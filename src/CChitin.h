@@ -6,6 +6,8 @@
 class CChitin {
 public:
     static void GetGameVersionInfo(HINSTANCE hInstance);
+    static void FixReadonlyPermissions();
+    static void DoFixReadonlyPermissions(CString path);
 
     static CString buildVersionString;
     static CString versionString;

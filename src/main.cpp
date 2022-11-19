@@ -14,6 +14,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
     AfxSetResourceHandle(hInstance);
 
+    CChitin::FixReadonlyPermissions();
+
     // TODO: Incomplete.
 
     return 0;

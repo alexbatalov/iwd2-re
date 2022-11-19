@@ -1,5 +1,6 @@
 #include "CChitin.h"
 
+#include <direct.h>
 #include <winver.h>
 
 // 0x8FB938
@@ -55,6 +56,80 @@ void CChitin::GetGameVersionInfo(HINSTANCE hInstance)
 
         if (fileVersionInfo != NULL) {
             delete[] fileVersionInfo;
+        }
+    }
+}
+
+// Removes `readonly` file attribute on all files in special directories.
+//
+// BINARY IDENTICAL
+// 0x792940
+void CChitin::FixReadonlyPermissions()
+{
+    CString cache;
+    CString mpsave;
+    CString mptemp;
+    CString save;
+    CString temp;
+    CString tempsave;
+
+    char cwd[MAX_PATH];
+    if (getcwd(cwd, sizeof(cwd)) != NULL) {
+        cache = cwd;
+        cache += "\\cache";
+
+        mpsave = cwd;
+        mpsave += "\\mpsave";
+
+        mptemp = cwd;
+        mptemp += "\\mptemp";
+
+        save = cwd;
+        save += "\\save";
+
+        temp = cwd;
+        temp += "\\temp";
+
+        tempsave = cwd;
+        tempsave += "\\tempsave";
+
+        DoFixReadonlyPermissions(cache);
+        DoFixReadonlyPermissions(mpsave);
+        DoFixReadonlyPermissions(mptemp);
+        DoFixReadonlyPermissions(save);
+        DoFixReadonlyPermissions(temp);
+        DoFixReadonlyPermissions(tempsave);
+    }
+}
+
+// NOTE: Passing object produces unncessary copies at call sites.
+//
+// BINARY IDENTICAL
+// 0x792B50
+void CChitin::DoFixReadonlyPermissions(CString path)
+{
+    CFileFind fileFind;
+
+    BOOLEAN exists = fileFind.FindFile(path);
+    if (exists) {
+        DWORD attrs = GetFileAttributes(path);
+        attrs &= ~FILE_ATTRIBUTE_READONLY;
+        SetFileAttributes(path, attrs);
+    }
+
+    path += "\\*.*";
+
+    BOOLEAN working = fileFind.FindFile(path);
+    while (working) {
+        working = fileFind.FindNextFile();
+        if (!fileFind.IsDots()) {
+            if (fileFind.IsDirectory()) {
+                DoFixReadonlyPermissions(fileFind.GetFilePath());
+            }
+
+            DWORD attrs = GetFileAttributes(fileFind.GetFilePath());
+            attrs &= ~FILE_ATTRIBUTE_READONLY;
+            SetFileAttributes(fileFind.GetFilePath(), attrs);
         }
     }
 }
