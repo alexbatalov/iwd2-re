@@ -1,5 +1,6 @@
 # Force LF
 *.cc text eol=lf
+*.cpp text eol=lf
 *.h text eol=lf
 *.md text eol=lf
 .clang-format text eol=lf
