@@ -13,6 +13,8 @@ set(CMAKE_MFC_FLAG 2)
 add_executable(${EXECUTABLE_NAME} WIN32)
 
 target_sources(${EXECUTABLE_NAME} PUBLIC
+    "src/CBaldurChitin.cpp"
+    "src/CBaldurChitin.h"
     "src/CChitin.cpp"
     "src/CChitin.h"
     "src/main.cpp"

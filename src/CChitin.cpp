@@ -12,6 +12,18 @@ CString CChitin::versionString;
 // 0x8FB944
 CString CChitin::name;
 
+// 0x78E2A0
+CChitin::CChitin()
+{
+    // TODO: Incomplete.
+}
+
+// 0x78E930
+CChitin::~CChitin()
+{
+    // TODO: Incomplete.
+}
+
 // BINARY IDENTICAL
 // 0x78FDF0
 void CChitin::GetGameVersionInfo(HINSTANCE hInstance)
@@ -58,6 +70,14 @@ void CChitin::GetGameVersionInfo(HINSTANCE hInstance)
             delete[] fileVersionInfo;
         }
     }
+}
+
+// 0x7926B0
+int CChitin::WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    // TODO: Incomplete.
+
+    return 0;
 }
 
 // Removes `readonly` file attribute on all files in special directories.
