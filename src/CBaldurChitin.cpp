@@ -1,5 +1,8 @@
 #include "CBaldurChitin.h"
 
+CChitin* g_pChitin;
+CBaldurChitin* g_pBaldurChitin;
+
 // 0x421E40
 CBaldurChitin::CBaldurChitin()
 {

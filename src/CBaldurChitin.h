@@ -12,4 +12,7 @@ public:
     void Init(HINSTANCE hInstance);
 };
 
+extern CChitin* g_pChitin;
+extern CBaldurChitin* g_pBaldurChitin;
+
 #endif /* CBALDURCHITIN_H_ */

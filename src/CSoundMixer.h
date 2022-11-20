@@ -11,6 +11,7 @@ public:
     CSoundMixer();
     ~CSoundMixer();
 
+    void CleanUp();
     BOOL ReleaseAll();
 
     static BYTE m_tSqrtTable[10000];

@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#include "CBaldurChitin.h"
+
 // 0x9039D8
 BYTE CSoundMixer::m_tSqrtTable[10000];
 
@@ -54,8 +56,25 @@ CSoundMixer::CSoundMixer()
     field_0 = 0;
 }
 
+// #binary-identical
 // 0x7AAF50
 CSoundMixer::~CSoundMixer()
+{
+    if (g_pChitin != NULL && g_pChitin->field_390 != 1) {
+        EnterCriticalSection(&(g_pChitin->field_394));
+    }
+
+    CleanUp();
+
+    field_100.SetSize(0);
+
+    if (g_pChitin != NULL && g_pChitin->field_390 != 1) {
+        LeaveCriticalSection(&(g_pChitin->field_394));
+    }
+}
+
+// 0x7AB1E0
+void CSoundMixer::CleanUp()
 {
     // TODO: Incomplete.
 }

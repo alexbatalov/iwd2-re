@@ -70,6 +70,7 @@ public:
     /* 032C */ CRITICAL_SECTION field_32C;
     /* 0344 */ CRITICAL_SECTION field_344;
     /* 035C */ CRITICAL_SECTION field_35C;
+    /* 0390 */ int field_390;
     /* 0394 */ CRITICAL_SECTION field_394;
     /* 03AC */ CRITICAL_SECTION field_3AC;
     /* 03C8 */ CSoundMixer cSoundMixer; // #guess
