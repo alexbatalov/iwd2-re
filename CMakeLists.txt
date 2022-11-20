@@ -13,10 +13,28 @@ set(CMAKE_MFC_FLAG 2)
 add_executable(${EXECUTABLE_NAME} WIN32)
 
 target_sources(${EXECUTABLE_NAME} PUBLIC
+    "src/CAliasList.cpp"
+    "src/CAliasList.h"
     "src/CBaldurChitin.cpp"
     "src/CBaldurChitin.h"
     "src/CChitin.cpp"
     "src/CChitin.h"
+    "src/CDimm.cpp"
+    "src/CDimm.h"
+    "src/CGameSpy.cpp"
+    "src/CGameSpy.h"
+    "src/CImm.cpp"
+    "src/CImm.h"
+    "src/CNetwork.cpp"
+    "src/CNetwork.h"
+    "src/CProgressBar.cpp"
+    "src/CProgressBar.h"
+    "src/CSoundMixer.cpp"
+    "src/CSoundMixer.h"
+    "src/CUnknown1.cpp"
+    "src/CUnknown1.h"
+    "src/CVideo.cpp"
+    "src/CVideo.h"
     "src/main.cpp"
 )
 

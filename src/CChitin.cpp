@@ -12,10 +12,96 @@ CString CChitin::versionString;
 // 0x8FB944
 CString CChitin::name;
 
+// 0x8FB974
+int CChitin::dword_8FB974;
+
+// 0x8FB978
+int CChitin::dword_8FB978;
+
+// 0x8FB97C
+int CChitin::dword_8FB97C;
+
+// TODO: Check generated assembly once memory layout is complete.
+//
 // 0x78E2A0
 CChitin::CChitin()
 {
-    // TODO: Incomplete.
+    field_184 = 0;
+    field_188 = 0;
+    field_18C = 0;
+    field_190 = 0;
+    field_194 = 0;
+    field_198 = 0;
+    m_nThreads = 0;
+    field_1A28 = 0;
+    m_dwThreadIds[m_nThreads] = GetCurrentThreadId();
+
+    HANDLE currentProcess = GetCurrentProcess();
+    HANDLE currentThread = GetCurrentThread();
+    if (DuplicateHandle(currentProcess, currentThread, currentProcess, &(m_hThreadHandles[m_nThreads]), 0, TRUE, DUPLICATE_SAME_ACCESS)) {
+        m_nThreads++;
+    }
+
+    InitializeCriticalSection(&field_2FC);
+    InitializeCriticalSection(&field_32C);
+    InitializeCriticalSection(&field_314);
+    InitializeCriticalSection(&field_344);
+    InitializeCriticalSection(&field_C4);
+    InitializeCriticalSection(&field_35C);
+    InitializeCriticalSection(&field_394);
+    InitializeCriticalSection(&field_3AC);
+    InitializeCriticalSection(&field_1C32);
+
+    InitializeVariables();
+    InitVariables3D();
+
+    OSVERSIONINFO versionInfo;
+    memset(&versionInfo, 0, sizeof(OSVERSIONINFO));
+    versionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+    GetVersionEx(&versionInfo);
+
+    dwPlatformId = versionInfo.dwPlatformId;
+
+    if (versionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) {
+        cDimm.field_D6 = cDimm.field_DE - 0x1000000;
+    } else {
+        cDimm.field_D6 = cDimm.field_DE - 0x800000;
+    }
+
+    field_FE = 0;
+    field_1C4C = 0;
+    field_1A2A = 0;
+    field_1A2E = 0;
+
+    for (int i = 0; i < 16; i++) {
+        field_1A32[i] = 1000;
+    }
+
+    memset(field_1A72, 0, sizeof(field_1A72));
+    memset(field_1AB2, 0, sizeof(field_1AB2));
+    memset(field_1AF2, 0, sizeof(field_1AF2));
+    memset(field_1B32, 0, sizeof(field_1B32));
+
+    field_110 = 0;
+    field_114 = 0;
+
+    field_118 = "";
+    field_120 = "";
+    field_11C = "";
+    field_124 = 0;
+    field_128 = 0;
+    field_12C = "";
+    field_131 = 0;
+    field_132 = "";
+    field_130 = 0;
+    field_136 = 6;
+    dword_8FB974 = 0;
+    dword_8FB978 = 0;
+    dword_8FB97C = 0;
+    field_180 = 0;
+    field_19C = 0;
+    field_1C4A = 1;
+    field_2EC = 0;
 }
 
 // 0x78E930
@@ -152,4 +238,16 @@ void CChitin::DoFixReadonlyPermissions(CString path)
             SetFileAttributes(fileFind.GetFilePath(), attrs);
         }
     }
+}
+
+// 0x7902C0
+void CChitin::InitializeVariables()
+{
+    // TODO: Incomplete.
+}
+
+// 0x7C8980
+void CChitin::InitVariables3D()
+{
+    // TODO: Incomplete.
 }
