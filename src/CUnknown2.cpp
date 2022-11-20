@@ -3,7 +3,12 @@
 // 0x7C24C0
 CUnknown2::CUnknown2()
 {
-    // TODO: Incomplete.
+    field_0 = 0;
+    field_4 = 0;
+    field_8 = 0;
+    field_28 = 0;
+    field_2C = 0;
+    field_30 = 0;
 }
 
 // 0x7C24F0
