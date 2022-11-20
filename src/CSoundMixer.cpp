@@ -35,8 +35,8 @@ CSoundMixer::CSoundMixer()
     field_40 = 0;
     field_140 = 0;
     cSoundProperties.field_10 = 0;
-    field_13C = 0;
-    field_8 = 0;
+    pDirectSound3DListener = NULL;
+    pPrimarySoundBuffer = NULL;
     field_118 = 0;
     field_114 = ".\\music";
     field_120 = 0;
@@ -79,10 +79,69 @@ void CSoundMixer::CleanUp()
     // TODO: Incomplete.
 }
 
+// #binary-identical
 // 0x7AB7D0
 BOOL CSoundMixer::ReleaseAll()
 {
-    // TODO: Incomplete.
+    if (field_4C != 0 || field_48 != 0) {
+        return FALSE;
+    }
 
-    return FALSE;
+    field_4C = 1;
+    field_48 = 1;
+
+    if (g_pChitin != NULL && g_pChitin->field_390 != 1) {
+        EnterCriticalSection(&(g_pChitin->field_394));
+    }
+
+    if (pDirectSound3DListener != NULL) {
+        pDirectSound3DListener->Release();
+        pDirectSound3DListener = NULL;
+    }
+
+    if (g_pChitin != NULL && g_pChitin->field_390 != 1) {
+        EnterCriticalSection(&(g_pChitin->field_394));
+    }
+
+    cSoundProperties.Uninit();
+    field_140 = 0;
+
+    if (g_pChitin != NULL && g_pChitin->field_390 != 1) {
+        LeaveCriticalSection(&(g_pChitin->field_394));
+    }
+
+    while (!field_84.IsEmpty()) {
+        // TODO: Object type?
+        CObject* v1 = field_84.RemoveHead();
+        if (v1 != NULL) {
+            delete v1;
+        }
+    }
+
+    while (!lSounds.IsEmpty()) {
+        CSound* sound = static_cast<CSound*>(lSounds.RemoveHead());
+        if (sound->pSoundBuffer != NULL) {
+            sound->pSoundBuffer->Release();
+            sound->pSoundBuffer = NULL;
+        }
+        // NOTE: Why sound itself is not deleted like the object above?
+    }
+
+    if (pDirectSound != NULL) {
+        if (pPrimarySoundBuffer != NULL) {
+            pPrimarySoundBuffer->Release();
+            pPrimarySoundBuffer = NULL;
+        }
+
+        pDirectSound->Release();
+        pDirectSound = NULL;
+    }
+
+    field_4C = 0;
+
+    if (g_pChitin != NULL && g_pChitin->field_390 != 1) {
+        LeaveCriticalSection(&(g_pChitin->field_394));
+    }
+
+    return TRUE;
 }

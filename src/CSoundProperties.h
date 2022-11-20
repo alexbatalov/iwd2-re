@@ -6,6 +6,8 @@ public:
     CSoundProperties();
     ~CSoundProperties();
 
+    void Uninit();
+
     /* 0010 */ int field_10;
 };
 

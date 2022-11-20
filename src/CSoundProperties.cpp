@@ -9,5 +9,11 @@ CSoundProperties::CSoundProperties()
 // 0x7C22D0
 CSoundProperties::~CSoundProperties()
 {
+    Uninit();
+}
+
+// 0x7C22D0
+void CSoundProperties::Uninit()
+{
     // TODO: Incomplete.
 }

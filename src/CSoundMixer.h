@@ -3,6 +3,12 @@
 
 #include <afx.h>
 
+// clang-format off
+#include <mmsystem.h>
+#include <dsound.h>
+// clang-format on
+
+#include "CSound.h"
 #include "CSoundProperties.h"
 #include "CUnknown2.h"
 
@@ -17,7 +23,8 @@ public:
     static BYTE m_tSqrtTable[10000];
 
     /* 0000 */ int field_0;
-    /* 0008 */ int field_8;
+    /* 0004 */ IDirectSound* pDirectSound; // #guess
+    /* 0008 */ IDirectSoundBuffer* pPrimarySoundBuffer; // #guess
     /* 003C */ int field_3C;
     /* 0040 */ int field_40;
     /* 0044 */ int field_44;
@@ -27,7 +34,7 @@ public:
     /* 0054 */ CObArray field_54;
     /* 0068 */ CObList field_68;
     /* 0084 */ CObList field_84;
-    /* 00A0 */ CObList field_A0;
+    /* 00A0 */ CObList lSounds; // #guess
     /* 00C0 */ int field_C0;
     /* 00C4 */ int field_C4;
     /* 00C8 */ int field_C8;
@@ -51,7 +58,7 @@ public:
     /* 0120 */ int field_120;
     /* 0124 */ int field_124;
     /* 0128 */ CSoundProperties cSoundProperties; // #guess
-    /* 013C */ int field_13C;
+    /* 013C */ IDirectSound3DListener* pDirectSound3DListener; // #guess
     /* 0140 */ int field_140;
     /* 0144 */ CUnknown2 field_144;
     /* 0178 */ int field_178;
