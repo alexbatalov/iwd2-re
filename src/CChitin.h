@@ -24,6 +24,7 @@ public:
     static void DoFixReadonlyPermissions(CString path);
     void InitializeVariables();
     void InitVariables3D();
+    void Shutdown3D();
 
     static CString buildVersionString;
     static CString versionString;
@@ -34,6 +35,7 @@ public:
 
     /* 0054 */ CObList lEngines;
     /* 0078 */ CWnd cWnd; // #guess
+    /* 00B4 */ HANDLE field_B4;
     /* 00C4 */ CRITICAL_SECTION field_C4;
     /* 00DC */ CString field_DC;
     /* 00FA */ DWORD dwPlatformId; // #guess
@@ -62,6 +64,7 @@ public:
     /* 01A8 */ CImm cImm; // #guess
     /* 02E8 */ CString field_2E8;
     /* 02EC */ int field_2EC;
+    /* 028F */ HANDLE m_eventTimer;
     /* 02FC */ CRITICAL_SECTION field_2FC;
     /* 0314 */ CRITICAL_SECTION field_314;
     /* 032C */ CRITICAL_SECTION field_32C;

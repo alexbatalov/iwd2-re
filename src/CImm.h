@@ -4,10 +4,6 @@
 #include <afxmt.h>
 #include <afxwin.h>
 
-// NOTE: For unknown reason the constructor and destructor for this class are
-// inlined in `CChitin`. This is only way to explain how assignments appear
-// before static objects constructor calls.
-//
 // #guess
 class CImm {
 public:

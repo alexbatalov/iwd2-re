@@ -104,10 +104,37 @@ CChitin::CChitin()
     field_2EC = 0;
 }
 
+// TODO: Check generated assembly once memory layout is complete.
+//
 // 0x78E930
 CChitin::~CChitin()
 {
-    // TODO: Incomplete.
+    if (cVideo.m_bIs3dAccelerated) {
+        Shutdown3D();
+    }
+
+    field_14C.RemoveAll();
+
+    cDimm.DestroyKeyTable();
+    cDimm.DumpAll();
+
+    DeleteCriticalSection(&field_2FC);
+    DeleteCriticalSection(&field_32C);
+    DeleteCriticalSection(&field_314);
+    DeleteCriticalSection(&field_C4);
+    DeleteCriticalSection(&field_35C);
+
+    if (m_eventTimer != NULL) {
+        CloseHandle(m_eventTimer);
+    }
+
+    if (field_B4 != NULL) {
+        CloseHandle(field_B4);
+    }
+
+    DeleteCriticalSection(&field_394);
+    DeleteCriticalSection(&field_3AC);
+    DeleteCriticalSection(&field_1C32);
 }
 
 // BINARY IDENTICAL
@@ -248,6 +275,13 @@ void CChitin::InitializeVariables()
 
 // 0x7C8980
 void CChitin::InitVariables3D()
+{
+    // TODO: Incomplete.
+}
+
+// #guess
+// 0x7C8B10
+void CChitin::Shutdown3D()
 {
     // TODO: Incomplete.
 }

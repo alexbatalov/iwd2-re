@@ -6,6 +6,9 @@ public:
     CDimm();
     ~CDimm();
 
+    void DestroyKeyTable();
+    void DumpAll();
+
     /* 00D6 */ int field_D6;
     /* 00DE */ int field_DE;
 };
