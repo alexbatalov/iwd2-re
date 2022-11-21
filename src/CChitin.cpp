@@ -3,6 +3,10 @@
 #include <direct.h>
 #include <winver.h>
 
+// #guess
+// 0x8B9E48
+UINT CChitin::MAXIMUM_FRAME_RATE;
+
 // 0x8FB938
 CString CChitin::buildVersionString;
 
@@ -267,10 +271,119 @@ void CChitin::DoFixReadonlyPermissions(CString path)
     }
 }
 
+// #binary-identical
 // 0x7902C0
 void CChitin::InitializeVariables()
 {
-    // TODO: Incomplete.
+    field_193E = 0;
+    field_1A0 = 0;
+    field_1A4 = 0;
+    field_13A = -1;
+    field_13E = 0;
+    field_142 = 0;
+    field_E0 = 0;
+    field_E1 = 1;
+    field_E2 = 1;
+    field_E4 = 0;
+    field_108 = 0;
+    field_10C = 0;
+    field_F8 = 0;
+    m_nScreenWidth = GetSystemMetrics(SM_CXFULLSCREEN);
+    m_nScreenHeight = GetSystemMetrics(SM_CYFULLSCREEN);
+    field_F9 = 0;
+    field_174 = 0;
+    field_C = 0;
+    field_1C = 0;
+    field_2C = 0;
+    m_nDoubleClickTime = GetDoubleClickTime();
+    if (m_nDoubleClickTime == 0) {
+        m_nDoubleClickTime = 500;
+    }
+
+    m_nDoubleClickTime = 10 * m_nDoubleClickTime / (10000 / MAXIMUM_FRAME_RATE) + 1;
+    field_18 = m_nDoubleClickTime;
+    field_38 = m_nDoubleClickTime;
+    field_28 = m_nDoubleClickTime;
+    field_40 = GetSystemMetrics(SM_CXDOUBLECLK);
+    field_44 = GetSystemMetrics(SM_CYDOUBLECLK);
+
+    if (!SystemParametersInfo(SPI_GETKEYBOARDDELAY, 0, &m_nKeyboardDelay, 0)) {
+        m_nKeyboardDelay = 1;
+    }
+
+    m_nKeyboardDelay = 15 * (m_nKeyboardDelay + 1);
+
+    if (!SystemParametersInfo(SPI_GETKEYBOARDSPEED, 0, &m_nKeyboardSpeed, 0)) {
+        m_nKeyboardSpeed = 8;
+    }
+
+    m_nKeyboardSpeed = MAXIMUM_FRAME_RATE / (m_nKeyboardSpeed + 1) + 1;
+
+    if (GetSystemMetrics(SM_SWAPBUTTON)) {
+        field_4 = 2;
+        field_8 = 1;
+    } else {
+        field_4 = 1;
+        field_8 = 2;
+    }
+
+    if (!SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &m_nWheelScrollLines, 0)) {
+        m_nWheelScrollLines = 3;
+    }
+
+    field_16C = 0;
+    field_170 = WM_MOUSEWHEEL;
+
+    HWND hWnd = FindWindow("MouseZ", "Magellan MSWHEEL");
+    field_170 = RegisterWindowMessage("MSWHEEL_ROLLMSG");
+
+    UINT v1 = RegisterWindowMessage("MSH_WHEELSUPPORT_MSG");
+    UINT v2 = RegisterWindowMessage("MSH_SCROLL_LINES_MSG");
+    if (v1 != 0) {
+        field_16C = SendMessage(hWnd, v1, 0, 0);
+    } else {
+        field_16C = 0;
+    }
+
+    int scrollLines;
+    if (v2 != 0) {
+        scrollLines = SendMessage(hWnd, v2, 0, 0);
+    } else {
+        scrollLines = 3;
+    }
+
+    if (hWnd != NULL && field_16C != 0) {
+        m_nWheelScrollLines = scrollLines;
+    }
+
+    field_148 = 0;
+    field_1932 = 0;
+    field_1936 = 1;
+    field_193A = 0;
+    field_1902 = 0;
+    field_48 = 0;
+    field_1912 = 0;
+    field_4C = 0;
+    field_374 = 0;
+    field_388 = 0;
+    field_50 = 0;
+    field_37C = 0;
+    field_1906 = 0;
+    field_190A = 0;
+    m_eventTimer = NULL;
+    field_B4 = 0;
+    field_378 = 0;
+    field_38C = 0;
+    field_390 = 0;
+    field_190E = 0;
+    field_70 = 0;
+    field_BC = 0;
+    field_C0 = 0;
+    field_3C4 = 0;
+    field_74 = 0;
+
+    srand(time(0));
+    rand();
 }
 
 // 0x7C8980
