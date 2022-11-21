@@ -21,6 +21,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CChitin.h"
     "src/CDimm.cpp"
     "src/CDimm.h"
+    "src/CDimmKeyTable.cpp"
+    "src/CDimmKeyTable.h"
     "src/CGameSpy.cpp"
     "src/CGameSpy.h"
     "src/CImm.cpp"

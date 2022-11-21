@@ -63,9 +63,9 @@ CChitin::CChitin()
     dwPlatformId = versionInfo.dwPlatformId;
 
     if (versionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) {
-        cDimm.field_D6 = cDimm.field_DE - 0x1000000;
+        cDimm.field_D6 = cDimm.dwTotalPhysicalMemory - 0x1000000;
     } else {
-        cDimm.field_D6 = cDimm.field_DE - 0x800000;
+        cDimm.field_D6 = cDimm.dwTotalPhysicalMemory - 0x800000;
     }
 
     field_FE = 0;
