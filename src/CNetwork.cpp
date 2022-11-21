@@ -79,10 +79,10 @@ CNetwork::CNetwork()
         field_736[l] = "";
         field_76C[l] = 0;
         field_766[l] = 0;
-        m_pSlidingWindow[l].Initialize();
+        m_pSlidingWindow[l].Initialize(l);
     }
 
-    m_SystemWindow.Initialize();
+    m_SystemWindow.Initialize(-1);
 
     for (unsigned int m = 0; m <= 255; m++) {
         unsigned int v1 = m;
