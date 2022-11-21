@@ -29,6 +29,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CImm.h"
     "src/CNetwork.cpp"
     "src/CNetwork.h"
+    "src/CNetworkWindow.cpp"
+    "src/CNetworkWindow.h"
     "src/CProgressBar.cpp"
     "src/CProgressBar.h"
     "src/CResCache.cpp"
