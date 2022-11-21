@@ -33,6 +33,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CProgressBar.h"
     "src/CResCache.cpp"
     "src/CResCache.h"
+    "src/CResRef.cpp"
+    "src/CResRef.h"
     "src/CSound.cpp"
     "src/CSound.h"
     "src/CSoundMixer.cpp"
