@@ -386,10 +386,12 @@ void CChitin::InitializeVariables()
     rand();
 }
 
+// #binary-identical
 // 0x7C8980
 void CChitin::InitVariables3D()
 {
-    // TODO: Incomplete.
+    field_2F0 = 0;
+    field_2F4 = 0;
 }
 
 // #guess

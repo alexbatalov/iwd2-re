@@ -103,7 +103,9 @@ public:
     /* 01A8 */ CImm cImm; // #guess
     /* 02E8 */ CString field_2E8;
     /* 02EC */ int field_2EC;
-    /* 028F */ HANDLE m_eventTimer;
+    /* 02F0 */ int field_2F0;
+    /* 02F4 */ int field_2F4;
+    /* 02F8 */ HANDLE m_eventTimer;
     /* 02FC */ CRITICAL_SECTION field_2FC;
     /* 0314 */ CRITICAL_SECTION field_314;
     /* 032C */ CRITICAL_SECTION field_32C;
