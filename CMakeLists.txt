@@ -43,6 +43,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CUnknown1.h"
     "src/CUnknown2.cpp"
     "src/CUnknown2.h"
+    "src/CVidBlitter.cpp"
+    "src/CVidBlitter.h"
     "src/CVideo.cpp"
     "src/CVideo.h"
     "src/main.cpp"
