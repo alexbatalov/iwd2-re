@@ -51,6 +51,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CVidBlitter.h"
     "src/CVideo.cpp"
     "src/CVideo.h"
+    "src/CVidMode.cpp"
+    "src/CVidMode.h"
     "src/main.cpp"
 )
 
