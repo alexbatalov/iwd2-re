@@ -30,7 +30,7 @@ CVidMode::CVidMode()
     field_94 = 0;
     field_8A = 0;
     field_8E = 0;
-    field_A0 = 0;
+    field_A0 = NULL;
     field_E4 = 0;
     field_EC = 0;
     field_E8 = 0;

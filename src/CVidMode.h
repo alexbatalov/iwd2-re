@@ -39,7 +39,7 @@ public:
     /* 0094 */ int field_94;
     /* 0098 */ int field_98;
     /* 009C */ int field_9C;
-    /* 00A0 */ int field_A0;
+    /* 00A0 */ void* field_A0;
     /* 00A4 */ COLORREF rgbGlobalTint;
     /* 00A8 */ unsigned char field_A8;
     /* 00A9 */ unsigned char field_A9;
