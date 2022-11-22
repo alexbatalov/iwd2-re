@@ -59,6 +59,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CVidInf.h"
     "src/CVidMode.cpp"
     "src/CVidMode.h"
+    "src/CWarp.cpp"
+    "src/CWarp.h"
     "src/main.cpp"
 )
 
