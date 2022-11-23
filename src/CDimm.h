@@ -7,14 +7,19 @@
 #include "CDimmKeyTable.h"
 #include "CResCache.h"
 
+class CRes;
+
 // #memory-identical
 class CDimm {
 public:
     CDimm();
     ~CDimm();
 
+    int CancelRequest(CRes* pRes);
     void DestroyKeyTable();
+    void Dump(CRes* pRes, int a2, int a3);
     void DumpAll();
+    void ReleaseResObject(CRes* pRes);
 
     /* 0000 */ int field_0;
     /* 0004 */ int field_4;

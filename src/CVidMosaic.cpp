@@ -3,7 +3,8 @@
 // 0x7B0AA0
 CVidMosaic::CVidMosaic()
 {
-    // TODO: Incomplete.
+    pRes = NULL;
+    field_B0 = 0;
 }
 
 // 0x7B0B20

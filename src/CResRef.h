@@ -10,6 +10,7 @@ public:
     CResRef();
 
     CResRef operator=(const char* pName);
+    BOOL operator!=(const char* pName);
 
 protected:
     RESREF m_resRef;

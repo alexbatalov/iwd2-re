@@ -43,14 +43,34 @@ CDimm::~CDimm()
     // TODO: Incomplete.
 }
 
+// 0x782550
+int CDimm::CancelRequest(CRes* pRes)
+{
+    // TODO: Incomplete.
+
+    return 0;
+}
+
 // 0x7840E0
 void CDimm::DestroyKeyTable()
 {
     // TODO: Incomplete.
 }
 
+// 0x785C10
+void CDimm::Dump(CRes* pRes, int a2, int a3)
+{
+    // TODO: Incomplete.
+}
+
 // 0x785FB0
 void CDimm::DumpAll()
+{
+    // TODO: Incomplete.
+}
+
+// 0x787CE0
+void CDimm::ReleaseResObject(CRes* pRes)
 {
     // TODO: Incomplete.
 }

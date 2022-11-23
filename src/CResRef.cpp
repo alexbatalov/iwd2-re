@@ -29,3 +29,26 @@ CResRef CResRef::operator=(const char* pName)
 
     return *this;
 }
+
+// #binary-identical
+// 0x78AB40
+BOOL CResRef::operator!=(const char* pName)
+{
+    for (unsigned int i = 0; i < sizeof(m_resRef); i++) {
+        // NOTE: Signed math.
+        int c1 = pName[i] >= 'a' && pName[i] <= 'z' ? pName[i] - ('a' - 'A') : pName[i];
+
+        // NOTE: Unsigned math.
+        int c2 = m_resRef[i] >= 'a' && m_resRef[i] <= 'z' ? m_resRef[i] - ('a' - 'A') : m_resRef[i];
+
+        if (c1 != c2) {
+            return TRUE;
+        }
+
+        if (c1 == '\0') {
+            return FALSE;
+        }
+    }
+
+    return FALSE;
+}
