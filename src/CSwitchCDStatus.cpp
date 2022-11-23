@@ -3,7 +3,9 @@
 // 0x54D280
 CSwitchCDStatus::CSwitchCDStatus()
 {
-    // TODO: Incomplete.
+    field_0 = 0;
+    field_4 = 0;
+    field_EF4 = 0;
 }
 
 // 0x54D360
