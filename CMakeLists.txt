@@ -51,6 +51,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CSoundProperties.h"
     "src/CSwitchCDStatus.cpp"
     "src/CSwitchCDStatus.h"
+    "src/CTlkFileOverride.cpp"
+    "src/CTlkFileOverride.h"
     "src/CTlkTable.cpp"
     "src/CTlkTable.h"
     "src/CUnknown1.cpp"
