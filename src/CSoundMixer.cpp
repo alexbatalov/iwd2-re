@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-#include "CBaldurChitin.h"
+#include "CChitin.h"
 
 // 0x9039D8
 BYTE CSoundMixer::m_tSqrtTable[10000];

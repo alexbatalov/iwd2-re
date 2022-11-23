@@ -1,6 +1,6 @@
 #include "CNetworkWindow.h"
 
-#include "CBaldurChitin.h"
+#include "CChitin.h"
 
 // #binary-identical
 // 0x7A1E50

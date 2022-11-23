@@ -156,4 +156,6 @@ public:
     /* 1C4C */ int field_1C4C;
 };
 
+extern CChitin* g_pChitin;
+
 #endif /* CCHITIN_H_ */

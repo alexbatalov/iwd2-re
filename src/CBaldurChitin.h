@@ -26,7 +26,6 @@ public:
     /* 4A34 */ CVidFont field_4A34;
 };
 
-extern CChitin* g_pChitin;
 extern CBaldurChitin* g_pBaldurChitin;
 
 #endif /* CBALDURCHITIN_H_ */
