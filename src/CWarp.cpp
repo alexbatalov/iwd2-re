@@ -35,3 +35,18 @@ CWarp::~CWarp()
 {
     lTimers.RemoveAll();
 }
+
+// 0x7B54D0
+BOOL CWarp::SetVideoMode(int a1)
+{
+    CVidMode* pOldVideoMode = pVidMode;
+    pVidMode = g_pChitin->cVideo.GetVidMode(a1);
+    if (pVidMode != NULL) {
+        // #design-flaw: Uses both `g_pChitin` and `CWarp::pChitin`.
+        if (this == pChitin->pActiveEngine) {
+            pVidMode->ActivateVideoMode(pOldVideoMode, 0, 1);
+            g_pChitin->cVideo.cVidBlitter.Init();
+        }
+    }
+    return pVidMode != NULL;
+}

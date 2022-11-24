@@ -33,3 +33,9 @@ static void sub_7B6810(int a1, int a2, int a3, int a4, int a5, int a6)
 {
     // TODO: Incomplete.
 }
+
+// 0x7B6960
+void CVidBlitter::Init()
+{
+    // TODO: Incomplete.
+}

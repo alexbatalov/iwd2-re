@@ -1,5 +1,7 @@
 #include "CVideo.h"
 
+#include "CVidInf.h"
+
 // 0x794FC0
 CVideo::CVideo()
 {
@@ -16,10 +18,10 @@ CVideo::CVideo()
     field_108 = 0;
     field_10C = 0;
     field_110 = 0;
-    field_14E = 0;
-    field_152 = 0;
-    field_156 = 0;
-    field_15A = 0;
+    m_pVidModes[0] = NULL;
+    m_pVidModes[1] = NULL;
+    m_pVidModes[2] = NULL;
+    m_pVidModes[3] = NULL;
     field_15E = 0;
     field_12A = 0;
     field_12E = 0;
@@ -37,5 +39,23 @@ CVideo::CVideo()
 // 0x7950A0
 CVideo::~CVideo()
 {
+    for (int k = 0; k < 4; k++) {
+        if (m_pVidModes[k] != NULL) {
+            delete m_pVidModes[k];
+            m_pVidModes[k] = NULL;
+        }
+    }
+
     // TODO: Incomplete.
+}
+
+// 0x7951B0
+CVidMode* CVideo::GetVidMode(int a1)
+{
+    if (m_pVidModes[a1] == NULL) {
+        if (a1 == 0) {
+            m_pVidModes[a1] = new CVidInf();
+        }
+    }
+    return m_pVidModes[a1];
 }

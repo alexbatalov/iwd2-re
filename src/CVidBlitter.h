@@ -7,6 +7,8 @@ public:
 
     CVidBlitter();
 
+    void Init();
+
     /* 0000 */ unsigned char field_0;
     /* 0001 */ unsigned char field_1;
     /* 0002 */ unsigned char field_2;

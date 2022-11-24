@@ -15,7 +15,8 @@ public:
     static BOOL bInitialized;
 
     CVidMode();
-    virtual ~CVidMode();
+    /* 005C */ virtual int ActivateVideoMode(CVidMode* pPrevVidMode, int a2, int a3) = 0;
+    /* 011C */ virtual ~CVidMode();
 
     /* 0004 */ int field_4;
     /* 0008 */ int field_8;

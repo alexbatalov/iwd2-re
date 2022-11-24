@@ -14,6 +14,8 @@
 #include "CUnknown1.h"
 #include "CVideo.h"
 
+class CWarp;
+
 class CChitin {
 public:
     CChitin();
@@ -119,7 +121,7 @@ public:
     /* 0390 */ int field_390;
     /* 0394 */ CRITICAL_SECTION field_394;
     /* 03AC */ CRITICAL_SECTION field_3AC;
-    /* 03C4 */ int field_3C4;
+    /* 03C4 */ CWarp* pActiveEngine;
     /* 03C8 */ CSoundMixer cSoundMixer; // #guess
     /* 0542 */ CDimm cDimm; // #guess
     /* 07EA */ CVideo cVideo;

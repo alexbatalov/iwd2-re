@@ -379,7 +379,7 @@ void CChitin::InitializeVariables()
     field_70 = 0;
     field_BC = 0;
     field_C0 = 0;
-    field_3C4 = 0;
+    pActiveEngine = NULL;
     field_74 = 0;
 
     srand(time(0));

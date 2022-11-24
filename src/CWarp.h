@@ -19,6 +19,8 @@ public:
     CWarp();
     ~CWarp();
 
+    BOOL SetVideoMode(int a1);
+
     /* 0004 */ CVidMode* pVidMode; // #guess
     /* 0008 */ CWarp* pLastEngine;
     /* 000C */ CObList lTimers;

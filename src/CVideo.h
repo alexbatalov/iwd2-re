@@ -1,15 +1,19 @@
 #ifndef CVIDEO_H_
 #define CVIDEO_H_
 
-#include <windows.h>
+#include <afx.h>
 
 #include "CResRef.h"
 #include "CVidBlitter.h"
+
+class CVidMode;
 
 class CVideo {
 public:
     CVideo();
     ~CVideo();
+
+    CVidMode* GetVidMode(int a1);
 
     /* 0000 */ short field_0;
     /* 0002 */ short field_2;
@@ -34,10 +38,7 @@ public:
     /* 0142 */ int field_142;
     /* 0146 */ int field_146;
     /* 014A */ int field_14A;
-    /* 014E */ int field_14E;
-    /* 0152 */ int field_152;
-    /* 0156 */ int field_156;
-    /* 015A */ int field_15A;
+    /* 014E */ CVidMode* m_pVidModes[4];
     /* 015E */ int field_15E;
     /* 0162 */ unsigned char field_162;
     /* 0162 */ unsigned char field_163;

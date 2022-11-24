@@ -31,3 +31,11 @@ CVidInf::~CVidInf()
 
     field_9C = 0;
 }
+
+// 0x79B100
+BOOL CVidInf::ActivateVideoMode(CVidMode* pPrevVidMode, int a2, int a3)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
