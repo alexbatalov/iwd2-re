@@ -21,6 +21,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CBaldurMessage.h"
     "src/CCacheStatus.cpp"
     "src/CCacheStatus.h"
+    "src/CChatBuffer.cpp"
+    "src/CChatBuffer.h"
     "src/CChitin.cpp"
     "src/CChitin.h"
     "src/CDimm.cpp"
