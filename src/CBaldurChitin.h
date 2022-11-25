@@ -27,9 +27,6 @@ public:
     static const USHORT DEFAULT_SCREEN_WIDTH;
     static const USHORT DEFAULT_SCREEN_HEIGHT;
 
-    static DWORD FPS;
-    static USHORT SCREEN_WIDTH;
-    static USHORT SCREEN_HEIGHT;
     static short word_8BA320;
     static CString string_8C8CA0;
     static RECT stru_8E7538;
@@ -46,6 +43,15 @@ public:
     CBaldurChitin();
     ~CBaldurChitin();
     void Init(HINSTANCE hInstance);
+    void SaveOptions();
+
+    /* 0010 */ DWORD GetIDSExclusiveMode();
+    /* 009C */ void ShutDown(int nLineNumber, const char* szFileName, const char* text);
+    /* 00A0 */ const char* GetConfigFileName();
+    /* 00A4 */ const char* GetKeyFileName();
+    /* 00A8 */ const char* GetLogFileName();
+    /* 00A8 */ const char* GetErrorFileName();
+    /* 00B0 */ void SaveBitsPerPixel(USHORT nBpp);
 
     /* 1C50 */ int field_1C50;
     /* 1C54 */ int field_1C54;

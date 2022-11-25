@@ -8,7 +8,8 @@
 class CVidInf : public CVidMode {
 public:
     CVidInf();
-    /* 005C */ BOOL ActivateVideoMode(CVidMode* pPrevVidMode, int a2, int a3);
+    /* 005C */ BOOL ActivateVideoMode(CVidMode* pPrevVidMode, HWND hWnd, BOOL bFullscreen);
+    /* 006C */ BOOL DeactivateVideoMode(int a2);
     /* 011C */ ~CVidInf();
 
     /* 00F4 */ unsigned char field_F4[108];

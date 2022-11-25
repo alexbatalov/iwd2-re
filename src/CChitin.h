@@ -27,6 +27,18 @@ public:
     void InitializeVariables();
     void InitVariables3D();
     void Shutdown3D();
+    void SuspendThreads();
+    void AddEngine(CWarp* pNewEngine);
+    CWnd* GetWnd();
+    void Resume();
+
+    /* 0010 */ virtual DWORD GetIDSExclusiveMode();
+    /* 00A0 */ virtual const char* GetConfigFileName();
+    /* 00A4 */ virtual const char* GetKeyFileName();
+    /* 00A8 */ virtual const char* GetLogFileName();
+    /* 00A8 */ virtual const char* GetErrorFileName();
+    /* 00B0 */ virtual void SaveBitsPerPixel(USHORT nBpp) = 0;
+    /* 009C */ virtual void ShutDown(int nLineNumber, const char* szFileName, const char* text);
 
     static UINT MAXIMUM_FRAME_RATE;
     static CString buildVersionString;

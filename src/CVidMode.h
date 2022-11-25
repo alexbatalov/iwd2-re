@@ -15,7 +15,8 @@ public:
     static BOOL bInitialized;
 
     CVidMode();
-    /* 005C */ virtual int ActivateVideoMode(CVidMode* pPrevVidMode, int a2, int a3) = 0;
+    /* 005C */ virtual BOOL ActivateVideoMode(CVidMode* pPrevVidMode, HWND hWnd, BOOL bFullscreen) = 0;
+    /* 006C */ virtual BOOL DeactivateVideoMode(int a2) = 0;
     /* 011C */ virtual ~CVidMode();
 
     /* 0004 */ int field_4;

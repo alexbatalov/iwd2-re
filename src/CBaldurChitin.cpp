@@ -19,6 +19,7 @@
 #define SOFT_SRC_KEY_BLT_FAST_KEY "SoftSrcKeyBltFast"
 #define USE_MIRROR_FX_KEY "Use Mirror FX"
 #define STRREF_ON_KEY "Strref On"
+#define BITS_PER_PIXEL_KEY "BitsPerPixel"
 
 CChitin* g_pChitin;
 CBaldurChitin* g_pBaldurChitin;
@@ -30,18 +31,6 @@ const USHORT CBaldurChitin::DEFAULT_SCREEN_WIDTH = 800;
 // #guess
 // 0x85DE3E
 const USHORT CBaldurChitin::DEFAULT_SCREEN_HEIGHT = 600;
-
-// #guess
-// 0x8BA318
-DWORD CBaldurChitin::FPS = 60;
-
-// #guess
-// 0x8BA31C
-USHORT CBaldurChitin::SCREEN_WIDTH = 800;
-
-// #guess
-// 0x8BA31E
-USHORT CBaldurChitin::SCREEN_HEIGHT = 600;
 
 // 0x8BA320
 short CBaldurChitin::word_8BA320 = 100;
@@ -165,13 +154,13 @@ CBaldurChitin::CBaldurChitin()
 
     field_E2 = m_bFullscreen;
 
-    FPS = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
+    CVideo::FPS = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         DISPLAY_FREQUENCY_KEY,
         60,
         FILE_NAME);
 
-    if (FPS < 60) {
-        FPS = 60;
+    if (CVideo::FPS < 60) {
+        CVideo::FPS = 60;
     }
 
     cVideo.m_bIs3dAccelerated = FALSE;
@@ -179,12 +168,12 @@ CBaldurChitin::CBaldurChitin()
     memset(field_49B4, 0, sizeof(field_49B4));
     field_4A24 = 1;
 
-    SCREEN_WIDTH = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
+    CVideo::SCREENWIDTH = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         RESOLUTION_KEY,
         800,
         FILE_NAME);
 
-    if (SCREEN_WIDTH >= GetSystemMetrics(SM_CXFULLSCREEN)) {
+    if (CVideo::SCREENWIDTH >= GetSystemMetrics(SM_CXFULLSCREEN)) {
         field_E4 = 1;
         field_E2 = 1;
         m_bFullscreen = TRUE;
@@ -194,7 +183,7 @@ CBaldurChitin::CBaldurChitin()
     field_4A2C = 0;
 
     // TODO: Check, assignments to rects are in random order.
-    switch (SCREEN_WIDTH) {
+    switch (CVideo::SCREENWIDTH) {
     case 2048:
         stru_8E7538.left = 0;
         stru_8E7538.top = 0;
@@ -246,7 +235,7 @@ CBaldurChitin::CBaldurChitin()
         stru_8E7A10.right = 960;
         stru_8E7A10.bottom = 522;
 
-        SCREEN_HEIGHT = 1536;
+        CVideo::SCREENHEIGHT = 1536;
         string_8C8CA0 = "10";
         strncpy(field_49B4[0].field_10, "STON10L", sizeof(field_49B4[0].field_10));
         strncpy(field_49B4[1].field_10, "STON10R", sizeof(field_49B4[1].field_10));
@@ -304,7 +293,7 @@ CBaldurChitin::CBaldurChitin()
         stru_8E7A10.right = 736;
         stru_8E7A10.bottom = 354;
 
-        SCREEN_HEIGHT = 1200;
+        CVideo::SCREENHEIGHT = 1200;
         string_8C8CA0 = "08";
         break;
     case 1024:
@@ -358,7 +347,7 @@ CBaldurChitin::CBaldurChitin()
         stru_8E7A10.right = 960;
         stru_8E7A10.bottom = 522;
 
-        SCREEN_HEIGHT = 768;
+        CVideo::SCREENHEIGHT = 768;
         string_8C8CA0 = "10";
         strncpy(field_49B4[0].field_10, "STON10L", sizeof(field_49B4[0].field_10));
         strncpy(field_49B4[1].field_10, "STON10R", sizeof(field_49B4[1].field_10));
@@ -417,7 +406,7 @@ CBaldurChitin::CBaldurChitin()
         stru_8E7A10.right = 736;
         stru_8E7A10.bottom = 354;
 
-        SCREEN_HEIGHT = 600;
+        CVideo::SCREENHEIGHT = 600;
         string_8C8CA0 = "08";
         break;
     }
@@ -428,39 +417,39 @@ CBaldurChitin::CBaldurChitin()
     // order.
     field_49B4[0].field_0 = -5;
     field_49B4[0].field_C = 1;
-    field_49B4[0].field_A = SCREEN_HEIGHT;
-    field_49B4[0].field_8 = (SCREEN_WIDTH - DEFAULT_SCREEN_WIDTH) / 2;
+    field_49B4[0].field_A = CVideo::SCREENHEIGHT;
+    field_49B4[0].field_8 = (CVideo::SCREENWIDTH - DEFAULT_SCREEN_WIDTH) / 2;
     field_49B4[0].field_4 = 0;
     field_49B4[0].field_6 = 0;
 
     field_49B4[1].field_0 = -4;
     field_49B4[1].field_C = 1;
-    field_49B4[1].field_A = SCREEN_HEIGHT;
-    field_49B4[1].field_8 = (SCREEN_WIDTH - DEFAULT_SCREEN_WIDTH) / 2;
+    field_49B4[1].field_A = CVideo::SCREENHEIGHT;
+    field_49B4[1].field_8 = (CVideo::SCREENWIDTH - DEFAULT_SCREEN_WIDTH) / 2;
     field_49B4[1].field_4 = field_49B4[0].field_8 + DEFAULT_SCREEN_WIDTH;
     field_49B4[1].field_6 = 0;
 
     field_49B4[2].field_0 = -3;
     field_49B4[2].field_C = 1;
-    field_49B4[2].field_A = (SCREEN_HEIGHT - DEFAULT_SCREEN_HEIGHT) / 2;
+    field_49B4[2].field_A = (CVideo::SCREENHEIGHT - DEFAULT_SCREEN_HEIGHT) / 2;
     field_49B4[2].field_8 = DEFAULT_SCREEN_WIDTH;
     field_49B4[2].field_4 = field_49B4[0].field_8;
     field_49B4[2].field_6 = 0;
 
     field_49B4[3].field_0 = -2;
     field_49B4[3].field_C = 1;
-    field_49B4[3].field_A = (SCREEN_HEIGHT - DEFAULT_SCREEN_HEIGHT) / 2;
+    field_49B4[3].field_A = (CVideo::SCREENHEIGHT - DEFAULT_SCREEN_HEIGHT) / 2;
     field_49B4[3].field_8 = DEFAULT_SCREEN_WIDTH;
     field_49B4[3].field_4 = field_49B4[0].field_8;
     field_49B4[3].field_6 = field_49B4[2].field_A + DEFAULT_SCREEN_HEIGHT;
 
     m_ptScreen.x = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         SCREEN_POSITION_X_KEY,
-        (GetSystemMetrics(SM_CXFULLSCREEN) - SCREEN_WIDTH) / 2,
+        (GetSystemMetrics(SM_CXFULLSCREEN) - CVideo::SCREENWIDTH) / 2,
         FILE_NAME);
     m_ptScreen.y = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         SCREEN_POSITION_Y_KEY,
-        (GetSystemMetrics(SM_CYFULLSCREEN) - SCREEN_HEIGHT) / 2,
+        (GetSystemMetrics(SM_CYFULLSCREEN) - CVideo::SCREENHEIGHT) / 2,
         FILE_NAME);
 
     field_49A2 = 292;
@@ -531,4 +520,78 @@ CBaldurChitin::~CBaldurChitin()
 void CBaldurChitin::Init(HINSTANCE hInstance)
 {
     // TODO: Incomplete.
+}
+
+// #guess
+// 0x422BA0
+DWORD CBaldurChitin::GetIDSExclusiveMode()
+{
+    return 5;
+}
+
+// 0x424D60
+void CBaldurChitin::ShutDown(int nLineNumber, const char* szFileName, const char* text)
+{
+    if (nLineNumber == -1) {
+        SaveOptions();
+    }
+    CChitin::ShutDown(nLineNumber, szFileName, text);
+}
+
+// #guess
+// 0x422DE0
+const char* CBaldurChitin::GetConfigFileName()
+{
+    return ".\\Icewind2.ini";
+}
+
+// 0x422DF0
+const char* CBaldurChitin::GetKeyFileName()
+{
+    return ".\\Chitin.key";
+}
+
+// #guess
+// 0x422E00
+const char* CBaldurChitin::GetLogFileName()
+{
+    return ".\\Icewind2.log";
+}
+
+// #guess
+// 0x422E10
+const char* CBaldurChitin::GetErrorFileName()
+{
+    return ".\\Icewind2.err";
+}
+
+// 0x425040
+void CBaldurChitin::SaveOptions()
+{
+    // TODO: Incomplete.
+}
+
+// 0x425680
+void CBaldurChitin::SaveBitsPerPixel(USHORT nBpp)
+{
+    switch (nBpp) {
+    case 16:
+        WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+            BITS_PER_PIXEL_KEY,
+            "16",
+            GetConfigFileName());
+        break;
+    case 24:
+        WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+            BITS_PER_PIXEL_KEY,
+            "24",
+            GetConfigFileName());
+        break;
+    case 32:
+        WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+            BITS_PER_PIXEL_KEY,
+            "32",
+            GetConfigFileName());
+        break;
+    }
 }

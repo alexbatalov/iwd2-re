@@ -33,7 +33,14 @@ CVidInf::~CVidInf()
 }
 
 // 0x79B100
-BOOL CVidInf::ActivateVideoMode(CVidMode* pPrevVidMode, int a2, int a3)
+BOOL CVidInf::ActivateVideoMode(CVidMode* pPrevVidMode, HWND hWnd, BOOL bFullscreen)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+BOOL CVidInf::DeactivateVideoMode(int a2)
 {
     // TODO: Incomplete.
 

@@ -21,6 +21,9 @@ public:
 
     BOOL SetVideoMode(int a1);
 
+    /* 0014 */ virtual void EngineActivated() = 0;
+    /* 0018 */ virtual void EngineDeactivated() = 0;
+
     /* 0004 */ CVidMode* pVidMode; // #guess
     /* 0008 */ CWarp* pLastEngine;
     /* 000C */ CObList lTimers;

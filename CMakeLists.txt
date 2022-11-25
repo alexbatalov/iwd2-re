@@ -110,5 +110,8 @@ target_compile_definitions(${EXECUTABLE_NAME} PUBLIC
 )
 
 target_link_libraries(${EXECUTABLE_NAME}
+    ddraw
+    dsound
+    dxguid
     version
 )

@@ -3,6 +3,8 @@
 #include <direct.h>
 #include <winver.h>
 
+#include "CWarp.h"
+
 // #guess
 // 0x8B9E48
 UINT CChitin::MAXIMUM_FRAME_RATE;
@@ -397,6 +399,77 @@ void CChitin::InitVariables3D()
 // #guess
 // 0x7C8B10
 void CChitin::Shutdown3D()
+{
+    // TODO: Incomplete.
+}
+
+// 0x78EC20
+void CChitin::SuspendThreads()
+{
+    DWORD currentThreadId = GetCurrentThreadId();
+    for (USHORT k = 0; k < m_nThreads; k++) {
+        if (m_dwThreadIds[k] != currentThreadId) {
+            SuspendThread(m_hThreadHandles[k]);
+        }
+    }
+}
+
+// 0x78EC70
+void CChitin::AddEngine(CWarp* pNewEngine)
+{
+    if (pNewEngine != NULL) {
+        lEngines.AddTail(pNewEngine);
+    }
+}
+
+// #guess
+// 0x78FDE0
+CWnd* CChitin::GetWnd()
+{
+    return &cWnd;
+}
+
+// 0x790570
+void CChitin::Resume()
+{
+    // TODO: Incomplete.
+}
+
+// 0x78E6E0
+DWORD CChitin::GetIDSExclusiveMode()
+{
+    return 0;
+}
+
+// #guess
+// 0x78E790
+const char* CChitin::GetConfigFileName()
+{
+    return "Chitin.ini";
+}
+
+// 0x78E7A0
+const char* CChitin::GetKeyFileName()
+{
+    return "Chitin.key";
+}
+
+// #guess
+// 0x78E7B0
+const char* CChitin::GetLogFileName()
+{
+    return "Chitin.log";
+}
+
+// #guess
+// 0x78E7C0
+const char* CChitin::GetErrorFileName()
+{
+    return "Chitin.err";
+}
+
+// 0x7909C0
+void CChitin::ShutDown(int nLineNumber, const char* szFileName, const char* text)
 {
     // TODO: Incomplete.
 }
