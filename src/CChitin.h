@@ -60,7 +60,7 @@ public:
     /* 00C4 */ CRITICAL_SECTION field_C4;
     /* 00DC */ CString field_DC;
     /* 00E0 */ unsigned char field_E0;
-    /* 00E1 */ unsigned char field_E1;
+    /* 00E1 */ BOOLEAN m_bFullscreen; // #guess
     /* 00E2 */ unsigned char field_E2;
     /* 00E4 */ int field_E4;
     /* 00F8 */ unsigned char field_F8;
@@ -69,8 +69,7 @@ public:
     /* 00FE */ short field_FE;
     /* 0100 */ int m_nScreenWidth; // #guess
     /* 0104 */ int m_nScreenHeight; // #guess
-    /* 0108 */ int field_108;
-    /* 010C */ int field_10C;
+    /* 0108 */ CPoint m_ptScreen;
     /* 0110 */ int field_110;
     /* 0114 */ int field_114;
     /* 0118 */ CString field_118;
@@ -92,6 +91,7 @@ public:
     /* 016C */ int field_16C;
     /* 0170 */ int field_170;
     /* 0174 */ int field_174;
+    /* 0178 */ BOOL m_bUseMirrorFX; // #guess
     /* 0180 */ int field_180;
     /* 0184 */ int field_184;
     /* 0188 */ int field_188;
@@ -103,7 +103,7 @@ public:
     /* 01A0 */ int field_1A0;
     /* 01A4 */ int field_1A4;
     /* 01A8 */ CImm cImm; // #guess
-    /* 02E8 */ CString field_2E8;
+    /* 02E8 */ CString m_sFontName;
     /* 02EC */ int field_2EC;
     /* 02F0 */ int field_2F0;
     /* 02F4 */ int field_2F4;

@@ -282,11 +282,11 @@ void CChitin::InitializeVariables()
     field_13E = 0;
     field_142 = 0;
     field_E0 = 0;
-    field_E1 = 1;
+    m_bFullscreen = TRUE;
     field_E2 = 1;
     field_E4 = 0;
-    field_108 = 0;
-    field_10C = 0;
+    m_ptScreen.x = 0;
+    m_ptScreen.y = 0;
     field_F8 = 0;
     m_nScreenWidth = GetSystemMetrics(SM_CXFULLSCREEN);
     m_nScreenHeight = GetSystemMetrics(SM_CYFULLSCREEN);

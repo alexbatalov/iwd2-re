@@ -1,6 +1,8 @@
 #ifndef CVIDBLITTER_H_
 #define CVIDBLITTER_H_
 
+#include <afx.h>
+
 class CVidBlitter {
 public:
     typedef void(Func1)(int, int, int, int, int, int);
@@ -9,11 +11,11 @@ public:
 
     void Init();
 
-    /* 0000 */ unsigned char field_0;
-    /* 0001 */ unsigned char field_1;
-    /* 0002 */ unsigned char field_2;
-    /* 0003 */ unsigned char field_3;
-    /* 0004 */ unsigned char field_4;
+    /* 0000 */ BOOLEAN m_bSoftSrcKeyBltFast; // #guess
+    /* 0001 */ BOOLEAN m_bSoftBltFast; // #guess
+    /* 0002 */ BOOLEAN m_bSoftSrcKeyBlt; // #guess
+    /* 0003 */ BOOLEAN m_bSoftBlt; // #guess
+    /* 0004 */ BOOLEAN m_bSoftMirrorBlt; // #guess
     /* 00DE */ int field_DE;
     /* 00E2 */ int field_E2;
     /* 00E6 */ unsigned char field_E6;

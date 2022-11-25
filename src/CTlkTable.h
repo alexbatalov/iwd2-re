@@ -15,6 +15,8 @@ public:
 
 class CTlkTable {
 public:
+    static BOOLEAN STRREF_ON;
+
     CTlkTable();
     ~CTlkTable();
 

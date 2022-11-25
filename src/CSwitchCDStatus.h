@@ -12,6 +12,8 @@ public:
     CSwitchCDStatus();
     ~CSwitchCDStatus();
 
+    void Init();
+
     /* 0000 */ int field_0;
     /* 0004 */ int field_4;
     /* 0008 */ CVidMosaic field_8[4];

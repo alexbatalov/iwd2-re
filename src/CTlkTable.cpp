@@ -5,6 +5,9 @@
 // 0x8FB954
 unsigned char byte_8FB954;
 
+// 0x8FB955
+BOOLEAN CTlkTable::STRREF_ON;
+
 // #binary-identical
 // 0x793DB0
 CTlkTable::CTlkTable()

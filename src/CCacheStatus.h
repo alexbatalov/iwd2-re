@@ -13,6 +13,8 @@ public:
     CCacheStatus();
     ~CCacheStatus();
 
+    void Init();
+
     /* 0004 */ int field_4;
     /* 0008 */ int field_8;
     /* 000C */ int field_C;

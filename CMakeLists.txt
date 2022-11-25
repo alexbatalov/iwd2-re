@@ -75,6 +75,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CUnknown1.h"
     "src/CUnknown2.cpp"
     "src/CUnknown2.h"
+    "src/CUtil.cpp"
+    "src/CUtil.h"
     "src/CVidBitmap.cpp"
     "src/CVidBitmap.h"
     "src/CVidBlitter.cpp"

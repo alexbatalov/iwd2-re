@@ -17,3 +17,9 @@ CCacheStatus::CCacheStatus()
 CCacheStatus::~CCacheStatus()
 {
 }
+
+// 0x440400
+void CCacheStatus::Init()
+{
+    // TODO: Incomplete.
+}

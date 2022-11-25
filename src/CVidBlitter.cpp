@@ -6,11 +6,11 @@ static void sub_7B6810(int a1, int a2, int a3, int a4, int a5, int a6);
 // 0x7B6780
 CVidBlitter::CVidBlitter()
 {
-    field_0 = 0;
-    field_1 = 0;
-    field_2 = 0;
-    field_3 = 0;
-    field_4 = 0;
+    m_bSoftSrcKeyBltFast = FALSE;
+    m_bSoftBltFast = FALSE;
+    m_bSoftSrcKeyBlt = FALSE;
+    m_bSoftBlt = FALSE;
+    m_bSoftMirrorBlt = FALSE;
     field_E6 = 0;
     field_DE = 0;
     field_E2 = 0;

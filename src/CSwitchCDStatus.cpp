@@ -13,3 +13,9 @@ CSwitchCDStatus::~CSwitchCDStatus()
 {
     // TODO: Incomplete.
 }
+
+// 0x54D460
+void CSwitchCDStatus::Init()
+{
+    // TODO: Incomplete.
+}
