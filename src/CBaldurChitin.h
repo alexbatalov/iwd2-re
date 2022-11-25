@@ -45,7 +45,15 @@ public:
     void Init(HINSTANCE hInstance);
     void SaveOptions();
 
+    /* 0008 */ DWORD GetIDSInvalidVideoMode();
+    /* 000C */ DWORD GetIDSOpenGLDll();
     /* 0010 */ DWORD GetIDSExclusiveMode();
+    /* 0014 */ DWORD GetIDSChoosePixelFormat();
+    /* 0018 */ DWORD GetIDSSetPixelFormat();
+    /* 001C */ DWORD GetIDSSetGameResolution();
+    /* 0020 */ DWORD GetIDSSetGameBitDepth();
+    /* 0024 */ DWORD GetIDSBadDeskTopBitDepth();
+    /* 0028 */ DWORD GetIDSWindowsFonts();
     /* 009C */ void ShutDown(int nLineNumber, const char* szFileName, const char* text);
     /* 00A0 */ const char* GetConfigFileName();
     /* 00A4 */ const char* GetKeyFileName();

@@ -32,7 +32,15 @@ public:
     CWnd* GetWnd();
     void Resume();
 
+    /* 0008 */ virtual DWORD GetIDSInvalidVideoMode();
+    /* 000C */ virtual DWORD GetIDSOpenGLDll();
     /* 0010 */ virtual DWORD GetIDSExclusiveMode();
+    /* 0014 */ virtual DWORD GetIDSChoosePixelFormat();
+    /* 0018 */ virtual DWORD GetIDSSetPixelFormat();
+    /* 001C */ virtual DWORD GetIDSSetGameResolution();
+    /* 0020 */ virtual DWORD GetIDSSetGameBitDepth();
+    /* 0024 */ virtual DWORD GetIDSBadDeskTopBitDepth();
+    /* 0028 */ virtual DWORD GetIDSWindowsFonts();
     /* 00A0 */ virtual const char* GetConfigFileName();
     /* 00A4 */ virtual const char* GetKeyFileName();
     /* 00A8 */ virtual const char* GetLogFileName();

@@ -100,6 +100,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CWarp.cpp"
     "src/CWarp.h"
     "src/main.cpp"
+    "src/resource.h"
+    "src/resource.rc"
 )
 
 target_compile_definitions(${EXECUTABLE_NAME} PUBLIC

@@ -1,6 +1,7 @@
 #include "CBaldurChitin.h"
 
 #include "CUtil.h"
+#include "resource.h"
 
 #define FILE_NAME ".\\Icewind2.ini"
 #define PROGRAM_OPTIONS_SECTION_KEY "Program Options"
@@ -522,11 +523,58 @@ void CBaldurChitin::Init(HINSTANCE hInstance)
     // TODO: Incomplete.
 }
 
-// #guess
+// 0x422B80
+DWORD CBaldurChitin::GetIDSInvalidVideoMode()
+{
+    return IDS_INVALID_VIDEO_MODE;
+}
+
+// 0x422B90
+DWORD CBaldurChitin::GetIDSOpenGLDll()
+{
+    return IDS_OPENGLL_DLL;
+}
+
 // 0x422BA0
 DWORD CBaldurChitin::GetIDSExclusiveMode()
 {
-    return 5;
+    return IDS_EXSLUSIVE_MODE;
+}
+
+// 0x49FC40
+DWORD CBaldurChitin::GetIDSChoosePixelFormat()
+{
+    return IDS_CHOOSE_PIXEL_FORMAT;
+}
+
+// 0x422BB0
+DWORD CBaldurChitin::GetIDSSetPixelFormat()
+{
+    return IDS_SET_PIXEL_FORMAT;
+}
+
+// 0x422BC0
+DWORD CBaldurChitin::GetIDSSetGameResolution()
+{
+    return IDS_SET_GAME_RESOLUTION;
+}
+
+// 0x422BD0
+DWORD CBaldurChitin::GetIDSSetGameBitDepth()
+{
+    return IDS_SET_GAME_BIT_DEPTH;
+}
+
+// 0x422BE0
+DWORD CBaldurChitin::GetIDSBadDeskTopBitDepth()
+{
+    return IDS_BAD_DESKTOP_BIT_DEPTH;
+}
+
+// 0x422BF0
+DWORD CBaldurChitin::GetIDSWindowsFonts()
+{
+    return IDS_WINDOWS_FONTS;
 }
 
 // 0x424D60

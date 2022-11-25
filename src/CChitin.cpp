@@ -436,7 +436,55 @@ void CChitin::Resume()
 }
 
 // 0x78E6E0
+DWORD CChitin::GetIDSInvalidVideoMode()
+{
+    return 0;
+}
+
+// 0x78E6E0
+DWORD CChitin::GetIDSOpenGLDll()
+{
+    return 0;
+}
+
+// 0x78E6E0
 DWORD CChitin::GetIDSExclusiveMode()
+{
+    return 0;
+}
+
+// 0x78E6E0
+DWORD CChitin::GetIDSChoosePixelFormat()
+{
+    return 0;
+}
+
+// 0x78E6E0
+DWORD CChitin::GetIDSSetPixelFormat()
+{
+    return 0;
+}
+
+// 0x78E6E0
+DWORD CChitin::GetIDSSetGameResolution()
+{
+    return 0;
+}
+
+// 0x78E6E0
+DWORD CChitin::GetIDSSetGameBitDepth()
+{
+    return 0;
+}
+
+// 0x78E6E0
+DWORD CChitin::GetIDSBadDeskTopBitDepth()
+{
+    return 0;
+}
+
+// 0x78E6E0
+DWORD CChitin::GetIDSWindowsFonts()
 {
     return 0;
 }
