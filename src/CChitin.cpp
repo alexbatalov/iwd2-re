@@ -3,6 +3,8 @@
 #include <direct.h>
 #include <winver.h>
 
+#include "CAlias.h"
+#include "CUtil.h"
 #include "CWarp.h"
 
 // #guess
@@ -188,6 +190,15 @@ void CChitin::GetGameVersionInfo(HINSTANCE hInstance)
         if (fileVersionInfo != NULL) {
             delete[] fileVersionInfo;
         }
+    }
+}
+
+// 0x790040
+void CChitin::InitResources()
+{
+    ReadIniFiles();
+    if (!cDimm.CreateKeyTable()) {
+        UTIL_ASSERT_MSG(FALSE, "Error initializing key table, bad key file");
     }
 }
 
@@ -433,6 +444,56 @@ CWnd* CChitin::GetWnd()
 void CChitin::Resume()
 {
     // TODO: Incomplete.
+}
+
+// #not-binary-identical
+// 0x790600
+void CChitin::ReadIniFiles()
+{
+    CString temp;
+    char buffer[256];
+
+    if (field_4C == 0) {
+        GetPrivateProfileStringA("Alias", "HD0:", "", buffer, sizeof(buffer), GetConfigFileName());
+        if (strlen(buffer) == 0) {
+            temp = "path:=.\\";
+
+            CAlias* alias = new CAlias(temp);
+            if (!lAliases.AddAlias(alias)) {
+                delete alias;
+            }
+
+            return;
+        } else {
+            temp = "HD0:=";
+            temp += buffer;
+            temp.MakeLower();
+
+            CAlias* alias = new CAlias(temp);
+            if (!lAliases.AddAlias(alias)) {
+                delete alias;
+            }
+
+            for (unsigned char cd = 1;; cd++) {
+                temp.FormatMessageA("CD%d:", cd);
+
+                memset(buffer, 0, sizeof(buffer));
+                GetPrivateProfileStringA("Alias", temp, "", buffer, sizeof(buffer), GetConfigFileName());
+                if (strlen(buffer) == 0) {
+                    break;
+                }
+
+                temp += "=";
+                temp += buffer;
+                temp.MakeLower();
+
+                CAlias* alias = new CAlias(temp);
+                if (!lAliases.AddAlias(alias)) {
+                    delete alias;
+                }
+            }
+        }
+    }
 }
 
 // 0x78E6E0

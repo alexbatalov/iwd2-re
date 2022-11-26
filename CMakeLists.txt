@@ -13,6 +13,8 @@ set(CMAKE_MFC_FLAG 2)
 add_executable(${EXECUTABLE_NAME} WIN32)
 
 target_sources(${EXECUTABLE_NAME} PUBLIC
+    "src/CAlias.cpp"
+    "src/CAlias.h"
     "src/CAliasList.cpp"
     "src/CAliasList.h"
     "src/CBaldurChitin.cpp"

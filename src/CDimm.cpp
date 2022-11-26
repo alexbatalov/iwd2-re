@@ -51,6 +51,14 @@ int CDimm::CancelRequest(CRes* pRes)
     return 0;
 }
 
+// 0x783920
+BOOL CDimm::CreateKeyTable()
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x7840E0
 void CDimm::DestroyKeyTable()
 {

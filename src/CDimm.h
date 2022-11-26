@@ -16,6 +16,7 @@ public:
     ~CDimm();
 
     int CancelRequest(CRes* pRes);
+    BOOL CreateKeyTable();
     void DestroyKeyTable();
     void Dump(CRes* pRes, int a2, int a3);
     void DumpAll();

@@ -21,6 +21,7 @@ public:
     CChitin();
     virtual ~CChitin();
     static void GetGameVersionInfo(HINSTANCE hInstance);
+    void InitResources();
     int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
     static void FixReadonlyPermissions();
     static void DoFixReadonlyPermissions(CString path);
@@ -31,6 +32,7 @@ public:
     void AddEngine(CWarp* pNewEngine);
     CWnd* GetWnd();
     void Resume();
+    void ReadIniFiles();
 
     /* 0008 */ virtual DWORD GetIDSInvalidVideoMode();
     /* 000C */ virtual DWORD GetIDSOpenGLDll();
