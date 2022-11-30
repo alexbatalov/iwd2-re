@@ -13,6 +13,10 @@ public:
     CResCache();
     ~CResCache();
 
+    void AccessFileInCache(UINT nIndex);
+    BOOL CopyFile(UINT nIndex, const CString& a3, const CString& a4, const CString& a5);
+    BOOL RefreshStatus(const CString& a2);
+
     static CString DEFAULT_CACHE_DIRECTORY; // #guess
 
     /* 0000 */ int field_0;

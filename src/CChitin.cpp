@@ -385,7 +385,7 @@ void CChitin::InitializeVariables()
     field_190A = 0;
     m_eventTimer = NULL;
     field_B4 = 0;
-    field_378 = 0;
+    field_378 = NULL;
     field_38C = 0;
     field_390 = 0;
     field_190E = 0;
@@ -395,7 +395,7 @@ void CChitin::InitializeVariables()
     pActiveEngine = NULL;
     field_74 = 0;
 
-    srand(time(0));
+    srand(static_cast<unsigned int>(time(NULL)));
     rand();
 }
 

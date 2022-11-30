@@ -1,31 +1,55 @@
 #ifndef CRES_H_
 #define CRES_H_
 
-#include <afx.h>
-#include <afxmt.h>
+#include "mfc.h"
 
 #include "CChitin.h"
 #include "CResRef.h"
+#include "ChDataTypes.h"
+
+struct CDimmKeyTableEntry;
 
 class CRes : public CObject {
 public:
+    enum Flags {
+        RES_FLAG_0x04 = 0x04,
+        RES_FLAG_0x08 = 0x08,
+        RES_FLAG_0x10 = 0x10,
+        RES_FLAG_0x100 = 0x100,
+    };
+
     CRes();
     ~CRes();
 
-    int CancelRequest();
+    /* 000C */ virtual BOOL func_C();
+    /* 0010 */ virtual void func_10();
+    /* 0014 */ virtual int func_14();
+    /* 0018 */ virtual int func_18();
 
-    /* 0004 */ int field_4;
+    int CancelRequest();
+    int Dump(int a2);
+    int GetDemands();
+    RESID GetID();
+    /* 001C */ virtual CResRef GetResRef();
+    /* 0020 */ virtual USHORT GetResType();
+    int Release();
+    int Request();
+    void SetID(RESID nNewID);
+    void SetPriority(int nNewPriority);
+    BOOL Write(const CString& sFilePath, LPVOID lpBuf, DWORD dwSize);
+
+    /* 0004 */ DWORD dwFlags; // #guess
     /* 0008 */ int field_8;
-    /* 000C */ int field_C;
-    /* 0010 */ int field_10;
+    /* 000C */ CObList* m_pCurrentList; // #guess
+    /* 0010 */ CDimmKeyTableEntry* m_pDimmKeyTableEntry; // #guess
     /* 0014 */ int field_14;
     /* 0018 */ int field_18;
     /* 001C */ int field_1C;
     /* 0020 */ CCriticalSection field_20;
     /* 0040 */ int field_40;
     /* 0044 */ int field_44;
-    /* 0048 */ int field_48;
-    /* 004C */ int field_4C;
+    /* 0048 */ POSITION m_pCurrentListPos; // #guess
+    /* 004C */ RESID m_nID;
 };
 
 template <class T, int nType>

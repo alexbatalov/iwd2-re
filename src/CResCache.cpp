@@ -31,3 +31,25 @@ CResCache::~CResCache()
     LeaveCriticalSection(&criticalSection);
     DeleteCriticalSection(&criticalSection);
 }
+
+// 0x78C130
+void CResCache::AccessFileInCache(UINT nIndex)
+{
+    // TODO: Incomplete.
+}
+
+// 0x78C4F0
+BOOL CResCache::CopyFile(UINT nIndex, const CString& a3, const CString& a4, const CString& a5)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x78D090
+BOOL CResCache::RefreshStatus(const CString& a2)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}

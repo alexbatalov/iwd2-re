@@ -136,7 +136,7 @@ public:
     /* 0344 */ CRITICAL_SECTION field_344;
     /* 035C */ CRITICAL_SECTION field_35C;
     /* 0374 */ int field_374;
-    /* 0378 */ int field_378;
+    /* 0378 */ HANDLE field_378;
     /* 037C */ int field_37C;
     /* 0388 */ int field_388;
     /* 038C */ int field_38C;
