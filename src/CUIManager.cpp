@@ -17,9 +17,9 @@ CUIManager::CUIManager()
     field_28 = 0;
     field_32 = -1;
     field_76 = 0;
-    SetRect(&field_7A, 0, 0, 0, 0);
-    SetRect(&field_8A, 0, 0, 0, 0);
-    SetRect(&field_9A, 0, 0, 0, 0);
+    field_7A.SetRect(0, 0, 0, 0);
+    field_8A.SetRect(0, 0, 0, 0);
+    field_9A.SetRect(0, 0, 0, 0);
     field_AA = 0;
 }
 
@@ -37,4 +37,30 @@ CUIManager::~CUIManager()
         m_lPanels.RemoveAll();
         field_4 = 0;
     }
+}
+
+// 0x4D45E0
+void CUIManager::InvalidateRect(const CRect* rect)
+{
+    if (field_4 != 0) {
+        if (field_18 != 0) {
+            POSITION pos = m_lPanels.GetHeadPosition();
+            while (pos != NULL) {
+                CUIPanel* pPanel = m_lPanels.GetNext(pos);
+                pPanel->InvalidateRect(rect);
+            }
+        }
+    }
+}
+
+// 0x4D4620
+void CUIManager::InvalidateCursorRect(const CRect& rect)
+{
+    field_7A = field_8A;
+    field_8A = rect;
+
+    field_9A.left = min(field_8A.left, field_7A.left);
+    field_9A.top = min(field_8A.top, field_7A.top);
+    field_9A.right = max(field_8A.right, field_7A.right);
+    field_9A.bottom = max(field_8A.bottom, field_7A.bottom);
 }

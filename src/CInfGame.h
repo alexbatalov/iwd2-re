@@ -11,6 +11,7 @@ public:
     ~CInfGame();
     void StartSearchThread();
 
+    /* 3846 */ SHORT m_nCharacters;
     /* 43EA */ CGameOptions m_cOptions; // #guess
     /* 4A00 */ HANDLE m_hSearchThread; // #guess
 };

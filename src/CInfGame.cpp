@@ -1,5 +1,7 @@
 #include "CInfGame.h"
 
+#include <process.h>
+
 #include "CSearchBitmap.h"
 
 // 0x59CC30

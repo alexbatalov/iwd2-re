@@ -12,6 +12,8 @@ class CUIManager {
 public:
     CUIManager();
     ~CUIManager();
+    void InvalidateRect(const CRect* rect);
+    void InvalidateCursorRect(const CRect& rect);
 
     /* 000 */ int field_0;
     /* 004 */ int field_4;
@@ -30,9 +32,9 @@ public:
     /* 0036 */ CCriticalSection field_36;
     /* 0056 */ CCriticalSection field_56;
     /* 0076 */ int field_76;
-    /* 007A */ RECT field_7A;
-    /* 008A */ RECT field_8A;
-    /* 009A */ RECT field_9A;
+    /* 007A */ CRect field_7A;
+    /* 008A */ CRect field_8A;
+    /* 009A */ CRect field_9A;
     /* 00AA */ int field_AA;
     /* 00AE */ CTypedPtrList<CPtrList, CUIPanel*> m_lPanels; // #guess
 };

@@ -51,6 +51,11 @@ BOOL CWarp::SetVideoMode(int a1)
     return pVidMode != NULL;
 }
 
+// 0x799E60
+void CWarp::InvalidateCursorRect(const CRect& rect)
+{
+}
+
 // 0x799CA0
 void CWarp::EngineActivated()
 {
@@ -58,5 +63,10 @@ void CWarp::EngineActivated()
 
 // 0x799CA0
 void CWarp::EngineDeactivated()
+{
+}
+
+// 0x78E730
+void CWarp::ResetControls()
 {
 }
