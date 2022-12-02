@@ -38,6 +38,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/ChDataTypes.h"
     "src/CImm.cpp"
     "src/CImm.h"
+    "src/CKeyInfo.cpp"
+    "src/CKeyInfo.h"
     "src/CMessageHandler.cpp"
     "src/CMessageHandler.h"
     "src/CNetwork.cpp"
