@@ -1,5 +1,28 @@
 #include "CBaldurChitin.h"
 
+#include "CBaldurProjector.h"
+#include "CDungeonMaster.h"
+#include "CInfCursor.h"
+#include "CInfGame.h"
+#include "CScreenChapter.h"
+#include "CScreenCharacter.h"
+#include "CScreenConnection.h"
+#include "CScreenCreateChar.h"
+#include "CScreenInventory.h"
+#include "CScreenJournal.h"
+#include "CScreenKeymaps.h"
+#include "CScreenLoad.h"
+#include "CScreenMap.h"
+#include "CScreenMovies.h"
+#include "CScreenMultiPlayer.h"
+#include "CScreenOptions.h"
+#include "CScreenSave.h"
+#include "CScreenSinglePlayer.h"
+#include "CScreenSpellbook.h"
+#include "CScreenStart.h"
+#include "CScreenStore.h"
+#include "CScreenWorld.h"
+#include "CScreenWorldMap.h"
 #include "CUtil.h"
 #include "resource.h"
 
@@ -21,6 +44,7 @@
 #define USE_MIRROR_FX_KEY "Use Mirror FX"
 #define STRREF_ON_KEY "Strref On"
 #define BITS_PER_PIXEL_KEY "BitsPerPixel"
+#define FIRST_RUN_KEY "First Run"
 
 CChitin* g_pChitin;
 CBaldurChitin* g_pBaldurChitin;
@@ -32,6 +56,11 @@ const USHORT CBaldurChitin::DEFAULT_SCREEN_WIDTH = 800;
 // #guess
 // 0x85DE3E
 const USHORT CBaldurChitin::DEFAULT_SCREEN_HEIGHT = 600;
+
+// NOTE: Probably static in `CBaldurChitin`.
+//
+// 0x8BA28C
+unsigned char byte_8BA28C = 1;
 
 // 0x8BA320
 short CBaldurChitin::word_8BA320 = 100;
@@ -72,29 +101,29 @@ RECT CBaldurChitin::stru_8E7A10;
 // 0x421E40
 CBaldurChitin::CBaldurChitin()
 {
-    field_1C50 = 0;
-    field_1C58 = 0;
-    field_1C5C = 0;
-    field_1C60 = 0;
-    field_1C64 = 0;
-    field_1C68 = 0;
-    field_1C6C = 0;
-    field_1C70 = 0;
-    field_1C74 = 0;
-    field_1C78 = 0;
-    field_1C7C = 0;
-    field_1C80 = 0;
-    field_1C84 = 0;
-    field_1C88 = 0;
-    field_1C8C = 0;
-    field_1C90 = 0;
-    field_1C94 = 0;
-    field_1C98 = 0;
-    field_1C9C = 0;
-    field_1CA0 = 0;
-    field_1CA4 = 0;
-    field_1CA8 = 0;
-    field_1C54 = 0;
+    m_pObjectCursor = NULL;
+    m_pEngineDM = NULL;
+    m_pEngineProjector = NULL;
+    m_pEngineCharacter = NULL;
+    m_pEngineCreateChar = NULL;
+    m_pEngineInventory = NULL;
+    m_pEngineJournal = NULL;
+    m_pEngineLoad = NULL;
+    m_pEngineMap = NULL;
+    m_pEngineOptions = NULL;
+    m_pEngineSave = NULL;
+    m_pEngineSpellbook = NULL;
+    m_pEngineStart = NULL;
+    m_pEngineWorld = NULL;
+    m_pEngineStore = NULL;
+    m_pEngineMultiPlayer = NULL;
+    m_pEngineSinglePlayer = NULL;
+    m_pEngineConnection = NULL;
+    m_pEngineWorldMap = NULL;
+    m_pEngineChapter = NULL;
+    m_pEngineMovies = NULL;
+    m_pEngineKeymaps = NULL;
+    m_pObjectGame = NULL;
     field_499E = 0;
     field_49B2 = 1;
 
@@ -514,7 +543,145 @@ CBaldurChitin::CBaldurChitin()
 // 0x422EB0
 CBaldurChitin::~CBaldurChitin()
 {
-    // TODO: Incomplete.
+    if (CTlkTable::STRREF_ON) {
+        WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+            STRREF_ON_KEY,
+            "1",
+            FILE_NAME);
+    } else {
+        WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+            STRREF_ON_KEY,
+            "0",
+            FILE_NAME);
+    }
+
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        FIRST_RUN_KEY,
+        "1",
+        FILE_NAME);
+
+    m_cTlkTable.CloseFile(0, byte_8FB954);
+    m_cTlkTable.CloseFile(0, byte_8BA28C);
+
+    if (m_pObjectGame != NULL) {
+        delete m_pObjectGame;
+        m_pObjectGame = NULL;
+    }
+
+    if (m_pEngineChapter != NULL) {
+        delete m_pEngineChapter;
+        m_pEngineChapter = NULL;
+    }
+
+    if (m_pEngineWorld != NULL) {
+        delete m_pEngineWorld;
+        m_pEngineWorld = NULL;
+    }
+
+    if (m_pEngineStore != NULL) {
+        delete m_pEngineStore;
+        m_pEngineStore = NULL;
+    }
+
+    if (m_pEngineWorldMap != NULL) {
+        delete m_pEngineWorldMap;
+        m_pEngineWorldMap = NULL;
+    }
+
+    if (m_pEngineConnection != NULL) {
+        delete m_pEngineConnection;
+        m_pEngineConnection = NULL;
+    }
+
+    if (m_pEngineMultiPlayer != NULL) {
+        delete m_pEngineMultiPlayer;
+        m_pEngineMultiPlayer = NULL;
+    }
+
+    if (m_pEngineSinglePlayer != NULL) {
+        delete m_pEngineSinglePlayer;
+        m_pEngineSinglePlayer = NULL;
+    }
+
+    if (m_pEngineStart != NULL) {
+        delete m_pEngineStart;
+        m_pEngineStart = NULL;
+    }
+
+    if (m_pEngineSpellbook != NULL) {
+        delete m_pEngineSpellbook;
+        m_pEngineSpellbook = NULL;
+    }
+
+    if (m_pEngineSave != NULL) {
+        delete m_pEngineSave;
+        m_pEngineSave = NULL;
+    }
+
+    if (m_pEngineOptions != NULL) {
+        delete m_pEngineOptions;
+        m_pEngineOptions = NULL;
+    }
+
+    if (m_pEngineMap != NULL) {
+        delete m_pEngineMap;
+        m_pEngineMap = NULL;
+    }
+
+    if (m_pEngineLoad != NULL) {
+        delete m_pEngineLoad;
+        m_pEngineLoad = NULL;
+    }
+
+    if (m_pEngineJournal != NULL) {
+        delete m_pEngineJournal;
+        m_pEngineJournal = NULL;
+    }
+
+    if (m_pEngineInventory != NULL) {
+        delete m_pEngineInventory;
+        m_pEngineInventory = NULL;
+    }
+
+    if (m_pEngineCreateChar != NULL) {
+        delete m_pEngineCreateChar;
+        m_pEngineCreateChar = NULL;
+    }
+
+    if (m_pEngineCharacter != NULL) {
+        delete m_pEngineCharacter;
+        m_pEngineCharacter = NULL;
+    }
+
+    if (m_pEngineProjector != NULL) {
+        delete m_pEngineProjector;
+        m_pEngineProjector = NULL;
+    }
+
+    if (m_pEngineDM != NULL) {
+        delete m_pEngineDM;
+        m_pEngineDM = NULL;
+    }
+
+    if (m_pEngineMovies != NULL) {
+        delete m_pEngineMovies;
+        m_pEngineMovies = NULL;
+    }
+
+    if (m_pEngineKeymaps != NULL) {
+        delete m_pEngineKeymaps;
+        m_pEngineKeymaps = NULL;
+    }
+
+    if (m_pObjectCursor != NULL) {
+        delete m_pObjectCursor;
+        m_pObjectCursor = NULL;
+    }
+
+    if (field_4F40 != NULL) {
+        delete field_4F40;
+        field_4F40 = NULL;
+    }
 }
 
 // 0x423800

@@ -11,6 +11,32 @@
 #include "CTlkTable.h"
 #include "CVidFont.h"
 
+extern unsigned char byte_8BA28C;
+
+class CBaldurProjector;
+class CDungeonMaster;
+class CInfCursor;
+class CInfGame;
+class CScreenChapter;
+class CScreenCharacter;
+class CScreenConnection;
+class CScreenCreateChar;
+class CScreenInventory;
+class CScreenJournal;
+class CScreenKeymaps;
+class CScreenLoad;
+class CScreenMap;
+class CScreenMovies;
+class CScreenMultiPlayer;
+class CScreenOptions;
+class CScreenSave;
+class CScreenSinglePlayer;
+class CScreenSpellbook;
+class CScreenStart;
+class CScreenStore;
+class CScreenWorld;
+class CScreenWorldMap;
+
 class CBaldurChitin : public CChitin {
 public:
     // TODO: Some kind of layout info.
@@ -22,6 +48,14 @@ public:
         /* 000A */ short field_A;
         /* 000C */ short field_C;
         /* 0010 */ char field_10[8];
+    };
+
+    // TODO: Something sound-related.
+    struct S4F40 {
+        CResRef cResRef;
+        int field_8;
+        int field_C;
+        int field_10;
     };
 
     static const USHORT DEFAULT_SCREEN_WIDTH;
@@ -61,29 +95,29 @@ public:
     /* 00A8 */ const char* GetErrorFileName();
     /* 00B0 */ void SaveBitsPerPixel(USHORT nBpp);
 
-    /* 1C50 */ int field_1C50;
-    /* 1C54 */ int field_1C54;
-    /* 1C58 */ int field_1C58;
-    /* 1C5C */ int field_1C5C;
-    /* 1C60 */ int field_1C60;
-    /* 1C64 */ int field_1C64;
-    /* 1C68 */ int field_1C68;
-    /* 1C6C */ int field_1C6C;
-    /* 1C70 */ int field_1C70;
-    /* 1C74 */ int field_1C74;
-    /* 1C78 */ int field_1C78;
-    /* 1C7C */ int field_1C7C;
-    /* 1C80 */ int field_1C80;
-    /* 1C84 */ int field_1C84;
-    /* 1C88 */ int field_1C88;
-    /* 1C8C */ int field_1C8C;
-    /* 1C90 */ int field_1C90;
-    /* 1C94 */ int field_1C94;
-    /* 1C98 */ int field_1C98;
-    /* 1C9C */ int field_1C9C;
-    /* 1CA0 */ int field_1CA0;
-    /* 1CA4 */ int field_1CA4;
-    /* 1CA8 */ int field_1CA8;
+    /* 1C50 */ CInfCursor* m_pObjectCursor;
+    /* 1C54 */ CInfGame* m_pObjectGame;
+    /* 1C58 */ CDungeonMaster* m_pEngineDM;
+    /* 1C5C */ CBaldurProjector* m_pEngineProjector;
+    /* 1C60 */ CScreenCharacter* m_pEngineCharacter;
+    /* 1C64 */ CScreenCreateChar* m_pEngineCreateChar;
+    /* 1C68 */ CScreenInventory* m_pEngineInventory;
+    /* 1C6C */ CScreenJournal* m_pEngineJournal;
+    /* 1C70 */ CScreenLoad* m_pEngineLoad;
+    /* 1C74 */ CScreenMap* m_pEngineMap;
+    /* 1C78 */ CScreenOptions* m_pEngineOptions;
+    /* 1C7C */ CScreenSave* m_pEngineSave;
+    /* 1C80 */ CScreenSpellbook* m_pEngineSpellbook;
+    /* 1C84 */ CScreenStart* m_pEngineStart;
+    /* 1C88 */ CScreenWorld* m_pEngineWorld;
+    /* 1C8C */ CScreenStore* m_pEngineStore;
+    /* 1C90 */ CScreenMultiPlayer* m_pEngineMultiPlayer;
+    /* 1C94 */ CScreenSinglePlayer* m_pEngineSinglePlayer;
+    /* 1C98 */ CScreenConnection* m_pEngineConnection;
+    /* 1C9C */ CScreenWorldMap* m_pEngineWorldMap;
+    /* 1CA0 */ CScreenChapter* m_pEngineChapter;
+    /* 1CA4 */ CScreenMovies* m_pEngineMovies;
+    /* 1CA8 */ CScreenKeymaps* m_pEngineKeymaps;
     /* 1CAC */ CTlkTable m_cTlkTable;
     /* 1D52 */ CCacheStatus m_cCachingStatus;
     /* 3970 */ CSwitchCDStatus m_cSwitchingCDStatus; // #guess
@@ -105,6 +139,7 @@ public:
     /* 4A34 */ CVidFont field_4A34;
     /* 4F38 */ int field_4F38;
     /* 4F3C */ int field_4F3C;
+    /* 4F40 */ S4F40* field_4F40;
 };
 
 extern CBaldurChitin* g_pBaldurChitin;

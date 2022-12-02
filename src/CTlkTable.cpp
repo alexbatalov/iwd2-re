@@ -21,3 +21,11 @@ CTlkTable::~CTlkTable()
 {
     // TODO: Incomplete.
 }
+
+// 0x794190
+BOOL CTlkTable::CloseFile(BYTE a2, BYTE a3)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}

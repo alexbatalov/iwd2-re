@@ -19,6 +19,7 @@ public:
 
     CTlkTable();
     ~CTlkTable();
+    BOOL CloseFile(BYTE a2, BYTE a3);
 
     CTypedPtrMap<CMapWordToPtr, USHORT, CTlkFile*> field_0;
     CMapStringToString field_1C;
