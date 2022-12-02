@@ -23,6 +23,7 @@
 #include "CScreenStore.h"
 #include "CScreenWorld.h"
 #include "CScreenWorldMap.h"
+#include "CSearchBitmap.h"
 #include "CUtil.h"
 #include "resource.h"
 
@@ -45,6 +46,22 @@
 #define STRREF_ON_KEY "Strref On"
 #define BITS_PER_PIXEL_KEY "BitsPerPixel"
 #define FIRST_RUN_KEY "First Run"
+#define IS_3D_ACCELERATED "3D Acceleration"
+#define MAXIMUM_FRAME_RATE_KEY "Maximum Frame Rate"
+#define PATH_SEARCH_NODES_KEY "Path Search Nodes"
+#define TOOLTIPS_KEY "Tooltips"
+#define TRANSLUCENT_SHADOWS_KEY "Translucent Shadows"
+#define SPRITE_MIRROR_KEY "Sprite Mirror"
+#define GAMMA_CORRECTION_KEY "Gamma Correction"
+#define BRIGHTNESS_CORRECTION_KEY "Brightness Correction"
+#define BACKWARDS_COMPATIBLE_3D_KEY "Backwards Compatible 3d"
+#define VOLUME_MOVIE_KEY "Volume Movie"
+#define VOLUME_MUSIC_KEY "Volume Music"
+#define VOLUME_VOICES_KEY "Volume Voices"
+#define VOLUME_AMBIENTS_KEY "Volume Ambients"
+#define VOLUME_SFX_KEY "Volume SFX"
+#define DISPLAY_MOVIE_SUBTITLES_KEY "Display Movie Subtitles"
+#define SHADED_SELECTION_BOX_KEY "Shaded Selection Box"
 
 CChitin* g_pChitin;
 CBaldurChitin* g_pBaldurChitin;
@@ -909,7 +926,177 @@ const char* CBaldurChitin::GetErrorFileName()
 // 0x425040
 void CBaldurChitin::SaveOptions()
 {
-    // TODO: Incomplete.
+    CGameOptions* pOptions = &(m_pObjectGame->m_cOptions);
+    CString sString;
+
+    if (m_bFullscreen) {
+        SaveBitsPerPixel(cVideo.m_nBpp);
+    } else {
+        RECT rect;
+        GetWindowRect(GetWnd()->GetSafeHwnd(), &rect);
+
+        m_ptScreen.x = rect.left;
+        m_ptScreen.y = rect.top;
+
+        sString.Format("%d", m_ptScreen.x);
+        WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+            SCREEN_POSITION_X_KEY,
+            sString,
+            GetConfigFileName());
+
+        sString.Format("%d", m_ptScreen.y);
+        WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+            SCREEN_POSITION_Y_KEY,
+            sString,
+            GetConfigFileName());
+    }
+
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        FONT_NAME_KEY,
+        m_sFontName,
+        GetConfigFileName());
+
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        DOUBLE_BYTE_CHARACTER_SUPPORT_KEY,
+        field_1A0 ? "1" : "0",
+        GetConfigFileName());
+
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        IS_3D_ACCELERATED,
+        cVideo.m_bIs3dAccelerated ? "1" : "0",
+        GetConfigFileName());
+
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        SIXTEEN_BIT_TEXTURES_KEY,
+        field_2F4 ? "1" : "0",
+        GetConfigFileName());
+
+    sString.Format("%d", CVideo::FPS);
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        DISPLAY_FREQUENCY_KEY,
+        sString,
+        GetConfigFileName());
+
+    sString.Format("%d", CVideo::SCREENWIDTH);
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        RESOLUTION_KEY,
+        sString,
+        GetConfigFileName());
+
+    sString.Format("%d", CChitin::TIMER_UPDATES_PER_SECOND);
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        MAXIMUM_FRAME_RATE_KEY,
+        sString,
+        GetConfigFileName());
+
+    sString.Format("%d", CSearchRequest::MAXNODES);
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        PATH_SEARCH_NODES_KEY,
+        sString,
+        GetConfigFileName());
+
+    sString.Format("%d", pOptions->m_nTooltips);
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        TOOLTIPS_KEY,
+        sString,
+        GetConfigFileName());
+
+    sString.Format("%d", pOptions->m_nTranslucentShadows);
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        TRANSLUCENT_SHADOWS_KEY,
+        sString,
+        GetConfigFileName());
+
+    sString.Format("%d", SPRITE_MIRROR);
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        SPRITE_MIRROR_KEY,
+        sString,
+        GetConfigFileName());
+
+    if (CVidMode::bInitialized) {
+        sString.Format("%d", GetCurrentVideoMode()->m_nGammaCorrection);
+        WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+            GAMMA_CORRECTION_KEY,
+            sString,
+            GetConfigFileName());
+
+        sString.Format("%d", GetCurrentVideoMode()->m_nBrightnessCorrection);
+        WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+            BRIGHTNESS_CORRECTION_KEY,
+            sString,
+            GetConfigFileName());
+    }
+
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        BACKWARDS_COMPATIBLE_3D_KEY,
+        cVideo.field_13A ? "1" : "0",
+        GetConfigFileName());
+
+    sString.Format("%d", pOptions->m_nVolumeMovie);
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        VOLUME_MOVIE_KEY,
+        sString,
+        GetConfigFileName());
+
+    sString.Format("%d", pOptions->m_nVolumeMusic);
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        VOLUME_MUSIC_KEY,
+        sString,
+        GetConfigFileName());
+
+    sString.Format("%d", pOptions->m_nVolumeVoices);
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        VOLUME_VOICES_KEY,
+        sString,
+        GetConfigFileName());
+
+    sString.Format("%d", pOptions->m_nVolumeAmbients);
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        VOLUME_AMBIENTS_KEY,
+        sString,
+        GetConfigFileName());
+
+    sString.Format("%d", pOptions->m_nVolumeSFX);
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        VOLUME_SFX_KEY,
+        sString,
+        GetConfigFileName());
+
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        SOFT_SRC_KEY_BLT_FAST_KEY,
+        cVideo.cVidBlitter.m_bSoftSrcKeyBltFast ? "1" : "0",
+        GetConfigFileName());
+
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        SOFT_BLT_FAST_KEY,
+        cVideo.cVidBlitter.m_bSoftBltFast ? "1" : "0",
+        GetConfigFileName());
+
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        SOFT_SRC_KEY_BLT_KEY,
+        cVideo.cVidBlitter.m_bSoftSrcKeyBlt ? "1" : "0",
+        GetConfigFileName());
+
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        SOFT_BLT_KEY,
+        cVideo.cVidBlitter.m_bSoftBlt ? "1" : "0",
+        GetConfigFileName());
+
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        SOFT_MIRROR_BLT_KEY,
+        cVideo.cVidBlitter.m_bSoftMirrorBlt ? "1" : "0",
+        GetConfigFileName());
+
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        DISPLAY_MOVIE_SUBTITLES_KEY,
+        pOptions->m_bDisplayMovieSubtitles ? "1" : "0",
+        GetConfigFileName());
+
+    sString.Format("%d", pOptions->m_nShadedSelectionBox);
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        SHADED_SELECTION_BOX_KEY,
+        sString,
+        GetConfigFileName());
 }
 
 // 0x425680

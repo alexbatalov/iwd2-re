@@ -7,9 +7,8 @@
 #include "CUtil.h"
 #include "CWarp.h"
 
-// #guess
 // 0x8B9E48
-UINT CChitin::MAXIMUM_FRAME_RATE;
+DWORD CChitin::TIMER_UPDATES_PER_SECOND = 30;
 
 // 0x8FB938
 CString CChitin::buildVersionString;
@@ -313,7 +312,7 @@ void CChitin::InitializeVariables()
         m_nDoubleClickTime = 500;
     }
 
-    m_nDoubleClickTime = 10 * m_nDoubleClickTime / (10000 / MAXIMUM_FRAME_RATE) + 1;
+    m_nDoubleClickTime = 10 * m_nDoubleClickTime / (10000 / TIMER_UPDATES_PER_SECOND) + 1;
     field_18 = m_nDoubleClickTime;
     field_38 = m_nDoubleClickTime;
     field_28 = m_nDoubleClickTime;
@@ -330,7 +329,7 @@ void CChitin::InitializeVariables()
         m_nKeyboardSpeed = 8;
     }
 
-    m_nKeyboardSpeed = MAXIMUM_FRAME_RATE / (m_nKeyboardSpeed + 1) + 1;
+    m_nKeyboardSpeed = TIMER_UPDATES_PER_SECOND / (m_nKeyboardSpeed + 1) + 1;
 
     if (GetSystemMetrics(SM_SWAPBUTTON)) {
         field_4 = 2;
@@ -581,4 +580,13 @@ const char* CChitin::GetErrorFileName()
 void CChitin::ShutDown(int nLineNumber, const char* szFileName, const char* text)
 {
     // TODO: Incomplete.
+}
+
+// NOTE: Inlined in many places. I'm not sure if uninlined version exists.
+CVidMode* CChitin::GetCurrentVideoMode()
+{
+    if (pActiveEngine != NULL) {
+        return pActiveEngine->pVidMode;
+    }
+    return NULL;
 }

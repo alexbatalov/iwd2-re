@@ -43,8 +43,8 @@ public:
     /* 009C */ int field_9C;
     /* 00A0 */ void* field_A0;
     /* 00A4 */ COLORREF rgbGlobalTint;
-    /* 00A8 */ unsigned char field_A8;
-    /* 00A9 */ unsigned char field_A9;
+    /* 00A8 */ BYTE m_nBrightnessCorrection;
+    /* 00A9 */ BYTE m_nGammaCorrection;
     /* 00C2 */ int field_C2;
     /* 00C6 */ int field_C6;
     /* 00CA */ int field_CA;

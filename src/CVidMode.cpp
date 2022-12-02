@@ -38,8 +38,8 @@ CVidMode::CVidMode()
     rgbGlobalTint = 0xFFFFFF;
     field_4 = 0;
     field_8F = 0;
-    field_A8 = 0;
-    field_A9 = 0;
+    m_nBrightnessCorrection = 0;
+    m_nGammaCorrection = 0;
     field_8 = 0;
     field_C = 0;
     field_10 = 1;

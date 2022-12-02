@@ -37,6 +37,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CDimmKeyTable.h"
     "src/CDungeonMaster.cpp"
     "src/CDungeonMaster.h"
+    "src/CGameOptions.cpp"
+    "src/CGameOptions.h"
     "src/CGameSpy.cpp"
     "src/CGameSpy.h"
     "src/ChDataTypes.h"

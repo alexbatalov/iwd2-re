@@ -3,6 +3,14 @@
 
 #include "mfc.h"
 
+class CSearchRequest {
+public:
+    static LONG MINNODES;
+    static LONG MAXNODES;
+    static LONG MINNODESBACK;
+    static LONG MAXNODESBACK;
+};
+
 void SearchThreadMain(void* userInfo);
 
 #endif /* CSEARCHBITMAP_H_ */

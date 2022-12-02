@@ -14,6 +14,7 @@
 #include "CUnknown1.h"
 #include "CVideo.h"
 
+class CVidMode;
 class CWarp;
 
 class CChitin {
@@ -33,6 +34,7 @@ public:
     CWnd* GetWnd();
     void Resume();
     void ReadIniFiles();
+    CVidMode* GetCurrentVideoMode();
 
     /* 0008 */ virtual DWORD GetIDSInvalidVideoMode();
     /* 000C */ virtual DWORD GetIDSOpenGLDll();
@@ -50,7 +52,7 @@ public:
     /* 00B0 */ virtual void SaveBitsPerPixel(USHORT nBpp) = 0;
     /* 009C */ virtual void ShutDown(int nLineNumber, const char* szFileName, const char* text);
 
-    static UINT MAXIMUM_FRAME_RATE;
+    static DWORD TIMER_UPDATES_PER_SECOND;
     static CString buildVersionString;
     static CString versionString;
     static CString name;
