@@ -63,6 +63,7 @@ public:
 
     static short word_8BA320;
     static CString string_8C8CA0;
+    static CString OVERRIDE_DIR_NAME;
     static RECT stru_8E7538;
     static RECT stru_8E7548;
     static RECT stru_8E7958;
@@ -73,6 +74,7 @@ public:
     static RECT stru_8E79E0;
     static RECT stru_8E79F8;
     static RECT stru_8E7A10;
+    static BOOL SPRITE_MIRROR;
 
     CBaldurChitin();
     ~CBaldurChitin();

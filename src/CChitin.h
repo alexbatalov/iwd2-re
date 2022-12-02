@@ -74,7 +74,7 @@ public:
     /* 0050 */ int field_50;
     /* 0054 */ CObList lEngines;
     /* 0070 */ int field_70;
-    /* 0074 */ int field_74;
+    /* 0074 */ CWarp* m_pStartingEngine;
     /* 0078 */ CWnd cWnd; // #guess
     /* 00B4 */ HANDLE field_B4;
     /* 00BC */ int field_BC;

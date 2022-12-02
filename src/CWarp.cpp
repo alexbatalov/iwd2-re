@@ -50,3 +50,13 @@ BOOL CWarp::SetVideoMode(int a1)
     }
     return pVidMode != NULL;
 }
+
+// 0x799CA0
+void CWarp::EngineActivated()
+{
+}
+
+// 0x799CA0
+void CWarp::EngineDeactivated()
+{
+}

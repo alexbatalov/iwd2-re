@@ -393,7 +393,7 @@ void CChitin::InitializeVariables()
     field_BC = 0;
     field_C0 = 0;
     pActiveEngine = NULL;
-    field_74 = 0;
+    m_pStartingEngine = NULL;
 
     srand(static_cast<unsigned int>(time(NULL)));
     rand();

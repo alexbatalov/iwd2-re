@@ -68,6 +68,10 @@ short CBaldurChitin::word_8BA320 = 100;
 // 0x8C8CA0
 CString CBaldurChitin::string_8C8CA0;
 
+// #guess
+// 0x8CB238
+CString CBaldurChitin::OVERRIDE_DIR_NAME(".\\override\\");
+
 // 0x8E7538
 RECT CBaldurChitin::stru_8E7538;
 
@@ -97,6 +101,12 @@ RECT CBaldurChitin::stru_8E79F8;
 
 // 0x8E7A10
 RECT CBaldurChitin::stru_8E7A10;
+
+// NOTE: Likely belongs to other object.
+//
+// #guess
+// 0x8F8E14
+BOOL CBaldurChitin::SPRITE_MIRROR;
 
 // 0x421E40
 CBaldurChitin::CBaldurChitin()
@@ -687,7 +697,123 @@ CBaldurChitin::~CBaldurChitin()
 // 0x423800
 void CBaldurChitin::Init(HINSTANCE hInstance)
 {
-    // TODO: Incomplete.
+    CString maleURI;
+    CString femaleURI;
+    CString path;
+    BOOLEAN bOpened;
+
+    field_4F40 = new S4F40[64];
+    for (int k = 0; k < 64; k++) {
+        field_4F40[k].cResRef = "XXXXXXXX";
+        field_4F40[k].field_8 = -1;
+        field_4F40[k].field_C = 0;
+        field_4F40[k].field_10 = 0;
+    }
+
+    g_pChitin->cDimm.AddToDirectoryList(OVERRIDE_DIR_NAME, FALSE);
+
+    InitResources();
+
+    m_pObjectCursor = new CInfCursor();
+
+    m_pEngineDM = new CDungeonMaster();
+    m_pEngineProjector = new CBaldurProjector();
+    m_pEngineCharacter = new CScreenCharacter();
+    m_pEngineCreateChar = new CScreenCreateChar();
+    m_pEngineInventory = new CScreenInventory();
+    m_pEngineJournal = new CScreenJournal();
+    m_pEngineLoad = new CScreenLoad();
+    m_pEngineMap = new CScreenMap();
+    m_pEngineOptions = new CScreenOptions();
+    m_pEngineSave = new CScreenSave();
+    m_pEngineSpellbook = new CScreenSpellbook();
+    m_pEngineStart = new CScreenStart();
+    m_pEngineWorld = new CScreenWorld();
+    m_pEngineStore = new CScreenStore();
+    m_pEngineMultiPlayer = new CScreenMultiPlayer();
+    m_pEngineSinglePlayer = new CScreenSinglePlayer();
+    m_pEngineConnection = new CScreenConnection();
+    m_pEngineWorldMap = new CScreenWorldMap();
+    m_pEngineChapter = new CScreenChapter();
+    m_pEngineKeymaps = new CScreenKeymaps();
+
+    m_pObjectGame = new CInfGame();
+    m_pObjectGame->StartSearchThread();
+
+    m_pStartingEngine = m_pEngineDM;
+
+    AddEngine(m_pEngineDM);
+    AddEngine(m_pEngineProjector);
+    AddEngine(m_pEngineCharacter);
+    AddEngine(m_pEngineCreateChar);
+    AddEngine(m_pEngineInventory);
+    AddEngine(m_pEngineJournal);
+    AddEngine(m_pEngineLoad);
+    AddEngine(m_pEngineMap);
+    AddEngine(m_pEngineOptions);
+    AddEngine(m_pEngineSave);
+    AddEngine(m_pEngineSpellbook);
+    AddEngine(m_pEngineStart);
+    AddEngine(m_pEngineWorld);
+    AddEngine(m_pEngineStore);
+    AddEngine(m_pEngineMultiPlayer);
+    AddEngine(m_pEngineSinglePlayer);
+    AddEngine(m_pEngineConnection);
+    AddEngine(m_pEngineWorldMap);
+    AddEngine(m_pEngineChapter);
+    AddEngine(m_pEngineMovies);
+    AddEngine(m_pEngineKeymaps);
+
+    maleURI = "hd0:\\dialog.tlk";
+    femaleURI = "hd0:\\dialogf.tlk";
+    path = "";
+
+    if (lAliases.ResolveFileName(femaleURI, path) == TRUE) {
+        CFileStatus fileStatus;
+        if (CFile::GetStatus(path, fileStatus)) {
+            bOpened = m_cTlkTable.AddTlkFile(path, 0, byte_8BA28C, 1);
+            if (bOpened) {
+                if (lAliases.ResolveFileName(maleURI, path) == TRUE) {
+                    bOpened = m_cTlkTable.AddTlkFile(path, 0, byte_8FB954, 1);
+
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\CBaldurChitin.cpp
+                    // __LINE__: 1148
+                    UTIL_ASSERT(bOpened);
+                }
+            } else {
+                byte_8BA28C = byte_8FB954;
+                if (lAliases.ResolveFileName(maleURI, path) == TRUE) {
+                    bOpened = m_cTlkTable.AddTlkFile(path, 0, byte_8FB954, 1);
+
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\CBaldurChitin.cpp
+                    // __LINE__: 1158
+                    UTIL_ASSERT(bOpened);
+                }
+            }
+        } else {
+            byte_8BA28C = byte_8FB954;
+            if (lAliases.ResolveFileName(maleURI, path) == TRUE) {
+                bOpened = m_cTlkTable.AddTlkFile(path, 0, byte_8FB954, 1);
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\CBaldurChitin.cpp
+                // __LINE__: 1169
+                UTIL_ASSERT(bOpened);
+            }
+        }
+    } else {
+        byte_8BA28C = byte_8FB954;
+        if (lAliases.ResolveFileName(maleURI, path) == TRUE) {
+            bOpened = m_cTlkTable.AddTlkFile(path, 0, byte_8FB954, 1);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CBaldurChitin.cpp
+            // __LINE__: 1181
+            UTIL_ASSERT(bOpened);
+        }
+    }
+
+    if (g_pChitin->cDimm.GetMemoryAmount() == 1) {
+        SPRITE_MIRROR = 1;
+    }
 }
 
 // 0x422B80
