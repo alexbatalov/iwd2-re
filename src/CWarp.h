@@ -24,6 +24,10 @@ public:
     /* 000C */ virtual void InvalidateCursorRect(const CRect& rect);
     /* 0014 */ virtual void EngineActivated();
     /* 0018 */ virtual void EngineDeactivated();
+    /* 001C */ virtual void EngineDestroyed();
+    /* 0020 */ virtual void EngineInitialized();
+    /* 0024 */ virtual void EngineGameInit();
+    /* 0028 */ virtual void EngineGameUninit();
     /* 00B8 */ virtual void ResetControls();
 
     /* 0004 */ CVidMode* pVidMode; // #guess

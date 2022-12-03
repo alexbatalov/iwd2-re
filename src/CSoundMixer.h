@@ -24,6 +24,7 @@ public:
     void CleanUp();
     int GetChannelVolume(int nChannelNumber);
     void GetListenPosition(CPoint& pos, LONG& posZ);
+    BOOL Initialize(CWnd* pWnd, int nNewMaxVoices, int nNewMaxChannels);
     void InitializeChannels(int nNewMaxChannels);
     BOOL ReleaseAll();
     void RemoveWaiting(CSound* pSoundPtr);

@@ -24,3 +24,9 @@ void CInfGame::StartSearchThread()
         m_hSearchThread = NULL;
     }
 }
+
+// 0x5C0EA0
+void CInfGame::ApplyVolumeSliders(BOOLEAN a2)
+{
+    // TODO: Incomplete.
+}

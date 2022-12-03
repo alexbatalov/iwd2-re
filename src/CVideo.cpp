@@ -5,6 +5,12 @@
 #include "CVidInf.h"
 #include "CWarp.h"
 
+// 0x85DE2C
+const USHORT CVideo::word_85DE2C = 16;
+
+// 0x85DE2E
+const USHORT CVideo::word_85DE2E = 32;
+
 // #guess
 // 0x8BA318
 DWORD CVideo::FPS = 60;
@@ -411,4 +417,12 @@ void CVideo::SetBitsPerPixels(USHORT nNewBpp, BOOLEAN a3)
 void CVideo::CleanUp3d()
 {
     // TODO: Incomplete.
+}
+
+// 0x7BBAF0
+BOOL CVideo::Initialize3d(HWND hWnd, BOOLEAN bFullscreen, int a4)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
 }

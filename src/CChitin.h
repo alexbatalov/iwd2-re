@@ -23,11 +23,14 @@ public:
     virtual ~CChitin();
     static void GetGameVersionInfo(HINSTANCE hInstance);
     void InitResources();
+    BOOL InitInstance();
+    void ParseCommandLine();
     int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
     static void FixReadonlyPermissions();
     static void DoFixReadonlyPermissions(CString path);
     void InitializeVariables();
     void InitVariables3D();
+    BOOL Init3d();
     void Shutdown3D();
     void SuspendThreads();
     void AddEngine(CWarp* pNewEngine);
@@ -36,6 +39,8 @@ public:
     void ReadIniFiles();
     CVidMode* GetCurrentVideoMode();
 
+    /* 0000 */ virtual void SynchronousUpdate();
+    /* 0004 */ virtual int InitApplication(HINSTANCE hInstance, int nShowCmd);
     /* 0008 */ virtual DWORD GetIDSInvalidVideoMode();
     /* 000C */ virtual DWORD GetIDSOpenGLDll();
     /* 0010 */ virtual DWORD GetIDSExclusiveMode();
@@ -45,17 +50,31 @@ public:
     /* 0020 */ virtual DWORD GetIDSSetGameBitDepth();
     /* 0024 */ virtual DWORD GetIDSBadDeskTopBitDepth();
     /* 0028 */ virtual DWORD GetIDSWindowsFonts();
+    /* 002C */ virtual void MessageThreadMain(void* userInfo) = 0;
+    /* 0030 */ virtual void RSThreadMain(void* userInfo) = 0;
+    /* 0034 */ virtual void MainAIThread(void* userInfo) = 0;
+    /* 0038 */ virtual void MusicThreadMain(void* userInfo) = 0;
+    /* 0040 */ virtual const CString& GetIconRes();
+    /* 0050 */ virtual BOOL InitGraphics();
+    /* 0058 */ virtual BOOL InitializeServices(HWND hWnd);
     /* 00A0 */ virtual const char* GetConfigFileName();
     /* 00A4 */ virtual const char* GetKeyFileName();
     /* 00A8 */ virtual const char* GetLogFileName();
     /* 00A8 */ virtual const char* GetErrorFileName();
-    /* 00B0 */ virtual void SaveBitsPerPixel(USHORT nBpp) = 0;
+    /* 00B0 */ virtual void SaveBitsPerPixel(USHORT nBpp);
+    /* 00B4 */ virtual UINT GetSavedBitsPerPixel();
+    /* 00B8 */ virtual BYTE GetNumberSoundChannels();
+    /* 00C0 */ virtual void LoadOptions();
+    /* 0098 */ virtual void SelectEngine(CWarp* pNewEngine);
     /* 009C */ virtual void ShutDown(int nLineNumber, const char* szFileName, const char* text);
 
     static DWORD TIMER_UPDATES_PER_SECOND;
+    static const CString ICON_RES_ID;
     static CString buildVersionString;
     static CString versionString;
     static CString name;
+    static BOOL SCREEN_SAVE_ACTIVE;
+    static BOOL SCREEN_SAVE_ACTIVE_LOADED;
     static int dword_8FB974;
     static int dword_8FB978;
     static int dword_8FB97C;
@@ -79,10 +98,11 @@ public:
     /* 0074 */ CWarp* m_pStartingEngine;
     /* 0078 */ CWnd cWnd; // #guess
     /* 00B4 */ HANDLE field_B4;
+    /* 00B8 */ HINSTANCE m_hInstance; // #guess
     /* 00BC */ int field_BC;
     /* 00C0 */ int field_C0;
     /* 00C4 */ CRITICAL_SECTION field_C4;
-    /* 00DC */ CString field_DC;
+    /* 00DC */ CString m_sCommandLine;
     /* 00E0 */ unsigned char field_E0;
     /* 00E1 */ BOOLEAN m_bFullscreen; // #guess
     /* 00E2 */ unsigned char field_E2;
@@ -116,6 +136,7 @@ public:
     /* 0170 */ int field_170;
     /* 0174 */ int field_174;
     /* 0178 */ BOOL m_bUseMirrorFX; // #guess
+    /* 017C */ UINT m_nQueryCancelAutoPlayMsgID; // #guess
     /* 0180 */ int field_180;
     /* 0184 */ int field_184;
     /* 0188 */ int field_188;
@@ -138,10 +159,12 @@ public:
     /* 0344 */ CRITICAL_SECTION field_344;
     /* 035C */ CRITICAL_SECTION field_35C;
     /* 0374 */ int field_374;
-    /* 0378 */ HANDLE field_378;
+    /* 0378 */ HANDLE m_hRSThread;
     /* 037C */ int field_37C;
+    /* 0380 */ HANDLE m_hMessageThread;
+    /* 0384 */ HANDLE m_hMainAIThread;
     /* 0388 */ int field_388;
-    /* 038C */ int field_38C;
+    /* 038C */ HANDLE m_hMusicThread;
     /* 0390 */ int field_390;
     /* 0394 */ CRITICAL_SECTION field_394;
     /* 03AC */ CRITICAL_SECTION field_3AC;

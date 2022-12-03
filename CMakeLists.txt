@@ -178,4 +178,5 @@ target_link_libraries(${EXECUTABLE_NAME}
     dsound
     dxguid
     version
+    winmm
 )

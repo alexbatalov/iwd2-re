@@ -1,5 +1,8 @@
 #include "CVidCell.h"
 
+// 0x8BAC8C
+BOOL CVidCell::TRANSLUCENT_SHADOWS_ON = TRUE;
+
 // #binary-identical
 // 0x7ACD70
 CVidCell::CVidCell()

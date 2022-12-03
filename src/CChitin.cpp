@@ -1,14 +1,25 @@
 #include "CChitin.h"
 
 #include <direct.h>
+#include <process.h>
 #include <winver.h>
 
 #include "CAlias.h"
 #include "CUtil.h"
 #include "CWarp.h"
 
+static LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
+static void MessageThreadMain(void* userInfo);
+static void RSThreadMain(void* userInfo);
+static void MainAIThread(void* userInfo);
+static void MusicThreadMain(void* userInfo);
+static void CALLBACK TimerFunction(UINT uTimerID, UINT uMsg, DWORD dwUser, DWORD dw1, DWORD dw2);
+
 // 0x8B9E48
 DWORD CChitin::TIMER_UPDATES_PER_SECOND = 30;
+
+// 0x8FB934
+const CString CChitin::ICON_RES_ID("");
 
 // 0x8FB938
 CString CChitin::buildVersionString;
@@ -19,6 +30,14 @@ CString CChitin::versionString;
 // 0x8FB944
 CString CChitin::name;
 
+// #guess
+// 0x8FB948
+BOOL CChitin::SCREEN_SAVE_ACTIVE;
+
+// #guess
+// 0x8FB94C
+BOOL CChitin::SCREEN_SAVE_ACTIVE_LOADED;
+
 // 0x8FB974
 int CChitin::dword_8FB974;
 
@@ -27,6 +46,14 @@ int CChitin::dword_8FB978;
 
 // 0x8FB97C
 int CChitin::dword_8FB97C;
+
+// 0x78D960
+static LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+    // TODO: Incomplete.
+
+    return DefWindowProcA(hWnd, Msg, wParam, lParam);
+}
 
 // TODO: Check generated assembly once memory layout is complete.
 //
@@ -201,12 +228,154 @@ void CChitin::InitResources()
     }
 }
 
+// #binary-identical
+// 0x790080
+BOOL CChitin::InitInstance()
+{
+    POSITION pos = lEngines.GetHeadPosition();
+    while (pos != NULL) {
+        CWarp* pEngine = static_cast<CWarp*>(lEngines.GetNext(pos));
+        if (pEngine != NULL) {
+            pEngine->EngineInitialized();
+        }
+    }
+
+    if (m_pStartingEngine != NULL) {
+        SelectEngine(m_pStartingEngine);
+    } else {
+        ShutDown(-1, NULL, NULL);
+    }
+
+    m_hRSThread = reinterpret_cast<HANDLE>(_beginthread(::RSThreadMain, 0, NULL));
+    field_4C = 1;
+    m_hMessageThread = reinterpret_cast<HANDLE>(_beginthread(::MessageThreadMain, 0, NULL));
+    m_hMusicThread = reinterpret_cast<HANDLE>(_beginthread(::MusicThreadMain, 0, NULL));
+
+    TIMER_UPDATES_PER_SECOND = GetPrivateProfileIntA("Program Options",
+        "Maximum Frame Rate",
+        30,
+        GetConfigFileName());
+
+    if (TIMER_UPDATES_PER_SECOND < 10 || TIMER_UPDATES_PER_SECOND > 60) {
+        TIMER_UPDATES_PER_SECOND = 30;
+    }
+
+    TIMECAPS tc;
+    timeGetDevCaps(&tc, sizeof(tc));
+
+    field_C0 = min(max(tc.wPeriodMin, 5), tc.wPeriodMax);
+    timeBeginPeriod(field_C0);
+
+    SECURITY_ATTRIBUTES attrs;
+    attrs.nLength = sizeof(attrs);
+    attrs.lpSecurityDescriptor = NULL;
+    attrs.bInheritHandle = FALSE;
+    m_eventTimer = CreateEventA(&attrs, TRUE, TRUE, "BaldurTimerEvent");
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\Chitin.cpp
+    // __LINE__: 1808
+    UTIL_ASSERT(m_eventTimer != NULL);
+
+    field_BC = timeSetEvent(1000 / TIMER_UPDATES_PER_SECOND, 5, ::TimerFunction, 0, 1);
+
+    m_hMainAIThread = reinterpret_cast<HANDLE>(_beginthread(::MainAIThread, 0, NULL));
+
+    SCREEN_SAVE_ACTIVE_LOADED = SystemParametersInfoA(SPI_GETSCREENSAVEACTIVE, 0, &SCREEN_SAVE_ACTIVE, 0);
+    if (SCREEN_SAVE_ACTIVE_LOADED) {
+        SystemParametersInfoA(SPI_SETSCREENSAVEACTIVE, FALSE, NULL, 0);
+    }
+
+    return TRUE;
+}
+
+// 0x790240
+BOOL CChitin::InitializeServices(HWND hWnd)
+{
+    BOOL initialized;
+
+    if (cVideo.m_bIs3dAccelerated) {
+        initialized = cVideo.Initialize3d(hWnd, m_bFullscreen, 0);
+    } else {
+        initialized = cVideo.Initialize(hWnd, m_bFullscreen);
+    }
+
+    if (initialized) {
+        cSoundMixer.Initialize(&cWnd, 16, GetNumberSoundChannels());
+        field_142 = 1;
+    }
+
+    return initialized;
+}
+
+// 0x7917F0
+void CChitin::ParseCommandLine()
+{
+    // TODO: Incomplete.
+}
+
 // 0x7926B0
 int CChitin::WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-    // TODO: Incomplete.
+    m_nQueryCancelAutoPlayMsgID = RegisterWindowMessageA("QueryCancelAutoPlay");
 
-    return 0;
+    m_sCommandLine = lpCmdLine;
+    ParseCommandLine();
+
+    if (!m_bFullscreen) {
+        int nBpp = CUtil::GetCurrentBitsPerPixels();
+        if (nBpp != 16 && nBpp != 24 && nBpp != 32) {
+            CString s;
+            s.LoadStringA(GetIDSInvalidVideoMode());
+            MessageBoxA(NULL, s, name, 0);
+            return 0;
+        }
+    }
+
+    if (!InitApplication(hInstance, nCmdShow)) {
+        field_1932 = 1;
+        cWnd.Detach();
+        return 0;
+    }
+
+    CoInitialize(NULL);
+
+    HANDLE hCopy;
+    HANDLE hCurrentThread = GetCurrentThread();
+    HANDLE hCurrentProcess = GetCurrentProcess();
+    DuplicateHandle(hCurrentProcess, hCurrentThread, hCurrentProcess, &hCopy, 0, FALSE, DUPLICATE_SAME_ACCESS);
+    field_B4 = hCopy;
+
+    InitInstance();
+
+    MSG msg;
+    while (1) {
+        while (!PeekMessageA(&msg, NULL, 0, 0, 0)) {
+            if (field_1932 == 0) {
+                if (field_193A == 1) {
+                    field_193A = 0;
+                    field_193E = 1;
+                    SynchronousUpdate();
+                    field_193E = 0;
+                    field_1936 = 1;
+                }
+            }
+        }
+
+        if (!GetMessageA(&msg, NULL, 0, 0)) {
+            break;
+        }
+
+        TranslateMessage(&msg);
+        DispatchMessageA(&msg);
+    }
+
+    CoUninitialize();
+
+    if (SCREEN_SAVE_ACTIVE_LOADED) {
+        SystemParametersInfoA(SPI_SETSCREENSAVEACTIVE, SCREEN_SAVE_ACTIVE, NULL, 0);
+    }
+
+    return msg.wParam;
 }
 
 // Removes `readonly` file attribute on all files in special directories.
@@ -384,8 +553,8 @@ void CChitin::InitializeVariables()
     field_190A = 0;
     m_eventTimer = NULL;
     field_B4 = 0;
-    field_378 = NULL;
-    field_38C = 0;
+    m_hRSThread = NULL;
+    m_hMusicThread = NULL;
     field_390 = 0;
     field_190E = 0;
     field_70 = 0;
@@ -406,11 +575,115 @@ void CChitin::InitVariables3D()
     field_2F4 = 0;
 }
 
+// 0x7C8990
+BOOL CChitin::Init3d()
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x790860
+void CChitin::SelectEngine(CWarp* pNewEngine)
+{
+    // TODO: Incomplete.
+}
+
 // #guess
 // 0x7C8B10
 void CChitin::Shutdown3D()
 {
     // TODO: Incomplete.
+}
+
+// 0x790FE0
+int CChitin::InitApplication(HINSTANCE hInstance, int nCmdShow)
+{
+    CString sIcon = GetIconRes();
+
+    WNDCLASSEXA wc = { 0 };
+    wc.cbSize = sizeof(wc);
+    wc.style = WS_EX_TOPMOST;
+    wc.lpfnWndProc = WndProc;
+    wc.hInstance = hInstance;
+    if (sIcon.Compare("") != 0) {
+        wc.hIcon = LoadIconA(hInstance, sIcon);
+    }
+    wc.hCursor = LoadCursorA(NULL, IDC_ARROW);
+    wc.hbrBackground = reinterpret_cast<HBRUSH>(GetStockObject(4));
+    wc.lpszClassName = "ChitinClass";
+
+    if (!RegisterClassExA(&wc)) {
+        return 0;
+    }
+
+    m_hInstance = hInstance;
+
+    if (cVideo.m_bIs3dAccelerated) {
+        if (!Init3d()) {
+            return 0;
+        }
+    }
+
+    int rc = InitGraphics();
+    if (rc != 0) {
+        LoadOptions();
+    }
+
+    return rc;
+}
+
+// 0x791150
+BOOL CChitin::InitGraphics()
+{
+    if (m_ptScreen.x < 0 || m_ptScreen.x >= GetSystemMetrics(SM_CXFULLSCREEN) - CVideo::SCREENWIDTH) {
+        m_ptScreen.x = (GetSystemMetrics(SM_CXFULLSCREEN) - CVideo::SCREENWIDTH) / 2;
+    }
+
+    if (m_ptScreen.y < 0 || m_ptScreen.y >= GetSystemMetrics(SM_CYFULLSCREEN) - CVideo::SCREENHEIGHT) {
+        m_ptScreen.y = (GetSystemMetrics(SM_CYFULLSCREEN) - CVideo::SCREENHEIGHT) / 2;
+    }
+
+    HWND hWnd = CreateWindowExA(WS_EX_TOPMOST,
+        "ChitinClass",
+        name,
+        WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_SYSMENU,
+        m_ptScreen.x,
+        m_ptScreen.y,
+        GetSystemMetrics(SM_CXSCREEN),
+        GetSystemMetrics(SM_CYSCREEN),
+        NULL,
+        NULL,
+        m_hInstance,
+        NULL);
+    if (dwPlatformId == VER_PLATFORM_WIN32_NT) {
+        HMODULE hKernel32 = GetModuleHandleA("Kernel32");
+        if (hKernel32 != NULL) {
+            typedef BOOL(__stdcall SetProcessAffinityMaskFunc)(HANDLE, DWORD);
+
+            SetProcessAffinityMaskFunc* pfnSetProcessAffinityMask = reinterpret_cast<SetProcessAffinityMaskFunc*>(GetProcAddress(hKernel32, "SetProcessAffinityMask"));
+            if (pfnSetProcessAffinityMask != NULL) {
+                HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, GetCurrentProcessId());
+                SetProcessAffinityMask(hProcess, 1);
+                CloseHandle(hProcess);
+            }
+        }
+    }
+
+    if (hWnd == NULL) {
+        return FALSE;
+    }
+
+    cWnd.Attach(hWnd);
+
+    if (!InitializeServices(hWnd)) {
+        return FALSE;
+    }
+
+    UpdateWindow(hWnd);
+    SetCursor(NULL);
+
+    return TRUE;
 }
 
 // 0x78EC20
@@ -549,6 +822,12 @@ DWORD CChitin::GetIDSWindowsFonts()
     return 0;
 }
 
+// 0x78E6F0
+const CString& CChitin::GetIconRes()
+{
+    return ICON_RES_ID;
+}
+
 // #guess
 // 0x78E790
 const char* CChitin::GetConfigFileName()
@@ -576,8 +855,36 @@ const char* CChitin::GetErrorFileName()
     return "Chitin.err";
 }
 
+// 0x799E60
+void CChitin::SaveBitsPerPixel(USHORT nBpp)
+{
+}
+
+// 0x78E7D0
+UINT CChitin::GetSavedBitsPerPixel()
+{
+    return GetPrivateProfileIntA("Program Options", "BitsPerPixel", CVideo::word_85DE2C, GetConfigFileName());
+}
+
+// 0x78E800
+BYTE CChitin::GetNumberSoundChannels()
+{
+    return 16;
+}
+
+// 0x78E730
+void CChitin::LoadOptions()
+{
+}
+
 // 0x7909C0
 void CChitin::ShutDown(int nLineNumber, const char* szFileName, const char* text)
+{
+    // TODO: Incomplete.
+}
+
+// 0x790B70
+void CChitin::SynchronousUpdate()
 {
     // TODO: Incomplete.
 }
@@ -589,4 +896,34 @@ CVidMode* CChitin::GetCurrentVideoMode()
         return pActiveEngine->pVidMode;
     }
     return NULL;
+}
+
+// 0x7928A0
+static void MessageThreadMain(void* userInfo)
+{
+    g_pChitin->MessageThreadMain(userInfo);
+}
+
+// 0x7928C0
+static void RSThreadMain(void* userInfo)
+{
+    g_pChitin->RSThreadMain(userInfo);
+}
+
+// 0x7928E0
+static void MainAIThread(void* userInfo)
+{
+    g_pChitin->MainAIThread(userInfo);
+}
+
+// 0x792900
+static void MusicThreadMain(void* userInfo)
+{
+    g_pChitin->MusicThreadMain(userInfo);
+}
+
+// 0x792920
+static void CALLBACK TimerFunction(UINT uTimerID, UINT uMsg, DWORD dwUser, DWORD dw1, DWORD dw2)
+{
+    SetEvent(g_pChitin->m_eventTimer);
 }

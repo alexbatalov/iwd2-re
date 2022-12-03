@@ -64,6 +64,7 @@ public:
     static short word_8BA320;
     static CString string_8C8CA0;
     static CString OVERRIDE_DIR_NAME;
+    static const CString ICON_RES_ID;
     static RECT stru_8E7538;
     static RECT stru_8E7548;
     static RECT stru_8E7958;
@@ -90,12 +91,20 @@ public:
     /* 0020 */ DWORD GetIDSSetGameBitDepth();
     /* 0024 */ DWORD GetIDSBadDeskTopBitDepth();
     /* 0028 */ DWORD GetIDSWindowsFonts();
+    /* 002C */ void MessageThreadMain(void* userInfo);
+    /* 0030 */ void RSThreadMain(void* userInfo);
+    /* 0034 */ void MainAIThread(void* userInfo);
+    /* 0038 */ void MusicThreadMain(void* userInfo);
+    /* 0040 */ const CString& GetIconRes();
     /* 009C */ void ShutDown(int nLineNumber, const char* szFileName, const char* text);
     /* 00A0 */ const char* GetConfigFileName();
     /* 00A4 */ const char* GetKeyFileName();
     /* 00A8 */ const char* GetLogFileName();
     /* 00A8 */ const char* GetErrorFileName();
     /* 00B0 */ void SaveBitsPerPixel(USHORT nBpp);
+    /* 00B4 */ UINT GetSavedBitsPerPixel();
+    /* 00B8 */ BYTE GetNumberSoundChannels();
+    /* 00C0 */ void LoadOptions();
 
     /* 1C50 */ CInfCursor* m_pObjectCursor;
     /* 1C54 */ CInfGame* m_pObjectGame;

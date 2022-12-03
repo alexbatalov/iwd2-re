@@ -173,6 +173,14 @@ void CSoundMixer::GetListenPosition(CPoint& pos, LONG& posZ)
     posZ = m_nZCoordinate;
 }
 
+// 0x7AB340
+BOOL CSoundMixer::Initialize(CWnd* pWnd, int nNewMaxVoices, int nNewMaxChannels)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x7AB6B0
 void CSoundMixer::InitializeChannels(int nNewMaxChannels)
 {

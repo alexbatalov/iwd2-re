@@ -66,6 +66,26 @@ void CWarp::EngineDeactivated()
 {
 }
 
+// 0x799CA0
+void CWarp::EngineDestroyed()
+{
+}
+
+// 0x799CA0
+void CWarp::EngineInitialized()
+{
+}
+
+// 0x0x799CA0
+void CWarp::EngineGameInit()
+{
+}
+
+// 0x0x799CA0
+void CWarp::EngineGameUninit()
+{
+}
+
 // 0x78E730
 void CWarp::ResetControls()
 {

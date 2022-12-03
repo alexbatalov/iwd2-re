@@ -11,6 +11,8 @@ class CVidMode;
 
 class CVideo {
 public:
+    static const USHORT word_85DE2C;
+    static const USHORT word_85DE2E;
     static DWORD FPS;
     static USHORT SCREENWIDTH;
     static USHORT SCREENHEIGHT;
@@ -28,6 +30,7 @@ public:
     BOOL SetNextBpp(USHORT nNewBpp);
     void SetBitsPerPixels(USHORT nNewBpp, BOOLEAN a3);
     void CleanUp3d();
+    BOOL Initialize3d(HWND hWnd, BOOLEAN bFullscreen, int a4);
 
     /* 0000 */ USHORT m_nBpp; // #guess
     /* 0002 */ USHORT m_nNextBpp; // #guess

@@ -7,6 +7,8 @@
 
 class CVidCell : public CVidImage, public CResHelper<CResCell, 1000> {
 public:
+    static BOOL TRANSLUCENT_SHADOWS_ON;
+
     CVidCell();
     ~CVidCell();
 

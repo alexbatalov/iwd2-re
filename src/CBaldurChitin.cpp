@@ -62,6 +62,7 @@
 #define VOLUME_SFX_KEY "Volume SFX"
 #define DISPLAY_MOVIE_SUBTITLES_KEY "Display Movie Subtitles"
 #define SHADED_SELECTION_BOX_KEY "Shaded Selection Box"
+#define SINGLE_MEDIA_KEY "Single Media"
 
 CChitin* g_pChitin;
 CBaldurChitin* g_pBaldurChitin;
@@ -88,6 +89,9 @@ CString CBaldurChitin::string_8C8CA0;
 // #guess
 // 0x8CB238
 CString CBaldurChitin::OVERRIDE_DIR_NAME(".\\override\\");
+
+// 0x8CD43C
+const CString CBaldurChitin::ICON_RES_ID("IDI_GAMEICON");
 
 // 0x8E7538
 RECT CBaldurChitin::stru_8E7538;
@@ -833,6 +837,30 @@ void CBaldurChitin::Init(HINSTANCE hInstance)
     }
 }
 
+// 0x424180
+void CBaldurChitin::MessageThreadMain(void* userInfo)
+{
+    // TODO: Incomplete.
+}
+
+// 0x424220
+void CBaldurChitin::MusicThreadMain(void* userInfo)
+{
+    // TODO: Incomplete.
+}
+
+// 0x424260
+void CBaldurChitin::RSThreadMain(void* userInfo)
+{
+    // TODO: Incomplete.
+}
+
+// 0x4242B0
+void CBaldurChitin::MainAIThread(void* userInfo)
+{
+    // TODO: Incomplete.
+}
+
 // 0x422B80
 DWORD CBaldurChitin::GetIDSInvalidVideoMode()
 {
@@ -887,6 +915,12 @@ DWORD CBaldurChitin::GetIDSWindowsFonts()
     return IDS_WINDOWS_FONTS;
 }
 
+// 0x422C00
+const CString& CBaldurChitin::GetIconRes()
+{
+    return ICON_RES_ID;
+}
+
 // 0x424D60
 void CBaldurChitin::ShutDown(int nLineNumber, const char* szFileName, const char* text)
 {
@@ -921,6 +955,124 @@ const char* CBaldurChitin::GetLogFileName()
 const char* CBaldurChitin::GetErrorFileName()
 {
     return ".\\Icewind2.err";
+}
+
+// 0x422E20
+BYTE CBaldurChitin::GetNumberSoundChannels()
+{
+    return 21;
+}
+
+// 0x424D90
+void CBaldurChitin::LoadOptions()
+{
+    CGameOptions* pOptions = &(m_pObjectGame->m_cOptions);
+
+    pOptions->m_nTooltips = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
+        TOOLTIPS_KEY,
+        30,
+        GetConfigFileName());
+
+    pOptions->m_nTranslucentShadows = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
+        TRANSLUCENT_SHADOWS_KEY,
+        1,
+        GetConfigFileName());
+
+    CVidCell::TRANSLUCENT_SHADOWS_ON = pOptions->m_nTranslucentShadows;
+
+    if (pOptions->m_nTooltips > 99 && pOptions->m_nTooltips != INT_MAX) {
+        pOptions->m_nTooltips = 30;
+    }
+
+    BYTE nGammaCorrection = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
+        GAMMA_CORRECTION_KEY,
+        0,
+        GetConfigFileName());
+    if (nGammaCorrection < 0 || nGammaCorrection > 5) {
+        nGammaCorrection = 0;
+    }
+
+    cVideo.m_pVidModes[0]->m_nGammaCorrection = nGammaCorrection;
+
+    BYTE nBrightnessCorrection = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
+        BRIGHTNESS_CORRECTION_KEY,
+        0,
+        GetConfigFileName());
+    if (nBrightnessCorrection < 0 || nBrightnessCorrection > 40) {
+        nBrightnessCorrection = 0;
+    }
+
+    cVideo.m_pVidModes[0]->m_nBrightnessCorrection = nBrightnessCorrection;
+
+    cVideo.field_13A = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
+        BACKWARDS_COMPATIBLE_3D_KEY,
+        0,
+        GetConfigFileName());
+
+    SPRITE_MIRROR = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
+        SPRITE_MIRROR_KEY,
+        SPRITE_MIRROR,
+        GetConfigFileName());
+
+    pOptions->m_nVolumeMovie = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
+        VOLUME_MOVIE_KEY,
+        85,
+        GetConfigFileName());
+    if (pOptions->m_nVolumeMovie > 100) {
+        pOptions->m_nVolumeMovie = 85;
+    }
+
+    pOptions->m_nVolumeMusic = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
+        VOLUME_MUSIC_KEY,
+        100,
+        GetConfigFileName());
+    if (pOptions->m_nVolumeMusic > 100) {
+        pOptions->m_nVolumeMusic = 100;
+    }
+
+    pOptions->m_nVolumeVoices = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
+        VOLUME_VOICES_KEY,
+        100,
+        GetConfigFileName());
+    if (pOptions->m_nVolumeVoices > 100) {
+        pOptions->m_nVolumeVoices = 100;
+    }
+
+    pOptions->m_nVolumeAmbients = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
+        VOLUME_AMBIENTS_KEY,
+        100,
+        GetConfigFileName());
+    if (pOptions->m_nVolumeAmbients > 100) {
+        pOptions->m_nVolumeAmbients = 100;
+    }
+
+    pOptions->m_nVolumeSFX = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
+        VOLUME_SFX_KEY,
+        100,
+        GetConfigFileName());
+    if (pOptions->m_nVolumeSFX > 100) {
+        pOptions->m_nVolumeSFX = 100;
+    }
+
+    m_pObjectGame->ApplyVolumeSliders(TRUE);
+
+    pOptions->m_nShadedSelectionBox = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
+        SHADED_SELECTION_BOX_KEY,
+        0,
+        GetConfigFileName());
+    if (pOptions->m_nShadedSelectionBox != 0 && pOptions->m_nShadedSelectionBox != 1) {
+        pOptions->m_nShadedSelectionBox = 0;
+    }
+
+    pOptions->m_bDisplayMovieSubtitles = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
+        DISPLAY_MOVIE_SUBTITLES_KEY,
+        0,
+        GetConfigFileName());
+
+    g_pChitin->field_1C4C = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
+        SINGLE_MEDIA_KEY,
+        0,
+        GetConfigFileName());
 }
 
 // 0x425040
@@ -1122,4 +1274,13 @@ void CBaldurChitin::SaveBitsPerPixel(USHORT nBpp)
             GetConfigFileName());
         break;
     }
+}
+
+// 0x422C60
+UINT CBaldurChitin::GetSavedBitsPerPixel()
+{
+    return GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
+        BITS_PER_PIXEL_KEY,
+        CVideo::word_85DE2C,
+        GetConfigFileName());
 }

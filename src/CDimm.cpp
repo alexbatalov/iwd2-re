@@ -705,7 +705,7 @@ BOOL CDimm::ResumeServicing()
         }
     }
 
-    ResumeThread(g_pChitin->field_378);
+    ResumeThread(g_pChitin->m_hRSThread);
 
     return TRUE;
 }

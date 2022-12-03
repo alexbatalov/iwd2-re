@@ -10,6 +10,7 @@ public:
     CInfGame();
     ~CInfGame();
     void StartSearchThread();
+    void ApplyVolumeSliders(BOOLEAN a2);
 
     /* 3846 */ SHORT m_nCharacters;
     /* 43EA */ CGameOptions m_cOptions; // #guess
