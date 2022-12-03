@@ -24,6 +24,9 @@ const CString CChitin::ICON_RES_ID("");
 // 0x8FB938
 CString CChitin::buildVersionString;
 
+// 0x8FB93C
+const CString CChitin::DEFAULT_PRINTSCREEN_FILE_NAME("Scrn");
+
 // 0x8FB940
 CString CChitin::versionString;
 
@@ -866,6 +869,12 @@ DWORD CChitin::GetIDSWindowsFonts()
 const CString& CChitin::GetIconRes()
 {
     return ICON_RES_ID;
+}
+
+// 0x78E700
+void CChitin::GetScreenShotFilePrefix(CString& szGameFileName)
+{
+    szGameFileName = DEFAULT_PRINTSCREEN_FILE_NAME;
 }
 
 // #guess

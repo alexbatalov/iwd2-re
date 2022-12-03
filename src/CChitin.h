@@ -60,6 +60,7 @@ public:
     /* 0034 */ virtual void MainAIThread(void* userInfo) = 0;
     /* 0038 */ virtual void MusicThreadMain(void* userInfo) = 0;
     /* 0040 */ virtual const CString& GetIconRes();
+    /* 0044 */ virtual void GetScreenShotFilePrefix(CString& szGameFileName);
     /* 0050 */ virtual BOOL InitGraphics();
     /* 0058 */ virtual BOOL InitializeServices(HWND hWnd);
     /* 00A0 */ virtual const char* GetConfigFileName();
@@ -76,6 +77,7 @@ public:
     static DWORD TIMER_UPDATES_PER_SECOND;
     static const CString ICON_RES_ID;
     static CString buildVersionString;
+    static const CString DEFAULT_PRINTSCREEN_FILE_NAME;
     static CString versionString;
     static CString name;
     static BOOL SCREEN_SAVE_ACTIVE;

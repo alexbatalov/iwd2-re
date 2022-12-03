@@ -64,6 +64,7 @@ public:
     static short word_8BA320;
     static CString string_8C8CA0;
     static CString OVERRIDE_DIR_NAME;
+    static const CString PRINTSCREEN_FILE_NAME;
     static const CString ICON_RES_ID;
     static RECT stru_8E7538;
     static RECT stru_8E7548;
@@ -96,6 +97,7 @@ public:
     /* 0034 */ void MainAIThread(void* userInfo);
     /* 0038 */ void MusicThreadMain(void* userInfo);
     /* 0040 */ const CString& GetIconRes();
+    /* 0044 */ virtual void GetScreenShotFilePrefix(CString& szGameFileName);
     /* 009C */ void ShutDown(int nLineNumber, const char* szFileName, const char* text);
     /* 00A0 */ const char* GetConfigFileName();
     /* 00A4 */ const char* GetKeyFileName();

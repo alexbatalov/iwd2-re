@@ -90,6 +90,9 @@ CString CBaldurChitin::string_8C8CA0;
 // 0x8CB238
 CString CBaldurChitin::OVERRIDE_DIR_NAME(".\\override\\");
 
+// 0x8CD308
+const CString CBaldurChitin::PRINTSCREEN_FILE_NAME("iwd2");
+
 // 0x8CD43C
 const CString CBaldurChitin::ICON_RES_ID("IDI_GAMEICON");
 
@@ -932,6 +935,12 @@ DWORD CBaldurChitin::GetIDSWindowsFonts()
 const CString& CBaldurChitin::GetIconRes()
 {
     return ICON_RES_ID;
+}
+
+// 0x422C10
+void CBaldurChitin::GetScreenShotFilePrefix(CString& szGameFileName)
+{
+    szGameFileName = PRINTSCREEN_FILE_NAME;
 }
 
 // 0x424D60
