@@ -727,6 +727,12 @@ BOOL CDimm::Suspend()
     return TRUE;
 }
 
+// 0x788CF0
+void CDimm::Update()
+{
+    // TODO: Incomplete.
+}
+
 // 0x789250
 BOOL CDimm::WriteResourceWithData(const CString& sFileName, CRes* pRes, LPVOID lpBuf, DWORD dwSize)
 {

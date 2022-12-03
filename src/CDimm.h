@@ -54,6 +54,7 @@ public:
     BOOL ResumeServicing();
     void SetNewPriority(CRes* pRes, int nNewPriority);
     BOOL Suspend();
+    void Update();
     BOOL WriteResourceWithData(const CString& sFileName, CRes* pRes, LPVOID lpBuf, DWORD dwSize);
     BOOL WriteSetUp(const CString& a2, CString& a3);
 

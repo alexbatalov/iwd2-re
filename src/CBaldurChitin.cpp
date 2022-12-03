@@ -857,7 +857,15 @@ void CBaldurChitin::MusicThreadMain(void* userInfo)
 // 0x424260
 void CBaldurChitin::RSThreadMain(void* userInfo)
 {
-    // TODO: Incomplete.
+    RegisterThread();
+
+    while (field_374 == 0) {
+        cDimm.Update();
+
+        if (field_374 == 0) {
+            SuspendThread(m_hRSThread);
+        }
+    }
 }
 
 // 0x4242B0
