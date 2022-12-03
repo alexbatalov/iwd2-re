@@ -698,6 +698,18 @@ void CChitin::EnginesGameInit()
     }
 }
 
+// 0x7912D0
+void CChitin::EnginesGameUninit()
+{
+    POSITION pos = lEngines.GetHeadPosition();
+    while (pos != NULL) {
+        CWarp* pEngine = static_cast<CWarp*>(lEngines.GetNext(pos));
+        if (pEngine != NULL) {
+            pEngine->EngineGameUninit();
+        }
+    }
+}
+
 // 0x78EBA0
 void CChitin::RegisterThread()
 {
