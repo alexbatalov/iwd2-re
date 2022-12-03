@@ -35,6 +35,7 @@ public:
     void SetMusicVolume(int nNewVolume);
     void Lock();
     void Unlock();
+    void UpdateMusic();
 
     static BYTE m_tSqrtTable[10000];
 

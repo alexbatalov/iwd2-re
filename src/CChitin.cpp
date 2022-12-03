@@ -686,6 +686,22 @@ BOOL CChitin::InitGraphics()
     return TRUE;
 }
 
+// 0x78EBA0
+void CChitin::RegisterThread()
+{
+    // __FILE__: C:\Projects\Icewind2\src\chitin\Chitin.cpp
+    // __LINE__: 670
+    UTIL_ASSERT(m_nThreads < CHITIN_MAX_THREADS);
+
+    m_dwThreadIds[m_nThreads] = GetCurrentThreadId();
+
+    HANDLE hProcess = GetCurrentProcess();
+    HANDLE hThread = GetCurrentThread();
+    if (DuplicateHandle(hProcess, hThread, hProcess, &(m_hThreadHandles[m_nThreads]), 0, TRUE, DUPLICATE_SAME_ACCESS)) {
+        m_nThreads++;
+    }
+}
+
 // 0x78EC20
 void CChitin::SuspendThreads()
 {

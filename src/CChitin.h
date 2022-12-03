@@ -14,6 +14,8 @@
 #include "CUnknown1.h"
 #include "CVideo.h"
 
+#define CHITIN_MAX_THREADS 10
+
 class CVidMode;
 class CWarp;
 
@@ -32,6 +34,7 @@ public:
     void InitVariables3D();
     BOOL Init3d();
     void Shutdown3D();
+    void RegisterThread();
     void SuspendThreads();
     void AddEngine(CWarp* pNewEngine);
     CWnd* GetWnd();
@@ -189,8 +192,8 @@ public:
     /* 1946 */ int m_nKeyboardSpeed; // #guess
     /* 194A */ CCriticalSection field_194A;
     /* 196A */ CProgressBar cProgressBar;
-    /* 19D6 */ DWORD m_dwThreadIds[10]; // #guess
-    /* 19FE */ HANDLE m_hThreadHandles[10]; // #guess
+    /* 19D6 */ DWORD m_dwThreadIds[CHITIN_MAX_THREADS]; // #guess
+    /* 19FE */ HANDLE m_hThreadHandles[CHITIN_MAX_THREADS]; // #guess
     /* 1A26 */ USHORT m_nThreads;
     /* 1A28 */ short field_1A28;
     /* 1A2A */ int field_1A2A;

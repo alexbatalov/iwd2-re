@@ -391,3 +391,18 @@ void CSoundMixer::Unlock()
         }
     }
 }
+
+// 0x7AC9B0
+void CSoundMixer::UpdateMusic()
+{
+    if ((field_C0 & 2) != 0) {
+        if (m_bMusicInitialized) {
+            Lock();
+
+            // TODO: Incomplete.
+            // soundUpdate();
+
+            Unlock();
+        }
+    }
+}

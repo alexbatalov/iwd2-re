@@ -846,7 +846,12 @@ void CBaldurChitin::MessageThreadMain(void* userInfo)
 // 0x424220
 void CBaldurChitin::MusicThreadMain(void* userInfo)
 {
-    // TODO: Incomplete.
+    RegisterThread();
+
+    while (field_390 == 0) {
+        g_pChitin->cSoundMixer.UpdateMusic();
+        SleepEx(25, FALSE);
+    }
 }
 
 // 0x424260
