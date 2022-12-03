@@ -1396,3 +1396,9 @@ CBaldurMessage* CBaldurChitin::GetBaldurMessage()
 {
     return &m_cBaldurMessage;
 }
+
+// 0x425FB0
+void CBaldurChitin::SynchronousUpdate()
+{
+    CChitin::SynchronousUpdate();
+}

@@ -90,6 +90,7 @@ public:
     void ClearChatMessages();
     CBaldurMessage* GetBaldurMessage();
 
+    /* 0000 */ void SynchronousUpdate();
     /* 0008 */ DWORD GetIDSInvalidVideoMode();
     /* 000C */ DWORD GetIDSOpenGLDll();
     /* 0010 */ DWORD GetIDSExclusiveMode();
