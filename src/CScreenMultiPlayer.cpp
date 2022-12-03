@@ -11,3 +11,9 @@ CScreenMultiPlayer::~CScreenMultiPlayer()
 {
     // TODO: Incomplete.
 }
+
+// 0x64D690
+void CScreenMultiPlayer::ClearChatMessages()
+{
+    // TODO: Incomplete.
+}

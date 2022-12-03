@@ -1372,3 +1372,21 @@ UINT CBaldurChitin::GetSavedBitsPerPixel()
         CVideo::word_85DE2C,
         GetConfigFileName());
 }
+
+// 0x425BD0
+void CBaldurChitin::ClearChatMessages()
+{
+    m_cBaldurMessage.m_cChatBuffer.ClearMessages();
+
+    if (m_pEngineWorld != NULL) {
+        m_pEngineWorld->ClearChatMessages();
+    }
+
+    if (m_pEngineMultiPlayer != NULL) {
+        m_pEngineMultiPlayer->ClearChatMessages();
+    }
+
+    if (m_pEngineWorldMap != NULL) {
+        m_pEngineWorldMap->ClearChatMessages();
+    }
+}

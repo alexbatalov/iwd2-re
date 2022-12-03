@@ -87,6 +87,7 @@ public:
     void SetSoftSrcKeyBlt(BOOLEAN a2, BOOLEAN a3);
     void SetSoftBlt(BOOLEAN a2, BOOLEAN a3);
     void SetSoftMirrorBlt(BOOLEAN a2, BOOLEAN a3);
+    void ClearChatMessages();
 
     /* 0008 */ DWORD GetIDSInvalidVideoMode();
     /* 000C */ DWORD GetIDSOpenGLDll();

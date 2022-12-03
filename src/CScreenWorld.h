@@ -7,6 +7,9 @@ class CScreenWorld : public CBaldurEngine {
 public:
     CScreenWorld();
     ~CScreenWorld();
+    void ClearChatMessages();
+
+    /* 10DE */ int field_10DE;
 };
 
 #endif /* CSCREENWORLD_H_ */

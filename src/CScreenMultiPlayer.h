@@ -7,6 +7,7 @@ class CScreenMultiPlayer : public CBaldurEngine {
 public:
     CScreenMultiPlayer();
     ~CScreenMultiPlayer();
+    void ClearChatMessages();
 };
 
 #endif /* CSCREENMULTIPLAYER_H_ */

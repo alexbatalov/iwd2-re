@@ -22,3 +22,9 @@ CChatBuffer::~CChatBuffer()
 
     field_0.RemoveAll();
 }
+
+// 0x442CA0
+void CChatBuffer::ClearMessages()
+{
+    // TODO: Incomplete.
+}

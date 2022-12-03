@@ -11,3 +11,9 @@ CScreenWorld::~CScreenWorld()
 {
     // TODO: Incomplete.
 }
+
+// 0x692690
+void CScreenWorld::ClearChatMessages()
+{
+    field_10DE = 0;
+}
