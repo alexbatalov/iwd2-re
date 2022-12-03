@@ -943,6 +943,66 @@ void CBaldurChitin::GetScreenShotFilePrefix(CString& szGameFileName)
     szGameFileName = PRINTSCREEN_FILE_NAME;
 }
 
+// 0x424BD0
+void CBaldurChitin::SetSoftSrcKeyBltFast(BOOLEAN a2, BOOLEAN a3)
+{
+    cVideo.cVidBlitter.m_bSoftSrcKeyBltFast = a2;
+    cVideo.cVidBlitter.field_E6 = a3;
+
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        SOFT_SRC_KEY_BLT_FAST_KEY,
+        a2 ? "1" : "0",
+        GetConfigFileName());
+}
+
+// 0x424C20
+void CBaldurChitin::SetSoftBltFast(BOOLEAN a2, BOOLEAN a3)
+{
+    cVideo.cVidBlitter.m_bSoftBltFast = a2;
+    cVideo.cVidBlitter.field_E6 = a3;
+
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        SOFT_BLT_FAST_KEY,
+        a2 ? "1" : "0",
+        GetConfigFileName());
+}
+
+// 0x424C70
+void CBaldurChitin::SetSoftSrcKeyBlt(BOOLEAN a2, BOOLEAN a3)
+{
+    cVideo.cVidBlitter.m_bSoftSrcKeyBlt = a2;
+    cVideo.cVidBlitter.field_E6 = a3;
+
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        SOFT_SRC_KEY_BLT_KEY,
+        a2 ? "1" : "0",
+        GetConfigFileName());
+}
+
+// 0x424CC0
+void CBaldurChitin::SetSoftBlt(BOOLEAN a2, BOOLEAN a3)
+{
+    cVideo.cVidBlitter.m_bSoftBlt = a2;
+    cVideo.cVidBlitter.field_E6 = a3;
+
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        SOFT_BLT_KEY,
+        a2 ? "1" : "0",
+        GetConfigFileName());
+}
+
+// 0x424D10
+void CBaldurChitin::SetSoftMirrorBlt(BOOLEAN a2, BOOLEAN a3)
+{
+    cVideo.cVidBlitter.m_bSoftMirrorBlt = a2;
+    cVideo.cVidBlitter.field_E6 = a3;
+
+    WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+        SOFT_MIRROR_BLT_KEY,
+        a2 ? "1" : "0",
+        GetConfigFileName());
+}
+
 // 0x424D60
 void CBaldurChitin::ShutDown(int nLineNumber, const char* szFileName, const char* text)
 {

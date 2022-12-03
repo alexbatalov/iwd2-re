@@ -82,6 +82,11 @@ public:
     ~CBaldurChitin();
     void Init(HINSTANCE hInstance);
     void SaveOptions();
+    void SetSoftSrcKeyBltFast(BOOLEAN a2, BOOLEAN a3);
+    void SetSoftBltFast(BOOLEAN a2, BOOLEAN a3);
+    void SetSoftSrcKeyBlt(BOOLEAN a2, BOOLEAN a3);
+    void SetSoftBlt(BOOLEAN a2, BOOLEAN a3);
+    void SetSoftMirrorBlt(BOOLEAN a2, BOOLEAN a3);
 
     /* 0008 */ DWORD GetIDSInvalidVideoMode();
     /* 000C */ DWORD GetIDSOpenGLDll();
