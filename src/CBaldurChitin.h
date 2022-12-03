@@ -89,6 +89,7 @@ public:
     void SetSoftMirrorBlt(BOOLEAN a2, BOOLEAN a3);
     void ClearChatMessages();
     CBaldurMessage* GetBaldurMessage();
+    void AddPlayedMovie(const CResRef& cResMovie);
 
     /* 0000 */ void SynchronousUpdate();
     /* 0008 */ DWORD GetIDSInvalidVideoMode();

@@ -1402,3 +1402,11 @@ void CBaldurChitin::SynchronousUpdate()
 {
     CChitin::SynchronousUpdate();
 }
+
+// 0x4268F0
+void CBaldurChitin::AddPlayedMovie(const CResRef& cResMovie)
+{
+    CString sRes;
+    cResMovie.CopyToString(sRes);
+    WritePrivateProfileStringA("Movies", sRes, "1", GetConfigFileName());
+}
