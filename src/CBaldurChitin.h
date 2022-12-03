@@ -103,6 +103,7 @@ public:
     /* 0038 */ void MusicThreadMain(void* userInfo);
     /* 0040 */ const CString& GetIconRes();
     /* 0044 */ virtual void GetScreenShotFilePrefix(CString& szGameFileName);
+    /* 0058 */ BOOL InitializeServices(HWND hWnd);
     /* 009C */ void ShutDown(int nLineNumber, const char* szFileName, const char* text);
     /* 00A0 */ const char* GetConfigFileName();
     /* 00A4 */ const char* GetKeyFileName();

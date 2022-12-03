@@ -943,6 +943,12 @@ void CBaldurChitin::GetScreenShotFilePrefix(CString& szGameFileName)
     szGameFileName = PRINTSCREEN_FILE_NAME;
 }
 
+// 0x424A90
+BOOL CBaldurChitin::InitializeServices(HWND hWnd)
+{
+    return CChitin::InitializeServices(hWnd);
+}
+
 // 0x424BD0
 void CBaldurChitin::SetSoftSrcKeyBltFast(BOOLEAN a2, BOOLEAN a3)
 {
