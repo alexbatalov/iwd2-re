@@ -1410,3 +1410,19 @@ void CBaldurChitin::AddPlayedMovie(const CResRef& cResMovie)
     cResMovie.CopyToString(sRes);
     WritePrivateProfileStringA("Movies", sRes, "1", GetConfigFileName());
 }
+
+// 0x426EC0
+WORD CBaldurChitin::GetMultiplayerDirectPlayPort()
+{
+    return GetPrivateProfileIntA("Multiplayer", "Port", 0, GetConfigFileName());
+}
+
+// 0x426EE0
+WORD CBaldurChitin::GetMultiplayerGameSpyPort()
+{
+    if (GetPrivateProfileIntA("GameSpy", "Enabled", 0, GetConfigFileName()) != 1) {
+        return 0;
+    }
+
+    return GetPrivateProfileIntA("GameSpy", "Port", 0, GetConfigFileName());
+}

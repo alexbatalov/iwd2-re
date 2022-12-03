@@ -73,6 +73,8 @@ public:
     /* 00C0 */ virtual void LoadOptions();
     /* 0098 */ virtual void SelectEngine(CWarp* pNewEngine);
     /* 009C */ virtual void ShutDown(int nLineNumber, const char* szFileName, const char* text);
+    /* 00D0 */ virtual WORD GetMultiplayerGameSpyPort();
+    /* 00D4 */ virtual WORD GetMultiplayerDirectPlayPort();
 
     static DWORD TIMER_UPDATES_PER_SECOND;
     static const CString ICON_RES_ID;

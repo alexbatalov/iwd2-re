@@ -117,6 +117,8 @@ public:
     /* 00B4 */ UINT GetSavedBitsPerPixel();
     /* 00B8 */ BYTE GetNumberSoundChannels();
     /* 00C0 */ void LoadOptions();
+    /* 00D0 */ WORD GetMultiplayerGameSpyPort();
+    /* 00D4 */ WORD GetMultiplayerDirectPlayPort();
 
     /* 1C50 */ CInfCursor* m_pObjectCursor;
     /* 1C54 */ CInfGame* m_pObjectGame;

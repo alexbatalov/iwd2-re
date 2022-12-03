@@ -921,6 +921,18 @@ BYTE CChitin::GetNumberSoundChannels()
     return 16;
 }
 
+// 0x78E820
+WORD CChitin::GetMultiplayerGameSpyPort()
+{
+    return 0;
+}
+
+// 0x78E820
+WORD CChitin::GetMultiplayerDirectPlayPort()
+{
+    return 0;
+}
+
 // 0x78E730
 void CChitin::LoadOptions()
 {
