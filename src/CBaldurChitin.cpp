@@ -1390,3 +1390,9 @@ void CBaldurChitin::ClearChatMessages()
         m_pEngineWorldMap->ClearChatMessages();
     }
 }
+
+// 0x425CA0
+CBaldurMessage* CBaldurChitin::GetBaldurMessage()
+{
+    return &m_cBaldurMessage;
+}
