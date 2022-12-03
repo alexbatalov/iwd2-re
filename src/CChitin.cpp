@@ -686,6 +686,18 @@ BOOL CChitin::InitGraphics()
     return TRUE;
 }
 
+// 0x7912B0
+void CChitin::EnginesGameInit()
+{
+    POSITION pos = lEngines.GetHeadPosition();
+    while (pos != NULL) {
+        CWarp* pEngine = static_cast<CWarp*>(lEngines.GetNext(pos));
+        if (pEngine != NULL) {
+            pEngine->EngineGameInit();
+        }
+    }
+}
+
 // 0x78EBA0
 void CChitin::RegisterThread()
 {

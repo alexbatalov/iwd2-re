@@ -41,6 +41,7 @@ public:
     void Resume();
     void ReadIniFiles();
     CVidMode* GetCurrentVideoMode();
+    void EnginesGameInit();
 
     /* 0000 */ virtual void SynchronousUpdate();
     /* 0004 */ virtual int InitApplication(HINSTANCE hInstance, int nShowCmd);
