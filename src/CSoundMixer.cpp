@@ -304,6 +304,12 @@ void CSoundMixer::SetPanRange(int nNewPanRange)
     Unlock();
 }
 
+// 0x7ABBA0
+void CSoundMixer::UpdateSoundList()
+{
+    // TODO: Incomplete.
+}
+
 // 0x7AC030
 void CSoundMixer::UpdateSoundPositions()
 {
@@ -405,4 +411,11 @@ void CSoundMixer::UpdateMusic()
             Unlock();
         }
     }
+}
+
+// NOTE: Inlined in `CInfGame::ApplyVolumeSliders` and probably other places.
+void CSoundMixer::SetChannelVolume(int nChannelNumber, int nNewVolume)
+{
+    CSoundChannel* pSoundChannel = static_cast<CSoundChannel*>(m_aChannels[nChannelNumber]);
+    pSoundChannel->SetVolume(nNewVolume);
 }

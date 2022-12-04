@@ -30,12 +30,15 @@ public:
     void RemoveWaiting(CSound* pSoundPtr);
     void SetListenPosition(int nNewXCoordinate, int nNewYCoordinate, int nNewZCoordinate);
     void SetPanRange(int nNewPanRange);
+    void UpdateSoundList();
     void UpdateSoundPositions();
     void SetMusicPath(CString& sMusicPath);
     void SetMusicVolume(int nNewVolume);
     void Lock();
     void Unlock();
     void UpdateMusic();
+
+    void SetChannelVolume(int nChannelNumber, int nNewVolume);
 
     static BYTE m_tSqrtTable[10000];
 
