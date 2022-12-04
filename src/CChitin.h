@@ -75,6 +75,7 @@ public:
     /* 009C */ virtual void ShutDown(int nLineNumber, const char* szFileName, const char* text);
     /* 00D0 */ virtual WORD GetMultiplayerGameSpyPort();
     /* 00D4 */ virtual WORD GetMultiplayerDirectPlayPort();
+    /* 00EC */ virtual void GetGameSpyGameName(CString& sGameSpyName);
 
     static DWORD TIMER_UPDATES_PER_SECOND;
     static const CString ICON_RES_ID;

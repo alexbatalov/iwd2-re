@@ -63,6 +63,7 @@ public:
 
     static short word_8BA320;
     static CString string_8C8CA0;
+    static const CString BALDUR_GAMESPY_GAMENAME;
     static CString OVERRIDE_DIR_NAME;
     static const CString PRINTSCREEN_FILE_NAME;
     static const CString ICON_RES_ID;
@@ -119,6 +120,7 @@ public:
     /* 00C0 */ void LoadOptions();
     /* 00D0 */ WORD GetMultiplayerGameSpyPort();
     /* 00D4 */ WORD GetMultiplayerDirectPlayPort();
+    /* 00EC */ void GetGameSpyGameName(CString& sGameSpyName);
 
     /* 1C50 */ CInfCursor* m_pObjectCursor;
     /* 1C54 */ CInfGame* m_pObjectGame;

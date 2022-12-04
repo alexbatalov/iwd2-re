@@ -86,6 +86,9 @@ short CBaldurChitin::word_8BA320 = 100;
 // 0x8C8CA0
 CString CBaldurChitin::string_8C8CA0;
 
+// 0x8CB200
+const CString CBaldurChitin::BALDUR_GAMESPY_GAMENAME("iwd2");
+
 // #guess
 // 0x8CB238
 CString CBaldurChitin::OVERRIDE_DIR_NAME(".\\override\\");
@@ -1016,6 +1019,12 @@ void CBaldurChitin::ShutDown(int nLineNumber, const char* szFileName, const char
         SaveOptions();
     }
     CChitin::ShutDown(nLineNumber, szFileName, text);
+}
+
+// 0x422DC0
+void CBaldurChitin::GetGameSpyGameName(CString& sGameSpyName)
+{
+    sGameSpyName = BALDUR_GAMESPY_GAMENAME;
 }
 
 // #guess

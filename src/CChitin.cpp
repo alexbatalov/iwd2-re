@@ -921,6 +921,12 @@ BYTE CChitin::GetNumberSoundChannels()
     return 16;
 }
 
+// 0x78E840
+void CChitin::GetGameSpyGameName(CString& sGameSpyName)
+{
+    sGameSpyName = "";
+}
+
 // 0x78E820
 WORD CChitin::GetMultiplayerGameSpyPort()
 {
