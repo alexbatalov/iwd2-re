@@ -927,6 +927,12 @@ void CChitin::GetGameSpyGameName(CString& sGameSpyName)
     sGameSpyName = "";
 }
 
+// 0x78E840
+void CChitin::GetGameSpyCode(CString& sGameSpyCode)
+{
+    sGameSpyCode = "";
+}
+
 // 0x78E820
 WORD CChitin::GetMultiplayerGameSpyPort()
 {

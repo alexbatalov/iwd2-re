@@ -89,6 +89,18 @@ CString CBaldurChitin::string_8C8CA0;
 // 0x8CB200
 const CString CBaldurChitin::BALDUR_GAMESPY_GAMENAME("iwd2");
 
+// 0x8CD358
+const CString CBaldurChitin::BALDUR_GAMESPY_CODE1("]s{=$b");
+
+// 0x8CD440
+const CString CBaldurChitin::BALDUR_GAMESPY_CODE2("^@FH?2");
+
+// 0x8CD340
+const CString CBaldurChitin::BALDUR_GAMESPY_CODE3("Si8F5s");
+
+// 0x8CB1A8
+const CString CBaldurChitin::BALDUR_GAMESPY_CODE4("_0#9fJ");
+
 // #guess
 // 0x8CB238
 CString CBaldurChitin::OVERRIDE_DIR_NAME(".\\override\\");
@@ -1418,6 +1430,19 @@ void CBaldurChitin::AddPlayedMovie(const CResRef& cResMovie)
     CString sRes;
     cResMovie.CopyToString(sRes);
     WritePrivateProfileStringA("Movies", sRes, "1", GetConfigFileName());
+}
+
+// 0x426970
+void CBaldurChitin::GetGameSpyCode(CString& sGameSpyCode)
+{
+    sGameSpyCode = "";
+
+    for (int k = 0; k < 6; k++) {
+        sGameSpyCode += static_cast<char>(CBaldurChitin::BALDUR_GAMESPY_CODE1[k]
+            ^ CBaldurChitin::BALDUR_GAMESPY_CODE2[k]
+            ^ CBaldurChitin::BALDUR_GAMESPY_CODE3[k]
+            ^ CBaldurChitin::BALDUR_GAMESPY_CODE4[k]);
+    }
 }
 
 // 0x426EC0

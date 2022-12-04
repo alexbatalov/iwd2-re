@@ -76,6 +76,7 @@ public:
     /* 00D0 */ virtual WORD GetMultiplayerGameSpyPort();
     /* 00D4 */ virtual WORD GetMultiplayerDirectPlayPort();
     /* 00EC */ virtual void GetGameSpyGameName(CString& sGameSpyName);
+    /* 00F0 */ virtual void GetGameSpyCode(CString& sGameSpyCode);
 
     static DWORD TIMER_UPDATES_PER_SECOND;
     static const CString ICON_RES_ID;
