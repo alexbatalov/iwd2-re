@@ -1058,7 +1058,9 @@ void CChitin::SynchronousUpdate()
     // TODO: Incomplete.
 }
 
-// NOTE: Inlined in many places. I'm not sure if uninlined version exists.
+// NOTE: Inlined in many places.
+//
+// 0x597E00
 CVidMode* CChitin::GetCurrentVideoMode()
 {
     if (pActiveEngine != NULL) {
