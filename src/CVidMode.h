@@ -14,6 +14,8 @@ public:
     static BYTE NUM_FADE_FRAMES;
     static BOOL bInitialized;
 
+    static void SetWindowedMode(HWND hWnd);
+
     CVidMode();
     /* 005C */ virtual BOOL ActivateVideoMode(CVidMode* pPrevVidMode, HWND hWnd, BOOL bFullscreen) = 0;
     /* 0068 */ virtual BOOL CreateSurface(IDirectDrawSurface** lplpDirectDrawSurface, const CSize& cSize);

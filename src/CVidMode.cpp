@@ -92,3 +92,49 @@ void CVidMode::DestroySurface(IDirectDrawSurface** lplpDirectDrawSurface)
         }
     }
 }
+
+// 0x79AC20
+void CVidMode::SetWindowedMode(HWND hWnd)
+{
+    LONG windowStyle = GetWindowLongA(hWnd, GWL_STYLE);
+    windowStyle &= ~(WS_POPUP | WS_CAPTION | WS_MINIMIZEBOX);
+    windowStyle |= (WS_CAPTION | WS_MINIMIZEBOX);
+    SetWindowLongA(hWnd, GWL_STYLE, windowStyle);
+
+    RECT windowRect;
+    SetRect(&windowRect, 0, 0, CVideo::SCREENWIDTH, CVideo::SCREENHEIGHT);
+
+    AdjustWindowRectEx(&windowRect,
+        GetWindowLongA(hWnd, GWL_STYLE),
+        GetMenu(hWnd) != NULL,
+        GetWindowLongA(hWnd, GWL_EXSTYLE));
+
+    SetWindowPos(hWnd,
+        HWND_TOP,
+        0,
+        0,
+        windowRect.right - windowRect.left,
+        windowRect.bottom - windowRect.top,
+        SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOMOVE);
+
+    SetWindowPos(hWnd,
+        HWND_NOTOPMOST,
+        0,
+        0,
+        0,
+        0,
+        SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+
+    RECT workRect;
+    SystemParametersInfoA(SPI_GETWORKAREA, 0, &workRect, 0);
+
+    GetWindowRect(hWnd, &windowRect);
+
+    SetWindowPos(hWnd,
+        HWND_TOP,
+        min(windowRect.left, workRect.left),
+        min(windowRect.top, workRect.top),
+        0,
+        0,
+        SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE);
+}
