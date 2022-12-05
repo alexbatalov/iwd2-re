@@ -38,8 +38,9 @@ void CRes::func_10()
 {
 }
 
+// #guess
 // 0x4010C0
-int CRes::func_14()
+int CRes::GetResSize()
 {
     return -1;
 }

@@ -608,6 +608,42 @@ BOOL CDimm::LocalGetFileStatus(const CString& sFileName, CFileStatus& rStatus)
     return rc;
 }
 
+// 0x786F30
+int CDimm::LocalGetResourceSize(CRes* pRes)
+{
+    CString sFilePath;
+    CString sBaseName;
+    CString sExtension;
+    CFile file;
+
+    if (pRes == NULL) {
+        return 0;
+    }
+
+    int size = pRes->GetResSize();
+    if (size != -1) {
+        return size;
+    }
+
+    if (pRes->m_pDimmKeyTableEntry == NULL) {
+        return 0;
+    }
+
+    pRes->GetResRef().CopyToString(sBaseName);
+    g_pChitin->TranslateType(pRes->m_pDimmKeyTableEntry->field_12, sExtension);
+    GetElementInDirectoryList(~pRes->GetID() >> 20, sFilePath);
+
+    sFilePath += sBaseName + "." + sExtension;
+    if (file.Open(sFilePath, CFile::OpenFlags::modeRead | CFile::OpenFlags::typeBinary, NULL)) {
+        size = file.GetLength();
+        file.Close();
+    } else {
+        size = 0;
+    }
+
+    return size;
+}
+
 // 0x787740
 BOOL CDimm::MemoryAlmostFull()
 {

@@ -44,6 +44,7 @@ public:
     CRes* GetResObject(const CResRef& cResRef, USHORT nResType, BOOLEAN a3);
     RESID GetResID(CResRef cResRef, USHORT nResType);
     BOOL LocalGetFileStatus(const CString& sFileName, CFileStatus& rStatus);
+    int LocalGetResourceSize(CRes* pRes);
     BOOL MemoryAlmostFull();
     void ReduceFreedList(UINT a2);
     int Release(CRes* pRes);

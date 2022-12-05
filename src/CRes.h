@@ -23,7 +23,7 @@ public:
 
     /* 000C */ virtual BOOL func_C();
     /* 0010 */ virtual void func_10();
-    /* 0014 */ virtual int func_14();
+    /* 0014 */ virtual int GetResSize();
     /* 0018 */ virtual int func_18();
 
     int CancelRequest();
