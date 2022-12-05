@@ -1,5 +1,7 @@
 #include "CVidMode.h"
 
+#include "CChitin.h"
+
 // 0x8BA322
 BYTE CVidMode::NUM_FADE_FRAMES = 20;
 
@@ -55,4 +57,28 @@ CVidMode::CVidMode()
 CVidMode::~CVidMode()
 {
     bInitialized = FALSE;
+}
+
+// 0x795BB0
+BOOL CVidMode::CreateSurface(IDirectDrawSurface** lplpDirectDrawSurface, const CSize& cSize)
+{
+    DDCOLORKEY ddck;
+    ddck.dwColorSpaceLowValue = field_1C;
+    ddck.dwColorSpaceHighValue = ddck.dwColorSpaceLowValue;
+
+    DDSURFACEDESC ddsd = { 0 };
+    ddsd.dwSize = sizeof(ddsd);
+    ddsd.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;
+    ddsd.ddsCaps.dwCaps = DDCAPS_BLT;
+    ddsd.dwWidth = cSize.cx;
+    ddsd.dwHeight = cSize.cy;
+
+    if (g_pChitin->cVideo.m_pDirectDraw2->CreateSurface(&ddsd, lplpDirectDrawSurface, NULL) != DD_OK) {
+        *lplpDirectDrawSurface = NULL;
+        return FALSE;
+    }
+
+    (*lplpDirectDrawSurface)->SetColorKey(DDCKEY_SRCBLT, &ddck);
+
+    return TRUE;
 }

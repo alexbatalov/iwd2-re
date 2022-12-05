@@ -1,9 +1,9 @@
 #ifndef CVIDMODE_H_
 #define CVIDMODE_H_
 
-#include <afx.h>
-#include <afxmt.h>
-#include <afxtempl.h>
+#include "mfc.h"
+
+#include <ddraw.h>
 
 class CVidMode {
 public:
@@ -16,6 +16,7 @@ public:
 
     CVidMode();
     /* 005C */ virtual BOOL ActivateVideoMode(CVidMode* pPrevVidMode, HWND hWnd, BOOL bFullscreen) = 0;
+    /* 0068 */ virtual BOOL CreateSurface(IDirectDrawSurface** lplpDirectDrawSurface, const CSize& cSize);
     /* 006C */ virtual BOOL DeactivateVideoMode(int a2) = 0;
     /* 011C */ virtual ~CVidMode();
 
