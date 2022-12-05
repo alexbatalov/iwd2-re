@@ -84,7 +84,7 @@ unsigned char byte_8BA28C = 1;
 short CBaldurChitin::word_8BA320 = 100;
 
 // 0x8C8CA0
-CString CBaldurChitin::string_8C8CA0;
+CString CBaldurChitin::CHUI_GUIEXT("");
 
 // 0x8CB200
 const CString CBaldurChitin::BALDUR_GAMESPY_GAMENAME("iwd2");
@@ -315,7 +315,7 @@ CBaldurChitin::CBaldurChitin()
         stru_8E7A10.bottom = 522;
 
         CVideo::SCREENHEIGHT = 1536;
-        string_8C8CA0 = "10";
+        CHUI_GUIEXT = "10";
         strncpy(field_49B4[0].field_10, "STON10L", sizeof(field_49B4[0].field_10));
         strncpy(field_49B4[1].field_10, "STON10R", sizeof(field_49B4[1].field_10));
         strncpy(field_49B4[2].field_10, "STON10T", sizeof(field_49B4[2].field_10));
@@ -373,7 +373,7 @@ CBaldurChitin::CBaldurChitin()
         stru_8E7A10.bottom = 354;
 
         CVideo::SCREENHEIGHT = 1200;
-        string_8C8CA0 = "08";
+        CHUI_GUIEXT = "08";
         break;
     case 1024:
         stru_8E7538.left = 0;
@@ -427,7 +427,7 @@ CBaldurChitin::CBaldurChitin()
         stru_8E7A10.bottom = 522;
 
         CVideo::SCREENHEIGHT = 768;
-        string_8C8CA0 = "10";
+        CHUI_GUIEXT = "10";
         strncpy(field_49B4[0].field_10, "STON10L", sizeof(field_49B4[0].field_10));
         strncpy(field_49B4[1].field_10, "STON10R", sizeof(field_49B4[1].field_10));
         strncpy(field_49B4[2].field_10, "STON10T", sizeof(field_49B4[2].field_10));
@@ -486,7 +486,7 @@ CBaldurChitin::CBaldurChitin()
         stru_8E7A10.bottom = 354;
 
         CVideo::SCREENHEIGHT = 600;
-        string_8C8CA0 = "08";
+        CHUI_GUIEXT = "08";
         break;
     }
 

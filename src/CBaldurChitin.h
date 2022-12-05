@@ -62,7 +62,7 @@ public:
     static const USHORT DEFAULT_SCREEN_HEIGHT;
 
     static short word_8BA320;
-    static CString string_8C8CA0;
+    static CString CHUI_GUIEXT;
     static const CString BALDUR_GAMESPY_GAMENAME;
     static const CString BALDUR_GAMESPY_CODE1;
     static const CString BALDUR_GAMESPY_CODE2;
