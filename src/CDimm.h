@@ -42,6 +42,7 @@ public:
     CResFile* GetResFilePtr(UINT a2);
     BOOL GetResFileName(UINT nIndex, CString& sResFileName, USHORT& nResType, BOOLEAN a5);
     CRes* GetResObject(const CResRef& cResRef, USHORT nResType, BOOLEAN a3);
+    RESID GetResID(CResRef cResRef, USHORT nResType);
     BOOL MemoryAlmostFull();
     void ReduceFreedList(UINT a2);
     int Release(CRes* pRes);

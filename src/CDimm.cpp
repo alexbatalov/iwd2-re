@@ -579,6 +579,17 @@ CRes* CDimm::GetResObject(const CResRef& cResRef, USHORT nResType, BOOLEAN a3)
     return pKey->pRes;
 }
 
+// 0x786E50
+RESID CDimm::GetResID(CResRef cResRef, USHORT nResType)
+{
+    CDimmKeyTableEntry* pKey = m_cKeyTable.FindKey(cResRef, nResType, TRUE);
+    if (pKey != NULL) {
+        return pKey->field_C;
+    }
+
+    return -1;
+}
+
 // 0x787740
 BOOL CDimm::MemoryAlmostFull()
 {
