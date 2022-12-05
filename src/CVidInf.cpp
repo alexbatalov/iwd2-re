@@ -109,6 +109,39 @@ void CVidInf::DestroySurfaces()
     field_67C = 0;
 }
 
+// 0x79BFF0
+void CVidInf::DoTextOut(UINT nSurface, const CString& sText, int x, int y, COLORREF color)
+{
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        DoTextOut3d(nSurface, sText, x, y, color);
+        return;
+    }
+
+    if (nSurface < m_nSurfaces) {
+        IDirectDrawSurface* pSurface = m_pSurfaces[nSurface];
+        if (pSurface != NULL) {
+            HRESULT hr;
+            HDC hdc;
+
+            do {
+                hr = pSurface->GetDC(&hdc);
+                CheckResults(hr);
+            } while (hr == DDERR_SURFACELOST || hr == DDERR_WASSTILLDRAWING);
+
+            if (hr == DD_OK) {
+                SetBkMode(hdc, TRANSPARENT);
+                SetTextColor(hdc, color);
+                TextOutA(hdc, x, y, sText, sText.GetLength());
+            }
+
+            do {
+                hr = pSurface->ReleaseDC(hdc);
+                CheckResults(hr);
+            } while (hr == DDERR_SURFACELOST || hr == DDERR_WASSTILLDRAWING);
+        }
+    }
+}
+
 // 0x79E550
 void CVidInf::LoadFogOWarSurfaces(const CString& a2)
 {
@@ -209,4 +242,13 @@ void CVidInf::RestoreSurfaces()
             }
         }
     }
+}
+
+// 0x7BE530
+void CVidInf::DoTextOut3d(UINT nSurface, const CString& sText, int x, int y, COLORREF color)
+{
+    field_178.SetColor(color, 0, 0);
+
+    CRect screenRect(0, 0, CVideo::SCREENWIDTH, CVideo::SCREENHEIGHT);
+    field_178.TextOut3d(sText, x, y + 16, screenRect, 0, 0);
 }

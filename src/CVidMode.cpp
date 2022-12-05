@@ -113,6 +113,11 @@ void CVidMode::DestroySurfaces()
 {
 }
 
+// 0x799E30
+void CVidMode::DoTextOut(UINT nSurface, const CString& sText, int x, int y, COLORREF color)
+{
+}
+
 // 0x799E60
 void CVidMode::LoadFogOWarSurfaces(const CString& a2)
 {
