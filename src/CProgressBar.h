@@ -1,7 +1,9 @@
 #ifndef CPROGRESSBAR_H_
 #define CPROGRESSBAR_H_
 
-#include <windows.h>
+#include "mfc.h"
+
+#define CPROGRESSBAR_MAX_PLAYERS 6
 
 class CProgressBar {
 public:
@@ -13,22 +15,31 @@ public:
     }
 
     void Initialize();
+    void AddActionTarget(LONG nUnits);
+    LONG GetRemoteActionProgres(SHORT nPlayerNum);
+    void SetRemoteActionProgress(SHORT nPlayerNum, LONG nUnits);
+    LONG GetRemoteActionTarget(SHORT nPlayerNum);
+    void SetRemoteActionTarget(SHORT nPlayerNum, LONG nUnits);
+    BOOLEAN GetRemoteWaiting(SHORT nPlayerNum);
+    void SetRemoteWaiting(SHORT nPlayerNum, BOOLEAN bValue);
+    LONG GetRemoteWaitingReason(SHORT nPlayerNum);
+    void SetRemoteWaitingReason(SHORT nPlayerNum, LONG nReason);
 
-    /* 0000 */ int m_nSecondsToTimeout;
-    /* 0004 */ int field_4;
-    /* 0008 */ int field_8;
-    /* 000C */ int field_C;
-    /* 0010 */ int field_10;
-    /* 0014 */ unsigned char field_14;
-    /* 0015 */ unsigned char field_15;
-    /* 0016 */ int field_16;
-    /* 001A */ unsigned char field_1A;
-    /* 001B */ unsigned char field_1B;
-    /* 001C */ unsigned char field_1C;
-    /* 001D */ BOOLEAN m_bRemoteWaiting[6];
-    /* 0024 */ int m_nRemoteActionProgress[6];
-    /* 003C */ int m_nRemoteActionTarget[6];
-    /* 0054 */ int m_nRemoteWaitingReason[6];
+    /* 0000 */ DWORD m_nSecondsToTimeout;
+    /* 0004 */ LONG m_nProgressBarCaption;
+    /* 0008 */ LONG m_nParchmentCaption;
+    /* 000C */ LONG m_nActionProgress;
+    /* 0010 */ LONG m_nActionTarget;
+    /* 0014 */ BOOLEAN m_bTravelActive;
+    /* 0015 */ BOOLEAN m_bWaiting;
+    /* 0016 */ LONG m_nWaitingReason;
+    /* 001A */ BOOLEAN m_bDisableMinibars;
+    /* 001B */ BOOLEAN m_bTimeoutVisible;
+    /* 001C */ BOOLEAN m_bProgressBarActivated;
+    /* 001D */ BOOLEAN m_bRemoteWaiting[CPROGRESSBAR_MAX_PLAYERS];
+    /* 0024 */ LONG m_nRemoteActionProgress[CPROGRESSBAR_MAX_PLAYERS];
+    /* 003C */ LONG m_nRemoteActionTarget[CPROGRESSBAR_MAX_PLAYERS];
+    /* 0054 */ LONG m_nRemoteWaitingReason[CPROGRESSBAR_MAX_PLAYERS];
 };
 
 #endif /* CPROGRESSBAR_H_ */
