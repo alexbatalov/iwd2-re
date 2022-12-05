@@ -18,6 +18,7 @@ public:
     /* 005C */ virtual BOOL ActivateVideoMode(CVidMode* pPrevVidMode, HWND hWnd, BOOL bFullscreen) = 0;
     /* 0068 */ virtual BOOL CreateSurface(IDirectDrawSurface** lplpDirectDrawSurface, const CSize& cSize);
     /* 006C */ virtual BOOL DeactivateVideoMode(int a2) = 0;
+    /* 0070 */ virtual void DestroySurface(IDirectDrawSurface** lplpDirectDrawSurface);
     /* 011C */ virtual ~CVidMode();
 
     /* 0004 */ int field_4;

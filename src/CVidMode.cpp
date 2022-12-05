@@ -82,3 +82,13 @@ BOOL CVidMode::CreateSurface(IDirectDrawSurface** lplpDirectDrawSurface, const C
 
     return TRUE;
 }
+
+// 0x795C50
+void CVidMode::DestroySurface(IDirectDrawSurface** lplpDirectDrawSurface)
+{
+    if (lplpDirectDrawSurface != NULL) {
+        if (*lplpDirectDrawSurface != NULL) {
+            (*lplpDirectDrawSurface)->Release();
+        }
+    }
+}
