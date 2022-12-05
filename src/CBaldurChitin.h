@@ -81,7 +81,6 @@ public:
     static RECT stru_8E79E0;
     static RECT stru_8E79F8;
     static RECT stru_8E7A10;
-    static BOOL SPRITE_MIRROR;
 
     CBaldurChitin();
     ~CBaldurChitin();

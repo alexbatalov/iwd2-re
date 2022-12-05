@@ -2,6 +2,7 @@
 
 #include "CBaldurProjector.h"
 #include "CDungeonMaster.h"
+#include "CGameAnimationType.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CScreenChapter.h"
@@ -140,12 +141,6 @@ RECT CBaldurChitin::stru_8E79F8;
 
 // 0x8E7A10
 RECT CBaldurChitin::stru_8E7A10;
-
-// NOTE: Likely belongs to other object.
-//
-// #guess
-// 0x8F8E14
-BOOL CBaldurChitin::SPRITE_MIRROR;
 
 // 0x421E40
 CBaldurChitin::CBaldurChitin()
@@ -851,7 +846,7 @@ void CBaldurChitin::Init(HINSTANCE hInstance)
     }
 
     if (g_pChitin->cDimm.GetMemoryAmount() == 1) {
-        SPRITE_MIRROR = 1;
+        CGameAnimationType::MIRROR_BAM = 1;
     }
 }
 
@@ -1118,9 +1113,9 @@ void CBaldurChitin::LoadOptions()
         0,
         GetConfigFileName());
 
-    SPRITE_MIRROR = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
+    CGameAnimationType::MIRROR_BAM = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         SPRITE_MIRROR_KEY,
-        SPRITE_MIRROR,
+        CGameAnimationType::MIRROR_BAM,
         GetConfigFileName());
 
     pOptions->m_nVolumeMovie = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
@@ -1268,7 +1263,7 @@ void CBaldurChitin::SaveOptions()
         sString,
         GetConfigFileName());
 
-    sString.Format("%d", SPRITE_MIRROR);
+    sString.Format("%d", CGameAnimationType::MIRROR_BAM);
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         SPRITE_MIRROR_KEY,
         sString,
