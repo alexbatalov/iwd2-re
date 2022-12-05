@@ -27,12 +27,12 @@ CVidMode::CVidMode()
     field_D8 = 1;
     field_86 = 0;
     field_E0 = 0;
-    field_9C = 0;
+    m_nSurfaces = 0;
     nTickCount = GetTickCount();
     field_94 = 0;
     field_8A = 0;
     field_8E = 0;
-    field_A0 = NULL;
+    m_pSurfaces = NULL;
     field_E4 = 0;
     field_EC = 0;
     field_E8 = 0;
@@ -91,6 +91,21 @@ void CVidMode::DestroySurface(IDirectDrawSurface** lplpDirectDrawSurface)
             (*lplpDirectDrawSurface)->Release();
         }
     }
+}
+
+// 0x79A820
+BOOL CVidMode::UnLockSurface(UINT nIndex, LPVOID lpSurfaceData)
+{
+    if (nIndex >= m_nSurfaces) {
+        return FALSE;
+    }
+
+    IDirectDrawSurface* pSurface = m_pSurfaces[nIndex];
+    if (pSurface == NULL) {
+        return FALSE;
+    }
+
+    return pSurface->Unlock(lpSurfaceData) == DD_OK;
 }
 
 // 0x79AC20

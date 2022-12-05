@@ -4,8 +4,8 @@
 // 0x79AF00
 CVidInf::CVidInf()
 {
-    field_9C = 0;
-    field_A0 = 0;
+    m_nSurfaces = 0;
+    m_pSurfaces = NULL;
     field_678 = 0;
     field_E0 = 4;
     field_67C = 0;
@@ -24,12 +24,12 @@ CVidInf::CVidInf()
 // 0x79B010
 CVidInf::~CVidInf()
 {
-    if (field_A0 != NULL) {
-        delete field_A0;
-        field_A0 = NULL;
+    if (m_pSurfaces != NULL) {
+        delete m_pSurfaces;
+        m_pSurfaces = NULL;
     }
 
-    field_9C = 0;
+    m_nSurfaces = 0;
 }
 
 // 0x79B100

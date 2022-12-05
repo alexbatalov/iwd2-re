@@ -14,6 +14,7 @@ public:
     static BYTE NUM_FADE_FRAMES;
     static BOOL bInitialized;
 
+    BOOL UnLockSurface(UINT nIndex, LPVOID lpSurfaceData);
     static void SetWindowedMode(HWND hWnd);
 
     CVidMode();
@@ -44,8 +45,8 @@ public:
     /* 0090 */ DWORD nTickCount;
     /* 0094 */ int field_94;
     /* 0098 */ int field_98;
-    /* 009C */ int field_9C;
-    /* 00A0 */ void* field_A0;
+    /* 009C */ UINT m_nSurfaces;
+    /* 00A0 */ IDirectDrawSurface** m_pSurfaces;
     /* 00A4 */ COLORREF rgbGlobalTint;
     /* 00A8 */ BYTE m_nBrightnessCorrection;
     /* 00A9 */ BYTE m_nGammaCorrection;
