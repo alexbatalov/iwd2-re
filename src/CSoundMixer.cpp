@@ -125,15 +125,20 @@ void CSoundMixer::CleanUp()
 
     if (m_aChannels.GetSize() > 0) {
         for (int k = 0; k < m_nMaxChannels; k++) {
-            // TODO: Object type?
-            CObject* v1 = m_aChannels.GetAt(k);
-            if (v1 != NULL) {
-                delete v1;
+            CSoundChannel* pSoundChannel = static_cast<CSoundChannel*>(m_aChannels.GetAt(k));
+            if (pSoundChannel != NULL) {
+                delete pSoundChannel;
             }
         }
 
         m_nMaxChannels = -1;
         m_aChannels.SetSize(0);
+    }
+
+    if (m_bMusicInitialized) {
+        // TODO: Incomplete.
+        // musicClose();
+        // soundClose();
     }
 
     m_bMusicInitialized = FALSE;
