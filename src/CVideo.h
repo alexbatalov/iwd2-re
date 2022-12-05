@@ -32,6 +32,9 @@ public:
     void CleanUp3d();
     BOOL Initialize3d(HWND hWnd, BOOLEAN bFullscreen, int a4);
 
+    // NOTE: Can be seen via assertion in `CVidMode::LockSurface`.
+    USHORT GetBitsPerPixels() { return m_nBpp; }
+
     /* 0000 */ USHORT m_nBpp; // #guess
     /* 0002 */ USHORT m_nNextBpp; // #guess
     /* 0004 */ BOOLEAN m_bSupports16bpp; // #guess

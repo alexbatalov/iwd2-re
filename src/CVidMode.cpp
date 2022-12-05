@@ -1,6 +1,7 @@
 #include "CVidMode.h"
 
 #include "CChitin.h"
+#include "CUtil.h"
 
 // 0x8BA322
 BYTE CVidMode::NUM_FADE_FRAMES = 20;
@@ -59,6 +60,20 @@ CVidMode::~CVidMode()
     bInitialized = FALSE;
 }
 
+// 0x799F40
+BOOL CVidMode::CheckResults(HRESULT hr)
+{
+    switch (hr) {
+    case DD_OK:
+        return TRUE;
+    case DDERR_SURFACELOST:
+        RestoreSurfaces();
+        return FALSE;
+    default:
+        return FALSE;
+    }
+}
+
 // 0x795BB0
 BOOL CVidMode::CreateSurface(IDirectDrawSurface** lplpDirectDrawSurface, const CSize& cSize)
 {
@@ -91,6 +106,49 @@ void CVidMode::DestroySurface(IDirectDrawSurface** lplpDirectDrawSurface)
             (*lplpDirectDrawSurface)->Release();
         }
     }
+}
+
+// 0x799E60
+void CVidMode::LoadFogOWarSurfaces(const CString& a2)
+{
+}
+
+// 0x799CA0
+void CVidMode::RestoreSurfaces()
+{
+}
+
+// 0x799FA0
+BOOL CVidMode::LockSurface(UINT nIndex, LPDDSURFACEDESC pSurfaceDesc, const CRect& rect)
+{
+    RECT r = static_cast<RECT>(rect);
+
+    if (nIndex >= m_nSurfaces) {
+        return FALSE;
+    }
+
+    IDirectDrawSurface* pSurface = m_pSurfaces[nIndex];
+    if (pSurface == NULL) {
+        return FALSE;
+    }
+
+    HRESULT hr;
+    do {
+        pSurfaceDesc->dwSize = sizeof(*pSurfaceDesc);
+        hr = pSurface->Lock(&r, pSurfaceDesc, DDLOCK_WAIT, NULL);
+        if (hr == DDERR_SURFACELOST) {
+            RestoreSurfaces();
+            continue;
+        } else {
+            CheckResults(hr);
+        }
+    } while (hr == DDERR_SURFACEBUSY);
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo.cpp
+    // __LINE__: 5071
+    UTIL_ASSERT(g_pChitin->cVideo.GetBitsPerPixels() == 24 || !((LONG)(pSurfaceDesc->lpSurface) & 0x00000001));
+
+    return hr == DD_OK;
 }
 
 // 0x79A820

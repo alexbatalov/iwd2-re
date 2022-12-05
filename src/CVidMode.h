@@ -14,6 +14,8 @@ public:
     static BYTE NUM_FADE_FRAMES;
     static BOOL bInitialized;
 
+    BOOL CheckResults(HRESULT hr);
+    BOOL LockSurface(UINT nIndex, LPDDSURFACEDESC pSurfaceDesc, const CRect& rect);
     BOOL UnLockSurface(UINT nIndex, LPVOID lpSurfaceData);
     static void SetWindowedMode(HWND hWnd);
 
@@ -22,6 +24,8 @@ public:
     /* 0068 */ virtual BOOL CreateSurface(IDirectDrawSurface** lplpDirectDrawSurface, const CSize& cSize);
     /* 006C */ virtual BOOL DeactivateVideoMode(int a2) = 0;
     /* 0070 */ virtual void DestroySurface(IDirectDrawSurface** lplpDirectDrawSurface);
+    /* 00E8 */ virtual void LoadFogOWarSurfaces(const CString& a2);
+    /* 0100 */ virtual void RestoreSurfaces();
     /* 011C */ virtual ~CVidMode();
 
     /* 0004 */ int field_4;
