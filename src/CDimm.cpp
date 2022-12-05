@@ -404,7 +404,23 @@ BOOL CDimm::CreateKeyTable()
 // 0x7840E0
 void CDimm::DestroyKeyTable()
 {
-    // TODO: Incomplete.
+    if (m_cKeyTable.m_bInitialized == TRUE) {
+        m_cKeyTable.DestroyTable(this);
+    }
+
+    if (m_ppResFiles != NULL) {
+        for (unsigned int k = 0; k < m_nResFiles; k++) {
+            CResFile* pResFile = m_ppResFiles[k];
+            if (pResFile != NULL) {
+                delete pResFile;
+            }
+            m_ppResFiles[k] = NULL;
+        }
+
+        delete m_ppResFiles;
+        m_ppResFiles = NULL;
+        m_nResFiles = 0;
+    }
 }
 
 // 0x785C10
