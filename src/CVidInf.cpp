@@ -14,7 +14,7 @@ CVidInf::CVidInf()
     field_98 = 0;
     field_94 = 0;
     field_73A = "";
-    memset(field_F4, 0, sizeof(field_F4));
+    memset(&m_SurfaceDesc, 0, sizeof(m_SurfaceDesc));
     SetRect(&field_160, 0, 0, 0, 0);
     field_170 = 0;
     field_174 = 1;

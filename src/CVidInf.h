@@ -19,7 +19,7 @@ public:
 
     void DoTextOut3d(UINT nSurface, const CString& sText, int x, int y, COLORREF color);
 
-    /* 00F4 */ unsigned char field_F4[108];
+    /* 00F4 */ DDSURFACEDESC m_SurfaceDesc;
     /* 0160 */ RECT field_160;
     /* 0170 */ int field_170;
     /* 0174 */ int field_174;
