@@ -128,7 +128,7 @@ BOOL CDimm::RemoveTemporaryKey(const CString& sDirName, CResRef cResRef, USHORT 
 
     // __FILE__: C:\Projects\Icewind2\src\chitin\ChDimm.cpp
     // __LINE__: 9884
-    UTIL_ASSERT(m_bTemporaryKeyAdd == TRUE);
+    UTIL_ASSERT(pKey != NULL);
 
     // NOTE: Huge distance in line numbers implies inlining.
 
