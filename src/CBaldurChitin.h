@@ -125,6 +125,7 @@ public:
     /* 00D4 */ WORD GetMultiplayerDirectPlayPort();
     /* 00EC */ void GetGameSpyGameName(CString& sGameSpyName);
     /* 00F0 */ void GetGameSpyCode(CString& sGameSpyCode);
+    /* 0104 */ BOOL GetEAXActive();
 
     /* 1C50 */ CInfCursor* m_pObjectCursor;
     /* 1C54 */ CInfGame* m_pObjectGame;

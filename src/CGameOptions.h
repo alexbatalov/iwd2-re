@@ -41,7 +41,7 @@ public:
     /* 007C */ int field_7C;
     /* 0080 */ int field_80;
     /* 0084 */ int field_84;
-    /* 0088 */ int field_88;
+    /* 0088 */ BOOL m_bEnvironmentalAudio;
     /* 008C */ int field_8C;
     /* 0090 */ BOOL m_bDisplayMovieSubtitles; // #guess
     /* 0094 */ int field_94;

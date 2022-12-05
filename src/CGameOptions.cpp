@@ -39,7 +39,7 @@ CGameOptions::CGameOptions()
     field_7C = 1;
     field_80 = 1;
     field_84 = 0;
-    field_88 = 1;
+    m_bEnvironmentalAudio = TRUE;
     field_8C = 0;
     m_bDisplayMovieSubtitles = FALSE;
     field_94 = 1;

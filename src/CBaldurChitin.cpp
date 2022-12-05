@@ -1028,6 +1028,16 @@ void CBaldurChitin::ShutDown(int nLineNumber, const char* szFileName, const char
     CChitin::ShutDown(nLineNumber, szFileName, text);
 }
 
+// 0x422D70
+BOOL CBaldurChitin::GetEAXActive()
+{
+    if (m_pObjectGame != NULL) {
+        return m_pObjectGame->m_cOptions.m_bEnvironmentalAudio;
+    }
+
+    return FALSE;
+}
+
 // 0x422DC0
 void CBaldurChitin::GetGameSpyGameName(CString& sGameSpyName)
 {

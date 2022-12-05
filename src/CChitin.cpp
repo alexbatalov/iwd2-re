@@ -1023,6 +1023,12 @@ void CChitin::GetGameSpyCode(CString& sGameSpyCode)
     sGameSpyCode = "";
 }
 
+// 0x78E6E0
+BOOL CChitin::GetEAXActive()
+{
+    return FALSE;
+}
+
 // 0x78E820
 WORD CChitin::GetMultiplayerGameSpyPort()
 {
