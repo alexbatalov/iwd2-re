@@ -16,6 +16,7 @@
 
 #define CHITIN_MAX_THREADS 10
 
+class CRes;
 class CVidMode;
 class CWarp;
 
@@ -59,8 +60,11 @@ public:
     /* 0030 */ virtual void RSThreadMain(void* userInfo) = 0;
     /* 0034 */ virtual void MainAIThread(void* userInfo) = 0;
     /* 0038 */ virtual void MusicThreadMain(void* userInfo) = 0;
+    /* 003C */ virtual CRes* AllocResObject(int nType);
     /* 0040 */ virtual const CString& GetIconRes();
     /* 0044 */ virtual void GetScreenShotFilePrefix(CString& szGameFileName);
+    /* 0048 */ virtual int TranslateType(const CString& sRes);
+    /* 004C */ virtual void TranslateType(int nType, CString& sRes);
     /* 0050 */ virtual BOOL InitGraphics();
     /* 0058 */ virtual BOOL InitializeServices(HWND hWnd);
     /* 00A0 */ virtual const char* GetConfigFileName();

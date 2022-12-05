@@ -5,6 +5,14 @@
 #include <winver.h>
 
 #include "CAlias.h"
+#include "CResBinary.h"
+#include "CResBitmap.h"
+#include "CResCell.h"
+#include "CResCellHeader.h"
+#include "CResMosaic.h"
+#include "CResPLT.h"
+#include "CResTile.h"
+#include "CResWave.h"
 #include "CUtil.h"
 #include "CWarp.h"
 
@@ -599,6 +607,63 @@ void CChitin::Shutdown3D()
     // TODO: Incomplete.
 }
 
+// 0x790E10
+void CChitin::TranslateType(int nType, CString& sRes)
+{
+    switch (nType) {
+    case 1:
+        sRes = "BMP";
+        break;
+    case 4:
+        sRes = "WAV";
+        break;
+    case 5:
+        sRes = "WFX";
+        break;
+    case 6:
+        sRes = "PLT";
+        break;
+    case 1000:
+        sRes = "BAM";
+        break;
+    case 1003:
+        sRes = "TIS";
+        break;
+    case 1004:
+        sRes = "MOS";
+        break;
+    case 1100:
+        sRes = "BAH";
+        break;
+    default:
+        sRes = "RES";
+        break;
+    }
+}
+
+// 0x790EF0
+int CChitin::TranslateType(const CString& sRes)
+{
+    if (sRes.CompareNoCase("TIS") == 0)
+        return 1003;
+    if (sRes.CompareNoCase("BAM") == 0)
+        return 1000;
+    if (sRes.CompareNoCase("BAH") == 0)
+        return 1100;
+    if (sRes.CompareNoCase("BMP") == 0)
+        return 1;
+    if (sRes.CompareNoCase("MOS") == 0)
+        return 1004;
+    if (sRes.CompareNoCase("WAV") == 0)
+        return 4;
+    if (sRes.CompareNoCase("WFX") == 0)
+        return 5;
+    if (sRes.CompareNoCase("PLT") == 0)
+        return 6;
+
+    return 0xFFFF;
+}
+
 // 0x790FE0
 int CChitin::InitApplication(HINSTANCE hInstance, int nCmdShow)
 {
@@ -745,6 +810,31 @@ void CChitin::AddEngine(CWarp* pNewEngine)
 {
     if (pNewEngine != NULL) {
         lEngines.AddTail(pNewEngine);
+    }
+}
+
+// 0x78EC90
+CRes* CChitin::AllocResObject(int nType)
+{
+    switch (nType) {
+    case 1:
+        return new CResBitmap();
+    case 4:
+        return new CResWave();
+    case 5:
+        return new CResBinary();
+    case 6:
+        return new CResPLT();
+    case 1000:
+        return new CResCell();
+    case 1004:
+        return new CResMosaic();
+    case 1100:
+        return new CResCellHeader();
+    case 1003:
+        return new CResTile();
+    default:
+        return new CRes();
     }
 }
 
