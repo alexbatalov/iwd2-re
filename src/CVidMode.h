@@ -25,6 +25,7 @@ public:
     /* 006C */ virtual BOOL DeactivateVideoMode(int a2) = 0;
     /* 0070 */ virtual void DestroySurface(IDirectDrawSurface** lplpDirectDrawSurface);
     /* 0074 */ virtual void DestroySurfaces();
+    /* 007C */ void DoTextOut(UINT nSurface, const CString& sText, int x, int y, COLORREF color, int height);
     /* 0080 */ void DoTextOut(UINT nSurface, const CString& sText, int x, int y, COLORREF color);
     /* 00E8 */ virtual void LoadFogOWarSurfaces(const CString& a2);
     /* 0100 */ virtual void RestoreSurfaces();

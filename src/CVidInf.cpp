@@ -142,6 +142,54 @@ void CVidInf::DoTextOut(UINT nSurface, const CString& sText, int x, int y, COLOR
     }
 }
 
+// 0x79C0E0
+void CVidInf::DoTextOut(UINT nSurface, const CString& sText, int x, int y, COLORREF color, int height)
+{
+    if (nSurface < m_nSurfaces) {
+        IDirectDrawSurface* pSurface = m_pSurfaces[nSurface];
+        if (pSurface != NULL) {
+            HRESULT hr;
+            HDC hdc;
+
+            do {
+                hr = pSurface->GetDC(&hdc);
+                CheckResults(hr);
+            } while (hr == DDERR_SURFACELOST || hr == DDERR_WASSTILLDRAWING);
+
+            if (hr == DD_OK) {
+                HFONT hFont = CreateFontA(height,
+                    0,
+                    0,
+                    0,
+                    FW_NORMAL,
+                    FALSE,
+                    FALSE,
+                    FALSE,
+                    DEFAULT_CHARSET,
+                    OUT_DEFAULT_PRECIS,
+                    CLIP_DEFAULT_PRECIS,
+                    DEFAULT_QUALITY,
+                    DEFAULT_PITCH,
+                    FF_DONTCARE);
+
+                HGDIOBJ hPrev = SelectObject(hdc, hFont);
+
+                SetBkMode(hdc, TRANSPARENT);
+                SetTextColor(hdc, color);
+                TextOutA(hdc, x, y, sText, sText.GetLength());
+
+                HGDIOBJ hFontToRemove = SelectObject(hdc, hPrev);
+                DeleteObject(hFontToRemove);
+            }
+
+            do {
+                hr = pSurface->ReleaseDC(hdc);
+                CheckResults(hr);
+            } while (hr == DDERR_SURFACELOST || hr == DDERR_WASSTILLDRAWING);
+        }
+    }
+}
+
 // 0x79E550
 void CVidInf::LoadFogOWarSurfaces(const CString& a2)
 {

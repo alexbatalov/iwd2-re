@@ -118,6 +118,11 @@ void CVidMode::DoTextOut(UINT nSurface, const CString& sText, int x, int y, COLO
 {
 }
 
+// 0x799E40
+void CVidMode::DoTextOut(UINT nSurface, const CString& sText, int x, int y, COLORREF color, int height)
+{
+}
+
 // 0x799E60
 void CVidMode::LoadFogOWarSurfaces(const CString& a2)
 {

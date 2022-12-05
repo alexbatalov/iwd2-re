@@ -11,6 +11,7 @@ public:
     /* 005C */ BOOL ActivateVideoMode(CVidMode* pPrevVidMode, HWND hWnd, BOOL bFullscreen);
     /* 006C */ BOOL DeactivateVideoMode(int a2);
     /* 0074 */ void DestroySurfaces();
+    /* 007C */ void DoTextOut(UINT nSurface, const CString& sText, int x, int y, COLORREF color, int height);
     /* 0080 */ void DoTextOut(UINT nSurface, const CString& sText, int x, int y, COLORREF color);
     /* 00E8 */ void LoadFogOWarSurfaces(const CString& a2);
     /* 0100 */ void RestoreSurfaces();
