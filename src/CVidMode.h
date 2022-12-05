@@ -24,6 +24,7 @@ public:
     /* 0068 */ virtual BOOL CreateSurface(IDirectDrawSurface** lplpDirectDrawSurface, const CSize& cSize);
     /* 006C */ virtual BOOL DeactivateVideoMode(int a2) = 0;
     /* 0070 */ virtual void DestroySurface(IDirectDrawSurface** lplpDirectDrawSurface);
+    /* 0074 */ virtual void DestroySurfaces();
     /* 00E8 */ virtual void LoadFogOWarSurfaces(const CString& a2);
     /* 0100 */ virtual void RestoreSurfaces();
     /* 011C */ virtual ~CVidMode();

@@ -49,6 +49,66 @@ BOOL CVidInf::DeactivateVideoMode(int a2)
     return FALSE;
 }
 
+// 0x79BE90
+void CVidInf::DestroySurfaces()
+{
+    if (m_pSurfaces != NULL) {
+        if (m_pSurfaces[1] != NULL) {
+            m_pSurfaces[1]->Release();
+            m_pSurfaces[1] = NULL;
+        }
+
+        if (m_pSurfaces[0] != NULL) {
+            m_pSurfaces[0]->Release();
+            m_pSurfaces[0] = NULL;
+        }
+
+        if (m_pSurfaces[2] != NULL) {
+            m_pSurfaces[2]->Release();
+            m_pSurfaces[2] = NULL;
+        }
+
+        if (m_pSurfaces[3] != NULL) {
+            m_pSurfaces[3]->Release();
+            m_pSurfaces[3] = NULL;
+        }
+
+        if (m_pSurfaces[6] != NULL) {
+            m_pSurfaces[6]->Release();
+            m_pSurfaces[6] = NULL;
+        }
+
+        if (m_pSurfaces[7] != NULL) {
+            m_pSurfaces[7]->Release();
+            m_pSurfaces[7] = NULL;
+        }
+
+        if (m_pSurfaces[4] != NULL) {
+            m_pSurfaces[4]->Release();
+            m_pSurfaces[4] = NULL;
+        }
+
+        if (m_pSurfaces[5] != NULL) {
+            m_pSurfaces[5]->Release();
+            m_pSurfaces[5] = NULL;
+        }
+
+        if (m_pSurfaces[8] != NULL) {
+            m_pSurfaces[8]->Release();
+            m_pSurfaces[8] = NULL;
+        }
+    }
+
+    if (field_678 != NULL) {
+        for (int k = 0; k < field_67C; k++) {
+            field_678[k]->Release();
+            field_678[k] = NULL;
+        }
+    }
+
+    field_67C = 0;
+}
+
 // 0x79E550
 void CVidInf::LoadFogOWarSurfaces(const CString& a2)
 {

@@ -108,6 +108,11 @@ void CVidMode::DestroySurface(IDirectDrawSurface** lplpDirectDrawSurface)
     }
 }
 
+// 0x799CA0
+void CVidMode::DestroySurfaces()
+{
+}
+
 // 0x799E60
 void CVidMode::LoadFogOWarSurfaces(const CString& a2)
 {
