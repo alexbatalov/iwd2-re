@@ -555,6 +555,30 @@ BOOL CDimm::GetResFileName(UINT nIndex, CString& sResFileName, USHORT& nResType,
     return FALSE;
 }
 
+// 0x786DF0
+CRes* CDimm::GetResObject(const CResRef& cResRef, USHORT nResType, BOOLEAN a3)
+{
+    CDimmKeyTableEntry* pKey = m_cKeyTable.FindKey(cResRef, nResType, a3);
+    if (pKey == NULL) {
+        return NULL;
+    }
+
+    if (pKey->pRes != NULL) {
+        pKey->field_10++;
+        return pKey->pRes;
+    }
+
+    pKey->pRes = g_pChitin->AllocResObject(nResType);
+    if (pKey->pRes == NULL) {
+        return NULL;
+    }
+
+    pKey->pRes->SetID(pKey->field_C);
+    pKey->pRes->m_pDimmKeyTableEntry = pKey;
+    pKey->field_10++;
+    return pKey->pRes;
+}
+
 // 0x787740
 BOOL CDimm::MemoryAlmostFull()
 {
