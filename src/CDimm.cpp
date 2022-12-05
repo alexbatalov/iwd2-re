@@ -590,6 +590,24 @@ RESID CDimm::GetResID(CResRef cResRef, USHORT nResType)
     return -1;
 }
 
+// #guess
+// 0x786E90
+BOOL CDimm::LocalGetFileStatus(const CString& sFileName, CFileStatus& rStatus)
+{
+    BOOL rc = FALSE;
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChDimm.cpp
+    // __LINE__: 3820
+    UTIL_ASSERT(sFileName.GetLength() > 0);
+
+    CFile file;
+    if (file.Open(sFileName, CFile::OpenFlags::modeRead | CFile::OpenFlags::typeBinary, NULL)) {
+        rc = file.GetStatus(rStatus);
+    }
+
+    return rc;
+}
+
 // 0x787740
 BOOL CDimm::MemoryAlmostFull()
 {
