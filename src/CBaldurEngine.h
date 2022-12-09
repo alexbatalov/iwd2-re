@@ -146,8 +146,8 @@ public:
 
     CBaldurEngine();
     ~CBaldurEngine();
-    void InvalidateCursorRect(const CRect& rect);
-    void ResetControls();
+    void InvalidateCursorRect(const CRect& rect) override;
+    void ResetControls() override;
 
     /* 00CC */ virtual CUIManager* GetUIManager();
     /* 00D0 */ virtual int GetSelectedCharacter();

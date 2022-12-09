@@ -19,7 +19,7 @@ public:
     };
 
     CRes();
-    ~CRes();
+    ~CRes() override;
 
     /* 000C */ virtual BOOL func_C();
     /* 0010 */ virtual void func_10();

@@ -30,13 +30,13 @@ public:
     CBaldurProjector();
     ~CBaldurProjector();
 
-    /* 0024 */ void EngineGameInit();
-    /* 0028 */ void EngineGameUninit();
-    /* 0070 */ void OnLButtonDown(CPoint pt);
-    /* 00A0 */ SHORT GetNumVirtualKeys();
-    /* 00A4 */ CKeyInfo* GetVirtualKeys();
-    /* 00A8 */ BYTE* GetVirtualKeysFlags();
-    /* 00AC */ void OnKeyDown(SHORT a2);
+    /* 0024 */ void EngineGameInit() override;
+    /* 0028 */ void EngineGameUninit() override;
+    /* 0070 */ void OnLButtonDown(CPoint pt) override;
+    /* 00A0 */ SHORT GetNumVirtualKeys() override;
+    /* 00A4 */ CKeyInfo* GetVirtualKeys() override;
+    /* 00A8 */ BYTE* GetVirtualKeysFlags() override;
+    /* 00AC */ void OnKeyDown(SHORT a2) override;
 
     void PlayMovie(const CResRef& cResRef);
     BOOL ResolveMovieFileName(const CResRef& cResRef, CString& sMovieFileName);
