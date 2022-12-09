@@ -93,7 +93,7 @@ void CWarp::EngineGameUninit()
 }
 
 // 0x778900
-void OnLButtonDown(CPoint pt)
+void CWarp::OnLButtonDown(CPoint pt)
 {
 }
 

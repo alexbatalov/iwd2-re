@@ -31,11 +31,11 @@ public:
     /* 0024 */ virtual void EngineGameInit();
     /* 0028 */ virtual void EngineGameUninit();
     /* 002C */ virtual void SelectEngine(CWarp* pWarp);
-    /* 0070 */ void OnLButtonDown(CPoint pt);
-    /* 00A0 */ SHORT GetNumVirtualKeys();
-    /* 00A4 */ CKeyInfo* GetVirtualKeys();
-    /* 00A8 */ BYTE* GetVirtualKeysFlags();
-    /* 00AC */ void OnKeyDown(SHORT a2);
+    /* 0070 */ virtual void OnLButtonDown(CPoint pt);
+    /* 00A0 */ virtual SHORT GetNumVirtualKeys();
+    /* 00A4 */ virtual CKeyInfo* GetVirtualKeys();
+    /* 00A8 */ virtual BYTE* GetVirtualKeysFlags();
+    /* 00AC */ virtual void OnKeyDown(SHORT a2);
     /* 00B8 */ virtual void ResetControls();
 
     /* 0004 */ CVidMode* pVidMode; // #guess
