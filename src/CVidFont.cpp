@@ -31,6 +31,26 @@ void CVidFont::SetColor(COLORREF color, int a3, int a4)
     // TODO: Incomplete.
 }
 
+// 0x793170
+void CVidFont::SetResRef(const CResRef& cNewResRef, int a3, int a4)
+{
+    // TODO: Incomplete.
+}
+
+// 0x7A05A0
+int CVidFont::RegisterFont()
+{
+    // TODO: Incomplete.
+
+    return 0;
+}
+
+// 0x7A0880
+void CVidFont::Unload()
+{
+    // TODO: Incomplete.
+}
+
 // 0x7A1210
 void CVidFont::TextOut3d(const CString& sText, int a3, int a4, const CRect& rect, int a6, int a7)
 {

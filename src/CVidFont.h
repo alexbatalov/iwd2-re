@@ -3,6 +3,7 @@
 
 #include "mfc.h"
 
+#include "CResRef.h"
 #include "CVidCell.h"
 
 class CVidFont : public CVidCell {
@@ -10,6 +11,9 @@ public:
     CVidFont();
     ~CVidFont();
     void SetColor(COLORREF color, int a3, int a4);
+    void SetResRef(const CResRef& cNewResRef, int a3, int a4);
+    int RegisterFont();
+    void Unload();
     void TextOut3d(const CString& sText, int a3, int a4, const CRect& rect, int a6, int a7);
 
     /* 04DA */ HFONT m_hFont;

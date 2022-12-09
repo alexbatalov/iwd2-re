@@ -51,6 +51,12 @@ BOOL CWarp::SetVideoMode(int a1)
     return pVidMode != NULL;
 }
 
+// 0x7B5530
+void CWarp::SelectEngine(CWarp* pWarp)
+{
+    g_pChitin->SelectEngine(pWarp);
+}
+
 // 0x799E60
 void CWarp::InvalidateCursorRect(const CRect& rect)
 {
@@ -83,6 +89,34 @@ void CWarp::EngineGameInit()
 
 // 0x0x799CA0
 void CWarp::EngineGameUninit()
+{
+}
+
+// 0x778900
+void OnLButtonDown(CPoint pt)
+{
+}
+
+// 0x78E820
+SHORT CWarp::GetNumVirtualKeys()
+{
+    return 0;
+}
+
+// 0x78E6E0
+CKeyInfo* CWarp::GetVirtualKeys()
+{
+    return NULL;
+}
+
+// 0x78E6E0
+BYTE* CWarp::GetVirtualKeysFlags()
+{
+    return NULL;
+}
+
+// 0x799E60
+void CWarp::OnKeyDown(SHORT a2)
 {
 }
 
