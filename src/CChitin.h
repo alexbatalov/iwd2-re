@@ -44,6 +44,7 @@ public:
     CVidMode* GetCurrentVideoMode();
     void EnginesGameInit();
     void EnginesGameUninit();
+    CString GetFontName();
 
     /* 0000 */ virtual void SynchronousUpdate();
     /* 0004 */ virtual int InitApplication(HINSTANCE hInstance, int nShowCmd);

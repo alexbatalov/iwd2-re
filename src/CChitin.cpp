@@ -1069,6 +1069,12 @@ CVidMode* CChitin::GetCurrentVideoMode()
     return NULL;
 }
 
+// 0x793540
+CString CChitin::GetFontName()
+{
+    return m_sFontName;
+}
+
 // 0x7928A0
 static void MessageThreadMain(void* userInfo)
 {
