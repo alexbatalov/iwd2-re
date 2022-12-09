@@ -3,13 +3,26 @@
 // 0x792CA0
 CVidFont::CVidFont()
 {
-    // TODO: Incomplete.
+    field_4E2 = 0;
+    field_4F4 = 0;
+    field_4F8 = 0;
+    field_4FC = 0;
+    field_4DE = 0;
+    m_hFont = NULL;
+    field_4E6 = -1;
+    field_4E8 = -1;
+    field_4EA = -1;
+    field_4EC = 0xFFFFFF;
+    field_4F0 = 0xFFFFFF;
 }
 
 // 0x792D10
 CVidFont::~CVidFont()
 {
-    // TODO: Incomplete.
+    if (m_hFont != NULL) {
+        DeleteObject(m_hFont);
+        m_hFont = NULL;
+    }
 }
 
 // 0x7930F0
