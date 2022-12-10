@@ -620,7 +620,7 @@ int CDimm::LocalGetResourceSize(CRes* pRes)
         return 0;
     }
 
-    int size = pRes->GetResSize();
+    int size = pRes->GetFixedResourceSize();
     if (size != -1) {
         return size;
     }
@@ -661,7 +661,7 @@ void CDimm::ReduceFreedList(UINT a2)
             CRes* pRes = static_cast<CRes*>(m_lFreed.GetNext(pos));
             if (pRes != NULL) {
                 if (pRes->field_40 == 0) {
-                    if (pRes->func_C()) {
+                    if (pRes->OnResourceFreed()) {
                         Dump(pRes, 1, 0);
                         delete pRes;
                     } else {

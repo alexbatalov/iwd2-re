@@ -28,25 +28,25 @@ CRes::~CRes()
 }
 
 // 0x78E6E0
-BOOL CRes::func_C()
+BOOL CRes::OnResourceFreed()
 {
     return FALSE;
 }
 
 // 0x78E730
-void CRes::func_10()
+void CRes::OnResourceServiced()
 {
 }
 
 // #guess
 // 0x4010C0
-int CRes::GetResSize()
+int CRes::GetFixedResourceSize()
 {
     return -1;
 }
 
 // 0x78E6E0
-int CRes::func_18()
+int CRes::GetFixedResourceDataOffset()
 {
     return 0;
 }
@@ -93,7 +93,7 @@ CResRef CRes::GetResRef()
 
 // #guess
 // 0x77E5D0
-USHORT CRes::GetResType()
+USHORT CRes::GetType()
 {
     if (m_pDimmKeyTableEntry != NULL) {
         return m_pDimmKeyTableEntry->field_12;

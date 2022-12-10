@@ -19,19 +19,20 @@ public:
     };
 
     CRes();
-    ~CRes() override;
-
-    /* 000C */ virtual BOOL func_C();
-    /* 0010 */ virtual void func_10();
-    /* 0014 */ virtual int GetResSize();
-    /* 0018 */ virtual int func_18();
+    /* 0000 */ /* GetRuntimeClass */
+    /* 0004 */ ~CRes() override;
+    /* 0008 */ /* Serialize */
+    /* 000C */ virtual BOOL OnResourceFreed();
+    /* 0010 */ virtual void OnResourceServiced();
+    /* 0014 */ virtual int GetFixedResourceSize();
+    /* 0018 */ virtual int GetFixedResourceDataOffset();
+    /* 001C */ virtual CResRef GetResRef();
+    /* 0020 */ virtual USHORT GetType();
 
     int CancelRequest();
     int Dump(int a2);
     int GetDemands();
     RESID GetID();
-    /* 001C */ virtual CResRef GetResRef();
-    /* 0020 */ virtual USHORT GetResType();
     int Release();
     int Request();
     void SetID(RESID nNewID);
