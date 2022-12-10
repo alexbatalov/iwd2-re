@@ -196,3 +196,7 @@ target_link_libraries(${EXECUTABLE_NAME}
     version
     winmm
 )
+
+add_subdirectory("third_party/zlib")
+target_link_libraries(${EXECUTABLE_NAME} ${ZLIB_LIBRARIES})
+target_include_directories(${EXECUTABLE_NAME} PRIVATE ${ZLIB_INCLUDE_DIRS})
