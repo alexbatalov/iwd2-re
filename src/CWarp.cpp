@@ -97,8 +97,156 @@ void CWarp::EngineGameUninit()
 {
 }
 
+// 0x78E6E0
+BOOL CWarp::CheckSystemKeyCtrl()
+{
+    return FALSE;
+}
+
+// 0x799E60
+void CWarp::SetSystemKeyCtrl(BOOLEAN bValue)
+{
+}
+
+// 0x78E6E0
+BOOL CWarp::GetCtrlKey()
+{
+    return FALSE;
+}
+
+// 0x78E6E0
+BOOL CWarp::CheckSystemKeyShift()
+{
+    return FALSE;
+}
+
+// 0x799E60
+void CWarp::SetSystemKeyShift(BOOL bValue)
+{
+}
+
+// 0x78E6E0
+BOOL CWarp::GetShiftKey()
+{
+    return FALSE;
+}
+
+// 0x78E6E0
+BOOL CWarp::CheckSystemKeyMenu()
+{
+    return FALSE;
+}
+
+// 0x799E60
+void CWarp::SetSystemKeyMenu(BOOL bValue)
+{
+}
+
+// 0x78E6E0
+BOOL CWarp::CheckSystemKeyCapsLock()
+{
+    return FALSE;
+}
+
+// 0x799E60
+void CWarp::SetSystemKeyCapsLock(BOOL bValue)
+{
+}
+
+// 0x78E6E0
+BOOL CWarp::GetCapsLockKey()
+{
+    return FALSE;
+}
+
+// 0x78E6E0
+BOOL CWarp::GetMenuKey()
+{
+    return FALSE;
+}
+
+// 0x78E6E0
+BOOL CWarp::CheckMouseMove()
+{
+    return FALSE;
+}
+
+// 0x778900
+void CWarp::OnMouseMove(CPoint pt)
+{
+}
+
+// 0x78E6E0
+BOOL CWarp::CheckMouseLButton()
+{
+    return FALSE;
+}
+
+// 0x778900
+void CWarp::OnLButtonDblClk(CPoint pt)
+{
+}
+
 // 0x778900
 void CWarp::OnLButtonDown(CPoint pt)
+{
+}
+
+// 0x778900
+void CWarp::OnLButtonUp(CPoint pt)
+{
+}
+
+// 0x78E6E0
+BOOL CWarp::CheckMouseMButton()
+{
+    return FALSE;
+}
+
+// 0x778900
+void CWarp::OnMButtonDblClk(CPoint pt)
+{
+}
+
+// 0x778900
+void CWarp::OnMButtonDown(CPoint pt)
+{
+}
+
+// 0x778900
+void CWarp::OnMButtonUp(CPoint pt)
+{
+}
+
+// 0x78E6E0
+BOOL CWarp::CheckMouseRButton()
+{
+    return FALSE;
+}
+
+// 0x778900
+void CWarp::OnRButtonDblClk(CPoint pt)
+{
+}
+
+// 0x778900
+void CWarp::OnRButtonDown(CPoint pt)
+{
+}
+
+// 0x778900
+void CWarp::OnRButtonUp(CPoint pt)
+{
+}
+
+// 0x78E6E0
+BOOL CWarp::CheckMouseWheel()
+{
+    return FALSE;
+}
+
+// 0x7B5450
+void CWarp::OnMouseWheel(BOOL bForward, LONG nTicks, DWORD nLines, WORD wFlags)
 {
 }
 
@@ -125,7 +273,38 @@ void CWarp::OnKeyDown(SHORT a2)
 {
 }
 
+// 0x799E60
+void CWarp::EnableEditKeys(SHORT a2)
+{
+}
+
+// 0x78E730
+void CWarp::DisableEditKeys()
+{
+}
+
 // 0x78E730
 void CWarp::ResetControls()
 {
+}
+
+// 0x799CA0
+void CWarp::OnVideoChange()
+{
+}
+
+// 0x799CA0
+void CWarp::TimerAsynchronousUpdate()
+{
+}
+
+// 0x799CA0
+void CWarp::TimerSynchronousUpdate()
+{
+}
+
+// 0x7B5550
+void CWarp::TimerUpdate()
+{
+    // TODO: Incomplete.
 }
