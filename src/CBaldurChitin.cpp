@@ -1465,3 +1465,9 @@ WORD CBaldurChitin::GetMultiplayerGameSpyPort()
 
     return GetPrivateProfileIntA("GameSpy", "Port", 0, GetConfigFileName());
 }
+
+// 0x4D26B0
+CInfCursor* CBaldurChitin::GetObjectCursor()
+{
+    return m_pObjectCursor;
+}

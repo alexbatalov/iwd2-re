@@ -94,6 +94,7 @@ public:
     void ClearChatMessages();
     CBaldurMessage* GetBaldurMessage();
     void AddPlayedMovie(const CResRef& cResMovie);
+    CInfCursor* GetObjectCursor();
 
     /* 0000 */ void SynchronousUpdate() override;
     /* 0008 */ DWORD GetIDSInvalidVideoMode() override;
