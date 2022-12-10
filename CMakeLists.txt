@@ -13,6 +13,7 @@ set(CMAKE_MFC_FLAG 2)
 add_executable(${EXECUTABLE_NAME} WIN32)
 
 target_sources(${EXECUTABLE_NAME} PUBLIC
+    "src/BalDataTypes.h"
     "src/CAlias.cpp"
     "src/CAlias.h"
     "src/CAliasList.cpp"
@@ -138,6 +139,9 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CTlkFileOverride.h"
     "src/CTlkTable.cpp"
     "src/CTlkTable.h"
+    "src/CUIControlBase.cpp"
+    "src/CUIControlBase.h"
+    "src/CUIControlFactory.cpp"
     "src/CUIManager.cpp"
     "src/CUIManager.h"
     "src/CUIPanel.cpp"

@@ -77,6 +77,29 @@ public:
         }
         pRes = NULL;
     }
+
+    void SetResRef(const CResRef& cNewResRef, BOOL bSetAutoRequest, BOOL bWarningIfMissing)
+    {
+        if (cResRef != cNewResRef && cResRef != "") {
+            if (field_0) {
+                (static_cast<CRes*>(pRes))->CancelRequest();
+            }
+        }
+
+        if (cNewResRef != "") {
+            T* pNewRes = static_cast<T*>(g_pChitin->cDimm.GetResObject(cNewResRef, nType, TRUE));
+            if (pNewRes != NULL) {
+                pRes = pNewRes;
+                cResRef = cNewResRef;
+            } else {
+                pRes = NULL;
+                cResRef = "";
+            }
+        } else {
+            pRes = NULL;
+            cResRef = "";
+        }
+    }
 };
 
 #endif /* CRES_H_ */

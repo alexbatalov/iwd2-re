@@ -24,6 +24,7 @@ public:
     BOOL SetVideoMode(int a1);
 
     /* 000C */ virtual void InvalidateCursorRect(const CRect& rect);
+    /* 0010 */ virtual void NormalizePanelRect(DWORD nID, CRect& rect);
     /* 0014 */ virtual void EngineActivated();
     /* 0018 */ virtual void EngineDeactivated();
     /* 001C */ virtual void EngineDestroyed();

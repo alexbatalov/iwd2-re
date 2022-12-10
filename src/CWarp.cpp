@@ -62,6 +62,11 @@ void CWarp::InvalidateCursorRect(const CRect& rect)
 {
 }
 
+// 0x778900
+void CWarp::NormalizePanelRect(DWORD nID, CRect& rect)
+{
+}
+
 // 0x799CA0
 void CWarp::EngineActivated()
 {

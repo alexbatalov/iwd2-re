@@ -5,21 +5,35 @@
 #include <afxmt.h>
 #include <afxtempl.h>
 
+#include "BalDataTypes.h"
 #include "CResRef.h"
-#include "CUIPanel.h"
+
+class CUIControlBase;
+class CUIPanel;
+class CWarp;
 
 class CUIManager {
 public:
     CUIManager();
     ~CUIManager();
+    void AddPanel(UI_PANELHEADER* panelInfo);
+    void ReorderPanelAfter(DWORD nID1, DWORD nID2);
+    CUIPanel* GetPanel(DWORD nID);
+    void SetCapture(CUIControlBase* pControl, unsigned char a3);
+    void OnLButtonUp(CPoint pt);
+    void OnRButtonUp(CPoint pt);
+    BOOL OnKeyDown(SHORT nKey);
+    void Render();
     void InvalidateRect(const CRect* rect);
     void InvalidateCursorRect(const CRect& rect);
+    void ForceToolTip();
+    void ShiftPanels(const CPoint& pt);
 
-    /* 000 */ int field_0;
-    /* 004 */ int field_4;
-    /* 008 */ CResRef field_8;
-    /* 0010 */ int field_10;
-    /* 0014 */ int field_14;
+    /* 0000 */ int field_0;
+    /* 0004 */ int field_4;
+    /* 0008 */ CResRef field_8;
+    /* 0010 */ CWarp* m_pWarp; // #guess
+    /* 0014 */ CUIControlBase* m_pFocusedControl; // #guess
     /* 0018 */ int field_18;
     /* 001C */ int field_1C;
     /* 0020 */ int field_20;
