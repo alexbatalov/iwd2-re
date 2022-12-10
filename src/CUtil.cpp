@@ -51,6 +51,22 @@ void CUtil::UtilAssert(int nLineNumber, const char* szFileName, const char* pExp
     abort();
 }
 
+// 0x780C80
+LONG CUtil::UtilRandInt(LONG nRange, LONG nWeight)
+{
+    LONG nValue = nWeight + ((nRange * rand()) >> 15);
+
+    if (nValue >= nRange) {
+        nValue = nRange - 1;
+    }
+
+    if (nValue < 0) {
+        nValue = 0;
+    }
+
+    return nValue;
+}
+
 // 0x780CB0
 int CUtil::GetCurrentBitsPerPixels()
 {
