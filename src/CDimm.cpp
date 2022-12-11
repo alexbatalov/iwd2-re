@@ -764,10 +764,94 @@ BOOL CDimm::RemoveFromDirectoryList(const CString& sDirName, BOOL a3)
     return FALSE;
 }
 
+// #binary-identical
 // 0x787F20
 int CDimm::Request(CRes* pRes)
 {
-    // TODO: Incomplete.
+    if (pRes->field_44 == 0 && pRes->field_40 == 0) {
+        EnterCriticalSection(&(g_pChitin->field_2FC));
+
+        if ((pRes->dwFlags & CRes::RES_FLAG_0x08) == CRes::RES_FLAG_0x08) {
+            if (pRes->m_pCurrentList != NULL) {
+                pRes->m_pCurrentList->RemoveAt(pRes->m_pCurrentListPos);
+                pRes->m_pCurrentList = NULL;
+                pRes->m_pCurrentListPos = NULL;
+            }
+
+            pRes->dwFlags &= ~CRes::RES_FLAG_0x08;
+        }
+
+        if ((pRes->dwFlags & CRes::RES_FLAG_0x04) == CRes::RES_FLAG_0x04) {
+            if (pRes->m_pCurrentListPos != NULL) {
+                if (pRes->m_pCurrentList != NULL) {
+                    pRes->m_pCurrentList->RemoveAt(pRes->m_pCurrentListPos);
+                    pRes->m_pCurrentList = NULL;
+                    pRes->m_pCurrentListPos = NULL;
+                }
+            }
+
+            switch (pRes->dwFlags & 3) {
+            case PRIORITY_HIGH:
+                pRes->m_pCurrentList = &m_lServicedHigh;
+                pRes->m_pCurrentListPos = m_lServicedHigh.AddTail(pRes);
+                break;
+            case PRIORITY_MEDIUM:
+                pRes->m_pCurrentList = &m_lServicedMedium;
+                pRes->m_pCurrentListPos = m_lServicedMedium.AddTail(pRes);
+                break;
+            default:
+                pRes->m_pCurrentList = &m_lServicedLow;
+                pRes->m_pCurrentListPos = m_lServicedLow.AddTail(pRes);
+                break;
+            }
+        } else {
+            if ((pRes->dwFlags & CRes::RES_FLAG_0x10) != CRes::RES_FLAG_0x10) {
+                switch (pRes->dwFlags & 3) {
+                case PRIORITY_HIGH:
+                    pRes->m_pCurrentList = &m_lRequestedHigh;
+                    pRes->m_pCurrentListPos = m_lRequestedHigh.AddTail(pRes);
+                    break;
+                case PRIORITY_MEDIUM:
+                    pRes->m_pCurrentList = &m_lRequestedMedium;
+                    pRes->m_pCurrentListPos = m_lRequestedMedium.AddTail(pRes);
+                    break;
+                default:
+                    pRes->m_pCurrentList = &m_lRequestedLow;
+                    pRes->m_pCurrentListPos = m_lRequestedLow.AddTail(pRes);
+                    break;
+                }
+            }
+        }
+
+        LeaveCriticalSection(&(g_pChitin->field_2FC));
+    }
+
+    pRes->field_44 += 1;
+
+    if ((pRes->m_nID >> 20) < m_nResFiles && (pRes->m_nID & 0xFFF00000) < 0xFC000000) {
+        CResFile* pResFile = m_ppResFiles[pRes->m_nID >> 20];
+
+        CResCache* pResCache = &(g_pChitin->cDimm.cResCache);
+        EnterCriticalSection(&(g_pChitin->field_35C));
+        while (pResCache->field_110 == 1) {
+            LeaveCriticalSection(&(g_pChitin->field_35C));
+
+            while (pResCache->field_110 == 1) {
+                SleepEx(50, FALSE);
+            }
+
+            EnterCriticalSection(&(g_pChitin->field_35C));
+        }
+
+        if (pResFile->m_nRefCount <= 0) {
+            pResFile->m_nRefCount = 0;
+            pResFile->OpenFile();
+        }
+
+        pResFile->m_nRefCount += 1;
+
+        LeaveCriticalSection(&(g_pChitin->field_35C));
+    }
 
     return 0;
 }
