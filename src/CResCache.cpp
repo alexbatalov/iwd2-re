@@ -3,6 +3,7 @@
 #include <direct.h>
 
 #include "CChitin.h"
+#include "CUtil.h"
 
 // 0x8E7514
 GetDiskFreeSpaceExAFunc* CResCache::pfnGetDiskFreeSpaceExA;
@@ -256,7 +257,89 @@ int CResCache::GetUnusedSize()
 // 0x78D090
 BOOL CResCache::RefreshStatus(const CString& a2)
 {
-    // TODO: Incomplete.
+    CString v1;
+    CString v2;
+    CFile cFile;
+    CString v3;
 
+    field_11C = GetPrivateProfileIntA("Config", "CacheSize", 175, g_pChitin->GetConfigFileName());
+    if (field_11C < 125 || field_11C > 2147) {
+        field_11C = 175;
+    }
+
+    field_11C *= 1000000;
+    field_120 = field_11C;
+
+    if (a2.Compare("") != 0) {
+        field_108 = a2;
+    }
+
+    v1 = field_108;
+
+    if (g_pChitin->cDimm.FindDirectoryInDirectoryList(v1) == DIMM_NOT_IN_DIRECTORY_LIST) {
+        if (!g_pChitin->cDimm.AddToDirectoryList(v1, FALSE)) {
+            return FALSE;
+        }
+    }
+
+    EnterCriticalSection(&criticalSection);
+
+    POSITION pos = field_128.GetHeadPosition();
+    while (pos != NULL) {
+        POSITION curr = pos;
+        Entry* pEntry = field_128.GetNext(pos);
+        field_128.RemoveAt(curr);
+
+        unsigned int nIndex = pEntry->nIndex;
+        if (g_pChitin->cDimm.m_cKeyTable.m_bInitialized) {
+            if (nIndex < g_pChitin->cDimm.m_cKeyTable.m_nResFiles) {
+                if (g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries != NULL) {
+                    g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries[nIndex].bDrives &= ~0x200;
+                }
+            }
+        }
+
+        delete pEntry;
+    }
+
+    field_120 = field_11C;
+    field_124 = 0;
+    LeaveCriticalSection(&criticalSection);
+
+    for (unsigned int k = 0; k < g_pChitin->cDimm.m_nResFiles; k++) {
+        if (!g_pChitin->cDimm.m_cKeyTable.m_bInitialized && k >= g_pChitin->cDimm.m_cKeyTable.m_nResFiles) {
     return FALSE;
+        }
+
+        v2 = reinterpret_cast<char*>(g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries) + g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries[k].nFileNameOffset;
+
+        if (g_pChitin->lAliases.ResolveFileName(v1 + v2, v3) == FALSE) {
+            v3 = v1 + v2;
+        }
+
+        if (cFile.Open(v3, CFile::OpenFlags::modeRead, NULL)) {
+            cFile.Close();
+
+            CFileStatus cFileStatus;
+            if (!CFile::GetStatus(v3, cFileStatus)) {
+                // __FILE__: C:\Projects\Icewind2\src\chitin\ChDimm.cpp
+                // __LINE__: 11872
+                UTIL_ASSERT(FALSE);
+            }
+
+            AddFileToCache(k, cFileStatus.m_mtime, cFileStatus.m_size);
+        } else {
+            if (g_pChitin->cDimm.m_cKeyTable.m_bInitialized) {
+                if (k < g_pChitin->cDimm.m_cKeyTable.m_nResFiles) {
+                    if (g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries != NULL) {
+                        g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries[k].bDrives &= ~0x200;
+                    }
+                }
+            }
+        }
+    }
+
+    field_0 = 1;
+
+    return TRUE;
 }
