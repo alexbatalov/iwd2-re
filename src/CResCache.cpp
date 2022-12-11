@@ -343,3 +343,53 @@ BOOL CResCache::RefreshStatus(const CString& a2)
 
     return TRUE;
 }
+
+// 0x78D470
+BOOL CResCache::ValidateFile(UINT nResFileID, LONG a3)
+{
+    CString v1;
+    CString v2;
+    CFile cFile;
+    CString v3;
+
+    UINT nIndex = nResFileID >> 20;
+
+    v1 = field_108;
+
+    if (g_pChitin->cDimm.FindDirectoryInDirectoryList(v1) != DIMM_NOT_IN_DIRECTORY_LIST) {
+        if (g_pChitin->cDimm.m_cKeyTable.m_bInitialized && nIndex < g_pChitin->cDimm.m_cKeyTable.m_nResFiles) {
+            v2 = reinterpret_cast<char*>(g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries) + g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries[nIndex].nFileNameOffset;
+
+            if (g_pChitin->lAliases.ResolveFileName(v1 + v2, v3) == FALSE) {
+                v3 = v1 + v2;
+            }
+
+            CFileStatus cFileStatus;
+            if (CFile::GetStatus(v3, cFileStatus)) {
+                if (static_cast<DWORD>(cFileStatus.m_size) != g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries[nIndex].nFileSize) {
+                    EnterCriticalSection(&criticalSection);
+
+                    POSITION pos = field_128.GetTailPosition();
+                    while (pos != NULL) {
+                        POSITION curr = pos;
+                        Entry* pEntry = field_128.GetPrev(pos);
+                        if (pEntry->nIndex == nIndex) {
+                            if (DeleteFileFromCache(pEntry->nIndex) == TRUE) {
+                                field_120 += pEntry->nSize;
+                                field_124 -= 1;
+                                field_128.RemoveAt(curr);
+                                delete pEntry;
+                            }
+                        }
+                    }
+
+                    LeaveCriticalSection(&criticalSection);
+                }
+            }
+
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}

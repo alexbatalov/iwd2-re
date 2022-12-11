@@ -23,6 +23,7 @@ public:
     BOOL IsCacheSpaceAvailable();
     int GetUnusedSize();
     BOOL RefreshStatus(const CString& a2);
+    BOOL ValidateFile(UINT nResFileID, LONG a3);
 
     static GetDiskFreeSpaceExAFunc* pfnGetDiskFreeSpaceExA;
     static CString DEFAULT_CACHE_DIRECTORY; // #guess
