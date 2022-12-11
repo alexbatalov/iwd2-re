@@ -675,12 +675,63 @@ void CDimm::ReduceFreedList(UINT a2)
     }
 }
 
+// #binary-identical
 // 0x787BA0
 int CDimm::Release(CRes* pRes)
 {
-    // TODO: Incomplete.
+    pRes->field_40 -= 1;
+
+    if (pRes->field_40 == 0) {
+        field_29C -= pRes->field_14;
+    }
+
+    if (pRes->field_40 != 0 || (pRes->dwFlags & CRes::RES_FLAG_0x100) == 0) {
+        if (pRes->field_44 == 0 && pRes->field_40 == 0) {
+            EnterCriticalSection(&(g_pChitin->field_2FC));
+
+            if ((pRes->dwFlags & CRes::RES_FLAG_0x08) == 0) {
+                if (pRes->m_pCurrentList != NULL) {
+                    pRes->m_pCurrentList->RemoveAt(pRes->m_pCurrentListPos);
+                    pRes->m_pCurrentList = NULL;
+                    pRes->m_pCurrentListPos = NULL;
+                }
+
+                if ((pRes->dwFlags & (CRes::RES_FLAG_0x04 | CRes::RES_FLAG_0x10)) != 0) {
+                    pRes->m_pCurrentList = &m_lFreed;
+                    pRes->m_pCurrentListPos = m_lFreed.AddTail(pRes);
+                    pRes->dwFlags |= CRes::RES_FLAG_0x08;
+                }
+            }
+
+            LeaveCriticalSection(&(g_pChitin->field_2FC));
+        }
+
+        if ((pRes->m_nID >> 20) < m_nResFiles && (pRes->m_nID & 0xFFF00000) < 0xFC000000) {
+            CResFile* pResFile = m_ppResFiles[pRes->m_nID >> 20];
+            EnterCriticalSection(&(g_pChitin->field_35C));
+
+            if (pResFile->m_nRefCount <= 1) {
+                pResFile->CloseFile();
+                pResFile->m_nRefCount = 0;
+            } else {
+                pResFile->m_nRefCount -= 1;
+            }
+
+            LeaveCriticalSection(&(g_pChitin->field_35C));
+        }
+
+        return 0;
+    } else {
+        pRes->dwFlags &= ~0x100;
+
+        Dump(pRes, 1, 0);
+
+        if (pRes->m_pDimmKeyTableEntry != NULL) {
+            pRes->SetID(pRes->m_pDimmKeyTableEntry->field_C);
+        }
 
     return 0;
+    }
 }
 
 // #binary-identical
