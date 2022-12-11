@@ -27,12 +27,32 @@ CResCache::CResCache()
     InitializeCriticalSection(&criticalSection);
 }
 
+// #binary-identical
 // 0x78C020
 CResCache::~CResCache()
 {
     EnterCriticalSection(&criticalSection);
 
-    // TODO: Incomplete.
+    POSITION pos = field_128.GetHeadPosition();
+    while (pos != NULL) {
+        POSITION curr = pos;
+        Entry* pEntry = field_128.GetNext(pos);
+        field_128.RemoveAt(curr);
+
+        UINT nIndex = pEntry->nIndex;
+        if (g_pChitin->cDimm.m_cKeyTable.m_bInitialized) {
+            if (nIndex < g_pChitin->cDimm.m_cKeyTable.m_nResFiles) {
+                if (g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries != NULL) {
+                    g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries[nIndex].bDrives &= ~0x200;
+                }
+            }
+        }
+
+        delete pEntry;
+    }
+
+    field_124 = 0;
+    field_120 = field_11C;
 
     LeaveCriticalSection(&criticalSection);
     DeleteCriticalSection(&criticalSection);
