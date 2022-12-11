@@ -123,6 +123,13 @@ BOOL CResCache::CopyFile(UINT nIndex, const CString& a3, const CString& a4, cons
 }
 
 // #binary-identical
+// 0x78CF40
+BOOL CResCache::IsCacheSpaceAvailable()
+{
+    return GetUnusedSize() == field_120;
+}
+
+// #binary-identical
 // 0x78CF60
 int CResCache::GetUnusedSize()
 {
