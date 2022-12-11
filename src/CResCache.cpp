@@ -4,6 +4,9 @@
 
 #include "CChitin.h"
 
+// 0x8E7514
+GetDiskFreeSpaceExAFunc* CResCache::pfnGetDiskFreeSpaceExA;
+
 // 0x8FB928
 CString CResCache::DEFAULT_CACHE_DIRECTORY("hd0:\\cache\\");
 
@@ -117,6 +120,63 @@ BOOL CResCache::CopyFile(UINT nIndex, const CString& a3, const CString& a4, cons
     // TODO: Incomplete.
 
     return FALSE;
+}
+
+// #binary-identical
+// 0x78CF60
+int CResCache::GetUnusedSize()
+{
+    int v1;
+    DWORD dwSectorsPerCluster;
+    DWORD dwBytesPerSector;
+    DWORD dwNumberOfFreeClusters;
+    DWORD dwTotalNumberOfClusters;
+    if (GetDiskFreeSpaceA(NULL, &dwSectorsPerCluster, &dwBytesPerSector, &dwNumberOfFreeClusters, &dwTotalNumberOfClusters) && dwNumberOfFreeClusters != 0) {
+        if (static_cast<int>(dwSectorsPerCluster * (dwNumberOfFreeClusters / 128) * (dwBytesPerSector / 8)) >= 0x200000) {
+            v1 = INT_MAX;
+        } else {
+            v1 = dwNumberOfFreeClusters * dwBytesPerSector * dwSectorsPerCluster - 10000000;
+        }
+
+        if (field_120 < v1) {
+            v1 = field_120;
+        }
+
+        return v1;
+    } else {
+        HMODULE hModule = LoadLibraryA("kernel32.dll");
+        if (hModule == NULL) {
+            return field_120;
+        }
+
+        BOOL bHaveGetDiskFreeSpaceExA = GetProcAddress(hModule, "GetDiskFreeSpaceExA") != NULL;
+        pfnGetDiskFreeSpaceExA = reinterpret_cast<GetDiskFreeSpaceExAFunc*>(GetProcAddress(hModule, "GetDiskFreeSpaceExA"));
+
+        if (bHaveGetDiskFreeSpaceExA) {
+            ULARGE_INTEGER nFreeBytesAvailable;
+            ULARGE_INTEGER nTotalNumberOfBytes;
+            if (pfnGetDiskFreeSpaceExA(NULL, &nFreeBytesAvailable, &nTotalNumberOfBytes, NULL)) {
+                FreeLibrary(hModule);
+
+                if (nFreeBytesAvailable.HighPart == 0 && nFreeBytesAvailable.LowPart - 10000000 <= INT_MAX) {
+                    v1 = static_cast<int>(nFreeBytesAvailable.LowPart - 10000000);
+                    if (field_120 < v1) {
+                        v1 = field_120;
+                    }
+                    return v1;
+                } else {
+                    v1 = field_120;
+                    if (v1 >= INT_MAX) {
+                        v1 = INT_MAX;
+                    }
+                    return v1;
+                }
+            }
+        }
+
+        FreeLibrary(hModule);
+        return field_120;
+    }
 }
 
 // 0x78D090

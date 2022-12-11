@@ -1,8 +1,9 @@
 #ifndef CRESCACHE_H_
 #define CRESCACHE_H_
 
-#include <afx.h>
-#include <afxtempl.h>
+#include "mfc.h"
+
+typedef BOOL(WINAPI GetDiskFreeSpaceExAFunc)(LPCSTR lpDirectoryName, PULARGE_INTEGER lpFreeBytesAvailableToCaller, PULARGE_INTEGER lpTotalNumberOfBytes, PULARGE_INTEGER lpTotalNumberOfFreeBytes);
 
 class CResCache {
 public:
@@ -18,8 +19,10 @@ public:
     void AccessFileInCache(UINT nIndex);
     void AddFileToCache(UINT nIndex, const CTime& cTime, DWORD nSize);
     BOOL CopyFile(UINT nIndex, const CString& a3, const CString& a4, const CString& a5);
+    int GetUnusedSize();
     BOOL RefreshStatus(const CString& a2);
 
+    static GetDiskFreeSpaceExAFunc* pfnGetDiskFreeSpaceExA;
     static CString DEFAULT_CACHE_DIRECTORY; // #guess
 
     /* 0000 */ int field_0;
