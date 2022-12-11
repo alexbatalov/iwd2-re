@@ -61,7 +61,48 @@ CResCache::~CResCache()
 // 0x78C130
 void CResCache::AccessFileInCache(UINT nIndex)
 {
-    // TODO: Incomplete.
+    CString v1;
+    CString v2;
+    CString v3;
+    CFile cFile;
+
+    if (field_0) {
+        v1 = field_108;
+        if (g_pChitin->cDimm.FindDirectoryInDirectoryList(v1) == DIMM_NOT_IN_DIRECTORY_LIST) {
+            if (!g_pChitin->cDimm.AddToDirectoryList(v1, FALSE)) {
+                return;
+            }
+        }
+
+        if (g_pChitin->cDimm.m_cKeyTable.m_bInitialized) {
+            if (nIndex < g_pChitin->cDimm.m_cKeyTable.m_nResFiles) {
+                v2 = reinterpret_cast<char*>(g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries) + g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries[nIndex].nFileNameOffset;
+
+                if (!g_pChitin->lAliases.ResolveFileName(v1 + v2, v3)) {
+                    v3 = v1 + v2;
+                }
+
+                if (cFile.Open(v3, CFile::OpenFlags::modeRead, NULL)) {
+                    cFile.Close();
+
+                    CFileStatus cFileStatus;
+                    if (!CFile::GetStatus(v3, cFileStatus)) {
+                        // __FILE__: C:\Projects\Icewind2\src\chitin\ChDimm.cpp
+                        // __LINE__: 10722
+                        UTIL_ASSERT(FALSE);
+                    }
+
+                    cFileStatus.m_mtime = CTime::GetCurrentTime();
+
+                    // NOTE: There is unknown unwind stack changes around
+                    // `SetStatus`, not sure how to replicate it.
+                    CFile::SetStatus(v3, cFileStatus);
+
+                    AddFileToCache(nIndex, cFileStatus.m_mtime, cFileStatus.m_size);
+                }
+            }
+        }
+    }
 }
 
 // #binary-identical
