@@ -683,10 +683,26 @@ int CDimm::Release(CRes* pRes)
     return 0;
 }
 
+// #binary-identical
 // 0x787CE0
 void CDimm::ReleaseResObject(CRes* pRes)
 {
-    // TODO: Incomplete.
+    if (pRes != NULL) {
+        CDimmKeyTableEntry* pKey = pRes->m_pDimmKeyTableEntry;
+        if (pKey != NULL) {
+            pKey->field_10 -= 1;
+            if (pKey->field_10 <= 0) {
+                pKey->field_10 = 0;
+                Dump(pRes, 1, 0);
+                pRes->m_pDimmKeyTableEntry = NULL;
+
+                if (pKey->pRes != NULL) {
+                    delete pKey->pRes;
+                }
+                pKey->pRes = NULL;
+            }
+        }
+    }
 }
 
 // 0x787D30
