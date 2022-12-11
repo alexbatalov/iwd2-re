@@ -47,6 +47,7 @@ public:
     int LocalGetResourceSize(CRes* pRes);
     BOOL MemoryAlmostFull();
     void ReduceFreedList(UINT a2);
+    BOOL ReduceServicedList();
     int Release(CRes* pRes);
     void ReleaseResObject(CRes* pRes);
     BOOL RemoveFromDirectoryList(const CString& sDirName, BOOL a3);

@@ -644,10 +644,11 @@ int CDimm::LocalGetResourceSize(CRes* pRes)
     return size;
 }
 
+// #binary-identical
 // 0x787740
 BOOL CDimm::MemoryAlmostFull()
 {
-    return field_D6 < field_DA + 1200000;
+    return field_DA + 1200000 > field_D6;
 }
 
 // 0x7879C0
@@ -673,6 +674,54 @@ void CDimm::ReduceFreedList(UINT a2)
 
         LeaveCriticalSection(&(g_pChitin->field_2FC));
     }
+}
+
+// #binary-identical
+// 0x787A70
+BOOL CDimm::ReduceServicedList()
+{
+    POSITION pos;
+
+    EnterCriticalSection(&(g_pChitin->field_2FC));
+
+    ReduceFreedList(1200000);
+
+    pos = m_lServicedLow.GetHeadPosition();
+    // NOTE: Uninline `MemoryAlmostFull`.
+    while (MemoryAlmostFull() && pos != NULL) {
+        CRes* pRes = static_cast<CRes*>(m_lServicedLow.GetNext(pos));
+        if (pRes != NULL && pRes->field_40 == 0) {
+            if (pRes->OnResourceFreed()) {
+                Dump(pRes, 1, 0);
+                // NOTE: Not sure why it uses bare `free`, but it's definitely
+                // not `delete`.
+                free(pRes);
+            } else {
+                Dump(pRes, 0, 0);
+            }
+        }
+    }
+
+    pos = m_lServicedMedium.GetHeadPosition();
+    // NOTE: Uninline `MemoryAlmostFull`.
+    while (MemoryAlmostFull() && pos != NULL) {
+        CRes* pRes = static_cast<CRes*>(m_lServicedLow.GetNext(pos));
+        if (pRes != NULL && pRes->field_40 == 0) {
+            if (pRes->OnResourceFreed()) {
+                Dump(pRes, 1, 0);
+                // NOTE: Not sure why it uses bare `free`, but it's definitely
+                // not `delete`.
+                free(pRes);
+            } else {
+                Dump(pRes, 0, 0);
+            }
+        }
+    }
+
+    LeaveCriticalSection(&(g_pChitin->field_2FC));
+
+    // NOTE: Uninline.
+    return !MemoryAlmostFull();
 }
 
 // #binary-identical
