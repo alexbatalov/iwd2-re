@@ -123,6 +123,73 @@ BOOL CResCache::CopyFile(UINT nIndex, const CString& a3, const CString& a4, cons
 }
 
 // #binary-identical
+// 0x78CD90
+void CResCache::FlushCache(int a2)
+{
+    _chdir(workingDirectory);
+
+    int v1 = a2;
+    if (v1 <= 0) {
+        v1 = field_11C;
+    }
+
+    EnterCriticalSection(&criticalSection);
+
+    POSITION pos = field_128.GetTailPosition();
+
+    EnterCriticalSection(&(g_pChitin->field_35C));
+
+    int nUnusedSize = GetUnusedSize();
+
+    if (!g_pChitin->cNetwork.field_6E0 && v1 <= 10000000) {
+        while (pos != NULL && nUnusedSize < v1) {
+            POSITION curr = pos;
+            Entry* pEntry = field_128.GetPrev(pos);
+            if (pEntry->nSize <= 10000000) {
+                if (DeleteFileFromCache(pEntry->nIndex) == TRUE) {
+                    field_120 += pEntry->nSize;
+                    field_124 -= 1;
+
+                    nUnusedSize = GetUnusedSize();
+
+                    field_128.RemoveAt(curr);
+                    delete pEntry;
+                }
+            }
+        }
+    }
+
+    if (nUnusedSize < v1) {
+        POSITION pos = field_128.GetTailPosition();
+        while (pos != NULL) {
+            if (nUnusedSize >= v1) {
+                break;
+            }
+
+            POSITION curr = pos;
+            Entry* pEntry = field_128.GetPrev(pos);
+            if (DeleteFileFromCache(pEntry->nIndex) == TRUE) {
+                field_120 += pEntry->nSize;
+                field_124 -= 1;
+
+                nUnusedSize = GetUnusedSize();
+
+                field_128.RemoveAt(curr);
+                delete pEntry;
+            }
+        }
+    }
+
+    LeaveCriticalSection(&(g_pChitin->field_35C));
+
+    if (field_120 >= field_11C) {
+        field_120 = field_11C;
+    }
+
+    LeaveCriticalSection(&criticalSection);
+}
+
+// #binary-identical
 // 0x78CF40
 BOOL CResCache::IsCacheSpaceAvailable()
 {
