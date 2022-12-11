@@ -966,10 +966,79 @@ BOOL CDimm::ResumeServicing()
     return TRUE;
 }
 
+// #binary-identical
 // 0x788BE0
-void CDimm::SetNewPriority(CRes* pRes, int nNewPriority)
+void CDimm::SetNewPriority(CRes* pRes, unsigned int nNewPriority)
 {
-    // TODO: Incomplete.
+    EnterCriticalSection(&(g_pChitin->field_2FC));
+
+    if (pRes->field_44 > 0) {
+        if (nNewPriority != (pRes->dwFlags & 3)) {
+            if ((pRes->dwFlags & (CRes::RES_FLAG_0x10 | CRes::RES_FLAG_0x04)) == 0) {
+                if (pRes->m_pCurrentListPos != NULL) {
+                    if (pRes->m_pCurrentList != NULL) {
+                        pRes->m_pCurrentList->RemoveAt(pRes->m_pCurrentListPos);
+                        pRes->m_pCurrentList = NULL;
+                        pRes->m_pCurrentListPos = NULL;
+                    }
+                }
+
+                switch (nNewPriority) {
+                case PRIORITY_HIGH:
+                    pRes->m_pCurrentList = &m_lRequestedHigh;
+                    pRes->m_pCurrentListPos = m_lRequestedHigh.AddTail(pRes);
+                    break;
+                case PRIORITY_MEDIUM:
+                    pRes->m_pCurrentList = &m_lRequestedMedium;
+                    pRes->m_pCurrentListPos = m_lRequestedMedium.AddTail(pRes);
+                    break;
+                default:
+                    pRes->m_pCurrentList = &m_lRequestedLow;
+                    pRes->m_pCurrentListPos = m_lRequestedLow.AddTail(pRes);
+                    break;
+                }
+            } else {
+                if (pRes->m_pCurrentListPos != NULL) {
+                    if (pRes->m_pCurrentList != NULL) {
+                        pRes->m_pCurrentList->RemoveAt(pRes->m_pCurrentListPos);
+                        pRes->m_pCurrentList = NULL;
+                        pRes->m_pCurrentListPos = NULL;
+                    }
+                }
+
+                switch (nNewPriority) {
+                case PRIORITY_HIGH:
+                    pRes->m_pCurrentList = &m_lServicedHigh;
+                    pRes->m_pCurrentListPos = m_lServicedHigh.AddTail(pRes);
+                    break;
+                case PRIORITY_MEDIUM:
+                    pRes->m_pCurrentList = &m_lServicedMedium;
+                    pRes->m_pCurrentListPos = m_lServicedMedium.AddTail(pRes);
+                    break;
+                default:
+                    pRes->m_pCurrentList = &m_lServicedLow;
+                    pRes->m_pCurrentListPos = m_lServicedLow.AddTail(pRes);
+                    break;
+                }
+            }
+        }
+    }
+
+    switch (nNewPriority) {
+    case PRIORITY_HIGH:
+        pRes->dwFlags &= ~0x1;
+        pRes->dwFlags |= 0x2;
+        break;
+    case PRIORITY_MEDIUM:
+        pRes->dwFlags &= ~0x2;
+        pRes->dwFlags |= 0x1;
+        break;
+    default:
+        pRes->dwFlags &= ~0x3;
+        break;
+    }
+
+    LeaveCriticalSection(&(g_pChitin->field_2FC));
 }
 
 // 0x788CD0

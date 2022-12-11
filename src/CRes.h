@@ -36,7 +36,7 @@ public:
     int Release();
     int Request();
     void SetID(RESID nNewID);
-    void SetPriority(int nNewPriority);
+    void SetPriority(unsigned int nNewPriority);
     BOOL Write(const CString& sFilePath, LPVOID lpBuf, DWORD dwSize);
 
     /* 0004 */ DWORD dwFlags; // #guess

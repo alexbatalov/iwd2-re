@@ -127,7 +127,7 @@ void CRes::SetID(RESID nNewID)
 }
 
 // 0x77E670
-void CRes::SetPriority(int nNewPriority)
+void CRes::SetPriority(unsigned int nNewPriority)
 {
     g_pChitin->cDimm.SetNewPriority(this, nNewPriority);
 }

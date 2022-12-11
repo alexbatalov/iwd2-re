@@ -56,7 +56,7 @@ public:
     INT RequestsPendingCount(int nPriority);
     BOOL Resume();
     BOOL ResumeServicing();
-    void SetNewPriority(CRes* pRes, int nNewPriority);
+    void SetNewPriority(CRes* pRes, unsigned int nNewPriority);
     BOOL Suspend();
     void Update();
     BOOL WriteResourceWithData(const CString& sFileName, CRes* pRes, LPVOID lpBuf, DWORD dwSize);
