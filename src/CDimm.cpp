@@ -651,6 +651,51 @@ BOOL CDimm::MemoryAlmostFull()
     return field_DA + 1200000 > field_D6;
 }
 
+// #binary-identical
+// 0x787760
+void CDimm::MoveRequests(int nOldPriority, int nNewPriority, int nCount)
+{
+    POSITION pos;
+    int nRemaining = nCount;
+
+    switch (nOldPriority) {
+    case PRIORITY_HIGH:
+        pos = m_lRequestedHigh.GetHeadPosition();
+        while (pos != NULL && nRemaining > 0) {
+            CRes* pRes = static_cast<CRes*>(m_lRequestedHigh.GetNext(pos));
+            nRemaining--;
+            if (pRes != NULL) {
+                SetNewPriority(pRes, nNewPriority);
+            }
+        }
+        break;
+    case PRIORITY_MEDIUM:
+        pos = m_lRequestedMedium.GetHeadPosition();
+        while (pos != NULL && nRemaining > 0) {
+            CRes* pRes = static_cast<CRes*>(m_lRequestedMedium.GetNext(pos));
+            nRemaining--;
+            if (pRes != NULL) {
+                SetNewPriority(pRes, nNewPriority);
+            }
+        }
+        break;
+    case PRIORITY_LOW:
+        pos = m_lRequestedLow.GetHeadPosition();
+        while (pos != NULL && nRemaining > 0) {
+            CRes* pRes = static_cast<CRes*>(m_lRequestedLow.GetNext(pos));
+            nRemaining--;
+            if (pRes != NULL) {
+                SetNewPriority(pRes, nNewPriority);
+            }
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\chitin\ChDimm.cpp
+        // __LINE__: 4365
+        UTIL_ASSERT(FALSE);
+    }
+}
+
 // 0x7879C0
 void CDimm::ReduceFreedList(UINT a2)
 {

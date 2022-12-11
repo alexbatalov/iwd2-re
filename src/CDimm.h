@@ -46,6 +46,7 @@ public:
     BOOL LocalGetFileStatus(const CString& sFileName, CFileStatus& rStatus);
     int LocalGetResourceSize(CRes* pRes);
     BOOL MemoryAlmostFull();
+    void MoveRequests(int nOldPriority, int nNewPriority, int nCount);
     void ReduceFreedList(UINT a2);
     BOOL ReduceServicedList();
     int Release(CRes* pRes);
