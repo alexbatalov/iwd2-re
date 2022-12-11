@@ -40,7 +40,7 @@ public:
     BOOL Write(const CString& sFilePath, LPVOID lpBuf, DWORD dwSize);
 
     /* 0004 */ DWORD dwFlags; // #guess
-    /* 0008 */ int field_8;
+    /* 0008 */ void* m_pData;
     /* 000C */ CObList* m_pCurrentList; // #guess
     /* 0010 */ CDimmKeyTableEntry* m_pDimmKeyTableEntry; // #guess
     /* 0014 */ int field_14;

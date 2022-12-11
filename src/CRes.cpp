@@ -12,7 +12,7 @@ CRes::CRes()
     field_44 = 0;
     field_14 = 0;
     field_1C = 0;
-    field_8 = 0;
+    m_pData = NULL;
     m_pDimmKeyTableEntry = NULL;
     m_pCurrentList = NULL;
     field_18 = 0;

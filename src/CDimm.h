@@ -74,7 +74,7 @@ public:
     /* 007A */ CObList m_lRequestedMedium; // #guess
     /* 0096 */ CObList m_lRequestedHigh; // #guess
     /* 00B2 */ CObList m_lFreed; // #guess
-    /* 00CE */ int field_CE;
+    /* 00CE */ CRes* field_CE;
     /* 00D2 */ int field_D2;
     /* 00D6 */ unsigned int field_D6;
     /* 00DA */ unsigned int field_DA;
@@ -85,8 +85,8 @@ public:
     /* 00EC */ CResFile** m_ppResFiles;
     /* 00F0 */ CResCache cResCache; // #guess
     /* 024C */ CDimmKeyTable m_cKeyTable; // #guess
-    /* 0270 */ int field_270;
-    /* 0274 */ int field_274;
+    /* 0270 */ CRes* field_270;
+    /* 0274 */ CRes* field_274;
     /* 0278 */ CList<CString, CString> m_lDirectories; // #guess
     /* 0294 */ unsigned char field_294;
     /* 0295 */ unsigned char field_295;

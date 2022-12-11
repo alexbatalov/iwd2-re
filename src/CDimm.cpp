@@ -23,9 +23,9 @@ CDimm::CDimm()
     field_4 = 0;
     field_8 = 0;
     field_DA = 0;
-    field_CE = 0;
-    field_274 = 0;
-    field_270 = 0;
+    field_CE = NULL;
+    field_274 = NULL;
+    field_270 = NULL;
     field_D2 = 0;
     field_E6 = 0;
 
@@ -426,7 +426,156 @@ void CDimm::DestroyKeyTable()
 // 0x785C10
 int CDimm::Dump(CRes* pRes, int a2, int a3)
 {
-    // TODO: Incomplete.
+    if (pRes->field_40 > 0 && pRes->m_pCurrentList == NULL) {
+        pRes->field_40 = 0;
+    }
+
+    EnterCriticalSection(&(g_pChitin->field_2FC));
+
+    if (field_274 == pRes) {
+        EnterCriticalSection(&(g_pChitin->field_32C));
+        field_274 = NULL;
+        LeaveCriticalSection(&(g_pChitin->field_32C));
+    }
+
+    if (field_270 == pRes) {
+        EnterCriticalSection(&(g_pChitin->field_32C));
+        field_270 = 0;
+        LeaveCriticalSection(&(g_pChitin->field_32C));
+    }
+
+    if ((pRes->dwFlags & CRes::RES_FLAG_0x10) != 0) {
+        field_D2 = 0;
+        field_CE = NULL;
+    }
+
+    if ((pRes->dwFlags & (CRes::RES_FLAG_0x10 | CRes::RES_FLAG_0x04)) != 0) {
+        if ((pRes->dwFlags & CRes::RES_FLAG_0x08) != 0) {
+            pRes->dwFlags &= ~0x5C;
+
+            if (pRes->m_pCurrentList != NULL) {
+                pRes->m_pCurrentList->RemoveAt(pRes->m_pCurrentListPos);
+                pRes->m_pCurrentList = NULL;
+                pRes->m_pCurrentListPos = NULL;
+            }
+
+            // __FILE__: C:\Projects\Icewind2\src\chitin\ChDimm.cpp
+            // __LINE__: 7095
+            UTIL_ASSERT_MSG(pRes != NULL, "Attempting to free invalid resource.");
+
+            if (pRes->m_pData != NULL) {
+                delete pRes->m_pData;
+                pRes->m_pData = NULL;
+            }
+
+            field_DA -= pRes->field_14;
+
+            pRes->m_pData = NULL;
+            if (pRes->OnResourceFreed()) {
+                // NOTE: Not sure why it uses bare `free`, but it's definitely
+                // not `delete`.
+                free(pRes);
+            }
+        } else {
+            if ((pRes->dwFlags & CRes::RES_FLAG_0x10) != 0) {
+                field_D2 = 0;
+                field_CE = NULL;
+            }
+
+            if (pRes->m_pCurrentListPos != NULL) {
+                if (pRes->m_pCurrentList != NULL) {
+                    pRes->m_pCurrentList->RemoveAt(pRes->m_pCurrentListPos);
+                    pRes->m_pCurrentList = NULL;
+                    pRes->m_pCurrentListPos = NULL;
+                }
+            }
+
+            pRes->dwFlags &= ~(CRes::RES_FLAG_0x10 | CRes::RES_FLAG_0x04);
+
+            // __FILE__: C:\Projects\Icewind2\src\chitin\ChDimm.cpp
+            // __LINE__: 7095
+            UTIL_ASSERT_MSG(pRes != NULL, "Attempting to free invalid resource.");
+
+            if (pRes->m_pData != NULL) {
+                delete pRes->m_pData;
+                pRes->m_pData = NULL;
+            }
+
+            field_DA -= pRes->field_14;
+            pRes->m_pData = NULL;
+
+            if (a2 != 0 || pRes->field_44 <= 0) {
+                if ((pRes->m_nID >> 20) < m_nResFiles && (pRes->m_nID & 0xFFF00000) < 0xFC000000) {
+                    for (int v1 = 0; v1 < pRes->field_44; v1++) {
+                        CResFile* pResFile = m_ppResFiles[pRes->m_nID >> 20];
+                        EnterCriticalSection(&(g_pChitin->field_35C));
+
+                        if (pResFile->m_nRefCount <= 1) {
+                            pResFile->CloseFile();
+                            pResFile->m_nRefCount = 0;
+                        } else {
+                            pResFile->m_nRefCount -= 1;
+                        }
+
+                        LeaveCriticalSection(&(g_pChitin->field_35C));
+                    }
+                }
+
+                pRes->field_44 = 0;
+                pRes->m_pCurrentListPos = NULL;
+            } else {
+                if (a3 == 1) {
+                    pRes->dwFlags &= ~0x3;
+                    pRes->m_pCurrentList = &m_lRequestedLow;
+                    pRes->m_pCurrentListPos = m_lRequestedLow.AddTail(pRes);
+                } else {
+                    switch (pRes->dwFlags & 3) {
+                    case PRIORITY_MEDIUM:
+                        pRes->m_pCurrentList = &m_lRequestedMedium;
+                        pRes->m_pCurrentListPos = m_lRequestedMedium.AddTail(pRes);
+                        break;
+                    case PRIORITY_HIGH:
+                        pRes->m_pCurrentList = &m_lRequestedHigh;
+                        pRes->m_pCurrentListPos = m_lRequestedHigh.AddTail(pRes);
+                        break;
+                    default:
+                        pRes->m_pCurrentList = &m_lRequestedLow;
+                        pRes->m_pCurrentListPos = m_lRequestedLow.AddTail(pRes);
+                        break;
+                    }
+                }
+            }
+        }
+    } else {
+        if (a2 != 0 && pRes->field_44 > 0 && pRes->m_pCurrentListPos != NULL) {
+            if (pRes->m_pCurrentList != NULL) {
+                pRes->m_pCurrentList->RemoveAt(pRes->m_pCurrentListPos);
+                pRes->m_pCurrentList = NULL;
+                pRes->m_pCurrentListPos = NULL;
+            }
+
+            if ((pRes->m_nID >> 20) < m_nResFiles && (pRes->m_nID & 0xFFF00000) < 0xFC000000) {
+                for (int v1 = 0; v1 < pRes->field_44; v1++) {
+                    CResFile* pResFile = m_ppResFiles[pRes->m_nID >> 20];
+                    EnterCriticalSection(&(g_pChitin->field_35C));
+
+                    if (pResFile->m_nRefCount <= 1) {
+                        pResFile->CloseFile();
+                        pResFile->m_nRefCount = 0;
+                    } else {
+                        pResFile->m_nRefCount -= 1;
+                    }
+
+                    LeaveCriticalSection(&(g_pChitin->field_35C));
+                }
+            }
+
+            pRes->m_pCurrentListPos = NULL;
+            pRes->field_44 = 0;
+        }
+    }
+
+    LeaveCriticalSection(&(g_pChitin->field_2FC));
 
     return 0;
 }
