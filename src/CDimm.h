@@ -39,6 +39,7 @@ public:
     BOOL FindFileInDirectoryList(const CString& sDirName, CString& sFileName);
     BOOL GetElementInDirectoryList(int a2, CString& a3);
     int GetMemoryAmount();
+    UINT GetResFileID(const CString& sName);
     CResFile* GetResFilePtr(UINT a2);
     BOOL GetResFileName(UINT nIndex, CString& sResFileName, USHORT& nResType, BOOLEAN a5);
     CRes* GetResObject(const CResRef& cResRef, USHORT nResType, BOOLEAN a3);

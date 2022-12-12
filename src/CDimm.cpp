@@ -683,6 +683,25 @@ int CDimm::GetMemoryAmount()
     return 0;
 }
 
+// #binary-identical
+// 0x7863E0
+UINT CDimm::GetResFileID(const CString& sName)
+{
+    CString sFileName = sName + ".BIF";
+    sFileName.MakeUpper();
+
+    CString v1;
+    for (unsigned int k = 0; k < m_cKeyTable.m_nResFiles; k++) {
+        v1 = reinterpret_cast<char*>(m_cKeyTable.m_pResFileNameEntries) + m_cKeyTable.m_pResFileNameEntries[k].nFileNameOffset;
+        v1.MakeUpper();
+        if (v1.FindOneOf(sFileName) != -1) {
+            return k << 20;
+        }
+    }
+
+    return -1;
+}
+
 // 0x7864F0
 CResFile* CDimm::GetResFilePtr(UINT a2)
 {
