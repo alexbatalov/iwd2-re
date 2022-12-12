@@ -1228,6 +1228,53 @@ BOOL CDimm::ResumeServicing()
     return TRUE;
 }
 
+// 0x7882D0
+BOOL CDimm::ServiceFromFile(CRes* pRes, CString a3)
+{
+    CFile cFile;
+    CString v1;
+
+    if (!g_pChitin->lAliases.ResolveFileName(a3, v1)) {
+        v1 = a3;
+    }
+
+    if (!cFile.Open(v1, CFile::OpenFlags::modeRead | CFile::OpenFlags::typeBinary, NULL)) {
+        return FALSE;
+    }
+
+    UINT nSize = static_cast<UINT>(cFile.GetLength());
+    if (nSize <= 0) {
+        return FALSE;
+    }
+
+    pRes->m_pData = malloc(nSize);
+    if (pRes->m_pData == NULL) {
+        cFile.Close();
+        return FALSE;
+    }
+
+    EnterCriticalSection(&(g_pChitin->field_32C));
+    pRes->field_14 = cFile.Read(pRes->m_pData, nSize);
+    pRes->dwFlags |= CRes::RES_FLAG_0x04;
+    LeaveCriticalSection(&(g_pChitin->field_32C));
+
+    cFile.Close();
+
+    if (pRes != NULL) {
+        if ((pRes->dwFlags & CRes::RES_FLAG_0x04) != 0 && (pRes->dwFlags & (CRes::RES_FLAG_0x20 | CRes::RES_FLAG_0x40)) == 0) {
+            pRes->dwFlags |= CRes::RES_FLAG_0x20;
+            pRes->OnResourceServiced();
+            pRes->dwFlags &= ~CRes::RES_FLAG_0x20;
+            pRes->dwFlags |= CRes::RES_FLAG_0x40;
+        }
+    }
+
+    pRes->field_14 = 0;
+    pRes->m_nID = -1;
+
+    return TRUE;
+}
+
 // #binary-identical
 // 0x788BE0
 void CDimm::SetNewPriority(CRes* pRes, unsigned int nNewPriority)

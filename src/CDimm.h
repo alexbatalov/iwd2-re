@@ -59,6 +59,7 @@ public:
     INT RequestsPendingCount(int nPriority);
     BOOL Resume();
     BOOL ResumeServicing();
+    BOOL ServiceFromFile(CRes* pRes, CString a3);
     void SetNewPriority(CRes* pRes, unsigned int nNewPriority);
     BOOL Suspend();
     void Update();
