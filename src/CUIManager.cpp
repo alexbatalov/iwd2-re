@@ -127,6 +127,18 @@ void CUIManager::OnLButtonUp(CPoint pt)
     }
 }
 
+// 0x4D4310
+void CUIManager::OnLButtonDblClk(CPoint pt)
+{
+    // TODO: Incomplete.
+}
+
+// 0x4D43D0
+void CUIManager::OnRButtonDown(CPoint pt)
+{
+    // TODO: Incomplete.
+}
+
 // 0x4D44B0
 void CUIManager::OnRButtonUp(CPoint pt)
 {

@@ -11,6 +11,8 @@ public:
     ~CInfCursor();
     void SetCursor(INT nNewCursor, BOOLEAN bForce);
     void SetToolTip(STRREF nStrRef, CUIControlBase* pControl, SHORT nHotKeyIndex1, SHORT nHotKeyIndex2, CString sKey, STRREF nSecondaryStrRef, STRREF nTertiaryStrRef);
+
+    /* 09FE */ int m_nState;
 };
 
 #endif /* CINFCURSOR_H_ */

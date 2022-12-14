@@ -22,6 +22,8 @@ public:
     void SetCapture(CUIControlBase* pControl, unsigned char a3);
     void ClearTooltip();
     void OnLButtonUp(CPoint pt);
+    void OnLButtonDblClk(CPoint pt);
+    void OnRButtonDown(CPoint pt);
     void OnRButtonUp(CPoint pt);
     BOOL OnKeyDown(SHORT nKey);
     void Render();
