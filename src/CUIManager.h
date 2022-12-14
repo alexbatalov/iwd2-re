@@ -20,6 +20,7 @@ public:
     void ReorderPanelAfter(DWORD nID1, DWORD nID2);
     CUIPanel* GetPanel(DWORD nID);
     void SetCapture(CUIControlBase* pControl, unsigned char a3);
+    void ClearTooltip();
     void OnLButtonUp(CPoint pt);
     void OnRButtonUp(CPoint pt);
     BOOL OnKeyDown(SHORT nKey);

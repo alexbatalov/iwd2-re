@@ -145,15 +145,31 @@ public:
     static const CResRef RESREF_SOUND_8C8C80;
 
     CBaldurEngine();
-    ~CBaldurEngine();
-    void InvalidateCursorRect(const CRect& rect) override;
-    void ResetControls() override;
-
-    /* 00CC */ virtual CUIManager* GetUIManager();
+    /* 000C */ void InvalidateCursorRect(const CRect& rect) override;
+    /* 002C */ void SelectEngine(CWarp* pWarp) override;
+    /* 00B8 */ void ResetControls() override;
+    /* 0098 */ BOOL CheckMouseWheel() override;
+    /* 009C */ void OnMouseWheel(BOOL bForward, LONG nTicks, DWORD nLines, WORD wFlags) override;
+    /* 00CC */ virtual CUIManager* GetManager();
     /* 00D0 */ virtual int GetSelectedCharacter();
     /* 00D4 */ virtual int GetPickedCharacter();
     /* 00D8 */ virtual void SetSelectedCharacter(int nNewSelectedCharacter);
     /* 00DC */ virtual void SetPickedCharacter(int nNewPickedCharacter);
+    /* 00E0 */ virtual void OnPortraitLClick(DWORD nPortrait);
+    /* 00E4 */ virtual void OnPortraitLDblClick(DWORD nPortrait);
+    /* 00E8 */ virtual void UpdateContainerStatus(LONG a2, SHORT a3);
+    /* 00EC */ virtual void UpdatePersonalItemStatus(LONG a2);
+    /* 00F0 */ virtual void OnRestButtonClick();
+    /* 00F4 */ virtual void UpdateCursorShape(BYTE nCursor);
+    /* 00F8 */ virtual void CheckEnablePortaits(DWORD dwPanelId);
+    /* 00FC */ virtual void CheckEnableLeftPanel();
+    /* 0100 */ virtual void EnablePortait(DWORD dwPanelId, DWORD dwControlId, BOOL bEnable);
+    /* 0104 */ virtual void CancelEngine();
+    /* 0108 */ virtual void UpdateCharacterStatus(LONG nCharacterId);
+    /* 010C */ virtual void UpdatePartyGoldStatus();
+    /* 0110 */ virtual void GetChatEditBoxStatus(CString& sChatText, BOOL& bInputCapture);
+    /* 0114 */ virtual void SetChatEditBoxStatus(const CString& sChatText, BOOL bInputCapture);
+    /* 0118 */ virtual BOOL StopMusic();
 
     /* 0028 */ int m_nSelectedCharacter;
     /* 002C */ int m_nPickedCharacter;

@@ -3,7 +3,16 @@
 #include <process.h>
 
 #include "CBaldurChitin.h"
+#include "CBaldurEngine.h"
+#include "CBaldurProjector.h"
+#include "CScreenMultiPlayer.h"
+#include "CScreenSave.h"
+#include "CScreenSinglePlayer.h"
+#include "CScreenWorldMap.h"
 #include "CSearchBitmap.h"
+#include "CUIControlBase.h"
+#include "CUIManager.h"
+#include "CUIPanel.h"
 
 // 0x59CC30
 CInfGame::CInfGame()
@@ -24,6 +33,53 @@ void CInfGame::StartSearchThread()
         CloseHandle(m_hSearchThread);
         m_hSearchThread = NULL;
     }
+}
+
+// 0x5AF360
+void CInfGame::UpdatePortrait(SHORT nPortrait, DWORD dwPanelId)
+{
+    if (nPortrait != -1) {
+        CBaldurEngine* pEngine = static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine);
+        if (pEngine != g_pBaldurChitin->m_pEngineProjector
+            && pEngine != g_pBaldurChitin->m_pEngineMultiPlayer
+            && pEngine != g_pBaldurChitin->m_pEngineSinglePlayer
+            && pEngine != g_pBaldurChitin->m_pEngineWorldMap
+            && pEngine != g_pBaldurChitin->m_pEngineSave) {
+            CUIManager* pManager = pEngine->GetManager();
+            CUIPanel* pPanel = pManager->GetPanel(dwPanelId);
+            if (pPanel != NULL) {
+                CUIControlBase* pControl = pPanel->GetControl(nPortrait);
+                if (pControl != NULL) {
+                    pControl->InvalidateRect();
+                }
+            } else {
+                // NOTE: Obtaining active engine second time, probably some
+                // inlining. Looks similar to `CBaldurEngine::OnPortraitLClick`.
+                CUIManager* pManager = static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->GetManager();
+                CUIPanel* pPanel = pManager->GetPanel(1);
+                if (pPanel != NULL) {
+                    CUIControlBase* pControl = pPanel->GetControl(nPortrait);
+                    if (pControl != NULL) {
+                        pControl->InvalidateRect();
+                    }
+                }
+            }
+        }
+    }
+}
+
+// 0x5AF4E0
+SHORT CInfGame::GetCharacterPortaitNum(LONG nCharacterId)
+{
+    if (nCharacterId != -1) {
+        for (SHORT nPortrait = 0; nPortrait < 6; nPortrait++) {
+            if (m_nCharacterPortaits[nPortrait] == nCharacterId) {
+                return nPortrait;
+            }
+        }
+    }
+
+    return -1;
 }
 
 // 0x5C0EA0

@@ -104,6 +104,12 @@ void CUIManager::SetCapture(CUIControlBase* pControl, unsigned char a3)
     m_pFocusedControl->SetFocus();
 }
 
+// 0x4D4060
+void CUIManager::ClearTooltip()
+{
+    // TODO: Incomplete.
+}
+
 // 0x4D42B0
 void CUIManager::OnLButtonUp(CPoint pt)
 {

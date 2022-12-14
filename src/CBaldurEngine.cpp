@@ -1,7 +1,12 @@
 #include "CBaldurEngine.h"
 
 #include "CBaldurChitin.h"
+#include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CScreenWorld.h"
+#include "CUIControlBase.h"
+#include "CUIPanel.h"
+#include "CUtil.h"
 
 // NOTE: The following constants are ordered according to addresses of its
 // dynamic initializers in range 0x426F30 - 0x4277B0.
@@ -429,18 +434,28 @@ CBaldurEngine::CBaldurEngine()
     m_nPickedCharacter = -1;
 }
 
+// #binary-identical
+// 0x427830
+BOOL CBaldurEngine::CheckMouseWheel()
+{
+    return field_FA != 0 || field_FE != 0;
+}
+
+// #binary-identical
 // 0x427850
-CUIManager* CBaldurEngine::GetUIManager()
+CUIManager* CBaldurEngine::GetManager()
 {
     return &m_cUIManager;
 }
 
+// #binary-identical
 // 0x427860
 void CBaldurEngine::SetSelectedCharacter(int nNewSelectedCharacter)
 {
     m_nSelectedCharacter = nNewSelectedCharacter;
 }
 
+// #binary-identical
 // 0x427870
 void CBaldurEngine::SetPickedCharacter(int nNewPickedCharacter)
 {
@@ -455,31 +470,174 @@ void CBaldurEngine::InvalidateCursorRect(const CRect& rect)
     m_cUIManager.InvalidateCursorRect(copy);
 }
 
+// #binary-identical
 // 0x4278B0
 void CBaldurEngine::ResetControls()
 {
     m_cUIManager.InvalidateRect(NULL);
 }
 
-// 0x4278E0
-CBaldurEngine::~CBaldurEngine()
-{
-}
-
+// #binary-identical
 // 0x427930
 int CBaldurEngine::GetSelectedCharacter()
 {
-    if (m_nSelectedCharacter > g_pBaldurChitin->m_pObjectGame->m_nCharacters) {
+    if (m_nSelectedCharacter >= g_pBaldurChitin->m_pObjectGame->m_nCharacters) {
         m_nSelectedCharacter = 0;
     }
     return m_nSelectedCharacter;
 }
 
+// #binary-identical
 // 0x427960
 int CBaldurEngine::GetPickedCharacter()
 {
-    if (m_nPickedCharacter > g_pBaldurChitin->m_pObjectGame->m_nCharacters) {
-        m_nPickedCharacter = 0;
+    if (m_nPickedCharacter >= g_pBaldurChitin->m_pObjectGame->m_nCharacters) {
+        m_nPickedCharacter = -1;
     }
     return m_nPickedCharacter;
+}
+
+// 0x427990
+void CBaldurEngine::SelectEngine(CWarp* pWarp)
+{
+    CBaldurEngine* pActiveEngine = static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine);
+
+    pActiveEngine->GetManager()->ClearTooltip();
+
+    g_pBaldurChitin->GetObjectCursor()->SetCursor(0, FALSE);
+
+    CString sChatText("");
+    BOOL bInputCapture = FALSE;
+    if (pActiveEngine != NULL) {
+        pActiveEngine->GetChatEditBoxStatus(sChatText, bInputCapture);
+        pActiveEngine->CancelEngine();
+    }
+
+    CWarp::SelectEngine(pWarp);
+
+    static_cast<CBaldurEngine*>(pWarp)->SetChatEditBoxStatus(sChatText, bInputCapture);
+}
+
+// 0x427A60
+void CBaldurEngine::OnPortraitLClick(DWORD nPortrait)
+{
+    int nPrevSelectedCharacter = m_nSelectedCharacter;
+    m_nSelectedCharacter = nPortrait;
+    if (nPrevSelectedCharacter != -1) {
+        CUIPanel* pPanel = m_cUIManager.GetPanel(1);
+        CUIControlBase* pControl = pPanel->GetControl(nPrevSelectedCharacter);
+        if (pControl != NULL) {
+            pControl->InvalidateRect();
+        }
+    }
+}
+
+// 0x427A90
+void CBaldurEngine::UpdateCursorShape(BYTE nCursor)
+{
+    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+    unsigned char v1 = pGame->field_1BA1;
+    g_pBaldurChitin->m_pObjectCursor->SetCursor(v1 == 4 ? nCursor : v1, FALSE);
+}
+
+// 0x4277C0
+void CBaldurEngine::EnablePortait(DWORD dwPanelId, DWORD dwControlId, BOOL bEnable)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+    if (pPanel != NULL) {
+        CUIControlBase* pControl = pPanel->GetControl(dwControlId);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CBaldurChitin.cpp
+        // __LINE__: 3925
+        UTIL_ASSERT(pControl != NULL);
+
+        pControl->SetActive(bEnable);
+        pControl->SetInactiveRender(bEnable);
+    }
+}
+
+// 0x427B20
+void CBaldurEngine::CheckEnablePortaits(DWORD dwPanelId)
+{
+    for (DWORD nPortrait = 0; nPortrait < 6; nPortrait++) {
+        // NOTE: Unsigned compare.
+        BOOL bEnable = nPortrait < g_pBaldurChitin->m_pObjectGame->m_nCharacters;
+        EnablePortait(dwPanelId, nPortrait, bEnable);
+    }
+}
+
+// 0x428240
+void CBaldurEngine::UpdateCharacterStatus(LONG nCharacterId)
+{
+    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CBaldurChitin.cpp
+    // __LINE__: 4273
+    UTIL_ASSERT(pGame != NULL);
+
+    SHORT nPortrait = pGame->GetCharacterPortaitNum(nCharacterId);
+    if (nPortrait >= 0) {
+        // NOTE: There is an unused condition at 0x428285.
+        pGame->UpdatePortrait(nPortrait, 1);
+    }
+}
+
+// #binary-identical
+// 0x4282A0
+void CBaldurEngine::GetChatEditBoxStatus(CString& sChatText, BOOL& bInputCapture)
+{
+    sChatText = "";
+    bInputCapture = FALSE;
+}
+
+// 0x4289C0
+void CBaldurEngine::OnMouseWheel(BOOL bForward, LONG nTicks, DWORD nLines, WORD wFlags)
+{
+    // TODO: Incomplete.
+}
+
+// 0x799E60
+void CBaldurEngine::OnPortraitLDblClick(DWORD nPortrait)
+{
+}
+
+// 0x778900
+void CBaldurEngine::UpdateContainerStatus(LONG a2, SHORT a3)
+{
+}
+
+// 0x799E60
+void CBaldurEngine::UpdatePersonalItemStatus(LONG a2)
+{
+}
+
+// 0x78E730
+void CBaldurEngine::OnRestButtonClick()
+{
+}
+
+// 0x799CA0
+void CBaldurEngine::CheckEnableLeftPanel()
+{
+}
+
+// 0x78E730
+void CBaldurEngine::CancelEngine()
+{
+}
+
+// 0x78E730
+void CBaldurEngine::UpdatePartyGoldStatus()
+{
+}
+
+// 0x71E750
+void CBaldurEngine::SetChatEditBoxStatus(const CString& sChatText, BOOL bInputCapture)
+{
+}
+
+// 0x78E6E0
+BOOL CBaldurEngine::StopMusic()
+{
+    return FALSE;
 }
