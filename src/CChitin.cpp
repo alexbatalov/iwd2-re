@@ -1079,6 +1079,11 @@ BOOL CChitin::GetEAXActive()
     return FALSE;
 }
 
+// 0x78E730
+void CChitin::RedrawScreen()
+{
+}
+
 // 0x78E820
 WORD CChitin::GetMultiplayerGameSpyPort()
 {

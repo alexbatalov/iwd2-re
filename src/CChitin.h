@@ -95,6 +95,7 @@ public:
     /* 00EC */ virtual void GetGameSpyGameName(CString& sGameSpyName);
     /* 00F0 */ virtual void GetGameSpyCode(CString& sGameSpyCode);
     /* 0104 */ virtual BOOL GetEAXActive();
+    /* 010C */ virtual void RedrawScreen();
 
     static DWORD TIMER_UPDATES_PER_SECOND;
     static const CString ICON_RES_ID;

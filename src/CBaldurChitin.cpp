@@ -1176,6 +1176,14 @@ void CBaldurChitin::UnloadFonts()
     CVidFont::UnloadAllFonts();
 }
 
+// 0x422E80
+void CBaldurChitin::RedrawScreen()
+{
+    if (pActiveEngine != NULL) {
+        static_cast<CBaldurEngine*>(pActiveEngine)->GetManager()->InvalidateRect(NULL);
+    }
+}
+
 // 0x422EA0
 void CBaldurChitin::SetRenderCount(BYTE nCount)
 {
