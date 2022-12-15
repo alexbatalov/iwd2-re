@@ -84,6 +84,7 @@ public:
     /* 00B8 */ virtual BYTE GetNumberSoundChannels();
     /* 00BC */ virtual LONG GetMovieVolume();
     /* 00C0 */ virtual void LoadOptions();
+    /* 00C4 */ virtual void PreLoadFonts();
     /* 0098 */ virtual void SelectEngine(CWarp* pNewEngine);
     /* 009C */ virtual void ShutDown(int nLineNumber, const char* szFileName, const char* text);
     /* 00D0 */ virtual WORD GetMultiplayerGameSpyPort();

@@ -131,6 +131,7 @@ public:
     /* 00B8 */ BYTE GetNumberSoundChannels() override;
     /* 00BC */ LONG GetMovieVolume() override;
     /* 00C0 */ void LoadOptions() override;
+    /* 00C4 */ void PreLoadFonts() override;
     /* 00D0 */ WORD GetMultiplayerGameSpyPort() override;
     /* 00D4 */ WORD GetMultiplayerDirectPlayPort() override;
     /* 00EC */ void GetGameSpyGameName(CString& sGameSpyName) override;

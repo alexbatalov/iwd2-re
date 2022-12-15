@@ -1277,6 +1277,14 @@ void CBaldurChitin::LoadOptions()
         GetIniFileName());
 }
 
+// 0x424FF0
+void CBaldurChitin::PreLoadFonts()
+{
+    field_4A34.SetResRef(CResRef("NORMAL"), 0, 1);
+    field_4A34.SetColor(0xFFFFFF, 0, 0);
+    field_4A34.RegisterFont();
+}
+
 // 0x425040
 void CBaldurChitin::SaveOptions()
 {
