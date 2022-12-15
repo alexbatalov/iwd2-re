@@ -1003,6 +1003,42 @@ BOOL CBaldurChitin::InitializeServices(HWND hWnd)
     return CChitin::InitializeServices(hWnd);
 }
 
+// 0x424AA0
+void CBaldurChitin::FlipFullScreenMode(BOOLEAN a2)
+{
+    BOOL bWasFullscreen = m_bFullscreen;
+    m_bFullscreen = bWasFullscreen == FALSE;
+    field_E2 = bWasFullscreen == FALSE;
+
+    if (a2) {
+        if (bWasFullscreen) {
+            WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+                FULL_SCREEN_KEY,
+                "0",
+                GetIniFileName());
+        } else {
+            CString sValue;
+
+            sValue.Format("%d", m_ptScreen.x);
+            WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+                SCREEN_POSITION_X_KEY,
+                sValue,
+                GetIniFileName());
+
+            sValue.Format("%d", m_ptScreen.y);
+            WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+                SCREEN_POSITION_Y_KEY,
+                sValue,
+                GetIniFileName());
+
+            WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
+                FULL_SCREEN_KEY,
+                "1",
+                GetIniFileName());
+        }
+    }
+}
+
 // 0x424BD0
 void CBaldurChitin::SetSoftSrcKeyBltFast(BOOLEAN a2, BOOLEAN a3)
 {

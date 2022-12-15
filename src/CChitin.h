@@ -74,6 +74,7 @@ public:
     /* 006C */ virtual void SetCDSwitchActivateEngine(BOOL bValue);
     /* 0074 */ virtual void OnMultiplayerSessionToClose();
     /* 0090 */ virtual void AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD dw1, DWORD dw2);
+    /* 0094 */ virtual void FlipFullScreenMode(BOOLEAN a2);
     /* 00A0 */ virtual const char* GetIniFileName();
     /* 00A4 */ virtual const char* GetKeyFileName();
     /* 00A8 */ virtual const char* GetLogFileName();

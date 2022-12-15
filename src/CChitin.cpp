@@ -999,6 +999,14 @@ void CChitin::OnMultiplayerSessionToClose()
 {
 }
 
+// 0x78E770
+void CChitin::FlipFullScreenMode(BOOLEAN a2)
+{
+    BOOL bWasFullscreen = m_bFullscreen;
+    m_bFullscreen = bWasFullscreen == FALSE;
+    field_E2 = bWasFullscreen == FALSE;
+}
+
 // 0x78E790
 const char* CChitin::GetIniFileName()
 {

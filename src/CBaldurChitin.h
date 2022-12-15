@@ -120,6 +120,7 @@ public:
     /* 006C */ void SetCDSwitchActivateEngine(BOOL bValue) override;
     /* 0074 */ void OnMultiplayerSessionToClose() override;
     /* 0090 */ void AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD dw1, DWORD dw2) override;
+    /* 0094 */ void FlipFullScreenMode(BOOLEAN a2) override;
     /* 009C */ void ShutDown(int nLineNumber, const char* szFileName, const char* text) override;
     /* 00A0 */ const char* GetIniFileName() override;
     /* 00A4 */ const char* GetKeyFileName() override;
