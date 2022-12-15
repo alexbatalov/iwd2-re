@@ -22,7 +22,7 @@ public:
     /* 0440 */ CVidMosaic field_440;
     /* 04F4 */ CVidFont field_4F4;
     /* 09F4 */ CVidFont field_9F4;
-    /* 0EF4 */ int field_EF4;
+    /* 0EF4 */ BOOL m_bActivateEngine;
     /* 0EF8 */ CCriticalSection field_EF8;
 };
 

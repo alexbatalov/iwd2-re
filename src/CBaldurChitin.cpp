@@ -977,6 +977,12 @@ void CBaldurChitin::SetProgressBarActivateEngine(BOOL bValue)
     m_cCachingStatus.m_bActivateEngine = bValue;
 }
 
+// 0x422C40
+void CBaldurChitin::SetCDSwitchActivateEngine(BOOL bValue)
+{
+    m_cSwitchingCDStatus.m_bActivateEngine = bValue;
+}
+
 // 0x424A90
 BOOL CBaldurChitin::InitializeServices(HWND hWnd)
 {

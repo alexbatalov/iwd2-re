@@ -71,6 +71,7 @@ public:
     /* 0058 */ virtual BOOL InitializeServices(HWND hWnd);
     /* 005C */ virtual void SetProgressBar(BOOLEAN bEnabled, LONG nProgressBarCaption, INT nBytesCopied, INT nTotalBytes, BOOLEAN bTravel, LONG nParchmentCaption, BOOLEAN bWaiting, LONG nWaitingReason, BOOLEAN bDisplayMinibars, BOOLEAN bTimeoutCounter, DWORD nSecondsToTimeout);
     /* 0060 */ virtual void SetProgressBarActivateEngine(BOOL bValue);
+    /* 006C */ virtual void SetCDSwitchActivateEngine(BOOL bValue);
     /* 00A0 */ virtual const char* GetIniFileName();
     /* 00A4 */ virtual const char* GetKeyFileName();
     /* 00A8 */ virtual const char* GetLogFileName();

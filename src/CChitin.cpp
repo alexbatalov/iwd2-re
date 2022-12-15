@@ -983,6 +983,11 @@ void CChitin::SetProgressBarActivateEngine(BOOL bValue)
 {
 }
 
+// 0x799E60
+void CChitin::SetCDSwitchActivateEngine(BOOL bValue)
+{
+}
+
 // 0x78E790
 const char* CChitin::GetIniFileName()
 {

@@ -5,7 +5,7 @@ CSwitchCDStatus::CSwitchCDStatus()
 {
     field_0 = 0;
     field_4 = 0;
-    field_EF4 = 0;
+    m_bActivateEngine = FALSE;
 }
 
 // 0x54D360
