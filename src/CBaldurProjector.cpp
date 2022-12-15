@@ -260,7 +260,7 @@ void CBaldurProjector::PlayMovieInternal(const CResRef& cResRef, BOOL bAsynchThr
                 CString sMovie;
                 cResRef.CopyToString(sMovie);
 
-                if (GetPrivateProfileIntA("Movies", sMovie, FALSE, g_pBaldurChitin->GetConfigFileName())) {
+                if (GetPrivateProfileIntA("Movies", sMovie, FALSE, g_pBaldurChitin->GetIniFileName())) {
                     field_145 = 1;
                 }
 

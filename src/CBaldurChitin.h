@@ -115,10 +115,10 @@ public:
     /* 0044 */ virtual void GetScreenShotFilePrefix(CString& szGameFileName) override;
     /* 0058 */ BOOL InitializeServices(HWND hWnd) override;
     /* 009C */ void ShutDown(int nLineNumber, const char* szFileName, const char* text) override;
-    /* 00A0 */ const char* GetConfigFileName() override;
+    /* 00A0 */ const char* GetIniFileName() override;
     /* 00A4 */ const char* GetKeyFileName() override;
     /* 00A8 */ const char* GetLogFileName() override;
-    /* 00A8 */ const char* GetErrorFileName() override;
+    /* 00A8 */ const char* GetErrFileName() override;
     /* 00B0 */ void SaveBitsPerPixel(USHORT nBpp) override;
     /* 00B4 */ UINT GetSavedBitsPerPixel() override;
     /* 00B8 */ BYTE GetNumberSoundChannels() override;

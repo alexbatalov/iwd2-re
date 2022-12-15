@@ -331,7 +331,7 @@ BOOL CResCache::RefreshStatus(const CString& a2)
     CFile cFile;
     CString v3;
 
-    field_11C = GetPrivateProfileIntA("Config", "CacheSize", 175, g_pChitin->GetConfigFileName());
+    field_11C = GetPrivateProfileIntA("Config", "CacheSize", 175, g_pChitin->GetIniFileName());
     if (field_11C < 125 || field_11C > 2147) {
         field_11C = 175;
     }

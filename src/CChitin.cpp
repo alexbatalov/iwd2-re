@@ -265,7 +265,7 @@ BOOL CChitin::InitInstance()
     TIMER_UPDATES_PER_SECOND = GetPrivateProfileIntA("Program Options",
         "Maximum Frame Rate",
         30,
-        GetConfigFileName());
+        GetIniFileName());
 
     if (TIMER_UPDATES_PER_SECOND < 10 || TIMER_UPDATES_PER_SECOND > 60) {
         TIMER_UPDATES_PER_SECOND = 30;
@@ -859,7 +859,7 @@ void CChitin::ReadIniFiles()
     char buffer[256];
 
     if (field_4C == 0) {
-        GetPrivateProfileStringA("Alias", "HD0:", "", buffer, sizeof(buffer), GetConfigFileName());
+        GetPrivateProfileStringA("Alias", "HD0:", "", buffer, sizeof(buffer), GetIniFileName());
         if (strlen(buffer) == 0) {
             temp = "path:=.\\";
 
@@ -883,7 +883,7 @@ void CChitin::ReadIniFiles()
                 temp.FormatMessageA("CD%d:", cd);
 
                 memset(buffer, 0, sizeof(buffer));
-                GetPrivateProfileStringA("Alias", temp, "", buffer, sizeof(buffer), GetConfigFileName());
+                GetPrivateProfileStringA("Alias", temp, "", buffer, sizeof(buffer), GetIniFileName());
                 if (strlen(buffer) == 0) {
                     break;
                 }
@@ -967,9 +967,8 @@ void CChitin::GetScreenShotFilePrefix(CString& szGameFileName)
     szGameFileName = DEFAULT_PRINTSCREEN_FILE_NAME;
 }
 
-// #guess
 // 0x78E790
-const char* CChitin::GetConfigFileName()
+const char* CChitin::GetIniFileName()
 {
     return "Chitin.ini";
 }
@@ -980,16 +979,14 @@ const char* CChitin::GetKeyFileName()
     return "Chitin.key";
 }
 
-// #guess
 // 0x78E7B0
 const char* CChitin::GetLogFileName()
 {
     return "Chitin.log";
 }
 
-// #guess
 // 0x78E7C0
-const char* CChitin::GetErrorFileName()
+const char* CChitin::GetErrFileName()
 {
     return "Chitin.err";
 }
@@ -1002,7 +999,7 @@ void CChitin::SaveBitsPerPixel(USHORT nBpp)
 // 0x78E7D0
 UINT CChitin::GetSavedBitsPerPixel()
 {
-    return GetPrivateProfileIntA("Program Options", "BitsPerPixel", CVideo::word_85DE2C, GetConfigFileName());
+    return GetPrivateProfileIntA("Program Options", "BitsPerPixel", CVideo::word_85DE2C, GetIniFileName());
 }
 
 // 0x78E800

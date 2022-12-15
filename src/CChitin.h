@@ -68,10 +68,10 @@ public:
     /* 004C */ virtual void TranslateType(int nType, CString& sRes);
     /* 0050 */ virtual BOOL InitGraphics();
     /* 0058 */ virtual BOOL InitializeServices(HWND hWnd);
-    /* 00A0 */ virtual const char* GetConfigFileName();
+    /* 00A0 */ virtual const char* GetIniFileName();
     /* 00A4 */ virtual const char* GetKeyFileName();
     /* 00A8 */ virtual const char* GetLogFileName();
-    /* 00A8 */ virtual const char* GetErrorFileName();
+    /* 00A8 */ virtual const char* GetErrFileName();
     /* 00B0 */ virtual void SaveBitsPerPixel(USHORT nBpp);
     /* 00B4 */ virtual UINT GetSavedBitsPerPixel();
     /* 00B8 */ virtual BYTE GetNumberSoundChannels();

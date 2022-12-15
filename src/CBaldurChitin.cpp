@@ -986,7 +986,7 @@ void CBaldurChitin::SetSoftSrcKeyBltFast(BOOLEAN a2, BOOLEAN a3)
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         SOFT_SRC_KEY_BLT_FAST_KEY,
         a2 ? "1" : "0",
-        GetConfigFileName());
+        GetIniFileName());
 }
 
 // 0x424C20
@@ -998,7 +998,7 @@ void CBaldurChitin::SetSoftBltFast(BOOLEAN a2, BOOLEAN a3)
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         SOFT_BLT_FAST_KEY,
         a2 ? "1" : "0",
-        GetConfigFileName());
+        GetIniFileName());
 }
 
 // 0x424C70
@@ -1010,7 +1010,7 @@ void CBaldurChitin::SetSoftSrcKeyBlt(BOOLEAN a2, BOOLEAN a3)
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         SOFT_SRC_KEY_BLT_KEY,
         a2 ? "1" : "0",
-        GetConfigFileName());
+        GetIniFileName());
 }
 
 // 0x424CC0
@@ -1022,7 +1022,7 @@ void CBaldurChitin::SetSoftBlt(BOOLEAN a2, BOOLEAN a3)
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         SOFT_BLT_KEY,
         a2 ? "1" : "0",
-        GetConfigFileName());
+        GetIniFileName());
 }
 
 // 0x424D10
@@ -1034,7 +1034,7 @@ void CBaldurChitin::SetSoftMirrorBlt(BOOLEAN a2, BOOLEAN a3)
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         SOFT_MIRROR_BLT_KEY,
         a2 ? "1" : "0",
-        GetConfigFileName());
+        GetIniFileName());
 }
 
 // 0x424D60
@@ -1064,7 +1064,7 @@ void CBaldurChitin::GetGameSpyGameName(CString& sGameSpyName)
 
 // #guess
 // 0x422DE0
-const char* CBaldurChitin::GetConfigFileName()
+const char* CBaldurChitin::GetIniFileName()
 {
     return ".\\Icewind2.ini";
 }
@@ -1084,7 +1084,7 @@ const char* CBaldurChitin::GetLogFileName()
 
 // #guess
 // 0x422E10
-const char* CBaldurChitin::GetErrorFileName()
+const char* CBaldurChitin::GetErrFileName()
 {
     return ".\\Icewind2.err";
 }
@@ -1103,12 +1103,12 @@ void CBaldurChitin::LoadOptions()
     pOptions->m_nTooltips = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         TOOLTIPS_KEY,
         30,
-        GetConfigFileName());
+        GetIniFileName());
 
     pOptions->m_nTranslucentShadows = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         TRANSLUCENT_SHADOWS_KEY,
         1,
-        GetConfigFileName());
+        GetIniFileName());
 
     CVidCell::TRANSLUCENT_SHADOWS_ON = pOptions->m_nTranslucentShadows;
 
@@ -1119,7 +1119,7 @@ void CBaldurChitin::LoadOptions()
     BYTE nGammaCorrection = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         GAMMA_CORRECTION_KEY,
         0,
-        GetConfigFileName());
+        GetIniFileName());
     if (nGammaCorrection < 0 || nGammaCorrection > 5) {
         nGammaCorrection = 0;
     }
@@ -1129,7 +1129,7 @@ void CBaldurChitin::LoadOptions()
     BYTE nBrightnessCorrection = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         BRIGHTNESS_CORRECTION_KEY,
         0,
-        GetConfigFileName());
+        GetIniFileName());
     if (nBrightnessCorrection < 0 || nBrightnessCorrection > 40) {
         nBrightnessCorrection = 0;
     }
@@ -1139,17 +1139,17 @@ void CBaldurChitin::LoadOptions()
     cVideo.field_13A = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         BACKWARDS_COMPATIBLE_3D_KEY,
         0,
-        GetConfigFileName());
+        GetIniFileName());
 
     CGameAnimationType::MIRROR_BAM = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         SPRITE_MIRROR_KEY,
         CGameAnimationType::MIRROR_BAM,
-        GetConfigFileName());
+        GetIniFileName());
 
     pOptions->m_nVolumeMovie = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         VOLUME_MOVIE_KEY,
         85,
-        GetConfigFileName());
+        GetIniFileName());
     if (pOptions->m_nVolumeMovie > 100) {
         pOptions->m_nVolumeMovie = 85;
     }
@@ -1157,7 +1157,7 @@ void CBaldurChitin::LoadOptions()
     pOptions->m_nVolumeMusic = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         VOLUME_MUSIC_KEY,
         100,
-        GetConfigFileName());
+        GetIniFileName());
     if (pOptions->m_nVolumeMusic > 100) {
         pOptions->m_nVolumeMusic = 100;
     }
@@ -1165,7 +1165,7 @@ void CBaldurChitin::LoadOptions()
     pOptions->m_nVolumeVoices = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         VOLUME_VOICES_KEY,
         100,
-        GetConfigFileName());
+        GetIniFileName());
     if (pOptions->m_nVolumeVoices > 100) {
         pOptions->m_nVolumeVoices = 100;
     }
@@ -1173,7 +1173,7 @@ void CBaldurChitin::LoadOptions()
     pOptions->m_nVolumeAmbients = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         VOLUME_AMBIENTS_KEY,
         100,
-        GetConfigFileName());
+        GetIniFileName());
     if (pOptions->m_nVolumeAmbients > 100) {
         pOptions->m_nVolumeAmbients = 100;
     }
@@ -1181,7 +1181,7 @@ void CBaldurChitin::LoadOptions()
     pOptions->m_nVolumeSFX = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         VOLUME_SFX_KEY,
         100,
-        GetConfigFileName());
+        GetIniFileName());
     if (pOptions->m_nVolumeSFX > 100) {
         pOptions->m_nVolumeSFX = 100;
     }
@@ -1191,7 +1191,7 @@ void CBaldurChitin::LoadOptions()
     pOptions->m_nShadedSelectionBox = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         SHADED_SELECTION_BOX_KEY,
         0,
-        GetConfigFileName());
+        GetIniFileName());
     if (pOptions->m_nShadedSelectionBox != 0 && pOptions->m_nShadedSelectionBox != 1) {
         pOptions->m_nShadedSelectionBox = 0;
     }
@@ -1199,12 +1199,12 @@ void CBaldurChitin::LoadOptions()
     pOptions->m_bDisplayMovieSubtitles = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         DISPLAY_MOVIE_SUBTITLES_KEY,
         0,
-        GetConfigFileName());
+        GetIniFileName());
 
     g_pChitin->field_1C4C = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         SINGLE_MEDIA_KEY,
         0,
-        GetConfigFileName());
+        GetIniFileName());
 }
 
 // 0x425040
@@ -1226,161 +1226,161 @@ void CBaldurChitin::SaveOptions()
         WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
             SCREEN_POSITION_X_KEY,
             sString,
-            GetConfigFileName());
+            GetIniFileName());
 
         sString.Format("%d", m_ptScreen.y);
         WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
             SCREEN_POSITION_Y_KEY,
             sString,
-            GetConfigFileName());
+            GetIniFileName());
     }
 
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         FONT_NAME_KEY,
         m_sFontName,
-        GetConfigFileName());
+        GetIniFileName());
 
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         DOUBLE_BYTE_CHARACTER_SUPPORT_KEY,
         field_1A0 ? "1" : "0",
-        GetConfigFileName());
+        GetIniFileName());
 
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         IS_3D_ACCELERATED,
         cVideo.m_bIs3dAccelerated ? "1" : "0",
-        GetConfigFileName());
+        GetIniFileName());
 
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         SIXTEEN_BIT_TEXTURES_KEY,
         field_2F4 ? "1" : "0",
-        GetConfigFileName());
+        GetIniFileName());
 
     sString.Format("%d", CVideo::FPS);
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         DISPLAY_FREQUENCY_KEY,
         sString,
-        GetConfigFileName());
+        GetIniFileName());
 
     sString.Format("%d", CVideo::SCREENWIDTH);
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         RESOLUTION_KEY,
         sString,
-        GetConfigFileName());
+        GetIniFileName());
 
     sString.Format("%d", CChitin::TIMER_UPDATES_PER_SECOND);
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         MAXIMUM_FRAME_RATE_KEY,
         sString,
-        GetConfigFileName());
+        GetIniFileName());
 
     sString.Format("%d", CSearchRequest::MAXNODES);
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         PATH_SEARCH_NODES_KEY,
         sString,
-        GetConfigFileName());
+        GetIniFileName());
 
     sString.Format("%d", pOptions->m_nTooltips);
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         TOOLTIPS_KEY,
         sString,
-        GetConfigFileName());
+        GetIniFileName());
 
     sString.Format("%d", pOptions->m_nTranslucentShadows);
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         TRANSLUCENT_SHADOWS_KEY,
         sString,
-        GetConfigFileName());
+        GetIniFileName());
 
     sString.Format("%d", CGameAnimationType::MIRROR_BAM);
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         SPRITE_MIRROR_KEY,
         sString,
-        GetConfigFileName());
+        GetIniFileName());
 
     if (CVidMode::bInitialized) {
         sString.Format("%d", GetCurrentVideoMode()->m_nGammaCorrection);
         WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
             GAMMA_CORRECTION_KEY,
             sString,
-            GetConfigFileName());
+            GetIniFileName());
 
         sString.Format("%d", GetCurrentVideoMode()->m_nBrightnessCorrection);
         WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
             BRIGHTNESS_CORRECTION_KEY,
             sString,
-            GetConfigFileName());
+            GetIniFileName());
     }
 
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         BACKWARDS_COMPATIBLE_3D_KEY,
         cVideo.field_13A ? "1" : "0",
-        GetConfigFileName());
+        GetIniFileName());
 
     sString.Format("%d", pOptions->m_nVolumeMovie);
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         VOLUME_MOVIE_KEY,
         sString,
-        GetConfigFileName());
+        GetIniFileName());
 
     sString.Format("%d", pOptions->m_nVolumeMusic);
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         VOLUME_MUSIC_KEY,
         sString,
-        GetConfigFileName());
+        GetIniFileName());
 
     sString.Format("%d", pOptions->m_nVolumeVoices);
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         VOLUME_VOICES_KEY,
         sString,
-        GetConfigFileName());
+        GetIniFileName());
 
     sString.Format("%d", pOptions->m_nVolumeAmbients);
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         VOLUME_AMBIENTS_KEY,
         sString,
-        GetConfigFileName());
+        GetIniFileName());
 
     sString.Format("%d", pOptions->m_nVolumeSFX);
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         VOLUME_SFX_KEY,
         sString,
-        GetConfigFileName());
+        GetIniFileName());
 
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         SOFT_SRC_KEY_BLT_FAST_KEY,
         cVideo.cVidBlitter.m_bSoftSrcKeyBltFast ? "1" : "0",
-        GetConfigFileName());
+        GetIniFileName());
 
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         SOFT_BLT_FAST_KEY,
         cVideo.cVidBlitter.m_bSoftBltFast ? "1" : "0",
-        GetConfigFileName());
+        GetIniFileName());
 
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         SOFT_SRC_KEY_BLT_KEY,
         cVideo.cVidBlitter.m_bSoftSrcKeyBlt ? "1" : "0",
-        GetConfigFileName());
+        GetIniFileName());
 
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         SOFT_BLT_KEY,
         cVideo.cVidBlitter.m_bSoftBlt ? "1" : "0",
-        GetConfigFileName());
+        GetIniFileName());
 
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         SOFT_MIRROR_BLT_KEY,
         cVideo.cVidBlitter.m_bSoftMirrorBlt ? "1" : "0",
-        GetConfigFileName());
+        GetIniFileName());
 
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         DISPLAY_MOVIE_SUBTITLES_KEY,
         pOptions->m_bDisplayMovieSubtitles ? "1" : "0",
-        GetConfigFileName());
+        GetIniFileName());
 
     sString.Format("%d", pOptions->m_nShadedSelectionBox);
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         SHADED_SELECTION_BOX_KEY,
         sString,
-        GetConfigFileName());
+        GetIniFileName());
 }
 
 // 0x425680
@@ -1391,19 +1391,19 @@ void CBaldurChitin::SaveBitsPerPixel(USHORT nBpp)
         WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
             BITS_PER_PIXEL_KEY,
             "16",
-            GetConfigFileName());
+            GetIniFileName());
         break;
     case 24:
         WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
             BITS_PER_PIXEL_KEY,
             "24",
-            GetConfigFileName());
+            GetIniFileName());
         break;
     case 32:
         WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
             BITS_PER_PIXEL_KEY,
             "32",
-            GetConfigFileName());
+            GetIniFileName());
         break;
     }
 }
@@ -1414,7 +1414,7 @@ UINT CBaldurChitin::GetSavedBitsPerPixel()
     return GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         BITS_PER_PIXEL_KEY,
         CVideo::word_85DE2C,
-        GetConfigFileName());
+        GetIniFileName());
 }
 
 // 0x425BD0
@@ -1452,7 +1452,7 @@ void CBaldurChitin::AddPlayedMovie(const CResRef& cResMovie)
 {
     CString sRes;
     cResMovie.CopyToString(sRes);
-    WritePrivateProfileStringA("Movies", sRes, "1", GetConfigFileName());
+    WritePrivateProfileStringA("Movies", sRes, "1", GetIniFileName());
 }
 
 // 0x426970
@@ -1471,17 +1471,17 @@ void CBaldurChitin::GetGameSpyCode(CString& sGameSpyCode)
 // 0x426EC0
 WORD CBaldurChitin::GetMultiplayerDirectPlayPort()
 {
-    return GetPrivateProfileIntA("Multiplayer", "Port", 0, GetConfigFileName());
+    return GetPrivateProfileIntA("Multiplayer", "Port", 0, GetIniFileName());
 }
 
 // 0x426EE0
 WORD CBaldurChitin::GetMultiplayerGameSpyPort()
 {
-    if (GetPrivateProfileIntA("GameSpy", "Enabled", 0, GetConfigFileName()) != 1) {
+    if (GetPrivateProfileIntA("GameSpy", "Enabled", 0, GetIniFileName()) != 1) {
         return 0;
     }
 
-    return GetPrivateProfileIntA("GameSpy", "Port", 0, GetConfigFileName());
+    return GetPrivateProfileIntA("GameSpy", "Port", 0, GetIniFileName());
 }
 
 // 0x4D26B0
