@@ -184,6 +184,14 @@ BOOL CResCache::CopyFile(UINT nIndex, const CString& a3, const CString& a4, cons
     return FALSE;
 }
 
+// 0x78CAC0
+BOOL CResCache::DeleteFileFromCache(UINT nIndex)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // #binary-identical
 // 0x78CD90
 void CResCache::FlushCache(int a2)
