@@ -61,6 +61,7 @@ public:
     static const USHORT DEFAULT_SCREEN_WIDTH;
     static const USHORT DEFAULT_SCREEN_HEIGHT;
 
+    static BYTE RENDER_COUNT;
     static short word_8BA320;
     static CString CHUI_GUIEXT;
     static const CString BALDUR_GAMESPY_GAMENAME;
@@ -136,6 +137,7 @@ public:
     /* 00CC */ void SetSoundVolumes() override;
     /* 00D0 */ WORD GetMultiplayerGameSpyPort() override;
     /* 00D4 */ WORD GetMultiplayerDirectPlayPort() override;
+    /* 00D8 */ void SetRenderCount(BYTE nCount) override;
     /* 00EC */ void GetGameSpyGameName(CString& sGameSpyName) override;
     /* 00F0 */ void GetGameSpyCode(CString& sGameSpyCode) override;
     /* 0104 */ BOOL GetEAXActive() override;

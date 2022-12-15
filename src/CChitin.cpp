@@ -1091,6 +1091,11 @@ WORD CChitin::GetMultiplayerDirectPlayPort()
     return 0;
 }
 
+// 0x799E60
+void CChitin::SetRenderCount(BYTE nCount)
+{
+}
+
 // 0x78E730
 void CChitin::LoadOptions()
 {

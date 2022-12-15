@@ -91,6 +91,7 @@ public:
     /* 009C */ virtual void ShutDown(int nLineNumber, const char* szFileName, const char* text);
     /* 00D0 */ virtual WORD GetMultiplayerGameSpyPort();
     /* 00D4 */ virtual WORD GetMultiplayerDirectPlayPort();
+    /* 00D8 */ virtual void SetRenderCount(BYTE nCount);
     /* 00EC */ virtual void GetGameSpyGameName(CString& sGameSpyName);
     /* 00F0 */ virtual void GetGameSpyCode(CString& sGameSpyCode);
     /* 0104 */ virtual BOOL GetEAXActive();
