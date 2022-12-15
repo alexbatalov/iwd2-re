@@ -171,7 +171,7 @@ CBaldurChitin::CBaldurChitin()
     m_pEngineMovies = NULL;
     m_pEngineKeymaps = NULL;
     m_pObjectGame = NULL;
-    field_499E = 0;
+    m_bFontRectOutline = FALSE;
     field_49B2 = 1;
 
     GetPrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
@@ -1406,6 +1406,12 @@ void CBaldurChitin::SaveBitsPerPixel(USHORT nBpp)
             GetIniFileName());
         break;
     }
+}
+
+// 0x422C60
+BOOL CBaldurChitin::FontRectOutline()
+{
+    return m_bFontRectOutline;
 }
 
 // 0x422C60

@@ -113,6 +113,7 @@ public:
     /* 003C */ CRes* AllocResObject(int nType) override;
     /* 0040 */ const CString& GetIconRes() override;
     /* 0044 */ virtual void GetScreenShotFilePrefix(CString& szGameFileName) override;
+    /* 0054 */ BOOL FontRectOutline() override;
     /* 0058 */ BOOL InitializeServices(HWND hWnd) override;
     /* 009C */ void ShutDown(int nLineNumber, const char* szFileName, const char* text) override;
     /* 00A0 */ const char* GetIniFileName() override;
@@ -157,7 +158,7 @@ public:
     /* 3970 */ CSwitchCDStatus m_cSwitchingCDStatus; // #guess
     /* 4888 */ CBaldurMessage m_cBaldurMessage;
     /* 4980 */ CMessageHandler m_cMessageHandler;
-    /* 499E */ int field_499E;
+    /* 499E */ BOOL m_bFontRectOutline;
     /* 49A2 */ int field_49A2;
     /* 49A6 */ int field_49A6;
     /* 49AA */ unsigned char field_49AA;

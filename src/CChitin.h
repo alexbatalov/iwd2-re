@@ -67,6 +67,7 @@ public:
     /* 0048 */ virtual int TranslateType(const CString& sRes);
     /* 004C */ virtual void TranslateType(int nType, CString& sRes);
     /* 0050 */ virtual BOOL InitGraphics();
+    /* 0054 */ virtual BOOL FontRectOutline();
     /* 0058 */ virtual BOOL InitializeServices(HWND hWnd);
     /* 00A0 */ virtual const char* GetIniFileName();
     /* 00A4 */ virtual const char* GetKeyFileName();

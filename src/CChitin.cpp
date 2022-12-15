@@ -967,6 +967,12 @@ void CChitin::GetScreenShotFilePrefix(CString& szGameFileName)
     szGameFileName = DEFAULT_PRINTSCREEN_FILE_NAME;
 }
 
+// 0x78E6E0
+BOOL CChitin::FontRectOutline()
+{
+    return FALSE;
+}
+
 // 0x78E790
 const char* CChitin::GetIniFileName()
 {
