@@ -82,6 +82,7 @@ public:
     /* 00B0 */ virtual void SaveBitsPerPixel(USHORT nBpp);
     /* 00B4 */ virtual UINT GetSavedBitsPerPixel();
     /* 00B8 */ virtual BYTE GetNumberSoundChannels();
+    /* 00BC */ virtual LONG GetMovieVolume();
     /* 00C0 */ virtual void LoadOptions();
     /* 0098 */ virtual void SelectEngine(CWarp* pNewEngine);
     /* 009C */ virtual void ShutDown(int nLineNumber, const char* szFileName, const char* text);

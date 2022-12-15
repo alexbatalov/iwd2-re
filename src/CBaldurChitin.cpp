@@ -1157,6 +1157,14 @@ BYTE CBaldurChitin::GetNumberSoundChannels()
     return 21;
 }
 
+// 0x422E30
+LONG CBaldurChitin::GetMovieVolume()
+{
+    // NOTE: Looks odd, generated binary does not match.
+    LONG v1 = m_pObjectGame->m_cOptions.m_nVolumeMovie - 100;
+    return -(v1 * v1);
+}
+
 // 0x424D90
 void CBaldurChitin::LoadOptions()
 {

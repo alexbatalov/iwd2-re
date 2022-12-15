@@ -1061,6 +1061,12 @@ void CChitin::GetGameSpyCode(CString& sGameSpyCode)
 }
 
 // 0x78E6E0
+LONG CChitin::GetMovieVolume()
+{
+    return 0;
+}
+
+// 0x78E6E0
 BOOL CChitin::GetEAXActive()
 {
     return FALSE;
