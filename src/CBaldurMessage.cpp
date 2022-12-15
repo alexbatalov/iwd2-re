@@ -60,7 +60,7 @@ CBaldurMessage::CBaldurMessage()
     field_E5 = 0;
     m_dwSignalSecondsToTimeout = SIGNAL_SECONDSTOMPTIMEOUT;
     field_7 = 0;
-    field_F4 = 0;
+    m_bMultiplayerSessionShutdown = FALSE;
     field_F5 = 0;
     field_F6 = 0;
 }

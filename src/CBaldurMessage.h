@@ -57,7 +57,7 @@ public:
     /* 00EA */ CString field_EA;
     /* 00EE */ unsigned char field_EE;
     /* 00F0 */ DWORD m_dwSignalSecondsToTimeout;
-    /* 00F4 */ unsigned char field_F4;
+    /* 00F4 */ BOOLEAN m_bMultiplayerSessionShutdown;
     /* 00F5 */ unsigned char field_F5;
     /* 00F6 */ unsigned char field_F6;
 };

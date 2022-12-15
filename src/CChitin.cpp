@@ -988,6 +988,11 @@ void CChitin::SetCDSwitchActivateEngine(BOOL bValue)
 {
 }
 
+// 0x78E730
+void CChitin::OnMultiplayerSessionToClose()
+{
+}
+
 // 0x78E790
 const char* CChitin::GetIniFileName()
 {

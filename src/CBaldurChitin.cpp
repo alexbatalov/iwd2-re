@@ -1447,6 +1447,12 @@ void CBaldurChitin::SetProgressBar(BOOLEAN bEnabled, LONG nProgressBarCaption, I
     }
 }
 
+// 0x4258C0
+void CBaldurChitin::OnMultiplayerSessionToClose()
+{
+    m_cBaldurMessage.m_bMultiplayerSessionShutdown = TRUE;
+}
+
 // 0x422C60
 BOOL CBaldurChitin::FontRectOutline()
 {
