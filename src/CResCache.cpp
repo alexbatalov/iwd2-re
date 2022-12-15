@@ -377,7 +377,7 @@ BOOL CResCache::RefreshStatus(const CString& a2)
 
     for (unsigned int k = 0; k < g_pChitin->cDimm.m_nResFiles; k++) {
         if (!g_pChitin->cDimm.m_cKeyTable.m_bInitialized && k >= g_pChitin->cDimm.m_cKeyTable.m_nResFiles) {
-    return FALSE;
+            return FALSE;
         }
 
         v2 = reinterpret_cast<char*>(g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries) + g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries[k].nFileNameOffset;

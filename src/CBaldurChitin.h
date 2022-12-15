@@ -110,6 +110,7 @@ public:
     /* 0030 */ void RSThreadMain(void* userInfo) override;
     /* 0034 */ void MainAIThread(void* userInfo) override;
     /* 0038 */ void MusicThreadMain(void* userInfo) override;
+    /* 003C */ CRes* AllocResObject(int nType) override;
     /* 0040 */ const CString& GetIconRes() override;
     /* 0044 */ virtual void GetScreenShotFilePrefix(CString& szGameFileName) override;
     /* 0058 */ BOOL InitializeServices(HWND hWnd) override;

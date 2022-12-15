@@ -5,6 +5,7 @@
 #include "CGameAnimationType.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CResWED.h"
 #include "CScreenChapter.h"
 #include "CScreenCharacter.h"
 #include "CScreenConnection.h"
@@ -725,6 +726,17 @@ CBaldurChitin::~CBaldurChitin()
     if (field_4F40 != NULL) {
         delete field_4F40;
         field_4F40 = NULL;
+    }
+}
+
+// 0x423210
+CRes* CBaldurChitin::AllocResObject(int nType)
+{
+    switch (nType) {
+    case 1001:
+        return new CResWED();
+    default:
+        return CChitin::AllocResObject(nType);
     }
 }
 

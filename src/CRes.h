@@ -32,6 +32,7 @@ public:
     /* 0020 */ virtual USHORT GetType();
 
     int CancelRequest();
+    void* Demand();
     int Dump(int a2);
     int GetDemands();
     RESID GetID();

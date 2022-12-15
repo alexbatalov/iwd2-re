@@ -58,6 +58,14 @@ int CRes::CancelRequest()
     return g_pChitin->cDimm.CancelRequest(this);
 }
 
+// 0x77E390
+void* CRes::Demand()
+{
+    // TODO: Incomplete.
+
+    return NULL;
+}
+
 // 0x77E520
 int CRes::Dump(int a2)
 {

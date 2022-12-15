@@ -87,6 +87,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CResUI.h"
     "src/CResWave.cpp"
     "src/CResWave.h"
+    "src/CResWED.cpp"
+    "src/CResWED.h"
     "src/CScreenChapter.cpp"
     "src/CScreenChapter.h"
     "src/CScreenCharacter.cpp"

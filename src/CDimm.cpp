@@ -992,7 +992,7 @@ int CDimm::Release(CRes* pRes)
             pRes->SetID(pRes->m_pDimmKeyTableEntry->field_C);
         }
 
-    return 0;
+        return 0;
     }
 }
 
