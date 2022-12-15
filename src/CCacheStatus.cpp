@@ -3,7 +3,7 @@
 // 0x4400D0
 CCacheStatus::CCacheStatus()
 {
-    field_4 = 0;
+    m_nScreensDrawn = 0;
     field_8 = 0;
     field_C = 0;
     field_10 = 0;
@@ -22,6 +22,12 @@ CCacheStatus::~CCacheStatus()
 void CCacheStatus::Init()
 {
     // TODO: Incomplete.
+}
+
+// 0x4406A0
+void CCacheStatus::InvalidateScreen()
+{
+    m_nScreensDrawn = 0;
 }
 
 // 0x4406B0

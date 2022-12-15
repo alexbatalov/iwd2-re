@@ -14,9 +14,10 @@ public:
     ~CCacheStatus();
 
     void Init();
+    void InvalidateScreen();
     void Update(BOOLEAN bEnabled, LONG nProgressBarCaption, INT nBytesCopied, INT nTotalBytes, BOOLEAN bTravel, LONG nParchmentCaption, BOOLEAN bWaiting, LONG nWaitingReason, BOOLEAN bDisplayMinibars, BOOLEAN bTimeoutCounter, DWORD nSecondsToTimeout);
 
-    /* 0004 */ int field_4;
+    /* 0004 */ INT m_nScreensDrawn;
     /* 0008 */ int field_8;
     /* 000C */ int field_C;
     /* 0010 */ int field_10;
