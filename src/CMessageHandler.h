@@ -5,6 +5,8 @@ class CMessageHandler {
 public:
     CMessageHandler();
     ~CMessageHandler();
+    void AsynchronousUpdate();
+    void PostAsynchronousUpdate();
 };
 
 #endif /* CMESSAGEHANDLER_H_ */

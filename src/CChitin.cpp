@@ -838,6 +838,12 @@ CRes* CChitin::AllocResObject(int nType)
     }
 }
 
+// 0x78F0E0
+void CChitin::AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD dw1, DWORD dw2)
+{
+    // TODO: Incomplete.
+}
+
 // #guess
 // 0x78FDE0
 CWnd* CChitin::GetWnd()
