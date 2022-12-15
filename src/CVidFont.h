@@ -16,6 +16,8 @@ public:
     void Unload();
     void TextOut3d(const CString& sText, int a3, int a4, const CRect& rect, int a6, int a7);
 
+    static void UnloadAllFonts();
+
     /* 04DA */ HFONT m_hFont;
     /* 04DE */ int field_4DE;
     /* 04E2 */ int field_4E2;

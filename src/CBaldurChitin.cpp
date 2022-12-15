@@ -1165,6 +1165,13 @@ LONG CBaldurChitin::GetMovieVolume()
     return -(v1 * v1);
 }
 
+// 0x422E70
+void CBaldurChitin::UnloadFonts()
+{
+    field_4A34.Unload();
+    CVidFont::UnloadAllFonts();
+}
+
 // 0x424D90
 void CBaldurChitin::LoadOptions()
 {

@@ -51,6 +51,12 @@ void CVidFont::Unload()
     // TODO: Incomplete.
 }
 
+// 0x7A0A40
+void CVidFont::UnloadAllFonts()
+{
+    // TODO: Incomplete.
+}
+
 // 0x7A1210
 void CVidFont::TextOut3d(const CString& sText, int a3, int a4, const CRect& rect, int a6, int a7)
 {

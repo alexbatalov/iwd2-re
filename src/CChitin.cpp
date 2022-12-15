@@ -14,6 +14,7 @@
 #include "CResTile.h"
 #include "CResWave.h"
 #include "CUtil.h"
+#include "CVidFont.h"
 #include "CWarp.h"
 
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
@@ -1046,6 +1047,12 @@ UINT CChitin::GetSavedBitsPerPixel()
 BYTE CChitin::GetNumberSoundChannels()
 {
     return 16;
+}
+
+// 0x78E810
+void CChitin::UnloadFonts()
+{
+    CVidFont::UnloadAllFonts();
 }
 
 // 0x78E840
