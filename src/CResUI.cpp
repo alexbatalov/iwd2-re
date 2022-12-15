@@ -17,9 +17,23 @@ CResUI::~CResUI()
 // 0x401400
 void* CResUI::Demand()
 {
-    // TODO: Incomplete.
+    void* pData = CRes::Demand();
+    if (!m_bParsed || GetDemands() <= 1) {
+        if (pData != NULL) {
+            m_pHeader = reinterpret_cast<UI_HEADER*>(pData);
+            if (m_pHeader->nFileType == 'CHUI' && m_pHeader->nFileVersion == 'V1  ') {
+                m_pPanels = reinterpret_cast<UI_PANELHEADER*>(reinterpret_cast<unsigned char*>(pData) + m_pHeader->nOffsetToPanelTable);
+                m_pControlTable = reinterpret_cast<UI_CONTROLTABLEENTRY*>(reinterpret_cast<unsigned char*>(pData) + m_pHeader->nOffsetToControlTable);
+                m_bParsed = TRUE;
+            }
+        }
 
-    return FALSE;
+        if (!m_bParsed) {
+            return NULL;
+        }
+    }
+
+    return pData;
 }
 
 // 0x401460
