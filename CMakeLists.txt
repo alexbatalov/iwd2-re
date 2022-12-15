@@ -83,6 +83,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CResRef.h"
     "src/CResTile.cpp"
     "src/CResTile.h"
+    "src/CResUI.cpp"
+    "src/CResUI.h"
     "src/CResWave.cpp"
     "src/CResWave.h"
     "src/CScreenChapter.cpp"
