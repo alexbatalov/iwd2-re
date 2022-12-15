@@ -1101,6 +1101,11 @@ void CChitin::PreLoadFonts()
 {
 }
 
+// 0x78E730
+void CChitin::SetSoundVolumes()
+{
+}
+
 // 0x7909C0
 void CChitin::ShutDown(int nLineNumber, const char* szFileName, const char* text)
 {

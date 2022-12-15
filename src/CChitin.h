@@ -86,6 +86,7 @@ public:
     /* 00C0 */ virtual void LoadOptions();
     /* 00C4 */ virtual void PreLoadFonts();
     /* 00C8 */ virtual void UnloadFonts();
+    /* 00CC */ virtual void SetSoundVolumes();
     /* 0098 */ virtual void SelectEngine(CWarp* pNewEngine);
     /* 009C */ virtual void ShutDown(int nLineNumber, const char* szFileName, const char* text);
     /* 00D0 */ virtual WORD GetMultiplayerGameSpyPort();

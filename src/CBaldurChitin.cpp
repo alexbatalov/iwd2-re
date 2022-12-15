@@ -1172,6 +1172,14 @@ void CBaldurChitin::UnloadFonts()
     CVidFont::UnloadAllFonts();
 }
 
+// 0x422E50
+void CBaldurChitin::SetSoundVolumes()
+{
+    if (m_pObjectGame != NULL) {
+        m_pObjectGame->ApplyVolumeSliders(TRUE);
+    }
+}
+
 // 0x424D90
 void CBaldurChitin::LoadOptions()
 {
