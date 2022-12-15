@@ -978,6 +978,11 @@ BOOL CChitin::FontRectOutline()
     return FALSE;
 }
 
+// 0x799E60
+void CChitin::SetProgressBarActivateEngine(BOOL bValue)
+{
+}
+
 // 0x78E790
 const char* CChitin::GetIniFileName()
 {

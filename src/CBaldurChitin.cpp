@@ -971,6 +971,12 @@ void CBaldurChitin::GetScreenShotFilePrefix(CString& szGameFileName)
     szGameFileName = PRINTSCREEN_FILE_NAME;
 }
 
+// 0x422C30
+void CBaldurChitin::SetProgressBarActivateEngine(BOOL bValue)
+{
+    m_cCachingStatus.m_bActivateEngine = bValue;
+}
+
 // 0x424A90
 BOOL CBaldurChitin::InitializeServices(HWND hWnd)
 {

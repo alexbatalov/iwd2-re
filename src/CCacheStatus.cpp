@@ -9,7 +9,7 @@ CCacheStatus::CCacheStatus()
     field_10 = 0;
     field_14 = 0;
     field_18 = 0;
-    field_1C16 = 0;
+    m_bActivateEngine = FALSE;
     field_1C1A = 0;
 }
 

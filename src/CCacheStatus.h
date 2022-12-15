@@ -42,7 +42,7 @@ public:
     /* 1A86 */ CVidMosaic field_1A86;
     /* 1B3A */ CVidMosaic field_1B3A;
     /* 1BEE */ CCriticalSection field_1BEE;
-    /* 1C16 */ int field_1C16;
+    /* 1C16 */ BOOL m_bActivateEngine;
     /* 1C1A */ int field_1C1A;
 };
 
