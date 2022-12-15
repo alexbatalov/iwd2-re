@@ -75,6 +75,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CResCellHeader.h"
     "src/CResFile.cpp"
     "src/CResFile.h"
+    "src/CResItem.cpp"
+    "src/CResItem.h"
     "src/CResMosaic.cpp"
     "src/CResMosaic.h"
     "src/CResPLT.cpp"

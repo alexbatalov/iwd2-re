@@ -115,4 +115,91 @@ typedef struct WED_TiledObject_st {
     /* 0016 */ DWORD nOffsetToSecondaryPolys;
 } WED_TILEDOBJECT;
 
+// NOTE: This struct is V1.0, probably does not match V2.0 used in IWD2.
+typedef struct Item_Header_st {
+    /* 0000 */ DWORD nFileType;
+    /* 0004 */ DWORD nFileVersion;
+    /* 0008 */ STRREF genericName;
+    /* 000C */ STRREF identifiedName;
+    /* 0010 */ RESREF usedUpItemID;
+    /* 0018 */ DWORD itemFlags;
+    /* 001C */ WORD itemType;
+    /* 001E */ DWORD notUsableBy;
+    /* 0022 */ BYTE animationType[2];
+    /* 0024 */ WORD minLevelRequired;
+    /* 0026 */ WORD minSTRRequired;
+    /* 0028 */ BYTE minSTRBonusRequired;
+    /* 0029 */ BYTE notUsableBy2a;
+    /* 002A */ BYTE minINTRequired;
+    /* 002B */ BYTE notUsableBy2b;
+    /* 002C */ BYTE minDEXRequired;
+    /* 002D */ BYTE notUsableBy2c;
+    /* 002E */ BYTE minWISRequired;
+    /* 002F */ BYTE notUsableBy2d;
+    /* 0030 */ BYTE minCONRequired;
+    /* 0031 */ BYTE proficiencyType;
+    /* 0032 */ WORD minCHRRequired;
+    /* 0034 */ DWORD baseValue;
+    /* 0038 */ WORD maxStackable;
+    /* 003A */ RESREF itemIcon;
+    /* 0042 */ WORD loreValue;
+    /* 0044 */ RESREF groundIcon;
+    /* 004C */ DWORD baseWeight;
+    /* 0050 */ STRREF genericDescription;
+    /* 0054 */ STRREF identifiedDescription;
+    /* 0058 */ RESREF descriptionPicture;
+    /* 0060 */ DWORD attributes;
+    /* 0064 */ DWORD abilityOffset;
+    /* 0068 */ WORD abilityCount;
+    /* 006A */ DWORD effectsOffset;
+    /* 006E */ WORD equipedStartingEffect;
+    /* 0070 */ WORD equipedEffectCount;
+} ITEM_HEADER;
+
+typedef struct Item_ability_st {
+    /* 0000 */ WORD type;
+    /* 0002 */ BYTE quickSlotType;
+    /* 0003 */ BYTE largeDamageDice;
+    /* 0004 */ RESREF quickSlotIcon;
+    /* 000C */ BYTE actionType;
+    /* 000D */ BYTE actionCount;
+    /* 000E */ WORD range;
+    /* 0010 */ BYTE launcherType;
+    /* 0011 */ BYTE largeDamageDiceCount;
+    /* 0012 */ BYTE speedFactor;
+    /* 0013 */ BYTE largeDamageDiceBonus;
+    /* 0014 */ SHORT thac0Bonus;
+    /* 0016 */ BYTE damageDice;
+    /* 0017 */ BYTE school;
+    /* 0018 */ BYTE damageDiceCount;
+    /* 0019 */ BYTE secondaryType;
+    /* 001A */ SHORT damageDiceBonus;
+    /* 001C */ WORD damageType;
+    /* 001E */ WORD effectCount;
+    /* 0020 */ WORD startingEffect;
+    /* 0022 */ WORD maxUsageCount;
+    /* 0024 */ WORD usageFlags;
+    /* 0026 */ DWORD abilityFlags;
+    /* 002A */ WORD missileType;
+    /* 002C */ WORD attackProbability[6];
+} ITEM_ABILITY;
+
+typedef struct Item_effect_st {
+    /* 0000 */ WORD effectID;
+    /* 0002 */ BYTE targetType;
+    /* 0003 */ BYTE spellLevel;
+    /* 0004 */ int effectAmount;
+    /* 0008 */ DWORD dwFlags;
+    /* 000C */ WORD durationType;
+    /* 000E */ DWORD duration;
+    /* 0012 */ BYTE probabilityUpper;
+    /* 0013 */ BYTE probabilityLower;
+    /* 0014 */ RESREF res;
+    /* 001C */ DWORD numDice;
+    /* 0020 */ DWORD diceSize;
+    /* 0024 */ DWORD savingThrow;
+    /* 0028 */ LONG saveMod;
+    /* 002C */ DWORD special;
+} ITEM_EFFECT;
+
 #endif /* BALDATATYPES_H_ */
