@@ -23,3 +23,9 @@ void CCacheStatus::Init()
 {
     // TODO: Incomplete.
 }
+
+// 0x4406B0
+void CCacheStatus::Update(BOOLEAN bEnabled, LONG nProgressBarCaption, INT nBytesCopied, INT nTotalBytes, BOOLEAN bTravel, LONG nParchmentCaption, BOOLEAN bWaiting, LONG nWaitingReason, BOOLEAN bDisplayMinibars, BOOLEAN bTimeoutCounter, DWORD nSecondsToTimeout)
+{
+    // TODO: Incomplete.
+}

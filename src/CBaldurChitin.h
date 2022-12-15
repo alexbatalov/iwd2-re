@@ -115,6 +115,7 @@ public:
     /* 0044 */ virtual void GetScreenShotFilePrefix(CString& szGameFileName) override;
     /* 0054 */ BOOL FontRectOutline() override;
     /* 0058 */ BOOL InitializeServices(HWND hWnd) override;
+    /* 005C */ void SetProgressBar(BOOLEAN bEnabled, LONG nProgressBarCaption, INT nBytesCopied, INT nTotalBytes, BOOLEAN bTravel, LONG nParchmentCaption, BOOLEAN bWaiting, LONG nWaitingReason, BOOLEAN bDisplayMinibars, BOOLEAN bTimeoutCounter, DWORD nSecondsToTimeout) override;
     /* 009C */ void ShutDown(int nLineNumber, const char* szFileName, const char* text) override;
     /* 00A0 */ const char* GetIniFileName() override;
     /* 00A4 */ const char* GetKeyFileName() override;

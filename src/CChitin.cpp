@@ -967,6 +967,11 @@ void CChitin::GetScreenShotFilePrefix(CString& szGameFileName)
     szGameFileName = DEFAULT_PRINTSCREEN_FILE_NAME;
 }
 
+// 0x78E720
+void CChitin::SetProgressBar(BOOLEAN bEnabled, LONG nProgressBarCaption, INT nBytesCopied, INT nTotalBytes, BOOLEAN bTravel, LONG nParchmentCaption, BOOLEAN bWaiting, LONG nWaitingReason, BOOLEAN bDisplayMinibars, BOOLEAN bTimeoutCounter, DWORD nSecondsToTimeout)
+{
+}
+
 // 0x78E6E0
 BOOL CChitin::FontRectOutline()
 {

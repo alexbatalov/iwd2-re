@@ -14,6 +14,7 @@ public:
     ~CCacheStatus();
 
     void Init();
+    void Update(BOOLEAN bEnabled, LONG nProgressBarCaption, INT nBytesCopied, INT nTotalBytes, BOOLEAN bTravel, LONG nParchmentCaption, BOOLEAN bWaiting, LONG nWaitingReason, BOOLEAN bDisplayMinibars, BOOLEAN bTimeoutCounter, DWORD nSecondsToTimeout);
 
     /* 0004 */ int field_4;
     /* 0008 */ int field_8;

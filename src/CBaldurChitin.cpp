@@ -1408,6 +1408,33 @@ void CBaldurChitin::SaveBitsPerPixel(USHORT nBpp)
     }
 }
 
+// 0x425710
+void CBaldurChitin::SetProgressBar(BOOLEAN bEnabled, LONG nProgressBarCaption, INT nBytesCopied, INT nTotalBytes, BOOLEAN bTravel, LONG nParchmentCaption, BOOLEAN bWaiting, LONG nWaitingReason, BOOLEAN bDisplayMinibars, BOOLEAN bTimeoutCounter, DWORD nSecondsToTimeout)
+{
+    if (bEnabled == TRUE) {
+        g_pChitin->cProgressBar.m_bProgressBarActivated = TRUE;
+        g_pChitin->cProgressBar.m_bTravelActive = bTravel;
+    }
+
+    m_cCachingStatus.Update(bEnabled,
+        nProgressBarCaption,
+        nBytesCopied,
+        nTotalBytes,
+        bTravel,
+        nParchmentCaption,
+        bWaiting,
+        nWaitingReason,
+        bDisplayMinibars,
+        bTimeoutCounter,
+        nSecondsToTimeout);
+
+    if (bEnabled == FALSE) {
+        g_pChitin->cProgressBar.Initialize();
+        g_pChitin->cProgressBar.m_bProgressBarActivated = FALSE;
+        g_pChitin->cProgressBar.m_bTravelActive = bTravel;
+    }
+}
+
 // 0x422C60
 BOOL CBaldurChitin::FontRectOutline()
 {
