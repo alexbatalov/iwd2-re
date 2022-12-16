@@ -6,6 +6,17 @@ void CSound::ResetVolume()
     // TODO: Incomplete.
 }
 
+// 0x7A9AB0
+DWORD CSound::GetStatus()
+{
+    if (pSoundBuffer != NULL) {
+        DWORD dwStatus;
+        pSoundBuffer->GetStatus(&dwStatus);
+        return dwStatus;
+    }
+    return 0;
+}
+
 // NOTE: Inlined in `CSoundMixer::UpdateSoundPositions`.
 BOOL CSound::IsPlaying()
 {

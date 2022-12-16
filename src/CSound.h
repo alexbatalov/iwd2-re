@@ -13,6 +13,7 @@ public:
     void ResetVolume();
 
     BOOL IsPlaying();
+    DWORD GetStatus();
 
     BOOL GetLooping() { return m_nLooping; }
     IDirectSoundBuffer* GetBuffer() { return pSoundBuffer; }
