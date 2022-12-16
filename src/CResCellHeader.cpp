@@ -36,6 +36,38 @@ void* CResCellHeader::Demand()
     return pData;
 }
 
+// 0x77FDA0
+FRAMEENTRY* CResCellHeader::GetFrame(WORD nSequence, WORD nFrame, BOOL bDoubleSize)
+{
+    if (m_pFrameList == NULL) {
+        return NULL;
+    }
+
+    if (m_pSequences == NULL) {
+        return NULL;
+    }
+
+    if (m_pFrames == NULL) {
+        return NULL;
+    }
+
+    WORD nIndex = m_pFrameList[nFrame + m_pSequences[nSequence].nStartingFrame];
+    if (nIndex == -1) {
+        return NULL;
+    }
+
+    if (!bDoubleSize) {
+        return &(m_pFrames[nIndex]);
+    }
+
+    m_doubleSizeFrameEntry = m_pFrames[nIndex];
+    m_doubleSizeFrameEntry.nCenterX *= 2;
+    m_doubleSizeFrameEntry.nCenterY *= 2;
+    m_doubleSizeFrameEntry.nWidth *= 2;
+    m_doubleSizeFrameEntry.nHeight *= 2;
+    return &m_doubleSizeFrameEntry;
+}
+
 // 0x77FE40
 int CResCellHeader::Release()
 {
@@ -149,7 +181,7 @@ BOOL CResCellHeader::Parse(void* pData)
         memcpy(m_pSequences, pSequences, sizeof(SEQUENCEENTRY) * pBamHeader->nSequences);
     } while (0);
 
-    int nFrameListSize = 0;
+    WORD nFrameListSize = 0;
     for (BYTE nSequence = 0; nSequence < pBamHeader->nSequences; nSequence++) {
         nFrameListSize += pSequences[nSequence].nFrames;
     }

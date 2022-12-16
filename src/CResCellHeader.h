@@ -11,6 +11,7 @@ public:
     CResCellHeader();
     /* 0004 */ ~CResCellHeader() override;
     void* Demand();
+    FRAMEENTRY* GetFrame(WORD nSequence, WORD nFrame, BOOL bDoubleSize);
     int Release();
     void ResRefChange();
     BOOL Parse(void* pData);
@@ -22,6 +23,7 @@ public:
     /* 0060 */ SEQUENCEENTRY* m_pSequences;
     /* 0064 */ WORD* m_pFrameList;
     /* 0068 */ WORD m_nFrameListSize; // #guess
+    /* 006A */ FRAMEENTRY m_doubleSizeFrameEntry; // #guess
     /* 0076 */ BOOL m_bParsing;
 };
 
