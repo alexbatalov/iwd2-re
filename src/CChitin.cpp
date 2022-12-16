@@ -1055,6 +1055,18 @@ void CChitin::UnloadFonts()
     CVidFont::UnloadAllFonts();
 }
 
+// 0x78E830
+DWORD CChitin::GetCloseConfirmationFlags()
+{
+    return 0x24;
+}
+
+// 0x78E840
+void CChitin::GetCloseConfirmationStr(CString& sString)
+{
+    sString = "";
+}
+
 // 0x78E840
 void CChitin::GetGameSpyGameName(CString& sGameSpyName)
 {
@@ -1065,6 +1077,14 @@ void CChitin::GetGameSpyGameName(CString& sGameSpyName)
 void CChitin::GetGameSpyCode(CString& sGameSpyCode)
 {
     sGameSpyCode = "";
+}
+
+// 0x78E860
+void CChitin::GetPanicCDStrings(CString& sMediaRemoved, CString& sPlaceCD, CString& sInDrive)
+{
+    sMediaRemoved = "";
+    sPlaceCD = "";
+    sInDrive = "";
 }
 
 // 0x78E6E0

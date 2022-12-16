@@ -92,8 +92,11 @@ public:
     /* 00D0 */ virtual WORD GetMultiplayerGameSpyPort();
     /* 00D4 */ virtual WORD GetMultiplayerDirectPlayPort();
     /* 00D8 */ virtual void SetRenderCount(BYTE nCount);
+    /* 00DC */ virtual DWORD GetCloseConfirmationFlags();
+    /* 00E0 */ virtual void GetCloseConfirmationStr(CString& sString);
     /* 00EC */ virtual void GetGameSpyGameName(CString& sGameSpyName);
     /* 00F0 */ virtual void GetGameSpyCode(CString& sGameSpyCode);
+    /* 00F4 */ virtual void GetPanicCDStrings(CString& sMediaRemoved, CString& sPlaceCD, CString& sInDrive);
     /* 0104 */ virtual BOOL GetEAXActive();
     /* 010C */ virtual void RedrawScreen();
 
