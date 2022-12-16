@@ -1630,6 +1630,14 @@ void CBaldurChitin::GetGameSpyCode(CString& sGameSpyCode)
     }
 }
 
+// 0x4269C0
+void CBaldurChitin::GetPanicCDStrings(CString& sMediaRemoved, CString& sPlaceCD, CString& sInDrive)
+{
+    sMediaRemoved = CBaldurEngine::FetchString(20714);
+    sPlaceCD = CBaldurEngine::FetchString(20715);
+    sInDrive = CBaldurEngine::FetchString(20716);
+}
+
 // 0x426EC0
 WORD CBaldurChitin::GetMultiplayerDirectPlayPort()
 {

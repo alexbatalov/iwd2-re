@@ -142,6 +142,7 @@ public:
     /* 00E0 */ void GetCloseConfirmationStr(CString& sString) override;
     /* 00EC */ void GetGameSpyGameName(CString& sGameSpyName) override;
     /* 00F0 */ void GetGameSpyCode(CString& sGameSpyCode) override;
+    /* 00F4 */ void GetPanicCDStrings(CString& sMediaRemoved, CString& sPlaceCD, CString& sInDrive) override;
     /* 0104 */ BOOL GetEAXActive() override;
     /* 010C */ void RedrawScreen() override;
 
