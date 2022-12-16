@@ -533,7 +533,7 @@ CBaldurChitin::CBaldurChitin()
         (GetSystemMetrics(SM_CYFULLSCREEN) - CVideo::SCREENHEIGHT) / 2,
         FILE_NAME);
 
-    field_49A2 = 292;
+    m_dwCloseConfirmationFlags = 0x124;
     m_dwCloseConfirmationStrId = 20186;
     field_49AA = 0;
     field_49AB = 0;
@@ -1556,6 +1556,12 @@ void CBaldurChitin::OnMultiplayerSessionToClose()
 BOOL CBaldurChitin::FontRectOutline()
 {
     return m_bFontRectOutline;
+}
+
+// 0x422C90
+DWORD CBaldurChitin::GetCloseConfirmationFlags()
+{
+    return m_dwCloseConfirmationFlags;
 }
 
 // 0x422CA0
