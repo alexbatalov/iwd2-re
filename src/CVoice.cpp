@@ -49,6 +49,8 @@ BOOL CVoice::GetLooping()
 }
 
 // NOTE: Inlined in `CSoundMixer::UpdateSoundPositions`.
+//
+// 0x7AABF0
 BOOL CVoice::IsSoundPlaying()
 {
     if (m_pSound != NULL) {
@@ -62,6 +64,16 @@ BOOL CVoice::IsSoundPlaying()
         m_pSoundBuffer->GetStatus(&dwStatus);
         return (dwStatus & DSBSTATUS_PLAYING) != 0;
     }
+}
+
+// 0x7AAC70
+int CVoice::GetChannel()
+{
+    if (m_pSound != NULL) {
+        return m_pSound->m_nChannel;
+    }
+
+    return m_nChannel;
 }
 
 // NOTE: Inlined in `CSoundMixer::UpdateSoundPositions`.

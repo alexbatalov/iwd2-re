@@ -19,6 +19,7 @@ public:
     void SetSound(CSound* pSound);
     BOOL GetLooping();
     BOOL IsSoundPlaying();
+    int GetChannel();
     void ResetVolume();
 
     /* 0004 */ CSound* m_pSound;
