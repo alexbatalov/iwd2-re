@@ -28,3 +28,13 @@ BOOL CSound::IsPlaying()
         return FALSE;
     }
 }
+
+// 0x7AA710
+void CSound::SetRange(int nNewRange)
+{
+    if (nNewRange > 0) {
+        m_nRange = nNewRange;
+    } else {
+        m_nRange = 1;
+    }
+}

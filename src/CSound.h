@@ -14,10 +14,12 @@ public:
 
     BOOL IsPlaying();
     DWORD GetStatus();
+    void SetRange(int nNewRange);
 
     BOOL GetLooping() { return m_nLooping; }
     IDirectSoundBuffer* GetBuffer() { return pSoundBuffer; }
 
+    /* 0020 */ int m_nRange; // #guess
     /* 0040 */ int m_nChannel; // #guess
     /* 0044 */ int m_nPriority; // #guess
     /* 0048 */ int m_nLooping; // #guess
