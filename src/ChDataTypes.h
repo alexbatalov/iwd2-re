@@ -62,4 +62,17 @@ typedef struct {
     DWORD nStrEntriesOffset;
 } TLK_FILE_HEADER;
 
+typedef struct mosHeader_st {
+    DWORD nFileType;
+    DWORD nFileVersion;
+    WORD nWidth;
+    WORD nHeight;
+    WORD nXTiles;
+    WORD nYTiles;
+    WORD nTileSize;
+    BYTE nTransparentColor;
+    BYTE nCompressed;
+    DWORD nPaletteOffset;
+} MOSAICHEADER;
+
 #endif /* CHDATATYPES_H_ */
