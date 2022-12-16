@@ -10,9 +10,9 @@ class CResMosaic : public CRes {
 public:
     CResMosaic();
     /* 0004 */ ~CResMosaic() override;
-    WORD GetMosaicWidth(BOOL a2);
-    WORD GetMosaicHeight(BOOL a2);
-    WORD GetTileSize(BOOL a2);
+    WORD GetMosaicWidth(BOOL bDoubleSize);
+    WORD GetMosaicHeight(BOOL bDoubleSize);
+    WORD GetTileSize(BOOL bDoubleSize);
     RGBQUAD* GetTilePalette(UINT nTile);
     void* Demand();
     int Release();

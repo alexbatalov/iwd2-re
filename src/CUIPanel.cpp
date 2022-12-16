@@ -45,7 +45,7 @@ CUIPanel::CUIPanel(CUIManager* manager, UI_PANELHEADER* panelInfo)
 
     if (panelInfo->nType == 1) {
         field_3E.SetResRef(CResRef(panelInfo->refMosaic), FALSE, TRUE);
-        field_3E.field_B0 = m_pManager->field_AA;
+        field_3E.m_bDoubleSize = m_pManager->field_AA;
     }
 }
 

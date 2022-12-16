@@ -18,9 +18,9 @@ CResMosaic::~CResMosaic()
 }
 
 // 0x780310
-WORD CResMosaic::GetMosaicWidth(BOOL a2)
+WORD CResMosaic::GetMosaicWidth(BOOL bDoubleSize)
 {
-    if (a2) {
+    if (bDoubleSize) {
         return 2 * m_pHeader->nWidth;
     }
 
@@ -28,9 +28,9 @@ WORD CResMosaic::GetMosaicWidth(BOOL a2)
 }
 
 // 0x780340
-WORD CResMosaic::GetMosaicHeight(BOOL a2)
+WORD CResMosaic::GetMosaicHeight(BOOL bDoubleSize)
 {
-    if (a2) {
+    if (bDoubleSize) {
         return 2 * m_pHeader->nHeight;
     }
 
@@ -38,9 +38,9 @@ WORD CResMosaic::GetMosaicHeight(BOOL a2)
 }
 
 // 0x780340
-WORD CResMosaic::GetTileSize(BOOL a2)
+WORD CResMosaic::GetTileSize(BOOL bDoubleSize)
 {
-    if (a2) {
+    if (bDoubleSize) {
         return 2 * m_pHeader->nTileSize;
     }
 

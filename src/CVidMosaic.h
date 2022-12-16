@@ -8,8 +8,9 @@ class CVidMosaic : public CVidImage, public CResHelper<CResMosaic, 1004> {
 public:
     CVidMosaic();
     ~CVidMosaic();
+    void GetSize(CSize& frameSize, BOOL a3);
 
-    /* 00B0 */ int field_B0;
+    /* 00B0 */ BOOL m_bDoubleSize;
 };
 
 #endif /* CVIDMOSAIC_H_ */
