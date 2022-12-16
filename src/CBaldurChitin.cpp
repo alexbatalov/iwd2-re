@@ -534,7 +534,7 @@ CBaldurChitin::CBaldurChitin()
         FILE_NAME);
 
     field_49A2 = 292;
-    field_49A6 = 20186;
+    m_dwCloseConfirmationStrId = 20186;
     field_49AA = 0;
     field_49AB = 0;
     field_49B0 = 0;
@@ -1556,6 +1556,12 @@ void CBaldurChitin::OnMultiplayerSessionToClose()
 BOOL CBaldurChitin::FontRectOutline()
 {
     return m_bFontRectOutline;
+}
+
+// 0x422CA0
+void CBaldurChitin::GetCloseConfirmationStr(CString& sString)
+{
+    sString = CBaldurEngine::FetchString(m_dwCloseConfirmationStrId);
 }
 
 // 0x422C60

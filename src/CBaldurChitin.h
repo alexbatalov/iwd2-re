@@ -138,6 +138,7 @@ public:
     /* 00D0 */ WORD GetMultiplayerGameSpyPort() override;
     /* 00D4 */ WORD GetMultiplayerDirectPlayPort() override;
     /* 00D8 */ void SetRenderCount(BYTE nCount) override;
+    /* 00E0 */ void GetCloseConfirmationStr(CString& sString) override;
     /* 00EC */ void GetGameSpyGameName(CString& sGameSpyName) override;
     /* 00F0 */ void GetGameSpyCode(CString& sGameSpyCode) override;
     /* 0104 */ BOOL GetEAXActive() override;
@@ -173,7 +174,7 @@ public:
     /* 4980 */ CMessageHandler m_cMessageHandler;
     /* 499E */ BOOL m_bFontRectOutline;
     /* 49A2 */ int field_49A2;
-    /* 49A6 */ int field_49A6;
+    /* 49A6 */ DWORD m_dwCloseConfirmationStrId; // #guess
     /* 49AA */ unsigned char field_49AA;
     /* 49AB */ unsigned char field_49AB;
     /* 49B0 */ unsigned char field_49B0;
