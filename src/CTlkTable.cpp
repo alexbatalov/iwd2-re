@@ -47,6 +47,14 @@ BOOL CTlkTable::AddTlkFile(const CString& filePath, BYTE a3, BYTE a4, BOOLEAN a5
     return TRUE;
 }
 
+// 0x7941D0
+BOOLEAN CTlkTable::Fetch(DWORD dwStrId, STR_RES& strRes)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x794190
 BOOL CTlkTable::CloseFile(BYTE a2, BYTE a3)
 {

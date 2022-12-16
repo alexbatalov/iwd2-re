@@ -5,6 +5,12 @@
 
 #include "CTlkFileOverride.h"
 #include "ChDataTypes.h"
+#include "CSound.h"
+
+typedef struct {
+    CString szText;
+    CSound cSound;
+} STR_RES;
 
 extern unsigned char byte_8FB954;
 
@@ -24,6 +30,7 @@ public:
     ~CTlkTable();
     BOOL AddTlkFile(const CString& filePath, BYTE a3, BYTE a4, BOOLEAN a5);
     BOOL CloseFile(BYTE a2, BYTE a3);
+    BOOLEAN Fetch(DWORD dwStrId, STR_RES& strRes);
     BOOL OpenFile(BYTE a2, BYTE a3);
 
     CTypedPtrMap<CMapWordToPtr, USHORT, CTlkFile*> field_0;

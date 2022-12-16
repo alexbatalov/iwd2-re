@@ -566,6 +566,16 @@ void CBaldurEngine::CheckEnablePortaits(DWORD dwPanelId)
     }
 }
 
+// 0x427B60
+CString CBaldurEngine::FetchString(DWORD dwStrId)
+{
+    STR_RES strRes;
+    if (!g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes)) {
+        strRes.szText = "";
+    }
+    return strRes.szText;
+}
+
 // 0x428240
 void CBaldurEngine::UpdateCharacterStatus(LONG nCharacterId)
 {
