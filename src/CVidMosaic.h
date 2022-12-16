@@ -9,6 +9,7 @@ public:
     CVidMosaic();
     ~CVidMosaic();
     void GetSize(CSize& frameSize, BOOL a3);
+    int GetTileNumber(int x, int y);
 
     /* 00B0 */ BOOL m_bDoubleSize;
 };

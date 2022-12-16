@@ -33,3 +33,9 @@ void CVidMosaic::GetSize(CSize& frameSize, BOOL a3)
         pRes->Release();
     }
 }
+
+// 0x7B1670
+int CVidMosaic::GetTileNumber(int x, int y)
+{
+    return pRes->m_pHeader->nXTiles * (y / pRes->GetTileSize(m_bDoubleSize)) + x / pRes->GetTileSize(m_bDoubleSize);
+}
