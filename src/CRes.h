@@ -48,7 +48,7 @@ public:
     /* 0010 */ CDimmKeyTableEntry* m_pDimmKeyTableEntry; // #guess
     /* 0014 */ int field_14;
     /* 0018 */ int field_18;
-    /* 001C */ int m_nResSizeActual;
+    /* 001C */ DWORD m_nResSizeActual;
     /* 0020 */ CCriticalSection field_20;
     /* 0040 */ int field_40;
     /* 0044 */ int field_44;
