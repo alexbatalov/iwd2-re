@@ -75,4 +75,28 @@ typedef struct mosHeader_st {
     DWORD nPaletteOffset;
 } MOSAICHEADER;
 
+typedef struct bamHeader_st {
+    DWORD nFileType;
+    DWORD nFileVersion;
+    WORD nFrames;
+    BYTE nSequences;
+    BYTE nTransparentColor;
+    DWORD nTableOffset;
+    DWORD nPaletteOffset;
+    DWORD nFrameListOffset;
+} BAMHEADER;
+
+typedef struct frameTableEntry_st {
+    WORD nWidth;
+    WORD nHeight;
+    short nCenterX;
+    short nCenterY;
+    DWORD nOffset;
+} FRAMEENTRY;
+
+typedef struct sequenceTableEntry_st {
+    SHORT nFrames;
+    WORD nStartingFrame;
+} SEQUENCEENTRY;
+
 #endif /* CHDATATYPES_H_ */

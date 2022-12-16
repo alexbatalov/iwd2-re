@@ -3,8 +3,8 @@
 
 #include "mfc.h"
 
-#include "ChDataTypes.h"
 #include "CRes.h"
+#include "ChDataTypes.h"
 
 class CResMosaic : public CRes {
 public:

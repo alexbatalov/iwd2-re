@@ -11,7 +11,7 @@ CRes::CRes()
     m_nID = 0;
     field_44 = 0;
     field_14 = 0;
-    field_1C = 0;
+    m_nResSizeActual = 0;
     m_pData = NULL;
     m_pDimmKeyTableEntry = NULL;
     m_pCurrentList = NULL;
@@ -23,7 +23,7 @@ CRes::CRes()
 // 0x77E2F0
 CRes::~CRes()
 {
-    field_1C = 0;
+    m_nResSizeActual = 0;
     g_pChitin->cDimm.Dump(this, 1, 0);
 }
 
@@ -69,7 +69,7 @@ void* CRes::Demand()
 // 0x77E520
 int CRes::Dump(int a2)
 {
-    field_1C = 0;
+    m_nResSizeActual = 0;
     return g_pChitin->cDimm.Dump(this, a2, 0);
 }
 
@@ -126,7 +126,7 @@ int CRes::Request()
 void CRes::SetID(RESID nNewID)
 {
     if (m_nID != 0) {
-        field_1C = 0;
+        m_nResSizeActual = 0;
         g_pChitin->cDimm.Dump(this, 0, 0);
         m_nID = nNewID;
     } else {
