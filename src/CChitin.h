@@ -46,6 +46,9 @@ public:
     void EnginesGameUninit();
     CString GetFontName();
 
+    // NOTE: Inlined in `CVidInf::SetClipper`.
+    BOOL FullScreen() { return m_bFullscreen; }
+
     /* 0000 */ virtual void SynchronousUpdate();
     /* 0004 */ virtual int InitApplication(HINSTANCE hInstance, int nShowCmd);
     /* 0008 */ virtual DWORD GetIDSInvalidVideoMode();
