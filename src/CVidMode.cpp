@@ -81,7 +81,7 @@ CVidMode::~CVidMode()
 
 // #binary-identical
 // 0x799E50
-int CVidMode::GetTransparentColor()
+COLORREF CVidMode::GetTransparentColor()
 {
     return 65280;
 }

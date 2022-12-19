@@ -95,7 +95,7 @@ public:
     /* 00D0 */ virtual BOOL GetFXSize(CSize& size);
     /* 00D4 */ virtual RGBQUAD* GetPalette();
     /* 00D8 */ virtual CVidCell* GetPointer();
-    /* 00DC */ virtual int GetTransparentColor();
+    /* 00DC */ virtual COLORREF GetTransparentColor();
     /* 00E0 */ virtual int GetType();
     /* 00E4 */ virtual int GetNumVRamSurfaces();
     /* 00E8 */ virtual void LoadFogOWarSurfaces(const CString& a2);
