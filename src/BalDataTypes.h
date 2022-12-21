@@ -40,6 +40,11 @@ typedef struct UI_Control_st {
     /* 000C */ WORD nType;
 } UI_CONTROL;
 
+// TODO: Incomplete.
+typedef struct UI_Control_Button_st {
+    UI_CONTROL base;
+} UI_CONTROL_BUTTON;
+
 typedef struct WED_WedHeader_st {
     /* 0000 */ DWORD nFileType;
     /* 0004 */ DWORD nFileVersion;

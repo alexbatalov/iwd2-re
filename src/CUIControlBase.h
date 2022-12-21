@@ -9,6 +9,10 @@ class CUIPanel;
 
 class CUIControlBase {
 public:
+    static const BYTE byte_84C89C;
+    static const BYTE byte_84C89D;
+    static const BYTE byte_84C89E;
+
     static CUIControlBase* CreateControl(CUIPanel* pPanel, UI_CONTROL* controlInfo);
 
     CUIControlBase(CUIPanel* pPanel, UI_CONTROL* controlInfo, int a4);
