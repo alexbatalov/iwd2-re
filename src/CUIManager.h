@@ -34,7 +34,7 @@ public:
 
     /* 0000 */ int field_0;
     /* 0004 */ BOOL m_bInitialized;
-    /* 0008 */ CResRef field_8;
+    /* 0008 */ CResRef m_cResRef;
     /* 0010 */ CWarp* m_pWarp; // #guess
     /* 0014 */ CUIControlBase* m_pFocusedControl; // #guess
     /* 0018 */ int field_18;

@@ -41,7 +41,7 @@ CUIManager::~CUIManager()
 void CUIManager::fInit(CWarp* pWarp, CResRef cResRef, BOOL a5)
 {
     if (m_bInitialized != TRUE) {
-        field_8 = cResRef;
+        m_cResRef = cResRef;
         m_pWarp = pWarp;
         field_0 = 0;
         m_pFocusedControl = NULL;
