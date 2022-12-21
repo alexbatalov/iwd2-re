@@ -1,10 +1,12 @@
 #include "CUIManager.h"
 
 #include "CBaldurChitin.h"
-#include "CBaldurEngine.h"
 #include "CInfGame.h"
+#include "CResUI.h"
 #include "CUIControlBase.h"
 #include "CUIPanel.h"
+#include "CUtil.h"
+#include "CWarp.h"
 
 // 0x4D39B0
 CUIManager::CUIManager()
@@ -12,10 +14,10 @@ CUIManager::CUIManager()
     field_18 = 1;
     field_2E = 1;
     field_2D = 1;
-    m_pEngine = NULL;
+    m_pWarp = NULL;
     field_2C = 0;
     field_0 = 0;
-    field_4 = 0;
+    m_bInitialized = FALSE;
     m_pFocusedControl = NULL;
     field_1C = 0;
     field_20 = 0;
@@ -32,7 +34,71 @@ CUIManager::CUIManager()
 // 0x4D3AB0
 CUIManager::~CUIManager()
 {
-    if (field_4 != 0) {
+    fUninit();
+}
+
+// 0x4D3B80
+void CUIManager::fInit(CWarp* pWarp, CResRef cResRef, BOOL a5)
+{
+    if (m_bInitialized != TRUE) {
+        field_8 = cResRef;
+        m_pWarp = pWarp;
+        field_0 = 0;
+        m_pFocusedControl = NULL;
+        field_18 = 1;
+        field_1C = 0;
+        field_20 = 0;
+        field_24 = 0;
+        field_28 = 0;
+        field_2E = 1;
+        field_2D = 1;
+        field_32 = -1;
+        field_76 = 0;
+        field_7A.SetRect(0, 0, 0, 0);
+        field_8A.SetRect(0, 0, 0, 0);
+        field_9A.SetRect(0, 0, 0, 0);
+
+        CResUI* pRes = static_cast<CResUI*>(g_pChitin->cDimm.GetResObject(cResRef, 1002, TRUE));
+        if (pRes->Demand() != NULL) {
+            field_AA = a5;
+
+            int nPanels = pRes->GetPanelNo();
+            for (int nPanel = 0; nPanel < nPanels; nPanel++) {
+                if ((pRes->GetPanel(nPanel)->wFlags & 2) == 0) {
+                    CUIPanel* pPanel = new CUIPanel(this, pRes->GetPanel(nPanel));
+                    if (pPanel == NULL) {
+                        return;
+                    }
+
+                    m_lPanels.AddTail(pPanel);
+
+                    int nControls = pRes->GetControlNo(nPanel);
+                    for (int nControl = 0; nControl < nControls; nControl++) {
+                        UI_CONTROL* controlInfo = pRes->GetControl(nPanel, nControl);
+
+                        // __FILE__: C:\Projects\Icewind2\src\Baldur\ChUI.cpp
+                        // __LINE__: 447
+                        UTIL_ASSERT(controlInfo != NULL);
+
+                        CUIControlBase* pControl = CUIControlBase::CreateControl(pPanel, controlInfo);
+                        if (pControl != NULL) {
+                            pPanel->m_lControls.AddTail(pControl);
+                        }
+                    }
+                }
+            }
+
+            m_bInitialized = TRUE;
+            pRes->Release();
+            g_pChitin->cDimm.ReleaseResObject(pRes);
+        }
+    }
+}
+
+// NOTE: Inlined in destructor.
+void CUIManager::fUninit()
+{
+    if (m_bInitialized) {
         POSITION pos = m_lPanels.GetHeadPosition();
         while (pos != NULL) {
             CUIPanel* panel = m_lPanels.GetNext(pos);
@@ -41,14 +107,14 @@ CUIManager::~CUIManager()
             }
         }
         m_lPanels.RemoveAll();
-        field_4 = 0;
+        m_bInitialized = FALSE;
     }
 }
 
 // 0x4D3DE0
 void CUIManager::AddPanel(UI_PANELHEADER* panelInfo)
 {
-    if (field_4 != 0) {
+    if (m_bInitialized) {
         if (panelInfo->nWidth != 0 && panelInfo->nHeight != 0) {
             CUIPanel* pPanel = new CUIPanel(this, panelInfo);
             if (pPanel != NULL) {
@@ -61,7 +127,7 @@ void CUIManager::AddPanel(UI_PANELHEADER* panelInfo)
 // 0x4D3E70
 void CUIManager::ReorderPanelAfter(DWORD nID1, DWORD nID2)
 {
-    if (field_4) {
+    if (m_bInitialized) {
         // NOTE: Uninline.
         CUIPanel* pPanel1 = GetPanel(nID1);
         if (pPanel1 != NULL) {
@@ -78,7 +144,7 @@ void CUIManager::ReorderPanelAfter(DWORD nID1, DWORD nID2)
 // 0x4D4000
 CUIPanel* CUIManager::GetPanel(DWORD nID)
 {
-    if (field_4 != 0) {
+    if (m_bInitialized) {
         POSITION pos = m_lPanels.GetHeadPosition();
         while (pos != NULL) {
             CUIPanel* pPanel = m_lPanels.GetNext(pos);
@@ -175,7 +241,7 @@ void CUIManager::Render()
     CSingleLock renderLock(&field_36, FALSE);
     renderLock.Lock(INFINITE);
 
-    if (field_4 != 0) {
+    if (m_bInitialized) {
         if (field_18 != 0) {
             if (field_0 == 0) {
                 POSITION pos = m_lPanels.GetHeadPosition();
@@ -193,7 +259,7 @@ void CUIManager::Render()
 // 0x4D45E0
 void CUIManager::InvalidateRect(const CRect* rect)
 {
-    if (field_4 != 0) {
+    if (m_bInitialized) {
         if (field_18 != 0) {
             POSITION pos = m_lPanels.GetHeadPosition();
             while (pos != NULL) {

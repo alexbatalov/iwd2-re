@@ -156,7 +156,7 @@ CUIControlBase* CUIPanel::GetControl(DWORD nID)
 BOOL CUIPanel::IsOver(const CPoint& pt)
 {
     CRect rect(m_ptOrigin, m_size);
-    m_pManager->m_pEngine->NormalizePanelRect(m_nID, rect);
+    m_pManager->m_pWarp->NormalizePanelRect(m_nID, rect);
     return rect.PtInRect(pt);
 }
 

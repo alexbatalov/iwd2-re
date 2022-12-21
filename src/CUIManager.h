@@ -1,21 +1,21 @@
 #ifndef CUIMANAGER_H_
 #define CUIMANAGER_H_
 
-#include <afx.h>
-#include <afxmt.h>
-#include <afxtempl.h>
+#include "mfc.h"
 
 #include "BalDataTypes.h"
 #include "CResRef.h"
 
-class CBaldurEngine;
 class CUIControlBase;
 class CUIPanel;
+class CWarp;
 
 class CUIManager {
 public:
     CUIManager();
     ~CUIManager();
+    void fInit(CWarp* pWarp, CResRef cResRef, BOOL a5);
+    void fUninit();
     void AddPanel(UI_PANELHEADER* panelInfo);
     void ReorderPanelAfter(DWORD nID1, DWORD nID2);
     CUIPanel* GetPanel(DWORD nID);
@@ -33,9 +33,9 @@ public:
     void ShiftPanels(const CPoint& pt);
 
     /* 0000 */ int field_0;
-    /* 0004 */ int field_4;
+    /* 0004 */ BOOL m_bInitialized;
     /* 0008 */ CResRef field_8;
-    /* 0010 */ CBaldurEngine* m_pEngine; // #guess
+    /* 0010 */ CWarp* m_pWarp; // #guess
     /* 0014 */ CUIControlBase* m_pFocusedControl; // #guess
     /* 0018 */ int field_18;
     /* 001C */ int field_1C;
