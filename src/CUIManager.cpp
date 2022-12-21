@@ -1,10 +1,10 @@
 #include "CUIManager.h"
 
 #include "CBaldurChitin.h"
+#include "CBaldurEngine.h"
 #include "CInfGame.h"
 #include "CUIControlBase.h"
 #include "CUIPanel.h"
-#include "CWarp.h"
 
 // 0x4D39B0
 CUIManager::CUIManager()
@@ -12,7 +12,7 @@ CUIManager::CUIManager()
     field_18 = 1;
     field_2E = 1;
     field_2D = 1;
-    m_pWarp = NULL;
+    m_pEngine = NULL;
     field_2C = 0;
     field_0 = 0;
     field_4 = 0;

@@ -8,9 +8,9 @@
 #include "BalDataTypes.h"
 #include "CResRef.h"
 
+class CBaldurEngine;
 class CUIControlBase;
 class CUIPanel;
-class CWarp;
 
 class CUIManager {
 public:
@@ -35,7 +35,7 @@ public:
     /* 0000 */ int field_0;
     /* 0004 */ int field_4;
     /* 0008 */ CResRef field_8;
-    /* 0010 */ CWarp* m_pWarp; // #guess
+    /* 0010 */ CBaldurEngine* m_pEngine; // #guess
     /* 0014 */ CUIControlBase* m_pFocusedControl; // #guess
     /* 0018 */ int field_18;
     /* 001C */ int field_1C;

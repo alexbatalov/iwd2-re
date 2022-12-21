@@ -1,9 +1,9 @@
 #include "CUIPanel.h"
 
+#include "CBaldurEngine.h"
 #include "CUIControlBase.h"
 #include "CUIManager.h"
 #include "CUtil.h"
-#include "CWarp.h"
 
 // 0x4D2750
 CUIPanel::CUIPanel(CUIManager* manager, UI_PANELHEADER* panelInfo)
@@ -156,7 +156,7 @@ CUIControlBase* CUIPanel::GetControl(DWORD nID)
 BOOL CUIPanel::IsOver(const CPoint& pt)
 {
     CRect rect(m_ptOrigin, m_size);
-    m_pManager->m_pWarp->NormalizePanelRect(m_nID, rect);
+    m_pManager->m_pEngine->NormalizePanelRect(m_nID, rect);
     return rect.PtInRect(pt);
 }
 
