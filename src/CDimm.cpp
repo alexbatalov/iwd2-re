@@ -724,9 +724,9 @@ BOOL CDimm::GetResFileName(UINT nIndex, CString& sResFileName, USHORT& nResType,
 }
 
 // 0x786DF0
-CRes* CDimm::GetResObject(const CResRef& cResRef, USHORT nResType, BOOLEAN a3)
+CRes* CDimm::GetResObject(const CResRef& cResRef, USHORT nResType, BOOL bWarningIfMissing)
 {
-    CDimmKeyTableEntry* pKey = m_cKeyTable.FindKey(cResRef, nResType, a3);
+    CDimmKeyTableEntry* pKey = m_cKeyTable.FindKey(cResRef, nResType, bWarningIfMissing);
     if (pKey == NULL) {
         return NULL;
     }

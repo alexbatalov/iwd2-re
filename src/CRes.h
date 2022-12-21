@@ -59,7 +59,7 @@ public:
 template <class T, int nType>
 class CResHelper {
 public:
-    /* 0000 */ int field_0;
+    /* 0000 */ BOOL bLoading;
     /* 0004 */ T* pRes;
     /* 0008 */ CResRef cResRef;
 
@@ -67,15 +67,15 @@ public:
     {
         pRes = NULL;
         cResRef = "";
-        field_0 = 0;
+        bLoading = FALSE;
     }
 
     ~CResHelper()
     {
         if (pRes != NULL && cResRef != "") {
-            if (field_0) {
+            if (bLoading) {
                 (static_cast<CRes*>(pRes))->CancelRequest();
-                field_0 = 0;
+                bLoading = FALSE;
             }
             g_pChitin->cDimm.ReleaseResObject(pRes);
         }
@@ -84,24 +84,28 @@ public:
 
     void SetResRef(const CResRef& cNewResRef, BOOL bSetAutoRequest, BOOL bWarningIfMissing)
     {
-        if (cResRef != cNewResRef && cResRef != "") {
-            if (field_0) {
+        if (cResRef != cNewResRef) {
+            if (pRes != NULL && cResRef != "" && bLoading) {
                 (static_cast<CRes*>(pRes))->CancelRequest();
             }
-        }
 
-        if (cNewResRef != "") {
-            T* pNewRes = static_cast<T*>(g_pChitin->cDimm.GetResObject(cNewResRef, nType, TRUE));
-            if (pNewRes != NULL) {
-                pRes = pNewRes;
-                cResRef = cNewResRef;
+            if (cNewResRef != "") {
+                T* pNewRes = static_cast<T*>(g_pChitin->cDimm.GetResObject(cNewResRef, nType, bWarningIfMissing));
+                if (pNewRes != NULL) {
+                    pRes = pNewRes;
+                    if (bSetAutoRequest) {
+                        bLoading = TRUE;
+                        static_cast<CRes*>(pNewRes)->Request();
+                    }
+                    cResRef = cNewResRef;
+                } else {
+                    pRes = NULL;
+                    cResRef = "";
+                }
             } else {
                 pRes = NULL;
                 cResRef = "";
             }
-        } else {
-            pRes = NULL;
-            cResRef = "";
         }
     }
 };

@@ -36,7 +36,7 @@ public:
     BOOL BuildNewTable(int a2);
     void DestroyTable(CDimm* dimm);
     BOOL ExtendTable();
-    CDimmKeyTableEntry* FindKey(const CResRef& resRef, USHORT nResType, BOOL a4);
+    CDimmKeyTableEntry* FindKey(const CResRef& resRef, USHORT nResType, BOOL bWarningIfMissing);
     unsigned int Hash(const CResRef& a2, int a3);
     void RemoveNonUpdatedEntries();
     void RescanDirectoryNumberAndName(int nDirNumber, const CString& sDirName);

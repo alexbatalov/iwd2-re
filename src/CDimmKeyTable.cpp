@@ -153,7 +153,7 @@ BOOL CDimmKeyTable::ExtendTable()
 }
 
 // 0x78B410
-CDimmKeyTableEntry* CDimmKeyTable::FindKey(const CResRef& resRef, USHORT nResType, BOOL a4)
+CDimmKeyTableEntry* CDimmKeyTable::FindKey(const CResRef& resRef, USHORT nResType, BOOL bWarningIfMissing)
 {
     BOOL done = FALSE;
 
@@ -170,7 +170,7 @@ CDimmKeyTableEntry* CDimmKeyTable::FindKey(const CResRef& resRef, USHORT nResTyp
         }
 
         if (m_pEntries[k].resRef == "") {
-            if (a4) {
+            if (bWarningIfMissing) {
                 // TODO: Some kind of unused error logging code.
             }
             return NULL;
