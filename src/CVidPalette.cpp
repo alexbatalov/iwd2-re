@@ -16,6 +16,12 @@ const USHORT CVidPalette::TYPE_RESOURCE = 0;
 // 0x85E84A
 const USHORT CVidPalette::TYPE_RANGE = 1;
 
+// 0x85E84E
+const USHORT CVidPalette::NUM_RANGES = 7;
+
+// 0x85E856
+const BYTE CVidPalette::LIGHT_SCALE = 3;
+
 // #binary-identical
 // 0x7BEEA0
 CVidPalette::CVidPalette(USHORT nType)

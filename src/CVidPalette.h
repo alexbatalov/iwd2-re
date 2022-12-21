@@ -18,7 +18,6 @@ typedef struct {
 
 class CVidPalette {
 public:
-
     CVidPalette(USHORT nType = TYPE_RESOURCE);
     ~CVidPalette();
     void SetType(USHORT nType);
@@ -31,6 +30,8 @@ public:
     static const RGBQUAD SHADOW_RGBQUAD;
     static const USHORT TYPE_RESOURCE;
     static const USHORT TYPE_RANGE;
+    static const USHORT NUM_RANGES;
+    static const BYTE LIGHT_SCALE;
 
     int m_nAUCounter;
     int m_nAUCounterBase;
