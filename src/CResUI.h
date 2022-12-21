@@ -16,6 +16,7 @@ public:
     int GetPanelNo();
     UI_CONTROL* GetControl(UINT nPanel, UINT nControl);
     int GetControlNo(UINT nPanel);
+    int Release();
 
     /* 0050 */ UI_HEADER* m_pHeader;
     /* 0054 */ UI_PANELHEADER* m_pPanels;

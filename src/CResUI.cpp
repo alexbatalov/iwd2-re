@@ -92,3 +92,16 @@ int CResUI::GetControlNo(UINT nPanel)
 
     return m_pPanels[nPanel].nControls;
 }
+
+// 0x401BA0
+int CResUI::Release()
+{
+    int rc = CRes::Release();
+    if (GetDemands() <= 0) {
+        m_bParsed = FALSE;
+        m_pHeader = NULL;
+        m_pPanels = NULL;
+        m_pControlTable = NULL;
+    }
+    return rc;
+}
