@@ -171,6 +171,8 @@ public:
     /* 0114 */ virtual void SetChatEditBoxStatus(const CString& sChatText, BOOL bInputCapture);
     /* 0118 */ virtual BOOL StopMusic();
 
+    void PlayGUISound(const CResRef& cResRef);
+
     static CString FetchString(DWORD dwStrId);
 
     /* 0028 */ int m_nSelectedCharacter;

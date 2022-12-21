@@ -576,6 +576,15 @@ CString CBaldurEngine::FetchString(DWORD dwStrId)
     return strRes.szText;
 }
 
+// 0x4281B0
+void CBaldurEngine::PlayGUISound(const CResRef& cResRef)
+{
+    CSound cSound(cResRef, 0, 0, 0, INT_MAX, FALSE);
+    cSound.SetFireForget(TRUE);
+    cSound.SetChannel(5, 0);
+    cSound.Play(FALSE);
+}
+
 // 0x428240
 void CBaldurEngine::UpdateCharacterStatus(LONG nCharacterId)
 {
