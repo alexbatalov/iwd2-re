@@ -207,4 +207,68 @@ typedef struct Item_effect_st {
     /* 002C */ DWORD special;
 } ITEM_EFFECT;
 
+typedef struct Spell_Header_st {
+    /* 0000 */ DWORD nFileType;
+    /* 0004 */ DWORD nFileVersion;
+    /* 0008 */ STRREF genericName;
+    /* 000C */ STRREF identifiedName;
+    /* 0010 */ RESREF usedUpItemID;
+    /* 0018 */ DWORD itemFlags;
+    /* 001C */ WORD itemType;
+    /* 001E */ DWORD notUsableBy;
+    /* 0022 */ WORD castingAnimationType;
+    /* 0024 */ BYTE minLevelRequired;
+    /* 0025 */ BYTE school;
+    /* 0026 */ BYTE minSTRRequired;
+    /* 0027 */ BYTE secondaryType;
+    /* 0028 */ BYTE minSTRBonusRequired;
+    /* 0029 */ BYTE notUsableBy2a;
+    /* 002A */ BYTE minINTRequired;
+    /* 002B */ BYTE notUsableBy2b;
+    /* 002C */ BYTE minDEXRequired;
+    /* 002D */ BYTE notUsableBy2c;
+    /* 002E */ BYTE minWISRequired;
+    /* 002F */ BYTE notUsableBy2d;
+    /* 0030 */ WORD minCONRequired;
+    /* 0032 */ WORD minCHRRequired;
+    /* 0034 */ DWORD spellLevel;
+    /* 0038 */ WORD maxStackable;
+    /* 003A */ RESREF itemIcon;
+    /* 0042 */ WORD loreValue;
+    /* 0044 */ RESREF groundIcon;
+    /* 004C */ DWORD baseWeight;
+    /* 0050 */ STRREF genericDescription;
+    /* 0054 */ STRREF identifiedDescription;
+    /* 0058 */ RESREF descriptionPicture;
+    /* 0060 */ DWORD attributes;
+    /* 0064 */ DWORD abilityOffset;
+    /* 0068 */ WORD abilityCount;
+    /* 006A */ DWORD effectsOffset;
+    /* 006E */ WORD castingStartingEffect;
+    /* 0070 */ WORD castingEffectCount;
+    /* 0072 */ BYTE field_72;
+    /* 0073 */ BYTE field_73;
+} SPELL_HEADER;
+
+typedef struct Spell_ability_st {
+    /* 0000 */ WORD type;
+    /* 0002 */ WORD quickSlotType;
+    /* 0004 */ RESREF quickSlotIcon;
+    /* 000C */ BYTE actionType;
+    /* 000D */ BYTE actionCount;
+    /* 000E */ WORD range;
+    /* 0010 */ WORD minCasterLevel;
+    /* 0012 */ WORD speedFactor;
+    /* 0014 */ WORD timesPerDay;
+    /* 0016 */ WORD damageDice;
+    /* 0018 */ WORD damageDiceCount;
+    /* 001A */ WORD damageDiceBonus;
+    /* 001C */ WORD damageType;
+    /* 001E */ WORD effectCount;
+    /* 0020 */ WORD startingEffect;
+    /* 0022 */ WORD maxUsageCount;
+    /* 0024 */ WORD usageFlags;
+    /* 0026 */ WORD missileType;
+} SPELL_ABILITY;
+
 #endif /* BALDATATYPES_H_ */

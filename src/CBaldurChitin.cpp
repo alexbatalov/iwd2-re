@@ -6,6 +6,7 @@
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CResItem.h"
+#include "CResSpell.h"
 #include "CResUI.h"
 #include "CResWED.h"
 #include "CScreenChapter.h"
@@ -745,6 +746,8 @@ CRes* CBaldurChitin::AllocResObject(int nType)
         return new CResUI();
     case 1005:
         return new CResItem();
+    case 1006:
+        return new CResSpell();
     default:
         return CChitin::AllocResObject(nType);
     }

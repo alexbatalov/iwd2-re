@@ -83,6 +83,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CResPLT.h"
     "src/CResRef.cpp"
     "src/CResRef.h"
+    "src/CResSpell.cpp"
+    "src/CResSpell.h"
     "src/CResTile.cpp"
     "src/CResTile.h"
     "src/CResUI.cpp"
