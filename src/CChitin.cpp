@@ -101,10 +101,10 @@ CChitin::CChitin()
     InitializeVariables();
     InitVariables3D();
 
-    OSVERSIONINFO versionInfo;
-    memset(&versionInfo, 0, sizeof(OSVERSIONINFO));
-    versionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-    GetVersionEx(&versionInfo);
+    OSVERSIONINFOA versionInfo;
+    memset(&versionInfo, 0, sizeof(OSVERSIONINFOA));
+    versionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
+    GetVersionExA(&versionInfo);
 
     dwPlatformId = versionInfo.dwPlatformId;
 
@@ -188,17 +188,17 @@ CChitin::~CChitin()
 void CChitin::GetGameVersionInfo(HINSTANCE hInstance)
 {
     char filename[256] = "Oct 16 2002";
-    GetModuleFileName(hInstance, filename, 256);
+    GetModuleFileNameA(hInstance, filename, 256);
 
     DWORD handle;
-    DWORD size = GetFileVersionInfoSize(filename, &handle);
+    DWORD size = GetFileVersionInfoSizeA(filename, &handle);
     if (size != 0) {
         BYTE* fileVersionInfo = new BYTE[size];
-        GetFileVersionInfo(filename, handle, size, fileVersionInfo);
+        GetFileVersionInfoA(filename, handle, size, fileVersionInfo);
 
         LPVOID buffer;
         UINT len;
-        if (VerQueryValue(fileVersionInfo, "\\StringFileInfo\\040904B0\\PrivateBuild", &buffer, &len)) {
+        if (VerQueryValueA(fileVersionInfo, "\\StringFileInfo\\040904B0\\PrivateBuild", &buffer, &len)) {
             char buildDate[] = "Oct 16 2002";
             char buildTime[] = "15:36:32";
             char months[] = "JanFebMarAprMayJunJulAugSepOctNovDec";
@@ -213,13 +213,13 @@ void CChitin::GetGameVersionInfo(HINSTANCE hInstance)
             buildVersionString = "";
         }
 
-        if (VerQueryValue(fileVersionInfo, "\\StringFileInfo\\040904B0\\ProductVersion", &buffer, &len)) {
+        if (VerQueryValueA(fileVersionInfo, "\\StringFileInfo\\040904B0\\ProductVersion", &buffer, &len)) {
             versionString = CString(reinterpret_cast<char*>(buffer));
         } else {
             versionString = "";
         }
 
-        if (VerQueryValue(fileVersionInfo, "\\StringFileInfo\\040904B0\\ProductName", &buffer, &len)) {
+        if (VerQueryValueA(fileVersionInfo, "\\StringFileInfo\\040904B0\\ProductName", &buffer, &len)) {
             name = CString(reinterpret_cast<char*>(buffer));
         } else {
             name = "";
@@ -527,11 +527,11 @@ void CChitin::InitializeVariables()
     field_16C = 0;
     field_170 = WM_MOUSEWHEEL;
 
-    HWND hWnd = FindWindow("MouseZ", "Magellan MSWHEEL");
-    field_170 = RegisterWindowMessage("MSWHEEL_ROLLMSG");
+    HWND hWnd = FindWindowA("MouseZ", "Magellan MSWHEEL");
+    field_170 = RegisterWindowMessageA("MSWHEEL_ROLLMSG");
 
-    UINT v1 = RegisterWindowMessage("MSH_WHEELSUPPORT_MSG");
-    UINT v2 = RegisterWindowMessage("MSH_SCROLL_LINES_MSG");
+    UINT v1 = RegisterWindowMessageA("MSH_WHEELSUPPORT_MSG");
+    UINT v2 = RegisterWindowMessageA("MSH_SCROLL_LINES_MSG");
     if (v1 != 0) {
         field_16C = SendMessage(hWnd, v1, 0, 0);
     } else {

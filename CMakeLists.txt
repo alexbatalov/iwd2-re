@@ -196,7 +196,7 @@ target_compile_definitions(${EXECUTABLE_NAME} PUBLIC
     _AFXDLL
     _CRT_NONSTDC_NO_WARNINGS
     _CRT_SECURE_NO_WARNINGS
-    _SBCS
+    _MBCS
 )
 
 target_link_libraries(${EXECUTABLE_NAME}

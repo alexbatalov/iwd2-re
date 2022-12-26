@@ -7,15 +7,15 @@
 // 0x421820
 static BOOL IsSupportedOS(DWORD& majorVersion, DWORD& minorVersion)
 {
-    OSVERSIONINFOEX info = { 0 };
+    OSVERSIONINFOEXA info = { 0 };
     BOOL supported = TRUE;
     int servicePack;
 
-    info.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-    if (!GetVersionEx(reinterpret_cast<LPOSVERSIONINFO>(&info))) {
-        info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+    info.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXA);
+    if (!GetVersionExA(reinterpret_cast<LPOSVERSIONINFOA>(&info))) {
+        info.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
 
-        if (!GetVersionEx(reinterpret_cast<LPOSVERSIONINFO>(&info))) {
+        if (!GetVersionExA(reinterpret_cast<LPOSVERSIONINFOA>(&info))) {
             return FALSE;
         }
     }
@@ -68,7 +68,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
                            "\r\n"
                            "Press Enter to Exit";
         const char* caption = "Operating System Not Supported";
-        MessageBox(NULL, text, caption, MB_ICONERROR);
+        MessageBoxA(NULL, text, caption, MB_ICONERROR);
         return 0;
     }
 
@@ -79,7 +79,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
         mutexName = v1;
     }
 
-    HANDLE mutexHandle = CreateMutex(NULL, FALSE, mutexName);
+    HANDLE mutexHandle = CreateMutexA(NULL, FALSE, mutexName);
 
     // NOTE: Wrong check, should check for `INVALID_HANDLE_VALUE`.
     if (mutexHandle == NULL) {
@@ -98,22 +98,22 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     }
 
     char currentDirectory[261];
-    GetCurrentDirectory(sizeof(currentDirectory), currentDirectory);
+    GetCurrentDirectoryA(sizeof(currentDirectory), currentDirectory);
 
     char currentDirectoryCopy[261];
-    lstrcpy(currentDirectoryCopy, currentDirectory);
-    lstrcat(currentDirectoryCopy, "\\register");
-    SetCurrentDirectory(currentDirectoryCopy);
+    lstrcpyA(currentDirectoryCopy, currentDirectory);
+    lstrcatA(currentDirectoryCopy, "\\register");
+    SetCurrentDirectoryA(currentDirectoryCopy);
 
     STARTUPINFO startupInfo = { 0 };
     PROCESS_INFORMATION processInfo;
-    if (CreateProcess(NULL, "reg32.exe FALSE", NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, NULL, &startupInfo, &processInfo)) {
+    if (CreateProcessA(NULL, "reg32.exe FALSE", NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, NULL, &startupInfo, &processInfo)) {
         WaitForSingleObject(processInfo.hProcess, INFINITE);
         CloseHandle(processInfo.hThread);
         CloseHandle(processInfo.hProcess);
     }
 
-    SetCurrentDirectory(currentDirectory);
+    SetCurrentDirectoryA(currentDirectory);
 
     baldurChitin.Init(hInstance);
     int rc = baldurChitin.WinMain(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
