@@ -283,4 +283,10 @@ typedef struct ExportCharacter_Header_st {
     /* 0004 */ DWORD nFileVersion;
 } EXPORT_CHARACTER_HEADER;
 
+// NOTE: There are no traces of such struct in the code.
+typedef struct Area_Header_st {
+    /* 0000 */ DWORD nFileType;
+    /* 0004 */ DWORD nFileVersion;
+} AREA_HEADER;
+
 #endif /* BALDATATYPES_H_ */

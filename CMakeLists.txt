@@ -63,6 +63,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CProgressBar.h"
     "src/CRes.cpp"
     "src/CRes.h"
+    "src/CResArea.cpp"
+    "src/CResArea.h"
     "src/CResBinary.cpp"
     "src/CResBinary.h"
     "src/CResBitmap.cpp"
