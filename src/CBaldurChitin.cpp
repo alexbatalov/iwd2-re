@@ -11,6 +11,7 @@
 #include "CResGame.h"
 #include "CResItem.h"
 #include "CResSpell.h"
+#include "CResStore.h"
 #include "CResUI.h"
 #include "CResWED.h"
 #include "CScreenChapter.h"
@@ -758,6 +759,8 @@ CRes* CBaldurChitin::AllocResObject(int nType)
         return new CResArea();
     case 1013:
         return new CResGame();
+    case 1014:
+        return new CResStore();
     case 1018:
         return new CResCHR();
     default:
