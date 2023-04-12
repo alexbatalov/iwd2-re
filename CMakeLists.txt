@@ -79,6 +79,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CResCHR.h"
     "src/CResCRE.cpp"
     "src/CResCRE.h"
+    "src/CResDLG.cpp"
+    "src/CResDLG.h"
     "src/CResFile.cpp"
     "src/CResFile.h"
     "src/CResGame.cpp"
