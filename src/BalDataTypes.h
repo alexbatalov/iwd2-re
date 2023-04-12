@@ -271,4 +271,10 @@ typedef struct Spell_ability_st {
     /* 0026 */ WORD missileType;
 } SPELL_ABILITY;
 
+// NOTE: There are no traces of such struct in the code.
+typedef struct Creature_Header_st {
+    /* 0000 */ DWORD nFileType;
+    /* 0004 */ DWORD nFileVersion;
+} CREATURE_HEADER;
+
 #endif /* BALDATATYPES_H_ */

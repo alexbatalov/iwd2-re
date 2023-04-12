@@ -73,6 +73,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CResCell.h"
     "src/CResCellHeader.cpp"
     "src/CResCellHeader.h"
+    "src/CResCRE.cpp"
+    "src/CResCRE.h"
     "src/CResFile.cpp"
     "src/CResFile.h"
     "src/CResItem.cpp"
