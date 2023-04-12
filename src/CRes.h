@@ -108,6 +108,15 @@ public:
             }
         }
     }
+
+    int Request()
+    {
+        if (pRes != NULL) {
+            return static_cast<CRes*>(pRes)->Request();
+        } else {
+            return 0;
+        }
+    }
 };
 
 #endif /* CRES_H_ */
