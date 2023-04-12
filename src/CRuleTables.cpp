@@ -1201,14 +1201,192 @@ const CString CRuleTables::DLGINST("DLGINST");
 // 0x8DEF5C
 const CString CRuleTables::SCRINST("SCRINST");
 
+// NOTE: This function is somewhat strange. It's first half uses inlined
+// `C2DArray` constructor, while the second half calls `0x5402E0` to initialize
+// tables. The same goes for destructor below (destructor at `0x426500` is
+// oddly placed between `CBaldurChitin` implementation). This is definitely not
+// a coincedence, but I'm not sure how replicate that.
+//
 // 0x53CB60
 CRuleTables::CRuleTables()
 {
-    // TODO: Incomplete.
+    m_tReactionModCharisma.Load(CResRef(REACTION_MOD_CHARISMA));
+    m_tReactionModReputation.Load(CResRef(REACTION_MOD_REPUTATION));
+    m_tReputationMod.Load(CResRef(REPUTATION_MOD));
+    m_lNoDecodeList.LoadList(CResRef(NO_DECODE_LIST), FALSE);
+    m_tFeats.Load(CResRef(FEATS));
+    m_tSkills.Load(CResRef(SKILLS));
+    m_tSkillPointsRace.Load(CResRef(SKILL_POINTS_RACE));
+    m_tSkillPointsDex.Load(CResRef(SKILL_POINTS_DEX));
+    m_tSkillPointsBard.Load(CResRef(SKILL_POINTS_BARD));
+    m_tSkillPointsRanger.Load(CResRef(SKILL_POINTS_RANGER));
+    m_tAbilityRaceReq.Load(CResRef(ABILITY_RACE_REQ));
+    m_tAbilityRaceAdj.Load(CResRef(ABILITY_RACE_ADJ));
+    m_tAbilityClassReq.Load(CResRef(ABILITY_CLASS_REQ));
+    m_tMoncRate.Load(CResRef(MONCRATE));
+    m_tSavingThrowPriest.Load(CResRef(SAVE_PRIEST));
+    m_tSavingThrowWarrior.Load(CResRef(SAVE_WARRIOR));
+    m_tSavingThrowWizard.Load(CResRef(SAVE_WIZARD));
+    m_tSavingThrowRogue.Load(CResRef(SAVE_ROGUE));
+    m_tSavingThrowBard.Load(CResRef(SAVE_BARD));
+    m_tSavingThrowMonk.Load(CResRef(SAVE_MONK));
+    m_tSavingThrowRace.Load(CResRef(SAVE_RACE));
+    m_tHitPointsWarrior.Load(CResRef(HP_WARRIOR));
+    m_tHitPointsWizard.Load(CResRef(HP_WIZARD));
+    m_tHitPointsPriest.Load(CResRef(HP_PRIEST));
+    m_tHitPointsRogue.Load(CResRef(HP_ROGUE));
+    m_tHitPointsBarbarian.Load(CResRef(HP_BARBARIAN));
+    m_tHitPointsMonk.Load(CResRef(HP_MONK));
+    m_tStartingGold.Load(CResRef(STARTING_GOLD));
+    m_tStartingExperiencePoints.Load(CResRef(STARTING_XP));
+    m_tTHAC0.Load(CResRef(THAC0));
+    m_tMaxSpellsBonus.Load(CResRef(MAX_SPELLS_BONUS));
+    m_tMaxSpellsBard.Load(CResRef(MAX_SPELLS_BARD));
+    m_tMaxSpellsCleric.Load(CResRef(MAX_SPELLS_CLERIC));
+    m_tMaxSpellsDruid.Load(CResRef(MAX_SPELLS_DRUID));
+    m_tMaxSpellsPaladin.Load(CResRef(MAX_SPELLS_PALADIN));
+    m_tMaxSpellsRanger.Load(CResRef(MAX_SPELLS_RANGER));
+    m_tMaxSpellsSorcerer.Load(CResRef(MAX_SPELLS_SORCERER));
+    m_tMaxSpellsWizard.Load(CResRef(MAX_SPELLS_WIZARD));
+    m_tKnownSpellsSorcerer.Load(CResRef(KNOWN_SPELLS_SORCERER));
+    m_tKnownSpellsBard.Load(CResRef(KNOWN_SPELLS_BARD));
+    m_tMaxDruidShapeshifts.Load(CResRef(MAX_DRUID_SHAPESHIFTS));
+    m_tBackstabMultiplier.Load(CResRef(BACKSTAB_MULTIPLIER));
+    m_tExperienceLevels.Load(CResRef(EXPERIENCE_LEVELS));
+    m_tLayOnHandsAmount.Load(CResRef(LAY_ON_HANDS_AMOUNT));
+    m_lInstantActions.LoadList(CResRef(INSTANT_ACTIONS), TRUE);
+
+    // NOTE: Looks like there are no separate constants for some tables. At
+    // least they are defenitely not `CString` instances.
+
+    m_tMonsterSummon1.Load(CResRef("MSummo1"));
+    m_tMonsterSummon2.Load(CResRef("MSummo2"));
+    m_tMonsterSummon3.Load(CResRef("MSummo3"));
+    m_tMonsterSummon4.Load(CResRef("MSummo4"));
+    m_tMonsterSummon5.Load(CResRef("MSummo5"));
+    m_tMonsterSummon6.Load(CResRef("MSummo6"));
+    m_tMonsterSummonMalavon.Load(CResRef("MSummoM"));
+    m_tMonsterSummon7.Load(CResRef("MSummo7"));
+    m_tAnimalSummon1.Load(CResRef("ASummo1"));
+    m_tAnimalSummon2.Load(CResRef("ASummo2"));
+    m_tAnimalSummon3.Load(CResRef("ASummo3"));
+    m_tSMonste.Load(CResRef("SMonste"));
+    m_tDSMonste.Load(CResRef("DSMonste"));
+    m_tShades.Load(CResRef("Shades"));
+    m_tADead.Load(CResRef("aDead"));
+    m_tADeadL.Load(CResRef("ADeadL"));
+    m_tGInsect.Load(CResRef("GInsect"));
+    m_tCDoom.Load(CResRef("CDoom"));
+    m_tCFElemW.Load(CResRef("CFElemW"));
+    m_tCEElemW.Load(CResRef("CEElemW"));
+    m_tCEElemM.Load(CResRef("CEElemM"));
+    m_tCWElemW.Load(CResRef("CWElemW"));
+    m_tCFElemP.Load(CResRef("CFElemP"));
+    m_tCEElemP.Load(CResRef("CEElemP"));
+    m_tSShadow.Load(CResRef("SShadow"));
+    m_tIStalke.Load(CResRef("IStalke"));
+    m_tSTrolls.Load(CResRef("STrolls"));
+
+    m_tStrengthMod.Load(CResRef(STRENGTH_MODIFIERS));
+    m_tIntoxicationMod.Load(CResRef(INTOXICATION_MODIFIERS));
+    m_tFatigueMod.Load(CResRef(FATIGUE_MODIFIERS));
+    m_tEffectText.Load(CResRef(EFFECT_TEXT));
+    m_tNumSpells.Load(CResRef(NUM_SPELLS));
+    m_tToolTips.Load(CResRef(TOOLTIPS));
+    m_tStartArea.Load(CResRef(START_AREA_FILE));
+    m_tStartPos.Load(CResRef(START_POS_FILE));
+    m_tSparkleColors.Load(CResRef(SPARKLE_COLOR_FILE));
+    m_tYears.Load(CResRef(YEARS));
+    m_tMonths.Load(CResRef(MONTHS));
+    m_tPostDialog.Load(CResRef(POST_DIALOG));
+    m_tCharacterSounds.Load(CResRef(CHARACTER_SOUNDS));
+    m_tRtNorm.Load(CResRef(RT_NORM));
+    m_tRtFury.Load(CResRef(RT_FURY));
+    m_tIntelligenceMod.Load(CResRef(INTELLIGENCE_MODIFIERS));
+    m_tDonateRumor.Load(CResRef(DONATE_RUMOR));
+    m_tClassWeapon.Load(CResRef(CLASWEAP));
+    m_tAreaLinkageCaching.Load(CResRef(AREA_LINKAGE_CACHING));
+    m_tCacheValidation.Load(CResRef(CACHE_VALIDATION));
+    m_tScriptDescription.Load(CResRef(SCRIPT_DESCRIPTION));
+    m_tCharacterStateDescription.Load(CResRef(CHARACTER_STATE_DESCRIPTION));
+    m_tMasterArea.Load(CResRef(MASTER_AREA));
+    m_tMovieDescription.Load(CResRef(MOVIE_DESCRIPTION));
+    m_tSpellDescription.Load(CResRef(SPELL_DESCRIPTION));
+    m_tAlignment.Load(CResRef(ALIGNMENT));
+    m_tReputationStoreMod.Load(CResRef(REPUTATION_STORE_MOD));
+    m_tReputationStart.Load(CResRef(REPUTATION_START));
+    m_tWeaponSpecialization.Load(CResRef(WEAPON_SPECIALIZATION));
+    m_tWeaponAttacks.Load(CResRef(WEAPON_ATTACKS));
+    m_tLore.Load(CResRef(LORE));
+    m_tCharismaStoreMod.Load(CResRef(CHARISMA_STORE_MOD));
+    m_tRaiseDeadCost.Load(CResRef(RAISE_DEAD_COST));
+    m_tHappiness.Load(CResRef(HAPPINESS));
+    m_tReputationDescription.Load(CResRef(REPUTATION_DESCRIPTION));
+    m_tIntoxication.Load(CResRef(INTOXICATION));
+    m_tCustomSound.Load(CResRef(CUSTOM_SOUND));
+    m_tExclusiveItems.Load(CResRef(EXCLUSIVE_ITEMS));
+    m_tFeatClass.Load(CResRef(FEATCLAS));
+    m_tFeatLevel.Load(CResRef(FEATLVL));
+    m_tSkillCosts.Load(CResRef(SKILLCOST));
+    m_tSkillPoints.Load(CResRef(SKILLPTS));
+    m_tSoundChannel.Load(CResRef("SNDCHANN"));
+    m_tReverb.Load(CResRef("REVERB"));
+    m_lEAXENVIR.LoadList(CResRef("EAXENVIR"), FALSE);
+    m_tCharStr.Load(CResRef("CHARSTR"));
+    m_tTracking.Load(CResRef("TRACKING"));
+    m_tKitList.Load(CResRef(KIT_LIST));
+    m_tSrTable.Load(CResRef(SR_TABLE));
+    m_tSrList.Load(CResRef(SR_LIST));
+    m_tRaceRsMd.Load(CResRef(RACERSMD));
+    m_tRaceSpAb.Load(CResRef(RACESPAB));
+    m_tEncMod.Load(CResRef(ENCMOD));
+    m_tClassRsMd.Load(CResRef(CLSSRSMD));
+    m_tQuickSlots.Load(CResRef(QSLOTS));
+    m_tSpontaneousCasting.Load(CResRef(SPONCAST));
+    m_tCLABFI05.Load(CResRef(CLABFI05));
+    m_tCLABBA01.Load(CResRef(CLABBA01));
+    m_tCLABPR01.Load(CResRef(CLABPR01));
+    m_tCLABCL01.Load(CResRef(CLABCL01));
+    m_tCLABCL02.Load(CResRef(CLABCL02));
+    m_tCLABCL03.Load(CResRef(CLABCL03));
+    m_tCLABCL04.Load(CResRef(CLABCL04));
+    m_tCLABCL05.Load(CResRef(CLABCL05));
+    m_tCLABCL06.Load(CResRef(CLABCL06));
+    m_tCLABCL07.Load(CResRef(CLABCL07));
+    m_tCLABCL08.Load(CResRef(CLABCL08));
+    m_tCLABCL09.Load(CResRef(CLABCL09));
+    m_tCLABDR01.Load(CResRef(CLABDR01));
+    m_tCLABFI01.Load(CResRef(CLABFI01));
+    m_tCLABMO01.Load(CResRef(CLABMO01));
+    m_tCLABPA01.Load(CResRef(CLABPA01));
+    m_tCLABRN01.Load(CResRef(CLABRN01));
+    m_tCLABTH01.Load(CResRef(CLABTH01));
+    m_tCLABSR01.Load(CResRef(CLABSR01));
+    m_tCLABMA01.Load(CResRef(CLABMA01));
+    m_tSpellAutomaticPicker.Load(CResRef(AUTOMATIC_SPELL_PICKER));
+    m_tLoadingHints.Load(CResRef(LOADING_HINTS));
+    m_tBAATFGT.Load(CResRef(BAATFGT));
+    m_tBAATNFG.Load(CResRef(BAATNFG));
+    m_tBAATMAG.Load(CResRef(BAATMAG));
+    m_tBAATMKU.Load(CResRef(BAATMKU));
+    m_lDLGINST.LoadList(CResRef(DLGINST), TRUE);
+    m_lSCRINST.LoadList(CResRef(SCRINST), TRUE);
+    m_tCREHIDEM.Load(CResRef(CREHIDEM));
+    m_tCRELIGHT.Load(CResRef(CRELIGHT));
+    m_tItemText.Load(CResRef(ITEMTEXT));
+    m_tItemAbility.Load(CResRef(ITEMABIL));
+    m_tTrapSave.Load(CResRef(TRAPSAVE));
+    m_tAreaLoad.Load(CResRef("AREALOAD"));
+    m_tHelp01.Load(CResRef(HELP01));
+    m_tHelp02.Load(CResRef(HELP02));
+    m_tHelp03.Load(CResRef(HELP03));
+    m_tHelp04.Load(CResRef(HELP04));
 }
 
+// NOTE: See constructor for some oddities in this function. Destructor itself
+// is completely synthesized.
+//
 // 0x540330
 CRuleTables::~CRuleTables()
 {
-    // TODO: Incomplete.
 }
