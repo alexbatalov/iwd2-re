@@ -14,6 +14,8 @@ add_executable(${EXECUTABLE_NAME} WIN32)
 
 target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/BalDataTypes.h"
+    "src/C2DArray.cpp"
+    "src/C2DArray.h"
     "src/CAlias.cpp"
     "src/CAlias.h"
     "src/CAliasList.cpp"

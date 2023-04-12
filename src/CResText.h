@@ -7,6 +7,7 @@ class CResText : public CRes {
 public:
     CResText();
     ~CResText();
+    // 0x403320
     CString GetText() { return m_string; }
     void* Demand();
     BOOL Parse(void* pData);
