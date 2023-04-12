@@ -105,6 +105,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CResWave.h"
     "src/CResWED.cpp"
     "src/CResWED.h"
+    "src/CResWorldMap.cpp"
+    "src/CResWorldMap.h"
     "src/CRuleTables.cpp"
     "src/CRuleTables.h"
     "src/CScreenChapter.cpp"
