@@ -9,6 +9,7 @@
 #include "CResCHR.h"
 #include "CResCRE.h"
 #include "CResDLG.h"
+#include "CResEffect.h"
 #include "CResGame.h"
 #include "CResItem.h"
 #include "CResSpell.h"
@@ -767,6 +768,8 @@ CRes* CBaldurChitin::AllocResObject(int nType)
         return new CResStore();
     case 1015:
         return new CResWorldMap();
+    case 1016:
+        return new CResEffect();
     case 1018:
         return new CResCHR();
     default:
