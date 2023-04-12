@@ -277,4 +277,10 @@ typedef struct Creature_Header_st {
     /* 0004 */ DWORD nFileVersion;
 } CREATURE_HEADER;
 
+// NOTE: There are no traces of such struct in the code.
+typedef struct ExportCharacter_Header_st {
+    /* 0000 */ DWORD nFileType;
+    /* 0004 */ DWORD nFileVersion;
+} EXPORT_CHARACTER_HEADER;
+
 #endif /* BALDATATYPES_H_ */
