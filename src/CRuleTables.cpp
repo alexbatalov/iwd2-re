@@ -867,81 +867,62 @@ const CString CRuleTables::TOKEN_SCRIPT("script");
 // 0x8DE8B0
 const CString CRuleTables::CASTSPELL("CASTSPELL");
 
-// #guess
 // 0x8DF2AC
-const CString CRuleTables::CLABFI05("CLABFI05");
+const CString CRuleTables::CLASS_ABILITIES_BARBARIAN("CLABFI05");
 
-// #guess
 // 0x8DF21C
-const CString CRuleTables::CLABBA01("CLABBA01");
+const CString CRuleTables::CLASS_ABILITIES_BARD("CLABBA01");
 
-// #guess
 // 0x8DEF8C
-const CString CRuleTables::CLABPR01("CLABPR01");
+const CString CRuleTables::CLASS_ABILITIES_CLERIC_TRUE("CLABPR01");
 
-// #guess
 // 0x8DE950
-const CString CRuleTables::CLABCL01("CLABCL01");
+const CString CRuleTables::CLASS_ABILITIES_CLERIC_ILMATER("CLABCL01");
 
-// #guess
 // 0x8DEE68
-const CString CRuleTables::CLABCL02("CLABCL02");
+const CString CRuleTables::CLASS_ABILITIES_CLERIC_LATHANDER("CLABCL02");
 
-// #guess
 // 0x8DF274
-const CString CRuleTables::CLABCL03("CLABCL03");
+const CString CRuleTables::CLASS_ABILITIES_CLERIC_SELUNE("CLABCL03");
 
-// #guess
 // 0x8DEDF8
-const CString CRuleTables::CLABCL04("CLABCL04");
+const CString CRuleTables::CLASS_ABILITIES_CLERIC_HELM("CLABCL04");
 
-// #guess
 // 0x8DF1F0
-const CString CRuleTables::CLABCL05("CLABCL05");
+const CString CRuleTables::CLASS_ABILITIES_CLERIC_OGHMA("CLABCL05");
 
-// #guess
 // 0x8DEEE4
-const CString CRuleTables::CLABCL06("CLABCL06");
+const CString CRuleTables::CLASS_ABILITIES_CLERIC_TEMPUS("CLABCL06");
 
-// #guess
 // 0x8DF06C
-const CString CRuleTables::CLABCL07("CLABCL07");
+const CString CRuleTables::CLASS_ABILITIES_CLERIC_BANE("CLABCL07");
 
-// #guess
 // 0x8DF284
-const CString CRuleTables::CLABCL08("CLABCL08");
+const CString CRuleTables::CLASS_ABILITIES_CLERIC_MASK("CLABCL08");
 
-// #guess
 // 0x8DF188
-const CString CRuleTables::CLABCL09("CLABCL09");
+const CString CRuleTables::CLASS_ABILITIES_CLERIC_TALOS("CLABCL09");
 
-// #guess
 // 0x8DE8DC
-const CString CRuleTables::CLABDR01("CLABDR01");
+const CString CRuleTables::CLASS_ABILITIES_DRUID("CLABDR01");
 
-// #guess
 // 0x8DE9B8
-const CString CRuleTables::CLABFI01("CLABFI01");
+const CString CRuleTables::CLASS_ABILITIES_FIGHTER("CLABFI01");
 
-// #guess
 // 0x8DF268
-const CString CRuleTables::CLABMO01("CLABMO01");
+const CString CRuleTables::CLASS_ABILITIES_MONK("CLABMO01");
 
-// #guess
 // 0x8DE9A0
-const CString CRuleTables::CLABPA01("CLABPA01");
+const CString CRuleTables::CLASS_ABILITIES_PALADIN("CLABPA01");
 
-// #guess
 // 0x8DEE2C
-const CString CRuleTables::CLABRN01("CLABRN01");
+const CString CRuleTables::CLASS_ABILITIES_RANGER("CLABRN01");
 
-// #guess
 // 0x8DEFE8
-const CString CRuleTables::CLABTH01("CLABTH01");
+const CString CRuleTables::CLASS_ABILITIES_ROGUE("CLABTH01");
 
-// #guess
 // 0x8DF0DC
-const CString CRuleTables::CLABMA01("CLABMA01");
+const CString CRuleTables::CLASS_ABILITIES_WIZARD("CLABMA01");
 
 // #guess
 // 0x8DEF04
@@ -975,9 +956,8 @@ const CString CRuleTables::CLABMA03("CLABMA03");
 // 0x8DF02C
 const CString CRuleTables::CLABMA04("CLABMA04");
 
-// #guess
 // 0x8DEED4
-const CString CRuleTables::CLABSR01("CLABSR01");
+const CString CRuleTables::CLASS_ABILITIES_SORCERER("CLABSR01");
 
 // 0x8DF020
 const CString CRuleTables::AUTOMATIC_SPELL_PICKER("SplAutoP");
@@ -1347,26 +1327,26 @@ CRuleTables::CRuleTables()
     m_tClassRsMd.Load(CResRef(CLSSRSMD));
     m_tQuickSlots.Load(CResRef(QSLOTS));
     m_tSpontaneousCasting.Load(CResRef(SPONCAST));
-    m_tCLABFI05.Load(CResRef(CLABFI05));
-    m_tCLABBA01.Load(CResRef(CLABBA01));
-    m_tCLABPR01.Load(CResRef(CLABPR01));
-    m_tCLABCL01.Load(CResRef(CLABCL01));
-    m_tCLABCL02.Load(CResRef(CLABCL02));
-    m_tCLABCL03.Load(CResRef(CLABCL03));
-    m_tCLABCL04.Load(CResRef(CLABCL04));
-    m_tCLABCL05.Load(CResRef(CLABCL05));
-    m_tCLABCL06.Load(CResRef(CLABCL06));
-    m_tCLABCL07.Load(CResRef(CLABCL07));
-    m_tCLABCL08.Load(CResRef(CLABCL08));
-    m_tCLABCL09.Load(CResRef(CLABCL09));
-    m_tCLABDR01.Load(CResRef(CLABDR01));
-    m_tCLABFI01.Load(CResRef(CLABFI01));
-    m_tCLABMO01.Load(CResRef(CLABMO01));
-    m_tCLABPA01.Load(CResRef(CLABPA01));
-    m_tCLABRN01.Load(CResRef(CLABRN01));
-    m_tCLABTH01.Load(CResRef(CLABTH01));
-    m_tCLABSR01.Load(CResRef(CLABSR01));
-    m_tCLABMA01.Load(CResRef(CLABMA01));
+    m_tClassAbilitiesBarbarian.Load(CResRef(CLASS_ABILITIES_BARBARIAN));
+    m_tClassAbilitiesBard.Load(CResRef(CLASS_ABILITIES_BARD));
+    m_tClassAbilitiesClericTrue.Load(CResRef(CLASS_ABILITIES_CLERIC_TRUE));
+    m_tClassAbilitiesClericIlmater.Load(CResRef(CLASS_ABILITIES_CLERIC_ILMATER));
+    m_tClassAbilitiesClericLathander.Load(CResRef(CLASS_ABILITIES_CLERIC_LATHANDER));
+    m_tClassAbilitiesClericSelune.Load(CResRef(CLASS_ABILITIES_CLERIC_SELUNE));
+    m_tClassAbilitiesClericHelm.Load(CResRef(CLASS_ABILITIES_CLERIC_HELM));
+    m_tClassAbilitiesClericOghma.Load(CResRef(CLASS_ABILITIES_CLERIC_OGHMA));
+    m_tClassAbilitiesClericTempus.Load(CResRef(CLASS_ABILITIES_CLERIC_TEMPUS));
+    m_tClassAbilitiesClericBane.Load(CResRef(CLASS_ABILITIES_CLERIC_BANE));
+    m_tClassAbilitiesClericMask.Load(CResRef(CLASS_ABILITIES_CLERIC_MASK));
+    m_tClassAbilitiesClericTalos.Load(CResRef(CLASS_ABILITIES_CLERIC_TALOS));
+    m_tClassAbilitiesDruid.Load(CResRef(CLASS_ABILITIES_DRUID));
+    m_tClassAbilitiesFighter.Load(CResRef(CLASS_ABILITIES_FIGHTER));
+    m_tClassAbilitiesMonk.Load(CResRef(CLASS_ABILITIES_MONK));
+    m_tClassAbilitiesPaladin.Load(CResRef(CLASS_ABILITIES_PALADIN));
+    m_tClassAbilitiesRanger.Load(CResRef(CLASS_ABILITIES_RANGER));
+    m_tClassAbilitiesRogue.Load(CResRef(CLASS_ABILITIES_ROGUE));
+    m_tClassAbilitiesSorcerer.Load(CResRef(CLASS_ABILITIES_SORCERER));
+    m_tClassAbilitiesWizard.Load(CResRef(CLASS_ABILITIES_WIZARD));
     m_tSpellAutomaticPicker.Load(CResRef(AUTOMATIC_SPELL_PICKER));
     m_tLoadingHints.Load(CResRef(LOADING_HINTS));
     m_tBAATFGT.Load(CResRef(BAATFGT));
@@ -2156,48 +2136,48 @@ const C2DArray* CRuleTables::GetClassAbilityTable(BYTE nClass, DWORD nSpecialist
 {
     switch (nClass) {
     case CAIObjectType::C_BARBARIAN:
-        return &m_tCLABFI05;
+        return &m_tClassAbilitiesBarbarian;
     case CAIObjectType::C_BARD:
-        return &m_tCLABBA01;
+        return &m_tClassAbilitiesBard;
     case CAIObjectType::C_CLERIC:
         switch (nSpecialist & 0xFF8000) {
         case 0x8000:
-            return &m_tCLABCL01;
+            return &m_tClassAbilitiesClericIlmater;
         case 0x10000:
-            return &m_tCLABCL02;
+            return &m_tClassAbilitiesClericLathander;
         case 0x20000:
-            return &m_tCLABCL03;
+            return &m_tClassAbilitiesClericSelune;
         case 0x40000:
-            return &m_tCLABCL04;
+            return &m_tClassAbilitiesClericHelm;
         case 0x80000:
-            return &m_tCLABCL05;
+            return &m_tClassAbilitiesClericOghma;
         case 0x100000:
-            return &m_tCLABCL06;
+            return &m_tClassAbilitiesClericTempus;
         case 0x200000:
-            return &m_tCLABCL07;
+            return &m_tClassAbilitiesClericBane;
         case 0x400000:
-            return &m_tCLABCL08;
+            return &m_tClassAbilitiesClericMask;
         case 0x800000:
-            return &m_tCLABCL09;
+            return &m_tClassAbilitiesClericTalos;
         }
 
-        return &m_tCLABPR01;
+        return &m_tClassAbilitiesClericTrue;
     case CAIObjectType::C_DRUID:
-        return &m_tCLABDR01;
+        return &m_tClassAbilitiesDruid;
     case CAIObjectType::C_FIGHTER:
-        return &m_tCLABFI01;
+        return &m_tClassAbilitiesFighter;
     case CAIObjectType::C_MONK:
-        return &m_tCLABMO01;
+        return &m_tClassAbilitiesMonk;
     case CAIObjectType::C_PALADIN:
-        return &m_tCLABPA01;
+        return &m_tClassAbilitiesPaladin;
     case CAIObjectType::C_RANGER:
-        return &m_tCLABRN01;
+        return &m_tClassAbilitiesRanger;
     case CAIObjectType::C_ROGUE:
-        return &m_tCLABTH01;
+        return &m_tClassAbilitiesRogue;
     case CAIObjectType::C_SORCERER:
-        return &m_tCLABSR01;
+        return &m_tClassAbilitiesSorcerer;
     case CAIObjectType::C_WIZARD:
-        return &m_tCLABMA01;
+        return &m_tClassAbilitiesWizard;
     }
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
