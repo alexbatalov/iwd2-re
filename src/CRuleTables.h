@@ -3,6 +3,7 @@
 
 #include "mfc.h"
 
+#include "BalDataTypes.h"
 #include "C2DArray.h"
 #include "CAIIdList.h"
 
@@ -364,6 +365,29 @@ public:
 
     CRuleTables();
     ~CRuleTables();
+    const CString GetRaceString(BYTE nRace, BYTE nSubRace) const;
+    const CString GetAlignmentString(BYTE nAlignment) const;
+    const CString GetClassString(BYTE nClass, DWORD nSpecialist) const;
+    STRREF GetClassSuffixStringRef(BYTE nClass) const;
+    STRREF GetClassBeyondCastingAbilityStringRef(BYTE nClass) const;
+    STRREF GetClassDescriptionStringRef(BYTE nClass, DWORD nSpecialist) const;
+    void GetStartArea(CResRef& cResArea, CPoint& ptView) const;
+    CPoint GetStartPoint(INT nCharacterSlot) const;
+    int GetStartRotation(INT nCharacterSlot) const;
+    void GetCharacterStateDescription(INT nState, CString& sDescription) const;
+    void GetMovieDescription(const CString& sMovie, CString& sDescription) const;
+    BOOL IsValidAlignment(BYTE nClass, BYTE nAlignment, DWORD nSpecialist) const;
+    BOOL IsUsableByAlignment(DWORD dwNotUsableBy, BYTE nAlignment) const;
+    BYTE GetStartingReputation(BYTE nAlignment) const;
+    DWORD GetXPCap() const;
+    void GetClassStringMixed(BYTE nClass, DWORD nSpecialist, CString& sClass);
+    DWORD GetReputationDescription(SHORT nReputation) const;
+    void GetIntoxicationInfo(BYTE nCON, INT& nIntoxicationRate, INT& nRecoveryRate, INT& nIntoxicationCap) const;
+    BOOL GetCustomSound(CString& sName, BYTE nSoundId) const;
+    void GetAlignmentStringMixed(BYTE nAlignment, CString& sAlignment) const;
+    void GetGenderStringMixed(BYTE nGender, CString& sGender) const;
+    BYTE MapCharacterSpecializationToSchool(WORD nSpecialistMage) const;
+    const C2DArray* CRuleTables::GetClassAbilityTable(BYTE nClass, DWORD nSpecialist) const;
 
     /* 0000 */ C2DArray m_tReactionModCharisma;
     /* 0024 */ C2DArray m_tReactionModReputation;

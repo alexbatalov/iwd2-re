@@ -1,6 +1,10 @@
 #include "CRuleTables.h"
 
+#include "CAIObjectType.h"
+#include "CBaldurChitin.h"
+#include "CInfGame.h"
 #include "CTimerWorld.h"
+#include "CUtil.h"
 
 // 0x8DF018
 const DWORD CRuleTables::TIME_RESTING = 8
@@ -1389,4 +1393,814 @@ CRuleTables::CRuleTables()
 // 0x540330
 CRuleTables::~CRuleTables()
 {
+}
+
+// 0x541940
+const CString CRuleTables::GetRaceString(BYTE nRace, BYTE nSubRace) const
+{
+    switch (nRace) {
+    case CAIObjectType::R_HUMAN:
+        switch (nSubRace) {
+        case 0:
+            return HUMAN;
+        case 1:
+            return HUMAN_AASIMAR;
+        case 2:
+            return HUMAN_TIEFLING;
+        }
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+        // __LINE__: 1062
+        UTIL_ASSERT(FALSE);
+    case CAIObjectType::R_ELF:
+        switch (nSubRace) {
+        case 0:
+            return ELF;
+        case 1:
+            return ELF_DROW;
+        case 2:
+            return ELF_WILD;
+        }
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+        // __LINE__: 1080
+        UTIL_ASSERT(FALSE);
+    case CAIObjectType::R_HALF_ELF:
+        switch (nSubRace) {
+        case 0:
+            return HALF_ELF;
+        }
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+        // __LINE__: 1086
+        UTIL_ASSERT(FALSE);
+    case CAIObjectType::R_DWARF:
+        switch (nSubRace) {
+        case 0:
+            return DWARF;
+        case 1:
+            return DWARF_GOLD;
+        case 2:
+            return DWARF_GRAY;
+        }
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+        // __LINE__: 1103
+        UTIL_ASSERT(FALSE);
+    case CAIObjectType::R_HALFLING:
+        switch (nSubRace) {
+        case 0:
+            return HALFLING;
+        case 1:
+            return HALFLING_STRONGHEART;
+        case 2:
+            return HALFLING_GHOSTWISE;
+        }
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+        // __LINE__: 1121
+        UTIL_ASSERT(FALSE);
+    case CAIObjectType::R_GNOME:
+        switch (nSubRace) {
+        case 0:
+            return GNOME;
+        case 1:
+            return GNOME_DEEP;
+        }
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+        // __LINE__: 1136
+        UTIL_ASSERT(FALSE);
+    case CAIObjectType::R_HALF_ORC:
+        switch (nSubRace) {
+        case 0:
+            return HALF_ORC;
+        }
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+        // __LINE__: 1142
+        UTIL_ASSERT(FALSE);
+    }
+
+    return CString("");
+}
+
+// 0x541C20
+const CString CRuleTables::GetAlignmentString(BYTE nAlignment) const
+{
+    switch (nAlignment) {
+    case CAIObjectType::LAWFUL_GOOD:
+        return LAWFUL_GOOD;
+    case CAIObjectType::LAWFUL_NEUTRAL:
+        return LAWFUL_NEUTRAL;
+    case CAIObjectType::LAWFUL_EVIL:
+        return LAWFUL_EVIL;
+    case CAIObjectType::NEUTRAL_GOOD:
+        return NEUTRAL_GOOD;
+    case CAIObjectType::NEUTRAL:
+        return NEUTRAL;
+    case CAIObjectType::NEUTRAL_EVIL:
+        return NEUTRAL_EVIL;
+    case CAIObjectType::CHAOTIC_GOOD:
+        return CHAOTIC_GOOD;
+    case CAIObjectType::CHAOTIC_NEUTRAL:
+        return CHAOTIC_NEUTRAL;
+    case CAIObjectType::CHAOTIC_EVIL:
+        return CHAOTIC_EVIL;
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+    // __LINE__: 1354
+    UTIL_ASSERT(FALSE);
+}
+
+// 0x541DA0
+const CString CRuleTables::GetClassString(BYTE nClass, DWORD nSpecialist) const
+{
+    switch (nClass) {
+    case CAIObjectType::C_BARBARIAN:
+        return BARBARIAN;
+    case CAIObjectType::C_BARD:
+        return BARD;
+    case CAIObjectType::C_CLERIC:
+        switch (nSpecialist & 0xFF8000) {
+        case 0x8000:
+            return CLERIC_ILMATER;
+        case 0x10000:
+            return CLERIC_LATHANDER;
+        case 0x20000:
+            return CLERIC_SELUNE;
+        case 0x40000:
+            return CLERIC_HELM;
+        case 0x80000:
+            return CLERIC_OGHMA;
+        case 0x100000:
+            return CLERIC_TEMPUS;
+        case 0x200000:
+            return CLERIC_BANE;
+        case 0x400000:
+            return CLERIC_MASK;
+        case 0x800000:
+            return CLERIC_TALOS;
+        }
+
+        return CLERIC;
+    case CAIObjectType::C_DRUID:
+        return DRUID;
+    case CAIObjectType::C_FIGHTER:
+        return FIGHTER;
+    case CAIObjectType::C_MONK:
+        switch (nSpecialist & 0x38) {
+        case 0x8:
+            return MONK_OLD_ORDER;
+        case 0x10:
+            return MONK_BROKEN_ONES;
+        case 0x20:
+            return MONK_DARK_MOON;
+        }
+
+        return MONK;
+    case CAIObjectType::C_PALADIN:
+        switch (nSpecialist & 0x7) {
+        case 0x1:
+            return PALADIN_ILMATER;
+        case 0x2:
+            return PALADIN_HELM;
+        case 0x4:
+            return PALADIN_MYSTRA;
+        }
+
+        return PALADIN;
+    case CAIObjectType::C_RANGER:
+        return RANGER;
+    case CAIObjectType::C_ROGUE:
+        return ROGUE;
+    case CAIObjectType::C_SORCERER:
+        return SORCERER;
+    case CAIObjectType::C_WIZARD:
+        switch (nSpecialist & 0x7FC0) {
+        case 0x40:
+            return WIZARD_ABJURER;
+        case 0x80:
+            return WIZARD_CONJURER;
+        case 0x100:
+            return WIZARD_DIVINER;
+        case 0x200:
+            return WIZARD_ENCHANTER;
+        case 0x400:
+            return WIZARD_ILLUSIONIST;
+        case 0x800:
+            return WIZARD_EVOKER;
+        case 0x1000:
+            return WIZARD_NECROMANCER;
+        case 0x2000:
+            return WIZARD_TRANSMUTER;
+        }
+        return WIZARD;
+    }
+
+    return CString("");
+}
+
+// TODO: Figure out when it is actually used, maybe needs a better name.
+//
+// 0x5421F0
+STRREF CRuleTables::GetClassSuffixStringRef(BYTE nClass) const
+{
+    switch (nClass) {
+    case CAIObjectType::C_BARD:
+        // " - Bard "
+        return 39734;
+    case CAIObjectType::C_CLERIC:
+        // " - Cleric "
+        return 39736;
+    case CAIObjectType::C_DRUID:
+        // " - Druid "
+        return 39737;
+    case CAIObjectType::C_PALADIN:
+        // " - Paladin "
+        return 39738;
+    case CAIObjectType::C_RANGER:
+        // " - Ranger "
+        return 39739;
+    case CAIObjectType::C_SORCERER:
+        // " - Sorcerer "
+        return 39740;
+    case CAIObjectType::C_WIZARD:
+        // " - Wizard "
+        return 39741;
+    }
+
+    return -1;
+}
+
+// TODO: Definitely needs a better name.
+//
+// 0x542270
+STRREF CRuleTables::GetClassBeyondCastingAbilityStringRef(BYTE nClass) const
+{
+    switch (nClass) {
+    case CAIObjectType::C_BARD:
+        // " Beyond Bard Casting Ability"
+        return 39804;
+    case CAIObjectType::C_CLERIC:
+        // " Beyond Cleric Casting Ability"
+        return 39806;
+    case CAIObjectType::C_DRUID:
+        // " Beyond Druid Casting Ability"
+        return 39807;
+    case CAIObjectType::C_PALADIN:
+        // " Beyond Paladin Casting Ability"
+        return 39808;
+    case CAIObjectType::C_RANGER:
+        // " Beyond Ranger Casting Ability"
+        return 39809;
+    case CAIObjectType::C_SORCERER:
+        // " Beyond Sorcerer Casting Ability"
+        return 39810;
+    case CAIObjectType::C_WIZARD:
+        // " Beyond Wizard Casting Ability"
+        return 39811;
+    }
+
+    return -1;
+}
+
+// 0x5422F0
+STRREF CRuleTables::GetClassDescriptionStringRef(BYTE nClass, DWORD nSpecialist) const
+{
+    switch (nClass) {
+    case CAIObjectType::C_BARBARIAN:
+        // BARBARIAN
+        return 37;
+    case CAIObjectType::C_BARD:
+        // BARD
+        return 9562;
+    case CAIObjectType::C_CLERIC:
+        switch (nSpecialist & 0xFF8000) {
+        case 0x8000:
+            // PAINBEARER OF ILMATER
+            return 38118;
+        case 0x10000:
+            // MORNINGLORD OF LATHANDER
+            return 38119;
+        case 0x20000:
+            // SILVERSTAR OF SELUNE
+            return 38120;
+        case 0x40000:
+            // WATCHER OF HELM
+            return 38121;
+        case 0x80000:
+            // LOREKEEPER OF OGHMA
+            return 38122;
+        case 0x100000:
+            // BATTLEGUARD OF TEMPUS
+            return 38123;
+        case 0x200000:
+            // DREADMASTER OF BANE
+            return 38124;
+        case 0x400000:
+            // DEMARCH OF MASK
+            return 38125;
+        case 0x800000:
+            // STORMLORD OF TALOS
+            return 38126;
+        }
+
+        // CLERIC
+        return 9559;
+    case CAIObjectType::C_DRUID:
+        // DRUID
+        return 9560;
+    case CAIObjectType::C_FIGHTER:
+        // FIGHTER
+        return 9556;
+    case CAIObjectType::C_MONK:
+        switch (nSpecialist & 0x38) {
+        case 0x8:
+            // MONK OF THE OLD ORDER
+            return 39410;
+        case 0x10:
+            // MONK OF THE BROKEN ONES
+            return 39411;
+        case 0x20:
+            // MONK OF THE DARK MOON
+            return 39412;
+        }
+
+        // MONK
+        return 36;
+    case CAIObjectType::C_PALADIN:
+        switch (nSpecialist & 0x7) {
+        case 0x1:
+            // PALADIN OF ILMATER
+            return 39407;
+        case 0x2:
+            // PALADIN OF HELM
+            return 39408;
+        case 0x4:
+            // PALADIN OF MYSTRA
+            return 39409;
+        }
+
+        // PALADIN
+        return 9558;
+    case CAIObjectType::C_RANGER:
+        // RANGER
+        return 9557;
+    case CAIObjectType::C_ROGUE:
+        // ROGUE
+        return 9561;
+    case CAIObjectType::C_SORCERER:
+        // SORCERER
+        return 35;
+    case CAIObjectType::C_WIZARD:
+        switch (nSpecialist & 0x7FC0) {
+        case 0x40:
+            // ABJURER
+            return 9564;
+        case 0x80:
+            // CONJURER
+            return 9565;
+        case 0x100:
+            // DIVINER
+            return 9566;
+        case 0x200:
+            // ENCHANTER
+            return 9567;
+        case 0x400:
+            // ILLUSIONIST
+            return 9568;
+        case 0x800:
+            // EVOKER
+            return 9569;
+        case 0x1000:
+            // NECROMANCER
+            return 9570;
+        case 0x2000:
+            // TRANSMUTER
+            return 9571;
+        }
+
+        // WIZARD
+        return 9563;
+    }
+
+    return -1;
+}
+
+// 0x5439B0
+void CRuleTables::GetStartArea(CResRef& cResArea, CPoint& ptView) const
+{
+    if (g_pBaldurChitin->m_pObjectGame->m_bExpansion == TRUE) {
+        cResArea = m_tStartArea.GetAt(VALUE, START_AREA_EXPANSION);
+        ptView.x = atol(m_tStartArea.GetAt(VALUE, START_XPOS_EXPANSION));
+        ptView.y = atol(m_tStartArea.GetAt(VALUE, START_YPOS_EXPANSION));
+    } else {
+        cResArea = m_tStartArea.GetAt(VALUE, START_AREA);
+        ptView.x = atol(m_tStartArea.GetAt(VALUE, START_XPOS));
+        ptView.y = atol(m_tStartArea.GetAt(VALUE, START_YPOS));
+    }
+}
+
+// 0x543A90
+CPoint CRuleTables::GetStartPoint(INT nCharacterSlot) const
+{
+    CPoint ptStart;
+    CString sSlot;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+    // __LINE__: 3320
+    UTIL_ASSERT(0 <= nCharacterSlot && nCharacterSlot < CINFGAME_MAXCHARACTERS);
+
+    sSlot.Format("%d", nCharacterSlot + 1);
+
+    if (g_pBaldurChitin->m_pObjectGame->m_bExpansion == TRUE) {
+        ptStart.x = atol(m_tStartPos.GetAt(sSlot, START_XPOS_EXPANSION));
+        ptStart.y = atol(m_tStartPos.GetAt(sSlot, START_YPOS_EXPANSION));
+    } else {
+        ptStart.x = atol(m_tStartPos.GetAt(sSlot, START_XPOS));
+        ptStart.y = atol(m_tStartPos.GetAt(sSlot, START_YPOS));
+    }
+
+    return ptStart;
+}
+
+// 0x543BB0
+int CRuleTables::GetStartRotation(INT nCharacterSlot) const
+{
+    int rotation;
+    CString sSlot;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+    // __LINE__: 3346
+    UTIL_ASSERT(0 <= nCharacterSlot && nCharacterSlot < CINFGAME_MAXCHARACTERS);
+
+    sSlot.Format("%d", nCharacterSlot + 1);
+
+    if (g_pBaldurChitin->m_pObjectGame->m_bExpansion == TRUE) {
+        rotation = atol(m_tStartPos.GetAt(sSlot, START_ROT_EXPANSION));
+    } else {
+        rotation = atol(m_tStartPos.GetAt(sSlot, START_ROT));
+    }
+
+    return rotation;
+}
+
+// 0x5446B0
+void CRuleTables::GetCharacterStateDescription(INT nState, CString& sDescription) const
+{
+    STR_RES strRes;
+    DWORD strDescription;
+    CString sState;
+
+    sState.Format("%d", nState);
+    strDescription = atol(m_tCharacterStateDescription.GetAt(DESCRIPTION, sState));
+    g_pBaldurChitin->m_cTlkTable.Fetch(strDescription, strRes);
+    sDescription = strRes.szText;
+}
+
+// 0x5447B0
+void CRuleTables::GetMovieDescription(const CString& sMovie, CString& sDescription) const
+{
+    STR_RES strRes;
+    DWORD strDescription;
+
+    strDescription = atol(m_tCharacterStateDescription.GetAt(DESCRIPTION, sMovie));
+    g_pBaldurChitin->m_cTlkTable.Fetch(strDescription, strRes);
+    sDescription = strRes.szText;
+}
+
+// 0x544870
+void CRuleTables::GetMovieDescription(const CString& sSpell, CString& sDescription) const
+{
+    STR_RES strRes;
+    DWORD strDescription;
+
+    strDescription = atol(m_tCharacterStateDescription.GetAt(DESCRIPTION, sSpell));
+    g_pBaldurChitin->m_cTlkTable.Fetch(strDescription, strRes);
+    sDescription = strRes.szText;
+}
+
+// 0x544A60
+BOOL CRuleTables::IsValidAlignment(BYTE nClass, BYTE nAlignment, DWORD nSpecialist) const
+{
+    CString sClass = GetClassString(nClass, nSpecialist);
+    CString sAlignment = GetAlignmentString(nAlignment);
+    return atol(m_tAlignment.GetAt(sAlignment, sClass));
+}
+
+// 0x544B10
+BOOL CRuleTables::IsUsableByAlignment(DWORD dwNotUsableBy, BYTE nAlignment) const
+{
+    if ((dwNotUsableBy & 0x4000) != 0) {
+        if (nAlignment == CAIObjectType::CHAOTIC_GOOD
+            || nAlignment == CAIObjectType::NEUTRAL_GOOD
+            || nAlignment == CAIObjectType::LAWFUL_GOOD) {
+            return FALSE;
+        }
+    }
+
+    if ((dwNotUsableBy & 0x8000) != 0) {
+        if (nAlignment == CAIObjectType::CHAOTIC_NEUTRAL
+            || nAlignment == CAIObjectType::NEUTRAL
+            || nAlignment == CAIObjectType::LAWFUL_NEUTRAL) {
+            return FALSE;
+        }
+    }
+
+    if ((dwNotUsableBy & 0x2000) != 0) {
+        if (nAlignment == CAIObjectType::CHAOTIC_EVIL
+            || nAlignment == CAIObjectType::NEUTRAL_EVIL
+            || nAlignment == CAIObjectType::LAWFUL_EVIL) {
+            return FALSE;
+        }
+    }
+
+    if ((dwNotUsableBy & 0x10000) != 0) {
+        if (nAlignment == CAIObjectType::LAWFUL_GOOD
+            || nAlignment == CAIObjectType::LAWFUL_NEUTRAL
+            || nAlignment == CAIObjectType::LAWFUL_EVIL) {
+            return FALSE;
+        }
+    }
+
+    if ((dwNotUsableBy & 0x20000) != 0) {
+        if (nAlignment == CAIObjectType::NEUTRAL_GOOD
+            || nAlignment == CAIObjectType::NEUTRAL
+            || nAlignment == CAIObjectType::NEUTRAL_EVIL) {
+            return FALSE;
+        }
+    }
+
+    if ((dwNotUsableBy & 0x1000) != 0) {
+        if (nAlignment == CAIObjectType::CHAOTIC_GOOD
+            || nAlignment == CAIObjectType::CHAOTIC_NEUTRAL
+            || nAlignment == CAIObjectType::CHAOTIC_EVIL) {
+            return FALSE;
+        }
+    }
+
+    return TRUE;
+}
+
+// 0x544BF0
+BYTE CRuleTables::GetStartingReputation(BYTE nAlignment) const
+{
+    CString sAlignment = GetAlignmentString(nAlignment);
+    return atol(m_tReputationStart.GetAt(VALUE, sAlignment));
+}
+
+// #guess
+// 0x544C70
+DWORD CRuleTables::GetXPCap() const
+{
+    return 528000;
+}
+
+// 0x545080
+void CRuleTables::GetClassStringMixed(BYTE nClass, DWORD nSpecialist, CString& sClass)
+{
+    STR_RES strRes;
+    DWORD strClass;
+
+    switch (nClass) {
+    case CAIObjectType::C_BARBARIAN:
+        // "Barbarian"
+        strClass = 10;
+        break;
+    case CAIObjectType::C_BARD:
+        // "Bard"
+        strClass = 10179;
+        break;
+    case CAIObjectType::C_CLERIC:
+        // "Cleric"
+        strClass = 10177;
+        break;
+    case CAIObjectType::C_DRUID:
+        // "Druid"
+        strClass = 10186;
+        break;
+    case CAIObjectType::C_FIGHTER:
+        // "Fighter"
+        strClass = 10174;
+        break;
+    case CAIObjectType::C_MONK:
+        // "Monk"
+        strClass = 39;
+        break;
+    case CAIObjectType::C_PALADIN:
+        // "Paladin"
+        strClass = 10194;
+        break;
+    case CAIObjectType::C_RANGER:
+        // "Ranger"
+        strClass = 10173;
+        break;
+    case CAIObjectType::C_ROGUE:
+        // "Thief"
+        strClass = 10175;
+        break;
+    case CAIObjectType::C_SORCERER:
+        // "Sorcerer"
+        strClass = 38;
+        break;
+    case CAIObjectType::C_WIZARD:
+        // "Wizard"
+        strClass = 10176;
+        break;
+    default:
+        strClass = -1;
+        break;
+    }
+
+    g_pBaldurChitin->m_cTlkTable.Fetch(strClass, strRes);
+    sClass = strRes.szText;
+}
+
+// 0x5452C0
+DWORD CRuleTables::GetReputationDescription(SHORT nReputation) const
+{
+    return atol(m_tReputationDescription.GetAt(CPoint(0, nReputation)));
+}
+
+// 0x545310
+void CRuleTables::GetIntoxicationInfo(BYTE nCON, INT& nIntoxicationRate, INT& nRecoveryRate, INT& nIntoxicationCap) const
+{
+    nIntoxicationRate = atol(m_tReputationDescription.GetAt(CPoint(0, nCON - 1)));
+    nRecoveryRate = atol(m_tReputationDescription.GetAt(CPoint(1, nCON - 1)));
+    nIntoxicationCap = atol(m_tReputationDescription.GetAt(CPoint(2, nCON - 1)));
+}
+
+// 0x5453F0
+BOOL CRuleTables::GetCustomSound(CString& sName, BYTE nSoundId) const
+{
+    CString temp;
+    LONG value;
+
+    value = m_tCustomSound.GetAtLong(CPoint(0, nSoundId));
+    if (value < 10) {
+        sName.Format("0%d", value);
+    } else {
+        sName.Format("%d", value);
+    }
+
+    return value;
+}
+
+// 0x545490
+void CRuleTables::GetAlignmentStringMixed(BYTE nAlignment, CString& sAlignment) const
+{
+    DWORD dwStrId;
+    STR_RES strRes;
+
+    switch (nAlignment) {
+    case CAIObjectType::LAWFUL_GOOD:
+        // "Lawful Good"
+        dwStrId = 1102;
+        break;
+    case CAIObjectType::LAWFUL_NEUTRAL:
+        // "Lawful Neutral"
+        dwStrId = 1104;
+        break;
+    case CAIObjectType::LAWFUL_EVIL:
+        // "Lawful Evil"
+        dwStrId = 1103;
+        break;
+    case CAIObjectType::NEUTRAL_GOOD:
+        // "Neutral Good"
+        dwStrId = 1105;
+        break;
+    case CAIObjectType::NEUTRAL:
+        // "True Neutral"
+        dwStrId = 1106;
+        break;
+    case CAIObjectType::NEUTRAL_EVIL:
+        // "Neutral Evil"
+        dwStrId = 1107;
+        break;
+    case CAIObjectType::CHAOTIC_GOOD:
+        // "Chaotic Good"
+        dwStrId = 1108;
+        break;
+    case CAIObjectType::CHAOTIC_NEUTRAL:
+        // "Chaotic Neutral"
+        dwStrId = 1109;
+        break;
+    case CAIObjectType::CHAOTIC_EVIL:
+        // "Chaotic Evil"
+        dwStrId = 1110;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+        // __LINE__: 5529
+        UTIL_ASSERT(FALSE);
+    }
+
+    g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes);
+    sAlignment = strRes.szText;
+}
+
+// 0x5455F0
+void CRuleTables::GetGenderStringMixed(BYTE nGender, CString& sGender) const
+{
+    DWORD dwStrId;
+    STR_RES strRes;
+
+    switch (nGender) {
+    case CAIObjectType::SEX_MALE:
+        // "Male"
+        dwStrId = 1050;
+        break;
+    case CAIObjectType::SEX_FEMALE:
+        // "Female"
+        dwStrId = 1051;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+        // __LINE__: 5575
+        UTIL_ASSERT(FALSE);
+    }
+
+    g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes);
+    sGender = strRes.szText;
+}
+
+// 0x545A10
+BYTE CRuleTables::MapCharacterSpecializationToSchool(WORD nSpecialistMage) const
+{
+    switch (nSpecialistMage & 0x7FC0) {
+    case 0x40:
+        return 1;
+    case 0x80:
+        return 2;
+    case 0x100:
+        return 3;
+    case 0x200:
+        return 4;
+    case 0x400:
+        return 5;
+    case 0x800:
+        return 6;
+    case 0x1000:
+        return 7;
+    case 0x2000:
+        return 8;
+    }
+
+    return 0;
+}
+
+// 0x546030
+const C2DArray* CRuleTables::GetClassAbilityTable(BYTE nClass, DWORD nSpecialist) const
+{
+    switch (nClass) {
+    case CAIObjectType::C_BARBARIAN:
+        return &m_tCLABFI05;
+    case CAIObjectType::C_BARD:
+        return &m_tCLABBA01;
+    case CAIObjectType::C_CLERIC:
+        switch (nSpecialist & 0xFF8000) {
+        case 0x8000:
+            return &m_tCLABCL01;
+        case 0x10000:
+            return &m_tCLABCL02;
+        case 0x20000:
+            return &m_tCLABCL03;
+        case 0x40000:
+            return &m_tCLABCL04;
+        case 0x80000:
+            return &m_tCLABCL05;
+        case 0x100000:
+            return &m_tCLABCL06;
+        case 0x200000:
+            return &m_tCLABCL07;
+        case 0x400000:
+            return &m_tCLABCL08;
+        case 0x800000:
+            return &m_tCLABCL09;
+        }
+
+        return &m_tCLABPR01;
+    case CAIObjectType::C_DRUID:
+        return &m_tCLABDR01;
+    case CAIObjectType::C_FIGHTER:
+        return &m_tCLABFI01;
+    case CAIObjectType::C_MONK:
+        return &m_tCLABMO01;
+    case CAIObjectType::C_PALADIN:
+        return &m_tCLABPA01;
+    case CAIObjectType::C_RANGER:
+        return &m_tCLABRN01;
+    case CAIObjectType::C_ROGUE:
+        return &m_tCLABTH01;
+    case CAIObjectType::C_SORCERER:
+        return &m_tCLABSR01;
+    case CAIObjectType::C_WIZARD:
+        return &m_tCLABMA01;
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+    // __LINE__: 6354
+    UTIL_ASSERT_MSG(FALSE, "GetClassAbilityTable Being  called incorrectly");
 }

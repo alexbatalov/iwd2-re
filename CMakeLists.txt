@@ -18,6 +18,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/C2DArray.h"
     "src/CAIIdList.cpp"
     "src/CAIIdList.h"
+    "src/CAIObjectType.cpp"
+    "src/CAIObjectType.h"
     "src/CAIUtil.cpp"
     "src/CAIUtil.h"
     "src/CAlias.cpp"

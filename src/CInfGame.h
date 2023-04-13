@@ -7,6 +7,9 @@
 #include "CRuleTables.h"
 #include "CTimerWorld.h"
 
+// Seen in `CRuleTables::GetStartPoint` assertion.
+#define CINFGAME_MAXCHARACTERS 6
+
 class CInfGame {
 public:
     CInfGame();
@@ -24,6 +27,8 @@ public:
     /* 3846 */ SHORT m_nCharacters;
     /* 43EA */ CGameOptions m_cOptions; // #guess
     /* 4A00 */ HANDLE m_hSearchThread; // #guess
+    // NOTE: Can also be BYTE indicating number of expansion pack.
+    /* 4BD5 */ BOOLEAN m_bExpansion;
 };
 
 #endif /* CINFGAME_H_ */
