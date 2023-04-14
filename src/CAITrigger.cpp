@@ -1,5 +1,18 @@
 #include "CAITrigger.h"
 
+// NOTE: Inlined.
+CAITrigger::CAITrigger(const CAITrigger& trigger)
+{
+    m_triggerID = trigger.m_triggerID;
+    m_specificID = trigger.m_specificID;
+    m_triggerCause.Set(trigger.m_triggerCause);
+    m_flags = trigger.m_flags;
+    m_specific2 = trigger.m_specific2;
+    m_specific3 = trigger.m_specific3;
+    m_string1 = trigger.m_string1;
+    m_string2 = trigger.m_string2;
+}
+
 // 0x420D10
 CAITrigger::CAITrigger(SHORT triggerID, const CAIObjectType& cause, LONG specificID)
 {

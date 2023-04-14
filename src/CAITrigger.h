@@ -5,6 +5,7 @@
 
 class CAITrigger {
 public:
+    CAITrigger(const CAITrigger& trigger);
     CAITrigger(SHORT triggerID, const CAIObjectType& cause, LONG specificID);
     CAITrigger(SHORT triggerID, LONG specificID);
     ~CAITrigger();
