@@ -18,6 +18,22 @@ CAIAction::CAIAction()
     m_internalFlags = 0;
 }
 
+// NOTE: Inlined.
+CAIAction::CAIAction(const CAIAction& action)
+{
+    m_actionID = action.m_actionID;
+    m_actorID.Set(action.m_actorID);
+    m_acteeID.Set(action.m_acteeID);
+    m_acteeID2.Set(action.m_acteeID2);
+    m_specificID = action.m_specificID;
+    m_specificID2 = action.m_specificID2;
+    m_specificID3 = action.m_specificID2;
+    m_string1 = action.m_string1;
+    m_string2 = action.m_string2;
+    m_dest = action.m_dest;
+    m_internalFlags = action.m_internalFlags;
+}
+
 // 0x403B40
 CAIAction::~CAIAction()
 {

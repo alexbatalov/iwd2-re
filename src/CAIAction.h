@@ -12,6 +12,7 @@ public:
     static const CAIAction NULL_ACTION;
 
     CAIAction();
+    CAIAction(const CAIAction& action);
     ~CAIAction();
     BOOL OfType(SHORT type) const;
     void Read(CString sData);
