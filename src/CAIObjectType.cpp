@@ -189,6 +189,28 @@ CAIObjectType::~CAIObjectType()
 {
 }
 
+// 0x40AFE0
+BOOL CAIObjectType::OfType(const CAIObjectType& type, BOOL bCheckForNonSprites, BOOL bNoNonSprites) const
+{
+    if (Equal(NOONE)) {
+        return Equal(type);
+    }
+
+    if (Equal(ANYONE)) {
+        if (Equal(NOT_SPRITE) && !bCheckForNonSprites) {
+            return FALSE;
+        }
+    }
+
+    if (Equal(NOT_SPRITE) && bNoNonSprites) {
+        return FALSE;
+    }
+
+    // TODO: Incomplete.
+
+    return TRUE;
+}
+
 // 0x40B6E0
 void CAIObjectType::Set(const CAIObjectType& type)
 {
@@ -291,6 +313,12 @@ void CAIObjectType::SetSpecialCase(const BYTE* SpecialCase)
     for (int index = 0; index < 5; index++) {
         m_SpecialCase[index] = SpecialCase[index];
     }
+}
+
+// 0x40D450
+void CAIObjectType::Read(CString sData)
+{
+    // TODO: Incomplete.
 }
 
 // 0x40D700

@@ -20,6 +20,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CAIIdList.h"
     "src/CAIObjectType.cpp"
     "src/CAIObjectType.h"
+    "src/CAITrigger.cpp"
+    "src/CAITrigger.h"
     "src/CAIUtil.cpp"
     "src/CAIUtil.h"
     "src/CAlias.cpp"

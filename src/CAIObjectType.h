@@ -81,14 +81,22 @@ public:
     static const CAIObjectType NOT_SPRITE;
     static const CAIObjectType OBJECT_MYSELF;
 
+    // TODO: Not sure if this is allowed in old C++. Check in VC6.
+    CAIObjectType()
+        : CAIObjectType(0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0)
+    {
+    }
+
     CAIObjectType(const CAIObjectType& type);
     CAIObjectType(BYTE nEnemyAlly, BYTE nGeneral, BYTE nRace, BYTE nSubRace, BYTE nClass, BYTE nSpecific, BYTE nGender, BYTE nAlignment, int nInstance, const BYTE* SpecialCase, const CString& sName, BYTE nAvClass, int nClassMask);
     CAIObjectType(BYTE nEnemyAlly, BYTE nGeneral, BYTE nRace, BYTE nSubRace, BYTE nClass, BYTE nSpecific, BYTE nGender, BYTE nAlignment, int nInstance, BYTE nAvClass, int nClassMask);
     ~CAIObjectType();
+    BOOL OfType(const CAIObjectType& type, BOOL bCheckForNonSprites, BOOL bNoNonSprites) const;
     void Set(const CAIObjectType& type);
     CString GetName() const;
     BOOL Equal(const CAIObjectType& type) const;
     void SetSpecialCase(const BYTE* SpecialCase);
+    void Read(CString sData);
     BOOL IsEnemyOf(const CAIObjectType& type) const;
     CAIObjectType GetEnemyOf() const;
     BOOL IsClassValid(BYTE nClass) const;
