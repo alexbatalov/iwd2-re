@@ -16,6 +16,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/BalDataTypes.h"
     "src/C2DArray.cpp"
     "src/C2DArray.h"
+    "src/CAIAction.cpp"
+    "src/CAIAction.h"
     "src/CAICondition.cpp"
     "src/CAICondition.h"
     "src/CAIIdList.cpp"
