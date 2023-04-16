@@ -211,7 +211,7 @@ void CResCache::FlushCache(int a2)
 
     int nUnusedSize = GetUnusedSize();
 
-    if (!g_pChitin->cNetwork.field_6E0 && v1 <= 10000000) {
+    if (!g_pChitin->cNetwork.m_bConnectionEstablished && v1 <= 10000000) {
         while (pos != NULL && nUnusedSize < v1) {
             POSITION curr = pos;
             Entry* pEntry = field_128.GetPrev(pos);

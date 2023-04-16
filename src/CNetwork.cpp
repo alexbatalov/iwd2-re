@@ -59,8 +59,8 @@ CNetwork::CNetwork()
     field_686 = 1;
     field_6D8 = 0;
     field_6DC = 0;
-    field_6E0 = 0;
-    field_6E1 = 0;
+    m_bConnectionEstablished = FALSE;
+    m_bIsHost = FALSE;
     field_6EA = 0;
     field_6EB = 0;
     m_nMaxPlayers = 6;

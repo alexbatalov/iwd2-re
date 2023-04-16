@@ -69,3 +69,15 @@ CBaldurMessage::CBaldurMessage()
 CBaldurMessage::~CBaldurMessage()
 {
 }
+
+// 0x4370B0
+void CBaldurMessage::TimeSynchBroadcast(ULONG nGameTime, BOOLEAN bCompressTime)
+{
+    // TODO: Incomplete.
+}
+
+// 0x437240
+void CBaldurMessage::TimeChangeToServer(DWORD deltaTime)
+{
+    // TODO: Incomplete.
+}

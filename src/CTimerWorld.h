@@ -5,6 +5,17 @@
 
 class CTimerWorld {
 public:
+    static const CString TOKEN_MINUTE;
+    static const CString TOKEN_HOUR;
+    static const CString TOKEN_DAY;
+    static const CString TOKEN_MONTH;
+    static const CString TOKEN_YEAR;
+    static const CString TOKEN_MONTHNAME;
+    static const CString TOKEN_DAYANDMONTH;
+    static const CString TOKEN_GAMEDAY;
+    static const CString TOKEN_GAMEDAYS;
+    static const CString TOKEN_DURATION;
+    static const CString TOKEN_DURATIONNOAND;
     static const BYTE TIMESCALE_MSEC_PER_SEC;
     static const BYTE TIMESCALE_SEC_PER_MIN;
     static const BYTE TIMESCALE_MIN_PER_HOUR;
@@ -27,6 +38,13 @@ public:
     static const UINT MULTIPLAYER_TIME_SYNCH_INTERVAL;
 
     CTimerWorld();
+    void AdvanceCurrentTime(ULONG gameTime);
+    void AddCurrentTime(ULONG gameTime);
+    void UpdateTime(BOOLEAN forceUpdate);
+    void CheckForTriggerEventAbsolute();
+    void CheckForTriggerEventPast();
+    void StartTime();
+    void StopTime();
 
     ULONG m_gameTime;
     BOOLEAN m_active;

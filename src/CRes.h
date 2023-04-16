@@ -109,6 +109,11 @@ public:
         }
     }
 
+    const CResRef& GetResRef() const
+    {
+        return cResRef;
+    }
+
     int Request()
     {
         if (pRes != NULL) {

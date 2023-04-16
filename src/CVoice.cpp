@@ -54,7 +54,7 @@ BOOL CVoice::GetLooping()
 BOOL CVoice::IsSoundPlaying()
 {
     if (m_pSound != NULL) {
-        return m_pSound->IsPlaying();
+        return m_pSound->IsSoundPlaying();
     } else {
         // __FILE__: C:\Projects\Icewind2\src\chitin\ChSound.cpp
         // __LINE__: 2152

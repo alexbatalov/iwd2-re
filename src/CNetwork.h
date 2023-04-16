@@ -67,8 +67,8 @@ public:
     /* 0686 */ unsigned char field_686;
     /* 06D8 */ int field_6D8;
     /* 06DC */ int field_6DC;
-    /* 06E0 */ unsigned char field_6E0;
-    /* 06E1 */ unsigned char field_6E1;
+    /* 06E0 */ BOOLEAN m_bConnectionEstablished;
+    /* 06E1 */ BOOLEAN m_bIsHost;
     /* 06E2 */ int m_nMaxPlayers;
     /* 06E6 */ int field_6E6;
     /* 06EA */ unsigned char field_6EA;

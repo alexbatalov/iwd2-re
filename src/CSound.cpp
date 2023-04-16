@@ -26,7 +26,7 @@ CSound::CSound()
     pSoundBuffer = NULL;
     field_4C = 0;
     field_50 = 0;
-    field_5C = 0;
+    m_bFireForget = FALSE;
     m_nArea = 0;
     m_nVolume = 100;
     m_nPriority = INT_MAX;
@@ -60,7 +60,7 @@ CSound::CSound(CResRef cResRef, int nRange, int nChannel, int nLooping, int nPri
     pSoundBuffer = NULL;
     field_4C = 0;
     field_50 = 0;
-    field_5C = 0;
+    m_bFireForget = FALSE;
     m_nArea = 0;
 }
 
@@ -97,8 +97,8 @@ DWORD CSound::GetStatus()
     return 0;
 }
 
-// NOTE: Inlined in `CSoundMixer::UpdateSoundPositions`.
-BOOL CSound::IsPlaying()
+// 0x7A9AE0
+BOOL CSound::IsSoundPlaying()
 {
     if (pSoundBuffer != NULL) {
         DWORD dwStatus;
@@ -117,6 +117,22 @@ BOOL CSound::Play(BOOL bReplay)
     return FALSE;
 }
 
+// 0x7AA690
+BOOL CSound::SetLoopingFlag(int nNewLooping)
+{
+    if (nNewLooping != 0 && nNewLooping != 1) {
+        return FALSE;
+    }
+
+    if (m_bFireForget) {
+        return FALSE;
+    }
+
+    m_nLooping = nNewLooping;
+
+    return TRUE;
+}
+
 // 0x7AA710
 void CSound::SetRange(int nNewRange)
 {
@@ -125,4 +141,16 @@ void CSound::SetRange(int nNewRange)
     } else {
         m_nRange = 1;
     }
+}
+
+// 0x7AA730
+void CSound::SetVolume(int nNewVolume)
+{
+    // TODO: Incomplete.
+}
+
+// 0x7AA910
+void CSound::Stop()
+{
+    // TODO: Incomplete.
 }

@@ -13,6 +13,8 @@ public:
 
     CBaldurMessage();
     ~CBaldurMessage();
+    void TimeSynchBroadcast(ULONG nGameTime, BOOLEAN bCompressTime);
+    void TimeChangeToServer(ULONG deltaTime);
 
     /* 0000 */ unsigned char field_0;
     /* 0001 */ unsigned char field_1;

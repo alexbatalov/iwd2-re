@@ -19,11 +19,13 @@ public:
     void ResetVolume();
     BOOL SetChannel(int nNewChannel, DWORD nArea);
 
-    BOOL IsPlaying();
+    BOOL IsSoundPlaying();
     BOOL Play(BOOL bReplay);
     DWORD GetStatus();
+    BOOL SetLoopingFlag(int nNewLooping);
     void SetRange(int nNewRange);
-
+    void SetVolume(int nNewVolume);
+    void Stop();
     BOOL GetLooping() { return m_nLooping; }
     IDirectSoundBuffer* GetBuffer() { return pSoundBuffer; }
 
@@ -47,7 +49,7 @@ public:
     /* 0050 */ int field_50;
     /* 0054 */ int field_54;
     /* 0058 */ IDirectSoundBuffer* pSoundBuffer; // #guess
-    /* 005C */ int field_5C;
+    /* 005C */ BOOL m_bFireForget;
     /* 0060 */ int m_nArea;
 };
 
