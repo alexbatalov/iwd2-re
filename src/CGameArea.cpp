@@ -1,6 +1,8 @@
 #include "CGameArea.h"
 
+#include "CBaldurChitin.h"
 #include "CChitin.h"
+#include "CInfGame.h"
 
 // 0x469B60
 CGameArea::CGameArea()
@@ -86,4 +88,194 @@ void CGameArea::SetDawn(BYTE nIntensity, BOOLEAN bPlayDayNightMovie)
 void CGameArea::SetDusk(BYTE nIntensity, BOOLEAN bPlayDayNightMovie)
 {
     // TODO: Incomplete.
+}
+
+// 0x479110
+void CGameArea::SetTimeOfDay(ULONG nTimeOfDay, BOOLEAN bPlayDayNightMovie)
+{
+    // TODO: Incomplete.
+}
+
+// 0x479260
+void CGameArea::SetSoundEnvironment()
+{
+    // NOTE: Not sure why they are explicit. Probably remapping from one enum
+    // to other.
+    switch (m_headerSound.m_reverb) {
+    case 0:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_GENERIC);
+        break;
+    case 1:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_PADDEDCELL);
+        break;
+    case 2:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_ROOM);
+        break;
+    case 3:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_BATHROOM);
+        break;
+    case 4:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_LIVINGROOM);
+        break;
+    case 5:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_STONEROOM);
+        break;
+    case 6:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_AUDITORIUM);
+        break;
+    case 7:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_CONCERTHALL);
+        break;
+    case 8:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_CAVE);
+        break;
+    case 9:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_ARENA);
+        break;
+    case 10:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_HANGAR);
+        break;
+    case 11:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_CARPETEDHALLWAY);
+        break;
+    case 12:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_HALLWAY);
+        break;
+    case 13:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_STONECORRIDOR);
+        break;
+    case 14:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_ALLEY);
+        break;
+    case 15:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_FOREST);
+        break;
+    case 16:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_CITY);
+        break;
+    case 17:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_MOUNTAINS);
+        break;
+    case 18:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_QUARRY);
+        break;
+    case 19:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_PLAIN);
+        break;
+    case 20:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_PARKINGLOT);
+        break;
+    case 21:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_SEWERPIPE);
+        break;
+    case 22:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_UNDERWATER);
+        break;
+    case 23:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_DRUGGED);
+        break;
+    case 24:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_DIZZY);
+        break;
+    case 25:
+        g_pBaldurChitin->cSoundMixer.m_cSoundProperties.SetEnvironmentPreset(EAX_ENVIRONMENT_PSYCHOTIC);
+        break;
+    }
+}
+
+// 0x479CC0
+BOOL CGameArea::SetSong(SHORT slot, BYTE song)
+{
+    switch (slot) {
+    case 0:
+        m_headerSound.m_dayMusic = song;
+        return TRUE;
+    case 1:
+        m_headerSound.m_nightMusic = song;
+        return TRUE;
+    case 2:
+        m_headerSound.m_battleWinningMusic = song;
+        return TRUE;
+    case 3:
+        m_headerSound.m_battleStandOffMusic = song;
+        return TRUE;
+    case 4:
+        m_headerSound.m_battleLosingMusic = song;
+        return TRUE;
+    case 5:
+        m_headerSound.m_alt1Music0 = song;
+        return TRUE;
+    case 6:
+        m_headerSound.m_alt1Music1 = song;
+        return TRUE;
+    case 7:
+        m_headerSound.m_alt1Music2 = song;
+        return TRUE;
+    case 8:
+        m_headerSound.m_alt1Music3 = song;
+        return TRUE;
+    case 9:
+        m_headerSound.m_alt1Music4 = song;
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
+// 0x479DB0
+BYTE CGameArea::GetSong(SHORT slot)
+{
+    if (slot > 256) {
+        return -1;
+    }
+
+    DWORD song;
+    if (slot != 256) {
+        switch (slot) {
+        case 0:
+            song = m_headerSound.m_dayMusic;
+            break;
+        case 1:
+            song = m_headerSound.m_nightMusic;
+            break;
+        case 2:
+            song = m_headerSound.m_battleWinningMusic;
+            break;
+        case 3:
+            song = m_headerSound.m_battleStandOffMusic;
+            break;
+        case 4:
+            song = m_headerSound.m_battleLosingMusic;
+            break;
+        case 5:
+            song = m_headerSound.m_alt1Music0;
+            break;
+        case 6:
+            song = m_headerSound.m_alt1Music1;
+            break;
+        case 7:
+            song = m_headerSound.m_alt1Music2;
+            break;
+        case 8:
+            song = m_headerSound.m_alt1Music3;
+            break;
+        case 9:
+            song = m_headerSound.m_alt1Music4;
+            break;
+        default:
+            return -1;
+        }
+    } else {
+        if (g_pBaldurChitin->m_pObjectGame->m_worldTime.IsDay() || g_pBaldurChitin->m_pObjectGame->m_worldTime.IsDusk()) {
+            song = m_headerSound.m_dayMusic;
+        } else {
+            song = m_headerSound.m_nightMusic;
+        }
+    }
+
+    if (song == 0) {
+        song = -1;
+    }
+
+    return song;
 }

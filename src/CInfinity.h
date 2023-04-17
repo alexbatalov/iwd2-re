@@ -3,8 +3,16 @@
 
 #include "mfc.h"
 
+#include "CResRef.h"
+
 class CInfinity {
 public:
+    static const CString DAWN_MOVIE;
+    static const CString DUSK_MOVIE;
+    static const CString NIGHT_RESREF_SUFFIX;
+    static const CString RAIN_RESREF_SUFFIX;
+    static const CResRef THUNDERRESREFS[3];
+
     CInfinity();
     ~CInfinity();
 

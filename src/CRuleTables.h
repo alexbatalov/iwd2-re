@@ -386,8 +386,11 @@ public:
     BOOL GetCustomSound(CString& sName, BYTE nSoundId) const;
     void GetAlignmentStringMixed(BYTE nAlignment, CString& sAlignment) const;
     void GetGenderStringMixed(BYTE nGender, CString& sGender) const;
+    BOOL Is3DSound(int nSoundChannel) const;
+    float GetSoundReverbMix(int nSoundChannel, int nReverb) const;
+    int GetSoundEnvironment(EAXPRESET& preset, int nReverb) const;
     BYTE MapCharacterSpecializationToSchool(WORD nSpecialistMage) const;
-    const C2DArray* CRuleTables::GetClassAbilityTable(BYTE nClass, DWORD nSpecialist) const;
+    const C2DArray* GetClassAbilityTable(BYTE nClass, DWORD nSpecialist) const;
 
     /* 0000 */ C2DArray m_tReactionModCharisma;
     /* 0024 */ C2DArray m_tReactionModReputation;
@@ -488,7 +491,7 @@ public:
     /* 0D9C */ C2DArray m_tSkillPoints;
     /* 0DC0 */ C2DArray m_tSoundChannel;
     /* 0DE4 */ C2DArray m_tReverb;
-    /* 0E08 */ CAIIdList m_lEAXENVIR;
+    /* 0E08 */ CAIIdList m_lEAXEnvironment;
     /* 0E48 */ CAIIdList field_E48;
     /* 0E88 */ CAIIdList field_E88;
     /* 0EC8 */ C2DArray m_tMonsterSummon1;

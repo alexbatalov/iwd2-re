@@ -82,6 +82,18 @@ SHORT CInfGame::GetCharacterPortaitNum(LONG nCharacterId)
     return -1;
 }
 
+// 0x5BB800
+BOOL CInfGame::Is3DSound(int nSoundChannel)
+{
+    return m_ruleTables.Is3DSound(nSoundChannel);
+}
+
+// 0x5BB810
+float CInfGame::GetSoundReverbMix(int nSoundChannel, int nReverb)
+{
+    return m_ruleTables.GetSoundReverbMix(nSoundChannel, nReverb);
+}
+
 // 0x5C0EA0
 void CInfGame::ApplyVolumeSliders(BOOLEAN a2)
 {

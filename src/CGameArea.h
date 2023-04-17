@@ -38,7 +38,10 @@ public:
     void SetApproachingDusk();
     void SetDawn(BYTE nIntensity, BOOLEAN bPlayDayNightMovie);
     void SetDusk(BYTE nIntensity, BOOLEAN bPlayDayNightMovie);
-    void CGameArea::SetTimeOfDay(ULONG nTimeOfDay, BOOLEAN bPlayDayNightMovie);
+    void SetTimeOfDay(ULONG nTimeOfDay, BOOLEAN bPlayDayNightMovie);
+    void SetSoundEnvironment();
+    BOOL SetSong(SHORT slot, BYTE song);
+    BYTE GetSong(SHORT slot);
 
     /* 005C */ CAreaSoundsAndMusic m_headerSound;
     /* 01EF */ BOOLEAN m_bAreaLoaded;

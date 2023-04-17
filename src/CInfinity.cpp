@@ -1,5 +1,24 @@
 #include "CInfinity.h"
 
+// 0x8E79D8
+const CString CInfinity::DAWN_MOVIE("BGSUNRIS");
+
+// 0x8E7A08
+const CString CInfinity::DUSK_MOVIE("BGSUNSET");
+
+// 0x8E7A0C
+const CString CInfinity::NIGHT_RESREF_SUFFIX("N");
+
+// 0x8E7968
+const CString CInfinity::RAIN_RESREF_SUFFIX("R");
+
+// 0x8E7970
+const CResRef CInfinity::THUNDERRESREFS[3] = {
+    CResRef("Amb_E13a"),
+    CResRef("Amb_E13b"),
+    CResRef("Amb_E13f"),
+};
+
 // 0x5CC360
 CInfinity::CInfinity()
 {

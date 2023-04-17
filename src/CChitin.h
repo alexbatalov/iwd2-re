@@ -100,7 +100,11 @@ public:
     /* 00EC */ virtual void GetGameSpyGameName(CString& sGameSpyName);
     /* 00F0 */ virtual void GetGameSpyCode(CString& sGameSpyCode);
     /* 00F4 */ virtual void GetPanicCDStrings(CString& sMediaRemoved, CString& sPlaceCD, CString& sInDrive);
+    /* 00F8 */ virtual void OnMixerInitialize();
+    /* 00FC */ virtual BOOL Is3DSound(int nSoundChannel);
+    /* 0100 */ virtual float GetSoundReverbMix(int nSoundChannel, int nReverb);
     /* 0104 */ virtual BOOL GetEAXActive();
+    /* 0108 */ virtual int GetSoundEnvironment(EAXPRESET& preset, int environment);
     /* 010C */ virtual void RedrawScreen();
 
     static DWORD TIMER_UPDATES_PER_SECOND;

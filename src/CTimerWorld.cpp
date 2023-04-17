@@ -271,3 +271,31 @@ void CTimerWorld::StopTime()
         g_pBaldurChitin->m_pEngineWorld->UnhideInterface();
     }
 }
+
+// NOTE: Inlined.
+BOOLEAN CTimerWorld::IsDay()
+{
+    ULONG time = m_gameTime % TIMESCALE_MSEC_PER_DAY;
+    return time >= TIME_DAY && time < TIME_DUSK;
+}
+
+// NOTE: Inlined.
+BOOLEAN CTimerWorld::IsNight()
+{
+    ULONG time = m_gameTime % TIMESCALE_MSEC_PER_DAY;
+    return time >= TIME_NIGHT && time < TIME_DAWN;
+}
+
+// NOTE: Inlined.
+BOOLEAN CTimerWorld::IsDawn()
+{
+    ULONG time = m_gameTime % TIMESCALE_MSEC_PER_DAY;
+    return time >= TIME_DAWN && time < TIME_DAY;
+}
+
+// NOTE: Inlined.
+BOOLEAN CTimerWorld::IsDusk()
+{
+    ULONG time = m_gameTime % TIMESCALE_MSEC_PER_DAY;
+    return time >= TIME_DUSK && time < TIME_NIGHT;
+}

@@ -22,6 +22,7 @@ public:
     void AddSound(CSound* pSoundPtr);
     void TransferBuffer(CSound* pSoundPtr);
     void CleanUp();
+    int GetChannelType(int nChannelNumber);
     int GetChannelVolume(int nChannelNumber);
     void GetListenPosition(CPoint& pos, LONG& posZ);
     BOOL Initialize(CWnd* pWnd, int nNewMaxVoices, int nNewMaxChannels);
@@ -39,15 +40,21 @@ public:
     void UpdateMusic();
 
     void SetChannelVolume(int nChannelNumber, int nNewVolume);
+    int GetChannelVolumeFast(int nChannelNumber);
+    BOOL IsSoundWaiting(CSound* pSound);
+    void RemoveWaiting(CSound* pSound);
+    void RemoveFromLoopingList(CSound* pSound);
+
+    BOOL GetMixerInitialized() { return m_bMixerInitialized; }
 
     static BYTE m_tSqrtTable[10000];
 
     /* 0000 */ int field_0;
     /* 0004 */ IDirectSound* m_pDirectSound; // #guess
     /* 0008 */ IDirectSoundBuffer* m_pPrimarySoundBuffer; // #guess
-    /* 003C */ int field_3C;
+    /* 003C */ BOOL m_bMixerInitialized;
     /* 0040 */ int field_40;
-    /* 0044 */ int field_44;
+    /* 0044 */ BOOL m_bInLoopingUpdate;
     /* 0048 */ BOOL m_bInPositionUpdate;
     /* 004C */ BOOL m_bInReleaseAll; // #guess
     /* 0050 */ int field_50;
@@ -79,7 +86,7 @@ public:
     /* 0124 */ int field_124;
     /* 0128 */ CSoundProperties m_cSoundProperties; // #guess
     /* 013C */ IDirectSound3DListener* m_pDirectSound3DListener; // #guess
-    /* 0140 */ int field_140;
+    /* 0140 */ DWORD m_dwEAXProperties;
     /* 0144 */ CUnknown2 field_144;
     /* 0178 */ int field_178;
 };

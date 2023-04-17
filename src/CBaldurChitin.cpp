@@ -1148,6 +1148,24 @@ void CBaldurChitin::ShutDown(int nLineNumber, const char* szFileName, const char
     CChitin::ShutDown(nLineNumber, szFileName, text);
 }
 
+// 0x422D00
+BOOL CBaldurChitin::Is3DSound(int nSoundChannel)
+{
+    if (m_pObjectGame != NULL) {
+        return m_pObjectGame->Is3DSound(nSoundChannel);
+    }
+}
+
+// 0x422D20
+float CBaldurChitin::GetSoundReverbMix(int nSoundChannel, int nReverb)
+{
+    if (m_pObjectGame != NULL) {
+        return m_pObjectGame->GetSoundReverbMix(nSoundChannel, nReverb);
+    }
+
+    return 0.0;
+}
+
 // 0x422D70
 BOOL CBaldurChitin::GetEAXActive()
 {
@@ -1156,6 +1174,16 @@ BOOL CBaldurChitin::GetEAXActive()
     }
 
     return FALSE;
+}
+
+// 0x422D90
+int CBaldurChitin::GetSoundEnvironment(EAXPRESET& preset, int environment)
+{
+    if (m_pObjectGame != NULL) {
+        return m_pObjectGame->m_ruleTables.GetSoundEnvironment(preset, environment);
+    }
+
+    return EAX_ENVIRONMENT_GENERIC;
 }
 
 // 0x422DC0

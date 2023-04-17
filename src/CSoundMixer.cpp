@@ -14,7 +14,7 @@ BYTE CSoundMixer::m_tSqrtTable[10000];
 // 0x7AAD80
 CSoundMixer::CSoundMixer()
 {
-    field_44 = 0;
+    m_bInLoopingUpdate = FALSE;
     m_bInPositionUpdate = FALSE;
     m_bInReleaseAll = FALSE;
     field_50 = 0;
@@ -35,10 +35,10 @@ CSoundMixer::CSoundMixer()
     field_FC = 0;
     field_178 = 0;
     field_C0 |= 0x03;
-    field_3C = 0;
+    m_bMixerInitialized = FALSE;
     field_40 = 0;
-    field_140 = 0;
-    m_cSoundProperties.field_10 = 0;
+    m_dwEAXProperties = 0;
+    m_cSoundProperties.m_nPreset = 0;
     m_pDirectSound3DListener = NULL;
     m_pPrimarySoundBuffer = NULL;
     m_bMusicInitialized = FALSE;
@@ -55,7 +55,7 @@ CSoundMixer::CSoundMixer()
 
     ReleaseAll();
 
-    field_3C = 0;
+    m_bMixerInitialized = FALSE;
     field_40 = 0;
     field_0 = 0;
 }
@@ -76,7 +76,7 @@ CSoundMixer::~CSoundMixer()
 // 0x7AB060
 void CSoundMixer::AddSound(CSound* pSoundPtr)
 {
-    if (field_3C) {
+    if (m_bMixerInitialized) {
         Lock();
 
         CVoice* pVoice = new CVoice();
@@ -146,11 +146,28 @@ void CSoundMixer::CleanUp()
 
     ReleaseAll();
 
-    field_3C = 0;
+    m_bMixerInitialized = FALSE;
     field_40 = 0;
     field_0 = 0;
 
     Unlock();
+}
+
+// NOTE: Inlined.
+int CSoundMixer::GetChannelType(int nChannelNumber)
+{
+    int type = 0;
+
+    Lock();
+
+    if (nChannelNumber >= 0 && nChannelNumber <= m_nMaxChannels) {
+        CSoundChannel* pSoundChannel = static_cast<CSoundChannel*>(m_aChannels.GetAt(nChannelNumber));
+        type = pSoundChannel->m_nType;
+    }
+
+    Unlock();
+
+    return type;
 }
 
 // 0x7AB2A0
@@ -231,7 +248,7 @@ BOOL CSoundMixer::ReleaseAll()
     Lock();
 
     m_cSoundProperties.Uninit();
-    field_140 = 0;
+    m_dwEAXProperties = 0;
 
     Unlock();
 
@@ -423,4 +440,53 @@ void CSoundMixer::SetChannelVolume(int nChannelNumber, int nNewVolume)
 {
     CSoundChannel* pSoundChannel = static_cast<CSoundChannel*>(m_aChannels[nChannelNumber]);
     pSoundChannel->SetVolume(nNewVolume);
+}
+
+// NOTE: Inlined in `CSound::Create2DBuffer` - returns volume without locking
+// seen in `CSoundMixer::GetChannelVolume`.
+int CSoundMixer::GetChannelVolumeFast(int nChannelNumber)
+{
+    CSoundChannel* pSoundChannel = static_cast<CSoundChannel*>(m_aChannels[nChannelNumber]);
+    return pSoundChannel->m_nVolume;
+}
+
+// NOTE: Inlined in many places.
+BOOL CSoundMixer::IsSoundWaiting(CSound* pSound)
+{
+    BOOL isWaiting = FALSE;
+
+    if (pSound != NULL && pSound->GetResRef() != "") {
+        Lock();
+
+        if (m_lWaiting.Find(pSound) != NULL) {
+            isWaiting = TRUE;
+        }
+
+        Unlock();
+    }
+
+    return isWaiting;
+}
+
+// NOTE: Inlined in many places.
+void CSoundMixer::RemoveWaiting(CSound* pSound)
+{
+    Lock();
+    m_lWaiting.RemoveAt(m_lWaiting.Find(pSound));
+    Unlock();
+}
+
+// NOTE: Inlined in many places.
+void CSoundMixer::RemoveFromLoopingList(CSound* pSound)
+{
+    Lock();
+
+    m_bInLoopingUpdate = TRUE;
+    POSITION pos = m_lLooping.Find(pSound);
+    if (pos != NULL) {
+        m_lLooping.RemoveAt(pos);
+        m_bInLoopingUpdate = FALSE;
+    }
+
+    Unlock();
 }

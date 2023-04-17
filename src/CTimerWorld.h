@@ -46,6 +46,11 @@ public:
     void StartTime();
     void StopTime();
 
+    BOOLEAN IsDay();
+    BOOLEAN IsNight();
+    BOOLEAN IsDawn();
+    BOOLEAN IsDusk();
+
     ULONG m_gameTime;
     BOOLEAN m_active;
     BYTE m_nLastPercentage;

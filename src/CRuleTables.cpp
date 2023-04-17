@@ -1315,7 +1315,7 @@ CRuleTables::CRuleTables()
     m_tSkillPoints.Load(CResRef(SKILLPTS));
     m_tSoundChannel.Load(CResRef("SNDCHANN"));
     m_tReverb.Load(CResRef("REVERB"));
-    m_lEAXENVIR.LoadList(CResRef("EAXENVIR"), FALSE);
+    m_lEAXEnvironment.LoadList(CResRef("EAXENVIR"), FALSE);
     m_tCharStr.Load(CResRef("CHARSTR"));
     m_tTracking.Load(CResRef("TRACKING"));
     m_tKitList.Load(CResRef(KIT_LIST));
@@ -2104,6 +2104,39 @@ void CRuleTables::GetGenderStringMixed(BYTE nGender, CString& sGender) const
 
     g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes);
     sGender = strRes.szText;
+}
+
+// 0x5457C0
+BOOL CRuleTables::Is3DSound(int nSoundChannel) const
+{
+    return m_tSoundChannel.GetAtLong(CPoint(1, nSoundChannel));
+}
+
+// 0x5457F0
+float CRuleTables::GetSoundReverbMix(int nSoundChannel, int nReverb) const
+{
+    float v1 = atof(m_tSoundChannel.GetAt(CPoint(2, nSoundChannel)));
+    float v2 = atof(m_tReverb.GetAt(CPoint(4, nReverb)));
+    return v1 * v2;
+}
+
+// 0x545890
+int CRuleTables::GetSoundEnvironment(EAXPRESET& preset, int nReverb) const
+{
+    int nPreset = nReverb % m_tReverb.GetWidth();
+
+    CString sEnvironment = m_tReverb.GetAt(CPoint(0, nPreset));
+
+    preset.fVolume = atof(m_tReverb.GetAt(CPoint(1, nPreset)));
+    preset.fDecayTime = atof(m_tReverb.GetAt(CPoint(2, nPreset)));
+    preset.fDaming = atof(m_tReverb.GetAt(CPoint(3, nPreset)));
+
+    CAIId* id = m_lEAXEnvironment.Find(sEnvironment, TRUE);
+    if (id != NULL) {
+        preset.dwEnvironment = id->m_id;
+    }
+
+    return nPreset;
 }
 
 // 0x545A10

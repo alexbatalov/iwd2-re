@@ -122,6 +122,15 @@ public:
             return 0;
         }
     }
+
+    int Release()
+    {
+        if (pRes != NULL) {
+            return static_cast<CRes*>(pRes)->Release();
+        } else {
+            return 0;
+        }
+    }
 };
 
 #endif /* CRES_H_ */

@@ -1087,6 +1087,23 @@ void CChitin::GetPanicCDStrings(CString& sMediaRemoved, CString& sPlaceCD, CStri
     sInDrive = "";
 }
 
+// 0x78E730
+void CChitin::OnMixerInitialize()
+{
+}
+
+// 0x799E20
+BOOL CChitin::Is3DSound(int nSoundChannel)
+{
+    return FALSE;
+}
+
+// 0x78E890
+float CChitin::GetSoundReverbMix(int nSoundChannel, int nReverb)
+{
+    return 0.0;
+}
+
 // 0x78E6E0
 LONG CChitin::GetMovieVolume()
 {
@@ -1097,6 +1114,12 @@ LONG CChitin::GetMovieVolume()
 BOOL CChitin::GetEAXActive()
 {
     return FALSE;
+}
+
+// 0x4051C0
+int CChitin::GetSoundEnvironment(EAXPRESET& preset, int environment)
+{
+    return EAX_ENVIRONMENT_GENERIC;
 }
 
 // 0x78E730

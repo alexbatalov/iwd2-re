@@ -3,17 +3,27 @@
 
 #include "CRes.h"
 
+#include <mmsystem.h>
+
 class CResWave : public CRes {
 public:
     CResWave();
     ~CResWave();
+    void* Demand();
+    LPWAVEFORMATEX GetWaveFormatPtr();
+    DWORD GetWaveSize();
+    int Release();
+    BOOL Parse(void* pData);
+    BOOL ParseNormalWave(void* pData);
+    BOOL ParseCompressedWave(void* pData);
+    BOOL CopyWaveData(BYTE* pWaveData);
 
-    /* 0050 */ int field_50;
-    /* 0054 */ int field_54;
-    /* 0058 */ int field_58;
-    /* 005C */ int field_5C;
-    /* 0060 */ int field_60;
-    /* 0064 */ int field_64;
+    /* 0050 */ BOOL m_bCompressed;
+    /* 0054 */ BOOL m_bParsed;
+    /* 0058 */ DWORD m_nWaveNormalSize;
+    /* 005C */ DWORD m_nWaveCompressedSize;
+    /* 0060 */ BYTE* m_pWaveData;
+    /* 0064 */ LPWAVEFORMATEX m_pWaveFormatEx;
 };
 
 #endif /* CRESWAVE_H_ */
