@@ -37,7 +37,7 @@ CGameOptions::CGameOptions()
     field_74 = 0;
     field_78 = 0;
     field_7C = 1;
-    field_80 = 1;
+    m_bWeatherEnabled = TRUE;
     field_84 = 0;
     m_bEnvironmentalAudio = TRUE;
     field_8C = 0;

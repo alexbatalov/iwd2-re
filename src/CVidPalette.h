@@ -32,6 +32,7 @@ public:
     static const USHORT TYPE_RANGE;
     static const USHORT NUM_RANGES;
     static const BYTE LIGHT_SCALE;
+    static const BYTE NO_TINT;
 
     int m_nAUCounter;
     int m_nAUCounterBase;

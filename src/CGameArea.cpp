@@ -16,6 +16,14 @@ CGameArea::~CGameArea()
     // TODO: Incomplete.
 }
 
+// 0x46A7B0
+void CGameArea::ApplyWindToAmbients(BYTE nPercentVolume)
+{
+    m_sndAmbientVolume = nPercentVolume;
+    m_sndAmbientDay.SetVolume(m_sndAmbientDayVolume * m_sndAmbientVolume / 100);
+    m_sndAmbientNight.SetVolume(m_sndAmbientNightVolume * m_sndAmbientVolume / 100);
+}
+
 // 0x477EE0
 void CGameArea::SetDay()
 {

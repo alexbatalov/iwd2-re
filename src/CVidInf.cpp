@@ -1,6 +1,7 @@
 #include "CVidInf.h"
 
 #include "CChitin.h"
+#include "CParticle.h"
 #include "CUtil.h"
 
 // #binary-identical
@@ -376,6 +377,21 @@ BOOL CVidInf::BKUnlock()
     m_SurfaceDesc.lpSurface = NULL;
 
     return TRUE;
+}
+
+// 0x79E060
+BOOL CVidInf::BKRender(CParticle* pParticle, const CRect& rClip, USHORT nFlag, USHORT nBlobSize)
+{
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        pParticle->Render3d(rClip, m_rLockedRect, nFlag, nBlobSize);
+        return TRUE;
+    }
+
+    if (m_SurfaceDesc.lpSurface != NULL) {
+        pParticle->Render(m_SurfaceDesc.lpSurface, m_SurfaceDesc.lPitch, rClip, nFlag, nBlobSize);
+    }
+
+    return FALSE;
 }
 
 // #binary-identical

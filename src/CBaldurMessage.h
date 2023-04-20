@@ -13,6 +13,7 @@ public:
 
     CBaldurMessage();
     ~CBaldurMessage();
+    void WeatherBroadcast(WORD wWeatherFlags);
     void TimeSynchBroadcast(ULONG nGameTime, BOOLEAN bCompressTime);
     void TimeChangeToServer(ULONG deltaTime);
 

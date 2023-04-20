@@ -22,6 +22,9 @@ const USHORT CVidPalette::NUM_RANGES = 7;
 // 0x85E856
 const BYTE CVidPalette::LIGHT_SCALE = 3;
 
+// 0x85E857
+const BYTE CVidPalette::NO_TINT = 255;
+
 // #binary-identical
 // 0x7BEEA0
 CVidPalette::CVidPalette(USHORT nType)

@@ -24,6 +24,9 @@ public:
     void SetApproachingDawn();
     void SetApproachingDusk();
 
+    /* 0040 */ int nNewX;
+    /* 0044 */ int nNewY;
+    /* 0048 */ CRect rViewPort;
     /* 011C */ int nCurrentLightningFrequency;
     /* 0120 */ int nNextLightningFrequency;
     /* 012C */ int nNextRainLevel;

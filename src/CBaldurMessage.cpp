@@ -70,6 +70,12 @@ CBaldurMessage::~CBaldurMessage()
 {
 }
 
+// 0x436F50
+void CBaldurMessage::WeatherBroadcast(WORD wWeatherFlags)
+{
+    // TODO: Incomplete.
+}
+
 // 0x4370B0
 void CBaldurMessage::TimeSynchBroadcast(ULONG nGameTime, BOOLEAN bCompressTime)
 {

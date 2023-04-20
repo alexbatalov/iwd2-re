@@ -7,6 +7,8 @@
 
 #define CVIDINF_SURFACE_FRONT 1
 
+class CParticle;
+
 class CVidInf : public CVidMode {
 public:
     CVidInf();
@@ -32,6 +34,7 @@ public:
     BOOL FXLock(CRect& rFXRect, DWORD dwFlags);
     BOOL BKLock(CRect& rBack);
     BOOL BKUnlock();
+    BOOL BKRender(CParticle* pParticle, const CRect& rClip, USHORT nFlag, USHORT nBlobSize);
     void GetFogOWarTileRect(unsigned char a2, CRect& rTileRect);
     void DoTextOut3d(UINT nSurface, const CString& sText, int x, int y, COLORREF color);
 

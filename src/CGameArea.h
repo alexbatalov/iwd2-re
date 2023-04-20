@@ -6,6 +6,30 @@
 #include "CInfinity.h"
 #include "CSound.h"
 
+typedef struct CAreaFileHeader {
+    RESREF m_areaName;
+    DWORD m_lastSaved;
+    DWORD m_flags;
+    RESREF m_areaEdgeNorth;
+    DWORD m_flagsEdgeNorth;
+    RESREF m_areaEdgeEast;
+    DWORD m_flagsEdgeEast;
+    RESREF m_areaEdgeSouth;
+    DWORD m_flagsEdgeSouth;
+    RESREF m_areaEdgeWest;
+    DWORD m_flagsEdgeWest;
+    WORD m_areaType;
+    WORD m_rainProbability;
+    WORD m_snowProbability;
+    WORD m_fogProbability;
+    WORD m_lightningProbability;
+    WORD m_windSpeed;
+    DWORD field_4C;
+    DWORD field_50;
+    DWORD field_54;
+    DWORD field_58;
+};
+
 typedef struct CAreaSoundsAndMusic {
     DWORD m_dayMusic;
     DWORD m_nightMusic;
@@ -32,6 +56,7 @@ public:
     CGameArea();
     ~CGameArea();
 
+    void ApplyWindToAmbients(BYTE nPercentVolume);
     void SetDay();
     void SetNight();
     void SetApproachingDawn();
@@ -43,6 +68,7 @@ public:
     BOOL SetSong(SHORT slot, BYTE song);
     BYTE GetSong(SHORT slot);
 
+    /* 0000 */ CAreaFileHeader m_header;
     /* 005C */ CAreaSoundsAndMusic m_headerSound;
     /* 01EF */ BOOLEAN m_bAreaLoaded;
     /* 04CC */ CInfinity m_cInfinity;

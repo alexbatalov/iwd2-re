@@ -39,7 +39,7 @@ public:
     /* 0074 */ int field_74;
     /* 0078 */ int field_78;
     /* 007C */ int field_7C;
-    /* 0080 */ int field_80;
+    /* 0080 */ int m_bWeatherEnabled;
     /* 0084 */ int field_84;
     /* 0088 */ BOOL m_bEnvironmentalAudio;
     /* 008C */ int field_8C;
