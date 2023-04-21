@@ -4,6 +4,7 @@
 #include "CGameArea.h"
 #include "CInfGame.h"
 #include "CUtil.h"
+#include "CVidInf.h"
 #include "CVidPalette.h"
 
 // 0x8E2074
@@ -43,7 +44,7 @@ CWeather::CWeather()
     m_nRainVolumeLevel = 0;
     m_bReInitialize = FALSE;
     m_nDurationCounter = 0;
-    m_rgbCurrentOverCastColor = CVidPalette::NO_TINT | (CVidPalette::NO_TINT << 8) | (CVidPalette::NO_TINT << 16);
+    m_rgbCurrentOverCastColor = RGB(CVidPalette::NO_TINT, CVidPalette::NO_TINT, CVidPalette::NO_TINT);
 }
 
 // 0x555520
@@ -61,14 +62,14 @@ void CWeather::CancelCurrentWeather(CGameArea* pArea, ULONG nCurrentTime)
         m_rainStorm.UnInitialize();
         m_nCurrentWeather = 0;
         m_nLightningFreq = 0;
-        m_rgbCurrentOverCastColor = CVidPalette::NO_TINT | (CVidPalette::NO_TINT << 8) | (CVidPalette::NO_TINT << 16);
+        m_rgbCurrentOverCastColor = RGB(CVidPalette::NO_TINT, CVidPalette::NO_TINT, CVidPalette::NO_TINT);
         SetWind(0, WEATHER_TRANSITION_TIME, TRUE);
         SetRainSound(0, WEATHER_TRANSITION_TIME);
         break;
     case 2:
         m_snowStorm.UnInitialize();
         m_nCurrentWeather = 0;
-        m_rgbCurrentOverCastColor = CVidPalette::NO_TINT | (CVidPalette::NO_TINT << 8) | (CVidPalette::NO_TINT << 16);
+        m_rgbCurrentOverCastColor = RGB(CVidPalette::NO_TINT, CVidPalette::NO_TINT, CVidPalette::NO_TINT);
         SetWind(0, WEATHER_TRANSITION_TIME, TRUE);
         break;
     }
@@ -98,7 +99,7 @@ void CWeather::CheckWeather()
     CGameArea* pArea = pGame->GetVisibleArea();
     if (pGame->m_cOptions.m_bWeatherEnabled) {
         if (pArea != NULL) {
-            if (nCurrentTime > m_nLastTimeChecked && gameTime >= m_nNextTimeToStartChecking) {
+            if (nCurrentTime > m_nLastTimeChecked && nCurrentTime >= m_nNextTimeToStartChecking) {
                 if ((pArea->m_header.m_areaType & 0x4) != 0) {
                     m_nLastTimeChecked = nCurrentTime;
                     if (nCurrentTime % CTimerWorld::TIMESCALE_MSEC_PER_HOUR == 0) {
@@ -186,7 +187,7 @@ void CWeather::CompressTime()
 }
 
 // 0x555D60
-void CWeather::ResetWeather()
+void CWeather::ResetWeather(CGameArea* pArea)
 {
     // TODO: Incomplete.
 }
@@ -440,21 +441,21 @@ void CRainStorm::AsynchronousUpdate()
         if ((pArea->m_header.m_areaType & 0x4) != 0) {
             CRect rNewWorldViewPort(pArea->m_cInfinity.nNewX,
                 pArea->m_cInfinity.nNewY,
-                m_cInfinity.nNewX + m_cInfinity.rViewPort.Width(),
-                m_cInfinity.nNewY + m_cInfinity.rViewPort.Height());
+                pArea->m_cInfinity.nNewX + pArea->m_cInfinity.rViewPort.Width(),
+                pArea->m_cInfinity.nNewY + pArea->m_cInfinity.rViewPort.Height());
 
-            CRect rOld(m_rOldWorldViewPort.left << RESOLUTION_INC,
-                m_rOldWorldViewPort.top << RESOLUTION_INC,
-                m_rOldWorldViewPort.right << RESOLUTION_INC,
-                m_rOldWorldViewPort.bottom << RESOLUTION_INC);
+            CRect rOld(m_rOldWorldViewPort.left << CParticle::RESOLUTION_INC,
+                m_rOldWorldViewPort.top << CParticle::RESOLUTION_INC,
+                m_rOldWorldViewPort.right << CParticle::RESOLUTION_INC,
+                m_rOldWorldViewPort.bottom << CParticle::RESOLUTION_INC);
 
-            CRect rNew(rNewWorldViewPort.left << RESOLUTION_INC,
-                rNewWorldViewPort.top << RESOLUTION_INC,
-                rNewWorldViewPort.right << RESOLUTION_INC,
-                rNewWorldViewPort.bottom << RESOLUTION_INC);
+            CRect rNew(rNewWorldViewPort.left << CParticle::RESOLUTION_INC,
+                rNewWorldViewPort.top << CParticle::RESOLUTION_INC,
+                rNewWorldViewPort.right << CParticle::RESOLUTION_INC,
+                rNewWorldViewPort.bottom << CParticle::RESOLUTION_INC);
 
             for (int index = 0; index < 250; index++) {
-                if (m_pRainDrops[index].AsynchronousUpdate(rOld, rNew) == DEAD) {
+                if (m_pRainDrops[index].AsynchronousUpdate(rOld, rNew) == CParticle::DEAD) {
                     // __FILE__: C:\Projects\Icewind2\src\Baldur\CWeather.cpp
                     // __LINE__: 1813
                     UTIL_ASSERT(m_pRainDrops != NULL);
@@ -463,13 +464,13 @@ void CRainStorm::AsynchronousUpdate()
                     m_pRainDrops[index].m_vel.y = 0;
                     m_pRainDrops[index].m_vel.z = 0;
 
-                    m_pRainDrops[index].m_pos.x = (rNewWorldViewPort.left + rand() % rNewWorldViewPort.Width()) << RESOLUTION_INC;
-                    m_pRainDrops[index].m_pos.y = (rand() % (4 / rNewWorldViewPort.bottom / 3 - 4 * rNewWorldViewPort.top / 3) + 4 * rNewWorldViewPort.top / 3 + 100) << RESOLUTION_INC;
-                    m_pRainDrops[index].m_pos.z = 100 << RESOLUTION_INC;
+                    m_pRainDrops[index].m_pos.x = (rNewWorldViewPort.left + rand() % rNewWorldViewPort.Width()) << CParticle::RESOLUTION_INC;
+                    m_pRainDrops[index].m_pos.y = (rand() % (4 / rNewWorldViewPort.bottom / 3 - 4 * rNewWorldViewPort.top / 3) + 4 * rNewWorldViewPort.top / 3 + 100) << CParticle::RESOLUTION_INC;
+                    m_pRainDrops[index].m_pos.z = 100 << CParticle::RESOLUTION_INC;
                 }
             }
 
-            m_rOldWorldViewPort.SetRect(rNewWorldViewPort);
+            m_rOldWorldViewPort = rNewWorldViewPort;
         }
     }
 }
@@ -483,9 +484,9 @@ void CRainStorm::GenerateDrops(const CPoint& ptViewPort, const CRect& rBounds)
     if (m_pRainDrops != NULL) {
         for (int i = 0; i < 250; i++) {
             WORD z = rand() % 100;
-            m_pRainDrops[i].m_pos.x = (ptViewPort.x + rand() % rBounds.Width()) << RESOLUTION_INC;
-            m_pRainDrops[i].m_pos.y = (4 * ptViewPort.y / 3 + z + rand() % (4 * rBounds.Height() / 3)) << RESOLUTION_INC;
-            m_pRainDrops[i].m_pos.z = z << RESOLUTION_INC;
+            m_pRainDrops[i].m_pos.x = (ptViewPort.x + rand() % rBounds.Width()) << CParticle::RESOLUTION_INC;
+            m_pRainDrops[i].m_pos.y = (4 * ptViewPort.y / 3 + z + rand() % (4 * rBounds.Height() / 3)) << CParticle::RESOLUTION_INC;
+            m_pRainDrops[i].m_pos.z = z << CParticle::RESOLUTION_INC;
         }
     }
 }
@@ -552,32 +553,32 @@ void CSnowStorm::AsynchronousUpdate()
         if ((pArea->m_header.m_areaType & 0x4) != 0) {
             CRect rNewWorldViewPort(pArea->m_cInfinity.nNewX,
                 pArea->m_cInfinity.nNewY,
-                m_cInfinity.nNewX + m_cInfinity.rViewPort.Width(),
-                m_cInfinity.nNewY + m_cInfinity.rViewPort.Height());
+                pArea->m_cInfinity.nNewX + pArea->m_cInfinity.rViewPort.Width(),
+                pArea->m_cInfinity.nNewY + pArea->m_cInfinity.rViewPort.Height());
 
-            CRect rOld(m_rOldWorldViewPort.left << RESOLUTION_INC,
-                m_rOldWorldViewPort.top << RESOLUTION_INC,
-                m_rOldWorldViewPort.right << RESOLUTION_INC,
-                m_rOldWorldViewPort.bottom << RESOLUTION_INC);
+            CRect rOld(m_rOldWorldViewPort.left << CParticle::RESOLUTION_INC,
+                m_rOldWorldViewPort.top << CParticle::RESOLUTION_INC,
+                m_rOldWorldViewPort.right << CParticle::RESOLUTION_INC,
+                m_rOldWorldViewPort.bottom << CParticle::RESOLUTION_INC);
 
-            CRect rNew(rNewWorldViewPort.left << RESOLUTION_INC,
-                rNewWorldViewPort.top << RESOLUTION_INC,
-                rNewWorldViewPort.right << RESOLUTION_INC,
-                rNewWorldViewPort.bottom << RESOLUTION_INC);
+            CRect rNew(rNewWorldViewPort.left << CParticle::RESOLUTION_INC,
+                rNewWorldViewPort.top << CParticle::RESOLUTION_INC,
+                rNewWorldViewPort.right << CParticle::RESOLUTION_INC,
+                rNewWorldViewPort.bottom << CParticle::RESOLUTION_INC);
 
             for (int index = 0; index < 250; index++) {
-                if (m_pRainDrops[index].AsynchronousUpdate(rOld, rNew) == DEAD) {
+                if (m_pSnowFlakes[index].AsynchronousUpdate(rOld, rNew) == CParticle::DEAD) {
                     // __FILE__: C:\Projects\Icewind2\src\Baldur\CWeather.cpp
                     // __LINE__: 2125
                     UTIL_ASSERT(m_pSnowFlakes != NULL);
 
-                    m_pRainDrops[index].m_pos.x = (rNewWorldViewPort.left + rand() % rNewWorldViewPort.Width()) << RESOLUTION_INC;
-                    m_pRainDrops[index].m_pos.y = (rand() % (4 / rNewWorldViewPort.bottom / 3 - 4 * rNewWorldViewPort.top / 3) + 4 * rNewWorldViewPort.top / 3 + 100) << RESOLUTION_INC;
-                    m_pRainDrops[index].m_pos.z = 100 << RESOLUTION_INC;
+                    m_pSnowFlakes[index].m_pos.x = (rNewWorldViewPort.left + rand() % rNewWorldViewPort.Width()) << CParticle::RESOLUTION_INC;
+                    m_pSnowFlakes[index].m_pos.y = (rand() % (4 / rNewWorldViewPort.bottom / 3 - 4 * rNewWorldViewPort.top / 3) + 4 * rNewWorldViewPort.top / 3 + 100) << CParticle::RESOLUTION_INC;
+                    m_pSnowFlakes[index].m_pos.z = 100 << CParticle::RESOLUTION_INC;
                 }
             }
 
-            m_rOldWorldViewPort.SetRect(rNewWorldViewPort);
+            m_rOldWorldViewPort = rNewWorldViewPort;
         }
     }
 }
@@ -591,9 +592,9 @@ void CSnowStorm::GenerateFlakes(const CPoint& ptViewPort, const CRect& rBounds)
     if (m_pSnowFlakes != NULL) {
         for (int index = 0; index < 250; index++) {
             WORD z = rand() % 100;
-            m_pSnowFlakes[index].m_pos.x = (ptViewPort.x + rand() % rBounds.Width()) << RESOLUTION_INC;
-            m_pSnowFlakes[index].m_pos.y = (4 * ptViewPort.y / 3 + z + rand() % (4 * rBounds.Height() / 3)) << RESOLUTION_INC;
-            m_pSnowFlakes[index].m_pos.z = z << RESOLUTION_INC;
+            m_pSnowFlakes[index].m_pos.x = (ptViewPort.x + rand() % rBounds.Width()) << CParticle::RESOLUTION_INC;
+            m_pSnowFlakes[index].m_pos.y = (4 * ptViewPort.y / 3 + z + rand() % (4 * rBounds.Height() / 3)) << CParticle::RESOLUTION_INC;
+            m_pSnowFlakes[index].m_pos.z = z << CParticle::RESOLUTION_INC;
         }
     }
 }
@@ -667,10 +668,6 @@ BYTE CSnowFlake::AsynchronousUpdate(const CRect& rOldViewPort, const CRect& rNew
         if (nTrueY - m_pos.z < rNewViewPort.top || nTrueY - m_pos.z > rNewViewPort.bottom) {
             m_pos.y = 4 * (rNewViewPort.bottom + rOldViewPort.top + 2 * m_pos.z - nTrueY) / 3;
         }
-    }
-
-    if (m_vel.x < VELOCITY_LIGHT_WIND) {
-        m_vel.x += 100;
     }
 
     if (g_pBaldurChitin->m_pObjectGame->m_worldTime.m_active) {

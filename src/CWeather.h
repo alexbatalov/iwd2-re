@@ -82,7 +82,7 @@ public:
     WORD Marshal();
     void AdvanceWeatherLevel(ULONG nCurrentTime);
     void CompressTime();
-    void ResetWeather();
+    void ResetWeather(CGameArea* pArea);
     void SetCurrentWeather(CGameArea* pArea, WORD wWeatherFlags);
     void SetCurrentWeather(CGameArea* pArea, ULONG nCurrentTime, BYTE nWeatherType);
     BYTE GetWind();
