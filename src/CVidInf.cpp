@@ -1,5 +1,7 @@
 #include "CVidInf.h"
 
+#include <gl/gl.h>
+
 #include "CChitin.h"
 #include "CParticle.h"
 #include "CUtil.h"
@@ -319,6 +321,198 @@ IDirectDrawSurface* CVidInf::GetFXSurfacePtr(DWORD dwFlags)
     return m_pSurfaces[2];
 }
 
+// 0x79C6D0
+LPVOID CVidInf::GetLockedSurface()
+{
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        return dword_907B20;
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo.cpp
+    // __LINE__: 7398
+    UTIL_ASSERT(m_SurfaceDesc.lpSurface != NULL);
+
+    return m_SurfaceDesc.lpSurface;
+}
+
+// 0x79C720
+LONG CVidInf::GetSurfacePitch()
+{
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        if (g_pChitin->cVideo.field_13A) {
+            return CVidTile::BYTES_PER_TEXEL << 9;
+        } else {
+            return CVidTile::BYTES_PER_TEXEL * m_rLockedRect.Width();
+        }
+    } else {
+        if (m_SurfaceDesc.lpSurface != NULL) {
+            return m_SurfaceDesc.lPitch;
+        } else {
+            return 0;
+        }
+    }
+}
+
+// 0x79D030
+void CVidInf::FXClear(LPVOID pSurface, INT nSize)
+{
+    memset(pSurface, 0, 4 * nSize);
+}
+
+// 0x79D100
+BOOL CVidInf::FXRender(CVidCell* pVidCell, INT nRefPointX, INT nRefPointY, DWORD dwFlags, INT nTransValue)
+{
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        return pVidCell->FXRender3d(nRefPointX, nRefPointY, m_rLockedRect, dwFlags | 0x40, nTransValue, 0);
+    }
+
+    if (m_SurfaceDesc.lpSurface != NULL) {
+        return pVidCell->Render(reinterpret_cast<WORD*>(m_SurfaceDesc.lpSurface), m_SurfaceDesc.lPitch, nRefPointX, nRefPointY, dwFlags, nTransValue);
+    }
+
+    return FALSE;
+}
+
+// 0x79D180
+BOOL CVidInf::FXRender(CVidCell* pVidCell, INT nRefPtX, INT nRefPtY, const CRect& rClip, BOOLEAN a5, DWORD dwFlags)
+{
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        return pVidCell->FXRender3d(nRefPtX,
+            nRefPtY,
+            m_rLockedRect,
+            rClip,
+            a5,
+            dwFlags | 0x40,
+            FALSE);
+    }
+
+    if (m_SurfaceDesc.lpSurface == NULL) {
+        return pVidCell->Render(reinterpret_cast<WORD*>(m_SurfaceDesc.lpSurface),
+            m_SurfaceDesc.lPitch,
+            nRefPtX,
+            nRefPtY,
+            rClip,
+            a5,
+            dwFlags,
+            CPoint(0, 0));
+    }
+
+    return FALSE;
+}
+
+// 0x79D220
+BOOL CVidInf::FXRender(CParticle* pParticle, const CRect& rClip, USHORT nFlag, USHORT nBlobSize)
+{
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        // TODO: Replace with function pointers.
+        glEnable(GL_TEXTURE_2D);
+        CheckResults3d(0);
+
+        g_pChitin->cVideo.field_13E = 2;
+
+        glBindTexture(GL_TEXTURE_2D, 2);
+        CheckResults3d(0);
+
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        CheckResults3d(0);
+
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        CheckResults3d(0);
+
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        CheckResults3d(0);
+
+        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+        CheckResults3d(0);
+
+        glColor4f(1.0, 1.0, 1.0, 1.0);
+        CheckResults3d(0);
+
+        if (g_pChitin->cVideo.field_13A) {
+            pParticle->Render(dword_907B20,
+                CVidTile::BYTES_PER_TEXEL * 512,
+                rClip,
+                nFlag,
+                nBlobSize);
+        } else {
+            pParticle->Render(dword_907B20,
+                CVidTile::BYTES_PER_TEXEL * rClip.Width(),
+                rClip,
+                nFlag,
+                nBlobSize);
+        }
+        return TRUE;
+    }
+
+    if (m_SurfaceDesc.lpSurface != NULL) {
+        pParticle->Render(m_SurfaceDesc.lpSurface, m_SurfaceDesc.lPitch, rClip, nFlag, nBlobSize);
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+// 0x79D450
+BOOL CVidInf::FXRender(CPoint* pPoints, INT nPoints, const CRect& rSurface, COLORREF rgbColor, BOOL bClipped)
+{
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        // TODO: Replace with function pointers.
+        glEnable(GL_TEXTURE_2D);
+        CheckResults3d(0);
+
+        g_pChitin->cVideo.field_13E = 2;
+
+        glBindTexture(GL_TEXTURE_2D, 2);
+        CheckResults3d(0);
+
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        CheckResults3d(0);
+
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        CheckResults3d(0);
+
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        CheckResults3d(0);
+
+        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+        CheckResults3d(0);
+
+        glColor4f(1.0, 1.0, 1.0, 1.0);
+        CheckResults3d(0);
+
+        if (g_pChitin->cVideo.field_13A) {
+            return DrawPoints(pPoints,
+                nPoints,
+                reinterpret_cast<WORD*>(dword_907B20),
+                CVidTile::BYTES_PER_TEXEL * 512,
+                rSurface,
+                rgbColor,
+                bClipped);
+        } else {
+            return DrawPoints(pPoints,
+                nPoints,
+                reinterpret_cast<WORD*>(dword_907B20),
+                CVidTile::BYTES_PER_TEXEL * rSurface.Width(),
+                rSurface,
+                rgbColor,
+                bClipped);
+        }
+        return TRUE;
+    }
+
+    if (m_SurfaceDesc.lpSurface != NULL) {
+        return DrawPoints(pPoints,
+            nPoints,
+            reinterpret_cast<WORD*>(m_SurfaceDesc.lpSurface),
+            m_SurfaceDesc.lPitch,
+            rSurface,
+            rgbColor,
+            bClipped);
+    }
+
+    return FALSE;
+}
+
 // #binary-identical
 // 0x79D050
 BOOL CVidInf::FXLock(CRect& rFXRect, DWORD dwFlags)
@@ -389,6 +583,52 @@ BOOL CVidInf::BKRender(CParticle* pParticle, const CRect& rClip, USHORT nFlag, U
 
     if (m_SurfaceDesc.lpSurface != NULL) {
         pParticle->Render(m_SurfaceDesc.lpSurface, m_SurfaceDesc.lPitch, rClip, nFlag, nBlobSize);
+    }
+
+    return FALSE;
+}
+
+// 0x79E0D0
+BOOL CVidInf::BKRenderEllipse(const CPoint& ptCenter, const CSize& axes, const CRect& rClip, COLORREF rgbColor)
+{
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        CRect rNewClip(rClip);
+        rNewClip.OffsetRect(m_rLockedRect.TopLeft());
+        DrawEllipse3d(ptCenter + m_rLockedRect.TopLeft(), axes, &rNewClip, rgbColor);
+        return TRUE;
+    }
+
+    if (m_SurfaceDesc.lpSurface != NULL) {
+        DrawEllipse(ptCenter, axes, m_SurfaceDesc, &rClip, rgbColor);
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+// 0x79E1D0
+BOOL CVidInf::BKRenderLine(int nXFrom, int nYFrom, int nXTo, int nYTo, const CRect& rSurface, COLORREF rgbColor)
+{
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        CRect rNewSurface(rSurface);
+        rNewSurface.OffsetRect(m_rLockedRect.TopLeft());
+        return DrawLine3d(nXFrom + m_rLockedRect.left,
+            nYFrom + m_rLockedRect.top,
+            nXTo + m_rLockedRect.left,
+            nYTo + m_rLockedRect.top,
+            rNewSurface,
+            rgbColor);
+    }
+
+    if (m_SurfaceDesc.lpSurface != NULL) {
+        return DrawLine(nXFrom,
+            nYFrom,
+            nXTo,
+            nYTo,
+            m_SurfaceDesc,
+            rSurface,
+            rgbColor,
+            FALSE);
     }
 
     return FALSE;

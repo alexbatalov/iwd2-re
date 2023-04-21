@@ -1,5 +1,8 @@
 #include "CVidImage.h"
 
+// 0x85E838
+const INT CVidTile::BYTES_PER_TEXEL = 4;
+
 // 0x7ACA60
 CVidImage::CVidImage()
 {

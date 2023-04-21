@@ -31,12 +31,23 @@ public:
 
     BOOL FullScreenFlip(int a2);
     BOOL WindowedFlip(int a2);
+    LPVOID GetLockedSurface();
+    LONG GetSurfacePitch();
+    void FXClear(LPVOID pSurface, INT nSize);
     BOOL FXLock(CRect& rFXRect, DWORD dwFlags);
+    BOOL FXRender(CVidCell* pVidCell, INT nRefPointX, INT nRefPointY, DWORD dwFlags, INT nTransValue);
+    BOOL FXRender(CVidCell* pVidCell, INT nRefPtX, INT nRefPtY, const CRect& rClip, BOOLEAN a5, DWORD dwFlags);
+    BOOL FXRender(CParticle* pParticle, const CRect& rClip, USHORT nFlag, USHORT nBlobSize);
+    BOOL FXRender(CPoint* pPoints, INT nPoints, const CRect& rSurface, COLORREF rgbColor, BOOL bClipped);
     BOOL BKLock(CRect& rBack);
     BOOL BKUnlock();
     BOOL BKRender(CParticle* pParticle, const CRect& rClip, USHORT nFlag, USHORT nBlobSize);
+    BOOL BKRenderEllipse(const CPoint& ptCenter, const CSize& axes, const CRect& rClip, COLORREF rgbColor);
+    BOOL BKRenderLine(int nXFrom, int nYFrom, int nXTo, int nYTo, const CRect& rSurface, COLORREF rgbColor);
     void GetFogOWarTileRect(unsigned char a2, CRect& rTileRect);
     void DoTextOut3d(UINT nSurface, const CString& sText, int x, int y, COLORREF color);
+
+    static unsigned char dword_907B20[512 * 512 * 4];
 
     /* 00F4 */ DDSURFACEDESC m_SurfaceDesc;
     /* 0160 */ CRect m_rLockedRect;

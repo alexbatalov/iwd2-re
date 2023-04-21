@@ -178,3 +178,35 @@ void CVidCell::UnsuppressTint(SHORT nRange)
 {
     m_paletteAffects.suppressTints &= ~(1 << nRange);
 }
+
+// 0x7AE5D0
+BOOL CVidCell::Render(WORD* pSurface, LONG lPitch, INT nRefPointX, INT nRefPointY, DWORD dwFlags, INT nTransValue)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x7AF060
+BOOL CVidCell::Render(WORD* pSurface, LONG lPitch, INT nRefPtX, INT nRefPtY, const CRect& rClip, BOOLEAN a6, DWORD dwFlags, const CPoint& ptSource)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x7C5210
+BOOL CVidCell::FXRender3d(INT nRefPtX, INT nRefPtY, const CRect& rFXRect, DWORD dwFlags, INT nTransVal, BOOL bAlphaValues)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x7C5330
+BOOL CVidCell::FXRender3d(INT nRefPtX, INT nRefPtY, const CRect& rFXRect, const CRect& rClip, BOOLEAN a5, DWORD dwFlags, BOOL bAlphaValues)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}

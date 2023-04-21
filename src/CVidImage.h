@@ -16,4 +16,9 @@ public:
     /* 0028 */ CVIDIMG_PALETTEAFFECT m_paletteAffects;
 };
 
+class CVidTile : public CVidImage {
+public:
+    static const INT BYTES_PER_TEXEL;
+};
+
 #endif /* CVIDIMAGE_H_ */

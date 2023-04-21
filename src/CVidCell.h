@@ -21,9 +21,11 @@ public:
     void SuppressTint(SHORT nRange);
     void UnsuppressTint(SHORT nRange);
 
-    // NOTE: Force this class to have vftable. Remove once real virtual methods
-    // are identified.
-    virtual void Dummy() { }
+    /* 0004 */ virtual BOOL Render(WORD* pSurface, LONG lPitch, INT nRefPtX, INT nRefPtY, const CRect& rClip, BOOLEAN a6, DWORD dwFlags, const CPoint& ptSource);
+    /* 000C */ virtual BOOL Render(WORD* pSurface, LONG lPitch, INT nRefPointX, INT nRefPointY, DWORD dwFlags, INT nTransValue);
+
+    BOOL FXRender3d(INT nRefPtX, INT nRefPtY, const CRect& rFXRect, DWORD dwFlags, INT nTransVal, BOOL bAlphaValues);
+    BOOL FXRender3d(INT nRefPtX, INT nRefPtY, const CRect& rFXRect, const CRect& rClip, BOOLEAN a5, DWORD dwFlags, BOOL bAlphaValues);
 
     /* 00B4 */ CResHelper<CResCellHeader, 1100> field_B4;
     /* 00C4 */ SHORT m_nCurrentFrame;

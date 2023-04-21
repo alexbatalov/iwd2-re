@@ -1,5 +1,7 @@
 #include "CVidMode.h"
 
+#include <gl/gl.h>
+
 #include "CChitin.h"
 #include "CUtil.h"
 #include "CVidCell.h"
@@ -178,6 +180,78 @@ void CVidMode::DisplayFrameRate(UINT nSurface)
         CString v3;
         DoTextOut(nSurface, sFrameRate, (CVideo::SCREENWIDTH >> 1) - 240, 4, 255);
     }
+}
+
+// 0x795D50
+DWORD CVidMode::ConvertToSurfaceRGB(COLORREF rgb)
+{
+    if (g_pChitin->cVideo.m_nBpp == 16) {
+        return ((GetRValue(rgb) >> field_C2) << m_dwRBitShift) | ((GetGValue(rgb) >> field_C6) << m_dwGBitShift) | ((GetBValue(rgb) >> field_CA) << m_dwBBitShift);
+    } else {
+        return (GetRValue(rgb) << m_dwRBitShift) | (GetGValue(rgb) << m_dwGBitShift) | (GetBValue(rgb) << m_dwBBitShift);
+    }
+}
+
+// 0x795E00
+COLORREF CVidMode::ApplyBrightnessContrast(COLORREF rgb)
+{
+    if (m_nBrightnessCorrection != 0) {
+        BYTE v1 = ~m_nBrightnessCorrection;
+        rgb = RGB(~((v1 * ~GetRValue(rgb)) >> 8),
+            ~((v1 * ~GetGValue(rgb)) >> 8),
+            ~((v1 * ~GetBValue(rgb)) >> 8));
+    }
+
+    if (m_nGammaCorrection != 0) {
+        BYTE v2 = m_nGammaCorrection + (1 << CVidPalette::LIGHT_SCALE);
+        rgb = RGB(min((v2 * GetRValue(rgb)) >> CVidPalette::LIGHT_SCALE, 255),
+            min((v2 * GetGValue(rgb)) >> CVidPalette::LIGHT_SCALE, 255),
+            min((v2 * GetBValue(rgb)) >> CVidPalette::LIGHT_SCALE, 255));
+    }
+
+    return rgb;
+}
+
+// 0x795F10
+void CVidMode::ApplyFadeAmount(CVIDPALETTE_COLOR* pColor)
+{
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        return;
+    }
+
+    pColor->rgbRed = pColor->rgbRed * m_nFade / NUM_FADE_FRAMES;
+
+    // NOTE: Strange check for 3D, probably result of some inlining
+    pColor->rgbGreen = g_pChitin->cVideo.m_bIs3dAccelerated
+        ? pColor->rgbGreen
+        : pColor->rgbGreen * m_nFade / NUM_FADE_FRAMES;
+
+    // NOTE: Same as above.
+    pColor->rgbBlue = g_pChitin->cVideo.m_bIs3dAccelerated
+        ? pColor->rgbBlue
+        : pColor->rgbBlue * m_nFade / NUM_FADE_FRAMES;
+}
+
+// 0x795FB0
+COLORREF CVidMode::ApplyFadeAmount(COLORREF rgb)
+{
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        return rgb;
+    }
+
+    return RGB(GetRValue(rgb) * m_nFade / NUM_FADE_FRAMES,
+        GetGValue(rgb) * m_nFade / NUM_FADE_FRAMES,
+        GetBValue(rgb) * m_nFade / NUM_FADE_FRAMES);
+}
+
+// 0x796020
+INT CVidMode::ApplyFadeAmount(INT nColor)
+{
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        return nColor;
+    }
+
+    return nColor * m_nFade / NUM_FADE_FRAMES;
 }
 
 // #binary-identical
@@ -934,6 +1008,45 @@ BOOL CVidMode::DrawRecticle3d(const CVIDMODE_RECTICLE_DESCRIPTION& rd, const CRe
     // TODO: Incomplete.
 
     return FALSE;
+}
+
+// 0x7BEA80
+void CVidMode::CheckResults3d(int a1)
+{
+    // TODO: Incomplete.
+}
+
+// 0x7BC110
+void CVidMode::Set3dClipRect(const CRect& rClip)
+{
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        // TODO: Replace with function pointers.
+        glScissor(rClip.left,
+            CVideo::SCREENHEIGHT - rClip.bottom,
+            rClip.Width(),
+            rClip.Height());
+        CheckResults3d(0);
+    }
+}
+
+// 0x7BC180
+void CVidMode::EnableScissoring()
+{
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        // TODO: Replace with function pointers.
+        glEnable(GL_SCISSOR_TEST);
+        CheckResults3d(0);
+    }
+}
+
+// 0x7BC1C0
+void CVidMode::DisableScissoring()
+{
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        // TODO: Replace with function pointers.
+        glDisable(GL_SCISSOR_TEST);
+        CheckResults3d(0);
+    }
 }
 
 // 0x7C8B40

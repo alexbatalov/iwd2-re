@@ -16,6 +16,12 @@ typedef struct {
     /* 0077 */ BYTE suppressTints;
 } CVIDIMG_PALETTEAFFECT;
 
+typedef struct {
+    INT rgbRed;
+    INT rgbGreen;
+    INT rgbBlue;
+} CVIDPALETTE_COLOR;
+
 class CVidPalette {
 public:
     CVidPalette(USHORT nType = TYPE_RESOURCE);
