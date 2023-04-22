@@ -202,6 +202,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CUIControlButton3State.cpp"
     "src/CUIControlButton3State.h"
     "src/CUIControlFactory.cpp"
+    "src/CUIControlSlider.cpp"
+    "src/CUIControlSlider.h"
     "src/CUIManager.cpp"
     "src/CUIManager.h"
     "src/CUIPanel.cpp"
