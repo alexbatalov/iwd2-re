@@ -75,3 +75,9 @@ int CUtil::GetCurrentBitsPerPixels()
     ReleaseDC(NULL, dc);
     return bpp;
 }
+
+// 0x780CF0
+int CUtil::SplitString(CVidFont* pTextFont, const CString& sSource, WORD nLineLength, int nMaxStrings, CString* pStringsOut, BOOL bDivideWords, BOOL bDemanded, BOOL bCheckRemainderForNewLine, WORD nSuggestedSplitLength)
+{
+    // TODO: Incomplete.
+}
