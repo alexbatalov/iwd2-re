@@ -1,5 +1,7 @@
 #include "CNetwork.h"
 
+#include "CChitin.h"
+
 // 0x861078
 const CNetwork::S861078 CNetwork::stru_861078 = { 0 };
 
@@ -106,6 +108,26 @@ CNetwork::CNetwork()
 
 // 0x7A4440
 CNetwork::~CNetwork()
+{
+    // TODO: Incomplete.
+}
+
+// 0x7A5A20
+void CNetwork::CloseSession(BOOLEAN bAIResponsible)
+{
+    if (bAIResponsible == TRUE) {
+        g_pChitin->OnMultiplayerSessionToClose();
+        SleepEx(1000, FALSE);
+        if (m_bConnectionEstablished == TRUE) {
+            OnCloseSession();
+        }
+    } else {
+        OnCloseSession();
+    }
+}
+
+// 0x7A5A60
+void CNetwork::OnCloseSession()
 {
     // TODO: Incomplete.
 }

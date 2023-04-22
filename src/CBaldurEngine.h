@@ -4,6 +4,8 @@
 #include "CUIManager.h"
 #include "CWarp.h"
 
+class CUIControlBase;
+
 class CBaldurEngine : public CWarp {
 public:
     static const CResRef RESREF_SOUND_CLICKLEFT;
@@ -178,7 +180,7 @@ public:
     /* 0028 */ int m_nSelectedCharacter;
     /* 002C */ int m_nPickedCharacter;
     /* 0030 */ CUIManager m_cUIManager;
-    /* 00FA */ int field_FA;
+    /* 00FA */ CUIControlBase* field_FA;
     /* 00FE */ int field_FE;
     /* 0102 */ int field_102;
 };

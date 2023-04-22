@@ -221,7 +221,7 @@ void CVidInf::DoTextOut(UINT nSurface, const CString& sText, int x, int y, COLOR
 
 // #binary-identical
 // 0x79C1E0
-BOOL CVidInf::Flip(int a2)
+BOOL CVidInf::Flip(BOOL bRenderCursor)
 {
     if (m_bPrintScreen) {
         SaveScreen();
@@ -231,14 +231,14 @@ BOOL CVidInf::Flip(int a2)
     DisplayFrameRate(0);
 
     if (g_pChitin->FullScreen()) {
-        return FullScreenFlip(a2);
+        return FullScreenFlip(bRenderCursor);
     } else {
-        return WindowedFlip(a2);
+        return WindowedFlip(bRenderCursor);
     }
 }
 
 // 0x79C230
-BOOL CVidInf::FullScreenFlip(int a2)
+BOOL CVidInf::FullScreenFlip(BOOL bRenderCursor)
 {
     // TODO: Incomplete.
 
@@ -246,7 +246,7 @@ BOOL CVidInf::FullScreenFlip(int a2)
 }
 
 // 0x79C400
-BOOL CVidInf::WindowedFlip(int a2)
+BOOL CVidInf::WindowedFlip(BOOL bRenderCursor)
 {
     // TODO: Incomplete.
 

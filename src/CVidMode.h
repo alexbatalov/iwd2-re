@@ -95,7 +95,7 @@ public:
     /* 00A8 */ virtual BOOL DrawRect(const CRect& r, UINT nSurface, const CRect& rClip, COLORREF rgbColor);
     /* 00B0 */ virtual BOOL OutlinePoly(const CPoint* pPoly, SHORT nVertices, const CRect& rSurface, COLORREF rgbColor, const CPoint& ptOffset);
     /* 00B4 */ virtual BOOL EraseScreen(UINT nSurface, COLORREF rgbColor);
-    /* 00B8 */ virtual BOOL Flip(int a2);
+    /* 00B8 */ virtual BOOL Flip(BOOL bRenderCursor);
     /* 00BC */ virtual int GetColorDepth();
     /* 00C0 */ virtual int GetEllipseArcPixelList(LONG a2, LONG a3, BYTE* a4);
     /* 00C4 */ virtual BOOL GetFXSurface(INT& nSurface, DWORD dwFlags);

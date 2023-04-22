@@ -186,7 +186,7 @@ CBaldurChitin::CBaldurChitin()
     m_pEngineKeymaps = NULL;
     m_pObjectGame = NULL;
     m_bFontRectOutline = FALSE;
-    field_49B2 = 1;
+    m_bIsAutoStarting = 1;
 
     GetPrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         FONT_NAME_KEY,

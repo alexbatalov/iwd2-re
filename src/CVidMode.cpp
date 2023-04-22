@@ -1195,7 +1195,7 @@ BOOL CVidMode::RenderPointer(unsigned int)
 }
 
 // 0x799C90
-BOOL CVidMode::Flip(int a2)
+BOOL CVidMode::Flip(BOOL bRenderCursor)
 {
     return TRUE;
 }

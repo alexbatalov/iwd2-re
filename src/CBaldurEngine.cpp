@@ -428,7 +428,7 @@ const CResRef CBaldurEngine::RESREF_SOUND_8C8C80("G_Glove2");
 CBaldurEngine::CBaldurEngine()
 {
     m_nSelectedCharacter = 0;
-    field_FA = 0;
+    field_FA = NULL;
     field_102 = 0;
     field_FE = 0;
     m_nPickedCharacter = -1;
@@ -438,7 +438,7 @@ CBaldurEngine::CBaldurEngine()
 // 0x427830
 BOOL CBaldurEngine::CheckMouseWheel()
 {
-    return field_FA != 0 || field_FE != 0;
+    return field_FA != NULL || field_FE != 0;
 }
 
 // #binary-identical

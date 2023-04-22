@@ -16,6 +16,8 @@ public:
 
     CNetwork();
     ~CNetwork();
+    void CloseSession(BOOLEAN bAIResponsible);
+    void OnCloseSession();
 
     static const S861078 stru_861078;
 

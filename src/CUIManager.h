@@ -21,6 +21,7 @@ public:
     CUIPanel* GetPanel(DWORD nID);
     void SetCapture(CUIControlBase* pControl, unsigned char a3);
     void ClearTooltip();
+    void OnMouseMove(CPoint pt);
     void OnLButtonUp(CPoint pt);
     void OnLButtonDblClk(CPoint pt);
     void OnRButtonDown(CPoint pt);

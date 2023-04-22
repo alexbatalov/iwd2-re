@@ -176,6 +176,12 @@ void CUIManager::ClearTooltip()
     // TODO: Incomplete.
 }
 
+// 0x4D40B0
+void CUIManager::OnMouseMove(CPoint pt)
+{
+    // TODO: Incomplete.
+}
+
 // 0x4D42B0
 void CUIManager::OnLButtonUp(CPoint pt)
 {

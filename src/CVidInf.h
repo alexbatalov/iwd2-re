@@ -18,7 +18,7 @@ public:
     /* 0074 */ void DestroySurfaces() override;
     /* 007C */ void DoTextOut(UINT nSurface, const CString& sText, int x, int y, COLORREF color, int height) override;
     /* 0080 */ void DoTextOut(UINT nSurface, const CString& sText, int x, int y, COLORREF color) override;
-    /* 00B8 */ BOOL Flip(int a2) override;
+    /* 00B8 */ BOOL Flip(BOOL bRenderCursor) override;
     /* 00C4 */ BOOL GetFXSurface(INT& nSurface, DWORD dwFlags) override;
     /* 00C8 */ IDirectDrawSurface* GetFXSurfacePtr(DWORD dwFlags) override;
     /* 00CC */ BOOL GetCursorSurfaceSize(CSize& size) override;
@@ -29,8 +29,8 @@ public:
     /* 010C */ void ParsePixelFormat(const DDPIXELFORMAT& ddpf) override;
     /* 011C */ ~CVidInf() override;
 
-    BOOL FullScreenFlip(int a2);
-    BOOL WindowedFlip(int a2);
+    BOOL FullScreenFlip(BOOL bRenderCursor);
+    BOOL WindowedFlip(BOOL bRenderCursor);
     LPVOID GetLockedSurface();
     LONG GetSurfacePitch();
     void FXClear(LPVOID pSurface, INT nSize);

@@ -185,7 +185,7 @@ public:
     /* 49B0 */ unsigned char field_49B0;
     /* 49B1 */ unsigned char field_49B1;
     /* 49AC */ CString field_49AC;
-    /* 49B2 */ unsigned char field_49B2;
+    /* 49B2 */ BOOLEAN m_bIsAutoStarting;
     /* 49B4 */ S49B4 field_49B4[4];
     /* 4A24 */ int field_4A24;
     /* 4A28 */ int field_4A28;
