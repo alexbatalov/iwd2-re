@@ -182,6 +182,12 @@ void CUIManager::OnMouseMove(CPoint pt)
     // TODO: Incomplete.
 }
 
+// 0x4D41D0
+void CUIManager::OnLButtonDown(CPoint pt)
+{
+    // TODO: Incomplete.
+}
+
 // 0x4D42B0
 void CUIManager::OnLButtonUp(CPoint pt)
 {
