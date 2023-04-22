@@ -80,6 +80,16 @@ ITEM_EFFECT* CResSpell::GetCastingEffect(int nEffect)
     return NULL;
 }
 
+// 0x4016D0
+int CResSpell::GetCastingEffectNo()
+{
+    if (m_bParsed) {
+        return m_pHeader->castingEffectCount;
+    }
+
+    return -1;
+}
+
 // 0x401BD0
 BOOL CResSpell::Parse(void* pData)
 {

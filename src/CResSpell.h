@@ -13,6 +13,7 @@ public:
     ITEM_EFFECT* GetAbilityEffect(int nAbility, int nEffect, int a4);
     int GetAbilityEffectNo(int nAbility);
     ITEM_EFFECT* GetCastingEffect(int nEffect);
+    int GetCastingEffectNo();
     int Release();
     BOOL Parse(void* pData);
 
