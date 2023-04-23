@@ -27,6 +27,12 @@ void CScreenConnection::SetSystemKeyCtrl(BOOLEAN bValue)
     m_bCtrlKeyDown = bValue;
 }
 
+// 0x6717F0
+SHORT CScreenConnection::GetNumVirtualKeys()
+{
+    return CSCREENCONNECTION_VIRTUAL_KEYS;
+}
+
 // 0x5FA8D0
 CKeyInfo* CScreenConnection::GetVirtualKeys()
 {

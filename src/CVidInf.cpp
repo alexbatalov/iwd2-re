@@ -6,6 +6,9 @@
 #include "CParticle.h"
 #include "CUtil.h"
 
+// 0x907B20
+unsigned char CVidInf::dword_907B20[512 * 512 * 4];
+
 // #binary-identical
 // 0x79AF00
 CVidInf::CVidInf()

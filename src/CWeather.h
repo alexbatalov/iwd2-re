@@ -4,8 +4,11 @@
 #include "mfc.h"
 
 #include "CParticle.h"
+#include "CResRef.h"
+#include "CSound.h"
 
 class CGameArea;
+class CVidMode;
 
 class CRainDrop : public CParticle {
 public:

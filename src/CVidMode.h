@@ -6,6 +6,7 @@
 #include <ddraw.h>
 
 #include "CResRef.h"
+#include "CVidPalette.h"
 
 class CVidCell;
 

@@ -90,6 +90,19 @@ int CResSpell::GetCastingEffectNo()
     return -1;
 }
 
+// 0x401BA0
+int CResSpell::Release()
+{
+    int rc = CRes::Release();
+    if (GetDemands() <= 0) {
+        m_bParsed = FALSE;
+        m_pAbilities = NULL;
+        m_pEffects = NULL;
+        m_pHeader = NULL;
+    }
+    return rc;
+}
+
 // 0x401BD0
 BOOL CResSpell::Parse(void* pData)
 {

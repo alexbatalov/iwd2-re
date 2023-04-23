@@ -16,7 +16,6 @@ public:
     ~CAIAction();
     BOOL OfType(SHORT type) const;
     void Read(CString sData);
-    void Read(CString sData);
 
     SHORT m_actionID;
     CAIObjectType m_actorID;

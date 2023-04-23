@@ -6,7 +6,7 @@
 #include "CInfinity.h"
 #include "CSound.h"
 
-typedef struct CAreaFileHeader {
+typedef struct {
     RESREF m_areaName;
     DWORD m_lastSaved;
     DWORD m_flags;
@@ -28,9 +28,9 @@ typedef struct CAreaFileHeader {
     DWORD field_50;
     DWORD field_54;
     DWORD field_58;
-};
+} CAreaFileHeader;
 
-typedef struct CAreaSoundsAndMusic {
+typedef struct {
     DWORD m_dayMusic;
     DWORD m_nightMusic;
     DWORD m_battleWinningMusic;
@@ -49,7 +49,7 @@ typedef struct CAreaSoundsAndMusic {
     DWORD m_nightAmbientVolume;
     DWORD m_reverb;
     DWORD m_notUsed[15];
-};
+} CAreaSoundsAndMusic;
 
 class CGameArea {
 public:

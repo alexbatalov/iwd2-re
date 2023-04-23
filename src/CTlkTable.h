@@ -3,9 +3,9 @@
 
 #include "mfc.h"
 
+#include "CSound.h"
 #include "CTlkFileOverride.h"
 #include "ChDataTypes.h"
-#include "CSound.h"
 
 typedef struct {
     CString szText;

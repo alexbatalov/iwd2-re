@@ -189,7 +189,7 @@ void CTimerWorld::CheckForTriggerEventAbsolute()
                 m_nLastPercentage = nNewPercentage;
             }
         } else if (time >= TIME_DAWN && time < TIME_DAY) {
-            BYTE nNewPercentage = -1 - ((time + 16750216) << 8) / TIMESCALE_MSEC_PER_HOUR;
+            BYTE nNewPercentage = ((time + 16750216) << 8) / TIMESCALE_MSEC_PER_HOUR;
             if (nNewPercentage != m_nLastPercentage) {
                 pActiveArea->SetDawn(nNewPercentage, TRUE);
                 m_nLastPercentage = nNewPercentage;

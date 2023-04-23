@@ -42,7 +42,6 @@ public:
     void SetChannelVolume(int nChannelNumber, int nNewVolume);
     int GetChannelVolumeFast(int nChannelNumber);
     BOOL IsSoundWaiting(CSound* pSound);
-    void RemoveWaiting(CSound* pSound);
     void RemoveFromLoopingList(CSound* pSound);
 
     BOOL GetMixerInitialized() { return m_bMixerInitialized; }

@@ -255,12 +255,24 @@ target_compile_definitions(${EXECUTABLE_NAME} PUBLIC
     _MBCS
 )
 
+# TODO: Use winsdkver.h?
+target_compile_definitions(${EXECUTABLE_NAME} PUBLIC
+    _WIN32_WINNT=0x0501
+)
+
 target_link_libraries(${EXECUTABLE_NAME}
     ddraw
     dsound
     dxguid
+    imm32
     version
     winmm
+)
+
+# TODO: Remove, original binary is not linked with opengl. All gl functions are
+# dynamically bound at runtime.
+target_link_libraries(${EXECUTABLE_NAME}
+    opengl32
 )
 
 add_subdirectory("third_party/zlib")

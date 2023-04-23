@@ -469,14 +469,6 @@ BOOL CSoundMixer::IsSoundWaiting(CSound* pSound)
 }
 
 // NOTE: Inlined in many places.
-void CSoundMixer::RemoveWaiting(CSound* pSound)
-{
-    Lock();
-    m_lWaiting.RemoveAt(m_lWaiting.Find(pSound));
-    Unlock();
-}
-
-// NOTE: Inlined in many places.
 void CSoundMixer::RemoveFromLoopingList(CSound* pSound)
 {
     Lock();

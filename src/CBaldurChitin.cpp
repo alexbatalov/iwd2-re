@@ -1154,6 +1154,8 @@ BOOL CBaldurChitin::Is3DSound(int nSoundChannel)
     if (m_pObjectGame != NULL) {
         return m_pObjectGame->Is3DSound(nSoundChannel);
     }
+
+    return FALSE;
 }
 
 // 0x422D20

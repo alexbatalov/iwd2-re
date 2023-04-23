@@ -34,6 +34,8 @@ void CUIControlSlider::OnMouseMove(CPoint pt)
 BOOL CUIControlSlider::OnLButtonDown(CPoint pt)
 {
     // TODO: Incomplete.
+
+    return TRUE;
 }
 
 // 0x4D6380

@@ -376,6 +376,7 @@ public:
     int GetStartRotation(INT nCharacterSlot) const;
     void GetCharacterStateDescription(INT nState, CString& sDescription) const;
     void GetMovieDescription(const CString& sMovie, CString& sDescription) const;
+    void GetSpellDescription(const CString& sSpell, CString& sDescription) const;
     BOOL IsValidAlignment(BYTE nClass, BYTE nAlignment, DWORD nSpecialist) const;
     BOOL IsUsableByAlignment(DWORD dwNotUsableBy, BYTE nAlignment) const;
     BYTE GetStartingReputation(BYTE nAlignment) const;

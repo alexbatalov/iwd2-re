@@ -1,7 +1,7 @@
 #ifndef CSOUNDPROPERTIES_H_
 #define CSOUNDPROPERTIES_H_
 
-#include <windows.h>
+#include "mfc.h"
 
 // clang-format off
 #include <mmsystem.h>
@@ -12,7 +12,7 @@
 #define CSOUNDPROPERTIES_EAX_SUPPORTS_REVERBMIX 0x2
 #define CSOUNDPROPERTIES_EAX_SUPPORTS_VMANAGEMENT_MODE 0x4
 
-typedef enum EAXEnvironment {
+typedef enum {
     EAX_ENVIRONMENT_GENERIC,
     EAX_ENVIRONMENT_PADDEDCELL,
     EAX_ENVIRONMENT_ROOM,
@@ -39,14 +39,14 @@ typedef enum EAXEnvironment {
     EAX_ENVIRONMENT_DRUGGED,
     EAX_ENVIRONMENT_DIZZY,
     EAX_ENVIRONMENT_PSYCHOTIC,
-};
+} EAXEnvironment;
 
-typedef struct EAXPRESET {
+typedef struct {
     int dwEnvironment;
     float fVolume;
     float fDecayTime;
     float fDaming;
-};
+} EAXPRESET;
 
 class CSoundProperties {
 public:

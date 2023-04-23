@@ -237,7 +237,7 @@ BYTE CGameArea::GetSong(SHORT slot)
         return -1;
     }
 
-    DWORD song;
+    BYTE song;
     if (slot != 256) {
         switch (slot) {
         case 0:

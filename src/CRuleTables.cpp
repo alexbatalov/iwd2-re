@@ -1846,18 +1846,18 @@ void CRuleTables::GetMovieDescription(const CString& sMovie, CString& sDescripti
     STR_RES strRes;
     DWORD strDescription;
 
-    strDescription = atol(m_tCharacterStateDescription.GetAt(DESCRIPTION, sMovie));
+    strDescription = atol(m_tMovieDescription.GetAt(DESCRIPTION, sMovie));
     g_pBaldurChitin->m_cTlkTable.Fetch(strDescription, strRes);
     sDescription = strRes.szText;
 }
 
 // 0x544870
-void CRuleTables::GetMovieDescription(const CString& sSpell, CString& sDescription) const
+void CRuleTables::GetSpellDescription(const CString& sSpell, CString& sDescription) const
 {
     STR_RES strRes;
     DWORD strDescription;
 
-    strDescription = atol(m_tCharacterStateDescription.GetAt(DESCRIPTION, sSpell));
+    strDescription = atol(m_tSpellDescription.GetAt(DESCRIPTION, sSpell));
     g_pBaldurChitin->m_cTlkTable.Fetch(strDescription, strRes);
     sDescription = strRes.szText;
 }
