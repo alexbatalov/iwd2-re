@@ -518,7 +518,7 @@ void CSoundMixer::SetMusicVolume(int nNewVolume)
 void CSoundMixer::Lock()
 {
     if (g_pChitin != NULL) {
-        if (g_pChitin->field_390 != 1) {
+        if (g_pChitin->m_bExitMusicThread != TRUE) {
             EnterCriticalSection(&(g_pChitin->field_394));
         }
     }
@@ -529,7 +529,7 @@ void CSoundMixer::Lock()
 void CSoundMixer::Unlock()
 {
     if (g_pChitin != NULL) {
-        if (g_pChitin->field_390 != 1) {
+        if (g_pChitin->m_bExitMusicThread != TRUE) {
             LeaveCriticalSection(&(g_pChitin->field_394));
         }
     }

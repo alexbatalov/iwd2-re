@@ -3,6 +3,8 @@
 
 #include "mfc.h"
 
+class CVidMosaic;
+
 // #guess
 class CImm {
 public:
@@ -34,6 +36,7 @@ public:
     CString sub_7C2ED0(HWND hWnd);
     CString sub_7C34A0();
     CString sub_7C34D0();
+    void CleanUp();
 
     static const CSize PADDING;
 
@@ -45,7 +48,7 @@ public:
     /* 0130 */ CString field_130;
     /* 0134 */ CString field_134;
     /* 0138 */ CString m_sCandidateList;
-    /* 013C */ int field_13C;
+    /* 013C */ CVidMosaic* field_13C;
 };
 
 #endif /* CIMM_H_ */

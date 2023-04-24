@@ -38,6 +38,7 @@ public:
     void RegisterThread();
     void SuspendThreads();
     void AddEngine(CWarp* pNewEngine);
+    void DestroyServices();
     CWnd* GetWnd();
     void Resume();
     void ReadIniFiles();
@@ -205,14 +206,14 @@ public:
     /* 032C */ CRITICAL_SECTION field_32C;
     /* 0344 */ CRITICAL_SECTION field_344;
     /* 035C */ CRITICAL_SECTION field_35C;
-    /* 0374 */ int field_374;
+    /* 0374 */ BOOL m_bExitRSThread;
     /* 0378 */ HANDLE m_hRSThread;
-    /* 037C */ int field_37C;
+    /* 037C */ BOOL m_bExitMessageThread;
     /* 0380 */ HANDLE m_hMessageThread;
     /* 0384 */ HANDLE m_hMainAIThread;
-    /* 0388 */ int field_388;
+    /* 0388 */ BOOL m_bExitMainAIThread;
     /* 038C */ HANDLE m_hMusicThread;
-    /* 0390 */ int field_390;
+    /* 0390 */ BOOL m_bExitMusicThread;
     /* 0394 */ CRITICAL_SECTION field_394;
     /* 03AC */ CRITICAL_SECTION field_3AC;
     /* 03C4 */ CWarp* pActiveEngine;

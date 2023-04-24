@@ -570,17 +570,17 @@ void CChitin::InitializeVariables()
     m_bEngineActive = FALSE;
     field_1912 = 0;
     field_4C = 0;
-    field_374 = 0;
-    field_388 = 0;
+    m_bExitRSThread = FALSE;
+    m_bExitMainAIThread = FALSE;
     field_50 = 0;
-    field_37C = 0;
+    m_bExitMessageThread = FALSE;
     field_1906.x = 0;
     field_1906.y = 0;
     m_eventTimer = NULL;
     field_B4 = 0;
     m_hRSThread = NULL;
     m_hMusicThread = NULL;
-    field_390 = 0;
+    m_bExitMusicThread = FALSE;
     nAUCounter = 0;
     field_70 = 0;
     field_BC = 0;
@@ -897,6 +897,71 @@ CRes* CChitin::AllocResObject(int nType)
     }
 }
 
+// 0x78FC90
+void CChitin::DestroyServices()
+{
+    DWORD dwSuspendCount;
+
+    // NOTE: Uninline.
+    cImm.CleanUp();
+
+    m_bExitRSThread = TRUE;
+    if (m_hRSThread != NULL) {
+        do {
+            dwSuspendCount = ResumeThread(m_hRSThread);
+            if (dwSuspendCount == -1) {
+                GetLastError();
+                break;
+            }
+        } while (dwSuspendCount > 1);
+    }
+
+    m_bExitMessageThread = TRUE;
+    if (m_hMessageThread != NULL) {
+        do {
+            dwSuspendCount = ResumeThread(m_hMessageThread);
+            if (dwSuspendCount == -1) {
+                GetLastError();
+                break;
+            }
+        } while (dwSuspendCount > 1);
+    }
+
+    m_bExitMainAIThread = TRUE;
+    if (m_hMainAIThread != NULL) {
+        do {
+            dwSuspendCount = ResumeThread(m_hMainAIThread);
+            if (dwSuspendCount == -1) {
+                GetLastError();
+                break;
+            }
+        } while (dwSuspendCount > 1);
+    }
+
+    m_bExitMusicThread = TRUE;
+    if (m_hMusicThread != NULL) {
+        do {
+            dwSuspendCount = ResumeThread(m_hMusicThread);
+            if (dwSuspendCount == -1) {
+                GetLastError();
+                break;
+            }
+        } while (dwSuspendCount > 1);
+    }
+
+    field_142 = 0;
+    cSoundMixer.CleanUp();
+    cVideo.CleanUp();
+
+    // NOTE: Ugly, probably `CVideo` has additional `CleanUp`-like method
+    // inlined into destructor.
+    cVideo.~CVideo();
+
+    for (USHORT nIndex = 0; nIndex < m_nThreads; nIndex++) {
+        CloseHandle(m_hThreadHandles[nIndex]);
+    }
+}
+
 // 0x78F0E0
 void CChitin::AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD dw1, DWORD dw2)
 {
@@ -906,7 +971,7 @@ void CChitin::AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD d
     if (!field_E0) {
         nAUCounter++;
 
-        if (field_4C && !field_374) {
+        if (field_4C && !m_bExitRSThread) {
             cDimm.ResumeServicing();
         }
 

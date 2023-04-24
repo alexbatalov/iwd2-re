@@ -930,7 +930,7 @@ void CBaldurChitin::MusicThreadMain(void* userInfo)
 {
     RegisterThread();
 
-    while (field_390 == 0) {
+    while (!m_bExitMusicThread) {
         g_pChitin->cSoundMixer.UpdateMusic();
         SleepEx(25, FALSE);
     }
@@ -941,10 +941,10 @@ void CBaldurChitin::RSThreadMain(void* userInfo)
 {
     RegisterThread();
 
-    while (field_374 == 0) {
+    while (!m_bExitRSThread) {
         cDimm.Update();
 
-        if (field_374 == 0) {
+        if (!m_bExitRSThread) {
             SuspendThread(m_hRSThread);
         }
     }

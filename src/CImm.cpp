@@ -2,6 +2,7 @@
 
 #include "CChitin.h"
 #include "CUtil.h"
+#include "CVidMosaic.h"
 #include "CWarp.h"
 
 // 0xA09FC0
@@ -374,4 +375,14 @@ CString CImm::sub_7C34A0()
 CString CImm::sub_7C34D0()
 {
     return field_134;
+}
+
+// NOTE: Probably inlined in `CChitin::DestroyServices`.
+void CImm::CleanUp()
+{
+    if (field_13C != NULL) {
+        delete field_13C;
+    }
+
+    field_13C = NULL;
 }
