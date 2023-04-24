@@ -1331,7 +1331,26 @@ CWnd* CChitin::GetWnd()
 // 0x790570
 void CChitin::Resume()
 {
-    // TODO: Incomplete.
+    m_mouseLDblClickCount = m_mouseDblClickTime;
+    GetAsyncKeyState(m_mouseLButton);
+
+    m_mouseRDblClickCount = m_mouseDblClickTime;
+    GetAsyncKeyState(m_mouseRButton);
+
+    m_mouseMDblClickCount = m_mouseDblClickTime;
+    GetAsyncKeyState(VK_MBUTTON);
+
+    if (pActiveEngine != NULL) {
+        SHORT nKeys = pActiveEngine->GetNumVirtualKeys();
+        if (nKeys > 0) {
+            CKeyInfo* keys = pActiveEngine->GetVirtualKeys();
+            for (SHORT nKey = 0; nKey < nKeys; nKey++) {
+                keys[nKey].m_repeatCount = GetAsyncKeyState(keys[nKey].m_keyCode) != 0;
+            }
+        }
+    }
+
+    field_E0 = 0;
 }
 
 // #not-binary-identical
