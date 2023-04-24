@@ -122,16 +122,18 @@ public:
 
     /* 0004 */ int m_mouseLButton;
     /* 0008 */ int m_mouseRButton;
-    /* 000C */ int field_C;
+    /* 000C */ BOOL m_bMouseLButtonDown;
+    /* 0010 */ CPoint m_mouseLDblClickPoint;
     /* 0018 */ int m_mouseLDblClickCount;
-    /* 001C */ int field_1C;
+    /* 001C */ BOOL m_bMouseRButtonDown;
+    /* 0020 */ CPoint m_mouseRDblClickPoint;
     /* 0028 */ int m_mouseRDblClickCount;
-    /* 002C */ int field_2C;
+    /* 002C */ BOOL m_bMouseMButtonDown;
+    /* 0030 */ CPoint m_mouseMDblClickPoint;
     /* 0038 */ int m_mouseMDblClickCount;
-    /* 003C */ UINT m_mouseDblClickTime; // #guess
-    /* 0040 */ int field_40;
-    /* 0044 */ int field_44;
-    /* 0048 */ int m_bEngineActive;
+    /* 003C */ UINT m_mouseDblClickTime;
+    /* 0040 */ CSize m_mouseDblClickSize;
+    /* 0048 */ BOOL m_bEngineActive;
     /* 004C */ int field_4C;
     /* 0050 */ int field_50;
     /* 0054 */ CObList lEngines;
@@ -172,6 +174,9 @@ public:
     /* 01E3 */ int field_13E;
     /* 0142 */ int field_142;
     /* 0148 */ int m_bInMouseWheelQueue;
+    // FIXME: Looks like this list stores `wParam` values of `WM_MOUSEWHEEL`
+    // disguised as pointers. There are more specialized collections for such
+    // case.
     /* 014C */ CPtrList m_lMouseWheel;
     /* 0168 */ int m_nWheelScrollLines; // #guess
     /* 016C */ int field_16C;
@@ -180,9 +185,9 @@ public:
     /* 0178 */ BOOL m_bUseMirrorFX; // #guess
     /* 017C */ UINT m_nQueryCancelAutoPlayMsgID; // #guess
     /* 0180 */ int field_180;
-    /* 0184 */ int field_184;
-    /* 0188 */ int field_188;
-    /* 018C */ int field_18C;
+    /* 0184 */ DWORD m_nTickCount;
+    /* 0188 */ int m_nAIPerSec;
+    /* 018C */ int m_nAIElasped;
     /* 0190 */ int field_190;
     /* 0194 */ int field_194;
     /* 0198 */ int field_198;
@@ -218,9 +223,8 @@ public:
     /* 18D4 */ CGameSpy cGameSpy; // #guess
     /* 1900 */ CUnknown1 field_1900;
     /* 1902 */ int field_1902;
-    /* 1906 */ int field_1906;
-    /* 190A */ int field_190A;
-    /* 190E */ int field_190E;
+    /* 1906 */ CPoint field_1906;
+    /* 190E */ LONG nAUCounter;
     /* 1912 */ int field_1912;
     /* 1916 */ CAliasList lAliases; // #guess
     /* 1932 */ int field_1932;

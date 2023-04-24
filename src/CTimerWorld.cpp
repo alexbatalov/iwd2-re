@@ -152,7 +152,7 @@ void CTimerWorld::AddCurrentTime(ULONG gameTime)
 void CTimerWorld::UpdateTime(BOOLEAN forceUpdate)
 {
     if (m_active || forceUpdate) {
-        if ((g_pBaldurChitin->field_190E & 1) != 1) {
+        if ((g_pBaldurChitin->nAUCounter & 1) != 1) {
             m_gameTime++;
             CheckForTriggerEventAbsolute();
         }
