@@ -1655,7 +1655,66 @@ void CChitin::SetSoundVolumes()
 // 0x7909C0
 void CChitin::ShutDown(int nLineNumber, const char* szFileName, const char* text)
 {
-    // TODO: Incomplete.
+    CString sString;
+
+    if (!field_1932) {
+        field_1932 = TRUE;
+
+        field_E0 = 1;
+        if (field_BC != 0) {
+            field_BC = timeKillEvent(field_BC);
+        }
+        timeEndPeriod(field_C0);
+
+        POSITION pos = lEngines.GetHeadPosition();
+        while (pos != NULL) {
+            CWarp* pEngine = static_cast<CWarp*>(lEngines.GetAt(pos));
+            if (pEngine != NULL) {
+                pEngine->EngineDestroyed();
+            }
+
+            lEngines.RemoveAt(pos);
+            pos = lEngines.GetHeadPosition();
+        }
+
+        DestroyServices();
+
+        if (nLineNumber != -1) {
+            const char* szFileNameOnly = szFileName;
+            if (strrchr(szFileName, '\\') != NULL) {
+                szFileNameOnly = strrchr(szFileName, '\\') + 1;
+            }
+
+            if (text != NULL) {
+                sString.Format("An Assertion failed in %s at line number %d \n Programmer says: %s",
+                    szFileNameOnly,
+                    nLineNumber,
+                    text);
+            } else {
+                sString.Format("An Assertion failed in %s at line number %d",
+                    szFileNameOnly,
+                    nLineNumber);
+            }
+
+            if (name.Compare("") != 0) {
+                MessageBoxA(NULL, sString, name, MB_SYSTEMMODAL | MB_ICONERROR);
+            } else {
+                MessageBoxA(NULL, sString, "Assertion", MB_SYSTEMMODAL | MB_ICONERROR);
+            }
+        }
+
+        RECT windowRect;
+        GetWindowRect(cWnd.GetSafeHwnd(), &windowRect);
+        m_ptScreen.x = windowRect.left;
+        m_ptScreen.y = windowRect.top;
+
+        HWND hWnd = cWnd.Detach();
+        if (hWnd != NULL) {
+            DestroyWindow(hWnd);
+        }
+
+        PostQuitMessage(0);
+    }
 }
 
 // 0x790B70
