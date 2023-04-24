@@ -5,16 +5,25 @@
 #include "CVidFont.h"
 #include "CVidMode.h"
 
+#define CVIDINF_SURFACE_BACK 0
 #define CVIDINF_SURFACE_FRONT 1
+#define CVIDINF_SURFACE_2 2
+#define CVIDINF_SURFACE_3 3
+#define CVIDINF_SURFACE_4 4
+#define CVIDINF_SURFACE_5 5
+#define CVIDINF_SURFACE_6 6
+#define CVIDINF_SURFACE_7 7
+#define CVIDINF_SURFACE_8 8
 
 class CParticle;
 
 class CVidInf : public CVidMode {
 public:
     CVidInf();
-    /* 005C */ BOOL ActivateVideoMode(CVidMode* pPrevVidMode, HWND hWnd, BOOL bFullscreen) override;
+    /* 005C */ BOOL ActivateVideoMode(CVidMode* pPrevVidMode, HWND hWnd, BOOLEAN bFullscreen) override;
     /* 0060 */ BOOLEAN SetClipper(IDirectDrawClipper* lpDirectDrawClipper) override;
-    /* 006C */ BOOL DeactivateVideoMode(int a2) override;
+    /* 0064 */ BOOL CreateSurfaces(BOOLEAN bFullscreen) override;
+    /* 006C */ BOOL DeactivateVideoMode(CVidMode* pNextVidMode) override;
     /* 0074 */ void DestroySurfaces() override;
     /* 007C */ void DoTextOut(UINT nSurface, const CString& sText, int x, int y, COLORREF color, int height) override;
     /* 0080 */ void DoTextOut(UINT nSurface, const CString& sText, int x, int y, COLORREF color) override;
@@ -28,6 +37,7 @@ public:
     /* 0100 */ void RestoreSurfaces() override;
     /* 010C */ void ParsePixelFormat(const DDPIXELFORMAT& ddpf) override;
     /* 011C */ ~CVidInf() override;
+    /* 0124 */ BOOL DestroySurfaces3d(CVidMode* pNextVidMode) override;
 
     BOOL FullScreenFlip(BOOL bRenderCursor);
     BOOL WindowedFlip(BOOL bRenderCursor);

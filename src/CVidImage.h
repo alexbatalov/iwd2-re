@@ -5,6 +5,8 @@
 
 class CVidImage {
 public:
+    static DWORD rgbTempPal[256];
+
     CVidImage();
     ~CVidImage();
     COLORREF GetTintColor();

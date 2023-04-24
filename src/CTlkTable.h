@@ -28,7 +28,7 @@ public:
 
     CTlkTable();
     ~CTlkTable();
-    BOOL AddTlkFile(const CString& filePath, BYTE a3, BYTE a4, BOOLEAN a5);
+    BOOL AddTlkFile(const CString& filePath, BYTE a3, BYTE a4, BOOLEAN bOpen);
     BOOL CloseFile(BYTE a2, BYTE a3);
     BOOLEAN Fetch(DWORD dwStrId, STR_RES& strRes);
     BOOL OpenFile(BYTE a2, BYTE a3);

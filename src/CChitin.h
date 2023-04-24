@@ -115,22 +115,23 @@ public:
     static CString name;
     static BOOL SCREEN_SAVE_ACTIVE;
     static BOOL SCREEN_SAVE_ACTIVE_LOADED;
+    static BOOLEAN byte_8FB950;
     static int dword_8FB974;
     static int dword_8FB978;
     static int dword_8FB97C;
 
-    /* 0004 */ int field_4;
-    /* 0008 */ int field_8;
+    /* 0004 */ int m_mouseLButton;
+    /* 0008 */ int m_mouseRButton;
     /* 000C */ int field_C;
-    /* 0018 */ int field_18;
+    /* 0018 */ int m_mouseLDblClickCount;
     /* 001C */ int field_1C;
-    /* 0028 */ int field_28;
+    /* 0028 */ int m_mouseRDblClickCount;
     /* 002C */ int field_2C;
-    /* 0038 */ int field_38;
-    /* 003C */ UINT m_nDoubleClickTime; // #guess
+    /* 0038 */ int m_mouseMDblClickCount;
+    /* 003C */ UINT m_mouseDblClickTime; // #guess
     /* 0040 */ int field_40;
     /* 0044 */ int field_44;
-    /* 0048 */ int field_48;
+    /* 0048 */ int m_bEngineActive;
     /* 004C */ int field_4C;
     /* 0050 */ int field_50;
     /* 0054 */ CObList lEngines;
@@ -147,6 +148,7 @@ public:
     /* 00E1 */ BOOLEAN m_bFullscreen; // #guess
     /* 00E2 */ unsigned char field_E2;
     /* 00E4 */ int field_E4;
+    /* 00E8 */ RECT field_E8;
     /* 00F8 */ unsigned char field_F8;
     /* 00F9 */ unsigned char field_F9;
     /* 00FA */ DWORD dwPlatformId; // #guess
@@ -169,8 +171,8 @@ public:
     /* 013A */ int field_13A;
     /* 01E3 */ int field_13E;
     /* 0142 */ int field_142;
-    /* 0148 */ int field_148;
-    /* 014C */ CPtrList field_14C;
+    /* 0148 */ int m_bInMouseWheelQueue;
+    /* 014C */ CPtrList m_lMouseWheel;
     /* 0168 */ int m_nWheelScrollLines; // #guess
     /* 016C */ int field_16C;
     /* 0170 */ int field_170;

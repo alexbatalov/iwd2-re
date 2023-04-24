@@ -31,7 +31,7 @@ BOOL CAliasList::ResolveFileName(const CString& a2, CString& a3)
     while (aliasPos != NULL) {
         CAlias* pAlias = static_cast<CAlias*>(GetNext(aliasPos));
         if (pAlias != NULL) {
-            if (a2.FindOneOf(pAlias->field_8) != -1) {
+            if (a2.Find(pAlias->field_8) != -1) {
                 POSITION pos = pAlias->field_C.GetHeadPosition();
                 if (pos != NULL) {
                     while (pos != NULL) {

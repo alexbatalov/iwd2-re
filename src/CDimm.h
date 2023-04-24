@@ -26,7 +26,7 @@ public:
     CDimm();
     ~CDimm();
 
-    BOOL AddToDirectoryList(const CString& sDirName, BOOL a3);
+    BOOL AddToDirectoryList(const CString& sDirName, BOOL bRescan);
     BOOL AddTemporaryKey(const CString& a2, CResRef cResRef, USHORT nResType);
     BOOL RemoveTemporaryKey(const CString& sDirName, CResRef cResRef, USHORT nType);
     int CancelRequest(CRes* pRes);

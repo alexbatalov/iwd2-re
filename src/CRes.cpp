@@ -104,7 +104,7 @@ CResRef CRes::GetResRef()
 USHORT CRes::GetType()
 {
     if (m_pDimmKeyTableEntry != NULL) {
-        return m_pDimmKeyTableEntry->field_12;
+        return m_pDimmKeyTableEntry->nResType;
     }
 
     return 0xFFFF;

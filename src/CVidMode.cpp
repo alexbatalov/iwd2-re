@@ -6,6 +6,9 @@
 #include "CUtil.h"
 #include "CVidCell.h"
 
+// 0x8BA320
+short CVidMode::word_8BA320 = 100;
+
 // 0x8BA322
 BYTE CVidMode::NUM_FADE_FRAMES = 20;
 
@@ -967,13 +970,13 @@ void CVidMode::SetWindowedMode(HWND hWnd)
 }
 
 // 0x7BC100
-BOOL CVidMode::ActivateVideoMode(CVidMode* pPrevVidMode, HWND hWnd, BOOL bFullscreen)
+BOOL CVidMode::ActivateVideoMode(CVidMode* pPrevVidMode, HWND hWnd, BOOLEAN bFullscreen)
 {
     return TRUE;
 }
 
 // 0x7BC100
-BOOL CVidMode::ActivateVideoMode3d(CVidMode* pPrevVidMode, HWND hWnd, BOOL bFullscreen)
+BOOL CVidMode::ActivateVideoMode3d(CVidMode* pPrevVidMode, HWND hWnd, BOOLEAN bFullscreen)
 {
     return TRUE;
 }
@@ -1154,13 +1157,13 @@ BOOL CVidMode::DrawThickLine32(INT nXFrom, INT nYFrom, INT nXTo, INT nYTo, DWORD
 }
 
 // 0x799E20
-BOOL CVidMode::CreateSurfaces(BOOLEAN a2)
+BOOL CVidMode::CreateSurfaces(BOOLEAN bFullscreen)
 {
     return FALSE;
 }
 
 // 0x799C90
-BOOL CVidMode::DeactivateVideoMode(int a2)
+BOOL CVidMode::DeactivateVideoMode(CVidMode* pNextVidMode)
 {
     return TRUE;
 }
@@ -1212,7 +1215,22 @@ BOOL CVidMode::CreateSurfaces3d()
 }
 
 // 0x78E6E0
-BOOL CVidMode::DestroySurfaces3d()
+BOOL CVidMode::DestroySurfaces3d(CVidMode* pNextVidMode)
 {
     return FALSE;
+}
+
+// 0x7BEDE0
+void CVidMode::sub_7BEDE0()
+{
+    CSingleLock lock(&field_4A, FALSE);
+    lock.Lock(INFINITE);
+
+    while (!field_6A.IsEmpty()) {
+        GLuint texture = static_cast<GLuint>(field_6A.RemoveHead());
+        glDeleteTextures(1, &texture);
+        CheckResults3d(0);
+    }
+
+    lock.Unlock();
 }

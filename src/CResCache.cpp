@@ -16,28 +16,28 @@ CString CResCache::DEFAULT_CACHE_DIRECTORY("hd0:\\cache\\");
 CResCache::CResCache()
 {
     getcwd(workingDirectory, sizeof(workingDirectory));
-    field_108 = DEFAULT_CACHE_DIRECTORY;
+    m_sDirName = DEFAULT_CACHE_DIRECTORY;
     field_110 = 0;
-    field_11C = 175000000;
-    field_120 = 175000000;
+    m_nCacheSize = 175000000;
+    m_nAvailableCacheSize = 175000000;
     field_114 = 0;
     field_118 = 0;
-    field_124 = 0;
-    field_0 = 0;
-    InitializeCriticalSection(&criticalSection);
+    m_nEntries = 0;
+    m_bInitialized = FALSE;
+    InitializeCriticalSection(&m_criticalSection);
 }
 
 // #binary-identical
 // 0x78C020
 CResCache::~CResCache()
 {
-    EnterCriticalSection(&criticalSection);
+    EnterCriticalSection(&m_criticalSection);
 
-    POSITION pos = field_128.GetHeadPosition();
+    POSITION pos = m_lEntries.GetHeadPosition();
     while (pos != NULL) {
         POSITION curr = pos;
-        Entry* pEntry = field_128.GetNext(pos);
-        field_128.RemoveAt(curr);
+        Entry* pEntry = m_lEntries.GetNext(pos);
+        m_lEntries.RemoveAt(curr);
 
         UINT nIndex = pEntry->nIndex;
         if (g_pChitin->cDimm.m_cKeyTable.m_bInitialized) {
@@ -51,11 +51,11 @@ CResCache::~CResCache()
         delete pEntry;
     }
 
-    field_124 = 0;
-    field_120 = field_11C;
+    m_nEntries = 0;
+    m_nAvailableCacheSize = m_nCacheSize;
 
-    LeaveCriticalSection(&criticalSection);
-    DeleteCriticalSection(&criticalSection);
+    LeaveCriticalSection(&m_criticalSection);
+    DeleteCriticalSection(&m_criticalSection);
 }
 
 // 0x78C130
@@ -66,8 +66,8 @@ void CResCache::AccessFileInCache(UINT nIndex)
     CString v3;
     CFile cFile;
 
-    if (field_0) {
-        v1 = field_108;
+    if (m_bInitialized) {
+        v1 = m_sDirName;
         if (g_pChitin->cDimm.FindDirectoryInDirectoryList(v1) == DIMM_NOT_IN_DIRECTORY_LIST) {
             if (!g_pChitin->cDimm.AddToDirectoryList(v1, FALSE)) {
                 return;
@@ -114,16 +114,16 @@ void CResCache::AddFileToCache(UINT nIndex, const CTime& cTime, DWORD nSize)
     POSITION existingEntryPos;
     POSITION previousEntryPos;
 
-    EnterCriticalSection(&(criticalSection));
+    EnterCriticalSection(&(m_criticalSection));
 
-    POSITION pos = field_128.GetHeadPosition();
+    POSITION pos = m_lEntries.GetHeadPosition();
     while (pos != NULL) {
         if (prevEntryFound && existingEntryFound) {
             break;
         }
 
         POSITION curr = pos;
-        Entry* pEntry = field_128.GetNext(pos);
+        Entry* pEntry = m_lEntries.GetNext(pos);
         if (nIndex == pEntry->nIndex) {
             existingEntryFound = TRUE;
             existingEntryPos = pos;
@@ -139,11 +139,11 @@ void CResCache::AddFileToCache(UINT nIndex, const CTime& cTime, DWORD nSize)
 
     Entry* pEntry;
     if (existingEntryFound == TRUE) {
-        pEntry = field_128.GetAt(existingEntryPos);
-        field_128.RemoveAt(existingEntryPos);
+        pEntry = m_lEntries.GetAt(existingEntryPos);
+        m_lEntries.RemoveAt(existingEntryPos);
         pEntry->cTime = cTime;
         if (pEntry->nSize != nSize) {
-            field_120 += pEntry->nSize - nSize;
+            m_nAvailableCacheSize += pEntry->nSize - nSize;
         }
     } else {
         pEntry = new Entry;
@@ -151,18 +151,18 @@ void CResCache::AddFileToCache(UINT nIndex, const CTime& cTime, DWORD nSize)
         pEntry->cTime = cTime;
         pEntry->nSize = nSize;
 
-        field_124 += 1;
-        field_120 -= nSize;
+        m_nEntries += 1;
+        m_nAvailableCacheSize -= nSize;
     }
 
-    if (field_120 >= field_11C) {
-        field_120 = field_11C;
+    if (m_nAvailableCacheSize >= m_nCacheSize) {
+        m_nAvailableCacheSize = m_nCacheSize;
     }
 
     if (!prevEntryFound) {
-        field_128.AddTail(pEntry);
+        m_lEntries.AddTail(pEntry);
     } else {
-        field_128.InsertBefore(previousEntryPos, pEntry);
+        m_lEntries.InsertBefore(previousEntryPos, pEntry);
     }
 
     if (g_pChitin->cDimm.m_cKeyTable.m_bInitialized) {
@@ -173,7 +173,7 @@ void CResCache::AddFileToCache(UINT nIndex, const CTime& cTime, DWORD nSize)
         }
     }
 
-    LeaveCriticalSection(&(criticalSection));
+    LeaveCriticalSection(&(m_criticalSection));
 }
 
 // 0x78C4F0
@@ -200,12 +200,12 @@ void CResCache::FlushCache(int a2)
 
     int v1 = a2;
     if (v1 <= 0) {
-        v1 = field_11C;
+        v1 = m_nCacheSize;
     }
 
-    EnterCriticalSection(&criticalSection);
+    EnterCriticalSection(&m_criticalSection);
 
-    POSITION pos = field_128.GetTailPosition();
+    POSITION pos = m_lEntries.GetTailPosition();
 
     EnterCriticalSection(&(g_pChitin->field_35C));
 
@@ -214,15 +214,15 @@ void CResCache::FlushCache(int a2)
     if (!g_pChitin->cNetwork.m_bConnectionEstablished && v1 <= 10000000) {
         while (pos != NULL && nUnusedSize < v1) {
             POSITION curr = pos;
-            Entry* pEntry = field_128.GetPrev(pos);
+            Entry* pEntry = m_lEntries.GetPrev(pos);
             if (pEntry->nSize <= 10000000) {
                 if (DeleteFileFromCache(pEntry->nIndex) == TRUE) {
-                    field_120 += pEntry->nSize;
-                    field_124 -= 1;
+                    m_nAvailableCacheSize += pEntry->nSize;
+                    m_nEntries -= 1;
 
                     nUnusedSize = GetUnusedSize();
 
-                    field_128.RemoveAt(curr);
+                    m_lEntries.RemoveAt(curr);
                     delete pEntry;
                 }
             }
@@ -230,21 +230,21 @@ void CResCache::FlushCache(int a2)
     }
 
     if (nUnusedSize < v1) {
-        POSITION pos = field_128.GetTailPosition();
+        POSITION pos = m_lEntries.GetTailPosition();
         while (pos != NULL) {
             if (nUnusedSize >= v1) {
                 break;
             }
 
             POSITION curr = pos;
-            Entry* pEntry = field_128.GetPrev(pos);
+            Entry* pEntry = m_lEntries.GetPrev(pos);
             if (DeleteFileFromCache(pEntry->nIndex) == TRUE) {
-                field_120 += pEntry->nSize;
-                field_124 -= 1;
+                m_nAvailableCacheSize += pEntry->nSize;
+                m_nEntries -= 1;
 
                 nUnusedSize = GetUnusedSize();
 
-                field_128.RemoveAt(curr);
+                m_lEntries.RemoveAt(curr);
                 delete pEntry;
             }
         }
@@ -252,18 +252,18 @@ void CResCache::FlushCache(int a2)
 
     LeaveCriticalSection(&(g_pChitin->field_35C));
 
-    if (field_120 >= field_11C) {
-        field_120 = field_11C;
+    if (m_nAvailableCacheSize >= m_nCacheSize) {
+        m_nAvailableCacheSize = m_nCacheSize;
     }
 
-    LeaveCriticalSection(&criticalSection);
+    LeaveCriticalSection(&m_criticalSection);
 }
 
 // #binary-identical
 // 0x78CF40
 BOOL CResCache::IsCacheSpaceAvailable()
 {
-    return GetUnusedSize() == field_120;
+    return GetUnusedSize() == m_nAvailableCacheSize;
 }
 
 // #binary-identical
@@ -282,15 +282,15 @@ int CResCache::GetUnusedSize()
             v1 = dwNumberOfFreeClusters * dwBytesPerSector * dwSectorsPerCluster - 10000000;
         }
 
-        if (field_120 < v1) {
-            v1 = field_120;
+        if (m_nAvailableCacheSize < v1) {
+            v1 = m_nAvailableCacheSize;
         }
 
         return v1;
     } else {
         HMODULE hModule = LoadLibraryA("kernel32.dll");
         if (hModule == NULL) {
-            return field_120;
+            return m_nAvailableCacheSize;
         }
 
         BOOL bHaveGetDiskFreeSpaceExA = GetProcAddress(hModule, "GetDiskFreeSpaceExA") != NULL;
@@ -304,12 +304,12 @@ int CResCache::GetUnusedSize()
 
                 if (nFreeBytesAvailable.HighPart == 0 && nFreeBytesAvailable.LowPart - 10000000 <= INT_MAX) {
                     v1 = static_cast<int>(nFreeBytesAvailable.LowPart - 10000000);
-                    if (field_120 < v1) {
-                        v1 = field_120;
+                    if (m_nAvailableCacheSize < v1) {
+                        v1 = m_nAvailableCacheSize;
                     }
                     return v1;
                 } else {
-                    v1 = field_120;
+                    v1 = m_nAvailableCacheSize;
                     if (v1 >= INT_MAX) {
                         v1 = INT_MAX;
                     }
@@ -319,31 +319,31 @@ int CResCache::GetUnusedSize()
         }
 
         FreeLibrary(hModule);
-        return field_120;
+        return m_nAvailableCacheSize;
     }
 }
 
 // 0x78D090
-BOOL CResCache::RefreshStatus(const CString& a2)
+BOOL CResCache::RefreshStatus(const CString& sDirName)
 {
     CString v1;
     CString v2;
     CFile cFile;
     CString v3;
 
-    field_11C = GetPrivateProfileIntA("Config", "CacheSize", 175, g_pChitin->GetIniFileName());
-    if (field_11C < 125 || field_11C > 2147) {
-        field_11C = 175;
+    m_nCacheSize = GetPrivateProfileIntA("Config", "CacheSize", 175, g_pChitin->GetIniFileName());
+    if (m_nCacheSize < 125 || m_nCacheSize > 2147) {
+        m_nCacheSize = 175;
     }
 
-    field_11C *= 1000000;
-    field_120 = field_11C;
+    m_nCacheSize *= 1000000;
+    m_nAvailableCacheSize = m_nCacheSize;
 
-    if (a2.Compare("") != 0) {
-        field_108 = a2;
+    if (sDirName.Compare("") != 0) {
+        m_sDirName = sDirName;
     }
 
-    v1 = field_108;
+    v1 = m_sDirName;
 
     if (g_pChitin->cDimm.FindDirectoryInDirectoryList(v1) == DIMM_NOT_IN_DIRECTORY_LIST) {
         if (!g_pChitin->cDimm.AddToDirectoryList(v1, FALSE)) {
@@ -351,13 +351,13 @@ BOOL CResCache::RefreshStatus(const CString& a2)
         }
     }
 
-    EnterCriticalSection(&criticalSection);
+    EnterCriticalSection(&m_criticalSection);
 
-    POSITION pos = field_128.GetHeadPosition();
+    POSITION pos = m_lEntries.GetHeadPosition();
     while (pos != NULL) {
         POSITION curr = pos;
-        Entry* pEntry = field_128.GetNext(pos);
-        field_128.RemoveAt(curr);
+        Entry* pEntry = m_lEntries.GetNext(pos);
+        m_lEntries.RemoveAt(curr);
 
         unsigned int nIndex = pEntry->nIndex;
         if (g_pChitin->cDimm.m_cKeyTable.m_bInitialized) {
@@ -371,9 +371,9 @@ BOOL CResCache::RefreshStatus(const CString& a2)
         delete pEntry;
     }
 
-    field_120 = field_11C;
-    field_124 = 0;
-    LeaveCriticalSection(&criticalSection);
+    m_nAvailableCacheSize = m_nCacheSize;
+    m_nEntries = 0;
+    LeaveCriticalSection(&m_criticalSection);
 
     for (unsigned int k = 0; k < g_pChitin->cDimm.m_nResFiles; k++) {
         if (!g_pChitin->cDimm.m_cKeyTable.m_bInitialized && k >= g_pChitin->cDimm.m_cKeyTable.m_nResFiles) {
@@ -408,7 +408,7 @@ BOOL CResCache::RefreshStatus(const CString& a2)
         }
     }
 
-    field_0 = 1;
+    m_bInitialized = TRUE;
 
     return TRUE;
 }
@@ -416,43 +416,43 @@ BOOL CResCache::RefreshStatus(const CString& a2)
 // 0x78D470
 BOOL CResCache::ValidateFile(UINT nResFileID, LONG a3)
 {
-    CString v1;
-    CString v2;
+    CString sDirName;
+    CString sFileName;
     CFile cFile;
-    CString v3;
+    CString sResolvedFileName;
 
     UINT nIndex = nResFileID >> 20;
 
-    v1 = field_108;
+    sDirName = m_sDirName;
 
-    if (g_pChitin->cDimm.FindDirectoryInDirectoryList(v1) != DIMM_NOT_IN_DIRECTORY_LIST) {
+    if (g_pChitin->cDimm.FindDirectoryInDirectoryList(sDirName) != DIMM_NOT_IN_DIRECTORY_LIST) {
         if (g_pChitin->cDimm.m_cKeyTable.m_bInitialized && nIndex < g_pChitin->cDimm.m_cKeyTable.m_nResFiles) {
-            v2 = reinterpret_cast<char*>(g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries) + g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries[nIndex].nFileNameOffset;
+            sFileName = reinterpret_cast<char*>(g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries) + g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries[nIndex].nFileNameOffset;
 
-            if (g_pChitin->lAliases.ResolveFileName(v1 + v2, v3) == FALSE) {
-                v3 = v1 + v2;
+            if (g_pChitin->lAliases.ResolveFileName(sDirName + sFileName, sResolvedFileName) == FALSE) {
+                sResolvedFileName = sDirName + sFileName;
             }
 
             CFileStatus cFileStatus;
-            if (CFile::GetStatus(v3, cFileStatus)) {
+            if (CFile::GetStatus(sResolvedFileName, cFileStatus)) {
                 if (static_cast<DWORD>(cFileStatus.m_size) != g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries[nIndex].nFileSize) {
-                    EnterCriticalSection(&criticalSection);
+                    EnterCriticalSection(&m_criticalSection);
 
-                    POSITION pos = field_128.GetTailPosition();
+                    POSITION pos = m_lEntries.GetTailPosition();
                     while (pos != NULL) {
                         POSITION curr = pos;
-                        Entry* pEntry = field_128.GetPrev(pos);
+                        Entry* pEntry = m_lEntries.GetPrev(pos);
                         if (pEntry->nIndex == nIndex) {
                             if (DeleteFileFromCache(pEntry->nIndex) == TRUE) {
-                                field_120 += pEntry->nSize;
-                                field_124 -= 1;
-                                field_128.RemoveAt(curr);
+                                m_nAvailableCacheSize += pEntry->nSize;
+                                m_nEntries -= 1;
+                                m_lEntries.RemoveAt(curr);
                                 delete pEntry;
                             }
                         }
                     }
 
-                    LeaveCriticalSection(&criticalSection);
+                    LeaveCriticalSection(&m_criticalSection);
                 }
             }
 

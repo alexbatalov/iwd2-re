@@ -51,21 +51,22 @@ CDimm::~CDimm()
 }
 
 // 0x782240
-BOOL CDimm::AddToDirectoryList(const CString& sDirName, BOOL a3)
+BOOL CDimm::AddToDirectoryList(const CString& sDirName, BOOL bRescan)
 {
-    CString v1;
-    CString v2;
+    CString sResolvedDirName;
+    CString sExistingDirName;
 
-    if (g_pChitin->lAliases.ResolveFileName(sDirName, v1)) {
-        v1 = sDirName;
+    if (!g_pChitin->lAliases.ResolveFileName(sDirName, sResolvedDirName)) {
+        sResolvedDirName = sDirName;
     }
 
     int index = 0;
     POSITION pos = m_lDirectories.GetHeadPosition();
     while (pos != NULL) {
-        v2 = m_lDirectories.GetAt(pos);
-        if (v1.CompareNoCase(v2) == 0) {
-            break;
+        sExistingDirName = m_lDirectories.GetAt(pos);
+        if (sResolvedDirName.CompareNoCase(sExistingDirName) == 0) {
+            // NOTE: Not sure why it returns false.
+            return FALSE;
         }
 
         index++;
@@ -73,11 +74,14 @@ BOOL CDimm::AddToDirectoryList(const CString& sDirName, BOOL a3)
     }
 
     if (index < 64) {
-        m_lDirectories.AddTail(v1);
+        m_lDirectories.AddTail(sResolvedDirName);
         if (m_cKeyTable.m_bInitialized) {
-            if (a3) {
+            if (bRescan) {
                 CString v3;
-                if (GetElementInDirectoryList(index, v3) == TRUE) {
+                // NOTE: Strange code, unclear why `GetElementInDirectoryList`
+                // is called on global obtained via `CChitin`, while subsequent
+                // call to `RescanDirectoryNumberAndName` is called on `this`.
+                if (g_pChitin->cDimm.GetElementInDirectoryList(index, v3) == TRUE) {
                     m_cKeyTable.RescanDirectoryNumberAndName(index, v3);
                 }
             }
@@ -134,10 +138,10 @@ BOOL CDimm::RemoveTemporaryKey(const CString& sDirName, CResRef cResRef, USHORT 
 
     pKey->resRef = "";
     pKey->pRes = NULL;
-    pKey->field_C = -1;
+    pKey->nID = -1;
     pKey->field_10 = 0;
-    pKey->field_12 = -1;
-    pKey->field_14 = 0;
+    pKey->nResType = -1;
+    pKey->bUpdated = 0;
     if (m_bTemporaryDirAdd == TRUE) {
         m_bTemporaryDirAdd = FALSE;
         RemoveFromDirectoryList(sDirName, 0);
@@ -319,12 +323,12 @@ BOOL CDimm::CreateKeyTable()
     KEYFILE_HEADER keyFileHeader;
     keyFile.Read(&keyFileHeader, sizeof(keyFileHeader));
 
-    if (keyFileHeader.nFileType != 'KEY ') {
+    if (memcmp(&(keyFileHeader.nFileType), "KEY ", 4) != 0) {
         m_cKeyTable.m_bInitialized = FALSE;
         return FALSE;
     }
 
-    if (keyFileHeader.nFileVersion != 'V1  ') {
+    if (memcmp(&(keyFileHeader.nFileVersion), "V1  ", 4) != 0) {
         m_cKeyTable.m_bInitialized = FALSE;
         return FALSE;
     }
@@ -384,12 +388,11 @@ BOOL CDimm::CreateKeyTable()
         m_cKeyTable.AddKey(CResRef(keyEntry.resRef), keyEntry.nType, keyEntry.nID);
     }
 
-    for (DWORD l = 0;; l++) {
-        if (GetElementInDirectoryList(l, v1) != TRUE) {
-            break;
+    for (int nDirIndex = 0; GetElementInDirectoryList(nDirIndex, v1) == TRUE; nDirIndex++) {
+        CString sDirName;
+        if (g_pChitin->cDimm.GetElementInDirectoryList(nDirIndex, sDirName) == TRUE) {
+            m_cKeyTable.RescanDirectoryNumberAndName(nDirIndex, sDirName);
         }
-
-        m_cKeyTable.RescanDirectoryNumberAndName(l, v1);
     }
 
     m_cKeyTable.m_bInitialized = TRUE;
@@ -741,7 +744,7 @@ CRes* CDimm::GetResObject(const CResRef& cResRef, USHORT nResType, BOOL bWarning
         return NULL;
     }
 
-    pKey->pRes->SetID(pKey->field_C);
+    pKey->pRes->SetID(pKey->nID);
     pKey->pRes->m_pDimmKeyTableEntry = pKey;
     pKey->field_10++;
     return pKey->pRes;
@@ -752,7 +755,7 @@ RESID CDimm::GetResID(CResRef cResRef, USHORT nResType)
 {
     CDimmKeyTableEntry* pKey = m_cKeyTable.FindKey(cResRef, nResType, TRUE);
     if (pKey != NULL) {
-        return pKey->field_C;
+        return pKey->nID;
     }
 
     return -1;
@@ -798,7 +801,7 @@ int CDimm::LocalGetResourceSize(CRes* pRes)
     }
 
     pRes->GetResRef().CopyToString(sBaseName);
-    g_pChitin->TranslateType(pRes->m_pDimmKeyTableEntry->field_12, sExtension);
+    g_pChitin->TranslateType(pRes->m_pDimmKeyTableEntry->nResType, sExtension);
     GetElementInDirectoryList(~pRes->GetID() >> 20, sFilePath);
 
     sFilePath += sBaseName + "." + sExtension;
@@ -989,7 +992,7 @@ int CDimm::Release(CRes* pRes)
         Dump(pRes, 1, 0);
 
         if (pRes->m_pDimmKeyTableEntry != NULL) {
-            pRes->SetID(pRes->m_pDimmKeyTableEntry->field_C);
+            pRes->SetID(pRes->m_pDimmKeyTableEntry->nID);
         }
 
         return 0;

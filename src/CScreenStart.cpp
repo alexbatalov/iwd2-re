@@ -235,7 +235,7 @@ void CScreenStart::sub_66F990()
     UTIL_ASSERT(pConnection != NULL);
 
     if (g_pBaldurChitin->m_bIsAutoStarting && g_pBaldurChitin->field_130) {
-        if (g_pBaldurChitin->cDimm.cResCache.field_11C >= 140000000) {
+        if (g_pBaldurChitin->cDimm.cResCache.m_nCacheSize >= 140000000) {
             pConnection->StartConnection(TRUE);
             SelectEngine(pConnection);
         } else {
@@ -246,7 +246,7 @@ void CScreenStart::sub_66F990()
             SummonPopup(2);
         }
     } else {
-        if (g_pBaldurChitin->cDimm.cResCache.field_11C >= 140000000) {
+        if (g_pBaldurChitin->cDimm.cResCache.m_nCacheSize >= 140000000) {
             pConnection->StartConnection(FALSE);
             SelectEngine(pConnection);
         } else {

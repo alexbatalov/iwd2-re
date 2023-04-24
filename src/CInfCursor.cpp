@@ -12,6 +12,12 @@ CInfCursor::~CInfCursor()
     // TODO: Incomplete.
 }
 
+// 0x597020
+void CInfCursor::Initialize()
+{
+    // TODO: Incomplete.
+}
+
 // 0x5972E0
 void CInfCursor::SetCursor(INT nNewCursor, BOOLEAN bForce)
 {

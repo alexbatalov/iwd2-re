@@ -114,6 +114,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     }
 
     SetCurrentDirectoryA(currentDirectory);
+    SetCurrentDirectoryA("C:\\Program Files (x86)\\GOG.com\\Icewind Dale II");
 
     baldurChitin.Init(hInstance);
     int rc = baldurChitin.WinMain(hInstance, hPrevInstance, lpCmdLine, nCmdShow);

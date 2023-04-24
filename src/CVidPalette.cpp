@@ -115,6 +115,12 @@ INT CVidPalette::GetReservedEntries(DWORD dwFlags)
     return memcmp(&m_pPalette[1], &SHADOW_RGBQUAD, sizeof(RGBQUAD)) == 0 ? 2 : 1;
 }
 
+// 0x7BF150
+void CVidPalette::Realize(DWORD* pDestPalette, INT nBpp, DWORD dwFlags, CVIDIMG_PALETTEAFFECT* pAffectArgs, DWORD nTransVal)
+{
+    // TODO: Incomplete.
+}
+
 // #binary-identical
 // 0x7BF390
 void CVidPalette::SetPalette(RGBQUAD* pPalette, int nEntries, USHORT nType)

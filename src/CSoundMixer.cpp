@@ -8,6 +8,9 @@
 #include "CUtil.h"
 #include "CVoice.h"
 
+static void MusicDebugFunc(CHAR* a1);
+static BOOL MusicCompressQuery(CHAR* a1);
+
 // 0x9039D8
 BYTE CSoundMixer::m_tSqrtTable[10000];
 
@@ -52,6 +55,9 @@ CSoundMixer::CSoundMixer()
     for (int i = 0; i < 10000; i++) {
         m_tSqrtTable[i] = static_cast<BYTE>(sqrt(static_cast<double>(i)));
     }
+
+    // FIXME: Initialize to prevent crash in `ReleaseAll`.
+    m_pDirectSound = NULL;
 
     ReleaseAll();
 
@@ -196,11 +202,120 @@ void CSoundMixer::GetListenPosition(CPoint& pos, LONG& posZ)
 }
 
 // 0x7AB340
-BOOL CSoundMixer::Initialize(CWnd* pWnd, int nNewMaxVoices, int nNewMaxChannels)
+void CSoundMixer::Initialize(CWnd* pWnd, int nNewMaxVoices, int nNewMaxChannels)
 {
-    // TODO: Incomplete.
+    HRESULT hr;
 
-    return FALSE;
+    field_C4 = 1;
+    field_C8 = 0;
+    field_CC = 0;
+    field_D0 = 0;
+    m_nMaxChannels = -1;
+    field_DC = nNewMaxVoices;
+    m_nPanRange = 1;
+    m_bInPositionUpdate = FALSE;
+    m_bInReleaseAll = FALSE;
+    field_50 = 0;
+    field_0 = 0;
+    field_F0 = 0;
+    InitializeChannels(nNewMaxChannels);
+
+    if (m_pDirectSound != NULL) {
+        // __FILE__: C:\Projects\Icewind2\src\chitin\ChSound.cpp
+        // __LINE__: 3276
+        UTIL_ASSERT_MSG(FALSE, "Direct sound object not Released properly");
+    }
+
+    hr = DirectSoundCreate(NULL, &m_pDirectSound, NULL);
+    if (hr != DS_OK) {
+        m_bMixerInitialized = FALSE;
+        return;
+    }
+
+    m_hWnd = (HWND)pWnd;
+
+    hr = m_pDirectSound->SetCooperativeLevel(m_hWnd, DSSCL_EXCLUSIVE);
+    if (hr == DSERR_INVALIDPARAM || hr == DSERR_ALLOCATED) {
+        m_bMixerInitialized = 0;
+        return;
+    }
+
+    if (hr != DS_OK) {
+        m_bMixerInitialized = 0;
+        return;
+    }
+
+    DSBUFFERDESC bufferDesc = { 0 };
+    bufferDesc.dwSize = sizeof(bufferDesc);
+    bufferDesc.dwFlags = DSBCAPS_CTRL3D | DSBCAPS_PRIMARYBUFFER;
+
+    hr = m_pDirectSound->CreateSoundBuffer(&bufferDesc, &m_pPrimarySoundBuffer, NULL);
+    if (hr != DS_OK) {
+        m_bMixerInitialized = 0;
+        return;
+    }
+
+    WAVEFORMATEX waveFormat = { 0 };
+
+    DSCAPS caps = { 0 };
+    caps.dwSize = sizeof(caps);
+
+    hr = m_pDirectSound->GetCaps(&caps);
+    if (hr == DS_OK) {
+        waveFormat.nSamplesPerSec = 22050;
+        waveFormat.wFormatTag = 1;
+        waveFormat.wBitsPerSample = (caps.dwSize & DSCAPS_PRIMARY16BIT) != 0 ? 16 : 8;
+        waveFormat.cbSize = 0;
+        waveFormat.nChannels = (caps.dwSize & DSCAPS_PRIMARYSTEREO) != 0 ? 2 : 1;
+        waveFormat.nBlockAlign = waveFormat.wBitsPerSample * waveFormat.nChannels / 8;
+        waveFormat.nAvgBytesPerSec = waveFormat.nSamplesPerSec * waveFormat.nBlockAlign;
+
+        hr = m_pPrimarySoundBuffer->SetFormat(&waveFormat);
+        if (hr != DS_OK) {
+            m_bMixerInitialized = 0;
+            return;
+        }
+    }
+
+    // TODO: Incomplete.
+    // if (soundInit(m_hWnd, m_pDirectSound, 16, 8192, 22050) == 0) {
+    //     if (musicInit(MusicCompressQuery) == 0) {
+    //         musicSetDebugFunc(MusicDebugFunc);
+    //         m_bMusicInitialized = TRUE;
+    //     }
+    // }
+
+    if (m_bMusicInitialized) {
+        g_pChitin->OnMixerInitialize();
+    }
+
+    Lock();
+
+    m_dwEAXProperties = m_cSoundProperties.Init(m_pDirectSound);
+    m_cSoundProperties.SetEnvironmentPreset(m_cSoundProperties.m_nPreset);
+
+    Unlock();
+
+    if ((m_dwEAXProperties & CSOUNDPROPERTIES_EAX_SUPPORTS_ENVIRONMENT) != 0) {
+        hr = m_pPrimarySoundBuffer->QueryInterface(IID_IDirectSound3DListener, reinterpret_cast<LPVOID*>(&m_pDirectSound3DListener));
+        if (hr == DS_OK) {
+            m_pDirectSound3DListener->SetOrientation(0.0, -1.0, 0.0, 0.0, 0.0, 1.0, 0);
+        } else {
+            m_dwEAXProperties = 0;
+        }
+    }
+
+    if (field_178) {
+        m_dwEAXProperties |= CSOUNDPROPERTIES_EAX_SUPPORTS_ENVIRONMENT;
+    } else {
+        if (field_144.sub_799C90()) {
+            field_144.sub_7C25B0();
+            field_178 = FALSE;
+        } else {
+            field_178 = TRUE;
+            m_dwEAXProperties |= CSOUNDPROPERTIES_EAX_SUPPORTS_ENVIRONMENT;
+        }
+    }
 }
 
 // 0x7AB6B0
@@ -481,4 +596,15 @@ void CSoundMixer::RemoveFromLoopingList(CSound* pSound)
     }
 
     Unlock();
+}
+
+// 0x7ACA40
+static void MusicDebugFunc(CHAR* a1)
+{
+}
+
+// 0x7ACA50
+static BOOL MusicCompressQuery(CHAR* a1)
+{
+    return TRUE;
 }

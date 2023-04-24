@@ -24,10 +24,7 @@ typedef struct {
 
 class CVidMode {
 public:
-    struct Entry {
-        unsigned char dummy[1];
-    };
-
+    static short word_8BA320;
     static BYTE NUM_FADE_FRAMES;
     static BOOL bInitialized;
 
@@ -49,6 +46,7 @@ public:
     void Set3dClipRect(const CRect& rClip);
     void EnableScissoring();
     void DisableScissoring();
+    void sub_7BEDE0();
 
     CVidMode();
     /* 0000 */ virtual BOOLEAN SaveScreen();
@@ -74,11 +72,11 @@ public:
     /* 0050 */ virtual BOOL DrawThickLine16(INT nXFrom, INT nYFrom, INT nXTo, INT nYTo, WORD* pSurface, LONG lpitch, CRect& rSurface, int a8, unsigned short color, BOOLEAN bClipped);
     /* 0054 */ virtual BOOL DrawThickLine24(INT nXFrom, INT nYFrom, INT nXTo, INT nYTo, BYTE* pSurface, LONG lpitch, CRect& rSurface, int a8, unsigned long color, BOOLEAN bClipped);
     /* 0058 */ virtual BOOL DrawThickLine32(INT nXFrom, INT nYFrom, INT nXTo, INT nYTo, DWORD* pSurface, LONG lpitch, CRect& rSurface, int a8, unsigned long color, BOOLEAN bClipped);
-    /* 005C */ virtual BOOL ActivateVideoMode(CVidMode* pPrevVidMode, HWND hWnd, BOOL bFullscreen);
+    /* 005C */ virtual BOOL ActivateVideoMode(CVidMode* pPrevVidMode, HWND hWnd, BOOLEAN bFullscreen);
     /* 0060 */ virtual BOOLEAN SetClipper(IDirectDrawClipper* lpDirectDrawClipper);
-    /* 0064 */ virtual BOOL CreateSurfaces(BOOLEAN a2);
+    /* 0064 */ virtual BOOL CreateSurfaces(BOOLEAN bFullscreen);
     /* 0068 */ virtual BOOL CreateSurface(IDirectDrawSurface** lplpDirectDrawSurface, const CSize& cSize);
-    /* 006C */ virtual BOOL DeactivateVideoMode(int a2);
+    /* 006C */ virtual BOOL DeactivateVideoMode(CVidMode* pNextVidMode);
     /* 0070 */ virtual void DestroySurface(IDirectDrawSurface** lplpDirectDrawSurface);
     /* 0074 */ virtual void DestroySurfaces();
     /* 0078 */ virtual void DisplayFrameRate(UINT nSurface);
@@ -123,9 +121,9 @@ public:
     /* 0118 */ virtual DWORD ReduceColor(COLORREF rgbColor);
     /* 011C */ virtual ~CVidMode();
     /* 0120 */ virtual BOOL CreateSurfaces3d();
-    /* 0124 */ virtual BOOL DestroySurfaces3d();
+    /* 0124 */ virtual BOOL DestroySurfaces3d(CVidMode* pNextVidMode);
     /* 0128 */ virtual int GetTextureId();
-    /* 012C */ virtual BOOL ActivateVideoMode3d(CVidMode* pPrevVidMode, HWND hWnd, BOOL bFullscreen);
+    /* 012C */ virtual BOOL ActivateVideoMode3d(CVidMode* pPrevVidMode, HWND hWnd, BOOLEAN bFullscreen);
 
     /* 0004 */ int field_4;
     /* 0008 */ int m_nPointerNumber; // #guess
@@ -140,7 +138,7 @@ public:
     /* 0048 */ BOOLEAN m_bFadeTo;
     /* 0049 */ BYTE m_nFade;
     /* 004A */ CCriticalSection field_4A;
-    /* 006A */ CTypedPtrList<CPtrList, Entry*> field_6A;
+    /* 006A */ CTypedPtrList<CPtrList, unsigned int> field_6A;
     /* 0086 */ int m_nColorDepth; // #guess
     /* 008A */ CVidCell* m_pPointerVidCell; // #guess
     /* 008E */ BOOLEAN m_bPointerAnimating; // #guess

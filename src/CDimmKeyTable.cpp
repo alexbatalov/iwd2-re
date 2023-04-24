@@ -9,24 +9,69 @@
 // 0x78AEF0
 BOOL CDimmKeyTable::AddKey(CResRef cResRef, USHORT nResType, RESID nID)
 {
-    BOOL v1 = FALSE;
+    BOOL bNotFound = FALSE;
     unsigned int hash = Hash(cResRef, nResType);
 
     if (cResRef == "") {
         return FALSE;
     }
 
+    // TODO: Refactor, looks ugly.
     int n = static_cast<int>(hash);
     while (1) {
-        while (v1) {
-            if (ExtendTable()) {
-                v1 = FALSE;
-                hash = Hash(cResRef, nResType);
+        if (bNotFound) {
+            if (!ExtendTable()) {
+                return FALSE;
+            }
+
+            bNotFound = FALSE;
+            hash = Hash(cResRef, nResType);
+
+            if (cResRef == "") {
+                return FALSE;
+            }
+        }
+
+        if (m_pEntries[n].resRef == "") {
+            break;
+        }
+
+        if (m_pEntries[n].resRef == cResRef && m_pEntries[n].nResType == nResType) {
+            break;
+        }
+
+        n++;
+        if (n >= m_nEntries) {
+            n = 0;
+        }
+
+        if (n == hash) {
+            bNotFound = TRUE;
+        }
+    }
+
+    if (m_pEntries[n].nID != nID) {
+        if (m_pEntries[n].resRef != "") {
+            m_pEntries[n].nID = nID;
+            if (m_bInitialized == TRUE) {
+                if (m_pEntries[n].pRes != NULL) {
+                    if (m_pEntries[n].pRes->GetDemands() > 0) {
+                        m_pEntries[n].pRes->dwFlags |= CRes::Flags::RES_FLAG_0x100;
+                    } else {
+                        g_pChitin->cDimm.Dump(m_pEntries[n].pRes, 1, 0);
+                        m_pEntries[n].pRes->SetID(nID);
+                    }
+                }
             }
         }
     }
 
-    // TODO: Incomplete.
+    m_pEntries[n].nID = nID;
+    m_pEntries[n].resRef = cResRef;
+    m_pEntries[n].nResType = nResType;
+    m_pEntries[n].bUpdated = TRUE;
+
+    return TRUE;
 }
 
 // 0x78B0C0
@@ -49,10 +94,10 @@ BOOL CDimmKeyTable::BuildNewTable(int nLength)
         if (pEntry != NULL) {
             pEntry->resRef = "";
             pEntry->pRes = NULL;
-            pEntry->field_C = -1;
+            pEntry->nID = -1;
             pEntry->field_10 = 0;
-            pEntry->field_12 = -1;
-            pEntry->field_14 = 0;
+            pEntry->nResType = -1;
+            pEntry->bUpdated = FALSE;
         }
     }
 
@@ -74,9 +119,9 @@ void CDimmKeyTable::DestroyTable(CDimm* dimm)
                     delete pEntry->pRes;
                 }
 
-                pEntry->field_C = -1;
+                pEntry->nID = -1;
                 pEntry->field_10 = 0;
-                pEntry->field_12 = -1;
+                pEntry->nResType = -1;
             }
         }
 
@@ -108,7 +153,7 @@ BOOL CDimmKeyTable::ExtendTable()
         if (pEntry != NULL) {
             m_nEntries = m_nNewEntries;
 
-            unsigned int hash = Hash(pEntry->resRef, pEntry->field_12);
+            unsigned int hash = Hash(pEntry->resRef, pEntry->nResType);
             m_nEntries = length;
 
             BOOL bFull = FALSE;
@@ -165,7 +210,7 @@ CDimmKeyTableEntry* CDimmKeyTable::FindKey(const CResRef& resRef, USHORT nResTyp
     int k = hash;
 
     while (!done) {
-        if (m_pEntries[k].field_12 == nResType && m_pEntries[k].resRef == resRef) {
+        if (m_pEntries[k].nResType == nResType && m_pEntries[k].resRef == resRef) {
             return &(m_pEntries[k]);
         }
 
@@ -236,13 +281,13 @@ unsigned int CDimmKeyTable::Hash(const CResRef& a2, int a3)
 // 0x78B6F0
 void CDimmKeyTable::RemoveNonUpdatedEntries()
 {
-    if (m_pEntries != NULL && m_nEntries > 0) {
-        for (int k = 0; k < m_nEntries; k++) {
-            CDimmKeyTableEntry* pEntry = &(m_pEntries[k]);
+    if (m_pEntries != NULL) {
+        for (int index = 0; index < m_nEntries; index++) {
+            CDimmKeyTableEntry* pEntry = &(m_pEntries[index]);
             if (pEntry != NULL) {
-                if (!pEntry->field_14) {
+                if (!pEntry->bUpdated) {
                     if (pEntry->pRes != NULL) {
-                        pEntry->field_C = -1;
+                        pEntry->nID = -1;
                         if (pEntry->pRes->GetDemands() > 0) {
                             pEntry->pRes->dwFlags |= CRes::Flags::RES_FLAG_0x100;
                         } else {
@@ -259,5 +304,93 @@ void CDimmKeyTable::RemoveNonUpdatedEntries()
 // 0x78B780
 void CDimmKeyTable::RescanDirectoryNumberAndName(int nDirNumber, const CString& sDirName)
 {
-    // TODO: Incomplete.
+    CString sPattern = sDirName + "*.*";
+
+    WIN32_FIND_DATAA findFileData;
+    HANDLE hFindFile = FindFirstFileA(sPattern, &findFileData);
+    if (hFindFile != INVALID_HANDLE_VALUE) {
+        do {
+            if ((findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != FILE_ATTRIBUTE_DIRECTORY) {
+                size_t pos = 0;
+                while (pos < 32 && findFileData.cFileName[pos] != '\0') {
+                    pos++;
+                }
+
+                while (pos > 1 && findFileData.cFileName[pos] != '.') {
+                    pos--;
+                }
+
+                int nType = g_pChitin->TranslateType(CString(findFileData.cFileName[pos + 1]));
+
+                // FIXME: Probably wrong, `TranslateType` returns -1 to indicate
+                // error.
+                if (nType != 0) {
+                    char temp[RESREF_SIZE] = { 0 };
+                    memcpy(temp, findFileData.cFileName, min(pos, RESREF_SIZE));
+                    AddKey(CResRef(temp), nType, (~nDirNumber) << 20);
+                }
+            }
+        } while (FindNextFileA(hFindFile, &findFileData));
+        FindClose(hFindFile);
+    }
+}
+
+// 0x78B940
+BOOL CDimmKeyTable::RescanEverything()
+{
+    CFile keyFile;
+    CString v1;
+    CResRef resRef;
+
+    if (m_pEntries != NULL) {
+        for (int index = 0; index < m_nEntries; index++) {
+            CDimmKeyTableEntry* entry = &(m_pEntries[index]);
+            if (entry != NULL) {
+                entry->bUpdated = FALSE;
+            }
+        }
+    }
+
+    if (!keyFile.Open(g_pChitin->GetKeyFileName(), CFile::OpenFlags::modeRead)) {
+        return FALSE;
+    }
+
+    KEYFILE_HEADER keyFileHeader;
+    if (!keyFile.Read(&keyFileHeader, sizeof(keyFileHeader))) {
+        return FALSE;
+    }
+
+    if (memcmp(&(keyFileHeader.nFileType), "KEY ", 4) != 0) {
+        return FALSE;
+    }
+
+    if (memcmp(&(keyFileHeader.nFileVersion), "V1  ", 4) != 0) {
+        return FALSE;
+    }
+
+    if (keyFileHeader.nResFiles == 0 && keyFileHeader.nKeys == 0) {
+        return FALSE;
+    }
+
+    keyFile.Seek(keyFileHeader.nOffsetToKeyTable, CFile::SeekPosition::begin);
+
+    for (DWORD index = 0; index < keyFileHeader.nKeys; index++) {
+        KEYFILE_KEYENTRY keyEntry;
+        keyFile.Read(&keyEntry, sizeof(keyEntry));
+        AddKey(CResRef(keyEntry.resRef), keyEntry.nType, keyEntry.nID);
+    }
+
+    for (int nDirNumber = 0; g_pChitin->cDimm.GetElementInDirectoryList(nDirNumber, v1) == TRUE; nDirNumber++) {
+        // FIXME: Should be outside of the loop.
+        CString sDirName;
+        if (g_pChitin->cDimm.GetElementInDirectoryList(nDirNumber, sDirName) == TRUE) {
+            RescanDirectoryNumberAndName(nDirNumber, sDirName);
+        }
+    }
+
+    m_bInitialized = TRUE;
+    keyFile.Close();
+    RemoveNonUpdatedEntries();
+
+    return TRUE;
 }

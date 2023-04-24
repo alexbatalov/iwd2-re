@@ -165,7 +165,7 @@ BOOL CResFile::OpenFile()
 
         m_cFile.Close();
 
-        v35 = g_pChitin->cDimm.cResCache.field_108;
+        v35 = g_pChitin->cDimm.cResCache.m_sDirName;
 
         if (!g_pChitin->cDimm.m_cKeyTable.m_bInitialized) {
             // NOTE: Leaking `m_pHeader`.

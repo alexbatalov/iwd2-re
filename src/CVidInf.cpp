@@ -5,6 +5,9 @@
 #include "CChitin.h"
 #include "CParticle.h"
 #include "CUtil.h"
+#include "CVidImage.h"
+
+#define SEVEN_EIGHT_ZERO 780
 
 // 0x907B20
 unsigned char CVidInf::dword_907B20[512 * 512 * 4];
@@ -40,7 +43,7 @@ int CVidInf::GetNumVRamSurfaces()
 CVidInf::~CVidInf()
 {
     if (m_pSurfaces != NULL) {
-        delete m_pSurfaces;
+        free(m_pSurfaces);
         m_pSurfaces = NULL;
     }
 
@@ -48,11 +51,127 @@ CVidInf::~CVidInf()
 }
 
 // 0x79B100
-BOOL CVidInf::ActivateVideoMode(CVidMode* pPrevVidMode, HWND hWnd, BOOL bFullscreen)
+BOOL CVidInf::ActivateVideoMode(CVidMode* pPrevVidMode, HWND hWnd, BOOLEAN bFullscreen)
 {
-    // TODO: Incomplete.
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        return ActivateVideoMode3d(pPrevVidMode, hWnd, bFullscreen);
+    }
 
-    return FALSE;
+    if (pPrevVidMode != NULL && pPrevVidMode->GetType() == 0) {
+        return TRUE;
+    }
+
+    m_nSurfaces = 9;
+    if (m_pSurfaces != NULL) {
+        free(m_pSurfaces);
+    }
+
+    m_pSurfaces = reinterpret_cast<IDirectDrawSurface**>(malloc(sizeof(IDirectDrawSurface*) * m_nSurfaces));
+    memset(m_pSurfaces, 0, sizeof(IDirectDrawSurface*) * m_nSurfaces);
+
+    if (m_pVRamSurfaces != NULL) {
+        free(m_pVRamSurfaces);
+    }
+
+    m_pVRamSurfaces = reinterpret_cast<IDirectDrawSurface**>(malloc(sizeof(IDirectDrawSurface*) * SEVEN_EIGHT_ZERO));
+    memset(m_pVRamSurfaces, 0, sizeof(IDirectDrawSurface*) * SEVEN_EIGHT_ZERO);
+
+    if (!bFullscreen) {
+        int nBpp = CUtil::GetCurrentBitsPerPixels();
+        switch (nBpp) {
+        case 16:
+        case 24:
+        case 32:
+            g_pChitin->cVideo.m_nBpp = nBpp;
+            g_pChitin->cVideo.m_nNextBpp = nBpp;
+            break;
+        default:
+            g_pChitin->cVideo.m_nBpp = 16;
+            g_pChitin->cVideo.m_nNextBpp = 16;
+            break;
+        }
+
+        for (int index = 0; index < 256; index++) {
+            CVidImage::rgbTempPal[index] = -1;
+        }
+
+        SetWindowedMode(hWnd);
+    } else {
+        int nBpp = CUtil::GetCurrentBitsPerPixels();
+        switch (nBpp) {
+        case 16:
+        case 24:
+        case 32:
+            g_pChitin->cVideo.m_nBpp = nBpp;
+            g_pChitin->cVideo.m_nNextBpp = nBpp;
+            break;
+        default:
+            g_pChitin->cVideo.m_nBpp = 16;
+            g_pChitin->cVideo.m_nNextBpp = 16;
+            break;
+        }
+
+        if ((g_pChitin->cVideo.m_nBpp == 16 && !g_pChitin->cVideo.m_bSupports16bpp)
+            || (g_pChitin->cVideo.m_nBpp == 24 && !g_pChitin->cVideo.m_bSupports24bpp)
+            || (g_pChitin->cVideo.m_nBpp == 32 && !g_pChitin->cVideo.m_bSupports32bpp)) {
+            g_pChitin->cVideo.m_nBpp = 16;
+            g_pChitin->cVideo.m_nNextBpp = 16;
+
+            if (g_pChitin != NULL) {
+                g_pChitin->SaveBitsPerPixel(16);
+            }
+        }
+
+        if ((g_pChitin->cVideo.m_nBpp == 16 && !g_pChitin->cVideo.m_bSupports16bpp)
+            || (g_pChitin->cVideo.m_nBpp == 24 && !g_pChitin->cVideo.m_bSupports24bpp)
+            || (g_pChitin->cVideo.m_nBpp == 32 && !g_pChitin->cVideo.m_bSupports32bpp)) {
+            g_pChitin->field_E0 = TRUE;
+            PostMessageA(g_pChitin->GetWnd()->GetSafeHwnd(), WM_DESTROY, 0, 0);
+            return FALSE;
+        }
+
+        switch (g_pChitin->cVideo.m_nBpp) {
+        case 16:
+            g_pChitin->cVideo.m_pDirectDraw2->SetDisplayMode(CVideo::SCREENWIDTH,
+                CVideo::SCREENHEIGHT,
+                16,
+                g_pChitin->cVideo.m_dwMipMapCount16,
+                0);
+            break;
+        case 24:
+            g_pChitin->cVideo.m_pDirectDraw2->SetDisplayMode(CVideo::SCREENWIDTH,
+                CVideo::SCREENHEIGHT,
+                24,
+                g_pChitin->cVideo.m_dwMipMapCount24,
+                0);
+            break;
+        case 32:
+            g_pChitin->cVideo.m_pDirectDraw2->SetDisplayMode(CVideo::SCREENWIDTH,
+                CVideo::SCREENHEIGHT,
+                32,
+                g_pChitin->cVideo.m_dwMipMapCount32,
+                0);
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo.cpp
+            // __LINE__: 6137
+            UTIL_ASSERT(FALSE);
+        }
+
+        for (int index = 0; index < 256; index++) {
+            CVidImage::rgbTempPal[index] = -1;
+        }
+    }
+
+    CreateSurfaces(bFullscreen);
+
+    if (!bFullscreen) {
+        SetClipper(g_pChitin->cVideo.m_pDirectDrawClipper);
+    }
+
+    g_pChitin->cVideo.m_pCurrentVidMode = this;
+
+    return TRUE;
 }
 
 // 0x79B420
@@ -71,61 +190,344 @@ BOOLEAN CVidInf::SetClipper(IDirectDrawClipper* lpDirectDrawClipper)
     return TRUE;
 }
 
-// 0x79BDF0
-BOOL CVidInf::DeactivateVideoMode(int a2)
+// 0x79B4A0
+BOOL CVidInf::CreateSurfaces(BOOLEAN bFullscreen)
 {
-    // TODO: Incomplete.
+    CString v1;
+    DDSURFACEDESC surfaceDesc = { 0 };
+    HRESULT hr;
 
-    return FALSE;
+    field_14 = FALSE;
+    surfaceDesc.dwSize = sizeof(surfaceDesc);
+
+    if (bFullscreen) {
+        surfaceDesc.dwFlags = DDSD_BACKBUFFERCOUNT | DDSD_CAPS;
+        surfaceDesc.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_PRIMARYSURFACE | DDSCAPS_FLIP | DDSCAPS_COMPLEX;
+        surfaceDesc.dwBackBufferCount = 1;
+    } else {
+        surfaceDesc.dwFlags = DDSD_CAPS;
+        surfaceDesc.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_PRIMARYSURFACE;
+    }
+
+    hr = g_pChitin->cVideo.m_pDirectDraw2->CreateSurface(&surfaceDesc, &(m_pSurfaces[CVIDINF_SURFACE_FRONT]), NULL);
+    if (hr != DD_OK) {
+        if (bFullscreen) {
+            field_14 = TRUE;
+            surfaceDesc.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE | DDSCAPS_FLIP | DDSCAPS_COMPLEX;
+        } else {
+            surfaceDesc.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
+        }
+
+        hr = g_pChitin->cVideo.m_pDirectDraw2->CreateSurface(&surfaceDesc, &(m_pSurfaces[CVIDINF_SURFACE_FRONT]), NULL);
+        if (hr != DD_OK) {
+            m_pSurfaces[CVIDINF_SURFACE_FRONT] = NULL;
+            return FALSE;
+        }
+    }
+
+    g_pChitin->cVideo.m_pDirectDraw2->GetDisplayMode(&surfaceDesc);
+
+    g_pChitin->m_nScreenWidth = surfaceDesc.dwWidth;
+    g_pChitin->m_nScreenHeight = surfaceDesc.dwHeight;
+
+    if (!bFullscreen || field_14) {
+        g_pChitin->SetRenderCount(1);
+    } else {
+        g_pChitin->SetRenderCount(2);
+    }
+
+    if (bFullscreen) {
+        DDSCAPS caps;
+        caps.dwCaps = DDSCAPS_BACKBUFFER;
+
+        hr = m_pSurfaces[CVIDINF_SURFACE_FRONT]->GetAttachedSurface(&caps, &(m_pSurfaces[CVIDINF_SURFACE_BACK]));
+        if (hr != DD_OK) {
+            m_pSurfaces[CVIDINF_SURFACE_BACK] = NULL;
+            return FALSE;
+        }
+    } else {
+        surfaceDesc.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;
+        surfaceDesc.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_OFFSCREENPLAIN;
+        surfaceDesc.dwWidth = CVideo::SCREENWIDTH;
+        surfaceDesc.dwHeight = CVideo::SCREENHEIGHT;
+
+        hr = g_pChitin->cVideo.m_pDirectDraw2->CreateSurface(&surfaceDesc, &(m_pSurfaces[CVIDINF_SURFACE_BACK]), NULL);
+        if (hr != DD_OK) {
+            surfaceDesc.ddsCaps.dwCaps = DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
+
+            hr = g_pChitin->cVideo.m_pDirectDraw2->CreateSurface(&surfaceDesc, &(m_pSurfaces[CVIDINF_SURFACE_BACK]), NULL);
+            if (hr != DD_OK) {
+                CheckResults(hr);
+                m_pSurfaces[CVIDINF_SURFACE_BACK] = NULL;
+                return FALSE;
+            }
+        }
+    }
+
+    surfaceDesc.ddpfPixelFormat.dwFlags = sizeof(surfaceDesc.ddpfPixelFormat);
+
+    hr = m_pSurfaces[CVIDINF_SURFACE_BACK]->GetPixelFormat(&(surfaceDesc.ddpfPixelFormat));
+    if (hr != DD_OK) {
+        return FALSE;
+    }
+
+    ParsePixelFormat(surfaceDesc.ddpfPixelFormat);
+
+    DDCOLORKEY colorKey;
+    colorKey.dwColorSpaceLowValue = m_dwGBitMask;
+    colorKey.dwColorSpaceLowValue = m_dwGBitMask;
+
+    surfaceDesc.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;
+
+    if (g_pChitin->cVideo.m_nBpp == 16
+        && (g_pChitin->cVideo.cVidBlitter.m_bSoftSrcKeyBlt
+            || g_pChitin->cVideo.cVidBlitter.m_bSoftSrcKeyBltFast)) {
+        surfaceDesc.ddsCaps.dwCaps = DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
+    } else {
+        surfaceDesc.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_OFFSCREENPLAIN;
+    }
+
+    surfaceDesc.dwWidth = 256;
+    surfaceDesc.dwHeight = 64;
+
+    hr = g_pChitin->cVideo.m_pDirectDraw2->CreateSurface(&surfaceDesc, &(m_pSurfaces[CVIDINF_SURFACE_4]), NULL);
+    if (hr != DD_OK) {
+        surfaceDesc.ddsCaps.dwCaps = DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
+
+        hr = g_pChitin->cVideo.m_pDirectDraw2->CreateSurface(&surfaceDesc, &(m_pSurfaces[CVIDINF_SURFACE_4]), NULL);
+        if (hr != DD_OK) {
+            m_pSurfaces[CVIDINF_SURFACE_4] = NULL;
+            return FALSE;
+        }
+    }
+
+    m_pSurfaces[CVIDINF_SURFACE_4]->SetColorKey(DDCKEY_SRCBLT, &colorKey);
+
+    if (!bFullscreen || field_14) {
+        m_pSurfaces[CVIDINF_SURFACE_5] = NULL;
+    } else {
+        if (g_pChitin->cVideo.m_nBpp == 16
+            && (g_pChitin->cVideo.cVidBlitter.m_bSoftSrcKeyBlt
+                || g_pChitin->cVideo.cVidBlitter.m_bSoftSrcKeyBltFast)) {
+            surfaceDesc.ddsCaps.dwCaps = DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
+        } else {
+            surfaceDesc.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_OFFSCREENPLAIN;
+        }
+
+        hr = g_pChitin->cVideo.m_pDirectDraw2->CreateSurface(&surfaceDesc, &(m_pSurfaces[CVIDINF_SURFACE_5]), NULL);
+        if (hr != DD_OK) {
+            surfaceDesc.ddsCaps.dwCaps = DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
+
+            hr = g_pChitin->cVideo.m_pDirectDraw2->CreateSurface(&surfaceDesc, &(m_pSurfaces[CVIDINF_SURFACE_5]), NULL);
+            if (hr != DD_OK) {
+                m_pSurfaces[CVIDINF_SURFACE_5] = NULL;
+                return FALSE;
+            }
+        }
+
+        m_pSurfaces[CVIDINF_SURFACE_5]->SetColorKey(DDCKEY_SRCBLT, &colorKey);
+    }
+
+    if (g_pChitin->cVideo.m_nBpp == 16
+        && (g_pChitin->cVideo.cVidBlitter.m_bSoftSrcKeyBlt
+            || g_pChitin->cVideo.cVidBlitter.m_bSoftSrcKeyBltFast
+            || g_pChitin->cVideo.cVidBlitter.m_bSoftMirrorBlt)) {
+        surfaceDesc.ddsCaps.dwCaps = DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
+    } else {
+        surfaceDesc.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_OFFSCREENPLAIN;
+    }
+
+    surfaceDesc.dwWidth = 512;
+    surfaceDesc.dwHeight = 512;
+
+    hr = g_pChitin->cVideo.m_pDirectDraw2->CreateSurface(&surfaceDesc, &(m_pSurfaces[CVIDINF_SURFACE_2]), NULL);
+    if (hr == DD_OK) {
+        if (g_pChitin->cVideo.m_nBpp != 16
+            || (!g_pChitin->cVideo.cVidBlitter.m_bSoftSrcKeyBlt
+                && !g_pChitin->cVideo.cVidBlitter.m_bSoftSrcKeyBltFast
+                && !g_pChitin->cVideo.cVidBlitter.m_bSoftMirrorBlt)) {
+            m_pSurfaces[CVIDINF_SURFACE_3] = NULL;
+
+            if (g_pChitin->m_bUseMirrorFX) {
+                surfaceDesc.ddsCaps.dwCaps = DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
+                surfaceDesc.dwWidth = 512;
+                surfaceDesc.dwHeight = 512;
+
+                hr = g_pChitin->cVideo.m_pDirectDraw2->CreateSurface(&surfaceDesc, &(m_pSurfaces[CVIDINF_SURFACE_3]), NULL);
+                if (hr == DD_OK) {
+                    m_pSurfaces[CVIDINF_SURFACE_3]->SetColorKey(DDCKEY_SRCBLT, &colorKey);
+                } else {
+                    m_pSurfaces[CVIDINF_SURFACE_3] = NULL;
+                }
+            }
+        }
+    } else {
+        surfaceDesc.ddsCaps.dwCaps = DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
+
+        hr = g_pChitin->cVideo.m_pDirectDraw2->CreateSurface(&surfaceDesc, &(m_pSurfaces[CVIDINF_SURFACE_2]), NULL);
+        if (hr != DD_OK) {
+            m_pSurfaces[CVIDINF_SURFACE_2] = NULL;
+            return FALSE;
+        }
+    }
+
+    m_pSurfaces[CVIDINF_SURFACE_2]->SetColorKey(DDCKEY_SRCBLT, &colorKey);
+
+    if (g_pChitin->cVideo.m_nBpp == 16
+        && (g_pChitin->cVideo.cVidBlitter.m_bSoftSrcKeyBlt
+            || g_pChitin->cVideo.cVidBlitter.m_bSoftSrcKeyBltFast
+            || g_pChitin->cVideo.cVidBlitter.m_bSoftMirrorBlt)) {
+        surfaceDesc.ddsCaps.dwCaps = DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
+    } else {
+        surfaceDesc.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_OFFSCREENPLAIN;
+    }
+
+    surfaceDesc.dwWidth = 64;
+    surfaceDesc.dwHeight = 64;
+
+    hr = g_pChitin->cVideo.m_pDirectDraw2->CreateSurface(&surfaceDesc, &(m_pSurfaces[CVIDINF_SURFACE_6]), NULL);
+    if (hr != DD_OK) {
+        surfaceDesc.ddsCaps.dwCaps = DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
+
+        hr = g_pChitin->cVideo.m_pDirectDraw2->CreateSurface(&surfaceDesc, &(m_pSurfaces[CVIDINF_SURFACE_6]), NULL);
+        if (hr != DD_OK) {
+            m_pSurfaces[CVIDINF_SURFACE_6] = NULL;
+            return FALSE;
+        }
+    }
+
+    m_pSurfaces[CVIDINF_SURFACE_6]->SetColorKey(DDCKEY_SRCBLT, &colorKey);
+
+    hr = g_pChitin->cVideo.m_pDirectDraw2->CreateSurface(&surfaceDesc, &(m_pSurfaces[CVIDINF_SURFACE_7]), NULL);
+    if (hr != DD_OK) {
+        surfaceDesc.ddsCaps.dwCaps = DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
+
+        hr = g_pChitin->cVideo.m_pDirectDraw2->CreateSurface(&surfaceDesc, &(m_pSurfaces[CVIDINF_SURFACE_7]), NULL);
+        if (hr != DD_OK) {
+            m_pSurfaces[CVIDINF_SURFACE_7] = NULL;
+            return FALSE;
+        }
+    }
+
+    m_pSurfaces[CVIDINF_SURFACE_7]->SetColorKey(DDCKEY_SRCBLT, &colorKey);
+
+    if (g_pChitin->cVideo.m_nBpp == 16
+        && (g_pChitin->cVideo.cVidBlitter.m_bSoftSrcKeyBlt
+            || g_pChitin->cVideo.cVidBlitter.m_bSoftSrcKeyBltFast)) {
+        surfaceDesc.ddsCaps.dwCaps = DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
+    } else {
+        surfaceDesc.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN;
+    }
+
+    surfaceDesc.dwWidth = 64;
+    surfaceDesc.dwHeight = 64;
+
+    for (m_nVRamSurfaces = 0; m_nVRamSurfaces < word_8BA320 && m_nVRamSurfaces < SEVEN_EIGHT_ZERO && hr == DD_OK; m_nVRamSurfaces++) {
+        hr = g_pChitin->cVideo.m_pDirectDraw2->CreateSurface(&surfaceDesc, &(m_pVRamSurfaces[m_nVRamSurfaces]), NULL);
+        if (hr != DD_OK) {
+            m_pVRamSurfaces[m_nVRamSurfaces--] = NULL;
+        }
+    }
+
+    if (m_nVRamSurfaces == word_8BA320) {
+        if (g_pChitin->cVideo.m_nBpp != 16
+            || (!g_pChitin->cVideo.cVidBlitter.m_bSoftBlt
+                && !g_pChitin->cVideo.cVidBlitter.m_bSoftBltFast)) {
+            surfaceDesc.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_OFFSCREENPLAIN;
+
+            for (; m_nVRamSurfaces < SEVEN_EIGHT_ZERO && hr == DD_OK; m_nVRamSurfaces++) {
+                hr = g_pChitin->cVideo.m_pDirectDraw2->CreateSurface(&surfaceDesc, &(m_pVRamSurfaces[m_nVRamSurfaces]), NULL);
+                if (hr != DD_OK) {
+                    m_pVRamSurfaces[m_nVRamSurfaces--] = NULL;
+                }
+            }
+        }
+    }
+
+    LoadFogOWarSurfaces(CString(""));
+
+    return TRUE;
+}
+
+// 0x79BDF0
+BOOL CVidInf::DeactivateVideoMode(CVidMode* pNextVidMode)
+{
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        return DestroySurfaces3d(pNextVidMode);
+    }
+
+    if (pNextVidMode != NULL && pNextVidMode->GetType() == 0) {
+        return TRUE;
+    }
+
+    if (!g_pChitin->m_bFullscreen) {
+        SetClipper(NULL);
+    }
+
+    DestroySurfaces();
+
+    m_nSurfaces = 0;
+
+    if (m_pSurfaces != NULL) {
+        free(m_pSurfaces);
+        m_pSurfaces = NULL;
+    }
+
+    if (m_pVRamSurfaces != NULL) {
+        free(m_pVRamSurfaces);
+        m_pVRamSurfaces = NULL;
+    }
+
+    return TRUE;
 }
 
 // 0x79BE90
 void CVidInf::DestroySurfaces()
 {
     if (m_pSurfaces != NULL) {
-        if (m_pSurfaces[1] != NULL) {
-            m_pSurfaces[1]->Release();
-            m_pSurfaces[1] = NULL;
+        if (m_pSurfaces[CVIDINF_SURFACE_FRONT] != NULL) {
+            m_pSurfaces[CVIDINF_SURFACE_FRONT]->Release();
+            m_pSurfaces[CVIDINF_SURFACE_FRONT] = NULL;
         }
 
-        if (m_pSurfaces[0] != NULL) {
-            m_pSurfaces[0]->Release();
-            m_pSurfaces[0] = NULL;
+        if (m_pSurfaces[CVIDINF_SURFACE_BACK] != NULL) {
+            m_pSurfaces[CVIDINF_SURFACE_BACK]->Release();
+            m_pSurfaces[CVIDINF_SURFACE_BACK] = NULL;
         }
 
-        if (m_pSurfaces[2] != NULL) {
-            m_pSurfaces[2]->Release();
-            m_pSurfaces[2] = NULL;
+        if (m_pSurfaces[CVIDINF_SURFACE_2] != NULL) {
+            m_pSurfaces[CVIDINF_SURFACE_2]->Release();
+            m_pSurfaces[CVIDINF_SURFACE_2] = NULL;
         }
 
-        if (m_pSurfaces[3] != NULL) {
-            m_pSurfaces[3]->Release();
-            m_pSurfaces[3] = NULL;
+        if (m_pSurfaces[CVIDINF_SURFACE_3] != NULL) {
+            m_pSurfaces[CVIDINF_SURFACE_3]->Release();
+            m_pSurfaces[CVIDINF_SURFACE_3] = NULL;
         }
 
-        if (m_pSurfaces[6] != NULL) {
-            m_pSurfaces[6]->Release();
-            m_pSurfaces[6] = NULL;
+        if (m_pSurfaces[CVIDINF_SURFACE_6] != NULL) {
+            m_pSurfaces[CVIDINF_SURFACE_6]->Release();
+            m_pSurfaces[CVIDINF_SURFACE_6] = NULL;
         }
 
-        if (m_pSurfaces[7] != NULL) {
-            m_pSurfaces[7]->Release();
-            m_pSurfaces[7] = NULL;
+        if (m_pSurfaces[CVIDINF_SURFACE_7] != NULL) {
+            m_pSurfaces[CVIDINF_SURFACE_7]->Release();
+            m_pSurfaces[CVIDINF_SURFACE_7] = NULL;
         }
 
-        if (m_pSurfaces[4] != NULL) {
-            m_pSurfaces[4]->Release();
-            m_pSurfaces[4] = NULL;
+        if (m_pSurfaces[CVIDINF_SURFACE_4] != NULL) {
+            m_pSurfaces[CVIDINF_SURFACE_4]->Release();
+            m_pSurfaces[CVIDINF_SURFACE_4] = NULL;
         }
 
-        if (m_pSurfaces[5] != NULL) {
-            m_pSurfaces[5]->Release();
-            m_pSurfaces[5] = NULL;
+        if (m_pSurfaces[CVIDINF_SURFACE_5] != NULL) {
+            m_pSurfaces[CVIDINF_SURFACE_5]->Release();
+            m_pSurfaces[CVIDINF_SURFACE_5] = NULL;
         }
 
-        if (m_pSurfaces[8] != NULL) {
-            m_pSurfaces[8]->Release();
-            m_pSurfaces[8] = NULL;
+        if (m_pSurfaces[CVIDINF_SURFACE_8] != NULL) {
+            m_pSurfaces[CVIDINF_SURFACE_8]->Release();
+            m_pSurfaces[CVIDINF_SURFACE_8] = NULL;
         }
     }
 
@@ -137,6 +539,36 @@ void CVidInf::DestroySurfaces()
     }
 
     m_nVRamSurfaces = 0;
+}
+
+// 0x7BE210
+BOOL CVidInf::DestroySurfaces3d(CVidMode* pNextVidMode)
+{
+    if (pNextVidMode != NULL && pNextVidMode->GetType() == 0) {
+        return TRUE;
+    }
+
+    field_178.Unload();
+
+    GLuint texture1 = 2;
+    glDeleteTextures(1, &texture1);
+    CheckResults3d(0);
+
+    GLuint texture2 = 5;
+    glDeleteTextures(1, &texture2);
+
+    GLuint texture3 = 6;
+    glDeleteTextures(1, &texture3);
+
+    for (int index = 0; index < m_nVRamSurfaces; index++) {
+        GLuint texture = static_cast<GLuint>(index);
+        glDeleteTextures(1, &texture);
+        CheckResults3d(0);
+    }
+
+    sub_7BEDE0();
+
+    return TRUE;
 }
 
 // #binary-identical
@@ -260,7 +692,7 @@ BOOL CVidInf::WindowedFlip(BOOL bRenderCursor)
 // 0x79C580
 BOOL CVidInf::GetCursorSurfaceSize(CSize& size)
 {
-    if (m_pSurfaces[4] != NULL) {
+    if (m_pSurfaces[CVIDINF_SURFACE_4] != NULL) {
         size.cx = 256;
         size.cy = 64;
         return TRUE;
@@ -272,7 +704,7 @@ BOOL CVidInf::GetCursorSurfaceSize(CSize& size)
 // 0x79C5B0
 BOOL CVidInf::GetFXSize(CSize& size)
 {
-    if (g_pChitin->cVideo.m_bIs3dAccelerated || m_pSurfaces[2] != NULL) {
+    if (g_pChitin->cVideo.m_bIs3dAccelerated || m_pSurfaces[CVIDINF_SURFACE_2] != NULL) {
         size.cx = 512;
         size.cy = 512;
         return TRUE;
@@ -289,7 +721,7 @@ BOOL CVidInf::GetFXSurface(INT& nSurface, DWORD dwFlags)
     }
 
     if (g_pChitin->m_bUseMirrorFX) {
-        if (m_pSurfaces[3] != NULL) {
+        if (m_pSurfaces[CVIDINF_SURFACE_3] != NULL) {
             if ((dwFlags & 0x30) != 0) {
                 nSurface = 3;
                 return TRUE;
@@ -297,7 +729,7 @@ BOOL CVidInf::GetFXSurface(INT& nSurface, DWORD dwFlags)
         }
     }
 
-    if (m_pSurfaces[2] != NULL) {
+    if (m_pSurfaces[CVIDINF_SURFACE_2] != NULL) {
         nSurface = 2;
         return TRUE;
     }
@@ -314,14 +746,14 @@ IDirectDrawSurface* CVidInf::GetFXSurfacePtr(DWORD dwFlags)
     }
 
     if (g_pChitin->m_bUseMirrorFX) {
-        if (m_pSurfaces[3] != NULL) {
+        if (m_pSurfaces[CVIDINF_SURFACE_3] != NULL) {
             if ((dwFlags & 0x30) != 0) {
-                return m_pSurfaces[3];
+                return m_pSurfaces[CVIDINF_SURFACE_3];
             }
         }
     }
 
-    return m_pSurfaces[2];
+    return m_pSurfaces[CVIDINF_SURFACE_2];
 }
 
 // 0x79C6D0
@@ -667,7 +1099,99 @@ void CVidInf::GetFogOWarTileRect(unsigned char a2, CRect& rTileRect)
 // 0x79E550
 void CVidInf::LoadFogOWarSurfaces(const CString& a2)
 {
-    // TODO: Incomplete.
+    CVidCell tileVidCell;
+    CRect rTileRect(0, 0, 64, 64);
+    DDBLTFX fx;
+    DDSURFACEDESC surfaceDesc;
+    BOOL bSurfaceLocked;
+
+    if (!g_pChitin->cVideo.m_bIs3dAccelerated) {
+        if (g_pChitin->field_F8 != 1) {
+            if (!a2.IsEmpty()) {
+                field_73A = a2;
+            } else {
+                if (field_73A.IsEmpty()) {
+                    return;
+                }
+            }
+
+            CResRef resRef(field_73A);
+            tileVidCell.SetResRef(resRef, TRUE, TRUE);
+            tileVidCell.field_B4.SetResRef(resRef, TRUE, FALSE);
+
+            if (tileVidCell.pRes != NULL) {
+                tileVidCell.pRes->field_7E = tileVidCell.field_B4.GetResRef() == "";
+            }
+
+            tileVidCell.field_D6 = 0;
+            tileVidCell.SequenceSet(0);
+            tileVidCell.pRes->Demand();
+            tileVidCell.RealizePalette(1);
+
+            fx.dwSize = sizeof(fx);
+            fx.dwFillColor = m_dwGBitMask;
+
+            if (m_pSurfaces[CVIDINF_SURFACE_6] != NULL) {
+                g_pChitin->cVideo.cVidBlitter.Blt(m_pSurfaces[CVIDINF_SURFACE_6], &rTileRect, NULL, NULL, DDBLT_WAIT | DDBLT_COLORFILL, &fx);
+
+                surfaceDesc.dwSize = sizeof(surfaceDesc);
+
+                field_174 = FALSE;
+                bSurfaceLocked = LockSurface(6, &surfaceDesc, rTileRect);
+                field_174 = TRUE;
+
+                // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo.cpp
+                // __LINE__: 8995
+                UTIL_ASSERT(surfaceDesc.lpSurface != NULL);
+
+                if (bSurfaceLocked) {
+                    tileVidCell.FrameSet(0);
+                    tileVidCell.Render(reinterpret_cast<WORD*>(surfaceDesc.lpSurface), surfaceDesc.lPitch, 0, 0, rTileRect, TRUE, 0, CPoint(0, 0));
+
+                    tileVidCell.FrameSet(1);
+                    tileVidCell.Render(reinterpret_cast<WORD*>(surfaceDesc.lpSurface), surfaceDesc.lPitch, 32, 0, rTileRect, TRUE, 0, CPoint(0, 0));
+
+                    tileVidCell.FrameSet(2);
+                    tileVidCell.Render(reinterpret_cast<WORD*>(surfaceDesc.lpSurface), surfaceDesc.lPitch, 0, 32, rTileRect, TRUE, 0, CPoint(0, 0));
+
+                    tileVidCell.FrameSet(2);
+                    tileVidCell.Render(reinterpret_cast<WORD*>(surfaceDesc.lpSurface), surfaceDesc.lPitch, 32, 32, rTileRect, TRUE, 0, CPoint(0, 0));
+
+                    // NOTE: Uninline.
+                    UnLockSurface(6, surfaceDesc.lpSurface);
+                }
+            }
+
+            if (m_pSurfaces[CVIDINF_SURFACE_7] != NULL) {
+                g_pChitin->cVideo.cVidBlitter.Blt(m_pSurfaces[CVIDINF_SURFACE_7], &rTileRect, NULL, NULL, DDBLT_WAIT | DDBLT_COLORFILL, &fx);
+
+                surfaceDesc.dwSize = sizeof(surfaceDesc);
+
+                bSurfaceLocked = LockSurface(7, &surfaceDesc, rTileRect);
+
+                // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo.cpp
+                // __LINE__: 9017
+                UTIL_ASSERT(surfaceDesc.lpSurface != NULL);
+
+                if (bSurfaceLocked) {
+                    tileVidCell.FrameSet(4);
+                    tileVidCell.Render(reinterpret_cast<WORD*>(surfaceDesc.lpSurface), surfaceDesc.lPitch, 0, 0, rTileRect, TRUE, 0, CPoint(0, 0));
+
+                    tileVidCell.FrameSet(5);
+                    tileVidCell.Render(reinterpret_cast<WORD*>(surfaceDesc.lpSurface), surfaceDesc.lPitch, 32, 0, rTileRect, TRUE, 0, CPoint(0, 0));
+
+                    tileVidCell.FrameSet(6);
+                    tileVidCell.Render(reinterpret_cast<WORD*>(surfaceDesc.lpSurface), surfaceDesc.lPitch, 0, 32, rTileRect, TRUE, 0, CPoint(0, 0));
+
+                    tileVidCell.FrameSet(7);
+                    tileVidCell.Render(reinterpret_cast<WORD*>(surfaceDesc.lpSurface), surfaceDesc.lPitch, 32, 32, rTileRect, TRUE, 0, CPoint(0, 0));
+
+                    // NOTE: Uninline.
+                    UnLockSurface(7, surfaceDesc.lpSurface);
+                }
+            }
+        }
+    }
 }
 
 // 0x79FFA0
@@ -678,8 +1202,8 @@ void CVidInf::RestoreSurfaces()
 
     if (!g_pChitin->cVideo.m_bIs3dAccelerated) {
         if (!g_pChitin->field_1932) {
-            if (m_pSurfaces[1] != NULL) {
-                hr = m_pSurfaces[1]->Restore();
+            if (m_pSurfaces[CVIDINF_SURFACE_FRONT] != NULL) {
+                hr = m_pSurfaces[CVIDINF_SURFACE_FRONT]->Restore();
                 CheckResults(hr);
             }
 
@@ -688,65 +1212,65 @@ void CVidInf::RestoreSurfaces()
             ddck.dwColorSpaceHighValue = ddck.dwColorSpaceLowValue;
 
             if (!g_pChitin->m_bFullscreen) {
-                hr = m_pSurfaces[0]->Restore();
+                hr = m_pSurfaces[CVIDINF_SURFACE_BACK]->Restore();
                 CheckResults(hr);
             }
 
-            if (m_pSurfaces[2] != NULL) {
-                hr = m_pSurfaces[2]->Restore();
+            if (m_pSurfaces[CVIDINF_SURFACE_2] != NULL) {
+                hr = m_pSurfaces[CVIDINF_SURFACE_2]->Restore();
                 CheckResults(hr);
 
                 if (hr == DD_OK) {
-                    m_pSurfaces[2]->SetColorKey(DDCKEY_SRCBLT, &ddck);
+                    m_pSurfaces[CVIDINF_SURFACE_2]->SetColorKey(DDCKEY_SRCBLT, &ddck);
                 }
             }
 
-            if (m_pSurfaces[3] != NULL) {
-                hr = m_pSurfaces[3]->Restore();
+            if (m_pSurfaces[CVIDINF_SURFACE_3] != NULL) {
+                hr = m_pSurfaces[CVIDINF_SURFACE_3]->Restore();
                 CheckResults(hr);
 
                 if (hr == DD_OK) {
-                    m_pSurfaces[3]->SetColorKey(DDCKEY_SRCBLT, &ddck);
+                    m_pSurfaces[CVIDINF_SURFACE_3]->SetColorKey(DDCKEY_SRCBLT, &ddck);
                 }
             }
 
-            if (m_pSurfaces[6] != NULL) {
-                hr = m_pSurfaces[6]->Restore();
+            if (m_pSurfaces[CVIDINF_SURFACE_6] != NULL) {
+                hr = m_pSurfaces[CVIDINF_SURFACE_6]->Restore();
                 CheckResults(hr);
 
                 if (hr == DD_OK) {
-                    m_pSurfaces[6]->SetColorKey(DDCKEY_SRCBLT, &ddck);
+                    m_pSurfaces[CVIDINF_SURFACE_6]->SetColorKey(DDCKEY_SRCBLT, &ddck);
                 } else {
                     v1 = FALSE;
                 }
             }
 
-            if (m_pSurfaces[7] != NULL) {
-                hr = m_pSurfaces[7]->Restore();
+            if (m_pSurfaces[CVIDINF_SURFACE_7] != NULL) {
+                hr = m_pSurfaces[CVIDINF_SURFACE_7]->Restore();
                 CheckResults(hr);
 
                 if (hr == DD_OK) {
-                    m_pSurfaces[7]->SetColorKey(DDCKEY_SRCBLT, &ddck);
+                    m_pSurfaces[CVIDINF_SURFACE_7]->SetColorKey(DDCKEY_SRCBLT, &ddck);
                 } else {
                     v1 = FALSE;
                 }
             }
 
-            if (m_pSurfaces[4] != NULL) {
-                hr = m_pSurfaces[4]->Restore();
+            if (m_pSurfaces[CVIDINF_SURFACE_4] != NULL) {
+                hr = m_pSurfaces[CVIDINF_SURFACE_4]->Restore();
                 CheckResults(hr);
 
                 if (hr == DD_OK) {
-                    m_pSurfaces[4]->SetColorKey(DDCKEY_SRCBLT, &ddck);
+                    m_pSurfaces[CVIDINF_SURFACE_4]->SetColorKey(DDCKEY_SRCBLT, &ddck);
                 }
             }
 
-            if (m_pSurfaces[5] != NULL) {
-                hr = m_pSurfaces[5]->Restore();
+            if (m_pSurfaces[CVIDINF_SURFACE_5] != NULL) {
+                hr = m_pSurfaces[CVIDINF_SURFACE_5]->Restore();
                 CheckResults(hr);
 
                 if (hr == DD_OK) {
-                    m_pSurfaces[5]->SetColorKey(DDCKEY_SRCBLT, &ddck);
+                    m_pSurfaces[CVIDINF_SURFACE_5]->SetColorKey(DDCKEY_SRCBLT, &ddck);
                 }
             }
 

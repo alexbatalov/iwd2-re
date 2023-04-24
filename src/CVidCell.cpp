@@ -125,6 +125,20 @@ BOOL CVidCell::FrameSet(SHORT nFrame)
     return TRUE;
 }
 
+// 0x7AE210
+void CVidCell::RealizePalette(DWORD dwFlags)
+{
+    if (!field_CC) {
+        // __FILE__: C:\Projects\Icewind2\src\chitin\ChVidImage.cpp
+        // __LINE__: 1537
+        UTIL_ASSERT(pRes != NULL);
+
+        m_cPalette.SetPalette(pRes->m_pPalette, 256, CVidPalette::TYPE_RESOURCE);
+    }
+
+    m_cPalette.Realize(CVidImage::rgbTempPal, g_pChitin->cVideo.m_nBpp, dwFlags, &m_paletteAffects, 255);
+}
+
 // #binary-identical
 // 0x7AE290
 BOOL CVidCell::SequenceSet(SHORT nSequence)

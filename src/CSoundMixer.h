@@ -25,7 +25,7 @@ public:
     int GetChannelType(int nChannelNumber);
     int GetChannelVolume(int nChannelNumber);
     void GetListenPosition(CPoint& pos, LONG& posZ);
-    BOOL Initialize(CWnd* pWnd, int nNewMaxVoices, int nNewMaxChannels);
+    void Initialize(CWnd* pWnd, int nNewMaxVoices, int nNewMaxChannels);
     void InitializeChannels(int nNewMaxChannels);
     BOOL ReleaseAll();
     void RemoveWaiting(CSound* pSoundPtr);
@@ -61,6 +61,7 @@ public:
     /* 0068 */ CObList m_lLooping;
     /* 0084 */ CObList m_lVoices;
     /* 00A0 */ CObList m_lWaiting; // #guess
+    /* 00BC */ HWND m_hWnd;
     /* 00C0 */ int field_C0;
     /* 00C4 */ int field_C4;
     /* 00C8 */ int field_C8;

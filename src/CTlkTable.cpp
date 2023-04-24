@@ -32,7 +32,7 @@ CTlkTable::~CTlkTable()
 }
 
 // 0x7940C0
-BOOL CTlkTable::AddTlkFile(const CString& filePath, BYTE a3, BYTE a4, BOOLEAN a5)
+BOOL CTlkTable::AddTlkFile(const CString& filePath, BYTE a3, BYTE a4, BOOLEAN bOpen)
 {
     CTlkFile* pFile = new CTlkFile();
     pFile->SetFilePath(filePath);
@@ -40,7 +40,7 @@ BOOL CTlkTable::AddTlkFile(const CString& filePath, BYTE a3, BYTE a4, BOOLEAN a5
     USHORT key = (a4 << 8) | a3;
     field_0[key] = pFile;
 
-    if (a5) {
+    if (bOpen) {
         return OpenFile(a3, a4);
     }
 
@@ -99,7 +99,7 @@ BOOL CTlkTable::OpenFile(BYTE a2, BYTE a3)
         UTIL_ASSERT(FALSE);
     }
 
-    if (pFile->m_header.nFileType != 'TLK ') {
+    if (memcmp(&(pFile->m_header.nFileType), "TLK ", 4) != 0) {
         // __FILE__: C:\Projects\Icewind2\src\chitin\ChTlkTbl.cpp
         // __LINE__: 97
         UTIL_ASSERT(FALSE);

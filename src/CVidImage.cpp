@@ -3,6 +3,9 @@
 // 0x85E838
 const INT CVidTile::BYTES_PER_TEXEL = 4;
 
+// 0x9064F8
+DWORD CVidImage::rgbTempPal[256];
+
 // 0x7ACA60
 CVidImage::CVidImage()
 {

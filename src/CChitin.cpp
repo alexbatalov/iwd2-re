@@ -5,6 +5,7 @@
 #include <winver.h>
 
 #include "CAlias.h"
+#include "CKeyInfo.h"
 #include "CResBinary.h"
 #include "CResBitmap.h"
 #include "CResCell.h"
@@ -49,6 +50,9 @@ BOOL CChitin::SCREEN_SAVE_ACTIVE;
 // #guess
 // 0x8FB94C
 BOOL CChitin::SCREEN_SAVE_ACTIVE_LOADED;
+
+// 0x8FB950
+BOOLEAN CChitin::byte_8FB950;
 
 // 0x8FB974
 int CChitin::dword_8FB974;
@@ -159,7 +163,7 @@ CChitin::~CChitin()
         Shutdown3D();
     }
 
-    field_14C.RemoveAll();
+    m_lMouseWheel.RemoveAll();
 
     cDimm.DestroyKeyTable();
     cDimm.DumpAll();
@@ -488,15 +492,15 @@ void CChitin::InitializeVariables()
     field_C = 0;
     field_1C = 0;
     field_2C = 0;
-    m_nDoubleClickTime = GetDoubleClickTime();
-    if (m_nDoubleClickTime == 0) {
-        m_nDoubleClickTime = 500;
+    m_mouseDblClickTime = GetDoubleClickTime();
+    if (m_mouseDblClickTime == 0) {
+        m_mouseDblClickTime = 500;
     }
 
-    m_nDoubleClickTime = 10 * m_nDoubleClickTime / (10000 / TIMER_UPDATES_PER_SECOND) + 1;
-    field_18 = m_nDoubleClickTime;
-    field_38 = m_nDoubleClickTime;
-    field_28 = m_nDoubleClickTime;
+    m_mouseDblClickTime = 10 * m_mouseDblClickTime / (10000 / TIMER_UPDATES_PER_SECOND) + 1;
+    m_mouseLDblClickCount = m_mouseDblClickTime;
+    m_mouseMDblClickCount = m_mouseDblClickTime;
+    m_mouseRDblClickCount = m_mouseDblClickTime;
     field_40 = GetSystemMetrics(SM_CXDOUBLECLK);
     field_44 = GetSystemMetrics(SM_CYDOUBLECLK);
 
@@ -513,11 +517,11 @@ void CChitin::InitializeVariables()
     m_nKeyboardSpeed = TIMER_UPDATES_PER_SECOND / (m_nKeyboardSpeed + 1) + 1;
 
     if (GetSystemMetrics(SM_SWAPBUTTON)) {
-        field_4 = 2;
-        field_8 = 1;
+        m_mouseLButton = VK_RBUTTON;
+        m_mouseRButton = VK_LBUTTON;
     } else {
-        field_4 = 1;
-        field_8 = 2;
+        m_mouseLButton = VK_LBUTTON;
+        m_mouseRButton = VK_RBUTTON;
     }
 
     if (!SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &m_nWheelScrollLines, 0)) {
@@ -549,12 +553,12 @@ void CChitin::InitializeVariables()
         m_nWheelScrollLines = scrollLines;
     }
 
-    field_148 = 0;
+    m_bInMouseWheelQueue = FALSE;
     field_1932 = 0;
     field_1936 = 1;
     field_193A = 0;
     field_1902 = 0;
-    field_48 = 0;
+    m_bEngineActive = FALSE;
     field_1912 = 0;
     field_4C = 0;
     field_374 = 0;
@@ -598,7 +602,52 @@ BOOL CChitin::Init3d()
 // 0x790860
 void CChitin::SelectEngine(CWarp* pNewEngine)
 {
-    // TODO: Incomplete.
+    CVidMode* pPrevVidMode = NULL;
+    if (pNewEngine != NULL) {
+        EnterCriticalSection(&field_3AC);
+
+        m_bEngineActive = FALSE;
+        if (pActiveEngine != NULL) {
+            pActiveEngine->EngineDeactivated();
+
+            if (pActiveEngine->pVidMode != NULL) {
+                pPrevVidMode = pActiveEngine->pVidMode;
+                pActiveEngine->pVidMode->DeactivateVideoMode(pNewEngine->pVidMode);
+            }
+
+            if (!m_bInMouseWheelQueue) {
+                m_bInMouseWheelQueue = TRUE;
+                m_lMouseWheel.RemoveAll();
+                m_bInMouseWheelQueue = FALSE;
+            }
+
+            m_mouseLDblClickCount = m_mouseDblClickTime;
+            GetAsyncKeyState(m_mouseLButton);
+
+            m_mouseRDblClickCount = m_mouseDblClickTime;
+            GetAsyncKeyState(m_mouseRButton);
+
+            m_mouseMDblClickCount = m_mouseDblClickTime;
+            GetAsyncKeyState(VK_MBUTTON);
+
+            SHORT nKeys = pNewEngine->GetNumVirtualKeys();
+            if (nKeys > 0) {
+                CKeyInfo* keys = pNewEngine->GetVirtualKeys();
+                for (SHORT nKey = 0; nKey < nKeys; nKey++) {
+                    keys[nKey].m_repeatCount = GetAsyncKeyState(keys[nKey].m_keyCode) != 0;
+                }
+            }
+        }
+
+        pNewEngine->pLastEngine = pActiveEngine;
+        pActiveEngine = pNewEngine;
+        pActiveEngine->pVidMode->ActivateVideoMode(pPrevVidMode, cWnd.GetSafeHwnd(), m_bFullscreen);
+        cVideo.cVidBlitter.Init();
+        pActiveEngine->EngineActivated();
+
+        m_bEngineActive = TRUE;
+        LeaveCriticalSection(&field_3AC);
+    }
 }
 
 // #guess
@@ -733,7 +782,7 @@ BOOL CChitin::InitGraphics()
             SetProcessAffinityMaskFunc* pfnSetProcessAffinityMask = reinterpret_cast<SetProcessAffinityMaskFunc*>(GetProcAddress(hKernel32, "SetProcessAffinityMask"));
             if (pfnSetProcessAffinityMask != NULL) {
                 HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, GetCurrentProcessId());
-                SetProcessAffinityMask(hProcess, 1);
+                pfnSetProcessAffinityMask(hProcess, 1);
                 CloseHandle(hProcess);
             }
         }
@@ -874,8 +923,6 @@ void CChitin::ReadIniFiles()
             if (!lAliases.AddAlias(alias)) {
                 delete alias;
             }
-
-            return;
         } else {
             temp = "HD0:=";
             temp += buffer;

@@ -11,10 +11,10 @@ class CRes;
 struct CDimmKeyTableEntry {
     CResRef resRef;
     CRes* pRes;
-    int field_C;
+    RESID nID;
     short field_10;
-    short field_12;
-    int field_14;
+    USHORT nResType;
+    int bUpdated;
 };
 
 class CDimmKeyTable {
@@ -40,6 +40,7 @@ public:
     unsigned int Hash(const CResRef& a2, int a3);
     void RemoveNonUpdatedEntries();
     void RescanDirectoryNumberAndName(int nDirNumber, const CString& sDirName);
+    BOOL RescanEverything();
 
     /* 0000 */ int m_bInitialized; // #guess
     /* 0004 */ KEYFILE_RESFILENAME* m_pResFileNameEntries; // #guess

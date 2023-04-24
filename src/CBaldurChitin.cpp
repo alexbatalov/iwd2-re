@@ -98,9 +98,6 @@ BYTE CBaldurChitin::RENDER_COUNT = 2;
 // 0x8BA28C
 unsigned char byte_8BA28C = 1;
 
-// 0x8BA320
-short CBaldurChitin::word_8BA320 = 100;
-
 // 0x8C8CA0
 CString CBaldurChitin::CHUI_GUIEXT("");
 
@@ -502,7 +499,7 @@ CBaldurChitin::CBaldurChitin()
         break;
     }
 
-    word_8BA320 = 3 * (((stru_8E7548.right - stru_8E7548.left + 63) / 64 + 1) * ((stru_8E7548.bottom - stru_8E7548.top + 63) / 64 + 1)) / 2;
+    CVidMode::word_8BA320 = 3 * (((stru_8E7548.right - stru_8E7548.left + 63) / 64 + 1) * ((stru_8E7548.bottom - stru_8E7548.top + 63) / 64 + 1)) / 2;
 
     // TODO: Check assignments to `field_49B4`. In binary they appear in random
     // order.
@@ -877,10 +874,10 @@ void CBaldurChitin::Init(HINSTANCE hInstance)
     if (lAliases.ResolveFileName(femaleURI, path) == TRUE) {
         CFileStatus fileStatus;
         if (CFile::GetStatus(path, fileStatus)) {
-            bOpened = m_cTlkTable.AddTlkFile(path, 0, byte_8BA28C, 1);
+            bOpened = m_cTlkTable.AddTlkFile(path, 0, byte_8BA28C, TRUE);
             if (bOpened) {
                 if (lAliases.ResolveFileName(maleURI, path) == TRUE) {
-                    bOpened = m_cTlkTable.AddTlkFile(path, 0, byte_8FB954, 1);
+                    bOpened = m_cTlkTable.AddTlkFile(path, 0, byte_8FB954, TRUE);
 
                     // __FILE__: C:\Projects\Icewind2\src\Baldur\CBaldurChitin.cpp
                     // __LINE__: 1148
@@ -889,7 +886,7 @@ void CBaldurChitin::Init(HINSTANCE hInstance)
             } else {
                 byte_8BA28C = byte_8FB954;
                 if (lAliases.ResolveFileName(maleURI, path) == TRUE) {
-                    bOpened = m_cTlkTable.AddTlkFile(path, 0, byte_8FB954, 1);
+                    bOpened = m_cTlkTable.AddTlkFile(path, 0, byte_8FB954, TRUE);
 
                     // __FILE__: C:\Projects\Icewind2\src\Baldur\CBaldurChitin.cpp
                     // __LINE__: 1158
@@ -899,7 +896,7 @@ void CBaldurChitin::Init(HINSTANCE hInstance)
         } else {
             byte_8BA28C = byte_8FB954;
             if (lAliases.ResolveFileName(maleURI, path) == TRUE) {
-                bOpened = m_cTlkTable.AddTlkFile(path, 0, byte_8FB954, 1);
+                bOpened = m_cTlkTable.AddTlkFile(path, 0, byte_8FB954, TRUE);
 
                 // __FILE__: C:\Projects\Icewind2\src\Baldur\CBaldurChitin.cpp
                 // __LINE__: 1169
@@ -909,7 +906,7 @@ void CBaldurChitin::Init(HINSTANCE hInstance)
     } else {
         byte_8BA28C = byte_8FB954;
         if (lAliases.ResolveFileName(maleURI, path) == TRUE) {
-            bOpened = m_cTlkTable.AddTlkFile(path, 0, byte_8FB954, 1);
+            bOpened = m_cTlkTable.AddTlkFile(path, 0, byte_8FB954, TRUE);
 
             // __FILE__: C:\Projects\Icewind2\src\Baldur\CBaldurChitin.cpp
             // __LINE__: 1181

@@ -16,6 +16,7 @@ public:
     void DeleteRangeAffects(USHORT nRangeId);
     BOOL FrameAdvance();
     BOOL FrameSet(SHORT nFrame);
+    void RealizePalette(DWORD dwFlags);
     BOOL SequenceSet(SHORT nSequence);
     void AddResPaletteAffect(USHORT nAffectType, COLORREF rgbAffectColor, BYTE pulsePeriod);
     void SuppressTint(SHORT nRange);

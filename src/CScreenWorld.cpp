@@ -12,6 +12,14 @@ CScreenWorld::~CScreenWorld()
     // TODO: Incomplete.
 }
 
+// 0x68DFD0
+BOOL CScreenWorld::TogglePauseGame(char a2, char a3, int a4)
+{
+    // TODO: Incomplete.
+
+    return TRUE;
+}
+
 // 0x692690
 void CScreenWorld::ClearChatMessages()
 {

@@ -9,6 +9,7 @@ class CInfCursor {
 public:
     CInfCursor();
     ~CInfCursor();
+    void Initialize();
     void SetCursor(INT nNewCursor, BOOLEAN bForce);
     void SetToolTip(STRREF nStrRef, CUIControlBase* pControl, SHORT nHotKeyIndex1, SHORT nHotKeyIndex2, CString sKey, STRREF nSecondaryStrRef, STRREF nTertiaryStrRef);
 
