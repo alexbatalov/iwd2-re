@@ -1,7 +1,64 @@
 #include "CBaldurProjector.h"
 
 #include "CBaldurChitin.h"
+#include "CInfGame.h"
+#include "CScreenWorld.h"
 #include "CUtil.h"
+#include "CVidInf.h"
+
+// NOTE: Not sure if it's actually part of class. There is a strange mix of
+// `this` vs. instance obtained from global `g_pBaldurChitin`.
+//
+// 0x43E300
+void CBaldurProjector::sub_43E300(HBINK bnk)
+{
+    LPDIRECTDRAWSURFACE pSurface = g_pChitin->pActiveEngine->pVidMode->m_pSurfaces[CVIDINF_SURFACE_BACK];
+
+    DDSURFACEDESC surfaceDesc;
+    surfaceDesc.dwSize = sizeof(surfaceDesc);
+
+    int nType = m_pfnBinkDDSurfaceType(pSurface);
+
+    int nDestX = (CVideo::SCREENWIDTH - bnk->width) / 2;
+    int nDestY = (CVideo::SCREENHEIGHT - bnk->height) / 2;
+
+    if (nDestX >= 0 && nDestY >= 0) {
+        if (field_65A > 0) {
+            field_65A--;
+            g_pChitin->pActiveEngine->pVidMode->EraseScreen(CVIDINF_SURFACE_BACK, RGB(0, 0, 0));
+        }
+
+        // TODO: Incomplete (subtitles).
+
+        m_pfnBinkDoFrame(bnk);
+
+        do {
+            if (pSurface->Lock(NULL, &surfaceDesc, DDLOCK_WAIT, NULL) == DDERR_SURFACELOST) {
+                if (pSurface->Restore() == DD_OK) {
+                    continue;
+                } else {
+                    break;
+                }
+            }
+
+            m_pfnBinkCopyToBuffer(bnk,
+                surfaceDesc.lpSurface,
+                surfaceDesc.lPitch,
+                bnk->height,
+                nDestX,
+                nDestY,
+                nType | 0xF0000000);
+
+            pSurface->Unlock(surfaceDesc.lpSurface);
+
+            g_pChitin->pActiveEngine->pVidMode->Flip(FALSE);
+        } while (0);
+
+        if (bnk->frame_num != bnk->frames) {
+            m_pfnBinkNextFrame(bnk);
+        }
+    }
+}
 
 // 0x43E640
 CBaldurProjector::CBaldurProjector()
@@ -27,10 +84,10 @@ CBaldurProjector::CBaldurProjector()
     field_14A.SetResRef(CResRef("NORMAL"), g_pChitin->field_2EC, 1);
     field_14A.SetColor(0xFFFFFF, 0, 0);
     field_14A.RegisterFont();
-    field_64E = "";
+    m_sCurrentMovieFileName = "";
 
     m_hBink = NULL;
-    field_652 = "";
+    m_currentMovieResRef = "";
     field_65A = 4;
 
     m_pfnBinkOpen = NULL;
@@ -48,8 +105,8 @@ CBaldurProjector::CBaldurProjector()
     m_pfnBinkGetError = NULL;
     m_pfnBinkSetVolume = NULL;
     m_hBinkDLL = NULL;
-    field_69A = 0;
-    field_69E = 1;
+    m_bThreadPriorityChanged = FALSE;
+    m_nPrevThreadPriority = 1;
 
     m_hBinkDLL = LoadLibraryA("binkw32");
     if (m_hBinkDLL != NULL) {
@@ -140,13 +197,14 @@ CBaldurProjector::~CBaldurProjector()
 
     if (m_hBink != NULL) {
         m_pfnBinkClose(m_hBink);
+        m_hBink = NULL;
         field_14A.Unload();
     }
 
     // TODO: Incomplete. Destroying some global object and surface, probably
     // related to subtitles.
 
-    field_64E = "";
+    m_sCurrentMovieFileName = "";
 
     if (m_hBinkDLL != NULL) {
         FreeLibrary(m_hBinkDLL);
@@ -154,6 +212,103 @@ CBaldurProjector::~CBaldurProjector()
     }
 
     LeaveCriticalSection(&(g_pChitin->field_3AC));
+}
+
+// 0x43EC20
+void CBaldurProjector::EngineActivated()
+{
+    if (m_hBinkDLL == NULL) {
+        SelectEngine(pLastEngine);
+        return;
+    }
+
+    EnterCriticalSection(&(g_pChitin->field_3AC));
+
+    if (CChitin::byte_8FB950) {
+        if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE
+            && g_pChitin->cNetwork.m_bIsHost == TRUE
+            && g_pChitin->cNetwork.field_1C) {
+            g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
+        }
+
+        if (m_hBink != NULL) {
+            m_pfnBinkClose(m_hBink);
+            m_hBink = NULL;
+        }
+    }
+
+    // TODO: Incomplete.
+
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        SelectEngine(pLastEngine);
+        LeaveCriticalSection(&(g_pChitin->field_3AC));
+        return;
+    }
+
+    g_pBaldurChitin->cSoundMixer.StartSong(-1, 5);
+
+    if (m_hBink == NULL) {
+        m_pfnBinkSetSoundSystem(m_pfnBinkOpenDirectSound, reinterpret_cast<unsigned int>(pSoundMixer->m_pDirectSound));
+        m_hBink = m_pfnBinkOpen(m_sCurrentMovieFileName, 0x4000);
+
+        if (m_hBink == NULL) {
+            char* error = m_pfnBinkGetError();
+            SelectEngine(pLastEngine);
+            LeaveCriticalSection(&(g_pChitin->field_3AC));
+            return;
+        }
+
+        m_pfnBinkSetSoundOnOff(m_hBink, 1);
+        m_pfnBinkSetVolume(m_hBink, 0, SHORT_MAX * g_pBaldurChitin->m_pObjectGame->m_cOptions.m_nVolumeMovie / 100);
+
+        m_nPrevThreadPriority = GetThreadPriority(GetCurrentThread());
+        m_bThreadPriorityChanged = SetThreadPriority(GetCurrentThread(), 15);
+
+        if (g_pBaldurChitin->m_pObjectGame->m_cOptions.m_bDisplayMovieSubtitles) {
+            // TODO: Incomplete.
+        }
+    }
+
+    pDimm->Suspend();
+    pVidMode->field_D4 = 0;
+    field_65A = 4;
+    g_pChitin->pActiveEngine->pVidMode->EraseScreen(CVIDINF_SURFACE_BACK, RGB(0, 0, 0));
+
+    LeaveCriticalSection(&(g_pChitin->field_3AC));
+}
+
+// 0x43EED0
+void CBaldurProjector::EngineDeactivated()
+{
+    if (CChitin::byte_8FB950
+        && g_pChitin->cNetwork.m_bConnectionEstablished == TRUE
+        && g_pChitin->cNetwork.m_bIsHost == TRUE
+        && g_pChitin->cNetwork.field_1C) {
+        g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
+    }
+
+    if (m_bThreadPriorityChanged == TRUE) {
+        SetThreadPriority(GetCurrentThread(), m_nPrevThreadPriority);
+    }
+
+    if (!g_pChitin->cVideo.m_bIs3dAccelerated) {
+        EnterCriticalSection(&(g_pChitin->field_3AC));
+
+        if (m_hBink != NULL) {
+            while (m_pfnBinkWait(m_hBink)) {
+            }
+
+            m_pfnBinkClose(m_hBink);
+            m_hBink = NULL;
+        }
+
+        // TODO: Incomplete.
+
+        pDimm->Resume();
+        pVidMode->field_D4 = 1;
+
+        LeaveCriticalSection(&(g_pChitin->field_3AC));
+    }
 }
 
 // 0x43F000
@@ -237,7 +392,7 @@ void CBaldurProjector::PlayMovieInternal(const CResRef& cResRef, BOOL bAsynchThr
         if (m_hBink != NULL) {
             m_pfnBinkClose(m_hBink);
             m_hBink = NULL;
-            field_64E = "";
+            m_sCurrentMovieFileName = "";
         }
 
         field_144 = 1;
@@ -246,10 +401,10 @@ void CBaldurProjector::PlayMovieInternal(const CResRef& cResRef, BOOL bAsynchThr
         CString sMovieFileName("");
         BOOL resolved = ResolveMovieFileName(cResRef, sMovieFileName);
 
-        field_652 = cResRef;
+        m_currentMovieResRef = cResRef;
 
         if (resolved) {
-            field_64E = sMovieFileName;
+            m_sCurrentMovieFileName = sMovieFileName;
 
             if (cResRef == "BISLOGO") {
                 g_pBaldurChitin->AddPlayedMovie(cResRef);
@@ -295,4 +450,57 @@ void CBaldurProjector::PlayMovieNext(const CResRef& cResRef)
     *temp = cResRef;
 
     m_lMovies.AddTail(temp);
+}
+
+// 0x43F4C0
+void CBaldurProjector::TimerAsynchronousUpdate()
+{
+    EnterCriticalSection(&(g_pChitin->field_3AC));
+
+    if (field_146) {
+        field_146 = 0;
+
+        if (g_pChitin->cNetwork.m_bConnectionEstablished == 1
+            && !g_pChitin->cNetwork.m_bIsHost) {
+            // TODO: Incomplete.
+        }
+
+        if (g_pChitin->cNetwork.m_bIsHost == 1 && g_pChitin->cNetwork.field_1C) {
+            // TODO: Incomplete.
+        }
+
+        SelectEngine(pLastEngine);
+    }
+
+    if (g_pChitin->pActiveEngine == this && !field_146) {
+        if (m_hBink != NULL) {
+            if (m_hBink->frame_num == m_hBink->frames) {
+                if (field_145) {
+                    field_145 = 0;
+                }
+
+                m_bDeactivateEngine = FALSE;
+
+                if (!m_lMovies.IsEmpty()) {
+                    do {
+                        CResRef* pMovieResRef = m_lMovies.RemoveHead();
+                        if (pMovieResRef != NULL) {
+                            PlayMovieInternal(*pMovieResRef, FALSE);
+                            delete pMovieResRef;
+                        }
+                    } while (m_hBink == NULL && !m_lMovies.IsEmpty());
+                }
+
+                if (m_hBink == NULL) {
+                    field_146 = 1;
+                }
+            } else {
+                if (m_pfnBinkWait(m_hBink) == 0) {
+                    sub_43E300(m_hBink);
+                }
+            }
+        }
+    }
+
+    LeaveCriticalSection(&(g_pChitin->field_3AC));
 }
