@@ -75,6 +75,101 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lPara
         return 0;
     }
 
+    switch (Msg) {
+    case WM_DESTROY:
+        if (!g_pChitin->field_F8) {
+            g_pChitin->ShutDown(-1, NULL, NULL);
+            return 0;
+        }
+        break;
+    case WM_MOVE:
+    case WM_SIZE:
+        if (g_pChitin->m_bFullscreen) {
+            SetRect(&(g_pChitin->field_E8),
+                0,
+                0,
+                GetSystemMetrics(SM_CXSCREEN),
+                GetSystemMetrics(SM_CYSCREEN));
+        } else {
+            GetClientRect(hWnd, &(g_pChitin->field_E8));
+            ClientToScreen(hWnd, reinterpret_cast<LPPOINT>(&(g_pChitin->field_E8.left)));
+            ClientToScreen(hWnd, reinterpret_cast<LPPOINT>(&(g_pChitin->field_E8.right)));
+            g_pChitin->RedrawScreen();
+
+            RECT rect;
+            GetClientRect(hWnd, &rect);
+
+            if (rect.right == rect.left && rect.bottom == rect.top) {
+                if (CChitin::byte_8FB950 == 0) {
+                    g_pChitin->OnAltTab(hWnd, FALSE);
+                }
+            } else {
+                if (CChitin::byte_8FB950 == 1) {
+                    g_pChitin->OnAltTab(hWnd, TRUE);
+                }
+            }
+        }
+        break;
+    case WM_KILLFOCUS:
+        SetCursor(LoadCursorA(NULL, IDC_ARROW));
+        return 0;
+    case WM_PAINT:
+        if (GetUpdateRect(hWnd, NULL, FALSE)) {
+            PAINTSTRUCT paint;
+            BeginPaint(hWnd, &paint);
+            EndPaint(hWnd, &paint);
+        }
+        return 1;
+    case WM_ERASEBKGND:
+        return 1;
+    case WM_ACTIVATEAPP:
+        if (g_pChitin->field_F8 || g_pChitin->field_1932) {
+            return 0;
+        }
+
+        SetCursor(NULL);
+        g_pChitin->OnAltTab(hWnd, wParam);
+        break;
+    case WM_SETCURSOR:
+        return 1;
+    case WM_INPUTLANGCHANGE:
+        return 0;
+    case WM_DISPLAYCHANGE:
+        g_pChitin->OnDisplayChange();
+        break;
+    case WM_IME_STARTCOMPOSITION:
+        if (g_pChitin->field_1A4) {
+            g_pChitin->cImm.OnStartComposition();
+            return 0;
+        }
+        break;
+    case WM_IME_ENDCOMPOSITION:
+        if (g_pChitin->field_1A4) {
+            g_pChitin->cImm.OnEndComposition();
+            return 0;
+        }
+        break;
+    case WM_IME_COMPOSITION:
+        if (g_pChitin->field_1A4) {
+            g_pChitin->cImm.OnComposition(hWnd, wParam, lParam);
+            return 0;
+        }
+        break;
+    case WM_IME_NOTIFY:
+        if (g_pChitin->field_1A4) {
+            g_pChitin->cImm.OnNotify(hWnd, wParam, lParam);
+            return 0;
+        }
+        break;
+    case WM_IME_SETCONTEXT:
+    case WM_IME_CONTROL:
+    case WM_IME_COMPOSITIONFULL:
+        if (g_pChitin->field_1A4) {
+            return 0;
+        }
+        break;
+    }
+
     // TODO: Incomplete.
 
     return DefWindowProcA(hWnd, Msg, wParam, lParam);
@@ -330,6 +425,12 @@ BOOL CChitin::InitializeServices(HWND hWnd)
     }
 
     return initialized;
+}
+
+// 0x791610
+void CChitin::OnDisplayChange()
+{
+    // TODO: Incomplete.
 }
 
 // 0x7917F0
@@ -833,6 +934,66 @@ void CChitin::EnginesGameUninit()
         CWarp* pEngine = static_cast<CWarp*>(lEngines.GetNext(pos));
         if (pEngine != NULL) {
             pEngine->EngineGameUninit();
+        }
+    }
+}
+
+// 0x7912F0
+void CChitin::OnAltEnter(BOOLEAN a1)
+{
+    // TODO: Incomplete.
+}
+
+// 0x7914D0
+void CChitin::OnAltTab(HWND hWnd, BOOL a2)
+{
+    if (a2 == 1) {
+        field_1C4A = 1;
+        if (pActiveEngine != NULL) {
+            CVidMode* pVidMode = pActiveEngine->pVidMode;
+            if (pVidMode != NULL) {
+                field_F8 = 1;
+                if (cVideo.m_bIs3dAccelerated) {
+                    if (m_bFullscreen) {
+                        cVideo.m_pCurrentVidMode = pVidMode;
+                        cVideo.Initialize3d(hWnd, TRUE, 1);
+                    }
+                } else {
+                    pVidMode->RestoreSurfaces();
+                }
+                field_F8 = 0;
+
+                if (cDimm.field_294) {
+                    SetCDSwitchActivateEngine(TRUE);
+                    Resume();
+                    byte_8FB950 = 0;
+                } else if (cProgressBar.m_bProgressBarActivated) {
+                    SetProgressBarActivateEngine(TRUE);
+                    Resume();
+                    byte_8FB950 = 0;
+                } else {
+                    if (pActiveEngine != NULL) {
+                        pActiveEngine->EngineActivated();
+                    }
+                    Resume();
+                    byte_8FB950 = 0;
+                }
+            }
+        }
+    } else {
+        byte_8FB950 = 1;
+        field_1C4A = 0;
+        field_E0 = 1;
+
+        if (pActiveEngine != NULL) {
+            pActiveEngine->EngineDeactivated();
+        }
+
+        if (cVideo.m_bIs3dAccelerated) {
+            if (m_bFullscreen) {
+                cVideo.CleanUp();
+                CloseWindow(hWnd);
+            }
         }
     }
 }

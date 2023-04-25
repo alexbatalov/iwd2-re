@@ -27,6 +27,7 @@ public:
     static void GetGameVersionInfo(HINSTANCE hInstance);
     void InitResources();
     BOOL InitInstance();
+    void OnDisplayChange();
     void ParseCommandLine();
     int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
     static void FixReadonlyPermissions();
@@ -98,6 +99,8 @@ public:
     /* 00D8 */ virtual void SetRenderCount(BYTE nCount);
     /* 00DC */ virtual DWORD GetCloseConfirmationFlags();
     /* 00E0 */ virtual void GetCloseConfirmationStr(CString& sString);
+    /* 00E4 */ virtual void OnAltEnter(BOOLEAN a1);
+    /* 00E8 */ virtual void OnAltTab(HWND hWnd, BOOL a2);
     /* 00EC */ virtual void GetGameSpyGameName(CString& sGameSpyName);
     /* 00F0 */ virtual void GetGameSpyCode(CString& sGameSpyCode);
     /* 00F4 */ virtual void GetPanicCDStrings(CString& sMediaRemoved, CString& sPlaceCD, CString& sInDrive);

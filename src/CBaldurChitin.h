@@ -139,6 +139,7 @@ public:
     /* 00D8 */ void SetRenderCount(BYTE nCount) override;
     /* 00DC */ DWORD GetCloseConfirmationFlags() override;
     /* 00E0 */ void GetCloseConfirmationStr(CString& sString) override;
+    /* 00E8 */ void OnAltTab(HWND hWnd, BOOL a2) override;
     /* 00EC */ void GetGameSpyGameName(CString& sGameSpyName) override;
     /* 00F0 */ void GetGameSpyCode(CString& sGameSpyCode) override;
     /* 00F4 */ void GetPanicCDStrings(CString& sMediaRemoved, CString& sPlaceCD, CString& sInDrive) override;

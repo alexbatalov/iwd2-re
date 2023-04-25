@@ -77,6 +77,9 @@
 #define DISPLAY_MOVIE_SUBTITLES_KEY "Display Movie Subtitles"
 #define SHADED_SELECTION_BOX_KEY "Shaded Selection Box"
 #define SINGLE_MEDIA_KEY "Single Media"
+#define AI_THREAD_PRIORITY_KEY "AI Thread Priority"
+#define NT_SMOOTH_SOUND_KEY "NT Smooth Sound"
+#define MUSIC_THREAD_PRIORITY_KEY "Music Thread Priority"
 
 CChitin* g_pChitin;
 CBaldurChitin* g_pBaldurChitin;
@@ -953,7 +956,101 @@ void CBaldurChitin::RSThreadMain(void* userInfo)
 // 0x4242B0
 void CBaldurChitin::MainAIThread(void* userInfo)
 {
-    // TODO: Incomplete.
+    // NOTE: Not sure if the next two are static to this function. They are not
+    // initialized and only used in this function.
+
+    // 0x8CF6E0
+    static DWORD dword_8CF6E0;
+
+    // 0x8CF6E4
+    static DWORD dword_8CF6E4;
+
+    RegisterThread();
+
+    INT nAIThreadPriority = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY, AI_THREAD_PRIORITY_KEY, 15, g_pChitin->GetIniFileName());
+    if (nAIThreadPriority < 0 || (nAIThreadPriority > 2 && nAIThreadPriority != 15)) {
+        nAIThreadPriority = 15;
+
+        CString sValue;
+        sValue.Format("%d", nAIThreadPriority);
+        WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY, AI_THREAD_PRIORITY_KEY, sValue, g_pChitin->GetIniFileName());
+    }
+
+    SetThreadPriority(GetCurrentThread(), nAIThreadPriority);
+
+    if (!g_pChitin->field_1A28) {
+        g_pChitin->field_1A28 = 1;
+
+        if (g_pChitin->dwPlatformId == VER_PLATFORM_WIN32_NT) {
+            if (GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY, NT_SMOOTH_SOUND_KEY, 1, g_pChitin->GetIniFileName()) != 0) {
+                SetThreadPriority(GetCurrentThread(), 2);
+            }
+        }
+    }
+
+    INT nMusicThreadPriority = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY, MUSIC_THREAD_PRIORITY_KEY, 15, g_pChitin->GetIniFileName());
+    if (nMusicThreadPriority < 0 || (nMusicThreadPriority > 2 && nMusicThreadPriority != 15)) {
+        nMusicThreadPriority = 15;
+
+        CString sValue;
+        sValue.Format("%d", nMusicThreadPriority);
+        WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY, MUSIC_THREAD_PRIORITY_KEY, sValue, g_pChitin->GetIniFileName());
+    }
+
+    SetThreadPriority(m_hMusicThread, nMusicThreadPriority);
+
+    int v1 = 0;
+    while (!m_bExitMainAIThread) {
+        if (g_pBaldurChitin->pActiveEngine == g_pBaldurChitin->m_pEngineProjector) {
+            if (v1++ == 10) {
+                v1 = 0;
+                if (WaitForSingleObject(m_eventTimer, 100) == WAIT_ABANDONED) {
+                    return;
+                }
+
+                ResetEvent(m_eventTimer);
+            }
+        } else {
+            if (WaitForSingleObject(m_eventTimer, 100) == WAIT_ABANDONED) {
+                return;
+            }
+
+            if (field_194 >= 15 || m_nAIPerSec <= 24) {
+                if (field_19C != 0) {
+                    field_19C = max(field_19C - 1, 0);
+                    if (field_19C != 0) {
+                        SleepEx(field_19C, FALSE);
+                    }
+                }
+            } else {
+                if (field_19C < 30) {
+                    field_19C += 5;
+                }
+                SleepEx(field_19C, FALSE);
+            }
+
+            ResetEvent(m_eventTimer);
+
+            DWORD nTickCount = GetTickCount();
+            dword_8CF6E4 = nTickCount - dword_8CF6E0;
+            if (dword_8CF6E4 < 1000 / TIMER_UPDATES_PER_SECOND - 10) {
+                continue;
+            }
+
+            dword_8CF6E0 = nTickCount;
+        }
+
+        if (g_pChitin->field_1936 == 1) {
+            g_pChitin->field_1912 = 1;
+            g_pChitin->AsynchronousUpdate(0, 0, 0, 0, 0);
+            g_pChitin->field_1912 = 0;
+            g_pChitin->field_193A = 1;
+        }
+
+        if (m_bExitMainAIThread) {
+            SuspendThread(m_hMainAIThread);
+        }
+    }
 }
 
 // 0x422B80
@@ -1032,6 +1129,12 @@ void CBaldurChitin::SetProgressBarActivateEngine(BOOL bValue)
 void CBaldurChitin::SetCDSwitchActivateEngine(BOOL bValue)
 {
     m_cSwitchingCDStatus.m_bActivateEngine = bValue;
+}
+
+// 0x424A70
+void CBaldurChitin::OnAltTab(HWND hWnd, BOOL a2)
+{
+    CChitin::OnAltTab(hWnd, a2);
 }
 
 // 0x424A90
