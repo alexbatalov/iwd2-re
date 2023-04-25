@@ -35,6 +35,8 @@ public:
     void UpdateSoundPositions();
     void SetMusicPath(CString& sMusicPath);
     void SetMusicVolume(int nNewVolume);
+    void StartSong(INT nSong, DWORD dwFlags);
+    void StartSong(INT nSong, INT nSection, INT nPosition, DWORD dwFlags);
     void Lock();
     void Unlock();
     void UpdateMusic();

@@ -518,6 +518,18 @@ void CSoundMixer::SetMusicVolume(int nNewVolume)
     Unlock();
 }
 
+// 0x7AC4F0
+void CSoundMixer::StartSong(INT nSong, DWORD dwFlags)
+{
+    StartSong(nSong, 0, -1, dwFlags);
+}
+
+// 0x7AC510
+void CSoundMixer::StartSong(INT nSong, INT nSection, INT nPosition, DWORD dwFlags)
+{
+    // TODO: Incomplete.
+}
+
 // #guess
 // 0x7AC970
 void CSoundMixer::Lock()
