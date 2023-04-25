@@ -1380,7 +1380,7 @@ void CChitin::ReadIniFiles()
             }
 
             for (unsigned char cd = 1;; cd++) {
-                temp.FormatMessageA("CD%d:", cd);
+                temp.Format("CD%d:", cd);
 
                 memset(buffer, 0, sizeof(buffer));
                 GetPrivateProfileStringA("Alias", temp, "", buffer, sizeof(buffer), GetIniFileName());
