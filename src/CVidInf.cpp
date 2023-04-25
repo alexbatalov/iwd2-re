@@ -683,7 +683,52 @@ BOOL CVidInf::FullScreenFlip(BOOL bRenderCursor)
 // 0x79C400
 BOOL CVidInf::WindowedFlip(BOOL bRenderCursor)
 {
-    // TODO: Incomplete.
+    if (CChitin::byte_8FB950) {
+        return TRUE;
+    }
+
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        return WindowedFlip3d(bRenderCursor);
+    }
+
+    BOOL bPointerRendered;
+    if (bRenderCursor) {
+        field_E4.left = 0;
+        field_E4.top = 0;
+        field_E4.right = 0;
+        field_E4.bottom = 0;
+        g_pChitin->field_1902 = 0;
+        bPointerRendered = RenderPointer(0);
+    } else {
+        bPointerRendered = FALSE;
+    }
+
+    do {
+        RECT srcRect;
+        srcRect.left = 0;
+        srcRect.top = 0;
+        srcRect.right = CVideo::SCREENWIDTH;
+        srcRect.bottom = CVideo::SCREENHEIGHT;
+
+        RECT destRect = g_pChitin->field_E8;
+
+        HRESULT hr = g_pChitin->cVideo.cVidBlitter.Blt(m_pSurfaces[CVIDINF_SURFACE_FRONT],
+            &destRect,
+            m_pSurfaces[CVIDINF_SURFACE_BACK],
+            &srcRect,
+            DDBLT_WAIT,
+            NULL);
+        CheckResults(hr);
+        if (hr != DDERR_SURFACELOST && hr != DDERR_WASSTILLDRAWING) {
+            break;
+        }
+    } while (!g_pChitin->field_1932);
+
+    if (bRenderCursor && bPointerRendered) {
+        if (field_E4.Width() > 0 && field_E4.Height() > 0) {
+            m_pPointerVidCell->RestoreBackground(CVIDINF_SURFACE_4, CVIDINF_SURFACE_BACK, field_E4);
+        }
+    }
 
     return FALSE;
 }
@@ -1411,6 +1456,14 @@ void CVidInf::ParsePixelFormat(const DDPIXELFORMAT& ddpf)
         // __LINE__: 9962
         UTIL_ASSERT(FALSE);
     }
+}
+
+// 0x7BE4E0
+BOOL CVidInf::WindowedFlip3d(BOOL bRenderCursor)
+{
+    // TODO: Incomplete.
+
+    return TRUE;
 }
 
 // #binary-identical

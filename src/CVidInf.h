@@ -55,6 +55,7 @@ public:
     BOOL BKRenderEllipse(const CPoint& ptCenter, const CSize& axes, const CRect& rClip, COLORREF rgbColor);
     BOOL BKRenderLine(int nXFrom, int nYFrom, int nXTo, int nYTo, const CRect& rSurface, COLORREF rgbColor);
     void GetFogOWarTileRect(unsigned char a2, CRect& rTileRect);
+    BOOL WindowedFlip3d(BOOL bRenderCursor);
     void DoTextOut3d(UINT nSurface, const CString& sText, int x, int y, COLORREF color);
 
     static unsigned char dword_907B20[512 * 512 * 4];

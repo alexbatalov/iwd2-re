@@ -165,10 +165,7 @@ public:
     /* 00D8 */ int field_D8;
     /* 00DC */ int field_DC;
     /* 00E0 */ int field_E0;
-    /* 00E4 */ int field_E4;
-    /* 00E8 */ int field_E8;
-    /* 00EC */ int field_EC;
-    /* 00F0 */ int field_F0;
+    /* 00E4 */ CRect field_E4;
 };
 
 #endif /* CVIDMODE_H_ */

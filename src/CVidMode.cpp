@@ -52,10 +52,10 @@ CVidMode::CVidMode()
     m_pPointerVidCell = NULL;
     m_bPointerAnimating = FALSE;
     m_pSurfaces = NULL;
-    field_E4 = 0;
-    field_EC = 0;
-    field_E8 = 0;
-    field_F0 = 0;
+    field_E4.left = 0;
+    field_E4.top = 0;
+    field_E4.right = 0;
+    field_E4.bottom = 0;
     rgbGlobalTint = 0xFFFFFF;
     field_4 = 0;
     m_bPrintScreen = FALSE;
