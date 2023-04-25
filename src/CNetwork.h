@@ -7,24 +7,17 @@
 
 class CNetwork {
 public:
-    struct S861078 {
-        int field_0;
-        int field_4;
-        int field_8;
-        int field_C;
-    };
-
     CNetwork();
     ~CNetwork();
     void CloseSession(BOOLEAN bAIResponsible);
     void OnCloseSession();
 
-    static const S861078 stru_861078;
+    static const GUID GUID_NULL;
 
     /* 0000 */ int field_0;
     /* 0004 */ int field_4;
-    /* 0008 */ S861078 field_8;
-    /* 0018 */ unsigned char field_18;
+    /* 0008 */ GUID m_nApplicationGuid;
+    /* 0018 */ BOOLEAN m_bApplicationGuidDefined;
     /* 0019 */ unsigned char field_19;
     /* 001A */ unsigned char field_1A;
     /* 001B */ unsigned char field_1B;
@@ -36,7 +29,7 @@ public:
     /* 0030 */ int field_30;
     /* 0034 */ int field_34;
     /* 0038 */ CString field_38[5];
-    /* 004C */ S861078 field_4C;
+    /* 004C */ GUID field_4C;
     /* 009C */ unsigned char field_9C;
     /* 009D */ unsigned char field_9D;
     /* 009E */ unsigned char field_9E;
@@ -59,9 +52,9 @@ public:
     /* 0122 */ int field_122;
     /* 0126 */ int field_126;
     /* 012A */ CString field_12A[64];
-    /* 022A */ S861078 field_22A[64];
+    /* 022A */ GUID field_22A[64];
     /* 0630 */ unsigned char field_630[64];
-    /* 066A */ S861078 field_66A;
+    /* 066A */ GUID field_66A;
     /* 067A */ unsigned char field_67A;
     /* 067C */ CString field_67C;
     /* 0680 */ unsigned char field_680;

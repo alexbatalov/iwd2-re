@@ -3,7 +3,7 @@
 #include "CChitin.h"
 
 // 0x861078
-const CNetwork::S861078 CNetwork::stru_861078 = { 0 };
+const GUID CNetwork::GUID_NULL = { 0 };
 
 // 0x7A3FD0
 CNetwork::CNetwork()
@@ -16,14 +16,14 @@ CNetwork::CNetwork()
     InitializeCriticalSection(&field_F6A);
     field_0 = 0;
     field_4 = 0;
-    field_8 = stru_861078;
-    field_18 = 0;
+    m_nApplicationGuid = GUID_NULL;
+    m_bApplicationGuidDefined = FALSE;
     field_19 = 0;
     field_1A = 0;
     field_1B = 0;
     field_1C = -1;
     field_20 = 0;
-    field_4C = stru_861078;
+    field_4C = GUID_NULL;
     field_20++;
     field_9C = 0;
     field_24 = 0;
@@ -46,14 +46,14 @@ CNetwork::CNetwork()
 
     for (int k = 0; k < 64; k++) {
         field_12A[k] = "";
-        field_22A[k] = stru_861078;
+        field_22A[k] = GUID_NULL;
         field_630[k] = 0;
     }
 
     field_121 = 0;
     field_122 = -1;
     field_126 = 0;
-    field_66A = stru_861078;
+    field_66A = GUID_NULL;
     field_67A = 0;
     field_67C = "";
     field_680 = 0;
