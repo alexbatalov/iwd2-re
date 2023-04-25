@@ -20,6 +20,7 @@ public:
     CScreenConnection();
     ~CScreenConnection();
     /* 0018 */ void EngineDeactivated() override;
+    /* 0020 */ void EngineInitialized() override;
     /* 0034 */ void SetSystemKeyCtrl(BOOLEAN bValue) override;
     /* 0064 */ void OnMouseMove(CPoint pt) override;
     /* 006C */ void OnLButtonDblClk(CPoint pt) override;
@@ -30,6 +31,8 @@ public:
     /* 00A0 */ SHORT GetNumVirtualKeys() override;
     /* 00A4 */ CKeyInfo* GetVirtualKeys() override;
     /* 00A8 */ BYTE* GetVirtualKeysFlags() override;
+    /* 00C0 */ void TimerAsynchronousUpdate() override;
+    /* 00C4 */ void TimerSynchronousUpdate() override;
     /* 0104 */ void CancelEngine() override;
 
     void SummonPopup(DWORD nID);

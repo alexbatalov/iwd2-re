@@ -120,14 +120,14 @@ DWORD CResFile::GetFileSize(RESID resID)
 BOOL CResFile::OpenFile()
 {
     CString sResFileName;
-    USHORT nResType;
+    WORD nDrive = 0;
     CString sResolvedResFileName;
 
     if (m_bOpen) {
         CloseFile();
     }
 
-    if (!g_pChitin->cDimm.GetResFileName(m_nIndex, sResFileName, nResType, FALSE)) {
+    if (!g_pChitin->cDimm.GetResFileName(m_nIndex, sResFileName, nDrive, FALSE)) {
         return FALSE;
     }
 
@@ -151,8 +151,8 @@ BOOL CResFile::OpenFile()
         return FALSE;
     }
 
-    if (m_pHeader->dwFileType != 'BIFF' || m_pHeader->dwFileType != 'V1  ') {
-        if (m_pHeader->dwFileType != 'BIFC') {
+    if (memcmp(&(m_pHeader->dwFileType), "BIFF", 4) != 0 || memcmp(&(m_pHeader->dwVersion), "V1  ", 4) != 0) {
+        if (memcmp(&(m_pHeader->dwFileType), "BIFC", 4) != 0) {
             m_cFile.Close();
             delete m_pHeader;
             return FALSE;

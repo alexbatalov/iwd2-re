@@ -1,10 +1,12 @@
 #include "CScreenConnection.h"
 
 #include "CBaldurChitin.h"
+#include "CBaldurProjector.h"
 #include "CInfCursor.h"
 #include "CScreenStart.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
+#include "CVidInf.h"
 
 // 0x8F375C
 const CString CScreenConnection::TOKEN_SERVERVERSION("SERVERVERSION");
@@ -202,6 +204,49 @@ void CScreenConnection::EngineDeactivated()
     }
 }
 
+// 0x5FADD0
+void CScreenConnection::EngineInitialized()
+{
+    m_cUIManager.fInit(this, CResRef("GUICONN"), g_pBaldurChitin->field_4A28);
+
+    CPoint pt;
+    if (g_pBaldurChitin->field_4A28) {
+        pt.x = CVideo::SCREENWIDTH / 2 - CBaldurChitin::DEFAULT_SCREEN_WIDTH;
+        pt.y = CVideo::SCREENHEIGHT / 2 - CBaldurChitin::DEFAULT_SCREEN_HEIGHT;
+    } else {
+        pt.x = (CVideo::SCREENWIDTH - CBaldurChitin::DEFAULT_SCREEN_WIDTH) / 2;
+        pt.y = (CVideo::SCREENHEIGHT - CBaldurChitin::DEFAULT_SCREEN_HEIGHT) / 2;
+    }
+
+    m_cUIManager.ShiftPanels(pt);
+
+    for (int n = 0; n < 4; n++) {
+        m_cUIManager.AddPanel(&(g_pBaldurChitin->field_49B4[n]));
+    }
+
+    field_FA = 0;
+
+    m_cUIManager.GetPanel(1)->SetActive(FALSE);
+    m_cUIManager.GetPanel(3)->SetActive(FALSE);
+    m_cUIManager.GetPanel(4)->SetActive(FALSE);
+    m_cUIManager.GetPanel(6)->SetActive(FALSE);
+    m_cUIManager.GetPanel(7)->SetActive(FALSE);
+    m_cUIManager.GetPanel(8)->SetActive(FALSE);
+    m_cUIManager.GetPanel(11)->SetActive(FALSE);
+    m_cUIManager.GetPanel(5)->SetActive(FALSE);
+    m_cUIManager.GetPanel(12)->SetActive(FALSE);
+    m_cUIManager.GetPanel(21)->SetActive(FALSE);
+    m_cUIManager.GetPanel(19)->SetActive(FALSE);
+    m_cUIManager.GetPanel(20)->SetActive(FALSE);
+    m_cUIManager.GetPanel(22)->SetActive(FALSE);
+    m_cUIManager.GetPanel(23)->SetActive(FALSE);
+    m_cUIManager.GetPanel(24)->SetActive(FALSE);
+    m_cUIManager.GetPanel(25)->SetActive(FALSE);
+
+    g_pChitin->cNetwork.m_nApplicationGuid = CBaldurChitin::GUID_BALDUR_GATE;
+    g_pChitin->cNetwork.m_bApplicationGuidDefined = TRUE;
+}
+
 // 0x5FB280
 void CScreenConnection::OnLButtonDblClk(CPoint pt)
 {
@@ -263,6 +308,47 @@ void CScreenConnection::OnRButtonUp(CPoint pt)
             g_pBaldurChitin->m_pObjectCursor->m_nState = 0;
             m_cUIManager.OnRButtonUp(pt);
         }
+    }
+}
+
+// 0x5FB3E0
+void CScreenConnection::TimerAsynchronousUpdate()
+{
+    if (m_bPlayEndCredits) {
+        g_pBaldurChitin->m_pEngineProjector->PlayMovie(CResRef("END"));
+        g_pBaldurChitin->m_pEngineProjector->PlayMovieNext(CResRef("CREDITS"));
+        m_bPlayEndCredits = FALSE;
+    }
+
+    // TODO: Incomplete.
+}
+
+// 0x5FBEF0
+void CScreenConnection::TimerSynchronousUpdate()
+{
+    if (m_bExitProgram) {
+        pChitin->ShutDown(-1, NULL, NULL);
+        return;
+    }
+
+    if (m_bEliminateInitialize == TRUE) {
+        // TODO: Incomplete.
+        // g_pChitin->cNetwork.RemoveInitializeConnection();
+        m_bEliminateInitialize = FALSE;
+    }
+
+    if (field_49A != TRUE || field_498) {
+        // TODO: Incomplete.
+
+        if (m_bPlayEndCredits == TRUE) {
+            g_pChitin->pActiveEngine->pVidMode->EraseScreen(CVIDINF_SURFACE_BACK, RGB(0, 0, 0));
+        } else {
+            m_cUIManager.Render();
+        }
+
+        pVidMode->Flip(TRUE);
+
+        // TODO: Incomplete.
     }
 }
 

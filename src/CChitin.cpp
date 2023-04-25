@@ -183,9 +183,9 @@ CChitin::CChitin()
     m_nTickCount = 0;
     m_nAIPerSec = 0;
     m_nAIElasped = 0;
-    field_190 = 0;
-    field_194 = 0;
-    field_198 = 0;
+    m_nRenderTickCount = 0;
+    m_nRenderPerSec = 0;
+    m_nRenderElasped = 0;
     m_nThreads = 0;
     field_1A28 = 0;
     m_dwThreadIds[m_nThreads] = GetCurrentThreadId();
@@ -479,9 +479,9 @@ int CChitin::WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
             if (field_1932 == 0) {
                 if (field_193A == 1) {
                     field_193A = 0;
-                    field_193E = 1;
+                    m_bSynchronousUpdate = TRUE;
                     SynchronousUpdate();
-                    field_193E = 0;
+                    m_bSynchronousUpdate = FALSE;
                     field_1936 = 1;
                 }
             }
@@ -582,7 +582,7 @@ void CChitin::DoFixReadonlyPermissions(CString path)
 // 0x7902C0
 void CChitin::InitializeVariables()
 {
-    field_193E = 0;
+    m_bSynchronousUpdate = FALSE;
     field_1A0 = 0;
     field_1A4 = 0;
     field_13A = -1;
@@ -669,7 +669,7 @@ void CChitin::InitializeVariables()
     field_193A = 0;
     field_1902 = 0;
     m_bEngineActive = FALSE;
-    field_1912 = 0;
+    m_bInAsynchronousUpdate = FALSE;
     field_4C = 0;
     m_bExitRSThread = FALSE;
     m_bExitMainAIThread = FALSE;
@@ -939,9 +939,72 @@ void CChitin::EnginesGameUninit()
 }
 
 // 0x7912F0
-void CChitin::OnAltEnter(BOOLEAN a1)
+BOOLEAN CChitin::OnAltEnter(BOOLEAN a1)
 {
-    // TODO: Incomplete.
+    if (m_bFullscreen) {
+        if (field_E4) {
+            return TRUE;
+        }
+    } else {
+        RECT rect;
+        GetWindowRect(cWnd.GetSafeHwnd(), &rect);
+        m_ptScreen.x = rect.left;
+        m_ptScreen.y = rect.top;
+    }
+
+    field_F8 = 1;
+    field_E0 = 1;
+
+    if (pActiveEngine != NULL) {
+        pActiveEngine->EngineDeactivated();
+    }
+
+    INT nCurrentSong = cSoundMixer.m_nCurrentSong;
+    cSoundMixer.StopMusic(TRUE);
+
+    CVidMode* pCurrentVidMode = cVideo.m_pCurrentVidMode;
+    field_142 = 0;
+
+    cSoundMixer.CleanUp();
+    cVideo.CleanUp();
+
+    HWND hWnd = cWnd.Detach();
+    DestroyWindow(hWnd);
+
+    int nBpp = CUtil::GetCurrentBitsPerPixels();
+    if (nBpp != 16 && nBpp != 24 && nBpp != 32) {
+        CString s;
+        s.LoadStringA(GetIDSInvalidVideoMode());
+        MessageBoxA(NULL, s, name, 0);
+        ShutDown(-1, NULL, NULL);
+        return FALSE;
+    }
+
+    FlipFullScreenMode(a1);
+
+    cVideo.m_pCurrentVidMode = pCurrentVidMode;
+    if (!InitGraphics()) {
+        ShutDown(-1, NULL, NULL);
+        return FALSE;
+    }
+
+    SetSoundVolumes();
+    cSoundMixer.StartSong(nCurrentSong, 1);
+
+    if (cDimm.field_294) {
+        SetCDSwitchActivateEngine(TRUE);
+    } else if (cProgressBar.m_bProgressBarActivated) {
+        SetProgressBarActivateEngine(TRUE);
+    } else {
+        if (pActiveEngine != NULL) {
+            pActiveEngine->EngineActivated();
+        }
+    }
+
+    Resume();
+    field_F8 = 0;
+
+    return TRUE;
 }
 
 // 0x7914D0
@@ -1882,6 +1945,25 @@ void CChitin::ShutDown(int nLineNumber, const char* szFileName, const char* text
 void CChitin::SynchronousUpdate()
 {
     // TODO: Incomplete.
+
+    if (m_bEngineActive && pActiveEngine != NULL && !field_E0) {
+        if (cDimm.field_294 == 1) {
+            // TODO: Incomplete.
+        } else if (cProgressBar.m_bProgressBarActivated == 1) {
+            // TODO: Incomplete.
+        } else {
+            m_nRenderElasped++;
+
+            DWORD nTickCount = GetTickCount();
+            if (nTickCount - m_nRenderTickCount > 1000) {
+                m_nRenderPerSec = m_nRenderElasped;
+                m_nRenderElasped = 0;
+                m_nRenderTickCount = nTickCount;
+            }
+
+            pActiveEngine->TimerSynchronousUpdate();
+        }
+    }
 }
 
 // NOTE: Inlined in many places.

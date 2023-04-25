@@ -1,6 +1,7 @@
 #include "CRes.h"
 
 #include "CChitin.h"
+#include "CUtil.h"
 
 // #binary-identical
 // 0x77E250
@@ -61,9 +62,55 @@ int CRes::CancelRequest()
 // 0x77E390
 void* CRes::Demand()
 {
-    // TODO: Incomplete.
+    void* pData = g_pChitin->cDimm.Demand(this);
 
-    return NULL;
+    if (m_nResSizeActual == 0) {
+        m_nResSizeActual = field_14;
+    }
+
+    if (field_18) {
+        if (pData != NULL) {
+            CSingleLock lock(&field_20, FALSE);
+            lock.Lock(INFINITE);
+
+            unsigned char* pBytes = reinterpret_cast<unsigned char*>(pData);
+            if (*(pBytes + 3) == 'C') {
+                DWORD nSizeNew = *(reinterpret_cast<DWORD*>(pBytes + 8)) + 1;
+                void* pDataNew = operator new(nSizeNew);
+
+                // __FILE__: C:\Projects\Icewind2\src\chitin\ChDataTypes.cpp
+                // __LINE__: 251
+                UTIL_ASSERT(pDataNew != NULL && nSizeNew > 0);
+
+                DWORD nResSizeActual = nSizeNew;
+                int err = CUtil::Uncompress(reinterpret_cast<BYTE*>(pDataNew),
+                    &nResSizeActual,
+                    pBytes + 12,
+                    field_14 - 12);
+                operator delete(m_pData);
+
+                if (err != 0) {
+                    CString sErr(" ");
+                    sErr.Format("Uncompression Error: %d\n", err);
+
+                    // __FILE__: C:\Projects\Icewind2\src\chitin\ChDataTypes.cpp
+                    // __LINE__: 261
+                    UTIL_ASSERT_MSG(FALSE, sErr);
+                }
+
+                // __FILE__: C:\Projects\Icewind2\src\chitin\ChDataTypes.cpp
+                // __LINE__: 263
+                UTIL_ASSERT_MSG(nSizeNew - 1 == nResSizeActual, "Uncompression Error: uncompressed data size does not match requested size");
+
+                m_pData = pDataNew;
+                m_nResSizeActual = nResSizeActual;
+            }
+
+            lock.Unlock();
+        }
+    }
+
+    return pData;
 }
 
 // 0x77E520

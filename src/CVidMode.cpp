@@ -175,10 +175,10 @@ void CVidMode::DisplayFrameRate(UINT nSurface)
 {
     if (g_pChitin->field_1A2A) {
         CString sFrameRate;
-        int v1 = g_pChitin->m_nAIPerSec;
-        int v2 = g_pChitin->field_194;
-        int nVRamSurfaces = GetNumVRamSurfaces();
-        sFrameRate.Format("%02d %02d %d ", v2, v1, nVRamSurfaces);
+        sFrameRate.Format("%02d %02d %d ",
+            g_pChitin->m_nRenderPerSec,
+            g_pChitin->m_nAIPerSec,
+            GetNumVRamSurfaces());
 
         CString v3;
         DoTextOut(nSurface, sFrameRate, (CVideo::SCREENWIDTH >> 1) - 240, 4, 255);

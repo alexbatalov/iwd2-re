@@ -20,7 +20,7 @@ CSoundMixer::CSoundMixer()
     m_bInLoopingUpdate = FALSE;
     m_bInPositionUpdate = FALSE;
     m_bInReleaseAll = FALSE;
-    field_50 = 0;
+    m_bInQueueUpdate = FALSE;
     field_C4 = 0;
     field_C8 = 0;
     field_CC = 0;
@@ -47,8 +47,8 @@ CSoundMixer::CSoundMixer()
     m_bMusicInitialized = FALSE;
     m_sMusicPath = ".\\music";
     m_nNumSongs = 0;
-    field_11C = -1;
-    field_124 = -1;
+    m_nCurrentSong = -1;
+    m_nLastSong = -1;
     m_aMusicSlots.SetSize(10);
 
     // NOTE: Generated assembly is different.
@@ -218,7 +218,7 @@ void CSoundMixer::Initialize(CWnd* pWnd, int nNewMaxVoices, int nNewMaxChannels)
     m_nPanRange = 1;
     m_bInPositionUpdate = FALSE;
     m_bInReleaseAll = FALSE;
-    field_50 = 0;
+    m_bInQueueUpdate = FALSE;
     field_0 = 0;
     field_F0 = 0;
     InitializeChannels(nNewMaxChannels);
@@ -486,6 +486,37 @@ void CSoundMixer::UpdateSoundPositions()
     }
 }
 
+// 0x7AC150
+void CSoundMixer::UpdateQueue()
+{
+    if ((field_C0 & 1) != 0) {
+        if (!m_bInQueueUpdate) {
+            m_bInQueueUpdate = TRUE;
+            Lock();
+
+            for (int nChannel = 0; nChannel < m_nMaxChannels; nChannel++) {
+                CSoundChannel* pSoundChannel = static_cast<CSoundChannel*>(m_aChannels[nChannel]);
+                if (pSoundChannel->m_nType == 1) {
+                    if (!pSoundChannel->m_lQueue.IsEmpty()) {
+                        CSound* pSound = static_cast<CSound*>(pSoundChannel->m_lQueue.GetHead());
+                        if (!pSound->IsSoundPlaying()) {
+                            pSoundChannel->m_lQueue.RemoveHead();
+
+                            if (!pSoundChannel->m_lQueue.IsEmpty()) {
+                                CSound* pNextSound = static_cast<CSound*>(pSoundChannel->m_lQueue.GetHead());
+                                pNextSound->ExclusivePlay(FALSE);
+                            }
+                        }
+                    }
+                }
+            }
+
+            Unlock();
+            m_bInQueueUpdate = FALSE;
+        }
+    }
+}
+
 // 0x7AC230
 void CSoundMixer::SetMusicPath(CString& sNewMusicPath)
 {
@@ -528,6 +559,28 @@ void CSoundMixer::StartSong(INT nSong, DWORD dwFlags)
 void CSoundMixer::StartSong(INT nSong, INT nSection, INT nPosition, DWORD dwFlags)
 {
     // TODO: Incomplete.
+}
+
+// 0x7AC8E0
+void CSoundMixer::StopMusic(BOOL bForce)
+{
+    if (m_bMusicInitialized) {
+        Lock();
+
+        if (m_nCurrentSong != -1) {
+            // TODO: Incomplete.
+            if (bForce) {
+                // musicForceStop();
+            } else {
+                // musicStop();
+            }
+
+            m_nLastSong = m_nCurrentSong;
+            m_nCurrentSong = -1;
+        }
+
+        Unlock();
+    }
 }
 
 // #guess

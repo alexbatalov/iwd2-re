@@ -21,7 +21,7 @@ void* CResUI::Demand()
     if (!m_bParsed || GetDemands() <= 1) {
         if (pData != NULL) {
             m_pHeader = reinterpret_cast<UI_HEADER*>(pData);
-            if (m_pHeader->nFileType == 'CHUI' && m_pHeader->nFileVersion == 'V1  ') {
+            if (memcmp(&(m_pHeader->nFileType), "CHUI", 4) == 0 && memcmp(&(m_pHeader->nFileVersion), "V1  ", 4) == 0) {
                 m_pPanels = reinterpret_cast<UI_PANELHEADER*>(reinterpret_cast<unsigned char*>(pData) + m_pHeader->nOffsetToPanelTable);
                 m_pControlTable = reinterpret_cast<UI_CONTROLTABLEENTRY*>(reinterpret_cast<unsigned char*>(pData) + m_pHeader->nOffsetToControlTable);
                 m_bParsed = TRUE;

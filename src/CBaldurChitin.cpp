@@ -84,6 +84,9 @@
 CChitin* g_pChitin;
 CBaldurChitin* g_pBaldurChitin;
 
+// 0x847F50
+const GUID CBaldurChitin::GUID_BALDUR_GATE = { 0x588C135F, 0x0B15, 0x4A02, { 0x8F, 0x2D, 0x04, 0x69, 0x7B, 0xE2, 0x90, 0x4E } };
+
 // #guess
 // 0x85DE3C
 const USHORT CBaldurChitin::DEFAULT_SCREEN_WIDTH = 800;
@@ -328,10 +331,10 @@ CBaldurChitin::CBaldurChitin()
 
         CVideo::SCREENHEIGHT = 1536;
         CHUI_GUIEXT = "10";
-        strncpy(field_49B4[0].field_10, "STON10L", sizeof(field_49B4[0].field_10));
-        strncpy(field_49B4[1].field_10, "STON10R", sizeof(field_49B4[1].field_10));
-        strncpy(field_49B4[2].field_10, "STON10T", sizeof(field_49B4[2].field_10));
-        strncpy(field_49B4[3].field_10, "STON10B", sizeof(field_49B4[3].field_10));
+        strncpy(reinterpret_cast<char*>(field_49B4[0].refMosaic), "STON10L", RESREF_SIZE);
+        strncpy(reinterpret_cast<char*>(field_49B4[1].refMosaic), "STON10R", RESREF_SIZE);
+        strncpy(reinterpret_cast<char*>(field_49B4[2].refMosaic), "STON10T", RESREF_SIZE);
+        strncpy(reinterpret_cast<char*>(field_49B4[3].refMosaic), "STON10B", RESREF_SIZE);
         break;
     case 1600:
         stru_8E7538.left = 0;
@@ -440,10 +443,10 @@ CBaldurChitin::CBaldurChitin()
 
         CVideo::SCREENHEIGHT = 768;
         CHUI_GUIEXT = "10";
-        strncpy(field_49B4[0].field_10, "STON10L", sizeof(field_49B4[0].field_10));
-        strncpy(field_49B4[1].field_10, "STON10R", sizeof(field_49B4[1].field_10));
-        strncpy(field_49B4[2].field_10, "STON10T", sizeof(field_49B4[2].field_10));
-        strncpy(field_49B4[3].field_10, "STON10B", sizeof(field_49B4[3].field_10));
+        strncpy(reinterpret_cast<char*>(field_49B4[0].refMosaic), "STON10L", RESREF_SIZE);
+        strncpy(reinterpret_cast<char*>(field_49B4[1].refMosaic), "STON10R", RESREF_SIZE);
+        strncpy(reinterpret_cast<char*>(field_49B4[2].refMosaic), "STON10T", RESREF_SIZE);
+        strncpy(reinterpret_cast<char*>(field_49B4[3].refMosaic), "STON10B", RESREF_SIZE);
         break;
     case 800:
     default:
@@ -506,33 +509,33 @@ CBaldurChitin::CBaldurChitin()
 
     // TODO: Check assignments to `field_49B4`. In binary they appear in random
     // order.
-    field_49B4[0].field_0 = -5;
-    field_49B4[0].field_C = 1;
-    field_49B4[0].field_A = CVideo::SCREENHEIGHT;
-    field_49B4[0].field_8 = (CVideo::SCREENWIDTH - DEFAULT_SCREEN_WIDTH) / 2;
-    field_49B4[0].field_4 = 0;
-    field_49B4[0].field_6 = 0;
+    field_49B4[0].nPanelID = -5;
+    field_49B4[0].x = 0;
+    field_49B4[0].y = 0;
+    field_49B4[0].nWidth = (CVideo::SCREENWIDTH - DEFAULT_SCREEN_WIDTH) / 2;
+    field_49B4[0].nHeight = CVideo::SCREENHEIGHT;
+    field_49B4[0].nType = 1;
 
-    field_49B4[1].field_0 = -4;
-    field_49B4[1].field_C = 1;
-    field_49B4[1].field_A = CVideo::SCREENHEIGHT;
-    field_49B4[1].field_8 = (CVideo::SCREENWIDTH - DEFAULT_SCREEN_WIDTH) / 2;
-    field_49B4[1].field_4 = field_49B4[0].field_8 + DEFAULT_SCREEN_WIDTH;
-    field_49B4[1].field_6 = 0;
+    field_49B4[1].nPanelID = -4;
+    field_49B4[1].x = field_49B4[0].nWidth + DEFAULT_SCREEN_WIDTH;
+    field_49B4[1].y = 0;
+    field_49B4[1].nWidth = (CVideo::SCREENWIDTH - DEFAULT_SCREEN_WIDTH) / 2;
+    field_49B4[1].nHeight = CVideo::SCREENHEIGHT;
+    field_49B4[1].nType = 1;
 
-    field_49B4[2].field_0 = -3;
-    field_49B4[2].field_C = 1;
-    field_49B4[2].field_A = (CVideo::SCREENHEIGHT - DEFAULT_SCREEN_HEIGHT) / 2;
-    field_49B4[2].field_8 = DEFAULT_SCREEN_WIDTH;
-    field_49B4[2].field_4 = field_49B4[0].field_8;
-    field_49B4[2].field_6 = 0;
+    field_49B4[2].nPanelID = -3;
+    field_49B4[2].x = field_49B4[0].nWidth;
+    field_49B4[2].y = 0;
+    field_49B4[2].nWidth = DEFAULT_SCREEN_WIDTH;
+    field_49B4[2].nHeight = (CVideo::SCREENHEIGHT - DEFAULT_SCREEN_HEIGHT) / 2;
+    field_49B4[2].nType = 1;
 
-    field_49B4[3].field_0 = -2;
-    field_49B4[3].field_C = 1;
-    field_49B4[3].field_A = (CVideo::SCREENHEIGHT - DEFAULT_SCREEN_HEIGHT) / 2;
-    field_49B4[3].field_8 = DEFAULT_SCREEN_WIDTH;
-    field_49B4[3].field_4 = field_49B4[0].field_8;
-    field_49B4[3].field_6 = field_49B4[2].field_A + DEFAULT_SCREEN_HEIGHT;
+    field_49B4[3].nPanelID = -2;
+    field_49B4[3].x = field_49B4[0].nWidth;
+    field_49B4[3].y = field_49B4[2].nHeight + DEFAULT_SCREEN_HEIGHT;
+    field_49B4[3].nWidth = DEFAULT_SCREEN_WIDTH;
+    field_49B4[3].nHeight = (CVideo::SCREENHEIGHT - DEFAULT_SCREEN_HEIGHT) / 2;
+    field_49B4[3].nType = 1;
 
     m_ptScreen.x = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         SCREEN_POSITION_X_KEY,
@@ -1015,7 +1018,7 @@ void CBaldurChitin::MainAIThread(void* userInfo)
                 return;
             }
 
-            if (field_194 >= 15 || m_nAIPerSec <= 24) {
+            if (m_nRenderPerSec >= 15 || m_nAIPerSec <= 24) {
                 if (field_19C != 0) {
                     field_19C = max(field_19C - 1, 0);
                     if (field_19C != 0) {
@@ -1041,9 +1044,9 @@ void CBaldurChitin::MainAIThread(void* userInfo)
         }
 
         if (g_pChitin->field_1936 == 1) {
-            g_pChitin->field_1912 = 1;
+            g_pChitin->m_bInAsynchronousUpdate = TRUE;
             g_pChitin->AsynchronousUpdate(0, 0, 0, 0, 0);
-            g_pChitin->field_1912 = 0;
+            g_pChitin->m_bInAsynchronousUpdate = FALSE;
             g_pChitin->field_193A = 1;
         }
 

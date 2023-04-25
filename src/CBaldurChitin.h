@@ -3,6 +3,7 @@
 
 #include <afxwin.h>
 
+#include "BalDataTypes.h"
 #include "CBaldurMessage.h"
 #include "CCacheStatus.h"
 #include "CChitin.h"
@@ -39,17 +40,6 @@ class CScreenWorldMap;
 
 class CBaldurChitin : public CChitin {
 public:
-    // TODO: Some kind of layout info.
-    struct S49B4 {
-        /* 0000 */ int field_0;
-        /* 0004 */ short field_4;
-        /* 0006 */ short field_6;
-        /* 0008 */ short field_8;
-        /* 000A */ short field_A;
-        /* 000C */ short field_C;
-        /* 0010 */ char field_10[8];
-    };
-
     // TODO: Something sound-related.
     struct S4F40 {
         CResRef cResRef;
@@ -58,6 +48,7 @@ public:
         int field_10;
     };
 
+    static const GUID GUID_BALDUR_GATE;
     static const USHORT DEFAULT_SCREEN_WIDTH;
     static const USHORT DEFAULT_SCREEN_HEIGHT;
 
@@ -186,7 +177,7 @@ public:
     /* 49B1 */ unsigned char field_49B1;
     /* 49AC */ CString field_49AC;
     /* 49B2 */ BOOLEAN m_bIsAutoStarting;
-    /* 49B4 */ S49B4 field_49B4[4];
+    /* 49B4 */ UI_PANELHEADER field_49B4[4];
     /* 4A24 */ int field_4A24;
     /* 4A28 */ int field_4A28;
     /* 4A2C */ int field_4A2C;

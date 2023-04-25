@@ -99,7 +99,7 @@ public:
     /* 00D8 */ virtual void SetRenderCount(BYTE nCount);
     /* 00DC */ virtual DWORD GetCloseConfirmationFlags();
     /* 00E0 */ virtual void GetCloseConfirmationStr(CString& sString);
-    /* 00E4 */ virtual void OnAltEnter(BOOLEAN a1);
+    /* 00E4 */ virtual BOOLEAN OnAltEnter(BOOLEAN a1);
     /* 00E8 */ virtual void OnAltTab(HWND hWnd, BOOL a2);
     /* 00EC */ virtual void GetGameSpyGameName(CString& sGameSpyName);
     /* 00F0 */ virtual void GetGameSpyCode(CString& sGameSpyCode);
@@ -192,9 +192,9 @@ public:
     /* 0184 */ DWORD m_nTickCount;
     /* 0188 */ int m_nAIPerSec;
     /* 018C */ int m_nAIElasped;
-    /* 0190 */ int field_190;
-    /* 0194 */ int field_194;
-    /* 0198 */ int field_198;
+    /* 0190 */ int m_nRenderTickCount;
+    /* 0194 */ int m_nRenderPerSec;
+    /* 0198 */ int m_nRenderElasped;
     /* 019C */ int field_19C;
     /* 01A0 */ int field_1A0;
     /* 01A4 */ int field_1A4;
@@ -229,12 +229,12 @@ public:
     /* 1902 */ int field_1902;
     /* 1906 */ CPoint field_1906;
     /* 190E */ LONG nAUCounter;
-    /* 1912 */ int field_1912;
+    /* 1912 */ BOOL m_bInAsynchronousUpdate;
     /* 1916 */ CAliasList lAliases; // #guess
     /* 1932 */ int field_1932;
     /* 1936 */ int field_1936;
     /* 193A */ int field_193A;
-    /* 193E */ int field_193E;
+    /* 193E */ int m_bSynchronousUpdate;
     /* 1942 */ int m_nKeyboardDelay; // #guess
     /* 1946 */ int m_nKeyboardSpeed; // #guess
     /* 194A */ CCriticalSection field_194A;

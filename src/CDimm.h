@@ -31,7 +31,10 @@ public:
     BOOL RemoveTemporaryKey(const CString& sDirName, CResRef cResRef, USHORT nType);
     int CancelRequest(CRes* pRes);
     BOOL CDScan(USHORT a2);
+    WORD CDSwitch(WORD drive, CString& sDrive, BOOLEAN a3);
     BOOL CreateKeyTable();
+    void* Demand(CRes* pRes);
+    void* InternalDemand(CRes* pRes);
     void DestroyKeyTable();
     int Dump(CRes* pRes, int a2, int a3);
     int DumpAll();
@@ -41,13 +44,15 @@ public:
     int GetMemoryAmount();
     UINT GetResFileID(const CString& sName);
     CResFile* GetResFilePtr(UINT a2);
-    BOOL GetResFileName(UINT nIndex, CString& sResFileName, USHORT& nResType, BOOLEAN a5);
+    BOOL GetResFileName(UINT nIndex, CString& sResFileName, WORD& nDrive, BOOLEAN a5);
     CRes* GetResObject(const CResRef& cResRef, USHORT nResType, BOOL bWarningIfMissing);
     RESID GetResID(CResRef cResRef, USHORT nResType);
     BOOL LocalGetFileStatus(const CString& sFileName, CFileStatus& rStatus);
     int LocalGetResourceSize(CRes* pRes);
+    int LocalReadResource(CRes* pRes, DWORD nNumberOfBytesToRead, DWORD nOffset);
     BOOL MemoryAlmostFull();
     void MoveRequests(int nOldPriority, int nNewPriority, int nCount);
+    void PartialServiceRequest(CRes* pRes, DWORD nBytesToRead);
     void ReduceFreedList(UINT a2);
     BOOL ReduceServicedList();
     int Release(CRes* pRes);
@@ -60,11 +65,14 @@ public:
     BOOL Resume();
     BOOL ResumeServicing();
     BOOL ServiceFromFile(CRes* pRes, CString a3);
+    void ServiceRequest(CRes* pRes, DWORD a2);
+    void ServiceRequest(CRes* pRes);
     void SetNewPriority(CRes* pRes, unsigned int nNewPriority);
     BOOL Suspend();
     void Update();
     BOOL WriteResourceWithData(const CString& sFileName, CRes* pRes, LPVOID lpBuf, DWORD dwSize);
     BOOL WriteSetUp(const CString& a2, CString& a3);
+    BOOL Alloc(CRes* pRes, DWORD nSize);
 
     /* 0000 */ int field_0;
     /* 0004 */ int field_4;

@@ -309,6 +309,14 @@ BOOL CDimm::CDScan(USHORT a2)
     return TRUE;
 }
 
+// 0x7828D0
+WORD CDimm::CDSwitch(WORD drive, CString& sDrive, BOOLEAN a3)
+{
+    // TODO: Incomplete.
+
+    return 0;
+}
+
 // 0x783920
 BOOL CDimm::CreateKeyTable()
 {
@@ -402,6 +410,180 @@ BOOL CDimm::CreateKeyTable()
     cResCache.RefreshStatus(CString(""));
 
     return TRUE;
+}
+
+// 0x783D00
+void* CDimm::Demand(CRes* pRes)
+{
+    void* pData = InternalDemand(pRes);
+
+    int v1 = 5;
+    while (field_CE == pRes) {
+        Release(pRes);
+        Dump(pRes, 1, 0);
+        pData = InternalDemand(pRes);
+
+        if (field_CE != pRes) {
+            break;
+        }
+
+        if (--v1 <= 0) {
+            return NULL;
+        }
+    }
+
+    if (pData != NULL) {
+        // __FILE__: C:\Projects\Icewind2\src\chitin\ChDimm.cpp
+        // __LINE__: 1255
+        UTIL_ASSERT(pRes != NULL);
+
+        if (pRes->field_14 >= 4) {
+            BYTE* pBytes = reinterpret_cast<BYTE*>(pData) + pRes->field_14 - 4;
+
+            int v2 = 5;
+            while (pBytes[0] == 'Y' && pBytes[1] == 'u' && pBytes[2] == 'k' && pBytes[3] == 'i') {
+                Release(pRes);
+                Dump(pRes, 1, 0);
+                pData = InternalDemand(pRes);
+
+                pBytes = reinterpret_cast<BYTE*>(pData) + pRes->field_14 - 4;
+                if (pBytes[0] != 'Y' || pBytes[1] != 'u' || pBytes[2] != 'k' || pBytes[3] != 'i') {
+                    break;
+                }
+
+                if (--v2 <= 0) {
+                    return NULL;
+                }
+            }
+        }
+    }
+
+    return pData;
+}
+
+// 0x783E00
+void* CDimm::InternalDemand(CRes* pRes)
+{
+    pRes->field_40++;
+    field_8++;
+    field_4 = 1;
+
+    RESID nResID = pRes->GetID();
+    if ((nResID >> 20) < m_nResFiles && (nResID & 0xFFF00000) < 0xFC000000) {
+        CResFile* pResFile = m_ppResFiles[nResID >> 20];
+        EnterCriticalSection(&(g_pChitin->field_35C));
+        while (g_pChitin->cDimm.cResCache.field_110 == 1) {
+            LeaveCriticalSection(&(g_pChitin->field_35C));
+            while (g_pChitin->cDimm.cResCache.field_110 == 1) {
+                SleepEx(50, 0);
+            }
+            EnterCriticalSection(&(g_pChitin->field_35C));
+        }
+
+        if (pResFile->m_nRefCount <= 0) {
+            pResFile->m_nRefCount = 0;
+            pResFile->OpenFile();
+        }
+
+        pResFile->m_nRefCount++;
+        LeaveCriticalSection(&(g_pChitin->field_35C));
+    }
+
+    if ((pRes->dwFlags & CRes::Flags::RES_FLAG_0x04) != 0
+        && pRes != field_CE
+        && (pRes->dwFlags & CRes::Flags::RES_FLAG_0x10) != 0) {
+        if (pRes != NULL) {
+            if ((pRes->dwFlags & (CRes::Flags::RES_FLAG_0x20 | CRes::Flags::RES_FLAG_0x40)) == 0) {
+                pRes->dwFlags |= CRes::Flags::RES_FLAG_0x20;
+            }
+        }
+
+        if (pRes->field_40 == 1) {
+            field_29C += pRes->field_14;
+        }
+
+        return pRes->m_pData;
+    }
+
+    EnterCriticalSection(&(g_pChitin->field_314));
+
+    if ((pRes->dwFlags & CRes::Flags::RES_FLAG_0x10) != 0) {
+        field_0 = 1;
+        if (pRes == field_CE) {
+            field_270 = field_CE;
+            PartialServiceRequest(field_CE, field_CE->field_14);
+        }
+
+        field_8--;
+        field_0 = 0;
+        field_4 = 0;
+        LeaveCriticalSection(&(g_pChitin->field_314));
+
+        EnterCriticalSection(&(g_pChitin->field_2FC));
+        if (field_270 == pRes) {
+            if (pRes != NULL) {
+                if ((pRes->dwFlags & CRes::Flags::RES_FLAG_0x04) != 0
+                    && (pRes->dwFlags & (CRes::Flags::RES_FLAG_0x20 | CRes::Flags::RES_FLAG_0x40)) == 0) {
+                    pRes->dwFlags |= CRes::Flags::RES_FLAG_0x20;
+                    pRes->OnResourceServiced();
+                    pRes->dwFlags &= ~CRes::Flags::RES_FLAG_0x20;
+                    pRes->dwFlags |= CRes::Flags::RES_FLAG_0x40;
+                }
+            }
+        }
+        LeaveCriticalSection(&(g_pChitin->field_2FC));
+        if (pRes->field_40 == 1) {
+            field_29C += pRes->field_14;
+        }
+        return pRes->m_pData;
+    } else if ((pRes->dwFlags & CRes::Flags::RES_FLAG_0x04) != 0) {
+        field_8--;
+        field_4 = 0;
+        LeaveCriticalSection(&(g_pChitin->field_314));
+
+        if (pRes != NULL) {
+            if ((pRes->dwFlags & CRes::Flags::RES_FLAG_0x04) != 0
+                && (pRes->dwFlags & (CRes::Flags::RES_FLAG_0x20 | CRes::Flags::RES_FLAG_0x40)) == 0) {
+                pRes->dwFlags |= CRes::Flags::RES_FLAG_0x20;
+                pRes->OnResourceFreed();
+                pRes->dwFlags &= ~CRes::Flags::RES_FLAG_0x20;
+                pRes->dwFlags |= CRes::Flags::RES_FLAG_0x40;
+            }
+        }
+
+        if (pRes->field_40 == 1) {
+            field_29C += pRes->field_14;
+        }
+
+        return pRes->m_pData;
+    } else {
+        field_270 = pRes;
+        ServiceRequest(pRes);
+
+        field_8--;
+        field_4 = 0;
+        LeaveCriticalSection(&(g_pChitin->field_314));
+
+        EnterCriticalSection(&(g_pChitin->field_2FC));
+        if (field_270 == pRes) {
+            if (pRes != NULL) {
+                if ((pRes->dwFlags & CRes::Flags::RES_FLAG_0x04) != 0
+                    && (pRes->dwFlags & (CRes::Flags::RES_FLAG_0x20 | CRes::Flags::RES_FLAG_0x40)) == 0) {
+                    pRes->dwFlags |= CRes::Flags::RES_FLAG_0x20;
+                    pRes->OnResourceServiced();
+                    pRes->dwFlags &= ~CRes::Flags::RES_FLAG_0x20;
+                    pRes->dwFlags |= CRes::Flags::RES_FLAG_0x40;
+                }
+            }
+        }
+        LeaveCriticalSection(&(g_pChitin->field_2FC));
+
+        if (pRes->field_40 == 1) {
+            field_29C += pRes->field_14;
+        }
+
+        return pRes->m_pData;
+    }
 }
 
 // 0x7840E0
@@ -719,11 +901,129 @@ CResFile* CDimm::GetResFilePtr(UINT a2)
 }
 
 // 0x786520
-BOOL CDimm::GetResFileName(UINT nIndex, CString& sResFileName, USHORT& nResType, BOOLEAN a5)
+BOOL CDimm::GetResFileName(UINT nIndex, CString& sResFileName, WORD& nDrive, BOOLEAN a5)
 {
-    // TODO: Incomplete.
+    CFileFind fileFind;
+    CString sDrive("");
+    CString sFileName;
+    CString sResolvedFileName;
 
-    return FALSE;
+    nDrive = 0;
+
+    if (!m_cKeyTable.m_bInitialized || nIndex >= m_cKeyTable.m_nResFiles) {
+        nDrive = 0;
+        return FALSE;
+    }
+
+    sFileName = reinterpret_cast<char*>(m_cKeyTable.m_pResFileNameEntries) + m_cKeyTable.m_pResFileNameEntries[nIndex].nFileNameOffset;
+
+    WORD drives = m_cKeyTable.m_pResFileNameEntries[nIndex].bDrives;
+    if ((drives & 1) != 0) {
+        CString sTemp;
+
+        sDrive = "hd0:";
+        sTemp = sDrive + "\\" + sFileName;
+        if (!g_pChitin->lAliases.ResolveFileName(sTemp, sResolvedFileName)) {
+            sResolvedFileName = sTemp;
+        }
+
+        if (fileFind.FindFile(sResolvedFileName)) {
+            nDrive = 1;
+        } else {
+            fileFind.Close();
+            sDrive = "";
+        }
+    }
+
+    if (sDrive.Compare("") == 0) {
+        if ((drives & 0x200) != 0) {
+            if (FindFileInDirectoryList(sFileName, sDrive) == TRUE) {
+                nDrive = 0x200;
+            }
+        }
+    }
+
+    if (sDrive.Compare("") == 0) {
+        BOOLEAN bFound = FALSE;
+
+        CDScan(drives);
+
+        WORD nDriveCandidate;
+        WORD v4 = drives & field_EA;
+        if ((v4 & 2) != 0) {
+            sDrive = "cd0:";
+            nDriveCandidate = 2;
+        } else if ((v4 & 4) != 0) {
+            sDrive = "cd1:";
+            nDriveCandidate = 4;
+        } else if ((v4 & 8) != 0) {
+            sDrive = "cd2:";
+            nDriveCandidate = 8;
+        } else if ((v4 & 16) != 0) {
+            sDrive = "cd3:";
+            nDriveCandidate = 16;
+        } else {
+            nDriveCandidate = 0;
+        }
+
+        if (nDriveCandidate != 0) {
+            if (!g_pChitin->lAliases.ResolveFileName(sDrive + "\\" + sFileName, sResolvedFileName)) {
+                sResolvedFileName = sFileName;
+            }
+
+            if (fileFind.FindFile(sResolvedFileName)) {
+                bFound = TRUE;
+                nDrive = nDriveCandidate;
+            } else {
+                CString sCopy(sResolvedFileName);
+
+                int pos = sCopy.ReverseFind('.');
+                sCopy.SetAt(++pos, 'c');
+                sCopy.SetAt(++pos, 'b');
+                sCopy.SetAt(++pos, 'f');
+
+                if (fileFind.FindFile(sCopy)) {
+                    pos = sFileName.ReverseFind('.');
+                    sFileName.SetAt(++pos, 'c');
+                    sFileName.SetAt(++pos, 'b');
+                    sFileName.SetAt(++pos, 'f');
+
+                    bFound = TRUE;
+                    nDrive = nDriveCandidate;
+                } else {
+                    fileFind.Close();
+                    sDrive = "";
+                }
+            }
+        }
+
+        if (!bFound) {
+            switch (CDSwitch(drives, sFileName, a5)) {
+            case 0:
+                exit(EXIT_SUCCESS);
+            case 2:
+                sDrive = "cd0:";
+                break;
+            case 4:
+                sDrive = "cd1:";
+                break;
+            case 8:
+                sDrive = "cd2:";
+                break;
+            case 16:
+                sDrive = "cd3:";
+                break;
+            }
+        }
+    }
+
+    if (sFileName.GetAt(0) == '\\' || sDrive.Right(1).Compare("\\") == 0) {
+        sResFileName.Format("%s%s", sDrive, sFileName);
+    } else {
+        sResFileName.Format("%s\\%s", sDrive, sFileName);
+    }
+
+    return TRUE;
 }
 
 // 0x786DF0
@@ -815,6 +1115,43 @@ int CDimm::LocalGetResourceSize(CRes* pRes)
     return size;
 }
 
+// 0x787180
+int CDimm::LocalReadResource(CRes* pRes, DWORD nNumberOfBytesToRead, DWORD nOffset)
+{
+    INT nBytesRead = 0;
+    CString sDirName;
+    CString sExt;
+    CString sFileName;
+    CFile file;
+    CResRef resRef;
+
+    if (pRes != NULL && pRes->m_pData != NULL) {
+        resRef = pRes->GetResRef();
+        if (resRef != "") {
+            g_pChitin->TranslateType(pRes->GetType(), sExt);
+
+            RESID nResID = pRes->GetID();
+            GetElementInDirectoryList(~nResID >> 20, sFileName);
+
+            sFileName = sDirName + resRef.GetResRef() + "." + sExt;
+
+            int nFixedOffset = pRes->GetFixedResourceDataOffset();
+            int nFixedSize = pRes->GetFixedResourceSize();
+            if (nFixedSize >= 0) {
+                nFixedOffset += nFixedSize * (pRes->GetID() & 0x3FFF);
+            }
+
+            if (file.Open(sFileName, CFile::OpenFlags::modeRead)) {
+                file.Seek(nOffset + nFixedOffset, CFile::SeekPosition::begin);
+                nBytesRead = file.Read(reinterpret_cast<BYTE*>(pRes->m_pData) + nOffset, nNumberOfBytesToRead);
+                file.Close();
+            }
+        }
+    }
+
+    return nBytesRead;
+}
+
 // #binary-identical
 // 0x787740
 BOOL CDimm::MemoryAlmostFull()
@@ -865,6 +1202,53 @@ void CDimm::MoveRequests(int nOldPriority, int nNewPriority, int nCount)
         // __LINE__: 4365
         UTIL_ASSERT(FALSE);
     }
+}
+
+// 0x787830
+void CDimm::PartialServiceRequest(CRes* pRes, DWORD nBytesToRead)
+{
+    EnterCriticalSection(&(g_pChitin->field_32C));
+
+    if (field_274 != NULL) {
+        RESID nResID = pRes->GetID();
+        if ((nResID >> 20) < m_nResFiles || (nResID & 0xFFF00000) >= 0xFC000000) {
+            DWORD nResSize = (nResID & 0xFFF00000) < 0xFC000000
+                ? m_ppResFiles[nResID >> 20]->GetFileSize(pRes->GetID())
+                : LocalGetResourceSize(pRes);
+            DWORD nRemaining = nResSize - field_D2;
+            if (nResSize != field_D2) {
+                if (nBytesToRead < nRemaining) {
+                    UINT nBytesRead = (nResID & 0xFFF00000) < 0xFC000000
+                        ? m_ppResFiles[nResID >> 20]->ReadResource(nResID, pRes->m_pData, nBytesToRead, field_D2)
+                        : LocalReadResource(pRes, nBytesToRead, field_D2);
+                    if (field_CE == pRes || field_CE == NULL) {
+                        field_CE = pRes;
+                        field_D2 += nBytesRead;
+                    }
+                } else {
+                    UINT nBytesRead = (nResID & 0xFFF00000) < 0xFC000000
+                        ? m_ppResFiles[nResID >> 20]->ReadResource(nResID, pRes->m_pData, nRemaining, field_D2)
+                        : LocalReadResource(pRes, nRemaining, field_D2);
+                    if (nBytesRead < nRemaining) {
+                        if (field_CE == pRes || field_CE == NULL) {
+                            field_CE = pRes;
+                            field_D2 += nBytesRead;
+                        }
+                    } else {
+                        if (field_CE == pRes || field_CE == NULL) {
+                            field_CE = NULL;
+                            field_D2 = nRemaining;
+
+                            pRes->dwFlags &= ~CRes::Flags::RES_FLAG_0x10;
+                            pRes->dwFlags |= CRes::Flags::RES_FLAG_0x04;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    LeaveCriticalSection(&(g_pChitin->field_32C));
 }
 
 // 0x7879C0
@@ -1121,7 +1505,7 @@ int CDimm::Request(CRes* pRes)
     return 0;
 }
 
-//
+// 0x7880E0
 BOOL CDimm::RequestsPending(int nPriority)
 {
     BOOL rc = FALSE;
@@ -1278,6 +1662,285 @@ BOOL CDimm::ServiceFromFile(CRes* pRes, CString a3)
     return TRUE;
 }
 
+// 0x788480
+void CDimm::ServiceRequest(CRes* pRes, DWORD nBytesToRead)
+{
+    if (field_274 == NULL) {
+        return;
+    }
+
+    if ((pRes->dwFlags & CRes::Flags::RES_FLAG_0x04) == 0) {
+        EnterCriticalSection(&(g_pChitin->field_2FC));
+
+        if (field_274 != NULL) {
+            RESID nResID = pRes->GetID();
+            if ((nResID >> 20) >= m_nResFiles
+                && ((nResID & 0xFFF00000) < 0xFC000000
+                    || (pRes->dwFlags & (CRes::Flags::RES_FLAG_0x04 | CRes::Flags::RES_FLAG_0x10)) != 0)) {
+                pRes->dwFlags &= ~CRes::Flags::RES_FLAG_0x10;
+                field_274 = NULL;
+            } else {
+                UINT nBytesRead = (nResID & 0xFFF00000) < 0xFC000000
+                    ? m_ppResFiles[nResID >> 20]->GetFileSize(pRes->GetID())
+                    : LocalGetResourceSize(pRes);
+
+                if (nBytesRead != 0) {
+                    pRes->field_14 = nBytesRead;
+                    if (Alloc(pRes, pRes->field_14)) {
+                        if (pRes->m_pCurrentListPos != NULL && pRes->m_pCurrentList != NULL) {
+                            pRes->m_pCurrentList->RemoveAt(pRes->m_pCurrentListPos);
+                            pRes->m_pCurrentList = NULL;
+                            pRes->m_pCurrentListPos = NULL;
+                        }
+
+                        pRes->dwFlags |= CRes::Flags::RES_FLAG_0x10;
+
+                        switch (pRes->dwFlags & 3) {
+                        case PRIORITY_MEDIUM:
+                            pRes->m_pCurrentList = &m_lServicedMedium;
+                            pRes->m_pCurrentListPos = m_lServicedMedium.AddTail(pRes);
+                            break;
+                        case PRIORITY_HIGH:
+                            pRes->m_pCurrentList = &m_lServicedHigh;
+                            pRes->m_pCurrentListPos = m_lServicedHigh.AddTail(pRes);
+                            break;
+                        default:
+                            pRes->m_pCurrentList = &m_lServicedLow;
+                            pRes->m_pCurrentListPos = m_lServicedLow.AddTail(pRes);
+                            break;
+                        }
+
+                        LeaveCriticalSection(&(g_pChitin->field_2FC));
+
+                        EnterCriticalSection(&(g_pChitin->field_32C));
+                        if (field_274 != NULL) {
+                            if (nBytesToRead < pRes->field_14) {
+                                UINT nBytesRead = (nResID & 0xFFF00000) < 0xFC000000
+                                    ? m_ppResFiles[nResID >> 20]->ReadResource(nResID, pRes->m_pData, nBytesToRead, 0)
+                                    : LocalReadResource(pRes, nBytesToRead, 0);
+                                if (field_CE == pRes || field_CE == NULL) {
+                                    field_CE = pRes;
+                                    field_D2 = nBytesRead;
+                                } else {
+                                    if (nBytesRead < pRes->field_14) {
+                                        if ((nResID & 0xFFF00000) < 0xFC000000) {
+                                            m_ppResFiles[nResID >> 20]->ReadResource(nResID, pRes->m_pData, pRes->field_14 - nBytesRead, 0);
+                                        } else {
+                                            LocalReadResource(pRes, pRes->field_14 - nBytesRead, 0);
+                                        }
+
+                                        pRes->dwFlags &= ~CRes::Flags::RES_FLAG_0x10;
+                                        pRes->dwFlags |= CRes::Flags::RES_FLAG_0x04;
+                                    }
+                                }
+                            } else {
+                                UINT nBytesRead = (nResID & 0xFFF00000) < 0xFC000000
+                                    ? m_ppResFiles[nResID >> 20]->ReadResource(nResID, pRes->m_pData, pRes->field_14, 0)
+                                    : LocalReadResource(pRes, pRes->field_14, 0);
+                                if (nBytesRead < pRes->field_14) {
+                                    if (field_CE == pRes || field_CE == NULL) {
+                                        field_CE = pRes;
+                                        field_D2 = nBytesRead;
+                                    } else {
+                                        UINT nMoreBytesRead = (nResID & 0xFFF00000) < 0xFC000000
+                                            ? m_ppResFiles[nResID >> 20]->ReadResource(nResID, pRes->m_pData, pRes->field_14 - nBytesRead, 0)
+                                            : LocalReadResource(pRes, pRes->field_14 - nBytesRead, 0);
+                                        pRes->dwFlags &= ~CRes::Flags::RES_FLAG_0x10;
+                                        pRes->dwFlags |= CRes::Flags::RES_FLAG_0x04;
+                                    }
+                                } else {
+                                    if (field_CE == pRes || field_CE == NULL) {
+                                        field_CE = NULL;
+                                        field_D2 = nBytesRead;
+                                        pRes->dwFlags &= ~CRes::Flags::RES_FLAG_0x10;
+                                        pRes->dwFlags |= CRes::Flags::RES_FLAG_0x04;
+                                    }
+                                }
+                            }
+                        }
+                        LeaveCriticalSection(&(g_pChitin->field_32C));
+                        return;
+                    }
+                }
+            }
+        }
+
+        LeaveCriticalSection(&(g_pChitin->field_2FC));
+    } else {
+        if (pRes->m_pCurrentList == &m_lRequestedHigh
+            || pRes->m_pCurrentList == &m_lRequestedMedium
+            || pRes->m_pCurrentList == &m_lRequestedLow) {
+            EnterCriticalSection(&(g_pChitin->field_2FC));
+
+            if (field_274 != NULL) {
+                if ((pRes->dwFlags & CRes::Flags::RES_FLAG_0x04) != 0) {
+                    if (pRes->m_pData != NULL) {
+                        if (pRes->m_pCurrentList == &m_lRequestedLow
+                            || pRes->m_pCurrentList == &m_lRequestedMedium
+                            || pRes->m_pCurrentList == &m_lRequestedLow) {
+                            if (pRes->m_pCurrentListPos != NULL && pRes->m_pCurrentList != NULL) {
+                                pRes->m_pCurrentList->RemoveAt(pRes->m_pCurrentListPos);
+                                pRes->m_pCurrentList = NULL;
+                                pRes->m_pCurrentListPos = NULL;
+                            }
+
+                            switch (pRes->dwFlags & 3) {
+                            case PRIORITY_MEDIUM:
+                                pRes->m_pCurrentList = &m_lServicedMedium;
+                                pRes->m_pCurrentListPos = m_lServicedMedium.AddTail(pRes);
+                                break;
+                            case PRIORITY_HIGH:
+                                pRes->m_pCurrentList = &m_lServicedHigh;
+                                pRes->m_pCurrentListPos = m_lServicedHigh.AddTail(pRes);
+                                break;
+                            default:
+                                pRes->m_pCurrentList = &m_lServicedLow;
+                                pRes->m_pCurrentListPos = m_lServicedLow.AddTail(pRes);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            LeaveCriticalSection(&(g_pChitin->field_2FC));
+        }
+    }
+}
+
+// 0x788860
+void CDimm::ServiceRequest(CRes* pRes)
+{
+    if (field_270 == NULL) {
+        return;
+    }
+
+    if ((pRes->dwFlags & CRes::Flags::RES_FLAG_0x04) == 0) {
+        EnterCriticalSection(&(g_pChitin->field_2FC));
+
+        if (field_270 == NULL) {
+            LeaveCriticalSection(&(g_pChitin->field_2FC));
+            return;
+        }
+
+        RESID nResID = pRes->GetID();
+        if ((nResID >> 20) >= m_nResFiles
+            && ((nResID & 0xFFF00000) < 0xFC000000
+                || (pRes->dwFlags & (CRes::Flags::RES_FLAG_0x04 | CRes::Flags::RES_FLAG_0x10)) != 0)) {
+            if ((pRes->dwFlags & CRes::Flags::RES_FLAG_0x10) != 0) {
+                // __FILE__: C:\Projects\Icewind2\src\chitin\ChDimm.cpp
+                // __LINE__: 6079
+                UTIL_ASSERT(FALSE);
+            }
+
+            LeaveCriticalSection(&(g_pChitin->field_2FC));
+            field_270 = NULL;
+            return;
+        }
+
+        pRes->field_14 = (nResID & 0xFFF00000) < 0xFC000000
+            ? m_ppResFiles[nResID >> 20]->GetFileSize(pRes->GetID())
+            : LocalGetResourceSize(pRes);
+
+        if (pRes->field_14 == 0 || !Alloc(pRes, pRes->field_14)) {
+            LeaveCriticalSection(&(g_pChitin->field_2FC));
+            field_270 = NULL;
+            return;
+        }
+
+        if (pRes->m_pCurrentListPos != NULL && pRes->m_pCurrentList != NULL) {
+            pRes->m_pCurrentList->RemoveAt(pRes->m_pCurrentListPos);
+            pRes->m_pCurrentList = NULL;
+            pRes->m_pCurrentListPos = NULL;
+        }
+
+        pRes->dwFlags |= CRes::Flags::RES_FLAG_0x10;
+
+        switch (pRes->dwFlags & 3) {
+        case PRIORITY_MEDIUM:
+            pRes->m_pCurrentList = &m_lServicedMedium;
+            pRes->m_pCurrentListPos = m_lServicedMedium.AddTail(pRes);
+            break;
+        case PRIORITY_HIGH:
+            pRes->m_pCurrentList = &m_lServicedHigh;
+            pRes->m_pCurrentListPos = m_lServicedHigh.AddTail(pRes);
+            break;
+        default:
+            pRes->m_pCurrentList = &m_lServicedLow;
+            pRes->m_pCurrentListPos = m_lServicedLow.AddTail(pRes);
+            break;
+        }
+
+        LeaveCriticalSection(&(g_pChitin->field_2FC));
+
+        EnterCriticalSection(&(g_pChitin->field_32C));
+        if (field_270 != NULL) {
+            UINT nBytesRead = (nResID & 0xFFF00000) < 0xFC000000
+                ? m_ppResFiles[nResID >> 20]->ReadResource(nResID, pRes->m_pData, pRes->field_14, 0)
+                : LocalReadResource(pRes, pRes->field_14, 0);
+            if (nBytesRead < pRes->field_14) {
+                if (field_CE == pRes || field_CE == NULL) {
+                    field_CE = pRes;
+                    field_D2 = nBytesRead;
+                } else {
+                    UINT nMoreBytesRead = (nResID & 0xFFF00000) < 0xFC000000
+                        ? m_ppResFiles[nResID >> 20]->ReadResource(nResID, pRes->m_pData, pRes->field_14 - nBytesRead, 0)
+                        : LocalReadResource(pRes, pRes->field_14 - nBytesRead, 0);
+                    pRes->dwFlags &= ~CRes::Flags::RES_FLAG_0x10;
+                    pRes->dwFlags |= CRes::Flags::RES_FLAG_0x04;
+                }
+            } else {
+                if (field_CE == pRes || field_CE == NULL) {
+                    field_CE = NULL;
+                    field_D2 = nBytesRead;
+                    pRes->dwFlags &= ~CRes::Flags::RES_FLAG_0x10;
+                    pRes->dwFlags |= CRes::Flags::RES_FLAG_0x04;
+                }
+            }
+        }
+        LeaveCriticalSection(&(g_pChitin->field_32C));
+    } else {
+        if (pRes->m_pCurrentList == &m_lRequestedHigh
+            || pRes->m_pCurrentList == &m_lRequestedMedium
+            || pRes->m_pCurrentList == &m_lRequestedLow) {
+            EnterCriticalSection(&(g_pChitin->field_2FC));
+
+            if (field_270 != NULL) {
+                if ((pRes->dwFlags & CRes::Flags::RES_FLAG_0x04) != 0) {
+                    if (pRes->m_pData != NULL) {
+                        if (pRes->m_pCurrentList == &m_lRequestedLow
+                            || pRes->m_pCurrentList == &m_lRequestedMedium
+                            || pRes->m_pCurrentList == &m_lRequestedLow) {
+                            if (pRes->m_pCurrentListPos != NULL && pRes->m_pCurrentList != NULL) {
+                                pRes->m_pCurrentList->RemoveAt(pRes->m_pCurrentListPos);
+                                pRes->m_pCurrentList = NULL;
+                                pRes->m_pCurrentListPos = NULL;
+                            }
+
+                            switch (pRes->dwFlags & 3) {
+                            case PRIORITY_MEDIUM:
+                                pRes->m_pCurrentList = &m_lServicedMedium;
+                                pRes->m_pCurrentListPos = m_lServicedMedium.AddTail(pRes);
+                                break;
+                            case PRIORITY_HIGH:
+                                pRes->m_pCurrentList = &m_lServicedHigh;
+                                pRes->m_pCurrentListPos = m_lServicedHigh.AddTail(pRes);
+                                break;
+                            default:
+                                pRes->m_pCurrentList = &m_lServicedLow;
+                                pRes->m_pCurrentListPos = m_lServicedLow.AddTail(pRes);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            LeaveCriticalSection(&(g_pChitin->field_2FC));
+        }
+    }
+}
+
 // #binary-identical
 // 0x788BE0
 void CDimm::SetNewPriority(CRes* pRes, unsigned int nNewPriority)
@@ -1367,7 +2030,126 @@ BOOL CDimm::Suspend()
 // 0x788CF0
 void CDimm::Update()
 {
-    // TODO: Incomplete.
+    CRes* pRes = NULL;
+    BOOL bContinue = TRUE;
+    BOOL bStop = FALSE;
+
+    if (!field_4) {
+        field_8++;
+        field_4 = 1;
+
+        while (bContinue && !g_pChitin->m_bExitRSThread && !field_0 && !bStop) {
+            EnterCriticalSection(&(g_pChitin->field_314));
+
+            DWORD nBytesRead = 0;
+            if (field_CE != NULL) {
+                field_274 = pRes;
+                PartialServiceRequest(field_CE, 310048);
+                nBytesRead = field_D2;
+            }
+
+            LeaveCriticalSection(&(g_pChitin->field_314));
+
+            EnterCriticalSection(&(g_pChitin->field_2FC));
+
+            if (field_274 == pRes) {
+                if (pRes != NULL) {
+                    if ((pRes->dwFlags & CRes::Flags::RES_FLAG_0x04) != 0
+                        && (pRes->dwFlags & (CRes::Flags::RES_FLAG_0x20 | CRes::Flags::RES_FLAG_0x40)) == 0) {
+                        pRes->dwFlags |= CRes::Flags::RES_FLAG_0x20;
+                        pRes->OnResourceServiced();
+                        pRes->dwFlags &= ~CRes::Flags::RES_FLAG_0x20;
+                        pRes->dwFlags |= CRes::Flags::RES_FLAG_0x40;
+                    }
+                }
+            }
+
+            while (nBytesRead < 30000 && !g_pChitin->m_bExitRSThread && !field_0 && field_DA < field_D6) {
+                if (!m_lRequestedHigh.IsEmpty()) {
+                    pRes = static_cast<CRes*>(m_lRequestedHigh.GetHead());
+                    field_274 = pRes;
+                    LeaveCriticalSection(&(g_pChitin->field_2FC));
+                    EnterCriticalSection(&(g_pChitin->field_314));
+                    if (field_274 == pRes) {
+                        ServiceRequest(pRes, 310048 - nBytesRead);
+                    }
+                    LeaveCriticalSection(&(g_pChitin->field_314));
+                    EnterCriticalSection(&(g_pChitin->field_2FC));
+                    nBytesRead += field_D2;
+                    if (field_274 == pRes) {
+                        if (pRes != NULL) {
+                            if ((pRes->dwFlags & CRes::Flags::RES_FLAG_0x04) != 0
+                                && (pRes->dwFlags & (CRes::Flags::RES_FLAG_0x20 | CRes::Flags::RES_FLAG_0x40)) == 0) {
+                                pRes->dwFlags |= CRes::Flags::RES_FLAG_0x20;
+                                pRes->OnResourceServiced();
+                                pRes->dwFlags &= ~CRes::Flags::RES_FLAG_0x20;
+                                pRes->dwFlags |= CRes::Flags::RES_FLAG_0x40;
+                            }
+                        }
+                    }
+                } else if (!m_lRequestedMedium.IsEmpty()) {
+                    pRes = static_cast<CRes*>(m_lRequestedMedium.GetHead());
+                    field_274 = pRes;
+                    LeaveCriticalSection(&(g_pChitin->field_2FC));
+                    EnterCriticalSection(&(g_pChitin->field_314));
+                    if (field_274 == pRes) {
+                        ServiceRequest(pRes, 310048 - nBytesRead);
+                    }
+                    LeaveCriticalSection(&(g_pChitin->field_314));
+                    EnterCriticalSection(&(g_pChitin->field_2FC));
+                    nBytesRead += field_D2;
+                    if (field_274 == pRes) {
+                        if (pRes != NULL) {
+                            if ((pRes->dwFlags & CRes::Flags::RES_FLAG_0x04) != 0
+                                && (pRes->dwFlags & (CRes::Flags::RES_FLAG_0x20 | CRes::Flags::RES_FLAG_0x40)) == 0) {
+                                pRes->dwFlags |= CRes::Flags::RES_FLAG_0x20;
+                                pRes->OnResourceServiced();
+                                pRes->dwFlags &= ~CRes::Flags::RES_FLAG_0x20;
+                                pRes->dwFlags |= CRes::Flags::RES_FLAG_0x40;
+                            }
+                        }
+                    }
+                } else if (!m_lRequestedLow.IsEmpty()) {
+                    pRes = static_cast<CRes*>(m_lRequestedLow.GetHead());
+                    field_274 = pRes;
+                    LeaveCriticalSection(&(g_pChitin->field_2FC));
+                    EnterCriticalSection(&(g_pChitin->field_314));
+                    if (field_274 == pRes) {
+                        ServiceRequest(pRes, 310048 - nBytesRead);
+                    }
+                    LeaveCriticalSection(&(g_pChitin->field_314));
+                    EnterCriticalSection(&(g_pChitin->field_2FC));
+                    nBytesRead += field_D2;
+                    if (field_274 == pRes) {
+                        if (pRes != NULL) {
+                            if ((pRes->dwFlags & CRes::Flags::RES_FLAG_0x04) != 0
+                                && (pRes->dwFlags & (CRes::Flags::RES_FLAG_0x20 | CRes::Flags::RES_FLAG_0x40)) == 0) {
+                                pRes->dwFlags |= CRes::Flags::RES_FLAG_0x20;
+                                pRes->OnResourceServiced();
+                                pRes->dwFlags &= ~CRes::Flags::RES_FLAG_0x20;
+                                pRes->dwFlags |= CRes::Flags::RES_FLAG_0x40;
+                            }
+                        }
+                    }
+                } else {
+                    bContinue = FALSE;
+                    break;
+                }
+            }
+
+            LeaveCriticalSection(&(g_pChitin->field_2FC));
+
+            if (field_DA > field_D6) {
+                ReduceFreedList(1200000);
+                if (field_DA > field_D6) {
+                    bStop = TRUE;
+                }
+            }
+        }
+
+        field_8--;
+        field_4 = 0;
+    }
 }
 
 // 0x789250
@@ -1383,4 +2165,72 @@ BOOL CDimm::WriteSetUp(const CString& a2, CString& a3)
     // TODO: Incomplete.
 
     return FALSE;
+}
+
+// 0x789710
+BOOL CDimm::Alloc(CRes* pRes, DWORD nSize)
+{
+    POSITION pos;
+
+    EnterCriticalSection(&(g_pChitin->field_2FC));
+
+    if (pRes->m_pData != NULL) {
+        // __FILE__: C:\Projects\Icewind2\src\chitin\ChDimm.cpp
+        // __LINE__: 7095
+        UTIL_ASSERT_MSG(pRes != NULL, "Attempting to free invalid resource.");
+
+        operator delete(pRes->m_pData);
+        pRes->m_pData = NULL;
+        field_DA -= pRes->field_14;
+    }
+
+    ReduceFreedList(1200000);
+
+    pos = m_lServicedLow.GetHeadPosition();
+    while (field_DA > field_D6 && pos != NULL) {
+        CRes* pRes = static_cast<CRes*>(m_lServicedLow.GetNext(pos));
+        if (pRes != NULL) {
+            if (pRes->field_40 == 0) {
+                if (pRes->OnResourceFreed()) {
+                    Dump(pRes, 1, 0);
+                    free(pRes);
+                } else {
+                    Dump(pRes, 0, 0);
+                }
+            }
+        }
+    }
+
+    pos = m_lServicedMedium.GetHeadPosition();
+    while (field_DA > field_D6 && pos != NULL) {
+        CRes* pRes = static_cast<CRes*>(m_lServicedMedium.GetNext(pos));
+        if (pRes != NULL) {
+            if (pRes->field_40 == 0) {
+                if (pRes->OnResourceFreed()) {
+                    Dump(pRes, 1, 0);
+                    free(pRes);
+                } else {
+                    Dump(pRes, 0, 0);
+                }
+            }
+        }
+    }
+
+    LeaveCriticalSection(&(g_pChitin->field_2FC));
+
+    if (field_DA > field_D6) {
+        return FALSE;
+    }
+
+    pRes->m_pData = operator new(nSize);
+    field_DA += nSize;
+    if (pRes->m_pData == NULL) {
+        return FALSE;
+    }
+
+    if (nSize >= 4) {
+        memcpy(reinterpret_cast<BYTE*>(pRes->m_pData) + nSize - 4, "Yuki", 4);
+    }
+
+    return TRUE;
 }

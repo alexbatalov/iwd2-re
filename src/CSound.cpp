@@ -240,6 +240,14 @@ void CSound::DestroyBuffer(LPDIRECTSOUNDBUFFER* soundBufferPtr)
     }
 }
 
+// 0x7A94F0
+BOOL CSound::ExclusivePlay(BOOL bReplay)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x7A9910
 BOOL CSound::ExclusiveStop()
 {

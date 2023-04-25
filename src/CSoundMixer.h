@@ -33,10 +33,12 @@ public:
     void SetPanRange(int nNewPanRange);
     void UpdateSoundList();
     void UpdateSoundPositions();
+    void UpdateQueue();
     void SetMusicPath(CString& sMusicPath);
     void SetMusicVolume(int nNewVolume);
     void StartSong(INT nSong, DWORD dwFlags);
     void StartSong(INT nSong, INT nSection, INT nPosition, DWORD dwFlags);
+    void StopMusic(BOOL bForce);
     void Lock();
     void Unlock();
     void UpdateMusic();
@@ -58,7 +60,7 @@ public:
     /* 0044 */ BOOL m_bInLoopingUpdate;
     /* 0048 */ BOOL m_bInPositionUpdate;
     /* 004C */ BOOL m_bInReleaseAll; // #guess
-    /* 0050 */ int field_50;
+    /* 0050 */ BOOL m_bInQueueUpdate;
     /* 0054 */ CObArray m_aChannels;
     /* 0068 */ CObList m_lLooping;
     /* 0084 */ CObList m_lVoices;
@@ -83,9 +85,9 @@ public:
     /* 0100 */ CDWordArray m_aMusicSlots;
     /* 0114 */ CString m_sMusicPath; // #guess
     /* 0118 */ BOOL m_bMusicInitialized;
-    /* 011C */ int field_11C;
+    /* 011C */ int m_nCurrentSong;
     /* 0120 */ int m_nNumSongs;
-    /* 0124 */ int field_124;
+    /* 0124 */ int m_nLastSong;
     /* 0128 */ CSoundProperties m_cSoundProperties; // #guess
     /* 013C */ IDirectSound3DListener* m_pDirectSound3DListener; // #guess
     /* 0140 */ DWORD m_dwEAXProperties;

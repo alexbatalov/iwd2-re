@@ -25,11 +25,16 @@ typedef struct KeyFileResFileName_st {
     WORD bDrives;
 } KEYFILE_RESFILENAME;
 
+#pragma pack(push)
+#pragma pack(2)
+
 typedef struct KeyFileKeyEntry_st {
     RESREF resRef;
     WORD nType;
     RESID nID;
 } KEYFILE_KEYENTRY;
+
+#pragma pack(pop)
 
 typedef struct biffHeader_st {
     DWORD dwFileType;

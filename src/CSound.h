@@ -21,6 +21,7 @@ public:
     BOOL Create2DBuffer(LPWAVEFORMATEX waveFormat);
     BOOL Create3DBuffer(LPWAVEFORMATEX waveFormat, float mix);
     void DestroyBuffer(LPDIRECTSOUNDBUFFER* soundBufferPtr);
+    BOOL ExclusivePlay(BOOL bReplay);
     BOOL ExclusiveStop();
     DWORD GetPlayTime();
     void ResetVolume();
