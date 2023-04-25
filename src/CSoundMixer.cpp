@@ -201,6 +201,9 @@ void CSoundMixer::GetListenPosition(CPoint& pos, LONG& posZ)
     posZ = m_nZCoordinate;
 }
 
+// NOTE: Window pointer can probably be upgraded to reference since it cannot be
+// null and should have attached HWND which is never validated.
+//
 // 0x7AB340
 void CSoundMixer::Initialize(CWnd* pWnd, int nNewMaxVoices, int nNewMaxChannels)
 {
@@ -232,18 +235,20 @@ void CSoundMixer::Initialize(CWnd* pWnd, int nNewMaxVoices, int nNewMaxChannels)
         return;
     }
 
-    m_hWnd = (HWND)pWnd;
+    m_hWnd = pWnd->m_hWnd;
 
     hr = m_pDirectSound->SetCooperativeLevel(m_hWnd, DSSCL_EXCLUSIVE);
     if (hr == DSERR_INVALIDPARAM || hr == DSERR_ALLOCATED) {
-        m_bMixerInitialized = 0;
+        m_bMixerInitialized = FALSE;
         return;
     }
 
     if (hr != DS_OK) {
-        m_bMixerInitialized = 0;
+        m_bMixerInitialized = FALSE;
         return;
     }
+
+    m_bMixerInitialized = TRUE;
 
     DSBUFFERDESC bufferDesc = { 0 };
     bufferDesc.dwSize = sizeof(bufferDesc);
@@ -251,7 +256,7 @@ void CSoundMixer::Initialize(CWnd* pWnd, int nNewMaxVoices, int nNewMaxChannels)
 
     hr = m_pDirectSound->CreateSoundBuffer(&bufferDesc, &m_pPrimarySoundBuffer, NULL);
     if (hr != DS_OK) {
-        m_bMixerInitialized = 0;
+        m_bMixerInitialized = FALSE;
         return;
     }
 
@@ -263,16 +268,16 @@ void CSoundMixer::Initialize(CWnd* pWnd, int nNewMaxVoices, int nNewMaxChannels)
     hr = m_pDirectSound->GetCaps(&caps);
     if (hr == DS_OK) {
         waveFormat.nSamplesPerSec = 22050;
-        waveFormat.wFormatTag = 1;
-        waveFormat.wBitsPerSample = (caps.dwSize & DSCAPS_PRIMARY16BIT) != 0 ? 16 : 8;
+        waveFormat.wFormatTag = WAVE_FORMAT_PCM;
+        waveFormat.wBitsPerSample = (caps.dwFlags & DSCAPS_PRIMARY16BIT) != 0 ? 16 : 8;
         waveFormat.cbSize = 0;
-        waveFormat.nChannels = (caps.dwSize & DSCAPS_PRIMARYSTEREO) != 0 ? 2 : 1;
+        waveFormat.nChannels = (caps.dwFlags & DSCAPS_PRIMARYSTEREO) != 0 ? 2 : 1;
         waveFormat.nBlockAlign = waveFormat.wBitsPerSample * waveFormat.nChannels / 8;
         waveFormat.nAvgBytesPerSec = waveFormat.nSamplesPerSec * waveFormat.nBlockAlign;
 
         hr = m_pPrimarySoundBuffer->SetFormat(&waveFormat);
         if (hr != DS_OK) {
-            m_bMixerInitialized = 0;
+            m_bMixerInitialized = FALSE;
             return;
         }
     }
