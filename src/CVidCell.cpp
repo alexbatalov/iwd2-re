@@ -1,6 +1,7 @@
 #include "CVidCell.h"
 
 #include "CUtil.h"
+#include "CVidMode.h"
 
 // 0x8BAC8C
 BOOL CVidCell::TRANSLUCENT_SHADOWS_ON = TRUE;
@@ -123,6 +124,29 @@ BOOL CVidCell::FrameSet(SHORT nFrame)
 {
     m_nCurrentFrame = nFrame;
     return TRUE;
+}
+
+// 0x7AE140
+void CVidCell::RestoreBackground(INT nFrom, INT nTo, const CRect& rClip)
+{
+    RECT srcRect;
+    srcRect.left = 0;
+    srcRect.top = 0;
+    srcRect.right = rClip.Width();
+    srcRect.bottom = rClip.Height();
+
+    do {
+        HRESULT hr = g_pChitin->cVideo.cVidBlitter.BltFast(g_pChitin->GetCurrentVideoMode()->m_pSurfaces[nTo],
+            rClip.left,
+            rClip.top,
+            g_pChitin->GetCurrentVideoMode()->m_pSurfaces[nFrom],
+            &srcRect,
+            DDBLTFAST_WAIT);
+        g_pChitin->GetCurrentVideoMode()->CheckResults(hr);
+        if (hr != DDERR_SURFACELOST && hr != DDERR_WASSTILLDRAWING) {
+            break;
+        }
+    } while (!g_pChitin->field_1932);
 }
 
 // 0x7AE210

@@ -16,6 +16,7 @@ public:
     void DeleteRangeAffects(USHORT nRangeId);
     BOOL FrameAdvance();
     BOOL FrameSet(SHORT nFrame);
+    void RestoreBackground(INT nFrom, INT nTo, const CRect& rClip);
     void RealizePalette(DWORD dwFlags);
     BOOL SequenceSet(SHORT nSequence);
     void AddResPaletteAffect(USHORT nAffectType, COLORREF rgbAffectColor, BYTE pulsePeriod);
