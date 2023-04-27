@@ -151,3 +151,44 @@ RGBQUAD CVidPalette::SetPaletteEntry(USHORT nEntry, COLORREF rgbColor)
     m_pPalette[nEntry].rgbBlue = GetBValue(rgbColor);
     return old;
 }
+
+// 0x7BF430
+BOOL CVidPalette::GetTint(CVIDPALETTE_COLOR& rgbTint, CVIDIMG_PALETTEAFFECT* pAffectArgs, INT& nShiftBack, INT& nMaxValue, DWORD dwFlags)
+{
+    CVidMode* pVidMode = g_pChitin->GetCurrentVideoMode();
+    COLORREF rgbGlobalTintColor = pVidMode->GetGlobalTintColor();
+
+    if ((dwFlags & 0x20000) != 0) {
+        if ((dwFlags & 0x10000) != 0) {
+            rgbTint.rgbRed = GetRValue(rgbGlobalTintColor) * GetRValue(pAffectArgs->rgbTintColor);
+            rgbTint.rgbGreen = GetGValue(rgbGlobalTintColor) * GetGValue(pAffectArgs->rgbTintColor);
+            rgbTint.rgbBlue = GetBValue(rgbGlobalTintColor) * GetBValue(pAffectArgs->rgbTintColor);
+            nShiftBack = 16;
+            nMaxValue = 255 * 255;
+            return TRUE;
+        } else {
+            rgbTint.rgbRed = GetRValue(pAffectArgs->rgbTintColor);
+            rgbTint.rgbGreen = GetGValue(pAffectArgs->rgbTintColor);
+            rgbTint.rgbBlue = GetBValue(pAffectArgs->rgbTintColor);
+            nShiftBack = 8;
+            nMaxValue = 255;
+            return TRUE;
+        }
+    } else {
+        if ((dwFlags & 0x10000) != 0) {
+            rgbTint.rgbRed = GetRValue(rgbGlobalTintColor);
+            rgbTint.rgbGreen = GetGValue(rgbGlobalTintColor);
+            rgbTint.rgbBlue = GetBValue(rgbGlobalTintColor);
+            nShiftBack = 8;
+            nMaxValue = 255;
+            return TRUE;
+        } else {
+            rgbTint.rgbRed = 1;
+            rgbTint.rgbGreen = 1;
+            rgbTint.rgbBlue = 1;
+            nShiftBack = 0;
+            nMaxValue = 1;
+            return FALSE;
+        }
+    }
+}
