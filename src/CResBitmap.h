@@ -7,6 +7,7 @@ class CResBitmap : public CRes {
 public:
     CResBitmap();
     ~CResBitmap();
+    BOOL GetPixelColor(INT nX, INT nY, RGBQUAD& color, BOOL bDoubleSize);
 
     /* 0050 */ int field_50;
     /* 0054 */ int field_54;

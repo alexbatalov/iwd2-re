@@ -2,6 +2,7 @@
 
 #include "CChitin.h"
 #include "CUtil.h"
+#include "CVidBitmap.h"
 #include "CVidMode.h"
 
 // 0x85E840
@@ -274,4 +275,23 @@ BOOL CVidPalette::GetLight(CVIDPALETTE_COLOR& rgbLight, CVIDIMG_PALETTEAFFECT* p
             return FALSE;
         }
     }
+}
+
+// 0x7BF7D0
+void CVidPalette::SetRange(USHORT nRange, USHORT nValue, CVidBitmap& bmpMasterPalette)
+{
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVidPal.cpp
+    // __LINE__: 934
+    UTIL_ASSERT(m_nType == TYPE_RANGE);
+
+    m_rangeColors[nRange] = nValue;
+
+    RGBQUAD* pTmpPalette = m_pPalette + 12 * nRange + 1;
+    bmpMasterPalette.pRes->Demand();
+    for (int nIndex = 0; nIndex < 12; nIndex++) {
+        bmpMasterPalette.GetPixelColor(*pTmpPalette++, nIndex, nValue, TRUE);
+    }
+    bmpMasterPalette.pRes->Release();
+
+    m_bSubRangesCalculated = FALSE;
 }

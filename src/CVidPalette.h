@@ -22,6 +22,8 @@ typedef struct {
     INT rgbBlue;
 } CVIDPALETTE_COLOR;
 
+class CVidBitmap;
+
 class CVidPalette {
 public:
     CVidPalette(USHORT nType = TYPE_RESOURCE);
@@ -36,6 +38,7 @@ public:
     BOOL GetTint(CVIDPALETTE_COLOR& rgbTint, CVIDIMG_PALETTEAFFECT* pAffectArgs, INT& nShiftBack, INT& nMaxValue, DWORD dwFlags);
     BOOL GetAdd(CVIDPALETTE_COLOR& rgbInv, CVIDIMG_PALETTEAFFECT* pAffectArgs, INT& nShiftBack, DWORD dwFlags);
     BOOL GetLight(CVIDPALETTE_COLOR& rgbLight, CVIDIMG_PALETTEAFFECT* pAffectArgs, DWORD dwFlags);
+    void SetRange(USHORT nRange, USHORT nValue, CVidBitmap& bmpMasterPalette);
 
     static const RGBQUAD CLEAR_RGBQUAD;
     static const RGBQUAD SHADOW_RGBQUAD;
