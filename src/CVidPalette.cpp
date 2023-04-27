@@ -233,3 +233,35 @@ BOOL CVidPalette::GetAdd(CVIDPALETTE_COLOR& rgbInv, CVIDIMG_PALETTEAFFECT* pAffe
         }
     }
 }
+
+// 0x7BF6C0
+BOOL CVidPalette::GetLight(CVIDPALETTE_COLOR& rgbLight, CVIDIMG_PALETTEAFFECT* pAffectArgs, DWORD dwFlags)
+{
+    BYTE nGammaCorrection = g_pChitin->GetCurrentVideoMode()->m_nGammaCorrection;
+
+    if ((dwFlags & 0x200000) != 0) {
+        if (nGammaCorrection != 0) {
+            rgbLight.rgbRed = GetRValue(pAffectArgs->rgbLightColor) + nGammaCorrection + 8;
+            rgbLight.rgbGreen = GetGValue(pAffectArgs->rgbLightColor) + nGammaCorrection + 8;
+            rgbLight.rgbBlue = GetBValue(pAffectArgs->rgbLightColor) + nGammaCorrection + 8;
+            return TRUE;
+        } else {
+            rgbLight.rgbRed = GetRValue(pAffectArgs->rgbLightColor) + 8;
+            rgbLight.rgbGreen = GetGValue(pAffectArgs->rgbLightColor) + 8;
+            rgbLight.rgbBlue = GetBValue(pAffectArgs->rgbLightColor) + 8;
+            return TRUE;
+        }
+    } else {
+        if (nGammaCorrection != 0) {
+            rgbLight.rgbRed = nGammaCorrection + 8;
+            rgbLight.rgbGreen = nGammaCorrection + 8;
+            rgbLight.rgbBlue = nGammaCorrection + 8;
+            return TRUE;
+        } else {
+            rgbLight.rgbRed = 8;
+            rgbLight.rgbGreen = 8;
+            rgbLight.rgbBlue = 8;
+            return FALSE;
+        }
+    }
+}

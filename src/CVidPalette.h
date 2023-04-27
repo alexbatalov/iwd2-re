@@ -34,6 +34,7 @@ public:
     RGBQUAD SetPaletteEntry(USHORT nEntry, COLORREF rgbColor);
     BOOL GetTint(CVIDPALETTE_COLOR& rgbTint, CVIDIMG_PALETTEAFFECT* pAffectArgs, INT& nShiftBack, INT& nMaxValue, DWORD dwFlags);
     BOOL GetAdd(CVIDPALETTE_COLOR& rgbInv, CVIDIMG_PALETTEAFFECT* pAffectArgs, INT& nShiftBack, DWORD dwFlags);
+    BOOL GetLight(CVIDPALETTE_COLOR& rgbLight, CVIDIMG_PALETTEAFFECT* pAffectArgs, DWORD dwFlags);
 
     static const RGBQUAD CLEAR_RGBQUAD;
     static const RGBQUAD SHADOW_RGBQUAD;
