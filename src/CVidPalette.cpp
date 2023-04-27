@@ -54,6 +54,16 @@ CVidPalette::~CVidPalette()
     }
 }
 
+// 0x7BEF00
+void CVidPalette::SetAUCounter()
+{
+    int nBase = m_nAUCounterBase;
+    if (nBase == 0) {
+        nBase = reinterpret_cast<int>(m_pPalette);
+    }
+    m_nAUCounter = nBase + g_pChitin->nAUCounter;
+}
+
 // 0x7BEF30
 void CVidPalette::SetType(USHORT nType)
 {

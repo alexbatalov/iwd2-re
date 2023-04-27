@@ -26,6 +26,7 @@ class CVidPalette {
 public:
     CVidPalette(USHORT nType = TYPE_RESOURCE);
     ~CVidPalette();
+    void SetAUCounter();
     void SetType(USHORT nType);
     INT GetReservedEntries(DWORD dwFlags);
     void Realize(DWORD* pDestPalette, INT nBpp, DWORD dwFlags, CVIDIMG_PALETTEAFFECT* pAffectArgs, DWORD nTransVal);
