@@ -160,6 +160,134 @@ BOOL CUIPanel::IsOver(const CPoint& pt)
     return rect.PtInRect(pt);
 }
 
+// 0x4D2D20
+BOOL CUIPanel::sub_4D2D20()
+{
+    if ((m_wFlags & 0x1) == 0) {
+        return FALSE;
+    }
+
+    m_wFlags &= ~0x1;
+    field_112 = TRUE;
+    return TRUE;
+}
+
+// 0x4D2D50
+BOOL CUIPanel::sub_4D2D50()
+{
+    if (!field_112) {
+        return FALSE;
+    }
+
+    m_wFlags |= 0x1;
+    field_112 = FALSE;
+
+    return TRUE;
+}
+
+// 0x4D2D80
+BOOL CUIPanel::OnLButtonDown(const CPoint& pt)
+{
+    if (!m_bActive) {
+        return FALSE;
+    }
+
+    POSITION pos = m_lControls.GetTailPosition();
+    while (pos != NULL) {
+        CUIControlBase* pControl = m_lControls.GetPrev(pos);
+        if (pt.x - m_ptOrigin.x >= pControl->m_nX
+            && pt.x - m_ptOrigin.x <= pControl->m_nX + pControl->m_nWidth
+            && pt.y - m_ptOrigin.y >= pControl->m_nY
+            && pt.y - m_ptOrigin.y <= pControl->m_nY + pControl->m_nHeight) {
+            if (pControl->IsOverPixel(pt - m_ptOrigin)) {
+                if (pControl->OnLButtonDown(pt - m_ptOrigin)) {
+                    return TRUE;
+                }
+            }
+        }
+    }
+
+    return FALSE;
+}
+
+// 0x4D2E60
+BOOL CUIPanel::OnLButtonDblClk(const CPoint& pt)
+{
+    if (!m_bActive) {
+        return FALSE;
+    }
+
+    POSITION pos = m_lControls.GetTailPosition();
+    while (pos != NULL) {
+        CUIControlBase* pControl = m_lControls.GetPrev(pos);
+        if (pt.x - m_ptOrigin.x >= pControl->m_nX
+            && pt.x - m_ptOrigin.x <= pControl->m_nX + pControl->m_nWidth
+            && pt.y - m_ptOrigin.y >= pControl->m_nY
+            && pt.y - m_ptOrigin.y <= pControl->m_nY + pControl->m_nHeight) {
+            if (pControl->IsOverPixel(pt - m_ptOrigin)) {
+                if (pControl->OnLButtonDblClk(pt - m_ptOrigin)) {
+                    return TRUE;
+                }
+            }
+        }
+    }
+
+    return FALSE;
+}
+
+// 0x4D2F40
+void CUIPanel::OnMouseMove(const CPoint& pt)
+{
+    if (!m_bActive) {
+        return;
+    }
+
+    if (!field_109) {
+        return;
+    }
+
+    POSITION pos = m_lControls.GetTailPosition();
+    while (pos != NULL) {
+        CUIControlBase* pControl = m_lControls.GetPrev(pos);
+        if (pControl->field_20) {
+            if (pt.x - m_ptOrigin.x >= pControl->m_nX
+                && pt.x - m_ptOrigin.x <= pControl->m_nX + pControl->m_nWidth
+                && pt.y - m_ptOrigin.y >= pControl->m_nY
+                && pt.y - m_ptOrigin.y <= pControl->m_nY + pControl->m_nHeight) {
+                if (pControl->IsOverPixel(pt - m_ptOrigin)) {
+                    pControl->OnMouseMove(pt - m_ptOrigin);
+                    return;
+                }
+            }
+        }
+    }
+}
+
+// 0x4D3020
+BOOL CUIPanel::OnRButtonDown(const CPoint& pt)
+{
+    if (!m_bActive) {
+        return FALSE;
+    }
+
+    POSITION pos = m_lControls.GetTailPosition();
+    while (pos != NULL) {
+        CUIControlBase* pControl = m_lControls.GetPrev(pos);
+        if (pt.x - m_ptOrigin.x >= pControl->m_nX
+            && pt.x - m_ptOrigin.x <= pControl->m_nX + pControl->m_nWidth
+            && pt.y - m_ptOrigin.y >= pControl->m_nY
+            && pt.y - m_ptOrigin.y <= pControl->m_nY + pControl->m_nHeight) {
+            if (pControl->IsOverPixel(pt - m_ptOrigin)) {
+                if (pControl->OnRButtonDown(pt - m_ptOrigin)) {
+                    return TRUE;
+                }
+            }
+        }
+    }
+
+    return FALSE;
+}
+
 // 0x4D3100
 void CUIPanel::Render()
 {

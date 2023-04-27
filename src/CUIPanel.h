@@ -19,6 +19,12 @@ public:
     BOOL RemoveControl(DWORD nID);
     CUIControlBase* GetControl(DWORD nID);
     BOOL IsOver(const CPoint& pt);
+    BOOL sub_4D2D20();
+    BOOL sub_4D2D50();
+    BOOL OnLButtonDown(const CPoint& pt);
+    BOOL OnLButtonDblClk(const CPoint& pt);
+    void OnMouseMove(const CPoint& pt);
+    BOOL OnRButtonDown(const CPoint& pt);
     void Render();
     void InvalidateRect(const RECT* pRect);
     void SetActive(BOOL bActive);
