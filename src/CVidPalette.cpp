@@ -192,3 +192,44 @@ BOOL CVidPalette::GetTint(CVIDPALETTE_COLOR& rgbTint, CVIDIMG_PALETTEAFFECT* pAf
         }
     }
 }
+
+// 0x7BF590
+BOOL CVidPalette::GetAdd(CVIDPALETTE_COLOR& rgbInv, CVIDIMG_PALETTEAFFECT* pAffectArgs, INT& nShiftBack, DWORD dwFlags)
+{
+    BYTE nBrightnessCorrection;
+    if (g_pChitin->cVideo.m_bIs3dAccelerated && (dwFlags & 0x8) != 0) {
+        nBrightnessCorrection = 0;
+    } else {
+        nBrightnessCorrection = g_pChitin->GetCurrentVideoMode()->m_nBrightnessCorrection;
+    }
+
+    if ((dwFlags & 0x40000) != 0) {
+        if (nBrightnessCorrection != 0) {
+            rgbInv.rgbRed = nBrightnessCorrection * GetRValue(pAffectArgs->rgbAddColor);
+            rgbInv.rgbGreen = nBrightnessCorrection * GetGValue(pAffectArgs->rgbAddColor);
+            rgbInv.rgbBlue = nBrightnessCorrection * GetBValue(pAffectArgs->rgbAddColor);
+            nShiftBack = 16;
+            return TRUE;
+        } else {
+            rgbInv.rgbRed = GetRValue(pAffectArgs->rgbAddColor);
+            rgbInv.rgbGreen = GetGValue(pAffectArgs->rgbAddColor);
+            rgbInv.rgbBlue = GetBValue(pAffectArgs->rgbAddColor);
+            nShiftBack = 8;
+            return TRUE;
+        }
+    } else {
+        if (nBrightnessCorrection != 0) {
+            rgbInv.rgbRed = ~nBrightnessCorrection;
+            rgbInv.rgbGreen = ~nBrightnessCorrection;
+            rgbInv.rgbBlue = ~nBrightnessCorrection;
+            nShiftBack = 8;
+            return TRUE;
+        } else {
+            rgbInv.rgbRed = 1;
+            rgbInv.rgbGreen = 1;
+            rgbInv.rgbBlue = 1;
+            nShiftBack = 0;
+            return FALSE;
+        }
+    }
+}
