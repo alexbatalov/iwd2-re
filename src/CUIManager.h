@@ -18,6 +18,7 @@ public:
     void fUninit();
     void AddPanel(UI_PANELHEADER* panelInfo);
     void ReorderPanelAfter(DWORD nID1, DWORD nID2);
+    void TimerAsynchronousUpdate();
     CUIPanel* GetPanel(DWORD nID);
     void SetCapture(CUIControlBase* pControl, unsigned char a3);
     void ClearTooltip();

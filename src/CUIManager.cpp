@@ -141,6 +141,42 @@ void CUIManager::ReorderPanelAfter(DWORD nID1, DWORD nID2)
     }
 }
 
+// 0x4D3F00
+void CUIManager::TimerAsynchronousUpdate()
+{
+    DWORD nID = -1;
+    if (m_bInitialized) {
+        if (field_18) {
+            POSITION pos = m_lPanels.GetHeadPosition();
+            while (pos != NULL) {
+                CUIPanel* pPanel = m_lPanels.GetNext(pos);
+                if (!pPanel->field_108) {
+                    if (g_pBaldurChitin->m_pObjectGame->m_cOptions.m_nTooltips == INT_MAX && !field_76) {
+                        continue;
+                    }
+
+                    CRect r(pPanel->m_ptOrigin, pPanel->m_size);
+                    pPanel->m_pManager->m_pWarp->NormalizePanelRect(pPanel->m_nID, r);
+                    if (!r.PtInRect(g_pBaldurChitin->field_1906)) {
+                        continue;
+                    }
+                }
+                nID = pPanel->TimerAsynchronousUpdate();
+            }
+
+            if (field_2D) {
+                field_1C++;
+            } else {
+                if (nID != field_32) {
+                    field_2D = TRUE;
+                    field_32 = -1;
+                    field_1C++;
+                }
+            }
+        }
+    }
+}
+
 // 0x4D4000
 CUIPanel* CUIManager::GetPanel(DWORD nID)
 {
