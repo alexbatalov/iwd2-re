@@ -47,6 +47,56 @@ WORD CResMosaic::GetTileSize(BOOL bDoubleSize)
     return m_pHeader->nTileSize;
 }
 
+// 0x7803A0
+BYTE* CResMosaic::GetTileData(UINT nTile, BOOL bDoubleSize)
+{
+    if (nTile >= m_pHeader->nXTiles * m_pHeader->nYTiles) {
+        return NULL;
+    }
+
+    if (!bDoubleSize) {
+        return m_pTileData + m_pOffsets[nTile];
+    }
+
+    if (m_pDimmKeyTableEntry->resRef == g_pChitin->cVideo.field_114
+        && m_pDimmKeyTableEntry->nResType == g_pChitin->cVideo.field_11C
+        && nTile == g_pChitin->cVideo.field_11E) {
+        return reinterpret_cast<BYTE*>(g_pChitin->cVideo.m_doubleSizeData);
+    }
+
+    g_pChitin->cVideo.field_114 = m_pDimmKeyTableEntry->resRef;
+    g_pChitin->cVideo.field_11C = m_pDimmKeyTableEntry->nResType;
+    g_pChitin->cVideo.field_11E = nTile;
+    g_pChitin->cVideo.SetDoubleSizeData(4 * m_pHeader->nTileSize * m_pHeader->nTileSize);
+
+    BYTE* pTileData = m_pTileData + m_pOffsets[nTile];
+    BYTE* pDoubleSizeTileData = reinterpret_cast<BYTE*>(g_pChitin->cVideo.m_doubleSizeData);
+
+    WORD nTileWidth = m_pHeader->nWidth - m_pHeader->nTileSize * (nTile % m_pHeader->nXTiles);
+    if (nTileWidth >= m_pHeader->nTileSize) {
+        nTileWidth = m_pHeader->nTileSize;
+    }
+
+    WORD nTileHeight = m_pHeader->nHeight - m_pHeader->nTileSize * (nTile / m_pHeader->nXTiles);
+    if (nTileHeight >= m_pHeader->nTileSize) {
+        nTileHeight = m_pHeader->nTileSize;
+    }
+
+    WORD nOffset = 2 * nTileWidth;
+    for (WORD y = 0; y < nTileHeight; y++) {
+        for (WORD x = 0; x < nTileWidth; x++) {
+            BYTE byte = *pTileData++;
+            pDoubleSizeTileData[0] = byte;
+            pDoubleSizeTileData[nOffset] = byte;
+            pDoubleSizeTileData[1] = byte;
+            pDoubleSizeTileData[nOffset] = byte;
+            pDoubleSizeTileData += 2;
+        }
+    }
+
+    return reinterpret_cast<BYTE*>(g_pChitin->cVideo.m_doubleSizeData);
+}
+
 // 0x780530
 RGBQUAD* CResMosaic::GetTilePalette(UINT nTile)
 {

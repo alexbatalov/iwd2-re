@@ -13,6 +13,7 @@ public:
     WORD GetMosaicWidth(BOOL bDoubleSize);
     WORD GetMosaicHeight(BOOL bDoubleSize);
     WORD GetTileSize(BOOL bDoubleSize);
+    BYTE* GetTileData(UINT nTile, BOOL bDoubleSize);
     RGBQUAD* GetTilePalette(UINT nTile);
     void* Demand();
     int Release();
