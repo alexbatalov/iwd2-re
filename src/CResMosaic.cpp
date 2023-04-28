@@ -93,17 +93,17 @@ BOOL CResMosaic::Parse(void* pData)
     }
 
     m_pHeader = reinterpret_cast<MOSAICHEADER*>(pData);
-    if (m_pHeader->nFileType != 'MOS ') {
+    if (memcmp(&(m_pHeader->nFileType), "MOS ", 4) != 0) {
         return FALSE;
     }
 
-    if (m_pHeader->nFileVersion != 'V1  ') {
+    if (memcmp(&(m_pHeader->nFileVersion), "V1  ", 4) != 0) {
         return FALSE;
     }
 
     m_pPalettes = reinterpret_cast<RGBQUAD*>(reinterpret_cast<unsigned char*>(pData) + m_pHeader->nPaletteOffset);
-    m_pOffsets = reinterpret_cast<DWORD*>(reinterpret_cast<unsigned char*>(pData) + 1024 * m_pHeader->nXTiles * m_pHeader->nYTiles);
-    m_pTileData = reinterpret_cast<BYTE*>(reinterpret_cast<unsigned char*>(m_pOffsets) + 4 * m_pHeader->nXTiles * m_pHeader->nYTiles);
+    m_pOffsets = reinterpret_cast<DWORD*>(reinterpret_cast<unsigned char*>(m_pPalettes) + sizeof(RGBQUAD) * 256 * m_pHeader->nXTiles * m_pHeader->nYTiles);
+    m_pTileData = reinterpret_cast<BYTE*>(reinterpret_cast<unsigned char*>(m_pOffsets) + sizeof(DWORD) * m_pHeader->nXTiles * m_pHeader->nYTiles);
 
     m_bParsed = TRUE;
 
