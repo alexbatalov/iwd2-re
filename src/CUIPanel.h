@@ -17,6 +17,7 @@ public:
     ~CUIPanel();
     void AddControl(UI_CONTROL* controlInfo);
     BOOL RemoveControl(DWORD nID);
+    DWORD TimerAsynchronousUpdate();
     CUIControlBase* GetControl(DWORD nID);
     BOOL IsOver(const CPoint& pt);
     BOOL sub_4D2D20();

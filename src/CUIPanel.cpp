@@ -1,6 +1,8 @@
 #include "CUIPanel.h"
 
+#include "CBaldurChitin.h"
 #include "CBaldurEngine.h"
+#include "CInfGame.h"
 #include "CUIControlBase.h"
 #include "CUIManager.h"
 #include "CUtil.h"
@@ -136,6 +138,37 @@ BOOL CUIPanel::RemoveControl(DWORD nID)
     }
 
     return TRUE;
+}
+
+// 0x4D2B90
+DWORD CUIPanel::TimerAsynchronousUpdate()
+{
+    DWORD nID = -1;
+
+    if (m_bActive || m_bInactiveRender) {
+        CPoint pt = g_pBaldurChitin->field_1906 - m_ptOrigin;
+
+        POSITION pos = m_lControls.GetHeadPosition();
+        while (pos != NULL) {
+            CUIControlBase* pControl = m_lControls.GetNext(pos);
+            if (pControl->m_bActive
+                && (g_pBaldurChitin->m_pObjectGame->m_cOptions.m_nTooltips != INT_MAX || m_pManager->field_76)
+                && pt.x >= pControl->m_nX && pt.x <= pControl->m_nX + pControl->m_nWidth
+                && pt.y >= pControl->m_nY && pt.y <= pControl->m_nY + pControl->m_nHeight) {
+                pControl->TimerAsynchronousUpdate(TRUE);
+                nID = pControl->m_nID;
+            } else if (pControl->field_1F) {
+                BOOLEAN bInside = FALSE;
+                if (pt.x >= pControl->m_nX && pt.x <= pControl->m_nX + pControl->m_nWidth
+                    && pt.y >= pControl->m_nY && pt.y <= pControl->m_nY + pControl->m_nHeight) {
+                    bInside = TRUE;
+                }
+                pControl->TimerAsynchronousUpdate(bInside);
+            }
+        }
+    }
+
+    return nID;
 }
 
 // 0x4D2CA0
