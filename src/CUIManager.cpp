@@ -240,7 +240,33 @@ void CUIManager::OnLButtonDblClk(CPoint pt)
 // 0x4D43D0
 void CUIManager::OnRButtonDown(CPoint pt)
 {
-    // TODO: Incomplete.
+    if (m_bInitialized) {
+        if (field_18) {
+            if (m_pFocusedControl != NULL) {
+                if (field_2C != 2) {
+                    return;
+                }
+
+                m_pFocusedControl->OnRButtonDown(pt - m_pFocusedControl->m_pPanel->m_ptOrigin);
+            }
+
+            if (!field_0) {
+                POSITION pos = m_lPanels.GetTailPosition();
+                while (pos != NULL) {
+                    CUIPanel* pPanel = m_lPanels.GetPrev(pos);
+                    CRect r(pPanel->m_ptOrigin, pPanel->m_size);
+                    pPanel->m_pManager->m_pWarp->NormalizePanelRect(pPanel->m_nID, r);
+                    if (r.PtInRect(pt)) {
+                        if (pPanel->m_bActive) {
+                            if (pPanel->OnRButtonDown(pt)) {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 // 0x4D44B0
