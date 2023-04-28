@@ -3,13 +3,19 @@
 // 0x596C10
 CInfCursor::CInfCursor()
 {
-    // TODO: Incomplete.
+    field_0 = 0;
+    field_9F2 = 0;
+    field_9EE = 0;
+    field_A02 = NULL;
+    field_9FA = 0;
+    m_nState = 0;
+    field_A06 = 0;
+    field_9F6 = -1;
 }
 
 // 0x596CD0
 CInfCursor::~CInfCursor()
 {
-    // TODO: Incomplete.
 }
 
 // 0x597020
