@@ -1,6 +1,7 @@
 #include "CUIManager.h"
 
 #include "CBaldurChitin.h"
+#include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CResUI.h"
 #include "CUIControlBase.h"
@@ -209,7 +210,19 @@ void CUIManager::SetCapture(CUIControlBase* pControl, unsigned char a3)
 // 0x4D4060
 void CUIManager::ClearTooltip()
 {
-    // TODO: Incomplete.
+    field_1C = 0;
+    field_76 = 0;
+
+    CInfCursor* pCursor = g_pBaldurChitin->m_pObjectCursor;
+    if (pCursor->field_A02 != NULL) {
+        pCursor->field_A02->ResetToolTip();
+        pCursor->field_A02 = NULL;
+    }
+
+    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+    if (pGame->field_1BA1 == 101) {
+        pGame->field_1BA1 = 4;
+    }
 }
 
 // 0x4D40B0
