@@ -73,10 +73,10 @@ void* CRes::Demand()
             CSingleLock lock(&field_20, FALSE);
             lock.Lock(INFINITE);
 
-            unsigned char* pBytes = reinterpret_cast<unsigned char*>(pData);
+            unsigned char* pBytes = reinterpret_cast<unsigned char*>(m_pData);
             if (*(pBytes + 3) == 'C') {
                 DWORD nSizeNew = *(reinterpret_cast<DWORD*>(pBytes + 8)) + 1;
-                void* pDataNew = operator new(nSizeNew);
+                void* pDataNew = malloc(nSizeNew);
 
                 // __FILE__: C:\Projects\Icewind2\src\chitin\ChDataTypes.cpp
                 // __LINE__: 251
@@ -87,7 +87,7 @@ void* CRes::Demand()
                     &nResSizeActual,
                     pBytes + 12,
                     field_14 - 12);
-                operator delete(m_pData);
+                free(m_pData);
 
                 if (err != 0) {
                     CString sErr(" ");
@@ -102,6 +102,7 @@ void* CRes::Demand()
                 // __LINE__: 263
                 UTIL_ASSERT_MSG(nSizeNew - 1 == nResSizeActual, "Uncompression Error: uncompressed data size does not match requested size");
 
+                pData = pDataNew;
                 m_pData = pDataNew;
                 m_nResSizeActual = nResSizeActual;
             }

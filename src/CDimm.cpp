@@ -2179,7 +2179,7 @@ BOOL CDimm::Alloc(CRes* pRes, DWORD nSize)
         // __LINE__: 7095
         UTIL_ASSERT_MSG(pRes != NULL, "Attempting to free invalid resource.");
 
-        operator delete(pRes->m_pData);
+        free(pRes->m_pData);
         pRes->m_pData = NULL;
         field_DA -= pRes->field_14;
     }
@@ -2222,7 +2222,7 @@ BOOL CDimm::Alloc(CRes* pRes, DWORD nSize)
         return FALSE;
     }
 
-    pRes->m_pData = operator new(nSize);
+    pRes->m_pData = malloc(nSize);
     field_DA += nSize;
     if (pRes->m_pData == NULL) {
         return FALSE;
