@@ -125,6 +125,9 @@ public:
     /* 0128 */ virtual int GetTextureId();
     /* 012C */ virtual BOOL ActivateVideoMode3d(CVidMode* pPrevVidMode, HWND hWnd, BOOLEAN bFullscreen);
 
+    // NOTE: Can be seen via assertion in `CVidMosaic::Render`.
+    INT GetNumSurfaces() { return m_nSurfaces; }
+
     /* 0004 */ int field_4;
     /* 0008 */ int m_nPointerNumber; // #guess
     /* 000C */ int field_C;
@@ -147,7 +150,7 @@ public:
     /* 0094 */ int field_94;
     /* 0098 */ int field_98;
     /* 009C */ UINT m_nSurfaces;
-    /* 00A0 */ IDirectDrawSurface** m_pSurfaces;
+    /* 00A0 */ IDirectDrawSurface** pSurfaces;
     /* 00A4 */ COLORREF rgbGlobalTint;
     /* 00A8 */ BYTE m_nBrightnessCorrection;
     /* 00A9 */ BYTE m_nGammaCorrection;

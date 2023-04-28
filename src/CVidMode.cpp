@@ -51,7 +51,7 @@ CVidMode::CVidMode()
     field_94 = 0;
     m_pPointerVidCell = NULL;
     m_bPointerAnimating = FALSE;
-    m_pSurfaces = NULL;
+    pSurfaces = NULL;
     field_E4.left = 0;
     field_E4.top = 0;
     field_E4.right = 0;
@@ -658,7 +658,7 @@ BOOL CVidMode::EraseScreen(UINT nSurface, COLORREF rgbColor)
         return FALSE;
     }
 
-    IDirectDrawSurface* pSurface = m_pSurfaces[nSurface];
+    IDirectDrawSurface* pSurface = pSurfaces[nSurface];
     if (pSurface == NULL) {
         return FALSE;
     }
@@ -731,7 +731,7 @@ BOOL CVidMode::RenderPoly(UINT nSurface, CRect& a3, POINT* apt, int cpt, COLORRE
         return FALSE;
     }
 
-    IDirectDrawSurface* pSurface = m_pSurfaces[nSurface];
+    IDirectDrawSurface* pSurface = pSurfaces[nSurface];
     if (pSurface == NULL) {
         return FALSE;
     }
@@ -813,7 +813,7 @@ BOOL CVidMode::LockSurface(UINT nIndex, LPDDSURFACEDESC pSurfaceDesc, const CRec
         return FALSE;
     }
 
-    IDirectDrawSurface* pSurface = m_pSurfaces[nIndex];
+    IDirectDrawSurface* pSurface = pSurfaces[nIndex];
     if (pSurface == NULL) {
         return FALSE;
     }
@@ -892,7 +892,7 @@ BOOL CVidMode::UnLockSurface(UINT nIndex, LPVOID lpSurfaceData)
         return FALSE;
     }
 
-    IDirectDrawSurface* pSurface = m_pSurfaces[nIndex];
+    IDirectDrawSurface* pSurface = pSurfaces[nIndex];
     if (pSurface == NULL) {
         return FALSE;
     }

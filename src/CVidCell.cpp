@@ -136,10 +136,10 @@ void CVidCell::RestoreBackground(INT nFrom, INT nTo, const CRect& rClip)
     srcRect.bottom = rClip.Height();
 
     do {
-        HRESULT hr = g_pChitin->cVideo.cVidBlitter.BltFast(g_pChitin->GetCurrentVideoMode()->m_pSurfaces[nTo],
+        HRESULT hr = g_pChitin->cVideo.cVidBlitter.BltFast(g_pChitin->GetCurrentVideoMode()->pSurfaces[nTo],
             rClip.left,
             rClip.top,
-            g_pChitin->GetCurrentVideoMode()->m_pSurfaces[nFrom],
+            g_pChitin->GetCurrentVideoMode()->pSurfaces[nFrom],
             &srcRect,
             DDBLTFAST_WAIT);
         g_pChitin->GetCurrentVideoMode()->CheckResults(hr);

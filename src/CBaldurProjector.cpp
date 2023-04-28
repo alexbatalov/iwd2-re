@@ -12,7 +12,7 @@
 // 0x43E300
 void CBaldurProjector::sub_43E300(HBINK bnk)
 {
-    LPDIRECTDRAWSURFACE pSurface = g_pChitin->pActiveEngine->pVidMode->m_pSurfaces[CVIDINF_SURFACE_BACK];
+    LPDIRECTDRAWSURFACE pSurface = g_pChitin->pActiveEngine->pVidMode->pSurfaces[CVIDINF_SURFACE_BACK];
 
     DDSURFACEDESC surfaceDesc;
     surfaceDesc.dwSize = sizeof(surfaceDesc);
