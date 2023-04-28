@@ -28,7 +28,7 @@ public:
     /* 0024 */ virtual BOOL OnRButtonDown(CPoint pt);
     /* 0028 */ virtual void OnRButtonUp(CPoint pt);
     /* 002C */ virtual void OnKeyDown(short nKey);
-    /* 0030 */ virtual void TimerAsynchronousUpdate(unsigned char a2);
+    /* 0030 */ virtual void TimerAsynchronousUpdate(BOOLEAN bInside);
     /* 0034 */ virtual int GetToolTipStrRef();
     /* 0038 */ virtual int GetSecondaryToolTipStrRef();
     /* 003C */ virtual int GetTertiaryToolTipStrRef();
@@ -56,7 +56,7 @@ public:
     /* 0022 */ CRect field_22;
     /* 0032 */ int m_bInactiveRender; // #guess
     /* 0036 */ int field_36;
-    /* 003A */ int field_3A;
+    /* 003A */ BOOL m_bToolTipActive;
     /* 003E */ int m_nToolTipStrRef; // #guess
     /* 0042 */ int m_nSecondaryToolTipStrRef; // #guess
     /* 0046 */ int m_nTertiaryToolTipStrRef; // #guess

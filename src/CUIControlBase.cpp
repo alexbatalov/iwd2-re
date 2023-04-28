@@ -2,6 +2,7 @@
 
 #include "CBaldurChitin.h"
 #include "CInfCursor.h"
+#include "CInfGame.h"
 #include "CUIManager.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -49,7 +50,7 @@ CUIControlBase::CUIControlBase(CUIPanel* pPanel, UI_CONTROL* controlInfo, int a4
     field_36 = a4;
     field_20 = 0;
     m_bInactiveRender = FALSE;
-    field_3A = 0;
+    m_bToolTipActive = FALSE;
     m_nToolTipHotKeyIndex1 = -1;
     m_nToolTipHotKeyIndex2 = -1;
     m_sKey = "";
@@ -128,9 +129,24 @@ void CUIControlBase::OnKeyDown(short nKey)
 }
 
 // 0x4D25B0
-void CUIControlBase::TimerAsynchronousUpdate(unsigned char a2)
+void CUIControlBase::TimerAsynchronousUpdate(BOOLEAN bInside)
 {
-    // TODO: Incomplete.
+    if (m_bActive || m_bInactiveRender) {
+        if (bInside) {
+            if (m_bActive || m_bInactiveRender) {
+                if (m_pPanel->m_bActive) {
+                    if (!m_bToolTipActive || g_pBaldurChitin->m_pObjectCursor->field_9F6 != 101) {
+                        if (m_pPanel->m_pManager->field_76
+                            || (g_pBaldurChitin->m_pObjectGame->m_cOptions.m_nTooltips != INT_MAX
+                                && m_pPanel->m_pManager->field_1C >= g_pBaldurChitin->m_pObjectGame->m_cOptions.m_nTooltips)) {
+                            ActivateToolTip();
+                            m_bToolTipActive = TRUE;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 // 0x4D2500
@@ -156,7 +172,7 @@ int CUIControlBase::GetTertiaryToolTipStrRef()
 // 0x4D2520
 void CUIControlBase::ResetToolTip()
 {
-    field_3A = 0;
+    m_bToolTipActive = FALSE;
 }
 
 // 0x4D26C0
