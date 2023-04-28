@@ -92,6 +92,7 @@ BYTE* CResMosaic::GetTileData(UINT nTile, BOOL bDoubleSize)
             pDoubleSizeTileData[nOffset] = byte;
             pDoubleSizeTileData += 2;
         }
+        pDoubleSizeTileData += nOffset;
     }
 
     return reinterpret_cast<BYTE*>(g_pChitin->cVideo.m_doubleSizeData);
