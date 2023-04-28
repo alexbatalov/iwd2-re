@@ -328,9 +328,37 @@ void CUIPanel::Render()
 }
 
 // 0x4D3810
-void CUIPanel::InvalidateRect(const RECT* pRect)
+void CUIPanel::InvalidateRect(const CRect* pRect)
 {
-    // TODO: Incomplete.
+    if (m_bActive || m_bInactiveRender) {
+        CRect r;
+        if (pRect != NULL) {
+            r.IntersectRect(pRect, CRect(m_ptOrigin, m_size));
+            if (r.IsRectEmpty()) {
+                return;
+            }
+        }
+
+        if (m_nRenderCount == 0) {
+            m_rDirty.SetRect(0, 0, 0, 0);
+        }
+
+        CSingleLock lock(&(m_pManager->field_56), FALSE);
+        lock.Lock(INFINITE);
+        m_nRenderCount = CBaldurChitin::RENDER_COUNT;
+        lock.Unlock();
+
+        if (pRect != NULL) {
+            r.OffsetRect(-m_ptOrigin);
+            m_rDirty.UnionRect(m_rDirty, r);
+        } else {
+            m_rDirty.SetRect(0, 0, m_size.cx, m_size.cy);
+        }
+
+        if (m_pManager != NULL) {
+            m_pManager->m_pWarp->NormalizePanelRect(m_nID, m_rDirty);
+        }
+    }
 }
 
 // 0x4D3980

@@ -27,7 +27,7 @@ public:
     void OnMouseMove(const CPoint& pt);
     BOOL OnRButtonDown(const CPoint& pt);
     void Render();
-    void InvalidateRect(const RECT* pRect);
+    void InvalidateRect(const CRect* pRect);
     void SetActive(BOOL bActive);
 
     /* 0000 */ CUIManager* m_pManager; // #guess
