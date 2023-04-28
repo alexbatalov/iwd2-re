@@ -71,6 +71,20 @@ FRAMEENTRY* CResCell::GetFrame(WORD nSequence, WORD nFrame, BOOL bDoubleSize)
     return &m_doubleSizeFrameEntry;
 }
 
+// 0x77F5C0
+BOOL CResCell::GetCompressed(FRAMEENTRY* pFrame, BOOL bDoubleSize)
+{
+    if (pFrame == NULL) {
+        return FALSE;
+    }
+
+    if (bDoubleSize) {
+        return FALSE;
+    }
+
+    return (pFrame->nOffset & 0x80000000) != 0x80000000;
+}
+
 // 0x77F820
 int CResCell::Release()
 {
