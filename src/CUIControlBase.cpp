@@ -28,7 +28,7 @@ CUIControlBase::CUIControlBase(CUIPanel* pPanel, UI_CONTROL* controlInfo, int a4
     m_pPanel = pPanel;
     m_nID = controlInfo->nID;
 
-    if (pPanel->m_pManager->field_AA) {
+    if (pPanel->m_pManager->m_bDoubleSize) {
         m_nX = controlInfo->x * 2;
         m_nY = controlInfo->y * 2;
         m_nWidth = controlInfo->nWidth * 2;

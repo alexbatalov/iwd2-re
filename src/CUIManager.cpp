@@ -29,7 +29,7 @@ CUIManager::CUIManager()
     field_7A.SetRect(0, 0, 0, 0);
     field_8A.SetRect(0, 0, 0, 0);
     field_9A.SetRect(0, 0, 0, 0);
-    field_AA = 0;
+    m_bDoubleSize = FALSE;
 }
 
 // 0x4D3AB0
@@ -39,7 +39,7 @@ CUIManager::~CUIManager()
 }
 
 // 0x4D3B80
-void CUIManager::fInit(CWarp* pWarp, CResRef cResRef, BOOL a5)
+void CUIManager::fInit(CWarp* pWarp, CResRef cResRef, BOOL bDoubleSize)
 {
     if (m_bInitialized != TRUE) {
         m_cResRef = cResRef;
@@ -61,7 +61,7 @@ void CUIManager::fInit(CWarp* pWarp, CResRef cResRef, BOOL a5)
 
         CResUI* pRes = static_cast<CResUI*>(g_pChitin->cDimm.GetResObject(cResRef, 1002, TRUE));
         if (pRes->Demand() != NULL) {
-            field_AA = a5;
+            m_bDoubleSize = bDoubleSize;
 
             int nPanels = pRes->GetPanelNo();
             for (int nPanel = 0; nPanel < nPanels; nPanel++) {

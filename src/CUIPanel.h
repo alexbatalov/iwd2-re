@@ -37,16 +37,16 @@ public:
     /* 0030 */ CPoint m_ptBaseOrigin;
     /* 0034 */ CSize m_size;
     /* 003C */ WORD m_wFlags;
-    /* 003E */ CVidMosaic field_3E;
-    /* 00F2 */ short field_F2;
+    /* 003E */ CVidMosaic m_mosBackground;
+    /* 00F2 */ SHORT m_nRenderCount;
     /* 00F4 */ BOOL m_bActive;
-    /* 00F8 */ CRect field_F8;
+    /* 00F8 */ CRect m_rDirty;
     /* 0108 */ unsigned char field_108;
     /* 0109 */ unsigned char field_109;
     /* 010A */ BOOL m_bInactiveRender;
     /* 010E */ BOOL m_bEnabled;
     /* 0112 */ int field_112;
-    /* 0116 */ RECT field_116;
+    /* 0116 */ CRect field_116;
     /* 0126 */ int field_126;
 };
 

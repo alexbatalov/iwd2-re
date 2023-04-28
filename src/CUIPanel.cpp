@@ -18,7 +18,7 @@ CUIPanel::CUIPanel(CUIManager* manager, UI_PANELHEADER* panelInfo)
     m_pManager = manager;
     m_nID = panelInfo->nPanelID;
 
-    if (manager->field_AA) {
+    if (manager->m_bDoubleSize) {
         m_ptOrigin.x = panelInfo->x * 2;
         m_ptOrigin.y = panelInfo->y * 2;
         m_ptBaseOrigin.x = panelInfo->x * 2;
@@ -37,7 +37,7 @@ CUIPanel::CUIPanel(CUIManager* manager, UI_PANELHEADER* panelInfo)
     m_bActive = TRUE;
     m_bEnabled = TRUE;
     m_wFlags = panelInfo->wFlags;
-    field_F2 = 0;
+    m_nRenderCount = 0;
     field_108 = 0;
     field_109 = 0;
     m_bInactiveRender = FALSE;
@@ -46,8 +46,8 @@ CUIPanel::CUIPanel(CUIManager* manager, UI_PANELHEADER* panelInfo)
     SetRectEmpty(&field_116);
 
     if (panelInfo->nType == 1) {
-        field_3E.SetResRef(CResRef(panelInfo->refMosaic), FALSE, TRUE);
-        field_3E.m_bDoubleSize = m_pManager->field_AA;
+        m_mosBackground.SetResRef(CResRef(panelInfo->refMosaic), FALSE, TRUE);
+        m_mosBackground.m_bDoubleSize = m_pManager->m_bDoubleSize;
     }
 }
 

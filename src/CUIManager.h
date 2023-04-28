@@ -14,7 +14,7 @@ class CUIManager {
 public:
     CUIManager();
     ~CUIManager();
-    void fInit(CWarp* pWarp, CResRef cResRef, BOOL a5);
+    void fInit(CWarp* pWarp, CResRef cResRef, BOOL bDoubleSize);
     void fUninit();
     void AddPanel(UI_PANELHEADER* panelInfo);
     void ReorderPanelAfter(DWORD nID1, DWORD nID2);
@@ -55,7 +55,7 @@ public:
     /* 007A */ CRect field_7A;
     /* 008A */ CRect field_8A;
     /* 009A */ CRect field_9A;
-    /* 00AA */ int field_AA;
+    /* 00AA */ BOOL m_bDoubleSize;
     /* 00AE */ CTypedPtrList<CPtrList, CUIPanel*> m_lPanels; // #guess
 };
 

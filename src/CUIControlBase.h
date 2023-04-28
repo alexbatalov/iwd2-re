@@ -54,7 +54,7 @@ public:
     /* 001F */ unsigned char field_1F;
     /* 0020 */ unsigned char field_20;
     /* 0022 */ CRect field_22;
-    /* 0032 */ int m_bInactiveRender; // #guess
+    /* 0032 */ BOOL m_bInactiveRender; // #guess
     /* 0036 */ int field_36;
     /* 003A */ BOOL m_bToolTipActive;
     /* 003E */ int m_nToolTipStrRef; // #guess
