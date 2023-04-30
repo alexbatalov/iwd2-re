@@ -89,7 +89,7 @@ BYTE* CResMosaic::GetTileData(UINT nTile, BOOL bDoubleSize)
             pDoubleSizeTileData[0] = byte;
             pDoubleSizeTileData[nOffset] = byte;
             pDoubleSizeTileData[1] = byte;
-            pDoubleSizeTileData[nOffset] = byte;
+            pDoubleSizeTileData[nOffset + 1] = byte;
             pDoubleSizeTileData += 2;
         }
         pDoubleSizeTileData += nOffset;
