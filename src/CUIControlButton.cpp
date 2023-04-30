@@ -40,13 +40,13 @@ CUIControlButton::CUIControlButton(CUIPanel* panel, UI_CONTROL_BUTTON* controlIn
 
     CResRef resRef(controlInfo->refBam);
     m_cVidCell.SetResRef(resRef, FALSE, TRUE);
-    m_cVidCell.field_B4.SetResRef(resRef, FALSE, FALSE);
+    m_cVidCell.m_header.SetResRef(resRef, FALSE, FALSE);
 
     if (m_cVidCell.pRes != NULL) {
-        m_cVidCell.pRes->field_7E = m_cVidCell.field_B4.GetResRef() == "";
+        m_cVidCell.pRes->field_7E = m_cVidCell.m_header.GetResRef() == "";
     }
 
-    m_cVidCell.field_D6 = m_pPanel->m_pManager->m_bDoubleSize;
+    m_cVidCell.m_bDoubleSize = m_pPanel->m_pManager->m_bDoubleSize;
     m_cVidCell.SequenceSet(controlInfo->nSequence);
     m_cVidCell.FrameSet(m_nNormalFrame);
 

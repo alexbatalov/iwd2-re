@@ -3,6 +3,8 @@
 
 #include "CVidPalette.h"
 
+#define CVIDIMG_TRANSLUCENT 0x2
+
 class CVidImage {
 public:
     static DWORD rgbTempPal[256];

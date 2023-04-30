@@ -1192,13 +1192,13 @@ void CVidInf::LoadFogOWarSurfaces(const CString& a2)
 
             CResRef resRef(field_73A);
             tileVidCell.SetResRef(resRef, TRUE, TRUE);
-            tileVidCell.field_B4.SetResRef(resRef, TRUE, FALSE);
+            tileVidCell.m_header.SetResRef(resRef, TRUE, FALSE);
 
             if (tileVidCell.pRes != NULL) {
-                tileVidCell.pRes->field_7E = tileVidCell.field_B4.GetResRef() == "";
+                tileVidCell.pRes->field_7E = tileVidCell.m_header.GetResRef() == "";
             }
 
-            tileVidCell.field_D6 = 0;
+            tileVidCell.m_bDoubleSize = FALSE;
             tileVidCell.SequenceSet(0);
             tileVidCell.pRes->Demand();
             tileVidCell.RealizePalette(1);

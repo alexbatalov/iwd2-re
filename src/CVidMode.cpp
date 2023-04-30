@@ -862,13 +862,13 @@ BOOL CVidMode::SetPointer(CVidCell* pVidCell, CResRef cResRef, BOOLEAN bAnimatin
     lock.Lock(INFINITE);
 
     pVidCell->SetResRef(cResRef, TRUE, TRUE);
-    pVidCell->field_B4.SetResRef(cResRef, TRUE, FALSE);
+    pVidCell->m_header.SetResRef(cResRef, TRUE, FALSE);
 
     if (pVidCell->pRes != NULL) {
-        pVidCell->pRes->field_7E = pVidCell->field_B4.cResRef == "";
+        pVidCell->pRes->field_7E = pVidCell->m_header.cResRef == "";
     }
 
-    pVidCell->field_D6 = 0;
+    pVidCell->m_bDoubleSize = 0;
 
     if (pVidCell->pRes == NULL) {
         lock.Unlock();
