@@ -9,7 +9,7 @@ public:
     ~CUIControlButton3State();
     void SetSelected(INT nSelected);
     void OnLButtonClick(CPoint pt) override;
-    void Render(int a2) override;
+    BOOL Render(BOOL bForce) override;
 
     SHORT m_nSelectedFrame;
     SHORT m_nNotSelectedFrame;

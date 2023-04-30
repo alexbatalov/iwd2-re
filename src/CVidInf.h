@@ -51,6 +51,7 @@ public:
     BOOL FXRender(CPoint* pPoints, INT nPoints, const CRect& rSurface, COLORREF rgbColor, BOOL bClipped);
     BOOL BKLock(CRect& rBack);
     BOOL BKUnlock();
+    BOOL BKRender(CVidCell* pVidCell, INT x, INT y, const CRect& rClip, BOOLEAN bDemanded, DWORD dwFlags);
     BOOL BKRender(CParticle* pParticle, const CRect& rClip, USHORT nFlag, USHORT nBlobSize);
     BOOL BKRenderEllipse(const CPoint& ptCenter, const CSize& axes, const CRect& rClip, COLORREF rgbColor);
     BOOL BKRenderLine(int nXFrom, int nYFrom, int nXTo, int nYTo, const CRect& rSurface, COLORREF rgbColor);

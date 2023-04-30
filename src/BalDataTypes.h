@@ -5,6 +5,9 @@
 
 typedef DWORD STRREF;
 
+#pragma pack(push)
+#pragma pack(2)
+
 typedef struct UI_Header_st {
     /* 0000 */ DWORD nFileType;
     /* 0004 */ DWORD nFileVersion;
@@ -40,9 +43,19 @@ typedef struct UI_Control_st {
     /* 000C */ WORD nType;
 } UI_CONTROL;
 
-// TODO: Incomplete.
 typedef struct UI_Control_Button_st {
     UI_CONTROL base;
+    RESREF refBam;
+    BYTE nSequence;
+    BYTE nTextFlags;
+    BYTE nNormalFrame;
+    BYTE xLow;
+    BYTE nPressedFrame;
+    BYTE xHigh;
+    BYTE nSelectedFrame;
+    BYTE yLow;
+    BYTE nDisabledFrame;
+    BYTE yHigh;
 } UI_CONTROL_BUTTON;
 
 // TODO: Incomplete.
@@ -298,5 +311,7 @@ typedef struct Area_Header_st {
     /* 0000 */ DWORD nFileType;
     /* 0004 */ DWORD nFileVersion;
 } AREA_HEADER;
+
+#pragma pack(pop)
 
 #endif /* BALDATATYPES_H_ */

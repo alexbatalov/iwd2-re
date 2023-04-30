@@ -31,7 +31,7 @@ void CUIControlButton3State::OnLButtonClick(CPoint pt)
 }
 
 // 0x4D5B20
-void CUIControlButton3State::Render(int a2)
+BOOL CUIControlButton3State::Render(BOOL bForce)
 {
     if (!m_bPressed) {
         if (m_bEnabled) {
@@ -45,5 +45,5 @@ void CUIControlButton3State::Render(int a2)
         }
     }
 
-    CUIControlButton::Render(a2);
+    return CUIControlButton::Render(bForce);
 }

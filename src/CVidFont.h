@@ -10,6 +10,7 @@ class CVidFont : public CVidCell {
 public:
     CVidFont();
     ~CVidFont();
+    SHORT GetFontHeight(BOOLEAN bDemanded);
     void SetColor(COLORREF color, int a3, int a4);
     void SetResRef(const CResRef& cNewResRef, int a3, int a4);
     int RegisterFont();

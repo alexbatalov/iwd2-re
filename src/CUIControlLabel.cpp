@@ -46,9 +46,11 @@ BOOL CUIControlLabel::NeedRender()
 }
 
 // 0x4E43E0
-void CUIControlLabel::Render(int a2)
+BOOL CUIControlLabel::Render(BOOL bForce)
 {
     // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // 0x4E46F0

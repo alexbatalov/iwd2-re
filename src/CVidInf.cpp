@@ -1053,6 +1053,36 @@ BOOL CVidInf::BKUnlock()
     return TRUE;
 }
 
+// 0x79DE50
+BOOL CVidInf::BKRender(CVidCell* pVidCell, INT x, INT y, const CRect& rClip, BOOLEAN bDemanded, DWORD dwFlags)
+{
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        memset(dword_907B20, 0, 4 * 512 * 512);
+
+        CRect rNewClip(rClip);
+        rNewClip.OffsetRect(m_rLockedRect.left, m_rLockedRect.top);
+
+        return pVidCell->Render3d(m_rLockedRect.left + x,
+            m_rLockedRect.top + y,
+            rNewClip,
+            bDemanded,
+            dwFlags | 0x1);
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo.cpp
+    // __LINE__: 8512
+    UTIL_ASSERT(m_SurfaceDesc.lpSurface != NULL);
+
+    return pVidCell->Render(reinterpret_cast<WORD*>(m_SurfaceDesc.lpSurface),
+        m_SurfaceDesc.lPitch,
+        x,
+        y,
+        rClip,
+        bDemanded,
+        dwFlags,
+        CPoint(0, 0));
+}
+
 // 0x79E060
 BOOL CVidInf::BKRender(CParticle* pParticle, const CRect& rClip, USHORT nFlag, USHORT nBlobSize)
 {

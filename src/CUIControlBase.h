@@ -38,7 +38,7 @@ public:
     /* 004C */ virtual void ActivateToolTip();
     /* 0050 */ virtual void InvalidateRect() = 0;
     /* 0054 */ virtual void func_54();
-    /* 0058 */ virtual void Render(int a2) = 0;
+    /* 0058 */ virtual BOOL Render(BOOL bForce) = 0;
     /* 005C */ virtual BOOL GetInactiveRender();
     /* 0060 */ virtual void SetInactiveRender(BOOL bInactiveRender);
     /* 0064 */ virtual BOOL NeedRender();

@@ -2,6 +2,7 @@
 
 #include "CUtil.h"
 #include "CVidMode.h"
+#include "CVidPoly.h"
 
 // 0x8BAC8C
 BOOL CVidCell::TRANSLUCENT_SHADOWS_ON = TRUE;
@@ -227,6 +228,22 @@ BOOL CVidCell::Render(WORD* pSurface, LONG lPitch, INT nRefPointX, INT nRefPoint
 
 // 0x7AF060
 BOOL CVidCell::Render(WORD* pSurface, LONG lPitch, INT nRefPtX, INT nRefPtY, const CRect& rClip, BOOLEAN a6, DWORD dwFlags, const CPoint& ptSource)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x7C4A90
+BOOL CVidCell::Render3d(INT x, INT y, const CRect& rClip, CVidPoly* pClipPoly, int nPolys, DWORD dwFlags, INT nTransVal, BOOL bDemanded)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x7C4E20
+BOOL CVidCell::Render3d(INT x, INT y, const CRect& rClip, BOOLEAN bDemanded, DWORD dwFlags)
 {
     // TODO: Incomplete.
 

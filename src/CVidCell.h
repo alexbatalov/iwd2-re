@@ -5,6 +5,8 @@
 #include "CResCellHeader.h"
 #include "CVidImage.h"
 
+class CVidPoly;
+
 class CVidCell : public CVidImage, public CResHelper<CResCell, 1000> {
 public:
     static BOOL TRANSLUCENT_SHADOWS_ON;
@@ -26,6 +28,8 @@ public:
     /* 0004 */ virtual BOOL Render(WORD* pSurface, LONG lPitch, INT nRefPtX, INT nRefPtY, const CRect& rClip, BOOLEAN a6, DWORD dwFlags, const CPoint& ptSource);
     /* 000C */ virtual BOOL Render(WORD* pSurface, LONG lPitch, INT nRefPointX, INT nRefPointY, DWORD dwFlags, INT nTransValue);
 
+    BOOL Render3d(INT x, INT y, const CRect& rClip, CVidPoly* pClipPoly, int nPolys, DWORD dwFlags, INT nTransVal, BOOL bDemanded);
+    BOOL Render3d(INT x, INT y, const CRect& rClip, BOOLEAN bDemanded, DWORD dwFlags);
     BOOL FXRender3d(INT nRefPtX, INT nRefPtY, const CRect& rFXRect, DWORD dwFlags, INT nTransVal, BOOL bAlphaValues);
     BOOL FXRender3d(INT nRefPtX, INT nRefPtY, const CRect& rFXRect, const CRect& rClip, BOOLEAN a5, DWORD dwFlags, BOOL bAlphaValues);
 

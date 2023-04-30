@@ -11,7 +11,7 @@ public:
     ~CUIControlLabel();
 
     /* 0050 */ void InvalidateRect() override;
-    /* 0058 */ void Render(int a2) override;
+    /* 0058 */ BOOL Render(BOOL bForce) override;
     /* 0064 */ BOOL NeedRender() override;
 
     void SetText(const CString& sString);

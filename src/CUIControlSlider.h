@@ -16,7 +16,7 @@ public:
     /* 0018 */ BOOL OnLButtonDown(CPoint pt) override;
     /* 001C */ void OnLButtonUp(CPoint pt) override;
     /* 0050 */ void InvalidateRect() override;
-    /* 0058 */ void Render(int a2) override;
+    /* 0058 */ BOOL Render(BOOL bForce) override;
     /* 0064 */ BOOL NeedRender() override;
     /* 0068 */ virtual void OnThumbChange();
     /* 006C */ virtual void OnThumbFinalChange();

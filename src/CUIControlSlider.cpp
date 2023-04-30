@@ -62,9 +62,11 @@ BOOL CUIControlSlider::NeedRender()
 }
 
 // 0x4D6460
-void CUIControlSlider::Render(int a2)
+BOOL CUIControlSlider::Render(BOOL bForce)
 {
     // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // 0x4D66E0

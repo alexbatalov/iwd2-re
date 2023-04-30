@@ -25,6 +25,14 @@ CVidFont::~CVidFont()
     }
 }
 
+// 0x793050
+SHORT CVidFont::GetFontHeight(BOOLEAN bDemanded)
+{
+    // TODO: Incomplete.
+
+    return 0;
+}
+
 // 0x7930F0
 void CVidFont::SetColor(COLORREF color, int a3, int a4)
 {
