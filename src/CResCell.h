@@ -13,6 +13,7 @@ public:
     void* Demand();
     FRAMEENTRY* GetFrame(WORD nSequence, WORD nFrame, BOOL bDoubleSize);
     BOOL GetCompressed(FRAMEENTRY* pFrame, BOOL bDoubleSize);
+    BYTE* GetFrameData(FRAMEENTRY* pFrame, BOOL bDoubleSize);
     int Release();
     void ResRefChange();
     BOOL Parse(void* pData);

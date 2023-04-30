@@ -85,6 +85,103 @@ BOOL CResCell::GetCompressed(FRAMEENTRY* pFrame, BOOL bDoubleSize)
     return (pFrame->nOffset & 0x80000000) != 0x80000000;
 }
 
+// 0x77F5F0
+BYTE* CResCell::GetFrameData(FRAMEENTRY* pFrame, BOOL bDoubleSize)
+{
+    if (!m_bParsed) {
+        return NULL;
+    }
+
+    if (pFrame == NULL) {
+        return FALSE;
+    }
+
+    if (!bDoubleSize) {
+        return reinterpret_cast<BYTE*>(m_pBamHeader) + (pFrame->nOffset & 0x7FFFFFFF);
+    }
+
+    if (m_pDimmKeyTableEntry->resRef == g_pChitin->cVideo.field_114
+        && m_pDimmKeyTableEntry->nResType == g_pChitin->cVideo.field_11C
+        && pFrame->nOffset == g_pChitin->cVideo.field_11E) {
+        return reinterpret_cast<BYTE*>(g_pChitin->cVideo.m_doubleSizeData);
+    }
+
+    g_pChitin->cVideo.field_114 = m_pDimmKeyTableEntry->resRef;
+    g_pChitin->cVideo.field_11C = m_pDimmKeyTableEntry->nResType;
+    g_pChitin->cVideo.field_11E = pFrame->nOffset;
+    g_pChitin->cVideo.SetDoubleSizeData(pFrame->nHeight * pFrame->nWidth);
+
+    BYTE* pFrameData = reinterpret_cast<BYTE*>(m_pBamHeader) + (pFrame->nOffset & 0x7FFFFFFF);
+    BYTE* pDoubleSizeFrameData = reinterpret_cast<BYTE*>(g_pChitin->cVideo.m_doubleSizeData);
+
+    WORD nWidth = pFrame->nWidth / 2;
+    WORD nHeight = pFrame->nHeight / 2;
+    WORD nOffset = pFrame->nWidth;
+
+    // NOTE: Why it uses `m_pBamHeaderCopy` instead of `m_pBamHeader`?
+    BYTE nTransparentColor = m_pBamHeaderCopy->nTransparentColor;
+
+    if ((pFrame->nOffset & 0x80000000) == 0x80000000) {
+        for (WORD y = 0; y < nHeight; y++) {
+            for (WORD x = 0; x < nWidth; x++) {
+                BYTE nColor = *pFrameData++;
+                pDoubleSizeFrameData[0] = nColor;
+                pDoubleSizeFrameData[nOffset] = nColor;
+                pDoubleSizeFrameData[1] = nColor;
+                pDoubleSizeFrameData[nOffset + 1] = nColor;
+                pDoubleSizeFrameData += 2;
+            }
+            pDoubleSizeFrameData += nOffset;
+        }
+    } else {
+        memset(pDoubleSizeFrameData, nTransparentColor, pFrame->nHeight * pFrame->nWidth);
+
+        WORD nRunLength = 0;
+        int pos = 0;
+        for (WORD y = 0; y < nHeight; y++) {
+            WORD nRemainingWidth = nWidth;
+            while (nRemainingWidth != 0) {
+                BYTE nColor = pFrameData[pos];
+                if (nColor == nTransparentColor) {
+                    if (nRunLength == 0) {
+                        nRunLength = pFrameData[pos] + 1;
+                    }
+
+                    if (nRemainingWidth == nRunLength) {
+                        pos += 2;
+
+                        pDoubleSizeFrameData += 2 * nRemainingWidth;
+                        nRunLength = 0;
+                        nRemainingWidth = 0;
+                    } else if (nRemainingWidth > nRunLength) {
+                        pos += 2;
+
+                        pDoubleSizeFrameData += 2 * nRunLength;
+                        nRemainingWidth -= nRunLength;
+                        nRunLength = 0;
+                    } else {
+                        pDoubleSizeFrameData += 2 * nRemainingWidth;
+                        nRunLength -= nRemainingWidth;
+                        nRemainingWidth = 0;
+                    }
+                } else {
+                    pos++;
+
+                    pDoubleSizeFrameData[0] = nColor;
+                    pDoubleSizeFrameData[nOffset] = nColor;
+                    pDoubleSizeFrameData[1] = nColor;
+                    pDoubleSizeFrameData[nOffset + 1] = nColor;
+                    pDoubleSizeFrameData += 2;
+                    nRemainingWidth--;
+                }
+            }
+            pDoubleSizeFrameData += nOffset;
+        }
+    }
+
+    return reinterpret_cast<BYTE*>(g_pChitin->cVideo.m_doubleSizeData);
+}
+
 // 0x77F820
 int CResCell::Release()
 {
@@ -150,7 +247,7 @@ BOOL CResCell::Parse(void* pData)
     }
 
     BAMHEADER* pBamHeader = reinterpret_cast<BAMHEADER*>(pData);
-    if (pBamHeader->nFileType != 'BAM ' || pBamHeader->nFileVersion != 'V1  ') {
+    if (memcmp(&(pBamHeader->nFileType), "BAM ", 4) != 0 || memcmp(&(pBamHeader->nFileVersion), "V1  ", 4) != 0) {
         return FALSE;
     }
 
