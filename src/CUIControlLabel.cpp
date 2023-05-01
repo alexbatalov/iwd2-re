@@ -69,8 +69,8 @@ void CUIControlLabel::SetText(const CString& sString)
 void CUIControlLabel::SetForegroundColor(COLORREF rgbColor)
 {
     if ((field_55A & 0x1) != 0) {
-        if (field_58.field_4EC != rgbColor) {
-            field_58.SetColor(rgbColor, field_58.field_4F0, 0);
+        if (field_58.m_rgbForegroundColor != rgbColor) {
+            field_58.SetColor(rgbColor, field_58.m_rgbBackgroundColor, FALSE);
             InvalidateRect();
         }
     }

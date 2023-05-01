@@ -35,6 +35,9 @@ public:
     // NOTE: Can be seen via assertion in `CVidMode::LockSurface`.
     USHORT GetBitsPerPixels() { return m_nBpp; }
 
+    // NOTE: Can be seen via assertion in `CVidFont::SetTextFontEx`.
+    BOOL Is3dAccelerated() { return m_bIs3dAccelerated; }
+
     /* 0000 */ USHORT m_nBpp; // #guess
     /* 0002 */ USHORT m_nNextBpp; // #guess
     /* 0004 */ BOOLEAN m_bSupports16bpp; // #guess
