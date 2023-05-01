@@ -39,14 +39,23 @@ public:
     BOOL GetAdd(CVIDPALETTE_COLOR& rgbInv, CVIDIMG_PALETTEAFFECT* pAffectArgs, INT& nShiftBack, DWORD dwFlags);
     BOOL GetLight(CVIDPALETTE_COLOR& rgbLight, CVIDIMG_PALETTEAFFECT* pAffectArgs, DWORD dwFlags);
     void SetRange(USHORT nRange, USHORT nValue, CVidBitmap& bmpMasterPalette);
+    void RealizeRange(DWORD* pDestPalette, INT nBpp, DWORD dwFlags, CVIDIMG_PALETTEAFFECT* pAffectArgs, DWORD nTransVal);
+    void RealizeResource(DWORD* pDestPalette, INT nBpp, DWORD dwFlags, CVIDIMG_PALETTEAFFECT* pAffectArgs);
+    void QuickRealizeResource(DWORD* pDestPalette, INT nBpp);
+
+    void RealizeResource3d(DWORD* pDestPalette, DWORD dwFlags, CVIDIMG_PALETTEAFFECT* pAffectArgs, DWORD nTransVal);
+    void RealizeRange3d(DWORD* pDestPalette, DWORD dwFlags, CVIDIMG_PALETTEAFFECT* pAffectArgs, DWORD nTransVal);
 
     static const RGBQUAD CLEAR_RGBQUAD;
     static const RGBQUAD SHADOW_RGBQUAD;
     static const USHORT TYPE_RESOURCE;
     static const USHORT TYPE_RANGE;
     static const USHORT NUM_RANGES;
+    static const BYTE SHADOW_ENTRY;
+    static const BYTE CLEAR_ENTRY;
     static const BYTE LIGHT_SCALE;
     static const BYTE NO_TINT;
+    static BYTE m_SuppressTintMasks[7];
 
     int m_nAUCounter;
     int m_nAUCounterBase;
