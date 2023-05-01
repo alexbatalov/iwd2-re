@@ -144,7 +144,7 @@ BYTE* CResCell::GetFrameData(FRAMEENTRY* pFrame, BOOL bDoubleSize)
                 BYTE nColor = pFrameData[pos];
                 if (nColor == nTransparentColor) {
                     if (nRunLength == 0) {
-                        nRunLength = pFrameData[pos] + 1;
+                        nRunLength = pFrameData[pos + 1] + 1;
                     }
 
                     if (nRemainingWidth == nRunLength) {
