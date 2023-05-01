@@ -1410,8 +1410,6 @@ void CChitin::AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD d
                                     pActiveEngine->OnLButtonDblClk(field_1906);
                                     m_mouseLDblClickCount = m_mouseDblClickTime;
                                 }
-
-                                pActiveEngine->OnLButtonUp(field_1906);
                             }
                         }
                     }
@@ -1453,8 +1451,6 @@ void CChitin::AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD d
                                     pActiveEngine->OnRButtonDblClk(field_1906);
                                     m_mouseRDblClickCount = m_mouseDblClickTime;
                                 }
-
-                                pActiveEngine->OnRButtonUp(field_1906);
                             }
                         }
                     }
@@ -1496,8 +1492,6 @@ void CChitin::AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD d
                                     pActiveEngine->OnMButtonDblClk(field_1906);
                                     m_mouseMDblClickCount = m_mouseDblClickTime;
                                 }
-
-                                pActiveEngine->OnMButtonUp(field_1906);
                             }
                         }
                     }
