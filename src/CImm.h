@@ -34,6 +34,7 @@ public:
     void sub_7C2CC0(HWND hWnd);
     void sub_7C2E10(HWND hWnd);
     CString sub_7C2ED0(HWND hWnd);
+    void sub_7C3140(const CRect& a1, const CRect& a2, int a3, BOOL bDemanded);
     CString sub_7C34A0();
     CString sub_7C34D0();
     void CleanUp();

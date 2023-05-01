@@ -6,6 +6,7 @@
 #include "CUIControlBase.h"
 #include "CUIManager.h"
 #include "CUtil.h"
+#include "CVidInf.h"
 
 // 0x4D2750
 CUIPanel::CUIPanel(CUIManager* manager, UI_PANELHEADER* panelInfo)
@@ -323,6 +324,103 @@ BOOL CUIPanel::OnRButtonDown(const CPoint& pt)
 
 // 0x4D3100
 void CUIPanel::Render()
+{
+    CRect rDirty(0, 0, 0, 0);
+
+    if (!m_bActive && !m_bInactiveRender) {
+        return;
+    }
+
+    CRect v2 = m_pManager->field_9A;
+    v2.OffsetRect(-m_ptOrigin);
+
+    CRect v3;
+    v3.IntersectRect(v2, CRect(0, 0, m_size.cx, m_size.cy));
+
+    m_pManager->m_pWarp->NormalizePanelRect(m_nID, v3);
+
+    CRect v4;
+    if (m_nRenderCount == 0) {
+        v4 = v3;
+    } else {
+        v4.UnionRect(m_rDirty, v3);
+    }
+
+    if (v4.IsRectEmpty()) {
+        rDirty.SetRectEmpty();
+    } else {
+        CRect rTemp = v4;
+        rTemp.OffsetRect(m_ptOrigin);
+        rDirty = rTemp;
+    }
+
+    POSITION pos = m_lControls.GetHeadPosition();
+    while (pos != NULL) {
+        CUIControlBase* pControl = m_lControls.GetNext(pos);
+        if (pControl->NeedRender()) {
+            CRect rControl(CPoint(pControl->m_nX, pControl->m_nY),
+                CSize(pControl->m_nWidth, pControl->m_nHeight));
+            m_pManager->m_pWarp->NormalizePanelRect(m_nID, rControl);
+            if (!rControl.IsRectEmpty()) {
+                if (rDirty.IsRectEmpty()) {
+                    rDirty = rControl;
+                } else {
+                    rDirty.UnionRect(rDirty, rControl);
+                }
+            }
+        }
+    }
+
+    if (!rDirty.IsRectEmpty()) {
+        CRect rMosaic = rDirty;
+        rMosaic.OffsetRect(-m_ptOrigin);
+
+        if (m_nRenderCount != 0) {
+            CSingleLock lock(&(m_pManager->field_56), FALSE);
+            lock.Lock(INFINITE);
+            m_nRenderCount--;
+            lock.Unlock();
+        }
+
+        m_mosBackground.Render(CVIDINF_SURFACE_BACK,
+            m_ptOrigin.x,
+            m_ptOrigin.y,
+            rMosaic,
+            rDirty,
+            0x1,
+            FALSE);
+
+        POSITION pos = m_lControls.GetHeadPosition();
+        while (pos != NULL) {
+            CUIControlBase* pControl = m_lControls.GetNext(pos);
+            CRect rControl(m_ptOrigin + CPoint(pControl->m_nX, pControl->m_nY),
+                CSize(pControl->m_nWidth, pControl->m_nHeight));
+
+            CRect rDirtyControl;
+            rDirtyControl.IntersectRect(rDirty, rControl);
+
+            if (!rDirtyControl.IsRectNull()) {
+                pControl->field_22 = rDirtyControl;
+                pControl->Render(TRUE);
+            }
+        }
+
+        if (!m_bEnabled) {
+            RenderDither(rDirty);
+        }
+    }
+
+    if (m_bEnabled) {
+        if (!field_116.IsRectNull()) {
+            CRect r;
+            r.IntersectRect(field_116, CRect(m_ptOrigin, m_size));
+            g_pChitin->cImm.sub_7C3140(field_116, r, field_126, FALSE);
+        }
+    }
+}
+
+// 0x4D3610
+void CUIPanel::RenderDither(const CRect& rClip)
 {
     // TODO: Incomplete.
 }

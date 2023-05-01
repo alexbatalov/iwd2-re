@@ -27,6 +27,7 @@ public:
     void OnMouseMove(const CPoint& pt);
     BOOL OnRButtonDown(const CPoint& pt);
     void Render();
+    void RenderDither(const CRect& rClip);
     void InvalidateRect(const CRect* pRect);
     void SetActive(BOOL bActive);
 

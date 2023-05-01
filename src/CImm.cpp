@@ -365,6 +365,12 @@ CString CImm::sub_7C2ED0(HWND hWnd)
     return sString;
 }
 
+// 0x7C3140
+void CImm::sub_7C3140(const CRect& a1, const CRect& a2, int a3, BOOL bDemanded)
+{
+    // TODO: Incomplete.
+}
+
 // 0x7C34A0
 CString CImm::sub_7C34A0()
 {
