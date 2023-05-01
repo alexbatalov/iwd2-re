@@ -70,6 +70,7 @@ public:
     BOOL sub_7D0C60(BYTE* pSurface, LONG lPitch, DWORD dwFlags);
     BOOL sub_7D1190(DWORD* pSurface, LONG lPitch, DWORD dwFlags);
 
+    BOOL Render3d(INT x, INT y, DWORD dwFlags, INT nTransVal);
     BOOL Render3d(INT x, INT y, const CRect& rClip, CVidPoly* pClipPoly, int nPolys, DWORD dwFlags, INT nTransVal, BOOL bDemanded);
     BOOL Render3d(INT x, INT y, const CRect& rClip, BOOLEAN bDemanded, DWORD dwFlags);
     BOOL FXRender3d(INT nRefPtX, INT nRefPtY, const CRect& rFXRect, DWORD dwFlags, INT nTransVal, BOOL bAlphaValues);

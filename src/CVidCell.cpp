@@ -1465,6 +1465,14 @@ BOOL CVidCell::sub_7D1190(DWORD* pSurface, LONG lPitch, DWORD dwFlags)
     return TRUE;
 }
 
+// 0x7C4960
+BOOL CVidCell::Render3d(INT x, INT y, DWORD dwFlags, INT nTransVal)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x7C4A90
 BOOL CVidCell::Render3d(INT x, INT y, const CRect& rClip, CVidPoly* pClipPoly, int nPolys, DWORD dwFlags, INT nTransVal, BOOL bDemanded)
 {
