@@ -19,59 +19,111 @@
 #define CAIOBJECTTYPE_LOCATION_TYPE_POINT 1
 #define CAIOBJECTTYPE_LOCATION_TYPE_RECT 2
 
+#define CAIOBJECTTYPE_EA_ALL 0
+#define CAIOBJECTTYPE_EA_PC 2
+#define CAIOBJECTTYPE_EA_FAMILIAR 3
+#define CAIOBJECTTYPE_EA_ALLY 4
+#define CAIOBJECTTYPE_EA_CONTROLLED 5
+#define CAIOBJECTTYPE_EA_CHARMED 6
+#define CAIOBJECTTYPE_EA_0X847C3A 7
+#define CAIOBJECTTYPE_EA_GOODCUTOFF 30
+#define CAIOBJECTTYPE_EA_CONTROLCUTOFF 15
+#define CAIOBJECTTYPE_EA_NOTGOOD 31
+#define CAIOBJECTTYPE_EA_NEUTRAL 128
+#define CAIOBJECTTYPE_EA_NOTEVIL 199
+#define CAIOBJECTTYPE_EA_ENEMY 255
+#define CAIOBJECTTYPE_EA_CHARMED_PC 254
+#define CAIOBJECTTYPE_EA_EVILCUTOFF 200
+#define CAIOBJECTTYPE_EA_ARENAPC 253
+#define CAIOBJECTTYPE_EA_INANIMATE 127
+#define CAIOBJECTTYPE_EA_ANYTHING 126
+
+#define CAIOBJECTTYPE_R_HUMAN 1
+#define CAIOBJECTTYPE_R_ELF 2
+#define CAIOBJECTTYPE_R_HALF_ELF 3
+#define CAIOBJECTTYPE_R_DWARF 4
+#define CAIOBJECTTYPE_R_HALFLING 5
+#define CAIOBJECTTYPE_R_GNOME 6
+#define CAIOBJECTTYPE_R_HALF_ORC 7
+
+#define CAIOBJECTTYPE_C_BARBARIAN 1
+#define CAIOBJECTTYPE_C_BARD 2
+#define CAIOBJECTTYPE_C_CLERIC 3
+#define CAIOBJECTTYPE_C_DRUID 4
+#define CAIOBJECTTYPE_C_FIGHTER 5
+#define CAIOBJECTTYPE_C_MONK 6
+#define CAIOBJECTTYPE_C_PALADIN 7
+#define CAIOBJECTTYPE_C_RANGER 8
+#define CAIOBJECTTYPE_C_ROGUE 9
+#define CAIOBJECTTYPE_C_SORCERER 10
+#define CAIOBJECTTYPE_C_WIZARD 11
+
+#define CAIOBJECTTYPE_SEX_MALE 1
+#define CAIOBJECTTYPE_SEX_FEMALE 2
+
+#define CAIOBJECTTYPE_LAWFUL_GOOD 0x11
+#define CAIOBJECTTYPE_LAWFUL_NEUTRAL 0x12
+#define CAIOBJECTTYPE_LAWFUL_EVIL 0x13
+#define CAIOBJECTTYPE_NEUTRAL_GOOD 0x21
+#define CAIOBJECTTYPE_NEUTRAL 0x22
+#define CAIOBJECTTYPE_NEUTRAL_EVIL 0x23
+#define CAIOBJECTTYPE_CHAOTIC_GOOD 0x31
+#define CAIOBJECTTYPE_CHAOTIC_NEUTRAL 0x32
+#define CAIOBJECTTYPE_CHAOTIC_EVIL 0x33
+
 class CAIObjectType {
 public:
-    /* 0x847C34 */ static const BYTE EA_ALL = 0;
-    /* 0x847C35 */ static const BYTE EA_PC = 2;
-    /* 0x847C36 */ static const BYTE EA_FAMILIAR = 3;
-    /* 0x847C37 */ static const BYTE EA_ALLY = 4;
-    /* 0x847C38 */ static const BYTE EA_CONTROLLED = 5;
-    /* 0x847C39 */ static const BYTE EA_CHARMED = 6;
-    /* 0x847C3A */ static const BYTE EA_0x847C3A = 7;
-    /* 0x847C3B */ static const BYTE EA_GOODCUTOFF = 30;
-    /* 0x847C3C */ static const BYTE EA_CONTROLCUTOFF = 15;
-    /* 0x847C3D */ static const BYTE EA_NOTGOOD = 31;
-    /* 0x847C3E */ static const BYTE EA_NEUTRAL = 128;
-    /* 0x847C3F */ static const BYTE EA_NOTEVIL = 199;
-    /* 0x847C40 */ static const BYTE EA_ENEMY = 255;
-    /* 0x847C41 */ static const BYTE EA_CHARMED_PC = 254;
-    /* 0x847C42 */ static const BYTE EA_EVILCUTOFF = 200;
-    /* 0x847C43 */ static const BYTE EA_ARENAPC = 253;
-    /* 0x847C44 */ static const BYTE EA_INANIMATE = 127;
-    /* 0x847C45 */ static const BYTE EA_ANYTHING = 126;
+    static const BYTE EA_ALL;
+    static const BYTE EA_PC;
+    static const BYTE EA_FAMILIAR;
+    static const BYTE EA_ALLY;
+    static const BYTE EA_CONTROLLED;
+    static const BYTE EA_CHARMED;
+    static const BYTE EA_0x847C3A;
+    static const BYTE EA_GOODCUTOFF;
+    static const BYTE EA_CONTROLCUTOFF;
+    static const BYTE EA_NOTGOOD;
+    static const BYTE EA_NEUTRAL;
+    static const BYTE EA_NOTEVIL;
+    static const BYTE EA_ENEMY;
+    static const BYTE EA_CHARMED_PC;
+    static const BYTE EA_EVILCUTOFF;
+    static const BYTE EA_ARENAPC;
+    static const BYTE EA_INANIMATE;
+    static const BYTE EA_ANYTHING;
 
-    /* 0x847C5B */ static const BYTE R_HUMAN = 1;
-    /* 0x847C5C */ static const BYTE R_ELF = 2;
-    /* 0x847C5D */ static const BYTE R_HALF_ELF = 3;
-    /* 0x847C5E */ static const BYTE R_DWARF = 4;
-    /* 0x847C5F */ static const BYTE R_HALFLING = 5;
-    /* 0x847C60 */ static const BYTE R_GNOME = 6;
-    /* 0x847C61 */ static const BYTE R_HALF_ORC = 7;
+    static const BYTE R_HUMAN;
+    static const BYTE R_ELF;
+    static const BYTE R_HALF_ELF;
+    static const BYTE R_DWARF;
+    static const BYTE R_HALFLING;
+    static const BYTE R_GNOME;
+    static const BYTE R_HALF_ORC;
 
-    /* 0x847CA5 */ static const BYTE C_BARBARIAN = 1;
-    /* 0x847CA6 */ static const BYTE C_BARD = 2;
-    /* 0x847CA7 */ static const BYTE C_CLERIC = 3;
-    /* 0x847CA8 */ static const BYTE C_DRUID = 4;
-    /* 0x847CA9 */ static const BYTE C_FIGHTER = 5;
-    /* 0x847CAA */ static const BYTE C_MONK = 6;
-    /* 0x847CAB */ static const BYTE C_PALADIN = 7;
-    /* 0x847CAC */ static const BYTE C_RANGER = 8;
-    /* 0x847CAD */ static const BYTE C_ROGUE = 9;
-    /* 0x847CAE */ static const BYTE C_SORCERER = 10;
-    /* 0x847CAF */ static const BYTE C_WIZARD = 11;
+    static const BYTE C_BARBARIAN;
+    static const BYTE C_BARD;
+    static const BYTE C_CLERIC;
+    static const BYTE C_DRUID;
+    static const BYTE C_FIGHTER;
+    static const BYTE C_MONK;
+    static const BYTE C_PALADIN;
+    static const BYTE C_RANGER;
+    static const BYTE C_ROGUE;
+    static const BYTE C_SORCERER;
+    static const BYTE C_WIZARD;
 
-    /* 0x847CF2 */ static const BYTE SEX_MALE = 1;
-    /* 0x847CF3 */ static const BYTE SEX_FEMALE = 2;
+    static const BYTE SEX_MALE;
+    static const BYTE SEX_FEMALE;
 
-    /* 0x847CF8 */ static const BYTE LAWFUL_GOOD = 0x11;
-    /* 0x847CF9 */ static const BYTE LAWFUL_NEUTRAL = 0x12;
-    /* 0x847CFA */ static const BYTE LAWFUL_EVIL = 0x13;
-    /* 0x847CFB */ static const BYTE NEUTRAL_GOOD = 0x21;
-    /* 0x847CFC */ static const BYTE NEUTRAL = 0x22;
-    /* 0x847CFD */ static const BYTE NEUTRAL_EVIL = 0x23;
-    /* 0x847CFE */ static const BYTE CHAOTIC_GOOD = 0x31;
-    /* 0x847CFF */ static const BYTE CHAOTIC_NEUTRAL = 0x32;
-    /* 0x847D00 */ static const BYTE CHAOTIC_EVIL = 0x33;
+    static const BYTE LAWFUL_GOOD;
+    static const BYTE LAWFUL_NEUTRAL;
+    static const BYTE LAWFUL_EVIL;
+    static const BYTE NEUTRAL_GOOD;
+    static const BYTE NEUTRAL;
+    static const BYTE NEUTRAL_EVIL;
+    static const BYTE CHAOTIC_GOOD;
+    static const BYTE CHAOTIC_NEUTRAL;
+    static const BYTE CHAOTIC_EVIL;
 
     static const int INSTANCE_NOT_SPRITE;
     static const BYTE SPECIALCASE_MYSELF[5];
@@ -81,15 +133,9 @@ public:
     static const CAIObjectType NOT_SPRITE;
     static const CAIObjectType OBJECT_MYSELF;
 
-    // TODO: Not sure if this is allowed in old C++. Check in VC6.
-    CAIObjectType()
-        : CAIObjectType(0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0)
-    {
-    }
-
     CAIObjectType(const CAIObjectType& type);
     CAIObjectType(BYTE nEnemyAlly, BYTE nGeneral, BYTE nRace, BYTE nSubRace, BYTE nClass, BYTE nSpecific, BYTE nGender, BYTE nAlignment, int nInstance, const BYTE* SpecialCase, const CString& sName, BYTE nAvClass, int nClassMask);
-    CAIObjectType(BYTE nEnemyAlly, BYTE nGeneral, BYTE nRace, BYTE nSubRace, BYTE nClass, BYTE nSpecific, BYTE nGender, BYTE nAlignment, int nInstance, BYTE nAvClass, int nClassMask);
+    CAIObjectType(BYTE nEnemyAlly = 0, BYTE nGeneral = 0, BYTE nRace = 0, BYTE nSubRace = 0, BYTE nClass = 0, BYTE nSpecific = 0, BYTE nGender = 0, BYTE nAlignment = 0, int nInstance = -1, BYTE nAvClass = 0, int nClassMask = 0);
     ~CAIObjectType();
     BOOL OfType(const CAIObjectType& type, BOOL bCheckForNonSprites, BOOL bNoNonSprites) const;
     void Set(const CAIObjectType& type);

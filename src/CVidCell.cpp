@@ -185,12 +185,14 @@ BOOL CVidCell::Demand(BOOLEAN& bDemanded)
 BOOL CVidCell::GetCurrentCenterPoint(CPoint& ptReference, BOOLEAN bDemanded)
 {
     if (pRes == NULL) {
-        ptReference.SetPoint(0, 0);
+        ptReference.x = 0;
+        ptReference.y = 0;
         return FALSE;
     }
 
     if (!Demand(bDemanded)) {
-        ptReference.SetPoint(0, 0);
+        ptReference.x = 0;
+        ptReference.y = 0;
         return FALSE;
     }
 
@@ -243,7 +245,8 @@ BOOL CVidCell::GetCurrentCenterPoint(CPoint& ptReference, BOOLEAN bDemanded)
     // NOTE: Uninline.
     FRAMEENTRY* pFrame = GetResFrame(nSequence, nFrame);
     if (pFrame != NULL) {
-        ptReference.SetPoint(pFrame->nCenterX, pFrame->nCenterY);
+        ptReference.x = pFrame->nCenterX;
+        ptReference.y = pFrame->nCenterY;
         bSuccess = TRUE;
     } else {
         bSuccess = FALSE;
@@ -259,12 +262,14 @@ BOOL CVidCell::GetCurrentCenterPoint(CPoint& ptReference, BOOLEAN bDemanded)
 BOOL CVidCell::GetCurrentFrameSize(CSize& frameSize, BOOLEAN bDemanded)
 {
     if (pRes == NULL) {
-        frameSize.SetSize(0, 0);
+        frameSize.cx = 0;
+        frameSize.cy = 0;
         return FALSE;
     }
 
     if (!Demand(bDemanded)) {
-        frameSize.SetSize(0, 0);
+        frameSize.cx = 0;
+        frameSize.cy = 0;
         return FALSE;
     }
 
@@ -317,7 +322,8 @@ BOOL CVidCell::GetCurrentFrameSize(CSize& frameSize, BOOLEAN bDemanded)
     // NOTE: Uninline.
     FRAMEENTRY* pFrame = GetResFrame(nSequence, nFrame);
     if (pFrame != NULL) {
-        frameSize.SetSize(pFrame->nWidth, pFrame->nHeight);
+        frameSize.cx = pFrame->nWidth;
+        frameSize.cy = pFrame->nHeight;
         bSuccess = TRUE;
     } else {
         bSuccess = FALSE;
@@ -383,7 +389,8 @@ BOOL CVidCell::GetFrameCenterPoint(SHORT nSequence, SHORT nFrame, CSize& ptCtr, 
 
     FRAMEENTRY* pFrame = GetResFrame(nSequence, nFrame);
     if (pFrame != NULL) {
-        ptCtr.SetSize(pFrame->nCenterX, pFrame->nCenterY);
+        ptCtr.cx = pFrame->nCenterX;
+        ptCtr.cy = pFrame->nCenterY;
         bSuccess = TRUE;
     } else {
         bSuccess = FALSE;

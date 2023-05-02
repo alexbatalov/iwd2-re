@@ -1379,7 +1379,7 @@ CRuleTables::~CRuleTables()
 const CString CRuleTables::GetRaceString(BYTE nRace, BYTE nSubRace) const
 {
     switch (nRace) {
-    case CAIObjectType::R_HUMAN:
+    case CAIOBJECTTYPE_R_HUMAN:
         switch (nSubRace) {
         case 0:
             return HUMAN;
@@ -1392,7 +1392,7 @@ const CString CRuleTables::GetRaceString(BYTE nRace, BYTE nSubRace) const
         // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
         // __LINE__: 1062
         UTIL_ASSERT(FALSE);
-    case CAIObjectType::R_ELF:
+    case CAIOBJECTTYPE_R_ELF:
         switch (nSubRace) {
         case 0:
             return ELF;
@@ -1405,7 +1405,7 @@ const CString CRuleTables::GetRaceString(BYTE nRace, BYTE nSubRace) const
         // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
         // __LINE__: 1080
         UTIL_ASSERT(FALSE);
-    case CAIObjectType::R_HALF_ELF:
+    case CAIOBJECTTYPE_R_HALF_ELF:
         switch (nSubRace) {
         case 0:
             return HALF_ELF;
@@ -1414,7 +1414,7 @@ const CString CRuleTables::GetRaceString(BYTE nRace, BYTE nSubRace) const
         // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
         // __LINE__: 1086
         UTIL_ASSERT(FALSE);
-    case CAIObjectType::R_DWARF:
+    case CAIOBJECTTYPE_R_DWARF:
         switch (nSubRace) {
         case 0:
             return DWARF;
@@ -1427,7 +1427,7 @@ const CString CRuleTables::GetRaceString(BYTE nRace, BYTE nSubRace) const
         // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
         // __LINE__: 1103
         UTIL_ASSERT(FALSE);
-    case CAIObjectType::R_HALFLING:
+    case CAIOBJECTTYPE_R_HALFLING:
         switch (nSubRace) {
         case 0:
             return HALFLING;
@@ -1440,7 +1440,7 @@ const CString CRuleTables::GetRaceString(BYTE nRace, BYTE nSubRace) const
         // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
         // __LINE__: 1121
         UTIL_ASSERT(FALSE);
-    case CAIObjectType::R_GNOME:
+    case CAIOBJECTTYPE_R_GNOME:
         switch (nSubRace) {
         case 0:
             return GNOME;
@@ -1451,7 +1451,7 @@ const CString CRuleTables::GetRaceString(BYTE nRace, BYTE nSubRace) const
         // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
         // __LINE__: 1136
         UTIL_ASSERT(FALSE);
-    case CAIObjectType::R_HALF_ORC:
+    case CAIOBJECTTYPE_R_HALF_ORC:
         switch (nSubRace) {
         case 0:
             return HALF_ORC;
@@ -1469,23 +1469,23 @@ const CString CRuleTables::GetRaceString(BYTE nRace, BYTE nSubRace) const
 const CString CRuleTables::GetAlignmentString(BYTE nAlignment) const
 {
     switch (nAlignment) {
-    case CAIObjectType::LAWFUL_GOOD:
+    case CAIOBJECTTYPE_LAWFUL_GOOD:
         return LAWFUL_GOOD;
-    case CAIObjectType::LAWFUL_NEUTRAL:
+    case CAIOBJECTTYPE_LAWFUL_NEUTRAL:
         return LAWFUL_NEUTRAL;
-    case CAIObjectType::LAWFUL_EVIL:
+    case CAIOBJECTTYPE_LAWFUL_EVIL:
         return LAWFUL_EVIL;
-    case CAIObjectType::NEUTRAL_GOOD:
+    case CAIOBJECTTYPE_NEUTRAL_GOOD:
         return NEUTRAL_GOOD;
-    case CAIObjectType::NEUTRAL:
+    case CAIOBJECTTYPE_NEUTRAL:
         return NEUTRAL;
-    case CAIObjectType::NEUTRAL_EVIL:
+    case CAIOBJECTTYPE_NEUTRAL_EVIL:
         return NEUTRAL_EVIL;
-    case CAIObjectType::CHAOTIC_GOOD:
+    case CAIOBJECTTYPE_CHAOTIC_GOOD:
         return CHAOTIC_GOOD;
-    case CAIObjectType::CHAOTIC_NEUTRAL:
+    case CAIOBJECTTYPE_CHAOTIC_NEUTRAL:
         return CHAOTIC_NEUTRAL;
-    case CAIObjectType::CHAOTIC_EVIL:
+    case CAIOBJECTTYPE_CHAOTIC_EVIL:
         return CHAOTIC_EVIL;
     }
 
@@ -1498,11 +1498,11 @@ const CString CRuleTables::GetAlignmentString(BYTE nAlignment) const
 const CString CRuleTables::GetClassString(BYTE nClass, DWORD nSpecialist) const
 {
     switch (nClass) {
-    case CAIObjectType::C_BARBARIAN:
+    case CAIOBJECTTYPE_C_BARBARIAN:
         return BARBARIAN;
-    case CAIObjectType::C_BARD:
+    case CAIOBJECTTYPE_C_BARD:
         return BARD;
-    case CAIObjectType::C_CLERIC:
+    case CAIOBJECTTYPE_C_CLERIC:
         switch (nSpecialist & 0xFF8000) {
         case 0x8000:
             return CLERIC_ILMATER;
@@ -1525,11 +1525,11 @@ const CString CRuleTables::GetClassString(BYTE nClass, DWORD nSpecialist) const
         }
 
         return CLERIC;
-    case CAIObjectType::C_DRUID:
+    case CAIOBJECTTYPE_C_DRUID:
         return DRUID;
-    case CAIObjectType::C_FIGHTER:
+    case CAIOBJECTTYPE_C_FIGHTER:
         return FIGHTER;
-    case CAIObjectType::C_MONK:
+    case CAIOBJECTTYPE_C_MONK:
         switch (nSpecialist & 0x38) {
         case 0x8:
             return MONK_OLD_ORDER;
@@ -1540,7 +1540,7 @@ const CString CRuleTables::GetClassString(BYTE nClass, DWORD nSpecialist) const
         }
 
         return MONK;
-    case CAIObjectType::C_PALADIN:
+    case CAIOBJECTTYPE_C_PALADIN:
         switch (nSpecialist & 0x7) {
         case 0x1:
             return PALADIN_ILMATER;
@@ -1551,13 +1551,13 @@ const CString CRuleTables::GetClassString(BYTE nClass, DWORD nSpecialist) const
         }
 
         return PALADIN;
-    case CAIObjectType::C_RANGER:
+    case CAIOBJECTTYPE_C_RANGER:
         return RANGER;
-    case CAIObjectType::C_ROGUE:
+    case CAIOBJECTTYPE_C_ROGUE:
         return ROGUE;
-    case CAIObjectType::C_SORCERER:
+    case CAIOBJECTTYPE_C_SORCERER:
         return SORCERER;
-    case CAIObjectType::C_WIZARD:
+    case CAIOBJECTTYPE_C_WIZARD:
         switch (nSpecialist & 0x7FC0) {
         case 0x40:
             return WIZARD_ABJURER;
@@ -1588,25 +1588,25 @@ const CString CRuleTables::GetClassString(BYTE nClass, DWORD nSpecialist) const
 STRREF CRuleTables::GetClassSuffixStringRef(BYTE nClass) const
 {
     switch (nClass) {
-    case CAIObjectType::C_BARD:
+    case CAIOBJECTTYPE_C_BARD:
         // " - Bard "
         return 39734;
-    case CAIObjectType::C_CLERIC:
+    case CAIOBJECTTYPE_C_CLERIC:
         // " - Cleric "
         return 39736;
-    case CAIObjectType::C_DRUID:
+    case CAIOBJECTTYPE_C_DRUID:
         // " - Druid "
         return 39737;
-    case CAIObjectType::C_PALADIN:
+    case CAIOBJECTTYPE_C_PALADIN:
         // " - Paladin "
         return 39738;
-    case CAIObjectType::C_RANGER:
+    case CAIOBJECTTYPE_C_RANGER:
         // " - Ranger "
         return 39739;
-    case CAIObjectType::C_SORCERER:
+    case CAIOBJECTTYPE_C_SORCERER:
         // " - Sorcerer "
         return 39740;
-    case CAIObjectType::C_WIZARD:
+    case CAIOBJECTTYPE_C_WIZARD:
         // " - Wizard "
         return 39741;
     }
@@ -1620,25 +1620,25 @@ STRREF CRuleTables::GetClassSuffixStringRef(BYTE nClass) const
 STRREF CRuleTables::GetClassBeyondCastingAbilityStringRef(BYTE nClass) const
 {
     switch (nClass) {
-    case CAIObjectType::C_BARD:
+    case CAIOBJECTTYPE_C_BARD:
         // " Beyond Bard Casting Ability"
         return 39804;
-    case CAIObjectType::C_CLERIC:
+    case CAIOBJECTTYPE_C_CLERIC:
         // " Beyond Cleric Casting Ability"
         return 39806;
-    case CAIObjectType::C_DRUID:
+    case CAIOBJECTTYPE_C_DRUID:
         // " Beyond Druid Casting Ability"
         return 39807;
-    case CAIObjectType::C_PALADIN:
+    case CAIOBJECTTYPE_C_PALADIN:
         // " Beyond Paladin Casting Ability"
         return 39808;
-    case CAIObjectType::C_RANGER:
+    case CAIOBJECTTYPE_C_RANGER:
         // " Beyond Ranger Casting Ability"
         return 39809;
-    case CAIObjectType::C_SORCERER:
+    case CAIOBJECTTYPE_C_SORCERER:
         // " Beyond Sorcerer Casting Ability"
         return 39810;
-    case CAIObjectType::C_WIZARD:
+    case CAIOBJECTTYPE_C_WIZARD:
         // " Beyond Wizard Casting Ability"
         return 39811;
     }
@@ -1650,13 +1650,13 @@ STRREF CRuleTables::GetClassBeyondCastingAbilityStringRef(BYTE nClass) const
 STRREF CRuleTables::GetClassDescriptionStringRef(BYTE nClass, DWORD nSpecialist) const
 {
     switch (nClass) {
-    case CAIObjectType::C_BARBARIAN:
+    case CAIOBJECTTYPE_C_BARBARIAN:
         // BARBARIAN
         return 37;
-    case CAIObjectType::C_BARD:
+    case CAIOBJECTTYPE_C_BARD:
         // BARD
         return 9562;
-    case CAIObjectType::C_CLERIC:
+    case CAIOBJECTTYPE_C_CLERIC:
         switch (nSpecialist & 0xFF8000) {
         case 0x8000:
             // PAINBEARER OF ILMATER
@@ -1689,13 +1689,13 @@ STRREF CRuleTables::GetClassDescriptionStringRef(BYTE nClass, DWORD nSpecialist)
 
         // CLERIC
         return 9559;
-    case CAIObjectType::C_DRUID:
+    case CAIOBJECTTYPE_C_DRUID:
         // DRUID
         return 9560;
-    case CAIObjectType::C_FIGHTER:
+    case CAIOBJECTTYPE_C_FIGHTER:
         // FIGHTER
         return 9556;
-    case CAIObjectType::C_MONK:
+    case CAIOBJECTTYPE_C_MONK:
         switch (nSpecialist & 0x38) {
         case 0x8:
             // MONK OF THE OLD ORDER
@@ -1710,7 +1710,7 @@ STRREF CRuleTables::GetClassDescriptionStringRef(BYTE nClass, DWORD nSpecialist)
 
         // MONK
         return 36;
-    case CAIObjectType::C_PALADIN:
+    case CAIOBJECTTYPE_C_PALADIN:
         switch (nSpecialist & 0x7) {
         case 0x1:
             // PALADIN OF ILMATER
@@ -1725,16 +1725,16 @@ STRREF CRuleTables::GetClassDescriptionStringRef(BYTE nClass, DWORD nSpecialist)
 
         // PALADIN
         return 9558;
-    case CAIObjectType::C_RANGER:
+    case CAIOBJECTTYPE_C_RANGER:
         // RANGER
         return 9557;
-    case CAIObjectType::C_ROGUE:
+    case CAIOBJECTTYPE_C_ROGUE:
         // ROGUE
         return 9561;
-    case CAIObjectType::C_SORCERER:
+    case CAIOBJECTTYPE_C_SORCERER:
         // SORCERER
         return 35;
-    case CAIObjectType::C_WIZARD:
+    case CAIOBJECTTYPE_C_WIZARD:
         switch (nSpecialist & 0x7FC0) {
         case 0x40:
             // ABJURER
@@ -1945,47 +1945,47 @@ void CRuleTables::GetClassStringMixed(BYTE nClass, DWORD nSpecialist, CString& s
     DWORD strClass;
 
     switch (nClass) {
-    case CAIObjectType::C_BARBARIAN:
+    case CAIOBJECTTYPE_C_BARBARIAN:
         // "Barbarian"
         strClass = 10;
         break;
-    case CAIObjectType::C_BARD:
+    case CAIOBJECTTYPE_C_BARD:
         // "Bard"
         strClass = 10179;
         break;
-    case CAIObjectType::C_CLERIC:
+    case CAIOBJECTTYPE_C_CLERIC:
         // "Cleric"
         strClass = 10177;
         break;
-    case CAIObjectType::C_DRUID:
+    case CAIOBJECTTYPE_C_DRUID:
         // "Druid"
         strClass = 10186;
         break;
-    case CAIObjectType::C_FIGHTER:
+    case CAIOBJECTTYPE_C_FIGHTER:
         // "Fighter"
         strClass = 10174;
         break;
-    case CAIObjectType::C_MONK:
+    case CAIOBJECTTYPE_C_MONK:
         // "Monk"
         strClass = 39;
         break;
-    case CAIObjectType::C_PALADIN:
+    case CAIOBJECTTYPE_C_PALADIN:
         // "Paladin"
         strClass = 10194;
         break;
-    case CAIObjectType::C_RANGER:
+    case CAIOBJECTTYPE_C_RANGER:
         // "Ranger"
         strClass = 10173;
         break;
-    case CAIObjectType::C_ROGUE:
+    case CAIOBJECTTYPE_C_ROGUE:
         // "Thief"
         strClass = 10175;
         break;
-    case CAIObjectType::C_SORCERER:
+    case CAIOBJECTTYPE_C_SORCERER:
         // "Sorcerer"
         strClass = 38;
         break;
-    case CAIObjectType::C_WIZARD:
+    case CAIOBJECTTYPE_C_WIZARD:
         // "Wizard"
         strClass = 10176;
         break;
@@ -2035,39 +2035,39 @@ void CRuleTables::GetAlignmentStringMixed(BYTE nAlignment, CString& sAlignment) 
     STR_RES strRes;
 
     switch (nAlignment) {
-    case CAIObjectType::LAWFUL_GOOD:
+    case CAIOBJECTTYPE_LAWFUL_GOOD:
         // "Lawful Good"
         dwStrId = 1102;
         break;
-    case CAIObjectType::LAWFUL_NEUTRAL:
+    case CAIOBJECTTYPE_LAWFUL_NEUTRAL:
         // "Lawful Neutral"
         dwStrId = 1104;
         break;
-    case CAIObjectType::LAWFUL_EVIL:
+    case CAIOBJECTTYPE_LAWFUL_EVIL:
         // "Lawful Evil"
         dwStrId = 1103;
         break;
-    case CAIObjectType::NEUTRAL_GOOD:
+    case CAIOBJECTTYPE_NEUTRAL_GOOD:
         // "Neutral Good"
         dwStrId = 1105;
         break;
-    case CAIObjectType::NEUTRAL:
+    case CAIOBJECTTYPE_NEUTRAL:
         // "True Neutral"
         dwStrId = 1106;
         break;
-    case CAIObjectType::NEUTRAL_EVIL:
+    case CAIOBJECTTYPE_NEUTRAL_EVIL:
         // "Neutral Evil"
         dwStrId = 1107;
         break;
-    case CAIObjectType::CHAOTIC_GOOD:
+    case CAIOBJECTTYPE_CHAOTIC_GOOD:
         // "Chaotic Good"
         dwStrId = 1108;
         break;
-    case CAIObjectType::CHAOTIC_NEUTRAL:
+    case CAIOBJECTTYPE_CHAOTIC_NEUTRAL:
         // "Chaotic Neutral"
         dwStrId = 1109;
         break;
-    case CAIObjectType::CHAOTIC_EVIL:
+    case CAIOBJECTTYPE_CHAOTIC_EVIL:
         // "Chaotic Evil"
         dwStrId = 1110;
         break;
@@ -2088,11 +2088,11 @@ void CRuleTables::GetGenderStringMixed(BYTE nGender, CString& sGender) const
     STR_RES strRes;
 
     switch (nGender) {
-    case CAIObjectType::SEX_MALE:
+    case CAIOBJECTTYPE_SEX_MALE:
         // "Male"
         dwStrId = 1050;
         break;
-    case CAIObjectType::SEX_FEMALE:
+    case CAIOBJECTTYPE_SEX_FEMALE:
         // "Female"
         dwStrId = 1051;
         break;
@@ -2168,11 +2168,11 @@ BYTE CRuleTables::MapCharacterSpecializationToSchool(WORD nSpecialistMage) const
 const C2DArray* CRuleTables::GetClassAbilityTable(BYTE nClass, DWORD nSpecialist) const
 {
     switch (nClass) {
-    case CAIObjectType::C_BARBARIAN:
+    case CAIOBJECTTYPE_C_BARBARIAN:
         return &m_tClassAbilitiesBarbarian;
-    case CAIObjectType::C_BARD:
+    case CAIOBJECTTYPE_C_BARD:
         return &m_tClassAbilitiesBard;
-    case CAIObjectType::C_CLERIC:
+    case CAIOBJECTTYPE_C_CLERIC:
         switch (nSpecialist & 0xFF8000) {
         case 0x8000:
             return &m_tClassAbilitiesClericIlmater;
@@ -2195,21 +2195,21 @@ const C2DArray* CRuleTables::GetClassAbilityTable(BYTE nClass, DWORD nSpecialist
         }
 
         return &m_tClassAbilitiesClericTrue;
-    case CAIObjectType::C_DRUID:
+    case CAIOBJECTTYPE_C_DRUID:
         return &m_tClassAbilitiesDruid;
-    case CAIObjectType::C_FIGHTER:
+    case CAIOBJECTTYPE_C_FIGHTER:
         return &m_tClassAbilitiesFighter;
-    case CAIObjectType::C_MONK:
+    case CAIOBJECTTYPE_C_MONK:
         return &m_tClassAbilitiesMonk;
-    case CAIObjectType::C_PALADIN:
+    case CAIOBJECTTYPE_C_PALADIN:
         return &m_tClassAbilitiesPaladin;
-    case CAIObjectType::C_RANGER:
+    case CAIOBJECTTYPE_C_RANGER:
         return &m_tClassAbilitiesRanger;
-    case CAIObjectType::C_ROGUE:
+    case CAIOBJECTTYPE_C_ROGUE:
         return &m_tClassAbilitiesRogue;
-    case CAIObjectType::C_SORCERER:
+    case CAIOBJECTTYPE_C_SORCERER:
         return &m_tClassAbilitiesSorcerer;
-    case CAIObjectType::C_WIZARD:
+    case CAIOBJECTTYPE_C_WIZARD:
         return &m_tClassAbilitiesWizard;
     }
 

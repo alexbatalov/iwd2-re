@@ -37,7 +37,7 @@ void CGameArea::SetDay()
             m_sndAmbientDay.SetResRef(CResRef(m_headerSound.m_dayAmbient), TRUE, TRUE);
             if (m_sndAmbientDay.GetResRef() != "") {
                 m_sndAmbientDay.SetLoopingFlag(TRUE);
-                m_sndAmbientDay.SetChannel(1, reinterpret_cast<uintptr_t>(this));
+                m_sndAmbientDay.SetChannel(1, reinterpret_cast<DWORD>(this));
                 m_sndAmbientDay.SetVolume(m_sndAmbientDayVolume * m_sndAmbientVolume / 100);
                 m_sndAmbientDay.Play(FALSE);
             }
@@ -62,7 +62,7 @@ void CGameArea::SetNight()
             m_sndAmbientNight.SetResRef(CResRef(m_headerSound.m_nightAmbient), TRUE, TRUE);
             if (m_sndAmbientNight.GetResRef() != "") {
                 m_sndAmbientNight.SetLoopingFlag(TRUE);
-                m_sndAmbientNight.SetChannel(1, reinterpret_cast<uintptr_t>(this));
+                m_sndAmbientNight.SetChannel(1, reinterpret_cast<DWORD>(this));
                 m_sndAmbientNight.SetVolume(m_sndAmbientNightVolume * m_sndAmbientVolume / 100);
                 m_sndAmbientNight.Play(FALSE);
             }

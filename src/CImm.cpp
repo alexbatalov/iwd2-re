@@ -6,7 +6,7 @@
 #include "CWarp.h"
 
 // 0xA09FC0
-const CSize CImm::PADDING = { 3, 3 };
+const CSize CImm::PADDING(3, 3);
 
 // WM_IME_STARTCOMPOSITION
 // NOTE: Inlined in `WndProc`.
