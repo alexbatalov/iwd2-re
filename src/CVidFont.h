@@ -20,9 +20,10 @@ public:
     void RealizePalette(COLORREF rgbForegroundColor, COLORREF rgbBackgroundColor);
     BOOL TextOut(const CString& sString, int x, int y, const CRect& rClip, INT nSurface);
     BOOL TextOut(const CString& sString, WORD* pSurface, LONG lPitch, int x, int y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded);
+    BOOL TextOutEx(INT nSurface, const CString& sString, int x, int y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded);
     int RegisterFont();
     void Unload();
-    void TextOut3d(const CString& sText, int a3, int a4, const CRect& rect, int a6, int a7);
+    BOOL TextOut3d(const CString& sText, int x, int y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded);
 
     static void UnloadAllFonts();
 

@@ -433,6 +433,14 @@ BOOL CVidFont::TextOut(const CString& sString, WORD* pSurface, LONG lPitch, int 
     return TRUE;
 }
 
+// 0x793A70
+BOOL CVidFont::TextOutEx(INT nSurface, const CString& sString, int x, int y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x7A05A0
 int CVidFont::RegisterFont()
 {
@@ -454,7 +462,9 @@ void CVidFont::UnloadAllFonts()
 }
 
 // 0x7A1210
-void CVidFont::TextOut3d(const CString& sText, int a3, int a4, const CRect& rect, int a6, int a7)
+BOOL CVidFont::TextOut3d(const CString& sText, int x, int y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded)
 {
     // TODO: Incomplete.
+
+    return FALSE;
 }

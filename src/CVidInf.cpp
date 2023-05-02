@@ -1172,6 +1172,50 @@ BOOL CVidInf::BKRenderLine(int nXFrom, int nYFrom, int nXTo, int nYTo, const CRe
     return FALSE;
 }
 
+// 0x79E340
+BOOL CVidInf::BKTextOut(CVidFont* pFont, const CString& sString, int x, int y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded)
+{
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        CRect rNewClip;
+        rNewClip.left = m_rLockedRect.left + rClip.left;
+        rNewClip.top = m_rLockedRect.top + rClip.top;
+        rNewClip.top = m_rLockedRect.left + rClip.right;
+        rNewClip.bottom = m_rLockedRect.top + rClip.bottom;
+
+        return pFont->TextOut3d(sString,
+            x + m_rLockedRect.left,
+            y + m_rLockedRect.top,
+            rNewClip,
+            dwFlags,
+            bDemanded);
+    }
+
+    if (g_pChitin->m_sFontName.Compare("") == 0 || pFont->GetResRef() == "STATES2") {
+        return pFont->TextOut(sString,
+            reinterpret_cast<WORD*>(m_SurfaceDesc.lpSurface),
+            m_SurfaceDesc.lPitch,
+            x,
+            y,
+            rClip,
+            dwFlags,
+            bDemanded);
+    }
+
+    CRect rNewClip;
+    rNewClip.left = m_rLockedRect.left + rClip.left;
+    rNewClip.top = m_rLockedRect.top + rClip.top;
+    rNewClip.top = m_rLockedRect.left + rClip.right;
+    rNewClip.bottom = m_rLockedRect.top + rClip.bottom;
+
+    return pFont->TextOutEx(CVIDINF_SURFACE_BACK,
+        sString,
+        x + m_rLockedRect.left,
+        y + m_rLockedRect.top,
+        rNewClip,
+        dwFlags,
+        bDemanded);
+}
+
 // #binary-identical
 // 0x79E4A0
 void CVidInf::GetFogOWarTileRect(unsigned char a2, CRect& rTileRect)
