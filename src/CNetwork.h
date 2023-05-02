@@ -1,35 +1,54 @@
 #ifndef CNETWORK_H_
 #define CNETWORK_H_
 
-#include <afx.h>
+#include "mfc.h"
 
 #include "CNetworkWindow.h"
+
+#define CNETWORK_MAX_SERVICE_PROVIDERS 5
 
 class CNetwork {
 public:
     CNetwork();
     ~CNetwork();
+    BOOLEAN EnumerateServiceProviders();
+    BOOLEAN GetServiceProviderType(INT nServiceProviderNumber, INT& nServiceProviderType);
+    void RemoveInitializeConnection();
+    BOOLEAN SelectServiceProvider(INT nServiceProviderNumber);
     void CloseSession(BOOLEAN bAIResponsible);
     void OnCloseSession();
+    BOOLEAN JoinSelectedSession(INT& nErrorCode);
 
-    static const GUID GUID_NULL;
+    static const INT MAX_SERVICE_PROVIDERS;
+
+    static const INT SERV_PROV_TCP_IP;
+    static const INT SERV_PROV_MODEM;
+    static const INT SERV_PROV_SERIAL;
+    static const INT SERV_PROV_IPX;
+    static const INT SERV_PROV_NULL;
+
+    static const INT ERROR_NONE;
+    static const INT ERROR_PLAYEREXISTS;
+    static const INT ERROR_CANNOTCREATEPLAYER;
+    static const INT ERROR_CANNOTCONNECT;
+    static const INT ERROR_INVALIDPASSWORD;
 
     /* 0000 */ int field_0;
     /* 0004 */ int field_4;
     /* 0008 */ GUID m_nApplicationGuid;
     /* 0018 */ BOOLEAN m_bApplicationGuidDefined;
     /* 0019 */ unsigned char field_19;
-    /* 001A */ unsigned char field_1A;
-    /* 001B */ unsigned char field_1B;
-    /* 001C */ int field_1C;
-    /* 0020 */ int field_20;
+    /* 001A */ BOOLEAN m_bServiceProviderEnumerated;
+    /* 001B */ BOOLEAN m_bServiceProviderSelected;
+    /* 001C */ INT m_nServiceProvider;
+    /* 0020 */ INT m_nTotalServiceProviders;
     /* 0024 */ int field_24;
     /* 0028 */ int field_28;
     /* 002C */ int field_2C;
     /* 0030 */ int field_30;
     /* 0034 */ int field_34;
-    /* 0038 */ CString field_38[5];
-    /* 004C */ GUID field_4C;
+    /* 0038 */ CString m_serviceProviderNames[CNETWORK_MAX_SERVICE_PROVIDERS];
+    /* 004C */ GUID m_serviceProviderGuids[CNETWORK_MAX_SERVICE_PROVIDERS];
     /* 009C */ unsigned char field_9C;
     /* 009D */ unsigned char field_9D;
     /* 009E */ unsigned char field_9E;
@@ -48,7 +67,7 @@ public:
     /* 0116 */ unsigned char field_116;
     /* 0118 */ int field_118;
     /* 0120 */ unsigned char field_120;
-    /* 0121 */ unsigned char field_121;
+    /* 0121 */ BOOLEAN m_bSessionSelected;
     /* 0122 */ int field_122;
     /* 0126 */ int field_126;
     /* 012A */ CString field_12A[64];

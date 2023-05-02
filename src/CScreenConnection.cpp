@@ -570,7 +570,8 @@ void CUIControlButtonConnectionJoinGame::OnLButtonClick(CPoint pt)
     // __LINE__: 7620
     UTIL_ASSERT(pConnection != NULL);
 
-    if (g_pChitin->cNetwork.field_1C && g_pBaldurChitin->cDimm.cResCache.m_nCacheSize < 175000000) {
+    if (g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL
+        && g_pBaldurChitin->cDimm.cResCache.m_nCacheSize < 175000000) {
         pConnection->field_49E = 2;
         pConnection->m_popupText = 20692;
         pConnection->m_popupButtonText1 = 11973;

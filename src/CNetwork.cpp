@@ -2,8 +2,38 @@
 
 #include "CChitin.h"
 
-// 0x861078
-const GUID CNetwork::GUID_NULL = { 0 };
+// 0x85E63C
+const INT CNetwork::MAX_SERVICE_PROVIDERS = CNETWORK_MAX_SERVICE_PROVIDERS;
+
+// 0x85E64C
+const INT CNetwork::SERV_PROV_TCP_IP = 8;
+
+// 0x85E650
+const INT CNetwork::SERV_PROV_MODEM = 4;
+
+// 0x85E654
+const INT CNetwork::SERV_PROV_SERIAL = 2;
+
+// 0x85E658
+const INT CNetwork::SERV_PROV_IPX = 1;
+
+// 0x85E65C
+const INT CNetwork::SERV_PROV_NULL = 0;
+
+// 0x85E6A8
+const INT CNetwork::ERROR_NONE = 0;
+
+// 0x85E6AC
+const INT CNetwork::ERROR_PLAYEREXISTS = 1;
+
+// 0x85E6B0
+const INT CNetwork::ERROR_CANNOTCREATEPLAYER = 2;
+
+// 0x85E6B4
+const INT CNetwork::ERROR_CANNOTCONNECT = 3;
+
+// 0x85E6B8
+const INT CNetwork::ERROR_INVALIDPASSWORD = 4;
 
 // 0x7A3FD0
 CNetwork::CNetwork()
@@ -19,12 +49,11 @@ CNetwork::CNetwork()
     m_nApplicationGuid = GUID_NULL;
     m_bApplicationGuidDefined = FALSE;
     field_19 = 0;
-    field_1A = 0;
-    field_1B = 0;
-    field_1C = -1;
-    field_20 = 0;
-    field_4C = GUID_NULL;
-    field_20++;
+    m_bServiceProviderEnumerated = FALSE;
+    m_bServiceProviderSelected = FALSE;
+    m_nServiceProvider = -1;
+    m_nTotalServiceProviders = 0;
+    m_serviceProviderGuids[m_nTotalServiceProviders++] = GUID_NULL;
     field_9C = 0;
     field_24 = 0;
     field_28 = 0;
@@ -50,7 +79,7 @@ CNetwork::CNetwork()
         field_630[k] = 0;
     }
 
-    field_121 = 0;
+    m_bSessionSelected = FALSE;
     field_122 = -1;
     field_126 = 0;
     field_66A = GUID_NULL;
@@ -112,6 +141,51 @@ CNetwork::~CNetwork()
     // TODO: Incomplete.
 }
 
+// 0x7A5340
+BOOLEAN CNetwork::EnumerateServiceProviders()
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x7A5520
+BOOLEAN CNetwork::GetServiceProviderType(INT nServiceProviderNumber, INT& nServiceProviderType)
+{
+    if (!(nServiceProviderNumber >= 0 && nServiceProviderNumber < m_nTotalServiceProviders)) {
+        nServiceProviderType = SERV_PROV_NULL;
+        return FALSE;
+    }
+
+    // TODO: Incomplete.
+
+    nServiceProviderType = SERV_PROV_NULL;
+    return TRUE;
+}
+
+// 0x7A5720
+void CNetwork::RemoveInitializeConnection()
+{
+    // TODO: Incomplete.
+}
+
+// 0x7A57A0
+BOOLEAN CNetwork::SelectServiceProvider(INT nServiceProviderNumber)
+{
+    if (!m_bServiceProviderEnumerated) {
+        return FALSE;
+    }
+
+    if (!(nServiceProviderNumber >= 0 && nServiceProviderNumber < m_nTotalServiceProviders)) {
+        return FALSE;
+    }
+
+    m_nServiceProvider = nServiceProviderNumber;
+    m_bServiceProviderSelected = TRUE;
+
+    return m_bServiceProviderEnumerated;
+}
+
 // 0x7A5A20
 void CNetwork::CloseSession(BOOLEAN bAIResponsible)
 {
@@ -130,4 +204,17 @@ void CNetwork::CloseSession(BOOLEAN bAIResponsible)
 void CNetwork::OnCloseSession()
 {
     // TODO: Incomplete.
+}
+
+// 0x7A64B0
+BOOLEAN CNetwork::JoinSelectedSession(INT& nErrorCode)
+{
+    if (!m_bSessionSelected) {
+        nErrorCode = ERROR_CANNOTCONNECT;
+        return FALSE;
+    }
+
+    // TODO: Incomplete.
+
+    return FALSE;
 }
