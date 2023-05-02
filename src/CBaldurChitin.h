@@ -49,6 +49,8 @@ public:
     };
 
     static const GUID GUID_BALDUR_GATE;
+    static const DWORD MINIMUM_DRIVE_SPACE;
+    static const DWORD MINIMUM_DRIVE_SECTORS;
     static const USHORT DEFAULT_SCREEN_WIDTH;
     static const USHORT DEFAULT_SCREEN_HEIGHT;
 

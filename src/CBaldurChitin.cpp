@@ -87,6 +87,12 @@ CBaldurChitin* g_pBaldurChitin;
 // 0x847F50
 const GUID CBaldurChitin::GUID_BALDUR_GATE = { 0x588C135F, 0x0B15, 0x4A02, { 0x8F, 0x2D, 0x04, 0x69, 0x7B, 0xE2, 0x90, 0x4E } };
 
+// 0x847F64
+const DWORD CBaldurChitin::MINIMUM_DRIVE_SPACE = 5000000;
+
+// 0x847F68
+const DWORD CBaldurChitin::MINIMUM_DRIVE_SECTORS = 1500;
+
 // #guess
 // 0x85DE3C
 const USHORT CBaldurChitin::DEFAULT_SCREEN_WIDTH = 800;
