@@ -470,3 +470,10 @@ void CUIPanel::SetActive(BOOL bActive)
         pControl->SetActive(bActive);
     }
 }
+
+// 0x5FF320
+void CUIPanel::SetBackgroundResRef(CResRef cNewResRef, BOOL bDoubleSize)
+{
+    m_mosBackground.SetResRef(cNewResRef, TRUE, TRUE);
+    m_mosBackground.m_bDoubleSize = bDoubleSize;
+}

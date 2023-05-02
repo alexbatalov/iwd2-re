@@ -30,6 +30,7 @@ public:
     void RenderDither(const CRect& rClip);
     void InvalidateRect(const CRect* pRect);
     void SetActive(BOOL bActive);
+    void SetBackgroundResRef(CResRef cNewResRef, BOOL bDoubleSize);
 
     /* 0000 */ CUIManager* m_pManager; // #guess
     /* 0004 */ CTypedPtrList<CPtrList, CUIControlBase*> m_lControls; // #guess
