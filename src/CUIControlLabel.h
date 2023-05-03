@@ -19,10 +19,11 @@ public:
 
     /* 0052 */ CString* m_pText;
     /* 0056 */ SHORT m_nRenderCount;
-    /* 0058 */ CVidFont field_58;
-    /* 055A */ short field_55A;
-    short field_55C;
-    unsigned char field_55E;
+    /* 0058 */ CVidFont m_cVidFont;
+    /* 0558 */ SHORT m_nFontHeight;
+    /* 055A */ WORD m_nTextFlags;
+    /* 055C */ SHORT m_nTextLines;
+    /* 055E */ BYTE m_nMaxLines;
 };
 
 #endif /* CUICONTROLLABEL_H_ */

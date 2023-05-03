@@ -1,6 +1,7 @@
 #include "CUIControlBase.h"
 
 #include "CScreenConnection.h"
+#include "CUIControlLabel.h"
 #include "CUIManager.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -15,6 +16,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
     // TODO: Incomplete.
 
     if (controlInfo->nID >= 0xFFFFFFF) {
+        return new CUIControlLabel(pPanel, reinterpret_cast<UI_CONTROL_LABEL*>(controlInfo));
     }
 
     if (pPanel->m_pManager->m_cResRef == "START") {

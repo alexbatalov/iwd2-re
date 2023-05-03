@@ -63,9 +63,13 @@ typedef struct UI_Control_Slider_st {
     UI_CONTROL base;
 } UI_CONTROL_SLIDER;
 
-// TODO: Incomplete.
 typedef struct UI_Control_Label_st {
     UI_CONTROL base;
+    STRREF nText;
+    RESREF refTextFont;
+    DWORD nForegroundColor;
+    DWORD nBackgroundColor;
+    WORD nTextFlags;
 } UI_CONTROL_LABEL;
 
 typedef struct WED_WedHeader_st {
