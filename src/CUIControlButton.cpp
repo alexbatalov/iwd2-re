@@ -250,7 +250,7 @@ void CUIControlButton::OnRButtonUp(CPoint pt)
 // 0x4D5070
 BOOL CUIControlButton::Render(BOOL bForce)
 {
-    CVidInf* pVidMode = static_cast<CVidInf*>(g_pBaldurChitin->GetCurrentVideoMode());
+    CVidInf* pVidInf = static_cast<CVidInf*>(g_pBaldurChitin->GetCurrentVideoMode());
     if (!m_bActive && !m_bInactiveRender) {
         return FALSE;
     }
@@ -272,7 +272,7 @@ BOOL CUIControlButton::Render(BOOL bForce)
     CRect rDirtyRect;
     rDirtyRect.IntersectRect(rControlRect, field_22);
 
-    if (!pVidMode->BKLock(rDirtyRect)) {
+    if (!pVidInf->BKLock(rDirtyRect)) {
         return FALSE;
     }
 
@@ -283,7 +283,7 @@ BOOL CUIControlButton::Render(BOOL bForce)
 
     DWORD dwFlags = field_64C != 0 ? 0x80001 : 0x1;
     m_cVidCell.RealizePalette(dwFlags);
-    BOOL bResult = pVidMode->BKRender(&m_cVidCell, pt.x, pt.y, rDirtyRect, TRUE, dwFlags);
+    BOOL bResult = pVidInf->BKRender(&m_cVidCell, pt.x, pt.y, rDirtyRect, TRUE, dwFlags);
     m_cVidCell.pRes->Release();
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\ChUIControls.cpp
@@ -291,10 +291,88 @@ BOOL CUIControlButton::Render(BOOL bForce)
     UTIL_ASSERT(bResult);
 
     if (m_pText != NULL) {
-        // TODO: Incomplete.
+        if (m_bPressed) {
+            pt.x += field_63E;
+            pt.y += field_642;
+        }
+
+        DWORD dwFlags;
+        if (field_64C) {
+            dwFlags = 0x80000;
+        } else if (m_bEnabled) {
+            dwFlags = 0;
+        } else {
+            m_cVidFont.SetTintColor(RGB(180, 180, 180));
+
+            if (g_pChitin->field_1A0) {
+                m_cVidFont.SetTintColor(RGB(80, 80, 80));
+            }
+
+            dwFlags = 0x20000;
+        }
+
+        m_cVidFont.pRes->Demand();
+
+        SHORT nBaseLineHeight = m_cVidFont.GetBaseLineHeight(TRUE);
+        SHORT nFontHeight = m_cVidFont.GetFontHeight(TRUE);
+
+        if ((m_nTextFlags & 0x10) != 0) {
+            if ((m_nTextFlags & 0x4) != 0) {
+                pt.y += field_65C;
+            } else if ((m_nTextFlags & 0x8) != 0) {
+                pt.y += field_65C - nFontHeight + m_nTextLines;
+            } else {
+                pt.y += field_65C - nFontHeight * m_nTextLines / 2;
+            }
+        } else {
+            if ((m_nTextFlags & 0x4) != 0) {
+                pt.y += dword_8AB9B4 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1);
+            } else if ((m_nTextFlags & 0x8) != 0) {
+                pt.y += m_nHeight
+                    - dword_8AB9B4 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1)
+                    - nFontHeight * m_nTextLines;
+            } else {
+                pt.y += (m_nHeight - nFontHeight * m_nTextLines) / 2;
+            }
+        }
+
+        for (int nLine = 0; nLine < m_nTextLines; nLine++) {
+            int x;
+            if ((m_nTextFlags & 0x10) != 0) {
+                if ((m_nTextFlags & 0x1) != 0) {
+                    x = pt.x + field_658;
+                } else if ((m_nTextFlags & 0x2) != 0) {
+                    x = pt.x + field_658
+                        - m_cVidFont.GetStringLength(m_pText[nLine], TRUE);
+                } else {
+                    x = pt.x + field_658
+                        - m_cVidFont.GetStringLength(m_pText[nLine], TRUE) / 2;
+                }
+            } else {
+                if ((m_nTextFlags & 0x1) != 0) {
+                    x = pt.x + dword_8AB9B4 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1);
+                } else if ((m_nTextFlags & 0x2) != 0) {
+                    // FIXME: Calculating string width twice.
+                    x = pt.x + max(m_nWidth - m_cVidFont.GetStringLength(m_pText[nLine], TRUE), 0);
+                } else {
+                    // FIXME: Calculating string width twice.
+                    x = pt.x + max(m_nWidth - m_cVidFont.GetStringLength(m_pText[nLine], TRUE), 0) / 2;
+                }
+            }
+
+            pVidInf->BKTextOut(&m_cVidFont,
+                m_pText[nLine],
+                x,
+                pt.y + nBaseLineHeight,
+                rDirtyRect,
+                dwFlags,
+                TRUE);
+
+            pt.y += nFontHeight;
+        }
     }
 
-    pVidMode->BKUnlock();
+    pVidInf->BKUnlock();
     return TRUE;
 }
 
