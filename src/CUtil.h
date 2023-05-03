@@ -12,7 +12,7 @@ public:
     static void UtilAssert(int nLineNumber, const char* szFileName, const char* pExp, const char* pText);
     static LONG UtilRandInt(LONG nRange, LONG nWeight);
     static int GetCurrentBitsPerPixels();
-    static int SplitString(CVidFont* pTextFont, const CString& sSource, WORD nLineLength, int nMaxStrings, CString* pStringsOut, BOOL bDivideWords, BOOL bDemanded, BOOL bCheckRemainderForNewLine, WORD nSuggestedSplitLength);
+    static BYTE SplitString(CVidFont* pTextFont, const CString& sSource, WORD nLineLength, BYTE nMaxStrings, CString* pStringsOut, BOOL bDivideWords, BOOL bDemanded, BOOL bCheckRemainderForNewLine, WORD nSuggestedSplitLength);
 
     static CCriticalSection ZLIB_CRITICAL_SECTION;
 };

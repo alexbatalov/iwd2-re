@@ -3,6 +3,7 @@
 #include <zlib.h>
 
 #include "CChitin.h"
+#include "CVidFont.h"
 
 // #guess
 // 0x8FB8E8
@@ -77,9 +78,80 @@ int CUtil::GetCurrentBitsPerPixels()
 }
 
 // 0x780CF0
-int CUtil::SplitString(CVidFont* pTextFont, const CString& sSource, WORD nLineLength, int nMaxStrings, CString* pStringsOut, BOOL bDivideWords, BOOL bDemanded, BOOL bCheckRemainderForNewLine, WORD nSuggestedSplitLength)
+BYTE CUtil::SplitString(CVidFont* pTextFont, const CString& sSource, WORD nLineLength, BYTE nMaxStrings, CString* pStringsOut, BOOL bDivideWords, BOOL bDemanded, BOOL bCheckRemainderForNewLine, WORD nSuggestedSplitLength)
 {
-    // TODO: Incomplete.
+    if (sSource.Compare("") == 0) {
+        return 0;
+    }
 
-    return 0;
+    if (pStringsOut == NULL || nMaxStrings == 0 || nLineLength == 0) {
+        return 0;
+    }
+
+    if (!bDemanded) {
+        if (pTextFont->pRes->Demand() == NULL) {
+            return 0;
+        }
+    }
+
+    pStringsOut[0] = sSource;
+    for (BYTE nNext = 1; nNext < nMaxStrings; nNext++) {
+        pStringsOut[nNext] = "";
+    }
+
+    BYTE nCurrentLine = 0;
+    while (nCurrentLine < nMaxStrings) {
+        if (pStringsOut[nCurrentLine].IsEmpty()) {
+            break;
+        }
+
+        int nSpace = -1;
+
+        // TODO: Incomplete (unclear DBCS code).
+        for (int nIndex = 0; nIndex < pStringsOut[nCurrentLine].GetLength(); nIndex++) {
+            char ch = pStringsOut[nCurrentLine][nIndex];
+            if (ch == '\n' || ch == '\r') {
+                if (nCurrentLine + 1 < nMaxStrings) {
+                    pStringsOut[nCurrentLine + 1] = pStringsOut[nCurrentLine].Mid(nIndex + 1);
+                }
+
+                if (nCurrentLine + 1 != nMaxStrings || bCheckRemainderForNewLine) {
+                    pStringsOut[nCurrentLine] = pStringsOut[nCurrentLine].Left(nIndex);
+                }
+
+                break;
+            }
+
+            if (ch == ' ') {
+                nSpace = nIndex;
+            }
+
+            LONG nSubStringWidth = pTextFont->GetStringLength(pStringsOut[nCurrentLine].Left(nIndex + 1), TRUE);
+
+            // NOTE: Signed compare.
+            if (nSubStringWidth > static_cast<WORD>(nLineLength)
+                || (nSubStringWidth >= nSuggestedSplitLength
+                    && nSpace == nIndex)) {
+                if (nCurrentLine + 1 < nMaxStrings) {
+                    if (bDivideWords || nSpace == -1) {
+                        pStringsOut[nCurrentLine + 1] = pStringsOut[nCurrentLine].Mid(nIndex);
+                        pStringsOut[nCurrentLine] = pStringsOut[nCurrentLine].Left(nIndex);
+                    } else {
+                        pStringsOut[nCurrentLine + 1] = pStringsOut[nCurrentLine].Mid(nSpace + 1);
+                        pStringsOut[nCurrentLine] = pStringsOut[nCurrentLine].Left(nSpace);
+                    }
+                }
+
+                break;
+            }
+        }
+
+        nCurrentLine++;
+    }
+
+    if (!bDemanded) {
+        pTextFont->pRes->Release();
+    }
+
+    return nCurrentLine;
 }
