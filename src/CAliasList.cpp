@@ -4,6 +4,19 @@
 
 #include "CAlias.h"
 
+// 0x781A00
+CAliasList::~CAliasList()
+{
+    POSITION pos = GetHeadPosition();
+    while (pos != NULL) {
+        CAlias* pAlias = static_cast<CAlias*>(GetNext(pos));
+        if (pAlias != NULL) {
+            delete pAlias;
+        }
+    }
+    RemoveAll();
+}
+
 // #binary-identical
 // 0x781A90
 BOOL CAliasList::AddAlias(CAlias* pAlias)

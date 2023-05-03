@@ -7,6 +7,7 @@ class CAlias;
 
 class CAliasList : public CObList {
 public:
+    ~CAliasList();
     BOOL AddAlias(CAlias* pAlias);
     BOOL ResolveFileName(const CString& a2, CString& a3);
 };
