@@ -59,14 +59,6 @@ typedef struct biffFixedTableEntry_st {
     DWORD nType;
 } BIFF_FIXEDTABLEENTRY;
 
-typedef struct {
-    DWORD nFileType;
-    DWORD nFileVersion;
-    WORD nLanguage;
-    DWORD nStrEntries;
-    DWORD nStrEntriesOffset;
-} TLK_FILE_HEADER;
-
 typedef struct mosHeader_st {
     DWORD nFileType;
     DWORD nFileVersion;

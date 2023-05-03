@@ -1,7 +1,9 @@
 #ifndef CTLKFILEOVERRIDE_H_
 #define CTLKFILEOVERRIDE_H_
 
-#include <afx.h>
+#include "mfc.h"
+
+#include "CStrRes.h"
 
 class CTlkFileOverrideText : public CFile {
 public:
@@ -37,6 +39,8 @@ public:
 
     // Destructor is inlined in `CTlkTable`.
     ~CTlkFileOverride() { }
+
+    BOOLEAN Fetch(DWORD strId, STR_RES& strRes);
 
     /* 0000 */ CString field_0;
     /* 0004 */ CString field_4;

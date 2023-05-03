@@ -187,6 +187,7 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CSoundProperties.h"
     "src/CSpell.cpp"
     "src/CSpell.h"
+    "src/CStrRes.h"
     "src/CSwitchCDStatus.cpp"
     "src/CSwitchCDStatus.h"
     "src/CTimerWorld.cpp"

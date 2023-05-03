@@ -1,5 +1,7 @@
 #include "CTlkFileOverride.h"
 
+#include "CTlkTable.h"
+
 // #binary-identical
 // 0x7B5CA0
 CTlkFileOverrideHeader::CTlkFileOverrideHeader()
@@ -30,4 +32,12 @@ CTlkFileOverrideHeader::~CTlkFileOverrideHeader()
         delete m_ppEntries;
         m_ppEntries = NULL;
     }
+}
+
+// 0x7B5690
+BOOLEAN CTlkFileOverride::Fetch(DWORD strId, STR_RES& strRes)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
 }
