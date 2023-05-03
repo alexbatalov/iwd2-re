@@ -130,7 +130,7 @@ void CSoundMixer::CleanUp()
     Lock();
 
     if (m_aChannels.GetSize() > 0) {
-        for (int k = 0; k < m_nMaxChannels; k++) {
+        for (int k = 0; k <= m_nMaxChannels; k++) {
             CSoundChannel* pSoundChannel = static_cast<CSoundChannel*>(m_aChannels.GetAt(k));
             if (pSoundChannel != NULL) {
                 delete pSoundChannel;
