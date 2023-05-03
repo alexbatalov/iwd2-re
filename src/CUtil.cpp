@@ -176,3 +176,26 @@ void CUtil::TrimLeft(CString& sString)
 
     sString = sString.Mid(nIndex);
 }
+
+// 0x781520
+void CUtil::TrimRight(CString& sString)
+{
+    int nEnd = -1;
+    int nIndex = 0;
+    while (nIndex < sString.GetLength()) {
+        if (g_pChitin->field_1A0 && IsDBCSLeadByte(sString[nIndex])) {
+            nIndex++;
+            nEnd = nIndex;
+        } else {
+            if (sString[nIndex] != ' '
+                && sString[nIndex] != '\t'
+                && sString[nIndex] != '\n') {
+                nEnd = nIndex;
+            }
+        }
+
+        nIndex++;
+    }
+
+    sString = sString.Left(nEnd + 1);
+}
