@@ -241,6 +241,8 @@ BOOL CResFile::OpenFile()
                 delete m_pVarEntries;
                 m_pVarEntries = NULL;
             }
+
+            return FALSE;
         }
 
         if (m_cFile.Read(m_pFixedEntries, sizeof(BIFF_FIXEDTABLEENTRY) * m_pHeader->nFixedRes) < sizeof(BIFF_FIXEDTABLEENTRY) * m_pHeader->nFixedRes) {
@@ -255,6 +257,8 @@ BOOL CResFile::OpenFile()
 
             delete m_pFixedEntries;
             m_pFixedEntries = NULL;
+
+            return FALSE;
         }
     }
 
