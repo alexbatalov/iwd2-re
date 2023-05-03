@@ -155,3 +155,24 @@ BYTE CUtil::SplitString(CVidFont* pTextFont, const CString& sSource, WORD nLineL
 
     return nCurrentLine;
 }
+
+// 0x781470
+void CUtil::TrimLeft(CString& sString)
+{
+    int nIndex = 0;
+    while (nIndex < sString.GetLength()) {
+        if (g_pChitin->field_1A0 && IsDBCSLeadByte(sString[nIndex])) {
+            break;
+        }
+
+        if (sString[nIndex] != ' '
+            && sString[nIndex] != '\t'
+            && sString[nIndex] != '\n') {
+            break;
+        }
+
+        nIndex++;
+    }
+
+    sString = sString.Mid(nIndex);
+}

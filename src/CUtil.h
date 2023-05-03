@@ -13,6 +13,7 @@ public:
     static LONG UtilRandInt(LONG nRange, LONG nWeight);
     static int GetCurrentBitsPerPixels();
     static BYTE SplitString(CVidFont* pTextFont, const CString& sSource, WORD nLineLength, BYTE nMaxStrings, CString* pStringsOut, BOOL bDivideWords, BOOL bDemanded, BOOL bCheckRemainderForNewLine, WORD nSuggestedSplitLength);
+    static void TrimLeft(CString& sString);
 
     static CCriticalSection ZLIB_CRITICAL_SECTION;
 };
