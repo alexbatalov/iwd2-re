@@ -246,7 +246,7 @@ CChitin::CChitin()
     field_128 = 0;
     field_12C = "";
     field_131 = 0;
-    field_132 = "";
+    m_sStartUpGameSpyLocation = "";
     field_130 = 0;
     field_136 = 6;
     dword_8FB974 = 0;
@@ -1975,6 +1975,12 @@ CVidMode* CChitin::GetCurrentVideoMode()
 CString CChitin::GetFontName()
 {
     return m_sFontName;
+}
+
+// 0x5FBEC0
+CString CChitin::GetStartUpGameSpyLocation()
+{
+    return m_sStartUpGameSpyLocation;
 }
 
 // 0x7928A0
