@@ -6,6 +6,9 @@
 #include "CUtil.h"
 #include "CVidInf.h"
 
+// 0x8CFF2C
+BOOLEAN CBaldurProjector::byte_8CFF2C;
+
 // NOTE: Not sure if it's actually part of class. There is a strange mix of
 // `this` vs. instance obtained from global `g_pBaldurChitin`.
 //
@@ -78,7 +81,7 @@ CBaldurProjector::CBaldurProjector()
     field_10A = 0;
     field_144 = 1;
     field_145 = 0;
-    field_146 = 0;
+    m_bSelectEngine = FALSE;
     field_147 = 0;
 
     field_14A.SetResRef(CResRef("NORMAL"), g_pChitin->field_2EC, 1);
@@ -141,6 +144,12 @@ CBaldurProjector::CBaldurProjector()
             m_hBinkDLL = NULL;
         }
     }
+}
+
+// 0x49FC40
+BOOL CBaldurProjector::CheckMouseLButton()
+{
+    return TRUE;
 }
 
 // 0x43E9E0
@@ -457,8 +466,8 @@ void CBaldurProjector::TimerAsynchronousUpdate()
 {
     EnterCriticalSection(&(g_pChitin->field_3AC));
 
-    if (field_146) {
-        field_146 = 0;
+    if (m_bSelectEngine) {
+        m_bSelectEngine = FALSE;
 
         if (g_pChitin->cNetwork.m_bConnectionEstablished == 1
             && !g_pChitin->cNetwork.m_bIsHost) {
@@ -473,9 +482,21 @@ void CBaldurProjector::TimerAsynchronousUpdate()
         SelectEngine(pLastEngine);
     }
 
-    if (g_pChitin->pActiveEngine == this && !field_146) {
+    if (g_pChitin->pActiveEngine == this && !m_bSelectEngine) {
+        BOOLEAN v1 = byte_8CFF2C && m_bDeactivateEngine;
+        BOOLEAN v2 = (g_pChitin->cNetwork.m_nServiceProvider == CNetwork::SERV_PROV_NULL
+                         || g_pChitin->cNetwork.m_nServiceProvider == -1)
+            && (field_144 || field_145) && m_bDeactivateEngine;
+
         if (m_hBink != NULL) {
-            if (m_hBink->frame_num == m_hBink->frames) {
+            if (v1 || v2 || m_hBink->frame_num == m_hBink->frames) {
+                byte_8CFF2C = FALSE;
+
+                if (m_hBink != NULL) {
+                    m_pfnBinkClose(m_hBink);
+                    m_hBink = NULL;
+                }
+
                 if (field_145) {
                     field_145 = 0;
                 }
@@ -493,7 +514,7 @@ void CBaldurProjector::TimerAsynchronousUpdate()
                 }
 
                 if (m_hBink == NULL) {
-                    field_146 = 1;
+                    m_bSelectEngine = TRUE;
                 }
             } else {
                 if (m_pfnBinkWait(m_hBink) == 0) {

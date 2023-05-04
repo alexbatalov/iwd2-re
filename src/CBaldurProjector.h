@@ -35,6 +35,8 @@ typedef void(__stdcall BinkSetVolume)(HBINK bnk, unsigned int trackid, int volum
 
 class CBaldurProjector : public CBaldurEngine {
 public:
+    static BOOLEAN byte_8CFF2C;
+
     CBaldurProjector();
     ~CBaldurProjector();
 
@@ -42,6 +44,7 @@ public:
     /* 0018 */ void EngineDeactivated() override;
     /* 0024 */ void EngineGameInit() override;
     /* 0028 */ void EngineGameUninit() override;
+    /* 0068 */ BOOL CheckMouseLButton() override;
     /* 0070 */ void OnLButtonDown(CPoint pt) override;
     /* 00A0 */ SHORT GetNumVirtualKeys() override;
     /* 00A4 */ CKeyInfo* GetVirtualKeys() override;
@@ -63,7 +66,7 @@ public:
     /* 0128 */ CTypedPtrList<CPtrList, CResRef*> m_lMovies; // #guess
     /* 0144 */ unsigned char field_144;
     /* 0145 */ unsigned char field_145;
-    /* 0146 */ unsigned char field_146;
+    /* 0146 */ BOOLEAN m_bSelectEngine;
     /* 0147 */ unsigned char field_147;
     /* 014A */ CVidFont field_14A;
     /* 064A */ HBINK m_hBink; // #guess
