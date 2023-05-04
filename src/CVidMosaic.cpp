@@ -107,29 +107,21 @@ BOOL CVidMosaic::Render(INT nSurface, int x, int y, const CRect& rMosaic, const 
 
     CRect rTile(0, 0, nTileSize, nTileSize);
 
-    for (INT nTileY = nFirstTileY; nTileY <= nLastTileY; nTileY++) {
-        int y = nTileY * nTileSize;
-        if (y + nTileSize < rClip.top || y > rClip.bottom) {
+    for (INT nTileY = nFirstTileY; nTileY < nLastTileY; nTileY++) {
+        int destY = y + nTileY * nTileSize;
+        if (destY + nTileSize < rClip.top || destY > rClip.bottom) {
             continue;
         }
 
-        if (y + nTileSize < nMosaicHeight) {
-            rTile.bottom = nTileSize;
-        } else {
-            rTile.bottom = nMosaicHeight - y;
-        }
+        rTile.bottom = min(nMosaicHeight - nTileY * nTileSize, nTileSize);
 
-        for (INT nTileX = nFirstTileX; nTileX <= nLastTileX; nTileX++) {
-            int x = nTileX * nTileSize;
-            if (x + nTileSize < rClip.left || x > rClip.right) {
+        for (INT nTileX = nFirstTileX; nTileX < nLastTileX; nTileX++) {
+            int destX = x + nTileX * nTileSize;
+            if (destX + nTileSize < rClip.left || destX > rClip.right) {
                 continue;
             }
 
-            if (x + nTileSize < nMosaicWidth) {
-                rTile.right = nTileSize;
-            } else {
-                rTile.right = nMosaicWidth - x;
-            }
+            rTile.right = min(nMosaicWidth - nTileX * nTileSize, nTileSize);
 
             if (pVidMode->LockSurface(m_nFxSurface, &surfaceDesc, rTile)) {
                 (this->*Blt)(reinterpret_cast<DWORD*>(surfaceDesc.lpSurface),
@@ -140,8 +132,8 @@ BOOL CVidMosaic::Render(INT nSurface, int x, int y, const CRect& rMosaic, const 
                 pVidMode->UnLockSurface(m_nFxSurface, surfaceDesc.lpSurface);
 
                 BltFromFX(pVidMode->pSurfaces[nSurface],
-                    x,
-                    y,
+                    destX,
+                    destY,
                     rTile.Size(),
                     rClip,
                     dwFlags);
