@@ -1508,7 +1508,7 @@ void CChitin::AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD d
                     SHORT nState = GetAsyncKeyState(pKeys[nKey].m_keyCode);
                     if (nState == 0) {
                         pKeys[nKey].m_repeatCount = 0;
-                    } else if (nState == 0x8000) {
+                    } else if (nState == SHRT_MIN) {
                         pKeys[nKey].m_repeatCount++;
                     } else {
                         BOOL bFirstPress = pKeys[nKey].m_repeatCount == 0;
