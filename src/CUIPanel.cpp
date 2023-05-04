@@ -358,7 +358,7 @@ void CUIPanel::Render()
     while (pos != NULL) {
         CUIControlBase* pControl = m_lControls.GetNext(pos);
         if (pControl->NeedRender()) {
-            CRect rControl(CPoint(pControl->m_nX, pControl->m_nY),
+            CRect rControl(m_ptOrigin + CPoint(pControl->m_nX, pControl->m_nY),
                 CSize(pControl->m_nWidth, pControl->m_nHeight));
             m_pManager->m_pWarp->NormalizePanelRect(m_nID, rControl);
             if (!rControl.IsRectEmpty()) {
