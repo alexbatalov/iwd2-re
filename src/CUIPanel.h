@@ -43,7 +43,7 @@ public:
     /* 00F2 */ SHORT m_nRenderCount;
     /* 00F4 */ BOOL m_bActive;
     /* 00F8 */ CRect m_rDirty;
-    /* 0108 */ unsigned char field_108;
+    /* 0108 */ BOOLEAN m_bNeedAsyncUpdate;
     /* 0109 */ unsigned char field_109;
     /* 010A */ BOOL m_bInactiveRender;
     /* 010E */ BOOL m_bEnabled;

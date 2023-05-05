@@ -43,6 +43,8 @@ public:
     /* 0060 */ virtual void SetInactiveRender(BOOL bInactiveRender);
     /* 0064 */ virtual BOOL NeedRender();
 
+    void SetNeedAsyncUpdate();
+
     /* 0004 */ unsigned char field_4;
     /* 0008 */ CUIPanel* m_pPanel; // #guess
     /* 000A */ DWORD m_nID; // #guess
@@ -51,7 +53,7 @@ public:
     /* 0016 */ INT m_nWidth; // #guess
     /* 001A */ INT m_nHeight; // #guess
     /* 001E */ BOOLEAN m_bActive; // #guess
-    /* 001F */ unsigned char field_1F;
+    /* 001F */ BOOLEAN m_bNeedAsyncUpdate;
     /* 0020 */ unsigned char field_20;
     /* 0022 */ CRect field_22;
     /* 0032 */ BOOL m_bInactiveRender; // #guess

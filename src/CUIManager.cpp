@@ -151,7 +151,7 @@ void CUIManager::TimerAsynchronousUpdate()
             POSITION pos = m_lPanels.GetHeadPosition();
             while (pos != NULL) {
                 CUIPanel* pPanel = m_lPanels.GetNext(pos);
-                if (!pPanel->field_108) {
+                if (!pPanel->m_bNeedAsyncUpdate) {
                     if (g_pBaldurChitin->m_pObjectGame->m_cOptions.m_nTooltips == INT_MAX && !field_76) {
                         continue;
                     }

@@ -56,10 +56,10 @@ CUIControlBase::CUIControlBase(CUIPanel* pPanel, UI_CONTROL* controlInfo, int a4
     m_sKey = "";
 
     if ((controlInfo->nType & 0x100) != 0) {
-        field_1F = 1;
-        m_pPanel->field_108 = 1;
+        m_bNeedAsyncUpdate = TRUE;
+        m_pPanel->m_bNeedAsyncUpdate = TRUE;
     } else {
-        field_1F = 0;
+        m_bNeedAsyncUpdate = FALSE;
     }
 }
 
@@ -227,4 +227,11 @@ void CUIControlBase::SetInactiveRender(BOOL bInactiveRender)
 BOOL CUIControlBase::NeedRender()
 {
     return FALSE;
+}
+
+// 0x77AB80
+void CUIControlBase::SetNeedAsyncUpdate()
+{
+    m_bNeedAsyncUpdate = TRUE;
+    m_pPanel->m_bNeedAsyncUpdate = TRUE;
 }

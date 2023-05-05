@@ -39,7 +39,7 @@ CUIPanel::CUIPanel(CUIManager* manager, UI_PANELHEADER* panelInfo)
     m_bEnabled = TRUE;
     m_wFlags = panelInfo->wFlags;
     m_nRenderCount = 0;
-    field_108 = 0;
+    m_bNeedAsyncUpdate = FALSE;
     field_109 = 0;
     m_bInactiveRender = FALSE;
     field_112 = 0;
@@ -158,7 +158,7 @@ DWORD CUIPanel::TimerAsynchronousUpdate()
                 && pt.y >= pControl->m_nY && pt.y <= pControl->m_nY + pControl->m_nHeight) {
                 pControl->TimerAsynchronousUpdate(TRUE);
                 nID = pControl->m_nID;
-            } else if (pControl->field_1F) {
+            } else if (pControl->m_bNeedAsyncUpdate) {
                 BOOLEAN bInside = FALSE;
                 if (pt.x >= pControl->m_nX && pt.x <= pControl->m_nX + pControl->m_nWidth
                     && pt.y >= pControl->m_nY && pt.y <= pControl->m_nY + pControl->m_nHeight) {

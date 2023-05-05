@@ -29,7 +29,7 @@ CUIControlLabel::CUIControlLabel(CUIPanel* pPanel, UI_CONTROL_LABEL* pControlInf
     }
 
     m_nFontHeight = m_cVidFont.GetFontHeight(FALSE);
-    field_1F = 0;
+    m_bNeedAsyncUpdate = FALSE;
 
     m_nTextFlags = pControlInfo->nTextFlags;
     m_nTextFlags |= 0x100;
