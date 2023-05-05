@@ -228,7 +228,36 @@ void CUIManager::ClearTooltip()
 // 0x4D40B0
 void CUIManager::OnMouseMove(CPoint pt)
 {
-    // TODO: Incomplete.
+    field_1C = 0;
+    field_76 = 0;
+
+    if (g_pBaldurChitin->m_pObjectCursor->field_A02 != NULL) {
+        g_pBaldurChitin->m_pObjectCursor->field_A02->ResetToolTip();
+        g_pBaldurChitin->m_pObjectCursor->field_A02 = NULL;
+    }
+
+    if (g_pBaldurChitin->m_pObjectGame->field_1BA1 == 101) {
+        g_pBaldurChitin->m_pObjectGame->field_1BA1 = 4;
+    }
+
+    if (m_pFocusedControl != NULL && field_2C != 2) {
+        m_pFocusedControl->OnMouseMove(pt - m_pFocusedControl->m_pPanel->m_ptOrigin);
+    } else {
+        if (!field_0) {
+            POSITION pos = m_lPanels.GetHeadPosition();
+            while (pos != NULL) {
+                CUIPanel* pPanel = m_lPanels.GetNext(pos);
+                if (pPanel->field_109) {
+                    CRect rPanel(pPanel->m_ptOrigin, pPanel->m_size);
+                    pPanel->m_pManager->m_pWarp->NormalizePanelRect(pPanel->m_nID, rPanel);
+
+                    if (rPanel.PtInRect(g_pBaldurChitin->field_1906)) {
+                        pPanel->OnMouseMove(pt);
+                    }
+                }
+            }
+        }
+    }
 }
 
 // 0x4D41D0
