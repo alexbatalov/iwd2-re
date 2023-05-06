@@ -3,7 +3,7 @@
 // 0x84CF76
 const BYTE CBaldurMessage::DELETEAREA_EMPTY_VOTE = 101;
 
-// // 0x84CFC4
+// 0x84CFC4
 const DWORD CBaldurMessage::SIGNAL_SECONDSTOMPTIMEOUT = 200;
 
 // 0x4294F0
@@ -68,6 +68,62 @@ CBaldurMessage::CBaldurMessage()
 // 0x429720
 CBaldurMessage::~CBaldurMessage()
 {
+}
+
+// 0x42B2B0
+BOOL CBaldurMessage::SendFullSettingsToClients(const CString& sPlayerName)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x42BC00
+BOOL CBaldurMessage::SendCharacterReadyToServer(INT nCharacterSlot, BOOLEAN bReady)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x42C0E0
+BOOL CBaldurMessage::SendImportingOptionToServer(BYTE nImportingBitField)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x42C390
+BOOL CBaldurMessage::SendRestrictStoreOptionToServer(BOOLEAN bRestrictStore)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x42C640
+BOOL CBaldurMessage::SendJoinRequestOptionToServer(BOOLEAN bListenToJoin)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x42CCA0
+BOOL CBaldurMessage::SendArbitrationLockStatus(BOOLEAN bStatus)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x42CEF0
+BOOL CBaldurMessage::SendArbitrationLockAllowInput(BOOLEAN bAllowInput)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // 0x436F50

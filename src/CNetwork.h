@@ -41,6 +41,7 @@ public:
     BOOLEAN HostNewSession();
     BOOLEAN JoinSelectedSession(INT& nErrorCode);
     BOOLEAN SelectSession(INT nSession);
+    BOOLEAN SetInSessionOptions();
     void SetMaxPlayers(INT nMaxPlayers);
     void UnselectSession();
     BOOLEAN CreatePlayer(INT& nErrorCode);

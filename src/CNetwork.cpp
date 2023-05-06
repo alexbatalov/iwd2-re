@@ -461,6 +461,14 @@ BOOLEAN CNetwork::SelectSession(INT nSession)
     return TRUE;
 }
 
+// 0x7A66E0
+BOOLEAN CNetwork::SetInSessionOptions()
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x7A6800
 void CNetwork::SetMaxPlayers(INT nMaxPlayers)
 {

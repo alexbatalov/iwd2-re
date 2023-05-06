@@ -79,6 +79,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CKeyInfo.h"
     "src/CMessageHandler.cpp"
     "src/CMessageHandler.h"
+    "src/CMultiplayerSettings.cpp"
+    "src/CMultiplayerSettings.h"
     "src/CNetwork.cpp"
     "src/CNetwork.h"
     "src/CNetworkWindow.cpp"

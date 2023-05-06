@@ -13,6 +13,13 @@ public:
 
     CBaldurMessage();
     ~CBaldurMessage();
+    BOOL SendFullSettingsToClients(const CString& sPlayerName);
+    BOOL SendCharacterReadyToServer(INT nCharacterSlot, BOOLEAN bReady);
+    BOOL SendImportingOptionToServer(BYTE nImportingBitField);
+    BOOL SendRestrictStoreOptionToServer(BOOLEAN bRestrictStore);
+    BOOL SendJoinRequestOptionToServer(BOOLEAN bListenToJoin);
+    BOOL SendArbitrationLockStatus(BOOLEAN bStatus);
+    BOOL SendArbitrationLockAllowInput(BOOLEAN bAllowInput);
     void WeatherBroadcast(WORD wWeatherFlags);
     void TimeSynchBroadcast(ULONG nGameTime, BOOLEAN bCompressTime);
     void TimeChangeToServer(ULONG deltaTime);
