@@ -44,7 +44,7 @@ public:
     /* 00F4 */ BOOL m_bActive;
     /* 00F8 */ CRect m_rDirty;
     /* 0108 */ BOOLEAN m_bNeedAsyncUpdate;
-    /* 0109 */ unsigned char field_109;
+    /* 0109 */ BOOLEAN m_bNeedMouseMove;
     /* 010A */ BOOL m_bInactiveRender;
     /* 010E */ BOOL m_bEnabled;
     /* 0112 */ int field_112;

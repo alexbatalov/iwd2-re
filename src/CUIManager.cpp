@@ -247,7 +247,7 @@ void CUIManager::OnMouseMove(CPoint pt)
             POSITION pos = m_lPanels.GetHeadPosition();
             while (pos != NULL) {
                 CUIPanel* pPanel = m_lPanels.GetNext(pos);
-                if (pPanel->field_109) {
+                if (pPanel->m_bNeedMouseMove) {
                     CRect rPanel(pPanel->m_ptOrigin, pPanel->m_size);
                     pPanel->m_pManager->m_pWarp->NormalizePanelRect(pPanel->m_nID, rPanel);
 

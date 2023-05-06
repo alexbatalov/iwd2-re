@@ -48,7 +48,7 @@ CUIControlBase::CUIControlBase(CUIPanel* pPanel, UI_CONTROL* controlInfo, int a4
     m_nSecondaryToolTipStrRef = -1;
     m_nTertiaryToolTipStrRef = -1;
     field_36 = a4;
-    field_20 = 0;
+    m_bNeedMouseMove = FALSE;
     m_bInactiveRender = FALSE;
     m_bToolTipActive = FALSE;
     m_nToolTipHotKeyIndex1 = -1;
@@ -234,4 +234,11 @@ void CUIControlBase::SetNeedAsyncUpdate()
 {
     m_bNeedAsyncUpdate = TRUE;
     m_pPanel->m_bNeedAsyncUpdate = TRUE;
+}
+
+// NOTE: Inlined.
+void CUIControlBase::SetNeedMouseMove()
+{
+    m_bNeedMouseMove = TRUE;
+    m_pPanel->m_bNeedMouseMove = TRUE;
 }

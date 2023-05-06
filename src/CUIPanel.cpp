@@ -40,7 +40,7 @@ CUIPanel::CUIPanel(CUIManager* manager, UI_PANELHEADER* panelInfo)
     m_wFlags = panelInfo->wFlags;
     m_nRenderCount = 0;
     m_bNeedAsyncUpdate = FALSE;
-    field_109 = 0;
+    m_bNeedMouseMove = FALSE;
     m_bInactiveRender = FALSE;
     field_112 = 0;
 
@@ -276,14 +276,14 @@ void CUIPanel::OnMouseMove(const CPoint& pt)
         return;
     }
 
-    if (!field_109) {
+    if (!m_bNeedMouseMove) {
         return;
     }
 
     POSITION pos = m_lControls.GetTailPosition();
     while (pos != NULL) {
         CUIControlBase* pControl = m_lControls.GetPrev(pos);
-        if (pControl->field_20) {
+        if (pControl->m_bNeedMouseMove) {
             if (pt.x - m_ptOrigin.x >= pControl->m_nX
                 && pt.x - m_ptOrigin.x <= pControl->m_nX + pControl->m_nWidth
                 && pt.y - m_ptOrigin.y >= pControl->m_nY

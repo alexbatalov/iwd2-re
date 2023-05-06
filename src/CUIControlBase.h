@@ -44,6 +44,7 @@ public:
     /* 0064 */ virtual BOOL NeedRender();
 
     void SetNeedAsyncUpdate();
+    void SetNeedMouseMove();
 
     /* 0004 */ unsigned char field_4;
     /* 0008 */ CUIPanel* m_pPanel; // #guess
@@ -54,7 +55,7 @@ public:
     /* 001A */ INT m_nHeight; // #guess
     /* 001E */ BOOLEAN m_bActive; // #guess
     /* 001F */ BOOLEAN m_bNeedAsyncUpdate;
-    /* 0020 */ unsigned char field_20;
+    /* 0020 */ BOOLEAN m_bNeedMouseMove;
     /* 0022 */ CRect field_22;
     /* 0032 */ BOOL m_bInactiveRender; // #guess
     /* 0036 */ int field_36;
