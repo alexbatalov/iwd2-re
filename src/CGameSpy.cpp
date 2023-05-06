@@ -26,3 +26,11 @@ CGameSpy::~CGameSpy()
     field_0 = 0;
     field_1 = 0;
 }
+
+// 0x4D1EC0
+BOOLEAN CGameSpy::sub_4D1EC0(BOOL a1)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}

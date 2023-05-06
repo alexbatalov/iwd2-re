@@ -1,13 +1,14 @@
 #ifndef CGAMESPY_H_
 #define CGAMESPY_H_
 
-#include <windows.h>
+#include "mfc.h"
 
 // #guess
 class CGameSpy {
 public:
     CGameSpy();
     ~CGameSpy();
+    BOOLEAN sub_4D1EC0(BOOL a1);
 
     /* 0000 */ unsigned char field_0;
     /* 0001 */ unsigned char field_1;
