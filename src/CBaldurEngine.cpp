@@ -5,6 +5,8 @@
 #include "CInfGame.h"
 #include "CScreenWorld.h"
 #include "CUIControlBase.h"
+#include "CUIControlLabel.h"
+#include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
 
@@ -574,6 +576,138 @@ CString CBaldurEngine::FetchString(DWORD dwStrId)
         strRes.szText = "";
     }
     return strRes.szText;
+}
+
+// 0x427C20
+void CBaldurEngine::UpdateText(CUIControlTextDisplay* pText, const char* format, ...)
+{
+    // 0x8CB258
+    static char buffer[8192];
+
+    // FIXME: Unused.
+    STR_RES strRes;
+
+    va_list args;
+    va_start(args, format);
+
+    _vsnprintf(buffer, sizeof(buffer), format, args);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CBaldurChitin.cpp
+    // __LINE__: 4079
+    UTIL_ASSERT(pText != NULL);
+
+    pText->DisplayString(CString(""),
+        CString(buffer),
+        pText->m_rgbLabelColor,
+        pText->m_rgbTextColor,
+        -1,
+        FALSE,
+        TRUE);
+
+    va_end(args);
+}
+
+// 0x427D60
+void CBaldurEngine::UpdateTextNoTrim(CUIControlTextDisplay* pText, const char* format, ...)
+{
+    // 0x8CD468
+    static char buffer[8192];
+
+    // FIXME: Unused.
+    STR_RES strRes;
+
+    va_list args;
+    va_start(args, format);
+
+    _vsnprintf(buffer, sizeof(buffer), format, args);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CBaldurChitin.cpp
+    // __LINE__: 4098
+    UTIL_ASSERT(pText != NULL);
+
+    pText->DisplayString(CString(""),
+        CString(buffer),
+        pText->m_rgbLabelColor,
+        pText->m_rgbTextColor,
+        -1,
+        FALSE,
+        FALSE);
+
+    va_end(args);
+}
+
+// 0x427EA0
+void CBaldurEngine::UpdateTextForceColor(CUIControlTextDisplay* pText, COLORREF rgbTextColor, const char* format, ...)
+{
+    // 0x8C8D40
+    static char buffer[8192];
+
+    // FIXME: Unused.
+    STR_RES strRes;
+
+    va_list args;
+    va_start(args, format);
+
+    _vsnprintf(buffer, sizeof(buffer), format, args);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CBaldurChitin.cpp
+    // __LINE__: 4136
+    UTIL_ASSERT(pText != NULL);
+
+    pText->DisplayString(CString(""),
+        CString(buffer),
+        pText->m_rgbLabelColor,
+        rgbTextColor,
+        -1,
+        FALSE,
+        TRUE);
+
+    va_end(args);
+}
+
+// 0x427FE0
+void CBaldurEngine::UpdateLabel(CUIPanel* pPanel, DWORD nID, const char* format, ...)
+{
+    // NOTE: This buffer is not static (as in previous `UpdateText` functions).
+    char buffer[4096];
+
+    // FIXME: Unused.
+    STR_RES strRes;
+
+    va_list args;
+    va_start(args, format);
+
+    _vsnprintf(buffer, sizeof(buffer), format, args);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CBaldurChitin.cpp
+    // __LINE__: 4181
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlLabel* pLabel = static_cast<CUIControlLabel*>(pPanel->GetControl(nID));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CBaldurChitin.cpp
+    // __LINE__: 4183
+    UTIL_ASSERT(pLabel != NULL);
+
+    pLabel->SetText(CString(buffer));
+}
+
+// 0x428130
+void CBaldurEngine::HighlightLabel(CUIPanel* pPanel, CUIControlLabel* pLabel, BOOL bCustomColor, COLORREF rgbForegroundColor)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CBaldurChitin.cpp
+    // __LINE__: 4214
+    UTIL_ASSERT(pPanel != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CBaldurChitin.cpp
+    // __LINE__: 4216
+    UTIL_ASSERT(pLabel != NULL);
+
+    if (bCustomColor) {
+        pLabel->SetForegroundColor(rgbForegroundColor);
+    } else {
+        pLabel->SetForegroundColor(RGB(255, 255, 255));
+    }
 }
 
 // 0x4281B0

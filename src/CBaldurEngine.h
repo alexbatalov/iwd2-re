@@ -5,6 +5,9 @@
 #include "CWarp.h"
 
 class CUIControlBase;
+class CUIControlLabel;
+class CUIControlTextDisplay;
+class CUIPanel;
 
 class CBaldurEngine : public CWarp {
 public:
@@ -176,6 +179,11 @@ public:
     void PlayGUISound(const CResRef& cResRef);
 
     static CString FetchString(DWORD dwStrId);
+    static void UpdateText(CUIControlTextDisplay* pText, const char* format, ...);
+    static void UpdateTextNoTrim(CUIControlTextDisplay* pText, const char* format, ...);
+    static void UpdateTextForceColor(CUIControlTextDisplay* pText, COLORREF rgbTextColor, const char* format, ...);
+    static void UpdateLabel(CUIPanel* pPanel, DWORD nID, const char* format, ...);
+    static void HighlightLabel(CUIPanel* pPanel, CUIControlLabel* pLabel, BOOL bCustomColor, COLORREF rgbForegroundColor);
 
     /* 0028 */ int m_nSelectedCharacter;
     /* 002C */ int m_nPickedCharacter;
