@@ -2,17 +2,44 @@
 
 #include "CUtil.h"
 
+// 0x84C534
+const BYTE CGamePermission::TOTAL_PERMISSIONS = CGAMEPERMISSION_TOTAL_PERMISSIONS;
+
+// 084C535
+const BYTE CGamePermission::AREA_TRANSITION = 1;
+
+// 0x84C536
+const BYTE CGamePermission::CHAR_RECORDS = 3;
+
+// 0x84C537
+const BYTE CGamePermission::DIALOG = 2;
+
+// 0x84C538
+const BYTE CGamePermission::GROUP_POOL = 5;
+
+// 0x84C539
+const BYTE CGamePermission::LEADER = 6;
+
+// 0x84C53A
+const BYTE CGamePermission::MODIFY_CHARS = 7;
+
+// 0x84C53B
+const BYTE CGamePermission::PAUSING = 4;
+
+// 0x84C53C
+const BYTE CGamePermission::PURCHASING = 0;
+
 // 0x4C8A40
 CGamePermission::CGamePermission()
 {
-    m_bPermissions[1] = TRUE;
-    m_bPermissions[3] = TRUE;
-    m_bPermissions[2] = TRUE;
-    m_bPermissions[5] = TRUE;
-    m_bPermissions[6] = TRUE;
-    m_bPermissions[7] = TRUE;
-    m_bPermissions[4] = TRUE;
-    m_bPermissions[0] = TRUE;
+    m_bPermissions[AREA_TRANSITION] = TRUE;
+    m_bPermissions[CHAR_RECORDS] = TRUE;
+    m_bPermissions[DIALOG] = TRUE;
+    m_bPermissions[GROUP_POOL] = TRUE;
+    m_bPermissions[LEADER] = TRUE;
+    m_bPermissions[MODIFY_CHARS] = TRUE;
+    m_bPermissions[PAUSING] = TRUE;
+    m_bPermissions[PURCHASING] = TRUE;
 }
 
 // 0x4C8A60
