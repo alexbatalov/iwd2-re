@@ -14,6 +14,120 @@
 #include "CUIManager.h"
 #include "CUIPanel.h"
 
+// 0x8E707C
+const CString CInfGame::FOGOWAR_RESREF("FOGOWAR");
+
+// 0x8E74AC
+const CString CInfGame::SAVE_OBJECT_LIST_NAME("SVTRIOBJ");
+
+// 0x8E74F4
+const CString CInfGame::CHAPTER_GLOBAL("CHAPTER");
+
+// 0x8E74E8
+const CString CInfGame::TOKEN_CURRENT_CHAPTER("CurrentChapter");
+
+// 0x8E7510
+const CString CInfGame::TOKEN_CHARACTER("CHARNAME");
+
+// 0x8E7498
+const CString CInfGame::TOKEN_GABBER("GABBER");
+
+// 0x8E7064
+const CString CInfGame::TOKEN_SIRMAAM("PROTAGONIST_SIRMAAM");
+
+// 0x8E7084
+const CString CInfGame::TOKEN_GIRLBOY("PROTAGONIST_GIRLBOY");
+
+// 0x8E74FC
+const CString CInfGame::TOKEN_BROTHERSISTER("PROTAGONIST_BROTHERSISTER");
+
+// 0x8E7060
+const CString CInfGame::TOKEN_LADYLORD("PROTAGONIST_LADYLORD");
+
+// 0x8E7520
+const CString CInfGame::TOKEN_MALEFEMALE("PROTAGONIST_MALEFEMALE");
+
+// 0x8E7518
+const CString CInfGame::TOKEN_HESHE("PROTAGONIST_HESHE");
+
+// 0x8E7504
+const CString CInfGame::TOKEN_HISHER("PROTAGONIST_HISHER");
+
+// 0x8E74DC
+const CString CInfGame::TOKEN_RACE("PROTAGONIST_RACE");
+
+// 0x8E74D0
+const CString CInfGame::TOKEN_HIMHER("PROTAGONIST_HIMHER");
+
+// 0x8E7074
+const CString CInfGame::TOKEN_MANWOMAN("PROTAGONIST_MANWOMAN");
+
+// 0x8E74C4
+const CString CInfGame::TOKEN_GABBER_SIRMAAM("SIRMAAM");
+
+// 0x8E7070
+const CString CInfGame::TOKEN_GABBER_GIRLBOY("GIRLBOY");
+
+// 0x8E74E4
+const CString CInfGame::TOKEN_GABBER_BROTHERSISTER("BROTHERSISTER");
+
+// 0x8E7088
+const CString CInfGame::TOKEN_GABBER_LADYLORD("LADYLORD");
+
+// 0x8E7080
+const CString CInfGame::TOKEN_GABBER_MALEFEMALE("MALEFEMALE");
+
+// 0x8E751C
+const CString CInfGame::TOKEN_GABBER_HESHE("HESHE");
+
+// 0x8E74EC
+const CString CInfGame::TOKEN_GABBER_HISHER("HISHER");
+
+// 0x8E708C
+const CString CInfGame::TOKEN_GABBER_RACE("RACE");
+
+// 0x8E74C8
+const CString CInfGame::TOKEN_GABBER_HIMHER("HIMHER");
+
+// 0x8E74F0
+const CString CInfGame::TOKEN_GABBER_MANWOMAN("MANWOMAN");
+
+// 0x8E7494
+const CString CInfGame::TOKEN_PLAYER1("PLAYER1");
+
+// 0x8E74BC
+const CString CInfGame::TOKEN_PLAYER2("PLAYER2");
+
+// 0x8E7490
+const CString CInfGame::TOKEN_PLAYER3("PLAYER3");
+
+// 0x8E74A4
+const CString CInfGame::TOKEN_PLAYER4("PLAYER4");
+
+// 0x8E74C0
+const CString CInfGame::TOKEN_PLAYER5("PLAYER5");
+
+// 0x8E749C
+const CString CInfGame::TOKEN_PLAYER6("PLAYER6");
+
+// 0x8E74D8
+const CString CInfGame::TOKEN_SURFACE_UNDERDARK("SURFACE_UNDERDARK");
+
+// 0x8E74D4
+const CString CInfGame::AUTO_SAVE_NAME("000000000-Auto-Save");
+
+// 0x8E7508
+const CString CInfGame::QUICK_SAVE_NAME("000000002-Quick-Save");
+
+// 0x8E750C
+const CString CInfGame::QUICK_SAVE_BACKUP_NAME("000000001-Quick-Save-Backup");
+
+// 0x8E706C
+const CString CInfGame::SILHOUETTE_PORTRAIT_SM("noportsm");
+
+// 0x8E705C
+const CString CInfGame::SILHOUETTE_PORTRAIT_LG("noportlg");
+
 // 0x59CC30
 CInfGame::CInfGame()
 {

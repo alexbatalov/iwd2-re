@@ -25,6 +25,45 @@ public:
 
     CGameArea* GetVisibleArea() { return m_gameAreas[m_visibleArea]; }
 
+    static const CString FOGOWAR_RESREF;
+    static const CString SAVE_OBJECT_LIST_NAME;
+    static const CString CHAPTER_GLOBAL;
+    static const CString TOKEN_CURRENT_CHAPTER;
+    static const CString TOKEN_CHARACTER;
+    static const CString TOKEN_GABBER;
+    static const CString TOKEN_SIRMAAM;
+    static const CString TOKEN_GIRLBOY;
+    static const CString TOKEN_BROTHERSISTER;
+    static const CString TOKEN_LADYLORD;
+    static const CString TOKEN_MALEFEMALE;
+    static const CString TOKEN_HESHE;
+    static const CString TOKEN_HISHER;
+    static const CString TOKEN_RACE;
+    static const CString TOKEN_HIMHER;
+    static const CString TOKEN_MANWOMAN;
+    static const CString TOKEN_GABBER_SIRMAAM;
+    static const CString TOKEN_GABBER_GIRLBOY;
+    static const CString TOKEN_GABBER_BROTHERSISTER;
+    static const CString TOKEN_GABBER_LADYLORD;
+    static const CString TOKEN_GABBER_MALEFEMALE;
+    static const CString TOKEN_GABBER_HESHE;
+    static const CString TOKEN_GABBER_HISHER;
+    static const CString TOKEN_GABBER_RACE;
+    static const CString TOKEN_GABBER_HIMHER;
+    static const CString TOKEN_GABBER_MANWOMAN;
+    static const CString TOKEN_PLAYER1;
+    static const CString TOKEN_PLAYER2;
+    static const CString TOKEN_PLAYER3;
+    static const CString TOKEN_PLAYER4;
+    static const CString TOKEN_PLAYER5;
+    static const CString TOKEN_PLAYER6;
+    static const CString TOKEN_SURFACE_UNDERDARK;
+    static const CString AUTO_SAVE_NAME;
+    static const CString QUICK_SAVE_NAME;
+    static const CString QUICK_SAVE_BACKUP_NAME;
+    static const CString SILHOUETTE_PORTRAIT_SM;
+    static const CString SILHOUETTE_PORTRAIT_LG;
+
     /* 0000 */ CRuleTables m_ruleTables;
     /* 1B58 */ CCriticalSection field_1B58;
     /* 1B78 */ CTimerWorld m_worldTime;
