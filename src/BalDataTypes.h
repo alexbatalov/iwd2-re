@@ -72,6 +72,16 @@ typedef struct UI_Control_Label_st {
     WORD nTextFlags;
 } UI_CONTROL_LABEL;
 
+typedef struct UI_Control_TextDisplay_st {
+    UI_CONTROL base;
+    RESREF refTextFont;
+    RESREF refLabelFont;
+    DWORD nTextColor;
+    DWORD nLabelColor;
+    DWORD nBackgroundColor;
+    DWORD nScrollBarID;
+} UI_CONTROL_TEXTDISPLAY;
+
 typedef struct WED_WedHeader_st {
     /* 0000 */ DWORD nFileType;
     /* 0004 */ DWORD nFileVersion;

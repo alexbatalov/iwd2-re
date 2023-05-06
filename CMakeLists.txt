@@ -207,6 +207,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CUIControlLabel.h"
     "src/CUIControlSlider.cpp"
     "src/CUIControlSlider.h"
+    "src/CUIControlTextDisplay.cpp"
+    "src/CUIControlTextDisplay.h"
     "src/CUIManager.cpp"
     "src/CUIManager.h"
     "src/CUIPanel.cpp"
