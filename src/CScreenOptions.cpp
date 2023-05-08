@@ -6,6 +6,7 @@
 #include "CScreenWorld.h"
 #include "CUIControlButton.h"
 #include "CUIPanel.h"
+#include "CUtil.h"
 
 // 0x6530E0
 CScreenOptions::CScreenOptions()
@@ -211,6 +212,44 @@ void CScreenOptions::EngineInitialized()
     m_cUIManager.GetPanel(13)->SetActive(FALSE);
 
     m_cUIManager.ReorderPanelAfter(13, 2);
+}
+
+// 0x654E30
+void CScreenOptions::EnableMainPanel(BOOL bEnable)
+{
+    CUIPanel* pMainPanel = m_cUIManager.GetPanel(2);
+    CUIPanel* pLeftPanel = m_cUIManager.GetPanel(0);
+    CUIPanel* pRightPanel = m_cUIManager.GetPanel(1);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 1233
+    UTIL_ASSERT(pMainPanel != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 1234
+    UTIL_ASSERT(pLeftPanel != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 1235
+    UTIL_ASSERT(pRightPanel != NULL);
+
+    if (bEnable) {
+        PlayGUISound(RESREF_SOUND_WINDOWCLOSE);
+    }
+
+    pMainPanel->SetEnabled(bEnable);
+    pLeftPanel->SetEnabled(bEnable);
+    pRightPanel->SetEnabled(bEnable);
+
+    if (CVideo::SCREENWIDTH / (g_pBaldurChitin->field_4A28 ? 2 : 1) != CBaldurChitin::DEFAULT_SCREEN_WIDTH) {
+        m_cUIManager.GetPanel(-5)->SetEnabled(bEnable);
+        m_cUIManager.GetPanel(-4)->SetEnabled(bEnable);
+        m_cUIManager.GetPanel(-3)->SetEnabled(bEnable);
+        m_cUIManager.GetPanel(-2)->SetEnabled(bEnable);
+    }
+
+    CheckEnablePortaits(1);
+    CheckEnableLeftPanel();
 }
 
 // 0x654F90
