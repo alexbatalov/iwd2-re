@@ -23,6 +23,8 @@ public:
     /* 0068 */ BOOL CheckMouseLButton() override;
     /* 0088 */ BOOL CheckMouseRButton() override;
 
+    void UpdateMainPanel();
+
     /* 0106 */ CKeyInfo m_pVirtualKeys[CSCREENOPTIONS_VIRTUAL_KEYS];
     /* 03D6 */ BYTE m_pVirtualKeysFlags[CSCREENOPTIONS_VIRTUAL_KEYS];
     /* 0430 */ BOOL m_bExitProgram;

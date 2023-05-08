@@ -4,6 +4,7 @@
 #include "CGameOptions.h"
 #include "CInfGame.h"
 #include "CScreenWorld.h"
+#include "CUIControlButton.h"
 #include "CUIPanel.h"
 
 // 0x6530E0
@@ -210,4 +211,33 @@ void CScreenOptions::EngineInitialized()
     m_cUIManager.GetPanel(13)->SetActive(FALSE);
 
     m_cUIManager.ReorderPanelAfter(13, 2);
+}
+
+// 0x654F90
+void CScreenOptions::UpdateMainPanel()
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(2);
+
+    if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE) {
+        CUIControlButton* pButton;
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(5));
+        pButton->SetEnabled(g_pChitin->cNetwork.m_bIsHost);
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(6));
+        pButton->SetEnabled(g_pChitin->cNetwork.m_bIsHost);
+    }
+
+    CString sFormattedVersion;
+    CString sVersion = CChitin::versionString;
+    CString sBuildNumber = CChitin::buildVersionString;
+
+    int major;
+    int minor;
+    int patch;
+    sscanf(sVersion, "%d, %d, %d", &major, &minor, &patch);
+
+    sFormattedVersion.Format("v%d.%d%d (%s)", major, minor, patch, sBuildNumber);
+
+    UpdateLabel(pPanel, 0x1000000B, "%s", sFormattedVersion);
 }
