@@ -214,6 +214,19 @@ void CScreenOptions::EngineInitialized()
     m_cUIManager.ReorderPanelAfter(13, 2);
 }
 
+// 0x654730
+void CScreenOptions::TimerSynchronousUpdate()
+{
+    if (m_bExitProgram) {
+        g_pBaldurChitin->ShutDown(-1, NULL, NULL);
+        return;
+    }
+
+    g_pBaldurChitin->m_pObjectGame->SynchronousUpdate();
+    m_cUIManager.Render();
+    pVidMode->Flip(TRUE);
+}
+
 // 0x654E30
 void CScreenOptions::EnableMainPanel(BOOL bEnable)
 {

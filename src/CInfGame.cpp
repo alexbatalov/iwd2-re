@@ -214,6 +214,12 @@ float CInfGame::GetSoundReverbMix(int nSoundChannel, int nReverb)
     return m_ruleTables.GetSoundReverbMix(nSoundChannel, nReverb);
 }
 
+// 0x5BE900
+void CInfGame::SynchronousUpdate()
+{
+    // TODO: Incomplete.
+}
+
 // 0x5C0EA0
 void CInfGame::ApplyVolumeSliders(BOOLEAN a2)
 {

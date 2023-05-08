@@ -22,6 +22,7 @@ public:
     /* 0060 */ BOOL CheckMouseMove() override;
     /* 0068 */ BOOL CheckMouseLButton() override;
     /* 0088 */ BOOL CheckMouseRButton() override;
+    /* 00C4 */ void TimerSynchronousUpdate() override;
 
     void EnableMainPanel(BOOL bEnable);
     void UpdateMainPanel();

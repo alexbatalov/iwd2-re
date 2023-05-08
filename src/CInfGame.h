@@ -22,6 +22,7 @@ public:
     SHORT GetCharacterPortaitNum(LONG nCharacterId);
     BOOL Is3DSound(int nSoundChannel);
     float GetSoundReverbMix(int nSoundChannel, int nReverb);
+    void SynchronousUpdate();
     void ApplyVolumeSliders(BOOLEAN a2);
 
     CGameArea* GetVisibleArea() { return m_gameAreas[m_visibleArea]; }
