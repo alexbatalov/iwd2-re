@@ -149,6 +149,12 @@ void CInfGame::StartSearchThread()
     }
 }
 
+// 0x5AA350
+void CInfGame::SaveOptions()
+{
+    // TODO: Incomplete.
+}
+
 // 0x5AF360
 void CInfGame::UpdatePortrait(SHORT nPortrait, DWORD dwPanelId)
 {

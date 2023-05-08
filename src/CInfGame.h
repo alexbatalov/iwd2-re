@@ -17,6 +17,7 @@ public:
     CInfGame();
     ~CInfGame();
     void StartSearchThread();
+    void SaveOptions();
     void UpdatePortrait(SHORT nPortrait, DWORD dwPanelId);
     SHORT GetCharacterPortaitNum(LONG nCharacterId);
     BOOL Is3DSound(int nSoundChannel);
