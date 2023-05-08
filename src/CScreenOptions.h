@@ -16,6 +16,7 @@ public:
     CScreenOptions();
     /* 0004 */ ~CScreenOptions() override;
     /* 0018 */ void EngineDeactivated() override;
+    /* 0020 */ void EngineInitialized() override;
     /* 0030 */ BOOL CheckSystemKeyCtrl() override;
     /* 0034 */ void SetSystemKeyCtrl(BOOLEAN bValue) override;
     /* 0060 */ BOOL CheckMouseMove() override;

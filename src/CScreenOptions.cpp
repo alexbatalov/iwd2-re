@@ -171,3 +171,43 @@ void CScreenOptions::EngineDeactivated()
     g_pBaldurChitin->m_pObjectGame->SaveOptions();
     g_pBaldurChitin->SaveOptions();
 }
+
+// 0x6541D0
+void CScreenOptions::EngineInitialized()
+{
+    m_cUIManager.fInit(this, CResRef("GUIOPT"), g_pBaldurChitin->field_4A28);
+
+    CPoint pt;
+    if (g_pBaldurChitin->field_4A28) {
+        pt.x = CVideo::SCREENWIDTH / 2 - CBaldurChitin::DEFAULT_SCREEN_WIDTH;
+        pt.y = CVideo::SCREENHEIGHT / 2 - CBaldurChitin::DEFAULT_SCREEN_HEIGHT;
+    } else {
+        pt.x = (CVideo::SCREENWIDTH - CBaldurChitin::DEFAULT_SCREEN_WIDTH) / 2;
+        pt.y = (CVideo::SCREENHEIGHT - CBaldurChitin::DEFAULT_SCREEN_HEIGHT) / 2;
+    }
+
+    m_cUIManager.ShiftPanels(pt);
+
+    for (int index = 0; index < 4; index++) {
+        m_cUIManager.AddPanel(&(g_pBaldurChitin->field_49B4[index]));
+    }
+
+    m_nSelectedCharacter = 0;
+    field_FA = NULL;
+    m_bExitProgram = FALSE;
+    m_bFullScreenOptions = FALSE;
+
+    m_cUIManager.GetPanel(3)->SetActive(FALSE);
+    m_cUIManager.GetPanel(4)->SetActive(FALSE);
+    m_cUIManager.GetPanel(5)->SetActive(FALSE);
+    m_cUIManager.GetPanel(6)->SetActive(FALSE);
+    m_cUIManager.GetPanel(7)->SetActive(FALSE);
+    m_cUIManager.GetPanel(12)->SetActive(FALSE);
+    m_cUIManager.GetPanel(8)->SetActive(FALSE);
+    m_cUIManager.GetPanel(9)->SetActive(FALSE);
+    m_cUIManager.GetPanel(10)->SetActive(FALSE);
+    m_cUIManager.GetPanel(50)->SetActive(FALSE);
+    m_cUIManager.GetPanel(13)->SetActive(FALSE);
+
+    m_cUIManager.ReorderPanelAfter(13, 2);
+}
