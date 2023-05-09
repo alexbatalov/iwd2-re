@@ -34,6 +34,12 @@ public:
     void ResetPopupPanel(DWORD nID);
     void ResetErrorPanel(CUIPanel* pPanel);
     void UpdatePopupPanel(DWORD dwPanelId, BOOLEAN bInitialUpdate);
+    void UpdateGraphicsPanel(BOOLEAN bInitialUpdate);
+    void UpdateSoundPanel(BOOLEAN bInitialUpdate);
+    void UpdateSelectSoundsPanel(BOOLEAN bInitialUpdate);
+    void UpdateGamePlayPanel(BOOLEAN bInitialUpdate);
+    void UpdateFeedbackPanel(BOOLEAN bInitialUpdate);
+    void UpdateAutoPausePanel(BOOLEAN bInitialUpdate);
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
 
     /* 0106 */ CKeyInfo m_pVirtualKeys[CSCREENOPTIONS_VIRTUAL_KEYS];

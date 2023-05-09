@@ -453,12 +453,6 @@ void CScreenOptions::ResetPopupPanel(DWORD nID)
     }
 }
 
-// 0x655440
-void CScreenOptions::UpdatePopupPanel(DWORD dwPanelId, BOOLEAN bInitialUpdate)
-{
-    // TODO: Incomplete.
-}
-
 // 0x6551F0
 void CScreenOptions::ResetErrorPanel(CUIPanel* pPanel)
 {
@@ -508,6 +502,82 @@ void CScreenOptions::ResetErrorPanel(CUIPanel* pPanel)
 
         pButton->SetText(FetchString(m_strErrorButtonText[nButton]));
     }
+}
+
+// 0x655440
+void CScreenOptions::UpdatePopupPanel(DWORD dwPanelId, BOOLEAN bInitialUpdate)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    switch (dwPanelId) {
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 50:
+        break;
+    case 6:
+        UpdateGraphicsPanel(bInitialUpdate);
+        break;
+    case 7:
+        UpdateSoundPanel(bInitialUpdate);
+        break;
+    case 8:
+        UpdateGamePlayPanel(bInitialUpdate);
+        break;
+    case 9:
+        UpdateFeedbackPanel(bInitialUpdate);
+        break;
+    case 10:
+        UpdateAutoPausePanel(bInitialUpdate);
+        break;
+    case 12:
+        UpdateSelectSoundsPanel(bInitialUpdate);
+        break;
+    case 13:
+        m_cUIManager.InvalidateRect(NULL);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+        // __LINE__: 1583
+        UTIL_ASSERT(FALSE);
+    }
+}
+
+// 0x655B80
+void CScreenOptions::UpdateGraphicsPanel(BOOLEAN bInitialUpdate)
+{
+    // TODO: Incomplete.
+}
+
+// 0x656090
+void CScreenOptions::UpdateSoundPanel(BOOLEAN bInitialUpdate)
+{
+    // TODO: Incomplete.
+}
+
+// 0x656360
+void CScreenOptions::UpdateSelectSoundsPanel(BOOLEAN bInitialUpdate)
+{
+    // TODO: Incomplete.
+}
+
+// 0x6565B0
+void CScreenOptions::UpdateGamePlayPanel(BOOLEAN bInitialUpdate)
+{
+    // TODO: Incomplete.
+}
+
+// 0x656B00
+void CScreenOptions::UpdateFeedbackPanel(BOOLEAN bInitialUpdate)
+{
+    // TODO: Incomplete.
+}
+
+// 0x656D50
+void CScreenOptions::UpdateAutoPausePanel(BOOLEAN bInitialUpdate)
+{
+    // TODO: Incomplete.
 }
 
 // 0x657360
