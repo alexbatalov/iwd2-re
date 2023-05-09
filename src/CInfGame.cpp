@@ -251,3 +251,11 @@ void CInfGame::ApplyVolumeSliders(BOOLEAN a2)
 
     g_pBaldurChitin->cSoundMixer.UpdateSoundList();
 }
+
+// 0x5C1E30
+BOOL CInfGame::CanRestParty(STRREF& strError, unsigned char a2, unsigned char a3, unsigned char a4)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}

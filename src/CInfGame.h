@@ -24,6 +24,7 @@ public:
     float GetSoundReverbMix(int nSoundChannel, int nReverb);
     void SynchronousUpdate();
     void ApplyVolumeSliders(BOOLEAN a2);
+    BOOL CanRestParty(STRREF& strError, unsigned char a2, unsigned char a3, unsigned char a4);
 
     CGameArea* GetVisibleArea() { return m_gameAreas[m_visibleArea]; }
 

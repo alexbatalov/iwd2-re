@@ -545,6 +545,36 @@ void CScreenOptions::UpdatePopupPanel(DWORD dwPanelId, BOOLEAN bInitialUpdate)
     }
 }
 
+// 0x655A70
+void CScreenOptions::OnRestButtonClick()
+{
+    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 1887
+    UTIL_ASSERT(pGame != NULL);
+
+    CSingleLock lock(&(m_cUIManager.field_36), FALSE);
+    lock.Lock(INFINITE);
+
+    STRREF dwErrorTextId;
+    if (pGame->CanRestParty(dwErrorTextId, 0, 0, 0)) {
+        m_dwErrorState = 7;
+        m_dwErrorTextId = 15358;
+        m_strErrorButtonText[0] = 17199;
+        m_strErrorButtonText[1] = 11596;
+        m_strErrorButtonText[2] = 13727;
+        SummonPopup(50);
+    } else {
+        m_dwErrorState = 6;
+        m_dwErrorTextId = dwErrorTextId;
+        m_strErrorButtonText[0] = 11973;
+        SummonPopup(3);
+    }
+
+    lock.Unlock();
+}
+
 // 0x655B80
 void CScreenOptions::UpdateGraphicsPanel(BOOLEAN bInitialUpdate)
 {
