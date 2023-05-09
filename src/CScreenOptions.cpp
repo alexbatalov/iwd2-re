@@ -295,6 +295,44 @@ void CScreenOptions::UpdateMainPanel()
     UpdateLabel(pPanel, 0x1000000B, "%s", sFormattedVersion);
 }
 
+// 0x6550E0
+void CScreenOptions::ResetPopupPanel(DWORD nID)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(nID);
+    switch (nID) {
+    case 3:
+    case 4:
+    case 5:
+    case 50:
+        ResetErrorPanel(pPanel);
+        break;
+    case 6:
+        UpdateHelp(pPanel->m_nID, 33, 18038);
+        break;
+    case 7:
+        UpdateHelp(pPanel->m_nID, 14, 18040);
+        break;
+    case 8:
+        UpdateHelp(pPanel->m_nID, 40, 18042);
+        break;
+    case 9:
+        UpdateHelp(pPanel->m_nID, 28, 18043);
+        break;
+    case 10:
+        UpdateHelp(pPanel->m_nID, 15, 18044);
+        break;
+    case 12:
+        UpdateHelp(pPanel->m_nID, 16, 18041);
+        break;
+    case 13:
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+        // __LINE__: 1443
+        UTIL_ASSERT(FALSE);
+    }
+}
+
 // 0x6551F0
 void CScreenOptions::ResetErrorPanel(CUIPanel* pPanel)
 {

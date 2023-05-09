@@ -26,6 +26,7 @@ public:
 
     void EnableMainPanel(BOOL bEnable);
     void UpdateMainPanel();
+    void ResetPopupPanel(DWORD nID);
     void ResetErrorPanel(CUIPanel* pPanel);
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
 
