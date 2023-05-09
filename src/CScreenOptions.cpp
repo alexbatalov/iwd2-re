@@ -264,6 +264,46 @@ void CScreenOptions::SummonPopup(DWORD dwPopupId)
     UpdatePopupPanel(pPanel->m_nID, TRUE);
 }
 
+// 0x654CB0
+void CScreenOptions::DismissPopup()
+{
+    if (m_cUIManager.m_pFocusedControl != NULL) {
+        m_cUIManager.m_pFocusedControl->KillFocus();
+        m_cUIManager.m_pFocusedControl = NULL;
+    }
+
+    CUIPanel* pPanel = m_lPopupStack.RemoveTail();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 1184
+    UTIL_ASSERT(pPanel != NULL);
+
+    // NOTE: Uninline.
+    ShowPopupPanel(pPanel->m_nID, FALSE);
+
+    CUIPanel* pMainPanel = m_cUIManager.GetPanel(2);
+    pMainPanel->InvalidateRect(NULL);
+
+    if (m_lPopupStack.GetTailPosition() != NULL) {
+        CUIPanel* pPanel = m_lPopupStack.GetTail();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+        // __LINE__: 1201
+        UTIL_ASSERT(pPanel != NULL);
+
+        // NOTE: Uninline.
+        ShowPopupPanel(pPanel->m_nID, TRUE);
+
+        // NOTE: Uninline.
+        EnablePopupPanel(pPanel->m_nID, TRUE);
+
+        UpdatePopupPanel(pPanel->m_nID, FALSE);
+    } else {
+        EnableMainPanel(TRUE);
+        UpdateMainPanel();
+    }
+}
+
 // 0x654E30
 void CScreenOptions::EnableMainPanel(BOOL bEnable)
 {

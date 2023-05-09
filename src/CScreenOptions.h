@@ -25,6 +25,7 @@ public:
     /* 00C4 */ void TimerSynchronousUpdate() override;
 
     void SummonPopup(DWORD dwPopupId);
+    void DismissPopup();
     void EnableMainPanel(BOOL bEnable);
     void UpdateMainPanel();
     void ShowPopupPanel(DWORD dwPanelId, BOOL bShow);
