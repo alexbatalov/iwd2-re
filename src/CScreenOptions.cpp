@@ -228,6 +228,42 @@ void CScreenOptions::TimerSynchronousUpdate()
     pVidMode->Flip(TRUE);
 }
 
+// 0x654B40
+void CScreenOptions::SummonPopup(DWORD dwPopupId)
+{
+    if (m_cUIManager.m_pFocusedControl != NULL) {
+        m_cUIManager.m_pFocusedControl->KillFocus();
+        m_cUIManager.m_pFocusedControl = NULL;
+    }
+
+    if (!m_lPopupStack.IsEmpty()) {
+        CUIPanel* pPanel = m_lPopupStack.GetTail();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+        // __LINE__: 1133
+        UTIL_ASSERT(pPanel != NULL);
+
+        // NOTE: Uninline.
+        EnablePopupPanel(pPanel->m_nID, FALSE);
+    } else {
+        EnableMainPanel(FALSE);
+    }
+
+    CUIPanel* pPanel = m_lPopupStack.GetTail();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 1139
+    UTIL_ASSERT(pPanel != NULL);
+
+    m_lPopupStack.AddTail(pPanel);
+    ResetPopupPanel(pPanel->m_nID);
+
+    // NOTE: Uninline.
+    ShowPopupPanel(pPanel->m_nID, TRUE);
+
+    UpdatePopupPanel(pPanel->m_nID, TRUE);
+}
+
 // 0x654E30
 void CScreenOptions::EnableMainPanel(BOOL bEnable)
 {
@@ -295,6 +331,36 @@ void CScreenOptions::UpdateMainPanel()
     UpdateLabel(pPanel, 0x1000000B, "%s", sFormattedVersion);
 }
 
+// NOTE: Uninlined.
+void CScreenOptions::ShowPopupPanel(DWORD dwPanelId, BOOL bShow)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 1325
+    UTIL_ASSERT(FALSE);
+
+    pPanel->SetActive(bShow);
+    pPanel->SetInactiveRender(bShow);
+
+    if (bShow) {
+        pPanel->InvalidateRect(NULL);
+        PlayGUISound(RESREF_SOUND_WINDOWOPEN);
+    }
+}
+
+// NOTE: Uninlined.
+void CScreenOptions::EnablePopupPanel(DWORD dwPanelId, BOOL bEnable)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 1370
+    UTIL_ASSERT(FALSE);
+
+    pPanel->SetEnabled(bEnable);
+}
+
 // 0x6550E0
 void CScreenOptions::ResetPopupPanel(DWORD nID)
 {
@@ -331,6 +397,12 @@ void CScreenOptions::ResetPopupPanel(DWORD nID)
         // __LINE__: 1443
         UTIL_ASSERT(FALSE);
     }
+}
+
+// 0x655440
+void CScreenOptions::UpdatePopupPanel(DWORD dwPanelId, BOOLEAN bInitialUpdate)
+{
+    // TODO: Incomplete.
 }
 
 // 0x6551F0

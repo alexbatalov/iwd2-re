@@ -24,10 +24,14 @@ public:
     /* 0088 */ BOOL CheckMouseRButton() override;
     /* 00C4 */ void TimerSynchronousUpdate() override;
 
+    void SummonPopup(DWORD dwPopupId);
     void EnableMainPanel(BOOL bEnable);
     void UpdateMainPanel();
+    void ShowPopupPanel(DWORD dwPanelId, BOOL bShow);
+    void EnablePopupPanel(DWORD dwPanelId, BOOL bEnable);
     void ResetPopupPanel(DWORD nID);
     void ResetErrorPanel(CUIPanel* pPanel);
+    void UpdatePopupPanel(DWORD dwPanelId, BOOLEAN bInitialUpdate);
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
 
     /* 0106 */ CKeyInfo m_pVirtualKeys[CSCREENOPTIONS_VIRTUAL_KEYS];
