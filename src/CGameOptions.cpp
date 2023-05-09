@@ -31,8 +31,8 @@ CGameOptions::CGameOptions()
     field_58 = 62;
     field_5C = 1;
     field_60 = 1;
-    field_64 = 0;
-    field_68 = 1;
+    m_nAutoPauseState = 0;
+    m_bAutoPauseCenter = TRUE;
     field_70 = 0;
     field_74 = 0;
     field_78 = 0;
@@ -46,7 +46,7 @@ CGameOptions::CGameOptions()
     field_98 = 1;
     field_9C = 1;
     field_A0 = 0;
-    field_A4 = 0;
+    m_bAutoPauseOnTrap = FALSE;
     field_A8 = 0;
     field_AC = 0;
     field_B0 = 1;

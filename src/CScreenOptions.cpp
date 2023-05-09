@@ -5,6 +5,7 @@
 #include "CInfGame.h"
 #include "CScreenWorld.h"
 #include "CUIControlButton.h"
+#include "CUIControlButton3State.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -577,7 +578,59 @@ void CScreenOptions::UpdateFeedbackPanel(BOOLEAN bInitialUpdate)
 // 0x656D50
 void CScreenOptions::UpdateAutoPausePanel(BOOLEAN bInitialUpdate)
 {
-    // TODO: Incomplete.
+    CGameOptions* pOptions = &(g_pBaldurChitin->m_pObjectGame->m_cOptions);
+    CUIPanel* pPanel = m_cUIManager.GetPanel(10);
+    CUIControlButton3State* pButton;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 2383
+    UTIL_ASSERT(pPanel != NULL);
+
+    field_FA = pPanel->GetControl(16);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(1));
+    UTIL_ASSERT(pButton != NULL); // 2388
+    pButton->SetSelected(pOptions->m_nAutoPauseState & 0x4);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(2));
+    UTIL_ASSERT(pButton != NULL); // 2392
+    pButton->SetSelected(pOptions->m_nAutoPauseState & 0x8);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(3));
+    UTIL_ASSERT(pButton != NULL); // 2396
+    pButton->SetSelected(pOptions->m_nAutoPauseState & 0x10);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(4));
+    UTIL_ASSERT(pButton != NULL); // 2400
+    pButton->SetSelected(pOptions->m_nAutoPauseState & 0x2);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(5));
+    UTIL_ASSERT(pButton != NULL); // 2404
+    pButton->SetSelected(pOptions->m_nAutoPauseState & 0x1);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(13));
+    UTIL_ASSERT(pButton != NULL); // 2408
+    pButton->SetSelected(pOptions->m_nAutoPauseState & 0x20);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(25));
+    UTIL_ASSERT(pButton != NULL); // 2412
+    pButton->SetSelected(pOptions->m_nAutoPauseState & 0x40);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(26));
+    UTIL_ASSERT(pButton != NULL); // 2416
+    pButton->SetSelected(pOptions->m_bAutoPauseOnTrap);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(30));
+    UTIL_ASSERT(pButton != NULL); // 2420
+    pButton->SetSelected(pOptions->m_nAutoPauseState & 0x200);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(36));
+    UTIL_ASSERT(pButton != NULL); // 2424
+    pButton->SetSelected(pOptions->m_nAutoPauseState & 0x400);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(33));
+    UTIL_ASSERT(pButton != NULL); // 2428
+    pButton->SetSelected(pOptions->m_bAutoPauseCenter);
 }
 
 // 0x657360

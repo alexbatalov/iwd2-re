@@ -32,8 +32,8 @@ public:
     /* 0058 */ int field_58;
     /* 005C */ int field_5C;
     /* 0060 */ int field_60;
-    /* 0064 */ int field_64;
-    /* 0068 */ int field_68;
+    /* 0064 */ DWORD m_nAutoPauseState;
+    /* 0068 */ BOOL m_bAutoPauseCenter;
     /* 006C */ int field_6C;
     /* 0070 */ int field_70;
     /* 0074 */ int field_74;
@@ -48,7 +48,7 @@ public:
     /* 0098 */ int field_98;
     /* 009C */ int field_9C;
     /* 00A0 */ int field_A0;
-    /* 00A4 */ int field_A4;
+    /* 00A4 */ BOOL m_bAutoPauseOnTrap;
     /* 00A8 */ int field_A8;
     /* 00AC */ int field_AC;
     /* 00B0 */ int field_B0;
