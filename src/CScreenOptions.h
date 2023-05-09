@@ -27,6 +27,7 @@ public:
     void EnableMainPanel(BOOL bEnable);
     void UpdateMainPanel();
     void ResetErrorPanel(CUIPanel* pPanel);
+    void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
 
     /* 0106 */ CKeyInfo m_pVirtualKeys[CSCREENOPTIONS_VIRTUAL_KEYS];
     /* 03D6 */ BYTE m_pVirtualKeysFlags[CSCREENOPTIONS_VIRTUAL_KEYS];

@@ -345,3 +345,24 @@ void CScreenOptions::ResetErrorPanel(CUIPanel* pPanel)
         pButton->SetText(FetchString(m_strErrorButtonText[nButton]));
     }
 }
+
+// 0x657360
+void CScreenOptions::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId)
+{
+    STR_RES strRes;
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 2777
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(dwTextId));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 2779
+    UTIL_ASSERT(pText != NULL);
+
+    g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes);
+    UpdateText(pText, "%s", strRes.szText);
+}
