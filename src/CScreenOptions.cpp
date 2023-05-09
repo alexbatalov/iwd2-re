@@ -560,7 +560,51 @@ void CScreenOptions::UpdateSoundPanel(BOOLEAN bInitialUpdate)
 // 0x656360
 void CScreenOptions::UpdateSelectSoundsPanel(BOOLEAN bInitialUpdate)
 {
-    // TODO: Incomplete.
+    CGameOptions* pOptions = &(g_pBaldurChitin->m_pObjectGame->m_cOptions);
+    CUIPanel* pPanel = m_cUIManager.GetPanel(12);
+    CUIControlButton3State* pButton;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 2126
+    UTIL_ASSERT(pPanel != NULL);
+
+    field_FA = pPanel->GetControl(17);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(6));
+    UTIL_ASSERT(pButton != NULL); // 2131
+    pButton->SetSelected(pOptions->m_bAttackSounds);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(7));
+    UTIL_ASSERT(pButton != NULL); // 2135
+    pButton->SetSelected(pOptions->m_bFootStepsSounds);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(5));
+    UTIL_ASSERT(pButton != NULL); // 2139
+    pButton->SetSelected(pOptions->m_bSubtitles);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(8));
+    UTIL_ASSERT(pButton != NULL); // 2143
+    pButton->SetSelected(pOptions->m_nCommandSoundsFrequency == 3);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(9));
+    UTIL_ASSERT(pButton != NULL); // 2147
+    pButton->SetSelected(pOptions->m_nCommandSoundsFrequency == 2);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(10));
+    UTIL_ASSERT(pButton != NULL); // 2151
+    pButton->SetSelected(pOptions->m_nCommandSoundsFrequency == 1);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(58));
+    UTIL_ASSERT(pButton != NULL); // 2155
+    pButton->SetSelected(pOptions->m_nSelectionSoundsFrequency == 3);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(59));
+    UTIL_ASSERT(pButton != NULL); // 2159
+    pButton->SetSelected(pOptions->m_nSelectionSoundsFrequency == 2);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(60));
+    UTIL_ASSERT(pButton != NULL); // 2163
+    pButton->SetSelected(pOptions->m_nSelectionSoundsFrequency == 1);
 }
 
 // 0x6565B0

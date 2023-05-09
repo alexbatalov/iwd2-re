@@ -10,7 +10,7 @@ public:
     /* 0000 */ int field_0;
     /* 0004 */ int field_4;
     /* 0008 */ int field_8;
-    /* 000C */ int field_C;
+    /* 000C */ BOOL m_bSubtitles;
     /* 0010 */ int field_10;
     /* 0014 */ int field_14;
     /* 0018 */ DWORD m_nVolumeMusic; // #guess
@@ -18,20 +18,20 @@ public:
     /* 0020 */ DWORD m_nVolumeVoices; // #guess
     /* 0024 */ DWORD m_nVolumeAmbients;
     /* 0028 */ DWORD m_nVolumeMovie; // #guess
-    /* 002C */ int field_2C;
+    /* 002C */ BOOL m_bFootStepsSounds;
     /* 0030 */ int field_30;
     /* 0034 */ int m_nTranslucentShadows; // #guess
     /* 0038 */ int field_38;
     /* 003C */ int field_3C;
     /* 0040 */ int m_nTooltips; // #guess
     /* 0044 */ int field_44;
-    /* 0048 */ int field_48;
-    /* 004C */ int field_4C;
+    /* 0048 */ DWORD m_nCommandSoundsFrequency;
+    /* 004C */ DWORD m_nSelectionSoundsFrequency;
     /* 0050 */ int field_50;
     /* 0054 */ int field_54;
     /* 0058 */ int field_58;
     /* 005C */ int field_5C;
-    /* 0060 */ int field_60;
+    /* 0060 */ BOOL m_bAttackSounds;
     /* 0064 */ DWORD m_nAutoPauseState;
     /* 0068 */ BOOL m_bAutoPauseCenter;
     /* 006C */ int field_6C;
