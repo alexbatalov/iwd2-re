@@ -5,6 +5,7 @@
 #include "CInfGame.h"
 #include "CScreenWorld.h"
 #include "CUIControlButton.h"
+#include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
 
@@ -292,4 +293,55 @@ void CScreenOptions::UpdateMainPanel()
     sFormattedVersion.Format("v%d.%d%d (%s)", major, minor, patch, sBuildNumber);
 
     UpdateLabel(pPanel, 0x1000000B, "%s", sFormattedVersion);
+}
+
+// 0x6551F0
+void CScreenOptions::ResetErrorPanel(CUIPanel* pPanel)
+{
+    switch (pPanel->m_nID) {
+    case 3:
+        m_nNumErrorButtons = 1;
+        break;
+    case 4:
+        m_nNumErrorButtons = 2;
+        break;
+    case 5:
+    case 50:
+        m_nNumErrorButtons = 3;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+        // __LINE__: 1494
+        UTIL_ASSERT(FALSE);
+    }
+
+    STR_RES strRes;
+    g_pBaldurChitin->m_cTlkTable.Fetch(m_dwErrorTextId, strRes);
+
+    strRes.cSound.SetChannel(0, 0);
+    strRes.cSound.SetFireForget(TRUE);
+    strRes.cSound.Play(TRUE);
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(3));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 1507
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+    UpdateText(pText, "%s", strRes.szText);
+
+    for (INT nButton = 0; nButton < m_nNumErrorButtons; nButton++) {
+        CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nButton + 1));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 1516
+        UTIL_ASSERT(pButton != NULL);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 2684
+        UTIL_ASSERT(0 <= nButton && nButton < CSCREENOPTIONS_ERROR_BUTTONS);
+
+        pButton->SetText(FetchString(m_strErrorButtonText[nButton]));
+    }
 }
