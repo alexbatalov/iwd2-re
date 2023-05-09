@@ -23,6 +23,7 @@ public:
     /* 0068 */ BOOL CheckMouseLButton() override;
     /* 0088 */ BOOL CheckMouseRButton() override;
     /* 00C4 */ void TimerSynchronousUpdate() override;
+    /* 00E0 */ void OnPortraitLClick(DWORD nPortrait) override;
 
     void SummonPopup(DWORD dwPopupId);
     void DismissPopup();

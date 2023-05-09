@@ -215,6 +215,20 @@ void CScreenOptions::EngineInitialized()
     m_cUIManager.ReorderPanelAfter(13, 2);
 }
 
+// 0x6546B0
+void CScreenOptions::OnPortraitLClick(DWORD nPortrait)
+{
+    if (nPortrait < g_pBaldurChitin->m_pObjectGame->m_nCharacters) {
+        DWORD nOldSelectedCharacter = m_nSelectedCharacter;
+        m_nSelectedCharacter = nPortrait;
+        UpdateCursorShape(0);
+        UpdateMainPanel();
+
+        m_cUIManager.GetPanel(1)->GetControl(nOldSelectedCharacter)->InvalidateRect();
+        m_cUIManager.GetPanel(1)->GetControl(m_nSelectedCharacter)->InvalidateRect();
+    }
+}
+
 // 0x654730
 void CScreenOptions::TimerSynchronousUpdate()
 {
