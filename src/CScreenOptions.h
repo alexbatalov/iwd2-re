@@ -25,7 +25,9 @@ public:
     /* 00C4 */ void TimerSynchronousUpdate() override;
     /* 00E0 */ void OnPortraitLClick(DWORD nPortrait) override;
     /* 00F0 */ void OnRestButtonClick() override;
+    /* 0104 */ void CancelEngine() override;
 
+    void OnCancelButtonClick();
     void SummonPopup(DWORD dwPopupId);
     void DismissPopup();
     void EnableMainPanel(BOOL bEnable);

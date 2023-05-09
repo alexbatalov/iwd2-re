@@ -243,6 +243,12 @@ void CScreenOptions::TimerSynchronousUpdate()
     pVidMode->Flip(TRUE);
 }
 
+// 0x654960
+void CScreenOptions::OnCancelButtonClick()
+{
+    // TODO: Incomplete.
+}
+
 // 0x654B40
 void CScreenOptions::SummonPopup(DWORD dwPopupId)
 {
@@ -726,4 +732,12 @@ void CScreenOptions::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId)
 
     g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes);
     UpdateText(pText, "%s", strRes.szText);
+}
+
+// 0x657470
+void CScreenOptions::CancelEngine()
+{
+    while (m_lPopupStack.GetTailPosition() != NULL && m_lPopupStack.GetTail() != NULL) {
+        OnCancelButtonClick();
+    }
 }
