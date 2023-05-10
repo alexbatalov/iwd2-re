@@ -770,3 +770,27 @@ void CUIControlButtonOptionsPopupDone::OnLButtonClick(CPoint pt)
 
     pOptions->OnDoneButtonClick();
 }
+
+// 0x6592E0
+CUIControlButtonOptionsPopupCancel::CUIControlButtonOptionsPopupCancel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, 1, 0)
+{
+    SetText(CBaldurEngine::FetchString(13727));
+}
+
+// 0x659390
+CUIControlButtonOptionsPopupCancel::~CUIControlButtonOptionsPopupCancel()
+{
+}
+
+// 0x659430
+void CUIControlButtonOptionsPopupCancel::OnLButtonClick(CPoint pt)
+{
+    CScreenOptions* pOptions = g_pBaldurChitin->m_pEngineOptions;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 4185
+    UTIL_ASSERT(pOptions != NULL);
+
+    pOptions->OnCancelButtonClick();
+}

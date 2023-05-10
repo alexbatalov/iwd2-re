@@ -77,4 +77,11 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonOptionsPopupCancel : public CUIControlButton {
+public:
+    CUIControlButtonOptionsPopupCancel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonOptionsPopupCancel();
+    void OnLButtonClick(CPoint pt) override;
+};
+
 #endif /* CSCREENOPTIONS_H_ */
