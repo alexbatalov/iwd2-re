@@ -11,6 +11,7 @@
 #include "CScreenMovies.h"
 #include "CScreenSave.h"
 #include "CScreenWorld.h"
+#include "CUIControlSlider.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -847,7 +848,95 @@ void CScreenOptions::OnRestButtonClick()
 // 0x655B80
 void CScreenOptions::UpdateGraphicsPanel(BOOLEAN bInitialUpdate)
 {
-    // TODO: Incomplete.
+    CGameOptions* pOptions = &(g_pBaldurChitin->m_pObjectGame->m_cOptions);
+    CUIPanel* pPanel = m_cUIManager.GetPanel(6);
+    CUIControlSlider* pSlider;
+    SHORT nValue;
+    CUIControlButton3State* pButton;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 1941
+    UTIL_ASSERT(pPanel != NULL);
+
+    field_FA = pPanel->GetControl(34);
+
+    pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(3));
+    UTIL_ASSERT(pSlider != NULL); // 1948
+    nValue = ((pSlider->field_1F2 - 1) * g_pBaldurChitin->GetCurrentVideoMode()->m_nBrightnessCorrection + 39) / 40;
+    pSlider->field_208 = max(min(nValue, pSlider->field_1F2 - 1), 0);
+    pSlider->InvalidateRect();
+
+    pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(22));
+    UTIL_ASSERT(pSlider != NULL); // 1954
+    nValue = ((pSlider->field_1F2 - 1) * g_pBaldurChitin->GetCurrentVideoMode()->m_nGammaCorrection + 4) / 5;
+    pSlider->field_208 = max(min(nValue, pSlider->field_1F2 - 1), 0);
+    pSlider->InvalidateRect();
+
+    if (bInitialUpdate) {
+        pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(5));
+        UTIL_ASSERT(pButton != NULL); // 1961
+        pButton->SetEnabled(g_pBaldurChitin->m_bFullscreen
+            && (g_pBaldurChitin->cVideo.m_bSupports16bpp
+                || g_pBaldurChitin->cVideo.m_nBpp == 16));
+        pButton->SetSelected(g_pBaldurChitin->cVideo.m_nBpp == 16);
+
+        pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(6));
+        UTIL_ASSERT(pButton != NULL); // 1966
+        pButton->SetEnabled(g_pBaldurChitin->m_bFullscreen
+            && (g_pBaldurChitin->cVideo.m_bSupports24bpp
+                || g_pBaldurChitin->cVideo.m_nBpp == 24));
+        pButton->SetSelected(g_pBaldurChitin->cVideo.m_nBpp == 24);
+
+        pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(7));
+        UTIL_ASSERT(pButton != NULL); // 1971
+        pButton->SetEnabled(g_pBaldurChitin->m_bFullscreen
+            && (g_pBaldurChitin->cVideo.m_bSupports32bpp
+                || g_pBaldurChitin->cVideo.m_nBpp == 32));
+        pButton->SetSelected(g_pBaldurChitin->cVideo.m_nBpp == 32);
+
+        pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(9));
+        UTIL_ASSERT(pButton != NULL); // 1976
+        pButton->SetSelected(g_pBaldurChitin->m_bFullscreen);
+
+        pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(40));
+        UTIL_ASSERT(pButton != NULL); // 1980
+        if (!g_pChitin->cVideo.m_bIs3dAccelerated) {
+            pButton->SetSelected(g_pBaldurChitin->cVideo.cVidBlitter.m_bSoftMirrorBlt);
+        } else {
+            pButton->SetEnabled(FALSE);
+        }
+
+        pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(41));
+        UTIL_ASSERT(pButton != NULL); // 1993
+        if (!g_pChitin->cVideo.m_bIs3dAccelerated) {
+            pButton->SetSelected(g_pBaldurChitin->cVideo.cVidBlitter.m_bSoftSrcKeyBltFast
+                || g_pBaldurChitin->cVideo.cVidBlitter.m_bSoftSrcKeyBlt);
+        } else {
+            pButton->SetEnabled(FALSE);
+        }
+
+        pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(42));
+        UTIL_ASSERT(pButton != NULL); // 2006
+        if (!g_pChitin->cVideo.m_bIs3dAccelerated) {
+            pButton->SetSelected(g_pBaldurChitin->cVideo.cVidBlitter.m_bSoftBltFast
+                || g_pBaldurChitin->cVideo.cVidBlitter.m_bSoftBlt);
+        } else {
+            pButton->SetEnabled(FALSE);
+        }
+
+        pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(56));
+        UTIL_ASSERT(pButton != NULL); // 2019
+        pButton->SetSelected(CVidCell::TRANSLUCENT_BLTS_ON);
+
+        pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(57));
+        UTIL_ASSERT(pButton != NULL); // 2023
+        pButton->SetSelected(g_pBaldurChitin->m_pObjectGame->m_cOptions.m_bStaticAnimations);
+    }
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(51));
+    UTIL_ASSERT(pButton != NULL); // 2029
+    pButton->SetSelected(pOptions->m_bTranslucentShadows);
+    m_cUIManager.InvalidateRect(NULL);
 }
 
 // 0x656090

@@ -23,8 +23,10 @@ public:
 
     /* 0052 */ CVidMosaic field_52;
     /* 0106 */ CVidCell field_106;
+    /* 01F2 */ short field_1F2;
     /* 0204 */ unsigned char field_204;
     /* 0206 */ SHORT m_nRenderCount;
+    /* 0208 */ short field_208;
     /* 020A */ int field_20A;
     /* 020E */ int field_20E;
 };
