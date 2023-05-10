@@ -45,8 +45,8 @@ public:
     /* 008C */ int field_8C;
     /* 0090 */ BOOL m_bDisplayMovieSubtitles; // #guess
     /* 0094 */ int field_94;
-    /* 0098 */ int field_98;
-    /* 009C */ int field_9C;
+    /* 0098 */ BOOL m_bStaticAnimations;
+    /* 009C */ BOOL m_bTranslucentBlts;
     /* 00A0 */ BOOL m_bMaxHP;
     /* 00A4 */ BOOL m_bAutoPauseOnTrap;
     /* 00A8 */ int field_A8;

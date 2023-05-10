@@ -21,14 +21,14 @@ CScreenOptions::CScreenOptions()
     m_dwErrorState = 0;
     m_nNumErrorButtons = 0;
     m_bSpriteMirror = FALSE;
-    field_488 = 0;
-    field_48A = 0;
-    field_48B = 0;
-    field_48C = 0;
-    field_48D = 0;
-    field_E90 = 0;
-    field_E91 = 0;
-    m_bFullScreenOptions = FALSE;
+    m_nBpp = 0;
+    m_bFullscreen = 0;
+    m_bSoftMirrorBlt = 0;
+    m_bSoftSrcKeyBlt = 0;
+    m_bSoftBlt = 0;
+    m_bTranslucentBlts = 0;
+    m_bStaticAnimations = 0;
+    m_bFromMainMenu = FALSE;
 
     SetVideoMode(0);
     m_pVirtualKeys[0] = CKeyInfo(VK_ESCAPE, -1, 0);
@@ -203,7 +203,7 @@ void CScreenOptions::EngineInitialized()
     m_nSelectedCharacter = 0;
     field_FA = NULL;
     m_bExitProgram = FALSE;
-    m_bFullScreenOptions = FALSE;
+    m_bFromMainMenu = FALSE;
 
     m_cUIManager.GetPanel(3)->SetActive(FALSE);
     m_cUIManager.GetPanel(4)->SetActive(FALSE);
@@ -297,7 +297,7 @@ void CScreenOptions::OnDoneButtonClick()
     case 13:
         DismissPopup();
 
-        m_bFullScreenOptions = FALSE;
+        m_bFromMainMenu = FALSE;
         lock.Unlock();
 
         g_pBaldurChitin->m_pObjectGame->ApplyVolumeSliders(TRUE);
@@ -360,7 +360,7 @@ void CScreenOptions::OnCancelButtonClick()
         DismissPopup();
         lock.Unlock();
 
-        if (m_bFullScreenOptions) {
+        if (m_bFromMainMenu) {
             g_pBaldurChitin->pActiveEngine->SelectEngine(g_pBaldurChitin->m_pEngineConnection);
         }
 
@@ -683,8 +683,7 @@ void CScreenOptions::QuitGame()
     // __LINE__: 1611
     UTIL_ASSERT(pGame != NULL);
 
-    m_bFullScreenOptions = FALSE;
-
+    m_bFromMainMenu = FALSE;
     SelectEngine(g_pBaldurChitin->m_pEngineConnection);
 
     if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE) {
@@ -702,7 +701,15 @@ void CScreenOptions::QuitGame()
 // 0x655610
 void CScreenOptions::SaveGraphicModeOptions()
 {
-    // TODO: Incomplete.
+    m_nBpp = g_pBaldurChitin->cVideo.m_nBpp;
+    m_bFullscreen = g_pBaldurChitin->m_bFullscreen;
+    m_bSoftMirrorBlt = g_pBaldurChitin->cVideo.cVidBlitter.m_bSoftMirrorBlt;
+    m_bSoftSrcKeyBlt = g_pBaldurChitin->cVideo.cVidBlitter.m_bSoftSrcKeyBlt
+        || g_pBaldurChitin->cVideo.cVidBlitter.m_bSoftSrcKeyBltFast;
+    m_bSoftBlt = g_pBaldurChitin->cVideo.cVidBlitter.m_bSoftBlt
+        || g_pBaldurChitin->cVideo.cVidBlitter.m_bSoftBltFast;
+    m_bTranslucentBlts = g_pBaldurChitin->m_pObjectGame->m_cOptions.m_bTranslucentBlts;
+    m_bStaticAnimations = g_pBaldurChitin->m_pObjectGame->m_cOptions.m_bStaticAnimations;
 }
 
 // 0x6556C0
@@ -717,7 +724,7 @@ void CScreenOptions::LoadGame()
     CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
-    // __LINE__: 1887
+    // __LINE__: 1823
     UTIL_ASSERT(pGame != NULL);
 
     INT nLoadState;
@@ -1610,7 +1617,7 @@ void CUIControlButtonOptionsGameCommand::OnLButtonClick(CPoint pt)
             if (m_pPanel->m_nID == 2) {
                 pEngine->SelectEngine(g_pBaldurChitin->m_pEngineWorld);
             } else {
-                pEngine->m_bFullScreenOptions = 0;
+                pEngine->m_bFromMainMenu = FALSE;
                 pEngine->DismissPopup();
                 pEngine->SelectEngine(g_pBaldurChitin->m_pEngineConnection);
             }
@@ -1625,7 +1632,7 @@ void CUIControlButtonOptionsGameCommand::OnLButtonClick(CPoint pt)
 
                 pKeymaps->StartKeymaps();
                 pEngine->SelectEngine(pKeymaps);
-                pKeymaps->field_776 = pEngine->m_bFullScreenOptions;
+                pKeymaps->m_bFromMainMenu = pEngine->m_bFromMainMenu;
             }
             break;
         case 14:

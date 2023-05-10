@@ -44,7 +44,7 @@ public:
     /* 076C */ int field_76C;
     /* 0774 */ unsigned char field_774;
     /* 0775 */ unsigned char field_775;
-    /* 0776 */ unsigned char field_776;
+    /* 0776 */ BOOLEAN m_bFromMainMenu;
     /* 047E */ BOOLEAN m_bSystemKeyCtrl;
     /* 0442 */ BOOL m_bSystemKeyShift;
     /* 0446 */ BOOL m_bSystemKeyCapsLock;

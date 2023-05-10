@@ -9,7 +9,7 @@ CScreenKeymaps::CScreenKeymaps()
     field_76C = 0;
     field_774 = 0;
     field_775 = 0;
-    field_776 = 0;
+    m_bFromMainMenu = FALSE;
 
     SetVideoMode(0);
 

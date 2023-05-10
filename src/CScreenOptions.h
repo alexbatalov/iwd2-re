@@ -65,17 +65,17 @@ public:
     /* 045C */ DWORD m_strErrorButtonText[CSCREENOPTIONS_ERROR_BUTTONS];
     /* 0468 */ CTypedPtrList<CPtrList, CGameOptions*> m_lOptionsStack;
     /* 0484 */ BOOL m_bSpriteMirror;
-    /* 0488 */ short field_488;
-    /* 048A */ unsigned char field_48A;
-    /* 048B */ unsigned char field_48B;
-    /* 048C */ unsigned char field_48C;
-    /* 048D */ unsigned char field_48D;
+    /* 0488 */ USHORT m_nBpp;
+    /* 048A */ BOOLEAN m_bFullscreen;
+    /* 048B */ BOOLEAN m_bSoftMirrorBlt;
+    /* 048C */ BOOLEAN m_bSoftSrcKeyBlt;
+    /* 048D */ BOOLEAN m_bSoftBlt;
     /* 048E */ BOOLEAN m_bCtrlKeyDown;
     /* 0490 */ CVidFont m_preLoadFontRealms;
     /* 0990 */ CVidFont m_preLoadFontStnSml;
-    /* 0E90 */ unsigned char field_E90;
-    /* 0E91 */ unsigned char field_E91;
-    /* 0E92 */ BOOLEAN m_bFullScreenOptions;
+    /* 0E90 */ BOOLEAN m_bTranslucentBlts;
+    /* 0E91 */ BOOLEAN m_bStaticAnimations;
+    /* 0E92 */ BOOLEAN m_bFromMainMenu;
 };
 
 class CUIControlButtonOptionsSelection : public CUIControlButton3State {

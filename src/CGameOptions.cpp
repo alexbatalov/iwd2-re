@@ -43,8 +43,8 @@ CGameOptions::CGameOptions()
     field_8C = 0;
     m_bDisplayMovieSubtitles = FALSE;
     field_94 = 1;
-    field_98 = 1;
-    field_9C = 1;
+    m_bStaticAnimations = TRUE;
+    m_bTranslucentBlts = TRUE;
     m_bMaxHP = FALSE;
     m_bAutoPauseOnTrap = FALSE;
     field_A8 = 0;
