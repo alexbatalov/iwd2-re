@@ -1383,12 +1383,12 @@ void CBaldurChitin::LoadOptions()
         30,
         GetIniFileName());
 
-    pOptions->m_nTranslucentShadows = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
+    pOptions->m_bTranslucentShadows = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         TRANSLUCENT_SHADOWS_KEY,
         1,
         GetIniFileName());
 
-    CVidCell::TRANSLUCENT_SHADOWS_ON = pOptions->m_nTranslucentShadows;
+    CVidCell::TRANSLUCENT_SHADOWS_ON = pOptions->m_bTranslucentShadows;
 
     if (pOptions->m_nTooltips > 99 && pOptions->m_nTooltips != INT_MAX) {
         pOptions->m_nTooltips = 30;
@@ -1571,7 +1571,7 @@ void CBaldurChitin::SaveOptions()
         sString,
         GetIniFileName());
 
-    sString.Format("%d", pOptions->m_nTranslucentShadows);
+    sString.Format("%d", pOptions->m_bTranslucentShadows);
     WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
         TRANSLUCENT_SHADOWS_KEY,
         sString,

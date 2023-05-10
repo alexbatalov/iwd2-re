@@ -4,7 +4,6 @@
 #include "CGameOptions.h"
 #include "CInfGame.h"
 #include "CScreenWorld.h"
-#include "CUIControlButton3State.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -751,6 +750,304 @@ void CScreenOptions::CancelEngine()
     while (m_lPopupStack.GetTailPosition() != NULL && m_lPopupStack.GetTail() != NULL) {
         OnCancelButtonClick();
     }
+}
+
+// 0x657490
+CUIControlButtonOptionsSelection::CUIControlButtonOptionsSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, 1, 0)
+{
+    m_nPressedFrame = 2;
+    m_nDisabledFrame = 0;
+    m_nNotSelectedFrame = 1;
+    m_nSelectedFrame = 3;
+}
+
+// 0x657500
+CUIControlButtonOptionsSelection::~CUIControlButtonOptionsSelection()
+{
+}
+
+// 0x6575A0
+void CUIControlButtonOptionsSelection::OnLButtonClick(CPoint pt)
+{
+    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 2899
+    UTIL_ASSERT(pGame != NULL);
+
+    CGameOptions* pOptions = &(pGame->m_cOptions);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 2901
+    UTIL_ASSERT(pOptions != NULL);
+
+    CUIControlButton3State::OnLButtonClick(pt);
+
+    DWORD dwTextId;
+    DWORD dwStrId;
+    switch (m_pPanel->m_nID) {
+    case 6:
+        dwTextId = 33;
+
+        switch (m_nID) {
+        case 9:
+            dwStrId = 18000;
+            break;
+        case 40:
+            dwStrId = 15135;
+            break;
+        case 41:
+            dwStrId = 18006;
+            break;
+        case 42:
+            dwStrId = 18007;
+            break;
+        case 51:
+            dwStrId = 20620;
+            pOptions->m_bTranslucentShadows = m_bSelected;
+            CVidCell::TRANSLUCENT_SHADOWS_ON = m_bSelected;
+            break;
+        case 56:
+            dwStrId = 15141;
+            break;
+        case 57:
+            dwStrId = 18004;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 2947
+            UTIL_ASSERT(FALSE);
+        }
+
+        break;
+    case 8:
+        dwTextId = 40;
+
+        switch (m_nID) {
+        case 14:
+            dwStrId = 18021;
+            pOptions->m_bAlwaysDither = m_bSelected;
+            break;
+        case 19:
+            if (pOptions->field_4) {
+                dwStrId = 18023;
+                pOptions->m_bGore = m_bSelected;
+            } else {
+                m_bSelected = FALSE;
+            }
+            break;
+        case 42:
+            dwStrId = 11797;
+            pOptions->m_bDarkvision = m_bSelected;
+            break;
+        case 47:
+            dwStrId = 20619;
+            pOptions->m_bWeatherEnabled = m_bSelected;
+            break;
+        case 50:
+            dwStrId = 15136;
+            pOptions->m_bMaxHP = m_bSelected;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 2987
+            UTIL_ASSERT(FALSE);
+        }
+
+        break;
+    case 12:
+        dwTextId = 16;
+
+        switch (m_nID) {
+        case 5:
+            dwStrId = 18015;
+            pOptions->m_bSubtitles = m_bSelected;
+            break;
+        case 6:
+            dwStrId = 18013;
+            pOptions->m_bAttackSounds = m_bSelected;
+            break;
+        case 7:
+            dwStrId = 18014;
+            pOptions->m_bFootStepsSounds = m_bSelected;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 3012
+            UTIL_ASSERT(FALSE);
+        }
+
+        break;
+    case 7:
+        dwTextId = 14;
+
+        switch (m_nID) {
+        case 26:
+            dwStrId = 18022;
+            pOptions->m_bEnvironmentalAudio = m_bSelected;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 3027
+            UTIL_ASSERT(FALSE);
+        }
+
+        break;
+    case 9:
+        dwTextId = 28;
+
+        switch (m_nID) {
+        case 10:
+            dwStrId = 18026;
+            if (m_bSelected) {
+                pOptions->m_nEffectTextLevel |= 0x1;
+            } else {
+                pOptions->m_nEffectTextLevel &= ~0x1;
+            }
+            break;
+        case 11:
+            dwStrId = 18027;
+            if (m_bSelected) {
+                pOptions->m_nEffectTextLevel |= 0x2;
+            } else {
+                pOptions->m_nEffectTextLevel &= ~0x2;
+            }
+            break;
+        case 12:
+            dwStrId = 18028;
+            if (m_bSelected) {
+                pOptions->m_nEffectTextLevel |= 0x4;
+            } else {
+                pOptions->m_nEffectTextLevel &= ~0x4;
+            }
+            break;
+        case 13:
+            dwStrId = 18029;
+            if (m_bSelected) {
+                pOptions->m_nEffectTextLevel |= 0x8;
+            } else {
+                pOptions->m_nEffectTextLevel &= ~0x8;
+            }
+            break;
+        case 14:
+            dwStrId = 18030;
+            if (m_bSelected) {
+                pOptions->m_nEffectTextLevel |= 0x20;
+            } else {
+                pOptions->m_nEffectTextLevel &= ~0x20;
+            }
+            break;
+        case 15:
+            dwStrId = 18031;
+            if (m_bSelected) {
+                pOptions->m_nEffectTextLevel |= 0x10;
+            } else {
+                pOptions->m_nEffectTextLevel &= ~0x10;
+            }
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 3109
+            UTIL_ASSERT(FALSE);
+        }
+
+        break;
+    case 10:
+        dwTextId = 15;
+
+        switch (m_nID) {
+        case 1:
+            dwStrId = 18032;
+            if (m_bSelected) {
+                pOptions->m_nAutoPauseState |= 0x4;
+            } else {
+                pOptions->m_nAutoPauseState &= ~0x4;
+            }
+            break;
+        case 2:
+            dwStrId = 18033;
+            if (m_bSelected) {
+                pOptions->m_nAutoPauseState |= 0x8;
+            } else {
+                pOptions->m_nAutoPauseState &= ~0x8;
+            }
+            break;
+        case 3:
+            dwStrId = 18034;
+            if (m_bSelected) {
+                pOptions->m_nAutoPauseState |= 0x10;
+            } else {
+                pOptions->m_nAutoPauseState &= ~0x10;
+            }
+            break;
+        case 4:
+            dwStrId = 18035;
+            if (m_bSelected) {
+                pOptions->m_nAutoPauseState |= 0x2;
+            } else {
+                pOptions->m_nAutoPauseState &= ~0x2;
+            }
+            break;
+        case 5:
+            dwStrId = 18036;
+            if (m_bSelected) {
+                pOptions->m_nAutoPauseState |= 0x1;
+            } else {
+                pOptions->m_nAutoPauseState &= ~0x1;
+            }
+            break;
+        case 13:
+            dwStrId = 18037;
+            if (m_bSelected) {
+                pOptions->m_nAutoPauseState |= 0x20;
+            } else {
+                pOptions->m_nAutoPauseState &= ~0x20;
+            }
+            break;
+        case 25:
+            dwStrId = 10640;
+            if (m_bSelected) {
+                pOptions->m_nAutoPauseState |= 0x40;
+            } else {
+                pOptions->m_nAutoPauseState &= ~0x40;
+            }
+            break;
+        case 26:
+            dwStrId = 23514;
+            if (m_bSelected) {
+                pOptions->m_nAutoPauseState |= 0x200;
+            } else {
+                pOptions->m_nAutoPauseState &= ~0x200;
+            }
+            break;
+        case 33:
+            dwStrId = 24888;
+            pOptions->m_bAutoPauseCenter = m_bSelected;
+            break;
+        case 36:
+            dwStrId = 26311;
+            if (m_bSelected) {
+                pOptions->m_nAutoPauseState |= 0x400;
+            } else {
+                pOptions->m_nAutoPauseState &= ~0x400;
+            }
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 3244
+            UTIL_ASSERT(FALSE);
+        }
+
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+        // __LINE__: 3250
+        UTIL_ASSERT(FALSE);
+    }
+
+    g_pBaldurChitin->m_pEngineOptions->UpdateHelp(m_pPanel->m_nID, dwTextId, dwStrId);
+    g_pBaldurChitin->m_pEngineOptions->UpdatePopupPanel(m_pPanel->m_nID, FALSE);
 }
 
 // 0x659150

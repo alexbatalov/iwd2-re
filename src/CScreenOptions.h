@@ -5,6 +5,7 @@
 
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
+#include "CUIControlButton3State.h"
 #include "CVidFont.h"
 
 #define CSCREENOPTIONS_VIRTUAL_KEYS 90
@@ -69,6 +70,13 @@ public:
     /* 0E90 */ unsigned char field_E90;
     /* 0E91 */ unsigned char field_E91;
     /* 0E92 */ BOOLEAN m_bFullScreenOptions;
+};
+
+class CUIControlButtonOptionsSelection : public CUIControlButton3State {
+public:
+    CUIControlButtonOptionsSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonOptionsSelection();
+    void OnLButtonClick(CPoint pt) override;
 };
 
 class CUIControlButtonOptionsPopupDone : public CUIControlButton {

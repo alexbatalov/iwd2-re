@@ -7,7 +7,7 @@ class CGameOptions {
 public:
     CGameOptions();
 
-    /* 0000 */ int field_0;
+    /* 0000 */ BOOL m_bGore;
     /* 0004 */ int field_4;
     /* 0008 */ int field_8;
     /* 000C */ BOOL m_bSubtitles;
@@ -20,16 +20,16 @@ public:
     /* 0028 */ DWORD m_nVolumeMovie; // #guess
     /* 002C */ BOOL m_bFootStepsSounds;
     /* 0030 */ int field_30;
-    /* 0034 */ int m_nTranslucentShadows; // #guess
+    /* 0034 */ BOOL m_bTranslucentShadows;
     /* 0038 */ int field_38;
     /* 003C */ int field_3C;
     /* 0040 */ int m_nTooltips; // #guess
     /* 0044 */ int field_44;
     /* 0048 */ DWORD m_nCommandSoundsFrequency;
     /* 004C */ DWORD m_nSelectionSoundsFrequency;
-    /* 0050 */ int field_50;
+    /* 0050 */ BOOL m_bAlwaysDither;
     /* 0054 */ int field_54;
-    /* 0058 */ int field_58;
+    /* 0058 */ DWORD m_nEffectTextLevel;
     /* 005C */ int field_5C;
     /* 0060 */ BOOL m_bAttackSounds;
     /* 0064 */ DWORD m_nAutoPauseState;
@@ -37,7 +37,7 @@ public:
     /* 006C */ int field_6C;
     /* 0070 */ int field_70;
     /* 0074 */ int field_74;
-    /* 0078 */ int field_78;
+    /* 0078 */ BOOL m_bDarkvision;
     /* 007C */ int field_7C;
     /* 0080 */ int m_bWeatherEnabled;
     /* 0084 */ int field_84;
@@ -47,7 +47,7 @@ public:
     /* 0094 */ int field_94;
     /* 0098 */ int field_98;
     /* 009C */ int field_9C;
-    /* 00A0 */ int field_A0;
+    /* 00A0 */ BOOL m_bMaxHP;
     /* 00A4 */ BOOL m_bAutoPauseOnTrap;
     /* 00A8 */ int field_A8;
     /* 00AC */ int field_AC;

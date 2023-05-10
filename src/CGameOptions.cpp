@@ -5,7 +5,7 @@ CGameOptions::CGameOptions()
 {
     field_B4 = 0;
     field_BC = 0;
-    field_0 = 1;
+    m_bGore = TRUE;
     field_4 = 0;
     field_8 = 28;
     m_bSubtitles = FALSE;
@@ -18,24 +18,24 @@ CGameOptions::CGameOptions()
     m_nVolumeMovie = 50;
     m_bFootStepsSounds = TRUE;
     field_30 = 1;
-    m_nTranslucentShadows = 1;
+    m_bTranslucentShadows = TRUE;
     field_38 = 0;
     field_3C = 0;
     m_nTooltips = 30;
     field_44 = 3000;
     m_nCommandSoundsFrequency = 2;
     m_nSelectionSoundsFrequency = 3;
-    field_50 = 1;
+    m_bAlwaysDither = TRUE;
     field_6C = 3;
     field_54 = 36;
-    field_58 = 62;
+    m_nEffectTextLevel = 62;
     field_5C = 1;
     m_bAttackSounds = TRUE;
     m_nAutoPauseState = 0;
     m_bAutoPauseCenter = TRUE;
     field_70 = 0;
     field_74 = 0;
-    field_78 = 0;
+    m_bDarkvision = FALSE;
     field_7C = 1;
     m_bWeatherEnabled = TRUE;
     field_84 = 0;
@@ -45,7 +45,7 @@ CGameOptions::CGameOptions()
     field_94 = 1;
     field_98 = 1;
     field_9C = 1;
-    field_A0 = 0;
+    m_bMaxHP = FALSE;
     m_bAutoPauseOnTrap = FALSE;
     field_A8 = 0;
     field_AC = 0;
