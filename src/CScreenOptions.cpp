@@ -4,6 +4,7 @@
 #include "CGameAnimationType.h"
 #include "CGameOptions.h"
 #include "CInfGame.h"
+#include "CInfinity.h"
 #include "CScreenConnection.h"
 #include "CScreenKeymaps.h"
 #include "CScreenLoad.h"
@@ -715,7 +716,54 @@ void CScreenOptions::SaveGraphicModeOptions()
 // 0x6556C0
 void CScreenOptions::CheckGraphicModeOptions(CUIPanel* pPanel)
 {
-    // TODO: Incomplete.
+    if (static_cast<CUIControlButton3State*>(pPanel->GetControl(40))->m_bSelected != m_bSoftMirrorBlt) {
+        if (!g_pChitin->cVideo.m_bIs3dAccelerated) {
+            g_pBaldurChitin->SetSoftMirrorBlt(m_bSoftMirrorBlt == FALSE, TRUE);
+        }
+    }
+
+    if (static_cast<CUIControlButton3State*>(pPanel->GetControl(41))->m_bSelected != m_bSoftSrcKeyBlt) {
+        if (!g_pChitin->cVideo.m_bIs3dAccelerated) {
+            g_pBaldurChitin->SetSoftSrcKeyBltFast(m_bSoftSrcKeyBlt == FALSE, TRUE);
+            g_pBaldurChitin->SetSoftSrcKeyBlt(m_bSoftSrcKeyBlt == FALSE, TRUE);
+        }
+    }
+
+    if (static_cast<CUIControlButton3State*>(pPanel->GetControl(42))->m_bSelected != m_bSoftBlt) {
+        if (!g_pChitin->cVideo.m_bIs3dAccelerated) {
+            g_pBaldurChitin->SetSoftBltFast(m_bSoftBlt == FALSE, TRUE);
+            g_pBaldurChitin->SetSoftBlt(m_bSoftBlt == FALSE, TRUE);
+        }
+    }
+
+    if (static_cast<CUIControlButton3State*>(pPanel->GetControl(56))->m_bSelected != m_bTranslucentBlts) {
+        BOOL bOldTranslucentBlts = g_pBaldurChitin->m_pObjectGame->m_cOptions.m_bTranslucentBlts;
+        g_pBaldurChitin->m_pObjectGame->m_cOptions.m_bTranslucentBlts = bOldTranslucentBlts == FALSE;
+        CVidCell::TRANSLUCENT_BLTS_ON = bOldTranslucentBlts == FALSE;
+        CInfinity::TRANSLUCENT_BLTS_ON = bOldTranslucentBlts == FALSE;
+    }
+
+    if (static_cast<CUIControlButton3State*>(pPanel->GetControl(57))->m_bSelected != m_bStaticAnimations) {
+        g_pBaldurChitin->m_pObjectGame->m_cOptions.m_bStaticAnimations = g_pBaldurChitin->m_pObjectGame->m_cOptions.m_bStaticAnimations == FALSE;
+    }
+
+    if (static_cast<CUIControlButton3State*>(pPanel->GetControl(5))->m_bSelected) {
+        if (m_nBpp != 16) {
+            g_pBaldurChitin->cVideo.SetNextBpp(16);
+        }
+    } else if (static_cast<CUIControlButton3State*>(pPanel->GetControl(6))->m_bSelected) {
+        if (m_nBpp != 24) {
+            g_pBaldurChitin->cVideo.SetNextBpp(24);
+        }
+    } else {
+        if (m_nBpp != 32) {
+            g_pBaldurChitin->cVideo.SetNextBpp(32);
+        }
+    }
+
+    if (static_cast<CUIControlButton3State*>(pPanel->GetControl(9))->m_bSelected != g_pBaldurChitin->m_bFullscreen) {
+        g_pBaldurChitin->field_E2 = g_pBaldurChitin->m_bFullscreen == FALSE;
+    }
 }
 
 // 0x655910

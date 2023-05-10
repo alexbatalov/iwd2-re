@@ -1,5 +1,12 @@
 #include "CInfinity.h"
 
+// NOTE: Not sure if it belongs to `CInfinity`. Also unclear what's the need for
+// separate setting which looks to be in sync with
+// `CVidCell::TRANSLUCENT_BLTS_ON`.
+//
+// 0x8A85F4
+BOOLEAN CInfinity::TRANSLUCENT_BLTS_ON = TRUE;
+
 // 0x8E79D8
 const CString CInfinity::DAWN_MOVIE("BGSUNRIS");
 

@@ -12,6 +12,7 @@ public:
     static const CString NIGHT_RESREF_SUFFIX;
     static const CString RAIN_RESREF_SUFFIX;
     static const CResRef THUNDERRESREFS[3];
+    static BOOLEAN TRANSLUCENT_BLTS_ON;
 
     CInfinity();
     ~CInfinity();
