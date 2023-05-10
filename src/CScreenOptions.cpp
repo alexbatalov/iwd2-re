@@ -942,7 +942,48 @@ void CScreenOptions::UpdateGraphicsPanel(BOOLEAN bInitialUpdate)
 // 0x656090
 void CScreenOptions::UpdateSoundPanel(BOOLEAN bInitialUpdate)
 {
-    // TODO: Incomplete.
+    CGameOptions* pOptions = &(g_pBaldurChitin->m_pObjectGame->m_cOptions);
+    CUIPanel* pPanel = m_cUIManager.GetPanel(7);
+    CUIControlSlider* pSlider;
+    CUIControlButton3State* pButton;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 2059
+    UTIL_ASSERT(pPanel != NULL);
+
+    field_FA = pPanel->GetControl(15);
+
+    // TODO: Check casts.
+
+    pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(4));
+    UTIL_ASSERT(pSlider != NULL); // 2065
+    pSlider->field_208 = max(min(static_cast<short>(((pSlider->field_1F2 - 1) * pOptions->m_nVolumeMusic + 99) / 100), pSlider->field_1F2 - 1), 0);
+    pSlider->InvalidateRect();
+
+    pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(3));
+    UTIL_ASSERT(pSlider != NULL); // 2070
+    pSlider->field_208 = max(min(static_cast<short>(((pSlider->field_1F2 - 1) * pOptions->m_nVolumeVoices + 99) / 100), pSlider->field_1F2 - 1), 0);
+    pSlider->InvalidateRect();
+
+    pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(1));
+    UTIL_ASSERT(pSlider != NULL); // 2075
+    pSlider->field_208 = max(min(static_cast<short>(((pSlider->field_1F2 - 1) * pOptions->m_nVolumeAmbients + 99) / 100), pSlider->field_1F2 - 1), 0);
+    pSlider->InvalidateRect();
+
+    pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(2));
+    UTIL_ASSERT(pSlider != NULL); // 2080
+    pSlider->field_208 = max(min(static_cast<short>(((pSlider->field_1F2 - 1) * pOptions->m_nVolumeSFX + 99) / 100), pSlider->field_1F2 - 1), 0);
+    pSlider->InvalidateRect();
+
+    pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(22));
+    UTIL_ASSERT(pSlider != NULL); // 2085
+    pSlider->field_208 = max(min(static_cast<short>(((pSlider->field_1F2 - 1) * pOptions->m_nVolumeMovie + 99) / 100), pSlider->field_1F2 - 1), 0);
+    pSlider->InvalidateRect();
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(26));
+    UTIL_ASSERT(pButton != NULL); // 2090
+    pButton->SetSelected(pOptions->m_bEnvironmentalAudio);
+    pButton->SetEnabled((g_pBaldurChitin->cSoundMixer.m_dwEAXProperties & CSOUNDPROPERTIES_EAX_SUPPORTS_ENVIRONMENT) != 0);
 }
 
 // 0x656360
