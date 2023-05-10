@@ -48,6 +48,7 @@ public:
     void UpdateFeedbackPanel(BOOLEAN bInitialUpdate);
     void UpdateAutoPausePanel(BOOLEAN bInitialUpdate);
     void OnErrorButtonClick(INT nButton);
+    void PopOptions(CGameOptions* pOptions);
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
 
     /* 0106 */ CKeyInfo m_pVirtualKeys[CSCREENOPTIONS_VIRTUAL_KEYS];
@@ -59,7 +60,7 @@ public:
     /* 0458 */ INT m_nNumErrorButtons;
     /* 045C */ DWORD m_strErrorButtonText[CSCREENOPTIONS_ERROR_BUTTONS];
     /* 0468 */ CTypedPtrList<CPtrList, CGameOptions*> m_lOptionsStack;
-    /* 0484 */ int field_484;
+    /* 0484 */ BOOL m_bSpriteMirror;
     /* 0488 */ short field_488;
     /* 048A */ unsigned char field_48A;
     /* 048B */ unsigned char field_48B;

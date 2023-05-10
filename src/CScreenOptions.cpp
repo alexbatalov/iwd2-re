@@ -1,6 +1,7 @@
 #include "CScreenOptions.h"
 
 #include "CBaldurChitin.h"
+#include "CGameAnimationType.h"
 #include "CGameOptions.h"
 #include "CInfGame.h"
 #include "CScreenConnection.h"
@@ -15,7 +16,7 @@ CScreenOptions::CScreenOptions()
     m_dwErrorTextId = 0;
     m_dwErrorState = 0;
     m_nNumErrorButtons = 0;
-    field_484 = 0;
+    m_bSpriteMirror = FALSE;
     field_488 = 0;
     field_48A = 0;
     field_48B = 0;
@@ -251,7 +252,62 @@ void CScreenOptions::OnDoneButtonClick()
 // 0x654960
 void CScreenOptions::OnCancelButtonClick()
 {
-    // TODO: Incomplete.
+    CGameOptions* pOptions = &(g_pBaldurChitin->m_pObjectGame->m_cOptions);
+
+    CSingleLock lock(&(m_cUIManager.field_36), FALSE);
+    lock.Lock(INFINITE);
+
+    CUIPanel* pPanel = m_lPopupStack.GetTailPosition() != NULL ? m_lPopupStack.GetTail() : NULL;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 1015
+    UTIL_ASSERT(pPanel != NULL);
+
+    switch (pPanel->m_nID) {
+    case 3:
+    case 4:
+    case 5:
+    case 50:
+        DismissPopup();
+        lock.Unlock();
+
+        break;
+    case 6:
+        CGameAnimationType::MIRROR_BAM = m_bSpriteMirror;
+
+        // NOTE: Uninline.
+        PopOptions(pOptions);
+
+        DismissPopup();
+        lock.Unlock();
+
+        break;
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 12:
+        // NOTE: Uninline.
+        PopOptions(pOptions);
+
+        DismissPopup();
+        lock.Unlock();
+
+        break;
+    case 13:
+        DismissPopup();
+        lock.Unlock();
+
+        if (m_bFullScreenOptions) {
+            g_pBaldurChitin->pActiveEngine->SelectEngine(g_pBaldurChitin->m_pEngineConnection);
+        }
+
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+        // __LINE__: 1050
+        UTIL_ASSERT(FALSE);
+    }
 }
 
 // 0x654B40
@@ -747,6 +803,19 @@ void CScreenOptions::UpdateAutoPausePanel(BOOLEAN bInitialUpdate)
 void CScreenOptions::OnErrorButtonClick(INT nButton)
 {
     // TODO: Incomplete.
+}
+
+// NOTE: Inlined.
+void CScreenOptions::PopOptions(CGameOptions* pOptions)
+{
+    CGameOptions* pRemoved = m_lOptionsStack.RemoveTail();
+    if (pRemoved != NULL) {
+        if (pOptions != NULL) {
+            memcpy(pOptions, pRemoved, sizeof(CGameOptions));
+        }
+
+        delete pRemoved;
+    }
 }
 
 // 0x657360
