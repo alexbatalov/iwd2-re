@@ -36,6 +36,8 @@ public:
     /* 00A4 */ CKeyInfo* GetVirtualKeys() override;
     /* 00A8 */ BYTE* GetVirtualKeysFlags() override;
 
+    void StartKeymaps();
+
     /* 0106 */ CKeyInfo m_pVirtualKeys[CSCREENKEYMAPS_VIRTUAL_KEYS];
     /* 03E6 */ BYTE m_pVirtualKeysFlags[CSCREENKEYMAPS_VIRTUAL_KEYS];
     /* 044E */ CTypedPtrList<CPtrList, Entry> field_44E;

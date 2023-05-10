@@ -7,6 +7,8 @@ class CScreenMovies : public CBaldurEngine {
 public:
     CScreenMovies();
     ~CScreenMovies();
+
+    void StartMovies(INT nEngineState);
 };
 
 #endif /* CSCREENMOVIES_H_ */

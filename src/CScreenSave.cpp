@@ -11,3 +11,9 @@ CScreenSave::~CScreenSave()
 {
     // TODO: Incomplete.
 }
+
+// 0x65BA10
+void CScreenSave::StartSave(INT nEngineState)
+{
+    // TODO: Incomplete.
+}

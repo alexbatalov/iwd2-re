@@ -41,6 +41,7 @@ public:
     void ResetErrorPanel(CUIPanel* pPanel);
     void UpdatePopupPanel(DWORD dwPanelId, BOOLEAN bInitialUpdate);
     void QuitGame();
+    void SaveGraphicModeOptions();
     void CheckGraphicModeOptions(CUIPanel* pPanel);
     void LoadGame();
     void UpdateGraphicsPanel(BOOLEAN bInitialUpdate);
@@ -50,6 +51,7 @@ public:
     void UpdateFeedbackPanel(BOOLEAN bInitialUpdate);
     void UpdateAutoPausePanel(BOOLEAN bInitialUpdate);
     void OnErrorButtonClick(INT nButton);
+    void PushOptions(CGameOptions* pOptions);
     void PopOptions(CGameOptions* pOptions);
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
 
@@ -91,6 +93,13 @@ public:
     void OnLButtonClick(CPoint pt) override;
 
     /* 066E */ SHORT m_nDisabledSelectedFrame;
+};
+
+class CUIControlButtonOptionsGameCommand : public CUIControlButton {
+public:
+    CUIControlButtonOptionsGameCommand(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonOptionsGameCommand();
+    void OnLButtonClick(CPoint pt) override;
 };
 
 class CUIControlButtonOptionsPopupDone : public CUIControlButton {

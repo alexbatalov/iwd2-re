@@ -19,6 +19,7 @@ public:
     ~CInfGame();
     void StartSearchThread();
     void DestroyGame(unsigned char a1, unsigned char a2);
+    BOOLEAN CanSaveGame(STRREF& strError, unsigned char a2, unsigned char a3);
     void SaveOptions();
     void UpdatePortrait(SHORT nPortrait, DWORD dwPanelId);
     SHORT GetCharacterPortaitNum(LONG nCharacterId);
@@ -74,6 +75,7 @@ public:
     /* 1B78 */ CTimerWorld m_worldTime;
     /* 1BA1 */ unsigned char field_1BA1;
     /* 1BB2 */ CMultiplayerSettings m_multiplayerSettings;
+    /* 366E */ int field_366E;
     /* 37E0 */ BYTE m_visibleArea;
     /* 37E2 */ CGameArea* m_gameAreas[12];
     /* 3812 */ CGameArea* m_pGameAreaMaster;
@@ -83,8 +85,11 @@ public:
     /* 43E2 */ int field_43E2;
     /* 43EA */ CGameOptions m_cOptions; // #guess
     /* 4A00 */ HANDLE m_hSearchThread; // #guess
+    /* 4AA2 */ ULONG field_4AA2;
     // NOTE: Can also be BYTE indicating number of expansion pack.
     /* 4BD5 */ BOOLEAN m_bExpansion;
+    /* 50D8 */ BOOL field_50D8;
+    /* 50DC */ unsigned char field_50DC;
 };
 
 #endif /* CINFGAME_H_ */

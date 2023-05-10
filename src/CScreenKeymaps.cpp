@@ -248,3 +248,9 @@ BYTE* CScreenKeymaps::GetVirtualKeysFlags()
 {
     return m_pVirtualKeysFlags;
 }
+
+// 0x639DC0
+void CScreenKeymaps::StartKeymaps()
+{
+    // TODO: Incomplete.
+}

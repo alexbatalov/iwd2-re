@@ -5,7 +5,10 @@
 #include "CGameOptions.h"
 #include "CInfGame.h"
 #include "CScreenConnection.h"
+#include "CScreenKeymaps.h"
 #include "CScreenLoad.h"
+#include "CScreenMovies.h"
+#include "CScreenSave.h"
 #include "CScreenWorld.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
@@ -696,6 +699,12 @@ void CScreenOptions::QuitGame()
     pGame->DestroyGame(1, 0);
 }
 
+// 0x655610
+void CScreenOptions::SaveGraphicModeOptions()
+{
+    // TODO: Incomplete.
+}
+
 // 0x6556C0
 void CScreenOptions::CheckGraphicModeOptions(CUIPanel* pPanel)
 {
@@ -916,6 +925,18 @@ void CScreenOptions::UpdateAutoPausePanel(BOOLEAN bInitialUpdate)
 void CScreenOptions::OnErrorButtonClick(INT nButton)
 {
     // TODO: Incomplete.
+}
+
+// NOTE: Inlined.
+void CScreenOptions::PushOptions(CGameOptions* pOptions)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 2710
+    UTIL_ASSERT(pOptions != NULL);
+
+    CGameOptions* pCopy = new CGameOptions();
+    memcpy(pCopy, pOptions, sizeof(CGameOptions));
+    m_lOptionsStack.AddTail(pCopy);
 }
 
 // NOTE: Inlined.
@@ -1386,6 +1407,288 @@ void CUIControlButtonOptionsRadio::OnLButtonClick(CPoint pt)
 
     g_pBaldurChitin->m_pEngineOptions->UpdateHelp(m_pPanel->m_nID, dwTextId, dwStrId);
     g_pBaldurChitin->m_pEngineOptions->UpdatePopupPanel(m_pPanel->m_nID, FALSE);
+}
+
+// 0x658A60
+CUIControlButtonOptionsGameCommand::CUIControlButtonOptionsGameCommand(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, 1, 0)
+{
+    STR_RES strRes;
+    DWORD dwStrId;
+
+    switch (m_pPanel->m_nID) {
+    case 2:
+    case 13:
+        switch (m_nID) {
+        case 5:
+            dwStrId = 13729; // "Load Game"
+            break;
+        case 6:
+            dwStrId = 13730; // "Save Game"
+            break;
+        case 7:
+            dwStrId = 17162; // "Graphics"
+            break;
+        case 8:
+            dwStrId = 17164; // "Sound"
+            break;
+        case 9:
+            dwStrId = 17165; // "Game Play"
+            break;
+        case 10:
+            dwStrId = 13731; // "Quit Game"
+            break;
+        case 11:
+            dwStrId = 10308; // "Return"
+            break;
+        case 13:
+            dwStrId = 33468; // "Keyboard"
+            break;
+        case 14:
+            dwStrId = 15415; // "Movies"
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 3817
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 6:
+        dwStrId = controlInfo->base.nID;
+        break;
+    case 7:
+        switch (m_nID) {
+        case 13:
+            dwStrId = 17778; // "Character Sounds"
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 3834
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 8:
+        switch (m_nID) {
+        case 5:
+            dwStrId = 17163; // "Feedback"
+            break;
+        case 6:
+            dwStrId = 17166; // "Auto-Pause"
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 3852
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+        // __LINE__: 3859
+        UTIL_ASSERT(FALSE);
+    }
+
+    g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes);
+    SetText(strRes.szText);
+}
+
+// 0x6589C0
+CUIControlButtonOptionsGameCommand::~CUIControlButtonOptionsGameCommand()
+{
+}
+
+// 0x658A60
+void CUIControlButtonOptionsGameCommand::OnLButtonClick(CPoint pt)
+{
+    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 3893
+    UTIL_ASSERT(pGame != NULL);
+
+    CScreenOptions* pEngine = g_pBaldurChitin->m_pEngineOptions;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 3895
+    UTIL_ASSERT(pEngine != NULL);
+
+    CSingleLock lock(&(pEngine->GetManager()->field_36), FALSE);
+    lock.Lock(INFINITE);
+
+    CUIManager* pManager = pEngine->GetManager();
+    if (pManager->m_pFocusedControl != NULL) {
+        pManager->m_pFocusedControl->KillFocus();
+        pManager->m_pFocusedControl = NULL;
+    }
+
+    STRREF dwStrId;
+    switch (m_pPanel->m_nID) {
+    case 2:
+    case 13:
+        switch (m_nID) {
+        case 5:
+            pEngine->m_dwErrorState = 5;
+            pEngine->m_dwErrorTextId = 19531;
+            pEngine->m_strErrorButtonText[0] = 15590;
+            pEngine->m_strErrorButtonText[1] = 13727;
+            pEngine->SummonPopup(4);
+            break;
+        case 6:
+            if (pGame->CanSaveGame(dwStrId, 0, 0)) {
+                if (g_pChitin->cNetwork.m_nServiceProvider == CNetwork::SERV_PROV_NULL) {
+                    pGame->field_366E = 1;
+                    pGame->field_50DC = 0;
+
+                    if (!g_pChitin->cVideo.m_bIs3dAccelerated) {
+                        if (!pGame->field_50D8) {
+                            pGame->SynchronousUpdate();
+                        }
+                        pGame->field_50D8 = TRUE;
+                    }
+                }
+
+                CScreenSave* pSave = g_pBaldurChitin->m_pEngineSave;
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+                // __LINE__: 1670
+                UTIL_ASSERT(pSave != NULL);
+
+                pSave->StartSave(0);
+                pEngine->SelectEngine(pSave);
+            } else {
+                pEngine->m_dwErrorState = 0;
+                pEngine->m_dwErrorTextId = dwStrId;
+                pEngine->m_strErrorButtonText[0] = 11973;
+                pEngine->SummonPopup(3);
+            }
+            break;
+        case 7:
+            pEngine->SaveGraphicModeOptions();
+
+            // NOTE: Uninline.
+            pEngine->PushOptions(&(pGame->m_cOptions));
+
+            pEngine->m_bSpriteMirror = CGameAnimationType::MIRROR_BAM;
+            pEngine->SummonPopup(6);
+            break;
+        case 8:
+            // NOTE: Uninline.
+            pEngine->PushOptions(&(pGame->m_cOptions));
+
+            pEngine->SummonPopup(7);
+            break;
+        case 9:
+            // NOTE: Uninline.
+            pEngine->PushOptions(&(pGame->m_cOptions));
+
+            pEngine->SummonPopup(8);
+            break;
+        case 10:
+            if (pGame->field_4AA2 < pGame->m_worldTime.m_gameTime) {
+                if (pGame->CanSaveGame(dwStrId, 0, 0)) {
+                    pEngine->m_dwErrorState = 3;
+                    pEngine->m_dwErrorTextId = 16456;
+                    pEngine->m_strErrorButtonText[0] = 15589;
+                    pEngine->m_strErrorButtonText[1] = 15417;
+                    pEngine->m_strErrorButtonText[2] = 13727;
+                    pEngine->SummonPopup(5);
+                } else {
+                    pEngine->m_dwErrorState = 1;
+                    pEngine->m_dwErrorTextId = 16516;
+                    pEngine->m_strErrorButtonText[0] = 15417;
+                    pEngine->m_strErrorButtonText[1] = 13727;
+                    pEngine->SummonPopup(4);
+                }
+            } else {
+                pEngine->m_dwErrorState = 4;
+                pEngine->m_dwErrorTextId = 19532;
+                pEngine->m_strErrorButtonText[0] = 15417;
+                pEngine->m_strErrorButtonText[1] = 13727;
+                pEngine->SummonPopup(4);
+            }
+            break;
+        case 11:
+            if (m_pPanel->m_nID == 2) {
+                pEngine->SelectEngine(g_pBaldurChitin->m_pEngineWorld);
+            } else {
+                pEngine->m_bFullScreenOptions = 0;
+                pEngine->DismissPopup();
+                pEngine->SelectEngine(g_pBaldurChitin->m_pEngineConnection);
+            }
+            break;
+        case 13:
+            if (1) {
+                CScreenKeymaps* pKeymaps = g_pBaldurChitin->m_pEngineKeymaps;
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+                // __LINE__: 4000
+                UTIL_ASSERT(pKeymaps != NULL);
+
+                pKeymaps->StartKeymaps();
+                pEngine->SelectEngine(pKeymaps);
+                pKeymaps->field_776 = pEngine->m_bFullScreenOptions;
+            }
+            break;
+        case 14:
+            if (1) {
+                CScreenMovies* pMovies = g_pBaldurChitin->m_pEngineMovies;
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+                // __LINE__: 4010
+                UTIL_ASSERT(pMovies != NULL);
+
+                pMovies->StartMovies(0);
+                pEngine->SelectEngine(pMovies);
+            }
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 4031
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 6:
+        break;
+    case 8:
+        switch (m_nID) {
+        case 5:
+            // NOTE: Uninline.
+            pEngine->PushOptions(&(pGame->m_cOptions));
+
+            pEngine->SummonPopup(9);
+            break;
+        case 6:
+            // NOTE: Uninline.
+            pEngine->PushOptions(&(pGame->m_cOptions));
+
+            pEngine->SummonPopup(10);
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 4050
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 7:
+        switch (m_nID) {
+        case 13:
+            // NOTE: Uninline.
+            pEngine->PushOptions(&(pGame->m_cOptions));
+
+            pEngine->SummonPopup(12);
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 4064
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+        // __LINE__: 4073
+        UTIL_ASSERT(FALSE);
+    }
+
+    lock.Unlock();
 }
 
 // 0x659150

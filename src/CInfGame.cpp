@@ -155,6 +155,14 @@ void CInfGame::DestroyGame(unsigned char a1, unsigned char a2)
     // TODO: Incomplete.
 }
 
+// 0x5AC110
+BOOLEAN CInfGame::CanSaveGame(STRREF& strError, unsigned char a2, unsigned char a3)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x5AA350
 void CInfGame::SaveOptions()
 {

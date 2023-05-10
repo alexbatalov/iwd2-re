@@ -7,6 +7,8 @@ class CScreenSave : public CBaldurEngine {
 public:
     CScreenSave();
     ~CScreenSave();
+
+    void StartSave(INT nEngineState);
 };
 
 #endif /* CSCREENSAVE_H_ */
