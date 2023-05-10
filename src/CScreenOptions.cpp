@@ -3,6 +3,7 @@
 #include "CBaldurChitin.h"
 #include "CGameAnimationType.h"
 #include "CGameOptions.h"
+#include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CInfinity.h"
 #include "CScreenConnection.h"
@@ -161,6 +162,75 @@ void CScreenOptions::SetSystemKeyCtrl(BOOLEAN bValue)
 // 0x653D80
 CScreenOptions::~CScreenOptions()
 {
+}
+
+// 0x653E20
+void CScreenOptions::EngineActivated()
+{
+    if (CChitin::byte_8FB950
+        && g_pChitin->cNetwork.m_bConnectionEstablished == TRUE
+        && g_pChitin->cNetwork.m_bIsHost == TRUE
+        && g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
+        g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
+    }
+
+    if (m_cUIManager.m_bInitialized) {
+        m_preLoadFontRealms.SetResRef(CResRef("REALMS"), FALSE, TRUE);
+        m_preLoadFontRealms.RegisterFont();
+
+        m_preLoadFontStnSml.SetResRef(CResRef("STONESML"), FALSE, TRUE);
+        m_preLoadFontStnSml.RegisterFont();
+
+        if (m_bFromMainMenu) {
+            if (m_lPopupStack.GetTailPosition() != NULL && m_lPopupStack.GetTail() != NULL) {
+                CUIPanel* pPanel = m_cUIManager.GetPanel(6);
+                CUIControlButton3State* pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(9));
+                pButton->SetSelected(g_pBaldurChitin->m_bFullscreen);
+
+                // TODO: Unclear.
+                UpdatePopupPanel(m_lPopupStack.GetTail()->m_nID, FALSE);
+            } else {
+                SummonPopup(13);
+
+                m_cUIManager.GetPanel(2)->SetActive(FALSE);
+                m_cUIManager.GetPanel(2)->SetInactiveRender(FALSE);
+
+                CUIPanel* pPanel = m_cUIManager.GetPanel(13);
+
+                // NOTE: Looks similar to code in `UpdateMainPanel`.
+                CString sFormattedVersion;
+                CString sVersion = CChitin::versionString;
+                CString sBuildNumber = CChitin::buildVersionString;
+
+                int major;
+                int minor;
+                int patch;
+                sscanf(sVersion, "%d, %d, %d", &major, &minor, &patch);
+
+                sFormattedVersion.Format("v%d.%d%d (%s)", major, minor, patch, sBuildNumber);
+
+                UpdateLabel(pPanel, 0x1000000B, "%s", sFormattedVersion);
+            }
+        } else {
+            if (m_lPopupStack.GetTailPosition() != NULL && m_lPopupStack.GetTail() != NULL) {
+                CUIPanel* pPanel = m_cUIManager.GetPanel(6);
+                CUIControlButton3State* pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(9));
+                pButton->SetSelected(g_pBaldurChitin->m_bFullscreen);
+
+                // TODO: Unclear.
+                UpdatePopupPanel(m_lPopupStack.GetTail()->m_nID, FALSE);
+            } else {
+                UpdateMainPanel();
+            }
+
+            CheckEnablePortaits(1);
+            CheckEnableLeftPanel();
+        }
+
+        g_pBaldurChitin->m_pObjectCursor->SetCursor(0, FALSE);
+        m_cUIManager.InvalidateRect(NULL);
+        g_pBaldurChitin->m_pObjectGame->LoadKeymap();
+    }
 }
 
 // 0x654140

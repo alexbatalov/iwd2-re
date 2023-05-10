@@ -20,6 +20,7 @@ public:
     void StartSearchThread();
     void DestroyGame(unsigned char a1, unsigned char a2);
     BOOLEAN CanSaveGame(STRREF& strError, unsigned char a2, unsigned char a3);
+    void LoadKeymap();
     void SaveOptions();
     void UpdatePortrait(SHORT nPortrait, DWORD dwPanelId);
     SHORT GetCharacterPortaitNum(LONG nCharacterId);

@@ -17,6 +17,7 @@ class CScreenOptions : public CBaldurEngine {
 public:
     CScreenOptions();
     /* 0004 */ ~CScreenOptions() override;
+    /* 0014 */ void EngineActivated() override;
     /* 0018 */ void EngineDeactivated() override;
     /* 0020 */ void EngineInitialized() override;
     /* 0030 */ BOOL CheckSystemKeyCtrl() override;

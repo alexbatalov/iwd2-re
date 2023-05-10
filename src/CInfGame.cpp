@@ -166,6 +166,12 @@ BOOLEAN CInfGame::CanSaveGame(STRREF& strError, unsigned char a2, unsigned char 
     return FALSE;
 }
 
+// 0x5A98F0
+void CInfGame::LoadKeymap()
+{
+    // TODO: Incomplete.
+}
+
 // 0x5AA350
 void CInfGame::SaveOptions()
 {
