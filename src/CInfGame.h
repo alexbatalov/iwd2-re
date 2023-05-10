@@ -17,6 +17,7 @@ public:
     CInfGame();
     ~CInfGame();
     void StartSearchThread();
+    void DestroyGame(unsigned char a1, unsigned char a2);
     void SaveOptions();
     void UpdatePortrait(SHORT nPortrait, DWORD dwPanelId);
     SHORT GetCharacterPortaitNum(LONG nCharacterId);

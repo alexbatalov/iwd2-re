@@ -40,6 +40,7 @@ public:
     void ResetPopupPanel(DWORD nID);
     void ResetErrorPanel(CUIPanel* pPanel);
     void UpdatePopupPanel(DWORD dwPanelId, BOOLEAN bInitialUpdate);
+    void QuitGame();
     void UpdateGraphicsPanel(BOOLEAN bInitialUpdate);
     void UpdateSoundPanel(BOOLEAN bInitialUpdate);
     void UpdateSelectSoundsPanel(BOOLEAN bInitialUpdate);

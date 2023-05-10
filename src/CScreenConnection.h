@@ -42,6 +42,7 @@ public:
     void OnCancelButtonClick();
     void StartConnection(BOOLEAN bDirectPlayLobby);
     void sub_6024A0();
+    void ShowSessionTerminatedMessage();
 
     /* 0106 */ int field_106;
     /* 010A */ CKeyInfo m_pVirtualKeys[CSCREENCONNECTION_VIRTUAL_KEYS];

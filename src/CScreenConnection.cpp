@@ -638,3 +638,9 @@ void CUIControlButtonConnectionPopupCancel::OnLButtonClick(CPoint pt)
 
     pConnection->OnCancelButtonClick();
 }
+
+// 0x605850
+void CScreenConnection::ShowSessionTerminatedMessage()
+{
+    // TODO: Incomplete.
+}

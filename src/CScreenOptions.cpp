@@ -3,6 +3,7 @@
 #include "CBaldurChitin.h"
 #include "CGameOptions.h"
 #include "CInfGame.h"
+#include "CScreenConnection.h"
 #include "CScreenWorld.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
@@ -553,6 +554,31 @@ void CScreenOptions::UpdatePopupPanel(DWORD dwPanelId, BOOLEAN bInitialUpdate)
         // __LINE__: 1583
         UTIL_ASSERT(FALSE);
     }
+}
+
+// 0x655570
+void CScreenOptions::QuitGame()
+{
+    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 1611
+    UTIL_ASSERT(pGame != NULL);
+
+    m_bFullScreenOptions = FALSE;
+
+    SelectEngine(g_pBaldurChitin->m_pEngineConnection);
+
+    if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE) {
+        if (g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
+            g_pBaldurChitin->m_pEngineConnection->ShowSessionTerminatedMessage();
+        }
+
+        g_pChitin->cNetwork.CloseSession(TRUE);
+        g_pBaldurChitin->m_cBaldurMessage.field_7 = FALSE;
+    }
+
+    pGame->DestroyGame(1, 0);
 }
 
 // 0x655A70

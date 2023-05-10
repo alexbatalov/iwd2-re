@@ -149,6 +149,12 @@ void CInfGame::StartSearchThread()
     }
 }
 
+// 0x59FB50
+void CInfGame::DestroyGame(unsigned char a1, unsigned char a2)
+{
+    // TODO: Incomplete.
+}
+
 // 0x5AA350
 void CInfGame::SaveOptions()
 {
