@@ -4,6 +4,7 @@
 #include "mfc.h"
 
 #include "CGameOptions.h"
+#include "CMultiplayerSettings.h"
 #include "CRuleTables.h"
 #include "CTimerWorld.h"
 
@@ -72,9 +73,11 @@ public:
     /* 1B58 */ CCriticalSection field_1B58;
     /* 1B78 */ CTimerWorld m_worldTime;
     /* 1BA1 */ unsigned char field_1BA1;
+    /* 1BB2 */ CMultiplayerSettings m_multiplayerSettings;
     /* 37E0 */ BYTE m_visibleArea;
     /* 37E2 */ CGameArea* m_gameAreas[12];
     /* 3812 */ CGameArea* m_pGameAreaMaster;
+    /* 3816 */ LONG m_characters[6];
     /* 382E */ LONG m_nCharacterPortaits[6];
     /* 3846 */ SHORT m_nCharacters;
     /* 43E2 */ int field_43E2;

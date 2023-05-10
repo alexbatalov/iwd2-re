@@ -20,6 +20,8 @@ public:
     BOOL SendJoinRequestOptionToServer(BOOLEAN bListenToJoin);
     BOOL SendArbitrationLockStatus(BOOLEAN bStatus);
     BOOL SendArbitrationLockAllowInput(BOOLEAN bAllowInput);
+    BOOL ObjectControlRequest(LONG localObjectID);
+    BOOL ObjectControl();
     void WeatherBroadcast(WORD wWeatherFlags);
     void TimeSynchBroadcast(ULONG nGameTime, BOOLEAN bCompressTime);
     void TimeChangeToServer(ULONG deltaTime);

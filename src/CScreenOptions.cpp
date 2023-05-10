@@ -5,6 +5,7 @@
 #include "CGameOptions.h"
 #include "CInfGame.h"
 #include "CScreenConnection.h"
+#include "CScreenLoad.h"
 #include "CScreenWorld.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
@@ -699,6 +700,54 @@ void CScreenOptions::QuitGame()
 void CScreenOptions::CheckGraphicModeOptions(CUIPanel* pPanel)
 {
     // TODO: Incomplete.
+}
+
+// 0x655910
+void CScreenOptions::LoadGame()
+{
+    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 1887
+    UTIL_ASSERT(pGame != NULL);
+
+    INT nLoadState;
+    if (g_pChitin->cNetwork.m_bConnectionEstablished) {
+        nLoadState = 3;
+
+        if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE && !g_pBaldurChitin->m_pObjectGame->m_multiplayerSettings.m_bArbitrationLockStatus) {
+            for (DWORD nIndex = 0; nIndex < 6; nIndex++) {
+                // NOTE: Looks like inlining.
+                LONG localObjectID;
+                if (nIndex < 6) {
+                    localObjectID = pGame->m_characters[nIndex];
+                } else {
+                    localObjectID = -1;
+                }
+
+                if (localObjectID != -1) {
+                    g_pBaldurChitin->m_cBaldurMessage.ObjectControlRequest(localObjectID);
+                }
+            }
+        }
+
+        g_pBaldurChitin->m_cBaldurMessage.ObjectControl();
+        pGame->m_multiplayerSettings.SetArbitrationLockAllowInput(FALSE);
+        pGame->m_multiplayerSettings.SetArbitrationLockStatus(TRUE);
+    } else {
+        nLoadState = 2;
+    }
+
+    pGame->DestroyGame(1, 0);
+
+    CScreenLoad* pLoad = g_pBaldurChitin->m_pEngineLoad;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 1856
+    UTIL_ASSERT(pLoad != NULL);
+
+    pLoad->StartLoad(nLoadState);
+    SelectEngine(pLoad);
 }
 
 // 0x655A70

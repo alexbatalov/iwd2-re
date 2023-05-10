@@ -42,6 +42,7 @@ public:
     void UpdatePopupPanel(DWORD dwPanelId, BOOLEAN bInitialUpdate);
     void QuitGame();
     void CheckGraphicModeOptions(CUIPanel* pPanel);
+    void LoadGame();
     void UpdateGraphicsPanel(BOOLEAN bInitialUpdate);
     void UpdateSoundPanel(BOOLEAN bInitialUpdate);
     void UpdateSelectSoundsPanel(BOOLEAN bInitialUpdate);

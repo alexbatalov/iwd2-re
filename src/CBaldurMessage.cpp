@@ -126,6 +126,22 @@ BOOL CBaldurMessage::SendArbitrationLockAllowInput(BOOLEAN bAllowInput)
     return FALSE;
 }
 
+// 0x430980
+BOOL CBaldurMessage::ObjectControlRequest(LONG localObjectID)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x430C50
+BOOL CBaldurMessage::ObjectControl()
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x436F50
 void CBaldurMessage::WeatherBroadcast(WORD wWeatherFlags)
 {
