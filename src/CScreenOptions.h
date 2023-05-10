@@ -4,6 +4,7 @@
 #include "CBaldurEngine.h"
 
 #include "CKeyInfo.h"
+#include "CUIControlButton.h"
 #include "CVidFont.h"
 
 #define CSCREENOPTIONS_VIRTUAL_KEYS 90
@@ -27,6 +28,7 @@ public:
     /* 00F0 */ void OnRestButtonClick() override;
     /* 0104 */ void CancelEngine() override;
 
+    void OnDoneButtonClick();
     void OnCancelButtonClick();
     void SummonPopup(DWORD dwPopupId);
     void DismissPopup();
@@ -66,6 +68,13 @@ public:
     /* 0E90 */ unsigned char field_E90;
     /* 0E91 */ unsigned char field_E91;
     /* 0E92 */ BOOLEAN m_bFullScreenOptions;
+};
+
+class CUIControlButtonOptionsPopupDone : public CUIControlButton {
+public:
+    CUIControlButtonOptionsPopupDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonOptionsPopupDone();
+    void OnLButtonClick(CPoint pt) override;
 };
 
 #endif /* CSCREENOPTIONS_H_ */

@@ -4,7 +4,6 @@
 #include "CGameOptions.h"
 #include "CInfGame.h"
 #include "CScreenWorld.h"
-#include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
@@ -241,6 +240,12 @@ void CScreenOptions::TimerSynchronousUpdate()
     g_pBaldurChitin->m_pObjectGame->SynchronousUpdate();
     m_cUIManager.Render();
     pVidMode->Flip(TRUE);
+}
+
+// 0x654780
+void CScreenOptions::OnDoneButtonClick()
+{
+    // TODO: Incomplete.
 }
 
 // 0x654960
@@ -740,4 +745,28 @@ void CScreenOptions::CancelEngine()
     while (m_lPopupStack.GetTailPosition() != NULL && m_lPopupStack.GetTail() != NULL) {
         OnCancelButtonClick();
     }
+}
+
+// 0x659150
+CUIControlButtonOptionsPopupDone::CUIControlButtonOptionsPopupDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, 1, 0)
+{
+    SetText(CBaldurEngine::FetchString(11973));
+}
+
+// 0x659200
+CUIControlButtonOptionsPopupDone::~CUIControlButtonOptionsPopupDone()
+{
+}
+
+// 0x6592A0
+void CUIControlButtonOptionsPopupDone::OnLButtonClick(CPoint pt)
+{
+    CScreenOptions* pOptions = g_pBaldurChitin->m_pEngineOptions;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 4131
+    UTIL_ASSERT(pOptions != NULL);
+
+    pOptions->OnDoneButtonClick();
 }
