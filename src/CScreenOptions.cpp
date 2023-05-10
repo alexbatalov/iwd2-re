@@ -246,7 +246,65 @@ void CScreenOptions::TimerSynchronousUpdate()
 // 0x654780
 void CScreenOptions::OnDoneButtonClick()
 {
-    // TODO: Incomplete.
+    CUIPanel* pPanel = m_lPopupStack.GetTailPosition() != NULL ? m_lPopupStack.GetTail() : NULL;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 930
+    UTIL_ASSERT(pPanel != NULL);
+
+    switch (pPanel->m_nID) {
+    case 3:
+    case 4:
+    case 50:
+        OnErrorButtonClick(0);
+        return;
+    case 5:
+        return;
+    }
+
+    CSingleLock lock(&(m_cUIManager.field_36), FALSE);
+    lock.Lock(INFINITE);
+
+    switch (pPanel->m_nID) {
+    case 6:
+        CheckGraphicModeOptions(pPanel);
+
+        // NOTE: Uninline.
+        PopOptions(NULL);
+
+        DismissPopup();
+        g_pBaldurChitin->SaveOptions();
+        lock.Unlock();
+
+        break;
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 12:
+        // NOTE: Uninline.
+        PopOptions(NULL);
+
+        DismissPopup();
+        g_pBaldurChitin->SaveOptions();
+        lock.Unlock();
+
+        break;
+    case 13:
+        DismissPopup();
+
+        m_bFullScreenOptions = FALSE;
+        lock.Unlock();
+
+        g_pBaldurChitin->m_pObjectGame->ApplyVolumeSliders(TRUE);
+        g_pBaldurChitin->pActiveEngine->SelectEngine(g_pBaldurChitin->m_pEngineConnection);
+
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+        // __LINE__: 978
+        UTIL_ASSERT(pPanel != NULL);
+    }
 }
 
 // 0x654960
@@ -635,6 +693,12 @@ void CScreenOptions::QuitGame()
     }
 
     pGame->DestroyGame(1, 0);
+}
+
+// 0x6556C0
+void CScreenOptions::CheckGraphicModeOptions(CUIPanel* pPanel)
+{
+    // TODO: Incomplete.
 }
 
 // 0x655A70
