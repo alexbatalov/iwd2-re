@@ -128,6 +128,9 @@ const CString CInfGame::SILHOUETTE_PORTRAIT_SM("noportsm");
 // 0x8E705C
 const CString CInfGame::SILHOUETTE_PORTRAIT_LG("noportlg");
 
+// 0x8E7524
+BOOL CInfGame::dword_8E7524;
+
 // 0x59CC30
 CInfGame::CInfGame()
 {
@@ -264,6 +267,14 @@ void CInfGame::ApplyVolumeSliders(BOOLEAN a2)
     }
 
     g_pBaldurChitin->cSoundMixer.UpdateSoundList();
+}
+
+// 0x5C1160
+BOOLEAN CInfGame::RestParty(int a2, unsigned char a3)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // 0x5C1E30

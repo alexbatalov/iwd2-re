@@ -979,7 +979,184 @@ void CScreenOptions::UpdateAutoPausePanel(BOOLEAN bInitialUpdate)
 // 0x656FF0
 void CScreenOptions::OnErrorButtonClick(INT nButton)
 {
-    // TODO: Incomplete.
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 2454
+    UTIL_ASSERT(0 <= nButton && nButton < CSCREENOPTIONS_ERROR_BUTTONS);
+
+    CSingleLock lock(&(m_cUIManager.field_36), FALSE);
+
+    // TODO: Unclear.
+    CUIPanel* pPanel = m_lPopupStack.GetTailPosition() != NULL ? m_lPopupStack.GetTail() : NULL;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 2459
+    UTIL_ASSERT(pPanel != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 2461
+    UTIL_ASSERT(pGame != NULL);
+
+    switch (m_dwErrorState) {
+    case 0:
+        switch (nButton) {
+        case 0:
+            lock.Lock(INFINITE);
+            DismissPopup();
+            lock.Unlock();
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 2622
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 1:
+        switch (nButton) {
+        case 0:
+            lock.Lock(INFINITE);
+            DismissPopup();
+            lock.Unlock();
+            QuitGame();
+            break;
+        case 1:
+            lock.Lock(INFINITE);
+            DismissPopup();
+            lock.Unlock();
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 2516
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 3:
+        switch (nButton) {
+        case 0:
+            if (1) {
+                lock.Lock(INFINITE);
+                DismissPopup();
+                lock.Unlock();
+
+                if (g_pChitin->cNetwork.m_nServiceProvider == CNetwork::SERV_PROV_NULL) {
+                    pGame->field_366E = 1;
+                    pGame->field_50DC = 0;
+
+                    if (!g_pChitin->cVideo.m_bIs3dAccelerated) {
+                        if (!pGame->field_50D8) {
+                            pGame->SynchronousUpdate();
+                        }
+                        pGame->field_50D8;
+                    }
+                }
+
+                CScreenSave* pSave = g_pBaldurChitin->m_pEngineSave;
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+                // __LINE__: 1670
+                UTIL_ASSERT(FALSE);
+
+                pSave->StartSave(1);
+                SelectEngine(pSave);
+            }
+            break;
+        case 1:
+            lock.Lock(INFINITE);
+            DismissPopup();
+            lock.Unlock();
+            QuitGame();
+            break;
+        default:
+            lock.Lock(INFINITE);
+            DismissPopup();
+            lock.Unlock();
+            break;
+        }
+        break;
+    case 4:
+        switch (nButton) {
+        case 0:
+            lock.Lock(INFINITE);
+            DismissPopup();
+            lock.Unlock();
+            QuitGame();
+            break;
+        case 1:
+            lock.Lock(INFINITE);
+            DismissPopup();
+            lock.Unlock();
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 2538
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 5:
+        switch (nButton) {
+        case 0:
+            lock.Lock(INFINITE);
+            DismissPopup();
+            lock.Unlock();
+            LoadGame();
+            break;
+        case 1:
+            lock.Lock(INFINITE);
+            DismissPopup();
+            lock.Unlock();
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 2560
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 6:
+        switch (nButton) {
+        case 0:
+            lock.Lock(INFINITE);
+            DismissPopup();
+            lock.Unlock();
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 2607
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 7:
+        switch (nButton) {
+        case 0:
+            lock.Lock(INFINITE);
+            DismissPopup();
+            lock.Unlock();
+
+            CInfGame::dword_8E7524 = FALSE;
+            pGame->RestParty(1, 0);
+            break;
+        case 1:
+            lock.Lock(INFINITE);
+            DismissPopup();
+            lock.Unlock();
+
+            CInfGame::dword_8E7524 = FALSE;
+            pGame->RestParty(1, 0);
+            CInfGame::dword_8E7524 = TRUE;
+            break;
+        default:
+            lock.Lock(INFINITE);
+            DismissPopup();
+            lock.Unlock();
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+        // __LINE__: 2628
+        UTIL_ASSERT(FALSE);
+    }
+
+    lock.Unlock();
 }
 
 // NOTE: Inlined.

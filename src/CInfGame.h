@@ -27,6 +27,7 @@ public:
     float GetSoundReverbMix(int nSoundChannel, int nReverb);
     void SynchronousUpdate();
     void ApplyVolumeSliders(BOOLEAN a2);
+    BOOLEAN RestParty(int a2, unsigned char a3);
     BOOL CanRestParty(STRREF& strError, unsigned char a2, unsigned char a3, unsigned char a4);
 
     CGameArea* GetVisibleArea() { return m_gameAreas[m_visibleArea]; }
@@ -69,6 +70,8 @@ public:
     static const CString QUICK_SAVE_BACKUP_NAME;
     static const CString SILHOUETTE_PORTRAIT_SM;
     static const CString SILHOUETTE_PORTRAIT_LG;
+
+    static BOOL dword_8E7524;
 
     /* 0000 */ CRuleTables m_ruleTables;
     /* 1B58 */ CCriticalSection field_1B58;
