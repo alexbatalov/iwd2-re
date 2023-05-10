@@ -225,7 +225,8 @@ void CScreenOptions::EngineInitialized()
 // 0x6546B0
 void CScreenOptions::OnPortraitLClick(DWORD nPortrait)
 {
-    if (nPortrait < g_pBaldurChitin->m_pObjectGame->m_nCharacters) {
+    // TODO: Check cast.
+    if (nPortrait < static_cast<DWORD>(g_pBaldurChitin->m_pObjectGame->m_nCharacters)) {
         DWORD nOldSelectedCharacter = m_nSelectedCharacter;
         m_nSelectedCharacter = nPortrait;
         UpdateCursorShape(0);
@@ -1056,14 +1057,16 @@ void CScreenOptions::UpdateFeedbackPanel(BOOLEAN bInitialUpdate)
 
     field_FA = pPanel->GetControl(29);
 
+    // TODO: Check casts.
+
     pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(8));
     UTIL_ASSERT(pSlider != NULL); // 2325
-    pSlider->field_208 = max(min(pOptions->m_nGuiFeedbackLevel, pSlider->field_1F2 - 1), 0);
+    pSlider->field_208 = max(min(static_cast<short>(pOptions->m_nGuiFeedbackLevel), pSlider->field_1F2 - 1), 0);
     pSlider->InvalidateRect();
 
     pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(9));
     UTIL_ASSERT(pSlider != NULL); // 2330
-    pSlider->field_208 = max(min(pOptions->m_nLocatorFeedbackLevel, pSlider->field_1F2 - 1), 0);
+    pSlider->field_208 = max(min(static_cast<short>(pOptions->m_nLocatorFeedbackLevel), pSlider->field_1F2 - 1), 0);
     pSlider->InvalidateRect();
 
     pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(10));
