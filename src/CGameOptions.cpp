@@ -9,8 +9,8 @@ CGameOptions::CGameOptions()
     field_4 = 0;
     field_8 = 28;
     m_bSubtitles = FALSE;
-    field_10 = 3;
-    field_14 = 3;
+    m_nGuiFeedbackLevel = 3;
+    m_nLocatorFeedbackLevel = 3;
     m_nVolumeMusic = 50;
     m_nVolumeSFX = 50;
     m_nVolumeVoices = 50;

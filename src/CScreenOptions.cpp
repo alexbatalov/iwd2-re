@@ -1004,7 +1004,50 @@ void CScreenOptions::UpdateGamePlayPanel(BOOLEAN bInitialUpdate)
 // 0x656B00
 void CScreenOptions::UpdateFeedbackPanel(BOOLEAN bInitialUpdate)
 {
-    // TODO: Incomplete.
+    CGameOptions* pOptions = &(g_pBaldurChitin->m_pObjectGame->m_cOptions);
+    CUIPanel* pPanel = m_cUIManager.GetPanel(9);
+    CUIControlSlider* pSlider;
+    CUIControlButton3State* pButton;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 2319
+    UTIL_ASSERT(pPanel != NULL);
+
+    field_FA = pPanel->GetControl(29);
+
+    pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(8));
+    UTIL_ASSERT(pSlider != NULL); // 2325
+    pSlider->field_208 = max(min(pOptions->m_nGuiFeedbackLevel, pSlider->field_1F2 - 1), 0);
+    pSlider->InvalidateRect();
+
+    pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(9));
+    UTIL_ASSERT(pSlider != NULL); // 2330
+    pSlider->field_208 = max(min(pOptions->m_nLocatorFeedbackLevel, pSlider->field_1F2 - 1), 0);
+    pSlider->InvalidateRect();
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(10));
+    UTIL_ASSERT(pButton != NULL); // 2335
+    pButton->SetSelected(pOptions->m_nEffectTextLevel & 0x1);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(11));
+    UTIL_ASSERT(pButton != NULL); // 2339
+    pButton->SetSelected(pOptions->m_nEffectTextLevel & 0x2);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(12));
+    UTIL_ASSERT(pButton != NULL); // 2343
+    pButton->SetSelected(pOptions->m_nEffectTextLevel & 0x4);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(13));
+    UTIL_ASSERT(pButton != NULL); // 2347
+    pButton->SetSelected(pOptions->m_nEffectTextLevel & 0x8);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(14));
+    UTIL_ASSERT(pButton != NULL); // 2351
+    pButton->SetSelected(pOptions->m_nEffectTextLevel & 0x20);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(15));
+    UTIL_ASSERT(pButton != NULL); // 2355
+    pButton->SetSelected(pOptions->m_nEffectTextLevel & 0x10);
 }
 
 // 0x656D50

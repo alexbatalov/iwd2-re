@@ -11,8 +11,8 @@ public:
     /* 0004 */ int field_4;
     /* 0008 */ int field_8;
     /* 000C */ BOOL m_bSubtitles;
-    /* 0010 */ int field_10;
-    /* 0014 */ int field_14;
+    /* 0010 */ DWORD m_nGuiFeedbackLevel;
+    /* 0014 */ DWORD m_nLocatorFeedbackLevel;
     /* 0018 */ DWORD m_nVolumeMusic; // #guess
     /* 001C */ DWORD m_nVolumeSFX; // #guess
     /* 0020 */ DWORD m_nVolumeVoices; // #guess
