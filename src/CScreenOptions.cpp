@@ -1050,6 +1050,136 @@ void CUIControlButtonOptionsSelection::OnLButtonClick(CPoint pt)
     g_pBaldurChitin->m_pEngineOptions->UpdatePopupPanel(m_pPanel->m_nID, FALSE);
 }
 
+// 0x657C60
+CUIControlButtonOptionsRadio::CUIControlButtonOptionsRadio(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, 1, 0)
+{
+    m_nNotSelectedFrame = 0;
+    m_nPressedFrame = 1;
+    m_nSelectedFrame = 3;
+    m_nDisabledFrame = 2;
+    m_nDisabledSelectedFrame = 4;
+}
+
+// 0x657CE0
+CUIControlButtonOptionsRadio::~CUIControlButtonOptionsRadio()
+{
+}
+
+// 0x6512D0
+BOOL CUIControlButtonOptionsRadio::Render(BOOL bForce)
+{
+    if (!m_bPressed) {
+        if (m_bEnabled) {
+            if (m_bSelected) {
+                m_cVidCell.FrameSet(m_nSelectedFrame);
+            } else {
+                m_cVidCell.FrameSet(m_nNotSelectedFrame);
+            }
+        } else {
+            if (m_bSelected) {
+                m_cVidCell.FrameSet(m_nDisabledSelectedFrame);
+            } else {
+                m_cVidCell.FrameSet(m_nDisabledFrame);
+            }
+        }
+    }
+    return CUIControlButton::Render(bForce);
+}
+
+// 0x657D80
+void CUIControlButtonOptionsRadio::OnLButtonClick(CPoint pt)
+{
+    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 3318
+    UTIL_ASSERT(pGame != NULL);
+
+    CGameOptions* pOptions = &(pGame->m_cOptions);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 3320
+    UTIL_ASSERT(pOptions != NULL);
+
+    DWORD dwTextId;
+    DWORD dwStrId;
+
+    switch (m_pPanel->m_nID) {
+    case 6:
+        dwTextId = 33;
+
+        switch (m_nID) {
+        case 5:
+            dwStrId = 17205;
+            SetSelected(1);
+            static_cast<CUIControlButton3State*>(m_pPanel->GetControl(6))->SetSelected(0);
+            static_cast<CUIControlButton3State*>(m_pPanel->GetControl(7))->SetSelected(0);
+            break;
+        case 6:
+            dwStrId = 17205;
+            SetSelected(1);
+            static_cast<CUIControlButton3State*>(m_pPanel->GetControl(5))->SetSelected(0);
+            static_cast<CUIControlButton3State*>(m_pPanel->GetControl(7))->SetSelected(0);
+            break;
+        case 7:
+            dwStrId = 17205;
+            SetSelected(1);
+            static_cast<CUIControlButton3State*>(m_pPanel->GetControl(5))->SetSelected(0);
+            static_cast<CUIControlButton3State*>(m_pPanel->GetControl(6))->SetSelected(0);
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 3355
+            UTIL_ASSERT(FALSE);
+        }
+
+        break;
+    case 12:
+        dwTextId = 16;
+
+        switch (m_nID) {
+        case 8:
+            dwStrId = 18016;
+            pOptions->m_nCommandSoundsFrequency = 3;
+            break;
+        case 9:
+            dwStrId = 18016;
+            pOptions->m_nCommandSoundsFrequency = 2;
+            break;
+        case 10:
+            dwStrId = 18016;
+            pOptions->m_nCommandSoundsFrequency = 1;
+            break;
+        case 58:
+            dwStrId = 11352;
+            pOptions->m_nSelectionSoundsFrequency = 3;
+            break;
+        case 59:
+            dwStrId = 11352;
+            pOptions->m_nSelectionSoundsFrequency = 2;
+            break;
+        case 60:
+            dwStrId = 11352;
+            pOptions->m_nSelectionSoundsFrequency = 1;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 3395
+            UTIL_ASSERT(FALSE);
+        }
+
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+        // __LINE__: 3401
+        UTIL_ASSERT(FALSE);
+    }
+
+    g_pBaldurChitin->m_pEngineOptions->UpdateHelp(m_pPanel->m_nID, dwTextId, dwStrId);
+    g_pBaldurChitin->m_pEngineOptions->UpdatePopupPanel(m_pPanel->m_nID, FALSE);
+}
+
 // 0x659150
 CUIControlButtonOptionsPopupDone::CUIControlButtonOptionsPopupDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, 1, 0)

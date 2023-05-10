@@ -79,6 +79,16 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonOptionsRadio : public CUIControlButton3State {
+public:
+    CUIControlButtonOptionsRadio(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonOptionsRadio();
+    BOOL Render(BOOL bForce) override;
+    void OnLButtonClick(CPoint pt) override;
+
+    /* 066E */ SHORT m_nDisabledSelectedFrame;
+};
+
 class CUIControlButtonOptionsPopupDone : public CUIControlButton {
 public:
     CUIControlButtonOptionsPopupDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
