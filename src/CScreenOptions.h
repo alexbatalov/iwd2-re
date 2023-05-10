@@ -45,6 +45,7 @@ public:
     void UpdateGamePlayPanel(BOOLEAN bInitialUpdate);
     void UpdateFeedbackPanel(BOOLEAN bInitialUpdate);
     void UpdateAutoPausePanel(BOOLEAN bInitialUpdate);
+    void OnErrorButtonClick(INT nButton);
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
 
     /* 0106 */ CKeyInfo m_pVirtualKeys[CSCREENOPTIONS_VIRTUAL_KEYS];
@@ -81,6 +82,13 @@ class CUIControlButtonOptionsPopupCancel : public CUIControlButton {
 public:
     CUIControlButtonOptionsPopupCancel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonOptionsPopupCancel();
+    void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonOptionsError : public CUIControlButton {
+public:
+    CUIControlButtonOptionsError(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonOptionsError();
     void OnLButtonClick(CPoint pt) override;
 };
 

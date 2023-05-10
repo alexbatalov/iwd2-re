@@ -718,6 +718,12 @@ void CScreenOptions::UpdateAutoPausePanel(BOOLEAN bInitialUpdate)
     pButton->SetSelected(pOptions->m_bAutoPauseCenter);
 }
 
+// 0x656FF0
+void CScreenOptions::OnErrorButtonClick(INT nButton)
+{
+    // TODO: Incomplete.
+}
+
 // 0x657360
 void CScreenOptions::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId)
 {
@@ -793,4 +799,28 @@ void CUIControlButtonOptionsPopupCancel::OnLButtonClick(CPoint pt)
     UTIL_ASSERT(pOptions != NULL);
 
     pOptions->OnCancelButtonClick();
+}
+
+// 0x659470
+CUIControlButtonOptionsError::CUIControlButtonOptionsError(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, 1, 0)
+{
+    SetText(CBaldurEngine::FetchString(13727));
+}
+
+// 0x6594C0
+CUIControlButtonOptionsError::~CUIControlButtonOptionsError()
+{
+}
+
+// 0x659560
+void CUIControlButtonOptionsError::OnLButtonClick(CPoint pt)
+{
+    CScreenOptions* pOptions = g_pBaldurChitin->m_pEngineOptions;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 4237
+    UTIL_ASSERT(pOptions != NULL);
+
+    pOptions->OnErrorButtonClick(m_nID);
 }
