@@ -28,7 +28,8 @@ void CGameArea::ApplyWindToAmbients(BYTE nPercentVolume)
 void CGameArea::SetDay()
 {
     m_sndAmbientNight.Stop();
-    m_sndAmbientDayVolume = m_headerSound.m_dayAmbientVolume;
+    // TODO: Check cast.
+    m_sndAmbientDayVolume = static_cast<WORD>(m_headerSound.m_dayAmbientVolume);
 
     if (m_sndAmbientDay.IsSoundPlaying()) {
         m_sndAmbientDay.SetVolume(m_sndAmbientDayVolume * m_sndAmbientVolume / 100);
@@ -53,7 +54,8 @@ void CGameArea::SetDay()
 void CGameArea::SetNight()
 {
     m_sndAmbientDay.Stop();
-    m_sndAmbientNightVolume = m_headerSound.m_nightAmbientVolume;
+    // TODO: Check cast.
+    m_sndAmbientNightVolume = static_cast<WORD>(m_headerSound.m_nightAmbientVolume);
 
     if (m_sndAmbientNight.IsSoundPlaying()) {
         m_sndAmbientNight.SetVolume(m_sndAmbientNightVolume * m_sndAmbientVolume / 100);
@@ -237,47 +239,49 @@ BYTE CGameArea::GetSong(SHORT slot)
         return -1;
     }
 
+    // TODO: Check casts.
+
     BYTE song;
     if (slot != 256) {
         switch (slot) {
         case 0:
-            song = m_headerSound.m_dayMusic;
+            song = static_cast<BYTE>(m_headerSound.m_dayMusic);
             break;
         case 1:
-            song = m_headerSound.m_nightMusic;
+            song = static_cast<BYTE>(m_headerSound.m_nightMusic);
             break;
         case 2:
-            song = m_headerSound.m_battleWinningMusic;
+            song = static_cast<BYTE>(m_headerSound.m_battleWinningMusic);
             break;
         case 3:
-            song = m_headerSound.m_battleStandOffMusic;
+            song = static_cast<BYTE>(m_headerSound.m_battleStandOffMusic);
             break;
         case 4:
-            song = m_headerSound.m_battleLosingMusic;
+            song = static_cast<BYTE>(m_headerSound.m_battleLosingMusic);
             break;
         case 5:
-            song = m_headerSound.m_alt1Music0;
+            song = static_cast<BYTE>(m_headerSound.m_alt1Music0);
             break;
         case 6:
-            song = m_headerSound.m_alt1Music1;
+            song = static_cast<BYTE>(m_headerSound.m_alt1Music1);
             break;
         case 7:
-            song = m_headerSound.m_alt1Music2;
+            song = static_cast<BYTE>(m_headerSound.m_alt1Music2);
             break;
         case 8:
-            song = m_headerSound.m_alt1Music3;
+            song = static_cast<BYTE>(m_headerSound.m_alt1Music3);
             break;
         case 9:
-            song = m_headerSound.m_alt1Music4;
+            song = static_cast<BYTE>(m_headerSound.m_alt1Music4);
             break;
         default:
             return -1;
         }
     } else {
         if (g_pBaldurChitin->m_pObjectGame->m_worldTime.IsDay() || g_pBaldurChitin->m_pObjectGame->m_worldTime.IsDusk()) {
-            song = m_headerSound.m_dayMusic;
+            song = static_cast<BYTE>(m_headerSound.m_dayMusic);
         } else {
-            song = m_headerSound.m_nightMusic;
+            song = static_cast<BYTE>(m_headerSound.m_nightMusic);
         }
     }
 
