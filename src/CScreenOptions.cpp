@@ -2,6 +2,7 @@
 
 #include "CBaldurChitin.h"
 #include "CGameAnimationType.h"
+#include "CGameArea.h"
 #include "CGameOptions.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
@@ -12,7 +13,6 @@
 #include "CScreenMovies.h"
 #include "CScreenSave.h"
 #include "CScreenWorld.h"
-#include "CUIControlSlider.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -1964,6 +1964,249 @@ void CUIControlButtonOptionsRadio::OnLButtonClick(CPoint pt)
     default:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
         // __LINE__: 3401
+        UTIL_ASSERT(FALSE);
+    }
+
+    g_pBaldurChitin->m_pEngineOptions->UpdateHelp(m_pPanel->m_nID, dwTextId, dwStrId);
+    g_pBaldurChitin->m_pEngineOptions->UpdatePopupPanel(m_pPanel->m_nID, FALSE);
+}
+
+// 0x657FF0
+CUIControlSliderOptionsSlider::CUIControlSliderOptionsSlider(CUIPanel* panel, UI_CONTROL_SLIDER* controlInfo)
+    : CUIControlSlider(panel, controlInfo)
+{
+}
+
+// 0x658030
+CUIControlSliderOptionsSlider::~CUIControlSliderOptionsSlider()
+{
+}
+
+// 0x6580A0
+void CUIControlSliderOptionsSlider::OnThumbChange()
+{
+    OnThumbFinalChange();
+}
+
+// 0x6580B0
+void CUIControlSliderOptionsSlider::OnThumbFinalChange()
+{
+    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 3538
+    UTIL_ASSERT(pGame != NULL);
+
+    CGameOptions* pOptions = &(pGame->m_cOptions);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 3540
+    UTIL_ASSERT(pOptions != NULL);
+
+    DWORD dwTextId;
+    DWORD dwStrId;
+    DWORD dwNewDifficultyStrId = -1;
+    DWORD dwValue;
+    switch (m_pPanel->m_nID) {
+    case 6:
+        dwTextId = 33;
+
+        switch (m_nID) {
+        case 3:
+            if (1) {
+                CSingleLock lock(&(m_pPanel->m_pManager->field_36), FALSE);
+                dwStrId = 17203;
+                dwValue = 40 * field_208 / (field_1F2 - 1);
+                lock.Lock(INFINITE);
+
+                g_pBaldurChitin->GetCurrentVideoMode()->m_nBrightnessCorrection = static_cast<BYTE>(dwValue);
+
+                CScreenOptions* pOptions = g_pBaldurChitin->m_pEngineOptions;
+                pOptions->m_preLoadFontRealms.Unload();
+                pOptions->m_preLoadFontStnSml.Unload();
+                pOptions->m_preLoadFontRealms.RegisterFont();
+                pOptions->m_preLoadFontStnSml.RegisterFont();
+                m_pPanel->m_pManager->InvalidateRect(NULL);
+
+                lock.Unlock();
+            }
+            break;
+        case 22:
+            if (1) {
+                CSingleLock lock(&(m_pPanel->m_pManager->field_36), FALSE);
+                dwStrId = 17204;
+                dwValue = 5 * field_208 / (field_1F2 - 1);
+                lock.Lock(INFINITE);
+
+                g_pBaldurChitin->GetCurrentVideoMode()->m_nGammaCorrection = static_cast<BYTE>(dwValue);
+
+                CScreenOptions* pOptions = g_pBaldurChitin->m_pEngineOptions;
+                pOptions->m_preLoadFontRealms.Unload();
+                pOptions->m_preLoadFontStnSml.Unload();
+                pOptions->m_preLoadFontRealms.RegisterFont();
+                pOptions->m_preLoadFontStnSml.RegisterFont();
+                m_pPanel->m_pManager->InvalidateRect(NULL);
+
+                lock.Unlock();
+            }
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 3580
+            UTIL_ASSERT(FALSE);
+        }
+
+        break;
+    case 7:
+        dwTextId = 14;
+
+        switch (m_nID) {
+        case 1:
+            dwStrId = 18008;
+            pOptions->m_nVolumeAmbients = 100 * field_208 / (field_1F2 - 1);
+
+            if (CGameArea::byte_8D2138) {
+                CGameArea::dword_8D212C = pOptions->m_nVolumeAmbients;
+            }
+
+            pGame->ApplyVolumeSliders(FALSE);
+            break;
+        case 2:
+            dwStrId = 18009;
+            pOptions->m_nVolumeSFX = 100 * field_208 / (field_1F2 - 1);
+            pGame->ApplyVolumeSliders(FALSE);
+            break;
+        case 3:
+            dwStrId = 18010;
+            pOptions->m_nVolumeVoices = 100 * field_208 / (field_1F2 - 1);
+            pGame->ApplyVolumeSliders(FALSE);
+            break;
+        case 4:
+            dwStrId = 18011;
+            pOptions->m_nVolumeMusic = 100 * field_208 / (field_1F2 - 1);
+            pGame->ApplyVolumeSliders(FALSE);
+            break;
+        case 22:
+            dwStrId = 18012;
+            pOptions->m_nVolumeMovie = 100 * field_208 / (field_1F2 - 1);
+            pGame->ApplyVolumeSliders(FALSE);
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 3624
+            UTIL_ASSERT(FALSE);
+        }
+
+        break;
+    case 8:
+        dwTextId = 40;
+
+        switch (m_nID) {
+        case 1:
+            dwStrId = 18017;
+            if (field_208 + 1 < field_1F2) {
+                pOptions->m_nTooltips = 100 * (field_208 + 1) / (field_1F2 - 1);
+            } else {
+                pOptions->m_nTooltips = 0x7FFFFFFF;
+            }
+            break;
+        case 2:
+            dwStrId = 18018;
+            pOptions->m_nMouseScrollSpeed = 44 * field_208 / (field_1F2 - 1) + 6;
+            break;
+        case 3:
+            dwStrId = 18019;
+            pOptions->m_nKeyboardScrollSpeed = 132 * field_208 / (field_1F2 - 1) + 18;
+            break;
+        case 12:
+            dwStrId = 18020;
+            pOptions->m_nDifficultyLevel = field_208 + 1;
+
+            switch (pOptions->m_nDifficultyLevel) {
+            case 1:
+                pOptions->m_nDifficultyMultiplier = -50;
+                dwNewDifficultyStrId = 11308; // "Very Easy"
+                break;
+            case 2:
+                pOptions->m_nDifficultyMultiplier = -25;
+                dwNewDifficultyStrId = 11309; // "Easy"
+                break;
+            case 3:
+                pOptions->m_nDifficultyMultiplier = 0;
+                dwNewDifficultyStrId = 11311; // "Normal"
+                break;
+            case 4:
+                pOptions->m_nDifficultyMultiplier = 50;
+                dwNewDifficultyStrId = 11312; // "Hard"
+                break;
+            case 5:
+                pOptions->m_nDifficultyMultiplier = 100;
+                dwNewDifficultyStrId = 11313; // "Insane"
+                break;
+            }
+
+            if (pOptions->m_nMPDifficultyMultiplier != pOptions->m_nDifficultyMultiplier) {
+                if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE
+                    && g_pChitin->cNetwork.m_bIsHost == TRUE) {
+                    // 11314 - "Difficulty Level"
+                    g_pBaldurChitin->m_cBaldurMessage.sub_43E0E0(11314,
+                        dwNewDifficultyStrId,
+                        RGB(215, 215, 190),
+                        RGB(215, 215, 190),
+                        -1,
+                        -1,
+                        -1);
+                    pOptions->m_nMPDifficultyMultiplier = pOptions->m_nDifficultyMultiplier;
+                }
+
+                if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE
+                    && g_pChitin->cNetwork.m_bIsHost == TRUE) {
+                    g_pBaldurChitin->m_cBaldurMessage.SendFullSettingsToClients(CString(""));
+                }
+            }
+
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 3704
+            UTIL_ASSERT(FALSE);
+        }
+
+        break;
+    case 9:
+        dwTextId = 28;
+
+        switch (m_nID) {
+        case 8:
+            dwStrId = 18024;
+            dwValue = field_208 + 1;
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 3716
+            UTIL_ASSERT(dwValue <= CGAMEOPTIONS_GUIFEEDBACK_HIGHEST);
+
+            pOptions->m_nGuiFeedbackLevel = dwValue;
+            break;
+        case 9:
+            dwStrId = 18025;
+            dwValue = field_208 + 1;
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 3723
+            UTIL_ASSERT(dwValue <= CGAMEOPTIONS_GUIFEEDBACK_HIGHEST);
+
+            pOptions->m_nLocatorFeedbackLevel = dwValue;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 3728
+            UTIL_ASSERT(FALSE);
+        }
+
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+        // __LINE__: 3734
         UTIL_ASSERT(FALSE);
     }
 

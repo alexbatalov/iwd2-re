@@ -4,6 +4,12 @@
 #include "CChitin.h"
 #include "CInfGame.h"
 
+// 0x8D212C
+INT CGameArea::dword_8D212C;
+
+// 0x8D2138
+BOOLEAN CGameArea::byte_8D2138;
+
 // 0x469B60
 CGameArea::CGameArea()
 {

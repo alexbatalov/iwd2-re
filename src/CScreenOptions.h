@@ -6,6 +6,7 @@
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
+#include "CUIControlSlider.h"
 #include "CVidFont.h"
 
 #define CSCREENOPTIONS_VIRTUAL_KEYS 90
@@ -95,6 +96,14 @@ public:
     void OnLButtonClick(CPoint pt) override;
 
     /* 066E */ SHORT m_nDisabledSelectedFrame;
+};
+
+class CUIControlSliderOptionsSlider : public CUIControlSlider {
+public:
+    CUIControlSliderOptionsSlider(CUIPanel* pale, UI_CONTROL_SLIDER* controlInfo);
+    ~CUIControlSliderOptionsSlider();
+    /* 0068 */ void OnThumbChange() override;
+    /* 006C */ void OnThumbFinalChange() override;
 };
 
 class CUIControlButtonOptionsGameCommand : public CUIControlButton {

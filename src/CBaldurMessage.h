@@ -25,6 +25,7 @@ public:
     void WeatherBroadcast(WORD wWeatherFlags);
     void TimeSynchBroadcast(ULONG nGameTime, BOOLEAN bCompressTime);
     void TimeChangeToServer(ULONG deltaTime);
+    BOOL sub_43E0E0(DWORD a1, DWORD a2, COLORREF a3, COLORREF a4, int a5, int a6, int a7);
 
     /* 0000 */ unsigned char field_0;
     /* 0001 */ unsigned char field_1;

@@ -159,3 +159,11 @@ void CBaldurMessage::TimeChangeToServer(DWORD deltaTime)
 {
     // TODO: Incomplete.
 }
+
+// 0x43E0E0
+BOOL CBaldurMessage::sub_43E0E0(DWORD a1, DWORD a2, COLORREF a3, COLORREF a4, int a5, int a6, int a7)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}

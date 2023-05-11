@@ -68,6 +68,9 @@ public:
     BOOL SetSong(SHORT slot, BYTE song);
     BYTE GetSong(SHORT slot);
 
+    static INT dword_8D212C;
+    static BOOLEAN byte_8D2138;
+
     /* 0000 */ CAreaFileHeader m_header;
     /* 005C */ CAreaSoundsAndMusic m_headerSound;
     /* 01EF */ BOOLEAN m_bAreaLoaded;

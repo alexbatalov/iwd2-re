@@ -3,13 +3,16 @@
 
 #include "mfc.h"
 
+// Seen in `CUIControlSliderOptionsSlider::OnThumbFinalChange` assertion.
+#define CGAMEOPTIONS_GUIFEEDBACK_HIGHEST 5
+
 class CGameOptions {
 public:
     CGameOptions();
 
     /* 0000 */ BOOL m_bGore;
     /* 0004 */ int field_4;
-    /* 0008 */ int field_8;
+    /* 0008 */ DWORD m_nMouseScrollSpeed;
     /* 000C */ BOOL m_bSubtitles;
     /* 0010 */ DWORD m_nGuiFeedbackLevel;
     /* 0014 */ DWORD m_nLocatorFeedbackLevel;
@@ -28,15 +31,15 @@ public:
     /* 0048 */ DWORD m_nCommandSoundsFrequency;
     /* 004C */ DWORD m_nSelectionSoundsFrequency;
     /* 0050 */ BOOL m_bAlwaysDither;
-    /* 0054 */ int field_54;
+    /* 0054 */ DWORD m_nKeyboardScrollSpeed;
     /* 0058 */ DWORD m_nEffectTextLevel;
     /* 005C */ int field_5C;
     /* 0060 */ BOOL m_bAttackSounds;
     /* 0064 */ DWORD m_nAutoPauseState;
     /* 0068 */ BOOL m_bAutoPauseCenter;
-    /* 006C */ int field_6C;
-    /* 0070 */ int field_70;
-    /* 0074 */ int field_74;
+    /* 006C */ DWORD m_nDifficultyLevel;
+    /* 0070 */ LONG m_nDifficultyMultiplier;
+    /* 0074 */ LONG m_nMPDifficultyMultiplier;
     /* 0078 */ BOOL m_bDarkvision;
     /* 007C */ int field_7C;
     /* 0080 */ int m_bWeatherEnabled;
