@@ -196,7 +196,10 @@ BOOL CSound::Create3DBuffer(LPWAVEFORMATEX waveFormat, float mix)
 
             soundBuffer3D->SetMinDistance(128.0, 0);
 
-            soundBuffer3D->SetPosition(m_nXCoordinate, m_nYCoordinate, m_nZCoordinate, 0);
+            soundBuffer3D->SetPosition(static_cast<D3DVALUE>(m_nXCoordinate),
+                static_cast<D3DVALUE>(m_nYCoordinate),
+                static_cast<D3DVALUE>(m_nZCoordinate),
+                DS3D_IMMEDIATE);
             soundBuffer3D->Release();
         } else {
             hr = pSoundBuffer->SetVolume(30 * ((nChannelVolume * m_nVolume / 100) / 100 - 100));
@@ -378,7 +381,10 @@ void CSound::SetCoordinates(int nNewXCoordinate, int nNewYCoordinate, int nNewZC
         if (IsSoundPlaying()) {
             LPDIRECTSOUND3DBUFFER soundBuffer3D;
             if (SUCCEEDED(pSoundBuffer->QueryInterface(IID_IDirectSound3DBuffer, reinterpret_cast<LPVOID*>(&soundBuffer3D)))) {
-                soundBuffer3D->SetPosition(m_nXCoordinate, m_nYCoordinate, m_nZCoordinate, 0);
+                soundBuffer3D->SetPosition(static_cast<D3DVALUE>(m_nXCoordinate),
+                    static_cast<D3DVALUE>(m_nYCoordinate),
+                    static_cast<D3DVALUE>(m_nZCoordinate),
+                    DS3D_IMMEDIATE);
                 soundBuffer3D->Release();
             }
         }

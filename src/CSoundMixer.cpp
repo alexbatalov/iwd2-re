@@ -428,7 +428,7 @@ void CSoundMixer::SetListenPosition(int nNewXCoordinate, int nNewYCoordinate, in
         m_pDirectSound3DListener->SetPosition(static_cast<D3DVALUE>(nNewXCoordinate),
             static_cast<D3DVALUE>(nNewYCoordinate),
             static_cast<D3DVALUE>(nNewZCoordinate),
-            0);
+            DS3D_IMMEDIATE);
     }
 
     UpdateSoundPositions();
