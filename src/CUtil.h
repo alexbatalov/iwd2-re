@@ -9,7 +9,7 @@ class CUtil {
 public:
     static int Compress(BYTE* pDest, DWORD* nDestSize, const BYTE* pSrc, DWORD nSrcSize, int nLevel);
     static int Uncompress(BYTE* dest, DWORD* destLen, const BYTE* source, DWORD sourceLen);
-    static void UtilAssert(int nLineNumber, const char* szFileName, const char* pExp, const char* pText);
+    __declspec(noreturn) static void UtilAssert(int nLineNumber, const char* szFileName, const char* pExp, const char* pText);
     static LONG UtilRandInt(LONG nRange, LONG nWeight);
     static int GetCurrentBitsPerPixels();
     static BYTE SplitString(CVidFont* pTextFont, const CString& sSource, WORD nLineLength, BYTE nMaxStrings, CString* pStringsOut, BOOL bDivideWords, BOOL bDemanded, BOOL bCheckRemainderForNewLine, WORD nSuggestedSplitLength);
