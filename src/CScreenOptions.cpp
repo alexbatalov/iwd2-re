@@ -147,16 +147,68 @@ BOOL CScreenOptions::CheckMouseLButton()
     return TRUE;
 }
 
+// 0x5D76C0
+void CScreenOptions::OnLButtonDblClk(CPoint pt)
+{
+    m_cUIManager.OnLButtonDblClk(pt);
+}
+
+// 0x636970
+void CScreenOptions::OnLButtonDown(CPoint pt)
+{
+    g_pBaldurChitin->m_pObjectCursor->m_nState = 1;
+    m_cUIManager.OnLButtonDown(pt);
+}
+
+// 0x6369A0
+void CScreenOptions::OnLButtonUp(CPoint pt)
+{
+    g_pBaldurChitin->m_pObjectCursor->m_nState = 0;
+    m_cUIManager.OnLButtonUp(pt);
+}
+
 // 0x49FC40
 BOOL CScreenOptions::CheckMouseRButton()
 {
     return TRUE;
 }
 
+// 0x6369D0
+void CScreenOptions::OnRButtonDown(CPoint pt)
+{
+    g_pBaldurChitin->m_pObjectCursor->m_nState = 1;
+    m_cUIManager.OnRButtonDown(pt);
+}
+
+// 0x636A00
+void CScreenOptions::OnRButtonUp(CPoint pt)
+{
+    g_pBaldurChitin->m_pObjectCursor->m_nState = 0;
+    m_cUIManager.OnRButtonUp(pt);
+}
+
 // 0x653D40
 void CScreenOptions::SetSystemKeyCtrl(BOOLEAN bValue)
 {
     m_bCtrlKeyDown = bValue;
+}
+
+// 0x699600
+SHORT CScreenOptions::GetNumVirtualKeys()
+{
+    return CSCREENOPTIONS_VIRTUAL_KEYS;
+}
+
+// 0x699610
+CKeyInfo* CScreenOptions::GetVirtualKeys()
+{
+    return m_pVirtualKeys;
+}
+
+// 0x699620
+BYTE* CScreenOptions::GetVirtualKeysFlags()
+{
+    return m_pVirtualKeysFlags;
 }
 
 // 0x653D80
