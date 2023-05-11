@@ -37,3 +37,15 @@ void CScreenWorld::UnhideInterface()
 {
     // TODO: Incomplete.
 }
+
+// 0x697970
+CUIControlButtonClock::CUIControlButtonClock(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, 1, 0)
+{
+    // TODO: Incomplete.
+}
+
+// 0x697C20
+CUIControlButtonClock::~CUIControlButtonClock()
+{
+}

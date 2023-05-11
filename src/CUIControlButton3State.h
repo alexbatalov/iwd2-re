@@ -11,9 +11,9 @@ public:
     void OnLButtonClick(CPoint pt) override;
     BOOL Render(BOOL bForce) override;
 
-    SHORT m_nSelectedFrame;
-    SHORT m_nNotSelectedFrame;
-    BOOL m_bSelected;
+    /* 0666 */ SHORT m_nSelectedFrame;
+    /* 0668 */ SHORT m_nNotSelectedFrame;
+    /* 066A */ BOOL m_bSelected;
 };
 
 #endif /* CUICONTROLBUTTON3STATE_H_ */

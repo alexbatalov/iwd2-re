@@ -172,6 +172,12 @@ void CInfGame::LoadKeymap()
     // TODO: Incomplete.
 }
 
+// 0x5A9BA0
+void CInfGame::LoadOptions()
+{
+    // TODO: Incomplete.
+}
+
 // 0x5AA350
 void CInfGame::SaveOptions()
 {
@@ -225,6 +231,18 @@ SHORT CInfGame::GetCharacterPortaitNum(LONG nCharacterId)
     return -1;
 }
 
+// 0x5AF870
+void CInfGame::OnPortraitLClick(DWORD id)
+{
+    // TODO: Incomplete.
+}
+
+// 0x5AFCB0
+void CInfGame::OnPortraitLDblClick(DWORD id)
+{
+    // TODO: Incomplete.
+}
+
 // 0x5BB800
 BOOL CInfGame::Is3DSound(int nSoundChannel)
 {
@@ -241,6 +259,14 @@ float CInfGame::GetSoundReverbMix(int nSoundChannel, int nReverb)
 void CInfGame::SynchronousUpdate()
 {
     // TODO: Incomplete.
+}
+
+// 0x5C0890
+BOOL CInfGame::SaveGameExists(const CString& sSaveGame)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // 0x5C0EA0

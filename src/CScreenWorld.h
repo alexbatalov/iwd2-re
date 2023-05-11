@@ -3,6 +3,9 @@
 
 #include "CBaldurEngine.h"
 
+#include "CUIControlButton3State.h"
+#include "CVidCell.h"
+
 class CScreenWorld : public CBaldurEngine {
 public:
     CScreenWorld();
@@ -19,6 +22,15 @@ public:
     /* 10DE */ int field_10DE;
     /* 11CA */ BYTE m_nAutoHideInterface;
     /* 11CC */ INT m_nAutoUnhideInterface;
+};
+
+class CUIControlButtonClock : public CUIControlButton3State {
+public:
+    CUIControlButtonClock(CUIPanel* pPanel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonClock() override;
+
+    /* 066E */ CVidCell field_66E;
+    /* 0748 */ CVidCell field_748;
 };
 
 #endif /* CSCREENWORLD_H_ */

@@ -13,6 +13,7 @@
 #include "CScreenMovies.h"
 #include "CScreenSave.h"
 #include "CScreenWorld.h"
+#include "CUIControlFactory.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -2621,4 +2622,236 @@ void CUIControlButtonOptionsError::OnLButtonClick(CPoint pt)
     UTIL_ASSERT(pOptions != NULL);
 
     pOptions->OnErrorButtonClick(m_nID);
+}
+
+// NOTE: Unclear why this function is separated from constructor/destructor
+// pair (originally in `CUIControlButtons.cpp`, now in `CUIControlFactory.cpp`).
+//
+// 0x6595A0
+void CUIControlButtonOptionsHotArea::OnHotAreaClick(CPoint pt)
+{
+    DWORD dwTextId;
+    DWORD dwStrId;
+    switch (m_pPanel->m_nID) {
+    case 6:
+        dwTextId = 33;
+
+        switch (m_nID) {
+        case 35:
+            dwStrId = 17203;
+            break;
+        case 36:
+            dwStrId = 17204;
+            break;
+        case 37:
+            dwStrId = 17205;
+            break;
+        case 38:
+            dwStrId = 18000;
+            break;
+        case 44:
+            dwStrId = 15135;
+            break;
+        case 46:
+            dwStrId = 18006;
+            break;
+        case 48:
+            dwStrId = 18007;
+            break;
+        case 50:
+            dwStrId = 20620;
+            break;
+        case 52:
+            dwStrId = 15141;
+            break;
+        case 54:
+            dwStrId = 18004;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 4311
+            UTIL_ASSERT(FALSE);
+        }
+
+        break;
+    case 7:
+        dwTextId = 14;
+
+        switch (m_nID) {
+        case 16:
+            dwStrId = 18008;
+            break;
+        case 17:
+            dwStrId = 18009;
+            break;
+        case 18:
+            dwStrId = 18010;
+            break;
+        case 19:
+            dwStrId = 18011;
+            break;
+        case 20:
+            dwStrId = 18012;
+            break;
+        case 28:
+            dwStrId = 18022;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 4345
+            UTIL_ASSERT(FALSE);
+        }
+
+        break;
+    case 8:
+        dwTextId = 40;
+
+        switch (m_nID) {
+        case 21:
+            dwStrId = 18017;
+            break;
+        case 22:
+            dwStrId = 18018;
+            break;
+        case 23:
+            dwStrId = 18019;
+            break;
+        case 24:
+            dwStrId = 18020;
+            break;
+        case 25:
+            dwStrId = 18021;
+            break;
+        case 27:
+            if (!g_pBaldurChitin->m_pObjectGame->m_cOptions.field_4) {
+                return;
+            }
+
+            dwStrId = 18023;
+            break;
+        case 44:
+            dwStrId = 11797;
+            break;
+        case 46:
+            dwStrId = 20619;
+            break;
+        case 49:
+            dwStrId = 15136;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 4427
+            UTIL_ASSERT(FALSE);
+        }
+
+        break;
+    case 9:
+        dwTextId = 28;
+
+        switch (m_nID) {
+        case 30:
+            dwStrId = 18024;
+            break;
+        case 31:
+            dwStrId = 18025;
+            break;
+        case 32:
+            dwStrId = 18026;
+            break;
+        case 33:
+            dwStrId = 18027;
+            break;
+        case 34:
+            dwStrId = 18028;
+            break;
+        case 35:
+            dwStrId = 18029;
+            break;
+        case 36:
+            dwStrId = 18030;
+            break;
+        case 37:
+            dwStrId = 18031;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 4469
+            UTIL_ASSERT(FALSE);
+        }
+
+        break;
+    case 10:
+        dwTextId = 15;
+
+        switch (m_nID) {
+        case 17:
+            dwStrId = 18032;
+            break;
+        case 18:
+            dwStrId = 18033;
+            break;
+        case 19:
+            dwStrId = 18034;
+            break;
+        case 20:
+            dwStrId = 18035;
+            break;
+        case 21:
+            dwStrId = 18036;
+            break;
+        case 22:
+            dwStrId = 18037;
+            break;
+        case 24:
+            dwStrId = 10640;
+            break;
+        case 28:
+            dwStrId = 18560;
+            break;
+        case 31:
+            dwStrId = 23514;
+            break;
+        case 34:
+            dwStrId = 24888;
+            break;
+        case 37:
+            dwStrId = 26311;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 4523
+            UTIL_ASSERT(FALSE);
+        }
+
+        break;
+    case 12:
+        dwTextId = 16;
+
+        switch (m_nID) {
+        case 18:
+            dwStrId = 18013;
+            break;
+        case 19:
+            dwStrId = 18014;
+            break;
+        case 20:
+            dwStrId = 18015;
+            break;
+        case 21:
+            dwStrId = 18016;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+            // __LINE__: 4374
+            UTIL_ASSERT(FALSE);
+        }
+
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+        // __LINE__: 4529
+        UTIL_ASSERT(FALSE);
+    }
+
+    g_pBaldurChitin->m_pEngineOptions->UpdateHelp(m_pPanel->m_nID, dwTextId, dwStrId);
 }

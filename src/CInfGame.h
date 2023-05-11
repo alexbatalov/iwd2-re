@@ -24,12 +24,16 @@ public:
     void DestroyGame(unsigned char a1, unsigned char a2);
     BOOLEAN CanSaveGame(STRREF& strError, unsigned char a2, unsigned char a3);
     void LoadKeymap();
+    void LoadOptions();
     void SaveOptions();
     void UpdatePortrait(SHORT nPortrait, DWORD dwPanelId);
     SHORT GetCharacterPortaitNum(LONG nCharacterId);
+    void OnPortraitLClick(DWORD id);
+    void OnPortraitLDblClick(DWORD id);
     BOOL Is3DSound(int nSoundChannel);
     float GetSoundReverbMix(int nSoundChannel, int nReverb);
     void SynchronousUpdate();
+    BOOL SaveGameExists(const CString& sSaveGame);
     void ApplyVolumeSliders(BOOLEAN a2);
     BOOLEAN RestParty(int a2, unsigned char a3);
     BOOL CanRestParty(STRREF& strError, unsigned char a2, unsigned char a3, unsigned char a4);
