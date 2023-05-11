@@ -602,7 +602,7 @@ void CScreenOptions::SummonPopup(DWORD dwPopupId)
         EnableMainPanel(FALSE);
     }
 
-    CUIPanel* pPanel = m_lPopupStack.GetTail();
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPopupId);
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
     // __LINE__: 1139
@@ -613,6 +613,9 @@ void CScreenOptions::SummonPopup(DWORD dwPopupId)
 
     // NOTE: Uninline.
     ShowPopupPanel(pPanel->m_nID, TRUE);
+
+    // NOTE: Uninline.
+    EnablePopupPanel(pPanel->m_nID, TRUE);
 
     UpdatePopupPanel(pPanel->m_nID, TRUE);
 }
@@ -731,7 +734,7 @@ void CScreenOptions::ShowPopupPanel(DWORD dwPanelId, BOOL bShow)
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
     // __LINE__: 1325
-    UTIL_ASSERT(FALSE);
+    UTIL_ASSERT(pPanel != NULL);
 
     pPanel->SetActive(bShow);
     pPanel->SetInactiveRender(bShow);
@@ -749,7 +752,7 @@ void CScreenOptions::EnablePopupPanel(DWORD dwPanelId, BOOL bEnable)
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
     // __LINE__: 1370
-    UTIL_ASSERT(FALSE);
+    UTIL_ASSERT(pPanel != NULL);
 
     pPanel->SetEnabled(bEnable);
 }
