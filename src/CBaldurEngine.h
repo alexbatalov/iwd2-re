@@ -177,6 +177,7 @@ public:
     /* 0118 */ virtual BOOL StopMusic();
 
     void PlayGUISound(const CResRef& cResRef);
+    void OnLeftPanelButtonClick(DWORD dwButtonId);
 
     static CString FetchString(DWORD dwStrId);
     static void UpdateText(CUIControlTextDisplay* pText, const char* format, ...);

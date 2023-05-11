@@ -25,6 +25,7 @@ public:
     /* 0060 */ BOOL CheckMouseMove() override;
     /* 0068 */ BOOL CheckMouseLButton() override;
     /* 0088 */ BOOL CheckMouseRButton() override;
+    /* 00AC */ void OnKeyDown(SHORT nKeysFlags) override;
     /* 00C4 */ void TimerSynchronousUpdate() override;
     /* 00E0 */ void OnPortraitLClick(DWORD nPortrait) override;
     /* 00F0 */ void OnRestButtonClick() override;

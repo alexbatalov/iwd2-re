@@ -292,6 +292,90 @@ void CScreenOptions::EngineInitialized()
     m_cUIManager.ReorderPanelAfter(13, 2);
 }
 
+// 0x6543A0
+void CScreenOptions::OnKeyDown(SHORT nKeysFlags)
+{
+    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+
+    if (nKeysFlags > 0) {
+        for (SHORT nKeyFlag = 0; nKeyFlag < nKeysFlags; nKeyFlag++) {
+            switch (m_pVirtualKeysFlags[nKeyFlag]) {
+            case VK_TAB:
+                m_cUIManager.ForceToolTip();
+                break;
+            case VK_RETURN:
+                if (m_lPopupStack.GetTailPosition() != NULL && m_lPopupStack.GetTail() != NULL) {
+                    OnDoneButtonClick();
+                }
+                break;
+            case VK_ESCAPE:
+                if (m_lPopupStack.GetTailPosition() != NULL && m_lPopupStack.GetTail() != NULL) {
+                    OnCancelButtonClick();
+                } else {
+                    SelectEngine(g_pBaldurChitin->m_pEngineWorld);
+                }
+                break;
+            case VK_SNAPSHOT:
+                g_pBaldurChitin->GetCurrentVideoMode()->PrintScreen();
+                break;
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+                if (m_lPopupStack.GetTailPosition() == NULL || m_lPopupStack.GetTail() == NULL) {
+                    OnPortraitLClick(m_pVirtualKeysFlags[nKeyFlag] - '1');
+                }
+                break;
+            default:
+                for (SHORT index = 0; index < CINFGAME_KEYMAP_SIZE; index) {
+                    // __FILE__: .\Include\InfGame.h
+                    // __LINE__: 1486
+                    UTIL_ASSERT(index >= 0 && index < CINFGAME_KEYMAP_SIZE);
+
+                    if (pGame->m_pKeymap[index] == m_pVirtualKeysFlags[nKeyFlag]
+                        && pGame->m_pKeymapFlags[index] == m_bCtrlKeyDown) {
+                        switch (index) {
+                        case 0:
+                            static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->OnLeftPanelButtonClick(5);
+                            break;
+                        case 1:
+                            static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->OnLeftPanelButtonClick(8);
+                            break;
+                        case 2:
+                            static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->OnLeftPanelButtonClick(0);
+                            break;
+                        case 3:
+                            static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->OnLeftPanelButtonClick(6);
+                            break;
+                        case 4:
+                            static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->OnLeftPanelButtonClick(7);
+                            break;
+                        case 5:
+                            static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->OnLeftPanelButtonClick(4);
+                            break;
+                        case 6:
+                            static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->OnLeftPanelButtonClick(9);
+                            break;
+                        case 7:
+                            static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->OnLeftPanelButtonClick(13);
+                            break;
+                        case 29:
+                            OnRestButtonClick();
+                            break;
+                        default:
+                            break;
+                        }
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+    }
+}
+
 // 0x6546B0
 void CScreenOptions::OnPortraitLClick(DWORD nPortrait)
 {

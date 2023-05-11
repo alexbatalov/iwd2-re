@@ -743,6 +743,12 @@ void CBaldurEngine::GetChatEditBoxStatus(CString& sChatText, BOOL& bInputCapture
     bInputCapture = FALSE;
 }
 
+// 0x4282C0
+void CBaldurEngine::OnLeftPanelButtonClick(DWORD dwButtonId)
+{
+    // TODO: Incomplete.
+}
+
 // 0x4289C0
 void CBaldurEngine::OnMouseWheel(BOOL bForward, LONG nTicks, DWORD nLines, WORD wFlags)
 {

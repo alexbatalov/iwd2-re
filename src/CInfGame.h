@@ -11,6 +11,9 @@
 // Seen in `CRuleTables::GetStartPoint` assertion.
 #define CINFGAME_MAXCHARACTERS 6
 
+// Seen in `CScreenOptions::OnKeyDown` assertion.
+#define CINFGAME_KEYMAP_SIZE 372
+
 class CGameArea;
 
 class CInfGame {
@@ -88,6 +91,8 @@ public:
     /* 3846 */ SHORT m_nCharacters;
     /* 43E2 */ int field_43E2;
     /* 43EA */ CGameOptions m_cOptions; // #guess
+    /* 4514 */ BYTE m_pKeymap[CINFGAME_KEYMAP_SIZE];
+    /* 4688 */ BOOLEAN m_pKeymapFlags[CINFGAME_KEYMAP_SIZE];
     /* 4A00 */ HANDLE m_hSearchThread; // #guess
     /* 4AA2 */ ULONG field_4AA2;
     // NOTE: Can also be BYTE indicating number of expansion pack.
