@@ -24,6 +24,7 @@ public:
     /* 0030 */ BOOL CheckSystemKeyCtrl() override;
     /* 0034 */ void SetSystemKeyCtrl(BOOLEAN bValue) override;
     /* 0060 */ BOOL CheckMouseMove() override;
+    /* 0064 */ void OnMouseMove(CPoint pt) override;
     /* 0068 */ BOOL CheckMouseLButton() override;
     /* 006C */ void OnLButtonDblClk(CPoint pt) override;
     /* 0070 */ void OnLButtonDown(CPoint pt) override;

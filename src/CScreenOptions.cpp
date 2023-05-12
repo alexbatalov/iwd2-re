@@ -142,6 +142,12 @@ BOOL CScreenOptions::CheckMouseMove()
     return TRUE;
 }
 
+// 0x66F4B0
+void CScreenOptions::OnMouseMove(CPoint pt)
+{
+    m_cUIManager.OnMouseMove(pt);
+}
+
 // 0x49FC40
 BOOL CScreenOptions::CheckMouseLButton()
 {
