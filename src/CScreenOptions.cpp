@@ -1088,14 +1088,14 @@ void CScreenOptions::UpdateGraphicsPanel(BOOLEAN bInitialUpdate)
 
     pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(3));
     UTIL_ASSERT(pSlider != NULL); // 1948
-    nValue = ((pSlider->field_1F2 - 1) * g_pBaldurChitin->GetCurrentVideoMode()->m_nBrightnessCorrection + 39) / 40;
-    pSlider->field_208 = max(min(nValue, pSlider->field_1F2 - 1), 0);
+    nValue = ((pSlider->m_nKnobJumpCount - 1) * g_pBaldurChitin->GetCurrentVideoMode()->m_nBrightnessCorrection + 39) / 40;
+    pSlider->m_nValue = max(min(nValue, pSlider->m_nKnobJumpCount - 1), 0);
     pSlider->InvalidateRect();
 
     pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(22));
     UTIL_ASSERT(pSlider != NULL); // 1954
-    nValue = ((pSlider->field_1F2 - 1) * g_pBaldurChitin->GetCurrentVideoMode()->m_nGammaCorrection + 4) / 5;
-    pSlider->field_208 = max(min(nValue, pSlider->field_1F2 - 1), 0);
+    nValue = ((pSlider->m_nKnobJumpCount - 1) * g_pBaldurChitin->GetCurrentVideoMode()->m_nGammaCorrection + 4) / 5;
+    pSlider->m_nValue = max(min(nValue, pSlider->m_nKnobJumpCount - 1), 0);
     pSlider->InvalidateRect();
 
     if (bInitialUpdate) {
@@ -1183,27 +1183,27 @@ void CScreenOptions::UpdateSoundPanel(BOOLEAN bInitialUpdate)
 
     pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(4));
     UTIL_ASSERT(pSlider != NULL); // 2065
-    pSlider->field_208 = max(min(static_cast<short>(((pSlider->field_1F2 - 1) * pOptions->m_nVolumeMusic + 99) / 100), pSlider->field_1F2 - 1), 0);
+    pSlider->m_nValue = max(min(static_cast<short>(((pSlider->m_nKnobJumpCount - 1) * pOptions->m_nVolumeMusic + 99) / 100), pSlider->m_nKnobJumpCount - 1), 0);
     pSlider->InvalidateRect();
 
     pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(3));
     UTIL_ASSERT(pSlider != NULL); // 2070
-    pSlider->field_208 = max(min(static_cast<short>(((pSlider->field_1F2 - 1) * pOptions->m_nVolumeVoices + 99) / 100), pSlider->field_1F2 - 1), 0);
+    pSlider->m_nValue = max(min(static_cast<short>(((pSlider->m_nKnobJumpCount - 1) * pOptions->m_nVolumeVoices + 99) / 100), pSlider->m_nKnobJumpCount - 1), 0);
     pSlider->InvalidateRect();
 
     pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(1));
     UTIL_ASSERT(pSlider != NULL); // 2075
-    pSlider->field_208 = max(min(static_cast<short>(((pSlider->field_1F2 - 1) * pOptions->m_nVolumeAmbients + 99) / 100), pSlider->field_1F2 - 1), 0);
+    pSlider->m_nValue = max(min(static_cast<short>(((pSlider->m_nKnobJumpCount - 1) * pOptions->m_nVolumeAmbients + 99) / 100), pSlider->m_nKnobJumpCount - 1), 0);
     pSlider->InvalidateRect();
 
     pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(2));
     UTIL_ASSERT(pSlider != NULL); // 2080
-    pSlider->field_208 = max(min(static_cast<short>(((pSlider->field_1F2 - 1) * pOptions->m_nVolumeSFX + 99) / 100), pSlider->field_1F2 - 1), 0);
+    pSlider->m_nValue = max(min(static_cast<short>(((pSlider->m_nKnobJumpCount - 1) * pOptions->m_nVolumeSFX + 99) / 100), pSlider->m_nKnobJumpCount - 1), 0);
     pSlider->InvalidateRect();
 
     pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(22));
     UTIL_ASSERT(pSlider != NULL); // 2085
-    pSlider->field_208 = max(min(static_cast<short>(((pSlider->field_1F2 - 1) * pOptions->m_nVolumeMovie + 99) / 100), pSlider->field_1F2 - 1), 0);
+    pSlider->m_nValue = max(min(static_cast<short>(((pSlider->m_nKnobJumpCount - 1) * pOptions->m_nVolumeMovie + 99) / 100), pSlider->m_nKnobJumpCount - 1), 0);
     pSlider->InvalidateRect();
 
     pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(26));
@@ -1286,12 +1286,12 @@ void CScreenOptions::UpdateFeedbackPanel(BOOLEAN bInitialUpdate)
 
     pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(8));
     UTIL_ASSERT(pSlider != NULL); // 2325
-    pSlider->field_208 = max(min(static_cast<short>(pOptions->m_nGuiFeedbackLevel), pSlider->field_1F2 - 1), 0);
+    pSlider->m_nValue = max(min(static_cast<short>(pOptions->m_nGuiFeedbackLevel), pSlider->m_nKnobJumpCount - 1), 0);
     pSlider->InvalidateRect();
 
     pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(9));
     UTIL_ASSERT(pSlider != NULL); // 2330
-    pSlider->field_208 = max(min(static_cast<short>(pOptions->m_nLocatorFeedbackLevel), pSlider->field_1F2 - 1), 0);
+    pSlider->m_nValue = max(min(static_cast<short>(pOptions->m_nLocatorFeedbackLevel), pSlider->m_nKnobJumpCount - 1), 0);
     pSlider->InvalidateRect();
 
     pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(10));
@@ -2097,7 +2097,7 @@ void CUIControlSliderOptionsSlider::OnThumbFinalChange()
             if (1) {
                 CSingleLock lock(&(m_pPanel->m_pManager->field_36), FALSE);
                 dwStrId = 17203;
-                dwValue = 40 * field_208 / (field_1F2 - 1);
+                dwValue = 40 * m_nValue / (m_nKnobJumpCount - 1);
                 lock.Lock(INFINITE);
 
                 g_pBaldurChitin->GetCurrentVideoMode()->m_nBrightnessCorrection = static_cast<BYTE>(dwValue);
@@ -2116,7 +2116,7 @@ void CUIControlSliderOptionsSlider::OnThumbFinalChange()
             if (1) {
                 CSingleLock lock(&(m_pPanel->m_pManager->field_36), FALSE);
                 dwStrId = 17204;
-                dwValue = 5 * field_208 / (field_1F2 - 1);
+                dwValue = 5 * m_nValue / (m_nKnobJumpCount - 1);
                 lock.Lock(INFINITE);
 
                 g_pBaldurChitin->GetCurrentVideoMode()->m_nGammaCorrection = static_cast<BYTE>(dwValue);
@@ -2144,7 +2144,7 @@ void CUIControlSliderOptionsSlider::OnThumbFinalChange()
         switch (m_nID) {
         case 1:
             dwStrId = 18008;
-            pOptions->m_nVolumeAmbients = 100 * field_208 / (field_1F2 - 1);
+            pOptions->m_nVolumeAmbients = 100 * m_nValue / (m_nKnobJumpCount - 1);
 
             if (CGameArea::byte_8D2138) {
                 CGameArea::dword_8D212C = pOptions->m_nVolumeAmbients;
@@ -2154,22 +2154,22 @@ void CUIControlSliderOptionsSlider::OnThumbFinalChange()
             break;
         case 2:
             dwStrId = 18009;
-            pOptions->m_nVolumeSFX = 100 * field_208 / (field_1F2 - 1);
+            pOptions->m_nVolumeSFX = 100 * m_nValue / (m_nKnobJumpCount - 1);
             pGame->ApplyVolumeSliders(FALSE);
             break;
         case 3:
             dwStrId = 18010;
-            pOptions->m_nVolumeVoices = 100 * field_208 / (field_1F2 - 1);
+            pOptions->m_nVolumeVoices = 100 * m_nValue / (m_nKnobJumpCount - 1);
             pGame->ApplyVolumeSliders(FALSE);
             break;
         case 4:
             dwStrId = 18011;
-            pOptions->m_nVolumeMusic = 100 * field_208 / (field_1F2 - 1);
+            pOptions->m_nVolumeMusic = 100 * m_nValue / (m_nKnobJumpCount - 1);
             pGame->ApplyVolumeSliders(FALSE);
             break;
         case 22:
             dwStrId = 18012;
-            pOptions->m_nVolumeMovie = 100 * field_208 / (field_1F2 - 1);
+            pOptions->m_nVolumeMovie = 100 * m_nValue / (m_nKnobJumpCount - 1);
             pGame->ApplyVolumeSliders(FALSE);
             break;
         default:
@@ -2185,23 +2185,23 @@ void CUIControlSliderOptionsSlider::OnThumbFinalChange()
         switch (m_nID) {
         case 1:
             dwStrId = 18017;
-            if (field_208 + 1 < field_1F2) {
-                pOptions->m_nTooltips = 100 * (field_208 + 1) / (field_1F2 - 1);
+            if (m_nValue + 1 < m_nKnobJumpCount) {
+                pOptions->m_nTooltips = 100 * (m_nValue + 1) / (m_nKnobJumpCount - 1);
             } else {
                 pOptions->m_nTooltips = 0x7FFFFFFF;
             }
             break;
         case 2:
             dwStrId = 18018;
-            pOptions->m_nMouseScrollSpeed = 44 * field_208 / (field_1F2 - 1) + 6;
+            pOptions->m_nMouseScrollSpeed = 44 * m_nValue / (m_nKnobJumpCount - 1) + 6;
             break;
         case 3:
             dwStrId = 18019;
-            pOptions->m_nKeyboardScrollSpeed = 132 * field_208 / (field_1F2 - 1) + 18;
+            pOptions->m_nKeyboardScrollSpeed = 132 * m_nValue / (m_nKnobJumpCount - 1) + 18;
             break;
         case 12:
             dwStrId = 18020;
-            pOptions->m_nDifficultyLevel = field_208 + 1;
+            pOptions->m_nDifficultyLevel = m_nValue + 1;
 
             switch (pOptions->m_nDifficultyLevel) {
             case 1:
@@ -2260,7 +2260,7 @@ void CUIControlSliderOptionsSlider::OnThumbFinalChange()
         switch (m_nID) {
         case 8:
             dwStrId = 18024;
-            dwValue = field_208 + 1;
+            dwValue = m_nValue + 1;
 
             // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
             // __LINE__: 3716
@@ -2270,7 +2270,7 @@ void CUIControlSliderOptionsSlider::OnThumbFinalChange()
             break;
         case 9:
             dwStrId = 18025;
-            dwValue = field_208 + 1;
+            dwValue = m_nValue + 1;
 
             // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
             // __LINE__: 3723
@@ -2864,6 +2864,9 @@ void CUIControlButtonOptionsHotArea::OnHotAreaClick(CPoint pt)
             break;
         case 21:
             dwStrId = 18016;
+            break;
+        case 57:
+            dwStrId = 11352;
             break;
         default:
             // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp

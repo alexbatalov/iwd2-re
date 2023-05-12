@@ -21,14 +21,23 @@ public:
     /* 0068 */ virtual void OnThumbChange();
     /* 006C */ virtual void OnThumbFinalChange();
 
-    /* 0052 */ CVidMosaic field_52;
-    /* 0106 */ CVidCell field_106;
-    /* 01F2 */ short field_1F2;
-    /* 0204 */ unsigned char field_204;
+    /* 0052 */ CVidMosaic m_mosBackground;
+    /* 0106 */ CVidCell m_vcKnob;
+    /* 01E0 */ SHORT m_nSequence;
+    /* 01E2 */ SHORT m_nKnobFrame;
+    /* 01E4 */ SHORT m_nActiveKnobFrame;
+    /* 01E6 */ SHORT m_nDisabledKnobFrame;
+    /* 01E8 */ int m_nKnobOffsetX;
+    /* 01EC */ int m_nKnobOffsetY;
+    /* 01F0 */ SHORT m_nKnobJumpWidth;
+    /* 01F2 */ SHORT m_nKnobJumpCount;
+    /* 01F4 */ CRect m_rTrack;
+    /* 0204 */ BOOLEAN m_bKnobEnabled;
     /* 0206 */ SHORT m_nRenderCount;
-    /* 0208 */ short field_208;
-    /* 020A */ int field_20A;
-    /* 020E */ int field_20E;
+    /* 0208 */ SHORT m_nValue;
+    /* 020A */ BOOL m_bTracking;
+    /* 020E */ BOOL m_bValueChanged;
+    /* 0212 */ int field_212;
 };
 
 #endif /* CUICONTROLSLIDER_H_ */

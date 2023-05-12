@@ -61,6 +61,19 @@ typedef struct UI_Control_Button_st {
 // TODO: Incomplete.
 typedef struct UI_Control_Slider_st {
     UI_CONTROL base;
+    RESREF refBackground;
+    RESREF refKnob;
+    SHORT nSequence;
+    SHORT nKnobFrame;
+    SHORT nActiveKnobFrame;
+    SHORT nKnobOffsetX;
+    SHORT nKnobOffsetY;
+    SHORT nKnobJumpWidth;
+    SHORT nKnobJumpCount;
+    SHORT nTrackMinY;
+    SHORT nTrackMaxY;
+    SHORT nTrackMinX;
+    SHORT nTrackMaxX;
 } UI_CONTROL_SLIDER;
 
 typedef struct UI_Control_Label_st {
