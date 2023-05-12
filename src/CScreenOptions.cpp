@@ -1286,12 +1286,12 @@ void CScreenOptions::UpdateFeedbackPanel(BOOLEAN bInitialUpdate)
 
     pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(8));
     UTIL_ASSERT(pSlider != NULL); // 2325
-    pSlider->m_nValue = max(min(static_cast<short>(pOptions->m_nGuiFeedbackLevel), pSlider->m_nKnobJumpCount - 1), 0);
+    pSlider->m_nValue = max(min(static_cast<short>(pOptions->m_nGuiFeedbackLevel) - 1, pSlider->m_nKnobJumpCount - 1), 0);
     pSlider->InvalidateRect();
 
     pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(9));
     UTIL_ASSERT(pSlider != NULL); // 2330
-    pSlider->m_nValue = max(min(static_cast<short>(pOptions->m_nLocatorFeedbackLevel), pSlider->m_nKnobJumpCount - 1), 0);
+    pSlider->m_nValue = max(min(static_cast<short>(pOptions->m_nLocatorFeedbackLevel) - 1, pSlider->m_nKnobJumpCount - 1), 0);
     pSlider->InvalidateRect();
 
     pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(10));
