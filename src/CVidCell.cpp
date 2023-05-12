@@ -1230,7 +1230,7 @@ BOOL CVidCell::BltFromFX(LPDIRECTDRAWSURFACE pSurface, int x, int y, const CRect
         rSrcSurface.right -= x + m_pFrame->nWidth - rClip.right;
     }
 
-    if (x + m_pFrame->nHeight - 1 >= rClip.bottom) {
+    if (y + m_pFrame->nHeight - 1 >= rClip.bottom) {
         rSrcSurface.bottom -= y + m_pFrame->nHeight - rClip.bottom;
     }
 
