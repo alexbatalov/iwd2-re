@@ -147,7 +147,7 @@ DWORD CUIPanel::TimerAsynchronousUpdate()
     DWORD nID = -1;
 
     if (m_bActive || m_bInactiveRender) {
-        CPoint pt = g_pBaldurChitin->field_1906 - m_ptOrigin;
+        CPoint pt = g_pBaldurChitin->m_ptPointer - m_ptOrigin;
 
         POSITION pos = m_lControls.GetHeadPosition();
         while (pos != NULL) {

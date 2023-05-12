@@ -158,7 +158,7 @@ void CUIManager::TimerAsynchronousUpdate()
 
                     CRect r(pPanel->m_ptOrigin, pPanel->m_size);
                     pPanel->m_pManager->m_pWarp->NormalizePanelRect(pPanel->m_nID, r);
-                    if (!r.PtInRect(g_pBaldurChitin->field_1906)) {
+                    if (!r.PtInRect(g_pBaldurChitin->m_ptPointer)) {
                         continue;
                     }
                 }
@@ -251,7 +251,7 @@ void CUIManager::OnMouseMove(CPoint pt)
                     CRect rPanel(pPanel->m_ptOrigin, pPanel->m_size);
                     pPanel->m_pManager->m_pWarp->NormalizePanelRect(pPanel->m_nID, rPanel);
 
-                    if (rPanel.PtInRect(g_pBaldurChitin->field_1906)) {
+                    if (rPanel.PtInRect(g_pBaldurChitin->m_ptPointer)) {
                         pPanel->OnMouseMove(pt);
                     }
                 }

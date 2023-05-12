@@ -131,7 +131,11 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lPara
         g_pChitin->OnAltTab(hWnd, wParam);
         break;
     case WM_SETCURSOR:
-        return 1;
+        if (g_pChitin->m_bFullscreen || (LOWORD(lParam) == HTCLIENT && GetFocus())) {
+            SetCursor(NULL);
+            return 1;
+        }
+        break;
     case WM_INPUTLANGCHANGE:
         return 0;
     case WM_DISPLAYCHANGE:
@@ -667,7 +671,7 @@ void CChitin::InitializeVariables()
     field_1932 = 0;
     field_1936 = 1;
     field_193A = 0;
-    field_1902 = 0;
+    m_bPointerUpdated = FALSE;
     m_bEngineActive = FALSE;
     m_bInAsynchronousUpdate = FALSE;
     field_4C = 0;
@@ -675,8 +679,8 @@ void CChitin::InitializeVariables()
     m_bExitMainAIThread = FALSE;
     field_50 = 0;
     m_bExitMessageThread = FALSE;
-    field_1906.x = 0;
-    field_1906.y = 0;
+    m_ptPointer.x = 0;
+    m_ptPointer.y = 0;
     m_eventTimer = NULL;
     field_B4 = 0;
     m_hRSThread = NULL;
@@ -1190,7 +1194,7 @@ void CChitin::DestroyServices()
 void CChitin::AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD dw1, DWORD dw2)
 {
     int v1 = 0;
-    CSingleLock lock(&field_194A, FALSE);
+    CSingleLock positionLock(&m_csPointerPosition, FALSE);
 
     if (!field_E0) {
         nAUCounter++;
@@ -1267,29 +1271,29 @@ void CChitin::AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD d
                         && pt.y != 0
                         && pt.y != CVideo::SCREENHEIGHT - 1)) {
                     if (pVidMode != NULL) {
-                        pVidMode->field_D8 = 1;
+                        pVidMode->m_bPointerInside = TRUE;
                     }
                 } else {
                     pt.x = -1;
                     pt.y = -1;
 
                     if (pVidMode != NULL) {
-                        pVidMode->field_D8 = 0;
+                        pVidMode->m_bPointerInside = FALSE;
                     }
                 }
 
-                if (pt.x == field_1906.x && pt.y == field_1906.y) {
+                if (pt.x == m_ptPointer.x && pt.y == m_ptPointer.y) {
                     if (v1 > 0) {
                         if (pActiveEngine->CheckMouseMove()) {
                             pActiveEngine->OnMouseMove(pt);
                         }
                     }
                 } else {
-                    lock.Lock();
-                    field_1906 = pt;
-                    lock.Unlock();
+                    positionLock.Lock();
+                    m_ptPointer = pt;
+                    positionLock.Unlock();
 
-                    field_1902 = 0;
+                    m_bPointerUpdated = FALSE;
 
                     if (pActiveEngine->CheckMouseMove()) {
                         pActiveEngine->OnMouseMove(pt);
@@ -1300,7 +1304,7 @@ void CChitin::AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD d
                     pt.x = min(max(pt.x, 0), m_nScreenWidth - 1);
 
                     if (pVidMode != NULL) {
-                        pVidMode->field_D8 = 1;
+                        pVidMode->m_bPointerInside = TRUE;
                     }
                     pt.y = pt.y * (CVideo::SCREENHEIGHT - 1) / (m_nScreenHeight - 1);
                 } else if (field_F9 && (pt.y == 0 || pt.y == m_nScreenHeight - 1)) {
@@ -1308,29 +1312,29 @@ void CChitin::AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD d
                     pt.y = min(max(pt.y, 0), m_nScreenHeight - 1);
 
                     if (pVidMode != NULL) {
-                        pVidMode->field_D8 = 1;
+                        pVidMode->m_bPointerInside = TRUE;
                     }
                 } else {
                     pt.x = -1;
                     pt.y = -1;
 
                     if (pVidMode != NULL) {
-                        pVidMode->field_D8 = 0;
+                        pVidMode->m_bPointerInside = FALSE;
                     }
                 }
 
-                if (pt.x == field_1906.x && pt.y == field_1906.y) {
+                if (pt.x == m_ptPointer.x && pt.y == m_ptPointer.y) {
                     if (v1 > 0) {
                         if (pActiveEngine->CheckMouseMove()) {
                             pActiveEngine->OnMouseMove(pt);
                         }
                     }
                 } else {
-                    lock.Lock();
-                    field_1906 = pt;
-                    lock.Unlock();
+                    positionLock.Lock();
+                    m_ptPointer = pt;
+                    positionLock.Unlock();
 
-                    field_1902 = 0;
+                    m_bPointerUpdated = FALSE;
 
                     if (pActiveEngine->CheckMouseMove()) {
                         pActiveEngine->OnMouseMove(pt);
@@ -1372,7 +1376,7 @@ void CChitin::AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD d
             }
 
             if (pActiveEngine->CheckSystemKeyMenu() || nMenuState == 0) {
-                if (field_1906.x != -1) {
+                if (m_ptPointer.x != -1) {
                     if (pActiveEngine->CheckMouseLButton()) {
                         SHORT nLButtonState = GetAsyncKeyState(m_mouseLButton);
                         m_mouseLDblClickCount++;
@@ -1380,34 +1384,34 @@ void CChitin::AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD d
                         if (m_bMouseLButtonDown) {
                             if (nLButtonState >= 0) {
                                 m_bMouseLButtonDown = FALSE;
-                                pActiveEngine->OnLButtonUp(field_1906);
+                                pActiveEngine->OnLButtonUp(m_ptPointer);
                             }
                         } else {
                             if (nLButtonState >= 0) {
                                 if ((nLButtonState & 1) != 0) {
                                     if (m_mouseLDblClickCount >= m_mouseDblClickTime
-                                        || abs(field_1906.x - m_mouseLDblClickPoint.x) > m_mouseDblClickSize.cx / 2
-                                        || abs(field_1906.y - m_mouseLDblClickPoint.y) > m_mouseDblClickSize.cy / 2) {
-                                        pActiveEngine->OnLButtonDown(field_1906);
-                                        m_mouseLDblClickPoint = field_1906;
+                                        || abs(m_ptPointer.x - m_mouseLDblClickPoint.x) > m_mouseDblClickSize.cx / 2
+                                        || abs(m_ptPointer.y - m_mouseLDblClickPoint.y) > m_mouseDblClickSize.cy / 2) {
+                                        pActiveEngine->OnLButtonDown(m_ptPointer);
+                                        m_mouseLDblClickPoint = m_ptPointer;
                                         m_mouseLDblClickCount = 0;
                                     } else {
-                                        pActiveEngine->OnLButtonDblClk(field_1906);
+                                        pActiveEngine->OnLButtonDblClk(m_ptPointer);
                                         m_mouseLDblClickCount = m_mouseDblClickTime;
                                     }
 
-                                    pActiveEngine->OnLButtonUp(field_1906);
+                                    pActiveEngine->OnLButtonUp(m_ptPointer);
                                 }
                             } else {
                                 m_bMouseLButtonDown = TRUE;
                                 if (m_mouseLDblClickCount >= m_mouseDblClickTime
-                                    || abs(field_1906.x - m_mouseLDblClickPoint.x) > m_mouseDblClickSize.cx / 2
-                                    || abs(field_1906.y - m_mouseLDblClickPoint.y) > m_mouseDblClickSize.cy / 2) {
-                                    pActiveEngine->OnLButtonDown(field_1906);
-                                    m_mouseLDblClickPoint = field_1906;
+                                    || abs(m_ptPointer.x - m_mouseLDblClickPoint.x) > m_mouseDblClickSize.cx / 2
+                                    || abs(m_ptPointer.y - m_mouseLDblClickPoint.y) > m_mouseDblClickSize.cy / 2) {
+                                    pActiveEngine->OnLButtonDown(m_ptPointer);
+                                    m_mouseLDblClickPoint = m_ptPointer;
                                     m_mouseLDblClickCount = 0;
                                 } else {
-                                    pActiveEngine->OnLButtonDblClk(field_1906);
+                                    pActiveEngine->OnLButtonDblClk(m_ptPointer);
                                     m_mouseLDblClickCount = m_mouseDblClickTime;
                                 }
                             }
@@ -1421,34 +1425,34 @@ void CChitin::AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD d
                         if (m_bMouseRButtonDown) {
                             if (nRButtonState >= 0) {
                                 m_bMouseRButtonDown = FALSE;
-                                pActiveEngine->OnRButtonUp(field_1906);
+                                pActiveEngine->OnRButtonUp(m_ptPointer);
                             }
                         } else {
                             if (nRButtonState >= 0) {
                                 if ((nRButtonState & 1) != 0) {
                                     if (m_mouseRDblClickCount >= m_mouseDblClickTime
-                                        || abs(field_1906.x - m_mouseRDblClickPoint.x) > m_mouseDblClickSize.cx / 2
-                                        || abs(field_1906.y - m_mouseRDblClickPoint.y) > m_mouseDblClickSize.cy / 2) {
-                                        pActiveEngine->OnRButtonDown(field_1906);
-                                        m_mouseRDblClickPoint = field_1906;
+                                        || abs(m_ptPointer.x - m_mouseRDblClickPoint.x) > m_mouseDblClickSize.cx / 2
+                                        || abs(m_ptPointer.y - m_mouseRDblClickPoint.y) > m_mouseDblClickSize.cy / 2) {
+                                        pActiveEngine->OnRButtonDown(m_ptPointer);
+                                        m_mouseRDblClickPoint = m_ptPointer;
                                         m_mouseRDblClickCount = 0;
                                     } else {
-                                        pActiveEngine->OnRButtonDblClk(field_1906);
+                                        pActiveEngine->OnRButtonDblClk(m_ptPointer);
                                         m_mouseRDblClickCount = m_mouseDblClickTime;
                                     }
 
-                                    pActiveEngine->OnRButtonUp(field_1906);
+                                    pActiveEngine->OnRButtonUp(m_ptPointer);
                                 }
                             } else {
                                 m_bMouseRButtonDown = TRUE;
                                 if (m_mouseRDblClickCount >= m_mouseDblClickTime
-                                    || abs(field_1906.x - m_mouseRDblClickPoint.x) > m_mouseDblClickSize.cx / 2
-                                    || abs(field_1906.y - m_mouseRDblClickPoint.y) > m_mouseDblClickSize.cy / 2) {
-                                    pActiveEngine->OnRButtonDown(field_1906);
-                                    m_mouseRDblClickPoint = field_1906;
+                                    || abs(m_ptPointer.x - m_mouseRDblClickPoint.x) > m_mouseDblClickSize.cx / 2
+                                    || abs(m_ptPointer.y - m_mouseRDblClickPoint.y) > m_mouseDblClickSize.cy / 2) {
+                                    pActiveEngine->OnRButtonDown(m_ptPointer);
+                                    m_mouseRDblClickPoint = m_ptPointer;
                                     m_mouseRDblClickCount = 0;
                                 } else {
-                                    pActiveEngine->OnRButtonDblClk(field_1906);
+                                    pActiveEngine->OnRButtonDblClk(m_ptPointer);
                                     m_mouseRDblClickCount = m_mouseDblClickTime;
                                 }
                             }
@@ -1462,34 +1466,34 @@ void CChitin::AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD d
                         if (m_bMouseMButtonDown) {
                             if (nMButtonState >= 0) {
                                 m_bMouseMButtonDown = FALSE;
-                                pActiveEngine->OnMButtonUp(field_1906);
+                                pActiveEngine->OnMButtonUp(m_ptPointer);
                             }
                         } else {
                             if (nMButtonState >= 0) {
                                 if ((nMButtonState & 1) != 0) {
                                     if (m_mouseMDblClickCount >= m_mouseDblClickTime
-                                        || abs(field_1906.x - m_mouseMDblClickPoint.x) > m_mouseDblClickSize.cx / 2
-                                        || abs(field_1906.y - m_mouseMDblClickPoint.y) > m_mouseDblClickSize.cy / 2) {
-                                        pActiveEngine->OnMButtonDown(field_1906);
-                                        m_mouseMDblClickPoint = field_1906;
+                                        || abs(m_ptPointer.x - m_mouseMDblClickPoint.x) > m_mouseDblClickSize.cx / 2
+                                        || abs(m_ptPointer.y - m_mouseMDblClickPoint.y) > m_mouseDblClickSize.cy / 2) {
+                                        pActiveEngine->OnMButtonDown(m_ptPointer);
+                                        m_mouseMDblClickPoint = m_ptPointer;
                                         m_mouseMDblClickCount = 0;
                                     } else {
-                                        pActiveEngine->OnMButtonDblClk(field_1906);
+                                        pActiveEngine->OnMButtonDblClk(m_ptPointer);
                                         m_mouseMDblClickCount = m_mouseDblClickTime;
                                     }
 
-                                    pActiveEngine->OnMButtonUp(field_1906);
+                                    pActiveEngine->OnMButtonUp(m_ptPointer);
                                 }
                             } else {
                                 m_bMouseMButtonDown = TRUE;
                                 if (m_mouseMDblClickCount >= m_mouseDblClickTime
-                                    || abs(field_1906.x - m_mouseMDblClickPoint.x) > m_mouseDblClickSize.cx / 2
-                                    || abs(field_1906.y - m_mouseMDblClickPoint.y) > m_mouseDblClickSize.cy / 2) {
-                                    pActiveEngine->OnMButtonDown(field_1906);
-                                    m_mouseMDblClickPoint = field_1906;
+                                    || abs(m_ptPointer.x - m_mouseMDblClickPoint.x) > m_mouseDblClickSize.cx / 2
+                                    || abs(m_ptPointer.y - m_mouseMDblClickPoint.y) > m_mouseDblClickSize.cy / 2) {
+                                    pActiveEngine->OnMButtonDown(m_ptPointer);
+                                    m_mouseMDblClickPoint = m_ptPointer;
                                     m_mouseMDblClickCount = 0;
                                 } else {
-                                    pActiveEngine->OnMButtonDblClk(field_1906);
+                                    pActiveEngine->OnMButtonDblClk(m_ptPointer);
                                     m_mouseMDblClickCount = m_mouseDblClickTime;
                                 }
                             }

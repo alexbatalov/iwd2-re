@@ -693,12 +693,12 @@ BOOL CVidInf::WindowedFlip(BOOL bRenderCursor)
 
     BOOL bPointerRendered;
     if (bRenderCursor) {
-        field_E4.left = 0;
-        field_E4.top = 0;
-        field_E4.right = 0;
-        field_E4.bottom = 0;
-        g_pChitin->field_1902 = 0;
-        bPointerRendered = RenderPointer(0);
+        m_rPointerStorage.left = 0;
+        m_rPointerStorage.top = 0;
+        m_rPointerStorage.right = 0;
+        m_rPointerStorage.bottom = 0;
+        g_pChitin->m_bPointerUpdated = FALSE;
+        bPointerRendered = RenderPointer(CVIDINF_SURFACE_BACK);
     } else {
         bPointerRendered = FALSE;
     }
@@ -725,8 +725,8 @@ BOOL CVidInf::WindowedFlip(BOOL bRenderCursor)
     } while (!g_pChitin->field_1932);
 
     if (bRenderCursor && bPointerRendered) {
-        if (field_E4.Width() > 0 && field_E4.Height() > 0) {
-            m_pPointerVidCell->RestoreBackground(CVIDINF_SURFACE_4, CVIDINF_SURFACE_BACK, field_E4);
+        if (m_rPointerStorage.Width() > 0 && m_rPointerStorage.Height() > 0) {
+            m_pPointerVidCell->RestoreBackground(CVIDINF_SURFACE_4, CVIDINF_SURFACE_BACK, m_rPointerStorage);
         }
     }
 
@@ -1341,6 +1341,197 @@ void CVidInf::LoadFogOWarSurfaces(const CString& a2)
     }
 }
 
+// 0x79F6A0
+BOOL CVidInf::RenderPointer()
+{
+    if (m_bPointerAnimating) {
+        return TRUE;
+    }
+
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        return TRUE;
+    }
+
+    if (g_pChitin->m_bFullscreen) {
+        return RenderPointer(CVIDINF_SURFACE_FRONT);
+    }
+
+    CRect rPointer(m_rPointerStorage);
+
+    CSingleLock positionLock(&(g_pChitin->m_csPointerPosition));
+    CSingleLock renderLock(&m_csRenderPointer);
+    rPointer.OffsetRect(g_pChitin->field_E8.left, g_pChitin->field_E8.top);
+
+    if (g_pChitin->m_bPointerUpdated) {
+        return FALSE;
+    }
+
+    renderLock.Lock(INFINITE);
+    CVidCell* pPointerVidCell = m_pPointerVidCell;
+    renderLock.Unlock();
+
+    if (!m_bPointerInside || pPointerVidCell == NULL || !m_bPointerEnabled) {
+        field_10 = FALSE;
+        return FALSE;
+    }
+
+    g_pChitin->m_bPointerUpdated = TRUE;
+
+    positionLock.Lock(INFINITE);
+    CPoint pt = g_pChitin->m_ptPointer;
+    positionLock.Unlock();
+
+    if (field_10 && rPointer.Width() > 0 && rPointer.Height() > 0) {
+        pPointerVidCell->RestoreBackground(CVIDINF_SURFACE_4,
+            CVIDINF_SURFACE_FRONT,
+            rPointer);
+    }
+
+    field_10 = TRUE;
+
+    g_pChitin->GetWnd()->ClientToScreen(&pt);
+
+    renderLock.Lock(INFINITE);
+    pPointerVidCell->StoreBackground(CVIDINF_SURFACE_FRONT,
+        CVIDINF_SURFACE_4,
+        pt.x,
+        pt.y,
+        g_pChitin->field_E8,
+        m_rPointerStorage,
+        m_nPointerNumber > 0);
+    g_pChitin->GetWnd()->ScreenToClient(&m_rPointerStorage);
+    RenderPointerImage(pPointerVidCell,
+        CVIDINF_SURFACE_FRONT,
+        m_nPointerNumber,
+        pt.x,
+        pt.y,
+        g_pChitin->field_E8);
+    renderLock.Unlock();
+
+    return TRUE;
+}
+
+// 0x79F950
+BOOL CVidInf::RenderPointer(UINT nSurface)
+{
+    CSingleLock positionLock(&(g_pChitin->m_csPointerPosition), FALSE);
+    CSingleLock renderLock(&m_csRenderPointer);
+
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        return RenderPointer3d(nSurface);
+    }
+
+    if (g_pChitin->m_bPointerUpdated) {
+        return FALSE;
+    }
+
+    renderLock.Lock(INFINITE);
+    CVidCell* pPointerVidCell = m_pPointerVidCell;
+    renderLock.Unlock();
+
+    if (!m_bPointerInside || pPointerVidCell == NULL || !m_bPointerEnabled) {
+        field_10 = FALSE;
+        return FALSE;
+    }
+
+    g_pChitin->m_bPointerUpdated = TRUE;
+
+    positionLock.Lock(INFINITE);
+    CPoint pt = g_pChitin->m_ptPointer;
+    positionLock.Unlock();
+
+    CRect rClip(0, 0, CVideo::SCREENWIDTH, CVideo::SCREENHEIGHT);
+
+    if (field_10 && m_rPointerStorage.Width() > 0 && m_rPointerStorage.Height() > 0) {
+        pPointerVidCell->RestoreBackground(CVIDINF_SURFACE_4, nSurface, m_rPointerStorage);
+    }
+
+    field_10 = TRUE;
+
+    renderLock.Lock(INFINITE);
+    pPointerVidCell->StoreBackground(nSurface,
+        CVIDINF_SURFACE_4,
+        pt.x,
+        pt.y,
+        rClip,
+        m_rPointerStorage,
+        m_nPointerNumber > 0);
+    RenderPointerImage(pPointerVidCell, nSurface, m_nPointerNumber, pt.x, pt.y, rClip);
+    renderLock.Unlock();
+
+    return TRUE;
+}
+
+// NOTE: `rClip` can be reference.
+//
+// 0x79FBA0
+void CVidInf::RenderPointerImage(CVidCell* pPointerVidCell, INT nSurface, INT nNumber, INT x, INT y, CRect rClip)
+{
+    CVidCell numberVidCell;
+
+    BOOL bResult = pPointerVidCell->Render(nSurface,
+        x,
+        y,
+        rClip,
+        NULL,
+        0,
+        m_dwCursorRenderFlags,
+        -1);
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo.cpp
+    // __LINE__: 9646
+    UTIL_ASSERT(bResult);
+
+    if (nNumber > 0) {
+        CResRef numberResRef("NUMBER");
+        numberVidCell.SetResRef(numberResRef, TRUE, TRUE);
+        numberVidCell.m_header.SetResRef(numberResRef, TRUE, FALSE);
+
+        if (numberVidCell.pRes != NULL) {
+            numberVidCell.pRes->field_7E = numberVidCell.m_header.GetResRef() == "";
+        }
+
+        numberVidCell.m_bDoubleSize = FALSE;
+
+        numberVidCell.SequenceSet(0);
+        numberVidCell.SetTintColor(pPointerVidCell->GetTintColor());
+
+        CSize frameSize;
+        pPointerVidCell->GetCurrentFrameSize(frameSize, FALSE);
+
+        CPoint ptCenter;
+        pPointerVidCell->GetCurrentCenterPoint(ptCenter, FALSE);
+
+        CPoint pt(max(frameSize.cx - ptCenter.x - 7, 9) + x,
+            max(frameSize.cy - ptCenter.y - 7, 9) + y);
+
+        INT nCurr = nNumber;
+        if (pt.y >= y - ptCenter.y) {
+            while (nCurr > 0 && pt.x >= x - ptCenter.x) {
+                INT nDigit = nCurr % 10;
+                nCurr /= 10;
+                if (nDigit > 0 || nCurr > 0) {
+                    numberVidCell.FrameSet(nDigit);
+
+                    BOOL bResult = numberVidCell.Render(nSurface,
+                        pt.x,
+                        pt.y,
+                        rClip,
+                        NULL,
+                        0,
+                        m_dwCursorRenderFlags,
+                        -1);
+
+                    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo.cpp
+                    // __LINE__: 9686
+                    UTIL_ASSERT(bResult);
+                }
+                pt.x -= 5;
+            }
+        }
+    }
+}
+
 // 0x79FFA0
 void CVidInf::RestoreSurfaces()
 {
@@ -1566,6 +1757,14 @@ BOOL CVidInf::WindowedFlip3d(BOOL bRenderCursor)
     // TODO: Incomplete.
 
     return TRUE;
+}
+
+// 0x7BE300
+BOOL CVidInf::RenderPointer3d(UINT nSurface)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // #binary-identical

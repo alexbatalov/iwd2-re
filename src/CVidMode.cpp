@@ -42,8 +42,8 @@ CVidMode::CVidMode()
     field_CA = 0;
     field_D2 = 0;
     field_DC = 0;
-    field_D4 = 0;
-    field_D8 = 1;
+    m_bPointerEnabled = FALSE;
+    m_bPointerInside = TRUE;
     m_nColorDepth = 0;
     field_E0 = 0;
     m_nSurfaces = 0;
@@ -52,17 +52,17 @@ CVidMode::CVidMode()
     m_pPointerVidCell = NULL;
     m_bPointerAnimating = FALSE;
     pSurfaces = NULL;
-    field_E4.left = 0;
-    field_E4.top = 0;
-    field_E4.right = 0;
-    field_E4.bottom = 0;
+    m_rPointerStorage.left = 0;
+    m_rPointerStorage.top = 0;
+    m_rPointerStorage.right = 0;
+    m_rPointerStorage.bottom = 0;
     rgbGlobalTint = 0xFFFFFF;
     field_4 = 0;
     m_bPrintScreen = FALSE;
     m_nBrightnessCorrection = 0;
     m_nGammaCorrection = 0;
     m_nPointerNumber = 0;
-    field_C = 0;
+    m_dwCursorRenderFlags = 0;
     field_10 = 1;
     field_14 = 0;
     m_bFadeTo = 0;
@@ -843,7 +843,7 @@ BOOL CVidMode::LockSurface(UINT nIndex, LPDDSURFACEDESC pSurfaceDesc, const CRec
 // 0x79A670
 BOOL CVidMode::SetPointer(CVidCell* pVidCell, BOOLEAN bAnimating, INT nPointerNumber)
 {
-    CSingleLock lock(&field_28, FALSE);
+    CSingleLock lock(&m_csRenderPointer, FALSE);
     lock.Lock(INFINITE);
 
     m_nPointerNumber = nPointerNumber;
@@ -858,7 +858,7 @@ BOOL CVidMode::SetPointer(CVidCell* pVidCell, BOOLEAN bAnimating, INT nPointerNu
 // 0x79A700
 BOOL CVidMode::SetPointer(CVidCell* pVidCell, CResRef cResRef, BOOLEAN bAnimating, INT nPointerNumber)
 {
-    CSingleLock lock(&field_28, FALSE);
+    CSingleLock lock(&m_csRenderPointer, FALSE);
     lock.Lock(INFINITE);
 
     pVidCell->SetResRef(cResRef, TRUE, TRUE);
@@ -1192,7 +1192,7 @@ void CVidMode::RenderFlash(UINT nSurface, COLORREF rgbColor, unsigned char a4, c
 }
 
 // 0x799C90
-BOOL CVidMode::RenderPointer(unsigned int)
+BOOL CVidMode::RenderPointer(UINT nSurface)
 {
     return TRUE;
 }

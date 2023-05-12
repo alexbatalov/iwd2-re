@@ -110,7 +110,7 @@ public:
     /* 00EC */ virtual void PrintScreen();
     /* 00F0 */ virtual void RenderFlash(UINT nSurface, COLORREF rgbColor, unsigned char a4, const CRect& a5);
     /* 00F4 */ virtual BOOL RenderPoly(UINT nSurface, CRect& a3, POINT* apt, int cpt, COLORREF rgbColor);
-    /* 00F8 */ virtual BOOL RenderPointer(unsigned int);
+    /* 00F8 */ virtual BOOL RenderPointer(UINT nSurface);
     /* 00FC */ virtual BOOL RenderPointer();
     /* 0100 */ virtual void RestoreSurfaces();
     /* 0104 */ virtual BOOL SetPointer(CVidCell* pVidCell, CResRef cResRef, BOOLEAN bAnimating, INT nPointerNumber);
@@ -129,15 +129,15 @@ public:
     INT GetNumSurfaces() { return m_nSurfaces; }
 
     /* 0004 */ int field_4;
-    /* 0008 */ int m_nPointerNumber; // #guess
-    /* 000C */ int field_C;
+    /* 0008 */ INT m_nPointerNumber;
+    /* 000C */ DWORD m_dwCursorRenderFlags;
     /* 0010 */ int field_10;
     /* 0014 */ int field_14;
     /* 0018 */ DWORD m_dwRBitMask; // #guess
     /* 001C */ DWORD m_dwGBitMask; // #guess
     /* 0020 */ DWORD m_dwBBitMask; // #guess
     /* 0024 */ int field_24;
-    /* 0028 */ CCriticalSection field_28;
+    /* 0028 */ CCriticalSection m_csRenderPointer;
     /* 0048 */ BOOLEAN m_bFadeTo;
     /* 0049 */ BYTE m_nFade;
     /* 004A */ CCriticalSection field_4A;
@@ -164,11 +164,11 @@ public:
     /* 00C6 */ DWORD field_C6;
     /* 00CA */ DWORD field_CA;
     /* 00D2 */ short field_D2;
-    /* 00D4 */ int field_D4;
-    /* 00D8 */ int field_D8;
+    /* 00D4 */ BOOL m_bPointerEnabled;
+    /* 00D8 */ BOOL m_bPointerInside;
     /* 00DC */ int field_DC;
     /* 00E0 */ int field_E0;
-    /* 00E4 */ CRect field_E4;
+    /* 00E4 */ CRect m_rPointerStorage;
 };
 
 #endif /* CVIDMODE_H_ */

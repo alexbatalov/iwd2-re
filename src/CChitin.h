@@ -227,8 +227,8 @@ public:
     /* 0952 */ CNetwork cNetwork;
     /* 18D4 */ CGameSpy cGameSpy; // #guess
     /* 1900 */ CUnknown1 field_1900;
-    /* 1902 */ int field_1902;
-    /* 1906 */ CPoint field_1906;
+    /* 1902 */ BOOL m_bPointerUpdated;
+    /* 1906 */ CPoint m_ptPointer;
     /* 190E */ LONG nAUCounter;
     /* 1912 */ BOOL m_bInAsynchronousUpdate;
     /* 1916 */ CAliasList lAliases; // #guess
@@ -238,7 +238,7 @@ public:
     /* 193E */ int m_bSynchronousUpdate;
     /* 1942 */ int m_nKeyboardDelay; // #guess
     /* 1946 */ int m_nKeyboardSpeed; // #guess
-    /* 194A */ CCriticalSection field_194A;
+    /* 194A */ CCriticalSection m_csPointerPosition;
     /* 196A */ CProgressBar cProgressBar;
     /* 19D6 */ DWORD m_dwThreadIds[CHITIN_MAX_THREADS]; // #guess
     /* 19FE */ HANDLE m_hThreadHandles[CHITIN_MAX_THREADS]; // #guess

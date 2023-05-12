@@ -34,6 +34,8 @@ public:
     /* 00D0 */ BOOL GetFXSize(CSize& size) override;
     /* 00E4 */ int GetNumVRamSurfaces() override;
     /* 00E8 */ void LoadFogOWarSurfaces(const CString& a2) override;
+    /* 00F8 */ BOOL RenderPointer(UINT nSurface) override;
+    /* 00FC */ BOOL RenderPointer() override;
     /* 0100 */ void RestoreSurfaces() override;
     /* 010C */ void ParsePixelFormat(const DDPIXELFORMAT& ddpf) override;
     /* 011C */ ~CVidInf() override;
@@ -58,7 +60,9 @@ public:
     BOOL BKRenderLine(int nXFrom, int nYFrom, int nXTo, int nYTo, const CRect& rSurface, COLORREF rgbColor);
     BOOL BKTextOut(CVidFont* pFont, const CString& sString, int x, int y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded);
     void GetFogOWarTileRect(unsigned char a2, CRect& rTileRect);
+    void RenderPointerImage(CVidCell* pPointerVidCell, INT nSurface, INT nPointerNumber, INT x, INT y, CRect rClip);
     BOOL WindowedFlip3d(BOOL bRenderCursor);
+    BOOL RenderPointer3d(UINT nSurface);
     void DoTextOut3d(UINT nSurface, const CString& sText, int x, int y, COLORREF color);
 
     static unsigned char dword_907B20[512 * 512 * 4];

@@ -68,19 +68,19 @@ void CInfCursor::CursorUpdate(CVidMode* pVidMode)
 
             m_vcArrow.FrameAdvance();
 
-            g_pBaldurChitin->field_1902 = 0;
+            g_pBaldurChitin->m_bPointerUpdated = FALSE;
             break;
         case 100:
             // NOTE: Uninline.
             SetScrollArrowDirection();
             m_vcArrow.FrameAdvance();
 
-            g_pBaldurChitin->field_1902 = 0;
+            g_pBaldurChitin->m_bPointerUpdated = FALSE;
             break;
         case 101:
             m_vcToolTip.FrameAdvance();
 
-            g_pBaldurChitin->field_1902 = 0;
+            g_pBaldurChitin->m_bPointerUpdated = FALSE;
             break;
         case 102:
             if (m_vcCustom.pRes == NULL) {
@@ -91,7 +91,7 @@ void CInfCursor::CursorUpdate(CVidMode* pVidMode)
 
             if (field_A06) {
                 m_vcCustom.FrameAdvance();
-                g_pBaldurChitin->field_1902 = 0;
+                g_pBaldurChitin->m_bPointerUpdated = FALSE;
             }
 
             break;
@@ -101,7 +101,7 @@ void CInfCursor::CursorUpdate(CVidMode* pVidMode)
         }
     } else {
         pVidMode->SetPointer(NULL, FALSE, -1);
-        pVidMode->field_D4 = FALSE;
+        pVidMode->m_bPointerEnabled = FALSE;
     }
 }
 
@@ -199,8 +199,8 @@ void CInfCursor::SetCursor(INT nNewCursor, BOOLEAN bForce)
                 m_vcToolTip.field_5E2 = 0;
 
                 pVidMode->SetPointer(&m_vcToolTip, TRUE, -1);
-                pVidMode->field_D4 = 1;
-                g_pBaldurChitin->field_1902 = 0;
+                pVidMode->m_bPointerEnabled = TRUE;
+                g_pBaldurChitin->m_bPointerUpdated = FALSE;
             }
             break;
         case 102:
@@ -213,7 +213,7 @@ void CInfCursor::SetCursor(INT nNewCursor, BOOLEAN bForce)
                 }
 
                 pVidMode->SetPointer(&m_vcCustom, field_A06, -1);
-                g_pBaldurChitin->field_1902 = 0;
+                g_pBaldurChitin->m_bPointerUpdated = FALSE;
             }
             break;
         default:
@@ -228,8 +228,8 @@ void CInfCursor::SetCursor(INT nNewCursor, BOOLEAN bForce)
                 m_vcCursors.FrameSet(0);
 
                 pVidMode->SetPointer(&m_vcCursors, 0, -1);
-                pVidMode->field_D4 = 1;
-                g_pBaldurChitin->field_1902 = 0;
+                pVidMode->m_bPointerEnabled = TRUE;
+                g_pBaldurChitin->m_bPointerUpdated = FALSE;
             }
             break;
         }
@@ -246,13 +246,13 @@ void CInfCursor::SetGreyScale(BOOLEAN bGreyScale)
         CVidCell* vc = GetCurrentCursor();
         vc->SetTintColor(RGB(180, 180, 180));
 
-        g_pBaldurChitin->GetCurrentVideoMode()->field_C |= 0xA0000;
+        g_pBaldurChitin->GetCurrentVideoMode()->m_dwCursorRenderFlags |= 0xA0000;
     } else {
         // NOTE: Uninline.
         CVidCell* vc = GetCurrentCursor();
         vc->SetTintColor(RGB(255, 255, 255));
 
-        g_pBaldurChitin->GetCurrentVideoMode()->field_C &= ~0xA0000;
+        g_pBaldurChitin->GetCurrentVideoMode()->m_dwCursorRenderFlags &= ~0xA0000;
     }
 }
 

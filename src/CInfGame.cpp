@@ -134,6 +134,7 @@ BOOL CInfGame::dword_8E7524;
 // 0x59CC30
 CInfGame::CInfGame()
 {
+    field_1BA1 = 4;
     // TODO: Incomplete.
 }
 

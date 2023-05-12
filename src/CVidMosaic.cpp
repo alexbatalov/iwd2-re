@@ -123,6 +123,10 @@ BOOL CVidMosaic::Render(INT nSurface, int x, int y, const CRect& rMosaic, const 
 
             rTile.right = min(nMosaicWidth - nTileX * nTileSize, nTileSize);
 
+            // TODO: Figure out why pointer needs to be rendered for every tile
+            // in mosaic.
+            g_pChitin->GetCurrentVideoMode()->RenderPointer();
+
             if (pVidMode->LockSurface(m_nFxSurface, &surfaceDesc, rTile)) {
                 (this->*Blt)(reinterpret_cast<DWORD*>(surfaceDesc.lpSurface),
                     surfaceDesc.lPitch,

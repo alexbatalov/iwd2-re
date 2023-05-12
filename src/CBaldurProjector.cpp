@@ -279,7 +279,7 @@ void CBaldurProjector::EngineActivated()
     }
 
     pDimm->Suspend();
-    pVidMode->field_D4 = 0;
+    pVidMode->m_bPointerEnabled = FALSE;
     field_65A = 4;
     g_pChitin->pActiveEngine->pVidMode->EraseScreen(CVIDINF_SURFACE_BACK, RGB(0, 0, 0));
 
@@ -314,7 +314,7 @@ void CBaldurProjector::EngineDeactivated()
         // TODO: Incomplete.
 
         pDimm->Resume();
-        pVidMode->field_D4 = 1;
+        pVidMode->m_bPointerEnabled = TRUE;
 
         LeaveCriticalSection(&(g_pChitin->field_3AC));
     }
