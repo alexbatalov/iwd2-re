@@ -1878,6 +1878,14 @@ void CUIControlButtonOptionsSelection::OnLButtonClick(CPoint pt)
             }
             break;
         case 26:
+            dwStrId = 18560;
+            if (m_bSelected) {
+                pOptions->m_bAutoPauseOnTrap = TRUE;
+            } else {
+                pOptions->m_bAutoPauseOnTrap = FALSE;
+            }
+            break;
+        case 30:
             dwStrId = 23514;
             if (m_bSelected) {
                 pOptions->m_nAutoPauseState |= 0x200;
