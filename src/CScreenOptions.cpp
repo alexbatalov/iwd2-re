@@ -1596,6 +1596,8 @@ void CScreenOptions::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId)
     // __LINE__: 2779
     UTIL_ASSERT(pText != NULL);
 
+    pText->RemoveAll();
+
     g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes);
     UpdateText(pText, "%s", strRes.szText);
 }
