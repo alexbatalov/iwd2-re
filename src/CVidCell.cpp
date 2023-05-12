@@ -871,7 +871,7 @@ BOOL CVidCell::Render(INT nSurface, int x, int y, const CRect& rClip, CVidPoly* 
     }
 
     DDCOLORKEY ddck;
-    g_pChitin->GetCurrentVideoMode()->pSurfaces[nSurface]->GetColorKey(DDCKEY_SRCBLT, &ddck);
+    g_pChitin->GetCurrentVideoMode()->pSurfaces[m_nFxSurface]->GetColorKey(DDCKEY_SRCBLT, &ddck);
 
     if (m_pFrame == NULL) {
         if (!GetFrame(FALSE)) {
