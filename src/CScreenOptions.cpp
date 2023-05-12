@@ -444,6 +444,15 @@ void CScreenOptions::OnPortraitLClick(DWORD nPortrait)
     }
 }
 
+// 0x66A540
+void CScreenOptions::TimerAsynchronousUpdate()
+{
+    g_pBaldurChitin->m_pEngineWorld->AsynchronousUpdate(FALSE);
+    UpdateCursorShape(0);
+    m_cUIManager.TimerAsynchronousUpdate();
+    g_pBaldurChitin->m_pObjectCursor->CursorUpdate(pVidMode);
+}
+
 // 0x654730
 void CScreenOptions::TimerSynchronousUpdate()
 {

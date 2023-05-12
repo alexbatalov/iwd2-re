@@ -10,6 +10,7 @@ class CScreenWorld : public CBaldurEngine {
 public:
     CScreenWorld();
     ~CScreenWorld();
+    void AsynchronousUpdate(BOOL bActiveEngine);
     BOOL TogglePauseGame(char a2, char a3, int a4);
     void ClearChatMessages();
     void HideInterface();

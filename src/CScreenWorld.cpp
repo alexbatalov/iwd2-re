@@ -12,6 +12,12 @@ CScreenWorld::~CScreenWorld()
     // TODO: Incomplete.
 }
 
+// 0x68C3D0
+void CScreenWorld::AsynchronousUpdate(BOOL bActiveEngine)
+{
+    // TODO: Incomplete.
+}
+
 // 0x68DFD0
 BOOL CScreenWorld::TogglePauseGame(char a2, char a3, int a4)
 {
