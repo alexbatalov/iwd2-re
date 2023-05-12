@@ -2276,7 +2276,7 @@ void CUIControlSliderOptionsSlider::OnThumbFinalChange()
         case 1:
             dwStrId = 18017;
             if (m_nValue + 1 < m_nKnobJumpCount) {
-                pOptions->m_nTooltips = 100 * (m_nValue + 1) / (m_nKnobJumpCount - 1);
+                pOptions->m_nTooltips = 100 * m_nValue / (m_nKnobJumpCount - 1);
             } else {
                 pOptions->m_nTooltips = 0x7FFFFFFF;
             }
