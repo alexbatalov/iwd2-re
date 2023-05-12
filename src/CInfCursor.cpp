@@ -227,7 +227,7 @@ void CInfCursor::SetCursor(INT nNewCursor, BOOLEAN bForce)
 
                 m_vcCursors.FrameSet(0);
 
-                pVidMode->SetPointer(&m_vcCustom, 0, -1);
+                pVidMode->SetPointer(&m_vcCursors, 0, -1);
                 pVidMode->field_D4 = 1;
                 g_pBaldurChitin->field_1902 = 0;
             }
