@@ -258,23 +258,23 @@ BOOL CVidPalette::GetAdd(CVIDPALETTE_COLOR& rgbInv, CVIDIMG_PALETTEAFFECT* pAffe
 
     if ((dwFlags & 0x40000) != 0) {
         if (nBrightnessCorrection != 0) {
-            rgbInv.rgbRed = nBrightnessCorrection * GetRValue(pAffectArgs->rgbAddColor);
-            rgbInv.rgbGreen = nBrightnessCorrection * GetGValue(pAffectArgs->rgbAddColor);
-            rgbInv.rgbBlue = nBrightnessCorrection * GetBValue(pAffectArgs->rgbAddColor);
+            rgbInv.rgbRed = static_cast<BYTE>(~nBrightnessCorrection) * static_cast<BYTE>(~GetRValue(pAffectArgs->rgbAddColor));
+            rgbInv.rgbGreen = static_cast<BYTE>(~nBrightnessCorrection) * static_cast<BYTE>(~GetGValue(pAffectArgs->rgbAddColor));
+            rgbInv.rgbBlue = static_cast<BYTE>(~nBrightnessCorrection) * static_cast<BYTE>(~GetBValue(pAffectArgs->rgbAddColor));
             nShiftBack = 16;
             return TRUE;
         } else {
-            rgbInv.rgbRed = GetRValue(pAffectArgs->rgbAddColor);
-            rgbInv.rgbGreen = GetGValue(pAffectArgs->rgbAddColor);
-            rgbInv.rgbBlue = GetBValue(pAffectArgs->rgbAddColor);
+            rgbInv.rgbRed = static_cast<BYTE>(~GetRValue(pAffectArgs->rgbAddColor));
+            rgbInv.rgbGreen = static_cast<BYTE>(~GetGValue(pAffectArgs->rgbAddColor));
+            rgbInv.rgbBlue = static_cast<BYTE>(~GetBValue(pAffectArgs->rgbAddColor));
             nShiftBack = 8;
             return TRUE;
         }
     } else {
         if (nBrightnessCorrection != 0) {
-            rgbInv.rgbRed = ~nBrightnessCorrection;
-            rgbInv.rgbGreen = ~nBrightnessCorrection;
-            rgbInv.rgbBlue = ~nBrightnessCorrection;
+            rgbInv.rgbRed = static_cast<BYTE>(~nBrightnessCorrection);
+            rgbInv.rgbGreen = static_cast<BYTE>(~nBrightnessCorrection);
+            rgbInv.rgbBlue = static_cast<BYTE>(~nBrightnessCorrection);
             nShiftBack = 8;
             return TRUE;
         } else {
