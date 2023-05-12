@@ -1265,7 +1265,97 @@ void CScreenOptions::UpdateSelectSoundsPanel(BOOLEAN bInitialUpdate)
 // 0x6565B0
 void CScreenOptions::UpdateGamePlayPanel(BOOLEAN bInitialUpdate)
 {
-    // TODO: Incomplete.
+    CGameOptions* pOptions = &(g_pBaldurChitin->m_pObjectGame->m_cOptions);
+    CUIPanel* pPanel = m_cUIManager.GetPanel(8);
+    CUIControlSlider* pSlider;
+    CUIControlButton3State* pButton;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
+    // __LINE__: 2191
+    UTIL_ASSERT(pPanel != NULL);
+
+    field_FA = pPanel->GetControl(41);
+
+    pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(1));
+    UTIL_ASSERT(pSlider != NULL); // 2197
+    // TODO: Unclear.
+    pSlider->m_nValue = pOptions->m_nTooltips != 0x7FFFFFFF
+        ? max(min(static_cast<short>(((pSlider->m_nKnobJumpCount - 1) * pOptions->m_nTooltips + 99) / 100), pSlider->m_nKnobJumpCount - 1), 0)
+        : max(min(static_cast<short>(pSlider->m_nKnobJumpCount - 1), pSlider->m_nKnobJumpCount - 1), 0);
+    pSlider->InvalidateRect();
+
+    pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(2));
+    UTIL_ASSERT(pSlider != NULL); // 2209
+    pSlider->m_nValue = max(min(static_cast<short>(((pSlider->m_nKnobJumpCount - 1) * (pOptions->m_nMouseScrollSpeed - 6) + 43) / 44), pSlider->m_nKnobJumpCount - 1), 0);
+    pSlider->InvalidateRect();
+
+    pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(3));
+    UTIL_ASSERT(pSlider != NULL); // 2214
+    pSlider->m_nValue = max(min(static_cast<short>(((pSlider->m_nKnobJumpCount - 1) * (pOptions->m_nKeyboardScrollSpeed - 18) + 131) / 132), pSlider->m_nKnobJumpCount - 1), 0);
+    pSlider->InvalidateRect();
+
+    pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(12));
+    UTIL_ASSERT(pSlider != NULL); // 2219
+
+    if (g_pBaldurChitin->cNetwork.m_bConnectionEstablished && !g_pBaldurChitin->cNetwork.m_bIsHost) {
+        switch (pOptions->m_nMPDifficultyMultiplier) {
+        case -25:
+            pOptions->m_nDifficultyLevel = 2;
+            pSlider->m_bKnobEnabled = FALSE;
+            break;
+        case 0:
+            pOptions->m_nDifficultyLevel = 3;
+            pSlider->m_bKnobEnabled = FALSE;
+            break;
+        case 50:
+            pOptions->m_nDifficultyLevel = 4;
+            pSlider->m_bKnobEnabled = FALSE;
+            break;
+        case 100:
+            pOptions->m_nDifficultyLevel = 5;
+            pSlider->m_bKnobEnabled = FALSE;
+            break;
+        default:
+            pOptions->m_nDifficultyLevel = 1;
+            pSlider->m_bKnobEnabled = FALSE;
+            break;
+        }
+    } else {
+        pSlider->m_bKnobEnabled = pOptions->field_C2 == 0;
+    }
+
+    pSlider->m_nValue = max(min(static_cast<short>(((pSlider->m_nKnobJumpCount - 1) * (pOptions->m_nDifficultyLevel - 1) + 4) / 5), pSlider->m_nKnobJumpCount - 1), 0);
+
+    if (pSlider->m_bKnobEnabled) {
+        if (g_pBaldurChitin->m_pObjectGame->m_nDifficultyLevel != -1) {
+            g_pBaldurChitin->m_pObjectGame->m_nDifficultyLevel = pOptions->m_nDifficultyLevel;
+        }
+    }
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(14));
+    UTIL_ASSERT(pButton != NULL); // 2263
+    pButton->SetSelected(pOptions->m_bAlwaysDither);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(19));
+    UTIL_ASSERT(pButton != NULL); // 2267
+    if (pOptions->field_4) {
+        pButton->SetSelected(pOptions->m_bGore);
+    } else {
+        pPanel->GetControl(19)->SetActive(FALSE);
+        pPanel->GetControl(19)->SetInactiveRender(FALSE);
+        pPanel->GetControl(27)->SetActive(FALSE);
+        pPanel->GetControl(27)->SetInactiveRender(FALSE);
+        pPanel->GetControl(0x10000011)->SetActive(FALSE);
+        pPanel->GetControl(0x10000011)->SetInactiveRender(FALSE);
+    }
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(42));
+    UTIL_ASSERT(pButton != NULL); // 2281
+    pButton->SetSelected(pOptions->m_bDarkvision);
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(50));
+    UTIL_ASSERT(pButton != NULL); // 2285
+    pButton->SetSelected(pOptions->m_bMaxHP);
 }
 
 // 0x656B00
