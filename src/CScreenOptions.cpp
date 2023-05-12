@@ -1101,23 +1101,23 @@ void CScreenOptions::UpdateGraphicsPanel(BOOLEAN bInitialUpdate)
     if (bInitialUpdate) {
         pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(5));
         UTIL_ASSERT(pButton != NULL); // 1961
-        pButton->SetEnabled(g_pBaldurChitin->m_bFullscreen
-            && (g_pBaldurChitin->cVideo.m_bSupports16bpp
-                || g_pBaldurChitin->cVideo.m_nBpp == 16));
+        pButton->SetEnabled((g_pBaldurChitin->m_bFullscreen
+                                && g_pBaldurChitin->cVideo.m_bSupports16bpp)
+            || g_pBaldurChitin->cVideo.m_nBpp == 16);
         pButton->SetSelected(g_pBaldurChitin->cVideo.m_nBpp == 16);
 
         pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(6));
         UTIL_ASSERT(pButton != NULL); // 1966
-        pButton->SetEnabled(g_pBaldurChitin->m_bFullscreen
-            && (g_pBaldurChitin->cVideo.m_bSupports24bpp
-                || g_pBaldurChitin->cVideo.m_nBpp == 24));
+        pButton->SetEnabled((g_pBaldurChitin->m_bFullscreen
+                                && g_pBaldurChitin->cVideo.m_bSupports24bpp)
+            || g_pBaldurChitin->cVideo.m_nBpp == 24);
         pButton->SetSelected(g_pBaldurChitin->cVideo.m_nBpp == 24);
 
         pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(7));
         UTIL_ASSERT(pButton != NULL); // 1971
-        pButton->SetEnabled(g_pBaldurChitin->m_bFullscreen
-            && (g_pBaldurChitin->cVideo.m_bSupports32bpp
-                || g_pBaldurChitin->cVideo.m_nBpp == 32));
+        pButton->SetEnabled((g_pBaldurChitin->m_bFullscreen
+                                && g_pBaldurChitin->cVideo.m_bSupports32bpp)
+            || g_pBaldurChitin->cVideo.m_nBpp == 32);
         pButton->SetSelected(g_pBaldurChitin->cVideo.m_nBpp == 32);
 
         pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(9));
