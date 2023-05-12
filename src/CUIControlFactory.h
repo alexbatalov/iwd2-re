@@ -10,6 +10,7 @@ class CUIControlButtonHotArea : public CUIControlButton {
 public:
     CUIControlButtonHotArea(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonHotArea() override;
+    BOOL Render(BOOL bForce) override;
     BOOL OnLButtonDown(CPoint pt) override;
     virtual void OnHotAreaClick(CPoint pt);
 };

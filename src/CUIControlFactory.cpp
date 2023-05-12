@@ -474,6 +474,12 @@ CUIControlButtonHotArea::~CUIControlButtonHotArea()
 {
 }
 
+// 0x799E20
+BOOL CUIControlButtonHotArea::Render(BOOL bForce)
+{
+    return FALSE;
+}
+
 // 0x778910
 BOOL CUIControlButtonHotArea::OnLButtonDown(CPoint pt)
 {
