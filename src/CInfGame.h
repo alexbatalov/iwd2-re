@@ -101,6 +101,7 @@ public:
     /* 4AA2 */ ULONG field_4AA2;
     // NOTE: Can also be BYTE indicating number of expansion pack.
     /* 4BD5 */ BOOLEAN m_bExpansion;
+    /* 4BD8 */ DWORD m_nDifficultyLevel;
     /* 50D8 */ BOOL field_50D8;
     /* 50DC */ unsigned char field_50DC;
 };
