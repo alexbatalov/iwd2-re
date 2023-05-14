@@ -35,6 +35,7 @@ public:
     /* 00C4 */ void TimerSynchronousUpdate() override;
     /* 0104 */ void CancelEngine() override;
 
+    void EnablePopupPanel(DWORD dwPanelId, BOOL bEnable);
     void SummonPopup(DWORD nID);
     void DismissPopup();
     void sub_5FCA00(int a1);

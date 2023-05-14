@@ -353,6 +353,18 @@ void CScreenConnection::TimerSynchronousUpdate()
     }
 }
 
+// NOTE: Inlined.
+void CScreenConnection::EnablePopupPanel(DWORD dwPanelId, BOOL bEnable)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 1718
+    UTIL_ASSERT(pPanel != NULL);
+
+    pPanel->SetEnabled(dwPanelId);
+}
+
 // 0x5FC6F0
 void CScreenConnection::SummonPopup(DWORD nID)
 {
