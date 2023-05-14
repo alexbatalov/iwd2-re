@@ -659,7 +659,50 @@ void CScreenConnection::SummonPopup(DWORD nID)
 // 0x5FC850
 void CScreenConnection::DismissPopup()
 {
-    // TODO: Incomplete.
+    if (m_cUIManager.m_pFocusedControl != NULL) {
+        m_cUIManager.m_pFocusedControl->KillFocus();
+        m_cUIManager.m_pFocusedControl = NULL;
+    }
+
+    CUIPanel* pPanel = m_lPopupStack.RemoveTail();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 2024
+    UTIL_ASSERT(pPanel != NULL);
+
+    // NOTE: Uninline.
+    ShowPopupPanel(pPanel->m_nID, FALSE);
+
+    CUIPanel* pMainPanel = m_cUIManager.GetPanel(0);
+    pMainPanel->InvalidateRect(NULL);
+
+    if (m_lPopupStack.GetTailPosition() != NULL) {
+        CUIPanel* pPanel = m_lPopupStack.GetTail();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 2041
+        UTIL_ASSERT(pPanel != NULL);
+
+        // NOTE: Uninline.
+        ShowPopupPanel(pPanel->m_nID, TRUE);
+
+        // NOTE: Uninline.
+        EnablePopupPanel(pPanel->m_nID, TRUE);
+
+        UpdatePopupPanel(pPanel->m_nID);
+    } else {
+        EnableMainPanel(TRUE);
+        UpdateMainPanel();
+    }
+
+    if (g_pBaldurChitin->field_1A0) {
+        // FIXME: Unused.
+        g_pChitin->GetWnd();
+
+        if (g_pBaldurChitin->cImm.field_128) {
+            g_pBaldurChitin->cImm.sub_7C2E10(g_pChitin->GetWnd()->GetSafeHwnd());
+        }
+    }
 }
 
 // 0x5FCA00
@@ -703,6 +746,12 @@ void CScreenConnection::EnableMainPanel(BOOL bEnable)
             PlayGUISound(RESREF_SOUND_WINDOWCLOSE);
         }
     }
+}
+
+// 0x5FEE50
+void CScreenConnection::UpdateMainPanel()
+{
+    // TODO: Incomplete.
 }
 
 // 0x5FF690

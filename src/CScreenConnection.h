@@ -61,6 +61,7 @@ public:
     void OnDoneButtonClick();
     void OnCancelButtonClick();
     void EnableMainPanel(BOOL bEnable);
+    void UpdateMainPanel();
     void UpdateProtocolPanel();
     void UpdateSerialPanel();
     void UpdateModemPanel();
