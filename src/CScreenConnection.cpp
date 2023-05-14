@@ -129,8 +129,8 @@ CScreenConnection::CScreenConnection()
     // FIXME: Where is key 90?
 
     m_bCtrlKeyDown = FALSE;
-    field_442 = 0;
-    field_446 = 0;
+    m_bShiftKeyDown = FALSE;
+    m_bCapsLockKeyOn = FALSE;
     m_nProtocol = 0;
     field_476 = -1;
     field_472 = -1;
@@ -160,10 +160,70 @@ CScreenConnection::CScreenConnection()
     m_bPlayEndCredits = FALSE;
 }
 
+// 0x49FC40
+BOOL CScreenConnection::CheckSystemKeyCtrl()
+{
+    return TRUE;
+}
+
 // 0x5FA8B0
 void CScreenConnection::SetSystemKeyCtrl(BOOLEAN bValue)
 {
     m_bCtrlKeyDown = bValue;
+}
+
+// 0x49FC40
+BOOL CScreenConnection::CheckSystemKeyShift()
+{
+    return TRUE;
+}
+
+// 0x638D70
+void CScreenConnection::SetSystemKeyShift(BOOL bValue)
+{
+    m_bShiftKeyDown = bValue;
+}
+
+// 0x638D80
+BOOL CScreenConnection::GetShiftKey()
+{
+    return m_bShiftKeyDown;
+}
+
+// 0x49FC40
+BOOL CScreenConnection::CheckSystemKeyCapsLock()
+{
+    return TRUE;
+}
+
+// 0x638D90
+void CScreenConnection::SetSystemKeyCapsLock(BOOL bValue)
+{
+    m_bCapsLockKeyOn = bValue;
+}
+
+// 0x638DA0
+BOOL CScreenConnection::GetCapsLockKey()
+{
+    return m_bCapsLockKeyOn;
+}
+
+// 0x49FC40
+BOOL CScreenConnection::CheckMouseMove()
+{
+    return TRUE;
+}
+
+// 0x49FC40
+BOOL CScreenConnection::CheckMouseLButton()
+{
+    return TRUE;
+}
+
+// 0x49FC40
+BOOL CScreenConnection::CheckMouseRButton()
+{
+    return TRUE;
 }
 
 // 0x6717F0
