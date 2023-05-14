@@ -52,6 +52,7 @@ public:
 
     void RenderTorch();
     void EnablePopupPanel(DWORD dwPanelId, BOOL bEnable);
+    void ShowPopupPanel(DWORD dwPanelId, BOOL bShow);
     void ResetPopupPanel(DWORD nID);
     void UpdatePopupPanel(DWORD nID);
     void SummonPopup(DWORD nID);
