@@ -85,6 +85,19 @@ typedef struct UI_Control_Label_st {
     WORD nTextFlags;
 } UI_CONTROL_LABEL;
 
+typedef struct UI_Control_ScrollBar_st {
+    UI_CONTROL base;
+    RESREF refBam;
+    SHORT nSequence;
+    SHORT nScrollUpNormalFrame;
+    SHORT nScrollUpPressedFrame;
+    SHORT nScrollDownNormalFrame;
+    SHORT nScrollDownPressedFrame;
+    SHORT nTrackFrame;
+    SHORT nThumbFrame;
+    DWORD nTextDisplayID;
+} UI_CONTROL_SCROLLBAR;
+
 typedef struct UI_Control_TextDisplay_st {
     UI_CONTROL base;
     RESREF refTextFont;

@@ -35,6 +35,7 @@ public:
     /* 0014 */ void OnMouseMove(CPoint pt) override;
     /* 0018 */ BOOL OnLButtonDown(CPoint pt) override;
     /* 001C */ void OnLButtonUp(CPoint pt) override;
+    /* 0030 */ void TimerAsynchronousUpdate(BOOLEAN bInside) override;
     /* 0050 */ void InvalidateRect() override;
     /* 0058 */ BOOL Render(BOOL bForce) override;
     /* 0064 */ BOOL NeedRender() override;
@@ -44,7 +45,13 @@ public:
     /* 0074 */ virtual void OnItemSelected(LONG lMarker);
 
     POSITION DisplayString(const CString& sLabel, const CString& sString, COLORREF rgbForegroundColor, COLORREF rgbBackgroundColor, LONG lMarker, BOOLEAN a6, BOOLEAN bTrim);
+    void AdjustScrollBar();
     INT GetNumLines(POSITION posBossItem);
+    void OnScroll(SHORT a1, SHORT a2);
+    void OnScrollDown();
+    void OnScrollUp();
+    void OnPageDown(DWORD a1);
+    void OnPageUp(DWORD a1);
     void RemoveAll();
     void RemoveString(POSITION pos);
     SHORT ParseAndInsertStringAfter(POSITION tail, const CString& sLabel, const CString& sString, COLORREF rgbForegroundColor, COLORREF rgbBackgroundColor, LONG a6, POSITION& posBoss, BOOLEAN bTrim);

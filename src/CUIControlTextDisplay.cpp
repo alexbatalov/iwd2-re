@@ -1,6 +1,7 @@
 #include "CUIControlTextDisplay.h"
 
 #include "CBaldurChitin.h"
+#include "CUIControlScrollBar.h"
 #include "CUIManager.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -153,13 +154,25 @@ POSITION CUIControlTextDisplay::DisplayString(const CString& sLabel, const CStri
         m_posTopString = posTopString;
         field_5A = m_plstStrings->GetCount() - v1;
 
-        if (m_nScrollBarID != -1) {
-            // TODO: Incomplete.
-            // CUIControlScrollBar* pScrollBar = static_cast<CUIControlScrollBar*>(m_pPanel->GetControl(m_nScrollBarID));
-            // pScrollBar->AdjustScrollBar(field_5A, m_plstStrings->GetCount(), field_A6A);
-        }
+        // NOTE: Uninline.
+        AdjustScrollBar();
     } else {
-        // TODO: Incomplete.
+        if (m_nScrollBarID == -1
+            || !static_cast<CUIControlScrollBar*>(m_pPanel->GetControl(m_nScrollBarID))->field_146) {
+            if (m_plstStrings->GetCount() - field_5A > field_A6A) {
+                field_5A = max(nOldCount - field_A6A, 0);
+
+                // NOTE: Uninline.
+                AdjustScrollBar();
+
+                m_posTopString = m_plstStrings->FindIndex(max(field_A6A, 0));
+                if (m_posTopString == NULL) {
+                    m_posTopString = m_plstStrings->GetTailPosition();
+                }
+
+                field_A65 = min(v1, field_A6A);
+            }
+        }
     }
 
     field_A6C++;
@@ -172,6 +185,17 @@ POSITION CUIControlTextDisplay::DisplayString(const CString& sLabel, const CStri
     InvalidateRect();
 
     return posTopString;
+}
+
+// 0x4E22F0
+void CUIControlTextDisplay::AdjustScrollBar()
+{
+    if (m_nScrollBarID != -1) {
+        CUIControlScrollBar* pScrollBar = static_cast<CUIControlScrollBar*>(m_pPanel->GetControl(m_nScrollBarID));
+
+        // NOTE: Uninline.
+        pScrollBar->AdjustScrollBar(field_5A, m_plstStrings->GetCount(), field_A6A);
+    }
 }
 
 // 0x4E23A0
@@ -324,6 +348,92 @@ void CUIControlTextDisplay::OnMouseMove(CPoint pt)
     }
 }
 
+// 0x4E2790
+void CUIControlTextDisplay::OnScroll(SHORT a1, SHORT a2)
+{
+    SHORT nOldIndex = field_5A;
+    // TODO: Odd code, check.
+    field_5A = max(m_plstStrings->GetCount() - field_A6A, 0) * a1 / a2;
+    if (nOldIndex != field_5A) {
+        m_posTopString = m_plstStrings->FindIndex(field_5A);
+
+        CRect rDirty(m_pPanel->m_ptOrigin + CPoint(m_nX, m_nY),
+            CSize(m_nWidth, m_nHeight));
+        m_pPanel->InvalidateRect(&rDirty);
+        InvalidateRect();
+    }
+}
+
+// 0x4E2830
+void CUIControlTextDisplay::OnScrollDown()
+{
+    field_A64 = 0;
+    if (field_5A < m_plstStrings->GetCount() - field_A6A) {
+        if (field_A65) {
+            field_A67 = 1;
+        } else {
+            field_A65 = 1;
+        }
+    }
+}
+
+// 0x4E2870
+void CUIControlTextDisplay::OnScrollUp()
+{
+    field_A65 = 0;
+    if (m_posTopString != m_plstStrings->GetHeadPosition() || field_A62) {
+        if (field_A64) {
+            field_A66 = 1;
+        } else {
+            field_A64 = 1;
+        }
+    }
+}
+
+// 0x4E28B0
+void CUIControlTextDisplay::OnPageDown(DWORD a1)
+{
+    if (m_plstStrings->GetCount() > field_A6A) {
+        SHORT nOldIndex = field_5A;
+        // TODO: Check casts.
+        SHORT v1 = static_cast<SHORT> min(a1, static_cast<DWORD>(field_A6A - 1));
+        field_5A = max(field_5A + v1, m_plstStrings->GetCount() - field_A6A);
+        if (nOldIndex != field_5A) {
+            m_posTopString = m_plstStrings->FindIndex(field_5A);
+
+            CRect rDirty(m_pPanel->m_ptOrigin + CPoint(m_nX, m_nY),
+                CSize(m_nWidth, m_nHeight));
+            m_pPanel->InvalidateRect(&rDirty);
+            InvalidateRect();
+        }
+    }
+
+    // NOTE: Uninline.
+    AdjustScrollBar();
+}
+
+// 0x4E2A00
+void CUIControlTextDisplay::OnPageUp(DWORD a1)
+{
+    if (!m_plstStrings->IsEmpty()) {
+        SHORT nOldIndex = field_5A;
+        // TODO: Check casts.
+        SHORT v1 = static_cast<SHORT> min(a1, static_cast<DWORD>(field_A6A - 1));
+        field_5A = max(field_5A - v1, 0);
+        if (nOldIndex != field_5A) {
+            m_posTopString = m_plstStrings->FindIndex(field_5A);
+
+            CRect rDirty(m_pPanel->m_ptOrigin + CPoint(m_nX, m_nY),
+                CSize(m_nWidth, m_nHeight));
+            m_pPanel->InvalidateRect(&rDirty);
+            InvalidateRect();
+        }
+    }
+
+    // NOTE: Uninline.
+    AdjustScrollBar();
+}
+
 // 0x4E2B50
 void CUIControlTextDisplay::RemoveAll()
 {
@@ -397,11 +507,8 @@ void CUIControlTextDisplay::RemoveString(POSITION posBoss)
 
         field_5A = nIndex;
 
-        if (m_nScrollBarID != -1) {
-            // TODO: Incomplete.
-            // CUIControlScrollBar* pScrollBar = static_cast<CUIControlScrollBar*>(m_pPanel->GetControl(m_nScrollBarID));
-            // pScrollBar->AdjustScrollBar(field_5A, m_plstStrings->GetCount(), field_A6A);
-        }
+        // NOTE: Uninline.
+        AdjustScrollBar();
     } else {
         m_posTopString = NULL;
         field_5A = 0;
@@ -726,6 +833,108 @@ void CUIControlTextDisplay::SetItemTextColor(POSITION posBossItem, COLORREF rgbC
     }
 }
 
+// 0x4E3880
+void CUIControlTextDisplay::TimerAsynchronousUpdate(BOOLEAN bInside)
+{
+    CUIControlBase::TimerAsynchronousUpdate(bInside);
+
+    if (m_bActive) {
+        if (m_posHighlightedItem != NULL && !bInside) {
+            UnHighlightItem();
+        }
+
+        if (field_A65 != 0 || field_A67) {
+            if (field_5A < m_plstStrings->GetCount() - field_A6A) {
+                if (field_A62 > -m_nFontHeight) {
+                    field_A62 -= 3;
+                    if (field_A62 <= -m_nFontHeight) {
+                        if (field_A65 != 0) {
+                            field_A65--;
+                            m_plstStrings->GetNext(m_posTopString);
+                            field_5A++;
+
+                            // NOTE: Uninline.
+                            AdjustScrollBar();
+
+                            if (field_A67 && field_5A < m_plstStrings->GetCount() - field_A6A) {
+                                field_A62 += m_nFontHeight;
+                            } else {
+                                field_A62 = 0;
+                            }
+                        } else {
+                            field_A62 = -m_nFontHeight;
+                        }
+                    }
+                } else {
+                    field_A62 = 0;
+                    m_plstStrings->GetNext(m_posTopString);
+                    field_5A++;
+
+                    // NOTE: Uninline.
+                    AdjustScrollBar();
+                }
+
+                CRect rDirty(m_pPanel->m_ptOrigin + CPoint(m_nX, m_nY),
+                    CSize(m_nWidth, m_nHeight));
+                m_pPanel->InvalidateRect(&rDirty);
+                InvalidateRect();
+            } else {
+                field_A65 = 0;
+                field_A67 = 0;
+            }
+        } else if (field_A64 != 0 || field_A66) {
+            if (m_posTopString != m_plstStrings->GetHeadPosition()) {
+                if (field_A62 < 0) {
+                    field_A62 += 3;
+                    if (field_A62 >= 0) {
+                        if (field_A64 != 0) {
+                            field_A64--;
+                        }
+
+                        if (field_A64 != 0 || field_A66) {
+                            field_A62 -= m_nFontHeight;
+                            m_plstStrings->GetPrev(m_posTopString);
+                            field_5A--;
+
+                            // NOTE: Uninline.
+                            AdjustScrollBar();
+                        } else {
+                            field_A62 = 0;
+                        }
+                    }
+                } else {
+                    field_A62 = -m_nFontHeight;
+                    m_plstStrings->GetPrev(m_posTopString);
+                    field_5A--;
+
+                    // NOTE: Uninline.
+                    AdjustScrollBar();
+                }
+
+                CRect rDirty(m_pPanel->m_ptOrigin + CPoint(m_nX, m_nY),
+                    CSize(m_nWidth, m_nHeight));
+                m_pPanel->InvalidateRect(&rDirty);
+                InvalidateRect();
+            } else {
+                if (field_A62 > 0) {
+                    field_A64 = 0;
+                    field_A66 = 0;
+                } else {
+                    field_A62 += 3;
+                    if (field_A62 > 0) {
+                        field_A62 = 0;
+                    }
+
+                    CRect rDirty(m_pPanel->m_ptOrigin + CPoint(m_nX, m_nY),
+                        CSize(m_nWidth, m_nHeight));
+                    m_pPanel->InvalidateRect(&rDirty);
+                    InvalidateRect();
+                }
+            }
+        }
+    }
+}
+
 // 0x4E3CA0
 void CUIControlTextDisplay::SetTopString(POSITION posTopString)
 {
@@ -746,11 +955,8 @@ void CUIControlTextDisplay::SetTopString(POSITION posTopString)
 
         field_5A = nIndex;
 
-        if (m_nScrollBarID != -1) {
-            // TODO: Incomplete.
-            // CUIControlScrollBar* pScrollBar = static_cast<CUIControlScrollBar*>(m_pPanel->GetControl(m_nScrollBarID));
-            // pScrollBar->AdjustScrollBar(field_5A, m_plstStrings->GetCount(), field_A6A);
-        }
+        // NOTE: Uninline.
+        AdjustScrollBar();
 
         CRect rDirty(m_pPanel->m_ptOrigin + CPoint(m_nX, m_nY),
             CSize(m_nWidth, m_nHeight));
