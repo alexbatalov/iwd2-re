@@ -31,7 +31,7 @@ CScreenConnection::CScreenConnection()
     field_FB0 = 0;
     field_FA8 = 1;
     field_FA6 = 0;
-    field_F9A = 0;
+    m_bIsNight = FALSE;
 
     SetVideoMode(0);
 
@@ -306,6 +306,57 @@ void CScreenConnection::EngineInitialized()
 
     g_pChitin->cNetwork.m_nApplicationGuid = CBaldurChitin::GUID_BALDUR_GATE;
     g_pChitin->cNetwork.m_bApplicationGuidDefined = TRUE;
+}
+
+// 0x5FB020
+void CScreenConnection::RenderTorch()
+{
+    CVidInf* pVidMode = static_cast<CVidInf*>(g_pChitin->GetCurrentVideoMode());
+
+    if (!m_bIsNight) {
+        return;
+    }
+
+    if (m_bPlayEndCredits == TRUE) {
+        return;
+    }
+
+    if (m_lPopupStack.GetTailPosition() != NULL && m_lPopupStack.GetTail() != NULL) {
+        return;
+    }
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(0);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 729
+    UTIL_ASSERT(pPanel != NULL);
+
+    CPoint pt(106, 383);
+
+    if (g_pBaldurChitin->field_4A28) {
+        pt.x *= 2;
+        pt.y *= 2;
+    }
+
+    CPoint origin = pPanel->m_ptOrigin + pt;
+
+    CSize size;
+    m_vcTorch.GetCurrentFrameSize(size, FALSE);
+
+    CRect rTorch(origin, size);
+    pVidMode->BKLock(rTorch);
+
+    BOOL bResult = pVidMode->BKRender(&m_vcTorch,
+        origin.x - rTorch.left,
+        origin.y - rTorch.top,
+        0x80,
+        -1);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 766
+    UTIL_ASSERT(bResult);
+
+    pVidMode->BKUnlock();
 }
 
 // 0x5FB280

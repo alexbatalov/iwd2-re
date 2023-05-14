@@ -45,6 +45,7 @@ public:
     /* 00C4 */ void TimerSynchronousUpdate() override;
     /* 0104 */ void CancelEngine() override;
 
+    void RenderTorch();
     void EnablePopupPanel(DWORD dwPanelId, BOOL bEnable);
     void SummonPopup(DWORD nID);
     void DismissPopup();
@@ -95,7 +96,7 @@ public:
     /* 04BE */ unsigned char field_4BE;
     /* 04C0 */ CVidFont field_4C0;
     /* 09C0 */ CVidFont field_9C0;
-    /* 0F9A */ int field_F9A;
+    /* 0F9A */ BOOL m_bIsNight;
     /* 0F9E */ BOOL m_bPlayEndCredits;
     /* 0FA2 */ BOOL m_bExitProgram;
     /* 0FA6 */ unsigned char field_FA6;
@@ -103,7 +104,7 @@ public:
     /* 0FAC */ int field_FAC;
     /* 0FB4 */ int field_FB4;
     /* 0FB8 */ int field_FB8;
-    /* 0EC0 */ CVidCell field_EC0;
+    /* 0EC0 */ CVidCell m_vcTorch;
     /* 0FB0 */ int field_FB0;
 };
 
