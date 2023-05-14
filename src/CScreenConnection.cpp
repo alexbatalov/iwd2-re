@@ -720,7 +720,35 @@ void CScreenConnection::OnDoneButtonClick()
 // 0x5FE930
 void CScreenConnection::OnCancelButtonClick()
 {
-    // TODO: Incomplete.
+    if (m_lPopupStack.GetTailPosition() != NULL && m_lPopupStack.GetTail() != NULL) {
+        CUIPanel* pPanel = m_lPopupStack.GetTail();
+
+        CSingleLock lock(&(GetManager()->field_36), 0);
+        lock.Lock(INFINITE);
+
+        switch (pPanel->m_nID) {
+        case 0:
+        case 1:
+        case 19:
+        case 21:
+            break;
+        case 7:
+            m_nSessionIndex = -1;
+            m_bEliminateInitialize = TRUE;
+            DismissPopup();
+            break;
+        case 8:
+            g_pChitin->cNetwork.CloseSession(TRUE);
+            m_bEliminateInitialize = TRUE;
+            DismissPopup();
+            break;
+        default:
+            DismissPopup();
+            break;
+        }
+
+        lock.Unlock();
+    }
 }
 
 // 0x5FEA60
