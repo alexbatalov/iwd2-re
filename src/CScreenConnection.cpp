@@ -15,8 +15,20 @@ const CString CScreenConnection::TOKEN_SERVERVERSION("SERVERVERSION");
 // 0x8F3748
 const CString CScreenConnection::TOKEN_CLIENTVERSION("CLIENTVERSION");
 
+// 0x8B3340
+BOOLEAN CScreenConnection::byte_8B3340 = TRUE;
+
+// 0x8B3341
+BOOLEAN CScreenConnection::byte_8B3341 = TRUE;
+
+// 0x8B3342
+BOOLEAN CScreenConnection::byte_8B3342 = TRUE;
+
 // 0x8F3768
 int CScreenConnection::dword_8F3768;
+
+// 0x8F376C
+BOOLEAN CScreenConnection::byte_8F376C;
 
 // 0x5F9BB0
 CScreenConnection::CScreenConnection()
@@ -504,6 +516,31 @@ void CScreenConnection::OnDoneButtonClick()
 void CScreenConnection::OnCancelButtonClick()
 {
     // TODO: Incomplete.
+}
+
+// 0x5FED80
+void CScreenConnection::EnableMainPanel(BOOL bEnable)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(0);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 3751
+    UTIL_ASSERT(pPanel != NULL);
+
+    pPanel->SetEnabled(bEnable);
+
+    if (CVideo::SCREENWIDTH / (g_pBaldurChitin->field_4A28 ? 2 : 1) != CBaldurChitin::DEFAULT_SCREEN_WIDTH) {
+        m_cUIManager.GetPanel(-5)->SetEnabled(bEnable);
+        m_cUIManager.GetPanel(-4)->SetEnabled(bEnable);
+        m_cUIManager.GetPanel(-3)->SetEnabled(bEnable);
+        m_cUIManager.GetPanel(-2)->SetEnabled(bEnable);
+    }
+
+    if (bEnable) {
+        if (byte_8B3341) {
+            PlayGUISound(RESREF_SOUND_WINDOWCLOSE);
+        }
+    }
 }
 
 // 0x600770

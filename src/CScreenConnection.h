@@ -15,7 +15,11 @@ class CScreenConnection : public CBaldurEngine {
 public:
     static const CString TOKEN_SERVERVERSION;
     static const CString TOKEN_CLIENTVERSION;
+    static BOOLEAN byte_8B3340;
+    static BOOLEAN byte_8B3341;
+    static BOOLEAN byte_8B3342;
     static int dword_8F3768;
+    static BOOLEAN byte_8F376C;
 
     CScreenConnection();
     ~CScreenConnection();
@@ -52,6 +56,7 @@ public:
     void sub_5FCA00(int a1);
     void OnDoneButtonClick();
     void OnCancelButtonClick();
+    void EnableMainPanel(BOOL bEnable);
     void StartConnection(BOOLEAN bDirectPlayLobby);
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
     void sub_6024A0();
