@@ -37,8 +37,8 @@ CScreenConnection::CScreenConnection()
     m_nSerialPort = 0;
     m_nSerialBaudRate = 0;
     m_dwLastSessionRefresh = 0;
-    field_49E = 0;
-    field_4A6 = 0;
+    m_nErrorState = 0;
+    m_nNumErrorButtons = 0;
     m_bAllowInput = FALSE;
     field_FB0 = 0;
     field_FA8 = 1;
@@ -146,9 +146,9 @@ CScreenConnection::CScreenConnection()
     m_nProtocol = 0;
     field_476 = -1;
     m_nModemAddress = -1;
-    m_popupText = -1;
-    m_popupButtonText1 = -1;
-    m_popupButtonText2 = -1;
+    m_strErrorText = -1;
+    m_strErrorButtonText[0] = -1;
+    m_strErrorButtonText[1] = -1;
     field_496 = 0;
     m_bEliminateInitialize = FALSE;
     m_nEnumServiceProvidersCountDown = -1;
@@ -780,7 +780,49 @@ void CScreenConnection::StartConnection(BOOLEAN bDirectPlayLobby)
 // 0x600920
 void CScreenConnection::ResetErrorPanel(CUIPanel* pPanel)
 {
-    // TODO: Incomplete.
+    switch (pPanel->m_nID) {
+    case 19:
+        m_nNumErrorButtons = 0;
+        break;
+    case 20:
+    case 23:
+        m_nNumErrorButtons = 1;
+        break;
+    case 22:
+        m_nNumErrorButtons = 2;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 5523
+        UTIL_ASSERT(FALSE);
+    }
+
+    STR_RES strRes;
+    g_pBaldurChitin->m_cTlkTable.Fetch(m_strErrorText, strRes);
+
+    strRes.cSound.SetChannel(0, 0);
+    strRes.cSound.SetFireForget(TRUE);
+    strRes.cSound.Play(FALSE);
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(0));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 5536
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+
+    UpdateText(pText, "%s", strRes.szText);
+
+    for (INT nButton = 0; nButton < m_nNumErrorButtons; nButton++) {
+        CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nButton + 1));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 5546
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->SetText(FetchString(m_strErrorButtonText[nButton]));
+    }
 }
 
 // 0x602060
@@ -977,16 +1019,16 @@ void CUIControlButtonConnectionJoinGame::OnLButtonClick(CPoint pt)
 
     if (g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL
         && g_pBaldurChitin->cDimm.cResCache.m_nCacheSize < 175000000) {
-        pConnection->field_49E = 2;
-        pConnection->m_popupText = 20692;
-        pConnection->m_popupButtonText1 = 11973;
+        pConnection->m_nErrorState = 2;
+        pConnection->m_strErrorText = 20692;
+        pConnection->m_strErrorButtonText[0] = 11973;
         pConnection->SummonPopup(20);
     } else {
         CSingleLock lock(&(m_pPanel->m_pManager->field_36), TRUE);
-        pConnection->field_49E = 7;
-        pConnection->m_popupText = 20624;
-        pConnection->m_popupButtonText1 = 20625;
-        pConnection->m_popupButtonText2 = 13727;
+        pConnection->m_nErrorState = 7;
+        pConnection->m_strErrorText = 20624;
+        pConnection->m_strErrorButtonText[0] = 20625;
+        pConnection->m_strErrorButtonText[1] = 13727;
         pConnection->SummonPopup(22);
         lock.Unlock();
     }

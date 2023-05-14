@@ -8,6 +8,7 @@
 #include "CVidFont.h"
 
 #define CSCREENCONNECTION_VIRTUAL_KEYS 91
+#define CSCREENCONNECTION_ERROR_BUTTONS 2
 
 class CUIPanel;
 
@@ -99,13 +100,10 @@ public:
     /* 049B */ unsigned char field_49B;
     /* 049C */ unsigned char field_49C;
     /* 049D */ BOOLEAN m_bDirectPlayLobby;
-    // Some flags related to popup.
-    /* 049E */ int field_49E;
-    /* 04A2 */ STRREF m_popupText;
-    /* 04A6 */ int field_4A6;
-    // Maybe part of array.
-    /* 04AA */ STRREF m_popupButtonText1;
-    /* 04AE */ STRREF m_popupButtonText2;
+    /* 049E */ INT m_nErrorState;
+    /* 04A2 */ STRREF m_strErrorText;
+    /* 04A6 */ INT m_nNumErrorButtons;
+    /* 04AA */ STRREF m_strErrorButtonText[CSCREENCONNECTION_ERROR_BUTTONS];
     /* 04B6 */ unsigned char field_4B6;
     /* 04B7 */ unsigned char field_4B7;
     /* 04B8 */ unsigned char field_4B8;
