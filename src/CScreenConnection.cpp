@@ -551,6 +551,56 @@ void CScreenConnection::ResetPopupPanel(DWORD nID)
     }
 }
 
+// 0x5FC3A0
+void CScreenConnection::UpdatePopupPanel(DWORD nID)
+{
+    switch (nID) {
+    case 1:
+        UpdateProtocolPanel();
+        break;
+    case 3:
+        UpdateModemPanel();
+        break;
+    case 4:
+        UpdateSerialPanel();
+        break;
+    case 5:
+        UpdateTCPIPPanel();
+        break;
+    case 6:
+        // TODO: Incomplete.
+        break;
+    case 7:
+        // TODO: Incomplete.
+        break;
+    case 8:
+        // TODO: Incomplete.
+        break;
+    case 11:
+        // TODO: Incomplete.
+        break;
+    case 12:
+        // TODO: Incomplete.
+        break;
+    case 19:
+    case 20:
+    case 21:
+    case 22:
+    case 23:
+        break;
+    case 24:
+        // TODO: Incomplete.
+        break;
+    case 25:
+        // TODO: Incomplete.
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 1893
+        UTIL_ASSERT(FALSE);
+    }
+}
+
 // 0x5FC6F0
 void CScreenConnection::SummonPopup(DWORD nID)
 {
@@ -604,6 +654,30 @@ void CScreenConnection::EnableMainPanel(BOOL bEnable)
             PlayGUISound(RESREF_SOUND_WINDOWCLOSE);
         }
     }
+}
+
+// 0x5FF690
+void CScreenConnection::UpdateProtocolPanel()
+{
+    // TODO: Incomplete.
+}
+
+// 0x5FF960
+void CScreenConnection::UpdateSerialPanel()
+{
+    // TODO: Incomplete.
+}
+
+// 0x5FFB90
+void CScreenConnection::UpdateModemPanel()
+{
+    // TODO: Incomplete.
+}
+
+// 0x5FFD20
+void CScreenConnection::UpdateTCPIPPanel()
+{
+    // TODO: Incomplete.
 }
 
 // 0x5FFF60

@@ -52,12 +52,17 @@ public:
     void RenderTorch();
     void EnablePopupPanel(DWORD dwPanelId, BOOL bEnable);
     void ResetPopupPanel(DWORD nID);
+    void UpdatePopupPanel(DWORD nID);
     void SummonPopup(DWORD nID);
     void DismissPopup();
     void sub_5FCA00(int a1);
     void OnDoneButtonClick();
     void OnCancelButtonClick();
     void EnableMainPanel(BOOL bEnable);
+    void UpdateProtocolPanel();
+    void UpdateSerialPanel();
+    void UpdateModemPanel();
+    void UpdateTCPIPPanel();
     void ResetProtocolPanel();
     void ResetSerialPanel();
     void ResetModemPanel();
