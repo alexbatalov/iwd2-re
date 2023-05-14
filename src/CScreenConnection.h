@@ -83,8 +83,8 @@ public:
     /* 0446 */ BOOL m_bCapsLockKeyOn;
     /* 044A */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
     /* 0466 */ INT m_nProtocol;
-    /* 046A */ int field_46A;
-    /* 046E */ int field_46E;
+    /* 046A */ UINT m_nSerialPort;
+    /* 046E */ UINT m_nSerialBaudRate;
     /* 0472 */ int field_472;
     /* 0476 */ int field_476;
     /* 048A */ DWORD m_dwLastSessionRefresh;

@@ -34,8 +34,8 @@ BOOLEAN CScreenConnection::byte_8F376C;
 CScreenConnection::CScreenConnection()
 {
     field_106 = 0;
-    field_46A = 0;
-    field_46E = 0;
+    m_nSerialPort = 0;
+    m_nSerialBaudRate = 0;
     m_dwLastSessionRefresh = 0;
     field_49E = 0;
     field_4A6 = 0;
@@ -689,7 +689,26 @@ void CScreenConnection::ResetProtocolPanel()
 // 0x600100
 void CScreenConnection::ResetSerialPanel()
 {
-    // TODO: Incomplete.
+    CNetwork* pNetwork = &(g_pBaldurChitin->cNetwork);
+
+    UINT nSerialPort = GetPrivateProfileIntA("Multiplayer",
+        "Serial Port",
+        1,
+        g_pBaldurChitin->GetIniFileName());
+    if (pNetwork->m_nSerialPort != nSerialPort) {
+        pNetwork->SetSerialPort(nSerialPort);
+    }
+
+    UINT nSerialBaudRate = GetPrivateProfileIntA("Multiplayer",
+        "Serial Baud",
+        38400,
+        g_pBaldurChitin->GetIniFileName());
+    if (pNetwork->m_nSerialBaudRate != nSerialBaudRate) {
+        pNetwork->SetSerialBaudRate(nSerialBaudRate);
+    }
+
+    m_nSerialPort = pNetwork->m_nSerialPort;
+    m_nSerialBaudRate = pNetwork->m_nSerialBaudRate;
 }
 
 // 0x6001B0
