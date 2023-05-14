@@ -5,6 +5,7 @@
 #include "CInfCursor.h"
 #include "CScreenStart.h"
 #include "CUIPanel.h"
+#include "CUIControlTextDisplay.h"
 #include "CUtil.h"
 #include "CVidInf.h"
 
@@ -399,6 +400,29 @@ void CScreenConnection::StartConnection(BOOLEAN bDirectPlayLobby)
     if (g_pBaldurChitin->m_bIsAutoStarting) {
         m_bAllowInput = FALSE;
     }
+}
+
+// 0x602060
+void CScreenConnection::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, STRREF dwStrId)
+{
+    STR_RES strRes;
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 6834
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(dwTextId));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 6836
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+
+    g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes);
+    UpdateText(pText, "%s", strRes.szText);
 }
 
 // 0x6024A0
