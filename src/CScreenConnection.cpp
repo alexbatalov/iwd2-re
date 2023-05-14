@@ -144,7 +144,7 @@ CScreenConnection::CScreenConnection()
     m_bShiftKeyDown = FALSE;
     m_bCapsLockKeyOn = FALSE;
     m_nProtocol = 0;
-    field_476 = -1;
+    m_nSessionIndex = -1;
     m_nModemAddress = -1;
     m_strErrorText = -1;
     m_strErrorButtonText[0] = -1;
@@ -160,11 +160,11 @@ CScreenConnection::CScreenConnection()
     field_49B = 0;
     field_49C = 0;
     field_4B6 = 0;
-    field_4B7 = 0;
-    field_4B8 = 0;
-    field_4B9 = 0;
-    field_4BA = 0;
-    field_4BE = 0;
+    m_bJoinWaiting = FALSE;
+    m_bJoinComplete = FALSE;
+    m_nJoinEvent = 0;
+    m_nJoinErrorCode = CNetwork::ERROR_NONE;
+    m_bJoinReturnValue = FALSE;
     m_bExitProgram = FALSE;
     field_FAC = 1;
     field_FB4 = 1;
@@ -721,6 +721,40 @@ void CScreenConnection::OnDoneButtonClick()
 void CScreenConnection::OnCancelButtonClick()
 {
     // TODO: Incomplete.
+}
+
+// 0x5FEA60
+void CScreenConnection::OnJoinGameButtonClick()
+{
+    CSingleLock lock(&(m_cUIManager.field_36), FALSE);
+    lock.Lock(INFINITE);
+
+    CNetwork* pNetwork = &(g_pBaldurChitin->cNetwork);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 3531
+    UTIL_ASSERT(GetSessionIndex() != -1);
+
+    pNetwork->SelectSession(m_nSessionIndex);
+
+    pVidMode->m_bPointerEnabled = TRUE;
+
+    if (m_lPopupStack.GetTailPosition() != NULL && m_lPopupStack.GetTail() != NULL) {
+        DismissPopup();
+    }
+
+    if (pNetwork->GetPasswordRequiredForSelectedSession()) {
+        SummonPopup(7);
+    } else {
+        pNetwork->field_680 = 0;
+        m_bJoinWaiting = TRUE;
+        m_bJoinComplete = FALSE;
+        m_nJoinEvent = 8;
+        m_nJoinErrorCode = CNetwork::ERROR_NONE;
+        m_bJoinReturnValue = FALSE;
+    }
+
+    lock.Unlock();
 }
 
 // 0x5FED80

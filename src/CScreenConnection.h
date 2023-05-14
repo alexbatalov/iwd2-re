@@ -50,6 +50,9 @@ public:
     /* 00C4 */ void TimerSynchronousUpdate() override;
     /* 0104 */ void CancelEngine() override;
 
+    // Seen in `OnJoinGameButtonClick` assertion.
+    INT GetSessionIndex() { return m_nSessionIndex; }
+
     void RenderTorch();
     void EnablePopupPanel(DWORD dwPanelId, BOOL bEnable);
     void ShowPopupPanel(DWORD dwPanelId, BOOL bShow);
@@ -60,6 +63,7 @@ public:
     void sub_5FCA00(int a1);
     void OnDoneButtonClick();
     void OnCancelButtonClick();
+    void OnJoinGameButtonClick();
     void EnableMainPanel(BOOL bEnable);
     void UpdateMainPanel();
     void UpdateProtocolPanel();
@@ -89,7 +93,8 @@ public:
     /* 046A */ UINT m_nSerialPort;
     /* 046E */ UINT m_nSerialBaudRate;
     /* 0472 */ INT m_nModemAddress;
-    /* 0476 */ int field_476;
+    /* 0476 */ INT m_nSessionIndex;
+    /* 047A */ GUID m_sessionGuid;
     /* 048A */ DWORD m_dwLastSessionRefresh;
     /* 048E */ INT m_nEnumServiceProvidersCountDown;
     /* 0492 */ BOOL m_bStartedCountDown;
@@ -107,11 +112,11 @@ public:
     /* 04A6 */ INT m_nNumErrorButtons;
     /* 04AA */ STRREF m_strErrorButtonText[CSCREENCONNECTION_ERROR_BUTTONS];
     /* 04B6 */ unsigned char field_4B6;
-    /* 04B7 */ unsigned char field_4B7;
-    /* 04B8 */ unsigned char field_4B8;
-    /* 04B9 */ unsigned char field_4B9;
-    /* 04BA */ int field_4BA;
-    /* 04BE */ unsigned char field_4BE;
+    /* 04B7 */ BOOLEAN m_bJoinWaiting;
+    /* 04B8 */ BOOLEAN m_bJoinComplete;
+    /* 04B9 */ BYTE m_nJoinEvent;
+    /* 04BA */ INT m_nJoinErrorCode;
+    /* 04BE */ BOOLEAN m_bJoinReturnValue;
     /* 04C0 */ CVidFont field_4C0;
     /* 09C0 */ CVidFont field_9C0;
     /* 0F9A */ BOOL m_bIsNight;
