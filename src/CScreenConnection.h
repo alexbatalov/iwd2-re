@@ -51,13 +51,21 @@ public:
 
     void RenderTorch();
     void EnablePopupPanel(DWORD dwPanelId, BOOL bEnable);
+    void ResetPopupPanel(DWORD nID);
     void SummonPopup(DWORD nID);
     void DismissPopup();
     void sub_5FCA00(int a1);
     void OnDoneButtonClick();
     void OnCancelButtonClick();
     void EnableMainPanel(BOOL bEnable);
+    void ResetProtocolPanel();
+    void ResetSerialPanel();
+    void ResetModemPanel();
+    void ResetTCPIPPanel();
+    void ResetCreateGamePanel();
+    void ResetPlayerNamePanel();
     void StartConnection(BOOLEAN bDirectPlayLobby);
+    void ResetErrorPanel(CUIPanel* pPanel);
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
     void sub_6024A0();
     void ShowSessionTerminatedMessage();

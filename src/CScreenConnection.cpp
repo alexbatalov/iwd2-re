@@ -488,6 +488,69 @@ void CScreenConnection::EnablePopupPanel(DWORD dwPanelId, BOOL bEnable)
     pPanel->SetEnabled(dwPanelId);
 }
 
+// 0x5FC080
+void CScreenConnection::ResetPopupPanel(DWORD nID)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(nID);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 1745
+    UTIL_ASSERT(pPanel != NULL);
+
+    switch (nID) {
+    case 0:
+        break;
+    case 1:
+        ResetProtocolPanel();
+        break;
+    case 3:
+        ResetModemPanel();
+        break;
+    case 4:
+        ResetSerialPanel();
+        break;
+    case 5:
+        ResetTCPIPPanel();
+        break;
+    case 6:
+        ResetCreateGamePanel();
+        break;
+    case 7:
+        // TODO: Incomplete.
+        break;
+    case 8:
+        ResetPlayerNamePanel();
+        break;
+    case 11:
+        // TODO: Incomplete.
+        break;
+    case 12:
+        // TODO: Incomplete.
+        break;
+    case 19:
+    case 20:
+    case 22:
+        ResetErrorPanel(pPanel);
+        break;
+    case 21:
+        // TODO: Incomplete.
+        break;
+    case 23:
+        // TODO: Incomplete.
+        break;
+    case 24:
+        // TODO: Incomplete.
+        break;
+    case 25:
+        // TODO: Incomplete.
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 1812
+        UTIL_ASSERT(FALSE);
+    }
+}
+
 // 0x5FC6F0
 void CScreenConnection::SummonPopup(DWORD nID)
 {
@@ -543,6 +606,42 @@ void CScreenConnection::EnableMainPanel(BOOL bEnable)
     }
 }
 
+// 0x5FFF60
+void CScreenConnection::ResetProtocolPanel()
+{
+    // TODO: Incomplete.
+}
+
+// 0x600100
+void CScreenConnection::ResetSerialPanel()
+{
+    // TODO: Incomplete.
+}
+
+// 0x6001B0
+void CScreenConnection::ResetModemPanel()
+{
+    // TODO: Incomplete.
+}
+
+// 0x6002C0
+void CScreenConnection::ResetTCPIPPanel()
+{
+    // TODO: Incomplete.
+}
+
+// 0x600370
+void CScreenConnection::ResetCreateGamePanel()
+{
+    // TODO: Incomplete.
+}
+
+// 0x600470
+void CScreenConnection::ResetPlayerNamePanel()
+{
+    // TODO: Incomplete.
+}
+
 // 0x600770
 void CScreenConnection::StartConnection(BOOLEAN bDirectPlayLobby)
 {
@@ -560,6 +659,12 @@ void CScreenConnection::StartConnection(BOOLEAN bDirectPlayLobby)
     if (g_pBaldurChitin->m_bIsAutoStarting) {
         m_bAllowInput = FALSE;
     }
+}
+
+// 0x600920
+void CScreenConnection::ResetErrorPanel(CUIPanel* pPanel)
+{
+    // TODO: Incomplete.
 }
 
 // 0x602060
