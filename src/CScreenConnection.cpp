@@ -145,7 +145,7 @@ CScreenConnection::CScreenConnection()
     m_bCapsLockKeyOn = FALSE;
     m_nProtocol = 0;
     field_476 = -1;
-    field_472 = -1;
+    m_nModemAddress = -1;
     m_popupText = -1;
     m_popupButtonText1 = -1;
     m_popupButtonText2 = -1;
@@ -714,7 +714,30 @@ void CScreenConnection::ResetSerialPanel()
 // 0x6001B0
 void CScreenConnection::ResetModemPanel()
 {
-    // TODO: Incomplete.
+    CNetwork* pNetwork = &(g_pBaldurChitin->cNetwork);
+    CString sModemSelected;
+    CString sDefaultModem("");
+
+    GetPrivateProfileStringA("Multiplayer",
+        "Modem Selected",
+        sDefaultModem,
+        sModemSelected.GetBuffer(128),
+        128,
+        g_pBaldurChitin->GetIniFileName());
+
+    if (sModemSelected.Compare("") != 0) {
+        if (pNetwork->m_nModemAddress != -1) {
+            pNetwork->UnselectModemAddress();
+        }
+
+        pNetwork->SelectModemAddress(pNetwork->FindModemAddress(sModemSelected));
+    }
+
+    // FIXME: Missing `ReleaseBuffer`.
+
+    m_nModemAddress = pNetwork->m_nModemAddress;
+
+    UpdateHelp(3, 7, 11317);
 }
 
 // 0x6002C0

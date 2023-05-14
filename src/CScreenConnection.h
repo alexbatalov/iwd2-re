@@ -85,7 +85,7 @@ public:
     /* 0466 */ INT m_nProtocol;
     /* 046A */ UINT m_nSerialPort;
     /* 046E */ UINT m_nSerialBaudRate;
-    /* 0472 */ int field_472;
+    /* 0472 */ INT m_nModemAddress;
     /* 0476 */ int field_476;
     /* 048A */ DWORD m_dwLastSessionRefresh;
     /* 048E */ INT m_nEnumServiceProvidersCountDown;
