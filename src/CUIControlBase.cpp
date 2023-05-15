@@ -42,7 +42,7 @@ CUIControlBase::CUIControlBase(CUIPanel* pPanel, UI_CONTROL* controlInfo, int a4
 
     m_bActive = TRUE;
 
-    field_22.SetRect(0, 0, 0, 0);
+    m_rDirty.SetRect(0, 0, 0, 0);
 
     m_nToolTipStrRef = -1;
     m_nSecondaryToolTipStrRef = -1;

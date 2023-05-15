@@ -203,7 +203,7 @@ BOOL CUIControlSlider::Render(BOOL bForce)
         CSize(m_nWidth, m_nHeight));
 
     CRect rDirtyRect;
-    rDirtyRect.IntersectRect(rControlRect, field_22);
+    rDirtyRect.IntersectRect(rControlRect, m_rDirty);
 
     CRect rClip(rDirtyRect);
     CRect rMosaic(rDirtyRect);
@@ -235,7 +235,7 @@ BOOL CUIControlSlider::Render(BOOL bForce)
     m_vcKnob.GetCurrentFrameSize(frameSize, FALSE);
 
     CRect rKnobClip;
-    rKnobClip.IntersectRect(CRect(CPoint(x, y), frameSize), field_22);
+    rKnobClip.IntersectRect(CRect(CPoint(x, y), frameSize), m_rDirty);
 
     m_vcKnob.Render(CVIDINF_SURFACE_BACK,
         x,

@@ -674,7 +674,7 @@ BOOL CUIControlTextDisplay::Render(BOOL bForce)
         CSize(m_nWidth, m_nHeight));
 
     CRect rDirtyFrame;
-    rDirtyFrame.IntersectRect(rFrame, field_22);
+    rDirtyFrame.IntersectRect(rFrame, m_rDirty);
 
     if (!pVidInf->BKLock(rDirtyFrame)) {
         m_textFont.pRes->Release();

@@ -378,7 +378,7 @@ BOOL CUIControlScrollBar::Render(BOOL bForce)
         CSize(m_nWidth, m_nHeight));
 
     CRect rDirtyRect;
-    rDirtyRect.IntersectRect(rControlRect, field_22);
+    rDirtyRect.IntersectRect(rControlRect, m_rDirty);
 
     if (!pVidInf->BKLock(rDirtyRect)) {
         // FIXME: `pRes` is not released.

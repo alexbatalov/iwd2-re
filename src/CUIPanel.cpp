@@ -397,10 +397,8 @@ void CUIPanel::Render()
                 CSize(pControl->m_nWidth, pControl->m_nHeight));
 
             CRect rDirtyControl;
-            rDirtyControl.IntersectRect(rDirty, rControl);
-
-            if (!rDirtyControl.IsRectNull()) {
-                pControl->field_22 = rDirtyControl;
+            if (rDirtyControl.IntersectRect(rDirty, rControl)) {
+                pControl->m_rDirty = rDirtyControl;
                 pControl->Render(TRUE);
             }
         }

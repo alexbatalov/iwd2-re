@@ -56,7 +56,7 @@ public:
     /* 001E */ BOOLEAN m_bActive; // #guess
     /* 001F */ BOOLEAN m_bNeedAsyncUpdate;
     /* 0020 */ BOOLEAN m_bNeedMouseMove;
-    /* 0022 */ CRect field_22;
+    /* 0022 */ CRect m_rDirty;
     /* 0032 */ BOOL m_bInactiveRender; // #guess
     /* 0036 */ int field_36;
     /* 003A */ BOOL m_bToolTipActive;
