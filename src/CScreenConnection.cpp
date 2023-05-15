@@ -7,7 +7,6 @@
 #include "CScreenStart.h"
 #include "CUIPanel.h"
 #include "CUIControlButton3State.h"
-#include "CUIControlTextDisplay.h"
 #include "CUtil.h"
 #include "CVidInf.h"
 
@@ -1981,6 +1980,44 @@ void CUIControlButtonConnectionJoinGame::OnLButtonClick(CPoint pt)
         pConnection->SummonPopup(22);
         lock.Unlock();
     }
+}
+
+// 0x603640
+CUIControlTextDisplayConnectionTCPIPSessions::CUIControlTextDisplayConnectionTCPIPSessions(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo)
+    : CUIControlTextDisplay(panel, controlInfo, TRUE)
+{
+    // NOTE: Uninline.
+    SetNeedMouseMove();
+}
+
+// 0x621470
+CUIControlTextDisplayConnectionTCPIPSessions::~CUIControlTextDisplayConnectionTCPIPSessions()
+{
+}
+
+// 0x603690
+void CUIControlTextDisplayConnectionTCPIPSessions::OnItemSelected(LONG lMarker)
+{
+    CScreenConnection* pConnection = g_pBaldurChitin->m_pEngineConnection;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 7780
+    UTIL_ASSERT(pConnection != NULL);
+
+    CUIPanel* pPanel = pConnection->m_cUIManager.GetPanel(11);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 6795
+    UTIL_ASSERT(pConnection != NULL);
+
+    pConnection->m_nSessionIndex = lMarker;
+
+    GUID guid;
+    if (g_pBaldurChitin->cNetwork.GetSessionGUID(pConnection->m_nSessionIndex, guid)) {
+        pConnection->m_sessionGuid = guid;
+    }
+
+    pConnection->UpdatePopupPanel(pPanel->m_nID);
 }
 
 // 0x603750

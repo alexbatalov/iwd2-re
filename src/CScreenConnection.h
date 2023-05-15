@@ -4,6 +4,7 @@
 #include "CBaldurEngine.h"
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
+#include "CUIControlTextDisplay.h"
 #include "CVidCell.h"
 #include "CVidFont.h"
 
@@ -182,6 +183,12 @@ public:
     CUIControlButtonConnectionJoinGame(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonConnectionJoinGame();
     void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlTextDisplayConnectionTCPIPSessions : public CUIControlTextDisplay {
+    CUIControlTextDisplayConnectionTCPIPSessions(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo);
+    ~CUIControlTextDisplayConnectionTCPIPSessions() override;
+    void OnItemSelected(LONG lMarker) override;
 };
 
 class CUIControlButtonConnectionPopupDone : public CUIControlButton {
