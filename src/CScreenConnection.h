@@ -77,6 +77,7 @@ public:
     void ResetCreateGamePanel();
     void ResetPlayerNamePanel();
     void StartConnection(BOOLEAN bDirectPlayLobby);
+    void SetEliminateInitialize(BOOLEAN bEliminateInitialize);
     void ResetErrorPanel(CUIPanel* pPanel);
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
     void sub_6024A0();

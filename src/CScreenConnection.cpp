@@ -937,6 +937,12 @@ void CScreenConnection::StartConnection(BOOLEAN bDirectPlayLobby)
     }
 }
 
+// 0x6007E0
+void CScreenConnection::SetEliminateInitialize(BOOLEAN bEliminateInitialize)
+{
+    m_bEliminateInitialize = bEliminateInitialize;
+}
+
 // 0x600920
 void CScreenConnection::ResetErrorPanel(CUIPanel* pPanel)
 {
