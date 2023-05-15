@@ -834,7 +834,116 @@ void CScreenConnection::UpdateMainPanel()
 // 0x5FF690
 void CScreenConnection::UpdateProtocolPanel()
 {
-    // TODO: Incomplete.
+    CUIPanel* pPanel;
+    CUIControlButton* pButton;
+    CUIControlButton3State* pButton3;
+    DWORD nButtonID;
+
+    pPanel = m_cUIManager.GetPanel(1);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4046
+    UTIL_ASSERT(pPanel != NULL);
+
+    field_FA = pPanel->GetControl(8);
+
+    for (nButtonID = 0; nButtonID < 2; nButtonID++) {
+        pButton3 = static_cast<CUIControlButton3State*>(pPanel->GetControl(nButtonID));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 4063
+        UTIL_ASSERT(pButton3 != NULL);
+
+        pButton3->SetEnabled(FALSE);
+    }
+
+    for (INT nServiceProviderNumber = 0; nServiceProviderNumber < g_pBaldurChitin->cNetwork.m_nTotalServiceProviders; nServiceProviderNumber++) {
+        INT nServiceProviderType;
+        g_pBaldurChitin->cNetwork.GetServiceProviderType(nServiceProviderNumber, nServiceProviderType);
+
+        if (nServiceProviderType == CNetwork::SERV_PROV_IPX) {
+            nButtonID = 0;
+        } else if (nServiceProviderType == CNetwork::SERV_PROV_TCP_IP) {
+            nButtonID = 1;
+        } else if (nServiceProviderType == CNetwork::SERV_PROV_MODEM) {
+            continue;
+        } else if (nServiceProviderType == CNetwork::SERV_PROV_SERIAL) {
+            continue;
+        } else if (nServiceProviderType == CNetwork::SERV_PROV_NULL) {
+            nButtonID = 10;
+        } else {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+            // __LINE__: 4105
+            UTIL_ASSERT(FALSE);
+        }
+
+        pButton3 = static_cast<CUIControlButton3State*>(pPanel->GetControl(nButtonID));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 4110
+        UTIL_ASSERT(pButton3 != NULL);
+
+        pButton3->SetEnabled(TRUE);
+    }
+
+    pButton = static_cast<CUIControlButton*>(pPanel->GetControl(10));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4121
+    UTIL_ASSERT(pButton != NULL);
+
+    pButton->SetEnabled(TRUE);
+
+    DWORD nSelectedButtonID;
+    switch (m_nProtocol) {
+    case 0:
+        nSelectedButtonID = 10;
+        break;
+    case 1:
+        nSelectedButtonID = 0;
+        break;
+    case 2:
+        nSelectedButtonID = 1;
+        break;
+    case 3:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 4142
+        UTIL_ASSERT(FALSE);
+    case 4:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 4148
+        UTIL_ASSERT(FALSE);
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 4152
+        UTIL_ASSERT(FALSE);
+    }
+
+    for (nButtonID = 0; nButtonID < 2; nButtonID++) {
+        pButton3 = static_cast<CUIControlButton3State*>(pPanel->GetControl(nButtonID));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 4163
+        UTIL_ASSERT(pButton3 != NULL);
+
+        pButton3->SetSelected(nSelectedButtonID == nButtonID);
+    }
+
+    pButton3 = static_cast<CUIControlButton3State*>(pPanel->GetControl(10));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4168
+    UTIL_ASSERT(pButton3 != NULL);
+
+    pButton3->SetSelected(nSelectedButtonID == 10);
+
+    pButton = static_cast<CUIControlButton*>(pPanel->GetControl(6));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4179
+    UTIL_ASSERT(pButton != NULL);
+
+    pButton->SetEnabled(IsDoneButtonClickable());
 }
 
 // 0x5FF960
