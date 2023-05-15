@@ -5,6 +5,7 @@
 #include "CInfCursor.h"
 #include "CScreenStart.h"
 #include "CUIPanel.h"
+#include "CUIControlButton3State.h"
 #include "CUIControlTextDisplay.h"
 #include "CUtil.h"
 #include "CVidInf.h"
@@ -711,6 +712,14 @@ void CScreenConnection::sub_5FCA00(int a1)
     // TODO: Incomplete.
 }
 
+// 0x5FD670
+BOOL CScreenConnection::IsDoneButtonClickable()
+{
+    // TODO: Incomplete.
+
+    return TRUE;
+}
+
 // 0x5FDB20
 void CScreenConnection::OnDoneButtonClick()
 {
@@ -831,7 +840,106 @@ void CScreenConnection::UpdateProtocolPanel()
 // 0x5FF960
 void CScreenConnection::UpdateSerialPanel()
 {
-    // TODO: Incomplete.
+    DWORD nButtonID;
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(4);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4212
+    UTIL_ASSERT(pPanel != NULL);
+
+    UINT nOldSerialPort = m_nSerialPort;
+    UINT nOldSerialBaudRate = m_nSerialBaudRate;
+
+    for (nButtonID = 0; nButtonID < 4; nButtonID++) {
+        CUIControlButton3State* pPort = static_cast<CUIControlButton3State*>(pPanel->GetControl(nButtonID));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 4220
+        UTIL_ASSERT(pPort != NULL);
+
+        UINT nNewSerialPort;
+        switch (pPort->m_nID) {
+        case 0:
+            nNewSerialPort = 1;
+            break;
+        case 1:
+            nNewSerialPort = 2;
+            break;
+        case 2:
+            nNewSerialPort = 3;
+            break;
+        case 3:
+            nNewSerialPort = 4;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+            // __LINE__: 8232
+            UTIL_ASSERT(FALSE);
+        }
+
+        pPort->SetSelected(nOldSerialPort != nNewSerialPort);
+    }
+
+    for (nButtonID = 4; nButtonID < 12; nButtonID++) {
+        CUIControlButton3State* pBaud = static_cast<CUIControlButton3State*>(pPanel->GetControl(nButtonID));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 4227
+        UTIL_ASSERT(pBaud != NULL);
+
+        UINT nNewSerialBaudRate;
+        switch (pBaud->m_nID) {
+        case 4:
+            nNewSerialBaudRate = 14400;
+            break;
+        case 5:
+            nNewSerialBaudRate = 19200;
+            break;
+        case 6:
+            nNewSerialBaudRate = 38400;
+            break;
+        case 7:
+            nNewSerialBaudRate = 56000;
+            break;
+        case 8:
+            nNewSerialBaudRate = 57600;
+            break;
+        case 9:
+            nNewSerialBaudRate = 115200;
+            break;
+        case 10:
+            nNewSerialBaudRate = 128000;
+            break;
+        case 11:
+            nNewSerialBaudRate = 256000;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+            // __LINE__: 8368
+            UTIL_ASSERT(FALSE);
+        }
+
+        pBaud->SetSelected(nOldSerialBaudRate != nNewSerialBaudRate);
+    }
+
+    for (nButtonID = 10; nButtonID < 12; nButtonID++) {
+        CUIControlButton3State* pBaud = static_cast<CUIControlButton3State*>(pPanel->GetControl(nButtonID));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 4236
+        UTIL_ASSERT(pBaud != NULL);
+
+        pBaud->SetEnabled(FALSE);
+    }
+
+    CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(15));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4244
+    UTIL_ASSERT(pDone != NULL);
+
+    pDone->SetEnabled(IsDoneButtonClickable());
 }
 
 // 0x5FFB90

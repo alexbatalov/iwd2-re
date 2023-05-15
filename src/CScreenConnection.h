@@ -61,6 +61,7 @@ public:
     void SummonPopup(DWORD nID);
     void DismissPopup();
     void sub_5FCA00(int a1);
+    BOOL IsDoneButtonClickable();
     void OnDoneButtonClick();
     void OnCancelButtonClick();
     void OnJoinGameButtonClick();
