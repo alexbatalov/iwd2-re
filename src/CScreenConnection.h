@@ -4,6 +4,7 @@
 #include "CBaldurEngine.h"
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
+#include "CUIControlButton3State.h"
 #include "CUIControlTextDisplay.h"
 #include "CVidCell.h"
 #include "CVidFont.h"
@@ -202,6 +203,13 @@ class CUIControlButtonConnectionPopupCancel : public CUIControlButton {
 public:
     CUIControlButtonConnectionPopupCancel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonConnectionPopupCancel();
+    void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonConnectionProtocolProtocol : public CUIControlButton3State {
+public:
+    CUIControlButtonConnectionProtocolProtocol(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonConnectionProtocolProtocol() override;
     void OnLButtonClick(CPoint pt) override;
 };
 

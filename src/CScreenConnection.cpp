@@ -6,7 +6,6 @@
 #include "CInfGame.h"
 #include "CScreenStart.h"
 #include "CUIPanel.h"
-#include "CUIControlButton3State.h"
 #include "CUtil.h"
 #include "CVidInf.h"
 
@@ -2070,6 +2069,94 @@ void CUIControlButtonConnectionPopupCancel::OnLButtonClick(CPoint pt)
     UTIL_ASSERT(pConnection != NULL);
 
     pConnection->OnCancelButtonClick();
+}
+
+// 0x603AF0
+CUIControlButtonConnectionProtocolProtocol::CUIControlButtonConnectionProtocolProtocol(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, TRUE, 0)
+{
+    STR_RES strRes;
+
+    DWORD strId;
+    switch (m_nID) {
+    case 0:
+        // "ipx"
+        strId = 13967;
+        break;
+    case 1:
+        // "tcp/ip"
+        strId = 13968;
+        break;
+    case 2:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 7936
+        UTIL_ASSERT(FALSE);
+    case 3:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 7942
+        UTIL_ASSERT(FALSE);
+    case 10:
+        // "Single Player"
+        strId = 15413;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 7950
+        UTIL_ASSERT(FALSE);
+    }
+
+    g_pBaldurChitin->m_cTlkTable.Fetch(strId, strRes);
+    SetText(strRes.szText);
+
+    m_nSelectedFrame = 0;
+    m_nNotSelectedFrame = 1;
+}
+
+// 0x603C90
+CUIControlButtonConnectionProtocolProtocol::~CUIControlButtonConnectionProtocolProtocol()
+{
+}
+
+// 0x603D30
+void CUIControlButtonConnectionProtocolProtocol::OnLButtonClick(CPoint pt)
+{
+    CScreenConnection* pConnection = g_pBaldurChitin->m_pEngineConnection;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 7986
+    UTIL_ASSERT(pConnection != NULL);
+
+    CSingleLock lock(&(pConnection->GetManager()->field_36), FALSE);
+    lock.Lock(INFINITE);
+
+    switch (m_nID) {
+    case 0:
+        pConnection->m_nProtocol = 1;
+        pConnection->UpdatePopupPanel(m_pPanel->m_nID);
+        break;
+    case 1:
+        pConnection->m_nProtocol = 2;
+        pConnection->UpdatePopupPanel(m_pPanel->m_nID);
+        break;
+    case 2:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 8010
+        UTIL_ASSERT(FALSE);
+    case 3:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 8018
+        UTIL_ASSERT(FALSE);
+    case 10:
+        pConnection->m_nProtocol = 0;
+        pConnection->UpdatePopupPanel(m_pPanel->m_nID);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 8027
+        UTIL_ASSERT(FALSE);
+    }
+
+    lock.Unlock();
 }
 
 // 0x605850
