@@ -2183,6 +2183,28 @@ void CUIControlButtonConnectionProtocolProtocol::OnLButtonClick(CPoint pt)
     lock.Unlock();
 }
 
+// 0x603EA0
+CUIControlTextDisplayConnectionModems::CUIControlTextDisplayConnectionModems(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo)
+    : CUIControlTextDisplay(panel, controlInfo, TRUE)
+{
+    // NOTE: Uninline.
+    SetNeedMouseMove();
+}
+
+// 0x603ED0
+void CUIControlTextDisplayConnectionModems::OnItemSelected(LONG lMarker)
+{
+    CScreenConnection* pConnection = g_pBaldurChitin->m_pEngineConnection;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 8151
+    UTIL_ASSERT(pConnection != NULL);
+
+    pConnection->m_nModemAddress = lMarker;
+
+    pConnection->UpdatePopupPanel(m_pPanel->m_nID);
+}
+
 // 0x603F20
 CUIControlButtonConnectionSerialPort::CUIControlButtonConnectionSerialPort(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, 1, 0)

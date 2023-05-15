@@ -213,6 +213,12 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlTextDisplayConnectionModems : public CUIControlTextDisplay {
+public:
+    CUIControlTextDisplayConnectionModems(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo);
+    void OnItemSelected(LONG lMarker) override;
+};
+
 class CUIControlButtonConnectionSerialPort : public CUIControlButton3State {
 public:
     CUIControlButtonConnectionSerialPort(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
