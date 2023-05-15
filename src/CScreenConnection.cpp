@@ -1872,7 +1872,31 @@ CUIControlButtonConnectionQuitGame::~CUIControlButtonConnectionQuitGame()
 // 0x602960
 void CUIControlButtonConnectionQuitGame::OnLButtonClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CScreenConnection* pConnection = g_pBaldurChitin->m_pEngineConnection;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 7237
+    UTIL_ASSERT(pConnection != NULL);
+
+    CSingleLock lock(&(pConnection->GetManager()->field_36), FALSE);
+    lock.Lock(INFINITE);
+
+    g_pBaldurChitin->cNetwork.UnselectSession();
+    g_pBaldurChitin->cNetwork.field_680 = 0;
+    g_pBaldurChitin->cNetwork.UnselectModemAddress();
+    pConnection->m_bEliminateInitialize = TRUE;
+
+    // NOTE: Obtaining same lock twice, likely some inlining.
+    CSingleLock sameLock(&(pConnection->GetManager()->field_36), FALSE);
+    sameLock.Lock(INFINITE);
+    pConnection->m_nErrorState = 9;
+    pConnection->m_strErrorText = 19532;
+    pConnection->m_strErrorButtonText[0] = 15417;
+    pConnection->m_strErrorButtonText[1] = 13727;
+    pConnection->SummonPopup(22);
+    sameLock.Unlock();
+
+    lock.Unlock();
 }
 
 // 0x602A90
