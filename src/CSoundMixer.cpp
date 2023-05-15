@@ -620,6 +620,14 @@ void CSoundMixer::UpdateMusic()
     }
 }
 
+// 0x7ACA20
+int CSoundMixer::sub_7ACA20()
+{
+    // TODO: Incomplete.
+
+    return 0;
+}
+
 // NOTE: Inlined in `CInfGame::ApplyVolumeSliders` and probably other places.
 void CSoundMixer::SetChannelVolume(int nChannelNumber, int nNewVolume)
 {

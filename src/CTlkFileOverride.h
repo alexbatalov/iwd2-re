@@ -41,6 +41,7 @@ public:
     ~CTlkFileOverride() { }
 
     BOOLEAN Fetch(DWORD strId, STR_RES& strRes);
+    void CloseFiles();
 
     /* 0000 */ CString field_0;
     /* 0004 */ CString field_4;

@@ -42,6 +42,7 @@ public:
     void Lock();
     void Unlock();
     void UpdateMusic();
+    int sub_7ACA20();
 
     void SetChannelVolume(int nChannelNumber, int nNewVolume);
     int GetChannelVolumeFast(int nChannelNumber);

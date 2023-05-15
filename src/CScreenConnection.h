@@ -24,6 +24,7 @@ public:
 
     CScreenConnection();
     ~CScreenConnection();
+    /* 0014 */ void EngineActivated() override;
     /* 0018 */ void EngineDeactivated() override;
     /* 0020 */ void EngineInitialized() override;
     /* 0030 */ BOOL CheckSystemKeyCtrl() override;
@@ -127,8 +128,8 @@ public:
     /* 04B9 */ BYTE m_nJoinEvent;
     /* 04BA */ INT m_nJoinErrorCode;
     /* 04BE */ BOOLEAN m_bJoinReturnValue;
-    /* 04C0 */ CVidFont field_4C0;
-    /* 09C0 */ CVidFont field_9C0;
+    /* 04C0 */ CVidFont m_preLoadFontRealms;
+    /* 09C0 */ CVidFont m_preLoadFontStnSml;
     /* 0F9A */ BOOL m_bIsNight;
     /* 0F9E */ BOOL m_bPlayEndCredits;
     /* 0FA2 */ BOOL m_bExitProgram;

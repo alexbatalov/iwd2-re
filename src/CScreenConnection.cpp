@@ -263,11 +263,107 @@ CScreenConnection::~CScreenConnection()
 {
 }
 
+// 0x5FA9B0
+void CScreenConnection::EngineActivated()
+{
+    g_pBaldurChitin->m_pObjectGame->field_366E = 0;
+
+    m_preLoadFontRealms.SetResRef(CResRef("REALMS"), FALSE, TRUE);
+    m_preLoadFontRealms.RegisterFont();
+
+    m_preLoadFontStnSml.SetResRef(CResRef("STONESM2"), FALSE, TRUE);
+    m_preLoadFontStnSml.RegisterFont();
+
+    CResRef resRef("MMTRCHB");
+    m_vcTorch.SetResRef(resRef, TRUE, TRUE);
+    m_vcTorch.m_header.SetResRef(resRef, TRUE, FALSE);
+
+    if (m_vcTorch.pRes != NULL) {
+        m_vcTorch.pRes->field_7E = m_vcTorch.m_header.GetResRef() == "";
+    }
+
+    m_vcTorch.m_bDoubleSize = g_pBaldurChitin->field_4A28;
+
+    if (field_FA8) {
+        DWORD dwSectorsPerCluster;
+        DWORD dwBytesPerSector;
+        DWORD dwNumberOfFreeClusters;
+        DWORD dwTotalNumberOfClusters;
+        if (GetDiskFreeSpaceA(NULL, &dwSectorsPerCluster, &dwBytesPerSector, &dwNumberOfFreeClusters, &dwTotalNumberOfClusters)) {
+            if (dwNumberOfFreeClusters * dwSectorsPerCluster < CBaldurChitin::MINIMUM_DRIVE_SECTORS
+                || dwNumberOfFreeClusters * dwSectorsPerCluster < CBaldurChitin::MINIMUM_DRIVE_SPACE / dwBytesPerSector
+                || !g_pBaldurChitin->cDimm.cResCache.IsCacheSpaceAvailable()) {
+                g_pBaldurChitin->m_dwCloseConfirmationStrId = 10248;
+                g_pBaldurChitin->m_dwCloseConfirmationFlags = 0x10;
+                PostMessageA(g_pBaldurChitin->cWnd.GetSafeHwnd(), WM_CLOSE, 0, 0);
+                field_FA8 = FALSE;
+                return;
+            }
+        }
+    }
+
+    UpdateMainPanel();
+    g_pBaldurChitin->GetObjectCursor()->SetCursor(0, FALSE);
+    m_cUIManager.InvalidateRect(NULL);
+
+    if (!m_bStartedCountDown && m_nEnumServiceProvidersCountDown == 2) {
+        m_bStartedCountDown = TRUE;
+
+        CSingleLock lock(&(m_cUIManager.field_36), FALSE);
+        lock.Lock(INFINITE);
+
+        if (byte_8B3340) {
+            byte_8B3340 = FALSE;
+            byte_8B3341 = FALSE;
+        } else {
+            byte_8B3341 = TRUE;
+        }
+
+        m_nErrorState = 5;
+
+        // "Finding the network devices on this host..."
+        m_strErrorText = 20275;
+        SummonPopup(19);
+
+        pVidMode->m_bPointerEnabled = FALSE;
+
+        lock.Unlock();
+    }
+
+    CString v1;
+    g_pChitin->cDimm.WriteSetUp(CString(".\\temp\\foo.bar"), v1);
+
+    g_pBaldurChitin->m_cTlkTable.m_override.CloseFiles();
+    g_pBaldurChitin->m_cTlkTable.OpenOverride(CString("temp/default.toh"), CString("temp/default.tot"));
+
+    switch (dword_8F3768) {
+    case 0:
+        dword_8F3768 = 1;
+        break;
+    case 1:
+        if (g_pBaldurChitin->cSoundMixer.sub_7ACA20() != 1) {
+            g_pBaldurChitin->cSoundMixer.StopMusic(TRUE);
+        }
+
+        g_pBaldurChitin->cSoundMixer.StartSong(1, 2);
+
+        dword_8F3768 = 2;
+        break;
+    default:
+        g_pBaldurChitin->cSoundMixer.sub_7ACA20();
+
+        if (g_pBaldurChitin->cSoundMixer.sub_7ACA20() != 1
+            && g_pBaldurChitin->cSoundMixer.m_nCurrentSong != 1) {
+            dword_8F3768 = 1;
+        }
+    }
+}
+
 // 0x5FAD80
 void CScreenConnection::EngineDeactivated()
 {
-    field_4C0.Unload();
-    field_9C0.Unload();
+    m_preLoadFontRealms.Unload();
+    m_preLoadFontStnSml.Unload();
 
     if (m_cUIManager.m_pFocusedControl != NULL) {
         m_cUIManager.m_pFocusedControl->KillFocus();

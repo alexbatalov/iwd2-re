@@ -34,6 +34,14 @@ CTlkTable::CTlkTable()
     field_58 = byte_8FB954;
 }
 
+// 0x793E90
+BOOL CTlkTable::OpenOverride(const CString& a1, const CString& a2)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x793EB0
 CTlkTable::~CTlkTable()
 {
