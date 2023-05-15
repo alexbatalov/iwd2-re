@@ -2209,5 +2209,20 @@ void CUIControlButtonConnectionErrorButton::OnLButtonClick(CPoint pt)
 // 0x605850
 void CScreenConnection::ShowSessionTerminatedMessage()
 {
-    // TODO: Incomplete.
+    CSingleLock lock(&(m_cUIManager.field_36), FALSE);
+    lock.Lock(INFINITE);
+
+    if (g_pBaldurChitin->m_cBaldurMessage.field_E5) {
+        SummonPopup(23);
+        g_pBaldurChitin->m_cBaldurMessage.field_E5 = 0;
+    } else {
+        m_nErrorState = 0;
+        m_strErrorText = 10803;
+        m_strErrorButtonText[0] = 11973;
+        SummonPopup(20);
+    }
+
+    pVidMode->m_bPointerEnabled = TRUE;
+
+    lock.Unlock();
 }
