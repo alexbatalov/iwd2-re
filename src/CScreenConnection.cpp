@@ -446,7 +446,194 @@ void CScreenConnection::TimerAsynchronousUpdate()
         m_bPlayEndCredits = FALSE;
     }
 
-    // TODO: Incomplete.
+    if (field_FA8) {
+        // TODO: Incomplete (detecting/switching CD).
+
+        srand(static_cast<unsigned int>(time(NULL)));
+        rand();
+
+        field_FA8 = FALSE;
+        field_FA6 = TRUE;
+
+        UpdateMainPanel();
+        m_cUIManager.InvalidateRect(NULL);
+
+        g_pBaldurChitin->m_pObjectCursor->SetCursor(0, FALSE);
+        g_pBaldurChitin->m_pObjectCursor->m_bVisible = TRUE;
+        g_pBaldurChitin->m_pObjectCursor->SetCursor(100, FALSE);
+        g_pBaldurChitin->m_pObjectCursor->m_bVisible = FALSE;
+        g_pBaldurChitin->m_pObjectCursor->CursorUpdate(pVidMode);
+
+        CString sResolvedFileName;
+
+        BOOL bHaveLogo = FALSE;
+        if (g_pChitin->lAliases.ResolveFileName(CString("hd0:\\data\\bislogo.mve"), sResolvedFileName) == TRUE) {
+            CFileFind fileFind;
+            if (fileFind.FindFile(sResolvedFileName)) {
+                bHaveLogo = TRUE;
+                g_pBaldurChitin->m_pEngineProjector->PlayMovie(CResRef("BISLOGO"));
+                g_pBaldurChitin->m_pEngineProjector->PlayMovieNext(CResRef("WOTC"));
+                g_pBaldurChitin->m_pEngineProjector->PlayMovieNext(CResRef("NVIDIA"));
+            }
+        }
+
+        BOOL bHaveIntro = FALSE;
+        if (g_pChitin->lAliases.ResolveFileName(CString("hd0:\\data\\intro.mve"), sResolvedFileName) == TRUE) {
+            CFileFind fileFind;
+            if (fileFind.FindFile(sResolvedFileName)) {
+                bHaveIntro = TRUE;
+            }
+        }
+
+        if (!bHaveIntro) {
+            if (g_pChitin->lAliases.ResolveFileName(CString("cd2:\\data\\Intro.mve"), sResolvedFileName) == TRUE) {
+                CFileFind fileFind;
+                if (fileFind.FindFile(sResolvedFileName)) {
+                    bHaveIntro = TRUE;
+                }
+            }
+        }
+
+        if (bHaveIntro) {
+            if (!bHaveLogo) {
+                g_pBaldurChitin->m_pEngineProjector->PlayMovie(CResRef("INTRO"));
+            } else {
+                g_pBaldurChitin->m_pEngineProjector->PlayMovieNext(CResRef("INTRO"));
+            }
+        }
+
+        if (bHaveLogo || bHaveIntro) {
+            byte_8F376C = TRUE;
+        } else {
+            byte_8F376C = FALSE;
+        }
+    }
+
+    if (m_bDirectPlayLobby) {
+        AutoStartDirectPlayLobby();
+        m_bDirectPlayLobby = FALSE;
+        return;
+    }
+
+    if (m_nEnumServiceProvidersCountDown == 0) {
+        CSingleLock lock(&(m_cUIManager.field_36), FALSE);
+        lock.Lock(INFINITE);
+        if (!byte_8F376C) {
+            DismissPopup();
+        }
+        lock.Unlock();
+
+        UpdateMainPanel();
+
+        m_nEnumServiceProvidersCountDown--;
+        pVidMode->m_bPointerEnabled = TRUE;
+
+        if (g_pBaldurChitin->m_bIsAutoStarting) {
+            g_pBaldurChitin->m_bIsAutoStarting = FALSE;
+            m_bAllowInput = TRUE;
+            AutoSelectServiceProvider();
+            UpdateMainPanel();
+        } else {
+            if (g_pBaldurChitin->field_110) {
+                if (g_pChitin->field_131) {
+                    WritePrivateProfileStringA("GameSpy",
+                        "Location",
+                        g_pChitin->GetStartUpGameSpyLocation(),
+                        g_pBaldurChitin->GetIniFileName());
+                }
+
+                if (AutoStartInitialize()) {
+                    UpdateMainPanel();
+                }
+
+                g_pBaldurChitin->m_bIsAutoStarting = FALSE;
+                m_bAllowInput = TRUE;
+            } else {
+                if (g_pBaldurChitin->field_114 || g_pBaldurChitin->field_130) {
+                    if (g_pBaldurChitin->field_114) {
+                        AutoStartConnect();
+                    }
+                } else {
+                    g_pBaldurChitin->m_bIsAutoStarting = FALSE;
+                    m_bAllowInput = TRUE;
+                    AutoSelectServiceProvider();
+                    UpdateMainPanel();
+                }
+            }
+        }
+    }
+
+    if (m_bJoinWaiting == TRUE && m_bJoinComplete == TRUE) {
+        m_bJoinComplete = FALSE;
+        m_bJoinWaiting = FALSE;
+        HandleJoinCompletion(m_nJoinEvent);
+    }
+
+    if (m_bEMWaiting == TRUE) {
+        if (m_bEMSwapped == TRUE) {
+            m_bEMWaiting = FALSE;
+            HandleEMEvent(m_nEMEvent, m_nEMEventStage);
+        }
+    } else {
+        if (m_lPopupStack.GetTailPosition() != NULL) {
+            CUIPanel* pPanel = m_lPopupStack.GetTail();
+            if (pPanel != NULL) {
+                if (pPanel->m_nID == 11 || pPanel->m_nID == 5) {
+                    if (GetTickCount() - m_dwLastSessionRefresh > 5000) {
+                        CString sValue;
+                        GetPrivateProfileStringA("Multiplayer",
+                            "AsyncEnumeration",
+                            "0",
+                            sValue.GetBuffer(128),
+                            128,
+                            g_pBaldurChitin->GetIniFileName());
+
+                        if (sValue.Compare("1") == 0 || pPanel->m_nID == 11) {
+                            BOOL v1;
+                            if (g_pChitin->cNetwork.field_9C) {
+                                v1 = TRUE;
+                            } else {
+                                g_pChitin->cNetwork.field_FA = CString("");
+                                v1 = g_pChitin->cNetwork.InitializeConnectionToServiceProvider(FALSE);
+                            }
+
+                            if (v1) {
+                                field_4B6 = TRUE;
+
+                                if (g_pChitin->cNetwork.field_9C == TRUE) {
+                                    g_pChitin->cNetwork.EnumerateSessions(TRUE, FALSE);
+                                }
+
+                                UpdatePopupPanel(pPanel->m_nID);
+                                m_dwLastSessionRefresh = GetTickCount();
+                            }
+                        }
+                    }
+                }
+
+                if (pPanel->m_nID == 21) {
+                    if (g_pChitin->cNetwork.MakePlayersVisible() == 1) {
+                        g_pBaldurChitin->m_cBaldurMessage.SendFullSettingsToClients(CString(""));
+                    }
+                }
+            }
+        }
+
+        if (field_FA6) {
+            field_FA6 = FALSE;
+            g_pBaldurChitin->m_pObjectCursor->SetCursor(0, TRUE);
+            g_pBaldurChitin->m_pObjectCursor->m_bVisible = TRUE;
+        }
+
+        UpdateCursorShape(0);
+
+        m_cUIManager.TimerAsynchronousUpdate();
+        g_pBaldurChitin->m_pObjectCursor->CursorUpdate(pVidMode);
+
+        if (m_bExitProgram) {
+            // TODO: Incomplete.
+        }
+    }
 }
 
 // 0x5FBEF0
@@ -1451,6 +1638,38 @@ void CScreenConnection::ResetErrorPanel(CUIPanel* pPanel)
 
         pButton->SetText(FetchString(m_strErrorButtonText[nButton]));
     }
+}
+
+// 0x600B50
+void CScreenConnection::HandleEMEvent(BYTE nEvent, BYTE nEventStage)
+{
+    // TODO: Incomplete.
+}
+
+// 0x6014A0
+void CScreenConnection::HandleJoinCompletion(BYTE nEvent)
+{
+    // TODO: Incomplete.
+}
+
+// 0x601790
+BOOL CScreenConnection::AutoStartInitialize()
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x6018E0
+void CScreenConnection::AutoStartConnect()
+{
+    // TODO: Incomplete.
+}
+
+// 0x601AE0
+void CScreenConnection::AutoStartDirectPlayLobby()
+{
+    // TODO: Incomplete.
 }
 
 // 0x601CB0

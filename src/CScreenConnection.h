@@ -82,6 +82,11 @@ public:
     void SetEliminateInitialize(BOOLEAN bEliminateInitialize);
     void OnErrorButtonClick(INT nButton);
     void ResetErrorPanel(CUIPanel* pPanel);
+    void HandleEMEvent(BYTE nEvent, BYTE nEventStage);
+    void HandleJoinCompletion(BYTE nEvent);
+    BOOL AutoStartInitialize();
+    void AutoStartConnect();
+    void AutoStartDirectPlayLobby();
     void AutoSelectServiceProvider();
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
     void sub_6024A0();
