@@ -2262,6 +2262,109 @@ void CUIControlButtonConnectionSerialPort::OnLButtonClick(CPoint pt)
     lock.Unlock();
 }
 
+// 0x604210
+CUIControlButtonConnectionSerialBaudRate::CUIControlButtonConnectionSerialBaudRate(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, 1, 0)
+{
+    INT nBaudRate;
+    switch (m_nID) {
+    case 4:
+        nBaudRate = 14400;
+        break;
+    case 5:
+        nBaudRate = 19200;
+        break;
+    case 6:
+        nBaudRate = 38400;
+        break;
+    case 7:
+        nBaudRate = 56000;
+        break;
+    case 8:
+        nBaudRate = 57600;
+        break;
+    case 9:
+        nBaudRate = 115200;
+        break;
+    case 10:
+        nBaudRate = 128000;
+        break;
+    case 11:
+        nBaudRate = 256000;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 8368
+        UTIL_ASSERT(FALSE);
+    }
+
+    char buffer[80];
+    sprintf(buffer, "%d", nBaudRate);
+    SetText(CString(buffer));
+
+    m_nSelectedFrame = 1;
+    m_nNotSelectedFrame = 0;
+}
+
+// 0x604370
+CUIControlButtonConnectionSerialBaudRate::~CUIControlButtonConnectionSerialBaudRate()
+{
+}
+
+// 0x604410
+void CUIControlButtonConnectionSerialBaudRate::OnLButtonClick(CPoint pt)
+{
+    CScreenConnection* pConnection = g_pBaldurChitin->m_pEngineConnection;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 8399
+    UTIL_ASSERT(pConnection != NULL);
+
+    CSingleLock lock(&(pConnection->GetManager()->field_36), FALSE);
+    lock.Lock(INFINITE);
+
+    INT nBaudRate;
+    switch (m_nID) {
+    case 4:
+        nBaudRate = 14400;
+        break;
+    case 5:
+        nBaudRate = 19200;
+        break;
+    case 6:
+        nBaudRate = 38400;
+        break;
+    case 7:
+        nBaudRate = 56000;
+        break;
+    case 8:
+        nBaudRate = 57600;
+        break;
+    case 9:
+        nBaudRate = 115200;
+        break;
+    case 10:
+        nBaudRate = 128000;
+        break;
+    case 11:
+        nBaudRate = 256000;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 8368
+        UTIL_ASSERT(FALSE);
+    }
+
+    pConnection->m_nSerialBaudRate = nBaudRate;
+
+    CUIPanel* pPanel = pConnection->m_lPopupStack.GetTailPosition() != NULL
+        ? pConnection->m_lPopupStack.GetTail()
+        : NULL;
+    pConnection->UpdatePopupPanel(pPanel->m_nID);
+
+    lock.Unlock();
+}
+
 // 0x604F80
 CUIControlButtonConnectionErrorButton::CUIControlButtonConnectionErrorButton(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, 1, 0)

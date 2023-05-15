@@ -220,6 +220,13 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonConnectionSerialBaudRate : public CUIControlButton3State {
+public:
+    CUIControlButtonConnectionSerialBaudRate(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonConnectionSerialBaudRate() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlButtonConnectionErrorButton : public CUIControlButton {
 public:
     CUIControlButtonConnectionErrorButton(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
