@@ -2159,6 +2159,29 @@ void CUIControlButtonConnectionProtocolProtocol::OnLButtonClick(CPoint pt)
     lock.Unlock();
 }
 
+// 0x604F80
+CUIControlButtonConnectionErrorButton::CUIControlButtonConnectionErrorButton(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, 1, 0)
+{
+}
+
+// 0x604FD0
+CUIControlButtonConnectionErrorButton::~CUIControlButtonConnectionErrorButton()
+{
+}
+
+// 0x605070
+void CUIControlButtonConnectionErrorButton::OnLButtonClick(CPoint pt)
+{
+    CScreenConnection* pConnection = g_pBaldurChitin->m_pEngineConnection;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 8928
+    UTIL_ASSERT(pConnection != NULL);
+
+    pConnection->OnErrorButtonClick(m_nID - 1);
+}
+
 // 0x605850
 void CScreenConnection::ShowSessionTerminatedMessage()
 {

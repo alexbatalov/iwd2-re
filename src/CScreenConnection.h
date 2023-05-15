@@ -213,4 +213,11 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonConnectionErrorButton : public CUIControlButton {
+public:
+    CUIControlButtonConnectionErrorButton(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonConnectionErrorButton() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 #endif /* CSCREENCONNECTION_H_ */
