@@ -2183,6 +2183,85 @@ void CUIControlButtonConnectionProtocolProtocol::OnLButtonClick(CPoint pt)
     lock.Unlock();
 }
 
+// 0x603F20
+CUIControlButtonConnectionSerialPort::CUIControlButtonConnectionSerialPort(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, 1, 0)
+{
+    INT nPort;
+    switch (m_nID) {
+    case 0:
+        nPort = 1;
+        break;
+    case 1:
+        nPort = 2;
+        break;
+    case 2:
+        nPort = 3;
+        break;
+    case 3:
+        nPort = 4;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 8232
+        UTIL_ASSERT(FALSE);
+    }
+
+    char buffer[80];
+    sprintf(buffer, "COM%d", nPort);
+    SetText(CString(buffer));
+
+    m_nSelectedFrame = 1;
+    m_nNotSelectedFrame = 0;
+}
+
+// 0x604050
+CUIControlButtonConnectionSerialPort::~CUIControlButtonConnectionSerialPort()
+{
+}
+
+// 0x6040F0
+void CUIControlButtonConnectionSerialPort::OnLButtonClick(CPoint pt)
+{
+    CScreenConnection* pConnection = g_pBaldurChitin->m_pEngineConnection;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 8263
+    UTIL_ASSERT(pConnection != NULL);
+
+    CSingleLock lock(&(pConnection->GetManager()->field_36), FALSE);
+    lock.Lock(INFINITE);
+
+    INT nPort;
+    switch (m_nID) {
+    case 0:
+        nPort = 1;
+        break;
+    case 1:
+        nPort = 2;
+        break;
+    case 2:
+        nPort = 3;
+        break;
+    case 3:
+        nPort = 4;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 8232
+        UTIL_ASSERT(FALSE);
+    }
+
+    pConnection->m_nSerialPort = nPort;
+
+    CUIPanel* pPanel = pConnection->m_lPopupStack.GetTailPosition() != NULL
+        ? pConnection->m_lPopupStack.GetTail()
+        : NULL;
+    pConnection->UpdatePopupPanel(pPanel->m_nID);
+
+    lock.Unlock();
+}
+
 // 0x604F80
 CUIControlButtonConnectionErrorButton::CUIControlButtonConnectionErrorButton(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, 1, 0)
