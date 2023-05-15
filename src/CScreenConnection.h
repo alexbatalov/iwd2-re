@@ -92,7 +92,9 @@ public:
     void AutoStartDirectPlayLobby();
     void AutoSelectServiceProvider();
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
-    void sub_6024A0();
+    void OnLobbyNewGameButtonClick();
+    void OnLobbyLoadGameButtonClick();
+    void OnLobbyExitButtonClick();
     void ShowSessionTerminatedMessage();
 
     /* 0106 */ int field_106;
@@ -237,6 +239,13 @@ class CUIControlButtonConnectionErrorButton : public CUIControlButton {
 public:
     CUIControlButtonConnectionErrorButton(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonConnectionErrorButton() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonConnectionLobbyMenu : public CUIControlButton {
+public:
+    CUIControlButtonConnectionLobbyMenu(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonConnectionLobbyMenu() override;
     void OnLButtonClick(CPoint pt) override;
 };
 

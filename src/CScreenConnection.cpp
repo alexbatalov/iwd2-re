@@ -1795,8 +1795,20 @@ void CScreenConnection::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, STRREF dwStr
     UpdateText(pText, "%s", strRes.szText);
 }
 
+// 0x602170
+void CScreenConnection::OnLobbyNewGameButtonClick()
+{
+    // TODO: Incomplete.
+}
+
+// 0x602360
+void CScreenConnection::OnLobbyLoadGameButtonClick()
+{
+    // TODO: Incomplete.
+}
+
 // 0x6024A0
-void CScreenConnection::sub_6024A0()
+void CScreenConnection::OnLobbyExitButtonClick()
 {
     CSingleLock lock(&(m_cUIManager.field_36));
     lock.Lock();
@@ -2408,6 +2420,59 @@ void CUIControlButtonConnectionErrorButton::OnLButtonClick(CPoint pt)
     UTIL_ASSERT(pConnection != NULL);
 
     pConnection->OnErrorButtonClick(m_nID - 1);
+}
+
+// 0x6050B0
+CUIControlButtonConnectionLobbyMenu::CUIControlButtonConnectionLobbyMenu(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, 1, 0)
+{
+    CScreenConnection* pConnection = g_pBaldurChitin->m_pEngineConnection;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 8956
+    UTIL_ASSERT(pConnection != NULL);
+
+    STRREF dwStrId;
+    switch (m_nID) {
+    case 1:
+        dwStrId = 13728; // "New Game"
+        break;
+    case 2:
+        dwStrId = 13729; // "Load Game"
+        break;
+    case 3:
+        dwStrId = 13906; // "Exit"
+        break;
+    }
+
+    SetText(CBaldurEngine::FetchString(dwStrId));
+}
+
+// 0x6051A0
+CUIControlButtonConnectionLobbyMenu::~CUIControlButtonConnectionLobbyMenu()
+{
+}
+
+// 0x605240
+void CUIControlButtonConnectionLobbyMenu::OnLButtonClick(CPoint pt)
+{
+    CScreenConnection* pConnection = g_pBaldurChitin->m_pEngineConnection;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 9006
+    UTIL_ASSERT(pConnection != NULL);
+
+    switch (m_nID) {
+    case 1:
+        pConnection->OnLobbyNewGameButtonClick();
+        break;
+    case 2:
+        pConnection->OnLobbyLoadGameButtonClick();
+        break;
+    case 3:
+        pConnection->OnLobbyExitButtonClick();
+        break;
+    }
 }
 
 // 0x605850
