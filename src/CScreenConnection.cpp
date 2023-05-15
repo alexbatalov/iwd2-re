@@ -156,11 +156,11 @@ CScreenConnection::CScreenConnection()
     m_nEnumServiceProvidersCountDown = -1;
     m_bDirectPlayLobby = FALSE;
     m_bStartedCountDown = FALSE;
-    field_498 = 0;
-    field_499 = 0;
-    field_49A = 0;
-    field_49B = 0;
-    field_49C = 0;
+    m_bEMSwapped = FALSE;
+    m_bEMValue = FALSE;
+    m_bEMWaiting = FALSE;
+    m_nEMEvent = 0;
+    m_nEMEventStage = 0;
     field_4B6 = 0;
     m_bJoinWaiting = FALSE;
     m_bJoinComplete = FALSE;
@@ -377,7 +377,7 @@ void CScreenConnection::RenderTorch()
 void CScreenConnection::OnLButtonDblClk(CPoint pt)
 {
     if (m_bAllowInput) {
-        if (!field_49A) {
+        if (!m_bEMWaiting) {
             m_cUIManager.OnLButtonDblClk(pt);
         }
     }
@@ -387,7 +387,7 @@ void CScreenConnection::OnLButtonDblClk(CPoint pt)
 void CScreenConnection::OnLButtonDown(CPoint pt)
 {
     if (m_bAllowInput) {
-        if (!field_49A) {
+        if (!m_bEMWaiting) {
             g_pBaldurChitin->m_pObjectCursor->m_nState = 1;
             m_cUIManager.OnLButtonDown(pt);
         }
@@ -398,7 +398,7 @@ void CScreenConnection::OnLButtonDown(CPoint pt)
 void CScreenConnection::OnLButtonUp(CPoint pt)
 {
     if (m_bAllowInput) {
-        if (!field_49A) {
+        if (!m_bEMWaiting) {
             g_pBaldurChitin->m_pObjectCursor->m_nState = 0;
             m_cUIManager.OnLButtonUp(pt);
         }
@@ -409,7 +409,7 @@ void CScreenConnection::OnLButtonUp(CPoint pt)
 void CScreenConnection::OnMouseMove(CPoint pt)
 {
     if (m_bAllowInput) {
-        if (!field_49A) {
+        if (!m_bEMWaiting) {
             m_cUIManager.OnMouseMove(pt);
         }
     }
@@ -419,7 +419,7 @@ void CScreenConnection::OnMouseMove(CPoint pt)
 void CScreenConnection::OnRButtonDown(CPoint pt)
 {
     if (m_bAllowInput) {
-        if (!field_49A) {
+        if (!m_bEMWaiting) {
             g_pBaldurChitin->m_pObjectCursor->m_nState = 1;
             m_cUIManager.OnRButtonDown(pt);
         }
@@ -430,7 +430,7 @@ void CScreenConnection::OnRButtonDown(CPoint pt)
 void CScreenConnection::OnRButtonUp(CPoint pt)
 {
     if (m_bAllowInput) {
-        if (!field_49A) {
+        if (!m_bEMWaiting) {
             g_pBaldurChitin->m_pObjectCursor->m_nState = 0;
             m_cUIManager.OnRButtonUp(pt);
         }
@@ -458,23 +458,51 @@ void CScreenConnection::TimerSynchronousUpdate()
     }
 
     if (m_bEliminateInitialize == TRUE) {
-        // TODO: Incomplete.
-        // g_pChitin->cNetwork.RemoveInitializeConnection();
+        g_pChitin->cNetwork.RemoveInitializeConnection();
         m_bEliminateInitialize = FALSE;
     }
 
-    if (field_49A != TRUE || field_498) {
-        // TODO: Incomplete.
+    if (m_bEMWaiting == TRUE && !m_bEMSwapped) {
+        g_pChitin->cVideo.SetExclusiveMode(m_bEMValue);
+        m_bEMSwapped = TRUE;
+        return;
+    }
 
-        if (m_bPlayEndCredits == TRUE) {
-            g_pChitin->pActiveEngine->pVidMode->EraseScreen(CVIDINF_SURFACE_BACK, RGB(0, 0, 0));
-        } else {
-            m_cUIManager.Render();
+    if (m_bJoinWaiting == TRUE && !m_bJoinComplete) {
+        INT nErrorCode = CNetwork::ERROR_NONE;
+        BOOLEAN bResult = g_pChitin->cNetwork.JoinSelectedSession(nErrorCode);
+        m_nJoinErrorCode = nErrorCode;
+        m_bJoinReturnValue = bResult;
+        m_bJoinComplete = TRUE;
+    }
+
+    if (m_nEnumServiceProvidersCountDown >= 1) {
+        if (m_nEnumServiceProvidersCountDown == 1) {
+            g_pChitin->cNetwork.EnumerateServiceProviders();
         }
+        m_nEnumServiceProvidersCountDown--;
+    }
 
-        pVidMode->Flip(TRUE);
+    if (m_bPlayEndCredits == TRUE) {
+        g_pChitin->pActiveEngine->pVidMode->EraseScreen(CVIDINF_SURFACE_BACK, RGB(0, 0, 0));
+    } else {
+        m_cUIManager.Render();
+    }
 
-        // TODO: Incomplete.
+    pVidMode->Flip(TRUE);
+
+    RenderTorch();
+
+    if (m_bIsNight) {
+        if (m_lPopupStack.GetTailPosition() == NULL || m_lPopupStack.GetTail() == NULL) {
+            SHORT nCurrentFrame = m_vcTorch.m_nCurrentFrame;
+            SHORT nCurrentSequence = m_vcTorch.m_nCurrentSequence;
+            if (nCurrentFrame + 1 < m_vcTorch.GetSequenceLength(nCurrentSequence, FALSE)) {
+                m_vcTorch.FrameAdvance();
+            } else {
+                m_vcTorch.FrameSet(0);
+            }
+        }
     }
 }
 

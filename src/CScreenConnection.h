@@ -106,11 +106,11 @@ public:
     /* 0497 */ BOOLEAN m_bEliminateInitialize;
     /* 04B2 */ BOOL m_bAllowInput;
     /* 0496 */ unsigned char field_496;
-    /* 0498 */ unsigned char field_498;
-    /* 0499 */ unsigned char field_499;
-    /* 049A */ BOOLEAN field_49A;
-    /* 049B */ unsigned char field_49B;
-    /* 049C */ unsigned char field_49C;
+    /* 0498 */ BOOLEAN m_bEMSwapped;
+    /* 0499 */ BOOLEAN m_bEMValue;
+    /* 049A */ BOOLEAN m_bEMWaiting;
+    /* 049B */ BYTE m_nEMEvent;
+    /* 049C */ BYTE m_nEMEventStage;
     /* 049D */ BOOLEAN m_bDirectPlayLobby;
     /* 049E */ INT m_nErrorState;
     /* 04A2 */ STRREF m_strErrorText;
