@@ -3,6 +3,7 @@
 #include "CBaldurChitin.h"
 #include "CBaldurProjector.h"
 #include "CInfCursor.h"
+#include "CInfGame.h"
 #include "CScreenStart.h"
 #include "CUIPanel.h"
 #include "CUIControlButton3State.h"
@@ -828,7 +829,116 @@ void CScreenConnection::EnableMainPanel(BOOL bEnable)
 // 0x5FEE50
 void CScreenConnection::UpdateMainPanel()
 {
-    // TODO: Incomplete.
+    CUIPanel* pPanel = m_cUIManager.GetPanel(0);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 3801
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(0));
+
+    CTime time = CTime::GetCurrentTime();
+    if (time.GetHour() > 6 && time.GetHour() < 18) {
+        if (pPanel->m_mosBackground.GetResRef() == "STARTN") {
+            pPanel->SetBackgroundResRef(CResRef("START"), g_pBaldurChitin->field_4A28);
+            m_bIsNight = FALSE;
+            m_vcTorch.FrameSet(0);
+        }
+    } else {
+        if (pPanel->m_mosBackground.GetResRef() == "START") {
+            pPanel->SetBackgroundResRef(CResRef("STARTN"), g_pBaldurChitin->field_4A28);
+            m_bIsNight = TRUE;
+            m_vcTorch.FrameSet(0);
+        }
+    }
+
+    if (byte_8B3342 == TRUE && g_pChitin->cNetwork.m_bServiceProviderEnumerated) {
+        byte_8B3342 = FALSE;
+        AutoSelectServiceProvider();
+    }
+
+    // FIXME: This value is uninitialized in the original code which leads to
+    // annoying warnings in the debug console.
+    INT nServiceProviderType = -1;
+
+    if (g_pChitin->cNetwork.m_nServiceProvider == -1) {
+        // "Single Player"
+        pButton->SetText(FetchString(15413));
+        g_pChitin->cNetwork.SelectServiceProvider(0);
+    } else {
+        g_pChitin->cNetwork.GetServiceProviderType(g_pChitin->cNetwork.m_nServiceProvider, nServiceProviderType);
+        if (nServiceProviderType == CNetwork::SERV_PROV_IPX) {
+            // "ipx"
+            pButton->SetText(FetchString(13967));
+        } else if (nServiceProviderType == CNetwork::SERV_PROV_TCP_IP) {
+            // "tcp/ip"
+            pButton->SetText(FetchString(13968));
+        } else if (nServiceProviderType == CNetwork::SERV_PROV_MODEM) {
+            // "Modem"
+            pButton->SetText(FetchString(13969));
+        } else if (nServiceProviderType == CNetwork::SERV_PROV_SERIAL) {
+            // "Serial"
+            pButton->SetText(FetchString(13970));
+        } else if (nServiceProviderType == CNetwork::SERV_PROV_NULL) {
+            // "Single Player"
+            pButton->SetText(FetchString(15413));
+        } else {
+            pButton->SetText(CString("ERROR!"));
+        }
+    }
+
+    pButton = static_cast<CUIControlButton*>(pPanel->GetControl(3));
+    pButton->SetEnabled(nServiceProviderType == CNetwork::SERV_PROV_NULL
+        && (g_pBaldurChitin->m_pObjectGame->SaveGameExists(CInfGame::QUICK_SAVE_NAME)
+            || g_pBaldurChitin->m_pObjectGame->SaveGameExists(CInfGame::QUICK_SAVE_BACKUP_NAME)));
+
+    if (nServiceProviderType == CNetwork::SERV_PROV_NULL) {
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(11));
+        pButton->SetEnabled(FALSE);
+    }
+
+    if (g_pChitin->field_110) {
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(0));
+        pButton->SetEnabled(FALSE);
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(11));
+        pButton->SetEnabled(FALSE);
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(3));
+        pButton->SetEnabled(FALSE);
+    } else if (g_pChitin->field_114) {
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(0));
+        pButton->SetEnabled(FALSE);
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(2));
+        pButton->SetEnabled(FALSE);
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(7));
+        pButton->SetEnabled(FALSE);
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(3));
+        pButton->SetEnabled(FALSE);
+    }
+
+    pButton = static_cast<CUIControlButton*>(pPanel->GetControl(7));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 3931
+    UTIL_ASSERT(pButton != NULL);
+
+    pButton->SetEnabled(g_pChitin->cNetwork.m_bServiceProviderEnumerated && !g_pChitin->field_114);
+
+    if (nServiceProviderType != CNetwork::SERV_PROV_NULL && !g_pChitin->field_110) {
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(11));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 3931
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->SetEnabled(g_pChitin->cNetwork.m_bServiceProviderEnumerated);
+    }
+
+    m_cUIManager.InvalidateRect(NULL);
 }
 
 // 0x5FF690
@@ -1313,6 +1423,12 @@ void CScreenConnection::ResetErrorPanel(CUIPanel* pPanel)
 
         pButton->SetText(FetchString(m_strErrorButtonText[nButton]));
     }
+}
+
+// 0x601CB0
+void CScreenConnection::AutoSelectServiceProvider()
+{
+    // TODO: Incomplete.
 }
 
 // 0x602060

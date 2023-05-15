@@ -82,6 +82,7 @@ public:
     void SetEliminateInitialize(BOOLEAN bEliminateInitialize);
     void OnErrorButtonClick(INT nButton);
     void ResetErrorPanel(CUIPanel* pPanel);
+    void AutoSelectServiceProvider();
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
     void sub_6024A0();
     void ShowSessionTerminatedMessage();
