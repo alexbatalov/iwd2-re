@@ -64,6 +64,7 @@ public:
     void OnDoneButtonClick();
     void OnCancelButtonClick();
     void OnJoinGameButtonClick();
+    void sub_5FEB70();
     void EnableMainPanel(BOOL bEnable);
     void UpdateMainPanel();
     void UpdateProtocolPanel();
@@ -78,6 +79,7 @@ public:
     void ResetPlayerNamePanel();
     void StartConnection(BOOLEAN bDirectPlayLobby);
     void SetEliminateInitialize(BOOLEAN bEliminateInitialize);
+    void OnErrorButtonClick(INT nButton);
     void ResetErrorPanel(CUIPanel* pPanel);
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
     void sub_6024A0();

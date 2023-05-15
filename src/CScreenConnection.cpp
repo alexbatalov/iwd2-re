@@ -785,6 +785,12 @@ void CScreenConnection::OnJoinGameButtonClick()
     lock.Unlock();
 }
 
+// 0x5FEB70
+void CScreenConnection::sub_5FEB70()
+{
+    // TODO: Incomplete.
+}
+
 // 0x5FED80
 void CScreenConnection::EnableMainPanel(BOOL bEnable)
 {
@@ -941,6 +947,59 @@ void CScreenConnection::StartConnection(BOOLEAN bDirectPlayLobby)
 void CScreenConnection::SetEliminateInitialize(BOOLEAN bEliminateInitialize)
 {
     m_bEliminateInitialize = bEliminateInitialize;
+}
+
+// 0x6007F0
+void CScreenConnection::OnErrorButtonClick(INT nButton)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 5414
+    UTIL_ASSERT(0 <= nButton && nButton < CSCREENCONNECTION_ERROR_BUTTONS);
+
+    CSingleLock lock(&(GetManager()->field_36), FALSE);
+    lock.Lock(INFINITE);
+
+    switch (m_nErrorState) {
+    case 0:
+    case 1:
+    case 2:
+    case 6:
+    case 8:
+    case 10:
+    case 23:
+        DismissPopup();
+        break;
+    case 7:
+        switch (nButton) {
+        case 0:
+            DismissPopup();
+            sub_5FEB70();
+            break;
+        case 1:
+            DismissPopup();
+            break;
+        }
+        break;
+    case 9:
+        switch (nButton) {
+        case 0:
+            DismissPopup();
+
+            if (m_cUIManager.m_pFocusedControl != NULL) {
+                m_cUIManager.m_pFocusedControl->KillFocus();
+                m_cUIManager.m_pFocusedControl = NULL;
+            }
+
+            m_bExitProgram = TRUE;
+            break;
+        case 1:
+            DismissPopup();
+            break;
+        }
+        break;
+    }
+
+    lock.Unlock();
 }
 
 // 0x600920
