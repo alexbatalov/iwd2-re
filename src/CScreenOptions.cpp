@@ -14,6 +14,7 @@
 #include "CScreenSave.h"
 #include "CScreenWorld.h"
 #include "CUIControlFactory.h"
+#include "CUIControlScrollBar.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -332,7 +333,7 @@ void CScreenOptions::EngineInitialized()
     }
 
     m_nSelectedCharacter = 0;
-    field_FA = NULL;
+    m_pCurrentScrollBar = NULL;
     m_bExitProgram = FALSE;
     m_bFromMainMenu = FALSE;
 
@@ -1084,7 +1085,7 @@ void CScreenOptions::UpdateGraphicsPanel(BOOLEAN bInitialUpdate)
     // __LINE__: 1941
     UTIL_ASSERT(pPanel != NULL);
 
-    field_FA = pPanel->GetControl(34);
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(34));
 
     pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(3));
     UTIL_ASSERT(pSlider != NULL); // 1948
@@ -1177,7 +1178,7 @@ void CScreenOptions::UpdateSoundPanel(BOOLEAN bInitialUpdate)
     // __LINE__: 2059
     UTIL_ASSERT(pPanel != NULL);
 
-    field_FA = pPanel->GetControl(15);
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(15));
 
     // TODO: Check casts.
 
@@ -1223,7 +1224,7 @@ void CScreenOptions::UpdateSelectSoundsPanel(BOOLEAN bInitialUpdate)
     // __LINE__: 2126
     UTIL_ASSERT(pPanel != NULL);
 
-    field_FA = pPanel->GetControl(17);
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(17));
 
     pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(6));
     UTIL_ASSERT(pButton != NULL); // 2131
@@ -1274,7 +1275,7 @@ void CScreenOptions::UpdateGamePlayPanel(BOOLEAN bInitialUpdate)
     // __LINE__: 2191
     UTIL_ASSERT(pPanel != NULL);
 
-    field_FA = pPanel->GetControl(41);
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(41));
 
     pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(1));
     UTIL_ASSERT(pSlider != NULL); // 2197
@@ -1370,7 +1371,7 @@ void CScreenOptions::UpdateFeedbackPanel(BOOLEAN bInitialUpdate)
     // __LINE__: 2319
     UTIL_ASSERT(pPanel != NULL);
 
-    field_FA = pPanel->GetControl(29);
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(29));
 
     // TODO: Check casts.
 
@@ -1420,7 +1421,7 @@ void CScreenOptions::UpdateAutoPausePanel(BOOLEAN bInitialUpdate)
     // __LINE__: 2383
     UTIL_ASSERT(pPanel != NULL);
 
-    field_FA = pPanel->GetControl(16);
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(16));
 
     pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(1));
     UTIL_ASSERT(pButton != NULL); // 2388

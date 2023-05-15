@@ -5,6 +5,7 @@
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CScreenStart.h"
+#include "CUIControlScrollBar.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
 #include "CVidInf.h"
@@ -393,7 +394,7 @@ void CScreenConnection::EngineInitialized()
         m_cUIManager.AddPanel(&(g_pBaldurChitin->field_49B4[n]));
     }
 
-    field_FA = 0;
+    m_pCurrentScrollBar = NULL;
 
     m_cUIManager.GetPanel(1)->SetActive(FALSE);
     m_cUIManager.GetPanel(3)->SetActive(FALSE);
@@ -1264,7 +1265,7 @@ void CScreenConnection::UpdateProtocolPanel()
     // __LINE__: 4046
     UTIL_ASSERT(pPanel != NULL);
 
-    field_FA = pPanel->GetControl(8);
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(8));
 
     for (nButtonID = 0; nButtonID < 2; nButtonID++) {
         pButton3 = static_cast<CUIControlButton3State*>(pPanel->GetControl(nButtonID));

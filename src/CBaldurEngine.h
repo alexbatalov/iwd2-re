@@ -4,8 +4,8 @@
 #include "CUIManager.h"
 #include "CWarp.h"
 
-class CUIControlBase;
 class CUIControlLabel;
+class CUIControlScrollBar;
 class CUIControlTextDisplay;
 class CUIPanel;
 
@@ -189,7 +189,7 @@ public:
     /* 0028 */ int m_nSelectedCharacter;
     /* 002C */ int m_nPickedCharacter;
     /* 0030 */ CUIManager m_cUIManager;
-    /* 00FA */ CUIControlBase* field_FA;
+    /* 00FA */ CUIControlScrollBar* m_pCurrentScrollBar;
     /* 00FE */ int field_FE;
     /* 0102 */ int field_102;
 };

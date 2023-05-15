@@ -4,6 +4,7 @@
 #include "CScreenConnection.h"
 #include "CUIControlBase.h"
 #include "CUIControlButton.h"
+#include "CUIControlScrollBar.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
 
@@ -96,7 +97,7 @@ void CScreenStart::OnKeyDown(SHORT nKeyFlags)
                         OnErrorButtonClick(1);
                         break;
                     case 4:
-                        field_FA = m_cUIManager.GetPanel(4)->GetControl(1);
+                        m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(m_cUIManager.GetPanel(4)->GetControl(1));
                         sub_6702C0();
                         break;
                     }
