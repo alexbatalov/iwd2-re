@@ -849,7 +849,55 @@ void CScreenConnection::UpdateTCPIPPanel()
 // 0x5FFF60
 void CScreenConnection::ResetProtocolPanel()
 {
-    // TODO: Incomplete.
+    m_nProtocol = 0;
+
+    if (g_pChitin->cNetwork.m_nServiceProvider != -1) {
+        INT nServiceProviderType;
+        g_pChitin->cNetwork.GetServiceProviderType(g_pChitin->cNetwork.m_nServiceProvider, nServiceProviderType);
+
+        if (nServiceProviderType == CNetwork::SERV_PROV_NULL) {
+            m_nProtocol = 0;
+        } else if (nServiceProviderType == CNetwork::SERV_PROV_IPX) {
+            m_nProtocol = 1;
+        } else if (nServiceProviderType == CNetwork::SERV_PROV_TCP_IP) {
+            m_nProtocol = 2;
+        } else if (nServiceProviderType == CNetwork::SERV_PROV_MODEM) {
+            m_nProtocol = 3;
+        } else if (nServiceProviderType == CNetwork::SERV_PROV_SERIAL) {
+            m_nProtocol = 4;
+        }
+    } else {
+        CString sLastProtocol;
+        GetPrivateProfileStringA("Multiplayer",
+            "Last Protocol Used",
+            "",
+            sLastProtocol.GetBuffer(128),
+            128,
+            g_pBaldurChitin->GetIniFileName());
+        sLastProtocol.ReleaseBuffer();
+
+        switch (sLastProtocol.GetBuffer(1)[0]) {
+        case '1':
+            m_nProtocol = 1;
+            break;
+        case '2':
+            m_nProtocol = 2;
+            break;
+        case '3':
+            m_nProtocol = 3;
+            break;
+        case '4':
+            m_nProtocol = 4;
+            break;
+        default:
+            m_nProtocol = 0;
+            break;
+        }
+
+        // FIXME: Missing `ReleaseBuffer`.
+    }
+
+    UpdateHelp(1, 7, 11316);
 }
 
 // 0x600100
