@@ -189,6 +189,7 @@ public:
 };
 
 class CUIControlTextDisplayConnectionTCPIPSessions : public CUIControlTextDisplay {
+public:
     CUIControlTextDisplayConnectionTCPIPSessions(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo);
     ~CUIControlTextDisplayConnectionTCPIPSessions() override;
     void OnItemSelected(LONG lMarker) override;

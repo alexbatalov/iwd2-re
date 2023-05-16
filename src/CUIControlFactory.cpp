@@ -37,8 +37,10 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
     } else if (pPanel->m_pManager->m_cResRef == "GUISAVE") {
     } else if (pPanel->m_pManager->m_cResRef == "GUICHAP") {
     } else if (pPanel->m_pManager->m_cResRef == "GUICONN") {
+        // 0x76DDE8
         switch (pPanel->m_nID) {
         case 0:
+            // 0x76DE2E
             switch (controlInfo->nID) {
             case 0:
                 return new CUIControlButtonConnectionGameMode(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
@@ -54,125 +56,235 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
                 return new CUIControlButtonGeneralOptionsFromMainMenu(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 11:
                 return new CUIControlButtonConnectionJoinGame(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
-            default:
-                break;
             }
             break;
         case 1:
+            // 0x76E017
             switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 10:
+                return new CUIControlButtonConnectionProtocolProtocol(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 5:
                 return new CUIControlButtonConnectionPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 6:
                 return new CUIControlButtonConnectionPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
-            default:
-                break;
+            case 7:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 8:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
             }
             break;
         case 3:
+            // 0x76E115
             switch (controlInfo->nID) {
+            case 3:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
             case 5:
                 return new CUIControlButtonConnectionPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 6:
                 return new CUIControlButtonConnectionPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
-            default:
-                break;
+            case 7:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 8:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
             }
             break;
         case 4:
+            // 0x76E228
             switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+                return new CUIControlButtonConnectionSerialPort(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+                return new CUIControlButtonConnectionSerialBaudRate(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 14:
                 return new CUIControlButtonConnectionPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 15:
                 return new CUIControlButtonConnectionPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
-            default:
-                break;
             }
             break;
         case 5:
+            // 0x76E2E1
             switch (controlInfo->nID) {
+            case 1:
+                // TODO: Incomplete.
+                return NULL;
             case 2:
                 return new CUIControlButtonConnectionPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 3:
                 return new CUIControlButtonConnectionPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
-            default:
-                break;
+            case 6:
+                // TOOD: Incomplete.
+                return NULL;
+            case 7:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
             }
             break;
         case 6:
+            // 0x76E3DC
             switch (controlInfo->nID) {
+            case 0:
+                // TODO: Incomplete.
+                return NULL;
+            case 1:
+                // TODO: Incomplete.
+                return NULL;
+            case 4:
+                // TODO: Incomplete.
+                return NULL;
             case 6:
                 return new CUIControlButtonConnectionPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
-            default:
-                break;
+            case 10:
+                // TODO: Incomplete.
+                return NULL;
+            case 13:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 14:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 15:
+                // TODO: Incomplete.
+                return NULL;
             }
             break;
         case 7:
+            // 0x76E56C
             switch (controlInfo->nID) {
             case 0:
                 return new CUIControlButtonConnectionPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 1:
                 return new CUIControlButtonConnectionPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 2:
+                // TODO: Incomplete.
+                return NULL;
             default:
                 break;
             }
             break;
         case 8:
+            // 0x76E5ED
             switch (controlInfo->nID) {
+            case 3:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 4:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 5:
+                // TODO: Incomplete.
+                return NULL;
             case 6:
                 return new CUIControlButtonConnectionPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 7:
                 return new CUIControlButtonConnectionPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
-            default:
-                break;
             }
             break;
         case 11:
+            // 0x76E6D0
             switch (controlInfo->nID) {
+            case 1:
+                return new CUIControlTextDisplayConnectionTCPIPSessions(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo));
+            case 2:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
             case 3:
                 return new CUIControlButtonConnectionPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 4:
                 return new CUIControlButtonConnectionPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
-            default:
-                break;
+            case 5:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 6:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
             }
             break;
         case 12:
+            // 0x76E7D0
             switch (controlInfo->nID) {
+            case 1:
+                // TODO: Incomplete.
+                return NULL;
             case 2:
                 return new CUIControlButtonConnectionPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 3:
                 return new CUIControlButtonConnectionPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
-            default:
-                break;
+            }
+            break;
+        case 19:
+        case 20:
+        case 22:
+            // 0x76E8ED
+            if (controlInfo->nID == 0) {
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            } else if (controlInfo->nID < CSCREENCONNECTION_ERROR_BUTTONS + 1) {
+                return new CUIControlButtonConnectionErrorButton(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            } else {
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\UIControlButtons.cpp
+                // __LINE__: 947
+                UTIL_ASSERT(FALSE);
+            }
+            break;
+        case 21:
+            // 0x76E868
+            switch (controlInfo->nID) {
+            case 1:
+            case 2:
+            case 3:
+                return new CUIControlButtonConnectionLobbyMenu(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 4:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 5:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
             }
             break;
         case 23:
+            // 0x76E979
             switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
             case 1:
                 return new CUIControlButtonConnectionPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
-            default:
-                break;
+            case 2:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
             }
             break;
         case 24:
+            // 0x76E9FE
             switch (controlInfo->nID) {
             case 1:
                 return new CUIControlButtonConnectionPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 2:
                 return new CUIControlButtonConnectionPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
-            default:
-                break;
+            case 3:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 4:
+            case 5:
+            case 6:
+                // TODO: Incomplete.
+                return NULL;
+            case 7:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
             }
             break;
         case 25:
+            // 0x76EAD7
             switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 1:
+            case 2:
+                // TODO: Incomplete.
+                return NULL;
             case 3:
                 return new CUIControlButtonConnectionPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
-            default:
-                break;
+            case 4:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
             }
-            break;
-        default:
             break;
         }
     } else if (pPanel->m_pManager->m_cResRef == "GUIMP") {
