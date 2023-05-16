@@ -60,7 +60,7 @@ public:
     BOOL sub_7CF650(BYTE* pSurface, LONG lPitch, DWORD dwFlags);
     BOOL sub_7CF8D0(BYTE* pSurface, LONG lPitch, DWORD dwFlags, INT nTransVal);
 
-    BOOL sub_7CFBC0(DWORD* pSurface, LONG lPitch, DWORD dwFlags, INT nTransVal);
+    BOOL Blt8To32(DWORD* pSurface, LONG lPitch, DWORD dwFlags, INT nTransVal);
     BOOL Blt8To32(DWORD* pSurface, LONG lPitch, const CPoint& pt, const CRect& rClip, DWORD dwFlags, const CPoint& ptSource, INT nTransVal);
     BOOL sub_7D0470(DWORD* pSurface, LONG lPitch, DWORD dwFlags);
     BOOL sub_7D0730(DWORD* pSurface, LONG lPitch, DWORD dwFlags);

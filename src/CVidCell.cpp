@@ -831,7 +831,7 @@ BOOL CVidCell::Render(WORD* pSurface, LONG lPitch, INT nRefPointX, INT nRefPoint
                     dwFlags);
                 break;
             case 32:
-                bSuccess = sub_7CFBC0(reinterpret_cast<DWORD*>(pSurface)
+                bSuccess = Blt8To32(reinterpret_cast<DWORD*>(pSurface)
                         + lPitch / 4 * (nRefPointY - m_pFrame->nCenterY)
                         + (nRefPointX - m_pFrame->nCenterX),
                     lPitch,
@@ -986,7 +986,7 @@ BOOL CVidCell::Render(INT nSurface, int x, int y, const CRect& rClip, CVidPoly* 
                 dwFlags);
             break;
         case 32:
-            bSuccess = sub_7CFBC0(reinterpret_cast<DWORD*>(ddsd.lpSurface),
+            bSuccess = Blt8To32(reinterpret_cast<DWORD*>(ddsd.lpSurface),
                 ddsd.lPitch,
                 dwFlags,
                 255);
@@ -1409,9 +1409,91 @@ BOOL CVidCell::sub_7CF8D0(BYTE* pSurface, LONG lPitch, DWORD dwFlags, INT nTrans
 }
 
 // 0x7CFBC0
-BOOL CVidCell::sub_7CFBC0(DWORD* pSurface, LONG lPitch, DWORD dwFlags, INT nTransVal)
+BOOL CVidCell::Blt8To32(DWORD* pSurface, LONG lPitch, DWORD dwFlags, INT nTransVal)
 {
-    // TODO: Incomplete.
+    int nWidth = m_pFrame->nWidth;
+    int nHeight = m_pFrame->nHeight;
+
+    if (nWidth == 0 || nHeight == 0) {
+        return TRUE;
+    }
+
+    if (!m_bPaletteChanged) {
+        m_cPalette.SetPalette(pRes->m_pPalette, 256, CVidPalette::TYPE_RESOURCE);
+    }
+
+    m_cPalette.Realize(CVidImage::rgbTempPal, 32, dwFlags, &m_paletteAffects, nTransVal);
+
+    if (!m_bShadowOn) {
+        CVidImage::rgbTempPal[CVidPalette::SHADOW_ENTRY] = g_pChitin->GetCurrentVideoMode()->field_24;
+    }
+
+    if (g_pChitin->field_174) {
+        if (m_nCurrentFrame == 0) {
+            for (int index = CVidPalette::SHADOW_ENTRY + 1; index < 256; index++) {
+                CVidImage::rgbTempPal[index] = g_pChitin->GetCurrentVideoMode()->ConvertToSurfaceRGB(255);
+            }
+        }
+    }
+
+    BYTE* pFrameData = pRes->GetFrameData(m_pFrame, m_bDoubleSize);
+    BAMHEADER* pBamHeader = pRes->field_7E
+        ? pRes->m_pBamHeaderCopy
+        : pRes->m_pBamHeader;
+    BYTE nTransparentColor = pBamHeader->nTransparentColor;
+
+    // NOTE: Original code is slightly different, but does the same thing.
+    if (pRes->GetCompressed(m_pFrame, m_bDoubleSize)) {
+        int nRunLength = 0;
+        int pos = 0;
+        for (int y = 0; y < nHeight; y++) {
+            int nRemainingWidth = nWidth;
+            while (nRemainingWidth != 0) {
+                BYTE nColor = pFrameData[pos];
+                if (nColor == nTransparentColor) {
+                    if (nRunLength == 0) {
+                        nRunLength = pFrameData[pos + 1] + 1;
+                    }
+
+                    if (nRemainingWidth == nRunLength) {
+                        pos += 2;
+
+                        pSurface += nRemainingWidth;
+                        nRunLength = 0;
+                        nRemainingWidth = 0;
+                    } else if (nRemainingWidth > nRunLength) {
+                        pos += 2;
+
+                        pSurface += nRunLength;
+                        nRemainingWidth -= nRunLength;
+                        nRunLength = 0;
+                    } else {
+                        pSurface += nRemainingWidth;
+                        nRunLength -= nRemainingWidth;
+                        nRemainingWidth = 0;
+                    }
+                } else {
+                    pos++;
+
+                    *pSurface++ = CVidImage::rgbTempPal[nColor];
+                    nRemainingWidth--;
+                }
+            }
+            pSurface += lPitch / 4 - nWidth;
+        }
+    } else {
+        for (int y = 0; y < nHeight; y++) {
+            for (int x = 0; x < nWidth; x++) {
+                BYTE nColor = *pFrameData;
+                if (nColor != nTransparentColor) {
+                    *pSurface = CVidImage::rgbTempPal[nColor];
+                }
+                pFrameData++;
+                pSurface++;
+            }
+            pSurface += lPitch / 4 - nWidth;
+        }
+    }
 
     return TRUE;
 }
@@ -1419,7 +1501,252 @@ BOOL CVidCell::sub_7CFBC0(DWORD* pSurface, LONG lPitch, DWORD dwFlags, INT nTran
 // 0x7CFDF0
 BOOL CVidCell::Blt8To32(DWORD* pSurface, LONG lPitch, const CPoint& pt, const CRect& rClip, DWORD dwFlags, const CPoint& ptSource, INT nTransVal)
 {
-    // TODO: Incomplete.
+    int nBltWidth = m_pFrame->nWidth - ptSource.x;
+    int nBltHeight = m_pFrame->nHeight - ptSource.y;
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVidImage.cpp
+    // __LINE__: 5029
+    UTIL_ASSERT(ptSource.x >= 0 && ptSource.y >= 0);
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVidImage.cpp
+    // __LINE__: 5030
+    UTIL_ASSERT(rClip.top >= 0 && rClip.top <= rClip.bottom && rClip.left >= 0 && rClip.left <= rClip.right);
+
+    if (pt.y > rClip.bottom
+        || pt.x > rClip.right
+        || pt.x + nBltWidth < rClip.left
+        || pt.y + nBltHeight < rClip.top) {
+        return TRUE;
+    }
+
+    BYTE* pFrameData = pRes->GetFrameData(m_pFrame, m_bDoubleSize);
+    BAMHEADER* pBamHeader = pRes->field_7E
+        ? pRes->m_pBamHeaderCopy
+        : pRes->m_pBamHeader;
+    BYTE nTransparentColor = pBamHeader->nTransparentColor;
+
+    DWORD* pDest = pSurface + lPitch / 4 * pt.y + pt.x;
+
+    // NOTE: Original code is different, but does the same thing.
+    if (pRes->GetCompressed(m_pFrame, m_bDoubleSize)) {
+        int nWidth = m_pFrame->nWidth;
+        int nHeight = m_pFrame->nHeight;
+        int nRunLength = 0;
+        int pos = 0;
+
+        // Skip src top.
+        int nSkipSrcH = ptSource.y;
+        while (nSkipSrcH > 0) {
+            int nRemainingWidth = nWidth;
+            while (nRemainingWidth != 0) {
+                BYTE nColor = pFrameData[pos];
+                if (nColor == nTransparentColor) {
+                    if (nRunLength == 0) {
+                        nRunLength = pFrameData[pos + 1] + 1;
+                    }
+
+                    if (nRemainingWidth == nRunLength) {
+                        pos += 2;
+
+                        nRunLength = 0;
+                        nRemainingWidth = 0;
+                    } else if (nRemainingWidth > nRunLength) {
+                        pos += 2;
+
+                        nRemainingWidth -= nRunLength;
+                        nRunLength = 0;
+                    } else {
+                        nRunLength -= nRemainingWidth;
+                        nRemainingWidth = 0;
+                    }
+                } else {
+                    pos++;
+                    nRemainingWidth--;
+                }
+            }
+            nSkipSrcH--;
+        }
+
+        // Skip dest top.
+        int nSkipDestH = max(rClip.top - pt.y, 0);
+        while (nSkipDestH > 0) {
+            int nRemainingWidth = nWidth;
+            while (nRemainingWidth != 0) {
+                BYTE nColor = pFrameData[pos];
+                if (nColor == nTransparentColor) {
+                    if (nRunLength == 0) {
+                        nRunLength = pFrameData[pos + 1] + 1;
+                    }
+
+                    if (nRemainingWidth == nRunLength) {
+                        pos += 2;
+
+                        pDest += nRemainingWidth;
+                        nRunLength = 0;
+                        nRemainingWidth = 0;
+                    } else if (nRemainingWidth > nRunLength) {
+                        pos += 2;
+
+                        pDest += nRunLength;
+                        nRemainingWidth -= nRunLength;
+                        nRunLength = 0;
+                    } else {
+                        pDest += nRemainingWidth;
+                        nRunLength -= nRemainingWidth;
+                        nRemainingWidth = 0;
+                    }
+                } else {
+                    pos++;
+
+                    pDest++;
+                    nRemainingWidth--;
+                }
+            }
+            pDest += lPitch / 4 - nWidth;
+            nSkipDestH--;
+        }
+
+        int nBltH = min(nHeight - ptSource.y, rClip.bottom - pt.y);
+        while (nBltH > 0) {
+            int nRemainingWidth = nWidth;
+
+            // Skip src left.
+            int nSkipSrcW = min(ptSource.x, nRemainingWidth);
+            nRemainingWidth -= nSkipSrcW;
+            while (nSkipSrcW > 0) {
+                BYTE nColor = pFrameData[pos];
+                if (nColor == nTransparentColor) {
+                    if (nRunLength == 0) {
+                        nRunLength = pFrameData[pos + 1] + 1;
+                    }
+
+                    if (nSkipSrcW == nRunLength) {
+                        pos += 2;
+
+                        nRunLength = 0;
+                        nSkipSrcW = 0;
+                    } else if (nSkipSrcW > nRunLength) {
+                        pos += 2;
+
+                        nSkipSrcW -= nRunLength;
+                        nRunLength = 0;
+                    } else {
+                        nRunLength -= nSkipSrcW;
+                        nSkipSrcW = 0;
+                    }
+                } else {
+                    pos++;
+                    nSkipSrcW--;
+                }
+            }
+
+            // Skip dest left.
+            int nSkipDestW = min(max(rClip.left - pt.x, 0), nRemainingWidth);
+            nRemainingWidth -= nSkipDestW;
+            while (nSkipDestW > 0) {
+                BYTE nColor = pFrameData[pos];
+                if (nColor == nTransparentColor) {
+                    if (nRunLength == 0) {
+                        nRunLength = pFrameData[pos + 1] + 1;
+                    }
+
+                    if (nSkipDestW == nRunLength) {
+                        pos += 2;
+
+                        pDest += nSkipDestW;
+                        nRunLength = 0;
+                        nSkipDestW = 0;
+                    } else if (nSkipDestW > nRunLength) {
+                        pos += 2;
+
+                        pDest += nRunLength;
+                        nSkipDestW -= nRunLength;
+                        nRunLength = 0;
+                    } else {
+                        pDest += nSkipDestW;
+                        nRunLength -= nSkipDestW;
+                        nSkipDestW = 0;
+                    }
+                } else {
+                    pos++;
+                    pDest++;
+                    nSkipDestW--;
+                }
+            }
+
+            // Blt.
+            int nBltW = min(max(rClip.right - rClip.left, 0), nRemainingWidth);
+            nRemainingWidth -= nBltW;
+            while (nBltW > 0) {
+                BYTE nColor = pFrameData[pos];
+                if (nColor == nTransparentColor) {
+                    if (nRunLength == 0) {
+                        nRunLength = pFrameData[pos + 1] + 1;
+                    }
+
+                    if (nBltW == nRunLength) {
+                        pos += 2;
+
+                        pDest += nBltW;
+                        nRunLength = 0;
+                        nBltW = 0;
+                    } else if (nBltW > nRunLength) {
+                        pos += 2;
+
+                        pDest += nRunLength;
+                        nBltW -= nRunLength;
+                        nRunLength = 0;
+                    } else {
+                        pDest += nBltW;
+                        nRunLength -= nBltW;
+                        nBltW = 0;
+                    }
+                } else {
+                    pos++;
+
+                    *pDest++ = CVidImage::rgbTempPal[nColor];
+                    nBltW--;
+                }
+            }
+
+            // Skip remainder.
+            while (nRemainingWidth > 0) {
+                BYTE nColor = pFrameData[pos];
+                if (nColor == nTransparentColor) {
+                    if (nRunLength == 0) {
+                        nRunLength = pFrameData[pos + 1] + 1;
+                    }
+
+                    if (nRemainingWidth == nRunLength) {
+                        pos += 2;
+
+                        pDest += nRemainingWidth;
+                        nRunLength = 0;
+                        nRemainingWidth = 0;
+                    } else if (nRemainingWidth > nRunLength) {
+                        pos += 2;
+
+                        pDest += nRunLength;
+                        nRemainingWidth -= nRunLength;
+                        nRunLength = 0;
+                    } else {
+                        pDest += nRemainingWidth;
+                        nRunLength -= nRemainingWidth;
+                        nRemainingWidth = 0;
+                    }
+                } else {
+                    pos++;
+
+                    pDest++;
+                    nRemainingWidth--;
+                }
+            }
+            pDest += lPitch / 4 - nWidth;
+            nBltH--;
+        }
+    } else {
+        // TODO: Incomplete.
+    }
 
     return TRUE;
 }
