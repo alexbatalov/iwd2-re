@@ -86,6 +86,7 @@ public:
     void SetSoftMirrorBlt(BOOLEAN a2, BOOLEAN a3);
     void ClearChatMessages();
     CBaldurMessage* GetBaldurMessage();
+    CStringList* GetPlayedMovies();
     void AddPlayedMovie(const CResRef& cResMovie);
     CInfCursor* GetObjectCursor();
 

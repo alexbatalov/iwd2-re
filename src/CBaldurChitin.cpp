@@ -1784,6 +1784,77 @@ void CBaldurChitin::SynchronousUpdate()
     CChitin::SynchronousUpdate();
 }
 
+// 0x426600
+CStringList* CBaldurChitin::GetPlayedMovies()
+{
+    WIN32_FIND_DATAA findFileData;
+    HANDLE hFind;
+    char buffer[4096];
+
+    CStringList* pStringList = new CStringList();
+
+    // NOTE: Original code is slightly different, but does the same thing.
+    CString sMovieName;
+    CString sResolvedFileName;
+    CString sFileName;
+
+    GetPrivateProfileStringA("Movies", NULL, "", buffer, sizeof(buffer), GetIniFileName());
+
+    char* pch = buffer;
+    while (*pch != '\0') {
+        sMovieName = pch;
+        BOOL bFound = FALSE;
+
+        sFileName = "hd0:\\override\\";
+        sFileName += sMovieName;
+        sFileName += ".mve";
+
+        if (g_pChitin->lAliases.ResolveFileName(sFileName, sResolvedFileName) == TRUE) {
+            hFind = FindFirstFileA(sResolvedFileName, &findFileData);
+            if (hFind != INVALID_HANDLE_VALUE) {
+                bFound = TRUE;
+                FindClose(hFind);
+            }
+        }
+
+        if (!bFound) {
+            sFileName = "hd0:\\data\\";
+            sFileName += sMovieName;
+            sFileName += ".mve";
+
+            if (g_pChitin->lAliases.ResolveFileName(sFileName, sResolvedFileName) == TRUE) {
+                hFind = FindFirstFileA(sResolvedFileName, &findFileData);
+                if (hFind != INVALID_HANDLE_VALUE) {
+                    bFound = TRUE;
+                    FindClose(hFind);
+                }
+            }
+
+            if (!bFound) {
+                sFileName = "cd2:\\data\\";
+                sFileName += sMovieName;
+                sFileName += ".mve";
+
+                if (g_pChitin->lAliases.ResolveFileName(sFileName, sResolvedFileName) == TRUE) {
+                    hFind = FindFirstFileA(sResolvedFileName, &findFileData);
+                    if (hFind != INVALID_HANDLE_VALUE) {
+                        bFound = TRUE;
+                        FindClose(hFind);
+                    }
+                }
+            }
+        }
+
+        if (GetPrivateProfileIntA("Movies", sMovieName, 0, GetIniFileName()) > 0 && bFound) {
+            pStringList->AddTail(sMovieName);
+        }
+
+        pch += strlen(pch) + 1;
+    }
+
+    return pStringList;
+}
+
 // 0x4268F0
 void CBaldurChitin::AddPlayedMovie(const CResRef& cResMovie)
 {
