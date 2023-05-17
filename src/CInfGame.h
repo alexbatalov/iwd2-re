@@ -14,6 +14,8 @@
 // Seen in `CScreenOptions::OnKeyDown` assertion.
 #define CINFGAME_KEYMAP_SIZE 372
 
+#define CINFGAME_SPECIAL_SYMBOLS 12
+
 class CGameArea;
 
 class CInfGame {
@@ -23,7 +25,12 @@ public:
     void StartSearchThread();
     void DestroyGame(unsigned char a1, unsigned char a2);
     BOOLEAN CanSaveGame(STRREF& strError, unsigned char a2, unsigned char a3);
+    char sub_5A9780(BYTE nKey);
+    BYTE sub_5A97D0(char ch);
+    BYTE sub_5A9830(int index);
     void LoadKeymap();
+    void LoadKey(const CString& sKey, SHORT index);
+    void SetKey(INT nIndex, BYTE nKey, BYTE nKeyFlag);
     void LoadOptions();
     void SaveOptions();
     void UpdatePortrait(SHORT nPortrait, DWORD dwPanelId);

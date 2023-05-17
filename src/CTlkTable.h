@@ -53,6 +53,7 @@ public:
     BOOLEAN Fetch(DWORD dwStrId, STR_RES& strRes);
     BOOL OpenFile(BYTE a2, BYTE a3);
     void ParseStr(CString& sText);
+    void SetToken(const CString& sKey, const CString& sValue);
 
     CTypedPtrMap<CMapWordToPtr, USHORT, CTlkFile*> m_mapTlkFiles;
     CMapStringToString m_mapTokens;

@@ -46,6 +46,13 @@ public:
     void SetNeedAsyncUpdate();
     void SetNeedMouseMove();
 
+    // NOTE: Convenience.
+    inline BOOL IsOver(const CPoint& pt)
+    {
+        return pt.x >= m_nX && pt.x <= m_nX + m_nWidth
+            && pt.y >= m_nY && pt.y <= m_nY + m_nHeight;
+    }
+
     /* 0004 */ unsigned char field_4;
     /* 0008 */ CUIPanel* m_pPanel; // #guess
     /* 000A */ DWORD m_nID; // #guess

@@ -7,6 +7,7 @@
 #include "CScreenConnection.h"
 #include "CScreenInventory.h"
 #include "CScreenJournal.h"
+#include "CScreenKeymaps.h"
 #include "CScreenMap.h"
 #include "CScreenMovies.h"
 #include "CScreenOptions.h"
@@ -623,6 +624,29 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
     } else if (pPanel->m_pManager->m_cResRef == "GUIWMAP") {
     } else if (pPanel->m_pManager->m_cResRef == "GUICG") {
     } else if (pPanel->m_pManager->m_cResRef == "GUIKEYS") {
+        switch (pPanel->m_nID) {
+        case 0:
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 3:
+            case 4:
+            case 5:
+                return new CUIControlButtonKeymap(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\UIControlButtons.cpp
+                // __LINE__: 6289
+                UTIL_ASSERT(FALSE);
+            }
+            break;
+        case 1:
+            if (controlInfo->nID == 0) {
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            } else if (controlInfo->nID < CSCREENKEYMAPS_ERROR_BUTTONS + 1) {
+                return new CUIControlButtonKeymap(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        }
     }
 
     return NULL;

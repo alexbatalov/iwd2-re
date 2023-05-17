@@ -313,3 +313,9 @@ void CTlkTable::ParseStr(CString& sText)
         sText = sText.Left(sText.GetLength() - 1);
     }
 }
+
+// NOTE: Inlined.
+void CTlkTable::SetToken(const CString& sKey, const CString& sValue)
+{
+    m_mapTokens.SetAt(sKey, sValue);
+}

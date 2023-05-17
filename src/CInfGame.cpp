@@ -13,6 +13,478 @@
 #include "CUIControlBase.h"
 #include "CUIManager.h"
 #include "CUIPanel.h"
+#include "CUtil.h"
+
+#define FIFTY_THREE 53
+
+// 0x8AFC50
+static const char* off_8AFC50[FIFTY_THREE] = {
+    "Inventory",
+    "Character Record",
+    "Return to Game",
+    "Journal",
+    "Map",
+    "Spellbook",
+    "Options",
+    "Character Arbitration",
+    "Guard / Protect",
+    "Turn Undead",
+    "Battle Song",
+    "Cast Spell",
+    "Use Item",
+    "Dialog",
+    "Thieving",
+    "Stealth",
+    "Trap Detection",
+    "Group Stop",
+    "Group Attack",
+    "Special Abilities",
+    "Equip Melee Weapon",
+    "Equip Range Weapon",
+    "Quick Load",
+    "Hide Interface",
+    "Chat Window",
+    "Location",
+    "Quick Save",
+    "Toggle AI",
+    "Toggle Interface",
+    "Rest",
+    "Toggle Portrait HP",
+    "Formation",
+    "Multiselect 1-2",
+    "Multiselect 3-4",
+    "Multiselect 5-6",
+    "Multiselect 1-3",
+    "Multiselect 4-6",
+    "Multiselect All",
+    "Quick Spell Slot1",
+    "Quick Spell Slot2",
+    "Quick Spell Slot3",
+    "Quick Weapon Slot1",
+    "Quick Weapon Slot2",
+    "Quick Weapon Slot3",
+    "Quick Weapon Slot4",
+    "Quick Item Slot1",
+    "Quick Item Slot2",
+    "Quick Item Slot3",
+    "Quick Formation Slot1",
+    "Quick Formation Slot2",
+    "Quick Formation Slot3",
+    "Quick Formation Slot4",
+    "Quick Formation Slot5",
+};
+
+// 0x8AFD24
+static const char* off_8AFD24[FIFTY_THREE] = {
+    "I",
+    "R",
+    "G",
+    "J",
+    "M",
+    "S",
+    "O",
+    "C",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "D",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "V",
+    "",
+    "",
+    "L",
+    "H",
+    "T",
+    "X",
+    "Q",
+    "A",
+    "Y",
+    "Z",
+    ".",
+    "F",
+    "7",
+    "8",
+    "9",
+    "0",
+    "-",
+    "=",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+};
+
+// 0x8B4F84
+static const char* off_8B4F84[] = {
+    "SPPR101",
+    "SPPR102",
+    "SPPR103",
+    "SPPR105",
+    "SPPR106",
+    "SPPR107",
+    "SPPR108",
+    "SPPR109",
+    "SPPR110",
+    "SPPR111",
+    "SPPR112",
+    "SPPR113",
+    "SPPR114",
+    "SPPR115",
+    "SPPR116",
+    "SPPR117",
+    "SPPR201",
+    "SPPR202",
+    "SPPR203",
+    "SPPR204",
+    "SPPR205",
+    "SPPR206",
+    "SPPR207",
+    "SPPR208",
+    "SPPR210",
+    "SPPR211",
+    "SPPR212",
+    "SPPR213",
+    "SPPR214",
+    "SPPR215",
+    "SPPR216",
+    "SPPR217",
+    "SPPR218",
+    "SPPR219",
+    "SPPR220",
+    "SPPR221",
+    "SPPR222",
+    "SPPR301",
+    "SPPR302",
+    "SPPR303",
+    "SPPR304",
+    "SPPR305",
+    "SPPR306",
+    "SPPR307",
+    "SPPR308",
+    "SPPR309",
+    "SPPR310",
+    "SPPR311",
+    "SPPR312",
+    "SPPR313",
+    "SPPR314",
+    "SPPR315",
+    "SPPR316",
+    "SPPR318",
+    "SPPR319",
+    "SPPR320",
+    "SPPR322",
+    "SPPR323",
+    "SPPR324",
+    "SPPR325",
+    "SPPR326",
+    "SPPR327",
+    "SPPR328",
+    "SPPR401",
+    "SPPR402",
+    "SPPR403",
+    "SPPR404",
+    "SPPR405",
+    "SPPR406",
+    "SPPR407",
+    "SPPR408",
+    "SPPR409",
+    "SPPR410",
+    "SPPR411",
+    "SPPR414",
+    "SPPR415",
+    "SPPR416",
+    "SPPR417",
+    "SPPR418",
+    "SPPR420",
+    "SPPR422",
+    "SPPR423",
+    "SPPR424",
+    "SPPR425",
+    "SPPR426",
+    "SPPR427",
+    "SPPR428",
+    "SPPR429",
+    "SPPR501",
+    "SPPR502",
+    "SPPR503",
+    "SPPR504",
+    "SPPR507",
+    "SPPR508",
+    "SPPR510",
+    "SPPR511",
+    "SPPR512",
+    "SPPR513",
+    "SPPR514",
+    "SPPR515",
+    "SPPR516",
+    "SPPR517",
+    "SPPR518",
+    "SPPR519",
+    "SPPR520",
+    "SPPR521",
+    "SPPR522",
+    "SPPR523",
+    "SPPR524",
+    "SPPR602",
+    "SPPR605",
+    "SPPR606",
+    "SPPR607",
+    "SPPR608",
+    "SPPR609",
+    "SPPR610",
+    "SPPR611",
+    "SPPR612",
+    "SPPR613",
+    "SPPR614",
+    "SPPR615",
+    "SPPR616",
+    "SPPR702",
+    "SPPR704",
+    "SPPR705",
+    "SPPR707",
+    "SPPR709",
+    "SPPR712",
+    "SPPR714",
+    "SPPR715",
+    "SPPR716",
+    "SPPR717",
+    "SPPR718",
+    "SPPR719",
+    "SPPR720",
+    "SPPR721",
+    "SPPR722",
+    "SPPR723",
+    "SPPR724",
+    "SPPR725",
+    "SPPR726",
+    "SPPR727",
+    "SPPR728",
+    "SPPR729",
+    "SPWI101",
+    "SPWI102",
+    "SPWI103",
+    "SPWI104",
+    "SPWI105",
+    "SPWI107",
+    "SPWI108",
+    "SPWI112",
+    "SPWI113",
+    "SPWI114",
+    "SPWI115",
+    "SPWI116",
+    "SPWI117",
+    "SPWI118",
+    "SPWI119",
+    "SPWI120",
+    "SPWI121",
+    "SPWI122",
+    "SPWI201",
+    "SPWI203",
+    "SPWI205",
+    "SPWI206",
+    "SPWI207",
+    "SPWI209",
+    "SPWI210",
+    "SPWI211",
+    "SPWI212",
+    "SPWI213",
+    "SPWI214",
+    "SPWI215",
+    "SPWI217",
+    "SPWI218",
+    "SPWI219",
+    "SPWI220",
+    "SPWI221",
+    "SPWI222",
+    "SPWI223",
+    "SPWI224",
+    "SPWI225",
+    "SPWI226",
+    "SPWI227",
+    "SPWI228",
+    "SPWI302",
+    "SPWI303",
+    "SPWI304",
+    "SPWI305",
+    "SPWI306",
+    "SPWI308",
+    "SPWI309",
+    "SPWI310",
+    "SPWI311",
+    "SPWI312",
+    "SPWI313",
+    "SPWI314",
+    "SPWI316",
+    "SPWI317",
+    "SPWI318",
+    "SPWI319",
+    "SPWI320",
+    "SPWI321",
+    "SPWI322",
+    "SPWI323",
+    "SPWI401",
+    "SPWI402",
+    "SPWI404",
+    "SPWI405",
+    "SPWI406",
+    "SPWI407",
+    "SPWI408",
+    "SPWI410",
+    "SPWI411",
+    "SPWI412",
+    "SPWI413",
+    "SPWI414",
+    "SPWI417",
+    "SPWI418",
+    "SPWI419",
+    "SPWI420",
+    "SPWI421",
+    "SPWI422",
+    "SPWI423",
+    "SPWI424",
+    "SPWI425",
+    "SPWI426",
+    "SPWI427",
+    "SPWI428",
+    "SPWI501",
+    "SPWI503",
+    "SPWI504",
+    "SPWI505",
+    "SPWI507",
+    "SPWI508",
+    "SPWI509",
+    "SPWI510",
+    "SPWI511",
+    "SPWI512",
+    "SPWI513",
+    "SPWI514",
+    "SPWI515",
+    "SPWI516",
+    "SPWI517",
+    "SPWI518",
+    "SPWI519",
+    "SPWI520",
+    "SPWI521",
+    "SPWI522",
+    "SPWI523",
+    "SPWI524",
+    "SPWI525",
+    "SPWI526",
+    "SPWI601",
+    "SPWI603",
+    "SPWI605",
+    "SPWI606",
+    "SPWI607",
+    "SPWI608",
+    "SPWI609",
+    "SPWI610",
+    "SPWI611",
+    "SPWI612",
+    "SPWI613",
+    "SPWI614",
+    "SPWI615",
+    "SPWI616",
+    "SPWI617",
+    "SPWI618",
+    "SPWI619",
+    "SPWI620",
+    "SPWI621",
+    "SPWI622",
+    "SPWI623",
+    "SPWI624",
+    "SPWI626",
+    "SPWI627",
+    "SPWI628",
+    "SPWI629",
+    "SPWI630",
+    "SPWI702",
+    "SPWI703",
+    "SPWI704",
+    "SPWI705",
+    "SPWI706",
+    "SPWI707",
+    "SPWI708",
+    "SPWI709",
+    "SPWI710",
+    "SPWI711",
+    "SPWI712",
+    "SPWI713",
+    "SPWI714",
+    "SPWI715",
+    "SPWI716",
+    "SPWI717",
+    "SPWI718",
+    "SPWI719",
+    "SPWI802",
+    "SPWI803",
+    "SPWI804",
+    "SPWI805",
+    "SPWI806",
+    "SPWI807",
+    "SPWI808",
+    "SPWI809",
+    "SPWI810",
+    "SPWI902",
+    "SPWI903",
+    "SPWI905",
+    "SPWI906",
+    "SPWI907",
+    "SPWI908",
+    "SPWI909",
+    "SPWI910",
+    "SPWI911",
+    NULL,
+    NULL,
+};
+
+// 0x8ABA24
+static char byte_8ABA24[CINFGAME_SPECIAL_SYMBOLS] = {
+    ';',
+    '=',
+    ',',
+    '-',
+    '.',
+    '/',
+    '`',
+    '[',
+    '\\',
+    ']',
+    '\'',
+    '\0',
+};
+
+// 0x8ABA3C
+static BYTE byte_8ABA3C[CINFGAME_SPECIAL_SYMBOLS] = {
+    VK_OEM_1,
+    VK_OEM_PLUS,
+    VK_OEM_COMMA,
+    VK_OEM_MINUS,
+    VK_OEM_PERIOD,
+    VK_OEM_2,
+    VK_OEM_3,
+    VK_OEM_4,
+    VK_OEM_5,
+    VK_OEM_6,
+    VK_OEM_7,
+    0,
+};
 
 // 0x8E707C
 const CString CInfGame::FOGOWAR_RESREF("FOGOWAR");
@@ -167,10 +639,159 @@ BOOLEAN CInfGame::CanSaveGame(STRREF& strError, unsigned char a2, unsigned char 
     return FALSE;
 }
 
+// 0x5A9780
+char CInfGame::sub_5A9780(BYTE nKey)
+{
+    if (nKey >= 'A' && nKey <= 'Z') {
+        return static_cast<char>(nKey);
+    }
+
+    if (nKey >= '0' && nKey <= '9') {
+        return static_cast<char>(nKey);
+    }
+
+    for (int sym = 0; sym < CINFGAME_SPECIAL_SYMBOLS; sym++) {
+        if (byte_8ABA3C[sym] == nKey) {
+            return byte_8ABA24[sym];
+        }
+    }
+
+    return -1;
+}
+
+// 0x5A97D0
+BYTE CInfGame::sub_5A97D0(char ch)
+{
+    if (ch >= 'a' && ch <= 'z') {
+        return static_cast<BYTE>(ch - 32);
+    }
+
+    if (ch >= 'A' && ch <= 'Z') {
+        return static_cast<BYTE>(ch);
+    }
+
+    if (ch >= '0' && ch <= '9') {
+        return static_cast<BYTE>(ch);
+    }
+
+    for (int sym = 0; sym < CINFGAME_SPECIAL_SYMBOLS; sym++) {
+        if (byte_8ABA24[sym] == ch) {
+            return byte_8ABA3C[sym];
+        }
+    }
+
+    return -1;
+}
+
+// 0x5A9830
+BYTE CInfGame::sub_5A9830(int index)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 7779
+    UTIL_ASSERT(index >= 0 && index < CINFGAME_KEYMAP_SIZE);
+
+    if (index >= FIFTY_THREE) {
+        return 0;
+    }
+
+    // NOTE: Uninline.
+    return sub_5A97D0(off_8AFD24[index][0]);
+}
+
 // 0x5A98F0
 void CInfGame::LoadKeymap()
 {
-    // TODO: Incomplete.
+    CString sKey;
+
+    memset(m_pKeymap, 0, sizeof(m_pKeymap));
+    memset(m_pKeymapFlags, 0, sizeof(m_pKeymapFlags));
+
+    // NOTE: Unsigned compare in both loops.
+    WORD index;
+    for (index = 0; index < FIFTY_THREE; index++) {
+        char* buffer = sKey.GetBuffer(128);
+        GetPrivateProfileStringA("Keymap",
+            off_8AFC50[index],
+            off_8AFD24[index],
+            buffer,
+            128,
+            ".\\Keymap.ini");
+        sKey.ReleaseBuffer();
+        LoadKey(sKey, index);
+    }
+
+    for (; index < CINFGAME_KEYMAP_SIZE; index++) {
+        char* buffer = sKey.GetBuffer(128);
+        if (index >= 199) {
+            GetPrivateProfileStringA("Wizard Spells",
+                off_8B4F84[index],
+                "",
+                buffer,
+                128,
+                ".\\Keymap.ini");
+        } else {
+            GetPrivateProfileStringA("Priest Spells",
+                off_8B4F84[index],
+                "",
+                buffer,
+                128,
+                ".\\Keymap.ini");
+        }
+        sKey.ReleaseBuffer();
+        LoadKey(sKey, index);
+    }
+}
+
+// 0x5A9A30
+void CInfGame::LoadKey(const CString& sKey, SHORT index)
+{
+    INT nOffset = 0;
+    if (sKey.GetLength() > 0) {
+        if (sKey.Find("CTRL-") == 0
+            || sKey.Find("ctrl-") == 0
+            || sKey.Find("Ctrl-") == 0) {
+            nOffset = strlen("CTRL-");
+            m_pKeymapFlags[index] = 1;
+        }
+
+        if (sKey[nOffset] >= 'a' && sKey[nOffset] <= 'z') {
+            m_pKeymap[index] = sKey[nOffset] - 32;
+        } else {
+            m_pKeymap[index] = sKey[nOffset];
+
+            for (int sym = 0; sym < CINFGAME_SPECIAL_SYMBOLS; sym++) {
+                if (byte_8ABA24[sym] == sKey[nOffset]) {
+                    m_pKeymap[index] = byte_8ABA3C[sym];
+                    break;
+                }
+            }
+        }
+    }
+}
+
+// 0x5A9B00
+void CInfGame::SetKey(INT nIndex, BYTE nKey, BYTE nKeyFlag)
+{
+    if (nIndex >= 0 && nIndex < CINFGAME_KEYMAP_SIZE) {
+        m_pKeymap[nIndex] = nKey;
+        m_pKeymapFlags[nIndex] = nKeyFlag;
+
+        for (int sym = 0; sym < CINFGAME_SPECIAL_SYMBOLS; sym++) {
+            if (byte_8ABA3C[sym] == nKey) {
+                nKey = byte_8ABA24[sym];
+                break;
+            }
+        }
+
+        if (nIndex < FIFTY_THREE) {
+            char buffer[16];
+            sprintf(buffer, "%s%c", nKeyFlag ? "CTRL-" : "", nKey);
+            WritePrivateProfileStringA("Keymap",
+                off_8AFC50[nIndex],
+                buffer,
+                ".\\Keymap.ini");
+        }
+    }
 }
 
 // 0x5A9BA0
