@@ -715,54 +715,52 @@ BOOL CUIControlTextDisplay::Render(BOOL bForce)
         }
     }
 
-    if (pt.y < rClip.bottom) {
-        while (pos != NULL) {
-            CDisplayString* pDisplayString = m_plstStrings->GetAt(pos);
-            if (pDisplayString->GetBossPos() != posBoss) {
-                break;
-            }
+    while (pt.y < rClip.bottom && pos != NULL) {
+        CDisplayString* pDisplayString = m_plstStrings->GetAt(pos);
+        if (pDisplayString->GetBossPos() != posBoss) {
+            posBoss = pDisplayString->GetBossPos();
+        }
 
-            if (!pDisplayString->m_sLabel.IsEmpty()) {
-                if (rgbCurrentLabelColor != pDisplayString->m_rgbLabelColor) {
-                    if (!field_AAE
-                        || (g_pChitin->m_sFontName.Compare("") != 0
-                            && m_labelFont.GetResRef() != "STATES2")) {
-                        rgbCurrentLabelColor = pDisplayString->m_rgbLabelColor;
-                        m_labelFont.SetColor(rgbCurrentLabelColor, m_rgbBackgroundColor, FALSE);
-                    }
-                }
-
-                // FIXME: Font has been demanded, but passes `FALSE`.
-                pVidInf->BKTextOut(&m_labelFont,
-                    pDisplayString->m_sLabel,
-                    pt.x + 3 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1),
-                    pt.y - pDisplayString->m_nLine * m_nFontHeight + nBaseLineHeight,
-                    rClip,
-                    0,
-                    FALSE);
-            }
-
-            if (rgbCurrentTextColor != pDisplayString->m_rgbTextColor) {
+        if (!pDisplayString->m_sLabel.IsEmpty()) {
+            if (rgbCurrentLabelColor != pDisplayString->m_rgbLabelColor) {
                 if (!field_AAE
                     || (g_pChitin->m_sFontName.Compare("") != 0
-                        && m_textFont.GetResRef() != "STATES2")) {
-                    rgbCurrentTextColor = pDisplayString->m_rgbTextColor;
-                    m_textFont.SetColor(rgbCurrentTextColor, m_rgbBackgroundColor, FALSE);
+                        && m_labelFont.GetResRef() != "STATES2")) {
+                    rgbCurrentLabelColor = pDisplayString->m_rgbLabelColor;
+                    m_labelFont.SetColor(rgbCurrentLabelColor, m_rgbBackgroundColor, FALSE);
                 }
             }
 
             // FIXME: Font has been demanded, but passes `FALSE`.
-            pVidInf->BKTextOut(&m_textFont,
-                pDisplayString->GetString(),
-                pt.x + pDisplayString->m_nOffset,
-                pt.y + nBaseLineHeight,
+            pVidInf->BKTextOut(&m_labelFont,
+                pDisplayString->m_sLabel,
+                pt.x + 3 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1),
+                pt.y - pDisplayString->m_nLine * m_nFontHeight + nBaseLineHeight,
                 rClip,
                 0,
                 FALSE);
-
-            m_plstStrings->GetNext(pos);
-            pt.y += m_nFontHeight;
         }
+
+        if (rgbCurrentTextColor != pDisplayString->m_rgbTextColor) {
+            if (!field_AAE
+                || (g_pChitin->m_sFontName.Compare("") != 0
+                    && m_textFont.GetResRef() != "STATES2")) {
+                rgbCurrentTextColor = pDisplayString->m_rgbTextColor;
+                m_textFont.SetColor(rgbCurrentTextColor, m_rgbBackgroundColor, FALSE);
+            }
+        }
+
+        // FIXME: Font has been demanded, but passes `FALSE`.
+        pVidInf->BKTextOut(&m_textFont,
+            pDisplayString->GetString(),
+            pt.x + pDisplayString->m_nOffset,
+            pt.y + nBaseLineHeight,
+            rClip,
+            0,
+            FALSE);
+
+        m_plstStrings->GetNext(pos);
+        pt.y += m_nFontHeight;
     }
 
     renderLock.Unlock();
