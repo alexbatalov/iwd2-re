@@ -19,7 +19,7 @@ CScreenMovies::CScreenMovies()
     m_pVirtualKeys[3] = CKeyInfo('$', 0, 0);
     m_pVirtualKeys[4] = CKeyInfo('%', 0, 0);
     m_pVirtualKeys[5] = CKeyInfo('\'', 0, 0);
-    m_pVirtualKeys[6] = CKeyInfo(VK_TAB, 0, 0);
+    m_pVirtualKeys[6] = CKeyInfo(VK_BACK, 0, 0);
     m_pVirtualKeys[7] = CKeyInfo('.', 0, 0);
     m_pVirtualKeys[8] = CKeyInfo(VK_SPACE, 0, 0);
     m_pVirtualKeys[9] = CKeyInfo('A', 0, 0);
@@ -38,6 +38,8 @@ CScreenMovies::CScreenMovies()
     m_pVirtualKeys[22] = CKeyInfo('N', 0, 0);
     m_pVirtualKeys[23] = CKeyInfo('O', 0, 0);
     m_pVirtualKeys[24] = CKeyInfo('P', 0, 0);
+    // FIXME: Overriding `P`.
+    m_pVirtualKeys[24] = CKeyInfo(VK_ESCAPE, 0, 0);
     m_pVirtualKeys[25] = CKeyInfo('Q', 0, 0);
     m_pVirtualKeys[26] = CKeyInfo('R', 0, 0);
     m_pVirtualKeys[27] = CKeyInfo('S', 0, 0);
@@ -59,6 +61,8 @@ CScreenMovies::CScreenMovies()
     m_pVirtualKeys[43] = CKeyInfo('8', 0, 0);
     m_pVirtualKeys[44] = CKeyInfo('9', 0, 0);
     m_pVirtualKeys[45] = CKeyInfo('-', 0, 0);
+    // FIXME: Buffer overrun.
+    m_pVirtualKeys[46] = CKeyInfo(VK_TAB, -1, 0);
 
     m_nEngineState = 0;
     m_pMovies = NULL;
@@ -221,7 +225,7 @@ void CScreenMovies::OnKeyDown(SHORT nKeysFlags)
                 m_cUIManager.ForceToolTip();
                 break;
             case VK_RETURN:
-            case VK_CANCEL:
+            case VK_ESCAPE:
                 // NOTE: Uninline.
                 StopMovies();
 
