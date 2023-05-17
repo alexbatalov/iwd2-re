@@ -41,11 +41,11 @@ CUIControlLabel::CUIControlLabel(CUIPanel* pPanel, UI_CONTROL_LABEL* pControlInf
     g_pBaldurChitin->m_cTlkTable.Fetch(pControlInfo->nText, strRes);
 
     SHORT nLineHeight = m_cVidFont.GetFontHeight(FALSE);
-    if (nLineHeight > m_nHeight) {
-        nLineHeight = m_nHeight;
+    if (nLineHeight > m_size.cy) {
+        nLineHeight = m_size.cy;
     }
 
-    m_nMaxLines = m_nHeight / nLineHeight;
+    m_nMaxLines = m_size.cy / nLineHeight;
 
     m_pText = new CString[m_nMaxLines];
 
@@ -104,8 +104,7 @@ BOOL CUIControlLabel::Render(BOOL bForce)
         lock.Unlock();
     }
 
-    CRect rFrame(m_pPanel->m_ptOrigin + CPoint(m_nX, m_nY),
-        CSize(m_nWidth, m_nHeight));
+    CRect rFrame(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
 
     CRect rDirtyFrame;
     rDirtyFrame.IntersectRect(rFrame, m_rDirty);
@@ -125,9 +124,9 @@ BOOL CUIControlLabel::Render(BOOL bForce)
 
     if ((m_nTextFlags & 0x20) == 0) {
         if ((m_nTextFlags & 0x80) != 0) {
-            pt.y += m_nHeight - nFontHeight * m_nTextLines;
+            pt.y += m_size.cy - nFontHeight * m_nTextLines;
         } else {
-            pt.y += m_nHeight / 2 - nFontHeight * m_nTextLines / 2;
+            pt.y += m_size.cy / 2 - nFontHeight * m_nTextLines / 2;
         }
     }
 
@@ -143,10 +142,10 @@ BOOL CUIControlLabel::Render(BOOL bForce)
     for (SHORT nLine = 0; nLine < m_nTextLines; nLine++) {
         if ((m_nTextFlags & 0x10) != 0) {
             // FIXME: Calculating string length twice.
-            x = pt.x + max(m_nWidth - m_cVidFont.GetStringLength(m_pText[nLine], TRUE), 0);
+            x = pt.x + max(m_size.cx - m_cVidFont.GetStringLength(m_pText[nLine], TRUE), 0);
         } else if ((m_nTextFlags & 0x4) != 0) {
             // FIXME: Calculating string length twice.
-            x = pt.x + max(m_nWidth / 2 - m_cVidFont.GetStringLength(m_pText[nLine], TRUE) / 2, 0);
+            x = pt.x + max(m_size.cx / 2 - m_cVidFont.GetStringLength(m_pText[nLine], TRUE) / 2, 0);
         }
 
         pVidInf->BKTextOut(&m_cVidFont,
@@ -172,7 +171,7 @@ void CUIControlLabel::SetText(const CString& sString)
     if ((m_nTextFlags & 0x100) != 0) {
         m_nTextLines = CUtil::SplitString(&m_cVidFont,
             sString,
-            m_nWidth,
+            m_size.cx,
             m_nMaxLines,
             m_pText,
             FALSE,
@@ -183,7 +182,7 @@ void CUIControlLabel::SetText(const CString& sString)
     } else {
         m_nTextLines = CUtil::SplitString(&m_cVidFont,
             sString,
-            m_nWidth,
+            m_size.cx,
             1,
             m_pText,
             FALSE,

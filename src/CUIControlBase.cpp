@@ -29,15 +29,15 @@ CUIControlBase::CUIControlBase(CUIPanel* pPanel, UI_CONTROL* controlInfo, int a4
     m_nID = controlInfo->nID;
 
     if (pPanel->m_pManager->m_bDoubleSize) {
-        m_nX = controlInfo->x * 2;
-        m_nY = controlInfo->y * 2;
-        m_nWidth = controlInfo->nWidth * 2;
-        m_nHeight = controlInfo->nHeight * 2;
+        m_ptOrigin.x = controlInfo->x * 2;
+        m_ptOrigin.y = controlInfo->y * 2;
+        m_size.cx = controlInfo->nWidth * 2;
+        m_size.cy = controlInfo->nHeight * 2;
     } else {
-        m_nX = controlInfo->x;
-        m_nY = controlInfo->y;
-        m_nWidth = controlInfo->nWidth;
-        m_nHeight = controlInfo->nHeight;
+        m_ptOrigin.x = controlInfo->x;
+        m_ptOrigin.y = controlInfo->y;
+        m_size.cx = controlInfo->nWidth;
+        m_size.cy = controlInfo->nHeight;
     }
 
     m_bActive = TRUE;

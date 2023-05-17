@@ -154,14 +154,12 @@ DWORD CUIPanel::TimerAsynchronousUpdate()
             CUIControlBase* pControl = m_lControls.GetNext(pos);
             if (pControl->m_bActive
                 && (g_pBaldurChitin->m_pObjectGame->m_cOptions.m_nTooltips != INT_MAX || m_pManager->field_76)
-                && pt.x >= pControl->m_nX && pt.x <= pControl->m_nX + pControl->m_nWidth
-                && pt.y >= pControl->m_nY && pt.y <= pControl->m_nY + pControl->m_nHeight) {
+                && pControl->IsOver(pt)) {
                 pControl->TimerAsynchronousUpdate(TRUE);
                 nID = pControl->m_nID;
             } else if (pControl->m_bNeedAsyncUpdate) {
                 BOOLEAN bInside = FALSE;
-                if (pt.x >= pControl->m_nX && pt.x <= pControl->m_nX + pControl->m_nWidth
-                    && pt.y >= pControl->m_nY && pt.y <= pControl->m_nY + pControl->m_nHeight) {
+                if (pControl->IsOver(pt)) {
                     bInside = TRUE;
                 }
                 pControl->TimerAsynchronousUpdate(bInside);
@@ -229,10 +227,7 @@ BOOL CUIPanel::OnLButtonDown(const CPoint& pt)
     POSITION pos = m_lControls.GetTailPosition();
     while (pos != NULL) {
         CUIControlBase* pControl = m_lControls.GetPrev(pos);
-        if (pt.x - m_ptOrigin.x >= pControl->m_nX
-            && pt.x - m_ptOrigin.x <= pControl->m_nX + pControl->m_nWidth
-            && pt.y - m_ptOrigin.y >= pControl->m_nY
-            && pt.y - m_ptOrigin.y <= pControl->m_nY + pControl->m_nHeight) {
+        if (pControl->IsOver(pt - m_ptOrigin)) {
             if (pControl->IsOverPixel(pt - m_ptOrigin)) {
                 if (pControl->OnLButtonDown(pt - m_ptOrigin)) {
                     return TRUE;
@@ -254,10 +249,7 @@ BOOL CUIPanel::OnLButtonDblClk(const CPoint& pt)
     POSITION pos = m_lControls.GetTailPosition();
     while (pos != NULL) {
         CUIControlBase* pControl = m_lControls.GetPrev(pos);
-        if (pt.x - m_ptOrigin.x >= pControl->m_nX
-            && pt.x - m_ptOrigin.x <= pControl->m_nX + pControl->m_nWidth
-            && pt.y - m_ptOrigin.y >= pControl->m_nY
-            && pt.y - m_ptOrigin.y <= pControl->m_nY + pControl->m_nHeight) {
+        if (pControl->IsOver(pt - m_ptOrigin)) {
             if (pControl->IsOverPixel(pt - m_ptOrigin)) {
                 if (pControl->OnLButtonDblClk(pt - m_ptOrigin)) {
                     return TRUE;
@@ -284,10 +276,7 @@ void CUIPanel::OnMouseMove(const CPoint& pt)
     while (pos != NULL) {
         CUIControlBase* pControl = m_lControls.GetPrev(pos);
         if (pControl->m_bNeedMouseMove) {
-            if (pt.x - m_ptOrigin.x >= pControl->m_nX
-                && pt.x - m_ptOrigin.x <= pControl->m_nX + pControl->m_nWidth
-                && pt.y - m_ptOrigin.y >= pControl->m_nY
-                && pt.y - m_ptOrigin.y <= pControl->m_nY + pControl->m_nHeight) {
+            if (pControl->IsOver(pt - m_ptOrigin)) {
                 if (pControl->IsOverPixel(pt - m_ptOrigin)) {
                     pControl->OnMouseMove(pt - m_ptOrigin);
                     return;
@@ -307,10 +296,7 @@ BOOL CUIPanel::OnRButtonDown(const CPoint& pt)
     POSITION pos = m_lControls.GetTailPosition();
     while (pos != NULL) {
         CUIControlBase* pControl = m_lControls.GetPrev(pos);
-        if (pt.x - m_ptOrigin.x >= pControl->m_nX
-            && pt.x - m_ptOrigin.x <= pControl->m_nX + pControl->m_nWidth
-            && pt.y - m_ptOrigin.y >= pControl->m_nY
-            && pt.y - m_ptOrigin.y <= pControl->m_nY + pControl->m_nHeight) {
+        if (IsOver(pt - m_ptOrigin)) {
             if (pControl->IsOverPixel(pt - m_ptOrigin)) {
                 if (pControl->OnRButtonDown(pt - m_ptOrigin)) {
                     return TRUE;
@@ -358,8 +344,7 @@ void CUIPanel::Render()
     while (pos != NULL) {
         CUIControlBase* pControl = m_lControls.GetNext(pos);
         if (pControl->NeedRender()) {
-            CRect rControl(m_ptOrigin + CPoint(pControl->m_nX, pControl->m_nY),
-                CSize(pControl->m_nWidth, pControl->m_nHeight));
+            CRect rControl(m_ptOrigin + pControl->m_ptOrigin, pControl->m_size);
             m_pManager->m_pWarp->NormalizePanelRect(m_nID, rControl);
             if (!rControl.IsRectEmpty()) {
                 if (rDirty.IsRectEmpty()) {
@@ -393,8 +378,7 @@ void CUIPanel::Render()
         POSITION pos = m_lControls.GetHeadPosition();
         while (pos != NULL) {
             CUIControlBase* pControl = m_lControls.GetNext(pos);
-            CRect rControl(m_ptOrigin + CPoint(pControl->m_nX, pControl->m_nY),
-                CSize(pControl->m_nWidth, pControl->m_nHeight));
+            CRect rControl(m_ptOrigin + pControl->m_ptOrigin, pControl->m_size);
 
             CRect rDirtyControl;
             if (rDirtyControl.IntersectRect(rDirty, rControl)) {

@@ -196,10 +196,7 @@ void CScreenStart::UpdateMainPanel()
             pControl->SetActive(FALSE);
             pControl->SetInactiveRender(FALSE);
 
-            CRect rControlFrame(pControl->m_nX,
-                pControl->m_nY,
-                pControl->m_nX + pControl->m_nWidth,
-                pControl->m_nY + pControl->m_nHeight);
+            CRect rControlFrame(pControl->m_ptOrigin, pControl->m_size);
             pPanel->InvalidateRect(&rControlFrame);
         }
 

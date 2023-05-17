@@ -87,8 +87,8 @@ void CUIControlSlider::OnMouseMove(CPoint pt)
     }
 
     SHORT nValue;
-    if (field_212 + pt.x - m_nX < m_rTrack.right) {
-        nValue = max((field_212 + pt.x - m_nX + m_nKnobJumpWidth / 2 - m_rTrack.left) / m_nKnobJumpWidth, 0);
+    if (field_212 + pt.x - m_ptOrigin.x < m_rTrack.right) {
+        nValue = max((field_212 + pt.x - m_ptOrigin.x + m_nKnobJumpWidth / 2 - m_rTrack.left) / m_nKnobJumpWidth, 0);
     } else {
         nValue = m_nKnobJumpCount - 1;
     }
@@ -117,8 +117,8 @@ BOOL CUIControlSlider::OnLButtonDown(CPoint pt)
         return FALSE;
     }
 
-    int x = pt.x - m_nX;
-    int y = pt.y - m_nY;
+    int x = pt.x - m_ptOrigin.x;
+    int y = pt.y - m_ptOrigin.y;
 
     CPoint ptKnob(m_nKnobJumpWidth * m_nValue + m_nKnobOffsetX, m_nKnobOffsetY);
 
@@ -199,8 +199,7 @@ BOOL CUIControlSlider::Render(BOOL bForce)
         lock.Unlock();
     }
 
-    CRect rControlRect(CPoint(m_pPanel->m_ptOrigin.x + m_nX, m_pPanel->m_ptOrigin.y + m_nY),
-        CSize(m_nWidth, m_nHeight));
+    CRect rControlRect(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
 
     CRect rDirtyRect;
     rDirtyRect.IntersectRect(rControlRect, m_rDirty);

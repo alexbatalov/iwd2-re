@@ -49,17 +49,15 @@ public:
     // NOTE: Convenience.
     inline BOOL IsOver(const CPoint& pt)
     {
-        return pt.x >= m_nX && pt.x <= m_nX + m_nWidth
-            && pt.y >= m_nY && pt.y <= m_nY + m_nHeight;
+        return pt.x >= m_ptOrigin.x && pt.x <= m_ptOrigin.x + m_size.cx
+            && pt.y >= m_ptOrigin.y && pt.y <= m_ptOrigin.y + m_size.cy;
     }
 
     /* 0004 */ unsigned char field_4;
     /* 0008 */ CUIPanel* m_pPanel; // #guess
     /* 000A */ DWORD m_nID; // #guess
-    /* 000E */ INT m_nX; // #guess
-    /* 0012 */ INT m_nY; // #guess
-    /* 0016 */ INT m_nWidth; // #guess
-    /* 001A */ INT m_nHeight; // #guess
+    /* 000E */ CPoint m_ptOrigin;
+    /* 0016 */ CSize m_size;
     /* 001E */ BOOLEAN m_bActive; // #guess
     /* 001F */ BOOLEAN m_bNeedAsyncUpdate;
     /* 0020 */ BOOLEAN m_bNeedMouseMove;

@@ -71,12 +71,12 @@ CUIControlButton::CUIControlButton(CUIPanel* panel, UI_CONTROL_BUTTON* controlIn
     }
 
     SHORT nFontHeight = m_cVidFont.GetFontHeight(FALSE);
-    if (nFontHeight > m_nHeight - 2 * dword_8AB9B4 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1)) {
-        nFontHeight = m_nHeight - 2 * dword_8AB9B4 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1);
+    if (nFontHeight > m_size.cy - 2 * dword_8AB9B4 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1)) {
+        nFontHeight = m_size.cy - 2 * dword_8AB9B4 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1);
     }
 
     if (nFontHeight != 0) {
-        m_nMaxLines = (m_nHeight - 2 * dword_8AB9B4 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1)) / nFontHeight;
+        m_nMaxLines = (m_size.cy - 2 * dword_8AB9B4 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1)) / nFontHeight;
     } else {
         m_nMaxLines = 1;
     }
@@ -115,7 +115,7 @@ void CUIControlButton::KillFocus()
 // 0x4D4CA0
 void CUIControlButton::OnMouseMove(CPoint pt)
 {
-    if (!(pt.x >= m_nX && pt.y >= m_nY && pt.x <= m_nX + m_nWidth && pt.y <= m_nY + m_nHeight)) {
+    if (!IsOver(pt)) {
         if (m_bPressed) {
             m_cVidCell.FrameSet(m_nNormalFrame);
             m_bPressed = FALSE;
@@ -124,7 +124,7 @@ void CUIControlButton::OnMouseMove(CPoint pt)
         }
     }
 
-    if (pt.x >= m_nX && pt.y >= m_nY && pt.x <= m_nX + m_nWidth && pt.y <= m_nY + m_nHeight) {
+    if (IsOver(pt)) {
         if (!m_bPressed) {
             m_cVidCell.FrameSet(m_nPressedFrame);
             m_bPressed = TRUE;
@@ -180,7 +180,7 @@ void CUIControlButton::OnLButtonUp(CPoint pt)
 
     if (m_bActive) {
         if ((m_nMouseButtons & 1) != 0) {
-            if (pt.x >= m_nX && pt.y >= m_nY && pt.x <= m_nX + m_nWidth && pt.y <= m_nY + m_nHeight) {
+            if (IsOver(pt)) {
                 OnLButtonClick(pt);
             }
         }
@@ -240,7 +240,7 @@ void CUIControlButton::OnRButtonUp(CPoint pt)
 
     if (m_bActive) {
         if ((m_nMouseButtons & 2) != 0) {
-            if (pt.x >= m_nX && pt.y >= m_nY && pt.x <= m_nX + m_nWidth && pt.y <= m_nY + m_nHeight) {
+            if (IsOver(pt)) {
                 OnRButtonClick(pt);
             }
         }
@@ -266,8 +266,7 @@ BOOL CUIControlButton::Render(BOOL bForce)
         lock.Unlock();
     }
 
-    CRect rControlRect(CPoint(m_pPanel->m_ptOrigin.x + m_nX, m_pPanel->m_ptOrigin.y + m_nY),
-        CSize(m_nWidth, m_nHeight));
+    CRect rControlRect(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
 
     CRect rDirtyRect;
     rDirtyRect.IntersectRect(rControlRect, m_rDirty);
@@ -328,11 +327,11 @@ BOOL CUIControlButton::Render(BOOL bForce)
             if ((m_nTextFlags & 0x4) != 0) {
                 pt.y += dword_8AB9B4 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1);
             } else if ((m_nTextFlags & 0x8) != 0) {
-                pt.y += m_nHeight
+                pt.y += m_size.cy
                     - dword_8AB9B4 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1)
                     - nFontHeight * m_nTextLines;
             } else {
-                pt.y += (m_nHeight - nFontHeight * m_nTextLines) / 2;
+                pt.y += (m_size.cy - nFontHeight * m_nTextLines) / 2;
             }
         }
 
@@ -353,10 +352,10 @@ BOOL CUIControlButton::Render(BOOL bForce)
                     x = pt.x + dword_8AB9B4 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1);
                 } else if ((m_nTextFlags & 0x2) != 0) {
                     // FIXME: Calculating string width twice.
-                    x = pt.x + max(m_nWidth - m_cVidFont.GetStringLength(m_pText[nLine], TRUE), 0);
+                    x = pt.x + max(m_size.cx - m_cVidFont.GetStringLength(m_pText[nLine], TRUE), 0);
                 } else {
                     // FIXME: Calculating string width twice.
-                    x = pt.x + max(m_nWidth - m_cVidFont.GetStringLength(m_pText[nLine], TRUE), 0) / 2;
+                    x = pt.x + max(m_size.cx - m_cVidFont.GetStringLength(m_pText[nLine], TRUE), 0) / 2;
                 }
             }
 
@@ -462,7 +461,7 @@ void CUIControlButton::SetText(const CString& sText)
     if ((field_654 & 0x100) != 0) {
         m_nTextLines = CUtil::SplitString(&m_cVidFont,
             sCopy,
-            m_nWidth - 2 * dword_8AB9B4 * (bDoubleSize ? 2 : 1),
+            m_size.cx - 2 * dword_8AB9B4 * (bDoubleSize ? 2 : 1),
             m_nMaxLines,
             m_pText,
             FALSE,
@@ -472,7 +471,7 @@ void CUIControlButton::SetText(const CString& sText)
     } else {
         m_nTextLines = CUtil::SplitString(&m_cVidFont,
             sCopy,
-            m_nWidth - 2 * dword_8AB9B4 * (bDoubleSize ? 2 : 1),
+            m_size.cx - 2 * dword_8AB9B4 * (bDoubleSize ? 2 : 1),
             1,
             m_pText,
             FALSE,

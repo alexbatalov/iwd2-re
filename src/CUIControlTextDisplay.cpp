@@ -78,7 +78,7 @@ CUIControlTextDisplay::CUIControlTextDisplay(CUIPanel* pPanel, UI_CONTROL_TEXTDI
     field_A67 = 0;
     SetNeedAsyncUpdate();
     field_AB7 = 1;
-    field_A6A = m_nHeight / m_nFontHeight;
+    field_A6A = m_size.cy / m_nFontHeight;
 }
 
 // 0x4E1D50
@@ -179,8 +179,7 @@ POSITION CUIControlTextDisplay::DisplayString(const CString& sLabel, const CStri
     field_A62 = 0;
     field_A64 = 0;
 
-    CRect rDirty(m_pPanel->m_ptOrigin + CPoint(m_nX, m_nY),
-        CSize(m_nWidth, m_nHeight));
+    CRect rDirty(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
     m_pPanel->InvalidateRect(&rDirty);
     InvalidateRect();
 
@@ -270,7 +269,7 @@ void CUIControlTextDisplay::InvalidateRect()
 // 0x4E2550
 void CUIControlTextDisplay::OnButtonLClick(CPoint ptMouseClick)
 {
-    ptMouseClick.y -= m_nY;
+    ptMouseClick.y -= m_ptOrigin.y;
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\ChUIControls.cpp
     // __LINE__: 6047
@@ -304,8 +303,7 @@ void CUIControlTextDisplay::OnLButtonUp(CPoint pt)
     }
 
     if (m_bActive) {
-        if (pt.x >= m_nX && pt.x <= m_nX + m_nWidth
-            && pt.y >= m_nY && pt.y <= m_nY + m_nHeight) {
+        if (IsOver(pt)) {
             OnButtonLClick(pt);
         }
     }
@@ -315,14 +313,13 @@ void CUIControlTextDisplay::OnLButtonUp(CPoint pt)
 void CUIControlTextDisplay::OnMouseMove(CPoint pt)
 {
     CPoint ptMouseClick = pt;
-    ptMouseClick.y -= m_nY;
+    ptMouseClick.y -= m_ptOrigin.y;
 
     if (m_bActive) {
         // NOTE: Original code is slightly different.
         BOOL bHighlighted = FALSE;
 
-        if (pt.x >= m_nX && pt.x <= m_nX + m_nWidth
-            && pt.y >= m_nY && pt.y <= m_nY + m_nHeight) {
+        if (IsOver(pt)) {
             // __FILE__: C:\Projects\Icewind2\src\Baldur\ChUIControls.cpp
             // __LINE__: 6168
             UTIL_ASSERT(ptMouseClick.y >= 0);
@@ -357,8 +354,7 @@ void CUIControlTextDisplay::OnScroll(SHORT a1, SHORT a2)
     if (nOldIndex != field_5A) {
         m_posTopString = m_plstStrings->FindIndex(field_5A);
 
-        CRect rDirty(m_pPanel->m_ptOrigin + CPoint(m_nX, m_nY),
-            CSize(m_nWidth, m_nHeight));
+        CRect rDirty(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
         m_pPanel->InvalidateRect(&rDirty);
         InvalidateRect();
     }
@@ -401,8 +397,7 @@ void CUIControlTextDisplay::OnPageDown(DWORD a1)
         if (nOldIndex != field_5A) {
             m_posTopString = m_plstStrings->FindIndex(field_5A);
 
-            CRect rDirty(m_pPanel->m_ptOrigin + CPoint(m_nX, m_nY),
-                CSize(m_nWidth, m_nHeight));
+            CRect rDirty(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
             m_pPanel->InvalidateRect(&rDirty);
             InvalidateRect();
         }
@@ -423,8 +418,7 @@ void CUIControlTextDisplay::OnPageUp(DWORD a1)
         if (nOldIndex != field_5A) {
             m_posTopString = m_plstStrings->FindIndex(field_5A);
 
-            CRect rDirty(m_pPanel->m_ptOrigin + CPoint(m_nX, m_nY),
-                CSize(m_nWidth, m_nHeight));
+            CRect rDirty(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
             m_pPanel->InvalidateRect(&rDirty);
             InvalidateRect();
         }
@@ -451,8 +445,7 @@ void CUIControlTextDisplay::RemoveAll()
 
     lock.Unlock();
 
-    CRect rDirty(m_pPanel->m_ptOrigin + CPoint(m_nX, m_nY),
-        CSize(m_nWidth, m_nHeight));
+    CRect rDirty(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
     m_pPanel->InvalidateRect(&rDirty);
     InvalidateRect();
 }
@@ -517,8 +510,7 @@ void CUIControlTextDisplay::RemoveString(POSITION posBoss)
 
     lock.Unlock();
 
-    CRect rDirty(m_pPanel->m_ptOrigin + CPoint(m_nX, m_nY),
-        CSize(m_nWidth, m_nHeight));
+    CRect rDirty(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
     m_pPanel->InvalidateRect(&rDirty);
     InvalidateRect();
 
@@ -581,7 +573,7 @@ SHORT CUIControlTextDisplay::ParseAndInsertStringAfter(POSITION posInsertAfter, 
 
         SHORT nStrings = CUtil::SplitString(&m_textFont,
             sStringCopy,
-            m_nWidth - 3 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1) - nOffset,
+            m_size.cx - 3 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1) - nOffset,
             2,
             sStrings,
             FALSE,
@@ -670,8 +662,7 @@ BOOL CUIControlTextDisplay::Render(BOOL bForce)
         : m_labelFont;
     SHORT nBaseLineHeight = font.GetBaseLineHeight(TRUE);
 
-    CRect rFrame(m_pPanel->m_ptOrigin + CPoint(m_nX, m_nY),
-        CSize(m_nWidth, m_nHeight));
+    CRect rFrame(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
 
     CRect rDirtyFrame;
     rDirtyFrame.IntersectRect(rFrame, m_rDirty);
@@ -824,8 +815,7 @@ void CUIControlTextDisplay::SetItemTextColor(POSITION posBossItem, COLORREF rgbC
             pDisplayString->m_rgbTextColor = rgbColor;
         }
 
-        CRect rDirty(m_pPanel->m_ptOrigin + CPoint(m_nX, m_nY),
-            CSize(m_nWidth, m_nHeight));
+        CRect rDirty(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
         m_pPanel->InvalidateRect(&rDirty);
         InvalidateRect();
     }
@@ -872,8 +862,7 @@ void CUIControlTextDisplay::TimerAsynchronousUpdate(BOOLEAN bInside)
                     AdjustScrollBar();
                 }
 
-                CRect rDirty(m_pPanel->m_ptOrigin + CPoint(m_nX, m_nY),
-                    CSize(m_nWidth, m_nHeight));
+                CRect rDirty(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
                 m_pPanel->InvalidateRect(&rDirty);
                 InvalidateRect();
             } else {
@@ -909,8 +898,7 @@ void CUIControlTextDisplay::TimerAsynchronousUpdate(BOOLEAN bInside)
                     AdjustScrollBar();
                 }
 
-                CRect rDirty(m_pPanel->m_ptOrigin + CPoint(m_nX, m_nY),
-                    CSize(m_nWidth, m_nHeight));
+                CRect rDirty(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
                 m_pPanel->InvalidateRect(&rDirty);
                 InvalidateRect();
             } else {
@@ -923,8 +911,7 @@ void CUIControlTextDisplay::TimerAsynchronousUpdate(BOOLEAN bInside)
                         field_A62 = 0;
                     }
 
-                    CRect rDirty(m_pPanel->m_ptOrigin + CPoint(m_nX, m_nY),
-                        CSize(m_nWidth, m_nHeight));
+                    CRect rDirty(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
                     m_pPanel->InvalidateRect(&rDirty);
                     InvalidateRect();
                 }
@@ -956,8 +943,7 @@ void CUIControlTextDisplay::SetTopString(POSITION posTopString)
         // NOTE: Uninline.
         AdjustScrollBar();
 
-        CRect rDirty(m_pPanel->m_ptOrigin + CPoint(m_nX, m_nY),
-            CSize(m_nWidth, m_nHeight));
+        CRect rDirty(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
         m_pPanel->InvalidateRect(&rDirty);
         InvalidateRect();
 

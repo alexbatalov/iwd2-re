@@ -169,16 +169,14 @@ BOOL CUIControlScrollBar::OnLButtonDown(CPoint pt)
         return FALSE;
     }
 
-    if (pt.x >= m_pScrollUpButton->m_nX && pt.x <= m_pScrollUpButton->m_nX + m_pScrollUpButton->m_nWidth
-        && pt.y >= m_pScrollUpButton->m_nY && pt.y <= m_pScrollUpButton->m_nY + m_pScrollUpButton->m_nHeight) {
+    if (m_pScrollUpButton->IsOver(pt)) {
         if (m_pScrollUpButton->IsOverPixel(pt)) {
             m_pScrollUpButton->OnLButtonDown(pt);
             return TRUE;
         }
     }
 
-    if (pt.x >= m_pScrollDownButton->m_nX && pt.x <= m_pScrollDownButton->m_nX + m_pScrollDownButton->m_nWidth
-        && pt.y >= m_pScrollDownButton->m_nY && pt.y <= m_pScrollDownButton->m_nY + m_pScrollDownButton->m_nHeight) {
+    if (m_pScrollDownButton->IsOver(pt)) {
         if (m_pScrollDownButton->IsOverPixel(pt)) {
             m_pScrollDownButton->OnLButtonDown(pt);
             return TRUE;
@@ -210,8 +208,7 @@ void CUIControlScrollBar::OnLButtonUp(CPoint pt)
     }
 
     if (m_bActive) {
-        if (pt.x >= m_nX && pt.x <= m_nX + m_nWidth
-            && pt.y >= m_nY && pt.y <= m_nY + m_nHeight) {
+        if (IsOver(pt)) {
             OnLButtonClick(pt);
         } else {
             field_146 = 0;
@@ -224,7 +221,7 @@ void CUIControlScrollBar::OnMouseMove(CPoint pt)
 {
     if (m_bActive && field_146) {
         int v1 = pt.y - field_148;
-        int v2 = m_nY + m_pScrollUpButton->m_nHeight;
+        int v2 = m_ptOrigin.y + m_pScrollUpButton->m_size.cy;
         if (v1 >= v2) {
             if (v1 <= v2 + field_142) {
                 field_144 = v1 - v2;
@@ -248,8 +245,8 @@ BOOLEAN CUIControlScrollBar::sub_4E5000(const CPoint& pt)
     CSize size;
     m_cVidCell.GetFrameSize(m_nSequence, m_nThumbFrame, size, FALSE);
 
-    CPoint origin(m_nX + m_nWidth / 2 - size.cx / 2,
-        m_nY + field_144 + m_pScrollUpButton->m_nHeight);
+    CPoint origin(m_ptOrigin.x + m_size.cx / 2 - size.cx / 2,
+        m_ptOrigin.y + field_144 + m_pScrollUpButton->m_size.cy);
     CRect rect(origin, size);
 
     if (!rect.PtInRect(pt)) {
@@ -265,7 +262,7 @@ BOOLEAN CUIControlScrollBar::sub_4E5000(const CPoint& pt)
 void CUIControlScrollBar::OnLButtonClick(CPoint pt)
 {
     if (!field_146) {
-        if (pt.y <= m_nY + field_144 + m_pScrollUpButton->m_nHeight) {
+        if (pt.y <= m_ptOrigin.y + field_144 + m_pScrollUpButton->m_size.cy) {
             OnPageUp(-1);
         } else {
             OnPageDown(-1);
@@ -374,8 +371,7 @@ BOOL CUIControlScrollBar::Render(BOOL bForce)
     m_cVidCell.pRes->Demand();
     m_cVidCell.RealizePalette(0);
 
-    CRect rControlRect(CPoint(m_pPanel->m_ptOrigin.x + m_nX, m_pPanel->m_ptOrigin.y + m_nY),
-        CSize(m_nWidth, m_nHeight));
+    CRect rControlRect(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
 
     CRect rDirtyRect;
     rDirtyRect.IntersectRect(rControlRect, m_rDirty);
@@ -389,10 +385,10 @@ BOOL CUIControlScrollBar::Render(BOOL bForce)
     rDirtyRect.OffsetRect(-rDirtyRect.left, -rDirtyRect.top);
 
     CRect rUp;
-    rUp.left = pt.x + (m_nWidth - m_pScrollUpButton->m_nWidth) / 2;
+    rUp.left = pt.x + (m_size.cx - m_pScrollUpButton->m_size.cx) / 2;
     rUp.top = pt.y;
-    rUp.right = rUp.left + m_pScrollUpButton->m_nWidth;
-    rUp.bottom = rUp.top + m_pScrollUpButton->m_nHeight;
+    rUp.right = rUp.left + m_pScrollUpButton->m_size.cx;
+    rUp.bottom = rUp.top + m_pScrollUpButton->m_size.cy;
 
     CRect rUpClip;
     if (rUpClip.IntersectRect(rUp, rDirtyRect)) {
@@ -414,8 +410,8 @@ BOOL CUIControlScrollBar::Render(BOOL bForce)
     int y = 0;
     while (y < field_140) {
         CRect rTrack;
-        rTrack.left = pt.x + (m_nWidth - trackSize.cx) / 2;
-        rTrack.top = y + m_pScrollUpButton->m_nHeight + pt.y;
+        rTrack.left = pt.x + (m_size.cx - trackSize.cx) / 2;
+        rTrack.top = y + m_pScrollUpButton->m_size.cy + pt.y;
         rTrack.right = rTrack.left + trackSize.cx;
         rTrack.bottom = min(rTrack.top + trackSize.cy, field_140);
 
@@ -433,10 +429,10 @@ BOOL CUIControlScrollBar::Render(BOOL bForce)
     }
 
     CRect rDown;
-    rDown.left = pt.x + (m_nWidth - m_pScrollDownButton->m_nWidth) / 2;
-    rDown.top = pt.y + m_pScrollUpButton->m_nHeight + field_140;
-    rDown.right = rDown.left + m_pScrollDownButton->m_nWidth;
-    rDown.bottom = rDown.top + m_pScrollDownButton->m_nHeight;
+    rDown.left = pt.x + (m_size.cx - m_pScrollDownButton->m_size.cx) / 2;
+    rDown.top = pt.y + m_pScrollUpButton->m_size.cy + field_140;
+    rDown.right = rDown.left + m_pScrollDownButton->m_size.cx;
+    rDown.bottom = rDown.top + m_pScrollDownButton->m_size.cy;
 
     CRect rDownClip;
     if (rDownClip.IntersectRect(rDown, rDirtyRect)) {
@@ -457,8 +453,8 @@ BOOL CUIControlScrollBar::Render(BOOL bForce)
         m_cVidCell.FrameSet(m_nThumbFrame);
 
         CRect rThumb;
-        rThumb.left = pt.x + m_nWidth / 2 - thumbSize.cx / 2;
-        rThumb.top = pt.y + m_pScrollUpButton->m_nHeight + field_144;
+        rThumb.left = pt.x + m_size.cx / 2 - thumbSize.cx / 2;
+        rThumb.top = pt.y + m_pScrollUpButton->m_size.cy + field_144;
         rThumb.right = rThumb.left + thumbSize.cx;
         rThumb.bottom = rThumb.top + thumbSize.cy;
 
@@ -484,20 +480,14 @@ void CUIControlScrollBar::TimerAsynchronousUpdate(BOOLEAN bInside)
 {
     CPoint pt = g_pBaldurChitin->m_ptPointer - m_pPanel->m_ptOrigin;
 
-    if (pt.x >= m_pScrollUpButton->m_nX
-        && pt.x <= m_pScrollUpButton->m_nX + m_pScrollUpButton->m_nWidth
-        && pt.y >= m_pScrollUpButton->m_nY
-        && pt.y <= m_pScrollUpButton->m_nY + m_pScrollUpButton->m_nHeight) {
+    if (m_pScrollUpButton->IsOver(pt)) {
         if (m_pScrollUpButton->IsOverPixel(pt)) {
             m_pScrollUpButton->TimerAsynchronousUpdate(TRUE);
             return;
         }
     }
 
-    if (pt.x >= m_pScrollDownButton->m_nX
-        && pt.x <= m_pScrollDownButton->m_nX + m_pScrollDownButton->m_nWidth
-        && pt.y >= m_pScrollDownButton->m_nY
-        && pt.y <= m_pScrollDownButton->m_nY + m_pScrollDownButton->m_nHeight) {
+    if (m_pScrollDownButton->IsOver(pt)) {
         if (m_pScrollDownButton->IsOverPixel(pt)) {
             m_pScrollDownButton->TimerAsynchronousUpdate(TRUE);
             return;
