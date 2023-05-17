@@ -620,6 +620,22 @@ void CSoundMixer::UpdateMusic()
     }
 }
 
+// 0x7AC840
+int CSoundMixer::sub_7AC840()
+{
+    // TODO: Incomplete.
+
+    return 0;
+}
+
+// 0x7AC890
+int CSoundMixer::sub_7AC890()
+{
+    // TODO: Incomplete.
+
+    return 0;
+}
+
 // 0x7ACA20
 int CSoundMixer::sub_7ACA20()
 {

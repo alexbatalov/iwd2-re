@@ -8,8 +8,10 @@
 #include "CScreenInventory.h"
 #include "CScreenJournal.h"
 #include "CScreenMap.h"
+#include "CScreenMovies.h"
 #include "CScreenOptions.h"
 #include "CScreenSpellbook.h"
+#include "CScreenStore.h"
 #include "CScreenWorld.h"
 #include "CUIControlLabel.h"
 #include "CUIControlScrollBar.h"
@@ -33,6 +35,44 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
 
     if (pPanel->m_pManager->m_cResRef == "START") {
     } else if (pPanel->m_pManager->m_cResRef == "GUIMOVIE") {
+        switch (pPanel->m_nID) {
+        case 1:
+            // 0x76D661
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                // NOTE: Unclear why movies use store portraits?
+                return new CUIControlPortraitStore(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 50:
+            case 51:
+            case 52:
+            case 53:
+            case 54:
+            case 55:
+                // NOTE: Uninline.
+                return new CUIControlButton77DCC0(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 2:
+            // 0x76D547
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlTextDisplayMovies(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo));
+            case 1:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 2:
+                return new CUIControlButtonMoviesPlay(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 3:
+                return new CUIControlButtonMoviesCredits(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 4:
+                return new CUIControlButtonMoviesDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        }
     } else if (pPanel->m_pManager->m_cResRef == "GUILOAD") {
     } else if (pPanel->m_pManager->m_cResRef == "GUISAVE") {
     } else if (pPanel->m_pManager->m_cResRef == "GUICHAP") {

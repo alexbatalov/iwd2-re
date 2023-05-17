@@ -93,6 +93,12 @@ const DWORD CBaldurChitin::MINIMUM_DRIVE_SPACE = 5000000;
 // 0x847F68
 const DWORD CBaldurChitin::MINIMUM_DRIVE_SECTORS = 1500;
 
+// 0x847F6C
+const COLORREF CBaldurChitin::TEXTDISPLAY_COLOR_SELECT = RGB(255, 102, 0);
+
+// 0x847F70
+const COLORREF CBaldurChitin::TEXTDISPLAY_COLOR_HIGHLIGHT = RGB(255, 183, 0);
+
 // #guess
 // 0x85DE3C
 const USHORT CBaldurChitin::DEFAULT_SCREEN_WIDTH = 800;
@@ -850,6 +856,7 @@ void CBaldurChitin::Init(HINSTANCE hInstance)
     m_pEngineConnection = new CScreenConnection();
     m_pEngineWorldMap = new CScreenWorldMap();
     m_pEngineChapter = new CScreenChapter();
+    m_pEngineMovies = new CScreenMovies();
     m_pEngineKeymaps = new CScreenKeymaps();
 
     m_pObjectGame = new CInfGame();
