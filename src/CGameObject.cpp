@@ -1,6 +1,7 @@
 #include "CGameObject.h"
 
 #include "CGameArea.h"
+#include "CGameObjectArray.h"
 #include "CTimerWorld.h"
 #include "CUtil.h"
 
@@ -104,11 +105,6 @@ const BYTE CGameObject::DEFAULT_TERRAIN_TABLE[16] = {
     5,
 };
 
-// NOTE: Probably does not belong here.
-//
-// 0x851878
-const LONG CGameObject::OBJECT_INVALID = -1;
-
 // 0x4C7B30
 CGameObject::CGameObject()
 {
@@ -118,7 +114,7 @@ CGameObject::CGameObject()
     m_posZ = 0;
     m_pArea = NULL;
     m_posVertList = NULL;
-    m_id = OBJECT_INVALID;
+    m_id = CGameObjectArray::INVALID_OBJECT_ID;
     field_60 = 0;
     m_AISpeed = AI_SPEED_NORMAL;
     m_typeAI.Set(CAIObjectType::NOT_SPRITE);
@@ -171,7 +167,7 @@ const CAIObjectType& CGameObject::GetAIType()
 // 0x44CB70
 LONG CGameObject::GetTargetId()
 {
-    return OBJECT_INVALID;
+    return CGameObjectArray::INVALID_OBJECT_ID;
 }
 
 // 0x44CB80

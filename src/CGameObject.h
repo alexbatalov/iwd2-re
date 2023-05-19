@@ -32,7 +32,6 @@ public:
     static const BYTE AI_SPEED_HASTED;
     static const BYTE DEFAULT_VISIBLE_TERRAIN_TABLE[16];
     static const BYTE DEFAULT_TERRAIN_TABLE[16];
-    static const LONG OBJECT_INVALID;
 
     CGameObject();
     /* 0000 */ virtual ~CGameObject();
