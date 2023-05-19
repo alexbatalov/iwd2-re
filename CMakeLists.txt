@@ -60,6 +60,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CGameAnimationType.h"
     "src/CGameArea.cpp"
     "src/CGameArea.h"
+    "src/CGameObject.cpp"
+    "src/CGameObject.h"
     "src/CGameOptions.cpp"
     "src/CGameOptions.h"
     "src/CGamePermission.cpp"

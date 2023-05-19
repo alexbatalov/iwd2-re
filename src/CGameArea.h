@@ -56,7 +56,9 @@ public:
     CGameArea();
     ~CGameArea();
 
+    void AddObject(LONG id, BYTE listType);
     void ApplyWindToAmbients(BYTE nPercentVolume);
+    void RemoveObject(POSITION posVertList, BYTE listType, LONG id);
     void SetDay();
     void SetNight();
     void SetApproachingDawn();
