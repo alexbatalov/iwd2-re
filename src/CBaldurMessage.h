@@ -5,10 +5,13 @@
 #include <afxmt.h>
 
 #include "CChatBuffer.h"
+#include "CResRef.h"
 
 class CBaldurMessage {
 public:
     static const BYTE DELETEAREA_EMPTY_VOTE;
+    static const BYTE SIGNAL_SERVER;
+    static const BYTE SIGNAL_END_MAJOR_EVENT;
     static const DWORD SIGNAL_SECONDSTOMPTIMEOUT;
 
     CBaldurMessage();
@@ -22,6 +25,8 @@ public:
     BOOL SendArbitrationLockAllowInput(BOOLEAN bAllowInput);
     BOOL ObjectControlRequest(LONG localObjectID);
     BOOL ObjectControl();
+    BOOLEAN SendSignal(BYTE signalType, BYTE signalToSend);
+    BOOLEAN ChapterAnnounceStatus(BYTE nChapter, CResRef cResRef);
     void WeatherBroadcast(WORD wWeatherFlags);
     void TimeSynchBroadcast(ULONG nGameTime, BOOLEAN bCompressTime);
     void TimeChangeToServer(ULONG deltaTime);

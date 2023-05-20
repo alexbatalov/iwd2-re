@@ -3,6 +3,12 @@
 // 0x84CF76
 const BYTE CBaldurMessage::DELETEAREA_EMPTY_VOTE = 101;
 
+// 0x84CFBC
+const BYTE CBaldurMessage::SIGNAL_SERVER = 83;
+
+// 0x84CFBD
+const BYTE CBaldurMessage::SIGNAL_END_MAJOR_EVENT = 49;
+
 // 0x84CFC4
 const DWORD CBaldurMessage::SIGNAL_SECONDSTOMPTIMEOUT = 200;
 
@@ -136,6 +142,22 @@ BOOL CBaldurMessage::ObjectControlRequest(LONG localObjectID)
 
 // 0x430C50
 BOOL CBaldurMessage::ObjectControl()
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x4333C0
+BOOLEAN CBaldurMessage::SendSignal(BYTE signalType, BYTE signalToSend)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x434EB0
+BOOLEAN CBaldurMessage::ChapterAnnounceStatus(BYTE nChapter, CResRef cResRef)
 {
     // TODO: Incomplete.
 

@@ -82,6 +82,8 @@ public:
     /* 0984 */ BYTE m_sndAmbientVolume;
     /* 0986 */ WORD m_sndAmbientDayVolume;
     /* 0988 */ WORD m_sndAmbientNightVolume;
+    /* 0AE8 */ SHORT m_nCurrentSong;
+    /* 0AEA */ INT m_nBattleSongCounter;
 };
 
 #endif /* CGAMEAREA_H_ */

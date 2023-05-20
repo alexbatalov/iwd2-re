@@ -1827,6 +1827,25 @@ int CRuleTables::GetStartRotation(INT nCharacterSlot) const
     return rotation;
 }
 
+// 0x543C80
+CList<STRREF, STRREF>* CRuleTables::GetChapterText(const CResRef& cResText, BYTE nChapter) const
+{
+    C2DArray tText;
+    tText.Load(cResText);
+
+    CList<STRREF, STRREF>* pTextList = new CList<STRREF, STRREF>();
+
+    if (nChapter == -1) {
+        // NOTE: Uninline.
+        nChapter = g_pBaldurChitin->m_pObjectGame->GetCurrentChapter();
+    }
+
+    pTextList->AddTail(tText.GetAtLong(CPoint(0, nChapter + 1)));
+    pTextList->AddTail(tText.GetAtLong(CPoint(1, nChapter + 1)));
+
+    return pTextList;
+}
+
 // 0x5446B0
 void CRuleTables::GetCharacterStateDescription(INT nState, CString& sDescription) const
 {

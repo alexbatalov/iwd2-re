@@ -271,8 +271,8 @@ BOOL CSound::ExclusiveStop()
 // 0x7A9A20
 DWORD CSound::GetPlayTime()
 {
-    // FIXME: Can return uninitialized value.
-    DWORD playTime;
+    // FIXME: This value is uninitialized in the original code.
+    DWORD playTime = 0;
 
     if (Request()) {
         LPWAVEFORMATEX waveFormat = pRes->GetWaveFormatPtr();

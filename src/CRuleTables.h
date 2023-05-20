@@ -374,6 +374,7 @@ public:
     void GetStartArea(CResRef& cResArea, CPoint& ptView) const;
     CPoint GetStartPoint(INT nCharacterSlot) const;
     int GetStartRotation(INT nCharacterSlot) const;
+    CList<STRREF, STRREF>* GetChapterText(const CResRef& cResText, BYTE nChapter) const;
     void GetCharacterStateDescription(INT nState, CString& sDescription) const;
     void GetMovieDescription(const CString& sMovie, CString& sDescription) const;
     void GetSpellDescription(const CString& sSpell, CString& sDescription) const;

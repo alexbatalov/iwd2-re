@@ -3,6 +3,7 @@
 
 #include "mfc.h"
 
+#include "CGameObjectArray.h"
 #include "CGameOptions.h"
 #include "CMultiplayerSettings.h"
 #include "CRuleTables.h"
@@ -45,6 +46,8 @@ public:
     BOOLEAN RestParty(int a2, unsigned char a3);
     BOOL CanRestParty(STRREF& strError, unsigned char a2, unsigned char a3, unsigned char a4);
 
+    INT GetCurrentChapter();
+    void SetCurrentChapter(INT nChapter);
     CGameArea* GetVisibleArea() { return m_gameAreas[m_visibleArea]; }
 
     static const CString FOGOWAR_RESREF;
@@ -94,6 +97,7 @@ public:
     /* 1BA1 */ unsigned char field_1BA1;
     /* 1BB2 */ CMultiplayerSettings m_multiplayerSettings;
     /* 366E */ int field_366E;
+    /* 372C */ CGameObjectArray m_cObjectArray;
     /* 37E0 */ BYTE m_visibleArea;
     /* 37E2 */ CGameArea* m_gameAreas[12];
     /* 3812 */ CGameArea* m_pGameAreaMaster;

@@ -3,6 +3,7 @@
 #include "CBaldurChitin.h"
 #include "CBaldurEngine.h"
 #include "CInfGame.h"
+#include "CScreenChapter.h"
 #include "CScreenCharacter.h"
 #include "CScreenConnection.h"
 #include "CScreenInventory.h"
@@ -77,6 +78,27 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
     } else if (pPanel->m_pManager->m_cResRef == "GUILOAD") {
     } else if (pPanel->m_pManager->m_cResRef == "GUISAVE") {
     } else if (pPanel->m_pManager->m_cResRef == "GUICHAP") {
+        // 0x76DD0D
+        switch (pPanel->m_nID) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlButtonChapterDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 2:
+                return new CUIControlTextDisplayChapter(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo));
+            case 3:
+                return new CUIControlButtonChapterReplay(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        }
     } else if (pPanel->m_pManager->m_cResRef == "GUICONN") {
         // 0x76DDE8
         switch (pPanel->m_nID) {

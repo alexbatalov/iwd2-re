@@ -607,6 +607,9 @@ BOOL CInfGame::dword_8E7524;
 CInfGame::CInfGame()
 {
     field_1BA1 = 4;
+    m_visibleArea = 0;
+    memset(m_gameAreas, 0, sizeof(m_gameAreas));
+    m_pGameAreaMaster = NULL;
     // TODO: Incomplete.
 }
 
@@ -937,4 +940,22 @@ BOOL CInfGame::CanRestParty(STRREF& strError, unsigned char a2, unsigned char a3
     // TODO: Incomplete.
 
     return FALSE;
+}
+
+// NOTE: Odd location.
+//
+// 0x428620
+INT CInfGame::GetCurrentChapter()
+{
+    // TODO: Incomplete.
+
+    return 0;
+}
+
+// NOTE: Odd location
+//
+// 0x435110
+void CInfGame::SetCurrentChapter(INT nChapter)
+{
+    // TODO: Incomplete.
 }
