@@ -1246,7 +1246,7 @@ void CScreenKeymaps::SelectKeymap(INT nIndex)
 
 // 0x63AB50
 CUIControlButtonKeymap::CUIControlButtonKeymap(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     SetText(CString(""));
 }

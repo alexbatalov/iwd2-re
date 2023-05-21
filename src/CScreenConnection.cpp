@@ -1841,7 +1841,7 @@ void CScreenConnection::CancelEngine()
 
 // 0x602590
 CUIControlButtonConnectionGameMode::CUIControlButtonConnectionGameMode(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
     g_pBaldurChitin->m_cTlkTable.Fetch(15413, strRes); // "Single Player"
@@ -1870,7 +1870,7 @@ void CUIControlButtonConnectionGameMode::OnLButtonClick(CPoint pt)
 
 // 0x6027D0
 CUIControlButtonConnectionQuitGame::CUIControlButtonConnectionQuitGame(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
     g_pBaldurChitin->m_cTlkTable.Fetch(13731, strRes); // "Quit Game"
@@ -1914,7 +1914,7 @@ void CUIControlButtonConnectionQuitGame::OnLButtonClick(CPoint pt)
 
 // 0x602A90
 CUIControlButtonConnectionNewGame::CUIControlButtonConnectionNewGame(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
     g_pBaldurChitin->m_cTlkTable.Fetch(13963, strRes); // "New Game"
@@ -1934,7 +1934,7 @@ void CUIControlButtonConnectionNewGame::OnLButtonClick(CPoint pt)
 
 // 0x602E10
 CUIControlButtonConnectionQuickLoad::CUIControlButtonConnectionQuickLoad(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
     g_pBaldurChitin->m_cTlkTable.Fetch(33508, strRes); // "Quick Load"
@@ -1960,7 +1960,7 @@ void CUIControlButtonConnectionQuickLoad::OnLButtonClick(CPoint pt)
 
 // 0x602FE0
 CUIControlButtonConnectionLoadGame::CUIControlButtonConnectionLoadGame(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
     g_pBaldurChitin->m_cTlkTable.Fetch(13729, strRes); // "Load Game"
@@ -1980,7 +1980,7 @@ void CUIControlButtonConnectionLoadGame::OnLButtonClick(CPoint pt)
 
 // 0x603380
 CUIControlButtonConnectionJoinGame::CUIControlButtonConnectionJoinGame(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
     g_pBaldurChitin->m_cTlkTable.Fetch(13964, strRes); // "Join Game"
@@ -2058,7 +2058,7 @@ void CUIControlTextDisplayConnectionTCPIPSessions::OnItemSelected(LONG lMarker)
 
 // 0x603750
 CUIControlButtonConnectionPopupDone::CUIControlButtonConnectionPopupDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
     g_pBaldurChitin->m_cTlkTable.Fetch(11973, strRes); // "Done"
@@ -2084,7 +2084,7 @@ void CUIControlButtonConnectionPopupDone::OnLButtonClick(CPoint pt)
 
 // 0x603920
 CUIControlButtonConnectionPopupCancel::CUIControlButtonConnectionPopupCancel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
     g_pBaldurChitin->m_cTlkTable.Fetch(13727, strRes); // "Cancel"
@@ -2110,7 +2110,7 @@ void CUIControlButtonConnectionPopupCancel::OnLButtonClick(CPoint pt)
 
 // 0x603AF0
 CUIControlButtonConnectionProtocolProtocol::CUIControlButtonConnectionProtocolProtocol(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton3State(panel, controlInfo, TRUE, 0)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
 
@@ -2220,7 +2220,7 @@ void CUIControlTextDisplayConnectionModems::OnItemSelected(LONG lMarker)
 
 // 0x603F20
 CUIControlButtonConnectionSerialPort::CUIControlButtonConnectionSerialPort(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton3State(panel, controlInfo, 1, 0)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
 {
     INT nPort;
     switch (m_nID) {
@@ -2299,7 +2299,7 @@ void CUIControlButtonConnectionSerialPort::OnLButtonClick(CPoint pt)
 
 // 0x604210
 CUIControlButtonConnectionSerialBaudRate::CUIControlButtonConnectionSerialBaudRate(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton3State(panel, controlInfo, 1, 0)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
 {
     INT nBaudRate;
     switch (m_nID) {
@@ -2402,7 +2402,7 @@ void CUIControlButtonConnectionSerialBaudRate::OnLButtonClick(CPoint pt)
 
 // 0x604F80
 CUIControlButtonConnectionErrorButton::CUIControlButtonConnectionErrorButton(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
 }
 
@@ -2425,7 +2425,7 @@ void CUIControlButtonConnectionErrorButton::OnLButtonClick(CPoint pt)
 
 // 0x6050B0
 CUIControlButtonConnectionLobbyMenu::CUIControlButtonConnectionLobbyMenu(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     CScreenConnection* pConnection = g_pBaldurChitin->m_pEngineConnection;
 

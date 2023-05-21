@@ -765,7 +765,7 @@ void CScreenChapter::CancelEngine()
 
 // 0x5D4930
 CUIControlButtonChapterDone::CUIControlButtonChapterDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
     g_pBaldurChitin->m_cTlkTable.Fetch(11973, strRes);
@@ -796,7 +796,7 @@ void CUIControlButtonChapterDone::OnLButtonClick(CPoint pt)
 
 // 0x5D4B60
 CUIControlButtonChapterReplay::CUIControlButtonChapterReplay(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
     g_pBaldurChitin->m_cTlkTable.Fetch(16510, strRes);

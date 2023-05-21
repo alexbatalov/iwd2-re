@@ -497,7 +497,7 @@ void CUIControlScrollBar::TimerAsynchronousUpdate(BOOLEAN bInside)
 
 // NOTE: Inlined in `CUIControlScrollBar::CUIControlScrollBar`.
 CUIControlButtonScrollBar::CUIControlButtonScrollBar(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo, CUIControlScrollBar* pScrollBar, BYTE nDirection)
-    : CUIControlButton(panel, controlInfo, 1, 1)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
 {
     m_pScrollBar = pScrollBar;
     m_nDirection = nDirection;

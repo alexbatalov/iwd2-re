@@ -993,7 +993,7 @@ void CScreenJournal::CancelEngine()
 
 // 0x637BE0
 CUIControlButtonJournalScroll::CUIControlButtonJournalScroll(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
 }
 
@@ -1041,7 +1041,7 @@ void CUIControlButtonJournalScroll::OnLButtonDoubleClick(CPoint pt)
 
 // 0x637D70
 CUIControlButtonJournalError::CUIControlButtonJournalError(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
 }
 

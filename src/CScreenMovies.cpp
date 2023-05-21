@@ -476,7 +476,7 @@ void CUIControlTextDisplayMovies::OnItemSelected(LONG lMarker)
 
 // 0x647AF0
 CUIControlButtonMoviesPlay::CUIControlButtonMoviesPlay(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
     g_pBaldurChitin->m_cTlkTable.Fetch(17318, strRes);
@@ -502,7 +502,7 @@ void CUIControlButtonMoviesPlay::OnLButtonClick(CPoint pt)
 
 // 0x647CC0
 CUIControlButtonMoviesCredits::CUIControlButtonMoviesCredits(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
     g_pBaldurChitin->m_cTlkTable.Fetch(15591, strRes);
@@ -529,7 +529,7 @@ void CUIControlButtonMoviesCredits::OnLButtonClick(CPoint pt)
 
 // 0x647ED0
 CUIControlButtonMoviesDone::CUIControlButtonMoviesDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
     g_pBaldurChitin->m_cTlkTable.Fetch(11973, strRes);

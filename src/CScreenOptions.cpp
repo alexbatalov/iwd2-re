@@ -1709,7 +1709,7 @@ void CScreenOptions::CancelEngine()
 
 // 0x657490
 CUIControlButtonOptionsSelection::CUIControlButtonOptionsSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton3State(panel, controlInfo, 1, 0)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
 {
     m_nPressedFrame = 2;
     m_nDisabledFrame = 0;
@@ -2015,7 +2015,7 @@ void CUIControlButtonOptionsSelection::OnLButtonClick(CPoint pt)
 
 // 0x657C60
 CUIControlButtonOptionsRadio::CUIControlButtonOptionsRadio(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton3State(panel, controlInfo, 1, 0)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
 {
     m_nNotSelectedFrame = 0;
     m_nPressedFrame = 1;
@@ -2388,7 +2388,7 @@ void CUIControlSliderOptionsSlider::OnThumbFinalChange()
 
 // 0x658A60
 CUIControlButtonOptionsGameCommand::CUIControlButtonOptionsGameCommand(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
     DWORD dwStrId;
@@ -2670,7 +2670,7 @@ void CUIControlButtonOptionsGameCommand::OnLButtonClick(CPoint pt)
 
 // 0x659150
 CUIControlButtonOptionsPopupDone::CUIControlButtonOptionsPopupDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     SetText(CBaldurEngine::FetchString(11973));
 }
@@ -2694,7 +2694,7 @@ void CUIControlButtonOptionsPopupDone::OnLButtonClick(CPoint pt)
 
 // 0x6592E0
 CUIControlButtonOptionsPopupCancel::CUIControlButtonOptionsPopupCancel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     SetText(CBaldurEngine::FetchString(13727));
 }
@@ -2718,7 +2718,7 @@ void CUIControlButtonOptionsPopupCancel::OnLButtonClick(CPoint pt)
 
 // 0x659470
 CUIControlButtonOptionsError::CUIControlButtonOptionsError(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     SetText(CBaldurEngine::FetchString(13727));
 }

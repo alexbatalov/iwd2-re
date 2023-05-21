@@ -8,6 +8,12 @@
 #include "CVidInf.h"
 #include "CVidMode.h"
 
+// 0x84C920
+const BYTE CUIControlButton::LBUTTON = 1;
+
+// 0x84C921
+const BYTE CUIControlButton::RBUTTON = 2;
+
 // 0x8AB9B4
 const int CUIControlButton::dword_8AB9B4 = 2;
 
@@ -145,7 +151,7 @@ BOOL CUIControlButton::OnLButtonDown(CPoint pt)
         return FALSE;
     }
 
-    if ((m_nMouseButtons & 1) == 0) {
+    if ((m_nMouseButtons & LBUTTON) == 0) {
         return FALSE;
     }
 
@@ -179,7 +185,7 @@ void CUIControlButton::OnLButtonUp(CPoint pt)
     lock.Unlock();
 
     if (m_bActive) {
-        if ((m_nMouseButtons & 1) != 0) {
+        if ((m_nMouseButtons & LBUTTON) != 0) {
             if (IsOver(pt)) {
                 OnLButtonClick(pt);
             }
@@ -194,7 +200,7 @@ BOOL CUIControlButton::OnLButtonDblClk(CPoint pt)
         return FALSE;
     }
 
-    if ((m_nMouseButtons & 1) == 0) {
+    if ((m_nMouseButtons & LBUTTON) == 0) {
         return FALSE;
     }
 
@@ -210,7 +216,7 @@ BOOL CUIControlButton::OnRButtonDown(CPoint pt)
         return FALSE;
     }
 
-    if ((m_nMouseButtons & 2) == 0) {
+    if ((m_nMouseButtons & RBUTTON) == 0) {
         return FALSE;
     }
 
@@ -239,7 +245,7 @@ void CUIControlButton::OnRButtonUp(CPoint pt)
     InvalidateRect();
 
     if (m_bActive) {
-        if ((m_nMouseButtons & 2) != 0) {
+        if ((m_nMouseButtons & RBUTTON) != 0) {
             if (IsOver(pt)) {
                 OnRButtonClick(pt);
             }

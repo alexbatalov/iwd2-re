@@ -780,7 +780,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
 
 // 0x7788D0
 CUIControlButtonHotArea::CUIControlButtonHotArea(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
 }
 
@@ -852,7 +852,7 @@ CUIControlPortraitBase::~CUIControlPortraitBase()
 
 // 0x779CB0
 CUIControlPortraitGeneral::CUIControlPortraitGeneral(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlPortraitBase(panel, controlInfo, 3)
+    : CUIControlPortraitBase(panel, controlInfo, LBUTTON | RBUTTON)
 {
 }
 
@@ -888,7 +888,7 @@ void CUIControlPortraitGeneral::OnRButtonClick(CPoint pt)
 
 // 0x77A170
 CUIControlButtonAI::CUIControlButtonAI(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     m_nNormalFrame++;
     m_nToolTipHotKeyIndex1 = 27;
@@ -903,7 +903,7 @@ CUIControlButtonAI::~CUIControlButtonAI()
 
 // 0x77B410
 CUIControlButtonRest::CUIControlButtonRest(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, 1, 0)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     m_nToolTipHotKeyIndex1 = 29;
     m_nToolTipStrRef = 11942;
@@ -922,7 +922,7 @@ void CUIControlButtonRest::OnLButtonClick(CPoint pt)
 
 // 0x77CD30
 CUIControlButtonGeneralBase::CUIControlButtonGeneralBase(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton3State(panel, controlInfo, 1, 0)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
 {
     m_nNotSelectedFrame = m_nNormalFrame;
     m_nSelectedFrame = m_nNotSelectedFrame / 2 + 20;
