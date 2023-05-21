@@ -17,7 +17,6 @@
 #include "CScreenWorld.h"
 #include "CUIControlLabel.h"
 #include "CUIControlScrollBar.h"
-#include "CUIControlTextDisplay.h"
 #include "CUIManager.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -639,6 +638,111 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             break;
         }
     } else if (pPanel->m_pManager->m_cResRef == "GUIJRNL") {
+        // 0x770EEA
+        switch (pPanel->m_nID) {
+        case 0:
+            // 0x770F2D
+            switch (controlInfo->nID) {
+            case 4:
+                return new CUIControlButtonGeneralSpellbook(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 5:
+                return new CUIControlButtonGeneralInventory(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 6:
+                return new CUIControlButtonGeneralWorld(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 7:
+                return new CUIControlButtonGeneralMap(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 8:
+                return new CUIControlButtonGeneralCharacter(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 9:
+                return new CUIControlButtonGeneralOptions(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 10:
+                return new CUIControlButtonClock(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 12:
+                return new CUIControlButtonRest(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 13:
+                return new CUIControlButtonGeneralMultiPlayer(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 14:
+                return new CUIControlButtonAI(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 1:
+            // 0x77114F
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                return new CUIControlPortraitGeneral(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 12:
+                return new CUIControlButtonRest(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 50:
+            case 51:
+            case 52:
+            case 53:
+            case 54:
+            case 55:
+                return new CUIControlButton77DCC0(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 2:
+            // 0x7711EB
+            switch (controlInfo->nID) {
+            case 1:
+                return new CUIControlTextDisplayJournal(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo));
+            case 2:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 3:
+            case 4:
+                return new CUIControlButtonJournalScroll(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 5:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 6:
+                // TODO: Incomplete.
+                return NULL;
+            }
+            break;
+        case 7:
+        case 8:
+            // 0x77135F
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+                return new CUIControlButtonJournalError(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 3:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\UIControlButtons.cpp
+                // __LINE__: 3110
+                UTIL_ASSERT(FALSE);
+            }
+            break;
+        case 9:
+            // 0x7712F8
+            switch (controlInfo->nID) {
+            case 0:
+                // TODO: Incomplete.
+                return NULL;
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                // TODO: Incomplete.
+                return NULL;
+            }
+            break;
+        case 50:
+            // 0x7713BF
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 2:
+                return new CUIControlButtonJournalError(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 3:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            }
+        }
     } else if (pPanel->m_pManager->m_cResRef == "GUIINV") {
     } else if (pPanel->m_pManager->m_cResRef == "GUIREC") {
     } else if (pPanel->m_pManager->m_cResRef == "GUISPL" || pPanel->m_pManager->m_cResRef == "GUISPL08") {
@@ -716,6 +820,22 @@ CUIControlButtonOptionsHotArea::CUIControlButtonOptionsHotArea(CUIPanel* panel, 
 
 // 0x7798F0
 CUIControlButtonOptionsHotArea::~CUIControlButtonOptionsHotArea()
+{
+}
+
+// 0x779BC0
+CUIControlTextDisplayJournal::CUIControlTextDisplayJournal(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo)
+    : CUIControlTextDisplay(panel, controlInfo, TRUE)
+{
+}
+
+// 0x603670
+CUIControlTextDisplayJournal::~CUIControlTextDisplayJournal()
+{
+}
+
+// 0x71E750
+void CUIControlTextDisplayJournal::OnButtonLClick(CPoint pt)
 {
 }
 

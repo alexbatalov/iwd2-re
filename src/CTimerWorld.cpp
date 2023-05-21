@@ -241,6 +241,12 @@ void CTimerWorld::CheckForTriggerEventPast()
     }
 }
 
+// 0x54F1D0
+void CTimerWorld::GetCurrentTimeString(ULONG nFromTime, STRREF strTimeFormat, CString& sTime)
+{
+    // TODO: Incomplete.
+}
+
 // 0x54F970
 void CTimerWorld::StartTime()
 {

@@ -3,6 +3,7 @@
 
 #include "mfc.h"
 
+#include "CGameJournal.h"
 #include "CGameObjectArray.h"
 #include "CGameOptions.h"
 #include "CMultiplayerSettings.h"
@@ -107,6 +108,7 @@ public:
     /* 3846 */ SHORT m_nCharacters;
     /* 43E2 */ int field_43E2;
     /* 43EA */ CGameOptions m_cOptions; // #guess
+    /* 44C8 */ CGameJournal m_cJournal;
     /* 4514 */ BYTE m_pKeymap[CINFGAME_KEYMAP_SIZE];
     /* 4688 */ BOOLEAN m_pKeymapFlags[CINFGAME_KEYMAP_SIZE];
     /* 4A00 */ HANDLE m_hSearchThread; // #guess

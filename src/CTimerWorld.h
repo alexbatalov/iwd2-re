@@ -3,6 +3,8 @@
 
 #include "mfc.h"
 
+#include "BalDataTypes.h"
+
 class CTimerWorld {
 public:
     static const CString TOKEN_MINUTE;
@@ -43,6 +45,7 @@ public:
     void UpdateTime(BOOLEAN forceUpdate);
     void CheckForTriggerEventAbsolute();
     void CheckForTriggerEventPast();
+    static void GetCurrentTimeString(ULONG nFromTime, STRREF strTimeFormat, CString& sTime);
     void StartTime();
     void StopTime();
 

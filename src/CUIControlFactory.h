@@ -3,6 +3,7 @@
 
 #include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
+#include "CUIControlTextDisplay.h"
 
 class CBaldurEngine;
 
@@ -26,6 +27,13 @@ class CUIControlPortraitBase : public CUIControlButton {
 public:
     CUIControlPortraitBase(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo, BYTE nMouseButtons);
     ~CUIControlPortraitBase();
+};
+
+class CUIControlTextDisplayJournal : public CUIControlTextDisplay {
+public:
+    CUIControlTextDisplayJournal(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo);
+    ~CUIControlTextDisplayJournal() override;
+    void OnButtonLClick(CPoint pt) override;
 };
 
 class CUIControlPortraitGeneral : public CUIControlPortraitBase {

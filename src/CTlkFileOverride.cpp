@@ -42,6 +42,12 @@ BOOLEAN CTlkFileOverride::Fetch(DWORD strId, STR_RES& strRes)
     return FALSE;
 }
 
+// 0x7B5A00
+void CTlkFileOverride::Remove(DWORD strId)
+{
+    // TODO: Incomplete.
+}
+
 // 0x7B5C30
 void CTlkFileOverride::CloseFiles()
 {
