@@ -445,6 +445,12 @@ void CUIControlTextDisplay::RemoveAll()
 
     lock.Unlock();
 
+    m_posTopString = NULL;
+    field_5A = 0;
+    field_5C = 0;
+    m_posHighlightedItem = NULL;
+    field_A6C = 0;
+
     CRect rDirty(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
     m_pPanel->InvalidateRect(&rDirty);
     InvalidateRect();
