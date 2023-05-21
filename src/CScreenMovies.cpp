@@ -15,12 +15,12 @@ CScreenMovies::CScreenMovies()
     SetVideoMode(0);
     m_pVirtualKeys[0] = CKeyInfo(VK_SNAPSHOT, -1, 0);
     m_pVirtualKeys[1] = CKeyInfo(VK_RETURN, 0, 0);
-    m_pVirtualKeys[2] = CKeyInfo('#', 0, 0);
-    m_pVirtualKeys[3] = CKeyInfo('$', 0, 0);
-    m_pVirtualKeys[4] = CKeyInfo('%', 0, 0);
-    m_pVirtualKeys[5] = CKeyInfo('\'', 0, 0);
+    m_pVirtualKeys[2] = CKeyInfo(VK_END, 0, 0);
+    m_pVirtualKeys[3] = CKeyInfo(VK_HOME, 0, 0);
+    m_pVirtualKeys[4] = CKeyInfo(VK_LEFT, 0, 0);
+    m_pVirtualKeys[5] = CKeyInfo(VK_RIGHT, 0, 0);
     m_pVirtualKeys[6] = CKeyInfo(VK_BACK, 0, 0);
-    m_pVirtualKeys[7] = CKeyInfo('.', 0, 0);
+    m_pVirtualKeys[7] = CKeyInfo(VK_DELETE, 0, 0);
     m_pVirtualKeys[8] = CKeyInfo(VK_SPACE, 0, 0);
     m_pVirtualKeys[9] = CKeyInfo('A', 0, 0);
     m_pVirtualKeys[10] = CKeyInfo('B', 0, 0);
@@ -60,7 +60,7 @@ CScreenMovies::CScreenMovies()
     m_pVirtualKeys[42] = CKeyInfo('7', 0, 0);
     m_pVirtualKeys[43] = CKeyInfo('8', 0, 0);
     m_pVirtualKeys[44] = CKeyInfo('9', 0, 0);
-    m_pVirtualKeys[45] = CKeyInfo('-', 0, 0);
+    m_pVirtualKeys[45] = CKeyInfo(VK_INSERT, 0, 0);
     // FIXME: Buffer overrun.
     m_pVirtualKeys[46] = CKeyInfo(VK_TAB, -1, 0);
 
