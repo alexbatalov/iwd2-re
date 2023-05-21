@@ -5,6 +5,7 @@
 #include "CBaldurChitin.h"
 #include "CBaldurEngine.h"
 #include "CBaldurProjector.h"
+#include "CGameObject.h"
 #include "CScreenMultiPlayer.h"
 #include "CScreenSave.h"
 #include "CScreenSinglePlayer.h"
@@ -924,6 +925,39 @@ void CInfGame::ApplyVolumeSliders(BOOLEAN a2)
     }
 
     g_pBaldurChitin->cSoundMixer.UpdateSoundList();
+}
+
+// 0x5C1090
+BYTE CInfGame::GetCharactersControlled()
+{
+    BYTE bControlled = 0;
+    CGameObject* pObject;
+
+    for (SHORT nIndex = 0; nIndex < m_nCharacters; nIndex++) {
+        LONG id = m_nCharacterPortaits[nIndex];
+
+        BYTE rc;
+        do {
+            // NOTE: Using global. Implying inlined static function.
+            rc = g_pBaldurChitin->m_pObjectGame->m_cObjectArray.GetShare(id,
+                CGameObjectArray::THREAD_ASYNCH,
+                &pObject,
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (g_pChitin->cNetwork.m_nServiceProvider == CNetwork::SERV_PROV_NULL
+                || g_pChitin->cNetwork.field_6FA == pObject->m_remotePlayerID) {
+                bControlled |= 1 << nIndex;
+            }
+
+            g_pBaldurChitin->m_pObjectGame->m_cObjectArray.ReleaseShare(id,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+
+    return bControlled;
 }
 
 // 0x5C1160
