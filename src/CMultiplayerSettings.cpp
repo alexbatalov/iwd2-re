@@ -193,13 +193,13 @@ void CMultiplayerSettings::SetListenToJoinOption(BOOLEAN bListenToJoin, BOOLEAN 
 }
 
 // 0x519120
-void CMultiplayerSettings::SetArbitrationLockStatus(BOOLEAN bStatus)
+void CMultiplayerSettings::SetArbitrationLockStatus(BOOLEAN bStatus, unsigned char a2)
 {
     if (g_pChitin->cNetwork.m_bConnectionEstablished) {
         m_bArbitrationLockStatus = bStatus;
 
         if (g_pChitin->cNetwork.m_bIsHost == TRUE) {
-            g_pBaldurChitin->m_cBaldurMessage.SendArbitrationLockStatus(bStatus);
+            g_pBaldurChitin->m_cBaldurMessage.SendArbitrationLockStatus(bStatus, a2);
         }
     }
 }

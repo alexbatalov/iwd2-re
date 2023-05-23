@@ -117,7 +117,7 @@ BOOL CBaldurMessage::SendJoinRequestOptionToServer(BOOLEAN bListenToJoin)
 }
 
 // 0x42CCA0
-BOOL CBaldurMessage::SendArbitrationLockStatus(BOOLEAN bStatus)
+BOOL CBaldurMessage::SendArbitrationLockStatus(BOOLEAN bStatus, unsigned char a2)
 {
     // TODO: Incomplete.
 

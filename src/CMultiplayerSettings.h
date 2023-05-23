@@ -30,7 +30,7 @@ public:
     void SetImportingCharacterOption(BYTE nImportingBitField);
     void SetRestrictStoreOption(BOOLEAN bRestrictStore);
     void SetListenToJoinOption(BOOLEAN bListenToJoin, BOOLEAN bFlush);
-    void SetArbitrationLockStatus(BOOLEAN bStatus);
+    void SetArbitrationLockStatus(BOOLEAN bStatus, unsigned char a2);
     void SetArbitrationLockAllowInput(BOOLEAN bStatus);
     void SetCharacterCreationLocation(CString sAreaName, CPoint ptStart);
     void SetServerOnLoadGame(PLAYER_ID localPlayerID);

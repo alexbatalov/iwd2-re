@@ -9,6 +9,7 @@
 #include "CScreenInventory.h"
 #include "CScreenJournal.h"
 #include "CScreenKeymaps.h"
+#include "CScreenLoad.h"
 #include "CScreenMap.h"
 #include "CScreenMovies.h"
 #include "CScreenOptions.h"
@@ -75,6 +76,87 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             break;
         }
     } else if (pPanel->m_pManager->m_cResRef == "GUILOAD") {
+        // 0x76D7BF
+        switch (pPanel->m_nID) {
+        case 0:
+            // 0x76D8D8
+            switch (controlInfo->nID) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                return new CUIControlButtonLoadScreenShot(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 22:
+                return new CUIControlButtonLoadCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 23:
+                return new CUIControlScrollBarLoadGames(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 25:
+            case 26:
+            case 27:
+            case 28:
+            case 29:
+            case 30:
+            case 31:
+            case 32:
+            case 33:
+            case 34:
+            case 35:
+            case 36:
+            case 37:
+            case 38:
+            case 39:
+            case 40:
+            case 41:
+            case 42:
+            case 43:
+            case 44:
+            case 45:
+            case 46:
+            case 47:
+            case 48:
+            case 49:
+            case 50:
+            case 51:
+            case 52:
+            case 53:
+            case 54:
+                return new CUIControlButtonLoadPortrait(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 55:
+            case 56:
+            case 57:
+            case 58:
+            case 59:
+                return new CUIControlButtonLoadLoad(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 60:
+            case 61:
+            case 62:
+            case 63:
+            case 64:
+                return new CUIControlButtonLoadDelete(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 1:
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 1:
+            case 2:
+                return new CUIControlButtonLoadError(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 2:
+            switch (controlInfo->nID) {
+            case 1:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 10:
+                return new CUIControlButtonLoadError(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            default:
+                // NOTE: Strange case - creating scrollbar in default section.
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            }
+            break;
+        }
     } else if (pPanel->m_pManager->m_cResRef == "GUISAVE") {
     } else if (pPanel->m_pManager->m_cResRef == "GUICHAP") {
         // 0x76DD0D

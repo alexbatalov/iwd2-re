@@ -887,6 +887,14 @@ void CInfGame::SynchronousUpdate()
     // TODO: Incomplete.
 }
 
+// 0x5C0730
+BOOL CInfGame::DeleteSaveGame(const CString& sFileName)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x5C0890
 BOOL CInfGame::SaveGameExists(const CString& sSaveGame)
 {

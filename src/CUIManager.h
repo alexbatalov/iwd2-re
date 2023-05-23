@@ -34,6 +34,7 @@ public:
     void InvalidateCursorRect(const CRect& rect);
     void ForceToolTip();
     void ShiftPanels(const CPoint& pt);
+    void KillCapture();
 
     /* 0000 */ int field_0;
     /* 0004 */ BOOL m_bInitialized;

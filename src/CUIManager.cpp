@@ -440,3 +440,14 @@ void CUIManager::ShiftPanels(const CPoint& pt)
         pPanel->m_ptOrigin = pPanel->m_ptBaseOrigin + pt;
     }
 }
+
+// NOTE: Odd location.
+//
+// 0x63C3C0
+void CUIManager::KillCapture()
+{
+    if (m_pFocusedControl != NULL) {
+        m_pFocusedControl->KillFocus();
+        m_pFocusedControl = NULL;
+    }
+}

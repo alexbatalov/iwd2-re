@@ -42,6 +42,7 @@ public:
     BOOL Is3DSound(int nSoundChannel);
     float GetSoundReverbMix(int nSoundChannel, int nReverb);
     void SynchronousUpdate();
+    BOOL DeleteSaveGame(const CString& sFileName);
     BOOL SaveGameExists(const CString& sSaveGame);
     void ApplyVolumeSliders(BOOLEAN a2);
     LONG GetCharacterSlot(INT nCharacterSlot);

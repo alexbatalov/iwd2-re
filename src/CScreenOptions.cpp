@@ -1025,7 +1025,7 @@ void CScreenOptions::LoadGame()
 
         g_pBaldurChitin->m_cBaldurMessage.ObjectControl();
         pGame->m_multiplayerSettings.SetArbitrationLockAllowInput(FALSE);
-        pGame->m_multiplayerSettings.SetArbitrationLockStatus(TRUE);
+        pGame->m_multiplayerSettings.SetArbitrationLockStatus(TRUE, 1);
     } else {
         nLoadState = 2;
     }

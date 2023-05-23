@@ -21,7 +21,7 @@ public:
     BOOL SendImportingOptionToServer(BYTE nImportingBitField);
     BOOL SendRestrictStoreOptionToServer(BOOLEAN bRestrictStore);
     BOOL SendJoinRequestOptionToServer(BOOLEAN bListenToJoin);
-    BOOL SendArbitrationLockStatus(BOOLEAN bStatus);
+    BOOL SendArbitrationLockStatus(BOOLEAN bStatus, unsigned char a2);
     BOOL SendArbitrationLockAllowInput(BOOLEAN bAllowInput);
     BOOL ObjectControlRequest(LONG localObjectID);
     BOOL ObjectControl();
