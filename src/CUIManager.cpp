@@ -301,10 +301,8 @@ void CUIManager::OnLButtonUp(CPoint pt)
         m_pFocusedControl->OnLButtonUp(pt - m_pFocusedControl->m_pPanel->m_ptOrigin);
 
         if (pPrevFocusedControl == m_pFocusedControl && field_2C == 0) {
-            if (m_pFocusedControl != NULL) {
-                m_pFocusedControl->KillFocus();
-                m_pFocusedControl = NULL;
-            }
+            // NOTE: Uninline.
+            KillCapture();
         }
     }
 }
@@ -356,10 +354,8 @@ void CUIManager::OnRButtonUp(CPoint pt)
         m_pFocusedControl->OnRButtonUp(pt - m_pFocusedControl->m_pPanel->m_ptOrigin);
 
         if (pPrevFocusedControl == m_pFocusedControl && field_2C == 1) {
-            if (m_pFocusedControl != NULL) {
-                m_pFocusedControl->KillFocus();
-                m_pFocusedControl = NULL;
-            }
+            // NOTE: Uninline.
+            KillCapture();
         }
     }
 }

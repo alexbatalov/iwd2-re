@@ -193,10 +193,8 @@ void CScreenChapter::EngineDeactivated()
 
     g_pBaldurChitin->m_pObjectCursor->CursorUpdate(pVidMode);
 
-    if (m_cUIManager.m_pFocusedControl != NULL) {
-        m_cUIManager.m_pFocusedControl->KillFocus();
-        m_cUIManager.m_pFocusedControl = NULL;
-    }
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
 
     g_pBaldurChitin->cSoundMixer.StopMusic(TRUE);
 }

@@ -299,10 +299,8 @@ void CScreenJournal::EngineDeactivated()
     m_preLoadFontRealms.Unload();
     m_preLoadFontTool.Unload();
 
-    if (m_cUIManager.m_pFocusedControl != NULL) {
-        m_cUIManager.m_pFocusedControl->KillFocus();
-        m_cUIManager.m_pFocusedControl = NULL;
-    }
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
 }
 
 // 0x636360
@@ -690,10 +688,8 @@ void CScreenJournal::UpdatePopupPanel(DWORD dwPanelId)
 // 0x636EC0
 void CScreenJournal::SummonPopup(DWORD dwPopupId)
 {
-    if (m_cUIManager.m_pFocusedControl != NULL) {
-        m_cUIManager.m_pFocusedControl->KillFocus();
-        m_cUIManager.m_pFocusedControl = NULL;
-    }
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
 
     if (!m_lPopupStack.IsEmpty()) {
         CUIPanel* pPanel = m_lPopupStack.GetTail();
@@ -732,10 +728,8 @@ void CScreenJournal::SummonPopup(DWORD dwPopupId)
 // 0x637170
 void CScreenJournal::DismissPopup()
 {
-    if (m_cUIManager.m_pFocusedControl != NULL) {
-        m_cUIManager.m_pFocusedControl->KillFocus();
-        m_cUIManager.m_pFocusedControl = NULL;
-    }
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
 
     CUIPanel* pPanel = m_lPopupStack.RemoveTail();
 

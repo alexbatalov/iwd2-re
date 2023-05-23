@@ -601,10 +601,8 @@ void CScreenOptions::OnCancelButtonClick()
 // 0x654B40
 void CScreenOptions::SummonPopup(DWORD dwPopupId)
 {
-    if (m_cUIManager.m_pFocusedControl != NULL) {
-        m_cUIManager.m_pFocusedControl->KillFocus();
-        m_cUIManager.m_pFocusedControl = NULL;
-    }
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
 
     if (!m_lPopupStack.IsEmpty()) {
         CUIPanel* pPanel = m_lPopupStack.GetTail();
@@ -640,10 +638,8 @@ void CScreenOptions::SummonPopup(DWORD dwPopupId)
 // 0x654CB0
 void CScreenOptions::DismissPopup()
 {
-    if (m_cUIManager.m_pFocusedControl != NULL) {
-        m_cUIManager.m_pFocusedControl->KillFocus();
-        m_cUIManager.m_pFocusedControl = NULL;
-    }
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
 
     CUIPanel* pPanel = m_lPopupStack.RemoveTail();
 
@@ -2492,10 +2488,9 @@ void CUIControlButtonOptionsGameCommand::OnLButtonClick(CPoint pt)
     lock.Lock(INFINITE);
 
     CUIManager* pManager = pEngine->GetManager();
-    if (pManager->m_pFocusedControl != NULL) {
-        pManager->m_pFocusedControl->KillFocus();
-        pManager->m_pFocusedControl = NULL;
-    }
+
+    // NOTE: Uninline.
+    pManager->KillCapture();
 
     STRREF dwStrId;
     switch (m_pPanel->m_nID) {

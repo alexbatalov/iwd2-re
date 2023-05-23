@@ -122,9 +122,9 @@ BOOL CUIPanel::RemoveControl(DWORD nID)
         m_lControls.GetNext(pos);
 
         if (pControl->m_nID == nID) {
-            if (m_pManager->m_pFocusedControl == pControl && m_pManager->m_pFocusedControl != NULL) {
-                m_pManager->m_pFocusedControl->KillFocus();
-                m_pManager->m_pFocusedControl = NULL;
+            if (m_pManager->m_pFocusedControl == pControl) {
+                // NOTE: Uninline.
+                m_pManager->KillCapture();
             }
 
             m_lControls.RemoveAt(curr);

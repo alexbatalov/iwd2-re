@@ -416,10 +416,8 @@ void CScreenKeymaps::EngineDeactivated()
         }
     }
 
-    if (m_cUIManager.m_pFocusedControl != NULL) {
-        m_cUIManager.m_pFocusedControl->KillFocus();
-        m_cUIManager.m_pFocusedControl = NULL;
-    }
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
 }
 
 // 0x638F40
@@ -869,10 +867,8 @@ void CScreenKeymaps::UpdatePopupPanel(DWORD dwPanelId)
 // 0x639F40
 void CScreenKeymaps::SummonPopup(DWORD dwPopupId)
 {
-    if (m_cUIManager.m_pFocusedControl != NULL) {
-        m_cUIManager.m_pFocusedControl->KillFocus();
-        m_cUIManager.m_pFocusedControl = NULL;
-    }
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
 
     if (!m_lPopupStack.IsEmpty()) {
         CUIPanel* pPanel = m_lPopupStack.GetTail();
@@ -912,10 +908,8 @@ void CScreenKeymaps::SummonPopup(DWORD dwPopupId)
 // 0x63A100
 void CScreenKeymaps::DismissPopup()
 {
-    if (m_cUIManager.m_pFocusedControl != NULL) {
-        m_cUIManager.m_pFocusedControl->KillFocus();
-        m_cUIManager.m_pFocusedControl = NULL;
-    }
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
 
     CUIPanel* pPanel = m_lPopupStack.RemoveTail();
 

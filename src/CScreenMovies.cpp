@@ -201,10 +201,8 @@ void CScreenMovies::EngineDeactivated()
 {
     m_preLoadFontRealms.Unload();
 
-    if (m_cUIManager.m_pFocusedControl != NULL) {
-        m_cUIManager.m_pFocusedControl->KillFocus();
-        m_cUIManager.m_pFocusedControl = NULL;
-    }
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
 }
 
 // 0x647540

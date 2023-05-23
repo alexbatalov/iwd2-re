@@ -221,10 +221,8 @@ void CScreenStart::sub_66F8F0()
 // 0x66F990
 void CScreenStart::sub_66F990()
 {
-    if (m_cUIManager.m_pFocusedControl != NULL) {
-        m_cUIManager.m_pFocusedControl->KillFocus();
-        m_cUIManager.m_pFocusedControl = NULL;
-    }
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
 
     CScreenConnection* pConnection = g_pBaldurChitin->m_pEngineConnection;
 
@@ -282,10 +280,8 @@ void CScreenStart::sub_66FA90(BOOL bEnabled)
 // 0x66FB60
 void CScreenStart::SummonPopup(DWORD nID)
 {
-    if (m_cUIManager.m_pFocusedControl != NULL) {
-        m_cUIManager.m_pFocusedControl->KillFocus();
-        m_cUIManager.m_pFocusedControl = NULL;
-    }
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
 
     if (m_lPopupStack.GetCount() != 0) {
         CUIPanel* pPanel = m_lPopupStack.GetTail();
@@ -328,10 +324,8 @@ void CScreenStart::SummonPopup(DWORD nID)
 // 0x66FCF0
 void CScreenStart::DismissPopup()
 {
-    if (m_cUIManager.m_pFocusedControl != NULL) {
-        m_cUIManager.m_pFocusedControl->KillFocus();
-        m_cUIManager.m_pFocusedControl = NULL;
-    }
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
 
     CUIPanel* pPanel = m_lPopupStack.GetTail();
     m_lPopupStack.RemoveAt(m_lPopupStack.GetTailPosition());

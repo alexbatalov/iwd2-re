@@ -364,10 +364,8 @@ void CScreenConnection::EngineDeactivated()
     m_preLoadFontRealms.Unload();
     m_preLoadFontStnSml.Unload();
 
-    if (m_cUIManager.m_pFocusedControl != NULL) {
-        m_cUIManager.m_pFocusedControl->KillFocus();
-        m_cUIManager.m_pFocusedControl = NULL;
-    }
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
 
     if (dword_8F3768 == 2) {
         dword_8F3768 = 1;
@@ -932,10 +930,8 @@ void CScreenConnection::UpdatePopupPanel(DWORD nID)
 // 0x5FC6F0
 void CScreenConnection::SummonPopup(DWORD nID)
 {
-    if (m_cUIManager.m_pFocusedControl != NULL) {
-        m_cUIManager.m_pFocusedControl->KillFocus();
-        m_cUIManager.m_pFocusedControl = NULL;
-    }
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
 
     if (!m_lPopupStack.IsEmpty()) {
         CUIPanel* pPanel = m_lPopupStack.GetTail();
@@ -971,10 +967,8 @@ void CScreenConnection::SummonPopup(DWORD nID)
 // 0x5FC850
 void CScreenConnection::DismissPopup()
 {
-    if (m_cUIManager.m_pFocusedControl != NULL) {
-        m_cUIManager.m_pFocusedControl->KillFocus();
-        m_cUIManager.m_pFocusedControl = NULL;
-    }
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
 
     CUIPanel* pPanel = m_lPopupStack.RemoveTail();
 
@@ -1670,10 +1664,8 @@ void CScreenConnection::OnErrorButtonClick(INT nButton)
         case 0:
             DismissPopup();
 
-            if (m_cUIManager.m_pFocusedControl != NULL) {
-                m_cUIManager.m_pFocusedControl->KillFocus();
-                m_cUIManager.m_pFocusedControl = NULL;
-            }
+            // NOTE: Uninline.
+            m_cUIManager.KillCapture();
 
             m_bExitProgram = TRUE;
             break;
