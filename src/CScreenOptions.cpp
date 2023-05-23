@@ -312,6 +312,12 @@ void CScreenOptions::EngineDeactivated()
     g_pBaldurChitin->SaveOptions();
 }
 
+// 0x5D72C0
+void CScreenOptions::EngineDestroyed()
+{
+    m_cUIManager.fUninit();
+}
+
 // 0x6541D0
 void CScreenOptions::EngineInitialized()
 {
