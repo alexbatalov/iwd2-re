@@ -420,6 +420,12 @@ void CScreenKeymaps::EngineDeactivated()
     m_cUIManager.KillCapture();
 }
 
+// 0x5D72C0
+void CScreenKeymaps::EngineDestroyed()
+{
+    m_cUIManager.fUninit();
+}
+
 // 0x638F40
 void CScreenKeymaps::EngineInitialized()
 {
