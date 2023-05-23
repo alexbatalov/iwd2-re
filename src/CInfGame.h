@@ -44,6 +44,7 @@ public:
     void SynchronousUpdate();
     BOOL SaveGameExists(const CString& sSaveGame);
     void ApplyVolumeSliders(BOOLEAN a2);
+    LONG GetCharacterSlot(INT nCharacterSlot);
     BYTE GetCharactersControlled();
     BOOLEAN RestParty(int a2, unsigned char a3);
     BOOL CanRestParty(STRREF& strError, unsigned char a2, unsigned char a3, unsigned char a4);
