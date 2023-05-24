@@ -13,6 +13,7 @@
 #include "CScreenMap.h"
 #include "CScreenMovies.h"
 #include "CScreenOptions.h"
+#include "CScreenSinglePlayer.h"
 #include "CScreenSpellbook.h"
 #include "CScreenStore.h"
 #include "CScreenWorld.h"
@@ -433,6 +434,122 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
         }
     } else if (pPanel->m_pManager->m_cResRef == "GUIMP") {
     } else if (pPanel->m_pManager->m_cResRef == "GUISP") {
+        // 0x76F351
+        switch (pPanel->m_nID) {
+        case 0:
+            // 0x76F39F
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                return new CUIControlButtonSinglePlayerReady(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+                return new CUIControlButtonSinglePlayerPortrait(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 18:
+            case 19:
+            case 20:
+            case 21:
+            case 22:
+            case 23:
+                return new CUIControlButtonSinglePlayerCharacter(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 25:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 26:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 27:
+                // TODO: Incomplete.
+                return NULL;
+            case 28:
+                return new CUIControlButtonSinglePlayerDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 30:
+                return new CUIControlButtonSinglePlayerLogout(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 43:
+                return new CUIControlButtonSinglePlayerModify(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\UIControlButtons.cpp
+                // __LINE__: 1409
+                UTIL_ASSERT(FALSE);
+            }
+            break;
+        case 3:
+            // 0x76F55B
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlButtonSinglePlayerModifyCharacterCreate(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 3:
+                return new CUIControlButtonSinglePlayerModifyCharacterDelete(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 4:
+                return new CUIControlButtonSinglePlayerModifyCharacterCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\UIControlButtons.cpp
+                // __LINE__: 1430
+                UTIL_ASSERT(FALSE);
+            }
+            break;
+        case 5:
+        case 6:
+        case 7:
+            // 0x76F6B0
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 1:
+            case 2:
+                return new CUIControlButtonSinglePlayerError(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\UIControlButtons.cpp
+                // __LINE__: 1472
+                UTIL_ASSERT(FALSE);
+            }
+            break;
+        case 8:
+            // 0x76F620
+            switch (controlInfo->nID) {
+            case 1:
+                return new CUIControlButtonSinglePlayerViewCharacterDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 2:
+            case 3:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 4:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            }
+            break;
+        case 10:
+            // 0x76F730
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                return new CUIControlButtonSinglePlayerPartySelection(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 6:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 7:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 8:
+                return new CUIControlScrollBarSinglePlayerParties(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 10:
+                return new CUIControlButtonSinglePlayerPartyDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 11:
+                return new CUIControlButtonSinglePlayerPartyCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 12:
+                return new CUIControlButtonSinglePlayerPartyModify(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\UIControlButtons.cpp
+                // __LINE__: 1514
+                UTIL_ASSERT(FALSE);
+            }
+        }
     } else if (pPanel->m_pManager->m_cResRef == "GUIW" || pPanel->m_pManager->m_cResRef == "GUIW08" || pPanel->m_pManager->m_cResRef == "GUIW10" || pPanel->m_pManager->m_cResRef == "GUIW12" || pPanel->m_pManager->m_cResRef == "GUIW16" || pPanel->m_pManager->m_cResRef == "GUIW20") {
     } else if (pPanel->m_pManager->m_cResRef == "GUISTORE") {
     } else if (pPanel->m_pManager->m_cResRef == "GUIOPT") {

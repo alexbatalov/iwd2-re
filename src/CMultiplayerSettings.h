@@ -15,6 +15,15 @@
 
 class CMultiplayerSettings {
 public:
+    static const BYTE CHARSTATUS_NO_CHARACTER;
+    static const BYTE CHARSTATUS_CHARACTER;
+    static const BYTE CHARSTATUS_CREATING_CHARACTER;
+    static const BYTE CHARSTATUS_SIGNAL_CREATION_START;
+    static const BYTE CHARSTATUS_SIGNAL_CREATION_CANCEL;
+    static const BYTE CHARSTATUS_SIGNAL_CREATION_COMPLETE;
+    static const BYTE CHARSTATUS_SIGNAL_IMPORTED;
+    static const BYTE CHARSTATUS_SIGNAL_DELETED;
+
     CMultiplayerSettings();
     ~CMultiplayerSettings();
     DWORD GetDataSize();
@@ -50,6 +59,7 @@ public:
     /* 0091 */ BOOLEAN m_bArbitrationLockAllowInput;
     /* 0092 */ CPoint m_ptAreaStart;
     /* 009A */ CString m_sAreaName;
+    /* 00B8 */ unsigned char field_B8;
 };
 
 #endif /* CMULTIPLAYERSETTINGS_H_ */

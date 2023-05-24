@@ -994,6 +994,12 @@ BOOL CInfGame::CanRestParty(STRREF& strError, unsigned char a2, unsigned char a3
     return FALSE;
 }
 
+// 0x5C76B0
+void CInfGame::MultiplayerSetCharacterCreationLocation()
+{
+    // TODO: Incomplete.
+}
+
 // NOTE: Odd location.
 //
 // 0x428620

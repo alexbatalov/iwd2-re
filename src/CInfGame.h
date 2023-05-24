@@ -18,6 +18,9 @@
 
 #define CINFGAME_SPECIAL_SYMBOLS 12
 
+// Seen in `CScreenSinglePlayer::UpdateModifyCharacterPanel` assertion.
+#define CINFGAME_MAXCHARACTERS 6
+
 class CGameArea;
 
 class CInfGame {
@@ -49,6 +52,7 @@ public:
     BYTE GetCharactersControlled();
     BOOLEAN RestParty(int a2, unsigned char a3);
     BOOL CanRestParty(STRREF& strError, unsigned char a2, unsigned char a3, unsigned char a4);
+    void MultiplayerSetCharacterCreationLocation();
 
     INT GetCurrentChapter();
     void SetCurrentChapter(INT nChapter);

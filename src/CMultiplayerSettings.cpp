@@ -6,6 +6,30 @@
 // TODO: Too many `MAX_PLAYERS` constants.
 #define MAX_PLAYERS 6
 
+// 0x84D5A2
+const BYTE CMultiplayerSettings::CHARSTATUS_NO_CHARACTER = 0;
+
+// 0x84D5A3
+const BYTE CMultiplayerSettings::CHARSTATUS_CHARACTER = 1;
+
+// 0x84D5A4
+const BYTE CMultiplayerSettings::CHARSTATUS_CREATING_CHARACTER = 2;
+
+// 0x84D5A5
+const BYTE CMultiplayerSettings::CHARSTATUS_SIGNAL_CREATION_START = 8;
+
+// 0x84D5A6
+const BYTE CMultiplayerSettings::CHARSTATUS_SIGNAL_CREATION_CANCEL = 9;
+
+// 0x84D5A7
+const BYTE CMultiplayerSettings::CHARSTATUS_SIGNAL_CREATION_COMPLETE = 10;
+
+// 0x84D5A8
+const BYTE CMultiplayerSettings::CHARSTATUS_SIGNAL_IMPORTED = 11;
+
+// 0x84D5A9
+const BYTE CMultiplayerSettings::CHARSTATUS_SIGNAL_DELETED = 12;
+
 // 0x517510
 CMultiplayerSettings::CMultiplayerSettings()
 {
