@@ -1,5 +1,11 @@
 #include "C2DArray.h"
 
+#include "CAIUtil.h"
+
+#define TAB '\t'
+#define NEWLINE '\n'
+#define SPACE ' '
+
 // NOTE: Inlined.
 C2DArray::C2DArray()
 {
@@ -58,7 +64,111 @@ BOOL C2DArray::Release()
 // 0x402B70
 void C2DArray::Load(const CResRef& cResRef)
 {
-    // TODO: Incomplete.
+    SetResRef(cResRef, TRUE, TRUE);
+    Request();
+    if (pRes != NULL) {
+        pRes->Demand();
+        CString sText = pRes->GetText();
+        pRes->Release();
+
+        sText.Replace(TAB, SPACE);
+
+        CString v1;
+        CString v2;
+        CString v3;
+        CString v4;
+        CString v5;
+        SHORT sizeX;
+        SHORT sizeY;
+        SHORT posX;
+        SHORT posY;
+
+        v1 = CAIUtil::ReadAfterChar(sText, NEWLINE);
+        v5 = CAIUtil::ReadToChar(v1, NEWLINE);
+        v1 = CAIUtil::ReadAfterChar(v1, NEWLINE);
+        v5.TrimLeft();
+        v5.TrimRight();
+        m_default = v5;
+
+        v3 = CAIUtil::ReadToChar(v1, NEWLINE);
+        v1 = CAIUtil::ReadAfterChar(v1, NEWLINE);
+        v3.TrimLeft();
+        v3.TrimRight();
+
+        sizeX = 0;
+        v4 = v3;
+        while (v4.GetLength() > 0) {
+            sizeX++;
+            v4 = CAIUtil::ReadAfterChar(v4, SPACE);
+            v4.TrimLeft();
+            v4.TrimRight();
+        }
+
+        m_nSizeX = sizeX;
+
+        if (m_pNamesX != NULL) {
+            delete m_pNamesX;
+        }
+
+        m_pNamesX = new CString[m_nSizeX];
+
+        posX = 0;
+        v4 = v3;
+        while (v4.GetLength() > 0) {
+            v5 = CAIUtil::ReadToChar(v4, SPACE);
+            m_pNamesX[posX] = v5;
+            m_pNamesX[posX].MakeUpper();
+            v4 = CAIUtil::ReadAfterChar(v4, SPACE);
+            v4.TrimLeft();
+            v4.TrimRight();
+            posX++;
+        }
+
+        sizeY = 0;
+        v2 = v1;
+        while (v2.GetLength() > 0) {
+            sizeY++;
+            v2 = CAIUtil::ReadAfterChar(v2, NEWLINE);
+        }
+
+        m_nSizeY = sizeY;
+
+        if (m_pNamesY != NULL) {
+            delete m_pNamesY;
+        }
+
+        m_pNamesY = new CString[m_nSizeY];
+
+        if (m_pArray != NULL) {
+            delete m_pArray;
+        }
+
+        m_pArray = new CString[m_nSizeX * m_nSizeY];
+
+        posY = 0;
+        v2 = v1;
+        while (v2.GetLength() > 0) {
+            v3 = CAIUtil::ReadToChar(v2, NEWLINE);
+            v2 = CAIUtil::ReadAfterChar(v2, NEWLINE);
+            v5 = CAIUtil::ReadToChar(v3, SPACE);
+            m_pNamesY[posY] = v5;
+            m_pNamesY[posY].MakeUpper();
+            v4 = CAIUtil::ReadAfterChar(v3, SPACE);
+            v4.TrimLeft();
+            v4.TrimRight();
+
+            posX = 0;
+            while (v4.GetLength() > 0 && posX < m_nSizeX) {
+                v5 = CAIUtil::ReadToChar(v4, SPACE);
+                v4 = CAIUtil::ReadAfterChar(v4, SPACE);
+                v4.TrimLeft();
+                v4.TrimRight();
+                m_pArray[posY * m_nSizeX + posX] = v5;
+                posX++;
+            }
+            posY++;
+        }
+    }
 }
 
 // 0x403340
