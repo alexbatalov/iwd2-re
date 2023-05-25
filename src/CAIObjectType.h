@@ -71,6 +71,10 @@
 #define CAIOBJECTTYPE_CHAOTIC_NEUTRAL 0x32
 #define CAIOBJECTTYPE_CHAOTIC_EVIL 0x33
 
+// Seen in `CDerivedStats::GetClassLevel` assertion. Not sure if it belongs
+// here.
+#define CAIOBJECT_CLASS_MAX 11
+
 class CAIObjectType {
 public:
     static const BYTE EA_ALL;

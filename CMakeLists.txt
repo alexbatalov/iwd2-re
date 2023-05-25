@@ -50,6 +50,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CChitin.h"
     "src/CCrypt.cpp"
     "src/CCrypt.h"
+    "src/CDerivedStats.cpp"
+    "src/CDerivedStats.h"
     "src/CDimm.cpp"
     "src/CDimm.h"
     "src/CDimmKeyTable.cpp"
