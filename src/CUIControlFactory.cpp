@@ -13,6 +13,7 @@
 #include "CScreenMap.h"
 #include "CScreenMovies.h"
 #include "CScreenOptions.h"
+#include "CScreenSave.h"
 #include "CScreenSinglePlayer.h"
 #include "CScreenSpellbook.h"
 #include "CScreenStore.h"
@@ -159,6 +160,99 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             break;
         }
     } else if (pPanel->m_pManager->m_cResRef == "GUISAVE") {
+        // 0x76DA1A
+        switch (pPanel->m_nID) {
+        case 0:
+            // 0x76DA61
+            switch (controlInfo->nID) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                return new CUIControlButtonSaveScreenShot(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 22:
+                return new CUIControlButtonSaveCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 23:
+                return new CUIControlScrollBarSaveGames(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 25:
+            case 26:
+            case 27:
+            case 28:
+            case 29:
+            case 30:
+            case 31:
+            case 32:
+            case 33:
+            case 34:
+            case 35:
+            case 36:
+            case 37:
+            case 38:
+            case 39:
+            case 40:
+            case 41:
+            case 42:
+            case 43:
+            case 44:
+            case 45:
+            case 46:
+            case 47:
+            case 48:
+            case 49:
+            case 50:
+            case 51:
+            case 52:
+            case 53:
+            case 54:
+                return new CUIControlButtonSavePortrait(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 55:
+            case 56:
+            case 57:
+            case 58:
+            case 59:
+                return new CUIControlButtonSaveSave(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 60:
+            case 61:
+            case 62:
+            case 63:
+            case 64:
+                return new CUIControlButtonSaveDelete(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 1:
+            // 0x76DBA7
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlButtonSaveScreenShot(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 3:
+                // TODO: Incomplete.
+                return NULL;
+            case 7:
+                return new CUIControlButtonSavePopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 8:
+                return new CUIControlButtonSavePopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 40:
+            case 41:
+            case 42:
+            case 43:
+            case 44:
+            case 45:
+                return new CUIControlButtonSavePortrait(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 2:
+        case 3:
+            // 0x76DC86
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 1:
+            case 2:
+                return new CUIControlButtonSaveError(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        }
     } else if (pPanel->m_pManager->m_cResRef == "GUICHAP") {
         // 0x76DD0D
         switch (pPanel->m_nID) {
