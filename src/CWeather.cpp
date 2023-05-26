@@ -94,7 +94,7 @@ void CWeather::CancelCurrentWeather(CGameArea* pArea, ULONG nCurrentTime)
 // 0x555790
 void CWeather::CheckWeather()
 {
-    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
     ULONG nCurrentTime = pGame->GetWorldTimer()->m_gameTime;
     CGameArea* pArea = pGame->GetVisibleArea();
     if (pGame->m_cOptions.m_bWeatherEnabled) {
@@ -177,7 +177,7 @@ void CWeather::AdvanceWeatherLevel(ULONG nCurrentTime)
         return;
     }
 
-    CancelCurrentWeather(g_pBaldurChitin->m_pObjectGame->m_pGameAreaMaster, nCurrentTime);
+    CancelCurrentWeather(g_pBaldurChitin->GetObjectGame()->m_pGameAreaMaster, nCurrentTime);
 }
 
 // 0x5559D0
@@ -196,8 +196,8 @@ void CWeather::ResetWeather(CGameArea* pArea)
 void CWeather::SetCurrentWeather(CGameArea* pArea, WORD wWeatherFlags)
 {
     if (!g_pBaldurChitin->cNetwork.GetSessionOpen() || !g_pBaldurChitin->cNetwork.GetSessionHosting()) {
-        CancelCurrentWeather(pArea, g_pBaldurChitin->m_pObjectGame->GetWorldTimer()->m_gameTime);
-        if (g_pBaldurChitin->m_pObjectGame->m_cOptions.m_bWeatherEnabled) {
+        CancelCurrentWeather(pArea, g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime);
+        if (g_pBaldurChitin->GetObjectGame()->m_cOptions.m_bWeatherEnabled) {
             // NOTE: Uninline.
             Unmarshal(wWeatherFlags);
             ResetWeather(pArea);
@@ -232,7 +232,7 @@ void CWeather::SetRainSound(SHORT nRainLevel, ULONG nLevelPercentage)
 {
     if (nRainLevel != 0) {
         m_nRainVolumeLevel = nLevelPercentage;
-        if ((g_pBaldurChitin->m_pObjectGame->GetVisibleArea()->m_header.m_areaType & 4) != 0) {
+        if ((g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->m_header.m_areaType & 4) != 0) {
             switch (nRainLevel) {
             case 4:
                 if (!m_sndRain.IsSoundPlaying()) {
@@ -271,7 +271,7 @@ void CWeather::SetWind(SHORT nWindLevel, ULONG nLevelPercentage, BOOLEAN bResetA
 {
     if (nWindLevel != 0) {
         m_nWindVolumeLevel = nLevelPercentage;
-        if ((g_pBaldurChitin->m_pObjectGame->GetVisibleArea()->m_header.m_areaType & 4) != 0) {
+        if ((g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->m_header.m_areaType & 4) != 0) {
             switch (nWindLevel) {
             case 16:
                 if (!m_bWindOn) {
@@ -285,7 +285,7 @@ void CWeather::SetWind(SHORT nWindLevel, ULONG nLevelPercentage, BOOLEAN bResetA
                     m_sndWind.SetVolume((20 * m_nWindVolumeLevel - 20 * (WEATHER_TRANSITION_TIME / 5)) / (WEATHER_TRANSITION_TIME - WEATHER_TRANSITION_TIME / 5));
                 } else {
                     m_sndWind.SetVolume(0);
-                    g_pBaldurChitin->m_pObjectGame->GetVisibleArea()->ApplyWindToAmbients(100 - 500 * m_nWindVolumeLevel / WEATHER_TRANSITION_TIME);
+                    g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->ApplyWindToAmbients(100 - 500 * m_nWindVolumeLevel / WEATHER_TRANSITION_TIME);
                 }
 
                 m_nWindLevel = 16;
@@ -321,7 +321,7 @@ void CWeather::SetWind(SHORT nWindLevel, ULONG nLevelPercentage, BOOLEAN bResetA
             m_bWindOn = FALSE;
 
             if (bResetAmbients) {
-                g_pBaldurChitin->m_pObjectGame->GetVisibleArea()->ApplyWindToAmbients(100);
+                g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->ApplyWindToAmbients(100);
             }
         }
     }
@@ -331,7 +331,7 @@ void CWeather::SetWind(SHORT nWindLevel, ULONG nLevelPercentage, BOOLEAN bResetA
 void CWeather::OnAreaChange(BOOLEAN bForceOff)
 {
     if (m_nCurrentWeather == 1) {
-        if (bForceOff || (g_pBaldurChitin->m_pObjectGame->GetVisibleArea()->m_header.m_areaType & 0x4) == 0) {
+        if (bForceOff || (g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->m_header.m_areaType & 0x4) == 0) {
             if (m_sndRain.IsSoundPlaying()) {
                 SetRainSound(0, 0);
             }
@@ -370,7 +370,7 @@ void CWeather::Update()
 {
     switch (m_nCurrentWeather) {
     case 1:
-        if (g_pBaldurChitin->m_pObjectGame->m_cOptions.m_bWeatherEnabled) {
+        if (g_pBaldurChitin->GetObjectGame()->m_cOptions.m_bWeatherEnabled) {
             UpdateRain();
 
             if (m_nWeatherLevel != 0) {
@@ -379,11 +379,11 @@ void CWeather::Update()
                 }
             }
         } else {
-            CancelCurrentWeather(g_pBaldurChitin->m_pObjectGame->GetVisibleArea(), g_pBaldurChitin->m_pObjectGame->GetWorldTimer()->m_gameTime);
+            CancelCurrentWeather(g_pBaldurChitin->GetObjectGame()->GetVisibleArea(), g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime);
         }
         break;
     case 2:
-        if (g_pBaldurChitin->m_pObjectGame->m_cOptions.m_bWeatherEnabled) {
+        if (g_pBaldurChitin->GetObjectGame()->m_cOptions.m_bWeatherEnabled) {
             UpdateSnow();
 
             if (m_nWeatherLevel != 0) {
@@ -392,7 +392,7 @@ void CWeather::Update()
                 }
             }
         } else {
-            CancelCurrentWeather(g_pBaldurChitin->m_pObjectGame->GetVisibleArea(), g_pBaldurChitin->m_pObjectGame->GetWorldTimer()->m_gameTime);
+            CancelCurrentWeather(g_pBaldurChitin->GetObjectGame()->GetVisibleArea(), g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime);
         }
         break;
     default:
@@ -437,7 +437,7 @@ CRainStorm::~CRainStorm()
 void CRainStorm::AsynchronousUpdate()
 {
     if (IsInitialized()) {
-        CGameArea* pArea = g_pBaldurChitin->m_pObjectGame->GetVisibleArea();
+        CGameArea* pArea = g_pBaldurChitin->GetObjectGame()->GetVisibleArea();
         if ((pArea->m_header.m_areaType & 0x4) != 0) {
             CRect rNewWorldViewPort(pArea->GetInfinity()->nNewX,
                 pArea->GetInfinity()->nNewY,
@@ -494,7 +494,7 @@ void CRainStorm::GenerateDrops(const CPoint& ptViewPort, const CRect& rBounds)
 // 0x557D90
 void CRainStorm::Render(CVidMode* pVidMode, int a2, const CRect& rClip, COLORREF rgbColor)
 {
-    CRect& rSurface = g_pBaldurChitin->m_pObjectGame->GetVisibleArea()->GetInfinity()->rViewPort;
+    CRect& rSurface = g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->GetInfinity()->rViewPort;
 
     CSingleLock renderLock(&m_cCriticalSection, TRUE);
     if (m_pRainDrops != NULL && static_cast<CVidInf*>(pVidMode)->BKLock(rSurface)) {
@@ -549,7 +549,7 @@ CSnowStorm::~CSnowStorm()
 void CSnowStorm::AsynchronousUpdate()
 {
     if (IsInitialized()) {
-        CGameArea* pArea = g_pBaldurChitin->m_pObjectGame->GetVisibleArea();
+        CGameArea* pArea = g_pBaldurChitin->GetObjectGame()->GetVisibleArea();
         if ((pArea->m_header.m_areaType & 0x4) != 0) {
             CRect rNewWorldViewPort(pArea->GetInfinity()->nNewX,
                 pArea->GetInfinity()->nNewY,
@@ -602,7 +602,7 @@ void CSnowStorm::GenerateFlakes(const CPoint& ptViewPort, const CRect& rBounds)
 // 0x558310
 void CSnowStorm::Render(CVidMode* pVidMode, int a2, const CRect& rClip, COLORREF rgbColor)
 {
-    CRect& rSurface = g_pBaldurChitin->m_pObjectGame->GetVisibleArea()->GetInfinity()->rViewPort;
+    CRect& rSurface = g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->GetInfinity()->rViewPort;
     COLORREF rgbSnowColor = RGB(GetRValue(rgbColor) * 230, GetGValue(rgbColor) * 230, GetBValue(rgbColor) * 230);
 
     CSingleLock renderLock(&m_cCriticalSection, TRUE);
@@ -670,7 +670,7 @@ BYTE CSnowFlake::AsynchronousUpdate(const CRect& rOldViewPort, const CRect& rNew
         }
     }
 
-    if (g_pBaldurChitin->m_pObjectGame->GetWorldTimer()->m_active) {
+    if (g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_active) {
         if (CParticle::AsynchronousUpdate() == AIRBORN) {
             m_nDriftCounter++;
             if (m_nDriftCounter == m_nDriftWidth) {
@@ -737,7 +737,7 @@ BYTE CRainDrop::AsynchronousUpdate(const CRect& rOldViewPort, const CRect& rNewV
         m_vel.x += 100;
     }
 
-    if (g_pBaldurChitin->m_pObjectGame->GetWorldTimer()->m_active) {
+    if (g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_active) {
         return CParticle::AsynchronousUpdate();
     } else {
         return AIRBORN;

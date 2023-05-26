@@ -163,7 +163,7 @@ void CTimerWorld::UpdateTime(BOOLEAN forceUpdate)
 void CTimerWorld::CheckForTriggerEventAbsolute()
 {
     ULONG time = m_gameTime % TIMESCALE_MSEC_PER_DAY;
-    CGameArea* pActiveArea = g_pBaldurChitin->m_pObjectGame->GetVisibleArea();
+    CGameArea* pActiveArea = g_pBaldurChitin->GetObjectGame()->GetVisibleArea();
     if (pActiveArea != NULL && pActiveArea->m_bAreaLoaded) {
         switch (time) {
         case TIME_DAY:
@@ -202,7 +202,7 @@ void CTimerWorld::CheckForTriggerEventAbsolute()
 void CTimerWorld::CheckForTriggerEventPast()
 {
     ULONG time = m_gameTime % TIMESCALE_MSEC_PER_DAY;
-    CGameArea* pActiveArea = g_pBaldurChitin->m_pObjectGame->GetVisibleArea();
+    CGameArea* pActiveArea = g_pBaldurChitin->GetObjectGame()->GetVisibleArea();
     if (pActiveArea != NULL && pActiveArea->m_bAreaLoaded) {
         if ((pActiveArea->GetInfinity()->m_areaType & 0x40) != 0) {
             pActiveArea->SetNight();
@@ -258,7 +258,7 @@ void CTimerWorld::StartTime()
     }
 
     if (g_pBaldurChitin->m_pEngineWorld->m_nAutoUnhideInterface > 0) {
-        if (g_pBaldurChitin->m_pObjectGame->field_43E2 != 322) {
+        if (g_pBaldurChitin->GetObjectGame()->field_43E2 != 322) {
             g_pBaldurChitin->m_pEngineWorld->m_nAutoUnhideInterface--;
             g_pBaldurChitin->m_pEngineWorld->UnhideInterface();
         }

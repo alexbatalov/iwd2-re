@@ -1773,7 +1773,7 @@ STRREF CRuleTables::GetClassDescriptionStringRef(BYTE nClass, DWORD nSpecialist)
 // 0x5439B0
 void CRuleTables::GetStartArea(CResRef& cResArea, CPoint& ptView) const
 {
-    if (g_pBaldurChitin->m_pObjectGame->m_bExpansion == TRUE) {
+    if (g_pBaldurChitin->GetObjectGame()->m_bExpansion == TRUE) {
         cResArea = m_tStartArea.GetAt(VALUE, START_AREA_EXPANSION);
         ptView.x = atol(m_tStartArea.GetAt(VALUE, START_XPOS_EXPANSION));
         ptView.y = atol(m_tStartArea.GetAt(VALUE, START_YPOS_EXPANSION));
@@ -1796,7 +1796,7 @@ CPoint CRuleTables::GetStartPoint(INT nCharacterSlot) const
 
     sSlot.Format("%d", nCharacterSlot + 1);
 
-    if (g_pBaldurChitin->m_pObjectGame->m_bExpansion == TRUE) {
+    if (g_pBaldurChitin->GetObjectGame()->m_bExpansion == TRUE) {
         ptStart.x = atol(m_tStartPos.GetAt(sSlot, START_XPOS_EXPANSION));
         ptStart.y = atol(m_tStartPos.GetAt(sSlot, START_YPOS_EXPANSION));
     } else {
@@ -1819,7 +1819,7 @@ int CRuleTables::GetStartRotation(INT nCharacterSlot) const
 
     sSlot.Format("%d", nCharacterSlot + 1);
 
-    if (g_pBaldurChitin->m_pObjectGame->m_bExpansion == TRUE) {
+    if (g_pBaldurChitin->GetObjectGame()->m_bExpansion == TRUE) {
         rotation = atol(m_tStartPos.GetAt(sSlot, START_ROT_EXPANSION));
     } else {
         rotation = atol(m_tStartPos.GetAt(sSlot, START_ROT));
@@ -1838,7 +1838,7 @@ CList<STRREF, STRREF>* CRuleTables::GetChapterText(const CResRef& cResText, BYTE
 
     if (nChapter == -1) {
         // NOTE: Uninline.
-        nChapter = g_pBaldurChitin->m_pObjectGame->GetCurrentChapter();
+        nChapter = g_pBaldurChitin->GetObjectGame()->GetCurrentChapter();
     }
 
     pTextList->AddTail(tText.GetAtLong(CPoint(0, nChapter + 1)));

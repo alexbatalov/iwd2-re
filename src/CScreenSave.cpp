@@ -441,7 +441,7 @@ void CScreenSave::TimerAsynchronousUpdate()
 // 0x63BAA0
 void CScreenSave::TimerSynchronousUpdate()
 {
-    g_pBaldurChitin->m_pObjectGame->SynchronousUpdate();
+    g_pBaldurChitin->GetObjectGame()->SynchronousUpdate();
     m_cUIManager.Render();
     pVidMode->Flip(TRUE);
 }
@@ -524,7 +524,7 @@ void CScreenSave::OnMainCancelButtonClick()
         UTIL_ASSERT(FALSE);
     }
 
-    g_pBaldurChitin->m_pObjectGame->field_50D8 = FALSE;
+    g_pBaldurChitin->GetObjectGame()->field_50D8 = FALSE;
 
     // NOTE: Uninline.
     StopSave();
@@ -957,7 +957,7 @@ void CScreenSave::DeleteSave(INT nGameSlot)
     // __LINE__: 2496
     UTIL_ASSERT(m_aGameSlots[nGameSlot]->m_sFileName != "");
 
-    g_pBaldurChitin->m_pObjectGame->DeleteSaveGame(m_aGameSlots[nGameSlot]->m_sFileName);
+    g_pBaldurChitin->GetObjectGame()->DeleteSaveGame(m_aGameSlots[nGameSlot]->m_sFileName);
 
     RefreshGameSlots();
     UpdateMainPanel();
@@ -1134,7 +1134,7 @@ void CUIControlScrollBarSaveGames::UpdateScrollBar()
     // __LINE__: 3236
     UTIL_ASSERT(pSave != NULL);
 
-    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSave.cpp
     // __LINE__: 3238

@@ -957,7 +957,7 @@ BYTE CInfGame::GetCharactersControlled()
         BYTE rc;
         do {
             // NOTE: Using global. Implying inlined static function.
-            rc = g_pBaldurChitin->m_pObjectGame->GetObjectArray()->GetShare(id,
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(id,
                 CGameObjectArray::THREAD_ASYNCH,
                 &pObject,
                 INFINITE);
@@ -969,7 +969,7 @@ BYTE CInfGame::GetCharactersControlled()
                 bControlled |= 1 << nIndex;
             }
 
-            g_pBaldurChitin->m_pObjectGame->GetObjectArray()->ReleaseShare(id,
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(id,
                 CGameObjectArray::THREAD_ASYNCH,
                 INFINITE);
         }

@@ -164,7 +164,7 @@ void CScreenChapter::EngineActivated()
     g_pBaldurChitin->GetObjectCursor()->CursorUpdate(pVidMode);
     m_cUIManager.InvalidateRect(NULL);
 
-    CGameArea* pArea = g_pBaldurChitin->m_pObjectGame->GetVisibleArea();
+    CGameArea* pArea = g_pBaldurChitin->GetObjectGame()->GetVisibleArea();
     if (pArea != NULL) {
         if (pArea->m_nBattleSongCounter > 0) {
             pArea->m_nBattleSongCounter = 0;
@@ -289,7 +289,7 @@ void CScreenChapter::OnPortraitLClick(DWORD nPortrait)
 // 0x5D3600
 void CScreenChapter::TimerAsynchronousUpdate()
 {
-    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenChapter.cpp
     // __LINE__: 681
@@ -363,7 +363,7 @@ void CScreenChapter::TimerAsynchronousUpdate()
 // 0x5D3950
 void CScreenChapter::TimerSynchronousUpdate()
 {
-    g_pBaldurChitin->m_pObjectGame->SynchronousUpdate();
+    g_pBaldurChitin->GetObjectGame()->SynchronousUpdate();
     m_cUIManager.Render();
     pVidMode->Flip(TRUE);
 
@@ -549,7 +549,7 @@ void CScreenChapter::UpdateMainPanel()
 // 0x5D4190
 void CScreenChapter::OnDoneButtonClick()
 {
-    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenChapter.cpp
     // __LINE__: 1086
@@ -619,7 +619,7 @@ void CScreenChapter::OnReplayButtonClick()
 void CScreenChapter::StartChapter(const CResRef& cResText)
 {
     m_nEngineState = 0;
-    m_nChapter = g_pBaldurChitin->m_pObjectGame->GetCurrentChapter();
+    m_nChapter = g_pBaldurChitin->GetObjectGame()->GetCurrentChapter();
 
     m_nChapter = max(min(m_nChapter, CGameJournal::NUM_CHAPTERS + 1), 0);
 
@@ -638,10 +638,10 @@ void CScreenChapter::StartChapter(const CResRef& cResText)
 // 0x5D4450
 void CScreenChapter::StartChapterMultiplayerHost(BYTE nChapter, BYTE* resRef)
 {
-    g_pBaldurChitin->m_pObjectGame->SetCurrentChapter(nChapter);
+    g_pBaldurChitin->GetObjectGame()->SetCurrentChapter(nChapter);
 
-    BOOLEAN bJoinRequests = g_pBaldurChitin->m_pObjectGame->GetMultiplayerSettings()->m_bJoinRequests;
-    g_pBaldurChitin->m_pObjectGame->GetMultiplayerSettings()->SetListenToJoinOption(FALSE, TRUE);
+    BOOLEAN bJoinRequests = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->m_bJoinRequests;
+    g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->SetListenToJoinOption(FALSE, TRUE);
     g_pBaldurChitin->m_pEngineWorld->m_bEndMajorEventListenToJoin = bJoinRequests;
     g_pBaldurChitin->m_pEngineWorld->m_bEndMajorEventPauseStatus = g_pBaldurChitin->m_pEngineWorld->m_bPaused;
     g_pBaldurChitin->m_pEngineWorld->m_bHardPaused = TRUE;
@@ -667,7 +667,7 @@ void CScreenChapter::StartChapterMultiplayerHost(BYTE nChapter, BYTE* resRef)
 // 0x5D4650
 BOOL CScreenChapter::StartText(const CResRef& cResText)
 {
-    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenChapter.cpp
     // __LINE__ 1406

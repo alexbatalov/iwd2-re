@@ -369,7 +369,7 @@ void CScreenMovies::OnDoneButtonClick()
 // 0x647860
 void CScreenMovies::StartMovies(INT nEngineState)
 {
-    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
     m_nEngineState = nEngineState;
 

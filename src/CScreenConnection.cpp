@@ -265,7 +265,7 @@ CScreenConnection::~CScreenConnection()
 // 0x5FA9B0
 void CScreenConnection::EngineActivated()
 {
-    g_pBaldurChitin->m_pObjectGame->field_366E = 0;
+    g_pBaldurChitin->GetObjectGame()->field_366E = 0;
 
     m_preLoadFontRealms.SetResRef(CResRef("REALMS"), FALSE, TRUE);
     m_preLoadFontRealms.RegisterFont();
@@ -1193,8 +1193,8 @@ void CScreenConnection::UpdateMainPanel()
 
     pButton = static_cast<CUIControlButton*>(pPanel->GetControl(3));
     pButton->SetEnabled(nServiceProviderType == CNetwork::SERV_PROV_NULL
-        && (g_pBaldurChitin->m_pObjectGame->SaveGameExists(CInfGame::QUICK_SAVE_NAME)
-            || g_pBaldurChitin->m_pObjectGame->SaveGameExists(CInfGame::QUICK_SAVE_BACKUP_NAME)));
+        && (g_pBaldurChitin->GetObjectGame()->SaveGameExists(CInfGame::QUICK_SAVE_NAME)
+            || g_pBaldurChitin->GetObjectGame()->SaveGameExists(CInfGame::QUICK_SAVE_BACKUP_NAME)));
 
     if (nServiceProviderType == CNetwork::SERV_PROV_NULL) {
         pButton = static_cast<CUIControlButton*>(pPanel->GetControl(11));

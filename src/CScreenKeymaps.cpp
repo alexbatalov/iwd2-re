@@ -562,7 +562,7 @@ void CScreenKeymaps::HandleKeyDown(BYTE nKey)
     } else if ((nKey >= 'A' && nKey <= 'Z') || (nKey >= '0' && nKey <= '9')) {
         nKey = nKey;
     } else {
-        nKey = g_pBaldurChitin->m_pObjectGame->sub_5A97D0(g_pBaldurChitin->m_pObjectGame->sub_5A9780(nKey));
+        nKey = g_pBaldurChitin->GetObjectGame()->sub_5A97D0(g_pBaldurChitin->GetObjectGame()->sub_5A9780(nKey));
         if (nKey < 0) {
             return;
         }
@@ -606,9 +606,9 @@ void CScreenKeymaps::HandleKeyDown(BYTE nKey)
 
     CString sValue;
     if (m_bSystemKeyCtrl) {
-        sValue.Format("%s%c", FetchString(24638), g_pBaldurChitin->m_pObjectGame->sub_5A9780(nKey));
+        sValue.Format("%s%c", FetchString(24638), g_pBaldurChitin->GetObjectGame()->sub_5A9780(nKey));
     } else {
-        sValue.Format("%c", g_pBaldurChitin->m_pObjectGame->sub_5A9780(nKey));
+        sValue.Format("%c", g_pBaldurChitin->GetObjectGame()->sub_5A9780(nKey));
     }
 
     g_pBaldurChitin->m_cTlkTable.SetToken(CString("KEY"), sValue);
@@ -693,7 +693,7 @@ void CScreenKeymaps::TimerAsynchronousUpdate()
 // 0x63BAA0
 void CScreenKeymaps::TimerSynchronousUpdate()
 {
-    g_pBaldurChitin->m_pObjectGame->SynchronousUpdate();
+    g_pBaldurChitin->GetObjectGame()->SynchronousUpdate();
     m_cUIManager.Render();
     pVidMode->Flip(TRUE);
 }
@@ -721,7 +721,7 @@ void CScreenKeymaps::UpdateMainPanel()
 
         CUIControlLabel* pKeyLabel = static_cast<CUIControlLabel*>(pPanel->GetControl(index + 0x10000005));
         if (dword_8B3FE0[m_nPage][index] >= 0) {
-            int ch = g_pBaldurChitin->m_pObjectGame->sub_5A9780(m_pKeymap[dword_8B3FE0[m_nPage][index]]);
+            int ch = g_pBaldurChitin->GetObjectGame()->sub_5A9780(m_pKeymap[dword_8B3FE0[m_nPage][index]]);
             if (ch > 0) {
                 if (m_pKeymapFlags[dword_8B3FE0[m_nPage][index]] == 1) {
                     sValue.Format("%s%c", FetchString(24638), ch);
@@ -752,15 +752,15 @@ void CScreenKeymaps::UpdateMainPanel()
 // 0x639DC0
 void CScreenKeymaps::StartKeymaps()
 {
-    g_pBaldurChitin->m_pObjectGame->LoadKeymap();
+    g_pBaldurChitin->GetObjectGame()->LoadKeymap();
 
     for (SHORT index = 0; index < CINFGAME_KEYMAP_SIZE; index++) {
         // __FILE__: .\Include\InfGame.h
         // __LINE__: 1486
         UTIL_ASSERT(index >= 0 && index < CINFGAME_KEYMAP_SIZE);
 
-        m_pKeymap[index] = g_pBaldurChitin->m_pObjectGame->m_pKeymap[index];
-        m_pKeymapFlags[index] = g_pBaldurChitin->m_pObjectGame->m_pKeymapFlags[index];
+        m_pKeymap[index] = g_pBaldurChitin->GetObjectGame()->m_pKeymap[index];
+        m_pKeymapFlags[index] = g_pBaldurChitin->GetObjectGame()->m_pKeymapFlags[index];
     }
 }
 
@@ -1014,7 +1014,7 @@ void CScreenKeymaps::OnPageButtonClick(INT nButton)
 void CScreenKeymaps::OnDefaultButtonClick()
 {
     if (m_nSelectedKeymapIndex >= 0) {
-        BYTE nKey = g_pBaldurChitin->m_pObjectGame->sub_5A9830(CScreenKeymaps::dword_8B3FE0[m_nPage][m_nSelectedKeymapIndex]);
+        BYTE nKey = g_pBaldurChitin->GetObjectGame()->sub_5A9830(CScreenKeymaps::dword_8B3FE0[m_nPage][m_nSelectedKeymapIndex]);
         if (nKey != 0) {
             HandleKeyDown(nKey);
         } else {
@@ -1041,7 +1041,7 @@ void CScreenKeymaps::OnDoneButtonClick()
     SelectEngine(pOptions);
 
     for (int index = 0; index < CINFGAME_KEYMAP_SIZE; index++) {
-        g_pBaldurChitin->m_pObjectGame->SetKey(index,
+        g_pBaldurChitin->GetObjectGame()->SetKey(index,
             m_pKeymap[index],
             m_pKeymapFlags[index]);
     }
@@ -1103,7 +1103,7 @@ void CScreenKeymaps::OnErrorButtonClick(INT nButton)
             DismissPopup();
 
             for (int index = 0; index < CINFGAME_KEYMAP_SIZE; index++) {
-                m_pKeymap[index] = g_pBaldurChitin->m_pObjectGame->sub_5A9830(index);
+                m_pKeymap[index] = g_pBaldurChitin->GetObjectGame()->sub_5A9830(index);
             }
 
             UpdateMainPanel();
@@ -1217,9 +1217,9 @@ void CScreenKeymaps::SetKeymap(INT nPage, INT nIndex, BYTE nKey, BYTE nKeyFlag)
     if (nKeyFlag != 0) {
         sKey.Format("%s%c",
             FetchString(24638),
-            g_pBaldurChitin->m_pObjectGame->sub_5A9780(m_pKeymap[dword_8B3FE0[nPage][nIndex]]));
+            g_pBaldurChitin->GetObjectGame()->sub_5A9780(m_pKeymap[dword_8B3FE0[nPage][nIndex]]));
     } else {
-        sKey.Format("%c", g_pBaldurChitin->m_pObjectGame->sub_5A9780(m_pKeymap[dword_8B3FE0[nPage][nIndex]]));
+        sKey.Format("%c", g_pBaldurChitin->GetObjectGame()->sub_5A9780(m_pKeymap[dword_8B3FE0[nPage][nIndex]]));
     }
 
     pLabel->SetText(sKey);

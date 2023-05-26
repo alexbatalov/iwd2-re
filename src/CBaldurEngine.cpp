@@ -483,7 +483,7 @@ void CBaldurEngine::ResetControls()
 // 0x427930
 int CBaldurEngine::GetSelectedCharacter()
 {
-    if (m_nSelectedCharacter >= g_pBaldurChitin->m_pObjectGame->GetNumCharacters()) {
+    if (m_nSelectedCharacter >= g_pBaldurChitin->GetObjectGame()->GetNumCharacters()) {
         m_nSelectedCharacter = 0;
     }
     return m_nSelectedCharacter;
@@ -493,7 +493,7 @@ int CBaldurEngine::GetSelectedCharacter()
 // 0x427960
 int CBaldurEngine::GetPickedCharacter()
 {
-    if (m_nPickedCharacter >= g_pBaldurChitin->m_pObjectGame->GetNumCharacters()) {
+    if (m_nPickedCharacter >= g_pBaldurChitin->GetObjectGame()->GetNumCharacters()) {
         m_nPickedCharacter = -1;
     }
     return m_nPickedCharacter;
@@ -537,7 +537,7 @@ void CBaldurEngine::OnPortraitLClick(DWORD nPortrait)
 // 0x427A90
 void CBaldurEngine::UpdateCursorShape(BYTE nCursor)
 {
-    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
     unsigned char v1 = pGame->field_1BA1;
     g_pBaldurChitin->GetObjectCursor()->SetCursor(v1 == 4 ? nCursor : v1, FALSE);
 }
@@ -563,7 +563,7 @@ void CBaldurEngine::CheckEnablePortaits(DWORD dwPanelId)
 {
     for (DWORD nPortrait = 0; nPortrait < 6; nPortrait++) {
         // NOTE: Unsigned compare.
-        BOOL bEnable = nPortrait < static_cast<DWORD>(g_pBaldurChitin->m_pObjectGame->GetNumCharacters());
+        BOOL bEnable = nPortrait < static_cast<DWORD>(g_pBaldurChitin->GetObjectGame()->GetNumCharacters());
         EnablePortait(dwPanelId, nPortrait, bEnable);
     }
 }
@@ -722,7 +722,7 @@ void CBaldurEngine::PlayGUISound(const CResRef& cResRef)
 // 0x428240
 void CBaldurEngine::UpdateCharacterStatus(LONG nCharacterId)
 {
-    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\CBaldurChitin.cpp
     // __LINE__: 4273

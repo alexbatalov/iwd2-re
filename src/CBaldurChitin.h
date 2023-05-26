@@ -91,6 +91,7 @@ public:
     CStringList* GetPlayedMovies();
     void AddPlayedMovie(const CResRef& cResMovie);
     CInfCursor* GetObjectCursor();
+    CInfGame* GetObjectGame();
 
     /* 0000 */ void SynchronousUpdate() override;
     /* 0008 */ DWORD GetIDSInvalidVideoMode() override;

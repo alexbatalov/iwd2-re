@@ -343,7 +343,7 @@ void CScreenLoad::TimerAsynchronousUpdate()
     g_pBaldurChitin->GetObjectCursor()->CursorUpdate(pVidMode);
 
     if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
-        CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+        CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
         if (!pGame->GetMultiplayerSettings()->m_bArbitrationLockStatus) {
             pGame->GetMultiplayerSettings()->SetArbitrationLockStatus(TRUE, 0);
         }
@@ -353,7 +353,7 @@ void CScreenLoad::TimerAsynchronousUpdate()
 // 0x63BAA0
 void CScreenLoad::TimerSynchronousUpdate()
 {
-    g_pBaldurChitin->m_pObjectGame->SynchronousUpdate();
+    g_pBaldurChitin->GetObjectGame()->SynchronousUpdate();
     m_cUIManager.Render();
     pVidMode->Flip(TRUE);
 }
@@ -435,7 +435,7 @@ void CScreenLoad::OnMainCancelButtonClick()
     case 1:
     case 3:
         if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
-            CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+            CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
             if (pGame->GetMultiplayerSettings()->m_bArbitrationLockStatus == TRUE) {
                 pGame->GetMultiplayerSettings()->SetArbitrationLockAllowInput(TRUE);
                 pGame->GetMultiplayerSettings()->SetArbitrationLockStatus(FALSE, 0);
@@ -451,7 +451,7 @@ void CScreenLoad::OnMainCancelButtonClick()
 
         // NOTE: Repeats code block above.
         if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
-            CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+            CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
             if (pGame->GetMultiplayerSettings()->m_bArbitrationLockStatus == TRUE) {
                 pGame->GetMultiplayerSettings()->SetArbitrationLockAllowInput(TRUE);
                 pGame->GetMultiplayerSettings()->SetArbitrationLockStatus(FALSE, 0);
@@ -793,7 +793,7 @@ void CScreenLoad::DeleteGame(INT nGameSlot)
     // __LINE__: 2273
     UTIL_ASSERT(m_aGameSlots[nGameSlot]->m_sFileName != "");
 
-    g_pBaldurChitin->m_pObjectGame->DeleteSaveGame(CString(m_aGameSlots[nGameSlot]->m_sFileName));
+    g_pBaldurChitin->GetObjectGame()->DeleteSaveGame(CString(m_aGameSlots[nGameSlot]->m_sFileName));
 
     RefreshGameSlots();
     UpdateMainPanel();
@@ -976,7 +976,7 @@ void CUIControlScrollBarLoadGames::UpdateScrollBar()
     // __LINE__: 2836
     UTIL_ASSERT(pLoad != NULL);
 
-    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenLoad.cpp
     // __LINE__: 2838

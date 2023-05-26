@@ -268,12 +268,12 @@ void CBaldurProjector::EngineActivated()
         }
 
         m_pfnBinkSetSoundOnOff(m_hBink, 1);
-        m_pfnBinkSetVolume(m_hBink, 0, 32767 * g_pBaldurChitin->m_pObjectGame->m_cOptions.m_nVolumeMovie / 100);
+        m_pfnBinkSetVolume(m_hBink, 0, 32767 * g_pBaldurChitin->GetObjectGame()->m_cOptions.m_nVolumeMovie / 100);
 
         m_nPrevThreadPriority = GetThreadPriority(GetCurrentThread());
         m_bThreadPriorityChanged = SetThreadPriority(GetCurrentThread(), 15);
 
-        if (g_pBaldurChitin->m_pObjectGame->m_cOptions.m_bDisplayMovieSubtitles) {
+        if (g_pBaldurChitin->GetObjectGame()->m_cOptions.m_bDisplayMovieSubtitles) {
             // TODO: Incomplete.
         }
     }

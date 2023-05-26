@@ -99,11 +99,11 @@ CGameJournal::~CGameJournal()
 // 0x4C6360
 BOOL CGameJournal::AddEntry(STRREF strText, WORD nType)
 {
-    INT nChapter = g_pBaldurChitin->m_pObjectGame->GetCurrentChapter();
+    INT nChapter = g_pBaldurChitin->GetObjectGame()->GetCurrentChapter();
     nChapter = max(min(nChapter, NUM_CHAPTERS - 1), 0);
     return AddEntry(strText,
         nChapter,
-        g_pBaldurChitin->m_pObjectGame->GetWorldTimer()->m_gameTime,
+        g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime,
         nType);
 }
 
@@ -158,7 +158,7 @@ void CGameJournal::UpdateTextDisplay(INT nChapter, CUIControlTextDisplay* pText)
     // __LINE__: 584
     UTIL_ASSERT(m_aChapters[nChapter] != NULL);
 
-    BYTE bControlled = g_pBaldurChitin->m_pObjectGame->GetCharactersControlled();
+    BYTE bControlled = g_pBaldurChitin->GetObjectGame()->GetCharactersControlled();
 
     POSITION pos = m_aChapters[nChapter]->GetHeadPosition();
     while (pos != NULL) {

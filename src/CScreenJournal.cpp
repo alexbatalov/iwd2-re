@@ -330,7 +330,7 @@ void CScreenJournal::EngineGameInit()
     field_484 = "";
 
     // NOTE: Calls `GetCurrentChapter` four times.
-    m_nChapter = min(max(g_pBaldurChitin->m_pObjectGame->GetCurrentChapter(), 0), CGameJournal::NUM_CHAPTERS - 1);
+    m_nChapter = min(max(g_pBaldurChitin->GetObjectGame()->GetCurrentChapter(), 0), CGameJournal::NUM_CHAPTERS - 1);
 
     m_cUIManager.GetPanel(7)->SetActive(FALSE);
     m_cUIManager.GetPanel(8)->SetActive(FALSE);
@@ -347,7 +347,7 @@ void CScreenJournal::EngineGameUninit()
 // 0x636530
 void CScreenJournal::OnKeyDown(SHORT nKeysFlags)
 {
-    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
     if (nKeysFlags > 0) {
         for (SHORT nKeyFlag = 0; nKeyFlag < nKeysFlags; nKeyFlag++) {
@@ -474,7 +474,7 @@ void CScreenJournal::UpdateMainPanel()
 {
     CUIControlTextDisplay* pText;
 
-    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
     CUIPanel* pPanel = m_cUIManager.GetPanel(2);
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreenjournal.cpp
@@ -547,7 +547,7 @@ void CScreenJournal::TimerAsynchronousUpdate()
 // 0x63BAA0
 void CScreenJournal::TimerSynchronousUpdate()
 {
-    g_pBaldurChitin->m_pObjectGame->SynchronousUpdate();
+    g_pBaldurChitin->GetObjectGame()->SynchronousUpdate();
     m_cUIManager.Render();
     pVidMode->Flip(TRUE);
 }
@@ -556,7 +556,7 @@ void CScreenJournal::TimerSynchronousUpdate()
 void CScreenJournal::OnPortraitLClick(DWORD nPortrait)
 {
     // NOTE: Unsigned compare.
-    if (nPortrait < static_cast<DWORD>(g_pBaldurChitin->m_pObjectGame->GetNumCharacters())) {
+    if (nPortrait < static_cast<DWORD>(g_pBaldurChitin->GetObjectGame()->GetNumCharacters())) {
         DWORD nOldPortrait = m_nSelectedCharacter;
         m_nSelectedCharacter = nPortrait;
         m_cUIManager.GetPanel(1)->GetControl(nOldPortrait)->InvalidateRect();
@@ -642,7 +642,7 @@ void CScreenJournal::EnablePopupPanel(DWORD dwPanelId, BOOL bEnable)
 // NOTE: Inlined.
 void CScreenJournal::ResetPopupPanel(DWORD dwPanelId)
 {
-    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreenjournal.cpp
     // __LINE__: 1288
@@ -854,7 +854,7 @@ void CScreenJournal::ResetAnnotatePanel()
     pBtRevert->SetEnabled(TRUE);
 
     if (!field_EA0) {
-        switch (g_pBaldurChitin->m_pObjectGame->m_cJournal.GetEntryType(field_E9C)) {
+        switch (g_pBaldurChitin->GetObjectGame()->m_cJournal.GetEntryType(field_E9C)) {
         case 0:
             pBtRevert->SetEnabled(FALSE);
             break;
@@ -863,7 +863,7 @@ void CScreenJournal::ResetAnnotatePanel()
             // FALLTHROUGH
         case 2:
         case 4:
-            if (!g_pBaldurChitin->m_pObjectGame->m_cJournal.IsEntryChanged(field_E9C)) {
+            if (!g_pBaldurChitin->GetObjectGame()->m_cJournal.IsEntryChanged(field_E9C)) {
                 pBtRevert->SetEnabled(FALSE);
             }
             break;
@@ -881,7 +881,7 @@ void CScreenJournal::ResetAnnotatePanel()
 // 0x6378B0
 void CScreenJournal::OnRestButtonClick()
 {
-    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreenjournal.cpp
     // __LINE__: 1667
@@ -915,7 +915,7 @@ void CScreenJournal::OnErrorButtonClick(INT nButton)
     // __LINE__: 1729
     UTIL_ASSERT(0 <= nButton && nButton < GetNumErrorButtons());
 
-    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreenjournal.cpp
     // __LINE__: 1731

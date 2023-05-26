@@ -1912,3 +1912,9 @@ CInfCursor* CBaldurChitin::GetObjectCursor()
 {
     return m_pObjectCursor;
 }
+
+// 0x40CB10
+CInfGame* CBaldurChitin::GetObjectGame()
+{
+    return m_pObjectGame;
+}

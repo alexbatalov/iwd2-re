@@ -1174,8 +1174,8 @@ void CUIControlPortraitGeneral::OnRButtonClick(CPoint pt)
 {
     CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
     pWorld->OnPortraitLClick(static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->GetSelectedCharacter());
-    g_pBaldurChitin->m_pObjectGame->OnPortraitLClick(m_nID);
-    g_pBaldurChitin->m_pObjectGame->OnPortraitLDblClick(m_nID);
+    g_pBaldurChitin->GetObjectGame()->OnPortraitLClick(m_nID);
+    g_pBaldurChitin->GetObjectGame()->OnPortraitLDblClick(m_nID);
     m_pPanel->m_pManager->m_pWarp->SelectEngine(pWorld);
 }
 
@@ -1347,7 +1347,7 @@ void CUIControlButtonGeneralOptions::OnLButtonClick(CPoint pt)
     UTIL_ASSERT(pOptions != NULL);
 
     pOptions->m_bFromMainMenu = FALSE;
-    g_pBaldurChitin->m_pObjectGame->LoadOptions();
+    g_pBaldurChitin->GetObjectGame()->LoadOptions();
     g_pBaldurChitin->m_pEngineConnection->SelectEngine(pOptions);
 }
 
@@ -1377,7 +1377,7 @@ void CUIControlButtonGeneralOptionsFromMainMenu::OnLButtonClick(CPoint pt)
     UTIL_ASSERT(pOptions != NULL);
 
     pOptions->m_bFromMainMenu = TRUE;
-    g_pBaldurChitin->m_pObjectGame->LoadOptions();
+    g_pBaldurChitin->GetObjectGame()->LoadOptions();
     g_pBaldurChitin->m_pEngineConnection->SelectEngine(pOptions);
 }
 

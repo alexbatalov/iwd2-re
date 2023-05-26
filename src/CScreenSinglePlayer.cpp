@@ -303,7 +303,7 @@ void CScreenSinglePlayer::EngineActivated()
         if (!field_138E) {
             sprintf(byte_8F64C0, "%s %i", (LPCSTR)PARTY, 0);
             if (GetPrivateProfileStringA(byte_8F64C0, NAME, "", byte_8F64E0, sizeof(byte_8F64E0), ".\\Party.ini")) {
-                CMultiplayerSettings* pSettings = g_pBaldurChitin->m_pObjectGame->GetMultiplayerSettings();
+                CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
 
                 BOOL v1 = TRUE;
                 for (INT nSlot = 0; nSlot < 6 && v1; nSlot++) {
@@ -375,7 +375,7 @@ void CScreenSinglePlayer::EngineDestroyed()
 // 0x660B90
 void CScreenSinglePlayer::OnKeyDown(SHORT nKeysFlags)
 {
-    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
     // __LINE__: 528
@@ -750,7 +750,7 @@ void CScreenSinglePlayer::UpdateMainPanel()
         UpdateMainPanelCharacter(pPanel, nCharacterSlot);
     }
 
-    CMultiplayerSettings* pSettings = g_pBaldurChitin->m_pObjectGame->GetMultiplayerSettings();
+    CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
     // __LINE__: 1667
@@ -826,7 +826,7 @@ void CScreenSinglePlayer::UpdateModifyCharacterPanel()
     // __LINE__: 2033
     UTIL_ASSERT(pPanel != NULL);
 
-    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
     // __LINE__: 2036
@@ -880,7 +880,7 @@ void CScreenSinglePlayer::OnMainDoneButtonClick()
 // 0x663640
 BOOL CScreenSinglePlayer::IsModifyButtonClickable()
 {
-    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
     // __LINE__: 2656
@@ -896,7 +896,7 @@ BOOL CScreenSinglePlayer::IsModifyButtonClickable()
 // 0x6636D0
 void CScreenSinglePlayer::OnModifyButtonClick()
 {
-    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
     // __LINE__: 2707
@@ -956,9 +956,9 @@ void CScreenSinglePlayer::OnErrorButtonClick(INT nButton)
         switch (nButton) {
         case 0:
             if (1) {
-                CMultiplayerSettings* pSettings = g_pBaldurChitin->m_pObjectGame->GetMultiplayerSettings();
+                CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
                 if (g_pBaldurChitin->cNetwork.GetSessionHosting()) {
-                    g_pBaldurChitin->m_pObjectGame->MultiplayerSetCharacterCreationLocation();
+                    g_pBaldurChitin->GetObjectGame()->MultiplayerSetCharacterCreationLocation();
                     pSettings->SetArbitrationLockStatus(TRUE, 0);
                 } else {
                     g_pBaldurChitin->m_cBaldurMessage.SendArbitrationLockRequestToServer(TRUE);
@@ -1090,7 +1090,7 @@ void CScreenSinglePlayer::sub_6644B0(CUIPanel* pPanel)
 // 0x665280
 BOOL CScreenSinglePlayer::sub_665280(INT nCharacterSlot)
 {
-    CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
     // __LINE__: 3649
@@ -1169,7 +1169,7 @@ CUIControlButtonSinglePlayerReady::~CUIControlButtonSinglePlayerReady()
 // 0x665690
 void CUIControlButtonSinglePlayerReady::OnLButtonClick(CPoint pt)
 {
-    CMultiplayerSettings* pSettings = g_pBaldurChitin->m_pObjectGame->GetMultiplayerSettings();
+    CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
     // __LINE__: 3919
