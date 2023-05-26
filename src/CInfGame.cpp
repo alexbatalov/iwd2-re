@@ -1018,6 +1018,12 @@ void CInfGame::SetCurrentChapter(INT nChapter)
     // TODO: Incomplete.
 }
 
+// 0x452FD0
+CInfButtonArray* CInfGame::GetButtonArray()
+{
+    return &m_cButtonArray;
+}
+
 // 0x452FE0
 LONG CInfGame::GetCharacterId(SHORT nPortrait)
 {

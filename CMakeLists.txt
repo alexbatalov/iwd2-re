@@ -79,6 +79,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/ChDataTypes.h"
     "src/CImm.cpp"
     "src/CImm.h"
+    "src/CInfButtonArray.cpp"
+    "src/CInfButtonArray.h"
     "src/CInfCursor.cpp"
     "src/CInfCursor.h"
     "src/CInfGame.cpp"

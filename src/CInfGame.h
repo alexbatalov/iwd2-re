@@ -6,6 +6,7 @@
 #include "CGameJournal.h"
 #include "CGameObjectArray.h"
 #include "CGameOptions.h"
+#include "CInfButtonArray.h"
 #include "CMultiplayerSettings.h"
 #include "CRuleTables.h"
 #include "CTimerWorld.h"
@@ -56,6 +57,7 @@ public:
 
     INT GetCurrentChapter();
     void SetCurrentChapter(INT nChapter);
+    CInfButtonArray* GetButtonArray();
     LONG GetCharacterId(SHORT nPortrait);
     CTimerWorld* GetWorldTimer();
     SHORT GetNumCharacters();
@@ -109,6 +111,7 @@ public:
     /* 1B78 */ CTimerWorld m_worldTime;
     /* 1BA1 */ unsigned char field_1BA1;
     /* 1BB2 */ CMultiplayerSettings m_multiplayerSettings;
+    /* 1C78 */ CInfButtonArray m_cButtonArray;
     /* 366E */ int field_366E;
     /* 372C */ CGameObjectArray m_cObjectArray;
     /* 37E0 */ BYTE m_visibleArea;
