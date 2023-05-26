@@ -62,6 +62,8 @@ public:
     /* 0064 */ virtual BOOL EvaluateStatusTrigger(const CAITrigger& trigger);
     /* 0068 */ virtual BOOLEAN func_68();
 
+    CGameArea* GetArea();
+
     /* 0004 */ BYTE m_objectType;
     /* 0006 */ CPoint m_pos;
     /* 000E */ LONG m_posZ;

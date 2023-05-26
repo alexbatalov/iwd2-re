@@ -309,3 +309,9 @@ BOOLEAN CGameObject::func_68()
 {
     return FALSE;
 }
+
+// 0x40CB00
+CGameArea* CGameObject::GetArea()
+{
+    return m_pArea;
+}
