@@ -678,7 +678,7 @@ BOOL CScreenChapter::StartText(const CResRef& cResText)
     m_cResText = cResText;
 
     LONG id = CGameObjectArray::INVALID_OBJECT_ID;
-    if (pGame->m_nCharacters > 0) {
+    if (pGame->GetNumCharacters() > 0) {
         id = pGame->m_nCharacterPortaits[0];
     }
 

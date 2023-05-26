@@ -1018,6 +1018,12 @@ void CInfGame::SetCurrentChapter(INT nChapter)
     // TODO: Incomplete.
 }
 
+// 0x453020
+SHORT CInfGame::GetNumCharacters()
+{
+    return m_nCharacters;
+}
+
 // 0x453030
 CGameObjectArray* CInfGame::GetObjectArray()
 {

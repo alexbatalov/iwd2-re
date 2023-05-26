@@ -445,8 +445,8 @@ void CScreenOptions::OnKeyDown(SHORT nKeysFlags)
 // 0x6546B0
 void CScreenOptions::OnPortraitLClick(DWORD nPortrait)
 {
-    // TODO: Check cast.
-    if (nPortrait < static_cast<DWORD>(g_pBaldurChitin->m_pObjectGame->m_nCharacters)) {
+    // NOTE: Unsigned compare.
+    if (nPortrait < static_cast<DWORD>(g_pBaldurChitin->m_pObjectGame->GetNumCharacters())) {
         DWORD nOldSelectedCharacter = m_nSelectedCharacter;
         m_nSelectedCharacter = nPortrait;
         UpdateCursorShape(0);

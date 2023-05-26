@@ -483,7 +483,7 @@ void CBaldurEngine::ResetControls()
 // 0x427930
 int CBaldurEngine::GetSelectedCharacter()
 {
-    if (m_nSelectedCharacter >= g_pBaldurChitin->m_pObjectGame->m_nCharacters) {
+    if (m_nSelectedCharacter >= g_pBaldurChitin->m_pObjectGame->GetNumCharacters()) {
         m_nSelectedCharacter = 0;
     }
     return m_nSelectedCharacter;
@@ -493,7 +493,7 @@ int CBaldurEngine::GetSelectedCharacter()
 // 0x427960
 int CBaldurEngine::GetPickedCharacter()
 {
-    if (m_nPickedCharacter >= g_pBaldurChitin->m_pObjectGame->m_nCharacters) {
+    if (m_nPickedCharacter >= g_pBaldurChitin->m_pObjectGame->GetNumCharacters()) {
         m_nPickedCharacter = -1;
     }
     return m_nPickedCharacter;
@@ -563,7 +563,7 @@ void CBaldurEngine::CheckEnablePortaits(DWORD dwPanelId)
 {
     for (DWORD nPortrait = 0; nPortrait < 6; nPortrait++) {
         // NOTE: Unsigned compare.
-        BOOL bEnable = nPortrait < g_pBaldurChitin->m_pObjectGame->m_nCharacters;
+        BOOL bEnable = nPortrait < static_cast<DWORD>(g_pBaldurChitin->m_pObjectGame->GetNumCharacters());
         EnablePortait(dwPanelId, nPortrait, bEnable);
     }
 }

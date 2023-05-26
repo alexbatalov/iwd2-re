@@ -555,7 +555,8 @@ void CScreenJournal::TimerSynchronousUpdate()
 // 0x636A30
 void CScreenJournal::OnPortraitLClick(DWORD nPortrait)
 {
-    if (nPortrait < g_pBaldurChitin->m_pObjectGame->m_nCharacters) {
+    // NOTE: Unsigned compare.
+    if (nPortrait < static_cast<DWORD>(g_pBaldurChitin->m_pObjectGame->GetNumCharacters())) {
         DWORD nOldPortrait = m_nSelectedCharacter;
         m_nSelectedCharacter = nPortrait;
         m_cUIManager.GetPanel(1)->GetControl(nOldPortrait)->InvalidateRect();
