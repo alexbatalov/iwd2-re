@@ -685,14 +685,14 @@ BOOL CScreenChapter::StartText(const CResRef& cResText)
     CGameObject* pObject;
     BYTE rc;
     do {
-        rc = pGame->m_cObjectArray.GetShare(id,
+        rc = pGame->GetObjectArray()->GetShare(id,
             CGameObjectArray::THREAD_ASYNCH,
             &pObject,
             INFINITE);
     } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
     if (rc == CGameObjectArray::SUCCESS) {
-        pGame->m_cObjectArray.ReleaseShare(id,
+        pGame->GetObjectArray()->ReleaseShare(id,
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
     }

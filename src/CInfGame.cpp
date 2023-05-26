@@ -957,7 +957,7 @@ BYTE CInfGame::GetCharactersControlled()
         BYTE rc;
         do {
             // NOTE: Using global. Implying inlined static function.
-            rc = g_pBaldurChitin->m_pObjectGame->m_cObjectArray.GetShare(id,
+            rc = g_pBaldurChitin->m_pObjectGame->GetObjectArray()->GetShare(id,
                 CGameObjectArray::THREAD_ASYNCH,
                 &pObject,
                 INFINITE);
@@ -969,7 +969,7 @@ BYTE CInfGame::GetCharactersControlled()
                 bControlled |= 1 << nIndex;
             }
 
-            g_pBaldurChitin->m_pObjectGame->m_cObjectArray.ReleaseShare(id,
+            g_pBaldurChitin->m_pObjectGame->GetObjectArray()->ReleaseShare(id,
                 CGameObjectArray::THREAD_ASYNCH,
                 INFINITE);
         }
@@ -1018,12 +1018,17 @@ void CInfGame::SetCurrentChapter(INT nChapter)
     // TODO: Incomplete.
 }
 
+// 0x453030
+CGameObjectArray* CInfGame::GetObjectArray()
+{
+    return &m_cObjectArray;
+}
+
 // 0x453040
 CGameArea* CInfGame::GetVisibleArea()
 {
     return m_gameAreas[m_visibleArea];
 }
-
 
 // 0x453060
 CMultiplayerSettings* CInfGame::GetMultiplayerSettings()

@@ -56,6 +56,7 @@ public:
 
     INT GetCurrentChapter();
     void SetCurrentChapter(INT nChapter);
+    CGameObjectArray* GetObjectArray();
     CGameArea* GetVisibleArea();
     CMultiplayerSettings* GetMultiplayerSettings();
 
