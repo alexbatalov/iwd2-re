@@ -1705,6 +1705,11 @@ void CChitin::SetProgressBarActivateEngine(BOOL bValue)
 {
 }
 
+// 0x78E740
+void CChitin::SetCDSwitchStatus(BOOLEAN a1, BOOLEAN a2, BYTE a3, const CString& a4, BOOLEAN a5, BOOLEAN a6, BOOLEAN a7)
+{
+}
+
 // 0x799E60
 void CChitin::SetCDSwitchActivateEngine(BOOL bValue)
 {

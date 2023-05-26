@@ -1728,6 +1728,12 @@ void CBaldurChitin::SetProgressBar(BOOLEAN bEnabled, LONG nProgressBarCaption, I
     }
 }
 
+// 0x425800
+void CBaldurChitin::SetCDSwitchStatus(BOOLEAN a1, BOOLEAN a2, BYTE a3, const CString& a4, BOOLEAN a5, BOOLEAN a6, BOOLEAN a7)
+{
+    m_cSwitchingCDStatus.Update(a1, a2, a3, a4, a5, a6, a7);
+}
+
 // 0x4258C0
 void CBaldurChitin::OnMultiplayerSessionToClose()
 {
