@@ -50,7 +50,7 @@ WORD CResMosaic::GetTileSize(BOOL bDoubleSize)
 // 0x7803A0
 BYTE* CResMosaic::GetTileData(UINT nTile, BOOL bDoubleSize)
 {
-    if (nTile >= m_pHeader->nXTiles * m_pHeader->nYTiles) {
+    if (nTile >= static_cast<UINT>(m_pHeader->nXTiles * m_pHeader->nYTiles)) {
         return NULL;
     }
 
@@ -101,7 +101,7 @@ BYTE* CResMosaic::GetTileData(UINT nTile, BOOL bDoubleSize)
 // 0x780530
 RGBQUAD* CResMosaic::GetTilePalette(UINT nTile)
 {
-    if (nTile < m_pHeader->nXTiles * m_pHeader->nYTiles) {
+    if (nTile < static_cast<UINT>(m_pHeader->nXTiles * m_pHeader->nYTiles)) {
         return &(m_pPalettes[nTile * 256]);
     }
 

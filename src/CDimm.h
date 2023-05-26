@@ -48,7 +48,7 @@ public:
     CRes* GetResObject(const CResRef& cResRef, USHORT nResType, BOOL bWarningIfMissing);
     RESID GetResID(CResRef cResRef, USHORT nResType);
     BOOL LocalGetFileStatus(const CString& sFileName, CFileStatus& rStatus);
-    int LocalGetResourceSize(CRes* pRes);
+    DWORD LocalGetResourceSize(CRes* pRes);
     int LocalReadResource(CRes* pRes, DWORD nNumberOfBytesToRead, DWORD nOffset);
     BOOL MemoryAlmostFull();
     void MoveRequests(int nOldPriority, int nNewPriority, int nCount);

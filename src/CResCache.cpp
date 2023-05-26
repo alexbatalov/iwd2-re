@@ -98,7 +98,9 @@ void CResCache::AccessFileInCache(UINT nIndex)
                     // `SetStatus`, not sure how to replicate it.
                     CFile::SetStatus(v3, cFileStatus);
 
-                    AddFileToCache(nIndex, cFileStatus.m_mtime, cFileStatus.m_size);
+                    // NOTE: `m_size` is `LONG` in VC6, but `ULONGLONG` in
+                    // more modern versions.
+                    AddFileToCache(nIndex, cFileStatus.m_mtime, static_cast<DWORD>(cFileStatus.m_size));
                 }
             }
         }
@@ -396,7 +398,9 @@ BOOL CResCache::RefreshStatus(const CString& sDirName)
                 UTIL_ASSERT(FALSE);
             }
 
-            AddFileToCache(k, cFileStatus.m_mtime, cFileStatus.m_size);
+            // NOTE: `m_size` is `LONG` in VC6, but `ULONGLONG` in more modern
+            // versions.
+            AddFileToCache(k, cFileStatus.m_mtime, static_cast<DWORD>(cFileStatus.m_size));
         } else {
             if (g_pChitin->cDimm.m_cKeyTable.m_bInitialized) {
                 if (k < g_pChitin->cDimm.m_cKeyTable.m_nResFiles) {

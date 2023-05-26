@@ -216,6 +216,8 @@ CChitin::CChitin()
     OSVERSIONINFOA versionInfo;
     memset(&versionInfo, 0, sizeof(OSVERSIONINFOA));
     versionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
+
+#pragma warning(suppress : 4996)
     GetVersionExA(&versionInfo);
 
     dwPlatformId = versionInfo.dwPlatformId;

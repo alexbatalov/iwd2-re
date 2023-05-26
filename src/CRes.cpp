@@ -11,7 +11,7 @@ CRes::CRes()
     field_40 = 0;
     m_nID = 0;
     field_44 = 0;
-    field_14 = 0;
+    nSize = 0;
     m_nResSizeActual = 0;
     m_pData = NULL;
     m_pDimmKeyTableEntry = NULL;
@@ -65,7 +65,7 @@ void* CRes::Demand()
     void* pData = g_pChitin->cDimm.Demand(this);
 
     if (m_nResSizeActual == 0) {
-        m_nResSizeActual = field_14;
+        m_nResSizeActual = nSize;
     }
 
     if (field_18) {
@@ -86,7 +86,7 @@ void* CRes::Demand()
                 int err = CUtil::Uncompress(reinterpret_cast<BYTE*>(pDataNew),
                     &nResSizeActual,
                     pBytes + 12,
-                    field_14 - 12);
+                    nSize - 12);
                 free(m_pData);
 
                 if (err != 0) {

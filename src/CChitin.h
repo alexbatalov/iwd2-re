@@ -126,17 +126,17 @@ public:
     static int dword_8FB978;
     static int dword_8FB97C;
 
-    /* 0004 */ int m_mouseLButton;
-    /* 0008 */ int m_mouseRButton;
+    /* 0004 */ INT m_mouseLButton;
+    /* 0008 */ INT m_mouseRButton;
     /* 000C */ BOOL m_bMouseLButtonDown;
     /* 0010 */ CPoint m_mouseLDblClickPoint;
-    /* 0018 */ int m_mouseLDblClickCount;
+    /* 0018 */ UINT m_mouseLDblClickCount;
     /* 001C */ BOOL m_bMouseRButtonDown;
     /* 0020 */ CPoint m_mouseRDblClickPoint;
-    /* 0028 */ int m_mouseRDblClickCount;
+    /* 0028 */ UINT m_mouseRDblClickCount;
     /* 002C */ BOOL m_bMouseMButtonDown;
     /* 0030 */ CPoint m_mouseMDblClickPoint;
-    /* 0038 */ int m_mouseMDblClickCount;
+    /* 0038 */ UINT m_mouseMDblClickCount;
     /* 003C */ UINT m_mouseDblClickTime;
     /* 0040 */ CSize m_mouseDblClickSize;
     /* 0048 */ BOOL m_bEngineActive;

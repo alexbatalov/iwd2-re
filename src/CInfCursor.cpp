@@ -195,7 +195,8 @@ void CInfCursor::SetCursor(INT nNewCursor, BOOLEAN bForce)
                 CSize size2;
                 m_vcToolTip.GetFrameSize(2, m_vcToolTip.field_5DC, size2, FALSE);
 
-                m_vcToolTip.field_5DE = (size1.cx / 2) + (size2.cx / 2);
+                // TODO: Check cast.
+                m_vcToolTip.field_5DE = static_cast<short>((size1.cx / 2) + (size2.cx / 2));
                 m_vcToolTip.field_5E2 = 0;
 
                 pVidMode->SetPointer(&m_vcToolTip, TRUE, -1);
@@ -325,7 +326,8 @@ void CInfToolTip::Initialize()
     CSize size2;
     GetFrameSize(2, 0, size2, FALSE);
 
-    field_5DE = (size2.cx / 2) + (size1.cx / 2);
+    // TODO: Check cast.
+    field_5DE = static_cast<short>((size2.cx / 2) + (size1.cx / 2));
     field_5E0 = field_5DE;
 
     field_5E8 = GetSequenceLength(1, FALSE);

@@ -12,9 +12,12 @@ static BOOL IsSupportedOS(DWORD& majorVersion, DWORD& minorVersion)
     int servicePack;
 
     info.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXA);
+
+#pragma warning(suppress : 4996)
     if (!GetVersionExA(reinterpret_cast<LPOSVERSIONINFOA>(&info))) {
         info.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
 
+#pragma warning(suppress : 4996)
         if (!GetVersionExA(reinterpret_cast<LPOSVERSIONINFOA>(&info))) {
             return FALSE;
         }

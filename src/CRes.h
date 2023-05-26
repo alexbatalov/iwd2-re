@@ -46,7 +46,7 @@ public:
     /* 0008 */ void* m_pData;
     /* 000C */ CObList* m_pCurrentList; // #guess
     /* 0010 */ CDimmKeyTableEntry* m_pDimmKeyTableEntry; // #guess
-    /* 0014 */ int field_14;
+    /* 0014 */ DWORD nSize;
     /* 0018 */ int field_18;
     /* 001C */ DWORD m_nResSizeActual;
     /* 0020 */ CCriticalSection field_20;

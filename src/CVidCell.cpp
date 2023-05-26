@@ -346,7 +346,7 @@ BYTE CVidCell::GetSequenceLength(WORD nSequence, BOOLEAN bDemanded)
     // NOTE: Uninline.
     if (nSequence < GetResBamHeader()->nSequences) {
         // NOTE: Uninline.
-        nFrames = GetResSequences()->nFrames;
+        nFrames = static_cast<BYTE>(GetResSequences()->nFrames);
     } else {
         nFrames = 0;
     }
