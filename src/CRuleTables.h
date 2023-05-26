@@ -392,6 +392,7 @@ public:
     float GetSoundReverbMix(int nSoundChannel, int nReverb) const;
     int GetSoundEnvironment(EAXPRESET& preset, int nReverb) const;
     BYTE MapCharacterSpecializationToSchool(WORD nSpecialistMage) const;
+    INT GetNumLoadingHints() const;
     const C2DArray* GetClassAbilityTable(BYTE nClass, DWORD nSpecialist) const;
 
     /* 0000 */ C2DArray m_tReactionModCharisma;

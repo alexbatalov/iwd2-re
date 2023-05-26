@@ -2183,6 +2183,12 @@ BYTE CRuleTables::MapCharacterSpecializationToSchool(WORD nSpecialistMage) const
     return 0;
 }
 
+// 0x546020
+INT CRuleTables::GetNumLoadingHints() const
+{
+    return m_tLoadingHints.GetHeight() - 1;
+}
+
 // 0x546030
 const C2DArray* CRuleTables::GetClassAbilityTable(BYTE nClass, DWORD nSpecialist) const
 {
