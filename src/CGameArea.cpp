@@ -296,7 +296,7 @@ BYTE CGameArea::GetSong(SHORT slot)
             return -1;
         }
     } else {
-        if (g_pBaldurChitin->m_pObjectGame->m_worldTime.IsDay() || g_pBaldurChitin->m_pObjectGame->m_worldTime.IsDusk()) {
+        if (g_pBaldurChitin->m_pObjectGame->GetWorldTimer()->IsDay() || g_pBaldurChitin->m_pObjectGame->GetWorldTimer()->IsDusk()) {
             song = static_cast<BYTE>(m_headerSound.m_dayMusic);
         } else {
             song = static_cast<BYTE>(m_headerSound.m_nightMusic);

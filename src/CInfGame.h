@@ -56,6 +56,7 @@ public:
 
     INT GetCurrentChapter();
     void SetCurrentChapter(INT nChapter);
+    CTimerWorld* GetWorldTimer();
     SHORT GetNumCharacters();
     CGameObjectArray* GetObjectArray();
     CGameArea* GetVisibleArea();

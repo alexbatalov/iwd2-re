@@ -103,7 +103,7 @@ BOOL CGameJournal::AddEntry(STRREF strText, WORD nType)
     nChapter = max(min(nChapter, NUM_CHAPTERS - 1), 0);
     return AddEntry(strText,
         nChapter,
-        g_pBaldurChitin->m_pObjectGame->m_worldTime.m_gameTime,
+        g_pBaldurChitin->m_pObjectGame->GetWorldTimer()->m_gameTime,
         nType);
 }
 

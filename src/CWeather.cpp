@@ -95,7 +95,7 @@ void CWeather::CancelCurrentWeather(CGameArea* pArea, ULONG nCurrentTime)
 void CWeather::CheckWeather()
 {
     CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
-    ULONG nCurrentTime = pGame->m_worldTime.m_gameTime;
+    ULONG nCurrentTime = pGame->GetWorldTimer()->m_gameTime;
     CGameArea* pArea = pGame->GetVisibleArea();
     if (pGame->m_cOptions.m_bWeatherEnabled) {
         if (pArea != NULL) {
@@ -196,7 +196,7 @@ void CWeather::ResetWeather(CGameArea* pArea)
 void CWeather::SetCurrentWeather(CGameArea* pArea, WORD wWeatherFlags)
 {
     if (!g_pBaldurChitin->cNetwork.GetSessionOpen() || !g_pBaldurChitin->cNetwork.GetSessionHosting()) {
-        CancelCurrentWeather(pArea, g_pBaldurChitin->m_pObjectGame->m_worldTime.m_gameTime);
+        CancelCurrentWeather(pArea, g_pBaldurChitin->m_pObjectGame->GetWorldTimer()->m_gameTime);
         if (g_pBaldurChitin->m_pObjectGame->m_cOptions.m_bWeatherEnabled) {
             // NOTE: Uninline.
             Unmarshal(wWeatherFlags);
@@ -379,7 +379,7 @@ void CWeather::Update()
                 }
             }
         } else {
-            CancelCurrentWeather(g_pBaldurChitin->m_pObjectGame->GetVisibleArea(), g_pBaldurChitin->m_pObjectGame->m_worldTime.m_gameTime);
+            CancelCurrentWeather(g_pBaldurChitin->m_pObjectGame->GetVisibleArea(), g_pBaldurChitin->m_pObjectGame->GetWorldTimer()->m_gameTime);
         }
         break;
     case 2:
@@ -392,7 +392,7 @@ void CWeather::Update()
                 }
             }
         } else {
-            CancelCurrentWeather(g_pBaldurChitin->m_pObjectGame->GetVisibleArea(), g_pBaldurChitin->m_pObjectGame->m_worldTime.m_gameTime);
+            CancelCurrentWeather(g_pBaldurChitin->m_pObjectGame->GetVisibleArea(), g_pBaldurChitin->m_pObjectGame->GetWorldTimer()->m_gameTime);
         }
         break;
     default:
@@ -670,7 +670,7 @@ BYTE CSnowFlake::AsynchronousUpdate(const CRect& rOldViewPort, const CRect& rNew
         }
     }
 
-    if (g_pBaldurChitin->m_pObjectGame->m_worldTime.m_active) {
+    if (g_pBaldurChitin->m_pObjectGame->GetWorldTimer()->m_active) {
         if (CParticle::AsynchronousUpdate() == AIRBORN) {
             m_nDriftCounter++;
             if (m_nDriftCounter == m_nDriftWidth) {
@@ -737,7 +737,7 @@ BYTE CRainDrop::AsynchronousUpdate(const CRect& rOldViewPort, const CRect& rNewV
         m_vel.x += 100;
     }
 
-    if (g_pBaldurChitin->m_pObjectGame->m_worldTime.m_active) {
+    if (g_pBaldurChitin->m_pObjectGame->GetWorldTimer()->m_active) {
         return CParticle::AsynchronousUpdate();
     } else {
         return AIRBORN;

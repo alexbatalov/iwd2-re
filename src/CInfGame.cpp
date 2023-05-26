@@ -1018,6 +1018,12 @@ void CInfGame::SetCurrentChapter(INT nChapter)
     // TODO: Incomplete.
 }
 
+// 0x453010
+CTimerWorld* CInfGame::GetWorldTimer()
+{
+    return &m_worldTime;
+}
+
 // 0x453020
 SHORT CInfGame::GetNumCharacters()
 {
