@@ -208,14 +208,14 @@ void CScreenSave::OnLButtonDblClk(CPoint pt)
 // 0x636970
 void CScreenSave::OnLButtonDown(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 1;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
     m_cUIManager.OnLButtonDown(pt);
 }
 
 // 0x6369A0
 void CScreenSave::OnLButtonUp(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 0;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
     m_cUIManager.OnLButtonUp(pt);
 }
 
@@ -228,14 +228,14 @@ BOOL CScreenSave::CheckMouseRButton()
 // 0x6369D0
 void CScreenSave::OnRButtonDown(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 1;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
     m_cUIManager.OnRButtonDown(pt);
 }
 
 // 0x636A00
 void CScreenSave::OnRButtonUp(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 0;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
     m_cUIManager.OnRButtonUp(pt);
 }
 
@@ -435,7 +435,7 @@ void CScreenSave::TimerAsynchronousUpdate()
     g_pBaldurChitin->m_pEngineWorld->AsynchronousUpdate(FALSE);
     UpdateCursorShape(0);
     m_cUIManager.TimerAsynchronousUpdate();
-    g_pBaldurChitin->m_pObjectCursor->CursorUpdate(pVidMode);
+    g_pBaldurChitin->GetObjectCursor()->CursorUpdate(pVidMode);
 }
 
 // 0x63BAA0

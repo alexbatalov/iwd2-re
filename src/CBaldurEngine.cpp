@@ -539,7 +539,7 @@ void CBaldurEngine::UpdateCursorShape(BYTE nCursor)
 {
     CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
     unsigned char v1 = pGame->field_1BA1;
-    g_pBaldurChitin->m_pObjectCursor->SetCursor(v1 == 4 ? nCursor : v1, FALSE);
+    g_pBaldurChitin->GetObjectCursor()->SetCursor(v1 == 4 ? nCursor : v1, FALSE);
 }
 
 // 0x4277C0

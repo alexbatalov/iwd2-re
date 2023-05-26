@@ -135,7 +135,7 @@ void CUIControlBase::TimerAsynchronousUpdate(BOOLEAN bInside)
         if (bInside) {
             if (m_bActive || m_bInactiveRender) {
                 if (m_pPanel->m_bActive) {
-                    if (!m_bToolTipActive || g_pBaldurChitin->m_pObjectCursor->m_nCurrentCursor != 101) {
+                    if (!m_bToolTipActive || g_pBaldurChitin->GetObjectCursor()->m_nCurrentCursor != 101) {
                         if (m_pPanel->m_pManager->field_76
                             || (g_pBaldurChitin->m_pObjectGame->m_cOptions.m_nTooltips != INT_MAX
                                 && m_pPanel->m_pManager->field_1C >= g_pBaldurChitin->m_pObjectGame->m_cOptions.m_nTooltips)) {

@@ -46,7 +46,7 @@ void CDungeonMaster::EngineDeactivated()
 // 0x599750
 void CDungeonMaster::EngineInitialized()
 {
-    g_pBaldurChitin->m_pObjectCursor->Initialize();
+    g_pBaldurChitin->GetObjectCursor()->Initialize();
 }
 
 // 0x599760

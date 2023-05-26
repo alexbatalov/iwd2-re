@@ -91,14 +91,14 @@ void CScreenLoad::OnLButtonDblClk(CPoint pt)
 // 0x636970
 void CScreenLoad::OnLButtonDown(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 1;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
     m_cUIManager.OnLButtonDown(pt);
 }
 
 // 0x6369A0
 void CScreenLoad::OnLButtonUp(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 0;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
     m_cUIManager.OnLButtonUp(pt);
 }
 
@@ -111,14 +111,14 @@ BOOL CScreenLoad::CheckMouseRButton()
 // 0x6369D0
 void CScreenLoad::OnRButtonDown(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 1;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
     m_cUIManager.OnRButtonDown(pt);
 }
 
 // 0x636A00
 void CScreenLoad::OnRButtonUp(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 0;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
     m_cUIManager.OnRButtonUp(pt);
 }
 
@@ -340,7 +340,7 @@ void CScreenLoad::TimerAsynchronousUpdate()
 
     UpdateCursorShape(0);
     m_cUIManager.TimerAsynchronousUpdate();
-    g_pBaldurChitin->m_pObjectCursor->CursorUpdate(pVidMode);
+    g_pBaldurChitin->GetObjectCursor()->CursorUpdate(pVidMode);
 
     if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
         CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;

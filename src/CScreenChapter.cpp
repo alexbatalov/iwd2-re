@@ -79,14 +79,14 @@ void CScreenChapter::OnLButtonDblClk(CPoint pt)
 // 0x636970
 void CScreenChapter::OnLButtonDown(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 1;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
     m_cUIManager.OnLButtonDown(pt);
 }
 
 // 0x6369A0
 void CScreenChapter::OnLButtonUp(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 0;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
     m_cUIManager.OnLButtonUp(pt);
 }
 
@@ -99,14 +99,14 @@ BOOL CScreenChapter::CheckMouseRButton()
 // 0x6369D0
 void CScreenChapter::OnRButtonDown(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 1;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
     m_cUIManager.OnRButtonDown(pt);
 }
 
 // 0x636A00
 void CScreenChapter::OnRButtonUp(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 0;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
     m_cUIManager.OnRButtonUp(pt);
 }
 
@@ -159,9 +159,9 @@ void CScreenChapter::EngineActivated()
     m_preLoadFontRealms.RegisterFont();
 
     UpdateCursorShape(0);
-    g_pBaldurChitin->m_pObjectCursor->SetCursor(0, TRUE);
-    g_pBaldurChitin->m_pObjectCursor->m_bVisible = TRUE;
-    g_pBaldurChitin->m_pObjectCursor->CursorUpdate(pVidMode);
+    g_pBaldurChitin->GetObjectCursor()->SetCursor(0, TRUE);
+    g_pBaldurChitin->GetObjectCursor()->m_bVisible = TRUE;
+    g_pBaldurChitin->GetObjectCursor()->CursorUpdate(pVidMode);
     m_cUIManager.InvalidateRect(NULL);
 
     CGameArea* pArea = g_pBaldurChitin->m_pObjectGame->GetVisibleArea();
@@ -191,7 +191,7 @@ void CScreenChapter::EngineDeactivated()
 
     m_preLoadFontRealms.Unload();
 
-    g_pBaldurChitin->m_pObjectCursor->CursorUpdate(pVidMode);
+    g_pBaldurChitin->GetObjectCursor()->CursorUpdate(pVidMode);
 
     // NOTE: Uninline.
     m_cUIManager.KillCapture();
@@ -357,7 +357,7 @@ void CScreenChapter::TimerAsynchronousUpdate()
 
     UpdateCursorShape(0);
     m_cUIManager.TimerAsynchronousUpdate();
-    g_pBaldurChitin->m_pObjectCursor->CursorUpdate(pVidMode);
+    g_pBaldurChitin->GetObjectCursor()->CursorUpdate(pVidMode);
 }
 
 // 0x5D3950

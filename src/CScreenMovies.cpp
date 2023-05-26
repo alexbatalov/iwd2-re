@@ -91,7 +91,7 @@ BOOL CScreenMovies::CheckMouseLButton()
 // 0x6369A0
 void CScreenMovies::OnLButtonUp(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 0;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
     m_cUIManager.OnLButtonUp(pt);
 }
 
@@ -165,8 +165,8 @@ void CScreenMovies::EngineActivated()
 
         pButton->SetEnabled(m_nMovieIndex >= 0);
 
-        g_pBaldurChitin->m_pObjectCursor->SetCursor(0, FALSE);
-        g_pBaldurChitin->m_pObjectCursor->m_bVisible = TRUE;
+        g_pBaldurChitin->GetObjectCursor()->SetCursor(0, FALSE);
+        g_pBaldurChitin->GetObjectCursor()->m_bVisible = TRUE;
         CheckEnablePortaits(1);
         CheckEnableLeftPanel();
         m_cUIManager.InvalidateRect(NULL);
@@ -209,7 +209,7 @@ void CScreenMovies::EngineDeactivated()
 void CScreenMovies::OnLButtonDown(CPoint pt)
 {
     g_pBaldurChitin->field_1A2E = FALSE;
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 1;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
     m_cUIManager.OnLButtonDown(pt);
 }
 
@@ -242,7 +242,7 @@ void CScreenMovies::OnKeyDown(SHORT nKeysFlags)
 void CScreenMovies::TimerAsynchronousUpdate()
 {
     UpdateCursorShape(0);
-    g_pBaldurChitin->m_pObjectCursor->CursorUpdate(pVidMode);
+    g_pBaldurChitin->GetObjectCursor()->CursorUpdate(pVidMode);
     m_cUIManager.TimerAsynchronousUpdate();
 }
 

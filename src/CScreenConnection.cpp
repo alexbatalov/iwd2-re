@@ -481,7 +481,7 @@ void CScreenConnection::OnLButtonDown(CPoint pt)
 {
     if (m_bAllowInput) {
         if (!m_bEMWaiting) {
-            g_pBaldurChitin->m_pObjectCursor->m_nState = 1;
+            g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
             m_cUIManager.OnLButtonDown(pt);
         }
     }
@@ -492,7 +492,7 @@ void CScreenConnection::OnLButtonUp(CPoint pt)
 {
     if (m_bAllowInput) {
         if (!m_bEMWaiting) {
-            g_pBaldurChitin->m_pObjectCursor->m_nState = 0;
+            g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
             m_cUIManager.OnLButtonUp(pt);
         }
     }
@@ -513,7 +513,7 @@ void CScreenConnection::OnRButtonDown(CPoint pt)
 {
     if (m_bAllowInput) {
         if (!m_bEMWaiting) {
-            g_pBaldurChitin->m_pObjectCursor->m_nState = 1;
+            g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
             m_cUIManager.OnRButtonDown(pt);
         }
     }
@@ -524,7 +524,7 @@ void CScreenConnection::OnRButtonUp(CPoint pt)
 {
     if (m_bAllowInput) {
         if (!m_bEMWaiting) {
-            g_pBaldurChitin->m_pObjectCursor->m_nState = 0;
+            g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
             m_cUIManager.OnRButtonUp(pt);
         }
     }
@@ -551,11 +551,11 @@ void CScreenConnection::TimerAsynchronousUpdate()
         UpdateMainPanel();
         m_cUIManager.InvalidateRect(NULL);
 
-        g_pBaldurChitin->m_pObjectCursor->SetCursor(0, FALSE);
-        g_pBaldurChitin->m_pObjectCursor->m_bVisible = TRUE;
-        g_pBaldurChitin->m_pObjectCursor->SetCursor(100, FALSE);
-        g_pBaldurChitin->m_pObjectCursor->m_bVisible = FALSE;
-        g_pBaldurChitin->m_pObjectCursor->CursorUpdate(pVidMode);
+        g_pBaldurChitin->GetObjectCursor()->SetCursor(0, FALSE);
+        g_pBaldurChitin->GetObjectCursor()->m_bVisible = TRUE;
+        g_pBaldurChitin->GetObjectCursor()->SetCursor(100, FALSE);
+        g_pBaldurChitin->GetObjectCursor()->m_bVisible = FALSE;
+        g_pBaldurChitin->GetObjectCursor()->CursorUpdate(pVidMode);
 
         CString sResolvedFileName;
 
@@ -714,14 +714,14 @@ void CScreenConnection::TimerAsynchronousUpdate()
 
         if (field_FA6) {
             field_FA6 = FALSE;
-            g_pBaldurChitin->m_pObjectCursor->SetCursor(0, TRUE);
-            g_pBaldurChitin->m_pObjectCursor->m_bVisible = TRUE;
+            g_pBaldurChitin->GetObjectCursor()->SetCursor(0, TRUE);
+            g_pBaldurChitin->GetObjectCursor()->m_bVisible = TRUE;
         }
 
         UpdateCursorShape(0);
 
         m_cUIManager.TimerAsynchronousUpdate();
-        g_pBaldurChitin->m_pObjectCursor->CursorUpdate(pVidMode);
+        g_pBaldurChitin->GetObjectCursor()->CursorUpdate(pVidMode);
 
         if (m_bExitProgram) {
             // TODO: Incomplete.

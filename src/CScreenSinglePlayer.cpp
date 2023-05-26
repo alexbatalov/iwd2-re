@@ -228,14 +228,14 @@ void CScreenSinglePlayer::OnLButtonDblClk(CPoint pt)
 // 0x636970
 void CScreenSinglePlayer::OnLButtonDown(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 0;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
     m_cUIManager.OnLButtonDown(pt);
 }
 
 // 0x6369A0
 void CScreenSinglePlayer::OnLButtonUp(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 0;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
     m_cUIManager.OnLButtonUp(pt);
 }
 
@@ -248,14 +248,14 @@ BOOL CScreenSinglePlayer::CheckMouseRButton()
 // 0x6369D0
 void CScreenSinglePlayer::OnRButtonDown(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 1;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
     m_cUIManager.OnRButtonDown(pt);
 }
 
 // 0x636A00
 void CScreenSinglePlayer::OnRButtonUp(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 0;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
     m_cUIManager.OnRButtonUp(pt);
 }
 
@@ -296,7 +296,7 @@ void CScreenSinglePlayer::EngineActivated()
 
     CheckEnableCharacters();
 
-    g_pBaldurChitin->m_pObjectCursor->SetCursor(0, FALSE);
+    g_pBaldurChitin->GetObjectCursor()->SetCursor(0, FALSE);
     m_cUIManager.InvalidateRect(NULL);
 
     if (field_45C == 1) {

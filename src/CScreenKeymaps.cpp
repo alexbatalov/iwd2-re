@@ -339,7 +339,7 @@ void CScreenKeymaps::OnLButtonDblClk(CPoint pt)
 // 0x6369A0
 void CScreenKeymaps::OnLButtonUp(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 0;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
     m_cUIManager.OnLButtonUp(pt);
 }
 
@@ -352,14 +352,14 @@ BOOL CScreenKeymaps::CheckMouseRButton()
 // 0x6369D0
 void CScreenKeymaps::OnRButtonDown(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 1;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
     m_cUIManager.OnRButtonDown(pt);
 }
 
 // 0x636A00
 void CScreenKeymaps::OnRButtonUp(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 0;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
     m_cUIManager.OnRButtonUp(pt);
 }
 
@@ -624,7 +624,7 @@ void CScreenKeymaps::HandleKeyDown(BYTE nKey)
 // 0x639790
 void CScreenKeymaps::OnLButtonDown(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 1;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
     m_cUIManager.OnLButtonDown(pt);
 
     CUIPanel* pPanel = m_cUIManager.GetPanel(0);
@@ -671,7 +671,7 @@ void CScreenKeymaps::TimerAsynchronousUpdate()
 {
     UpdateCursorShape(0);
     m_cUIManager.TimerAsynchronousUpdate();
-    g_pBaldurChitin->m_pObjectCursor->CursorUpdate(pVidMode);
+    g_pBaldurChitin->GetObjectCursor()->CursorUpdate(pVidMode);
 
     if (m_nSelectedKeymapIndex >= 0) {
         CUIPanel* pPanel = m_cUIManager.GetPanel(0);

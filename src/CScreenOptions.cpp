@@ -164,14 +164,14 @@ void CScreenOptions::OnLButtonDblClk(CPoint pt)
 // 0x636970
 void CScreenOptions::OnLButtonDown(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 1;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
     m_cUIManager.OnLButtonDown(pt);
 }
 
 // 0x6369A0
 void CScreenOptions::OnLButtonUp(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 0;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
     m_cUIManager.OnLButtonUp(pt);
 }
 
@@ -184,14 +184,14 @@ BOOL CScreenOptions::CheckMouseRButton()
 // 0x6369D0
 void CScreenOptions::OnRButtonDown(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 1;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
     m_cUIManager.OnRButtonDown(pt);
 }
 
 // 0x636A00
 void CScreenOptions::OnRButtonUp(CPoint pt)
 {
-    g_pBaldurChitin->m_pObjectCursor->m_nState = 0;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
     m_cUIManager.OnRButtonUp(pt);
 }
 
@@ -287,7 +287,7 @@ void CScreenOptions::EngineActivated()
             CheckEnableLeftPanel();
         }
 
-        g_pBaldurChitin->m_pObjectCursor->SetCursor(0, FALSE);
+        g_pBaldurChitin->GetObjectCursor()->SetCursor(0, FALSE);
         m_cUIManager.InvalidateRect(NULL);
         g_pBaldurChitin->m_pObjectGame->LoadKeymap();
     }
@@ -463,7 +463,7 @@ void CScreenOptions::TimerAsynchronousUpdate()
     g_pBaldurChitin->m_pEngineWorld->AsynchronousUpdate(FALSE);
     UpdateCursorShape(0);
     m_cUIManager.TimerAsynchronousUpdate();
-    g_pBaldurChitin->m_pObjectCursor->CursorUpdate(pVidMode);
+    g_pBaldurChitin->GetObjectCursor()->CursorUpdate(pVidMode);
 }
 
 // 0x654730

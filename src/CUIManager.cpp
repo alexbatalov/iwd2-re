@@ -213,7 +213,7 @@ void CUIManager::ClearTooltip()
     field_1C = 0;
     field_76 = 0;
 
-    CInfCursor* pCursor = g_pBaldurChitin->m_pObjectCursor;
+    CInfCursor* pCursor = g_pBaldurChitin->GetObjectCursor();
     if (pCursor->field_A02 != NULL) {
         pCursor->field_A02->ResetToolTip();
         pCursor->field_A02 = NULL;
@@ -231,9 +231,10 @@ void CUIManager::OnMouseMove(CPoint pt)
     field_1C = 0;
     field_76 = 0;
 
-    if (g_pBaldurChitin->m_pObjectCursor->field_A02 != NULL) {
-        g_pBaldurChitin->m_pObjectCursor->field_A02->ResetToolTip();
-        g_pBaldurChitin->m_pObjectCursor->field_A02 = NULL;
+    CInfCursor* pCursor = g_pBaldurChitin->GetObjectCursor();
+    if (pCursor->field_A02 != NULL) {
+        pCursor->field_A02->ResetToolTip();
+        pCursor->field_A02 = NULL;
     }
 
     if (g_pBaldurChitin->m_pObjectGame->field_1BA1 == 101) {
