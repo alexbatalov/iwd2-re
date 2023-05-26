@@ -28,6 +28,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CAIObjectType.h"
     "src/CAIResponse.cpp"
     "src/CAIResponse.h"
+    "src/CAIScriptFile.cpp"
+    "src/CAIScriptFile.h"
     "src/CAITrigger.cpp"
     "src/CAITrigger.h"
     "src/CAIUtil.cpp"
