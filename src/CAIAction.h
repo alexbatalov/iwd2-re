@@ -17,6 +17,8 @@ public:
     BOOL OfType(SHORT type) const;
     void Read(CString sData);
 
+    SHORT GetActionID() const;
+
     SHORT m_actionID;
     CAIObjectType m_actorID;
     CAIObjectType m_acteeID;

@@ -50,3 +50,9 @@ void CAIAction::Read(CString sData)
 {
     // TODO: Incomplete.
 }
+
+// 0x452B80
+SHORT CAIAction::GetActionID() const
+{
+    return m_actionID;
+}
