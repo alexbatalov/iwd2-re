@@ -1,5 +1,6 @@
 #include "CAIObjectType.h"
 
+#include "CGameAIBase.h"
 #include "CUtil.h"
 
 // 0x847C34
@@ -426,6 +427,12 @@ void CAIObjectType::Set(const CAIObjectType& type)
     }
 
     m_sName = type.m_sName;
+}
+
+// 0x40B880
+void CAIObjectType::Decode(CGameAIBase* caller)
+{
+    // TODO: Incomplete.
 }
 
 // 0x40CAC0

@@ -1,5 +1,7 @@
 #include "CAIAction.h"
 
+#include "CGameAIBase.h"
+
 // 0x847784
 const SHORT CAIAction::NO_ACTION = 0;
 
@@ -49,6 +51,13 @@ BOOL CAIAction::OfType(SHORT type) const
 void CAIAction::Read(CString sData)
 {
     // TODO: Incomplete.
+}
+
+void CAIAction::Decode(CGameAIBase* caller)
+{
+    m_actorID.Decode(caller);
+    m_acteeID.Decode(caller);
+    m_acteeID2.Decode(caller);
 }
 
 // 0x452B80

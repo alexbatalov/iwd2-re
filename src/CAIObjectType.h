@@ -75,6 +75,8 @@
 // here.
 #define CAIOBJECT_CLASS_MAX 11
 
+class CGameAIBase;
+
 class CAIObjectType {
 public:
     static const BYTE EA_ALL;
@@ -143,6 +145,7 @@ public:
     ~CAIObjectType();
     BOOL OfType(const CAIObjectType& type, BOOL bCheckForNonSprites, BOOL bNoNonSprites) const;
     void Set(const CAIObjectType& type);
+    void Decode(CGameAIBase* caller);
     CString GetName() const;
     BOOL Equal(const CAIObjectType& type) const;
     void SetSpecialCase(const BYTE* SpecialCase);

@@ -5,6 +5,8 @@
 
 #include "CAIObjectType.h"
 
+class CGameAIBase;
+
 class CAIAction {
 public:
     static const SHORT NO_ACTION;
@@ -16,6 +18,7 @@ public:
     ~CAIAction();
     BOOL OfType(SHORT type) const;
     void Read(CString sData);
+    void Decode(CGameAIBase* caller);
 
     SHORT GetActionID() const;
     CString GetString2() const;
