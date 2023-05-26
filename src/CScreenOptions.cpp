@@ -1009,7 +1009,7 @@ void CScreenOptions::LoadGame()
     if (g_pChitin->cNetwork.m_bConnectionEstablished) {
         nLoadState = 3;
 
-        if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE && !g_pBaldurChitin->m_pObjectGame->m_multiplayerSettings.m_bArbitrationLockStatus) {
+        if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE && !g_pBaldurChitin->m_pObjectGame->GetMultiplayerSettings()->m_bArbitrationLockStatus) {
             for (DWORD nIndex = 0; nIndex < 6; nIndex++) {
                 // NOTE: Looks like inlining.
                 LONG localObjectID;
@@ -1026,8 +1026,8 @@ void CScreenOptions::LoadGame()
         }
 
         g_pBaldurChitin->m_cBaldurMessage.ObjectControl();
-        pGame->m_multiplayerSettings.SetArbitrationLockAllowInput(FALSE);
-        pGame->m_multiplayerSettings.SetArbitrationLockStatus(TRUE, 1);
+        pGame->GetMultiplayerSettings()->SetArbitrationLockAllowInput(FALSE);
+        pGame->GetMultiplayerSettings()->SetArbitrationLockStatus(TRUE, 1);
     } else {
         nLoadState = 2;
     }

@@ -56,6 +56,7 @@ public:
 
     INT GetCurrentChapter();
     void SetCurrentChapter(INT nChapter);
+    CMultiplayerSettings* GetMultiplayerSettings();
     CGameArea* GetVisibleArea() { return m_gameAreas[m_visibleArea]; }
 
     static const CString FOGOWAR_RESREF;

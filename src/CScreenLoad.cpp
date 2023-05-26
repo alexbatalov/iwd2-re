@@ -344,8 +344,8 @@ void CScreenLoad::TimerAsynchronousUpdate()
 
     if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE) {
         CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
-        if (!pGame->m_multiplayerSettings.m_bArbitrationLockStatus) {
-            pGame->m_multiplayerSettings.SetArbitrationLockStatus(TRUE, 0);
+        if (!pGame->GetMultiplayerSettings()->m_bArbitrationLockStatus) {
+            pGame->GetMultiplayerSettings()->SetArbitrationLockStatus(TRUE, 0);
         }
     }
 }
@@ -436,9 +436,9 @@ void CScreenLoad::OnMainCancelButtonClick()
     case 3:
         if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE) {
             CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
-            if (pGame->m_multiplayerSettings.m_bArbitrationLockStatus == TRUE) {
-                pGame->m_multiplayerSettings.SetArbitrationLockAllowInput(TRUE);
-                pGame->m_multiplayerSettings.SetArbitrationLockStatus(FALSE, 0);
+            if (pGame->GetMultiplayerSettings()->m_bArbitrationLockStatus == TRUE) {
+                pGame->GetMultiplayerSettings()->SetArbitrationLockAllowInput(TRUE);
+                pGame->GetMultiplayerSettings()->SetArbitrationLockStatus(FALSE, 0);
             }
         }
 
@@ -452,9 +452,9 @@ void CScreenLoad::OnMainCancelButtonClick()
         // NOTE: Repeats code block above.
         if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE) {
             CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
-            if (pGame->m_multiplayerSettings.m_bArbitrationLockStatus == TRUE) {
-                pGame->m_multiplayerSettings.SetArbitrationLockAllowInput(TRUE);
-                pGame->m_multiplayerSettings.SetArbitrationLockStatus(FALSE, 0);
+            if (pGame->GetMultiplayerSettings()->m_bArbitrationLockStatus == TRUE) {
+                pGame->GetMultiplayerSettings()->SetArbitrationLockAllowInput(TRUE);
+                pGame->GetMultiplayerSettings()->SetArbitrationLockStatus(FALSE, 0);
             }
         }
 

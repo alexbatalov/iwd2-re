@@ -1017,3 +1017,9 @@ void CInfGame::SetCurrentChapter(INT nChapter)
 {
     // TODO: Incomplete.
 }
+
+// 0x453060
+CMultiplayerSettings* CInfGame::GetMultiplayerSettings()
+{
+    return &m_multiplayerSettings;
+}
