@@ -3,6 +3,12 @@
 #include "CUtil.h"
 #include "CVidInf.h"
 
+// 0x8FB980
+CTypedPtrList<CPtrList, CVidFontRegistryEntry*> CVidFont::REGISTRY;
+
+// 0x8FB9A0
+CCriticalSection CVidFont::REGISTRY_CRITICAL_SECTION;
+
 // 0x792CA0
 CVidFont::CVidFont()
 {

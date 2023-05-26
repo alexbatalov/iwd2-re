@@ -6,8 +6,16 @@
 #include "CResRef.h"
 #include "CVidCell.h"
 
+class CVidFontRegistryEntry {
+public:
+    unsigned int dummy;
+};
+
 class CVidFont : public CVidCell {
 public:
+    static CTypedPtrList<CPtrList, CVidFontRegistryEntry*> REGISTRY;
+    static CCriticalSection REGISTRY_CRITICAL_SECTION;
+
     CVidFont();
     ~CVidFont();
     LONG GetStringLength(const CString& sString, BOOLEAN bDemanded);
