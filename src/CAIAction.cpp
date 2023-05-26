@@ -56,3 +56,9 @@ SHORT CAIAction::GetActionID() const
 {
     return m_actionID;
 }
+
+// 0x452B90
+CString CAIAction::GetString2() const
+{
+    return m_string2;
+}

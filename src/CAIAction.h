@@ -18,6 +18,7 @@ public:
     void Read(CString sData);
 
     SHORT GetActionID() const;
+    CString GetString2() const;
 
     SHORT m_actionID;
     CAIObjectType m_actorID;
