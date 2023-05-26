@@ -2,6 +2,7 @@
 
 #include "CAIObjectType.h"
 #include "CBaldurChitin.h"
+#include "CDerivedStats.h"
 #include "CInfGame.h"
 #include "CTimerWorld.h"
 #include "CUtil.h"
@@ -2015,6 +2016,12 @@ void CRuleTables::GetClassStringMixed(BYTE nClass, DWORD nSpecialist, CString& s
 
     g_pBaldurChitin->m_cTlkTable.Fetch(strClass, strRes);
     sClass = strRes.szText;
+}
+
+// 0x5451B0
+int CRuleTables::GetRaiseDeadCost(const CAIObjectType& type, CDerivedStats& DStats) const
+{
+    return atol(m_tRaiseDeadCost.GetAt(CPoint(0, DStats.m_nLevel - 1)));
 }
 
 // 0x5452C0

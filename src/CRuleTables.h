@@ -7,6 +7,9 @@
 #include "C2DArray.h"
 #include "CAIIdList.h"
 
+class CAIObjectType;
+class CDerivedStats;
+
 class CRuleTables {
 public:
     static const DWORD TIME_RESTING;
@@ -383,6 +386,7 @@ public:
     BYTE GetStartingReputation(BYTE nAlignment) const;
     DWORD GetXPCap() const;
     void GetClassStringMixed(BYTE nClass, DWORD nSpecialist, CString& sClass);
+    INT GetRaiseDeadCost(const CAIObjectType& type, CDerivedStats& DStats) const;
     DWORD GetReputationDescription(SHORT nReputation) const;
     void GetIntoxicationInfo(BYTE nCON, INT& nIntoxicationRate, INT& nRecoveryRate, INT& nIntoxicationCap) const;
     BOOL GetCustomSound(CString& sName, BYTE nSoundId) const;
