@@ -56,6 +56,7 @@ public:
 
     INT GetCurrentChapter();
     void SetCurrentChapter(INT nChapter);
+    LONG GetCharacterId(SHORT nPortrait);
     CTimerWorld* GetWorldTimer();
     SHORT GetNumCharacters();
     CGameObjectArray* GetObjectArray();
@@ -114,7 +115,7 @@ public:
     /* 37E2 */ CGameArea* m_gameAreas[12];
     /* 3812 */ CGameArea* m_pGameAreaMaster;
     /* 3816 */ LONG m_characters[6];
-    /* 382E */ LONG m_nCharacterPortaits[6];
+    /* 382E */ LONG m_characterPortraits[6];
     /* 3846 */ SHORT m_nCharacters;
     /* 43E2 */ int field_43E2;
     /* 43EA */ CGameOptions m_cOptions; // #guess

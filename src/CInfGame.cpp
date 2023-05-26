@@ -848,7 +848,7 @@ SHORT CInfGame::GetCharacterPortaitNum(LONG nCharacterId)
 {
     if (nCharacterId != -1) {
         for (SHORT nPortrait = 0; nPortrait < 6; nPortrait++) {
-            if (m_nCharacterPortaits[nPortrait] == nCharacterId) {
+            if (m_characterPortraits[nPortrait] == nCharacterId) {
                 return nPortrait;
             }
         }
@@ -952,7 +952,7 @@ BYTE CInfGame::GetCharactersControlled()
     CGameObject* pObject;
 
     for (SHORT nIndex = 0; nIndex < m_nCharacters; nIndex++) {
-        LONG id = m_nCharacterPortaits[nIndex];
+        LONG id = m_characterPortraits[nIndex];
 
         BYTE rc;
         do {
@@ -1016,6 +1016,16 @@ INT CInfGame::GetCurrentChapter()
 void CInfGame::SetCurrentChapter(INT nChapter)
 {
     // TODO: Incomplete.
+}
+
+// 0x452FE0
+LONG CInfGame::GetCharacterId(SHORT nPortrait)
+{
+    if (nPortrait < m_nCharacters) {
+        return m_characterPortraits[nPortrait];
+    }
+
+    return CGameObjectArray::INVALID_OBJECT_ID;
 }
 
 // 0x453010
