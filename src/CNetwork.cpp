@@ -594,6 +594,12 @@ INT CNetwork::FindPlayerLocationByName(const CString& sPlayerName, BOOLEAN bInvi
     return -1;
 }
 
+// 0x452B40
+INT CNetwork::GetServiceProvider()
+{
+    return m_nServiceProvider;
+}
+
 // 0x452B50
 BOOLEAN CNetwork::GetSessionOpen()
 {

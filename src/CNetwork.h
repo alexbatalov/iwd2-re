@@ -55,6 +55,7 @@ public:
     INT FindPlayerLocationByID(PLAYER_ID playerID, BOOLEAN bInvisible);
     INT FindPlayerLocationByName(const CString& sPlayerName, BOOLEAN bInvisible);
 
+    INT GetServiceProvider();
     BOOLEAN GetSessionOpen();
     BOOLEAN GetSessionHosting();
 

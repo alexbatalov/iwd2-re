@@ -1165,7 +1165,7 @@ void CScreenConnection::UpdateMainPanel()
     // annoying warnings in the debug console.
     INT nServiceProviderType = -1;
 
-    if (g_pChitin->cNetwork.m_nServiceProvider == -1) {
+    if (g_pChitin->cNetwork.GetServiceProvider() == -1) {
         // "Single Player"
         pButton->SetText(FetchString(15413));
         g_pChitin->cNetwork.SelectServiceProvider(0);
@@ -1482,7 +1482,7 @@ void CScreenConnection::ResetProtocolPanel()
 {
     m_nProtocol = 0;
 
-    if (g_pChitin->cNetwork.m_nServiceProvider != -1) {
+    if (g_pChitin->cNetwork.GetServiceProvider() != -1) {
         INT nServiceProviderType;
         g_pChitin->cNetwork.GetServiceProviderType(g_pChitin->cNetwork.m_nServiceProvider, nServiceProviderType);
 
@@ -1993,7 +1993,7 @@ void CUIControlButtonConnectionJoinGame::OnLButtonClick(CPoint pt)
     // __LINE__: 7620
     UTIL_ASSERT(pConnection != NULL);
 
-    if (g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL
+    if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL
         && g_pBaldurChitin->cDimm.cResCache.m_nCacheSize < 175000000) {
         pConnection->m_nErrorState = 2;
         pConnection->m_strErrorText = 20692;

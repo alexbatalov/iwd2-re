@@ -230,7 +230,7 @@ void CScreenOptions::EngineActivated()
     if (CChitin::byte_8FB950
         && g_pChitin->cNetwork.GetSessionOpen() == TRUE
         && g_pChitin->cNetwork.GetSessionHosting() == TRUE
-        && g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
+        && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
         g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
     }
 
@@ -299,7 +299,7 @@ void CScreenOptions::EngineDeactivated()
     if (CChitin::byte_8FB950) {
         if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
             && g_pChitin->cNetwork.GetSessionHosting() == TRUE
-            && g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
+            && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
             if (!g_pBaldurChitin->m_pEngineWorld->m_bPaused) {
                 g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
             }
@@ -918,7 +918,7 @@ void CScreenOptions::QuitGame()
     SelectEngine(g_pBaldurChitin->m_pEngineConnection);
 
     if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
-        if (g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
+        if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
             g_pBaldurChitin->m_pEngineConnection->ShowSessionTerminatedMessage();
         }
 
@@ -1533,7 +1533,7 @@ void CScreenOptions::OnErrorButtonClick(INT nButton)
                 DismissPopup();
                 lock.Unlock();
 
-                if (g_pChitin->cNetwork.m_nServiceProvider == CNetwork::SERV_PROV_NULL) {
+                if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL) {
                     pGame->field_366E = 1;
                     pGame->field_50DC = 0;
 
@@ -2512,7 +2512,7 @@ void CUIControlButtonOptionsGameCommand::OnLButtonClick(CPoint pt)
             break;
         case 6:
             if (pGame->CanSaveGame(dwStrId, 0, 0)) {
-                if (g_pChitin->cNetwork.m_nServiceProvider == CNetwork::SERV_PROV_NULL) {
+                if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL) {
                     pGame->field_366E = 1;
                     pGame->field_50DC = 0;
 

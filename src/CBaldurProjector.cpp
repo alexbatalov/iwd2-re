@@ -236,7 +236,7 @@ void CBaldurProjector::EngineActivated()
     if (CChitin::byte_8FB950) {
         if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
             && g_pChitin->cNetwork.GetSessionHosting() == TRUE
-            && g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
+            && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
             g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
         }
 
@@ -292,7 +292,7 @@ void CBaldurProjector::EngineDeactivated()
     if (CChitin::byte_8FB950
         && g_pChitin->cNetwork.GetSessionOpen() == TRUE
         && g_pChitin->cNetwork.GetSessionHosting() == TRUE
-        && g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
+        && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
         g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
     }
 
@@ -475,7 +475,7 @@ void CBaldurProjector::TimerAsynchronousUpdate()
         }
 
         if (g_pChitin->cNetwork.GetSessionHosting() == 1
-            && g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
+            && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
             // TODO: Incomplete.
         }
 
@@ -484,8 +484,8 @@ void CBaldurProjector::TimerAsynchronousUpdate()
 
     if (g_pChitin->pActiveEngine == this && !m_bSelectEngine) {
         BOOLEAN v1 = byte_8CFF2C && m_bDeactivateEngine;
-        BOOLEAN v2 = (g_pChitin->cNetwork.m_nServiceProvider == CNetwork::SERV_PROV_NULL
-                         || g_pChitin->cNetwork.m_nServiceProvider == -1)
+        BOOLEAN v2 = (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
+                         || g_pChitin->cNetwork.GetServiceProvider() == -1)
             && (field_144 || field_145) && m_bDeactivateEngine;
 
         if (m_hBink != NULL) {

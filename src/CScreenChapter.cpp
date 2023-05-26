@@ -150,7 +150,7 @@ void CScreenChapter::EngineActivated()
     if (CChitin::byte_8FB950) {
         if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
             && g_pChitin->cNetwork.GetSessionHosting() == TRUE
-            && g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
+            && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
             g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
         }
     }
@@ -182,7 +182,7 @@ void CScreenChapter::EngineDeactivated()
     if (CChitin::byte_8FB950) {
         if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
             && g_pChitin->cNetwork.GetSessionHosting() == TRUE
-            && g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
+            && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
             if (!g_pBaldurChitin->m_pEngineWorld->m_bPaused) {
                 g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
             }
@@ -535,7 +535,7 @@ void CScreenChapter::UpdateMainPanel()
     UTIL_ASSERT(pButton != NULL);
 
     pButton->SetEnabled(!g_pBaldurChitin->cNetwork.GetSessionOpen()
-        || g_pChitin->cNetwork.m_nServiceProvider == CNetwork::SERV_PROV_NULL);
+        || g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL);
 
     pButton = static_cast<CUIControlButton*>(m_pMainPanel->GetControl(0));
 
@@ -561,7 +561,7 @@ void CScreenChapter::OnDoneButtonClick()
 
         SelectEngine(g_pBaldurChitin->m_pEngineWorld);
 
-        if (g_pBaldurChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL
+        if (g_pBaldurChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL
             && g_pBaldurChitin->cNetwork.GetSessionHosting() == TRUE) {
             // TODO: Incomplete.
             Sleep(25);
@@ -578,7 +578,7 @@ void CScreenChapter::OnDoneButtonClick()
         SelectEngine(g_pBaldurChitin->m_pEngineConnection);
 
         if (g_pChitin->cNetwork.GetSessionOpen() == 1) {
-            if (g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
+            if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
                 g_pBaldurChitin->m_pEngineConnection->ShowSessionTerminatedMessage();
             }
 
