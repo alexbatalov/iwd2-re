@@ -42,6 +42,7 @@ public:
 
     BOOLEAN Fetch(DWORD strId, STR_RES& strRes);
     void Remove(DWORD strId);
+    BOOL Open(const CString& a1, const CString& a2);
     void CloseFiles();
 
     /* 0000 */ CString field_0;

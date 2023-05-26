@@ -48,6 +48,14 @@ void CTlkFileOverride::Remove(DWORD strId)
     // TODO: Incomplete.
 }
 
+// 0x7B5A50
+BOOL CTlkFileOverride::Open(const CString& a1, const CString& a2)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x7B5C30
 void CTlkFileOverride::CloseFiles()
 {

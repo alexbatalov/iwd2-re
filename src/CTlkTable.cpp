@@ -37,9 +37,7 @@ CTlkTable::CTlkTable()
 // 0x793E90
 BOOL CTlkTable::OpenOverride(const CString& a1, const CString& a2)
 {
-    // TODO: Incomplete.
-
-    return FALSE;
+    return m_override.Open(a1, a2);
 }
 
 // 0x793EB0
