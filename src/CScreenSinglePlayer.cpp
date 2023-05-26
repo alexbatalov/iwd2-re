@@ -888,7 +888,7 @@ BOOL CScreenSinglePlayer::IsModifyButtonClickable()
 
     return !pGame->GetMultiplayerSettings()->field_B8
         && (g_pBaldurChitin->cNetwork.FindPlayerLocationByID(g_pBaldurChitin->cNetwork.field_6FA, FALSE) != -1
-            || g_pBaldurChitin->cNetwork.m_bIsHost)
+            || g_pBaldurChitin->cNetwork.GetSessionHosting())
         && field_45C == 2
         && pGame->GetMultiplayerSettings()->m_bArbitrationLockAllowInput;
 }
@@ -905,7 +905,7 @@ void CScreenSinglePlayer::OnModifyButtonClick()
     if (IsModifyButtonClickable()) {
         STRREF strError;
         if (pGame->CanSaveGame(strError, 0, 0)) {
-            if (g_pBaldurChitin->cNetwork.m_bIsHost) {
+            if (g_pBaldurChitin->cNetwork.GetSessionHosting()) {
                 pGame->MultiplayerSetCharacterCreationLocation();
                 pGame->GetMultiplayerSettings()->SetArbitrationLockStatus(TRUE, 0);
             }
@@ -957,7 +957,7 @@ void CScreenSinglePlayer::OnErrorButtonClick(INT nButton)
         case 0:
             if (1) {
                 CMultiplayerSettings* pSettings = g_pBaldurChitin->m_pObjectGame->GetMultiplayerSettings();
-                if (g_pBaldurChitin->cNetwork.m_bIsHost) {
+                if (g_pBaldurChitin->cNetwork.GetSessionHosting()) {
                     g_pBaldurChitin->m_pObjectGame->MultiplayerSetCharacterCreationLocation();
                     pSettings->SetArbitrationLockStatus(TRUE, 0);
                 } else {

@@ -599,3 +599,9 @@ BOOLEAN CNetwork::GetSessionOpen()
 {
     return m_bConnectionEstablished;
 }
+
+// 0x452B60
+BOOLEAN CNetwork::GetSessionHosting()
+{
+    return m_bIsHost;
+}

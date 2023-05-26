@@ -70,7 +70,7 @@ BOOLEAN CMultiplayerSettings::GetPermission(INT nPlayerSlot, INT nPermission)
 // 0x518220
 void CMultiplayerSettings::ResetPermissionsForPlayer(INT nPlayerSlot, BOOLEAN bFlush)
 {
-    if (g_pChitin->cNetwork.GetSessionOpen() && g_pChitin->cNetwork.m_bIsHost) {
+    if (g_pChitin->cNetwork.GetSessionOpen() && g_pChitin->cNetwork.GetSessionHosting()) {
         for (BYTE nPermission = 0; nPermission < CGamePermission::TOTAL_PERMISSIONS; nPermission++) {
             BOOLEAN bValue = m_cDefaultPermissions.GetSinglePermission(nPermission);
             m_pcPermissions[nPlayerSlot].SetSinglePermission(nPermission, bValue);
@@ -144,7 +144,7 @@ void CMultiplayerSettings::SetCharacterReady(INT nCharacterSlot, BOOLEAN bReady,
         "CMultiplayerSettings::SetCharacterReady: Bad Character Slot.");
 
     if (g_pChitin->cNetwork.GetSessionOpen()) {
-        if (g_pChitin->cNetwork.m_bIsHost) {
+        if (g_pChitin->cNetwork.GetSessionHosting()) {
             m_pbCharacterReady[nCharacterSlot] = bReady;
 
             if (bFlush == TRUE) {
@@ -175,7 +175,7 @@ void CMultiplayerSettings::SetImportingCharacterOption(BYTE nImportingBitField)
     UTIL_ASSERT(nImportingBitField == (IMPORT_ALL) || nImportingBitField == (IMPORT_EXPERIENCE | IMPORT_STATISTICS) || nImportingBitField == (IMPORT_STATISTICS));
 
     if (g_pChitin->cNetwork.GetSessionOpen()) {
-        if (g_pChitin->cNetwork.m_bIsHost) {
+        if (g_pChitin->cNetwork.GetSessionHosting()) {
             m_nImportingBitField = nImportingBitField;
             g_pBaldurChitin->m_cBaldurMessage.SendFullSettingsToClients(CString(""));
         } else {
@@ -188,7 +188,7 @@ void CMultiplayerSettings::SetImportingCharacterOption(BYTE nImportingBitField)
 void CMultiplayerSettings::SetRestrictStoreOption(BOOLEAN bRestrictStore)
 {
     if (g_pChitin->cNetwork.GetSessionOpen()) {
-        if (g_pChitin->cNetwork.m_bIsHost) {
+        if (g_pChitin->cNetwork.GetSessionHosting()) {
             m_bRestrictStoreOption = bRestrictStore;
             g_pBaldurChitin->m_cBaldurMessage.SendFullSettingsToClients(CString(""));
         } else {
@@ -201,7 +201,7 @@ void CMultiplayerSettings::SetRestrictStoreOption(BOOLEAN bRestrictStore)
 void CMultiplayerSettings::SetListenToJoinOption(BOOLEAN bListenToJoin, BOOLEAN bFlush)
 {
     if (g_pChitin->cNetwork.GetSessionOpen()) {
-        if (g_pChitin->cNetwork.m_bIsHost) {
+        if (g_pChitin->cNetwork.GetSessionHosting()) {
             m_bJoinRequests = bListenToJoin;
 
             g_pChitin->cNetwork.SetJoinEnabled(bListenToJoin);
@@ -222,7 +222,7 @@ void CMultiplayerSettings::SetArbitrationLockStatus(BOOLEAN bStatus, unsigned ch
     if (g_pChitin->cNetwork.GetSessionOpen()) {
         m_bArbitrationLockStatus = bStatus;
 
-        if (g_pChitin->cNetwork.m_bIsHost == TRUE) {
+        if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
             g_pBaldurChitin->m_cBaldurMessage.SendArbitrationLockStatus(bStatus, a2);
         }
     }
@@ -234,7 +234,7 @@ void CMultiplayerSettings::SetArbitrationLockAllowInput(BOOLEAN bAllowInput)
     if (g_pChitin->cNetwork.GetSessionOpen()) {
         m_bArbitrationLockAllowInput = bAllowInput;
 
-        if (g_pChitin->cNetwork.m_bIsHost == TRUE) {
+        if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
             g_pBaldurChitin->m_cBaldurMessage.SendArbitrationLockAllowInput(bAllowInput);
         }
     }
@@ -245,7 +245,7 @@ void CMultiplayerSettings::SetArbitrationLockAllowInput(BOOLEAN bAllowInput)
 // 0x5191B0
 void CMultiplayerSettings::SetCharacterCreationLocation(CString sAreaName, CPoint ptStart)
 {
-    if (g_pChitin->cNetwork.GetSessionOpen() && g_pChitin->cNetwork.m_bIsHost) {
+    if (g_pChitin->cNetwork.GetSessionOpen() && g_pChitin->cNetwork.GetSessionHosting()) {
         m_sAreaName = sAreaName;
         m_ptAreaStart = ptStart;
         g_pBaldurChitin->m_cBaldurMessage.SendFullSettingsToClients(CString(""));

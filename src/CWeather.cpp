@@ -85,7 +85,7 @@ void CWeather::CancelCurrentWeather(CGameArea* pArea, ULONG nCurrentTime)
         }
         m_nLastTimeChecked = nCurrentTime;
 
-        if (g_pBaldurChitin->cNetwork.GetSessionOpen() && g_pBaldurChitin->cNetwork.m_bIsHost) {
+        if (g_pBaldurChitin->cNetwork.GetSessionOpen() && g_pBaldurChitin->cNetwork.GetSessionHosting()) {
             g_pBaldurChitin->m_cBaldurMessage.WeatherBroadcast(Marshal());
         }
     }
@@ -195,7 +195,7 @@ void CWeather::ResetWeather(CGameArea* pArea)
 // 0x556190
 void CWeather::SetCurrentWeather(CGameArea* pArea, WORD wWeatherFlags)
 {
-    if (!g_pBaldurChitin->cNetwork.GetSessionOpen() || !g_pBaldurChitin->cNetwork.m_bIsHost) {
+    if (!g_pBaldurChitin->cNetwork.GetSessionOpen() || !g_pBaldurChitin->cNetwork.GetSessionHosting()) {
         CancelCurrentWeather(pArea, g_pBaldurChitin->m_pObjectGame->m_worldTime.m_gameTime);
         if (g_pBaldurChitin->m_pObjectGame->m_cOptions.m_bWeatherEnabled) {
             // NOTE: Uninline.

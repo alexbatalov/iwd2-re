@@ -229,7 +229,7 @@ void CScreenOptions::EngineActivated()
 {
     if (CChitin::byte_8FB950
         && g_pChitin->cNetwork.GetSessionOpen() == TRUE
-        && g_pChitin->cNetwork.m_bIsHost == TRUE
+        && g_pChitin->cNetwork.GetSessionHosting() == TRUE
         && g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
         g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
     }
@@ -298,7 +298,7 @@ void CScreenOptions::EngineDeactivated()
 {
     if (CChitin::byte_8FB950) {
         if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
-            && g_pChitin->cNetwork.m_bIsHost == TRUE
+            && g_pChitin->cNetwork.GetSessionHosting() == TRUE
             && g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
             if (!g_pBaldurChitin->m_pEngineWorld->m_bPaused) {
                 g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
@@ -726,10 +726,10 @@ void CScreenOptions::UpdateMainPanel()
         CUIControlButton* pButton;
 
         pButton = static_cast<CUIControlButton*>(pPanel->GetControl(5));
-        pButton->SetEnabled(g_pChitin->cNetwork.m_bIsHost);
+        pButton->SetEnabled(g_pChitin->cNetwork.GetSessionHosting());
 
         pButton = static_cast<CUIControlButton*>(pPanel->GetControl(6));
-        pButton->SetEnabled(g_pChitin->cNetwork.m_bIsHost);
+        pButton->SetEnabled(g_pChitin->cNetwork.GetSessionHosting());
     }
 
     CString sFormattedVersion;
@@ -1300,7 +1300,7 @@ void CScreenOptions::UpdateGamePlayPanel(BOOLEAN bInitialUpdate)
     pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(12));
     UTIL_ASSERT(pSlider != NULL); // 2219
 
-    if (g_pBaldurChitin->cNetwork.GetSessionOpen() && !g_pBaldurChitin->cNetwork.m_bIsHost) {
+    if (g_pBaldurChitin->cNetwork.GetSessionOpen() && !g_pBaldurChitin->cNetwork.GetSessionHosting()) {
         switch (pOptions->m_nMPDifficultyMultiplier) {
         case -25:
             pOptions->m_nDifficultyLevel = 2;
@@ -2321,7 +2321,7 @@ void CUIControlSliderOptionsSlider::OnThumbFinalChange()
 
             if (pOptions->m_nMPDifficultyMultiplier != pOptions->m_nDifficultyMultiplier) {
                 if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
-                    && g_pChitin->cNetwork.m_bIsHost == TRUE) {
+                    && g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
                     // 11314 - "Difficulty Level"
                     g_pBaldurChitin->m_cBaldurMessage.sub_43E0E0(11314,
                         dwNewDifficultyStrId,
@@ -2334,7 +2334,7 @@ void CUIControlSliderOptionsSlider::OnThumbFinalChange()
                 }
 
                 if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
-                    && g_pChitin->cNetwork.m_bIsHost == TRUE) {
+                    && g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
                     g_pBaldurChitin->m_cBaldurMessage.SendFullSettingsToClients(CString(""));
                 }
             }

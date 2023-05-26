@@ -149,7 +149,7 @@ void CScreenChapter::EngineActivated()
 {
     if (CChitin::byte_8FB950) {
         if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
-            && g_pChitin->cNetwork.m_bIsHost == TRUE
+            && g_pChitin->cNetwork.GetSessionHosting() == TRUE
             && g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
             g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
         }
@@ -181,7 +181,7 @@ void CScreenChapter::EngineDeactivated()
 {
     if (CChitin::byte_8FB950) {
         if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
-            && g_pChitin->cNetwork.m_bIsHost == TRUE
+            && g_pChitin->cNetwork.GetSessionHosting() == TRUE
             && g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
             if (!g_pBaldurChitin->m_pEngineWorld->m_bPaused) {
                 g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
@@ -262,7 +262,7 @@ void CScreenChapter::OnKeyDown(SHORT nKeysFlags)
                     m_cUIManager.ForceToolTip();
                     break;
                 case VK_RETURN:
-                    if (g_pBaldurChitin->cNetwork.m_bIsHost == TRUE) {
+                    if (g_pBaldurChitin->cNetwork.GetSessionHosting() == TRUE) {
                         OnDoneButtonClick();
                     }
                     break;
@@ -543,7 +543,7 @@ void CScreenChapter::UpdateMainPanel()
     // __LINE__: 1032
     UTIL_ASSERT(pButton != NULL);
 
-    pButton->SetEnabled(g_pChitin->cNetwork.m_bIsHost == TRUE);
+    pButton->SetEnabled(g_pChitin->cNetwork.GetSessionHosting() == TRUE);
 }
 
 // 0x5D4190
@@ -562,7 +562,7 @@ void CScreenChapter::OnDoneButtonClick()
         SelectEngine(g_pBaldurChitin->m_pEngineWorld);
 
         if (g_pBaldurChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL
-            && g_pBaldurChitin->cNetwork.m_bIsHost == TRUE) {
+            && g_pBaldurChitin->cNetwork.GetSessionHosting() == TRUE) {
             // TODO: Incomplete.
             Sleep(25);
         }
@@ -725,7 +725,7 @@ void CScreenChapter::StopText(BOOL bNotifyServer)
 
         if (bNotifyServer) {
             if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
-                && !g_pChitin->cNetwork.m_bIsHost) {
+                && !g_pChitin->cNetwork.GetSessionHosting()) {
                 g_pBaldurChitin->m_cBaldurMessage.SendSignal(CBaldurMessage::SIGNAL_SERVER,
                     CBaldurMessage::SIGNAL_END_MAJOR_EVENT);
             }

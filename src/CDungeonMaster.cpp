@@ -22,7 +22,7 @@ void CDungeonMaster::EngineActivated()
 {
     if (CChitin::byte_8FB950
         && g_pChitin->cNetwork.GetSessionOpen() == TRUE
-        && g_pChitin->cNetwork.m_bIsHost == TRUE
+        && g_pChitin->cNetwork.GetSessionHosting() == TRUE
         && g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
         g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
     }
@@ -37,7 +37,7 @@ void CDungeonMaster::EngineDeactivated()
 {
     if (CChitin::byte_8FB950
         && g_pChitin->cNetwork.GetSessionOpen() == TRUE
-        && g_pChitin->cNetwork.m_bIsHost == 1
+        && g_pChitin->cNetwork.GetSessionHosting() == TRUE
         && g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
         g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
     }
