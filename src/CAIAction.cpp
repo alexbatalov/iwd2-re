@@ -62,3 +62,9 @@ CString CAIAction::GetString2() const
 {
     return m_string2;
 }
+
+// 0x452BC0
+DWORD CAIAction::GetFlags() const
+{
+    return m_internalFlags;
+}

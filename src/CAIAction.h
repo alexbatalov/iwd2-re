@@ -19,6 +19,7 @@ public:
 
     SHORT GetActionID() const;
     CString GetString2() const;
+    DWORD GetFlags() const;
 
     SHORT m_actionID;
     CAIObjectType m_actorID;
