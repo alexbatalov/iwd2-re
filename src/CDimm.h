@@ -74,6 +74,8 @@ public:
     BOOL WriteSetUp(const CString& a2, CString& a3);
     BOOL Alloc(CRes* pRes, DWORD nSize);
 
+    CString GetCDSwitchDriveLetter();
+
     /* 0000 */ int field_0;
     /* 0004 */ int field_4;
     /* 0008 */ short field_8;
@@ -102,7 +104,7 @@ public:
     /* 0295 */ unsigned char field_295;
     /* 0296 */ unsigned char field_296;
     /* 0297 */ unsigned char field_297;
-    /* 0298 */ CString field_298;
+    /* 0298 */ CString m_sCDSwitchDriveLetter;
     /* 029C */ int field_29C;
     /* 02A0 */ int field_2A0;
     /* 02A4 */ unsigned char field_2A4;

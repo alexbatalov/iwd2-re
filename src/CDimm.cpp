@@ -2240,3 +2240,9 @@ BOOL CDimm::Alloc(CRes* pRes, DWORD nSize)
 
     return TRUE;
 }
+
+// 0x790DE0
+CString CDimm::GetCDSwitchDriveLetter()
+{
+    return m_sCDSwitchDriveLetter;
+}
