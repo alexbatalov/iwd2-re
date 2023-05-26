@@ -9,6 +9,7 @@
 
 class CAIObjectType;
 class CDerivedStats;
+class CGameSprite;
 
 class CRuleTables {
 public:
@@ -368,12 +369,19 @@ public:
 
     CRuleTables();
     ~CRuleTables();
+    INT GetTrapSenseBonus(CDerivedStats& DStats) const;
     const CString GetRaceString(BYTE nRace, BYTE nSubRace) const;
     const CString GetAlignmentString(BYTE nAlignment) const;
     const CString GetClassString(BYTE nClass, DWORD nSpecialist) const;
     STRREF GetClassSuffixStringRef(BYTE nClass) const;
     STRREF GetClassBeyondCastingAbilityStringRef(BYTE nClass) const;
     STRREF GetClassDescriptionStringRef(BYTE nClass, DWORD nSpecialist) const;
+    int sub_542560(unsigned short a1, unsigned short a2) const;
+    void sub_5425E0(const CAIObjectType& typeAI, int a2, BYTE& a3, BYTE& a4, BYTE& a5, BYTE& a6, BYTE& a7, BYTE& a8) const;
+    INT FindSavingThrow(CDerivedStats& stats, const CString& sSavingThrow) const;
+    INT GetSavingThrow(const CAIObjectType& typeAI, CDerivedStats& DStats, BYTE nCON, const CString& sSavingThrow) const;
+    INT GetStartingGold(CGameSprite* pSprite) const;
+    INT GetStartingExperiencePoints(CGameSprite* pSprite) const;
     void GetStartArea(CResRef& cResArea, CPoint& ptView) const;
     CPoint GetStartPoint(INT nCharacterSlot) const;
     int GetStartRotation(INT nCharacterSlot) const;

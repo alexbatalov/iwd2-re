@@ -3,6 +3,7 @@
 #include "CAIObjectType.h"
 #include "CBaldurChitin.h"
 #include "CDerivedStats.h"
+#include "CGameSprite.h"
 #include "CInfGame.h"
 #include "CTimerWorld.h"
 #include "CUtil.h"
@@ -1376,6 +1377,19 @@ CRuleTables::~CRuleTables()
 {
 }
 
+// 0x5418E0
+INT CRuleTables::GetTrapSenseBonus(CDerivedStats& DStats) const
+{
+    INT nBonus = 0;
+    CPoint pt(0, 0);
+    for (int iClassType = 1; iClassType <= CAIOBJECT_CLASS_MAX; iClassType++) {
+        pt.y = DStats.GetClassLevel(iClassType) - 1;
+        pt.x = iClassType - 1;
+        nBonus += m_tTrapSave.GetAtLong(pt);
+    }
+    return nBonus;
+}
+
 // 0x541940
 const CString CRuleTables::GetRaceString(BYTE nRace, BYTE nSubRace) const
 {
@@ -1770,6 +1784,156 @@ STRREF CRuleTables::GetClassDescriptionStringRef(BYTE nClass, DWORD nSpecialist)
     return -1;
 }
 
+// 0x542560
+int CRuleTables::sub_542560(unsigned short a1, unsigned short a2) const
+{
+    if (a1 == 0) {
+        return 0;
+    }
+
+    if (a2 == 0) {
+        a2 = 1;
+    }
+
+    return atol(m_tMoncRate.GetAt(CPoint(a1 - 1, a2 - 1)));
+}
+
+// 0x5425E0
+void CRuleTables::sub_5425E0(const CAIObjectType& typeAI, int a2, BYTE& a3, BYTE& a4, BYTE& a5, BYTE& a6, BYTE& a7, BYTE& a8) const
+{
+    a3 = 0x80;
+    a4 = 0x80;
+    a5 = 0x80;
+    a6 = 0x80;
+    a7 = 0x80;
+    a8 = 0x80;
+}
+
+// 0x542610
+INT CRuleTables::FindSavingThrow(CDerivedStats& DStats, const CString& sSavingThrow) const
+{
+
+    CString sLevel;
+    int nLevel;
+    INT nSavingThrow = 0;
+
+    nLevel = DStats.GetClassLevel(CAIOBJECTTYPE_C_BARBARIAN);
+    if (nLevel != 0) {
+        sLevel.Format("%d", nLevel);
+        nSavingThrow += atol(m_tSavingThrowWarrior.GetAt(sSavingThrow, sLevel));
+    }
+
+    nLevel = DStats.GetClassLevel(CAIOBJECTTYPE_C_BARD);
+    if (nLevel != 0) {
+        sLevel.Format("%d", nLevel);
+        nSavingThrow += atol(m_tSavingThrowBard.GetAt(sSavingThrow, sLevel));
+    }
+
+    nLevel = DStats.GetClassLevel(CAIOBJECTTYPE_C_CLERIC);
+    if (nLevel != 0) {
+        sLevel.Format("%d", nLevel);
+        nSavingThrow += atol(m_tSavingThrowPriest.GetAt(sSavingThrow, sLevel));
+    }
+
+    nLevel = DStats.GetClassLevel(CAIOBJECTTYPE_C_DRUID);
+    if (nLevel != 0) {
+        sLevel.Format("%d", nLevel);
+        nSavingThrow += atol(m_tSavingThrowPriest.GetAt(sSavingThrow, sLevel));
+    }
+
+    nLevel = DStats.GetClassLevel(CAIOBJECTTYPE_C_FIGHTER);
+    if (nLevel != 0) {
+        sLevel.Format("%d", nLevel);
+        nSavingThrow += atol(m_tSavingThrowWarrior.GetAt(sSavingThrow, sLevel));
+    }
+
+    nLevel = DStats.GetClassLevel(CAIOBJECTTYPE_C_MONK);
+    if (nLevel != 0) {
+        sLevel.Format("%d", nLevel);
+        nSavingThrow += atol(m_tSavingThrowMonk.GetAt(sSavingThrow, sLevel));
+    }
+
+    nLevel = DStats.GetClassLevel(CAIOBJECTTYPE_C_PALADIN);
+    if (nLevel != 0) {
+        sLevel.Format("%d", nLevel);
+        nSavingThrow += atol(m_tSavingThrowWarrior.GetAt(sSavingThrow, sLevel));
+    }
+
+    nLevel = DStats.GetClassLevel(CAIOBJECTTYPE_C_RANGER);
+    if (nLevel != 0) {
+        sLevel.Format("%d", nLevel);
+        nSavingThrow += atol(m_tSavingThrowWarrior.GetAt(sSavingThrow, sLevel));
+    }
+
+    nLevel = DStats.GetClassLevel(CAIOBJECTTYPE_C_ROGUE);
+    if (nLevel != 0) {
+        sLevel.Format("%d", nLevel);
+        nSavingThrow += atol(m_tSavingThrowRogue.GetAt(sSavingThrow, sLevel));
+    }
+
+    nLevel = DStats.GetClassLevel(CAIOBJECTTYPE_C_SORCERER);
+    if (nLevel != 0) {
+        sLevel.Format("%d", nLevel);
+        nSavingThrow += atol(m_tSavingThrowWizard.GetAt(sSavingThrow, sLevel));
+    }
+
+    nLevel = DStats.GetClassLevel(CAIOBJECTTYPE_C_WIZARD);
+    if (nLevel != 0) {
+        sLevel.Format("%d", nLevel);
+        nSavingThrow += atol(m_tSavingThrowWizard.GetAt(sSavingThrow, sLevel));
+    }
+
+    return nSavingThrow;
+}
+
+// 0x5429B0
+INT CRuleTables::GetSavingThrow(const CAIObjectType& typeAI, CDerivedStats& DStats, BYTE nCON, const CString& sSavingThrow) const
+{
+    INT nSavingThrow = FindSavingThrow(DStats, sSavingThrow);
+
+    CString sRace = GetRaceString(typeAI.m_nRace, typeAI.m_nSubRace);
+    nSavingThrow += atol(m_tSavingThrowRace.GetAt(sSavingThrow, sRace));
+
+    nSavingThrow = min(nSavingThrow, 40);
+    nSavingThrow = max(nSavingThrow, -40);
+    return nSavingThrow;
+}
+
+// 0x542FE0
+INT CRuleTables::GetStartingGold(CGameSprite* pSprite) const
+{
+    INT nGold = 0;
+
+    INT nBestClass = pSprite->m_derivedStats.GetBestClass();
+    CString sBestClass = GetClassString(nBestClass, 0);
+
+    INT nSides = atol(m_tStartingGold.GetAt(SIDES, sBestClass));
+    INT nRolls = atol(m_tStartingGold.GetAt(ROLLS, sBestClass));
+    INT nModifier = atol(m_tStartingGold.GetAt(MODIFIER, sBestClass));
+    INT nMultiplier = atol(m_tStartingGold.GetAt(MULTIPLIER, sBestClass));
+
+    while (nRolls > 0) {
+        nGold += nModifier + rand() % nSides + 1;
+        nRolls--;
+    }
+
+    nGold *= nMultiplier;
+
+    DWORD nBestClassLevel = pSprite->m_derivedStats.GetClassLevel(nBestClass);
+    if (nBestClassLevel > 1) {
+        nGold += atol(m_tStartingGold.GetAt(BONUS_PER_LEVEL, sBestClass)) * (nBestClassLevel - 1);
+    }
+
+    return nGold;
+}
+
+// 0x543140
+INT CRuleTables::GetStartingExperiencePoints(CGameSprite* pSprite) const
+{
+    CString sRace = GetRaceString(pSprite->m_startTypeAI.m_nRace, pSprite->m_startTypeAI.m_nSubRace);
+    return atol(m_tStartingExperiencePoints.GetAt(VALUE, sRace));
+}
+
 // 0x5439B0
 void CRuleTables::GetStartArea(CResRef& cResArea, CPoint& ptView) const
 {
@@ -1969,7 +2133,8 @@ BOOL CRuleTables::IsUsableByAlignment(DWORD dwNotUsableBy, BYTE nAlignment) cons
 BYTE CRuleTables::GetStartingReputation(BYTE nAlignment) const
 {
     CString sAlignment = GetAlignmentString(nAlignment);
-    return atol(m_tReputationStart.GetAt(VALUE, sAlignment));
+    // TODO: Check cast.
+    return static_cast<BYTE>(atol(m_tReputationStart.GetAt(VALUE, sAlignment)));
 }
 
 // #guess
@@ -2162,8 +2327,9 @@ BOOL CRuleTables::Is3DSound(int nSoundChannel) const
 // 0x5457F0
 float CRuleTables::GetSoundReverbMix(int nSoundChannel, int nReverb) const
 {
-    float v1 = atof(m_tSoundChannel.GetAt(CPoint(2, nSoundChannel)));
-    float v2 = atof(m_tReverb.GetAt(CPoint(4, nReverb)));
+    // TODO: Check casts.
+    float v1 = static_cast<float>(atof(m_tSoundChannel.GetAt(CPoint(2, nSoundChannel))));
+    float v2 = static_cast<float>(atof(m_tReverb.GetAt(CPoint(4, nReverb))));
     return v1 * v2;
 }
 
@@ -2174,9 +2340,10 @@ int CRuleTables::GetSoundEnvironment(EAXPRESET& preset, int nReverb) const
 
     CString sEnvironment = m_tReverb.GetAt(CPoint(0, nPreset));
 
-    preset.fVolume = atof(m_tReverb.GetAt(CPoint(1, nPreset)));
-    preset.fDecayTime = atof(m_tReverb.GetAt(CPoint(2, nPreset)));
-    preset.fDaming = atof(m_tReverb.GetAt(CPoint(3, nPreset)));
+    // TODO: Check casts.
+    preset.fVolume = static_cast<float>(atof(m_tReverb.GetAt(CPoint(1, nPreset))));
+    preset.fDecayTime = static_cast<float>(atof(m_tReverb.GetAt(CPoint(2, nPreset))));
+    preset.fDaming = static_cast<float>(atof(m_tReverb.GetAt(CPoint(3, nPreset))));
 
     CAIId* id = m_lEAXEnvironment.Find(sEnvironment, TRUE);
     if (id != NULL) {
