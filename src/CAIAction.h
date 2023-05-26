@@ -23,6 +23,11 @@ public:
     SHORT GetActionID() const;
     CString GetString2() const;
     DWORD GetFlags() const;
+    const CAIObjectType& GetActee2() const;
+    LONG GetSpecifics() const;
+    LONG GetSpecifics2() const;
+    LONG GetSpecifics3() const;
+    CString GetString1() const;
 
     SHORT m_actionID;
     CAIObjectType m_actorID;

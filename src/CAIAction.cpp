@@ -77,3 +77,33 @@ DWORD CAIAction::GetFlags() const
 {
     return m_internalFlags;
 }
+
+// 0x41E170
+const CAIObjectType& CAIAction::GetActee2() const
+{
+    return m_acteeID2;
+}
+
+// 0x41E180
+LONG CAIAction::GetSpecifics() const
+{
+    return m_specificID;
+}
+
+// 0x41E190
+LONG CAIAction::GetSpecifics2() const
+{
+    return m_specificID2;
+}
+
+// 0x41E1A0
+LONG CAIAction::GetSpecifics3() const
+{
+    return m_specificID3;
+}
+
+// 0x41E1B0
+CString CAIAction::GetString1() const
+{
+    return m_string1;
+}
