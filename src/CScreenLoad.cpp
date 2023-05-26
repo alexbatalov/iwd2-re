@@ -162,7 +162,7 @@ CScreenLoad::~CScreenLoad()
 void CScreenLoad::EngineActivated()
 {
     if (CChitin::byte_8FB950
-        && g_pChitin->cNetwork.m_bConnectionEstablished == TRUE
+        && g_pChitin->cNetwork.GetSessionOpen() == TRUE
         && g_pChitin->cNetwork.m_bIsHost == TRUE
         && g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
         g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
@@ -190,7 +190,7 @@ void CScreenLoad::EngineActivated()
 void CScreenLoad::EngineDeactivated()
 {
     if (CChitin::byte_8FB950
-        && g_pChitin->cNetwork.m_bConnectionEstablished == TRUE
+        && g_pChitin->cNetwork.GetSessionOpen() == TRUE
         && g_pChitin->cNetwork.m_bIsHost == TRUE
         && g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
         if (!g_pBaldurChitin->m_pEngineWorld->m_bPaused) {
@@ -342,7 +342,7 @@ void CScreenLoad::TimerAsynchronousUpdate()
     m_cUIManager.TimerAsynchronousUpdate();
     g_pBaldurChitin->m_pObjectCursor->CursorUpdate(pVidMode);
 
-    if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE) {
+    if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
         CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
         if (!pGame->GetMultiplayerSettings()->m_bArbitrationLockStatus) {
             pGame->GetMultiplayerSettings()->SetArbitrationLockStatus(TRUE, 0);
@@ -434,7 +434,7 @@ void CScreenLoad::OnMainCancelButtonClick()
         break;
     case 1:
     case 3:
-        if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE) {
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
             CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
             if (pGame->GetMultiplayerSettings()->m_bArbitrationLockStatus == TRUE) {
                 pGame->GetMultiplayerSettings()->SetArbitrationLockAllowInput(TRUE);
@@ -450,7 +450,7 @@ void CScreenLoad::OnMainCancelButtonClick()
         }
 
         // NOTE: Repeats code block above.
-        if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE) {
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
             CInfGame* pGame = g_pBaldurChitin->m_pObjectGame;
             if (pGame->GetMultiplayerSettings()->m_bArbitrationLockStatus == TRUE) {
                 pGame->GetMultiplayerSettings()->SetArbitrationLockAllowInput(TRUE);

@@ -55,6 +55,8 @@ public:
     INT FindPlayerLocationByID(PLAYER_ID playerID, BOOLEAN bInvisible);
     INT FindPlayerLocationByName(const CString& sPlayerName, BOOLEAN bInvisible);
 
+    BOOLEAN GetSessionOpen();
+
     static const INT MAX_SERVICE_PROVIDERS;
 
     static const INT SERV_PROV_TCP_IP;

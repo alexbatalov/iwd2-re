@@ -267,7 +267,7 @@ CScreenSave::~CScreenSave()
 void CScreenSave::EngineActivated()
 {
     if (CChitin::byte_8FB950
-        && g_pChitin->cNetwork.m_bConnectionEstablished == TRUE
+        && g_pChitin->cNetwork.GetSessionOpen() == TRUE
         && g_pChitin->cNetwork.m_bIsHost == TRUE
         && g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
         g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
@@ -288,7 +288,7 @@ void CScreenSave::EngineActivated()
 void CScreenSave::EngineDeactivated()
 {
     if (CChitin::byte_8FB950
-        && g_pChitin->cNetwork.m_bConnectionEstablished == TRUE
+        && g_pChitin->cNetwork.GetSessionOpen() == TRUE
         && g_pChitin->cNetwork.m_bIsHost == TRUE
         && g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
         if (!g_pBaldurChitin->m_pEngineWorld->m_bPaused) {

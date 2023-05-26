@@ -339,7 +339,7 @@ BYTE CGameObjectArray::Add(LONG* index, CGameObject* ptr, DWORD dwTimeOut)
     type.m_nInstance = *index;
     ptr->SetAIType(type, 0);
 
-    if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE) {
+    if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
         // TODO: Incomplete.
     }
 

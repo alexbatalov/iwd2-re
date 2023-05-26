@@ -148,7 +148,7 @@ CScreenChapter::~CScreenChapter()
 void CScreenChapter::EngineActivated()
 {
     if (CChitin::byte_8FB950) {
-        if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
             && g_pChitin->cNetwork.m_bIsHost == TRUE
             && g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
             g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
@@ -180,7 +180,7 @@ void CScreenChapter::EngineActivated()
 void CScreenChapter::EngineDeactivated()
 {
     if (CChitin::byte_8FB950) {
-        if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
             && g_pChitin->cNetwork.m_bIsHost == TRUE
             && g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
             if (!g_pBaldurChitin->m_pEngineWorld->m_bPaused) {
@@ -350,7 +350,7 @@ void CScreenChapter::TimerAsynchronousUpdate()
             nElapsed = nTickCount - m_nEndTime;
         }
 
-        if (nElapsed > 2000 && g_pBaldurChitin->cNetwork.m_bConnectionEstablished) {
+        if (nElapsed > 2000 && g_pBaldurChitin->cNetwork.GetSessionOpen()) {
             OnDoneButtonClick();
         }
     }
@@ -534,7 +534,7 @@ void CScreenChapter::UpdateMainPanel()
     // __LINE__: 1027
     UTIL_ASSERT(pButton != NULL);
 
-    pButton->SetEnabled(!g_pBaldurChitin->cNetwork.m_bConnectionEstablished
+    pButton->SetEnabled(!g_pBaldurChitin->cNetwork.GetSessionOpen()
         || g_pChitin->cNetwork.m_nServiceProvider == CNetwork::SERV_PROV_NULL);
 
     pButton = static_cast<CUIControlButton*>(m_pMainPanel->GetControl(0));
@@ -577,7 +577,7 @@ void CScreenChapter::OnDoneButtonClick()
 
         SelectEngine(g_pBaldurChitin->m_pEngineConnection);
 
-        if (g_pChitin->cNetwork.m_bConnectionEstablished == 1) {
+        if (g_pChitin->cNetwork.GetSessionOpen() == 1) {
             if (g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
                 g_pBaldurChitin->m_pEngineConnection->ShowSessionTerminatedMessage();
             }
@@ -724,7 +724,7 @@ void CScreenChapter::StopText(BOOL bNotifyServer)
         m_pTextList = NULL;
 
         if (bNotifyServer) {
-            if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE
+            if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
                 && !g_pChitin->cNetwork.m_bIsHost) {
                 g_pBaldurChitin->m_cBaldurMessage.SendSignal(CBaldurMessage::SIGNAL_SERVER,
                     CBaldurMessage::SIGNAL_END_MAJOR_EVENT);

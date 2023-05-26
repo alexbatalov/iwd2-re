@@ -116,10 +116,10 @@ void CTimerWorld::AdvanceCurrentTime(ULONG gameTime)
     }
 
     if (deltaTime > 900) {
-        if (g_pChitin->cNetwork.m_bIsHost || g_pChitin->cNetwork.m_bConnectionEstablished != TRUE) {
+        if (g_pChitin->cNetwork.m_bIsHost || g_pChitin->cNetwork.GetSessionOpen() != TRUE) {
             m_gameTime += deltaTime;
 
-            if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE && g_pChitin->cNetwork.m_bIsHost == TRUE) {
+            if (g_pChitin->cNetwork.GetSessionOpen() == TRUE && g_pChitin->cNetwork.m_bIsHost == TRUE) {
                 g_pBaldurChitin->m_cBaldurMessage.TimeSynchBroadcast(m_gameTime, true);
                 CheckForTriggerEventPast();
                 g_pBaldurChitin->m_pEngineWorld->CompressTime(gameTime);
@@ -134,10 +134,10 @@ void CTimerWorld::AdvanceCurrentTime(ULONG gameTime)
 void CTimerWorld::AddCurrentTime(ULONG gameTime)
 {
     if (gameTime > 900) {
-        if (g_pChitin->cNetwork.m_bIsHost || g_pChitin->cNetwork.m_bConnectionEstablished != TRUE) {
+        if (g_pChitin->cNetwork.m_bIsHost || g_pChitin->cNetwork.GetSessionOpen() != TRUE) {
             m_gameTime += gameTime;
 
-            if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE && g_pChitin->cNetwork.m_bIsHost == TRUE) {
+            if (g_pChitin->cNetwork.GetSessionOpen() == TRUE && g_pChitin->cNetwork.m_bIsHost == TRUE) {
                 g_pBaldurChitin->m_cBaldurMessage.TimeSynchBroadcast(m_gameTime, true);
                 CheckForTriggerEventPast();
                 g_pBaldurChitin->m_pEngineWorld->CompressTime(gameTime);

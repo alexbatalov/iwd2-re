@@ -228,7 +228,7 @@ CScreenOptions::~CScreenOptions()
 void CScreenOptions::EngineActivated()
 {
     if (CChitin::byte_8FB950
-        && g_pChitin->cNetwork.m_bConnectionEstablished == TRUE
+        && g_pChitin->cNetwork.GetSessionOpen() == TRUE
         && g_pChitin->cNetwork.m_bIsHost == TRUE
         && g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
         g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
@@ -297,7 +297,7 @@ void CScreenOptions::EngineActivated()
 void CScreenOptions::EngineDeactivated()
 {
     if (CChitin::byte_8FB950) {
-        if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
             && g_pChitin->cNetwork.m_bIsHost == TRUE
             && g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
             if (!g_pBaldurChitin->m_pEngineWorld->m_bPaused) {
@@ -722,7 +722,7 @@ void CScreenOptions::UpdateMainPanel()
 {
     CUIPanel* pPanel = m_cUIManager.GetPanel(2);
 
-    if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE) {
+    if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
         CUIControlButton* pButton;
 
         pButton = static_cast<CUIControlButton*>(pPanel->GetControl(5));
@@ -917,7 +917,7 @@ void CScreenOptions::QuitGame()
     m_bFromMainMenu = FALSE;
     SelectEngine(g_pBaldurChitin->m_pEngineConnection);
 
-    if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE) {
+    if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
         if (g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
             g_pBaldurChitin->m_pEngineConnection->ShowSessionTerminatedMessage();
         }
@@ -1006,10 +1006,10 @@ void CScreenOptions::LoadGame()
     UTIL_ASSERT(pGame != NULL);
 
     INT nLoadState;
-    if (g_pChitin->cNetwork.m_bConnectionEstablished) {
+    if (g_pChitin->cNetwork.GetSessionOpen()) {
         nLoadState = 3;
 
-        if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE && !g_pBaldurChitin->m_pObjectGame->GetMultiplayerSettings()->m_bArbitrationLockStatus) {
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE && !g_pBaldurChitin->m_pObjectGame->GetMultiplayerSettings()->m_bArbitrationLockStatus) {
             for (DWORD nIndex = 0; nIndex < 6; nIndex++) {
                 // NOTE: Looks like inlining.
                 LONG localObjectID;
@@ -1300,7 +1300,7 @@ void CScreenOptions::UpdateGamePlayPanel(BOOLEAN bInitialUpdate)
     pSlider = static_cast<CUIControlSlider*>(pPanel->GetControl(12));
     UTIL_ASSERT(pSlider != NULL); // 2219
 
-    if (g_pBaldurChitin->cNetwork.m_bConnectionEstablished && !g_pBaldurChitin->cNetwork.m_bIsHost) {
+    if (g_pBaldurChitin->cNetwork.GetSessionOpen() && !g_pBaldurChitin->cNetwork.m_bIsHost) {
         switch (pOptions->m_nMPDifficultyMultiplier) {
         case -25:
             pOptions->m_nDifficultyLevel = 2;
@@ -2320,7 +2320,7 @@ void CUIControlSliderOptionsSlider::OnThumbFinalChange()
             }
 
             if (pOptions->m_nMPDifficultyMultiplier != pOptions->m_nDifficultyMultiplier) {
-                if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE
+                if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
                     && g_pChitin->cNetwork.m_bIsHost == TRUE) {
                     // 11314 - "Difficulty Level"
                     g_pBaldurChitin->m_cBaldurMessage.sub_43E0E0(11314,
@@ -2333,7 +2333,7 @@ void CUIControlSliderOptionsSlider::OnThumbFinalChange()
                     pOptions->m_nMPDifficultyMultiplier = pOptions->m_nDifficultyMultiplier;
                 }
 
-                if (g_pChitin->cNetwork.m_bConnectionEstablished == TRUE
+                if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
                     && g_pChitin->cNetwork.m_bIsHost == TRUE) {
                     g_pBaldurChitin->m_cBaldurMessage.SendFullSettingsToClients(CString(""));
                 }
