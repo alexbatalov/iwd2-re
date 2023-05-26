@@ -309,3 +309,9 @@ BYTE CGameArea::GetSong(SHORT slot)
 
     return song;
 }
+
+// 0x453080
+CInfinity* CGameArea::GetInfinity()
+{
+    return &m_cInfinity;
+}

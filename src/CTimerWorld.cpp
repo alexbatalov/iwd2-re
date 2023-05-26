@@ -204,7 +204,7 @@ void CTimerWorld::CheckForTriggerEventPast()
     ULONG time = m_gameTime % TIMESCALE_MSEC_PER_DAY;
     CGameArea* pActiveArea = g_pBaldurChitin->m_pObjectGame->GetVisibleArea();
     if (pActiveArea != NULL && pActiveArea->m_bAreaLoaded) {
-        if ((pActiveArea->m_cInfinity.m_areaType & 0x40) != 0) {
+        if ((pActiveArea->GetInfinity()->m_areaType & 0x40) != 0) {
             pActiveArea->SetNight();
             m_nLastPercentage = -1;
         } else {

@@ -70,6 +70,8 @@ public:
     BOOL SetSong(SHORT slot, BYTE song);
     BYTE GetSong(SHORT slot);
 
+    CInfinity* GetInfinity();
+
     static INT dword_8D212C;
     static BOOLEAN byte_8D2138;
 

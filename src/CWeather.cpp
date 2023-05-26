@@ -81,7 +81,7 @@ void CWeather::CancelCurrentWeather(CGameArea* pArea, ULONG nCurrentTime)
     if (pArea != NULL) {
         m_nNextTimeToStartChecking = CTimerWorld::TIMESCALE_MSEC_PER_HOUR + rand() % CTimerWorld::TIMESCALE_MSEC_PER_DAY;
         if ((pArea->m_header.m_areaType & 0x4) != 0) {
-            pArea->m_cInfinity.SetCurrentWeather(m_rgbCurrentOverCastColor, m_nCurrentWeather, m_nWeatherLevel, m_nLightningFreq);
+            pArea->GetInfinity()->SetCurrentWeather(m_rgbCurrentOverCastColor, m_nCurrentWeather, m_nWeatherLevel, m_nLightningFreq);
         }
         m_nLastTimeChecked = nCurrentTime;
 
@@ -439,10 +439,10 @@ void CRainStorm::AsynchronousUpdate()
     if (IsInitialized()) {
         CGameArea* pArea = g_pBaldurChitin->m_pObjectGame->GetVisibleArea();
         if ((pArea->m_header.m_areaType & 0x4) != 0) {
-            CRect rNewWorldViewPort(pArea->m_cInfinity.nNewX,
-                pArea->m_cInfinity.nNewY,
-                pArea->m_cInfinity.nNewX + pArea->m_cInfinity.rViewPort.Width(),
-                pArea->m_cInfinity.nNewY + pArea->m_cInfinity.rViewPort.Height());
+            CRect rNewWorldViewPort(pArea->GetInfinity()->nNewX,
+                pArea->GetInfinity()->nNewY,
+                pArea->GetInfinity()->nNewX + pArea->GetInfinity()->rViewPort.Width(),
+                pArea->GetInfinity()->nNewY + pArea->GetInfinity()->rViewPort.Height());
 
             CRect rOld(m_rOldWorldViewPort.left << CParticle::RESOLUTION_INC,
                 m_rOldWorldViewPort.top << CParticle::RESOLUTION_INC,
@@ -494,7 +494,7 @@ void CRainStorm::GenerateDrops(const CPoint& ptViewPort, const CRect& rBounds)
 // 0x557D90
 void CRainStorm::Render(CVidMode* pVidMode, int a2, const CRect& rClip, COLORREF rgbColor)
 {
-    CRect& rSurface = g_pBaldurChitin->m_pObjectGame->GetVisibleArea()->m_cInfinity.rViewPort;
+    CRect& rSurface = g_pBaldurChitin->m_pObjectGame->GetVisibleArea()->GetInfinity()->rViewPort;
 
     CSingleLock renderLock(&m_cCriticalSection, TRUE);
     if (m_pRainDrops != NULL && static_cast<CVidInf*>(pVidMode)->BKLock(rSurface)) {
@@ -551,10 +551,10 @@ void CSnowStorm::AsynchronousUpdate()
     if (IsInitialized()) {
         CGameArea* pArea = g_pBaldurChitin->m_pObjectGame->GetVisibleArea();
         if ((pArea->m_header.m_areaType & 0x4) != 0) {
-            CRect rNewWorldViewPort(pArea->m_cInfinity.nNewX,
-                pArea->m_cInfinity.nNewY,
-                pArea->m_cInfinity.nNewX + pArea->m_cInfinity.rViewPort.Width(),
-                pArea->m_cInfinity.nNewY + pArea->m_cInfinity.rViewPort.Height());
+            CRect rNewWorldViewPort(pArea->GetInfinity()->nNewX,
+                pArea->GetInfinity()->nNewY,
+                pArea->GetInfinity()->nNewX + pArea->GetInfinity()->rViewPort.Width(),
+                pArea->GetInfinity()->nNewY + pArea->GetInfinity()->rViewPort.Height());
 
             CRect rOld(m_rOldWorldViewPort.left << CParticle::RESOLUTION_INC,
                 m_rOldWorldViewPort.top << CParticle::RESOLUTION_INC,
@@ -602,7 +602,7 @@ void CSnowStorm::GenerateFlakes(const CPoint& ptViewPort, const CRect& rBounds)
 // 0x558310
 void CSnowStorm::Render(CVidMode* pVidMode, int a2, const CRect& rClip, COLORREF rgbColor)
 {
-    CRect& rSurface = g_pBaldurChitin->m_pObjectGame->GetVisibleArea()->m_cInfinity.rViewPort;
+    CRect& rSurface = g_pBaldurChitin->m_pObjectGame->GetVisibleArea()->GetInfinity()->rViewPort;
     COLORREF rgbSnowColor = RGB(GetRValue(rgbColor) * 230, GetGValue(rgbColor) * 230, GetBValue(rgbColor) * 230);
 
     CSingleLock renderLock(&m_cCriticalSection, TRUE);
