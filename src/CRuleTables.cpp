@@ -2183,6 +2183,12 @@ BYTE CRuleTables::MapCharacterSpecializationToSchool(WORD nSpecialistMage) const
     return 0;
 }
 
+// 0x545FD0
+INT CRuleTables::GetLoadingHint(INT nHintNumber) const
+{
+    return atol(m_tLoadingHints.GetAt(CPoint(0, nHintNumber)));
+}
+
 // 0x546020
 INT CRuleTables::GetNumLoadingHints() const
 {
