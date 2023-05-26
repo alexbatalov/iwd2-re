@@ -73,7 +73,7 @@ public:
     /* 001C */ int field_1C;
     /* 0020 */ CAIObjectType m_typeAI;
     /* 005C */ LONG m_id;
-    /* 0060 */ short field_60;
+    /* 0060 */ SHORT m_canBeSeen;
     /* 0062 */ DWORD m_remotePlayerID;
     /* 0066 */ int field_66;
     /* 006A */ BYTE m_AISpeed;

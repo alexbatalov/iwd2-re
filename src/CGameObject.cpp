@@ -115,7 +115,7 @@ CGameObject::CGameObject()
     m_pArea = NULL;
     m_posVertList = NULL;
     m_id = CGameObjectArray::INVALID_OBJECT_ID;
-    field_60 = 0;
+    m_canBeSeen = 0;
     m_AISpeed = AI_SPEED_NORMAL;
     m_typeAI.Set(CAIObjectType::NOT_SPRITE);
     m_remotePlayerID = 0;

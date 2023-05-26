@@ -78,6 +78,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CGameOptions.h"
     "src/CGamePermission.cpp"
     "src/CGamePermission.h"
+    "src/CGameSprite.cpp"
+    "src/CGameSprite.h"
     "src/CGameSpy.cpp"
     "src/CGameSpy.h"
     "src/ChDataTypes.h"

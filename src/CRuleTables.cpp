@@ -1882,6 +1882,27 @@ void CRuleTables::GetSpellDescription(const CString& sSpell, CString& sDescripti
     sDescription = strRes.szText;
 }
 
+// 0x544930
+SHORT CRuleTables::GetLayOnHandsAmount(const CAIObjectType& typeAI, CDerivedStats& DStats) const
+{
+    if ((DStats.m_classMask & CLASSMASK_PALADIN) == 0) {
+        return 0;
+    }
+
+    DWORD nPaladinLevel = DStats.GetClassLevel(CAIOBJECTTYPE_C_PALADIN);
+
+    // TODO: Check casts.
+    float v1 = DStats.field_5E < 10
+        ? static_cast<float>(DStats.field_5E) - 1.0f
+        : static_cast<float>(DStats.field_5E);
+    float v2 = (v1 - 10.0f) / 2.0f;
+    if (static_cast<int>(v2) >= 1) {
+        nPaladinLevel *= static_cast<int>(v2);
+    }
+
+    return nPaladinLevel;
+}
+
 // 0x544A60
 BOOL CRuleTables::IsValidAlignment(BYTE nClass, BYTE nAlignment, DWORD nSpecialist) const
 {
