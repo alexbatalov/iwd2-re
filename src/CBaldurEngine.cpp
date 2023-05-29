@@ -426,6 +426,18 @@ const CResRef CBaldurEngine::RESREF_SOUND_8CAD98("G_Glove1");
 // 0x8C8C80
 const CResRef CBaldurEngine::RESREF_SOUND_8C8C80("G_Glove2");
 
+// 0x847F74
+const COLORREF CBaldurEngine::COLOR_LABEL_NORMAL = RGB(255, 255, 255);
+
+// 0x847F78
+const COLORREF CBaldurEngine::COLOR_LABEL_HIGHLIGHT_PENALTY = RGB(255, 0, 0);
+
+// 0x847F7C
+const COLORREF CBaldurEngine::COLOR_LABEL_HIGHLIGHT_BONUS = RGB(255, 255, 0);
+
+// 0x847F80
+const COLORREF CBaldurEngine::COLOR_LABEL_DISABLE = RGB(160, 160, 160);
+
 // 0x4277C0
 CBaldurEngine::CBaldurEngine()
 {
@@ -693,11 +705,13 @@ void CBaldurEngine::UpdateLabel(CUIPanel* pPanel, DWORD nID, const char* format,
 }
 
 // 0x428130
-void CBaldurEngine::HighlightLabel(CUIPanel* pPanel, CUIControlLabel* pLabel, BOOL bCustomColor, COLORREF rgbForegroundColor)
+void CBaldurEngine::HighlightLabel(CUIPanel* pPanel, DWORD nID, BOOL bCustomColor, COLORREF rgbForegroundColor)
 {
     // __FILE__: C:\Projects\Icewind2\src\Baldur\CBaldurChitin.cpp
     // __LINE__: 4214
     UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlLabel* pLabel = static_cast<CUIControlLabel*>(pPanel->GetControl(nID));
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\CBaldurChitin.cpp
     // __LINE__: 4216

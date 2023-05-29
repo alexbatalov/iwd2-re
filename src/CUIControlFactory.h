@@ -16,6 +16,27 @@ public:
     virtual void OnHotAreaClick(CPoint pt);
 };
 
+class CUIControlButtonCharGenAbilitiesHotArea : public CUIControlButtonHotArea {
+public:
+    CUIControlButtonCharGenAbilitiesHotArea(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGenAbilitiesHotArea() override;
+    void OnHotAreaClick(CPoint pt) override;
+};
+
+class CUIControlButtonCharGenSkillsHotArea : public CUIControlButtonHotArea {
+public:
+    CUIControlButtonCharGenSkillsHotArea(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGenSkillsHotArea() override;
+    void OnHotAreaClick(CPoint pt) override;
+};
+
+class CUIControlButtonCharGenFeatsHotArea : public CUIControlButtonHotArea {
+public:
+    CUIControlButtonCharGenFeatsHotArea(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGenFeatsHotArea() override;
+    void OnHotAreaClick(CPoint pt) override;
+};
+
 class CUIControlButtonOptionsHotArea : public CUIControlButtonHotArea {
 public:
     CUIControlButtonOptionsHotArea(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

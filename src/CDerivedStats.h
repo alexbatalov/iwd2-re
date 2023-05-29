@@ -11,7 +11,7 @@ public:
     LONG GetAtOffset(SHORT offset);
     int sub_447390();
     unsigned char sub_4473A0();
-    BOOL sub_447940(INT iClassType);
+    BOOL HasClassMask(INT iClassType);
     DWORD GetClassLevel(INT iClassType);
     void SetClassLevel(INT iClassType, INT nLevel);
     BOOL HasClass(INT iClassType);
@@ -126,6 +126,7 @@ public:
     /* 014E */ unsigned char field_14E;
     /* 014F */ unsigned char field_14F;
     /* 0150 */ unsigned char field_150;
+    /* 0151 */ unsigned char field_151;
     /* 0152 */ unsigned char field_152;
     /* 0153 */ unsigned char field_153;
     /* 0184 */ int field_184;

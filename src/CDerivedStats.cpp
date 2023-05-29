@@ -330,7 +330,7 @@ unsigned char CDerivedStats::sub_4473A0()
 }
 
 // 0x447940
-BOOL CDerivedStats::sub_447940(INT iClassType)
+BOOL CDerivedStats::HasClassMask(INT iClassType)
 {
     return (iClassType & m_classMask) != 0;
 }

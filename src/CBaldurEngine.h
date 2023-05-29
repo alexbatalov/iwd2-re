@@ -149,6 +149,11 @@ public:
     static const CResRef RESREF_SOUND_8CAD98;
     static const CResRef RESREF_SOUND_8C8C80;
 
+    static const COLORREF COLOR_LABEL_NORMAL;
+    static const COLORREF COLOR_LABEL_HIGHLIGHT_PENALTY;
+    static const COLORREF COLOR_LABEL_HIGHLIGHT_BONUS;
+    static const COLORREF COLOR_LABEL_DISABLE;
+
     CBaldurEngine();
     /* 000C */ void InvalidateCursorRect(const CRect& rect) override;
     /* 002C */ void SelectEngine(CWarp* pWarp) override;
@@ -184,7 +189,7 @@ public:
     static void UpdateTextNoTrim(CUIControlTextDisplay* pText, const char* format, ...);
     static void UpdateTextForceColor(CUIControlTextDisplay* pText, COLORREF rgbTextColor, const char* format, ...);
     static void UpdateLabel(CUIPanel* pPanel, DWORD nID, const char* format, ...);
-    static void HighlightLabel(CUIPanel* pPanel, CUIControlLabel* pLabel, BOOL bCustomColor, COLORREF rgbForegroundColor);
+    static void HighlightLabel(CUIPanel* pPanel, DWORD nID, BOOL bCustomColor, COLORREF rgbForegroundColor);
 
     /* 0028 */ int m_nSelectedCharacter;
     /* 002C */ int m_nPickedCharacter;

@@ -376,6 +376,7 @@ public:
     STRREF GetClassSuffixStringRef(BYTE nClass) const;
     STRREF GetClassBeyondCastingAbilityStringRef(BYTE nClass) const;
     STRREF GetClassDescriptionStringRef(BYTE nClass, DWORD nSpecialist) const;
+    INT GetAbilityScoreModifier(INT nScore) const;
     int sub_542560(unsigned short a1, unsigned short a2) const;
     void sub_5425E0(const CAIObjectType& typeAI, int a2, BYTE& a3, BYTE& a4, BYTE& a5, BYTE& a6, BYTE& a7, BYTE& a8) const;
     INT FindSavingThrow(CDerivedStats& stats, const CString& sSavingThrow) const;
@@ -386,6 +387,8 @@ public:
     CPoint GetStartPoint(INT nCharacterSlot) const;
     int GetStartRotation(INT nCharacterSlot) const;
     CList<STRREF, STRREF>* GetChapterText(const CResRef& cResText, BYTE nChapter) const;
+    void GetClassStringLower(BYTE nClass, DWORD a2, DWORD a3, CString& sClass, int a5) const;
+    void GetClassStringMixed(BYTE nClass, DWORD nSpecialist, DWORD dwFlags, CString& sClass, int a5) const;
     void GetCharacterStateDescription(INT nState, CString& sDescription) const;
     void GetMovieDescription(const CString& sMovie, CString& sDescription) const;
     void GetSpellDescription(const CString& sSpell, CString& sDescription) const;
@@ -394,7 +397,9 @@ public:
     BOOL IsUsableByAlignment(DWORD dwNotUsableBy, BYTE nAlignment) const;
     BYTE GetStartingReputation(BYTE nAlignment) const;
     DWORD GetXPCap() const;
-    void GetClassStringMixed(BYTE nClass, DWORD nSpecialist, CString& sClass);
+    BOOL IsValidSubRace(BYTE nRace, BYTE nSubRace);
+    void GetRaceStringMixed(BYTE nRace, CString& sClass, BYTE nSubRace);
+    void GetClassStringGameSpy(BYTE nClass, DWORD nSpecialist, CString& sClass);
     INT GetRaiseDeadCost(const CAIObjectType& type, CDerivedStats& DStats) const;
     DWORD GetReputationDescription(SHORT nReputation) const;
     void GetIntoxicationInfo(BYTE nCON, INT& nIntoxicationRate, INT& nRecoveryRate, INT& nIntoxicationCap) const;
@@ -405,6 +410,12 @@ public:
     float GetSoundReverbMix(int nSoundChannel, int nReverb) const;
     int GetSoundEnvironment(EAXPRESET& preset, int nReverb) const;
     BYTE MapCharacterSpecializationToSchool(WORD nSpecialistMage) const;
+    DWORD GetFeatName(DWORD id) const;
+    DWORD GetFeatId(DWORD index) const;
+    DWORD GetFeatDescription(DWORD id) const;
+    DWORD GetSkillName(DWORD id) const;
+    DWORD GetSkillId(DWORD index) const;
+    DWORD GetSkillDescription(DWORD id) const;
     INT GetLoadingHint(INT nHintNumber) const;
     INT GetNumLoadingHints() const;
     const C2DArray* GetClassAbilityTable(BYTE nClass, DWORD nSpecialist) const;

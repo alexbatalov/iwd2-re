@@ -1784,6 +1784,18 @@ STRREF CRuleTables::GetClassDescriptionStringRef(BYTE nClass, DWORD nSpecialist)
     return -1;
 }
 
+// 0x542510
+INT CRuleTables::GetAbilityScoreModifier(INT nScore) const
+{
+    float fScore;
+    if (nScore < 10) {
+        fScore = static_cast<float>(nScore) - 1.0f;
+    } else {
+        fScore = static_cast<float>(nScore);
+    }
+    return static_cast<INT>((fScore - 10.0f) / 2.0f);
+}
+
 // 0x542560
 int CRuleTables::sub_542560(unsigned short a1, unsigned short a2) const
 {
@@ -2011,6 +2023,286 @@ CList<STRREF, STRREF>* CRuleTables::GetChapterText(const CResRef& cResText, BYTE
     return pTextList;
 }
 
+// 0x543EB0
+void CRuleTables::GetClassStringLower(BYTE nClass, DWORD nSpecialist, DWORD dwFlags, CString& sClass, int a5) const
+{
+    STR_RES strRes;
+
+    STRREF strMageSchool;
+    switch (nSpecialist & 0x7FC0) {
+    case 0x40:
+        strMageSchool = 597; // "Abjurer"
+        break;
+    case 0x80:
+        strMageSchool = 2179; // "Conjurer"
+        break;
+    case 0x100:
+        strMageSchool = 2846; // "Diviner"
+        break;
+    case 0x200:
+        strMageSchool = 2861; // "Enchanter"
+        break;
+    case 0x400:
+        strMageSchool = 2862; // "Illusionist"
+        break;
+    case 0x800:
+        strMageSchool = 3015; // "Evoker"
+        break;
+    case 0x1000:
+        strMageSchool = 12744; // "Necromancer"
+        break;
+    case 0x2000:
+        strMageSchool = 12745; // "Transmuter"
+        break;
+    default:
+        if (nSpecialist == 0x4000) {
+            strMageSchool = 18039; // "Wizard"
+        } else {
+            strMageSchool = -1;
+        }
+        break;
+    }
+
+    if (strMageSchool != -1) {
+        g_pBaldurChitin->m_cTlkTable.Fetch(strMageSchool, strRes);
+        g_pBaldurChitin->m_cTlkTable.SetToken(TOKEN_MAGESCHOOL, strRes.szText);
+    }
+
+    STRREF strFighterType;
+    if ((dwFlags & 0x200) != 0) {
+        strFighterType = 10367; // "fallen paladin"
+    } else if ((dwFlags & 0x400) != 0) {
+        strFighterType = 10365; // "fallen ranger"
+    } else {
+        strFighterType = 10086; // "Fighter"
+    }
+
+    g_pBaldurChitin->m_cTlkTable.Fetch(strFighterType, strRes);
+    g_pBaldurChitin->m_cTlkTable.SetToken(TOKEN_FIGHTERTYPE, strRes.szText);
+
+    STRREF strClass;
+    switch (nClass) {
+    case CAIOBJECTTYPE_C_BARBARIAN:
+        strClass = 31; // "Barbarian"
+        break;
+    case CAIOBJECTTYPE_C_BARD:
+        strClass = 7206; // "Bard"
+        break;
+    case CAIOBJECTTYPE_C_CLERIC:
+        strClass = 7204; // "Cleric"
+        break;
+    case CAIOBJECTTYPE_C_DRUID:
+        strClass = 7210; // "Druid"
+        break;
+    case CAIOBJECTTYPE_C_FIGHTER:
+        strClass = 7201; // "<FIGHTERTYPE>"
+        break;
+    case CAIOBJECTTYPE_C_MONK:
+        strClass = 30; // "Monk"
+        break;
+    case CAIOBJECTTYPE_C_PALADIN:
+        strClass = 7217; // "Paladin"
+        break;
+    case CAIOBJECTTYPE_C_RANGER:
+        strClass = 7200; // "Ranger"
+        break;
+    case CAIOBJECTTYPE_C_ROGUE:
+        strClass = 7202; // "Rogue"
+        break;
+    case CAIOBJECTTYPE_C_SORCERER:
+        strClass = 29; // "Sorcerer"
+        break;
+    case CAIOBJECTTYPE_C_WIZARD:
+        strClass = 7203; // "<MAGESCHOOL>"
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+        // __LINE__: 3690
+        UTIL_ASSERT(FALSE);
+    }
+
+    g_pBaldurChitin->m_cTlkTable.Fetch(strClass, strRes);
+    sClass = strRes.szText;
+}
+
+// 0x544120
+void CRuleTables::GetClassStringMixed(BYTE nClass, DWORD nSpecialist, DWORD dwFlags, CString& sClass, int a5) const
+{
+    STR_RES strRes;
+
+    STRREF strMageSchool;
+    switch (nSpecialist & 0x7FC0) {
+    case 0x40:
+        strMageSchool = 502; // "Abjurer"
+        break;
+    case 0x80:
+        strMageSchool = 504; // "Conjurer"
+        break;
+    case 0x100:
+        strMageSchool = 2012; // "Diviner"
+        break;
+    case 0x200:
+        strMageSchool = 2022; // "Enchanter"
+        break;
+    case 0x400:
+        strMageSchool = 12785; // "Illusionist"
+        break;
+    case 0x800:
+        strMageSchool = 12786; // "Evoker"
+        break;
+    case 0x1000:
+        strMageSchool = 12787; // "Necromancer"
+        break;
+    case 0x2000:
+        strMageSchool = 12788; // "Transmuter"
+        break;
+    default:
+        if (nSpecialist == 0x4000) {
+            strMageSchool = 9987; // "Wizard"
+        } else {
+            strMageSchool = -1;
+        }
+        break;
+    }
+
+    if (strMageSchool != -1) {
+        g_pBaldurChitin->m_cTlkTable.Fetch(strMageSchool, strRes);
+        g_pBaldurChitin->m_cTlkTable.SetToken(TOKEN_MAGESCHOOL, strRes.szText);
+    }
+
+    STRREF strFighterType;
+    if ((dwFlags & 0x200) != 0) {
+        strFighterType = 10371; // "Fallen Paladin"
+    } else if ((dwFlags & 0x400) != 0) {
+        strFighterType = 10369; // "Fallen Ranger"
+    } else {
+        switch (nClass) {
+        case CAIOBJECTTYPE_C_BARBARIAN:
+            strFighterType = 16799; // "Fighter"
+            break;
+        default:
+            strFighterType = 34; // "Barbarian"
+            break;
+        }
+    }
+
+    g_pBaldurChitin->m_cTlkTable.Fetch(strFighterType, strRes);
+    g_pBaldurChitin->m_cTlkTable.SetToken(TOKEN_FIGHTERTYPE, strRes.szText);
+
+    STRREF strClass;
+    switch (nClass) {
+    case CAIOBJECTTYPE_C_BARBARIAN:
+        strClass = 34; // "Barbarian"
+        break;
+    case CAIOBJECTTYPE_C_BARD:
+        strClass = 1083; // "Bard"
+        break;
+    case CAIOBJECTTYPE_C_CLERIC:
+        switch (nSpecialist & 0xFF8000) {
+        case 0x8000:
+            strClass = 38097; // "Painbearer of Ilmater"
+            break;
+        case 0x10000:
+            strClass = 38098; // "Morninglord of Lathander"
+            break;
+        case 0x20000:
+            strClass = 38099; // "Silverstar of Selune"
+            break;
+        case 0x40000:
+            strClass = 38100; // "Watcher of Helm"
+            break;
+        case 0x80000:
+            strClass = 38101; // "Lorekeeper of Oghma"
+            break;
+        case 0x100000:
+            strClass = 38102; // "Battleguard of Tempus"
+            break;
+        case 0x200000:
+            strClass = 38103; // "Dreadmaster of Bane"
+            break;
+        case 0x400000:
+            strClass = 38106; // "Demarch of Mask"
+            break;
+        case 0x800000:
+            strClass = 38107; // "Stormlord of Talos"
+            break;
+        default:
+            strClass = 1079; // "Cleric"
+            break;
+        }
+        break;
+    case CAIOBJECTTYPE_C_DRUID:
+        strClass = 1080; // "Druid"
+        break;
+    case CAIOBJECTTYPE_C_FIGHTER:
+        strClass = 1076; // "<FIGHTERTYPE>"
+        break;
+    case CAIOBJECTTYPE_C_MONK:
+        switch (nSpecialist & 0x38) {
+        case 0x8:
+            strClass = 36877; // "Monk of the Old Order"
+            break;
+        case 0x10:
+            strClass = 36878; // "Monk of the Broken Ones"
+            break;
+        case 0x20:
+            strClass = 36879; // "Monk of the Dark Moon"
+            break;
+        default:
+            strClass = 33; // "Monk"
+            break;
+        }
+        break;
+    case CAIOBJECTTYPE_C_PALADIN:
+        if ((dwFlags & 0x200) != 0) {
+            strClass = 10371; // "Fallen Paladin"
+        } else {
+            switch (nSpecialist & 0x7) {
+            case 0x1:
+                strClass = 36875; // "Paladin of Ilmater"
+                break;
+            case 0x2:
+                strClass = 36872; // "Paladin of Helm"
+                break;
+            case 0x4:
+                strClass = 36873; // "Paladin of Mystra"
+                break;
+            default:
+                strClass = 1078; // "Paladin"
+                break;
+            }
+        }
+        break;
+    case CAIOBJECTTYPE_C_RANGER:
+        if ((dwFlags & 0x400) != 0) {
+            strClass = 10369; // "Fallen Ranger"
+        } else {
+            strClass = 1077; // "Ranger"
+        }
+        break;
+    case CAIOBJECTTYPE_C_ROGUE:
+        strClass = 1082; // "Rogue"
+        break;
+    case CAIOBJECTTYPE_C_SORCERER:
+        if (a5 != 0) {
+            strClass = 32; // "Sorcerer"
+        } else {
+            strClass = 40352; // "Sorceress"
+        }
+        break;
+    case CAIOBJECTTYPE_C_WIZARD:
+        strClass = 1081; // "<MAGESCHOOL>"
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+        // __LINE__: 3926
+        UTIL_ASSERT(FALSE);
+    }
+
+    g_pBaldurChitin->m_cTlkTable.Fetch(strClass, strRes);
+    sClass = strRes.szText;
+}
+
 // 0x5446B0
 void CRuleTables::GetCharacterStateDescription(INT nState, CString& sDescription) const
 {
@@ -2144,8 +2436,152 @@ DWORD CRuleTables::GetXPCap() const
     return 528000;
 }
 
+// 0x544D20
+BOOL CRuleTables::IsValidSubRace(BYTE nRace, BYTE nSubRace)
+{
+    switch (nRace) {
+    case CAIOBJECTTYPE_R_HUMAN:
+        return nSubRace == CAIOBJECTTYPE_SUBRACE_PURERACE
+            || nSubRace == CAIOBJECTTYPE_SUBRACE_HUMAN_AASIMAR
+            || nSubRace == CAIOBJECTTYPE_SUBRACE_HUMAN_TIEFLING;
+    case CAIOBJECTTYPE_R_ELF:
+        return nSubRace == CAIOBJECTTYPE_SUBRACE_PURERACE
+            || nSubRace == CAIOBJECTTYPE_SUBRACE_ELF_DROW
+            || nSubRace == CAIOBJECTTYPE_SUBRACE_ELF_WILD;
+    case CAIOBJECTTYPE_R_HALF_ELF:
+        return nSubRace == CAIOBJECTTYPE_SUBRACE_PURERACE;
+    case CAIOBJECTTYPE_R_DWARF:
+        return nSubRace == CAIOBJECTTYPE_SUBRACE_PURERACE
+            || nSubRace == CAIOBJECTTYPE_SUBRACE_DWARF_GOLD
+            || nSubRace == CAIOBJECTTYPE_SUBRACE_DWARF_GRAY;
+    case CAIOBJECTTYPE_R_HALFLING:
+        return nSubRace == CAIOBJECTTYPE_SUBRACE_PURERACE
+            || nSubRace == CAIOBJECTTYPE_SUBRACE_HALFLING_STRONGHEART
+            || nSubRace == CAIOBJECTTYPE_SUBRACE_HALFLING_GHOSTWISE;
+    case CAIOBJECTTYPE_R_GNOME:
+        return nSubRace == CAIOBJECTTYPE_SUBRACE_PURERACE
+            || nSubRace == CAIOBJECTTYPE_SUBRACE_GNOME_DEEP;
+    case CAIOBJECTTYPE_R_HALF_ORC:
+        return nSubRace == CAIOBJECTTYPE_SUBRACE_PURERACE;
+    default:
+        return FALSE;
+    }
+}
+
+// 0x544DB0
+void CRuleTables::GetRaceStringMixed(BYTE nRace, CString& sRace, BYTE nSubRace)
+{
+    STR_RES strRes;
+
+    STRREF strRace;
+    switch (nRace) {
+    case CAIOBJECTTYPE_R_HUMAN:
+        switch (nSubRace) {
+        case CAIOBJECTTYPE_SUBRACE_PURERACE:
+            strRace = 1096; // "Human"
+            break;
+        case CAIOBJECTTYPE_SUBRACE_HUMAN_AASIMAR:
+            strRace = 5377; // "Aasimar"
+            break;
+        case CAIOBJECTTYPE_SUBRACE_HUMAN_TIEFLING:
+            strRace = 5378; // "Tiefling"
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+            // __LINE__: 5130
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case CAIOBJECTTYPE_R_ELF:
+        switch (nSubRace) {
+        case CAIOBJECTTYPE_SUBRACE_PURERACE:
+            strRace = 1097; // "Moon Elf"
+            break;
+        case CAIOBJECTTYPE_SUBRACE_ELF_DROW:
+            strRace = 5379; // "Drow"
+            break;
+        case CAIOBJECTTYPE_SUBRACE_ELF_WILD:
+            strRace = 5380; // "Wild Elf"
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+            // __LINE__: 5151
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case CAIOBJECTTYPE_R_HALF_ELF:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+        // __LINE__: 5157
+        UTIL_ASSERT(nSubRace == CAIOBJECTTYPE_SUBRACE_PURERACE);
+
+        strRace = 1098; // "Half-Elf"
+        break;
+    case CAIOBJECTTYPE_R_DWARF:
+        switch (nSubRace) {
+        case CAIOBJECTTYPE_SUBRACE_PURERACE:
+            strRace = 1100; // "Shield Dwarf"
+            break;
+        case CAIOBJECTTYPE_SUBRACE_DWARF_GOLD:
+            strRace = 5381; // "Gold Dwarf"
+            break;
+        case CAIOBJECTTYPE_SUBRACE_DWARF_GRAY:
+            strRace = 5382; // "Gray Dwarf"
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+            // __LINE__: 5178
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case CAIOBJECTTYPE_R_HALFLING:
+        switch (nSubRace) {
+        case CAIOBJECTTYPE_SUBRACE_PURERACE:
+            strRace = 5374; // "Lightfoot Halfling"
+            break;
+        case CAIOBJECTTYPE_SUBRACE_HALFLING_STRONGHEART:
+            strRace = 5383; // "Strongheart Halfling"
+            break;
+        case CAIOBJECTTYPE_SUBRACE_HALFLING_GHOSTWISE:
+            strRace = 5384; // "Ghostwise Halfling"
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+            // __LINE__: 5178
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case CAIOBJECTTYPE_R_GNOME:
+        switch (nSubRace) {
+        case CAIOBJECTTYPE_SUBRACE_PURERACE:
+            strRace = 1099; // "Rock Gnome"
+            break;
+        case CAIOBJECTTYPE_SUBRACE_GNOME_DEEP:
+            strRace = 5385; // "Deep Gnome"
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+            // __LINE__: 5216
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case CAIOBJECTTYPE_R_HALF_ORC:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+        // __LINE__: 5222
+        UTIL_ASSERT(nSubRace == CAIOBJECTTYPE_SUBRACE_PURERACE);
+
+        strRace = 23; // "Half-Orc"
+        break;
+    default:
+        strRace = -1;
+        break;
+    }
+
+    g_pBaldurChitin->m_cTlkTable.Fetch(strRace, strRes);
+    sRace = strRes.szText;
+}
+
 // 0x545080
-void CRuleTables::GetClassStringMixed(BYTE nClass, DWORD nSpecialist, CString& sClass)
+void CRuleTables::GetClassStringGameSpy(BYTE nClass, DWORD nSpecialist, CString& sClass)
 {
     STR_RES strRes;
     DWORD strClass;
@@ -2376,6 +2812,84 @@ BYTE CRuleTables::MapCharacterSpecializationToSchool(WORD nSpecialistMage) const
     }
 
     return 0;
+}
+
+// 0x545A90
+DWORD CRuleTables::GetFeatName(DWORD id) const
+{
+    for (SHORT nIndex = 0; nIndex < m_tFeats.GetHeight(); nIndex++) {
+        if (GetFeatId(nIndex) == id) {
+            const CString& sValue = m_tFeats.GetAt(CPoint(1, nIndex));
+            DWORD str;
+            sscanf(sValue, "%d", &str);
+            return str != 0 ? str : -1;
+        }
+    }
+
+    return -1;
+}
+
+// 0x545B70
+DWORD CRuleTables::GetFeatId(DWORD index) const
+{
+    const CString& sValue = m_tFeats.GetAt(CPoint(0, index));
+    DWORD id;
+    sscanf(sValue, "%d", &id);
+    return id;
+}
+
+// 0x545BC0
+DWORD CRuleTables::GetFeatDescription(DWORD id) const
+{
+    for (SHORT nIndex = 0; nIndex < m_tFeats.GetHeight(); nIndex++) {
+        if (GetFeatId(nIndex) == id) {
+            const CString& sValue = m_tFeats.GetAt(CPoint(2, nIndex));
+            DWORD str;
+            sscanf(sValue, "%d", &str);
+            return str != 0 ? str : -1;
+        }
+    }
+
+    return -1;
+}
+
+// 0x545CA0
+DWORD CRuleTables::GetSkillName(DWORD id) const
+{
+    for (SHORT nIndex = 0; nIndex < m_tSkills.GetHeight(); nIndex++) {
+        if (GetSkillId(nIndex) == id) {
+            const CString& sValue = m_tSkills.GetAt(CPoint(1, nIndex));
+            DWORD str;
+            sscanf(sValue, "%d", &str);
+            return str != 0 ? str : -1;
+        }
+    }
+
+    return -1;
+}
+
+// 0x545D80
+DWORD CRuleTables::GetSkillId(DWORD index) const
+{
+    const CString& sValue = m_tSkills.GetAt(CPoint(0, index));
+    DWORD id;
+    sscanf(sValue, "%d", &id);
+    return id;
+}
+
+// 0x545DD0
+DWORD CRuleTables::GetSkillDescription(DWORD id) const
+{
+    for (SHORT nIndex = 0; nIndex < m_tSkills.GetHeight(); nIndex++) {
+        if (GetSkillId(nIndex) == id) {
+            const CString& sValue = m_tSkills.GetAt(CPoint(2, nIndex));
+            DWORD str;
+            sscanf(sValue, "%d", &str);
+            return str != 0 ? str : -1;
+        }
+    }
+
+    return -1;
 }
 
 // 0x545FD0
