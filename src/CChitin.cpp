@@ -249,7 +249,7 @@ CChitin::CChitin()
     field_11C = "";
     field_124 = 0;
     field_128 = 0;
-    field_12C = "";
+    m_sStartUpSession = "";
     field_131 = 0;
     m_sStartUpGameSpyLocation = "";
     field_130 = 0;
@@ -1997,6 +1997,12 @@ CString CChitin::GetStartUpGameSpyLocation()
 CString CChitin::GetStartUpAddress()
 {
     return m_sStartUpAddress;
+}
+
+// 0x600440
+CString CChitin::GetStartUpSession()
+{
+    return m_sStartUpSession;
 }
 
 // 0x7928A0

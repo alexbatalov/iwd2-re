@@ -1669,7 +1669,25 @@ void CScreenConnection::ResetTCPIPPanel()
 // 0x600370
 void CScreenConnection::ResetCreateGamePanel()
 {
-    // TODO: Incomplete.
+    CUIPanel* pPanel = m_cUIManager.GetPanel(6);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4936
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(0));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4938
+    UTIL_ASSERT(pEdit != NULL);
+
+    if (g_pBaldurChitin->GetStartUpSession() != "") {
+        pEdit->SetText(g_pBaldurChitin->GetStartUpSession());
+    }
+
+    m_cUIManager.SetCapture(pEdit, 2);
+
+    UpdateHelp(pPanel->m_nID, 13, 11320);
 }
 
 // 0x600470
