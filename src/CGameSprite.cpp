@@ -319,6 +319,18 @@ void CGameSprite::sub_72DE60()
     // TODO: Incomplete.
 }
 
+// 0x71F760
+const CString& CGameSprite::GetName()
+{
+    if (m_baseStats.m_name != -1) {
+        STR_RES strRes;
+        g_pBaldurChitin->m_cTlkTable.Fetch(m_baseStats.m_name, strRes);
+        m_sName = strRes.szText;
+    }
+
+    return m_sName;
+}
+
 // 0x762890
 void CGameSprite::SetFeatValue(UINT nFeatNumber, INT iFeatValue)
 {

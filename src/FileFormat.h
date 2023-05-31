@@ -5,6 +5,7 @@
 
 class CCreatureFileHeader {
 public:
+    /* 0000 */ DWORD m_name;
     /* 0048 */ BYTE m_attackBase;
     /* 0083 */ BYTE m_barbarianLevel;
     /* 0084 */ BYTE m_bardLevel;

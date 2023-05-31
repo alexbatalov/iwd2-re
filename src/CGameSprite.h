@@ -184,6 +184,7 @@ public:
     SHORT GetTurnUndeadLevel();
     SHORT GetLayOnHandsAmount();
     void sub_72DE60();
+    const CString& GetName();
     void SetFeatValue(UINT nFeatNumber, INT iFeatValue);
     INT GetFeatValue(UINT nFeatNumber);
     INT GetMaxFeatValue(UINT nFeatNumber);
@@ -194,6 +195,7 @@ public:
     INT GetSkillValue(UINT iSkillNumber);
     INT GetSkillCost(UINT iSkillNumber, BYTE nClass);
 
+    /* 05A0 */ CString m_sName;
     /* 05A4 */ CCreatureFileHeader m_baseStats;
     /* 0920 */ CDerivedStats m_derivedStats;
     /* 3DFA */ CAIObjectType m_liveTypeAI;
