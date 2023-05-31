@@ -1183,8 +1183,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 0:
                 return new CUIControlButtonCharGenPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 2:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlEditCharGen(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo));
             case 3:
                 return new CUIControlButtonCharGenPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             }
@@ -1519,8 +1518,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 4:
                 return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
             case 7:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlEditCharGen(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo));
             }
             break;
         case 51:

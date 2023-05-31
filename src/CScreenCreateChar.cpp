@@ -2090,7 +2090,7 @@ void CScreenCreateChar::sub_610DC0()
 }
 
 // 0x611900
-void CScreenCreateChar::sub_611900()
+void CScreenCreateChar::OnCharacterExportItemSelect(INT nItem)
 {
     // TODO: Incomplete.
 }
@@ -3781,6 +3781,82 @@ BYTE CUIControlButtonCharGenRaceSelection::GetRace()
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
         // __LINE__: 12897
         UTIL_ASSERT(FALSE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x61C8F0
+CUIControlEditCharGen::CUIControlEditCharGen(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo)
+    : CUIControlEdit(panel, controlInfo, 0)
+{
+}
+
+// 0x61C940
+CUIControlEditCharGen::~CUIControlEditCharGen()
+{
+}
+
+// 0x61CA10
+void CUIControlEditCharGen::OnKeyDown(SHORT nKey)
+{
+    CUIControlEdit::OnKeyDown(nKey);
+
+    CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 13111
+    UTIL_ASSERT(pCreateChar != NULL);
+
+    INT nGameSprite = pCreateChar->GetSpriteId();
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (m_nID == 7) {
+            pCreateChar->OnCharacterExportItemSelect(-1);
+        }
+
+        pCreateChar->UpdatePopupPanel(m_pPanel->m_nID, pSprite);
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// 0x61CAE0
+void CUIControlEditCharGen::OnEditReturn(CString sText)
+{
+    CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
+    INT nGameSprite = pCreateChar->GetSpriteId();
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (m_nID == 7) {
+            pCreateChar->OnCharacterExportItemSelect(-1);
+        }
+
+        pCreateChar->UpdatePopupPanel(m_pPanel->m_nID, pSprite);
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
     }
 }
 

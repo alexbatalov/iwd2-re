@@ -7,6 +7,7 @@
 #include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
 #include "CUIControlButtonPlusMinus.h"
+#include "CUIControlEdit.h"
 #include "CUIControlScrollBar.h"
 #include "CUIControlTextDisplay.h"
 #include "CVidFont.h"
@@ -119,7 +120,7 @@ public:
     void sub_610A40(INT a1);
     void OnCharacterImportItemSelect(INT nItem);
     void sub_610DC0();
-    void sub_611900();
+    void OnCharacterExportItemSelect(INT nItem);
     void sub_611AF0();
     void sub_612800();
     void sub_612930();
@@ -320,6 +321,14 @@ public:
     ~CUIControlButtonCharGenRaceSelection() override;
     void OnLButtonClick(CPoint pt) override;
     BYTE GetRace();
+};
+
+class CUIControlEditCharGen : public CUIControlEdit {
+public:
+    CUIControlEditCharGen(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo);
+    ~CUIControlEditCharGen() override;
+    void OnKeyDown(SHORT nKey) override;
+    void OnEditReturn(CString sText) override;
 };
 
 class CUIControlButtonClericWizardSpecializationSelection : public CUIControlButton3State {
