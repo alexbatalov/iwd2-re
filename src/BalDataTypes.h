@@ -58,6 +58,26 @@ typedef struct UI_Control_Button_st {
     BYTE yHigh;
 } UI_CONTROL_BUTTON;
 
+typedef struct UI_Control_Text_st {
+    /* 0000 */ UI_CONTROL base;
+    /* 000E */ RESREF refMosaic;
+    /* 0016 */ RESREF refMosaicTextFocused;
+    /* 001E */ RESREF refMosaicTextUnFocused;
+    /* 0026 */ RESREF refCursor;
+    /* 002E */ WORD nSequence;
+    /* 0030 */ WORD nFrame;
+    /* 0032 */ WORD x;
+    /* 0034 */ WORD y;
+    /* 0036 */ WORD field_36;
+    /* 0038 */ WORD field_38;
+    /* 003A */ RESREF refFont;
+    /* 0042 */ WORD field_42;
+    /* 0044 */ char initialText[32];
+    /* 0064 */ WORD nMaxLength;
+    /* 0066 */ WORD nTextCapitalization;
+    /* 0068 */ WORD field_68;
+} UI_CONTROL_EDIT;
+
 // TODO: Incomplete.
 typedef struct UI_Control_Slider_st {
     UI_CONTROL base;

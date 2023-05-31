@@ -10,7 +10,7 @@ public:
 
     CVidMosaic();
     ~CVidMosaic();
-    void GetSize(CSize& frameSize, BOOL a3);
+    void GetSize(CSize& frameSize, BOOL bDemanded);
     BOOL Render(INT nSurface, int x, int y, const CRect& rMosaic, const CRect& rClip, DWORD dwFlags, BOOL bDemanded);
     BOOL BltFromFX(LPDIRECTDRAWSURFACE pSurface, int x, int y, const CSize& size, const CRect& rClip, DWORD dwFlags);
     BOOL BltMos8To16(DWORD* pSurface, LONG lPitch, UINT nTile, const CRect& rRect, DWORD dwFlags);

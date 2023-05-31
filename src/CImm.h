@@ -3,6 +3,7 @@
 
 #include "mfc.h"
 
+class CVidFont;
 class CVidMosaic;
 
 // #guess
@@ -34,10 +35,12 @@ public:
     void sub_7C2CC0(HWND hWnd);
     void sub_7C2E10(HWND hWnd);
     CString sub_7C2ED0(HWND hWnd);
-    void sub_7C3140(const CRect& a1, const CRect& a2, int a3, BOOL bDemanded);
+    CRect sub_7C3020(const CPoint& ptPanel, const CSize& panelSize, const CPoint& ptEdit, const CSize& editSize, SHORT nFontHeight);
+    void sub_7C3140(const CRect& a1, const CRect& a2, CVidFont* pVidFont, BOOL bDemanded);
     CString sub_7C34A0();
     CString sub_7C34D0();
     void CleanUp();
+    CString sub_4D89E0();
 
     static const CSize PADDING;
 

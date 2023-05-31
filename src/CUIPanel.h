@@ -48,8 +48,8 @@ public:
     /* 010A */ BOOL m_bInactiveRender;
     /* 010E */ BOOL m_bEnabled;
     /* 0112 */ int field_112;
-    /* 0116 */ CRect field_116;
-    /* 0126 */ int field_126;
+    /* 0116 */ CRect m_rImeSuggestionsFrame;
+    /* 0126 */ CVidFont* m_pImeSuggestionsFont;
 };
 
 #endif /* CUIPANEL_H_ */

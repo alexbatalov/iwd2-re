@@ -2,6 +2,7 @@
 
 #include "CChitin.h"
 #include "CUtil.h"
+#include "CVidFont.h"
 #include "CVidMosaic.h"
 #include "CWarp.h"
 
@@ -365,8 +366,16 @@ CString CImm::sub_7C2ED0(HWND hWnd)
     return sString;
 }
 
+// 0x7C3020
+CRect CImm::sub_7C3020(const CPoint& ptPanel, const CSize& panelSize, const CPoint& ptEdit, const CSize& editSize, SHORT nFontHeight)
+{
+    // TODO: Incomplete.
+
+    return CRect();
+}
+
 // 0x7C3140
-void CImm::sub_7C3140(const CRect& a1, const CRect& a2, int a3, BOOL bDemanded)
+void CImm::sub_7C3140(const CRect& a1, const CRect& a2, CVidFont* pVidFont, BOOL bDemanded)
 {
     // TODO: Incomplete.
 }
@@ -391,4 +400,14 @@ void CImm::CleanUp()
     }
 
     field_13C = NULL;
+}
+
+// NOTE: Odd location.
+//
+// 0x4D89E0
+CString CImm::sub_4D89E0()
+{
+    CString v1 = field_130;
+    field_130 = "";
+    return v1;
 }

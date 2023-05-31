@@ -17,20 +17,20 @@ CVidMosaic::~CVidMosaic()
 }
 
 // 0x7B0BF0
-void CVidMosaic::GetSize(CSize& frameSize, BOOL a3)
+void CVidMosaic::GetSize(CSize& frameSize, BOOL bDemanded)
 {
     // __FILE__: C:\Projects\Icewind2\src\chitin\ChVidImage.cpp
     // __LINE__: 5312
     UTIL_ASSERT(pRes != NULL);
 
-    if (!a3) {
+    if (!bDemanded) {
         pRes->Demand();
     }
 
     frameSize.cx = pRes->GetMosaicWidth(m_bDoubleSize);
     frameSize.cy = pRes->GetMosaicHeight(m_bDoubleSize);
 
-    if (!a3) {
+    if (!bDemanded) {
         pRes->Release();
     }
 }

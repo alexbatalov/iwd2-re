@@ -15,7 +15,7 @@ CUIPanel::CUIPanel(CUIManager* manager, UI_PANELHEADER* panelInfo)
     // __LINE__: 286
     UTIL_ASSERT(manager != NULL && panelInfo != NULL);
 
-    field_126 = 0;
+    m_pImeSuggestionsFont = NULL;
     m_pManager = manager;
     m_nID = panelInfo->nPanelID;
 
@@ -44,7 +44,7 @@ CUIPanel::CUIPanel(CUIManager* manager, UI_PANELHEADER* panelInfo)
     m_bInactiveRender = FALSE;
     field_112 = 0;
 
-    SetRectEmpty(&field_116);
+    SetRectEmpty(&m_rImeSuggestionsFrame);
 
     if (panelInfo->nType == 1) {
         m_mosBackground.SetResRef(CResRef(panelInfo->refMosaic), FALSE, TRUE);
@@ -393,10 +393,10 @@ void CUIPanel::Render()
     }
 
     if (m_bEnabled) {
-        if (!field_116.IsRectNull()) {
+        if (!m_rImeSuggestionsFrame.IsRectNull()) {
             CRect r;
-            r.IntersectRect(field_116, CRect(m_ptOrigin, m_size));
-            g_pChitin->cImm.sub_7C3140(field_116, r, field_126, FALSE);
+            r.IntersectRect(m_rImeSuggestionsFrame, CRect(m_ptOrigin, m_size));
+            g_pChitin->cImm.sub_7C3140(m_rImeSuggestionsFrame, r, m_pImeSuggestionsFont, FALSE);
         }
     }
 }
