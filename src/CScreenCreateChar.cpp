@@ -519,7 +519,7 @@ void CScreenCreateChar::ResetPopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
         UpdateHelp(pPanel->m_nID, 29, 17247);
         break;
     case 5:
-        sub_609900(pPanel, pSprite);
+        ResetNamePanel(pPanel, pSprite);
         break;
     case 6:
         ResetSkillsPanel(pPanel, pSprite);
@@ -750,9 +750,23 @@ void CScreenCreateChar::sub_609750(CUIPanel* pPanel, CGameSprite* pSprite)
 }
 
 // 0x609900
-void CScreenCreateChar::sub_609900(CUIPanel* pPanel, CGameSprite* pSprite)
+void CScreenCreateChar::ResetNamePanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    CString sName(pSprite->GetName());
+
+    // FIXME: Unused.
+    CAIObjectType typeAI(pSprite->m_startTypeAI);
+    typeAI.m_sName = CString("");
+
+    CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(2));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 2241
+    UTIL_ASSERT(pEdit != NULL);
+
+    pEdit->SetText(sName);
+
+    m_cUIManager.SetCapture(pEdit, 2);
 }
 
 // 0x609A10

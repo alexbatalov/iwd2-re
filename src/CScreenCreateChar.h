@@ -73,7 +73,7 @@ public:
     void sub_609460(CUIPanel* pPanel, CGameSprite* pSprite);
     void sub_6095E0();
     void sub_609750(CUIPanel* pPanel, CGameSprite* pSprite);
-    void sub_609900(CUIPanel* pPanel, CGameSprite* pSprite);
+    void ResetNamePanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void ResetAppearancePanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void sub_609B30(CUIPanel* pPanel, CGameSprite* pSprite);
     void ResetClericWizardSpecializationPanel(CUIPanel* pPanel, CGameSprite* pSprite);
