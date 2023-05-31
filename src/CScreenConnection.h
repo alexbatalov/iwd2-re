@@ -46,6 +46,7 @@ public:
     /* 0088 */ BOOL CheckMouseRButton() override;
     /* 0090 */ void OnRButtonDown(CPoint pt) override;
     /* 0094 */ void OnRButtonUp(CPoint pt) override;
+    /* 00AC */ void OnKeyDown(SHORT nKeysFlags) override;
     /* 00A0 */ SHORT GetNumVirtualKeys() override;
     /* 00A4 */ CKeyInfo* GetVirtualKeys() override;
     /* 00A8 */ BYTE* GetVirtualKeysFlags() override;

@@ -466,6 +466,56 @@ void CScreenConnection::RenderTorch()
     pVidMode->BKUnlock();
 }
 
+// 0x5FB160
+void CScreenConnection::OnKeyDown(SHORT nKeysFlags)
+{
+    if (!m_bAllowInput) {
+        return;
+    }
+
+    if (m_bEMWaiting) {
+        return;
+    }
+
+    if (nKeysFlags > 0) {
+        for (SHORT nKeyFlag = 0; nKeyFlag < nKeysFlags; nKeyFlag++) {
+            switch (m_pVirtualKeysFlags[nKeyFlag]) {
+            case VK_ESCAPE:
+                if (GetTopPopup() != NULL) {
+                    OnCancelButtonClick();
+                }
+                break;
+            case VK_RETURN:
+                if (GetTopPopup() != NULL) {
+                    if (g_pBaldurChitin->field_1A0) {
+                        // FIXME: Unused.
+                        g_pChitin->GetWnd();
+                        if (g_pBaldurChitin->cImm.field_128) {
+                            m_cUIManager.OnKeyDown(VK_RETURN);
+                        } else {
+                            OnDoneButtonClick();
+                        }
+                    } else {
+                        OnDoneButtonClick();
+                    }
+                }
+                break;
+            default:
+                if (!m_cUIManager.OnKeyDown(m_pVirtualKeysFlags[nKeyFlag])) {
+                    switch (m_pVirtualKeysFlags[nKeyFlag]) {
+                    case VK_TAB:
+                        m_cUIManager.ForceToolTip();
+                        break;
+                    case VK_SNAPSHOT:
+                        g_pBaldurChitin->GetCurrentVideoMode()->PrintScreen();
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
 // 0x5FB280
 void CScreenConnection::OnLButtonDblClk(CPoint pt)
 {
