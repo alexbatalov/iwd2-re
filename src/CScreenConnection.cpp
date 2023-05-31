@@ -1644,7 +1644,26 @@ void CScreenConnection::ResetModemPanel()
 // 0x6002C0
 void CScreenConnection::ResetTCPIPPanel()
 {
-    // TODO: Incomplete.
+    CUIPanel* pPanel = m_cUIManager.GetPanel(5);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4900
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(1));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4902
+    UTIL_ASSERT(pEdit != NULL);
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(6));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4906
+    UTIL_ASSERT(pText != NULL);
+
+    pText->SetTopString(pText->m_plstStrings->FindIndex(0));
+    m_cUIManager.SetCapture(pEdit, 2);
 }
 
 // 0x600370
