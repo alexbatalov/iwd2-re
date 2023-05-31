@@ -57,6 +57,7 @@ public:
     INT GetSessionIndex() { return m_nSessionIndex; }
 
     void RenderTorch();
+    CUIPanel* GetTopPopup();
     void EnablePopupPanel(DWORD dwPanelId, BOOL bEnable);
     void ShowPopupPanel(DWORD dwPanelId, BOOL bShow);
     void ResetPopupPanel(DWORD nID);

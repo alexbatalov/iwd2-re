@@ -428,7 +428,7 @@ void CScreenConnection::RenderTorch()
         return;
     }
 
-    if (m_lPopupStack.GetTailPosition() != NULL && m_lPopupStack.GetTail() != NULL) {
+    if (GetTopPopup() != NULL) {
         return;
     }
 
@@ -774,7 +774,7 @@ void CScreenConnection::TimerSynchronousUpdate()
     RenderTorch();
 
     if (m_bIsNight) {
-        if (m_lPopupStack.GetTailPosition() == NULL || m_lPopupStack.GetTail() == NULL) {
+        if (GetTopPopup() == NULL) {
             SHORT nCurrentFrame = m_vcTorch.m_nCurrentFrame;
             SHORT nCurrentSequence = m_vcTorch.m_nCurrentSequence;
             if (nCurrentFrame + 1 < m_vcTorch.GetSequenceLength(nCurrentSequence, FALSE)) {
@@ -784,6 +784,12 @@ void CScreenConnection::TimerSynchronousUpdate()
             }
         }
     }
+}
+
+// NOTE: Inlined.
+CUIPanel* CScreenConnection::GetTopPopup()
+{
+    return m_lPopupStack.GetTailPosition() != NULL ? m_lPopupStack.GetTail() : NULL;
 }
 
 // NOTE: Inlined.
@@ -1034,7 +1040,7 @@ void CScreenConnection::OnDoneButtonClick()
 // 0x5FE930
 void CScreenConnection::OnCancelButtonClick()
 {
-    if (m_lPopupStack.GetTailPosition() != NULL && m_lPopupStack.GetTail() != NULL) {
+    if (GetTopPopup() != NULL) {
         CUIPanel* pPanel = m_lPopupStack.GetTail();
 
         CSingleLock lock(&(GetManager()->field_36), 0);
@@ -1081,7 +1087,7 @@ void CScreenConnection::OnJoinGameButtonClick()
 
     pVidMode->m_bPointerEnabled = TRUE;
 
-    if (m_lPopupStack.GetTailPosition() != NULL && m_lPopupStack.GetTail() != NULL) {
+    if (GetTopPopup() != NULL) {
         DismissPopup();
     }
 
@@ -1817,7 +1823,7 @@ void CScreenConnection::OnLobbyExitButtonClick()
 // 0x602550
 void CScreenConnection::CancelEngine()
 {
-    while (m_lPopupStack.GetTailPosition() != NULL && m_lPopupStack.GetTail() != NULL) {
+    while (GetTopPopup() != NULL) {
         CUIPanel* pPanel = m_lPopupStack.GetTail();
         switch (pPanel->m_nID) {
         case 19:
@@ -2281,10 +2287,7 @@ void CUIControlButtonConnectionSerialPort::OnLButtonClick(CPoint pt)
 
     pConnection->m_nSerialPort = nPort;
 
-    CUIPanel* pPanel = pConnection->m_lPopupStack.GetTailPosition() != NULL
-        ? pConnection->m_lPopupStack.GetTail()
-        : NULL;
-    pConnection->UpdatePopupPanel(pPanel->m_nID);
+    pConnection->UpdatePopupPanel(pConnection->GetTopPopup()->m_nID);
 
     lock.Unlock();
 }
@@ -2384,10 +2387,7 @@ void CUIControlButtonConnectionSerialBaudRate::OnLButtonClick(CPoint pt)
 
     pConnection->m_nSerialBaudRate = nBaudRate;
 
-    CUIPanel* pPanel = pConnection->m_lPopupStack.GetTailPosition() != NULL
-        ? pConnection->m_lPopupStack.GetTail()
-        : NULL;
-    pConnection->UpdatePopupPanel(pPanel->m_nID);
+    pConnection->UpdatePopupPanel(pConnection->GetTopPopup()->m_nID);
 
     lock.Unlock();
 }
