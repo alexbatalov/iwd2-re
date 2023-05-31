@@ -48,6 +48,7 @@ public:
     void EnginesGameUninit();
     CString GetFontName();
     CString GetStartUpGameSpyLocation();
+    CString GetStartUpAddress();
 
     // NOTE: Inlined in `CVidInf::SetClipper`.
     BOOL FullScreen() { return m_bFullscreen; }
@@ -165,8 +166,8 @@ public:
     /* 0104 */ int m_nScreenHeight; // #guess
     /* 0108 */ CPoint m_ptScreen;
     /* 0110 */ int field_110;
-    /* 0114 */ int field_114;
-    /* 0118 */ CString field_118;
+    /* 0114 */ BOOL m_bStartUpConnect;
+    /* 0118 */ CString m_sStartUpAddress;
     /* 011C */ CString field_11C;
     /* 0120 */ CString field_120;
     /* 0124 */ int field_124;

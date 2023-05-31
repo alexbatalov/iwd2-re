@@ -5,6 +5,7 @@
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
+#include "CUIControlEdit.h"
 #include "CUIControlTextDisplay.h"
 #include "CVidCell.h"
 #include "CVidFont.h"
@@ -236,6 +237,16 @@ public:
     CUIControlButtonConnectionSerialBaudRate(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonConnectionSerialBaudRate() override;
     void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlEditConnectionWithDefault : public CUIControlEdit {
+public:
+    CUIControlEditConnectionWithDefault(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo, BYTE nField);
+    ~CUIControlEditConnectionWithDefault();
+    void OnKeyDown(SHORT nKey) override;
+    void OnEditReturn(CString sText) override;
+
+    /* 0892 */ BYTE m_nField;
 };
 
 class CUIControlButtonConnectionErrorButton : public CUIControlButton {

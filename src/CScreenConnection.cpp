@@ -692,8 +692,8 @@ void CScreenConnection::TimerAsynchronousUpdate()
                 g_pBaldurChitin->m_bIsAutoStarting = FALSE;
                 m_bAllowInput = TRUE;
             } else {
-                if (g_pBaldurChitin->field_114 || g_pBaldurChitin->field_130) {
-                    if (g_pBaldurChitin->field_114) {
+                if (g_pBaldurChitin->m_bStartUpConnect || g_pBaldurChitin->field_130) {
+                    if (g_pBaldurChitin->m_bStartUpConnect) {
                         AutoStartConnect();
                     }
                 } else {
@@ -1266,7 +1266,7 @@ void CScreenConnection::UpdateMainPanel()
 
         pButton = static_cast<CUIControlButton*>(pPanel->GetControl(3));
         pButton->SetEnabled(FALSE);
-    } else if (g_pChitin->field_114) {
+    } else if (g_pChitin->m_bStartUpConnect) {
         pButton = static_cast<CUIControlButton*>(pPanel->GetControl(0));
         pButton->SetEnabled(FALSE);
 
@@ -1286,7 +1286,7 @@ void CScreenConnection::UpdateMainPanel()
     // __LINE__: 3931
     UTIL_ASSERT(pButton != NULL);
 
-    pButton->SetEnabled(g_pChitin->cNetwork.m_bServiceProviderEnumerated && !g_pChitin->field_114);
+    pButton->SetEnabled(g_pChitin->cNetwork.m_bServiceProviderEnumerated && !g_pChitin->m_bStartUpConnect);
 
     if (nServiceProviderType != CNetwork::SERV_PROV_NULL && !g_pChitin->field_110) {
         pButton = static_cast<CUIControlButton*>(pPanel->GetControl(11));
@@ -2441,6 +2441,142 @@ void CUIControlButtonConnectionSerialBaudRate::OnLButtonClick(CPoint pt)
 
     lock.Unlock();
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x604560
+CUIControlEditConnectionWithDefault::CUIControlEditConnectionWithDefault(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo, BYTE nField)
+    : CUIControlEdit(panel, controlInfo, 0)
+{
+    CString sValue;
+
+    switch (nField) {
+    case 0:
+        GetPrivateProfileStringA("Multiplayer",
+            "Session Name",
+            "",
+            sValue.GetBuffer(128),
+            128,
+            g_pBaldurChitin->GetIniFileName());
+        break;
+    case 1:
+        GetPrivateProfileStringA("Multiplayer",
+            "Session Password",
+            "",
+            sValue.GetBuffer(128),
+            128,
+            g_pBaldurChitin->GetIniFileName());
+        break;
+    case 2:
+        GetPrivateProfileStringA("Multiplayer",
+            "Player Name",
+            "",
+            sValue.GetBuffer(128),
+            128,
+            g_pBaldurChitin->GetIniFileName());
+        break;
+    case 3:
+        if (g_pChitin->m_bStartUpConnect) {
+            sValue = g_pChitin->GetStartUpAddress();
+        } else {
+            GetPrivateProfileStringA("Multiplayer",
+                "TCP/IP Address",
+                "",
+                sValue.GetBuffer(128),
+                128,
+                g_pBaldurChitin->GetIniFileName());
+        }
+        break;
+    case 4:
+        GetPrivateProfileStringA("Multiplayer",
+            "Phone Number",
+            "",
+            sValue.GetBuffer(128),
+            128,
+            g_pBaldurChitin->GetIniFileName());
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 8543
+        UTIL_ASSERT(FALSE);
+    }
+
+    sValue.ReleaseBuffer();
+
+    if (sValue.GetLength() > 0) {
+        m_sText = sValue;
+    }
+
+    m_nField = nField;
+}
+
+// 0x6047D0
+CUIControlEditConnectionWithDefault::~CUIControlEditConnectionWithDefault()
+{
+}
+
+// 0x6048A0
+void CUIControlEditConnectionWithDefault::OnKeyDown(SHORT nKey)
+{
+    CUIControlEdit::OnKeyDown(nKey);
+
+    CScreenConnection* pConnection = g_pBaldurChitin->m_pEngineConnection;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 8581
+    UTIL_ASSERT(pConnection != NULL);
+
+    switch (m_nField) {
+    case 5:
+        pConnection->m_nSessionIndex = -1;
+        break;
+    }
+
+    pConnection->UpdatePopupPanel(m_pPanel->m_nID);
+}
+
+// 0x604900
+void CUIControlEditConnectionWithDefault::OnEditReturn(CString sText)
+{
+    switch (m_nField) {
+    case 0:
+        WritePrivateProfileStringA("Multiplayer",
+            "Session Name",
+            sText,
+            g_pBaldurChitin->GetIniFileName());
+        break;
+    case 1:
+        WritePrivateProfileStringA("Multiplayer",
+            "Session Password",
+            sText,
+            g_pBaldurChitin->GetIniFileName());
+        break;
+    case 2:
+        WritePrivateProfileStringA("Multiplayer",
+            "Player Name",
+            sText,
+            g_pBaldurChitin->GetIniFileName());
+        break;
+    case 3:
+        WritePrivateProfileStringA("Multiplayer",
+            "TCP/IP Address",
+            sText,
+            g_pBaldurChitin->GetIniFileName());
+        break;
+    case 4:
+        WritePrivateProfileStringA("Multiplayer",
+            "Phone Number",
+            sText,
+            g_pBaldurChitin->GetIniFileName());
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 8633
+        UTIL_ASSERT(FALSE);
+    }
+}
+
+// -----------------------------------------------------------------------------
 
 // 0x604F80
 CUIControlButtonConnectionErrorButton::CUIControlButtonConnectionErrorButton(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)

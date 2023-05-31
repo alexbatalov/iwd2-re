@@ -243,9 +243,8 @@ CChitin::CChitin()
     memset(field_1B32, 0, sizeof(field_1B32));
 
     field_110 = 0;
-    field_114 = 0;
-
-    field_118 = "";
+    m_bStartUpConnect = FALSE;
+    m_sStartUpAddress = "";
     field_120 = "";
     field_11C = "";
     field_124 = 0;
@@ -1992,6 +1991,12 @@ CString CChitin::GetFontName()
 CString CChitin::GetStartUpGameSpyLocation()
 {
     return m_sStartUpGameSpyLocation;
+}
+
+// 0x601AB0
+CString CChitin::GetStartUpAddress()
+{
+    return m_sStartUpAddress;
 }
 
 // 0x7928A0
