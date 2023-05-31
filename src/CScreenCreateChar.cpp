@@ -608,7 +608,13 @@ void CScreenCreateChar::ResetExportPanel(CUIPanel* pPanel, CGameSprite* pSprite)
     m_nCharacterIndex = -1;
     UpdateCharacterList(pPanel, 2, m_nCharacterIndex);
 
-    // TODO: Incomplete.
+    CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(7));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 1790
+    UTIL_ASSERT(pEdit != NULL);
+
+    pEdit->SetText(CString(""));
 
     UpdateHelp(pPanel->m_nID, 4, 10962);
 }
