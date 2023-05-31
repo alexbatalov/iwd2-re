@@ -1301,6 +1301,12 @@ void CScreenConnection::UpdateMainPanel()
     m_cUIManager.InvalidateRect(NULL);
 }
 
+// 0x5FF450
+void CScreenConnection::UpdateSessionList(CUIPanel* pPanel, DWORD nTextId)
+{
+    // TODO: Incomplete.
+}
+
 // 0x5FF690
 void CScreenConnection::UpdateProtocolPanel()
 {
@@ -1530,7 +1536,33 @@ void CScreenConnection::UpdateModemPanel()
 // 0x5FFD20
 void CScreenConnection::UpdateTCPIPPanel()
 {
-    // TODO: Incomplete.
+    CUIPanel* pPanel = m_cUIManager.GetPanel(5);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4408
+    UTIL_ASSERT(pPanel != NULL);
+
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(7));
+
+    if (m_nSessionIndex >= 0) {
+        CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(1));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 4415
+        UTIL_ASSERT(pEdit != NULL);
+
+        pEdit->SetText(CString(""));
+    }
+
+    UpdateSessionList(pPanel, 6);
+
+    CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(3));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4424
+    UTIL_ASSERT(pDone != NULL);
+
+    pDone->SetEnabled(IsDoneButtonClickable());
 }
 
 // 0x5FFF60

@@ -74,6 +74,7 @@ public:
     void sub_5FEB70();
     void EnableMainPanel(BOOL bEnable);
     void UpdateMainPanel();
+    void UpdateSessionList(CUIPanel* pPanel, DWORD nTextId);
     void UpdateProtocolPanel();
     void UpdateSerialPanel();
     void UpdateModemPanel();
