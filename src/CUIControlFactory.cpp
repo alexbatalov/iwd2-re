@@ -1307,14 +1307,11 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 0:
                 return new CUIControlButtonCharGenPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 1:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlButtonCharGenAppearancePortrait(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 2:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlButtonCharGenAppearanceLeft(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 3:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlButtonCharGenAppearanceRight(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 5:
                 return new CUIControlButtonCharGenPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 6:
@@ -1796,6 +1793,45 @@ CUIControlButtonCharGenSkillsHotArea::CUIControlButtonCharGenSkillsHotArea(CUIPa
 
 // 0x779230
 CUIControlButtonCharGenSkillsHotArea::~CUIControlButtonCharGenSkillsHotArea()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x7792D0
+CUIControlButtonCharGenAppearancePortrait::CUIControlButtonCharGenAppearancePortrait(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, 0, 1)
+{
+}
+
+// 0x779350
+CUIControlButtonCharGenAppearancePortrait::~CUIControlButtonCharGenAppearancePortrait()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x7793F0
+CUIControlButtonCharGenAppearanceLeft::CUIControlButtonCharGenAppearanceLeft(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+}
+
+// 0x779440
+CUIControlButtonCharGenAppearanceLeft::~CUIControlButtonCharGenAppearanceLeft()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x7794E0
+CUIControlButtonCharGenAppearanceRight::CUIControlButtonCharGenAppearanceRight(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+}
+
+// 0x779530
+CUIControlButtonCharGenAppearanceRight::~CUIControlButtonCharGenAppearanceRight()
 {
 }
 

@@ -40,6 +40,30 @@ public:
     void OnHotAreaClick(CPoint pt) override;
 };
 
+class CUIControlButtonCharGenAppearancePortrait : public CUIControlButton {
+public:
+    CUIControlButtonCharGenAppearancePortrait(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGenAppearancePortrait() override;
+    BOOL Render(BOOL bForce) override;
+    void SetPortrait(const CResRef& resRef);
+
+    /* 0666 */ CResRef m_portraitResRef;
+};
+
+class CUIControlButtonCharGenAppearanceLeft : public CUIControlButton {
+public:
+    CUIControlButtonCharGenAppearanceLeft(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGenAppearanceLeft() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonCharGenAppearanceRight : public CUIControlButton {
+public:
+    CUIControlButtonCharGenAppearanceRight(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGenAppearanceRight() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlButtonCharGenFeatsHotArea : public CUIControlButtonHotArea {
 public:
     CUIControlButtonCharGenFeatsHotArea(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

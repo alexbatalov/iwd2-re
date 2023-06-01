@@ -1,11 +1,13 @@
 #ifndef FILEFORMAT_H_
 #define FILEFORMAT_H_
 
-#include "mfc.h"
+#include "BalDataTypes.h"
 
 class CCreatureFileHeader {
 public:
     /* 0000 */ DWORD m_name;
+    /* 002C */ RESREF m_portraitSmall;
+    /* 0034 */ RESREF m_portraitLarge;
     /* 0048 */ BYTE m_attackBase;
     /* 0083 */ BYTE m_barbarianLevel;
     /* 0084 */ BYTE m_bardLevel;

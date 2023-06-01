@@ -111,6 +111,8 @@ public:
     void sub_610190(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
     CString GetCurrentPortrait(CGameSprite* pSprite);
+    void IncCurrentPortrait(CGameSprite* pSprite);
+    void DecCurrentPortrait(CGameSprite* pSprite);
     void sub_610540();
     void RecallMemoryAbilities(BYTE& nSTR, BYTE& nDEX, BYTE& nCON, BYTE& nINT, BYTE& nWIS, BYTE& nCHR, INT& nExtra);
     INT GetNumHatedRaces();

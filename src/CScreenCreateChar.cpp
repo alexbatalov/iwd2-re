@@ -2144,6 +2144,45 @@ CString CScreenCreateChar::GetCurrentPortrait(CGameSprite* pSprite)
     }
 }
 
+// NOTE: Inlined.
+void CScreenCreateChar::IncCurrentPortrait(CGameSprite* pSprite)
+{
+    INT nCount;
+    switch (pSprite->m_startTypeAI.m_nGender) {
+    case CAIOBJECTTYPE_SEX_MALE:
+        nCount = sizeof(MALE_PORTRAITS) / sizeof(MALE_PORTRAITS[0]);
+        break;
+    case CAIOBJECTTYPE_SEX_FEMALE:
+        nCount = sizeof(FEMALE_PORTRAITS) / sizeof(FEMALE_PORTRAITS[0]);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 5575
+        UTIL_ASSERT(FALSE);
+    }
+
+    m_nCurrentPortrait = (m_nCurrentPortrait + 1) % nCount;
+}
+
+void CScreenCreateChar::DecCurrentPortrait(CGameSprite* pSprite)
+{
+    INT nCount;
+    switch (pSprite->m_startTypeAI.m_nGender) {
+    case CAIOBJECTTYPE_SEX_MALE:
+        nCount = sizeof(MALE_PORTRAITS) / sizeof(MALE_PORTRAITS[0]);
+        break;
+    case CAIOBJECTTYPE_SEX_FEMALE:
+        nCount = sizeof(FEMALE_PORTRAITS) / sizeof(FEMALE_PORTRAITS[0]);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 5618
+        UTIL_ASSERT(FALSE);
+    }
+
+    m_nCurrentPortrait = (m_nCurrentPortrait + nCount - 1) % nCount;
+}
+
 // 0x610540
 void CScreenCreateChar::sub_610540()
 {
@@ -4336,6 +4375,125 @@ void CUIControlButtonClericWizardSpecializationSelection::OnLButtonClick(CPoint 
         }
 
         pCreateChar->UpdateHelp(m_pPanel->m_nID, 11, strDescription);
+        pCreateChar->UpdatePopupPanel(m_pPanel->m_nID, pSprite);
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Unclear why this function is separated from constructor/destructor
+// pair (originally in `CUIControlButtons.cpp`, now in `CUIControlFactory.cpp`).
+//
+// 0x61D0E0
+void CUIControlButtonCharGenAppearancePortrait::SetPortrait(const CResRef& resRef)
+{
+    if (m_portraitResRef != resRef) {
+        m_portraitResRef = resRef;
+        InvalidateRect();
+    }
+}
+
+// NOTE: Unclear why this function is separated from constructor/destructor
+// pair (originally in `CUIControlButtons.cpp`, now in `CUIControlFactory.cpp`).
+//
+// 0x61D120
+BOOL CUIControlButtonCharGenAppearancePortrait::Render(BOOL bForce)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Unclear why this function is separated from constructor/destructor
+// pair (originally in `CUIControlButtons.cpp`, now in `CUIControlFactory.cpp`).
+//
+// 0x61D3E0
+void CUIControlButtonCharGenAppearanceLeft::OnLButtonClick(CPoint pt)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 13613
+    UTIL_ASSERT(pGame != NULL && pCreateChar != NULL);
+
+    INT nGameSprite = pCreateChar->GetSpriteId();
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        CString sPortrait;
+        CResRef portraitResRef;
+
+        pCreateChar->DecCurrentPortrait(pSprite);
+        sPortrait = pCreateChar->GetCurrentPortrait(pSprite);
+
+        portraitResRef = sPortrait + "S";
+        portraitResRef.GetResRef(pSprite->m_baseStats.m_portraitSmall);
+
+        portraitResRef = sPortrait + "L";
+        portraitResRef.GetResRef(pSprite->m_baseStats.m_portraitLarge);
+
+        pCreateChar->UpdatePopupPanel(m_pPanel->m_nID, pSprite);
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Unclear why this function is separated from constructor/destructor
+// pair (originally in `CUIControlButtons.cpp`, now in `CUIControlFactory.cpp`).
+//
+// 0x61D600
+void CUIControlButtonCharGenAppearanceRight::OnLButtonClick(CPoint pt)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 13675
+    UTIL_ASSERT(pGame != NULL && pCreateChar != NULL);
+
+    INT nGameSprite = pCreateChar->GetSpriteId();
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        CString sPortrait;
+        CResRef portraitResRef;
+
+        pCreateChar->IncCurrentPortrait(pSprite);
+        sPortrait = pCreateChar->GetCurrentPortrait(pSprite);
+
+        portraitResRef = sPortrait + "S";
+        portraitResRef.GetResRef(pSprite->m_baseStats.m_portraitSmall);
+
+        portraitResRef = sPortrait + "L";
+        portraitResRef.GetResRef(pSprite->m_baseStats.m_portraitLarge);
+
         pCreateChar->UpdatePopupPanel(m_pPanel->m_nID, pSprite);
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
