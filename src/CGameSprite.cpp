@@ -304,7 +304,7 @@ SHORT CGameSprite::GetTurnUndeadLevel()
         nLevel += m_derivedStats.GetClassLevel(CAIOBJECTTYPE_C_PALADIN) - 2;
     }
 
-    return nLevel;
+    return static_cast<SHORT>(nLevel);
 }
 
 // 0x71B9A0
@@ -675,7 +675,7 @@ BOOL CGameSprite::sub_763150(UINT nFeatNumber)
     }
 
     if (nFeatNumber == CGAMESPRITE_FEAT_CLEAVE) {
-        if (m_derivedStats.field_54 >= 13) {
+        if (m_derivedStats.m_nSTR >= 13) {
             if (sub_763150(CGAMESPRITE_FEAT_POWER_ATTACK)) {
                 INT nValue = GetFeatValue(CGAMESPRITE_FEAT_CLEAVE);
                 if (nValue == 1 || nValue == 2) {
@@ -698,10 +698,10 @@ BOOL CGameSprite::sub_763200(UINT nFeatNumber, INT a2)
     // __LINE__: 29333
     UTIL_ASSERT(nFeatNumber < CGAMESPRITE_FEAT_NUMFEATS);
 
-    BYTE nSTR = m_derivedStats.field_54;
-    BYTE nDEX = m_derivedStats.field_5A;
-    BYTE nINT = m_derivedStats.field_56;
-    BYTE nWIS = m_derivedStats.field_58;
+    SHORT nSTR = m_derivedStats.m_nSTR;
+    SHORT nDEX = m_derivedStats.m_nDEX;
+    SHORT nINT = m_derivedStats.m_nINT;
+    SHORT nWIS = m_derivedStats.m_nWIS;
 
     if (a2 == 1) {
         nSTR = m_baseStats.m_STRBase;

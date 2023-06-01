@@ -6,9 +6,9 @@
 #include "BalDataTypes.h"
 #include "C2DArray.h"
 #include "CAIIdList.h"
-#include "FileFormat.h"
 
 class CAIObjectType;
+class CCreatureFileHeader;
 class CDerivedStats;
 class CGameSprite;
 

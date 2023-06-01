@@ -52,10 +52,10 @@ public:
     /* 0046 */ BYTE m_nLevel;
     /* 0047 */ BYTE m_nClassLevels[CAIOBJECT_CLASS_MAX];
     /* 0052 */ short field_52;
-    /* 0054 */ short field_54;
-    /* 0056 */ short field_56;
-    /* 0058 */ short field_58;
-    /* 005A */ short field_5A;
+    /* 0054 */ SHORT m_nSTR;
+    /* 0056 */ SHORT m_nINT;
+    /* 0058 */ SHORT m_nWIS;
+    /* 005A */ SHORT m_nDEX;
     /* 005C */ short field_5C;
     /* 005E */ short field_5E;
     /* 0060 */ int field_60;

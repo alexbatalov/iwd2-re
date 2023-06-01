@@ -42,10 +42,10 @@ CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
     field_3A += other.field_3A;
     field_3C += other.field_3C;
     m_nLevel += other.m_nLevel;
-    field_54 += other.field_54;
-    field_56 += other.field_56;
-    field_58 += other.field_58;
-    field_5A += other.field_5A;
+    m_nSTR += other.m_nSTR;
+    m_nINT += other.m_nINT;
+    m_nWIS += other.m_nWIS;
+    m_nDEX += other.m_nDEX;
     field_5C += other.field_5C;
     field_5E += other.field_5E;
     field_60 += other.field_60;
@@ -185,17 +185,17 @@ LONG CDerivedStats::GetAtOffset(SHORT offset)
     case 35:
         return field_52;
     case 36:
-        return field_54;
+        return m_nSTR;
     case 37:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\CDerivedStats.cpp
         // __LINE__: 1412
         UTIL_ASSERT(FALSE);
     case 38:
-        return field_56;
+        return m_nINT;
     case 39:
-        return field_58;
+        return m_nWIS;
     case 40:
-        return field_5A;
+        return m_nDEX;
     case 41:
         return field_5C;
     case 42:
