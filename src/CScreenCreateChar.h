@@ -109,7 +109,7 @@ public:
     void UpdateClassPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateAlignmentPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateClericWizardSpecializationPanel(CUIPanel* pPanel, CGameSprite* pSprite);
-    void sub_610190(CUIPanel* pPanel, CGameSprite* pSprite);
+    void UpdateHatedRacePanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
     CString GetCurrentPortrait(CGameSprite* pSprite);
     void IncCurrentPortrait(CGameSprite* pSprite);

@@ -6,6 +6,7 @@
 #include "BalDataTypes.h"
 #include "C2DArray.h"
 #include "CAIIdList.h"
+#include "FileFormat.h"
 
 class CAIObjectType;
 class CDerivedStats;
@@ -419,6 +420,7 @@ public:
     INT GetLoadingHint(INT nHintNumber) const;
     INT GetNumLoadingHints() const;
     const C2DArray* GetClassAbilityTable(BYTE nClass, DWORD nSpecialist) const;
+    BOOLEAN IsHatedRace(BYTE nRace, const CCreatureFileHeader& BStats) const;
 
     /* 0000 */ C2DArray m_tReactionModCharisma;
     /* 0024 */ C2DArray m_tReactionModReputation;

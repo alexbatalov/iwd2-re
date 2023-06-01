@@ -1633,7 +1633,7 @@ void CScreenCreateChar::UpdatePopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
         UpdateClericWizardSpecializationPanel(pPanel, pSprite);
         break;
     case 15:
-        sub_610190(pPanel, pSprite);
+        UpdateHatedRacePanel(pPanel, pSprite);
         break;
     case 16:
         sub_60F430(pPanel, pSprite);
@@ -2364,9 +2364,41 @@ void CScreenCreateChar::UpdateClericWizardSpecializationPanel(CUIPanel* pPanel, 
 }
 
 // 0x610190
-void CScreenCreateChar::sub_610190(CUIPanel* pPanel, CGameSprite* pSprite)
+void CScreenCreateChar::UpdateHatedRacePanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    if (field_1624 == NULL) {
+        field_1624 = static_cast<CUIControlScrollBar*>(pPanel->GetControl(1));
+    }
+
+    m_pCurrentScrollBar = field_1624;
+
+    for (INT nIndex = 0; nIndex < 11; nIndex++) {
+        // NOTE: Uninline.
+        BYTE nRace = GetHatedRace(nIndex);
+
+        CUIControlButton3State* pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(22 + nIndex));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 5346
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->SetText(FetchString(GetRangerHatedRaceStrref(nRace)));
+        pButton->SetSelected(nRace == pSprite->m_baseStats.m_favoredEnemies[0]);
+        pButton->SetEnabled(!g_pBaldurChitin->GetObjectGame()->m_ruleTables.IsHatedRace(nRace, pSprite->m_baseStats)
+            || pButton->m_bSelected);
+    }
+
+    CUIControlScrollBarCharGenHatedRace* pScrollBar = static_cast<CUIControlScrollBarCharGenHatedRace*>(pPanel->GetControl(1));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 5359
+    UTIL_ASSERT(pScrollBar != NULL);
+
+    // NOTE: Uninline.
+    pScrollBar->UpdateScrollBar();
+
+    CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(0));
+    pDone->SetEnabled(IsDoneButtonClickable());
 }
 
 // 0x6103A0

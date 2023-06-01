@@ -2957,3 +2957,15 @@ const C2DArray* CRuleTables::GetClassAbilityTable(BYTE nClass, DWORD nSpecialist
     // __LINE__: 6354
     UTIL_ASSERT_MSG(FALSE, "GetClassAbilityTable Being  called incorrectly");
 }
+
+// 0x546830
+BOOLEAN CRuleTables::IsHatedRace(BYTE nRace, const CCreatureFileHeader& BStats) const
+{
+    for (int index = 0; index < 8; index++) {
+        if (BStats.m_favoredEnemies[index] == nRace) {
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
