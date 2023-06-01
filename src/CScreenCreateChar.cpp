@@ -937,7 +937,17 @@ void CScreenCreateChar::ResetNamePanel(CUIPanel* pPanel, CGameSprite* pSprite)
 // 0x609A10
 void CScreenCreateChar::ResetAppearancePanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    CResRef portraitResRef;
+
+    m_nCurrentPortrait = 0;
+
+    CString sPortrait = GetCurrentPortrait(pSprite);
+
+    portraitResRef = sPortrait + "S";
+    portraitResRef.GetResRef(pSprite->m_baseStats.m_portraitSmall);
+
+    portraitResRef = sPortrait + "L";
+    portraitResRef.GetResRef(pSprite->m_baseStats.m_portraitLarge);
 }
 
 // 0x609B30
