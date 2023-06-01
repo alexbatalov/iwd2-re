@@ -2360,7 +2360,86 @@ void CScreenCreateChar::UpdateAlignmentPanel(CUIPanel* pPanel, CGameSprite* pSpr
 // 0x60FEE0
 void CScreenCreateChar::UpdateClericWizardSpecializationPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(10));
+
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    if (pSprite->m_startTypeAI.IsClassValid(CAIObjectType::C_WIZARD)) {
+        for (INT nButtonId = 2; nButtonId <= 13; nButtonId++) {
+            // FIXME: Should be outside of the loop.
+            CString sClassName;
+            if (nButtonId <= 9 || nButtonId >= 13) {
+                CUIControlButtonClericWizardSpecializationSelection* pButton = static_cast<CUIControlButtonClericWizardSpecializationSelection*>(pPanel->GetControl(nButtonId));
+                DWORD nSpecialization = pSprite->m_baseStats.m_specialization;
+                BOOLEAN bSelected = (pButton->GetSpecialization(CAIOBJECTTYPE_C_WIZARD) & nSpecialization) != 0;
+
+                // FIXME: Meaningless at this point as was already used.
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+                // __LINE__: 5258
+                UTIL_ASSERT(pButton != NULL);
+
+                pButton->SetSelected(bSelected);
+                pButton->SetEnabled(TRUE);
+                ruleTables.GetClassStringLower(CAIOBJECTTYPE_C_WIZARD,
+                    pButton->GetSpecialization(CAIOBJECTTYPE_C_WIZARD),
+                    0,
+                    sClassName,
+                    1);
+                pButton->SetText(sClassName);
+            }
+        }
+    } else if (pSprite->m_startTypeAI.IsClassValid(CAIObjectType::C_CLERIC)) {
+        for (INT nButtonId = 2; nButtonId <= 13; nButtonId++) {
+            if (nButtonId <= 9 || nButtonId >= 13) {
+                CUIControlButtonClericWizardSpecializationSelection* pButton = static_cast<CUIControlButtonClericWizardSpecializationSelection*>(pPanel->GetControl(nButtonId));
+                DWORD nSpecialization = pSprite->m_baseStats.m_specialization;
+                BOOLEAN bSelected = (pButton->GetSpecialization(CAIOBJECTTYPE_C_CLERIC) & nSpecialization) != 0;
+
+                pButton->SetSelected(bSelected);
+                pButton->SetEnabled(TRUE);
+
+                STRREF strClass;
+                switch (nButtonId) {
+                case 13:
+                    strClass = 38097; // "Painbearer of Ilmater"
+                    break;
+                case 2:
+                    strClass = 38098; // "Morninglord of Lathander"
+                    break;
+                case 3:
+                    strClass = 38099; // "Silverstar of Selune"
+                    break;
+                case 4:
+                    strClass = 38100; // "Watcher of Helm"
+                    break;
+                case 5:
+                    strClass = 38101; // "Lorekeeper of Oghma"
+                    break;
+                case 7:
+                    strClass = 38102; // "Battleguard of Tempus"
+                    break;
+                case 6:
+                    strClass = 38103; // "Dreadmaster of Bane"
+                    break;
+                case 8:
+                    strClass = 38106; // "Demarch of Mask"
+                    break;
+                case 9:
+                    strClass = 38107; // "Stormlord of Talos"
+                    break;
+                }
+
+                pButton->SetText(FetchString(strClass));
+            }
+        }
+    } else {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 5293
+        UTIL_ASSERT(FALSE);
+    }
+
+    CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(0));
+    pDone->SetEnabled(IsDoneButtonClickable());
 }
 
 // 0x610190
