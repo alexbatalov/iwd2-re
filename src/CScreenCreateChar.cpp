@@ -1780,7 +1780,23 @@ void CScreenCreateChar::UpdateCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite
 // 0x60E2D0
 void CScreenCreateChar::UpdateAppearancePanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    CUIControlButtonCharGenAppearancePortrait* pPortrait = static_cast<CUIControlButtonCharGenAppearancePortrait*>(pPanel->GetControl(1));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 4188
+    UTIL_ASSERT(pPortrait != NULL);
+
+    CString sPortrait = GetCurrentPortrait(pSprite);
+
+    // NOTE: Uninline.
+    pPortrait->SetPortrait(CResRef(sPortrait + "L"));
+
+    // FIXME: Redundant, previous `SetPortrait` has already invalidated button
+    // if it was necessary.
+    pPortrait->InvalidateRect();
+
+    CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(6));
+    pDone->SetEnabled(IsDoneButtonClickable());
 }
 
 // 0x60E3E0
