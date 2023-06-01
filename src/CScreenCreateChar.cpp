@@ -341,7 +341,39 @@ BOOL CScreenCreateChar::CheckMouseMove()
 // 0x607620
 void CScreenCreateChar::OnMouseMove(CPoint pt)
 {
-    // TODO: Incomplete.
+    if (m_cUIManager.GetPanel(15)->m_bActive) {
+        CUIPanel* pPanel = m_cUIManager.GetPanel(15);
+        CUIControlBase* pControl = pPanel->GetControl(8);
+        if (pControl != NULL && pControl->IsOver(pt - pPanel->m_ptOrigin)) {
+            field_1624 = static_cast<CUIControlScrollBar*>(pPanel->GetControl(9));
+            m_pCurrentScrollBar = field_1624;
+        } else {
+            field_1624 = static_cast<CUIControlScrollBar*>(pPanel->GetControl(1));
+            m_pCurrentScrollBar = field_1624;
+        }
+    } else if (m_cUIManager.GetPanel(20)->m_bActive) {
+        CUIPanel* pPanel = m_cUIManager.GetPanel(20);
+        CUIControlBase* pControl = pPanel->GetControl(4);
+        if (pControl != NULL && pControl->IsOver(pt - pPanel->m_ptOrigin)) {
+            field_1624 = static_cast<CUIControlScrollBar*>(pPanel->GetControl(5));
+            m_pCurrentScrollBar = field_1624;
+        } else {
+            field_1624 = static_cast<CUIControlScrollBar*>(pPanel->GetControl(3));
+            m_pCurrentScrollBar = field_1624;
+        }
+    } else if (m_cUIManager.GetPanel(55)->m_bActive) {
+        CUIPanel* pPanel = m_cUIManager.GetPanel(55);
+        CUIControlBase* pControl = pPanel->GetControl(92);
+        if (pControl != NULL && pControl->IsOver(pt - pPanel->m_ptOrigin)) {
+            field_1624 = static_cast<CUIControlScrollBar*>(pPanel->GetControl(91));
+            m_pCurrentScrollBar = field_1624;
+        } else {
+            field_1624 = static_cast<CUIControlScrollBar*>(pPanel->GetControl(104));
+            m_pCurrentScrollBar = field_1624;
+        }
+    }
+
+    m_cUIManager.OnMouseMove(pt);
 }
 
 // 0x49FC40
