@@ -408,7 +408,7 @@ void CScreenMovies::StartMovies(INT nEngineState)
 
     while (pos != NULL) {
         sName = m_pMovies->GetAt(pos);
-        pGame->m_ruleTables.GetMovieDescription(sName, sDescription);
+        pGame->GetRuleTables().GetMovieDescription(sName, sDescription);
         if (sDescription.Compare("") != 0) {
             pText->DisplayString(CString(""),
                 sDescription,

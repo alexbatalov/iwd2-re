@@ -698,7 +698,7 @@ BOOL CScreenChapter::StartText(const CResRef& cResText)
     // __LINE__ 1440
     UTIL_ASSERT(m_pTextList == NULL);
 
-    m_pTextList = pGame->m_ruleTables.GetChapterText(m_cResText, -1);
+    m_pTextList = pGame->GetRuleTables().GetChapterText(m_cResText, -1);
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenChapter.cpp
     // __LINE__ 1443

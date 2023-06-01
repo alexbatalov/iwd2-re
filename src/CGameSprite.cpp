@@ -310,7 +310,7 @@ SHORT CGameSprite::GetTurnUndeadLevel()
 // 0x71B9A0
 SHORT CGameSprite::GetLayOnHandsAmount()
 {
-    return g_pBaldurChitin->GetObjectGame()->m_ruleTables.GetLayOnHandsAmount(m_typeAI, m_derivedStats);
+    return g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetLayOnHandsAmount(m_typeAI, m_derivedStats);
 }
 
 // 0x72DE60
@@ -1032,14 +1032,14 @@ INT CGameSprite::GetSkillCost(UINT iSkillNumber, BYTE nClass)
     // __LINE__: 30463
     UTIL_ASSERT(iSkillNumber < CGAMESPRITE_SKILL_NUMSKILLS);
 
-    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
 
     int v1 = 0;
     int v2 = 0;
     int v3 = 0;
     for (INT iClassType = 1; iClassType <= CAIOBJECT_CLASS_MAX; iClassType++) {
         if (m_derivedStats.HasClass(iClassType)) {
-            INT nCost = atol(pGame->m_ruleTables.m_tSkillCosts.GetAt(CPoint(iClassType - 1, iSkillNumber)));
+            INT nCost = atol(ruleTables.m_tSkillCosts.GetAt(CPoint(iClassType - 1, iSkillNumber)));
             if (nCost == 1) {
                 v3 = 1;
                 if (iClassType == nClass) {
@@ -1075,7 +1075,7 @@ INT CGameSprite::GetSkillCost(UINT iSkillNumber, BYTE nClass)
     for (INT iClassType = 1; iClassType <= CAIOBJECT_CLASS_MAX; iClassType++) {
         INT nLevel = m_derivedStats.GetClassLevel(iClassType);
         if (nLevel > 0) {
-            INT nCost = atol(pGame->m_ruleTables.m_tSkillCosts.GetAt(CPoint(iClassType - 1, iSkillNumber)));
+            INT nCost = atol(ruleTables.m_tSkillCosts.GetAt(CPoint(iClassType - 1, iSkillNumber)));
             if (nCost > 0) {
                 nLevels += nLevel;
             }

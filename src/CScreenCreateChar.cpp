@@ -1291,16 +1291,16 @@ void CScreenCreateChar::ResetAlignmentPanel(CUIPanel* pPanel, CGameSprite* pSpri
 // 0x60BE30
 BOOL CScreenCreateChar::ResetAbility(CGameSprite* pSprite, const CString& sMin, const CString& sMax, const CString& sMod, BYTE& nAbility, BYTE& nMin, BYTE& nMax, INT& nMod, BOOL bRandomize)
 {
-    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
     INT nBestClass = pSprite->m_derivedStats.GetBestClass();
 
-    const CString& sRace = pGame->m_ruleTables.GetRaceString(pSprite->m_startTypeAI.m_nRace, pSprite->m_startTypeAI.m_nSubRace);
-    BYTE nMinRaceReq = static_cast<BYTE>(atol(pGame->m_ruleTables.m_tAbilityRaceReq.GetAt(sMin, sRace)));
-    BYTE nMaxRaceReq = static_cast<BYTE>(atol(pGame->m_ruleTables.m_tAbilityRaceReq.GetAt(sMax, sRace)));
-    BYTE nRaceAdj = static_cast<BYTE>(atol(pGame->m_ruleTables.m_tAbilityRaceAdj.GetAt(sMod, sRace)));
+    const CString& sRace = ruleTables.GetRaceString(pSprite->m_startTypeAI.m_nRace, pSprite->m_startTypeAI.m_nSubRace);
+    BYTE nMinRaceReq = static_cast<BYTE>(atol(ruleTables.m_tAbilityRaceReq.GetAt(sMin, sRace)));
+    BYTE nMaxRaceReq = static_cast<BYTE>(atol(ruleTables.m_tAbilityRaceReq.GetAt(sMax, sRace)));
+    BYTE nRaceAdj = static_cast<BYTE>(atol(ruleTables.m_tAbilityRaceAdj.GetAt(sMod, sRace)));
 
-    const CString& sClass = pGame->m_ruleTables.GetClassString(nBestClass, pSprite->m_baseStats.m_specialization);
-    BYTE nMinClassReq = static_cast<BYTE>(atol(pGame->m_ruleTables.m_tAbilityClassReq.GetAt(sMin, sClass)));
+    const CString& sClass = ruleTables.GetClassString(nBestClass, pSprite->m_baseStats.m_specialization);
+    BYTE nMinClassReq = static_cast<BYTE>(atol(ruleTables.m_tAbilityClassReq.GetAt(sMin, sClass)));
 
     if (bRandomize == TRUE) {
         INT v1 = 6;
@@ -1316,7 +1316,7 @@ BOOL CScreenCreateChar::ResetAbility(CGameSprite* pSprite, const CString& sMin, 
             nRolls--;
         }
     } else {
-        nAbility = static_cast<BYTE>(pGame->m_cOptions.field_CA);
+        nAbility = static_cast<BYTE>(g_pBaldurChitin->GetObjectGame()->m_cOptions.field_CA);
     }
 
     BOOL bResult;
@@ -1742,7 +1742,7 @@ void CScreenCreateChar::UpdateMonkPaladinSpecializationPanel(CUIPanel* pPanel, C
     CString v2;
     CString v3;
 
-    sClass = g_pBaldurChitin->GetObjectGame()->m_ruleTables.GetClassString(pSprite->m_startTypeAI.m_nClass, 0);
+    sClass = g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetClassString(pSprite->m_startTypeAI.m_nClass, 0);
 
     pBtOption1->SetInactiveRender(FALSE);
     pBtOption2->SetInactiveRender(FALSE);
@@ -1864,12 +1864,12 @@ void CScreenCreateChar::UpdateSubRacePanel(CUIPanel* pPanel, CGameSprite* pSprit
     CString sRaceMixed;
     CString v5;
 
-    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
 
-    sRace = pGame->m_ruleTables.GetRaceString(pSprite->m_startTypeAI.m_nRace, pSprite->m_startTypeAI.m_nSubRace);
-    sPureRace = pGame->m_ruleTables.GetRaceString(pSprite->m_startTypeAI.m_nRace, 0);
+    sRace = ruleTables.GetRaceString(pSprite->m_startTypeAI.m_nRace, pSprite->m_startTypeAI.m_nSubRace);
+    sPureRace = ruleTables.GetRaceString(pSprite->m_startTypeAI.m_nRace, 0);
 
-    sSubRaceFileName = pGame->m_ruleTables.m_tSrTable.GetAt(CString("SRFILE"), sPureRace);
+    sSubRaceFileName = ruleTables.m_tSrTable.GetAt(CString("SRFILE"), sPureRace);
     if (m_tSubRace.GetResRef() != sSubRaceFileName) {
         m_tSubRace.Load(CResRef(sSubRaceFileName));
     }
@@ -1896,11 +1896,11 @@ void CScreenCreateChar::UpdateSubRacePanel(CUIPanel* pPanel, CGameSprite* pSprit
 
     for (INT nIndex = 0; nIndex < m_tSubRace.GetHeight(); nIndex++) {
         INT nSubRaceListIndex = atol(m_tSubRace.GetAt(CPoint(0, nIndex)));
-        INT nSubRaceId = atol(pGame->m_ruleTables.m_tSrList.GetAt(CPoint(4, nSubRaceListIndex)));
+        INT nSubRaceId = atol(ruleTables.m_tSrList.GetAt(CPoint(4, nSubRaceListIndex)));
         if (nSubRaceId == 0) {
-            pGame->m_ruleTables.GetRaceStringMixed(pSprite->m_startTypeAI.m_nRace, sRaceMixed, 0);
+            ruleTables.GetRaceStringMixed(pSprite->m_startTypeAI.m_nRace, sRaceMixed, 0);
         } else {
-            STRREF strRace = atol(pGame->m_ruleTables.m_tSrList.GetAt(CPoint(2, nSubRaceListIndex)));
+            STRREF strRace = atol(ruleTables.m_tSrList.GetAt(CPoint(2, nSubRaceListIndex)));
             sRaceMixed = FetchString(strRace);
         }
 
@@ -2055,7 +2055,7 @@ void CScreenCreateChar::UpdateFeatsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 
     m_pCurrentScrollBar = field_1624;
 
-    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
 
     HighlightLabel(pPanel,
         0x1000000C,
@@ -2073,8 +2073,8 @@ void CScreenCreateChar::UpdateFeatsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 
     for (DWORD dwButtonId = 14; dwButtonId <= 32; dwButtonId += 2) {
         DWORD index = (dwButtonId - 14) / 2;
-        DWORD id = pGame->m_ruleTables.GetFeatId(m_nTopFeat + index);
-        STRREF strName = pGame->m_ruleTables.GetFeatName(id);
+        DWORD id = ruleTables.GetFeatId(m_nTopFeat + index);
+        STRREF strName = ruleTables.GetFeatName(id);
         UpdateLabel(pPanel,
             0x10000001 + index,
             "%s",
@@ -2099,7 +2099,7 @@ void CScreenCreateChar::UpdateFeatsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 
     DWORD index = 0;
     for (DWORD dwButtonId = 15; dwButtonId < 35; dwButtonId += 2) {
-        DWORD id = pGame->m_ruleTables.GetFeatId(m_nTopFeat + index);
+        DWORD id = ruleTables.GetFeatId(m_nTopFeat + index);
         CUIControlButton* pButton;
 
         BOOL bPlusEnabled = pSprite->sub_763A40(id, 1) && m_nExtraFeats > 0;
@@ -2171,7 +2171,7 @@ void CScreenCreateChar::UpdateAbilitiesPanel(CUIPanel* pPanel, CGameSprite* pSpr
         "%d",
         m_nExtraAbilityPoints);
 
-    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
 
     // STR
     UpdateLabel(pPanel,
@@ -2181,7 +2181,7 @@ void CScreenCreateChar::UpdateAbilitiesPanel(CUIPanel* pPanel, CGameSprite* pSpr
     UpdateLabel(pPanel,
         0x10000024,
         "%+d",
-        pGame->m_ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_STRBase));
+        ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_STRBase));
     HighlightLabel(pPanel,
         0x10000024,
         pSprite->m_baseStats.m_STRBase != 10 && pSprite->m_baseStats.m_STRBase != 11,
@@ -2195,7 +2195,7 @@ void CScreenCreateChar::UpdateAbilitiesPanel(CUIPanel* pPanel, CGameSprite* pSpr
     UpdateLabel(pPanel,
         0x10000025,
         "%+d",
-        pGame->m_ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_DEXBase));
+        ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_DEXBase));
     HighlightLabel(pPanel,
         0x10000025,
         pSprite->m_baseStats.m_DEXBase != 10 && pSprite->m_baseStats.m_DEXBase != 11,
@@ -2209,7 +2209,7 @@ void CScreenCreateChar::UpdateAbilitiesPanel(CUIPanel* pPanel, CGameSprite* pSpr
     UpdateLabel(pPanel,
         0x10000026,
         "%+d",
-        pGame->m_ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_CONBase));
+        ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_CONBase));
     HighlightLabel(pPanel,
         0x10000026,
         pSprite->m_baseStats.m_CONBase != 10 && pSprite->m_baseStats.m_CONBase != 11,
@@ -2223,7 +2223,7 @@ void CScreenCreateChar::UpdateAbilitiesPanel(CUIPanel* pPanel, CGameSprite* pSpr
     UpdateLabel(pPanel,
         0x10000027,
         "%+d",
-        pGame->m_ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_INTBase));
+        ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_INTBase));
     HighlightLabel(pPanel,
         0x10000027,
         pSprite->m_baseStats.m_INTBase != 10 && pSprite->m_baseStats.m_INTBase != 11,
@@ -2237,7 +2237,7 @@ void CScreenCreateChar::UpdateAbilitiesPanel(CUIPanel* pPanel, CGameSprite* pSpr
     UpdateLabel(pPanel,
         0x10000028,
         "%+d",
-        pGame->m_ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_WISBase));
+        ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_WISBase));
     HighlightLabel(pPanel,
         0x10000028,
         pSprite->m_baseStats.m_WISBase != 10 && pSprite->m_baseStats.m_WISBase != 11,
@@ -2251,7 +2251,7 @@ void CScreenCreateChar::UpdateAbilitiesPanel(CUIPanel* pPanel, CGameSprite* pSpr
     UpdateLabel(pPanel,
         0x10000029,
         "%+d",
-        pGame->m_ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_CHRBase));
+        ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_CHRBase));
     HighlightLabel(pPanel,
         0x10000029,
         pSprite->m_baseStats.m_CHRBase != 10 && pSprite->m_baseStats.m_CHRBase != 11,
@@ -2337,7 +2337,7 @@ void CScreenCreateChar::UpdateAlignmentPanel(CUIPanel* pPanel, CGameSprite* pSpr
 {
     m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(12));
 
-    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
 
     for (INT nButton = 2; nButton <= 10; nButton++) {
         CUIControlButtonCharGenAlignmentSelection* pAlignment = static_cast<CUIControlButtonCharGenAlignmentSelection*>(pPanel->GetControl(nButton));
@@ -2347,7 +2347,7 @@ void CScreenCreateChar::UpdateAlignmentPanel(CUIPanel* pPanel, CGameSprite* pSpr
 
         pAlignment->SetSelected(pSprite->m_startTypeAI.m_nGender == nAlignment);
 
-        BOOL bIsValid = pGame->m_ruleTables.IsValidAlignment(pSprite->m_startTypeAI.m_nClass,
+        BOOL bIsValid = ruleTables.IsValidAlignment(pSprite->m_startTypeAI.m_nClass,
             nAlignment,
             pSprite->m_baseStats.m_specialization);
         pAlignment->SetEnabled(bIsValid);
@@ -2384,7 +2384,7 @@ void CScreenCreateChar::UpdateHatedRacePanel(CUIPanel* pPanel, CGameSprite* pSpr
 
         pButton->SetText(FetchString(GetRangerHatedRaceStrref(nRace)));
         pButton->SetSelected(nRace == pSprite->m_baseStats.m_favoredEnemies[0]);
-        pButton->SetEnabled(!g_pBaldurChitin->GetObjectGame()->m_ruleTables.IsHatedRace(nRace, pSprite->m_baseStats)
+        pButton->SetEnabled(!g_pBaldurChitin->GetObjectGame()->GetRuleTables().IsHatedRace(nRace, pSprite->m_baseStats)
             || pButton->m_bSelected);
     }
 
@@ -3710,9 +3710,10 @@ BOOL CUIControlButtonCharGenSkillsPlusMinus::OnLButtonDown(CPoint pt)
         return FALSE;
     }
 
-    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
-    DWORD id = pGame->m_ruleTables.GetSkillId(g_pBaldurChitin->m_pEngineCreateChar->m_nTopSkill + offset);
-    STRREF strDescription = pGame->m_ruleTables.GetSkillDescription(id);
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    DWORD id = ruleTables.GetSkillId(g_pBaldurChitin->m_pEngineCreateChar->m_nTopSkill + offset);
+    STRREF strDescription = ruleTables.GetSkillDescription(id);
     g_pBaldurChitin->m_pEngineCreateChar->UpdateHelp(m_pPanel->m_nID, 92, strDescription);
 
     return OnLButtonDown(pt);
@@ -3822,13 +3823,13 @@ void CUIControlButtonCharGenSkillsPlusMinus::AdjustValue()
     if (rc == CGameObjectArray::SUCCESS) {
         CAIObjectType typeAI(pSprite->m_startTypeAI);
 
-        CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+        const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
 
-        DWORD id = pGame->m_ruleTables.GetSkillId(pCreateChar->m_nTopSkill + offset);
+        DWORD id = ruleTables.GetSkillId(pCreateChar->m_nTopSkill + offset);
         INT nValue = pSprite->GetSkillValue(id);
 
         // FIXME: Looks wrong (obtaining id from id).
-        INT nCost = pSprite->GetSkillCost(pGame->m_ruleTables.GetSkillId(id),
+        INT nCost = pSprite->GetSkillCost(ruleTables.GetSkillId(id),
             typeAI.m_nClass);
 
         if (bInc) {
@@ -3841,7 +3842,7 @@ void CUIControlButtonCharGenSkillsPlusMinus::AdjustValue()
                 pSprite->SetSkillValue(id, nValue - 1);
 
                 // FIXME: Looks wrong (obtaining id from id).
-                pCreateChar->m_nExtraSkillPoints += pSprite->GetSkillCost(pGame->m_ruleTables.GetSkillId(id),
+                pCreateChar->m_nExtraSkillPoints += pSprite->GetSkillCost(ruleTables.GetSkillId(id),
                     typeAI.m_nClass);
             }
         }
@@ -4105,12 +4106,12 @@ BYTE CUIControlButtonCharGenGenderSelection::GetGender()
 CUIControlButtonCharGenClassSelection::CUIControlButtonCharGenClassSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 1)
 {
-    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
     CString sClassName;
     // FIXME: Unused.
     STR_RES strRes;
 
-    pGame->m_ruleTables.GetClassStringLower(GetClass(), 0x4000, 0, sClassName, 1);
+    ruleTables.GetClassStringLower(GetClass(), 0x4000, 0, sClassName, 1);
     SetText(sClassName);
     m_nSelectedFrame = 0;
 }
@@ -4957,10 +4958,10 @@ void CUIControlButtonCharGenSkillsHotArea::OnHotAreaClick(CPoint pt)
         UTIL_ASSERT(FALSE);
     }
 
-    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
 
-    DWORD id = pGame->m_ruleTables.GetSkillId(offset + g_pBaldurChitin->m_pEngineCreateChar->m_nTopSkill);
-    STRREF strDescription = pGame->m_ruleTables.GetSkillDescription(id);
+    DWORD id = ruleTables.GetSkillId(offset + g_pBaldurChitin->m_pEngineCreateChar->m_nTopSkill);
+    STRREF strDescription = ruleTables.GetSkillDescription(id);
     g_pBaldurChitin->m_pEngineCreateChar->UpdateHelp(m_pPanel->m_nID, 92, strDescription);
 
     // FIXME: Same call, what for?
@@ -5369,10 +5370,10 @@ CUIControlButtonMonkPaladinSpecializationSelection::~CUIControlButtonMonkPaladin
 DWORD CUIControlButtonMonkPaladinSpecializationSelection::GetHelp(CGameSprite* pSprite)
 {
     CAIObjectType typeAI(pSprite->m_startTypeAI);
-    CString sClass = g_pBaldurChitin->GetObjectGame()->m_ruleTables.GetClassString(typeAI.m_nClass,
+    CString sClass = g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetClassString(typeAI.m_nClass,
         pSprite->m_baseStats.m_specialization);
 
-    DWORD str = atol(g_pBaldurChitin->GetObjectGame()->m_ruleTables.m_tKitList.GetAt(CString("HELP"), sClass));
+    DWORD str = atol(g_pBaldurChitin->GetObjectGame()->GetRuleTables().m_tKitList.GetAt(CString("HELP"), sClass));
     if (str != 0) {
         return str;
     }
@@ -5485,11 +5486,11 @@ DWORD CUIControlButtonCharGenSubRaceSelection::GetHelp(const CAIObjectType& type
     CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
 
     INT nSubRaceListIndex = atol(pCreateChar->m_tSubRace.GetAt(CPoint(0, nIndex)));
-    INT nSubRaceId = atol(g_pBaldurChitin->GetObjectGame()->m_ruleTables.m_tSrList.GetAt(CPoint(4, nSubRaceListIndex)));
+    INT nSubRaceId = atol(g_pBaldurChitin->GetObjectGame()->GetRuleTables().m_tSrList.GetAt(CPoint(4, nSubRaceListIndex)));
 
     STRREF strHelp;
     if (pCreateChar->m_tSubRace.GetResRef() != "" && nSubRaceId != 0) {
-        strHelp = atol(g_pBaldurChitin->GetObjectGame()->m_ruleTables.m_tSrList.GetAt(CPoint(2, nSubRaceListIndex)));
+        strHelp = atol(g_pBaldurChitin->GetObjectGame()->GetRuleTables().m_tSrList.GetAt(CPoint(2, nSubRaceListIndex)));
     } else {
         switch (typeAI.m_nRace) {
         case CAIOBJECTTYPE_R_HUMAN:
@@ -5682,10 +5683,10 @@ void CUIControlButtonCharGenFeatsHotArea::OnHotAreaClick(CPoint pt)
         UTIL_ASSERT(FALSE);
     }
 
-    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
 
-    DWORD id = pGame->m_ruleTables.GetFeatId(offset + g_pBaldurChitin->m_pEngineCreateChar->m_nTopFeat);
-    STRREF strDescription = pGame->m_ruleTables.GetFeatDescription(id);
+    DWORD id = ruleTables.GetFeatId(offset + g_pBaldurChitin->m_pEngineCreateChar->m_nTopFeat);
+    STRREF strDescription = ruleTables.GetFeatDescription(id);
     g_pBaldurChitin->m_pEngineCreateChar->UpdateHelp(m_pPanel->m_nID, 92, strDescription);
 }
 
@@ -5909,9 +5910,10 @@ BOOL CUIControlButtonCharGenFeatsPlusMinus::OnLButtonDown(CPoint pt)
         return FALSE;
     }
 
-    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
-    DWORD id = pGame->m_ruleTables.GetFeatId(g_pBaldurChitin->m_pEngineCreateChar->m_nTopFeat + offset);
-    STRREF strDescription = pGame->m_ruleTables.GetFeatDescription(id);
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    DWORD id = ruleTables.GetFeatId(g_pBaldurChitin->m_pEngineCreateChar->m_nTopFeat + offset);
+    STRREF strDescription = ruleTables.GetFeatDescription(id);
     g_pBaldurChitin->m_pEngineCreateChar->UpdateHelp(m_pPanel->m_nID, 92, strDescription);
 
     return OnLButtonDown(pt);
@@ -6019,7 +6021,7 @@ void CUIControlButtonCharGenFeatsPlusMinus::AdjustValue()
     } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
     if (rc == CGameObjectArray::SUCCESS) {
-        DWORD id = g_pBaldurChitin->GetObjectGame()->m_ruleTables.GetFeatId(pCreateChar->m_nTopFeat + offset);
+        DWORD id = g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetFeatId(pCreateChar->m_nTopFeat + offset);
         INT nValue = pSprite->GetFeatValue(id);
 
         if (bInc) {
@@ -6032,8 +6034,9 @@ void CUIControlButtonCharGenFeatsPlusMinus::AdjustValue()
                 pSprite->SetFeatValue(id, nValue - 1);
                 pCreateChar->m_nExtraFeats++;
 
-                CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
-                for (INT nFeat = 0; nFeat < pGame->m_ruleTables.m_tFeats.GetHeight(); nFeat++) {
+                const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+                for (INT nFeat = 0; nFeat < ruleTables.m_tFeats.GetHeight(); nFeat++) {
                     while (pSprite->GetFeatValue(nFeat) > 0) {
                         if (pSprite->sub_763200(nFeat, 1)) {
                             break;

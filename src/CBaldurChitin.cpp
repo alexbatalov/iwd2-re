@@ -1298,7 +1298,7 @@ BOOL CBaldurChitin::GetEAXActive()
 int CBaldurChitin::GetSoundEnvironment(EAXPRESET& preset, int environment)
 {
     if (m_pObjectGame != NULL) {
-        return m_pObjectGame->m_ruleTables.GetSoundEnvironment(preset, environment);
+        return m_pObjectGame->GetRuleTables().GetSoundEnvironment(preset, environment);
     }
 
     return EAX_ENVIRONMENT_GENERIC;

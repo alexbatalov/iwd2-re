@@ -68,6 +68,8 @@ public:
     CGameArea* GetVisibleArea();
     CMultiplayerSettings* GetMultiplayerSettings();
 
+    const CRuleTables& GetRuleTables() { return m_ruleTables; }
+
     static const CString FOGOWAR_RESREF;
     static const CString SAVE_OBJECT_LIST_NAME;
     static const CString CHAPTER_GLOBAL;

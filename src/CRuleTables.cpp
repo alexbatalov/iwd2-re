@@ -2437,7 +2437,7 @@ DWORD CRuleTables::GetXPCap() const
 }
 
 // 0x544D20
-BOOL CRuleTables::IsValidSubRace(BYTE nRace, BYTE nSubRace)
+BOOL CRuleTables::IsValidSubRace(BYTE nRace, BYTE nSubRace) const
 {
     switch (nRace) {
     case CAIOBJECTTYPE_R_HUMAN:
@@ -2469,7 +2469,7 @@ BOOL CRuleTables::IsValidSubRace(BYTE nRace, BYTE nSubRace)
 }
 
 // 0x544DB0
-void CRuleTables::GetRaceStringMixed(BYTE nRace, CString& sRace, BYTE nSubRace)
+void CRuleTables::GetRaceStringMixed(BYTE nRace, CString& sRace, BYTE nSubRace) const
 {
     STR_RES strRes;
 

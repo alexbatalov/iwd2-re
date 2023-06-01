@@ -489,7 +489,7 @@ void CScreenJournal::UpdateMainPanel()
 
     s1 = "chapters";
 
-    CList<STRREF, STRREF>* pList = pGame->m_ruleTables.GetChapterText(CResRef(s1), m_nChapter);
+    CList<STRREF, STRREF>* pList = pGame->GetRuleTables().GetChapterText(CResRef(s1), m_nChapter);
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreenjournal.cpp
     // __LINE__: 1117
