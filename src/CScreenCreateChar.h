@@ -60,7 +60,7 @@ public:
     /* 00C4 */ void TimerSynchronousUpdate() override;
     /* 0104 */ void CancelEngine() override;
 
-    STRREF sub_607820(BYTE nRace);
+    STRREF GetRangerHatedRaceStrref(BYTE nRace);
     void EnableMainPanel(BOOL bEnable);
     void UpdateMainPanel(CGameSprite* pSprite);
     void ResetPopupPanel(DWORD dwPanelId, CGameSprite* pSprite);

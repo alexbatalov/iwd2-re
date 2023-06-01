@@ -445,56 +445,56 @@ void CScreenCreateChar::OnRButtonUp(CPoint pt)
 }
 
 // 0x607820
-STRREF CScreenCreateChar::sub_607820(BYTE nRace)
+STRREF CScreenCreateChar::GetRangerHatedRaceStrref(BYTE nRace)
 {
     STRREF strRace;
     switch (nRace) {
-    case 113:
+    case CAIOBJECTTYPE_R_OGRE:
         strRace = 15975;
         break;
-    case 118:
+    case CAIOBJECTTYPE_R_WYVERN:
         strRace = 37617;
         break;
-    case 153:
+    case CAIOBJECTTYPE_R_GIANT:
         strRace = 3279;
         break;
-    case 155:
+    case CAIOBJECTTYPE_R_GOBLIN:
         strRace = 3280;
         break;
-    case 157:
+    case CAIOBJECTTYPE_R_LIZARDMAN:
         strRace = 3281;
         break;
-    case 160:
+    case CAIOBJECTTYPE_R_ORC:
         strRace = 3282;
         break;
-    case 161:
+    case CAIOBJECTTYPE_R_SALAMANDER:
         strRace = 3290;
         break;
-    case 165:
+    case CAIOBJECTTYPE_R_TROLL:
         strRace = 3288;
         break;
-    case 166:
+    case CAIOBJECTTYPE_R_UMBERHULK:
         strRace = 3289;
         break;
-    case 167:
+    case CAIOBJECTTYPE_R_UNDEAD:
         strRace = 3285;
         break;
-    case 168:
+    case CAIOBJECTTYPE_R_YUANTI:
         strRace = 30850;
         break;
-    case 174:
+    case CAIOBJECTTYPE_R_HARPY:
         strRace = 37616;
         break;
-    case 180:
+    case CAIOBJECTTYPE_R_BUGBEAR:
         strRace = 28367;
         break;
-    case 181:
+    case CAIOBJECTTYPE_R_HOOK_HORROR:
         strRace = 37606;
         break;
-    case 182:
+    case CAIOBJECTTYPE_R_DRIDER:
         strRace = 37607;
         break;
-    case 191:
+    case CAIOBJECTTYPE_R_SHAPESHIFTER:
         strRace = 37605;
         break;
     default:
@@ -4987,49 +4987,52 @@ void CUIControlButtonCharGenHatedRaceSelection::OnLButtonClick(CPoint pt)
 
         STRREF strHelp;
         switch (nRace) {
-        case 113:
+        case CAIOBJECTTYPE_R_OGRE:
             strHelp = 15998;
             break;
-        case 118:
+        case CAIOBJECTTYPE_R_WYVERN:
             strHelp = 37619;
             break;
-        case 153:
+        case CAIOBJECTTYPE_R_GIANT:
             strHelp = 3291;
             break;
-        case 155:
+        case CAIOBJECTTYPE_R_GOBLIN:
+            strHelp = 3292;
+            break;
+        case CAIOBJECTTYPE_R_LIZARDMAN:
             strHelp = 3293;
             break;
-        case 160:
+        case CAIOBJECTTYPE_R_ORC:
             strHelp = 3294;
             break;
-        case 161:
+        case CAIOBJECTTYPE_R_SALAMANDER:
             strHelp = 3295;
             break;
-        case 165:
+        case CAIOBJECTTYPE_R_TROLL:
             strHelp = 3299;
             break;
-        case 166:
+        case CAIOBJECTTYPE_R_UMBERHULK:
             strHelp = 3300;
             break;
-        case 167:
+        case CAIOBJECTTYPE_R_UNDEAD:
             strHelp = 3297;
             break;
-        case 168:
+        case CAIOBJECTTYPE_R_YUANTI:
             strHelp = 3301;
             break;
-        case 174:
+        case CAIOBJECTTYPE_R_HARPY:
             strHelp = 37618;
             break;
-        case 180:
+        case CAIOBJECTTYPE_R_BUGBEAR:
             strHelp = 8032;
             break;
-        case 181:
+        case CAIOBJECTTYPE_R_HOOK_HORROR:
             strHelp = 37608;
             break;
-        case 182:
+        case CAIOBJECTTYPE_R_DRIDER:
             strHelp = 41079;
             break;
-        case 191:
+        case CAIOBJECTTYPE_R_SHAPESHIFTER:
             strHelp = 37609;
             break;
         default:
