@@ -560,7 +560,7 @@ void CScreenCreateChar::ResetPopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
         sub_609460(pPanel, pSprite);
         break;
     case 19:
-        sub_609750(pPanel, pSprite);
+        ResetCustomSoundsPanel(pPanel, pSprite);
         break;
     case 20:
         ResetImportPanel(pPanel, pSprite);
@@ -750,9 +750,56 @@ void CScreenCreateChar::sub_6095E0()
 }
 
 // 0x609750
-void CScreenCreateChar::sub_609750(CUIPanel* pPanel, CGameSprite* pSprite)
+void CScreenCreateChar::ResetCustomSoundsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    CString sSound;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 2177
+    UTIL_ASSERT(pGame != NULL);
+
+    m_pSounds = pGame->GetSounds();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 2186
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(45));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 2188
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+    pText->m_rgbHighlightColor = CBaldurChitin::TEXTDISPLAY_COLOR_HIGHLIGHT;
+    pText->field_A68 = 32767;
+
+    INT nIndex = 0;
+    POSITION pos = m_pSounds->GetHeadPosition();
+    while (pos != NULL) {
+        // FIXME: Unnecessary copy.
+        sSound = m_pSounds->GetAt(pos);
+        pText->DisplayString(CString(""),
+            sSound,
+            pText->m_rgbLabelColor,
+            pText->m_rgbTextColor,
+            nIndex,
+            FALSE,
+            TRUE);
+
+        m_pSounds->GetNext(pos);
+        nIndex++;
+    }
+
+    pos = pText->m_plstStrings->FindIndex(0);
+    pText->SetTopString(pos);
+    pText->SetItemTextColor(pos, CBaldurChitin::TEXTDISPLAY_COLOR_SELECT);
+
+    m_nCustomSoundIndex = 0;
+    field_58A = 3;
+
+    UpdateHelp(pPanel->m_nID, 50, 11315);
 }
 
 // 0x609900
