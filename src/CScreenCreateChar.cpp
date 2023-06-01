@@ -1249,7 +1249,7 @@ void CScreenCreateChar::UpdatePopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
             m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(46));
 
             pButton = static_cast<CUIControlButton*>(pPanel->GetControl(47));
-            pButton->SetEnabled(field_586 >= 0);
+            pButton->SetEnabled(m_nCustomSoundIndex >= 0);
 
             pButton = static_cast<CUIControlButton*>(pPanel->GetControl(0));
             pButton->SetEnabled(IsDoneButtonClickable());
@@ -2204,7 +2204,56 @@ void CScreenCreateChar::sub_613EF0()
 // 0x614450
 void CScreenCreateChar::OnSoundItemSelect(INT nItem)
 {
-    // TODO: Incomplete.
+    INT nGameSprite = GetSpriteId();
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (nItem != m_nCustomSoundIndex) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+            // __LINE__: 7999
+            UTIL_ASSERT(m_pSounds != NULL);
+
+            CUIPanel* pPanel = m_cUIManager.GetPanel(18);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+            // __LINE__: 8003
+            UTIL_ASSERT(pPanel != NULL);
+
+            CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(4));
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+            // __LINE__: 8005
+            UTIL_ASSERT(pText != NULL);
+
+            if (m_nCustomSoundIndex != -1) {
+                pText->SetItemTextColor(pText->GetItemBossPosition(m_nCustomSoundIndex),
+                    pText->m_rgbTextColor);
+            }
+
+            m_nCustomSoundIndex = nItem;
+
+            if (m_nCustomSoundIndex != -1) {
+                pText->SetItemTextColor(pText->GetItemBossPosition(m_nCustomSoundIndex),
+                    CBaldurChitin::TEXTDISPLAY_COLOR_SELECT);
+            }
+
+            field_58A = 3;
+
+            UpdatePopupPanel(GetTopPopup()->m_nID, pSprite);
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
 }
 
 // 0x615B70

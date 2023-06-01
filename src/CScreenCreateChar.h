@@ -190,9 +190,11 @@ public:
     /* 057A */ int field_57A;
     /* 057E */ int field_57E;
     /* 0582 */ CStringList* m_pPortraits;
-    /* 0586 */ int field_586;
+    /* 0586 */ INT m_nCustomSoundIndex;
+    /* 058A */ int field_58A;
     /* 058E */ INT m_nCharacterIndex;
     /* 0592 */ CStringList* m_pCharacters;
+    /* 059A */ CStringList* m_pSounds;
     /* 059E */ CVidFont m_preLoadFontRealms;
     /* 0A9E */ CVidFont m_preLoadFontStnSml;
     /* 0F9E */ CVidFont m_preLoadFontTool;
