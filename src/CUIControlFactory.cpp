@@ -1452,8 +1452,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             switch (controlInfo->nID) {
             case 0:
             case 1:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlButtonCharGenPortrait(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 2:
             case 4:
                 // TODO: Incomplete.
@@ -1758,6 +1757,19 @@ BOOL CUIControlButtonHotArea::OnLButtonDown(CPoint pt)
 
 // 0x778900
 void CUIControlButtonHotArea::OnHotAreaClick(CPoint pt)
+{
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x778FC0
+CUIControlButtonCharGenPortrait::CUIControlButtonCharGenPortrait(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+}
+
+// 0x779050
+CUIControlButtonCharGenPortrait::~CUIControlButtonCharGenPortrait()
 {
 }
 

@@ -16,6 +16,16 @@ public:
     virtual void OnHotAreaClick(CPoint pt);
 };
 
+class CUIControlButtonCharGenPortrait : public CUIControlButton {
+public:
+    CUIControlButtonCharGenPortrait(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGenPortrait() override;
+    BOOL Render(BOOL bForce) override;
+    void SetPortrait(const CResRef& resRef);
+
+    /* 0666 */ CResRef m_portraitResRef;
+};
+
 class CUIControlButtonCharGenAbilitiesHotArea : public CUIControlButtonHotArea {
 public:
     CUIControlButtonCharGenAbilitiesHotArea(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

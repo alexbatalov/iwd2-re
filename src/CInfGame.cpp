@@ -994,6 +994,16 @@ BOOL CInfGame::CanRestParty(STRREF& strError, unsigned char a2, unsigned char a3
     return FALSE;
 }
 
+// 0x5C3010
+CStringList* CInfGame::GetPortraits()
+{
+    CStringList* pList = new CStringList();
+
+    // TODO: Incomplete.
+
+    return pList;
+}
+
 // 0x5C3240
 CStringList* CInfGame::GetImportCharacters()
 {

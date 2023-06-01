@@ -70,8 +70,8 @@ public:
     void ResetSubRacePanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void sub_609170(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateCharacterList(CUIPanel* pPanel, DWORD dwTextId, INT nSelected);
-    void sub_609460(CUIPanel* pPanel, CGameSprite* pSprite);
-    void sub_6095E0();
+    void ResetCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
+    void UpdatePortraitList(CUIPanel* pPanel, DWORD dwTextId, INT nSelectedIndex);
     void ResetCustomSoundsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void ResetNamePanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void ResetAppearancePanel(CUIPanel* pPanel, CGameSprite* pSprite);

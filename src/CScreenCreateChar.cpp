@@ -557,7 +557,7 @@ void CScreenCreateChar::ResetPopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
         }
         break;
     case 18:
-        sub_609460(pPanel, pSprite);
+        ResetCustomPortraitsPanel(pPanel, pSprite);
         break;
     case 19:
         ResetCustomSoundsPanel(pPanel, pSprite);
@@ -738,15 +738,95 @@ void CScreenCreateChar::UpdateCharacterList(CUIPanel* pPanel, DWORD dwTextId, IN
 }
 
 // 0x609460
-void CScreenCreateChar::sub_609460(CUIPanel* pPanel, CGameSprite* pSprite)
+void CScreenCreateChar::ResetCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 2068
+    UTIL_ASSERT(pGame != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 2071
+    UTIL_ASSERT(m_pPortraits == NULL);
+
+    m_pPortraits = pGame->GetPortraits();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 2073
+    UTIL_ASSERT(m_pPortraits != NULL);
+
+    field_57A = -1;
+    field_57E = -1;
+
+    UpdatePortraitList(pPanel, 4, field_57A);
+    UpdatePortraitList(pPanel, 2, field_57E);
+
+    CUIControlButtonCharGenPortrait* pPortrait;
+
+    pPortrait = static_cast<CUIControlButtonCharGenPortrait*>(pPanel->GetControl(1));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 2083
+    UTIL_ASSERT(pPortrait != NULL);
+
+    pPortrait->SetPortrait(CResRef(""));
+
+    pPortrait = static_cast<CUIControlButtonCharGenPortrait*>(pPanel->GetControl(0));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 2086
+    UTIL_ASSERT(pPortrait != NULL);
+
+    pPortrait->SetPortrait(CResRef(""));
 }
 
 // 0x6095E0
-void CScreenCreateChar::sub_6095E0()
+void CScreenCreateChar::UpdatePortraitList(CUIPanel* pPanel, DWORD dwTextId, INT nSelectedIndex)
 {
-    // TODO: Incomplete.
+    CString sPortrait;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 2119
+    UTIL_ASSERT(m_pPortraits != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 2120
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(dwTextId));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 2122
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+    pText->m_rgbHighlightColor = CBaldurChitin::TEXTDISPLAY_COLOR_HIGHLIGHT;
+    pText->field_A68 = 32767;
+
+    INT nIndex = 0;
+    POSITION pos = m_pPortraits->GetHeadPosition();
+    while (pos != NULL) {
+        COLORREF rgbTextColor = nIndex == nSelectedIndex
+            ? CBaldurChitin::TEXTDISPLAY_COLOR_SELECT
+            : pText->m_rgbTextColor;
+
+        // FIXME: Unnecessary copy.
+        sPortrait = m_pPortraits->GetAt(pos);
+
+        pText->DisplayString(CString(""),
+            sPortrait,
+            pText->m_rgbLabelColor,
+            rgbTextColor,
+            nIndex,
+            FALSE,
+            TRUE);
+
+        m_pPortraits->GetNext(pos);
+        nIndex++;
+    }
+
+    pText->SetTopString(pText->m_plstStrings->FindIndex(0));
 }
 
 // 0x609750
@@ -3897,6 +3977,28 @@ BYTE CUIControlButtonCharGenRaceSelection::GetRace()
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
         // __LINE__: 12897
         UTIL_ASSERT(FALSE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Unclear why this function is separated from constructor/destructor
+// pair (originally in `CUIControlButtons.cpp`, now in `CUIControlFactory.cpp`).
+//
+// 0x61C650
+BOOL CUIControlButtonCharGenPortrait::Render(BOOL bForce)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// NOTE: Inlined.
+void CUIControlButtonCharGenPortrait::SetPortrait(const CResRef& resRef)
+{
+    if (m_portraitResRef != resRef) {
+        m_portraitResRef = resRef;
+        InvalidateRect();
     }
 }
 
