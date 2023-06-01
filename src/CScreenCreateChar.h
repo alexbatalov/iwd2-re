@@ -95,7 +95,7 @@ public:
     void UpdatePopupPanel(DWORD dwPanelId, CGameSprite* pSprite);
     void UpdateMonkPaladinSpecializationPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateSubRacePanel(CUIPanel* pPanel, CGameSprite* pSprite);
-    void sub_60E080(CUIPanel* pPanel, CGameSprite* pSprite);
+    void UpdateCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateAppearancePanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateFeatsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateGenderPanel(CUIPanel* pPanel, CGameSprite* pSprite);

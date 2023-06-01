@@ -1367,7 +1367,7 @@ void CScreenCreateChar::UpdatePopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
         }
         break;
     case 18:
-        sub_60E080(pPanel, pSprite);
+        UpdateCustomPortraitsPanel(pPanel, pSprite);
         break;
     case 19:
         if (1) {
@@ -1686,9 +1686,63 @@ void CScreenCreateChar::UpdateSubRacePanel(CUIPanel* pPanel, CGameSprite* pSprit
 }
 
 // 0x60E080
-void CScreenCreateChar::sub_60E080(CUIPanel* pPanel, CGameSprite* pSprite)
+void CScreenCreateChar::UpdateCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    CString sPortrait;
+    CUIControlButtonCharGenPortrait* pPortrait;
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 4067
+    UTIL_ASSERT(pGame != NULL);
+
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(3));
+
+    pPortrait = static_cast<CUIControlButtonCharGenPortrait*>(pPanel->GetControl(1));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 4072
+    UTIL_ASSERT(pPortrait != NULL);
+
+    sPortrait = "";
+    if (field_57A >= 0) {
+        POSITION pos = m_pPortraits->FindIndex(field_57A);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 4077
+        UTIL_ASSERT(pos != NULL);
+
+        sPortrait = m_pPortraits->GetAt(pos);
+    }
+
+    // NOTE: Uninline.
+    pPortrait->SetPortrait(CResRef(sPortrait));
+
+    pPortrait = static_cast<CUIControlButtonCharGenPortrait*>(pPanel->GetControl(0));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 4085
+    UTIL_ASSERT(pPortrait != NULL);
+
+    sPortrait = "";
+    if (field_57E >= 0) {
+        POSITION pos = m_pPortraits->FindIndex(field_57E);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 4090
+        UTIL_ASSERT(pos != NULL);
+
+        sPortrait = m_pPortraits->GetAt(pos);
+    }
+
+    // NOTE: Uninline.
+    pPortrait->SetPortrait(CResRef(sPortrait));
+
+    UpdateLabel(pPanel, 0x10000007, "%s", sPortrait);
+
+    CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(6));
+    pDone->SetEnabled(IsDoneButtonClickable());
 }
 
 // 0x60E2D0
