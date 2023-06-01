@@ -303,7 +303,57 @@ void CScreenCreateChar::EngineInitialized()
 // 0x607380
 void CScreenCreateChar::OnKeyDown(SHORT nKeysFlags)
 {
-    // TODO: Incomplete.
+    if (nKeysFlags > 0) {
+        for (SHORT nKeyFlag = 0; nKeyFlag < nKeysFlags; nKeyFlag++) {
+            switch (m_pVirtualKeysFlags[nKeyFlag]) {
+            case VK_ESCAPE:
+                if (GetTopPopup() != NULL) {
+                    OnCancelButtonClick();
+                }
+                break;
+            case VK_RETURN:
+                if (GetTopPopup() != NULL && GetTopPopup()->m_nID != 51) {
+                    if (g_pBaldurChitin->field_1A0) {
+                        // FIXME: Unused.
+                        g_pChitin->GetWnd();
+                        if (g_pBaldurChitin->cImm.field_128) {
+                            m_cUIManager.OnKeyDown(VK_RETURN);
+                        } else {
+                            OnDoneButtonClick();
+                        }
+                    } else {
+                        OnDoneButtonClick();
+                    }
+                }
+                break;
+            default:
+                if (!m_cUIManager.OnKeyDown(m_pVirtualKeysFlags[nKeyFlag])) {
+                    switch (m_pVirtualKeysFlags[nKeyFlag]) {
+                    case VK_TAB:
+                        m_cUIManager.ForceToolTip();
+                        break;
+                    case VK_LEFT:
+                    case VK_NUMPAD4:
+                        if (GetTopPopup() != NULL && GetTopPopup()->m_nID == 11) {
+                            CUIControlButton* pButton = static_cast<CUIControlButton*>(GetManager()->GetPanel(11)->GetControl(2));
+                            pButton->OnLButtonClick(CPoint(0, 0));
+                        }
+                        break;
+                    case VK_RIGHT:
+                    case VK_NUMPAD6:
+                        if (GetTopPopup() != NULL && GetTopPopup()->m_nID == 11) {
+                            CUIControlButton* pButton = static_cast<CUIControlButton*>(GetManager()->GetPanel(11)->GetControl(3));
+                            pButton->OnLButtonClick(CPoint(0, 0));
+                        }
+                        break;
+                    case VK_SNAPSHOT:
+                        g_pBaldurChitin->GetCurrentVideoMode()->PrintScreen();
+                        break;
+                    }
+                }
+            }
+        }
+    }
 }
 
 // 0x49FC40
