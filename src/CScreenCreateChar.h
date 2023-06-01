@@ -3,6 +3,7 @@
 
 #include "C2DArray.h"
 #include "CBaldurEngine.h"
+#include "CGameAnimation.h"
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
@@ -148,6 +149,7 @@ public:
     /* 012A */ C2DArray m_tSubRace;
     /* 014E */ C2DArray field_14E;
     /* 0172 */ C2DArray field_172;
+    /* 0196 */ CGameAnimation field_196;
     /* 01A0 */ CKeyInfo m_pVirtualKeys[CSCREENCREATECHAR_VIRTUAL_KEYS];
     /* 0470 */ BYTE m_pVirtualKeysFlags[CSCREENCREATECHAR_VIRTUAL_KEYS];
     /* 04CA */ BOOL m_bCtrlKeyDown;
@@ -159,7 +161,14 @@ public:
     /* 04E2 */ INT m_nGameSprite;
     /* 04E6 */ INT m_nExtraFeats;
     /* 04EA */ INT m_nExtraAbilityPoints;
+    /* 04EE */ int field_4EE;
+    /* 04F2 */ int field_4F2;
     /* 04F2 */ INT m_nExtraSkillPoints;
+    /* 04F6 */ int field_4F6;
+    /* 04FE */ int field_4FE;
+    /* 0502 */ int field_502;
+    /* 0506 */ int field_506;
+    /* 050A */ int field_50A;
     /* 050E */ BYTE m_nMinSTR;
     /* 050F */ BYTE m_nMinDEX;
     /* 0510 */ BYTE m_nMinCON;
@@ -180,9 +189,13 @@ public:
     /* 052E */ INT m_nModCHR;
     /* 0532 */ INT m_nCurrentPortrait;
     /* 0536 */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
+    /* 0552 */ int field_552;
+    /* 0556 */ int field_556;
     /* 055A */ BYTE m_hatedRaces[CSCREENCREATECHAR_NUM_HATEDRACES];
     /* 056A */ int m_nTopHatedRace;
+    /* 056E */ unsigned char field_56E;
     /* 056F */ BYTE m_nMemorySTR;
+    /* 0570 */ unsigned char field_570;
     /* 0571 */ BYTE m_nMemoryDEX;
     /* 0572 */ BYTE m_nMemoryCON;
     /* 0573 */ BYTE m_nMemoryINT;
@@ -196,18 +209,24 @@ public:
     /* 058A */ int field_58A;
     /* 058E */ INT m_nCharacterIndex;
     /* 0592 */ CStringList* m_pCharacters;
+    /* 0596 */ int field_596;
     /* 059A */ CStringList* m_pSounds;
     /* 059E */ CVidFont m_preLoadFontRealms;
     /* 0A9E */ CVidFont m_preLoadFontStnSml;
     /* 0F9E */ CVidFont m_preLoadFontTool;
     /* 149E */ INT field_149E;
+    /* 14A2 */ unsigned char field_14A2;
+    /* 14A3 */ unsigned char field_14A3;
     /* 14A4 */ int field_14A4;
     /* 14A8 */ int field_14A8;
-    /* 14AC */ INT m_nTopFeat;
+    /* 14AC */ SHORT m_nTopFeat;
+    /* 14AE */ int field_14AE;
     /* 14B2 */ INT m_storedFeats[75];
     /* 15DE */ SHORT m_nTopSkill;
+    /* 15E0 */ int field_15E0;
     /* 15E4 */ INT m_storedSkills[16];
     /* 1624 */ CUIControlScrollBar* field_1624;
+    /* 1628 */ int field_1628;
 };
 
 class CUIControlButtonCharGenMenu : public CUIControlButton {

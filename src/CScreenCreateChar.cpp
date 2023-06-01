@@ -1,6 +1,7 @@
 #include "CScreenCreateChar.h"
 
 #include "CBaldurChitin.h"
+#include "CGameAnimationType.h"
 #include "CGameObjectArray.h"
 #include "CGameSprite.h"
 #include "CInfCursor.h"
@@ -118,7 +119,190 @@ const CString CScreenCreateChar::TOKEN_MAXIMUM("MAXIMUM");
 // 0x605C40
 CScreenCreateChar::CScreenCreateChar()
 {
-    // TODO: Incomplete.
+    field_196.m_animation = NULL;
+    field_4DA = 0;
+    field_4DE = 0;
+    m_nExtraFeats = 0;
+    m_nExtraAbilityPoints = 0;
+    field_4EE = 0;
+    field_4F2 = 0;
+    field_4F6 = 0;
+    field_4FE = 0;
+    field_502 = 0;
+    field_506 = 0;
+    field_50A = 0;
+
+    m_nMinSTR = 0;
+    m_nMinDEX = 0;
+    m_nMinCON = 0;
+    m_nMinINT = 0;
+    m_nMinWIS = 0;
+    m_nMinCHR = 0;
+
+    m_nMaxSTR = 0;
+    m_nMaxDEX = 0;
+    m_nMaxCON = 0;
+    m_nMaxINT = 0;
+    m_nMaxWIS = 0;
+    m_nMaxCHR = 0;
+
+    m_nModSTR = 0;
+    m_nModDEX = 0;
+    m_nModCON = 0;
+    m_nModINT = 0;
+    m_nModWIS = 0;
+    m_nModCHR = 0;
+
+    m_nCurrentPortrait = 0;
+    m_nTopHatedRace = 0;
+    field_56E = 0;
+    m_nMemorySTR = 0;
+    field_570 = 0;
+
+    m_nMemoryDEX = 0;
+    m_nMemoryCON = 0;
+    m_nMemoryINT = 0;
+    m_nMemoryWIS = 0;
+    m_nMemoryCHR = 0;
+    m_nMemoryExtra = 0;
+    field_57A = 0;
+    field_57E = 0;
+    m_nCustomSoundIndex = 0;
+    field_58A = 0;
+    m_nCharacterIndex = 0;
+    field_596 = 0;
+    field_14A4 = 0;
+    field_14A8 = 0;
+
+    SetVideoMode(0);
+
+    m_pVirtualKeys[0] = CKeyInfo(VK_ESCAPE, -1, 0);
+    m_pVirtualKeys[1] = CKeyInfo('1', 0, 0);
+    m_pVirtualKeys[2] = CKeyInfo('2', 0, 0);
+    m_pVirtualKeys[3] = CKeyInfo('3', 0, 0);
+    m_pVirtualKeys[4] = CKeyInfo('4', 0, 0);
+    m_pVirtualKeys[5] = CKeyInfo('5', 0, 0);
+    m_pVirtualKeys[6] = CKeyInfo('6', 0, 0);
+    m_pVirtualKeys[7] = CKeyInfo('7', 0, 0);
+    m_pVirtualKeys[8] = CKeyInfo('8', 0, 0);
+    m_pVirtualKeys[9] = CKeyInfo('9', 0, 0);
+    m_pVirtualKeys[10] = CKeyInfo(VK_SPACE, -1, 0);
+    m_pVirtualKeys[11] = CKeyInfo('A', 0, 0);
+    m_pVirtualKeys[12] = CKeyInfo('B', 0, 0);
+    m_pVirtualKeys[13] = CKeyInfo('C', 0, 0);
+    m_pVirtualKeys[14] = CKeyInfo('D', 0, 0);
+    m_pVirtualKeys[15] = CKeyInfo('E', 0, 0);
+    m_pVirtualKeys[16] = CKeyInfo('F', 0, 0);
+    m_pVirtualKeys[17] = CKeyInfo('G', 0, 0);
+    m_pVirtualKeys[18] = CKeyInfo('H', 0, 0);
+    m_pVirtualKeys[19] = CKeyInfo('I', 0, 0);
+    m_pVirtualKeys[20] = CKeyInfo('J', 0, 0);
+    m_pVirtualKeys[21] = CKeyInfo('K', 0, 0);
+    m_pVirtualKeys[22] = CKeyInfo('L', 0, 0);
+    m_pVirtualKeys[23] = CKeyInfo('M', 0, 0);
+    m_pVirtualKeys[24] = CKeyInfo('N', 0, 0);
+    m_pVirtualKeys[25] = CKeyInfo('O', 0, 0);
+    m_pVirtualKeys[26] = CKeyInfo('P', 0, 0);
+    m_pVirtualKeys[27] = CKeyInfo('Q', 0, 0);
+    m_pVirtualKeys[28] = CKeyInfo('R', 0, 0);
+    m_pVirtualKeys[29] = CKeyInfo('S', 0, 0);
+    m_pVirtualKeys[30] = CKeyInfo('T', 0, 0);
+    m_pVirtualKeys[31] = CKeyInfo('U', 0, 0);
+    m_pVirtualKeys[32] = CKeyInfo('V', 0, 0);
+    m_pVirtualKeys[33] = CKeyInfo('W', 0, 0);
+    m_pVirtualKeys[34] = CKeyInfo('X', 0, 0);
+    m_pVirtualKeys[35] = CKeyInfo('Y', 0, 0);
+    m_pVirtualKeys[36] = CKeyInfo('Z', 0, 0);
+    m_pVirtualKeys[37] = CKeyInfo('0', 0, 0);
+    m_pVirtualKeys[38] = CKeyInfo(VK_BACK, 0, 0);
+    m_pVirtualKeys[39] = CKeyInfo(VK_END, -1, 0);
+    m_pVirtualKeys[40] = CKeyInfo(VK_HOME, -1, 0);
+    m_pVirtualKeys[41] = CKeyInfo(VK_LEFT, static_cast<BYTE>(CChitin::TIMER_UPDATES_PER_SECOND), static_cast<BYTE>(CChitin::TIMER_UPDATES_PER_SECOND));
+    m_pVirtualKeys[42] = CKeyInfo(VK_UP, static_cast<BYTE>(CChitin::TIMER_UPDATES_PER_SECOND), static_cast<BYTE>(CChitin::TIMER_UPDATES_PER_SECOND));
+    m_pVirtualKeys[43] = CKeyInfo(VK_RIGHT, static_cast<BYTE>(CChitin::TIMER_UPDATES_PER_SECOND), static_cast<BYTE>(CChitin::TIMER_UPDATES_PER_SECOND));
+    m_pVirtualKeys[44] = CKeyInfo(VK_DOWN, 0, 0);
+    m_pVirtualKeys[45] = CKeyInfo(VK_SNAPSHOT, -1, 0);
+    m_pVirtualKeys[46] = CKeyInfo(VK_INSERT, -1, 0);
+    m_pVirtualKeys[47] = CKeyInfo(VK_DELETE, 0, 0);
+    m_pVirtualKeys[48] = CKeyInfo(VK_NUMPAD0, -1, 0);
+    m_pVirtualKeys[49] = CKeyInfo(VK_NUMPAD1, -1, 0);
+    m_pVirtualKeys[50] = CKeyInfo(VK_NUMPAD2, -1, 0);
+    m_pVirtualKeys[51] = CKeyInfo(VK_NUMPAD3, -1, 0);
+    m_pVirtualKeys[52] = CKeyInfo(VK_NUMPAD4, static_cast<BYTE>(CChitin::TIMER_UPDATES_PER_SECOND), static_cast<BYTE>(CChitin::TIMER_UPDATES_PER_SECOND));
+    m_pVirtualKeys[53] = CKeyInfo(VK_NUMPAD5, -1, 0);
+    m_pVirtualKeys[54] = CKeyInfo(VK_NUMPAD6, static_cast<BYTE>(CChitin::TIMER_UPDATES_PER_SECOND), static_cast<BYTE>(CChitin::TIMER_UPDATES_PER_SECOND));
+    m_pVirtualKeys[55] = CKeyInfo(VK_NUMPAD7, -1, 0);
+    m_pVirtualKeys[56] = CKeyInfo(VK_NUMPAD8, -1, 0);
+    m_pVirtualKeys[57] = CKeyInfo(VK_NUMPAD9, -1, 0);
+    m_pVirtualKeys[58] = CKeyInfo(VK_MULTIPLY, -1, 0);
+    m_pVirtualKeys[59] = CKeyInfo(VK_ADD, -1, 0);
+    m_pVirtualKeys[60] = CKeyInfo(VK_SEPARATOR, -1, 0);
+    m_pVirtualKeys[61] = CKeyInfo(VK_SUBTRACT, -1, 0);
+    m_pVirtualKeys[62] = CKeyInfo(VK_DECIMAL, -1, 0);
+    m_pVirtualKeys[63] = CKeyInfo(VK_DIVIDE, -1, 0);
+    m_pVirtualKeys[64] = CKeyInfo(VK_F1, -1, 0);
+    m_pVirtualKeys[65] = CKeyInfo(VK_F2, -1, 0);
+    m_pVirtualKeys[66] = CKeyInfo(VK_F3, -1, 0);
+    m_pVirtualKeys[67] = CKeyInfo(VK_F4, -1, 0);
+    m_pVirtualKeys[68] = CKeyInfo(VK_F5, -1, 0);
+    m_pVirtualKeys[69] = CKeyInfo(VK_F6, -1, 0);
+    m_pVirtualKeys[70] = CKeyInfo(VK_F7, -1, 0);
+    m_pVirtualKeys[71] = CKeyInfo(VK_F8, -1, 0);
+    m_pVirtualKeys[72] = CKeyInfo(VK_F9, -1, 0);
+    m_pVirtualKeys[73] = CKeyInfo(VK_F10, -1, 0);
+    m_pVirtualKeys[74] = CKeyInfo(VK_F11, -1, 0);
+    m_pVirtualKeys[75] = CKeyInfo(VK_F12, -1, 0);
+    m_pVirtualKeys[76] = CKeyInfo(VK_NUMLOCK, -1, 0);
+    m_pVirtualKeys[77] = CKeyInfo(VK_RETURN, -1, 0);
+    m_pVirtualKeys[78] = CKeyInfo(VK_OEM_3, 0, 0);
+    m_pVirtualKeys[79] = CKeyInfo(VK_OEM_MINUS, 0, 0);
+    m_pVirtualKeys[80] = CKeyInfo(VK_OEM_PLUS, 0, 0);
+    m_pVirtualKeys[81] = CKeyInfo(VK_OEM_4, 0, 0);
+    m_pVirtualKeys[82] = CKeyInfo(VK_OEM_6, 0, 0);
+    m_pVirtualKeys[83] = CKeyInfo(VK_OEM_5, 0, 0);
+    m_pVirtualKeys[84] = CKeyInfo(VK_OEM_1, 0, 0);
+    m_pVirtualKeys[85] = CKeyInfo(VK_OEM_7, 0, 0);
+    m_pVirtualKeys[86] = CKeyInfo(VK_OEM_COMMA, 0, 0);
+    m_pVirtualKeys[87] = CKeyInfo(VK_OEM_PERIOD, 0, 0);
+    m_pVirtualKeys[88] = CKeyInfo(VK_OEM_2, 0, 0);
+    m_pVirtualKeys[89] = CKeyInfo(VK_TAB, -1, 0);
+
+    m_bCtrlKeyDown = FALSE;
+    m_bShiftKeyDown = FALSE;
+    m_bCapsLockKeyOn = FALSE;
+    field_4D6 = 0;
+    m_nGameSprite = CGameObjectArray::INVALID_OBJECT_ID;
+    field_552 = 0;
+    field_556 = -1;
+    m_pPortraits = NULL;
+    m_pCharacters = NULL;
+    m_pSounds = NULL;
+    field_14A2 = 1;
+    field_14A3 = 1;
+    field_149E = 0;
+    m_nTopFeat = 0;
+    field_14AE = 0;
+    m_hatedRaces[0] = CAIObjectType::R_BUGBEAR;
+    m_hatedRaces[1] = CAIObjectType::R_DRIDER;
+    m_hatedRaces[2] = CAIObjectType::R_GIANT;
+    m_hatedRaces[3] = CAIObjectType::R_GOBLIN;
+    m_hatedRaces[4] = CAIObjectType::R_HARPY;
+    m_hatedRaces[5] = CAIObjectType::R_HOOK_HORROR;
+    m_hatedRaces[6] = CAIObjectType::R_LIZARDMAN;
+    m_hatedRaces[7] = CAIObjectType::R_OGRE;
+    m_hatedRaces[8] = CAIObjectType::R_ORC;
+    m_hatedRaces[9] = CAIObjectType::R_SALAMANDER;
+    m_hatedRaces[10] = CAIObjectType::R_SHAPESHIFTER;
+    m_hatedRaces[11] = CAIObjectType::R_TROLL;
+    m_hatedRaces[12] = CAIObjectType::R_UMBERHULK;
+    m_hatedRaces[13] = CAIObjectType::R_UNDEAD;
+    m_hatedRaces[14] = CAIObjectType::R_WYVERN;
+    m_hatedRaces[15] = CAIObjectType::R_YUANTI;
+    m_nTopSkill = 0;
+    field_15E0 = 0;
+    memset(m_storedFeats, 0, sizeof(m_storedFeats));
+    memset(m_storedSkills, 0, sizeof(m_storedSkills));
+    field_1628 = 0;
 }
 
 // 0x49FC40
@@ -190,7 +374,10 @@ BYTE* CScreenCreateChar::GetVirtualKeysFlags()
 // 0x606D00
 CScreenCreateChar::~CScreenCreateChar()
 {
-    // TODO: Incomplete.
+    if (field_196.m_animation != NULL) {
+        delete field_196.m_animation;
+        field_196.m_animation = NULL;
+    }
 }
 
 // 0x606F50
