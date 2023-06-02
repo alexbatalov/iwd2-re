@@ -290,7 +290,7 @@ BOOL CUIControlTextDisplay::OnLButtonDown(CPoint pt)
         return FALSE;
     }
 
-    m_pPanel->m_pManager->SetCapture(this, FALSE);
+    m_pPanel->m_pManager->SetCapture(this, CUIManager::MOUSELBUTTON);
 
     return TRUE;
 }

@@ -1688,7 +1688,7 @@ void CScreenConnection::ResetTCPIPPanel()
     UTIL_ASSERT(pText != NULL);
 
     pText->SetTopString(pText->m_plstStrings->FindIndex(0));
-    m_cUIManager.SetCapture(pEdit, 2);
+    m_cUIManager.SetCapture(pEdit, CUIManager::KEYBOARD);
 }
 
 // 0x600370
@@ -1710,7 +1710,7 @@ void CScreenConnection::ResetCreateGamePanel()
         pEdit->SetText(g_pBaldurChitin->GetStartUpSession());
     }
 
-    m_cUIManager.SetCapture(pEdit, 2);
+    m_cUIManager.SetCapture(pEdit, CUIManager::KEYBOARD);
 
     UpdateHelp(pPanel->m_nID, 13, 11320);
 }

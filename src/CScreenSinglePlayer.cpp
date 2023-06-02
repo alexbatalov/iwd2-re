@@ -329,10 +329,8 @@ void CScreenSinglePlayer::EngineDeactivated()
     m_preLoadFontStnSml.Unload();
     m_preLoadFontTool.Unload();
 
-    if (m_cUIManager.m_pFocusedControl != NULL) {
-        m_cUIManager.m_pFocusedControl->KillFocus();
-        m_cUIManager.m_pFocusedControl = NULL;
-    }
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
 }
 
 // 0x660A20
@@ -531,10 +529,8 @@ void CScreenSinglePlayer::UpdatePopupPanel(DWORD dwPanelId)
 // 0x6614A0
 void CScreenSinglePlayer::SummonPopup(DWORD dwPopupId)
 {
-    if (m_cUIManager.m_pFocusedControl != NULL) {
-        m_cUIManager.m_pFocusedControl->KillFocus();
-        m_cUIManager.m_pFocusedControl = NULL;
-    }
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
 
     if (!m_lPopupStack.IsEmpty()) {
         CUIPanel* pPanel = m_lPopupStack.GetTail();

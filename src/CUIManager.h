@@ -12,6 +12,10 @@ class CWarp;
 
 class CUIManager {
 public:
+    static const BYTE MOUSELBUTTON;
+    static const BYTE MOUSERBUTTON;
+    static const BYTE KEYBOARD;
+
     CUIManager();
     ~CUIManager();
     void fInit(CWarp* pWarp, CResRef cResRef, BOOL bDoubleSize);
@@ -20,7 +24,7 @@ public:
     void ReorderPanelAfter(DWORD nID1, DWORD nID2);
     void TimerAsynchronousUpdate();
     CUIPanel* GetPanel(DWORD nID);
-    void SetCapture(CUIControlBase* pControl, unsigned char a3);
+    void SetCapture(CUIControlBase* pControl, BYTE nType);
     void ClearTooltip();
     void OnMouseMove(CPoint pt);
     void OnLButtonDown(CPoint pt);
@@ -46,7 +50,7 @@ public:
     /* 0020 */ int field_20;
     /* 0024 */ int field_24;
     /* 0028 */ int field_28;
-    /* 002C */ unsigned char field_2C;
+    /* 002C */ unsigned char m_nCaptureType;
     /* 002E */ unsigned char field_2E;
     /* 002D */ unsigned char field_2D;
     /* 0032 */ int field_32;

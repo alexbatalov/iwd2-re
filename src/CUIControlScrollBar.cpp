@@ -178,7 +178,7 @@ BOOL CUIControlScrollBar::OnLButtonDown(CPoint pt)
         }
     }
 
-    m_pPanel->m_pManager->SetCapture(this, 0);
+    m_pPanel->m_pManager->SetCapture(this, CUIManager::MOUSELBUTTON);
 
     if (sub_4E5000(pt)) {
         field_146 = 1;

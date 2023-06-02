@@ -9,6 +9,15 @@
 #include "CUtil.h"
 #include "CWarp.h"
 
+// 0x84C89C
+const BYTE CUIManager::MOUSELBUTTON = 0;
+
+// 0x84C89D
+const BYTE CUIManager::MOUSERBUTTON = 1;
+
+// 0x84C89E
+const BYTE CUIManager::KEYBOARD = 2;
+
 // 0x4D39B0
 CUIManager::CUIManager()
 {
@@ -16,7 +25,7 @@ CUIManager::CUIManager()
     field_2E = 1;
     field_2D = 1;
     m_pWarp = NULL;
-    field_2C = 0;
+    m_nCaptureType = 0;
     field_0 = 0;
     m_bInitialized = FALSE;
     m_pFocusedControl = NULL;
@@ -195,14 +204,14 @@ CUIPanel* CUIManager::GetPanel(DWORD nID)
 }
 
 // 0x4D4030
-void CUIManager::SetCapture(CUIControlBase* pControl, unsigned char a3)
+void CUIManager::SetCapture(CUIControlBase* pControl, BYTE nType)
 {
     if (m_pFocusedControl != NULL) {
         m_pFocusedControl->KillFocus();
     }
 
     m_pFocusedControl = pControl;
-    field_2C = a3;
+    m_nCaptureType = nType;
 
     m_pFocusedControl->SetFocus();
 }
@@ -241,7 +250,7 @@ void CUIManager::OnMouseMove(CPoint pt)
         g_pBaldurChitin->GetObjectGame()->field_1BA1 = 4;
     }
 
-    if (m_pFocusedControl != NULL && field_2C != 2) {
+    if (m_pFocusedControl != NULL && m_nCaptureType != KEYBOARD) {
         m_pFocusedControl->OnMouseMove(pt - m_pFocusedControl->m_pPanel->m_ptOrigin);
     } else {
         if (!field_0) {
@@ -267,7 +276,7 @@ void CUIManager::OnLButtonDown(CPoint pt)
     if (m_bInitialized) {
         if (field_18) {
             if (m_pFocusedControl != NULL) {
-                if (field_2C != 2) {
+                if (m_nCaptureType != KEYBOARD) {
                     return;
                 }
 
@@ -296,12 +305,12 @@ void CUIManager::OnLButtonDown(CPoint pt)
 // 0x4D42B0
 void CUIManager::OnLButtonUp(CPoint pt)
 {
-    if (m_pFocusedControl != NULL && field_2C == 0) {
+    if (m_pFocusedControl != NULL && m_nCaptureType == MOUSELBUTTON) {
         CUIControlBase* pPrevFocusedControl = m_pFocusedControl;
 
         m_pFocusedControl->OnLButtonUp(pt - m_pFocusedControl->m_pPanel->m_ptOrigin);
 
-        if (pPrevFocusedControl == m_pFocusedControl && field_2C == 0) {
+        if (pPrevFocusedControl == m_pFocusedControl && m_nCaptureType == MOUSELBUTTON) {
             // NOTE: Uninline.
             KillCapture();
         }
@@ -320,7 +329,7 @@ void CUIManager::OnRButtonDown(CPoint pt)
     if (m_bInitialized) {
         if (field_18) {
             if (m_pFocusedControl != NULL) {
-                if (field_2C != 2) {
+                if (m_nCaptureType != KEYBOARD) {
                     return;
                 }
 
@@ -349,12 +358,12 @@ void CUIManager::OnRButtonDown(CPoint pt)
 // 0x4D44B0
 void CUIManager::OnRButtonUp(CPoint pt)
 {
-    if (m_pFocusedControl != NULL && field_2C == 1) {
+    if (m_pFocusedControl != NULL && m_nCaptureType == MOUSERBUTTON) {
         CUIControlBase* pPrevFocusedControl = m_pFocusedControl;
 
         m_pFocusedControl->OnRButtonUp(pt - m_pFocusedControl->m_pPanel->m_ptOrigin);
 
-        if (pPrevFocusedControl == m_pFocusedControl && field_2C == 1) {
+        if (pPrevFocusedControl == m_pFocusedControl && m_nCaptureType == MOUSERBUTTON) {
             // NOTE: Uninline.
             KillCapture();
         }
@@ -365,7 +374,7 @@ void CUIManager::OnRButtonUp(CPoint pt)
 BOOL CUIManager::OnKeyDown(SHORT nKey)
 {
     if (field_0 == 0) {
-        if (m_pFocusedControl != NULL && field_2C == 2) {
+        if (m_pFocusedControl != NULL && m_nCaptureType == KEYBOARD) {
             m_pFocusedControl->OnKeyDown(nKey);
             return TRUE;
         }

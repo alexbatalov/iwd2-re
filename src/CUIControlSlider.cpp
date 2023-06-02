@@ -129,7 +129,7 @@ BOOL CUIControlSlider::OnLButtonDown(CPoint pt)
         m_nRenderCount = CBaldurChitin::RENDER_COUNT;
         renderLock.Unlock();
 
-        m_pPanel->m_pManager->SetCapture(this, 0);
+        m_pPanel->m_pManager->SetCapture(this, CUIManager::MOUSELBUTTON);
 
         m_bValueChanged = FALSE;
         field_212 = ptKnob.x + frameSize.cx / 2 - x;

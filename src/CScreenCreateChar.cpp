@@ -1168,7 +1168,7 @@ void CScreenCreateChar::ResetNamePanel(CUIPanel* pPanel, CGameSprite* pSprite)
 
     pEdit->SetText(sName);
 
-    m_cUIManager.SetCapture(pEdit, 2);
+    m_cUIManager.SetCapture(pEdit, CUIManager::KEYBOARD);
 }
 
 // 0x609A10

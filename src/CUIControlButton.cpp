@@ -151,7 +151,7 @@ BOOL CUIControlButton::OnLButtonDown(CPoint pt)
 
     m_cVidCell.FrameSet(m_nPressedFrame);
     m_bPressed = TRUE;
-    m_pPanel->m_pManager->SetCapture(this, byte_84C89C);
+    m_pPanel->m_pManager->SetCapture(this, CUIManager::MOUSELBUTTON);
 
     InvalidateRect();
 
@@ -217,7 +217,7 @@ BOOL CUIControlButton::OnRButtonDown(CPoint pt)
     m_cVidCell.FrameSet(m_nPressedFrame);
 
     m_bPressed = TRUE;
-    m_pPanel->m_pManager->SetCapture(this, byte_84C89D);
+    m_pPanel->m_pManager->SetCapture(this, CUIManager::MOUSERBUTTON);
 
     InvalidateRect();
 

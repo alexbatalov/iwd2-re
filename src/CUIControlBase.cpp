@@ -7,15 +7,6 @@
 #include "CUIPanel.h"
 #include "CUtil.h"
 
-// 0x84C89C
-const BYTE CUIControlBase::byte_84C89C = 0;
-
-// 0x84C89D
-const BYTE CUIControlBase::byte_84C89D = 1;
-
-// 0x84C89E
-const BYTE CUIControlBase::byte_84C89E = 2;
-
 // 0x4D23B0
 CUIControlBase::CUIControlBase(CUIPanel* pPanel, UI_CONTROL* controlInfo, int a4)
 {

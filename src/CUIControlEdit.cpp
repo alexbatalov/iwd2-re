@@ -174,7 +174,7 @@ BOOL CUIControlEdit::OnLButtonDown(CPoint pt)
             m_nCursorIndex = index;
             InvalidateRect();
         } else {
-            m_pPanel->m_pManager->SetCapture(this, 2);
+            m_pPanel->m_pManager->SetCapture(this, CUIManager::KEYBOARD);
         }
     }
 
