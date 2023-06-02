@@ -652,8 +652,8 @@ void CScreenChapter::StartChapterMultiplayerHost(BYTE nChapter, BYTE* resRef)
             RGB(255, 0, 0),
             RGB(255, 0, 0),
             -1,
-            CGameObjectArray::INVALID_OBJECT_ID,
-            CGameObjectArray::INVALID_OBJECT_ID);
+            CGameObjectArray::INVALID_INDEX,
+            CGameObjectArray::INVALID_INDEX);
 
         g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, g_pChitin->cNetwork.field_6FA);
     }

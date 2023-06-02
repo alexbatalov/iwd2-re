@@ -1061,7 +1061,7 @@ LONG CInfGame::GetCharacterId(SHORT nPortrait)
         return m_characterPortraits[nPortrait];
     }
 
-    return CGameObjectArray::INVALID_OBJECT_ID;
+    return CGameObjectArray::INVALID_INDEX;
 }
 
 // 0x453010

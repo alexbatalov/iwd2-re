@@ -35,8 +35,10 @@ const BYTE CGameObjectArray::THREAD_1 = 1;
 // 0x851875
 const BYTE CGameObjectArray::THREAD_2 = 2;
 
+// NOTE: Seen in `CScreenCreateChar::OnDoneButtonClick` assertion.
+//
 // 0x851878
-const LONG CGameObjectArray::INVALID_OBJECT_ID = -1;
+const LONG CGameObjectArray::INVALID_INDEX = -1;
 
 // 0x59A510
 CGameObjectArrayEntry::CGameObjectArrayEntry()

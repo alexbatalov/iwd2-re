@@ -11,7 +11,7 @@ LONG CAIGroup::GetGroupLeader()
         return reinterpret_cast<LONG>(m_memberList.GetHead());
     }
 
-    return CGameObjectArray::INVALID_OBJECT_ID;
+    return CGameObjectArray::INVALID_INDEX;
 }
 
 // 0x4060E0

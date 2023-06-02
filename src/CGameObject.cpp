@@ -114,7 +114,7 @@ CGameObject::CGameObject()
     m_posZ = 0;
     m_pArea = NULL;
     m_posVertList = NULL;
-    m_id = CGameObjectArray::INVALID_OBJECT_ID;
+    m_id = CGameObjectArray::INVALID_INDEX;
     m_canBeSeen = 0;
     m_AISpeed = AI_SPEED_NORMAL;
     m_typeAI.Set(CAIObjectType::NOT_SPRITE);
@@ -167,7 +167,7 @@ const CAIObjectType& CGameObject::GetAIType()
 // 0x44CB70
 LONG CGameObject::GetTargetId()
 {
-    return CGameObjectArray::INVALID_OBJECT_ID;
+    return CGameObjectArray::INVALID_INDEX;
 }
 
 // 0x44CB80

@@ -271,7 +271,7 @@ CScreenCreateChar::CScreenCreateChar()
     m_bShiftKeyDown = FALSE;
     m_bCapsLockKeyOn = FALSE;
     field_4D6 = 0;
-    m_nGameSprite = CGameObjectArray::INVALID_OBJECT_ID;
+    m_nGameSprite = CGameObjectArray::INVALID_INDEX;
     field_552 = 0;
     field_556 = -1;
     m_pPortraits = NULL;
@@ -2808,9 +2808,9 @@ void CScreenCreateChar::DeleteCharacter()
             if (pSprite != NULL) {
                 delete pSprite;
             }
-            SetSpriteId(CGameObjectArray::INVALID_OBJECT_ID);
+            SetSpriteId(CGameObjectArray::INVALID_INDEX);
         } else {
-            SetSpriteId(CGameObjectArray::INVALID_OBJECT_ID);
+            SetSpriteId(CGameObjectArray::INVALID_INDEX);
         }
     }
 }

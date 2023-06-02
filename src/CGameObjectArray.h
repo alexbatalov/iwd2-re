@@ -35,7 +35,7 @@ public:
     static const BYTE THREAD_1;
     static const BYTE THREAD_2;
 
-    static const LONG INVALID_OBJECT_ID;
+    static const LONG INVALID_INDEX;
 
     CGameObjectArray(SHORT arrayStartSize = 100, SHORT arrayGrowSize = 10);
     ~CGameObjectArray();

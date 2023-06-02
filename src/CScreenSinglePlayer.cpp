@@ -847,7 +847,7 @@ void CScreenSinglePlayer::UpdateModifyCharacterPanel()
 
     BOOL v4 = FALSE;
     if (pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_CHARACTER
-        && pGame->GetCharacterSlot(nCharacterSlot) != CGameObjectArray::INVALID_OBJECT_ID) {
+        && pGame->GetCharacterSlot(nCharacterSlot) != CGameObjectArray::INVALID_INDEX) {
         v4 = TRUE;
     }
 
