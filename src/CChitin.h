@@ -117,10 +117,10 @@ public:
 
     static DWORD TIMER_UPDATES_PER_SECOND;
     static const CString ICON_RES_ID;
-    static CString buildVersionString;
+    static CString m_sBuildNumber;
     static const CString DEFAULT_PRINTSCREEN_FILE_NAME;
-    static CString versionString;
-    static CString name;
+    static CString m_sVersionNumber;
+    static CString m_sGameName;
     static BOOL SCREEN_SAVE_ACTIVE;
     static BOOL SCREEN_SAVE_ACTIVE_LOADED;
     static BOOLEAN byte_8FB950;

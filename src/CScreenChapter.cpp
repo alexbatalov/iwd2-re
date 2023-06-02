@@ -422,7 +422,7 @@ void CScreenChapter::ResetMainPanel()
     UTIL_ASSERT(m_pTextControl != NULL);
 
     m_pTextControl->RemoveAll();
-    m_pTextControl->m_sLabelSuffix = CString(" ");
+    m_pTextControl->m_sNameSeparator = CString(" ");
 
     // Add leading empty lines so that the text gracefully slide in from the
     // bottom.

@@ -10,6 +10,21 @@
 #include "CUtil.h"
 #include "CVidInf.h"
 
+// 0x852E98
+const BYTE CScreenConnection::DEFAULT_SESSION_NAME = 0;
+
+// 0x852E99
+const BYTE CScreenConnection::DEFAULT_SESSION_PASSWORD = 1;
+
+// 0x852E9A
+const BYTE CScreenConnection::DEFAULT_PLAYER_NAME = 2;
+
+// 0x852E9B
+const BYTE CScreenConnection::DEFAULT_TCP_IP_ADDRESS = 3;
+
+// 0x852E9C
+const BYTE CScreenConnection::DEFAULT_PHONE_NUMBER = 4;
+
 // 0x8F375C
 const CString CScreenConnection::TOKEN_SERVERVERSION("SERVERVERSION");
 

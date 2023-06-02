@@ -17,7 +17,7 @@
 
 class CScreenSinglePlayer : public CBaldurEngine {
 public:
-    static const CString GOLD;
+    static const CString TOKEN_GOLD;
     static const CString PARTY;
     static const CString DESCR;
     static const CString CHAR;

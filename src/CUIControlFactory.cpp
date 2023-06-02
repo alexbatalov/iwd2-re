@@ -357,7 +357,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             // 0x76E2E1
             switch (controlInfo->nID) {
             case 1:
-                return new CUIControlEditConnectionWithDefault(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo), 3);
+                return new CUIControlEditConnectionWithDefault(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo), CScreenConnection::DEFAULT_TCP_IP_ADDRESS);
             case 2:
                 return new CUIControlButtonConnectionPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 3:
@@ -373,11 +373,11 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             // 0x76E3DC
             switch (controlInfo->nID) {
             case 0:
-                return new CUIControlEditConnectionWithDefault(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo), 0);
+                return new CUIControlEditConnectionWithDefault(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo), CScreenConnection::DEFAULT_SESSION_NAME);
             case 1:
-                return new CUIControlEditConnectionWithDefault(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo), 2);
+                return new CUIControlEditConnectionWithDefault(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo), CScreenConnection::DEFAULT_PLAYER_NAME);
             case 4:
-                return new CUIControlEditConnectionWithDefault(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo), 1);
+                return new CUIControlEditConnectionWithDefault(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo), CScreenConnection::DEFAULT_SESSION_PASSWORD);
             case 6:
                 return new CUIControlButtonConnectionPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 10:
@@ -400,7 +400,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 1:
                 return new CUIControlButtonConnectionPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 2:
-                return new CUIControlEditConnectionWithDefault(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo), 1);
+                return new CUIControlEditConnectionWithDefault(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo), CScreenConnection::DEFAULT_SESSION_PASSWORD);
             default:
                 break;
             }
@@ -413,7 +413,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 4:
                 return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
             case 5:
-                return new CUIControlEditConnectionWithDefault(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo), 2);
+                return new CUIControlEditConnectionWithDefault(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo), CScreenConnection::DEFAULT_PLAYER_NAME);
             case 6:
                 return new CUIControlButtonConnectionPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 7:
@@ -441,7 +441,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             // 0x76E7D0
             switch (controlInfo->nID) {
             case 1:
-                return new CUIControlEditConnectionWithDefault(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo), 4);
+                return new CUIControlEditConnectionWithDefault(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo), CScreenConnection::DEFAULT_PHONE_NUMBER);
             case 2:
                 return new CUIControlButtonConnectionPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 3:

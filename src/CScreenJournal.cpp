@@ -510,7 +510,7 @@ void CScreenJournal::UpdateMainPanel()
     UTIL_ASSERT(pText != NULL);
 
     pText->RemoveAll();
-    pText->m_sLabelSuffix = CString(" ");
+    pText->m_sNameSeparator = CString(" ");
 
     CSize size;
     pText->m_labelFont.GetFrameSize(64, 0, size, FALSE);

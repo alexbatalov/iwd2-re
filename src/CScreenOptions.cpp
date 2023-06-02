@@ -259,8 +259,8 @@ void CScreenOptions::EngineActivated()
 
                 // NOTE: Looks similar to code in `UpdateMainPanel`.
                 CString sFormattedVersion;
-                CString sVersion = CChitin::versionString;
-                CString sBuildNumber = CChitin::buildVersionString;
+                CString sVersion = CChitin::m_sVersionNumber;
+                CString sBuildNumber = CChitin::m_sBuildNumber;
 
                 int major;
                 int minor;
@@ -733,8 +733,8 @@ void CScreenOptions::UpdateMainPanel()
     }
 
     CString sFormattedVersion;
-    CString sVersion = CChitin::versionString;
-    CString sBuildNumber = CChitin::buildVersionString;
+    CString sVersion = CChitin::m_sVersionNumber;
+    CString sBuildNumber = CChitin::m_sBuildNumber;
 
     int major;
     int minor;

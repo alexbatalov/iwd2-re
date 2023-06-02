@@ -8,7 +8,7 @@
 #include "CVidInf.h"
 
 // 0x8D7608
-const CString CUIControlTextDisplay::DEFAULT_LABEL_SUFFIX("- ");
+const CString CUIControlTextDisplay::NAME_SEPARATOR("- ");
 
 // 0x4E1A90
 CUIControlTextDisplay::CUIControlTextDisplay(CUIPanel* pPanel, UI_CONTROL_TEXTDISPLAY* pControlInfo, BOOLEAN a3)
@@ -26,7 +26,7 @@ CUIControlTextDisplay::CUIControlTextDisplay(CUIPanel* pPanel, UI_CONTROL_TEXTDI
     m_nScrollBarID = pControlInfo->nScrollBarID;
     m_rgbHighlightColor = RGB(255, 255, 255);
     m_posHighlightedItem = NULL;
-    m_sLabelSuffix = DEFAULT_LABEL_SUFFIX;
+    m_sNameSeparator = NAME_SEPARATOR;
     field_AB4 = 0;
     field_5C = 0;
 
@@ -546,7 +546,7 @@ SHORT CUIControlTextDisplay::ParseAndInsertStringAfter(POSITION posInsertAfter, 
     }
 
     if (!sLabelCopy.IsEmpty()) {
-        sLabelCopy += m_sLabelSuffix;
+        sLabelCopy += m_sNameSeparator;
 
         if (field_AB7) {
             nOffset += m_labelFont.GetStringLength(sLabelCopy, TRUE);
@@ -993,7 +993,7 @@ BOOLEAN CUIControlTextDisplay::GetItem(INT nItemIndex, CString& sLabel, CString&
     }
 
     sLabel = m_plstStrings->GetAt(posBossItem)->GetLabel();
-    sLabel = sLabel.Left(sLabel.GetLength() - m_sLabelSuffix.GetLength());
+    sLabel = sLabel.Left(sLabel.GetLength() - m_sNameSeparator.GetLength());
 
     sString = m_plstStrings->GetAt(posBossItem)->GetString();
 

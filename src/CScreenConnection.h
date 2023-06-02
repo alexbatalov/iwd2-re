@@ -17,6 +17,11 @@ class CUIPanel;
 
 class CScreenConnection : public CBaldurEngine {
 public:
+    static const BYTE DEFAULT_SESSION_NAME;
+    static const BYTE DEFAULT_SESSION_PASSWORD;
+    static const BYTE DEFAULT_PLAYER_NAME;
+    static const BYTE DEFAULT_TCP_IP_ADDRESS;
+    static const BYTE DEFAULT_PHONE_NUMBER;
     static const CString TOKEN_SERVERVERSION;
     static const CString TOKEN_CLIENTVERSION;
     static BOOLEAN byte_8B3340;

@@ -25,7 +25,7 @@ class CScreenCreateChar : public CBaldurEngine {
 public:
     static const char* MALE_PORTRAITS[];
     static const char* FEMALE_PORTRAITS[];
-    static const CString NUMBER;
+    static const CString TOKEN_NUMBER;
     static const CString TOKEN_MINIMUM;
     static const CString TOKEN_MAXIMUM;
 

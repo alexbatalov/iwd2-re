@@ -207,7 +207,7 @@ BOOL CVideo::Initialize(HWND hWnd, BOOLEAN bFullscreen)
                 if (1) {
                     CString msg;
                     msg.LoadStringA(g_pChitin->GetIDSExclusiveMode());
-                    MessageBoxA(NULL, msg, CChitin::name, 0);
+                    MessageBoxA(NULL, msg, CChitin::m_sGameName, 0);
                 }
                 return FALSE;
             default:

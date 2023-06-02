@@ -27,7 +27,7 @@ public:
 
 class CUIControlTextDisplay : public CUIControlBase {
 public:
-    static const CString DEFAULT_LABEL_SUFFIX;
+    static const CString NAME_SEPARATOR;
 
     CUIControlTextDisplay(CUIPanel* pPanel, UI_CONTROL_TEXTDISPLAY* pControlInfo, BOOLEAN a3);
     /* 0000 */ ~CUIControlTextDisplay() override;
@@ -92,7 +92,7 @@ public:
     /* 0A8E */ CCriticalSection field_A8E;
     /* 0AAE */ BOOLEAN field_AAE;
     /* 0AAF */ BOOLEAN field_AAF;
-    /* 0AB0 */ CString m_sLabelSuffix;
+    /* 0AB0 */ CString m_sNameSeparator;
     /* 0AB4 */ short field_AB4;
     /* 0AB6 */ BOOLEAN field_AB6;
     /* 0AB7 */ unsigned char field_AB7;

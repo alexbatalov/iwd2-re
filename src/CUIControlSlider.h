@@ -7,7 +7,7 @@
 
 class CUIControlSlider : public CUIControlBase {
 public:
-    static const CSize stru_8D7A28;
+    static const CSize THUMB_SIZE_EXPAND;
 
     CUIControlSlider(CUIPanel* panel, UI_CONTROL_SLIDER* controlInfo);
     ~CUIControlSlider();

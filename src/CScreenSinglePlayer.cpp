@@ -11,7 +11,7 @@
 #include "CUtil.h"
 
 // 0x8F7500
-const CString CScreenSinglePlayer::GOLD("GOLD");
+const CString CScreenSinglePlayer::TOKEN_GOLD("GOLD");
 
 // 0x8F64BC
 const CString CScreenSinglePlayer::PARTY("Party");

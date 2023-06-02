@@ -32,7 +32,7 @@ public:
     /* 0080 */ virtual void OnPageDown(int a2);
 
     void AdjustScrollBar(SHORT a1, SHORT a2, SHORT a3);
-    BOOLEAN sub_4E5000(const CPoint& pt);
+    BOOLEAN OverThumb(const CPoint& pt);
 
     /* 0052 */ SHORT m_nRenderCount;
     /* 0054 */ DWORD m_nTextDisplayID;

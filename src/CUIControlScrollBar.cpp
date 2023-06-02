@@ -180,7 +180,7 @@ BOOL CUIControlScrollBar::OnLButtonDown(CPoint pt)
 
     m_pPanel->m_pManager->SetCapture(this, CUIManager::MOUSELBUTTON);
 
-    if (sub_4E5000(pt)) {
+    if (OverThumb(pt)) {
         field_146 = 1;
     }
 
@@ -235,7 +235,7 @@ void CUIControlScrollBar::OnMouseMove(CPoint pt)
 }
 
 // 0x4E5000
-BOOLEAN CUIControlScrollBar::sub_4E5000(const CPoint& pt)
+BOOLEAN CUIControlScrollBar::OverThumb(const CPoint& pt)
 {
     CSize size;
     m_cVidCell.GetFrameSize(m_nSequence, m_nThumbFrame, size, FALSE);

@@ -32,16 +32,16 @@ DWORD CChitin::TIMER_UPDATES_PER_SECOND = 30;
 const CString CChitin::ICON_RES_ID("");
 
 // 0x8FB938
-CString CChitin::buildVersionString;
+CString CChitin::m_sBuildNumber;
 
 // 0x8FB93C
 const CString CChitin::DEFAULT_PRINTSCREEN_FILE_NAME("Scrn");
 
 // 0x8FB940
-CString CChitin::versionString;
+CString CChitin::m_sVersionNumber;
 
 // 0x8FB944
-CString CChitin::name;
+CString CChitin::m_sGameName;
 
 // #guess
 // 0x8FB948
@@ -318,24 +318,24 @@ void CChitin::GetGameVersionInfo(HINSTANCE hInstance)
             buildDate[3] = '\0';
 
             int month = (strstr(months, buildDate) - months) / 3 + 1;
-            buildVersionString.Format("%-2.2i%-2.2i%2.2s",
+            m_sBuildNumber.Format("%-2.2i%-2.2i%2.2s",
                 month,
                 atoi(&(buildDate[4])),
                 buildTime);
         } else {
-            buildVersionString = "";
+            m_sBuildNumber = "";
         }
 
         if (VerQueryValueA(fileVersionInfo, "\\StringFileInfo\\040904B0\\ProductVersion", &buffer, &len)) {
-            versionString = CString(reinterpret_cast<char*>(buffer));
+            m_sVersionNumber = CString(reinterpret_cast<char*>(buffer));
         } else {
-            versionString = "";
+            m_sVersionNumber = "";
         }
 
         if (VerQueryValueA(fileVersionInfo, "\\StringFileInfo\\040904B0\\ProductName", &buffer, &len)) {
-            name = CString(reinterpret_cast<char*>(buffer));
+            m_sGameName = CString(reinterpret_cast<char*>(buffer));
         } else {
-            name = "";
+            m_sGameName = "";
         }
 
         if (fileVersionInfo != NULL) {
@@ -457,7 +457,7 @@ int CChitin::WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
         if (nBpp != 16 && nBpp != 24 && nBpp != 32) {
             CString s;
             s.LoadStringA(GetIDSInvalidVideoMode());
-            MessageBoxA(NULL, s, name, 0);
+            MessageBoxA(NULL, s, m_sGameName, 0);
             return 0;
         }
     }
@@ -879,7 +879,7 @@ BOOL CChitin::InitGraphics()
 
     HWND hWnd = CreateWindowExA(WS_EX_TOPMOST,
         "ChitinClass",
-        name,
+        m_sGameName,
         WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_SYSMENU,
         m_ptScreen.x,
         m_ptScreen.y,
@@ -980,7 +980,7 @@ BOOLEAN CChitin::OnAltEnter(BOOLEAN a1)
     if (nBpp != 16 && nBpp != 24 && nBpp != 32) {
         CString s;
         s.LoadStringA(GetIDSInvalidVideoMode());
-        MessageBoxA(NULL, s, name, 0);
+        MessageBoxA(NULL, s, m_sGameName, 0);
         ShutDown(-1, NULL, NULL);
         return FALSE;
     }
@@ -1924,8 +1924,8 @@ void CChitin::ShutDown(int nLineNumber, const char* szFileName, const char* text
                     nLineNumber);
             }
 
-            if (name.Compare("") != 0) {
-                MessageBoxA(NULL, sString, name, MB_SYSTEMMODAL | MB_ICONERROR);
+            if (m_sGameName.Compare("") != 0) {
+                MessageBoxA(NULL, sString, m_sGameName, MB_SYSTEMMODAL | MB_ICONERROR);
             } else {
                 MessageBoxA(NULL, sString, "Assertion", MB_SYSTEMMODAL | MB_ICONERROR);
             }

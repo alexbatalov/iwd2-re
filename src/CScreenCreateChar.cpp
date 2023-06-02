@@ -108,7 +108,7 @@ const char* CScreenCreateChar::FEMALE_PORTRAITS[] = {
 };
 
 // 0x8F3B7C
-const CString CScreenCreateChar::NUMBER("number");
+const CString CScreenCreateChar::TOKEN_NUMBER("number");
 
 // 0x8F3B94
 const CString CScreenCreateChar::TOKEN_MINIMUM("MINIMUM");

@@ -7,7 +7,7 @@
 #include "CVidInf.h"
 
 // 0x8D7A28
-const CSize CUIControlSlider::stru_8D7A28(5, 5);
+const CSize CUIControlSlider::THUMB_SIZE_EXPAND(5, 5);
 
 // 0x4D5B90
 CUIControlSlider::CUIControlSlider(CUIPanel* panel, UI_CONTROL_SLIDER* controlInfo)
@@ -118,7 +118,7 @@ BOOL CUIControlSlider::OnLButtonDown(CPoint pt)
     m_vcKnob.GetFrameSize(m_nSequence, m_nKnobFrame, frameSize, FALSE);
 
     CRect rKnob(ptKnob, frameSize);
-    rKnob.InflateRect(stru_8D7A28);
+    rKnob.InflateRect(THUMB_SIZE_EXPAND);
 
     if (x >= rKnob.left && x < rKnob.right
         && y >= rKnob.top && y < rKnob.bottom) {
