@@ -44,15 +44,8 @@ CUIControlEdit::CUIControlEdit(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo, in
     m_mosTextFocusedBackground.SetResRef(CResRef(controlInfo->refMosaicTextFocused), FALSE, TRUE);
     m_mosTextUnFocusedBackground.SetResRef(CResRef(controlInfo->refMosaicTextUnFocused), FALSE, TRUE);
 
-    CResRef cursorResRef(controlInfo->refCursor);
-    m_vcCursor.SetResRef(cursorResRef, FALSE, TRUE);
-    m_vcCursor.m_header.SetResRef(cursorResRef, FALSE, FALSE);
-
-    if (m_vcCursor.pRes != NULL) {
-        m_vcCursor.pRes->field_7E = m_vcCursor.m_header.GetResRef() == "";
-    }
-
-    m_vcCursor.m_bDoubleSize = m_pPanel->m_pManager->m_bDoubleSize;
+    // NOTE: Uninline.
+    m_vcCursor.SetResRef(CResRef(controlInfo->refCursor), m_pPanel->m_pManager->m_bDoubleSize, FALSE);
 
     m_vcCursor.SequenceSet(controlInfo->nSequence);
     m_vcCursor.FrameSet(controlInfo->nFrame);

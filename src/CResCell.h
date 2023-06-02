@@ -28,7 +28,7 @@ public:
     /* 006A */ RGBQUAD* m_pPalette;
     /* 006E */ FRAMEENTRY m_doubleSizeFrameEntry; // #guess
     /* 007A */ BOOL m_bParsing; // #guess
-    /* 007E */ int field_7E;
+    /* 007E */ BOOL m_bCacheHeader;
 };
 
 #endif /* CRESCELL_H_ */

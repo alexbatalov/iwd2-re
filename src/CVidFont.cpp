@@ -197,16 +197,11 @@ void CVidFont::SetColor(COLORREF rgbForegroundColor, COLORREF rgbBackgroundColor
 // 0x793170
 void CVidFont::SetResRef(const CResRef& cNewResRef, BOOL bDoubleSize, BOOL bSetAutoRequest)
 {
-    CVidCell::SetResRef(cNewResRef, bSetAutoRequest, TRUE);
-    m_header.SetResRef(cNewResRef, bSetAutoRequest, FALSE);
-
-    if (pRes != NULL) {
-        pRes->field_7E = GetResRef() == "";
-    }
+    // NOTE: Uninline.
+    CVidCell::SetResRef(cNewResRef, bDoubleSize, bSetAutoRequest);
 
     m_rgbForegroundColor = RGB(255, 255, 255);
     m_rgbBackgroundColor = RGB(255, 255, 255);
-    m_bDoubleSize = bDoubleSize;
     m_nBaseLineHeight = -1;
     m_nFontHeight = -1;
     m_bFontSet = FALSE;

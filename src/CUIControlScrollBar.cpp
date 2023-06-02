@@ -11,13 +11,8 @@
 CUIControlScrollBar::CUIControlScrollBar(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo)
     : CUIControlBase(panel, &(controlInfo->base), 1)
 {
-    CResRef resRef(controlInfo->refBam);
-    m_cVidCell.SetResRef(resRef, FALSE, TRUE);
-    m_cVidCell.m_header.SetResRef(resRef, FALSE, FALSE);
-    if (m_cVidCell.pRes != NULL) {
-        m_cVidCell.pRes->field_7E = m_cVidCell.m_header.GetResRef() == "";
-    }
-    m_cVidCell.m_bDoubleSize = m_pPanel->m_pManager->m_bDoubleSize;
+    // NOTE: Uninline.
+    m_cVidCell.SetResRef(CResRef(controlInfo->refBam), m_pPanel->m_pManager->m_bDoubleSize, FALSE);
 
     m_cVidCell.SequenceSet(controlInfo->nSequence);
     m_cVidCell.pRes->Demand();

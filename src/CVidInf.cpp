@@ -1262,15 +1262,9 @@ void CVidInf::LoadFogOWarSurfaces(const CString& a2)
                 }
             }
 
-            CResRef resRef(field_73A);
-            tileVidCell.SetResRef(resRef, TRUE, TRUE);
-            tileVidCell.m_header.SetResRef(resRef, TRUE, FALSE);
+            // NOTE: Uninline.
+            tileVidCell.SetResRef(CResRef(field_73A), FALSE, TRUE);
 
-            if (tileVidCell.pRes != NULL) {
-                tileVidCell.pRes->field_7E = tileVidCell.m_header.GetResRef() == "";
-            }
-
-            tileVidCell.m_bDoubleSize = FALSE;
             tileVidCell.SequenceSet(0);
             tileVidCell.pRes->Demand();
             tileVidCell.RealizePalette(1);
@@ -1483,15 +1477,8 @@ void CVidInf::RenderPointerImage(CVidCell* pPointerVidCell, INT nSurface, INT nN
     UTIL_ASSERT(bResult);
 
     if (nNumber > 0) {
-        CResRef numberResRef("NUMBER");
-        numberVidCell.SetResRef(numberResRef, TRUE, TRUE);
-        numberVidCell.m_header.SetResRef(numberResRef, TRUE, FALSE);
-
-        if (numberVidCell.pRes != NULL) {
-            numberVidCell.pRes->field_7E = numberVidCell.m_header.GetResRef() == "";
-        }
-
-        numberVidCell.m_bDoubleSize = FALSE;
+        // NOTE: Uninline.
+        numberVidCell.SetResRef(CResRef("NUMBER"), FALSE, TRUE);
 
         numberVidCell.SequenceSet(0);
         numberVidCell.SetTintColor(pPointerVidCell->GetTintColor());

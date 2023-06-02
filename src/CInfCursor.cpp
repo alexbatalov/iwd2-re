@@ -123,35 +123,14 @@ CVidCell* CInfCursor::GetCurrentCursor()
 // 0x597020
 void CInfCursor::Initialize()
 {
-    CResRef arrowResRef("CURSARW");
-    m_vcArrow.SetResRef(arrowResRef, TRUE, TRUE);
-    m_vcArrow.m_header.SetResRef(arrowResRef, TRUE, FALSE);
+    // NOTE: Uninline.
+    m_vcArrow.SetResRef(CResRef("CURSARW"), FALSE, TRUE);
 
-    if (m_vcArrow.pRes != NULL) {
-        m_vcArrow.pRes->field_7E = m_vcArrow.m_header.GetResRef() == "";
-    }
+    // NOTE: Uninline.
+    m_vcCursors.SetResRef(CResRef("CURSORS"), FALSE, TRUE);
 
-    m_vcArrow.m_bDoubleSize = FALSE;
-
-    CResRef cursorsResRef("CURSORS");
-    m_vcCursors.SetResRef(cursorsResRef, TRUE, TRUE);
-    m_vcCursors.m_header.SetResRef(cursorsResRef, TRUE, FALSE);
-
-    if (m_vcCursors.pRes != NULL) {
-        m_vcCursors.pRes->field_7E = m_vcCursors.m_header.GetResRef() == "";
-    }
-
-    m_vcCursors.m_bDoubleSize = FALSE;
-
-    CResRef toolTipResRef("TOOLTIP");
-    m_vcToolTip.SetResRef(toolTipResRef, TRUE, TRUE);
-    m_vcToolTip.m_header.SetResRef(toolTipResRef, TRUE, FALSE);
-
-    if (m_vcToolTip.pRes != NULL) {
-        m_vcToolTip.pRes->field_7E = m_vcToolTip.m_header.GetResRef() == "";
-    }
-
-    m_vcToolTip.m_bDoubleSize = FALSE;
+    // NOTE: Uninline.
+    m_vcToolTip.SetResRef(CResRef("TOOLTIP"), FALSE, TRUE);
 
     m_vcToolTip.Initialize();
 

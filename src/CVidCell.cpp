@@ -27,16 +27,8 @@ CVidCell::CVidCell()
 CVidCell::CVidCell(CResRef cNewResRef, BOOL bDoubleSize)
 {
     // NOTE: Uninline.
-    SetResRef(cNewResRef, TRUE, TRUE);
+    SetResRef(cNewResRef, bDoubleSize, TRUE);
 
-    // NOTE: Uninline.
-    m_header.SetResRef(cNewResRef, TRUE, FALSE);
-
-    if (pRes != NULL) {
-        pRes->field_7E = m_header.GetResRef() == "";
-    }
-
-    m_bDoubleSize = bDoubleSize;
     field_C8 = 1;
     m_nCurrentFrame = 0;
     m_nCurrentSequence = 0;
@@ -1290,7 +1282,7 @@ BOOL CVidCell::GetFrame(BOOLEAN bDemanded)
     }
 
     BAMHEADER* pHeader;
-    if (pRes->field_7E) {
+    if (pRes->m_bCacheHeader) {
         pHeader = pRes->m_pBamHeaderCopy;
     } else {
         pHeader = pRes->m_pBamHeader;
@@ -1437,7 +1429,7 @@ BOOL CVidCell::Blt8To32(DWORD* pSurface, LONG lPitch, DWORD dwFlags, INT nTransV
     }
 
     BYTE* pFrameData = pRes->GetFrameData(m_pFrame, m_bDoubleSize);
-    BAMHEADER* pBamHeader = pRes->field_7E
+    BAMHEADER* pBamHeader = pRes->m_bCacheHeader
         ? pRes->m_pBamHeaderCopy
         : pRes->m_pBamHeader;
     BYTE nTransparentColor = pBamHeader->nTransparentColor;
@@ -1520,7 +1512,7 @@ BOOL CVidCell::Blt8To32(DWORD* pSurface, LONG lPitch, const CPoint& pt, const CR
     }
 
     BYTE* pFrameData = pRes->GetFrameData(m_pFrame, m_bDoubleSize);
-    BAMHEADER* pBamHeader = pRes->field_7E
+    BAMHEADER* pBamHeader = pRes->m_bCacheHeader
         ? pRes->m_pBamHeaderCopy
         : pRes->m_pBamHeader;
     BYTE nTransparentColor = pBamHeader->nTransparentColor;
@@ -1846,7 +1838,7 @@ BAMHEADER* CVidCell::GetResBamHeader()
     if (m_header.GetResRef() != "") {
         return m_header.pRes->m_pBamHeaderCopy;
     } else {
-        if (pRes->field_7E) {
+        if (pRes->m_bCacheHeader) {
             return pRes->m_pBamHeaderCopy;
         } else {
             return pRes->m_pBamHeader;

@@ -15,7 +15,7 @@ CResCell::CResCell()
     m_pPalette = NULL;
     m_bParsing = FALSE;
     field_18 = 1;
-    field_7E = 1;
+    m_bCacheHeader = TRUE;
 }
 
 // 0x77F450
@@ -190,7 +190,7 @@ int CResCell::Release()
         m_bParsed = FALSE;
         m_pBamHeader = NULL;
 
-        if (!field_7E) {
+        if (!m_bCacheHeader) {
             m_pBamHeaderCopy = NULL;
             m_pFrames = NULL;
             m_pSequences = NULL;
@@ -205,7 +205,7 @@ int CResCell::Release()
 // 0x77F860
 void CResCell::ResRefChange()
 {
-    if (field_7E) {
+    if (m_bCacheHeader) {
         CSingleLock lock(&field_20, FALSE);
         lock.Lock(INFINITE);
 
@@ -251,7 +251,7 @@ BOOL CResCell::Parse(void* pData)
         return FALSE;
     }
 
-    if (!field_7E) {
+    if (!m_bCacheHeader) {
         m_pBamHeader = pBamHeader;
         m_pFrames = reinterpret_cast<FRAMEENTRY*>(reinterpret_cast<unsigned char*>(pData) + pBamHeader->nTableOffset);
         m_pSequences = reinterpret_cast<SEQUENCEENTRY*>(reinterpret_cast<unsigned char*>(pData) + pBamHeader->nTableOffset + sizeof(FRAMEENTRY) * pBamHeader->nFrames);

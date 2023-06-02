@@ -273,15 +273,8 @@ void CScreenConnection::EngineActivated()
     m_preLoadFontStnSml.SetResRef(CResRef("STONESM2"), FALSE, TRUE);
     m_preLoadFontStnSml.RegisterFont();
 
-    CResRef resRef("MMTRCHB");
-    m_vcTorch.SetResRef(resRef, TRUE, TRUE);
-    m_vcTorch.m_header.SetResRef(resRef, TRUE, FALSE);
-
-    if (m_vcTorch.pRes != NULL) {
-        m_vcTorch.pRes->field_7E = m_vcTorch.m_header.GetResRef() == "";
-    }
-
-    m_vcTorch.m_bDoubleSize = g_pBaldurChitin->field_4A28;
+    // NOTE: Uninline.
+    m_vcTorch.SetResRef(CResRef("MMTRCHB"), g_pBaldurChitin->field_4A28, TRUE);
 
     if (field_FA8) {
         DWORD dwSectorsPerCluster;

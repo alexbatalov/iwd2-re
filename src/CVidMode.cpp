@@ -861,14 +861,8 @@ BOOL CVidMode::SetPointer(CVidCell* pVidCell, CResRef cResRef, BOOLEAN bAnimatin
     CSingleLock lock(&m_csRenderPointer, FALSE);
     lock.Lock(INFINITE);
 
-    pVidCell->SetResRef(cResRef, TRUE, TRUE);
-    pVidCell->m_header.SetResRef(cResRef, TRUE, FALSE);
-
-    if (pVidCell->pRes != NULL) {
-        pVidCell->pRes->field_7E = pVidCell->m_header.cResRef == "";
-    }
-
-    pVidCell->m_bDoubleSize = 0;
+    // NOTE: Uninline.
+    pVidCell->SetResRef(cResRef, FALSE, TRUE);
 
     if (pVidCell->pRes == NULL) {
         lock.Unlock();

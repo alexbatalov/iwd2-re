@@ -53,19 +53,11 @@ CUIControlSlider::CUIControlSlider(CUIPanel* panel, UI_CONTROL_SLIDER* controlIn
     m_bTracking = FALSE;
     m_bKnobEnabled = TRUE;
 
-    CResRef backgroundResRef(controlInfo->refBackground);
-    m_mosBackground.SetResRef(backgroundResRef, FALSE, TRUE);
+    m_mosBackground.SetResRef(CResRef(controlInfo->refBackground), FALSE, TRUE);
     m_mosBackground.m_bDoubleSize = m_pPanel->m_pManager->m_bDoubleSize;
 
-    CResRef knobResRef(controlInfo->refKnob);
-    m_vcKnob.SetResRef(knobResRef, FALSE, TRUE);
-    m_vcKnob.m_header.SetResRef(knobResRef, FALSE, FALSE);
-
-    if (m_vcKnob.pRes != NULL) {
-        m_vcKnob.pRes->field_7E = m_vcKnob.m_header.GetResRef() != "";
-    }
-
-    m_vcKnob.m_bDoubleSize = m_pPanel->m_pManager->m_bDoubleSize;
+    // NOTE: Uninline.
+    m_vcKnob.SetResRef(CResRef(controlInfo->refKnob), m_pPanel->m_pManager->m_bDoubleSize, FALSE);
 
     m_vcKnob.SequenceSet(m_nSequence);
 }

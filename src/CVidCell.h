@@ -40,6 +40,20 @@ public:
     void BltBackGroundToFx(LPDIRECTDRAWSURFACE pSurface, CRect& rDest, const CRect& rClip, DWORD dwFlags);
     BOOL BltFromFX(LPDIRECTDRAWSURFACE pSurface, int x, int y, const CRect& rClip, DWORD dwFlags);
 
+    // NOTE: Convenience. This sequence always appear in this order. In addition
+    // there is eponymous function in `CVidFont`. Most likely it was inlined.
+    void SetResRef(const CResRef& cNewResRef, BOOL bDoubleSize, BOOL bSetAutoRequest)
+    {
+        CResHelper::SetResRef(cNewResRef, bSetAutoRequest, TRUE);
+        m_header.SetResRef(cNewResRef, bSetAutoRequest, FALSE);
+
+        if (pRes != NULL) {
+            pRes->m_bCacheHeader = m_header.GetResRef() == "";
+        }
+
+        m_bDoubleSize = bDoubleSize;
+    }
+
     /* 0000 */ virtual BOOL FrameAdvance();
     /* 0004 */ virtual BOOL Render(WORD* pSurface, LONG lPitch, INT nRefPtX, INT nRefPtY, const CRect& rClip, BOOLEAN bDemanded, DWORD dwFlags, const CPoint& ptSource);
     /* 0008 */ virtual BOOL Render(INT nSurface, int x, int y, const CRect& rClip, CVidPoly* pClipPoly, int nPolys, DWORD dwFlags, int nTransVal);
