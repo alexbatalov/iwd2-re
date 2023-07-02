@@ -27,13 +27,13 @@ public:
     /* 0038 */ int field_38;
     /* 003C */ int field_3C;
     /* 0040 */ int m_nTooltips; // #guess
-    /* 0044 */ int field_44;
+    /* 0044 */ LONG m_nBoredTime;
     /* 0048 */ DWORD m_nCommandSoundsFrequency;
     /* 004C */ DWORD m_nSelectionSoundsFrequency;
     /* 0050 */ BOOL m_bAlwaysDither;
     /* 0054 */ DWORD m_nKeyboardScrollSpeed;
     /* 0058 */ DWORD m_nEffectTextLevel;
-    /* 005C */ int field_5C;
+    /* 005C */ int m_nTutorialState;
     /* 0060 */ BOOL m_bAttackSounds;
     /* 0064 */ DWORD m_nAutoPauseState;
     /* 0068 */ BOOL m_bAutoPauseCenter;
@@ -41,31 +41,31 @@ public:
     /* 0070 */ LONG m_nDifficultyMultiplier;
     /* 0074 */ LONG m_nMPDifficultyMultiplier;
     /* 0078 */ BOOL m_bDarkvision;
-    /* 007C */ int field_7C;
+    /* 007C */ BOOL m_bQuickItemMapping;
     /* 0080 */ int m_bWeatherEnabled;
-    /* 0084 */ int field_84;
+    /* 0084 */ BOOL m_bCheatsEnabled;
     /* 0088 */ BOOL m_bEnvironmentalAudio;
-    /* 008C */ int field_8C;
+    /* 008C */ BOOL m_bTerrainHugging;
     /* 0090 */ BOOL m_bDisplayMovieSubtitles; // #guess
     /* 0094 */ int field_94;
     /* 0098 */ BOOL m_bStaticAnimations;
     /* 009C */ BOOL m_bTranslucentBlts;
     /* 00A0 */ BOOL m_bMaxHP;
     /* 00A4 */ BOOL m_bAutoPauseOnTrap;
-    /* 00A8 */ int field_A8;
+    /* 00A8 */ BOOL m_bShowQuestXP;
     /* 00AC */ int field_AC;
-    /* 00B0 */ int field_B0;
-    /* 00B4 */ int field_B4;
-    /* 00B8 */ int field_B8;
-    /* 00BC */ int field_BC;
-    /* 00C0 */ unsigned char field_C0;
+    /* 00B0 */ BOOL m_bCriticalHitScreenShake;
+    /* 00B4 */ BOOL m_bHotkeysOnToolTips;
+    /* 00B8 */ BOOL m_bSuppressExtraDifficultyDamage;
+    /* 00BC */ BOOL m_bDuplicateFloatingText;
+    /* 00C0 */ unsigned char m_nTilesPrecachePercent;
     /* 00C2 */ int field_C2;
-    /* 00C6 */ int field_C6;
-    /* 00CA */ int field_CA;
+    /* 00C6 */ int m_nDefaultCharGenPointsPool;
+    /* 00CA */ int m_nDefaultCharGenPoints;
     /* 00CE */ int m_nShadedSelectionBox; // #guess
-    /* 00D2 */ int field_D2;
-    /* 00D6 */ int field_D6;
-    /* 00DA */ int field_DA;
+    /* 00D2 */ BOOL m_bAllScreenShake;
+    /* 00D6 */ int m_nOldPortraitHealth;
+    /* 00DA */ int m_nHitPointBarSequence;
 };
 
 #endif /* CGAMEOPTIONS_H_ */

@@ -6,9 +6,12 @@
 #include "CBaldurEngine.h"
 #include "CBaldurProjector.h"
 #include "CGameObject.h"
+#include "CGameSprite.h"
+#include "CInfinity.h"
 #include "CScreenMultiPlayer.h"
 #include "CScreenSave.h"
 #include "CScreenSinglePlayer.h"
+#include "CScreenWorld.h"
 #include "CScreenWorldMap.h"
 #include "CSearchBitmap.h"
 #include "CUIControlBase.h"
@@ -801,7 +804,317 @@ void CInfGame::SetKey(INT nIndex, BYTE nKey, BYTE nKeyFlag)
 // 0x5A9BA0
 void CInfGame::LoadOptions()
 {
-    // TODO: Incomplete.
+    m_cOptions.m_nTilesPrecachePercent = GetPrivateProfileIntA("Game Options",
+        "Tiles Precache Percent",
+        100,
+        g_pBaldurChitin->GetIniFileName());
+
+    if (m_cOptions.m_nTilesPrecachePercent > 100) {
+        m_cOptions.m_nTilesPrecachePercent = 100;
+    }
+
+    m_cOptions.m_bDuplicateFloatingText = GetPrivateProfileIntA("Game Options",
+        "Duplicate Floating Text",
+        1,
+        g_pBaldurChitin->GetIniFileName());
+
+    m_cOptions.m_bTranslucentBlts = GetPrivateProfileIntA("Game Options",
+        "Translucent Blts",
+        1,
+        g_pBaldurChitin->GetIniFileName());
+    CInfinity::TRANSLUCENT_BLTS_ON = m_cOptions.m_bTranslucentBlts;
+    CVidCell::TRANSLUCENT_BLTS_ON = m_cOptions.m_bTranslucentBlts;
+
+    m_cOptions.m_bMaxHP = GetPrivateProfileIntA("Game Options",
+        "Maximum HP",
+        0,
+        g_pBaldurChitin->GetIniFileName());
+
+    m_cOptions.m_bAutoPauseOnTrap = GetPrivateProfileIntA("Game Options",
+        "Pause On Trap",
+        0,
+        g_pBaldurChitin->GetIniFileName());
+
+    m_cOptions.field_AC = 0;
+
+    m_cOptions.m_bEnvironmentalAudio = GetPrivateProfileIntA("Game Options",
+        "Environmental Audio",
+        1,
+        g_pBaldurChitin->GetIniFileName());
+
+    m_cOptions.m_bCheatsEnabled = GetPrivateProfileIntA("Game Options",
+        "Cheats",
+        0,
+        g_pBaldurChitin->GetIniFileName());
+
+    m_cOptions.field_4 = GetPrivateProfileIntA("Game Options",
+        "Grant 2000",
+        0,
+        g_pBaldurChitin->GetIniFileName());
+
+    if (m_cOptions.field_4) {
+        m_cOptions.m_bGore = GetPrivateProfileIntA("Game Options",
+            "Chucknomitron",
+            0,
+            g_pBaldurChitin->GetIniFileName());
+    } else {
+        m_cOptions.m_bGore = FALSE;
+    }
+
+    m_cOptions.m_bFootStepsSounds = GetPrivateProfileIntA("Game Options",
+        "Footsteps",
+        1,
+        g_pBaldurChitin->GetIniFileName());
+
+    m_cOptions.m_nMouseScrollSpeed = GetPrivateProfileIntA("Game Options",
+        "Mouse Scroll Speed",
+        28,
+        g_pBaldurChitin->GetIniFileName());
+
+    if (m_cOptions.m_nMouseScrollSpeed < 6 || m_cOptions.m_nMouseScrollSpeed > 50) {
+        m_cOptions.m_nMouseScrollSpeed = 28;
+    }
+
+    m_cOptions.m_nGuiFeedbackLevel = GetPrivateProfileIntA("Game Options",
+        "GUI Feedback Level",
+        5,
+        g_pBaldurChitin->GetIniFileName());
+
+    if (m_cOptions.m_nGuiFeedbackLevel != 0 || m_cOptions.m_nGuiFeedbackLevel > 5) {
+        m_cOptions.m_nGuiFeedbackLevel = 5;
+    }
+
+    m_cOptions.m_nLocatorFeedbackLevel = GetPrivateProfileIntA("Game Options",
+        "Locator Feedback Level",
+        5,
+        g_pBaldurChitin->GetIniFileName());
+
+    if (m_cOptions.m_nLocatorFeedbackLevel != 0 || m_cOptions.m_nLocatorFeedbackLevel > 5) {
+        m_cOptions.m_nLocatorFeedbackLevel = 5;
+    }
+
+    m_cOptions.m_nBoredTime = GetPrivateProfileIntA("Game Options",
+        "Bored Timeout",
+        CScreenWorld::BORED_TIME,
+        g_pBaldurChitin->GetIniFileName());
+
+    if (m_cOptions.m_nBoredTime == 0 || m_cOptions.m_nBoredTime > CScreenWorld::BORED_TIME) {
+        m_cOptions.m_nBoredTime = CScreenWorld::BORED_TIME;
+    }
+
+    m_cOptions.m_bAlwaysDither = GetPrivateProfileIntA("Game Options",
+        "Always Dither",
+        1,
+        g_pBaldurChitin->GetIniFileName());
+
+    m_cOptions.m_bSubtitles = GetPrivateProfileIntA("Game Options",
+        "Subtitles",
+        0,
+        g_pBaldurChitin->GetIniFileName());
+
+    m_cOptions.m_nKeyboardScrollSpeed = GetPrivateProfileIntA("Game Options",
+        "Keyboard Scroll Speed",
+        36,
+        g_pBaldurChitin->GetIniFileName());
+
+    if (m_cOptions.m_nKeyboardScrollSpeed < 18 || m_cOptions.m_nKeyboardScrollSpeed > 150) {
+        m_cOptions.m_nKeyboardScrollSpeed = 36;
+    }
+
+    m_cOptions.m_nCommandSoundsFrequency = GetPrivateProfileIntA("Game Options",
+        "Command Sounds Frequency",
+        2,
+        g_pBaldurChitin->GetIniFileName());
+
+    if (m_cOptions.m_nCommandSoundsFrequency == 0 || m_cOptions.m_nCommandSoundsFrequency > 3) {
+        m_cOptions.m_nCommandSoundsFrequency = 2;
+    }
+
+    m_cOptions.m_nSelectionSoundsFrequency = GetPrivateProfileIntA("Game Options",
+        "Selection Sounds Frequency",
+        3,
+        g_pBaldurChitin->GetIniFileName());
+
+    if (m_cOptions.m_nSelectionSoundsFrequency == 0 || m_cOptions.m_nSelectionSoundsFrequency > 3) {
+        m_cOptions.m_nSelectionSoundsFrequency = 3;
+    }
+
+    m_cOptions.m_nEffectTextLevel = GetPrivateProfileIntA("Game Options",
+        "Effect Text Level",
+        62,
+        g_pBaldurChitin->GetIniFileName());
+
+    m_cOptions.m_bDarkvision = GetPrivateProfileIntA("Game Options",
+        "Darkvision",
+        0,
+        g_pBaldurChitin->GetIniFileName());
+
+    m_cOptions.m_bWeatherEnabled = GetPrivateProfileIntA("Game Options",
+        "Weather",
+        1,
+        g_pBaldurChitin->GetIniFileName());
+
+    m_cOptions.m_nTutorialState = GetPrivateProfileIntA("Game Options",
+        "Tutorial State",
+        1,
+        g_pBaldurChitin->GetIniFileName());
+
+    if (m_cOptions.m_nTutorialState > 1) {
+        m_cOptions.m_nTutorialState = 1;
+    }
+
+    m_cOptions.m_bAttackSounds = GetPrivateProfileIntA("Game Options",
+        "Attack Sounds",
+        1,
+        g_pBaldurChitin->GetIniFileName());
+
+    if (m_cOptions.m_bAttackSounds > 1) {
+        m_cOptions.m_bAttackSounds = 1;
+    }
+
+    m_cOptions.m_nAutoPauseState = GetPrivateProfileIntA("Game Options",
+        "Auto Pause State",
+        0,
+        g_pBaldurChitin->GetIniFileName());
+
+    m_cOptions.m_bAutoPauseCenter = GetPrivateProfileIntA("Game Options",
+        "Auto Pause Center",
+        1,
+        g_pBaldurChitin->GetIniFileName());
+
+    if (g_pBaldurChitin->cNetwork.GetSessionHosting() == TRUE) {
+        m_cOptions.m_nDifficultyLevel = GetPrivateProfileIntA("Game Options",
+            "Difficulty Level",
+            3,
+            g_pBaldurChitin->GetIniFileName());
+
+        if (m_cOptions.m_nDifficultyLevel < 1 || m_cOptions.m_nDifficultyLevel > 5) {
+            m_cOptions.m_nDifficultyLevel = 3;
+        }
+
+        switch (m_cOptions.m_nDifficultyLevel) {
+        case 1:
+            m_cOptions.m_nDifficultyMultiplier = -50;
+            break;
+        case 2:
+            m_cOptions.m_nDifficultyMultiplier = -25;
+            break;
+        case 3:
+            m_cOptions.m_nDifficultyMultiplier = 0;
+            break;
+        case 4:
+            m_cOptions.m_nDifficultyMultiplier = 50;
+            break;
+        case 5:
+            m_cOptions.m_nDifficultyMultiplier = 100;
+            break;
+        }
+
+        m_cOptions.m_nMPDifficultyMultiplier = m_cOptions.m_nDifficultyMultiplier;
+        m_nDifficultyLevel = -1;
+    } else {
+        m_nDifficultyLevel = GetPrivateProfileIntA("Game Options",
+            "Difficulty Level",
+            3,
+            g_pBaldurChitin->GetIniFileName());
+
+        // NOTE: Difficulty level is not normalized to 1..5 range as in the
+        // code path above.
+
+        m_cOptions.m_nDifficultyLevel = m_nDifficultyLevel;
+    }
+
+    m_cOptions.m_bQuickItemMapping = GetPrivateProfileIntA("Game Options",
+        "Quick Item Mapping",
+        1,
+        g_pBaldurChitin->GetIniFileName());
+
+    if (m_cOptions.m_bQuickItemMapping > 1) {
+        m_cOptions.m_bQuickItemMapping = 1;
+    }
+
+    m_cOptions.m_bTerrainHugging = GetPrivateProfileIntA("Game Options",
+        "Terrain Hugging",
+        0,
+        g_pBaldurChitin->GetIniFileName());
+
+    CGameSprite::SHOW_CHARACTER_HP = GetPrivateProfileIntA("Game Options",
+        "Show Character HP",
+        0,
+        g_pBaldurChitin->GetIniFileName());
+
+    CGameSprite::GRAVITY_IS_DOWN = GetPrivateProfileIntA("Game Options",
+        "Gravity Is Down",
+        0,
+        g_pBaldurChitin->GetIniFileName());
+
+    m_cOptions.m_bShowQuestXP = GetPrivateProfileIntA("Game Options",
+        "Show Quest XP",
+        0,
+        g_pBaldurChitin->GetIniFileName());
+
+    m_cOptions.m_bStaticAnimations = GetPrivateProfileIntA("Game Options",
+        "Static Animations",
+        1,
+        g_pBaldurChitin->GetIniFileName());
+
+    m_cOptions.m_bCriticalHitScreenShake = GetPrivateProfileIntA("Game Options",
+        "Critical Hit Screen Shake",
+        1,
+        g_pBaldurChitin->GetIniFileName());
+
+    m_cOptions.m_bSuppressExtraDifficultyDamage = GetPrivateProfileIntA("Game Options",
+        "Suppress Extra Difficulty Damage",
+        0,
+        g_pBaldurChitin->GetIniFileName());
+
+    if (!g_pBaldurChitin->cNetwork.GetSessionHosting()) {
+        g_pBaldurChitin->m_cBaldurMessage.DemandSettingsNightmareMode(FALSE);
+    }
+
+    m_cOptions.m_nDefaultCharGenPointsPool = GetPrivateProfileIntA("Game Options",
+        "DefaultCharGenPointsPool",
+        16,
+        g_pBaldurChitin->GetIniFileName());
+
+    if (m_cOptions.m_nDefaultCharGenPointsPool < 10 || m_cOptions.m_nDefaultCharGenPointsPool > 108) {
+        m_cOptions.m_nDefaultCharGenPointsPool = 16;
+    }
+
+    m_cOptions.m_nDefaultCharGenPoints = GetPrivateProfileIntA("Game Options",
+        "DefaultCharGenPoints",
+        10,
+        g_pBaldurChitin->GetIniFileName());
+
+    if (m_cOptions.m_nDefaultCharGenPoints < 3 || m_cOptions.m_nDefaultCharGenPoints > 18) {
+        m_cOptions.m_nDefaultCharGenPoints = 10;
+    }
+
+    m_cOptions.m_bHotkeysOnToolTips = GetPrivateProfileIntA("Game Options",
+        "Hotkeys On Tooltips",
+        1,
+        g_pBaldurChitin->GetIniFileName());
+
+    g_pBaldurChitin->m_cBaldurMessage.SetSignalDefaultSecondsToTimeout();
+
+    m_cOptions.m_bAllScreenShake = GetPrivateProfileIntA("Game Options",
+        "All Screen Shake",
+        1,
+        g_pBaldurChitin->GetIniFileName());
+
+    m_cOptions.m_nOldPortraitHealth = GetPrivateProfileIntA("Game Options",
+        "Old Portrait Health",
+        0,
+        g_pBaldurChitin->GetIniFileName());
+
+    m_cOptions.m_nHitPointBarSequence = GetPrivateProfileIntA("Game Options",
+        "Hit Point Bar Sequence",
+        0,
+        g_pBaldurChitin->GetIniFileName());
+
+    if (m_cOptions.m_nHitPointBarSequence < 0 || m_cOptions.m_nHitPointBarSequence > 5) {
+        m_cOptions.m_nHitPointBarSequence = 0;
+    }
 }
 
 // 0x5AA350

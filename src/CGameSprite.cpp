@@ -202,6 +202,12 @@ const CResRef CGameSprite::SPIN122("SPIN122");
 // 0x8F93F0
 const CResRef CGameSprite::SPIN285("SPIN285");
 
+// 0x8F950C
+BOOLEAN CGameSprite::SHOW_CHARACTER_HP;
+
+// 0x8F950D
+BOOLEAN CGameSprite::GRAVITY_IS_DOWN;
+
 // 0x
 BOOL CGameSprite::OnSearchMap()
 {

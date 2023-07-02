@@ -171,6 +171,9 @@ public:
     static const CResRef SPIN122;
     static const CResRef SPIN285;
 
+    static BOOLEAN SHOW_CHARACTER_HP;
+    static BOOLEAN GRAVITY_IS_DOWN;
+
     /* 0014 */ LONG GetTargetId() override;
     /* 003C */ BOOL OnSearchMap() override;
     /* 0044 */ void OnFormationButton(const CPoint& pt) override;

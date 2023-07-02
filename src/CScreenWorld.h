@@ -8,6 +8,8 @@
 
 class CScreenWorld : public CBaldurEngine {
 public:
+    static const LONG BORED_TIME;
+
     CScreenWorld();
     ~CScreenWorld();
     void AsynchronousUpdate(BOOL bActiveEngine);

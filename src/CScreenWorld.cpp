@@ -1,5 +1,8 @@
 #include "CScreenWorld.h"
 
+// 0x85A1EC
+const LONG CScreenWorld::BORED_TIME = 3000;
+
 // 0x685610
 CScreenWorld::CScreenWorld()
 {
