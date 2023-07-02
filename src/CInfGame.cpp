@@ -1120,7 +1120,126 @@ void CInfGame::LoadOptions()
 // 0x5AA350
 void CInfGame::SaveOptions()
 {
-    // TODO: Incomplete.
+    CString sValue;
+
+    sValue.Format("%d", m_cOptions.m_bFootStepsSounds);
+    WritePrivateProfileStringA("Game Options", "Footsteps", sValue, g_pBaldurChitin->GetIniFileName());
+
+    if ((!g_pChitin->cNetwork.GetSessionOpen() || g_pChitin->cNetwork.GetSessionHosting())
+        && m_cOptions.field_4 != 0) {
+        sValue.Format("%d", m_cOptions.field_4);
+        WritePrivateProfileStringA("Game Options", "Grant 2000", sValue, g_pBaldurChitin->GetIniFileName());
+
+        sValue.Format("%d", m_cOptions.m_bGore);
+        WritePrivateProfileStringA("Game Options", "Chucknomitron", sValue, g_pBaldurChitin->GetIniFileName());
+    }
+
+    sValue.Format("%d", m_cOptions.m_nMouseScrollSpeed);
+    WritePrivateProfileStringA("Game Options", "Mouse Scroll Speed", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_nGuiFeedbackLevel);
+    WritePrivateProfileStringA("Game Options", "GUI Feedback Level", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_nLocatorFeedbackLevel);
+    WritePrivateProfileStringA("Game Options", "Locator Feedback Level", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_nBoredTime);
+    WritePrivateProfileStringA("Game Options", "Bored Timeout", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_bAlwaysDither);
+    WritePrivateProfileStringA("Game Options", "Always Dither", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_bSubtitles);
+    WritePrivateProfileStringA("Game Options", "Subtitles", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_nKeyboardScrollSpeed);
+    WritePrivateProfileStringA("Game Options", "Keyboard Scroll Speed", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_nCommandSoundsFrequency);
+    WritePrivateProfileStringA("Game Options", "Command Sounds Frequency", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_nSelectionSoundsFrequency);
+    WritePrivateProfileStringA("Game Options", "Selection Sounds Frequency", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_nEffectTextLevel);
+    WritePrivateProfileStringA("Game Options", "Effect Text Level", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_bDarkvision);
+    WritePrivateProfileStringA("Game Options", "Darkvision", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_bWeatherEnabled);
+    WritePrivateProfileStringA("Game Options", "Weather", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_nTutorialState);
+    WritePrivateProfileStringA("Game Options", "Tutorial State", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_bAttackSounds);
+    WritePrivateProfileStringA("Game Options", "Attack Sounds", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_nAutoPauseState);
+    WritePrivateProfileStringA("Game Options", "Auto Pause State", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_bAutoPauseCenter);
+    WritePrivateProfileStringA("Game Options", "Auto Pause Center", sValue, g_pBaldurChitin->GetIniFileName());
+
+    if (m_nDifficultyLevel == -1) {
+        sValue.Format("%d", m_cOptions.m_nDifficultyLevel);
+    } else {
+        sValue.Format("%d", m_nDifficultyLevel);
+    }
+
+    WritePrivateProfileStringA("Game Options", "Difficulty Level", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_bQuickItemMapping);
+    WritePrivateProfileStringA("Game Options", "Quick Item Mapping", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_bEnvironmentalAudio);
+    WritePrivateProfileStringA("Game Options", "Environmental Audio", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_bTerrainHugging);
+    WritePrivateProfileStringA("Game Options", "Terrain Hugging", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_bStaticAnimations);
+    WritePrivateProfileStringA("Game Options", "Static Animations", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_bTranslucentBlts);
+    WritePrivateProfileStringA("Game Options", "Translucent Blts", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_bMaxHP);
+    WritePrivateProfileStringA("Game Options", "Maximum HP", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_bAutoPauseOnTrap);
+    WritePrivateProfileStringA("Game Options", "Pause On Trap", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", CGameSprite::SHOW_CHARACTER_HP);
+    WritePrivateProfileStringA("Game Options", "Show Character HP", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_bShowQuestXP);
+    WritePrivateProfileStringA("Game Options", "Show Quest XP", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", g_pBaldurChitin->field_1A0);
+    WritePrivateProfileStringA("Program Options", "Double Byte Character Support", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_bCriticalHitScreenShake);
+    WritePrivateProfileStringA("Game Options", "Critical Hit Screen Shake", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_bHotkeysOnToolTips);
+    WritePrivateProfileStringA("Game Options", "Hotkeys On Tooltips", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_bDuplicateFloatingText);
+    WritePrivateProfileStringA("Game Options", "Duplicate Floating Text", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_nTilesPrecachePercent);
+    WritePrivateProfileStringA("Game Options", "Tiles Precache Percent", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_bSuppressExtraDifficultyDamage);
+    WritePrivateProfileStringA("Game Options", "Suppress Extra Difficulty Damage", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_bAllScreenShake);
+    WritePrivateProfileStringA("Game Options", "All Screen Shake", sValue, g_pBaldurChitin->GetIniFileName());
+
+    sValue.Format("%d", m_cOptions.m_nHitPointBarSequence);
+    WritePrivateProfileStringA("Game Options", "Hit Point Bar Sequence", sValue, g_pBaldurChitin->GetIniFileName());
 }
 
 // 0x5AF360
