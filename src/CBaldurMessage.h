@@ -27,6 +27,7 @@ public:
     BOOLEAN KickPlayerRequest(const CString& sPlayerName);
     BOOL ObjectControlRequest(LONG localObjectID);
     BOOL ObjectControl();
+    void SetSignalDefaultSecondsToTimeout();
     BOOLEAN SendSignal(BYTE signalType, BYTE signalToSend);
     BOOLEAN ChapterAnnounceStatus(BYTE nChapter, CResRef cResRef);
     void WeatherBroadcast(WORD wWeatherFlags);

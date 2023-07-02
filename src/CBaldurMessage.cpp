@@ -1,5 +1,7 @@
 #include "CBaldurMessage.h"
 
+#include "CBaldurChitin.h"
+
 // 0x84CF76
 const BYTE CBaldurMessage::DELETEAREA_EMPTY_VOTE = 101;
 
@@ -162,6 +164,19 @@ BOOL CBaldurMessage::ObjectControl()
     // TODO: Incomplete.
 
     return FALSE;
+}
+
+// 0x433150
+void CBaldurMessage::SetSignalDefaultSecondsToTimeout()
+{
+    m_dwSignalSecondsToTimeout = GetPrivateProfileIntA("Multiplayer",
+        "Client Timeout",
+        SIGNAL_SECONDSTOMPTIMEOUT,
+        g_pBaldurChitin->GetIniFileName());
+
+    if (m_dwSignalSecondsToTimeout <= 30 || m_dwSignalSecondsToTimeout > 9999) {
+        m_dwSignalSecondsToTimeout = SIGNAL_SECONDSTOMPTIMEOUT;
+    }
 }
 
 // 0x4333C0
