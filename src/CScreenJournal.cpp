@@ -355,10 +355,10 @@ void CScreenJournal::OnKeyDown(SHORT nKeysFlags)
                 if (m_bCtrlKeyDown) {
                     switch (m_pVirtualKeysFlags[nKeyFlag]) {
                     case 'A':
-                        pGame->m_cJournal.SaveAll();
+                        pGame->GetJournal()->SaveAll();
                         break;
                     case 'S':
-                        pGame->m_cJournal.Save(m_nChapter);
+                        pGame->GetJournal()->Save(m_nChapter);
                         break;
                     }
                 } else {
@@ -532,7 +532,7 @@ void CScreenJournal::UpdateMainPanel()
     // __LINE__: 1140
     UTIL_ASSERT(pText != NULL);
 
-    pGame->m_cJournal.UpdateTextDisplay(m_nChapter, pText);
+    pGame->GetJournal()->UpdateTextDisplay(m_nChapter, pText);
 }
 
 // 0x66A540
@@ -854,7 +854,7 @@ void CScreenJournal::ResetAnnotatePanel()
     pBtRevert->SetEnabled(TRUE);
 
     if (!field_EA0) {
-        switch (g_pBaldurChitin->GetObjectGame()->m_cJournal.GetEntryType(field_E9C)) {
+        switch (g_pBaldurChitin->GetObjectGame()->GetJournal()->GetEntryType(field_E9C)) {
         case 0:
             pBtRevert->SetEnabled(FALSE);
             break;
@@ -863,7 +863,7 @@ void CScreenJournal::ResetAnnotatePanel()
             // FALLTHROUGH
         case 2:
         case 4:
-            if (!g_pBaldurChitin->GetObjectGame()->m_cJournal.IsEntryChanged(field_E9C)) {
+            if (!g_pBaldurChitin->GetObjectGame()->GetJournal()->IsEntryChanged(field_E9C)) {
                 pBtRevert->SetEnabled(FALSE);
             }
             break;

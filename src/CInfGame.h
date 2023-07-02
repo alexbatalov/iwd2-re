@@ -67,6 +67,7 @@ public:
     CGameObjectArray* GetObjectArray();
     CGameArea* GetVisibleArea();
     CMultiplayerSettings* GetMultiplayerSettings();
+    CGameJournal* GetJournal();
 
     const CRuleTables& GetRuleTables() { return m_ruleTables; }
 

@@ -1093,3 +1093,9 @@ CMultiplayerSettings* CInfGame::GetMultiplayerSettings()
 {
     return &m_multiplayerSettings;
 }
+
+// 0x439A70
+CGameJournal* CInfGame::GetJournal()
+{
+    return &m_cJournal;
+}
