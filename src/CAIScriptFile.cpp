@@ -1,5 +1,9 @@
 #include "CAIScriptFile.h"
 
+#include "CAICondition.h"
+#include "CAIResponse.h"
+#include "CAIScript.h"
+
 // 0x8C8438
 const CString CAIScriptFile::IF("IF");
 
@@ -14,6 +18,38 @@ const CString CAIScriptFile::RESPONSE("RESPONSE");
 
 // 0x8C8420
 const CString CAIScriptFile::COMMENT("//");
+
+// 0x40FDC0
+CAIScriptFile::CAIScriptFile()
+{
+    m_parseMode = 0;
+    m_lineNumber = 0;
+    m_curScript = new CAIScript();
+    m_curResponseSet = NULL;
+    m_curCondition = NULL;
+    m_curResponse = NULL;
+    LoadAllLists(".\\");
+}
+
+// 0x40FEB0
+CAIScriptFile::~CAIScriptFile()
+{
+    if (m_curScript != NULL) {
+        delete m_curScript;
+    }
+
+    if (m_curResponseSet != NULL) {
+        delete m_curResponseSet;
+    }
+
+    if (m_curCondition != NULL) {
+        delete m_curCondition;
+    }
+
+    if (m_curResponse != NULL) {
+        delete m_curResponse;
+    }
+}
 
 // FIXME: Use reference.
 //
