@@ -1526,6 +1526,24 @@ BOOL CInfGame::AddCharacterToAllies(LONG nCharacterId)
     return TRUE;
 }
 
+// 0x5BDA50
+BOOL CInfGame::RemoveCharacterFromAllies(LONG nCharacterId)
+{
+    POSITION pos = m_allies.Find(reinterpret_cast<int*>(nCharacterId));
+    if (pos == NULL) {
+        return FALSE;
+    }
+
+    m_allies.RemoveAt(pos);
+
+    // FIXME: What for?
+    if (m_allies.GetCount() == 0) {
+        m_allies.RemoveAll();
+    }
+
+    return TRUE;
+}
+
 // 0x5C1090
 BYTE CInfGame::GetCharactersControlled()
 {
