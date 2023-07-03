@@ -14,6 +14,7 @@ public:
     static const CString COMMENT;
 
     void ParseError(CString sError);
+    CString ReadToChar(CString sLine, char c);
     CString ReadAfterChar(CString sLine, char c);
     BOOL LoadAllLists(CString a1);
 

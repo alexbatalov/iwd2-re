@@ -27,6 +27,25 @@ void CAIScriptFile::ParseError(CString sError)
     m_errors += sError;
 }
 
+// FIXME: `CAIUtil::ReadToChar` is better (does not use `operator+` every
+// character).
+//
+// 0x41DF20
+CString CAIScriptFile::ReadToChar(CString sLine, char c)
+{
+    CString sString("");
+
+    for (int index = 0; index < sLine.GetLength(); index++) {
+        if (sLine[index] == c) {
+            break;
+        }
+
+        sString += sLine[index];
+    }
+
+    return sString;
+}
+
 // FIXME: Duplicate of `CAIUtil::ReadAfterChar`.
 // FIXME: Use reference.
 //
