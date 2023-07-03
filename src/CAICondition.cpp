@@ -1,5 +1,7 @@
 #include "CAICondition.h"
 
+#include "CAIUtil.h"
+
 // NOTE: Inlined.
 CAICondition::CAICondition()
 {
@@ -38,5 +40,15 @@ void CAICondition::Add(const CAITrigger& trigger)
 // 0x404290
 void CAICondition::Read(CString sData)
 {
-    // TODO: Incomplete.
+    CString sTriggerData;
+
+    sTriggerData = CAIUtil::ReadBetween(sData, CString("TR\n"));
+
+    while (sTriggerData.GetLength() > 0) {
+        CAITrigger* pTrigger = new CAITrigger(CAITrigger::NO_TRIGGER, 0);
+        pTrigger->Read(sData);
+        m_triggerList.AddTail(pTrigger);
+
+        sTriggerData = CAIUtil::ReadBetween(sData, CString("TR\n"));
+    }
 }

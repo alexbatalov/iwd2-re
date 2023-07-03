@@ -1,5 +1,8 @@
 #include "CAITrigger.h"
 
+// 0x847D98
+const SHORT CAITrigger::NO_TRIGGER = 0;
+
 // NOTE: Inlined.
 CAITrigger::CAITrigger(const CAITrigger& trigger)
 {
