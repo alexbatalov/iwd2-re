@@ -1493,6 +1493,18 @@ LONG CInfGame::GetCharacterSlot(INT nCharacterSlot)
     return m_characters[nCharacterSlot];
 }
 
+// 0x5BD690
+INT CInfGame::GetCharacterSlotFromId(LONG nCharacterId)
+{
+    for (int index = 0; index < CINFGAME_MAXCHARACTERS; index++) {
+        if (m_characters[index] == nCharacterId) {
+            return index;
+        }
+    }
+
+    return -1;
+}
+
 // 0x5C1090
 BYTE CInfGame::GetCharactersControlled()
 {
