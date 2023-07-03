@@ -1583,6 +1583,16 @@ BOOL CInfGame::RemoveCharacterFromFamiliars(LONG nCharacterId)
     return TRUE;
 }
 
+// 0x5BDB70
+DWORD CInfGame::GetScrollSpeed()
+{
+    if (m_gameAreas[m_visibleArea]->m_nKeyScrollState != 0) {
+        return m_cOptions.m_nKeyboardScrollSpeed;
+    } else {
+        return m_cOptions.m_nMouseScrollSpeed;
+    }
+}
+
 // 0x5C1090
 BYTE CInfGame::GetCharactersControlled()
 {
