@@ -1758,6 +1758,12 @@ void CInfGame::ReadyCharacterTerminationSequence(int a1, int a2)
     }
 }
 
+// 0x5C3210
+CString CInfGame::GetDirPortraits()
+{
+    return m_sPortraitsDir;
+}
+
 // 0x5C1090
 BYTE CInfGame::GetCharactersControlled()
 {
