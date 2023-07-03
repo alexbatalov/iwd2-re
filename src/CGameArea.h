@@ -82,6 +82,7 @@ public:
     /* 01EF */ BOOLEAN m_bAreaLoaded;
     /* 01F0 */ CResRef m_resRef;
     /* 023C */ LONG m_nKeyScrollState;
+    /* 0422 */ DWORD m_nInitialAreaId;
     /* 04CC */ CInfinity m_cInfinity;
     /* 08BC */ CSound m_sndAmbientDay;
     /* 0920 */ CSound m_sndAmbientNight;

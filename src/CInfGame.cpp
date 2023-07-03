@@ -1593,6 +1593,20 @@ DWORD CInfGame::GetScrollSpeed()
     }
 }
 
+// 0x5C04F0
+BOOLEAN CInfGame::FindAreaID(DWORD nAreaId)
+{
+    for (int index = 0; index < 12; index++) {
+        if (m_gameAreas[index] != NULL) {
+            if (m_gameAreas[index]->m_nInitialAreaId == nAreaId) {
+                return TRUE;
+            }
+        }
+    }
+
+    return FALSE;
+}
+
 // 0x5C1090
 BYTE CInfGame::GetCharactersControlled()
 {
