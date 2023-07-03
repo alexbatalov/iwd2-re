@@ -1565,6 +1565,24 @@ BOOL CInfGame::AddCharacterToFamiliars(LONG nCharacterId)
     return TRUE;
 }
 
+// 0x5BDB20
+BOOL CInfGame::RemoveCharacterFromFamiliars(LONG nCharacterId)
+{
+    POSITION pos = m_familiars.Find(reinterpret_cast<int*>(nCharacterId));
+    if (pos == NULL) {
+        return FALSE;
+    }
+
+    m_familiars.RemoveAt(pos);
+
+    // FIXME: What for?
+    if (m_familiars.GetCount() == 0) {
+        m_familiars.RemoveAll();
+    }
+
+    return TRUE;
+}
+
 // 0x5C1090
 BYTE CInfGame::GetCharactersControlled()
 {
