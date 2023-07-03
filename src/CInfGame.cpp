@@ -1401,6 +1401,22 @@ void CInfGame::UpdatePortraitToolTip(DWORD dwControlId, STRREF dwStrId)
     pControl->SetToolTipStrRef(dwStrId, -1, -1);
 }
 
+// FIXME: Use reference instead of object instance.
+//
+// 0x5B7510
+CGameArea* CInfGame::GetArea(CString sName)
+{
+    for (int index = 0; index < 12; index++) {
+        if (m_gameAreas[index] != NULL) {
+            if (m_gameAreas[index]->m_resRef == sName) {
+                return m_gameAreas[index];
+            }
+        }
+    }
+
+    return NULL;
+}
+
 // 0x5BB800
 BOOL CInfGame::Is3DSound(int nSoundChannel)
 {

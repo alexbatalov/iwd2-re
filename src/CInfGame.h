@@ -49,6 +49,7 @@ public:
     void EnablePortrait(BYTE nControlId, BOOL bEnable);
     BOOLEAN ExtendedDayNightAreaActive();
     void UpdatePortraitToolTip(DWORD dwControlId, STRREF dwStrId);
+    CGameArea* GetArea(CString sName);
     BOOL Is3DSound(int nSoundChannel);
     float GetSoundReverbMix(int nSoundChannel, int nReverb);
     void SynchronousUpdate();
