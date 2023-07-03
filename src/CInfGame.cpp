@@ -1718,6 +1718,23 @@ CString CInfGame::GetDirScripts()
     return m_sScriptsDir;
 }
 
+// 0x5C24F0
+void CInfGame::StartCharacterTerminationSequence()
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    if (pGame->field_43E2 == 322) {
+        pGame->field_43E2 = -1;
+    }
+
+    pGame->field_43E6 = 0;
+
+    if (g_pBaldurChitin->pActiveEngine != g_pBaldurChitin->m_pEngineWorld) {
+        g_pBaldurChitin->pActiveEngine->SelectEngine(g_pBaldurChitin->m_pEngineWorld);
+    }
+
+    g_pBaldurChitin->m_pEngineWorld->m_bGameOverPanel = TRUE;
+}
+
 // 0x5C1090
 BYTE CInfGame::GetCharactersControlled()
 {
