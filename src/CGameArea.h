@@ -6,6 +6,8 @@
 #include "CInfinity.h"
 #include "CSound.h"
 
+class CInfGame;
+
 typedef struct {
     RESREF m_areaName;
     DWORD m_lastSaved;
@@ -58,6 +60,7 @@ public:
 
     void AddObject(LONG id, BYTE listType);
     void ApplyWindToAmbients(BYTE nPercentVolume);
+    void SetListenPosition();
     void OnActivation();
     void OnDeactivation();
     void RemoveObject(POSITION posVertList, BYTE listType, LONG id);
@@ -71,6 +74,7 @@ public:
     void SetSoundEnvironment();
     BOOL SetSong(SHORT slot, BYTE song);
     BYTE GetSong(SHORT slot);
+    void PlaySong(SHORT slot, DWORD flags);
 
     CInfinity* GetInfinity();
 
@@ -81,8 +85,11 @@ public:
     /* 005C */ CAreaSoundsAndMusic m_headerSound;
     /* 01EF */ BOOLEAN m_bAreaLoaded;
     /* 01F0 */ CResRef m_resRef;
+    /* 0234 */ CInfGame* m_pGame;
     /* 0238 */ LONG m_nScrollState;
     /* 023C */ LONG m_nKeyScrollState;
+    /* 0256 */ CPoint m_ptMousePos;
+    /* 03DA */ BYTE m_firstRender;
     /* 0422 */ DWORD m_nInitialAreaId;
     /* 04CC */ CInfinity m_cInfinity;
     /* 08BC */ CSound m_sndAmbientDay;

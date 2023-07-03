@@ -5,6 +5,7 @@
 
 #include "CUIControlButton3State.h"
 #include "CVidCell.h"
+#include "CWeather.h"
 
 class CScreenWorld : public CBaldurEngine {
 public:
@@ -22,6 +23,7 @@ public:
 
     /* 013E */ BOOLEAN m_bPaused;
     /* 0146 */ BOOL m_bHardPaused;
+    /* 0F46 */ CWeather m_weather;
     /* 10DA */ DWORD m_deltaTime;
     /* 10DE */ int field_10DE;
     /* 10EC */ BOOL m_bGameOverPanel;

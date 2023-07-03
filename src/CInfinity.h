@@ -7,6 +7,7 @@
 
 class CInfinity {
 public:
+    static const BYTE SCROLL_DELAY;
     static const CString DAWN_MOVIE;
     static const CString DUSK_MOVIE;
     static const CString NIGHT_RESREF_SUFFIX;
@@ -26,7 +27,9 @@ public:
     void SetDusk();
     void SetApproachingDawn();
     void SetApproachingDusk();
+    void UpdateLightning();
 
+    /* 0024 */ BOOL bRefreshVRamRect;
     /* 0040 */ int nNewX;
     /* 0044 */ int nNewY;
     /* 0048 */ CRect rViewPort;
@@ -42,6 +45,7 @@ public:
     /* 015A */ BYTE m_renderDayNightCode;
     /* 015C */ BYTE m_dayLightIntensity;
     /* 015D */ BYTE m_requestDayNightCode;
+    /* 019A */ BYTE m_nScrollDelay;
     /* 019B */ BOOLEAN m_bMovieBroadcast;
     /* 019C */ BOOL m_bStartLightning;
     /* 01A0 */ BOOL m_bStopLightning;

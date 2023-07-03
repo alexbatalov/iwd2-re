@@ -4,6 +4,7 @@
 #include "CChitin.h"
 #include "CGameObject.h"
 #include "CInfGame.h"
+#include "CScreenWorld.h"
 #include "CUtil.h"
 
 // 0x8D212C
@@ -55,10 +56,65 @@ void CGameArea::ApplyWindToAmbients(BYTE nPercentVolume)
     m_sndAmbientNight.SetVolume(m_sndAmbientNightVolume * m_sndAmbientVolume / 100);
 }
 
+// 0x474F00
+void CGameArea::SetListenPosition()
+{
+    // TODO: Incomplete.
+}
+
 // 0x4750E0
 void CGameArea::OnActivation()
 {
-    // TODO: Incomplete.
+    SetListenPosition();
+
+    m_ptMousePos = g_pChitin->m_ptPointer;
+    m_nScrollState = 0;
+    m_nKeyScrollState = 0;
+    m_cInfinity.m_nScrollDelay = CInfinity::SCROLL_DELAY;
+    m_cInfinity.bRefreshVRamRect = TRUE;
+
+    if (g_pBaldurChitin->m_pEngineWorld->m_bPaused) {
+        g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->StopTime();
+    }
+
+    if (g_pBaldurChitin->GetObjectGame()->GetVisibleArea() == this) {
+        g_pBaldurChitin->cSoundMixer.m_nActiveArea = reinterpret_cast<DWORD>(this);
+        g_pBaldurChitin->cSoundMixer.UpdateSoundList();
+
+        if (g_pBaldurChitin->field_1C4A == 1 && byte_8D2138 == TRUE) {
+            if (dword_8D212C == g_pBaldurChitin->GetObjectGame()->m_cOptions.m_nVolumeAmbients) {
+                g_pBaldurChitin->cSoundMixer.SetChannelVolume(16, dword_8D212C);
+                g_pBaldurChitin->cSoundMixer.SetChannelVolume(17, dword_8D212C);
+            } else {
+                g_pBaldurChitin->cSoundMixer.SetChannelVolume(16, g_pBaldurChitin->GetObjectGame()->m_cOptions.m_nVolumeAmbients);
+                g_pBaldurChitin->cSoundMixer.SetChannelVolume(17, g_pBaldurChitin->GetObjectGame()->m_cOptions.m_nVolumeAmbients);
+            }
+            byte_8D2138 = FALSE;
+        } else {
+            g_pBaldurChitin->cSoundMixer.SetChannelVolume(16, g_pBaldurChitin->GetObjectGame()->m_cOptions.m_nVolumeAmbients);
+            g_pBaldurChitin->cSoundMixer.SetChannelVolume(17, g_pBaldurChitin->GetObjectGame()->m_cOptions.m_nVolumeAmbients);
+        }
+
+        SetTimeOfDay(m_pGame->GetWorldTimer()->m_gameTime % CTimerWorld::TIMESCALE_MSEC_PER_DAY, FALSE);
+        m_cInfinity.UpdateLightning();
+        SetSoundEnvironment();
+        g_pBaldurChitin->m_pEngineWorld->m_weather.OnAreaChange(FALSE);
+        m_firstRender = 8;
+
+        if (g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->IsDay()) {
+            m_nCurrentSong = 0;
+        } else if (g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->IsNight()) {
+            m_nCurrentSong = 1;
+        }
+
+        if (m_nCurrentSong != -1) {
+            if (!g_pBaldurChitin->cSoundMixer.sub_7ACA30()) {
+                PlaySong(m_nCurrentSong, 5);
+            }
+        }
+
+        g_pBaldurChitin->GetObjectGame()->ApplyVolumeSliders(TRUE);
+    }
 }
 
 // 0x475330
@@ -339,6 +395,12 @@ BYTE CGameArea::GetSong(SHORT slot)
     }
 
     return song;
+}
+
+// 0x479E80
+void CGameArea::PlaySong(SHORT slot, DWORD flags)
+{
+    // TODO: Incomplete.
 }
 
 // 0x453080

@@ -1,5 +1,8 @@
 #include "CInfinity.h"
 
+// 0x85197A
+const BYTE CInfinity::SCROLL_DELAY = 15;
+
 // NOTE: Not sure if it belongs to `CInfinity`. Also unclear what's the need for
 // separate setting which looks to be in sync with
 // `CVidCell::TRANSLUCENT_BLTS_ON`.
@@ -135,4 +138,10 @@ void CInfinity::SetApproachingDawn()
 // 0x799CA0
 void CInfinity::SetApproachingDusk()
 {
+}
+
+// 0x5D1C00
+void CInfinity::UpdateLightning()
+{
+    // TODO: Incomplete.
 }

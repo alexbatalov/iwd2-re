@@ -45,6 +45,7 @@ public:
     int sub_7AC840();
     int sub_7AC890();
     int sub_7ACA20();
+    int sub_7ACA30();
 
     void SetChannelVolume(int nChannelNumber, int nNewVolume);
     int GetChannelVolumeFast(int nChannelNumber);
@@ -81,7 +82,7 @@ public:
     /* 00E4 */ int m_nXCoordinate;
     /* 00E8 */ int m_nYCoordinate;
     /* 00EC */ int m_nZCoordinate;
-    /* 00F0 */ int field_F0;
+    /* 00F0 */ DWORD m_nActiveArea;
     /* 00F4 */ int field_F4;
     /* 00F8 */ int field_F8;
     /* 00FC */ int field_FC;

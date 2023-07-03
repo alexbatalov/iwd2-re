@@ -32,7 +32,7 @@ CSoundMixer::CSoundMixer()
     m_nXCoordinate = 0;
     m_nYCoordinate = 0;
     m_nZCoordinate = 0;
-    field_F0 = 0;
+    m_nActiveArea = 0;
     field_F4 = 0;
     field_F8 = 0;
     field_FC = 0;
@@ -220,7 +220,7 @@ void CSoundMixer::Initialize(CWnd* pWnd, int nNewMaxVoices, int nNewMaxChannels)
     m_bInReleaseAll = FALSE;
     m_bInQueueUpdate = FALSE;
     field_0 = 0;
-    field_F0 = 0;
+    m_nActiveArea = 0;
     InitializeChannels(nNewMaxChannels);
 
     if (m_pDirectSound != NULL) {
@@ -642,6 +642,12 @@ int CSoundMixer::sub_7ACA20()
     // TODO: Incomplete.
 
     return 0;
+}
+
+// 0x7ACA30
+int CSoundMixer::sub_7ACA30()
+{
+    return (field_C0 << 30) >> 31;
 }
 
 // NOTE: Inlined in `CInfGame::ApplyVolumeSliders` and probably other places.
