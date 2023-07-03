@@ -13,8 +13,11 @@ public:
     static const CString RESPONSE;
     static const CString COMMENT;
 
+    void ParseError(CString sError);
     BOOL LoadAllLists(CString a1);
 
+    /* 0002 */ LONG m_lineNumber;
+    /* 0016 */ CString m_errors;
     /* 002E */ CAIIdList m_triggers;
     /* 006E */ CAIIdList m_actions;
     /* 00AE */ CAIIdList m_objects;
