@@ -1706,6 +1706,12 @@ CString CInfGame::GetDirSaveRoot()
     return sResolvedFileName;
 }
 
+// 0x5C0A80
+CString CInfGame::GetDirSave()
+{
+    return field_4228 + field_4220 + "\\";
+}
+
 // 0x5C1090
 BYTE CInfGame::GetCharactersControlled()
 {
