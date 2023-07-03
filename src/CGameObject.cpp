@@ -42,13 +42,13 @@ const BYTE CGameObject::TYPE_TILED_OBJECT = 81;
 const BYTE CGameObject::TYPE_TEXT = 80;
 
 // 0x84C50C
-const BYTE CGameObject::LIST_FRONT = 0;
+const BYTE CGameObject::LIST_FRONT = CGAMEOBJECT_LIST_FRONT;
 
 // 0x84C50D
-const BYTE CGameObject::LIST_BACK = 1;
+const BYTE CGameObject::LIST_BACK = CGAMEOBJECT_LIST_BACK;
 
 // 0x84C50E
-const BYTE CGameObject::LIST_FLIGHT = 2;
+const BYTE CGameObject::LIST_FLIGHT = CGAMEOBJECT_LIST_FLIGHT;
 
 // 0x84C50F
 const BYTE CGameObject::VISIBLE_DELAY = 7;

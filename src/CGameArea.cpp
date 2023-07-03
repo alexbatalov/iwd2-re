@@ -2,7 +2,9 @@
 
 #include "CBaldurChitin.h"
 #include "CChitin.h"
+#include "CGameObject.h"
 #include "CInfGame.h"
+#include "CUtil.h"
 
 // 0x8D212C
 INT CGameArea::dword_8D212C;
@@ -25,7 +27,24 @@ CGameArea::~CGameArea()
 // 0x46A360
 void CGameArea::AddObject(LONG id, BYTE listType)
 {
-    // TODO: Incomplete.
+    CTypedPtrList<CPtrList, int*>* pList;
+    switch (listType) {
+    case CGAMEOBJECT_LIST_FRONT:
+        pList = &m_lVertSortAdd;
+        break;
+    case CGAMEOBJECT_LIST_BACK:
+        pList = &m_lVertSortBackAdd;
+        break;
+    case CGAMEOBJECT_LIST_FLIGHT:
+        pList = &m_lVertSortFlightAdd;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+        // __LINE__: 358
+        UTIL_ASSERT(FALSE);
+    }
+
+    pList->AddTail(reinterpret_cast<int*>(id));
 }
 
 // 0x46A7B0

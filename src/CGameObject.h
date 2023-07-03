@@ -8,6 +8,10 @@ class CAITrigger;
 class CGameArea;
 class CVidMode;
 
+#define CGAMEOBJECT_LIST_FRONT 0
+#define CGAMEOBJECT_LIST_BACK 1
+#define CGAMEOBJECT_LIST_FLIGHT 2
+
 class CGameObject {
 public:
     static const BYTE TYPE_NONE;
