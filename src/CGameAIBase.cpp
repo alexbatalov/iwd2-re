@@ -4,6 +4,7 @@
 #include "CBaldurChitin.h"
 #include "CInfGame.h"
 #include "CTimerWorld.h"
+#include "CUtil.h"
 
 // 0x44C4B0
 CGameAIBase::CGameAIBase()
@@ -55,6 +56,24 @@ void CGameAIBase::ClearTriggers()
         }
     }
     m_pendingTriggers.RemoveAll();
+}
+
+// 0x45D130
+void CGameAIBase::RemoveFromArea()
+{
+    CGameObject::RemoveFromArea();
+
+    BYTE rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->Delete(m_id,
+        CGameObjectArray::THREAD_ASYNCH,
+        NULL,
+        INFINITE);
+    if (rc != CGameObjectArray::SUCCESS) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameAIBase.cpp
+        // __LINE__: 6886
+        UTIL_ASSERT(FALSE);
+    }
+
+    delete this;
 }
 
 // 0x45D190

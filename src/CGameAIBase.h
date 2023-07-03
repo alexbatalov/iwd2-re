@@ -12,6 +12,7 @@ public:
     CGameAIBase();
     /* 0000 */ ~CGameAIBase() override;
     /* 002C */ BOOLEAN CompressTime(DWORD deltaTime) override;
+    /* 0048 */ void RemoveFromArea() override;
     /* 0090 */ virtual void SetCurrAction(const CAIAction& action);
     /* 009C */ virtual const BYTE* GetVisibleTerrainTable();
     /* 00A0 */ virtual const BYTE* GetTerrainTable();
