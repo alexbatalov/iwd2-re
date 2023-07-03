@@ -50,6 +50,21 @@ POSITION CAIGroup::Add(LONG characterId)
     return m_memberList.AddTail(reinterpret_cast<LONG*>(characterId));
 }
 
+// 0x406250
+BOOL CAIGroup::IsPartyLeader()
+{
+    if (m_memberList.GetCount() == 0) {
+        return FALSE;
+    }
+
+    LONG memberId = reinterpret_cast<LONG>(m_memberList.GetHead());
+    if (g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(memberId) != -1) {
+        return TRUE;
+    }
+
+    return g_pBaldurChitin->GetObjectGame()->m_familiars.Find(reinterpret_cast<int*>(memberId)) != NULL;
+}
+
 // 0x4093E0
 BOOL CAIGroup::InList(LONG characterId)
 {

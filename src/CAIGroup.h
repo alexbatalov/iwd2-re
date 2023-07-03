@@ -8,6 +8,7 @@ public:
     LONG GetGroupLeader();
     LONG* GetGroupList();
     POSITION Add(LONG characterId);
+    BOOL IsPartyLeader();
     BOOL InList(LONG characterId);
 
     /* 0004 */ BOOL m_groupChanged;
