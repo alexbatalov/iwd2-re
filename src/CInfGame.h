@@ -47,6 +47,7 @@ public:
     void OnPortraitLClick(DWORD id);
     void OnPortraitLDblClick(DWORD id);
     void EnablePortrait(BYTE nControlId, BOOL bEnable);
+    BOOLEAN ExtendedDayNightAreaActive();
     BOOL Is3DSound(int nSoundChannel);
     float GetSoundReverbMix(int nSoundChannel, int nReverb);
     void SynchronousUpdate();

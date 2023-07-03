@@ -9,16 +9,16 @@
 #include "CGameObject.h"
 #include "CGameSprite.h"
 #include "CInfinity.h"
-#include "CScreenMultiPlayer.h"
-#include "CScreenSave.h"
-#include "CScreenSinglePlayer.h"
 #include "CScreenCharacter.h"
 #include "CScreenInventory.h"
 #include "CScreenJournal.h"
-#include "CScreenStore.h"
-#include "CScreenOptions.h"
 #include "CScreenMap.h"
+#include "CScreenMultiPlayer.h"
+#include "CScreenOptions.h"
+#include "CScreenSave.h"
+#include "CScreenSinglePlayer.h"
 #include "CScreenSpellbook.h"
+#include "CScreenStore.h"
 #include "CScreenWorld.h"
 #include "CScreenWorldMap.h"
 #include "CSearchBitmap.h"
@@ -1339,6 +1339,18 @@ void CInfGame::EnablePortrait(BYTE nControlId, BOOL bEnable)
     g_pBaldurChitin->m_pEngineSpellbook->EnablePortrait(1, nControlId, bEnable);
     g_pBaldurChitin->m_pEngineStore->EnablePortrait(1, nControlId, bEnable);
     g_pBaldurChitin->m_pEngineWorld->EnablePortrait(1, nControlId, bEnable);
+}
+
+// 0x5AFE60
+BOOLEAN CInfGame::ExtendedDayNightAreaActive()
+{
+    for (int index = 0; index < 12; index++) {
+        if ((m_gameAreas[index]->m_header.m_areaType & 0x40) != 0) {
+            return TRUE;
+        }
+    }
+
+    return FALSE;
 }
 
 // 0x5BB800
