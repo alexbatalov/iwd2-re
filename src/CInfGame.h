@@ -64,6 +64,7 @@ public:
     BOOL RemoveCharacterFromFamiliars(LONG nCharacterId);
     DWORD GetScrollSpeed();
     BOOLEAN FindAreaID(DWORD nAreaId);
+    CStringList* GetSaveGames();
     CString GetDirSaveRoot();
     BYTE GetCharactersControlled();
     BOOLEAN RestParty(int a2, unsigned char a3);

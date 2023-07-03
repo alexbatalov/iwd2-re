@@ -1435,6 +1435,44 @@ void CInfGame::SynchronousUpdate()
     // TODO: Incomplete.
 }
 
+// 0x5C0520
+CStringList* CInfGame::GetSaveGames()
+{
+    CStringList* pList = new CStringList();
+
+    CString sFileName;
+
+    WIN32_FIND_DATAA ffd;
+    HANDLE hFindFile = FindFirstFileA(GetDirSaveRoot() + "*.*", &ffd);
+    if (hFindFile != INVALID_HANDLE_VALUE) {
+        do {
+            sFileName = ffd.cFileName;
+            if ((ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0
+                && sFileName != "."
+                && sFileName != ".."
+                && SaveGameExists(sFileName)) {
+                POSITION pos = pList->GetHeadPosition();
+                while (pos != NULL) {
+                    if (sFileName < pList->GetAt(pos)) {
+                        break;
+                    }
+                    pList->GetNext(pos);
+                }
+
+                if (pos != NULL) {
+                    pList->InsertBefore(pos, sFileName);
+                } else {
+                    pList->AddTail(sFileName);
+                }
+            }
+        } while (FindNextFileA(hFindFile, &ffd));
+
+        FindClose(hFindFile);
+    }
+
+    return pList;
+}
+
 // 0x5C0730
 BOOL CInfGame::DeleteSaveGame(const CString& sFileName)
 {
