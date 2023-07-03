@@ -17,6 +17,7 @@ public:
     CInfinity();
     ~CInfinity();
 
+    void GetViewPosition(INT& x, INT& y);
     void SetCurrentWeather(COLORREF rgbOvercast, SHORT nWeather, int nWeatherLevel, int nLightningFrequency);
     void SetDay();
     void SetNight();

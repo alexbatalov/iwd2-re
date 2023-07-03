@@ -38,6 +38,13 @@ CInfinity::~CInfinity()
     // TODO: Incomplete.
 }
 
+// 0x5CECB0
+void CInfinity::GetViewPosition(INT& x, INT& y)
+{
+    x = nNewX;
+    y = nNewY;
+}
+
 // 0x5D1750
 void CInfinity::SetCurrentWeather(COLORREF rgbOvercast, SHORT nWeather, int nWeatherLevel, int nLightningFrequency)
 {
