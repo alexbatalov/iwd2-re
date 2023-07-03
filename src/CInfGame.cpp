@@ -1438,9 +1438,34 @@ void CInfGame::SynchronousUpdate()
 // 0x5C0730
 BOOL CInfGame::DeleteSaveGame(const CString& sFileName)
 {
-    // TODO: Incomplete.
+    CString sDirectoryName = GetDirSaveRoot() + sFileName;
 
-    return FALSE;
+    CFileStatus cFileStatus;
+    if (!CFile::GetStatus(sDirectoryName, cFileStatus)) {
+        return FALSE;
+    }
+
+    sDirectoryName += "\\";
+    if (!g_pChitin->cDimm.DirectoryRemoveFiles(sDirectoryName)) {
+        return FALSE;
+    }
+
+    WIN32_FIND_DATAA ffd;
+    HANDLE hFindFile = FindFirstFileA(sDirectoryName + "*.*", &ffd);
+    if (hFindFile == INVALID_HANDLE_VALUE) {
+        return FALSE;
+    }
+
+    do {
+        if ((ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0 || ffd.cFileName[0] != '.') {
+            FindClose(hFindFile);
+            return FALSE;
+        }
+    } while (FindNextFileA(hFindFile, &ffd));
+
+    FindClose(hFindFile);
+
+    return RemoveDirectoryA(sDirectoryName);
 }
 
 // 0x5C0890

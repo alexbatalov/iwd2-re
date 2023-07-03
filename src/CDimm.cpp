@@ -614,6 +614,14 @@ void CDimm::DestroyKeyTable()
     }
 }
 
+// 0x784880
+BOOL CDimm::DirectoryRemoveFiles(const CString& sDirectoryName)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x785C10
 int CDimm::Dump(CRes* pRes, int a2, int a3)
 {
