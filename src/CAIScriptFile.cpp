@@ -27,6 +27,22 @@ void CAIScriptFile::ParseError(CString sError)
     m_errors += sError;
 }
 
+// FIXME: Duplicate of `CAIUtil::ReadAfterChar`.
+// FIXME: Use reference.
+//
+// 0x41DFE0
+CString CAIScriptFile::ReadAfterChar(CString sLine, char c)
+{
+    CString sString("");
+
+    int index = sLine.Find(c);
+    if (index >= 0) {
+        sString = sLine.Right(sLine.GetLength() - index - 1);
+    }
+
+    return sString;
+}
+
 // 0x41E0B0
 BOOL CAIScriptFile::LoadAllLists(CString a1)
 {
