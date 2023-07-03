@@ -1446,9 +1446,31 @@ BOOL CInfGame::DeleteSaveGame(const CString& sFileName)
 // 0x5C0890
 BOOL CInfGame::SaveGameExists(const CString& sSaveGame)
 {
-    // TODO: Incomplete.
+    CString sFileName = GetDirSaveRoot() + sSaveGame + "\\ICEWIND2.GAM";
 
-    return FALSE;
+    HANDLE hFile = CreateFileA(sFileName,
+        GENERIC_READ,
+        0,
+        NULL,
+        OPEN_EXISTING,
+        FILE_ATTRIBUTE_NORMAL,
+        NULL);
+
+    // NOTE: Original code is slightly different (conditions inverted).
+    BOOL bSuccess = FALSE;
+    if (hFile != INVALID_HANDLE_VALUE) {
+        unsigned char signature[8];
+        DWORD dwBytesRead;
+        ReadFile(hFile, signature, sizeof(signature), &dwBytesRead, NULL);
+        if (dwBytesRead == sizeof(signature)
+            && memcmp(signature, "GAMEV2.2", sizeof(signature)) == 0) {
+            bSuccess = TRUE;
+        }
+
+        CloseHandle(hFile);
+    }
+
+    return bSuccess;
 }
 
 // 0x5C0EA0
