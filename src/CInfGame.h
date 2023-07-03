@@ -46,6 +46,7 @@ public:
     void WorldEngineDeactivated();
     void OnPortraitLClick(DWORD id);
     void OnPortraitLDblClick(DWORD id);
+    void EnablePortrait(BYTE nControlId, BOOL bEnable);
     BOOL Is3DSound(int nSoundChannel);
     float GetSoundReverbMix(int nSoundChannel, int nReverb);
     void SynchronousUpdate();

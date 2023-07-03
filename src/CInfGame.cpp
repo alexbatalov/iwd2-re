@@ -12,6 +12,13 @@
 #include "CScreenMultiPlayer.h"
 #include "CScreenSave.h"
 #include "CScreenSinglePlayer.h"
+#include "CScreenCharacter.h"
+#include "CScreenInventory.h"
+#include "CScreenJournal.h"
+#include "CScreenStore.h"
+#include "CScreenOptions.h"
+#include "CScreenMap.h"
+#include "CScreenSpellbook.h"
 #include "CScreenWorld.h"
 #include "CScreenWorldMap.h"
 #include "CSearchBitmap.h"
@@ -1319,6 +1326,19 @@ void CInfGame::OnPortraitLClick(DWORD id)
 void CInfGame::OnPortraitLDblClick(DWORD id)
 {
     // TODO: Incomplete.
+}
+
+// 0x5AFD90
+void CInfGame::EnablePortrait(BYTE nControlId, BOOL bEnable)
+{
+    g_pBaldurChitin->m_pEngineCharacter->EnablePortrait(1, nControlId, bEnable);
+    g_pBaldurChitin->m_pEngineInventory->EnablePortrait(1, nControlId, bEnable);
+    g_pBaldurChitin->m_pEngineJournal->EnablePortrait(1, nControlId, bEnable);
+    g_pBaldurChitin->m_pEngineMap->EnablePortrait(1, nControlId, bEnable);
+    g_pBaldurChitin->m_pEngineOptions->EnablePortrait(1, nControlId, bEnable);
+    g_pBaldurChitin->m_pEngineSpellbook->EnablePortrait(1, nControlId, bEnable);
+    g_pBaldurChitin->m_pEngineStore->EnablePortrait(1, nControlId, bEnable);
+    g_pBaldurChitin->m_pEngineWorld->EnablePortrait(1, nControlId, bEnable);
 }
 
 // 0x5BB800
