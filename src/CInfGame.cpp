@@ -1353,6 +1353,54 @@ BOOLEAN CInfGame::ExtendedDayNightAreaActive()
     return FALSE;
 }
 
+// 0x5AFE90
+void CInfGame::UpdatePortraitToolTip(DWORD dwControlId, STRREF dwStrId)
+{
+    CUIManager* pManager;
+    CUIPanel* pPanel;
+    CUIControlBase* pControl;
+
+    pManager = g_pBaldurChitin->m_pEngineCharacter->GetManager();
+    pPanel = pManager->GetPanel(1);
+    pControl = pPanel->GetControl(dwControlId);
+    pControl->SetToolTipStrRef(dwStrId, -1, -1);
+
+    pManager = g_pBaldurChitin->m_pEngineInventory->GetManager();
+    pPanel = pManager->GetPanel(1);
+    pControl = pPanel->GetControl(dwControlId);
+    pControl->SetToolTipStrRef(dwStrId, -1, -1);
+
+    pManager = g_pBaldurChitin->m_pEngineJournal->GetManager();
+    pPanel = pManager->GetPanel(1);
+    pControl = pPanel->GetControl(dwControlId);
+    pControl->SetToolTipStrRef(dwStrId, -1, -1);
+
+    pManager = g_pBaldurChitin->m_pEngineMap->GetManager();
+    pPanel = pManager->GetPanel(1);
+    pControl = pPanel->GetControl(dwControlId);
+    pControl->SetToolTipStrRef(dwStrId, -1, -1);
+
+    pManager = g_pBaldurChitin->m_pEngineOptions->GetManager();
+    pPanel = pManager->GetPanel(1);
+    pControl = pPanel->GetControl(dwControlId);
+    pControl->SetToolTipStrRef(dwStrId, -1, -1);
+
+    pManager = g_pBaldurChitin->m_pEngineSpellbook->GetManager();
+    pPanel = pManager->GetPanel(1);
+    pControl = pPanel->GetControl(dwControlId);
+    pControl->SetToolTipStrRef(dwStrId, -1, -1);
+
+    pManager = g_pBaldurChitin->m_pEngineStore->GetManager();
+    pPanel = pManager->GetPanel(1);
+    pControl = pPanel->GetControl(dwControlId);
+    pControl->SetToolTipStrRef(dwStrId, -1, -1);
+
+    pManager = g_pBaldurChitin->m_pEngineWorld->GetManager();
+    pPanel = pManager->GetPanel(1);
+    pControl = pPanel->GetControl(dwControlId);
+    pControl->SetToolTipStrRef(dwStrId, -1, -1);
+}
+
 // 0x5BB800
 BOOL CInfGame::Is3DSound(int nSoundChannel)
 {
