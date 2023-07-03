@@ -25,3 +25,11 @@ CInfButtonArray::CInfButtonArray()
 {
     // TODO: Incomplete.
 }
+
+// 0x588FF0
+BOOL CInfButtonArray::ResetState()
+{
+    // TODO: Incomplete.
+
+    return TRUE;
+}

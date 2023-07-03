@@ -26,10 +26,13 @@ class CInfButtonArray {
 public:
     CInfButtonArray();
 
+    BOOL ResetState();
+
     /* 0000 */ CInfButtonSettings m_buttonArray[12];
     /* 16E8 */ CVidCell field_16E8;
     /* 17C2 */ CVidCell field_17C2;
     /* 189C */ CVidCell field_189C;
+    /* 197E */ INT m_nSelectedButton;
 };
 
 #endif /* CINFBUTTONARRAY_H_ */

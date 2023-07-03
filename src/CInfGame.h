@@ -10,6 +10,7 @@
 #include "CMultiplayerSettings.h"
 #include "CRuleTables.h"
 #include "CTimerWorld.h"
+#include "CVRamPool.h"
 
 // Seen in `CRuleTables::GetStartPoint` assertion.
 #define CINFGAME_MAXCHARACTERS 6
@@ -41,6 +42,7 @@ public:
     void SaveOptions();
     void UpdatePortrait(SHORT nPortrait, DWORD dwPanelId);
     SHORT GetCharacterPortaitNum(LONG nCharacterId);
+    void WorldEngineActivated(CVidMode* pVidMode);
     void OnPortraitLClick(DWORD id);
     void OnPortraitLDblClick(DWORD id);
     BOOL Is3DSound(int nSoundChannel);
@@ -115,9 +117,11 @@ public:
     /* 0000 */ CRuleTables m_ruleTables;
     /* 1B58 */ CCriticalSection field_1B58;
     /* 1B78 */ CTimerWorld m_worldTime;
+    /* 1B96 */ SHORT m_nState;
     /* 1BA1 */ unsigned char field_1BA1;
     /* 1BB2 */ CMultiplayerSettings m_multiplayerSettings;
     /* 1C78 */ CInfButtonArray m_cButtonArray;
+    /* 3662 */ CVRamPool m_cVRamPool;
     /* 366E */ int field_366E;
     /* 372C */ CGameObjectArray m_cObjectArray;
     /* 37E0 */ BYTE m_visibleArea;

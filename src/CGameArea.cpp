@@ -36,6 +36,12 @@ void CGameArea::ApplyWindToAmbients(BYTE nPercentVolume)
     m_sndAmbientNight.SetVolume(m_sndAmbientNightVolume * m_sndAmbientVolume / 100);
 }
 
+// 0x4750E0
+void CGameArea::OnActivation()
+{
+    // TODO: Incomplete.
+}
+
 // 0x477550
 void CGameArea::RemoveObject(POSITION posVertList, BYTE listType, LONG id)
 {

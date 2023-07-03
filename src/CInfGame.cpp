@@ -5,6 +5,7 @@
 #include "CBaldurChitin.h"
 #include "CBaldurEngine.h"
 #include "CBaldurProjector.h"
+#include "CGameArea.h"
 #include "CGameObject.h"
 #include "CGameSprite.h"
 #include "CInfinity.h"
@@ -1287,6 +1288,17 @@ SHORT CInfGame::GetCharacterPortaitNum(LONG nCharacterId)
     }
 
     return -1;
+}
+
+// 0x5AF7F0
+void CInfGame::WorldEngineActivated(CVidMode* pVidMode)
+{
+    m_nState = 0;
+    m_cButtonArray.m_nSelectedButton = 100;
+    m_cVRamPool.DetachSurfaces();
+    m_cVRamPool.AttachSurfaces(pVidMode);
+    m_gameAreas[m_visibleArea]->OnActivation();
+    m_cButtonArray.ResetState();
 }
 
 // 0x5AF870
