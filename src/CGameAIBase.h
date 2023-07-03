@@ -12,6 +12,7 @@ public:
     CGameAIBase();
     /* 0000 */ ~CGameAIBase() override;
     /* 002C */ BOOLEAN CompressTime(DWORD deltaTime) override;
+    /* 0090 */ virtual void SetCurrAction(const CAIAction& action);
     /* 009C */ virtual const BYTE* GetVisibleTerrainTable();
     /* 00A0 */ virtual const BYTE* GetTerrainTable();
     /* 00AC */ virtual void ApplyTriggers();
@@ -37,7 +38,9 @@ public:
     /* 0412 */ CPtrList field_412;
     /* 042E */ CTypedPtrList<CPtrList, CAITrigger*> m_pendingTriggers;
     /* 044E */ CPtrList field_44E;
-    /* 0476 */ CAIAction field_476;
+    /* 0470 */ BOOL m_interrupt;
+    /* 0474 */ SHORT m_actionCount;
+    /* 0476 */ CAIAction m_curAction;
 };
 
 #endif /* CGAMEAIBASE_H_ */

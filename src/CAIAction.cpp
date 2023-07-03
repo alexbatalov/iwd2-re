@@ -53,6 +53,7 @@ void CAIAction::Read(CString sData)
     // TODO: Incomplete.
 }
 
+// 0x403E60
 void CAIAction::Decode(CGameAIBase* caller)
 {
     m_actorID.Decode(caller);

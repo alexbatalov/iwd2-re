@@ -1,6 +1,8 @@
 #include "CGameAIBase.h"
 
 #include "CAITrigger.h"
+#include "CBaldurChitin.h"
+#include "CInfGame.h"
 #include "CTimerWorld.h"
 
 // 0x44C4B0
@@ -53,6 +55,28 @@ void CGameAIBase::ClearTriggers()
         }
     }
     m_pendingTriggers.RemoveAll();
+}
+
+// 0x45D190
+void CGameAIBase::SetCurrAction(const CAIAction& action)
+{
+    m_actionCount = 0;
+    m_interrupt = FALSE;
+    m_curAction.m_actionID = action.m_actionID;
+    m_curAction.m_specificID = action.m_specificID;
+    m_curAction.m_actorID.Set(action.m_actorID);
+    m_curAction.m_acteeID.Set(action.m_acteeID);
+    m_curAction.m_acteeID2.Set(action.m_acteeID2);
+    m_curAction.m_dest = action.m_dest;
+    m_curAction.m_specificID2 = action.m_specificID2;
+    m_curAction.m_specificID3 = action.m_specificID3;
+    m_curAction.m_string1 = action.m_string1;
+    m_curAction.m_string2 = action.m_string2;
+    m_curAction.m_internalFlags = action.m_internalFlags;
+    if (action.m_actionID != CAIAction::NO_ACTION
+        && g_pBaldurChitin->GetObjectGame()->GetRuleTables().m_lNoDecodeList.Find(action.m_actionID) == NULL) {
+        m_curAction.Decode(this);
+    }
 }
 
 // 0x45D6A0
