@@ -555,7 +555,7 @@ void CBaldurEngine::UpdateCursorShape(BYTE nCursor)
 }
 
 // 0x4277C0
-void CBaldurEngine::EnablePortait(DWORD dwPanelId, DWORD dwControlId, BOOL bEnable)
+void CBaldurEngine::EnablePortrait(DWORD dwPanelId, DWORD dwControlId, BOOL bEnable)
 {
     CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
     if (pPanel != NULL) {
@@ -576,7 +576,7 @@ void CBaldurEngine::CheckEnablePortaits(DWORD dwPanelId)
     for (DWORD nPortrait = 0; nPortrait < 6; nPortrait++) {
         // NOTE: Unsigned compare.
         BOOL bEnable = nPortrait < static_cast<DWORD>(g_pBaldurChitin->GetObjectGame()->GetNumCharacters());
-        EnablePortait(dwPanelId, nPortrait, bEnable);
+        EnablePortrait(dwPanelId, nPortrait, bEnable);
     }
 }
 

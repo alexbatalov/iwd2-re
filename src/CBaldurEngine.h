@@ -173,7 +173,7 @@ public:
     /* 00F4 */ virtual void UpdateCursorShape(BYTE nCursor);
     /* 00F8 */ virtual void CheckEnablePortaits(DWORD dwPanelId);
     /* 00FC */ virtual void CheckEnableLeftPanel();
-    /* 0100 */ virtual void EnablePortait(DWORD dwPanelId, DWORD dwControlId, BOOL bEnable);
+    /* 0100 */ virtual void EnablePortrait(DWORD dwPanelId, DWORD dwControlId, BOOL bEnable);
     /* 0104 */ virtual void CancelEngine();
     /* 0108 */ virtual void UpdateCharacterStatus(LONG nCharacterId);
     /* 010C */ virtual void UpdatePartyGoldStatus();
