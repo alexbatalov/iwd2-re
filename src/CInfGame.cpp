@@ -1607,6 +1607,20 @@ BOOLEAN CInfGame::FindAreaID(DWORD nAreaId)
     return FALSE;
 }
 
+// 0x5C09C0
+CString CInfGame::GetDirSaveRoot()
+{
+    CString sResolvedFileName;
+    CString sFileName;
+
+    sFileName = field_4228;
+    if (!g_pBaldurChitin->lAliases.ResolveFileName(sFileName, sResolvedFileName)) {
+        sResolvedFileName = sFileName;
+    }
+
+    return sResolvedFileName;
+}
+
 // 0x5C1090
 BYTE CInfGame::GetCharactersControlled()
 {
