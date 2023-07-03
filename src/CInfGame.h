@@ -3,6 +3,7 @@
 
 #include "mfc.h"
 
+#include "CAIGroup.h"
 #include "CGameJournal.h"
 #include "CGameObjectArray.h"
 #include "CGameOptions.h"
@@ -91,6 +92,7 @@ public:
     CGameArea* GetVisibleArea();
     CMultiplayerSettings* GetMultiplayerSettings();
     CGameJournal* GetJournal();
+    CAIGroup* GetGroup();
 
     const CRuleTables& GetRuleTables() { return m_ruleTables; }
 
@@ -151,6 +153,7 @@ public:
     /* 3816 */ LONG m_characters[6];
     /* 382E */ LONG m_characterPortraits[6];
     /* 3846 */ SHORT m_nCharacters;
+    /* 3884 */ CAIGroup m_group;
     /* 38A8 */ CTypedPtrList<CPtrList, int*> m_allies; // NOTE: Stores actual ints disguised as pointers.
     /* 38C4 */ CTypedPtrList<CPtrList, int*> m_familiars; // NOTES: Stores actual ints disguised as pointers.
     /* 4210 */ CString m_sScriptsDir;

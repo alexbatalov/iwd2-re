@@ -1930,3 +1930,9 @@ CGameJournal* CInfGame::GetJournal()
 {
     return &m_cJournal;
 }
+
+// 0x475DB0
+CAIGroup* CInfGame::GetGroup()
+{
+    return &m_group;
+}
