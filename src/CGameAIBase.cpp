@@ -3,9 +3,28 @@
 #include "CAIScript.h"
 #include "CAITrigger.h"
 #include "CBaldurChitin.h"
+#include "CGameArea.h"
 #include "CInfGame.h"
 #include "CTimerWorld.h"
 #include "CUtil.h"
+
+// 0x8485C4
+const SHORT CGameAIBase::ACTION_DONE = -1;
+
+// 0x8485C6
+const SHORT CGameAIBase::ACTION_INTERRUPTABLE = 1;
+
+// 0x8485C8
+const SHORT CGameAIBase::ACTION_NORMAL = 0;
+
+// 0x8485CA
+const SHORT CGameAIBase::ACTION_ERROR = -2;
+
+// 0x8485CC
+const SHORT CGameAIBase::ACTION_NO_ACTION = 2;
+
+// 0x8485CE
+const SHORT CGameAIBase::ACTION_STOPPED = -3;
 
 // 0x44C4B0
 CGameAIBase::CGameAIBase()
@@ -152,4 +171,17 @@ void CGameAIBase::SetScript(SHORT level, CAIScript* script)
 void CGameAIBase::ApplyTriggers()
 {
     // TODO: Incomplete.
+}
+
+// 0x4668B0
+SHORT CGameAIBase::StartMusic()
+{
+    if (m_pArea == NULL) {
+        return ACTION_ERROR;
+    }
+
+    // TODO: Check cast.
+    m_pArea->PlaySong(static_cast<SHORT>(m_curAction.m_specificID), m_curAction.m_specificID2);
+
+    return ACTION_DONE;
 }

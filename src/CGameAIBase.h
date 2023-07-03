@@ -10,6 +10,13 @@ class CAITrigger;
 
 class CGameAIBase : public CGameObject {
 public:
+    static const SHORT ACTION_DONE;
+    static const SHORT ACTION_INTERRUPTABLE;
+    static const SHORT ACTION_NORMAL;
+    static const SHORT ACTION_ERROR;
+    static const SHORT ACTION_NO_ACTION;
+    static const SHORT ACTION_STOPPED;
+
     CGameAIBase();
     /* 0000 */ ~CGameAIBase() override;
     /* 002C */ BOOLEAN CompressTime(DWORD deltaTime) override;
@@ -22,6 +29,7 @@ public:
 
     void CheckTimers(LONG cycles);
     void ClearTriggers();
+    SHORT StartMusic();
 
     /* 006E */ CAIObjectType field_6E;
     /* 00AE */ CAIObjectType field_AE;
