@@ -30,6 +30,21 @@ SHORT CAIScriptFile::DecodeTriggerID(CString sName)
     return -1;
 }
 
+// FIXME: Use reference.
+//
+// 0x41CEB0
+SHORT CAIScriptFile::DecodeActionID(CString sName)
+{
+    CAIId* pId = m_actions.Find(sName, FALSE);
+    if (pId != NULL) {
+        return static_cast<SHORT>(pId->m_id);
+    }
+
+    ParseError("Action:" + sName + " Not found.  Check for proper brackets.");
+
+    return -1;
+}
+
 // 0x41D310
 void CAIScriptFile::ParseError(CString sError)
 {
