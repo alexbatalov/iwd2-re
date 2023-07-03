@@ -1764,6 +1764,12 @@ CString CInfGame::GetDirPortraits()
     return m_sPortraitsDir;
 }
 
+// 0x5C3510
+CString CInfGame::GetDirCharacters()
+{
+    return m_sCharactersDir;
+}
+
 // 0x5C1090
 BYTE CInfGame::GetCharactersControlled()
 {

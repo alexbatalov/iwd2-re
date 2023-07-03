@@ -71,6 +71,7 @@ public:
     static void StartCharacterTerminationSequence();
     void ReadyCharacterTerminationSequence(int a1, int a2);
     CString GetDirPortraits();
+    CString GetDirCharacters();
     BYTE GetCharactersControlled();
     BOOLEAN RestParty(int a2, unsigned char a3);
     BOOL CanRestParty(STRREF& strError, unsigned char a2, unsigned char a3, unsigned char a4);
@@ -153,6 +154,7 @@ public:
     /* 38C4 */ CTypedPtrList<CPtrList, int*> m_familiars; // NOTES: Stores actual ints disguised as pointers.
     /* 4210 */ CString m_sScriptsDir;
     /* 4218 */ CString m_sPortraitsDir;
+    /* 421C */ CString m_sCharactersDir;
     /* 4220 */ CString field_4220;
     /* 4228 */ CString field_4228;
     /* 43D8 */ int field_43D8;
