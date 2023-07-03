@@ -120,7 +120,36 @@ void CGameArea::OnActivation()
 // 0x475330
 void CGameArea::OnDeactivation()
 {
-    // TODO: Incomplete.
+    field_3DC = -1;
+    field_3E0 = -1;
+    field_3E4 = -1;
+    field_3E8 = -1;
+    field_3F6 = 0;
+
+    if (!m_pGame->field_43E6) {
+        m_pGame->field_1BA1 = 4;
+    }
+
+    if (!g_pBaldurChitin->field_1C4A) {
+        g_pBaldurChitin->cSoundMixer.m_nActiveArea = -1;
+        g_pBaldurChitin->cSoundMixer.UpdateSoundList();
+    } else {
+        if (!byte_8D2138) {
+            dword_8D212C = g_pBaldurChitin->cSoundMixer.GetChannelVolume(16);
+            if (dword_8D212C > 0) {
+                g_pBaldurChitin->cSoundMixer.SetChannelVolume(16, dword_8D212C / 2);
+                g_pBaldurChitin->cSoundMixer.SetChannelVolume(17, dword_8D212C / 2);
+            } else {
+                g_pBaldurChitin->cSoundMixer.SetChannelVolume(16, 0);
+                g_pBaldurChitin->cSoundMixer.SetChannelVolume(17, 0);
+            }
+            byte_8D2138 = TRUE;
+        }
+    }
+
+    g_pBaldurChitin->sub_4286B0(m_resRef, g_pBaldurChitin->cSoundMixer.m_nCurrentSong);
+
+    m_firstRender = 0;
 }
 
 // 0x477550

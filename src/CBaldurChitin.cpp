@@ -1924,3 +1924,9 @@ CInfGame* CBaldurChitin::GetObjectGame()
 {
     return m_pObjectGame;
 }
+
+// 0x4286B0
+void CBaldurChitin::sub_4286B0(CResRef cResRef, INT nSong)
+{
+    // TODO: Incomplete.
+}

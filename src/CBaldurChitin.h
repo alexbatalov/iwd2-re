@@ -93,6 +93,8 @@ public:
     CInfCursor* GetObjectCursor();
     CInfGame* GetObjectGame();
 
+    void sub_4286B0(CResRef cResRef, INT nSong);
+
     /* 0000 */ void SynchronousUpdate() override;
     /* 0008 */ DWORD GetIDSInvalidVideoMode() override;
     /* 000C */ DWORD GetIDSOpenGLDll() override;

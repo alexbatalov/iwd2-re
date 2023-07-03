@@ -90,6 +90,11 @@ public:
     /* 023C */ LONG m_nKeyScrollState;
     /* 0256 */ CPoint m_ptMousePos;
     /* 03DA */ BYTE m_firstRender;
+    /* 03DC */ int field_3DC;
+    /* 03E0 */ int field_3E0;
+    /* 03E4 */ int field_3E4;
+    /* 03E8 */ int field_3E8;
+    /* 03F6 */ int field_3F6;
     /* 0422 */ DWORD m_nInitialAreaId;
     /* 04CC */ CInfinity m_cInfinity;
     /* 08BC */ CSound m_sndAmbientDay;
