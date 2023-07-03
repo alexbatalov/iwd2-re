@@ -9,6 +9,7 @@ class CAIGroup {
 public:
     LONG GetGroupLeader();
     LONG* GetGroupList();
+    void Add(CGameSprite* pSprite);
     POSITION Add(LONG characterId);
     void Remove(CGameSprite* pSprite);
     BOOL IsPartyLeader();

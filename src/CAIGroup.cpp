@@ -29,6 +29,17 @@ LONG* CAIGroup::GetGroupList()
     return pList;
 }
 
+// 0x406110
+void CAIGroup::Add(CGameSprite* pSprite)
+{
+    if (pSprite->m_groupPosition != NULL) {
+        // NOTE: Uninline.
+        Remove(pSprite);
+    }
+
+    pSprite->m_groupPosition = Add(pSprite->m_id);
+}
+
 // 0x406170
 POSITION CAIGroup::Add(LONG characterId)
 {
