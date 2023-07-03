@@ -45,6 +45,16 @@ void CInfinity::GetViewPosition(INT& x, INT& y)
     y = nNewY;
 }
 
+// 0x5D1340
+void CInfinity::CallLightning(INT xWorldPos, INT yWorldPos)
+{
+    m_bStartLightning = TRUE;
+    bRenderCallLightning = TRUE;
+    cLightningPoint.x = xWorldPos;
+    cLightningPoint.y = yWorldPos;
+    nRenderLightningTimer = 30;
+}
+
 // 0x5D1750
 void CInfinity::SetCurrentWeather(COLORREF rgbOvercast, SHORT nWeather, int nWeatherLevel, int nLightningFrequency)
 {
