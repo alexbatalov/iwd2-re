@@ -5,6 +5,7 @@
 #include "CAIObjectType.h"
 #include "CGameObject.h"
 
+class CAIScript;
 class CAITrigger;
 
 class CGameAIBase : public CGameObject {
@@ -14,6 +15,7 @@ public:
     /* 002C */ BOOLEAN CompressTime(DWORD deltaTime) override;
     /* 0048 */ void RemoveFromArea() override;
     /* 0090 */ virtual void SetCurrAction(const CAIAction& action);
+    /* 0094 */ virtual void SetScript(SHORT level, CAIScript* script);
     /* 009C */ virtual const BYTE* GetVisibleTerrainTable();
     /* 00A0 */ virtual const BYTE* GetTerrainTable();
     /* 00AC */ virtual void ApplyTriggers();
@@ -36,6 +38,13 @@ public:
     /* 0342 */ CAIObjectType field_342;
     /* 037E */ CAIObjectType field_37E;
     /* 03BA */ CAIObjectType field_3BA;
+    /* 03F6 */ CAIScript* field_3F6;
+    /* 03FA */ CAIScript* field_3FA;
+    /* 03FE */ CAIScript* field_3FE;
+    /* 0402 */ CAIScript* field_402;
+    /* 0406 */ CAIScript* field_406;
+    /* 040A */ CAIScript* field_40A;
+    /* 040E */ CAIScript* field_40E;
     /* 0412 */ CPtrList field_412;
     /* 042E */ CTypedPtrList<CPtrList, CAITrigger*> m_pendingTriggers;
     /* 044E */ CPtrList field_44E;
