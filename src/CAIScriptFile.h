@@ -13,6 +13,7 @@ public:
     static const CString RESPONSE;
     static const CString COMMENT;
 
+    SHORT DecodeTriggerID(CString sName);
     void ParseError(CString sError);
     CString ReadToChar(CString sLine, char c);
     CString ReadAfterChar(CString sLine, char c);

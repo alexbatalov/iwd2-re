@@ -15,6 +15,21 @@ const CString CAIScriptFile::RESPONSE("RESPONSE");
 // 0x8C8420
 const CString CAIScriptFile::COMMENT("//");
 
+// FIXME: Use reference.
+//
+// 0x41CDB0
+SHORT CAIScriptFile::DecodeTriggerID(CString sName)
+{
+    CAIId* pId = m_triggers.Find(sName, FALSE);
+    if (pId != NULL) {
+        return static_cast<SHORT>(pId->m_id);
+    }
+
+    ParseError("Trigger:" + sName + " Not found.  Check for proper brackets.");
+
+    return -1;
+}
+
 // 0x41D310
 void CAIScriptFile::ParseError(CString sError)
 {
