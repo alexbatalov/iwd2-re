@@ -31,7 +31,7 @@ LONG* CAIGroup::GetGroupList()
 // 0x406170
 POSITION CAIGroup::Add(LONG characterId)
 {
-    SHORT portraitNum = g_pBaldurChitin->GetObjectGame()->GetCharacterPortaitNum(characterId);
+    SHORT portraitNum = g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(characterId);
     m_groupChanged = TRUE;
     if (portraitNum == -1) {
         return m_memberList.AddTail(reinterpret_cast<LONG*>(characterId));
@@ -40,7 +40,7 @@ POSITION CAIGroup::Add(LONG characterId)
     POSITION pos = m_memberList.GetHeadPosition();
     while (pos != NULL) {
         LONG memberId = reinterpret_cast<LONG>(m_memberList.GetAt(pos));
-        SHORT memberPortraitNum = g_pBaldurChitin->GetObjectGame()->GetCharacterPortaitNum(memberId);
+        SHORT memberPortraitNum = g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(memberId);
         if (memberPortraitNum == -1 || memberPortraitNum > portraitNum) {
             return m_memberList.InsertBefore(pos, reinterpret_cast<LONG*>(characterId));
         }

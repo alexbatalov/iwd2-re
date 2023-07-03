@@ -1284,7 +1284,7 @@ void CInfGame::UpdatePortrait(SHORT nPortrait, DWORD dwPanelId)
 }
 
 // 0x5AF4E0
-SHORT CInfGame::GetCharacterPortaitNum(LONG nCharacterId)
+SHORT CInfGame::GetCharacterPortraitNum(LONG nCharacterId)
 {
     if (nCharacterId != -1) {
         for (SHORT nPortrait = 0; nPortrait < 6; nPortrait++) {
@@ -1509,7 +1509,7 @@ INT CInfGame::GetCharacterSlotFromId(LONG nCharacterId)
 BOOL CInfGame::AddCharacterToAllies(LONG nCharacterId)
 {
     // NOTE: Uninline.
-    if (GetCharacterPortaitNum(nCharacterId) != -1) {
+    if (GetCharacterPortraitNum(nCharacterId) != -1) {
         return FALSE;
     }
 

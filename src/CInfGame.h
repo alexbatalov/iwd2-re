@@ -41,7 +41,7 @@ public:
     void LoadOptions();
     void SaveOptions();
     void UpdatePortrait(SHORT nPortrait, DWORD dwPanelId);
-    SHORT GetCharacterPortaitNum(LONG nCharacterId);
+    SHORT GetCharacterPortraitNum(LONG nCharacterId);
     void WorldEngineActivated(CVidMode* pVidMode);
     void WorldEngineDeactivated();
     void OnPortraitLClick(DWORD id);

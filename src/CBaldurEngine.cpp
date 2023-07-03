@@ -742,7 +742,7 @@ void CBaldurEngine::UpdateCharacterStatus(LONG nCharacterId)
     // __LINE__: 4273
     UTIL_ASSERT(pGame != NULL);
 
-    SHORT nPortrait = pGame->GetCharacterPortaitNum(nCharacterId);
+    SHORT nPortrait = pGame->GetCharacterPortraitNum(nCharacterId);
     if (nPortrait >= 0) {
         // NOTE: There is an unused condition at 0x428285.
         pGame->UpdatePortrait(nPortrait, 1);

@@ -273,7 +273,7 @@ void CGameSprite::PlaySound(BYTE soundID, BOOL showText, BOOL showCircle, BOOL o
 // 0x703270
 void CGameSprite::SetFootstepChannel()
 {
-    if (g_pBaldurChitin->GetObjectGame()->GetCharacterPortaitNum(m_id) == -1) {
+    if (g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(m_id) == -1) {
         for (int index = 0; index < 2; index++) {
             m_sndWalk[index].SetChannel(19, reinterpret_cast<DWORD>(m_pArea));
             m_sndArmor[index].SetChannel(20, reinterpret_cast<DWORD>(m_pArea));
@@ -293,7 +293,7 @@ void CGameSprite::SetFootstepChannel()
 // 0x70F270
 BYTE CGameSprite::GetChannel()
 {
-    SHORT nPortraitNum = g_pBaldurChitin->GetObjectGame()->GetCharacterPortaitNum(m_id);
+    SHORT nPortraitNum = g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(m_id);
     if (nPortraitNum != -1) {
         return nPortraitNum + 7;
     }
