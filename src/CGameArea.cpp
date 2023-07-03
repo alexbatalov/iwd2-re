@@ -42,6 +42,12 @@ void CGameArea::OnActivation()
     // TODO: Incomplete.
 }
 
+// 0x475330
+void CGameArea::OnDeactivation()
+{
+    // TODO: Incomplete.
+}
+
 // 0x477550
 void CGameArea::RemoveObject(POSITION posVertList, BYTE listType, LONG id)
 {

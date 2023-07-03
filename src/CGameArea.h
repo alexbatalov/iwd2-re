@@ -59,6 +59,7 @@ public:
     void AddObject(LONG id, BYTE listType);
     void ApplyWindToAmbients(BYTE nPercentVolume);
     void OnActivation();
+    void OnDeactivation();
     void RemoveObject(POSITION posVertList, BYTE listType, LONG id);
     void SetDay();
     void SetNight();

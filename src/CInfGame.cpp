@@ -1301,6 +1301,14 @@ void CInfGame::WorldEngineActivated(CVidMode* pVidMode)
     m_cButtonArray.ResetState();
 }
 
+// 0x5AF850
+void CInfGame::WorldEngineDeactivated()
+{
+    if (m_gameAreas[m_visibleArea] != NULL) {
+        m_gameAreas[m_visibleArea]->OnDeactivation();
+    }
+}
+
 // 0x5AF870
 void CInfGame::OnPortraitLClick(DWORD id)
 {

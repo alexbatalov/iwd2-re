@@ -43,6 +43,7 @@ public:
     void UpdatePortrait(SHORT nPortrait, DWORD dwPanelId);
     SHORT GetCharacterPortaitNum(LONG nCharacterId);
     void WorldEngineActivated(CVidMode* pVidMode);
+    void WorldEngineDeactivated();
     void OnPortraitLClick(DWORD id);
     void OnPortraitLDblClick(DWORD id);
     BOOL Is3DSound(int nSoundChannel);
