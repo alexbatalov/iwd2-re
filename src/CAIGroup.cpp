@@ -2,6 +2,7 @@
 
 #include "CBaldurChitin.h"
 #include "CGameObjectArray.h"
+#include "CGameSprite.h"
 #include "CInfGame.h"
 
 // 0x4060C0
@@ -48,6 +49,17 @@ POSITION CAIGroup::Add(LONG characterId)
     }
 
     return m_memberList.AddTail(reinterpret_cast<LONG*>(characterId));
+}
+
+// 0x406210
+void CAIGroup::Remove(CGameSprite* pSprite)
+{
+    m_groupChanged = TRUE;
+    if (pSprite->m_groupPosition != NULL) {
+        m_memberList.RemoveAt(pSprite->m_groupPosition);
+        m_groupChanged = TRUE;
+    }
+    pSprite->m_groupPosition = NULL;
 }
 
 // 0x406250

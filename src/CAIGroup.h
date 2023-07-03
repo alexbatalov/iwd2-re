@@ -3,11 +3,14 @@
 
 #include "mfc.h"
 
+class CGameSprite;
+
 class CAIGroup {
 public:
     LONG GetGroupLeader();
     LONG* GetGroupList();
     POSITION Add(LONG characterId);
+    void Remove(CGameSprite* pSprite);
     BOOL IsPartyLeader();
     BOOL InList(LONG characterId);
 
