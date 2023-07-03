@@ -31,6 +31,7 @@ public:
     ~CInfGame();
     void StartSearchThread();
     void DestroyGame(unsigned char a1, unsigned char a2);
+    CString GetDirSounds();
     BOOLEAN CanSaveGame(STRREF& strError, unsigned char a2, unsigned char a3);
     char sub_5A9780(BYTE nKey);
     BYTE sub_5A97D0(char ch);
@@ -153,6 +154,7 @@ public:
     /* 38A8 */ CTypedPtrList<CPtrList, int*> m_allies; // NOTE: Stores actual ints disguised as pointers.
     /* 38C4 */ CTypedPtrList<CPtrList, int*> m_familiars; // NOTES: Stores actual ints disguised as pointers.
     /* 4210 */ CString m_sScriptsDir;
+    /* 4214 */ CString m_sSoundsDir;
     /* 4218 */ CString m_sPortraitsDir;
     /* 421C */ CString m_sCharactersDir;
     /* 4220 */ CString field_4220;
