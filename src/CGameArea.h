@@ -81,6 +81,7 @@ public:
     /* 005C */ CAreaSoundsAndMusic m_headerSound;
     /* 01EF */ BOOLEAN m_bAreaLoaded;
     /* 01F0 */ CResRef m_resRef;
+    /* 0238 */ LONG m_nScrollState;
     /* 023C */ LONG m_nKeyScrollState;
     /* 0422 */ DWORD m_nInitialAreaId;
     /* 04CC */ CInfinity m_cInfinity;

@@ -25,6 +25,8 @@ public:
     /* 10DA */ DWORD m_deltaTime;
     /* 10DE */ int field_10DE;
     /* 10EC */ BOOL m_bGameOverPanel;
+    /* 10F0 */ int field_10F0;
+    /* 10F4 */ int field_10F4;
     /* 1151 */ BOOLEAN m_bEndMajorEventListenToJoin;
     /* 1152 */ BOOLEAN m_bEndMajorEventPauseStatus;
     /* 11CA */ BYTE m_nAutoHideInterface;

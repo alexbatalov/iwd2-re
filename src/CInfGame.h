@@ -69,6 +69,7 @@ public:
     CString GetDirSave();
     CString GetDirScripts();
     static void StartCharacterTerminationSequence();
+    void ReadyCharacterTerminationSequence(int a1, int a2);
     BYTE GetCharactersControlled();
     BOOLEAN RestParty(int a2, unsigned char a3);
     BOOL CanRestParty(STRREF& strError, unsigned char a2, unsigned char a3, unsigned char a4);
@@ -152,6 +153,7 @@ public:
     /* 4210 */ CString m_sScriptsDir;
     /* 4220 */ CString field_4220;
     /* 4228 */ CString field_4228;
+    /* 43D8 */ int field_43D8;
     /* 43E2 */ int field_43E2;
     /* 43E6 */ int field_43E6;
     /* 43EA */ CGameOptions m_cOptions; // #guess
@@ -160,6 +162,7 @@ public:
     /* 4688 */ BOOLEAN m_pKeymapFlags[CINFGAME_KEYMAP_SIZE];
     /* 4A00 */ HANDLE m_hSearchThread; // #guess
     /* 4AA2 */ ULONG field_4AA2;
+    /* 4AFC */ int field_4AFC;
     // NOTE: Can also be BYTE indicating number of expansion pack.
     /* 4BD5 */ BOOLEAN m_bExpansion;
     /* 4BD8 */ DWORD m_nDifficultyLevel;

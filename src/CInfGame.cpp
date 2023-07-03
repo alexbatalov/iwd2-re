@@ -8,6 +8,7 @@
 #include "CGameArea.h"
 #include "CGameObject.h"
 #include "CGameSprite.h"
+#include "CInfCursor.h"
 #include "CInfinity.h"
 #include "CScreenCharacter.h"
 #include "CScreenInventory.h"
@@ -1733,6 +1734,28 @@ void CInfGame::StartCharacterTerminationSequence()
     }
 
     g_pBaldurChitin->m_pEngineWorld->m_bGameOverPanel = TRUE;
+}
+
+// 0x5C2570
+void CInfGame::ReadyCharacterTerminationSequence(int a1, int a2)
+{
+    if (!field_43D8) {
+        // FIXME: What for (this function is not static as
+        // `StartCharacterTerminationSequence`).
+        CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+        pGame->field_43E2 = 322;
+        pGame->field_43E6 = 1;
+
+        g_pBaldurChitin->GetObjectCursor()->SetCursor(0, FALSE);
+
+        pGame->field_1BA1 = 4;
+        pGame->m_gameAreas[pGame->m_visibleArea]->m_nScrollState = 0;
+        pGame->field_4AFC = 150;
+
+        g_pBaldurChitin->m_pEngineWorld->field_10F0 = a1;
+        g_pBaldurChitin->m_pEngineWorld->field_10F4 = a2;
+    }
 }
 
 // 0x5C1090
