@@ -67,6 +67,7 @@ public:
     CStringList* GetSaveGames();
     CString GetDirSaveRoot();
     CString GetDirSave();
+    CString GetDirScripts();
     BYTE GetCharactersControlled();
     BOOLEAN RestParty(int a2, unsigned char a3);
     BOOL CanRestParty(STRREF& strError, unsigned char a2, unsigned char a3, unsigned char a4);
@@ -147,6 +148,7 @@ public:
     /* 3846 */ SHORT m_nCharacters;
     /* 38A8 */ CTypedPtrList<CPtrList, int*> m_allies; // NOTE: Stores actual ints disguised as pointers.
     /* 38C4 */ CTypedPtrList<CPtrList, int*> m_familiars; // NOTES: Stores actual ints disguised as pointers.
+    /* 4210 */ CString m_sScriptsDir;
     /* 4220 */ CString field_4220;
     /* 4228 */ CString field_4228;
     /* 43E2 */ int field_43E2;

@@ -1712,6 +1712,12 @@ CString CInfGame::GetDirSave()
     return field_4228 + field_4220 + "\\";
 }
 
+// 0x5C24C0
+CString CInfGame::GetDirScripts()
+{
+    return m_sScriptsDir;
+}
+
 // 0x5C1090
 BYTE CInfGame::GetCharactersControlled()
 {
