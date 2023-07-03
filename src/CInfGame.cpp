@@ -1505,6 +1505,27 @@ INT CInfGame::GetCharacterSlotFromId(LONG nCharacterId)
     return -1;
 }
 
+// 0x5BD9D0
+BOOL CInfGame::AddCharacterToAllies(LONG nCharacterId)
+{
+    // NOTE: Uninline.
+    if (GetCharacterPortaitNum(nCharacterId) != -1) {
+        return FALSE;
+    }
+
+    if (m_allies.Find(reinterpret_cast<int*>(nCharacterId)) != NULL) {
+        return FALSE;
+    }
+
+    if (m_familiars.Find(reinterpret_cast<int*>(nCharacterId)) != NULL) {
+        return FALSE;
+    }
+
+    m_allies.AddTail(reinterpret_cast<int*>(nCharacterId));
+
+    return TRUE;
+}
+
 // 0x5C1090
 BYTE CInfGame::GetCharactersControlled()
 {
