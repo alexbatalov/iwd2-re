@@ -1544,6 +1544,27 @@ BOOL CInfGame::RemoveCharacterFromAllies(LONG nCharacterId)
     return TRUE;
 }
 
+// 0x5BDAA0
+BOOL CInfGame::AddCharacterToFamiliars(LONG nCharacterId)
+{
+    // NOTE: Uninline.
+    if (GetCharacterPortraitNum(nCharacterId) != -1) {
+        return FALSE;
+    }
+
+    if (m_allies.Find(reinterpret_cast<int*>(nCharacterId)) != NULL) {
+        return FALSE;
+    }
+
+    if (m_familiars.Find(reinterpret_cast<int*>(nCharacterId)) != NULL) {
+        return FALSE;
+    }
+
+    m_familiars.AddTail(reinterpret_cast<int*>(nCharacterId));
+
+    return TRUE;
+}
+
 // 0x5C1090
 BYTE CInfGame::GetCharactersControlled()
 {
