@@ -17,6 +17,9 @@ public:
     static const SHORT ACTION_NO_ACTION;
     static const SHORT ACTION_STOPPED;
 
+    static const CString DEAD_GLOBAL_PREFIX;
+    static CAIAction m_aiAction;
+
     CGameAIBase();
     /* 0000 */ ~CGameAIBase() override;
     /* 002C */ BOOLEAN CompressTime(DWORD deltaTime) override;

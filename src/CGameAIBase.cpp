@@ -26,6 +26,12 @@ const SHORT CGameAIBase::ACTION_NO_ACTION = 2;
 // 0x8485CE
 const SHORT CGameAIBase::ACTION_STOPPED = -3;
 
+// 0x8D1408
+const CString CGameAIBase::DEAD_GLOBAL_PREFIX("_DEAD");
+
+// 0x8D1810
+CAIAction CGameAIBase::m_aiAction;
+
 // 0x44C4B0
 CGameAIBase::CGameAIBase()
 {
