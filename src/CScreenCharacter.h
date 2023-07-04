@@ -4,6 +4,7 @@
 #include "CBaldurEngine.h"
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
+#include "CUIControlButton3State.h"
 #include "CVidFont.h"
 
 #define CSCREENCHARACTER_VIRTUAL_KEYS 90
@@ -119,6 +120,13 @@ class CUIControlButtonCharacterLevelUp : public CUIControlButton {
 public:
     CUIControlButtonCharacterLevelUp(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonCharacterLevelUp() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonCharacterClassSelection : public CUIControlButton3State {
+public:
+    CUIControlButtonCharacterClassSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharacterClassSelection() override;
     void OnLButtonClick(CPoint pt) override;
 };
 

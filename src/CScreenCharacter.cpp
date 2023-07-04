@@ -1162,3 +1162,168 @@ void CUIControlButtonCharacterLevelUp::OnLButtonClick(CPoint pt)
 
     pCharacter->OnLevelUpButtonClick();
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x5EB340
+CUIControlButtonCharacterClassSelection::CUIControlButtonCharacterClassSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 1)
+{
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    CString sClass;
+    STR_RES strRes;
+    BYTE nClass;
+
+    switch (m_nID) {
+    case 2:
+        nClass = CAIOBJECTTYPE_C_BARBARIAN;
+        break;
+    case 3:
+        nClass = CAIOBJECTTYPE_C_BARD;
+        break;
+    case 4:
+        nClass = CAIOBJECTTYPE_C_CLERIC;
+        break;
+    case 5:
+        nClass = CAIOBJECTTYPE_C_DRUID;
+        break;
+    case 6:
+        nClass = CAIOBJECTTYPE_C_FIGHTER;
+        break;
+    case 7:
+        nClass = CAIOBJECTTYPE_C_MONK;
+        break;
+    case 8:
+        nClass = CAIOBJECTTYPE_C_PALADIN;
+        break;
+    case 9:
+        nClass = CAIOBJECTTYPE_C_RANGER;
+        break;
+    case 10:
+        nClass = CAIOBJECTTYPE_C_ROGUE;
+        break;
+    case 11:
+        nClass = CAIOBJECTTYPE_C_SORCERER;
+        break;
+    case 12:
+        nClass = CAIOBJECTTYPE_C_WIZARD;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 12808
+        UTIL_ASSERT(FALSE);
+    }
+
+    ruleTables.GetClassStringLower(nClass, 0x4000, 0, sClass, 1);
+    SetText(sClass);
+
+    m_nSelectedFrame = 0;
+    pCharacter->m_nClass = 0;
+}
+
+// 0x5EB540
+CUIControlButtonCharacterClassSelection::~CUIControlButtonCharacterClassSelection()
+{
+}
+
+// 0x5EB5E0
+void CUIControlButtonCharacterClassSelection::OnLButtonClick(CPoint pt)
+{
+    CSingleLock renderLock(&(m_pPanel->m_pManager->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 12641
+    UTIL_ASSERT(pCharacter != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 12643
+    UTIL_ASSERT(pGame != NULL);
+
+    // NOTE: Uninline.
+    LONG nCharacterId = pGame->GetCharacterId(pCharacter->GetSelectedCharacter());
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        STRREF strDescription;
+
+        switch (m_nID) {
+        case 2:
+            strDescription = 37;
+            pCharacter->m_nClass = CAIOBJECTTYPE_C_BARBARIAN;
+            break;
+        case 3:
+            strDescription = 9562;
+            pCharacter->m_nClass = CAIOBJECTTYPE_C_BARD;
+            break;
+        case 4:
+            strDescription = 9559;
+            pCharacter->m_nClass = CAIOBJECTTYPE_C_CLERIC;
+            break;
+        case 5:
+            strDescription = 9560;
+            pCharacter->m_nClass = CAIOBJECTTYPE_C_DRUID;
+            break;
+        case 6:
+            strDescription = 9556;
+            pCharacter->m_nClass = CAIOBJECTTYPE_C_FIGHTER;
+            break;
+        case 7:
+            strDescription = 36;
+            pCharacter->m_nClass = CAIOBJECTTYPE_C_MONK;
+            break;
+        case 8:
+            strDescription = 9558;
+            pCharacter->m_nClass = CAIOBJECTTYPE_C_PALADIN;
+            break;
+        case 9:
+            strDescription = 9557;
+            pCharacter->m_nClass = CAIOBJECTTYPE_C_RANGER;
+            break;
+        case 10:
+            strDescription = 9561;
+            pCharacter->m_nClass = CAIOBJECTTYPE_C_ROGUE;
+            break;
+        case 11:
+            strDescription = 35;
+            pCharacter->m_nClass = CAIOBJECTTYPE_C_SORCERER;
+            break;
+        case 12:
+            strDescription = 9563;
+            pCharacter->m_nClass = CAIOBJECTTYPE_C_WIZARD;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+            // __LINE__: 12724
+            UTIL_ASSERT(FALSE);
+        }
+
+        CAIObjectType typeAI(pSprite->m_startTypeAI);
+        typeAI.AddClass(pCharacter->m_nClass);
+        pSprite->SetAIType(typeAI, TRUE, TRUE);
+
+        pCharacter->UpdateHelp(m_pPanel->m_nID, 13, strDescription);
+        pCharacter->UpdatePopupPanel(m_pPanel->m_nID, pSprite);
+
+        pGame->GetObjectArray()->ReleaseDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    renderLock.Unlock();
+}
