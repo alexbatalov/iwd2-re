@@ -51,6 +51,7 @@ public:
     void EnablePopupPanel(DWORD dwPanelId, BOOL bEnable);
     void SummonPopup(DWORD dwPopupId, CGameSprite* pSprite, int a3);
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
+    void OnAppearanceButtonClick();
     void OnSoundsButtonClick();
 
     /* 0106 */ BYTE m_nClass;
