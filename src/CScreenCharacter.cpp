@@ -1,5 +1,10 @@
 #include "CScreenCharacter.h"
 
+#include "CBaldurChitin.h"
+#include "CInfCursor.h"
+#include "CScreenWorld.h"
+#include "CUIPanel.h"
+
 // 0x8F3324
 const CString CScreenCharacter::TOKEN_SPELLLEVEL("SPELLLEVEL");
 
@@ -91,4 +96,48 @@ CKeyInfo* CScreenCharacter::GetVirtualKeys()
 BYTE* CScreenCharacter::GetVirtualKeysFlags()
 {
     return m_pVirtualKeysFlags;
+}
+
+// 0x5D6A80
+void CScreenCharacter::EngineActivated()
+{
+    if (CChitin::byte_8FB950
+        && g_pChitin->cNetwork.GetSessionOpen() == TRUE
+        && g_pChitin->cNetwork.GetSessionHosting() == TRUE
+        && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+        g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
+    }
+
+    m_preLoadFontRealms.SetResRef(CResRef("REALMS"), FALSE, TRUE);
+    m_preLoadFontRealms.RegisterFont();
+
+    m_preLoadFontStnSml.SetResRef(CResRef("STONESML"), FALSE, TRUE);
+    m_preLoadFontStnSml.RegisterFont();
+
+    m_preLoadFontTool.SetResRef(CResRef("TOOLFONT"), FALSE, TRUE);
+    m_preLoadFontTool.RegisterFont();
+
+    if (m_cUIManager.m_bInitialized) {
+        if (GetTopPopup() == NULL) {
+            UpdateMainPanel(FALSE);
+        }
+
+        UpdateCursorShape(0);
+        CheckEnablePortaits(1);
+        CheckEnableLeftPanel();
+        g_pBaldurChitin->GetObjectCursor()->SetCursor(0, FALSE);
+        m_cUIManager.InvalidateRect(NULL);
+    }
+}
+
+// 0x5DBDE0
+void CScreenCharacter::UpdateMainPanel(BOOL bCharacterChanged)
+{
+    // TODO: Incomplete.
+}
+
+// NOTE: Inlined.
+CUIPanel* CScreenCharacter::GetTopPopup()
+{
+    return m_lPopupStack.GetTailPosition() != NULL ? m_lPopupStack.GetTail() : NULL;
 }

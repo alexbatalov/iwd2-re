@@ -3,8 +3,11 @@
 
 #include "CBaldurEngine.h"
 #include "CKeyInfo.h"
+#include "CVidFont.h"
 
 #define CSCREENCHARACTER_VIRTUAL_KEYS 90
+
+class CUIPanel;
 
 class CScreenCharacter : public CBaldurEngine {
 public:
@@ -16,6 +19,7 @@ public:
 
     CScreenCharacter();
     ~CScreenCharacter();
+    /* 0014 */ void EngineActivated() override;
     /* 0030 */ BOOL CheckSystemKeyCtrl() override;
     /* 0034 */ void SetSystemKeyCtrl(BOOLEAN bValue) override;
     /* 003C */ BOOL CheckSystemKeyShift() override;
@@ -28,12 +32,19 @@ public:
     /* 00A4 */ CKeyInfo* GetVirtualKeys() override;
     /* 00A8 */ BYTE* GetVirtualKeysFlags() override;
 
+    void UpdateMainPanel(BOOL bCharacterChanged);
+    CUIPanel* GetTopPopup();
+
     /* 01B0 */ BOOL m_bShiftKeyDown;
     /* 01B4 */ BOOL m_bCapsLockKeyOn;
     /* 01B8 */ BOOLEAN field_1B8;
     /* 0300 */ CKeyInfo m_pVirtualKeys[CSCREENCHARACTER_VIRTUAL_KEYS];
     /* 05D0 */ BYTE m_pVirtualKeysFlags[CSCREENCHARACTER_VIRTUAL_KEYS];
+    /* 062A */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
     /* 07B4 */ BOOLEAN m_bCtrlKeyDown;
+    /* 086E */ CVidFont m_preLoadFontRealms;
+    /* 0D6E */ CVidFont m_preLoadFontStnSml;
+    /* 126E */ CVidFont m_preLoadFontTool;
 };
 
 #endif /* CSCREENCHARACTER_H_ */
