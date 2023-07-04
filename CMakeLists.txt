@@ -68,6 +68,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CDungeonMaster.h"
     "src/CGameAIBase.cpp"
     "src/CGameAIBase.h"
+    "src/CGameAIGame.cpp"
+    "src/CGameAIGame.h"
     "src/CGameAnimation.cpp"
     "src/CGameAnimation.h"
     "src/CGameAnimationType.cpp"
