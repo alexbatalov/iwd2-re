@@ -130,6 +130,30 @@ void CScreenCharacter::EngineActivated()
     }
 }
 
+// 0x5D6BC0
+void CScreenCharacter::EngineDeactivated()
+{
+    if (CChitin::byte_8FB950) {
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+            && g_pChitin->cNetwork.GetSessionHosting() == TRUE
+            && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+            if (!g_pBaldurChitin->m_pEngineWorld->m_bPaused) {
+                g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
+            }
+        }
+    }
+
+    m_preLoadFontRealms.Unload();
+    m_preLoadFontStnSml.Unload();
+    m_preLoadFontTool.Unload();
+
+    if (m_cUIManager.m_pFocusedControl != NULL) {
+        // NOTE: Uninline.
+        m_cUIManager.KillCapture();
+        field_1B8 = FALSE;
+    }
+}
+
 // 0x5DBDE0
 void CScreenCharacter::UpdateMainPanel(BOOL bCharacterChanged)
 {
