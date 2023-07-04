@@ -39,6 +39,7 @@ public:
     void UpdatePortraitList(CUIPanel* pPanel, DWORD dwControlId, INT nSelected);
     void UpdateMainPanel(BOOL bCharacterChanged);
     CUIPanel* GetTopPopup();
+    void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
 
     /* 01B0 */ BOOL m_bShiftKeyDown;
     /* 01B4 */ BOOL m_bCapsLockKeyOn;

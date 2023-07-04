@@ -277,3 +277,26 @@ CUIPanel* CScreenCharacter::GetTopPopup()
 {
     return m_lPopupStack.GetTailPosition() != NULL ? m_lPopupStack.GetTail() : NULL;
 }
+
+// 0x5E6840
+void CScreenCharacter::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId)
+{
+    STR_RES strRes;
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 9357
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(dwTextId));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 9359
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+
+    g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes);
+    UpdateText(pText, "%s", strRes.szText);
+}
