@@ -21,6 +21,7 @@ public:
     /* 0000 */ ~CGameAIBase() override;
     /* 002C */ BOOLEAN CompressTime(DWORD deltaTime) override;
     /* 0048 */ void RemoveFromArea() override;
+    /* 0088 */ virtual void InsertAction(const CAIAction& action);
     /* 0090 */ virtual void SetCurrAction(const CAIAction& action);
     /* 0094 */ virtual void SetScript(SHORT level, CAIScript* script);
     /* 009C */ virtual const BYTE* GetVisibleTerrainTable();
@@ -53,7 +54,7 @@ public:
     /* 0406 */ CAIScript* field_406;
     /* 040A */ CAIScript* field_40A;
     /* 040E */ CAIScript* field_40E;
-    /* 0412 */ CPtrList field_412;
+    /* 0412 */ CTypedPtrList<CPtrList, CAIAction*> m_queuedActions;
     /* 042E */ CTypedPtrList<CPtrList, CAITrigger*> m_pendingTriggers;
     /* 044E */ CPtrList field_44E;
     /* 0470 */ BOOL m_interrupt;

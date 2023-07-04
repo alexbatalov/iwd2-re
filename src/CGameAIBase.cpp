@@ -96,6 +96,24 @@ void CGameAIBase::RemoveFromArea()
     delete this;
 }
 
+// 0x44CF50
+void CGameAIBase::InsertAction(const CAIAction& action)
+{
+    CAIAction* copy = new CAIAction();
+    copy->m_actionID = action.m_actionID;
+    copy->m_specificID = action.m_specificID;
+    copy->m_actorID.Set(action.m_actorID);
+    copy->m_acteeID.Set(action.m_acteeID);
+    copy->m_acteeID2.Set(action.m_acteeID2);
+    copy->m_dest = action.m_dest;
+    copy->m_specificID2 = action.m_specificID2;
+    copy->m_specificID3 = action.m_specificID3;
+    copy->m_string1 = action.m_string1;
+    copy->m_string2 = action.m_string2;
+    copy->m_internalFlags = action.m_internalFlags;
+    m_queuedActions.AddTail(copy);
+}
+
 // 0x45D190
 void CGameAIBase::SetCurrAction(const CAIAction& action)
 {
