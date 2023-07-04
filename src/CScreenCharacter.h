@@ -7,6 +7,7 @@
 
 #define CSCREENCHARACTER_VIRTUAL_KEYS 90
 
+class CGameSprite;
 class CUIPanel;
 
 class CScreenCharacter : public CBaldurEngine {
@@ -33,6 +34,7 @@ public:
     /* 00A4 */ CKeyInfo* GetVirtualKeys() override;
     /* 00A8 */ BYTE* GetVirtualKeysFlags() override;
 
+    CString GetCurrentPortrait(CGameSprite* pSprite);
     void UpdateMainPanel(BOOL bCharacterChanged);
     CUIPanel* GetTopPopup();
 
@@ -43,6 +45,7 @@ public:
     /* 05D0 */ BYTE m_pVirtualKeysFlags[CSCREENCHARACTER_VIRTUAL_KEYS];
     /* 062A */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
     /* 07B4 */ BOOLEAN m_bCtrlKeyDown;
+    /* 0802 */ int m_nCurrentPortrait;
     /* 086E */ CVidFont m_preLoadFontRealms;
     /* 0D6E */ CVidFont m_preLoadFontStnSml;
     /* 126E */ CVidFont m_preLoadFontTool;

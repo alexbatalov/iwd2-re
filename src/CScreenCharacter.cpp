@@ -1,9 +1,12 @@
 #include "CScreenCharacter.h"
 
 #include "CBaldurChitin.h"
+#include "CGameSprite.h"
 #include "CInfCursor.h"
+#include "CScreenCreateChar.h"
 #include "CScreenWorld.h"
 #include "CUIPanel.h"
+#include "CUtil.h"
 
 // 0x8F3324
 const CString CScreenCharacter::TOKEN_SPELLLEVEL("SPELLLEVEL");
@@ -151,6 +154,21 @@ void CScreenCharacter::EngineDeactivated()
         // NOTE: Uninline.
         m_cUIManager.KillCapture();
         field_1B8 = FALSE;
+    }
+}
+
+// 0x5D7B80
+CString CScreenCharacter::GetCurrentPortrait(CGameSprite* pSprite)
+{
+    switch (pSprite->m_startTypeAI.m_nGender) {
+    case CAIOBJECTTYPE_SEX_MALE:
+        return CString(CScreenCreateChar::MALE_PORTRAITS[m_nCurrentPortrait]);
+    case CAIOBJECTTYPE_SEX_FEMALE:
+        return CString(CScreenCreateChar::FEMALE_PORTRAITS[m_nCurrentPortrait]);
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 1767
+        UTIL_ASSERT(FALSE);
     }
 }
 
