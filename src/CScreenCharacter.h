@@ -52,6 +52,7 @@ public:
     void ShowPopupPanel(DWORD dwPanelId, BOOL bShow);
     void EnablePopupPanel(DWORD dwPanelId, BOOL bEnable);
     void SummonPopup(DWORD dwPopupId, CGameSprite* pSprite, int a3);
+    void OnCustomizeBiographyButtonClick();
     void OnScriptButtonClick();
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
     void CheckDropEquipment();
