@@ -6,6 +6,7 @@
 class CCreatureFileHeader {
 public:
     /* 0000 */ DWORD m_name;
+    /* 0008 */ DWORD m_flags;
     /* 002C */ RESREF m_portraitSmall;
     /* 0034 */ RESREF m_portraitLarge;
     /* 0048 */ BYTE m_attackBase;

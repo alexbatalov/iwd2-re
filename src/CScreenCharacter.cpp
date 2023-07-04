@@ -610,6 +610,37 @@ void CScreenCharacter::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId
     UpdateText(pText, "%s", strRes.szText);
 }
 
+// 0x5E76D0
+void CScreenCharacter::UpdateCustomizePanel(CGameSprite* pSprite)
+{
+    CUIControlButton* pButton;
+    CUIPanel* pPanel = m_cUIManager.GetPanel(17);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 9962
+    UTIL_ASSERT(pPanel != NULL);
+
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(6));
+
+    BOOL bEnabled = (pSprite->m_baseStats.m_flags & 0x800) != 0;
+
+    pButton = static_cast<CUIControlButton*>(pPanel->GetControl(0));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 9975
+    UTIL_ASSERT(pButton != NULL);
+
+    pButton->SetEnabled(bEnabled);
+
+    pButton = static_cast<CUIControlButton*>(pPanel->GetControl(1));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 9979
+    UTIL_ASSERT(pButton != NULL);
+
+    pButton->SetEnabled(bEnabled);
+}
+
 // 0x5E9800
 void CScreenCharacter::OnAppearanceButtonClick()
 {
