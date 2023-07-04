@@ -292,6 +292,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CWarp.h"
     "src/CWeather.cpp"
     "src/CWeather.h"
+    "src/CWorldMap.cpp"
+    "src/CWorldMap.h"
     "src/FileFormat.h"
     "src/main.cpp"
     "src/mfc.h"

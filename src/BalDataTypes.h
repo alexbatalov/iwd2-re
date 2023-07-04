@@ -4,6 +4,7 @@
 #include "ChDataTypes.h"
 
 typedef DWORD STRREF;
+typedef char SCRIPTNAME[32];
 
 #pragma pack(push)
 #pragma pack(2)
