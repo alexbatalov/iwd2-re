@@ -176,6 +176,18 @@ CString CScreenCharacter::GetCurrentPortrait(CGameSprite* pSprite)
     }
 }
 
+// 0x5D7C10
+void CScreenCharacter::ResetAppearancePanel(CUIPanel* pPanel, CGameSprite* pSprite)
+{
+    CString sPortrait;
+
+    m_nCurrentPortrait = 0;
+    sPortrait = GetCurrentPortrait(pSprite);
+
+    m_cResPortraitSmall = sPortrait + "S";
+    m_cResPortraitLarge = sPortrait + "L";
+}
+
 // 0x5D7E30
 void CScreenCharacter::ResetCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {

@@ -35,6 +35,7 @@ public:
     /* 00A8 */ BYTE* GetVirtualKeysFlags() override;
 
     CString GetCurrentPortrait(CGameSprite* pSprite);
+    void ResetAppearancePanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void ResetCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdatePortraitList(CUIPanel* pPanel, DWORD dwControlId, INT nSelected);
     void ResetClassPanel(CGameSprite* pSprite, int a2);
@@ -65,6 +66,8 @@ public:
     /* 0806 */ int field_806;
     /* 080A */ int field_80A;
     /* 080E */ CStringList* m_pPortraits;
+    /* 0836 */ CResRef m_cResPortraitSmall;
+    /* 083E */ CResRef m_cResPortraitLarge;
     /* 086E */ CVidFont m_preLoadFontRealms;
     /* 0D6E */ CVidFont m_preLoadFontStnSml;
     /* 126E */ CVidFont m_preLoadFontTool;
