@@ -138,4 +138,11 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonInformationBiography : public CUIControlButton {
+public:
+    CUIControlButtonInformationBiography(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonInformationBiography() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 #endif /* CSCREENCHARACTER_H_ */

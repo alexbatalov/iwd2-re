@@ -1361,3 +1361,31 @@ void CUIControlButtonInformationDone::OnLButtonClick(CPoint pt)
 
     pCharacter->OnDoneButtonClick();
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x5EBA90
+CUIControlButtonInformationBiography::CUIControlButtonInformationBiography(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->m_cTlkTable.Fetch(18003, strRes); // "Biography"
+    SetText(strRes.szText);
+}
+
+// 0x5EBB80
+CUIControlButtonInformationBiography::~CUIControlButtonInformationBiography()
+{
+}
+
+// 0x5EBC20
+void CUIControlButtonInformationBiography::OnLButtonClick(CPoint pt)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 12874
+    UTIL_ASSERT(pCharacter != NULL);
+
+    pCharacter->OnBiographyButtonClick();
+}
