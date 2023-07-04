@@ -35,6 +35,7 @@ public:
     /* 00A8 */ BYTE* GetVirtualKeysFlags() override;
 
     CString GetCurrentPortrait(CGameSprite* pSprite);
+    void ResetCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdatePortraitList(CUIPanel* pPanel, DWORD dwControlId, INT nSelected);
     void UpdateMainPanel(BOOL bCharacterChanged);
     CUIPanel* GetTopPopup();
@@ -47,6 +48,8 @@ public:
     /* 062A */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
     /* 07B4 */ BOOLEAN m_bCtrlKeyDown;
     /* 0802 */ int m_nCurrentPortrait;
+    /* 0806 */ int field_806;
+    /* 080A */ int field_80A;
     /* 080E */ CStringList* m_pPortraits;
     /* 086E */ CVidFont m_preLoadFontRealms;
     /* 0D6E */ CVidFont m_preLoadFontStnSml;

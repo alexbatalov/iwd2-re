@@ -1924,6 +1924,32 @@ void CUIControlPortraitGeneral::OnRButtonClick(CPoint pt)
     m_pPanel->m_pManager->m_pWarp->SelectEngine(pWorld);
 }
 
+// -----------------------------------------------------------------------------
+
+// 0x779DF0
+CUIControlButtonCharacterPortrait::CUIControlButtonCharacterPortrait(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, 0, 1)
+{
+}
+
+// 0x779E70
+CUIControlButtonCharacterPortrait::~CUIControlButtonCharacterPortrait()
+{
+}
+
+// NOTE: Same as `CUIControlButtonCharGenAppearancePortrait::SetPortrait`.
+//
+// 0x61D0E0
+void CUIControlButtonCharacterPortrait::SetPortrait(const CResRef& resRef)
+{
+    if (m_portraitResRef != resRef) {
+        m_portraitResRef = resRef;
+        InvalidateRect();
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x77A170
 CUIControlButtonAI::CUIControlButtonAI(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)

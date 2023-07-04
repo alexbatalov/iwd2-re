@@ -3,8 +3,10 @@
 #include "CBaldurChitin.h"
 #include "CGameSprite.h"
 #include "CInfCursor.h"
+#include "CInfGame.h"
 #include "CScreenCreateChar.h"
 #include "CScreenWorld.h"
+#include "CUIControlFactory.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -171,6 +173,50 @@ CString CScreenCharacter::GetCurrentPortrait(CGameSprite* pSprite)
         // __LINE__: 1767
         UTIL_ASSERT(FALSE);
     }
+}
+
+// 0x5D7E30
+void CScreenCharacter::ResetCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 1961
+    UTIL_ASSERT(pGame != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 1964
+    UTIL_ASSERT(m_pPortraits == NULL);
+
+    m_pPortraits = pGame->GetPortraits();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 1966
+    UTIL_ASSERT(m_pPortraits != NULL);
+
+    field_80A = -1;
+    field_806 = -1;
+    UpdatePortraitList(pPanel, 3, -1);
+    UpdatePortraitList(pPanel, 2, field_806);
+
+    CUIControlButtonCharacterPortrait* pPortrait;
+
+    pPortrait = static_cast<CUIControlButtonCharacterPortrait*>(pPanel->GetControl(1));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 1976
+    UTIL_ASSERT(pPortrait != NULL);
+
+    pPortrait->SetPortrait(CResRef(""));
+
+    pPortrait = static_cast<CUIControlButtonCharacterPortrait*>(pPanel->GetControl(0));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 1979
+    UTIL_ASSERT(pPortrait != NULL);
+
+    pPortrait->SetPortrait(CResRef(""));
+
 }
 
 // 0x5D8190

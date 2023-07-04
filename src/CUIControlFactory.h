@@ -100,6 +100,15 @@ public:
     void OnRButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonCharacterPortrait : public CUIControlButton {
+public:
+    CUIControlButtonCharacterPortrait(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharacterPortrait() override;
+    void SetPortrait(const CResRef& resRef);
+
+    /* 0666 */ CResRef m_portraitResRef;
+};
+
 class CUIControlButtonAI : public CUIControlButton {
 public:
     CUIControlButtonAI(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
