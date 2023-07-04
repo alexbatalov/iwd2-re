@@ -630,6 +630,12 @@ void CScreenCharacter::DismissPopup(CGameSprite* pSprite)
     }
 }
 
+// 0x5E2210
+void CScreenCharacter::OnDoneButtonClick()
+{
+    // TODO: Incomplete.
+}
+
 // 0x5E46C0
 void CScreenCharacter::OnInformationButtonClick()
 {
@@ -1326,4 +1332,32 @@ void CUIControlButtonCharacterClassSelection::OnLButtonClick(CPoint pt)
     }
 
     renderLock.Unlock();
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x5EB8C0
+CUIControlButtonInformationDone::CUIControlButtonInformationDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->m_cTlkTable.Fetch(11973, strRes); // "Done"
+    SetText(strRes.szText);
+}
+
+// 0x5EB9B0
+CUIControlButtonInformationDone::~CUIControlButtonInformationDone()
+{
+}
+
+// 0x5EBA50
+void CUIControlButtonInformationDone::OnLButtonClick(CPoint pt)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 12874
+    UTIL_ASSERT(pCharacter != NULL);
+
+    pCharacter->OnDoneButtonClick();
 }

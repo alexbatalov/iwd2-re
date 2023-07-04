@@ -55,6 +55,7 @@ public:
     void EnablePopupPanel(DWORD dwPanelId, BOOL bEnable);
     void SummonPopup(DWORD dwPopupId, CGameSprite* pSprite, int a3);
     void DismissPopup(CGameSprite* pSprite);
+    void OnDoneButtonClick();
     void OnInformationButtonClick();
     void OnBiographyButtonClick();
     void OnCustomizeBiographyButtonClick();
@@ -127,6 +128,13 @@ class CUIControlButtonCharacterClassSelection : public CUIControlButton3State {
 public:
     CUIControlButtonCharacterClassSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonCharacterClassSelection() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonInformationDone : public CUIControlButton {
+public:
+    CUIControlButtonInformationDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonInformationDone() override;
     void OnLButtonClick(CPoint pt) override;
 };
 
