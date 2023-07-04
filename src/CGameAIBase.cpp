@@ -63,6 +63,12 @@ void CGameAIBase::CheckTimers(LONG cycles)
     // TODO: Incomplete.
 }
 
+// 0x44D640
+void CGameAIBase::ClearActions(BOOL a1)
+{
+    // TODO: Incomplete.
+}
+
 // 0x44D730
 void CGameAIBase::ClearTriggers()
 {
@@ -112,6 +118,36 @@ void CGameAIBase::AddAction(const CAIAction& action)
     copy->m_string2 = action.m_string2;
     copy->m_internalFlags = action.m_internalFlags;
     m_queuedActions.AddHead(copy);
+}
+
+// 0x44CE40
+void CGameAIBase::ClearAI(BOOLEAN a1)
+{
+    ClearActions(FALSE);
+    ApplyTriggers();
+
+    POSITION pos = m_pendingTriggers.GetHeadPosition();
+    while (pos != NULL) {
+        CAITrigger* pTrigger = m_pendingTriggers.GetNext(pos);
+        if (pTrigger != NULL) {
+            delete pTrigger;
+        }
+    }
+    m_pendingTriggers.RemoveAll();
+
+    SetCurrAction(CAIAction::NULL_ACTION);
+
+    m_curAction.m_actionID = CAIAction::NULL_ACTION.m_actionID;
+    m_curAction.m_specificID = CAIAction::NULL_ACTION.m_specificID;
+    m_curAction.m_actorID.Set(CAIAction::NULL_ACTION.m_actorID);
+    m_curAction.m_acteeID.Set(CAIAction::NULL_ACTION.m_acteeID);
+    m_curAction.m_acteeID2.Set(CAIAction::NULL_ACTION.m_acteeID2);
+    m_curAction.m_dest = CAIAction::NULL_ACTION.m_dest;
+    m_curAction.m_specificID2 = CAIAction::NULL_ACTION.m_specificID2;
+    m_curAction.m_specificID3 = CAIAction::NULL_ACTION.m_specificID3;
+    m_curAction.m_string1 = CAIAction::NULL_ACTION.m_string1;
+    m_curAction.m_string2 = CAIAction::NULL_ACTION.m_string2;
+    m_curAction.m_internalFlags = CAIAction::NULL_ACTION.m_internalFlags;
 }
 
 // 0x44CF50
