@@ -587,6 +587,49 @@ void CScreenCharacter::SummonPopup(DWORD dwPopupId, CGameSprite* pSprite, int a3
     UpdatePopupPanel(pPanel->m_nID, pSprite);
 }
 
+// 0x5E1DF0
+void CScreenCharacter::DismissPopup(CGameSprite* pSprite)
+{
+    if (m_cUIManager.m_pFocusedControl != NULL) {
+        // NOTE: Uninline
+        m_cUIManager.KillCapture();
+        field_1B8 = FALSE;
+    }
+
+    CUIPanel* pPanel = m_lPopupStack.RemoveTail();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 7255
+    UTIL_ASSERT(pPanel != NULL);
+
+    // NOTE: Uninline.
+    ShowPopupPanel(pPanel->m_nID, FALSE);
+
+    CUIPanel* pMainPanel = m_cUIManager.GetPanel(2);
+    pMainPanel->InvalidateRect(NULL);
+
+    if (m_lPopupStack.GetTailPosition() != NULL) {
+        if (pSprite != NULL) {
+            CUIPanel* pPanel = m_lPopupStack.GetTail();
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+            // __LINE__: 7272
+            UTIL_ASSERT(pPanel != NULL);
+
+            // NOTE: Uninline.
+            ShowPopupPanel(pPanel->m_nID, TRUE);
+
+            // NOTE: Uninline.
+            EnablePopupPanel(pPanel->m_nID, TRUE);
+
+            UpdatePopupPanel(pPanel->m_nID, pSprite);
+        }
+    } else {
+        EnableMainPanel(TRUE);
+        UpdateMainPanel(FALSE);
+    }
+}
+
 // 0x5E46C0
 void CScreenCharacter::OnInformationButtonClick()
 {
