@@ -37,6 +37,8 @@ public:
     CString GetCurrentPortrait(CGameSprite* pSprite);
     void ResetCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdatePortraitList(CUIPanel* pPanel, DWORD dwControlId, INT nSelected);
+    void ResetExportPanel(CGameSprite* pSprite);
+    void UpdateCharacterList(CUIPanel* pPanel, DWORD dwTextId, INT nSelected);
     void EnableMainPanel(BOOL bEnable);
     STRREF GetRangerHatedRaceStrref(BYTE nRace);
     void UpdateMainPanel(BOOL bCharacterChanged);
@@ -55,6 +57,8 @@ public:
     /* 05D0 */ BYTE m_pVirtualKeysFlags[CSCREENCHARACTER_VIRTUAL_KEYS];
     /* 062A */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
     /* 07B4 */ BOOLEAN m_bCtrlKeyDown;
+    /* 07DE */ INT m_nCharacterIndex;
+    /* 07E2 */ CStringList* m_pCharacters;
     /* 0802 */ int m_nCurrentPortrait;
     /* 0806 */ int field_806;
     /* 080A */ int field_80A;

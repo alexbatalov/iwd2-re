@@ -219,6 +219,93 @@ void CScreenCharacter::ResetCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite* 
     pPortrait->SetPortrait(CResRef(""));
 }
 
+// 0x5D8570
+void CScreenCharacter::ResetExportPanel(CGameSprite* pSprite)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(13);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 2372
+    UTIL_ASSERT(pPanel != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 2374
+    UTIL_ASSERT(pGame != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 2377
+    UTIL_ASSERT(m_pCharacters == NULL);
+
+    m_pCharacters = pGame->GetImportCharacters();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 2379
+    UTIL_ASSERT(m_pCharacters != NULL);
+
+    m_nCharacterIndex = -1;
+    UpdateCharacterList(pPanel, 0, m_nCharacterIndex);
+
+    CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(6));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 2387
+    UTIL_ASSERT(pEdit != NULL);
+
+    pEdit->SetText(CString(""));
+
+    UpdateHelp(pPanel->m_nID, 2, 10962);
+}
+
+// 0x5D8680
+void CScreenCharacter::UpdateCharacterList(CUIPanel* pPanel, DWORD dwTextId, INT nSelected)
+{
+    CString sFileName;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 2423
+    UTIL_ASSERT(m_pCharacters != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 2424
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(dwTextId));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 2426
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+    pText->m_rgbHighlightColor = CBaldurChitin::TEXTDISPLAY_COLOR_HIGHLIGHT;
+    pText->field_A68 = 32767;
+
+    INT nIndex = 0;
+    POSITION pos = m_pCharacters->GetHeadPosition();
+    while (pos != NULL) {
+        COLORREF rgbTextColor = CBaldurChitin::TEXTDISPLAY_COLOR_SELECT;
+        if (nSelected != nIndex) {
+            rgbTextColor = pText->m_rgbTextColor;
+        }
+
+        sFileName = m_pCharacters->GetAt(pos);
+
+        pText->DisplayString(CString(""),
+            sFileName,
+            pText->m_rgbLabelColor,
+            rgbTextColor,
+            nIndex,
+            FALSE,
+            TRUE);
+
+        m_pCharacters->GetNext(pos);
+        nIndex++;
+    }
+
+    pText->SetTopString(pText->m_plstStrings->FindIndex(0));
+}
+
 // 0x5D8190
 void CScreenCharacter::UpdatePortraitList(CUIPanel* pPanel, DWORD dwControlId, INT nSelected)
 {
