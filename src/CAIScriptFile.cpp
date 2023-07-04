@@ -83,12 +83,12 @@ SHORT CAIScriptFile::DecodeActionID(CString sName)
 
 // FIXME: Use reference.
 //
-// 0x41CEB0
+// 0x41CF90
 BYTE CAIScriptFile::DecodeSpecialCase(CString sName)
 {
     CAIId* pId = m_objects.Find(sName, FALSE);
     if (pId != NULL) {
-        return static_cast<SHORT>(pId->m_id);
+        return static_cast<BYTE>(pId->m_id);
     }
 
     ParseError("Special Case:" + sName + " Not found.  Check for proper brackets.");
