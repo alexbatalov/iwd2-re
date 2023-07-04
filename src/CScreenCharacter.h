@@ -34,6 +34,7 @@ public:
     /* 00A0 */ SHORT GetNumVirtualKeys() override;
     /* 00A4 */ CKeyInfo* GetVirtualKeys() override;
     /* 00A8 */ BYTE* GetVirtualKeysFlags() override;
+    /* 00F0 */ void OnRestButtonClick() override;
 
     CString GetCurrentPortrait(CGameSprite* pSprite);
     void ResetAppearancePanel(CUIPanel* pPanel, CGameSprite* pSprite);
@@ -65,6 +66,7 @@ public:
     /* 05D0 */ BYTE m_pVirtualKeysFlags[CSCREENCHARACTER_VIRTUAL_KEYS];
     /* 062A */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
     /* 07B4 */ BOOLEAN m_bCtrlKeyDown;
+    /* 07C6 */ INT m_nErrorState;
     /* 07CA */ DWORD m_dwErrorTextId;
     /* 07CE */ INT m_nNumErrorButtons;
     /* 07D2 */ INT m_strErrorButtonText[CSCREENCHARACTER_ERROR_BUTTONS];

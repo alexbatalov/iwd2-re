@@ -610,6 +610,55 @@ void CScreenCharacter::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId
     UpdateText(pText, "%s", strRes.szText);
 }
 
+// 0x5E7020
+void CScreenCharacter::OnRestButtonClick()
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 9743
+    UTIL_ASSERT(pGame != NULL);
+
+    CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    // NOTE: Uninline.
+    LONG nCharacterId = pGame->GetCharacterId(m_nSelectedCharacter);
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        STRREF strError;
+        if (pGame->CanRestParty(strError, 0, 0, 0)) {
+            m_nErrorState = 1;
+            m_dwErrorTextId = 15358;
+            m_strErrorButtonText[0] = 17199;
+            m_strErrorButtonText[1] = 11596;
+            m_strErrorButtonText[2] = 13727;
+            SummonPopup(50, pSprite, 1);
+        } else {
+            m_nErrorState = 0;
+            m_dwErrorTextId = strError;
+            m_strErrorButtonText[0] = 11973;
+            SummonPopup(9, pSprite, 1);
+        }
+
+        pGame->GetObjectArray()->ReleaseDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    renderLock.Unlock();
+}
+
 // 0x5E71A0
 void CScreenCharacter::ResetErrorPanel(CUIPanel* pPanel)
 {
