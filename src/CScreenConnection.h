@@ -256,6 +256,13 @@ public:
     /* 0892 */ BYTE m_nField;
 };
 
+class CUIControlButtonConnectionCreateGameNewGame : public CUIControlButton {
+public:
+    CUIControlButtonConnectionCreateGameNewGame(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonConnectionCreateGameNewGame() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlButtonConnectionErrorButton : public CUIControlButton {
 public:
     CUIControlButtonConnectionErrorButton(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

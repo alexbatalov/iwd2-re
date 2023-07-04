@@ -883,7 +883,7 @@ BOOL CScreenSinglePlayer::IsModifyButtonClickable()
     UTIL_ASSERT(pGame != NULL);
 
     return !pGame->GetMultiplayerSettings()->field_B8
-        && (g_pBaldurChitin->cNetwork.FindPlayerLocationByID(g_pBaldurChitin->cNetwork.field_6FA, FALSE) != -1
+        && (g_pBaldurChitin->cNetwork.FindPlayerLocationByID(g_pBaldurChitin->cNetwork.m_idLocalPlayer, FALSE) != -1
             || g_pBaldurChitin->cNetwork.GetSessionHosting())
         && field_45C == 2
         && pGame->GetMultiplayerSettings()->m_bArbitrationLockAllowInput;

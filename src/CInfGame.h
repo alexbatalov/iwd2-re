@@ -42,6 +42,8 @@ public:
     void SetKey(INT nIndex, BYTE nKey, BYTE nKeyFlag);
     void LoadOptions();
     void SaveOptions();
+    void LoadMultiPlayerPermissions();
+    void NewGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace);
     void UpdatePortrait(SHORT nPortrait, DWORD dwPanelId);
     SHORT GetCharacterPortraitNum(LONG nCharacterId);
     void WorldEngineActivated(CVidMode* pVidMode);

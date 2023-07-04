@@ -655,7 +655,7 @@ void CScreenChapter::StartChapterMultiplayerHost(BYTE nChapter, BYTE* resRef)
             CGameObjectArray::INVALID_INDEX,
             CGameObjectArray::INVALID_INDEX);
 
-        g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, g_pChitin->cNetwork.field_6FA);
+        g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, g_pChitin->cNetwork.m_idLocalPlayer);
     }
 
     g_pBaldurChitin->GetBaldurMessage()->ChapterAnnounceStatus(nChapter, CResRef(resRef));

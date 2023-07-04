@@ -4,6 +4,8 @@
 #include "CBaldurProjector.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CScreenMultiPlayer.h"
+#include "CScreenSinglePlayer.h"
 #include "CScreenStart.h"
 #include "CUIControlScrollBar.h"
 #include "CUIPanel.h"
@@ -1084,7 +1086,172 @@ void CScreenConnection::OnLoadGameButtonClick(int a1)
 // 0x5FD0A0
 void CScreenConnection::OnNewGameButtonClick()
 {
-    // TODO: Incomplete.
+    CString sSessionName;
+    CString sSessionPassword;
+    CString sPlayerName;
+
+    CSingleLock renderLock(&(GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(6);
+
+    CNetwork* pNetwork = &(g_pBaldurChitin->cNetwork);
+    CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 2380
+    UTIL_ASSERT(pSettings != NULL);
+
+    CUIControlEdit* pEdit;
+
+    pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(0));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 2383
+    UTIL_ASSERT(pEdit != NULL);
+
+    sSessionName = pEdit->GetText();
+    sSessionName.TrimLeft();
+    sSessionName.TrimRight();
+
+    pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(4));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 2389
+    UTIL_ASSERT(pEdit != NULL);
+
+    sSessionPassword = pEdit->GetText();
+    sSessionPassword.TrimLeft();
+    sSessionPassword.TrimRight();
+
+    pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(1));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 2389
+    UTIL_ASSERT(pEdit != NULL);
+
+    sPlayerName = pEdit->GetText();
+    sPlayerName.TrimLeft();
+    sPlayerName.TrimRight();
+
+    renderLock.Unlock();
+
+    if (m_nProtocol != 0) {
+        WritePrivateProfileStringA("Multiplayer",
+            "Player Name",
+            sPlayerName,
+            g_pBaldurChitin->GetIniFileName());
+
+        WritePrivateProfileStringA("Multiplayer",
+            "Session Password",
+            sSessionPassword,
+            g_pBaldurChitin->GetIniFileName());
+
+        WritePrivateProfileStringA("Multiplayer",
+            "Session Name",
+            sSessionName,
+            g_pBaldurChitin->GetIniFileName());
+
+    } else {
+        if (sPlayerName.IsEmpty()) {
+            sPlayerName = "Player";
+        }
+
+        if (sSessionName.IsEmpty()) {
+            sSessionName = "Session";
+        }
+    }
+
+    if (!pNetwork->field_9C) {
+        pNetwork->InitializeConnectionToServiceProvider(TRUE);
+        if (!pNetwork->field_9C) {
+            m_nErrorState = 1;
+            m_strErrorText = 18986;
+            m_strErrorButtonText[0] = 11973;
+            SummonPopup(20);
+            return;
+        }
+    }
+
+    pNetwork->m_sSessionNameToMake = sSessionName;
+    pNetwork->m_bSessionNameToMake = TRUE;
+
+    if (sSessionPassword != "") {
+        pNetwork->m_sSessionPassword = sSessionPassword;
+        pNetwork->m_bSessionPasswordEnabled = TRUE;
+    } else {
+        pNetwork->m_bSessionPasswordEnabled = FALSE;
+    }
+
+    pNetwork->SetMaxPlayers(6);
+    pNetwork->SetApplicationOptions(TRUE, FALSE);
+    pNetwork->m_sLocalPlayerName = sPlayerName;
+    pNetwork->m_bPlayerNameToMake = TRUE;
+
+    INT nServiceProviderType;
+    pNetwork->GetServiceProviderType(pNetwork->m_nServiceProvider, nServiceProviderType);
+    if (nServiceProviderType == CNetwork::SERV_PROV_MODEM
+        || nServiceProviderType == CNetwork::SERV_PROV_TCP_IP) {
+        m_bEMSwapped = FALSE;
+        m_bEMValue = FALSE;
+        m_bEMWaiting = TRUE;
+        m_nEMEvent = 1;
+        m_nEMEventStage = 1;
+    } else {
+        if (pNetwork->HostNewSession()) {
+            INT nErrorCode;
+            if (pNetwork->CreatePlayer(nErrorCode)) {
+                CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+                renderLock.Lock(INFINITE);
+
+                if (m_nProtocol != 0) {
+                    DismissPopup();
+                }
+
+                renderLock.Unlock();
+
+                pSettings->InitializeSettings();
+
+                for (int nCharacterSlot = 0; nCharacterSlot < 6; nCharacterSlot++) {
+                    pSettings->SetCharacterControlledByPlayer(nCharacterSlot, 0, TRUE, FALSE);
+                }
+
+                pSettings->SetPlayerReady(g_pChitin->cNetwork.m_idLocalPlayer, TRUE, TRUE);
+
+                g_pBaldurChitin->GetObjectGame()->NewGame(TRUE, FALSE);
+
+                CResRef cResArea;
+                CString sAreaName;
+                CPoint pt;
+                g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetStartArea(cResArea, pt);
+                cResArea.CopyToString(sAreaName);
+
+                CPoint ptStart = g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetStartPoint(0);
+                pSettings->SetCharacterCreationLocation(sAreaName, ptStart);
+
+                g_pBaldurChitin->GetObjectGame()->LoadMultiPlayerPermissions();
+
+                if (g_pChitin->cNetwork.m_nServiceProvider == CNetwork::SERV_PROV_NULL) {
+                    CScreenSinglePlayer* pSinglePlayer = g_pBaldurChitin->m_pEngineSinglePlayer;
+                    pSinglePlayer->field_45C = 1;
+                    pSinglePlayer->StartSinglePlayer(1);
+                    SelectEngine(pSinglePlayer);
+                } else {
+                    CScreenMultiPlayer* pMultiPlayer = g_pBaldurChitin->m_pEngineMultiPlayer;
+                    pMultiPlayer->field_45C = 1;
+                    pMultiPlayer->StartMultiPlayer(1);
+                    SelectEngine(pMultiPlayer);
+                }
+
+                g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->SetArbitrationLockStatus(TRUE, 0);
+            } else {
+                pNetwork->CloseSession(TRUE);
+                m_bEliminateInitialize = TRUE;
+            }
+        } else {
+            m_bEliminateInitialize = TRUE;
+        }
+    }
 }
 
 // 0x5FD670
@@ -1158,7 +1325,7 @@ void CScreenConnection::OnJoinGameButtonClick()
     if (pNetwork->GetPasswordRequiredForSelectedSession()) {
         SummonPopup(7);
     } else {
-        pNetwork->field_680 = 0;
+        pNetwork->m_bSessionPasswordEnabled = FALSE;
         m_bJoinWaiting = TRUE;
         m_bJoinComplete = FALSE;
         m_nJoinEvent = 8;
@@ -2026,7 +2193,7 @@ void CUIControlButtonConnectionQuitGame::OnLButtonClick(CPoint pt)
     lock.Lock(INFINITE);
 
     g_pBaldurChitin->cNetwork.UnselectSession();
-    g_pBaldurChitin->cNetwork.field_680 = 0;
+    g_pBaldurChitin->cNetwork.m_bSessionPasswordEnabled = FALSE;
     g_pBaldurChitin->cNetwork.UnselectModemAddress();
     pConnection->m_bEliminateInitialize = TRUE;
 
@@ -2746,6 +2913,38 @@ void CUIControlEditConnectionWithDefault::OnEditReturn(CString sText)
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
         // __LINE__: 8633
         UTIL_ASSERT(FALSE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x604A50
+CUIControlButtonConnectionCreateGameNewGame::CUIControlButtonConnectionCreateGameNewGame(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->m_cTlkTable.Fetch(13728, strRes); // "New Game"
+    SetText(strRes.szText);
+}
+
+// 0x604B40
+CUIControlButtonConnectionCreateGameNewGame::~CUIControlButtonConnectionCreateGameNewGame()
+{
+}
+
+// 0x604BE0
+void CUIControlButtonConnectionCreateGameNewGame::OnLButtonClick(CPoint pt)
+{
+    CScreenConnection* pConnection = g_pBaldurChitin->m_pEngineConnection;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 8691
+    UTIL_ASSERT(pConnection != NULL);
+
+    if (pConnection->field_106) {
+        pConnection->OnLoadGameButtonClick(0);
+    } else {
+        pConnection->OnNewGameButtonClick();
     }
 }
 

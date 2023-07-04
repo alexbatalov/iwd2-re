@@ -113,6 +113,12 @@ BOOLEAN CMultiplayerSettings::GetPlayerReady(PLAYER_ID playerID)
     return FALSE;
 }
 
+// 0x518390
+void CMultiplayerSettings::SetPlayerReady(PLAYER_ID playerID, BOOLEAN bValue, BOOLEAN bFlush)
+{
+    // TODO: Incomplete.
+}
+
 // 0x5186C0
 INT CMultiplayerSettings::GetCharacterControlledByPlayer(INT nCharacterSlot)
 {
@@ -122,6 +128,22 @@ INT CMultiplayerSettings::GetCharacterControlledByPlayer(INT nCharacterSlot)
         "CMultiplayerSettings::GetCharacterControlledByPlayer: Bad Character Slot.");
 
     return g_pChitin->cNetwork.FindPlayerLocationByID(m_pnCharacterControlledByPlayer[nCharacterSlot], FALSE);
+}
+
+// 0x518710
+void CMultiplayerSettings::SetCharacterControlledByPlayer(INT nCharacterSlot, INT nPlayerSlot, BOOLEAN bFlush, BOOLEAN bCharacterUpdate)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMultiplayerSettings.cpp
+    // __LINE__: 1322
+    UTIL_ASSERT_MSG(((nCharacterSlot >= 0) && (nCharacterSlot < MAX_CHARACTERS)),
+        "CMultiplayerSettings::SetCharacterControlledByPlayer: Bad Character Slot.");
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMultiplayerSettings.cpp
+    // __LINE__: 1323
+    UTIL_ASSERT_MSG(((nPlayerSlot >= -1) && (nPlayerSlot < MAX_PLAYERS)),
+        "CMultiplayerSettings::SetCharacterControlledByPlayer: Bad player slot.");
+
+    // TODO: Incomplete.
 }
 
 // 0x518A30

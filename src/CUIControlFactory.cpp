@@ -381,8 +381,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 6:
                 return new CUIControlButtonConnectionPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 10:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlButtonConnectionCreateGameNewGame(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 13:
                 return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
             case 14:

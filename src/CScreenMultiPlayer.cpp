@@ -17,3 +17,9 @@ void CScreenMultiPlayer::ClearChatMessages()
 {
     // TODO: Incomplete.
 }
+
+// 0x64DDB0
+void CScreenMultiPlayer::StartMultiPlayer(INT nEngineState)
+{
+    // TODO: Incomplete.
+}

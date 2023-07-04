@@ -1257,6 +1257,18 @@ void CInfGame::SaveOptions()
     WritePrivateProfileStringA("Game Options", "Hit Point Bar Sequence", sValue, g_pBaldurChitin->GetIniFileName());
 }
 
+// 0x5AAC30
+void CInfGame::LoadMultiPlayerPermissions()
+{
+    // TODO: Incomplete.
+}
+
+// 0x5ABA20
+void CInfGame::NewGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace)
+{
+    // TODO: Incomplete.
+}
+
 // 0x5AF360
 void CInfGame::UpdatePortrait(SHORT nPortrait, DWORD dwPanelId)
 {
@@ -1796,7 +1808,7 @@ BYTE CInfGame::GetCharactersControlled()
 
         if (rc == CGameObjectArray::SUCCESS) {
             if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
-                || g_pChitin->cNetwork.field_6FA == pObject->m_remotePlayerID) {
+                || g_pChitin->cNetwork.m_idLocalPlayer == pObject->m_remotePlayerID) {
                 bControlled |= 1 << nIndex;
             }
 

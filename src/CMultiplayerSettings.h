@@ -32,7 +32,9 @@ public:
     void ResetPermissionsForPlayer(INT nPlayerSlot, BOOLEAN bFlush);
     BOOLEAN GetPlayerReady(SHORT nPlayerSlot);
     BOOLEAN GetPlayerReady(PLAYER_ID playerID);
+    void SetPlayerReady(PLAYER_ID playerID, BOOLEAN bValue, BOOLEAN bFlush);
     INT GetCharacterControlledByPlayer(INT nCharacterSlot);
+    void SetCharacterControlledByPlayer(INT nCharacterSlot, INT nPlayerSlot, BOOLEAN bFlush, BOOLEAN bCharacterUpdate);
     BOOLEAN GetCharacterReady(INT nCharacterSlot);
     void SetCharacterReady(INT nCharacterSlot, BOOLEAN bReady, BOOLEAN bFlush);
     BYTE GetCharacterStatus(INT nCharacterSlot);
