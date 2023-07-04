@@ -5,6 +5,30 @@
 // 0x847784
 const SHORT CAIAction::NO_ACTION = 0;
 
+// 0x8477C0
+const SHORT CAIAction::SPELL = 31;
+
+// 0x847832
+const SHORT CAIAction::SPELLPOINT = 95;
+
+// 0x847856
+const SHORT CAIAction::FORCESPELL = 113;
+
+// 0x847858
+const SHORT CAIAction::FORCESPELLPOINT = 114;
+
+// 0x8478B4
+const SHORT CAIAction::APPLYSPELL = 160;
+
+// 0x8478DE
+const SHORT CAIAction::REALLYFORCESPELL = 181;
+
+// 0x8478F2
+const SHORT CAIAction::SPELLNODEC = 191;
+
+// 0x8478F4
+const SHORT CAIAction::SPELLPOINTNODEC = 192;
+
 // 0x8C6118
 const CAIAction CAIAction::NULL_ACTION;
 

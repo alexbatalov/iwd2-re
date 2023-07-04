@@ -10,6 +10,14 @@ class CGameAIBase;
 class CAIAction {
 public:
     static const SHORT NO_ACTION;
+    static const SHORT SPELL;
+    static const SHORT SPELLPOINT;
+    static const SHORT FORCESPELL;
+    static const SHORT FORCESPELLPOINT;
+    static const SHORT APPLYSPELL;
+    static const SHORT REALLYFORCESPELL;
+    static const SHORT SPELLNODEC;
+    static const SHORT SPELLPOINTNODEC;
 
     static const CAIAction NULL_ACTION;
 

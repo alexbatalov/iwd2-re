@@ -60,6 +60,9 @@ public:
     /* 0412 */ CTypedPtrList<CPtrList, CAIAction*> m_queuedActions;
     /* 042E */ CTypedPtrList<CPtrList, CAITrigger*> m_pendingTriggers;
     /* 044E */ CPtrList field_44E;
+    /* 046A */ SHORT m_curResponseNum;
+    /* 046C */ SHORT m_curResponseSetNum;
+    /* 046E */ SHORT m_curScriptNum;
     /* 0470 */ BOOL m_interrupt;
     /* 0474 */ SHORT m_actionCount;
     /* 0476 */ CAIAction m_curAction;

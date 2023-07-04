@@ -66,7 +66,41 @@ void CGameAIBase::CheckTimers(LONG cycles)
 // 0x44D640
 void CGameAIBase::ClearActions(BOOL a1)
 {
-    // TODO: Incomplete.
+    if (a1) {
+        POSITION pos = m_queuedActions.GetHeadPosition();
+        while (pos != NULL) {
+            POSITION curr = pos;
+            CAIAction* pAction = m_queuedActions.GetNext(pos);
+            if (pAction != NULL) {
+                if (pAction->m_actionID != CAIAction::SPELL
+                    && pAction->m_actionID != CAIAction::SPELLPOINT
+                    && pAction->m_actionID != CAIAction::FORCESPELL
+                    && pAction->m_actionID != CAIAction::FORCESPELLPOINT
+                    && pAction->m_actionID != CAIAction::APPLYSPELL
+                    && pAction->m_actionID != CAIAction::REALLYFORCESPELL
+                    && pAction->m_actionID != CAIAction::SPELLNODEC
+                    && pAction->m_actionID != CAIAction::SPELLPOINTNODEC) {
+                    m_queuedActions.RemoveAt(curr);
+                    delete pAction;
+                }
+            }
+        }
+    } else {
+        POSITION pos = m_queuedActions.GetHeadPosition();
+        while (pos != NULL) {
+            CAIAction* pAction = m_queuedActions.GetNext(pos);
+            if (pAction != NULL) {
+                delete pAction;
+            }
+        }
+        m_queuedActions.RemoveAll();
+    }
+
+    if (m_queuedActions.GetCount() == 0) {
+        m_curResponseNum = -1;
+        m_curResponseSetNum = -1;
+        m_curScriptNum = -1;
+    }
 }
 
 // 0x44D730
