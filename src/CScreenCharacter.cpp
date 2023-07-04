@@ -774,6 +774,12 @@ void CScreenCharacter::OnScriptButtonClick()
     renderLock.Unlock();
 }
 
+// 0x5E4D50
+void CScreenCharacter::OnExportButtonClick()
+{
+    // TODO: Incomplete.
+}
+
 // 0x5E6840
 void CScreenCharacter::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId)
 {
@@ -1093,4 +1099,32 @@ void CUIControlButtonCharacterInformation::OnLButtonClick(CPoint pt)
     UTIL_ASSERT(pCharacter != NULL);
 
     pCharacter->OnInformationButtonClick();
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x5EAFA0
+CUIControlButtonCharacterExport::CUIControlButtonCharacterExport(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->m_cTlkTable.Fetch(13956, strRes); // "Export"
+    SetText(strRes.szText);
+}
+
+// 0x5EB090
+CUIControlButtonCharacterExport::~CUIControlButtonCharacterExport()
+{
+}
+
+// 0x5EB130
+void CUIControlButtonCharacterExport::OnLButtonClick(CPoint pt)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 12514
+    UTIL_ASSERT(pCharacter != NULL);
+
+    pCharacter->OnExportButtonClick();
 }
