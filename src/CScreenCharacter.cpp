@@ -5,6 +5,7 @@
 #include "CInfCursor.h"
 #include "CScreenCreateChar.h"
 #include "CScreenWorld.h"
+#include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
 
@@ -170,6 +171,53 @@ CString CScreenCharacter::GetCurrentPortrait(CGameSprite* pSprite)
         // __LINE__: 1767
         UTIL_ASSERT(FALSE);
     }
+}
+
+// 0x5D8190
+void CScreenCharacter::UpdatePortraitList(CUIPanel* pPanel, DWORD dwControlId, INT nSelected)
+{
+    CString sPortrait;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 2079
+    UTIL_ASSERT(m_pPortraits != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 2080
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(dwControlId));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 2082
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+    pText->m_rgbHighlightColor = CBaldurChitin::TEXTDISPLAY_COLOR_HIGHLIGHT;
+    pText->field_A68 = 32767;
+
+    INT nIndex = 0;
+    POSITION pos = m_pPortraits->GetHeadPosition();
+    while (pos != NULL) {
+        COLORREF rgbTextColor = CBaldurChitin::TEXTDISPLAY_COLOR_SELECT;
+        if (nSelected != nIndex) {
+            rgbTextColor = pText->m_rgbTextColor;
+        }
+
+        sPortrait = m_pPortraits->GetAt(pos);
+        pText->DisplayString(CString(""),
+            sPortrait,
+            pText->m_rgbLabelColor,
+            rgbTextColor,
+            nIndex,
+            FALSE,
+            TRUE);
+
+        m_pPortraits->GetNext(pos);
+        nIndex++;
+    }
+
+    pText->SetTopString(pText->m_plstStrings->FindIndex(0));
 }
 
 // 0x5DBDE0
