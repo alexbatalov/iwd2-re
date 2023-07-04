@@ -610,6 +610,56 @@ void CScreenCharacter::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId
     UpdateText(pText, "%s", strRes.szText);
 }
 
+// 0x5E71A0
+void CScreenCharacter::ResetErrorPanel(CUIPanel* pPanel)
+{
+    switch (pPanel->m_nID) {
+    case 9:
+        m_nNumErrorButtons = 1;
+        break;
+    case 10:
+        m_nNumErrorButtons = 2;
+        break;
+    case 50:
+        m_nNumErrorButtons = 3;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 9829
+        UTIL_ASSERT(FALSE);
+    }
+
+    STR_RES strRes;
+    g_pBaldurChitin->m_cTlkTable.Fetch(m_dwErrorTextId, strRes);
+
+    strRes.cSound.SetChannel(0, 0);
+    strRes.cSound.SetFireForget(TRUE);
+    strRes.cSound.Play(FALSE);
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(0));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 9842
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+    UpdateText(pText, "%s", strRes.szText);
+
+    for (INT nButton = 0; nButton < m_nNumErrorButtons; nButton++) {
+        CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nButton));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 9851
+        UTIL_ASSERT(pButton != NULL);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 10508
+        UTIL_ASSERT(0 <= nButton && nButton < CSCREENCHARACTER_ERROR_BUTTONS);
+
+        pButton->SetText(FetchString(m_strErrorButtonText[nButton]));
+    }
+}
+
 // 0x5E76D0
 void CScreenCharacter::UpdateCustomizePanel(CGameSprite* pSprite)
 {

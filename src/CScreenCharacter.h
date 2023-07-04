@@ -6,6 +6,7 @@
 #include "CVidFont.h"
 
 #define CSCREENCHARACTER_VIRTUAL_KEYS 90
+#define CSCREENCHARACTER_ERROR_BUTTONS 3
 
 class CGameSprite;
 class CUIPanel;
@@ -51,6 +52,7 @@ public:
     void EnablePopupPanel(DWORD dwPanelId, BOOL bEnable);
     void SummonPopup(DWORD dwPopupId, CGameSprite* pSprite, int a3);
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
+    void ResetErrorPanel(CUIPanel* pPanel);
     void UpdateCustomizePanel(CGameSprite* pSprite);
     void OnAppearanceButtonClick();
     void OnSoundsButtonClick();
@@ -63,6 +65,9 @@ public:
     /* 05D0 */ BYTE m_pVirtualKeysFlags[CSCREENCHARACTER_VIRTUAL_KEYS];
     /* 062A */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
     /* 07B4 */ BOOLEAN m_bCtrlKeyDown;
+    /* 07CA */ DWORD m_dwErrorTextId;
+    /* 07CE */ INT m_nNumErrorButtons;
+    /* 07D2 */ INT m_strErrorButtonText[CSCREENCHARACTER_ERROR_BUTTONS];
     /* 07DE */ INT m_nCharacterIndex;
     /* 07E2 */ CStringList* m_pCharacters;
     /* 0802 */ int m_nCurrentPortrait;
