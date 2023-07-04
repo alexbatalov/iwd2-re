@@ -99,4 +99,11 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonCharacterInformation : public CUIControlButton {
+public:
+    CUIControlButtonCharacterInformation(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharacterInformation() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 #endif /* CSCREENCHARACTER_H_ */

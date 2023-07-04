@@ -1066,3 +1066,31 @@ void CUIControlButtonCharacterCustomize::OnLButtonClick(CPoint pt)
 
     pCharacter->OnCustomizeButtonClick();
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x5EADD0
+CUIControlButtonCharacterInformation::CUIControlButtonCharacterInformation(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->m_cTlkTable.Fetch(11946, strRes); // "Information"
+    SetText(strRes.szText);
+}
+
+// 0x5EAEC0
+CUIControlButtonCharacterInformation::~CUIControlButtonCharacterInformation()
+{
+}
+
+// 0x5EAF60
+void CUIControlButtonCharacterInformation::OnLButtonClick(CPoint pt)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 12458
+    UTIL_ASSERT(pCharacter != NULL);
+
+    pCharacter->OnInformationButtonClick();
+}
