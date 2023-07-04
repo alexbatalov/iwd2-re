@@ -7,6 +7,7 @@
 
 class CAIScript;
 class CAITrigger;
+class CGameTimer;
 
 class CGameAIBase : public CGameObject {
 public:
@@ -62,7 +63,7 @@ public:
     /* 040E */ CAIScript* field_40E;
     /* 0412 */ CTypedPtrList<CPtrList, CAIAction*> m_queuedActions;
     /* 042E */ CTypedPtrList<CPtrList, CAITrigger*> m_pendingTriggers;
-    /* 044E */ CPtrList field_44E;
+    /* 044E */ CTypedPtrList<CPtrList, CGameTimer*> m_timers;
     /* 046A */ SHORT m_curResponseNum;
     /* 046C */ SHORT m_curResponseSetNum;
     /* 046E */ SHORT m_curScriptNum;

@@ -88,6 +88,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CGameSprite.h"
     "src/CGameSpy.cpp"
     "src/CGameSpy.h"
+    "src/CGameTimer.cpp"
+    "src/CGameTimer.h"
     "src/ChDataTypes.h"
     "src/CImm.cpp"
     "src/CImm.h"

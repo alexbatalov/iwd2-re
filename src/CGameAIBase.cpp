@@ -4,6 +4,7 @@
 #include "CAITrigger.h"
 #include "CBaldurChitin.h"
 #include "CGameArea.h"
+#include "CGameTimer.h"
 #include "CInfGame.h"
 #include "CTimerWorld.h"
 #include "CUtil.h"
@@ -41,7 +42,66 @@ CGameAIBase::CGameAIBase()
 // 0x44D160
 CGameAIBase::~CGameAIBase()
 {
-    // TODO: Incomplete.
+    POSITION pos;
+
+    pos = m_pendingTriggers.GetHeadPosition();
+    while (pos != NULL) {
+        CAITrigger* pTrigger = m_pendingTriggers.GetNext(pos);
+        if (pTrigger != NULL) {
+            delete pTrigger;
+        }
+    }
+
+    pos = m_queuedActions.GetHeadPosition();
+    while (pos != NULL) {
+        CAIAction* pAction = m_queuedActions.GetNext(pos);
+        if (pAction != NULL) {
+            delete pAction;
+        }
+    }
+
+    pos = m_timers.GetHeadPosition();
+    while (pos != NULL) {
+        CGameTimer* pTimer = m_timers.GetNext(pos);
+        if (pTimer != NULL) {
+            delete pTimer;
+        }
+    }
+
+    if (field_3F6 != NULL) {
+        delete field_3F6;
+        field_3F6 = NULL;
+    }
+
+    if (field_3FA != NULL) {
+        delete field_3FA;
+        field_3FA = NULL;
+    }
+
+    if (field_3FE != NULL) {
+        delete field_3FE;
+        field_3FE = NULL;
+    }
+
+    if (field_402 != NULL) {
+        delete field_402;
+        field_402 = NULL;
+    }
+
+    if (field_406 != NULL) {
+        delete field_406;
+        field_406 = NULL;
+    }
+
+    if (field_40A != NULL) {
+        delete field_40A;
+        field_40A = NULL;
+    }
+
+    if (field_40E != NULL) {
+        delete field_40E;
+        field_40E = NULL;
+    }
 }
 
 // 0x44D100
