@@ -37,6 +37,7 @@ public:
     CString GetCurrentPortrait(CGameSprite* pSprite);
     void ResetCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdatePortraitList(CUIPanel* pPanel, DWORD dwControlId, INT nSelected);
+    void ResetClassPanel(CGameSprite* pSprite, int a2);
     void ResetExportPanel(CGameSprite* pSprite);
     void UpdateCharacterList(CUIPanel* pPanel, DWORD dwTextId, INT nSelected);
     void EnableMainPanel(BOOL bEnable);
@@ -50,6 +51,7 @@ public:
     void SummonPopup(DWORD dwPopupId, CGameSprite* pSprite, int a3);
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
 
+    /* 0106 */ BYTE m_nClass;
     /* 01B0 */ BOOL m_bShiftKeyDown;
     /* 01B4 */ BOOL m_bCapsLockKeyOn;
     /* 01B8 */ BOOLEAN field_1B8;

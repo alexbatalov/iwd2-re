@@ -219,6 +219,36 @@ void CScreenCharacter::ResetCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite* 
     pPortrait->SetPortrait(CResRef(""));
 }
 
+// 0x5D8490
+void CScreenCharacter::ResetClassPanel(CGameSprite* pSprite, int a2)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(6);
+
+    DWORD name;
+    DWORD description;
+    switch (m_nClass) {
+    case CAIOBJECTTYPE_C_WIZARD:
+        name = 1081; // "<MAGESCHOOL>"
+        description = 10942;
+        break;
+    case CAIOBJECTTYPE_C_PALADIN:
+        name = 1078; // "Paladin"
+        description = 9558;
+        break;
+    case CAIOBJECTTYPE_C_MONK:
+        name = 33; // "Monk"
+        description = 36;
+        break;
+    case CAIOBJECTTYPE_C_CLERIC:
+        name = 1079; // "Cleric"
+        description = 9559;
+        break;
+    }
+
+    UpdateLabel(pPanel, 0x10000000, "%s", FetchString(name));
+    UpdateHelp(pPanel->m_nID, 13, description);
+}
+
 // 0x5D8570
 void CScreenCharacter::ResetExportPanel(CGameSprite* pSprite)
 {
