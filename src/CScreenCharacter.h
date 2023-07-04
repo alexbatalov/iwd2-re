@@ -37,8 +37,14 @@ public:
     CString GetCurrentPortrait(CGameSprite* pSprite);
     void ResetCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdatePortraitList(CUIPanel* pPanel, DWORD dwControlId, INT nSelected);
+    void EnableMainPanel(BOOL bEnable);
     void UpdateMainPanel(BOOL bCharacterChanged);
+    void ResetPopupPanel(DWORD dwPanelId, CGameSprite* pSprite, int a3);
+    void UpdatePopupPanel(DWORD dwPanelId, CGameSprite* pSprite);
     CUIPanel* GetTopPopup();
+    void ShowPopupPanel(DWORD dwPanelId, BOOL bShow);
+    void EnablePopupPanel(DWORD dwPanelId, BOOL bEnable);
+    void SummonPopup(DWORD dwPopupId, CGameSprite* pSprite, int a3);
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
 
     /* 01B0 */ BOOL m_bShiftKeyDown;
