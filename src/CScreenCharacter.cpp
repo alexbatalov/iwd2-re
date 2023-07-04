@@ -610,6 +610,40 @@ void CScreenCharacter::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId
     UpdateText(pText, "%s", strRes.szText);
 }
 
+// 0x5E6950
+void CScreenCharacter::CheckDropEquipment()
+{
+    CheckDropSlot(43);
+    CheckDropSlot(44);
+    CheckDropSlot(45);
+    CheckDropSlot(46);
+    CheckDropSlot(47);
+    CheckDropSlot(48);
+    CheckDropSlot(49);
+    CheckDropSlot(50);
+    CheckDropSlot(11);
+    CheckDropSlot(12);
+    CheckDropSlot(13);
+    CheckDropSlot(5);
+    CheckDropSlot(1);
+    CheckDropSlot(6);
+    CheckDropSlot(0);
+    CheckDropSlot(2);
+    CheckDropSlot(7);
+    CheckDropSlot(3);
+    CheckDropSlot(4);
+    CheckDropSlot(8);
+    CheckDropSlot(15);
+    CheckDropSlot(16);
+    CheckDropSlot(17);
+}
+
+// 0x5E6A30
+void CScreenCharacter::CheckDropSlot(INT nSlot)
+{
+    // TODO: Incomplete.
+}
+
 // 0x5E7020
 void CScreenCharacter::OnRestButtonClick()
 {
