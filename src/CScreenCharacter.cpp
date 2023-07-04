@@ -780,6 +780,12 @@ void CScreenCharacter::OnExportButtonClick()
     // TODO: Incomplete.
 }
 
+// 0x5E5330
+void CScreenCharacter::OnLevelUpButtonClick()
+{
+    // TODO: Incomplete.
+}
+
 // 0x5E6840
 void CScreenCharacter::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId)
 {
@@ -1127,4 +1133,32 @@ void CUIControlButtonCharacterExport::OnLButtonClick(CPoint pt)
     UTIL_ASSERT(pCharacter != NULL);
 
     pCharacter->OnExportButtonClick();
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x5EB170
+CUIControlButtonCharacterLevelUp::CUIControlButtonCharacterLevelUp(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->m_cTlkTable.Fetch(7175, strRes); // "Level Up"
+    SetText(strRes.szText);
+}
+
+// 0x5EB260
+CUIControlButtonCharacterLevelUp::~CUIControlButtonCharacterLevelUp()
+{
+}
+
+// 0x5EB300
+void CUIControlButtonCharacterLevelUp::OnLButtonClick(CPoint pt)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 12570
+    UTIL_ASSERT(pCharacter != NULL);
+
+    pCharacter->OnLevelUpButtonClick();
 }

@@ -59,6 +59,7 @@ public:
     void OnCustomizeBiographyButtonClick();
     void OnScriptButtonClick();
     void OnExportButtonClick();
+    void OnLevelUpButtonClick();
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
     void CheckDropEquipment();
     void CheckDropSlot(INT nSlot);
@@ -111,6 +112,13 @@ class CUIControlButtonCharacterExport : public CUIControlButton {
 public:
     CUIControlButtonCharacterExport(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonCharacterExport() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonCharacterLevelUp : public CUIControlButton {
+public:
+    CUIControlButtonCharacterLevelUp(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharacterLevelUp() override;
     void OnLButtonClick(CPoint pt) override;
 };
 
