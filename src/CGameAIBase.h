@@ -21,6 +21,7 @@ public:
     /* 0000 */ ~CGameAIBase() override;
     /* 002C */ BOOLEAN CompressTime(DWORD deltaTime) override;
     /* 0048 */ void RemoveFromArea() override;
+    /* 0074 */ virtual void AddAction(const CAIAction& action);
     /* 0088 */ virtual void InsertAction(const CAIAction& action);
     /* 0090 */ virtual void SetCurrAction(const CAIAction& action);
     /* 0094 */ virtual void SetScript(SHORT level, CAIScript* script);
