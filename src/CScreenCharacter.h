@@ -38,6 +38,7 @@ public:
     void ResetCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdatePortraitList(CUIPanel* pPanel, DWORD dwControlId, INT nSelected);
     void EnableMainPanel(BOOL bEnable);
+    STRREF GetRangerHatedRaceStrref(BYTE nRace);
     void UpdateMainPanel(BOOL bCharacterChanged);
     void ResetPopupPanel(DWORD dwPanelId, CGameSprite* pSprite, int a3);
     void UpdatePopupPanel(DWORD dwPanelId, CGameSprite* pSprite);

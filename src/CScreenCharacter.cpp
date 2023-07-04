@@ -1,5 +1,6 @@
 #include "CScreenCharacter.h"
 
+#include "CAIObjectType.h"
 #include "CBaldurChitin.h"
 #include "CGameSprite.h"
 #include "CInfCursor.h"
@@ -301,6 +302,69 @@ void CScreenCharacter::EnableMainPanel(BOOL bEnable)
 
     CheckEnablePortaits(1);
     CheckEnableLeftPanel();
+}
+
+// NOTE: Duplicate of `CScreenCreateChar::GetRangerHatedRaceStrref`.
+//
+// 0x5DBC80
+STRREF CScreenCharacter::GetRangerHatedRaceStrref(BYTE nRace)
+{
+    STRREF strRace;
+    switch (nRace) {
+    case CAIOBJECTTYPE_R_OGRE:
+        strRace = 15975;
+        break;
+    case CAIOBJECTTYPE_R_WYVERN:
+        strRace = 37617;
+        break;
+    case CAIOBJECTTYPE_R_GIANT:
+        strRace = 3279;
+        break;
+    case CAIOBJECTTYPE_R_GOBLIN:
+        strRace = 3280;
+        break;
+    case CAIOBJECTTYPE_R_LIZARDMAN:
+        strRace = 3281;
+        break;
+    case CAIOBJECTTYPE_R_ORC:
+        strRace = 3282;
+        break;
+    case CAIOBJECTTYPE_R_SALAMANDER:
+        strRace = 3290;
+        break;
+    case CAIOBJECTTYPE_R_TROLL:
+        strRace = 3288;
+        break;
+    case CAIOBJECTTYPE_R_UMBERHULK:
+        strRace = 3289;
+        break;
+    case CAIOBJECTTYPE_R_UNDEAD:
+        strRace = 3285;
+        break;
+    case CAIOBJECTTYPE_R_YUANTI:
+        strRace = 30850;
+        break;
+    case CAIOBJECTTYPE_R_HARPY:
+        strRace = 37616;
+        break;
+    case CAIOBJECTTYPE_R_BUGBEAR:
+        strRace = 28367;
+        break;
+    case CAIOBJECTTYPE_R_HOOK_HORROR:
+        strRace = 37606;
+        break;
+    case CAIOBJECTTYPE_R_DRIDER:
+        strRace = 37607;
+        break;
+    case CAIOBJECTTYPE_R_SHAPESHIFTER:
+        strRace = 37605;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 4439
+        UTIL_ASSERT(FALSE);
+    }
+    return strRace;
 }
 
 // 0x5DBDE0
