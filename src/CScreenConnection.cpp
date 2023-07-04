@@ -1076,7 +1076,7 @@ void CScreenConnection::DismissPopup()
 }
 
 // 0x5FCA00
-void CScreenConnection::sub_5FCA00(int a1)
+void CScreenConnection::OnLoadGameButtonClick(int a1)
 {
     // TODO: Incomplete.
 }
@@ -2130,8 +2130,10 @@ void CUIControlButtonConnectionQuickLoad::OnLButtonClick(CPoint pt)
     // __LINE__: 7434
     UTIL_ASSERT(pConnection != NULL);
 
-    pConnection->sub_5FCA00(1);
+    pConnection->OnLoadGameButtonClick(1);
 }
+
+// -----------------------------------------------------------------------------
 
 // 0x602FE0
 CUIControlButtonConnectionLoadGame::CUIControlButtonConnectionLoadGame(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
@@ -2150,8 +2152,52 @@ CUIControlButtonConnectionLoadGame::~CUIControlButtonConnectionLoadGame()
 // 0x603170
 void CUIControlButtonConnectionLoadGame::OnLButtonClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CScreenConnection* pConnection = g_pBaldurChitin->m_pEngineConnection;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 7491
+    UTIL_ASSERT(pConnection != NULL);
+
+    STR_RES strRes;
+
+    if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
+        || g_pBaldurChitin->cDimm.cResCache.m_nCacheSize >= 175000000) {
+        CUIPanel* pPanel = pConnection->GetManager()->GetPanel(6);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 7518
+        UTIL_ASSERT(pPanel != NULL);
+
+        CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(10));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 7520
+        UTIL_ASSERT(pButton != NULL);
+
+        pConnection->field_106 = 1;
+
+        g_pBaldurChitin->m_cTlkTable.Fetch(13729, strRes);
+        pButton->SetText(strRes.szText);
+
+        pConnection->field_106 = m_nID == 7;
+
+        if (pConnection->m_nProtocol != 0) {
+            CSingleLock renderLock(&(pConnection->GetManager()->field_36), FALSE);
+            renderLock.Lock(INFINITE);
+            pConnection->SummonPopup(6);
+            renderLock.Unlock();
+        } else {
+            pConnection->OnLoadGameButtonClick(0);
+        }
+    } else {
+        pConnection->m_nErrorState = 2;
+        pConnection->m_strErrorText = 20692;
+        pConnection->m_strErrorButtonText[0] = 11973;
+        pConnection->SummonPopup(20);
+    }
 }
+
+// -----------------------------------------------------------------------------
 
 // 0x603380
 CUIControlButtonConnectionJoinGame::CUIControlButtonConnectionJoinGame(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)

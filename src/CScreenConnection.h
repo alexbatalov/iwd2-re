@@ -71,8 +71,8 @@ public:
     void UpdatePopupPanel(DWORD nID);
     void SummonPopup(DWORD nID);
     void DismissPopup();
+    void OnLoadGameButtonClick(int a1);
     void OnNewGameButtonClick();
-    void sub_5FCA00(int a1);
     BOOL IsDoneButtonClickable();
     void OnDoneButtonClick();
     void OnCancelButtonClick();
