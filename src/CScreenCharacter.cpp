@@ -961,6 +961,12 @@ void CScreenCharacter::UpdateCustomizePanel(CGameSprite* pSprite)
     pButton->SetEnabled(bEnabled);
 }
 
+// 0x5E9600
+void CScreenCharacter::OnCustomizeButtonClick()
+{
+    // TODO: Incomplete.
+}
+
 // 0x5E9800
 void CScreenCharacter::OnAppearanceButtonClick()
 {
@@ -1031,4 +1037,32 @@ void CScreenCharacter::OnSoundsButtonClick()
     }
 
     renderLock.Unlock();
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x5EAC00
+CUIControlButtonCharacterCustomize::CUIControlButtonCharacterCustomize(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->m_cTlkTable.Fetch(10645, strRes); // "Customize"
+    SetText(strRes.szText);
+}
+
+// 0x5EACF0
+CUIControlButtonCharacterCustomize::~CUIControlButtonCharacterCustomize()
+{
+}
+
+// 0x5EAD90
+void CUIControlButtonCharacterCustomize::OnLButtonClick(CPoint pt)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 12402
+    UTIL_ASSERT(pCharacter != NULL);
+
+    pCharacter->OnCustomizeButtonClick();
 }

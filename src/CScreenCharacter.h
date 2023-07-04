@@ -3,6 +3,7 @@
 
 #include "CBaldurEngine.h"
 #include "CKeyInfo.h"
+#include "CUIControlButton.h"
 #include "CVidFont.h"
 
 #define CSCREENCHARACTER_VIRTUAL_KEYS 90
@@ -62,6 +63,7 @@ public:
     void CheckDropSlot(INT nSlot);
     void ResetErrorPanel(CUIPanel* pPanel);
     void UpdateCustomizePanel(CGameSprite* pSprite);
+    void OnCustomizeButtonClick();
     void OnAppearanceButtonClick();
     void OnSoundsButtonClick();
 
@@ -88,6 +90,13 @@ public:
     /* 086E */ CVidFont m_preLoadFontRealms;
     /* 0D6E */ CVidFont m_preLoadFontStnSml;
     /* 126E */ CVidFont m_preLoadFontTool;
+};
+
+class CUIControlButtonCharacterCustomize : public CUIControlButton {
+public:
+    CUIControlButtonCharacterCustomize(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharacterCustomize() override;
+    void OnLButtonClick(CPoint pt) override;
 };
 
 #endif /* CSCREENCHARACTER_H_ */
