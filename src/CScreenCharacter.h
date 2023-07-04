@@ -145,4 +145,11 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonCharacterCustomizeMenu : public CUIControlButton {
+public:
+    CUIControlButtonCharacterCustomizeMenu(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharacterCustomizeMenu() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 #endif /* CSCREENCHARACTER_H_ */

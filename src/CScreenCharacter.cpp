@@ -1389,3 +1389,66 @@ void CUIControlButtonInformationBiography::OnLButtonClick(CPoint pt)
 
     pCharacter->OnBiographyButtonClick();
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x5EEBD0
+CUIControlButtonCharacterCustomizeMenu::CUIControlButtonCharacterCustomizeMenu(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 15039
+    UTIL_ASSERT(pCharacter != NULL);
+
+    STRREF dwText;
+    switch (m_nID) {
+    case 0:
+        dwText = 11961; // "Appearance"
+        break;
+    case 1:
+        dwText = 10647; // "Sounds"
+        break;
+    case 3:
+        dwText = 17111; // "Script"
+        break;
+    case 4:
+        dwText = 18003; // "Biography"
+        break;
+    default:
+        dwText = -1;
+        break;
+    }
+    SetText(CBaldurEngine::FetchString(dwText));
+}
+
+// 0x5EED00
+CUIControlButtonCharacterCustomizeMenu::~CUIControlButtonCharacterCustomizeMenu()
+{
+}
+
+// 0x5EEDA0
+void CUIControlButtonCharacterCustomizeMenu::OnLButtonClick(CPoint pt)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 15093
+    UTIL_ASSERT(pCharacter != NULL);
+
+    switch (m_nID) {
+    case 0:
+        pCharacter->OnAppearanceButtonClick();
+        break;
+    case 1:
+        pCharacter->OnSoundsButtonClick();
+        break;
+    case 3:
+        pCharacter->OnScriptButtonClick();
+        break;
+    case 9:
+        pCharacter->OnCustomizeBiographyButtonClick();
+        break;
+    }
+}
