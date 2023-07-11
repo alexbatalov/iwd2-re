@@ -3274,6 +3274,21 @@ void CScreenCreateChar::CancelEngine()
     g_pBaldurChitin->field_4F3C = g_pBaldurChitin->cSoundMixer.sub_7AC890();
 }
 
+// 0x619030
+void CScreenCreateChar::UpdateClassEntry(CUIControlTextDisplay* pText, const CAIObjectType& typeAI, CDerivedStats* DStats, DWORD nSpecialization, BYTE nClass, DWORD dwFlags)
+{
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    CString sClass;
+    ruleTables.GetClassStringMixed(nClass,
+        nSpecialization,
+        dwFlags,
+        sClass,
+        typeAI.m_nGender != CAIOBJECTTYPE_SEX_FEMALE);
+
+    UpdateText(pText, "%s", FetchString(12136) + ":" + sClass);
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x6145C0

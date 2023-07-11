@@ -19,6 +19,7 @@
 #define CSCREENCREATECHAR_NUM_HATEDRACES 16
 
 class CAIObjectType;
+class CDerivedStats;
 class CGameSprite;
 
 class CScreenCreateChar : public CBaldurEngine {
@@ -145,6 +146,7 @@ public:
     void EnablePopupPanel(DWORD dwPanelId, BOOL bEnable);
     void SummonPopup(DWORD dwPopupId, CGameSprite* pSprite);
     void DismissPopup(CGameSprite* pSprite);
+    void UpdateClassEntry(CUIControlTextDisplay* pText, const CAIObjectType& typeAI, CDerivedStats* DStats, DWORD nSpecialization, BYTE nClass, DWORD dwFlags);
 
     /* 0106 */ C2DArray field_106;
     /* 012A */ C2DArray m_tSubRace;
