@@ -8,6 +8,7 @@ class CChatBuffer {
 public:
     CChatBuffer();
     ~CChatBuffer();
+    void AddMessage(const CString& sMessage);
     void ClearMessages();
 
     CTypedPtrList<CPtrList, CString*> m_lMessages;

@@ -23,6 +23,18 @@ CChatBuffer::~CChatBuffer()
     m_lMessages.RemoveAll();
 }
 
+// 0x442C30
+void CChatBuffer::AddMessage(const CString& sMessage)
+{
+    m_lMessages.AddTail(new CString(sMessage));
+    if (m_lMessages.GetCount() > 30) {
+        CString* pString = m_lMessages.GetHead();
+        delete pString;
+        m_lMessages.RemoveHead();
+    }
+    m_nMessageCount++;
+}
+
 // 0x442CA0
 void CChatBuffer::ClearMessages()
 {
