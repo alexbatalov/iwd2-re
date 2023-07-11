@@ -85,6 +85,12 @@ void CAIAction::Decode(CGameAIBase* caller)
     m_acteeID2.Decode(caller);
 }
 
+// 0x452B70
+const CPoint& CAIAction::GetDest() const
+{
+    return m_dest;
+}
+
 // 0x452B80
 SHORT CAIAction::GetActionID() const
 {

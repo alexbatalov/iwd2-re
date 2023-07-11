@@ -28,6 +28,7 @@ public:
     void Read(CString sData);
     void Decode(CGameAIBase* caller);
 
+    const CPoint& GetDest() const;
     SHORT GetActionID() const;
     CString GetString2() const;
     DWORD GetFlags() const;
