@@ -142,8 +142,10 @@ public:
     void OnCancelButtonClick();
     void OnMainCancelButtonClick();
     CUIPanel* GetTopPopup();
+    void ShowPopupPanel(DWORD dwPanelId, BOOL bShow);
+    void EnablePopupPanel(DWORD dwPanelId, BOOL bEnable);
     void SummonPopup(DWORD dwPopupId, CGameSprite* pSprite);
-    void DismissPopup();
+    void DismissPopup(CGameSprite* pSprite);
 
     /* 0106 */ C2DArray field_106;
     /* 012A */ C2DArray m_tSubRace;

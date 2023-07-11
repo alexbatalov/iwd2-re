@@ -2932,6 +2932,36 @@ CUIPanel* CScreenCreateChar::GetTopPopup()
     return m_lPopupStack.GetTailPosition() != NULL ? m_lPopupStack.GetTail() : NULL;
 }
 
+// NOTE: Inlined.
+void CScreenCreateChar::ShowPopupPanel(DWORD dwPanelId, BOOL bShow)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 1580
+    UTIL_ASSERT(pPanel != NULL);
+
+    pPanel->SetActive(bShow);
+    pPanel->SetInactiveRender(bShow);
+
+    if (bShow) {
+        pPanel->InvalidateRect(NULL);
+        PlayGUISound(RESREF_SOUND_WINDOWOPEN);
+    }
+}
+
+// NOTE: Inlined.
+void CScreenCreateChar::EnablePopupPanel(DWORD dwPanelId, BOOL bEnable)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 1624
+    UTIL_ASSERT(pPanel != NULL);
+
+    pPanel->SetEnabled(bEnable);
+}
+
 // 0x6179D0
 void CScreenCreateChar::SummonPopup(DWORD dwPopupId, CGameSprite* pSprite)
 {
@@ -2939,9 +2969,49 @@ void CScreenCreateChar::SummonPopup(DWORD dwPopupId, CGameSprite* pSprite)
 }
 
 // 0x617B70
-void CScreenCreateChar::DismissPopup()
+void CScreenCreateChar::DismissPopup(CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
+
+    CUIPanel* pPanel = m_lPopupStack.RemoveTail();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 10015
+    UTIL_ASSERT(pPanel != NULL);
+
+    // NOTE: Uninline.
+    ShowPopupPanel(pPanel->m_nID, FALSE);
+
+    CUIPanel* pMainPanel = m_cUIManager.GetPanel(0);
+    pMainPanel->InvalidateRect(NULL);
+
+    if (m_lPopupStack.GetTailPosition() != NULL) {
+        CUIPanel* pPanel = m_lPopupStack.GetTail();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 10032
+        UTIL_ASSERT(pPanel != NULL);
+
+        // NOTE: Uninline.
+        ShowPopupPanel(pPanel->m_nID, TRUE);
+
+        // NOTE: Uninline.
+        EnablePopupPanel(pPanel->m_nID, TRUE);
+
+        UpdatePopupPanel(pPanel->m_nID, pSprite);
+    } else {
+        EnableMainPanel(TRUE);
+        UpdateMainPanel(pSprite);
+    }
+
+    if (g_pBaldurChitin->field_1A0) {
+        // FIXME: Unused.
+        g_pChitin->GetWnd();
+        if (g_pBaldurChitin->cImm.field_128) {
+            g_pBaldurChitin->cImm.sub_7C2E10(g_pChitin->GetWnd()->GetSafeHwnd());
+        }
+    }
 }
 
 // 0x617D60
