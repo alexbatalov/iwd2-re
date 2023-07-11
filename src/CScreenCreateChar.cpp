@@ -165,9 +165,9 @@ CScreenCreateChar::CScreenCreateChar()
     m_nMemoryWIS = 0;
     m_nMemoryCHR = 0;
     m_nMemoryExtra = 0;
-    field_57A = 0;
-    field_57E = 0;
-    m_nCustomSoundIndex = 0;
+    m_nPortraitSmallIndex = 0;
+    m_nPortraitLargeIndex = 0;
+    m_nCustomSoundSetIndex = 0;
     field_58A = 0;
     m_nCharacterIndex = 0;
     field_596 = 0;
@@ -1025,11 +1025,11 @@ void CScreenCreateChar::ResetCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite*
     // __LINE__: 2073
     UTIL_ASSERT(m_pPortraits != NULL);
 
-    field_57A = -1;
-    field_57E = -1;
+    m_nPortraitSmallIndex = -1;
+    m_nPortraitLargeIndex = -1;
 
-    UpdatePortraitList(pPanel, 4, field_57A);
-    UpdatePortraitList(pPanel, 2, field_57E);
+    UpdatePortraitList(pPanel, 4, m_nPortraitSmallIndex);
+    UpdatePortraitList(pPanel, 2, m_nPortraitLargeIndex);
 
     CUIControlButtonCharGenPortrait* pPortrait;
 
@@ -1145,7 +1145,7 @@ void CScreenCreateChar::ResetCustomSoundsPanel(CUIPanel* pPanel, CGameSprite* pS
     pText->SetTopString(pos);
     pText->SetItemTextColor(pos, CBaldurChitin::TEXTDISPLAY_COLOR_SELECT);
 
-    m_nCustomSoundIndex = 0;
+    m_nCustomSoundSetIndex = 0;
     field_58A = 3;
 
     UpdateHelp(pPanel->m_nID, 50, 11315);
@@ -1600,7 +1600,7 @@ void CScreenCreateChar::UpdatePopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
     case 5:
         if (1) {
             CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(0));
-            pButton->SetEnabled(IsDoneButtonClickable());
+            pButton->SetEnabled(IsDoneButtonClickable(pSprite));
         }
         break;
     case 6:
@@ -1623,7 +1623,7 @@ void CScreenCreateChar::UpdatePopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
             }
 
             CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(0));
-            pButton->SetEnabled(IsDoneButtonClickable());
+            pButton->SetEnabled(IsDoneButtonClickable(pSprite));
         }
         break;
     case 11:
@@ -1655,10 +1655,10 @@ void CScreenCreateChar::UpdatePopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
             m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(46));
 
             pButton = static_cast<CUIControlButton*>(pPanel->GetControl(47));
-            pButton->SetEnabled(m_nCustomSoundIndex >= 0);
+            pButton->SetEnabled(m_nCustomSoundSetIndex >= 0);
 
             pButton = static_cast<CUIControlButton*>(pPanel->GetControl(0));
-            pButton->SetEnabled(IsDoneButtonClickable());
+            pButton->SetEnabled(IsDoneButtonClickable(pSprite));
         }
         break;
     case 20:
@@ -1670,7 +1670,7 @@ void CScreenCreateChar::UpdatePopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
             m_pCurrentScrollBar = field_1624;
 
             CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(0));
-            pButton->SetEnabled(IsDoneButtonClickable());
+            pButton->SetEnabled(IsDoneButtonClickable(pSprite));
         }
         break;
     case 21:
@@ -1683,7 +1683,7 @@ void CScreenCreateChar::UpdatePopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
             // __LINE__: 3679
             UTIL_ASSERT(pDone != NULL);
 
-            pDone->SetEnabled(IsDoneButtonClickable());
+            pDone->SetEnabled(IsDoneButtonClickable(pSprite));
         }
         break;
     case 51:
@@ -1834,7 +1834,7 @@ void CScreenCreateChar::UpdateMonkPaladinSpecializationPanel(CUIPanel* pPanel, C
     }
 
     CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(0));
-    pDone->SetEnabled(IsDoneButtonClickable());
+    pDone->SetEnabled(IsDoneButtonClickable(pSprite));
 }
 
 // 0x60D950
@@ -1961,7 +1961,7 @@ void CScreenCreateChar::UpdateSubRacePanel(CUIPanel* pPanel, CGameSprite* pSprit
     }
 
     CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(0));
-    pDone->SetEnabled(IsDoneButtonClickable());
+    pDone->SetEnabled(IsDoneButtonClickable(pSprite));
 }
 
 // 0x60E080
@@ -1985,8 +1985,8 @@ void CScreenCreateChar::UpdateCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite
     UTIL_ASSERT(pPortrait != NULL);
 
     sPortrait = "";
-    if (field_57A >= 0) {
-        POSITION pos = m_pPortraits->FindIndex(field_57A);
+    if (m_nPortraitSmallIndex >= 0) {
+        POSITION pos = m_pPortraits->FindIndex(m_nPortraitSmallIndex);
 
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
         // __LINE__: 4077
@@ -2005,8 +2005,8 @@ void CScreenCreateChar::UpdateCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite
     UTIL_ASSERT(pPortrait != NULL);
 
     sPortrait = "";
-    if (field_57E >= 0) {
-        POSITION pos = m_pPortraits->FindIndex(field_57E);
+    if (m_nPortraitLargeIndex >= 0) {
+        POSITION pos = m_pPortraits->FindIndex(m_nPortraitLargeIndex);
 
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
         // __LINE__: 4090
@@ -2021,7 +2021,7 @@ void CScreenCreateChar::UpdateCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite
     UpdateLabel(pPanel, 0x10000007, "%s", sPortrait);
 
     CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(6));
-    pDone->SetEnabled(IsDoneButtonClickable());
+    pDone->SetEnabled(IsDoneButtonClickable(pSprite));
 }
 
 // 0x60E2D0
@@ -2043,7 +2043,7 @@ void CScreenCreateChar::UpdateAppearancePanel(CUIPanel* pPanel, CGameSprite* pSp
     pPortrait->InvalidateRect();
 
     CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(6));
-    pDone->SetEnabled(IsDoneButtonClickable());
+    pDone->SetEnabled(IsDoneButtonClickable(pSprite));
 }
 
 // 0x60E3E0
@@ -2082,7 +2082,7 @@ void CScreenCreateChar::UpdateFeatsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
     }
 
     CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(0));
-    pDone->SetEnabled(IsDoneButtonClickable());
+    pDone->SetEnabled(IsDoneButtonClickable(pSprite));
 
     CUIControlScrollBarCharGenFeats* pScroll = static_cast<CUIControlScrollBarCharGenFeats*>(pPanel->GetControl(104));
 
@@ -2154,7 +2154,7 @@ void CScreenCreateChar::UpdateGenderPanel(CUIPanel* pPanel, CGameSprite* pSprite
     }
 
     CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(0));
-    pDone->SetEnabled(IsDoneButtonClickable());
+    pDone->SetEnabled(IsDoneButtonClickable(pSprite));
 }
 
 // 0x60E7F0
@@ -2263,7 +2263,7 @@ void CScreenCreateChar::UpdateAbilitiesPanel(CUIPanel* pPanel, CGameSprite* pSpr
     // __LINE__: 4454
     UTIL_ASSERT(pButton != NULL);
 
-    pButton->SetEnabled(IsDoneButtonClickable());
+    pButton->SetEnabled(IsDoneButtonClickable(pSprite));
 }
 
 // 0x60EB60
@@ -2329,7 +2329,7 @@ void CScreenCreateChar::UpdateClassPanel(CUIPanel* pPanel, CGameSprite* pSprite)
     }
 
     CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(0));
-    pDone->SetEnabled(IsDoneButtonClickable());
+    pDone->SetEnabled(IsDoneButtonClickable(pSprite));
 }
 
 // 0x60FDB0
@@ -2354,7 +2354,7 @@ void CScreenCreateChar::UpdateAlignmentPanel(CUIPanel* pPanel, CGameSprite* pSpr
     }
 
     CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(0));
-    pDone->SetEnabled(IsDoneButtonClickable());
+    pDone->SetEnabled(IsDoneButtonClickable(pSprite));
 }
 
 // 0x60FEE0
@@ -2439,7 +2439,7 @@ void CScreenCreateChar::UpdateClericWizardSpecializationPanel(CUIPanel* pPanel, 
     }
 
     CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(0));
-    pDone->SetEnabled(IsDoneButtonClickable());
+    pDone->SetEnabled(IsDoneButtonClickable(pSprite));
 }
 
 // 0x610190
@@ -2477,7 +2477,7 @@ void CScreenCreateChar::UpdateHatedRacePanel(CUIPanel* pPanel, CGameSprite* pSpr
     pScrollBar->UpdateScrollBar();
 
     CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(0));
-    pDone->SetEnabled(IsDoneButtonClickable());
+    pDone->SetEnabled(IsDoneButtonClickable(pSprite));
 }
 
 // 0x6103A0
@@ -2632,7 +2632,7 @@ void CScreenCreateChar::sub_6108D0(INT a1)
     } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
     if (rc == CGameObjectArray::SUCCESS) {
-        if (a1 != field_57E) {
+        if (a1 != m_nPortraitLargeIndex) {
             // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
             // __LINE__: 6064
             UTIL_ASSERT(m_pPortraits != NULL);
@@ -2649,15 +2649,15 @@ void CScreenCreateChar::sub_6108D0(INT a1)
             // __LINE__: 6070
             UTIL_ASSERT(pText != NULL);
 
-            if (field_57E != -1) {
-                pText->SetItemTextColor(pText->GetItemBossPosition(field_57E),
+            if (m_nPortraitLargeIndex != -1) {
+                pText->SetItemTextColor(pText->GetItemBossPosition(m_nPortraitLargeIndex),
                     pText->m_rgbTextColor);
             }
 
-            field_57E = a1;
+            m_nPortraitLargeIndex = a1;
 
-            if (field_57E != -1) {
-                pText->SetItemTextColor(pText->GetItemBossPosition(field_57E),
+            if (m_nPortraitLargeIndex != -1) {
+                pText->SetItemTextColor(pText->GetItemBossPosition(m_nPortraitLargeIndex),
                     CBaldurChitin::TEXTDISPLAY_COLOR_SELECT);
             }
 
@@ -2685,7 +2685,7 @@ void CScreenCreateChar::sub_610A40(INT a1)
     } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
     if (rc == CGameObjectArray::SUCCESS) {
-        if (a1 != field_57A) {
+        if (a1 != m_nPortraitSmallIndex) {
             // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
             // __LINE__: 6136
             UTIL_ASSERT(m_pPortraits != NULL);
@@ -2702,15 +2702,15 @@ void CScreenCreateChar::sub_610A40(INT a1)
             // __LINE__: 6142
             UTIL_ASSERT(pText != NULL);
 
-            if (field_57A != -1) {
-                pText->SetItemTextColor(pText->GetItemBossPosition(field_57A),
+            if (m_nPortraitSmallIndex != -1) {
+                pText->SetItemTextColor(pText->GetItemBossPosition(m_nPortraitSmallIndex),
                     pText->m_rgbTextColor);
             }
 
-            field_57A = a1;
+            m_nPortraitSmallIndex = a1;
 
-            if (field_57A != -1) {
-                pText->SetItemTextColor(pText->GetItemBossPosition(field_57A),
+            if (m_nPortraitSmallIndex != -1) {
+                pText->SetItemTextColor(pText->GetItemBossPosition(m_nPortraitSmallIndex),
                     CBaldurChitin::TEXTDISPLAY_COLOR_SELECT);
             }
 
@@ -2842,7 +2842,7 @@ void CScreenCreateChar::OnSoundItemSelect(INT nItem)
     } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
     if (rc == CGameObjectArray::SUCCESS) {
-        if (nItem != m_nCustomSoundIndex) {
+        if (nItem != m_nCustomSoundSetIndex) {
             // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
             // __LINE__: 7999
             UTIL_ASSERT(m_pSounds != NULL);
@@ -2859,15 +2859,15 @@ void CScreenCreateChar::OnSoundItemSelect(INT nItem)
             // __LINE__: 8005
             UTIL_ASSERT(pText != NULL);
 
-            if (m_nCustomSoundIndex != -1) {
-                pText->SetItemTextColor(pText->GetItemBossPosition(m_nCustomSoundIndex),
+            if (m_nCustomSoundSetIndex != -1) {
+                pText->SetItemTextColor(pText->GetItemBossPosition(m_nCustomSoundSetIndex),
                     pText->m_rgbTextColor);
             }
 
-            m_nCustomSoundIndex = nItem;
+            m_nCustomSoundSetIndex = nItem;
 
-            if (m_nCustomSoundIndex != -1) {
-                pText->SetItemTextColor(pText->GetItemBossPosition(m_nCustomSoundIndex),
+            if (m_nCustomSoundSetIndex != -1) {
+                pText->SetItemTextColor(pText->GetItemBossPosition(m_nCustomSoundSetIndex),
                     CBaldurChitin::TEXTDISPLAY_COLOR_SELECT);
             }
 
@@ -2883,11 +2883,108 @@ void CScreenCreateChar::OnSoundItemSelect(INT nItem)
 }
 
 // 0x615B70
-BOOL CScreenCreateChar::IsDoneButtonClickable()
+BOOL CScreenCreateChar::IsDoneButtonClickable(CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    CString v1;
+    CString v2;
+    CUIControlEdit* pEdit;
 
-    return FALSE;
+    CUIPanel* pPanel = GetTopPopup();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 8840
+    UTIL_ASSERT(pPanel != NULL);
+
+    CAIObjectType typeAI(pSprite->m_startTypeAI);
+
+    BOOL bClickable;
+
+    switch (pPanel->m_nID) {
+    case 1:
+        bClickable = typeAI.m_nGender != 0;
+        break;
+    case 2:
+        bClickable = typeAI.m_nClass != 0;
+        break;
+    case 3:
+        bClickable = typeAI.m_nAlignment != 0;
+        break;
+    case 4:
+    case 11:
+    case 13:
+    case 14:
+    case 51:
+    case 53:
+    case 54:
+        bClickable = TRUE;
+    case 5:
+        pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(2));
+        v1 = pEdit->GetText();
+        v1.TrimLeft();
+        v1.TrimRight();
+        bClickable = v1 != "";
+        break;
+    case 6:
+        bClickable = field_4F2 == 0;
+        break;
+    case 7:
+        bClickable = field_4EE == 0;
+        break;
+    case 8:
+        bClickable = typeAI.m_nRace != 0;
+        break;
+    case 12:
+        if (typeAI.m_nClass == CAIOBJECTTYPE_C_WIZARD) {
+            bClickable = (pSprite->GetSpecialization() & 0x7FC0) != 0;
+        } else if (typeAI.m_nClass == CAIOBJECTTYPE_C_CLERIC) {
+            bClickable = (pSprite->GetSpecialization() & 0xFF8000) != 0;
+        } else {
+            bClickable = FALSE;
+        }
+        break;
+    case 15:
+        bClickable = pSprite->m_baseStats.m_favoredEnemies[0] != CAIObjectType::R_NO_RACE;
+        break;
+    case 16:
+        bClickable = field_4EE == 0;
+        break;
+    case 17:
+        bClickable = field_4EE == 0;
+        break;
+    case 18:
+        bClickable = m_nPortraitSmallIndex >= 0 && m_nPortraitLargeIndex >= 0;
+        break;
+    case 19:
+        bClickable = m_nCustomSoundSetIndex >= 0;
+        break;
+    case 20:
+        bClickable = m_nCharacterIndex >= 0;
+        break;
+    case 21:
+        pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(7));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 8960
+        UTIL_ASSERT(pEdit != NULL);
+
+        v2 = pEdit->GetText();
+        v2.TrimLeft();
+        v2.TrimRight();
+        bClickable = v2 != "";
+        break;
+    case 52:
+        bClickable = pSprite->m_baseStats.m_specialization != 0;
+        break;
+    case 55:
+        bClickable = m_nExtraFeats == 0;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 8975
+        UTIL_ASSERT(FALSE);
+    }
+
+    return bClickable;
 }
 
 // 0x615F50

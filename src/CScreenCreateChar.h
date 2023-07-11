@@ -134,7 +134,7 @@ public:
     void ImportCharacter();
     void sub_613EF0();
     void OnSoundItemSelect(INT nItem);
-    BOOL IsDoneButtonClickable();
+    BOOL IsDoneButtonClickable(CGameSprite* pSprite);
     void OnDoneButtonClick();
     void SetSpriteId(INT nSpriteId);
     INT GetSpriteId();
@@ -204,10 +204,10 @@ public:
     /* 0574 */ BYTE m_nMemoryWIS;
     /* 0575 */ BYTE m_nMemoryCHR;
     /* 0576 */ INT m_nMemoryExtra;
-    /* 057A */ int field_57A;
-    /* 057E */ int field_57E;
+    /* 057A */ INT m_nPortraitSmallIndex;
+    /* 057E */ INT m_nPortraitLargeIndex;
     /* 0582 */ CStringList* m_pPortraits;
-    /* 0586 */ INT m_nCustomSoundIndex;
+    /* 0586 */ INT m_nCustomSoundSetIndex;
     /* 058A */ int field_58A;
     /* 058E */ INT m_nCharacterIndex;
     /* 0592 */ CStringList* m_pCharacters;
