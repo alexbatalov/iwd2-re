@@ -3008,7 +3008,125 @@ INT CScreenCreateChar::GetSpriteId()
 // 0x6171A0
 void CScreenCreateChar::OnCancelButtonClick()
 {
-    // TODO: Incomplete.
+    CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    INT nGameSprite = m_nGameSprite;
+
+    // FIXME: Unused.
+    CString v1;
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        CUIPanel* pPanel = GetTopPopup();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 9624
+        UTIL_ASSERT(pPanel != NULL);
+
+        switch (pPanel->m_nID) {
+        case 7:
+        case 15:
+            DismissPopup(pSprite);
+            SummonPopup(55, pSprite);
+            break;
+        case 12:
+        case 52:
+            if (1) {
+                CAIObjectType typeAI(pSprite->m_startTypeAI);
+                typeAI.m_nClass = 0;
+                pSprite->m_startTypeAI.Set(typeAI);
+                pSprite->m_baseStats.m_specialization = 0;
+
+                DismissPopup(pSprite);
+            }
+            break;
+        case 16:
+            DismissPopup(pSprite);
+            SummonPopup(7, pSprite);
+            break;
+        case 17:
+            if (field_4D6) {
+                field_4D6 = 0;
+                DismissPopup(pSprite);
+                SummonPopup(17, pSprite);
+            } else {
+                DismissPopup(pSprite);
+                SummonPopup(55, pSprite);
+            }
+            break;
+        case 18:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+            // __LINE__: 9630
+            UTIL_ASSERT(m_pPortraits != NULL);
+
+            delete m_pPortraits;
+            m_pPortraits = NULL;
+
+            DismissPopup(pSprite);
+            break;
+        case 19:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+            // __LINE__: 9656
+            UTIL_ASSERT(m_pSounds != NULL);
+
+            delete m_pSounds;
+            m_pSounds = NULL;
+
+            DismissPopup(pSprite);
+            break;
+        case 20:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+            // __LINE__: 9638
+            UTIL_ASSERT(m_pCharacters != NULL);
+
+            delete m_pCharacters;
+            m_pCharacters = NULL;
+
+            DismissPopup(pSprite);
+            break;
+        case 21:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+            // __LINE__: 9646
+            UTIL_ASSERT(m_pCharacters != NULL);
+
+            delete m_pCharacters;
+            m_pCharacters = NULL;
+
+            DismissPopup(pSprite);
+            break;
+        case 54:
+            if (1) {
+                CAIObjectType typeAI(pSprite->m_startTypeAI);
+                typeAI.m_nSubRace = 0;
+                pSprite->m_startTypeAI.Set(typeAI);
+
+                DismissPopup(pSprite);
+            }
+            break;
+        case 55:
+            DismissPopup(pSprite);
+            SummonPopup(6, pSprite);
+            break;
+        default:
+            DismissPopup(pSprite);
+            break;
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    renderLock.Unlock();
 }
 
 // 0x6175A0
