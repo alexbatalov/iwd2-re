@@ -138,7 +138,6 @@ public:
     void OnDoneButtonClick();
     void SetSpriteId(INT nSpriteId);
     INT GetSpriteId();
-    void sub_617190();
     void OnCancelButtonClick();
     void OnMainCancelButtonClick();
     CUIPanel* GetTopPopup();

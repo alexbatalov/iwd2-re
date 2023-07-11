@@ -3005,12 +3005,6 @@ INT CScreenCreateChar::GetSpriteId()
     return m_nGameSprite;
 }
 
-// 0x617190
-void CScreenCreateChar::sub_617190()
-{
-    // TODO: Incomplete.
-}
-
 // 0x6171A0
 void CScreenCreateChar::OnCancelButtonClick()
 {
