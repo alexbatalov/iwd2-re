@@ -10,8 +10,8 @@ public:
     ~CChatBuffer();
     void ClearMessages();
 
-    CTypedPtrList<CPtrList, CString*> field_0;
-    int field_1C;
+    CTypedPtrList<CPtrList, CString*> m_lMessages;
+    int m_nMessageCount;
 };
 
 #endif /* CCHATBUFFER_H_ */
