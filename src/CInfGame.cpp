@@ -1611,6 +1611,14 @@ BOOL CInfGame::SetCharacterSlot(INT nCharacterSlot, LONG nCharacterId)
     return TRUE;
 }
 
+// 0x5BD530
+BOOL CInfGame::ClearCharacterSlot(INT nCharacterSlot)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x5BD650
 LONG CInfGame::GetCharacterSlot(INT nCharacterSlot)
 {

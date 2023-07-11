@@ -1,6 +1,7 @@
 #include "CMultiplayerSettings.h"
 
 #include "CBaldurChitin.h"
+#include "CInfGame.h"
 #include "CUtil.h"
 
 // TODO: Too many `MAX_PLAYERS` constants.
@@ -266,7 +267,50 @@ BYTE CMultiplayerSettings::GetCharacterStatus(INT nCharacterSlot)
 // 0x518BA0
 void CMultiplayerSettings::SignalCharacterStatus(INT nCharacterSlot, BYTE nStatus, BOOLEAN bLocalMessage, BOOLEAN bFlush)
 {
-    // TODO: Incomplete.
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMultiplayerSettings.cpp
+    // __LINE__: 1534
+    UTIL_ASSERT_MSG(((nCharacterSlot >= 0) && (nCharacterSlot < MAX_CHARACTERS)),
+        "CMultiplayerSettings::SignalCharacterStatus: Bad Character Slot.");
+
+    if (g_pChitin->cNetwork.GetSessionOpen()) {
+        if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+            m_pbCharacterReady[nCharacterSlot] = 0;
+
+            if (nStatus == CHARSTATUS_SIGNAL_CREATION_START
+                || nStatus == CHARSTATUS_SIGNAL_CREATION_CANCEL
+                || nStatus == CHARSTATUS_SIGNAL_DELETED) {
+                if (nStatus == CHARSTATUS_SIGNAL_CREATION_START) {
+                    m_pnCharacterStatus[nCharacterSlot] = 2;
+                } else {
+                    m_pnCharacterStatus[nCharacterSlot] = 0;
+                }
+
+                if (g_pChitin->cNetwork.m_nLocalPlayer != g_pChitin->cNetwork.FindPlayerLocationByID(m_pnCharacterControlledByPlayer[nCharacterSlot], FALSE)) {
+                    g_pBaldurChitin->GetObjectGame()->ClearCharacterSlot(nCharacterSlot);
+                }
+            } else if (nStatus == CHARSTATUS_SIGNAL_CREATION_COMPLETE
+                || nStatus == CHARSTATUS_SIGNAL_IMPORTED) {
+                if (g_pChitin->cNetwork.m_nLocalPlayer == g_pChitin->cNetwork.FindPlayerLocationByID(m_pnCharacterControlledByPlayer[nCharacterSlot], FALSE)
+                    || bLocalMessage) {
+                    m_pnCharacterStatus[nCharacterSlot] = 1;
+                } else {
+                    g_pBaldurChitin->GetBaldurMessage()->DemandCharacterSlot(nCharacterSlot,
+                        FALSE,
+                        g_pChitin->cNetwork.FindPlayerLocationByID(m_pnCharacterControlledByPlayer[nCharacterSlot], FALSE));
+                }
+            }
+
+            if (bFlush == TRUE) {
+                g_pBaldurChitin->GetBaldurMessage()->SendFullSettingsToClients(CString(""));
+            }
+        } else {
+            INT v1 = g_pChitin->cNetwork.FindPlayerLocationByID(m_pnCharacterControlledByPlayer[nCharacterSlot], FALSE);
+            INT v2 = g_pChitin->cNetwork.FindPlayerLocationByID(g_pChitin->cNetwork.m_idLocalPlayer, FALSE);
+            if (v2 == v1) {
+                g_pBaldurChitin->GetBaldurMessage()->SendCharacterSlotStatusToServer(nCharacterSlot, nStatus);
+            }
+        }
+    }
 }
 
 // 0x518EB0

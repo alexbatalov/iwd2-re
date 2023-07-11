@@ -62,6 +62,7 @@ public:
     BOOL SaveGameExists(const CString& sSaveGame);
     void ApplyVolumeSliders(BOOLEAN a2);
     BOOL SetCharacterSlot(INT nCharacterSlot, LONG nCharacterId);
+    BOOL ClearCharacterSlot(INT nCharacterSlot);
     LONG GetCharacterSlot(INT nCharacterSlot);
     INT GetCharacterSlotFromId(LONG nCharacterId);
     BOOL AddCharacterToAllies(LONG nCharacterId);

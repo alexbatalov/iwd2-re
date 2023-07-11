@@ -21,10 +21,12 @@ public:
     BOOL SendImportingOptionToServer(BYTE nImportingBitField);
     BOOL SendRestrictStoreOptionToServer(BOOLEAN bRestrictStore);
     BOOL SendJoinRequestOptionToServer(BOOLEAN bListenToJoin);
+    BOOLEAN SendCharacterSlotStatusToServer(SHORT nCharacterSlot, BYTE nStatus);
     BOOLEAN SendArbitrationLockRequestToServer(BOOLEAN bLockValue);
     BOOL SendArbitrationLockStatus(BOOLEAN bStatus, unsigned char a2);
     BOOL SendArbitrationLockAllowInput(BOOLEAN bAllowInput);
     BOOLEAN KickPlayerRequest(const CString& sPlayerName);
+    BOOLEAN DemandCharacterSlot(SHORT nCharacterSlot, BOOLEAN bDemandFromHost, SHORT nPlayerSlot);
     BOOL ObjectControlRequest(LONG localObjectID);
     BOOL ObjectControl();
     void SetSignalDefaultSecondsToTimeout();

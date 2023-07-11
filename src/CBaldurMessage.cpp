@@ -118,6 +118,14 @@ BOOL CBaldurMessage::SendJoinRequestOptionToServer(BOOLEAN bListenToJoin)
     return FALSE;
 }
 
+// 0x42C8F0
+BOOLEAN CBaldurMessage::SendCharacterSlotStatusToServer(SHORT nCharacterSlot, BYTE nStatus)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x42CAD0
 BOOLEAN CBaldurMessage::SendArbitrationLockRequestToServer(BOOLEAN bLockValue)
 {
@@ -144,6 +152,14 @@ BOOL CBaldurMessage::SendArbitrationLockAllowInput(BOOLEAN bAllowInput)
 
 // 0x42D070
 BOOLEAN CBaldurMessage::KickPlayerRequest(const CString& sPlayerName)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x42F100
+BOOLEAN CBaldurMessage::DemandCharacterSlot(SHORT nCharacterSlot, BOOLEAN bDemandFromHost, SHORT nPlayerSlot)
 {
     // TODO: Incomplete.
 
