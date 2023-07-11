@@ -50,7 +50,81 @@ DWORD CMultiplayerSettings::GetDataSize()
 // 0x517610
 void CMultiplayerSettings::InitializeSettings()
 {
-    // TODO: Incomplete.
+    // NOTE: Unused.
+    CResRef cResRef;
+
+    for (SHORT nIndex = 0; nIndex < MAX_PLAYERS; nIndex++) {
+        for (INT nPermission = 0; nPermission < CGamePermission::TOTAL_PERMISSIONS; nPermission++) {
+            BOOLEAN bValue = TRUE;
+            if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL
+                && nIndex != 0
+                && nPermission == CGamePermission::LEADER) {
+                bValue = FALSE;
+            }
+
+            m_cDefaultPermissions.SetSinglePermission(nPermission, bValue);
+            m_pcPermissions[nIndex].SetSinglePermission(nPermission, bValue);
+        }
+
+        m_pnPlayerReady[nIndex] = 0;
+    }
+
+    field_8C = 0;
+
+    for (INT nPlayerSlot = 0; nPlayerSlot < MAX_PLAYERS; nPlayerSlot++) {
+        m_pbCharacterReady[nPlayerSlot] = FALSE;
+        m_pnCharacterStatus[nPlayerSlot] = FALSE;
+        field_AC[nPlayerSlot] = -1;
+
+        if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+            m_pnCharacterControlledByPlayer[nPlayerSlot] = g_pChitin->cNetwork.m_idLocalPlayer;
+        } else {
+            m_pnCharacterControlledByPlayer[nPlayerSlot] = 0;
+        }
+    }
+
+    m_nImportingBitField = IMPORT_ALL;
+    m_bRestrictStoreOption = TRUE;
+    m_bJoinRequests = TRUE;
+    m_bArbitrationLockStatus = FALSE;
+    m_bArbitrationLockAllowInput = TRUE;
+    field_A2 = 0;
+    field_A6 = 0;
+    field_9E = 0;
+    field_A7 = 0;
+    field_A8 = 0;
+    field_B8 = 0;
+
+    m_nDifficultyLevel = GetPrivateProfileIntA("Game Options",
+        "Difficulty Level",
+        3,
+        g_pBaldurChitin->GetIniFileName());
+    if (m_nDifficultyLevel < 1 || m_nDifficultyLevel > 5) {
+        m_nDifficultyLevel = 3;
+    }
+
+    switch (m_nDifficultyLevel) {
+    case 1:
+        field_BE = -50;
+        field_C2 = -50;
+        break;
+    case 2:
+        field_BE = -25;
+        field_C2 = -25;
+        break;
+    case 3:
+        field_BE = 0;
+        field_C2 = 0;
+        break;
+    case 4:
+        field_BE = 50;
+        field_C2 = 50;
+        break;
+    case 5:
+        field_BE = 100;
+        field_C2 = 100;
+        break;
+    }
 }
 
 // 0x517FE0
