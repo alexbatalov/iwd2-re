@@ -647,6 +647,14 @@ void CInfGame::DestroyGame(unsigned char a1, unsigned char a2)
     // TODO: Incomplete.
 }
 
+// 0x5A0F50
+LONG CInfGame::ImportCharacter(const CString& sFileName, INT nIndex)
+{
+    // TODO: Incomplete.
+
+    return 0;
+}
+
 // 0x5A1A80
 CString CInfGame::GetDirSounds()
 {

@@ -263,6 +263,12 @@ BYTE CMultiplayerSettings::GetCharacterStatus(INT nCharacterSlot)
     return m_pnCharacterStatus[nCharacterSlot];
 }
 
+// 0x518BA0
+void CMultiplayerSettings::SignalCharacterStatus(INT nCharacterSlot, BYTE nStatus, BOOLEAN bLocalMessage, BOOLEAN bFlush)
+{
+    // TODO: Incomplete.
+}
+
 // 0x518EB0
 void CMultiplayerSettings::SetImportingCharacterOption(BYTE nImportingBitField)
 {

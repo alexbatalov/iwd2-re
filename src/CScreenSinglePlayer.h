@@ -78,7 +78,7 @@ public:
     void StartSinglePlayer(INT nEngineState);
     void sub_663EB0();
     void UpdatePartySelectionPanel();
-    void sub_6642C0();
+    void OnPartySelectionDoneButtonClick();
     void sub_6644B0(CUIPanel* pPanel);
     BOOL sub_665280(INT nCharacterSlot);
     void OnPortraitButtonClick(INT nButton);

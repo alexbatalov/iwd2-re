@@ -32,6 +32,7 @@ public:
     ~CInfGame();
     void StartSearchThread();
     void DestroyGame(unsigned char a1, unsigned char a2);
+    LONG ImportCharacter(const CString& sFileName, INT nIndex);
     CString GetDirSounds();
     BOOLEAN CanSaveGame(STRREF& strError, unsigned char a2, unsigned char a3);
     char sub_5A9780(BYTE nKey);

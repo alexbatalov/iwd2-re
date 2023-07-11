@@ -664,7 +664,7 @@ void CScreenSinglePlayer::OnDoneButtonClick()
     case 10:
         DismissPopup();
         renderLock.Unlock();
-        sub_6642C0();
+        OnPartySelectionDoneButtonClick();
         break;
     default:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
@@ -1190,9 +1190,59 @@ void CScreenSinglePlayer::UpdatePartySelectionPanel()
 }
 
 // 0x6642C0
-void CScreenSinglePlayer::sub_6642C0()
+void CScreenSinglePlayer::OnPartySelectionDoneButtonClick()
 {
-    // TODO: Incomplete.
+    CUIPanel* pPanel = m_cUIManager.GetPanel(10);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 3368
+    UTIL_ASSERT(pPanel != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    CStringList* pCharacters = pGame->GetImportCharacters();
+
+    sprintf(byte_8F64C0, "%s %i", (LPCSTR)PARTY, m_nTopParty + m_nParty);
+
+    INT nCharacters = 0;
+    for (INT nCharacterSlot = 0; nCharacterSlot < 6; nCharacterSlot++) {
+        sprintf(byte_8F74E0, "%s%i", (LPCSTR)CHAR, nCharacterSlot + 1);
+        DWORD nSize = GetPrivateProfileStringA(byte_8F64C0,
+            byte_8F74E0,
+            "",
+            byte_8F64E0,
+            sizeof(byte_8F64E0),
+            ".\\Party.ini");
+        if (nSize != 0) {
+            byte_8F64E0[sizeof(byte_8F64E0) - 1] = '\0';
+
+            CString sFileName = byte_8F64E0;
+            sFileName.MakeUpper();
+            if (pCharacters->Find(sFileName) != NULL) {
+                LONG nCharacterId = pGame->ImportCharacter(CString(byte_8F64E0), m_nTopParty + m_nParty);
+                if (nCharacterId != 0) {
+                    CMultiplayerSettings* pSettings = pGame->GetMultiplayerSettings();
+
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+                    // __LINE__: 3398
+                    UTIL_ASSERT(pSettings != NULL);
+
+                    pSettings->SignalCharacterStatus(nCharacterSlot,
+                        CMultiplayerSettings::CHARSTATUS_SIGNAL_CREATION_COMPLETE,
+                        TRUE,
+                        TRUE);
+                    pGame->SetCharacterSlot(nCharacterSlot, nCharacterId);
+
+                    nCharacters++;
+                }
+            }
+        }
+    }
+
+    delete pCharacters;
+
+    if (m_nParty == 10 && nCharacters > 0) {
+        OnMainDoneButtonClick();
+    }
 }
 
 // 0x6644B0

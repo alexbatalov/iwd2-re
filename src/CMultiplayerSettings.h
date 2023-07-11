@@ -38,6 +38,7 @@ public:
     BOOLEAN GetCharacterReady(INT nCharacterSlot);
     void SetCharacterReady(INT nCharacterSlot, BOOLEAN bReady, BOOLEAN bFlush);
     BYTE GetCharacterStatus(INT nCharacterSlot);
+    void SignalCharacterStatus(INT nCharacterSlot, BYTE nStatus, BOOLEAN bLocalMessage, BOOLEAN bFlush);
     void SetImportingCharacterOption(BYTE nImportingBitField);
     void SetRestrictStoreOption(BOOLEAN bRestrictStore);
     void SetListenToJoinOption(BOOLEAN bListenToJoin, BOOLEAN bFlush);
