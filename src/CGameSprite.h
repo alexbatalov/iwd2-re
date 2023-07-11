@@ -102,6 +102,8 @@
 
 #define CGAMESPRITE_SKILL_NUMSKILLS 16
 
+class CUIControlTextDisplay;
+
 class CGameSprite : public CGameAIBase {
 public:
     static const CPoint PORTRAIT_ICON_SIZE;
@@ -198,6 +200,7 @@ public:
     void SetSkillValue(UINT iSkillNumber, INT iSkillValue);
     INT GetSkillValue(UINT iSkillNumber);
     INT GetSkillCost(UINT iSkillNumber, BYTE nClass);
+    void DisplayFeats(CUIControlTextDisplay* pText);
 
     /* 05A0 */ CString m_sName;
     /* 05A4 */ CCreatureFileHeader m_baseStats;

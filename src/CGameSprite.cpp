@@ -1,6 +1,7 @@
 #include "CGameSprite.h"
 
 #include "CBaldurChitin.h"
+#include "CBaldurEngine.h"
 #include "CInfGame.h"
 #include "CUtil.h"
 
@@ -1099,4 +1100,74 @@ INT CGameSprite::GetSkillCost(UINT iSkillNumber, BYTE nClass)
     }
 
     return 0;
+}
+
+// 0x765C50
+void CGameSprite::DisplayFeats(CUIControlTextDisplay* pText)
+{
+    CBaldurEngine* pEngine = static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine);
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+    // __LINE__: 31489
+    UTIL_ASSERT(pText != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+    // __LINE__: 31490
+    UTIL_ASSERT(pEngine != NULL);
+
+    for (int index = 0; index < CGAMESPRITE_FEAT_NUMFEATS; index++) {
+        UINT nFeatNumber = ruleTables.GetFeatId(index);
+        INT nFeatRank = GetFeatValue(nFeatNumber);
+        if (nFeatRank > 0) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+            // __LINE__: 29233
+            UTIL_ASSERT(nFeatNumber < CGAMESPRITE_FEAT_NUMFEATS);
+
+            if ((m_baseStats.m_feats[nFeatNumber >> 5] & (1 << (nFeatNumber & 0x1F))) != 0) {
+                switch (nFeatNumber) {
+                case CGAMESPRITE_FEAT_ARMOR_PROF:
+                case CGAMESPRITE_FEAT_ARMORED_ARCANA:
+                case CGAMESPRITE_FEAT_CLEAVE:
+                case CGAMESPRITE_FEAT_EXOTIC_BASTARD:
+                case CGAMESPRITE_FEAT_EXTRA_RAGE:
+                case CGAMESPRITE_FEAT_EXTRA_SHAPESHIFTING:
+                case CGAMESPRITE_FEAT_EXTRA_SMITING:
+                case CGAMESPRITE_FEAT_EXTRA_TURNING:
+                case CGAMESPRITE_FEAT_MARTIAL_AXE:
+                case CGAMESPRITE_FEAT_MARTIAL_BOW:
+                case CGAMESPRITE_FEAT_MARTIAL_FLAIL:
+                case CGAMESPRITE_FEAT_MARTIAL_GREATSWORD:
+                case CGAMESPRITE_FEAT_MARTIAL_HAMMER:
+                case CGAMESPRITE_FEAT_MARTIAL_LARGESWORD:
+                case CGAMESPRITE_FEAT_MARTIAL_POLEARM:
+                case CGAMESPRITE_FEAT_SIMPLE_CROSSBOW:
+                case CGAMESPRITE_FEAT_SIMPLE_MACE:
+                case CGAMESPRITE_FEAT_SIMPLE_MISSILE:
+                case CGAMESPRITE_FEAT_SIMPLE_QUARTERSTAFF:
+                case CGAMESPRITE_FEAT_SIMPLE_SMALLBLADE:
+                case CGAMESPRITE_FEAT_SPELL_FOCUS_ENCHANTMENT:
+                case CGAMESPRITE_FEAT_SPELL_FOCUS_EVOCATION:
+                case CGAMESPRITE_FEAT_SPELL_FOCUS_NECROMANCY:
+                case CGAMESPRITE_FEAT_SPELL_FOCUS_TRANSMUTE:
+                case CGAMESPRITE_FEAT_SPELL_PENETRATION:
+                case CGAMESPRITE_FEAT_TOUGHNESS:
+                    CBaldurEngine::UpdateText(pText,
+                        "%s: %d",
+                        (LPCSTR)ruleTables.GetFeatName(nFeatNumber),
+                        nFeatRank);
+                    break;
+                default:
+                    CBaldurEngine::UpdateText(pText,
+                        "%s",
+                        (LPCSTR)ruleTables.GetFeatName(nFeatNumber));
+                    break;
+                }
+            } else {
+                CBaldurEngine::UpdateText(pText,
+                    "%s",
+                    (LPCSTR)ruleTables.GetFeatName(nFeatNumber));
+            }
+        }
+    }
 }
