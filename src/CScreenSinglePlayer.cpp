@@ -835,7 +835,7 @@ void CScreenSinglePlayer::UpdateModifyCharacterPanel()
     UTIL_ASSERT(pSettings != NULL);
 
     INT nCharacterSlot = field_458;
-    BYTE v3 = static_cast<BYTE>(g_pBaldurChitin->cNetwork.field_78A);
+    BYTE v3 = static_cast<BYTE>(g_pBaldurChitin->cNetwork.m_nLocalPlayer);
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
     // __LINE__: 2043

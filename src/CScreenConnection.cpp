@@ -743,7 +743,7 @@ void CScreenConnection::TimerAsynchronousUpdate()
 
                         if (sValue.Compare("1") == 0 || pPanel->m_nID == 11) {
                             BOOL v1;
-                            if (g_pChitin->cNetwork.field_9C) {
+                            if (g_pChitin->cNetwork.m_bConnectionInitialized) {
                                 v1 = TRUE;
                             } else {
                                 g_pChitin->cNetwork.field_FA = CString("");
@@ -753,7 +753,7 @@ void CScreenConnection::TimerAsynchronousUpdate()
                             if (v1) {
                                 field_4B6 = TRUE;
 
-                                if (g_pChitin->cNetwork.field_9C == TRUE) {
+                                if (g_pChitin->cNetwork.m_bConnectionInitialized == TRUE) {
                                     g_pChitin->cNetwork.EnumerateSessions(TRUE, FALSE);
                                 }
 
@@ -1162,9 +1162,9 @@ void CScreenConnection::OnNewGameButtonClick()
         }
     }
 
-    if (!pNetwork->field_9C) {
+    if (!pNetwork->m_bConnectionInitialized) {
         pNetwork->InitializeConnectionToServiceProvider(TRUE);
-        if (!pNetwork->field_9C) {
+        if (!pNetwork->m_bConnectionInitialized) {
             m_nErrorState = 1;
             m_strErrorText = 18986;
             m_strErrorButtonText[0] = 11973;
@@ -1405,7 +1405,7 @@ void CScreenConnection::UpdateMainPanel()
     if (g_pChitin->cNetwork.GetServiceProvider() == -1) {
         // "Single Player"
         pButton->SetText(FetchString(15413));
-        g_pChitin->cNetwork.SelectServiceProvider(0);
+        g_pChitin->cNetwork.SelectServiceProvider(CNetwork::SERV_PROV_NULL);
     } else {
         g_pChitin->cNetwork.GetServiceProviderType(g_pChitin->cNetwork.m_nServiceProvider, nServiceProviderType);
         if (nServiceProviderType == CNetwork::SERV_PROV_IPX) {

@@ -34,3 +34,9 @@ BOOLEAN CGameSpy::sub_4D1EC0(BOOL a1)
 
     return FALSE;
 }
+
+// 0x4D2060
+void CGameSpy::sub_4D2060()
+{
+    // TODO: Incomplete.
+}

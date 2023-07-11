@@ -1716,8 +1716,18 @@ void CChitin::SetCDSwitchActivateEngine(BOOL bValue)
 {
 }
 
+// 0x78E750
+void CChitin::OnMultiplayerSessionOpen(CString& sJoinedGame, CString& sDroppedGame, CString& sLeftGame)
+{
+}
+
 // 0x78E730
 void CChitin::OnMultiplayerSessionToClose()
+{
+}
+
+// 0x778900
+void CChitin::OnMultiplayerPlayerJoin(PLAYER_ID playerID, const CString& sPlayerName)
 {
 }
 

@@ -45,6 +45,7 @@ public:
     void SetMaxPlayers(INT nMaxPlayers);
     void UnselectSession();
     BOOLEAN CreatePlayer(INT& nErrorCode);
+    BOOLEAN AddPlayerToList(PLAYER_ID dpID, const CString& sPlayerName, BOOLEAN bIsHost, BOOLEAN bMakeVisible);
     void EnumeratePlayers(BOOLEAN bProtectList);
     BOOLEAN MakePlayersVisible();
     PLAYER_ID GetPlayerID(INT nPlayerNumber);
@@ -54,6 +55,7 @@ public:
     PLAYER_ID FindPlayerIDByName(const CString& sPlayerName, BOOLEAN bInvisible);
     INT FindPlayerLocationByID(PLAYER_ID playerID, BOOLEAN bInvisible);
     INT FindPlayerLocationByName(const CString& sPlayerName, BOOLEAN bInvisible);
+    void sub_7A73D0(CString& a1);
 
     INT GetServiceProvider();
     BOOLEAN GetSessionOpen();
@@ -85,7 +87,7 @@ public:
     /* 0024 */ LPVOID m_pServiceProviderConnections[CNETWORK_MAX_SERVICE_PROVIDERS];
     /* 0038 */ CString m_serviceProviderNames[CNETWORK_MAX_SERVICE_PROVIDERS];
     /* 004C */ GUID m_serviceProviderGuids[CNETWORK_MAX_SERVICE_PROVIDERS];
-    /* 009C */ unsigned char field_9C;
+    /* 009C */ BOOLEAN m_bConnectionInitialized;
     /* 009D */ unsigned char field_9D;
     /* 009E */ unsigned char field_9E;
     /* 009F */ BOOLEAN m_bModemEnumerated;
@@ -123,23 +125,23 @@ public:
     /* 06E6 */ int m_dwSessionFlags;
     /* 06EA */ unsigned char field_6EA;
     /* 06EB */ BOOLEAN m_bSessionOptionsDefined;
-    /* 06EC */ CString field_6EC;
-    /* 06F0 */ CString field_6F0;
-    /* 06F4 */ CString field_6F4;
+    /* 06EC */ CString m_sJoinedGame;
+    /* 06F0 */ CString m_sDroppedGame;
+    /* 06F4 */ CString m_sLeftGame;
     /* 06F8 */ BOOLEAN m_bPlayerNameToMake;
     /* 06F9 */ BOOLEAN m_bPlayerCreated;
     /* 06FA */ PLAYER_ID m_idLocalPlayer;
     /* 06FE */ CString m_sLocalPlayerName;
-    /* 0702 */ CString field_702[6];
-    /* 071A */ int field_71A[6];
-    /* 0732 */ int field_732;
+    /* 0702 */ CString field_702[CNETWORK_MAX_PLAYERS];
+    /* 071A */ BOOL field_71A[CNETWORK_MAX_PLAYERS];
+    /* 0732 */ INT m_nTotalPlayers;
     /* 0736 */ CString m_psPlayerName[CNETWORK_MAX_PLAYERS];
     /* 074E */ PLAYER_ID m_pPlayerID[CNETWORK_MAX_PLAYERS];
     /* 0766 */ BOOLEAN m_pbPlayerVisible[CNETWORK_MAX_PLAYERS];
     /* 076C */ BOOLEAN m_pbPlayerEnumerateFlag[CNETWORK_MAX_PLAYERS];
-    /* 0772 */ int field_772[CNETWORK_MAX_PLAYERS];
-    /* 078A */ int field_78A;
-    /* 078E */ int field_78E;
+    /* 0772 */ PLAYER_ID field_772[CNETWORK_MAX_PLAYERS];
+    /* 078A */ int m_nLocalPlayer;
+    /* 078E */ int m_nHostPlayer;
     /* 0792 */ CString field_792;
     /* 0796 */ int field_796;
     /* 079A */ CNetworkWindow m_pSlidingWindow[CNETWORK_MAX_PLAYERS];

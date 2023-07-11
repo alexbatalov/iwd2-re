@@ -81,7 +81,9 @@ public:
     /* 0060 */ virtual void SetProgressBarActivateEngine(BOOL bValue);
     /* 0068 */ virtual void SetCDSwitchStatus(BOOLEAN a1, BOOLEAN a2, BYTE a3, const CString& a4, BOOLEAN a5, BOOLEAN a6, BOOLEAN a7);
     /* 006C */ virtual void SetCDSwitchActivateEngine(BOOL bValue);
+    /* 0070 */ virtual void OnMultiplayerSessionOpen(CString& sJoinedGame, CString& sDroppedGame, CString& sLeftGame);
     /* 0074 */ virtual void OnMultiplayerSessionToClose();
+    /* 007C */ virtual void OnMultiplayerPlayerJoin(PLAYER_ID playerID, const CString& sPlayerName);
     /* 0090 */ virtual void AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD dw1, DWORD dw2);
     /* 0094 */ virtual void FlipFullScreenMode(BOOLEAN a2);
     /* 00A0 */ virtual const char* GetIniFileName();

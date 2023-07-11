@@ -1740,6 +1740,66 @@ void CBaldurChitin::OnMultiplayerSessionToClose()
     m_cBaldurMessage.m_bMultiplayerSessionShutdown = TRUE;
 }
 
+// 0x4258D0
+void CBaldurChitin::OnMultiplayerSessionOpen(CString& sJoinedGame, CString& sDroppedGame, CString& sLeftGame)
+{
+    STR_RES strRes;
+    INT nServiceProviderType;
+
+    // FIXME: Why use globals?
+    if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+        g_pChitin->cNetwork.GetServiceProviderType(g_pChitin->cNetwork.m_nServiceProvider, nServiceProviderType);
+        if (nServiceProviderType == CNetwork::SERV_PROV_TCP_IP) {
+            BOOL bGameSpyEnabled = GetPrivateProfileIntA("GameSpy",
+                "Enabled",
+                0,
+                g_pBaldurChitin->GetIniFileName());
+            if (bGameSpyEnabled) {
+                g_pBaldurChitin->cGameSpy.sub_4D2060();
+            }
+        }
+    }
+
+    BOOL bRogerWilcoEnabled = GetPrivateProfileIntA("RogerWilco",
+        "Enabled",
+        0,
+        g_pBaldurChitin->GetIniFileName());
+    if (bRogerWilcoEnabled == TRUE) {
+        g_pChitin->cNetwork.GetServiceProviderType(g_pChitin->cNetwork.m_nServiceProvider, nServiceProviderType);
+        if (nServiceProviderType == CNetwork::SERV_PROV_TCP_IP
+            && g_pChitin->cNetwork.GetSessionHosting() != TRUE) {
+            CString v1;
+            g_pChitin->cNetwork.sub_7A73D0(v1);
+            if (v1 != "") {
+                // NOTE: Unused.
+            }
+        }
+    }
+
+    g_pBaldurChitin->m_cTlkTable.Fetch(10236, strRes);
+    sJoinedGame = strRes.szText;
+
+    g_pBaldurChitin->m_cTlkTable.Fetch(10245, strRes);
+    sDroppedGame = strRes.szText;
+
+    g_pBaldurChitin->m_cTlkTable.Fetch(10246, strRes);
+    sLeftGame = strRes.szText;
+
+    m_cBaldurMessage.m_cChatBuffer.ClearMessages();
+
+    if (m_pEngineWorld != NULL) {
+        m_pEngineWorld->ClearChatMessages();
+    }
+
+    if (m_pEngineMultiPlayer != NULL) {
+        m_pEngineMultiPlayer->ClearChatMessages();
+    }
+
+    if (m_pEngineWorldMap != NULL) {
+        m_pEngineWorldMap->ClearChatMessages();
+    }
+}
+
 // 0x422C60
 BOOL CBaldurChitin::FontRectOutline()
 {
@@ -1783,6 +1843,12 @@ void CBaldurChitin::ClearChatMessages()
     if (m_pEngineWorldMap != NULL) {
         m_pEngineWorldMap->ClearChatMessages();
     }
+}
+
+// 0x425C10
+void CBaldurChitin::OnMultiplayerPlayerJoin(PLAYER_ID playerID, const CString& sPlayerName)
+{
+    // TODO: Incomplete.
 }
 
 // 0x425CA0
