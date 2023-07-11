@@ -337,6 +337,12 @@ const CString& CGameSprite::GetName()
     return m_sName;
 }
 
+// 0x728570
+DWORD CGameSprite::GetSpecialization()
+{
+    return m_baseStats.m_specialization;
+}
+
 // 0x762890
 void CGameSprite::SetFeatValue(UINT nFeatNumber, INT iFeatValue)
 {

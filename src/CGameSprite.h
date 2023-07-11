@@ -188,6 +188,7 @@ public:
     SHORT GetLayOnHandsAmount();
     void sub_72DE60();
     const CString& GetName();
+    DWORD GetSpecialization();
     void SetFeatValue(UINT nFeatNumber, INT iFeatValue);
     INT GetFeatValue(UINT nFeatNumber);
     INT GetMaxFeatValue(UINT nFeatNumber);
