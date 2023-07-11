@@ -65,6 +65,8 @@ public:
     BOOLEAN GetItemTextColor(INT nItemIndex, COLORREF& rgbColor);
     POSITION GetItemBossPosition(INT nIndex);
 
+    POSITION DisplayString(const CString& sString, COLORREF rgbTextColor, LONG lMarker, BOOLEAN a4);
+
     /* 0052 */ CTypedPtrList<CPtrList, CDisplayString*>* m_plstStrings;
     /* 0056 */ POSITION m_posTopString;
     /* 005A */ short field_5A;

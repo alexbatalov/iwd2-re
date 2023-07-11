@@ -1,8 +1,9 @@
 #ifndef CCHATBUFFER_H_
 #define CCHATBUFFER_H_
 
-#include <afx.h>
-#include <afxtempl.h>
+#include "mfc.h"
+
+class CUIControlTextDisplay;
 
 class CChatBuffer {
 public:
@@ -10,6 +11,7 @@ public:
     ~CChatBuffer();
     void AddMessage(const CString& sMessage);
     void ClearMessages();
+    int UpdateTextDisplay(CUIControlTextDisplay* pText, int a2);
 
     CTypedPtrList<CPtrList, CString*> m_lMessages;
     int m_nMessageCount;

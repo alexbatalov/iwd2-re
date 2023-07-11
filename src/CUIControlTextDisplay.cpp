@@ -1054,3 +1054,15 @@ POSITION CUIControlTextDisplay::GetItemBossPosition(INT nItemIndex)
 void CUIControlTextDisplay::OnItemSelected(LONG lMarker)
 {
 }
+
+// 0x442D70
+POSITION CUIControlTextDisplay::DisplayString(const CString& sString, COLORREF rgbTextColor, LONG lMarker, BOOLEAN a4)
+{
+    return DisplayString(CString(""),
+        sString,
+        m_rgbLabelColor,
+        rgbTextColor,
+        lMarker,
+        a4,
+        TRUE);
+}

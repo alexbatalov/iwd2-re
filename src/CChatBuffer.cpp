@@ -1,5 +1,8 @@
 #include "CChatBuffer.h"
 
+#include "CUIControlTextDisplay.h"
+#include "CUtil.h"
+
 // #binary-identical
 // 0x442B90
 CChatBuffer::CChatBuffer()
@@ -48,4 +51,28 @@ void CChatBuffer::ClearMessages()
     }
 
     m_nMessageCount = 0;
+}
+
+// 0x442CF0
+int CChatBuffer::UpdateTextDisplay(CUIControlTextDisplay* pText, int a2)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CChatBuffer.cpp
+    // __LINE__: 186
+    UTIL_ASSERT(pText != NULL);
+
+    int v1 = m_nMessageCount - a2;
+    if (m_lMessages.GetCount() < v1) {
+        v1 = m_lMessages.GetCount();
+    }
+
+    if (v1 > 0) {
+        POSITION pos = m_lMessages.FindIndex(m_lMessages.GetCount() - v1);
+        while (pos != NULL) {
+            CString* pString = m_lMessages.GetNext(pos);
+
+            pText->DisplayString(*pString, RGB(110, 160, 220), -1, FALSE);
+        }
+    }
+
+    return m_nMessageCount;
 }
