@@ -29,6 +29,8 @@ public:
     void SetApproachingDusk();
     void UpdateLightning();
 
+    void SetAreaType(WORD areaType);
+
     /* 0024 */ BOOL bRefreshVRamRect;
     /* 0040 */ int nNewX;
     /* 0044 */ int nNewY;

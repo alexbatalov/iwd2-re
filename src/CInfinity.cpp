@@ -145,3 +145,9 @@ void CInfinity::UpdateLightning()
 {
     // TODO: Incomplete.
 }
+
+// 0x452C30
+void CInfinity::SetAreaType(WORD areaType)
+{
+    m_areaType = areaType;
+}
