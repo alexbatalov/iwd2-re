@@ -1390,7 +1390,50 @@ CUIControlButtonSinglePlayerCharacter::~CUIControlButtonSinglePlayerCharacter()
 // 0x665C40
 void CUIControlButtonSinglePlayerCharacter::OnLButtonClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CScreenSinglePlayer* pSinglePlayer = g_pBaldurChitin->m_pEngineSinglePlayer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 4125
+    UTIL_ASSERT(pSinglePlayer != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 4127
+    UTIL_ASSERT(pGame != NULL);
+
+    CMultiplayerSettings* pSettings = pGame->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 4129
+    UTIL_ASSERT(pSettings != NULL);
+
+    CSingleLock renderLock(&(pSinglePlayer->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    pSinglePlayer->field_458 = m_nID - 18;
+
+    if (pSinglePlayer->field_45C == 1
+        && g_pBaldurChitin->cNetwork.m_nLocalPlayer == pSettings->GetCharacterControlledByPlayer(pSinglePlayer->field_458)
+        && CMultiplayerSettings::CHARSTATUS_NO_CHARACTER == pSettings->GetCharacterStatus(pSinglePlayer->field_458)) {
+        CUIPanel* pPanel = pSinglePlayer->GetManager()->GetPanel(3);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+        // __LINE__: 4147
+        UTIL_ASSERT(pPanel != NULL);
+
+        CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(0));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+        // __LINE__: 4150
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->OnLButtonClick(CPoint(0, 0));
+    } else {
+        pSinglePlayer->SummonPopup(3);
+    }
+
+    renderLock.Unlock();
 }
 
 // 0x665E10
