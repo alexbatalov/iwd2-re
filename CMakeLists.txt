@@ -56,6 +56,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CChatBuffer.h"
     "src/CChitin.cpp"
     "src/CChitin.h"
+    "src/CCreatureFile.cpp"
+    "src/CCreatureFile.h"
     "src/CCrypt.cpp"
     "src/CCrypt.h"
     "src/CDerivedStats.cpp"
