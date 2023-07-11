@@ -144,8 +144,8 @@ CScreenSinglePlayer::CScreenSinglePlayer()
     field_458 = -1;
     field_45C = 0;
     field_460 = 0;
-    field_1392 = 0;
-    field_1396 = 0;
+    m_nPartyCount = 0;
+    m_nTopParty = 0;
     m_nParty = 0;
     field_139E = 0;
     field_488 = 0;
@@ -456,13 +456,13 @@ void CScreenSinglePlayer::ResetPopupPanel(DWORD dwPanelId)
         break;
     case 10:
         m_nParty = 0;
-        field_1396 = 0;
+        m_nTopParty = 0;
         dword_8B4828 = -1;
-        field_1392 = 0;
-        sprintf(byte_8F64C0, "%s %i", (LPCSTR)PARTY, field_1392);
+        m_nPartyCount = 0;
+        sprintf(byte_8F64C0, "%s %i", (LPCSTR)PARTY, m_nPartyCount);
         while (GetPrivateProfileStringA(byte_8F64C0, NAME, "", byte_8F64E0, sizeof(byte_8F64E0), ".\\Party.ini")) {
-            field_1392++;
-            sprintf(byte_8F64C0, "%s %i", (LPCSTR)PARTY, field_1392);
+            m_nPartyCount++;
+            sprintf(byte_8F64C0, "%s %i", (LPCSTR)PARTY, m_nPartyCount);
         }
         break;
     default:
@@ -517,7 +517,7 @@ void CScreenSinglePlayer::UpdatePopupPanel(DWORD dwPanelId)
     case 8:
         break;
     case 10:
-        sub_664010();
+        UpdatePartySelectionPanel();
         break;
     default:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
@@ -1111,9 +1111,82 @@ void CScreenSinglePlayer::sub_663EB0()
 }
 
 // 0x664010
-void CScreenSinglePlayer::sub_664010()
+void CScreenSinglePlayer::UpdatePartySelectionPanel()
 {
-    // TODO: Incomplete.
+    CUIPanel* pPanel = m_cUIManager.GetPanel(10);
+
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(7));
+
+    INT v1;
+    for (INT nSlot = 0; nSlot < 6; nSlot++) {
+        CUIControlButtonSinglePlayerPartySelection* pButton = static_cast<CUIControlButtonSinglePlayerPartySelection*>(pPanel->GetControl(nSlot));
+        BOOLEAN bSelected = m_nParty == nSlot;
+        sprintf(byte_8F64C0, "%s %i", (LPCSTR)PARTY, m_nTopParty + nSlot);
+
+        DWORD nSize = GetPrivateProfileStringA(byte_8F64C0,
+            NAME,
+            "",
+            byte_8F64E0,
+            sizeof(byte_8F64E0),
+            ".\\Party.ini");
+        if (nSize != 0) {
+            byte_8F64E0[20] = '\0';
+            pButton->SetSelected(bSelected);
+            pButton->SetEnabled(TRUE);
+            pButton->SetText(CString(byte_8F64E0));
+
+            if (bSelected) {
+                v1 = m_nTopParty + nSlot;
+            }
+        } else {
+            pButton->SetSelected(FALSE);
+            pButton->SetEnabled(FALSE);
+            pButton->SetActive(FALSE);
+            pButton->SetInactiveRender(FALSE);
+        }
+    }
+
+    CUIControlScrollBarSinglePlayerParties* pScroll = static_cast<CUIControlScrollBarSinglePlayerParties*>(pPanel->GetControl(8));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 3334
+    UTIL_ASSERT(pScroll != NULL);
+
+    // NOTE: Uninline.
+    pScroll->UpdateScrollBar();
+
+    if (v1 != dword_8B4828) {
+        CUIControlTextDisplay* pTextHelp = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(6));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+        // __LINE__: 3341
+        UTIL_ASSERT(pTextHelp != NULL);
+
+        pTextHelp->RemoveAll();
+
+        sprintf(byte_8F64C0, "%s %i", (LPCSTR)PARTY, v1);
+
+        for (INT nLine = 1; nLine <= 10; nLine++) {
+            sprintf(byte_8F74E0, "%s%i", (LPCSTR)DESCR, nLine);
+            DWORD nSize = GetPrivateProfileStringA(byte_8F64C0,
+                byte_8F74E0,
+                "",
+                byte_8F64E0,
+                sizeof(byte_8F64E0),
+                ".\\Party.ini");
+            if (nSize != 0) {
+                byte_8F64E0[sizeof(byte_8F64E0) - 1] = '\0';
+                UpdateText(pTextHelp, "%s", byte_8F64E0);
+                UpdateText(pTextHelp, "%s", " ");
+            }
+        }
+
+        pTextHelp->SetTopString(pTextHelp->m_plstStrings->FindIndex(0));
+
+        dword_8B4828 = v1;
+    }
+
+    pPanel->InvalidateRect(NULL);
 }
 
 // 0x6642C0
@@ -1562,6 +1635,8 @@ void CUIControlButtonSinglePlayerPartyModify::OnLButtonClick(CPoint pt)
     pSinglePlayer->OnDoneButtonClick();
 }
 
+// -----------------------------------------------------------------------------
+
 // 0x667A00
 CUIControlButtonSinglePlayerPartySelection::CUIControlButtonSinglePlayerPartySelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
@@ -1574,7 +1649,7 @@ CUIControlButtonSinglePlayerPartySelection::~CUIControlButtonSinglePlayerPartySe
 {
 }
 
-// 0x667810
+// 0x667B00
 void CUIControlButtonSinglePlayerPartySelection::OnLButtonClick(CPoint pt)
 {
     CScreenSinglePlayer* pSinglePlayer = g_pBaldurChitin->m_pEngineSinglePlayer;
@@ -1585,6 +1660,8 @@ void CUIControlButtonSinglePlayerPartySelection::OnLButtonClick(CPoint pt)
 
     pSinglePlayer->m_nParty = m_nID;
 }
+
+// -----------------------------------------------------------------------------
 
 // 0x667B50
 CUIControlScrollBarSinglePlayerParties::CUIControlScrollBarSinglePlayerParties(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo)
@@ -1597,6 +1674,18 @@ CUIControlScrollBarSinglePlayerParties::~CUIControlScrollBarSinglePlayerParties(
 {
 }
 
+// NOTE: Inlined.
+void CUIControlScrollBarSinglePlayerParties::UpdateScrollBar()
+{
+    CScreenSinglePlayer* pSinglePlayer = g_pBaldurChitin->m_pEngineSinglePlayer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 11289
+    UTIL_ASSERT(pSinglePlayer != NULL);
+
+    AdjustScrollBar(pSinglePlayer->m_nTopParty, pSinglePlayer->m_nPartyCount, 6);
+}
+
 // 0x667B70
 void CUIControlScrollBarSinglePlayerParties::OnScrollUp()
 {
@@ -1606,8 +1695,8 @@ void CUIControlScrollBarSinglePlayerParties::OnScrollUp()
     // __LINE__: 5404
     UTIL_ASSERT(pSinglePlayer != NULL);
 
-    pSinglePlayer->field_1396--;
-    sub_667D10();
+    pSinglePlayer->m_nTopParty--;
+    InvalidateItems();
 }
 
 // 0x667BC0
@@ -1619,8 +1708,8 @@ void CUIControlScrollBarSinglePlayerParties::OnScrollDown()
     // __LINE__: 5415
     UTIL_ASSERT(pSinglePlayer != NULL);
 
-    pSinglePlayer->field_1396++;
-    sub_667D10();
+    pSinglePlayer->m_nTopParty++;
+    InvalidateItems();
 }
 
 // 0x667C10
@@ -1632,8 +1721,8 @@ void CUIControlScrollBarSinglePlayerParties::OnPageUp(int a1)
     // __LINE__: 5426
     UTIL_ASSERT(pSinglePlayer != NULL);
 
-    pSinglePlayer->field_1396 -= min(a1, 5);
-    sub_667D10();
+    pSinglePlayer->m_nTopParty -= min(a1, 5);
+    InvalidateItems();
 }
 
 // 0x667C60
@@ -1645,8 +1734,8 @@ void CUIControlScrollBarSinglePlayerParties::OnPageDown(int a1)
     // __LINE__: 5441
     UTIL_ASSERT(pSinglePlayer != NULL);
 
-    pSinglePlayer->field_1396 += min(a1, 5);
-    sub_667D10();
+    pSinglePlayer->m_nTopParty += min(a1, 5);
+    InvalidateItems();
 }
 
 // 0x667CB0
@@ -1658,12 +1747,12 @@ void CUIControlScrollBarSinglePlayerParties::OnScroll()
     // __LINE__: 5456
     UTIL_ASSERT(pSinglePlayer != NULL);
 
-    pSinglePlayer->field_1396 = max(pSinglePlayer->field_1392 * field_144, 0) / field_142;
-    sub_667D10();
+    pSinglePlayer->m_nTopParty = max(pSinglePlayer->m_nPartyCount * field_144, 0) / field_142;
+    InvalidateItems();
 }
 
 // 0x667D10
-void CUIControlScrollBarSinglePlayerParties::sub_667D10()
+void CUIControlScrollBarSinglePlayerParties::InvalidateItems()
 {
     CScreenSinglePlayer* pSinglePlayer = g_pBaldurChitin->m_pEngineSinglePlayer;
 
@@ -1674,7 +1763,7 @@ void CUIControlScrollBarSinglePlayerParties::sub_667D10()
     CSingleLock renderLock(&(pSinglePlayer->GetManager()->field_36), FALSE);
     renderLock.Lock(INFINITE);
 
-    pSinglePlayer->field_1396 = max(min(pSinglePlayer->field_1396, pSinglePlayer->field_1392 - 6), 0);
+    pSinglePlayer->m_nTopParty = max(min(pSinglePlayer->m_nTopParty, pSinglePlayer->m_nPartyCount - 6), 0);
 
     // NOTE: Uninline.
     pSinglePlayer->UpdatePopupPanel(m_pPanel->m_nID);

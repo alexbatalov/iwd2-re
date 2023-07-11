@@ -77,7 +77,7 @@ public:
     void ResetErrorPanel(CUIPanel* pPanel);
     void StartSinglePlayer(INT nEngineState);
     void sub_663EB0();
-    void sub_664010();
+    void UpdatePartySelectionPanel();
     void sub_6642C0();
     void sub_6644B0(CUIPanel* pPanel);
     BOOL sub_665280(INT nCharacterSlot);
@@ -112,9 +112,9 @@ public:
     /* 098E */ CVidFont m_preLoadFontStnSml;
     /* 0E8E */ CVidFont m_preLoadFontTool;
     /* 138E */ int field_138E;
-    /* 1392 */ int field_1392;
-    /* 1396 */ int field_1396;
-    /* 139A */ int m_nParty;
+    /* 1392 */ int m_nPartyCount;
+    /* 1396 */ INT m_nTopParty;
+    /* 139A */ INT m_nParty;
     /* 139E */ int field_139E;
 };
 
@@ -235,7 +235,8 @@ public:
     void OnScrollDown() override;
     void OnPageUp(int a1) override;
     void OnPageDown(int a1) override;
-    void sub_667D10();
+    void UpdateScrollBar();
+    void InvalidateItems();
 };
 
 #endif /* CSCREENSINGLEPLAYER_H_ */
