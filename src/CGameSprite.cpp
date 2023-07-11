@@ -735,7 +735,7 @@ BOOL CGameSprite::sub_763200(UINT nFeatNumber, INT a2)
                    || m_derivedStats.GetClassLevel(CAIOBJECTTYPE_C_PALADIN) >= 15
                    || m_derivedStats.GetClassLevel(CAIOBJECTTYPE_C_RANGER) >= 15
                    || m_derivedStats.GetClassLevel(CAIOBJECTTYPE_C_RANGER) >= 8)
-            && m_derivedStats.field_151 >= 10;
+            && m_derivedStats.field_144[13] >= 10;
     case CGAMESPRITE_FEAT_AMBIDEXTERITY:
         return nDEX >= 15;
     case CGAMESPRITE_FEAT_ARMOR_PROF:
@@ -1168,6 +1168,39 @@ void CGameSprite::DisplayFeats(CUIControlTextDisplay* pText)
                     "%s",
                     (LPCSTR)ruleTables.GetFeatName(nFeatNumber));
             }
+        }
+    }
+}
+
+// 0x765E40
+void CGameSprite::DisplaySkills(CUIControlTextDisplay* pText)
+{
+    CBaldurEngine* pEngine = static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine);
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+    // __LINE__: 31521
+    UTIL_ASSERT(pText != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+    // __LINE__: 31522
+    UTIL_ASSERT(pEngine != NULL);
+
+    for (int index = 0; index < CGAMESPRITE_SKILL_NUMSKILLS; index++) {
+        INT nSkillId = ruleTables.GetSkillId(index);
+        if (m_baseStats.m_skills[nSkillId] == m_derivedStats.field_144[nSkillId]) {
+            if (m_derivedStats.field_144[nSkillId] != 0) {
+                CBaldurEngine::UpdateText(pText,
+                    "%s: %d",
+                    ruleTables.GetSkillName(nSkillId),
+                    m_derivedStats.field_144[nSkillId]);
+            }
+        } else {
+            CBaldurEngine::UpdateText(pText,
+                "%s: %d (%d)",
+                ruleTables.GetSkillName(nSkillId),
+                m_derivedStats.field_144[nSkillId],
+                m_baseStats.m_skills[nSkillId]);
         }
     }
 }

@@ -137,7 +137,7 @@ LONG CDerivedStats::GetAtOffset(SHORT offset)
     case 11:
         return field_20;
     case 12:
-        return field_14C;
+        return field_144[8];
     case 14:
         return field_22;
     case 15:
@@ -161,15 +161,15 @@ LONG CDerivedStats::GetAtOffset(SHORT offset)
     case 24:
         return field_36;
     case 25:
-        return field_144;
+        return field_144[0];
     case 26:
-        return field_14E;
+        return field_144[10];
     case 27:
-        return field_14D;
+        return field_144[9];
     case 28:
-        return field_150;
+        return field_144[12];
     case 29:
-        return field_14F;
+        return field_144[11];
     case 30:
         return field_38;
     case 31:
@@ -177,7 +177,7 @@ LONG CDerivedStats::GetAtOffset(SHORT offset)
     case 32:
         return field_3C;
     case 33:
-        return field_153;
+        return field_144[15];
     case 34:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\CDerivedStats.cpp
         // __LINE__: 1397
@@ -287,7 +287,7 @@ LONG CDerivedStats::GetAtOffset(SHORT offset)
     case 89:
         return field_A2;
     case 90:
-        return field_14A;
+        return field_144[6];
     case 91:
         return field_A6;
     case 92:
@@ -295,7 +295,7 @@ LONG CDerivedStats::GetAtOffset(SHORT offset)
     case 93:
         return field_3E;
     case 94:
-        return field_152;
+        return field_144[14];
     case 95:
         return m_nLevel;
     case 96:

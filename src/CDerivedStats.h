@@ -118,17 +118,7 @@ public:
     /* 0138 */ int field_138;
     /* 013C */ int field_13C;
     /* 0140 */ int field_140;
-    /* 0144 */ unsigned char field_144;
-    /* 014A */ unsigned char field_14A;
-    /* 014B */ unsigned char field_14B;
-    /* 014C */ unsigned char field_14C;
-    /* 014D */ unsigned char field_14D;
-    /* 014E */ unsigned char field_14E;
-    /* 014F */ unsigned char field_14F;
-    /* 0150 */ unsigned char field_150;
-    /* 0151 */ unsigned char field_151;
-    /* 0152 */ unsigned char field_152;
-    /* 0153 */ unsigned char field_153;
+    /* 0144 */ BYTE field_144[16];
     /* 0184 */ int field_184;
     /* 0188 */ CPtrList field_188;
     /* 01A4 */ CPtrList field_1A4;

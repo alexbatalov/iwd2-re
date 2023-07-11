@@ -201,6 +201,7 @@ public:
     INT GetSkillValue(UINT iSkillNumber);
     INT GetSkillCost(UINT iSkillNumber, BYTE nClass);
     void DisplayFeats(CUIControlTextDisplay* pText);
+    void DisplaySkills(CUIControlTextDisplay* pText);
 
     /* 05A0 */ CString m_sName;
     /* 05A4 */ CCreatureFileHeader m_baseStats;
