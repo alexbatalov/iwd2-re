@@ -437,3 +437,9 @@ CInfinity* CGameArea::GetInfinity()
 {
     return &m_cInfinity;
 }
+
+// 0x4530A0
+CAreaFileRestEncounter* CGameArea::GetHeaderRestEncounter()
+{
+    return &m_headerRestEncounter;
+}

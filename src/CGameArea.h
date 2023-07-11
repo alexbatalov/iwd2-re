@@ -5,6 +5,7 @@
 
 #include "CInfinity.h"
 #include "CSound.h"
+#include "FileFormat.h"
 
 class CInfGame;
 
@@ -53,6 +54,24 @@ typedef struct {
     DWORD m_notUsed[15];
 } CAreaSoundsAndMusic;
 
+typedef struct {
+    /* 0000 */ SCRIPTNAME m_scriptName;
+    /* 0020 */ STRREF m_randomCreatureString[10];
+    /* 0048 */ RESREF m_randomCreature[10];
+    /* 0098 */ WORD m_randomCreatureNum;
+    /* 009A */ WORD m_difficulty;
+    /* 009C */ DWORD m_lifeSpan;
+    /* 00A0 */ WORD m_huntingRange;
+    /* 00A2 */ WORD m_followRange;
+    /* 00A4 */ WORD m_maxTypeNum;
+    /* 00A6 */ WORD m_activated;
+    /* 00A8 */ WORD m_probDay;
+    /* 00AA */ WORD m_probNight;
+    /* 00AC */ WORD m_wFlags;
+    /* 00AE */ BYTE m_weights[10];
+    /* 00B8 */ DWORD m_notUsed[11];
+} CAreaFileRestEncounter;
+
 class CGameArea {
 public:
     CGameArea();
@@ -77,12 +96,14 @@ public:
     void PlaySong(SHORT slot, DWORD flags);
 
     CInfinity* GetInfinity();
+    CAreaFileRestEncounter* GetHeaderRestEncounter();
 
     static INT dword_8D212C;
     static BOOLEAN byte_8D2138;
 
     /* 0000 */ CAreaFileHeader m_header;
     /* 005C */ CAreaSoundsAndMusic m_headerSound;
+    /* 00EC */ CAreaFileRestEncounter m_headerRestEncounter;
     /* 01EF */ BOOLEAN m_bAreaLoaded;
     /* 01F0 */ CResRef m_resRef;
     /* 0234 */ CInfGame* m_pGame;
