@@ -107,7 +107,7 @@ public:
     /* 0480 */ int field_480;
     /* 0484 */ INT field_484;
     /* 0488 */ unsigned char field_488;
-    /* 048A */ int field_48A;
+    /* 048A */ BOOL m_bLastLockAllowInput;
     /* 048E */ CVidFont m_preLoadFontRealms;
     /* 098E */ CVidFont m_preLoadFontStnSml;
     /* 0E8E */ CVidFont m_preLoadFontTool;
