@@ -2965,7 +2965,47 @@ void CScreenCreateChar::EnablePopupPanel(DWORD dwPanelId, BOOL bEnable)
 // 0x6179D0
 void CScreenCreateChar::SummonPopup(DWORD dwPopupId, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
+
+    CUIPanel* pOldPanel = NULL;
+
+    if (m_lPopupStack.GetCount() != 0) {
+        pOldPanel = m_lPopupStack.GetTail();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 9926
+        UTIL_ASSERT(pOldPanel != NULL);
+
+        // NOTE: Uninline.
+        EnablePopupPanel(pOldPanel->m_nID, FALSE);
+    } else {
+        EnableMainPanel(FALSE);
+    }
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPopupId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 9932
+    UTIL_ASSERT(pPanel != NULL);
+
+    m_lPopupStack.AddTail(pPanel);
+
+    ResetPopupPanel(pPanel->m_nID, pSprite);
+
+    // NOTE: Uninline.
+    ShowPopupPanel(pPanel->m_nID, TRUE);
+
+    // NOTE: Uninline.
+    EnablePopupPanel(pPanel->m_nID, TRUE);
+
+    UpdatePopupPanel(pPanel->m_nID, pSprite);
+
+    if (pOldPanel != NULL && pPanel->m_pManager->field_2E == 1) {
+        if (pOldPanel->sub_4D2D20()) {
+            m_cUIManager.GetPanel(0)->InvalidateRect(NULL);
+        }
+    }
 }
 
 // 0x617B70
