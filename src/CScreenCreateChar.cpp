@@ -120,8 +120,8 @@ const CString CScreenCreateChar::TOKEN_MAXIMUM("MAXIMUM");
 CScreenCreateChar::CScreenCreateChar()
 {
     field_196.m_animation = NULL;
-    field_4DA = 0;
-    field_4DE = 0;
+    m_nFirstStep = 0;
+    m_nCurrentStep = 0;
     m_nExtraFeats = 0;
     m_nExtraAbilityPoints = 0;
     field_4EE = 0;
@@ -765,7 +765,214 @@ void CScreenCreateChar::EnableMainPanel(BOOL bEnable)
 // 0x607BB0
 void CScreenCreateChar::UpdateMainPanel(CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    CResRef portraitResRef;
+    CString sAlignment;
+    CString sGender;
+    CString v4;
+    CString sRace;
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(0);
+
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(10));
+
+    for (INT nStep = 0; nStep < 8; nStep++) {
+        CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nStep));
+        pButton->SetEnabled(nStep == m_nCurrentStep);
+        pButton->InvalidateRect();
+    }
+
+    CUIControlButton* pAccept = static_cast<CUIControlButton*>(pPanel->GetControl(8));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 1365
+    UTIL_ASSERT(pAccept != NULL);
+
+    pAccept->SetEnabled(m_nCurrentStep > 7);
+
+    CUIControlButton* pCancel = static_cast<CUIControlButton*>(pPanel->GetControl(15));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 1370
+    UTIL_ASSERT(pCancel != NULL);
+
+    if (m_nCurrentStep > 0) {
+        pCancel->SetText(FetchString(36788));
+    } else {
+        pCancel->SetText(FetchString(13727));
+    }
+
+    CUIControlButtonCharGenBiography* pBiography = static_cast<CUIControlButtonCharGenBiography*>(pPanel->GetControl(16));
+    pBiography->SetActive(TRUE);
+    pBiography->SetInactiveRender(TRUE);
+    pBiography->SetEnabled(m_nCurrentStep > 6);
+
+    CUIControlButton* pBack = static_cast<CUIControlButton*>(pPanel->GetControl(11));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 1387
+    UTIL_ASSERT(pBack != NULL);
+
+    if (m_nCurrentStep > 0 && m_nCurrentStep > m_nFirstStep) {
+        pBack->SetEnabled(TRUE);
+        pBack->SetActive(TRUE);
+    } else {
+        pBack->SetEnabled(FALSE);
+        pBack->SetActive(FALSE);
+    }
+
+    CUIControlButtonCharGenPortrait* pPortrait = static_cast<CUIControlButtonCharGenPortrait*>(pPanel->GetControl(12));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 1402
+    UTIL_ASSERT(pPortrait != NULL);
+
+    if (m_nCurrentStep > 0) {
+        portraitResRef = pSprite->m_baseStats.m_portraitLarge;
+    } else {
+        portraitResRef = "";
+    }
+
+    pPortrait->SetPortrait(portraitResRef);
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(9));
+
+    pText->RemoveAll();
+
+    if (m_nCurrentStep > 0) {
+        if (m_nCurrentStep > 7) {
+            UpdateText(pText,
+                "%s: %s",
+                FetchString(1047),
+                (LPCSTR)pSprite->GetName());
+        }
+
+        if (m_nCurrentStep > 0) {
+            ruleTables.GetGenderStringMixed(pSprite->m_startTypeAI.m_nGender, sGender);
+            UpdateText(pText,
+                "%s: %s",
+                FetchString(12135),
+                (LPCSTR)sGender);
+        }
+
+        if (m_nCurrentStep > 1) {
+            ruleTables.GetRaceStringMixed(pSprite->m_startTypeAI.m_nRace, sRace, pSprite->m_startTypeAI.m_nSubRace);
+            UpdateText(pText,
+                "%s: %s",
+                FetchString(1048),
+                (LPCSTR)sRace);
+        }
+
+        if (m_nCurrentStep > 2) {
+            DWORD nSpecialization = pSprite->GetSpecialization();
+
+            CDerivedStats* pDStats = &(pSprite->m_derivedStats);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+            // __LINE__: 10537
+            UTIL_ASSERT(pDStats != NULL);
+
+            CCreatureFileHeader* pBStats = &(pSprite->m_baseStats);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+            // __LINE__: 10539
+            UTIL_ASSERT(pBStats != NULL);
+
+            UpdateClassEntry(pText,
+                pSprite->m_startTypeAI,
+                pDStats,
+                nSpecialization,
+                pSprite->m_startTypeAI.m_nClass,
+                pBStats->m_flags);
+        }
+
+        if (m_nCurrentStep > 3) {
+            ruleTables.GetAlignmentStringMixed(pSprite->m_startTypeAI.m_nAlignment, sAlignment);
+            UpdateText(pText,
+                "%s: %s",
+                FetchString(1049),
+                (LPCSTR)sAlignment);
+        }
+
+        if (m_nCurrentStep > 4) {
+            UpdateText(pText, "");
+
+            UpdateTextForceColor(pText,
+                RGB(200, 200, 0),
+                "%s",
+                (LPCSTR)FetchString(17088));
+
+            UpdateText(pText,
+                "%s: %d  (%+d)",
+                (LPCSTR)FetchString(1145),
+                pSprite->m_baseStats.m_STRBase,
+                ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_STRBase));
+
+            UpdateText(pText,
+                "%s: %d  (%+d)",
+                (LPCSTR)FetchString(1151),
+                pSprite->m_baseStats.m_DEXBase,
+                ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_DEXBase));
+
+            UpdateText(pText,
+                "%s: %d  (%+d)",
+                (LPCSTR)FetchString(1178),
+                pSprite->m_baseStats.m_CONBase,
+                ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_CONBase));
+
+            UpdateText(pText,
+                "%s: %d  (%+d)",
+                (LPCSTR)FetchString(1179),
+                pSprite->m_baseStats.m_INTBase,
+                ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_INTBase));
+
+            UpdateText(pText,
+                "%s: %d  (%+d)",
+                (LPCSTR)FetchString(1180),
+                pSprite->m_baseStats.m_WISBase,
+                ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_WISBase));
+
+            UpdateText(pText,
+                "%s: %d  (%+d)",
+                (LPCSTR)FetchString(1181),
+                pSprite->m_baseStats.m_CHRBase,
+                ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_CHRBase));
+        }
+
+        if (m_nCurrentStep > 5) {
+            UpdateText(pText, "");
+
+            UpdateTextForceColor(pText,
+                RGB(200, 200, 0),
+                "%s",
+                (LPCSTR)FetchString(11983));
+
+            pSprite->DisplaySkills(pText);
+
+            UpdateText(pText, "");
+
+            UpdateTextForceColor(pText,
+                RGB(200, 200, 0),
+                "%s",
+                (LPCSTR)FetchString(36361));
+
+            pSprite->DisplayFeats(pText);
+
+            // TODO: Incomplete (spells).
+        }
+
+        pText->SetTopString(pText->m_plstStrings->FindIndex(0));
+    } else {
+        pSprite->m_baseStats.field_1A0 = -1;
+        pText->DisplayString(CString(""),
+            FetchString(16757),
+            pText->m_rgbLabelColor,
+            pText->m_rgbTextColor,
+            -1,
+            FALSE,
+            TRUE);
+    }
 }
 
 // 0x608AD0
@@ -3359,7 +3566,7 @@ void CUIControlButtonCharGenMenu::OnLButtonClick(CPoint pt)
 
     if (rc == CGameObjectArray::SUCCESS) {
         DWORD dwPopupId;
-        switch (pCreateChar->field_4DE) {
+        switch (pCreateChar->m_nCurrentStep) {
         case 0:
             dwPopupId = 1;
             break;
@@ -3480,10 +3687,10 @@ void CUIControlButtonCharGenBack::OnLButtonClick(CPoint)
     } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
     if (rc == CGameObjectArray::SUCCESS) {
-        if (pCreateChar->field_4DE > pCreateChar->field_4DA) {
-            pCreateChar->field_4DE--;
-            if (pCreateChar->field_4DE < pCreateChar->field_4DA) {
-                pCreateChar->field_4DE = pCreateChar->field_4DA;
+        if (pCreateChar->m_nCurrentStep > pCreateChar->m_nFirstStep) {
+            pCreateChar->m_nCurrentStep--;
+            if (pCreateChar->m_nCurrentStep < pCreateChar->m_nFirstStep) {
+                pCreateChar->m_nCurrentStep = pCreateChar->m_nFirstStep;
             }
             pCreateChar->UpdateMainPanel(pSprite);
         }

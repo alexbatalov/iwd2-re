@@ -159,8 +159,8 @@ public:
     /* 04CE */ BOOL m_bShiftKeyDown;
     /* 04D2 */ BOOL m_bCapsLockKeyOn;
     /* 04D6 */ int field_4D6;
-    /* 04DA */ int field_4DA;
-    /* 04DE */ int field_4DE;
+    /* 04DA */ int m_nFirstStep;
+    /* 04DE */ INT m_nCurrentStep;
     /* 04E2 */ INT m_nGameSprite;
     /* 04E6 */ INT m_nExtraFeats;
     /* 04EA */ INT m_nExtraAbilityPoints;

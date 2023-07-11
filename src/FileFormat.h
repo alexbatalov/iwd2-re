@@ -18,6 +18,7 @@ public:
     /* 0088 */ BYTE m_monkLevel;
     /* 0089 */ BYTE m_paladinLevel;
     /* 008B */ BYTE m_rogueLevel;
+    /* 01A0 */ int field_1A0;
     /* 01B8 */ DWORD m_feats[3];
     /* 01D0 */ BYTE m_featBow;
     /* 01D1 */ BYTE m_featCrossbow;
