@@ -1587,6 +1587,22 @@ void CInfGame::ApplyVolumeSliders(BOOLEAN a2)
     g_pBaldurChitin->cSoundMixer.UpdateSoundList();
 }
 
+// 0x5BD4E0
+BOOL CInfGame::SetCharacterSlot(INT nCharacterSlot, LONG nCharacterId)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 15670
+    UTIL_ASSERT(0 <= nCharacterSlot && nCharacterSlot < CINFGAME_MAXCHARACTERS);
+
+    if (m_characters[nCharacterSlot] != -1) {
+        return FALSE;
+    }
+
+    m_characters[nCharacterSlot] = nCharacterId;
+
+    return TRUE;
+}
+
 // 0x5BD650
 LONG CInfGame::GetCharacterSlot(INT nCharacterSlot)
 {
