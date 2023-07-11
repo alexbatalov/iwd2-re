@@ -2558,7 +2558,7 @@ void CScreenCreateChar::DecCurrentPortrait(CGameSprite* pSprite)
 }
 
 // 0x610540
-void CScreenCreateChar::sub_610540()
+void CScreenCreateChar::StartCreateChar(INT nCharacterSlot, INT nEngineState)
 {
     // TODO: Incomplete.
 }

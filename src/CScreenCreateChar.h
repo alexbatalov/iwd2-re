@@ -114,7 +114,7 @@ public:
     CString GetCurrentPortrait(CGameSprite* pSprite);
     void IncCurrentPortrait(CGameSprite* pSprite);
     void DecCurrentPortrait(CGameSprite* pSprite);
-    void sub_610540();
+    void StartCreateChar(INT nCharacterSlot, INT nEngineState);
     void RecallMemoryAbilities(BYTE& nSTR, BYTE& nDEX, BYTE& nCON, BYTE& nINT, BYTE& nWIS, BYTE& nCHR, INT& nExtra);
     INT GetNumHatedRaces();
     void SetTopHatedRace(INT nTopHatedRace);

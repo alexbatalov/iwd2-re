@@ -3,6 +3,7 @@
 #include "CBaldurChitin.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CScreenCreateChar.h"
 #include "CScreenStart.h"
 #include "CScreenWorld.h"
 #include "CUIControlLabel.h"
@@ -418,7 +419,23 @@ void CScreenSinglePlayer::OnKeyDown(SHORT nKeysFlags)
 // 0x660D00
 void CScreenSinglePlayer::TimerAsynchronousUpdate()
 {
+    CUIPanel* pPanel = GetTopPopup();
+
+    CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    if (pPanel != NULL) {
+        // NOTE: Uninline.
+        UpdatePopupPanel(pPanel->m_nID);
+    }
+
     // TODO: Incomplete.
+
+    renderLock.Unlock();
+
+    UpdateCursorShape(0);
+    m_cUIManager.TimerAsynchronousUpdate();
+    g_pBaldurChitin->GetObjectCursor()->CursorUpdate(pVidMode);
 }
 
 // 0x64A110
@@ -1488,6 +1505,8 @@ void CUIControlButtonSinglePlayerLogout::OnLButtonClick(CPoint pt)
     pSinglePlayer->OnLogoutButtonClick();
 }
 
+// -----------------------------------------------------------------------------
+
 // 0x666360
 CUIControlButtonSinglePlayerModifyCharacterCreate::CUIControlButtonSinglePlayerModifyCharacterCreate(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
@@ -1505,8 +1524,67 @@ CUIControlButtonSinglePlayerModifyCharacterCreate::~CUIControlButtonSinglePlayer
 // 0x6664F0
 void CUIControlButtonSinglePlayerModifyCharacterCreate::OnLButtonClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CScreenSinglePlayer* pSinglePlayer = g_pBaldurChitin->m_pEngineSinglePlayer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 4636
+    UTIL_ASSERT(pSinglePlayer != NULL);
+
+    CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 4638
+    UTIL_ASSERT(pCreateChar != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 4640
+    UTIL_ASSERT(pGame != NULL);
+
+    CMultiplayerSettings* pSettings = pGame->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 4642
+    UTIL_ASSERT(pSettings != NULL);
+
+    CNetwork* pNetwork = &(g_pBaldurChitin->cNetwork);
+
+    CSingleLock renderLock(&(pSinglePlayer->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    INT nCharacterSlot = pSinglePlayer->field_458;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 4650
+    UTIL_ASSERT(0 <= nCharacterSlot && nCharacterSlot < CINFGAME_MAXCHARACTERS);
+
+    if (pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_NO_CHARACTER) {
+        pSettings->SignalCharacterStatus(nCharacterSlot,
+            CMultiplayerSettings::CHARSTATUS_SIGNAL_CREATION_START,
+            TRUE,
+            TRUE);
+
+        // TODO: Incomplete.
+
+        if (pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_CREATING_CHARACTER) {
+            renderLock.Unlock();
+
+            if (pSinglePlayer->GetTopPopup() != NULL) {
+                pSinglePlayer->OnDoneButtonClick();
+            }
+
+            pCreateChar->StartCreateChar(nCharacterSlot, 3);
+            pSinglePlayer->SelectEngine(pCreateChar);
+
+            renderLock.Lock();
+        }
+    }
+
+    renderLock.Unlock();
 }
+
+// -----------------------------------------------------------------------------
 
 // 0x666850
 CUIControlButtonSinglePlayerModifyCharacterDelete::CUIControlButtonSinglePlayerModifyCharacterDelete(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
