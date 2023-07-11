@@ -33,3 +33,9 @@ BOOL CInfButtonArray::ResetState()
 
     return TRUE;
 }
+
+// 0x452C50
+void CInfButtonArray::SetSelectedButton(INT nSelectedButton)
+{
+    m_nSelectedButton = nSelectedButton;
+}
