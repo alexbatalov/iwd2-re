@@ -3,6 +3,7 @@
 #include "CBaldurProjector.h"
 #include "CDungeonMaster.h"
 #include "CGameAnimationType.h"
+#include "CInfinity.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CResArea.h"
@@ -144,36 +145,6 @@ const CString CBaldurChitin::PRINTSCREEN_FILE_NAME("iwd2");
 // 0x8CD43C
 const CString CBaldurChitin::ICON_RES_ID("IDI_GAMEICON");
 
-// 0x8E7538
-RECT CBaldurChitin::stru_8E7538;
-
-// 0x8E7548
-RECT CBaldurChitin::stru_8E7548;
-
-// 0x8E7958
-RECT CBaldurChitin::stru_8E7958;
-
-// 0x8E7988
-RECT CBaldurChitin::stru_8E7988;
-
-// 0x8E79A8
-RECT CBaldurChitin::stru_8E79A8;
-
-// 0x8E79B8
-RECT CBaldurChitin::stru_8E79B8;
-
-// 0x8E79C8
-RECT CBaldurChitin::stru_8E79C8;
-
-// 0x8E79E0
-RECT CBaldurChitin::stru_8E79E0;
-
-// 0x8E79F8
-RECT CBaldurChitin::stru_8E79F8;
-
-// 0x8E7A10
-RECT CBaldurChitin::stru_8E7A10;
-
 // 0x421E40
 CBaldurChitin::CBaldurChitin()
 {
@@ -291,55 +262,55 @@ CBaldurChitin::CBaldurChitin()
     // TODO: Check, assignments to rects are in random order.
     switch (CVideo::SCREENWIDTH) {
     case 2048:
-        stru_8E7538.left = 0;
-        stru_8E7538.top = 0;
-        stru_8E7538.right = 960;
-        stru_8E7538.bottom = 658;
+        CInfinity::stru_8E7538.left = 0;
+        CInfinity::stru_8E7538.top = 0;
+        CInfinity::stru_8E7538.right = 960;
+        CInfinity::stru_8E7538.bottom = 658;
 
-        stru_8E7548.left = 0;
-        stru_8E7548.top = 0;
-        stru_8E7548.right = 2048;
-        stru_8E7548.bottom = 1536;
+        CInfinity::stru_8E7548.left = 0;
+        CInfinity::stru_8E7548.top = 0;
+        CInfinity::stru_8E7548.right = 2048;
+        CInfinity::stru_8E7548.bottom = 1536;
 
-        stru_8E7958.left = 0;
-        stru_8E7958.top = 0;
-        stru_8E7958.right = 2048;
-        stru_8E7958.bottom = 968;
+        CInfinity::stru_8E7958.left = 0;
+        CInfinity::stru_8E7958.top = 0;
+        CInfinity::stru_8E7958.right = 2048;
+        CInfinity::stru_8E7958.bottom = 968;
 
-        stru_8E7988.left = 0;
-        stru_8E7988.top = 0;
-        stru_8E7988.right = 2048;
-        stru_8E7988.bottom = 1258;
+        CInfinity::stru_8E7988.left = 0;
+        CInfinity::stru_8E7988.top = 0;
+        CInfinity::stru_8E7988.right = 2048;
+        CInfinity::stru_8E7988.bottom = 1258;
 
-        stru_8E79A8.left = 256;
-        stru_8E79A8.top = 150;
-        stru_8E79A8.right = 768;
-        stru_8E79A8.bottom = 534;
+        CInfinity::stru_8E79A8.left = 256;
+        CInfinity::stru_8E79A8.top = 150;
+        CInfinity::stru_8E79A8.right = 768;
+        CInfinity::stru_8E79A8.bottom = 534;
 
-        stru_8E79B8.left = 0;
-        stru_8E79B8.top = 0;
-        stru_8E79B8.right = 2048;
-        stru_8E79B8.bottom = 1202;
+        CInfinity::stru_8E79B8.left = 0;
+        CInfinity::stru_8E79B8.top = 0;
+        CInfinity::stru_8E79B8.right = 2048;
+        CInfinity::stru_8E79B8.bottom = 1202;
 
-        stru_8E79C8.left = 0;
-        stru_8E79C8.top = 0;
-        stru_8E79C8.right = 2048;
-        stru_8E79C8.bottom = 1416;
+        CInfinity::stru_8E79C8.left = 0;
+        CInfinity::stru_8E79C8.top = 0;
+        CInfinity::stru_8E79C8.right = 2048;
+        CInfinity::stru_8E79C8.bottom = 1416;
 
-        stru_8E79E0.left = 0;
-        stru_8E79E0.top = 0;
-        stru_8E79E0.right = 2048;
-        stru_8E79E0.bottom = 1322;
+        CInfinity::stru_8E79E0.left = 0;
+        CInfinity::stru_8E79E0.top = 0;
+        CInfinity::stru_8E79E0.right = 2048;
+        CInfinity::stru_8E79E0.bottom = 1322;
 
-        stru_8E79F8.left = 0;
-        stru_8E79F8.top = 0;
-        stru_8E79F8.right = 2048;
-        stru_8E79F8.bottom = 1288;
+        CInfinity::stru_8E79F8.left = 0;
+        CInfinity::stru_8E79F8.top = 0;
+        CInfinity::stru_8E79F8.right = 2048;
+        CInfinity::stru_8E79F8.bottom = 1288;
 
-        stru_8E7A10.left = 0;
-        stru_8E7A10.top = 0;
-        stru_8E7A10.right = 960;
-        stru_8E7A10.bottom = 522;
+        CInfinity::stru_8E7A10.left = 0;
+        CInfinity::stru_8E7A10.top = 0;
+        CInfinity::stru_8E7A10.right = 960;
+        CInfinity::stru_8E7A10.bottom = 522;
 
         CVideo::SCREENHEIGHT = 1536;
         CHUI_GUIEXT = "10";
@@ -349,109 +320,109 @@ CBaldurChitin::CBaldurChitin()
         strncpy(reinterpret_cast<char*>(field_49B4[3].refMosaic), "STON10B", RESREF_SIZE);
         break;
     case 1600:
-        stru_8E7538.left = 0;
-        stru_8E7538.top = 0;
-        stru_8E7538.right = 736;
-        stru_8E7538.bottom = 490;
+        CInfinity::stru_8E7538.left = 0;
+        CInfinity::stru_8E7538.top = 0;
+        CInfinity::stru_8E7538.right = 736;
+        CInfinity::stru_8E7538.bottom = 490;
 
-        stru_8E7548.left = 0;
-        stru_8E7548.top = 0;
-        stru_8E7548.right = 1600;
-        stru_8E7548.bottom = 1200;
+        CInfinity::stru_8E7548.left = 0;
+        CInfinity::stru_8E7548.top = 0;
+        CInfinity::stru_8E7548.right = 1600;
+        CInfinity::stru_8E7548.bottom = 1200;
 
-        stru_8E7958.left = 0;
-        stru_8E7958.top = 0;
-        stru_8E7958.right = 1600;
-        stru_8E7958.bottom = 632;
+        CInfinity::stru_8E7958.left = 0;
+        CInfinity::stru_8E7958.top = 0;
+        CInfinity::stru_8E7958.right = 1600;
+        CInfinity::stru_8E7958.bottom = 632;
 
-        stru_8E7988.left = 0;
-        stru_8E7988.top = 0;
-        stru_8E7988.right = 1600;
-        stru_8E7988.bottom = 922;
+        CInfinity::stru_8E7988.left = 0;
+        CInfinity::stru_8E7988.top = 0;
+        CInfinity::stru_8E7988.right = 1600;
+        CInfinity::stru_8E7988.bottom = 922;
 
-        stru_8E79A8.left = 544;
-        stru_8E79A8.top = 366;
-        stru_8E79A8.right = 1056;
-        stru_8E79A8.bottom = 750;
+        CInfinity::stru_8E79A8.left = 544;
+        CInfinity::stru_8E79A8.top = 366;
+        CInfinity::stru_8E79A8.right = 1056;
+        CInfinity::stru_8E79A8.bottom = 750;
 
-        stru_8E79B8.left = 0;
-        stru_8E79B8.top = 0;
-        stru_8E79B8.right = 1600;
-        stru_8E79B8.bottom = 866;
+        CInfinity::stru_8E79B8.left = 0;
+        CInfinity::stru_8E79B8.top = 0;
+        CInfinity::stru_8E79B8.right = 1600;
+        CInfinity::stru_8E79B8.bottom = 866;
 
-        stru_8E79C8.left = 0;
-        stru_8E79C8.top = 0;
-        stru_8E79C8.right = 1600;
-        stru_8E79C8.bottom = 1080;
+        CInfinity::stru_8E79C8.left = 0;
+        CInfinity::stru_8E79C8.top = 0;
+        CInfinity::stru_8E79C8.right = 1600;
+        CInfinity::stru_8E79C8.bottom = 1080;
 
-        stru_8E79E0.left = 0;
-        stru_8E79E0.top = 0;
-        stru_8E79E0.right = 1600;
-        stru_8E79E0.bottom = 986;
+        CInfinity::stru_8E79E0.left = 0;
+        CInfinity::stru_8E79E0.top = 0;
+        CInfinity::stru_8E79E0.right = 1600;
+        CInfinity::stru_8E79E0.bottom = 986;
 
-        stru_8E79F8.left = 0;
-        stru_8E79F8.top = 0;
-        stru_8E79F8.right = 1600;
-        stru_8E79F8.bottom = 952;
+        CInfinity::stru_8E79F8.left = 0;
+        CInfinity::stru_8E79F8.top = 0;
+        CInfinity::stru_8E79F8.right = 1600;
+        CInfinity::stru_8E79F8.bottom = 952;
 
-        stru_8E7A10.left = 0;
-        stru_8E7A10.top = 0;
-        stru_8E7A10.right = 736;
-        stru_8E7A10.bottom = 354;
+        CInfinity::stru_8E7A10.left = 0;
+        CInfinity::stru_8E7A10.top = 0;
+        CInfinity::stru_8E7A10.right = 736;
+        CInfinity::stru_8E7A10.bottom = 354;
 
         CVideo::SCREENHEIGHT = 1200;
         CHUI_GUIEXT = "08";
         break;
     case 1024:
-        stru_8E7538.left = 0;
-        stru_8E7538.top = 0;
-        stru_8E7538.right = 960;
-        stru_8E7538.bottom = 658;
+        CInfinity::stru_8E7538.left = 0;
+        CInfinity::stru_8E7538.top = 0;
+        CInfinity::stru_8E7538.right = 960;
+        CInfinity::stru_8E7538.bottom = 658;
 
-        stru_8E7548.left = 0;
-        stru_8E7548.top = 0;
-        stru_8E7548.right = 1024;
-        stru_8E7548.bottom = 768;
+        CInfinity::stru_8E7548.left = 0;
+        CInfinity::stru_8E7548.top = 0;
+        CInfinity::stru_8E7548.right = 1024;
+        CInfinity::stru_8E7548.bottom = 768;
 
-        stru_8E7958.left = 0;
-        stru_8E7958.top = 0;
-        stru_8E7958.right = 1024;
-        stru_8E7958.bottom = 484;
+        CInfinity::stru_8E7958.left = 0;
+        CInfinity::stru_8E7958.top = 0;
+        CInfinity::stru_8E7958.right = 1024;
+        CInfinity::stru_8E7958.bottom = 484;
 
-        stru_8E7988.left = 0;
-        stru_8E7988.top = 0;
-        stru_8E7988.right = 1024;
-        stru_8E7988.bottom = 629;
+        CInfinity::stru_8E7988.left = 0;
+        CInfinity::stru_8E7988.top = 0;
+        CInfinity::stru_8E7988.right = 1024;
+        CInfinity::stru_8E7988.bottom = 629;
 
-        stru_8E79A8.left = 256;
-        stru_8E79A8.top = 150;
-        stru_8E79A8.right = 768;
-        stru_8E79A8.bottom = 534;
+        CInfinity::stru_8E79A8.left = 256;
+        CInfinity::stru_8E79A8.top = 150;
+        CInfinity::stru_8E79A8.right = 768;
+        CInfinity::stru_8E79A8.bottom = 534;
 
-        stru_8E79B8.left = 0;
-        stru_8E79B8.top = 0;
-        stru_8E79B8.right = 1024;
-        stru_8E79B8.bottom = 601;
+        CInfinity::stru_8E79B8.left = 0;
+        CInfinity::stru_8E79B8.top = 0;
+        CInfinity::stru_8E79B8.right = 1024;
+        CInfinity::stru_8E79B8.bottom = 601;
 
-        stru_8E79C8.left = 0;
-        stru_8E79C8.top = 0;
-        stru_8E79C8.right = 1024;
-        stru_8E79C8.bottom = 708;
+        CInfinity::stru_8E79C8.left = 0;
+        CInfinity::stru_8E79C8.top = 0;
+        CInfinity::stru_8E79C8.right = 1024;
+        CInfinity::stru_8E79C8.bottom = 708;
 
-        stru_8E79E0.left = 0;
-        stru_8E79E0.top = 0;
-        stru_8E79E0.right = 1024;
-        stru_8E79E0.bottom = 661;
+        CInfinity::stru_8E79E0.left = 0;
+        CInfinity::stru_8E79E0.top = 0;
+        CInfinity::stru_8E79E0.right = 1024;
+        CInfinity::stru_8E79E0.bottom = 661;
 
-        stru_8E79F8.left = 0;
-        stru_8E79F8.top = 0;
-        stru_8E79F8.right = 1024;
-        stru_8E79F8.bottom = 644;
+        CInfinity::stru_8E79F8.left = 0;
+        CInfinity::stru_8E79F8.top = 0;
+        CInfinity::stru_8E79F8.right = 1024;
+        CInfinity::stru_8E79F8.bottom = 644;
 
-        stru_8E7A10.left = 0;
-        stru_8E7A10.top = 0;
-        stru_8E7A10.right = 960;
-        stru_8E7A10.bottom = 522;
+        CInfinity::stru_8E7A10.left = 0;
+        CInfinity::stru_8E7A10.top = 0;
+        CInfinity::stru_8E7A10.right = 960;
+        CInfinity::stru_8E7A10.bottom = 522;
 
         CVideo::SCREENHEIGHT = 768;
         CHUI_GUIEXT = "10";
@@ -462,62 +433,62 @@ CBaldurChitin::CBaldurChitin()
         break;
     case 800:
     default:
-        stru_8E7538.left = 0;
-        stru_8E7538.top = 0;
-        stru_8E7538.right = 736;
-        stru_8E7538.bottom = 490;
+        CInfinity::stru_8E7538.left = 0;
+        CInfinity::stru_8E7538.top = 0;
+        CInfinity::stru_8E7538.right = 736;
+        CInfinity::stru_8E7538.bottom = 490;
 
-        stru_8E7548.left = 0;
-        stru_8E7548.top = 0;
-        stru_8E7548.right = 800;
-        stru_8E7548.bottom = 600;
+        CInfinity::stru_8E7548.left = 0;
+        CInfinity::stru_8E7548.top = 0;
+        CInfinity::stru_8E7548.right = 800;
+        CInfinity::stru_8E7548.bottom = 600;
 
-        stru_8E7958.left = 0;
-        stru_8E7958.top = 0;
-        stru_8E7958.right = 800;
-        stru_8E7958.bottom = 316;
+        CInfinity::stru_8E7958.left = 0;
+        CInfinity::stru_8E7958.top = 0;
+        CInfinity::stru_8E7958.right = 800;
+        CInfinity::stru_8E7958.bottom = 316;
 
-        stru_8E7988.left = 0;
-        stru_8E7988.top = 0;
-        stru_8E7988.right = 800;
-        stru_8E7988.bottom = 461;
+        CInfinity::stru_8E7988.left = 0;
+        CInfinity::stru_8E7988.top = 0;
+        CInfinity::stru_8E7988.right = 800;
+        CInfinity::stru_8E7988.bottom = 461;
 
-        stru_8E79A8.left = 144;
-        stru_8E79A8.top = 66;
-        stru_8E79A8.right = 656;
-        stru_8E79A8.bottom = 450;
+        CInfinity::stru_8E79A8.left = 144;
+        CInfinity::stru_8E79A8.top = 66;
+        CInfinity::stru_8E79A8.right = 656;
+        CInfinity::stru_8E79A8.bottom = 450;
 
-        stru_8E79B8.left = 0;
-        stru_8E79B8.top = 0;
-        stru_8E79B8.right = 800;
-        stru_8E79B8.bottom = 433;
+        CInfinity::stru_8E79B8.left = 0;
+        CInfinity::stru_8E79B8.top = 0;
+        CInfinity::stru_8E79B8.right = 800;
+        CInfinity::stru_8E79B8.bottom = 433;
 
-        stru_8E79C8.left = 0;
-        stru_8E79C8.top = 0;
-        stru_8E79C8.right = 800;
-        stru_8E79C8.bottom = 540;
+        CInfinity::stru_8E79C8.left = 0;
+        CInfinity::stru_8E79C8.top = 0;
+        CInfinity::stru_8E79C8.right = 800;
+        CInfinity::stru_8E79C8.bottom = 540;
 
-        stru_8E79E0.left = 0;
-        stru_8E79E0.top = 0;
-        stru_8E79E0.right = 800;
-        stru_8E79E0.bottom = 493;
+        CInfinity::stru_8E79E0.left = 0;
+        CInfinity::stru_8E79E0.top = 0;
+        CInfinity::stru_8E79E0.right = 800;
+        CInfinity::stru_8E79E0.bottom = 493;
 
-        stru_8E79F8.left = 0;
-        stru_8E79F8.top = 0;
-        stru_8E79F8.right = 800;
-        stru_8E79F8.bottom = 476;
+        CInfinity::stru_8E79F8.left = 0;
+        CInfinity::stru_8E79F8.top = 0;
+        CInfinity::stru_8E79F8.right = 800;
+        CInfinity::stru_8E79F8.bottom = 476;
 
-        stru_8E7A10.left = 0;
-        stru_8E7A10.top = 0;
-        stru_8E7A10.right = 736;
-        stru_8E7A10.bottom = 354;
+        CInfinity::stru_8E7A10.left = 0;
+        CInfinity::stru_8E7A10.top = 0;
+        CInfinity::stru_8E7A10.right = 736;
+        CInfinity::stru_8E7A10.bottom = 354;
 
         CVideo::SCREENHEIGHT = 600;
         CHUI_GUIEXT = "08";
         break;
     }
 
-    CVidMode::word_8BA320 = 3 * (((stru_8E7548.right - stru_8E7548.left + 63) / 64 + 1) * ((stru_8E7548.bottom - stru_8E7548.top + 63) / 64 + 1)) / 2;
+    CVidMode::word_8BA320 = 3 * (((CInfinity::stru_8E7548.right - CInfinity::stru_8E7548.left + 63) / 64 + 1) * ((CInfinity::stru_8E7548.bottom - CInfinity::stru_8E7548.top + 63) / 64 + 1)) / 2;
 
     // TODO: Check assignments to `field_49B4`. In binary they appear in random
     // order.

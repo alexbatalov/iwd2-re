@@ -22,6 +22,36 @@ const CString CInfinity::NIGHT_RESREF_SUFFIX("N");
 // 0x8E7968
 const CString CInfinity::RAIN_RESREF_SUFFIX("R");
 
+// 0x8E7538
+CRect CInfinity::stru_8E7538(0, 0, 800, 490);
+
+// 0x8E7548
+CRect CInfinity::stru_8E7548(0, 0, 800, 600);
+
+// 0x8E7958
+CRect CInfinity::stru_8E7958(0, 0, 800, 316);
+
+// 0x8E7988
+CRect CInfinity::stru_8E7988(0, 0, 800, 461);
+
+// 0x8E79A8
+CRect CInfinity::stru_8E79A8(0, 0, 800, 450);
+
+// 0x8E79B8
+CRect CInfinity::stru_8E79B8(0, 0, 800, 433);
+
+// 0x8E79C8
+CRect CInfinity::stru_8E79C8(0, 0, 800, 540);
+
+// 0x8E79E0
+CRect CInfinity::stru_8E79E0(0, 0, 800, 493);
+
+// 0x8E79F8
+CRect CInfinity::stru_8E79F8(0, 0, 800, 476);
+
+// 0x8E7A10
+CRect CInfinity::stru_8E7A10(0, 0, 800, 354);
+
 // 0x8E7970
 const CResRef CInfinity::THUNDERRESREFS[3] = {
     CResRef("Amb_E13a"),

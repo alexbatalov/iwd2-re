@@ -66,16 +66,6 @@ public:
     static CString OVERRIDE_DIR_NAME;
     static const CString PRINTSCREEN_FILE_NAME;
     static const CString ICON_RES_ID;
-    static RECT stru_8E7538;
-    static RECT stru_8E7548;
-    static RECT stru_8E7958;
-    static RECT stru_8E7988;
-    static RECT stru_8E79A8;
-    static RECT stru_8E79B8;
-    static RECT stru_8E79C8;
-    static RECT stru_8E79E0;
-    static RECT stru_8E79F8;
-    static RECT stru_8E7A10;
 
     CBaldurChitin();
     ~CBaldurChitin();

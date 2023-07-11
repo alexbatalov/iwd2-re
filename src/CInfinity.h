@@ -14,6 +14,16 @@ public:
     static const CString RAIN_RESREF_SUFFIX;
     static const CResRef THUNDERRESREFS[3];
     static BOOLEAN TRANSLUCENT_BLTS_ON;
+    static CRect stru_8E7538;
+    static CRect stru_8E7548;
+    static CRect stru_8E7958;
+    static CRect stru_8E7988;
+    static CRect stru_8E79A8;
+    static CRect stru_8E79B8;
+    static CRect stru_8E79C8;
+    static CRect stru_8E79E0;
+    static CRect stru_8E79F8;
+    static CRect stru_8E7A10;
 
     CInfinity();
     ~CInfinity();
