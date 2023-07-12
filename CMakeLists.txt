@@ -264,6 +264,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CUnknown2.h"
     "src/CUtil.cpp"
     "src/CUtil.h"
+    "src/CVariableHash.cpp"
+    "src/CVariableHash.h"
     "src/CVidBitmap.cpp"
     "src/CVidBitmap.h"
     "src/CVidBlitter.cpp"

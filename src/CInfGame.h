@@ -145,6 +145,7 @@ public:
     /* 0000 */ CRuleTables m_ruleTables;
     /* 1B58 */ CCriticalSection field_1B58;
     /* 1B78 */ CTimerWorld m_worldTime;
+    /* 1B84 */ unsigned char field_1B84;
     /* 1B96 */ SHORT m_nState;
     /* 1BA1 */ unsigned char field_1BA1;
     /* 1BB2 */ CMultiplayerSettings m_multiplayerSettings;

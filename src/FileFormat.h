@@ -134,4 +134,20 @@ public:
     DWORD nUnused[32];
 };
 
+class CAreaVariable {
+public:
+    CAreaVariable()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    SCRIPTNAME m_name;
+    WORD m_type;
+    WORD m_resRefType;
+    DWORD m_dwValue;
+    LONG m_intValue;
+    DOUBLE m_floatValue;
+    SCRIPTNAME m_stringValue;
+};
+
 #endif /* FILEFORMAT_H_ */
