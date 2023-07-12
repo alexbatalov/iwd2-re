@@ -288,3 +288,27 @@ void CGameAnimationTypeFlying::SetColorEffectAll(BYTE effectType, COLORREF tintC
         }
     }
 }
+
+// 0x6A43A0
+void CGameAnimationTypeFlying::SetColorRange(BYTE colorRange, BYTE rangeValue)
+{
+    if (m_falseColor) {
+        switch (colorRange & 0xF0) {
+        case 0x00:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+            // __LINE__: 1601
+            UTIL_ASSERT(m_currentVidCell != NULL);
+
+            m_charPalette.SetRange(colorRange & 0xF, rangeValue, g_pBaldurChitin->GetObjectGame()->m_rgbMasterBitmap);
+            break;
+        case 0x10:
+        case 0x20:
+        case 0x30:
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+            // __LINE__: 1611
+            UTIL_ASSERT(FALSE);
+        }
+    }
+}
