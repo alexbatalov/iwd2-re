@@ -88,3 +88,17 @@ CGameAnimationTypeFlying::CGameAnimationTypeFlying(USHORT animationID, BYTE* col
 CGameAnimationTypeFlying::~CGameAnimationTypeFlying()
 {
 }
+
+// 0x6A3E90
+void CGameAnimationTypeFlying::CalculateFxRect(CRect& rFx, CPoint& ptReference, LONG posZ)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 1318
+    UTIL_ASSERT(m_currentVidCell != NULL);
+
+    m_currentVidCell->GetCurrentCenterPoint(ptReference, FALSE);
+
+    CSize frameSize;
+    m_currentVidCell->GetCurrentFrameSize(frameSize, FALSE);
+    rFx.SetRect(0, 0, frameSize.cx, frameSize.cy);
+}

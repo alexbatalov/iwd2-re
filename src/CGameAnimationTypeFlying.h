@@ -8,6 +8,7 @@ class CGameAnimationTypeFlying : public CGameAnimationType {
 public:
     CGameAnimationTypeFlying(USHORT animationID, BYTE* colorRangeValues, WORD facing);
     /* 0000 */ ~CGameAnimationTypeFlying() override;
+    /* 0004 */ void CalculateFxRect(CRect& rFx, CPoint& ptReference, LONG posZ) override;
 
     /* 03FE */ CVidCell* m_currentVidCell;
     /* 0402 */ CVidCell* m_currentVidCellBase;

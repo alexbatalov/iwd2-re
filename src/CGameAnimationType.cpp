@@ -39,6 +39,11 @@ CGameAnimationType::~CGameAnimationType()
 {
 }
 
+// 0x78E750
+void CGameAnimationType::CalculateFxRect(CRect& rFx, CPoint& ptReference, LONG posZ)
+{
+}
+
 // 0x799E40
 void CGameAnimationType::CalculateGCBoundsRect(CRect& rGCBounds, const CPoint& pos, const CPoint& ptReference, LONG posZ, LONG nWidth, LONG nHeight)
 {
