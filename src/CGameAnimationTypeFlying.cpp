@@ -102,3 +102,17 @@ void CGameAnimationTypeFlying::CalculateFxRect(CRect& rFx, CPoint& ptReference, 
     m_currentVidCell->GetCurrentFrameSize(frameSize, FALSE);
     rFx.SetRect(0, 0, frameSize.cx, frameSize.cy);
 }
+
+// 0x6A3F00
+void CGameAnimationTypeFlying::CalculateGCBoundsRect(CRect& rGCBounds, const CPoint& pos, const CPoint& ptReference, LONG posZ, LONG nWidth, LONG nHeight)
+{
+    if (m_currentBamDirection > m_extendDirectionTest) {
+        rGCBounds.left = ptReference.x + pos.x - nWidth;
+    } else {
+        rGCBounds.left = pos.x - ptReference.x;
+    }
+
+    rGCBounds.top = posZ + pos.y - ptReference.y;
+    rGCBounds.right = rGCBounds.left + nWidth;
+    rGCBounds.bottom = rGCBounds.top + nHeight;
+}
