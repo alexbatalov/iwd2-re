@@ -129,3 +129,9 @@ BYTE CGameAnimationTypeFlying::GetListType()
 {
     return CGAMEOBJECT_LIST_FLIGHT;
 }
+
+// 0x6A4EA0
+BOOL CGameAnimationTypeFlying::IsFalseColor()
+{
+    return m_falseColor;
+}

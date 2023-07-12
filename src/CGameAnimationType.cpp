@@ -156,6 +156,12 @@ DWORD CGameAnimationType::GetSndWalkFreq()
     return m_nSndFreq;
 }
 
+// 0x49FC40
+BOOL CGameAnimationType::IsFalseColor()
+{
+    return TRUE;
+}
+
 // 0x55D200
 SHORT CGameAnimationType::GetCastHeight()
 {
