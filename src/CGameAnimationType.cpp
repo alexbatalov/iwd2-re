@@ -162,6 +162,12 @@ BOOL CGameAnimationType::IsFalseColor()
     return TRUE;
 }
 
+// 0x78E6E0
+BOOL CGameAnimationType::IsMirroring()
+{
+    return FALSE;
+}
+
 // 0x55D200
 SHORT CGameAnimationType::GetCastHeight()
 {

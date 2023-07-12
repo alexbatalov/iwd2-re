@@ -135,3 +135,9 @@ BOOL CGameAnimationTypeFlying::IsFalseColor()
 {
     return m_falseColor;
 }
+
+// 0x6A3C80
+BOOL CGameAnimationTypeFlying::IsMirroring()
+{
+    return m_currentBamDirection > m_extendDirectionTest;
+}

@@ -13,6 +13,7 @@ public:
     /* 000C */ void ChangeDirection(SHORT nDirection) override;
     /* 003C */ BYTE GetListType() override;
     /* 0078 */ BOOL IsFalseColor() override;
+    /* 0080 */ BOOL IsMirroring() override;
 
     /* 03FE */ CVidCell* m_currentVidCell;
     /* 0402 */ CVidCell* m_currentVidCellBase;
