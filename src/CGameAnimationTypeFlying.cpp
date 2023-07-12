@@ -151,3 +151,13 @@ BOOL CGameAnimationTypeFlying::IsBeginningOfSequence()
 
     return m_currentVidCell->m_nCurrentFrame == 0;
 }
+
+// 0x6A3CE0
+BOOL CGameAnimationTypeFlying::IsEndOfSequence()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 786
+    UTIL_ASSERT(m_currentVidCell != NULL);
+
+    return m_currentVidCell->IsEndOfSequence(FALSE);
+}

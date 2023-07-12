@@ -174,6 +174,12 @@ BOOL CGameAnimationType::IsBeginningOfSequence()
     return TRUE;
 }
 
+// 0x49FC40
+BOOL CGameAnimationType::IsEndOfSequence()
+{
+    return TRUE;
+}
+
 // 0x55D200
 SHORT CGameAnimationType::GetCastHeight()
 {
