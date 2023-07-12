@@ -78,6 +78,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CGameAnimationType.h"
     "src/CGameAnimationTypeFlying.cpp"
     "src/CGameAnimationTypeFlying.h"
+    "src/CGameAnimationTypeTownStatic.cpp"
+    "src/CGameAnimationTypeTownStatic.h"
     "src/CGameArea.cpp"
     "src/CGameArea.h"
     "src/CGameJournal.cpp"

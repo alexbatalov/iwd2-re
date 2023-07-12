@@ -60,6 +60,12 @@ void CGameAnimationType::GetAnimationResRef(CString& resRef, BYTE range)
     resRef = "";
 }
 
+// 0x6A3130
+BOOLEAN CGameAnimationType::CanLieDown()
+{
+    return TRUE;
+}
+
 // 0x55D0A0
 WORD CGameAnimationType::GetCastFrame()
 {
