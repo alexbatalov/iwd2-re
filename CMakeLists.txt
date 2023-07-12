@@ -223,6 +223,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CSoundMixer.h"
     "src/CSoundProperties.cpp"
     "src/CSoundProperties.h"
+    "src/CSpawn.cpp"
+    "src/CSpawn.h"
     "src/CSpell.cpp"
     "src/CSpell.h"
     "src/CStrRes.h"
