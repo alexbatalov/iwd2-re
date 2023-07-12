@@ -44,6 +44,12 @@ void CGameAnimationType::CalculateGCBoundsRect(CRect& rGCBounds, const CPoint& p
 {
 }
 
+// 0x55D080
+void CGameAnimationType::GetAnimationResRef(CString& resRef, BYTE range)
+{
+    resRef = "";
+}
+
 // 0x55D0A0
 WORD CGameAnimationType::GetCastFrame()
 {

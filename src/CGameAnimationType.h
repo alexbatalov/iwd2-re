@@ -18,6 +18,7 @@ public:
 
     /* 0000 */ virtual ~CGameAnimationType();
     /* 0008 */ virtual void CalculateGCBoundsRect(CRect& rGCBounds, const CPoint& pos, const CPoint& ptReference, LONG posZ, LONG nWidth, LONG nHeight);
+    /* 0024 */ virtual void GetAnimationResRef(CString& resRef, BYTE range);
     /* 0030 */ virtual WORD GetCastFrame();
     /* 0034 */ virtual BYTE GetColorBlood();
     /* 0038 */ virtual BYTE GetColorChunks();
