@@ -72,3 +72,9 @@ BYTE CGameAnimationType::GetPersonalSpace()
 {
     return m_personalSpace;
 }
+
+// 0x55D140
+const char* CGameAnimationType::GetSndArmor()
+{
+    return "";
+}

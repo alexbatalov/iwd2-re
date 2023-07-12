@@ -26,6 +26,7 @@ public:
     /* 0050 */ virtual NECK_POINTS GetNeckOffsets(SHORT nDirection);
     /* 0054 */ virtual const CRect& GetEllipseRect();
     /* 005C */ virtual BYTE GetPersonalSpace();
+    /* 0060 */ virtual const char* GetSndArmor();
 
     /* 0004 */ USHORT m_animationID;
     /* 0006 */ BYTE m_moveScale;
