@@ -25,6 +25,7 @@ public:
     /* 004C */ virtual BYTE GetMoveScaleDefault();
     /* 0050 */ virtual NECK_POINTS GetNeckOffsets(SHORT nDirection);
     /* 0054 */ virtual const CRect& GetEllipseRect();
+    /* 005C */ virtual BYTE GetPersonalSpace();
 
     /* 0004 */ USHORT m_animationID;
     /* 0006 */ BYTE m_moveScale;
@@ -34,6 +35,7 @@ public:
     /* 0019 */ BYTE m_colorChunks;
     /* 0022 */ NECK_POINTS m_neckOffsets[8];
     /* 0042 */ CVidBitmap m_combatRounds[5];
+    /* 03E4 */ BYTE m_personalSpace;
     /* 03E6 */ WORD m_castFrame;
 };
 

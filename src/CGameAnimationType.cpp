@@ -66,3 +66,9 @@ const CRect& CGameAnimationType::GetEllipseRect()
 {
     return m_rEllipse;
 }
+
+// 0x55D120
+BYTE CGameAnimationType::GetPersonalSpace()
+{
+    return m_personalSpace;
+}
