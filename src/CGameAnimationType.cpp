@@ -42,3 +42,9 @@ void CGameAnimationType::SetMoveScale(BYTE scale)
 {
     m_moveScaleCurrent = scale;
 }
+
+// 0x55D0F0
+void CGameAnimationType::ResetMoveScale()
+{
+    m_moveScaleCurrent = m_moveScale;
+}
