@@ -95,6 +95,8 @@ public:
     SEQUENCEENTRY* GetResSequences();
     void Release(BOOLEAN& bDemanded);
 
+    void UnsuppressTintAllRanges();
+
     /* 00B4 */ CResHelper<CResCellHeader, 1100> m_header;
     /* 00C4 */ SHORT m_nCurrentFrame;
     /* 00C6 */ SHORT m_nCurrentSequence;

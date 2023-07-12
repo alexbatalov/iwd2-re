@@ -190,6 +190,11 @@ void CGameAnimationType::DecrementFrame()
 {
 }
 
+// 0x799E60
+void CGameAnimationType::ClearColorEffects(BYTE colorRange)
+{
+}
+
 // 0x55D200
 SHORT CGameAnimationType::GetCastHeight()
 {

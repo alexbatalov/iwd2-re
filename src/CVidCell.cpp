@@ -1878,3 +1878,9 @@ void CVidCell::Release(BOOLEAN& bDemanded)
         }
     }
 }
+
+// NOTE: Inlined.
+void CVidCell::UnsuppressTintAllRanges()
+{
+    m_paletteAffects.suppressTints = 0;
+}

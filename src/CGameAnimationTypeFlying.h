@@ -18,6 +18,7 @@ public:
     /* 0084 */ BOOL IsEndOfSequence() override;
     /* 0088 */ void IncrementFrame() override;
     /* 008C */ void DecrementFrame() override;
+    /* 0094 */ void ClearColorEffects(BYTE colorRange) override;
 
     /* 03FE */ CVidCell* m_currentVidCell;
     /* 0402 */ CVidCell* m_currentVidCellBase;

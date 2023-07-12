@@ -44,6 +44,7 @@ public:
     /* 0084 */ virtual BOOL IsEndOfSequence();
     /* 0088 */ virtual void IncrementFrame();
     /* 008C */ virtual void DecrementFrame();
+    /* 0094 */ virtual void ClearColorEffects(BYTE colorRange);
     /* 00B0 */ virtual void CalculateFxRectMax(CRect& rFx, CPoint& ptReference, LONG posZ);
     /* 00B4 */ virtual void SetNeckOffsets(SHORT Sx, SHORT Sy, SHORT SWx, SHORT SWy, SHORT Wx, SHORT Wy, SHORT NWx, SHORT NWy, SHORT Nx, SHORT Ny, SHORT NEx, SHORT NEy, SHORT Ex, SHORT Ey, SHORT SEx, SHORT SEy);
     /* 00C4 */ virtual SHORT GetCastHeight();

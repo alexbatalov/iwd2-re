@@ -181,3 +181,34 @@ void CGameAnimationTypeFlying::DecrementFrame()
 
     m_currentVidCell->m_nCurrentFrame--;
 }
+
+// 0x6A4000
+void CGameAnimationTypeFlying::ClearColorEffects(BYTE colorRange)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 1410
+    UTIL_ASSERT(m_currentVidCell != NULL);
+
+    switch (colorRange & 0xF0) {
+    case 0x00:
+        if (m_falseColor) {
+            m_g1VidCellBase.DeleteRangeAffects(colorRange & 0xF);
+            m_g1VidCellBase.UnsuppressTint(colorRange & 0xF);
+        } else {
+            m_g1VidCellBase.SetTintColor(RGB(CVidPalette::NO_TINT, CVidPalette::NO_TINT, CVidPalette::NO_TINT));
+            m_g1VidCellBase.DeleteResPaletteAffect();
+
+            // NOTE: Uninline.
+            m_g1VidCellBase.UnsuppressTintAllRanges();
+        }
+        break;
+    case 0x10:
+    case 0x20:
+    case 0x30:
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+        // __LINE__: 1433
+        UTIL_ASSERT(FALSE);
+    }
+}
