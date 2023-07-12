@@ -1922,7 +1922,10 @@ INT CInfGame::GetCurrentChapter()
 // 0x435110
 void CInfGame::SetCurrentChapter(INT nChapter)
 {
-    // TODO: Incomplete.
+    CVariable* pVar = GetVariables()->FindKey(CHAPTER_GLOBAL);
+    if (pVar != NULL) {
+        pVar->m_intValue = nChapter;
+    }
 }
 
 // 0x452FD0
