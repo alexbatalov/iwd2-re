@@ -14,8 +14,10 @@ public:
     /* 0030 */ virtual WORD GetCastFrame();
     /* 0034 */ virtual BYTE GetColorBlood();
     /* 0038 */ virtual BYTE GetColorChunks();
+    /* 0040 */ virtual BYTE GetMoveScale();
 
     /* 0004 */ USHORT m_animationID;
+    /* 0007 */ BYTE m_moveScaleCurrent;
     /* 0018 */ BYTE m_colorBlood;
     /* 0019 */ BYTE m_colorChunks;
     /* 0042 */ CVidBitmap m_combatRounds[5];

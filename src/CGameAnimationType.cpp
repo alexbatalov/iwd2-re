@@ -30,3 +30,9 @@ BYTE CGameAnimationType::GetColorChunks()
 {
     return m_colorChunks;
 }
+
+// 0x55D0D0
+BYTE CGameAnimationType::GetMoveScale()
+{
+    return m_moveScaleCurrent;
+}
