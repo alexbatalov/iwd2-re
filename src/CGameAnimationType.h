@@ -11,9 +11,11 @@ public:
 
     /* 0000 */ virtual ~CGameAnimationType();
     /* 0008 */ virtual void CalculateGCBoundsRect(CRect& rGCBounds, const CPoint& pos, const CPoint& ptReference, LONG posZ, LONG nWidth, LONG nHeight);
+    /* 0030 */ virtual WORD GetCastFrame();
 
     /* 0004 */ USHORT m_animationID;
     /* 0042 */ CVidBitmap m_combatRounds[5];
+    /* 03E6 */ WORD m_castFrame;
 };
 
 #endif /* CGAMEANIMATIONTYPE_H_ */
