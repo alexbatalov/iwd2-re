@@ -78,3 +78,9 @@ const char* CGameAnimationType::GetSndArmor()
 {
     return "";
 }
+
+// 0x55D130
+const char* CGameAnimationType::GetSndDeath()
+{
+    return m_pSndDeath;
+}
