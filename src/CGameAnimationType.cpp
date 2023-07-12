@@ -232,6 +232,12 @@ SHORT CGameAnimationType::GetCastHeight()
     return 35;
 }
 
+// 0x55D210
+SHORT CGameAnimationType::GetCurrentFrame()
+{
+    return -1;
+}
+
 // 0x6A1E80
 void CGameAnimationType::SetNeckOffsets(SHORT Sx, SHORT Sy, SHORT SWx, SHORT SWy, SHORT Wx, SHORT Wy, SHORT NWx, SHORT NWy, SHORT Nx, SHORT Ny, SHORT NEx, SHORT NEy, SHORT Ex, SHORT Ey, SHORT SEx, SHORT SEy)
 {
