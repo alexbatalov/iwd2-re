@@ -108,3 +108,15 @@ SHORT CGameAnimationType::GetCastHeight()
 {
     return 35;
 }
+
+// 0x6A1F20
+void CGameAnimationType::CalculateFxRectMax(CRect& rFx, CPoint& ptReference, LONG posZ)
+{
+    ptReference.x = 256;
+    ptReference.y = 256;
+
+    rFx.left = 0;
+    rFx.top = 0;
+    rFx.right = 512;
+    rFx.bottom = 512;
+}
