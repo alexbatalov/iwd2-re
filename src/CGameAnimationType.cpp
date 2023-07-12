@@ -185,6 +185,11 @@ void CGameAnimationType::IncrementFrame()
 {
 }
 
+// 0x78E730
+void CGameAnimationType::DecrementFrame()
+{
+}
+
 // 0x55D200
 SHORT CGameAnimationType::GetCastHeight()
 {

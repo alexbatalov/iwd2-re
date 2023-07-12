@@ -171,3 +171,13 @@ void CGameAnimationTypeFlying::IncrementFrame()
 
     m_currentVidCell->FrameAdvance();
 }
+
+// 0x6A3D60
+void CGameAnimationTypeFlying::DecrementFrame()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 788
+    UTIL_ASSERT(m_currentVidCell != NULL);
+
+    m_currentVidCell->m_nCurrentFrame--;
+}
