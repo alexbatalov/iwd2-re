@@ -17,6 +17,7 @@ public:
     /* 0040 */ virtual BYTE GetMoveScale();
     /* 0044 */ virtual void SetMoveScale(BYTE scale);
     /* 0048 */ virtual void ResetMoveScale();
+    /* 004C */ virtual BYTE GetMoveScaleDefault();
 
     /* 0004 */ USHORT m_animationID;
     /* 0006 */ BYTE m_moveScale;

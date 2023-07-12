@@ -48,3 +48,9 @@ void CGameAnimationType::ResetMoveScale()
 {
     m_moveScaleCurrent = m_moveScale;
 }
+
+// 0x45B3A0
+BYTE CGameAnimationType::GetMoveScaleDefault()
+{
+    return m_moveScale;
+}
