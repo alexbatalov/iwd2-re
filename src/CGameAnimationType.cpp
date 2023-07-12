@@ -168,6 +168,12 @@ BOOL CGameAnimationType::IsMirroring()
     return FALSE;
 }
 
+// 0x49FC40
+BOOL CGameAnimationType::IsBeginningOfSequence()
+{
+    return TRUE;
+}
+
 // 0x55D200
 SHORT CGameAnimationType::GetCastHeight()
 {

@@ -141,3 +141,13 @@ BOOL CGameAnimationTypeFlying::IsMirroring()
 {
     return m_currentBamDirection > m_extendDirectionTest;
 }
+
+// 0x6A3CA0
+BOOL CGameAnimationTypeFlying::IsBeginningOfSequence()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 785
+    UTIL_ASSERT(m_currentVidCell != NULL);
+
+    return m_currentVidCell->m_nCurrentFrame == 0;
+}

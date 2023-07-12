@@ -40,6 +40,7 @@ public:
     /* 0070 */ virtual DWORD GetSndWalkFreq();
     /* 0074 */ virtual BOOL IsFalseColor();
     /* 007C */ virtual BOOL IsMirroring();
+    /* 0080 */ virtual BOOL IsBeginningOfSequence();
     /* 00B0 */ virtual void CalculateFxRectMax(CRect& rFx, CPoint& ptReference, LONG posZ);
     /* 00B4 */ virtual void SetNeckOffsets(SHORT Sx, SHORT Sy, SHORT SWx, SHORT SWy, SHORT Wx, SHORT Wy, SHORT NWx, SHORT NWy, SHORT Nx, SHORT Ny, SHORT NEx, SHORT NEy, SHORT Ex, SHORT Ey, SHORT SEx, SHORT SEy);
     /* 00C4 */ virtual SHORT GetCastHeight();

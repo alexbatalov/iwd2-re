@@ -14,6 +14,7 @@ public:
     /* 003C */ BYTE GetListType() override;
     /* 0074 */ BOOL IsFalseColor() override;
     /* 007C */ BOOL IsMirroring() override;
+    /* 0080 */ BOOL IsBeginningOfSequence() override;
 
     /* 03FE */ CVidCell* m_currentVidCell;
     /* 0402 */ CVidCell* m_currentVidCellBase;
