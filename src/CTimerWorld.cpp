@@ -278,28 +278,28 @@ void CTimerWorld::StopTime()
     }
 }
 
-// NOTE: Inlined.
+// 0x45B540
 BOOLEAN CTimerWorld::IsDay()
 {
     ULONG time = m_gameTime % TIMESCALE_MSEC_PER_DAY;
     return time >= TIME_DAY && time < TIME_DUSK;
 }
 
-// NOTE: Inlined.
+// 0x45B570
 BOOLEAN CTimerWorld::IsNight()
 {
     ULONG time = m_gameTime % TIMESCALE_MSEC_PER_DAY;
-    return time >= TIME_NIGHT && time < TIME_DAWN;
+    return time >= TIME_NIGHT || time < TIME_DAWN;
 }
 
-// NOTE: Inlined.
+// 0x45B5A0
 BOOLEAN CTimerWorld::IsDawn()
 {
     ULONG time = m_gameTime % TIMESCALE_MSEC_PER_DAY;
     return time >= TIME_DAWN && time < TIME_DAY;
 }
 
-// NOTE: Inlined.
+// 0x45B5D0
 BOOLEAN CTimerWorld::IsDusk()
 {
     ULONG time = m_gameTime % TIMESCALE_MSEC_PER_DAY;
