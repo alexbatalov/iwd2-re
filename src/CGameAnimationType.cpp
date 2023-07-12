@@ -96,3 +96,9 @@ const char* CGameAnimationType::GetSndWalk(SHORT a1)
 {
     return "";
 }
+
+// 0x55D160
+DWORD CGameAnimationType::GetSndWalkFreq()
+{
+    return m_nSndFreq;
+}

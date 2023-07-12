@@ -30,6 +30,7 @@ public:
     /* 0064 */ virtual const char* GetSndDeath();
     /* 0068 */ virtual const char* GetSndReady();
     /* 0070 */ virtual const char* GetSndWalk(SHORT a1);
+    /* 0074 */ virtual DWORD GetSndWalkFreq();
 
     /* 0004 */ USHORT m_animationID;
     /* 0006 */ BYTE m_moveScale;
@@ -37,6 +38,7 @@ public:
     /* 0008 */ CRect m_rEllipse;
     /* 0018 */ BYTE m_colorBlood;
     /* 0019 */ BYTE m_colorChunks;
+    /* 001A */ DWORD m_nSndFreq;
     /* 001E */ const char* m_pSndDeath;
     /* 0022 */ NECK_POINTS m_neckOffsets[8];
     /* 0042 */ CVidBitmap m_combatRounds[5];
