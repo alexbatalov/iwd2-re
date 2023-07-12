@@ -5,6 +5,57 @@
 #include "CInfGame.h"
 #include "CUtil.h"
 
+// 0x85BB38
+const BYTE CGameSprite::DIR_S = 0;
+
+// 0x85BB39
+const BYTE CGameSprite::DIR_SW = 2;
+
+// 0x85BB3A
+const BYTE CGameSprite::DIR_W = 4;
+
+// 0x85BB3B
+const BYTE CGameSprite::DIR_NW = 6;
+
+// 0x85BB3C
+const BYTE CGameSprite::DIR_N = 8;
+
+// 0x85BB3D
+const BYTE CGameSprite::DIR_NE = 10;
+
+// 0x85BB3E
+const BYTE CGameSprite::DIR_E = 12;
+
+// 0x85BB3F
+const BYTE CGameSprite::DIR_SE = 14;
+
+// 0x85BB40
+const BYTE CGameSprite::DIR_SSW = 1;
+
+// 0x85BB41
+const BYTE CGameSprite::DIR_SWW = 3;
+
+// 0x85BB42
+const BYTE CGameSprite::DIR_NWW = 5;
+
+// 0x85BB43
+const BYTE CGameSprite::DIR_NNW = 7;
+
+// 0x85BB44
+const BYTE CGameSprite::DIR_NNE = 9;
+
+// 0x85BB45
+const BYTE CGameSprite::DIR_NEE = 11;
+
+// 0x85BB46
+const BYTE CGameSprite::DIR_SEE = 13;
+
+// 0x85BB47
+const BYTE CGameSprite::DIR_SSE = 15;
+
+// 0x85BB48
+const BYTE CGameSprite::NUM_DIR = 16;
+
 // 0x8F94B8
 const CPoint CGameSprite::PORTRAIT_ICON_SIZE(10, 10);
 

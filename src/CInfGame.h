@@ -13,6 +13,7 @@
 #include "CTimerWorld.h"
 #include "CVRamPool.h"
 #include "CVariableHash.h"
+#include "CVidBitmap.h"
 
 // Seen in `CRuleTables::GetStartPoint` assertion.
 #define CINFGAME_MAXCHARACTERS 6
@@ -154,6 +155,7 @@ public:
     /* 1C78 */ CInfButtonArray m_cButtonArray;
     /* 3662 */ CVRamPool m_cVRamPool;
     /* 366E */ int field_366E;
+    /* 3672 */ CVidBitmap m_rgbMasterBitmap;
     /* 372C */ CGameObjectArray m_cObjectArray;
     /* 37E0 */ BYTE m_visibleArea;
     /* 37E2 */ CGameArea* m_gameAreas[12];

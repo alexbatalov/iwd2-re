@@ -106,6 +106,24 @@ class CUIControlTextDisplay;
 
 class CGameSprite : public CGameAIBase {
 public:
+    static const BYTE DIR_S;
+    static const BYTE DIR_SW;
+    static const BYTE DIR_W;
+    static const BYTE DIR_NW;
+    static const BYTE DIR_N;
+    static const BYTE DIR_NE;
+    static const BYTE DIR_E;
+    static const BYTE DIR_SE;
+    static const BYTE DIR_SSW;
+    static const BYTE DIR_SWW;
+    static const BYTE DIR_NWW;
+    static const BYTE DIR_NNW;
+    static const BYTE DIR_NNE;
+    static const BYTE DIR_NEE;
+    static const BYTE DIR_SEE;
+    static const BYTE DIR_SSE;
+    static const BYTE NUM_DIR;
+
     static const CPoint PORTRAIT_ICON_SIZE;
     static const CResRef SPIN110;
     static const CResRef SPIN111;
