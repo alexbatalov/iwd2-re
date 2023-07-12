@@ -15,6 +15,7 @@ public:
     /* 0034 */ virtual BYTE GetColorBlood();
     /* 0038 */ virtual BYTE GetColorChunks();
     /* 0040 */ virtual BYTE GetMoveScale();
+    /* 0044 */ virtual void SetMoveScale(BYTE scale);
 
     /* 0004 */ USHORT m_animationID;
     /* 0007 */ BYTE m_moveScaleCurrent;
