@@ -90,3 +90,9 @@ const char* CGameAnimationType::GetSndReady()
 {
     return "";
 }
+
+// 0x55D150
+const char* CGameAnimationType::GetSndWalk(SHORT a1)
+{
+    return "";
+}
