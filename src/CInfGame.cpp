@@ -1910,8 +1910,10 @@ void CInfGame::MultiplayerSetCharacterCreationLocation()
 // 0x428620
 INT CInfGame::GetCurrentChapter()
 {
-    // TODO: Incomplete.
-
+    CVariable* pVar = GetVariables()->FindKey(CHAPTER_GLOBAL);
+    if (pVar != NULL) {
+        return pVar->m_intValue;
+    }
     return 0;
 }
 
