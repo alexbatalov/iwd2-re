@@ -24,10 +24,12 @@ public:
     /* 0048 */ virtual void ResetMoveScale();
     /* 004C */ virtual BYTE GetMoveScaleDefault();
     /* 0050 */ virtual NECK_POINTS GetNeckOffsets(SHORT nDirection);
+    /* 0054 */ virtual const CRect& GetEllipseRect();
 
     /* 0004 */ USHORT m_animationID;
     /* 0006 */ BYTE m_moveScale;
     /* 0007 */ BYTE m_moveScaleCurrent;
+    /* 0008 */ CRect m_rEllipse;
     /* 0018 */ BYTE m_colorBlood;
     /* 0019 */ BYTE m_colorChunks;
     /* 0022 */ NECK_POINTS m_neckOffsets[8];

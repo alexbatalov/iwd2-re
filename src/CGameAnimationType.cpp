@@ -60,3 +60,9 @@ NECK_POINTS CGameAnimationType::GetNeckOffsets(SHORT nDirection)
 {
     return m_neckOffsets[nDirection / 2];
 }
+
+// 0x4699E0
+const CRect& CGameAnimationType::GetEllipseRect()
+{
+    return m_rEllipse;
+}
