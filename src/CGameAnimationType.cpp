@@ -24,3 +24,9 @@ BYTE CGameAnimationType::GetColorBlood()
 {
     return m_colorBlood;
 }
+
+// 0x55D0C0
+BYTE CGameAnimationType::GetColorChunks()
+{
+    return m_colorChunks;
+}
