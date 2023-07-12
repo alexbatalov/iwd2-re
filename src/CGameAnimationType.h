@@ -36,10 +36,10 @@ public:
     /* 0060 */ virtual const char* GetSndArmor();
     /* 0064 */ virtual const char* GetSndDeath();
     /* 0068 */ virtual const char* GetSndReady();
-    /* 0070 */ virtual const char* GetSndWalk(SHORT a1);
-    /* 0074 */ virtual DWORD GetSndWalkFreq();
-    /* 0078 */ virtual BOOL IsFalseColor();
-    /* 0080 */ virtual BOOL IsMirroring();
+    /* 006C */ virtual const char* GetSndWalk(SHORT a1);
+    /* 0070 */ virtual DWORD GetSndWalkFreq();
+    /* 0074 */ virtual BOOL IsFalseColor();
+    /* 007C */ virtual BOOL IsMirroring();
     /* 00B0 */ virtual void CalculateFxRectMax(CRect& rFx, CPoint& ptReference, LONG posZ);
     /* 00B4 */ virtual void SetNeckOffsets(SHORT Sx, SHORT Sy, SHORT SWx, SHORT SWy, SHORT Wx, SHORT Wy, SHORT NWx, SHORT NWy, SHORT Nx, SHORT Ny, SHORT NEx, SHORT NEy, SHORT Ex, SHORT Ey, SHORT SEx, SHORT SEy);
     /* 00C4 */ virtual SHORT GetCastHeight();

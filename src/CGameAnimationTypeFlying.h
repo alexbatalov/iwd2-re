@@ -12,8 +12,8 @@ public:
     /* 0008 */ void CalculateGCBoundsRect(CRect& rGCBounds, const CPoint& pos, const CPoint& ptReference, LONG posZ, LONG nWidth, LONG nHeight) override;
     /* 000C */ void ChangeDirection(SHORT nDirection) override;
     /* 003C */ BYTE GetListType() override;
-    /* 0078 */ BOOL IsFalseColor() override;
-    /* 0080 */ BOOL IsMirroring() override;
+    /* 0074 */ BOOL IsFalseColor() override;
+    /* 007C */ BOOL IsMirroring() override;
 
     /* 03FE */ CVidCell* m_currentVidCell;
     /* 0402 */ CVidCell* m_currentVidCellBase;
