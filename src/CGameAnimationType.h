@@ -28,6 +28,7 @@ public:
     /* 005C */ virtual BYTE GetPersonalSpace();
     /* 0060 */ virtual const char* GetSndArmor();
     /* 0064 */ virtual const char* GetSndDeath();
+    /* 0068 */ virtual const char* GetSndReady();
 
     /* 0004 */ USHORT m_animationID;
     /* 0006 */ BYTE m_moveScale;

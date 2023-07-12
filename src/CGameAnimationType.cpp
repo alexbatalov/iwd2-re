@@ -84,3 +84,9 @@ const char* CGameAnimationType::GetSndDeath()
 {
     return m_pSndDeath;
 }
+
+// 0x55D140
+const char* CGameAnimationType::GetSndReady()
+{
+    return "";
+}
