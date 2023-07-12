@@ -16,6 +16,7 @@ public:
     /* 007C */ BOOL IsMirroring() override;
     /* 0080 */ BOOL IsBeginningOfSequence() override;
     /* 0084 */ BOOL IsEndOfSequence() override;
+    /* 0088 */ void IncrementFrame() override;
 
     /* 03FE */ CVidCell* m_currentVidCell;
     /* 0402 */ CVidCell* m_currentVidCellBase;

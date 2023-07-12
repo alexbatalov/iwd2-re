@@ -180,6 +180,11 @@ BOOL CGameAnimationType::IsEndOfSequence()
     return TRUE;
 }
 
+// 0x78E730
+void CGameAnimationType::IncrementFrame()
+{
+}
+
 // 0x55D200
 SHORT CGameAnimationType::GetCastHeight()
 {

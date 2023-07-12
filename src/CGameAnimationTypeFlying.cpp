@@ -161,3 +161,13 @@ BOOL CGameAnimationTypeFlying::IsEndOfSequence()
 
     return m_currentVidCell->IsEndOfSequence(FALSE);
 }
+
+// 0x6A3D20
+void CGameAnimationTypeFlying::IncrementFrame()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 787
+    UTIL_ASSERT(m_currentVidCell != NULL);
+
+    m_currentVidCell->FrameAdvance();
+}
