@@ -12,6 +12,8 @@ typedef struct {
 
 class CGameAnimationType {
 public:
+    static const CString ROUND_BASE;
+
     static BOOL MIRROR_BAM;
 
     /* 0000 */ virtual ~CGameAnimationType();
@@ -47,6 +49,9 @@ public:
     /* 0042 */ CVidBitmap m_combatRounds[5];
     /* 03E4 */ BYTE m_personalSpace;
     /* 03E6 */ WORD m_castFrame;
+    /* 03E8 */ unsigned char field_3E8;
+    /* 03FB */ unsigned char field_3FB;
+    /* 03FC */ unsigned char field_3FC;
 };
 
 #endif /* CGAMEANIMATIONTYPE_H_ */

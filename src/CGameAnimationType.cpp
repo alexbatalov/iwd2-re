@@ -1,7 +1,38 @@
 #include "CGameAnimationType.h"
 
+// 0x8F8E10
+const CString CGameAnimationType::ROUND_BASE("RNDBASE");
+
 // 0x8F8E14
 BOOL CGameAnimationType::MIRROR_BAM;
+
+// 0x6A15F0
+CGameAnimationType::CGameAnimationType()
+{
+    m_rEllipse.left = -16;
+    m_rEllipse.top = -12;
+    m_rEllipse.right = 16;
+    m_rEllipse.bottom = 12;
+    m_animationID = 0;
+    field_3E8 = 0;
+    field_3FB = 0;
+    field_3FC = 0;
+    m_moveScale = 0;
+    m_moveScaleCurrent = 0;
+    m_colorBlood = 47;
+    m_colorChunks = 0;
+    m_nSndFreq = -1;
+    m_pSndDeath = "FAL_02B";
+    memset(m_neckOffsets, 0, sizeof(m_neckOffsets));
+    m_personalSpace = 3;
+    m_castFrame = 4;
+
+    CString sName;
+    for (char c = '1'; c < '6'; c++) {
+        sName = ROUND_BASE + c;
+        m_combatRounds[c - '1'].SetResRef(CResRef(sName), TRUE, TRUE);
+    }
+}
 
 // 0x55D060
 CGameAnimationType::~CGameAnimationType()
