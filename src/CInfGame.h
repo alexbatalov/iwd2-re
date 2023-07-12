@@ -12,6 +12,7 @@
 #include "CRuleTables.h"
 #include "CTimerWorld.h"
 #include "CVRamPool.h"
+#include "CVariableHash.h"
 
 // Seen in `CRuleTables::GetStartPoint` assertion.
 #define CINFGAME_MAXCHARACTERS 6
@@ -98,6 +99,7 @@ public:
     CMultiplayerSettings* GetMultiplayerSettings();
     CGameJournal* GetJournal();
     CAIGroup* GetGroup();
+    CVariableHash* GetVariables();
 
     const CRuleTables& GetRuleTables() { return m_ruleTables; }
 
@@ -175,6 +177,7 @@ public:
     /* 44C8 */ CGameJournal m_cJournal;
     /* 4514 */ BYTE m_pKeymap[CINFGAME_KEYMAP_SIZE];
     /* 4688 */ BOOLEAN m_pKeymapFlags[CINFGAME_KEYMAP_SIZE];
+    /* 47FC */ CVariableHash m_variables;
     /* 4A00 */ HANDLE m_hSearchThread; // #guess
     /* 4AA2 */ ULONG field_4AA2;
     /* 4AFC */ int field_4AFC;

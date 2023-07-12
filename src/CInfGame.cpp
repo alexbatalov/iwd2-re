@@ -1980,3 +1980,9 @@ CAIGroup* CInfGame::GetGroup()
 {
     return &m_group;
 }
+
+// 0x4286A0
+CVariableHash* CInfGame::GetVariables()
+{
+    return &m_variables;
+}
