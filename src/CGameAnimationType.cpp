@@ -205,6 +205,11 @@ void CGameAnimationType::SetColorEffect(BYTE effectType, BYTE colorRange, COLORR
 {
 }
 
+// 0x78E750
+void CGameAnimationType::SetColorEffectAll(BYTE effectType, COLORREF tintColor, BYTE periodLength)
+{
+}
+
 // 0x55D200
 SHORT CGameAnimationType::GetCastHeight()
 {

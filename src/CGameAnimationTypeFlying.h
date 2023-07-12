@@ -21,6 +21,7 @@ public:
     /* 0094 */ void ClearColorEffects(BYTE colorRange) override;
     /* 0098 */ void ClearColorEffectsAll() override;
     /* 009C */ void SetColorEffect(BYTE effectType, BYTE colorRange, COLORREF tintColor, BYTE periodLength) override;
+    /* 00A0 */ void SetColorEffectAll(BYTE effectType, COLORREF tintColor, BYTE periodLength) override;
 
     /* 03FE */ CVidCell* m_currentVidCell;
     /* 0402 */ CVidCell* m_currentVidCellBase;

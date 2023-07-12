@@ -267,3 +267,24 @@ void CGameAnimationTypeFlying::SetColorEffect(BYTE effectType, BYTE colorRange, 
         UTIL_ASSERT(FALSE);
     }
 }
+
+// 0x6A42E0
+void CGameAnimationTypeFlying::SetColorEffectAll(BYTE effectType, COLORREF tintColor, BYTE periodLength)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 1553
+    UTIL_ASSERT(m_currentVidCell != NULL);
+
+    if (m_falseColor) {
+        for (BYTE colorRange = 0; colorRange < CVidPalette::NUM_RANGES; colorRange++) {
+            SetColorEffect(effectType, colorRange, tintColor, periodLength);
+        }
+    } else {
+        if (effectType != 0) {
+            m_g1VidCellBase.AddResPaletteAffect(effectType, tintColor, periodLength);
+            m_g1VidCellBase.SuppressTint(0);
+        } else {
+            m_g1VidCellBase.SetTintColor(tintColor);
+        }
+    }
+}
