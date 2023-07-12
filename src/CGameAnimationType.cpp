@@ -102,3 +102,9 @@ DWORD CGameAnimationType::GetSndWalkFreq()
 {
     return m_nSndFreq;
 }
+
+// 0x55D200
+SHORT CGameAnimationType::GetCastHeight()
+{
+    return 35;
+}

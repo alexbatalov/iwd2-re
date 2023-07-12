@@ -31,6 +31,7 @@ public:
     /* 0068 */ virtual const char* GetSndReady();
     /* 0070 */ virtual const char* GetSndWalk(SHORT a1);
     /* 0074 */ virtual DWORD GetSndWalkFreq();
+    /* 00C4 */ virtual SHORT GetCastHeight();
 
     /* 0004 */ USHORT m_animationID;
     /* 0006 */ BYTE m_moveScale;
