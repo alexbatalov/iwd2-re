@@ -49,6 +49,11 @@ void CGameAnimationType::CalculateGCBoundsRect(CRect& rGCBounds, const CPoint& p
 {
 }
 
+// 0x799E60
+void CGameAnimationType::ChangeDirection(SHORT nDirection)
+{
+}
+
 // 0x55D080
 void CGameAnimationType::GetAnimationResRef(CString& resRef, BYTE range)
 {

@@ -70,18 +70,8 @@ CGameAnimationTypeFlying::CGameAnimationTypeFlying(USHORT animationID, BYTE* col
 
     m_extendDirectionTest = CGameSprite::DIR_N;
 
-    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
-    // __LINE__: 1379
-    UTIL_ASSERT(m_currentVidCell != NULL);
-
-    m_currentBamDirection = facing;
-    m_currentVidCell = m_currentVidCellBase;
-
-    if (facing <= m_extendDirectionTest) {
-        m_currentVidCell->SequenceSet(facing + 9 * m_currentBamSequence);
-    } else {
-        m_currentVidCell->SequenceSet((16 - facing) % 16 + 9 * m_currentBamSequence);
-    }
+    // NOTE: Uninline.
+    ChangeDirection(facing);
 }
 
 // 0x6A3E10
@@ -115,4 +105,21 @@ void CGameAnimationTypeFlying::CalculateGCBoundsRect(CRect& rGCBounds, const CPo
     rGCBounds.top = posZ + pos.y - ptReference.y;
     rGCBounds.right = rGCBounds.left + nWidth;
     rGCBounds.bottom = rGCBounds.top + nHeight;
+}
+
+// 0x6A3F60
+void CGameAnimationTypeFlying::ChangeDirection(SHORT nDirection)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 1379
+    UTIL_ASSERT(m_currentVidCell != NULL);
+
+    m_currentBamDirection = nDirection;
+    m_currentVidCell = m_currentVidCellBase;
+
+    if (m_currentBamDirection > m_extendDirectionTest) {
+        m_currentVidCell->SequenceSet((16 - m_currentBamDirection) % 16 + 9 * m_currentBamSequence);
+    } else {
+        m_currentVidCell->SequenceSet(m_currentBamDirection + 9 * m_currentBamSequence);
+    }
 }

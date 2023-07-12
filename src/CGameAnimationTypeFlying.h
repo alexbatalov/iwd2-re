@@ -10,6 +10,7 @@ public:
     /* 0000 */ ~CGameAnimationTypeFlying() override;
     /* 0004 */ void CalculateFxRect(CRect& rFx, CPoint& ptReference, LONG posZ) override;
     /* 0008 */ void CalculateGCBoundsRect(CRect& rGCBounds, const CPoint& pos, const CPoint& ptReference, LONG posZ, LONG nWidth, LONG nHeight) override;
+    /* 000C */ void ChangeDirection(SHORT nDirection) override;
 
     /* 03FE */ CVidCell* m_currentVidCell;
     /* 0402 */ CVidCell* m_currentVidCellBase;
