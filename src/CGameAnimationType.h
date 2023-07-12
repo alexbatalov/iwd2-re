@@ -5,6 +5,11 @@
 
 #include "CVidBitmap.h"
 
+typedef struct {
+    SHORT x;
+    SHORT y;
+} NECK_POINTS;
+
 class CGameAnimationType {
 public:
     static BOOL MIRROR_BAM;
@@ -18,12 +23,14 @@ public:
     /* 0044 */ virtual void SetMoveScale(BYTE scale);
     /* 0048 */ virtual void ResetMoveScale();
     /* 004C */ virtual BYTE GetMoveScaleDefault();
+    /* 0050 */ virtual NECK_POINTS GetNeckOffsets(SHORT nDirection);
 
     /* 0004 */ USHORT m_animationID;
     /* 0006 */ BYTE m_moveScale;
     /* 0007 */ BYTE m_moveScaleCurrent;
     /* 0018 */ BYTE m_colorBlood;
     /* 0019 */ BYTE m_colorChunks;
+    /* 0022 */ NECK_POINTS m_neckOffsets[8];
     /* 0042 */ CVidBitmap m_combatRounds[5];
     /* 03E6 */ WORD m_castFrame;
 };

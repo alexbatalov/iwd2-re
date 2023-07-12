@@ -54,3 +54,9 @@ BYTE CGameAnimationType::GetMoveScaleDefault()
 {
     return m_moveScale;
 }
+
+// 0x55D100
+NECK_POINTS CGameAnimationType::GetNeckOffsets(SHORT nDirection)
+{
+    return m_neckOffsets[nDirection / 2];
+}
