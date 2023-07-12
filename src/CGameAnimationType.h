@@ -25,6 +25,7 @@ public:
     /* 0030 */ virtual WORD GetCastFrame();
     /* 0034 */ virtual BYTE GetColorBlood();
     /* 0038 */ virtual BYTE GetColorChunks();
+    /* 003C */ virtual BYTE GetListType();
     /* 0040 */ virtual BYTE GetMoveScale();
     /* 0044 */ virtual void SetMoveScale(BYTE scale);
     /* 0048 */ virtual void ResetMoveScale();

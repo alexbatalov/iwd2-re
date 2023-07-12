@@ -78,6 +78,12 @@ BYTE CGameAnimationType::GetColorChunks()
     return m_colorChunks;
 }
 
+// 0x6A3C60
+BYTE CGameAnimationType::GetListType()
+{
+    return 0;
+}
+
 // 0x55D0D0
 BYTE CGameAnimationType::GetMoveScale()
 {

@@ -123,3 +123,9 @@ void CGameAnimationTypeFlying::ChangeDirection(SHORT nDirection)
         m_currentVidCell->SequenceSet(m_currentBamDirection + 9 * m_currentBamSequence);
     }
 }
+
+// 0x6A3C70
+BYTE CGameAnimationTypeFlying::GetListType()
+{
+    return CGAMEOBJECT_LIST_FLIGHT;
+}
