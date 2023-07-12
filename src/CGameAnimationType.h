@@ -49,6 +49,7 @@ public:
     /* 009C */ virtual void SetColorEffect(BYTE effectType, BYTE colorRange, COLORREF tintColor, BYTE periodLength);
     /* 00A0 */ virtual void SetColorEffectAll(BYTE effectType, COLORREF tintColor, BYTE periodLength);
     /* 00A4 */ virtual void SetColorRange(BYTE colorRange, BYTE rangeValue);
+    /* 00A8 */ virtual void SetColorRangeAll(BYTE rangeValue);
     /* 00B0 */ virtual void CalculateFxRectMax(CRect& rFx, CPoint& ptReference, LONG posZ);
     /* 00B4 */ virtual void SetNeckOffsets(SHORT Sx, SHORT Sy, SHORT SWx, SHORT SWy, SHORT Wx, SHORT Wy, SHORT NWx, SHORT NWy, SHORT Nx, SHORT Ny, SHORT NEx, SHORT NEy, SHORT Ex, SHORT Ey, SHORT SEx, SHORT SEy);
     /* 00C4 */ virtual SHORT GetCastHeight();

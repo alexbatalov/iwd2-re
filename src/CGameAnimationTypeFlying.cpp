@@ -312,3 +312,11 @@ void CGameAnimationTypeFlying::SetColorRange(BYTE colorRange, BYTE rangeValue)
         }
     }
 }
+
+// 0x6A4490
+void CGameAnimationTypeFlying::SetColorRangeAll(BYTE rangeValue)
+{
+    for (BYTE colorRange = 0; colorRange < CVidPalette::NUM_RANGES; colorRange++) {
+        SetColorRange(colorRange, rangeValue);
+    }
+}
