@@ -18,3 +18,9 @@ WORD CGameAnimationType::GetCastFrame()
 {
     return m_castFrame;
 }
+
+// 0x55D0B0
+BYTE CGameAnimationType::GetColorBlood()
+{
+    return m_colorBlood;
+}
