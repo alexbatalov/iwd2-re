@@ -232,3 +232,38 @@ void CGameAnimationTypeFlying::ClearColorEffectsAll()
         m_g1VidCellBase.UnsuppressTintAllRanges();
     }
 }
+
+// 0x6A41A0
+void CGameAnimationTypeFlying::SetColorEffect(BYTE effectType, BYTE colorRange, COLORREF tintColor, BYTE periodLength)
+{
+    switch (colorRange & 0xF0) {
+    case 0x00:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+        // __LINE__: 1498
+        UTIL_ASSERT(m_currentVidCell != NULL);
+
+        if (m_falseColor) {
+            m_g1VidCellBase.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+
+            if (effectType != 0) {
+                m_g1VidCellBase.SuppressTint(colorRange & 0xF);
+            }
+        } else {
+            if (effectType != 0) {
+                m_g1VidCellBase.AddResPaletteAffect(effectType, tintColor, periodLength);
+                m_g1VidCellBase.SuppressTint(0);
+            } else {
+                m_g1VidCellBase.SetTintColor(tintColor);
+            }
+        }
+        break;
+    case 0x10:
+    case 0x20:
+    case 0x30:
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+        // __LINE__: 1528
+        UTIL_ASSERT(FALSE);
+    }
+}
