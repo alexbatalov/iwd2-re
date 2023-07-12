@@ -109,6 +109,27 @@ SHORT CGameAnimationType::GetCastHeight()
     return 35;
 }
 
+// 0x6A1E80
+void CGameAnimationType::SetNeckOffsets(SHORT Sx, SHORT Sy, SHORT SWx, SHORT SWy, SHORT Wx, SHORT Wy, SHORT NWx, SHORT NWy, SHORT Nx, SHORT Ny, SHORT NEx, SHORT NEy, SHORT Ex, SHORT Ey, SHORT SEx, SHORT SEy)
+{
+    m_neckOffsets[0].x = Sx;
+    m_neckOffsets[0].y = Sy;
+    m_neckOffsets[1].x = SWx;
+    m_neckOffsets[1].y = SWy;
+    m_neckOffsets[2].x = Wx;
+    m_neckOffsets[2].y = Wy;
+    m_neckOffsets[3].x = NWx;
+    m_neckOffsets[3].y = NWy;
+    m_neckOffsets[4].x = Nx;
+    m_neckOffsets[4].y = Ny;
+    m_neckOffsets[5].x = NEx;
+    m_neckOffsets[5].y = NEy;
+    m_neckOffsets[6].x = Ex;
+    m_neckOffsets[6].y = Ey;
+    m_neckOffsets[7].x = SEx;
+    m_neckOffsets[7].y = SEy;
+}
+
 // 0x6A1F20
 void CGameAnimationType::CalculateFxRectMax(CRect& rFx, CPoint& ptReference, LONG posZ)
 {
