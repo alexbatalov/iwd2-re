@@ -320,3 +320,78 @@ void CGameAnimationTypeFlying::SetColorRangeAll(BYTE rangeValue)
         SetColorRange(colorRange, rangeValue);
     }
 }
+
+// 0x6A47B0
+SHORT CGameAnimationTypeFlying::SetSequence(SHORT nSequence)
+{
+    switch (nSequence) {
+    case 1:
+    case 4:
+    case 5:
+    case 6:
+    case 8:
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+    case 17:
+        nSequence = 7;
+        break;
+    case 2:
+    case 3:
+    case 7:
+    case 9:
+        break;
+    case 10:
+        m_currentVidCellBase = &m_g1VidCellBase;
+
+        switch (m_animationID & 0xF00) {
+        case 0x0:
+            if (rand() % 3 != 0) {
+                m_currentBamSequence = 1;
+            } else {
+                m_currentBamSequence = 0;
+            }
+            break;
+        case 0x100:
+            if (rand() % 5 != 0) {
+                m_currentBamSequence = 1;
+            } else {
+                m_currentBamSequence = 0;
+            }
+            break;
+        case 0x200:
+            if (rand() % 4 != 0) {
+                m_currentBamSequence = 1;
+            } else {
+                m_currentBamSequence = 0;
+            }
+            break;
+        case 0x300:
+            if (rand() % 6 != 0) {
+                m_currentBamSequence = 1;
+            } else {
+                m_currentBamSequence = 0;
+            }
+            break;
+        case 0x400:
+            m_currentBamSequence = 1;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+            // __LINE__: 1800
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+        // __LINE__: 1805
+        UTIL_ASSERT(FALSE);
+    }
+
+    ChangeDirection(m_currentBamDirection);
+    m_currentVidCell->FrameSet(0);
+
+    return nSequence;
+}

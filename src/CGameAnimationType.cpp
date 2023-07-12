@@ -220,6 +220,12 @@ void CGameAnimationType::SetColorRangeAll(BYTE rangeValue)
 {
 }
 
+// 0x55D180
+SHORT CGameAnimationType::SetSequence(SHORT nSequence)
+{
+    return nSequence;
+}
+
 // 0x55D200
 SHORT CGameAnimationType::GetCastHeight()
 {
