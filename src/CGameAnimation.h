@@ -11,6 +11,8 @@ public:
     ~CGameAnimation();
     /* 0000 */ virtual void CalculateGCBoundsRect(CRect& rGCBounds, const CPoint& pos, const CPoint& ptReference, LONG posZ, LONG nWidth, LONG nHeight);
 
+    USHORT GetAnimationId();
+
     /* 0004 */ CGameAnimationType* m_animation;
     /* 0008 */ short field_8;
 };

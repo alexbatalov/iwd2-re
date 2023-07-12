@@ -27,3 +27,13 @@ void CGameAnimation::CalculateGCBoundsRect(CRect& rGCBounds, const CPoint& pos, 
 
     m_animation->CalculateGCBoundsRect(rGCBounds, pos, ptReference, posZ, nWidth, nHeight);
 }
+
+// 0x45B690
+USHORT CGameAnimation::GetAnimationId()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2115
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->m_animationID;
+}
