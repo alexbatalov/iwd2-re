@@ -40,6 +40,7 @@ public:
     /* 006C */ virtual const char* GetSndWalk(SHORT a1);
     /* 0070 */ virtual DWORD GetSndWalkFreq();
     /* 0074 */ virtual BOOL IsFalseColor();
+    /* 0078 */ virtual BOOL IsInvulnerable();
     /* 007C */ virtual BOOL IsMirroring();
     /* 0080 */ virtual BOOL IsBeginningOfSequence();
     /* 0084 */ virtual BOOL IsEndOfSequence();

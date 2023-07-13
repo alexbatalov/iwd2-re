@@ -169,6 +169,12 @@ BOOL CGameAnimationType::IsFalseColor()
 }
 
 // 0x78E6E0
+BOOL CGameAnimationType::IsInvulnerable()
+{
+    return FALSE;
+}
+
+// 0x78E6E0
 BOOL CGameAnimationType::IsMirroring()
 {
     return FALSE;
