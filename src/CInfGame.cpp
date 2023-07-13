@@ -1991,3 +1991,9 @@ CVariableHash* CInfGame::GetVariables()
 {
     return &m_variables;
 }
+
+// 0x6E4E80
+CVidBitmap* CInfGame::GetMasterBitmap()
+{
+    return &m_rgbMasterBitmap;
+}

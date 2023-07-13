@@ -56,7 +56,7 @@ CGameAnimationTypeFlying::CGameAnimationTypeFlying(USHORT animationID, BYTE* col
 
     if (m_falseColor) {
         for (USHORT nRange = 0; nRange < CVidPalette::NUM_RANGES; nRange++) {
-            m_charPalette.SetRange(nRange, *colorRangeValues++, g_pBaldurChitin->GetObjectGame()->m_rgbMasterBitmap);
+            m_charPalette.SetRange(nRange, *colorRangeValues++, *g_pBaldurChitin->GetObjectGame()->GetMasterBitmap());
         }
         m_g1VidCellBase.SetPalette(m_charPalette);
     }
@@ -309,7 +309,7 @@ void CGameAnimationTypeFlying::SetColorRange(BYTE colorRange, BYTE rangeValue)
             // __LINE__: 1601
             UTIL_ASSERT(m_currentVidCell != NULL);
 
-            m_charPalette.SetRange(colorRange & 0xF, rangeValue, g_pBaldurChitin->GetObjectGame()->m_rgbMasterBitmap);
+            m_charPalette.SetRange(colorRange & 0xF, rangeValue, *g_pBaldurChitin->GetObjectGame()->GetMasterBitmap());
             break;
         case 0x10:
         case 0x20:

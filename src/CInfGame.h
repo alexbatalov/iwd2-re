@@ -101,6 +101,7 @@ public:
     CGameJournal* GetJournal();
     CAIGroup* GetGroup();
     CVariableHash* GetVariables();
+    CVidBitmap* GetMasterBitmap();
 
     const CRuleTables& GetRuleTables() { return m_ruleTables; }
 
