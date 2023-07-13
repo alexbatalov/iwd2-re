@@ -54,6 +54,12 @@ void CGameAnimationType::ChangeDirection(SHORT nDirection)
 {
 }
 
+// 0x799E20
+CVidPalette* CGameAnimationType::GetAnimationPalette(BYTE range)
+{
+    return NULL;
+}
+
 // 0x55D080
 void CGameAnimationType::GetAnimationResRef(CString& resRef, BYTE range)
 {
@@ -62,6 +68,12 @@ void CGameAnimationType::GetAnimationResRef(CString& resRef, BYTE range)
 
 // 0x6A3130
 BOOLEAN CGameAnimationType::CanLieDown()
+{
+    return TRUE;
+}
+
+// 0x6A3130
+BOOLEAN CGameAnimationType::DetectedByInfravision()
 {
     return TRUE;
 }
@@ -124,6 +136,12 @@ NECK_POINTS CGameAnimationType::GetNeckOffsets(SHORT nDirection)
 const CRect& CGameAnimationType::GetEllipseRect()
 {
     return m_rEllipse;
+}
+
+// 0x78E6E0
+BOOL CGameAnimationType::GetPathSmooth()
+{
+    return FALSE;
 }
 
 // 0x55D120

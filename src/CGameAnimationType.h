@@ -21,8 +21,10 @@ public:
     /* 0004 */ virtual void CalculateFxRect(CRect& rFx, CPoint& ptReference, LONG posZ);
     /* 0008 */ virtual void CalculateGCBoundsRect(CRect& rGCBounds, const CPoint& pos, const CPoint& ptReference, LONG posZ, LONG nWidth, LONG nHeight);
     /* 000C */ virtual void ChangeDirection(SHORT nDirection);
+    /* 0020 */ virtual CVidPalette* GetAnimationPalette(BYTE range);
     /* 0024 */ virtual void GetAnimationResRef(CString& resRef, BYTE range);
     /* 0028 */ virtual BOOLEAN CanLieDown();
+    /* 002C */ virtual BOOLEAN DetectedByInfravision();
     /* 0030 */ virtual WORD GetCastFrame();
     /* 0034 */ virtual BYTE GetColorBlood();
     /* 0038 */ virtual BYTE GetColorChunks();
@@ -33,6 +35,7 @@ public:
     /* 004C */ virtual BYTE GetMoveScaleDefault();
     /* 0050 */ virtual NECK_POINTS GetNeckOffsets(SHORT nDirection);
     /* 0054 */ virtual const CRect& GetEllipseRect();
+    /* 0058 */ virtual BOOL GetPathSmooth();
     /* 005C */ virtual BYTE GetPersonalSpace();
     /* 0060 */ virtual const char* GetSndArmor();
     /* 0064 */ virtual const char* GetSndDeath();
@@ -70,6 +73,7 @@ public:
     /* 0042 */ CVidBitmap m_combatRounds[5];
     /* 03E4 */ BYTE m_personalSpace;
     /* 03E6 */ WORD m_castFrame;
+    /* 03E9 */ char m_walkRef[9];
     /* 03E8 */ unsigned char field_3E8;
     /* 03FB */ unsigned char field_3FB;
     /* 03FC */ unsigned char field_3FC;
