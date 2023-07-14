@@ -300,3 +300,9 @@ void CGameAnimationType::CalculateFxRectMax(CRect& rFx, CPoint& ptReference, LON
     rFx.right = 512;
     rFx.bottom = 512;
 }
+
+// 0x55D230
+BOOLEAN CGameAnimationType::GetCurrentResRef(CString& resBody, CString& resWeapon, CString& resShield, CString& resHelmet)
+{
+    return FALSE;
+}

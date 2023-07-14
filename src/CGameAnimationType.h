@@ -60,6 +60,7 @@ public:
     /* 00B4 */ virtual void SetNeckOffsets(SHORT Sx, SHORT Sy, SHORT SWx, SHORT SWy, SHORT Wx, SHORT Wy, SHORT NWx, SHORT NWy, SHORT Nx, SHORT Ny, SHORT NEx, SHORT NEy, SHORT Ex, SHORT Ey, SHORT SEx, SHORT SEy);
     /* 00C4 */ virtual SHORT GetCastHeight();
     /* 00C8 */ virtual SHORT GetCurrentFrame();
+    /* 00D0 */ virtual BOOLEAN GetCurrentResRef(CString& resBody, CString& resWeapon, CString& resShield, CString& resHelmet);
 
     /* 0004 */ USHORT m_animationID;
     /* 0006 */ BYTE m_moveScale;
