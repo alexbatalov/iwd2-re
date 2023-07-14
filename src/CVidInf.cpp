@@ -675,7 +675,69 @@ BOOL CVidInf::Flip(BOOL bRenderCursor)
 // 0x79C230
 BOOL CVidInf::FullScreenFlip(BOOL bRenderCursor)
 {
-    // TODO: Incomplete.
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        return WindowedFlip3d(bRenderCursor);
+    }
+
+    CRect rOldPointerStorage;
+    BOOL bPointerRendered;
+    if (bRenderCursor) {
+        RECT src;
+        src.left = 0;
+        src.top = 0;
+        src.right = 256;
+        src.bottom = 64;
+
+        if (!field_14) {
+            do {
+                HRESULT hr = g_pChitin->cVideo.cVidBlitter.BltFast(pSurfaces[CVIDINF_SURFACE_5],
+                    0,
+                    0,
+                    g_pChitin->GetCurrentVideoMode()->pSurfaces[CVIDINF_SURFACE_4],
+                    &src,
+                    DDBLTFAST_WAIT);
+                CheckResults(hr);
+                if (hr != DDERR_SURFACELOST && hr != DDERR_WASSTILLDRAWING) {
+                    break;
+                }
+            } while (!g_pChitin->field_1932);
+        }
+
+        rOldPointerStorage = m_rPointerStorage;
+        m_rPointerStorage.left = 0;
+        m_rPointerStorage.top = 0;
+        m_rPointerStorage.right = 0;
+        m_rPointerStorage.bottom = 0;
+
+        g_pChitin->m_bPointerUpdated = FALSE;
+        bPointerRendered = RenderPointer(CVIDINF_SURFACE_BACK);
+    } else {
+        bPointerRendered = FALSE;
+    }
+
+    do {
+        HRESULT hr = pSurfaces[CVIDINF_SURFACE_FRONT]->Flip(NULL, DDFLIP_WAIT);
+        CheckResults(hr);
+        if (hr != DDERR_SURFACELOST && hr != DDERR_WASSTILLDRAWING) {
+            break;
+        }
+    } while (!g_pChitin->field_1932);
+
+    if (bRenderCursor) {
+        if (field_14) {
+            if (bPointerRendered
+                && rOldPointerStorage.Width() > 0
+                && rOldPointerStorage.Height() > 0) {
+                m_pPointerVidCell->RestoreBackground(CVIDINF_SURFACE_4, CVIDINF_SURFACE_BACK, rOldPointerStorage);
+            }
+        } else {
+            if (bPointerRendered
+                && rOldPointerStorage.Width() > 0
+                && rOldPointerStorage.Height() > 0) {
+                m_pPointerVidCell->RestoreBackground(CVIDINF_SURFACE_5, CVIDINF_SURFACE_BACK, rOldPointerStorage);
+            }
+        }
+    }
 
     return FALSE;
 }
