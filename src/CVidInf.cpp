@@ -6,6 +6,7 @@
 #include "CParticle.h"
 #include "CUtil.h"
 #include "CVidImage.h"
+#include "CVidPoly.h"
 
 #define SEVEN_EIGHT_ZERO 780
 
@@ -1076,6 +1077,93 @@ BOOL CVidInf::FXLock(CRect& rFXRect, DWORD dwFlags)
 
     m_SurfaceDesc.dwSize = sizeof(m_SurfaceDesc);
     return !!LockSurface(nSurface, &m_SurfaceDesc, rFXRect);
+}
+
+// 0x79DB10
+BOOL CVidInf::FXUnlock(DWORD dwFlags, const CRect* pFxRect, const CPoint& ptRef)
+{
+    DWORD dwPolyFlags = 0;
+
+    if ((dwFlags & 0x10) != 0) {
+        dwPolyFlags |= 0x4;
+    }
+
+    if ((dwFlags & 0x20) != 0) {
+        dwPolyFlags |= 0x8;
+    }
+
+    if (g_pChitin->cVideo.Is3dAccelerated()) {
+        if (pFxRect != NULL) {
+            dwPolyFlags |= 0x2;
+
+            CVidPoly cVidPoly;
+
+            WORD vertices[8];
+            vertices[0] = static_cast<WORD>(pFxRect->left);
+            vertices[1] = static_cast<WORD>(pFxRect->top);
+            vertices[2] = static_cast<WORD>(pFxRect->right);
+            vertices[3] = vertices[1];
+            vertices[4] = vertices[2];
+            vertices[5] = static_cast<WORD>(pFxRect->bottom);
+            vertices[6] = vertices[0];
+            vertices[7] = vertices[5];
+            cVidPoly.SetPoly(vertices, 4);
+
+            if (g_pChitin->cVideo.field_13A) {
+                cVidPoly.FillPoly(reinterpret_cast<WORD*>(dword_907B20),
+                    CVidTile::BYTES_PER_TEXEL * 512,
+                    pFxRect,
+                    field_24,
+                    dwPolyFlags,
+                    ptRef);
+            } else {
+                cVidPoly.FillPoly(reinterpret_cast<WORD*>(dword_907B20),
+                    CVidTile::BYTES_PER_TEXEL * m_rLockedRect.Width(),
+                    pFxRect,
+                    field_24,
+                    dwPolyFlags,
+                    ptRef);
+            }
+        }
+        return TRUE;
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo.cpp
+    // __LINE__: 8369
+    UTIL_ASSERT(m_SurfaceDesc.lpSurface != NULL);
+
+    if (pFxRect != NULL) {
+        CVidPoly cVidPoly;
+
+        WORD vertices[8];
+        vertices[0] = static_cast<WORD>(pFxRect->left);
+        vertices[1] = static_cast<WORD>(pFxRect->top);
+        vertices[2] = static_cast<WORD>(pFxRect->right);
+        vertices[3] = vertices[1];
+        vertices[4] = vertices[2];
+        vertices[5] = static_cast<WORD>(pFxRect->bottom);
+        vertices[6] = vertices[0];
+        vertices[7] = vertices[5];
+        cVidPoly.SetPoly(vertices, 4);
+
+        cVidPoly.FillPoly(reinterpret_cast<WORD*>(m_SurfaceDesc.lpSurface),
+            m_SurfaceDesc.lPitch,
+            pFxRect,
+            field_24,
+            dwPolyFlags | 0x2,
+            ptRef);
+    }
+
+    INT nSurface;
+    if (!GetFXSurface(nSurface, dwFlags)) {
+        return FALSE;
+    }
+
+    // NOTE: Uninline.
+    UnLockSurface(nSurface, m_SurfaceDesc.lpSurface);
+    m_SurfaceDesc.lpSurface = NULL;
+
+    return TRUE;
 }
 
 // #binary-identical

@@ -3,13 +3,20 @@
 
 #include "mfc.h"
 
+typedef struct {
+    WORD x;
+    WORD y;
+} CVIDPOLY_VERTEX;
+
 class CVidPoly {
 public:
     BOOL FillPoly(WORD* pSurface, LONG lPitch, const CRect& rClip, DWORD dwColor, DWORD dwFlags, const CPoint& ptRef);
+    void SetPoly(WORD* pVertices, WORD nVertices);
+    void SetPoly(CVIDPOLY_VERTEX* pVertices, WORD nVertices);
 
     int field_0;
-    int field_4;
-    int field_8;
+    CVIDPOLY_VERTEX* m_pVertices;
+    INT m_nVertices;
     int field_C;
     int field_10;
     int field_14;
