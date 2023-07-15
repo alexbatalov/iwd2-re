@@ -74,6 +74,12 @@ CInfinity::~CInfinity()
     // TODO: Incomplete.
 }
 
+// 0x5CE1F0
+BOOL CInfinity::FXLock(CRect& rBack, DWORD dwFlags)
+{
+    return static_cast<CVidInf*>(g_pChitin->GetCurrentVideoMode())->FXLock(rBack, dwFlags);
+}
+
 // 0x5CE930
 BOOL CInfinity::FXUnlock(DWORD dwFlags, const CRect* pFxRect, const CPoint& ptRef)
 {

@@ -28,6 +28,7 @@ public:
     CInfinity();
     ~CInfinity();
 
+    BOOL FXLock(CRect& rBack, DWORD dwFlags);
     BOOL FXUnlock(DWORD dwFlags, const CRect* pFxRect, const CPoint& ptRef);
     void GetViewPosition(INT& x, INT& y);
     void CallLightning(INT xWorldPos, INT yWorldPos);
