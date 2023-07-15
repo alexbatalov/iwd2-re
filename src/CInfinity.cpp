@@ -86,6 +86,34 @@ BOOL CInfinity::FXTextOut(CVidFont* pFont, const CString& sString, INT x, INT y,
     return static_cast<CVidInf*>(g_pChitin->GetCurrentVideoMode())->FXTextOut(pFont, sString, x, y, rClip, dwFlags, bDemanded);
 }
 
+// 0x5CE280
+BOOL CInfinity::FXRender(CVidCell* pVidCell, INT nRefPointX, INT nRefPointY, DWORD dwFlags, INT nTransValue)
+{
+    if (g_pChitin->GetCurrentVideoMode()->m_nFade == 0) {
+        return TRUE;
+    }
+
+    COLORREF rgbTintColor;
+    if ((dwFlags & 0x10000) == 0) {
+        rgbTintColor = pVidCell->GetTintColor();
+        pVidCell->SetTintColor(g_pChitin->GetCurrentVideoMode()->ApplyFadeAmount(rgbTintColor));
+
+        if (!g_pChitin->cVideo.m_bIs3dAccelerated) {
+            dwFlags |= 0x20000;
+        }
+    } else {
+        rgbTintColor = dwFlags;
+    }
+
+    BOOL bResult = static_cast<CVidInf*>(g_pChitin->GetCurrentVideoMode())->FXRender(pVidCell, nRefPointX, nRefPointY, dwFlags, nTransValue);
+
+    if ((dwFlags & 0x10000) == 0) {
+        pVidCell->SetTintColor(rgbTintColor);
+    }
+
+    return bResult;
+}
+
 // 0x5CE930
 BOOL CInfinity::FXUnlock(DWORD dwFlags, const CRect* pFxRect, const CPoint& ptRef)
 {

@@ -5,6 +5,7 @@
 
 #include "CResRef.h"
 
+class CVidCell;
 class CVidFont;
 
 class CInfinity {
@@ -32,6 +33,7 @@ public:
 
     BOOL FXLock(CRect& rBack, DWORD dwFlags);
     BOOL FXTextOut(CVidFont* pFont, const CString& sString, INT x, INT y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded);
+    BOOL FXRender(CVidCell* pVidCell, INT nRefPointX, INT nRefPointY, DWORD dwFlags, INT nTransValue);
     BOOL FXUnlock(DWORD dwFlags, const CRect* pFxRect, const CPoint& ptRef);
     void GetViewPosition(INT& x, INT& y);
     void CallLightning(INT xWorldPos, INT yWorldPos);
