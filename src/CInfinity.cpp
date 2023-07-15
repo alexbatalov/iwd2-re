@@ -80,6 +80,12 @@ BOOL CInfinity::FXLock(CRect& rBack, DWORD dwFlags)
     return static_cast<CVidInf*>(g_pChitin->GetCurrentVideoMode())->FXLock(rBack, dwFlags);
 }
 
+// 0x5CE230
+BOOL CInfinity::FXTextOut(CVidFont* pFont, const CString& sString, INT x, INT y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded)
+{
+    return static_cast<CVidInf*>(g_pChitin->GetCurrentVideoMode())->FXTextOut(pFont, sString, x, y, rClip, dwFlags, bDemanded);
+}
+
 // 0x5CE930
 BOOL CInfinity::FXUnlock(DWORD dwFlags, const CRect* pFxRect, const CPoint& ptRef)
 {
