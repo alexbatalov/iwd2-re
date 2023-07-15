@@ -1,5 +1,8 @@
 #include "CInfinity.h"
 
+#include "CChitin.h"
+#include "CVidInf.h"
+
 // 0x85197A
 const BYTE CInfinity::SCROLL_DELAY = 15;
 
@@ -69,6 +72,12 @@ CInfinity::CInfinity()
 CInfinity::~CInfinity()
 {
     // TODO: Incomplete.
+}
+
+// 0x5CE930
+BOOL CInfinity::FXUnlock(DWORD dwFlags, const CRect* pFxRect, const CPoint& ptRef)
+{
+    return static_cast<CVidInf*>(g_pChitin->GetCurrentVideoMode())->FXUnlock(dwFlags, pFxRect, ptRef);
 }
 
 // 0x5CECB0

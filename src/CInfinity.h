@@ -28,6 +28,7 @@ public:
     CInfinity();
     ~CInfinity();
 
+    BOOL FXUnlock(DWORD dwFlags, const CRect* pFxRect, const CPoint& ptRef);
     void GetViewPosition(INT& x, INT& y);
     void CallLightning(INT xWorldPos, INT yWorldPos);
     void SetCurrentWeather(COLORREF rgbOvercast, SHORT nWeather, int nWeatherLevel, int nLightningFrequency);
