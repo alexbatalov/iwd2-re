@@ -462,6 +462,14 @@ void CVidFont::UnloadAllFonts()
     // TODO: Incomplete.
 }
 
+// 0x7A1090
+BOOL CVidFont::TextOut3d(const CString& sText, WORD* pSurface, LONG lPitch, INT x, INT y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x7A1210
 BOOL CVidFont::TextOut3d(const CString& sText, int x, int y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded)
 {

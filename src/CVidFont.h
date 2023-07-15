@@ -31,6 +31,7 @@ public:
     BOOL TextOutEx(INT nSurface, const CString& sString, int x, int y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded);
     int RegisterFont();
     void Unload();
+    BOOL TextOut3d(const CString& sText, WORD* pSurface, LONG lPitch, INT x, INT y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded);
     BOOL TextOut3d(const CString& sText, int x, int y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded);
 
     static void UnloadAllFonts();

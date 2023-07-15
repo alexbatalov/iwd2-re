@@ -1079,6 +1079,50 @@ BOOL CVidInf::FXLock(CRect& rFXRect, DWORD dwFlags)
     return !!LockSurface(nSurface, &m_SurfaceDesc, rFXRect);
 }
 
+// 0x79D970
+BOOL CVidInf::FXTextOut(CVidFont* pFont, const CString& sString, INT x, INT y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded)
+{
+    if (g_pChitin->cVideo.Is3dAccelerated()) {
+        LONG lPitch = g_pChitin->cVideo.field_13A
+            ? CVidTile::BYTES_PER_TEXEL * 512
+            : CVidTile::BYTES_PER_TEXEL * m_rLockedRect.Width();
+        return pFont->TextOut3d(sString,
+            reinterpret_cast<WORD*>(dword_907B20),
+            lPitch,
+            x,
+            y,
+            rClip,
+            dwFlags,
+            bDemanded);
+    }
+
+    if (m_SurfaceDesc.lpSurface == NULL) {
+        return FALSE;
+    }
+
+    if (g_pChitin->GetFontName() == "" || pFont->GetResRef() == "STATES2") {
+        return pFont->TextOut(sString,
+            reinterpret_cast<WORD*>(m_SurfaceDesc.lpSurface),
+            m_SurfaceDesc.lPitch,
+            x,
+            y,
+            rClip,
+            dwFlags,
+            bDemanded);
+    }
+
+    INT nSurface;
+    g_pChitin->GetCurrentVideoMode()->GetFXSurface(nSurface, dwFlags);
+
+    return pFont->TextOutEx(nSurface,
+        sString,
+        x,
+        y,
+        rClip,
+        dwFlags,
+        bDemanded);
+}
+
 // 0x79DB10
 BOOL CVidInf::FXUnlock(DWORD dwFlags, const CRect* pFxRect, const CPoint& ptRef)
 {
