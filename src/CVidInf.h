@@ -45,6 +45,7 @@ public:
     BOOL WindowedFlip(BOOL bRenderCursor);
     LPVOID GetLockedSurface();
     LONG GetSurfacePitch();
+    void FXBltBackTo(const CPoint& ptTopLeft, const CRect& rFXRect, const CRect& rClip, DWORD dwFlags);
     BOOL FXBltToBack(CRect& rFXRect, INT x, INT y, INT nRefPointX, INT nRefPointY, const CRect& rClip, DWORD dwFlags);
     void FXClear(LPVOID pSurface, INT nSize);
     BOOL FXLock(CRect& rFXRect, DWORD dwFlags);

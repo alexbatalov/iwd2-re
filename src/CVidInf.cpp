@@ -896,6 +896,103 @@ LONG CVidInf::GetSurfacePitch()
     }
 }
 
+// 0x79CA10
+void CVidInf::FXBltBackTo(const CPoint& ptTopLeft, const CRect& rFXRect, const CRect& rClip, DWORD dwFlags)
+{
+    CRect rSrc(ptTopLeft, rFXRect.Size());
+
+    if (g_pChitin->cVideo.Is3dAccelerated()) {
+        return;
+    }
+
+    CPoint pt(0, 0);
+    BOOL bUseFX = FALSE;
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo.cpp
+    // __LINE__: 7588
+    UTIL_ASSERT(GetFXSurfacePtr(dwFlags) != NULL);
+
+    DDBLTFX fx;
+    fx.dwDDFX = 0;
+
+    if ((dwFlags & 0x20) != 0) {
+        if (rSrc.top < rClip.top) {
+            rSrc.top = rClip.top;
+        }
+
+        if (rSrc.bottom >= rClip.bottom) {
+            pt.y = rSrc.bottom - rClip.bottom;
+            rSrc.bottom = rClip.bottom;
+        }
+
+        fx.dwDDFX |= DDBLTFX_MIRRORUPDOWN;
+        bUseFX = TRUE;
+    } else {
+        if (rSrc.top < rClip.top) {
+            pt.y = rClip.top - rSrc.top;
+            rSrc.top = rClip.top;
+        }
+
+        if (rSrc.bottom >= rClip.bottom) {
+            rSrc.bottom = rClip.bottom;
+        }
+    }
+
+    if ((dwFlags & 0x10) != 0) {
+        if (rSrc.left < rClip.left) {
+            rSrc.left = rClip.left;
+        }
+
+        if (rSrc.right >= rClip.right) {
+            pt.x = rSrc.right - rClip.right;
+            rSrc.right = rClip.right;
+        }
+
+        fx.dwDDFX |= DDBLTFX_MIRRORLEFTRIGHT;
+        bUseFX = TRUE;
+    } else {
+        if (rSrc.left < rClip.left) {
+            pt.x = rClip.left - rSrc.left;
+            rSrc.left = rClip.left;
+        }
+
+        if (rSrc.right >= rClip.right) {
+            rSrc.right = rClip.right;
+        }
+    }
+
+    if (pt.y > rSrc.top && pt.x > rSrc.left) {
+        if (bUseFX) {
+            fx.dwSize = sizeof(fx);
+            while (1) {
+                HRESULT hr = g_pChitin->cVideo.cVidBlitter.Blt(GetFXSurfacePtr(dwFlags),
+                    CRect(pt, rSrc.Size()),
+                    pSurfaces[CVIDINF_SURFACE_BACK],
+                    rSrc,
+                    DDBLT_WAIT | DDBLT_DDFX,
+                    &fx);
+                CheckResults(hr);
+                if (hr != DDERR_SURFACELOST && hr != DDERR_WASSTILLDRAWING) {
+                    break;
+                }
+            }
+        } else {
+            while (1) {
+                HRESULT hr = g_pChitin->cVideo.cVidBlitter.BltFast(GetFXSurfacePtr(dwFlags),
+                    pt.x,
+                    pt.y,
+                    pSurfaces[CVIDINF_SURFACE_BACK],
+                    rSrc,
+                    DDBLTFAST_WAIT);
+                CheckResults(hr);
+                if (hr != DDERR_SURFACELOST && hr != DDERR_WASSTILLDRAWING) {
+                    break;
+                }
+            }
+        }
+    }
+}
+
 // 0x79CC90
 BOOL CVidInf::FXBltToBack(CRect& rFXRect, INT x, INT y, INT nRefPointX, INT nRefPointY, const CRect& rClip, DWORD dwFlags)
 {
