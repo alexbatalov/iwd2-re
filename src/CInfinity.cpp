@@ -1,6 +1,7 @@
 #include "CInfinity.h"
 
 #include "CChitin.h"
+#include "CUtil.h"
 #include "CVidInf.h"
 
 // 0x85197A
@@ -72,6 +73,26 @@ CInfinity::CInfinity()
 CInfinity::~CInfinity()
 {
     // TODO: Incomplete.
+}
+
+// 0x5CE0A0
+BOOL CInfinity::FXBltFrom(INT nDestSurface, CRect& rFXRect, INT x, INT y, INT nRefPointX, INT nRefPointY, DWORD dwFlags)
+{
+    if (g_pChitin->GetCurrentVideoMode()->m_nFade == 0) {
+        return TRUE;
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\Infinity.cpp
+    // __LINE__: 3163
+    UTIL_ASSERT(nDestSurface == CVIDINF_SURFACE_BACK);
+
+    return static_cast<CVidInf*>(pVidMode)->FXBltToBack(rFXRect,
+        rViewPort.left + x - nCurrentX,
+        rViewPort.top + y - nCurrentY,
+        nRefPointX,
+        nRefPointY,
+        rViewPort,
+        dwFlags);
 }
 
 // 0x5CE1F0

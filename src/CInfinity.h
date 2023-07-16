@@ -7,6 +7,7 @@
 
 class CVidCell;
 class CVidFont;
+class CVidMode;
 
 class CInfinity {
 public:
@@ -31,6 +32,7 @@ public:
     CInfinity();
     ~CInfinity();
 
+    BOOL FXBltFrom(INT nDestSurface, CRect& rFXRect, INT x, INT y, INT nRefPointX, INT nRefPointY, DWORD dwFlags);
     BOOL FXLock(CRect& rBack, DWORD dwFlags);
     BOOL FXTextOut(CVidFont* pFont, const CString& sString, INT x, INT y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded);
     BOOL FXRender(CVidCell* pVidCell, INT nRefPointX, INT nRefPointY, DWORD dwFlags, INT nTransValue);
@@ -48,10 +50,13 @@ public:
 
     void SetAreaType(WORD areaType);
 
+    /* 001C */ CVidMode* pVidMode;
     /* 0024 */ BOOL bRefreshVRamRect;
     /* 0040 */ int nNewX;
     /* 0044 */ int nNewY;
     /* 0048 */ CRect rViewPort;
+    /* 0090 */ int nCurrentX;
+    /* 0094 */ int nCurrentY;
     /* 011C */ int nCurrentLightningFrequency;
     /* 0120 */ int nNextLightningFrequency;
     /* 012C */ int nNextRainLevel;
