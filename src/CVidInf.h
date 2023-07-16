@@ -15,6 +15,9 @@
 #define CVIDINF_SURFACE_7 7
 #define CVIDINF_SURFACE_8 8
 
+#define CVIDCELL_FXPREP_COPYFROMBACK 0x80
+#define CVIDCELL_FXPREP_CLEARFILL 0x100
+
 class CParticle;
 
 class CVidInf : public CVidMode {
@@ -45,6 +48,7 @@ public:
     BOOL WindowedFlip(BOOL bRenderCursor);
     LPVOID GetLockedSurface();
     LONG GetSurfacePitch();
+    BOOL FXPrep(CRect& rFXRect, DWORD dwFlags, const CPoint& ptPos, const CPoint& ptReference, const CRect& rClip);
     void FXBltBackTo(const CPoint& ptTopLeft, const CRect& rFXRect, const CRect& rClip, DWORD dwFlags);
     BOOL FXBltToBack(CRect& rFXRect, INT x, INT y, INT nRefPointX, INT nRefPointY, const CRect& rClip, DWORD dwFlags);
     void FXClear(LPVOID pSurface, INT nSize);

@@ -896,6 +896,98 @@ LONG CVidInf::GetSurfacePitch()
     }
 }
 
+// 0x79C770
+BOOL CVidInf::FXPrep(CRect& rFXRect, DWORD dwFlags, const CPoint& ptPos, const CPoint& ptReference, const CRect& rClip)
+{
+    CPoint pt = ptReference;
+
+    if (g_pChitin->cVideo.Is3dAccelerated()) {
+        memset(CVidInf::dword_907B20, 0, rFXRect.Height() * 2048);
+        return TRUE;
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo.cpp
+    // __LINE__: 7486
+    UTIL_ASSERT(!((dwFlags & CVIDCELL_FXPREP_COPYFROMBACK) && (dwFlags & CVIDCELL_FXPREP_CLEARFILL)));
+
+    DDBLTFX fx;
+    fx.dwSize = sizeof(fx);
+    fx.dwFillColor = field_24;
+
+    if (GetFXSurfacePtr(dwFlags) != NULL) {
+        return FALSE;
+    }
+
+    if ((dwFlags & 0x10) != 0) {
+        pt.x = rFXRect.Width() - pt.x;
+    }
+
+    if ((dwFlags & 0x20) != 0) {
+        pt.y = rFXRect.Height() - pt.y;
+    }
+
+    pt.x = ptPos.x - pt.x;
+    pt.y = ptPos.y - pt.y;
+
+    if ((dwFlags & CVIDCELL_FXPREP_COPYFROMBACK) != 0) {
+        FXBltBackTo(pt, rFXRect, rClip, dwFlags);
+    } else if ((dwFlags & CVIDCELL_FXPREP_CLEARFILL) != 0) {
+        do {
+            HRESULT hr = g_pChitin->cVideo.cVidBlitter.Blt(GetFXSurfacePtr(dwFlags),
+                rFXRect,
+                NULL,
+                NULL,
+                DDBLT_WAIT | DDBLT_COLORFILL,
+                &fx);
+            if (!CheckResults(hr)) {
+                return FALSE;
+            }
+
+            if (hr != DDERR_SURFACELOST && hr != DDERR_WASSTILLDRAWING) {
+                break;
+            }
+        } while (1);
+    }
+
+    if (field_170) {
+        INT nSurface;
+        if (!GetFXSurface(nSurface, dwFlags)) {
+            return FALSE;
+        }
+
+        DrawLine(rFXRect.left,
+            rFXRect.top,
+            rFXRect.right - 1,
+            rFXRect.top,
+            nSurface,
+            rFXRect,
+            RGB(255, 255, 0));
+        DrawLine(rFXRect.right - 1,
+            rFXRect.top,
+            rFXRect.right - 1,
+            rFXRect.bottom - 1,
+            nSurface,
+            rFXRect,
+            RGB(255, 255, 0));
+        DrawLine(rFXRect.right - 1,
+            rFXRect.bottom - 1,
+            rFXRect.left,
+            rFXRect.bottom - 1,
+            nSurface,
+            rFXRect,
+            RGB(255, 255, 0));
+        DrawLine(rFXRect.left,
+            rFXRect.bottom - 1,
+            rFXRect.left,
+            rFXRect.top,
+            nSurface,
+            rFXRect,
+            RGB(255, 255, 0));
+    }
+
+    return TRUE;
+}
+
 // 0x79CA10
 void CVidInf::FXBltBackTo(const CPoint& ptTopLeft, const CRect& rFXRect, const CRect& rClip, DWORD dwFlags)
 {
