@@ -95,6 +95,28 @@ BOOL CInfinity::FXBltFrom(INT nDestSurface, CRect& rFXRect, INT x, INT y, INT nR
         dwFlags);
 }
 
+// 0x5CE130
+BOOL CInfinity::FXPrep(CRect& rFXRect, DWORD dwFlags, int a3, const CPoint& ptPos, const CPoint& ptReference)
+{
+    if ((dwFlags & 0x80) != 0 && a3 == -1) {
+        return FALSE;
+    }
+
+    if ((dwFlags & 0x80) != 0) {
+        return static_cast<CVidInf*>(pVidMode)->FXPrep(rFXRect,
+            dwFlags,
+            CPoint(ptPos.x + rViewPort.left - nCurrentX, ptPos.y + rViewPort.top - nCurrentY),
+            ptReference,
+            rViewPort);
+    } else {
+        return static_cast<CVidInf*>(pVidMode)->FXPrep(rFXRect,
+            dwFlags,
+            CPoint(0, 0),
+            CPoint(0, 0),
+            CRect(0, 0, 0, 0));
+    }
+}
+
 // 0x5CE1F0
 BOOL CInfinity::FXLock(CRect& rBack, DWORD dwFlags)
 {
