@@ -7,6 +7,8 @@
 
 class CTlkFileOverrideText : public CFile {
 public:
+    /* 0010 */ int field_10;
+    /* 0014 */ BOOLEAN m_bOpen;
 };
 
 class CTlkFileOverrideHeader : public CFile {
@@ -26,7 +28,7 @@ public:
     CTlkFileOverrideHeader();
     ~CTlkFileOverrideHeader();
 
-    /* 0010 */ unsigned char field_10;
+    /* 0010 */ BOOLEAN m_bOpen;
     /* 0012 */ Entry** m_ppEntries; // #guess
     /* 0016 */ int m_nEntryCount; // #guess
     /* 001A */ S1A field_1A;

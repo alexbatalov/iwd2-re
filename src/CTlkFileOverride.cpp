@@ -8,7 +8,7 @@ CTlkFileOverrideHeader::CTlkFileOverrideHeader()
 {
     memset(&field_1A, 0, sizeof(field_1A));
 
-    field_10 = 0;
+    m_bOpen = FALSE;
 
     m_nEntryCount = 60;
     m_ppEntries = new Entry*[m_nEntryCount];
@@ -59,5 +59,13 @@ BOOL CTlkFileOverride::Open(const CString& a1, const CString& a2)
 // 0x7B5C30
 void CTlkFileOverride::CloseFiles()
 {
-    // TODO: Incomplete.
+    if (m_header.m_bOpen) {
+        m_header.Close();
+        m_header.m_bOpen = FALSE;
+    }
+
+    if (m_text.m_bOpen) {
+        m_text.Close();
+        m_text.m_bOpen = FALSE;
+    }
 }
