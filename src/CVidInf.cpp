@@ -896,6 +896,125 @@ LONG CVidInf::GetSurfacePitch()
     }
 }
 
+// 0x79CC90
+BOOL CVidInf::FXBltToBack(CRect& rFXRect, INT x, INT y, INT nRefPointX, INT nRefPointY, const CRect& rClip, DWORD dwFlags)
+{
+    BOOL bUseFX = FALSE;
+    CRect rSrc(rFXRect);
+
+    if (!g_pChitin->cVideo.Is3dAccelerated()) {
+        if (GetFXSurfacePtr(dwFlags) == NULL) {
+            return FALSE;
+        }
+    }
+
+    LONG v1;
+    if ((dwFlags & 0x10) != 0) {
+        v1 = rFXRect.Width() - nRefPointX;
+    } else {
+        v1 = nRefPointX;
+    }
+
+    LONG v2;
+    if ((dwFlags & 0x20) != 0) {
+        v2 = rFXRect.Height() - nRefPointY;
+    } else {
+        v2 = nRefPointY;
+    }
+
+    CPoint pt(x - v1, y - v2);
+
+    if (g_pChitin->cVideo.Is3dAccelerated()) {
+        CVidCell::RenderTexture(pt.x,
+            pt.y,
+            rFXRect,
+            m_rLockedRect.Size(),
+            rClip,
+            dwFlags | 0x1);
+        return TRUE;
+    }
+
+    DDBLTFX fx;
+    fx.dwDDFX = 0;
+
+    if ((dwFlags & 0x20) != 0) {
+        if (pt.y < rClip.top) {
+            rSrc.bottom += pt.y - rClip.top;
+            pt.y = rClip.top;
+        }
+
+        if (rSrc.Height() + pt.y - 1 >= rClip.bottom) {
+            rSrc.top = pt.y + rSrc.bottom - rClip.bottom;
+        }
+
+        fx.dwDDFX |= DDBLTFX_MIRRORUPDOWN;
+        bUseFX = TRUE;
+    } else {
+        if (pt.y < rClip.top) {
+            rSrc.top += rClip.top - pt.y;
+            pt.y = rClip.top;
+        }
+
+        if (rSrc.Height() + pt.y - 1 >= rClip.bottom) {
+            rSrc.bottom = rSrc.top + rClip.bottom - pt.y;
+        }
+    }
+
+    if ((dwFlags & 0x10) != 0) {
+        if (pt.x < rClip.left) {
+            rSrc.right += pt.x - rClip.left;
+            pt.x = rClip.left;
+        }
+
+        if (rSrc.Width() + pt.x - 1 >= rClip.right) {
+            rSrc.left = pt.x + rSrc.right - rClip.right;
+        }
+
+        fx.dwDDFX |= DDBLTFX_MIRRORLEFTRIGHT;
+        bUseFX = TRUE;
+    } else {
+        if (pt.x < rClip.left) {
+            rSrc.left += rClip.left - pt.x;
+        }
+
+        if (rSrc.Width() + pt.x - 1 >= rClip.right) {
+            rSrc.right = rSrc.left + rClip.right - pt.x;
+        }
+    }
+
+    if (rSrc.bottom > rSrc.top && rSrc.right > rSrc.left) {
+        if (bUseFX) {
+            while (1) {
+                HRESULT hr = g_pChitin->cVideo.cVidBlitter.BltFast(pSurfaces[CVIDINF_SURFACE_BACK],
+                    pt.x,
+                    pt.y,
+                    GetFXSurfacePtr(dwFlags),
+                    rSrc,
+                    DDBLTFAST_WAIT | DDBLTFAST_SRCCOLORKEY);
+                CheckResults(hr);
+                if (hr != DDERR_SURFACELOST && hr != DDERR_WASSTILLDRAWING) {
+                    break;
+                }
+            }
+        } else {
+            while (1) {
+                HRESULT hr = g_pChitin->cVideo.cVidBlitter.Blt(pSurfaces[CVIDINF_SURFACE_BACK],
+                    CRect(pt, rSrc.Size()),
+                    GetFXSurfacePtr(dwFlags),
+                    rSrc,
+                    DDBLT_WAIT | DDBLT_KEYSRC | DDBLT_DDFX,
+                    &fx);
+                CheckResults(hr);
+                if (hr != DDERR_SURFACELOST && hr != DDERR_WASSTILLDRAWING) {
+                    break;
+                }
+            }
+        }
+    }
+
+    return TRUE;
+}
+
 // 0x79D030
 void CVidInf::FXClear(LPVOID pSurface, INT nSize)
 {

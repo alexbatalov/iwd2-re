@@ -45,6 +45,7 @@ public:
     BOOL WindowedFlip(BOOL bRenderCursor);
     LPVOID GetLockedSurface();
     LONG GetSurfacePitch();
+    BOOL FXBltToBack(CRect& rFXRect, INT x, INT y, INT nRefPointX, INT nRefPointY, const CRect& rClip, DWORD dwFlags);
     void FXClear(LPVOID pSurface, INT nSize);
     BOOL FXLock(CRect& rFXRect, DWORD dwFlags);
     BOOL FXRender(CVidCell* pVidCell, INT nRefPointX, INT nRefPointY, DWORD dwFlags, INT nTransValue);
