@@ -157,3 +157,9 @@ BYTE CVidBitmap::GetPixelValue(INT x, INT y, BOOLEAN bDemanded)
 
     return 0;
 }
+
+// 0x7B3180
+void CVidBitmap::SetRes(CResBitmap* pResBmp)
+{
+    pRes = pResBmp;
+}

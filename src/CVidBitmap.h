@@ -18,6 +18,7 @@ public:
     BOOL GetPixelColor(RGBQUAD& color, INT nX, INT nY, BOOL bLoaded);
     BOOL GetPixelValue(BYTE& value, INT x, INT y, BOOLEAN bDemanded);
     BYTE GetPixelValue(INT x, INT y, BOOLEAN bDemanded);
+    void SetRes(CResBitmap* pResBmp);
 
     /* 00B0 */ SHORT m_nBitCount;
     /* 00B6 */ BOOL m_bDoubleSize;
