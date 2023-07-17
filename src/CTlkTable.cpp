@@ -35,9 +35,9 @@ CTlkTable::CTlkTable()
 }
 
 // 0x793E90
-BOOL CTlkTable::OpenOverride(const CString& a1, const CString& a2)
+void CTlkTable::OpenOverride(const CString& sHeaderFileName, const CString& sTextFileName)
 {
-    return m_override.Open(a1, a2);
+    m_override.Open(sHeaderFileName, sTextFileName);
 }
 
 // 0x793EB0

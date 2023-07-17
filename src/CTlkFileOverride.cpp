@@ -34,6 +34,14 @@ CTlkFileOverrideHeader::~CTlkFileOverrideHeader()
     }
 }
 
+// 0x7B5DE0
+BOOLEAN CTlkFileOverrideHeader::Unmarshal()
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x7B5690
 BOOLEAN CTlkFileOverride::Fetch(DWORD strId, STR_RES& strRes)
 {
@@ -49,11 +57,16 @@ void CTlkFileOverride::Remove(DWORD strId)
 }
 
 // 0x7B5A50
-BOOL CTlkFileOverride::Open(const CString& a1, const CString& a2)
+void CTlkFileOverride::Open(const CString& sHeaderFileName, const CString& sTextFileName)
 {
-    // TODO: Incomplete.
+    m_header.m_bOpen = m_header.Open(sHeaderFileName, CFile::OpenFlags::modeReadWrite | CFile::OpenFlags::modeCreate | CFile::OpenFlags::modeNoTruncate, NULL);
+    if (m_header.m_bOpen) {
+        m_header.Unmarshal();
 
-    return FALSE;
+        m_text.m_bOpen = m_text.Open(sTextFileName, CFile::OpenFlags::modeReadWrite | CFile::OpenFlags::modeCreate | CFile::OpenFlags::modeNoTruncate, NULL);
+    } else {
+        m_text.m_bOpen = FALSE;
+    }
 }
 
 // 0x7B5C30

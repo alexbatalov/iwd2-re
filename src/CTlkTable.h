@@ -46,7 +46,7 @@ public:
     static BOOLEAN STRREF_ON;
 
     CTlkTable();
-    BOOL OpenOverride(const CString& a1, const CString& a2);
+    void OpenOverride(const CString& sHeaderFileName, const CString& sTextFileName);
     ~CTlkTable();
     BOOL AddTlkFile(const CString& filePath, BYTE a3, BYTE a4, BOOLEAN bOpen);
     BOOL CloseFile(BYTE a2, BYTE a3);

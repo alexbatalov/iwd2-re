@@ -28,6 +28,8 @@ public:
     CTlkFileOverrideHeader();
     ~CTlkFileOverrideHeader();
 
+    BOOLEAN Unmarshal();
+
     /* 0010 */ BOOLEAN m_bOpen;
     /* 0012 */ Entry** m_ppEntries; // #guess
     /* 0016 */ int m_nEntryCount; // #guess
@@ -44,7 +46,7 @@ public:
 
     BOOLEAN Fetch(DWORD strId, STR_RES& strRes);
     void Remove(DWORD strId);
-    BOOL Open(const CString& a1, const CString& a2);
+    void Open(const CString& sHeaderFileName, const CString& sTextFileName);
     void CloseFiles();
 
     /* 0000 */ CString field_0;
