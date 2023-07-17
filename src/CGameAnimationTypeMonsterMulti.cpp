@@ -664,14 +664,14 @@ void CGameAnimationTypeMonsterMulti::SetColorEffect(BYTE effectType, BYTE colorR
                     m_g1VidCellBase[quad].AddResPaletteAffect(effectType, tintColor, periodLength);
                     m_g2VidCellBase[quad].AddResPaletteAffect(effectType, tintColor, periodLength);
                     m_g3VidCellBase[quad].AddResPaletteAffect(effectType, tintColor, periodLength);
-                    m_g3VidCellBase[quad].AddResPaletteAffect(effectType, tintColor, periodLength);
-                    m_g3VidCellBase[quad].AddResPaletteAffect(effectType, tintColor, periodLength);
+                    m_g4VidCellBase[quad].AddResPaletteAffect(effectType, tintColor, periodLength);
+                    m_g5VidCellBase[quad].AddResPaletteAffect(effectType, tintColor, periodLength);
 
                     m_g1VidCellBase[quad].SuppressTint(0);
                     m_g2VidCellBase[quad].SuppressTint(0);
                     m_g3VidCellBase[quad].SuppressTint(0);
-                    m_g3VidCellBase[quad].SuppressTint(0);
-                    m_g3VidCellBase[quad].SuppressTint(0);
+                    m_g4VidCellBase[quad].SuppressTint(0);
+                    m_g5VidCellBase[quad].SuppressTint(0);
                 }
             } else {
                 for (BYTE quad = 0; quad < m_nQuadrants; quad++) {
