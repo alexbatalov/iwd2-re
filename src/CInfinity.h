@@ -11,6 +11,11 @@ class CVidMode;
 
 class CInfinity {
 public:
+    static const DWORD FXPREP_COPYFROMBACK;
+    static const DWORD FXPREP_CLEARFILL;
+    static const DWORD MIRROR_FX;
+    static const DWORD MIRROR_FX_UPDOWN;
+    static const DWORD CLIPPING_IGNORE_VERTICAL;
     static const BYTE SCROLL_DELAY;
     static const CString DAWN_MOVIE;
     static const CString DUSK_MOVIE;
@@ -37,6 +42,7 @@ public:
     BOOL FXLock(CRect& rBack, DWORD dwFlags);
     BOOL FXTextOut(CVidFont* pFont, const CString& sString, INT x, INT y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded);
     BOOL FXRender(CVidCell* pVidCell, INT nRefPointX, INT nRefPointY, DWORD dwFlags, INT nTransValue);
+    BOOL FXRenderClippingPolys(INT nPosX, INT nPosY, INT nPosZ, const CPoint& ptRef, const CRect& rGCBounds, BOOLEAN bDithered, DWORD dwBlitFlags);
     BOOL FXUnlock(DWORD dwFlags, const CRect* pFxRect, const CPoint& ptRef);
     void GetViewPosition(INT& x, INT& y);
     void CallLightning(INT xWorldPos, INT yWorldPos);

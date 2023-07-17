@@ -10,6 +10,9 @@ typedef struct {
     SHORT y;
 } NECK_POINTS;
 
+class CInfinity;
+class CVidMode;
+
 class CGameAnimationType {
 public:
     static const CString ROUND_BASE;
@@ -49,6 +52,7 @@ public:
     /* 0084 */ virtual BOOL IsEndOfSequence();
     /* 0088 */ virtual void IncrementFrame();
     /* 008C */ virtual void DecrementFrame();
+    /* 0090 */ virtual void Render(CInfinity* pInfinity, CVidMode* pVidMode, int a3, const CRect& rectFX, const CPoint& ptNewPos, const CPoint& ptReference, DWORD dwRenderFlags, COLORREF rgbTintColor, const CRect& rGCBounds, BOOL bDithered, BOOL bFadeOut, LONG posZ, BYTE transparency);
     /* 0094 */ virtual void ClearColorEffects(BYTE colorRange);
     /* 0098 */ virtual void ClearColorEffectsAll();
     /* 009C */ virtual void SetColorEffect(BYTE effectType, BYTE colorRange, COLORREF tintColor, BYTE periodLength);

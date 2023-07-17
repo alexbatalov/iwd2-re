@@ -180,6 +180,11 @@ DWORD CGameAnimationType::GetSndWalkFreq()
     return m_nSndFreq;
 }
 
+// 0x55D170
+void CGameAnimationType::Render(CInfinity* pInfinity, CVidMode* pVidMode, int a3, const CRect& rectFX, const CPoint& ptNewPos, const CPoint& ptReference, DWORD dwRenderFlags, COLORREF rgbTintColor, const CRect& rGCBounds, BOOL bDithered, BOOL bFadeOut, LONG posZ, BYTE transparency)
+{
+}
+
 // 0x49FC40
 BOOL CGameAnimationType::IsFalseColor()
 {

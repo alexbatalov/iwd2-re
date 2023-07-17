@@ -4,6 +4,21 @@
 #include "CUtil.h"
 #include "CVidInf.h"
 
+// 0x851934
+const DWORD CInfinity::FXPREP_COPYFROMBACK = 0x80;
+
+// 0x851938
+const DWORD CInfinity::FXPREP_CLEARFILL = 0x100;
+
+// 0x85193C
+const DWORD CInfinity::MIRROR_FX = 0x10;
+
+// 0x851940
+const DWORD CInfinity::MIRROR_FX_UPDOWN = 0x20;
+
+// 0x851944
+const DWORD CInfinity::CLIPPING_IGNORE_VERTICAL = 0x400;
+
 // 0x85197A
 const BYTE CInfinity::SCROLL_DELAY = 15;
 
@@ -155,6 +170,14 @@ BOOL CInfinity::FXRender(CVidCell* pVidCell, INT nRefPointX, INT nRefPointY, DWO
     }
 
     return bResult;
+}
+
+// 0x5CE350
+BOOL CInfinity::FXRenderClippingPolys(INT nPosX, INT nPosY, INT nPosZ, const CPoint& ptRef, const CRect& rGCBounds, BOOLEAN bDithered, DWORD dwBlitFlags)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // 0x5CE930
