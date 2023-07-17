@@ -14,6 +14,22 @@ CVidBitmap::~CVidBitmap()
 {
 }
 
+// 0x7B2E90
+SHORT CVidBitmap::GetBitCount(BOOL bDemanded)
+{
+    if (!bDemanded) {
+        pRes->Demand();
+    }
+
+    SHORT nBitCount = pRes->GetBitDepth();
+
+    if (!bDemanded) {
+        pRes->Release();
+    }
+
+    return nBitCount;
+}
+
 // 0x7B2F60
 BOOL CVidBitmap::GetPixelColor(RGBQUAD& color, INT nX, INT nY, BOOL bLoaded)
 {

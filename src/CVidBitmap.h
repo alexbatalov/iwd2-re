@@ -8,6 +8,7 @@ class CVidBitmap : public CVidImage, public CResHelper<CResBitmap, 1> {
 public:
     CVidBitmap();
     ~CVidBitmap();
+    SHORT GetBitCount(BOOL bDemanded);
     BOOL GetPixelColor(RGBQUAD& color, INT nX, INT nY, BOOL bLoaded);
 
     /* 00B0 */ SHORT m_nBitCount;
