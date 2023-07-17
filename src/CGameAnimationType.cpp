@@ -273,6 +273,12 @@ SHORT CGameAnimationType::GetCurrentFrame()
     return -1;
 }
 
+// 0x55D220
+BOOLEAN CGameAnimationType::GetCurrentSequenceAndFrame(SHORT nSequence, SHORT nFrame)
+{
+    return FALSE;
+}
+
 // 0x6A1E80
 void CGameAnimationType::SetNeckOffsets(SHORT Sx, SHORT Sy, SHORT SWx, SHORT SWy, SHORT Wx, SHORT Wy, SHORT NWx, SHORT NWy, SHORT Nx, SHORT Ny, SHORT NEx, SHORT NEy, SHORT Ex, SHORT Ey, SHORT SEx, SHORT SEy)
 {
