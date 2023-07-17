@@ -7,6 +7,8 @@
 class CVidBitmap : public CVidImage, public CResHelper<CResBitmap, 1> {
 public:
     CVidBitmap();
+    CVidBitmap(CResRef cNewResRef, BOOL bDoubleSize);
+    CVidBitmap(CResRef cNewResRef, BOOL bDoubleSize, USHORT nBitCount);
     ~CVidBitmap();
     SHORT GetBitCount(BOOL bDemanded);
     BOOL GetImageDimensions(CSize& size, BOOLEAN bDemanded);

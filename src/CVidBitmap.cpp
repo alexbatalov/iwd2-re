@@ -14,6 +14,30 @@ CVidBitmap::~CVidBitmap()
 {
 }
 
+// FIXME: Use reference.
+//
+// 0x7B2AD0
+CVidBitmap::CVidBitmap(CResRef cNewResRef, BOOL bDoubleSize)
+{
+    // NOTE: Uninline.
+    SetResRef(cNewResRef, TRUE, TRUE);
+
+    m_nBitCount = 8;
+    m_bDoubleSize = bDoubleSize;
+}
+
+// FIXME: Use reference.
+//
+// 0x7B2C40
+CVidBitmap::CVidBitmap(CResRef cNewResRef, BOOL bDoubleSize, USHORT nBitCount)
+{
+    // NOTE: Uninline.
+    SetResRef(cNewResRef, TRUE, TRUE);
+
+    m_nBitCount = nBitCount;
+    m_bDoubleSize = bDoubleSize;
+}
+
 // 0x7B2E90
 SHORT CVidBitmap::GetBitCount(BOOL bDemanded)
 {
