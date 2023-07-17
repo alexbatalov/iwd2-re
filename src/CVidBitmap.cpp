@@ -104,3 +104,56 @@ BOOL CVidBitmap::GetPixelColor(RGBQUAD& color, INT nX, INT nY, BOOL bLoaded)
 
     return FALSE;
 }
+
+// 0x7B3000
+BOOL CVidBitmap::GetPixelValue(BYTE& value, INT x, INT y, BOOLEAN bDemanded)
+{
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVidImage.cpp
+    // __LINE__: 7400
+    UTIL_ASSERT((m_nBitCount == CVIDBITMAP_8BIT || m_nBitCount == CVIDBITMAP_4BIT));
+
+    if (pRes == NULL) {
+        return FALSE;
+    }
+
+    if (m_nBitCount == CVIDBITMAP_8BIT || m_nBitCount == CVIDBITMAP_4BIT) {
+        if (bDemanded) {
+            value = pRes->GetPixelValue(x, y, m_bDoubleSize);
+            return TRUE;
+        }
+
+        if (pRes->Demand() != NULL) {
+            value = pRes->GetPixelValue(x, y, m_bDoubleSize);
+            pRes->Release();
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+// 0x7B30C0
+BYTE CVidBitmap::GetPixelValue(INT x, INT y, BOOLEAN bDemanded)
+{
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVidImage.cpp
+    // __LINE__: 7440
+    UTIL_ASSERT((m_nBitCount == CVIDBITMAP_8BIT || m_nBitCount == CVIDBITMAP_4BIT));
+
+    if (pRes == NULL) {
+        return 0;
+    }
+
+    if (m_nBitCount == CVIDBITMAP_8BIT || m_nBitCount == CVIDBITMAP_4BIT) {
+        if (bDemanded) {
+            return pRes->GetPixelValue(x, y, m_bDoubleSize);
+        }
+
+        if (pRes->Demand() != NULL) {
+            BYTE value = pRes->GetPixelValue(x, y, m_bDoubleSize);
+            pRes->Release();
+            return value;
+        }
+    }
+
+    return 0;
+}
