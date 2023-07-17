@@ -30,6 +30,32 @@ SHORT CVidBitmap::GetBitCount(BOOL bDemanded)
     return nBitCount;
 }
 
+// 0x7B2ED0
+BOOL CVidBitmap::GetImageDimensions(CSize& size, BOOLEAN bDemanded)
+{
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVidImage.cpp
+    // __LINE__: 7277
+    UTIL_ASSERT(pRes != NULL);
+
+    if (pRes == NULL) {
+        return FALSE;
+    }
+
+    if (!bDemanded) {
+        if (pRes->Demand() == NULL) {
+            return FALSE;
+        }
+    }
+
+    pRes->GetImageDimensions(size, m_bDoubleSize);
+
+    if (!bDemanded) {
+        pRes->Release();
+    }
+
+    return TRUE;
+}
+
 // 0x7B2F60
 BOOL CVidBitmap::GetPixelColor(RGBQUAD& color, INT nX, INT nY, BOOL bLoaded)
 {
