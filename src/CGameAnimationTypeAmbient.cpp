@@ -3,6 +3,7 @@
 #include "CBaldurChitin.h"
 #include "CGameSprite.h"
 #include "CInfGame.h"
+#include "CInfinity.h"
 #include "CUtil.h"
 #include "CVidMode.h"
 
@@ -660,6 +661,109 @@ void CGameAnimationTypeAmbient::SetColorRangeAll(BYTE rangeValue)
         for (BYTE colorRange = 0; colorRange < CVidPalette::NUM_RANGES; colorRange++) {
             SetColorRange(colorRange, rangeValue);
         }
+    }
+}
+
+// 0x6A8470
+void CGameAnimationTypeAmbient::Render(CInfinity* pInfinity, CVidMode* pVidMode, int a3, const CRect& rectFX, const CPoint& ptNewPos, const CPoint& ptReference, DWORD dwRenderFlags, COLORREF rgbTintColor, const CRect& rGCBounds, BOOL bDithered, BOOL bFadeOut, LONG posZ, BYTE transparency)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 4169
+    UTIL_ASSERT(pInfinity != NULL && pVidMode != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 4170
+    UTIL_ASSERT(m_currentVidCell != NULL);
+
+    CPoint ptPos(ptNewPos.x, ptNewPos.y + posZ);
+    CRect rFXRect(rectFX);
+
+    if (MIRROR_BAM) {
+        if (m_currentBamDirection > m_extendDirectionTest) {
+            dwRenderFlags |= CInfinity::MIRROR_FX;
+        }
+
+        if (transparency) {
+            dwRenderFlags |= CInfinity::FXPREP_COPYFROMBACK;
+            dwRenderFlags |= 0x2;
+        } else {
+            dwRenderFlags |= CInfinity::FXPREP_CLEARFILL;
+            dwRenderFlags |= 0x1;
+        }
+    } else {
+        if (m_animationID != 0xC500) {
+            dwRenderFlags |= 0x4;
+
+            dwRenderFlags |= CInfinity::FXPREP_COPYFROMBACK;
+
+            if (transparency) {
+                dwRenderFlags |= 0x2;
+            }
+        } else {
+            if (transparency) {
+                dwRenderFlags |= CInfinity::FXPREP_COPYFROMBACK;
+                dwRenderFlags |= 0x2;
+            } else {
+                dwRenderFlags |= CInfinity::FXPREP_CLEARFILL;
+                dwRenderFlags |= 0x1;
+            }
+        }
+    }
+
+    pInfinity->FXPrep(rFXRect, dwRenderFlags, a3, ptPos, ptReference);
+
+    if (pInfinity->FXLock(rFXRect, dwRenderFlags)) {
+        if (m_animationID == 0xC500) {
+            pInfinity->FXRender(m_currentVidCell,
+                ptReference.x,
+                ptReference.y,
+                dwRenderFlags,
+                transparency);
+        } else {
+            COLORREF oldTintColor = m_currentVidCell->GetTintColor();
+            BYTE b = GetBValue(oldTintColor) + GetBValue(rgbTintColor) - 255 >= 0
+                ? GetBValue(oldTintColor) + GetBValue(rgbTintColor) + 1
+                : 0;
+            BYTE g = GetGValue(oldTintColor) + GetGValue(rgbTintColor) - 255 >= 0
+                ? GetGValue(oldTintColor) + GetGValue(rgbTintColor) + 1
+                : 0;
+            BYTE r = GetBValue(oldTintColor) + GetBValue(rgbTintColor) - 255 >= 0
+                ? GetBValue(oldTintColor) + GetBValue(rgbTintColor) + 1
+                : 0;
+            m_currentVidCell->SetTintColor(RGB(r, g, b));
+
+            pInfinity->FXRender(m_currentVidCell,
+                ptReference.x,
+                ptReference.y,
+                dwRenderFlags,
+                transparency);
+
+            m_currentVidCell->SetTintColor(oldTintColor);
+        }
+
+        if (m_animationID != 0xC500) {
+            pInfinity->FXRenderClippingPolys(ptPos.x,
+                ptPos.y - posZ,
+                posZ,
+                ptReference,
+                CRect(rGCBounds.left, rGCBounds.top - posZ, rGCBounds.right, rGCBounds.bottom - posZ),
+                bDithered,
+                dwRenderFlags);
+        }
+
+        if (bFadeOut) {
+            pInfinity->FXUnlock(dwRenderFlags, &rFXRect, ptPos + ptReference);
+        } else {
+            pInfinity->FXUnlock(dwRenderFlags, &rFXRect, CPoint(0, 0));
+        }
+
+        pInfinity->FXBltFrom(a3,
+            rFXRect,
+            ptPos.x,
+            ptPos.y,
+            ptReference.x,
+            ptReference.y,
+            dwRenderFlags);
     }
 }
 
