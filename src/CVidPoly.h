@@ -15,6 +15,8 @@ public:
     void SetPoly(CVIDPOLY_VERTEX* pVertices, WORD nVertices);
     void DrawHLine16(void* pSurface, int xMin, int xMax, DWORD dwColor, const CRect& rSurface, const CPoint& ptRef);
 
+    void DrawHLine24(void* pSurface, int xMin, int xMax, DWORD dwColor, const CRect& rSurface, const CPoint& ptRef);
+
     int field_0;
     CVIDPOLY_VERTEX* m_pVertices;
     INT m_nVertices;
