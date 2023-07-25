@@ -13,6 +13,7 @@ public:
     BOOL FillPoly(WORD* pSurface, LONG lPitch, const CRect& rClip, DWORD dwColor, DWORD dwFlags, const CPoint& ptRef);
     void SetPoly(WORD* pVertices, WORD nVertices);
     void SetPoly(CVIDPOLY_VERTEX* pVertices, WORD nVertices);
+    void DrawHLine16(void* pSurface, int xMin, int xMax, DWORD dwColor, const CRect& rSurface, const CPoint& ptRef);
 
     int field_0;
     CVIDPOLY_VERTEX* m_pVertices;
