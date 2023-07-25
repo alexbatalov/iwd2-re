@@ -7,6 +7,8 @@
 
 class CTlkFileOverrideText : public CFile {
 public:
+    CTlkFileOverrideText();
+
     /* 0010 */ int field_10;
     /* 0014 */ BOOLEAN m_bOpen;
 };

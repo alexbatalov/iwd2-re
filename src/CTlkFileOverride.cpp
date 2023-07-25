@@ -2,6 +2,12 @@
 
 #include "CTlkTable.h"
 
+// NOTE: Inlined in `CTlkTable::CTlkTable`.
+CTlkFileOverrideText::CTlkFileOverrideText()
+{
+    m_bOpen = FALSE;
+}
+
 // #binary-identical
 // 0x7B5CA0
 CTlkFileOverrideHeader::CTlkFileOverrideHeader()
