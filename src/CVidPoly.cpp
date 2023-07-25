@@ -69,6 +69,24 @@ void CVidPoly::DrawHLine24(void* pSurface, int xMin, int xMax, DWORD dwColor, co
     }
 }
 
+// 0x7D69B0
+void CVidPoly::DrawHLineMirrored24(void* pSurface, int xMin, int xMax, DWORD dwColor, const CRect& rSurface, const CPoint& ptRef)
+{
+    unsigned char* pSurface8 = reinterpret_cast<unsigned char*>(pSurface);
+
+    int width = xMax - xMin + 1;
+    if (width > 0) {
+        pSurface8 += (rSurface.Width() - xMin) * 3;
+
+        for (int x = 0; x < width; x++) {
+            pSurface8[0] = GetRValue(dwColor);
+            pSurface8[1] = GetGValue(dwColor);
+            pSurface8[2] = GetBValue(dwColor);
+            pSurface8 -= 3;
+        }
+    }
+}
+
 // 0x7D6AF0
 void CVidPoly::DrawHLine32(void* pSurface, int xMin, int xMax, DWORD dwColor, const CRect& rSurface, const CPoint& ptRef)
 {
