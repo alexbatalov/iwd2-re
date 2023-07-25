@@ -13,8 +13,8 @@ public:
     void Load(const CResRef& cResRef);
     const CString& GetAt(const CString& nX, const CString& nY) const;
     LONG GetAtLong(const CPoint& coordinates) const;
-    SHORT GetHeight() const { return m_nSizeX; }
-    SHORT GetWidth() const { return m_nSizeY; }
+    SHORT GetHeight() const { return m_nSizeY; }
+    SHORT GetWidth() const { return m_nSizeX; }
     // 0x403530
     CString GetDefault() const { return m_default; }
     CString* GetRowNames() const { return m_pNamesX; }
