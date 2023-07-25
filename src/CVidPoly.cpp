@@ -83,6 +83,35 @@ void CVidPoly::DrawHLineDithered16(void* pSurface, int xMin, int xMax, DWORD dwC
     }
 }
 
+// 0x7C1BB0
+void CVidPoly::DrawHLineDitheredMirrored16(void* pSurface, int xMin, int xMax, DWORD dwColor, const CRect& rSurface, const CPoint& ptRef)
+{
+    unsigned short* pSurface16 = reinterpret_cast<unsigned short*>(pSurface);
+
+    int width = xMax - xMin + 1;
+    if (width > 0) {
+        pSurface16 += rSurface.Width() - xMin;
+
+        if ((ptRef.y & 1) != 0) {
+            if (((rSurface.Width() + xMin + ptRef.x - 1) & 1) != 0) {
+                pSurface16--;
+                width--;
+            }
+        } else {
+            if (((rSurface.Width() + xMin + ptRef.x - 1) & 1) == 0) {
+                pSurface16--;
+                width--;
+            }
+        }
+
+        width /= 2;
+        for (int x = 0; x < width; x++) {
+            *pSurface16 = static_cast<unsigned short>(dwColor);
+            pSurface16 -= 2;
+        }
+    }
+}
+
 // 0x7D6970
 void CVidPoly::DrawHLine24(void* pSurface, int xMin, int xMax, DWORD dwColor, const CRect& rSurface, const CPoint& ptRef)
 {
