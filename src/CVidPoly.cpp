@@ -1,5 +1,7 @@
 #include "CVidPoly.h"
 
+#include "CChitin.h"
+
 // 0x7C13A0
 BOOL CVidPoly::FillPoly(WORD* pSurface, LONG lPitch, const CRect& rClip, DWORD dwColor, DWORD dwFlags, const CPoint& ptRef)
 {
@@ -173,6 +175,42 @@ void CVidPoly::DrawHLineMirrored32(void* pSurface, int xMin, int xMax, DWORD dwC
 
         for (int x = 0; x < width; x++) {
             *pSurface32-- = dwColor;
+        }
+    }
+}
+
+// 0x7D6B60
+void CVidPoly::DrawHLineDithered32(void* pSurface, int xMin, int xMax, DWORD dwColor, const CRect& rSurface, const CPoint& ptRef)
+{
+    unsigned int* pSurface32 = reinterpret_cast<unsigned int*>(pSurface);
+
+    int width = xMax - xMin + 1;
+    if (width > 0) {
+        pSurface32 += xMin;
+
+        if (g_pChitin->cVideo.Is3dAccelerated()) {
+            for (int x = 0; x < width; x++) {
+                unsigned int rgb = *pSurface32;
+                *pSurface32++ = (rgb & 0xFFFFFF) | ((rgb >> 1) & 0x7F000000);
+            }
+        } else {
+            if ((ptRef.y & 1) != 0) {
+                if (((xMin + ptRef.x) & 1) != 0) {
+                    pSurface32++;
+                    width--;
+                }
+            } else {
+                if (((xMin + ptRef.x) & 1) == 0) {
+                    pSurface32++;
+                    width--;
+                }
+            }
+
+            width /= 2;
+            for (int x = 0; x < width; x++) {
+                *pSurface32 = dwColor;
+                pSurface32 += 2;
+            }
         }
     }
 }
