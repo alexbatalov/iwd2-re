@@ -101,3 +101,18 @@ void CVidPoly::DrawHLine32(void* pSurface, int xMin, int xMax, DWORD dwColor, co
         }
     }
 }
+
+// 0x7D6B20
+void CVidPoly::DrawHLineMirrored32(void* pSurface, int xMin, int xMax, DWORD dwColor, const CRect& rSurface, const CPoint& ptRef)
+{
+    unsigned int* pSurface32 = reinterpret_cast<unsigned int*>(pSurface);
+
+    int width = xMax - xMin + 1;
+    if (width > 0) {
+        pSurface32 += rSurface.Width() - xMin;
+
+        for (int x = 0; x < width; x++) {
+            *pSurface32-- = dwColor;
+        }
+    }
+}
