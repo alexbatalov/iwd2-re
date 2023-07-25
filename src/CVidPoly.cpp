@@ -274,3 +274,39 @@ void CVidPoly::DrawHLineDithered32(void* pSurface, int xMin, int xMax, DWORD dwC
         }
     }
 }
+
+// 0x7D6BF0
+void CVidPoly::DrawHLineDitheredMirrored32(void* pSurface, int xMin, int xMax, DWORD dwColor, const CRect& rSurface, const CPoint& ptRef)
+{
+    unsigned int* pSurface32 = reinterpret_cast<unsigned int*>(pSurface);
+
+    int width = xMax - xMin + 1;
+    if (width > 0) {
+        pSurface32 += rSurface.Width() - xMin;
+
+        if (g_pChitin->cVideo.Is3dAccelerated()) {
+            for (int x = 0; x < width; x++) {
+                unsigned int rgb = *pSurface32;
+                *pSurface32-- = (rgb & 0xFFFFFF) | ((rgb >> 1) & 0x7F000000);
+            }
+        } else {
+            if ((ptRef.y & 1) != 0) {
+                if (((rSurface.Width() + xMin + ptRef.x - 1) & 1) != 0) {
+                    pSurface32--;
+                    width--;
+                }
+            } else {
+                if (((rSurface.Width() + xMin + ptRef.x - 1) & 1) == 0) {
+                    pSurface32--;
+                    width--;
+                }
+            }
+
+            width /= 2;
+            for (int x = 0; x < width; x++) {
+                *pSurface32 = dwColor;
+                pSurface32 -= 2;
+            }
+        }
+    }
+}
