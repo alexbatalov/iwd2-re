@@ -112,6 +112,88 @@ void CVidPoly::DrawHLineDitheredMirrored16(void* pSurface, int xMin, int xMax, D
     }
 }
 
+// 0x7C1C20
+void CVidPoly::SetHLineFunction(DWORD dwFlags)
+{
+    switch (g_pChitin->cVideo.m_nBpp) {
+    case 32:
+        if ((dwFlags & 0x1) != 0) {
+            if ((dwFlags & 0x4) != 0) {
+                m_pDrawHLineFunction = &CVidPoly::DrawHLineMirrored32;
+            } else {
+                m_pDrawHLineFunction = &CVidPoly::DrawHLine32;
+            }
+        } else if ((dwFlags & 0x10) != 0) {
+            if ((dwFlags & 0x4) != 0) {
+                m_pDrawHLineFunction = &CVidPoly::DrawHLineShadedMirrored32;
+            } else {
+                m_pDrawHLineFunction = &CVidPoly::DrawHLineShaded32;
+            }
+        } else {
+            if ((dwFlags & 0x4) != 0) {
+                m_pDrawHLineFunction = &CVidPoly::DrawHLineDitheredMirrored32;
+            } else {
+                m_pDrawHLineFunction = &CVidPoly::DrawHLineDithered32;
+            }
+        }
+        break;
+    case 24:
+        if ((dwFlags & 0x1) != 0) {
+            if ((dwFlags & 0x4) != 0) {
+                m_pDrawHLineFunction = &CVidPoly::DrawHLineMirrored24;
+            } else {
+                m_pDrawHLineFunction = &CVidPoly::DrawHLine24;
+            }
+        } else if ((dwFlags & 0x10) != 0) {
+            if ((dwFlags & 0x4) != 0) {
+                m_pDrawHLineFunction = &CVidPoly::DrawHLineShadedMirrored24;
+            } else {
+                m_pDrawHLineFunction = &CVidPoly::DrawHLineShaded24;
+            }
+        } else {
+            if ((dwFlags & 0x4) != 0) {
+                m_pDrawHLineFunction = &CVidPoly::DrawHLineDitheredMirrored24;
+            } else {
+                m_pDrawHLineFunction = &CVidPoly::DrawHLineDithered24;
+            }
+        }
+        break;
+    default:
+        if ((dwFlags & 0x1) != 0) {
+            if ((dwFlags & 0x4) != 0) {
+                m_pDrawHLineFunction = &CVidPoly::DrawHLineMirrored16;
+            } else {
+                m_pDrawHLineFunction = &CVidPoly::DrawHLine16;
+            }
+        } else if ((dwFlags & 0x10) != 0) {
+            if ((dwFlags & 0x4) != 0) {
+                m_pDrawHLineFunction = &CVidPoly::DrawHLineShadedMirrored16;
+            } else {
+                m_pDrawHLineFunction = &CVidPoly::DrawHLineShaded16;
+            }
+        } else {
+            if ((dwFlags & 0x4) != 0) {
+                m_pDrawHLineFunction = &CVidPoly::DrawHLineDitheredMirrored16;
+            } else {
+                m_pDrawHLineFunction = &CVidPoly::DrawHLineDithered16;
+            }
+        }
+        break;
+    }
+}
+
+// 0x7C1FD0
+void CVidPoly::DrawHLineShaded16(void* pSurface, int xMin, int xMax, DWORD dwColor, const CRect& rSurface, const CPoint& ptRef)
+{
+    // TODO: Incomplete.
+}
+
+// 0x7C2040
+void CVidPoly::DrawHLineShadedMirrored16(void* pSurface, int xMin, int xMax, DWORD dwColor, const CRect& rSurface, const CPoint& ptRef)
+{
+    // TODO: Incomplete.
+}
+
 // 0x7D6970
 void CVidPoly::DrawHLine24(void* pSurface, int xMin, int xMax, DWORD dwColor, const CRect& rSurface, const CPoint& ptRef)
 {
@@ -309,4 +391,28 @@ void CVidPoly::DrawHLineDitheredMirrored32(void* pSurface, int xMin, int xMax, D
             }
         }
     }
+}
+
+// 0x7D6CA0
+void CVidPoly::DrawHLineShaded24(void* pSurface, int xMin, int xMax, DWORD dwColor, const CRect& rSurface, const CPoint& ptRef)
+{
+    // TODO: Incomplete.
+}
+
+// 0x7D6DA0
+void CVidPoly::DrawHLineShadedMirrored24(void* pSurface, int xMin, int xMax, DWORD dwColor, const CRect& rSurface, const CPoint& ptRef)
+{
+    // TODO: Incomplete.
+}
+
+// 0x7D6EB0
+void CVidPoly::DrawHLineShaded32(void* pSurface, int xMin, int xMax, DWORD dwColor, const CRect& rSurface, const CPoint& ptRef)
+{
+    // TODO: Incomplete.
+}
+
+// 0x7D6FD0
+void CVidPoly::DrawHLineShadedMirrored32(void* pSurface, int xMin, int xMax, DWORD dwColor, const CRect& rSurface, const CPoint& ptRef)
+{
+    // TODO: Incomplete.
 }
