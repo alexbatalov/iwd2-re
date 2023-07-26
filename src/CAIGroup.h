@@ -13,6 +13,7 @@ public:
     POSITION Add(LONG characterId);
     void Remove(CGameSprite* pSprite);
     BOOL IsPartyLeader();
+    void GroupCancelMove();
     BOOL InList(LONG characterId);
 
     /* 0004 */ BOOL m_groupChanged;

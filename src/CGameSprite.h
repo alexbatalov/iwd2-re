@@ -231,8 +231,10 @@ public:
     /* 4E00 */ CSound m_sndReady;
     /* 4E64 */ CSound m_sndDeath;
     /* 5586 */ POSITION m_groupPosition;
+    /* 558A */ BOOL m_groupMove;
     /* 562C */ int field_562C;
     /* 5690 */ LONG m_targetId;
+    /* 5694 */ CPoint m_targetPoint;
 };
 
 #endif /* CGAMESPRITE_H_ */
