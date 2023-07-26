@@ -5,6 +5,13 @@
 #include "CGameSprite.h"
 #include "CInfGame.h"
 
+// NOTE: Inlined.
+CAIGroup::CAIGroup(SHORT id)
+{
+    m_groupId = id;
+    m_groupChanged = FALSE;
+}
+
 // 0x4060C0
 LONG CAIGroup::GetGroupLeader()
 {

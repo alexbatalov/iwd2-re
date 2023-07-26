@@ -7,6 +7,8 @@ class CGameSprite;
 
 class CAIGroup {
 public:
+    CAIGroup(SHORT id = -1);
+
     LONG GetGroupLeader();
     LONG* GetGroupList();
     void Add(CGameSprite* pSprite);
@@ -16,7 +18,8 @@ public:
     void GroupCancelMove();
     BOOL InList(LONG characterId);
 
-    /* 0004 */ BOOL m_groupChanged;
+    /* 0000 */ SHORT m_groupId;
+    /* 0002 */ BOOL m_groupChanged;
     /* 0006 */ CTypedPtrList<CPtrList, LONG*> m_memberList;
 };
 
