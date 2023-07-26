@@ -95,6 +95,46 @@ BOOL CAIGroup::IsPartyLeader()
     return g_pBaldurChitin->GetObjectGame()->m_familiars.Find(reinterpret_cast<int*>(memberId)) != NULL;
 }
 
+// 0x4062B0
+void CAIGroup::Sort()
+{
+    CAIGroup tempGroup;
+    POSITION pos;
+
+    m_groupChanged = TRUE;
+
+    pos = m_memberList.GetHeadPosition();
+    while (pos != NULL) {
+        LONG memberId = reinterpret_cast<LONG>(m_memberList.GetNext(pos));
+        tempGroup.Add(memberId);
+    }
+
+    m_memberList.RemoveAll();
+
+    pos = tempGroup.m_memberList.GetHeadPosition();
+    while (pos != NULL) {
+        LONG memberId = reinterpret_cast<LONG>(tempGroup.m_memberList.GetNext(pos));
+
+        CGameSprite* pSprite;
+
+        BYTE rc;
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(memberId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            pSprite->m_groupPosition = m_memberList.AddTail(reinterpret_cast<LONG*>(memberId));
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(memberId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+}
+
 // 0x408660
 void CAIGroup::GroupCancelMove()
 {
