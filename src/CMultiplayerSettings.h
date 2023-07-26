@@ -6,15 +6,16 @@
 #include "CGamePermission.h"
 #include "CNetwork.h"
 
-// TODO: Should be defined elsewhere.
-#define MAX_CHARACTERS 6
-
-#define IMPORT_STATISTICS 1
-#define IMPORT_EXPERIENCE 2
-#define IMPORT_ALL 7
-
 class CMultiplayerSettings {
 public:
+    static const BYTE MAX_PLAYERS;
+    static const BYTE MAX_CHARACTERS;
+
+    static const BYTE IMPORT_ALL;
+    static const BYTE IMPORT_STATISTICS;
+    static const BYTE IMPORT_EXPERIENCE;
+    static const BYTE IMPORT_ITEMS;
+
     static const BYTE CHARSTATUS_NO_CHARACTER;
     static const BYTE CHARSTATUS_CHARACTER;
     static const BYTE CHARSTATUS_CREATING_CHARACTER;
@@ -51,10 +52,10 @@ public:
     /* 0000 */ CGamePermission m_pcPermissions[6];
     /* 0030 */ CGamePermission m_cDefaultPermissions;
     /* 0038 */ PLAYER_ID m_pnPlayerReady[6];
-    /* 0050 */ PLAYER_ID m_pnCharacterControlledByPlayer[MAX_CHARACTERS];
-    /* 0068 */ BOOLEAN m_pbCharacterReady[MAX_CHARACTERS];
-    /* 006E */ BYTE m_pnCharacterStatus[MAX_CHARACTERS];
-    /* 0074 */ PLAYER_ID m_pnLoadGameControlledByPlayer[MAX_CHARACTERS];
+    /* 0050 */ PLAYER_ID m_pnCharacterControlledByPlayer[6];
+    /* 0068 */ BOOLEAN m_pbCharacterReady[6];
+    /* 006E */ BYTE m_pnCharacterStatus[6];
+    /* 0074 */ PLAYER_ID m_pnLoadGameControlledByPlayer[6];
     /* 008C */ unsigned char field_8C;
     /* 008D */ BYTE m_nImportingBitField;
     /* 008E */ BOOLEAN m_bRestrictStoreOption;

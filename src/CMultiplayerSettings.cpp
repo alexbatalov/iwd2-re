@@ -4,8 +4,23 @@
 #include "CInfGame.h"
 #include "CUtil.h"
 
-// TODO: Too many `MAX_PLAYERS` constants.
-#define MAX_PLAYERS 6
+// 0x84D59C
+const BYTE CMultiplayerSettings::MAX_PLAYERS = 6;
+
+// 0x84D59D
+const BYTE CMultiplayerSettings::MAX_CHARACTERS = 6;
+
+// 0x84D59E
+const BYTE CMultiplayerSettings::IMPORT_ALL = 7;
+
+// 0x84D59F
+const BYTE CMultiplayerSettings::IMPORT_STATISTICS = 1;
+
+// 0x84D5A0
+const BYTE CMultiplayerSettings::IMPORT_EXPERIENCE = 2;
+
+// 0x84D5A1
+const BYTE CMultiplayerSettings::IMPORT_ITEMS = 4;
 
 // 0x84D5A2
 const BYTE CMultiplayerSettings::CHARSTATUS_NO_CHARACTER = 0;
