@@ -84,6 +84,7 @@ public:
     /* 0070 */ virtual void OnMultiplayerSessionOpen(CString& sJoinedGame, CString& sDroppedGame, CString& sLeftGame);
     /* 0074 */ virtual void OnMultiplayerSessionToClose();
     /* 007C */ virtual void OnMultiplayerPlayerJoin(PLAYER_ID playerID, const CString& sPlayerName);
+    /* 0080 */ virtual void OnMultiplayerPlayerVisible(PLAYER_ID playerID);
     /* 0090 */ virtual void AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD dw1, DWORD dw2);
     /* 0094 */ virtual void FlipFullScreenMode(BOOLEAN a2);
     /* 00A0 */ virtual const char* GetIniFileName();

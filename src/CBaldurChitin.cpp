@@ -1828,6 +1828,19 @@ CBaldurMessage* CBaldurChitin::GetBaldurMessage()
     return &m_cBaldurMessage;
 }
 
+// 0x425CB0
+void CBaldurChitin::OnMultiplayerPlayerVisible(PLAYER_ID playerID)
+{
+    if (g_pChitin->cNetwork.GetSessionOpen() && g_pChitin->cNetwork.GetSessionHosting()) {
+        if (m_pObjectGame != NULL) {
+            INT nSlot = g_pChitin->cNetwork.FindPlayerLocationByID(playerID, FALSE);
+            if (nSlot >= 0 && nSlot < CMultiplayerSettings::MAX_PLAYERS) {
+                m_pObjectGame->m_multiplayerSettings.ResetPermissionsForPlayer(nSlot, FALSE);
+            }
+        }
+    }
+}
+
 // 0x425FB0
 void CBaldurChitin::SynchronousUpdate()
 {

@@ -111,6 +111,7 @@ public:
     /* 0070 */ void OnMultiplayerSessionOpen(CString& sJoinedGame, CString& sDroppedGame, CString& sLeftGame) override;
     /* 0074 */ void OnMultiplayerSessionToClose() override;
     /* 007C */ void OnMultiplayerPlayerJoin(PLAYER_ID playerID, const CString& sPlayerName) override;
+    /* 0080 */ void OnMultiplayerPlayerVisible(PLAYER_ID playerID) override;
     /* 0090 */ void AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD dw1, DWORD dw2) override;
     /* 0094 */ void FlipFullScreenMode(BOOLEAN a2) override;
     /* 009C */ void ShutDown(int nLineNumber, const char* szFileName, const char* text) override;

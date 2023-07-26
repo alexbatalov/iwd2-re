@@ -1731,6 +1731,11 @@ void CChitin::OnMultiplayerPlayerJoin(PLAYER_ID playerID, const CString& sPlayer
 {
 }
 
+// 0x799E60
+void CChitin::OnMultiplayerPlayerVisible(PLAYER_ID playerID)
+{
+}
+
 // 0x78E770
 void CChitin::FlipFullScreenMode(BOOLEAN a2)
 {
