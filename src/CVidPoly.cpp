@@ -2,6 +2,17 @@
 
 #include "CChitin.h"
 
+// 0x7C0DB0
+CVidPoly::CVidPoly()
+{
+    field_0 = 0;
+    m_pVertices = NULL;
+    field_10 = 0;
+    field_C = 0;
+    m_nVertices = -1;
+    m_pDrawHLineFunction = &CVidPoly::DrawHLine16;
+}
+
 // 0x7C13A0
 BOOL CVidPoly::FillPoly(WORD* pSurface, LONG lPitch, const CRect& rClip, DWORD dwColor, DWORD dwFlags, const CPoint& ptRef)
 {
