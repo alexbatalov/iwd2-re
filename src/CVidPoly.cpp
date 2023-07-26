@@ -13,6 +13,24 @@ CVidPoly::CVidPoly()
     m_pDrawHLineFunction = &CVidPoly::DrawHLine16;
 }
 
+// 0x7C0DD0
+LONG CVidPoly::CalculateLineVIntersection(const CPoint& lineStart, const CPoint& lineEnd, LONG vertical, const CPoint& linePrev)
+{
+    if (lineStart.x == vertical) {
+        if ((lineEnd.x <= vertical || linePrev.x <= vertical)
+            && (lineEnd.x >= vertical || linePrev.x >= vertical)) {
+            return lineStart.y;
+        }
+    } else if (lineEnd.x != vertical) {
+        if ((lineStart.x >= vertical || lineEnd.x >= vertical)
+            && (lineStart.x <= vertical || lineEnd.x <= vertical)) {
+            return lineStart.y + (vertical - lineStart.x) * (lineEnd.y - lineStart.y) / (lineEnd.x - lineStart.x);
+        }
+    }
+
+    return -1;
+}
+
 // 0x7C13A0
 BOOL CVidPoly::FillPoly(WORD* pSurface, LONG lPitch, const CRect& rClip, DWORD dwColor, DWORD dwFlags, const CPoint& ptRef)
 {
