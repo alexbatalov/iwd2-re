@@ -1,6 +1,7 @@
 #include "CVidPoly.h"
 
 #include "CChitin.h"
+#include "CUtil.h"
 
 // 0x7C0DB0
 CVidPoly::CVidPoly()
@@ -29,6 +30,45 @@ LONG CVidPoly::CalculateLineVIntersection(const CPoint& lineStart, const CPoint&
     }
 
     return -1;
+}
+
+// 0x7C0E40
+BOOLEAN CVidPoly::IsPtInPoly(const CPoint* pPoly, SHORT nPoly, const CPoint& pt)
+{
+    SHORT numIntersectingEdges = 0;
+    SHORT cnt;
+    LONG interSectionY;
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVidPoly.cpp
+    // __LINE__: 166
+    UTIL_ASSERT(pPoly != NULL && nPoly > 0);
+
+    if (nPoly == 1) {
+        return pPoly[0] == pt;
+    } else if (nPoly == 2) {
+        interSectionY = CalculateLineVIntersection(pPoly[0], pPoly[2], pt.x, pPoly[1]);
+        return interSectionY == pt.y;
+    }
+
+    for (cnt = 0; cnt < nPoly; cnt++) {
+        if (cnt == nPoly - 1) {
+            interSectionY = CalculateLineVIntersection(pPoly[cnt], pPoly[0], pt.x, pPoly[cnt - 1]);
+        } else if (cnt != 0) {
+            interSectionY = CalculateLineVIntersection(pPoly[cnt], pPoly[cnt + 1], pt.x, pPoly[cnt - 1]);
+        } else {
+            interSectionY = CalculateLineVIntersection(pPoly[0], pPoly[cnt + 1], pt.x, pPoly[nPoly - 1]);
+        }
+
+        if (interSectionY == pt.y) {
+            return TRUE;
+        }
+
+        if (interSectionY != -1 && interSectionY < pt.y) {
+            numIntersectingEdges++;
+        }
+    }
+
+    return (numIntersectingEdges & 1);
 }
 
 // 0x7C13A0
