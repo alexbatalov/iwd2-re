@@ -34,6 +34,12 @@ public:
     BOOLEAN GetPlayerReady(SHORT nPlayerSlot);
     BOOLEAN GetPlayerReady(PLAYER_ID playerID);
     void SetPlayerReady(PLAYER_ID playerID, BOOLEAN bValue, BOOLEAN bFlush);
+    int sub_518560();
+    void sub_518580(PLAYER_ID playerID, INT characterSlotBeingViewed);
+    void sub_518650();
+    void sub_518660(PLAYER_ID playerID, BOOLEAN a2);
+    void sub_518690();
+    int sub_5186A0();
     INT GetCharacterControlledByPlayer(INT nCharacterSlot);
     void SetCharacterControlledByPlayer(INT nCharacterSlot, INT nPlayerSlot, BOOLEAN bFlush, BOOLEAN bCharacterUpdate);
     BOOLEAN GetCharacterReady(INT nCharacterSlot);
@@ -70,7 +76,7 @@ public:
     /* 00A7 */ unsigned char field_A7;
     /* 00A8 */ unsigned char field_A8;
     /* 00AC */ unsigned char field_AC[6];
-    /* 00B2 */ unsigned char field_B2[6];
+    /* 00B2 */ BOOLEAN field_B2[6];
     /* 00B8 */ unsigned char field_B8;
     /* 00BA */ int m_nDifficultyLevel;
     /* 00BE */ int field_BE;

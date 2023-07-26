@@ -209,6 +209,71 @@ void CMultiplayerSettings::SetPlayerReady(PLAYER_ID playerID, BOOLEAN bValue, BO
     // TODO: Incomplete.
 }
 
+// 0x518560
+int CMultiplayerSettings::sub_518560()
+{
+    int count = 0;
+
+    for (int index = 0; index < 6; index++) {
+        if (field_AC[index] != -1) {
+            count++;
+        }
+    }
+
+    return count;
+}
+
+// 0x518580
+void CMultiplayerSettings::sub_518580(PLAYER_ID playerID, INT characterSlotBeingViewed)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMultiplayerSettings.cpp
+    // __LINE__: 1185
+    UTIL_ASSERT(characterSlotBeingViewed >= -1 && characterSlotBeingViewed < MAX_CHARACTERS);
+
+    // TODO: Incomplete. There is some strange code which locks appropriate
+    // character, but never releases it. Check in debugger.
+
+    INT nPlayerSlot = g_pChitin->cNetwork.FindPlayerLocationByID(playerID, TRUE);
+    field_AC[nPlayerSlot] = characterSlotBeingViewed;
+}
+
+// 0x518650
+void CMultiplayerSettings::sub_518650()
+{
+    for (int index = 0; index < 6; index++) {
+        field_AC[index] = -1;
+    }
+}
+
+// 0x518660
+void CMultiplayerSettings::sub_518660(PLAYER_ID playerID, BOOLEAN a2)
+{
+    INT nPlayerSlot = g_pChitin->cNetwork.FindPlayerLocationByID(playerID, TRUE);
+    field_B2[nPlayerSlot] = a2;
+}
+
+// 0x518690
+void CMultiplayerSettings::sub_518690()
+{
+    for (int index = 0; index < 6; index++) {
+        field_B2[index] = FALSE;
+    }
+}
+
+// 0x5186A0
+int CMultiplayerSettings::sub_5186A0()
+{
+    int count = 0;
+
+    for (int index = 0; index < 6; index++) {
+        if (field_B2[index]) {
+            count++;
+        }
+    }
+
+    return count;
+}
+
 // 0x5186C0
 INT CMultiplayerSettings::GetCharacterControlledByPlayer(INT nCharacterSlot)
 {
