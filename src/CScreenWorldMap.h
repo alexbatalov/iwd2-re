@@ -7,6 +7,8 @@ class CScreenWorldMap : public CBaldurEngine {
 public:
     CScreenWorldMap();
     ~CScreenWorldMap();
+
+    void StartWorldMap(INT nEngineState, LONG nLeavingEdge, BOOLEAN bInControl);
     void ClearChatMessages();
 
     /* 104A */ int field_104A;

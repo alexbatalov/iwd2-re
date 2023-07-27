@@ -14,6 +14,13 @@ public:
     void OnDoneButtonClick();
 };
 
+class CUIControlButtonMapWorld : public CUIControlButton {
+public:
+    CUIControlButtonMapWorld(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonMapWorld() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlButtonMapError : public CUIControlButton {
 public:
     CUIControlButtonMapError(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

@@ -1,6 +1,7 @@
 #include "CScreenMap.h"
 
 #include "CBaldurChitin.h"
+#include "CScreenWorldMap.h"
 #include "CUtil.h"
 
 // 0x63F960
@@ -31,6 +32,44 @@ void CScreenMap::OnCancelButtonClick()
 void CScreenMap::OnDoneButtonClick()
 {
     // TODO: Incomplete.
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x6426E0
+CUIControlButtonMapWorld::CUIControlButtonMapWorld(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    m_nToolTipStrRef = 15418;
+}
+
+// 0x642740
+CUIControlButtonMapWorld::~CUIControlButtonMapWorld()
+{
+}
+
+// 0x6427E0
+void CUIControlButtonMapWorld::OnLButtonClick(CPoint pt)
+{
+    CScreenMap* pMap = g_pBaldurChitin->m_pEngineMap;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+    // __LINE__: 2037
+    UTIL_ASSERT(pMap != NULL);
+
+    CScreenWorldMap* pWorldMap = g_pBaldurChitin->m_pEngineWorldMap;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+    // __LINE__: 2039
+    UTIL_ASSERT(pWorldMap != NULL);
+
+    CSingleLock renderLock(&(pMap->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    pWorldMap->StartWorldMap(0, 8, 0);
+    pMap->SelectEngine(pWorldMap);
+
+    renderLock.Unlock();
 }
 
 // -----------------------------------------------------------------------------

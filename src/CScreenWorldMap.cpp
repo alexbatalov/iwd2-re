@@ -12,6 +12,12 @@ CScreenWorldMap::~CScreenWorldMap()
     // TODO: Incomplete.
 }
 
+// 0x69C2A0
+void CScreenWorldMap::StartWorldMap(INT nEngineState, LONG nLeavingEdge, BOOLEAN bInControl)
+{
+    // TODO: Incomplete.
+}
+
 // 0x6A01C0
 void CScreenWorldMap::ClearChatMessages()
 {
