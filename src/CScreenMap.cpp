@@ -21,6 +21,12 @@ void CScreenMap::OnErrorButtonClick(INT nButton)
     // TODO: Incomplete.
 }
 
+// 0x642460
+void CScreenMap::OnCancelButtonClick()
+{
+    // TODO: Incomplete.
+}
+
 // 0x6424D0
 void CScreenMap::OnDoneButtonClick()
 {
@@ -75,4 +81,29 @@ void CUIControlButtonMapNoteDone::OnLButtonClick(CPoint pt)
     UTIL_ASSERT(pMap != NULL);
 
     pMap->OnDoneButtonClick();
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x645B10
+CUIControlButtonMapNoteCancel::CUIControlButtonMapNoteCancel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+}
+
+// 0x645B60
+CUIControlButtonMapNoteCancel::~CUIControlButtonMapNoteCancel()
+{
+}
+
+// 0x645C00
+void CUIControlButtonMapNoteCancel::OnLButtonClick(CPoint pt)
+{
+    CScreenMap* pMap = g_pBaldurChitin->m_pEngineMap;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+    // __LINE__: 4290
+    UTIL_ASSERT(pMap != NULL);
+
+    pMap->OnCancelButtonClick();
 }

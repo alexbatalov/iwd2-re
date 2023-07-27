@@ -10,6 +10,7 @@ public:
     ~CScreenMap();
 
     void OnErrorButtonClick(INT nButton);
+    void OnCancelButtonClick();
     void OnDoneButtonClick();
 };
 
@@ -24,6 +25,13 @@ class CUIControlButtonMapNoteDone : public CUIControlButton {
 public:
     CUIControlButtonMapNoteDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonMapNoteDone() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonMapNoteCancel : public CUIControlButton {
+public:
+    CUIControlButtonMapNoteCancel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonMapNoteCancel() override;
     void OnLButtonClick(CPoint pt) override;
 };
 
