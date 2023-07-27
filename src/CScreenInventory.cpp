@@ -11,3 +11,9 @@ CScreenInventory::~CScreenInventory()
 {
     // TODO: Incomplete.
 }
+
+// 0x62CAA0
+void CScreenInventory::UnPauseGame()
+{
+    // TOOD: Incomplete.
+}

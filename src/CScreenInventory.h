@@ -7,6 +7,8 @@ class CScreenInventory : public CBaldurEngine {
 public:
     CScreenInventory();
     ~CScreenInventory();
+
+    void UnPauseGame();
 };
 
 #endif /* CSCREENINVENTORY_H_ */

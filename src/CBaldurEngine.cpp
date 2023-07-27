@@ -3,6 +3,13 @@
 #include "CBaldurChitin.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CScreenInventory.h"
+#include "CScreenJournal.h"
+#include "CScreenMap.h"
+#include "CScreenMultiPlayer.h"
+#include "CScreenOptions.h"
+#include "CScreenSinglePlayer.h"
+#include "CScreenSpellbook.h"
 #include "CScreenWorld.h"
 #include "CUIControlBase.h"
 #include "CUIControlLabel.h"
@@ -760,7 +767,62 @@ void CBaldurEngine::GetChatEditBoxStatus(CString& sChatText, BOOL& bInputCapture
 // 0x4282C0
 void CBaldurEngine::OnLeftPanelButtonClick(DWORD dwButtonId)
 {
-    // TODO: Incomplete.
+    switch (dwButtonId) {
+    case 0:
+        if (g_pBaldurChitin->m_pEngineWorld != g_pBaldurChitin->pActiveEngine) {
+            g_pBaldurChitin->pActiveEngine->SelectEngine(g_pBaldurChitin->m_pEngineWorld);
+        }
+        break;
+    case 4:
+        if (g_pBaldurChitin->m_pEngineSpellbook != g_pBaldurChitin->pActiveEngine) {
+            g_pBaldurChitin->m_pEngineSpellbook->OnPortraitLClick(static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->GetSelectedCharacter());
+            g_pBaldurChitin->pActiveEngine->SelectEngine(g_pBaldurChitin->m_pEngineSpellbook);
+        }
+        break;
+    case 5:
+        if (g_pBaldurChitin->m_pEngineInventory != g_pBaldurChitin->pActiveEngine) {
+            g_pBaldurChitin->m_pEngineInventory->OnPortraitLClick(static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->GetSelectedCharacter());
+            g_pBaldurChitin->pActiveEngine->SelectEngine(g_pBaldurChitin->m_pEngineInventory);
+            g_pBaldurChitin->m_pEngineInventory->UnPauseGame();
+        }
+        break;
+    case 6:
+        if (g_pBaldurChitin->m_pEngineJournal != g_pBaldurChitin->pActiveEngine) {
+            // FIXME: Calls `GetCurrentChapter` 4 times.
+            g_pBaldurChitin->m_pEngineJournal->m_nChapter = max(min(g_pBaldurChitin->GetObjectGame()->GetCurrentChapter(), CGameJournal::NUM_CHAPTERS - 1), 0);
+            g_pBaldurChitin->m_pEngineJournal->OnPortraitLClick(static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->GetSelectedCharacter());
+            g_pBaldurChitin->pActiveEngine->SelectEngine(g_pBaldurChitin->m_pEngineJournal);
+        }
+        break;
+    case 7:
+        if (g_pBaldurChitin->m_pEngineMap != g_pBaldurChitin->pActiveEngine) {
+            g_pBaldurChitin->m_pEngineMap->OnPortraitLClick(static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->GetSelectedCharacter());
+            g_pBaldurChitin->pActiveEngine->SelectEngine(g_pBaldurChitin->m_pEngineMap);
+        }
+        break;
+    case 8:
+        if (g_pBaldurChitin->m_pEngineOptions != g_pBaldurChitin->pActiveEngine) {
+            g_pBaldurChitin->m_pEngineOptions->OnPortraitLClick(static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->GetSelectedCharacter());
+            g_pBaldurChitin->m_pEngineOptions->m_bFromMainMenu = FALSE;
+            g_pBaldurChitin->pActiveEngine->SelectEngine(g_pBaldurChitin->m_pEngineOptions);
+        }
+        break;
+    case 13:
+        if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL) {
+            if (g_pBaldurChitin->m_pEngineSinglePlayer != g_pBaldurChitin->pActiveEngine) {
+                g_pBaldurChitin->m_pEngineSinglePlayer->field_45C = 2;
+                g_pBaldurChitin->m_pEngineSinglePlayer->StartSinglePlayer(2);
+                g_pBaldurChitin->pActiveEngine->SelectEngine(g_pBaldurChitin->m_pEngineSinglePlayer);
+            }
+        } else {
+            if (g_pBaldurChitin->m_pEngineMultiPlayer != g_pBaldurChitin->pActiveEngine) {
+                g_pBaldurChitin->m_pEngineMultiPlayer->field_45C = 2;
+                g_pBaldurChitin->m_pEngineMultiPlayer->StartMultiPlayer(2);
+                g_pBaldurChitin->pActiveEngine->SelectEngine(g_pBaldurChitin->m_pEngineMultiPlayer);
+            }
+        }
+        break;
+    }
 }
 
 // 0x4289C0
