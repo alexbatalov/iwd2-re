@@ -229,7 +229,7 @@ void CScreenSinglePlayer::OnLButtonDblClk(CPoint pt)
 // 0x636970
 void CScreenSinglePlayer::OnLButtonDown(CPoint pt)
 {
-    g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
     m_cUIManager.OnLButtonDown(pt);
 }
 
