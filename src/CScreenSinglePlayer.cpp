@@ -214,7 +214,7 @@ void CScreenSinglePlayer::OnMouseMove(CPoint pt)
     m_cUIManager.OnMouseMove(pt);
 }
 
-// 0x0x49FC40
+// 0x49FC40
 BOOL CScreenSinglePlayer::CheckMouseLButton()
 {
     return TRUE;
