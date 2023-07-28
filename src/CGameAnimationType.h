@@ -62,6 +62,7 @@ public:
     /* 00AC */ virtual SHORT SetSequence(SHORT nSequence);
     /* 00B0 */ virtual void CalculateFxRectMax(CRect& rFx, CPoint& ptReference, LONG posZ);
     /* 00B4 */ virtual void SetNeckOffsets(SHORT Sx, SHORT Sy, SHORT SWx, SHORT SWy, SHORT Wx, SHORT Wy, SHORT NWx, SHORT NWy, SHORT Nx, SHORT Ny, SHORT NEx, SHORT NEy, SHORT Ex, SHORT Ey, SHORT SEx, SHORT SEy);
+    /* 00BC */ virtual BOOL GetAboveGround();
     /* 00C4 */ virtual SHORT GetCastHeight();
     /* 00C8 */ virtual SHORT GetCurrentFrame();
     /* 00CC */ virtual BOOLEAN GetCurrentSequenceAndFrame(SHORT nSequence, SHORT nFrame);

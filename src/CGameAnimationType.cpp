@@ -261,6 +261,12 @@ SHORT CGameAnimationType::SetSequence(SHORT nSequence)
     return nSequence;
 }
 
+// 0x49FC40
+BOOL CGameAnimationType::GetAboveGround()
+{
+    return TRUE;
+}
+
 // 0x55D200
 SHORT CGameAnimationType::GetCastHeight()
 {
