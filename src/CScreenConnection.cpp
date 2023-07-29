@@ -3433,3 +3433,39 @@ void CScreenConnection::ShowSessionTerminatedMessage()
 
     lock.Unlock();
 }
+
+// 0x605920
+void CScreenConnection::ResetVersionMismatchPanel(CUIPanel* pPanel)
+{
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(0));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 9313
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+
+    g_pBaldurChitin->m_cTlkTable.SetToken(TOKEN_SERVERVERSION,
+        g_pBaldurChitin->GetBaldurMessage()->GetVersionControlShutdownServerString());
+
+    g_pBaldurChitin->m_cTlkTable.SetToken(TOKEN_CLIENTVERSION,
+        g_pBaldurChitin->GetBaldurMessage()->GetVersionControlShutdownClientString());
+
+    STRREF strText;
+    switch (g_pBaldurChitin->GetBaldurMessage()->m_nVersionControlShutdownReason) {
+    case 1:
+        strText = 11830;
+        break;
+    case 2:
+        strText = 11832;
+        break;
+    case 3:
+        strText = 1614;
+        break;
+    default:
+        strText = -1;
+        break;
+    }
+
+    UpdateText(pText, "%s", FetchString(strText));
+}

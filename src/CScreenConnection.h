@@ -106,6 +106,7 @@ public:
     void OnLobbyLoadGameButtonClick();
     void OnLobbyExitButtonClick();
     void ShowSessionTerminatedMessage();
+    void ResetVersionMismatchPanel(CUIPanel* pPanel);
 
     /* 0106 */ int field_106;
     /* 010A */ CKeyInfo m_pVirtualKeys[CSCREENCONNECTION_VIRTUAL_KEYS];
