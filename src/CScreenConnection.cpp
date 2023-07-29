@@ -2069,7 +2069,127 @@ void CScreenConnection::AutoStartDirectPlayLobby()
 // 0x601CB0
 void CScreenConnection::AutoSelectServiceProvider()
 {
-    // TODO: Incomplete.
+    m_nProtocol = 0;
+
+    CNetwork* pNetwork = &(g_pBaldurChitin->cNetwork);
+    CString sLastProtocolUsed;
+
+    if (g_pChitin->field_110 || g_pChitin->m_bStartUpConnect) {
+        sLastProtocolUsed = "2";
+    } else {
+        GetPrivateProfileStringA("Multiplayer",
+            "Last Protocol Used",
+            "0",
+            sLastProtocolUsed.GetBuffer(128),
+            128,
+            g_pBaldurChitin->GetIniFileName());
+        sLastProtocolUsed.ReleaseBuffer();
+    }
+
+    switch (sLastProtocolUsed[0] - '0') {
+    case 0:
+        m_nProtocol = 0;
+        break;
+    case 1:
+        m_nProtocol = 1;
+        break;
+    case 2:
+        m_nProtocol = 2;
+        break;
+    case 3:
+        m_nProtocol = 3;
+        break;
+    case 4:
+        m_nProtocol = 4;
+        break;
+    }
+
+    if (m_nProtocol != 0) {
+        INT nNewProvider = 0;
+        switch (m_nProtocol) {
+        case 1:
+            nNewProvider = CNetwork::SERV_PROV_IPX;
+            break;
+        case 2:
+            nNewProvider = CNetwork::SERV_PROV_TCP_IP;
+            break;
+        case 3:
+            if (1) {
+                CString sModemSelected;
+                CString sDefaultModemName("");
+
+                GetPrivateProfileStringA("Multiplayer",
+                    "Modem Selected",
+                    sDefaultModemName,
+                    sModemSelected.GetBuffer(128),
+                    128,
+                    g_pBaldurChitin->GetIniFileName());
+
+                if (sModemSelected != "") {
+                    if (pNetwork->m_nModemAddress != -1) {
+                        pNetwork->UnselectModemAddress();
+                    }
+
+                    INT nModemAddress = pNetwork->FindModemAddress(sModemSelected);
+                    pNetwork->SelectModemAddress(nModemAddress);
+                } else {
+                    m_nProtocol = 0;
+                    nNewProvider = 0;
+                }
+
+                if (pNetwork->m_nModemAddress != -1) {
+                    m_nModemAddress = pNetwork->m_nModemAddress;
+                    nNewProvider = CNetwork::SERV_PROV_MODEM;
+                }
+            }
+            break;
+        case 4:
+            if (1) {
+                UINT nSerialPort = GetPrivateProfileIntA("Multiplayer",
+                    "Serial Port",
+                    1,
+                    g_pBaldurChitin->GetIniFileName());
+                pNetwork->SetSerialPort(nSerialPort);
+                if (pNetwork->m_nSerialPort != nSerialPort) {
+                    pNetwork->SetSerialPort(1);
+                }
+
+                UINT nBaudRate = GetPrivateProfileIntA("Multiplayer",
+                    "Serial Baud",
+                    38400,
+                    g_pBaldurChitin->GetIniFileName());
+                pNetwork->SetSerialBaudRate(nBaudRate);
+                if (pNetwork->m_nSerialBaudRate != nBaudRate) {
+                    pNetwork->SetSerialBaudRate(38400);
+                }
+
+                m_nSerialPort = pNetwork->m_nSerialPort;
+                m_nSerialBaudRate = pNetwork->m_nSerialBaudRate;
+                nNewProvider = CNetwork::SERV_PROV_SERIAL;
+            }
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+            // __LINE__: 6749
+            UTIL_ASSERT(FALSE);
+        }
+
+        for (INT nIndex = 0; nIndex < pNetwork->m_nTotalServiceProviders; nIndex++) {
+            INT nProvider;
+            pNetwork->GetServiceProviderType(nIndex, nProvider);
+            if (nProvider == nNewProvider) {
+                pNetwork->SelectServiceProvider(nIndex);
+
+                CString sNewLastProtocolUsed;
+                sNewLastProtocolUsed.Format("%d", m_nProtocol);
+
+                WritePrivateProfileStringA("Multiplayer",
+                    "Last Protocol Used",
+                    sNewLastProtocolUsed,
+                    g_pBaldurChitin->GetIniFileName());
+            }
+        }
+    }
 }
 
 // 0x602060
