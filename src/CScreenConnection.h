@@ -265,6 +265,13 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlTextDisplayConnection604E90 : public CUIControlTextDisplay {
+public:
+    CUIControlTextDisplayConnection604E90(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo);
+    ~CUIControlTextDisplayConnection604E90() override;
+    void OnItemSelected(LONG lMarker) override;
+};
+
 class CUIControlButtonConnectionErrorButton : public CUIControlButton {
 public:
     CUIControlButtonConnectionErrorButton(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

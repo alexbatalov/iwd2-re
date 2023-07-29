@@ -3337,6 +3337,46 @@ void CUIControlButtonConnectionCreateGameNewGame::OnLButtonClick(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x604E90
+CUIControlTextDisplayConnection604E90::CUIControlTextDisplayConnection604E90(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo)
+    : CUIControlTextDisplay(panel, controlInfo, TRUE)
+{
+    // NOTE: Uninline.
+    SetNeedMouseMove();
+}
+
+// 0x621470
+CUIControlTextDisplayConnection604E90::~CUIControlTextDisplayConnection604E90()
+{
+}
+
+// 0x604EC0
+void CUIControlTextDisplayConnection604E90::OnItemSelected(LONG lMarker)
+{
+    CScreenConnection* pConnection = g_pBaldurChitin->m_pEngineConnection;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 8876
+    UTIL_ASSERT(pConnection != NULL);
+
+    CUIPanel* pPanel = pConnection->m_cUIManager.GetPanel(5);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 5291
+    UTIL_ASSERT(pConnection != NULL);
+
+    pConnection->m_nSessionIndex = lMarker;
+
+    GUID guid;
+    if (g_pBaldurChitin->cNetwork.GetSessionGUID(pConnection->m_nSessionIndex, guid)) {
+        pConnection->m_sessionGuid = guid;
+    }
+
+    pConnection->UpdatePopupPanel(pPanel->m_nID);
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x604F80
 CUIControlButtonConnectionErrorButton::CUIControlButtonConnectionErrorButton(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
