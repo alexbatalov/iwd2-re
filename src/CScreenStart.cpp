@@ -255,7 +255,7 @@ void CScreenStart::sub_66F990()
 }
 
 // 0x66FA90
-void CScreenStart::sub_66FA90(BOOL bEnabled)
+void CScreenStart::EnableMainPanel(BOOL bEnabled)
 {
     CUIPanel* pPanel = m_cUIManager.GetPanel(0);
 
@@ -293,7 +293,7 @@ void CScreenStart::SummonPopup(DWORD nID)
         // NOTE: Uninline.
         SetPopupEnabled(pPanel->m_nID, FALSE);
     } else {
-        sub_66FA90(FALSE);
+        EnableMainPanel(FALSE);
     }
 
     CUIPanel* pPanel = m_cUIManager.GetPanel(nID);
@@ -364,7 +364,7 @@ void CScreenStart::DismissPopup()
         // NOTE: Uninline.
         SetPopupEnabled(pPanel->m_nID, TRUE);
     } else {
-        sub_66FA90(TRUE);
+        EnableMainPanel(TRUE);
         UpdateMainPanel();
     }
 }

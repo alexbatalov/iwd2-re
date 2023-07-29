@@ -30,7 +30,7 @@ public:
     void UpdateMainPanel();
     void sub_66F8F0();
     void sub_66F990();
-    void sub_66FA90(BOOL bEnabled);
+    void EnableMainPanel(BOOL bEnabled);
     void SummonPopup(DWORD nID);
     void DismissPopup();
     void ResetErrorPanel(CUIPanel* pPanel);
