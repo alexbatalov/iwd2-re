@@ -19,9 +19,13 @@ public:
     static const CString TOKEN_CLIENTVERSION;
 
     CScreenStart();
-    ~CScreenStart();
+    /* 0004 */ ~CScreenStart() override;
     /* 0034 */ void SetSystemKeyCtrl(BOOLEAN bValue) override;
+    /* 0060 */ BOOL CheckMouseMove() override;
     /* 0064 */ void OnMouseMove(CPoint pt) override;
+    /* 0068 */ BOOL CheckMouseLButton() override;
+    /* 0070 */ void OnLButtonDown(CPoint pt) override;
+    /* 0074 */ void OnLButtonUp(CPoint pt) override;
     /* 00A0 */ SHORT GetNumVirtualKeys() override;
     /* 00A4 */ CKeyInfo* GetVirtualKeys() override;
     /* 00A8 */ BYTE* GetVirtualKeysFlags() override;

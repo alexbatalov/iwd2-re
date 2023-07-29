@@ -1,6 +1,7 @@
 #include "CScreenStart.h"
 
 #include "CBaldurChitin.h"
+#include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CMultiplayerSettings.h"
 #include "CScreenConnection.h"
@@ -120,10 +121,37 @@ void CScreenStart::OnKeyDown(SHORT nKeyFlags)
     }
 }
 
+// 0x49FC40
+BOOL CScreenStart::CheckMouseMove()
+{
+    return TRUE;
+}
+
 // 0x66F4B0
 void CScreenStart::OnMouseMove(CPoint pt)
 {
     m_cUIManager.OnMouseMove(pt);
+}
+
+// 0x49FC40
+BOOL CScreenStart::CheckMouseLButton()
+{
+    return TRUE;
+}
+
+// 0x647540
+void CScreenStart::OnLButtonDown(CPoint pt)
+{
+    g_pBaldurChitin->field_1A2E = FALSE;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
+    m_cUIManager.OnLButtonDown(pt);
+}
+
+// 0x6369A0
+void CScreenStart::OnLButtonUp(CPoint pt)
+{
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
+    m_cUIManager.OnLButtonUp(pt);
 }
 
 // 0x66F4D0
