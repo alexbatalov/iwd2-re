@@ -4,6 +4,7 @@
 #include "CBaldurProjector.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CScreenLoad.h"
 #include "CScreenMultiPlayer.h"
 #include "CScreenSinglePlayer.h"
 #include "CScreenStart.h"
@@ -2103,7 +2104,34 @@ void CScreenConnection::OnLobbyNewGameButtonClick()
 // 0x602360
 void CScreenConnection::OnLobbyLoadGameButtonClick()
 {
-    // TODO: Incomplete.
+    CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+
+    CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+    renderLock.Lock(INFINITE);
+    DismissPopup();
+    renderLock.Unlock();
+
+    pSettings->InitializeSettings();
+
+    for (INT nCharacterSlot = 0; nCharacterSlot < 6; nCharacterSlot++) {
+        pSettings->SetCharacterControlledByPlayer(nCharacterSlot, 0, TRUE, FALSE);
+    }
+
+    pSettings->SetPlayerReady(g_pChitin->cNetwork.m_idLocalPlayer, TRUE, TRUE);
+
+    CScreenLoad* pLoad = g_pBaldurChitin->m_pEngineLoad;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 6967
+    UTIL_ASSERT(pLoad != NULL);
+
+    pLoad->StartLoad(1);
+    SelectEngine(pLoad);
+
+    g_pBaldurChitin->GetObjectGame()->LoadMultiPlayerPermissions();
+
+    pSettings->SetArbitrationLockAllowInput(0);
+    pSettings->SetArbitrationLockStatus(TRUE, 0);
 }
 
 // 0x6024A0
