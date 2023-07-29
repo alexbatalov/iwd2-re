@@ -105,6 +105,7 @@ public:
     void OnLobbyNewGameButtonClick();
     void OnLobbyLoadGameButtonClick();
     void OnLobbyExitButtonClick();
+    void ReadyEndCredits();
     void ShowSessionTerminatedMessage();
     void ResetVersionMismatchPanel(CUIPanel* pPanel);
 

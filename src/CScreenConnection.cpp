@@ -3413,6 +3413,12 @@ void CUIControlButtonConnectionLobbyMenu::OnLButtonClick(CPoint pt)
     }
 }
 
+// 0x605840
+void CScreenConnection::ReadyEndCredits()
+{
+    m_bPlayEndCredits = TRUE;
+}
+
 // 0x605850
 void CScreenConnection::ShowSessionTerminatedMessage()
 {
