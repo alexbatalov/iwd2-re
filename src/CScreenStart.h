@@ -6,6 +6,7 @@
 #include "CVidFont.h"
 
 #define CSCREENSTART_VIRTUAL_KEYS 5
+#define CSCREENSTART_ERROR_BUTTONS 3
 
 class CUIPanel;
 
@@ -49,11 +50,10 @@ public:
     /* 0140 */ int field_140;
     /* 0144 */ int field_144;
     /* 0148 */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
-    /* 0164 */ int field_164;
-    /* 0168 */ int field_168;
-    /* 016C */ int field_16C;
-    /* 0170 */ int field_170;
-    /* 0174 */ int field_174;
+    /* 0164 */ INT m_nErrorState;
+    /* 0168 */ STRREF m_dwErrorTextId;
+    /* 016C */ INT m_nNumErrorButtons;
+    /* 0170 */ STRREF m_strErrorButtonText[CSCREENSTART_ERROR_BUTTONS];
     /* 017C */ int field_17C;
     /* 0180 */ CVidFont field_180;
 };

@@ -17,8 +17,8 @@ const CString CScreenStart::TOKEN_CLIENTVERSION("CLIENTVERSION");
 // 0x66F0C0
 CScreenStart::CScreenStart()
 {
-    field_164 = 0;
-    field_16C = 0;
+    m_nErrorState = 0;
+    m_nNumErrorButtons = 0;
     field_144 = 1;
     field_13F = 0;
     field_106 = 1;
@@ -209,10 +209,10 @@ void CScreenStart::sub_66F8F0()
 {
     CSingleLock lock(&m_cUIManager.field_36, TRUE);
 
-    field_164 = 0;
-    field_168 = 19532;
-    field_170 = 15417;
-    field_174 = 13727;
+    m_nErrorState = 0;
+    m_dwErrorTextId = 19532;
+    m_strErrorButtonText[0] = 15417;
+    m_strErrorButtonText[1] = 13727;
     SummonPopup(3);
 
     lock.Unlock();
@@ -236,9 +236,9 @@ void CScreenStart::sub_66F990()
             SelectEngine(pConnection);
         } else {
             g_pBaldurChitin->cNetwork.CloseSession(TRUE);
-            field_164 = 2;
-            field_168 = 20692;
-            field_170 = 11973;
+            m_nErrorState = 2;
+            m_dwErrorTextId = 20692;
+            m_strErrorButtonText[0] = 11973;
             SummonPopup(2);
         }
     } else {
@@ -246,9 +246,9 @@ void CScreenStart::sub_66F990()
             pConnection->StartConnection(FALSE);
             SelectEngine(pConnection);
         } else {
-            field_164 = 2;
-            field_168 = 20692;
-            field_170 = 11973;
+            m_nErrorState = 2;
+            m_dwErrorTextId = 20692;
+            m_strErrorButtonText[0] = 11973;
             SummonPopup(2);
         }
     }
@@ -372,7 +372,51 @@ void CScreenStart::DismissPopup()
 // 0x66FE20
 void CScreenStart::ResetErrorPanel(CUIPanel* pPanel)
 {
-    // TODO: Incomplete.
+    switch (pPanel->m_nID) {
+    case 1:
+        m_nNumErrorButtons = 0;
+        break;
+    case 2:
+        m_nNumErrorButtons = 1;
+        break;
+    case 3:
+        m_nNumErrorButtons = 2;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStart.cpp
+        // __LINE__: 1626
+        UTIL_ASSERT(FALSE);
+    }
+
+    STR_RES strRes;
+    g_pBaldurChitin->m_cTlkTable.Fetch(m_dwErrorTextId, strRes);
+
+    strRes.cSound.SetChannel(0, 0);
+    strRes.cSound.SetFireForget(TRUE);
+    strRes.cSound.Play(FALSE);
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(3));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStart.cpp
+    // __LINE__: 1639
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+    UpdateText(pText, "%s", strRes.szText);
+
+    for (INT nButton = 0; nButton < m_nNumErrorButtons; nButton++) {
+        CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nButton + 1));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStart.cpp
+        // __LINE__: 1648
+        UTIL_ASSERT(pButton != NULL);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStart.cpp
+        // __LINE__: 1701
+        UTIL_ASSERT(0 <= nButton && nButton < CSCREENSTART_ERROR_BUTTONS);
+
+        pButton->SetText(FetchString(m_strErrorButtonText[nButton]));
+    }
 }
 
 // 0x670050
