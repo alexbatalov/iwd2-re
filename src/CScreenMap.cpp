@@ -2,6 +2,7 @@
 
 #include "CBaldurChitin.h"
 #include "CGameArea.h"
+#include "CGameSprite.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CScreenWorld.h"
@@ -515,7 +516,55 @@ void CScreenMap::EnableMainPanel(BOOL bEnable)
 // 0x641800
 void CScreenMap::UpdateMainPanel()
 {
-    // TODO: Incomplete.
+    CUIPanel* pPanel = m_cUIManager.GetPanel(2);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+    // __LINE__: 1188
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlButtonMapAreaMap* pAreaMap = static_cast<CUIControlButtonMapAreaMap*>(pPanel->GetControl(2));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+    // __LINE__: 1192
+    UTIL_ASSERT(pAreaMap != NULL);
+
+    m_noteStrRef = -1;
+
+    UpdateLabel(pPanel, 0x10000003, "%s", "");
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // NOTE: Uninline.
+    LONG nCharacterId = pGame->GetCharacterId(m_nSelectedCharacter);
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc != CGameObjectArray::SUCCESS) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+        // __LINE__: 1203
+        UTIL_ASSERT(FALSE);
+    }
+
+    CGameArea* pArea = pSprite->m_pArea;
+    if (pArea == NULL) {
+        pArea = g_pBaldurChitin->GetObjectGame()->GetVisibleArea();
+    }
+
+    pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+        CGameObjectArray::THREAD_ASYNCH,
+        INFINITE);
+
+    if (pArea != NULL) {
+        pAreaMap->SetMap(pArea);
+    }
 }
 
 // 0x641970
