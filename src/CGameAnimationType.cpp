@@ -261,6 +261,20 @@ SHORT CGameAnimationType::SetSequence(SHORT nSequence)
     return nSequence;
 }
 
+// 0x55D190
+BYTE CGameAnimationType::GetAttackFrameType(BYTE numAttacks, BYTE speedFactor, BYTE combatFrame)
+{
+    if (numAttacks > 5 || speedFactor > 10) {
+        return 0;
+    }
+
+    if (combatFrame > 100) {
+        return 15;
+    }
+
+    return m_combatRounds[numAttacks - 1].GetPixelValue(combatFrame, speedFactor, FALSE);
+}
+
 // 0x49FC40
 BOOL CGameAnimationType::GetAboveGround()
 {
