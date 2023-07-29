@@ -85,6 +85,7 @@ public:
     void UpdateSerialPanel();
     void UpdateModemPanel();
     void UpdateTCPIPPanel();
+    void sub_5FFDF0();
     void ResetProtocolPanel();
     void ResetSerialPanel();
     void ResetModemPanel();

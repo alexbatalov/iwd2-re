@@ -1748,6 +1748,69 @@ void CScreenConnection::UpdateTCPIPPanel()
     pDone->SetEnabled(IsDoneButtonClickable());
 }
 
+// 0x5FFDF0
+void CScreenConnection::sub_5FFDF0()
+{
+    CUIControlButton3State* pButton3;
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(24);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4563
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(2));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4568
+    UTIL_ASSERT(pDone != NULL);
+
+    pDone->SetEnabled(IsDoneButtonClickable());
+
+    pButton3 = static_cast<CUIControlButton3State*>(pPanel->GetControl(4));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4573
+    UTIL_ASSERT(pButton3 != NULL);
+
+    pButton3->SetEnabled(TRUE);
+
+    pButton3 = static_cast<CUIControlButton3State*>(pPanel->GetControl(5));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4578
+    UTIL_ASSERT(pButton3 != NULL);
+
+    pButton3->SetEnabled(TRUE);
+
+    DWORD dwSelectedButtonID;
+    switch (field_FB4) {
+    case 1:
+        UpdateHelp(pPanel->m_nID, 3, 24870);
+        dwSelectedButtonID = 4;
+        break;
+    case 2:
+        UpdateHelp(pPanel->m_nID, 3, 24872);
+        dwSelectedButtonID = 5;
+        break;
+    case 3:
+        UpdateHelp(pPanel->m_nID, 3, 24874);
+        dwSelectedButtonID = 6;
+        break;
+    }
+
+    // NOTE: Probably wrong, button 6 is out of the loop.
+    for (DWORD dwButtonID = 4; dwButtonID <= 5; dwButtonID++) {
+        pButton3 = static_cast<CUIControlButton3State*>(pPanel->GetControl(dwButtonID));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 45617
+        UTIL_ASSERT(pButton3 != NULL);
+
+        pButton3->SetSelected(dwButtonID == dwSelectedButtonID);
+    }
+}
+
 // 0x5FFF60
 void CScreenConnection::ResetProtocolPanel()
 {
