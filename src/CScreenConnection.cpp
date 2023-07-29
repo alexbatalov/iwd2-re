@@ -2049,7 +2049,35 @@ void CScreenConnection::HandleJoinCompletion(BYTE nEvent)
 // 0x601790
 BOOL CScreenConnection::AutoStartInitialize()
 {
-    // TODO: Incomplete.
+    CNetwork* pNetwork = &(g_pBaldurChitin->cNetwork);
+    CString sLastProtocolUsed;
+
+    for (INT nIndex = 0; nIndex < pNetwork->m_nTotalServiceProviders; nIndex++) {
+        INT nProvider;
+        pNetwork->GetServiceProviderType(nIndex, nProvider);
+        if (nProvider == CNetwork::SERV_PROV_TCP_IP) {
+            pNetwork->SelectServiceProvider(nIndex);
+            m_nProtocol = 2;
+
+            sLastProtocolUsed.Format("%d", m_nProtocol);
+            WritePrivateProfileStringA("Multiplayer",
+                "Last Protocol Used",
+                sLastProtocolUsed,
+                g_pBaldurChitin->GetIniFileName());
+
+            return TRUE;
+        }
+    }
+
+    CSingleLock renderLock(&(GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    m_nErrorState = 6;
+    m_strErrorText = 20276;
+    m_strErrorButtonText[0] = 11973;
+    SummonPopup(20);
+
+    renderLock.Unlock();
 
     return FALSE;
 }
