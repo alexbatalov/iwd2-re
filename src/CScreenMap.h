@@ -60,6 +60,9 @@ public:
     void OnCancelButtonClick();
     void OnDoneButtonClick();
 
+    // NOTE: Seen in `OnErrorButtonClick` assertion.
+    INT GetNumErrorButtons() { return m_nNumErrorButtons; }
+
     /* 0106 */ CKeyInfo m_pVirtualKeys[CSCREENMAP_VIRTUAL_KEYS];
     /* 03D6 */ BYTE m_pVirtualKeysFlags[CSCREENMAP_VIRTUAL_KEYS];
     /* 0430 */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;

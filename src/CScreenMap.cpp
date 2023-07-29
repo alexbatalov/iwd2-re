@@ -685,7 +685,62 @@ void CScreenMap::UpdateNoteText(STRREF strRef)
 // 0x6422D0
 void CScreenMap::OnErrorButtonClick(INT nButton)
 {
-    // TODO: Incomplete.
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+    // __LINE__: 1805
+    UTIL_ASSERT(0 <= nButton && nButton < GetNumErrorButtons());
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+    // __LINE__: 1807
+    UTIL_ASSERT(pGame != NULL);
+
+    CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    switch (m_nErrorState) {
+    case 0:
+        switch (nButton) {
+        case 0:
+            DismissPopup();
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+            // __LINE__: 1849
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 1:
+        switch (nButton) {
+        case 0:
+            DismissPopup();
+
+            CInfGame::dword_8E7524 = FALSE;
+            pGame->RestParty(1, 0);
+            break;
+        case 1:
+            DismissPopup();
+
+            CInfGame::dword_8E7524 = TRUE;
+            pGame->RestParty(1, 0);
+            CInfGame::dword_8E7524 = FALSE;
+            break;
+        case 2:
+            DismissPopup();
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+            // __LINE__: 1836
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+        // __LINE__: 1855
+        UTIL_ASSERT(FALSE);
+    }
+
+    renderLock.Unlock();
 }
 
 // 0x642460
