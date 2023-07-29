@@ -188,6 +188,7 @@ public:
     /* 4B38 */ int field_4B38;
     // NOTE: Can also be BYTE indicating number of expansion pack.
     /* 4BD5 */ BOOLEAN m_bExpansion;
+    /* 4BD6 */ BOOLEAN field_4BD6;
     /* 4BD8 */ DWORD m_nDifficultyLevel;
     /* 50D8 */ BOOL field_50D8;
     /* 50DC */ unsigned char field_50DC;

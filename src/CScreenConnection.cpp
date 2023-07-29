@@ -3413,6 +3413,78 @@ void CUIControlButtonConnectionLobbyMenu::OnLButtonClick(CPoint pt)
     }
 }
 
+// -----------------------------------------------------------------------------
+
+// 0x605570
+CUIControlButtonConnection605570::CUIControlButtonConnection605570(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+
+    DWORD strId;
+    switch (m_nID) {
+    case 1:
+        strId = 13912; // "Yes"
+        break;
+    case 2:
+        strId = 13913; // "No"
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 9176
+        UTIL_ASSERT(FALSE);
+    }
+
+    g_pBaldurChitin->m_cTlkTable.Fetch(strId, strRes);
+    SetText(strRes.szText);
+}
+
+// 0x605680
+CUIControlButtonConnection605570::~CUIControlButtonConnection605570()
+{
+}
+
+// 0x605720
+void CUIControlButtonConnection605570::OnLButtonClick(CPoint pt)
+{
+    CScreenConnection* pConnection = g_pBaldurChitin->m_pEngineConnection;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 9208
+    UTIL_ASSERT(pConnection != NULL);
+
+    CSingleLock renderLock(&(pConnection->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    switch (m_nID) {
+    case 1:
+        if (pConnection->field_FB8) {
+            g_pBaldurChitin->GetObjectGame()->field_4BD6 = TRUE;
+            pConnection->OnNewGameButtonClick();
+        } else {
+            g_pBaldurChitin->GetObjectGame()->field_4BD6 = FALSE;
+            pConnection->OnNewGameButtonClick();
+        }
+        break;
+    case 2:
+        if (pConnection->field_FB8) {
+            g_pBaldurChitin->GetObjectGame()->field_4BD6 = FALSE;
+            pConnection->OnNewGameButtonClick();
+        } else {
+            pConnection->OnCancelButtonClick();
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 9246
+        UTIL_ASSERT(FALSE);
+    }
+
+    renderLock.Unlock();
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x605840
 void CScreenConnection::ReadyEndCredits()
 {

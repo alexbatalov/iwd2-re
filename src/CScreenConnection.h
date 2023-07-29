@@ -279,4 +279,11 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonConnection605570 : public CUIControlButton {
+public:
+    CUIControlButtonConnection605570(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonConnection605570() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 #endif /* CSCREENCONNECTION_H_ */
