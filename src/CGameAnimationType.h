@@ -64,6 +64,7 @@ public:
     /* 00B4 */ virtual void SetNeckOffsets(SHORT Sx, SHORT Sy, SHORT SWx, SHORT SWy, SHORT Wx, SHORT Wy, SHORT NWx, SHORT NWy, SHORT Nx, SHORT Ny, SHORT NEx, SHORT NEy, SHORT Ex, SHORT Ey, SHORT SEx, SHORT SEy);
     /* 00B8 */ virtual BYTE GetAttackFrameType(BYTE numAttacks, BYTE speedFactor, BYTE combatFrame);
     /* 00BC */ virtual BOOL GetAboveGround();
+    /* 00C0 */ virtual SHORT GetAwakePlayInReverse();
     /* 00C4 */ virtual SHORT GetCastHeight();
     /* 00C8 */ virtual SHORT GetCurrentFrame();
     /* 00CC */ virtual BOOLEAN GetCurrentSequenceAndFrame(SHORT nSequence, SHORT nFrame);

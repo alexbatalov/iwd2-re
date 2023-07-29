@@ -281,6 +281,12 @@ BOOL CGameAnimationType::GetAboveGround()
     return TRUE;
 }
 
+// 0x55D1F0
+SHORT CGameAnimationType::GetAwakePlayInReverse()
+{
+    return 1;
+}
+
 // 0x55D200
 SHORT CGameAnimationType::GetCastHeight()
 {
