@@ -265,6 +265,13 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonConnection604C30 : public CUIControlButton {
+public:
+    CUIControlButtonConnection604C30(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonConnection604C30() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlTextDisplayConnection604E90 : public CUIControlTextDisplay {
 public:
     CUIControlTextDisplayConnection604E90(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo);

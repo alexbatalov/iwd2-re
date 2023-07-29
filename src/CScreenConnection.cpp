@@ -4,6 +4,7 @@
 #include "CBaldurProjector.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CScreenCreateChar.h"
 #include "CScreenLoad.h"
 #include "CScreenMultiPlayer.h"
 #include "CScreenSinglePlayer.h"
@@ -3333,6 +3334,33 @@ void CUIControlButtonConnectionCreateGameNewGame::OnLButtonClick(CPoint pt)
     } else {
         pConnection->OnNewGameButtonClick();
     }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x604C30
+CUIControlButtonConnection604C30::CUIControlButtonConnection604C30(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->m_cTlkTable.Fetch(11825, strRes); // "Pre-generate Character"
+    SetText(strRes.szText);
+}
+
+// 0x604D20
+CUIControlButtonConnection604C30::~CUIControlButtonConnection604C30()
+{
+}
+
+// 0x604DC0
+void CUIControlButtonConnection604C30::OnLButtonClick(CPoint pt)
+{
+    g_pBaldurChitin->m_pEngineCreateChar->StartCreateChar(-1, 4);
+
+    g_pBaldurChitin->m_cTlkTable.m_override.CloseFiles();
+    g_pBaldurChitin->m_cTlkTable.OpenOverride(CString("temp/default.toh"), CString("temp/default.tot"));
+
+    g_pBaldurChitin->pActiveEngine->SelectEngine(g_pBaldurChitin->m_pEngineCreateChar);
 }
 
 // -----------------------------------------------------------------------------
