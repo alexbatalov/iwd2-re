@@ -1908,7 +1908,48 @@ void CScreenConnection::ResetCreateGamePanel()
 // 0x600470
 void CScreenConnection::ResetPlayerNamePanel()
 {
-    // TODO: Incomplete.
+    CString sPlayerName;
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(8);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 5040
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(3));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 5042
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+
+    CNetwork* pNetwork = &(g_pBaldurChitin->cNetwork);
+    pNetwork->CheckSessionStatus(FALSE);
+
+    for (INT nPlayerNumber = 0; nPlayerNumber < pNetwork->m_nMaxPlayers; nPlayerNumber++) {
+        if (pNetwork->GetRawPlayerID(nPlayerNumber) != 0) {
+            pNetwork->GetRawPlayerName(nPlayerNumber, sPlayerName);
+
+            pText->DisplayString(CString(""),
+                sPlayerName,
+                pText->m_rgbLabelColor,
+                pText->m_rgbTextColor,
+                -1,
+                FALSE,
+                TRUE);
+        }
+    }
+
+    pText->SetTopString(pText->m_plstStrings->FindIndex(0));
+
+    CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(0));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 5067
+    UTIL_ASSERT(pEdit != NULL);
+
+    m_cUIManager.SetCapture(pEdit, CUIManager::KEYBOARD);
 }
 
 // 0x600600
