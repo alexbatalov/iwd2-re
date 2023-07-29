@@ -2098,7 +2098,46 @@ void CScreenConnection::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, STRREF dwStr
 // 0x602170
 void CScreenConnection::OnLobbyNewGameButtonClick()
 {
-    // TODO: Incomplete.
+    CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+
+    CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+    renderLock.Lock(INFINITE);
+    DismissPopup();
+    renderLock.Unlock();
+
+    pSettings->InitializeSettings();
+
+    for (INT nCharacterSlot = 0; nCharacterSlot < 6; nCharacterSlot++) {
+        pSettings->SetCharacterControlledByPlayer(nCharacterSlot, 0, TRUE, FALSE);
+    }
+
+    pSettings->SetPlayerReady(g_pChitin->cNetwork.m_idLocalPlayer, TRUE, TRUE);
+
+    g_pBaldurChitin->GetObjectGame()->NewGame(TRUE, FALSE);
+
+    CResRef areaResRef;
+    CString sAreaName;
+    CPoint ptView;
+
+    g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetStartArea(areaResRef, ptView);
+    areaResRef.CopyToString(sAreaName);
+
+    CPoint ptStart = g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetStartPoint(0);
+    pSettings->SetCharacterCreationLocation(sAreaName, ptStart);
+
+    g_pBaldurChitin->GetObjectGame()->LoadMultiPlayerPermissions();
+
+    if (g_pBaldurChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL) {
+        g_pBaldurChitin->m_pEngineSinglePlayer->field_45C = 1;
+        g_pBaldurChitin->m_pEngineSinglePlayer->StartSinglePlayer(1);
+        SelectEngine(g_pBaldurChitin->m_pEngineSinglePlayer);
+    } else {
+        g_pBaldurChitin->m_pEngineMultiPlayer->field_45C = 1;
+        g_pBaldurChitin->m_pEngineMultiPlayer->StartMultiPlayer(1);
+        SelectEngine(g_pBaldurChitin->m_pEngineMultiPlayer);
+    }
+
+    pSettings->SetArbitrationLockStatus(TRUE, 0);
 }
 
 // 0x602360
