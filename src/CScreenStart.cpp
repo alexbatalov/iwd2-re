@@ -709,3 +709,28 @@ void CUIControlButtonStartMenu::OnLButtonClick(CPoint pt)
         UTIL_ASSERT(FALSE);
     }
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x670770
+CUIControlButtonStart670770::CUIControlButtonStart670770(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+}
+
+// 0x6707C0
+CUIControlButtonStart670770::~CUIControlButtonStart670770()
+{
+}
+
+// 0x670860
+void CUIControlButtonStart670770::OnLButtonClick(CPoint pt)
+{
+    CScreenStart* pStart = g_pBaldurChitin->m_pEngineStart;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStart.cpp
+    // __LINE__: 2010
+    UTIL_ASSERT(pStart != NULL);
+
+    pStart->sub_6702C0();
+}

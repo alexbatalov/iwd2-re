@@ -69,4 +69,11 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonStart670770 : CUIControlButton {
+public:
+    CUIControlButtonStart670770(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonStart670770();
+    void OnLButtonClick(CPoint pt) override;
+};
+
 #endif /* CSCREENSTART_H_ */
