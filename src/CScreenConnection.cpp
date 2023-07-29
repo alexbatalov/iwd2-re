@@ -747,7 +747,7 @@ void CScreenConnection::TimerAsynchronousUpdate()
                             if (g_pChitin->cNetwork.m_bConnectionInitialized) {
                                 v1 = TRUE;
                             } else {
-                                g_pChitin->cNetwork.field_FA = CString("");
+                                g_pChitin->cNetwork.m_sIPAddress = CString("");
                                 v1 = g_pChitin->cNetwork.InitializeConnectionToServiceProvider(FALSE);
                             }
 
@@ -2043,7 +2043,94 @@ void CScreenConnection::HandleEMEvent(BYTE nEvent, BYTE nEventStage)
 // 0x6014A0
 void CScreenConnection::HandleJoinCompletion(BYTE nEvent)
 {
-    // TODO: Incomplete.
+    CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+
+    if (nEvent == 8) {
+        renderLock.Lock(INFINITE);
+
+        if (m_bJoinReturnValue == TRUE) {
+            m_nSessionIndex = -1;
+            SummonPopup(8);
+
+            if (g_pBaldurChitin->m_bIsAutoStarting
+                && g_pBaldurChitin->GetStartUpPlayer() != "") {
+                CUIPanel* pPanel = m_cUIManager.GetPanel(8);
+                CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(5));
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+                // __LINE__: 6156
+                UTIL_ASSERT(pEdit != NULL);
+
+                pEdit->SetText(g_pBaldurChitin->GetStartUpPlayer());
+                renderLock.Unlock();
+
+                OnDoneButtonClick();
+
+                renderLock.Lock(INFINITE);
+                g_pBaldurChitin->m_bIsAutoStarting = FALSE;
+            }
+        } else {
+            INT nProviderType;
+            g_pChitin->cNetwork.GetServiceProviderType(g_pChitin->cNetwork.m_nServiceProvider, nProviderType);
+            if (nProviderType == CNetwork::SERV_PROV_TCP_IP) {
+                g_pChitin->cNetwork.sub_7A61D0();
+            }
+
+            m_nSessionIndex = -1;
+            m_bEliminateInitialize = TRUE;
+
+            if (m_nJoinErrorCode == CNetwork::ERROR_INVALIDPASSWORD) {
+                m_nErrorState = 0;
+                m_strErrorText = 18985;
+            } else {
+                m_nErrorState = 1;
+                m_strErrorText = 18986;
+            }
+
+            m_strErrorButtonText[0] = 11973;
+            SummonPopup(20);
+        }
+
+        renderLock.Unlock();
+    } else if (nEvent == 9) {
+        renderLock.Lock(INFINITE);
+
+        if (m_bJoinReturnValue) {
+            DismissPopup();
+            SummonPopup(8);
+
+            if (g_pBaldurChitin->m_bIsAutoStarting
+                && g_pBaldurChitin->GetStartUpPlayer() != "") {
+                CUIPanel* pPanel = m_cUIManager.GetPanel(8);
+                CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(5));
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+                // __LINE__: 6238
+                UTIL_ASSERT(pEdit != NULL);
+
+                pEdit->SetText(g_pBaldurChitin->GetStartUpPlayer());
+                renderLock.Unlock();
+
+                OnDoneButtonClick();
+
+                renderLock.Lock(INFINITE);
+                g_pBaldurChitin->m_bIsAutoStarting = FALSE;
+            }
+        } else {
+            if (m_nJoinErrorCode == CNetwork::ERROR_INVALIDPASSWORD) {
+                m_nErrorState = 0;
+                m_strErrorText = 18985;
+            } else {
+                m_nErrorState = 1;
+                m_strErrorText = 18986;
+            }
+
+            m_strErrorButtonText[0] = 11973;
+            SummonPopup(20);
+        }
+
+        renderLock.Unlock();
+    }
 }
 
 // 0x601790

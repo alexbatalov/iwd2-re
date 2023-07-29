@@ -245,7 +245,7 @@ CChitin::CChitin()
     field_110 = 0;
     m_bStartUpConnect = FALSE;
     m_sStartUpAddress = "";
-    field_120 = "";
+    m_sStartUpPlayer = "";
     field_11C = "";
     field_124 = 0;
     field_128 = 0;
@@ -2018,6 +2018,12 @@ CString CChitin::GetStartUpAddress()
 CString CChitin::GetStartUpSession()
 {
     return m_sStartUpSession;
+}
+
+// 0x601760
+CString CChitin::GetStartUpPlayer()
+{
+    return m_sStartUpPlayer;
 }
 
 // 0x7928A0

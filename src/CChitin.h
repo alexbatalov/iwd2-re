@@ -50,6 +50,7 @@ public:
     CString GetStartUpGameSpyLocation();
     CString GetStartUpAddress();
     CString GetStartUpSession();
+    CString GetStartUpPlayer();
 
     // NOTE: Inlined in `CVidInf::SetClipper`.
     BOOL FullScreen() { return m_bFullscreen; }
@@ -173,7 +174,7 @@ public:
     /* 0114 */ BOOL m_bStartUpConnect;
     /* 0118 */ CString m_sStartUpAddress;
     /* 011C */ CString field_11C;
-    /* 0120 */ CString field_120;
+    /* 0120 */ CString m_sStartUpPlayer;
     /* 0124 */ int field_124;
     /* 0128 */ int field_128;
     /* 012C */ CString m_sStartUpSession;
