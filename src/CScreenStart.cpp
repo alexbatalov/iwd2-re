@@ -461,7 +461,35 @@ void CScreenStart::OnErrorButtonClick(DWORD nID)
 // 0x670140
 void CScreenStart::ResetVersionMismatchPanel(CUIPanel* pPanel)
 {
-    // TODO: Incomplete.
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(0));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStart.cpp
+    // __LINE__: 1853
+    UTIL_ASSERT(pText != NULL);
+
+    g_pBaldurChitin->m_cTlkTable.SetToken(TOKEN_SERVERVERSION,
+        g_pBaldurChitin->GetBaldurMessage()->GetVersionControlShutdownServerString());
+
+    g_pBaldurChitin->m_cTlkTable.SetToken(TOKEN_CLIENTVERSION,
+        g_pBaldurChitin->GetBaldurMessage()->GetVersionControlShutdownClientString());
+
+    STRREF strText;
+    switch (g_pBaldurChitin->GetBaldurMessage()->m_nVersionControlShutdownReason) {
+    case 1:
+        strText = 11830;
+        break;
+    case 2:
+        strText = 11832;
+        break;
+    case 3:
+        strText = 1614;
+        break;
+    default:
+        strText = -1;
+        break;
+    }
+
+    UpdateText(pText, "%s", FetchString(strText));
 }
 
 // 0x6702C0

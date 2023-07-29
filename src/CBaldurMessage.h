@@ -81,7 +81,7 @@ public:
     /* 00E5 */ unsigned char field_E5;
     /* 00E6 */ CString m_sVersionControlShutdownClientString;
     /* 00EA */ CString m_sVersionControlShutdownServerString;
-    /* 00EE */ unsigned char field_EE;
+    /* 00EE */ BYTE m_nVersionControlShutdownReason;
     /* 00F0 */ DWORD m_dwSignalSecondsToTimeout;
     /* 00F4 */ BOOLEAN m_bMultiplayerSessionShutdown;
     /* 00F5 */ unsigned char field_F5;

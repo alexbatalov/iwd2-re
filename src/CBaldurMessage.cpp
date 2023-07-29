@@ -18,7 +18,7 @@ const DWORD CBaldurMessage::SIGNAL_SECONDSTOMPTIMEOUT = 200;
 CBaldurMessage::CBaldurMessage()
 {
     field_6 = 0;
-    field_EE = 0;
+    m_nVersionControlShutdownReason = 0;
     field_0 = 0;
     field_1 = 0;
     field_2 = 0;
