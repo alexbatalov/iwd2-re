@@ -65,7 +65,7 @@ CNetwork::CNetwork()
     m_bModemAddressSelected = FALSE;
     m_nModemAddress = -1;
     m_nTotalModemAddresses = 0;
-    field_FA = "";
+    m_sIPAddress = "";
     field_FE = "";
     m_nSerialBaudRate = 57600;
     m_nSerialPort = 1;

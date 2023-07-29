@@ -2057,7 +2057,54 @@ BOOL CScreenConnection::AutoStartInitialize()
 // 0x6018E0
 void CScreenConnection::AutoStartConnect()
 {
-    // TODO: Incomplete.
+    CNetwork* pNetwork = &(g_pBaldurChitin->cNetwork);
+
+    if (AutoStartInitialize()) {
+        g_pBaldurChitin->m_bIsAutoStarting = FALSE;
+
+        CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+        renderLock.Lock(INFINITE);
+
+        CString sStartUpAddress = g_pBaldurChitin->GetStartUpAddress();
+        sStartUpAddress.TrimLeft();
+        sStartUpAddress.TrimRight();
+
+        m_nErrorState = 4;
+        m_strErrorText = 20274;
+        SummonPopup(19);
+        pVidMode->m_bPointerEnabled = FALSE;
+
+        renderLock.Unlock();
+
+        g_pChitin->field_193A = TRUE;
+
+        g_pBaldurChitin->GetObjectGame()->sub_59FA00(TRUE);
+
+        renderLock.Lock();
+        if (pNetwork->m_bConnectionInitialized == TRUE) {
+            pNetwork->EnumerateSessions(TRUE, FALSE);
+        }
+        renderLock.Unlock();
+
+        pNetwork->m_sIPAddress = sStartUpAddress;
+        pNetwork->InitializeConnectionToServiceProvider(TRUE);
+
+        WritePrivateProfileStringA("Multiplayer",
+            "TCP/IP Address",
+            sStartUpAddress,
+            g_pBaldurChitin->GetIniFileName());
+
+        m_bEMSwapped = FALSE;
+        m_bEMValue = FALSE;
+        m_bEMWaiting = TRUE;
+        m_nEMEvent = 2;
+        m_nEMEventStage = 1;
+
+        m_bAllowInput = TRUE;
+    } else {
+        g_pBaldurChitin->m_bIsAutoStarting = FALSE;
+        m_bAllowInput = TRUE;
+    }
 }
 
 // 0x601AE0
