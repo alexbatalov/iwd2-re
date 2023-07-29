@@ -2063,7 +2063,45 @@ void CScreenConnection::AutoStartConnect()
 // 0x601AE0
 void CScreenConnection::AutoStartDirectPlayLobby()
 {
-    // TODO: Incomplete.
+    if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+        CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+        renderLock.Lock(INFINITE);
+
+        SummonPopup(21);
+        m_bAllowInput = TRUE;
+
+        renderLock.Unlock();
+    } else {
+        CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+        renderLock.Lock(INFINITE);
+
+        m_nErrorState = 4;
+        m_strErrorText = 20274;
+        SummonPopup(19);
+
+        renderLock.Unlock();
+
+        g_pChitin->field_193A = TRUE;
+
+        g_pBaldurChitin->GetObjectGame()->sub_59FA00(TRUE);
+
+        CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+        pSettings->InitializeSettings();
+        pSettings->field_B8 = 1;
+        pSettings->SetPlayerReady(g_pChitin->cNetwork.m_idLocalPlayer, FALSE, TRUE);
+
+        renderLock.Lock();
+        DismissPopup();
+        renderLock.Unlock();
+
+        g_pBaldurChitin->GetObjectGame()->NewGame(TRUE, FALSE);
+
+        g_pBaldurChitin->m_pEngineMultiPlayer->field_45C = 1;
+        g_pBaldurChitin->m_pEngineMultiPlayer->StartMultiPlayer(1);
+        SelectEngine(g_pBaldurChitin->m_pEngineMultiPlayer);
+    }
+
+    g_pBaldurChitin->m_bIsAutoStarting = FALSE;
 }
 
 // 0x601CB0
