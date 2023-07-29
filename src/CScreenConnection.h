@@ -279,6 +279,13 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonConnection6052A0 : public CUIControlButton3State {
+public:
+    CUIControlButtonConnection6052A0(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonConnection6052A0() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlButtonConnection605570 : public CUIControlButton {
 public:
     CUIControlButtonConnection605570(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

@@ -3415,6 +3415,76 @@ void CUIControlButtonConnectionLobbyMenu::OnLButtonClick(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x6052A0
+CUIControlButtonConnection6052A0::CUIControlButtonConnection6052A0(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+
+    DWORD strId;
+    switch (m_nID) {
+    case 4:
+        strId = 24869; // "Full Game"
+        break;
+    case 5:
+        strId = 24871; // "Expansion Only"
+        break;
+    case 6:
+        strId = 24873; // "Load Game"
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 9070
+        UTIL_ASSERT(FALSE);
+    }
+
+    g_pBaldurChitin->m_cTlkTable.Fetch(strId, strRes);
+    SetText(strRes.szText);
+
+    m_nSelectedFrame = 0;
+    m_nNotSelectedFrame = 1;
+}
+
+// 0x6053D0
+CUIControlButtonConnection6052A0::~CUIControlButtonConnection6052A0()
+{
+}
+
+// 0x605470
+void CUIControlButtonConnection6052A0::OnLButtonClick(CPoint pt)
+{
+    CScreenConnection* pConnection = g_pBaldurChitin->m_pEngineConnection;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 9106
+    UTIL_ASSERT(pConnection != NULL);
+
+    CSingleLock renderLock(&(pConnection->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    switch (m_nID) {
+    case 4:
+        pConnection->field_FB4 = 1;
+        break;
+    case 5:
+        pConnection->field_FB4 = 2;
+        break;
+    case 6:
+        pConnection->field_FB4 = 3;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 9130
+        UTIL_ASSERT(FALSE);
+    }
+
+    pConnection->UpdatePopupPanel(m_pPanel->m_nID);
+
+    renderLock.Unlock();
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x605570
 CUIControlButtonConnection605570::CUIControlButtonConnection605570(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
