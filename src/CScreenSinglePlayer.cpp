@@ -1006,7 +1006,7 @@ void CScreenSinglePlayer::OnErrorButtonClick(INT nButton)
                 DismissPopup();
             } while (m_lPopupStack.GetTailPosition() != NULL);
 
-            g_pBaldurChitin->m_pEngineStart->field_140 = 0;
+            g_pBaldurChitin->m_pEngineStart->m_nEngineState = 0;
             SelectEngine(g_pBaldurChitin->m_pEngineStart);
             g_pChitin->cNetwork.CloseSession(TRUE);
             break;

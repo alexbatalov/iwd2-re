@@ -1,9 +1,13 @@
 #include "CScreenStart.h"
 
 #include "CBaldurChitin.h"
+#include "CInfGame.h"
+#include "CMultiplayerSettings.h"
 #include "CScreenConnection.h"
+#include "CScreenCreateChar.h"
+#include "CScreenLoad.h"
+#include "CScreenMovies.h"
 #include "CUIControlBase.h"
-#include "CUIControlButton.h"
 #include "CUIControlScrollBar.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -30,7 +34,7 @@ CScreenStart::CScreenStart()
     m_pVirtualKeys[2] = CKeyInfo(VK_SNAPSHOT, -1, 0);
     m_pVirtualKeys[3] = CKeyInfo('8', 0, 0);
     m_pVirtualKeys[4] = CKeyInfo(VK_RETURN, 0, 0);
-    field_140 = 0;
+    m_nEngineState = 0;
     field_17C = 0;
 }
 
@@ -102,8 +106,8 @@ void CScreenStart::OnKeyDown(SHORT nKeyFlags)
                         break;
                     }
                 } else {
-                    if (field_140 != 0) {
-                        field_140 = 0;
+                    if (m_nEngineState != 0) {
+                        m_nEngineState = 0;
                         UpdateMainPanel();
                     }
                 }
@@ -144,7 +148,7 @@ void CScreenStart::UpdateMainPanel()
     // __LINE__: 852
     UTIL_ASSERT(pPanel != NULL);
 
-    switch (field_140) {
+    switch (m_nEngineState) {
     case 0:
         pButton = static_cast<CUIControlButton*>(pPanel->GetControl(0));
         pButton->SetText(FetchString(15413));
@@ -205,7 +209,7 @@ void CScreenStart::UpdateMainPanel()
 }
 
 // 0x66F8F0
-void CScreenStart::sub_66F8F0()
+void CScreenStart::OnQuitButtonClick()
 {
     CSingleLock lock(&m_cUIManager.field_36, TRUE);
 
@@ -537,5 +541,171 @@ void CScreenStart::ResetPopupPanel(DWORD nID)
     case 4:
         ResetVersionMismatchPanel(pPanel);
         break;
+    }
+}
+
+// NOTE: Inlined.
+void CScreenStart::OnNewGameButtonClick()
+{
+    CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStart.cpp
+    // __LINE__: 959
+    UTIL_ASSERT(pSettings != NULL);
+
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
+
+    g_pBaldurChitin->GetObjectGame()->NewGame(TRUE, FALSE);
+
+    pSettings->SignalCharacterStatus(0,
+        CMultiplayerSettings::CHARSTATUS_SIGNAL_CREATION_START,
+        TRUE,
+        TRUE);
+
+    g_pBaldurChitin->m_pEngineCreateChar->StartCreateChar(0, 1);
+    SelectEngine(g_pBaldurChitin->m_pEngineCreateChar);
+
+    m_nEngineState = 0;
+}
+
+// NOTE: Inlined.
+void CScreenStart::OnLoadGameButtonClick()
+{
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
+
+    CScreenLoad* pLoad = g_pBaldurChitin->m_pEngineLoad;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStart.cpp
+    // __LINE__: 1002
+    UTIL_ASSERT(pLoad != NULL);
+
+    pLoad->StartLoad(0);
+    SelectEngine(pLoad);
+
+    m_nEngineState = 0;
+}
+
+// NOTE: Inlined.
+void CScreenStart::OnPreGenerateButtonClick()
+{
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
+
+    g_pBaldurChitin->m_pEngineCreateChar->StartCreateChar(-1, 4);
+    g_pBaldurChitin->pActiveEngine->SelectEngine(g_pBaldurChitin->m_pEngineCreateChar);
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x670350
+CUIControlButtonStartMenu::CUIControlButtonStartMenu(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+}
+
+// 0x6703A0
+CUIControlButtonStartMenu::~CUIControlButtonStartMenu()
+{
+}
+
+// 0x670440
+void CUIControlButtonStartMenu::OnLButtonClick(CPoint pt)
+{
+    CScreenStart* pStart = g_pBaldurChitin->m_pEngineStart;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStart.cpp
+    // __LINE__: 2010
+    UTIL_ASSERT(pStart != NULL);
+
+    STR_RES strRes;
+
+    switch (pStart->m_nEngineState) {
+    case 0:
+        switch (m_nID) {
+        case 0:
+            pStart->m_nEngineState = 1;
+            pStart->UpdateMainPanel();
+            g_pBaldurChitin->ClearChatMessages();
+            break;
+        case 1:
+            pStart->m_nEngineState = 2;
+            pStart->UpdateMainPanel();
+            break;
+        case 2:
+            // NOTE: Some inlining, not sure which.
+            if (1) {
+                // NOTE: Uninline.
+                pStart->m_cUIManager.KillCapture();
+
+                CScreenMovies* pMovies = g_pBaldurChitin->m_pEngineMovies;
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStart.cpp
+                // __LINE__: 1115
+                UTIL_ASSERT(pMovies != NULL);
+
+                pMovies->StartMovies(0);
+                pStart->SelectEngine(pMovies);
+            }
+            break;
+        case 3:
+            pStart->OnQuitButtonClick();
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStart.cpp
+            // __LINE__: 2034
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 1:
+        switch (m_nID) {
+        case 0:
+            // NOTE: Uninline.
+            pStart->OnNewGameButtonClick();
+            break;
+        case 1:
+            // NOTE: Uninline.
+            pStart->OnLoadGameButtonClick();
+            break;
+        case 2:
+            g_pBaldurChitin->GetObjectGame()->field_4B38 = 1;
+
+            // NOTE: Uninline.
+            pStart->OnLoadGameButtonClick();
+            break;
+        case 3:
+            pStart->m_nEngineState = 0;
+            pStart->UpdateMainPanel();
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStart.cpp
+            // __LINE__: 2061
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 2:
+        switch (m_nID) {
+        case 0:
+            // NOTE: Uninline.
+            pStart->OnPreGenerateButtonClick();
+            break;
+        case 1:
+            pStart->sub_66F990();
+            break;
+        case 2:
+            pStart->m_nEngineState = 0;
+            pStart->UpdateMainPanel();
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStart.cpp
+            // __LINE__: 2083
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStart.cpp
+        // __LINE__: 2089
+        UTIL_ASSERT(FALSE);
     }
 }

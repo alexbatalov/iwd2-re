@@ -2116,7 +2116,7 @@ void CScreenConnection::OnLobbyExitButtonClick()
 
     g_pBaldurChitin->cNetwork.CloseSession(TRUE);
 
-    g_pBaldurChitin->m_pEngineStart->field_140 = 0;
+    g_pBaldurChitin->m_pEngineStart->m_nEngineState = 0;
     SelectEngine(g_pBaldurChitin->m_pEngineStart);
 }
 

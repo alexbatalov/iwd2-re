@@ -3,6 +3,7 @@
 
 #include "CBaldurEngine.h"
 #include "CKeyInfo.h"
+#include "CUIControlButton.h"
 #include "CVidFont.h"
 
 #define CSCREENSTART_VIRTUAL_KEYS 5
@@ -28,7 +29,7 @@ public:
     /* 00C4 */ void TimerSynchronousUpdate() override;
 
     void UpdateMainPanel();
-    void sub_66F8F0();
+    void OnQuitButtonClick();
     void sub_66F990();
     void EnableMainPanel(BOOL bEnabled);
     void SummonPopup(DWORD nID);
@@ -40,6 +41,9 @@ public:
 
     void SetPopupEnabled(DWORD nID, BOOL bEnabled);
     void ResetPopupPanel(DWORD nID);
+    void OnNewGameButtonClick();
+    void OnLoadGameButtonClick();
+    void OnPreGenerateButtonClick();
 
     /* 0106 */ int field_106;
     /* 010A */ BOOL m_bExitProgram;
@@ -47,7 +51,7 @@ public:
     /* 0136 */ BOOL m_bCtrlKeyDown;
     /* 013A */ BYTE m_pVirtualKeysFlags[CSCREENSTART_VIRTUAL_KEYS];
     /* 013F */ unsigned char field_13F;
-    /* 0140 */ int field_140;
+    /* 0140 */ INT m_nEngineState;
     /* 0144 */ int field_144;
     /* 0148 */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
     /* 0164 */ INT m_nErrorState;
@@ -56,6 +60,13 @@ public:
     /* 0170 */ STRREF m_strErrorButtonText[CSCREENSTART_ERROR_BUTTONS];
     /* 017C */ int field_17C;
     /* 0180 */ CVidFont field_180;
+};
+
+class CUIControlButtonStartMenu : CUIControlButton {
+public:
+    CUIControlButtonStartMenu(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonStartMenu();
+    void OnLButtonClick(CPoint pt) override;
 };
 
 #endif /* CSCREENSTART_H_ */

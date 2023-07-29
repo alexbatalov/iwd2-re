@@ -573,7 +573,7 @@ void CScreenChapter::OnDoneButtonClick()
 
         // NOTE: Looks odd, sets something on start engine, but selects
         // connection (which is the main menu in IWD2).
-        g_pBaldurChitin->m_pEngineStart->field_140 = 0;
+        g_pBaldurChitin->m_pEngineStart->m_nEngineState = 0;
 
         SelectEngine(g_pBaldurChitin->m_pEngineConnection);
 

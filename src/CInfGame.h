@@ -184,6 +184,7 @@ public:
     /* 4A00 */ HANDLE m_hSearchThread; // #guess
     /* 4AA2 */ ULONG field_4AA2;
     /* 4AFC */ int field_4AFC;
+    /* 4B38 */ int field_4B38;
     // NOTE: Can also be BYTE indicating number of expansion pack.
     /* 4BD5 */ BOOLEAN m_bExpansion;
     /* 4BD8 */ DWORD m_nDifficultyLevel;

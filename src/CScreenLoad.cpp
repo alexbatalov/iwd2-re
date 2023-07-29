@@ -428,7 +428,7 @@ void CScreenLoad::OnMainCancelButtonClick()
             m_cUIManager.KillCapture();
         }
 
-        g_pBaldurChitin->m_pEngineStart->field_140 = 1;
+        g_pBaldurChitin->m_pEngineStart->m_nEngineState = 1;
         SelectEngine(g_pBaldurChitin->m_pEngineStart);
 
         break;
