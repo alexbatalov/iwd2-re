@@ -37,6 +37,8 @@ public:
     void TimeChangeToServer(ULONG deltaTime);
     BOOLEAN DemandSettingsNightmareMode(BOOLEAN wait);
     BOOL sub_43E0E0(DWORD a1, DWORD a2, COLORREF a3, COLORREF a4, int a5, int a6, int a7);
+    CString GetVersionControlShutdownServerString();
+    CString GetVersionControlShutdownClientString();
 
     /* 0000 */ unsigned char field_0;
     /* 0001 */ unsigned char field_1;
@@ -77,8 +79,8 @@ public:
     /* 00E3 */ unsigned char field_E3;
     /* 00E4 */ unsigned char field_E4;
     /* 00E5 */ unsigned char field_E5;
-    /* 00E6 */ CString field_E6;
-    /* 00EA */ CString field_EA;
+    /* 00E6 */ CString m_sVersionControlShutdownClientString;
+    /* 00EA */ CString m_sVersionControlShutdownServerString;
     /* 00EE */ unsigned char field_EE;
     /* 00F0 */ DWORD m_dwSignalSecondsToTimeout;
     /* 00F4 */ BOOLEAN m_bMultiplayerSessionShutdown;

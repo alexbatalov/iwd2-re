@@ -244,3 +244,15 @@ BOOL CBaldurMessage::sub_43E0E0(DWORD a1, DWORD a2, COLORREF a3, COLORREF a4, in
 
     return FALSE;
 }
+
+// 0x605AA0
+CString CBaldurMessage::GetVersionControlShutdownServerString()
+{
+    return m_sVersionControlShutdownServerString;
+}
+
+// 0x605AD0
+CString CBaldurMessage::GetVersionControlShutdownClientString()
+{
+    return m_sVersionControlShutdownClientString;
+}
