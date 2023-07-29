@@ -1911,6 +1911,40 @@ void CScreenConnection::ResetPlayerNamePanel()
     // TODO: Incomplete.
 }
 
+// 0x600600
+void CScreenConnection::sub_600600()
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(25);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 5123
+    UTIL_ASSERT(pPanel != NULL);
+
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(4));
+
+    CString sPath;
+    char szFileName[16];
+    HANDLE hFindFile;
+    WIN32_FIND_DATAA findFileData;
+
+    for (int index = 0; index < 6; index++) {
+        sprintf(szFileName, "iwd%01d.chr", index);
+        sPath = g_pBaldurChitin->GetObjectGame()->GetDirCharacters() + szFileName;
+
+        hFindFile = FindFirstFileA(sPath, &findFileData);
+        if (hFindFile != INVALID_HANDLE_VALUE) {
+            field_FB8 = 1;
+            UpdateHelp(pPanel->m_nID, 0, 26318);
+
+            // FIXME: Leaking `hFindFile`.
+            return;
+        }
+    }
+
+    field_FB8 = 0;
+    UpdateHelp(pPanel->m_nID, 0, 26317);
+}
+
 // 0x600770
 void CScreenConnection::StartConnection(BOOLEAN bDirectPlayLobby)
 {

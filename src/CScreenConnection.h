@@ -91,6 +91,7 @@ public:
     void ResetTCPIPPanel();
     void ResetCreateGamePanel();
     void ResetPlayerNamePanel();
+    void sub_600600();
     void StartConnection(BOOLEAN bDirectPlayLobby);
     void SetEliminateInitialize(BOOLEAN bEliminateInitialize);
     void OnErrorButtonClick(INT nButton);
