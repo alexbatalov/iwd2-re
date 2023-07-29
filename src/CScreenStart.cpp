@@ -422,7 +422,40 @@ void CScreenStart::ResetErrorPanel(CUIPanel* pPanel)
 // 0x670050
 void CScreenStart::OnErrorButtonClick(DWORD nID)
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStart.cpp
+    // __LINE__: 1778
+    UTIL_ASSERT(pGame != NULL);
+
+    CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    switch (m_nErrorState) {
+    case 0:
+        DismissPopup();
+        break;
+    case 1:
+        switch (nID) {
+        case 0:
+            DismissPopup();
+
+            // NOTE: Uninline.
+            m_cUIManager.KillCapture();
+
+            m_bExitProgram = TRUE;
+            break;
+        case 1:
+            DismissPopup();
+            break;
+        }
+        break;
+    case 2:
+        DismissPopup();
+        break;
+    }
+
+    renderLock.Unlock();
 }
 
 // 0x670140
