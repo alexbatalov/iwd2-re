@@ -2379,7 +2379,7 @@ void CScreenConnection::ResetPlayerNamePanel()
 
     pText->SetTopString(pText->m_plstStrings->FindIndex(0));
 
-    CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(0));
+    CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(5));
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
     // __LINE__: 5067
