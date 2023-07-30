@@ -90,6 +90,7 @@ public:
     void ResetProtocolPanel();
     void ResetSerialPanel();
     void ResetModemPanel();
+    void ResetIPXPanel();
     void ResetTCPIPPanel();
     void ResetCreateGamePanel();
     void ResetPasswordPanel();

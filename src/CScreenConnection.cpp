@@ -917,7 +917,8 @@ void CScreenConnection::ResetPopupPanel(DWORD nID)
         ResetPlayerNamePanel();
         break;
     case 11:
-        // TODO: Incomplete.
+        // NOTE: Uninline.
+        ResetIPXPanel();
         break;
     case 12:
         // NOTE: Uninline.
@@ -2103,6 +2104,32 @@ void CScreenConnection::ResetModemPanel()
     m_nModemAddress = pNetwork->m_nModemAddress;
 
     UpdateHelp(3, 7, 11317);
+}
+
+// NOTE: Inlined.
+void CScreenConnection::ResetIPXPanel()
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(11);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4862
+    UTIL_ASSERT(pPanel != NULL);
+
+    if (g_pBaldurChitin->cNetwork.m_bSessionSelected == TRUE) {
+        m_nSessionIndex = g_pBaldurChitin->cNetwork.m_nSession;
+    } else {
+        m_nSessionIndex = -1;
+    }
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(1));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4869
+    UTIL_ASSERT(pText != NULL);
+
+    pText->SetTopString(pText->m_plstStrings->FindIndex(0));
+
+    UpdateHelp(pPanel->m_nID, 5, 11321);
 }
 
 // 0x6002C0
