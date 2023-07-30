@@ -920,7 +920,8 @@ void CScreenConnection::ResetPopupPanel(DWORD nID)
         // TODO: Incomplete.
         break;
     case 12:
-        // TODO: Incomplete.
+        // NOTE: Uninline.
+        ResetPhoneNumberPanel();
         break;
     case 19:
     case 20:
@@ -2165,6 +2166,24 @@ void CScreenConnection::ResetPasswordPanel()
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
     // __LINE__: 4977
+    UTIL_ASSERT(pEdit != NULL);
+
+    m_cUIManager.SetCapture(pEdit, CUIManager::KEYBOARD);
+}
+
+// NOTE: Inlined.
+void CScreenConnection::ResetPhoneNumberPanel()
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(12);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 5005
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(2));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 5007
     UTIL_ASSERT(pEdit != NULL);
 
     m_cUIManager.SetCapture(pEdit, CUIManager::KEYBOARD);
