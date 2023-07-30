@@ -1856,7 +1856,7 @@ void CScreenConnection::UpdateModemPanel()
 {
     CString sModemAddress;
 
-    CUIPanel* pPanel = m_cUIManager.GetPanel(5);
+    CUIPanel* pPanel = m_cUIManager.GetPanel(3);
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
     // __LINE__: 4277
