@@ -1400,7 +1400,7 @@ BOOL CScreenConnection::IsDoneButtonClickable()
         sPlayerName.TrimLeft();
         sPlayerName.TrimRight();
 
-        return sPlayerName == "";
+        return sPlayerName != "";
     case 11:
         return m_nSessionIndex != -1;
     case 12:
