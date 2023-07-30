@@ -92,6 +92,7 @@ public:
     void UpdatePasswordPanel();
     void UpdatePhoneNumberPanel();
     void sub_5FFDF0();
+    void UpdateImportPanel();
     void ResetProtocolPanel();
     void ResetSerialPanel();
     void ResetModemPanel();

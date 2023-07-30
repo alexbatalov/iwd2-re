@@ -997,7 +997,8 @@ void CScreenConnection::UpdatePopupPanel(DWORD nID)
         // TODO: Incomplete.
         break;
     case 25:
-        // TODO: Incomplete.
+        // NOTE: Uninline.
+        UpdateImportPanel();
         break;
     default:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
@@ -2204,6 +2205,34 @@ void CScreenConnection::sub_5FFDF0()
 
         pButton3->SetSelected(dwButtonID == dwSelectedButtonID);
     }
+}
+
+// NOTE: Inlined.
+void CScreenConnection::UpdateImportPanel()
+{
+    CUIControlButton* pButton;
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(25);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4645
+    UTIL_ASSERT(pPanel != NULL);
+
+    pButton = static_cast<CUIControlButton*>(pPanel->GetControl(1));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4651
+    UTIL_ASSERT(pButton != NULL);
+
+    pButton->SetEnabled(TRUE);
+
+    pButton = static_cast<CUIControlButton*>(pPanel->GetControl(2));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4656
+    UTIL_ASSERT(pButton != NULL);
+
+    pButton->SetEnabled(TRUE);
 }
 
 // 0x5FFF60
