@@ -1487,7 +1487,58 @@ void CScreenConnection::UpdateMainPanel()
 // 0x5FF450
 void CScreenConnection::UpdateSessionList(CUIPanel* pPanel, DWORD nTextId)
 {
-    // TODO: Incomplete.
+    CString sSessionName;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 3971
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(nTextId));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 3973
+    UTIL_ASSERT(pText != NULL);
+
+    int v1 = pText->field_5A;
+
+    pText->RemoveAll();
+    pText->m_rgbHighlightColor = CBaldurChitin::TEXTDISPLAY_COLOR_HIGHLIGHT;
+
+    BOOL bWasSelected = m_nSessionIndex >= 0;
+    m_nSessionIndex = -1;
+
+    CNetwork* pNetwork = &(g_pBaldurChitin->cNetwork);
+
+    for (INT nIndex = 0; nIndex < pNetwork->m_nTotalSessions; nIndex++) {
+        if (bWasSelected && m_nSessionIndex < 0) {
+            GUID sessionGuid;
+            if (pNetwork->GetSessionGUID(nIndex, sessionGuid)) {
+                if (IsEqualGUID(m_sessionGuid, sessionGuid)) {
+                    m_nSessionIndex = nIndex;
+                }
+            }
+        }
+
+        COLORREF rgbTextColor;
+        if (m_nSessionIndex == nIndex) {
+            rgbTextColor = CBaldurChitin::TEXTDISPLAY_COLOR_SELECT;
+        } else {
+            rgbTextColor = pText->m_rgbTextColor;
+        }
+
+        pNetwork->GetSessionName(nIndex, sSessionName);
+
+        pText->DisplayString(CString(""),
+            sSessionName,
+            pText->m_rgbLabelColor,
+            rgbTextColor,
+            nIndex,
+            FALSE,
+            TRUE);
+    }
+
+    INT nNewIndex = max(min(v1, pText->m_plstStrings->GetCount() - pText->field_A6A), 0);
+    pText->SetTopString(pText->m_plstStrings->FindIndex(nNewIndex));
 }
 
 // 0x5FF690
