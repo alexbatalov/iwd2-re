@@ -10,6 +10,7 @@
 #include "CScreenMultiPlayer.h"
 #include "CScreenSinglePlayer.h"
 #include "CScreenStart.h"
+#include "CScreenWorld.h"
 #include "CUIControlScrollBar.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -1094,7 +1095,166 @@ void CScreenConnection::DismissPopup()
 // 0x5FCA00
 void CScreenConnection::OnLoadGameButtonClick(int a1)
 {
-    // TODO: Incomplete.
+    CUIControlEdit* pEdit;
+    CString sSessionName;
+    CString sPassword;
+    CString sPlayerName;
+
+    CSingleLock renderLock(&(GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(6);
+
+    CNetwork* pNetwork = &(g_pBaldurChitin->cNetwork);
+
+    CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 2102
+    UTIL_ASSERT(pSettings != NULL);
+
+    pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(0));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 2105
+    UTIL_ASSERT(pEdit != NULL);
+
+    sSessionName = pEdit->GetText();
+    sSessionName.TrimLeft();
+    sSessionName.TrimRight();
+
+    pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(4));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 2111
+    UTIL_ASSERT(pEdit != NULL);
+
+    sPassword = pEdit->GetText();
+    sPassword.TrimLeft();
+    sPassword.TrimRight();
+
+    pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(1));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 2117
+    UTIL_ASSERT(pEdit != NULL);
+
+    sPlayerName = pEdit->GetText();
+    sPlayerName.TrimLeft();
+    sPlayerName.TrimRight();
+
+    renderLock.Unlock();
+
+    if (m_nProtocol != 0) {
+        WritePrivateProfileStringA("Multiplayer",
+            "Player Name",
+            sPlayerName,
+            g_pBaldurChitin->GetIniFileName());
+
+        WritePrivateProfileStringA("Multiplayer",
+            "Session Password",
+            sPassword,
+            g_pBaldurChitin->GetIniFileName());
+
+        WritePrivateProfileStringA("Multiplayer",
+            "Session Name",
+            sSessionName,
+            g_pBaldurChitin->GetIniFileName());
+    } else {
+        if (sPlayerName.IsEmpty()) {
+            sPlayerName = "Player";
+        }
+
+        if (sSessionName.IsEmpty()) {
+            sSessionName = "Session";
+        }
+    }
+
+    if (!pNetwork->m_bConnectionInitialized) {
+        pNetwork->InitializeConnectionToServiceProvider(TRUE);
+        if (!pNetwork->m_bConnectionInitialized) {
+            m_nErrorState = 1;
+            m_strErrorText = 18986;
+            m_strErrorButtonText[0] = 11973;
+            SummonPopup(20);
+            return;
+        }
+    }
+
+    pNetwork->m_sSessionNameToMake = sSessionName;
+    pNetwork->m_bSessionNameToMake = TRUE;
+
+    if (sPassword != "") {
+        pNetwork->m_sSessionPassword = sPassword;
+        pNetwork->m_bSessionPasswordEnabled = TRUE;
+    } else {
+        pNetwork->m_bSessionPasswordEnabled = FALSE;
+    }
+
+    pNetwork->SetMaxPlayers(CMultiplayerSettings::MAX_PLAYERS);
+    pNetwork->SetApplicationOptions(TRUE, FALSE);
+    pNetwork->m_sLocalPlayerName = sPlayerName;
+    pNetwork->m_bPlayerNameToMake = TRUE;
+
+    INT nServiceProviderType;
+    pNetwork->GetServiceProviderType(pNetwork->m_nServiceProvider, nServiceProviderType);
+    if (nServiceProviderType == CNetwork::SERV_PROV_MODEM
+        || nServiceProviderType == CNetwork::SERV_PROV_TCP_IP) {
+        m_bEMSwapped = FALSE;
+        m_bEMValue = FALSE;
+        m_bEMWaiting = TRUE;
+        m_nEMEvent = 0;
+        m_nEMEventStage = 1;
+    } else {
+        if (pNetwork->HostNewSession()) {
+            INT nErrorCode;
+            if (pNetwork->CreatePlayer(nErrorCode)) {
+                CSingleLock renderLock(&(GetManager()->field_36), FALSE);
+                renderLock.Lock(INFINITE);
+
+                if (m_nProtocol != 0) {
+                    DismissPopup();
+                }
+
+                renderLock.Unlock();
+
+                pSettings->InitializeSettings();
+
+                for (INT nCharacterSlot = 0; nCharacterSlot < 6; nCharacterSlot++) {
+                    pSettings->SetCharacterControlledByPlayer(nCharacterSlot, 0, TRUE, FALSE);
+                }
+
+                pSettings->SetPlayerReady(g_pChitin->cNetwork.m_idLocalPlayer, TRUE, TRUE);
+
+                if (a1) {
+                    sub_5FCF80();
+
+                    // NOTE: Uninline.
+                    GetManager()->KillCapture();
+
+                    SelectEngine(g_pBaldurChitin->m_pEngineWorld);
+                } else {
+                    CScreenLoad* pLoad = g_pBaldurChitin->m_pEngineLoad;
+
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+                    // __LINE__: 2257
+                    UTIL_ASSERT(pLoad != NULL);
+
+                    pLoad->StartLoad(1);
+                    SelectEngine(pLoad);
+
+                    g_pBaldurChitin->GetObjectGame()->LoadMultiPlayerPermissions();
+                    pSettings->SetArbitrationLockAllowInput(FALSE);
+                    pSettings->SetArbitrationLockStatus(TRUE, 0);
+                }
+            } else {
+                pNetwork->CloseSession(TRUE);
+                m_bEliminateInitialize = TRUE;
+            }
+        } else {
+            m_bEliminateInitialize = TRUE;
+        }
+    }
 }
 
 // 0x5FCF80
