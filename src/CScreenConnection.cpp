@@ -911,6 +911,7 @@ void CScreenConnection::ResetPopupPanel(DWORD nID)
         ResetCreateGamePanel();
         break;
     case 7:
+        // NOTE: Uninline.
         ResetPasswordPanel();
         break;
     case 8:
@@ -934,14 +935,14 @@ void CScreenConnection::ResetPopupPanel(DWORD nID)
         ResetLobbyPanel();
         break;
     case 23:
-        // TODO: Incomplete.
+        ResetVersionMismatchPanel(pPanel);
         break;
     case 24:
         // NOTE: Uninline.
         ResetMissionPackPanel();
         break;
     case 25:
-        // TODO: Incomplete.
+        sub_600600();
         break;
     default:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
