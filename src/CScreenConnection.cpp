@@ -983,7 +983,8 @@ void CScreenConnection::UpdatePopupPanel(DWORD nID)
         UpdateIPXPanel();
         break;
     case 12:
-        // TODO: Incomplete.
+        // NOTE: Uninline.
+        UpdatePhoneNumberPanel();
         break;
     case 19:
     case 20:
@@ -2098,6 +2099,24 @@ void CScreenConnection::UpdatePasswordPanel()
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
     // __LINE__: 4496
+    UTIL_ASSERT(pDone != NULL);
+
+    pDone->SetEnabled(IsDoneButtonClickable());
+}
+
+// NOTE: Inlined.
+void CScreenConnection::UpdatePhoneNumberPanel()
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(12);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4526
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(3));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4531
     UTIL_ASSERT(pDone != NULL);
 
     pDone->SetEnabled(IsDoneButtonClickable());

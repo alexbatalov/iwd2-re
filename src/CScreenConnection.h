@@ -89,6 +89,7 @@ public:
     void UpdatePlayerNamePanel();
     void UpdateTCPIPPanel();
     void UpdatePasswordPanel();
+    void UpdatePhoneNumberPanel();
     void sub_5FFDF0();
     void ResetProtocolPanel();
     void ResetSerialPanel();
