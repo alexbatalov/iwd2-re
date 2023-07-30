@@ -95,6 +95,7 @@ public:
     void ResetPasswordPanel();
     void ResetPhoneNumberPanel();
     void ResetPlayerNamePanel();
+    void ResetLobbyPanel();
     void sub_600600();
     void StartConnection(BOOLEAN bDirectPlayLobby);
     void SetEliminateInitialize(BOOLEAN bEliminateInitialize);

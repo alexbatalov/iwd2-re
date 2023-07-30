@@ -929,7 +929,8 @@ void CScreenConnection::ResetPopupPanel(DWORD nID)
         ResetErrorPanel(pPanel);
         break;
     case 21:
-        // TODO: Incomplete.
+        // NOTE: Uninline.
+        ResetLobbyPanel();
         break;
     case 23:
         // TODO: Incomplete.
@@ -2234,6 +2235,16 @@ void CScreenConnection::ResetPlayerNamePanel()
     UTIL_ASSERT(pEdit != NULL);
 
     m_cUIManager.SetCapture(pEdit, CUIManager::KEYBOARD);
+}
+
+// NOTE: Inlined.
+void CScreenConnection::ResetLobbyPanel()
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(21);
+
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(5));
+
+    UpdateHelp(21, 4, 11699);
 }
 
 // 0x600600
