@@ -97,6 +97,7 @@ public:
     void ResetPhoneNumberPanel();
     void ResetPlayerNamePanel();
     void ResetLobbyPanel();
+    void ResetMissionPackPanel();
     void sub_600600();
     void StartConnection(BOOLEAN bDirectPlayLobby);
     void SetEliminateInitialize(BOOLEAN bEliminateInitialize);

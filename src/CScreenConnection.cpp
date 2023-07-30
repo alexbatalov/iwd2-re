@@ -937,7 +937,8 @@ void CScreenConnection::ResetPopupPanel(DWORD nID)
         // TODO: Incomplete.
         break;
     case 24:
-        // TODO: Incomplete.
+        // NOTE: Uninline.
+        ResetMissionPackPanel();
         break;
     case 25:
         // TODO: Incomplete.
@@ -2272,6 +2273,19 @@ void CScreenConnection::ResetLobbyPanel()
     m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(5));
 
     UpdateHelp(21, 4, 11699);
+}
+
+// NOTE: Inlined.
+void CScreenConnection::ResetMissionPackPanel()
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(24);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 5094
+    UTIL_ASSERT(pPanel != NULL);
+
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(7));
+    field_FB4 = 1;
 }
 
 // 0x600600
