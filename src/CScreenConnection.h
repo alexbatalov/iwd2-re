@@ -92,6 +92,7 @@ public:
     void ResetModemPanel();
     void ResetTCPIPPanel();
     void ResetCreateGamePanel();
+    void ResetPasswordPanel();
     void ResetPlayerNamePanel();
     void sub_600600();
     void StartConnection(BOOLEAN bDirectPlayLobby);

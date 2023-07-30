@@ -911,7 +911,7 @@ void CScreenConnection::ResetPopupPanel(DWORD nID)
         ResetCreateGamePanel();
         break;
     case 7:
-        // TODO: Incomplete.
+        ResetPasswordPanel();
         break;
     case 8:
         ResetPlayerNamePanel();
@@ -2150,6 +2150,24 @@ void CScreenConnection::ResetCreateGamePanel()
     m_cUIManager.SetCapture(pEdit, CUIManager::KEYBOARD);
 
     UpdateHelp(pPanel->m_nID, 13, 11320);
+}
+
+// NOTE: Inlined.
+void CScreenConnection::ResetPasswordPanel()
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(7);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4975
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(2));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4977
+    UTIL_ASSERT(pEdit != NULL);
+
+    m_cUIManager.SetCapture(pEdit, CUIManager::KEYBOARD);
 }
 
 // 0x600470
