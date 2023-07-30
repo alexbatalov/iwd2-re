@@ -47,6 +47,7 @@ public:
     void LoadOptions();
     void SaveOptions();
     void LoadMultiPlayerPermissions();
+    void LoadGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace);
     void NewGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace);
     void UpdatePortrait(SHORT nPortrait, DWORD dwPanelId);
     SHORT GetCharacterPortraitNum(LONG nCharacterId);
@@ -73,6 +74,7 @@ public:
     BOOL AddCharacterToFamiliars(LONG nCharacterId);
     BOOL RemoveCharacterFromFamiliars(LONG nCharacterId);
     DWORD GetScrollSpeed();
+    void sub_5BF6A0(int a1);
     BOOLEAN FindAreaID(DWORD nAreaId);
     CStringList* GetSaveGames();
     CString GetDirSaveRoot();

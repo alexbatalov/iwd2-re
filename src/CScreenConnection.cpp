@@ -4,6 +4,7 @@
 #include "CBaldurProjector.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CScreenCharacter.h"
 #include "CScreenCreateChar.h"
 #include "CScreenLoad.h"
 #include "CScreenMultiPlayer.h"
@@ -1083,6 +1084,52 @@ void CScreenConnection::DismissPopup()
 void CScreenConnection::OnLoadGameButtonClick(int a1)
 {
     // TODO: Incomplete.
+}
+
+// 0x5FCF80
+void CScreenConnection::sub_5FCF80()
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 2295
+    UTIL_ASSERT(pGame != NULL);
+
+    BOOL bExists = FALSE;
+    if (pGame->SaveGameExists(CInfGame::QUICK_SAVE_NAME)) {
+        pGame->field_4220 = CInfGame::QUICK_SAVE_NAME;
+        CScreenCharacter::SAVE_NAME = CInfGame::QUICK_SAVE_NAME;
+        bExists = TRUE;
+    } else if (pGame->SaveGameExists(CInfGame::QUICK_SAVE_BACKUP_NAME)) {
+        pGame->field_4220 = CInfGame::QUICK_SAVE_BACKUP_NAME;
+        CScreenCharacter::SAVE_NAME = CInfGame::QUICK_SAVE_BACKUP_NAME;
+        bExists = TRUE;
+    }
+
+    if (bExists) {
+        pGame->LoadGame(TRUE, FALSE);
+        pGame->MultiplayerSetCharacterCreationLocation();
+        pGame->sub_5BF6A0(0);
+
+        for (INT nSlot = 0; nSlot < 6; nSlot++) {
+            if (pGame->GetCharacterId(nSlot) == CGameObjectArray::INVALID_INDEX) {
+                pGame->GetMultiplayerSettings()->SignalCharacterStatus(nSlot,
+                    CMultiplayerSettings::CHARSTATUS_SIGNAL_DELETED,
+                    TRUE,
+                    TRUE);
+            } else {
+                pGame->GetMultiplayerSettings()->SignalCharacterStatus(nSlot,
+                    CMultiplayerSettings::CHARSTATUS_SIGNAL_IMPORTED,
+                    TRUE,
+                    TRUE);
+            }
+        }
+    } else {
+        m_nErrorState = 10;
+        m_strErrorText = 37437;
+        m_strErrorButtonText[0] = 11973;
+        SummonPopup(20);
+    }
 }
 
 // 0x5FD0A0

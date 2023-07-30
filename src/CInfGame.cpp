@@ -1277,6 +1277,12 @@ void CInfGame::LoadMultiPlayerPermissions()
     // TODO: Incomplete.
 }
 
+// 0x5AB190
+void CInfGame::LoadGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace)
+{
+    // TODO: Incomplete.
+}
+
 // 0x5ABA20
 void CInfGame::NewGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace)
 {
@@ -1733,6 +1739,12 @@ DWORD CInfGame::GetScrollSpeed()
     } else {
         return m_cOptions.m_nMouseScrollSpeed;
     }
+}
+
+// 0x5BF6A0
+void CInfGame::sub_5BF6A0(int a1)
+{
+    // TODO: Incomplete.
 }
 
 // 0x5C04F0

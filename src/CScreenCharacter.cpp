@@ -27,6 +27,11 @@ const CString CScreenCharacter::TOKEN_MINIMUM("MINIMUM");
 // 0x8F3334
 const CString CScreenCharacter::TOKEN_MAXIMUM("MAXIMUM");
 
+// NOTE: Probably does not belong here.
+//
+// 0x8F3338
+CString CScreenCharacter::SAVE_NAME("default");
+
 // 0x5D5220
 CScreenCharacter::CScreenCharacter()
 {

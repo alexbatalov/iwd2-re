@@ -72,6 +72,7 @@ public:
     void SummonPopup(DWORD nID);
     void DismissPopup();
     void OnLoadGameButtonClick(int a1);
+    void sub_5FCF80();
     void OnNewGameButtonClick();
     BOOL IsDoneButtonClickable();
     void OnDoneButtonClick();

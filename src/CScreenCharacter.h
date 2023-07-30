@@ -21,6 +21,8 @@ public:
     static const CString TOKEN_MINIMUM;
     static const CString TOKEN_MAXIMUM;
 
+    static CString SAVE_NAME;
+
     CScreenCharacter();
     ~CScreenCharacter();
     /* 0014 */ void EngineActivated() override;
