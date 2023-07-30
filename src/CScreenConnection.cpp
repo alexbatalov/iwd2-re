@@ -1713,7 +1713,50 @@ void CScreenConnection::UpdateSerialPanel()
 // 0x5FFB90
 void CScreenConnection::UpdateModemPanel()
 {
-    // TODO: Incomplete.
+    CString sModemAddress;
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(5);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4277
+    UTIL_ASSERT(pPanel != NULL);
+
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(3));
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(2));
+
+    pText->RemoveAll();
+    pText->m_rgbHighlightColor = CBaldurChitin::TEXTDISPLAY_COLOR_HIGHLIGHT;
+
+    CNetwork* pNetwork = &(g_pBaldurChitin->cNetwork);
+    for (INT nIndex = 0; nIndex < pNetwork->m_nTotalModemAddresses; nIndex++) {
+        COLORREF rgbTextColor;
+        if (m_nModemAddress == nIndex) {
+            rgbTextColor = CBaldurChitin::TEXTDISPLAY_COLOR_SELECT;
+        } else {
+            rgbTextColor = pText->m_rgbTextColor;
+        }
+
+        pNetwork->GetModemAddress(nIndex, sModemAddress);
+
+        pText->DisplayString(CString(""),
+            sModemAddress,
+            pText->m_rgbLabelColor,
+            rgbTextColor,
+            nIndex,
+            FALSE,
+            TRUE);
+    }
+
+    pText->SetTopString(pText->m_plstStrings->FindIndex(0));
+
+    CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(6));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4313
+    UTIL_ASSERT(pDone != NULL);
+
+    pDone->SetEnabled(IsDoneButtonClickable());
 }
 
 // 0x5FFD20
