@@ -123,6 +123,8 @@ public:
     void ShowSessionTerminatedMessage();
     void ResetVersionMismatchPanel(CUIPanel* pPanel);
 
+    static BOOL IsValidAddress(const CString& sAddress);
+
     /* 0106 */ int field_106;
     /* 010A */ CKeyInfo m_pVirtualKeys[CSCREENCONNECTION_VIRTUAL_KEYS];
     /* 03E2 */ BYTE m_pVirtualKeysFlags[CSCREENCONNECTION_VIRTUAL_KEYS];

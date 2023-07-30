@@ -96,7 +96,7 @@ public:
     /* 00A6 */ INT m_nTotalModemAddresses;
     /* 00AA */ CString m_psModemAddress[20];
     /* 00FA */ CString m_sIPAddress;
-    /* 00FE */ CString field_FE;
+    /* 00FE */ CString m_sPhoneNumber;
     /* 0102 */ UINT m_nSerialPort;
     /* 0106 */ UINT m_nSerialBaudRate;
     /* 010A */ int field_10A;

@@ -1428,7 +1428,433 @@ BOOL CScreenConnection::IsDoneButtonClickable()
 // 0x5FDB20
 void CScreenConnection::OnDoneButtonClick()
 {
-    // TODO: Incomplete.
+    CString sPassword;
+    CString sPlayerName;
+    CString sAddress;
+    CString sPhoneNumber;
+
+    CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+
+    CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 2735
+    UTIL_ASSERT(pSettings != NULL);
+
+    CUIPanel* pPanel = GetTopPopup();
+    CNetwork* pNetwork = &(g_pBaldurChitin->cNetwork);
+
+    if (pPanel == NULL) {
+        return;
+    }
+
+    switch (pPanel->m_nID) {
+    case 19:
+    case 20:
+    case 22:
+        OnErrorButtonClick(0);
+        return;
+    case 23:
+        DismissPopup();
+        return;
+    }
+
+    if (!IsDoneButtonClickable()) {
+        return;
+    }
+
+    if (pPanel->m_nID == 1) {
+        renderLock.Lock(INFINITE);
+
+        INT nSelectedServiceProviderType;
+        switch (m_nProtocol) {
+        case 0:
+            nSelectedServiceProviderType = CNetwork::SERV_PROV_NULL;
+            break;
+        case 1:
+            nSelectedServiceProviderType = CNetwork::SERV_PROV_IPX;
+            break;
+        case 2:
+            nSelectedServiceProviderType = CNetwork::SERV_PROV_TCP_IP;
+            break;
+        case 3:
+            nSelectedServiceProviderType = CNetwork::SERV_PROV_MODEM;
+            break;
+        case 4:
+            nSelectedServiceProviderType = CNetwork::SERV_PROV_SERIAL;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+            // __LINE__: 2801
+            UTIL_ASSERT(FALSE);
+        }
+
+        if (nSelectedServiceProviderType == CNetwork::SERV_PROV_NULL) {
+            pNetwork->SelectServiceProvider(0);
+
+            CString sLastProtocolUsed;
+            sLastProtocolUsed.Format("%d", m_nProtocol);
+
+            WritePrivateProfileStringA("Multiplayer",
+                "Last Protocol Used",
+                sLastProtocolUsed,
+                g_pBaldurChitin->GetIniFileName());
+
+            DismissPopup();
+        } else {
+            for (INT nIndex = 0; nIndex < pNetwork->m_nTotalServiceProviders; nIndex++) {
+                INT nServiceProviderType;
+                pNetwork->GetServiceProviderType(nIndex, nServiceProviderType);
+
+                if (nServiceProviderType == nSelectedServiceProviderType) {
+                    pNetwork->SelectServiceProvider(nIndex);
+
+                    CString sLastProtocolUsed;
+                    sLastProtocolUsed.Format("%d", m_nProtocol);
+
+                    WritePrivateProfileStringA("Multiplayer",
+                        "Last Protocol Used",
+                        sLastProtocolUsed,
+                        g_pBaldurChitin->GetIniFileName());
+                }
+            }
+        }
+
+        if (pNetwork->m_bConnectionInitialized == TRUE && field_4B6 == 1) {
+            pNetwork->sub_7A61D0();
+            m_bEliminateInitialize = TRUE;
+        }
+
+        renderLock.Unlock();
+    } else if (pPanel->m_nID == 3) {
+        renderLock.Lock(INFINITE);
+
+        pNetwork->SelectModemAddress(m_nModemAddress);
+
+        CString sModemAddress;
+        pNetwork->GetModemAddress(m_nModemAddress, sModemAddress);
+
+        WritePrivateProfileStringA("Multiplayer",
+            "Modem Selected",
+            sModemAddress,
+            g_pBaldurChitin->GetIniFileName());
+
+        DismissPopup();
+
+        renderLock.Unlock();
+    } else if (pPanel->m_nID == 4) {
+        renderLock.Lock(INFINITE);
+
+        CString sValue;
+
+        pNetwork->SetSerialPort(m_nSerialPort);
+        pNetwork->SetSerialBaudRate(m_nSerialBaudRate);
+
+        sValue.Format("%d", m_nSerialPort);
+        WritePrivateProfileStringA("Multiplayer",
+            "Serial Port",
+            sValue,
+            g_pBaldurChitin->GetIniFileName());
+
+        sValue.Format("%d", m_nSerialBaudRate);
+        WritePrivateProfileStringA("Multiplayer",
+            "Serial Baud",
+            sValue,
+            g_pBaldurChitin->GetIniFileName());
+
+        DismissPopup();
+
+        renderLock.Unlock();
+    } else if (pPanel->m_nID == 5) {
+        CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(1));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 3054
+        UTIL_ASSERT(pEdit != NULL);
+
+        if (pEdit->GetText().GetLength() > 0) {
+            if (IsValidAddress(pEdit->GetText())) {
+                renderLock.Lock(INFINITE);
+
+                DismissPopup();
+
+                m_nErrorState = 4;
+                m_strErrorText = 20274;
+                SummonPopup(19);
+
+                pVidMode->m_bPointerEnabled = FALSE;
+                renderLock.Unlock();
+
+                if (field_4B6 == 1) {
+                    pNetwork->sub_7A61D0();
+                    m_bEliminateInitialize = TRUE;
+                }
+
+                g_pChitin->field_193A = TRUE;
+                g_pBaldurChitin->GetObjectGame()->sub_59FA00(TRUE);
+
+                renderLock.Lock(INFINITE);
+
+                sAddress = pEdit->GetText();
+                sAddress.TrimLeft();
+                sAddress.TrimRight();
+
+                renderLock.Unlock();
+
+                pNetwork->m_sIPAddress = sAddress;
+                pNetwork->InitializeConnectionToServiceProvider(TRUE);
+
+                WritePrivateProfileStringA("Multiplayer",
+                    "TCP/IP Address",
+                    sAddress,
+                    g_pBaldurChitin->GetIniFileName());
+
+                m_bEMSwapped = FALSE;
+                m_bEMValue = FALSE;
+                m_bEMWaiting = TRUE;
+                m_nEMEvent = 2;
+                m_nEMEventStage = 1;
+            } else {
+                renderLock.Lock(INFINITE);
+
+                m_nErrorState = 8;
+                m_strErrorText = 20681;
+                m_strErrorButtonText[0] = 11973;
+                SummonPopup(20);
+
+                renderLock.Unlock();
+            }
+        } else {
+            renderLock.Lock(INFINITE);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+            // __LINE__: 3149
+            UTIL_ASSERT(GetSessionIndex() != -1);
+
+            pNetwork->SelectSession(m_nSessionIndex);
+
+            DismissPopup();
+
+            renderLock.Unlock();
+
+            OnJoinGameButtonClick();
+        }
+    } else if (pPanel->m_nID == 7) {
+        renderLock.Lock(INFINITE);
+
+        CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(2));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 2903
+        UTIL_ASSERT(pEdit != NULL);
+
+        sPassword = pEdit->GetText();
+        sPassword.TrimLeft();
+        sPassword.TrimRight();
+
+        WritePrivateProfileStringA("Multiplayer",
+            "Session Password",
+            sPassword,
+            g_pBaldurChitin->GetIniFileName());
+
+        if (sPassword != "") {
+            pNetwork->m_sSessionPassword = sPassword;
+            pNetwork->m_bSessionPasswordEnabled = TRUE;
+        } else {
+            pNetwork->m_bSessionPasswordEnabled = FALSE;
+        }
+
+        m_bJoinWaiting = TRUE;
+        m_bJoinComplete = FALSE;
+        m_nJoinEvent = 9;
+        m_nJoinErrorCode = 0;
+        m_bJoinReturnValue = FALSE;
+
+        renderLock.Unlock();
+    } else if (pPanel->m_nID == 8) {
+        renderLock.Lock(INFINITE);
+
+        CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(2));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 2977
+        UTIL_ASSERT(pEdit != NULL);
+
+        sPlayerName = pEdit->GetText();
+        sPlayerName.TrimLeft();
+        sPlayerName.TrimRight();
+
+        WritePrivateProfileStringA("Multiplayer",
+            "Player Name",
+            sPassword,
+            g_pBaldurChitin->GetIniFileName());
+
+        pNetwork->EnumeratePlayers(FALSE);
+        pNetwork->m_sLocalPlayerName = sPlayerName;
+        pNetwork->m_bPlayerNameToMake = TRUE;
+
+        INT nErrorCode;
+        if (pNetwork->CreatePlayer(nErrorCode)) {
+            pSettings->InitializeSettings();
+            pSettings->field_B8 = 1;
+            pSettings->SetPlayerReady(pNetwork->m_idLocalPlayer, FALSE, TRUE);
+
+            DismissPopup();
+
+            renderLock.Unlock();
+
+            g_pBaldurChitin->GetObjectGame()->NewGame(TRUE, FALSE);
+
+            renderLock.Lock();
+
+            if (pNetwork->GetServiceProvider() == CNetwork::SERV_PROV_NULL) {
+                CScreenSinglePlayer* pSinglePlayer = g_pBaldurChitin->m_pEngineSinglePlayer;
+                pSinglePlayer->field_45C = 1;
+                pSinglePlayer->StartSinglePlayer(1);
+                SelectEngine(pSinglePlayer);
+            } else {
+                CScreenMultiPlayer* pMultiPlayer = g_pBaldurChitin->m_pEngineMultiPlayer;
+                pMultiPlayer->field_45C = 1;
+                pMultiPlayer->StartMultiPlayer(1);
+                SelectEngine(pMultiPlayer);
+            }
+        } else {
+            if (nErrorCode == CNetwork::ERROR_CANNOTCONNECT) {
+                m_nErrorState = 1;
+                m_strErrorText = 18986;
+            } else if (nErrorCode == CNetwork::ERROR_PLAYEREXISTS) {
+                m_nErrorState = 2;
+                m_strErrorText = 18987;
+            } else {
+                m_nErrorState = 2;
+                m_strErrorText = 17193;
+            }
+
+            m_strErrorButtonText[0] = 11973;
+            SummonPopup(20);
+        }
+
+        renderLock.Unlock();
+    } else if (pPanel->m_nID == 11) {
+        renderLock.Lock(INFINITE);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 3165
+        UTIL_ASSERT(GetSessionIndex() != -1);
+
+        pNetwork->SelectSession(m_nSessionIndex);
+
+        DismissPopup();
+
+        m_nErrorState = 4;
+        m_strErrorText = 20273;
+        SummonPopup(19);
+
+        pVidMode->m_bPointerEnabled = FALSE;
+        renderLock.Unlock();
+
+        g_pChitin->field_193A = TRUE;
+        g_pBaldurChitin->GetObjectGame()->sub_59FA00(TRUE);
+
+        OnJoinGameButtonClick();
+    } else if (pPanel->m_nID == 12) {
+        renderLock.Lock(INFINITE);
+
+        DismissPopup();
+
+        m_nErrorState = 3;
+        m_strErrorText = 20273;
+        SummonPopup(19);
+
+        pVidMode->m_bPointerEnabled = FALSE;
+        renderLock.Unlock();
+
+        g_pChitin->field_193A = TRUE;
+        g_pBaldurChitin->GetObjectGame()->sub_59FA00(TRUE);
+
+        renderLock.Lock(INFINITE);
+
+        CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(1));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 3210
+        UTIL_ASSERT(pEdit != NULL);
+
+        sPhoneNumber = pEdit->GetText();
+        sPhoneNumber.TrimLeft();
+        sPhoneNumber.TrimRight();
+
+        renderLock.Unlock();
+
+        pNetwork->m_sPhoneNumber = sPhoneNumber;
+        pNetwork->InitializeConnectionToServiceProvider(FALSE);
+
+        WritePrivateProfileStringA("Multiplayer",
+            "Phone Number",
+            sPhoneNumber,
+            g_pBaldurChitin->GetIniFileName());
+
+        m_bEMSwapped = FALSE;
+        m_bEMValue = FALSE;
+        m_bEMWaiting = TRUE;
+        m_nEMEvent = 2;
+        m_nEMEventStage = 1;
+    } else if (pPanel->m_nID == 24) {
+        // NOTE: Likely some inlining.
+        CScreenConnection* pConnection = g_pBaldurChitin->m_pEngineConnection;
+
+        if (pConnection->m_nProtocol == 0) {
+            switch (field_FB4) {
+            case 1:
+                pConnection->field_106 = 0;
+                g_pBaldurChitin->GetObjectGame()->m_bExpansion = FALSE;
+                g_pBaldurChitin->GetObjectGame()->field_4BD6 = FALSE;
+                pConnection->OnNewGameButtonClick();
+                break;
+            case 2:
+                pConnection->field_106 = 0;
+                g_pBaldurChitin->GetObjectGame()->m_bExpansion = TRUE;
+                DismissPopup();
+                SummonPopup(25);
+                break;
+            case 3:
+                pConnection->field_106 = 1;
+                g_pBaldurChitin->GetObjectGame()->m_bExpansion = FALSE;
+                g_pBaldurChitin->GetObjectGame()->field_4BD6 = FALSE;
+                OnLoadGameButtonClick(0);
+                break;
+            }
+        } else {
+            CSingleLock renderLock(&(pConnection->GetManager()->field_36), FALSE);
+            renderLock.Lock(INFINITE);
+
+            switch (field_FB4) {
+            case 1:
+                pConnection->field_106 = 0;
+                g_pBaldurChitin->GetObjectGame()->m_bExpansion = FALSE;
+                g_pBaldurChitin->GetObjectGame()->field_4BD6 = FALSE;
+                DismissPopup();
+                SummonPopup(6);
+                break;
+            case 2:
+                pConnection->field_106 = 0;
+                g_pBaldurChitin->GetObjectGame()->m_bExpansion = TRUE;
+                g_pBaldurChitin->GetObjectGame()->field_4BD6 = FALSE;
+                DismissPopup();
+                SummonPopup(6);
+                break;
+            case 3:
+                pConnection->field_106 = 1;
+                g_pBaldurChitin->GetObjectGame()->m_bExpansion = FALSE;
+                g_pBaldurChitin->GetObjectGame()->field_4BD6 = FALSE;
+                DismissPopup();
+                SummonPopup(6);
+                break;
+            }
+
+            renderLock.Unlock();
+        }
+    }
 }
 
 // 0x5FE930
@@ -4331,4 +4757,22 @@ void CScreenConnection::ResetVersionMismatchPanel(CUIPanel* pPanel)
     }
 
     UpdateText(pText, "%s", FetchString(strText));
+}
+
+// NOTE: Inlined.
+BOOL CScreenConnection::IsValidAddress(const CString& sAddress)
+{
+    INT nByte1;
+    INT nByte2;
+    INT nByte3;
+    INT nByte4;
+    INT nCharsScanned;
+    INT nFieldsScanned = sscanf(sAddress, "%d.%d.%d.%d%n", &nByte1, &nByte2, &nByte3, &nByte4, &nCharsScanned);
+
+    return nFieldsScanned == 4
+        && nCharsScanned == sAddress.GetLength()
+        && nByte1 >= 0 && nByte1 <= 255
+        && nByte2 >= 0 && nByte2 <= 255
+        && nByte3 >= 0 && nByte3 <= 255
+        && nByte4 >= 0 && nByte4 <= 255;
 }

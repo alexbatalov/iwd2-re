@@ -66,7 +66,7 @@ CNetwork::CNetwork()
     m_nModemAddress = -1;
     m_nTotalModemAddresses = 0;
     m_sIPAddress = "";
-    field_FE = "";
+    m_sPhoneNumber = "";
     m_nSerialBaudRate = 57600;
     m_nSerialPort = 1;
     field_112 = 4;
