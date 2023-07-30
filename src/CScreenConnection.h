@@ -91,7 +91,7 @@ public:
     void UpdateCreateGamePanel();
     void UpdatePasswordPanel();
     void UpdatePhoneNumberPanel();
-    void sub_5FFDF0();
+    void UpdateMissionPackPanel();
     void UpdateImportPanel();
     void ResetProtocolPanel();
     void ResetSerialPanel();
@@ -104,7 +104,7 @@ public:
     void ResetPlayerNamePanel();
     void ResetLobbyPanel();
     void ResetMissionPackPanel();
-    void sub_600600();
+    void ResetImportPanel();
     void StartConnection(BOOLEAN bDirectPlayLobby);
     void SetEliminateInitialize(BOOLEAN bEliminateInitialize);
     void OnErrorButtonClick(INT nButton);

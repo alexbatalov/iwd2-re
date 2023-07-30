@@ -942,7 +942,7 @@ void CScreenConnection::ResetPopupPanel(DWORD nID)
         ResetMissionPackPanel();
         break;
     case 25:
-        sub_600600();
+        ResetImportPanel();
         break;
     default:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
@@ -994,7 +994,7 @@ void CScreenConnection::UpdatePopupPanel(DWORD nID)
     case 23:
         break;
     case 24:
-        // TODO: Incomplete.
+        UpdateMissionPackPanel();
         break;
     case 25:
         // NOTE: Uninline.
@@ -2145,7 +2145,7 @@ void CScreenConnection::UpdatePhoneNumberPanel()
 }
 
 // 0x5FFDF0
-void CScreenConnection::sub_5FFDF0()
+void CScreenConnection::UpdateMissionPackPanel()
 {
     CUIControlButton3State* pButton3;
 
@@ -2525,7 +2525,7 @@ void CScreenConnection::ResetMissionPackPanel()
 }
 
 // 0x600600
-void CScreenConnection::sub_600600()
+void CScreenConnection::ResetImportPanel()
 {
     CUIPanel* pPanel = m_cUIManager.GetPanel(25);
 
