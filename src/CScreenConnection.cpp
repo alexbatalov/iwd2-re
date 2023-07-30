@@ -1311,9 +1311,112 @@ void CScreenConnection::OnNewGameButtonClick()
 // 0x5FD670
 BOOL CScreenConnection::IsDoneButtonClickable()
 {
-    // TODO: Incomplete.
+    CUIControlEdit* pEdit;
 
-    return TRUE;
+    CUIPanel* pPanel = GetTopPopup();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 2581
+    UTIL_ASSERT(pPanel != NULL);
+
+    CString sSessionName;
+    CString sPlayerName;
+    CString sPassword;
+    CString sPhoneNumber;
+    CString sAddress;
+
+    switch (pPanel->m_nID) {
+    case 1:
+    case 4:
+    case 19:
+    case 20:
+    case 21:
+    case 22:
+    case 24:
+    case 25:
+        return TRUE;
+    case 3:
+        return m_nModemAddress != -1;
+    case 5:
+        pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(1));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 2657
+        UTIL_ASSERT(pEdit != NULL);
+
+        sAddress = pEdit->GetText();
+        sAddress.TrimLeft();
+        sAddress.TrimRight();
+
+        return m_nSessionIndex != -1 || sAddress != "";
+    case 6:
+        pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(0));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 2615
+        UTIL_ASSERT(pEdit != NULL);
+
+        sSessionName = pEdit->GetText();
+        sSessionName.TrimLeft();
+        sSessionName.TrimRight();
+
+        pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(1));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 2620
+        UTIL_ASSERT(pEdit != NULL);
+
+        sPlayerName = pEdit->GetText();
+        sPlayerName.TrimLeft();
+        sPlayerName.TrimRight();
+
+        if (m_nProtocol == 0) {
+            sSessionName = "Single Player";
+            sPlayerName = "Player";
+        }
+
+        return sSessionName != "" && sPlayerName != "";
+    case 7:
+        pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(2));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 2615
+        UTIL_ASSERT(pEdit != NULL);
+
+        sPassword = pEdit->GetText();
+        sPassword.TrimLeft();
+        sPassword.TrimRight();
+
+        return sPassword != "";
+    case 8:
+        pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(5));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 2648
+        UTIL_ASSERT(pEdit != NULL);
+
+        sPlayerName = pEdit->GetText();
+        sPlayerName.TrimLeft();
+        sPlayerName.TrimRight();
+
+        return sPlayerName == "";
+    case 11:
+        return m_nSessionIndex != -1;
+    case 12:
+        pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(1));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 2670
+        UTIL_ASSERT(pEdit != NULL);
+
+        sPhoneNumber = pEdit->GetText();
+        sPhoneNumber.TrimLeft();
+        sPhoneNumber.TrimRight();
+
+        return sPhoneNumber != "";
+    }
+
+    return FALSE;
 }
 
 // 0x5FDB20
