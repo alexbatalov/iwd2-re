@@ -88,6 +88,7 @@ public:
     void UpdateIPXPanel();
     void UpdatePlayerNamePanel();
     void UpdateTCPIPPanel();
+    void UpdateCreateGamePanel();
     void UpdatePasswordPanel();
     void UpdatePhoneNumberPanel();
     void sub_5FFDF0();
