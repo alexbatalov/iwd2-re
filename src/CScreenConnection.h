@@ -85,6 +85,7 @@ public:
     void UpdateProtocolPanel();
     void UpdateSerialPanel();
     void UpdateModemPanel();
+    void UpdateIPXPanel();
     void UpdatePlayerNamePanel();
     void UpdateTCPIPPanel();
     void UpdatePasswordPanel();

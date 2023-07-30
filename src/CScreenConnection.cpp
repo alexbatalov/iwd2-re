@@ -979,7 +979,8 @@ void CScreenConnection::UpdatePopupPanel(DWORD nID)
         UpdatePlayerNamePanel();
         break;
     case 11:
-        // TODO: Incomplete.
+        // NOTE: Uninline.
+        UpdateIPXPanel();
         break;
     case 12:
         // TODO: Incomplete.
@@ -2005,6 +2006,28 @@ void CScreenConnection::UpdateModemPanel()
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
     // __LINE__: 4313
+    UTIL_ASSERT(pDone != NULL);
+
+    pDone->SetEnabled(IsDoneButtonClickable());
+}
+
+// NOTE: Inlined.
+void CScreenConnection::UpdateIPXPanel()
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(11);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4340
+    UTIL_ASSERT(pPanel != NULL);
+
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(2));
+
+    UpdateSessionList(pPanel, 1);
+
+    CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(4));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 4348
     UTIL_ASSERT(pDone != NULL);
 
     pDone->SetEnabled(IsDoneButtonClickable());
