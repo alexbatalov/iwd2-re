@@ -2313,7 +2313,7 @@ void CScreenConnection::ResetPhoneNumberPanel()
     // __LINE__: 5005
     UTIL_ASSERT(pPanel != NULL);
 
-    CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(2));
+    CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(1));
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
     // __LINE__: 5007
