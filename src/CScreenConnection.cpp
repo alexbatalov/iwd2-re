@@ -1341,7 +1341,50 @@ void CScreenConnection::OnJoinGameButtonClick()
 // 0x5FEB70
 void CScreenConnection::sub_5FEB70()
 {
-    // TODO: Incomplete.
+    CNetwork* pNetwork = &(g_pBaldurChitin->cNetwork);
+
+    INT nServiceProvider = pNetwork->GetServiceProvider();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+    // __LINE__: 3667
+    UTIL_ASSERT(nServiceProvider != -1);
+
+    INT nServiceProviderType;
+    pNetwork->GetServiceProviderType(nServiceProvider, nServiceProviderType);
+
+    if (nServiceProviderType == CNetwork::SERV_PROV_IPX) {
+        CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+        renderLock.Lock(INFINITE);
+        SummonPopup(11);
+        renderLock.Unlock();
+    } else if (nServiceProviderType == CNetwork::SERV_PROV_TCP_IP) {
+        CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+        renderLock.Lock(INFINITE);
+        SummonPopup(5);
+        renderLock.Unlock();
+    } else if (nServiceProviderType == CNetwork::SERV_PROV_SERIAL) {
+        if (!pNetwork->m_bConnectionInitialized) {
+            pNetwork->InitializeConnectionToServiceProvider(TRUE);
+        }
+
+        if (pNetwork->m_bConnectionInitialized == TRUE) {
+            if (pNetwork->m_bConnectionInitialized == TRUE) {
+                pNetwork->EnumerateSessions(FALSE, FALSE);
+            }
+
+            m_nSessionIndex = 0;
+            OnJoinGameButtonClick();
+        }
+    } else if (nServiceProviderType == CNetwork::SERV_PROV_MODEM) {
+        CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+        renderLock.Lock(INFINITE);
+        SummonPopup(12);
+        renderLock.Unlock();
+    } else {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+        // __LINE__: 3724
+        UTIL_ASSERT(FALSE);
+    }
 }
 
 // 0x5FED80
