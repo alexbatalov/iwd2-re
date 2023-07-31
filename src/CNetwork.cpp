@@ -1483,10 +1483,12 @@ void CNetwork::UnselectSession()
 BOOLEAN CNetwork::CreatePlayer(INT& nErrorCode)
 {
     if (m_bConnectionEstablished != TRUE) {
+        m_bPlayerCreated = FALSE;
         return FALSE;
     }
 
     if (!m_bPlayerNameToMake) {
+        m_bPlayerCreated = FALSE;
         return FALSE;
     }
 
@@ -1496,32 +1498,71 @@ BOOLEAN CNetwork::CreatePlayer(INT& nErrorCode)
         return FALSE;
     }
 
+    DPNAME dpName;
+    dpName.dwSize = sizeof(dpName);
+    dpName.dwFlags = 0;
+    dpName.lpszShortNameA = NULL;
+    dpName.lpszLongNameA = NULL;
+
     char szPlayerName[256];
     memcpy(szPlayerName, m_sLocalPlayerName.GetBuffer(m_sLocalPlayerName.GetLength()), m_sLocalPlayerName.GetLength());
     szPlayerName[m_sLocalPlayerName.GetLength()] = '\0';
 
+    dpName.lpszShortNameA = szPlayerName;
+    dpName.lpszLongNameA = szPlayerName;
+
+    DWORD dwPlayerFlags = 0;
+    if (m_bIsHost == TRUE) {
+        dwPlayerFlags = DPPLAYER_SERVERPLAYER;
+    }
+
     if (m_nServiceProvider != SERV_PROV_NULL) {
         EnterCriticalSection(&field_F6A);
 
-        // TODO: Incomplete.
+        HRESULT hr;
+        if (m_lpDirectPlay != NULL) {
+            hr = m_lpDirectPlay->CreatePlayer(&m_idLocalPlayer,
+                &dpName,
+                g_pChitin->field_180,
+                NULL,
+                0,
+                dwPlayerFlags);
+        } else {
+            hr = DPERR_NOMEMORY;
+        }
 
         LeaveCriticalSection(&field_F6A);
-    }
 
-    INT nSlot;
-    for (nSlot = 0; nSlot < CNETWORK_MAX_PLAYERS; nSlot++) {
-        if (!field_71A[nSlot]) {
-            break;
+        if (hr == DPERR_NOCONNECTION || hr == DPERR_GENERIC) {
+            m_bPlayerCreated = FALSE;
+            nErrorCode = ERROR_CANNOTCONNECT;
+            return FALSE;
         }
+
+        if (hr != DP_OK) {
+            m_bPlayerCreated = FALSE;
+            nErrorCode = ERROR_CANNOTCREATEPLAYER;
+            return FALSE;
+        }
+
+        AddPlayerToList(m_idLocalPlayer, m_sLocalPlayerName, m_bIsHost, TRUE);
+    } else {
+        INT nSlot;
+        for (nSlot = 0; nSlot < CNETWORK_MAX_PLAYERS; nSlot++) {
+            if (!field_71A[nSlot]) {
+                break;
+            }
+        }
+
+        if (nSlot >= CNETWORK_MAX_PLAYERS) {
+            return FALSE;
+        }
+
+        m_idLocalPlayer = nSlot + 1;
+        field_702[nSlot] = szPlayerName;
+        field_71A[nSlot] = TRUE;
     }
 
-    if (nSlot >= CNETWORK_MAX_PLAYERS) {
-        return FALSE;
-    }
-
-    m_idLocalPlayer = nSlot + 1;
-    field_702[nSlot] = szPlayerName;
-    field_71A[nSlot] = TRUE;
     m_bPlayerCreated = TRUE;
     AddPlayerToList(m_idLocalPlayer, m_sLocalPlayerName, m_bIsHost, TRUE);
 

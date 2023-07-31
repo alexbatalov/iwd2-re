@@ -197,7 +197,7 @@ public:
     /* 0174 */ int field_174;
     /* 0178 */ BOOL m_bUseMirrorFX; // #guess
     /* 017C */ UINT m_nQueryCancelAutoPlayMsgID; // #guess
-    /* 0180 */ int field_180;
+    /* 0180 */ HANDLE field_180;
     /* 0184 */ DWORD m_nTickCount;
     /* 0188 */ int m_nAIPerSec;
     /* 018C */ int m_nAIElasped;
