@@ -1226,9 +1226,47 @@ BOOLEAN CNetwork::SelectSession(INT nSession)
 // 0x7A66E0
 BOOLEAN CNetwork::SetInSessionOptions()
 {
-    // TODO: Incomplete.
+    char szSessionName[200];
+    char szSessionPassword[200];
 
-    return FALSE;
+    if (m_bConnectionEstablished != TRUE) {
+        return FALSE;
+    }
+
+    if (m_bIsHost != TRUE) {
+        return FALSE;
+    }
+
+    m_sessionDesc.dwMaxPlayers = m_nMaxPlayers;
+
+    memset(szSessionName, 0, sizeof(szSessionName));
+    strncpy(szSessionName, m_sSessionNameToMake, m_sSessionNameToMake.GetLength());
+    m_sessionDesc.lpszSessionNameA = szSessionName;
+
+    if (m_bAllowNewConnections == TRUE) {
+        m_sessionDesc.dwFlags = m_dwSessionFlags;
+    } else {
+        m_sessionDesc.dwFlags = m_dwSessionFlags | DPSESSION_JOINDISABLED | DPSESSION_NEWPLAYERSDISABLED;
+    }
+
+    if (m_bSessionPasswordEnabled == TRUE) {
+        memset(szSessionPassword, 0, sizeof(szSessionPassword));
+        strncpy(szSessionPassword, m_sSessionPassword, m_sSessionPassword.GetLength());
+        m_sessionDesc.lpszPasswordA = szSessionPassword;
+    }
+
+    EnterCriticalSection(&field_F6A);
+
+    if (m_lpDirectPlay != NULL) {
+        HRESULT hr = m_lpDirectPlay->SetSessionDesc(&m_sessionDesc, 0);
+        if (hr != DP_OK) {
+            LeaveCriticalSection(&field_F6A);
+            return FALSE;
+        }
+    }
+
+    LeaveCriticalSection(&field_F6A);
+    return TRUE;
 }
 
 // 0x7A6800
