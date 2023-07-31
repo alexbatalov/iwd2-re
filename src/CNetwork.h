@@ -3,6 +3,15 @@
 
 #include "mfc.h"
 
+#if _MSC_VER == 1200
+#define DPLAY_COMPAT 0
+#else
+#define DPLAY_COMPAT 1
+#endif
+
+#include <dplay.h>
+#include <dplobby.h>
+
 #include "CNetworkWindow.h"
 
 #define CNETWORK_MAX_SERVICE_PROVIDERS 5
@@ -149,6 +158,18 @@ public:
     /* 0B52 */ DWORD m_dwCRC32[256];
     /* 0F52 */ CRITICAL_SECTION field_F52;
     /* 0F6A */ CRITICAL_SECTION field_F6A;
+
+#if DPLAY_COMPAT
+    typedef HRESULT(WINAPI DirectPlayCreateFunc)(LPGUID, LPDIRECTPLAY*, IUnknown*);
+    typedef HRESULT(WINAPI DirectPlayLobbyCreateFunc)(LPGUID, LPDIRECTPLAYLOBBYA*, IUnknown*, LPVOID, DWORD);
+
+    HMODULE hDirectPlayDLL;
+    DirectPlayCreateFunc* DirectPlayCreate;
+    DirectPlayLobbyCreateFunc* DirectPlayLobbyCreateA;
+
+    void InitDirectPlay();
+    void FreeDirectPlay();
+#endif
 };
 
 #endif /* CNETWORK_H_ */

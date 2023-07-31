@@ -39,6 +39,10 @@ const INT CNetwork::ERROR_INVALIDPASSWORD = 4;
 // 0x7A3FD0
 CNetwork::CNetwork()
 {
+#if DPLAY_COMPAT
+    InitDirectPlay();
+#endif
+
     field_9D = 0;
     field_9E = 0;
     field_116 = 0;
@@ -161,6 +165,10 @@ CNetwork::~CNetwork()
 
     DeleteCriticalSection(&field_F6A);
     DeleteCriticalSection(&field_F52);
+
+#if DPLAY_COMPAT
+    FreeDirectPlay();
+#endif
 }
 
 // 0x7A4660
@@ -766,3 +774,42 @@ BOOLEAN CNetwork::GetSessionHosting()
 {
     return m_bIsHost;
 }
+
+#if DPLAY_COMPAT
+
+static HRESULT WINAPI FakeDirectPlayCreate(LPGUID, LPDIRECTPLAY*, IUnknown*)
+{
+    return DPERR_GENERIC;
+}
+
+static HRESULT WINAPI FakeDirectPlayLobbyCreateA(LPGUID, LPDIRECTPLAYLOBBYA*, IUnknown*, LPVOID, DWORD)
+{
+    return DPERR_GENERIC;
+}
+
+void CNetwork::InitDirectPlay()
+{
+    hDirectPlayDLL = LoadLibraryA("dplayx");
+    if (hDirectPlayDLL != NULL) {
+        DirectPlayCreate = (DirectPlayCreateFunc*)GetProcAddress(hDirectPlayDLL, "DirectPlayCreate");
+        DirectPlayLobbyCreateA = (DirectPlayLobbyCreateFunc*)GetProcAddress(hDirectPlayDLL, "DirectPlayLobbyCreateA");
+    }
+
+    if (DirectPlayCreate == NULL) {
+        DirectPlayCreate = FakeDirectPlayCreate;
+    }
+
+    if (DirectPlayLobbyCreateA == NULL) {
+        DirectPlayLobbyCreateA = FakeDirectPlayLobbyCreateA;
+    }
+}
+
+void CNetwork::FreeDirectPlay()
+{
+    if (hDirectPlayDLL != NULL) {
+        FreeLibrary(hDirectPlayDLL);
+        hDirectPlayDLL = NULL;
+    }
+}
+
+#endif
