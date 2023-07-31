@@ -261,6 +261,88 @@ BOOLEAN CNetwork::CreateDirectPlayLobbyInterface(IDirectPlayLobby3A** lplpDirect
     return TRUE;
 }
 
+// 0x7A4F00
+BOOLEAN CNetwork::HasModems()
+{
+    HKEY hSystem;
+    HKEY hCurrentControlSet;
+    HKEY hServices;
+    HKEY hModem;
+    HKEY hEnum;
+    HKEY hClass;
+    DWORD cSubKeys;
+
+    if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, "System", 0, KEY_READ, &hSystem) != ERROR_SUCCESS) {
+        return FALSE;
+    }
+
+    if (RegOpenKeyExA(hSystem, "CurrentControlSet", 0, KEY_READ, &hCurrentControlSet) != ERROR_SUCCESS) {
+        RegCloseKey(hSystem);
+        return FALSE;
+    }
+
+    if (RegOpenKeyExA(hSystem, "Services", 0, KEY_READ, &hServices) != ERROR_SUCCESS) {
+        RegCloseKey(hCurrentControlSet);
+        RegCloseKey(hSystem);
+        return FALSE;
+    }
+
+    if (g_pChitin->dwPlatformId == VER_PLATFORM_WIN32_NT) {
+        if (RegOpenKeyExA(hServices, "Modem", 0, KEY_READ, &hModem) != ERROR_SUCCESS) {
+            RegCloseKey(hServices);
+            RegCloseKey(hCurrentControlSet);
+            RegCloseKey(hSystem);
+            return FALSE;
+        }
+
+        if (RegOpenKeyExA(hModem, "Enum", 0, KEY_READ, &hEnum) != ERROR_SUCCESS) {
+            RegCloseKey(hModem);
+            RegCloseKey(hServices);
+            RegCloseKey(hCurrentControlSet);
+            RegCloseKey(hSystem);
+            return FALSE;
+        }
+
+        RegCloseKey(hEnum);
+        RegCloseKey(hModem);
+        RegCloseKey(hServices);
+        RegCloseKey(hCurrentControlSet);
+        RegCloseKey(hSystem);
+        return TRUE;
+    } else {
+        if (RegOpenKeyExA(hServices, "Class", 0, KEY_READ, &hClass) != ERROR_SUCCESS) {
+            RegCloseKey(hServices);
+            RegCloseKey(hCurrentControlSet);
+            RegCloseKey(hSystem);
+            return FALSE;
+        }
+
+        if (RegOpenKeyExA(hClass, "Modem", 0, KEY_READ, &hModem) != ERROR_SUCCESS) {
+            RegCloseKey(hClass);
+            RegCloseKey(hServices);
+            RegCloseKey(hCurrentControlSet);
+            RegCloseKey(hSystem);
+            return FALSE;
+        }
+
+        if (RegQueryInfoKeyA(hModem, NULL, NULL, NULL, &cSubKeys, NULL, NULL, NULL, NULL, NULL, NULL, NULL) != ERROR_SUCCESS) {
+            RegCloseKey(hModem);
+            RegCloseKey(hClass);
+            RegCloseKey(hServices);
+            RegCloseKey(hCurrentControlSet);
+            RegCloseKey(hSystem);
+            return FALSE;
+        }
+
+        RegCloseKey(hModem);
+        RegCloseKey(hClass);
+        RegCloseKey(hServices);
+        RegCloseKey(hCurrentControlSet);
+        RegCloseKey(hSystem);
+        return cSubKeys != 0;
+    }
+}
+
 // 0x7A5150
 void CNetwork::EnumerateModems()
 {
