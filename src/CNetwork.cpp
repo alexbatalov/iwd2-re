@@ -261,10 +261,61 @@ BOOLEAN CNetwork::CreateDirectPlayLobbyInterface(IDirectPlayLobby3A** lplpDirect
     return TRUE;
 }
 
+// 0x7A5150
+void CNetwork::EnumerateModems()
+{
+    // TODO: Incomplete.
+}
+
+// 0x7A5930
+static BOOL CALLBACK CNetworkEnumConnectionsCallback(LPCGUID lpguidSP, LPVOID lpConnection, DWORD dwConnectionSize, LPCDPNAME lpName, DWORD dwFlags, LPVOID lpContext)
+{
+    CString sServiceProviderName;
+
+    if (IsEqualGUID(*lpguidSP, DPSPGUID_TCPIP)) {
+        sServiceProviderName = "TCP/IP";
+    } else if (IsEqualGUID(*lpguidSP, DPSPGUID_IPX)) {
+        sServiceProviderName = "IPX";
+    } else if (IsEqualGUID(*lpguidSP, DPSPGUID_MODEM)) {
+        sServiceProviderName = "Modem";
+    } else if (IsEqualGUID(*lpguidSP, DPSPGUID_SERIAL)) {
+        sServiceProviderName = "Serial";
+    }
+
+    if (!sServiceProviderName.IsEmpty()) {
+        g_pChitin->cNetwork.AddServiceProviderToList(sServiceProviderName,
+            *lpguidSP,
+            lpConnection,
+            dwConnectionSize);
+    }
+
+    return TRUE;
+}
+
 // 0x7A5340
 BOOLEAN CNetwork::EnumerateServiceProviders()
 {
-    // TODO: Incomplete.
+    EnterCriticalSection(&field_F6A);
+
+    if (m_lpDirectPlay != NULL) {
+        m_lpDirectPlay->Release();
+        m_lpDirectPlay = NULL;
+    }
+
+    if (!CreateDirectPlayInterface(&GUID_NULL, &m_lpDirectPlay)) {
+        LeaveCriticalSection(&field_F6A);
+        return FALSE;
+    }
+
+    if (m_lpDirectPlayLobby != NULL) {
+        m_lpDirectPlayLobby->Release();
+        m_lpDirectPlayLobby = NULL;
+    }
+
+    if (!SendMessageA(g_pChitin->GetWnd()->GetSafeHwnd(), 0x405, reinterpret_cast<WPARAM>(&m_lpDirectPlayLobby), 0)) {
+        LeaveCriticalSection(&field_F6A);
+        return FALSE;
+    }
 
     m_bServiceProviderEnumerated = TRUE;
     m_bServiceProviderSelected = FALSE;
@@ -273,9 +324,16 @@ BOOLEAN CNetwork::EnumerateServiceProviders()
     m_serviceProviderGuids[0] = GUID_NULL;
     m_nTotalServiceProviders++;
 
-    // TODO: Incomplete.
+    m_lpDirectPlay->EnumConnections(&m_nApplicationGuid, CNetworkEnumConnectionsCallback, NULL, DPCONNECTION_DIRECTPLAY);
+    LeaveCriticalSection(&field_F6A);
 
-    return FALSE;
+    for (INT nIndex = 0; nIndex < m_nTotalServiceProviders; nIndex++) {
+        if (IsEqualGUID(m_serviceProviderGuids[nIndex], DPSPGUID_MODEM)) {
+            g_pChitin->cNetwork.EnumerateModems();
+        }
+    }
+
+    return TRUE;
 }
 
 // 0x7A5480
