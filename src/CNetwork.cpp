@@ -634,11 +634,57 @@ BOOLEAN CNetwork::GetServiceProviderType(INT nServiceProviderNumber, INT& nServi
 // 0x7A5600
 BOOLEAN CNetwork::InitializeConnectionToServiceProvider(BOOLEAN bHostingGame)
 {
-    // TODO: Incomplete.
+    if (!CreateDirectPlayAddress(bHostingGame)) {
+        return FALSE;
+    }
+
+    EnterCriticalSection(&field_F6A);
+
+    if (m_lpDirectPlay == NULL) {
+        if (SendMessageA(g_pChitin->GetWnd()->GetSafeHwnd(), 0x406, (WPARAM)&m_lpDirectPlay, 0) == 0) {
+            if (m_pDirectPlayAddress != NULL) {
+                delete m_pDirectPlayAddress;
+                // FIXME: `m_pDirectPlayAddress` is not nullified.
+
+                m_bDirectPlayAddressCreated = FALSE;
+            }
+
+            LeaveCriticalSection(&field_F6A);
+            m_bConnectionInitialized = FALSE;
+            return FALSE;
+        }
+    }
+
+    HRESULT hr;
+    if (m_nServiceProvider != 0) {
+        hr = m_lpDirectPlay->InitializeConnection(m_pDirectPlayAddress, 0);
+    }
+
+    LeaveCriticalSection(&field_F6A);
+
+    if (m_nServiceProvider != 0) {
+        if (hr != DP_OK && hr != DPERR_ALREADYINITIALIZED) {
+            if (m_pDirectPlayAddress != NULL) {
+                delete m_pDirectPlayAddress;
+                // FIXME: `m_pDirectPlayAddress` is not nullified.
+
+                m_bDirectPlayAddressCreated = FALSE;
+            }
+
+            m_bConnectionInitialized = FALSE;
+            return FALSE;
+        }
+    }
+
+    if (m_pDirectPlayAddress != NULL) {
+        delete m_pDirectPlayAddress;
+        // FIXME: `m_pDirectPlayAddress` is not nullified.
+
+        m_bDirectPlayAddressCreated = FALSE;
+    }
 
     m_bConnectionInitialized = TRUE;
-
-    return FALSE;
+    return TRUE;
 }
 
 // 0x7A5720
