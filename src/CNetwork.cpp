@@ -737,9 +737,32 @@ BOOLEAN CNetwork::GetServiceProviderType(INT nServiceProviderNumber, INT& nServi
         return FALSE;
     }
 
-    // TODO: Incomplete.
-
     nServiceProviderType = SERV_PROV_NULL;
+
+    if (IsEqualGUID(m_serviceProviderGuids[nServiceProviderNumber], DPSPGUID_IPX)) {
+        nServiceProviderType = SERV_PROV_IPX;
+        return TRUE;
+    }
+
+    if (IsEqualGUID(m_serviceProviderGuids[nServiceProviderNumber], DPSPGUID_SERIAL)) {
+        nServiceProviderType = SERV_PROV_SERIAL;
+        return TRUE;
+    }
+
+    if (IsEqualGUID(m_serviceProviderGuids[nServiceProviderNumber], DPSPGUID_MODEM)) {
+        nServiceProviderType = SERV_PROV_MODEM;
+        return TRUE;
+    }
+
+    if (IsEqualGUID(m_serviceProviderGuids[nServiceProviderNumber], DPSPGUID_TCPIP)) {
+        nServiceProviderType = SERV_PROV_TCP_IP;
+        return TRUE;
+    }
+
+    if (IsEqualGUID(m_serviceProviderGuids[nServiceProviderNumber], GUID_NULL)) {
+        nServiceProviderType = SERV_PROV_NULL;
+    }
+
     return TRUE;
 }
 
