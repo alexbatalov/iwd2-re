@@ -167,7 +167,15 @@ CNetwork::~CNetwork()
     if (m_nServiceProvider != SERV_PROV_NULL) {
         EnterCriticalSection(&field_F6A);
 
-        // TODO: Incomplete.
+        if (m_lpDirectPlay != NULL) {
+            m_lpDirectPlay->Release();
+            m_lpDirectPlay = NULL;
+        }
+
+        if (m_lpDirectPlayLobby != NULL) {
+            m_lpDirectPlayLobby->Release();
+            m_lpDirectPlayLobby = NULL;
+        }
 
         LeaveCriticalSection(&field_F6A);
     }
