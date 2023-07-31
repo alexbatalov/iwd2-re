@@ -1063,7 +1063,61 @@ BOOLEAN CNetwork::GetSessionGUID(INT nSession, GUID& sessionGuid)
 // 0x7A6270
 BOOLEAN CNetwork::HostNewSession()
 {
-    // TODO: Incomplete.
+    char szSessionName[200];
+    char szSessionPassword[200];
+
+    if (m_bConnectionInitialized != TRUE) {
+        return FALSE;
+    }
+
+    if (m_bConnectionEstablished) {
+        return FALSE;
+    }
+
+    if (!m_bSessionNameToMake) {
+        return FALSE;
+    }
+
+    m_sessionDesc = { 0 };
+    m_sessionDesc.dwFlags = m_dwSessionFlags;
+    m_sessionDesc.guidApplication = m_nApplicationGuid;
+    m_sessionDesc.dwSize = sizeof(m_sessionDesc);
+    m_sessionDesc.dwMaxPlayers = m_nMaxPlayers;
+
+    memset(szSessionName, 0, sizeof(szSessionName));
+    strncpy(szSessionName, m_sSessionNameToMake, m_sSessionNameToMake.GetLength());
+    m_sessionDesc.lpszSessionNameA = szSessionName;
+
+    if (m_bSessionPasswordEnabled == TRUE) {
+        memset(szSessionPassword, 0, sizeof(szSessionPassword));
+        strncpy(szSessionPassword, m_sSessionPassword, m_sSessionPassword.GetLength());
+        m_sessionDesc.lpszPasswordA = szSessionPassword;
+    }
+
+    DWORD dwOpenFlags = DPOPEN_CREATE;
+    if (!IsEqualGUID(m_serviceProviderGuids[m_nServiceProvider], DPSPGUID_MODEM)
+        && !IsEqualGUID(m_serviceProviderGuids[m_nServiceProvider], DPSPGUID_TCPIP)) {
+        dwOpenFlags |= DPOPEN_RETURNSTATUS;
+    }
+
+    if (m_nServiceProvider != 0) {
+        EnterCriticalSection(&field_F6A);
+
+        HRESULT hr;
+        if (m_lpDirectPlay != NULL) {
+            do {
+                hr = m_lpDirectPlay->Open(&m_sessionDesc, dwOpenFlags);
+            } while (hr == DPERR_CONNECTING);
+        } else {
+            hr = DPERR_NOMEMORY;
+        }
+
+        LeaveCriticalSection(&field_F6A);
+
+        if (hr != DP_OK) {
+            return FALSE;
+        }
+    }
 
     m_bAllowNewConnections = TRUE;
     m_bConnectionEstablished = TRUE;
@@ -1073,7 +1127,8 @@ BOOLEAN CNetwork::HostNewSession()
     m_nLocalPlayer = -1;
 
     for (int index = 0; index < CNETWORK_MAX_PLAYERS; index++) {
-        field_702[index] = "";
+        m_pPlayerID[index] = 0;
+        m_psPlayerName[index] = "";
         m_pbPlayerEnumerateFlag[index] = FALSE;
         m_pbPlayerVisible[index] = FALSE;
         m_pSlidingWindow[index].Initialize(index);

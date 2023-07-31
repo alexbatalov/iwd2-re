@@ -132,12 +132,13 @@ public:
     /* 0680 */ BOOLEAN m_bSessionPasswordEnabled;
     /* 0682 */ CString m_sSessionPassword;
     /* 0686 */ BOOLEAN m_bAllowNewConnections;
+    /* 0688 */ DPSESSIONDESC2 m_sessionDesc;
     /* 06D8 */ void* field_6D8;
     /* 06DC */ int field_6DC;
     /* 06E0 */ BOOLEAN m_bConnectionEstablished;
     /* 06E1 */ BOOLEAN m_bIsHost;
     /* 06E2 */ int m_nMaxPlayers;
-    /* 06E6 */ int m_dwSessionFlags;
+    /* 06E6 */ DWORD m_dwSessionFlags;
     /* 06EA */ unsigned char field_6EA;
     /* 06EB */ BOOLEAN m_bSessionOptionsDefined;
     /* 06EC */ CString m_sJoinedGame;
