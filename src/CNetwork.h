@@ -86,8 +86,8 @@ public:
     static const INT ERROR_CANNOTCONNECT;
     static const INT ERROR_INVALIDPASSWORD;
 
-    /* 0000 */ LPVOID m_lpDirectPlay;
-    /* 0004 */ LPVOID m_lpDirectPlayLobby;
+    /* 0000 */ IDirectPlay4A* m_lpDirectPlay;
+    /* 0004 */ IDirectPlayLobby3A* m_lpDirectPlayLobby;
     /* 0008 */ GUID m_nApplicationGuid;
     /* 0018 */ BOOLEAN m_bApplicationGuidDefined;
     /* 0019 */ unsigned char field_19;
