@@ -47,7 +47,7 @@ public:
     void CloseSession(BOOLEAN bAIResponsible);
     void OnCloseSession();
     BOOLEAN CheckSessionStatus(BOOLEAN bInThreadLoop);
-    void EnumerateSessions(BOOLEAN a1, BOOLEAN a2);
+    BOOLEAN EnumerateSessions(BOOLEAN a1, BOOLEAN a2);
     BOOLEAN sub_7A61D0();
     BOOLEAN GetPasswordRequiredForSelectedSession();
     BOOLEAN GetSessionName(INT nSession, CString& sSessionName);
@@ -119,7 +119,7 @@ public:
     /* 0116 */ BOOLEAN m_bDirectPlayAddressCreated;
     /* 0118 */ LPVOID m_pDirectPlayAddress;
     /* 011C */ DWORD m_pDirectPlayAddressSize;
-    /* 0120 */ unsigned char field_120;
+    /* 0120 */ BOOLEAN m_bSessionEnumerated;
     /* 0121 */ BOOLEAN m_bSessionSelected;
     /* 0122 */ INT m_nSession;
     /* 0126 */ INT m_nTotalSessions;

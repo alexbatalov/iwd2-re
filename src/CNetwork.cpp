@@ -76,7 +76,7 @@ CNetwork::CNetwork()
     m_nSerialFlowControl = DPCPA_RTSDTRFLOW;
     m_nSerialParity = 0;
     m_nSerialStopBits = 0;
-    field_120 = 0;
+    m_bSessionEnumerated = FALSE;
 
     for (INT nSession = 0; nSession < CNETWORK_MAX_SESSIONS; nSession++) {
         m_psSessionName[nSession] = "";
@@ -948,7 +948,7 @@ void CNetwork::OnCloseSession()
     LeaveCriticalSection(&field_F6A);
 
     m_bConnectionInitialized = FALSE;
-    field_120 = 0;
+    m_bSessionEnumerated = FALSE;
 
     for (INT nSession = 0; nSession < CNETWORK_MAX_SESSIONS; nSession++) {
         m_psSessionName[nSession] = "";
@@ -1014,10 +1014,116 @@ BOOLEAN CNetwork::CheckSessionStatus(BOOLEAN bInThreadLoop)
     return FALSE;
 }
 
-// 0x7A5F00
-void CNetwork::EnumerateSessions(BOOLEAN a1, BOOLEAN a2)
+// 0x7A6840
+static BOOL CALLBACK CNetworkEnumSessionsCallback(LPCDPSESSIONDESC2 lpSessionDesc, LPDWORD lpdwTimeOut, DWORD dwFlags, LPVOID lpContext)
 {
-    // TODO: Incomplete.
+    CString sSessionName;
+
+    if ((dwFlags & DPESC_TIMEDOUT) != 0) {
+        return FALSE;
+    }
+
+    sSessionName = lpSessionDesc->lpszPasswordA;
+
+    CNetwork* pNetwork = &(g_pChitin->cNetwork);
+    if (pNetwork->m_nTotalSessions < CNETWORK_MAX_SESSIONS) {
+        pNetwork->m_psSessionName[pNetwork->m_nTotalSessions] = sSessionName;
+        pNetwork->m_pSessionGuid[pNetwork->m_nTotalSessions] = lpSessionDesc->guidInstance;
+        pNetwork->m_pbSessionPasswordRequired[pNetwork->m_nTotalSessions] = (lpSessionDesc->dwFlags & DPSESSION_PASSWORDREQUIRED) != 0;
+        pNetwork->m_nTotalSessions++;
+    }
+
+    return TRUE;
+}
+
+// 0x7A5F00
+BOOLEAN CNetwork::EnumerateSessions(BOOLEAN a1, BOOLEAN a2)
+{
+    DPSESSIONDESC2 dpsd = { 0 };
+    dpsd.dwSize = sizeof(dpsd);
+    dpsd.guidApplication = m_nApplicationGuid;
+
+    DPCAPS caps = { 0 };
+    caps.dwSize = sizeof(caps);
+
+    if (m_lpDirectPlay != NULL) {
+        m_lpDirectPlay->GetCaps(&caps, 0);
+    }
+
+    DWORD dwTimeout = 0;
+    if (!a1 && !a2) {
+        dwTimeout = 3000;
+    }
+
+    DWORD dwFlags = DPENUMSESSIONS_AVAILABLE | DPENUMSESSIONS_PASSWORDREQUIRED;
+
+    if (!IsEqualGUID(m_serviceProviderGuids[m_nServiceProvider], DPSPGUID_MODEM)
+        && !IsEqualGUID(m_serviceProviderGuids[m_nServiceProvider], DPSPGUID_TCPIP)) {
+        dwFlags |= DPENUMSESSIONS_RETURNSTATUS;
+    }
+
+    if (a2 == TRUE) {
+        dwFlags |= DPENUMSESSIONS_STOPASYNC;
+    } else if (a1 == TRUE) {
+        dwFlags |= DPENUMSESSIONS_ASYNC;
+    }
+
+    if (m_bSessionEnumerated == TRUE) {
+        for (INT nSession = 0; nSession < m_nTotalSessions; nSession++) {
+            m_psSessionName[nSession] = "";
+            m_pSessionGuid[nSession] = GUID_NULL;
+            m_pbSessionPasswordRequired[nSession] = FALSE;
+        }
+        m_nTotalSessions = 0;
+    }
+
+    EnterCriticalSection(&field_F6A);
+
+    HRESULT hr;
+    if (m_lpDirectPlay != NULL) {
+        do {
+            hr = m_lpDirectPlay->EnumSessions(&dpsd,
+                dwTimeout,
+                CNetworkEnumSessionsCallback,
+                NULL,
+                dwFlags);
+        } while (hr == DPERR_CONNECTING);
+    } else {
+        hr = DPERR_NOMEMORY;
+    }
+
+    LeaveCriticalSection(&field_F6A);
+
+    if (hr != DP_OK) {
+        m_bSessionEnumerated = FALSE;
+
+        for (INT nSession = 0; nSession < CNETWORK_MAX_SESSIONS; nSession++) {
+            m_psSessionName[nSession] = "";
+            m_pSessionGuid[nSession] = GUID_NULL;
+            m_pbSessionPasswordRequired[nSession] = FALSE;
+        }
+
+        return FALSE;
+    }
+
+    m_bSessionEnumerated = TRUE;
+
+    if (m_bSessionSelected == TRUE) {
+        m_bSessionSelected = FALSE;
+
+        for (INT nSession = 0; nSession < CNETWORK_MAX_SESSIONS; nSession++) {
+            if (IsEqualGUID(m_pSessionGuid[nSession], m_guidSession)) {
+                m_nSession = nSession;
+                m_bSessionSelected = TRUE;
+            }
+        }
+
+        if (!m_bSessionSelected) {
+            m_guidSession = GUID_NULL;
+        }
+    }
+
+    return TRUE;
 }
 
 // 0x7A61D0
@@ -1208,7 +1314,7 @@ BOOLEAN CNetwork::JoinSelectedSession(INT& nErrorCode)
 // 0x7A6680
 BOOLEAN CNetwork::SelectSession(INT nSession)
 {
-    if (!field_120) {
+    if (!m_bSessionEnumerated) {
         return FALSE;
     }
 
