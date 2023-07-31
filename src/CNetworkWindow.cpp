@@ -36,6 +36,12 @@ CNetworkWindow::~CNetworkWindow()
     m_bInitialized = FALSE;
 }
 
+// 0x7A1F50
+void CNetworkWindow::AddToIncomingQueue(PLAYER_ID idFrom, PLAYER_ID idTo, BYTE* pData, DWORD dwDataSize)
+{
+    // TODO: Incomplete.
+}
+
 // #binary-identical
 // 0x7A2770
 void CNetworkWindow::Initialize(int a1)

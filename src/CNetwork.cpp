@@ -1600,10 +1600,95 @@ BOOLEAN CNetwork::AddPlayerToList(PLAYER_ID dpID, const CString& sPlayerName, BO
     return TRUE;
 }
 
+// 0x7A6EA0
+BOOLEAN CNetwork::RemovePlayerFromList(PLAYER_ID dpID, BOOLEAN bAIResponsible)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x7A7510
+static BOOL CALLBACK CNetworkEnumPlayersCallback(DPID dpId, DWORD dwPlayerType, LPCDPNAME lpName, DWORD dwFlags, LPVOID lpContext)
+{
+    CString sPlayerName;
+
+    if (dwPlayerType == DPPLAYERTYPE_PLAYER) {
+        sPlayerName = lpName->lpszShortNameA;
+        g_pChitin->cNetwork.AddPlayerToList(dpId,
+            sPlayerName,
+            (dwFlags & DPENUMPLAYERS_SERVERPLAYER) != 0,
+            FALSE);
+    }
+
+    return TRUE;
+}
+
 // 0x7A6F80
 void CNetwork::EnumeratePlayers(BOOLEAN bProtectList)
 {
-    // TODO: Incomplete.
+    if (!m_bConnectionEstablished) {
+        return;
+    }
+
+    if (!bProtectList) {
+        for (INT nPlayer = 0; nPlayer < CNETWORK_MAX_PLAYERS; nPlayer++) {
+            m_pPlayerID[nPlayer] = 0;
+            m_psPlayerName[nPlayer] = "";
+            m_pbPlayerVisible[nPlayer] = FALSE;
+        }
+
+        m_nTotalPlayers = 0;
+    }
+
+    for (INT nPlayer = 0; nPlayer < CNETWORK_MAX_PLAYERS; nPlayer++) {
+        m_pbPlayerEnumerateFlag[nPlayer] = FALSE;
+    }
+
+    EnterCriticalSection(&field_F6A);
+
+    if (m_lpDirectPlay != NULL) {
+        m_lpDirectPlay->EnumPlayers(NULL,
+            CNetworkEnumPlayersCallback,
+            NULL,
+            0);
+        LeaveCriticalSection(&field_F6A);
+
+        if (bProtectList == TRUE) {
+            for (INT nPlayer = 0; nPlayer < CNETWORK_MAX_PLAYERS; nPlayer++) {
+                if (m_pPlayerID[nPlayer] != 0 && !m_pbPlayerEnumerateFlag[nPlayer]) {
+                    CString sLeavingGame;
+                    CString sLeftPlayerName;
+
+                    sLeftPlayerName = m_psPlayerName[nPlayer];
+                    if (RemovePlayerFromList(m_pPlayerID[nPlayer], FALSE) == TRUE) {
+                        sLeavingGame.Format(" %s: %s", (LPCSTR)sLeftPlayerName, (LPCSTR)m_sLeftGame);
+                        sLeavingGame.SetAt(0, sLeavingGame.GetLength() - 1);
+
+                        BYTE* pSystemMsg = CreateCopyMessage((LPCSTR)sLeavingGame,
+                            sLeavingGame.GetLength(),
+                            0,
+                            0,
+                            1);
+                        if (pSystemMsg != NULL) {
+                            m_SystemWindow.AddToIncomingQueue(0,
+                                m_idLocalPlayer,
+                                pSystemMsg,
+                                sLeavingGame.GetLength() + 12);
+                        }
+                    } else {
+                        for (INT nIndex = 0; nIndex < CNETWORK_MAX_PLAYERS; nIndex++) {
+                            if (field_772[nIndex] == m_pPlayerID[nPlayer]) {
+                                field_772[nIndex] = 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    } else {
+        LeaveCriticalSection(&field_F6A);
+    }
 }
 
 // 0x7A7160
@@ -1706,6 +1791,14 @@ INT CNetwork::FindPlayerLocationByName(const CString& sPlayerName, BOOLEAN bInvi
 void CNetwork::sub_7A73D0(CString& a1)
 {
     // TODO: Incomplete.
+}
+
+// 0x7A7DF0
+BYTE* CNetwork::CreateCopyMessage(const void* lpData, DWORD dwDataSize, unsigned char a3, unsigned char a4, int a5)
+{
+    // TODO: Incomplete.
+
+    return NULL;
 }
 
 // 0x452B40

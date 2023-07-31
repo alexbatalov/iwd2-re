@@ -60,6 +60,7 @@ public:
     void UnselectSession();
     BOOLEAN CreatePlayer(INT& nErrorCode);
     BOOLEAN AddPlayerToList(PLAYER_ID dpID, const CString& sPlayerName, BOOLEAN bIsHost, BOOLEAN bMakeVisible);
+    BOOLEAN RemovePlayerFromList(PLAYER_ID dpID, BOOLEAN bAIResponsible);
     void EnumeratePlayers(BOOLEAN bProtectList);
     BOOLEAN MakePlayersVisible();
     PLAYER_ID GetPlayerID(INT nPlayerNumber);
@@ -70,6 +71,7 @@ public:
     INT FindPlayerLocationByID(PLAYER_ID playerID, BOOLEAN bInvisible);
     INT FindPlayerLocationByName(const CString& sPlayerName, BOOLEAN bInvisible);
     void sub_7A73D0(CString& a1);
+    BYTE* CreateCopyMessage(const void* lpData, DWORD dwDataSize, unsigned char a3, unsigned char a4, int a5);
 
     INT GetServiceProvider();
     BOOLEAN GetSessionOpen();

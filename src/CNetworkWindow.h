@@ -4,6 +4,9 @@
 #include <afx.h>
 #include <afxtempl.h>
 
+// TODO: Reuse from `CNetwork.h`.
+typedef DWORD PLAYER_ID;
+
 class CNetworkWindow {
 public:
     struct Entry {
@@ -13,6 +16,7 @@ public:
     CNetworkWindow();
     ~CNetworkWindow();
 
+    void AddToIncomingQueue(PLAYER_ID idFrom, PLAYER_ID idTo, BYTE* pData, DWORD dwDataSize);
     void Initialize(int a1);
     void RemoveFromAllQueues();
 
