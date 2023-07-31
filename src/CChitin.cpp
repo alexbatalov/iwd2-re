@@ -1741,6 +1741,11 @@ void CChitin::OnMultiplayerPlayerVisible(PLAYER_ID playerID)
 {
 }
 
+// 0x778900
+void CChitin::OnMultiplayerPlayerLeave(PLAYER_ID playerID, const CString& sPlayerName)
+{
+}
+
 // 0x78E770
 void CChitin::FlipFullScreenMode(BOOLEAN a2)
 {

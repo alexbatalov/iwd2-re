@@ -87,6 +87,7 @@ public:
     /* 0078 */ virtual void OnMultiplayerSessionClose();
     /* 007C */ virtual void OnMultiplayerPlayerJoin(PLAYER_ID playerID, const CString& sPlayerName);
     /* 0080 */ virtual void OnMultiplayerPlayerVisible(PLAYER_ID playerID);
+    /* 0084 */ virtual void OnMultiplayerPlayerLeave(PLAYER_ID playerID, const CString& sPlayerName);
     /* 0090 */ virtual void AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD dw1, DWORD dw2);
     /* 0094 */ virtual void FlipFullScreenMode(BOOLEAN a2);
     /* 00A0 */ virtual const char* GetIniFileName();

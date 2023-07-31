@@ -86,6 +86,12 @@ void CNetworkWindow::Initialize(int a1)
     m_bInitialized = TRUE;
 }
 
+// 0x7A2810
+void CNetworkWindow::ShutDown()
+{
+    // TODO: Incomplete.
+}
+
 // 0x7A2D10
 void CNetworkWindow::RemoveFromAllQueues()
 {

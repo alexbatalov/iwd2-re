@@ -1644,9 +1644,42 @@ BOOLEAN CNetwork::AddPlayerToList(PLAYER_ID dpID, const CString& sPlayerName, BO
 // 0x7A6EA0
 BOOLEAN CNetwork::RemovePlayerFromList(PLAYER_ID dpID, BOOLEAN bAIResponsible)
 {
-    // TODO: Incomplete.
+    INT nPlayerToRemove = -1;
+    BOOLEAN bFound = FALSE;
 
-    return FALSE;
+    for (INT nPlayer = 0; nPlayer < CNETWORK_MAX_PLAYERS; nPlayer++) {
+        if (m_pPlayerID[nPlayer] == dpID) {
+            nPlayerToRemove = nPlayer;
+            bFound = TRUE;
+        }
+    }
+
+    if (bFound != TRUE) {
+        return bFound;
+    }
+
+    if (nPlayerToRemove == m_nHostPlayer) {
+        if (bAIResponsible != TRUE) {
+            g_pChitin->OnMultiplayerSessionToClose();
+            SleepEx(1000, FALSE);
+
+            if (m_bConnectionEstablished == TRUE) {
+                OnCloseSession();
+            }
+        } else {
+            OnCloseSession();
+        }
+    } else {
+        g_pChitin->OnMultiplayerPlayerLeave(m_pPlayerID[nPlayerToRemove], m_psPlayerName[nPlayerToRemove]);
+        m_pSlidingWindow[nPlayerToRemove].ShutDown();
+        m_pPlayerID[nPlayerToRemove] = 0;
+        m_psPlayerName[nPlayerToRemove] = "";
+        m_pbPlayerEnumerateFlag[nPlayerToRemove] = FALSE;
+        m_pbPlayerVisible[nPlayerToRemove] = FALSE;
+        m_nTotalPlayers--;
+    }
+
+    return TRUE;
 }
 
 // 0x7A7510

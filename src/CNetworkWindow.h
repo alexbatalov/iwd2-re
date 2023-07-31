@@ -18,6 +18,7 @@ public:
 
     void AddToIncomingQueue(PLAYER_ID idFrom, PLAYER_ID idTo, BYTE* pData, DWORD dwDataSize);
     void Initialize(int a1);
+    void ShutDown();
     void RemoveFromAllQueues();
 
     /* 0000 */ BOOLEAN m_bInitialized; // #guess
