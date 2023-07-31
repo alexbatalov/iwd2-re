@@ -26,6 +26,7 @@ public:
     ~CNetwork();
     void AddModemAddressToList(LPCSTR lpAddress);
     void AddServiceProviderToList(const CString& sServiceProviderName, const GUID& sServiceProviderGuid, LPVOID lpConnection, size_t size);
+    BOOLEAN CreateDirectPlayInterface(const GUID* guid, IDirectPlay4A** lplpDirectPlay4);
     BOOLEAN CreateDirectPlayLobbyInterface(IDirectPlayLobby3A** lplpDirectPlayLobby3);
     BOOLEAN EnumerateServiceProviders();
     INT FindModemAddress(const CString& sAddress);

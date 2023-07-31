@@ -196,6 +196,49 @@ void CNetwork::AddServiceProviderToList(const CString& sServiceProviderName, con
     }
 }
 
+// 0x7A4D90
+BOOLEAN CNetwork::CreateDirectPlayInterface(const GUID* guid, IDirectPlay4A** lplpDirectPlay4)
+{
+    GUID guidCopy = *guid;
+    IDirectPlay* lpDirectPlay = NULL;
+    IDirectPlay4A* lpDirectPlay4 = NULL;
+
+    if (IsEqualGUID(guidCopy, GUID_NULL)) {
+        HRESULT hr = CoCreateInstance(CLSID_DirectPlay,
+            NULL,
+            CLSCTX_INPROC_SERVER,
+            IID_IDirectPlay4A,
+            reinterpret_cast<LPVOID*>(&lpDirectPlay4));
+        if (hr != S_OK) {
+            // NOTE: Not used. Probably were a part of error reporting.
+            switch (hr) {
+            case REGDB_E_CLASSNOTREG:
+                return FALSE;
+            case REGDB_E_IIDNOTREG:
+                return FALSE;
+            }
+
+            return FALSE;
+        }
+    } else {
+        if (DirectPlayCreate(&guidCopy, &lpDirectPlay, NULL) != DP_OK) {
+            return FALSE;
+        }
+
+        if (lpDirectPlay->QueryInterface(IID_IDirectPlay4A, reinterpret_cast<LPVOID*>(&lpDirectPlay4)) != DP_OK) {
+            if (lpDirectPlay != NULL) {
+                lpDirectPlay->Release();
+            }
+            return FALSE;
+        }
+
+        lpDirectPlay->Release();
+    }
+
+    *lplpDirectPlay4 = lpDirectPlay4;
+    return TRUE;
+}
+
 // 0x7A4E80
 BOOLEAN CNetwork::CreateDirectPlayLobbyInterface(IDirectPlayLobby3A** lplpDirectPlayLobby3)
 {
