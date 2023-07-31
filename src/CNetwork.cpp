@@ -339,7 +339,10 @@ void CNetwork::RemoveInitializeConnection()
 {
     EnterCriticalSection(&field_F6A);
 
-    // TODO: Incomplete.
+    if (m_lpDirectPlay != NULL) {
+        m_lpDirectPlay->Release();
+        m_lpDirectPlay = NULL;
+    }
 
     LeaveCriticalSection(&field_F6A);
 
