@@ -62,6 +62,7 @@ public:
     BOOLEAN AddPlayerToList(PLAYER_ID dpID, const CString& sPlayerName, BOOLEAN bIsHost, BOOLEAN bMakeVisible);
     BOOLEAN RemovePlayerFromList(PLAYER_ID dpID, BOOLEAN bAIResponsible);
     void EnumeratePlayers(BOOLEAN bProtectList);
+    BOOLEAN MakePlayerVisible(PLAYER_ID playerID);
     BOOLEAN MakePlayersVisible();
     PLAYER_ID GetPlayerID(INT nPlayerNumber);
     void GetPlayerName(INT nPlayerNumber, CString& sPlayerName);

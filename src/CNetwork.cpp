@@ -1732,12 +1732,36 @@ void CNetwork::EnumeratePlayers(BOOLEAN bProtectList)
     }
 }
 
+// NOTE: Inlined.
+BOOLEAN CNetwork::MakePlayerVisible(PLAYER_ID playerID)
+{
+    BOOLEAN bResult = FALSE;
+
+    for (INT nPlayer = 0; nPlayer < CNETWORK_MAX_PLAYERS; nPlayer++) {
+        if (m_pPlayerID[nPlayer] == playerID && !m_pbPlayerVisible[nPlayer]) {
+            m_pbPlayerVisible[nPlayer] = TRUE;
+            g_pChitin->OnMultiplayerPlayerVisible(playerID);
+
+            bResult = TRUE;
+        }
+    }
+
+    return bResult;
+}
+
 // 0x7A7160
 BOOLEAN CNetwork::MakePlayersVisible()
 {
-    // TODO: Incomplete.
+    BOOLEAN bResult = FALSE;
 
-    return FALSE;
+    for (INT nPlayer = 0; nPlayer < CNETWORK_MAX_PLAYERS; nPlayer++) {
+        if (m_pPlayerID[nPlayer] != 0 && !m_pbPlayerVisible[nPlayer]) {
+            // NOTE: Uninline.
+            bResult |= MakePlayerVisible(m_pPlayerID[nPlayer]);
+        }
+    }
+
+    return bResult;
 }
 
 // 0x7A7220
