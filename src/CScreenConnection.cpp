@@ -1676,6 +1676,8 @@ void CScreenConnection::OnDoneButtonClick()
                         "Last Protocol Used",
                         sLastProtocolUsed,
                         g_pBaldurChitin->GetIniFileName());
+
+                    DismissPopup();
                 }
             }
         }
