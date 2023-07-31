@@ -93,8 +93,8 @@ CNetwork::CNetwork()
     m_bSessionPasswordEnabled = FALSE;
     m_sSessionPassword = "";
     m_bAllowNewConnections = TRUE;
-    field_6D8 = NULL;
-    field_6DC = 0;
+    m_pLastSessionBuffer = NULL;
+    m_dwLastSessionBufferSize = 0;
     m_bConnectionEstablished = FALSE;
     m_bIsHost = FALSE;
     field_6EA = 0;
@@ -968,12 +968,12 @@ void CNetwork::OnCloseSession()
 
     EnterCriticalSection(&field_F6A);
 
-    if (field_6D8 != NULL) {
-        delete field_6D8;
-        field_6D8 = NULL;
+    if (m_pLastSessionBuffer != NULL) {
+        delete m_pLastSessionBuffer;
+        m_pLastSessionBuffer = NULL;
     }
 
-    field_6DC = 0;
+    m_dwLastSessionBufferSize = 0;
 
     LeaveCriticalSection(&field_F6A);
 
@@ -1009,9 +1009,98 @@ void CNetwork::OnCloseSession()
 // 0x7A5D00
 BOOLEAN CNetwork::CheckSessionStatus(BOOLEAN bInThreadLoop)
 {
-    // TODO: Incomplete.
+    HRESULT hr;
+    DWORD dwSize = m_dwLastSessionBufferSize;
+    INT nCurrentPlayers;
+    INT nMaxPlayers;
 
-    return FALSE;
+    if (m_bConnectionEstablished != TRUE) {
+        return TRUE;
+    }
+
+    EnterCriticalSection(&field_F6A);
+
+    if (m_lpDirectPlay != NULL) {
+        hr = m_lpDirectPlay->GetSessionDesc(NULL, &dwSize);
+    } else {
+        hr = DPERR_NOMEMORY;
+    }
+
+    LeaveCriticalSection(&field_F6A);
+
+    if (hr == DPERR_BUFFERTOOSMALL) {
+        if (m_dwLastSessionBufferSize < dwSize) {
+            EnterCriticalSection(&field_F6A);
+
+            if (m_pLastSessionBuffer != NULL) {
+                delete m_pLastSessionBuffer;
+                m_pLastSessionBuffer = NULL;
+            }
+
+            m_pLastSessionBuffer = new BYTE[dwSize];
+            m_dwLastSessionBufferSize = dwSize;
+
+            LeaveCriticalSection(&field_F6A);
+        }
+
+        if (m_pLastSessionBuffer == NULL) {
+            UTIL_ASSERT_MSG(FALSE, "CNetwork::CheckSessionStatus: Can't create session descriptor.");
+        }
+
+        EnterCriticalSection(&field_F6A);
+
+        hr = m_lpDirectPlay->GetSessionDesc(m_pLastSessionBuffer, &dwSize);
+
+        LeaveCriticalSection(&field_F6A);
+
+        nCurrentPlayers = reinterpret_cast<DPSESSIONDESC2*>(m_pLastSessionBuffer)->dwCurrentPlayers;
+        nMaxPlayers = reinterpret_cast<DPSESSIONDESC2*>(m_pLastSessionBuffer)->dwMaxPlayers;
+    } else {
+        if (m_nServiceProvider != 0) {
+            nCurrentPlayers = 1;
+            nMaxPlayers = 1;
+        }
+    }
+
+    if (!bInThreadLoop && hr == DP_OK) {
+        m_sessionDesc = *reinterpret_cast<DPSESSIONDESC2*>(m_pLastSessionBuffer);
+
+        nMaxPlayers = m_sessionDesc.dwMaxPlayers;
+        if (nMaxPlayers <= CNETWORK_MAX_PLAYERS) {
+            m_nMaxPlayers = nMaxPlayers;
+        }
+    }
+
+    if (bInThreadLoop == TRUE && m_bIsHost == TRUE && hr == DP_OK) {
+        // TODO: Check.
+        if ((nCurrentPlayers != CNETWORK_MAX_PLAYERS
+                || nMaxPlayers != CNETWORK_MAX_PLAYERS)
+            && nMaxPlayers != nCurrentPlayers + 1) {
+            m_nMaxPlayers = max(nCurrentPlayers + 1, CNETWORK_MAX_PLAYERS);
+            SetInSessionOptions();
+        }
+    }
+
+    if (hr == DPERR_NOCONNECTION) {
+        if (bInThreadLoop) {
+            g_pChitin->OnMultiplayerSessionToClose();
+            SleepEx(1000, FALSE);
+
+            if (m_bConnectionEstablished == TRUE) {
+                OnCloseSession();
+            }
+        } else {
+            OnCloseSession();
+        }
+
+        return FALSE;
+    }
+
+    if (nCurrentPlayers != m_nTotalPlayers) {
+        EnumeratePlayers(bInThreadLoop);
+    }
+
+    return TRUE;
 }
 
 // 0x7A6840

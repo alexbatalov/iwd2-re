@@ -133,8 +133,8 @@ public:
     /* 0682 */ CString m_sSessionPassword;
     /* 0686 */ BOOLEAN m_bAllowNewConnections;
     /* 0688 */ DPSESSIONDESC2 m_sessionDesc;
-    /* 06D8 */ void* field_6D8;
-    /* 06DC */ int field_6DC;
+    /* 06D8 */ LPVOID m_pLastSessionBuffer;
+    /* 06DC */ DWORD m_dwLastSessionBufferSize;
     /* 06E0 */ BOOLEAN m_bConnectionEstablished;
     /* 06E1 */ BOOLEAN m_bIsHost;
     /* 06E2 */ int m_nMaxPlayers;
