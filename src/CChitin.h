@@ -84,6 +84,7 @@ public:
     /* 006C */ virtual void SetCDSwitchActivateEngine(BOOL bValue);
     /* 0070 */ virtual void OnMultiplayerSessionOpen(CString& sJoinedGame, CString& sDroppedGame, CString& sLeftGame);
     /* 0074 */ virtual void OnMultiplayerSessionToClose();
+    /* 0078 */ virtual void OnMultiplayerSessionClose();
     /* 007C */ virtual void OnMultiplayerPlayerJoin(PLAYER_ID playerID, const CString& sPlayerName);
     /* 0080 */ virtual void OnMultiplayerPlayerVisible(PLAYER_ID playerID);
     /* 0090 */ virtual void AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD dw1, DWORD dw2);

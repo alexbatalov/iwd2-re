@@ -1726,6 +1726,11 @@ void CChitin::OnMultiplayerSessionToClose()
 {
 }
 
+// 0x78E730
+void CChitin::OnMultiplayerSessionClose()
+{
+}
+
 // 0x778900
 void CChitin::OnMultiplayerPlayerJoin(PLAYER_ID playerID, const CString& sPlayerName)
 {

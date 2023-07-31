@@ -93,7 +93,7 @@ CNetwork::CNetwork()
     m_bSessionPasswordEnabled = FALSE;
     m_sSessionPassword = "";
     m_bAllowNewConnections = TRUE;
-    field_6D8 = 0;
+    field_6D8 = NULL;
     field_6DC = 0;
     m_bConnectionEstablished = FALSE;
     m_bIsHost = FALSE;
@@ -907,7 +907,103 @@ void CNetwork::CloseSession(BOOLEAN bAIResponsible)
 // 0x7A5A60
 void CNetwork::OnCloseSession()
 {
-    // TODO: Incomplete.
+    if (!m_bConnectionEstablished) {
+        return;
+    }
+
+    g_pChitin->OnMultiplayerSessionClose();
+
+    if (m_bPlayerCreated == TRUE) {
+        EnterCriticalSection(&field_F6A);
+
+        HRESULT hr;
+        if (m_lpDirectPlay != NULL) {
+            hr = m_lpDirectPlay->DestroyPlayer(m_idLocalPlayer);
+        } else {
+            hr = DPERR_NOMEMORY;
+        }
+
+        LeaveCriticalSection(&field_F6A);
+
+        if (hr == DP_OK) {
+            m_bPlayerCreated = FALSE;
+        }
+    }
+
+    for (INT nPlayer = 0; nPlayer < CNETWORK_MAX_PLAYERS; nPlayer++) {
+        m_pPlayerID[nPlayer] = 0;
+        m_psPlayerName[nPlayer] = "";
+        m_pbPlayerEnumerateFlag[nPlayer] = FALSE;
+        m_pbPlayerVisible[nPlayer] = FALSE;
+    }
+
+    m_nTotalPlayers = 0;
+
+    EnterCriticalSection(&field_F6A);
+
+    if (m_lpDirectPlay != NULL) {
+        m_lpDirectPlay->Close();
+    }
+
+    LeaveCriticalSection(&field_F6A);
+
+    m_bConnectionInitialized = FALSE;
+    field_120 = 0;
+
+    for (INT nSession = 0; nSession < CNETWORK_MAX_SESSIONS; nSession++) {
+        m_psSessionName[nSession] = "";
+        m_pSessionGuid[nSession] = GUID_NULL;
+        m_pbSessionPasswordRequired[nSession] = FALSE;
+    }
+
+    m_bSessionSelected = FALSE;
+    m_nSession = -1;
+    m_nTotalSessions = 0;
+    m_guidSession = GUID_NULL;
+    m_bSessionNameToMake = FALSE;
+    m_sSessionNameToMake = "";
+    m_bAllowNewConnections = FALSE;
+    m_bSessionPasswordEnabled = FALSE;
+    m_sSessionPassword = "";
+
+    EnterCriticalSection(&field_F6A);
+
+    if (field_6D8 != NULL) {
+        delete field_6D8;
+        field_6D8 = NULL;
+    }
+
+    field_6DC = 0;
+
+    LeaveCriticalSection(&field_F6A);
+
+    m_bConnectionEstablished = FALSE;
+    m_bIsHost = FALSE;
+    field_6EA = 0;
+    m_bSessionOptionsDefined = FALSE;
+    m_nMaxPlayers = CNETWORK_MAX_PLAYERS;
+    m_dwSessionFlags = 0;
+    m_bPlayerNameToMake = FALSE;
+    m_bPlayerCreated = FALSE;
+    m_idLocalPlayer = 0;
+    m_sLocalPlayerName = "";
+    m_nHostPlayer = -1;
+    m_nLocalPlayer = -1;
+    m_nTotalPlayers = 0;
+
+    for (INT nPlayer = 0; nPlayer < CNETWORK_MAX_PLAYERS; nPlayer) {
+        m_pPlayerID[nPlayer] = 0;
+        m_psPlayerName[nPlayer] = "";
+        m_pbPlayerEnumerateFlag[nPlayer] = FALSE;
+        m_pbPlayerVisible[nPlayer] = FALSE;
+        m_pSlidingWindow[nPlayer].Initialize(nPlayer);
+    }
+
+    m_SystemWindow.RemoveFromAllQueues();
+
+    for (int index = 0; index < 6; index++) {
+        field_71A[index] = FALSE;
+    }
 }
 
 // 0x7A5D00

@@ -132,7 +132,7 @@ public:
     /* 0680 */ BOOLEAN m_bSessionPasswordEnabled;
     /* 0682 */ CString m_sSessionPassword;
     /* 0686 */ BOOLEAN m_bAllowNewConnections;
-    /* 06D8 */ int field_6D8;
+    /* 06D8 */ void* field_6D8;
     /* 06DC */ int field_6DC;
     /* 06E0 */ BOOLEAN m_bConnectionEstablished;
     /* 06E1 */ BOOLEAN m_bIsHost;
