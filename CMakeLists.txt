@@ -362,6 +362,8 @@ target_link_libraries(${EXECUTABLE_NAME}
     opengl32
 )
 
+target_include_directories(${EXECUTABLE_NAME} SYSTEM PRIVATE "third_party/directplay/include")
+
 add_subdirectory("third_party/zlib")
 target_link_libraries(${EXECUTABLE_NAME} ${ZLIB_LIBRARIES})
 target_include_directories(${EXECUTABLE_NAME} PRIVATE ${ZLIB_INCLUDE_DIRS})
