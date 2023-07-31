@@ -172,6 +172,10 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lPara
             return 0;
         }
         break;
+    case 0x405:
+        return g_pChitin->cNetwork.CreateDirectPlayLobbyInterface(reinterpret_cast<IDirectPlayLobby3A**>(wParam));
+    case 0x406:
+        return g_pChitin->cNetwork.CreateDirectPlayInterface(&GUID_NULL, reinterpret_cast<IDirectPlay4A**>(wParam));
     }
 
     // TODO: Incomplete.
