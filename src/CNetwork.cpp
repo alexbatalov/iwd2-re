@@ -510,10 +510,105 @@ BOOLEAN CNetwork::HasModems()
     }
 }
 
+// 0x7A58D0
+static BOOL CALLBACK CNetworkEnumAddressCallback(REFGUID guidDataType, DWORD dwDataSize, LPCVOID lpData, LPVOID lpContext)
+{
+    if (IsEqualGUID(guidDataType, DPAID_Modem)) {
+        LPCSTR lpAddress = (LPCSTR)lpData;
+        while (lstrlenA(lpAddress) != 0) {
+            g_pChitin->cNetwork.AddModemAddressToList(lpAddress);
+            lpAddress += lstrlenA(lpAddress) + 1;
+        }
+    }
+
+    return TRUE;
+}
+
 // 0x7A5150
 void CNetwork::EnumerateModems()
 {
-    // TODO: Incomplete.
+    IDirectPlay4A* lpDirectPlay;
+    LPVOID lpAddress = NULL;
+    HRESULT hr;
+    DWORD dwSize = 0;
+
+    m_bModemEnumerated = TRUE;
+    m_nTotalModemAddresses = 0;
+
+    if (!HasModems()) {
+        return;
+    }
+
+    for (INT nIndex = 0; nIndex < m_nTotalServiceProviders; nIndex++) {
+        if (IsEqualGUID(m_serviceProviderGuids[nIndex], DPSPGUID_MODEM)) {
+            // NOTE: Looks odd, probably some inlining.
+            if (m_bServiceProviderEnumerated && nIndex < m_nTotalServiceProviders) {
+                m_nServiceProvider = nIndex;
+                m_bServiceProviderSelected = TRUE;
+            }
+        }
+    }
+
+    if (CreateDirectPlayAddress(FALSE)) {
+        if (CreateDirectPlayInterface(&GUID_NULL, &lpDirectPlay)
+            && lpDirectPlay->InitializeConnection(m_pDirectPlayAddress, 0) == DP_OK) {
+            if (m_pDirectPlayAddress != NULL) {
+                delete m_pDirectPlayAddress;
+                // FIXME: `m_pDirectPlayAddress` is not nullified.
+
+                m_bDirectPlayAddressCreated = FALSE;
+            }
+            m_bConnectionInitialized = TRUE;
+        } else {
+            if (m_pDirectPlayAddress != NULL) {
+                delete m_pDirectPlayAddress;
+                // FIXME: `m_pDirectPlayAddress` is not nullified.
+
+                m_bDirectPlayAddressCreated = FALSE;
+            }
+
+            m_bConnectionInitialized = FALSE;
+        }
+    } else {
+        m_bConnectionInitialized = FALSE;
+    }
+
+    if (m_bConnectionInitialized == TRUE) {
+        hr = lpDirectPlay->GetPlayerAddress(0, NULL, &dwSize);
+        if (hr == DPERR_BUFFERTOOSMALL) {
+            lpAddress = new BYTE[dwSize];
+            if (lpAddress != NULL) {
+                hr = lpDirectPlay->GetPlayerAddress(0, lpAddress, &dwSize);
+            } else {
+                hr = DPERR_NOMEMORY;
+            }
+        }
+    } else {
+        hr = DP_OK;
+    }
+
+    m_bServiceProviderSelected = FALSE;
+    m_nServiceProvider = -1;
+    m_bConnectionInitialized = FALSE;
+
+    if (lpDirectPlay != NULL) {
+        lpDirectPlay->Release();
+        lpDirectPlay = NULL;
+    }
+
+    if (lpAddress != NULL) {
+        if (dwSize != 0) {
+            if (hr == DP_OK) {
+                EnterCriticalSection(&field_F6A);
+                m_lpDirectPlayLobby->EnumAddress(CNetworkEnumAddressCallback,
+                    lpAddress,
+                    dwSize,
+                    NULL);
+                LeaveCriticalSection(&field_F6A);
+            }
+        }
+        delete lpAddress;
+    }
 }
 
 // 0x7A5930
