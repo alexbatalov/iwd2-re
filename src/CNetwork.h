@@ -26,6 +26,7 @@ public:
     ~CNetwork();
     void AddModemAddressToList(LPCSTR lpAddress);
     void AddServiceProviderToList(const CString& sServiceProviderName, const GUID& sServiceProviderGuid, LPVOID lpConnection, size_t size);
+    BOOLEAN CreateDirectPlayAddress(BOOLEAN bHostingGame);
     BOOLEAN CreateDirectPlayInterface(const GUID* guid, IDirectPlay4A** lplpDirectPlay4);
     BOOLEAN CreateDirectPlayLobbyInterface(IDirectPlayLobby3A** lplpDirectPlayLobby3);
     BOOLEAN HasModems();
@@ -112,11 +113,12 @@ public:
     /* 00FE */ CString m_sPhoneNumber;
     /* 0102 */ UINT m_nSerialPort;
     /* 0106 */ UINT m_nSerialBaudRate;
-    /* 010A */ int field_10A;
-    /* 010E */ int field_10E;
-    /* 0112 */ int field_112;
-    /* 0116 */ unsigned char field_116;
-    /* 0118 */ int field_118;
+    /* 010A */ DWORD m_nSerialStopBits;
+    /* 010E */ DWORD m_nSerialParity;
+    /* 0112 */ DWORD m_nSerialFlowControl;
+    /* 0116 */ BOOLEAN m_bDirectPlayAddressCreated;
+    /* 0118 */ LPVOID m_pDirectPlayAddress;
+    /* 011C */ DWORD m_pDirectPlayAddressSize;
     /* 0120 */ unsigned char field_120;
     /* 0121 */ BOOLEAN m_bSessionSelected;
     /* 0122 */ INT m_nSession;

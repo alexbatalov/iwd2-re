@@ -45,7 +45,7 @@ CNetwork::CNetwork()
 
     field_9D = 0;
     field_9E = 0;
-    field_116 = 0;
+    m_bDirectPlayAddressCreated = FALSE;
     field_796 = 0;
     InitializeCriticalSection(&field_F52);
     InitializeCriticalSection(&field_F6A);
@@ -73,9 +73,9 @@ CNetwork::CNetwork()
     m_sPhoneNumber = "";
     m_nSerialBaudRate = 57600;
     m_nSerialPort = 1;
-    field_112 = 4;
-    field_10E = 0;
-    field_10A = 0;
+    m_nSerialFlowControl = DPCPA_RTSDTRFLOW;
+    m_nSerialParity = 0;
+    m_nSerialStopBits = 0;
     field_120 = 0;
 
     for (INT nSession = 0; nSession < CNETWORK_MAX_SESSIONS; nSession++) {
@@ -137,7 +137,7 @@ CNetwork::CNetwork()
         field_71A[nSlot] = FALSE;
     }
 
-    field_118 = 0;
+    m_pDirectPlayAddress = 0;
 }
 
 // 0x7A4440
@@ -194,6 +194,173 @@ void CNetwork::AddServiceProviderToList(const CString& sServiceProviderName, con
 
         m_nTotalServiceProviders++;
     }
+}
+
+// 0x7A4780
+BOOLEAN CNetwork::CreateDirectPlayAddress(BOOLEAN bHostingGame)
+{
+    DPCOMPOUNDADDRESSELEMENT addressElements[3];
+    DWORD dwElementCount = 0;
+    char szIpAddress[200];
+    WORD nPort;
+    char szModemAddress[200];
+    char szPhoneNumber[200];
+    DPCOMPORTADDRESS com;
+    HRESULT hr;
+
+    if (m_bDirectPlayAddressCreated) {
+        if (m_pDirectPlayAddress != NULL) {
+            delete m_pDirectPlayAddress;
+            m_bDirectPlayAddressCreated = FALSE;
+        }
+    }
+
+    if (!m_bServiceProviderSelected
+        || m_nServiceProvider < 0
+        || m_nServiceProvider >= m_nTotalServiceProviders) {
+        if (m_pDirectPlayAddress != NULL) {
+            delete m_pDirectPlayAddress;
+            m_bDirectPlayAddressCreated = FALSE;
+        }
+
+        return FALSE;
+    }
+
+    GUID serviceProviderGuid = m_serviceProviderGuids[m_nServiceProvider];
+
+    if (IsEqualGUID(serviceProviderGuid, DPSPGUID_MODEM)) {
+        addressElements[dwElementCount].guidDataType = DPAID_ServiceProvider;
+        addressElements[dwElementCount].dwDataSize = sizeof(GUID);
+        addressElements[dwElementCount].lpData = (LPVOID)&DPSPGUID_MODEM;
+        dwElementCount++;
+
+        lstrcpyA(szModemAddress, "");
+        if (m_bModemAddressSelected == TRUE
+            && m_nModemAddress >= 1
+            && m_nModemAddress < m_nTotalModemAddresses) {
+            lstrcpynA(szModemAddress, m_psModemAddress[m_nModemAddress], 200);
+
+            addressElements[dwElementCount].guidDataType = DPAID_Modem;
+            addressElements[dwElementCount].dwDataSize = lstrlenA(szModemAddress) + 1;
+            addressElements[dwElementCount].lpData = szModemAddress;
+            dwElementCount++;
+        }
+
+        if (m_sPhoneNumber.GetLength() > 0 && !bHostingGame) {
+            lstrcpynA(szPhoneNumber, m_sPhoneNumber, 200);
+
+            addressElements[dwElementCount].guidDataType = DPAID_Phone;
+            addressElements[dwElementCount].dwDataSize = lstrlenA(szPhoneNumber) + 1;
+            addressElements[dwElementCount].lpData = szPhoneNumber;
+            dwElementCount++;
+        }
+    } else if (IsEqualGUID(serviceProviderGuid, DPSPGUID_TCPIP)) {
+        addressElements[dwElementCount].guidDataType = DPAID_ServiceProvider;
+        addressElements[dwElementCount].dwDataSize = sizeof(GUID);
+        addressElements[dwElementCount].lpData = (LPVOID)&DPSPGUID_TCPIP;
+        dwElementCount++;
+
+        lstrcpyA(szIpAddress, "");
+        lstrcpynA(szIpAddress, m_sIPAddress, 200);
+
+        if (m_sIPAddress.IsEmpty() && bHostingGame == TRUE) {
+            m_sIPAddress = "127.0.0.1";
+            lstrcpynA(szIpAddress, m_sIPAddress, 200);
+            m_sIPAddress = "";
+        }
+
+        addressElements[dwElementCount].guidDataType = DPAID_INet;
+        addressElements[dwElementCount].dwDataSize = lstrlenA(szIpAddress) + 1;
+        addressElements[dwElementCount].lpData = szIpAddress;
+        dwElementCount++;
+
+        nPort = g_pChitin->GetMultiplayerDirectPlayPort();
+        if (nPort != 0) {
+            addressElements[dwElementCount].guidDataType = DPAID_INetPort;
+            addressElements[dwElementCount].dwDataSize = sizeof(WORD);
+            addressElements[dwElementCount].lpData = &nPort;
+            dwElementCount++;
+        }
+    } else if (IsEqualGUID(serviceProviderGuid, DPSPGUID_IPX)) {
+        addressElements[dwElementCount].guidDataType = DPAID_ServiceProvider;
+        addressElements[dwElementCount].dwDataSize = sizeof(GUID);
+        addressElements[dwElementCount].lpData = (LPVOID)&DPSPGUID_IPX;
+        dwElementCount++;
+    } else if (IsEqualGUID(serviceProviderGuid, DPSPGUID_SERIAL)) {
+        addressElements[dwElementCount].guidDataType = DPAID_ServiceProvider;
+        addressElements[dwElementCount].dwDataSize = sizeof(GUID);
+        addressElements[dwElementCount].lpData = (LPVOID)&DPSPGUID_SERIAL;
+        dwElementCount++;
+
+        com.dwComPort = m_nSerialPort;
+        com.dwBaudRate = m_nSerialBaudRate;
+        com.dwStopBits = m_nSerialStopBits;
+        com.dwParity = m_nSerialParity;
+        com.dwFlowControl = m_nSerialFlowControl;
+
+        addressElements[dwElementCount].guidDataType = DPAID_ComPort;
+        addressElements[dwElementCount].dwDataSize = sizeof(DPCOMPORTADDRESS);
+        addressElements[dwElementCount].lpData = &com;
+        dwElementCount++;
+    } else {
+        addressElements[dwElementCount].guidDataType = DPAID_ServiceProvider;
+        addressElements[dwElementCount].dwDataSize = sizeof(GUID);
+        addressElements[dwElementCount].lpData = &serviceProviderGuid;
+        dwElementCount++;
+    }
+
+    EnterCriticalSection(&field_F6A);
+
+    if (m_lpDirectPlayLobby == NULL) {
+        if (SendMessageA(g_pChitin->GetWnd()->GetSafeHwnd(), 0x405, (WPARAM)&m_lpDirectPlayLobby, 0) == 0) {
+            if (m_pDirectPlayAddress != NULL) {
+                delete m_pDirectPlayAddress;
+                m_bDirectPlayAddressCreated = FALSE;
+            }
+
+            LeaveCriticalSection(&field_F6A);
+            return FALSE;
+        }
+    }
+
+    hr = m_lpDirectPlayLobby->CreateCompoundAddress(addressElements,
+        dwElementCount,
+        NULL,
+        &m_pDirectPlayAddressSize);
+    if (hr != DPERR_BUFFERTOOSMALL) {
+        if (m_pDirectPlayAddress != NULL) {
+            delete m_pDirectPlayAddress;
+            m_bDirectPlayAddressCreated = FALSE;
+        }
+
+        LeaveCriticalSection(&field_F6A);
+        return FALSE;
+    }
+
+    m_pDirectPlayAddress = new BYTE[m_pDirectPlayAddressSize];
+    if (m_pDirectPlayAddress == NULL) {
+        LeaveCriticalSection(&field_F6A);
+        return FALSE;
+    }
+
+    hr = m_lpDirectPlayLobby->CreateCompoundAddress(addressElements,
+        dwElementCount,
+        m_pDirectPlayAddress,
+        &m_pDirectPlayAddressSize);
+    if (FAILED(hr)) {
+        if (m_pDirectPlayAddress != NULL) {
+            delete m_pDirectPlayAddress;
+            m_bDirectPlayAddressCreated = FALSE;
+        }
+
+        LeaveCriticalSection(&field_F6A);
+        return FALSE;
+    }
+
+    m_bDirectPlayAddressCreated = TRUE;
+
+    LeaveCriticalSection(&field_F6A);
+    return TRUE;
 }
 
 // 0x7A4D90
