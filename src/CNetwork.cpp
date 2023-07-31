@@ -1144,14 +1144,65 @@ BOOLEAN CNetwork::HostNewSession()
 // 0x7A64B0
 BOOLEAN CNetwork::JoinSelectedSession(INT& nErrorCode)
 {
+    char szSessionPassword[200];
+
     if (!m_bSessionSelected) {
         nErrorCode = ERROR_CANNOTCONNECT;
         return FALSE;
     }
 
-    // TODO: Incomplete.
+    m_sessionDesc = { 0 };
+    m_sessionDesc.dwSize = sizeof(m_sessionDesc);
+    m_sessionDesc.guidInstance = m_guidSession;
 
-    return FALSE;
+    if (m_bSessionPasswordEnabled) {
+        memset(szSessionPassword, 0, sizeof(szSessionPassword));
+        strncpy(szSessionPassword, m_sSessionPassword, m_sSessionPassword.GetLength());
+        m_sessionDesc.lpszPasswordA = szSessionPassword;
+    }
+
+    EnterCriticalSection(&field_F6A);
+
+    HRESULT hr;
+    if (m_lpDirectPlay != NULL) {
+        do {
+            hr = m_lpDirectPlay->Open(&m_sessionDesc, DPOPEN_JOIN);
+        } while (hr == DPERR_CONNECTING);
+    } else {
+        hr = DPERR_NOMEMORY;
+    }
+
+    LeaveCriticalSection(&field_F6A);
+
+    if (hr == DPERR_INVALIDPASSWORD) {
+        nErrorCode = ERROR_INVALIDPASSWORD;
+        return FALSE;
+    }
+
+    if (hr != DP_OK) {
+        nErrorCode = ERROR_CANNOTCONNECT;
+        return FALSE;
+    }
+
+    m_bConnectionEstablished = TRUE;
+    m_bIsHost = FALSE;
+    m_nHostPlayer = -1;
+    m_nTotalPlayers = 0;
+    m_nLocalPlayer = -1;
+
+    for (INT nPlayer = 0; nPlayer < CNETWORK_MAX_PLAYERS; nPlayer++) {
+        m_pPlayerID[nPlayer] = 0;
+        m_psPlayerName[nPlayer] = "";
+        m_pbPlayerEnumerateFlag[nPlayer] = FALSE;
+        m_pbPlayerVisible[nPlayer] = FALSE;
+        m_pSlidingWindow[nPlayer].Initialize(nPlayer);
+    }
+
+    m_SystemWindow.Initialize(-1);
+
+    g_pChitin->OnMultiplayerSessionOpen(m_sJoinedGame, m_sDroppedGame, m_sLeftGame);
+
+    return TRUE;
 }
 
 // 0x7A6680
