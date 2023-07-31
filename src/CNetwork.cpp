@@ -196,6 +196,28 @@ void CNetwork::AddServiceProviderToList(const CString& sServiceProviderName, con
     }
 }
 
+// 0x7A4E80
+BOOLEAN CNetwork::CreateDirectPlayLobbyInterface(IDirectPlayLobby3A** lplpDirectPlayLobby3)
+{
+    IDirectPlayLobby* lpDirectPlayLobby = NULL;
+    IDirectPlayLobby3A* lpDirectPlayLobby3 = NULL;
+
+    if (DirectPlayLobbyCreateA(NULL, &lpDirectPlayLobby, NULL, NULL, 0) != DP_OK) {
+        return FALSE;
+    }
+
+    if (lpDirectPlayLobby->QueryInterface(IID_IDirectPlayLobby3A, reinterpret_cast<LPVOID*>(&lpDirectPlayLobby3)) != DP_OK) {
+        if (lpDirectPlayLobby != NULL) {
+            lpDirectPlayLobby->Release();
+        }
+        return FALSE;
+    }
+
+    lpDirectPlayLobby->Release();
+    *lplpDirectPlayLobby3 = lpDirectPlayLobby3;
+    return TRUE;
+}
+
 // 0x7A5340
 BOOLEAN CNetwork::EnumerateServiceProviders()
 {
