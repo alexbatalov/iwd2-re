@@ -1705,6 +1705,26 @@ void CBaldurChitin::SetCDSwitchStatus(BOOLEAN a1, BOOLEAN a2, BYTE a3, const CSt
     m_cSwitchingCDStatus.Update(a1, a2, a3, a4, a5, a6, a7);
 }
 
+// 0x425840
+void CBaldurChitin::OnMultiplayerSessionClose()
+{
+    g_pChitin->cGameSpy.sub_4D1EC0(1);
+    g_pChitin->cGameSpy.sub_4D2310();
+
+    BOOL bEnabled = GetPrivateProfileIntA("RogerWilco",
+        "Enabled",
+        0,
+        g_pBaldurChitin->GetIniFileName());
+
+    if (bEnabled) {
+        // NOTE: Unused.
+        INT nServiceProviderType;
+        g_pChitin->cNetwork.GetServiceProviderType(g_pChitin->cNetwork.GetServiceProvider(), nServiceProviderType);
+    }
+
+    m_cBaldurMessage.field_7 = TRUE;
+}
+
 // 0x4258C0
 void CBaldurChitin::OnMultiplayerSessionToClose()
 {

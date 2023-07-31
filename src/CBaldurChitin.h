@@ -110,6 +110,7 @@ public:
     /* 006C */ void SetCDSwitchActivateEngine(BOOL bValue) override;
     /* 0070 */ void OnMultiplayerSessionOpen(CString& sJoinedGame, CString& sDroppedGame, CString& sLeftGame) override;
     /* 0074 */ void OnMultiplayerSessionToClose() override;
+    /* 0078 */ void OnMultiplayerSessionClose() override;
     /* 007C */ void OnMultiplayerPlayerJoin(PLAYER_ID playerID, const CString& sPlayerName) override;
     /* 0080 */ void OnMultiplayerPlayerVisible(PLAYER_ID playerID) override;
     /* 0090 */ void AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD dw1, DWORD dw2) override;
