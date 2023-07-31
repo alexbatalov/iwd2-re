@@ -1885,10 +1885,46 @@ INT CNetwork::FindPlayerLocationByName(const CString& sPlayerName, BOOLEAN bInvi
     return -1;
 }
 
+// 0x7A7490
+static BOOL CALLBACK CNetworkLobbyEnumAddressCallback(REFGUID guidDataType, DWORD dwDataSize, LPCVOID lpData, LPVOID lpContext)
+{
+    if (IsEqualGUID(guidDataType, DPAID_INet)) {
+        g_pChitin->cNetwork.field_792 = CString((LPCSTR)lpData);
+    }
+
+    return TRUE;
+}
+
 // 0x7A73D0
 void CNetwork::sub_7A73D0(CString& a1)
 {
-    // TODO: Incomplete.
+    HRESULT hr;
+    DWORD dwSize;
+
+    a1 = "";
+
+    if (m_lpDirectPlay != NULL) {
+        hr = m_lpDirectPlay->GetPlayerAddress(1, NULL, &dwSize);
+        if (hr == DPERR_BUFFERTOOSMALL) {
+            LPVOID pData = new BYTE[dwSize];
+
+            // __FILE__: C:\Projects\Icewind2\src\chitin\ChNetwork.cpp
+            // __LINE__: 7685
+            UTIL_ASSERT(pData != NULL);
+
+            hr = m_lpDirectPlay->GetPlayerAddress(1, pData, &dwSize);
+            if (hr == DP_OK) {
+                if (m_lpDirectPlayLobby != NULL) {
+                    field_792 = "";
+                    m_lpDirectPlayLobby->EnumAddress(CNetworkLobbyEnumAddressCallback,
+                        pData,
+                        dwSize,
+                        NULL);
+                    a1 = field_792;
+                }
+            }
+        }
+    }
 }
 
 // 0x7A7DF0
