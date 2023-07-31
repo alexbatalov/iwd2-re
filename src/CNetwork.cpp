@@ -3,6 +3,15 @@
 #include "CChitin.h"
 #include "CUtil.h"
 
+// 0x8FB9CC
+const CString CNetwork::MG("MG");
+
+// 0x8FB9D0
+const CString CNetwork::JM("JM");
+
+// 0x8FB9C8
+const CString CNetwork::JB("JB");
+
 // 0x85E63C
 const INT CNetwork::MAX_SERVICE_PROVIDERS = CNETWORK_MAX_SERVICE_PROVIDERS;
 

@@ -22,6 +22,24 @@ typedef DWORD PLAYER_ID;
 
 class CNetwork {
 public:
+    static const CString MG;
+    static const CString JM;
+    static const CString JB;
+
+    static const INT MAX_SERVICE_PROVIDERS;
+
+    static const INT SERV_PROV_TCP_IP;
+    static const INT SERV_PROV_MODEM;
+    static const INT SERV_PROV_SERIAL;
+    static const INT SERV_PROV_IPX;
+    static const INT SERV_PROV_NULL;
+
+    static const INT ERROR_NONE;
+    static const INT ERROR_PLAYEREXISTS;
+    static const INT ERROR_CANNOTCREATEPLAYER;
+    static const INT ERROR_CANNOTCONNECT;
+    static const INT ERROR_INVALIDPASSWORD;
+
     CNetwork();
     ~CNetwork();
     void AddModemAddressToList(LPCSTR lpAddress);
@@ -77,20 +95,6 @@ public:
     INT GetServiceProvider();
     BOOLEAN GetSessionOpen();
     BOOLEAN GetSessionHosting();
-
-    static const INT MAX_SERVICE_PROVIDERS;
-
-    static const INT SERV_PROV_TCP_IP;
-    static const INT SERV_PROV_MODEM;
-    static const INT SERV_PROV_SERIAL;
-    static const INT SERV_PROV_IPX;
-    static const INT SERV_PROV_NULL;
-
-    static const INT ERROR_NONE;
-    static const INT ERROR_PLAYEREXISTS;
-    static const INT ERROR_CANNOTCREATEPLAYER;
-    static const INT ERROR_CANNOTCONNECT;
-    static const INT ERROR_INVALIDPASSWORD;
 
     /* 0000 */ IDirectPlay4A* m_lpDirectPlay;
     /* 0004 */ IDirectPlayLobby3A* m_lpDirectPlayLobby;
