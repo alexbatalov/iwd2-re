@@ -99,7 +99,7 @@ CNetwork::CNetwork()
     m_bIsHost = FALSE;
     field_6EA = 0;
     m_bSessionOptionsDefined = 0;
-    m_nMaxPlayers = 6;
+    m_nMaxPlayers = CNETWORK_MAX_PLAYERS;
     m_dwSessionFlags = 0;
     m_bPlayerNameToMake = FALSE;
     m_bPlayerCreated = FALSE;
@@ -137,7 +137,7 @@ CNetwork::CNetwork()
         field_71A[nSlot] = FALSE;
     }
 
-    m_pDirectPlayAddress = 0;
+    m_pDirectPlayAddress = NULL;
 }
 
 // 0x7A4440
@@ -838,7 +838,7 @@ void CNetwork::SetApplicationOptions(BOOLEAN bKeepAlive, BOOLEAN bMigrateHost)
     m_dwSessionFlags = 0;
 
     if (bKeepAlive == TRUE) {
-        m_dwSessionFlags |= 0x40;
+        m_dwSessionFlags |= DPSESSION_KEEPALIVE;
     }
 }
 
