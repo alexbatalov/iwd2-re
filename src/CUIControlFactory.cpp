@@ -1834,6 +1834,19 @@ CUIControlButtonCharGenAppearanceRight::~CUIControlButtonCharGenAppearanceRight(
 
 // -----------------------------------------------------------------------------
 
+// 0x7795D0
+CUIControlButtonCharGen7795D0::CUIControlButtonCharGen7795D0(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+}
+
+// 0x779620
+CUIControlButtonCharGen7795D0::~CUIControlButtonCharGen7795D0()
+{
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x7796C0
 CUIControlButtonCharGenFeatsHotArea::CUIControlButtonCharGenFeatsHotArea(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButtonHotArea(panel, controlInfo)

@@ -64,6 +64,13 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonCharGen7795D0 : public CUIControlButton {
+public:
+    CUIControlButtonCharGen7795D0(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGen7795D0() override;
+    BOOL Render(BOOL bForce) override;
+};
+
 class CUIControlButtonCharGenFeatsHotArea : public CUIControlButtonHotArea {
 public:
     CUIControlButtonCharGenFeatsHotArea(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

@@ -5565,6 +5565,19 @@ void CUIControlButtonCharGenAppearanceCustom::OnLButtonClick(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// NOTE: Unclear why this function is separated from constructor/destructor
+// pair (originally in `CUIControlButtons.cpp`, now in `CUIControlFactory.cpp`).
+//
+// 0x61DAC0
+BOOL CUIControlButtonCharGen7795D0::Render(BOOL bForce)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x61E080
 CUIControlButtonCharGen61E080::CUIControlButtonCharGen61E080(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
