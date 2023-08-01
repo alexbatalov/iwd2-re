@@ -1954,6 +1954,37 @@ INT CInfGame::GetSpellcasterIndex(BYTE& nClass)
     UTIL_ASSERT_MSG(FALSE, sError);
 }
 
+// NOTE: Unclear why `nList` is passed as pointer.
+// TODO: Move to `CRuleTables`.
+//
+// 0x5CA730
+BYTE CInfGame::GetSpellcasterClass(INT& nIndex)
+{
+    switch (nIndex) {
+    case 0:
+        return CAIOBJECTTYPE_C_BARD;
+    case 1:
+        return CAIOBJECTTYPE_C_CLERIC;
+    case 2:
+        return CAIOBJECTTYPE_C_DRUID;
+    case 3:
+        return CAIOBJECTTYPE_C_PALADIN;
+    case 4:
+        return CAIOBJECTTYPE_C_RANGER;
+    case 5:
+        return CAIOBJECTTYPE_C_SORCERER;
+    case 6:
+        return CAIOBJECTTYPE_C_WIZARD;
+    }
+
+    CString sError;
+    sError.Format("Invalid spell caster class: %d", nIndex);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 23624
+    UTIL_ASSERT_MSG(FALSE, sError);
+}
+
 // NOTE: Odd location.
 //
 // 0x428620

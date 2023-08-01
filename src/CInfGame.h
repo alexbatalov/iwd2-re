@@ -93,6 +93,7 @@ public:
     void MultiplayerSetCharacterCreationLocation();
 
     INT GetSpellcasterIndex(BYTE& nClass);
+    BYTE GetSpellcasterClass(INT& nIndex);
 
     INT GetCurrentChapter();
     void SetCurrentChapter(INT nChapter);
