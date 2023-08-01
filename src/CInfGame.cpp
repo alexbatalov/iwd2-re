@@ -1985,6 +1985,34 @@ BYTE CInfGame::GetSpellcasterClass(INT& nIndex)
     UTIL_ASSERT_MSG(FALSE, sError);
 }
 
+// NOTE: Unclear why `nIndex` is passed as pointer.
+// TODO: Move to `CRuleTables`.
+//
+// 0x5CA870
+DWORD CInfGame::GetSpellcasterClassMask(INT& nIndex)
+{
+    switch (nIndex) {
+    case 0:
+        return CLASSMASK_BARD;
+    case 1:
+        return CLASSMASK_CLERIC;
+    case 2:
+        return CLASSMASK_DRUID;
+    case 3:
+        return CLASSMASK_PALADIN;
+    case 4:
+        return CLASSMASK_RANGER;
+    case 5:
+        return CLASSMASK_SORCERER;
+    case 6:
+        return CLASSMASK_WIZARD;
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 23663
+    UTIL_ASSERT_MSG(FALSE, "Invalid spell caster class mask");
+}
+
 // NOTE: Odd location.
 //
 // 0x428620
