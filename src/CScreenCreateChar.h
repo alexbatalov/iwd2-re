@@ -146,6 +146,7 @@ public:
     void EnablePopupPanel(DWORD dwPanelId, BOOL bEnable);
     void SummonPopup(DWORD dwPopupId, CGameSprite* pSprite);
     void DismissPopup(CGameSprite* pSprite);
+    void sub_617D80();
     void UpdateClassEntry(CUIControlTextDisplay* pText, const CAIObjectType& typeAI, CDerivedStats* DStats, DWORD nSpecialization, BYTE nClass, DWORD dwFlags);
 
     /* 0106 */ C2DArray field_106;
@@ -293,6 +294,13 @@ class CUIControlButtonCharGenAbilitiesReroll : public CUIControlButton {
 public:
     CUIControlButtonCharGenAbilitiesReroll(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonCharGenAbilitiesReroll() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonCharGen61A130 : public CUIControlButton {
+public:
+    CUIControlButtonCharGen61A130(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGen61A130() override;
     void OnLButtonClick(CPoint pt) override;
 };
 

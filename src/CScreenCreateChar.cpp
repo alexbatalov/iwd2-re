@@ -3477,8 +3477,12 @@ void CScreenCreateChar::CancelEngine()
         OnCancelButtonClick();
     }
 
-    g_pBaldurChitin->field_4F38 = g_pBaldurChitin->cSoundMixer.sub_7AC840();
-    g_pBaldurChitin->field_4F3C = g_pBaldurChitin->cSoundMixer.sub_7AC890();
+}
+
+// 0x617D80
+void CScreenCreateChar::sub_617D80()
+{
+    // TODO: Incomplete.
 }
 
 // 0x619030
@@ -4111,6 +4115,38 @@ void CUIControlButtonCharGenAbilitiesAllocate::OnLButtonClick(CPoint pt)
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
     }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x61A130
+CUIControlButtonCharGen61A130::CUIControlButtonCharGen61A130(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 11221
+    UTIL_ASSERT(pCreateChar != NULL);
+
+    SetText(CBaldurEngine::FetchString(27338)); // "Auto Pick"
+}
+
+// 0x61A200
+CUIControlButtonCharGen61A130::~CUIControlButtonCharGen61A130()
+{
+}
+
+// 0x61A2A0
+void CUIControlButtonCharGen61A130::OnLButtonClick(CPoint pt)
+{
+    CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 11245
+    UTIL_ASSERT(pCreateChar != NULL);
+
+    pCreateChar->sub_617D80();
 }
 
 // -----------------------------------------------------------------------------
