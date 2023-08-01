@@ -2581,7 +2581,7 @@ void CRuleTables::GetRaceStringMixed(BYTE nRace, CString& sRace, BYTE nSubRace) 
 }
 
 // 0x545080
-void CRuleTables::GetClassStringGameSpy(BYTE nClass, DWORD nSpecialist, CString& sClass)
+void CRuleTables::GetClassStringGameSpy(BYTE nClass, DWORD nSpecialist, CString& sClass) const
 {
     STR_RES strRes;
     DWORD strClass;

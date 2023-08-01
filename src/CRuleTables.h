@@ -400,7 +400,7 @@ public:
     DWORD GetXPCap() const;
     BOOL IsValidSubRace(BYTE nRace, BYTE nSubRace) const;
     void GetRaceStringMixed(BYTE nRace, CString& sClass, BYTE nSubRace) const;
-    void GetClassStringGameSpy(BYTE nClass, DWORD nSpecialist, CString& sClass);
+    void GetClassStringGameSpy(BYTE nClass, DWORD nSpecialist, CString& sClass) const;
     INT GetRaiseDeadCost(const CAIObjectType& type, CDerivedStats& DStats) const;
     DWORD GetReputationDescription(SHORT nReputation) const;
     void GetIntoxicationInfo(BYTE nCON, INT& nIntoxicationRate, INT& nRecoveryRate, INT& nIntoxicationCap) const;

@@ -1917,6 +1917,48 @@ CStringList* CInfGame::GetSounds()
     return pList;
 }
 
+// 0x5C72D0
+BOOLEAN CInfGame::GetGameSpyCharacterInformation(INT nCharacterSlot, CString& sName, CString& sRace, CString& sClass, CString& sLevel)
+{
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+    CString sTemp;
+
+    LONG nCharacterId = GetFixedOrderCharacterId(nCharacterSlot);
+
+    if (nCharacterId == CGameObjectArray::INVALID_INDEX) {
+        return FALSE;
+    }
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = m_cObjectArray.GetDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc != CGameObjectArray::SUCCESS) {
+        return FALSE;
+    }
+
+    BYTE nClass = pSprite->m_derivedStats.GetBestClass();
+
+    sName = pSprite->GetName();
+    ruleTables.GetRaceStringMixed(pSprite->m_liveTypeAI.m_nRace, sClass, 0);
+    ruleTables.GetClassStringGameSpy(nClass, pSprite->m_baseStats.m_specialization, sClass);
+
+    sTemp.Format("/%d", pSprite->m_derivedStats.m_nLevel);
+    sLevel += sTemp;
+
+    m_cObjectArray.ReleaseDeny(nCharacterId,
+        CGameObjectArray::THREAD_ASYNCH,
+        INFINITE);
+
+    return TRUE;
+}
+
 // 0x5C76B0
 void CInfGame::MultiplayerSetCharacterCreationLocation()
 {
