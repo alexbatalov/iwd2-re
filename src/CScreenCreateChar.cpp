@@ -4662,6 +4662,42 @@ BYTE CUIControlButtonCharGenAlignmentSelection::GetAlignment()
 
 // -----------------------------------------------------------------------------
 
+// 0x61B120
+CUIControlButtonCharGen61B120::CUIControlButtonCharGen61B120(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 1)
+{
+    m_nSelectedFrame = 0;
+    field_66E = "";
+    field_676 = "";
+}
+
+// 0x61B1F0
+CUIControlButtonCharGen61B120::~CUIControlButtonCharGen61B120()
+{
+}
+
+// 0x61B290
+void CUIControlButtonCharGen61B120::sub_61B290(CResRef cResRef)
+{
+    // TODO: Incomplete.
+}
+
+// 0x61B460
+void CUIControlButtonCharGen61B120::OnLButtonClick(CPoint pt)
+{
+    // TODO: Incomplete.
+}
+
+// 0x61B750
+BOOL CUIControlButtonCharGen61B120::Render(BOOL bForce)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x61B8D0
 CUIControlButtonCharGenGenderSelection::CUIControlButtonCharGenGenderSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 1)

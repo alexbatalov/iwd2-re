@@ -337,6 +337,19 @@ public:
     BYTE GetAlignment();
 };
 
+class CUIControlButtonCharGen61B120 : public CUIControlButton3State {
+public:
+    CUIControlButtonCharGen61B120(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGen61B120() override;
+    BOOL Render(BOOL bForce) override;
+    void OnLButtonClick(CPoint pt) override;
+
+    void sub_61B290(CResRef cResRef);
+
+    /* 066E */ CResRef field_66E;
+    /* 0676 */ CResRef field_676;
+};
+
 class CUIControlButtonCharGenGenderSelection : public CUIControlButton3State {
 public:
     CUIControlButtonCharGenGenderSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
