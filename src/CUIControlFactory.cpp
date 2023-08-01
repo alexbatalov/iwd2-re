@@ -1048,8 +1048,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 7:
                 return new CUIControlButtonCharGenMenu(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 8:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlButtonCharGen614950(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 9:
                 return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
             case 10:
@@ -1057,8 +1056,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 11:
                 return new CUIControlButtonCharGenBack(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 12:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlButtonCharGenPortrait(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 13:
                 return new CUIControlButtonCharGenImport(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 15:
@@ -1264,8 +1262,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 23:
             case 24:
             case 25:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlButtonCharGen61B120(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 26:
                 return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
             case 27:
@@ -1273,8 +1270,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 29:
                 return new CUIControlButtonCharGenPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 30:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlButtonCharGen61A130(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             }
             break;
         case 8:
@@ -1344,22 +1340,23 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 0:
                 return new CUIControlButtonCharGenPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 1:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlButtonCharGen7795D0(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 2:
             case 3:
             case 4:
             case 5:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlButtonCharGen61E080(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 13:
                 return new CUIControlButtonCharGenPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             }
             break;
         case 14:
             // 0x775118
-            // TODO: Incomplete.
-            return NULL;
+            if (controlInfo->nID <= CRESUI_CONTROLBUTTONID_CHARGEN_COLOR_LASTCOLOR
+                || controlInfo->nID == 35) {
+                return new CUIControlButtonCharGen61E720(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
         case 15:
             // 0x77516E
             switch (controlInfo->nID) {
@@ -1404,8 +1401,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 11:
             case 12:
             case 13:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlButtonCharGen620220(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 26:
                 return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
             case 27:
@@ -1431,8 +1427,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 11:
             case 12:
             case 13:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlButtonCharGen620AE0(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 26:
                 return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
             case 27:
@@ -1449,8 +1444,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
                 return new CUIControlButtonCharGenPortrait(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 2:
             case 4:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlTextDisplayCharGen621440(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo));
             case 3:
             case 5:
                 return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
@@ -1473,8 +1467,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 51:
                 return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
             case 47:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlButtonCharGen621570(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 50:
                 return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
             }
@@ -1503,8 +1496,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 1:
                 return new CUIControlButtonCharGenPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 2:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlTextDisplayCharGenExportCharacters(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo));
             case 3:
             case 5:
                 return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
@@ -1666,8 +1658,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 88:
             case 89:
             case 90:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlButtonCharGen6235C0(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 91:
                 return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
             case 92:
