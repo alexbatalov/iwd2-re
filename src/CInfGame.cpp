@@ -1923,6 +1923,37 @@ void CInfGame::MultiplayerSetCharacterCreationLocation()
     // TODO: Incomplete.
 }
 
+// NOTE: Unclear why `nClass` is passed as pointer.
+// TODO: Move to `CRuleTables`.
+//
+// 0x5CA5D0
+INT CInfGame::GetSpellcasterIndex(BYTE& nClass)
+{
+    switch (nClass) {
+    case CAIOBJECTTYPE_C_BARD:
+        return 0;
+    case CAIOBJECTTYPE_C_CLERIC:
+        return 1;
+    case CAIOBJECTTYPE_C_DRUID:
+        return 2;
+    case CAIOBJECTTYPE_C_PALADIN:
+        return 3;
+    case CAIOBJECTTYPE_C_RANGER:
+        return 4;
+    case CAIOBJECTTYPE_C_SORCERER:
+        return 5;
+    case CAIOBJECTTYPE_C_WIZARD:
+        return 6;
+    }
+
+    CString sError;
+    sError.Format("Invalid spell caster index: %d", nClass);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 23583
+    UTIL_ASSERT_MSG(FALSE, sError);
+}
+
 // NOTE: Odd location.
 //
 // 0x428620

@@ -92,6 +92,8 @@ public:
     CStringList* GetSounds();
     void MultiplayerSetCharacterCreationLocation();
 
+    INT GetSpellcasterIndex(BYTE& nClass);
+
     INT GetCurrentChapter();
     void SetCurrentChapter(INT nChapter);
     CInfButtonArray* GetButtonArray();
