@@ -6221,6 +6221,38 @@ void CUIControlTextDisplayCharGenImportCharacters::OnItemSelected(LONG lMarker)
 
 // -----------------------------------------------------------------------------
 
+// 0x621570
+CUIControlButtonCharGen621570::CUIControlButtonCharGen621570(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+    CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 16300
+    UTIL_ASSERT(pCreateChar != NULL);
+
+    SetText(CBaldurEngine::FetchString(17318));
+}
+
+// 0x621640
+CUIControlButtonCharGen621570::~CUIControlButtonCharGen621570()
+{
+}
+
+// 0x6216E0
+void CUIControlButtonCharGen621570::OnLButtonClick(CPoint pt)
+{
+    CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 16327
+    UTIL_ASSERT(pCreateChar != NULL);
+
+    pCreateChar->sub_613EF0();
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x621720
 CUIControlTextDisplayCharGenSoundSounds::CUIControlTextDisplayCharGenSoundSounds(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo)
     : CUIControlTextDisplay(panel, controlInfo, TRUE)
