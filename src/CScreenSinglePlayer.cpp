@@ -641,9 +641,60 @@ void CScreenSinglePlayer::DismissPopup()
 // 0x661860
 BOOL CScreenSinglePlayer::IsMainDoneButtonClickable()
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
-    return FALSE;
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 1386
+    UTIL_ASSERT(pGame != NULL);
+
+    CMultiplayerSettings* pSettings = pGame->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 1388
+    UTIL_ASSERT(pSettings != NULL);
+
+    BOOL bResult;
+    if (field_45C == 1) {
+        BOOL v1 = pSettings->field_B8 == 0;
+
+        for (INT nPlayer = 0; nPlayer < 6; nPlayer++) {
+            if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+                && g_pChitin->cNetwork.GetRawPlayerID(nPlayer) != 0
+                && !pSettings->GetPlayerReady(static_cast<SHORT>(nPlayer))) {
+                v1 = FALSE;
+            }
+        }
+
+        for (INT nCharacter = 0; nCharacter < 6; nCharacter++) {
+            if (pSettings->GetCharacterStatus(nCharacter) == CMultiplayerSettings::CHARSTATUS_CREATING_CHARACTER) {
+                v1 = FALSE;
+            }
+
+            if (pGame->GetCharacterSlot(nCharacter) != CGameObjectArray::INVALID_INDEX
+                && !pSettings->GetCharacterReady(nCharacter)) {
+                v1 = g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL;
+            }
+        }
+
+        if (!g_pBaldurChitin->cNetwork.GetSessionHosting()
+            && pSettings->m_bArbitrationLockStatus == 1) {
+            v1 = FALSE;
+        }
+
+        if (pGame->GetCharacterSlot(0) == CGameObjectArray::INVALID_INDEX) {
+            bResult = FALSE;
+        } else {
+            bResult = v1;
+        }
+    } else if (field_45C == 2) {
+        bResult = TRUE;
+    } else {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+        // __LINE__: 1454
+        UTIL_ASSERT(FALSE);
+    }
+
+    return bResult;
 }
 
 // 0x6619C0
