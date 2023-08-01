@@ -1031,7 +1031,7 @@ void CNetwork::OnCloseSession()
     m_nLocalPlayer = -1;
     m_nTotalPlayers = 0;
 
-    for (INT nPlayer = 0; nPlayer < CNETWORK_MAX_PLAYERS; nPlayer) {
+    for (INT nPlayer = 0; nPlayer < CNETWORK_MAX_PLAYERS; nPlayer++) {
         m_pPlayerID[nPlayer] = 0;
         m_psPlayerName[nPlayer] = "";
         m_pbPlayerEnumerateFlag[nPlayer] = FALSE;
