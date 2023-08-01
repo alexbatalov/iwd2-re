@@ -3615,6 +3615,28 @@ void CUIControlButtonCharGenMenu::OnLButtonClick(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x614950
+CUIControlButtonCharGen614950::CUIControlButtonCharGen614950(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->m_cTlkTable.Fetch(28210, strRes);
+    SetText(strRes.szText);
+}
+
+// 0x614A40
+CUIControlButtonCharGen614950::~CUIControlButtonCharGen614950()
+{
+}
+
+// 0x614EF0
+void CUIControlButtonCharGen614950::OnLButtonClick(CPoint pt)
+{
+    // TODO: Incomplete.
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x6154F0
 CUIControlButtonCharGenImport::CUIControlButtonCharGenImport(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)

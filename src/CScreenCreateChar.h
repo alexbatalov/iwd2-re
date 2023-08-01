@@ -244,6 +244,13 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonCharGen614950 : public CUIControlButton {
+public:
+    CUIControlButtonCharGen614950(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGen614950() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlButtonCharGenImport : public CUIControlButton {
 public:
     CUIControlButtonCharGenImport(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
