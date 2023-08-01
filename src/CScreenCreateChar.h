@@ -81,7 +81,7 @@ public:
     void ResetCustomSoundsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void ResetNamePanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void ResetAppearancePanel(CUIPanel* pPanel, CGameSprite* pSprite);
-    void sub_609B30(CUIPanel* pPanel, CGameSprite* pSprite);
+    void ResetColorsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void ResetClericWizardSpecializationPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void sub_60A5C0(CUIPanel* pPanel, CGameSprite* pSprite);
     void sub_60A920(CUIPanel* pPanel, CGameSprite* pSprite);
@@ -155,8 +155,8 @@ public:
 
     /* 0106 */ C2DArray field_106;
     /* 012A */ C2DArray m_tSubRace;
-    /* 014E */ C2DArray field_14E;
-    /* 0172 */ C2DArray field_172;
+    /* 014E */ C2DArray m_tHairColor;
+    /* 0172 */ C2DArray m_tSkinColor;
     /* 0196 */ CGameAnimation field_196;
     /* 01A0 */ CKeyInfo m_pVirtualKeys[CSCREENCREATECHAR_VIRTUAL_KEYS];
     /* 0470 */ BYTE m_pVirtualKeysFlags[CSCREENCREATECHAR_VIRTUAL_KEYS];

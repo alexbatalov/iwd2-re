@@ -1014,7 +1014,7 @@ void CScreenCreateChar::ResetPopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
         ResetClericWizardSpecializationPanel(pPanel, pSprite);
         break;
     case 13:
-        sub_609B30(pPanel, pSprite);
+        ResetColorsPanel(pPanel, pSprite);
         break;
     case 15:
         for (int index = 0; index < 8; index++) {
@@ -1396,9 +1396,106 @@ void CScreenCreateChar::ResetAppearancePanel(CUIPanel* pPanel, CGameSprite* pSpr
 }
 
 // 0x609B30
-void CScreenCreateChar::sub_609B30(CUIPanel* pPanel, CGameSprite* pSprite)
+void CScreenCreateChar::ResetColorsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    CAIObjectType typeAI(pSprite->m_startTypeAI);
+
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    CString sRace = ruleTables.GetRaceString(typeAI.m_nRace, 0);
+
+    CString sSubRaceFile = ruleTables.m_tSrTable.GetAt(CString("SRFILE"), sRace);
+
+    if (m_tSubRace.GetResRef() != sSubRaceFile) {
+        m_tSubRace.Load(CResRef(sSubRaceFile));
+    }
+
+    INT nSubRaceListIndex = atol(m_tSubRace.GetAt(CPoint(0, typeAI.m_nSubRace)));
+
+    CString sColorFile;
+
+    sColorFile = ruleTables.m_tSrList.GetAt(CPoint(5, nSubRaceListIndex));
+    if (m_tHairColor.GetResRef() != sColorFile) {
+        m_tHairColor.Load(CResRef(sColorFile));
+    }
+
+    sColorFile = ruleTables.m_tSrList.GetAt(CPoint(6, nSubRaceListIndex));
+    if (m_tSkinColor.GetResRef() != sColorFile) {
+        m_tSkinColor.Load(CResRef(sColorFile));
+    }
+
+    if (!field_1628) {
+        CResRef portraitColorResRef("portcolr");
+        C2DArray tPortraitColor;
+        CString v1;
+        CString sPortraitLarge;
+
+        sPortraitLarge = pSprite->m_baseStats.m_portraitLarge;
+        v1 = sPortraitLarge.Left(8);
+
+        tPortraitColor.Load(portraitColorResRef);
+
+        BOOL bDemanded = tPortraitColor.Demand();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 2351
+        UTIL_ASSERT(bDemanded == TRUE);
+
+        CPoint ptLocation;
+        BOOLEAN bFound = tPortraitColor.Find(v1, ptLocation, TRUE);
+
+        pSprite->m_baseStats.m_colors[0] = 30;
+
+        if (bFound) {
+            pSprite->GetAnimation()->GetAnimation()->SetColorRange(0, pSprite->m_baseStats.m_colors[0]);
+
+            ptLocation.x = 3;
+            pSprite->m_baseStats.m_colors[1] = tPortraitColor.GetAtLong(ptLocation);
+            pSprite->GetAnimation()->GetAnimation()->SetColorRange(1, pSprite->m_baseStats.m_colors[1]);
+
+            ptLocation.x = 2;
+            pSprite->m_baseStats.m_colors[2] = tPortraitColor.GetAtLong(ptLocation);
+            pSprite->GetAnimation()->GetAnimation()->SetColorRange(2, pSprite->m_baseStats.m_colors[2]);
+
+            ptLocation.x = 0;
+            pSprite->m_baseStats.m_colors[3] = tPortraitColor.GetAtLong(ptLocation);
+            pSprite->GetAnimation()->GetAnimation()->SetColorRange(3, pSprite->m_baseStats.m_colors[3]);
+
+            pSprite->m_baseStats.m_colors[4] = 23;
+            pSprite->GetAnimation()->GetAnimation()->SetColorRange(4, pSprite->m_baseStats.m_colors[4]);
+
+            pSprite->m_baseStats.m_colors[5] = 30;
+            pSprite->GetAnimation()->GetAnimation()->SetColorRange(5, pSprite->m_baseStats.m_colors[5]);
+
+            ptLocation.x = 1;
+            pSprite->m_baseStats.m_colors[6] = tPortraitColor.GetAtLong(ptLocation);
+            pSprite->GetAnimation()->GetAnimation()->SetColorRange(6, pSprite->m_baseStats.m_colors[6]);
+        } else {
+            pSprite->GetAnimation()->GetAnimation()->SetColorRange(0, pSprite->m_baseStats.m_colors[0]);
+
+            pSprite->m_baseStats.m_colors[1] = 39;
+            pSprite->GetAnimation()->GetAnimation()->SetColorRange(1, pSprite->m_baseStats.m_colors[1]);
+
+            pSprite->m_baseStats.m_colors[2] = 41;
+            pSprite->GetAnimation()->GetAnimation()->SetColorRange(2, pSprite->m_baseStats.m_colors[2]);
+
+            pSprite->m_baseStats.m_colors[3] = 12;
+            pSprite->GetAnimation()->GetAnimation()->SetColorRange(3, pSprite->m_baseStats.m_colors[3]);
+
+            pSprite->m_baseStats.m_colors[4] = 23;
+            pSprite->GetAnimation()->GetAnimation()->SetColorRange(4, pSprite->m_baseStats.m_colors[4]);
+
+            pSprite->m_baseStats.m_colors[5] = 30;
+            pSprite->GetAnimation()->GetAnimation()->SetColorRange(5, pSprite->m_baseStats.m_colors[5]);
+
+            pSprite->m_baseStats.m_colors[6] = 0;
+            pSprite->GetAnimation()->GetAnimation()->SetColorRange(6, pSprite->m_baseStats.m_colors[6]);
+        }
+
+        tPortraitColor.Release();
+
+        sub_612800();
+    }
 }
 
 // 0x60A4A0
@@ -5761,10 +5858,10 @@ BOOL CUIControlButtonCharGen61E720::sub_61F0C0(BYTE& a1)
 
         return FALSE;
     case 3:
-        a1 = atoi(pCreateChar->field_172.GetAt(CPoint(0, v1)));
+        a1 = atoi(pCreateChar->m_tSkinColor.GetAt(CPoint(0, v1)));
         return TRUE;
     case 6:
-        a1 = atoi(pCreateChar->field_14E.GetAt(CPoint(0, v1)));
+        a1 = atoi(pCreateChar->m_tHairColor.GetAt(CPoint(0, v1)));
         return TRUE;
     default:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp

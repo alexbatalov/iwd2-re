@@ -1255,3 +1255,9 @@ void CGameSprite::DisplaySkills(CUIControlTextDisplay* pText)
         }
     }
 }
+
+// NOTE: Inlined.
+CGameAnimation* CGameSprite::GetAnimation()
+{
+    return &m_animation;
+}

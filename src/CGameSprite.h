@@ -4,6 +4,7 @@
 #include "CAIObjectType.h"
 #include "CDerivedStats.h"
 #include "CGameAIBase.h"
+#include "CGameAnimation.h"
 #include "CResRef.h"
 #include "CSound.h"
 #include "FileFormat.h"
@@ -221,6 +222,8 @@ public:
     void DisplayFeats(CUIControlTextDisplay* pText);
     void DisplaySkills(CUIControlTextDisplay* pText);
 
+    CGameAnimation* GetAnimation();
+
     /* 05A0 */ CString m_sName;
     /* 05A4 */ CCreatureFileHeader m_baseStats;
     /* 0920 */ CDerivedStats m_derivedStats;
@@ -230,6 +233,7 @@ public:
     /* 4D36 */ CSound m_sndArmor[2];
     /* 4E00 */ CSound m_sndReady;
     /* 4E64 */ CSound m_sndDeath;
+    /* 50EC */ CGameAnimation m_animation;
     /* 5586 */ POSITION m_groupPosition;
     /* 558A */ BOOL m_groupMove;
     /* 562C */ int field_562C;

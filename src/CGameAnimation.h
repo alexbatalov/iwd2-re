@@ -13,6 +13,8 @@ public:
 
     USHORT GetAnimationId();
 
+    CGameAnimationType* GetAnimation();
+
     /* 0004 */ CGameAnimationType* m_animation;
     /* 0008 */ short field_8;
 };
