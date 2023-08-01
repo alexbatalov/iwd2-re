@@ -470,6 +470,13 @@ public:
     void OnItemSelected(LONG lMarker) override;
 };
 
+class CUIControlTextDisplayCharGenExportCharacters : public CUIControlTextDisplay {
+public:
+    CUIControlTextDisplayCharGenExportCharacters(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo);
+    ~CUIControlTextDisplayCharGenExportCharacters() override;
+    void OnItemSelected(LONG lMarker) override;
+};
+
 class CUIControlButtonMonkPaladinSpecializationSelection : public CUIControlButton3State {
 public:
     CUIControlButtonMonkPaladinSpecializationSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

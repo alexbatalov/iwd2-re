@@ -6280,6 +6280,33 @@ void CUIControlTextDisplayCharGenSoundSounds::OnItemSelected(LONG lMarker)
 
 // -----------------------------------------------------------------------------
 
+// 0x621790
+CUIControlTextDisplayCharGenExportCharacters::CUIControlTextDisplayCharGenExportCharacters(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo)
+    : CUIControlTextDisplay(panel, controlInfo, TRUE)
+{
+    // NOTE: Uninline.
+    SetNeedMouseMove();
+}
+
+// 0x603670
+CUIControlTextDisplayCharGenExportCharacters::~CUIControlTextDisplayCharGenExportCharacters()
+{
+}
+
+// 0x6217C0
+void CUIControlTextDisplayCharGenExportCharacters::OnItemSelected(LONG lMarker)
+{
+    CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 16435
+    UTIL_ASSERT(pCreateChar != NULL);
+
+    pCreateChar->OnCharacterExportItemSelect(lMarker);
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x621800
 CUIControlButtonMonkPaladinSpecializationSelection::CUIControlButtonMonkPaladinSpecializationSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 1)
