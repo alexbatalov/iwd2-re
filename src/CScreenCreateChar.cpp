@@ -1450,15 +1450,15 @@ void CScreenCreateChar::ResetColorsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
             pSprite->GetAnimation()->GetAnimation()->SetColorRange(0, pSprite->m_baseStats.m_colors[0]);
 
             ptLocation.x = 3;
-            pSprite->m_baseStats.m_colors[1] = tPortraitColor.GetAtLong(ptLocation);
+            pSprite->m_baseStats.m_colors[1] = static_cast<BYTE>(tPortraitColor.GetAtLong(ptLocation));
             pSprite->GetAnimation()->GetAnimation()->SetColorRange(1, pSprite->m_baseStats.m_colors[1]);
 
             ptLocation.x = 2;
-            pSprite->m_baseStats.m_colors[2] = tPortraitColor.GetAtLong(ptLocation);
+            pSprite->m_baseStats.m_colors[2] = static_cast<BYTE>(tPortraitColor.GetAtLong(ptLocation));
             pSprite->GetAnimation()->GetAnimation()->SetColorRange(2, pSprite->m_baseStats.m_colors[2]);
 
             ptLocation.x = 0;
-            pSprite->m_baseStats.m_colors[3] = tPortraitColor.GetAtLong(ptLocation);
+            pSprite->m_baseStats.m_colors[3] = static_cast<BYTE>(tPortraitColor.GetAtLong(ptLocation));
             pSprite->GetAnimation()->GetAnimation()->SetColorRange(3, pSprite->m_baseStats.m_colors[3]);
 
             pSprite->m_baseStats.m_colors[4] = 23;
@@ -1468,7 +1468,7 @@ void CScreenCreateChar::ResetColorsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
             pSprite->GetAnimation()->GetAnimation()->SetColorRange(5, pSprite->m_baseStats.m_colors[5]);
 
             ptLocation.x = 1;
-            pSprite->m_baseStats.m_colors[6] = tPortraitColor.GetAtLong(ptLocation);
+            pSprite->m_baseStats.m_colors[6] = static_cast<BYTE>(tPortraitColor.GetAtLong(ptLocation));
             pSprite->GetAnimation()->GetAnimation()->SetColorRange(6, pSprite->m_baseStats.m_colors[6]);
         } else {
             pSprite->GetAnimation()->GetAnimation()->SetColorRange(0, pSprite->m_baseStats.m_colors[0]);
