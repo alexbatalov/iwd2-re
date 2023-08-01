@@ -97,6 +97,7 @@ public:
     DWORD GetSpellcasterClassMask(INT& nIndex);
     INT GetSpellcasterDomainIndex(INT& a1);
     INT GetClassMask(BYTE& nClass);
+    void sub_5CADF0();
 
     INT GetCurrentChapter();
     void SetCurrentChapter(INT nChapter);

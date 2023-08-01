@@ -239,6 +239,7 @@ public:
     /* 562C */ int field_562C;
     /* 5690 */ LONG m_targetId;
     /* 5694 */ CPoint m_targetPoint;
+    /* 9D15 */ unsigned char field_9D15;
 };
 
 #endif /* CGAMESPRITE_H_ */

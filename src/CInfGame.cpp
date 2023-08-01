@@ -2077,6 +2077,38 @@ INT CInfGame::GetClassMask(BYTE& nClass)
     UTIL_ASSERT_MSG(FALSE, "CInfGame::GetClassMask() - Invalid class mask!");
 }
 
+// 0x5CADF0
+void CInfGame::sub_5CADF0()
+{
+    // FIXME: What for?
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    for (SHORT nPortrait = 0; nPortrait < m_nCharacters; nPortrait++) {
+        LONG nCharacterId = pGame->GetCharacterId(nPortrait);
+
+        CGameSprite* pSprite;
+
+        BYTE rc;
+        do {
+            rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            if ((pSprite->m_baseStats.m_generalState & 0x800) == 0
+                && (pSprite->m_derivedStats.m_generalState & 0x800) == 0) {
+                pSprite->field_9D15 = 1;
+            }
+
+            pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+}
+
 // NOTE: Odd location.
 //
 // 0x428620
