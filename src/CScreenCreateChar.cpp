@@ -9,6 +9,7 @@
 #include "CUIControlFactory.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
+#include "CVidCell.h"
 
 #define SKILL_COUNT 16
 #define SKILL_SLOTS 10
@@ -5502,6 +5503,109 @@ void CUIControlButtonCharGenAppearanceCustom::OnLButtonClick(CPoint pt)
     }
 
     renderLock.Unlock();
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x61E080
+CUIControlButtonCharGen61E080::CUIControlButtonCharGen61E080(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+    m_pDecal = new CVidCell(CResRef("COLGRAD"), m_pPanel->m_pManager->m_bDoubleSize);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 14066
+    UTIL_ASSERT(m_pDecal != NULL);
+
+    m_pDecal->SequenceSet(0);
+    m_pPalette = NULL;
+
+    switch (m_nID) {
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+        SetToolTipStrRef(-1, -1, -1);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 14092
+        UTIL_ASSERT(FALSE);
+    }
+}
+
+// 0x61E1E0
+CUIControlButtonCharGen61E080::~CUIControlButtonCharGen61E080()
+{
+    if (m_pDecal != NULL) {
+        delete m_pDecal;
+        m_pDecal = NULL;
+    }
+
+    if (m_pPalette != NULL) {
+        delete m_pPalette;
+        m_pPalette = NULL;
+    }
+}
+
+// 0x61E2D0
+void CUIControlButtonCharGen61E080::OnLButtonClick(CPoint pt)
+{
+    CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
+
+    // NOTE: Not used.
+    pCreateChar->GetManager();
+
+    switch (m_nID) {
+    case 2:
+        pCreateChar->field_56E = 6;
+        break;
+    case 3:
+        pCreateChar->field_56E = 3;
+        break;
+    case 4:
+        pCreateChar->field_56E = 2;
+        break;
+    case 5:
+        pCreateChar->field_56E = 1;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 14172
+        UTIL_ASSERT(FALSE);
+    }
+
+    CSingleLock renderLock(&(pCreateChar->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    INT nGameSprite = pCreateChar->GetSpriteId();
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        pCreateChar->SummonPopup(14, pSprite);
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    renderLock.Unlock();
+}
+
+// 0x61E430
+BOOL CUIControlButtonCharGen61E080::Render(BOOL bForce)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------------

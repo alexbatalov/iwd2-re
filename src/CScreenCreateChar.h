@@ -21,6 +21,7 @@
 class CAIObjectType;
 class CDerivedStats;
 class CGameSprite;
+class CVidCell;
 
 class CScreenCreateChar : public CBaldurEngine {
 public:
@@ -378,6 +379,17 @@ public:
     CUIControlButtonCharGenAppearanceCustom(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonCharGenAppearanceCustom() override;
     void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonCharGen61E080 : public CUIControlButton {
+public:
+    CUIControlButtonCharGen61E080(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGen61E080() override;
+    BOOL Render(BOOL bForce) override;
+    void OnLButtonClick(CPoint pt) override;
+
+    /* 0666 */ CVidCell* m_pDecal;
+    /* 066A */ CVidPalette* m_pPalette;
 };
 
 class CUIControlButtonCharGenPopupCancel : public CUIControlButton {
