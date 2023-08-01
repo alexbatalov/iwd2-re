@@ -2044,6 +2044,39 @@ INT CInfGame::GetSpellcasterDomainIndex(INT& a1)
     UTIL_ASSERT_MSG(FALSE, "Invalid spell caster domain index");
 }
 
+// 0x5CA9E0
+INT CInfGame::GetClassMask(BYTE& nClass)
+{
+    switch (nClass) {
+    case CAIOBJECTTYPE_C_BARBARIAN:
+        return CLASSMASK_BARBARIAN;
+    case CAIOBJECTTYPE_C_BARD:
+        return CLASSMASK_BARD;
+    case CAIOBJECTTYPE_C_CLERIC:
+        return CLASSMASK_CLERIC;
+    case CAIOBJECTTYPE_C_DRUID:
+        return CLASSMASK_DRUID;
+    case CAIOBJECTTYPE_C_FIGHTER:
+        return CLASSMASK_FIGHTER;
+    case CAIOBJECTTYPE_C_MONK:
+        return CLASSMASK_MONK;
+    case CAIOBJECTTYPE_C_PALADIN:
+        return CLASSMASK_PALADIN;
+    case CAIOBJECTTYPE_C_RANGER:
+        return CLASSMASK_RANGER;
+    case CAIOBJECTTYPE_C_ROGUE:
+        return CLASSMASK_ROGUE;
+    case CAIOBJECTTYPE_C_SORCERER:
+        return CLASSMASK_SORCERER;
+    case CAIOBJECTTYPE_C_WIZARD:
+        return CLASSMASK_WIZARD;
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 23834
+    UTIL_ASSERT_MSG(FALSE, "CInfGame::GetClassMask() - Invalid class mask!");
+}
+
 // NOTE: Odd location.
 //
 // 0x428620
