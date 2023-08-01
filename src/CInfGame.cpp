@@ -2013,6 +2013,37 @@ DWORD CInfGame::GetSpellcasterClassMask(INT& nIndex)
     UTIL_ASSERT_MSG(FALSE, "Invalid spell caster class mask");
 }
 
+// NOTE: Unclear why `a1` is passed as pointer.
+// TODO: Move to `CRuleTables`.
+//
+// 0x5CA910
+INT CInfGame::GetSpellcasterDomainIndex(INT& a1)
+{
+    if ((a1 & 0x8000) != 0) {
+        return 0;
+    } else if ((a1 & 0x10000) != 0) {
+        return 1;
+    } else if ((a1 & 0x20000) != 0) {
+        return 2;
+    } else if ((a1 & 0x40000) != 0) {
+        return 3;
+    } else if ((a1 & 0x80000) != 0) {
+        return 4;
+    } else if ((a1 & 0x100000) != 0) {
+        return 5;
+    } else if ((a1 & 0x200000) != 0) {
+        return 6;
+    } else if ((a1 & 0x400000) != 0) {
+        return 7;
+    } else if ((a1 & 0x800000) != 0) {
+        return 8;
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 23714
+    UTIL_ASSERT_MSG(FALSE, "Invalid spell caster domain index");
+}
+
 // NOTE: Odd location.
 //
 // 0x428620
