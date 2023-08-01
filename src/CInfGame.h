@@ -116,6 +116,8 @@ public:
 
     const CRuleTables& GetRuleTables() { return m_ruleTables; }
 
+    LONG GetFixedOrderCharacterId(SHORT nSlot);
+
     static const CString FOGOWAR_RESREF;
     static const CString SAVE_OBJECT_LIST_NAME;
     static const CString CHAPTER_GLOBAL;

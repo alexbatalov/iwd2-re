@@ -1920,7 +1920,50 @@ CStringList* CInfGame::GetSounds()
 // 0x5C76B0
 void CInfGame::MultiplayerSetCharacterCreationLocation()
 {
-    // TODO: Incomplete.
+    CResRef areaResRef;
+    CString sAreaString;
+    BOOLEAN bValueSet = FALSE;
+
+    for (BYTE nIndex = 0; nIndex < 6; nIndex++) {
+        if (bValueSet) {
+            break;
+        }
+
+        // NOTE: Uninline `GetFixedOrderCharacterId`.
+        LONG nCharacterId = g_pBaldurChitin->GetObjectGame()->GetFixedOrderCharacterId(nIndex);
+
+        if (nCharacterId != CGameObjectArray::INVALID_INDEX) {
+            CGameSprite* pSprite;
+
+            BYTE rc;
+            do {
+                rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    reinterpret_cast<CGameObject**>(&pSprite),
+                    INFINITE);
+            } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+            if (rc == CGameObjectArray::SUCCESS) {
+                CGameArea* pArea = pSprite->GetArea();
+                if (pArea != NULL) {
+                    areaResRef = pArea->m_resRef;
+                    areaResRef.CopyToString(sAreaString);
+
+                    CPoint ptStart = pSprite->GetPos();
+                    g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->SetCharacterCreationLocation(sAreaString,
+                        ptStart);
+
+                    bValueSet = TRUE;
+
+                    // TODO: Probably wrong, object released only when area is
+                    // not null.
+                    g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nCharacterId,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        INFINITE);
+                }
+            }
+        }
+    }
 }
 
 // 0x5C93E0
@@ -2232,4 +2275,14 @@ CVariableHash* CInfGame::GetVariables()
 CVidBitmap* CInfGame::GetMasterBitmap()
 {
     return &m_rgbMasterBitmap;
+}
+
+// NOTE: Inlined.
+LONG CInfGame::GetFixedOrderCharacterId(SHORT nSlot)
+{
+    if (nSlot < 6) {
+        return m_characters[nSlot];
+    }
+
+    return CGameObjectArray::INVALID_INDEX;
 }
