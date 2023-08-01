@@ -1010,16 +1010,11 @@ void CScreenOptions::LoadGame()
         nLoadState = 3;
 
         if (g_pChitin->cNetwork.GetSessionOpen() == TRUE && !g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->m_bArbitrationLockStatus) {
-            for (DWORD nIndex = 0; nIndex < 6; nIndex++) {
-                // NOTE: Looks like inlining.
-                LONG localObjectID;
-                if (nIndex < 6) {
-                    localObjectID = pGame->m_characters[nIndex];
-                } else {
-                    localObjectID = -1;
-                }
+            for (BYTE nIndex = 0; nIndex < 6; nIndex++) {
+                // NOTE: Uninline.
+                LONG localObjectID = pGame->GetFixedOrderCharacterId(nIndex);
 
-                if (localObjectID != -1) {
+                if (localObjectID != CGameObjectArray::INVALID_INDEX) {
                     g_pBaldurChitin->m_cBaldurMessage.ObjectControlRequest(localObjectID);
                 }
             }
