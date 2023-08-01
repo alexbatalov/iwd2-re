@@ -1923,6 +1923,38 @@ void CInfGame::MultiplayerSetCharacterCreationLocation()
     // TODO: Incomplete.
 }
 
+// 0x5C93E0
+INT CInfGame::sub_5C93E0()
+{
+    INT nCount = 0;
+
+    for (SHORT nPortrait = 0; nPortrait < m_nCharacters; nPortrait++) {
+        LONG nCharacterId = GetCharacterId(nPortrait);
+
+        CGameSprite* pSprite;
+
+        BYTE rc;
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (pSprite->field_70F2 == 1) {
+                nCount++;
+            }
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+
+    return nCount;
+}
+
 // NOTE: Unclear why `nClass` is passed as pointer.
 // TODO: Move to `CRuleTables`.
 //

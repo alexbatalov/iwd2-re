@@ -91,6 +91,7 @@ public:
     CStringList* GetImportCharacters();
     CStringList* GetSounds();
     void MultiplayerSetCharacterCreationLocation();
+    INT sub_5C93E0();
 
     INT GetSpellcasterIndex(BYTE& nClass);
     BYTE GetSpellcasterClass(INT& nIndex);
