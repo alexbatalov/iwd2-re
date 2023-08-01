@@ -6156,6 +6156,44 @@ void CUIControlButtonCharGenCancel::OnLButtonClick(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x621440
+CUIControlTextDisplayCharGen621440::CUIControlTextDisplayCharGen621440(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo)
+    : CUIControlTextDisplay(panel, controlInfo, TRUE)
+{
+    // NOTE: Uninline.
+    SetNeedMouseMove();
+}
+
+// 0x603670
+CUIControlTextDisplayCharGen621440::~CUIControlTextDisplayCharGen621440()
+{
+}
+
+// 0x621480
+void CUIControlTextDisplayCharGen621440::OnItemSelected(LONG lMarker)
+{
+    CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 16204
+    UTIL_ASSERT(pCreateChar != NULL);
+
+    switch (m_nID) {
+    case 2:
+        pCreateChar->sub_6108D0(lMarker);
+        break;
+    case 4:
+        pCreateChar->sub_610A40(lMarker);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 16217
+        UTIL_ASSERT(FALSE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x621500
 CUIControlTextDisplayCharGenImportCharacters::CUIControlTextDisplayCharGenImportCharacters(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo)
     : CUIControlTextDisplay(panel, controlInfo, TRUE)

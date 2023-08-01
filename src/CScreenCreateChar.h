@@ -442,6 +442,13 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlTextDisplayCharGen621440 : public CUIControlTextDisplay {
+public:
+    CUIControlTextDisplayCharGen621440(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo);
+    ~CUIControlTextDisplayCharGen621440() override;
+    void OnItemSelected(LONG lMarker) override;
+};
+
 class CUIControlTextDisplayCharGenImportCharacters : public CUIControlTextDisplay {
 public:
     CUIControlTextDisplayCharGenImportCharacters(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo);
