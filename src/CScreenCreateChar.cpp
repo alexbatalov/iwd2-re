@@ -6192,6 +6192,42 @@ void CUIControlButtonCharGenCancel::OnLButtonClick(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x620220
+CUIControlButtonCharGen620220::CUIControlButtonCharGen620220(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 1)
+{
+    m_nSelectedFrame = 0;
+    field_66E = "";
+    field_676 = "";
+}
+
+// 0x6202F0
+CUIControlButtonCharGen620220::~CUIControlButtonCharGen620220()
+{
+}
+
+// 0x620390
+void CUIControlButtonCharGen620220::sub_620390(CResRef cResRef)
+{
+    // TODO: Incomplete.
+}
+
+// 0x620560
+void CUIControlButtonCharGen620220::OnLButtonClick(CPoint pt)
+{
+    // TODO: Incomplete.
+}
+
+// 0x620970
+BOOL CUIControlButtonCharGen620220::Render(BOOL bForce)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x621440
 CUIControlTextDisplayCharGen621440::CUIControlTextDisplayCharGen621440(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo)
     : CUIControlTextDisplay(panel, controlInfo, TRUE)

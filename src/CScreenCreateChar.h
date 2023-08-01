@@ -455,6 +455,19 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonCharGen620220 : public CUIControlButton3State {
+public:
+    CUIControlButtonCharGen620220(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGen620220() override;
+    BOOL Render(BOOL bForce) override;
+    void OnLButtonClick(CPoint pt) override;
+
+    void sub_620390(CResRef cResRef);
+
+    /* 066E */ CResRef field_66E;
+    /* 0676 */ CResRef field_676;
+};
+
 class CUIControlTextDisplayCharGen621440 : public CUIControlTextDisplay {
 public:
     CUIControlTextDisplayCharGen621440(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo);
