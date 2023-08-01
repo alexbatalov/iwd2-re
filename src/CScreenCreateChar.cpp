@@ -7139,3 +7139,32 @@ void CUIControlButtonCharGenFeatsPlusMinus::AdjustValue()
             INFINITE);
     }
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x6235C0
+CUIControlButtonCharGen6235C0::CUIControlButtonCharGen6235C0(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+}
+
+// 0x623610
+CUIControlButtonCharGen6235C0::~CUIControlButtonCharGen6235C0()
+{
+}
+
+// 0x6236B0
+BOOL CUIControlButtonCharGen6235C0::Render(BOOL bForce)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x623BF0
+int CUIControlButtonCharGen6235C0::sub_623BF0(BYTE nRace, BYTE nSubRace)
+{
+    // TODO: Incomplete.
+
+    return 0;
+}

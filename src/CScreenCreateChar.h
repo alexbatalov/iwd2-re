@@ -581,4 +581,13 @@ public:
     void AdjustValue() override;
 };
 
+class CUIControlButtonCharGen6235C0 : public CUIControlButton {
+public:
+    CUIControlButtonCharGen6235C0(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGen6235C0() override;
+    BOOL Render(BOOL bForce) override;
+
+    int sub_623BF0(BYTE nRace, BYTE nSubRace);
+};
+
 #endif /* CSCREENCREATECHAR_H_ */
