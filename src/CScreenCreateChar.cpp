@@ -5610,6 +5610,102 @@ BOOL CUIControlButtonCharGen61E080::Render(BOOL bForce)
 
 // -----------------------------------------------------------------------------
 
+// 0x61E720
+CUIControlButtonCharGen61E720::CUIControlButtonCharGen61E720(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+    if (m_nID == 35) {
+        STR_RES strRes;
+        g_pBaldurChitin->m_cTlkTable.Fetch(33479, strRes);
+        SetText(strRes.szText);
+
+        m_pDecal = NULL;
+    } else {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 14349
+        UTIL_ASSERT(m_nID <= CRESUI_CONTROLBUTTONID_CHARGEN_COLOR_LASTCOLOR);
+
+        m_pDecal = new CVidCell(CResRef("COLGRAD"), m_pPanel->m_pManager->m_bDoubleSize);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 14355
+        UTIL_ASSERT(m_pDecal != NULL);
+
+        m_pDecal->SequenceSet(0);
+    }
+
+    m_pPalette = NULL;
+}
+
+// 0x61E8D0
+CUIControlButtonCharGen61E720::~CUIControlButtonCharGen61E720()
+{
+    if (m_pDecal != NULL) {
+        delete m_pDecal;
+        m_pDecal = NULL;
+    }
+
+    if (m_pPalette != NULL) {
+        delete m_pPalette;
+        m_pPalette = NULL;
+    }
+}
+
+// 0x61E9C0
+void CUIControlButtonCharGen61E720::OnLButtonClick(CPoint pt)
+{
+    // TODO: Incomplete.
+}
+
+// 0x61EE60
+BOOL CUIControlButtonCharGen61E720::Render(BOOL bForce)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x61F0C0
+BOOL CUIControlButtonCharGen61E720::sub_61F0C0(BYTE& a1)
+{
+    CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 14792
+    UTIL_ASSERT(pCreateChar != NULL);
+
+    INT v1 = m_nID;
+    switch (pCreateChar->field_56E) {
+    case 1:
+    case 2:
+        if (v1 < 31) {
+            a1 = v1 + 36;
+            return TRUE;
+        }
+
+        if (v1 < 34) {
+            a1 = v1 - 10;
+            return TRUE;
+        }
+
+        return FALSE;
+    case 3:
+        a1 = atoi(pCreateChar->field_172.GetAt(CPoint(0, v1)));
+        return TRUE;
+    case 6:
+        a1 = atoi(pCreateChar->field_14E.GetAt(CPoint(0, v1)));
+        return TRUE;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 14837
+        UTIL_ASSERT(FALSE);
+    }
+
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x61F220
 void CUIControlButtonCharGenAbilitiesHotArea::OnHotAreaClick(CPoint pt)
 {
