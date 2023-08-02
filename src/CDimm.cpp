@@ -617,9 +617,36 @@ void CDimm::DestroyKeyTable()
 // 0x784880
 BOOL CDimm::DirectoryRemoveFiles(const CString& sDirectoryName)
 {
-    // TODO: Incomplete.
+    CString sResolvedDirectoryName;
+    CString sPath;
+    CString sPattern;
 
-    return FALSE;
+    if (!g_pChitin->lAliases.ResolveFileName(sDirectoryName, sResolvedDirectoryName)) {
+        sResolvedDirectoryName = sDirectoryName;
+    }
+
+    sPattern = sResolvedDirectoryName + "*.*";
+
+    WIN32_FIND_DATAA findFileData;
+    HANDLE hFindFile = FindFirstFileA(sPattern, &findFileData);
+    if (hFindFile == INVALID_HANDLE_VALUE) {
+        // Directory does not exists - OK.
+        return TRUE;
+    }
+
+    BOOL bResult = TRUE;
+    do {
+        if ((findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != FILE_ATTRIBUTE_DIRECTORY) {
+            sPath = sResolvedDirectoryName + findFileData.cFileName;
+            if (!DeleteFileA(sPath)) {
+                bResult = FALSE;
+            }
+        }
+    } while (FindNextFileA(hFindFile, &findFileData));
+
+    FindClose(hFindFile);
+
+    return bResult;
 }
 
 // 0x785C10
