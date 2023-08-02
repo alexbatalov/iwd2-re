@@ -669,6 +669,15 @@ void CInfGame::StartSearchThread()
     }
 }
 
+// 0x59F9A0
+void CInfGame::BeginListManipulation(CGameArea* pArea)
+{
+    if (pArea != NULL) {
+        EnterCriticalSection(&(pArea->field_214));
+        pArea->SetListManipulationThreadId(GetCurrentThreadId());
+    }
+}
+
 // 0x59FA00
 void CInfGame::sub_59FA00(BOOL a1)
 {
