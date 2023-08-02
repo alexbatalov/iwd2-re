@@ -1322,6 +1322,37 @@ void CInfGame::UpdatePortrait(SHORT nPortrait, DWORD dwPanelId)
     }
 }
 
+// 0x5AF420
+void CInfGame::sub_5AF420(SHORT nPortrait, DWORD dwPanelId)
+{
+    if (nPortrait != -1) {
+        CBaldurEngine* pEngine = static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine);
+        if (pEngine != g_pBaldurChitin->m_pEngineProjector
+            && pEngine != g_pBaldurChitin->m_pEngineMultiPlayer
+            && pEngine != g_pBaldurChitin->m_pEngineSinglePlayer
+            && pEngine != g_pBaldurChitin->m_pEngineWorldMap
+            && pEngine != g_pBaldurChitin->m_pEngineSave) {
+            CUIManager* pManager = pEngine->GetManager();
+            CUIPanel* pPanel = pManager->GetPanel(dwPanelId);
+            if (pPanel != NULL) {
+                CUIControlBase* pControl = pPanel->GetControl(nPortrait);
+                if (pControl != NULL) {
+                    pControl->func_54();
+                }
+            } else {
+                CUIManager* pManager = static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->GetManager();
+                CUIPanel* pPanel = pManager->GetPanel(1);
+                if (pPanel != NULL) {
+                    CUIControlBase* pControl = pPanel->GetControl(nPortrait);
+                    if (pControl != NULL) {
+                        pControl->func_54();
+                    }
+                }
+            }
+        }
+    }
+}
+
 // 0x5AF4E0
 SHORT CInfGame::GetCharacterPortraitNum(LONG nCharacterId)
 {

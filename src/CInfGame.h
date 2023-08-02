@@ -50,6 +50,7 @@ public:
     void LoadGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace);
     void NewGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace);
     void UpdatePortrait(SHORT nPortrait, DWORD dwPanelId);
+    void sub_5AF420(SHORT nPortrait, DWORD dwPanelId);
     SHORT GetCharacterPortraitNum(LONG nCharacterId);
     SHORT GetFixedOrderCharacterPortraitNum(LONG nCharacterId);
     void WorldEngineActivated(CVidMode* pVidMode);
