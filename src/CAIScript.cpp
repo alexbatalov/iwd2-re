@@ -8,6 +8,13 @@ CAIScript::CAIScript()
     field_8 = 0;
 }
 
+// 0x45FE00
+CAIScript::CAIScript(CResRef cNewResRef)
+{
+    m_cResRef = cNewResRef;
+    Read(cNewResRef, FALSE);
+}
+
 // 0x40EFC0
 CAIScript::~CAIScript()
 {
@@ -26,4 +33,10 @@ CAIScript::~CAIScript()
 void CAIScript::Add(const CAICondition& condition, const CAIResponseSet& responseSet)
 {
     m_caList.AddTail(new CAIConditionResponse(condition, responseSet));
+}
+
+// 0x40F160
+void CAIScript::Read(CResRef cNewResRef, BOOL a2)
+{
+    // TODO: Incomplete.
 }

@@ -12,9 +12,11 @@ class CAIResponseSet;
 class CAIScript {
 public:
     CAIScript();
+    CAIScript(CResRef cNewResRef);
     ~CAIScript();
 
     void Add(const CAICondition& condition, const CAIResponseSet& responseSet);
+    void Read(CResRef cNewResRef, BOOL a2);
 
     /* 0000 */ CResRef m_cResRef;
     /* 0008 */ int field_8;
