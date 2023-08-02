@@ -25,6 +25,32 @@ CGameArea::~CGameArea()
     // TODO: Incomplete.
 }
 
+// 0x46A2E0
+INT CGameArea::SetListManipulationThreadId(DWORD ThreadID)
+{
+    if (ThreadID != 0) {
+        if (m_nListManipulationThreadCounter > 0) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+            // __LINE__: 295
+            UTIL_ASSERT(m_ListManipulationThreadId == ThreadID);
+        } else {
+            m_ListManipulationThreadId = ThreadID;
+        }
+
+        m_nListManipulationThreadCounter++;
+    } else {
+        if (m_nListManipulationThreadCounter > 0) {
+            m_nListManipulationThreadCounter--;
+        }
+
+        if (m_nListManipulationThreadCounter == 0) {
+            m_ListManipulationThreadId = 0;
+        }
+    }
+
+    return m_nListManipulationThreadCounter;
+}
+
 // 0x46A360
 void CGameArea::AddObject(LONG id, BYTE listType)
 {

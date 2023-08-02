@@ -77,6 +77,7 @@ public:
     CGameArea();
     ~CGameArea();
 
+    INT SetListManipulationThreadId(DWORD ThreadID);
     void AddObject(LONG id, BYTE listType);
     void ApplyWindToAmbients(BYTE nPercentVolume);
     void SetListenPosition();
@@ -106,6 +107,9 @@ public:
     /* 00EC */ CAreaFileRestEncounter m_headerRestEncounter;
     /* 01EF */ BOOLEAN m_bAreaLoaded;
     /* 01F0 */ CResRef m_resRef;
+    /* 0214 */ CRITICAL_SECTION field_214;
+    /* 022C */ INT m_nListManipulationThreadCounter;
+    /* 0230 */ DWORD m_ListManipulationThreadId;
     /* 0234 */ CInfGame* m_pGame;
     /* 0238 */ LONG m_nScrollState;
     /* 023C */ LONG m_nKeyScrollState;
