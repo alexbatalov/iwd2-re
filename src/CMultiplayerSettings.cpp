@@ -494,3 +494,11 @@ void CMultiplayerSettings::ResetServerOnLoadGame()
         m_pnCharacterControlledByPlayer[index] = m_pnLoadGameControlledByPlayer[index];
     }
 }
+
+// NOTE: Odd location.
+//
+// 0x5BFBC0
+CString CMultiplayerSettings::GetAreaStartName()
+{
+    return m_sAreaName;
+}

@@ -55,6 +55,8 @@ public:
     void SetServerOnLoadGame(PLAYER_ID localPlayerID);
     void ResetServerOnLoadGame();
 
+    CString GetAreaStartName();
+
     /* 0000 */ CGamePermission m_pcPermissions[6];
     /* 0030 */ CGamePermission m_cDefaultPermissions;
     /* 0038 */ PLAYER_ID m_pnPlayerReady[6];
