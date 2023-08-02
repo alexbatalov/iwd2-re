@@ -39,6 +39,8 @@ public:
     void ClearTriggers();
     SHORT StartMusic();
 
+    void SetDefaultScript(CAIScript* script);
+
     /* 006E */ CAIObjectType field_6E;
     /* 00AE */ CAIObjectType field_AE;
     /* 00EA */ CAIObjectType field_EA;
@@ -60,7 +62,7 @@ public:
     /* 0402 */ CAIScript* field_402;
     /* 0406 */ CAIScript* field_406;
     /* 040A */ CAIScript* field_40A;
-    /* 040E */ CAIScript* field_40E;
+    /* 040E */ CAIScript* m_defaultScript;
     /* 0412 */ CTypedPtrList<CPtrList, CAIAction*> m_queuedActions;
     /* 042E */ CTypedPtrList<CPtrList, CAITrigger*> m_pendingTriggers;
     /* 044E */ CTypedPtrList<CPtrList, CGameTimer*> m_timers;

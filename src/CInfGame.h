@@ -11,10 +11,12 @@
 #include "CMoveList.h"
 #include "CMultiplayerSettings.h"
 #include "CRuleTables.h"
+#include "CStrRes.h"
 #include "CTimerWorld.h"
 #include "CVRamPool.h"
 #include "CVariableHash.h"
 #include "CVidBitmap.h"
+#include "CVidPalette.h"
 
 // Seen in `CRuleTables::GetStartPoint` assertion.
 #define CINFGAME_MAXCHARACTERS 6
@@ -34,10 +36,12 @@ public:
     CInfGame();
     ~CInfGame();
     void StartSearchThread();
+    void InitGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace);
     void BeginListManipulation(CGameArea* pArea);
     INT EndListManipulation(CGameArea* pArea);
     void sub_59FA00(BOOL a1);
     void DestroyGame(unsigned char a1, unsigned char a2);
+    void sub_5A0160();
     LONG ImportCharacter(const CString& sFileName, INT nIndex);
     CString GetDirSounds();
     BOOLEAN CanSaveGame(STRREF& strError, unsigned char a2, unsigned char a3);
@@ -170,13 +174,16 @@ public:
     static const CString SILHOUETTE_PORTRAIT_LG;
 
     static BOOL dword_8E7524;
+    static int dword_8E752C;
 
     /* 0000 */ CRuleTables m_ruleTables;
     /* 1B58 */ CCriticalSection field_1B58;
     /* 1B78 */ CTimerWorld m_worldTime;
+    /* 1B7E */ BOOL m_bGameLoaded;
     /* 1B84 */ unsigned char field_1B84;
     /* 1B96 */ SHORT m_nState;
     /* 1BA1 */ unsigned char field_1BA1;
+    /* 1BAA */ CGamePermission m_singlePlayerPermissions;
     /* 1BB2 */ CMultiplayerSettings m_multiplayerSettings;
     /* 1C78 */ CInfButtonArray m_cButtonArray;
     /* 3662 */ CVRamPool m_cVRamPool;
@@ -192,6 +199,8 @@ public:
     /* 3884 */ CAIGroup m_group;
     /* 38A8 */ CTypedPtrList<CPtrList, int*> m_allies; // NOTE: Stores actual ints disguised as pointers.
     /* 38C4 */ CTypedPtrList<CPtrList, int*> m_familiars; // NOTES: Stores actual ints disguised as pointers.
+    /* 38E0 */ unsigned char field_38E0[72];
+    /* 4204 */ int field_4204;
     /* 4208 */ CString m_sTempDir;
     /* 420C */ CString m_sTempSaveDir;
     /* 4210 */ CString m_sScriptsDir;
@@ -201,7 +210,9 @@ public:
     /* 4220 */ CString field_4220;
     /* 4224 */ CString m_sSaveDir;
     /* 4228 */ CString m_sMultiplayerSaveDir;
+    /* 4348 */ unsigned char field_4248[400];
     /* 43D8 */ int field_43D8;
+    /* 43DC */ short field_43DC;
     /* 43E2 */ int field_43E2;
     /* 43E6 */ int field_43E6;
     /* 43EA */ CGameOptions m_cOptions; // #guess
@@ -209,14 +220,33 @@ public:
     /* 4514 */ BYTE m_pKeymap[CINFGAME_KEYMAP_SIZE];
     /* 4688 */ BOOLEAN m_pKeymapFlags[CINFGAME_KEYMAP_SIZE];
     /* 47FC */ CVariableHash m_variables;
+    /* 4808 */ CNamedCreatureVariableHash m_namedCreatures;
+    /* 4814 */ STR_RES field_4814;
+    /* 487C */ STR_RES field_487C;
+    /* 4A8E */ unsigned char field_4A8E;
+    /* 4A8F */ unsigned char field_4A8F;
     /* 4A9A */ DWORD m_dwLastProgressRenderTickCount;
     /* 4A9E */ DWORD m_dwLastProgressMsgTickCount;
     /* 4A00 */ HANDLE m_hSearchThread; // #guess
     /* 4AA2 */ ULONG field_4AA2;
+    /* 4AB2 */ unsigned char field_4AB2;
+    /* 4AB4 */ CVidPalette m_entanglePalette;
+    /* 4AD8 */ CVidPalette m_webHoldPalette;
     /* 4AFC */ int field_4AFC;
     /* 4B00 */ CMoveList m_cMoveList;
     /* 4B1C */ CMoveList m_cLimboList;
     /* 4B38 */ int field_4B38;
+    /* 4B3C */ LONG m_nAIIndex;
+    /* 4B40 */ int field_4B40;
+    /* 4B44 */ int field_4B44;
+    /* 4B48 */ unsigned char field_4B48[48];
+    /* 4B78 */ int field_4B78;
+    /* 4B7C */ int field_4B7C;
+    /* 4B80 */ int field_4B80;
+    /* 4B84 */ CString field_4B84;
+    /* 4B88 */ CString field_4B88;
+    /* 4B8C */ CString field_4B8C;
+    /* 4B90 */ CString field_4B90;
     // NOTE: Can also be BYTE indicating number of expansion pack.
     /* 4BD5 */ BOOLEAN m_bExpansion;
     /* 4BD6 */ BOOLEAN field_4BD6;

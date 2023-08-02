@@ -1,5 +1,8 @@
 #include "CInfButtonArray.h"
 
+// 0x851700
+const BYTE CInfButtonArray::STATE_NONE = 0;
+
 // 0x587960
 CInfButtonSettings::CInfButtonSettings()
 {
@@ -32,6 +35,14 @@ BOOL CInfButtonArray::ResetState()
     // TODO: Incomplete.
 
     return TRUE;
+}
+
+// 0x589110
+BOOL CInfButtonArray::SetState(INT nState, int a2)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // 0x452C50

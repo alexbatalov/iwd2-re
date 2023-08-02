@@ -2,9 +2,11 @@
 
 #include <process.h>
 
+#include "CAIScript.h"
 #include "CBaldurChitin.h"
 #include "CBaldurEngine.h"
 #include "CBaldurProjector.h"
+#include "CGameAIGame.h"
 #include "CGameArea.h"
 #include "CGameObject.h"
 #include "CGameSprite.h"
@@ -616,6 +618,9 @@ const CString CInfGame::SILHOUETTE_PORTRAIT_LG("noportlg");
 // 0x8E7524
 BOOL CInfGame::dword_8E7524;
 
+// 0x8E752C
+int CInfGame::dword_8E752C;
+
 // 0x59CC30
 CInfGame::CInfGame()
 {
@@ -669,6 +674,122 @@ void CInfGame::StartSearchThread()
     }
 }
 
+// 0x59F540
+void CInfGame::InitGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace)
+{
+    m_cVRamPool.AttachSurfaces(g_pBaldurChitin->GetCurrentVideoMode());
+
+    if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL) {
+        m_singlePlayerPermissions.SetSinglePermission(CGamePermission::AREA_TRANSITION, TRUE);
+        m_singlePlayerPermissions.SetSinglePermission(CGamePermission::CHAR_RECORDS, TRUE);
+        m_singlePlayerPermissions.SetSinglePermission(CGamePermission::DIALOG, TRUE);
+        m_singlePlayerPermissions.SetSinglePermission(CGamePermission::GROUP_POOL, TRUE);
+        m_singlePlayerPermissions.SetSinglePermission(CGamePermission::LEADER, TRUE);
+        m_singlePlayerPermissions.SetSinglePermission(CGamePermission::MODIFY_CHARS, TRUE);
+        m_singlePlayerPermissions.SetSinglePermission(CGamePermission::PAUSING, TRUE);
+        m_singlePlayerPermissions.SetSinglePermission(CGamePermission::PURCHASING, TRUE);
+    }
+
+    if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+        m_singlePlayerPermissions.SetSinglePermission(CGamePermission::LEADER, TRUE);
+    }
+
+    LoadKeymap();
+    LoadOptions();
+
+    g_pBaldurChitin->EnginesGameInit();
+
+    m_cButtonArray.SetState(CInfButtonArray::STATE_NONE, 0);
+
+    g_pBaldurChitin->GetCurrentVideoMode()->rgbGlobalTint = RGB(255, 255, 255);
+
+    m_worldTime.m_gameTime = CTimerWorld::TIME_DAY + 1;
+    m_worldTime.CheckForTriggerEventPast();
+
+    g_pBaldurChitin->m_cTlkTable.Fetch(16484, field_4814);
+    g_pBaldurChitin->m_cTlkTable.Fetch(15307, field_487C);
+
+    for (BYTE nIndex = 0; nIndex < 6; nIndex++) {
+        EnablePortrait(nIndex, FALSE);
+    }
+
+    field_43DC = 0;
+
+    memset(field_4248, 0, sizeof(field_4248));
+
+    field_43E2 = -1;
+    field_43E6 = 0;
+    field_4B84 = "";
+    field_4B88 = "";
+    field_4B8C = "";
+    field_4B90 = "";
+
+    m_pGameAreaMaster = NULL;
+    field_4A8E = 1;
+    field_4A8F = 1;
+    field_4AB2 = 0;
+    m_bGameLoaded = TRUE;
+
+    m_allies.RemoveAll();
+    m_familiars.RemoveAll();
+
+    memset(field_38E0, 0, sizeof(field_38E0));
+
+    field_4204 = 0;
+
+    m_cJournal.ClearAllEntries();
+
+    m_variables.Resize(2048);
+    m_namedCreatures.Resize(2048);
+    m_variables.ClearAll();
+    m_namedCreatures.ClearAll();
+
+    m_entanglePalette.SetType(CVidPalette::TYPE_RANGE);
+    m_entanglePalette.SetRange(0, 54, m_rgbMasterBitmap);
+
+    m_webHoldPalette.SetType(CVidPalette::TYPE_RANGE);
+    m_webHoldPalette.SetRange(0, 65, m_rgbMasterBitmap);
+
+    sub_5A0160();
+
+    field_4AFC = 0;
+
+    m_cMoveList.ClearAll();
+    m_cLimboList.ClearAll();
+
+    CGameAIGame* pAIGame = new CGameAIGame();
+    CAIScript* pScript = new CAIScript(CResRef("BALDUR"));
+
+    // NOTE: Uninline.
+    pAIGame->SetDefaultScript(pScript);
+
+    m_nAIIndex = pAIGame->m_id;
+    field_4B40 = 0;
+    field_4B44 = -1;
+
+    if (!g_pChitin->cDimm.DirectoryRemoveFiles(m_sTempDir)) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+        // __LINE__: 3213
+        UTIL_ASSERT_MSG(FALSE, "Could not clean out Temp directory");
+    }
+
+    if (!g_pChitin->cDimm.DirectoryRemoveFiles(m_sTempSaveDir)) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+        // __LINE__: 3215
+        UTIL_ASSERT_MSG(FALSE, "Could not clean out TempSave directory");
+    }
+
+    memset(field_4B48, 0, sizeof(field_4B48));
+
+    field_4B78 = 0;
+    field_4B7C = 0;
+    field_4B80 = 0;
+
+    dword_8E752C = 0;
+
+    ResetMultiPlayerPermissions();
+}
+
 // 0x59F9A0
 void CInfGame::BeginListManipulation(CGameArea* pArea)
 {
@@ -699,6 +820,12 @@ void CInfGame::sub_59FA00(BOOL a1)
 
 // 0x59FB50
 void CInfGame::DestroyGame(unsigned char a1, unsigned char a2)
+{
+    // TODO: Incomplete.
+}
+
+// 0x5A0160
+void CInfGame::sub_5A0160()
 {
     // TODO: Incomplete.
 }

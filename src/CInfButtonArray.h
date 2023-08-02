@@ -24,9 +24,12 @@ public:
 
 class CInfButtonArray {
 public:
+    static const BYTE STATE_NONE;
+
     CInfButtonArray();
 
     BOOL ResetState();
+    BOOL SetState(INT nState, int a2);
 
     void SetSelectedButton(INT nSelectedButton);
 

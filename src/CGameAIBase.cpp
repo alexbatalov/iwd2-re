@@ -98,9 +98,9 @@ CGameAIBase::~CGameAIBase()
         field_40A = NULL;
     }
 
-    if (field_40E != NULL) {
-        delete field_40E;
-        field_40E = NULL;
+    if (m_defaultScript != NULL) {
+        delete m_defaultScript;
+        m_defaultScript = NULL;
     }
 }
 
@@ -331,10 +331,10 @@ void CGameAIBase::SetScript(SHORT level, CAIScript* script)
         field_40A = script;
         break;
     case 6:
-        if (field_40E != NULL) {
-            delete field_40E;
+        if (m_defaultScript != NULL) {
+            delete m_defaultScript;
         }
-        field_40E = script;
+        m_defaultScript = script;
         break;
     }
 }
@@ -356,4 +356,14 @@ SHORT CGameAIBase::StartMusic()
     m_pArea->PlaySong(static_cast<SHORT>(m_curAction.m_specificID), m_curAction.m_specificID2);
 
     return ACTION_DONE;
+}
+
+// NOTE: Inlined.
+void CGameAIBase::SetDefaultScript(CAIScript* script)
+{
+    if (m_defaultScript != NULL) {
+        delete m_defaultScript;
+    }
+
+    m_defaultScript = script;
 }
