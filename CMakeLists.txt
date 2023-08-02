@@ -139,6 +139,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CKeyInfo.h"
     "src/CMessageHandler.cpp"
     "src/CMessageHandler.h"
+    "src/CMoveList.cpp"
+    "src/CMoveList.h"
     "src/CMultiplayerSettings.cpp"
     "src/CMultiplayerSettings.h"
     "src/CNetwork.cpp"

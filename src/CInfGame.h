@@ -8,6 +8,7 @@
 #include "CGameObjectArray.h"
 #include "CGameOptions.h"
 #include "CInfButtonArray.h"
+#include "CMoveList.h"
 #include "CMultiplayerSettings.h"
 #include "CRuleTables.h"
 #include "CTimerWorld.h"
@@ -213,6 +214,8 @@ public:
     /* 4A00 */ HANDLE m_hSearchThread; // #guess
     /* 4AA2 */ ULONG field_4AA2;
     /* 4AFC */ int field_4AFC;
+    /* 4B00 */ CMoveList m_cMoveList;
+    /* 4B1C */ CMoveList m_cLimboList;
     /* 4B38 */ int field_4B38;
     // NOTE: Can also be BYTE indicating number of expansion pack.
     /* 4BD5 */ BOOLEAN m_bExpansion;
