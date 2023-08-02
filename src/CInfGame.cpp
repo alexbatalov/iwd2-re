@@ -1912,7 +1912,54 @@ CStringList* CInfGame::GetSounds()
 {
     CStringList* pList = new CStringList();
 
-    // TODO: Incomplete.
+    CString sSoundSetDirName;
+    CString sPattern;
+    CString sTemp;
+
+    sPattern = GetDirSounds() + "*";
+    INT nCount = 0;
+
+    WIN32_FIND_DATAA findFileData;
+    HANDLE hFindFile = FindFirstFileA(sPattern, &findFileData);
+    if (hFindFile != INVALID_HANDLE_VALUE) {
+        do {
+            sSoundSetDirName = findFileData.cFileName;
+            if (sSoundSetDirName != "."
+                && sSoundSetDirName != ".."
+                && (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) {
+                sSoundSetDirName.MakeUpper();
+
+                INT nLength = sSoundSetDirName.GetLength();
+                if (nLength > 0 && nLength < 32) {
+                    if (nCount >= 32766) {
+                        break;
+                    }
+
+                    POSITION pos = pList->GetHeadPosition();
+                    while (pos != NULL) {
+                        sTemp = pList->GetAt(pos);
+                        if (sSoundSetDirName == sTemp) {
+                            break;
+                        }
+
+                        if (sSoundSetDirName < pList->GetAt(pos)) {
+                            pList->InsertBefore(pos, sSoundSetDirName);
+                            nCount++;
+                            break;
+                        }
+
+                        pList->GetNext(pos);
+                    }
+
+                    if (pos == NULL) {
+                        pList->AddTail(sSoundSetDirName);
+                        nCount++;
+                    }
+                }
+            }
+        } while (FindNextFileA(hFindFile, &findFileData));
+        FindClose(hFindFile);
+    }
 
     return pList;
 }
