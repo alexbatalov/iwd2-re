@@ -79,6 +79,7 @@ public:
     CStringList* GetSaveGames();
     CString GetDirSaveRoot();
     CString GetDirSave();
+    CStringList* GetScripts();
     CString GetDirScripts();
     static void StartCharacterTerminationSequence();
     void ReadyCharacterTerminationSequence(int a1, int a2);
