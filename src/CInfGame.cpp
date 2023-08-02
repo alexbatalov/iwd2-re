@@ -675,6 +675,41 @@ BOOLEAN CInfGame::CanSaveGame(STRREF& strError, unsigned char a2, unsigned char 
     return FALSE;
 }
 
+// 0x5A9680
+void CInfGame::ProgressBarCallback(DWORD dwSize, BOOLEAN bInitialize)
+{
+    if (bInitialize == TRUE) {
+        m_dwLastProgressRenderTickCount = GetTickCount() - 250;
+        m_dwLastProgressMsgTickCount = GetTickCount() - 5000;
+    }
+
+    g_pChitin->cProgressBar.m_nActionProgress += dwSize;
+
+    if (GetTickCount() - m_dwLastProgressMsgTickCount >= 1000) {
+        m_dwLastProgressMsgTickCount = GetTickCount();
+
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+            g_pBaldurChitin->GetBaldurMessage()->SendProgressBarStatus(g_pChitin->cProgressBar.m_nActionProgress,
+                g_pChitin->cProgressBar.m_nActionTarget,
+                g_pChitin->cProgressBar.m_bWaiting,
+                g_pChitin->cProgressBar.m_nWaitingReason,
+                g_pChitin->cProgressBar.m_bTimeoutVisible,
+                g_pChitin->cProgressBar.m_nSecondsToTimeout);
+        }
+    }
+
+    if (GetTickCount() - m_dwLastProgressRenderTickCount >= 250) {
+        m_dwLastProgressRenderTickCount = GetTickCount();
+
+        g_pChitin->field_193A = TRUE;
+        g_pChitin->cDimm.field_0 = 1;
+        g_pChitin->cDimm.field_4 = 1;
+        SleepEx(25, TRUE);
+
+        sub_59FA00(FALSE);
+    }
+}
+
 // 0x5A9780
 char CInfGame::sub_5A9780(BYTE nKey)
 {

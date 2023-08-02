@@ -38,6 +38,7 @@ public:
     LONG ImportCharacter(const CString& sFileName, INT nIndex);
     CString GetDirSounds();
     BOOLEAN CanSaveGame(STRREF& strError, unsigned char a2, unsigned char a3);
+    void ProgressBarCallback(DWORD dwSize, BOOLEAN bInitialize);
     char sub_5A9780(BYTE nKey);
     BYTE sub_5A97D0(char ch);
     BYTE sub_5A9830(int index);
@@ -201,6 +202,8 @@ public:
     /* 4514 */ BYTE m_pKeymap[CINFGAME_KEYMAP_SIZE];
     /* 4688 */ BOOLEAN m_pKeymapFlags[CINFGAME_KEYMAP_SIZE];
     /* 47FC */ CVariableHash m_variables;
+    /* 4A9A */ DWORD m_dwLastProgressRenderTickCount;
+    /* 4A9E */ DWORD m_dwLastProgressMsgTickCount;
     /* 4A00 */ HANDLE m_hSearchThread; // #guess
     /* 4AA2 */ ULONG field_4AA2;
     /* 4AFC */ int field_4AFC;

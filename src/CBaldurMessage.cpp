@@ -203,6 +203,14 @@ BOOLEAN CBaldurMessage::SendSignal(BYTE signalType, BYTE signalToSend)
     return FALSE;
 }
 
+// 0x433BE0
+BOOLEAN CBaldurMessage::SendProgressBarStatus(LONG nActionProgress, LONG nActionTarget, BOOLEAN bWaiting, LONG nWaitingReason, BOOLEAN bTimeoutVisible, DWORD nSecondsToTimeout)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x434EB0
 BOOLEAN CBaldurMessage::ChapterAnnounceStatus(BYTE nChapter, CResRef cResRef)
 {

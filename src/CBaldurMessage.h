@@ -31,6 +31,7 @@ public:
     BOOL ObjectControl();
     void SetSignalDefaultSecondsToTimeout();
     BOOLEAN SendSignal(BYTE signalType, BYTE signalToSend);
+    BOOLEAN SendProgressBarStatus(LONG nActionProgress, LONG nActionTarget, BOOLEAN bWaiting, LONG nWaitingReason, BOOLEAN bTimeoutVisible, DWORD nSecondsToTimeout);
     BOOLEAN ChapterAnnounceStatus(BYTE nChapter, CResRef cResRef);
     void WeatherBroadcast(WORD wWeatherFlags);
     void TimeSynchBroadcast(ULONG nGameTime, BOOLEAN bCompressTime);
