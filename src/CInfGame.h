@@ -51,6 +51,7 @@ public:
     void NewGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace);
     void UpdatePortrait(SHORT nPortrait, DWORD dwPanelId);
     SHORT GetCharacterPortraitNum(LONG nCharacterId);
+    SHORT GetFixedOrderCharacterPortraitNum(LONG nCharacterId);
     void WorldEngineActivated(CVidMode* pVidMode);
     void WorldEngineDeactivated();
     void OnPortraitLClick(DWORD id);

@@ -1336,6 +1336,20 @@ SHORT CInfGame::GetCharacterPortraitNum(LONG nCharacterId)
     return -1;
 }
 
+// 0x5AF510
+SHORT CInfGame::GetFixedOrderCharacterPortraitNum(LONG nCharacterId)
+{
+    if (nCharacterId != -1) {
+        for (SHORT nPortrait = 0; nPortrait < 6; nPortrait++) {
+            if (m_characters[nPortrait] == nCharacterId) {
+                return nPortrait;
+            }
+        }
+    }
+
+    return -1;
+}
+
 // 0x5AF7F0
 void CInfGame::WorldEngineActivated(CVidMode* pVidMode)
 {
