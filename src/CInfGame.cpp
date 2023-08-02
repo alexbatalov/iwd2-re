@@ -1892,7 +1892,50 @@ CStringList* CInfGame::GetPortraits()
 {
     CStringList* pList = new CStringList();
 
-    // TODO: Incomplete.
+    CString sFileName;
+    CString sPattern;
+    CString sTemp;
+
+    sPattern = GetDirPortraits() + "*.BMP";
+
+    INT nCount = 0;
+    WIN32_FIND_DATAA findFileData;
+    HANDLE hFindFile = FindFirstFileA(sPattern, &findFileData);
+    if (hFindFile != INVALID_HANDLE_VALUE) {
+        do {
+            sFileName = findFileData.cFileName;
+            if ((findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
+                sFileName = sFileName.SpanExcluding(".");
+                if (sFileName.GetLength() <= 8) {
+                    if (nCount >= 32767) {
+                        break;
+                    }
+
+                    POSITION pos = pList->GetHeadPosition();
+                    while (pos != NULL) {
+                        sTemp = pList->GetAt(pos);
+                        if (sFileName == sTemp) {
+                            break;
+                        }
+
+                        if (sFileName < pList->GetAt(pos)) {
+                            pList->InsertBefore(pos, sFileName);
+                            nCount++;
+                            break;
+                        }
+
+                        pList->GetNext(pos);
+                    }
+
+                    if (pos == NULL) {
+                        pList->AddTail(sFileName);
+                        nCount++;
+                    }
+                }
+            }
+        } while (FindNextFileA(hFindFile, &findFileData));
+        FindClose(hFindFile);
+    }
 
     return pList;
 }
