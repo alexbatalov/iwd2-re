@@ -72,7 +72,7 @@ void CUIControlLabel::InvalidateRect()
         CSingleLock lock(&(m_pPanel->m_pManager->field_56), FALSE);
         lock.Lock(INFINITE);
 
-        m_nRenderCount = CBaldurChitin::RENDER_COUNT;
+        m_nRenderCount = CUIManager::RENDER_COUNT;
 
         lock.Unlock();
     }

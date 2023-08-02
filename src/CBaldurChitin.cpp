@@ -108,10 +108,6 @@ const USHORT CBaldurChitin::DEFAULT_SCREEN_WIDTH = 800;
 // 0x85DE3E
 const USHORT CBaldurChitin::DEFAULT_SCREEN_HEIGHT = 600;
 
-// #guess
-// 0x8AB948
-BYTE CBaldurChitin::RENDER_COUNT = 2;
-
 // NOTE: Probably static in `CBaldurChitin`.
 //
 // 0x8BA28C
@@ -1340,7 +1336,7 @@ void CBaldurChitin::RedrawScreen()
 // 0x422EA0
 void CBaldurChitin::SetRenderCount(BYTE nCount)
 {
-    RENDER_COUNT = nCount;
+    CUIManager::RENDER_COUNT = nCount;
 }
 
 // 0x422E50

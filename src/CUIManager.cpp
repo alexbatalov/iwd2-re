@@ -9,6 +9,9 @@
 #include "CUtil.h"
 #include "CWarp.h"
 
+// 0x8AB948
+BYTE CUIManager::RENDER_COUNT = 2;
+
 // 0x84C89C
 const BYTE CUIManager::MOUSELBUTTON = 0;
 

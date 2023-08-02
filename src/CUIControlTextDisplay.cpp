@@ -261,7 +261,7 @@ void CUIControlTextDisplay::InvalidateRect()
     if (m_bActive || m_bInactiveRender) {
         CSingleLock lock(&(m_pPanel->m_pManager->field_56), FALSE);
         lock.Lock(INFINITE);
-        m_nRenderCount = CBaldurChitin::RENDER_COUNT;
+        m_nRenderCount = CUIManager::RENDER_COUNT;
         lock.Unlock();
     }
 }

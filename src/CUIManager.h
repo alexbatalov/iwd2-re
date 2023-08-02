@@ -40,6 +40,8 @@ public:
     void ShiftPanels(const CPoint& pt);
     void KillCapture();
 
+    static BYTE RENDER_COUNT;
+
     /* 0000 */ int field_0;
     /* 0004 */ BOOL m_bInitialized;
     /* 0008 */ CResRef m_cResRef;

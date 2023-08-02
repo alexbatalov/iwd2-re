@@ -90,7 +90,7 @@ void CUIControlSlider::OnMouseMove(CPoint pt)
 
         CSingleLock renderLock(&(m_pPanel->m_pManager->field_56), FALSE);
         renderLock.Lock(INFINITE);
-        m_nRenderCount = CBaldurChitin::RENDER_COUNT;
+        m_nRenderCount = CUIManager::RENDER_COUNT;
         renderLock.Unlock();
 
         m_bValueChanged = TRUE;
@@ -126,7 +126,7 @@ BOOL CUIControlSlider::OnLButtonDown(CPoint pt)
 
         CSingleLock renderLock(&(m_pPanel->m_pManager->field_56), FALSE);
         renderLock.Lock(INFINITE);
-        m_nRenderCount = CBaldurChitin::RENDER_COUNT;
+        m_nRenderCount = CUIManager::RENDER_COUNT;
         renderLock.Unlock();
 
         m_pPanel->m_pManager->SetCapture(this, CUIManager::MOUSELBUTTON);
@@ -141,7 +141,7 @@ BOOL CUIControlSlider::OnLButtonDown(CPoint pt)
 
             CSingleLock renderLock(&(m_pPanel->m_pManager->field_56), FALSE);
             renderLock.Lock(INFINITE);
-            m_nRenderCount = CBaldurChitin::RENDER_COUNT;
+            m_nRenderCount = CUIManager::RENDER_COUNT;
             renderLock.Unlock();
 
             OnThumbChange();
@@ -159,7 +159,7 @@ void CUIControlSlider::OnLButtonUp(CPoint pt)
 
     CSingleLock lock(&(m_pPanel->m_pManager->field_56), FALSE);
     lock.Lock(INFINITE);
-    m_nRenderCount = CBaldurChitin::RENDER_COUNT;
+    m_nRenderCount = CUIManager::RENDER_COUNT;
     lock.Unlock();
 
     if (m_bActive && m_bKnobEnabled && m_bValueChanged) {
@@ -247,7 +247,7 @@ void CUIControlSlider::InvalidateRect()
         CSingleLock lock(&(m_pPanel->m_pManager->field_56), FALSE);
         lock.Lock(INFINITE);
 
-        m_nRenderCount = CBaldurChitin::RENDER_COUNT;
+        m_nRenderCount = CUIManager::RENDER_COUNT;
 
         lock.Unlock();
     }
