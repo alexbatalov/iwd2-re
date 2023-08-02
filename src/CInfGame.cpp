@@ -2528,6 +2528,94 @@ INT CInfGame::sub_5C93E0()
     return nCount;
 }
 
+// NOTE: Somewhat broken version of `LoadMultiPlayerPermissions`.
+//
+// 0x5C9490
+void CInfGame::ResetMultiPlayerPermissions()
+{
+    if (!g_pBaldurChitin->cNetwork.GetSessionOpen()
+        || !g_pBaldurChitin->cNetwork.GetSessionHosting()) {
+        return;
+    }
+
+    CMultiplayerSettings* pSettings = GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 22952
+    UTIL_ASSERT(pSettings != NULL);
+
+    CString sPermissions;
+    CString sDefault("");
+
+    GetPrivateProfileStringA("Multiplayer",
+        "Default Permissions",
+        sDefault,
+        sPermissions.GetBuffer(10),
+        10,
+        g_pBaldurChitin->GetIniFileName());
+    sPermissions.ReleaseBuffer(-1);
+
+    if (sPermissions.GetLength() == 8) {
+        BOOL bPurchasing = sPermissions[0] == '1';
+        BOOL bAreaTransition = sPermissions[1] == '1';
+        BOOL bDialog = sPermissions[2] == '1';
+        BOOL bCharRecords = sPermissions[3] == '1';
+        BOOL bPausing = sPermissions[4] == '1';
+        BOOL bGroupPool = sPermissions[5] == '1';
+        BOOL bLeader = sPermissions[6] == '1';
+        BOOL bModifyChars = sPermissions[7] == '1';
+
+        // FIXME: Individual permission values are used as player slots. So
+        // depending on the value appropriate permission is set either on
+        // player 0 or 1.
+
+        pSettings->SetPermission(bPurchasing,
+            CGamePermission::PURCHASING,
+            bPurchasing,
+            TRUE);
+        pSettings->SetPermission(bAreaTransition,
+            CGamePermission::AREA_TRANSITION,
+            bAreaTransition,
+            TRUE);
+        pSettings->SetPermission(bDialog,
+            CGamePermission::DIALOG,
+            bDialog,
+            TRUE);
+        pSettings->SetPermission(bCharRecords,
+            CGamePermission::CHAR_RECORDS,
+            bCharRecords,
+            TRUE);
+        pSettings->SetPermission(bPausing,
+            CGamePermission::PAUSING,
+            bPausing,
+            TRUE);
+        pSettings->SetPermission(bGroupPool,
+            CGamePermission::GROUP_POOL,
+            bGroupPool,
+            TRUE);
+        pSettings->SetPermission(bLeader,
+            CGamePermission::LEADER,
+            bLeader,
+            TRUE);
+        pSettings->SetPermission(bModifyChars,
+            CGamePermission::MODIFY_CHARS,
+            bModifyChars,
+            TRUE);
+    }
+
+    INT nRestrictStore = GetPrivateProfileIntA("Multiplayer",
+        "Restrict Stores",
+        0,
+        g_pBaldurChitin->GetIniFileName());
+    pSettings->SetRestrictStoreOption(nRestrictStore != 0);
+
+    BYTE nImportingBitField = static_cast<BYTE>(GetPrivateProfileIntA("Multiplayer",
+        "Import Character",
+        CMultiplayerSettings::IMPORT_ALL,
+        g_pBaldurChitin->GetIniFileName()));
+    pSettings->SetImportingCharacterOption(nImportingBitField);
+}
+
 // NOTE: Unclear why `nClass` is passed as pointer.
 // TODO: Move to `CRuleTables`.
 //

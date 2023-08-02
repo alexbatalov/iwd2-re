@@ -102,6 +102,7 @@ public:
     BOOLEAN GetGameSpyCharacterInformation(INT nCharacterSlot, CString& sName, CString& sRace, CString& sClass, CString& sLevel);
     void MultiplayerSetCharacterCreationLocation();
     INT sub_5C93E0();
+    void ResetMultiPlayerPermissions();
 
     INT GetSpellcasterIndex(BYTE& nClass);
     BYTE GetSpellcasterClass(INT& nIndex);
