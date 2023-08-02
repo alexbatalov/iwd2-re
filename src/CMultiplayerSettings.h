@@ -30,6 +30,7 @@ public:
     DWORD GetDataSize();
     void InitializeSettings();
     BOOLEAN GetPermission(INT nPlayerNumber, INT nPermission);
+    void SetPermission(INT nPlayerSlot, INT nPermission, BOOLEAN bPermissionValue, BOOLEAN bFlush);
     void ResetPermissionsForPlayer(INT nPlayerSlot, BOOLEAN bFlush);
     BOOLEAN GetPlayerReady(SHORT nPlayerSlot);
     BOOLEAN GetPlayerReady(PLAYER_ID playerID);

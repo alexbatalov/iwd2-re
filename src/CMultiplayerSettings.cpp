@@ -157,6 +157,12 @@ BOOLEAN CMultiplayerSettings::GetPermission(INT nPlayerSlot, INT nPermission)
     return m_cDefaultPermissions.GetSinglePermission(nPermission);
 }
 
+// 0x518050
+void CMultiplayerSettings::SetPermission(INT nPlayerSlot, INT nPermission, BOOLEAN bPermissionValue, BOOLEAN bFlush)
+{
+    // TODO: Incomplete.
+}
+
 // 0x518220
 void CMultiplayerSettings::ResetPermissionsForPlayer(INT nPlayerSlot, BOOLEAN bFlush)
 {

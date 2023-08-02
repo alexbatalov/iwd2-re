@@ -1274,7 +1274,74 @@ void CInfGame::SaveOptions()
 // 0x5AAC30
 void CInfGame::LoadMultiPlayerPermissions()
 {
-    // TODO: Incomplete.
+    if (!g_pBaldurChitin->cNetwork.GetSessionOpen()
+        || !g_pBaldurChitin->cNetwork.GetSessionHosting()) {
+        return;
+    }
+
+    CMultiplayerSettings* pSettings = GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 8323
+    UTIL_ASSERT(pSettings != NULL);
+
+    CString sPermissions;
+    CString sDefault("");
+
+    GetPrivateProfileStringA("Multiplayer",
+        "Default Permissions",
+        sDefault,
+        sPermissions.GetBuffer(10),
+        10,
+        g_pBaldurChitin->GetIniFileName());
+    sPermissions.ReleaseBuffer(-1);
+
+    if (sPermissions.GetLength() == 8) {
+        pSettings->SetPermission(-1,
+            CGamePermission::PURCHASING,
+            sPermissions[0] == '1',
+            TRUE);
+        pSettings->SetPermission(-1,
+            CGamePermission::AREA_TRANSITION,
+            sPermissions[1] == '1',
+            TRUE);
+        pSettings->SetPermission(-1,
+            CGamePermission::DIALOG,
+            sPermissions[2] == '1',
+            TRUE);
+        pSettings->SetPermission(-1,
+            CGamePermission::CHAR_RECORDS,
+            sPermissions[3] == '1',
+            TRUE);
+        pSettings->SetPermission(-1,
+            CGamePermission::PAUSING,
+            sPermissions[4] == '1',
+            TRUE);
+        pSettings->SetPermission(-1,
+            CGamePermission::GROUP_POOL,
+            sPermissions[5] == '1',
+            TRUE);
+        pSettings->SetPermission(-1,
+            CGamePermission::LEADER,
+            sPermissions[6] == '1',
+            TRUE);
+        pSettings->SetPermission(-1,
+            CGamePermission::MODIFY_CHARS,
+            sPermissions[7] == '1',
+            TRUE);
+    }
+
+    INT nRestrictStore = GetPrivateProfileIntA("Multiplayer",
+        "Restrict Stores",
+        0,
+        g_pBaldurChitin->GetIniFileName());
+    pSettings->SetRestrictStoreOption(nRestrictStore != 0);
+
+    BYTE nImportingBitField = static_cast<BYTE>(GetPrivateProfileIntA("Multiplayer",
+        "Import Character",
+        CMultiplayerSettings::IMPORT_ALL,
+        g_pBaldurChitin->GetIniFileName()));
+    pSettings->SetImportingCharacterOption(nImportingBitField);
 }
 
 // 0x5AB190
