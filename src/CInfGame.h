@@ -188,12 +188,15 @@ public:
     /* 3884 */ CAIGroup m_group;
     /* 38A8 */ CTypedPtrList<CPtrList, int*> m_allies; // NOTE: Stores actual ints disguised as pointers.
     /* 38C4 */ CTypedPtrList<CPtrList, int*> m_familiars; // NOTES: Stores actual ints disguised as pointers.
+    /* 4208 */ CString m_sTempDir;
+    /* 420C */ CString m_sTempSaveDir;
     /* 4210 */ CString m_sScriptsDir;
     /* 4214 */ CString m_sSoundsDir;
     /* 4218 */ CString m_sPortraitsDir;
     /* 421C */ CString m_sCharactersDir;
     /* 4220 */ CString field_4220;
-    /* 4228 */ CString field_4228;
+    /* 4224 */ CString m_sSaveDir;
+    /* 4228 */ CString m_sMultiplayerSaveDir;
     /* 43D8 */ int field_43D8;
     /* 43E2 */ int field_43E2;
     /* 43E6 */ int field_43E6;

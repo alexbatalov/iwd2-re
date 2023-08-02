@@ -624,6 +624,34 @@ CInfGame::CInfGame()
     memset(m_gameAreas, 0, sizeof(m_gameAreas));
     m_pGameAreaMaster = NULL;
     // TODO: Incomplete.
+
+    m_sSaveDir = ".\\save\\";
+    m_sMultiplayerSaveDir = ".\\mpsave\\";
+    m_sTempDir = ".\\temp\\";
+    m_sTempSaveDir = ".\\tempsave\\";
+    m_sScriptsDir = ".\\scripts\\";
+    m_sPortraitsDir = ".\\portraits\\";
+    m_sSoundsDir = ".\\sounds\\";
+    m_sCharactersDir = ".\\characters\\";
+
+    if (!g_pChitin->cDimm.DirectoryRemoveFiles(m_sTempDir)) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+        // __LINE__: 2608
+        UTIL_ASSERT_MSG(FALSE, "Problems removing files from Temp directory, delete the directory and try again");
+    }
+
+    if (!g_pChitin->cDimm.DirectoryRemoveFiles(m_sTempSaveDir)) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+        // __LINE__: 2608
+        UTIL_ASSERT_MSG(FALSE, "Problems removing files from TempSave directory, delete the directory and try again");
+    }
+
+    g_pChitin->cDimm.AddToDirectoryList(m_sScriptsDir, TRUE);
+    g_pChitin->cDimm.AddToDirectoryList(m_sSoundsDir, TRUE);
+    g_pChitin->cDimm.AddToDirectoryList(m_sPortraitsDir, TRUE);
+    g_pChitin->cDimm.AddToDirectoryList(m_sCharactersDir, TRUE);
+
+    // TODO: Incomplete.
 }
 
 // 0x59ECB0
@@ -2004,7 +2032,7 @@ CString CInfGame::GetDirSaveRoot()
     CString sResolvedFileName;
     CString sFileName;
 
-    sFileName = field_4228;
+    sFileName = m_sMultiplayerSaveDir;
     if (!g_pBaldurChitin->lAliases.ResolveFileName(sFileName, sResolvedFileName)) {
         sResolvedFileName = sFileName;
     }
@@ -2015,7 +2043,7 @@ CString CInfGame::GetDirSaveRoot()
 // 0x5C0A80
 CString CInfGame::GetDirSave()
 {
-    return field_4228 + field_4220 + "\\";
+    return m_sMultiplayerSaveDir + field_4220 + "\\";
 }
 
 // 0x5C2280
