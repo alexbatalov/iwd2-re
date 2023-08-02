@@ -61,6 +61,7 @@ public:
     CGameArea* GetArea(CString sName);
     BOOL Is3DSound(int nSoundChannel);
     float GetSoundReverbMix(int nSoundChannel, int nReverb);
+    BYTE GetFrameRate();
     void SynchronousUpdate();
     BOOL DeleteSaveGame(const CString& sFileName);
     BOOL SaveGameExists(const CString& sSaveGame);

@@ -1468,6 +1468,12 @@ float CInfGame::GetSoundReverbMix(int nSoundChannel, int nReverb)
     return m_ruleTables.GetSoundReverbMix(nSoundChannel, nReverb);
 }
 
+// 0x5BB960
+BYTE CInfGame::GetFrameRate()
+{
+    return static_cast<BYTE>(g_pBaldurChitin->pActiveEngine->pVidMode->field_94);
+}
+
 // 0x5BE900
 void CInfGame::SynchronousUpdate()
 {
