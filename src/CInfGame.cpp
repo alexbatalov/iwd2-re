@@ -1468,6 +1468,37 @@ float CInfGame::GetSoundReverbMix(int nSoundChannel, int nReverb)
     return m_ruleTables.GetSoundReverbMix(nSoundChannel, nReverb);
 }
 
+// 0x5BB830
+CResRef CInfGame::GetAnimationBam(SHORT nPortrait, BYTE range)
+{
+    CString sResRef;
+
+    // NOTE: Uninline.
+    LONG nCharacterId = GetCharacterId(nPortrait);
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = m_cObjectArray.GetShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc != CGameObjectArray::SUCCESS) {
+        return CResRef("");
+    }
+
+    pSprite->GetAnimation()->GetAnimationResRef(sResRef, range);
+
+    m_cObjectArray.ReleaseShare(nCharacterId,
+        CGameObjectArray::THREAD_ASYNCH,
+        INFINITE);
+
+    return CResRef(sResRef);
+}
+
 // 0x5BB960
 BYTE CInfGame::GetFrameRate()
 {

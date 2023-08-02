@@ -13,6 +13,7 @@ public:
 
     USHORT GetAnimationId();
 
+    void GetAnimationResRef(CString& resRef, BYTE range);
     CGameAnimationType* GetAnimation();
 
     /* 0004 */ CGameAnimationType* m_animation;

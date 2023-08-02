@@ -39,6 +39,16 @@ USHORT CGameAnimation::GetAnimationId()
 }
 
 // NOTE: Inlined.
+void CGameAnimation::GetAnimationResRef(CString& resRef, BYTE range)
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2080
+    UTIL_ASSERT(m_animation != NULL);
+
+    m_animation->GetAnimationResRef(resRef, range);
+}
+
+// NOTE: Inlined.
 CGameAnimationType* CGameAnimation::GetAnimation()
 {
     // __FILE__: .\Include\ObjAnimation.h
