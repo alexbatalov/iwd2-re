@@ -1344,6 +1344,59 @@ void CInfGame::LoadMultiPlayerPermissions()
     pSettings->SetImportingCharacterOption(nImportingBitField);
 }
 
+// 0x5AAEC0
+void CInfGame::SaveMultiPlayerPermissions()
+{
+    if (!g_pBaldurChitin->cNetwork.GetSessionOpen()
+        || !g_pBaldurChitin->cNetwork.GetSessionHosting()) {
+        return;
+    }
+
+    CMultiplayerSettings* pSettings = GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 3290
+    UTIL_ASSERT(pSettings != NULL);
+
+    BOOL bPurchasing = pSettings->GetPermission(-1, CGamePermission::PURCHASING);
+    BOOL bAreaTransition = pSettings->GetPermission(-1, CGamePermission::AREA_TRANSITION);
+    BOOL bDialog = pSettings->GetPermission(-1, CGamePermission::DIALOG);
+    BOOL bCharRecords = pSettings->GetPermission(-1, CGamePermission::CHAR_RECORDS);
+    BOOL bPausing = pSettings->GetPermission(-1, CGamePermission::PAUSING);
+    BOOL bGroupPool = pSettings->GetPermission(-1, CGamePermission::GROUP_POOL);
+    BOOL bLeader = pSettings->GetPermission(-1, CGamePermission::LEADER);
+    BOOL bModifyChars = pSettings->GetPermission(-1, CGamePermission::MODIFY_CHARS);
+
+    CString sPermissions("00000000");
+    sPermissions.SetAt(0, bPurchasing + '0');
+    sPermissions.SetAt(1, bAreaTransition + '0');
+    sPermissions.SetAt(2, bDialog + '0');
+    sPermissions.SetAt(3, bCharRecords + '0');
+    sPermissions.SetAt(4, bPausing + '0');
+    sPermissions.SetAt(5, bGroupPool + '0');
+    sPermissions.SetAt(6, bLeader + '0');
+    sPermissions.SetAt(7, bModifyChars + '0');
+
+    WritePrivateProfileStringA("Multiplayer",
+        "Default Permissions",
+        sPermissions,
+        g_pBaldurChitin->GetIniFileName());
+
+    CString sTemp;
+
+    sTemp.Format("%d", pSettings->m_bRestrictStoreOption);
+    WritePrivateProfileStringA("Multiplayer",
+        "Restrict Stores",
+        sTemp,
+        g_pBaldurChitin->GetIniFileName());
+
+    sTemp.Format("%d", pSettings->m_nImportingBitField);
+    WritePrivateProfileStringA("Multiplayer",
+        "Import Character",
+        sTemp,
+        g_pBaldurChitin->GetIniFileName());
+}
+
 // 0x5AB190
 void CInfGame::LoadGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace)
 {

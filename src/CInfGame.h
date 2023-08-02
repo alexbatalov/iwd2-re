@@ -47,6 +47,7 @@ public:
     void LoadOptions();
     void SaveOptions();
     void LoadMultiPlayerPermissions();
+    void SaveMultiPlayerPermissions();
     void LoadGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace);
     void NewGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace);
     void UpdatePortrait(SHORT nPortrait, DWORD dwPanelId);
