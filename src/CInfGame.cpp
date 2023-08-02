@@ -1382,37 +1382,46 @@ void CInfGame::LoadMultiPlayerPermissions()
     sPermissions.ReleaseBuffer(-1);
 
     if (sPermissions.GetLength() == 8) {
+        BOOL bPurchasing = sPermissions[0] == '1';
+        BOOL bAreaTransition = sPermissions[1] == '1';
+        BOOL bDialog = sPermissions[2] == '1';
+        BOOL bCharRecords = sPermissions[3] == '1';
+        BOOL bPausing = sPermissions[4] == '1';
+        BOOL bGroupPool = sPermissions[5] == '1';
+        BOOL bLeader = sPermissions[6] == '1';
+        BOOL bModifyChars = sPermissions[7] == '1';
+
         pSettings->SetPermission(-1,
             CGamePermission::PURCHASING,
-            sPermissions[0] == '1',
+            bPurchasing,
             TRUE);
         pSettings->SetPermission(-1,
             CGamePermission::AREA_TRANSITION,
-            sPermissions[1] == '1',
+            bAreaTransition,
             TRUE);
         pSettings->SetPermission(-1,
             CGamePermission::DIALOG,
-            sPermissions[2] == '1',
+            bDialog,
             TRUE);
         pSettings->SetPermission(-1,
             CGamePermission::CHAR_RECORDS,
-            sPermissions[3] == '1',
+            bCharRecords,
             TRUE);
         pSettings->SetPermission(-1,
             CGamePermission::PAUSING,
-            sPermissions[4] == '1',
+            bPausing,
             TRUE);
         pSettings->SetPermission(-1,
             CGamePermission::GROUP_POOL,
-            sPermissions[5] == '1',
+            bGroupPool,
             TRUE);
         pSettings->SetPermission(-1,
             CGamePermission::LEADER,
-            sPermissions[6] == '1',
+            bLeader,
             TRUE);
         pSettings->SetPermission(-1,
             CGamePermission::MODIFY_CHARS,
-            sPermissions[7] == '1',
+            bModifyChars,
             TRUE);
     }
 
