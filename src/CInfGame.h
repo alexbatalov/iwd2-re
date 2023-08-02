@@ -34,6 +34,7 @@ public:
     ~CInfGame();
     void StartSearchThread();
     void BeginListManipulation(CGameArea* pArea);
+    INT EndListManipulation(CGameArea* pArea);
     void sub_59FA00(BOOL a1);
     void DestroyGame(unsigned char a1, unsigned char a2);
     LONG ImportCharacter(const CString& sFileName, INT nIndex);

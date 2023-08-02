@@ -678,6 +678,19 @@ void CInfGame::BeginListManipulation(CGameArea* pArea)
     }
 }
 
+// 0x59F9D0
+INT CInfGame::EndListManipulation(CGameArea* pArea)
+{
+    INT nCounter = 0;
+
+    if (pArea != NULL) {
+        nCounter = pArea->SetListManipulationThreadId(0);
+        LeaveCriticalSection(&(pArea->field_214));
+    }
+
+    return nCounter;
+}
+
 // 0x59FA00
 void CInfGame::sub_59FA00(BOOL a1)
 {
