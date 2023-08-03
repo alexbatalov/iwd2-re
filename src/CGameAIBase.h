@@ -37,6 +37,20 @@ public:
 
     void CheckTimers(LONG cycles);
     void ClearTriggers();
+    SHORT MoveCursor(CPoint dest, SHORT speed);
+    SHORT ClickLButton(CPoint pt);
+    SHORT ClickLButtonPoint();
+    SHORT ClickLButtonObject(CGameObject* target);
+    SHORT DoubleClickLButton(CPoint pt);
+    SHORT DoubleClickLButtonPoint();
+    SHORT DoubleClickLButtonObject(CGameObject* target);
+    SHORT ClickRButton(CPoint pt);
+    SHORT ClickRButtonPoint();
+    SHORT ClickRButtonObject(CGameObject* target);
+    SHORT DoubleClickRButton(CPoint pt);
+    SHORT DoubleClickRButtonPoint();
+    SHORT DoubleClickRButtonObject(CGameObject* target);
+    SHORT MoveCursorPoint();
     SHORT StartMusic();
 
     void SetDefaultScript(CAIScript* script);

@@ -6,6 +6,7 @@
 #include "CGameArea.h"
 #include "CGameTimer.h"
 #include "CInfGame.h"
+#include "CScreenWorld.h"
 #include "CTimerWorld.h"
 #include "CUtil.h"
 
@@ -343,6 +344,195 @@ void CGameAIBase::SetScript(SHORT level, CAIScript* script)
 void CGameAIBase::ApplyTriggers()
 {
     // TODO: Incomplete.
+}
+
+// 0x45F6D0
+SHORT CGameAIBase::MoveCursor(CPoint dest, SHORT speed)
+{
+    // TODO: Incomplete.
+
+    return ACTION_DONE;
+}
+
+// 0x45F900
+SHORT CGameAIBase::MoveCursorPoint()
+{
+    CPoint dest = m_curAction.m_dest;
+    SHORT speed = static_cast<SHORT>(m_curAction.m_specificID);
+
+    return MoveCursor(dest, speed);
+}
+
+// NOTE: Inlined.
+SHORT CGameAIBase::ClickLButton(CPoint pt)
+{
+    g_pBaldurChitin->m_pEngineWorld->OnLButtonDown(pt);
+    g_pBaldurChitin->m_pEngineWorld->OnLButtonUp(pt);
+    return ACTION_DONE;
+}
+
+// 0x45F920
+SHORT CGameAIBase::ClickLButtonPoint()
+{
+    CPoint dest = m_curAction.m_dest;
+    SHORT speed = static_cast<SHORT>(m_curAction.m_specificID);
+
+    SHORT moveReturn = MoveCursor(dest, speed);
+    if (moveReturn != ACTION_DONE) {
+        return moveReturn;
+    }
+
+    // NOTE: Uninline.
+    return ClickLButton(dest);
+}
+
+// 0x45F980
+SHORT CGameAIBase::ClickLButtonObject(CGameObject* target)
+{
+    if (target == NULL) {
+        return ACTION_ERROR;
+    }
+
+    CPoint dest = target->GetPos();
+    SHORT speed = static_cast<SHORT>(m_curAction.m_specificID);
+
+    SHORT moveReturn = MoveCursor(dest, speed);
+    if (moveReturn != ACTION_DONE) {
+        return moveReturn;
+    }
+
+    // NOTE: Uninline.
+    return ClickLButton(dest);
+}
+
+// NOTE: Inlined.
+SHORT CGameAIBase::DoubleClickLButton(CPoint pt)
+{
+    g_pBaldurChitin->m_pEngineWorld->OnLButtonDown(pt);
+    g_pBaldurChitin->m_pEngineWorld->OnLButtonUp(pt);
+    g_pBaldurChitin->m_pEngineWorld->OnLButtonDblClk(pt);
+    g_pBaldurChitin->m_pEngineWorld->OnLButtonUp(pt);
+    return ACTION_DONE;
+}
+
+// 0x45F9F0
+SHORT CGameAIBase::DoubleClickLButtonPoint()
+{
+    CPoint dest = m_curAction.m_dest;
+    SHORT speed = static_cast<SHORT>(m_curAction.m_specificID);
+
+    SHORT moveReturn = MoveCursor(dest, speed);
+    if (moveReturn != ACTION_DONE) {
+        return moveReturn;
+    }
+
+    // NOTE: Uninline.
+    return DoubleClickLButton(dest);
+}
+
+// 0x45FA70
+SHORT CGameAIBase::DoubleClickLButtonObject(CGameObject* target)
+{
+    if (target == NULL) {
+        return ACTION_ERROR;
+    }
+
+    CPoint dest = target->GetPos();
+    SHORT speed = static_cast<SHORT>(m_curAction.m_specificID);
+
+    SHORT moveReturn = MoveCursor(dest, speed);
+    if (moveReturn != ACTION_DONE) {
+        return moveReturn;
+    }
+
+    // NOTE: Uninline.
+    return DoubleClickLButton(dest);
+}
+
+// NOTE: Inlined.
+SHORT CGameAIBase::ClickRButton(CPoint pt)
+{
+    g_pBaldurChitin->m_pEngineWorld->OnRButtonDown(pt);
+    g_pBaldurChitin->m_pEngineWorld->OnRButtonUp(pt);
+    return ACTION_DONE;
+}
+
+// 0x45FB10
+SHORT CGameAIBase::ClickRButtonPoint()
+{
+    CPoint dest = m_curAction.m_dest;
+    SHORT speed = static_cast<SHORT>(m_curAction.m_specificID);
+
+    SHORT moveReturn = MoveCursor(dest, speed);
+    if (moveReturn != ACTION_DONE) {
+        return moveReturn;
+    }
+
+    // NOTE: Uninline.
+    return ClickRButton(dest);
+}
+
+// 0x45FB70
+SHORT CGameAIBase::ClickRButtonObject(CGameObject* target)
+{
+    if (target == NULL) {
+        return ACTION_ERROR;
+    }
+
+    CPoint dest = target->GetPos();
+    SHORT speed = static_cast<SHORT>(m_curAction.m_specificID);
+
+    SHORT moveReturn = MoveCursor(dest, speed);
+    if (moveReturn != ACTION_DONE) {
+        return moveReturn;
+    }
+
+    // NOTE: Uninline.
+    return ClickRButton(dest);
+}
+
+// NOTE: Inlined.
+SHORT CGameAIBase::DoubleClickRButton(CPoint pt)
+{
+    g_pBaldurChitin->m_pEngineWorld->OnRButtonDown(pt);
+    g_pBaldurChitin->m_pEngineWorld->OnRButtonUp(pt);
+    g_pBaldurChitin->m_pEngineWorld->OnRButtonDblClk(pt);
+    g_pBaldurChitin->m_pEngineWorld->OnRButtonUp(pt);
+    return ACTION_DONE;
+}
+
+// 0x45FBF0
+SHORT CGameAIBase::DoubleClickRButtonPoint()
+{
+    CPoint dest = m_curAction.m_dest;
+    SHORT speed = static_cast<SHORT>(m_curAction.m_specificID);
+
+    SHORT moveReturn = MoveCursor(dest, speed);
+    if (moveReturn != ACTION_DONE) {
+        return moveReturn;
+    }
+
+    // NOTE: Uninline.
+    return DoubleClickRButton(dest);
+}
+
+// 0x45FC80
+SHORT CGameAIBase::DoubleClickRButtonObject(CGameObject* target)
+{
+    if (target == NULL) {
+        return ACTION_ERROR;
+    }
+
+    CPoint dest = target->GetPos();
+    SHORT speed = static_cast<SHORT>(m_curAction.m_specificID);
+
+    SHORT moveReturn = MoveCursor(dest, speed);
+    if (moveReturn != ACTION_DONE) {
+        return moveReturn;
+    }
+
+    // NOTE: Uninline.
+    return DoubleClickLButton(dest);
 }
 
 // 0x4668B0
