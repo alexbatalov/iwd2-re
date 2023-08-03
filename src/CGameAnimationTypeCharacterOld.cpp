@@ -437,6 +437,7 @@ void CGameAnimationTypeCharacterOld::DecrementFrame()
     UTIL_ASSERT(m_currentVidCell != NULL);
 
     m_currentVidCell->m_nCurrentFrame--;
+    m_currentVidCellShadow->m_nCurrentFrame--;
 
     if (m_currentVidCellWeapon != NULL && m_currentVidCellWeapon->GetResRef().IsValid()) {
         m_currentVidCellWeapon->m_nCurrentFrame--;
