@@ -644,7 +644,6 @@ void CGameAnimationTypeCharacterOld::ClearColorEffectsAll()
     if (m_falseColor) {
         for (BYTE colorRange = 0; colorRange < CVidPalette::NUM_RANGES; colorRange++) {
             ClearColorEffects(colorRange);
-            ClearColorEffects(colorRange | 0x10);
         }
     } else {
         m_g1VidCellBase.SetTintColor(RGB(CVidPalette::NO_TINT, CVidPalette::NO_TINT, CVidPalette::NO_TINT));
