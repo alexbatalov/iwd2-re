@@ -80,6 +80,7 @@ public:
     INT SetListManipulationThreadId(DWORD ThreadID);
     void AddObject(LONG id, BYTE listType);
     void ApplyWindToAmbients(BYTE nPercentVolume);
+    void ProgressBarCallback(DWORD dwSize, BOOLEAN bInitialize);
     void SetListenPosition();
     void OnActivation();
     void OnDeactivation();
@@ -121,6 +122,8 @@ public:
     /* 03E8 */ int field_3E8;
     /* 03F6 */ int field_3F6;
     /* 0422 */ DWORD m_nInitialAreaId;
+    /* 042A */ DWORD m_dwLastProgressRenderTickCount;
+    /* 042E */ DWORD m_dwLastProgressMsgTickCount;
     /* 04CC */ CInfinity m_cInfinity;
     /* 08BC */ CSound m_sndAmbientDay;
     /* 0920 */ CSound m_sndAmbientNight;
