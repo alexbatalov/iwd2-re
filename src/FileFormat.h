@@ -59,6 +59,19 @@ public:
     /* 0268 */ DWORD m_specialization;
 };
 
+class CCreatureFileItem {
+public:
+    CCreatureFileItem()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    /* 0000 */ RESREF m_itemId;
+    /* 0008 */ WORD m_wear;
+    /* 000A */ WORD m_usageCount[3];
+    /* 0010 */ DWORD m_dynamicFlags;
+};
+
 class CWorldMapHeader {
 public:
     DWORD m_nMapCount;
