@@ -196,6 +196,7 @@ public:
     static BOOLEAN GRAVITY_IS_DOWN;
 
     /* 0014 */ LONG GetTargetId() override;
+    /* 0038 */ BOOL DoesIntersect(CRect r);
     /* 003C */ BOOL OnSearchMap() override;
     /* 0044 */ void OnFormationButton(const CPoint& pt) override;
     /* 00BC */ virtual void SetAIType(const CAIObjectType& typeAI, BOOL updateLive, BOOL updateStart);

@@ -260,6 +260,20 @@ BOOLEAN CGameSprite::SHOW_CHARACTER_HP;
 // 0x8F950D
 BOOLEAN CGameSprite::GRAVITY_IS_DOWN;
 
+// 0x6F2990
+BOOL CGameSprite::DoesIntersect(CRect r)
+{
+    r.InflateRect(0, 0, 1, 1);
+
+    CRect rEllipse = m_animation.GetEllipseRect();
+    rEllipse.OffsetRect(m_pos);
+
+    CRect rIntersection;
+    rIntersection.IntersectRect(r, rEllipse);
+
+    return !rIntersection.IsRectNull();
+}
+
 // 0x
 BOOL CGameSprite::OnSearchMap()
 {

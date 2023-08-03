@@ -14,6 +14,7 @@ public:
     USHORT GetAnimationId();
 
     void GetAnimationResRef(CString& resRef, BYTE range);
+    const CRect& GetEllipseRect();
     CGameAnimationType* GetAnimation();
 
     /* 0004 */ CGameAnimationType* m_animation;

@@ -49,6 +49,16 @@ void CGameAnimation::GetAnimationResRef(CString& resRef, BYTE range)
 }
 
 // NOTE: Inlined.
+const CRect& CGameAnimation::GetEllipseRect()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2091
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->GetEllipseRect();
+}
+
+// NOTE: Inlined.
 CGameAnimationType* CGameAnimation::GetAnimation()
 {
     // __FILE__: .\Include\ObjAnimation.h
