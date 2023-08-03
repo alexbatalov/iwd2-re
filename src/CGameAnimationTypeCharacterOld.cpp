@@ -433,7 +433,7 @@ void CGameAnimationTypeCharacterOld::IncrementFrame()
 void CGameAnimationTypeCharacterOld::DecrementFrame()
 {
     // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
-    // __LINE__: 1476
+    // __LINE__: 23096
     UTIL_ASSERT(m_currentVidCell != NULL);
 
     m_currentVidCell->m_nCurrentFrame--;
