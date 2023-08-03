@@ -200,6 +200,7 @@ public:
     /* 003C */ BOOL OnSearchMap() override;
     /* 0044 */ void OnFormationButton(const CPoint& pt) override;
     /* 009C */ const BYTE* GetVisibleTerrainTable() override;
+    /* 00A0 */ const BYTE* GetTerrainTable() override;
     /* 00BC */ virtual void SetAIType(const CAIObjectType& typeAI, BOOL updateLive, BOOL updateStart);
     /* 00C0 */ virtual void ResetAITypeLive();
     /* 00C4 */ virtual void ResetAIType();
@@ -235,6 +236,7 @@ public:
     /* 4D36 */ CSound m_sndArmor[2];
     /* 4E00 */ CSound m_sndReady;
     /* 4E64 */ CSound m_sndDeath;
+    /* 50BB */ BYTE m_terrainTable[16];
     /* 50CB */ BYTE m_visibleTerrainTable[16];
     /* 50EC */ CGameAnimation m_animation;
     /* 5586 */ POSITION m_groupPosition;

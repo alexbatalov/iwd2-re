@@ -326,6 +326,12 @@ LONG CGameSprite::GetTargetId()
     return m_targetId;
 }
 
+// 0x6F2C60
+const BYTE* CGameSprite::GetTerrainTable()
+{
+    return m_terrainTable;
+}
+
 // 0x700BB0
 void CGameSprite::OnFormationButton(const CPoint& pt)
 {
