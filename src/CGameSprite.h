@@ -205,6 +205,7 @@ public:
     /* 00C0 */ virtual void ResetAITypeLive();
     /* 00C4 */ virtual void ResetAIType();
 
+    void DropPath();
     void PlaySound(BYTE soundID, BOOL showText, BOOL showCircle, BOOL overrideOption);
     void SetFootstepChannel();
     BYTE GetChannel();
@@ -239,6 +240,7 @@ public:
     /* 50BB */ BYTE m_terrainTable[16];
     /* 50CB */ BYTE m_visibleTerrainTable[16];
     /* 50EC */ CGameAnimation m_animation;
+    /* 5382 */ LONG* m_pPath;
     /* 5586 */ POSITION m_groupPosition;
     /* 558A */ BOOL m_groupMove;
     /* 562C */ int field_562C;

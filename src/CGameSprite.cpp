@@ -332,6 +332,15 @@ const BYTE* CGameSprite::GetTerrainTable()
     return m_terrainTable;
 }
 
+// 0x6FF2F0
+void CGameSprite::DropPath()
+{
+    if (m_pPath != NULL) {
+        delete m_pPath;
+        m_pPath = NULL;
+    }
+}
+
 // 0x700BB0
 void CGameSprite::OnFormationButton(const CPoint& pt)
 {
