@@ -274,6 +274,12 @@ BOOL CGameSprite::DoesIntersect(CRect r)
     return !rIntersection.IsRectNull();
 }
 
+// 0x6F2B50
+const BYTE* CGameSprite::GetVisibleTerrainTable()
+{
+    return m_visibleTerrainTable;
+}
+
 // 0x
 BOOL CGameSprite::OnSearchMap()
 {
