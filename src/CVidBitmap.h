@@ -19,6 +19,7 @@ public:
     BOOL GetPixelValue(BYTE& value, INT x, INT y, BOOLEAN bDemanded);
     BYTE GetPixelValue(INT x, INT y, BOOLEAN bDemanded);
     void SetRes(CResBitmap* pResBmp);
+    BOOL BltBmp8To32(DWORD* pSurface, LONG lPitch, BYTE* pData, const CSize& bmpSize, LONG nDataJump, DWORD dwFlags);
 
     /* 00B0 */ SHORT m_nBitCount;
     /* 00B6 */ BOOL m_bDoubleSize;

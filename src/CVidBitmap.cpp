@@ -163,3 +163,21 @@ void CVidBitmap::SetRes(CResBitmap* pResBmp)
 {
     pRes = pResBmp;
 }
+
+// 0x7CD5E0
+BOOL CVidBitmap::BltBmp8To32(DWORD* pSurface, LONG lPitch, BYTE* pData, const CSize& bmpSize, LONG nDataJump, DWORD dwFlags)
+{
+    m_cPalette.SetPalette(pRes->GetColorTable(), pRes->GetColorCount(), CVidPalette::TYPE_RESOURCE);
+    m_cPalette.Realize(rgbTempPal, 32, dwFlags | 0x800000, &m_paletteAffects, 255);
+
+    for (LONG y = 0; y < bmpSize.cy; y++) {
+        for (LONG x = 0; x < bmpSize.cx; x++) {
+            *pSurface++ = rgbTempPal[*pData++];
+        }
+
+        pSurface += -bmpSize.cx - lPitch / 4;
+        pData += nDataJump;
+    }
+
+    return TRUE;
+}
