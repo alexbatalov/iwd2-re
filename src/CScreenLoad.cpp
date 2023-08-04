@@ -13,6 +13,31 @@
 
 #define GAME_SLOTS 5
 
+// 0x63E4B0
+CScreenLoadGameSlot::CScreenLoadGameSlot()
+{
+    m_sFileName = "";
+    m_sSlotName = "";
+    m_cResScreenShot.m_pData = NULL;
+    m_cBmpResPortrait0.m_pData = NULL;
+    m_cBmpResPortrait1.m_pData = NULL;
+    m_cBmpResPortrait2.m_pData = NULL;
+    m_cBmpResPortrait3.m_pData = NULL;
+    m_cBmpResPortrait4.m_pData = NULL;
+    m_cBmpResPortrait5.m_pData = NULL;
+    field_2FC = "";
+    field_304 = "";
+    field_308 = 0;
+    field_30C = 0;
+    field_310 = "";
+    field_314 = "";
+}
+
+// 0x63C850
+CScreenLoadGameSlot::~CScreenLoadGameSlot()
+{
+}
+
 // 0x63AF80
 CScreenLoad::CScreenLoad()
 {

@@ -3,6 +3,7 @@
 
 #include "CBaldurEngine.h"
 #include "CKeyInfo.h"
+#include "CResBitmap.h"
 #include "CUIControlButton.h"
 #include "CUIControlScrollBar.h"
 #include "CVidFont.h"
@@ -12,7 +13,24 @@
 
 class CScreenLoadGameSlot {
 public:
-    CString m_sFileName;
+    CScreenLoadGameSlot();
+    ~CScreenLoadGameSlot();
+
+    /* 0000 */ CString m_sFileName;
+    /* 0004 */ CString m_sSlotName;
+    /* 0008 */ CResBitmap m_cResScreenShot;
+    /* 0074 */ CResBitmap m_cBmpResPortrait0;
+    /* 00E0 */ CResBitmap m_cBmpResPortrait1;
+    /* 014C */ CResBitmap m_cBmpResPortrait2;
+    /* 01B8 */ CResBitmap m_cBmpResPortrait3;
+    /* 0224 */ CResBitmap m_cBmpResPortrait4;
+    /* 0290 */ CResBitmap m_cBmpResPortrait5;
+    /* 02FC */ CResRef field_2FC;
+    /* 0304 */ CString field_304;
+    /* 0308 */ ULONG field_308;
+    /* 030C */ int field_30C;
+    /* 0310 */ CString field_310;
+    /* 0314 */ CString field_314;
 };
 
 class CScreenLoad : public CBaldurEngine {
