@@ -5221,9 +5221,64 @@ BYTE CUIControlButtonCharGenRaceSelection::GetRace()
 // 0x61C650
 BOOL CUIControlButtonCharGenPortrait::Render(BOOL bForce)
 {
-    // TODO: Incomplete.
+    CResRef silhouetteResRef;
 
-    return FALSE;
+    if (!m_bActive && !m_bInactiveRender) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount == 0 && !bForce) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount != 0) {
+        CSingleLock lock(&(m_pPanel->m_pManager->field_56), FALSE);
+        lock.Lock(INFINITE);
+        m_nRenderCount--;
+        lock.Unlock();
+    }
+
+    if (m_portraitResRef == "" || m_portraitResRef == "NONE") {
+        return FALSE;
+    }
+
+    CVidBitmap vbPortrait;
+    vbPortrait.SetResRef(m_portraitResRef, TRUE, FALSE);
+    vbPortrait.m_bDoubleSize = m_pPanel->m_pManager->m_bDoubleSize;
+
+    if (m_pPanel->m_nID == 18 && m_nID == 1) {
+        silhouetteResRef = CInfGame::SILHOUETTE_PORTRAIT_SM;
+    } else {
+        silhouetteResRef = CInfGame::SILHOUETTE_PORTRAIT_LG;
+    }
+
+    if (vbPortrait.pRes == NULL) {
+        vbPortrait.SetResRef(silhouetteResRef, TRUE, TRUE);
+        vbPortrait.m_bDoubleSize = m_pPanel->m_pManager->m_bDoubleSize;
+    }
+
+    // FIXME: Calls `GetBitCount` two times.
+    if (vbPortrait.GetBitCount(FALSE) != 24 && vbPortrait.GetBitCount(FALSE) != 8) {
+        vbPortrait.SetResRef(silhouetteResRef, TRUE, TRUE);
+        vbPortrait.m_bDoubleSize = m_pPanel->m_pManager->m_bDoubleSize;
+    }
+
+    if (vbPortrait.pRes == NULL) {
+        return FALSE;
+    }
+
+    CRect rControlFrame(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
+
+    CRect rClip;
+    rClip.IntersectRect(rControlFrame, m_rDirty);
+
+    BOOL bResult = vbPortrait.RenderDirect(0, rControlFrame.left, rControlFrame.top, rClip, 0, FALSE);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 13053
+    UTIL_ASSERT(bResult);
+
+    return TRUE;
 }
 
 // NOTE: Inlined.
