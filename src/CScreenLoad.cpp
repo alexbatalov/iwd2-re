@@ -392,6 +392,10 @@ void CScreenLoad::UpdateMainPanel()
     // __LINE__: 733
     UTIL_ASSERT(pPanel != NULL);
 
+    // NOTE: Unused.
+    CString v1;
+    CString sTime;
+
     m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(23));
 
     CUIControlScrollBarLoadGames* pScrollBar = static_cast<CUIControlScrollBarLoadGames*>(pPanel->GetControl(23));
@@ -403,7 +407,72 @@ void CScreenLoad::UpdateMainPanel()
     // NOTE: Uninline.
     pScrollBar->UpdateScrollBar();
 
-    // TODO: Incomplete.
+    for (INT nSlot = 0; nSlot < GAME_SLOTS; nSlot++) {
+        CUIControlButton* pButton;
+        INT nGameSlot = nSlot + m_nTopGameSlot;
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(55 + nSlot));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenLoad.cpp
+        // __LINE__: 757
+        UTIL_ASSERT(pButton != NULL);
+
+        // NOTE: Inlining.
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenLoad.cpp
+        // __LINE__: 823
+        UTIL_ASSERT(0 <= nSlot && nSlot < GAME_SLOTS);
+
+        pButton->SetEnabled(nGameSlot < m_nNumGameSlots);
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(60 + nSlot));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenLoad.cpp
+        // __LINE__: 763
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->SetEnabled(nGameSlot < m_nNumGameSlots);
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(1 + nSlot));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenLoad.cpp
+        // __LINE__: 769
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->InvalidateRect();
+
+        for (DWORD nPortrait = 0; nPortrait < 6; nPortrait++) {
+            pButton = static_cast<CUIControlButton*>(pPanel->GetControl(25 + nSlot * 6 + nPortrait));
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenLoad.cpp
+            // __LINE__: 777
+            UTIL_ASSERT(pButton != NULL);
+
+            pButton->InvalidateRect();
+        }
+
+        if (nGameSlot < m_nNumGameSlots) {
+            CTimerWorld::GetCurrentTimeString(m_aGameSlots[nGameSlot]->field_308, 20670, sTime);
+
+            UpdateLabel(pPanel,
+                0x10000005 + nSlot,
+                "%s",
+                m_aGameSlots[nGameSlot]->m_sSlotName);
+            UpdateLabel(pPanel,
+                0x1000000A + nSlot,
+                "%s, %s",
+                m_aGameSlots[nGameSlot]->field_310,
+                sTime);
+            UpdateLabel(pPanel,
+                0x1000000F + nSlot,
+                "%s",
+                m_aGameSlots[nGameSlot]->field_314);
+        } else {
+            UpdateLabel(pPanel, 0x10000005 + nSlot, "");
+            UpdateLabel(pPanel, 0x1000000A + nSlot, "");
+            UpdateLabel(pPanel, 0x1000000F + nSlot, "");
+        }
+    }
 }
 
 // 0x63BE80
