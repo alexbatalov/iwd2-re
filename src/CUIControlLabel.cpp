@@ -135,7 +135,7 @@ BOOL CUIControlLabel::Render(BOOL bForce)
     // NOTE: `x` appears uninitialized, but constructor guarantees that one of
     // the horizontal alignment flags is set.
     int x;
-    if ((m_nTextFlags & 0x8) == 0) {
+    if ((m_nTextFlags & 0x8) != 0) {
         x = pt.x;
     }
 
