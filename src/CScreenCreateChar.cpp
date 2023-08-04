@@ -5511,9 +5511,65 @@ void CUIControlButtonCharGenAppearancePortrait::SetPortrait(const CResRef& resRe
 // 0x61D120
 BOOL CUIControlButtonCharGenAppearancePortrait::Render(BOOL bForce)
 {
-    // TODO: Incomplete.
+    if (!m_bActive && !m_bInactiveRender) {
+        return FALSE;
+    }
 
-    return FALSE;
+    if (m_nRenderCount == 0 && !bForce) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount != 0) {
+        CSingleLock lock(&(m_pPanel->m_pManager->field_56), FALSE);
+        lock.Lock(INFINITE);
+        m_nRenderCount--;
+        lock.Unlock();
+    }
+
+    if (m_portraitResRef == "" || m_portraitResRef == "NONE") {
+        return FALSE;
+    }
+
+    CVidBitmap vbPortrait;
+    vbPortrait.SetResRef(m_portraitResRef, TRUE, FALSE);
+    vbPortrait.m_bDoubleSize = m_pPanel->m_pManager->m_bDoubleSize;
+
+    if (vbPortrait.pRes == NULL) {
+        vbPortrait.SetResRef(CInfGame::SILHOUETTE_PORTRAIT_LG, TRUE, TRUE);
+        vbPortrait.m_bDoubleSize = m_pPanel->m_pManager->m_bDoubleSize;
+    }
+
+    // FIXME: Calls `GetBitCount` two times.
+    if (vbPortrait.GetBitCount(FALSE) != 24 && vbPortrait.GetBitCount(FALSE) != 8) {
+        vbPortrait.SetResRef(CInfGame::SILHOUETTE_PORTRAIT_LG, TRUE, TRUE);
+        vbPortrait.m_bDoubleSize = m_pPanel->m_pManager->m_bDoubleSize;
+    }
+
+    if (vbPortrait.pRes == NULL) {
+        return FALSE;
+    }
+
+    CSize size;
+    vbPortrait.GetImageDimensions(size, FALSE);
+
+    CPoint pt = m_pPanel->m_ptOrigin + m_ptOrigin;
+    if (size.cx < m_size.cx && size.cy < m_size.cy) {
+        pt.x += (m_size.cx - size.cx) / 2;
+        pt.y += (m_size.cy - size.cy) / 2;
+    }
+
+    CRect rControlFrame(pt, size);
+
+    CRect rClip;
+    rClip.IntersectRect(rControlFrame, m_rDirty);
+
+    BOOL bResult = vbPortrait.RenderDirect(0, pt.x, pt.y, rClip, 0, FALSE);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 13582
+    UTIL_ASSERT(bResult);
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------
