@@ -519,6 +519,39 @@ void CScreenLoad::RefreshGameSlots()
     // TODO: Incomplete.
 }
 
+// 0x63D460
+BOOL CScreenLoad::DrawScreenShot(INT nSlot, const CRect& rArea, const CRect& rClip)
+{
+    CVidBitmap vbScreenShot(CResRef(""), g_pBaldurChitin->field_4A28);
+
+    INT nGameSlot = nSlot + m_nTopGameSlot;
+    if (nGameSlot >= m_nNumGameSlots) {
+        return FALSE;
+    }
+
+    BOOL bResult;
+    if (m_aGameSlots[nGameSlot]->m_cResScreenShot.m_pData != NULL) {
+        vbScreenShot.SetRes(&(m_aGameSlots[nGameSlot]->m_cResScreenShot));
+        vbScreenShot.pRes->DemandLoadedBitmap();
+        bResult = vbScreenShot.RenderDirect(0, rArea.left, rArea.top, rClip, 0, 1);
+        vbScreenShot.pRes->ReleaseLoadedBitmap();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenLoad.cpp
+        // __LINE__: 1592
+        UTIL_ASSERT(bResult);
+    } else {
+        vbScreenShot.SetResRef(CResRef("ICEWIND2"), TRUE, TRUE);
+        vbScreenShot.m_bDoubleSize = g_pBaldurChitin->field_4A28;
+        bResult = vbScreenShot.RenderDirect(0, rArea.left, rArea.top, rClip, 0, 1);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenLoad.cpp
+        // __LINE__: 1599
+        UTIL_ASSERT(bResult);
+    }
+
+    return TRUE;
+}
+
 // 0x63D720
 BOOL CScreenLoad::DrawPortrait(USHORT nPortrait, INT nSlot, const CRect& rArea, const CRect& rClip)
 {
