@@ -69,6 +69,7 @@ public:
     void StartLoad(INT nEngineState);
     void FreeGameSlots();
     void RefreshGameSlots();
+    BOOL DrawPortrait(USHORT nPortrait, INT nSlot, const CRect& rArea, const CRect& rClip);
     void EnableMainPanel(BOOL bEnable);
     CUIPanel* GetTopPopup();
     void ShowPopupPanel(DWORD dwPanelId, BOOL bShow);
