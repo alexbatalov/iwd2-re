@@ -19,8 +19,20 @@ public:
     BOOL GetPixelValue(BYTE& value, INT x, INT y, BOOLEAN bDemanded);
     BYTE GetPixelValue(INT x, INT y, BOOLEAN bDemanded);
     void SetRes(CResBitmap* pResBmp);
+    BOOL RenderDirect(INT nSurface, INT x, INT y, const CRect& rClip, DWORD dwFlags, BOOLEAN bDemanded);
+
+    BOOL BltBmp8To16(WORD* pSurface, LONG lPitch, BYTE* pData, const CSize& bmpSize, LONG nDataJump, DWORD dwFlags);
+    BOOL BltBmp8To24(BYTE* pSurface, LONG lPitch, BYTE* pData, const CSize& bmpSize, LONG nDataJump, DWORD dwFlags);
     BOOL BltBmp8To32(DWORD* pSurface, LONG lPitch, BYTE* pData, const CSize& bmpSize, LONG nDataJump, DWORD dwFlags);
+    BOOL BltBmp24To16(WORD* pSurface, LONG lPitch, BYTE* pData, const CSize& bmpSize, LONG nDataJump, DWORD dwFlags);
+    BOOL BltBmp24To16Tint(WORD* pSurface, LONG lPitch, BYTE* pData, const CSize& bmpSize, LONG nDataJump, DWORD dwFlags);
+    BOOL BltBmp24To24(BYTE* pSurface, LONG lPitch, BYTE* pData, const CSize& bmpSize, LONG nDataJump, DWORD dwFlags);
+    BOOL BltBmp24To24Tint(BYTE* pSurface, LONG lPitch, BYTE* pData, const CSize& bmpSize, LONG nDataJump, DWORD dwFlags);
     BOOL BltBmp24To32(DWORD* pSurface, LONG lPitch, BYTE* pData, const CSize& bmpSize, LONG nDataJump, DWORD dwFlags);
+    BOOL BltBmp24To32Tint(DWORD* pSurface, LONG lPitch, BYTE* pData, const CSize& bmpSize, LONG nDataJump, DWORD dwFlags);
+
+    BOOL Render3d(INT x, INT y, const CRect& rClip, DWORD dwFlags, BOOLEAN bDemanded);
+    BOOL RenderDirect3d(INT x, INT y, const CRect& rClip, DWORD dwFlags, BOOLEAN bDemanded);
 
     /* 00B0 */ SHORT m_nBitCount;
     /* 00B6 */ BOOL m_bDoubleSize;
