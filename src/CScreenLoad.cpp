@@ -1081,9 +1081,38 @@ CUIControlButtonLoadPortrait::~CUIControlButtonLoadPortrait()
 // 0x63EFC0
 BOOL CUIControlButtonLoadPortrait::Render(BOOL bForce)
 {
-    // TODO: Incomplete.
+    if (!m_bActive && !m_bInactiveRender) {
+        return FALSE;
+    }
 
-    return FALSE;
+    if (m_nRenderCount == 0 && !bForce) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount != 0) {
+        CSingleLock lock(&(m_pPanel->m_pManager->field_56), FALSE);
+        lock.Lock(INFINITE);
+        m_nRenderCount--;
+        lock.Unlock();
+    }
+
+    CScreenLoad* pLoad = g_pBaldurChitin->m_pEngineLoad;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenLoad.cpp
+    // __LINE__: 2782
+    UTIL_ASSERT(pLoad != NULL);
+
+    CRect rControlRect(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
+
+    CRect rClip;
+    rClip.IntersectRect(rControlRect, m_rDirty);
+
+    // NOTE: Even though it's a rect, only top left corner is used.
+    CRect rArea;
+    rArea.left = m_pPanel->m_ptOrigin.x + m_ptOrigin.x;
+    rArea.top = m_pPanel->m_ptOrigin.y + m_ptOrigin.y;
+
+    return pLoad->DrawPortrait((m_nID - 25) % 6, (m_nID - 25) / 6, rArea, rClip);
 }
 
 // -----------------------------------------------------------------------------
