@@ -1,6 +1,8 @@
 #include "CVidBitmap.h"
 
+#include "CChitin.h"
 #include "CUtil.h"
+#include "CVidMode.h"
 
 // 0x7B2A40
 CVidBitmap::CVidBitmap()
@@ -177,6 +179,58 @@ BOOL CVidBitmap::BltBmp8To32(DWORD* pSurface, LONG lPitch, BYTE* pData, const CS
 
         pSurface += -bmpSize.cx - lPitch / 4;
         pData += nDataJump;
+    }
+
+    return TRUE;
+}
+
+// 0x7CD690
+BOOL CVidBitmap::BltBmp24To32(DWORD* pSurface, LONG lPitch, BYTE* pData, const CSize& bmpSize, LONG nDataJump, DWORD dwFlags)
+{
+    CVidMode* pVidMode = g_pChitin->GetCurrentVideoMode();
+
+    DWORD dwRBitShift = pVidMode->m_dwRBitShift;
+    DWORD dwGBitShift = pVidMode->m_dwGBitShift;
+    DWORD dwBBitShift = pVidMode->m_dwBBitShift;
+
+    if ((dwFlags & 0x1) != 0) {
+        for (LONG y = 0; y < bmpSize.cy; y++) {
+            for (LONG x = 0; x < bmpSize.cx; x++) {
+                BYTE r = pData[2];
+                BYTE g = pData[1];
+                BYTE b = pData[0];
+                BYTE a;
+
+                if (r != 0 || g != 255 || b != 0) {
+                    if ((dwFlags & 0x4) == 0 || r != 0 || g != 0 || b != 0) {
+                        a = 255;
+                    } else {
+                        a = 128;
+                        r = ((*pSurface >> dwRBitShift) >> 1) & 0x7F;
+                        g = ((*pSurface >> dwGBitShift) >> 1) & 0x7F;
+                        b = ((*pSurface >> dwBBitShift) >> 1) & 0x7F;
+                    }
+
+                    *pSurface = (a << 24) | (r << dwRBitShift) | (g << dwGBitShift) | (b << dwBBitShift);
+                }
+
+                pSurface++;
+                pData += 3;
+            }
+
+            pSurface += -bmpSize.cx - lPitch / 4;
+            pData += nDataJump;
+        }
+    } else {
+        for (LONG y = 0; y < bmpSize.cy; y++) {
+            for (LONG x = 0; x < bmpSize.cx; x++) {
+                *pSurface++ = (pData[0] << dwBBitShift) | (pData[1] << dwGBitShift) | (pData[2] << dwRBitShift);
+                pData += 3;
+            }
+
+            pSurface += -bmpSize.cx - lPitch / 4;
+            pData += nDataJump;
+        }
     }
 
     return TRUE;
