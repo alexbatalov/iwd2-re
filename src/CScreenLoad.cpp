@@ -1124,5 +1124,28 @@ void CUIControlButtonLoadError::OnLButtonClick(CPoint pt)
     // __LINE__: 3105
     UTIL_ASSERT(pLoad != NULL);
 
-    // TODO: Incomplete.
+    CSingleLock renderLock(&(pLoad->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    CUIPanel* pPanel = pLoad->GetTopPopup();
+    if (pPanel != NULL) {
+        switch (pPanel->m_nID) {
+        case 1:
+            // NOTE: Inlining.
+            if (1) {
+                CSingleLock renderLock(&(pLoad->m_cUIManager.field_36), FALSE);
+                renderLock.Lock(INFINITE);
+                pLoad->DismissPopup();
+                renderLock.Unlock();
+            }
+            break;
+        default:
+            pLoad->OnErrorButtonClick(m_nID - 1);
+            break;
+        }
+    } else {
+        pLoad->OnErrorButtonClick(m_nID - 1);
+    }
+
+    renderLock.Unlock();
 }
