@@ -132,7 +132,7 @@ public:
     BOOL Render(BOOL bForce) override;
     void OnLButtonClick(CPoint pt) override;
 
-    /* 0666 */ CResRef field_666;
+    /* 0666 */ CResRef m_portraitResRef;
 };
 
 class CUIControlButtonSinglePlayerCharacter : public CUIControlButton {
