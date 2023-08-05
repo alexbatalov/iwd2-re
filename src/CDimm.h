@@ -36,6 +36,7 @@ public:
     void* Demand(CRes* pRes);
     void* InternalDemand(CRes* pRes);
     void DestroyKeyTable();
+    BOOL DirectoryCopyFiles(const CString& sSource, const CString& sDest);
     BOOL DirectoryRemoveFiles(const CString& sDirectoryName);
     int Dump(CRes* pRes, int a2, int a3);
     int DumpAll();
