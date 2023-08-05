@@ -42,6 +42,7 @@ public:
 
     CString GetCurrentPortrait(CGameSprite* pSprite);
     void ResetAppearancePanel(CUIPanel* pPanel, CGameSprite* pSprite);
+    void UpdateAppearancePanel(CGameSprite* pSprite);
     void ResetCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdatePortraitList(CUIPanel* pPanel, DWORD dwControlId, INT nSelected);
     void ResetClassPanel(CGameSprite* pSprite, int a2);
@@ -57,6 +58,7 @@ public:
     void EnablePopupPanel(DWORD dwPanelId, BOOL bEnable);
     void SummonPopup(DWORD dwPopupId, CGameSprite* pSprite, int a3);
     void DismissPopup(CGameSprite* pSprite);
+    BOOL IsDoneButtonClickable(CGameSprite* pSprite);
     void OnDoneButtonClick();
     void OnInformationButtonClick();
     void OnBiographyButtonClick();

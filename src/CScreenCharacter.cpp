@@ -193,6 +193,26 @@ void CScreenCharacter::ResetAppearancePanel(CUIPanel* pPanel, CGameSprite* pSpri
     m_cResPortraitLarge = sPortrait + "L";
 }
 
+// 0x5D7D30
+void CScreenCharacter::UpdateAppearancePanel(CGameSprite* pSprite)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(18);
+    if (pPanel != NULL) {
+        CUIControlButtonCharacterPortrait* pPortrait = static_cast<CUIControlButtonCharacterPortrait*>(pPanel->GetControl(0));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 1923
+        UTIL_ASSERT(pPortrait != NULL);
+
+        CResRef portraitResRef(GetCurrentPortrait(pSprite) + "L");
+        pPortrait->SetPortrait(portraitResRef);
+        pPortrait->InvalidateRect();
+
+        CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(3));
+        pDone->SetEnabled(IsDoneButtonClickable(pSprite));
+    }
+}
+
 // 0x5D7E30
 void CScreenCharacter::ResetCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
@@ -633,6 +653,14 @@ void CScreenCharacter::DismissPopup(CGameSprite* pSprite)
         EnableMainPanel(TRUE);
         UpdateMainPanel(FALSE);
     }
+}
+
+// 0x5E1F50
+BOOL CScreenCharacter::IsDoneButtonClickable(CGameSprite* pSprite)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // 0x5E2210
