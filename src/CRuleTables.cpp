@@ -2430,6 +2430,14 @@ BYTE CRuleTables::GetStartingReputation(BYTE nAlignment) const
     return static_cast<BYTE>(atol(m_tReputationStart.GetAt(VALUE, sAlignment)));
 }
 
+// 0x544C80
+void CRuleTables::AdjustStoreMarkup(BYTE nCHR, SHORT nReputation, DWORD& dwMarkup) const
+{
+    INT nRepMod = atol(m_tReputationStoreMod.GetAt(CPoint(nReputation - 1, 0)));
+    INT nCHRMod = atol(m_tCharismaStoreMod.GetAt(CPoint(nCHR - 1, 0)));
+    dwMarkup = dwMarkup * (nRepMod + nCHRMod) / 100;
+}
+
 // #guess
 // 0x544C70
 DWORD CRuleTables::GetXPCap() const

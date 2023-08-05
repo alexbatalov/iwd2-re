@@ -398,6 +398,7 @@ public:
     BOOL IsValidAlignment(BYTE nClass, BYTE nAlignment, DWORD nSpecialist) const;
     BOOL IsUsableByAlignment(DWORD dwNotUsableBy, BYTE nAlignment) const;
     BYTE GetStartingReputation(BYTE nAlignment) const;
+    void AdjustStoreMarkup(BYTE nCHR, SHORT nReputation, DWORD& dwMarkup) const;
     DWORD GetXPCap() const;
     BOOL IsValidSubRace(BYTE nRace, BYTE nSubRace) const;
     void GetRaceStringMixed(BYTE nRace, CString& sClass, BYTE nSubRace) const;
