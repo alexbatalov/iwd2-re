@@ -59,7 +59,7 @@ public:
     BOOL ReduceServicedList();
     int Release(CRes* pRes);
     void ReleaseResObject(CRes* pRes);
-    BOOL RemoveFromDirectoryList(const CString& sDirName, BOOL a3);
+    BOOL RemoveFromDirectoryList(const CString& sDirName, BOOL bRescan);
     int Request(CRes* pRes);
     BOOL RequestsPending(int nPriority);
     INT RequestsPendingCount();

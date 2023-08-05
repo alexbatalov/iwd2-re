@@ -1534,9 +1534,38 @@ void CDimm::ReleaseResObject(CRes* pRes)
 }
 
 // 0x787D30
-BOOL CDimm::RemoveFromDirectoryList(const CString& sDirName, BOOL a3)
+BOOL CDimm::RemoveFromDirectoryList(const CString& sDirName, BOOL bRescan)
 {
-    // TODO: Incomplete.
+    CString sResolvedDirName;
+    CString sCurrentDirName;
+
+    if (!g_pChitin->lAliases.ResolveFileName(sDirName, sResolvedDirName)) {
+        sResolvedDirName = sDirName;
+    }
+
+    POSITION pos = m_lDirectories.GetHeadPosition();
+    while (pos != NULL) {
+        sCurrentDirName = m_lDirectories.GetAt(pos);
+        if (sResolvedDirName == sCurrentDirName) {
+            break;
+        }
+
+        m_lDirectories.GetNext(pos);
+    }
+
+    if (pos == NULL) {
+        return NULL;
+    }
+
+    m_lDirectories.RemoveAt(pos);
+
+    if (m_cKeyTable.m_bInitialized) {
+        if (bRescan) {
+            EnterCriticalSection(&(g_pChitin->field_314));
+            m_cKeyTable.RescanEverything();
+            LeaveCriticalSection(&(g_pChitin->field_314));
+        }
+    }
 
     return FALSE;
 }
