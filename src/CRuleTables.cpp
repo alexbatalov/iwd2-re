@@ -1947,6 +1947,22 @@ INT CRuleTables::GetStartingExperiencePoints(CGameSprite* pSprite) const
     return atol(m_tStartingExperiencePoints.GetAt(VALUE, sRace));
 }
 
+// 0x543770
+INT CRuleTables::GetMaxDruidShapeshifts(CCreatureFileHeader& BStats, INT nLevel) const
+{
+    INT nShapeshifts = 0;
+
+    if (BStats.m_druidLevel != 0) {
+        nShapeshifts = atol(m_tMaxDruidShapeshifts.GetAt(CPoint(nLevel - 1, 0)));
+
+        if (nShapeshifts != 0) {
+            nShapeshifts += BStats.m_featExtraShapeshifting;
+        }
+    }
+
+    return nShapeshifts;
+}
+
 // NOTE: Even though `xplevel.2da` contains entries for all classes, only
 // `FIGHTER` is used to determine XP progression. This is leftover from earlier
 // 2E games where every class has it's own progression.

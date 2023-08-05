@@ -385,6 +385,7 @@ public:
     INT GetSavingThrow(const CAIObjectType& typeAI, CDerivedStats& DStats, BYTE nCON, const CString& sSavingThrow) const;
     INT GetStartingGold(CGameSprite* pSprite) const;
     INT GetStartingExperiencePoints(CGameSprite* pSprite) const;
+    INT GetMaxDruidShapeshifts(CCreatureFileHeader& BStats, INT nLevel) const;
     DWORD GetNextLevelXP(BYTE nLevel) const;
     void GetStartArea(CResRef& cResArea, CPoint& ptView) const;
     CPoint GetStartPoint(INT nCharacterSlot) const;
