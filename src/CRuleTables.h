@@ -371,6 +371,7 @@ public:
 
     CRuleTables();
     ~CRuleTables();
+    BOOL ShouldCheckItemRequirements(CItem* pItem) const;
     INT GetTrapSenseBonus(CDerivedStats& DStats) const;
     const CString GetRaceString(BYTE nRace, BYTE nSubRace) const;
     const CString GetAlignmentString(BYTE nAlignment) const;

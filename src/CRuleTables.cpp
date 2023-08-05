@@ -1378,6 +1378,23 @@ CRuleTables::~CRuleTables()
 {
 }
 
+// Returns `TRUE` if item appears in `itemabil.2da` which contains a list of
+// item resrefs for which the engine should validate minimum level and
+// ability requirements.
+//
+// 0x541840
+BOOL CRuleTables::ShouldCheckItemRequirements(CItem* pItem) const
+{
+    CPoint ptLocation(0, 0);
+    CString sResRef = pItem->GetResRef().GetResRefStr();
+
+    if (m_tItemAbility.Find(sResRef, ptLocation, TRUE) == TRUE) {
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 // 0x5418E0
 INT CRuleTables::GetTrapSenseBonus(CDerivedStats& DStats) const
 {
