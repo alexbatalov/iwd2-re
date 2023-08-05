@@ -1536,24 +1536,24 @@ const CString CRuleTables::GetClassString(BYTE nClass, DWORD nSpecialist) const
     case CAIOBJECTTYPE_C_BARD:
         return BARD;
     case CAIOBJECTTYPE_C_CLERIC:
-        switch (nSpecialist & 0xFF8000) {
-        case 0x8000:
+        switch (nSpecialist & SPECMASK_CLERIC) {
+        case SPECMASK_CLERIC_ILMATER:
             return CLERIC_ILMATER;
-        case 0x10000:
+        case SPECMASK_CLERIC_LATHANDER:
             return CLERIC_LATHANDER;
-        case 0x20000:
+        case SPECMASK_CLERIC_SELUNE:
             return CLERIC_SELUNE;
-        case 0x40000:
+        case SPECMASK_CLERIC_HELM:
             return CLERIC_HELM;
-        case 0x80000:
+        case SPECMASK_CLERIC_OGHMA:
             return CLERIC_OGHMA;
-        case 0x100000:
+        case SPECMASK_CLERIC_TEMPUS:
             return CLERIC_TEMPUS;
-        case 0x200000:
+        case SPECMASK_CLERIC_BANE:
             return CLERIC_BANE;
-        case 0x400000:
+        case SPECMASK_CLERIC_MASK:
             return CLERIC_MASK;
-        case 0x800000:
+        case SPECMASK_CLERIC_TALOS:
             return CLERIC_TALOS;
         }
 
@@ -1563,23 +1563,23 @@ const CString CRuleTables::GetClassString(BYTE nClass, DWORD nSpecialist) const
     case CAIOBJECTTYPE_C_FIGHTER:
         return FIGHTER;
     case CAIOBJECTTYPE_C_MONK:
-        switch (nSpecialist & 0x38) {
-        case 0x8:
+        switch (nSpecialist & SPECMASK_MONK) {
+        case SPECMASK_MONK_OLD_ORDER:
             return MONK_OLD_ORDER;
-        case 0x10:
+        case SPECMASK_MONK_BROKEN_ONES:
             return MONK_BROKEN_ONES;
-        case 0x20:
+        case SPECMASK_MONK_DARK_MOON:
             return MONK_DARK_MOON;
         }
 
         return MONK;
     case CAIOBJECTTYPE_C_PALADIN:
-        switch (nSpecialist & 0x7) {
-        case 0x1:
+        switch (nSpecialist & SPECMASK_PALADIN) {
+        case SPECMASK_PALADIN_ILMATER:
             return PALADIN_ILMATER;
-        case 0x2:
+        case SPECMASK_PALADIN_HELM:
             return PALADIN_HELM;
-        case 0x4:
+        case SPECMASK_PALADIN_MYSTRA:
             return PALADIN_MYSTRA;
         }
 
@@ -1591,22 +1591,22 @@ const CString CRuleTables::GetClassString(BYTE nClass, DWORD nSpecialist) const
     case CAIOBJECTTYPE_C_SORCERER:
         return SORCERER;
     case CAIOBJECTTYPE_C_WIZARD:
-        switch (nSpecialist & 0x7FC0) {
-        case 0x40:
+        switch (nSpecialist & SPECMASK_WIZARD) {
+        case SPECMASK_WIZARD_ABJURER:
             return WIZARD_ABJURER;
-        case 0x80:
+        case SPECMASK_WIZARD_CONJURER:
             return WIZARD_CONJURER;
-        case 0x100:
+        case SPECMASK_WIZARD_DIVINER:
             return WIZARD_DIVINER;
-        case 0x200:
+        case SPECMASK_WIZARD_ENCHANTER:
             return WIZARD_ENCHANTER;
-        case 0x400:
+        case SPECMASK_WIZARD_ILLUSIONIST:
             return WIZARD_ILLUSIONIST;
-        case 0x800:
+        case SPECMASK_WIZARD_EVOKER:
             return WIZARD_EVOKER;
-        case 0x1000:
+        case SPECMASK_WIZARD_NECROMANCER:
             return WIZARD_NECROMANCER;
-        case 0x2000:
+        case SPECMASK_WIZARD_TRANSMUTER:
             return WIZARD_TRANSMUTER;
         }
         return WIZARD;
@@ -1690,32 +1690,32 @@ STRREF CRuleTables::GetClassDescriptionStringRef(BYTE nClass, DWORD nSpecialist)
         // BARD
         return 9562;
     case CAIOBJECTTYPE_C_CLERIC:
-        switch (nSpecialist & 0xFF8000) {
-        case 0x8000:
+        switch (nSpecialist & SPECMASK_CLERIC) {
+        case SPECMASK_CLERIC_ILMATER:
             // PAINBEARER OF ILMATER
             return 38118;
-        case 0x10000:
+        case SPECMASK_CLERIC_LATHANDER:
             // MORNINGLORD OF LATHANDER
             return 38119;
-        case 0x20000:
+        case SPECMASK_CLERIC_SELUNE:
             // SILVERSTAR OF SELUNE
             return 38120;
-        case 0x40000:
+        case SPECMASK_CLERIC_HELM:
             // WATCHER OF HELM
             return 38121;
-        case 0x80000:
+        case SPECMASK_CLERIC_OGHMA:
             // LOREKEEPER OF OGHMA
             return 38122;
-        case 0x100000:
+        case SPECMASK_CLERIC_TEMPUS:
             // BATTLEGUARD OF TEMPUS
             return 38123;
-        case 0x200000:
+        case SPECMASK_CLERIC_BANE:
             // DREADMASTER OF BANE
             return 38124;
-        case 0x400000:
+        case SPECMASK_CLERIC_MASK:
             // DEMARCH OF MASK
             return 38125;
-        case 0x800000:
+        case SPECMASK_CLERIC_TALOS:
             // STORMLORD OF TALOS
             return 38126;
         }
@@ -1729,14 +1729,14 @@ STRREF CRuleTables::GetClassDescriptionStringRef(BYTE nClass, DWORD nSpecialist)
         // FIGHTER
         return 9556;
     case CAIOBJECTTYPE_C_MONK:
-        switch (nSpecialist & 0x38) {
-        case 0x8:
+        switch (nSpecialist & SPECMASK_MONK) {
+        case SPECMASK_MONK_OLD_ORDER:
             // MONK OF THE OLD ORDER
             return 39410;
-        case 0x10:
+        case SPECMASK_MONK_BROKEN_ONES:
             // MONK OF THE BROKEN ONES
             return 39411;
-        case 0x20:
+        case SPECMASK_MONK_DARK_MOON:
             // MONK OF THE DARK MOON
             return 39412;
         }
@@ -1744,14 +1744,14 @@ STRREF CRuleTables::GetClassDescriptionStringRef(BYTE nClass, DWORD nSpecialist)
         // MONK
         return 36;
     case CAIOBJECTTYPE_C_PALADIN:
-        switch (nSpecialist & 0x7) {
-        case 0x1:
+        switch (nSpecialist & SPECMASK_PALADIN) {
+        case SPECMASK_PALADIN_ILMATER:
             // PALADIN OF ILMATER
             return 39407;
-        case 0x2:
+        case SPECMASK_PALADIN_HELM:
             // PALADIN OF HELM
             return 39408;
-        case 0x4:
+        case SPECMASK_PALADIN_MYSTRA:
             // PALADIN OF MYSTRA
             return 39409;
         }
@@ -1768,29 +1768,29 @@ STRREF CRuleTables::GetClassDescriptionStringRef(BYTE nClass, DWORD nSpecialist)
         // SORCERER
         return 35;
     case CAIOBJECTTYPE_C_WIZARD:
-        switch (nSpecialist & 0x7FC0) {
-        case 0x40:
+        switch (nSpecialist & SPECMASK_WIZARD) {
+        case SPECMASK_WIZARD_ABJURER:
             // ABJURER
             return 9564;
-        case 0x80:
+        case SPECMASK_WIZARD_CONJURER:
             // CONJURER
             return 9565;
-        case 0x100:
+        case SPECMASK_WIZARD_DIVINER:
             // DIVINER
             return 9566;
-        case 0x200:
+        case SPECMASK_WIZARD_ENCHANTER:
             // ENCHANTER
             return 9567;
-        case 0x400:
+        case SPECMASK_WIZARD_ILLUSIONIST:
             // ILLUSIONIST
             return 9568;
-        case 0x800:
+        case SPECMASK_WIZARD_EVOKER:
             // EVOKER
             return 9569;
-        case 0x1000:
+        case SPECMASK_WIZARD_NECROMANCER:
             // NECROMANCER
             return 9570;
-        case 0x2000:
+        case SPECMASK_WIZARD_TRANSMUTER:
             // TRANSMUTER
             return 9571;
         }
@@ -2080,29 +2080,29 @@ void CRuleTables::GetClassStringLower(BYTE nClass, DWORD nSpecialist, DWORD dwFl
     STR_RES strRes;
 
     STRREF strMageSchool;
-    switch (nSpecialist & 0x7FC0) {
-    case 0x40:
+    switch (nSpecialist & SPECMASK_WIZARD) {
+    case SPECMASK_WIZARD_ABJURER:
         strMageSchool = 597; // "Abjurer"
         break;
-    case 0x80:
+    case SPECMASK_WIZARD_CONJURER:
         strMageSchool = 2179; // "Conjurer"
         break;
-    case 0x100:
+    case SPECMASK_WIZARD_DIVINER:
         strMageSchool = 2846; // "Diviner"
         break;
-    case 0x200:
+    case SPECMASK_WIZARD_ENCHANTER:
         strMageSchool = 2861; // "Enchanter"
         break;
-    case 0x400:
+    case SPECMASK_WIZARD_ILLUSIONIST:
         strMageSchool = 2862; // "Illusionist"
         break;
-    case 0x800:
+    case SPECMASK_WIZARD_EVOKER:
         strMageSchool = 3015; // "Evoker"
         break;
-    case 0x1000:
+    case SPECMASK_WIZARD_NECROMANCER:
         strMageSchool = 12744; // "Necromancer"
         break;
-    case 0x2000:
+    case SPECMASK_WIZARD_TRANSMUTER:
         strMageSchool = 12745; // "Transmuter"
         break;
     default:
@@ -2182,29 +2182,29 @@ void CRuleTables::GetClassStringMixed(BYTE nClass, DWORD nSpecialist, DWORD dwFl
     STR_RES strRes;
 
     STRREF strMageSchool;
-    switch (nSpecialist & 0x7FC0) {
-    case 0x40:
+    switch (nSpecialist & SPECMASK_WIZARD) {
+    case SPECMASK_WIZARD_ABJURER:
         strMageSchool = 502; // "Abjurer"
         break;
-    case 0x80:
+    case SPECMASK_WIZARD_CONJURER:
         strMageSchool = 504; // "Conjurer"
         break;
-    case 0x100:
+    case SPECMASK_WIZARD_DIVINER:
         strMageSchool = 2012; // "Diviner"
         break;
-    case 0x200:
+    case SPECMASK_WIZARD_ENCHANTER:
         strMageSchool = 2022; // "Enchanter"
         break;
-    case 0x400:
+    case SPECMASK_WIZARD_ILLUSIONIST:
         strMageSchool = 12785; // "Illusionist"
         break;
-    case 0x800:
+    case SPECMASK_WIZARD_EVOKER:
         strMageSchool = 12786; // "Evoker"
         break;
-    case 0x1000:
+    case SPECMASK_WIZARD_NECROMANCER:
         strMageSchool = 12787; // "Necromancer"
         break;
-    case 0x2000:
+    case SPECMASK_WIZARD_TRANSMUTER:
         strMageSchool = 12788; // "Transmuter"
         break;
     default:
@@ -2249,32 +2249,32 @@ void CRuleTables::GetClassStringMixed(BYTE nClass, DWORD nSpecialist, DWORD dwFl
         strClass = 1083; // "Bard"
         break;
     case CAIOBJECTTYPE_C_CLERIC:
-        switch (nSpecialist & 0xFF8000) {
-        case 0x8000:
+        switch (nSpecialist & SPECMASK_CLERIC) {
+        case SPECMASK_CLERIC_ILMATER:
             strClass = 38097; // "Painbearer of Ilmater"
             break;
-        case 0x10000:
+        case SPECMASK_CLERIC_LATHANDER:
             strClass = 38098; // "Morninglord of Lathander"
             break;
-        case 0x20000:
+        case SPECMASK_CLERIC_SELUNE:
             strClass = 38099; // "Silverstar of Selune"
             break;
-        case 0x40000:
+        case SPECMASK_CLERIC_HELM:
             strClass = 38100; // "Watcher of Helm"
             break;
-        case 0x80000:
+        case SPECMASK_CLERIC_OGHMA:
             strClass = 38101; // "Lorekeeper of Oghma"
             break;
-        case 0x100000:
+        case SPECMASK_CLERIC_TEMPUS:
             strClass = 38102; // "Battleguard of Tempus"
             break;
-        case 0x200000:
+        case SPECMASK_CLERIC_BANE:
             strClass = 38103; // "Dreadmaster of Bane"
             break;
-        case 0x400000:
+        case SPECMASK_CLERIC_MASK:
             strClass = 38106; // "Demarch of Mask"
             break;
-        case 0x800000:
+        case SPECMASK_CLERIC_TALOS:
             strClass = 38107; // "Stormlord of Talos"
             break;
         default:
@@ -2289,14 +2289,14 @@ void CRuleTables::GetClassStringMixed(BYTE nClass, DWORD nSpecialist, DWORD dwFl
         strClass = 1076; // "<FIGHTERTYPE>"
         break;
     case CAIOBJECTTYPE_C_MONK:
-        switch (nSpecialist & 0x38) {
-        case 0x8:
+        switch (nSpecialist & SPECMASK_MONK) {
+        case SPECMASK_MONK_OLD_ORDER:
             strClass = 36877; // "Monk of the Old Order"
             break;
-        case 0x10:
+        case SPECMASK_MONK_BROKEN_ONES:
             strClass = 36878; // "Monk of the Broken Ones"
             break;
-        case 0x20:
+        case SPECMASK_MONK_DARK_MOON:
             strClass = 36879; // "Monk of the Dark Moon"
             break;
         default:
@@ -2308,14 +2308,14 @@ void CRuleTables::GetClassStringMixed(BYTE nClass, DWORD nSpecialist, DWORD dwFl
         if ((dwFlags & 0x200) != 0) {
             strClass = 10371; // "Fallen Paladin"
         } else {
-            switch (nSpecialist & 0x7) {
-            case 0x1:
+            switch (nSpecialist & SPECMASK_PALADIN) {
+            case SPECMASK_PALADIN_ILMATER:
                 strClass = 36875; // "Paladin of Ilmater"
                 break;
-            case 0x2:
+            case SPECMASK_PALADIN_HELM:
                 strClass = 36872; // "Paladin of Helm"
                 break;
-            case 0x4:
+            case SPECMASK_PALADIN_MYSTRA:
                 strClass = 36873; // "Paladin of Mystra"
                 break;
             default:
@@ -2929,22 +2929,22 @@ int CRuleTables::GetSoundEnvironment(EAXPRESET& preset, int nReverb) const
 // 0x545A10
 BYTE CRuleTables::MapCharacterSpecializationToSchool(WORD nSpecialistMage) const
 {
-    switch (nSpecialistMage & 0x7FC0) {
-    case 0x40:
+    switch (nSpecialistMage & SPECMASK_WIZARD) {
+    case SPECMASK_WIZARD_ABJURER:
         return 1;
-    case 0x80:
+    case SPECMASK_WIZARD_CONJURER:
         return 2;
-    case 0x100:
+    case SPECMASK_WIZARD_DIVINER:
         return 3;
-    case 0x200:
+    case SPECMASK_WIZARD_ENCHANTER:
         return 4;
-    case 0x400:
+    case SPECMASK_WIZARD_ILLUSIONIST:
         return 5;
-    case 0x800:
+    case SPECMASK_WIZARD_EVOKER:
         return 6;
-    case 0x1000:
+    case SPECMASK_WIZARD_NECROMANCER:
         return 7;
-    case 0x2000:
+    case SPECMASK_WIZARD_TRANSMUTER:
         return 8;
     }
 
@@ -3050,24 +3050,24 @@ const C2DArray* CRuleTables::GetClassAbilityTable(BYTE nClass, DWORD nSpecialist
     case CAIOBJECTTYPE_C_BARD:
         return &m_tClassAbilitiesBard;
     case CAIOBJECTTYPE_C_CLERIC:
-        switch (nSpecialist & 0xFF8000) {
-        case 0x8000:
+        switch (nSpecialist & SPECMASK_CLERIC) {
+        case SPECMASK_CLERIC_ILMATER:
             return &m_tClassAbilitiesClericIlmater;
-        case 0x10000:
+        case SPECMASK_CLERIC_LATHANDER:
             return &m_tClassAbilitiesClericLathander;
-        case 0x20000:
+        case SPECMASK_CLERIC_SELUNE:
             return &m_tClassAbilitiesClericSelune;
-        case 0x40000:
+        case SPECMASK_CLERIC_HELM:
             return &m_tClassAbilitiesClericHelm;
-        case 0x80000:
+        case SPECMASK_CLERIC_OGHMA:
             return &m_tClassAbilitiesClericOghma;
-        case 0x100000:
+        case SPECMASK_CLERIC_TEMPUS:
             return &m_tClassAbilitiesClericTempus;
-        case 0x200000:
+        case SPECMASK_CLERIC_BANE:
             return &m_tClassAbilitiesClericBane;
-        case 0x400000:
+        case SPECMASK_CLERIC_MASK:
             return &m_tClassAbilitiesClericMask;
-        case 0x800000:
+        case SPECMASK_CLERIC_TALOS:
             return &m_tClassAbilitiesClericTalos;
         }
 
@@ -3260,64 +3260,64 @@ BYTE CRuleTables::GetSpecializationIndex(BYTE nClass, DWORD nSpecialization) con
 {
     switch (nClass) {
     case CAIOBJECTTYPE_C_CLERIC:
-        switch (nSpecialization & 0xFF8000) {
-        case 0x8000:
+        switch (nSpecialization & SPECMASK_CLERIC) {
+        case SPECMASK_CLERIC_ILMATER:
             return 1;
-        case 0x10000:
+        case SPECMASK_CLERIC_LATHANDER:
             return 2;
-        case 0x20000:
+        case SPECMASK_CLERIC_SELUNE:
             return 3;
-        case 0x40000:
+        case SPECMASK_CLERIC_HELM:
             return 4;
-        case 0x80000:
+        case SPECMASK_CLERIC_OGHMA:
             return 5;
-        case 0x100000:
+        case SPECMASK_CLERIC_TEMPUS:
             return 6;
-        case 0x200000:
+        case SPECMASK_CLERIC_BANE:
             return 7;
-        case 0x400000:
+        case SPECMASK_CLERIC_MASK:
             return 8;
-        case 0x800000:
+        case SPECMASK_CLERIC_TALOS:
             return 9;
         }
         break;
     case CAIOBJECTTYPE_C_MONK:
-        switch (nSpecialization & 0x38) {
-        case 0x8:
+        switch (nSpecialization & SPECMASK_MONK) {
+        case SPECMASK_MONK_OLD_ORDER:
             return 1;
-        case 0x10:
+        case SPECMASK_MONK_BROKEN_ONES:
             return 2;
-        case 0x20:
+        case SPECMASK_MONK_DARK_MOON:
             return 3;
         }
         break;
     case CAIOBJECTTYPE_C_PALADIN:
-        switch (nSpecialization & 0x7) {
-        case 0x1:
+        switch (nSpecialization & SPECMASK_PALADIN) {
+        case SPECMASK_PALADIN_ILMATER:
             return 1;
-        case 0x2:
+        case SPECMASK_PALADIN_HELM:
             return 2;
-        case 0x4:
+        case SPECMASK_PALADIN_MYSTRA:
             return 3;
         }
         break;
     case CAIOBJECTTYPE_C_WIZARD:
-        switch (nSpecialization & 0x7FC0) {
-        case 0x40:
+        switch (nSpecialization & SPECMASK_WIZARD) {
+        case SPECMASK_WIZARD_ABJURER:
             return 1;
-        case 0x80:
+        case SPECMASK_WIZARD_CONJURER:
             return 2;
-        case 0x100:
+        case SPECMASK_WIZARD_DIVINER:
             return 3;
-        case 0x200:
+        case SPECMASK_WIZARD_ENCHANTER:
             return 4;
-        case 0x400:
+        case SPECMASK_WIZARD_ILLUSIONIST:
             return 5;
-        case 0x800:
+        case SPECMASK_WIZARD_EVOKER:
             return 6;
-        case 0x1000:
+        case SPECMASK_WIZARD_NECROMANCER:
             return 7;
-        case 0x2000:
+        case SPECMASK_WIZARD_TRANSMUTER:
             return 8;
         }
         break;
@@ -3333,63 +3333,63 @@ DWORD CRuleTables::GetSpecializationMask(BYTE nClass, BYTE nIndex) const
     case CAIOBJECTTYPE_C_CLERIC:
         switch (nIndex) {
         case 1:
-            return 0x8000;
+            return SPECMASK_CLERIC_ILMATER;
         case 2:
-            return 0x10000;
+            return SPECMASK_CLERIC_LATHANDER;
         case 3:
-            return 0x20000;
+            return SPECMASK_CLERIC_SELUNE;
         case 4:
-            return 0x40000;
+            return SPECMASK_CLERIC_HELM;
         case 5:
-            return 0x80000;
+            return SPECMASK_CLERIC_OGHMA;
         case 6:
-            return 0x100000;
+            return SPECMASK_CLERIC_TEMPUS;
         case 7:
-            return 0x200000;
+            return SPECMASK_CLERIC_BANE;
         case 8:
-            return 0x400000;
+            return SPECMASK_CLERIC_MASK;
         case 9:
-            return 0x800000;
+            return SPECMASK_CLERIC_TALOS;
         }
         break;
     case CAIOBJECTTYPE_C_MONK:
         switch (nIndex) {
         case 1:
-            return 0x8;
+            return SPECMASK_MONK_OLD_ORDER;
         case 2:
-            return 0x10;
+            return SPECMASK_MONK_BROKEN_ONES;
         case 3:
-            return 0x20;
+            return SPECMASK_MONK_DARK_MOON;
         }
         break;
     case CAIOBJECTTYPE_C_PALADIN:
         switch (nIndex) {
         case 1:
-            return 0x1;
+            return SPECMASK_PALADIN_ILMATER;
         case 2:
-            return 0x2;
+            return SPECMASK_PALADIN_HELM;
         case 3:
-            return 0x4;
+            return SPECMASK_PALADIN_MYSTRA;
         }
         break;
     case CAIOBJECTTYPE_C_WIZARD:
         switch (nIndex) {
         case 1:
-            return 0x40;
+            return SPECMASK_WIZARD_ABJURER;
         case 2:
-            return 0x80;
+            return SPECMASK_WIZARD_CONJURER;
         case 3:
-            return 0x100;
+            return SPECMASK_WIZARD_DIVINER;
         case 4:
-            return 0x200;
+            return SPECMASK_WIZARD_ENCHANTER;
         case 5:
-            return 0x400;
+            return SPECMASK_WIZARD_ILLUSIONIST;
         case 6:
-            return 0x800;
+            return SPECMASK_WIZARD_EVOKER;
         case 7:
-            return 0x1000;
+            return SPECMASK_WIZARD_NECROMANCER;
         case 8:
-            return 0x2000;
+            return SPECMASK_WIZARD_TRANSMUTER;
         }
         break;
     }
