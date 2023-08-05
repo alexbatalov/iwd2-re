@@ -2105,12 +2105,11 @@ void CRuleTables::GetClassStringLower(BYTE nClass, DWORD nSpecialist, DWORD dwFl
     case SPECMASK_WIZARD_TRANSMUTER:
         strMageSchool = 12745; // "Transmuter"
         break;
+    case SPECMASK_WIZARD_UNIVERSAL:
+        strMageSchool = 18039; // "Wizard"
+        break;
     default:
-        if (nSpecialist == 0x4000) {
-            strMageSchool = 18039; // "Wizard"
-        } else {
-            strMageSchool = -1;
-        }
+        strMageSchool = -1;
         break;
     }
 
@@ -2207,12 +2206,11 @@ void CRuleTables::GetClassStringMixed(BYTE nClass, DWORD nSpecialist, DWORD dwFl
     case SPECMASK_WIZARD_TRANSMUTER:
         strMageSchool = 12788; // "Transmuter"
         break;
+    case SPECMASK_WIZARD_UNIVERSAL:
+        strMageSchool = 9987; // "Wizard"
+        break;
     default:
-        if (nSpecialist == 0x4000) {
-            strMageSchool = 9987; // "Wizard"
-        } else {
-            strMageSchool = -1;
-        }
+        strMageSchool = -1;
         break;
     }
 
@@ -2946,6 +2944,8 @@ BYTE CRuleTables::MapCharacterSpecializationToSchool(WORD nSpecialistMage) const
         return 7;
     case SPECMASK_WIZARD_TRANSMUTER:
         return 8;
+    case SPECMASK_WIZARD_UNIVERSAL:
+        return 9;
     }
 
     return 0;
@@ -3319,6 +3319,8 @@ BYTE CRuleTables::GetSpecializationIndex(BYTE nClass, DWORD nSpecialization) con
             return 7;
         case SPECMASK_WIZARD_TRANSMUTER:
             return 8;
+        case SPECMASK_WIZARD_UNIVERSAL:
+            return 9;
         }
         break;
     }
@@ -3390,6 +3392,8 @@ DWORD CRuleTables::GetSpecializationMask(BYTE nClass, BYTE nIndex) const
             return SPECMASK_WIZARD_NECROMANCER;
         case 8:
             return SPECMASK_WIZARD_TRANSMUTER;
+        case 9:
+            return SPECMASK_WIZARD_UNIVERSAL;
         }
         break;
     }
