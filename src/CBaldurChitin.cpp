@@ -1695,6 +1695,19 @@ void CBaldurChitin::SetProgressBar(BOOLEAN bEnabled, LONG nProgressBarCaption, I
     }
 }
 
+// 0x4257B0
+void CBaldurChitin::BroadcastMultiplayerProgressBarInfo()
+{
+    if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+        g_pBaldurChitin->GetBaldurMessage()->SendProgressBarStatus(g_pChitin->cProgressBar.m_nActionProgress,
+            g_pChitin->cProgressBar.m_nActionTarget,
+            g_pChitin->cProgressBar.m_bWaiting,
+            g_pChitin->cProgressBar.m_nWaitingReason,
+            g_pChitin->cProgressBar.m_bTimeoutVisible,
+            g_pChitin->cProgressBar.m_nSecondsToTimeout);
+    }
+}
+
 // 0x425800
 void CBaldurChitin::SetCDSwitchStatus(BOOLEAN a1, BOOLEAN a2, BYTE a3, const CString& a4, BOOLEAN a5, BOOLEAN a6, BOOLEAN a7)
 {

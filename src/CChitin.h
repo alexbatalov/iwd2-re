@@ -81,6 +81,7 @@ public:
     /* 0058 */ virtual BOOL InitializeServices(HWND hWnd);
     /* 005C */ virtual void SetProgressBar(BOOLEAN bEnabled, LONG nProgressBarCaption, INT nBytesCopied, INT nTotalBytes, BOOLEAN bTravel, LONG nParchmentCaption, BOOLEAN bWaiting, LONG nWaitingReason, BOOLEAN bDisplayMinibars, BOOLEAN bTimeoutCounter, DWORD nSecondsToTimeout);
     /* 0060 */ virtual void SetProgressBarActivateEngine(BOOL bValue);
+    /* 0064 */ virtual void BroadcastMultiplayerProgressBarInfo();
     /* 0068 */ virtual void SetCDSwitchStatus(BOOLEAN a1, BOOLEAN a2, BYTE a3, const CString& a4, BOOLEAN a5, BOOLEAN a6, BOOLEAN a7);
     /* 006C */ virtual void SetCDSwitchActivateEngine(BOOL bValue);
     /* 0070 */ virtual void OnMultiplayerSessionOpen(CString& sJoinedGame, CString& sDroppedGame, CString& sLeftGame);

@@ -1802,6 +1802,11 @@ void CChitin::SetProgressBarActivateEngine(BOOL bValue)
 {
 }
 
+// 0x78E730
+void CChitin::BroadcastMultiplayerProgressBarInfo()
+{
+}
+
 // 0x78E740
 void CChitin::SetCDSwitchStatus(BOOLEAN a1, BOOLEAN a2, BYTE a3, const CString& a4, BOOLEAN a5, BOOLEAN a6, BOOLEAN a7)
 {

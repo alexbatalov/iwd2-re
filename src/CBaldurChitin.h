@@ -105,6 +105,7 @@ public:
     /* 0058 */ BOOL InitializeServices(HWND hWnd) override;
     /* 005C */ void SetProgressBar(BOOLEAN bEnabled, LONG nProgressBarCaption, INT nBytesCopied, INT nTotalBytes, BOOLEAN bTravel, LONG nParchmentCaption, BOOLEAN bWaiting, LONG nWaitingReason, BOOLEAN bDisplayMinibars, BOOLEAN bTimeoutCounter, DWORD nSecondsToTimeout) override;
     /* 0060 */ void SetProgressBarActivateEngine(BOOL bValue) override;
+    /* 0064 */ void BroadcastMultiplayerProgressBarInfo() override;
     /* 0068 */ void SetCDSwitchStatus(BOOLEAN a1, BOOLEAN a2, BYTE a3, const CString& a4, BOOLEAN a5, BOOLEAN a6, BOOLEAN a7) override;
     /* 006C */ void SetCDSwitchActivateEngine(BOOL bValue) override;
     /* 0070 */ void OnMultiplayerSessionOpen(CString& sJoinedGame, CString& sDroppedGame, CString& sLeftGame) override;
