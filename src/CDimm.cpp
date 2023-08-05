@@ -2193,6 +2193,44 @@ void CDimm::Update()
     }
 }
 
+// 0x789090
+BOOL CDimm::WriteFile(const CString& sDirName, const CString& sFileName, LPVOID lpBuf, DWORD dwSize)
+{
+    CString v1;
+    CString sResolvedFileName;
+    CFile cFile;
+
+    char path[MAX_PATH];
+    if (_getcwd(path, MAX_PATH) == NULL) {
+        return FALSE;
+    }
+
+    if (!WriteSetUp(sDirName + sFileName, sResolvedFileName)) {
+        return FALSE;
+    }
+
+    EnterCriticalSection(&(g_pChitin->field_344));
+
+    BOOL bResult = FALSE;
+
+    DWORD dwAttrs = GetFileAttributesA(sResolvedFileName);
+    if (dwAttrs != -1 && (dwAttrs & FILE_ATTRIBUTE_READONLY) != 0) {
+        SetFileAttributesA(sResolvedFileName, dwAttrs & ~FILE_ATTRIBUTE_READONLY);
+    }
+
+    if (cFile.Open(sResolvedFileName, CFile::OpenFlags::modeCreate | CFile::OpenFlags::typeBinary | CFile::OpenFlags::modeWrite, NULL)) {
+        bResult = TRUE;
+        cFile.Write(lpBuf, dwSize);
+        cFile.Close();
+    }
+
+    LeaveCriticalSection(&(g_pChitin->field_344));
+
+    _chdir(path);
+
+    return bResult;
+}
+
 // 0x789250
 BOOL CDimm::WriteResourceWithData(const CString& sFileName, CRes* pRes, LPVOID lpBuf, DWORD dwSize)
 {

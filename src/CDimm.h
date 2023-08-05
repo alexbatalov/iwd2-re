@@ -71,6 +71,7 @@ public:
     void SetNewPriority(CRes* pRes, unsigned int nNewPriority);
     BOOL Suspend();
     void Update();
+    BOOL WriteFile(const CString& sDirName, const CString& sFileName, LPVOID lpBuf, DWORD dwSize);
     BOOL WriteResourceWithData(const CString& sFileName, CRes* pRes, LPVOID lpBuf, DWORD dwSize);
     BOOL WriteSetUp(const CString& sFileName, CString& sResolvedFileName);
     BOOL Alloc(CRes* pRes, DWORD nSize);
