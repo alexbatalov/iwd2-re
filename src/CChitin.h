@@ -39,6 +39,7 @@ public:
     void RegisterThread();
     void SuspendThreads();
     void AddEngine(CWarp* pNewEngine);
+    int AskCloseConfirmation();
     void DestroyServices();
     CWnd* GetWnd();
     void Resume();

@@ -120,6 +120,34 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lPara
             EndPaint(hWnd, &paint);
         }
         return 1;
+    case WM_CLOSE:
+        if (g_pChitin->cDimm.field_294 && !g_pChitin->cDimm.field_296) {
+            g_pChitin->cDimm.field_2A0 = 1;
+            return 0;
+        }
+
+        if (g_pChitin->cProgressBar.m_bProgressBarActivated) {
+            return 0;
+        }
+
+        switch (g_pChitin->AskCloseConfirmation()) {
+        case IDOK:
+        case IDYES:
+            return 0;
+        }
+
+        DestroyWindow(g_pChitin->cWnd.GetSafeHwnd());
+        return 0;
+    case WM_QUERYENDSESSION:
+        if (g_pChitin->cDimm.field_294) {
+            return 1;
+        }
+
+        if (g_pChitin->cProgressBar.m_bProgressBarActivated) {
+            return 0;
+        }
+
+        return g_pChitin->AskCloseConfirmation() == IDYES;
     case WM_ERASEBKGND:
         return 1;
     case WM_ACTIVATEAPP:
@@ -1128,6 +1156,70 @@ CRes* CChitin::AllocResObject(int nType)
     default:
         return new CRes();
     }
+}
+
+// 0x78EEF0
+int CChitin::AskCloseConfirmation()
+{
+    CString sCloseConfirmation;
+    GetCloseConfirmationStr(sCloseConfirmation);
+
+    DWORD dwFlags = GetCloseConfirmationFlags();
+
+    int iResult;
+    if (m_bFullscreen) {
+        field_F8 = 1;
+        field_E0 = 1;
+
+        if (pActiveEngine != NULL) {
+            pActiveEngine->EngineDeactivated();
+        }
+
+        INT nSong = cSoundMixer.m_nCurrentSong;
+        cSoundMixer.StopMusic(TRUE);
+
+        CVidMode* pVidMode = cVideo.m_pCurrentVidMode;
+        field_142 = 0;
+
+        cSoundMixer.CleanUp();
+        cVideo.CleanUp();
+
+        DestroyWindow(cWnd.Detach());
+
+        iResult = MessageBoxA(NULL, sCloseConfirmation, m_sGameName, dwFlags);
+        if (iResult == IDNO || iResult == IDCANCEL) {
+            cVideo.m_pCurrentVidMode = pVidMode;
+
+            if (!InitGraphics()) {
+                ShutDown(-1, NULL, NULL);
+                return IDYES;
+            }
+
+            SetSoundVolumes();
+            cSoundMixer.StartSong(nSong, 0x1);
+
+            if (cDimm.field_294) {
+                SetCDSwitchActivateEngine(TRUE);
+            } else if (cProgressBar.m_bProgressBarActivated) {
+                SetProgressBarActivateEngine(TRUE);
+            } else {
+                if (pActiveEngine != NULL) {
+                    pActiveEngine->EngineActivated();
+                }
+            }
+
+            Resume();
+            field_F8 = 0;
+        } else {
+            ShutDown(-1, NULL, NULL);
+        }
+    } else {
+        field_E0 = 1;
+        iResult = MessageBoxA(NULL, sCloseConfirmation, m_sGameName, dwFlags);
+        Resume();
+    }
+
+    return iResult;
 }
 
 // 0x78FC90
