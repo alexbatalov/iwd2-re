@@ -2360,6 +2360,21 @@ SHORT CRuleTables::GetLayOnHandsAmount(const CAIObjectType& typeAI, CDerivedStat
     return nPaladinLevel;
 }
 
+// 0x5449F0
+INT CRuleTables::GetWholenessOfBodyAmount(const CAIObjectType& typeAI, CDerivedStats& DStats) const
+{
+    if ((typeAI.m_nClassMask & CLASSMASK_MONK) == 0) {
+        return 0;
+    }
+
+    INT nMonkLevel = DStats.GetClassLevel(CAIOBJECTTYPE_C_MONK);
+    if (nMonkLevel < 7) {
+        return 0;
+    }
+
+    return 2 * nMonkLevel;
+}
+
 // 0x544A20
 INT CRuleTables::GetLathanderRenewalAmount(const CAIObjectType& typeAI, CDerivedStats& DStats) const
 {
