@@ -436,6 +436,7 @@ public:
     INT GetEncumbranceMod(CGameSprite* pSprite) const;
     DWORD GetMaxSpellLevel(BYTE& nClass, INT& nLevel) const;
     BYTE GetSpecializationIndex(BYTE nClass, DWORD nSpecialization) const;
+    DWORD GetSpecializationMask(BYTE nClass, BYTE nIndex) const;
 
     /* 0000 */ C2DArray m_tReactionModCharisma;
     /* 0024 */ C2DArray m_tReactionModReputation;

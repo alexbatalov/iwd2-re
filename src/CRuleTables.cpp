@@ -3325,3 +3325,74 @@ BYTE CRuleTables::GetSpecializationIndex(BYTE nClass, DWORD nSpecialization) con
 
     return 0;
 }
+
+// 0x547470
+DWORD CRuleTables::GetSpecializationMask(BYTE nClass, BYTE nIndex) const
+{
+    switch (nClass) {
+    case CAIOBJECTTYPE_C_CLERIC:
+        switch (nIndex) {
+        case 1:
+            return 0x8000;
+        case 2:
+            return 0x10000;
+        case 3:
+            return 0x20000;
+        case 4:
+            return 0x40000;
+        case 5:
+            return 0x80000;
+        case 6:
+            return 0x100000;
+        case 7:
+            return 0x200000;
+        case 8:
+            return 0x400000;
+        case 9:
+            return 0x800000;
+        }
+        break;
+    case CAIOBJECTTYPE_C_MONK:
+        switch (nIndex) {
+        case 1:
+            return 0x8;
+        case 2:
+            return 0x10;
+        case 3:
+            return 0x20;
+        }
+        break;
+    case CAIOBJECTTYPE_C_PALADIN:
+        switch (nIndex) {
+        case 1:
+            return 0x1;
+        case 2:
+            return 0x2;
+        case 3:
+            return 0x4;
+        }
+        break;
+    case CAIOBJECTTYPE_C_WIZARD:
+        switch (nIndex) {
+        case 1:
+            return 0x40;
+        case 2:
+            return 0x80;
+        case 3:
+            return 0x100;
+        case 4:
+            return 0x200;
+        case 5:
+            return 0x400;
+        case 6:
+            return 0x800;
+        case 7:
+            return 0x1000;
+        case 8:
+            return 0x2000;
+        }
+        break;
+    }
+
+    return 0;
+}
