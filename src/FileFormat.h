@@ -12,14 +12,22 @@ public:
     /* 002C */ RESREF m_portraitSmall;
     /* 0034 */ RESREF m_portraitLarge;
     /* 0048 */ BYTE m_attackBase;
-    /* 0083 */ BYTE m_barbarianLevel;
-    /* 0084 */ BYTE m_bardLevel;
-    /* 0085 */ BYTE m_clericLevel;
-    /* 0086 */ BYTE m_druidLevel;
-    /* 0087 */ BYTE m_fighterLevel;
-    /* 0088 */ BYTE m_monkLevel;
-    /* 0089 */ BYTE m_paladinLevel;
-    /* 008B */ BYTE m_rogueLevel;
+    /* 0083 */ union {
+        struct {
+            /* 0083 */ BYTE m_barbarianLevel;
+            /* 0084 */ BYTE m_bardLevel;
+            /* 0085 */ BYTE m_clericLevel;
+            /* 0086 */ BYTE m_druidLevel;
+            /* 0087 */ BYTE m_fighterLevel;
+            /* 0088 */ BYTE m_monkLevel;
+            /* 0089 */ BYTE m_paladinLevel;
+            /* 008A */ BYTE m_rangerLevel;
+            /* 008B */ BYTE m_rogueLevel;
+            /* 008C */ BYTE m_sorcererLevel;
+            /* 008D */ BYTE m_wizardLevel;
+        };
+        BYTE m_classLevels[10];
+    };
     /* 01A0 */ int field_1A0;
     /* 01B8 */ DWORD m_feats[3];
     /* 01D0 */ BYTE m_featBow;

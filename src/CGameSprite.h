@@ -215,6 +215,7 @@ public:
     const CString& GetName();
     DWORD GetSpecialization();
     BOOL HasClassMask(DWORD dwMask);
+    BOOL HasClassLevel(INT iClassType);
     void SetFeatValue(UINT nFeatNumber, INT iFeatValue);
     INT GetFeatValue(UINT nFeatNumber);
     INT GetMaxFeatValue(UINT nFeatNumber);

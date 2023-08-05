@@ -436,6 +436,20 @@ BOOL CGameSprite::HasClassMask(DWORD dwMask)
     return (dwMask & GetAIType().m_nClassMask) != 0;
 }
 
+// 0x762830
+BOOL CGameSprite::HasClassLevel(INT iClassType)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+    // __LINE__: 28739
+    UTIL_ASSERT(iClassType > 0);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+    // __LINE__: 28740
+    UTIL_ASSERT(iClassType <= CAIOBJECT_CLASS_MAX);
+
+    return m_baseStats.m_classLevels[iClassType - 1] != 0;
+}
+
 // 0x762890
 void CGameSprite::SetFeatValue(UINT nFeatNumber, INT iFeatValue)
 {
