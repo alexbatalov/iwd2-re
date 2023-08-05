@@ -38,6 +38,7 @@ public:
     /* 00A0 */ SHORT GetNumVirtualKeys() override;
     /* 00A4 */ CKeyInfo* GetVirtualKeys() override;
     /* 00A8 */ BYTE* GetVirtualKeysFlags() override;
+    /* 00C4 */ void TimerSynchronousUpdate() override;
     /* 00F0 */ void OnRestButtonClick() override;
 
     CString GetCurrentPortrait(CGameSprite* pSprite);
@@ -99,6 +100,7 @@ public:
     /* 086E */ CVidFont m_preLoadFontRealms;
     /* 0D6E */ CVidFont m_preLoadFontStnSml;
     /* 126E */ CVidFont m_preLoadFontTool;
+    /* 17A4 */ int field_17A4;
 };
 
 class CUIControlButtonCharacterCustomize : public CUIControlButton {

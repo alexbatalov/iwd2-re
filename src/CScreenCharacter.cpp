@@ -484,6 +484,31 @@ void CScreenCharacter::UpdatePortraitList(CUIPanel* pPanel, DWORD dwControlId, I
     pText->SetTopString(pText->m_plstStrings->FindIndex(0));
 }
 
+// 0x5DBA80
+void CScreenCharacter::TimerSynchronousUpdate()
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    pGame->SynchronousUpdate();
+
+    field_17A4 = g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL;
+
+    if (m_lPopupStack.GetCount() > 0 && m_cUIManager.field_2E == 1) {
+        for (SHORT nPortrait = 0; nPortrait <= 5; nPortrait++) {
+            pGame->sub_5AF420(nPortrait, 1);
+        }
+
+        for (SHORT nPortrait = 50; nPortrait <= 55; nPortrait++) {
+            pGame->sub_5AF420(nPortrait, 1);
+        }
+    }
+
+    field_17A4 = FALSE;
+
+    m_cUIManager.Render();
+    pVidMode->Flip(TRUE);
+}
+
 // 0x5DBB20
 void CScreenCharacter::EnableMainPanel(BOOL bEnable)
 {
