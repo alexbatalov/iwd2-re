@@ -9,6 +9,11 @@
 // 0xA09FC0
 const CSize CImm::PADDING(3, 3);
 
+// 0x78E8A0
+CImm::~CImm()
+{
+}
+
 // WM_IME_STARTCOMPOSITION
 // NOTE: Inlined in `WndProc`.
 void CImm::OnStartComposition()

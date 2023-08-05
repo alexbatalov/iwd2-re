@@ -21,8 +21,7 @@ public:
         field_13C = 0;
     }
 
-    // NOTE: Destructor is inlined in `CChitin` destructor.
-    ~CImm() { }
+    ~CImm();
 
     void OnStartComposition();
     void OnEndComposition();
