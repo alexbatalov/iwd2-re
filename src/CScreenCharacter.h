@@ -44,6 +44,7 @@ public:
     void ResetAppearancePanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateAppearancePanel(CGameSprite* pSprite);
     void ResetCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
+    void UpdateCustomPortraitsPanel(CGameSprite* pSprite);
     void UpdatePortraitList(CUIPanel* pPanel, DWORD dwControlId, INT nSelected);
     void ResetClassPanel(CGameSprite* pSprite, int a2);
     void ResetExportPanel(CGameSprite* pSprite);

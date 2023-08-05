@@ -256,6 +256,70 @@ void CScreenCharacter::ResetCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite* 
     pPortrait->SetPortrait(CResRef(""));
 }
 
+// 0x5D7F70
+void CScreenCharacter::UpdateCustomPortraitsPanel(CGameSprite* pSprite)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(19);
+
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(4));
+
+    if (pPanel != NULL) {
+        CString sPortrait;
+        CUIControlButtonCharacterPortrait* pPortrait;
+
+        CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 2015
+        UTIL_ASSERT(pGame != NULL);
+
+        pPortrait = static_cast<CUIControlButtonCharacterPortrait*>(pPanel->GetControl(1));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 2019
+        UTIL_ASSERT(pPortrait != NULL);
+
+        sPortrait = "";
+        if (field_80A >= 0) {
+            POSITION pos = m_pPortraits->FindIndex(field_80A);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+            // __LINE__: 2024
+            UTIL_ASSERT(pos != NULL);
+
+            sPortrait = m_pPortraits->GetAt(pos);
+        }
+
+        pPortrait->SetPortrait(sPortrait);
+
+        UpdateLabel(pPanel, 0x10000006, "%s", (LPCSTR)sPortrait);
+
+        pPortrait = static_cast<CUIControlButtonCharacterPortrait*>(pPanel->GetControl(0));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 2032
+        UTIL_ASSERT(pPortrait != NULL);
+
+        sPortrait = "";
+        if (field_806 >= 0) {
+            POSITION pos = m_pPortraits->FindIndex(field_806);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+            // __LINE__: 2037
+            UTIL_ASSERT(pos != NULL);
+
+            sPortrait = m_pPortraits->GetAt(pos);
+        }
+
+        pPortrait->SetPortrait(sPortrait);
+
+        UpdateLabel(pPanel, 0x10000005, "%s", (LPCSTR)sPortrait);
+
+        CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(10));
+        pDone->SetEnabled(IsDoneButtonClickable(pSprite));
+    }
+}
+
 // 0x5D8490
 void CScreenCharacter::ResetClassPanel(CGameSprite* pSprite, int a2)
 {
