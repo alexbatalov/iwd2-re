@@ -624,6 +624,7 @@ int CInfGame::dword_8E752C;
 
 // 0x59CC30
 CInfGame::CInfGame()
+    : m_rgbMasterBitmap(CResRef("MPALETTE"), FALSE, 24)
 {
     field_1BA1 = 4;
     m_visibleArea = 0;
