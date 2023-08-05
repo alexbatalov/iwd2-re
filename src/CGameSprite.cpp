@@ -1313,6 +1313,66 @@ INT CGameSprite::GetRacialFavoredClass(DWORD& nSpecialization)
     return iClass;
 }
 
+// 0x7646E0
+INT CGameSprite::GetMulticlassingPenalty()
+{
+    if (m_derivedStats.m_nLevel == 0) {
+        return 0;
+    }
+
+    DWORD nSpecialization = 0;
+    INT iExcludedRacialClass = 0;
+    INT iRacialFavoredClass = GetRacialFavoredClass(nSpecialization);
+    INT iBestClass = m_derivedStats.GetBestClass();
+
+    if (iRacialFavoredClass == iBestClass
+        && (nSpecialization == 0
+            || (m_baseStats.m_specialization & nSpecialization) != 0)) {
+        if (m_derivedStats.GetClassLevel(iBestClass) == m_derivedStats.m_nLevel) {
+            // Means there is no multiclassing.
+            return 0;
+        }
+
+        iExcludedRacialClass = iRacialFavoredClass;
+        iBestClass = 0;
+        for (INT iClass = 1; iClass <= CAIOBJECT_CLASS_MAX; iClass++) {
+            if (iClass != iRacialFavoredClass) {
+                if (m_derivedStats.GetClassLevel(iClass) != 0) {
+                    if (iBestClass == 0
+                        || m_derivedStats.GetClassLevel(iClass) > m_derivedStats.GetClassLevel(iBestClass)) {
+                        iBestClass = iClass;
+                    }
+                }
+            }
+        }
+    }
+
+    INT nBestClassLevel = m_derivedStats.GetClassLevel(iBestClass);
+    if (nBestClassLevel <= 2) {
+        return 0;
+    }
+
+    INT nPenalty = 0;
+    for (INT iClass = 1; iClass <= CAIOBJECT_CLASS_MAX; iClass++) {
+        if (iClass != iExcludedRacialClass && iClass != iBestClass) {
+            INT nClassLevel = m_derivedStats.GetClassLevel(iClass);
+            if (nClassLevel != 0) {
+                if (nBestClassLevel - nClassLevel > 1
+                    && iClass != iRacialFavoredClass) {
+                    nPenalty += 20;
+                }
+            }
+        }
+    }
+
+    // 100% penalty, really?
+    if (nPenalty > 100) {
+        nPenalty = 100;
+    }
+
+    return nPenalty;
+}
+
 // 0x765C50
 void CGameSprite::DisplayFeats(CUIControlTextDisplay* pText)
 {
