@@ -72,7 +72,7 @@ public:
     BOOL Suspend();
     void Update();
     BOOL WriteResourceWithData(const CString& sFileName, CRes* pRes, LPVOID lpBuf, DWORD dwSize);
-    BOOL WriteSetUp(const CString& a2, CString& a3);
+    BOOL WriteSetUp(const CString& sFileName, CString& sResolvedFileName);
     BOOL Alloc(CRes* pRes, DWORD nSize);
 
     CString GetCDSwitchDriveLetter();

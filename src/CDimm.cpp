@@ -2201,11 +2201,56 @@ BOOL CDimm::WriteResourceWithData(const CString& sFileName, CRes* pRes, LPVOID l
     return FALSE;
 }
 
-BOOL CDimm::WriteSetUp(const CString& a2, CString& a3)
+// 0x789480
+BOOL CDimm::WriteSetUp(const CString& sFileName, CString& sResolvedFileName)
 {
-    // TODO: Incomplete.
+    CString sResolvedFileNameTemp;
+    CString sDirName;
+    CString sTemp;
 
-    return FALSE;
+    char path[MAX_PATH];
+    _getcwd(path, MAX_PATH);
+
+    if (g_pChitin->lAliases.ResolveFileName(sFileName, sResolvedFileNameTemp)) {
+        sResolvedFileNameTemp = sFileName;
+    }
+
+    INT nSlash = sResolvedFileNameTemp.ReverseFind('\\');
+    if (nSlash == -1) {
+        // __FILE__: C:\Projects\Icewind2\src\chitin\ChDimm.cpp
+        // __LINE__: 6809
+        UTIL_ASSERT(FALSE);
+    }
+
+    sDirName = sResolvedFileNameTemp.Left(nSlash);
+
+    if (_chdir(sDirName) != 0) {
+        for (INT nPos = 2; nPos < sDirName.GetLength(); nPos++) {
+            if (sDirName[nPos - 1] == '\\'
+                && sDirName[nPos - 2] != '\\'
+                && sDirName[nPos] != '\\') {
+                sTemp = sDirName[nPos - 1];
+
+                if (_chdir(sTemp) != 0) {
+                    if (_mkdir(sTemp) != 0) {
+                        _chdir(path);
+                        return FALSE;
+                    }
+                }
+            }
+        }
+
+        // Last path component (without trailing slash).
+        if (_mkdir(sDirName) != 0) {
+            _chdir(path);
+            return FALSE;
+        }
+    }
+
+    _chdir(path);
+
+    sResolvedFileName = sResolvedFileNameTemp;
+    return TRUE;
 }
 
 // 0x789710
