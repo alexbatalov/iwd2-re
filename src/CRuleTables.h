@@ -431,7 +431,7 @@ public:
     const C2DArray* GetClassAbilityTable(BYTE nClass, DWORD nSpecialist) const;
     STRREF GetSpeechStringRef(CString& sSoundSet, INT nSpeech) const;
     BOOLEAN IsHatedRace(const CAIObjectType& typeAI, const CCreatureFileHeader& BStats) const;
-    BOOLEAN IsHatedRace(BYTE nRace, const CCreatureFileHeader& BStats) const;
+    BOOLEAN IsHatedRace(BYTE& nRace, const CCreatureFileHeader& BStats) const;
     INT GetHatedRaceBonus(BYTE& nRace, const CCreatureFileHeader& BStats) const;
     INT GetEncumbranceMod(CGameSprite* pSprite) const;
 

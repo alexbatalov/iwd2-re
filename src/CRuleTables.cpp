@@ -3130,8 +3130,10 @@ BOOLEAN CRuleTables::IsHatedRace(const CAIObjectType& typeAI, const CCreatureFil
     return FALSE;
 }
 
+// FIXME: For unknown reason `nRace` is passed as a pointer.
+//
 // 0x546830
-BOOLEAN CRuleTables::IsHatedRace(BYTE nRace, const CCreatureFileHeader& BStats) const
+BOOLEAN CRuleTables::IsHatedRace(BYTE& nRace, const CCreatureFileHeader& BStats) const
 {
     for (int index = 0; index < 8; index++) {
         if (BStats.m_favoredEnemies[index] == nRace) {
