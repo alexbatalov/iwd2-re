@@ -12,6 +12,7 @@
 #include "CGameSprite.h"
 #include "CInfCursor.h"
 #include "CInfinity.h"
+#include "CItem.h"
 #include "CScreenCharacter.h"
 #include "CScreenInventory.h"
 #include "CScreenJournal.h"
@@ -2161,6 +2162,19 @@ DWORD CInfGame::GetScrollSpeed()
         return m_cOptions.m_nKeyboardScrollSpeed;
     } else {
         return m_cOptions.m_nMouseScrollSpeed;
+    }
+}
+
+// 0x5BF4B0
+void CInfGame::AddDisposableItem(CItem* pItem)
+{
+    if (pItem != NULL) {
+        CSingleLock disposableItemsLock(&m_disposableItemsCritSect, FALSE);
+        disposableItemsLock.Lock(INFINITE);
+
+        m_lDisposableItems.AddTail(pItem);
+
+        disposableItemsLock.Unlock();
     }
 }
 

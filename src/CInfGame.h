@@ -30,6 +30,7 @@
 #define CINFGAME_MAXCHARACTERS 6
 
 class CGameArea;
+class CItem;
 
 class CInfGame {
 public:
@@ -87,6 +88,7 @@ public:
     BOOL AddCharacterToFamiliars(LONG nCharacterId);
     BOOL RemoveCharacterFromFamiliars(LONG nCharacterId);
     DWORD GetScrollSpeed();
+    void AddDisposableItem(CItem* pItem);
     void sub_5BF6A0(int a1);
     BOOLEAN FindAreaID(DWORD nAreaId);
     CStringList* GetSaveGames();
@@ -228,6 +230,8 @@ public:
     /* 4A9A */ DWORD m_dwLastProgressRenderTickCount;
     /* 4A9E */ DWORD m_dwLastProgressMsgTickCount;
     /* 4A00 */ HANDLE m_hSearchThread; // #guess
+    /* 4A04 */ CCriticalSection m_disposableItemsCritSect;
+    /* 4A24 */ CTypedPtrList<CPtrList, CItem*> m_lDisposableItems;
     /* 4AA2 */ ULONG field_4AA2;
     /* 4AB2 */ unsigned char field_4AB2;
     /* 4AB4 */ CVidPalette m_entanglePalette;
