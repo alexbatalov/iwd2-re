@@ -3095,6 +3095,29 @@ const C2DArray* CRuleTables::GetClassAbilityTable(BYTE nClass, DWORD nSpecialist
     UTIL_ASSERT_MSG(FALSE, "GetClassAbilityTable Being  called incorrectly");
 }
 
+// 0x546680
+STRREF CRuleTables::GetSpeechStringRef(CString& sSoundSet, INT nSpeech) const
+{
+    if (sSoundSet.IsEmpty()) {
+        return -1;
+    }
+
+    if (nSpeech < 0 || nSpeech > 42) {
+        return -1;
+    }
+
+    CPoint ptLocation;
+    m_tCharStr.Find(sSoundSet, ptLocation, TRUE);
+
+    if (ptLocation.y == -1) {
+        return -1;
+    }
+
+    ptLocation.x = nSpeech;
+
+    return m_tCharStr.GetAtLong(ptLocation);
+}
+
 // 0x546830
 BOOLEAN CRuleTables::IsHatedRace(BYTE nRace, const CCreatureFileHeader& BStats) const
 {
