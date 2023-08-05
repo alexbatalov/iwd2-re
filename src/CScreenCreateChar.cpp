@@ -5387,23 +5387,23 @@ DWORD CUIControlButtonClericWizardSpecializationSelection::GetSpecialization(BYT
     case CAIOBJECTTYPE_C_WIZARD:
         switch (m_nID) {
         case 2:
-            return 0x40;
+            return SPECMASK_WIZARD_ABJURER;
         case 3:
-            return 0x80;
+            return SPECMASK_WIZARD_CONJURER;
         case 4:
-            return 0x100;
+            return SPECMASK_WIZARD_DIVINER;
         case 5:
-            return 0x200;
+            return SPECMASK_WIZARD_ENCHANTER;
         case 6:
-            return 0x800;
+            return SPECMASK_WIZARD_ILLUSIONIST;
         case 7:
-            return 0x400;
+            return SPECMASK_WIZARD_EVOKER;
         case 8:
-            return 0x1000;
+            return SPECMASK_WIZARD_NECROMANCER;
         case 9:
-            return 0x2000;
+            return SPECMASK_WIZARD_TRANSMUTER;
         case 13:
-            return 0x4000;
+            return SPECMASK_WIZARD_UNIVERSAL;
         default:
             // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
             // __LINE__: 13273
@@ -5413,23 +5413,23 @@ DWORD CUIControlButtonClericWizardSpecializationSelection::GetSpecialization(BYT
     case CAIOBJECTTYPE_C_CLERIC:
         switch (m_nID) {
         case 2:
-            return 0x10000;
+            return SPECMASK_CLERIC_LATHANDER;
         case 3:
-            return 0x20000;
+            return SPECMASK_CLERIC_SELUNE;
         case 4:
-            return 0x40000;
+            return SPECMASK_CLERIC_HELM;
         case 5:
-            return 0x80000;
+            return SPECMASK_CLERIC_OGHMA;
         case 6:
-            return 0x200000;
+            return SPECMASK_CLERIC_BANE;
         case 7:
-            return 0x100000;
+            return SPECMASK_CLERIC_TEMPUS;
         case 8:
-            return 0x400000;
+            return SPECMASK_CLERIC_MASK;
         case 9:
-            return 0x800000;
+            return SPECMASK_CLERIC_TALOS;
         case 13:
-            return 0x8000;
+            return SPECMASK_CLERIC_ILMATER;
         default:
             // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
             // __LINE__: 13310
@@ -5477,58 +5477,58 @@ void CUIControlButtonClericWizardSpecializationSelection::OnLButtonClick(CPoint 
 
         STRREF strDescription;
         switch (nSpecialization) {
-        case 0x40:
+        case SPECMASK_WIZARD_ABJURER:
             strDescription = 9564;
             break;
-        case 0x80:
+        case SPECMASK_WIZARD_CONJURER:
             strDescription = 9565;
             break;
-        case 0x100:
+        case SPECMASK_WIZARD_DIVINER:
             strDescription = 9566;
             break;
-        case 0x200:
+        case SPECMASK_WIZARD_ENCHANTER:
             strDescription = 9567;
             break;
-        case 0x400:
+        case SPECMASK_WIZARD_ILLUSIONIST:
             strDescription = 9568;
             break;
-        case 0x800:
+        case SPECMASK_WIZARD_EVOKER:
             strDescription = 9569;
             break;
-        case 0x1000:
+        case SPECMASK_WIZARD_NECROMANCER:
             strDescription = 9570;
             break;
-        case 0x2000:
+        case SPECMASK_WIZARD_TRANSMUTER:
             strDescription = 9571;
             break;
-        case 0x4000:
+        case SPECMASK_WIZARD_UNIVERSAL:
             strDescription = 9563;
             break;
-        case 0x8000:
+        case SPECMASK_CLERIC_ILMATER:
             strDescription = 38118;
             break;
-        case 0x10000:
+        case SPECMASK_CLERIC_LATHANDER:
             strDescription = 38119;
             break;
-        case 0x20000:
+        case SPECMASK_CLERIC_SELUNE:
             strDescription = 38120;
             break;
-        case 0x40000:
+        case SPECMASK_CLERIC_HELM:
             strDescription = 38121;
             break;
-        case 0x80000:
+        case SPECMASK_CLERIC_OGHMA:
             strDescription = 38122;
             break;
-        case 0x100000:
+        case SPECMASK_CLERIC_TEMPUS:
             strDescription = 38123;
             break;
-        case 0x200000:
+        case SPECMASK_CLERIC_BANE:
             strDescription = 38124;
             break;
-        case 0x400000:
+        case SPECMASK_CLERIC_MASK:
             strDescription = 38125;
             break;
-        case 0x800000:
+        case SPECMASK_CLERIC_TALOS:
             strDescription = 38126;
             break;
         default:
