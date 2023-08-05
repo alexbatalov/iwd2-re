@@ -317,7 +317,7 @@ public:
     /* 0014 */ BYTE m_nGender;
     /* 0015 */ BYTE m_nAlignment;
     /* 0016 */ BYTE m_nAvClass;
-    /* 0008 */ int m_nClassMask;
+    /* 0018 */ int m_nClassMask;
     /* 001C */ int m_nLocationType;
     /* 0020 */ CPoint m_ptCenter;
     /* 0028 */ int m_nRadius;
