@@ -12,6 +12,7 @@ public:
     /* 002C */ RESREF m_portraitSmall;
     /* 0034 */ RESREF m_portraitLarge;
     /* 0048 */ BYTE m_attackBase;
+    /* 0082 */ BYTE m_characterLevel;
     /* 0083 */ union {
         struct {
             /* 0083 */ BYTE m_barbarianLevel;
