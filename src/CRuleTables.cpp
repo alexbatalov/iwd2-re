@@ -3142,6 +3142,33 @@ BOOLEAN CRuleTables::IsHatedRace(BYTE nRace, const CCreatureFileHeader& BStats) 
     return FALSE;
 }
 
+// FIXME: For unknown reason `nRace` is passed as a pointer.
+//
+// 0x546860
+INT CRuleTables::GetHatedRaceBonus(BYTE& nRace, const CCreatureFileHeader& BStats) const
+{
+    BOOLEAN bFound = FALSE;
+    INT nFavoredEnemyIndex = 0;
+    INT nCnt;
+
+    for (nCnt = 0; nCnt < 8; nCnt++) {
+        if (BStats.m_favoredEnemies[nCnt] == CAIObjectType::R_NO_RACE) {
+            break;
+        }
+
+        if (BStats.m_favoredEnemies[nCnt] == nRace) {
+            bFound = TRUE;
+            nFavoredEnemyIndex = nCnt;
+        }
+    }
+
+    if (bFound != TRUE) {
+        return 0;
+    }
+
+    return nCnt - nFavoredEnemyIndex;
+}
+
 // 0x546AA0
 INT CRuleTables::GetEncumbranceMod(CGameSprite* pSprite) const
 {

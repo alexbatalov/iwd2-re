@@ -432,6 +432,7 @@ public:
     STRREF GetSpeechStringRef(CString& sSoundSet, INT nSpeech) const;
     BOOLEAN IsHatedRace(const CAIObjectType& typeAI, const CCreatureFileHeader& BStats) const;
     BOOLEAN IsHatedRace(BYTE nRace, const CCreatureFileHeader& BStats) const;
+    INT GetHatedRaceBonus(BYTE& nRace, const CCreatureFileHeader& BStats) const;
     INT GetEncumbranceMod(CGameSprite* pSprite) const;
 
     /* 0000 */ C2DArray m_tReactionModCharisma;
