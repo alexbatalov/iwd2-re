@@ -214,6 +214,7 @@ public:
     void sub_72DE60();
     const CString& GetName();
     DWORD GetSpecialization();
+    BOOL HasClassMask(DWORD dwMask);
     void SetFeatValue(UINT nFeatNumber, INT iFeatValue);
     INT GetFeatValue(UINT nFeatNumber);
     INT GetMaxFeatValue(UINT nFeatNumber);

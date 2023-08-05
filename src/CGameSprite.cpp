@@ -430,6 +430,12 @@ DWORD CGameSprite::GetSpecialization()
     return m_baseStats.m_specialization;
 }
 
+// 0x762740
+BOOL CGameSprite::HasClassMask(DWORD dwMask)
+{
+    return (dwMask & GetAIType().m_nClassMask) != 0;
+}
+
 // 0x762890
 void CGameSprite::SetFeatValue(UINT nFeatNumber, INT iFeatValue)
 {
