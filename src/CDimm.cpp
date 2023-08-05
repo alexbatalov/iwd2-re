@@ -809,7 +809,47 @@ int CDimm::Dump(CRes* pRes, int a2, int a3)
 // 0x785FB0
 int CDimm::DumpAll()
 {
-    // TODO: Incomplete.
+    POSITION pos;
+
+    pos = m_lFreed.GetHeadPosition();
+    while (pos != NULL) {
+        CRes* pRes = static_cast<CRes*>(m_lFreed.GetNext(pos));
+        if (pRes != NULL) {
+            AfxIsValidAddress(pRes, sizeof(CRes), TRUE);
+        }
+    }
+    m_lFreed.RemoveAll();
+
+    pos = m_lServicedHigh.GetHeadPosition();
+    while (pos != NULL) {
+        CRes* pRes = static_cast<CRes*>(m_lServicedHigh.GetNext(pos));
+        if (pRes != NULL) {
+            AfxIsValidAddress(pRes, sizeof(CRes), TRUE);
+        }
+    }
+    m_lServicedHigh.RemoveAll();
+
+    pos = m_lServicedMedium.GetHeadPosition();
+    while (pos != NULL) {
+        CRes* pRes = static_cast<CRes*>(m_lServicedMedium.GetNext(pos));
+        if (pRes != NULL) {
+            AfxIsValidAddress(pRes, sizeof(CRes), TRUE);
+        }
+    }
+    m_lServicedMedium.RemoveAll();
+
+    pos = m_lServicedLow.GetHeadPosition();
+    while (pos != NULL) {
+        CRes* pRes = static_cast<CRes*>(m_lServicedLow.GetNext(pos));
+        if (pRes != NULL) {
+            AfxIsValidAddress(pRes, sizeof(CRes), TRUE);
+        }
+    }
+    m_lServicedLow.RemoveAll();
+
+    m_lRequestedHigh.RemoveAll();
+    m_lRequestedMedium.RemoveAll();
+    m_lRequestedLow.RemoveAll();
 
     return 0;
 }
