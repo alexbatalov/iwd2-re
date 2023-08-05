@@ -1947,6 +1947,23 @@ INT CRuleTables::GetStartingExperiencePoints(CGameSprite* pSprite) const
     return atol(m_tStartingExperiencePoints.GetAt(VALUE, sRace));
 }
 
+// NOTE: Even though `xplevel.2da` contains entries for all classes, only
+// `FIGHTER` is used to determine XP progression. This is leftover from earlier
+// 2E games where every class has it's own progression.
+//
+// 0x5438D0
+DWORD CRuleTables::GetNextLevelXP(BYTE nLevel) const
+{
+    CString sClassName;
+
+    sClassName = GetClassString(CAIOBJECTTYPE_C_FIGHTER, 0);
+
+    char szLevel[80];
+    sprintf(szLevel, "%d", nLevel);
+
+    return atol(m_tExperienceLevels.GetAt(CString(szLevel), sClassName));
+}
+
 // 0x5439B0
 void CRuleTables::GetStartArea(CResRef& cResArea, CPoint& ptView) const
 {
