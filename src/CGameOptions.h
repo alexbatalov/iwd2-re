@@ -59,7 +59,7 @@ public:
     /* 00B8 */ BOOL m_bSuppressExtraDifficultyDamage;
     /* 00BC */ BOOL m_bDuplicateFloatingText;
     /* 00C0 */ unsigned char m_nTilesPrecachePercent;
-    /* 00C2 */ int field_C2;
+    /* 00C2 */ int m_nNightmareMode;
     /* 00C6 */ int m_nDefaultCharGenPointsPool;
     /* 00CA */ int m_nDefaultCharGenPoints;
     /* 00CE */ int m_nShadedSelectionBox; // #guess

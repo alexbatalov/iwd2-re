@@ -1319,7 +1319,7 @@ void CScreenOptions::UpdateGamePlayPanel(BOOLEAN bInitialUpdate)
             break;
         }
     } else {
-        pSlider->m_bKnobEnabled = pOptions->field_C2 == 0;
+        pSlider->m_bKnobEnabled = pOptions->m_nNightmareMode == 0;
     }
 
     pSlider->m_nValue = max(min(static_cast<short>(((pSlider->m_nKnobJumpCount - 1) * (pOptions->m_nDifficultyLevel - 1) + 4) / 5), pSlider->m_nKnobJumpCount - 1), 0);

@@ -54,7 +54,7 @@ CGameOptions::CGameOptions()
     m_bCriticalHitScreenShake = TRUE;
     m_bSuppressExtraDifficultyDamage = FALSE;
     m_nTilesPrecachePercent = 100;
-    field_C2 = 0;
+    m_nNightmareMode = 0;
     m_nDefaultCharGenPointsPool = 16;
     m_nDefaultCharGenPoints = 10;
     m_nShadedSelectionBox = 0;
