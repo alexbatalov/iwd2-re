@@ -1188,6 +1188,46 @@ INT CGameSprite::GetSkillCost(UINT iSkillNumber, BYTE nClass)
     return 0;
 }
 
+// 0x764520
+INT CGameSprite::GetEffectiveCharacterLevel()
+{
+    INT nLevel = m_derivedStats.m_nLevel;
+
+    switch (m_typeAI.m_nRace) {
+    case CAIOBJECTTYPE_R_HUMAN:
+        switch (m_typeAI.m_nSubRace) {
+        case CAIOBJECTTYPE_SUBRACE_HUMAN_AASIMAR:
+        case CAIOBJECTTYPE_SUBRACE_HUMAN_TIEFLING:
+            nLevel += 1;
+            break;
+        }
+        break;
+    case CAIOBJECTTYPE_R_ELF:
+        switch (m_typeAI.m_nSubRace) {
+        case CAIOBJECTTYPE_SUBRACE_ELF_DROW:
+            nLevel += 2;
+            break;
+        }
+        break;
+    case CAIOBJECTTYPE_R_DWARF:
+        switch (m_typeAI.m_nSubRace) {
+        case CAIOBJECTTYPE_SUBRACE_DWARF_GRAY:
+            nLevel += 2;
+            break;
+        }
+        break;
+    case CAIOBJECTTYPE_R_GNOME:
+        switch (m_typeAI.m_nSubRace) {
+        case CAIOBJECTTYPE_SUBRACE_GNOME_DEEP:
+            nLevel += 3;
+            break;
+        }
+        break;
+    }
+
+    return nLevel;
+}
+
 // 0x765C50
 void CGameSprite::DisplayFeats(CUIControlTextDisplay* pText)
 {

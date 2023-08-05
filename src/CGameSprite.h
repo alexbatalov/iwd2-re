@@ -223,6 +223,7 @@ public:
     void SetSkillValue(UINT iSkillNumber, INT iSkillValue);
     INT GetSkillValue(UINT iSkillNumber);
     INT GetSkillCost(UINT iSkillNumber, BYTE nClass);
+    INT GetEffectiveCharacterLevel();
     void DisplayFeats(CUIControlTextDisplay* pText);
     void DisplaySkills(CUIControlTextDisplay* pText);
 
