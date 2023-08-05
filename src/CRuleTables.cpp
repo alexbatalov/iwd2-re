@@ -2304,6 +2304,35 @@ void CRuleTables::GetClassStringMixed(BYTE nClass, DWORD nSpecialist, DWORD dwFl
     sClass = strRes.szText;
 }
 
+// 0x544500
+void CRuleTables::GetScriptDescription(const CString& sScript, CString& sTitle, CString& sDescription) const
+{
+    CString sName(sScript);
+    DWORD strTitle;
+    DWORD strDescription;
+    STR_RES strRes;
+
+    strTitle = atol(m_tScriptDescription.GetAt(TITLE, sName));
+
+    // TODO: Might be an error - obtains TITLE once again instead of DESCRIPTION
+    // as seen below.
+    strDescription = atol(m_tScriptDescription.GetAt(TITLE, sName));
+
+    if (strTitle == -1 || strDescription == -1) {
+        sName = CUSTOM;
+    }
+
+    g_pBaldurChitin->m_cTlkTable.SetToken(TOKEN_SCRIPT, sScript);
+
+    strTitle = atol(m_tScriptDescription.GetAt(TITLE, sName));
+    g_pBaldurChitin->m_cTlkTable.Fetch(strTitle, strRes);
+    sTitle = strRes.szText;
+
+    strDescription = atol(m_tScriptDescription.GetAt(DESCRIPTION, sName));
+    g_pBaldurChitin->m_cTlkTable.Fetch(strDescription, strRes);
+    sDescription = strRes.szText;
+}
+
 // 0x5446B0
 void CRuleTables::GetCharacterStateDescription(INT nState, CString& sDescription) const
 {
