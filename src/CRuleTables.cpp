@@ -3190,3 +3190,67 @@ INT CRuleTables::GetEncumbranceMod(CGameSprite* pSprite) const
 
     return nEncMod;
 }
+
+// FIXME: For unknown reason `nClass` and `nLevel` params are passed as
+// pointers.
+//
+// 0x547130
+DWORD CRuleTables::GetMaxSpellLevel(BYTE& nClass, INT& nLevel) const
+{
+    switch (nClass) {
+    case 0:
+    case CAIOBJECTTYPE_C_BARBARIAN:
+    case CAIOBJECTTYPE_C_FIGHTER:
+    case CAIOBJECTTYPE_C_MONK:
+    case CAIOBJECTTYPE_C_ROGUE:
+        return 0;
+    }
+
+    const C2DArray* tMaxSpells;
+    switch (nClass) {
+    case CAIOBJECTTYPE_C_BARD:
+        tMaxSpells = &m_tMaxSpellsBard;
+        break;
+    case CAIOBJECTTYPE_C_CLERIC:
+        tMaxSpells = &m_tMaxSpellsCleric;
+        break;
+    case CAIOBJECTTYPE_C_DRUID:
+        tMaxSpells = &m_tMaxSpellsDruid;
+        break;
+    case CAIOBJECTTYPE_C_PALADIN:
+        tMaxSpells = &m_tMaxSpellsPaladin;
+        break;
+    case CAIOBJECTTYPE_C_RANGER:
+        tMaxSpells = &m_tMaxSpellsRanger;
+        break;
+    case CAIOBJECTTYPE_C_SORCERER:
+        tMaxSpells = &m_tMaxSpellsSorcerer;
+        break;
+    case CAIOBJECTTYPE_C_WIZARD:
+        tMaxSpells = &m_tMaxSpellsWizard;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+        // __LINE__: 7049
+        UTIL_ASSERT(FALSE);
+    }
+
+    INT nSpellLevel;
+    for (nSpellLevel = 0; nSpellLevel < 9; nSpellLevel++) {
+        // FIXME: Should be outside of the loop (prevent ctor/dtor on every
+        // iteration).
+        CString sSpellLevel(" ");
+
+        // FIXME: Should be outside of the loop (never change, see below).
+        CString sClassLevel(" ");
+
+        sSpellLevel.Format("%d", nSpellLevel + 1);
+        sClassLevel.Format("%d", nLevel);
+
+        if (atol(tMaxSpells->GetAt(sSpellLevel, sClassLevel)) == 0) {
+            break;
+        }
+    }
+
+    return nSpellLevel;
+}
