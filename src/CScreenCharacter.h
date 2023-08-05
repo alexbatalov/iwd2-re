@@ -77,6 +77,8 @@ public:
     void OnAppearanceButtonClick();
     void OnSoundsButtonClick();
 
+    static void ResetBiography(CGameSprite* pSprite);
+
     /* 0106 */ BYTE m_nClass;
     /* 01B0 */ BOOL m_bShiftKeyDown;
     /* 01B4 */ BOOL m_bCapsLockKeyOn;

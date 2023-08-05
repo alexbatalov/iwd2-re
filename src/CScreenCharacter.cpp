@@ -32,6 +32,50 @@ const CString CScreenCharacter::TOKEN_MAXIMUM("MAXIMUM");
 // 0x8F3338
 CString CScreenCharacter::SAVE_NAME("default");
 
+// 0x5D50F0
+void CScreenCharacter::ResetBiography(CGameSprite* pSprite)
+{
+    switch (pSprite->m_derivedStats.GetBestClass()) {
+    case CAIOBJECTTYPE_C_BARBARIAN:
+        pSprite->m_baseStats.field_1A0 = 27862;
+        break;
+    case CAIOBJECTTYPE_C_BARD:
+        pSprite->m_baseStats.field_1A0 = 19425;
+        break;
+    case CAIOBJECTTYPE_C_CLERIC:
+        pSprite->m_baseStats.field_1A0 = 19422;
+        break;
+    case CAIOBJECTTYPE_C_DRUID:
+        pSprite->m_baseStats.field_1A0 = 19421;
+        break;
+    case CAIOBJECTTYPE_C_FIGHTER:
+        pSprite->m_baseStats.field_1A0 = 19423;
+        break;
+    case CAIOBJECTTYPE_C_MONK:
+        pSprite->m_baseStats.field_1A0 = 27860;
+        break;
+    case CAIOBJECTTYPE_C_PALADIN:
+        pSprite->m_baseStats.field_1A0 = 19427;
+        break;
+    case CAIOBJECTTYPE_C_RANGER:
+        pSprite->m_baseStats.field_1A0 = 19429;
+        break;
+    case CAIOBJECTTYPE_C_ROGUE:
+        pSprite->m_baseStats.field_1A0 = 19428;
+        break;
+    case CAIOBJECTTYPE_C_SORCERER:
+        pSprite->m_baseStats.field_1A0 = 27863;
+        break;
+    case CAIOBJECTTYPE_C_WIZARD:
+        pSprite->m_baseStats.field_1A0 = 19430;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 199
+        UTIL_ASSERT(FALSE);
+    }
+}
+
 // 0x5D5220
 CScreenCharacter::CScreenCharacter()
 {
