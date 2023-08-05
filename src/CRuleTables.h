@@ -435,6 +435,7 @@ public:
     INT GetHatedRaceBonus(BYTE& nRace, const CCreatureFileHeader& BStats) const;
     INT GetEncumbranceMod(CGameSprite* pSprite) const;
     DWORD GetMaxSpellLevel(BYTE& nClass, INT& nLevel) const;
+    BYTE GetSpecializationIndex(BYTE nClass, DWORD nSpecialization) const;
 
     /* 0000 */ C2DArray m_tReactionModCharisma;
     /* 0024 */ C2DArray m_tReactionModReputation;

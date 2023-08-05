@@ -3254,3 +3254,74 @@ DWORD CRuleTables::GetMaxSpellLevel(BYTE& nClass, INT& nLevel) const
 
     return nSpellLevel;
 }
+
+// 0x5472E0
+BYTE CRuleTables::GetSpecializationIndex(BYTE nClass, DWORD nSpecialization) const
+{
+    switch (nClass) {
+    case CAIOBJECTTYPE_C_CLERIC:
+        switch (nSpecialization & 0xFF8000) {
+        case 0x8000:
+            return 1;
+        case 0x10000:
+            return 2;
+        case 0x20000:
+            return 3;
+        case 0x40000:
+            return 4;
+        case 0x80000:
+            return 5;
+        case 0x100000:
+            return 6;
+        case 0x200000:
+            return 7;
+        case 0x400000:
+            return 8;
+        case 0x800000:
+            return 9;
+        }
+        break;
+    case CAIOBJECTTYPE_C_MONK:
+        switch (nSpecialization & 0x38) {
+        case 0x8:
+            return 1;
+        case 0x10:
+            return 2;
+        case 0x20:
+            return 3;
+        }
+        break;
+    case CAIOBJECTTYPE_C_PALADIN:
+        switch (nSpecialization & 0x7) {
+        case 0x1:
+            return 1;
+        case 0x2:
+            return 2;
+        case 0x4:
+            return 3;
+        }
+        break;
+    case CAIOBJECTTYPE_C_WIZARD:
+        switch (nSpecialization & 0x7FC0) {
+        case 0x40:
+            return 1;
+        case 0x80:
+            return 2;
+        case 0x100:
+            return 3;
+        case 0x200:
+            return 4;
+        case 0x400:
+            return 5;
+        case 0x800:
+            return 6;
+        case 0x1000:
+            return 7;
+        case 0x2000:
+            return 8;
+        }
+        break;
+    }
+
+    return 0;
+}
