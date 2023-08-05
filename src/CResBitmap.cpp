@@ -119,7 +119,7 @@ BOOL CResBitmap::GetPixelColor(int x, int y, RGBQUAD& color, BOOL bDoubleSize)
         // __LINE__: 1686
         UTIL_ASSERT(!(x >= pBitmapInfoHeader->biWidth || x < 0 || y > pBitmapInfoHeader->biHeight || y < 0));
 
-        color = *reinterpret_cast<RGBQUAD*>(pBitmapData[3 * x + 4 * nXWords * pBitmapInfoHeader->biHeight - y - 1]);
+        color = *reinterpret_cast<RGBQUAD*>(pBitmapData + 3 * x + 4 * nXWords * (pBitmapInfoHeader->biHeight - y - 1));
     }
 
     return FALSE;
