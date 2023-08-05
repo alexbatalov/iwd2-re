@@ -23,17 +23,7 @@ public:
     BOOLEAN Find(CString& sSearchString, CPoint& ptLocation, BOOLEAN bSearchLabels) const;
     BOOLEAN Find(CString& sSearchString, CPoint& ptLocation) const;
 
-    // NOTE: There are traces of such function in `CRuleTables` (which is
-    // obviously not `GetAtLong` because there are no `GetBuffer`and
-    // `ReleaseBuffer` calls).
-    const CString& C2DArray::GetAt(const CPoint& coordinates) const
-    {
-        if (coordinates.x >= 0 && coordinates.x < m_nSizeX && coordinates.y >= 0 && coordinates.y < m_nSizeY) {
-            return m_pArray[coordinates.x + m_nSizeX * coordinates.y];
-        } else {
-            return m_default;
-        }
-    }
+    const CString& GetAt(const CPoint& coordinates) const;
 
 protected:
     CString* m_pNamesX;
