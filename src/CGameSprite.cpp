@@ -1228,6 +1228,91 @@ INT CGameSprite::GetEffectiveCharacterLevel()
     return nLevel;
 }
 
+// 0x764590
+INT CGameSprite::GetRacialFavoredClass(DWORD& nSpecialization)
+{
+    INT iClass;
+
+    nSpecialization = 0;
+
+    switch (m_typeAI.m_nRace) {
+    case CAIOBJECTTYPE_R_HUMAN:
+        switch (m_typeAI.m_nSubRace) {
+        case CAIOBJECTTYPE_SUBRACE_PURERACE:
+            iClass = m_derivedStats.GetBestClass();
+            if (m_derivedStats.m_nLevel == 0) {
+                iClass = CAIOBJECTTYPE_C_FIGHTER;
+            }
+            break;
+        case CAIOBJECTTYPE_SUBRACE_HUMAN_AASIMAR:
+            iClass = CAIOBJECTTYPE_C_PALADIN;
+            break;
+        case CAIOBJECTTYPE_SUBRACE_HUMAN_TIEFLING:
+            iClass = CAIOBJECTTYPE_C_ROGUE;
+            break;
+        }
+        break;
+    case CAIOBJECTTYPE_R_ELF:
+        switch (m_typeAI.m_nSubRace) {
+        case CAIOBJECTTYPE_SUBRACE_PURERACE:
+            iClass = CAIOBJECTTYPE_C_WIZARD;
+            break;
+        case CAIOBJECTTYPE_SUBRACE_ELF_DROW:
+            switch (m_typeAI.m_nGender) {
+            case CAIOBJECTTYPE_SEX_MALE:
+                iClass = CAIOBJECTTYPE_C_WIZARD;
+                break;
+            case CAIOBJECTTYPE_SEX_FEMALE:
+                iClass = CAIOBJECTTYPE_C_CLERIC;
+                break;
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+                // __LINE__: 30684
+                UTIL_ASSERT_MSG(FALSE, "Character has no gender");
+            }
+            break;
+        case CAIOBJECTTYPE_SUBRACE_ELF_WILD:
+            iClass = CAIOBJECTTYPE_C_SORCERER;
+            break;
+        }
+        break;
+    case CAIOBJECTTYPE_R_HALF_ELF:
+        iClass = m_derivedStats.GetBestClass();
+        if (m_derivedStats.m_nLevel == 0) {
+            iClass = CAIOBJECTTYPE_C_FIGHTER;
+        }
+        break;
+    case CAIOBJECTTYPE_R_DWARF:
+        iClass = CAIOBJECTTYPE_C_FIGHTER;
+        break;
+    case CAIOBJECTTYPE_R_HALFLING:
+        switch (m_typeAI.m_nSubRace) {
+        case CAIOBJECTTYPE_SUBRACE_PURERACE:
+        case CAIOBJECTTYPE_SUBRACE_HALFLING_STRONGHEART:
+            iClass = CAIOBJECTTYPE_C_ROGUE;
+            break;
+        case CAIOBJECTTYPE_SUBRACE_HALFLING_GHOSTWISE:
+            // TODO: This does not look right.
+            iClass = CAIOBJECTTYPE_C_BARBARIAN;
+            break;
+        }
+        break;
+    case CAIOBJECTTYPE_R_GNOME:
+        iClass = CAIOBJECTTYPE_C_WIZARD;
+        nSpecialization = 0x400; // WIZARD_ILLUSIONIST
+        break;
+    case CAIOBJECTTYPE_R_HALF_ORC:
+        iClass = CAIOBJECTTYPE_C_BARBARIAN;
+        break;
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+    // __LINE__: 30733
+    UTIL_ASSERT_MSG(iClass != 0, "GetRacialFavoredClass() returned 0!");
+
+    return iClass;
+}
+
 // 0x765C50
 void CGameSprite::DisplayFeats(CUIControlTextDisplay* pText)
 {

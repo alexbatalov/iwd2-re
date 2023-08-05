@@ -224,6 +224,7 @@ public:
     INT GetSkillValue(UINT iSkillNumber);
     INT GetSkillCost(UINT iSkillNumber, BYTE nClass);
     INT GetEffectiveCharacterLevel();
+    INT GetRacialFavoredClass(DWORD& nSpecialization);
     void DisplayFeats(CUIControlTextDisplay* pText);
     void DisplaySkills(CUIControlTextDisplay* pText);
 
