@@ -5,6 +5,7 @@
 #include "CDerivedStats.h"
 #include "CGameSprite.h"
 #include "CInfGame.h"
+#include "CItem.h"
 #include "CTimerWorld.h"
 #include "CUtil.h"
 
@@ -2752,6 +2753,21 @@ void CRuleTables::GetGenderStringMixed(BYTE nGender, CString& sGender) const
 
     g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes);
     sGender = strRes.szText;
+}
+
+// 0x545730
+BOOL CRuleTables::IsItemExclusive(CItem* pItem) const
+{
+    BOOL bExclusive = FALSE;
+
+    if (pItem != NULL) {
+        CString sResRef;
+        pItem->GetResRef().CopyToString(sResRef);
+
+        bExclusive = atol(m_tExclusiveItems.GetAt(VALUE, sResRef));
+    }
+
+    return bExclusive;
 }
 
 // 0x5457C0

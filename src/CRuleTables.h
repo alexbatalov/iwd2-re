@@ -11,6 +11,7 @@ class CAIObjectType;
 class CCreatureFileHeader;
 class CDerivedStats;
 class CGameSprite;
+class CItem;
 
 class CRuleTables {
 public:
@@ -407,6 +408,7 @@ public:
     BOOL GetCustomSound(CString& sName, BYTE nSoundId) const;
     void GetAlignmentStringMixed(BYTE nAlignment, CString& sAlignment) const;
     void GetGenderStringMixed(BYTE nGender, CString& sGender) const;
+    BOOL IsItemExclusive(CItem* pItem) const;
     BOOL Is3DSound(int nSoundChannel) const;
     float GetSoundReverbMix(int nSoundChannel, int nReverb) const;
     int GetSoundEnvironment(EAXPRESET& preset, int nReverb) const;
