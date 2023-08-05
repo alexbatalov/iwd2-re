@@ -2232,11 +2232,46 @@ BOOL CDimm::WriteFile(const CString& sDirName, const CString& sFileName, LPVOID 
 }
 
 // 0x789250
-BOOL CDimm::WriteResourceWithData(const CString& sFileName, CRes* pRes, LPVOID lpBuf, DWORD dwSize)
+BOOL CDimm::WriteResourceWithData(const CString& sDirName, CRes* pRes, LPVOID lpBuf, DWORD dwSize)
 {
-    // TODO: Incomplete.
+    CString sFileName;
+    CString sBaseName;
+    CString sExtension;
 
-    return FALSE;
+    if (pRes == NULL) {
+        return FALSE;
+    }
+
+    if (FindDirectoryInDirectoryList(sDirName) == DIMM_NOT_IN_DIRECTORY_LIST) {
+        if (!AddToDirectoryList(sDirName, FALSE)) {
+            return FALSE;
+        }
+    }
+
+    RESID nID = (pRes->GetID() & 0xFFFFF) | (~FindDirectoryInDirectoryList(sDirName) << 20);
+    CResRef cResRef = pRes->GetResRef();
+    USHORT nType = pRes->GetType();
+
+    sBaseName = cResRef.GetResRef();
+    g_pChitin->TranslateType(nType, sExtension);
+    sFileName = sBaseName + "." + sExtension;
+
+    if (WriteFile(sDirName, sFileName, lpBuf, dwSize) != TRUE) {
+        return FALSE;
+    }
+
+    if (pRes->m_pDimmKeyTableEntry != NULL && pRes->m_pDimmKeyTableEntry->nID != nID) {
+        pRes->m_pDimmKeyTableEntry->nID = nID;
+
+        if (pRes->GetDemands() > 0) {
+            pRes->dwFlags |= CRes::RES_FLAG_0x100;
+        } else {
+            g_pChitin->cDimm.Dump(pRes, 1, 0);
+            pRes->SetID(nID);
+        }
+    }
+
+    return TRUE;
 }
 
 // 0x789480
