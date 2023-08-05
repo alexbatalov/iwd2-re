@@ -3106,3 +3106,23 @@ BOOLEAN CRuleTables::IsHatedRace(BYTE nRace, const CCreatureFileHeader& BStats) 
 
     return FALSE;
 }
+
+// 0x546AA0
+INT CRuleTables::GetEncumbranceMod(CGameSprite* pSprite) const
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+    // __LINE__: 6712
+    UTIL_ASSERT(pSprite != NULL);
+
+    const CAIObjectType& typeAI = pSprite->GetAIType();
+
+    CString sClass = GetClassString(typeAI.m_nClass, 0);
+
+    INT nEncMod = atol(m_tEncMod.GetAt(ENCUMBRANCE_MOD_PERCENT, sClass)) + 100;
+
+    if (pSprite->sub_763150(CGAMESPRITE_FEAT_STRONG_BACK)) {
+        nEncMod += 50;
+    }
+
+    return nEncMod;
+}
