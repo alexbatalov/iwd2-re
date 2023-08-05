@@ -2360,6 +2360,25 @@ SHORT CRuleTables::GetLayOnHandsAmount(const CAIObjectType& typeAI, CDerivedStat
     return nPaladinLevel;
 }
 
+// 0x544A20
+INT CRuleTables::GetLathanderRenewalAmount(const CAIObjectType& typeAI, CDerivedStats& DStats) const
+{
+    if ((typeAI.m_nClassMask & CLASSMASK_CLERIC) == 0) {
+        return 0;
+    }
+
+    if ((DStats.field_A2 & 0x10000) == 0) {
+        return 0;
+    }
+
+    INT nClericLevel = DStats.GetClassLevel(CAIOBJECTTYPE_C_CLERIC);
+    if (nClericLevel < 1) {
+        return 0;
+    }
+
+    return 2 * nClericLevel;
+}
+
 // 0x544A60
 BOOL CRuleTables::IsValidAlignment(BYTE nClass, BYTE nAlignment, DWORD nSpecialist) const
 {

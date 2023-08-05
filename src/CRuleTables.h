@@ -395,6 +395,7 @@ public:
     void GetMovieDescription(const CString& sMovie, CString& sDescription) const;
     void GetSpellDescription(const CString& sSpell, CString& sDescription) const;
     SHORT GetLayOnHandsAmount(const CAIObjectType& typeAI, CDerivedStats& DStats) const;
+    INT GetLathanderRenewalAmount(const CAIObjectType& typeAI, CDerivedStats& DStats) const;
     BOOL IsValidAlignment(BYTE nClass, BYTE nAlignment, DWORD nSpecialist) const;
     BOOL IsUsableByAlignment(DWORD dwNotUsableBy, BYTE nAlignment) const;
     BYTE GetStartingReputation(BYTE nAlignment) const;
