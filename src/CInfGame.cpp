@@ -2178,6 +2178,35 @@ void CInfGame::AddDisposableItem(CItem* pItem)
     }
 }
 
+// 0x5BF540
+void CInfGame::DestroyDisposableItems()
+{
+    if (m_lDisposableItems.GetCount() > 0) {
+        CSingleLock disposableItemsLock(&m_disposableItemsCritSect, FALSE);
+        disposableItemsLock.Lock(INFINITE);
+
+        POSITION pos = m_lDisposableItems.GetHeadPosition();
+        while (pos != NULL) {
+            CItem* pItem = m_lDisposableItems.GetAt(pos);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+            // __LINE__: 16931
+            UTIL_ASSERT(pItem != NULL);
+
+            delete pItem;
+
+            // NOTE: Meaningless.
+            m_lDisposableItems.SetAt(pos, NULL);
+
+            m_lDisposableItems.GetNext(pos);
+        }
+
+        m_lDisposableItems.RemoveAll();
+
+        disposableItemsLock.Unlock();
+    }
+}
+
 // 0x5BF6A0
 void CInfGame::sub_5BF6A0(int a1)
 {

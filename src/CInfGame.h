@@ -89,6 +89,7 @@ public:
     BOOL RemoveCharacterFromFamiliars(LONG nCharacterId);
     DWORD GetScrollSpeed();
     void AddDisposableItem(CItem* pItem);
+    void DestroyDisposableItems();
     void sub_5BF6A0(int a1);
     BOOLEAN FindAreaID(DWORD nAreaId);
     CStringList* GetSaveGames();
