@@ -933,7 +933,7 @@ void CNetwork::UnselectModemAddress()
 // 0x7A5A20
 void CNetwork::CloseSession(BOOLEAN bAIResponsible)
 {
-    if (bAIResponsible == TRUE) {
+    if (bAIResponsible != TRUE) {
         g_pChitin->OnMultiplayerSessionToClose();
         SleepEx(1000, FALSE);
         if (m_bConnectionEstablished == TRUE) {
