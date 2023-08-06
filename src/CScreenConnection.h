@@ -71,8 +71,8 @@ public:
     void UpdatePopupPanel(DWORD nID);
     void SummonPopup(DWORD nID);
     void DismissPopup();
-    void OnLoadGameButtonClick(int a1);
-    void sub_5FCF80();
+    void OnLoadGameButtonClick(BOOL bQuick);
+    void QuickLoadGame();
     void OnNewGameButtonClick();
     BOOL IsDoneButtonClickable();
     void OnDoneButtonClick();

@@ -1093,7 +1093,7 @@ void CScreenConnection::DismissPopup()
 }
 
 // 0x5FCA00
-void CScreenConnection::OnLoadGameButtonClick(int a1)
+void CScreenConnection::OnLoadGameButtonClick(BOOL bQuick)
 {
     CUIControlEdit* pEdit;
     CString sSessionName;
@@ -1226,8 +1226,8 @@ void CScreenConnection::OnLoadGameButtonClick(int a1)
 
                 pSettings->SetPlayerReady(g_pChitin->cNetwork.m_idLocalPlayer, TRUE, TRUE);
 
-                if (a1) {
-                    sub_5FCF80();
+                if (bQuick) {
+                    QuickLoadGame();
 
                     // NOTE: Uninline.
                     GetManager()->KillCapture();
@@ -1258,7 +1258,7 @@ void CScreenConnection::OnLoadGameButtonClick(int a1)
 }
 
 // 0x5FCF80
-void CScreenConnection::sub_5FCF80()
+void CScreenConnection::QuickLoadGame()
 {
     CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
@@ -1983,7 +1983,7 @@ void CScreenConnection::OnDoneButtonClick()
                 pConnection->field_106 = 1;
                 g_pBaldurChitin->GetObjectGame()->m_bExpansion = FALSE;
                 g_pBaldurChitin->GetObjectGame()->field_4BD6 = FALSE;
-                OnLoadGameButtonClick(0);
+                OnLoadGameButtonClick(FALSE);
                 break;
             }
         } else {
@@ -3920,7 +3920,7 @@ void CUIControlButtonConnectionQuickLoad::OnLButtonClick(CPoint pt)
     // __LINE__: 7434
     UTIL_ASSERT(pConnection != NULL);
 
-    pConnection->OnLoadGameButtonClick(1);
+    pConnection->OnLoadGameButtonClick(TRUE);
 }
 
 // -----------------------------------------------------------------------------
@@ -3977,7 +3977,7 @@ void CUIControlButtonConnectionLoadGame::OnLButtonClick(CPoint pt)
             pConnection->SummonPopup(6);
             renderLock.Unlock();
         } else {
-            pConnection->OnLoadGameButtonClick(0);
+            pConnection->OnLoadGameButtonClick(FALSE);
         }
     } else {
         pConnection->m_nErrorState = 2;
@@ -4565,7 +4565,7 @@ void CUIControlButtonConnectionCreateGameNewGame::OnLButtonClick(CPoint pt)
     UTIL_ASSERT(pConnection != NULL);
 
     if (pConnection->field_106) {
-        pConnection->OnLoadGameButtonClick(0);
+        pConnection->OnLoadGameButtonClick(FALSE);
     } else {
         pConnection->OnNewGameButtonClick();
     }
