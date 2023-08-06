@@ -1268,11 +1268,11 @@ void CScreenConnection::sub_5FCF80()
 
     BOOL bExists = FALSE;
     if (pGame->SaveGameExists(CInfGame::QUICK_SAVE_NAME)) {
-        pGame->field_4220 = CInfGame::QUICK_SAVE_NAME;
+        pGame->m_sSaveGame = CInfGame::QUICK_SAVE_NAME;
         CScreenCharacter::SAVE_NAME = CInfGame::QUICK_SAVE_NAME;
         bExists = TRUE;
     } else if (pGame->SaveGameExists(CInfGame::QUICK_SAVE_BACKUP_NAME)) {
-        pGame->field_4220 = CInfGame::QUICK_SAVE_BACKUP_NAME;
+        pGame->m_sSaveGame = CInfGame::QUICK_SAVE_BACKUP_NAME;
         CScreenCharacter::SAVE_NAME = CInfGame::QUICK_SAVE_BACKUP_NAME;
         bExists = TRUE;
     }

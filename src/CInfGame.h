@@ -17,6 +17,7 @@
 #include "CVariableHash.h"
 #include "CVidBitmap.h"
 #include "CVidPalette.h"
+#include "CWorldMap.h"
 
 // Seen in `CRuleTables::GetStartPoint` assertion.
 #define CINFGAME_MAXCHARACTERS 6
@@ -183,7 +184,10 @@ public:
     /* 1B58 */ CCriticalSection field_1B58;
     /* 1B78 */ CTimerWorld m_worldTime;
     /* 1B7E */ BOOL m_bGameLoaded;
+    /* 1B82 */ BOOLEAN m_bInLoadGame;
     /* 1B84 */ unsigned char field_1B84;
+    /* 1B92 */ BOOLEAN m_bFromNewGame;
+    /* 1B94 */ BOOLEAN m_bAnotherPlayerJoinedGame;
     /* 1B96 */ SHORT m_nState;
     /* 1BA1 */ unsigned char field_1BA1;
     /* 1BAA */ CGamePermission m_singlePlayerPermissions;
@@ -199,6 +203,7 @@ public:
     /* 3816 */ LONG m_characters[6];
     /* 382E */ LONG m_characterPortraits[6];
     /* 3846 */ SHORT m_nCharacters;
+    /* 387A */ SHORT m_nReputation;
     /* 3884 */ CAIGroup m_group;
     /* 38A8 */ CTypedPtrList<CPtrList, int*> m_allies; // NOTE: Stores actual ints disguised as pointers.
     /* 38C4 */ CTypedPtrList<CPtrList, int*> m_familiars; // NOTES: Stores actual ints disguised as pointers.
@@ -210,7 +215,7 @@ public:
     /* 4214 */ CString m_sSoundsDir;
     /* 4218 */ CString m_sPortraitsDir;
     /* 421C */ CString m_sCharactersDir;
-    /* 4220 */ CString field_4220;
+    /* 4220 */ CString m_sSaveGame;
     /* 4224 */ CString m_sSaveDir;
     /* 4228 */ CString m_sMultiplayerSaveDir;
     /* 4348 */ unsigned char field_4248[400];
@@ -220,6 +225,7 @@ public:
     /* 43E6 */ int field_43E6;
     /* 43EA */ CGameOptions m_cOptions; // #guess
     /* 44C8 */ CGameJournal m_cJournal;
+    /* 44DC */ CWorldMap m_cWorldMap;
     /* 4514 */ BYTE m_pKeymap[CINFGAME_KEYMAP_SIZE];
     /* 4688 */ BOOLEAN m_pKeymapFlags[CINFGAME_KEYMAP_SIZE];
     /* 47FC */ CVariableHash m_variables;

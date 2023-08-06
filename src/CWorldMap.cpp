@@ -56,6 +56,12 @@ void CWorldMap::ClearData()
     m_cHeader.m_nMapOffset = 0;
 }
 
+// 0x558960
+void CWorldMap::SetResRef(const CResRef& cResRef)
+{
+    // TODO: Incomplete.
+}
+
 // 0x559490
 CWorldMapData* CWorldMap::GetMap(DWORD nMap)
 {

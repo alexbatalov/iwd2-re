@@ -12,6 +12,7 @@ public:
     ~CWorldMap();
 
     void ClearData();
+    void SetResRef(const CResRef& cResRef);
     CWorldMapData* GetMap(DWORD nMap);
     DWORD GetNumAreas(DWORD nMap);
     CWorldMapArea* GetArea(DWORD nMap, DWORD nArea);

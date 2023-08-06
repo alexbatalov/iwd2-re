@@ -1635,7 +1635,121 @@ void CInfGame::LoadGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlac
 // 0x5ABA20
 void CInfGame::NewGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace)
 {
+    if (!bProgressBarInPlace && bProgressBarRequired == TRUE) {
+        sub_59FA00(TRUE);
+
+        g_pChitin->SetProgressBar(TRUE,
+            9889,
+            0,
+            0,
+            FALSE,
+            0,
+            FALSE,
+            0,
+            FALSE,
+            FALSE,
+            255);
+        g_pChitin->cProgressBar.m_nActionProgress = 0;
+        g_pChitin->cProgressBar.m_nActionTarget = 8000000;
+        g_pChitin->cProgressBar.m_bDisableMinibars = TRUE;
+    }
+
+    if (bProgressBarInPlace || bProgressBarRequired) {
+        g_pChitin->cProgressBar.AddActionTarget(625000);
+    }
+
+    m_bInLoadGame = TRUE;
+
+    BOOL bMusicThreadPriorityChanged = FALSE;
+    int nMusicThreadPriority = GetThreadPriority(g_pChitin->m_hMusicThread);
+
+    if (GetPrivateProfileIntA("Program Options", "Volume Music", 0, g_pChitin->GetIniFileName())) {
+        bMusicThreadPriorityChanged = SetThreadPriority(g_pChitin->m_hMusicThread, 15);
+    }
+
+    g_pBaldurChitin->m_cTlkTable.m_override.CloseFiles();
+
+    if (g_pChitin->cDimm.DirectoryRemoveFiles(CString(".\\mpsave\\default\\"))) {
+        g_pChitin->cDimm.m_cKeyTable.RescanEverything();
+    }
+
+    InitGame(FALSE, FALSE);
+
+    if (bProgressBarInPlace || bProgressBarRequired) {
+        ProgressBarCallback(156250, FALSE);
+    }
+
+    CVariable chapter;
+    chapter.SetName(CHAPTER_GLOBAL);
+    m_variables.AddKey(chapter);
+
+    m_bFromNewGame = TRUE;
+
+    g_pChitin->cDimm.AddToDirectoryList(m_sScriptsDir, TRUE);
+    g_pChitin->cDimm.AddToDirectoryList(m_sSoundsDir, TRUE);
+    g_pChitin->cDimm.AddToDirectoryList(m_sPortraitsDir, TRUE);
+    g_pChitin->cDimm.AddToDirectoryList(m_sCharactersDir, TRUE);
+    g_pChitin->cDimm.AddToDirectoryList(m_sTempDir, TRUE);
+
+    g_pBaldurChitin->m_cTlkTable.OpenOverride(CString("temp/default.toh"), CString("temp/default.tot"));
+
+    if (bProgressBarInPlace || bProgressBarRequired) {
+        ProgressBarCallback(156250, FALSE);
+    }
+
+    m_cWorldMap.SetResRef(CResRef("WORLDMAP"));
+
     // TODO: Incomplete.
+
+    m_cOptions.m_nNightmareMode = GetPrivateProfileIntA("Game Options",
+        "Nightmare Mode",
+        0,
+        g_pBaldurChitin->GetIniFileName());
+
+    if (m_cOptions.m_nNightmareMode == 1 && m_cOptions.m_nDifficultyLevel != 5) {
+        m_cOptions.m_nDifficultyLevel = 5;
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 8769
+    UTIL_ASSERT(m_nCharacters == 0);
+
+    m_bAnotherPlayerJoinedGame = FALSE;
+
+    m_sSaveGame = "default";
+    CScreenCharacter::SAVE_NAME = "default";
+
+    m_bInLoadGame = FALSE;
+
+    if (bMusicThreadPriorityChanged == TRUE) {
+        SetThreadPriority(g_pChitin->m_hMusicThread, nMusicThreadPriority);
+    }
+
+    if (bProgressBarInPlace || bProgressBarRequired) {
+        ProgressBarCallback(156250, FALSE);
+    }
+
+    if (!bProgressBarInPlace && bProgressBarRequired == TRUE) {
+        g_pChitin->cProgressBar.m_nActionProgress = g_pChitin->cProgressBar.m_nActionTarget;
+        g_pChitin->cProgressBar.m_bDisableMinibars = TRUE;
+        g_pChitin->field_193A = TRUE;
+
+        sub_59FA00(TRUE);
+
+        g_pChitin->SetProgressBar(FALSE,
+            0,
+            0,
+            0,
+            FALSE,
+            0,
+            FALSE,
+            0,
+            FALSE,
+            FALSE,
+            255);
+    }
+
+    m_nReputation = -10;
 }
 
 // 0x5AF360
@@ -2251,7 +2365,7 @@ CString CInfGame::GetDirSaveRoot()
 // 0x5C0A80
 CString CInfGame::GetDirSave()
 {
-    return m_sMultiplayerSaveDir + field_4220 + "\\";
+    return m_sMultiplayerSaveDir + m_sSaveGame + "\\";
 }
 
 // 0x5C2280
