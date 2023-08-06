@@ -37,7 +37,58 @@ CAIAction CGameAIBase::m_aiAction;
 // 0x44C4B0
 CGameAIBase::CGameAIBase()
 {
-    // TODO: Incomplete.
+    field_592 = 0;
+    m_objectType = CGameObject::TYPE_AIBASE;
+    field_6E.Set(CAIObjectType::NOONE);
+    field_AE.Set(CAIObjectType::NOONE);
+    field_EA.Set(CAIObjectType::NOONE);
+    field_126.Set(CAIObjectType::NOONE);
+    field_162.Set(CAIObjectType::NOONE);
+    field_19E.Set(CAIObjectType::NOONE);
+    field_1DA.Set(CAIObjectType::NOONE);
+    field_216.Set(CAIObjectType::NOONE);
+    field_252.Set(CAIObjectType::NOONE);
+    field_28E.Set(CAIObjectType::NOONE);
+    field_2CA.Set(CAIObjectType::NOONE);
+    field_306.Set(CAIObjectType::NOONE);
+    field_342.Set(CAIObjectType::NOONE);
+    field_37E.Set(CAIObjectType::NOONE);
+    field_3BA.Set(CAIObjectType::NOONE);
+    m_curResponseNum = -1;
+    m_curResponseSetNum = -1;
+    m_curScriptNum = -1;
+    m_curAction = CAIAction::NULL_ACTION;
+    m_interrupt = FALSE;
+    m_actionCount = 0;
+    field_54C = 0;
+    field_550 = 0;
+    field_552 = 0;
+    field_44A = 0;
+    field_3F6 = NULL;
+    field_3FA = NULL;
+    field_3FE = NULL;
+    field_402 = NULL;
+    field_406 = NULL;
+    field_40A = NULL;
+    m_defaultScript = NULL;
+    m_inCutScene = FALSE;
+    m_reactionRoll = 10;
+    field_550 = rand() % 120;
+
+    CAITrigger trigger(CAITrigger::ONCREATION, 0);
+    m_pendingTriggers.AddTail(new CAITrigger(trigger));
+
+    m_firstCall = TRUE;
+    field_57C = 0;
+    field_580 = 0;
+    field_592 = -1;
+    field_588 = 0;
+    field_58C = 0;
+    field_594 = 0;
+    field_595 = 1;
+    field_596 = 0;
+    m_randValue = rand() & 0x7FFF;
+
 }
 
 // 0x44D160

@@ -3,6 +3,9 @@
 // 0x847D98
 const SHORT CAITrigger::NO_TRIGGER = 0;
 
+// 0x847E04
+const SHORT CAITrigger::ONCREATION = 54;
+
 // NOTE: Inlined.
 CAITrigger::CAITrigger(const CAITrigger& trigger)
 {

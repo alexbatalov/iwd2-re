@@ -79,6 +79,7 @@ public:
     /* 040E */ CAIScript* m_defaultScript;
     /* 0412 */ CTypedPtrList<CPtrList, CAIAction*> m_queuedActions;
     /* 042E */ CTypedPtrList<CPtrList, CAITrigger*> m_pendingTriggers;
+    /* 044A */ int field_44A;
     /* 044E */ CTypedPtrList<CPtrList, CGameTimer*> m_timers;
     /* 046A */ SHORT m_curResponseNum;
     /* 046C */ SHORT m_curResponseSetNum;
@@ -86,6 +87,21 @@ public:
     /* 0470 */ BOOL m_interrupt;
     /* 0474 */ SHORT m_actionCount;
     /* 0476 */ CAIAction m_curAction;
+    /* 054C */ int field_54C;
+    /* 0550 */ short field_550;
+    /* 0552 */ short field_552;
+    /* 0574 */ BOOL m_inCutScene;
+    /* 0578 */ BOOL m_firstCall;
+    /* 057C */ int field_57C;
+    /* 0580 */ int field_580;
+    /* 0584 */ LONG m_randValue;
+    /* 0588 */ int field_588;
+    /* 058C */ int field_58C;
+    /* 0590 */ BYTE m_reactionRoll;
+    /* 0592 */ short field_592;
+    /* 0594 */ unsigned char field_594;
+    /* 0595 */ unsigned char field_595;
+    /* 0596 */ unsigned char field_596;
 };
 
 #endif /* CGAMEAIBASE_H_ */

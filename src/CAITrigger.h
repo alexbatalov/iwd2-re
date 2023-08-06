@@ -6,6 +6,7 @@
 class CAITrigger {
 public:
     static const SHORT NO_TRIGGER;
+    static const SHORT ONCREATION;
 
     CAITrigger(const CAITrigger& trigger);
     CAITrigger(SHORT triggerID, const CAIObjectType& cause, LONG specificID);
