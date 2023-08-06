@@ -1097,7 +1097,7 @@ void CScreenSinglePlayer::ResetErrorPanel(CUIPanel* pPanel)
     strRes.cSound.SetFireForget(TRUE);
     strRes.cSound.Play(TRUE);
 
-    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(3));
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(0));
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
     // __LINE__: 1551
