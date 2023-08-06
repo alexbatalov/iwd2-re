@@ -583,7 +583,7 @@ void CScreenChapter::OnDoneButtonClick()
             }
 
             g_pChitin->cNetwork.CloseSession(TRUE);
-            g_pBaldurChitin->m_cBaldurMessage.field_7 = 0;
+            g_pBaldurChitin->m_cBaldurMessage.m_bPlayerShutdown = 0;
         }
 
         pGame->DestroyGame(1, 0);

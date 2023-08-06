@@ -67,7 +67,7 @@ CBaldurMessage::CBaldurMessage()
 
     field_E5 = 0;
     m_dwSignalSecondsToTimeout = SIGNAL_SECONDSTOMPTIMEOUT;
-    field_7 = 0;
+    m_bPlayerShutdown = FALSE;
     m_bMultiplayerSessionShutdown = FALSE;
     field_F5 = 0;
     field_F6 = 0;
@@ -156,6 +156,12 @@ BOOLEAN CBaldurMessage::KickPlayerRequest(const CString& sPlayerName)
     // TODO: Incomplete.
 
     return FALSE;
+}
+
+// 0x42D860
+void CBaldurMessage::UpdateDemandCharacters(unsigned char a1, int a2, unsigned char a3)
+{
+    // TODO: Incomplete.
 }
 
 // 0x42F100

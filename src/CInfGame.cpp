@@ -860,6 +860,14 @@ BOOLEAN CInfGame::CanSaveGame(STRREF& strError, unsigned char a2, unsigned char 
     return FALSE;
 }
 
+// 0x5AC430
+BOOL CInfGame::SaveGame(unsigned char a1, unsigned char a2, unsigned char a3)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x5A9680
 void CInfGame::ProgressBarCallback(DWORD dwSize, BOOLEAN bInitialize)
 {

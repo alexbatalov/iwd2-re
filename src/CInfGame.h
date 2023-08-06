@@ -47,6 +47,7 @@ public:
     LONG ImportCharacter(const CString& sFileName, INT nIndex);
     CString GetDirSounds();
     BOOLEAN CanSaveGame(STRREF& strError, unsigned char a2, unsigned char a3);
+    BOOL SaveGame(unsigned char a1, unsigned char a2, unsigned char a3);
     void ProgressBarCallback(DWORD dwSize, BOOLEAN bInitialize);
     char sub_5A9780(BYTE nKey);
     BYTE sub_5A97D0(char ch);

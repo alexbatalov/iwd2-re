@@ -26,6 +26,7 @@ public:
     BOOL SendArbitrationLockStatus(BOOLEAN bStatus, unsigned char a2);
     BOOL SendArbitrationLockAllowInput(BOOLEAN bAllowInput);
     BOOLEAN KickPlayerRequest(const CString& sPlayerName);
+    void UpdateDemandCharacters(unsigned char a1, int a2, unsigned char a3);
     BOOLEAN DemandCharacterSlot(SHORT nCharacterSlot, BOOLEAN bDemandFromHost, SHORT nPlayerSlot);
     BOOL ObjectControlRequest(LONG localObjectID);
     BOOL ObjectControl();
@@ -48,7 +49,7 @@ public:
     /* 0004 */ unsigned char field_4;
     /* 0005 */ unsigned char field_5;
     /* 0006 */ unsigned char field_6;
-    /* 0007 */ unsigned char field_7;
+    /* 0007 */ BOOLEAN m_bPlayerShutdown;
     /* 0008 */ CChatBuffer m_cChatBuffer;
     /* 0028 */ BYTE m_nSignalQueueSize;
     /* 0029 */ unsigned char field_29;

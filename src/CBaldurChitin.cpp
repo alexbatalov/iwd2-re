@@ -1731,7 +1731,7 @@ void CBaldurChitin::OnMultiplayerSessionClose()
         g_pChitin->cNetwork.GetServiceProviderType(g_pChitin->cNetwork.GetServiceProvider(), nServiceProviderType);
     }
 
-    m_cBaldurMessage.field_7 = TRUE;
+    m_cBaldurMessage.m_bPlayerShutdown = TRUE;
 }
 
 // 0x4258C0
