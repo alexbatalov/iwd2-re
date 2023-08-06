@@ -626,6 +626,12 @@ int CInfGame::dword_8E752C;
 CInfGame::CInfGame()
     : m_rgbMasterBitmap(CResRef("MPALETTE"), FALSE, 24)
 {
+    m_nCharacters = 0;
+    for (INT nIndex = 0; nIndex < CINFGAME_MAXCHARACTERS; nIndex++) {
+        m_characters[nIndex] = CGameObjectArray::INVALID_INDEX;
+        m_characterPortraits[nIndex] = CGameObjectArray::INVALID_INDEX;
+    }
+
     field_1BA1 = 4;
     m_visibleArea = 0;
     memset(m_gameAreas, 0, sizeof(m_gameAreas));
