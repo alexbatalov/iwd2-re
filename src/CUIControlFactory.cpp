@@ -19,6 +19,7 @@
 #include "CScreenSpellbook.h"
 #include "CScreenStore.h"
 #include "CScreenWorld.h"
+#include "CScreenWorldMap.h"
 #include "CUIControlLabel.h"
 #include "CUIControlScrollBar.h"
 #include "CUIManager.h"
@@ -1098,6 +1099,87 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             break;
         }
     } else if (pPanel->m_pManager->m_cResRef == "GUIWMAP") {
+        // 0x773EDE
+        switch (pPanel->m_nID) {
+        case 0:
+            // 0x773F1F
+            switch (controlInfo->nID) {
+            case 4:
+                return new CUIControlButtonGeneralSpellbook(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 5:
+                return new CUIControlButtonGeneralInventory(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 6:
+                return new CUIControlButtonGeneralJournal(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 7:
+                return new CUIControlButtonGeneralWorld(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 8:
+                return new CUIControlButtonGeneralCharacter(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 9:
+                return new CUIControlButtonGeneralOptions(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 10:
+                return new CUIControlButtonClock(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 12:
+                return new CUIControlButtonRest(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 13:
+                return new CUIControlButtonGeneralMultiPlayer(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 14:
+                return new CUIControlButtonAI(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 1:
+            // 0x774096
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                return new CUIControlPortraitGeneral(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 12:
+                return new CUIControlButtonRest(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 50:
+            case 51:
+            case 52:
+            case 53:
+            case 54:
+            case 55:
+                return new CUIControlButton77DCC0(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 2:
+            // 0x77410B
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlButtonWorldMapDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 1:
+            case 2:
+                // NOTE: Probably leftover from earlier games.
+                return NULL;
+            case 4:
+                return new CUIControlButtonWorldMapWorldMap(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 3:
+            // 0x77415C
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlButtonWorldMapDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 1:
+            case 2:
+                return new CUIControlButtonWorldMapScroll(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 4:
+                return new CUIControlButtonWorldMapWorldMap(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 5:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 6:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 7:
+                // TODO: Incomplete.
+                return NULL;
+            }
+            break;
+        }
     } else if (pPanel->m_pManager->m_cResRef == "GUICG") {
         // 0x774284
         switch (pPanel->m_nID) {
