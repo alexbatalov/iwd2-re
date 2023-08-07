@@ -594,3 +594,11 @@ void CUIControlButtonScrollBar::TimerAsynchronousUpdate(BOOLEAN bInside)
         }
     }
 }
+
+// NOTE: Odd location.
+//
+// 0x61A070
+BOOL CUIControlScrollBar::OnLButtonDblClk(CPoint pt)
+{
+    return OnLButtonDown(pt);
+}

@@ -19,6 +19,7 @@ public:
     /* 0014 */ void OnMouseMove(CPoint pt) override;
     /* 0018 */ BOOL OnLButtonDown(CPoint pt) override;
     /* 001C */ void OnLButtonUp(CPoint pt) override;
+    /* 0020 */ BOOL OnLButtonDblClk(CPoint pt) override;
     /* 0030 */ void TimerAsynchronousUpdate(BOOLEAN bInside) override;
     /* 0050 */ void InvalidateRect() override;
     /* 0058 */ BOOL Render(BOOL bForce) override;
