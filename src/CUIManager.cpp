@@ -323,7 +323,27 @@ void CUIManager::OnLButtonUp(CPoint pt)
 // 0x4D4310
 void CUIManager::OnLButtonDblClk(CPoint pt)
 {
-    // TODO: Incomplete.
+    if (m_bInitialized) {
+        if (field_18) {
+            if (m_pFocusedControl == NULL || m_nCaptureType == KEYBOARD) {
+                if (!field_0) {
+                    POSITION pos = m_lPanels.GetTailPosition();
+                    while (pos != NULL) {
+                        CUIPanel* pPanel = m_lPanels.GetPrev(pos);
+                        CRect r(pPanel->m_ptOrigin, pPanel->m_size);
+                        pPanel->m_pManager->m_pWarp->NormalizePanelRect(pPanel->m_nID, r);
+                        if (r.PtInRect(pt)) {
+                            if (pPanel->m_bActive) {
+                                if (pPanel->OnLButtonDblClk(pt)) {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 // 0x4D43D0
