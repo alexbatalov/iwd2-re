@@ -110,7 +110,7 @@ void CGameArea::ProgressBarCallback(DWORD dwSize, BOOLEAN bInitialize)
     if (GetTickCount() - m_dwLastProgressRenderTickCount >= 250) {
         m_dwLastProgressRenderTickCount = GetTickCount();
 
-        g_pChitin->field_193A = TRUE;
+        g_pChitin->m_bDisplayStale = TRUE;
         g_pChitin->cDimm.field_0 = 1;
         g_pChitin->cDimm.field_4 = 1;
         SleepEx(25, TRUE);

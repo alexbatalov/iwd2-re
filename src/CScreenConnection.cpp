@@ -1752,7 +1752,7 @@ void CScreenConnection::OnDoneButtonClick()
                     m_bEliminateInitialize = TRUE;
                 }
 
-                g_pChitin->field_193A = TRUE;
+                g_pChitin->m_bDisplayStale = TRUE;
                 g_pBaldurChitin->GetObjectGame()->sub_59FA00(TRUE);
 
                 renderLock.Lock(INFINITE);
@@ -1915,7 +1915,7 @@ void CScreenConnection::OnDoneButtonClick()
         pVidMode->m_bPointerEnabled = FALSE;
         renderLock.Unlock();
 
-        g_pChitin->field_193A = TRUE;
+        g_pChitin->m_bDisplayStale = TRUE;
         g_pBaldurChitin->GetObjectGame()->sub_59FA00(TRUE);
 
         OnJoinGameButtonClick();
@@ -1931,7 +1931,7 @@ void CScreenConnection::OnDoneButtonClick()
         pVidMode->m_bPointerEnabled = FALSE;
         renderLock.Unlock();
 
-        g_pChitin->field_193A = TRUE;
+        g_pChitin->m_bDisplayStale = TRUE;
         g_pBaldurChitin->GetObjectGame()->sub_59FA00(TRUE);
 
         renderLock.Lock(INFINITE);
@@ -3427,7 +3427,7 @@ void CScreenConnection::AutoStartConnect()
 
         renderLock.Unlock();
 
-        g_pChitin->field_193A = TRUE;
+        g_pChitin->m_bDisplayStale = TRUE;
 
         g_pBaldurChitin->GetObjectGame()->sub_59FA00(TRUE);
 
@@ -3479,7 +3479,7 @@ void CScreenConnection::AutoStartDirectPlayLobby()
 
         renderLock.Unlock();
 
-        g_pChitin->field_193A = TRUE;
+        g_pChitin->m_bDisplayStale = TRUE;
 
         g_pBaldurChitin->GetObjectGame()->sub_59FA00(TRUE);
 

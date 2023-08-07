@@ -515,8 +515,8 @@ int CChitin::WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     while (1) {
         while (!PeekMessageA(&msg, NULL, 0, 0, 0)) {
             if (field_1932 == 0) {
-                if (field_193A == 1) {
-                    field_193A = 0;
+                if (m_bDisplayStale == TRUE) {
+                    m_bDisplayStale = FALSE;
                     m_bSynchronousUpdate = TRUE;
                     SynchronousUpdate();
                     m_bSynchronousUpdate = FALSE;
@@ -704,7 +704,7 @@ void CChitin::InitializeVariables()
     m_bInMouseWheelQueue = FALSE;
     field_1932 = 0;
     field_1936 = 1;
-    field_193A = 0;
+    m_bDisplayStale = FALSE;
     m_bPointerUpdated = FALSE;
     m_bEngineActive = FALSE;
     m_bInAsynchronousUpdate = FALSE;

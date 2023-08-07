@@ -894,7 +894,7 @@ void CInfGame::ProgressBarCallback(DWORD dwSize, BOOLEAN bInitialize)
     if (GetTickCount() - m_dwLastProgressRenderTickCount >= 250) {
         m_dwLastProgressRenderTickCount = GetTickCount();
 
-        g_pChitin->field_193A = TRUE;
+        g_pChitin->m_bDisplayStale = TRUE;
         g_pChitin->cDimm.field_0 = 1;
         g_pChitin->cDimm.field_4 = 1;
         SleepEx(25, TRUE);
@@ -1740,7 +1740,7 @@ void CInfGame::NewGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace
     if (!bProgressBarInPlace && bProgressBarRequired == TRUE) {
         g_pChitin->cProgressBar.m_nActionProgress = g_pChitin->cProgressBar.m_nActionTarget;
         g_pChitin->cProgressBar.m_bDisableMinibars = TRUE;
-        g_pChitin->field_193A = TRUE;
+        g_pChitin->m_bDisplayStale = TRUE;
 
         sub_59FA00(TRUE);
 

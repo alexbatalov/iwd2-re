@@ -1027,7 +1027,7 @@ void CBaldurChitin::MainAIThread(void* userInfo)
             g_pChitin->m_bInAsynchronousUpdate = TRUE;
             g_pChitin->AsynchronousUpdate(0, 0, 0, 0, 0);
             g_pChitin->m_bInAsynchronousUpdate = FALSE;
-            g_pChitin->field_193A = 1;
+            g_pChitin->m_bDisplayStale = TRUE;
         }
 
         if (m_bExitMainAIThread) {
