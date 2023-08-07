@@ -213,6 +213,7 @@ public:
     SHORT GetLayOnHandsAmount();
     void sub_72DE60();
     const CString& GetName();
+    STRREF GetNameRef();
     DWORD GetSpecialization();
     BOOL HasClassMask(DWORD dwMask);
     INT GetClassLevel(INT iClassType);

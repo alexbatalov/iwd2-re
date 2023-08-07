@@ -424,6 +424,23 @@ const CString& CGameSprite::GetName()
     return m_sName;
 }
 
+// 0x71F820
+STRREF CGameSprite::GetNameRef()
+{
+    STRREF strName = m_baseStats.m_name;
+
+    if (strName == -1) {
+        SHORT nSlot = g_pBaldurChitin->GetObjectGame()->GetCharacterSlotFromId(m_id);
+        if (nSlot < 0) {
+            nSlot = 0;
+        }
+
+        strName = -2 - nSlot;
+    }
+
+    return strName;
+}
+
 // 0x728570
 DWORD CGameSprite::GetSpecialization()
 {
