@@ -5,6 +5,7 @@
 
 #include "CInfinity.h"
 #include "CSound.h"
+#include "CVariableHash.h"
 #include "FileFormat.h"
 
 class CInfGame;
@@ -99,6 +100,7 @@ public:
 
     CInfinity* GetInfinity();
     CAreaFileRestEncounter* GetHeaderRestEncounter();
+    CNamedCreatureVariableHash* GetNamedCreatures();
 
     static INT dword_8D212C;
     static BOOLEAN byte_8D2138;
@@ -133,6 +135,7 @@ public:
     /* 09E6 */ CTypedPtrList<CPtrList, int*> m_lVertSortAdd; // NOTE: Stores actual ints disguised as pointers.
     /* 0A02 */ CTypedPtrList<CPtrList, int*> m_lVertSortBackAdd; // NOTE: Stores actual ints disguised as pointers.
     /* 0A1E */ CTypedPtrList<CPtrList, int*> m_lVertSortFlightAdd; // NOTE: Stores actual ints disguised as pointers.
+    /* 0ADA */ CNamedCreatureVariableHash m_namedCreatures;
     /* 0AE8 */ SHORT m_nCurrentSong;
     /* 0AEA */ INT m_nBattleSongCounter;
 };

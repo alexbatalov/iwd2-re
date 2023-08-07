@@ -504,3 +504,9 @@ CAreaFileRestEncounter* CGameArea::GetHeaderRestEncounter()
 {
     return &m_headerRestEncounter;
 }
+
+// 0x40CAF0
+CNamedCreatureVariableHash* CGameArea::GetNamedCreatures()
+{
+    return &m_namedCreatures;
+}
