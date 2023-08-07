@@ -3,6 +3,7 @@
 #include "CBaldurChitin.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CScreenMap.h"
 #include "CScreenWorld.h"
 #include "CTimerWorld.h"
 #include "CUIControlEdit.h"
@@ -340,6 +341,32 @@ void CScreenWorldMap::UpdateMainPanel()
     m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(m_pMainPanel->GetControl(6));
 }
 
+// NOTE: Inlined.
+void CScreenWorldMap::OnDoneButtonClick()
+{
+    CSingleLock renderLock(&(GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    switch (m_nEngineState) {
+    case 0:
+        StopWorldMap(FALSE);
+        SelectEngine(g_pBaldurChitin->m_pEngineMap);
+        break;
+    case 1:
+        if (m_bInControl && !m_bClickedArea) {
+            StopWorldMap(FALSE);
+            SelectEngine(g_pBaldurChitin->m_pEngineWorld);
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+        // __LINE__: 1405
+        UTIL_ASSERT(FALSE);
+    }
+
+    renderLock.Unlock();
+}
+
 // 0x69A4D0
 void CScreenWorldMap::SetMapView(const CPoint& ptMapView)
 {
@@ -355,6 +382,13 @@ void CScreenWorldMap::OnMapAsyncUpdate()
 // 0x69C2A0
 void CScreenWorldMap::StartWorldMap(INT nEngineState, LONG nLeavingEdge, BOOLEAN bInControl)
 {
+    // TODO: Incomplete.
+}
+
+// 0x69C9E0
+void CScreenWorldMap::StopWorldMap(BOOLEAN bAreaClicked)
+{
+    // TODO: Incomplete.
 }
 
 // 0x6A01C0
@@ -437,4 +471,30 @@ void CUIControlButtonWorldMapScroll::AdjustValue()
         // __LINE__: 4556
         UTIL_ASSERT(FALSE);
     }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x6A04B0
+CUIControlButtonWorldMapDone::CUIControlButtonWorldMapDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+}
+
+// 0x6A0500
+CUIControlButtonWorldMapDone::~CUIControlButtonWorldMapDone()
+{
+}
+
+// 0x6A05A0
+void CUIControlButtonWorldMapDone::OnLButtonClick(CPoint pt)
+{
+    CScreenWorldMap* pWorldMap = g_pBaldurChitin->m_pEngineWorldMap;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+    // __LINE__: 4609
+    UTIL_ASSERT(pWorldMap != NULL);
+
+    // NOTE: Uninline.
+    pWorldMap->OnDoneButtonClick();
 }

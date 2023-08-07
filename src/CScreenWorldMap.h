@@ -47,9 +47,11 @@ public:
     /* 0114 */ void SetChatEditBoxStatus(const CString& sChatText, BOOL bInputCapture) override;
 
     void UpdateMainPanel();
+    void OnDoneButtonClick();
     void SetMapView(const CPoint& ptMapView);
     void OnMapAsyncUpdate();
     void StartWorldMap(INT nEngineState, LONG nLeavingEdge, BOOLEAN bInControl);
+    void StopWorldMap(BOOLEAN bAreaClicked);
     void ClearChatMessages();
 
     /* 0106 */ CKeyInfo m_pVirtualKeys[CSCREENWORLDMAP_VIRTUAL_KEYS];
@@ -97,6 +99,13 @@ public:
     CUIControlButtonWorldMapScroll(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonWorldMapScroll();
     void AdjustValue() override;
+};
+
+class CUIControlButtonWorldMapDone : public CUIControlButton {
+public:
+    CUIControlButtonWorldMapDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonWorldMapDone();
+    void OnLButtonClick(CPoint pt) override;
 };
 
 #endif /* CSCREENWORLDMAP_H_ */
