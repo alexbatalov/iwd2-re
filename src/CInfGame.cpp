@@ -3212,3 +3212,9 @@ LONG CInfGame::GetFixedOrderCharacterId(SHORT nSlot)
 
     return CGameObjectArray::INVALID_INDEX;
 }
+
+// 0x40CAE0
+CNamedCreatureVariableHash* CInfGame::GetNamedCreatures()
+{
+    return &m_namedCreatures;
+}

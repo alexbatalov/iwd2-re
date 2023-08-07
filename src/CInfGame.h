@@ -134,6 +134,7 @@ public:
     CAIGroup* GetGroup();
     CVariableHash* GetVariables();
     CVidBitmap* GetMasterBitmap();
+    CNamedCreatureVariableHash* GetNamedCreatures();
 
     const CRuleTables& GetRuleTables() { return m_ruleTables; }
 
