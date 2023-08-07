@@ -499,6 +499,12 @@ CInfinity* CGameArea::GetInfinity()
     return &m_cInfinity;
 }
 
+// 0x453090
+CVariableHash* CGameArea::GetVariables()
+{
+    return &m_variables;
+}
+
 // 0x4530A0
 CAreaFileRestEncounter* CGameArea::GetHeaderRestEncounter()
 {

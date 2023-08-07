@@ -99,6 +99,7 @@ public:
     void PlaySong(SHORT slot, DWORD flags);
 
     CInfinity* GetInfinity();
+    CVariableHash* GetVariables();
     CAreaFileRestEncounter* GetHeaderRestEncounter();
     CNamedCreatureVariableHash* GetNamedCreatures();
 
@@ -135,6 +136,7 @@ public:
     /* 09E6 */ CTypedPtrList<CPtrList, int*> m_lVertSortAdd; // NOTE: Stores actual ints disguised as pointers.
     /* 0A02 */ CTypedPtrList<CPtrList, int*> m_lVertSortBackAdd; // NOTE: Stores actual ints disguised as pointers.
     /* 0A1E */ CTypedPtrList<CPtrList, int*> m_lVertSortFlightAdd; // NOTE: Stores actual ints disguised as pointers.
+    /* 0ACE */ CVariableHash m_variables;
     /* 0ADA */ CNamedCreatureVariableHash m_namedCreatures;
     /* 0AE8 */ SHORT m_nCurrentSong;
     /* 0AEA */ INT m_nBattleSongCounter;
