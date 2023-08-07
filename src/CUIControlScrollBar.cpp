@@ -267,20 +267,20 @@ void CUIControlScrollBar::OnLButtonClick(CPoint pt)
 }
 
 // 0x4E5110
-void CUIControlScrollBar::OnPageUp(int a1)
+void CUIControlScrollBar::OnPageUp(DWORD nLines)
 {
     if (m_nTextDisplayID != -1) {
         CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(m_pPanel->GetControl(m_nTextDisplayID));
-        pText->OnPageUp(a1);
+        pText->OnPageUp(nLines);
     }
 }
 
 // 0x4E5130
-void CUIControlScrollBar::OnPageDown(int a1)
+void CUIControlScrollBar::OnPageDown(DWORD nLines)
 {
     if (m_nTextDisplayID != -1) {
         CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(m_pPanel->GetControl(m_nTextDisplayID));
-        pText->OnPageDown(a1);
+        pText->OnPageDown(nLines);
     }
 }
 

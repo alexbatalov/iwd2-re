@@ -4329,7 +4329,7 @@ void CUIControlScrollBarCharGenSkills::OnScrollDown()
 }
 
 // 0x61A430
-void CUIControlScrollBarCharGenSkills::OnPageUp(int a1)
+void CUIControlScrollBarCharGenSkills::OnPageUp(DWORD nLines)
 {
     CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
 
@@ -4337,7 +4337,7 @@ void CUIControlScrollBarCharGenSkills::OnPageUp(int a1)
     // __LINE__: 11362
     UTIL_ASSERT(pCreateChar != NULL);
 
-    INT nStep = min(a1, SKILL_SLOTS - 1);
+    INT nStep = min(nLines, SKILL_SLOTS - 1);
     pCreateChar->m_nTopSkill = max(pCreateChar->m_nTopSkill - nStep, 0);
 
     InvalidateItems();
@@ -4347,7 +4347,7 @@ void CUIControlScrollBarCharGenSkills::OnPageUp(int a1)
 }
 
 // 0x61A4E0
-void CUIControlScrollBarCharGenSkills::OnPageDown(int a1)
+void CUIControlScrollBarCharGenSkills::OnPageDown(DWORD nLines)
 {
     CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
 
@@ -4355,7 +4355,7 @@ void CUIControlScrollBarCharGenSkills::OnPageDown(int a1)
     // __LINE__: 11362
     UTIL_ASSERT(pCreateChar != NULL);
 
-    INT nStep = min(a1, SKILL_SLOTS - 1);
+    INT nStep = min(nLines, SKILL_SLOTS - 1);
     pCreateChar->m_nTopSkill += nStep;
 
     InvalidateItems();
@@ -6201,7 +6201,7 @@ void CUIControlScrollBarCharGenHatedRace::OnScrollDown()
 }
 
 // 0x61F8E0
-void CUIControlScrollBarCharGenHatedRace::OnPageUp(int a1)
+void CUIControlScrollBarCharGenHatedRace::OnPageUp(DWORD nLines)
 {
     CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
 
@@ -6209,7 +6209,7 @@ void CUIControlScrollBarCharGenHatedRace::OnPageUp(int a1)
     // __LINE__: 15296
     UTIL_ASSERT(pCreateChar != NULL);
 
-    INT nStep = min(a1, 11);
+    INT nStep = min(nLines, 11);
     INT nTopHatedRace = max(pCreateChar->m_nTopHatedRace - nStep, 0);
 
     if (nTopHatedRace != pCreateChar->m_nTopHatedRace) {
@@ -6224,7 +6224,7 @@ void CUIControlScrollBarCharGenHatedRace::OnPageUp(int a1)
 }
 
 // 0x61F9E0
-void CUIControlScrollBarCharGenHatedRace::OnPageDown(int a1)
+void CUIControlScrollBarCharGenHatedRace::OnPageDown(DWORD nLines)
 {
     CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
 
@@ -6232,7 +6232,7 @@ void CUIControlScrollBarCharGenHatedRace::OnPageDown(int a1)
     // __LINE__: 15334
     UTIL_ASSERT(pCreateChar != NULL);
 
-    INT nStep = min(a1, 11);
+    INT nStep = min(nLines, 11);
     INT nTopHatedRace = min(pCreateChar->m_nTopHatedRace + nStep, 5);
 
     if (nTopHatedRace != pCreateChar->m_nTopHatedRace) {
@@ -7056,7 +7056,7 @@ void CUIControlScrollBarCharGenFeats::OnScrollDown()
 }
 
 // 0x622D30
-void CUIControlScrollBarCharGenFeats::OnPageUp(int a1)
+void CUIControlScrollBarCharGenFeats::OnPageUp(DWORD nLines)
 {
     CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
 
@@ -7064,7 +7064,7 @@ void CUIControlScrollBarCharGenFeats::OnPageUp(int a1)
     // __LINE__: 17197
     UTIL_ASSERT(pCreateChar != NULL);
 
-    INT nStep = min(a1, FEAT_SLOTS - 1);
+    INT nStep = min(nLines, FEAT_SLOTS - 1);
     pCreateChar->m_nTopFeat = max(pCreateChar->m_nTopFeat - nStep, 0);
 
     InvalidateItems();
@@ -7074,7 +7074,7 @@ void CUIControlScrollBarCharGenFeats::OnPageUp(int a1)
 }
 
 // 0x622DE0
-void CUIControlScrollBarCharGenFeats::OnPageDown(int a1)
+void CUIControlScrollBarCharGenFeats::OnPageDown(DWORD nLines)
 {
     CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
 
@@ -7082,7 +7082,7 @@ void CUIControlScrollBarCharGenFeats::OnPageDown(int a1)
     // __LINE__: 17225
     UTIL_ASSERT(pCreateChar != NULL);
 
-    INT nStep = min(a1, FEAT_SLOTS - 1);
+    INT nStep = min(nLines, FEAT_SLOTS - 1);
     pCreateChar->m_nTopFeat += nStep;
 
     InvalidateItems();

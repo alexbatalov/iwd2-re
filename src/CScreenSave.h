@@ -139,8 +139,8 @@ public:
     void OnScroll() override;
     void OnScrollUp() override;
     void OnScrollDown() override;
-    void OnPageUp(int a1) override;
-    void OnPageDown(int a1) override;
+    void OnPageUp(DWORD nLines) override;
+    void OnPageDown(DWORD nLines) override;
     void UpdateScrollBar();
     void UpdateMainPanel();
 };

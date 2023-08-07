@@ -28,8 +28,8 @@ public:
     /* 0070 */ virtual void OnScrollUp();
     /* 0074 */ virtual void OnScrollDown();
     /* 0078 */ virtual void OnScrollButtonUp(BYTE nDirection);
-    /* 007C */ virtual void OnPageUp(int a1);
-    /* 0080 */ virtual void OnPageDown(int a2);
+    /* 007C */ virtual void OnPageUp(DWORD nLines);
+    /* 0080 */ virtual void OnPageDown(DWORD nLines);
 
     void AdjustScrollBar(SHORT a1, SHORT a2, SHORT a3);
     BOOLEAN OverThumb(const CPoint& pt);

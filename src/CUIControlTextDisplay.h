@@ -50,8 +50,8 @@ public:
     void OnScroll(SHORT a1, SHORT a2);
     void OnScrollDown();
     void OnScrollUp();
-    void OnPageDown(DWORD a1);
-    void OnPageUp(DWORD a1);
+    void OnPageDown(DWORD nLines);
+    void OnPageUp(DWORD nLines);
     void RemoveAll();
     void RemoveString(POSITION pos);
     SHORT ParseAndInsertStringAfter(POSITION tail, const CString& sLabel, const CString& sString, COLORREF rgbForegroundColor, COLORREF rgbBackgroundColor, LONG a6, POSITION& posBoss, BOOLEAN bTrim);

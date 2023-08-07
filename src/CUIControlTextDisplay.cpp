@@ -387,12 +387,12 @@ void CUIControlTextDisplay::OnScrollUp()
 }
 
 // 0x4E28B0
-void CUIControlTextDisplay::OnPageDown(DWORD a1)
+void CUIControlTextDisplay::OnPageDown(DWORD nLines)
 {
     if (m_plstStrings->GetCount() > field_A6A) {
         SHORT nOldIndex = field_5A;
         // TODO: Check casts.
-        SHORT v1 = static_cast<SHORT> min(a1, static_cast<DWORD>(field_A6A - 1));
+        SHORT v1 = static_cast<SHORT> min(nLines, static_cast<DWORD>(field_A6A - 1));
         field_5A = min(field_5A + v1, m_plstStrings->GetCount() - field_A6A);
         if (nOldIndex != field_5A) {
             m_posTopString = m_plstStrings->FindIndex(field_5A);
@@ -408,12 +408,12 @@ void CUIControlTextDisplay::OnPageDown(DWORD a1)
 }
 
 // 0x4E2A00
-void CUIControlTextDisplay::OnPageUp(DWORD a1)
+void CUIControlTextDisplay::OnPageUp(DWORD nLines)
 {
     if (!m_plstStrings->IsEmpty()) {
         SHORT nOldIndex = field_5A;
         // TODO: Check casts.
-        SHORT v1 = static_cast<SHORT> min(a1, static_cast<DWORD>(field_A6A - 1));
+        SHORT v1 = static_cast<SHORT> min(nLines, static_cast<DWORD>(field_A6A - 1));
         field_5A = max(field_5A - v1, 0);
         if (nOldIndex != field_5A) {
             m_posTopString = m_plstStrings->FindIndex(field_5A);

@@ -1186,7 +1186,7 @@ void CUIControlScrollBarSaveGames::OnScrollDown()
 }
 
 // 0x65F040
-void CUIControlScrollBarSaveGames::OnPageUp(int a1)
+void CUIControlScrollBarSaveGames::OnPageUp(DWORD nLines)
 {
     CScreenSave* pSave = g_pBaldurChitin->m_pEngineSave;
 
@@ -1194,7 +1194,7 @@ void CUIControlScrollBarSaveGames::OnPageUp(int a1)
     // __LINE__: 3340
     UTIL_ASSERT(pSave != NULL);
 
-    INT nStep = min(a1, GAME_SLOTS - 1);
+    INT nStep = min(nLines, GAME_SLOTS - 1);
     INT nNewTopGameSlot = max(pSave->m_nTopGameSlot - nStep, 0);
     if (nNewTopGameSlot != pSave->m_nTopGameSlot) {
         pSave->m_nTopGameSlot = nNewTopGameSlot;
@@ -1208,7 +1208,7 @@ void CUIControlScrollBarSaveGames::OnPageUp(int a1)
 }
 
 // 0x65F140
-void CUIControlScrollBarSaveGames::OnPageDown(int a1)
+void CUIControlScrollBarSaveGames::OnPageDown(DWORD nLines)
 {
     CScreenSave* pSave = g_pBaldurChitin->m_pEngineSave;
 
@@ -1216,7 +1216,7 @@ void CUIControlScrollBarSaveGames::OnPageDown(int a1)
     // __LINE__: 3380
     UTIL_ASSERT(pSave != NULL);
 
-    INT nStep = nStep = min(a1, GAME_SLOTS - 1);
+    INT nStep = nStep = min(nLines, GAME_SLOTS - 1);
     INT nNewTopGameSlot = max(min(pSave->m_nTopGameSlot + nStep, pSave->m_nNumGameSlots - GAME_SLOTS), 0);
     if (nNewTopGameSlot != pSave->m_nTopGameSlot) {
         pSave->m_nTopGameSlot = nNewTopGameSlot;

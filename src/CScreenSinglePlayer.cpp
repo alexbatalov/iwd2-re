@@ -1974,7 +1974,7 @@ void CUIControlScrollBarSinglePlayerParties::OnScrollDown()
 }
 
 // 0x667C10
-void CUIControlScrollBarSinglePlayerParties::OnPageUp(int a1)
+void CUIControlScrollBarSinglePlayerParties::OnPageUp(DWORD nLines)
 {
     CScreenSinglePlayer* pSinglePlayer = g_pBaldurChitin->m_pEngineSinglePlayer;
 
@@ -1982,12 +1982,12 @@ void CUIControlScrollBarSinglePlayerParties::OnPageUp(int a1)
     // __LINE__: 5426
     UTIL_ASSERT(pSinglePlayer != NULL);
 
-    pSinglePlayer->m_nTopParty -= min(a1, 5);
+    pSinglePlayer->m_nTopParty -= min(nLines, 5);
     InvalidateItems();
 }
 
 // 0x667C60
-void CUIControlScrollBarSinglePlayerParties::OnPageDown(int a1)
+void CUIControlScrollBarSinglePlayerParties::OnPageDown(DWORD nLines)
 {
     CScreenSinglePlayer* pSinglePlayer = g_pBaldurChitin->m_pEngineSinglePlayer;
 
@@ -1995,7 +1995,7 @@ void CUIControlScrollBarSinglePlayerParties::OnPageDown(int a1)
     // __LINE__: 5441
     UTIL_ASSERT(pSinglePlayer != NULL);
 
-    pSinglePlayer->m_nTopParty += min(a1, 5);
+    pSinglePlayer->m_nTopParty += min(nLines, 5);
     InvalidateItems();
 }
 
