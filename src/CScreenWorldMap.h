@@ -49,7 +49,11 @@ public:
     void UpdateMainPanel();
     void OnDoneButtonClick();
     void SetMapView(const CPoint& ptMapView);
+    void OnMapMouseDown(const CPoint& ptMousePos);
+    void OnMapMouseUp(const CPoint& ptMousePos);
+    void OnMapMouseMove(const CPoint& ptMousePos);
     void OnMapAsyncUpdate();
+    BOOL DrawMap(const CRect& r);
     void StartWorldMap(INT nEngineState, LONG nLeavingEdge, BOOLEAN bInControl);
     void StopWorldMap(BOOLEAN bAreaClicked);
     void ClearChatMessages();
@@ -106,6 +110,19 @@ public:
     CUIControlButtonWorldMapDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonWorldMapDone();
     void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonWorldMapWorldMap : public CUIControlButton {
+public:
+    CUIControlButtonWorldMapWorldMap(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonWorldMapWorldMap();
+    void OnMouseMove(CPoint pt) override;
+    BOOL OnLButtonDown(CPoint pt) override;
+    void OnLButtonUp(CPoint pt) override;
+    BOOL Render(BOOL bForce) override;
+
+    /* 0676 */ int field_676;
+    /* 067A */ int field_67A;
 };
 
 #endif /* CSCREENWORLDMAP_H_ */

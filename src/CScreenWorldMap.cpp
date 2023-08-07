@@ -373,10 +373,36 @@ void CScreenWorldMap::SetMapView(const CPoint& ptMapView)
     // TODO: Incomplete.
 }
 
+// 0x69A640
+void CScreenWorldMap::OnMapMouseDown(const CPoint& ptMousePos)
+{
+    // TODO: Incomplete.
+}
+
+// 0x69A840
+void CScreenWorldMap::OnMapMouseUp(const CPoint& ptMousePos)
+{
+    // TODO: Incomplete.
+}
+
+// 0x69A920
+void CScreenWorldMap::OnMapMouseMove(const CPoint& ptMousePos)
+{
+    // TODO: Incomplete.
+}
+
 // 0x69A9D0
 void CScreenWorldMap::OnMapAsyncUpdate()
 {
     // TODO: Incomplete.
+}
+
+// 0x69BA70
+BOOL CScreenWorldMap::DrawMap(const CRect& r)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // 0x69C2A0
@@ -497,4 +523,108 @@ void CUIControlButtonWorldMapDone::OnLButtonClick(CPoint pt)
 
     // NOTE: Uninline.
     pWorldMap->OnDoneButtonClick();
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x6A06B0
+CUIControlButtonWorldMapWorldMap::CUIControlButtonWorldMapWorldMap(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    field_676 = 0;
+    field_67A = 0;
+}
+
+// 0x6A0710
+CUIControlButtonWorldMapWorldMap::~CUIControlButtonWorldMapWorldMap()
+{
+}
+
+// 0x6A07B0
+BOOL CUIControlButtonWorldMapWorldMap::Render(BOOL bForce)
+{
+    if (!m_bActive || !m_bInactiveRender) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount == 0 && !bForce) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount != 0) {
+        CSingleLock lock(&(m_pPanel->m_pManager->field_56), FALSE);
+        lock.Lock(INFINITE);
+        m_nRenderCount--;
+        lock.Unlock();
+    }
+
+    CScreenWorldMap* pWorldMap = g_pBaldurChitin->m_pEngineWorldMap;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+    // __LINE__: 4701
+    UTIL_ASSERT(pWorldMap != NULL);
+
+    CRect r = m_rDirty;
+    r.OffsetRect(-m_ptOrigin);
+    r.OffsetRect(-m_pPanel->m_ptOrigin);
+
+    return pWorldMap->DrawMap(r);
+}
+
+// 0x6A0940
+void CUIControlButtonWorldMapWorldMap::OnLButtonUp(CPoint pt)
+{
+    if (m_bActive) {
+        if ((m_nMouseButtons & LBUTTON) != 0) {
+            // NOTE: Uninline.
+            m_pPanel->m_pManager->KillCapture();
+
+            CScreenWorldMap* pWorldMap = g_pBaldurChitin->m_pEngineWorldMap;
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+            // __LINE__: 4740
+            UTIL_ASSERT(pWorldMap != NULL);
+
+            pWorldMap->OnMapMouseUp(pt);
+        }
+    }
+}
+
+// 0x6A09B0
+BOOL CUIControlButtonWorldMapWorldMap::OnLButtonDown(CPoint pt)
+{
+    if (!m_bActive) {
+        return FALSE;
+    }
+
+    if ((m_nMouseButtons & LBUTTON) == 0) {
+        return FALSE;
+    }
+
+    m_pPanel->m_pManager->SetCapture(this, CUIManager::MOUSELBUTTON);
+    m_pPanel->m_pManager->field_2D = 0;
+    m_pPanel->m_pManager->field_32 = m_nID;
+    m_pPanel->m_pManager->field_1C = 0;
+
+    CScreenWorldMap* pWorldMap = g_pBaldurChitin->m_pEngineWorldMap;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+    // __LINE__: 4780
+    UTIL_ASSERT(pWorldMap != NULL);
+
+    pWorldMap->OnMapMouseDown(pt);
+
+    return TRUE;
+}
+
+// 0x6A0A40
+void CUIControlButtonWorldMapWorldMap::OnMouseMove(CPoint pt)
+{
+    CScreenWorldMap* pWorldMap = g_pBaldurChitin->m_pEngineWorldMap;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+    // __LINE__: 4832
+    UTIL_ASSERT(pWorldMap != NULL);
+
+    pWorldMap->OnMapMouseMove(pt);
 }
