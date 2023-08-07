@@ -104,13 +104,13 @@ public:
     /* 0274 */ CRes* field_274;
     /* 0278 */ CList<CString, CString> m_lDirectories; // #guess
     /* 0294 */ unsigned char field_294;
-    /* 0295 */ unsigned char field_295;
-    /* 0296 */ unsigned char field_296;
-    /* 0297 */ unsigned char field_297;
+    /* 0295 */ BOOLEAN field_295;
+    /* 0296 */ BOOLEAN field_296;
+    /* 0297 */ BOOLEAN field_297;
     /* 0298 */ CString m_sCDSwitchDriveLetter;
     /* 029C */ int field_29C;
     /* 02A0 */ int field_2A0;
-    /* 02A4 */ unsigned char field_2A4;
+    /* 02A4 */ BOOLEAN field_2A4;
     /* 02A5 */ BOOLEAN m_bTemporaryKeyAdd;
     /* 02A6 */ BOOLEAN m_bTemporaryDirAdd; // #guess
 };

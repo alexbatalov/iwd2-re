@@ -2075,13 +2075,59 @@ void CChitin::ShutDown(int nLineNumber, const char* szFileName, const char* text
 // 0x790B70
 void CChitin::SynchronousUpdate()
 {
-    // TODO: Incomplete.
+    if (!cVideo.Is3dAccelerated()) {
+        if (field_E2 != m_bFullscreen) {
+            if (cVideo.m_nNextBpp != cVideo.m_nBpp) {
+                SaveBitsPerPixel(cVideo.m_nNextBpp);
+            }
+
+            OnAltEnter(TRUE);
+        } else {
+            if (cVideo.m_nNextBpp != cVideo.m_nBpp) {
+                cVideo.ChangeBppValue();
+            } else {
+                if (cVideo.cVidBlitter.field_E6) {
+                    cVideo.cVidBlitter.Reset();
+                }
+            }
+        }
+    } else {
+        if (field_E2 != m_bFullscreen) {
+            OnAltEnter(TRUE);
+        }
+    }
 
     if (m_bEngineActive && pActiveEngine != NULL && !field_E0) {
         if (cDimm.field_294 == 1) {
-            // TODO: Incomplete.
+            SetCDSwitchStatus(TRUE,
+                TRUE,
+                cDimm.field_297,
+                cDimm.GetCDSwitchDriveLetter(),
+                cDimm.field_296,
+                cDimm.field_295,
+                cDimm.field_2A4);
         } else if (cProgressBar.m_bProgressBarActivated == 1) {
-            // TODO: Incomplete.
+            BOOLEAN bDisplayMinibars = FALSE;
+            if (cProgressBar.m_nActionProgress == cProgressBar.m_nActionTarget
+                && cNetwork.GetSessionOpen() == TRUE
+                && !cProgressBar.m_bDisableMinibars
+                && cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+                bDisplayMinibars = TRUE;
+            }
+
+            if (cProgressBar.m_nActionProgress != 0 || cProgressBar.m_nActionTarget != 0) {
+                SetProgressBar(TRUE,
+                    cProgressBar.m_nProgressBarCaption,
+                    cProgressBar.m_nActionProgress,
+                    cProgressBar.m_nActionTarget,
+                    cProgressBar.m_bTravelActive,
+                    cProgressBar.m_nParchmentCaption,
+                    cProgressBar.m_bWaiting,
+                    cProgressBar.m_nWaitingReason,
+                    bDisplayMinibars,
+                    cProgressBar.m_bTimeoutVisible,
+                    cProgressBar.m_nSecondsToTimeout);
+            }
         } else {
             m_nRenderElasped++;
 

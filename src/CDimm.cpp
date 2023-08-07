@@ -11,10 +11,10 @@
 // 0x781E60
 CDimm::CDimm()
 {
-    field_2A4 = 0;
-    field_295 = 0;
-    field_296 = 0;
-    field_297 = 0;
+    field_2A4 = FALSE;
+    field_295 = FALSE;
+    field_296 = FALSE;
+    field_297 = FALSE;
 
     MEMORYSTATUS memoryStatus;
     memoryStatus.dwLength = sizeof(MEMORYSTATUS);
