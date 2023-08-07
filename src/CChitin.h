@@ -246,7 +246,7 @@ public:
     /* 1932 */ int field_1932;
     /* 1936 */ BOOL m_bAIStale;
     /* 193A */ BOOL m_bDisplayStale;
-    /* 193E */ int m_bSynchronousUpdate;
+    /* 193E */ BOOL m_bInSynchronousUpdate;
     /* 1942 */ int m_nKeyboardDelay; // #guess
     /* 1946 */ int m_nKeyboardSpeed; // #guess
     /* 194A */ CCriticalSection m_csPointerPosition;

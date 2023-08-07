@@ -517,9 +517,11 @@ int CChitin::WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
             if (field_1932 == 0) {
                 if (m_bDisplayStale == TRUE) {
                     m_bDisplayStale = FALSE;
-                    m_bSynchronousUpdate = TRUE;
+
+                    m_bInSynchronousUpdate = TRUE;
                     SynchronousUpdate();
-                    m_bSynchronousUpdate = FALSE;
+                    m_bInSynchronousUpdate = FALSE;
+
                     m_bAIStale = TRUE;
                 }
             }
@@ -620,7 +622,7 @@ void CChitin::DoFixReadonlyPermissions(CString path)
 // 0x7902C0
 void CChitin::InitializeVariables()
 {
-    m_bSynchronousUpdate = FALSE;
+    m_bInSynchronousUpdate = FALSE;
     field_1A0 = 0;
     field_1A4 = 0;
     field_13A = -1;
