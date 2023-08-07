@@ -66,7 +66,8 @@ int CChitin::dword_8FB97C;
 // 0x78D960
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-    if (g_pChitin->field_16C && Msg == g_pChitin->field_170) {
+    if ((g_pChitin->field_16C && Msg == g_pChitin->field_170)
+        || Msg == WM_MOUSEWHEEL) {
         if (!g_pChitin->m_bInMouseWheelQueue) {
             g_pChitin->m_bInMouseWheelQueue = TRUE;
             g_pChitin->m_lMouseWheel.AddTail(reinterpret_cast<void*>(wParam));
@@ -1319,7 +1320,7 @@ void CChitin::AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD d
                 if (!m_lMouseWheel.IsEmpty()) {
                     do {
                         wParam = reinterpret_cast<WPARAM>(m_lMouseWheel.RemoveHead());
-                        nDelta += HIWORD(wParam);
+                        nDelta += static_cast<SHORT>(wParam >> 16);
                     } while (!m_lMouseWheel.IsEmpty());
                 } else {
                     wParam = 0;
@@ -1330,7 +1331,7 @@ void CChitin::AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD d
                 LONG nRemainder;
                 if (nDelta < 0) {
                     bForward = FALSE;
-                    nTicks = -(-nDelta / WHEEL_DELTA);
+                    nTicks = -nDelta / WHEEL_DELTA;
                     nRemainder = -(-nDelta % WHEEL_DELTA);
                 } else {
                     bForward = TRUE;

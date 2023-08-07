@@ -828,6 +828,24 @@ void CBaldurEngine::OnLeftPanelButtonClick(DWORD dwButtonId)
 // 0x4289C0
 void CBaldurEngine::OnMouseWheel(BOOL bForward, LONG nTicks, DWORD nLines, WORD wFlags)
 {
+    if (nLines == 0) {
+        return;
+    }
+
+    if (m_pCurrentScrollBar != NULL) {
+        if (m_pCurrentScrollBar->m_pPanel->m_bActive
+            && m_pCurrentScrollBar->m_bActive) {
+            while (nTicks > 0) {
+                if (bForward) {
+                    m_pCurrentScrollBar->OnPageUp(nLines);
+                } else {
+                    m_pCurrentScrollBar->OnPageDown(nLines);
+                }
+                nTicks--;
+            }
+        }
+    }
+
     // TODO: Incomplete.
 }
 
