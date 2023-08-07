@@ -1023,7 +1023,7 @@ void CBaldurChitin::MainAIThread(void* userInfo)
             dword_8CF6E0 = nTickCount;
         }
 
-        if (g_pChitin->field_1936 == 1) {
+        if (g_pChitin->m_bAIStale == TRUE) {
             g_pChitin->m_bInAsynchronousUpdate = TRUE;
             g_pChitin->AsynchronousUpdate(0, 0, 0, 0, 0);
             g_pChitin->m_bInAsynchronousUpdate = FALSE;

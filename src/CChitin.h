@@ -244,7 +244,7 @@ public:
     /* 1912 */ BOOL m_bInAsynchronousUpdate;
     /* 1916 */ CAliasList lAliases; // #guess
     /* 1932 */ int field_1932;
-    /* 1936 */ int field_1936;
+    /* 1936 */ BOOL m_bAIStale;
     /* 193A */ BOOL m_bDisplayStale;
     /* 193E */ int m_bSynchronousUpdate;
     /* 1942 */ int m_nKeyboardDelay; // #guess

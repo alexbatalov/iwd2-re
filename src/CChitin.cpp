@@ -520,7 +520,7 @@ int CChitin::WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
                     m_bSynchronousUpdate = TRUE;
                     SynchronousUpdate();
                     m_bSynchronousUpdate = FALSE;
-                    field_1936 = 1;
+                    m_bAIStale = TRUE;
                 }
             }
         }
@@ -703,7 +703,7 @@ void CChitin::InitializeVariables()
 
     m_bInMouseWheelQueue = FALSE;
     field_1932 = 0;
-    field_1936 = 1;
+    m_bAIStale = TRUE;
     m_bDisplayStale = FALSE;
     m_bPointerUpdated = FALSE;
     m_bEngineActive = FALSE;
