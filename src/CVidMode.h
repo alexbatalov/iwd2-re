@@ -24,6 +24,9 @@ typedef struct {
 
 class CVidMode {
 public:
+    static const CString SCREEN_SHOT_DIR_NAME;
+    static const CString SCREEN_SHOT_EXTENSION;
+
     static short word_8BA320;
     static BYTE NUM_FADE_FRAMES;
     static BOOL bInitialized;
@@ -128,7 +131,7 @@ public:
     // NOTE: Can be seen via assertion in `CVidMosaic::Render`.
     INT GetNumSurfaces() { return m_nSurfaces; }
 
-    /* 0004 */ int field_4;
+    /* 0004 */ INT m_nPrintFile;
     /* 0008 */ INT m_nPointerNumber;
     /* 000C */ DWORD m_dwCursorRenderFlags;
     /* 0010 */ int field_10;

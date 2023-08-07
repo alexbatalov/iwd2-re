@@ -1837,6 +1837,76 @@ void CVidInf::LoadFogOWarSurfaces(const CString& a2)
     }
 }
 
+// 0x79E9F0
+BOOLEAN CVidInf::SaveScreen()
+{
+    CString sPath;
+    CString sPrefix;
+    CFile cFile;
+    WIN32_FIND_DATAA fileFindData;
+    HANDLE hFileFind;
+
+    hFileFind = FindFirstFileA(SCREEN_SHOT_DIR_NAME, &fileFindData);
+    if (hFileFind != INVALID_HANDLE_VALUE) {
+        if ((fileFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
+            return FALSE;
+        }
+    } else {
+        if (!CreateDirectoryA(SCREEN_SHOT_DIR_NAME, NULL)) {
+            return FALSE;
+        }
+    }
+
+    FindClose(hFileFind);
+
+    g_pChitin->GetScreenShotFilePrefix(sPrefix);
+
+    BOOL bFound;
+    do {
+        bFound = FALSE;
+
+        sPath.Format("%s\\%s%03d.%s",
+            SCREEN_SHOT_DIR_NAME,
+            sPrefix,
+            m_nPrintFile,
+            SCREEN_SHOT_EXTENSION);
+
+        hFileFind = FindFirstFileA(sPath, &fileFindData);
+        if (hFileFind != INVALID_HANDLE_VALUE) {
+            bFound = TRUE;
+            m_nPrintFile++;
+        }
+        FindClose(hFileFind);
+    } while (bFound);
+
+    CRect rClip(0, 0, CVideo::SCREENWIDTH, CVideo::SCREENHEIGHT);
+    LPBYTE data;
+    LONG size;
+
+    if (!PrintSurfaceToBmp(data, 0, rClip, size, 1)) {
+        if (data != NULL) {
+            delete data;
+        }
+
+        return FALSE;
+    }
+
+    if (data == NULL) {
+        return FALSE;
+    }
+
+    if (!cFile.Open(sPath, CFile::OpenFlags::modeCreate | CFile::OpenFlags::modeWrite, NULL)) {
+        delete data;
+        return FALSE;
+    }
+
+    cFile.Write(data, size);
+    cFile.Close();
+
+    delete data;
+    return TRUE;
+}
+
 // 0x79F6A0
 BOOL CVidInf::RenderPointer()
 {

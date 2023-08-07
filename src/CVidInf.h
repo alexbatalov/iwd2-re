@@ -23,6 +23,7 @@ class CParticle;
 class CVidInf : public CVidMode {
 public:
     CVidInf();
+    /* 0000 */ BOOLEAN SaveScreen() override;
     /* 005C */ BOOL ActivateVideoMode(CVidMode* pPrevVidMode, HWND hWnd, BOOLEAN bFullscreen) override;
     /* 0060 */ BOOLEAN SetClipper(IDirectDrawClipper* lpDirectDrawClipper) override;
     /* 0064 */ BOOL CreateSurfaces(BOOLEAN bFullscreen) override;

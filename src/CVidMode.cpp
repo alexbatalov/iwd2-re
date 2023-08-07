@@ -6,6 +6,12 @@
 #include "CUtil.h"
 #include "CVidCell.h"
 
+// 0x8FB964
+const CString CVidMode::SCREEN_SHOT_EXTENSION("bmp");
+
+// 0x8FB95C
+const CString CVidMode::SCREEN_SHOT_DIR_NAME(".\\ScrnShot");
+
 // 0x8BA320
 short CVidMode::word_8BA320 = 100;
 
@@ -57,7 +63,7 @@ CVidMode::CVidMode()
     m_rPointerStorage.right = 0;
     m_rPointerStorage.bottom = 0;
     rgbGlobalTint = 0xFFFFFF;
-    field_4 = 0;
+    m_nPrintFile = 0;
     m_bPrintScreen = FALSE;
     m_nBrightnessCorrection = 0;
     m_nGammaCorrection = 0;
