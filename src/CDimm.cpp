@@ -41,7 +41,7 @@ CDimm::CDimm()
     m_nResFiles = 0;
     m_bTemporaryKeyAdd = FALSE;
     m_bTemporaryDirAdd = FALSE;
-    field_294 = 0;
+    m_bCDSwitchActivated = FALSE;
 }
 
 // 0x782020

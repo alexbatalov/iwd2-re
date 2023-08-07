@@ -103,7 +103,7 @@ public:
     /* 0270 */ CRes* field_270;
     /* 0274 */ CRes* field_274;
     /* 0278 */ CList<CString, CString> m_lDirectories; // #guess
-    /* 0294 */ unsigned char field_294;
+    /* 0294 */ BOOLEAN m_bCDSwitchActivated;
     /* 0295 */ BOOLEAN field_295;
     /* 0296 */ BOOLEAN field_296;
     /* 0297 */ BOOLEAN field_297;

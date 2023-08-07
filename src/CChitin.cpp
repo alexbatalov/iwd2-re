@@ -122,7 +122,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lPara
         }
         return 1;
     case WM_CLOSE:
-        if (g_pChitin->cDimm.field_294 && !g_pChitin->cDimm.field_296) {
+        if (g_pChitin->cDimm.m_bCDSwitchActivated && !g_pChitin->cDimm.field_296) {
             g_pChitin->cDimm.field_2A0 = 1;
             return 0;
         }
@@ -140,7 +140,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lPara
 
         return 0;
     case WM_QUERYENDSESSION:
-        if (g_pChitin->cDimm.field_294) {
+        if (g_pChitin->cDimm.m_bCDSwitchActivated) {
             return 1;
         }
 
@@ -1029,7 +1029,7 @@ BOOLEAN CChitin::OnAltEnter(BOOLEAN a1)
     SetSoundVolumes();
     cSoundMixer.StartSong(nCurrentSong, 1);
 
-    if (cDimm.field_294) {
+    if (cDimm.m_bCDSwitchActivated) {
         SetCDSwitchActivateEngine(TRUE);
     } else if (cProgressBar.m_bProgressBarActivated) {
         SetProgressBarActivateEngine(TRUE);
@@ -1064,7 +1064,7 @@ void CChitin::OnAltTab(HWND hWnd, BOOL a2)
                 }
                 field_F8 = 0;
 
-                if (cDimm.field_294) {
+                if (cDimm.m_bCDSwitchActivated) {
                     SetCDSwitchActivateEngine(TRUE);
                     Resume();
                     byte_8FB950 = 0;
@@ -1199,7 +1199,7 @@ int CChitin::AskCloseConfirmation()
             SetSoundVolumes();
             cSoundMixer.StartSong(nSong, 0x1);
 
-            if (cDimm.field_294) {
+            if (cDimm.m_bCDSwitchActivated) {
                 SetCDSwitchActivateEngine(TRUE);
             } else if (cProgressBar.m_bProgressBarActivated) {
                 SetProgressBarActivateEngine(TRUE);
@@ -2098,7 +2098,7 @@ void CChitin::SynchronousUpdate()
     }
 
     if (m_bEngineActive && pActiveEngine != NULL && !field_E0) {
-        if (cDimm.field_294 == 1) {
+        if (cDimm.m_bCDSwitchActivated == TRUE) {
             SetCDSwitchStatus(TRUE,
                 TRUE,
                 cDimm.field_297,
