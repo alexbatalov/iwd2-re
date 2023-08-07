@@ -134,10 +134,10 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lPara
         switch (g_pChitin->AskCloseConfirmation()) {
         case IDOK:
         case IDYES:
-            return 0;
+            DestroyWindow(g_pChitin->cWnd.GetSafeHwnd());
+            break;
         }
 
-        DestroyWindow(g_pChitin->cWnd.GetSafeHwnd());
         return 0;
     case WM_QUERYENDSESSION:
         if (g_pChitin->cDimm.field_294) {
