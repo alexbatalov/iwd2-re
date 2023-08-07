@@ -393,7 +393,7 @@ void CUIControlTextDisplay::OnPageDown(DWORD a1)
         SHORT nOldIndex = field_5A;
         // TODO: Check casts.
         SHORT v1 = static_cast<SHORT> min(a1, static_cast<DWORD>(field_A6A - 1));
-        field_5A = max(field_5A + v1, m_plstStrings->GetCount() - field_A6A);
+        field_5A = min(field_5A + v1, m_plstStrings->GetCount() - field_A6A);
         if (nOldIndex != field_5A) {
             m_posTopString = m_plstStrings->FindIndex(field_5A);
 
