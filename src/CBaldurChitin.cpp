@@ -2009,3 +2009,9 @@ void CBaldurChitin::sub_4286B0(CResRef cResRef, INT nSong)
 {
     // TODO: Incomplete.
 }
+
+// 0x438550
+CScreenWorld* CBaldurChitin::GetScreenWorld()
+{
+    return m_pEngineWorld;
+}

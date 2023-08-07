@@ -81,6 +81,7 @@ public:
     void AddPlayedMovie(const CResRef& cResMovie);
     CInfCursor* GetObjectCursor();
     CInfGame* GetObjectGame();
+    CScreenWorld* GetScreenWorld();
 
     void sub_4286B0(CResRef cResRef, INT nSong);
 
