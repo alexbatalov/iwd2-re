@@ -3,6 +3,7 @@
 
 #include "CBaldurEngine.h"
 #include "CKeyInfo.h"
+#include "CUIControlButtonPlusMinus.h"
 #include "CVidCell.h"
 #include "CVidFont.h"
 #include "CVidMosaic.h"
@@ -46,6 +47,7 @@ public:
     /* 0114 */ void SetChatEditBoxStatus(const CString& sChatText, BOOL bInputCapture) override;
 
     void UpdateMainPanel();
+    void SetMapView(const CPoint& ptMapView);
     void OnMapAsyncUpdate();
     void StartWorldMap(INT nEngineState, LONG nLeavingEdge, BOOLEAN bInControl);
     void ClearChatMessages();
@@ -88,6 +90,13 @@ public:
     /* 1054 */ int m_nToolTip;
     /* 1058 */ CVidFont m_preLoadFontRealms;
     /* 1558 */ CVidFont m_preLoadFontTool;
+};
+
+class CUIControlButtonWorldMapScroll : public CUIControlButtonPlusMinus {
+public:
+    CUIControlButtonWorldMapScroll(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonWorldMapScroll();
+    void AdjustValue() override;
 };
 
 #endif /* CSCREENWORLDMAP_H_ */

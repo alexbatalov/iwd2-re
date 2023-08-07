@@ -340,6 +340,12 @@ void CScreenWorldMap::UpdateMainPanel()
     m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(m_pMainPanel->GetControl(6));
 }
 
+// 0x69A4D0
+void CScreenWorldMap::SetMapView(const CPoint& ptMapView)
+{
+    // TODO: Incomplete.
+}
+
 // 0x69A9D0
 void CScreenWorldMap::OnMapAsyncUpdate()
 {
@@ -390,5 +396,45 @@ void CScreenWorldMap::SetChatEditBoxStatus(const CString& sChatText, BOOL bInput
         if (bInputCapture) {
             m_cUIManager.SetCapture(pEdit, CUIManager::KEYBOARD);
         }
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x6A0310
+CUIControlButtonWorldMapScroll::CUIControlButtonWorldMapScroll(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButtonPlusMinus(panel, controlInfo)
+{
+}
+
+// 0x6A0310
+CUIControlButtonWorldMapScroll::~CUIControlButtonWorldMapScroll()
+{
+}
+
+// 0x6A03F0
+void CUIControlButtonWorldMapScroll::AdjustValue()
+{
+    CScreenWorldMap* pWorldMap = g_pBaldurChitin->m_pEngineWorldMap;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+    // __LINE__: 4543
+    UTIL_ASSERT(pWorldMap != NULL);
+
+    switch (m_nID) {
+    case 1:
+        if (!pWorldMap->m_bMapDragging) {
+            pWorldMap->SetMapView(pWorldMap->m_ptMapView - CPoint(0, 20));
+        }
+        break;
+    case 2:
+        if (!pWorldMap->m_bMapDragging) {
+            pWorldMap->SetMapView(pWorldMap->m_ptMapView + CPoint(0, 20));
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+        // __LINE__: 4556
+        UTIL_ASSERT(FALSE);
     }
 }
