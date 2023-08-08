@@ -4493,7 +4493,7 @@ BOOL CUIControlButtonCharGenSkillsPlusMinus::OnLButtonDown(CPoint pt)
     STRREF strDescription = ruleTables.GetSkillDescription(id);
     g_pBaldurChitin->m_pEngineCreateChar->UpdateHelp(m_pPanel->m_nID, 92, strDescription);
 
-    return OnLButtonDown(pt);
+    return CUIControlButtonPlusMinus::OnLButtonDown(pt);
 }
 
 // 0x61A980
@@ -7265,7 +7265,7 @@ BOOL CUIControlButtonCharGenFeatsPlusMinus::OnLButtonDown(CPoint pt)
     STRREF strDescription = ruleTables.GetFeatDescription(id);
     g_pBaldurChitin->m_pEngineCreateChar->UpdateHelp(m_pPanel->m_nID, 92, strDescription);
 
-    return OnLButtonDown(pt);
+    return CUIControlButtonPlusMinus::OnLButtonDown(pt);
 }
 
 // 0x6232A0
