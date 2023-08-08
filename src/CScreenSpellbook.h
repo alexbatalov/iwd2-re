@@ -103,6 +103,18 @@ public:
     void InvalidateItems();
 };
 
+class CUIControlButtonSpellbookSpellInfoIcon : public CUIControlButton {
+public:
+    CUIControlButtonSpellbookSpellInfoIcon(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonSpellbookSpellInfoIcon();
+    BOOL Render(BOOL bForce) override;
+
+    void SetSpell(const CResRef& cSpellResRef);
+
+    /* 0666 */ CResRef m_spellResRef;
+    /* 066E */ CResRef m_iconResRef;
+};
+
 class CUIControlButtonSpellbookPopupDone : public CUIControlButton {
 public:
     CUIControlButtonSpellbookPopupDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

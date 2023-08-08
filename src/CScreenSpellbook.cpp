@@ -5,6 +5,7 @@
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CScreenWorld.h"
+#include "CSpell.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -861,6 +862,103 @@ void CUIControlScrollBarSpellbookKnownSpells::InvalidateItems()
     pSpellbook->UpdateMainPanel();
 
     renderLock.Unlock();
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x66E3A0
+CUIControlButtonSpellbookSpellInfoIcon::CUIControlButtonSpellbookSpellInfoIcon(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, 0, 1)
+{
+    m_spellResRef = "";
+    m_iconResRef = "";
+}
+
+// 0x66E460
+CUIControlButtonSpellbookSpellInfoIcon::~CUIControlButtonSpellbookSpellInfoIcon()
+{
+}
+
+// 0x66E500
+void CUIControlButtonSpellbookSpellInfoIcon::SetSpell(const CResRef& cNewResRef)
+{
+    CString sIconResRef;
+
+    m_spellResRef = cNewResRef;
+    m_iconResRef = "";
+
+    if (m_spellResRef != "") {
+        CSpell cSpell;
+        cSpell.SetResRef(m_spellResRef, TRUE, TRUE);
+        cSpell.Demand();
+
+        if (cSpell.pRes != NULL) {
+            RESREF iconResRef;
+            cSpell.GetIcon(iconResRef);
+            m_iconResRef = iconResRef;
+
+            m_iconResRef.CopyToString(sIconResRef);
+            sIconResRef.SetAt(sIconResRef.GetLength() - 1, 'B');
+            m_iconResRef = sIconResRef;
+        }
+
+        cSpell.Release();
+    }
+}
+
+// 0x66E6A0
+BOOL CUIControlButtonSpellbookSpellInfoIcon::Render(BOOL bForce)
+{
+    CVidCell vcIcon;
+
+    if (!m_bActive && !m_bInactiveRender) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount == 0 && !bForce) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount != 0) {
+        CSingleLock lock(&(m_pPanel->m_pManager->field_56), FALSE);
+        lock.Lock(INFINITE);
+        m_nRenderCount--;
+        lock.Unlock();
+    }
+
+    if (m_iconResRef == "") {
+        return FALSE;
+    }
+
+    CRect rControlFrame(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
+
+    CRect rClip;
+    rClip.IntersectRect(rControlFrame, m_rDirty);
+
+    // NOTE: Uninline.
+    vcIcon.SetResRef(m_iconResRef, m_pPanel->m_pManager->m_bDoubleSize, TRUE);
+
+    if (vcIcon.pRes == NULL) {
+        return FALSE;
+    }
+
+    CSize iconSize;
+    vcIcon.GetCurrentFrameSize(iconSize, FALSE);
+
+    INT x = m_size.cx > iconSize.cx
+        ? rControlFrame.left + (m_size.cx - iconSize.cx) / 2
+        : rControlFrame.left;
+    INT y = m_size.cy > iconSize.cy
+        ? rControlFrame.top + (m_size.cy - iconSize.cy) / 2
+        : rControlFrame.top;
+
+    BOOL bResult = vcIcon.Render(0, x, y, rClip, NULL, 0, 0, -1);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+    // __LINE__: 4341
+    UTIL_ASSERT(bResult);
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------
