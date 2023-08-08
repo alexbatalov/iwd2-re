@@ -747,7 +747,100 @@ void CScreenSpellbook::ResetErrorPanel(CUIPanel* pPanel)
 // 0x66C0F0
 void CScreenSpellbook::OnErrorButtonClick(INT nButton)
 {
-    // TODO: Incomplete.
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+    // __LINE__: 2731
+    UTIL_ASSERT(0 <= nButton && nButton < GetNumErrorButtons());
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+    // __LINE__: 2733
+    UTIL_ASSERT(pGame != NULL);
+
+    CSingleLock renderLock(&(GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    // FIXME: Unncessary access via global var.
+    LONG nCharacterId = pGame->GetCharacterId(g_pBaldurChitin->m_pEngineSpellbook->GetSelectedCharacter());
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        switch (m_nErrorState) {
+        case 0:
+            switch (nButton) {
+            case 0:
+                DismissPopup();
+                break;
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+                // __LINE__: 2794
+                UTIL_ASSERT(FALSE);
+            }
+            break;
+        case 1:
+            switch (nButton) {
+            case 0:
+                DismissPopup();
+
+                CInfGame::dword_8E7524 = FALSE;
+                pGame->RestParty(1, 0);
+                UpdateMainPanel();
+                break;
+            case 1:
+                DismissPopup();
+
+                CInfGame::dword_8E7524 = TRUE;
+                pGame->RestParty(1, 0);
+                UpdateMainPanel();
+                CInfGame::dword_8E7524 = FALSE;
+                break;
+            case 2:
+                DismissPopup();
+                break;
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+                // __LINE__: 2781
+                UTIL_ASSERT(FALSE);
+            }
+            break;
+        case 2:
+            switch (nButton) {
+            case 0:
+                DismissPopup();
+
+                UnmemorizeSpell(pSprite, field_582);
+                UpdateMainPanel();
+                break;
+            case 1:
+                DismissPopup();
+                break;
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+                // __LINE__: 2813
+                UTIL_ASSERT(FALSE);
+            }
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+            // __LINE__: 2819
+            UTIL_ASSERT(FALSE);
+        }
+
+        pGame->GetObjectArray()->ReleaseDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    renderLock.Unlock();
 }
 
 // 0x66C360
@@ -800,6 +893,12 @@ void CScreenSpellbook::CheckMultiPlayerViewable()
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
     }
+}
+
+// 0x66CAF0
+void CScreenSpellbook::UnmemorizeSpell(CGameSprite* pSprite, int a2)
+{
+    // TODO: Incomplete.
 }
 
 // -----------------------------------------------------------------------------

@@ -15,6 +15,8 @@
 #define CSCREENSPELLBOOK_VIRTUAL_KEYS 92
 #define CSCREENSPELLBOOK_ERROR_BUTTONS 3
 
+class CGameSprite;
+
 class CScreenSpellbook : public CBaldurEngine {
 public:
     CScreenSpellbook();
@@ -56,6 +58,10 @@ public:
     void ResetErrorPanel(CUIPanel* pPanel);
     void OnErrorButtonClick(INT nButton);
     void CheckMultiPlayerViewable();
+    void UnmemorizeSpell(CGameSprite* pSprite, int a2);
+
+    // NOTE: Seen in `OnErrorButtonClick` assertion.
+    INT GetNumErrorButtons() { return m_nNumErrorButtons; }
 
     /* 0106 */ CKeyInfo m_pVirtualKeys[CSCREENSPELLBOOK_VIRTUAL_KEYS];
     /* 03E6 */ BYTE m_pVirtualKeysFlags[CSCREENSPELLBOOK_VIRTUAL_KEYS];
