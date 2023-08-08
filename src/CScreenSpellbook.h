@@ -3,6 +3,7 @@
 
 #include "CBaldurEngine.h"
 #include "CKeyInfo.h"
+#include "CUIControlButton.h"
 #include "CVidCell.h"
 #include "CVidFont.h"
 
@@ -85,6 +86,13 @@ public:
     /* 1650 */ DWORD m_nNumberOfSpellClasses;
     /* 1654 */ int field_1654[CSPELLLIST_NUM_CLASSES];
     /* 1670 */ int field_1670;
+};
+
+class CUIControlButtonSpellbookError : public CUIControlButton {
+public:
+    CUIControlButtonSpellbookError(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonSpellbookError();
+    void OnLButtonClick(CPoint pt) override;
 };
 
 #endif /* CSCREENSPELLBOOK_H_ */

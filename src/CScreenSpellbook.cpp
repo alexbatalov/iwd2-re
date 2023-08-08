@@ -751,3 +751,28 @@ void CScreenSpellbook::CancelEngine()
         OnCancelButtonClick();
     }
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x66EB70
+CUIControlButtonSpellbookError::CUIControlButtonSpellbookError(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+}
+
+// 0x66EBC0
+CUIControlButtonSpellbookError::~CUIControlButtonSpellbookError()
+{
+}
+
+// 0x66EC60
+void CUIControlButtonSpellbookError::OnLButtonClick(CPoint pt)
+{
+    CScreenSpellbook* pSpellbook = g_pBaldurChitin->m_pEngineSpellbook;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+    // __LINE__: 4450
+    UTIL_ASSERT(pSpellbook != NULL);
+
+    pSpellbook->OnErrorButtonClick(m_nID);
+}
