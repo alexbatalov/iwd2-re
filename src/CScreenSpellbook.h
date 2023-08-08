@@ -49,6 +49,7 @@ public:
     void SetSpellLevel(INT nLevel);
     void SetClassIndex(DWORD nNewClassIndex);
     void UpdateFlash();
+    void DrawFlash();
     CUIPanel* GetTopPopup();
     void EnableMainPanel(BOOL bEnable);
     void UpdateMainPanel();

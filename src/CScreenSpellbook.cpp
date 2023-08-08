@@ -9,6 +9,7 @@
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
+#include "CVidInf.h"
 
 // 0x667EC0
 CScreenSpellbook::CScreenSpellbook()
@@ -479,6 +480,47 @@ void CScreenSpellbook::UpdateFlash()
             // __LINE__: 1378
             UTIL_ASSERT(FALSE);
         }
+    }
+}
+
+// 0x66A400
+void CScreenSpellbook::DrawFlash()
+{
+    CVidInf* pVidInf = static_cast<CVidInf*>(g_pBaldurChitin->GetCurrentVideoMode());
+
+    if (m_pFlashCurrentSpell != NULL) {
+        CRect rControlFrame(m_pFlashCurrentSpell->m_pPanel->m_ptOrigin + m_pFlashCurrentSpell->m_ptOrigin,
+            m_pFlashCurrentSpell->m_size);
+
+        CSize flashSize;
+        m_vcFlash.GetCurrentFrameSize(flashSize, FALSE);
+
+        INT x = m_pFlashCurrentSpell->m_size.cx > flashSize.cx
+            ? rControlFrame.left + (m_pFlashCurrentSpell->m_size.cx - flashSize.cx) / 2
+            : rControlFrame.left;
+        INT y = m_pFlashCurrentSpell->m_size.cy > flashSize.cy
+            ? rControlFrame.top + (m_pFlashCurrentSpell->m_size.cy - flashSize.cy) / 2
+            : rControlFrame.top;
+
+        CRect rFlash(CPoint(x, y), flashSize);
+
+        CRect rClip;
+        rClip.IntersectRect(rFlash, m_pFlashCurrentSpell->m_rDirty);
+
+        // FIXME: Result is ignored.
+        pVidInf->BKLock(rClip);
+
+        BOOL bResult = pVidInf->BKRender(&m_vcFlash,
+            x - rClip.left,
+            y - rClip.top,
+            0x8,
+            -1);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+        // __LINE__: 1539
+        UTIL_ASSERT(bResult);
+
+        pVidInf->BKUnlock();
     }
 }
 
