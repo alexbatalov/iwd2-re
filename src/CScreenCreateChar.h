@@ -170,7 +170,6 @@ public:
     /* 04E6 */ INT m_nExtraFeats;
     /* 04EA */ INT m_nExtraAbilityPoints;
     /* 04EE */ int field_4EE;
-    /* 04F2 */ int field_4F2;
     /* 04F2 */ INT m_nExtraSkillPoints;
     /* 04F6 */ int field_4F6;
     /* 04FE */ int field_4FE;

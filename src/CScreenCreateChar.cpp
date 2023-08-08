@@ -126,7 +126,7 @@ CScreenCreateChar::CScreenCreateChar()
     m_nExtraFeats = 0;
     m_nExtraAbilityPoints = 0;
     field_4EE = 0;
-    field_4F2 = 0;
+    m_nExtraSkillPoints = 0;
     field_4F6 = 0;
     field_4FE = 0;
     field_502 = 0;
@@ -3231,7 +3231,7 @@ BOOL CScreenCreateChar::IsDoneButtonClickable(CGameSprite* pSprite)
         bClickable = v1 != "";
         break;
     case 6:
-        bClickable = field_4F2 == 0;
+        bClickable = m_nExtraSkillPoints == 0;
         break;
     case 7:
         bClickable = field_4EE == 0;
