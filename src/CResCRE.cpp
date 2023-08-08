@@ -36,13 +36,14 @@ BOOL CResCRE::Parse(void* pData)
     }
 
     CREATURE_HEADER* header = reinterpret_cast<CREATURE_HEADER*>(pData);
-    if (header->nFileType != 'CRE ') {
+    if (memcmp(&(header->nFileType), "CRE ", 4) != 0) {
         // __FILE__: C:\Projects\Icewind2\src\Baldur\BalDataTypes.cpp
         // __LINE__: 1967
         UTIL_ASSERT_MSG(FALSE, CString("Creature file has invalid header (!CRE ): ") + CString(reinterpret_cast<const char*>(m_pDimmKeyTableEntry->resRef.GetResRef()), RESREF_SIZE) + CString(".CRE"));
     }
 
-    if (header->nFileVersion != 'V2.2' && header->nFileVersion != 'V2.0') {
+    if (memcmp(&(header->nFileVersion), "V2.2", 4) != 0
+        && memcmp(&(header->nFileVersion), "V2.0", 4) != 0) {
         // __FILE__: C:\Projects\Icewind2\src\Baldur\BalDataTypes.cpp
         // __LINE__: 1981
         UTIL_ASSERT_MSG(FALSE, CString("Creature file version isn't ") + CString("V2.2") + CString(": ") + CString(reinterpret_cast<const char*>(m_pDimmKeyTableEntry->resRef.GetResRef()), RESREF_SIZE) + CString(".CRE"));
