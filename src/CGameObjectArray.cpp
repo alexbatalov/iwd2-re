@@ -326,6 +326,9 @@ BYTE CGameObjectArray::Add(LONG* index, CGameObject* ptr, DWORD dwTimeOut)
 
             m_nMaxArrayIndex++;
             arrayIndex = m_nMaxArrayIndex;
+        } else {
+            m_nMaxArrayIndex++;
+            arrayIndex = m_nMaxArrayIndex;
         }
     } else {
         // NOTE: See `CGameObjectArray::Delete`.
