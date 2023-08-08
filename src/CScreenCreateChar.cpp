@@ -3222,6 +3222,7 @@ BOOL CScreenCreateChar::IsDoneButtonClickable(CGameSprite* pSprite)
     case 53:
     case 54:
         bClickable = TRUE;
+        break;
     case 5:
         pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(2));
         v1 = pEdit->GetText();
