@@ -2650,7 +2650,7 @@ void CScreenCreateChar::UpdateAlignmentPanel(CUIPanel* pPanel, CGameSprite* pSpr
         // NOTE: Uninline.
         BYTE nAlignment = pAlignment->GetAlignment();
 
-        pAlignment->SetSelected(pSprite->m_startTypeAI.m_nGender == nAlignment);
+        pAlignment->SetSelected(pSprite->m_startTypeAI.m_nAlignment == nAlignment);
 
         BOOL bIsValid = ruleTables.IsValidAlignment(pSprite->m_startTypeAI.m_nClass,
             nAlignment,
