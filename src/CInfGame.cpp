@@ -988,14 +988,14 @@ void CInfGame::LoadKeymap()
         char* buffer = sKey.GetBuffer(128);
         if (index >= 199) {
             GetPrivateProfileStringA("Wizard Spells",
-                off_8B4F84[index],
+                off_8B4F84[index - FIFTY_THREE],
                 "",
                 buffer,
                 128,
                 ".\\Keymap.ini");
         } else {
             GetPrivateProfileStringA("Priest Spells",
-                off_8B4F84[index],
+                off_8B4F84[index - FIFTY_THREE],
                 "",
                 buffer,
                 128,
