@@ -6001,7 +6001,7 @@ void CUIControlButtonCharGenAbilitiesHotArea::OnHotAreaClick(CPoint pt)
     BYTE nMax;
     switch (m_nID) {
     case 30:
-        strDescription = 3582;
+        strDescription = 9582;
         nMin = pCreateChar->m_nMinSTR;
         nMax = pCreateChar->m_nMaxSTR;
         break;
