@@ -55,6 +55,7 @@ public:
     void DismissPopup();
     void OnDoneButtonClick();
     void OnCancelButtonClick();
+    void ResetSpellInfoPanel(CUIPanel* pPanel);
     void ResetErrorPanel(CUIPanel* pPanel);
     void OnErrorButtonClick(INT nButton);
     void CheckMultiPlayerViewable();
@@ -77,7 +78,7 @@ public:
     /* 053A */ int field_53A;
     /* 053E */ int field_53E;
     /* 0542 */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
-    /* 055E */ CResRef field_55E;
+    /* 055E */ CResRef m_spellResRef;
     /* 0566 */ INT m_nErrorState;
     /* 056A */ STRREF m_dwErrorTextId;
     /* 056E */ INT m_nNumErrorButtons;

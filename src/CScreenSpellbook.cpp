@@ -229,7 +229,7 @@ void CScreenSpellbook::EngineGameInit()
     field_53A = 0;
     field_53E = 0;
     field_442 = 0;
-    field_55E = "";
+    m_spellResRef = "";
 
     for (int index = 0; index < 24; index++) {
         field_148C[index] = CResRef();
@@ -694,6 +694,41 @@ void CScreenSpellbook::OnRestButtonClick()
     renderLock.Unlock();
 }
 
+// 0x66BCF0
+void CScreenSpellbook::ResetSpellInfoPanel(CUIPanel* pPanel)
+{
+    CSpell cSpell;
+    cSpell.SetResRef(m_spellResRef, TRUE, TRUE);
+
+    cSpell.Demand();
+
+    STRREF strName = cSpell.GetGenericName();
+    UpdateLabel(pPanel, 0x10000000, "%s", FetchString(strName));
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(3));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+    // __LINE__: 2541
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+
+    STRREF strDescription = cSpell.GetDescription();
+    UpdateText(pText, "%s", FetchString(strDescription));
+
+    pText->SetTopString(pText->m_plstStrings->FindIndex(0));
+
+    CUIControlButtonSpellbookSpellInfoIcon* pIcon = static_cast<CUIControlButtonSpellbookSpellInfoIcon*>(pPanel->GetControl(2));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+    // __LINE__: 2608
+    UTIL_ASSERT(pIcon != NULL);
+
+    pIcon->SetSpell(m_spellResRef);
+
+    cSpell.Release();
+}
+
 // 0x66BEE0
 void CScreenSpellbook::ResetErrorPanel(CUIPanel* pPanel)
 {
@@ -992,7 +1027,7 @@ void CUIControlButtonSpellbookSpell::OnRButtonClick(CPoint pt)
     renderLock.Lock(INFINITE);
 
     if (m_spellResRef != "") {
-        pSpellbook->field_55E = m_spellResRef;
+        pSpellbook->m_spellResRef = m_spellResRef;
         pSpellbook->SummonPopup(3);
     }
 
