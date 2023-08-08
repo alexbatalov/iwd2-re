@@ -52,10 +52,16 @@ public:
     CUIPanel* GetTopPopup();
     void EnableMainPanel(BOOL bEnable);
     void UpdateMainPanel();
+    void ShowPopupPanel(DWORD dwPanelId, BOOL bShow);
+    void EnablePopupPanel(DWORD dwPanelId, BOOL bEnable);
+    void ResetPopupPanel(DWORD dwPanelId);
+    void UpdatePopupPanel(DWORD dwPanelId);
     void SummonPopup(DWORD dwPopupId);
     void DismissPopup();
+    BOOL IsDoneButtonClickable();
     void OnDoneButtonClick();
     void OnCancelButtonClick();
+    void UpdateSpellInfoPanel();
     void ResetSpellInfoPanel(CUIPanel* pPanel);
     void ResetErrorPanel(CUIPanel* pPanel);
     void OnErrorButtonClick(INT nButton);

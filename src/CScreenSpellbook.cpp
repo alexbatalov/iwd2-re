@@ -507,41 +507,8 @@ void CScreenSpellbook::TimerSynchronousUpdate()
 
             switch (pPanel->m_nID) {
             case 3:
-                // NOTE: Inlining.
-                if (1) {
-                    CUIPanel* pPanel = m_cUIManager.GetPanel(3);
-
-                    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
-                    // __LINE__: 2638
-                    UTIL_ASSERT(pPanel != NULL);
-
-                    CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(5));
-
-                    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
-                    // __LINE__: 2641
-                    UTIL_ASSERT(pDone != NULL);
-
-                    // NOTE: Inlining.
-                    if (1) {
-                        CUIPanel* pPanel = GetTopPopup();
-
-                        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
-                        // __LINE__: 2323
-                        UTIL_ASSERT(pPanel != NULL);
-
-                        switch (pPanel->m_nID) {
-                        case 3:
-                        case 4:
-                        case 5:
-                            pDone->SetEnabled(TRUE);
-                            break;
-                        default:
-                            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
-                            // __LINE__: 2335
-                            UTIL_ASSERT(pPanel != NULL);
-                        }
-                    }
-                }
+                // NOTE: Uninline.
+                UpdateSpellInfoPanel();
                 break;
             case 4:
             case 5:
@@ -610,24 +577,183 @@ CUIPanel* CScreenSpellbook::GetTopPopup()
     return m_lPopupStack.GetTailPosition() != NULL ? m_lPopupStack.GetTail() : NULL;
 }
 
+// NOTE: Inlined.
+void CScreenSpellbook::ShowPopupPanel(DWORD dwPanelId, BOOL bShow)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    pPanel->SetActive(bShow);
+    pPanel->SetInactiveRender(bShow);
+
+    if (bShow) {
+        pPanel->InvalidateRect(NULL);
+        PlayGUISound(RESREF_SOUND_WINDOWOPEN);
+    }
+}
+
+// NOTE: Inlined.
+void CScreenSpellbook::EnablePopupPanel(DWORD dwPanelId, BOOL bEnable)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+    // __LINE__: 2064
+    UTIL_ASSERT(pPanel != NULL);
+
+    pPanel->SetEnabled(bEnable);
+}
+
+// NOTE: Inlined.
+void CScreenSpellbook::ResetPopupPanel(DWORD dwPanelId)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+    // __LINE__: 2091
+    UTIL_ASSERT(pPanel != NULL);
+
+    switch (pPanel->m_nID) {
+    case 3:
+        ResetSpellInfoPanel(pPanel);
+        break;
+    case 4:
+    case 5:
+    case 50:
+        ResetErrorPanel(pPanel);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+        // __LINE__: 2106
+        UTIL_ASSERT(FALSE);
+    }
+}
+
+// NOTE: Uninline.
+void CScreenSpellbook::UpdatePopupPanel(DWORD dwPanelId)
+{
+    switch (dwPanelId) {
+    case 3:
+        // NOTE: Uninline.
+        UpdateSpellInfoPanel();
+        break;
+    case 4:
+    case 5:
+    case 50:
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+        // __LINE__: 2145
+        UTIL_ASSERT(FALSE);
+    }
+}
+
 // 0x66B3C0
 void CScreenSpellbook::SummonPopup(DWORD dwPopupId)
 {
-    // TODO: Incomplete.
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
+
+    if (!m_lPopupStack.IsEmpty()) {
+        CUIPanel* pPanel = m_lPopupStack.GetTail();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+        // __LINE__: 2225
+        UTIL_ASSERT(pPanel != NULL);
+
+        // NOTE: Uninline.
+        EnablePopupPanel(pPanel->m_nID, FALSE);
+    } else {
+        // NOTE: Uninline.
+        EnableMainPanel(FALSE);
+    }
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPopupId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+    // __LINE__: 2231
+    UTIL_ASSERT(pPanel != NULL);
+
+    m_lPopupStack.AddTail(pPanel);
+
+    // NOTE: Uninline.
+    ResetPopupPanel(pPanel->m_nID);
+
+    // NOTE: Uninline.
+    ShowPopupPanel(pPanel->m_nID, TRUE);
+
+    // NOTE: Uninline.
+    EnablePopupPanel(pPanel->m_nID, TRUE);
+
+    // NOTE: Uninline.
+    UpdatePopupPanel(pPanel->m_nID);
 }
 
 // 0x66B6F0
 void CScreenSpellbook::DismissPopup()
 {
-    // TODO: Incomplete.
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
+
+    CUIPanel* pPanel = m_lPopupStack.RemoveTail();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+    // __LINE__: 2276
+    UTIL_ASSERT(pPanel != NULL);
+
+    // NOTE: Uninline.
+    ShowPopupPanel(pPanel->m_nID, FALSE);
+
+    CUIPanel* pMainPanel = m_cUIManager.GetPanel(2);
+    pMainPanel->InvalidateRect(NULL);
+
+    if (m_lPopupStack.GetTailPosition() != NULL) {
+        CUIPanel* pPanel = m_lPopupStack.GetTail();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+        // __LINE__: 2293
+        UTIL_ASSERT(pPanel != NULL);
+
+        // NOTE: Uninline.
+        ShowPopupPanel(pPanel->m_nID, TRUE);
+
+        // NOTE: Uninline.
+        EnablePopupPanel(pPanel->m_nID, TRUE);
+
+        // NOTE: Uninline.
+        UpdatePopupPanel(pPanel->m_nID);
+    } else {
+        EnableMainPanel(TRUE);
+        UpdateMainPanel();
+    }
+}
+
+// NOTE: Inlined.
+BOOL CScreenSpellbook::IsDoneButtonClickable()
+{
+    CUIPanel* pPanel = GetTopPopup();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+    // __LINE__: 2323
+    UTIL_ASSERT(pPanel != NULL);
+
+    switch (pPanel->m_nID) {
+    case 3:
+    case 4:
+    case 5:
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+        // __LINE__: 2335
+        UTIL_ASSERT(pPanel != NULL);
+    }
+
+    return TRUE;
 }
 
 // 0x66B960
 void CScreenSpellbook::OnDoneButtonClick()
 {
-    CUIPanel* pPanel;
-
-    pPanel = GetTopPopup();
+    CUIPanel* pPanel = GetTopPopup();
     if (pPanel != NULL) {
         switch (pPanel->m_nID) {
         case 4:
@@ -641,45 +767,29 @@ void CScreenSpellbook::OnDoneButtonClick()
     CSingleLock renderLock(&(GetManager()->field_36), FALSE);
     renderLock.Lock(INFINITE);
 
-    pPanel = GetTopPopup();
+    // NOTE: Uninline.
+    if (IsDoneButtonClickable()) {
+        CUIPanel* pPanel = GetTopPopup();
 
-    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
-    // __LINE__: 2323
-    UTIL_ASSERT(pPanel != NULL);
-
-    switch (pPanel->m_nID) {
-    case 3:
-    case 4:
-    case 5:
-        // NOTE: Inlining.
-        if (1) {
-            CUIPanel* pPanel = GetTopPopup();
-
-            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
-            // __LINE__: 2388
-            UTIL_ASSERT(pPanel != NULL);
-
-            CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
-
-            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
-            // __LINE__: 2390
-            UTIL_ASSERT(pGame != NULL);
-
-            switch (pPanel->m_nID) {
-            case 3:
-                DismissPopup();
-                break;
-            default:
-                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
-                // __LINE__: 2399
-                UTIL_ASSERT(FALSE);
-            }
-        }
-        break;
-    default:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
-        // __LINE__: 2335
-        UTIL_ASSERT(FALSE);
+        // __LINE__: 2388
+        UTIL_ASSERT(pPanel != NULL);
+
+        CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+        // __LINE__: 2390
+        UTIL_ASSERT(pGame != NULL);
+
+        switch (pPanel->m_nID) {
+        case 3:
+            DismissPopup();
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+            // __LINE__: 2399
+            UTIL_ASSERT(FALSE);
+        }
     }
 
     renderLock.Unlock();
@@ -772,6 +882,27 @@ void CScreenSpellbook::ResetSpellInfoPanel(CUIPanel* pPanel)
     pIcon->SetSpell(m_spellResRef);
 
     cSpell.Release();
+}
+
+// NOTE: Inlined.
+void CScreenSpellbook::UpdateSpellInfoPanel()
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(3);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+    // __LINE__: 2638
+    UTIL_ASSERT(pPanel != NULL);
+
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(4));
+
+    CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(5));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+    // __LINE__: 2641
+    UTIL_ASSERT(pDone != NULL);
+
+    // NOTE: Uninline.
+    pDone->SetEnabled(IsDoneButtonClickable());
 }
 
 // 0x66BEE0
