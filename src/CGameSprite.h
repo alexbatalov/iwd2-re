@@ -239,6 +239,8 @@ public:
     /* 05A0 */ CString m_sName;
     /* 05A4 */ CCreatureFileHeader m_baseStats;
     /* 0920 */ CDerivedStats m_derivedStats;
+    /* 3D38 */ BYTE m_nLastSpellbookClassIndex;
+    /* 3D39 */ BYTE m_nLastSpellbookSpellLevel;
     /* 3DFA */ CAIObjectType m_liveTypeAI;
     /* 3E36 */ CAIObjectType m_startTypeAI;
     /* 4C6A */ CSound m_sndWalk[2];
