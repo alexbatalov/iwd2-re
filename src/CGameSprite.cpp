@@ -441,6 +441,14 @@ STRREF CGameSprite::GetNameRef()
     return strName;
 }
 
+// 0x728460
+BOOL CGameSprite::Orderable(BOOL bIgnoreControl)
+{
+    // TODO: Incomplete.
+
+    return TRUE;
+}
+
 // 0x728570
 DWORD CGameSprite::GetSpecialization()
 {

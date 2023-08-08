@@ -55,6 +55,7 @@ public:
     void OnCancelButtonClick();
     void ResetErrorPanel(CUIPanel* pPanel);
     void OnErrorButtonClick(INT nButton);
+    void CheckMultiPlayerViewable();
 
     /* 0106 */ CKeyInfo m_pVirtualKeys[CSCREENSPELLBOOK_VIRTUAL_KEYS];
     /* 03E6 */ BYTE m_pVirtualKeysFlags[CSCREENSPELLBOOK_VIRTUAL_KEYS];
@@ -75,7 +76,7 @@ public:
     /* 056A */ STRREF m_dwErrorTextId;
     /* 056E */ INT m_nNumErrorButtons;
     /* 0572 */ STRREF m_strErrorButtonText[CSCREENSPELLBOOK_ERROR_BUTTONS];
-    /* 057E */ int field_57E;
+    /* 057E */ BOOL m_bMultiPlayerViewable;
     /* 0582 */ int field_582;
     /* 0586 */ BOOLEAN m_bCtrlKeyDown;
     /* 0588 */ CVidFont m_preLoadFontRealms;

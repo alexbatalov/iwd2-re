@@ -214,6 +214,7 @@ public:
     void sub_72DE60();
     const CString& GetName();
     STRREF GetNameRef();
+    BOOL Orderable(BOOL bIgnoreControl);
     DWORD GetSpecialization();
     BOOL HasClassMask(DWORD dwMask);
     INT GetClassLevel(INT iClassType);

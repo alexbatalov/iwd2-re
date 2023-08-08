@@ -118,7 +118,7 @@ CScreenSpellbook::CScreenSpellbook()
     field_53E = 0;
     m_nErrorState = 0;
     m_nNumErrorButtons = 0;
-    field_57E = 0;
+    m_bMultiPlayerViewable = FALSE;
     field_582 = 0;
     m_bCtrlKeyDown = FALSE;
     field_446 = 0;
@@ -755,6 +755,50 @@ void CScreenSpellbook::CancelEngine()
 {
     while (GetTopPopup() != NULL) {
         OnCancelButtonClick();
+    }
+}
+
+// 0x66C380
+void CScreenSpellbook::CheckMultiPlayerViewable()
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+    // __LINE__: 2942
+    UTIL_ASSERT(pGame != NULL);
+
+    m_bMultiPlayerViewable = TRUE;
+
+    LONG nCharacterId = pGame->GetCharacterId(m_nSelectedCharacter);
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pSprite->Orderable(1)) {
+            if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
+                || g_pChitin->cNetwork.m_idLocalPlayer == pSprite->m_remotePlayerID) {
+                m_bMultiPlayerViewable = TRUE;
+            } else {
+                if (g_pChitin->cNetwork.GetSessionOpen()) {
+                    m_bMultiPlayerViewable = g_pChitin->cNetwork.GetSessionHosting()
+                        || pGame->m_singlePlayerPermissions.GetSinglePermission(CGamePermission::LEADER);
+                }
+            }
+        } else {
+            m_bMultiPlayerViewable = FALSE;
+        }
+
+        pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
     }
 }
 
