@@ -5,6 +5,7 @@
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
+#include "CUIControlScrollBar.h"
 #include "CVidCell.h"
 #include "CVidFont.h"
 
@@ -62,8 +63,8 @@ public:
     /* 044A */ int field_44A;
     /* 044E */ unsigned char m_nSpellLevel;
     /* 0452 */ BYTE m_nClassIndex;
-    /* 0454 */ int field_454;
-    /* 0458 */ int field_458;
+    /* 0454 */ INT m_nNumKnownSpells;
+    /* 0458 */ INT m_nTopKnownSpell;
     /* 045C */ CVidCell field_45C;
     /* 0536 */ int field_536;
     /* 053A */ int field_53A;
@@ -88,6 +89,18 @@ public:
     /* 1650 */ DWORD m_nNumberOfSpellClasses;
     /* 1654 */ int field_1654[CSPELLLIST_NUM_CLASSES];
     /* 1670 */ int field_1670;
+};
+
+class CUIControlScrollBarSpellbookKnownSpells : public CUIControlScrollBar {
+public:
+    CUIControlScrollBarSpellbookKnownSpells(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo);
+    ~CUIControlScrollBarSpellbookKnownSpells() override;
+    void OnScroll() override;
+    void OnScrollUp() override;
+    void OnScrollDown() override;
+    void OnPageUp(DWORD nLines) override;
+    void OnPageDown(DWORD nLines) override;
+    void InvalidateItems();
 };
 
 class CUIControlButtonSpellbookPopupDone : public CUIControlButton {

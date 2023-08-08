@@ -5,7 +5,6 @@
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CScreenWorld.h"
-#include "CUIControlScrollBar.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -110,8 +109,8 @@ CScreenSpellbook::CScreenSpellbook()
 
     m_nSpellLevel = 0;
     m_nClassIndex = 11;
-    field_454 = 0;
-    field_458 = 0;
+    m_nNumKnownSpells = 0;
+    m_nTopKnownSpell = 0;
     field_442 = 0;
     field_536 = 0;
     field_53A = 0;
@@ -756,6 +755,112 @@ void CScreenSpellbook::CancelEngine()
     while (GetTopPopup() != NULL) {
         OnCancelButtonClick();
     }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x66E0B0
+CUIControlScrollBarSpellbookKnownSpells::CUIControlScrollBarSpellbookKnownSpells(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo)
+    : CUIControlScrollBar(panel, controlInfo)
+{
+}
+
+// 0x67F640
+CUIControlScrollBarSpellbookKnownSpells::~CUIControlScrollBarSpellbookKnownSpells()
+{
+}
+
+// 0x66E0D0
+void CUIControlScrollBarSpellbookKnownSpells::OnScrollUp()
+{
+    CScreenSpellbook* pSpellbook = g_pBaldurChitin->m_pEngineSpellbook;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+    // __LINE__: 3998
+    UTIL_ASSERT(pSpellbook != NULL);
+
+    pSpellbook->m_nTopKnownSpell = max(pSpellbook->m_nTopKnownSpell - 1, 0);
+
+    InvalidateItems();
+}
+
+// 0x66E120
+void CUIControlScrollBarSpellbookKnownSpells::OnScrollDown()
+{
+    CScreenSpellbook* pSpellbook = g_pBaldurChitin->m_pEngineSpellbook;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+    // __LINE__: 4021
+    UTIL_ASSERT(pSpellbook != NULL);
+
+    pSpellbook->m_nTopKnownSpell = max(min(pSpellbook->m_nTopKnownSpell + 1, pSpellbook->m_nNumKnownSpells - 8), 0);
+
+    InvalidateItems();
+}
+
+// 0x66E190
+void CUIControlScrollBarSpellbookKnownSpells::OnPageUp(DWORD nLines)
+{
+    CScreenSpellbook* pSpellbook = g_pBaldurChitin->m_pEngineSpellbook;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+    // __LINE__: 4044
+    UTIL_ASSERT(pSpellbook != NULL);
+
+    INT nStep = min(nLines, 7);
+    pSpellbook->m_nTopKnownSpell = max(pSpellbook->m_nTopKnownSpell - nStep, 0);
+
+    InvalidateItems();
+}
+
+// 0x66E200
+void CUIControlScrollBarSpellbookKnownSpells::OnPageDown(DWORD nLines)
+{
+    CScreenSpellbook* pSpellbook = g_pBaldurChitin->m_pEngineSpellbook;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+    // __LINE__: 4073
+    UTIL_ASSERT(pSpellbook != NULL);
+
+    INT nStep = min(nLines, 7);
+    pSpellbook->m_nTopKnownSpell = max(min(pSpellbook->m_nTopKnownSpell + nStep, pSpellbook->m_nNumKnownSpells - 8), 0);
+
+    InvalidateItems();
+}
+
+// 0x66E280
+void CUIControlScrollBarSpellbookKnownSpells::OnScroll()
+{
+    CScreenSpellbook* pSpellbook = g_pBaldurChitin->m_pEngineSpellbook;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+    // __LINE__: 4098
+    UTIL_ASSERT(pSpellbook != NULL);
+
+    pSpellbook->m_nTopKnownSpell = max(field_144 * (pSpellbook->m_nNumKnownSpells - 8), 0) / field_142;
+
+    if (pSpellbook->m_nNumKnownSpells < 8) {
+        field_144 = 0;
+    }
+
+    InvalidateItems();
+}
+
+// 0x66E300
+void CUIControlScrollBarSpellbookKnownSpells::InvalidateItems()
+{
+    CScreenSpellbook* pSpellbook = g_pBaldurChitin->m_pEngineSpellbook;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+    // __LINE__: 4156
+    UTIL_ASSERT(pSpellbook != NULL);
+
+    CSingleLock renderLock(&(pSpellbook->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    pSpellbook->UpdateMainPanel();
+
+    renderLock.Unlock();
 }
 
 // -----------------------------------------------------------------------------
