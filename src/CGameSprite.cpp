@@ -1507,19 +1507,19 @@ void CGameSprite::DisplayFeats(CUIControlTextDisplay* pText)
                 case CGAMESPRITE_FEAT_TOUGHNESS:
                     CBaldurEngine::UpdateText(pText,
                         "%s: %d",
-                        (LPCSTR)ruleTables.GetFeatName(nFeatNumber),
+                        (LPCSTR)CBaldurEngine::FetchString(ruleTables.GetFeatName(nFeatNumber)),
                         nFeatRank);
                     break;
                 default:
                     CBaldurEngine::UpdateText(pText,
                         "%s",
-                        (LPCSTR)ruleTables.GetFeatName(nFeatNumber));
+                        (LPCSTR)CBaldurEngine::FetchString(ruleTables.GetFeatName(nFeatNumber)));
                     break;
                 }
             } else {
                 CBaldurEngine::UpdateText(pText,
                     "%s",
-                    (LPCSTR)ruleTables.GetFeatName(nFeatNumber));
+                    (LPCSTR)CBaldurEngine::FetchString(ruleTables.GetFeatName(nFeatNumber)));
             }
         }
     }
@@ -1545,13 +1545,13 @@ void CGameSprite::DisplaySkills(CUIControlTextDisplay* pText)
             if (m_derivedStats.field_144[nSkillId] != 0) {
                 CBaldurEngine::UpdateText(pText,
                     "%s: %d",
-                    ruleTables.GetSkillName(nSkillId),
+                    (LPCSTR)CBaldurEngine::FetchString(ruleTables.GetSkillName(nSkillId)),
                     m_derivedStats.field_144[nSkillId]);
             }
         } else {
             CBaldurEngine::UpdateText(pText,
                 "%s: %d (%d)",
-                ruleTables.GetSkillName(nSkillId),
+                (LPCSTR)CBaldurEngine::FetchString(ruleTables.GetSkillName(nSkillId)),
                 m_derivedStats.field_144[nSkillId],
                 m_baseStats.m_skills[nSkillId]);
         }
