@@ -4,6 +4,7 @@
 #include "CBaldurEngine.h"
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
+#include "CUIControlButton3State.h"
 #include "CVidCell.h"
 #include "CVidFont.h"
 
@@ -39,6 +40,7 @@ public:
     /* 00F0 */ void OnRestButtonClick() override;
     /* 0104 */ void CancelEngine() override;
 
+    void sub_669830(DWORD nPortrait);
     int sub_66A010(DWORD nIndex);
     void SetSpellLevel(INT nLevel);
     void SetClassIndex(DWORD nNewClassIndex);
@@ -99,6 +101,13 @@ class CUIControlButtonSpellbookError : public CUIControlButton {
 public:
     CUIControlButtonSpellbookError(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonSpellbookError();
+    void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonSpellbookLevelSelection : public CUIControlButton3State {
+public:
+    CUIControlButtonSpellbookLevelSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonSpellbookLevelSelection();
     void OnLButtonClick(CPoint pt) override;
 };
 

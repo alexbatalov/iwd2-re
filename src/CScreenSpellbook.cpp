@@ -337,6 +337,12 @@ BYTE* CScreenSpellbook::GetVirtualKeysFlags()
     return m_pVirtualKeysFlags;
 }
 
+// 0x669830
+void CScreenSpellbook::sub_669830(DWORD nPortrait)
+{
+    // TODO: Incomplete.
+}
+
 // 0x66A010
 int CScreenSpellbook::sub_66A010(DWORD nIndex)
 {
@@ -801,4 +807,28 @@ void CUIControlButtonSpellbookError::OnLButtonClick(CPoint pt)
     UTIL_ASSERT(pSpellbook != NULL);
 
     pSpellbook->OnErrorButtonClick(m_nID);
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x66ECA0
+CUIControlButtonSpellbookLevelSelection::CUIControlButtonSpellbookLevelSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 1)
+{
+    m_nSelectedFrame = 0;
+}
+
+// 0x66ED00
+CUIControlButtonSpellbookLevelSelection::~CUIControlButtonSpellbookLevelSelection()
+{
+}
+
+// 0x66EDA0
+void CUIControlButtonSpellbookLevelSelection::OnLButtonClick(CPoint pt)
+{
+    CScreenSpellbook* pSpellbook = g_pBaldurChitin->m_pEngineSpellbook;
+
+    pSpellbook->SetSpellLevel(m_nID - 55);
+    pSpellbook->sub_669830(pSpellbook->GetSelectedCharacter());
+    pSpellbook->UpdateMainPanel();
 }
