@@ -519,7 +519,7 @@ void CGameSprite::SetFeatValue(UINT nFeatNumber, INT iFeatValue)
     // __LINE__: 28756
     UTIL_ASSERT(nFeatNumber < CGAMESPRITE_FEAT_NUMFEATS);
 
-    if (nFeatNumber > 0) {
+    if (iFeatValue > 0) {
         m_baseStats.m_feats[nFeatNumber >> 5] |= 1 << (nFeatNumber & 0x1F);
     } else {
         m_baseStats.m_feats[nFeatNumber >> 5] &= ~(1 << (nFeatNumber & 0x1F));
