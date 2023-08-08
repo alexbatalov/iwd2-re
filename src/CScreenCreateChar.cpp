@@ -6832,7 +6832,51 @@ DWORD CUIControlButtonCharGenSubRaceSelection::GetHelp(const CAIObjectType& type
 // 0x622130
 void CUIControlButtonCharGenSubRaceSelection::OnLButtonClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CUIControlButton3State::OnLButtonClick(pt);
+
+    CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
+
+    INT nGameSprite = pCreateChar->GetSpriteId();
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        CAIObjectType typeAI(pSprite->m_startTypeAI);
+
+        INT nRow = 0;
+        switch (m_nID) {
+        case 1:
+            nRow = 0;
+            break;
+        case 2:
+            nRow = 1;
+            break;
+        case 3:
+            nRow = 2;
+            break;
+        case 4:
+            nRow = 3;
+            break;
+        }
+
+        INT nSubRaceListIndex = atol(pCreateChar->m_tSubRace.GetAt(CPoint(0, nRow)));
+        typeAI.m_nSubRace = static_cast<BYTE>(atol(g_pBaldurChitin->GetObjectGame()->GetRuleTables().m_tSrList.GetAt(CPoint(4, nSubRaceListIndex))));
+
+        pSprite->m_startTypeAI.Set(typeAI);
+        pCreateChar->UpdateHelp(m_pPanel->m_nID, 6, GetHelp(typeAI));
+        pCreateChar->UpdatePopupPanel(m_pPanel->m_nID, pSprite);
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
 }
 
 // -----------------------------------------------------------------------------
