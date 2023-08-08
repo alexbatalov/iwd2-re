@@ -2347,7 +2347,7 @@ void CScreenCreateChar::UpdateAppearancePanel(CUIPanel* pPanel, CGameSprite* pSp
     // if it was necessary.
     pPortrait->InvalidateRect();
 
-    CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(6));
+    CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(0));
     pDone->SetEnabled(IsDoneButtonClickable(pSprite));
 }
 
