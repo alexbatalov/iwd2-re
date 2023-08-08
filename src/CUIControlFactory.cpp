@@ -1031,6 +1031,155 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
     } else if (pPanel->m_pManager->m_cResRef == "GUIINV") {
     } else if (pPanel->m_pManager->m_cResRef == "GUIREC") {
     } else if (pPanel->m_pManager->m_cResRef == "GUISPL" || pPanel->m_pManager->m_cResRef == "GUISPL08") {
+        // 0x775B04
+        switch (pPanel->m_nID) {
+        case 0:
+            // 0x775B19
+            switch (controlInfo->nID) {
+            case 4:
+                return new CUIControlButtonGeneralWorld(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 5:
+                return new CUIControlButtonGeneralInventory(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 6:
+                return new CUIControlButtonGeneralJournal(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 7:
+                return new CUIControlButtonGeneralMap(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 8:
+                return new CUIControlButtonGeneralCharacter(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 9:
+                return new CUIControlButtonGeneralOptions(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 10:
+                return new CUIControlButtonClock(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 12:
+                return new CUIControlButtonRest(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 13:
+                return new CUIControlButtonGeneralMultiPlayer(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 14:
+                return new CUIControlButtonAI(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 1:
+            // 0x775D27
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                return new CUIControlPortraitGeneral(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 50:
+            case 51:
+            case 52:
+            case 53:
+            case 54:
+            case 55:
+                return new CUIControlButton77DCC0(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 2:
+            // 0x775DA6
+            switch (controlInfo->nID) {
+            case 1:
+                return new CUIControlButtonCharacterPortrait(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+            case 15:
+            case 16:
+            case 17:
+            case 18:
+            case 19:
+            case 20:
+            case 21:
+            case 22:
+            case 23:
+            case 24:
+            case 25:
+            case 26:
+            case 27:
+            case 28:
+            case 29:
+            case 30:
+            case 31:
+            case 32:
+            case 33:
+            case 34:
+            case 35:
+            case 36:
+            case 37:
+            case 46:
+            case 47:
+            case 48:
+            case 49:
+            case 50:
+            case 51:
+            case 52:
+            case 53:
+                return new CUIControlButtonSpellbookSpell(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 54:
+                return new CUIControlScrollBarSpellbookKnownSpells(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 55:
+            case 56:
+            case 57:
+            case 58:
+            case 59:
+            case 60:
+            case 61:
+            case 62:
+            case 63:
+                return new CUIControlButtonSpellbookLevelSelection(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 88:
+            case 89:
+            case 90:
+            case 91:
+            case 92:
+            case 93:
+                return new CUIControlButtonSpellbookClassSelection(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 3:
+            // 0x775EB5
+            switch (controlInfo->nID) {
+            case 2:
+                return new CUIControlButtonSpellbookSpellInfoIcon(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 3:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 4:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 5:
+                return new CUIControlButtonSpellbookPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 4:
+        case 5:
+            // 0x775F62
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+                return new CUIControlButtonSpellbookError(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 3:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            }
+            break;
+        case 50:
+            // 0x775FC5
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 2:
+                return new CUIControlButtonSpellbookError(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 3:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            }
+            break;
+        }
     } else if (pPanel->m_pManager->m_cResRef == "GUIMAP") {
         // 0x7739D6
         switch (pPanel->m_nID) {
