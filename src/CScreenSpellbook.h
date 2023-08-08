@@ -88,6 +88,13 @@ public:
     /* 1670 */ int field_1670;
 };
 
+class CUIControlButtonSpellbookPopupDone : public CUIControlButton {
+public:
+    CUIControlButtonSpellbookPopupDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonSpellbookPopupDone();
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlButtonSpellbookError : public CUIControlButton {
 public:
     CUIControlButtonSpellbookError(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
