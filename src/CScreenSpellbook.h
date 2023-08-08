@@ -140,7 +140,7 @@ public:
 class CUIControlButtonSpellbookSpellInfoIcon : public CUIControlButton {
 public:
     CUIControlButtonSpellbookSpellInfoIcon(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
-    ~CUIControlButtonSpellbookSpellInfoIcon();
+    ~CUIControlButtonSpellbookSpellInfoIcon() override;
     BOOL Render(BOOL bForce) override;
 
     void SetSpell(const CResRef& cSpellResRef);
@@ -152,28 +152,28 @@ public:
 class CUIControlButtonSpellbookPopupDone : public CUIControlButton {
 public:
     CUIControlButtonSpellbookPopupDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
-    ~CUIControlButtonSpellbookPopupDone();
+    ~CUIControlButtonSpellbookPopupDone() override;
     void OnLButtonClick(CPoint pt) override;
 };
 
 class CUIControlButtonSpellbookError : public CUIControlButton {
 public:
     CUIControlButtonSpellbookError(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
-    ~CUIControlButtonSpellbookError();
+    ~CUIControlButtonSpellbookError() override;
     void OnLButtonClick(CPoint pt) override;
 };
 
 class CUIControlButtonSpellbookLevelSelection : public CUIControlButton3State {
 public:
     CUIControlButtonSpellbookLevelSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
-    ~CUIControlButtonSpellbookLevelSelection();
+    ~CUIControlButtonSpellbookLevelSelection() override;
     void OnLButtonClick(CPoint pt) override;
 };
 
 class CUIControlButtonSpellbookClassSelection : public CUIControlButton3State {
 public:
     CUIControlButtonSpellbookClassSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
-    ~CUIControlButtonSpellbookClassSelection();
+    ~CUIControlButtonSpellbookClassSelection() override;
     void OnLButtonClick(CPoint pt) override;
 };
 
