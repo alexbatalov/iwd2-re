@@ -6795,7 +6795,7 @@ DWORD CUIControlButtonCharGenSubRaceSelection::GetHelp(const CAIObjectType& type
 
     STRREF strHelp;
     if (pCreateChar->m_tSubRace.GetResRef() != "" && nSubRaceId != 0) {
-        strHelp = atol(g_pBaldurChitin->GetObjectGame()->GetRuleTables().m_tSrList.GetAt(CPoint(2, nSubRaceListIndex)));
+        strHelp = atol(g_pBaldurChitin->GetObjectGame()->GetRuleTables().m_tSrList.GetAt(CPoint(3, nSubRaceListIndex)));
     } else {
         switch (typeAI.m_nRace) {
         case CAIOBJECTTYPE_R_HUMAN:
