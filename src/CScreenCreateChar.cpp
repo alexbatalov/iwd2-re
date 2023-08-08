@@ -967,7 +967,7 @@ void CScreenCreateChar::UpdateMainPanel(CGameSprite* pSprite)
     } else {
         pSprite->m_baseStats.field_1A0 = -1;
         pText->DisplayString(CString(""),
-            FetchString(16757),
+            FetchString(16575),
             pText->m_rgbLabelColor,
             pText->m_rgbTextColor,
             -1,
