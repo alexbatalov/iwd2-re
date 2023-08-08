@@ -2374,7 +2374,7 @@ void CScreenCreateChar::UpdateFeatsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
     pSprite->field_562C = 1;
     pSprite->sub_72DE60();
 
-    m_nTopFeat = min(m_nTopFeat - (FEAT_COUNT - FEAT_SLOTS), FEAT_COUNT - FEAT_SLOTS);
+    m_nTopFeat = min(m_nTopFeat, FEAT_COUNT - FEAT_SLOTS);
 
     for (DWORD dwButtonId = 14; dwButtonId <= 32; dwButtonId += 2) {
         DWORD index = (dwButtonId - 14) / 2;
