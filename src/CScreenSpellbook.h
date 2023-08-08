@@ -111,4 +111,11 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonSpellbookClassSelection : public CUIControlButton3State {
+public:
+    CUIControlButtonSpellbookClassSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonSpellbookClassSelection();
+    void OnLButtonClick(CPoint pt) override;
+};
+
 #endif /* CSCREENSPELLBOOK_H_ */

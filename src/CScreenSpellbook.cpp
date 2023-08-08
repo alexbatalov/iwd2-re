@@ -832,3 +832,61 @@ void CUIControlButtonSpellbookLevelSelection::OnLButtonClick(CPoint pt)
     pSpellbook->sub_669830(pSpellbook->GetSelectedCharacter());
     pSpellbook->UpdateMainPanel();
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x66EDE0
+CUIControlButtonSpellbookClassSelection::CUIControlButtonSpellbookClassSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 1)
+{
+    m_nSelectedFrame = 0;
+}
+
+// 0x66EE60
+CUIControlButtonSpellbookClassSelection::~CUIControlButtonSpellbookClassSelection()
+{
+}
+
+// 0x66EF00
+void CUIControlButtonSpellbookClassSelection::OnLButtonClick(CPoint pt)
+{
+    CScreenSpellbook* pSpellbook = g_pBaldurChitin->m_pEngineSpellbook;
+
+    DWORD nClassIndex = pSpellbook->m_nClassIndex;
+    DWORD nNewClassIndex = m_nID - 88;
+
+    switch (m_nID) {
+    case 88:
+    case 89:
+    case 90:
+    case 91:
+        if (nClassIndex >= 4) {
+            nNewClassIndex += 4;
+        }
+
+        if (nNewClassIndex < pSpellbook->m_nNumberOfSpellClasses) {
+            pSpellbook->SetClassIndex(nNewClassIndex);
+        }
+
+        pSpellbook->sub_669830(pSpellbook->GetSelectedCharacter());
+        pSpellbook->UpdateMainPanel();
+        break;
+    case 92:
+        // Scroll class tabs left.
+        if (nClassIndex >= 4) {
+            pSpellbook->SetClassIndex(nClassIndex - 4);
+            pSpellbook->sub_669830(pSpellbook->GetSelectedCharacter());
+            pSpellbook->UpdateMainPanel();
+        }
+        break;
+    case 93:
+        // Scroll class tabs right.
+        if (nClassIndex < 4 && pSpellbook->m_nNumberOfSpellClasses > 4) {
+            nNewClassIndex = min(nClassIndex + 4, pSpellbook->m_nNumberOfSpellClasses - 1);
+            pSpellbook->SetClassIndex(nNewClassIndex);
+            pSpellbook->sub_669830(pSpellbook->GetSelectedCharacter());
+            pSpellbook->UpdateMainPanel();
+        }
+        break;
+    }
+}
