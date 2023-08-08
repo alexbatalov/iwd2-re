@@ -91,6 +91,23 @@ public:
     /* 1670 */ int field_1670;
 };
 
+class CUIControlButtonSpellbookSpell : public CUIControlButton {
+public:
+    CUIControlButtonSpellbookSpell(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonSpellbookSpell() override;
+    BOOL OnLButtonDown(CPoint pt) override;
+    BOOL Render(BOOL bForce) override;
+    void OnLButtonClick(CPoint pt) override;
+    void OnRButtonClick(CPoint pt) override;
+
+    void SetSpell(const CResRef& cSpellResRef);
+
+    /* 0666 */ CResRef m_spellResRef;
+    /* 066E */ CResRef m_iconResRef;
+    /* 0676 */ int field_676;
+    /* 067A */ int field_67A;
+};
+
 class CUIControlScrollBarSpellbookKnownSpells : public CUIControlScrollBar {
 public:
     CUIControlScrollBarSpellbookKnownSpells(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo);

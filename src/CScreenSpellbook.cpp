@@ -760,6 +760,112 @@ void CScreenSpellbook::CancelEngine()
 
 // -----------------------------------------------------------------------------
 
+// 0x66D420
+CUIControlButtonSpellbookSpell::CUIControlButtonSpellbookSpell(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON | RBUTTON, 1)
+{
+    m_spellResRef = "";
+    m_iconResRef = "";
+    field_676 = 1;
+    field_67A = 0;
+}
+
+// 0x66D500
+CUIControlButtonSpellbookSpell::~CUIControlButtonSpellbookSpell()
+{
+}
+
+// 0x66D5A0
+void CUIControlButtonSpellbookSpell::SetSpell(const CResRef& cNewResRef)
+{
+    CString sIconResRef;
+
+    m_spellResRef = cNewResRef;
+    m_iconResRef = "";
+
+    if (m_spellResRef != "") {
+        CSpell cSpell;
+        cSpell.SetResRef(m_spellResRef, TRUE, TRUE);
+        cSpell.Demand();
+
+        if (cSpell.pRes != NULL) {
+            RESREF iconResRef;
+            cSpell.GetIcon(iconResRef);
+            m_iconResRef = iconResRef;
+
+            m_iconResRef.CopyToString(sIconResRef);
+            sIconResRef.SetAt(sIconResRef.GetLength() - 1, 'C');
+            m_iconResRef = sIconResRef;
+
+            SetToolTipStrRef(cSpell.GetGenericName(), -1, -1);
+        }
+
+        cSpell.Release();
+    } else {
+        SetToolTipStrRef(-1, -1, -1);
+    }
+}
+
+// 0x66D760
+BOOL CUIControlButtonSpellbookSpell::OnLButtonDown(CPoint pt)
+{
+    if (!m_bActive) {
+        return FALSE;
+    }
+
+    if ((m_nMouseButtons & LBUTTON) == 0) {
+        return FALSE;
+    }
+
+    m_cVidCell.FrameSet(m_nPressedFrame);
+    m_bPressed = TRUE;
+
+    m_pPanel->m_pManager->SetCapture(this, CUIManager::MOUSELBUTTON);
+    InvalidateRect();
+
+    m_pPanel->m_pManager->field_32 = m_nID;
+    m_pPanel->m_pManager->field_2D = 0;
+    m_pPanel->m_pManager->field_1C = 0;
+
+    return TRUE;
+}
+
+// 0x66D7E0
+void CUIControlButtonSpellbookSpell::OnLButtonClick(CPoint pt)
+{
+    // TODO: Incomplete.
+}
+
+// 0x66DB60
+void CUIControlButtonSpellbookSpell::OnRButtonClick(CPoint pt)
+{
+    CScreenSpellbook* pSpellbook = g_pBaldurChitin->m_pEngineSpellbook;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+    // __LINE__: 3730
+    UTIL_ASSERT(pSpellbook != NULL);
+
+    CSingleLock renderLock(&(pSpellbook->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    if (m_spellResRef != "") {
+        pSpellbook->field_55E = m_spellResRef;
+        pSpellbook->SummonPopup(3);
+    }
+
+    renderLock.Unlock();
+}
+
+// 0x66DC30
+BOOL CUIControlButtonSpellbookSpell::Render(BOOL bForce)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x66E0B0
 CUIControlScrollBarSpellbookKnownSpells::CUIControlScrollBarSpellbookKnownSpells(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo)
     : CUIControlScrollBar(panel, controlInfo)
