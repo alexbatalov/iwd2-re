@@ -354,6 +354,34 @@ int CScreenSpellbook::sub_66A010(DWORD nIndex)
     return field_1654[nIndex];
 }
 
+// 0x66A040
+void CScreenSpellbook::OnPortraitLClick(DWORD nPortrait)
+{
+    if (!m_bFlashUnmemorize && !m_bFlashMemorize) {
+        // NOTE: Unused.
+        CUIPanel* pPanel = m_cUIManager.GetPanel(2);
+
+        if (nPortrait < g_pBaldurChitin->GetObjectGame()->m_nCharacters) {
+            DWORD nOldPortrait = m_nSelectedCharacter;
+            m_nSelectedCharacter = nPortrait;
+
+            sub_669830(nPortrait);
+            CheckMultiPlayerViewable();
+
+            UpdateCursorShape(0);
+            UpdateMainPanel();
+
+            m_cUIManager.GetPanel(2)->InvalidateRect(NULL);
+
+            if (nOldPortrait != -1) {
+                m_cUIManager.GetPanel(1)->GetControl(nOldPortrait)->InvalidateRect();
+            }
+
+            m_cUIManager.GetPanel(1)->GetControl(m_nSelectedCharacter)->InvalidateRect();
+        }
+    }
+}
+
 // 0x66A100
 void CScreenSpellbook::SetSpellLevel(INT nLevel)
 {
