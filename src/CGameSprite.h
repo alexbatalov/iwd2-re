@@ -216,6 +216,7 @@ public:
     STRREF GetNameRef();
     BOOL Orderable(BOOL bIgnoreControl);
     DWORD GetSpecialization();
+    BOOL ProcessEffectList();
     BOOL HasClassMask(DWORD dwMask);
     INT GetClassLevel(INT iClassType);
     void SetClassLevel(INT iClassType, INT nLevel);

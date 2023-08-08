@@ -2574,7 +2574,114 @@ void CScreenCreateChar::UpdateAbilitiesPanel(CUIPanel* pPanel, CGameSprite* pSpr
 // 0x60EB60
 void CScreenCreateChar::UpdateSkillsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(104));
+
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    pSprite->field_562C = 1;
+    pSprite->ProcessEffectList();
+
+    HighlightLabel(pPanel,
+        0x1000000C,
+        m_nExtraSkillPoints != 0,
+        CBaldurEngine::COLOR_LABEL_HIGHLIGHT_BONUS);
+
+    UpdateLabel(pPanel, 0x1000000C, "%d", m_nExtraSkillPoints);
+
+    m_nTopSkill = min(m_nTopSkill, 6);
+
+    for (DWORD nButtonID = 14; nButtonID < 33; nButtonID += 2) {
+        DWORD nIndex = (nButtonID - 14) / 2;
+        UINT nSkillID = ruleTables.GetSkillId(m_nTopSkill + nIndex);
+
+        // FIXME: Why `GetSkillId` second time? It is not present in the code
+        // path below.
+        INT nCost = pSprite->GetSkillCost(ruleTables.GetSkillId(nSkillID), pSprite->m_startTypeAI.m_nClass);
+
+        CString sName = FetchString(ruleTables.GetSkillName(nSkillID));
+        if (nCost > 0) {
+            UpdateLabel(pPanel,
+                0x10000001 + nIndex,
+                "%s (%d)",
+                (LPCSTR)sName,
+                nCost);
+        } else {
+            UpdateLabel(pPanel,
+                0x10000001 + nIndex,
+                "%s",
+                (LPCSTR)sName);
+        }
+    }
+
+    CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(0));
+    pDone->SetEnabled(IsDoneButtonClickable(pSprite));
+
+    CUIControlScrollBarCharGenSkills* pScroll = static_cast<CUIControlScrollBarCharGenSkills*>(pPanel->GetControl(104));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 4587
+    UTIL_ASSERT(pScroll != NULL);
+
+    // NOTE: Uninline.
+    pScroll->UpdateScrollBar();
+
+    for (DWORD nButtonID = 15; nButtonID < 35; nButtonID += 2) {
+        CUIControlButton* pButton;
+        DWORD nIndex = (nButtonID - 15) / 2;
+        UINT nSkillID = ruleTables.GetSkillId(m_nTopSkill + nIndex);
+        INT nCost = pSprite->GetSkillCost(nSkillID, pSprite->m_startTypeAI.m_nClass);
+
+        BOOL bCanIncrease = nCost != 0 && m_nExtraSkillPoints >= nCost;
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nButtonID - 1));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 4607
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->SetEnabled(bCanIncrease);
+        pButton->SetActive(bCanIncrease);
+
+        HighlightLabel(pPanel,
+            0x10000001 + nIndex,
+            !bCanIncrease,
+            CBaldurEngine::COLOR_LABEL_DISABLE);
+
+        BOOL bCanDecrease = m_storedSkills[m_nTopSkill + nIndex] < pSprite->GetSkillValue(m_nTopSkill + nIndex);
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nButtonID));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 4620
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->SetEnabled(bCanDecrease);
+        pButton->SetActive(bCanDecrease);
+
+        UpdateLabel(pPanel,
+            0x10000069 + nIndex,
+            "%d",
+            pSprite->GetSkillValue(m_nTopSkill + nIndex));
+
+        if (bCanDecrease) {
+            HighlightLabel(pPanel,
+                0x10000069 + nIndex,
+                TRUE,
+                RGB(0, 255, 255));
+        } else if (bCanIncrease) {
+            HighlightLabel(pPanel,
+                0x10000069 + nIndex,
+                TRUE,
+                CBaldurEngine::COLOR_LABEL_NORMAL);
+        } else {
+            HighlightLabel(pPanel,
+                0x10000069 + nIndex,
+                TRUE,
+                CBaldurEngine::COLOR_LABEL_DISABLE);
+        }
+    }
+
+    pPanel->InvalidateRect(NULL);
 }
 
 // 0x60EF70

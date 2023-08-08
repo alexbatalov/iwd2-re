@@ -455,6 +455,14 @@ DWORD CGameSprite::GetSpecialization()
     return m_baseStats.m_specialization;
 }
 
+// 0x72DE60
+BOOL CGameSprite::ProcessEffectList()
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x762740
 BOOL CGameSprite::HasClassMask(DWORD dwMask)
 {
