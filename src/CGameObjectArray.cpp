@@ -106,11 +106,11 @@ BYTE CGameObjectArray::GetShare(LONG index, BYTE threadNum, CGameObject** ptr, D
     if (threadNum == THREAD_ASYNCH) {
         SHORT arrayIndex = (index >> 16) & 0x7FFF;
 
-        if (m_nMaxArrayIndex < arrayIndex || (index & 0x8000) != 0 || m_nNextObjectId <= index) {
+        if (m_nMaxArrayIndex < arrayIndex || (index & 0x8000) != 0 || m_nNextObjectId <= static_cast<SHORT>(index)) {
             return BAD_INDEX;
         }
 
-        if (m_pArray[arrayIndex].m_objectId != index) {
+        if (m_pArray[arrayIndex].m_objectId != static_cast<SHORT>(index)) {
             return DELETED;
         }
 
@@ -125,12 +125,12 @@ BYTE CGameObjectArray::GetShare(LONG index, BYTE threadNum, CGameObject** ptr, D
         return TIMEOUT;
     }
 
-    if (m_nMaxArrayIndex < arrayIndex || (index & 0x8000) != 0 || m_nNextObjectId <= index) {
+    if (m_nMaxArrayIndex < arrayIndex || (index & 0x8000) != 0 || m_nNextObjectId <= static_cast<SHORT>(index)) {
         lock.Unlock();
         return BAD_INDEX;
     }
 
-    if (m_pArray[arrayIndex].m_objectId != index) {
+    if (m_pArray[arrayIndex].m_objectId != static_cast<SHORT>(index)) {
         lock.Unlock();
         return DELETED;
     }
@@ -172,12 +172,12 @@ BYTE CGameObjectArray::GetDeny(LONG index, BYTE threadNum, CGameObject** ptr, DW
         return TIMEOUT;
     }
 
-    if (m_nMaxArrayIndex < arrayIndex || (index & 0x8000) != 0 || m_nNextObjectId <= index) {
+    if (m_nMaxArrayIndex < arrayIndex || (index & 0x8000) != 0 || m_nNextObjectId <= static_cast<SHORT>(index)) {
         lock.Unlock();
         return BAD_INDEX;
     }
 
-    if (m_pArray[arrayIndex].m_objectId != index) {
+    if (m_pArray[arrayIndex].m_objectId != static_cast<SHORT>(index)) {
         lock.Unlock();
         return DELETED;
     }
@@ -229,12 +229,12 @@ BYTE CGameObjectArray::ReleaseShare(LONG index, BYTE threadNum, DWORD dwTimeOut)
         return TIMEOUT;
     }
 
-    if (m_nMaxArrayIndex < arrayIndex || (index & 0x8000) != 0 || m_nNextObjectId <= index) {
+    if (m_nMaxArrayIndex < arrayIndex || (index & 0x8000) != 0 || m_nNextObjectId <= static_cast<SHORT>(index)) {
         lock.Unlock();
         return BAD_INDEX;
     }
 
-    if (m_pArray[arrayIndex].m_objectId != -1 && m_pArray[arrayIndex].m_objectId != index) {
+    if (m_pArray[arrayIndex].m_objectId != -1 && m_pArray[arrayIndex].m_objectId != static_cast<SHORT>(index)) {
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
         // __LINE__: 559
         UTIL_ASSERT(FALSE);
@@ -264,11 +264,11 @@ BYTE CGameObjectArray::ReleaseDeny(LONG index, BYTE threadNum, DWORD dwTimeOut)
 
     SHORT arrayIndex = (index >> 16) & 0x7FFF;
 
-    if (m_nMaxArrayIndex < arrayIndex || (index & 0x8000) != 0 || m_nNextObjectId <= index) {
+    if (m_nMaxArrayIndex < arrayIndex || (index & 0x8000) != 0 || m_nNextObjectId <= static_cast<SHORT>(index)) {
         return BAD_INDEX;
     }
 
-    if (m_pArray[arrayIndex].m_objectId != -1 && m_pArray[arrayIndex].m_objectId != index) {
+    if (m_pArray[arrayIndex].m_objectId != -1 && m_pArray[arrayIndex].m_objectId != static_cast<SHORT>(index)) {
         return DELETED;
     }
 
@@ -374,12 +374,12 @@ BYTE CGameObjectArray::Delete(LONG index, BYTE threadNum, CGameObject** ptr, DWO
         return TIMEOUT;
     }
 
-    if (m_nMaxArrayIndex < arrayIndex || (index & 0x8000) != 0 || m_nNextObjectId <= index) {
+    if (m_nMaxArrayIndex < arrayIndex || (index & 0x8000) != 0 || m_nNextObjectId <= static_cast<SHORT>(index)) {
         lock.Unlock();
         return BAD_INDEX;
     }
 
-    if (m_pArray[arrayIndex].m_objectId != index) {
+    if (m_pArray[arrayIndex].m_objectId != static_cast<SHORT>(index)) {
         lock.Unlock();
         return DELETED;
     }
