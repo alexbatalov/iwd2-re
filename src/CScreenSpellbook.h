@@ -16,6 +16,7 @@
 #define CSCREENSPELLBOOK_ERROR_BUTTONS 3
 
 class CGameSprite;
+class CUIControlButtonSpellbookSpell;
 
 class CScreenSpellbook : public CBaldurEngine {
 public:
@@ -47,7 +48,7 @@ public:
     int sub_66A010(DWORD nIndex);
     void SetSpellLevel(INT nLevel);
     void SetClassIndex(DWORD nNewClassIndex);
-    void sub_66A2D0();
+    void UpdateFlash();
     CUIPanel* GetTopPopup();
     void EnableMainPanel(BOOL bEnable);
     void UpdateMainPanel();
@@ -66,17 +67,17 @@ public:
 
     /* 0106 */ CKeyInfo m_pVirtualKeys[CSCREENSPELLBOOK_VIRTUAL_KEYS];
     /* 03E6 */ BYTE m_pVirtualKeysFlags[CSCREENSPELLBOOK_VIRTUAL_KEYS];
-    /* 0442 */ int field_442;
-    /* 0446 */ int field_446;
-    /* 044A */ int field_44A;
+    /* 0442 */ CUIControlButtonSpellbookSpell* m_pFlashCurrentSpell;
+    /* 0446 */ CUIControlButtonSpellbookSpell* m_pFlashMemorizeSourceSpell;
+    /* 044A */ CUIControlButtonSpellbookSpell* m_pFlashMemorizeDestSpell;
     /* 044E */ unsigned char m_nSpellLevel;
     /* 0452 */ BYTE m_nClassIndex;
     /* 0454 */ INT m_nNumKnownSpells;
     /* 0458 */ INT m_nTopKnownSpell;
-    /* 045C */ CVidCell field_45C;
-    /* 0536 */ int field_536;
-    /* 053A */ int field_53A;
-    /* 053E */ int field_53E;
+    /* 045C */ CVidCell m_vcFlash;
+    /* 0536 */ BOOL m_bFlash;
+    /* 053A */ BOOL m_bFlashMemorize;
+    /* 053E */ BOOL m_bFlashUnmemorize;
     /* 0542 */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
     /* 055E */ CResRef m_spellResRef;
     /* 0566 */ INT m_nErrorState;

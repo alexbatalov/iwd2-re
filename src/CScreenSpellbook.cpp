@@ -112,17 +112,17 @@ CScreenSpellbook::CScreenSpellbook()
     m_nClassIndex = 11;
     m_nNumKnownSpells = 0;
     m_nTopKnownSpell = 0;
-    field_442 = 0;
-    field_536 = 0;
-    field_53A = 0;
-    field_53E = 0;
+    m_pFlashCurrentSpell = NULL;
+    m_bFlash = FALSE;
+    m_bFlashMemorize = FALSE;
+    m_bFlashUnmemorize = FALSE;
     m_nErrorState = 0;
     m_nNumErrorButtons = 0;
     m_bMultiPlayerViewable = FALSE;
     field_582 = 0;
     m_bCtrlKeyDown = FALSE;
-    field_446 = 0;
-    field_44A = 0;
+    m_pFlashMemorizeSourceSpell = NULL;
+    m_pFlashMemorizeDestSpell = NULL;
     field_1488 = 0;
 
     for (int index = 0; index < 24; index++) {
@@ -225,10 +225,10 @@ void CScreenSpellbook::EngineGameInit()
     m_nSelectedCharacter = -1;
     m_pCurrentScrollBar = NULL;
     m_nSpellLevel = 0;
-    field_536 = 0;
-    field_53A = 0;
-    field_53E = 0;
-    field_442 = 0;
+    m_bFlash = FALSE;
+    m_bFlashMemorize = FALSE;
+    m_bFlashUnmemorize = FALSE;
+    m_pFlashCurrentSpell = NULL;
     m_spellResRef = "";
 
     for (int index = 0; index < 24; index++) {
@@ -242,7 +242,7 @@ void CScreenSpellbook::EngineGameInit()
     m_cUIManager.GetPanel(50)->SetActive(FALSE);
 
     // NOTE: Uninline.
-    field_45C.SetResRef(CResRef("FLASH"), g_pBaldurChitin->field_4A28, TRUE);
+    m_vcFlash.SetResRef(CResRef("FLASH"), g_pBaldurChitin->field_4A28, TRUE);
 }
 
 // 0x49FC40
@@ -254,7 +254,7 @@ BOOL CScreenSpellbook::CheckMouseLButton()
 // 0x6696D0
 void CScreenSpellbook::OnLButtonDblClk(CPoint pt)
 {
-    if (!field_53E && !field_53A) {
+    if (!m_bFlashUnmemorize && !m_bFlashMemorize) {
         m_cUIManager.OnLButtonDblClk(pt);
     }
 }
@@ -264,7 +264,7 @@ void CScreenSpellbook::OnLButtonDown(CPoint pt)
 {
     g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
 
-    if (!field_53E && !field_53A) {
+    if (!m_bFlashUnmemorize && !m_bFlashMemorize) {
         m_cUIManager.OnLButtonDown(pt);
     }
 }
@@ -274,7 +274,7 @@ void CScreenSpellbook::OnLButtonUp(CPoint pt)
 {
     g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
 
-    if (!field_53E && !field_53A) {
+    if (!m_bFlashUnmemorize && !m_bFlashMemorize) {
         m_cUIManager.OnLButtonUp(pt);
     }
 }
@@ -288,7 +288,7 @@ BOOL CScreenSpellbook::CheckMouseMove()
 // 0x669780
 void CScreenSpellbook::OnMouseMove(CPoint pt)
 {
-    if (!field_53E && !field_53A) {
+    if (!m_bFlashUnmemorize && !m_bFlashMemorize) {
         m_cUIManager.OnMouseMove(pt);
     }
 }
@@ -304,7 +304,7 @@ void CScreenSpellbook::OnRButtonDown(CPoint pt)
 {
     g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
 
-    if (!field_53E && !field_53A) {
+    if (!m_bFlashUnmemorize && !m_bFlashMemorize) {
         m_cUIManager.OnRButtonDown(pt);
     }
 }
@@ -314,7 +314,7 @@ void CScreenSpellbook::OnRButtonUp(CPoint pt)
 {
     g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
 
-    if (!field_53E && !field_53A) {
+    if (!m_bFlashUnmemorize && !m_bFlashMemorize) {
         m_cUIManager.OnRButtonUp(pt);
     }
 }
@@ -432,9 +432,54 @@ void CScreenSpellbook::SetClassIndex(DWORD nNewClassIndex)
 }
 
 // 0x66A2D0
-void CScreenSpellbook::sub_66A2D0()
+void CScreenSpellbook::UpdateFlash()
 {
-    // TODO: Incomplete.
+    if (!m_bFlash) {
+        return;
+    }
+
+    if (m_vcFlash.m_nCurrentFrame + 1 < m_vcFlash.GetSequenceLength(m_vcFlash.m_nCurrentSequence, FALSE)) {
+        m_vcFlash.FrameAdvance();
+    } else {
+        m_bFlash = FALSE;
+    }
+
+    if (m_pFlashCurrentSpell != NULL) {
+        m_pFlashCurrentSpell->InvalidateRect();
+    }
+
+    if (!m_bFlash) {
+        if (m_bFlashUnmemorize) {
+            // When unmemorizing the flash appears only in that particular slot.
+            m_bFlashUnmemorize = FALSE;
+            UpdateMainPanel();
+            m_cUIManager.GetPanel(2)->InvalidateRect(NULL);
+        } else if (m_bFlashMemorize) {
+            // When memorizing spell the flash first appears in "Known spells"
+            // slot, than in "Memorized spells".
+            if (m_pFlashCurrentSpell == m_pFlashMemorizeSourceSpell) {
+                UpdateMainPanel();
+
+                if (m_pFlashCurrentSpell != NULL) {
+                    m_pFlashCurrentSpell = m_pFlashMemorizeDestSpell;
+                }
+
+                m_bFlash = TRUE;
+
+                m_vcFlash.FrameSet(0);
+
+                if (m_pFlashCurrentSpell != NULL) {
+                    m_pFlashCurrentSpell->InvalidateRect();
+                }
+            } else {
+                m_bFlashMemorize = FALSE;
+            }
+        } else {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSpellbook.cpp
+            // __LINE__: 1378
+            UTIL_ASSERT(FALSE);
+        }
+    }
 }
 
 // 0x66A540
@@ -511,7 +556,7 @@ void CScreenSpellbook::TimerSynchronousUpdate()
     }
 
     pVidMode->Flip(TRUE);
-    sub_66A2D0();
+    UpdateFlash();
 }
 
 // 0x66A750
