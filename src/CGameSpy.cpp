@@ -1,5 +1,7 @@
 #include "CGameSpy.h"
 
+#include <winsock2.h>
+
 // #binary-identical
 // 0x4D0930
 CGameSpy::CGameSpy()

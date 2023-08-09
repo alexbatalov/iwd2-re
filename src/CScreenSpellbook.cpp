@@ -14,6 +14,8 @@
 // 0x667EC0
 CScreenSpellbook::CScreenSpellbook()
 {
+    int index;
+
     SetVideoMode(0);
 
     m_pVirtualKeys[0] = CKeyInfo(VK_ESCAPE, -1, 0);
@@ -126,7 +128,7 @@ CScreenSpellbook::CScreenSpellbook()
     m_pFlashMemorizeDestSpell = NULL;
     field_1488 = 0;
 
-    for (int index = 0; index < 24; index++) {
+    for (index = 0; index < 24; index++) {
         field_148C[index] = CResRef();
         field_154C[index] = 0;
         field_15AC[index] = 0;
@@ -134,7 +136,7 @@ CScreenSpellbook::CScreenSpellbook()
 
     field_1670 = 0;
 
-    for (int index = 0; index < CSPELLLIST_NUM_CLASSES; index++) {
+    for (index = 0; index < CSPELLLIST_NUM_CLASSES; index++) {
         field_1654[index] = 0;
     }
 }
@@ -206,6 +208,8 @@ void CScreenSpellbook::EngineDeactivated()
 // 0x668ED0
 void CScreenSpellbook::EngineGameInit()
 {
+    int index;
+
     m_cUIManager.fInit(this, CResRef("GUISPL"), g_pBaldurChitin->field_4A28);
 
     CPoint pt;
@@ -219,7 +223,7 @@ void CScreenSpellbook::EngineGameInit()
 
     m_cUIManager.ShiftPanels(pt);
 
-    for (int index = 0; index < 4; index++) {
+    for (index = 0; index < 4; index++) {
         m_cUIManager.AddPanel(&(g_pBaldurChitin->field_49B4[index]));
     }
 
@@ -232,7 +236,7 @@ void CScreenSpellbook::EngineGameInit()
     m_pFlashCurrentSpell = NULL;
     m_spellResRef = "";
 
-    for (int index = 0; index < 24; index++) {
+    for (index = 0; index < 24; index++) {
         field_148C[index] = CResRef();
         field_154C[index] = 0;
     }

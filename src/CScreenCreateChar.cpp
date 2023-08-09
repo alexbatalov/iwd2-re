@@ -980,6 +980,7 @@ void CScreenCreateChar::UpdateMainPanel(CGameSprite* pSprite)
 void CScreenCreateChar::ResetPopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
 {
     CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+    int index;
 
     switch (dwPanelId) {
     case 1:
@@ -1017,7 +1018,7 @@ void CScreenCreateChar::ResetPopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
         ResetColorsPanel(pPanel, pSprite);
         break;
     case 15:
-        for (int index = 0; index < 8; index++) {
+        for (index = 0; index < 8; index++) {
             pSprite->m_baseStats.m_favoredEnemies[index] = -1;
         }
         m_nTopHatedRace = 0;
@@ -2168,6 +2169,7 @@ void CScreenCreateChar::UpdateSubRacePanel(CUIPanel* pPanel, CGameSprite* pSprit
     CString sPureRace;
     CString sRaceMixed;
     CString v5;
+    INT nIndex;
 
     const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
 
@@ -2199,7 +2201,7 @@ void CScreenCreateChar::UpdateSubRacePanel(CUIPanel* pPanel, CGameSprite* pSprit
     pBtOption4->SetEnabled(FALSE);
     pBtOption4->SetInactiveRender(FALSE);
 
-    for (INT nIndex = 0; nIndex < m_tSubRace.GetHeight(); nIndex++) {
+    for (nIndex = 0; nIndex < m_tSubRace.GetHeight(); nIndex++) {
         INT nSubRaceListIndex = atol(m_tSubRace.GetAt(CPoint(0, nIndex)));
         INT nSubRaceId = atol(ruleTables.m_tSrList.GetAt(CPoint(4, nSubRaceListIndex)));
         if (nSubRaceId == 0) {
@@ -2244,7 +2246,7 @@ void CScreenCreateChar::UpdateSubRacePanel(CUIPanel* pPanel, CGameSprite* pSprit
 
     INT nSelectedSubRace = atol(m_tSubRace.GetAt(CPoint(0, pSprite->m_startTypeAI.m_nSubRace)));
 
-    for (INT nIndex = 0; nIndex < m_tSubRace.GetHeight(); nIndex++) {
+    for (nIndex = 0; nIndex < m_tSubRace.GetHeight(); nIndex++) {
         INT nSubRace = atol(m_tSubRace.GetAt(CPoint(0, nIndex)));
         if (nSelectedSubRace == nSubRace) {
             switch (nIndex) {
@@ -2354,6 +2356,8 @@ void CScreenCreateChar::UpdateAppearancePanel(CUIPanel* pPanel, CGameSprite* pSp
 // 0x60E3E0
 void CScreenCreateChar::UpdateFeatsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
+    DWORD dwButtonId;
+
     if (field_1624 == NULL) {
         field_1624 = static_cast<CUIControlScrollBar*>(pPanel->GetControl(104));
     }
@@ -2376,7 +2380,7 @@ void CScreenCreateChar::UpdateFeatsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 
     m_nTopFeat = min(m_nTopFeat, FEAT_COUNT - FEAT_SLOTS);
 
-    for (DWORD dwButtonId = 14; dwButtonId <= 32; dwButtonId += 2) {
+    for (dwButtonId = 14; dwButtonId <= 32; dwButtonId += 2) {
         DWORD index = (dwButtonId - 14) / 2;
         DWORD id = ruleTables.GetFeatId(m_nTopFeat + index);
         STRREF strName = ruleTables.GetFeatName(id);
@@ -2403,7 +2407,7 @@ void CScreenCreateChar::UpdateFeatsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
     pScroll->UpdateScrollBar();
 
     DWORD index = 0;
-    for (DWORD dwButtonId = 15; dwButtonId < 35; dwButtonId += 2) {
+    for (dwButtonId = 15; dwButtonId < 35; dwButtonId += 2) {
         DWORD id = ruleTables.GetFeatId(m_nTopFeat + index);
         CUIControlButton* pButton;
 
@@ -2574,6 +2578,8 @@ void CScreenCreateChar::UpdateAbilitiesPanel(CUIPanel* pPanel, CGameSprite* pSpr
 // 0x60EB60
 void CScreenCreateChar::UpdateSkillsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
+    DWORD nButtonID;
+
     m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(104));
 
     const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
@@ -2590,7 +2596,7 @@ void CScreenCreateChar::UpdateSkillsPanel(CUIPanel* pPanel, CGameSprite* pSprite
 
     m_nTopSkill = min(m_nTopSkill, 6);
 
-    for (DWORD nButtonID = 14; nButtonID < 33; nButtonID += 2) {
+    for (nButtonID = 14; nButtonID < 33; nButtonID += 2) {
         DWORD nIndex = (nButtonID - 14) / 2;
         UINT nSkillID = ruleTables.GetSkillId(m_nTopSkill + nIndex);
 
@@ -2625,7 +2631,7 @@ void CScreenCreateChar::UpdateSkillsPanel(CUIPanel* pPanel, CGameSprite* pSprite
     // NOTE: Uninline.
     pScroll->UpdateScrollBar();
 
-    for (DWORD nButtonID = 15; nButtonID < 35; nButtonID += 2) {
+    for (nButtonID = 15; nButtonID < 35; nButtonID += 2) {
         CUIControlButton* pButton;
         DWORD nIndex = (nButtonID - 15) / 2;
         UINT nSkillID = ruleTables.GetSkillId(m_nTopSkill + nIndex);

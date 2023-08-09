@@ -947,6 +947,8 @@ void CNetwork::CloseSession(BOOLEAN bAIResponsible)
 // 0x7A5A60
 void CNetwork::OnCloseSession()
 {
+    INT nPlayer;
+
     if (!m_bConnectionEstablished) {
         return;
     }
@@ -970,7 +972,7 @@ void CNetwork::OnCloseSession()
         }
     }
 
-    for (INT nPlayer = 0; nPlayer < CNETWORK_MAX_PLAYERS; nPlayer++) {
+    for (nPlayer = 0; nPlayer < CNETWORK_MAX_PLAYERS; nPlayer++) {
         m_pPlayerID[nPlayer] = 0;
         m_psPlayerName[nPlayer] = "";
         m_pbPlayerEnumerateFlag[nPlayer] = FALSE;
@@ -1031,7 +1033,7 @@ void CNetwork::OnCloseSession()
     m_nLocalPlayer = -1;
     m_nTotalPlayers = 0;
 
-    for (INT nPlayer = 0; nPlayer < CNETWORK_MAX_PLAYERS; nPlayer++) {
+    for (nPlayer = 0; nPlayer < CNETWORK_MAX_PLAYERS; nPlayer++) {
         m_pPlayerID[nPlayer] = 0;
         m_psPlayerName[nPlayer] = "";
         m_pbPlayerEnumerateFlag[nPlayer] = FALSE;
@@ -1313,7 +1315,7 @@ BOOLEAN CNetwork::HostNewSession()
         return FALSE;
     }
 
-    m_sessionDesc = { 0 };
+    memset(&m_sessionDesc, 0, sizeof(m_sessionDesc));
     m_sessionDesc.dwFlags = m_dwSessionFlags;
     m_sessionDesc.guidApplication = m_nApplicationGuid;
     m_sessionDesc.dwSize = sizeof(m_sessionDesc);
@@ -1386,7 +1388,7 @@ BOOLEAN CNetwork::JoinSelectedSession(INT& nErrorCode)
         return FALSE;
     }
 
-    m_sessionDesc = { 0 };
+    memset(&m_sessionDesc, 0, sizeof(m_sessionDesc));
     m_sessionDesc.dwSize = sizeof(m_sessionDesc);
     m_sessionDesc.guidInstance = m_guidSession;
 
@@ -1613,6 +1615,8 @@ BOOLEAN CNetwork::CreatePlayer(INT& nErrorCode)
 // 0x7A6BC0
 BOOLEAN CNetwork::AddPlayerToList(PLAYER_ID dpID, const CString& sPlayerName, BOOLEAN bIsHost, BOOLEAN bMakeVisible)
 {
+    INT nPlayerNumber;
+
     // __FILE__: C:\Projects\Icewind2\src\chitin\ChNetwork.cpp
     // __LINE__: 6907
     UTIL_ASSERT(dpID != 0);
@@ -1620,7 +1624,7 @@ BOOLEAN CNetwork::AddPlayerToList(PLAYER_ID dpID, const CString& sPlayerName, BO
     INT nFound = -1;
     BOOLEAN bFound = FALSE;
 
-    for (INT nPlayerNumber = 0; nPlayerNumber < CNETWORK_MAX_PLAYERS; nPlayerNumber++) {
+    for (nPlayerNumber = 0; nPlayerNumber < CNETWORK_MAX_PLAYERS; nPlayerNumber++) {
         if (bFound) {
             break;
         }
@@ -1649,7 +1653,7 @@ BOOLEAN CNetwork::AddPlayerToList(PLAYER_ID dpID, const CString& sPlayerName, BO
         return FALSE;
     }
 
-    for (INT nPlayerNumber = 0; nPlayerNumber < CNETWORK_MAX_PLAYERS; nPlayerNumber++) {
+    for (nPlayerNumber = 0; nPlayerNumber < CNETWORK_MAX_PLAYERS; nPlayerNumber++) {
         if (field_772[nPlayerNumber] == dpID) {
             return FALSE;
         }

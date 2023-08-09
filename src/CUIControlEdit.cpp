@@ -363,7 +363,7 @@ void CUIControlEdit::OnKeyDown(SHORT nKey)
     case VK_RIGHT:
         if (m_nCursorIndex != m_sText.GetLength()) {
             if (g_pChitin->field_1A0) {
-                if (IsDBCSLeadByte(m_sText[m_nCursorIndex])) {
+                if (IsDBCSLeadByte(m_sText[(int)m_nCursorIndex])) {
                     m_nCursorIndex++;
                 }
             }
@@ -406,7 +406,7 @@ void CUIControlEdit::OnKeyDown(SHORT nKey)
         break;
     case VK_DELETE:
         if (m_nCursorIndex != m_sText.GetLength()) {
-            if (g_pChitin->field_1A0 && IsDBCSLeadByte(m_sText[m_nCursorIndex])) {
+            if (g_pChitin->field_1A0 && IsDBCSLeadByte(m_sText[(int)m_nCursorIndex])) {
                 m_sText = m_sText.Left(m_nCursorIndex)
                     + m_sText.Right(m_sText.GetLength() - m_nCursorIndex - 2);
             } else {

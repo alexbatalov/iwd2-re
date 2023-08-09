@@ -402,6 +402,7 @@ void CScreenChapter::SwitchMainPanel(DWORD dwMainPanelId)
 void CScreenChapter::ResetMainPanel()
 {
     STR_RES strRes;
+    int index;
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenChapter.cpp
     // __LINE__: 908
@@ -426,7 +427,7 @@ void CScreenChapter::ResetMainPanel()
 
     // Add leading empty lines so that the text gracefully slide in from the
     // bottom.
-    for (int index = 0; index < m_pTextControl->field_A6A + 1; index++) {
+    for (index = 0; index < m_pTextControl->field_A6A + 1; index++) {
         UpdateText(m_pTextControl, "");
     }
 
@@ -507,7 +508,7 @@ void CScreenChapter::ResetMainPanel()
 
     // Add trailing empty lines so that the text gracefully slide out at the
     // top.
-    for (int index = 0; index < m_pTextControl->field_A6A; index++) {
+    for (index = 0; index < m_pTextControl->field_A6A; index++) {
         UpdateText(m_pTextControl, "");
     }
 

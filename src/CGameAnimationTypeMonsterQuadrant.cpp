@@ -11,6 +11,7 @@ CGameAnimationTypeMonsterQuadrant::CGameAnimationTypeMonsterQuadrant(USHORT anim
     : m_charPalette(CVidPalette::TYPE_RANGE)
 {
     CString v1;
+    BYTE quad;
 
     m_animationID = animationID;
     m_falseColor = TRUE;
@@ -96,7 +97,7 @@ CGameAnimationTypeMonsterQuadrant::CGameAnimationTypeMonsterQuadrant(USHORT anim
     m_g2VidCellBase = &(m_g1VidCellBase[m_nQuadrants]);
     m_g3VidCellBase = &(m_g1VidCellBase[2 * m_nQuadrants]);
 
-    for (BYTE quad = 0; quad < m_nQuadrants; quad++) {
+    for (quad = 0; quad < m_nQuadrants; quad++) {
         CString sSuffix = static_cast<char>(quad + '1');
 
         m_g1VidCellBase[quad].SetResRef(CResRef(m_resRef + "G1" + v1 + sSuffix), FALSE, TRUE);
@@ -121,7 +122,7 @@ CGameAnimationTypeMonsterQuadrant::CGameAnimationTypeMonsterQuadrant(USHORT anim
         m_g2VidCellExtend = &(m_g1VidCellExtend[m_nQuadrants]);
         m_g3VidCellExtend = &(m_g1VidCellExtend[2 * m_nQuadrants]);
 
-        for (BYTE quad = 0; quad < m_nQuadrants; quad++) {
+        for (quad = 0; quad < m_nQuadrants; quad++) {
             CString sSuffix = static_cast<char>(quad + '1');
 
             m_g1VidCellExtend[quad].SetResRef(CResRef(m_resRef + "G1" + v1 + sSuffix + "E"), FALSE, TRUE);
@@ -139,7 +140,7 @@ CGameAnimationTypeMonsterQuadrant::CGameAnimationTypeMonsterQuadrant(USHORT anim
             m_charPalette.SetRange(colorRange, colorRangeValues[colorRange], *g_pBaldurChitin->GetObjectGame()->GetMasterBitmap());
         }
 
-        for (BYTE quad = 0; quad < m_nQuadrants; quad++) {
+        for (quad = 0; quad < m_nQuadrants; quad++) {
             m_g1VidCellBase[quad].SetPalette(m_charPalette);
             m_g2VidCellBase[quad].SetPalette(m_charPalette);
             m_g3VidCellBase[quad].SetPalette(m_charPalette);
@@ -158,7 +159,7 @@ CGameAnimationTypeMonsterQuadrant::CGameAnimationTypeMonsterQuadrant(USHORT anim
         if (m_falseColor) {
             m_charPalette.SetPaletteEntry(CVidPalette::SHADOW_ENTRY, g_pBaldurChitin->GetCurrentVideoMode()->GetTransparentColor());
         } else {
-            for (BYTE quad = 0; quad < m_nQuadrants; quad++) {
+            for (quad = 0; quad < m_nQuadrants; quad++) {
                 m_g1VidCellBase[quad].m_bShadowOn = FALSE;
                 m_g2VidCellBase[quad].m_bShadowOn = FALSE;
                 m_g3VidCellBase[quad].m_bShadowOn = FALSE;
@@ -272,6 +273,8 @@ SHORT CGameAnimationTypeMonsterQuadrant::GetCurrentFrame()
 // 0x6BAFF0
 void CGameAnimationTypeMonsterQuadrant::CalculateFxRect(CRect& rFx, CPoint& ptReference, LONG posZ)
 {
+    BYTE quad;
+
     // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
     // __LINE__: 11746
     UTIL_ASSERT(m_currentVidCell != NULL);
@@ -280,7 +283,7 @@ void CGameAnimationTypeMonsterQuadrant::CalculateFxRect(CRect& rFx, CPoint& ptRe
     m_currentVidCell->GetCurrentCenterPoint(pt, FALSE);
     ptReference = pt;
 
-    for (BYTE quad = 1; quad < m_nQuadrants; quad++) {
+    for (quad = 1; quad < m_nQuadrants; quad++) {
         CPoint ptTemp;
         m_currentVidCell[quad].GetCurrentCenterPoint(ptTemp, FALSE);
         ptReference.x = max(ptTemp.x, ptReference.x);
@@ -294,11 +297,11 @@ void CGameAnimationTypeMonsterQuadrant::CalculateFxRect(CRect& rFx, CPoint& ptRe
     frameSize.cy += ptReference.y - pt.y;
     rFx.SetRect(0, 0, frameSize.cx, frameSize.cy);
 
-    for (BYTE quad = 1; quad < m_nQuadrants; quad++) {
+    for (quad = 1; quad < m_nQuadrants; quad++) {
         m_currentVidCell[quad].GetCurrentFrameSize(frameSize, FALSE);
 
         CPoint ptTemp;
-        m_currentVidCell[quad].GetCurrentCenterPoint(pt, FALSE);
+        m_currentVidCell[quad].GetCurrentCenterPoint(ptTemp, FALSE);
 
         rFx.right = max(frameSize.cx + ptReference.x - ptTemp.x, rFx.right);
         rFx.bottom = max(frameSize.cy + ptReference.y - ptTemp.y, rFx.bottom);

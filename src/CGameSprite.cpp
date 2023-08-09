@@ -1237,6 +1237,8 @@ INT CGameSprite::GetSkillValue(UINT iSkillNumber)
 // 0x764310
 INT CGameSprite::GetSkillCost(UINT iSkillNumber, BYTE nClass)
 {
+    INT iClassType;
+
     // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
     // __LINE__: 30463
     UTIL_ASSERT(iSkillNumber < CGAMESPRITE_SKILL_NUMSKILLS);
@@ -1246,7 +1248,7 @@ INT CGameSprite::GetSkillCost(UINT iSkillNumber, BYTE nClass)
     int v1 = 0;
     int v2 = 0;
     int v3 = 0;
-    for (INT iClassType = 1; iClassType <= CAIOBJECT_CLASS_MAX; iClassType++) {
+    for (iClassType = 1; iClassType <= CAIOBJECT_CLASS_MAX; iClassType++) {
         if (m_derivedStats.HasClass(iClassType)) {
             INT nCost = atol(ruleTables.m_tSkillCosts.GetAt(CPoint(iClassType - 1, iSkillNumber)));
             if (nCost == 1) {
@@ -1281,7 +1283,7 @@ INT CGameSprite::GetSkillCost(UINT iSkillNumber, BYTE nClass)
     }
 
     INT nLevels = 0;
-    for (INT iClassType = 1; iClassType <= CAIOBJECT_CLASS_MAX; iClassType++) {
+    for (iClassType = 1; iClassType <= CAIOBJECT_CLASS_MAX; iClassType++) {
         INT nLevel = m_derivedStats.GetClassLevel(iClassType);
         if (nLevel > 0) {
             INT nCost = atol(ruleTables.m_tSkillCosts.GetAt(CPoint(iClassType - 1, iSkillNumber)));

@@ -44,7 +44,7 @@ public:
     // there is eponymous function in `CVidFont`. Most likely it was inlined.
     void SetResRef(const CResRef& cNewResRef, BOOL bDoubleSize, BOOL bSetAutoRequest)
     {
-        CResHelper::SetResRef(cNewResRef, bSetAutoRequest, TRUE);
+        CResHelper<CResCell, 1000>::SetResRef(cNewResRef, bSetAutoRequest, TRUE);
         m_header.SetResRef(cNewResRef, bSetAutoRequest, FALSE);
 
         if (pRes != NULL) {

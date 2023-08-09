@@ -170,7 +170,7 @@ public:
     WORD m_resRefType;
     DWORD m_dwValue;
     LONG m_intValue;
-    DOUBLE m_floatValue;
+    double m_floatValue;
     SCRIPTNAME m_stringValue;
 };
 

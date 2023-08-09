@@ -426,8 +426,10 @@ void CNamedCreatureVariableHash::ClearAll()
 // 0x550BC0
 void CNamedCreatureVariableHash::Resize(LONG nSize)
 {
+    int index;
+
     if (nSize < m_nTableEntries && m_hashEntries) {
-        for (int index = nSize; index < m_nTableEntries; index++) {
+        for (index = nSize; index < m_nTableEntries; index++) {
             if (m_hashEntries[index] != NULL) {
                 // NOTE: Uninline.
                 m_hashEntries[index]->sub_550B30();
@@ -443,11 +445,11 @@ void CNamedCreatureVariableHash::Resize(LONG nSize)
 
     m_hashEntries = new CNamedCreatureVariableHashEntry*[nSize];
 
-    for (int index = 0; index < nSize; index++) {
+    for (index = 0; index < nSize; index++) {
         m_hashEntries[index] = NULL;
     }
 
-    for (int index = 0; index < oldTableEntries; index++) {
+    for (index = 0; index < oldTableEntries; index++) {
         if (oldHashEntries[index] != NULL) {
             CNamedCreatureVariableHashEntry* pCurr = oldHashEntries[index];
             while (pCurr != NULL) {

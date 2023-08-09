@@ -84,7 +84,7 @@ BOOL CItem::ReleaseAll()
 // 0x4E8350
 void CItem::SetResRef(const CResRef& cNewResRef, BOOL bSetAutoRequest)
 {
-    CResHelper::SetResRef(cNewResRef, bSetAutoRequest, TRUE);
+    CResHelper<CResItem, 1005>::SetResRef(cNewResRef, bSetAutoRequest, TRUE);
 }
 
 // 0x4E8440
@@ -630,7 +630,7 @@ BYTE CItem::GetMinLevelRequired()
             // __LINE__: 2464
             UTIL_ASSERT(pRes->Demand());
 
-            nValue = pRes->m_pHeader->minLevelRequired;
+            nValue = static_cast<BYTE>(pRes->m_pHeader->minLevelRequired);
             pRes->Release();
         }
     }
@@ -649,7 +649,7 @@ BYTE CItem::GetMinSTRRequired()
             // __LINE__: 2483
             UTIL_ASSERT(pRes->Demand());
 
-            nValue = pRes->m_pHeader->minSTRRequired;
+            nValue = static_cast<BYTE>(pRes->m_pHeader->minSTRRequired);
             pRes->Release();
         }
     }
@@ -744,7 +744,7 @@ BYTE CItem::GetMinCHRRequired()
             // __LINE__: 2597
             UTIL_ASSERT(pRes->Demand());
 
-            nValue = pRes->m_pHeader->minCHRRequired;
+            nValue = static_cast<BYTE>(pRes->m_pHeader->minCHRRequired);
             pRes->Release();
         }
     }

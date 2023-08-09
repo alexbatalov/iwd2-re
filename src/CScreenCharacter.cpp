@@ -538,11 +538,13 @@ void CScreenCharacter::TimerSynchronousUpdate()
     field_17A4 = g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL;
 
     if (m_lPopupStack.GetCount() > 0 && m_cUIManager.field_2E == 1) {
-        for (SHORT nPortrait = 0; nPortrait <= 5; nPortrait++) {
+        SHORT nPortrait;
+
+        for (nPortrait = 0; nPortrait <= 5; nPortrait++) {
             pGame->sub_5AF420(nPortrait, 1);
         }
 
-        for (SHORT nPortrait = 50; nPortrait <= 55; nPortrait++) {
+        for (nPortrait = 50; nPortrait <= 55; nPortrait++) {
             pGame->sub_5AF420(nPortrait, 1);
         }
     }

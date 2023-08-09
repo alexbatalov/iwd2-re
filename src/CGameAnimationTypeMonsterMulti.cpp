@@ -268,7 +268,7 @@ CGameAnimationTypeMonsterMulti::~CGameAnimationTypeMonsterMulti()
 // 0x6B57D0
 void CGameAnimationTypeMonsterMulti::CalculateFxRectMax(CRect& rFx, CPoint& ptReference, LONG posZ)
 {
-    return CalculateFxRect(rFx, ptReference, posZ);
+    CalculateFxRect(rFx, ptReference, posZ);
 }
 
 // 0x6B57F0
@@ -350,6 +350,8 @@ SHORT CGameAnimationTypeMonsterMulti::GetCurrentFrame()
 // 0x6B5B80
 void CGameAnimationTypeMonsterMulti::CalculateFxRect(CRect& rFx, CPoint& ptReference, LONG posZ)
 {
+    BYTE quad;
+
     // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
     // __LINE__: 10336
     UTIL_ASSERT(m_currentVidCell != NULL);
@@ -358,7 +360,7 @@ void CGameAnimationTypeMonsterMulti::CalculateFxRect(CRect& rFx, CPoint& ptRefer
     m_currentVidCell->GetCurrentCenterPoint(pt, FALSE);
     ptReference = pt;
 
-    for (BYTE quad = 1; quad < m_nQuadrants; quad++) {
+    for (quad = 1; quad < m_nQuadrants; quad++) {
         CPoint ptTemp;
         m_currentVidCell[quad].GetCurrentCenterPoint(ptTemp, FALSE);
         ptReference.x = max(ptTemp.x, ptReference.x);
@@ -372,11 +374,11 @@ void CGameAnimationTypeMonsterMulti::CalculateFxRect(CRect& rFx, CPoint& ptRefer
     frameSize.cy += ptReference.y - pt.y;
     rFx.SetRect(0, 0, frameSize.cx, frameSize.cy);
 
-    for (BYTE quad = 1; quad < m_nQuadrants; quad++) {
+    for (quad = 1; quad < m_nQuadrants; quad++) {
         m_currentVidCell[quad].GetCurrentFrameSize(frameSize, FALSE);
 
         CPoint ptTemp;
-        m_currentVidCell[quad].GetCurrentCenterPoint(pt, FALSE);
+        m_currentVidCell[quad].GetCurrentCenterPoint(ptTemp, FALSE);
 
         rFx.right = max(frameSize.cx + ptReference.x - ptTemp.x, rFx.right);
         rFx.bottom = max(frameSize.cy + ptReference.y - ptTemp.y, rFx.bottom);

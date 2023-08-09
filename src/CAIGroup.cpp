@@ -16,18 +16,18 @@ const SHORT CAIGroup::FORMATION_GATHER = CAIGROUP_FORMATION_GATHER;
 
 // 0x8C6D98
 const CPoint CAIGroup::FORMATION_GATHER_OFFSETS[CAIGROUP_FORMATION_MAX_SIZE] = {
-    { 0, -3 },
-    { 3, -2 },
-    { -3, -2 },
-    { 3, 2 },
-    { -3, 2 },
-    { 0, 3 },
-    { 3, 5 },
-    { -3, 5 },
-    { 0, 6 },
-    { 3, 8 },
-    { -3, 8 },
-    { 0, 9 },
+    CPoint(0, -3),
+    CPoint(3, -2),
+    CPoint(-3, -2),
+    CPoint(3, 2),
+    CPoint(-3, 2),
+    CPoint(0, 3),
+    CPoint(3, 5),
+    CPoint(-3, 5),
+    CPoint(0, 6),
+    CPoint(3, 8),
+    CPoint(-3, 8),
+    CPoint(0, 9),
 };
 
 // 0x8479EC
@@ -51,18 +51,18 @@ const SHORT CAIGroup::FORMATION_T = CAIGROUP_FORMATION_T;
 
 // 0x8C6DF8
 const CPoint CAIGroup::FORMATION_T_OFFSETS[CAIGROUP_FORMATION_MAX_SIZE] = {
-    { 0, 0 },
-    { 4, 0 },
-    { -4, 0 },
-    { 0, 4 },
-    { 0, 7 },
-    { 0, 10 },
-    { 4, 4 },
-    { -4, 4 },
-    { 4, 7 },
-    { -4, 7 },
-    { 4, 10 },
-    { -4, 10 },
+    CPoint(0, 0),
+    CPoint(4, 0),
+    CPoint(-4, 0),
+    CPoint(0, 4),
+    CPoint(0, 7),
+    CPoint(0, 10),
+    CPoint(4, 4),
+    CPoint(-4, 4),
+    CPoint(4, 7),
+    CPoint(-4, 7),
+    CPoint(4, 10),
+    CPoint(-4, 10),
 };
 
 // 0x847A08
@@ -86,18 +86,18 @@ const SHORT CAIGroup::FORMATION_RANK = CAIGROUP_FORMATION_RANK;
 
 // 0x8C66E0
 const CPoint CAIGroup::FORMATION_RANK_OFFSETS[CAIGROUP_FORMATION_MAX_SIZE] = {
-    { -2, 0 },
-    { 2, 0 },
-    { -6, 0 },
-    { 6, 0 },
-    { -10, 0 },
-    { 10, 0 },
-    { -2, 3 },
-    { 2, 3 },
-    { -6, 3 },
-    { 6, 3 },
-    { -10, 3 },
-    { 10, 3 },
+    CPoint(-2, 0),
+    CPoint(2, 0),
+    CPoint(-6, 0),
+    CPoint(6, 0),
+    CPoint(-10, 0),
+    CPoint(10, 0),
+    CPoint(-2, 3),
+    CPoint(2, 3),
+    CPoint(-6, 3),
+    CPoint(6, 3),
+    CPoint(-10, 3),
+    CPoint(10, 3),
 };
 
 // 0x847A24
@@ -121,18 +121,18 @@ const SHORT CAIGroup::FORMATION_3BY2 = CAIGROUP_FORMATION_3BY2;
 
 // 0x8C6BA0
 const CPoint CAIGroup::FORMATION_3BY2_OFFSETS[CAIGROUP_FORMATION_MAX_SIZE] = {
-    { 0, 0 },
-    { 4, 0 },
-    { -4, 0 },
-    { 0, 4 },
-    { 4, 4 },
-    { -4, 4 },
-    { 0, 8 },
-    { 4, 8 },
-    { -4, 8 },
-    { 0, 12 },
-    { 4, 12 },
-    { -1, 12 },
+    CPoint(0, 0),
+    CPoint(4, 0),
+    CPoint(-4, 0),
+    CPoint(0, 4),
+    CPoint(4, 4),
+    CPoint(-4, 4),
+    CPoint(0, 8),
+    CPoint(4, 8),
+    CPoint(-4, 8),
+    CPoint(0, 12),
+    CPoint(4, 12),
+    CPoint(-1, 12),
 };
 
 // 0x847A40
@@ -156,18 +156,18 @@ const SHORT CAIGroup::FORMATION_2BY3 = CAIGROUP_FORMATION_2BY3;
 
 // 0x8C6C08
 const CPoint CAIGroup::FORMATION_2BY3_OFFSETS[CAIGROUP_FORMATION_MAX_SIZE] = {
-    { -2, 0 },
-    { 2, 0 },
-    { -2, 4 },
-    { 2, 4 },
-    { -2, 7 },
-    { 2, 7 },
-    { -6, 0 },
-    { 6, 0 },
-    { -6, 4 },
-    { 6, 4 },
-    { -6, 7 },
-    { 6, 7 },
+    CPoint(-2, 0),
+    CPoint(2, 0),
+    CPoint(-2, 4),
+    CPoint(2, 4),
+    CPoint(-2, 7),
+    CPoint(2, 7),
+    CPoint(-6, 0),
+    CPoint(6, 0),
+    CPoint(-6, 4),
+    CPoint(6, 4),
+    CPoint(-6, 7),
+    CPoint(6, 7),
 };
 
 // 0x847A5C
@@ -191,18 +191,18 @@ const SHORT CAIGroup::FORMATION_PROTECT = CAIGROUP_FORMATION_PROTECT;
 
 // 0x8C6740
 const CPoint CAIGroup::FORMATION_PROTECT_OFFSETS[CAIGROUP_FORMATION_MAX_SIZE] = {
-    { 0, -3 },
-    { 4, 0 },
-    { -4, 0 },
-    { 2, 4 },
-    { -2, 4 },
-    { 0, 0 },
-    { 0, -6 },
-    { 4, -3 },
-    { -4, -3 },
-    { 5, 5 },
-    { -5, 5 },
-    { 0, 7 },
+    CPoint(0, -3),
+    CPoint(4, 0),
+    CPoint(-4, 0),
+    CPoint(2, 4),
+    CPoint(-2, 4),
+    CPoint(0, 0),
+    CPoint(0, -6),
+    CPoint(4, -3),
+    CPoint(-4, -3),
+    CPoint(5, 5),
+    CPoint(-5, 5),
+    CPoint(0, 7),
 };
 
 // 0x847A78
@@ -226,18 +226,18 @@ const SHORT CAIGroup::FORMATION_4AND2 = CAIGROUP_FORMATION_4AND2;
 
 // 0x8C6D30
 const CPoint CAIGroup::FORMATION_4AND2_OFFSETS[CAIGROUP_FORMATION_MAX_SIZE] = {
-    { -2, 0 },
-    { 2, 0 },
-    { -6, 0 },
-    { 6, 0 },
-    { -2, 4 },
-    { 2, 4 },
-    { -6, 4 },
-    { 6, 4 },
-    { -2, 8 },
-    { 2, 8 },
-    { -6, 8 },
-    { 6, 8 },
+    CPoint(-2, 0),
+    CPoint(2, 0),
+    CPoint(-6, 0),
+    CPoint(6, 0),
+    CPoint(-2, 4),
+    CPoint(2, 4),
+    CPoint(-6, 4),
+    CPoint(6, 4),
+    CPoint(-2, 8),
+    CPoint(2, 8),
+    CPoint(-6, 8),
+    CPoint(6, 8),
 };
 
 // 0x847A94
@@ -261,18 +261,18 @@ const SHORT CAIGroup::FORMATION_V = CAIGROUP_FORMATION_V;
 
 // 0x8C6C68
 const CPoint CAIGroup::FORMATION_V_OFFSETS[CAIGROUP_FORMATION_MAX_SIZE] = {
-    { -1, 0 },
-    { 1, 0 },
-    { -2, 3 },
-    { 2, 3 },
-    { -4, 6 },
-    { 4, 6 },
-    { -1, 6 },
-    { 1, 6 },
-    { -2, 9 },
-    { 2, 9 },
-    { -4, 12 },
-    { 4, 12 },
+    CPoint(-1, 0),
+    CPoint(1, 0),
+    CPoint(-2, 3),
+    CPoint(2, 3),
+    CPoint(-4, 6),
+    CPoint(4, 6),
+    CPoint(-1, 6),
+    CPoint(1, 6),
+    CPoint(-2, 9),
+    CPoint(2, 9),
+    CPoint(-4, 12),
+    CPoint(4, 12),
 };
 
 // 0x847AB0
@@ -296,18 +296,18 @@ const SHORT CAIGroup::FORMATION_WEDGE = CAIGROUP_FORMATION_WEDGE;
 
 // 0x8C6618
 const CPoint CAIGroup::FORMATION_WEDGE_OFFSETS[CAIGROUP_FORMATION_MAX_SIZE] = {
-    { 0, 0 },
-    { 4, 3 },
-    { -4, 3 },
-    { -8, 6 },
-    { 8, 6 },
-    { 0, 6 },
-    { -8, 0 },
-    { 8, 0 },
-    { -12, 9 },
-    { -6, 9 },
-    { 6, 9 },
-    { 12, 9 },
+    CPoint(0, 0),
+    CPoint(4, 3),
+    CPoint(-4, 3),
+    CPoint(-8, 6),
+    CPoint(8, 6),
+    CPoint(0, 6),
+    CPoint(-8, 0),
+    CPoint(8, 0),
+    CPoint(-12, 9),
+    CPoint(-6, 9),
+    CPoint(6, 9),
+    CPoint(12, 9),
 };
 
 // 0x847ACC
@@ -331,18 +331,18 @@ const SHORT CAIGroup::FORMATION_LINE = CAIGROUP_FORMATION_LINE;
 
 // 0x8C6680
 const CPoint CAIGroup::FORMATION_LINE_OFFSETS[CAIGROUP_FORMATION_MAX_SIZE] = {
-    { 0, 0 },
-    { 0, 3 },
-    { 0, 6 },
-    { 0, 9 },
-    { 0, 12 },
-    { 0, 15 },
-    { 0, 18 },
-    { 0, 21 },
-    { 0, 24 },
-    { 0, 27 },
-    { 0, 30 },
-    { 0, 33 },
+    CPoint(0, 0),
+    CPoint(0, 3),
+    CPoint(0, 6),
+    CPoint(0, 9),
+    CPoint(0, 12),
+    CPoint(0, 15),
+    CPoint(0, 18),
+    CPoint(0, 21),
+    CPoint(0, 24),
+    CPoint(0, 27),
+    CPoint(0, 30),
+    CPoint(0, 33),
 };
 
 // 0x847AE8
@@ -366,18 +366,18 @@ const SHORT CAIGroup::FORMATION_S = CAIGROUP_FORMATION_S;
 
 // 0x8C6CC8
 const CPoint CAIGroup::FORMATION_S_OFFSETS[CAIGROUP_FORMATION_MAX_SIZE] = {
-    { 1, 0 },
-    { -1, 2 },
-    { 1, 4 },
-    { -1, 6 },
-    { 1, 8 },
-    { -1, 10 },
-    { 1, 12 },
-    { -1, 14 },
-    { 1, 16 },
-    { -1, 18 },
-    { 1, 20 },
-    { -1, 22 },
+    CPoint(1, 0),
+    CPoint(-1, 2),
+    CPoint(1, 4),
+    CPoint(-1, 6),
+    CPoint(1, 8),
+    CPoint(-1, 10),
+    CPoint(1, 12),
+    CPoint(-1, 14),
+    CPoint(1, 16),
+    CPoint(-1, 18),
+    CPoint(1, 20),
+    CPoint(-1, 22),
 };
 
 // 0x847B04

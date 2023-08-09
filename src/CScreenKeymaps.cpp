@@ -1065,6 +1065,8 @@ void CScreenKeymaps::OnCancelButtonClick()
 // 0x63A480
 void CScreenKeymaps::OnErrorButtonClick(INT nButton)
 {
+    int index;
+
     CSingleLock lock(&(m_cUIManager.field_36), FALSE);
     lock.Lock(INFINITE);
 
@@ -1074,7 +1076,7 @@ void CScreenKeymaps::OnErrorButtonClick(INT nButton)
         case 0:
             DismissPopup();
 
-            for (int index = 0; index < CSCREENKEYMAPS_PAGES * CSCREENKEYMAPS_PER_PAGE; index++) {
+            for (index = 0; index < CSCREENKEYMAPS_PAGES * CSCREENKEYMAPS_PER_PAGE; index++) {
                 INT nKeymap = dword_8B3FE0[index / CSCREENKEYMAPS_PER_PAGE][index % CSCREENKEYMAPS_PER_PAGE];
                 if (m_pKeymap[nKeymap] == m_nConflictKey
                     && m_pKeymapFlags[nKeymap] == m_nConflictKeyFlag) {
@@ -1102,7 +1104,7 @@ void CScreenKeymaps::OnErrorButtonClick(INT nButton)
         case 0:
             DismissPopup();
 
-            for (int index = 0; index < CINFGAME_KEYMAP_SIZE; index++) {
+            for (index = 0; index < CINFGAME_KEYMAP_SIZE; index++) {
                 m_pKeymap[index] = g_pBaldurChitin->GetObjectGame()->sub_5A9830(index);
             }
 
