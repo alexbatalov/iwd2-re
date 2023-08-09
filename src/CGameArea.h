@@ -9,6 +9,7 @@
 #include "FileFormat.h"
 
 class CInfGame;
+class CVidMode;
 
 typedef struct {
     RESREF m_areaName;
@@ -85,8 +86,15 @@ public:
     void SetListenPosition();
     void OnActivation();
     void OnDeactivation();
+    void OnActionButtonDown(const CPoint& pt);
+    void OnActionButtonUp(const CPoint& pt);
+    void OnActionButtonDblClk(const CPoint& pt);
+    void OnFormationButtonDown(const CPoint& pt);
+    void OnFormationButtonUp(const CPoint& pt);
+    void OnMouseMove(const CPoint& pt);
     void RemoveObject(POSITION posVertList, BYTE listType, LONG id);
     void OnLightningStrike();
+    void Render(CVidMode* pVidMode, int a2);
     void SetDay();
     void SetNight();
     void SetApproachingDawn();

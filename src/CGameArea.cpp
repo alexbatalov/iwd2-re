@@ -214,6 +214,42 @@ void CGameArea::OnDeactivation()
     m_firstRender = 0;
 }
 
+// 0x475440
+void CGameArea::OnActionButtonDown(const CPoint& pt)
+{
+    // TODO: Incomplete.
+}
+
+// 0x475DC0
+void CGameArea::OnActionButtonUp(const CPoint& pt)
+{
+    // TODO: Incomplete.
+}
+
+// 0x4765C0
+void CGameArea::OnActionButtonDblClk(const CPoint& pt)
+{
+    // TODO: Incomplete.
+}
+
+// 0x476680
+void CGameArea::OnFormationButtonDown(const CPoint& pt)
+{
+    // TODO: Incomplete.
+}
+
+// 0x4767E0
+void CGameArea::OnFormationButtonUp(const CPoint& pt)
+{
+    // TODO: Incomplete.
+}
+
+// 0x476970
+void CGameArea::OnMouseMove(const CPoint& pt)
+{
+    // TODO: Incomplete.
+}
+
 // 0x477550
 void CGameArea::RemoveObject(POSITION posVertList, BYTE listType, LONG id)
 {
@@ -247,6 +283,12 @@ void CGameArea::OnLightningStrike()
                 INFINITE);
         }
     }
+}
+
+// 0x477740
+void CGameArea::Render(CVidMode* pVidMode, int a2)
+{
+    // TODO: Incomplete.
 }
 
 // 0x477EE0
