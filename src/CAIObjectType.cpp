@@ -1,5 +1,6 @@
 #include "CAIObjectType.h"
 
+#include "CAIUtil.h"
 #include "CGameAIBase.h"
 #include "CUtil.h"
 
@@ -667,7 +668,95 @@ void CAIObjectType::SetSpecialCase(const BYTE* SpecialCase)
 // 0x40D450
 void CAIObjectType::Read(CString sData)
 {
-    // TODO: Incomplete.
+    CString v1;
+    LONG nEnemyAlly;
+    LONG nGeneral;
+    LONG nRace;
+    LONG nClass;
+    LONG nSpecific;
+    LONG nGender;
+    LONG nAlignment;
+    LONG nSubRace;
+    LONG nSpecialCase[5];
+
+    int x = -1;
+    int y = -1;
+    int width = -1;
+    int height = -1;
+
+    sscanf(sData,
+        "%ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld [%d.%d.%d.%d]",
+        &nEnemyAlly,
+        &nGeneral,
+        &nRace,
+        &nClass,
+        &nSpecific,
+        &nGender,
+        &nAlignment,
+        &nSubRace,
+        &(nSpecialCase[0]),
+        &(nSpecialCase[1]),
+        &(nSpecialCase[2]),
+        &(nSpecialCase[3]),
+        &(nSpecialCase[4]),
+        &x,
+        &y,
+        &width,
+        &height);
+
+    m_nRace = static_cast<BYTE>(nRace);
+    m_nEnemyAlly = static_cast<BYTE>(nEnemyAlly);
+    m_nGender = static_cast<BYTE>(nGender);
+    m_nGeneral = static_cast<BYTE>(nGeneral);
+    m_nClass = static_cast<BYTE>(nClass);
+    m_nSpecific = static_cast<BYTE>(nSpecific);
+    m_nAlignment = static_cast<BYTE>(nAlignment);
+
+    m_nSubRace = static_cast<BYTE>(nSubRace);
+    if (m_nSubRace == -1) {
+        m_nSubRace = 0;
+    }
+
+    m_SpecialCase[0] = static_cast<BYTE>(nSpecialCase[0]);
+    m_SpecialCase[1] = static_cast<BYTE>(nSpecialCase[1]);
+    m_SpecialCase[2] = static_cast<BYTE>(nSpecialCase[2]);
+    m_SpecialCase[3] = static_cast<BYTE>(nSpecialCase[3]);
+    m_SpecialCase[4] = static_cast<BYTE>(nSpecialCase[4]);
+
+    if (height > 0) {
+        CRect r;
+        r.left = x;
+        r.top = 4 * y / 3;
+        r.right = width;
+        r.bottom = 4 * height / 3;
+        r.NormalizeRect();
+
+        m_rect = r;
+        m_nLocationType = CAIOBJECTTYPE_LOCATION_TYPE_RECT;
+    } else if (x > 0 && y > 0) {
+        m_ptCenter.x = x;
+        m_ptCenter.y = 4 * y / 3;
+        m_nRadius = width;
+        m_nLocationType = CAIOBJECTTYPE_LOCATION_TYPE_POINT;
+    } else {
+        m_nLocationType = CAIOBJECTTYPE_LOCATION_TYPE_NONE;
+    }
+
+    CString sName = CAIUtil::ReadBetween(sData, CString('"'));
+    if (sName.GetLength() > 0) {
+        m_sName = sName;
+    }
+
+    int nAvClass;
+    int nClassMask;
+    sscanf(sData,
+        "%d %d",
+        &nAvClass,
+        &nClassMask);
+
+    m_nClassMask = nClassMask;
+    m_nAvClass = static_cast<BYTE>(nAvClass);
+    m_nInstance = -1;
 }
 
 // 0x40D700
