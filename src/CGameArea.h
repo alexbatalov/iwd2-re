@@ -86,6 +86,7 @@ public:
     void OnActivation();
     void OnDeactivation();
     void RemoveObject(POSITION posVertList, BYTE listType, LONG id);
+    void OnLightningStrike();
     void SetDay();
     void SetNight();
     void SetApproachingDawn();
@@ -133,6 +134,7 @@ public:
     /* 0984 */ BYTE m_sndAmbientVolume;
     /* 0986 */ WORD m_sndAmbientDayVolume;
     /* 0988 */ WORD m_sndAmbientNightVolume;
+    /* 0992 */ CTypedPtrList<CPtrList, int*> m_lVertSort; // NOTE: Stores actual ints disguised as pointers.
     /* 09E6 */ CTypedPtrList<CPtrList, int*> m_lVertSortAdd; // NOTE: Stores actual ints disguised as pointers.
     /* 0A02 */ CTypedPtrList<CPtrList, int*> m_lVertSortBackAdd; // NOTE: Stores actual ints disguised as pointers.
     /* 0A1E */ CTypedPtrList<CPtrList, int*> m_lVertSortFlightAdd; // NOTE: Stores actual ints disguised as pointers.

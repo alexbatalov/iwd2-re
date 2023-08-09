@@ -351,6 +351,12 @@ void CGameSprite::OnFormationButton(const CPoint& pt)
     }
 }
 
+// 0x700BE0
+void CGameSprite::OnLightningStrike()
+{
+    // TODO: Incomplete.
+}
+
 // 0x7011E0
 void CGameSprite::PlaySound(BYTE soundID, BOOL showText, BOOL showCircle, BOOL overrideOption)
 {

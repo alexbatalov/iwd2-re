@@ -3,6 +3,7 @@
 #include "CBaldurChitin.h"
 #include "CChitin.h"
 #include "CGameObject.h"
+#include "CGameSprite.h"
 #include "CInfGame.h"
 #include "CScreenWorld.h"
 #include "CUtil.h"
@@ -217,6 +218,35 @@ void CGameArea::OnDeactivation()
 void CGameArea::RemoveObject(POSITION posVertList, BYTE listType, LONG id)
 {
     // TODO: Incomplete.
+}
+
+// 0x4774B0
+void CGameArea::OnLightningStrike()
+{
+    if (!m_lVertSort.IsEmpty()) {
+        POSITION pos = m_lVertSort.FindIndex(rand() % m_lVertSort.GetCount());
+        LONG nId = reinterpret_cast<LONG>(m_lVertSort.GetAt(pos));
+
+        CGameObject* pObject;
+
+        BYTE rc;
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nId,
+                CGameObjectArray::THREAD_ASYNCH,
+                &pObject,
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (pObject->GetObjectType() == CGameObject::TYPE_SPRITE) {
+                static_cast<CGameSprite*>(pObject)->OnLightningStrike();
+            }
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
 }
 
 // 0x477EE0

@@ -206,6 +206,7 @@ public:
     /* 00C4 */ virtual void ResetAIType();
 
     void DropPath();
+    void OnLightningStrike();
     void PlaySound(BYTE soundID, BOOL showText, BOOL showCircle, BOOL overrideOption);
     void SetFootstepChannel();
     BYTE GetChannel();
