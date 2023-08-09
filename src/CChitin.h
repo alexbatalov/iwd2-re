@@ -1,8 +1,7 @@
 #ifndef CCHITIN_H_
 #define CCHITIN_H_
 
-#include <afxmt.h>
-#include <afxwin.h>
+#include "mfc.h"
 
 #include "CAliasList.h"
 #include "CDimm.h"

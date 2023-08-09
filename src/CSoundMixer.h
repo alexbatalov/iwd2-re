@@ -1,8 +1,7 @@
 #ifndef CSOUNDMIXER_H_
 #define CSOUNDMIXER_H_
 
-#include <afx.h>
-#include <afxwin.h>
+#include "mfc.h"
 
 // clang-format off
 #include <mmsystem.h>

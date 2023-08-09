@@ -1,7 +1,7 @@
 #ifndef CWARP_H_
 #define CWARP_H_
 
-#include <afx.h>
+#include "mfc.h"
 
 #include "CChitin.h"
 #include "CDimm.h"

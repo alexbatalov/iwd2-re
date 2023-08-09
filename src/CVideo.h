@@ -1,7 +1,8 @@
 #ifndef CVIDEO_H_
 #define CVIDEO_H_
 
-#include <afx.h>
+#include "mfc.h"
+
 #include <ddraw.h>
 
 #include "CResRef.h"

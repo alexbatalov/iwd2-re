@@ -1,7 +1,7 @@
 #ifndef CALIAS_H_
 #define CALIAS_H_
 
-#include <afx.h>
+#include "mfc.h"
 
 class CAlias : public CObject {
 public:

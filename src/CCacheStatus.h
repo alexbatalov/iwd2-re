@@ -1,8 +1,7 @@
 #ifndef CCACHESTATUS_H_
 #define CCACHESTATUS_H_
 
-#include <afx.h>
-#include <afxmt.h>
+#include "mfc.h"
 
 #include "CVidCell.h"
 #include "CVidFont.h"

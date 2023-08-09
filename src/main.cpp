@@ -1,4 +1,4 @@
-#include <afxwin.h>
+#include "mfc.h"
 
 #include <iostream>
 

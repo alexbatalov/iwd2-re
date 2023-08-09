@@ -1,7 +1,7 @@
 #ifndef CSOUNDCHANNEL_H_
 #define CSOUNDCHANNEL_H_
 
-#include <afxwin.h>
+#include "mfc.h"
 
 // #memory-identical
 class CSoundChannel : public CObject {

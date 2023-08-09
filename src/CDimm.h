@@ -1,8 +1,7 @@
 #ifndef CDIMM_H_
 #define CDIMM_H_
 
-#include <afx.h>
-#include <afxtempl.h>
+#include "mfc.h"
 
 #include "CDimmKeyTable.h"
 #include "CResCache.h"

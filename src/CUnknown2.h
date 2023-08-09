@@ -1,7 +1,7 @@
 #ifndef CUNKNOWN2_H_
 #define CUNKNOWN2_H_
 
-#include <afx.h>
+#include "mfc.h"
 
 // Unknown class in `CSoundMixer`.
 class CUnknown2 {

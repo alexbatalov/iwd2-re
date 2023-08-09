@@ -1,7 +1,8 @@
 #ifndef CVIDBLITTER_H_
 #define CVIDBLITTER_H_
 
-#include <afx.h>
+#include "mfc.h"
+
 #include <ddraw.h>
 
 class CVidBlitter {

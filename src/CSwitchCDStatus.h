@@ -1,8 +1,7 @@
 #ifndef CSWITCHCDSTATUS_H_
 #define CSWITCHCDSTATUS_H_
 
-#include <afx.h>
-#include <afxmt.h>
+#include "mfc.h"
 
 #include "CVidFont.h"
 #include "CVidMosaic.h"

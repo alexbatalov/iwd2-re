@@ -1,7 +1,7 @@
 #ifndef CVOICE_H_
 #define CVOICE_H_
 
-#include <afx.h>
+#include "mfc.h"
 
 // clang-format off
 #include <mmsystem.h>

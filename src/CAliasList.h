@@ -1,7 +1,7 @@
 #ifndef CALIASLIST_H_
 #define CALIASLIST_H_
 
-#include <afxwin.h>
+#include "mfc.h"
 
 class CAlias;
 

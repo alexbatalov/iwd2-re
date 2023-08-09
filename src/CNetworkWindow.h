@@ -1,8 +1,7 @@
 #ifndef CNETWORKWINDOW_H_
 #define CNETWORKWINDOW_H_
 
-#include <afx.h>
-#include <afxtempl.h>
+#include "mfc.h"
 
 // TODO: Reuse from `CNetwork.h`.
 typedef DWORD PLAYER_ID;

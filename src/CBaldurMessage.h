@@ -1,8 +1,7 @@
 #ifndef CBALDURMESSAGE_H_
 #define CBALDURMESSAGE_H_
 
-#include <afx.h>
-#include <afxmt.h>
+#include "mfc.h"
 
 #include "CChatBuffer.h"
 #include "CResRef.h"

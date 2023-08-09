@@ -1,7 +1,7 @@
 #ifndef CBALDURCHITIN_H_
 #define CBALDURCHITIN_H_
 
-#include <afxwin.h>
+#include "mfc.h"
 
 #include "BalDataTypes.h"
 #include "CBaldurMessage.h"
