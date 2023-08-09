@@ -357,6 +357,21 @@ void CGameSprite::OnLightningStrike()
     // TODO: Incomplete.
 }
 
+// 0x700F20
+void CGameSprite::MakeGlobal()
+{
+    if (!m_bGlobal) {
+        m_bGlobal = TRUE;
+
+        g_pBaldurChitin->GetObjectGame()->m_lstGlobalCreatures.AddTail(reinterpret_cast<int*>(m_id));
+
+        CVariable v;
+        v.SetName(CString(GetScriptName()));
+        v.m_intValue = m_id;
+        g_pBaldurChitin->GetObjectGame()->GetNamedCreatures()->AddKey(v);
+    }
+}
+
 // 0x7011E0
 void CGameSprite::PlaySound(BYTE soundID, BOOL showText, BOOL showCircle, BOOL overrideOption)
 {

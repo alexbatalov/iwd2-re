@@ -207,6 +207,7 @@ public:
 
     void DropPath();
     void OnLightningStrike();
+    void MakeGlobal();
     void PlaySound(BYTE soundID, BOOL showText, BOOL showCircle, BOOL overrideOption);
     void SetFootstepChannel();
     BYTE GetChannel();
@@ -250,6 +251,7 @@ public:
     /* 3D39 */ BYTE m_nLastSpellbookSpellLevel;
     /* 3DFA */ CAIObjectType m_liveTypeAI;
     /* 3E36 */ CAIObjectType m_startTypeAI;
+    /* 4C52 */ BOOLEAN m_bGlobal;
     /* 4C6A */ CSound m_sndWalk[2];
     /* 4D36 */ CSound m_sndArmor[2];
     /* 4E00 */ CSound m_sndReady;
