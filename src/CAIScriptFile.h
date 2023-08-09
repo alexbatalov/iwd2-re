@@ -29,6 +29,8 @@ public:
     CString ReadAfterChar(CString sLine, char c);
     BOOL LoadAllLists(CString a1);
 
+    void Clear();
+
     /* 0000 */ SHORT m_parseMode;
     /* 0002 */ LONG m_lineNumber;
     /* 0006 */ CAIScript* m_curScript;

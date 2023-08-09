@@ -19,6 +19,36 @@ const CString CAIScriptFile::RESPONSE("RESPONSE");
 // 0x8C8420
 const CString CAIScriptFile::COMMENT("//");
 
+// 0x40FCD0
+void CAIScriptFile::Clear()
+{
+    m_errors = "";
+    m_parseMode = 0;
+    m_lineNumber = 0;
+
+    if (m_curScript != NULL) {
+        delete m_curScript;
+        m_curScript = NULL;
+    }
+
+    m_curScript = new CAIScript();
+
+    if (m_curResponseSet != NULL) {
+        delete m_curResponseSet;
+    }
+    m_curResponseSet = NULL;
+
+    if (m_curCondition != NULL) {
+        delete m_curCondition;
+    }
+    m_curCondition = NULL;
+
+    if (m_curResponse != NULL) {
+        delete m_curResponse;
+    }
+    m_curResponse = NULL;
+}
+
 // 0x40FDC0
 CAIScriptFile::CAIScriptFile()
 {
