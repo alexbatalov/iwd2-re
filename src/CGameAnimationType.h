@@ -19,6 +19,8 @@ public:
 
     static BOOL MIRROR_BAM;
 
+    static CGameAnimationType* SetAnimationType(USHORT animationID, BYTE* colorRangeValues, WORD facing);
+
     CGameAnimationType();
     /* 0000 */ virtual ~CGameAnimationType();
     /* 0004 */ virtual void CalculateFxRect(CRect& rFx, CPoint& ptReference, LONG posZ);

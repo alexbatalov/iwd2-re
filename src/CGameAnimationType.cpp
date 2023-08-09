@@ -1,5 +1,22 @@
 #include "CGameAnimationType.h"
 
+#include "CGameAnimationTypeAmbient.h"
+#include "CGameAnimationTypeAmbientStatic.h"
+#include "CGameAnimationTypeCharacter.h"
+#include "CGameAnimationTypeCharacterOld.h"
+#include "CGameAnimationTypeFlying.h"
+#include "CGameAnimationTypeMonster.h"
+#include "CGameAnimationTypeMonsterAnkheg.h"
+#include "CGameAnimationTypeMonsterIcewind.h"
+#include "CGameAnimationTypeMonsterLarge.h"
+#include "CGameAnimationTypeMonsterLarge16.h"
+#include "CGameAnimationTypeMonsterLayered.h"
+#include "CGameAnimationTypeMonsterLayeredSpell.h"
+#include "CGameAnimationTypeMonsterMulti.h"
+#include "CGameAnimationTypeMonsterOld.h"
+#include "CGameAnimationTypeMonsterQuadrant.h"
+#include "CGameAnimationTypeTownStatic.h"
+
 // 0x8F8E10
 const CString CGameAnimationType::ROUND_BASE("RNDBASE");
 
@@ -32,6 +49,78 @@ CGameAnimationType::CGameAnimationType()
         sName = ROUND_BASE + c;
         m_combatRounds[c - '1'].SetResRef(CResRef(sName), TRUE, TRUE);
     }
+}
+
+// 0x6A1800
+CGameAnimationType* CGameAnimationType::SetAnimationType(USHORT animationID, BYTE* colorRangeValues, WORD facing)
+{
+    CGameAnimationType* pAnimation;
+
+    switch (animationID & 0xF000) {
+    case 0x1000:
+        switch (animationID & 0xF00) {
+        case 0x000:
+        case 0x100:
+            pAnimation = new CGameAnimationTypeMonsterQuadrant(animationID, colorRangeValues, facing & 0xF);
+            break;
+        default:
+            pAnimation = new CGameAnimationTypeMonsterMulti(animationID, colorRangeValues, facing & 0xF);
+            break;
+        }
+        break;
+    case 0x2000:
+        // TODO: Incomplete.
+        break;
+    case 0x3000:
+        pAnimation = new CGameAnimationTypeMonsterAnkheg(animationID, colorRangeValues, facing & 0xF);
+        break;
+    case 0x4000:
+        pAnimation = new CGameAnimationTypeTownStatic(animationID, colorRangeValues, facing & 0xF);
+        break;
+    case 0x5000:
+    case 0x6000:
+        if (CGameAnimationTypeCharacterOld::NewSupport(animationID)) {
+            pAnimation = new CGameAnimationTypeCharacter(animationID, colorRangeValues, facing & 0xF);
+        } else {
+            pAnimation = new CGameAnimationTypeCharacterOld(animationID, colorRangeValues, facing & 0xF);
+        }
+        break;
+    case 0x7000:
+        if (CGameAnimationTypeMonsterOld::NewSupport(animationID)) {
+            pAnimation = new CGameAnimationTypeMonster(animationID, colorRangeValues, facing & 0xF);
+        } else {
+            pAnimation = new CGameAnimationTypeMonsterOld(animationID, colorRangeValues, facing & 0xF);
+        }
+        break;
+    case 0x8000:
+        pAnimation = new CGameAnimationTypeMonsterLayered(animationID, colorRangeValues, facing & 0xF);
+        break;
+    case 0x9000:
+        pAnimation = new CGameAnimationTypeMonsterLarge(animationID, colorRangeValues, facing & 0xF);
+        break;
+    case 0xA000:
+        pAnimation = new CGameAnimationTypeMonsterLarge16(animationID, colorRangeValues, facing & 0xF);
+        break;
+    case 0xB000:
+        pAnimation = new CGameAnimationTypeAmbientStatic(animationID, colorRangeValues, facing & 0xF);
+        break;
+    case 0xC000:
+        pAnimation = new CGameAnimationTypeAmbient(animationID, colorRangeValues, facing & 0xF);
+        break;
+    case 0xD000:
+        pAnimation = new CGameAnimationTypeFlying(animationID, colorRangeValues, facing & 0xF);
+        break;
+    case 0xE000:
+        pAnimation = new CGameAnimationTypeMonsterIcewind(animationID, colorRangeValues, facing & 0xF);
+        break;
+    case 0xF000:
+        // TODO: Incomplete.
+        break;
+    }
+
+    pAnimation->m_animationID = animationID;
+
+    return pAnimation;
 }
 
 // 0x55D060
