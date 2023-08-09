@@ -197,5 +197,18 @@ void CAIResponseSet::Set(const CAIResponseSet& responseSet)
 // 0x40E770
 void CAIResponseSet::Read(CString sData)
 {
-    // TODO: Incomplete.
+    CString v1;
+    CString v2;
+
+    v2 = CAIUtil::ReadBetween(sData, CString("RE\n"));
+    while (v2.GetLength() > 0) {
+        CAIResponse* response = new CAIResponse();
+        response->Read(v2);
+
+        Add(*response);
+
+        delete response;
+
+        v2 = CAIUtil::ReadBetween(sData, CString("RE\n"));
+    }
 }
