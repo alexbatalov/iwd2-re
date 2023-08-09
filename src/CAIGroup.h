@@ -87,6 +87,8 @@ public:
     void GroupCancelMove();
     BOOL InList(LONG characterId);
 
+    BYTE GetCount();
+
     /* 0000 */ SHORT m_groupId;
     /* 0002 */ BOOL m_groupChanged;
     /* 0006 */ CTypedPtrList<CPtrList, LONG*> m_memberList;

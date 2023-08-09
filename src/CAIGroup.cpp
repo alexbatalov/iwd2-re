@@ -576,3 +576,9 @@ BOOL CAIGroup::InList(LONG characterId)
 {
     return m_memberList.Find(reinterpret_cast<LONG*>(characterId)) != NULL;
 }
+
+// 0x68C000
+BYTE CAIGroup::GetCount()
+{
+    return static_cast<BYTE>(m_memberList.GetCount());
+}
