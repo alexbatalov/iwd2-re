@@ -1,5 +1,28 @@
 #include "CAIUtil.h"
 
+// 0x421260
+CString CAIUtil::ReadTo(CString& line, CString pattern, BOOL consume)
+{
+    CString sTemp;
+
+    if (line.GetLength() < pattern.GetLength()) {
+        return line;
+    }
+
+    int index = line.Find(pattern);
+    if (index < 0) {
+        return line;
+    }
+
+    sTemp = line.Left(index);
+
+    if (consume) {
+        line = line.Right(line.GetLength() - pattern.GetLength() - index);
+    }
+
+    return sTemp;
+}
+
 // 0x421390
 CString CAIUtil::ReadBetween(CString& line, CString sep)
 {
