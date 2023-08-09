@@ -189,7 +189,7 @@ void CGameArea::OnDeactivation()
     field_3F6 = 0;
 
     if (!m_pGame->field_43E6) {
-        m_pGame->field_1BA1 = 4;
+        m_pGame->m_tempCursor = 4;
     }
 
     if (!g_pBaldurChitin->field_1C4A) {

@@ -247,7 +247,7 @@ void CScreenWorldMap::EngineDeactivated()
     field_FCE = -1;
     m_nSelectedArea = -1;
 
-    g_pBaldurChitin->GetObjectGame()->field_1BA1 = 4;
+    g_pBaldurChitin->GetObjectGame()->m_tempCursor = 4;
 }
 
 // 0x49FC40

@@ -632,7 +632,7 @@ CInfGame::CInfGame()
         m_characterPortraits[nIndex] = CGameObjectArray::INVALID_INDEX;
     }
 
-    field_1BA1 = 4;
+    m_tempCursor = 4;
     m_visibleArea = 0;
     memset(m_gameAreas, 0, sizeof(m_gameAreas));
     m_pGameAreaMaster = NULL;
@@ -2469,7 +2469,7 @@ void CInfGame::ReadyCharacterTerminationSequence(int a1, int a2)
 
         g_pBaldurChitin->GetObjectCursor()->SetCursor(0, FALSE);
 
-        pGame->field_1BA1 = 4;
+        pGame->m_tempCursor = 4;
         pGame->m_gameAreas[pGame->m_visibleArea]->m_nScrollState = 0;
         pGame->field_4AFC = 150;
 
@@ -3217,4 +3217,10 @@ LONG CInfGame::GetFixedOrderCharacterId(SHORT nSlot)
 CNamedCreatureVariableHash* CInfGame::GetNamedCreatures()
 {
     return &m_namedCreatures;
+}
+
+// 0x68C010
+void CInfGame::SetTempCursor(BYTE tempCursor)
+{
+    m_tempCursor = tempCursor;
 }

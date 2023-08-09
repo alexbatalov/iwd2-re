@@ -52,7 +52,7 @@ void CMessageHandler::PostAsynchronousUpdate()
                     && g_pBaldurChitin->m_pEngineMultiPlayer->field_45C != 1)) {
                 g_pBaldurChitin->GetObjectGame()->MultiplayerSetCharacterCreationLocation();
 
-                g_pBaldurChitin->GetObjectGame()->field_1BA1 = 4;
+                g_pBaldurChitin->GetObjectGame()->m_tempCursor = 4;
 
                 g_pBaldurChitin->m_pEngineMultiPlayer->field_45C = 1;
                 g_pBaldurChitin->m_pEngineMultiPlayer->StartMultiPlayer(1);

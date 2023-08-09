@@ -135,6 +135,7 @@ public:
     CVariableHash* GetVariables();
     CVidBitmap* GetMasterBitmap();
     CNamedCreatureVariableHash* GetNamedCreatures();
+    void SetTempCursor(BYTE tempCursor);
 
     const CRuleTables& GetRuleTables() { return m_ruleTables; }
 
@@ -191,7 +192,7 @@ public:
     /* 1B92 */ BOOLEAN m_bFromNewGame;
     /* 1B94 */ BOOLEAN m_bAnotherPlayerJoinedGame;
     /* 1B96 */ SHORT m_nState;
-    /* 1BA1 */ unsigned char field_1BA1;
+    /* 1BA1 */ unsigned char m_tempCursor;
     /* 1BAA */ CGamePermission m_singlePlayerPermissions;
     /* 1BB2 */ CMultiplayerSettings m_multiplayerSettings;
     /* 1C78 */ CInfButtonArray m_cButtonArray;

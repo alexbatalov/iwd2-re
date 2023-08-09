@@ -232,8 +232,8 @@ void CUIManager::ClearTooltip()
     }
 
     CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
-    if (pGame->field_1BA1 == 101) {
-        pGame->field_1BA1 = 4;
+    if (pGame->m_tempCursor == 101) {
+        pGame->m_tempCursor = 4;
     }
 }
 
@@ -249,8 +249,8 @@ void CUIManager::OnMouseMove(CPoint pt)
         pCursor->field_A02 = NULL;
     }
 
-    if (g_pBaldurChitin->GetObjectGame()->field_1BA1 == 101) {
-        g_pBaldurChitin->GetObjectGame()->field_1BA1 = 4;
+    if (g_pBaldurChitin->GetObjectGame()->m_tempCursor == 101) {
+        g_pBaldurChitin->GetObjectGame()->m_tempCursor = 4;
     }
 
     if (m_pFocusedControl != NULL && m_nCaptureType != KEYBOARD) {
