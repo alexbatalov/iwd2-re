@@ -1,5 +1,6 @@
 #include "CAIAction.h"
 
+#include "CAIUtil.h"
 #include "CGameAIBase.h"
 
 // 0x847784
@@ -74,7 +75,31 @@ BOOL CAIAction::OfType(SHORT type) const
 // 0x403BD0
 void CAIAction::Read(CString sData)
 {
-    // TODO: Incomplete.
+    CString v1;
+    CString v2;
+
+    v1 = CAIUtil::ReadTo(sData, CString("OB\n"), FALSE);
+    m_actionID = static_cast<SHORT>(strtol(v1, NULL, 10));
+
+    v2 = CAIUtil::ReadBetween(sData, CString("OB\n"));
+    m_actorID.Read(v2);
+
+    v2 = CAIUtil::ReadBetween(sData, CString("OB\n"));
+    m_acteeID.Read(v2);
+
+    v2 = CAIUtil::ReadBetween(sData, CString("OB\n"));
+    m_acteeID2.Read(v2);
+
+    sscanf(sData,
+        "%ld %d %d %d %d",
+        &m_specificID,
+        &(m_dest.x),
+        &(m_dest.y),
+        &m_specificID2,
+        &m_specificID3);
+
+    m_string1 = CAIUtil::ReadBetween(sData, CString('"'));
+    m_string2 = CAIUtil::ReadBetween(sData, CString('"'));
 }
 
 // 0x403E60
