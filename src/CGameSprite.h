@@ -237,8 +237,11 @@ public:
     void DisplayFeats(CUIControlTextDisplay* pText);
     void DisplaySkills(CUIControlTextDisplay* pText);
 
+    void SetResRef(const CResRef& resRef);
+
     CGameAnimation* GetAnimation();
 
+    /* 0598 */ CResRef m_resRef;
     /* 05A0 */ CString m_sName;
     /* 05A4 */ CCreatureFileHeader m_baseStats;
     /* 0920 */ CDerivedStats m_derivedStats;

@@ -1588,6 +1588,12 @@ void CGameSprite::DisplaySkills(CUIControlTextDisplay* pText)
     }
 }
 
+// 0x42FDC0
+void CGameSprite::SetResRef(const CResRef& resRef)
+{
+    m_resRef = resRef;
+}
+
 // NOTE: Inlined.
 CGameAnimation* CGameSprite::GetAnimation()
 {
