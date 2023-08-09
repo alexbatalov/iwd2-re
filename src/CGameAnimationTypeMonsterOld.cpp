@@ -410,6 +410,142 @@ CGameAnimationTypeMonsterOld::~CGameAnimationTypeMonsterOld()
 {
 }
 
+// 0x6AF4A0
+BOOL CGameAnimationTypeMonsterOld::NewSupport(USHORT animationID)
+{
+    switch (animationID & 0xF00) {
+    case 0x000:
+        switch (animationID & 0xF) {
+        case 0:
+        case 1:
+            return FALSE;
+        default:
+            return TRUE;
+        }
+        break;
+    case 0x100:
+        switch (animationID & 0xF) {
+        case 0:
+        case 1:
+            return FALSE;
+        default:
+            return TRUE;
+        }
+        break;
+    case 0x200:
+        switch (animationID & 0xF) {
+        case 0:
+        case 1:
+            return FALSE;
+        default:
+            return TRUE;
+        }
+        break;
+    case 0x300:
+        switch (animationID & 0xF) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+            return FALSE;
+        default:
+            return TRUE;
+        }
+        break;
+    case 0x400:
+        switch (animationID & 0xF) {
+        case 0:
+        case 1:
+        case 2:
+            return FALSE;
+        default:
+            return TRUE;
+        }
+        break;
+    case 0x500:
+        switch (animationID & 0xF) {
+        case 0:
+        case 1:
+            return FALSE;
+        default:
+            return TRUE;
+        }
+        break;
+    case 0x600:
+        return FALSE;
+    case 0x700:
+        switch (animationID & 0xF) {
+        case 0:
+        case 1:
+        case 2:
+            return FALSE;
+        default:
+            return TRUE;
+        }
+        break;
+    case 0x800:
+        return FALSE;
+    case 0x900:
+        switch (animationID & 0xF) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+            return FALSE;
+        default:
+            return TRUE;
+        }
+        break;
+    case 0xA00:
+        switch (animationID & 0xF) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+            return FALSE;
+        default:
+            return TRUE;
+        }
+        break;
+    case 0xB00:
+        switch (animationID & 0xF) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+            return FALSE;
+        default:
+            return TRUE;
+        }
+        break;
+    case 0xC00:
+        switch (animationID & 0xF) {
+        case 0:
+        case 1:
+            return FALSE;
+        default:
+            return TRUE;
+        }
+        break;
+    case 0xD00:
+        return FALSE;
+    case 0xE00:
+        switch (animationID & 0xF) {
+        case 0:
+        case 1:
+            return FALSE;
+        default:
+            return TRUE;
+        }
+        break;
+    }
+
+    return TRUE;
+}
+
 // 0x6AF210
 BOOLEAN CGameAnimationTypeMonsterOld::DetectedByInfravision()
 {

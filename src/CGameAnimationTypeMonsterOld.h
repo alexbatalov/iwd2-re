@@ -29,6 +29,8 @@ public:
     /* 00AC */ SHORT SetSequence(SHORT nSequence) override;
     /* 00C8 */ SHORT GetCurrentFrame() override;
 
+    static BOOL NewSupport(USHORT animationID);
+
     /* 03FE */ CString m_resRef;
     /* 0402 */ CVidCell* m_currentVidCell;
     /* 0406 */ CVidCell* m_currentVidCellBase;
