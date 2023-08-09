@@ -29,6 +29,8 @@ public:
     /* 00CC */ BOOLEAN GetCurrentSequenceAndFrame(SHORT nSequence, SHORT nFrame) override;
     /* 00D0 */ BOOLEAN GetCurrentResRef(CString& resBody, CString& resWeapon, CString& resShield, CString& resHelmet) override;
 
+    static BOOL NewSupport(USHORT animationID);
+
     /* 03FE */ CString m_resRef;
     /* 0402 */ CString m_shadowResRef;
     /* 0406 */ CString m_heightCode;

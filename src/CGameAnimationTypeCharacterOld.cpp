@@ -264,6 +264,85 @@ CGameAnimationTypeCharacterOld::~CGameAnimationTypeCharacterOld()
 {
 }
 
+// 0x6D44E0
+BOOL CGameAnimationTypeCharacterOld::NewSupport(USHORT animationID)
+{
+    switch (animationID) {
+    case 0x000:
+        switch (animationID & 0xF) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+            return TRUE;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+            // __LINE__: 21254
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 0x100:
+        switch (animationID & 0xF) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+            return TRUE;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+            // __LINE__: 21304
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 0x200:
+        switch (animationID & 0xF) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+            return TRUE;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+            // __LINE__: 21354
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 0x300:
+        switch (animationID & 0xF) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+            return TRUE;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+            // __LINE__: 21404
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 0x400:
+        switch (animationID & 0xF) {
+        case 0:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+            return FALSE;
+        }
+        break;
+    }
+
+    return TRUE;
+}
+
 // 0x6D3CC0
 BOOLEAN CGameAnimationTypeCharacterOld::CanLieDown()
 {
