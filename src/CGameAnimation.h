@@ -15,6 +15,7 @@ public:
 
     void GetAnimationResRef(CString& resRef, BYTE range);
     const CRect& GetEllipseRect();
+    void SetAnimationType(USHORT animationID, BYTE* colorRangeValues, WORD facing);
     CGameAnimationType* GetAnimation();
 
     /* 0004 */ CGameAnimationType* m_animation;

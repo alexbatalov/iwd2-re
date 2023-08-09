@@ -49,6 +49,20 @@ void CGameAnimation::GetAnimationResRef(CString& resRef, BYTE range)
 }
 
 // NOTE: Inlined.
+void CGameAnimation::SetAnimationType(USHORT animationID, BYTE* colorRangeValues, WORD facing)
+{
+    if (m_animation != NULL) {
+        delete m_animation;
+    }
+
+    m_animation = CGameAnimationType::SetAnimationType(animationID, colorRangeValues, facing);
+
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2086
+    UTIL_ASSERT(m_animation != NULL);
+}
+
+// NOTE: Inlined.
 const CRect& CGameAnimation::GetEllipseRect()
 {
     // __FILE__: .\Include\ObjAnimation.h
