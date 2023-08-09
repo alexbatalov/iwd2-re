@@ -227,6 +227,7 @@ public:
     BOOL sub_763150(UINT nFeatNumber);
     BOOL sub_763200(UINT nFeatNumber, INT a2);
     BOOL sub_763A40(UINT nFeatNumber, INT a2);
+    int GetExtraSkillPoints(BYTE nClass);
     void SetSkillValue(UINT iSkillNumber, INT iSkillValue);
     INT GetSkillValue(UINT iSkillNumber);
     INT GetSkillCost(UINT iSkillNumber, BYTE nClass);

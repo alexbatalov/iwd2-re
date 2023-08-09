@@ -1182,6 +1182,34 @@ BOOL CGameSprite::sub_763A40(UINT nFeatNumber, INT a2)
     return TRUE;
 }
 
+// 0x763DA0
+int CGameSprite::GetExtraSkillPoints(BYTE nClass)
+{
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    int sp = atol(ruleTables.m_tSkillPoints.GetAt(CPoint(nClass - 1, 0)));
+
+    sp += ruleTables.GetAbilityScoreModifier(m_baseStats.m_INTBase);
+
+    if (sp < 1) {
+        sp = 1;
+    }
+
+    if (m_derivedStats.m_nLevel == 1) {
+        sp *= 4;
+    }
+
+    if (m_typeAI.m_nRace == CAIOBJECTTYPE_R_HUMAN
+        && m_typeAI.m_nSubRace == CAIOBJECTTYPE_SUBRACE_PURERACE) {
+        if (m_derivedStats.m_nLevel == 1) {
+            sp++;
+        }
+        sp++;
+    }
+
+    return sp;
+}
+
 // 0x764270
 void CGameSprite::SetSkillValue(UINT iSkillNumber, INT iSkillValue)
 {
