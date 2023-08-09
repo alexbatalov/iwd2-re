@@ -53,6 +53,8 @@ public:
     SHORT MoveCursorPoint();
     SHORT StartMusic();
 
+    SCRIPTNAME& GetScriptName();
+
     void SetDefaultScript(CAIScript* script);
 
     /* 006E */ CAIObjectType field_6E;
@@ -90,6 +92,7 @@ public:
     /* 054C */ int field_54C;
     /* 0550 */ short field_550;
     /* 0552 */ short field_552;
+    /* 0554 */ SCRIPTNAME m_scriptName;
     /* 0574 */ BOOL m_inCutScene;
     /* 0578 */ BOOL m_firstCall;
     /* 057C */ int field_57C;

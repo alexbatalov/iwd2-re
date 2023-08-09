@@ -599,6 +599,12 @@ SHORT CGameAIBase::StartMusic()
     return ACTION_DONE;
 }
 
+// 0x460D60
+SCRIPTNAME& CGameAIBase::GetScriptName()
+{
+    return m_scriptName;
+}
+
 // NOTE: Inlined.
 void CGameAIBase::SetDefaultScript(CAIScript* script)
 {
