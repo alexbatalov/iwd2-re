@@ -13,6 +13,7 @@ public:
 
     USHORT GetAnimationId();
 
+    void ChangeDirection(SHORT nDirection);
     void GetAnimationResRef(CString& resRef, BYTE range);
     const CRect& GetEllipseRect();
     void SetAnimationType(USHORT animationID, BYTE* colorRangeValues, WORD facing);

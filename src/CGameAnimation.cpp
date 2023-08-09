@@ -28,6 +28,16 @@ void CGameAnimation::CalculateGCBoundsRect(CRect& rGCBounds, const CPoint& pos, 
     m_animation->CalculateGCBoundsRect(rGCBounds, pos, ptReference, posZ, nWidth, nHeight);
 }
 
+// NOTE: Inlined.
+void CGameAnimation::ChangeDirection(SHORT nDirection)
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2074
+    UTIL_ASSERT(m_animation != NULL);
+
+    m_animation->ChangeDirection(nDirection);
+}
+
 // 0x45B690
 USHORT CGameAnimation::GetAnimationId()
 {
