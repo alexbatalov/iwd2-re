@@ -1,5 +1,7 @@
 #include "CAIResponse.h"
 
+#include "CAIUtil.h"
+
 // 0x40DAB0
 CAIResponse::CAIResponse()
 {
@@ -108,7 +110,23 @@ BOOL CAIResponse::InListEnd(SHORT actionID)
 // 0x40E100
 void CAIResponse::Read(CString sData)
 {
-    // TODO: Incomplete.
+    CAIAction temp;
+    CString v1;
+    CString v2;
+
+    v1 = CAIUtil::ReadTo(sData, CString("AC\n"), FALSE);
+
+    v2 = CAIUtil::ReadBetween(sData, CString("AC\n"));
+    while (v2.GetLength() > 0) {
+        temp.Read(v2);
+
+        CAIAction* action = new CAIAction(temp);
+        m_actionList.AddTail(action);
+
+        temp = CAIAction::NULL_ACTION;
+
+        v2 = CAIUtil::ReadBetween(sData, CString("AC\n"));
+    }
 }
 
 // NOTE: Inlined.
