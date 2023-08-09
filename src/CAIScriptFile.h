@@ -24,6 +24,7 @@ public:
     SHORT DecodeTriggerID(CString sName);
     SHORT DecodeActionID(CString sName);
     BYTE DecodeSpecialCase(CString sName);
+    LONG ParseInt(CString sID, CString sListName);
     void ParseError(CString sError);
     CString ReadToChar(CString sLine, char c);
     CString ReadAfterChar(CString sLine, char c);

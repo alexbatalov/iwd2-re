@@ -1,6 +1,7 @@
 #include "CAIScriptFile.h"
 
 #include "CAICondition.h"
+#include "CAIIdList.h"
 #include "CAIResponse.h"
 #include "CAIScript.h"
 
@@ -124,6 +125,19 @@ BYTE CAIScriptFile::DecodeSpecialCase(CString sName)
     ParseError("Special Case:" + sName + " Not found.  Check for proper brackets.");
 
     return -1;
+}
+
+// 0x41D250
+LONG CAIScriptFile::ParseInt(CString sID, CString sListName)
+{
+    CResRef resRef(sListName);
+    CAIIdList ids(resRef);
+    CAIId* id = ids.Find(sID, FALSE);
+    if (id != NULL) {
+        return id->m_id;
+    }
+
+    return strtol(sID, 0, 10);
 }
 
 // 0x41D310
