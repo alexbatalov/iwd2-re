@@ -105,7 +105,52 @@ CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
 // 0x4468F0
 void CDerivedStats::CheckLimits()
 {
-    // TODO: Incomplete.
+    if ((m_generalState & 0x800) != 0) {
+        m_generalState &= ~0xFFFFF03F;
+    }
+
+    field_4 = min(field_4, 1);
+    field_E = min(max(field_E, -20), 20);
+    field_10 = min(max(field_10, -20), 20);
+    field_12 = min(max(field_12, -20), 20);
+    field_14 = min(max(field_14, -20), 20);
+    field_18 = min(max(field_18, -255), 255);
+    field_1A = min(max(field_1A, 0), 5);
+    field_1C = min(max(field_1C, -40), 40);
+    field_1E = min(max(field_1E, -40), 40);
+    field_20 = min(max(field_20, -40), 40);
+    field_144[10] = min(max(field_144[10], -128), 127);
+    field_144[9] = min(max(field_144[9], -128), 127);
+    field_144[6] = min(max(field_144[6], -128), 127);
+    field_144[14] = min(max(field_144[14], -128), 127);
+    field_144[12] = min(max(field_144[12], -128), 127);
+    field_144[11] = min(max(field_144[11], -128), 127);
+    field_144[15] = min(max(field_144[15], -128), 127);
+    field_38 = min(max(field_38, 0), 100);
+    field_3A = min(max(field_3A, 0), 100);
+    field_3C = min(max(field_3C, 0), 100);
+    m_nLevel = min(m_nLevel, 50);
+    m_nSTR = min(max(m_nSTR, 1), 40);
+    m_nINT = min(max(m_nINT, 1), 40);
+    m_nWIS = min(max(m_nWIS, 1), 40);
+    m_nDEX = min(max(m_nDEX, 1), 40);
+    field_5C = min(max(field_5C, 1), 40);
+    field_5E = min(max(field_5E, 1), 40);
+    field_60 = min(max(field_60, -1), 0);
+    field_64 = min(max(field_64, -1), 0);
+    field_68 = min(max(field_68, -1), 0);
+    field_70 = min(max(field_70, -1), 0);
+    field_74 = min(max(field_74, 10), 200);
+    field_6C = min(max(field_6C, 10), 200);
+    field_86 = min(max(field_86, -128), 127);
+    field_88 = min(max(field_88, 0), 100);
+    field_8A = min(max(field_8A, 0), 100);
+    field_8C = min(max(field_8C, 0), 255);
+    field_8E = min(max(field_8E, 0), 255);
+    field_90 = max(field_90, 0);
+    field_92 = max(field_92, 0);
+    field_94 = max(field_94, 0);
+    field_B2 = min(field_B2, 255);
 }
 
 // 0x446DD0
