@@ -2,8 +2,8 @@
 
 #include "CGameEffect.h"
 #include "CGameSprite.h"
-#include "FileFormat.h"
 #include "CUtil.h"
+#include "FileFormat.h"
 
 // 0x443B30
 CDerivedStats::CDerivedStats()
@@ -14,11 +14,148 @@ CDerivedStats::CDerivedStats()
 // 0x4440F0
 void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature, int a3, int a4)
 {
+    int index;
+
+    field_92 = 0;
+    field_94 = 0;
+
+    m_generalState = pCreature->m_generalState;
+    field_4 = pCreature->field_1E;
+    field_6 = 0;
+    field_8 = 0;
+    field_A = 0;
+    field_C = pCreature->field_3E;
+    field_E = pCreature->field_40;
+    field_10 = pCreature->field_42;
+    field_12 = pCreature->field_44;
+    field_14 = pCreature->field_46;
+
+    // TODO: Incomplete.
+
+    field_16 = 0;
+    field_18 = 0;
+    field_1A = pCreature->field_49;
+    field_1C = pCreature->field_4A;
+    field_1E = pCreature->field_4B;
+    field_20 = pCreature->field_4C;
+    field_22 = pCreature->field_4D;
+    field_24 = pCreature->field_4E;
+    field_26 = pCreature->field_4F;
+    field_28 = pCreature->field_50;
+    field_2A = pCreature->field_51;
+    field_2C = pCreature->field_52;
+    field_2E = pCreature->field_53;
+    field_30 = pCreature->field_54;
+    field_32 = pCreature->field_55;
+    field_34 = pCreature->field_56;
+    field_36 = pCreature->field_57;
+    field_3A = pCreature->field_5D;
+    field_3C = pCreature->field_5F;
+
+    memcpy(field_144, pCreature->m_skills, 64);
+
+    field_3E = pCreature->field_25B;
+
+    m_nLevel = pCreature->m_characterLevel;
+    m_barbarianLevel = pCreature->m_barbarianLevel;
+    m_bardLevel = pCreature->m_bardLevel;
+    m_clericLevel = pCreature->m_clericLevel;
+    m_druidLevel = pCreature->m_druidLevel;
+    m_fighterLevel = pCreature->m_fighterLevel;
+    m_monkLevel = pCreature->m_monkLevel;
+    m_paladinLevel = pCreature->m_paladinLevel;
+    m_rangerLevel = pCreature->m_rangerLevel;
+    m_rogueLevel = pCreature->m_rogueLevel;
+    m_sorcererLevel = pCreature->m_sorcererLevel;
+    m_wizardLevel = pCreature->m_wizardLevel;
+
+    field_52 = pCreature->field_25D;
+
+    m_nSTR = pCreature->m_STRBase;
+    m_nINT = pCreature->m_INTBase;
+    m_nWIS = pCreature->m_WISBase;
+    m_nDEX = pCreature->m_DEXBase;
+    m_nCON = pCreature->m_CONBase;
+    m_nCHR = pCreature->m_CHRBase;
+
+    field_60 = pCreature->field_C;
+    field_64 = pCreature->field_10;
+    field_68 = pCreature->field_14;
+    field_70 = pCreature->field_266;
+    field_74 = pCreature->field_3C;
+    field_6C = pCreature->field_265;
+
+    for (index = 0; index < 8; index++) {
+        m_favoredEnemies[index] = pCreature->m_favoredEnemies[index];
+    }
+
+    m_nSpecialization = pCreature->m_specialization;
+    field_A6 = 0;
+    field_AA = 0;
+    field_86 = 0;
+    field_88 = 0;
+    field_8A = 0;
+    field_8C = 100;
+    field_8E = 100;
+    field_90 = 0;
+    field_96 = 0;
+    field_9A = 0;
+    field_B2 = 0;
+    field_9E = 0;
+
+    for (index = 0; index < 8; index++) {
+        field_EC[index] = 0;
+    }
+
+    field_10C = 0;
+    field_AE = 0;
+    field_B4 = 0;
+    field_B8 = pCreature->field_58;
+    field_BA = 0;
+    field_BC = 0;
+    field_C0 = 0;
+    field_C4 = 0;
+    field_C6 = 0;
+    field_C8 = 0;
+    field_CA = 0;
+    field_CC = 0;
+    field_D0 = 0;
+    field_D4 = 0;
+    field_D8 = 0;
+    field_DC = 0;
+    field_E0 = 0;
+    field_E4 = 0;
+    field_E8 = 0;
+    field_110 = 0;
+    field_112 = 0;
+    field_114 = 0;
+    field_116 = 0;
+    field_118 = 0;
+    field_11A = 0;
+    field_11C = 0;
+    field_11E = 0;
+    field_120 = 0;
+    field_122 = 0;
+    field_124 = 0;
+    field_128 = 0;
+    field_12C = 0;
+    field_130 = 0;
+    field_134 = 0;
+    field_138 = 0;
+    field_13C = 0;
+    field_140 = 0;
+    field_184 = 0;
+
     // TODO: Incomplete.
 
     m_naturalImmunities.clear();
 
     // TODO: Incomplete.
+
+    memset(field_DAC, 0, sizeof(field_DAC));
+    field_E4C = 0;
+    field_E50 = 0;
+    field_E54 = 0;
 
     if (pSprite != NULL) {
         CAIObjectType typeAI(pSprite->GetAIType());
@@ -102,8 +239,8 @@ CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
     m_nINT += other.m_nINT;
     m_nWIS += other.m_nWIS;
     m_nDEX += other.m_nDEX;
-    field_5C += other.field_5C;
-    field_5E += other.field_5E;
+    m_nCON += other.m_nCON;
+    m_nCHR += other.m_nCHR;
     field_60 += other.field_60;
     field_64 += other.field_64;
     field_68 += other.field_68;
@@ -194,8 +331,8 @@ void CDerivedStats::CheckLimits()
     m_nINT = min(max(m_nINT, 1), 40);
     m_nWIS = min(max(m_nWIS, 1), 40);
     m_nDEX = min(max(m_nDEX, 1), 40);
-    field_5C = min(max(field_5C, 1), 40);
-    field_5E = min(max(field_5E, 1), 40);
+    m_nCON = min(max(m_nCON, 1), 40);
+    m_nCHR = min(max(m_nCHR, 1), 40);
     field_60 = min(max(field_60, -1), 0);
     field_64 = min(max(field_64, -1), 0);
     field_68 = min(max(field_68, -1), 0);
@@ -302,9 +439,9 @@ LONG CDerivedStats::GetAtOffset(SHORT offset)
     case 40:
         return m_nDEX;
     case 41:
-        return field_5C;
+        return m_nCON;
     case 42:
-        return field_5E;
+        return m_nCHR;
     case 43:
         return field_60;
     case 44:
@@ -318,7 +455,7 @@ LONG CDerivedStats::GetAtOffset(SHORT offset)
     case 48:
         return field_74;
     case 49:
-        return field_76;
+        return m_favoredEnemies[0];
     case 50:
         return field_86;
     case 51:
@@ -390,7 +527,7 @@ LONG CDerivedStats::GetAtOffset(SHORT offset)
     case 88:
         return field_E8;
     case 89:
-        return field_A2;
+        return m_nSpecialization;
     case 90:
         return field_144[6];
     case 91:

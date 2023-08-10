@@ -2426,9 +2426,9 @@ SHORT CRuleTables::GetLayOnHandsAmount(const CAIObjectType& typeAI, CDerivedStat
     DWORD nPaladinLevel = DStats.GetClassLevel(CAIOBJECTTYPE_C_PALADIN);
 
     // TODO: Check casts.
-    float v1 = DStats.field_5E < 10
-        ? static_cast<float>(DStats.field_5E) - 1.0f
-        : static_cast<float>(DStats.field_5E);
+    float v1 = DStats.m_nCHR < 10
+        ? static_cast<float>(DStats.m_nCHR) - 1.0f
+        : static_cast<float>(DStats.m_nCHR);
     float v2 = (v1 - 10.0f) / 2.0f;
     if (static_cast<int>(v2) >= 1) {
         nPaladinLevel *= static_cast<int>(v2);
@@ -2459,7 +2459,7 @@ INT CRuleTables::GetLathanderRenewalAmount(const CAIObjectType& typeAI, CDerived
         return 0;
     }
 
-    if ((DStats.field_A2 & 0x10000) == 0) {
+    if ((DStats.m_nSpecialization & SPECMASK_CLERIC_LATHANDER) == 0) {
         return 0;
     }
 

@@ -7,11 +7,39 @@ class CCreatureFileHeader {
 public:
     /* 0000 */ DWORD m_name;
     /* 0008 */ DWORD m_flags;
+    /* 000C */ int field_C;
+    /* 0010 */ int field_10;
+    /* 0014 */ int field_14;
     /* 0018 */ DWORD m_generalState;
+    /* 001E */ short field_1E;
     /* 0024 */ BYTE m_colors[7];
     /* 002C */ RESREF m_portraitSmall;
     /* 0034 */ RESREF m_portraitLarge;
+    /* 003C */ unsigned char field_3C;
+    /* 003E */ short field_3E;
+    /* 0040 */ short field_40;
+    /* 0042 */ short field_42;
+    /* 0044 */ short field_44;
+    /* 0046 */ short field_46;
     /* 0048 */ BYTE m_attackBase;
+    /* 0049 */ unsigned char field_49;
+    /* 004A */ unsigned char field_4A;
+    /* 004B */ unsigned char field_4B;
+    /* 004C */ unsigned char field_4C;
+    /* 004D */ unsigned char field_4D;
+    /* 004E */ unsigned char field_4E;
+    /* 004F */ unsigned char field_4F;
+    /* 0050 */ unsigned char field_50;
+    /* 0051 */ unsigned char field_51;
+    /* 0052 */ unsigned char field_52;
+    /* 0053 */ unsigned char field_53;
+    /* 0054 */ unsigned char field_54;
+    /* 0055 */ unsigned char field_55;
+    /* 0056 */ unsigned char field_56;
+    /* 0057 */ unsigned char field_57;
+    /* 0058 */ unsigned char field_58;
+    /* 005D */ unsigned char field_5D;
+    /* 005F */ unsigned char field_5F;
     /* 0082 */ BYTE m_characterLevel;
     /* 0083 */ union {
         struct {
@@ -27,9 +55,10 @@ public:
             /* 008C */ BYTE m_sorcererLevel;
             /* 008D */ BYTE m_wizardLevel;
         };
-        BYTE m_classLevels[10];
+        BYTE m_classLevels[11];
     };
     /* 01A0 */ int field_1A0;
+    /* 01B4 */ int field_1B4;
     /* 01B8 */ DWORD m_feats[3];
     /* 01D0 */ BYTE m_featBow;
     /* 01D1 */ BYTE m_featCrossbow;
@@ -57,7 +86,7 @@ public:
     /* 01E7 */ BYTE m_featExtraSmiting;
     /* 01E8 */ BYTE m_featExtraTurning;
     /* 01E9 */ BYTE m_featBastardSword;
-    /* 0210 */ BYTE m_skills[16];
+    /* 0210 */ BYTE m_skills[64];
     /* 0253 */ BYTE m_favoredEnemies[8];
     /* 025E */ BYTE m_STRBase;
     /* 025F */ BYTE m_DEXBase;
@@ -65,6 +94,10 @@ public:
     /* 0261 */ BYTE m_INTBase;
     /* 0262 */ BYTE m_WISBase;
     /* 0263 */ BYTE m_CHRBase;
+    /* 025B */ unsigned char field_25B;
+    /* 025D */ unsigned char field_25D;
+    /* 0265 */ unsigned char field_265;
+    /* 0266 */ short field_266;
     /* 0268 */ DWORD m_specialization;
 };
 

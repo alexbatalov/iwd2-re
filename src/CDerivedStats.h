@@ -80,15 +80,15 @@ public:
     /* 0056 */ SHORT m_nINT;
     /* 0058 */ SHORT m_nWIS;
     /* 005A */ SHORT m_nDEX;
-    /* 005C */ short field_5C;
-    /* 005E */ short field_5E;
+    /* 005C */ SHORT m_nCON;
+    /* 005E */ SHORT m_nCHR;
     /* 0060 */ int field_60;
     /* 0064 */ int field_64;
     /* 0068 */ int field_68;
     /* 006C */ int field_6C;
     /* 0070 */ int field_70;
     /* 0074 */ short field_74;
-    /* 0076 */ short field_76;
+    /* 0076 */ short m_favoredEnemies[8];
     /* 0086 */ short field_86;
     /* 0088 */ short field_88;
     /* 008A */ short field_8A;
@@ -100,7 +100,7 @@ public:
     /* 0096 */ short field_96;
     /* 009A */ int field_9A;
     /* 009E */ int field_9E;
-    /* 00A2 */ int field_A2;
+    /* 00A2 */ int m_nSpecialization;
     /* 00A6 */ int field_A6;
     /* 00AA */ int field_AA;
     /* 00AE */ int field_AE;
@@ -173,6 +173,10 @@ public:
     /* 0554 */ CPtrList field_554;
     /* 0570 */ CPtrList field_570;
     /* 0590 */ CPtrList field_590;
+    /* 0DAC */ unsigned char field_DAC[160];
+    /* 0E4C */ int field_E4C;
+    /* 0E50 */ int field_E50;
+    /* 0E54 */ int field_E54;
 };
 
 #endif /* CDERIVEDSTATS_H_ */
