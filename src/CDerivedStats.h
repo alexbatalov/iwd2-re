@@ -102,6 +102,7 @@ public:
     /* 00E0 */ int field_E0;
     /* 00E4 */ int field_E4;
     /* 00E8 */ int field_E8;
+    /* 00EC */ int field_EC[8];
     /* 010C */ int field_10C;
     /* 0110 */ short field_110;
     /* 0112 */ short field_112;
@@ -121,7 +122,7 @@ public:
     /* 0138 */ int field_138;
     /* 013C */ int field_13C;
     /* 0140 */ int field_140;
-    /* 0144 */ BYTE field_144[16];
+    /* 0144 */ BYTE field_144[64];
     /* 0184 */ int field_184;
     /* 0188 */ CPtrList field_188;
     /* 01A4 */ CPtrList field_1A4;

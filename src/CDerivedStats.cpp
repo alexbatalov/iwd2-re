@@ -11,6 +11,8 @@ CDerivedStats::CDerivedStats()
 // 0x4464E0
 CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
 {
+    int index;
+
     field_4 += other.field_4;
     field_6 += other.field_6;
     field_8 += other.field_8;
@@ -70,7 +72,9 @@ CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
     field_A6 += other.field_A6;
     field_AA += other.field_AA;
 
-    // TODO: Incomplete (unclear loop).
+    for (index = 0; index < 8; index++) {
+        field_EC[index] |= other.field_EC[index];
+    }
 
     field_10C |= other.field_10C;
     field_E8 += other.field_E8;
@@ -95,7 +99,9 @@ CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
     field_13C += other.field_13C;
     field_140 += other.field_140;
 
-    // TODO: Incomplete (unclear loop).
+    for (index = 0; index < 64; index++) {
+        field_144[index] += other.field_144[index];
+    }
 
     CheckLimits();
 
