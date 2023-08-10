@@ -332,55 +332,47 @@ unsigned char CDerivedStats::sub_4473A0()
 // 0x4473B0
 DWORD CDerivedStats::GetSorcererWizardLevel()
 {
-    DWORD dwArcaneClassesMask = m_classMask & (CLASSMASK_SORCERER | CLASSMASK_WIZARD);
-    DWORD dwCurrentClassMask = 1;
-    DWORD nLevel = 0;
-
-    if (dwArcaneClassesMask != 0) {
-        for (int index = 0; index < CAIOBJECT_CLASS_MAX; index++) {
-            if (dwCurrentClassMask > (CLASSMASK_SORCERER | CLASSMASK_WIZARD)) {
-                break;
-            }
-
-            if ((dwArcaneClassesMask & dwCurrentClassMask) != 0) {
-                nLevel += m_nClassLevels[index];
-            }
-
-            dwCurrentClassMask <<= 1;
-        }
-    }
-
-    return nLevel;
+    // NOTE: Uninline.
+    return GetClassMaskLevel(CLASSMASK_SORCERER | CLASSMASK_WIZARD);
 }
 
 // 0x4473F0
 DWORD CDerivedStats::GetBardMonkRogueLevel()
 {
-    DWORD dwArcaneClassesMask = m_classMask & (CLASSMASK_BARD | CLASSMASK_MONK | CLASSMASK_ROGUE);
-    DWORD dwCurrentClassMask = 1;
-    DWORD nLevel = 0;
-
-    if (dwArcaneClassesMask != 0) {
-        for (int index = 0; index < CAIOBJECT_CLASS_MAX; index++) {
-            if (dwCurrentClassMask > (CLASSMASK_BARD | CLASSMASK_MONK | CLASSMASK_ROGUE)) {
-                break;
-            }
-
-            if ((dwArcaneClassesMask & dwCurrentClassMask) != 0) {
-                nLevel += m_nClassLevels[index];
-            }
-
-            dwCurrentClassMask <<= 1;
-        }
-    }
-
-    return nLevel;
+    // NOTE: Uninline.
+    return GetClassMaskLevel(CLASSMASK_BARD | CLASSMASK_MONK | CLASSMASK_ROGUE);
 }
 
 // 0x447940
 BOOL CDerivedStats::HasClassMask(INT iClassType)
 {
     return (iClassType & m_classMask) != 0;
+}
+
+// 0x447950
+DWORD CDerivedStats::GetClassMaskLevel(DWORD dwMask)
+{
+    DWORD nLevel = 0;
+    DWORD dwCurrentClassMask = 1;
+
+    DWORD dwClassMask = dwMask & m_classMask;
+    if (dwClassMask == 0) {
+        return 0;
+    }
+
+    for (int index = 0; index < CAIOBJECT_CLASS_MAX; index++) {
+        if (dwCurrentClassMask > dwMask) {
+            break;
+        }
+
+        if ((dwClassMask & dwCurrentClassMask) != 0) {
+            nLevel += m_nClassLevels[index];
+        }
+
+        dwCurrentClassMask <<= 1;
+    }
+
+    return nLevel;
 }
 
 // 0x447990

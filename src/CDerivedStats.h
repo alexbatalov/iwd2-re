@@ -14,6 +14,7 @@ public:
     DWORD GetSorcererWizardLevel();
     DWORD GetBardMonkRogueLevel();
     BOOL HasClassMask(INT iClassType);
+    DWORD GetClassMaskLevel(DWORD dwMask);
     DWORD GetClassLevel(INT iClassType);
     void SetClassLevel(INT iClassType, INT nLevel);
     BOOL HasClass(INT iClassType);
