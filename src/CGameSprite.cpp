@@ -1246,6 +1246,29 @@ BOOL CGameSprite::sub_763A40(UINT nFeatNumber, INT a2)
     return TRUE;
 }
 
+// 0x763CB0
+int CGameSprite::GetExtraFeats(BYTE nClass)
+{
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    int classLevel = m_derivedStats.GetClassLevel(nClass);
+
+    int feats = atol(ruleTables.m_tFeatLevel.GetAt(CPoint(0, m_derivedStats.m_nLevel - 1)));
+    feats += atol(ruleTables.m_tFeatClass.GetAt(CPoint(nClass - 1, classLevel - 1)));
+
+    if (m_derivedStats.m_nLevel == 1) {
+        if (m_typeAI.m_nRace == CAIOBJECTTYPE_R_HUMAN
+            && m_typeAI.m_nSubRace == CAIOBJECTTYPE_SUBRACE_PURERACE) {
+            feats++;
+        } else if (m_typeAI.m_nRace == CAIOBJECTTYPE_R_HALFLING
+            && m_typeAI.m_nSubRace == CAIOBJECTTYPE_SUBRACE_HALFLING_STRONGHEART) {
+            feats++;
+        }
+    }
+
+    return feats;
+}
+
 // 0x763DA0
 int CGameSprite::GetExtraSkillPoints(BYTE nClass)
 {
