@@ -1,11 +1,65 @@
 #include "CDerivedStats.h"
 
+#include "CGameEffect.h"
+#include "CGameSprite.h"
+#include "FileFormat.h"
 #include "CUtil.h"
 
 // 0x443B30
 CDerivedStats::CDerivedStats()
 {
     // TODO: Incomplete.
+}
+
+// 0x4440F0
+void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature, int a3, int a4)
+{
+    // TODO: Incomplete.
+
+    m_naturalImmunities.clear();
+
+    // TODO: Incomplete.
+
+    if (pSprite != NULL) {
+        CAIObjectType typeAI(pSprite->GetAIType());
+
+        if (typeAI.m_nRace == CAIOBJECTTYPE_R_ELF
+            || typeAI.m_nRace == CAIOBJECTTYPE_R_HALF_ELF) {
+            m_naturalImmunities.insert(CGAMEEFFECT_SLEEP);
+            m_naturalImmunities.insert(CGAMEEFFECT_POWER_WORD_SLEEP);
+        }
+
+        if (pSprite->m_derivedStats.m_paladinLevel != 0) {
+            m_naturalImmunities.insert(CGAMEEFFECT_DISEASE);
+
+            if (pSprite->m_derivedStats.m_paladinLevel >= 2) {
+                m_naturalImmunities.insert(CGAMEEFFECT_PANIC);
+            }
+        }
+
+        if (pSprite->m_derivedStats.m_druidLevel >= 9) {
+            m_naturalImmunities.insert(CGAMEEFFECT_POISON);
+        }
+
+        if (pSprite->m_derivedStats.m_druidLevel >= 15) {
+            m_naturalImmunities.insert(CGAMEEFFECT_FATIGUE);
+        }
+
+        if (typeAI.m_nRace == CAIOBJECTTYPE_R_DWARF
+            && typeAI.m_nSubRace == CAIOBJECTTYPE_SUBRACE_DWARF_GRAY) {
+            m_naturalImmunities.insert(CGAMEEFFECT_PROTECTION_FROM_CREATURE);
+        }
+
+        if (pSprite->m_derivedStats.m_monkLevel >= 5) {
+            m_naturalImmunities.insert(CGAMEEFFECT_DISEASE);
+        }
+
+        if (pSprite->m_derivedStats.m_monkLevel >= 11) {
+            m_naturalImmunities.insert(CGAMEEFFECT_POISON);
+        }
+
+        // TODO: Incomplete.
+    }
 }
 
 // 0x4464E0

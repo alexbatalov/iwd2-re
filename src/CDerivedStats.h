@@ -3,9 +3,15 @@
 
 #include "CAIObjectType.h"
 
+#include <set>
+
+class CGameSprite;
+class CCreatureFileHeader;
+
 class CDerivedStats {
 public:
     CDerivedStats();
+    void Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature, int a3, int a4);
     CDerivedStats& operator+=(const CDerivedStats& other);
     void CheckLimits();
     LONG GetAtOffset(SHORT offset);
@@ -53,7 +59,22 @@ public:
     /* 003E */ short field_3E;
     /* 0042 */ DWORD m_classMask;
     /* 0046 */ BYTE m_nLevel;
-    /* 0047 */ BYTE m_nClassLevels[CAIOBJECT_CLASS_MAX];
+    union {
+        struct {
+            /* 0047 */ BYTE m_barbarianLevel;
+            /* 0048 */ BYTE m_bardLevel;
+            /* 0049 */ BYTE m_clericLevel;
+            /* 004A */ BYTE m_druidLevel;
+            /* 004B */ BYTE m_fighterLevel;
+            /* 004C */ BYTE m_monkLevel;
+            /* 004D */ BYTE m_paladinLevel;
+            /* 004E */ BYTE m_rangerLevel;
+            /* 004F */ BYTE m_rogueLevel;
+            /* 0050 */ BYTE m_sorcererLevel;
+            /* 0051 */ BYTE m_wizardLevel;
+        };
+        /* 0047 */ BYTE m_nClassLevels[CAIOBJECT_CLASS_MAX];
+    };
     /* 0052 */ short field_52;
     /* 0054 */ SHORT m_nSTR;
     /* 0056 */ SHORT m_nINT;
@@ -143,6 +164,7 @@ public:
     /* 0438 */ CPtrList field_438;
     /* 0454 */ CPtrList field_454;
     /* 04AC */ CPtrList field_4AC;
+    /* 0480 */ std::set<int> m_naturalImmunities;
     /* 04C8 */ CPtrList field_4C8;
     /* 04E4 */ CPtrList field_4E4;
     /* 0500 */ CPtrList field_500;
