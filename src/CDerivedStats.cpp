@@ -163,7 +163,7 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
         if (typeAI.m_nRace == CAIOBJECTTYPE_R_ELF
             || typeAI.m_nRace == CAIOBJECTTYPE_R_HALF_ELF) {
             m_naturalImmunities.insert(CGAMEEFFECT_SLEEP);
-            m_naturalImmunities.insert(CGAMEEFFECT_POWER_WORD_SLEEP);
+            m_naturalImmunities.insert(CGAMEEFFECT_POWERWORDSLEEP);
         }
 
         if (pSprite->m_derivedStats.m_paladinLevel != 0) {
@@ -184,7 +184,7 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
 
         if (typeAI.m_nRace == CAIOBJECTTYPE_R_DWARF
             && typeAI.m_nSubRace == CAIOBJECTTYPE_SUBRACE_DWARF_GRAY) {
-            m_naturalImmunities.insert(CGAMEEFFECT_PROTECTION_FROM_CREATURE);
+            m_naturalImmunities.insert(CGAMEEFFECT_HOLDCREATURE);
         }
 
         if (pSprite->m_derivedStats.m_monkLevel >= 5) {
