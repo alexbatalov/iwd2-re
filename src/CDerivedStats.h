@@ -12,6 +12,7 @@ public:
     int sub_447390();
     unsigned char sub_4473A0();
     DWORD GetSorcererWizardLevel();
+    DWORD GetBardMonkRogueLevel();
     BOOL HasClassMask(INT iClassType);
     DWORD GetClassLevel(INT iClassType);
     void SetClassLevel(INT iClassType, INT nLevel);

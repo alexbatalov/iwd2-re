@@ -353,6 +353,30 @@ DWORD CDerivedStats::GetSorcererWizardLevel()
     return nLevel;
 }
 
+// 0x4473F0
+DWORD CDerivedStats::GetBardMonkRogueLevel()
+{
+    DWORD dwArcaneClassesMask = m_classMask & (CLASSMASK_BARD | CLASSMASK_MONK | CLASSMASK_ROGUE);
+    DWORD dwCurrentClassMask = 1;
+    DWORD nLevel = 0;
+
+    if (dwArcaneClassesMask != 0) {
+        for (int index = 0; index < CAIOBJECT_CLASS_MAX; index++) {
+            if (dwCurrentClassMask > (CLASSMASK_BARD | CLASSMASK_MONK | CLASSMASK_ROGUE)) {
+                break;
+            }
+
+            if ((dwArcaneClassesMask & dwCurrentClassMask) != 0) {
+                nLevel += m_nClassLevels[index];
+            }
+
+            dwCurrentClassMask <<= 1;
+        }
+    }
+
+    return nLevel;
+}
+
 // 0x447940
 BOOL CDerivedStats::HasClassMask(INT iClassType)
 {
