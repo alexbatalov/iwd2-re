@@ -433,6 +433,49 @@ void CGameSprite::sub_72DE60()
     // TODO: Incomplete.
 }
 
+// 0x71F6E0
+int CGameSprite::sub_71F6E0()
+{
+    int v1;
+
+    switch (m_typeAI.m_nClass) {
+    case CAIOBJECTTYPE_C_BARBARIAN:
+    case CAIOBJECTTYPE_C_CLERIC:
+    case CAIOBJECTTYPE_C_DRUID:
+    case CAIOBJECTTYPE_C_FIGHTER:
+    case CAIOBJECTTYPE_C_PALADIN:
+    case CAIOBJECTTYPE_C_RANGER:
+        v1 = 10;
+        break;
+    case CAIOBJECTTYPE_C_BARD:
+    case CAIOBJECTTYPE_C_MONK:
+    case CAIOBJECTTYPE_C_ROGUE:
+        v1 = 15;
+        break;
+    default:
+        v1 = 5;
+        break;
+    }
+
+    switch (m_typeAI.m_nRace) {
+    case CAIOBJECTTYPE_R_ELF:
+        v1 += 20;
+        break;
+    case CAIOBJECTTYPE_R_DWARF:
+        v1 += 10;
+        break;
+    case CAIOBJECTTYPE_R_HALFLING:
+        v1 += 5;
+        break;
+    }
+
+    if (field_4C53 == 2) {
+        v1 = 100;
+    }
+
+    return v1;
+}
+
 // 0x71F760
 const CString& CGameSprite::GetName()
 {

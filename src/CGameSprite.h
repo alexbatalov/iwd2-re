@@ -214,6 +214,7 @@ public:
     SHORT GetTurnUndeadLevel();
     SHORT GetLayOnHandsAmount();
     void sub_72DE60();
+    int sub_71F6E0();
     const CString& GetName();
     STRREF GetNameRef();
     BOOL Orderable(BOOL bIgnoreControl);
@@ -252,6 +253,7 @@ public:
     /* 3DFA */ CAIObjectType m_liveTypeAI;
     /* 3E36 */ CAIObjectType m_startTypeAI;
     /* 4C52 */ BOOLEAN m_bGlobal;
+    /* 4C53 */ unsigned char field_4C53;
     /* 4C6A */ CSound m_sndWalk[2];
     /* 4D36 */ CSound m_sndArmor[2];
     /* 4E00 */ CSound m_sndReady;
