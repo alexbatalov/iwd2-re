@@ -1453,3 +1453,36 @@ void CUIControlButtonMultiPlayerPermissionsKick::OnLButtonClick(CPoint pt)
 
     pMultiPlayer->OnKickPlayerButtonClick(m_nID);
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x650BC0
+CUIControlButtonMultiPlayerPermissionsOptions::CUIControlButtonMultiPlayerPermissionsOptions(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->m_cTlkTable.Fetch(13905, strRes);
+    SetText(strRes.szText);
+}
+
+// 0x650CB0
+CUIControlButtonMultiPlayerPermissionsOptions::~CUIControlButtonMultiPlayerPermissionsOptions()
+{
+}
+
+// 0x650D50
+void CUIControlButtonMultiPlayerPermissionsOptions::OnLButtonClick(CPoint pt)
+{
+    CScreenMultiPlayer* pMultiPlayer = g_pBaldurChitin->m_pEngineMultiPlayer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 5604
+    UTIL_ASSERT(pMultiPlayer != NULL);
+
+    CSingleLock renderLock(&(pMultiPlayer->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    pMultiPlayer->SummonPopup(2);
+
+    renderLock.Unlock();
+}
