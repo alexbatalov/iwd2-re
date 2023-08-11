@@ -1180,3 +1180,36 @@ void CUIControlButtonMultiPlayerPlayer::OnLButtonClick(CPoint pt)
 
     renderLock.Unlock();
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x64FE80
+CUIControlButtonMultiPlayerCharacter::CUIControlButtonMultiPlayerCharacter(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+    m_cVidFont.SetResRef(CResRef("NORMAL"), m_pPanel->m_pManager->m_bDoubleSize, TRUE);
+    m_cVidFont.SetColor(RGB(210, 210, 210), RGB(30, 30, 30), FALSE);
+}
+
+// 0x64FF40
+CUIControlButtonMultiPlayerCharacter::~CUIControlButtonMultiPlayerCharacter()
+{
+}
+
+// 0x64FFE0
+void CUIControlButtonMultiPlayerCharacter::OnLButtonClick(CPoint pt)
+{
+    CScreenMultiPlayer* pMultiPlayer = g_pBaldurChitin->m_pEngineMultiPlayer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 5044
+    UTIL_ASSERT(pMultiPlayer != NULL);
+
+    CSingleLock renderLock(&(pMultiPlayer->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    pMultiPlayer->field_458 = m_nID - 18;
+    pMultiPlayer->SummonPopup(3);
+
+    renderLock.Unlock();
+}
