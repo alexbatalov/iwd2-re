@@ -1547,3 +1547,57 @@ void CUIControlButtonMultiPlayerPermissionsDone::OnLButtonClick(CPoint pt)
 
     pMultiPlayer->OnDoneButtonClick();
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x6511B0
+CUIControlButtonMultiPlayerOptionsImport::CUIControlButtonMultiPlayerOptionsImport(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
+{
+    m_nNotSelectedFrame = 0;
+    m_nPressedFrame = 1;
+    m_nSelectedFrame = 3;
+    m_nDisabledFrame = 2;
+    field_66E = 4;
+}
+
+// 0x651230
+CUIControlButtonMultiPlayerOptionsImport::~CUIControlButtonMultiPlayerOptionsImport()
+{
+}
+
+// 0x651340
+void CUIControlButtonMultiPlayerOptionsImport::OnLButtonClick(CPoint pt)
+{
+    DWORD strDescription;
+    BYTE nImportingBitField;
+
+    switch (m_nID) {
+    case 2:
+        strDescription = 11324;
+        nImportingBitField = CMultiplayerSettings::IMPORT_STATISTICS | CMultiplayerSettings::IMPORT_EXPERIENCE | CMultiplayerSettings::IMPORT_ITEMS;
+        break;
+    case 3:
+        strDescription = 11325;
+        nImportingBitField = CMultiplayerSettings::IMPORT_STATISTICS | CMultiplayerSettings::IMPORT_EXPERIENCE;
+        break;
+    case 4:
+        strDescription = 11326;
+        nImportingBitField = CMultiplayerSettings::IMPORT_STATISTICS;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+        // __LINE__: 5909
+        UTIL_ASSERT(FALSE);
+    }
+
+    CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 5916
+    UTIL_ASSERT(pSettings != NULL);
+
+    pSettings->SetImportingCharacterOption(nImportingBitField);
+
+    g_pBaldurChitin->m_pEngineMultiPlayer->UpdateHelp(m_pPanel->m_nID, 14, strDescription);
+}
