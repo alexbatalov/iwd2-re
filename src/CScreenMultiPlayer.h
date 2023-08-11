@@ -112,4 +112,16 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonMultiPlayerPortrait : CUIControlButton {
+public:
+    CUIControlButtonMultiPlayerPortrait(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonMultiPlayerPortrait() override;
+    BOOL Render(BOOL bForce) override;
+    void OnLButtonClick(CPoint pt) override;
+
+    void SetPortrait(const CResRef& resRef);
+
+    /* 0666 */ CResRef m_portraitResRef;
+};
+
 #endif /* CSCREENMULTIPLAYER_H_ */

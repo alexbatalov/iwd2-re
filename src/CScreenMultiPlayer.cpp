@@ -1057,3 +1057,85 @@ void CUIControlButtonMultiPlayerReady::OnLButtonClick(CPoint pt)
 
     pSettings->SetCharacterReady(nSlot, !pSettings->GetCharacterReady(nSlot), TRUE);
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x64F7F0
+CUIControlButtonMultiPlayerPortrait::CUIControlButtonMultiPlayerPortrait(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    m_portraitResRef = "";
+}
+
+// 0x64F890
+CUIControlButtonMultiPlayerPortrait::~CUIControlButtonMultiPlayerPortrait()
+{
+}
+
+// 0x64F930
+void CUIControlButtonMultiPlayerPortrait::SetPortrait(const CResRef& resRef)
+{
+    if (m_portraitResRef != resRef) {
+        m_portraitResRef = resRef;
+        InvalidateRect();
+    }
+}
+
+// 0x64F970
+BOOL CUIControlButtonMultiPlayerPortrait::Render(BOOL bForce)
+{
+    CVidBitmap vbPortrait;
+
+    if (!m_bActive && !m_bInactiveRender) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount == 0 && !bForce) {
+        return FALSE;
+    }
+
+    if (!CUIControlButton::Render(bForce)) {
+        return FALSE;
+    }
+
+    if (m_portraitResRef != "") {
+        vbPortrait.SetResRef(m_portraitResRef, TRUE, FALSE);
+        vbPortrait.m_bDoubleSize = m_pPanel->m_pManager->m_bDoubleSize;
+
+        if (vbPortrait.pRes == NULL) {
+            vbPortrait.SetResRef(CInfGame::SILHOUETTE_PORTRAIT_SM, TRUE, FALSE);
+            vbPortrait.m_bDoubleSize = m_pPanel->m_pManager->m_bDoubleSize;
+        }
+
+        // FIXME: Calls `GetBitCount` two times.
+        if (vbPortrait.GetBitCount(FALSE) != 24 && vbPortrait.GetBitCount(FALSE) != 8) {
+            vbPortrait.SetResRef(CInfGame::SILHOUETTE_PORTRAIT_SM, TRUE, FALSE);
+            vbPortrait.m_bDoubleSize = m_pPanel->m_pManager->m_bDoubleSize;
+        }
+
+        CRect rControlRect;
+        rControlRect.left = m_pPanel->m_ptOrigin.x + m_ptOrigin.x;
+        rControlRect.top = m_pPanel->m_ptOrigin.y + m_ptOrigin.y;
+        rControlRect.right = rControlRect.left + 42 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1);
+        rControlRect.bottom = rControlRect.top + 42 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1);
+
+        CRect rClip;
+        rClip.IntersectRect(rControlRect, m_rDirty);
+
+        vbPortrait.RenderDirect(0, rControlRect.left, rControlRect.top, rClip, 0, FALSE);
+    }
+
+    return TRUE;
+}
+
+// 0x64FBF0
+void CUIControlButtonMultiPlayerPortrait::OnLButtonClick(CPoint pt)
+{
+    CScreenMultiPlayer* pMultiPlayer = g_pBaldurChitin->m_pEngineMultiPlayer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 4921
+    UTIL_ASSERT(pMultiPlayer != NULL);
+
+    pMultiPlayer->OnPortraitButtonClick(m_nID - 6);
+}
