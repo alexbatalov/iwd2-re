@@ -1274,3 +1274,31 @@ void CUIControlButtonMultiPlayerOptions::OnLButtonClick(CPoint pt)
 
     renderLock.Unlock();
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x6504B0
+CUIControlButtonMultiPlayerLogout::CUIControlButtonMultiPlayerLogout(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->m_cTlkTable.Fetch(13906, strRes);
+    SetText(strRes.szText);
+}
+
+// 0x6505A0
+CUIControlButtonMultiPlayerLogout::~CUIControlButtonMultiPlayerLogout()
+{
+}
+
+// 0x650640
+void CUIControlButtonMultiPlayerLogout::OnLButtonClick(CPoint pt)
+{
+    CScreenMultiPlayer* pMultiPlayer = g_pBaldurChitin->m_pEngineMultiPlayer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 5230
+    UTIL_ASSERT(pMultiPlayer != NULL);
+
+    pMultiPlayer->OnLogoutButtonClick();
+}
