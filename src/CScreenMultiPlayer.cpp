@@ -1679,3 +1679,25 @@ void CUIControlButtonMultiPlayerModifyCharacterCreate::OnLButtonClick(CPoint pt)
 {
     // TODO: Incomplete.
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x651CA0
+CUIControlButtonMultiPlayerModifyCharacterDelete::CUIControlButtonMultiPlayerModifyCharacterDelete(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->m_cTlkTable.Fetch(13957, strRes);
+    SetText(strRes.szText);
+}
+
+// 0x651D90
+CUIControlButtonMultiPlayerModifyCharacterDelete::~CUIControlButtonMultiPlayerModifyCharacterDelete()
+{
+}
+
+// 0x651E30
+void CUIControlButtonMultiPlayerModifyCharacterDelete::OnLButtonClick(CPoint pt)
+{
+    // TODO: Incomplete.
+}

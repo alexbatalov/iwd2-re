@@ -239,4 +239,11 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonMultiPlayerModifyCharacterDelete : public CUIControlButton {
+public:
+    CUIControlButtonMultiPlayerModifyCharacterDelete(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonMultiPlayerModifyCharacterDelete() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 #endif /* CSCREENMULTIPLAYER_H_ */
