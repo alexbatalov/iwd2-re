@@ -108,14 +108,14 @@ public:
     /* 138E */ int field_138E;
 };
 
-class CUIControlButtonMultiPlayerReady : CUIControlButton3State {
+class CUIControlButtonMultiPlayerReady : public CUIControlButton3State {
 public:
     CUIControlButtonMultiPlayerReady(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonMultiPlayerReady() override;
     void OnLButtonClick(CPoint pt) override;
 };
 
-class CUIControlButtonMultiPlayerPortrait : CUIControlButton {
+class CUIControlButtonMultiPlayerPortrait : public CUIControlButton {
 public:
     CUIControlButtonMultiPlayerPortrait(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonMultiPlayerPortrait() override;
