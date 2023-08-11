@@ -218,4 +218,11 @@ public:
     /* 066E */ short field_66E;
 };
 
+class CUIControlButtonMultiPlayerOptionsCancel : public CUIControlButton {
+public:
+    CUIControlButtonMultiPlayerOptionsCancel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonMultiPlayerOptionsCancel() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 #endif /* CSCREENMULTIPLAYER_H_ */
