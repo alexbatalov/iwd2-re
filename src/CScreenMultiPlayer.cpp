@@ -1858,3 +1858,35 @@ void CUIControlButtonMultiPlayerError::OnLButtonClick(CPoint pt)
 
     pMultiPlayer->OnErrorButtonClick(m_nID - 1);
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x652B60
+CUIControlButtonMultiPlayerViewCharacterDone::CUIControlButtonMultiPlayerViewCharacterDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    CScreenMultiPlayer* pMultiPlayer = g_pBaldurChitin->m_pEngineMultiPlayer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 6649
+    UTIL_ASSERT(pMultiPlayer != NULL);
+
+    SetText(CBaldurEngine::FetchString(11973));
+}
+
+// 0x652C30
+CUIControlButtonMultiPlayerViewCharacterDone::~CUIControlButtonMultiPlayerViewCharacterDone()
+{
+}
+
+// 0x652CD0
+void CUIControlButtonMultiPlayerViewCharacterDone::OnLButtonClick(CPoint pt)
+{
+    CScreenMultiPlayer* pMultiPlayer = g_pBaldurChitin->m_pEngineMultiPlayer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 6676
+    UTIL_ASSERT(pMultiPlayer != NULL);
+
+    pMultiPlayer->OnDoneButtonClick();
+}
