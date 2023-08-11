@@ -1241,3 +1241,36 @@ void CUIControlButtonMultiPlayerDone::OnLButtonClick(CPoint pt)
 
     pMultiPlayer->OnMainDoneButtonClick();
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x650270
+CUIControlButtonMultiPlayerOptions::CUIControlButtonMultiPlayerOptions(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->m_cTlkTable.Fetch(10156, strRes);
+    SetText(strRes.szText);
+}
+
+// 0x650360
+CUIControlButtonMultiPlayerOptions::~CUIControlButtonMultiPlayerOptions()
+{
+}
+
+// 0x650400
+void CUIControlButtonMultiPlayerOptions::OnLButtonClick(CPoint pt)
+{
+    CScreenMultiPlayer* pMultiPlayer = g_pBaldurChitin->m_pEngineMultiPlayer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 5165
+    UTIL_ASSERT(pMultiPlayer != NULL);
+
+    CSingleLock renderLock(&(pMultiPlayer->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    pMultiPlayer->SummonPopup(1);
+
+    renderLock.Unlock();
+}
