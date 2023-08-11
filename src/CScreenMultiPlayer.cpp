@@ -1729,3 +1729,45 @@ void CUIControlButtonMultiPlayerModifyCharacterCancel::OnLButtonClick(CPoint pt)
 
     pMultiPlayer->OnCancelButtonClick();
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x652470
+CUIControlButtonMultiPlayerModifyPlayerPlayer::CUIControlButtonMultiPlayerModifyPlayerPlayer(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+    m_cVidFont.SetResRef(CResRef("NORMAL"), m_pPanel->m_pManager->m_bDoubleSize, TRUE);
+    m_cVidFont.SetColor(RGB(210, 210, 210), RGB(30, 30, 30), FALSE);
+}
+
+// 0x652530
+CUIControlButtonMultiPlayerModifyPlayerPlayer::~CUIControlButtonMultiPlayerModifyPlayerPlayer()
+{
+}
+
+// 0x6525D0
+void CUIControlButtonMultiPlayerModifyPlayerPlayer::OnLButtonClick(CPoint pt)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 6438
+    UTIL_ASSERT(m_nID <= CRESUI_CONTROLBUTTONID_MULTIPLAYER_MODIFYPLAYER_PLAYER5);
+
+    CScreenMultiPlayer* pMultiPlayer = g_pBaldurChitin->m_pEngineMultiPlayer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 6440
+    UTIL_ASSERT(pMultiPlayer != NULL);
+
+    CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 6443
+    UTIL_ASSERT(pSettings != NULL);
+
+    pSettings->SetCharacterControlledByPlayer(pMultiPlayer->field_458,
+        m_nID,
+        TRUE,
+        pMultiPlayer->field_45C != 1);
+
+    pMultiPlayer->OnDoneButtonClick();
+}

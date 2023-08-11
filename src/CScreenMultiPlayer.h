@@ -13,6 +13,8 @@
 #define CRESUI_CONTROLBUTTONID_MULTIPLAYER_PLAYER0 12
 #define CRESUI_CONTROLBUTTONID_MULTIPLAYER_PLAYER5 17
 
+#define CRESUI_CONTROLBUTTONID_MULTIPLAYER_MODIFYPLAYER_PLAYER5 5
+
 class CScreenMultiPlayer : public CBaldurEngine {
 public:
     static const CString TOKEN_GOLD;
@@ -250,6 +252,13 @@ class CUIControlButtonMultiPlayerModifyCharacterCancel : public CUIControlButton
 public:
     CUIControlButtonMultiPlayerModifyCharacterCancel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonMultiPlayerModifyCharacterCancel() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonMultiPlayerModifyPlayerPlayer : public CUIControlButton {
+public:
+    CUIControlButtonMultiPlayerModifyPlayerPlayer(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonMultiPlayerModifyPlayerPlayer() override;
     void OnLButtonClick(CPoint pt) override;
 };
 
