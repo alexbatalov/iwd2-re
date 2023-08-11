@@ -76,6 +76,7 @@ public:
     void StartMultiPlayer(INT nEngineState);
     BOOL IsModifyButtonClickable();
     void OnModifyButtonClick();
+    void OnErrorButtonClick(INT nButton);
     void ResetErrorPanel(CUIPanel* pPanel);
     void FocusChatEditBox();
     void OnKickPlayerButtonClick(INT nButton);
@@ -273,6 +274,13 @@ class CUIControlButtonMultiPlayerModify : public CUIControlButton {
 public:
     CUIControlButtonMultiPlayerModify(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonMultiPlayerModify() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonMultiPlayerError : public CUIControlButton {
+public:
+    CUIControlButtonMultiPlayerError(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonMultiPlayerError() override;
     void OnLButtonClick(CPoint pt) override;
 };
 

@@ -738,6 +738,12 @@ void CScreenMultiPlayer::CancelEngine()
     }
 }
 
+// 0x64D970
+void CScreenMultiPlayer::OnErrorButtonClick(INT nButton)
+{
+    // TODO: Incomplete.
+}
+
 // 0x64DB90
 void CScreenMultiPlayer::ResetErrorPanel(CUIPanel* pPanel)
 {
@@ -1826,4 +1832,29 @@ void CUIControlButtonMultiPlayerModify::OnLButtonClick(CPoint pt)
     UTIL_ASSERT(pMultiPlayer != NULL);
 
     pMultiPlayer->OnModifyButtonClick();
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x652A30
+CUIControlButtonMultiPlayerError::CUIControlButtonMultiPlayerError(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+}
+
+// 0x652A80
+CUIControlButtonMultiPlayerError::~CUIControlButtonMultiPlayerError()
+{
+}
+
+// 0x652B20
+void CUIControlButtonMultiPlayerError::OnLButtonClick(CPoint pt)
+{
+    CScreenMultiPlayer* pMultiPlayer = g_pBaldurChitin->m_pEngineMultiPlayer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 6620
+    UTIL_ASSERT(pMultiPlayer != NULL);
+
+    pMultiPlayer->OnErrorButtonClick(m_nID - 1);
 }
