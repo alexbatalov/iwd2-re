@@ -1890,3 +1890,63 @@ void CUIControlButtonMultiPlayerViewCharacterDone::OnLButtonClick(CPoint pt)
 
     pMultiPlayer->OnDoneButtonClick();
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x652DD0
+CUIControlButtonMultiPlayerSelection::CUIControlButtonMultiPlayerSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
+{
+    m_nPressedFrame = 2;
+    m_nDisabledFrame = 0;
+    m_nNotSelectedFrame = 1;
+    m_nSelectedFrame = 3;
+    field_66E = 4;
+}
+
+// 0x652E50
+CUIControlButtonMultiPlayerSelection::~CUIControlButtonMultiPlayerSelection()
+{
+}
+
+// 0x652EF0
+void CUIControlButtonMultiPlayerSelection::OnLButtonClick(CPoint pt)
+{
+    CScreenMultiPlayer* pMultiPlayer = g_pBaldurChitin->m_pEngineMultiPlayer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 6849
+    UTIL_ASSERT(pMultiPlayer != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 6851
+    UTIL_ASSERT(pGame != NULL);
+
+    CMultiplayerSettings* pSettings = pGame->GetMultiplayerSettings();
+
+    CUIControlButton3State::OnLButtonClick(pt);
+
+    switch (m_pPanel->m_nID) {
+    case 2:
+        switch (m_nID) {
+        case 18:
+            pSettings->SetRestrictStoreOption(!pSettings->m_bRestrictStoreOption);
+            pMultiPlayer->UpdateHelp(m_pPanel->m_nID, 14, 20717);
+
+            // NOTE: Uninline.
+            pMultiPlayer->UpdatePopupPanel(m_pPanel->m_nID);
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+            // __LINE__: 6870
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+        // __LINE__: 6876
+        UTIL_ASSERT(FALSE);
+    }
+}
