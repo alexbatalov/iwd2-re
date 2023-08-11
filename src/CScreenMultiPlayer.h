@@ -232,4 +232,11 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonMultiPlayerModifyCharacterCreate : public CUIControlButton {
+public:
+    CUIControlButtonMultiPlayerModifyCharacterCreate(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonMultiPlayerModifyCharacterCreate() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 #endif /* CSCREENMULTIPLAYER_H_ */

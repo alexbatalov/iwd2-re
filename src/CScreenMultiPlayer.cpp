@@ -1657,3 +1657,25 @@ void CUIControlButtonMultiPlayerOptionsDone::OnLButtonClick(CPoint pt)
 
     pMultiPlayer->OnDoneButtonClick();
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x6517C0
+CUIControlButtonMultiPlayerModifyCharacterCreate::CUIControlButtonMultiPlayerModifyCharacterCreate(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->m_cTlkTable.Fetch(13954, strRes);
+    SetText(strRes.szText);
+}
+
+// 0x6518B0
+CUIControlButtonMultiPlayerModifyCharacterCreate::~CUIControlButtonMultiPlayerModifyCharacterCreate()
+{
+}
+
+// 0x651950
+void CUIControlButtonMultiPlayerModifyCharacterCreate::OnLButtonClick(CPoint pt)
+{
+    // TODO: Incomplete.
+}
