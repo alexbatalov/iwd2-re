@@ -202,4 +202,11 @@ public:
     /* 066E */ short field_66E;
 };
 
+class CUIControlButtonMultiPlayerPermissionsDone : public CUIControlButton {
+public:
+    CUIControlButtonMultiPlayerPermissionsDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonMultiPlayerPermissionsDone() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 #endif /* CSCREENMULTIPLAYER_H_ */

@@ -1519,3 +1519,31 @@ void CUIControlButtonMultiPlayerPermissionsListen::OnLButtonClick(CPoint pt)
 
     pSettings->SetListenToJoinOption(m_bSelected == FALSE, TRUE);
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x650FE0
+CUIControlButtonMultiPlayerPermissionsDone::CUIControlButtonMultiPlayerPermissionsDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->m_cTlkTable.Fetch(11973, strRes);
+    SetText(strRes.szText);
+}
+
+// 0x6510D0
+CUIControlButtonMultiPlayerPermissionsDone::~CUIControlButtonMultiPlayerPermissionsDone()
+{
+}
+
+// 0x651170
+void CUIControlButtonMultiPlayerPermissionsDone::OnLButtonClick(CPoint pt)
+{
+    CScreenMultiPlayer* pMultiPlayer = g_pBaldurChitin->m_pEngineMultiPlayer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 5778
+    UTIL_ASSERT(pMultiPlayer != NULL);
+
+    pMultiPlayer->OnDoneButtonClick();
+}
