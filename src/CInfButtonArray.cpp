@@ -37,6 +37,12 @@ BOOL CInfButtonArray::ResetState()
     return TRUE;
 }
 
+// 0x589100
+void CInfButtonArray::UpdateState()
+{
+    SetState(m_nState, 0);
+}
+
 // 0x589110
 BOOL CInfButtonArray::SetState(INT nState, int a2)
 {

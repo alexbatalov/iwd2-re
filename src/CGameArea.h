@@ -87,6 +87,7 @@ public:
     void OnActivation();
     void OnDeactivation();
     void OnActionButtonDown(const CPoint& pt);
+    void OnActionButtonClickGround(const CPoint& pt);
     void OnActionButtonUp(const CPoint& pt);
     void OnActionButtonDblClk(const CPoint& pt);
     void OnFormationButtonDown(const CPoint& pt);
@@ -132,7 +133,7 @@ public:
     /* 03E0 */ int field_3E0;
     /* 03E4 */ int field_3E4;
     /* 03E8 */ int field_3E8;
-    /* 03F6 */ int field_3F6;
+    /* 03F6 */ BOOL m_groupMove;
     /* 0422 */ DWORD m_nInitialAreaId;
     /* 042A */ DWORD m_dwLastProgressRenderTickCount;
     /* 042E */ DWORD m_dwLastProgressMsgTickCount;

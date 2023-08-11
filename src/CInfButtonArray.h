@@ -29,6 +29,7 @@ public:
     CInfButtonArray();
 
     BOOL ResetState();
+    void UpdateState();
     BOOL SetState(INT nState, int a2);
 
     void SetSelectedButton(INT nSelectedButton);
@@ -38,7 +39,7 @@ public:
     /* 17C2 */ CVidCell field_17C2;
     /* 189C */ CVidCell field_189C;
     /* 197E */ INT m_nSelectedButton;
-    /* 1982 */ int field_1982;
+    /* 1982 */ int m_nState;
 };
 
 #endif /* CINFBUTTONARRAY_H_ */

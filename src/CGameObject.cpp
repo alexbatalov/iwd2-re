@@ -1,7 +1,9 @@
 #include "CGameObject.h"
 
+#include "CBaldurChitin.h"
 #include "CGameArea.h"
 #include "CGameObjectArray.h"
+#include "CInfGame.h"
 #include "CTimerWorld.h"
 #include "CUtil.h"
 
@@ -245,7 +247,25 @@ void CGameObject::OnActionButton(const CPoint& pt)
 // 0x4C7EE0
 void CGameObject::OnFormationButton(const CPoint& pt)
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    switch (pGame->m_nState) {
+    case 0:
+        if (m_pArea != NULL && m_pArea->m_groupMove) {
+            m_pArea->OnActionButtonClickGround(pt);
+        }
+        break;
+    case 1:
+    case 2:
+        pGame->m_nState = 0;
+        pGame->m_cButtonArray.m_nSelectedButton = 100;
+        pGame->m_cButtonArray.UpdateState();
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameObject.cpp
+        // __LINE__ 340
+        UTIL_ASSERT(FALSE);
+    }
 }
 
 // 0x4C7F60

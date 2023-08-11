@@ -186,7 +186,7 @@ void CGameArea::OnDeactivation()
     field_3E0 = -1;
     field_3E4 = -1;
     field_3E8 = -1;
-    field_3F6 = 0;
+    m_groupMove = 0;
 
     if (!m_pGame->field_43E6) {
         m_pGame->m_tempCursor = 4;
@@ -224,6 +224,12 @@ void CGameArea::OnActionButtonDown(const CPoint& pt)
 void CGameArea::OnActionButtonUp(const CPoint& pt)
 {
     // TODO: Incomplete.
+}
+
+// 0x475600
+void CGameArea::OnActionButtonClickGround(const CPoint& pt)
+{
+    // TOOD: Incomplete.
 }
 
 // 0x4765C0
