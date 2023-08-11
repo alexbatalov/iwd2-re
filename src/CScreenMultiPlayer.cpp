@@ -4,6 +4,7 @@
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CUIControlEdit.h"
+#include "CUIControlFactory.h"
 #include "CUIControlScrollBar.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
@@ -1889,6 +1890,46 @@ void CUIControlButtonMultiPlayerViewCharacterDone::OnLButtonClick(CPoint pt)
     UTIL_ASSERT(pMultiPlayer != NULL);
 
     pMultiPlayer->OnDoneButtonClick();
+}
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Unclear why this function is separated from constructor/destructor
+// pair (originally in `CUIControlButtons.cpp`, now in `CUIControlFactory.cpp`).
+//
+// 0x652D10
+void CUIControlButtonMultiPlayerHotArea::OnHotAreaClick(CPoint pt)
+{
+    STRREF strDescription;
+
+    switch (m_pPanel->m_nID) {
+    case 2:
+        switch (m_nID) {
+        case 11:
+            strDescription = 11324;
+            break;
+        case 12:
+            strDescription = 11325;
+            break;
+        case 13:
+            strDescription = 11326;
+            break;
+        case 17:
+            strDescription = 20717;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+            // __LINE__: 6728
+            UTIL_ASSERT(FALSE);
+        }
+
+        g_pBaldurChitin->m_pEngineMultiPlayer->UpdateHelp(m_pPanel->m_nID, 14, strDescription);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+        // __LINE__: 6734
+        UTIL_ASSERT(FALSE);
+    }
 }
 
 // -----------------------------------------------------------------------------

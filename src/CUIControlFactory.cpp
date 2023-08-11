@@ -2175,6 +2175,21 @@ void CUIControlTextDisplayJournal::OnButtonLClick(CPoint pt)
 {
 }
 
+// -----------------------------------------------------------------------------
+
+// NOTE: Inlined.
+CUIControlButtonMultiPlayerHotArea::CUIControlButtonMultiPlayerHotArea(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButtonHotArea(panel, controlInfo)
+{
+}
+
+// 0x779C10
+CUIControlButtonMultiPlayerHotArea::~CUIControlButtonMultiPlayerHotArea()
+{
+}
+
+// -----------------------------------------------------------------------------
+
 // NOTE: Inlined.
 CUIControlPortraitBase::CUIControlPortraitBase(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo, BYTE nMouseButtons)
     : CUIControlButton(panel, controlInfo, nMouseButtons, 0)

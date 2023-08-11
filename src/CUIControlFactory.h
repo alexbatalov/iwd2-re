@@ -98,6 +98,13 @@ public:
     void OnButtonLClick(CPoint pt) override;
 };
 
+class CUIControlButtonMultiPlayerHotArea : public CUIControlButtonHotArea {
+public:
+    CUIControlButtonMultiPlayerHotArea(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonMultiPlayerHotArea() override;
+    void OnHotAreaClick(CPoint pt) override;
+};
+
 class CUIControlPortraitGeneral : public CUIControlPortraitBase {
 public:
     CUIControlPortraitGeneral(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
