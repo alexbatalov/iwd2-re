@@ -1771,3 +1771,31 @@ void CUIControlButtonMultiPlayerModifyPlayerPlayer::OnLButtonClick(CPoint pt)
 
     pMultiPlayer->OnDoneButtonClick();
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x652690
+CUIControlButtonMultiPlayerModifyPlayerCancel::CUIControlButtonMultiPlayerModifyPlayerCancel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->m_cTlkTable.Fetch(13727, strRes);
+    SetText(strRes.szText);
+}
+
+// 0x652780
+CUIControlButtonMultiPlayerModifyPlayerCancel::~CUIControlButtonMultiPlayerModifyPlayerCancel()
+{
+}
+
+// 0x652820
+void CUIControlButtonMultiPlayerModifyPlayerCancel::OnLButtonClick(CPoint pt)
+{
+    CScreenMultiPlayer* pMultiPlayer = g_pBaldurChitin->m_pEngineMultiPlayer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 6512
+    UTIL_ASSERT(pMultiPlayer != NULL);
+
+    pMultiPlayer->OnCancelButtonClick();
+}

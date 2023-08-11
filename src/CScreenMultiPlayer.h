@@ -262,4 +262,11 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonMultiPlayerModifyPlayerCancel : public CUIControlButton {
+public:
+    CUIControlButtonMultiPlayerModifyPlayerCancel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonMultiPlayerModifyPlayerCancel() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 #endif /* CSCREENMULTIPLAYER_H_ */
