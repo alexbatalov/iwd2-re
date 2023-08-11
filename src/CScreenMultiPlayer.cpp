@@ -1026,3 +1026,34 @@ void CScreenMultiPlayer::SetChatEditBoxStatus(const CString& sChatText, BOOL bIn
         }
     }
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x64F690
+CUIControlButtonMultiPlayerReady::CUIControlButtonMultiPlayerReady(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
+{
+    m_nPressedFrame = 2;
+    m_nDisabledFrame = 3;
+    m_nNotSelectedFrame = 1;
+    m_nSelectedFrame = 0;
+}
+
+// 0x64F700
+CUIControlButtonMultiPlayerReady::~CUIControlButtonMultiPlayerReady()
+{
+}
+
+// 0x64F7A0
+void CUIControlButtonMultiPlayerReady::OnLButtonClick(CPoint pt)
+{
+    CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 4756
+    UTIL_ASSERT(pSettings != NULL);
+
+    INT nSlot = m_nID;
+
+    pSettings->SetCharacterReady(nSlot, !pSettings->GetCharacterReady(nSlot), TRUE);
+}

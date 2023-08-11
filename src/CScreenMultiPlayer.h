@@ -3,6 +3,7 @@
 
 #include "CBaldurEngine.h"
 #include "CKeyInfo.h"
+#include "CUIControlButton3State.h"
 #include "CVidFont.h"
 
 #define CSCREENMULTIPLAYER_VIRTUAL_KEYS 90
@@ -102,6 +103,13 @@ public:
     /* 098E */ CVidFont m_preLoadFontStnSml;
     /* 0E8E */ CVidFont m_preLoadFontTool;
     /* 138E */ int field_138E;
+};
+
+class CUIControlButtonMultiPlayerReady : CUIControlButton3State {
+public:
+    CUIControlButtonMultiPlayerReady(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonMultiPlayerReady() override;
+    void OnLButtonClick(CPoint pt) override;
 };
 
 #endif /* CSCREENMULTIPLAYER_H_ */
