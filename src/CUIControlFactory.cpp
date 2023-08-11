@@ -13,6 +13,7 @@
 #include "CScreenLoad.h"
 #include "CScreenMap.h"
 #include "CScreenMovies.h"
+#include "CScreenMultiPlayer.h"
 #include "CScreenOptions.h"
 #include "CScreenSave.h"
 #include "CScreenSinglePlayer.h"
@@ -519,6 +520,198 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             break;
         }
     } else if (pPanel->m_pManager->m_cResRef == "GUIMP") {
+        // 0x76EB90
+        switch (pPanel->m_nID) {
+        case 0:
+        case 9:
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                return new CUIControlButtonMultiPlayerReady(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+                return new CUIControlButtonMultiPlayerPortrait(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 12:
+            case 13:
+            case 14:
+            case 15:
+            case 16:
+            case 17:
+                return new CUIControlButtonMultiPlayerPlayer(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 18:
+            case 19:
+            case 20:
+            case 21:
+            case 22:
+            case 23:
+                return new CUIControlButtonMultiPlayerCharacter(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 25:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 26:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 27:
+                return new CUIControlEditMultiPlayerChat(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo));
+            case 28:
+                return new CUIControlButtonMultiPlayerDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 29:
+                return new CUIControlButtonMultiPlayerOptions(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 30:
+                return new CUIControlButtonMultiPlayerLogout(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 43:
+                return new CUIControlButtonMultiPlayerModify(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 1:
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                return new CUIControlButtonMultiPlayerPermissionsKick(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 13:
+            case 14:
+            case 15:
+            case 16:
+            case 17:
+            case 18:
+            case 19:
+            case 20:
+            case 21:
+            case 22:
+            case 23:
+            case 24:
+            case 25:
+            case 26:
+            case 27:
+            case 28:
+            case 29:
+            case 30:
+            case 31:
+            case 32:
+            case 33:
+            case 34:
+            case 35:
+            case 36:
+            case 37:
+            case 38:
+            case 39:
+            case 40:
+            case 41:
+            case 42:
+            case 49:
+            case 50:
+            case 51:
+            case 52:
+            case 53:
+            case 54:
+            case 55:
+            case 56:
+            case 57:
+            case 58:
+            case 59:
+            case 60:
+                return new CUIControlButtonMultiPlayerPermissionsPermission(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 61:
+                return new CUIControlButtonMultiPlayerPermissionsListen(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 62:
+                return new CUIControlButtonMultiPlayerPermissionsOptions(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 63:
+                return new CUIControlButtonMultiPlayerPermissionsDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 64:
+            case 65:
+            case 66:
+            case 67:
+            case 68:
+            case 69:
+            case 70:
+                return new CUIControlButtonMultiPlayerHotArea(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 72:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 73:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 74:
+                return new CUIControlEditMultiPlayerChat(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo));
+            }
+            break;
+        case 2:
+            switch (controlInfo->nID) {
+            case 2:
+            case 3:
+            case 4:
+                return new CUIControlButtonMultiPlayerOptionsImport(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 7:
+                return new CUIControlButtonMultiPlayerOptionsCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 8:
+                return new CUIControlButtonMultiPlayerOptionsDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 11:
+            case 12:
+            case 13:
+            case 17:
+                return new CUIControlButtonMultiPlayerHotArea(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 14:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 15:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 18:
+                return new CUIControlButtonMultiPlayerSelection(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 3:
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlButtonMultiPlayerModifyCharacterCreate(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 3:
+                return new CUIControlButtonMultiPlayerModifyCharacterDelete(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 4:
+                return new CUIControlButtonMultiPlayerModifyCharacterCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 4:
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                return new CUIControlButtonMultiPlayerModifyPlayerPlayer(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 6:
+                return new CUIControlButtonMultiPlayerModifyCharacterCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 5:
+        case 6:
+        case 7:
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 1:
+            case 2:
+                return new CUIControlButtonMultiPlayerError(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 8:
+            switch (controlInfo->nID) {
+            case 1:
+                return new CUIControlButtonMultiPlayerViewCharacterDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 2:
+            case 3:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 4:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            }
+            break;
+        }
     } else if (pPanel->m_pManager->m_cResRef == "GUISP") {
         // 0x76F351
         switch (pPanel->m_nID) {
