@@ -170,4 +170,13 @@ public:
     void OnEditReturn(CString sText) override;
 };
 
+class CUIControlButtonMultiPlayerPermissionsPermission : public CUIControlButton3State {
+public:
+    CUIControlButtonMultiPlayerPermissionsPermission(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonMultiPlayerPermissionsPermission() override;
+    void OnLButtonClick(CPoint pt) override;
+
+    /* 066E */ short field_66E;
+};
+
 #endif /* CSCREENMULTIPLAYER_H_ */

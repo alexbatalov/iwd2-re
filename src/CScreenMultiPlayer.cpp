@@ -1324,3 +1324,107 @@ void CUIControlEditMultiPlayerChat::OnEditReturn(CString sText)
     field_868 = sText;
     SetText(CString(""));
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x650830
+CUIControlButtonMultiPlayerPermissionsPermission::CUIControlButtonMultiPlayerPermissionsPermission(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
+{
+    m_nPressedFrame = 2;
+    m_nDisabledFrame = 0;
+    field_66E = 4;
+    m_nNotSelectedFrame = 1;
+    m_nSelectedFrame = 3;
+}
+
+// 0x6508B0
+CUIControlButtonMultiPlayerPermissionsPermission::~CUIControlButtonMultiPlayerPermissionsPermission()
+{
+}
+
+// 0x650950
+void CUIControlButtonMultiPlayerPermissionsPermission::OnLButtonClick(CPoint pt)
+{
+    INT nPlayer;
+    INT nPermission;
+
+    switch (m_nID) {
+    case 13:
+    case 14:
+    case 15:
+    case 16:
+    case 17:
+    case 18:
+        nPermission = CGamePermission::MODIFY_CHARS;
+        nPlayer = m_nID - 13;
+        break;
+    case 19:
+    case 20:
+    case 21:
+    case 22:
+    case 23:
+    case 24:
+        nPermission = CGamePermission::PURCHASING;
+        nPlayer = m_nID - 19;
+        break;
+    case 25:
+    case 26:
+    case 27:
+    case 28:
+    case 29:
+    case 30:
+        nPermission = CGamePermission::AREA_TRANSITION;
+        nPlayer = m_nID - 25;
+        break;
+    case 31:
+    case 32:
+    case 33:
+    case 34:
+    case 35:
+    case 36:
+        nPermission = CGamePermission::DIALOG;
+        nPlayer = m_nID - 31;
+        break;
+    case 37:
+    case 38:
+    case 39:
+    case 40:
+    case 41:
+    case 42:
+        nPermission = CGamePermission::CHAR_RECORDS;
+        nPlayer = m_nID - 37;
+        break;
+    case 49:
+    case 50:
+    case 51:
+    case 52:
+    case 53:
+    case 54:
+        nPermission = CGamePermission::PAUSING;
+        nPlayer = m_nID - 49;
+        break;
+    case 55:
+    case 56:
+    case 57:
+    case 58:
+    case 59:
+    case 60:
+        nPermission = CGamePermission::LEADER;
+        nPlayer = m_nID - 55;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+        // __LINE__: 5469
+        UTIL_ASSERT(FALSE);
+    }
+
+    CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 5474
+    UTIL_ASSERT(pSettings != NULL);
+
+    g_pBaldurChitin->cNetwork.GetPlayerID(nPlayer);
+    pSettings->SetPermission(nPlayer, nPermission, m_bSelected == FALSE, TRUE);
+}
