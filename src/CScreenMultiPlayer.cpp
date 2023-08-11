@@ -1428,3 +1428,28 @@ void CUIControlButtonMultiPlayerPermissionsPermission::OnLButtonClick(CPoint pt)
     g_pBaldurChitin->cNetwork.GetPlayerID(nPlayer);
     pSettings->SetPermission(nPlayer, nPermission, m_bSelected == FALSE, TRUE);
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x650A90
+CUIControlButtonMultiPlayerPermissionsKick::CUIControlButtonMultiPlayerPermissionsKick(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+}
+
+// 0x650AE0
+CUIControlButtonMultiPlayerPermissionsKick::~CUIControlButtonMultiPlayerPermissionsKick()
+{
+}
+
+// 0x650B80
+void CUIControlButtonMultiPlayerPermissionsKick::OnLButtonClick(CPoint pt)
+{
+    CScreenMultiPlayer* pMultiPlayer = g_pBaldurChitin->m_pEngineMultiPlayer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 5548
+    UTIL_ASSERT(pMultiPlayer != NULL);
+
+    pMultiPlayer->OnKickPlayerButtonClick(m_nID);
+}
