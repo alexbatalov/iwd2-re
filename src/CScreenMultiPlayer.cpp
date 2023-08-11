@@ -1486,3 +1486,36 @@ void CUIControlButtonMultiPlayerPermissionsOptions::OnLButtonClick(CPoint pt)
 
     renderLock.Unlock();
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x650E00
+CUIControlButtonMultiPlayerPermissionsListen::CUIControlButtonMultiPlayerPermissionsListen(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
+{
+    // FIXME: Unused.
+    STR_RES strRes;
+
+    m_nPressedFrame = 2;
+    m_nDisabledFrame = 0;
+    field_66E = 4;
+    m_nNotSelectedFrame = 1;
+    m_nSelectedFrame = 3;
+}
+
+// 0x650EF0
+CUIControlButtonMultiPlayerPermissionsListen::~CUIControlButtonMultiPlayerPermissionsListen()
+{
+}
+
+// 0x650F90
+void CUIControlButtonMultiPlayerPermissionsListen::OnLButtonClick(CPoint pt)
+{
+    CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 5722
+    UTIL_ASSERT(pSettings != NULL);
+
+    pSettings->SetListenToJoinOption(m_bSelected == FALSE, TRUE);
+}

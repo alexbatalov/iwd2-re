@@ -193,4 +193,13 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonMultiPlayerPermissionsListen : public CUIControlButton3State {
+public:
+    CUIControlButtonMultiPlayerPermissionsListen(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonMultiPlayerPermissionsListen() override;
+    void OnLButtonClick(CPoint pt) override;
+
+    /* 066E */ short field_66E;
+};
+
 #endif /* CSCREENMULTIPLAYER_H_ */
