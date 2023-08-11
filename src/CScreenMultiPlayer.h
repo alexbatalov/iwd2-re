@@ -9,6 +9,9 @@
 #define CSCREENMULTIPLAYER_VIRTUAL_KEYS 90
 #define CSCREENMULTIPLAYER_ERROR_BUTTONS 3
 
+#define CRESUI_CONTROLBUTTONID_MULTIPLAYER_PLAYER0 12
+#define CRESUI_CONTROLBUTTONID_MULTIPLAYER_PLAYER5 17
+
 class CScreenMultiPlayer : public CBaldurEngine {
 public:
     static const CString TOKEN_GOLD;
@@ -122,6 +125,13 @@ public:
     void SetPortrait(const CResRef& resRef);
 
     /* 0666 */ CResRef m_portraitResRef;
+};
+
+class CUIControlButtonMultiPlayerPlayer : public CUIControlButton {
+public:
+    CUIControlButtonMultiPlayerPlayer(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonMultiPlayerPlayer() override;
+    void OnLButtonClick(CPoint pt) override;
 };
 
 #endif /* CSCREENMULTIPLAYER_H_ */
