@@ -29,6 +29,7 @@ public:
     BOOLEAN DemandCharacterSlot(SHORT nCharacterSlot, BOOLEAN bDemandFromHost, SHORT nPlayerSlot);
     BOOL ObjectControlRequest(LONG localObjectID);
     BOOL ObjectControl();
+    BOOLEAN SendChatMessage(CString& sChatMessage);
     void SetSignalDefaultSecondsToTimeout();
     BOOLEAN SendSignal(BYTE signalType, BYTE signalToSend);
     BOOLEAN SendProgressBarStatus(LONG nActionProgress, LONG nActionTarget, BOOLEAN bWaiting, LONG nWaitingReason, BOOLEAN bTimeoutVisible, DWORD nSecondsToTimeout);

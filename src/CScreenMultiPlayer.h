@@ -4,6 +4,7 @@
 #include "CBaldurEngine.h"
 #include "CKeyInfo.h"
 #include "CUIControlButton3State.h"
+#include "CUIControlEdit.h"
 #include "CVidFont.h"
 
 #define CSCREENMULTIPLAYER_VIRTUAL_KEYS 90
@@ -160,6 +161,13 @@ public:
     CUIControlButtonMultiPlayerLogout(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonMultiPlayerLogout() override;
     void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlEditMultiPlayerChat : public CUIControlEdit {
+public:
+    CUIControlEditMultiPlayerChat(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo);
+    ~CUIControlEditMultiPlayerChat() override;
+    void OnEditReturn(CString sText) override;
 };
 
 #endif /* CSCREENMULTIPLAYER_H_ */

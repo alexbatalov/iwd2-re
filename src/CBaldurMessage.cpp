@@ -188,6 +188,14 @@ BOOL CBaldurMessage::ObjectControl()
     return FALSE;
 }
 
+// 0x432C50
+BOOLEAN CBaldurMessage::SendChatMessage(CString& sChatMessage)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x433150
 void CBaldurMessage::SetSignalDefaultSecondsToTimeout()
 {

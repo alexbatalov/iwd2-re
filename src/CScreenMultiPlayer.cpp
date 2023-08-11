@@ -1302,3 +1302,25 @@ void CUIControlButtonMultiPlayerLogout::OnLButtonClick(CPoint pt)
 
     pMultiPlayer->OnLogoutButtonClick();
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x650680
+CUIControlEditMultiPlayerChat::CUIControlEditMultiPlayerChat(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo)
+    : CUIControlEdit(panel, controlInfo, 0)
+{
+    field_8A0 = 0;
+}
+
+// 0x6506D0
+CUIControlEditMultiPlayerChat::~CUIControlEditMultiPlayerChat()
+{
+}
+
+// 0x6507A0
+void CUIControlEditMultiPlayerChat::OnEditReturn(CString sText)
+{
+    g_pBaldurChitin->GetBaldurMessage()->SendChatMessage(sText);
+    field_868 = sText;
+    SetText(CString(""));
+}
