@@ -2,16 +2,106 @@
 #define CSCREENMULTIPLAYER_H_
 
 #include "CBaldurEngine.h"
+#include "CKeyInfo.h"
+#include "CVidFont.h"
+
+#define CSCREENMULTIPLAYER_VIRTUAL_KEYS 90
+#define CSCREENMULTIPLAYER_ERROR_BUTTONS 3
 
 class CScreenMultiPlayer : public CBaldurEngine {
 public:
+    static const CString TOKEN_GOLD;
+
     CScreenMultiPlayer();
-    ~CScreenMultiPlayer();
+    /* 0004 */ ~CScreenMultiPlayer() override;
+    /* 0014 */ void EngineActivated() override;
+    /* 0018 */ void EngineDeactivated() override;
+    /* 0020 */ void EngineInitialized() override;
+    /* 0030 */ BOOL CheckSystemKeyCtrl() override;
+    /* 0034 */ void SetSystemKeyCtrl(BOOLEAN bValue) override;
+    /* 003C */ BOOL CheckSystemKeyShift() override;
+    /* 0040 */ void SetSystemKeyShift(BOOL bValue) override;
+    /* 0044 */ BOOL GetShiftKey() override;
+    /* 0050 */ BOOL CheckSystemKeyCapsLock() override;
+    /* 0054 */ void SetSystemKeyCapsLock(BOOL bValue) override;
+    /* 0058 */ BOOL GetCapsLockKey() override;
+    /* 0060 */ BOOL CheckMouseMove() override;
+    /* 0064 */ void OnMouseMove(CPoint pt) override;
+    /* 0068 */ BOOL CheckMouseLButton() override;
+    /* 006C */ void OnLButtonDblClk(CPoint pt) override;
+    /* 0070 */ void OnLButtonDown(CPoint pt) override;
+    /* 0074 */ void OnLButtonUp(CPoint pt) override;
+    /* 0088 */ BOOL CheckMouseRButton() override;
+    /* 0090 */ void OnRButtonDown(CPoint pt) override;
+    /* 0094 */ void OnRButtonUp(CPoint pt) override;
+    /* 00A0 */ SHORT GetNumVirtualKeys() override;
+    /* 00A4 */ CKeyInfo* GetVirtualKeys() override;
+    /* 00A8 */ BYTE* GetVirtualKeysFlags() override;
+    /* 00C0 */ void TimerAsynchronousUpdate() override;
+    /* 00C4 */ void TimerSynchronousUpdate() override;
+    /* 0104 */ void CancelEngine() override;
+    /* 0110 */ void GetChatEditBoxStatus(CString& sChatText, BOOL& bInputCapture) override;
+    /* 0114 */ void SetChatEditBoxStatus(const CString& sChatText, BOOL bInputCapture) override;
+
     void ClearChatMessages();
 
+    void ResetPopupPanel(DWORD dwPanelId);
+    CUIPanel* GetTopPopup();
+    void ShowPopupPanel(DWORD dwPanelId, BOOL bShow);
+    void EnablePopupPanel(DWORD dwPanelId, BOOL bEnable);
+    void UpdatePopupPanel(DWORD dwPanelId);
+    void SummonPopup(DWORD dwPopupId);
+    void DismissPopup();
+    BOOL IsMainDoneButtonClickable();
+    void OnDoneButtonClick();
+    void OnCancelButtonClick();
+    void EnableMainPanel(BOOL bEnable);
+    void UpdateOptionsPanel();
+    void UpdateMainPanel();
+    void CheckEnableCharacters();
+    void CheckCharacterButtons();
+    void UpdateMainPanelCharacter();
+    void UpdatePermissionsPanel();
+    void UpdatePermissionsPanelPlayer();
+    void UpdateModifyPlayerPanel();
+    void UpdateModifyCharacterPanel();
+    void OnMainDoneButtonClick();
     void StartMultiPlayer(INT nEngineState);
+    BOOL IsModifyButtonClickable();
+    void OnModifyButtonClick();
+    void ResetErrorPanel(CUIPanel* pPanel);
+    void FocusChatEditBox();
+    void OnKickPlayerButtonClick(INT nButton);
+    void sub_64E160();
+    void ResetViewCharacterPanel(CUIPanel* pPanel);
+    BOOL IsPortraitButtonClickable(INT nButton);
+    void OnPortraitButtonClick(INT nButton);
+    void OnLogoutButtonClick();
+    void CopyChatEditBox(CUIPanel* pFrom, CUIPanel* pTo);
+    void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
 
+    /* 0106 */ CKeyInfo m_pVirtualKeys[CSCREENMULTIPLAYER_VIRTUAL_KEYS];
+    /* 03D6 */ BYTE m_pVirtualKeysFlags[CSCREENMULTIPLAYER_VIRTUAL_KEYS];
+    /* 0430 */ BOOL m_bCtrlKeyDown;
+    /* 0434 */ BOOL m_bShiftKeyDown;
+    /* 0438 */ BOOL m_bCapsLockKeyOn;
+    /* 043C */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
+    /* 0458 */ int field_458;
     /* 045C */ int field_45C;
+    /* 0460 */ int field_460;
+    /* 0464 */ int field_464;
+    /* 0468 */ INT m_nErrorState;
+    /* 046C */ STRREF m_dwErrorTextId;
+    /* 0470 */ INT m_nNumErrorButtons;
+    /* 0474 */ STRREF m_strErrorButtonText[CSCREENMULTIPLAYER_ERROR_BUTTONS];
+    /* 0480 */ INT m_nKickPlayerSlot;
+    /* 0484 */ INT m_nCharacterSlot;
+    /* 0488 */ BOOLEAN m_bMultiplayerStartup;
+    /* 048A */ int field_48A;
+    /* 048E */ CVidFont m_preLoadFontRealms;
+    /* 098E */ CVidFont m_preLoadFontStnSml;
+    /* 0E8E */ CVidFont m_preLoadFontTool;
+    /* 138E */ int field_138E;
 };
 
 #endif /* CSCREENMULTIPLAYER_H_ */
