@@ -379,7 +379,47 @@ INT CScreenInventory::GetPortraitByPosition(CPoint pt)
 // 0x626230
 void CScreenInventory::TimerSynchronousUpdate()
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    pGame->SynchronousUpdate();
+
+    if (m_lPopupStack.GetCount() > 0 && m_cUIManager.field_2E == 1) {
+        SHORT nPortrait;
+
+        for (nPortrait = 0; nPortrait <= 5; nPortrait++) {
+            pGame->sub_5AF420(nPortrait, 1);
+        }
+
+        for (nPortrait = 50; nPortrait <= 55; nPortrait++) {
+            pGame->sub_5AF420(nPortrait, 1);
+        }
+    }
+
+    m_cUIManager.Render();
+    pVidMode->Flip(TRUE);
+
+    if (g_pBaldurChitin->pActiveEngine == g_pBaldurChitin->m_pEngineInventory) {
+        CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+        renderLock.Lock(INFINITE);
+
+        if (g_pBaldurChitin->m_pEngineInventory->GetTopPopup() == NULL) {
+            CUIPanel* pPanel = m_cUIManager.GetPanel(2);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+            // __LINE__: 1272
+            UTIL_ASSERT(pPanel != NULL);
+
+            CUIControlBase* pControl = pPanel->GetControl(50);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+            // __LINE__: 1277
+            UTIL_ASSERT(pControl != NULL);
+
+            pControl->InvalidateRect();
+        }
+
+        renderLock.Unlock();
+    }
 }
 
 // 0x626390
