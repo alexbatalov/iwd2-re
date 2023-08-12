@@ -112,6 +112,7 @@ public:
     /* 050C */ int m_nUseButtonMode;
     /* 0510 */ int field_510;
     /* 0514 */ int field_514;
+    /* 0518 */ BOOL m_bMultiPlayerViewable;
     /* 051C */ int field_51C;
     /* 0520 */ int field_520;
     /* 0524 */ int field_524;
