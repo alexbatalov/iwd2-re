@@ -59,7 +59,7 @@ public:
     void UpdateMainPanel(BOOL a1);
     void ResetPopupPanel();
     CUIPanel* GetTopPopup();
-    void SummonPopup();
+    void SummonPopup(DWORD dwPopupId);
     void DismissPopup();
     void ResetHistoryPanel();
     void ResetAbilitiesPanel();
@@ -104,7 +104,10 @@ public:
     /* 0490 */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
     /* 04AC */ int field_4AC;
     /* 04EC */ int field_4EC;
+    /* 04F0 */ INT m_nErrorState;
+    /* 04F4 */ STRREF m_strErrorText;
     /* 04F8 */ INT m_nNumErrorButtons;
+    /* 04FC */ STRREF m_strErrorButtonText[CSCREENINVENTORY_ERROR_BUTTONS];
     /* 0508 */ int field_508;
     /* 050C */ int field_50C;
     /* 0510 */ int field_510;

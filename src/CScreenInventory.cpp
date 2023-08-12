@@ -529,7 +529,7 @@ CUIPanel* CScreenInventory::GetTopPopup()
 }
 
 // 0x627700
-void CScreenInventory::SummonPopup()
+void CScreenInventory::SummonPopup(DWORD dwPopupId)
 {
     // TODO: Incomplete.
 }
@@ -593,7 +593,31 @@ void CScreenInventory::UpdateErrorPanel(CUIPanel* pPanel)
 // 0x629120
 void CScreenInventory::OnRestButtonClick()
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 3222
+    UTIL_ASSERT(pGame != NULL);
+
+    CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    STRREF strError;
+    if (pGame->CanRestParty(strError, 0, 0, 0)) {
+        m_nErrorState = 1;
+        m_strErrorText = 15358;
+        m_strErrorButtonText[0] = 17199;
+        m_strErrorButtonText[1] = 11596;
+        m_strErrorButtonText[2] = 13727;
+        SummonPopup(50);
+    } else {
+        m_nErrorState = 0;
+        m_strErrorText = strError;
+        m_strErrorButtonText[0] = 11973;
+        SummonPopup(7);
+    }
+
+    renderLock.Unlock();
 }
 
 // 0x629230
