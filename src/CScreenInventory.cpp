@@ -144,7 +144,97 @@ void CScreenInventory::EngineDestroyed()
 // 0x625490
 void CScreenInventory::EngineGameInit()
 {
-    // TODO: Incomplete.
+    m_cUIManager.fInit(this, CResRef("GUIINV"), g_pBaldurChitin->field_4A28);
+
+    CPoint pt;
+    if (g_pBaldurChitin->field_4A28) {
+        pt.x = CVideo::SCREENWIDTH / 2 - CBaldurChitin::DEFAULT_SCREEN_WIDTH;
+        pt.y = CVideo::SCREENHEIGHT / 2 - CBaldurChitin::DEFAULT_SCREEN_HEIGHT;
+    } else {
+        pt.x = (CVideo::SCREENWIDTH - CBaldurChitin::DEFAULT_SCREEN_WIDTH) / 2;
+        pt.y = (CVideo::SCREENHEIGHT - CBaldurChitin::DEFAULT_SCREEN_HEIGHT) / 2;
+    }
+
+    m_cUIManager.ShiftPanels(pt);
+
+    for (int index = 0; index < 4; index++) {
+        m_cUIManager.AddPanel(&(g_pBaldurChitin->field_49B4[index]));
+    }
+
+    if (m_pTempItem != NULL) {
+        delete m_pTempItem;
+        m_pTempItem = NULL;
+    }
+
+    m_pCurrentScrollBar = NULL;
+    m_nSelectedCharacter = 0;
+    m_pTempItem = NULL;
+    field_114 = 0;
+    field_118 = -1;
+    field_48C = -1;
+    field_488 = -1;
+    field_11E = 0;
+    field_11F = 0;
+    field_4AC = 0;
+    field_4EC = 0;
+    field_52C = 0;
+    field_510 = -1;
+    field_514 = -1;
+    field_524 = 0;
+    field_51C = 0;
+    field_520 = 0;
+    field_528 = 0;
+
+    m_cUIManager.GetPanel(3)->SetActive(FALSE);
+    m_cUIManager.GetPanel(4)->SetActive(FALSE);
+    m_cUIManager.GetPanel(5)->SetActive(FALSE);
+    m_cUIManager.GetPanel(6)->SetActive(FALSE);
+    m_cUIManager.GetPanel(7)->SetActive(FALSE);
+    m_cUIManager.GetPanel(8)->SetActive(FALSE);
+    m_cUIManager.GetPanel(9)->SetActive(FALSE);
+    m_cUIManager.GetPanel(50)->SetActive(FALSE);
+    m_cUIManager.GetPanel(2)->SetActive(FALSE);
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(0);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 632
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlBase* pControl;
+
+    pControl = pPanel->GetControl(0x10000038);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 636
+    UTIL_ASSERT(pControl != NULL);
+
+    pControl->SetToolTipStrRef(17183, -1, -1); // "Armor Class"
+
+    pControl = pPanel->GetControl(0x10000039);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 640
+    UTIL_ASSERT(pControl != NULL);
+
+    pControl->SetToolTipStrRef(17184, -1, -1); // "Current Hit Points"
+
+    pControl = pPanel->GetControl(0x1000003A);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 644
+    UTIL_ASSERT(pControl != NULL);
+
+    pControl->SetToolTipStrRef(17378, -1, -1); // "Maximum Hit Points"
+
+    field_50C = -1;
+    field_508 = -1;
+    field_510 = -1;
+    field_514 = -1;
+    field_52C = GetPrivateProfileIntA("Game Options",
+        OPTION_PAUSE_WARNING,
+        0,
+        g_pBaldurChitin->GetIniFileName());
 }
 
 // 0x6257C0
