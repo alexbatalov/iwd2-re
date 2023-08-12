@@ -4,6 +4,7 @@
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CItem.h"
+#include "CUIControlButton.h"
 #include "CUIControlLabel.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -576,9 +577,17 @@ void CScreenInventory::ResetErrorPanel()
 }
 
 // 0x6290C0
-void CScreenInventory::UpdateErrorPanel()
+void CScreenInventory::UpdateErrorPanel(CUIPanel* pPanel)
 {
-    // TODO: Incomplete.
+    for (INT nButton = 0; nButton < m_nNumErrorButtons; nButton++) {
+        CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nButton));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 3191
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->SetEnabled(IsErrorButtonClickable(nButton));
+    }
 }
 
 // 0x629120
@@ -630,9 +639,11 @@ void CScreenInventory::CheckEnableButtons()
 }
 
 // 0x62A060
-void CScreenInventory::IsErrorButtonClickable()
+BOOL CScreenInventory::IsErrorButtonClickable(INT nButton)
 {
     // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // 0x62A2F0

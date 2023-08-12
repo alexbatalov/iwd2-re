@@ -67,7 +67,7 @@ public:
     void OnDoneButtonClick();
     void OnCancelButtonClick();
     void ResetErrorPanel();
-    void UpdateErrorPanel();
+    void UpdateErrorPanel(CUIPanel* pPanel);
     void OnRestButtonClick();
     void IsAbilitiesButtonActive();
     void SetUseButtonMode();
@@ -76,7 +76,7 @@ public:
     void OnUseButtonClick();
     void OnAbilitiesButtonClick();
     void CheckEnableButtons();
-    void IsErrorButtonClickable();
+    BOOL IsErrorButtonClickable(INT nButton);
     void OnErrorButtonClick();
     void IdentifyWithSpell();
     void IdentifyWithScroll();
@@ -104,6 +104,7 @@ public:
     /* 0490 */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
     /* 04AC */ int field_4AC;
     /* 04EC */ int field_4EC;
+    /* 04F8 */ INT m_nNumErrorButtons;
     /* 0508 */ int field_508;
     /* 050C */ int field_50C;
     /* 0510 */ int field_510;
