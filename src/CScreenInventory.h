@@ -83,7 +83,7 @@ public:
     void IdentifyWithScroll();
     void CopySpell();
     void DrinkPotion();
-    void PlaySwapSound();
+    void PlaySwapSound(CItem* pOldItem, CItem* pNewItem);
     void CheckMultiPlayerViewable();
     void UnPauseGame();
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);

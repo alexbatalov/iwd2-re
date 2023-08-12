@@ -757,9 +757,434 @@ void CScreenInventory::DrinkPotion()
 }
 
 // 0x62B7D0
-void CScreenInventory::PlaySwapSound()
+void CScreenInventory::PlaySwapSound(CItem* pOldItem, CItem* pNewItem)
 {
-    // TODO: Incomplete.
+    WORD animationType;
+
+    if (pOldItem != NULL) {
+        switch (pOldItem->GetItemType()) {
+        case 1:
+            PlayGUISound(RESREF_SOUND_NECK2);
+            break;
+        case 3:
+            PlayGUISound(RESREF_SOUND_BELT2);
+            break;
+        case 4:
+            PlayGUISound(RESREF_SOUND_BOOT2);
+            break;
+        case 5:
+            PlayGUISound(RESREF_SOUND_ARRW2);
+            break;
+        case 6:
+            PlayGUISound(RESREF_SOUND_GLOVE2);
+            break;
+        case 7:
+            PlayGUISound(RESREF_SOUND_HELM2);
+            break;
+        case 8:
+            PlayGUISound(RESREF_SOUND_KEY2);
+            break;
+        case 9:
+            PlayGUISound(RESREF_SOUND_POTN2);
+            break;
+        case 10:
+            PlayGUISound(RESREF_SOUND_RING2);
+            break;
+        case 11:
+            PlayGUISound(RESREF_SOUND_SCROL2);
+            break;
+        case 14:
+            PlayGUISound(RESREF_SOUND_BULLT2);
+            break;
+        case 15:
+            PlayGUISound(RESREF_SOUND_BOW2);
+            break;
+        case 16:
+            PlayGUISound(RESREF_SOUND_DAGGR2);
+            break;
+        case 17:
+            PlayGUISound(RESREF_SOUND_MACE2);
+            break;
+        case 18:
+            PlayGUISound(RESREF_SOUND_SLING2);
+            break;
+        case 19:
+            PlayGUISound(RESREF_SOUND_SMSWD2);
+            break;
+        case 20:
+        case 57:
+        case 69:
+            PlayGUISound(RESREF_SOUND_LGSWD2);
+            break;
+        case 21:
+            PlayGUISound(RESREF_SOUND_HAMMR2);
+            break;
+        case 22:
+            PlayGUISound(RESREF_SOUND_MSTAR2);
+            break;
+        case 23:
+            PlayGUISound(RESREF_SOUND_FLAIL2);
+            break;
+        case 24:
+            PlayGUISound(RESREF_SOUND_DART2);
+            break;
+        case 25:
+            PlayGUISound(RESREF_SOUND_AXE2);
+            break;
+        case 26:
+            PlayGUISound(RESREF_SOUND_STAFF2);
+            break;
+        case 27:
+            PlayGUISound(RESREF_SOUND_CROSB2);
+            break;
+        case 29:
+            PlayGUISound(RESREF_SOUND_SPEAR2);
+            break;
+        case 30:
+            PlayGUISound(RESREF_SOUND_HALB2);
+            break;
+        case 31:
+            PlayGUISound(RESREF_SOUND_BOLT2);
+            break;
+        case 32:
+            PlayGUISound(RESREF_SOUND_CLOAK2);
+            break;
+        case 33:
+            PlayGUISound(RESREF_SOUND_GOLD2);
+            break;
+        case 34:
+            PlayGUISound(RESREF_SOUND_GEM2);
+            break;
+        case 35:
+            PlayGUISound(RESREF_SOUND_WAND2);
+            break;
+        case 36:
+            PlayGUISound(RESREF_SOUND_BARM2);
+            break;
+        case 37:
+            PlayGUISound(RESREF_SOUND_BSHD2);
+            break;
+        case 38:
+            PlayGUISound(RESREF_SOUND_BWPN2);
+            break;
+        case 40:
+            PlayGUISound(RESREF_SOUND_BROKN2);
+            break;
+        case 41:
+            PlayGUISound(RESREF_SOUND_BUCKR2);
+            break;
+        case 42:
+            PlayGUISound(RESREF_SOUND_CAND2);
+            break;
+        case 43:
+            PlayGUISound(RESREF_SOUND_CHILD2);
+            break;
+        case 44:
+            PlayGUISound(RESREF_SOUND_CLUB2);
+            break;
+        case 45:
+            PlayGUISound(RESREF_SOUND_FEM2);
+            break;
+        case 46:
+            PlayGUISound(RESREF_SOUND_KEYS2);
+            break;
+        case 47:
+            PlayGUISound(RESREF_SOUND_LGSLD2);
+            break;
+        case 48:
+            PlayGUISound(RESREF_SOUND_MALE2);
+            break;
+        case 49:
+            PlayGUISound(RESREF_SOUND_MDSLD2);
+            break;
+        case 50:
+            PlayGUISound(RESREF_SOUND_PAPR2);
+            break;
+        case 51:
+            PlayGUISound(RESREF_SOUND_ROD2);
+            break;
+        case 52:
+            PlayGUISound(RESREF_SOUND_SKULL2);
+            break;
+        case 53:
+            PlayGUISound(RESREF_SOUND_SMSLD2);
+            break;
+        case 54:
+            PlayGUISound(RESREF_SOUND_SPIDR2);
+            break;
+        case 55:
+            PlayGUISound(RESREF_SOUND_TELE2);
+            break;
+        case 56:
+            PlayGUISound(RESREF_SOUND_WINE2);
+            break;
+        case 59:
+            PlayGUISound(RESREF_SOUND_8CB1D0);
+            break;
+        case 60:
+        case 61:
+        case 62:
+        case 63:
+        case 64:
+        case 65:
+        case 66:
+        case 67:
+        case 68:
+            animationType = pOldItem->GetAnimationType();
+            switch (animationType & 0xFF) {
+            case 'A':
+            case 'a':
+                switch ((animationType >> 8) & 0xFF) {
+                case '2':
+                    PlayGUISound(RESREF_SOUND_LETHR2);
+                    break;
+                case '3':
+                    PlayGUISound(RESREF_SOUND_CHAIN2);
+                    break;
+                case '4':
+                    PlayGUISound(RESREF_SOUND_PLATE2);
+                    break;
+                default:
+                    PlayGUISound(RESREF_SOUND_EQUIP_DROP_GENERIC);
+                    break;
+                }
+                break;
+            case 'W':
+            case 'w':
+                PlayGUISound(RESREF_SOUND_CLOAK2);
+                break;
+            default:
+                PlayGUISound(RESREF_SOUND_EQUIP_DROP_GENERIC);
+                break;
+            }
+            break;
+        case 70:
+            PlayGUISound(RESREF_SOUND_8CAD40);
+            break;
+        case 71:
+            PlayGUISound(RESREF_SOUND_8CD260);
+            break;
+        case 72:
+            PlayGUISound(RESREF_SOUND_8C8C80);
+            break;
+        case 73:
+            PlayGUISound(RESREF_SOUND_8CD390);
+            break;
+        default:
+            PlayGUISound(RESREF_SOUND_EQUIP_DROP_GENERIC);
+            break;
+        }
+    } else if (pNewItem != NULL) {
+        switch (pNewItem->GetItemType()) {
+        case 1:
+            PlayGUISound(RESREF_SOUND_NECK1);
+            break;
+        case 3:
+            PlayGUISound(RESREF_SOUND_BELT1);
+            break;
+        case 4:
+            PlayGUISound(RESREF_SOUND_BOOT1);
+            break;
+        case 5:
+            PlayGUISound(RESREF_SOUND_ARRW1);
+            break;
+        case 6:
+            PlayGUISound(RESREF_SOUND_GLOVE1);
+            break;
+        case 7:
+            PlayGUISound(RESREF_SOUND_HELM1);
+            break;
+        case 8:
+            PlayGUISound(RESREF_SOUND_KEY1);
+            break;
+        case 9:
+            PlayGUISound(RESREF_SOUND_POTN1);
+            break;
+        case 10:
+            PlayGUISound(RESREF_SOUND_RING1);
+            break;
+        case 11:
+            PlayGUISound(RESREF_SOUND_SCROL1);
+            break;
+        case 14:
+            PlayGUISound(RESREF_SOUND_BULLT1);
+            break;
+        case 15:
+            PlayGUISound(RESREF_SOUND_BOW1);
+            break;
+        case 16:
+            PlayGUISound(RESREF_SOUND_DAGGR1);
+            break;
+        case 17:
+            PlayGUISound(RESREF_SOUND_MACE1);
+            break;
+        case 18:
+            PlayGUISound(RESREF_SOUND_SLING1);
+            break;
+        case 19:
+            PlayGUISound(RESREF_SOUND_SMSWD1);
+            break;
+        case 20:
+        case 57:
+        case 69:
+            PlayGUISound(RESREF_SOUND_LGSWD1);
+            break;
+        case 21:
+            PlayGUISound(RESREF_SOUND_HAMMR1);
+            break;
+        case 22:
+            PlayGUISound(RESREF_SOUND_MSTAR1);
+            break;
+        case 23:
+            PlayGUISound(RESREF_SOUND_FLAIL1);
+            break;
+        case 24:
+            PlayGUISound(RESREF_SOUND_DART1);
+            break;
+        case 25:
+            PlayGUISound(RESREF_SOUND_AXE1);
+            break;
+        case 26:
+            PlayGUISound(RESREF_SOUND_STAFF1);
+            break;
+        case 27:
+            PlayGUISound(RESREF_SOUND_CROSB1);
+            break;
+        case 29:
+            PlayGUISound(RESREF_SOUND_SPEAR1);
+            break;
+        case 30:
+            PlayGUISound(RESREF_SOUND_HALB1);
+            break;
+        case 31:
+            PlayGUISound(RESREF_SOUND_BOLT1);
+            break;
+        case 32:
+            PlayGUISound(RESREF_SOUND_CLOAK1);
+            break;
+        case 33:
+            PlayGUISound(RESREF_SOUND_GOLD1);
+            break;
+        case 34:
+            PlayGUISound(RESREF_SOUND_GEM1);
+            break;
+        case 35:
+            PlayGUISound(RESREF_SOUND_WAND1);
+            break;
+        case 36:
+            PlayGUISound(RESREF_SOUND_BARM1);
+            break;
+        case 37:
+            PlayGUISound(RESREF_SOUND_BSHD1);
+            break;
+        case 38:
+            PlayGUISound(RESREF_SOUND_BWPN1);
+            break;
+        case 40:
+            PlayGUISound(RESREF_SOUND_BROKN1);
+            break;
+        case 41:
+            PlayGUISound(RESREF_SOUND_BUCKR1);
+            break;
+        case 42:
+            PlayGUISound(RESREF_SOUND_CAND1);
+            break;
+        case 43:
+            PlayGUISound(RESREF_SOUND_CHILD1);
+            break;
+        case 44:
+            PlayGUISound(RESREF_SOUND_CLUB1);
+            break;
+        case 45:
+            PlayGUISound(RESREF_SOUND_FEM1);
+            break;
+        case 46:
+            PlayGUISound(RESREF_SOUND_KEYS1);
+            break;
+        case 47:
+            PlayGUISound(RESREF_SOUND_LGSLD1);
+            break;
+        case 48:
+            PlayGUISound(RESREF_SOUND_MALE1);
+            break;
+        case 49:
+            PlayGUISound(RESREF_SOUND_MDSLD1);
+            break;
+        case 50:
+            PlayGUISound(RESREF_SOUND_PAPR1);
+            break;
+        case 51:
+            PlayGUISound(RESREF_SOUND_ROD1);
+            break;
+        case 52:
+            PlayGUISound(RESREF_SOUND_SKULL1);
+            break;
+        case 53:
+            PlayGUISound(RESREF_SOUND_SMSLD1);
+            break;
+        case 54:
+            PlayGUISound(RESREF_SOUND_SPIDR1);
+            break;
+        case 55:
+            PlayGUISound(RESREF_SOUND_TELE1);
+            break;
+        case 56:
+            PlayGUISound(RESREF_SOUND_WINE1);
+            break;
+        case 59:
+            PlayGUISound(RESREF_SOUND_8CF680);
+            break;
+        case 60:
+        case 61:
+        case 62:
+        case 63:
+        case 64:
+        case 65:
+        case 66:
+        case 67:
+        case 68:
+            animationType = pNewItem->GetAnimationType();
+            switch (animationType & 0xFF) {
+            case 'A':
+            case 'a':
+                switch ((animationType >> 8) & 0xFF) {
+                case '2':
+                    PlayGUISound(RESREF_SOUND_LETHR1);
+                    break;
+                case '3':
+                    PlayGUISound(RESREF_SOUND_CHAIN1);
+                    break;
+                case '4':
+                    PlayGUISound(RESREF_SOUND_PLATE1);
+                    break;
+                default:
+                    PlayGUISound(RESREF_SOUND_EQUIP_TAKE_GENERIC);
+                    break;
+                }
+                break;
+            case 'W':
+            case 'w':
+                PlayGUISound(RESREF_SOUND_CLOAK1);
+                break;
+            default:
+                PlayGUISound(RESREF_SOUND_EQUIP_TAKE_GENERIC);
+                break;
+            }
+            break;
+        case 70:
+            PlayGUISound(RESREF_SOUND_8CF698);
+            break;
+        case 71:
+            PlayGUISound(RESREF_SOUND_8CF628);
+            break;
+        case 72:
+            PlayGUISound(RESREF_SOUND_8CAD98);
+            break;
+        case 73:
+            PlayGUISound(RESREF_SOUND_8CB1B0);
+            break;
+        }
+    }
 }
 
 // 0x62C4E0
