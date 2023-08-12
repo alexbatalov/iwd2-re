@@ -574,9 +574,54 @@ void CScreenInventory::OnCancelButtonClick()
 }
 
 // 0x628E70
-void CScreenInventory::ResetErrorPanel()
+void CScreenInventory::ResetErrorPanel(CUIPanel* pPanel)
 {
-    // TODO: Incomplete.
+    switch (pPanel->m_nID) {
+    case 7:
+        m_nNumErrorButtons = 1;
+        break;
+    case 8:
+        m_nNumErrorButtons = 2;
+        break;
+    case 9:
+    case 50:
+        m_nNumErrorButtons = 3;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 3137
+        UTIL_ASSERT(FALSE);
+    }
+
+    STR_RES strRes;
+    g_pBaldurChitin->m_cTlkTable.Fetch(m_strErrorText, strRes);
+
+    strRes.cSound.SetChannel(0, 0);
+    strRes.cSound.SetFireForget(TRUE);
+    strRes.cSound.Play(FALSE);
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(3));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 3150
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+    UpdateText(pText, "%s", strRes.szText);
+
+    for (INT nButton = 0; nButton < m_nNumErrorButtons; nButton++) {
+        CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nButton + 1));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 3159
+        UTIL_ASSERT(pButton != NULL);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 3998
+        UTIL_ASSERT(0 <= nButton && nButton < CSCREENINVENTORY_ERROR_BUTTONS);
+
+        pButton->SetText(FetchString(m_strErrorButtonText[nButton]));
+    }
 }
 
 // 0x6290C0

@@ -67,7 +67,7 @@ public:
     void SelectItemAbility();
     void OnDoneButtonClick();
     void OnCancelButtonClick();
-    void ResetErrorPanel();
+    void ResetErrorPanel(CUIPanel* pPanel);
     void UpdateErrorPanel(CUIPanel* pPanel);
     void OnRestButtonClick();
     void IsAbilitiesButtonActive();
