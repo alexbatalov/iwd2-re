@@ -808,5 +808,7 @@ void CScreenInventory::IsCharacterInRange()
 // 0x62CF50
 void CScreenInventory::UpdatePartyGoldStatus()
 {
-    // TODO: Incomplete.
+    if (GetTopPopup() == NULL) {
+        UpdateMainPanel(FALSE);
+    }
 }

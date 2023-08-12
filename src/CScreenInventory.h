@@ -46,6 +46,7 @@ public:
     /* 00E0 */ void OnPortraitLClick(DWORD nPortrait) override;
     /* 0104 */ void CancelEngine() override;
     /* 0108 */ void UpdateCharacterStatus(LONG nCharacterId) override;
+    /* 010C */ void UpdatePartyGoldStatus() override;
 
     INT GetSlotByPosition(CPoint pt);
     INT GetPortraitByPosition(CPoint pt);
@@ -87,7 +88,6 @@ public:
     void UnPauseGame();
     void UpdateHelp();
     void IsCharacterInRange();
-    void UpdatePartyGoldStatus();
 
     /* 0106 */ CGameAnimation m_animation;
     /* 0110 */ CItem* m_pTempItem;
