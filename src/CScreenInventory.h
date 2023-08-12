@@ -71,7 +71,7 @@ public:
     void OnRestButtonClick();
     void IsAbilitiesButtonActive();
     void SetUseButtonMode(INT nMode);
-    void SetAbilitiesButtonMode();
+    void SetAbilitiesButtonMode(INT nMode);
     void IsUseButtonActive();
     void OnUseButtonClick();
     void OnAbilitiesButtonClick();
@@ -108,7 +108,7 @@ public:
     /* 04F4 */ STRREF m_strErrorText;
     /* 04F8 */ INT m_nNumErrorButtons;
     /* 04FC */ STRREF m_strErrorButtonText[CSCREENINVENTORY_ERROR_BUTTONS];
-    /* 0508 */ int field_508;
+    /* 0508 */ int m_nAbilitiesButtonMode;
     /* 050C */ int m_nUseButtonMode;
     /* 0510 */ int field_510;
     /* 0514 */ int field_514;

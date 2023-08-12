@@ -229,7 +229,7 @@ void CScreenInventory::EngineGameInit()
     pControl->SetToolTipStrRef(17378, -1, -1); // "Maximum Hit Points"
 
     m_nUseButtonMode = -1;
-    field_508 = -1;
+    m_nAbilitiesButtonMode = -1;
     field_510 = -1;
     field_514 = -1;
     field_52C = GetPrivateProfileIntA("Game Options",
@@ -664,9 +664,31 @@ void CScreenInventory::SetUseButtonMode(INT nMode)
 }
 
 // 0x629660
-void CScreenInventory::SetAbilitiesButtonMode()
+void CScreenInventory::SetAbilitiesButtonMode(INT nMode)
 {
-    // TODO: Incomplete.
+    if (m_nAbilitiesButtonMode == nMode) {
+        return;
+    }
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(5);
+    if (pPanel == NULL) {
+        return;
+    }
+
+    CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(8));
+    if (pButton == NULL) {
+        return;
+    }
+
+    m_nAbilitiesButtonMode = nMode;
+    switch (nMode) {
+    case 0:
+        pButton->SetText(FetchString(11960)); // "Abilities"
+        break;
+    case 1:
+        pButton->SetText(FetchString(14133)); // "Identify"
+        break;
+    }
 }
 
 // 0x629740
