@@ -70,7 +70,7 @@ public:
     void UpdateErrorPanel(CUIPanel* pPanel);
     void OnRestButtonClick();
     void IsAbilitiesButtonActive();
-    void SetUseButtonMode();
+    void SetUseButtonMode(INT nMode);
     void SetAbilitiesButtonMode();
     void IsUseButtonActive();
     void OnUseButtonClick();
@@ -109,7 +109,7 @@ public:
     /* 04F8 */ INT m_nNumErrorButtons;
     /* 04FC */ STRREF m_strErrorButtonText[CSCREENINVENTORY_ERROR_BUTTONS];
     /* 0508 */ int field_508;
-    /* 050C */ int field_50C;
+    /* 050C */ int m_nUseButtonMode;
     /* 0510 */ int field_510;
     /* 0514 */ int field_514;
     /* 051C */ int field_51C;

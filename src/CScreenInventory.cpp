@@ -228,7 +228,7 @@ void CScreenInventory::EngineGameInit()
 
     pControl->SetToolTipStrRef(17378, -1, -1); // "Maximum Hit Points"
 
-    field_50C = -1;
+    m_nUseButtonMode = -1;
     field_508 = -1;
     field_510 = -1;
     field_514 = -1;
@@ -627,9 +627,40 @@ void CScreenInventory::IsAbilitiesButtonActive()
 }
 
 // 0x6294D0
-void CScreenInventory::SetUseButtonMode()
+void CScreenInventory::SetUseButtonMode(INT nMode)
 {
-    // TODO: Incomplete.
+    if (m_nUseButtonMode == nMode) {
+        return;
+    }
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(5);
+    if (pPanel == NULL) {
+        return;
+    }
+
+    CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(9));
+    if (pButton == NULL) {
+        return;
+    }
+
+    m_nUseButtonMode = nMode;
+    switch (nMode) {
+    case 0:
+        pButton->SetText(FetchString(19392)); // "Drink Potion"
+        break;
+    case 1:
+        pButton->SetText(FetchString(17104)); // "Write Magic"
+        break;
+    case 2:
+        pButton->SetText(FetchString(10874)); // "eat berries"
+        break;
+    case 3:
+        pButton->SetText(FetchString(24891)); // "Open Container"
+        break;
+    case 4:
+        pButton->SetText(FetchString(32477)); // "Eat Rations"
+        break;
+    }
 }
 
 // 0x629660
