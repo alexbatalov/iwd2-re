@@ -6,6 +6,7 @@
 #include "CItem.h"
 #include "CUIControlButton.h"
 #include "CUIControlLabel.h"
+#include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
 
@@ -794,9 +795,26 @@ void CScreenInventory::UnPauseGame()
 }
 
 // 0x62CC50
-void CScreenInventory::UpdateHelp()
+void CScreenInventory::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId)
 {
-    // TODO: Incomplete.
+    STR_RES strRes;
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 5842
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(dwTextId));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 5844
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+
+    g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes);
+    UpdateText(pText, "%s", strRes.szText);
 }
 
 // 0x62CD60

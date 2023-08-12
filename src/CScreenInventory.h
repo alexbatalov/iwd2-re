@@ -86,7 +86,7 @@ public:
     void PlaySwapSound();
     void CheckMultiPlayerViewable();
     void UnPauseGame();
-    void UpdateHelp();
+    void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
     void IsCharacterInRange();
 
     /* 0106 */ CGameAnimation m_animation;
