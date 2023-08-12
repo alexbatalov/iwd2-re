@@ -51,7 +51,7 @@ public:
     INT GetSlotByPosition(CPoint pt);
     INT GetPortraitByPosition(CPoint pt);
     void SetErrorString(STRREF strError, COLORREF rgb);
-    void UpdatePersonalItemStatus();
+    void UpdatePersonalItemStatus(LONG nCharacterId);
     void UpdateContainerStatus();
     void UpdateCursorShape();
     void FetchGroundPile();
@@ -88,6 +88,9 @@ public:
     void UnPauseGame();
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
     void IsCharacterInRange();
+    void UpdateRequesterPanel();
+    void UpdateHistoryPanel(BOOL a1);
+    void UpdateAbilitiesPanel();
 
     /* 0106 */ CGameAnimation m_animation;
     /* 0110 */ CItem* m_pTempItem;

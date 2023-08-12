@@ -452,9 +452,28 @@ void CScreenInventory::SetErrorString(STRREF strError, COLORREF rgb)
 }
 
 // 0x6266E0
-void CScreenInventory::UpdatePersonalItemStatus()
+void CScreenInventory::UpdatePersonalItemStatus(LONG nCharacterId)
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    SHORT nPortrait = GetSelectedCharacter();
+    if (pGame->GetCharacterId(nPortrait) == nCharacterId) {
+        if (GetTopPopup() != NULL) {
+            switch (GetTopPopup()->m_nID) {
+            case 4:
+                UpdateRequesterPanel();
+                break;
+            case 5:
+                UpdateHistoryPanel(0);
+                break;
+            case 6:
+                UpdateAbilitiesPanel();
+                break;
+            }
+        } else {
+            UpdateMainPanel(FALSE);
+            m_cUIManager.GetPanel(2)->InvalidateRect(NULL);
+        }
+    }
 }
 
 // 0x626780
@@ -1416,4 +1435,22 @@ void CScreenInventory::UpdatePartyGoldStatus()
     if (GetTopPopup() == NULL) {
         UpdateMainPanel(FALSE);
     }
+}
+
+// 0x631640
+void CScreenInventory::UpdateRequesterPanel()
+{
+    // TODO: Incomplete.
+}
+
+// 0x631790
+void CScreenInventory::UpdateHistoryPanel(BOOL a1)
+{
+    // TODO: Incomplete.
+}
+
+// 0x631A20
+void CScreenInventory::UpdateAbilitiesPanel()
+{
+    // TODO: Incomplete.
 }
