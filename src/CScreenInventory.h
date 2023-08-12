@@ -56,7 +56,7 @@ public:
     void UpdateCursorShape();
     void FetchGroundPile();
     void FlushGroundPiles();
-    void EnableMainPanel();
+    void EnableMainPanel(BOOL bEnable);
     void UpdateMainPanel(BOOL a1);
     void ResetPopupPanel();
     CUIPanel* GetTopPopup();
