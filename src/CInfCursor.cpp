@@ -242,6 +242,12 @@ void CInfCursor::SetToolTip(STRREF nStrRef, CUIControlBase* pControl, SHORT nHot
     // TODO: Incomplete.
 }
 
+// 0x597C50
+void CInfCursor::SetCustomCursor(CResRef customResRef, BOOLEAN bAnimating, INT nPointerNumber)
+{
+    // TODO: Incomplete.
+}
+
 // NOTE: Inlined.
 void CInfCursor::SetScrollArrowDirection()
 {
