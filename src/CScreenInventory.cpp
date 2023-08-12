@@ -4,6 +4,7 @@
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CItem.h"
+#include "CScreenWorld.h"
 #include "CUIControlButton.h"
 #include "CUIControlLabel.h"
 #include "CUIControlTextDisplay.h"
@@ -179,7 +180,7 @@ void CScreenInventory::EngineGameInit()
     field_11F = 0;
     field_4AC = 0;
     field_4EC = 0;
-    field_52C = 0;
+    m_bPauseWarningDisplayed = FALSE;
     field_510 = -1;
     field_514 = -1;
     field_524 = 0;
@@ -233,7 +234,7 @@ void CScreenInventory::EngineGameInit()
     m_nAbilitiesButtonMode = -1;
     field_510 = -1;
     field_514 = -1;
-    field_52C = GetPrivateProfileIntA("Game Options",
+    m_bPauseWarningDisplayed = GetPrivateProfileIntA("Game Options",
         OPTION_PAUSE_WARNING,
         0,
         g_pBaldurChitin->GetIniFileName());
@@ -791,7 +792,52 @@ void CScreenInventory::CheckMultiPlayerViewable()
 // 0x62CAA0
 void CScreenInventory::UnPauseGame()
 {
-    // TOOD: Incomplete.
+    CSingleLock renderLock(&(GetManager()->field_36), FALSE);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 5754
+    UTIL_ASSERT(pGame != NULL);
+
+    if (g_pChitin->cNetwork.GetSessionOpen() != TRUE) {
+        if (g_pBaldurChitin->m_pEngineWorld->m_bPaused) {
+            if (pGame->m_singlePlayerPermissions.m_bPermissions[CGamePermission::PAUSING]) {
+                if (m_bPauseWarningDisplayed) {
+                    SetErrorString(19381, RGB(255, 0, 0));
+                } else {
+                    renderLock.Lock(INFINITE);
+
+                    m_nErrorState = 2;
+                    m_strErrorText = 19381;
+                    m_strErrorButtonText[0] = 11973;
+                    SummonPopup(7);
+
+                    renderLock.Unlock();
+
+                    m_bPauseWarningDisplayed = TRUE;
+
+                    WritePrivateProfileStringA("Game Options",
+                        OPTION_PAUSE_WARNING,
+                        "1",
+                        g_pBaldurChitin->GetIniFileName());
+                }
+
+                g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
+            } else {
+                renderLock.Lock(INFINITE);
+
+                m_nErrorState = 5;
+                m_strErrorText = 10920;
+                m_strErrorButtonText[0] = 11973;
+                SummonPopup(7);
+
+                renderLock.Unlock();
+            }
+        } else {
+            pGame->GetWorldTimer()->StartTime();
+        }
+    }
 }
 
 // 0x62CC50

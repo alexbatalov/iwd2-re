@@ -116,7 +116,7 @@ public:
     /* 0520 */ int field_520;
     /* 0524 */ int field_524;
     /* 0528 */ int field_528;
-    /* 052C */ unsigned char field_52C;
+    /* 052C */ BOOLEAN m_bPauseWarningDisplayed;
     /* 142E */ C2DArray field_142E;
     /* 1452 */ C2DArray field_1452;
     /* 1476 */ C2DArray field_1476;
