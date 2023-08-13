@@ -439,6 +439,12 @@ SHORT CGameSprite::GetLayOnHandsAmount()
     return g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetLayOnHandsAmount(m_typeAI, m_derivedStats);
 }
 
+// 0x71C0A0
+INT CGameSprite::GetNumQuickWeaponSlots()
+{
+    return g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetNumQuickWeaponSlots(m_typeAI.m_nClass);
+}
+
 // 0x72DE60
 void CGameSprite::sub_72DE60()
 {

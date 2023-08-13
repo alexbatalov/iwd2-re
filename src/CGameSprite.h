@@ -215,6 +215,7 @@ public:
     void UnequipAll(BOOL a1);
     SHORT GetTurnUndeadLevel();
     SHORT GetLayOnHandsAmount();
+    INT GetNumQuickWeaponSlots();
     void sub_72DE60();
     int sub_71F6E0();
     const CString& GetName();
