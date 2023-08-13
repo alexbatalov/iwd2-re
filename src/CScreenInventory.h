@@ -128,6 +128,17 @@ public:
     /* 1476 */ C2DArray field_1476;
 };
 
+class CUIControlButtonInventoryColor : public CUIControlButton {
+public:
+    CUIControlButtonInventoryColor(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonInventoryColor() override;
+    BOOL Render(BOOL bForce) override;
+    void OnLButtonClick(CPoint pt) override;
+
+    /* 0666 */ CVidCell* m_pDecal;
+    /* 066A */ CVidPalette* m_pPalette;
+};
+
 class CUIControlButtonInventoryColorChoice : public CUIControlButton {
 public:
     CUIControlButtonInventoryColorChoice(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
