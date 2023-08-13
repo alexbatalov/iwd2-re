@@ -6,7 +6,6 @@
 #include "CInfGame.h"
 #include "CItem.h"
 #include "CScreenWorld.h"
-#include "CUIControlButton.h"
 #include "CUIControlLabel.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
@@ -823,7 +822,7 @@ BOOL CScreenInventory::IsErrorButtonClickable(INT nButton)
 }
 
 // 0x62A2F0
-void CScreenInventory::OnErrorButtonClick()
+void CScreenInventory::OnErrorButtonClick(INT nButton)
 {
     // TODO: Incomplete.
 }
@@ -1453,4 +1452,29 @@ void CScreenInventory::UpdateHistoryPanel(BOOL a1)
 void CScreenInventory::UpdateAbilitiesPanel()
 {
     // TODO: Incomplete.
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x635270
+CUIControlButtonInventoryError::CUIControlButtonInventoryError(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+}
+
+// 0x6352C0
+CUIControlButtonInventoryError::~CUIControlButtonInventoryError()
+{
+}
+
+// 0x635360
+void CUIControlButtonInventoryError::OnLButtonClick(CPoint pt)
+{
+    CScreenInventory* pInventory = g_pBaldurChitin->m_pEngineInventory;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 11832
+    UTIL_ASSERT(pInventory != NULL);
+
+    pInventory->OnErrorButtonClick(m_nID);
 }

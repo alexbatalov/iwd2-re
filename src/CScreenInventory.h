@@ -5,6 +5,7 @@
 #include "CBaldurEngine.h"
 #include "CGameAnimation.h"
 #include "CKeyInfo.h"
+#include "CUIControlButton.h"
 
 #define CSCREENINVENTORY_VIRTUAL_KEYS 90
 #define CSCREENINVENTORY_ERROR_BUTTONS 3
@@ -78,7 +79,7 @@ public:
     void OnAbilitiesButtonClick();
     void CheckEnableButtons();
     BOOL IsErrorButtonClickable(INT nButton);
-    void OnErrorButtonClick();
+    void OnErrorButtonClick(INT nButton);
     void IdentifyWithSpell();
     void IdentifyWithScroll();
     void CopySpell();
@@ -124,6 +125,13 @@ public:
     /* 142E */ C2DArray field_142E;
     /* 1452 */ C2DArray field_1452;
     /* 1476 */ C2DArray field_1476;
+};
+
+class CUIControlButtonInventoryError : public CUIControlButton {
+public:
+    CUIControlButtonInventoryError(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonInventoryError() override;
+    void OnLButtonClick(CPoint pt) override;
 };
 
 #endif /* CSCREENINVENTORY_H_ */
