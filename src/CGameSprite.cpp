@@ -408,6 +408,12 @@ BYTE CGameSprite::GetChannel()
     return 13;
 }
 
+// 0x71B460
+void CGameSprite::UnequipAll(BOOL a1)
+{
+    // TODO: Incomplete.
+}
+
 // 0x71B8D0
 SHORT CGameSprite::GetTurnUndeadLevel()
 {

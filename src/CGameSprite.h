@@ -211,6 +211,7 @@ public:
     void PlaySound(BYTE soundID, BOOL showText, BOOL showCircle, BOOL overrideOption);
     void SetFootstepChannel();
     BYTE GetChannel();
+    void UnequipAll(BOOL a1);
     SHORT GetTurnUndeadLevel();
     SHORT GetLayOnHandsAmount();
     void sub_72DE60();

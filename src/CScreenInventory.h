@@ -95,6 +95,7 @@ public:
     void UpdateAbilitiesPanel();
     INT MapButtonIdToInventoryId(INT nButton);
     INT MapInventoryIdToButtonId(INT nInventoryId);
+    void BeginSwap();
 
     /* 0106 */ CGameAnimation m_animation;
     /* 0110 */ CItem* m_pTempItem;

@@ -1663,6 +1663,44 @@ INT CScreenInventory::MapInventoryIdToButtonId(INT nInventoryId)
     }
 }
 
+// 0x62F100
+void CScreenInventory::BeginSwap()
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    SHORT nPortrait = m_nSelectedCharacter;
+
+    // NOTE: Uninline.
+    LONG nCharacterId = pGame->GetCharacterId(nPortrait);
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if ((pSprite->m_derivedStats.m_generalState & 0x800) == 0) {
+            CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+            renderLock.Lock(INFINITE);
+
+            CGameAnimationType* animation = pSprite->m_animation.m_animation;
+            pSprite->m_animation.m_animation = m_animation.m_animation;
+            pSprite->UnequipAll(TRUE);
+            pSprite->m_animation.m_animation = animation;
+
+            renderLock.Unlock();
+        }
+
+        pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x631E10
