@@ -1455,6 +1455,161 @@ void CScreenInventory::UpdateAbilitiesPanel()
 
 // -----------------------------------------------------------------------------
 
+// 0x0632530
+CUIControlButtonInventoryColorChoice::CUIControlButtonInventoryColorChoice(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    if (m_nID == 35) {
+        STR_RES strRes;
+        g_pBaldurChitin->m_cTlkTable.Fetch(33479, strRes); // "Default"
+        SetText(strRes.szText);
+
+        m_pDecal = NULL;
+        m_pPalette = NULL;
+    } else {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 9783
+        UTIL_ASSERT(m_nID <= CRESUI_CONTROLBUTTONID_INVENTORYCOLOR_LASTCOLOR);
+
+        m_pDecal = new CVidCell(CResRef("COLGRAD"), m_pPanel->m_pManager->m_bDoubleSize);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 9789
+        UTIL_ASSERT(m_pDecal != NULL);
+
+        m_pPalette = new CVidPalette(CVidPalette::TYPE_RANGE);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 9795
+        UTIL_ASSERT(m_pPalette != NULL);
+    }
+}
+
+// 0x632740
+CUIControlButtonInventoryColorChoice::~CUIControlButtonInventoryColorChoice()
+{
+    if (m_pDecal != NULL) {
+        delete m_pDecal;
+        m_pDecal = NULL;
+    }
+
+    if (m_pPalette != NULL) {
+        delete m_pPalette;
+        m_pPalette = NULL;
+    }
+}
+
+// 0x632830
+void CUIControlButtonInventoryColorChoice::OnLButtonClick(CPoint pt)
+{
+    CScreenInventory* pInventory = g_pBaldurChitin->m_pEngineInventory;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 9850
+    UTIL_ASSERT(pInventory != NULL);
+
+    if (pInventory->m_bMultiPlayerViewable) {
+        BYTE colorRange;
+        if (GetColorRange(colorRange)) {
+            pInventory->field_11F = colorRange;
+            pInventory->OnDoneButtonClick();
+        } else if (m_nID == 35) {
+            pInventory->field_11F = pInventory->field_11E;
+            pInventory->field_11E = 7;
+            pInventory->OnDoneButtonClick();
+        }
+    }
+}
+
+// 0x6328C0
+BOOL CUIControlButtonInventoryColorChoice::Render(BOOL bForce)
+{
+    if (m_nID == 35) {
+        return CUIControlButton::Render(bForce);
+    }
+
+    if (!m_bActive && !m_bInactiveRender) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount == 0 && !bForce) {
+        return FALSE;
+    }
+
+    if (!CUIControlButton::Render(bForce)) {
+        return FALSE;
+    }
+
+    CPoint pt = m_pPanel->m_ptOrigin + m_ptOrigin;
+
+    if (m_bPressed) {
+        m_pDecal->FrameSet(3);
+    } else {
+        m_pDecal->FrameSet(2);
+    }
+
+    BYTE colorRange;
+    if (GetColorRange(colorRange)) {
+        CRect rControlRect;
+        rControlRect.left = pt.x;
+        rControlRect.top = pt.y;
+        rControlRect.right = rControlRect.left + 42 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1);
+        rControlRect.bottom = rControlRect.top + 42 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1);
+
+        CRect rClip;
+        rClip.IntersectRect(rControlRect, m_rDirty);
+
+        m_pPalette->SetRange(0,
+            colorRange,
+            *g_pBaldurChitin->GetObjectGame()->GetMasterBitmap());
+
+        m_pDecal->SetPalette(*m_pPalette);
+
+        BOOL bResult = m_pDecal->Render(0, pt.x, pt.y, rClip, NULL, 0, 0, 0);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 9938
+        UTIL_ASSERT(bResult);
+    }
+
+    return TRUE;
+}
+
+// 0x632A70
+BOOL CUIControlButtonInventoryColorChoice::GetColorRange(BYTE& colorRange)
+{
+    CScreenInventory* pInventory = g_pBaldurChitin->m_pEngineInventory;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 9964
+    UTIL_ASSERT(pInventory != NULL);
+
+    switch (pInventory->field_11E) {
+    case 1:
+    case 2:
+        if (m_nID < 31) {
+            colorRange = static_cast<BYTE>(m_nID) + 36;
+            return TRUE;
+        } else if (m_nID < 34) {
+            colorRange = static_cast<BYTE>(m_nID) - 10;
+            return TRUE;
+        }
+        return FALSE;
+    case 3:
+        colorRange = static_cast<BYTE>(atol(pInventory->field_1452.GetAt(CPoint(0, m_nID))));
+        return TRUE;
+    case 6:
+        colorRange = static_cast<BYTE>(atol(pInventory->field_142E.GetAt(CPoint(0, m_nID))));
+        return TRUE;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 10006
+        UTIL_ASSERT(FALSE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x6334E0
 CUIControlButtonInventoryRequesterDone::CUIControlButtonInventoryRequesterDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)

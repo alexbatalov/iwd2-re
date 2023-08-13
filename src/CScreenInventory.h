@@ -11,6 +11,8 @@
 #define CSCREENINVENTORY_VIRTUAL_KEYS 90
 #define CSCREENINVENTORY_ERROR_BUTTONS 3
 
+#define CRESUI_CONTROLBUTTONID_INVENTORYCOLOR_LASTCOLOR 33
+
 class CScreenInventory : public CBaldurEngine {
 public:
     static const DWORD SLOT_ID[];
@@ -124,6 +126,19 @@ public:
     /* 142E */ C2DArray field_142E;
     /* 1452 */ C2DArray field_1452;
     /* 1476 */ C2DArray field_1476;
+};
+
+class CUIControlButtonInventoryColorChoice : public CUIControlButton {
+public:
+    CUIControlButtonInventoryColorChoice(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonInventoryColorChoice() override;
+    BOOL Render(BOOL bForce) override;
+    void OnLButtonClick(CPoint pt) override;
+
+    BOOL GetColorRange(BYTE& colorRange);
+
+    /* 0666 */ CVidCell* m_pDecal;
+    /* 066A */ CVidPalette* m_pPalette;
 };
 
 class CUIControlButtonInventoryRequesterDone : public CUIControlButton {
