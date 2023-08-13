@@ -214,6 +214,7 @@ public:
     void EquipAll(BOOL a1);
     void UnequipAll(BOOL a1);
     SHORT GetTurnUndeadLevel();
+    SHORT GetBackstabDamageMultiplier();
     SHORT GetLayOnHandsAmount();
     INT GetNumQuickWeaponSlots();
     void sub_72DE60();
@@ -252,6 +253,7 @@ public:
     /* 05A0 */ CString m_sName;
     /* 05A4 */ CCreatureFileHeader m_baseStats;
     /* 0920 */ CDerivedStats m_derivedStats;
+    /* 1778 */ CDerivedStats m_tempStats;
     /* 3D38 */ BYTE m_nLastSpellbookClassIndex;
     /* 3D39 */ BYTE m_nLastSpellbookSpellLevel;
     /* 3DFA */ CAIObjectType m_liveTypeAI;
@@ -272,6 +274,7 @@ public:
     /* 5690 */ LONG m_targetId;
     /* 5694 */ CPoint m_targetPoint;
     /* 70F2 */ int field_70F2;
+    /* 72A4 */ BOOL field_72A4;
     /* 9D15 */ unsigned char field_9D15;
 };
 

@@ -433,6 +433,22 @@ SHORT CGameSprite::GetTurnUndeadLevel()
     return static_cast<SHORT>(nLevel);
 }
 
+// 0x71B910
+SHORT CGameSprite::GetBackstabDamageMultiplier()
+{
+    if (!m_typeAI.IsClassValid(CAIObjectType::C_ROGUE)) {
+        return 0;
+    }
+
+    CDerivedStats* DStats = &m_derivedStats;
+    if (!field_72A4) {
+        DStats = &m_tempStats;
+    }
+
+    INT nLevel = DStats->GetBardMonkRogueLevel();
+    return atol(g_pBaldurChitin->GetObjectGame()->GetRuleTables().m_tBackstabMultiplier.GetAt(CPoint(nLevel, 0)));
+}
+
 // 0x71B9A0
 SHORT CGameSprite::GetLayOnHandsAmount()
 {
