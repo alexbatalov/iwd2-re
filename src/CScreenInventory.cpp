@@ -4,7 +4,6 @@
 #include "CGameSprite.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
-#include "CItem.h"
 #include "CScreenWorld.h"
 #include "CUIControlLabel.h"
 #include "CUIControlTextDisplay.h"
@@ -1452,6 +1451,46 @@ void CScreenInventory::UpdateHistoryPanel(BOOL a1)
 void CScreenInventory::UpdateAbilitiesPanel()
 {
     // TODO: Incomplete.
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x633D50
+CUIControlButtonInventoryHistoryIcon::CUIControlButtonInventoryHistoryIcon(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    field_662 = 0;
+    m_pItem = NULL;
+}
+
+// 0x633DF0
+CUIControlButtonInventoryHistoryIcon::~CUIControlButtonInventoryHistoryIcon()
+{
+}
+
+// 0x633EA0
+void CUIControlButtonInventoryHistoryIcon::SetItem(CItem* pItem)
+{
+    if (m_item.GetResRef() != pItem->GetResRef()) {
+        m_item.SetResRef(pItem->GetResRef(), TRUE);
+        m_item.m_useCount1 = pItem->m_useCount1;
+        m_item.m_useCount2 = pItem->m_useCount2;
+        m_item.m_useCount3 = pItem->m_useCount3;
+        m_item.m_flags = pItem->m_flags;
+        m_item.m_wear = pItem->m_wear;
+
+        m_pItem = &m_item;
+
+        InvalidateRect();
+    }
+}
+
+// 0x634950
+BOOL CUIControlButtonInventoryHistoryIcon::Render(BOOL bForce)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------------

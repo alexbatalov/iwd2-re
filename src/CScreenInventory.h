@@ -4,13 +4,12 @@
 #include "C2DArray.h"
 #include "CBaldurEngine.h"
 #include "CGameAnimation.h"
+#include "CItem.h"
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
 
 #define CSCREENINVENTORY_VIRTUAL_KEYS 90
 #define CSCREENINVENTORY_ERROR_BUTTONS 3
-
-class CItem;
 
 class CScreenInventory : public CBaldurEngine {
 public:
@@ -125,6 +124,18 @@ public:
     /* 142E */ C2DArray field_142E;
     /* 1452 */ C2DArray field_1452;
     /* 1476 */ C2DArray field_1476;
+};
+
+class CUIControlButtonInventoryHistoryIcon : public CUIControlButton {
+public:
+    CUIControlButtonInventoryHistoryIcon(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonInventoryHistoryIcon() override;
+    BOOL Render(BOOL bForce) override;
+
+    void SetItem(CItem* pItem);
+
+    /* 0666 */ CItem* m_pItem;
+    /* 066A */ CItem m_item;
 };
 
 class CUIControlButtonInventoryHistoryDone : public CUIControlButton {
