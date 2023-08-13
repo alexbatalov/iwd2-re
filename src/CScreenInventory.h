@@ -127,6 +127,17 @@ public:
     /* 1476 */ C2DArray field_1476;
 };
 
+class CUIControlButtonInventoryHistoryImage : public CUIControlButton {
+public:
+    CUIControlButtonInventoryHistoryImage(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonInventoryHistoryImage() override;
+    BOOL Render(BOOL bForce) override;
+
+    void SetImage(CResRef imageResRef);
+
+    /* 0666 */ CResRef m_imageResRef;
+};
+
 class CUIControlButtonInventoryHistoryAbilities : public CUIControlButton {
 public:
     CUIControlButtonInventoryHistoryAbilities(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

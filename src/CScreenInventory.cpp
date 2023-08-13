@@ -1456,6 +1456,35 @@ void CScreenInventory::UpdateAbilitiesPanel()
 
 // -----------------------------------------------------------------------------
 
+// 0x634B60
+CUIControlButtonInventoryHistoryImage::CUIControlButtonInventoryHistoryImage(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    m_imageResRef = "";
+}
+
+// 0x634C00
+CUIControlButtonInventoryHistoryImage::~CUIControlButtonInventoryHistoryImage()
+{
+}
+
+// 0x799C90
+BOOL CUIControlButtonInventoryHistoryImage::Render(BOOL bForce)
+{
+    return TRUE;
+}
+
+// 0x634CA0
+void CUIControlButtonInventoryHistoryImage::SetImage(CResRef imageResRef)
+{
+    if (m_imageResRef != imageResRef) {
+        m_imageResRef = imageResRef;
+        InvalidateRect();
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x634CE0
 CUIControlButtonInventoryHistoryAbilities::CUIControlButtonInventoryHistoryAbilities(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
