@@ -2874,6 +2874,12 @@ void CRuleTables::GetGenderStringMixed(BYTE nGender, CString& sGender) const
     sGender = strRes.szText;
 }
 
+// 0x545720
+INT CRuleTables::GetNumQuickWeaponSlots(BYTE nClass) const
+{
+    return 8;
+}
+
 // 0x545730
 BOOL CRuleTables::IsItemExclusive(CItem* pItem) const
 {
