@@ -94,6 +94,7 @@ public:
     void UpdateHistoryPanel(BOOL a1);
     void UpdateAbilitiesPanel();
     INT MapButtonIdToInventoryId(INT nButton);
+    INT MapInventoryIdToButtonId(INT nInventoryId);
 
     /* 0106 */ CGameAnimation m_animation;
     /* 0110 */ CItem* m_pTempItem;

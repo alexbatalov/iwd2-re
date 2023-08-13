@@ -1558,6 +1558,111 @@ INT CScreenInventory::MapButtonIdToInventoryId(INT nButton)
     }
 }
 
+// 0x630EB0
+INT CScreenInventory::MapInventoryIdToButtonId(INT nInventoryId)
+{
+    switch (nInventoryId) {
+    case 0:
+        return 14;
+    case 1:
+        return 11;
+    case 2:
+        return 21;
+    case 3:
+        return 25;
+    case 4:
+        return 24;
+    case 5:
+        return 12;
+    case 6:
+        return 13;
+    case 7:
+        return 22;
+    case 8:
+        return 23;
+    case 11:
+        return 15;
+    case 12:
+        return 16;
+    case 13:
+        return 17;
+    case 15:
+        return 5;
+    case 16:
+        return 6;
+    case 17:
+        return 7;
+    case 18:
+        return 30;
+    case 19:
+        return 31;
+    case 20:
+        return 32;
+    case 21:
+        return 33;
+    case 22:
+        return 34;
+    case 23:
+        return 35;
+    case 24:
+        return 36;
+    case 25:
+        return 37;
+    case 26:
+        return 38;
+    case 27:
+        return 39;
+    case 28:
+        return 40;
+    case 29:
+        return 41;
+    case 30:
+        return 42;
+    case 31:
+        return 43;
+    case 32:
+        return 44;
+    case 33:
+        return 45;
+    case 34:
+        return 73;
+    case 35:
+        return 74;
+    case 36:
+        return 75;
+    case 37:
+        return 76;
+    case 38:
+        return 77;
+    case 39:
+        return 78;
+    case 40:
+        return 79;
+    case 41:
+        return 80;
+    case 43:
+        return 101;
+    case 44:
+        return 102;
+    case 45:
+        return 103;
+    case 46:
+        return 104;
+    case 47:
+        return 105;
+    case 48:
+        return 106;
+    case 49:
+        return 107;
+    case 50:
+        return 108;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 9010
+        UTIL_ASSERT(FALSE);
+    }
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x631E10
