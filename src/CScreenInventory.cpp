@@ -1456,6 +1456,34 @@ void CScreenInventory::UpdateAbilitiesPanel()
 
 // -----------------------------------------------------------------------------
 
+// 0x6347C0
+CUIControlButtonInventoryHistoryDone::CUIControlButtonInventoryHistoryDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->m_cTlkTable.Fetch(11973, strRes);
+    SetText(strRes.szText);
+}
+
+// 0x6348B0
+CUIControlButtonInventoryHistoryDone::~CUIControlButtonInventoryHistoryDone()
+{
+}
+
+// 0x634950
+void CUIControlButtonInventoryHistoryDone::OnLButtonClick(CPoint pt)
+{
+    CScreenInventory* pInventory = g_pBaldurChitin->m_pEngineInventory;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 11187
+    UTIL_ASSERT(pInventory != NULL);
+
+    pInventory->OnDoneButtonClick();
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x634990
 CUIControlButtonInventoryHistoryCancel::CUIControlButtonInventoryHistoryCancel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
