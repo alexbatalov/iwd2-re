@@ -127,6 +127,13 @@ public:
     /* 1476 */ C2DArray field_1476;
 };
 
+class CUIControlButtonInventoryHistoryUse : public CUIControlButton {
+public:
+    CUIControlButtonInventoryHistoryUse(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonInventoryHistoryUse() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlButtonInventoryError : public CUIControlButton {
 public:
     CUIControlButtonInventoryError(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
