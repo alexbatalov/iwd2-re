@@ -1844,7 +1844,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             // 0x775118
             if (controlInfo->nID <= CRESUI_CONTROLBUTTONID_CHARGEN_COLOR_LASTCOLOR
                 || controlInfo->nID == 35) {
-                return new CUIControlButtonCharGen61E720(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+                return new CUIControlButtonCharGenColorChoice(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             }
             break;
         case 15:

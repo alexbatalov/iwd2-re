@@ -6004,7 +6004,7 @@ BOOL CUIControlButtonCharGen61E080::Render(BOOL bForce)
 // -----------------------------------------------------------------------------
 
 // 0x61E720
-CUIControlButtonCharGen61E720::CUIControlButtonCharGen61E720(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+CUIControlButtonCharGenColorChoice::CUIControlButtonCharGenColorChoice(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
 {
     if (m_nID == 35) {
@@ -6031,7 +6031,7 @@ CUIControlButtonCharGen61E720::CUIControlButtonCharGen61E720(CUIPanel* panel, UI
 }
 
 // 0x61E8D0
-CUIControlButtonCharGen61E720::~CUIControlButtonCharGen61E720()
+CUIControlButtonCharGenColorChoice::~CUIControlButtonCharGenColorChoice()
 {
     if (m_pDecal != NULL) {
         delete m_pDecal;
@@ -6045,13 +6045,13 @@ CUIControlButtonCharGen61E720::~CUIControlButtonCharGen61E720()
 }
 
 // 0x61E9C0
-void CUIControlButtonCharGen61E720::OnLButtonClick(CPoint pt)
+void CUIControlButtonCharGenColorChoice::OnLButtonClick(CPoint pt)
 {
     // TODO: Incomplete.
 }
 
 // 0x61EE60
-BOOL CUIControlButtonCharGen61E720::Render(BOOL bForce)
+BOOL CUIControlButtonCharGenColorChoice::Render(BOOL bForce)
 {
     // TODO: Incomplete.
 
@@ -6059,7 +6059,7 @@ BOOL CUIControlButtonCharGen61E720::Render(BOOL bForce)
 }
 
 // 0x61F0C0
-BOOL CUIControlButtonCharGen61E720::sub_61F0C0(BYTE& a1)
+BOOL CUIControlButtonCharGenColorChoice::GetColorRange(BYTE& colorRange)
 {
     CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
 
@@ -6067,26 +6067,27 @@ BOOL CUIControlButtonCharGen61E720::sub_61F0C0(BYTE& a1)
     // __LINE__: 14792
     UTIL_ASSERT(pCreateChar != NULL);
 
+    // NOTE: Signed comparisons below.
     INT v1 = m_nID;
     switch (pCreateChar->field_56E) {
     case 1:
     case 2:
         if (v1 < 31) {
-            a1 = v1 + 36;
+            colorRange = v1 + 36;
             return TRUE;
         }
 
         if (v1 < 34) {
-            a1 = v1 - 10;
+            colorRange = v1 - 10;
             return TRUE;
         }
 
         return FALSE;
     case 3:
-        a1 = atoi(pCreateChar->m_tSkinColor.GetAt(CPoint(0, v1)));
+        colorRange = atoi(pCreateChar->m_tSkinColor.GetAt(CPoint(0, v1)));
         return TRUE;
     case 6:
-        a1 = atoi(pCreateChar->m_tHairColor.GetAt(CPoint(0, v1)));
+        colorRange = atoi(pCreateChar->m_tHairColor.GetAt(CPoint(0, v1)));
         return TRUE;
     default:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp

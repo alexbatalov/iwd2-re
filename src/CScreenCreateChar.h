@@ -414,14 +414,14 @@ public:
     /* 066A */ CVidPalette* m_pPalette;
 };
 
-class CUIControlButtonCharGen61E720 : public CUIControlButton {
+class CUIControlButtonCharGenColorChoice : public CUIControlButton {
 public:
-    CUIControlButtonCharGen61E720(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
-    ~CUIControlButtonCharGen61E720() override;
+    CUIControlButtonCharGenColorChoice(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGenColorChoice() override;
     BOOL Render(BOOL bForce) override;
     void OnLButtonClick(CPoint pt) override;
 
-    BOOL sub_61F0C0(BYTE& a1);
+    BOOL GetColorRange(BYTE& colorRange);
 
     /* 0666 */ CVidCell* m_pDecal;
     /* 066A */ CVidPalette* m_pPalette;
