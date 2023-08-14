@@ -614,6 +614,59 @@ void CGameSprite::Equip(SHORT slotNum)
     }
 }
 
+// 0x71B7A0
+void CGameSprite::Unequip(SHORT slotNum)
+{
+    if (slotNum <= 51) {
+        if (m_equipment.m_items[slotNum] != NULL) {
+            switch (slotNum) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+                m_equipment.m_items[slotNum]->Unequip(this, slotNum, TRUE, FALSE);
+                break;
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+            case 43:
+            case 45:
+            case 46:
+            case 47:
+            case 48:
+            case 49:
+            case 50:
+                if (slotNum == m_equipment.m_selectedWeapon) {
+                    m_equipment.m_items[slotNum]->Unequip(this, slotNum, TRUE, FALSE);
+
+                    m_equipment.m_items[slotNum]->Demand();
+
+                    ITEM_ABILITY* pAbility = m_equipment.m_items[slotNum]->GetAbility(m_equipment.m_selectedWeaponAbility);
+
+                    SHORT lSlot;
+                    CItem* pLauncher = GetLauncher(pAbility, lSlot);
+                    if (pLauncher != NULL) {
+                        pLauncher->Unequip(this, slotNum, TRUE, FALSE);
+                    }
+
+                    m_equipment.m_items[slotNum]->Release();
+
+                    SelectWeaponAbility(10, 0, 0, 1);
+                } else {
+                    m_equipment.m_items[slotNum]->Unequip(this, slotNum, TRUE, FALSE);
+                }
+                break;
+            }
+        }
+    }
+}
+
 // 0x71B8D0
 SHORT CGameSprite::GetTurnUndeadLevel()
 {
@@ -753,6 +806,12 @@ BOOL CGameSprite::ProcessEffectList()
     // TODO: Incomplete.
 
     return FALSE;
+}
+
+// 0x74F830
+void CGameSprite::SelectWeaponAbility(unsigned char a1, unsigned char a2, unsigned char a3, unsigned char a4)
+{
+    // TODO: Incomplete.
 }
 
 // 0x762740

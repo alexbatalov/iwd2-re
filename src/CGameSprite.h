@@ -216,6 +216,7 @@ public:
     void UnequipAll(BOOL a1);
     void EquipAll(BOOL a1);
     void Equip(SHORT slotNum);
+    void Unequip(SHORT slotNum);
     SHORT GetTurnUndeadLevel();
     SHORT GetBackstabDamageMultiplier();
     SHORT GetLayOnHandsAmount();
@@ -227,6 +228,7 @@ public:
     BOOL Orderable(BOOL bIgnoreControl);
     DWORD GetSpecialization();
     BOOL ProcessEffectList();
+    void SelectWeaponAbility(unsigned char a1, unsigned char a2, unsigned char a3, unsigned char a4);
     BOOL HasClassMask(DWORD dwMask);
     INT GetClassLevel(INT iClassType);
     void SetClassLevel(INT iClassType, INT nLevel);
