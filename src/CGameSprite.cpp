@@ -3,6 +3,7 @@
 #include "CBaldurChitin.h"
 #include "CBaldurEngine.h"
 #include "CInfGame.h"
+#include "CItem.h"
 #include "CUtil.h"
 
 // 0x85BB38
@@ -406,6 +407,70 @@ BYTE CGameSprite::GetChannel()
         return nPortraitNum + 7;
     }
     return 13;
+}
+
+// 0x718650
+CItem* CGameSprite::GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot)
+{
+    int index;
+    launcherSlot = 0;
+
+    if (ability == NULL || ability->type != 2) {
+        return NULL;
+    }
+
+    switch (ability->launcherType) {
+    case 1:
+        launcherSlot = 2 * field_4C68 + 43;
+
+        if (m_equipment.m_items[launcherSlot] != NULL
+            && m_equipment.m_items[launcherSlot]->GetItemType() == 15) {
+            return m_equipment.m_items[launcherSlot];
+        }
+
+        for (index = 0; index < 8; index++) {
+            if (m_equipment.m_items[43 + index] != NULL
+                && m_equipment.m_items[43 + index]->GetItemType() == 15) {
+                return m_equipment.m_items[43 + index];
+            }
+        }
+
+        break;
+    case 2:
+        launcherSlot = 2 * field_4C68 + 43;
+
+        if (m_equipment.m_items[launcherSlot] != NULL
+            && m_equipment.m_items[launcherSlot]->GetItemType() == 27) {
+            return m_equipment.m_items[launcherSlot];
+        }
+
+        for (index = 0; index < 8; index++) {
+            if (m_equipment.m_items[43 + index] != NULL
+                && m_equipment.m_items[43 + index]->GetItemType() == 27) {
+                return m_equipment.m_items[43 + index];
+            }
+        }
+
+        break;
+    case 3:
+        launcherSlot = 2 * field_4C68 + 43;
+
+        if (m_equipment.m_items[launcherSlot] != NULL
+            && m_equipment.m_items[launcherSlot]->GetItemType() == 18) {
+            return m_equipment.m_items[launcherSlot];
+        }
+
+        for (index = 0; index < 8; index++) {
+            if (m_equipment.m_items[43 + index] != NULL
+                && m_equipment.m_items[43 + index]->GetItemType() == 18) {
+                return m_equipment.m_items[43 + index];
+            }
+        }
+
+        break;
+    }
+
+    return NULL;
 }
 
 // 0x71B5E0

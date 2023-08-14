@@ -212,6 +212,7 @@ public:
     void PlaySound(BYTE soundID, BOOL showText, BOOL showCircle, BOOL overrideOption);
     void SetFootstepChannel();
     BYTE GetChannel();
+    CItem* GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot);
     void EquipAll(BOOL a1);
     void UnequipAll(BOOL a1);
     SHORT GetTurnUndeadLevel();
@@ -262,6 +263,7 @@ public:
     /* 4AD8 */ CGameSpriteEquipment m_equipment;
     /* 4C52 */ BOOLEAN m_bGlobal;
     /* 4C53 */ unsigned char field_4C53;
+    /* 4C68 */ unsigned char field_4C68;
     /* 4C6A */ CSound m_sndWalk[2];
     /* 4D36 */ CSound m_sndArmor[2];
     /* 4E00 */ CSound m_sndReady;
