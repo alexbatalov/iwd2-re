@@ -473,12 +473,6 @@ CItem* CGameSprite::GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot
     return NULL;
 }
 
-// 0x71B5E0
-void CGameSprite::EquipAll(BOOL a1)
-{
-    // TODO: Incomplete.
-}
-
 // 0x71B460
 void CGameSprite::UnequipAll(BOOL animationOnly)
 {
@@ -536,6 +530,75 @@ void CGameSprite::UnequipAll(BOOL animationOnly)
         }
 
         m_equipment.m_items[m_equipment.m_selectedWeapon]->Release();
+    }
+}
+
+// 0x71B5E0
+void CGameSprite::EquipAll(BOOL animationOnly)
+{
+    if (m_equipment.m_items[6] != NULL) {
+        m_equipment.m_items[6]->Unequip(this, 6, TRUE, animationOnly);
+    }
+
+    if (m_equipment.m_items[1] != NULL) {
+        m_equipment.m_items[1]->Unequip(this, 1, TRUE, animationOnly);
+    }
+
+    if (m_equipment.m_items[5] != NULL) {
+        m_equipment.m_items[5]->Unequip(this, 5, TRUE, animationOnly);
+    }
+
+    if (m_equipment.m_items[7] != NULL) {
+        m_equipment.m_items[7]->Unequip(this, 7, TRUE, animationOnly);
+    }
+
+    if (m_equipment.m_items[8] != NULL) {
+        m_equipment.m_items[8]->Unequip(this, 8, TRUE, animationOnly);
+    }
+
+    if (m_equipment.m_items[0] != NULL) {
+        m_equipment.m_items[0]->Unequip(this, 0, TRUE, animationOnly);
+    }
+
+    if (m_equipment.m_items[2] != NULL) {
+        m_equipment.m_items[2]->Unequip(this, 2, TRUE, animationOnly);
+    }
+
+    if (m_equipment.m_items[3] != NULL) {
+        m_equipment.m_items[3]->Unequip(this, 3, TRUE, animationOnly);
+    }
+
+    if (m_equipment.m_items[4] != NULL) {
+        m_equipment.m_items[4]->Unequip(this, 4, TRUE, animationOnly);
+    }
+
+    BOOL v1 = FALSE;
+    BYTE v2 = 2 * field_4C68 + 43;
+    if (m_equipment.m_selectedWeapon == v2) {
+        v1 = TRUE;
+    }
+
+    if (m_equipment.m_items[m_equipment.m_selectedWeapon] != NULL) {
+        m_equipment.m_items[m_equipment.m_selectedWeapon]->Equip(this, m_equipment.m_selectedWeapon, animationOnly);
+
+        m_equipment.m_items[m_equipment.m_selectedWeapon]->Demand();
+
+        ITEM_ABILITY* pAbility = m_equipment.m_items[m_equipment.m_selectedWeapon]->GetAbility(m_equipment.m_selectedWeaponAbility);
+
+        SHORT lSlot;
+        CItem* pLauncher = GetLauncher(pAbility, lSlot);
+        if (pLauncher != NULL) {
+            pLauncher->Equip(this, lSlot, animationOnly);
+
+            if (lSlot == v2) {
+                v1 = TRUE;
+            }
+        }
+    }
+
+    BYTE v3 = 2 * (field_4C68 + 22);
+    if (m_equipment.m_items[v3] != NULL && v1 == TRUE) {
+        m_equipment.m_items[v3]->Equip(this, v3, animationOnly);
     }
 }
 

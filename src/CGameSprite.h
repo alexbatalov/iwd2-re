@@ -213,8 +213,8 @@ public:
     void SetFootstepChannel();
     BYTE GetChannel();
     CItem* GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot);
-    void EquipAll(BOOL a1);
     void UnequipAll(BOOL a1);
+    void EquipAll(BOOL a1);
     SHORT GetTurnUndeadLevel();
     SHORT GetBackstabDamageMultiplier();
     SHORT GetLayOnHandsAmount();
