@@ -6053,9 +6053,63 @@ void CUIControlButtonCharGenColorChoice::OnLButtonClick(CPoint pt)
 // 0x61EE60
 BOOL CUIControlButtonCharGenColorChoice::Render(BOOL bForce)
 {
-    // TODO: Incomplete.
+    if (m_nID == 35) {
+        return CUIControlButton::Render(bForce);
+    }
 
-    return FALSE;
+    if (!m_bActive && !m_bInactiveRender) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount == 0 && !bForce) {
+        return FALSE;
+    }
+
+    if (m_pPalette == NULL) {
+        m_pPalette = new CVidPalette(CVidPalette::TYPE_RANGE);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 14590
+        UTIL_ASSERT(m_pPalette != NULL);
+    }
+
+    if (!CUIControlButton::Render(bForce)) {
+        return FALSE;
+    }
+
+    CPoint pt = m_pPanel->m_ptOrigin + m_ptOrigin;
+
+    if (m_bPressed) {
+        m_pDecal->FrameSet(3);
+    } else {
+        m_pDecal->FrameSet(2);
+    }
+
+    BYTE colorRange;
+    if (GetColorRange(colorRange)) {
+        CRect rControlRect;
+        rControlRect.left = pt.x;
+        rControlRect.top = pt.y;
+        rControlRect.right = rControlRect.left + 42 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1);
+        rControlRect.bottom = rControlRect.top + 42 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1);
+
+        CRect rClip;
+        rClip.IntersectRect(rControlRect, m_rDirty);
+
+        m_pPalette->SetRange(0,
+            colorRange,
+            *g_pBaldurChitin->GetObjectGame()->GetMasterBitmap());
+
+        m_pDecal->SetPalette(*m_pPalette);
+
+        BOOL bResult = m_pDecal->Render(0, pt.x, pt.y, rClip, NULL, 0, 0, 0);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 14620
+        UTIL_ASSERT(bResult);
+    }
+
+    return TRUE;
 }
 
 // 0x61F0C0

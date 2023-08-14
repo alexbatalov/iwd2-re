@@ -18,7 +18,7 @@
 // Seen in `CUIControlButtonCharGenHatedRaceSelection::OnLButtonClick` assertion.
 #define CSCREENCREATECHAR_NUM_HATEDRACES 16
 
-// Seen in `CUIControlButtonCharGen61E720` assertion.
+// Seen in `CUIControlButtonCharGenColorChoice` assertion.
 #define CRESUI_CONTROLBUTTONID_CHARGEN_COLOR_LASTCOLOR 33
 
 class CAIObjectType;
