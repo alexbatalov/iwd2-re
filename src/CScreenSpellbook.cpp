@@ -250,6 +250,13 @@ void CScreenSpellbook::EngineGameInit()
     m_vcFlash.SetResRef(CResRef("FLASH"), g_pBaldurChitin->field_4A28, TRUE);
 }
 
+// 0x5D72C0
+void CScreenSpellbook::EngineGameUninit()
+{
+    // NOTE: Uninline.
+    m_cUIManager.fUninit();
+}
+
 // 0x49FC40
 BOOL CScreenSpellbook::CheckMouseLButton()
 {
