@@ -5,6 +5,7 @@
 #include "CDerivedStats.h"
 #include "CGameAIBase.h"
 #include "CGameAnimation.h"
+#include "CGameSpriteEquipment.h"
 #include "CResRef.h"
 #include "CSound.h"
 #include "FileFormat.h"
@@ -258,6 +259,7 @@ public:
     /* 3D39 */ BYTE m_nLastSpellbookSpellLevel;
     /* 3DFA */ CAIObjectType m_liveTypeAI;
     /* 3E36 */ CAIObjectType m_startTypeAI;
+    /* 4AD8 */ CGameSpriteEquipment m_equipment;
     /* 4C52 */ BOOLEAN m_bGlobal;
     /* 4C53 */ unsigned char field_4C53;
     /* 4C6A */ CSound m_sndWalk[2];

@@ -5,6 +5,7 @@
 #include "CSound.h"
 #include "FileFormat.h"
 
+class CGameSprite;
 class CWeaponIdentification;
 
 class CItem : public CResHelper<CResItem, 1005> {
@@ -23,6 +24,8 @@ public:
     WORD GetUsageCount(INT nAbility);
     WORD GetMaxUsageCount(INT nAbility);
     void SetUsageCount(INT nAbility, WORD nUseCount);
+    void Equip(CGameSprite* pSprite, LONG slotNum, BOOL animationOnly);
+    void Unequip(CGameSprite* pSprite, LONG slotNum, BOOL recalculateEffects, BOOL animationOnly);
     WORD GetAnimationType();
     ITEM_ABILITY* GetAbility(INT nAbility);
     WORD GetItemType();

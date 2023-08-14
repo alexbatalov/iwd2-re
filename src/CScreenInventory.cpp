@@ -71,10 +71,10 @@ const DWORD CScreenInventory::SLOT_ID[] = {
 const INT CScreenInventory::NUM_SLOTS = 53;
 
 // 0x855128
-const USHORT PERSONAL_INVENTORY_SIZE = 24;
+const USHORT CScreenInventory::PERSONAL_INVENTORY_SIZE = 24;
 
 // 0x85512C
-const LONG RANGE_SWAPITEM = 0x40000;
+const LONG CScreenInventory::RANGE_SWAPITEM = 0x40000;
 
 // 0x8F3FC0
 const CString CScreenInventory::OPTION_PAUSE_WARNING("Inventory Pause Warning");

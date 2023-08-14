@@ -1,5 +1,6 @@
 #include "CItem.h"
 
+#include "CGameSprite.h"
 #include "CImmunities.h"
 #include "CUtil.h"
 
@@ -197,6 +198,18 @@ void CItem::SetUsageCount(INT nAbility, WORD nUseCount)
             m_useCount1 = nUseCount;
         }
     }
+}
+
+// 0x4E8860
+void CItem::Equip(CGameSprite* pSprite, LONG slotNum, BOOL animationOnly)
+{
+    // TODO: Incomplete.
+}
+
+// 0x4E8DF0
+void CItem::Unequip(CGameSprite* pSprite, LONG slotNum, BOOL recalculateEffects, BOOL animationOnly)
+{
+    // TODO: Incomplete.
 }
 
 // 0x4E91F0
