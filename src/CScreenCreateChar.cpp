@@ -5996,9 +5996,93 @@ void CUIControlButtonCharGenHairSkinColor::OnLButtonClick(CPoint pt)
 // 0x61E430
 BOOL CUIControlButtonCharGenHairSkinColor::Render(BOOL bForce)
 {
-    // TODO: Incomplete.
+    if (!m_bActive && !m_bInactiveRender) {
+        return FALSE;
+    }
 
-    return FALSE;
+    if (m_pPalette == NULL) {
+        m_pPalette = new CVidPalette(CVidPalette::TYPE_RANGE);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 14247
+        UTIL_ASSERT(m_pPalette != NULL);
+    }
+
+    if (!CUIControlButton::Render(bForce)) {
+        return FALSE;
+    }
+
+    CPoint pt = m_pPanel->m_ptOrigin + m_ptOrigin;
+
+    if (m_bPressed) {
+        m_pDecal->FrameSet(1);
+    } else {
+        m_pDecal->FrameSet(0);
+    }
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // NOTE: Uninline.
+    LONG nCharacterId = g_pBaldurChitin->m_pEngineCreateChar->GetSpriteId();
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+            CGameObjectArray::THREAD_1,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        BYTE colorRange;
+        switch (m_nID) {
+        case 2:
+            colorRange = pSprite->m_baseStats.m_colors[6];
+            break;
+        case 3:
+            colorRange = pSprite->m_baseStats.m_colors[3];
+            break;
+        case 4:
+            colorRange = pSprite->m_baseStats.m_colors[2];
+            break;
+        case 5:
+            colorRange = pSprite->m_baseStats.m_colors[1];
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+            // __LINE__: 14304
+            UTIL_ASSERT(FALSE);
+        }
+
+        pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+            CGameObjectArray::THREAD_1,
+            INFINITE);
+
+        CRect rControlRect;
+        rControlRect.left = pt.x;
+        rControlRect.top = pt.y;
+        rControlRect.right = rControlRect.left + 42 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1);
+        rControlRect.bottom = rControlRect.top + 42 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1);
+
+        CRect rClip;
+        rClip.IntersectRect(rControlRect, m_rDirty);
+
+        m_pPalette->SetRange(0,
+            colorRange,
+            *g_pBaldurChitin->GetObjectGame()->GetMasterBitmap());
+
+        m_pDecal->SetPalette(*m_pPalette);
+
+        BOOL bResult = m_pDecal->Render(0, pt.x, pt.y, rClip, NULL, 0, 0, 0);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 14315
+        UTIL_ASSERT(bResult);
+    }
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------
