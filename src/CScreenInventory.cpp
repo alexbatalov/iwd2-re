@@ -136,13 +136,6 @@ void CScreenInventory::EngineDeactivated()
     // TODO: Incomplete.
 }
 
-// 0x5D72C0
-void CScreenInventory::EngineDestroyed()
-{
-    // NOTE: Uninline.
-    m_cUIManager.fUninit();
-}
-
 // 0x625490
 void CScreenInventory::EngineGameInit()
 {
@@ -237,6 +230,13 @@ void CScreenInventory::EngineGameInit()
         OPTION_PAUSE_WARNING,
         0,
         g_pBaldurChitin->GetIniFileName());
+}
+
+// 0x5D72C0
+void CScreenInventory::EngineGameUninit()
+{
+    // NOTE: Uninline.
+    m_cUIManager.fUninit();
 }
 
 // 0x6257C0

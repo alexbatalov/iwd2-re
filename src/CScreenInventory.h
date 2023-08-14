@@ -26,8 +26,8 @@ public:
     /* 0004 */ ~CScreenInventory() override;
     /* 0014 */ void EngineActivated() override;
     /* 0018 */ void EngineDeactivated() override;
-    /* 001C */ void EngineDestroyed() override;
     /* 0024 */ void EngineGameInit() override;
+    /* 0028 */ void EngineGameUninit() override;
     /* 0030 */ BOOL CheckSystemKeyCtrl() override;
     /* 0034 */ void SetSystemKeyCtrl(BOOLEAN bValue) override;
     /* 0060 */ BOOL CheckMouseMove() override;
