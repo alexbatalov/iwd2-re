@@ -222,6 +222,7 @@ public:
     SHORT GetLayOnHandsAmount();
     INT GetNumQuickWeaponSlots();
     DWORD GetCarriedWeight();
+    void GetNumInventoryPersonalSlots(INT& nUsedSlots, INT& nTotalSlots);
     void sub_72DE60();
     int sub_71F6E0();
     const CString& GetName();

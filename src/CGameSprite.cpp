@@ -4,6 +4,7 @@
 #include "CBaldurEngine.h"
 #include "CInfGame.h"
 #include "CItem.h"
+#include "CScreenInventory.h"
 #include "CUtil.h"
 
 // 0x85BB38
@@ -720,6 +721,19 @@ DWORD CGameSprite::GetCarriedWeight()
     }
 
     return weight;
+}
+
+// 0x71FBA0
+void CGameSprite::GetNumInventoryPersonalSlots(INT& nUsedSlots, INT& nTotalSlots)
+{
+    nTotalSlots = CScreenInventory::PERSONAL_INVENTORY_SIZE;
+    nUsedSlots = 0;
+
+    for (int index = 0; index < nTotalSlots; index++) {
+        if (m_equipment.m_items[index + 18] != NULL) {
+            nUsedSlots++;
+        }
+    }
 }
 
 // 0x72DE60
