@@ -1835,7 +1835,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 3:
             case 4:
             case 5:
-                return new CUIControlButtonCharGen61E080(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+                return new CUIControlButtonCharGenHairSkinColor(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 13:
                 return new CUIControlButtonCharGenPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             }

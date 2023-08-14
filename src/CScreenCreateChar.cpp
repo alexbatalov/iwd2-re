@@ -5901,7 +5901,7 @@ BOOL CUIControlButtonCharGen7795D0::Render(BOOL bForce)
 // -----------------------------------------------------------------------------
 
 // 0x61E080
-CUIControlButtonCharGen61E080::CUIControlButtonCharGen61E080(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+CUIControlButtonCharGenHairSkinColor::CUIControlButtonCharGenHairSkinColor(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
 {
     m_pDecal = new CVidCell(CResRef("COLGRAD"), m_pPanel->m_pManager->m_bDoubleSize);
@@ -5928,7 +5928,7 @@ CUIControlButtonCharGen61E080::CUIControlButtonCharGen61E080(CUIPanel* panel, UI
 }
 
 // 0x61E1E0
-CUIControlButtonCharGen61E080::~CUIControlButtonCharGen61E080()
+CUIControlButtonCharGenHairSkinColor::~CUIControlButtonCharGenHairSkinColor()
 {
     if (m_pDecal != NULL) {
         delete m_pDecal;
@@ -5942,7 +5942,7 @@ CUIControlButtonCharGen61E080::~CUIControlButtonCharGen61E080()
 }
 
 // 0x61E2D0
-void CUIControlButtonCharGen61E080::OnLButtonClick(CPoint pt)
+void CUIControlButtonCharGenHairSkinColor::OnLButtonClick(CPoint pt)
 {
     CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
 
@@ -5994,7 +5994,7 @@ void CUIControlButtonCharGen61E080::OnLButtonClick(CPoint pt)
 }
 
 // 0x61E430
-BOOL CUIControlButtonCharGen61E080::Render(BOOL bForce)
+BOOL CUIControlButtonCharGenHairSkinColor::Render(BOOL bForce)
 {
     // TODO: Incomplete.
 

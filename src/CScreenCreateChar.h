@@ -403,10 +403,10 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
-class CUIControlButtonCharGen61E080 : public CUIControlButton {
+class CUIControlButtonCharGenHairSkinColor : public CUIControlButton {
 public:
-    CUIControlButtonCharGen61E080(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
-    ~CUIControlButtonCharGen61E080() override;
+    CUIControlButtonCharGenHairSkinColor(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGenHairSkinColor() override;
     BOOL Render(BOOL bForce) override;
     void OnLButtonClick(CPoint pt) override;
 
