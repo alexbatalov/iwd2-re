@@ -215,6 +215,7 @@ public:
     CItem* GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot);
     void UnequipAll(BOOL a1);
     void EquipAll(BOOL a1);
+    void Equip(SHORT slotNum);
     SHORT GetTurnUndeadLevel();
     SHORT GetBackstabDamageMultiplier();
     SHORT GetLayOnHandsAmount();

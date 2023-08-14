@@ -602,6 +602,18 @@ void CGameSprite::EquipAll(BOOL animationOnly)
     }
 }
 
+// 0x71B770
+void CGameSprite::Equip(SHORT slotNum)
+{
+    if (slotNum <= 51) {
+        if (m_equipment.m_items[slotNum] != NULL) {
+            if (slotNum >= 0 && slotNum <= 8) {
+                m_equipment.m_items[slotNum]->Equip(this, slotNum, FALSE);
+            }
+        }
+    }
+}
+
 // 0x71B8D0
 SHORT CGameSprite::GetTurnUndeadLevel()
 {
