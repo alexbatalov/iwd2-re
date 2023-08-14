@@ -708,6 +708,20 @@ INT CGameSprite::GetNumQuickWeaponSlots()
     return g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetNumQuickWeaponSlots(m_typeAI.m_nClass);
 }
 
+// 0x71D480
+DWORD CGameSprite::GetCarriedWeight()
+{
+    DWORD weight = 0;
+
+    for (int index = 0; index < 51; index++) {
+        if (m_equipment.m_items[index] != NULL) {
+            weight += m_equipment.m_items[index]->GetWeight();
+        }
+    }
+
+    return weight;
+}
+
 // 0x72DE60
 void CGameSprite::sub_72DE60()
 {
