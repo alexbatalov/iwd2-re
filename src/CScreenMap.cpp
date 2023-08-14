@@ -310,6 +310,13 @@ void CScreenMap::EngineGameInit()
     m_noteStrRef = -1;
 }
 
+// 0x5D72C0
+void CScreenMap::EngineGameUninit()
+{
+    // NOTE: Uninline.
+    m_cUIManager.fUninit();
+}
+
 // 0x640A70
 void CScreenMap::OnKeyDown(SHORT nKeysFlags)
 {
