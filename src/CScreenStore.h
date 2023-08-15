@@ -191,4 +191,11 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonStoreRequesterCancel : public CUIControlButton {
+public:
+    CUIControlButtonStoreRequesterCancel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonStoreRequesterCancel() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 #endif /* CSCREENSTORE_H_ */

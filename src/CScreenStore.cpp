@@ -940,3 +940,31 @@ void CUIControlButtonStoreRequesterDone::OnLButtonClick(CPoint pt)
 
     pStore->OnDoneButtonClick();
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x6843E0
+CUIControlButtonStoreRequesterCancel::CUIControlButtonStoreRequesterCancel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->GetTlkTable().Fetch(13727, strRes); // "Cancel"
+    SetText(strRes.szText);
+}
+
+// 0x6844D0
+CUIControlButtonStoreRequesterCancel::~CUIControlButtonStoreRequesterCancel()
+{
+}
+
+// 0x684570
+void CUIControlButtonStoreRequesterCancel::OnLButtonClick(CPoint pt)
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 13380
+    UTIL_ASSERT(pStore != NULL);
+
+    pStore->OnCancelButtonClick();
+}
