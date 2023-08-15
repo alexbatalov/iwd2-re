@@ -207,4 +207,88 @@ public:
     SCRIPTNAME m_stringValue;
 };
 
+class CStoreFileHeader {
+public:
+    CStoreFileHeader()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    /* 0000 */ DWORD m_nStoreType;
+    /* 0004 */ STRREF m_strName;
+    /* 0008 */ DWORD m_nStoreFlags;
+    /* 000C */ DWORD m_nBuyMarkUp;
+    /* 0010 */ DWORD m_nSellMarkDown;
+    /* 0014 */ DWORD m_nAdditionalMarkDown;
+    /* 0018 */ WORD m_nStealDifficulty;
+    /* 001A */ WORD m_nMaxItems;
+    /* 001C */ RESREF m_script;
+    /* 0024 */ DWORD m_nbuyTypesOffset;
+    /* 0028 */ DWORD m_nBuyTypesCount;
+    /* 002C */ DWORD m_nInventoryOffset;
+    /* 0030 */ DWORD m_nInventoryCount;
+    /* 0034 */ DWORD m_nLore;
+    /* 0038 */ DWORD m_nIdentifyCost;
+    /* 003C */ RESREF m_resRumor;
+    /* 0044 */ DWORD m_drinkOffset;
+    /* 0048 */ DWORD m_drinkCount;
+    /* 004C */ RESREF m_resDonation;
+    /* 0054 */ DWORD m_nInnFlags;
+    /* 0058 */ DWORD m_nRoomCostPeasant;
+    /* 005C */ DWORD m_nRoomCostMerchant;
+    /* 0060 */ DWORD m_nRoomCostNoble;
+    /* 0064 */ DWORD m_nRoomCostRoyal;
+    /* 0068 */ DWORD m_spellOffset;
+    /* 006C */ DWORD m_spellCount;
+    /* 0070 */ DWORD m_rouletMaxBet;
+    /* 0074 */ DWORD m_crapsMaxBet;
+    /* 0078 */ DWORD m_wheelMaxBet;
+    /* 007C */ DWORD m_rouletWinChance;
+    /* 0080 */ DWORD m_crapsWinChance;
+    /* 0084 */ DWORD m_wheelWinChance;
+    /* 0088 */ DWORD m_rouletWinAmount;
+    /* 008C */ DWORD m_crapsWinAmount;
+    /* 0090 */ DWORD m_wheelWinAmount;
+    /* 0094 */ int field_94[21];
+};
+
+class CStoreFileSpell {
+public:
+    CStoreFileSpell()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    RESREF m_spell;
+    DWORD m_cost;
+};
+
+class CStoreFileItem {
+public:
+    CStoreFileItem()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    RESREF m_itemId;
+    WORD m_wear;
+    WORD m_usageCount[3];
+    DWORD m_dynamicFlags;
+    DWORD m_nInStock;
+    DWORD m_nStoreFlags;
+};
+
+class CStoreFileDrinks {
+public:
+    CStoreFileDrinks()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    RESREF m_icon;
+    STRREF m_strName;
+    DWORD m_nCost;
+    DWORD m_nRumorChance;
+};
+
 #endif /* FILEFORMAT_H_ */

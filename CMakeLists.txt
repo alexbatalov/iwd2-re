@@ -269,6 +269,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CSpawn.h"
     "src/CSpell.cpp"
     "src/CSpell.h"
+    "src/CStore.cpp"
+    "src/CStore.h"
     "src/CStrRes.h"
     "src/CSwitchCDStatus.cpp"
     "src/CSwitchCDStatus.h"
