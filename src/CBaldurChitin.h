@@ -81,6 +81,7 @@ public:
     CInfCursor* GetObjectCursor();
     CInfGame* GetObjectGame();
     CScreenWorld* GetScreenWorld();
+    CMessageHandler* GetMessageHandler();
 
     void sub_4286B0(CResRef cResRef, INT nSong);
 
