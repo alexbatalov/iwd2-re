@@ -432,6 +432,12 @@ void CScreenStore::CheckEnablePanels(BOOL bEnable)
     // TODO: Incomplete.
 }
 
+// 0x67CBD0
+void CScreenStore::OnDoneButtonClick()
+{
+    // TODO: Incomplete.
+}
+
 // 0x67CE40
 void CScreenStore::OnCancelButtonClick()
 {
@@ -905,4 +911,32 @@ void CUIControlButtonStoreError::OnLButtonClick(CPoint pt)
     UTIL_ASSERT(pStore != NULL);
 
     pStore->OnErrorButtonClick(m_nID);
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x684210
+CUIControlButtonStoreRequesterDone::CUIControlButtonStoreRequesterDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->GetTlkTable().Fetch(11973, strRes); // "Done"
+    SetText(strRes.szText);
+}
+
+// 0x684300
+CUIControlButtonStoreRequesterDone::~CUIControlButtonStoreRequesterDone()
+{
+}
+
+// 0x6843A0
+void CUIControlButtonStoreRequesterDone::OnLButtonClick(CPoint pt)
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 13324
+    UTIL_ASSERT(pStore != NULL);
+
+    pStore->OnDoneButtonClick();
 }

@@ -69,6 +69,7 @@ public:
     void OnRentRoomButtonClick();
     void OnBuyDrinkButtonClick(INT nButton);
     void CheckEnablePanels(BOOL bEnable);
+    void OnDoneButtonClick();
     void OnCancelButtonClick();
     void OnErrorButtonClick(INT nButton);
     void CloseBag(BOOL bSaveFile);
@@ -180,6 +181,13 @@ class CUIControlButtonStoreError : public CUIControlButton {
 public:
     CUIControlButtonStoreError(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonStoreError() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonStoreRequesterDone : public CUIControlButton {
+public:
+    CUIControlButtonStoreRequesterDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonStoreRequesterDone() override;
     void OnLButtonClick(CPoint pt) override;
 };
 
