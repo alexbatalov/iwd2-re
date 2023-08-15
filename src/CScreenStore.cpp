@@ -390,6 +390,12 @@ void CScreenStore::UpdateBuyDrinksPanel()
     // TODO: Incomplete.
 }
 
+// 0x678050
+void CScreenStore::OnBuyItemButtonClick()
+{
+    // TODO: Incomplete.
+}
+
 // 0x673B60
 void CScreenStore::CheckEnablePanels(BOOL bEnable)
 {
@@ -514,6 +520,34 @@ void CUIControlButtonStoreBarDone::OnLButtonClick(CPoint pt)
 
         g_pBaldurChitin->m_pEngineWorld->StopStore();
     }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x67EEE0
+CUIControlButtonStoreBuySellBuy::CUIControlButtonStoreBuySellBuy(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->GetTlkTable().Fetch(13703, strRes); // "Buy"
+    SetText(strRes.szText);
+}
+
+// 0x67EFD0
+CUIControlButtonStoreBuySellBuy::~CUIControlButtonStoreBuySellBuy()
+{
+}
+
+// 0x67F070
+void CUIControlButtonStoreBuySellBuy::OnLButtonClick(CPoint pt)
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 9738
+    UTIL_ASSERT(pStore != NULL);
+
+    pStore->OnBuyItemButtonClick();
 }
 
 // -----------------------------------------------------------------------------

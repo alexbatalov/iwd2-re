@@ -58,6 +58,7 @@ public:
     void UpdateBuySpellPanel();
     void UpdateRentRoomPanel();
     void UpdateBuyDrinksPanel();
+    void OnBuyItemButtonClick();
     void CheckEnablePanels(BOOL bEnable);
     void OnCancelButtonClick();
     void CloseBag(BOOL bSaveFile);
@@ -98,6 +99,13 @@ class CUIControlButtonStoreBarDone : public CUIControlButton {
 public:
     CUIControlButtonStoreBarDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonStoreBarDone() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonStoreBuySellBuy : public CUIControlButton {
+public:
+    CUIControlButtonStoreBuySellBuy(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonStoreBuySellBuy() override;
     void OnLButtonClick(CPoint pt) override;
 };
 
