@@ -142,7 +142,55 @@ void CScreenStore::EngineDeactivated()
 // 0x671D60
 void CScreenStore::EngineGameInit()
 {
-    // TODO: Incomplete.
+    m_cUIManager.fInit(this, CResRef("GUISTORE"), g_pBaldurChitin->field_4A28);
+
+    CPoint pt;
+    if (g_pBaldurChitin->field_4A28) {
+        pt.x = CVideo::SCREENWIDTH / 2 - CBaldurChitin::DEFAULT_SCREEN_WIDTH;
+        pt.y = CVideo::SCREENHEIGHT / 2 - CBaldurChitin::DEFAULT_SCREEN_HEIGHT;
+    } else {
+        pt.x = (CVideo::SCREENWIDTH - CBaldurChitin::DEFAULT_SCREEN_WIDTH) / 2;
+        pt.y = (CVideo::SCREENHEIGHT - CBaldurChitin::DEFAULT_SCREEN_HEIGHT) / 2;
+    }
+
+    m_cUIManager.ShiftPanels(pt);
+
+    for (int index = 0; index < 4; index++) {
+        m_cUIManager.AddPanel(&(g_pBaldurChitin->field_49B4[index]));
+    }
+
+    m_nSelectedCharacter = 0;
+    m_pCurrentScrollBar = NULL;
+    m_pMainPanel = NULL;
+    field_444 = 0;
+    field_464 = 0;
+    m_nTopSpellItem = 0;
+    m_nTopDrinkItem = 0;
+    field_4A4 = 0;
+    field_4F0 = 0;
+    field_4F4 = 0;
+    field_4F8 = 0;
+    field_4FC = 0;
+    m_pStore = 0;
+    m_pBag = NULL;
+    field_580 = -1;
+    field_584 = -1;
+    m_pButtonBar = NULL;
+    m_bStoreStarted = FALSE;
+    field_5BC = 0;
+
+    m_cUIManager.GetPanel(4)->SetActive(FALSE);
+    m_cUIManager.GetPanel(2)->SetActive(FALSE);
+    m_cUIManager.GetPanel(5)->SetActive(FALSE);
+    m_cUIManager.GetPanel(7)->SetActive(FALSE);
+    m_cUIManager.GetPanel(8)->SetActive(FALSE);
+    m_cUIManager.GetPanel(10)->SetActive(FALSE);
+    m_cUIManager.GetPanel(11)->SetActive(FALSE);
+    m_cUIManager.GetPanel(12)->SetActive(FALSE);
+    m_cUIManager.GetPanel(14)->SetActive(FALSE);
+    m_cUIManager.GetPanel(3)->SetActive(FALSE);
+    m_cUIManager.GetPanel(15)->SetActive(FALSE);
+    m_cUIManager.GetPanel(20)->SetActive(FALSE);
 }
 
 // 0x671FA0
