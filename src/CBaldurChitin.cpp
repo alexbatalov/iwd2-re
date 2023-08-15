@@ -2016,6 +2016,12 @@ CScreenWorld* CBaldurChitin::GetScreenWorld()
     return m_pEngineWorld;
 }
 
+// 0x4537D0
+CTlkTable& CBaldurChitin::GetTlkTable()
+{
+    return m_cTlkTable;
+}
+
 // 0x4537E0
 CMessageHandler* CBaldurChitin::GetMessageHandler()
 {

@@ -835,7 +835,7 @@ void CScreenOptions::ResetErrorPanel(CUIPanel* pPanel)
     }
 
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(m_dwErrorTextId, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(m_dwErrorTextId, strRes);
 
     strRes.cSound.SetChannel(0, 0);
     strRes.cSound.SetFireForget(TRUE);
@@ -1692,7 +1692,7 @@ void CScreenOptions::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId)
 
     pText->RemoveAll();
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(dwStrId, strRes);
     UpdateText(pText, "%s", strRes.szText);
 }
 
@@ -2461,7 +2461,7 @@ CUIControlButtonOptionsGameCommand::CUIControlButtonOptionsGameCommand(CUIPanel*
         UTIL_ASSERT(FALSE);
     }
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(dwStrId, strRes);
     SetText(strRes.szText);
 }
 

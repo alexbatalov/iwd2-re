@@ -346,8 +346,8 @@ void CScreenConnection::EngineActivated()
     CString v1;
     g_pChitin->cDimm.WriteSetUp(CString(".\\temp\\foo.bar"), v1);
 
-    g_pBaldurChitin->m_cTlkTable.m_override.CloseFiles();
-    g_pBaldurChitin->m_cTlkTable.OpenOverride(CString("temp/default.toh"), CString("temp/default.tot"));
+    g_pBaldurChitin->GetTlkTable().m_override.CloseFiles();
+    g_pBaldurChitin->GetTlkTable().OpenOverride(CString("temp/default.toh"), CString("temp/default.tot"));
 
     switch (dword_8F3768) {
     case 0:
@@ -3243,7 +3243,7 @@ void CScreenConnection::ResetErrorPanel(CUIPanel* pPanel)
     }
 
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(m_strErrorText, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(m_strErrorText, strRes);
 
     strRes.cSound.SetChannel(0, 0);
     strRes.cSound.SetFireForget(TRUE);
@@ -3647,7 +3647,7 @@ void CScreenConnection::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, STRREF dwStr
 
     pText->RemoveAll();
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(dwStrId, strRes);
     UpdateText(pText, "%s", strRes.szText);
 }
 
@@ -3765,7 +3765,7 @@ CUIControlButtonConnectionGameMode::CUIControlButtonConnectionGameMode(CUIPanel*
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(15413, strRes); // "Single Player"
+    g_pBaldurChitin->GetTlkTable().Fetch(15413, strRes); // "Single Player"
     SetText(strRes.szText);
 }
 
@@ -3794,7 +3794,7 @@ CUIControlButtonConnectionQuitGame::CUIControlButtonConnectionQuitGame(CUIPanel*
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13731, strRes); // "Quit Game"
+    g_pBaldurChitin->GetTlkTable().Fetch(13731, strRes); // "Quit Game"
     SetText(strRes.szText);
 }
 
@@ -3840,7 +3840,7 @@ CUIControlButtonConnectionNewGame::CUIControlButtonConnectionNewGame(CUIPanel* p
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13963, strRes); // "New Game"
+    g_pBaldurChitin->GetTlkTable().Fetch(13963, strRes); // "New Game"
     SetText(strRes.szText);
 }
 
@@ -3876,7 +3876,7 @@ void CUIControlButtonConnectionNewGame::OnLButtonClick(CPoint pt)
 
         pConnection->field_106 = 0;
 
-        g_pBaldurChitin->m_cTlkTable.Fetch(13728, strRes);
+        g_pBaldurChitin->GetTlkTable().Fetch(13728, strRes);
         pButton->SetText(strRes.szText);
 
         if (pConnection->m_nProtocol != 0) {
@@ -3902,7 +3902,7 @@ CUIControlButtonConnectionQuickLoad::CUIControlButtonConnectionQuickLoad(CUIPane
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(33508, strRes); // "Quick Load"
+    g_pBaldurChitin->GetTlkTable().Fetch(33508, strRes); // "Quick Load"
     SetText(strRes.szText);
 }
 
@@ -3930,7 +3930,7 @@ CUIControlButtonConnectionLoadGame::CUIControlButtonConnectionLoadGame(CUIPanel*
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13729, strRes); // "Load Game"
+    g_pBaldurChitin->GetTlkTable().Fetch(13729, strRes); // "Load Game"
     SetText(strRes.szText);
 }
 
@@ -3966,7 +3966,7 @@ void CUIControlButtonConnectionLoadGame::OnLButtonClick(CPoint pt)
 
         pConnection->field_106 = 1;
 
-        g_pBaldurChitin->m_cTlkTable.Fetch(13729, strRes);
+        g_pBaldurChitin->GetTlkTable().Fetch(13729, strRes);
         pButton->SetText(strRes.szText);
 
         pConnection->field_106 = m_nID == 7;
@@ -3994,7 +3994,7 @@ CUIControlButtonConnectionJoinGame::CUIControlButtonConnectionJoinGame(CUIPanel*
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13964, strRes); // "Join Game"
+    g_pBaldurChitin->GetTlkTable().Fetch(13964, strRes); // "Join Game"
     SetText(strRes.szText);
 }
 
@@ -4072,7 +4072,7 @@ CUIControlButtonConnectionPopupDone::CUIControlButtonConnectionPopupDone(CUIPane
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(11973, strRes); // "Done"
+    g_pBaldurChitin->GetTlkTable().Fetch(11973, strRes); // "Done"
     SetText(strRes.szText);
 }
 
@@ -4098,7 +4098,7 @@ CUIControlButtonConnectionPopupCancel::CUIControlButtonConnectionPopupCancel(CUI
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13727, strRes); // "Cancel"
+    g_pBaldurChitin->GetTlkTable().Fetch(13727, strRes); // "Cancel"
     SetText(strRes.szText);
 }
 
@@ -4153,7 +4153,7 @@ CUIControlButtonConnectionProtocolProtocol::CUIControlButtonConnectionProtocolPr
         UTIL_ASSERT(FALSE);
     }
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(strId, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(strId, strRes);
     SetText(strRes.szText);
 
     m_nSelectedFrame = 0;
@@ -4546,7 +4546,7 @@ CUIControlButtonConnectionCreateGameNewGame::CUIControlButtonConnectionCreateGam
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13728, strRes); // "New Game"
+    g_pBaldurChitin->GetTlkTable().Fetch(13728, strRes); // "New Game"
     SetText(strRes.szText);
 }
 
@@ -4578,7 +4578,7 @@ CUIControlButtonConnection604C30::CUIControlButtonConnection604C30(CUIPanel* pan
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(11825, strRes); // "Pre-generate Character"
+    g_pBaldurChitin->GetTlkTable().Fetch(11825, strRes); // "Pre-generate Character"
     SetText(strRes.szText);
 }
 
@@ -4592,8 +4592,8 @@ void CUIControlButtonConnection604C30::OnLButtonClick(CPoint pt)
 {
     g_pBaldurChitin->m_pEngineCreateChar->StartCreateChar(-1, 4);
 
-    g_pBaldurChitin->m_cTlkTable.m_override.CloseFiles();
-    g_pBaldurChitin->m_cTlkTable.OpenOverride(CString("temp/default.toh"), CString("temp/default.tot"));
+    g_pBaldurChitin->GetTlkTable().m_override.CloseFiles();
+    g_pBaldurChitin->GetTlkTable().OpenOverride(CString("temp/default.toh"), CString("temp/default.tot"));
 
     g_pBaldurChitin->pActiveEngine->SelectEngine(g_pBaldurChitin->m_pEngineCreateChar);
 }
@@ -4741,7 +4741,7 @@ CUIControlButtonConnection6052A0::CUIControlButtonConnection6052A0(CUIPanel* pan
         UTIL_ASSERT(FALSE);
     }
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(strId, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(strId, strRes);
     SetText(strRes.szText);
 
     m_nSelectedFrame = 0;
@@ -4808,7 +4808,7 @@ CUIControlButtonConnection605570::CUIControlButtonConnection605570(CUIPanel* pan
         UTIL_ASSERT(FALSE);
     }
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(strId, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(strId, strRes);
     SetText(strRes.szText);
 }
 
@@ -4896,10 +4896,10 @@ void CScreenConnection::ResetVersionMismatchPanel(CUIPanel* pPanel)
 
     pText->RemoveAll();
 
-    g_pBaldurChitin->m_cTlkTable.SetToken(TOKEN_SERVERVERSION,
+    g_pBaldurChitin->GetTlkTable().SetToken(TOKEN_SERVERVERSION,
         g_pBaldurChitin->GetBaldurMessage()->GetVersionControlShutdownServerString());
 
-    g_pBaldurChitin->m_cTlkTable.SetToken(TOKEN_CLIENTVERSION,
+    g_pBaldurChitin->GetTlkTable().SetToken(TOKEN_CLIENTVERSION,
         g_pBaldurChitin->GetBaldurMessage()->GetVersionControlShutdownClientString());
 
     STRREF strText;

@@ -714,8 +714,8 @@ void CInfGame::InitGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlac
     m_worldTime.m_gameTime = CTimerWorld::TIME_DAY + 1;
     m_worldTime.CheckForTriggerEventPast();
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(16484, field_4814);
-    g_pBaldurChitin->m_cTlkTable.Fetch(15307, field_487C);
+    g_pBaldurChitin->GetTlkTable().Fetch(16484, field_4814);
+    g_pBaldurChitin->GetTlkTable().Fetch(15307, field_487C);
 
     for (BYTE nIndex = 0; nIndex < 6; nIndex++) {
         EnablePortrait(nIndex, FALSE);
@@ -1675,7 +1675,7 @@ void CInfGame::NewGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace
         bMusicThreadPriorityChanged = SetThreadPriority(g_pChitin->m_hMusicThread, 15);
     }
 
-    g_pBaldurChitin->m_cTlkTable.m_override.CloseFiles();
+    g_pBaldurChitin->GetTlkTable().m_override.CloseFiles();
 
     if (g_pChitin->cDimm.DirectoryRemoveFiles(CString(".\\mpsave\\default\\"))) {
         g_pChitin->cDimm.m_cKeyTable.RescanEverything();
@@ -1699,7 +1699,7 @@ void CInfGame::NewGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace
     g_pChitin->cDimm.AddToDirectoryList(m_sCharactersDir, TRUE);
     g_pChitin->cDimm.AddToDirectoryList(m_sTempDir, TRUE);
 
-    g_pBaldurChitin->m_cTlkTable.OpenOverride(CString("temp/default.toh"), CString("temp/default.tot"));
+    g_pBaldurChitin->GetTlkTable().OpenOverride(CString("temp/default.toh"), CString("temp/default.tot"));
 
     if (bProgressBarInPlace || bProgressBarRequired) {
         ProgressBarCallback(156250, FALSE);

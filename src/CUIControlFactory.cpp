@@ -2633,7 +2633,7 @@ CUIControlButtonGeneralOptionsFromMainMenu::CUIControlButtonGeneralOptionsFromMa
     : CUIControlButtonGeneralBase(panel, controlInfo)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13905, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(13905, strRes);
     SetText(strRes.szText);
 
     field_66E = g_pBaldurChitin->m_pEngineOptions;

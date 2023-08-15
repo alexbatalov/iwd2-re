@@ -765,7 +765,7 @@ void CScreenMultiPlayer::ResetErrorPanel(CUIPanel* pPanel)
     }
 
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(m_dwErrorTextId, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(m_dwErrorTextId, strRes);
 
     strRes.cSound.SetChannel(0, 0);
     strRes.cSound.SetFireForget(TRUE);
@@ -922,7 +922,7 @@ void CScreenMultiPlayer::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStr
 
     pText->RemoveAll();
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(dwStrId, strRes);
     UpdateText(pText, "%s", strRes.szText);
 }
 
@@ -1228,7 +1228,7 @@ CUIControlButtonMultiPlayerDone::CUIControlButtonMultiPlayerDone(CUIPanel* panel
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(11973, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(11973, strRes);
     SetText(strRes.szText);
 }
 
@@ -1256,7 +1256,7 @@ CUIControlButtonMultiPlayerOptions::CUIControlButtonMultiPlayerOptions(CUIPanel*
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(10156, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(10156, strRes);
     SetText(strRes.szText);
 }
 
@@ -1289,7 +1289,7 @@ CUIControlButtonMultiPlayerLogout::CUIControlButtonMultiPlayerLogout(CUIPanel* p
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13906, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(13906, strRes);
     SetText(strRes.szText);
 }
 
@@ -1468,7 +1468,7 @@ CUIControlButtonMultiPlayerPermissionsOptions::CUIControlButtonMultiPlayerPermis
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13905, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(13905, strRes);
     SetText(strRes.szText);
 }
 
@@ -1534,7 +1534,7 @@ CUIControlButtonMultiPlayerPermissionsDone::CUIControlButtonMultiPlayerPermissio
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(11973, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(11973, strRes);
     SetText(strRes.szText);
 }
 
@@ -1616,7 +1616,7 @@ CUIControlButtonMultiPlayerOptionsCancel::CUIControlButtonMultiPlayerOptionsCanc
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13727, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(13727, strRes);
     SetText(strRes.szText);
 }
 
@@ -1644,7 +1644,7 @@ CUIControlButtonMultiPlayerOptionsDone::CUIControlButtonMultiPlayerOptionsDone(C
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13727, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(13727, strRes);
     SetText(strRes.szText);
 }
 
@@ -1672,7 +1672,7 @@ CUIControlButtonMultiPlayerModifyCharacterCreate::CUIControlButtonMultiPlayerMod
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13954, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(13954, strRes);
     SetText(strRes.szText);
 }
 
@@ -1694,7 +1694,7 @@ CUIControlButtonMultiPlayerModifyCharacterDelete::CUIControlButtonMultiPlayerMod
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13957, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(13957, strRes);
     SetText(strRes.szText);
 }
 
@@ -1716,7 +1716,7 @@ CUIControlButtonMultiPlayerModifyCharacterCancel::CUIControlButtonMultiPlayerMod
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13727, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(13727, strRes);
     SetText(strRes.szText);
 }
 
@@ -1786,7 +1786,7 @@ CUIControlButtonMultiPlayerModifyPlayerCancel::CUIControlButtonMultiPlayerModify
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13727, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(13727, strRes);
     SetText(strRes.szText);
 }
 
@@ -1814,7 +1814,7 @@ CUIControlButtonMultiPlayerModify::CUIControlButtonMultiPlayerModify(CUIPanel* p
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(18816, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(18816, strRes);
     SetText(strRes.szText);
 }
 

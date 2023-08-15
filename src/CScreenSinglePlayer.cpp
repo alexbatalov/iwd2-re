@@ -1091,7 +1091,7 @@ void CScreenSinglePlayer::ResetErrorPanel(CUIPanel* pPanel)
     }
 
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(m_dwErrorTextId, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(m_dwErrorTextId, strRes);
 
     strRes.cSound.SetChannel(0, 0);
     strRes.cSound.SetFireForget(TRUE);
@@ -1379,7 +1379,7 @@ void CScreenSinglePlayer::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwSt
 
     pText->RemoveAll();
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(dwStrId, strRes);
     UpdateText(pText, "%s", strRes.szText);
 }
 
@@ -1548,7 +1548,7 @@ CUIControlButtonSinglePlayerDone::CUIControlButtonSinglePlayerDone(CUIPanel* pan
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(11973, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(11973, strRes);
     SetText(strRes.szText);
 }
 
@@ -1574,7 +1574,7 @@ CUIControlButtonSinglePlayerLogout::CUIControlButtonSinglePlayerLogout(CUIPanel*
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13906, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(13906, strRes);
     SetText(strRes.szText);
 }
 
@@ -1602,7 +1602,7 @@ CUIControlButtonSinglePlayerModifyCharacterCreate::CUIControlButtonSinglePlayerM
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13954, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(13954, strRes);
     SetText(strRes.szText);
 }
 
@@ -1681,7 +1681,7 @@ CUIControlButtonSinglePlayerModifyCharacterDelete::CUIControlButtonSinglePlayerM
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13957, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(13957, strRes);
     SetText(strRes.szText);
 }
 
@@ -1701,7 +1701,7 @@ CUIControlButtonSinglePlayerModifyCharacterCancel::CUIControlButtonSinglePlayerM
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13727, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(13727, strRes);
     SetText(strRes.szText);
 }
 
@@ -1727,7 +1727,7 @@ CUIControlButtonSinglePlayerModify::CUIControlButtonSinglePlayerModify(CUIPanel*
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(18816, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(18816, strRes);
     SetText(strRes.szText);
 }
 
@@ -1782,7 +1782,7 @@ CUIControlButtonSinglePlayerViewCharacterDone::CUIControlButtonSinglePlayerViewC
     UTIL_ASSERT(pSinglePlayer != NULL);
 
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(11973, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(11973, strRes);
     SetText(strRes.szText);
 }
 
@@ -1808,7 +1808,7 @@ CUIControlButtonSinglePlayerPartyCancel::CUIControlButtonSinglePlayerPartyCancel
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13727, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(13727, strRes);
     SetText(strRes.szText);
 }
 
@@ -1841,7 +1841,7 @@ CUIControlButtonSinglePlayerPartyDone::CUIControlButtonSinglePlayerPartyDone(CUI
     UTIL_ASSERT(pSinglePlayer != NULL);
 
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(11973, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(11973, strRes);
     SetText(strRes.szText);
 }
 
@@ -1874,7 +1874,7 @@ CUIControlButtonSinglePlayerPartyModify::CUIControlButtonSinglePlayerPartyModify
     UTIL_ASSERT(pSinglePlayer != NULL);
 
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(10316, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(10316, strRes);
     SetText(strRes.szText);
 }
 

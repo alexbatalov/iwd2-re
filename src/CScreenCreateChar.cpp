@@ -2917,7 +2917,7 @@ void CScreenCreateChar::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrI
 
     pText->RemoveAll();
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(dwStrId, strRes);
     UpdateText(pText, "%s", strRes.szText);
 }
 
@@ -3752,7 +3752,7 @@ CUIControlButtonCharGenMenu::CUIControlButtonCharGenMenu(CUIPanel* panel, UI_CON
         UTIL_ASSERT(FALSE);
     }
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(strText, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(strText, strRes);
     SetText(strRes.szText);
 }
 
@@ -3831,7 +3831,7 @@ CUIControlButtonCharGen614950::CUIControlButtonCharGen614950(CUIPanel* panel, UI
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(28210, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(28210, strRes);
     SetText(strRes.szText);
 }
 
@@ -3853,7 +3853,7 @@ CUIControlButtonCharGenImport::CUIControlButtonCharGenImport(CUIPanel* panel, UI
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13955, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(13955, strRes);
     SetText(strRes.szText);
 }
 
@@ -3899,7 +3899,7 @@ CUIControlButtonCharGenBack::CUIControlButtonCharGenBack(CUIPanel* panel, UI_CON
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(15416, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(15416, strRes);
     SetText(strRes.szText);
 }
 
@@ -3946,7 +3946,7 @@ CUIControlButtonCharGenPopupDone::CUIControlButtonCharGenPopupDone(CUIPanel* pan
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(36789, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(36789, strRes);
     SetText(strRes.szText);
 }
 
@@ -4041,10 +4041,10 @@ BOOL CUIControlButtonCharGenAbilitiesPlusMinus::OnLButtonDown(CPoint pt)
     }
 
     sValue.Format("%d", nMin);
-    g_pBaldurChitin->m_cTlkTable.SetToken(CScreenCreateChar::TOKEN_MINIMUM, sValue);
+    g_pBaldurChitin->GetTlkTable().SetToken(CScreenCreateChar::TOKEN_MINIMUM, sValue);
 
     sValue.Format("%d", nMax);
-    g_pBaldurChitin->m_cTlkTable.SetToken(CScreenCreateChar::TOKEN_MAXIMUM, sValue);
+    g_pBaldurChitin->GetTlkTable().SetToken(CScreenCreateChar::TOKEN_MAXIMUM, sValue);
 
     pCreateChar->UpdateHelp(m_pPanel->m_nID, 29, strHelp);
 
@@ -4154,7 +4154,7 @@ CUIControlButtonCharGenAbilitiesStore::CUIControlButtonCharGenAbilitiesStore(CUI
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(17373, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(17373, strRes);
     SetText(strRes.szText);
 }
 
@@ -4209,7 +4209,7 @@ CUIControlButtonCharGenAbilitiesRecall::CUIControlButtonCharGenAbilitiesRecall(C
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(17374, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(17374, strRes);
     SetText(strRes.szText);
 }
 
@@ -4274,7 +4274,7 @@ CUIControlButtonCharGenAbilitiesReroll::CUIControlButtonCharGenAbilitiesReroll(C
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(11982, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(11982, strRes);
     SetText(strRes.szText);
 }
 
@@ -4316,7 +4316,7 @@ CUIControlButtonCharGenAbilitiesAllocate::CUIControlButtonCharGenAbilitiesAlloca
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(1379, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(1379, strRes);
     SetText(strRes.szText);
 }
 
@@ -4788,7 +4788,7 @@ CUIControlButtonCharGenAlignmentSelection::CUIControlButtonCharGenAlignmentSelec
         UTIL_ASSERT(FALSE);
     }
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(strText, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(strText, strRes);
     SetText(strRes.szText);
     m_nSelectedFrame = 0;
 }
@@ -5216,7 +5216,7 @@ CUIControlButtonCharGenRaceSelection::CUIControlButtonCharGenRaceSelection(CUIPa
         UTIL_ASSERT(FALSE);
     }
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(strText, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(strText, strRes);
     SetText(strRes.szText);
     m_nSelectedFrame = 0;
 }
@@ -5842,7 +5842,7 @@ CUIControlButtonCharGenAppearanceCustom::CUIControlButtonCharGenAppearanceCustom
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(17545, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(17545, strRes);
     SetText(strRes.szText);
 }
 
@@ -6093,7 +6093,7 @@ CUIControlButtonCharGenColorChoice::CUIControlButtonCharGenColorChoice(CUIPanel*
 {
     if (m_nID == 35) {
         STR_RES strRes;
-        g_pBaldurChitin->m_cTlkTable.Fetch(33479, strRes);
+        g_pBaldurChitin->GetTlkTable().Fetch(33479, strRes);
         SetText(strRes.szText);
 
         m_pDecal = NULL;
@@ -6289,10 +6289,10 @@ void CUIControlButtonCharGenAbilitiesHotArea::OnHotAreaClick(CPoint pt)
     }
 
     sValue.Format("%d", nMin);
-    g_pBaldurChitin->m_cTlkTable.SetToken(CScreenCreateChar::TOKEN_MINIMUM, sValue);
+    g_pBaldurChitin->GetTlkTable().SetToken(CScreenCreateChar::TOKEN_MINIMUM, sValue);
 
     sValue.Format("%d", nMax);
-    g_pBaldurChitin->m_cTlkTable.SetToken(CScreenCreateChar::TOKEN_MAXIMUM, sValue);
+    g_pBaldurChitin->GetTlkTable().SetToken(CScreenCreateChar::TOKEN_MAXIMUM, sValue);
 
     pCreateChar->UpdateHelp(m_pPanel->m_nID, 29, strDescription);
 }
@@ -6363,7 +6363,7 @@ CUIControlButtonCharGenPopupCancel::CUIControlButtonCharGenPopupCancel(CUIPanel*
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(15416, strRes); // "Back"
+    g_pBaldurChitin->GetTlkTable().Fetch(15416, strRes); // "Back"
     SetText(strRes.szText);
 }
 
@@ -6665,7 +6665,7 @@ CUIControlButtonCharGenCancel::CUIControlButtonCharGenCancel(CUIPanel* panel, UI
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13727, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(13727, strRes);
     SetText(strRes.szText);
 }
 

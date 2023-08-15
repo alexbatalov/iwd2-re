@@ -790,7 +790,7 @@ const CString& CGameSprite::GetName()
 {
     if (m_baseStats.m_name != -1) {
         STR_RES strRes;
-        g_pBaldurChitin->m_cTlkTable.Fetch(m_baseStats.m_name, strRes);
+        g_pBaldurChitin->GetTlkTable().Fetch(m_baseStats.m_name, strRes);
         m_sName = strRes.szText;
     }
 

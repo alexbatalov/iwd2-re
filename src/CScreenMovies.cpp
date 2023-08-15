@@ -477,7 +477,7 @@ CUIControlButtonMoviesPlay::CUIControlButtonMoviesPlay(CUIPanel* panel, UI_CONTR
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(17318, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(17318, strRes);
     SetText(strRes.szText);
 }
 
@@ -503,7 +503,7 @@ CUIControlButtonMoviesCredits::CUIControlButtonMoviesCredits(CUIPanel* panel, UI
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(15591, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(15591, strRes);
     SetText(strRes.szText);
 }
 
@@ -530,7 +530,7 @@ CUIControlButtonMoviesDone::CUIControlButtonMoviesDone(CUIPanel* panel, UI_CONTR
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(11973, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(11973, strRes);
     SetText(strRes.szText);
 }
 

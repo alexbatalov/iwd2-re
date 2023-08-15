@@ -440,7 +440,7 @@ void CScreenInventory::SetErrorString(STRREF strError, COLORREF rgb)
         CUIControlLabel* pLabel = static_cast<CUIControlLabel*>(pPanel->GetControl(0x1000003F));
         pLabel->SetForegroundColor(rgb);
 
-        g_pBaldurChitin->m_cTlkTable.Fetch(strError, strRes);
+        g_pBaldurChitin->GetTlkTable().Fetch(strError, strRes);
         pLabel->SetText(strRes.szText);
 
         strRes.cSound.SetChannel(0, 0);
@@ -643,7 +643,7 @@ void CScreenInventory::ResetErrorPanel(CUIPanel* pPanel)
     }
 
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(m_strErrorText, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(m_strErrorText, strRes);
 
     strRes.cSound.SetChannel(0, 0);
     strRes.cSound.SetFireForget(TRUE);
@@ -1417,7 +1417,7 @@ void CScreenInventory::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId
 
     pText->RemoveAll();
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(dwStrId, strRes);
     UpdateText(pText, "%s", strRes.szText);
 }
 
@@ -1920,7 +1920,7 @@ CUIControlButtonInventoryColorChoice::CUIControlButtonInventoryColorChoice(CUIPa
 {
     if (m_nID == 35) {
         STR_RES strRes;
-        g_pBaldurChitin->m_cTlkTable.Fetch(33479, strRes); // "Default"
+        g_pBaldurChitin->GetTlkTable().Fetch(33479, strRes); // "Default"
         SetText(strRes.szText);
 
         m_pDecal = NULL;
@@ -2074,7 +2074,7 @@ CUIControlButtonInventoryRequesterDone::CUIControlButtonInventoryRequesterDone(C
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(11973, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(11973, strRes);
     SetText(strRes.szText);
 }
 
@@ -2102,7 +2102,7 @@ CUIControlButtonInventoryRequesterCancel::CUIControlButtonInventoryRequesterCanc
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13727, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(13727, strRes);
     SetText(strRes.szText);
 }
 
@@ -2170,7 +2170,7 @@ CUIControlButtonInventoryHistoryDone::CUIControlButtonInventoryHistoryDone(CUIPa
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(11973, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(11973, strRes);
     SetText(strRes.szText);
 }
 
@@ -2198,7 +2198,7 @@ CUIControlButtonInventoryHistoryCancel::CUIControlButtonInventoryHistoryCancel(C
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13727, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(13727, strRes);
     SetText(strRes.szText);
 }
 

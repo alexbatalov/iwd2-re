@@ -30,7 +30,7 @@ void CGameJournalEntry::UpdateTextDisplay(CUIControlTextDisplay* pText)
     UTIL_ASSERT(pText != NULL);
 
     CTimerWorld::GetCurrentTimeString(m_nTime, 15980, sTime);
-    g_pBaldurChitin->m_cTlkTable.Fetch(m_strText, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(m_strText, strRes);
     CBaldurEngine::UpdateTextForceColor(pText, RGB(200, 200, 0), "%s", sTime);
 
     COLORREF rgbTextColor;
@@ -140,7 +140,7 @@ BOOL CGameJournal::IsEntryChanged(DWORD nIndex)
     // __LINE__: 553
     UTIL_ASSERT(pEntry != NULL);
 
-    return g_pBaldurChitin->m_cTlkTable.m_override.Fetch(pEntry->m_strText, strRes);
+    return g_pBaldurChitin->GetTlkTable().m_override.Fetch(pEntry->m_strText, strRes);
 }
 
 // 0x4C6A90
@@ -231,8 +231,8 @@ void CGameJournal::RevertEntry(DWORD nIndex)
     UTIL_ASSERT(pEntry != NULL);
 
     if (pEntry->m_wType != 0) {
-        if (g_pBaldurChitin->m_cTlkTable.m_override.Fetch(pEntry->m_strText, strRes)) {
-            g_pBaldurChitin->m_cTlkTable.m_override.Remove(pEntry->m_strText);
+        if (g_pBaldurChitin->GetTlkTable().m_override.Fetch(pEntry->m_strText, strRes)) {
+            g_pBaldurChitin->GetTlkTable().m_override.Remove(pEntry->m_strText);
         }
     }
 }
@@ -289,7 +289,7 @@ CString CGameJournal::GetEntryText(DWORD nIndex)
     // __LINE__: 988
     UTIL_ASSERT(pEntry != NULL);
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(pEntry->m_strText, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(pEntry->m_strText, strRes);
 
     return strRes.szText;
 }

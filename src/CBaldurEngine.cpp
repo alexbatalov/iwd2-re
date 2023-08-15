@@ -590,7 +590,7 @@ void CBaldurEngine::CheckEnablePortaits(DWORD dwPanelId)
 CString CBaldurEngine::FetchString(DWORD dwStrId)
 {
     STR_RES strRes;
-    if (!g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes)) {
+    if (!g_pBaldurChitin->GetTlkTable().Fetch(dwStrId, strRes)) {
         strRes.szText = "";
     }
     return strRes.szText;

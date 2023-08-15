@@ -866,7 +866,7 @@ void CScreenSave::ResetErrorPanel(CUIPanel* pPanel)
     }
 
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(m_dwErrorTextId, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(m_dwErrorTextId, strRes);
 
     strRes.cSound.SetChannel(0, 0);
     strRes.cSound.SetFireForget(TRUE);
@@ -978,7 +978,7 @@ CUIControlButtonSaveDelete::CUIControlButtonSaveDelete(CUIPanel* panel, UI_CONTR
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13957, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(13957, strRes);
     SetText(strRes.szText);
 }
 
@@ -1006,7 +1006,7 @@ CUIControlButtonSaveSave::CUIControlButtonSaveSave(CUIPanel* panel, UI_CONTROL_B
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(15589, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(15589, strRes);
     SetText(strRes.szText);
 }
 
@@ -1034,7 +1034,7 @@ CUIControlButtonSaveCancel::CUIControlButtonSaveCancel(CUIPanel* panel, UI_CONTR
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13727, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(13727, strRes);
     SetText(strRes.szText);
 }
 
@@ -1266,7 +1266,7 @@ CUIControlButtonSavePopupDone::CUIControlButtonSavePopupDone(CUIPanel* panel, UI
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(11973, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(11973, strRes);
     SetText(strRes.szText);
 }
 
@@ -1294,7 +1294,7 @@ CUIControlButtonSavePopupCancel::CUIControlButtonSavePopupCancel(CUIPanel* panel
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13727, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(13727, strRes);
     SetText(strRes.szText);
 }
 

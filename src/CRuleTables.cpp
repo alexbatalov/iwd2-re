@@ -2114,8 +2114,8 @@ void CRuleTables::GetClassStringLower(BYTE nClass, DWORD nSpecialist, DWORD dwFl
     }
 
     if (strMageSchool != -1) {
-        g_pBaldurChitin->m_cTlkTable.Fetch(strMageSchool, strRes);
-        g_pBaldurChitin->m_cTlkTable.SetToken(TOKEN_MAGESCHOOL, strRes.szText);
+        g_pBaldurChitin->GetTlkTable().Fetch(strMageSchool, strRes);
+        g_pBaldurChitin->GetTlkTable().SetToken(TOKEN_MAGESCHOOL, strRes.szText);
     }
 
     STRREF strFighterType;
@@ -2127,8 +2127,8 @@ void CRuleTables::GetClassStringLower(BYTE nClass, DWORD nSpecialist, DWORD dwFl
         strFighterType = 10086; // "Fighter"
     }
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(strFighterType, strRes);
-    g_pBaldurChitin->m_cTlkTable.SetToken(TOKEN_FIGHTERTYPE, strRes.szText);
+    g_pBaldurChitin->GetTlkTable().Fetch(strFighterType, strRes);
+    g_pBaldurChitin->GetTlkTable().SetToken(TOKEN_FIGHTERTYPE, strRes.szText);
 
     STRREF strClass;
     switch (nClass) {
@@ -2171,7 +2171,7 @@ void CRuleTables::GetClassStringLower(BYTE nClass, DWORD nSpecialist, DWORD dwFl
         UTIL_ASSERT(FALSE);
     }
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(strClass, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(strClass, strRes);
     sClass = strRes.szText;
 }
 
@@ -2215,8 +2215,8 @@ void CRuleTables::GetClassStringMixed(BYTE nClass, DWORD nSpecialist, DWORD dwFl
     }
 
     if (strMageSchool != -1) {
-        g_pBaldurChitin->m_cTlkTable.Fetch(strMageSchool, strRes);
-        g_pBaldurChitin->m_cTlkTable.SetToken(TOKEN_MAGESCHOOL, strRes.szText);
+        g_pBaldurChitin->GetTlkTable().Fetch(strMageSchool, strRes);
+        g_pBaldurChitin->GetTlkTable().SetToken(TOKEN_MAGESCHOOL, strRes.szText);
     }
 
     STRREF strFighterType;
@@ -2235,8 +2235,8 @@ void CRuleTables::GetClassStringMixed(BYTE nClass, DWORD nSpecialist, DWORD dwFl
         }
     }
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(strFighterType, strRes);
-    g_pBaldurChitin->m_cTlkTable.SetToken(TOKEN_FIGHTERTYPE, strRes.szText);
+    g_pBaldurChitin->GetTlkTable().Fetch(strFighterType, strRes);
+    g_pBaldurChitin->GetTlkTable().SetToken(TOKEN_FIGHTERTYPE, strRes.szText);
 
     STRREF strClass;
     switch (nClass) {
@@ -2348,7 +2348,7 @@ void CRuleTables::GetClassStringMixed(BYTE nClass, DWORD nSpecialist, DWORD dwFl
         UTIL_ASSERT(FALSE);
     }
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(strClass, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(strClass, strRes);
     sClass = strRes.szText;
 }
 
@@ -2370,14 +2370,14 @@ void CRuleTables::GetScriptDescription(const CString& sScript, CString& sTitle, 
         sName = CUSTOM;
     }
 
-    g_pBaldurChitin->m_cTlkTable.SetToken(TOKEN_SCRIPT, sScript);
+    g_pBaldurChitin->GetTlkTable().SetToken(TOKEN_SCRIPT, sScript);
 
     strTitle = atol(m_tScriptDescription.GetAt(TITLE, sName));
-    g_pBaldurChitin->m_cTlkTable.Fetch(strTitle, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(strTitle, strRes);
     sTitle = strRes.szText;
 
     strDescription = atol(m_tScriptDescription.GetAt(DESCRIPTION, sName));
-    g_pBaldurChitin->m_cTlkTable.Fetch(strDescription, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(strDescription, strRes);
     sDescription = strRes.szText;
 }
 
@@ -2390,7 +2390,7 @@ void CRuleTables::GetCharacterStateDescription(INT nState, CString& sDescription
 
     sState.Format("%d", nState);
     strDescription = atol(m_tCharacterStateDescription.GetAt(DESCRIPTION, sState));
-    g_pBaldurChitin->m_cTlkTable.Fetch(strDescription, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(strDescription, strRes);
     sDescription = strRes.szText;
 }
 
@@ -2401,7 +2401,7 @@ void CRuleTables::GetMovieDescription(const CString& sMovie, CString& sDescripti
     DWORD strDescription;
 
     strDescription = atol(m_tMovieDescription.GetAt(DESCRIPTION, sMovie));
-    g_pBaldurChitin->m_cTlkTable.Fetch(strDescription, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(strDescription, strRes);
     sDescription = strRes.szText;
 }
 
@@ -2412,7 +2412,7 @@ void CRuleTables::GetSpellDescription(const CString& sSpell, CString& sDescripti
     DWORD strDescription;
 
     strDescription = atol(m_tSpellDescription.GetAt(DESCRIPTION, sSpell));
-    g_pBaldurChitin->m_cTlkTable.Fetch(strDescription, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(strDescription, strRes);
     sDescription = strRes.szText;
 }
 
@@ -2696,7 +2696,7 @@ void CRuleTables::GetRaceStringMixed(BYTE nRace, CString& sRace, BYTE nSubRace) 
         break;
     }
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(strRace, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(strRace, strRes);
     sRace = strRes.szText;
 }
 
@@ -2756,7 +2756,7 @@ void CRuleTables::GetClassStringGameSpy(BYTE nClass, DWORD nSpecialist, CString&
         break;
     }
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(strClass, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(strClass, strRes);
     sClass = strRes.szText;
 }
 
@@ -2845,7 +2845,7 @@ void CRuleTables::GetAlignmentStringMixed(BYTE nAlignment, CString& sAlignment) 
         UTIL_ASSERT(FALSE);
     }
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(dwStrId, strRes);
     sAlignment = strRes.szText;
 }
 
@@ -2870,7 +2870,7 @@ void CRuleTables::GetGenderStringMixed(BYTE nGender, CString& sGender) const
         UTIL_ASSERT(FALSE);
     }
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(dwStrId, strRes);
     sGender = strRes.szText;
 }
 

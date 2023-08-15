@@ -321,7 +321,7 @@ void CScreenChapter::TimerAsynchronousUpdate()
         if (m_nParagraph > 0 && !m_cVoiceSound.IsSoundPlaying()) {
             if (m_nParagraph < m_pTextList->GetCount()) {
                 STRREF dwStrId = m_pTextList->GetAt(m_pTextList->FindIndex(m_nParagraph));
-                g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes);
+                g_pBaldurChitin->GetTlkTable().Fetch(dwStrId, strRes);
                 m_cVoiceSound.SetResRef(strRes.cSound.GetResRef(), TRUE, TRUE);
                 m_cVoiceSound.SetChannel(0, 0);
                 m_cVoiceSound.Play(FALSE);
@@ -444,7 +444,7 @@ void CScreenChapter::ResetMainPanel()
     INT nTextLength = 0;
     POSITION pos = m_pTextList->GetHeadPosition();
     while (pos != NULL) {
-        g_pBaldurChitin->m_cTlkTable.Fetch(m_pTextList->GetAt(pos), strRes);
+        g_pBaldurChitin->GetTlkTable().Fetch(m_pTextList->GetAt(pos), strRes);
 
         if (nLine == 0) {
             // TODO: Check `Right`, doesn't make sense.
@@ -764,7 +764,7 @@ CUIControlButtonChapterDone::CUIControlButtonChapterDone(CUIPanel* panel, UI_CON
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(11973, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(11973, strRes);
     SetText(strRes.szText);
 }
 
@@ -795,7 +795,7 @@ CUIControlButtonChapterReplay::CUIControlButtonChapterReplay(CUIPanel* panel, UI
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(16510, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(16510, strRes);
     SetText(strRes.szText);
 }
 

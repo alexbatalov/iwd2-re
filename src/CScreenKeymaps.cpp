@@ -611,9 +611,9 @@ void CScreenKeymaps::HandleKeyDown(BYTE nKey)
         sValue.Format("%c", g_pBaldurChitin->GetObjectGame()->sub_5A9780(nKey));
     }
 
-    g_pBaldurChitin->m_cTlkTable.SetToken(CString("KEY"), sValue);
+    g_pBaldurChitin->GetTlkTable().SetToken(CString("KEY"), sValue);
 
-    g_pBaldurChitin->m_cTlkTable.SetToken(CString("OPERATION"), FetchString(dword_8B40D0[conflict / CSCREENKEYMAPS_PER_PAGE][conflict % CSCREENKEYMAPS_PER_PAGE]));
+    g_pBaldurChitin->GetTlkTable().SetToken(CString("OPERATION"), FetchString(dword_8B40D0[conflict / CSCREENKEYMAPS_PER_PAGE][conflict % CSCREENKEYMAPS_PER_PAGE]));
 
     m_dwErrorTextId = 33480;
     m_strErrorButtonText[0] = 33481;
@@ -708,10 +708,10 @@ void CScreenKeymaps::UpdateMainPanel()
     CString sValue;
 
     sValue.Format("%d", m_nPage + 1);
-    g_pBaldurChitin->m_cTlkTable.SetToken(CString("PAGE"), sValue);
+    g_pBaldurChitin->GetTlkTable().SetToken(CString("PAGE"), sValue);
 
     sValue.Format("%d", 1);
-    g_pBaldurChitin->m_cTlkTable.SetToken(CString("NUMPAGES"), sValue);
+    g_pBaldurChitin->GetTlkTable().SetToken(CString("NUMPAGES"), sValue);
 
     pPageLabel->SetText(FetchString(33483));
 
@@ -966,7 +966,7 @@ void CScreenKeymaps::ResetErrorPanel(CUIPanel* pPanel)
     }
 
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(m_dwErrorTextId, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(m_dwErrorTextId, strRes);
 
     strRes.cSound.SetChannel(0, 0);
     strRes.cSound.SetFireForget(TRUE);

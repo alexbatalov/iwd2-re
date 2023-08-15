@@ -421,7 +421,7 @@ void CScreenStart::ResetErrorPanel(CUIPanel* pPanel)
     }
 
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(m_dwErrorTextId, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(m_dwErrorTextId, strRes);
 
     strRes.cSound.SetChannel(0, 0);
     strRes.cSound.SetFireForget(TRUE);
@@ -499,10 +499,10 @@ void CScreenStart::ResetVersionMismatchPanel(CUIPanel* pPanel)
     // __LINE__: 1853
     UTIL_ASSERT(pText != NULL);
 
-    g_pBaldurChitin->m_cTlkTable.SetToken(TOKEN_SERVERVERSION,
+    g_pBaldurChitin->GetTlkTable().SetToken(TOKEN_SERVERVERSION,
         g_pBaldurChitin->GetBaldurMessage()->GetVersionControlShutdownServerString());
 
-    g_pBaldurChitin->m_cTlkTable.SetToken(TOKEN_CLIENTVERSION,
+    g_pBaldurChitin->GetTlkTable().SetToken(TOKEN_CLIENTVERSION,
         g_pBaldurChitin->GetBaldurMessage()->GetVersionControlShutdownClientString());
 
     STRREF strText;

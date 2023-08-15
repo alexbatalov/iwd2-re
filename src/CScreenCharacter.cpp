@@ -979,7 +979,7 @@ void CScreenCharacter::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId
 
     pText->RemoveAll();
 
-    g_pBaldurChitin->m_cTlkTable.Fetch(dwStrId, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(dwStrId, strRes);
     UpdateText(pText, "%s", strRes.szText);
 }
 
@@ -1086,7 +1086,7 @@ void CScreenCharacter::ResetErrorPanel(CUIPanel* pPanel)
     }
 
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(m_dwErrorTextId, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(m_dwErrorTextId, strRes);
 
     strRes.cSound.SetChannel(0, 0);
     strRes.cSound.SetFireForget(TRUE);
@@ -1232,7 +1232,7 @@ CUIControlButtonCharacterCustomize::CUIControlButtonCharacterCustomize(CUIPanel*
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(10645, strRes); // "Customize"
+    g_pBaldurChitin->GetTlkTable().Fetch(10645, strRes); // "Customize"
     SetText(strRes.szText);
 }
 
@@ -1260,7 +1260,7 @@ CUIControlButtonCharacterInformation::CUIControlButtonCharacterInformation(CUIPa
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(11946, strRes); // "Information"
+    g_pBaldurChitin->GetTlkTable().Fetch(11946, strRes); // "Information"
     SetText(strRes.szText);
 }
 
@@ -1288,7 +1288,7 @@ CUIControlButtonCharacterExport::CUIControlButtonCharacterExport(CUIPanel* panel
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(13956, strRes); // "Export"
+    g_pBaldurChitin->GetTlkTable().Fetch(13956, strRes); // "Export"
     SetText(strRes.szText);
 }
 
@@ -1316,7 +1316,7 @@ CUIControlButtonCharacterLevelUp::CUIControlButtonCharacterLevelUp(CUIPanel* pan
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(7175, strRes); // "Level Up"
+    g_pBaldurChitin->GetTlkTable().Fetch(7175, strRes); // "Level Up"
     SetText(strRes.szText);
 }
 
@@ -1509,7 +1509,7 @@ CUIControlButtonInformationDone::CUIControlButtonInformationDone(CUIPanel* panel
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(11973, strRes); // "Done"
+    g_pBaldurChitin->GetTlkTable().Fetch(11973, strRes); // "Done"
     SetText(strRes.szText);
 }
 
@@ -1537,7 +1537,7 @@ CUIControlButtonInformationBiography::CUIControlButtonInformationBiography(CUIPa
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->m_cTlkTable.Fetch(18003, strRes); // "Biography"
+    g_pBaldurChitin->GetTlkTable().Fetch(18003, strRes); // "Biography"
     SetText(strRes.szText);
 }
 
