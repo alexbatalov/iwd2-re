@@ -6,6 +6,7 @@
 #include "CScreenWorld.h"
 #include "CStore.h"
 #include "CUIControlEdit.h"
+#include "CUIControlScrollBar.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -318,6 +319,72 @@ void CScreenStore::ResetErrorPanel(CUIPanel* pPanel)
 
 // 0x673FE0
 void CScreenStore::UpdateMainPanel()
+{
+    if (m_pStore != NULL) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 2221
+        UTIL_ASSERT(m_pMainPanel != NULL);
+
+        m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(m_pMainPanel->GetControl(7));
+
+        CUIControlButton* pButton = static_cast<CUIControlButton*>(m_pButtonBar->GetControl(0));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 2225
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->SetEnabled(g_pBaldurChitin->m_pEngineWorld->m_bInControlOfStore);
+
+        switch (m_pMainPanel->m_nID) {
+        case 2:
+            UpdateBuySellPanel();
+            break;
+        case 4:
+            UpdateIdentifyPanel();
+            break;
+        case 5:
+            UpdateBuySpellPanel();
+            break;
+        case 7:
+            UpdateRentRoomPanel();
+            break;
+        case 8:
+            UpdateBuyDrinksPanel();
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+            // __LINE__: 2259
+            UTIL_ASSERT(FALSE);
+        }
+    }
+}
+
+// 0x6740F0
+void CScreenStore::UpdateBuySellPanel()
+{
+    // TODO: Incomplete.
+}
+
+// 0x675380
+void CScreenStore::UpdateIdentifyPanel()
+{
+    // TODO: Incomplete.
+}
+
+// 0x675940
+void CScreenStore::UpdateBuySpellPanel()
+{
+    // TODO: Incomplete.
+}
+
+// 0x675E80
+void CScreenStore::UpdateRentRoomPanel()
+{
+    // TODO: Incomplete.
+}
+
+// 0x676300
+void CScreenStore::UpdateBuyDrinksPanel()
 {
     // TODO: Incomplete.
 }

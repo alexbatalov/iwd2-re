@@ -65,6 +65,7 @@ public:
     /* 0F46 */ CWeather m_weather;
     /* 10DA */ DWORD m_deltaTime;
     /* 10DE */ int field_10DE;
+    /* 10EB */ BOOLEAN m_bInControlOfStore;
     /* 10EC */ BOOL m_bGameOverPanel;
     /* 10F0 */ int field_10F0;
     /* 10F4 */ int field_10F4;

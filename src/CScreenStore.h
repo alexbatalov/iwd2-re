@@ -53,6 +53,11 @@ public:
     CUIPanel* GetTopPopup();
     void ResetErrorPanel(CUIPanel* pPanel);
     void UpdateMainPanel();
+    void UpdateBuySellPanel();
+    void UpdateIdentifyPanel();
+    void UpdateBuySpellPanel();
+    void UpdateRentRoomPanel();
+    void UpdateBuyDrinksPanel();
     void CheckEnablePanels(BOOL bEnable);
     void OnCancelButtonClick();
     void CloseBag(BOOL bSaveFile);
