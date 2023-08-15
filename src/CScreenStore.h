@@ -7,6 +7,7 @@
 #include "CVidFont.h"
 
 #define CSCREENSTORE_VIRTUAL_KEYS 91
+#define CSCREENSTORE_ERROR_BUTTONS 3
 
 #define CSCREENSTORE_NUM_BOTTOMBUTTON 4
 
@@ -50,6 +51,7 @@ public:
 
     void EnableMainPanel(BOOL bEnable);
     CUIPanel* GetTopPopup();
+    void ResetErrorPanel(CUIPanel* pPanel);
     void UpdateMainPanel();
     void CheckEnablePanels(BOOL bEnable);
     void OnCancelButtonClick();
@@ -79,6 +81,9 @@ public:
     /* 05B4 */ CUIPanel* m_pButtonBar;
     /* 05B8 */ BOOL m_bStoreStarted;
     /* 05BC */ int field_5BC;
+    /* 05C4 */ STRREF m_strErrorText;
+    /* 05C8 */ INT m_nNumErrorButtons;
+    /* 05CC */ STRREF m_strErrorButtonText[CSCREENSTORE_ERROR_BUTTONS];
     /* 05DA */ CVidFont m_preLoadFontRealms;
     /* 0ADA */ CVidFont m_preLoadFontStnSml;
     /* 0FDA */ CVidFont m_preLoadFontTool;

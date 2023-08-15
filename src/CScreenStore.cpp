@@ -6,6 +6,7 @@
 #include "CScreenWorld.h"
 #include "CStore.h"
 #include "CUIControlEdit.h"
+#include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
 
@@ -266,6 +267,53 @@ void CScreenStore::EnableMainPanel(BOOL bEnable)
 CUIPanel* CScreenStore::GetTopPopup()
 {
     return m_lPopupStack.GetTailPosition() != NULL ? m_lPopupStack.GetTail() : NULL;
+}
+
+// 0x6732F0
+void CScreenStore::ResetErrorPanel(CUIPanel* pPanel)
+{
+    switch (pPanel->m_nID) {
+    case 10:
+        m_nNumErrorButtons = 1;
+        break;
+    case 11:
+        m_nNumErrorButtons = 2;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 1655
+        UTIL_ASSERT(FALSE);
+    }
+
+    STR_RES strRes;
+    g_pBaldurChitin->GetTlkTable().Fetch(m_strErrorText, strRes);
+
+    strRes.cSound.SetChannel(0, 0);
+    strRes.cSound.SetFireForget(TRUE);
+    strRes.cSound.Play(FALSE);
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(3));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 1668
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+    UpdateText(pText, "%s", strRes.szText);
+
+    for (INT nButton = 0; nButton < m_nNumErrorButtons; nButton++) {
+        CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nButton));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 1677
+        UTIL_ASSERT(pButton != NULL);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 8744
+        UTIL_ASSERT(0 <= nButton && nButton < CSCREENSTORE_ERROR_BUTTONS);
+
+        pButton->SetText(FetchString(m_strErrorButtonText[nButton]));
+    }
 }
 
 // 0x673FE0
