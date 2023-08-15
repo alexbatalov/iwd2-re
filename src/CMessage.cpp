@@ -9,6 +9,15 @@
 #include "CScreenSinglePlayer.h"
 #include "CUtil.h"
 
+// 0x84820E
+const SHORT CMessage::BROADCAST_FORCED = 4;
+
+// 0x84CED6
+const BYTE CBaldurMessage::MSG_TYPE_CMESSAGE = 67;
+
+// 0x84CF2E
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
+
 // 0x84CF76
 const BYTE CBaldurMessage::DELETEAREA_EMPTY_VOTE = 101;
 
@@ -448,4 +457,31 @@ void CMessageHandler::PostAsynchronousUpdate()
 void CMessageHandler::AddMessage(CMessage* message, BOOL bForcePassThrough)
 {
     // TODO: Incomplete.
+}
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Inlined.
+CMessageStoreRelease::CMessageStoreRelease(const CResRef& store, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_store = store;
+}
+
+// 0x43E170
+SHORT CMessageStoreRelease::GetCommType()
+{
+    return BROADCAST_FORCED;
+}
+
+// 0x40A0E0
+BYTE CMessageStoreRelease::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x47E010
+BYTE CMessageStoreRelease::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 }

@@ -8,6 +8,9 @@
 
 class CBaldurMessage {
 public:
+    static const BYTE MSG_TYPE_CMESSAGE;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
+
     static const BYTE DELETEAREA_EMPTY_VOTE;
     static const BYTE SIGNAL_SERVER;
     static const BYTE SIGNAL_END_MAJOR_EVENT;
@@ -92,6 +95,8 @@ public:
 
 class CMessage {
 public:
+    static const SHORT BROADCAST_FORCED;
+
     CMessage(LONG caller, LONG target);
     /* 0000 */ virtual ~CMessage();
     /* 0004 */ virtual SHORT GetCommType();
@@ -117,6 +122,16 @@ public:
     void AddMessage(CMessage* message, BOOL bForcePassThrough);
 
     /* 001C */ BOOLEAN m_bLastArbitrationLockStatus;
+};
+
+class CMessageStoreRelease : public CMessage {
+public:
+    CMessageStoreRelease(const CResRef& store, LONG caller, LONG target);
+    /* 0004 */ SHORT GetCommType() override;
+    /* 0008 */ BYTE GetMsgType() override;
+    /* 000C */ BYTE GetMsgSubType() override;
+
+    CResRef m_store;
 };
 
 #endif /* CMESSAGE_H_ */
