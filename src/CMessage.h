@@ -1,5 +1,5 @@
-#ifndef CBALDURMESSAGE_H_
-#define CBALDURMESSAGE_H_
+#ifndef CMESSAGE_H_
+#define CMESSAGE_H_
 
 #include "mfc.h"
 
@@ -90,4 +90,14 @@ public:
     /* 00F6 */ unsigned char field_F6;
 };
 
-#endif /* CBALDURMESSAGE_H_ */
+class CMessageHandler {
+public:
+    CMessageHandler();
+    ~CMessageHandler();
+    void AsynchronousUpdate();
+    void PostAsynchronousUpdate();
+
+    /* 001C */ BOOLEAN m_bLastArbitrationLockStatus;
+};
+
+#endif /* CMESSAGE_H_ */

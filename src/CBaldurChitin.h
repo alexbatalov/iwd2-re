@@ -4,10 +4,9 @@
 #include "mfc.h"
 
 #include "BalDataTypes.h"
-#include "CBaldurMessage.h"
 #include "CCacheStatus.h"
 #include "CChitin.h"
-#include "CMessageHandler.h"
+#include "CMessage.h"
 #include "CSwitchCDStatus.h"
 #include "CTlkTable.h"
 #include "CVidFont.h"
