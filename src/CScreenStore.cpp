@@ -654,6 +654,81 @@ void CUIControlButtonStoreBuySpellBuy::OnLButtonClick(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x683080
+CUIControlButtonStoreRentRoomRoomSelect::CUIControlButtonStoreRentRoomRoomSelect(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
+{
+    m_nSelectedFrame = 0;
+    m_nNotSelectedFrame = 1;
+    m_nPressedFrame = 2;
+    m_nDisabledFrame = 3;
+
+    STR_RES strRes;
+
+    STRREF strText;
+    switch (m_nID) {
+    case 4:
+        strText = 14294; // "Peasant"
+        break;
+    case 5:
+        strText = 14295; // "Merchant"
+        break;
+    case 6:
+        strText = 14296; // "Noble"
+        break;
+    case 7:
+        strText = 14297; // "Royal"
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 12420
+        UTIL_ASSERT(FALSE);
+    }
+
+    g_pBaldurChitin->GetTlkTable().Fetch(strText, strRes);
+    SetText(strRes.szText);
+}
+
+// 0x6831E0
+CUIControlButtonStoreRentRoomRoomSelect::~CUIControlButtonStoreRentRoomRoomSelect()
+{
+}
+
+// 0x683280
+void CUIControlButtonStoreRentRoomRoomSelect::OnLButtonClick(CPoint pt)
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 12503
+    UTIL_ASSERT(pStore != NULL);
+
+    switch (m_nID) {
+    case 4:
+        pStore->m_dwRoomType = 1;
+        pStore->UpdateMainPanel();
+        break;
+    case 5:
+        pStore->m_dwRoomType = 2;
+        pStore->UpdateMainPanel();
+        break;
+    case 6:
+        pStore->m_dwRoomType = 3;
+        pStore->UpdateMainPanel();
+        break;
+    case 7:
+        pStore->m_dwRoomType = 4;
+        pStore->UpdateMainPanel();
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 12472
+        UTIL_ASSERT(FALSE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x683720
 CUIControlPortraitStore::CUIControlPortraitStore(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)

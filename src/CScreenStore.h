@@ -4,6 +4,7 @@
 #include "CBaldurEngine.h"
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
+#include "CUIControlButton3State.h"
 #include "CVidFont.h"
 
 #define CSCREENSTORE_VIRTUAL_KEYS 91
@@ -83,6 +84,7 @@ public:
     /* 04F4 */ int field_4F4;
     /* 04F8 */ int field_4F8;
     /* 04FC */ int field_4FC;
+    /* 0500 */ DWORD m_dwRoomType;
     /* 0580 */ int field_580;
     /* 0584 */ int field_584;
     /* 0588 */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
@@ -130,6 +132,13 @@ class CUIControlButtonStoreBuySpellBuy : public CUIControlButton {
 public:
     CUIControlButtonStoreBuySpellBuy(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonStoreBuySpellBuy() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonStoreRentRoomRoomSelect : public CUIControlButton3State {
+public:
+    CUIControlButtonStoreRentRoomRoomSelect(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonStoreRentRoomRoomSelect() override;
     void OnLButtonClick(CPoint pt) override;
 };
 
