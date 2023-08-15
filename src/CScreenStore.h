@@ -142,6 +142,13 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonStoreRentRoomRoomPicture : public CUIControlButton3State {
+public:
+    CUIControlButtonStoreRentRoomRoomPicture(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonStoreRentRoomRoomPicture() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlPortraitStore : public CUIControlButton {
 public:
     CUIControlPortraitStore(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

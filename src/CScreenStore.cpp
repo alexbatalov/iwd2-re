@@ -729,6 +729,56 @@ void CUIControlButtonStoreRentRoomRoomSelect::OnLButtonClick(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x683360
+CUIControlButtonStoreRentRoomRoomPicture::CUIControlButtonStoreRentRoomRoomPicture(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
+{
+    m_nSelectedFrame = 0;
+    m_nNotSelectedFrame = 0;
+    m_nPressedFrame = 0;
+    m_nDisabledFrame = 1;
+}
+
+// 0x6833D0
+CUIControlButtonStoreRentRoomRoomPicture::~CUIControlButtonStoreRentRoomRoomPicture()
+{
+}
+
+// 0x683470
+void CUIControlButtonStoreRentRoomRoomPicture::OnLButtonClick(CPoint pt)
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 12612
+    UTIL_ASSERT(pStore != NULL);
+
+    switch (m_nID) {
+    case 0:
+        pStore->m_dwRoomType = 1;
+        pStore->UpdateMainPanel();
+        break;
+    case 1:
+        pStore->m_dwRoomType = 2;
+        pStore->UpdateMainPanel();
+        break;
+    case 2:
+        pStore->m_dwRoomType = 3;
+        pStore->UpdateMainPanel();
+        break;
+    case 3:
+        pStore->m_dwRoomType = 4;
+        pStore->UpdateMainPanel();
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 12581
+        UTIL_ASSERT(FALSE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x683720
 CUIControlPortraitStore::CUIControlPortraitStore(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
