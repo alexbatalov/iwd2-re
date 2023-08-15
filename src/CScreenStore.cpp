@@ -420,6 +420,12 @@ void CScreenStore::OnRentRoomButtonClick()
     // TODO: Incomplete.
 }
 
+// 0x67C710
+void CScreenStore::OnBuyDrinkButtonClick(INT nButton)
+{
+    // TODO: Incomplete.
+}
+
 // 0x673B60
 void CScreenStore::CheckEnablePanels(BOOL bEnable)
 {
@@ -828,4 +834,41 @@ CUIControlPortraitStore::~CUIControlPortraitStore()
 void CUIControlPortraitStore::OnLButtonClick(CPoint pt)
 {
     g_pBaldurChitin->GetActiveEngine()->OnPortraitLClick(m_nID);
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x6838E0
+CUIControlButtonStoreBuyDrinksDrink::CUIControlButtonStoreBuyDrinksDrink(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->GetTlkTable().Fetch(14293, strRes); // "Rent"
+    SetText(strRes.szText);
+}
+
+// 0x683930
+CUIControlButtonStoreBuyDrinksDrink::~CUIControlButtonStoreBuyDrinksDrink()
+{
+}
+
+// 0x6839D0
+void CUIControlButtonStoreBuyDrinksDrink::OnLButtonClick(CPoint pt)
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 12811
+    UTIL_ASSERT(pStore != NULL);
+
+    CSingleLock renderLock(&(pStore->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 12817
+    UTIL_ASSERT(CRESUI_CONTROLBUTTONID_STORE_BUYDRINK_DRINK0 <= m_nID && m_nID <= CRESUI_CONTROLBUTTONID_STORE_BUYDRINK_DRINK7);
+
+    pStore->OnBuyDrinkButtonClick(m_nID - CRESUI_CONTROLBUTTONID_STORE_BUYDRINK_DRINK0);
+
+    renderLock.Unlock();
 }

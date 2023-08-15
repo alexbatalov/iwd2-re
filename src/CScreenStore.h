@@ -12,6 +12,9 @@
 
 #define CSCREENSTORE_NUM_BOTTOMBUTTON 4
 
+#define CRESUI_CONTROLBUTTONID_STORE_BUYDRINK_DRINK0 40
+#define CRESUI_CONTROLBUTTONID_STORE_BUYDRINK_DRINK7 47
+
 class CStore;
 
 class CScreenStore : public CBaldurEngine {
@@ -64,6 +67,7 @@ public:
     void OnIdentifyItemButtonClick();
     void OnBuySpellButtonClick();
     void OnRentRoomButtonClick();
+    void OnBuyDrinkButtonClick(INT nButton);
     void CheckEnablePanels(BOOL bEnable);
     void OnCancelButtonClick();
     void CloseBag(BOOL bSaveFile);
@@ -161,6 +165,13 @@ class CUIControlPortraitStore : public CUIControlButton {
 public:
     CUIControlPortraitStore(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlPortraitStore() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonStoreBuyDrinksDrink : public CUIControlButton {
+public:
+    CUIControlButtonStoreBuyDrinksDrink(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonStoreBuyDrinksDrink() override;
     void OnLButtonClick(CPoint pt) override;
 };
 
