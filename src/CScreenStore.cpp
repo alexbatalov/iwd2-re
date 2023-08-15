@@ -414,6 +414,12 @@ void CScreenStore::OnBuySpellButtonClick()
     // TODO: Incomplete.
 }
 
+// 0x67C570
+void CScreenStore::OnRentRoomButtonClick()
+{
+    // TODO: Incomplete.
+}
+
 // 0x673B60
 void CScreenStore::CheckEnablePanels(BOOL bEnable)
 {
@@ -775,6 +781,34 @@ void CUIControlButtonStoreRentRoomRoomPicture::OnLButtonClick(CPoint pt)
         // __LINE__: 12581
         UTIL_ASSERT(FALSE);
     }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x683550
+CUIControlButtonStoreRentRoomRent::CUIControlButtonStoreRentRoomRent(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->GetTlkTable().Fetch(14293, strRes); // "Rent"
+    SetText(strRes.szText);
+}
+
+// 0x683640
+CUIControlButtonStoreRentRoomRent::~CUIControlButtonStoreRentRoomRent()
+{
+}
+
+// 0x6836E0
+void CUIControlButtonStoreRentRoomRent::OnLButtonClick(CPoint pt)
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 12669
+    UTIL_ASSERT(pStore != NULL);
+
+    pStore->OnRentRoomButtonClick();
 }
 
 // -----------------------------------------------------------------------------

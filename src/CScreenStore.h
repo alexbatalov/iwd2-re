@@ -63,6 +63,7 @@ public:
     void OnSellItemButtonClick();
     void OnIdentifyItemButtonClick();
     void OnBuySpellButtonClick();
+    void OnRentRoomButtonClick();
     void CheckEnablePanels(BOOL bEnable);
     void OnCancelButtonClick();
     void CloseBag(BOOL bSaveFile);
@@ -146,6 +147,13 @@ class CUIControlButtonStoreRentRoomRoomPicture : public CUIControlButton3State {
 public:
     CUIControlButtonStoreRentRoomRoomPicture(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonStoreRentRoomRoomPicture() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonStoreRentRoomRent : public CUIControlButton {
+public:
+    CUIControlButtonStoreRentRoomRent(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonStoreRentRoomRent() override;
     void OnLButtonClick(CPoint pt) override;
 };
 
