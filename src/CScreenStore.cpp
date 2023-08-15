@@ -3,6 +3,7 @@
 #include "CBaldurChitin.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CScreenInventory.h"
 #include "CScreenWorld.h"
 #include "CStore.h"
 #include "CUIControlEdit.h"
@@ -477,6 +478,42 @@ void CScreenStore::CloseBag(BOOL bSaveFile)
 
     delete m_pBag;
     m_pBag = NULL;
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x67EA20
+CUIControlButtonStoreBarDone::CUIControlButtonStoreBarDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->GetTlkTable().Fetch(11973, strRes);
+    SetText(strRes.szText);
+}
+
+// 0x67EB10
+CUIControlButtonStoreBarDone::~CUIControlButtonStoreBarDone()
+{
+}
+
+// 0x67EBB0
+void CUIControlButtonStoreBarDone::OnLButtonClick(CPoint pt)
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 9575
+    UTIL_ASSERT(pStore != NULL);
+
+    if (g_pBaldurChitin->m_pEngineWorld->m_bInControlOfStore) {
+        if (pStore->m_pStore->m_header.m_nStoreType == 4) {
+            pStore->SelectEngine(g_pBaldurChitin->m_pEngineInventory);
+        } else {
+            pStore->SelectEngine(g_pBaldurChitin->m_pEngineWorld);
+        }
+
+        g_pBaldurChitin->m_pEngineWorld->StopStore();
+    }
 }
 
 // -----------------------------------------------------------------------------

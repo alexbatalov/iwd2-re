@@ -94,6 +94,13 @@ public:
     /* 0FDA */ CVidFont m_preLoadFontTool;
 };
 
+class CUIControlButtonStoreBarDone : public CUIControlButton {
+public:
+    CUIControlButtonStoreBarDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonStoreBarDone() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlPortraitStore : public CUIControlButton {
 public:
     CUIControlPortraitStore(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

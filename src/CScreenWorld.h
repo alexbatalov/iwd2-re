@@ -47,6 +47,7 @@ public:
 
     void AsynchronousUpdate(BOOL bActiveEngine);
     BOOL TogglePauseGame(char a2, char a3, int a4);
+    void StopStore();
     void ClearChatMessages();
     void HideInterface();
     void UnhideInterface();

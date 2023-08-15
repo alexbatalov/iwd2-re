@@ -440,6 +440,12 @@ BOOL CScreenWorld::TogglePauseGame(char a2, char a3, int a4)
     return TRUE;
 }
 
+// 0x691B50
+void CScreenWorld::StopStore()
+{
+    // TODO: Incomplete.
+}
+
 // 0x692690
 void CScreenWorld::ClearChatMessages()
 {
