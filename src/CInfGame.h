@@ -61,6 +61,7 @@ public:
     void SaveMultiPlayerPermissions();
     void LoadGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace);
     void NewGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace);
+    void ReleaseServerStore(const CResRef& store);
     void UpdatePortrait(SHORT nPortrait, DWORD dwPanelId);
     void sub_5AF420(SHORT nPortrait, DWORD dwPanelId);
     SHORT GetCharacterPortraitNum(LONG nCharacterId);

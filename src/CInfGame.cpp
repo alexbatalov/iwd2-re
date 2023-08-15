@@ -1760,6 +1760,12 @@ void CInfGame::NewGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace
     m_nReputation = -10;
 }
 
+// 0x5ADE90
+void CInfGame::ReleaseServerStore(const CResRef& store)
+{
+    // TODO: Incomplete.
+}
+
 // 0x5AF360
 void CInfGame::UpdatePortrait(SHORT nPortrait, DWORD dwPanelId)
 {

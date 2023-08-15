@@ -15,6 +15,7 @@ public:
     CStore(const CResRef& resRef);
     ~CStore();
     void SetResRef(const CResRef& resRef);
+    void Marshal(const CString& sDirName);
     DWORD GetItemSellValue(CItem& cItem, unsigned char a2);
     DWORD GetItemBuyValue(CItem& cItem, BYTE nCHR, SHORT nReputation, unsigned char a4);
     INT GetNumItems();

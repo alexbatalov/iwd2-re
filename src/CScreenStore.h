@@ -10,6 +10,8 @@
 
 #define CSCREENSTORE_NUM_BOTTOMBUTTON 4
 
+class CStore;
+
 class CScreenStore : public CBaldurEngine {
 public:
     static const CString TOKEN_HP;
@@ -51,6 +53,7 @@ public:
     void UpdateMainPanel();
     void CheckEnablePanels(BOOL bEnable);
     void OnCancelButtonClick();
+    void CloseBag(BOOL bSaveFile);
 
     /* 0106 */ CKeyInfo m_pVirtualKeys[CSCREENSTORE_VIRTUAL_KEYS];
     /* 039E */ BYTE m_pVirtualKeysFlags[CSCREENSTORE_VIRTUAL_KEYS];
@@ -58,7 +61,7 @@ public:
     /* 043A */ BOOLEAN m_bShiftKeyDown;
     /* 043C */ BOOL m_bCapsLockKeyOn;
     /* 0440 */ CUIPanel* m_pMainPanel;
-    /* 04EC */ int field_4EC;
+    /* 04EC */ CStore* m_pBag;
     /* 0588 */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
     /* 05A8 */ int field_5A8;
     /* 05B4 */ CUIPanel* m_pButtonBar;

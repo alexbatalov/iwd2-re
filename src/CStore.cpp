@@ -189,6 +189,12 @@ void CStore::SetResRef(const CResRef& resRef)
     }
 }
 
+// 0x54B9A0
+void CStore::Marshal(const CString& sDirName)
+{
+    // TODO: Incomplete.
+}
+
 // 0x54BDC0
 DWORD CStore::GetItemSellValue(CItem& cItem, unsigned char a2)
 {

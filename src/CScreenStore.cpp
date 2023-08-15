@@ -4,6 +4,7 @@
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CScreenWorld.h"
+#include "CStore.h"
 #include "CUIControlEdit.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -198,7 +199,7 @@ void CScreenStore::EnableMainPanel(BOOL bEnable)
     }
 
     if (m_pMainPanel->m_nID == 2) {
-        m_pMainPanel->GetControl(50)->SetInactiveRender(field_4EC != 0);
+        m_pMainPanel->GetControl(50)->SetInactiveRender(m_pBag != NULL);
     }
 
     m_pButtonBar->SetEnabled(bEnable);
@@ -291,6 +292,28 @@ void CScreenStore::UpdatePartyGoldStatus()
     if (GetTopPopup() == NULL) {
         UpdateMainPanel();
     }
+}
+
+// 0x684CD0
+void CScreenStore::CloseBag(BOOL bSaveFile)
+{
+    if (g_pChitin->cNetwork.GetSessionOpen()) {
+        if (g_pChitin->cNetwork.GetSessionHosting()) {
+            g_pBaldurChitin->GetObjectGame()->ReleaseServerStore(m_pBag->m_resRef);
+        } else {
+            CMessageStoreRelease* message = new CMessageStoreRelease(m_pBag->m_resRef,
+                CGameObjectArray::INVALID_INDEX,
+                CGameObjectArray::INVALID_INDEX);
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+        }
+    } else {
+        if (bSaveFile) {
+            m_pBag->Marshal(g_pBaldurChitin->GetObjectGame()->m_sTempDir);
+        }
+    }
+
+    delete m_pBag;
+    m_pBag = NULL;
 }
 
 // -----------------------------------------------------------------------------
