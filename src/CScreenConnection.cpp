@@ -4595,7 +4595,7 @@ void CUIControlButtonConnection604C30::OnLButtonClick(CPoint pt)
     g_pBaldurChitin->GetTlkTable().m_override.CloseFiles();
     g_pBaldurChitin->GetTlkTable().OpenOverride(CString("temp/default.toh"), CString("temp/default.tot"));
 
-    g_pBaldurChitin->pActiveEngine->SelectEngine(g_pBaldurChitin->m_pEngineCreateChar);
+    g_pBaldurChitin->GetActiveEngine()->SelectEngine(g_pBaldurChitin->m_pEngineCreateChar);
 }
 
 // -----------------------------------------------------------------------------

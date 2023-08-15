@@ -309,5 +309,5 @@ CUIControlPortraitStore::~CUIControlPortraitStore()
 // 0x683810
 void CUIControlPortraitStore::OnLButtonClick(CPoint pt)
 {
-    static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->OnPortraitLClick(m_nID);
+    g_pBaldurChitin->GetActiveEngine()->OnPortraitLClick(m_nID);
 }

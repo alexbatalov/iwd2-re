@@ -13,6 +13,7 @@
 
 extern unsigned char byte_8BA28C;
 
+class CBaldurEngine;
 class CBaldurProjector;
 class CDungeonMaster;
 class CInfCursor;
@@ -81,6 +82,7 @@ public:
     CInfCursor* GetObjectCursor();
     CInfGame* GetObjectGame();
     CScreenWorld* GetScreenWorld();
+    CBaldurEngine* GetActiveEngine();
     CTlkTable& GetTlkTable();
     CMessageHandler* GetMessageHandler();
 

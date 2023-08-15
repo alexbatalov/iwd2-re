@@ -404,28 +404,28 @@ void CScreenOptions::OnKeyDown(SHORT nKeysFlags)
                         && pGame->m_pKeymapFlags[index] == m_bCtrlKeyDown) {
                         switch (index) {
                         case 0:
-                            static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->OnLeftPanelButtonClick(5);
+                            g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(5);
                             break;
                         case 1:
-                            static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->OnLeftPanelButtonClick(8);
+                            g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(8);
                             break;
                         case 2:
-                            static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->OnLeftPanelButtonClick(0);
+                            g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(0);
                             break;
                         case 3:
-                            static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->OnLeftPanelButtonClick(6);
+                            g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(6);
                             break;
                         case 4:
-                            static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->OnLeftPanelButtonClick(7);
+                            g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(7);
                             break;
                         case 5:
-                            static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->OnLeftPanelButtonClick(4);
+                            g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(4);
                             break;
                         case 6:
-                            static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->OnLeftPanelButtonClick(9);
+                            g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(9);
                             break;
                         case 7:
-                            static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->OnLeftPanelButtonClick(13);
+                            g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(13);
                             break;
                         case 29:
                             OnRestButtonClick();
@@ -533,7 +533,7 @@ void CScreenOptions::OnDoneButtonClick()
         lock.Unlock();
 
         g_pBaldurChitin->GetObjectGame()->ApplyVolumeSliders(TRUE);
-        g_pBaldurChitin->pActiveEngine->SelectEngine(g_pBaldurChitin->m_pEngineConnection);
+        g_pBaldurChitin->GetActiveEngine()->SelectEngine(g_pBaldurChitin->m_pEngineConnection);
 
         break;
     default:
@@ -593,7 +593,7 @@ void CScreenOptions::OnCancelButtonClick()
         lock.Unlock();
 
         if (m_bFromMainMenu) {
-            g_pBaldurChitin->pActiveEngine->SelectEngine(g_pBaldurChitin->m_pEngineConnection);
+            g_pBaldurChitin->GetActiveEngine()->SelectEngine(g_pBaldurChitin->m_pEngineConnection);
         }
 
         break;

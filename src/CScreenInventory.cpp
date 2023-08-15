@@ -400,7 +400,7 @@ void CScreenInventory::TimerSynchronousUpdate()
     m_cUIManager.Render();
     pVidMode->Flip(TRUE);
 
-    if (g_pBaldurChitin->pActiveEngine == g_pBaldurChitin->m_pEngineInventory) {
+    if (g_pBaldurChitin->GetActiveEngine() == g_pBaldurChitin->m_pEngineInventory) {
         CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
         renderLock.Lock(INFINITE);
 
@@ -435,7 +435,7 @@ void CScreenInventory::SetErrorString(STRREF strError, COLORREF rgb)
 {
     STR_RES strRes;
 
-    if (g_pBaldurChitin->pActiveEngine == g_pBaldurChitin->m_pEngineInventory) {
+    if (g_pBaldurChitin->GetActiveEngine() == g_pBaldurChitin->m_pEngineInventory) {
         CUIPanel* pPanel = m_cUIManager.GetPanel(2);
         CUIControlLabel* pLabel = static_cast<CUIControlLabel*>(pPanel->GetControl(0x1000003F));
         pLabel->SetForegroundColor(rgb);

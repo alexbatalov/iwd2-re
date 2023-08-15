@@ -381,12 +381,12 @@ void CMessageHandler::PostAsynchronousUpdate()
         if (g_pBaldurChitin->GetObjectGame()->m_bAnotherPlayerJoinedGame == TRUE
             && (g_pBaldurChitin->GetObjectGame()->CanSaveGame(strError, 0, 0) == TRUE
                 || g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->m_bArbitrationLockStatus == TRUE)) {
-            if ((g_pBaldurChitin->pActiveEngine != g_pBaldurChitin->m_pEngineLoad
-                    && g_pBaldurChitin->pActiveEngine != g_pBaldurChitin->m_pEngineCreateChar
-                    && g_pBaldurChitin->pActiveEngine != g_pBaldurChitin->m_pEngineMultiPlayer
-                    && g_pBaldurChitin->pActiveEngine != g_pBaldurChitin->m_pEngineSinglePlayer
-                    && g_pBaldurChitin->pActiveEngine != g_pBaldurChitin->m_pEngineConnection)
-                || (g_pBaldurChitin->pActiveEngine == g_pBaldurChitin->m_pEngineMultiPlayer
+            if ((g_pBaldurChitin->GetActiveEngine() != g_pBaldurChitin->m_pEngineLoad
+                    && g_pBaldurChitin->GetActiveEngine() != g_pBaldurChitin->m_pEngineCreateChar
+                    && g_pBaldurChitin->GetActiveEngine() != g_pBaldurChitin->m_pEngineMultiPlayer
+                    && g_pBaldurChitin->GetActiveEngine() != g_pBaldurChitin->m_pEngineSinglePlayer
+                    && g_pBaldurChitin->GetActiveEngine() != g_pBaldurChitin->m_pEngineConnection)
+                || (g_pBaldurChitin->GetActiveEngine() == g_pBaldurChitin->m_pEngineMultiPlayer
                     && g_pBaldurChitin->m_pEngineMultiPlayer->field_45C != 1)) {
                 g_pBaldurChitin->GetObjectGame()->MultiplayerSetCharacterCreationLocation();
 
@@ -394,7 +394,7 @@ void CMessageHandler::PostAsynchronousUpdate()
 
                 g_pBaldurChitin->m_pEngineMultiPlayer->field_45C = 1;
                 g_pBaldurChitin->m_pEngineMultiPlayer->StartMultiPlayer(1);
-                g_pBaldurChitin->pActiveEngine->SelectEngine(g_pBaldurChitin->m_pEngineMultiPlayer);
+                g_pBaldurChitin->GetActiveEngine()->SelectEngine(g_pBaldurChitin->m_pEngineMultiPlayer);
 
                 g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->SetArbitrationLockStatus(1, 0);
             }
@@ -422,7 +422,7 @@ void CMessageHandler::PostAsynchronousUpdate()
 
     if (g_pBaldurChitin->GetBaldurMessage()->m_bPlayerShutdown == TRUE) {
         if (g_pBaldurChitin->GetObjectGame()->m_bGameLoaded) {
-            g_pBaldurChitin->pActiveEngine->SelectEngine(g_pBaldurChitin->m_pEngineConnection);
+            g_pBaldurChitin->GetActiveEngine()->SelectEngine(g_pBaldurChitin->m_pEngineConnection);
 
             if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
                 g_pBaldurChitin->m_pEngineConnection->ShowSessionTerminatedMessage();

@@ -1890,7 +1890,7 @@ INT CGameSprite::GetMulticlassingPenalty()
 // 0x765C50
 void CGameSprite::DisplayFeats(CUIControlTextDisplay* pText)
 {
-    CBaldurEngine* pEngine = static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine);
+    CBaldurEngine* pEngine = g_pBaldurChitin->GetActiveEngine();
     const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
@@ -1960,7 +1960,7 @@ void CGameSprite::DisplayFeats(CUIControlTextDisplay* pText)
 // 0x765E40
 void CGameSprite::DisplaySkills(CUIControlTextDisplay* pText)
 {
-    CBaldurEngine* pEngine = static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine);
+    CBaldurEngine* pEngine = g_pBaldurChitin->GetActiveEngine();
     const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp

@@ -1764,7 +1764,7 @@ void CInfGame::NewGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace
 void CInfGame::UpdatePortrait(SHORT nPortrait, DWORD dwPanelId)
 {
     if (nPortrait != -1) {
-        CBaldurEngine* pEngine = static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine);
+        CBaldurEngine* pEngine = g_pBaldurChitin->GetActiveEngine();
         if (pEngine != g_pBaldurChitin->m_pEngineProjector
             && pEngine != g_pBaldurChitin->m_pEngineMultiPlayer
             && pEngine != g_pBaldurChitin->m_pEngineSinglePlayer
@@ -1780,7 +1780,7 @@ void CInfGame::UpdatePortrait(SHORT nPortrait, DWORD dwPanelId)
             } else {
                 // NOTE: Obtaining active engine second time, probably some
                 // inlining. Looks similar to `CBaldurEngine::OnPortraitLClick`.
-                CUIManager* pManager = static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->GetManager();
+                CUIManager* pManager = g_pBaldurChitin->GetActiveEngine()->GetManager();
                 CUIPanel* pPanel = pManager->GetPanel(1);
                 if (pPanel != NULL) {
                     CUIControlBase* pControl = pPanel->GetControl(nPortrait);
@@ -1797,7 +1797,7 @@ void CInfGame::UpdatePortrait(SHORT nPortrait, DWORD dwPanelId)
 void CInfGame::sub_5AF420(SHORT nPortrait, DWORD dwPanelId)
 {
     if (nPortrait != -1) {
-        CBaldurEngine* pEngine = static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine);
+        CBaldurEngine* pEngine = g_pBaldurChitin->GetActiveEngine();
         if (pEngine != g_pBaldurChitin->m_pEngineProjector
             && pEngine != g_pBaldurChitin->m_pEngineMultiPlayer
             && pEngine != g_pBaldurChitin->m_pEngineSinglePlayer
@@ -1811,7 +1811,7 @@ void CInfGame::sub_5AF420(SHORT nPortrait, DWORD dwPanelId)
                     pControl->func_54();
                 }
             } else {
-                CUIManager* pManager = static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->GetManager();
+                CUIManager* pManager = g_pBaldurChitin->GetActiveEngine()->GetManager();
                 CUIPanel* pPanel = pManager->GetPanel(1);
                 if (pPanel != NULL) {
                     CUIControlBase* pControl = pPanel->GetControl(nPortrait);
@@ -2018,7 +2018,7 @@ CResRef CInfGame::GetAnimationBam(SHORT nPortrait, BYTE range)
 // 0x5BB960
 BYTE CInfGame::GetFrameRate()
 {
-    return static_cast<BYTE>(g_pBaldurChitin->pActiveEngine->pVidMode->field_94);
+    return static_cast<BYTE>(g_pBaldurChitin->GetActiveEngine()->pVidMode->field_94);
 }
 
 // 0x5BE900
@@ -2449,8 +2449,8 @@ void CInfGame::StartCharacterTerminationSequence()
 
     pGame->field_43E6 = 0;
 
-    if (g_pBaldurChitin->pActiveEngine != g_pBaldurChitin->m_pEngineWorld) {
-        g_pBaldurChitin->pActiveEngine->SelectEngine(g_pBaldurChitin->m_pEngineWorld);
+    if (g_pBaldurChitin->GetActiveEngine() != g_pBaldurChitin->m_pEngineWorld) {
+        g_pBaldurChitin->GetActiveEngine()->SelectEngine(g_pBaldurChitin->m_pEngineWorld);
     }
 
     g_pBaldurChitin->m_pEngineWorld->m_bGameOverPanel = TRUE;

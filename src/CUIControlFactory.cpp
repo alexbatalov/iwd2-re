@@ -2408,14 +2408,14 @@ CUIControlPortraitGeneral::~CUIControlPortraitGeneral()
 // 0x635200
 void CUIControlPortraitGeneral::OnLButtonClick(CPoint pt)
 {
-    static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->OnPortraitLClick(m_nID);
+    g_pBaldurChitin->GetActiveEngine()->OnPortraitLClick(m_nID);
 }
 
 // 0x779CF0
 void CUIControlPortraitGeneral::OnLButtonDoubleClick(CPoint pt)
 {
     CScreenMap* pMap = g_pBaldurChitin->m_pEngineMap;
-    if (g_pBaldurChitin->pActiveEngine == pMap) {
+    if (g_pBaldurChitin->GetActiveEngine() == pMap) {
         pMap->OnPortraitLDblClick(pMap->GetSelectedCharacter());
     }
 }
@@ -2424,7 +2424,7 @@ void CUIControlPortraitGeneral::OnLButtonDoubleClick(CPoint pt)
 void CUIControlPortraitGeneral::OnRButtonClick(CPoint pt)
 {
     CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
-    pWorld->OnPortraitLClick(static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->GetSelectedCharacter());
+    pWorld->OnPortraitLClick(g_pBaldurChitin->GetActiveEngine()->GetSelectedCharacter());
     g_pBaldurChitin->GetObjectGame()->OnPortraitLClick(m_nID);
     g_pBaldurChitin->GetObjectGame()->OnPortraitLDblClick(m_nID);
     m_pPanel->m_pManager->m_pWarp->SelectEngine(pWorld);
@@ -2487,7 +2487,7 @@ CUIControlButtonRest::~CUIControlButtonRest()
 // 0x77B510
 void CUIControlButtonRest::OnLButtonClick(CPoint pt)
 {
-    static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->OnRestButtonClick();
+    g_pBaldurChitin->GetActiveEngine()->OnRestButtonClick();
 }
 
 // 0x77CD30
@@ -2507,7 +2507,7 @@ CUIControlButtonGeneralBase::~CUIControlButtonGeneralBase()
 // 0x77CE50
 void CUIControlButtonGeneralBase::OnLButtonClick(CPoint pt)
 {
-    static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->OnLeftPanelButtonClick(m_nID);
+    g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(m_nID);
 }
 
 // 0x77CE70
@@ -2527,7 +2527,7 @@ CUIControlButtonGeneralWorld::~CUIControlButtonGeneralWorld()
 // 0x77CFB0
 void CUIControlButtonGeneralWorld::OnLButtonClick(CPoint pt)
 {
-    static_cast<CBaldurEngine*>(g_pBaldurChitin->pActiveEngine)->OnLeftPanelButtonClick(0);
+    g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(0);
 }
 
 // 0x77CFD0

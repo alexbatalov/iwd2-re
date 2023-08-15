@@ -622,7 +622,7 @@ void CScreenStart::OnPreGenerateButtonClick()
     m_cUIManager.KillCapture();
 
     g_pBaldurChitin->m_pEngineCreateChar->StartCreateChar(-1, 4);
-    g_pBaldurChitin->pActiveEngine->SelectEngine(g_pBaldurChitin->m_pEngineCreateChar);
+    g_pBaldurChitin->GetActiveEngine()->SelectEngine(g_pBaldurChitin->m_pEngineCreateChar);
 }
 
 // -----------------------------------------------------------------------------

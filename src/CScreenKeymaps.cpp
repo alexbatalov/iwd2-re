@@ -512,7 +512,7 @@ void CScreenKeymaps::HandleKeyDown(BYTE nKey)
             m_cUIManager.ForceToolTip();
             break;
         case VK_SNAPSHOT:
-            g_pBaldurChitin->pActiveEngine->pVidMode->PrintScreen();
+            g_pBaldurChitin->GetActiveEngine()->pVidMode->PrintScreen();
             break;
         }
     }
