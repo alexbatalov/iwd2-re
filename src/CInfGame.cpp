@@ -3224,3 +3224,9 @@ void CInfGame::SetTempCursor(BYTE tempCursor)
 {
     m_tempCursor = tempCursor;
 }
+
+// 0x45B630
+CGameOptions* CInfGame::GetOptions()
+{
+    return &m_cOptions;
+}

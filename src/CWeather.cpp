@@ -97,7 +97,7 @@ void CWeather::CheckWeather()
     CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
     ULONG nCurrentTime = pGame->GetWorldTimer()->m_gameTime;
     CGameArea* pArea = pGame->GetVisibleArea();
-    if (pGame->m_cOptions.m_bWeatherEnabled) {
+    if (pGame->GetOptions()->m_bWeatherEnabled) {
         if (pArea != NULL) {
             if (nCurrentTime > m_nLastTimeChecked && nCurrentTime >= m_nNextTimeToStartChecking) {
                 if ((pArea->m_header.m_areaType & 0x4) != 0) {
@@ -197,7 +197,7 @@ void CWeather::SetCurrentWeather(CGameArea* pArea, WORD wWeatherFlags)
 {
     if (!g_pBaldurChitin->cNetwork.GetSessionOpen() || !g_pBaldurChitin->cNetwork.GetSessionHosting()) {
         CancelCurrentWeather(pArea, g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime);
-        if (g_pBaldurChitin->GetObjectGame()->m_cOptions.m_bWeatherEnabled) {
+        if (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bWeatherEnabled) {
             // NOTE: Uninline.
             Unmarshal(wWeatherFlags);
             ResetWeather(pArea);
@@ -370,7 +370,7 @@ void CWeather::Update()
 {
     switch (m_nCurrentWeather) {
     case 1:
-        if (g_pBaldurChitin->GetObjectGame()->m_cOptions.m_bWeatherEnabled) {
+        if (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bWeatherEnabled) {
             UpdateRain();
 
             if (m_nWeatherLevel != 0) {
@@ -383,7 +383,7 @@ void CWeather::Update()
         }
         break;
     case 2:
-        if (g_pBaldurChitin->GetObjectGame()->m_cOptions.m_bWeatherEnabled) {
+        if (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bWeatherEnabled) {
             UpdateSnow();
 
             if (m_nWeatherLevel != 0) {

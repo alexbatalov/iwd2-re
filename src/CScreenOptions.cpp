@@ -546,7 +546,7 @@ void CScreenOptions::OnDoneButtonClick()
 // 0x654960
 void CScreenOptions::OnCancelButtonClick()
 {
-    CGameOptions* pOptions = &(g_pBaldurChitin->GetObjectGame()->m_cOptions);
+    CGameOptions* pOptions = g_pBaldurChitin->GetObjectGame()->GetOptions();
 
     CSingleLock lock(&(m_cUIManager.field_36), FALSE);
     lock.Lock(INFINITE);
@@ -939,8 +939,8 @@ void CScreenOptions::SaveGraphicModeOptions()
         || g_pBaldurChitin->cVideo.cVidBlitter.m_bSoftSrcKeyBltFast;
     m_bSoftBlt = g_pBaldurChitin->cVideo.cVidBlitter.m_bSoftBlt
         || g_pBaldurChitin->cVideo.cVidBlitter.m_bSoftBltFast;
-    m_bTranslucentBlts = g_pBaldurChitin->GetObjectGame()->m_cOptions.m_bTranslucentBlts;
-    m_bStaticAnimations = g_pBaldurChitin->GetObjectGame()->m_cOptions.m_bStaticAnimations;
+    m_bTranslucentBlts = g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bTranslucentBlts;
+    m_bStaticAnimations = g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bStaticAnimations;
 }
 
 // 0x6556C0
@@ -967,14 +967,14 @@ void CScreenOptions::CheckGraphicModeOptions(CUIPanel* pPanel)
     }
 
     if (static_cast<CUIControlButton3State*>(pPanel->GetControl(56))->m_bSelected != m_bTranslucentBlts) {
-        BOOL bOldTranslucentBlts = g_pBaldurChitin->GetObjectGame()->m_cOptions.m_bTranslucentBlts;
-        g_pBaldurChitin->GetObjectGame()->m_cOptions.m_bTranslucentBlts = bOldTranslucentBlts == FALSE;
+        BOOL bOldTranslucentBlts = g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bTranslucentBlts;
+        g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bTranslucentBlts = bOldTranslucentBlts == FALSE;
         CVidCell::TRANSLUCENT_BLTS_ON = bOldTranslucentBlts == FALSE;
         CInfinity::TRANSLUCENT_BLTS_ON = bOldTranslucentBlts == FALSE;
     }
 
     if (static_cast<CUIControlButton3State*>(pPanel->GetControl(57))->m_bSelected != m_bStaticAnimations) {
-        g_pBaldurChitin->GetObjectGame()->m_cOptions.m_bStaticAnimations = g_pBaldurChitin->GetObjectGame()->m_cOptions.m_bStaticAnimations == FALSE;
+        g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bStaticAnimations = g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bStaticAnimations == FALSE;
     }
 
     if (static_cast<CUIControlButton3State*>(pPanel->GetControl(5))->m_bSelected) {
@@ -1072,7 +1072,7 @@ void CScreenOptions::OnRestButtonClick()
 // 0x655B80
 void CScreenOptions::UpdateGraphicsPanel(BOOLEAN bInitialUpdate)
 {
-    CGameOptions* pOptions = &(g_pBaldurChitin->GetObjectGame()->m_cOptions);
+    CGameOptions* pOptions = g_pBaldurChitin->GetObjectGame()->GetOptions();
     CUIPanel* pPanel = m_cUIManager.GetPanel(6);
     CUIControlSlider* pSlider;
     SHORT nValue;
@@ -1154,7 +1154,7 @@ void CScreenOptions::UpdateGraphicsPanel(BOOLEAN bInitialUpdate)
 
         pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(57));
         UTIL_ASSERT(pButton != NULL); // 2023
-        pButton->SetSelected(g_pBaldurChitin->GetObjectGame()->m_cOptions.m_bStaticAnimations);
+        pButton->SetSelected(g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bStaticAnimations);
     }
 
     pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(51));
@@ -1166,7 +1166,7 @@ void CScreenOptions::UpdateGraphicsPanel(BOOLEAN bInitialUpdate)
 // 0x656090
 void CScreenOptions::UpdateSoundPanel(BOOLEAN bInitialUpdate)
 {
-    CGameOptions* pOptions = &(g_pBaldurChitin->GetObjectGame()->m_cOptions);
+    CGameOptions* pOptions = g_pBaldurChitin->GetObjectGame()->GetOptions();
     CUIPanel* pPanel = m_cUIManager.GetPanel(7);
     CUIControlSlider* pSlider;
     CUIControlButton3State* pButton;
@@ -1213,7 +1213,7 @@ void CScreenOptions::UpdateSoundPanel(BOOLEAN bInitialUpdate)
 // 0x656360
 void CScreenOptions::UpdateSelectSoundsPanel(BOOLEAN bInitialUpdate)
 {
-    CGameOptions* pOptions = &(g_pBaldurChitin->GetObjectGame()->m_cOptions);
+    CGameOptions* pOptions = g_pBaldurChitin->GetObjectGame()->GetOptions();
     CUIPanel* pPanel = m_cUIManager.GetPanel(12);
     CUIControlButton3State* pButton;
 
@@ -1263,7 +1263,7 @@ void CScreenOptions::UpdateSelectSoundsPanel(BOOLEAN bInitialUpdate)
 // 0x6565B0
 void CScreenOptions::UpdateGamePlayPanel(BOOLEAN bInitialUpdate)
 {
-    CGameOptions* pOptions = &(g_pBaldurChitin->GetObjectGame()->m_cOptions);
+    CGameOptions* pOptions = g_pBaldurChitin->GetObjectGame()->GetOptions();
     CUIPanel* pPanel = m_cUIManager.GetPanel(8);
     CUIControlSlider* pSlider;
     CUIControlButton3State* pButton;
@@ -1359,7 +1359,7 @@ void CScreenOptions::UpdateGamePlayPanel(BOOLEAN bInitialUpdate)
 // 0x656B00
 void CScreenOptions::UpdateFeedbackPanel(BOOLEAN bInitialUpdate)
 {
-    CGameOptions* pOptions = &(g_pBaldurChitin->GetObjectGame()->m_cOptions);
+    CGameOptions* pOptions = g_pBaldurChitin->GetObjectGame()->GetOptions();
     CUIPanel* pPanel = m_cUIManager.GetPanel(9);
     CUIControlSlider* pSlider;
     CUIControlButton3State* pButton;
@@ -1410,7 +1410,7 @@ void CScreenOptions::UpdateFeedbackPanel(BOOLEAN bInitialUpdate)
 // 0x656D50
 void CScreenOptions::UpdateAutoPausePanel(BOOLEAN bInitialUpdate)
 {
-    CGameOptions* pOptions = &(g_pBaldurChitin->GetObjectGame()->m_cOptions);
+    CGameOptions* pOptions = g_pBaldurChitin->GetObjectGame()->GetOptions();
     CUIPanel* pPanel = m_cUIManager.GetPanel(10);
     CUIControlButton3State* pButton;
 
@@ -1728,7 +1728,7 @@ void CUIControlButtonOptionsSelection::OnLButtonClick(CPoint pt)
     // __LINE__: 2899
     UTIL_ASSERT(pGame != NULL);
 
-    CGameOptions* pOptions = &(pGame->m_cOptions);
+    CGameOptions* pOptions = pGame->GetOptions();
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
     // __LINE__: 2901
@@ -2056,7 +2056,7 @@ void CUIControlButtonOptionsRadio::OnLButtonClick(CPoint pt)
     // __LINE__: 3318
     UTIL_ASSERT(pGame != NULL);
 
-    CGameOptions* pOptions = &(pGame->m_cOptions);
+    CGameOptions* pOptions = pGame->GetOptions();
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
     // __LINE__: 3320
@@ -2166,7 +2166,7 @@ void CUIControlSliderOptionsSlider::OnThumbFinalChange()
     // __LINE__: 3538
     UTIL_ASSERT(pGame != NULL);
 
-    CGameOptions* pOptions = &(pGame->m_cOptions);
+    CGameOptions* pOptions = pGame->GetOptions();
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenOptions.cpp
     // __LINE__: 3540
@@ -2538,20 +2538,20 @@ void CUIControlButtonOptionsGameCommand::OnLButtonClick(CPoint pt)
             pEngine->SaveGraphicModeOptions();
 
             // NOTE: Uninline.
-            pEngine->PushOptions(&(pGame->m_cOptions));
+            pEngine->PushOptions(pGame->GetOptions());
 
             pEngine->m_bSpriteMirror = CGameAnimationType::MIRROR_BAM;
             pEngine->SummonPopup(6);
             break;
         case 8:
             // NOTE: Uninline.
-            pEngine->PushOptions(&(pGame->m_cOptions));
+            pEngine->PushOptions(pGame->GetOptions());
 
             pEngine->SummonPopup(7);
             break;
         case 9:
             // NOTE: Uninline.
-            pEngine->PushOptions(&(pGame->m_cOptions));
+            pEngine->PushOptions(pGame->GetOptions());
 
             pEngine->SummonPopup(8);
             break;
@@ -2625,13 +2625,13 @@ void CUIControlButtonOptionsGameCommand::OnLButtonClick(CPoint pt)
         switch (m_nID) {
         case 5:
             // NOTE: Uninline.
-            pEngine->PushOptions(&(pGame->m_cOptions));
+            pEngine->PushOptions(pGame->GetOptions());
 
             pEngine->SummonPopup(9);
             break;
         case 6:
             // NOTE: Uninline.
-            pEngine->PushOptions(&(pGame->m_cOptions));
+            pEngine->PushOptions(pGame->GetOptions());
 
             pEngine->SummonPopup(10);
             break;
@@ -2645,7 +2645,7 @@ void CUIControlButtonOptionsGameCommand::OnLButtonClick(CPoint pt)
         switch (m_nID) {
         case 13:
             // NOTE: Uninline.
-            pEngine->PushOptions(&(pGame->m_cOptions));
+            pEngine->PushOptions(pGame->GetOptions());
 
             pEngine->SummonPopup(12);
             break;
@@ -2835,7 +2835,7 @@ void CUIControlButtonOptionsHotArea::OnHotAreaClick(CPoint pt)
             dwStrId = 18021;
             break;
         case 27:
-            if (!g_pBaldurChitin->GetObjectGame()->m_cOptions.field_4) {
+            if (!g_pBaldurChitin->GetObjectGame()->GetOptions()->field_4) {
                 return;
             }
 

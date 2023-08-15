@@ -1255,7 +1255,7 @@ float CBaldurChitin::GetSoundReverbMix(int nSoundChannel, int nReverb)
 BOOL CBaldurChitin::GetEAXActive()
 {
     if (m_pObjectGame != NULL) {
-        return m_pObjectGame->m_cOptions.m_bEnvironmentalAudio;
+        return m_pObjectGame->GetOptions()->m_bEnvironmentalAudio;
     }
 
     return FALSE;
@@ -1314,7 +1314,7 @@ BYTE CBaldurChitin::GetNumberSoundChannels()
 LONG CBaldurChitin::GetMovieVolume()
 {
     // NOTE: Looks odd, generated binary does not match.
-    LONG v1 = m_pObjectGame->m_cOptions.m_nVolumeMovie - 100;
+    LONG v1 = m_pObjectGame->GetOptions()->m_nVolumeMovie - 100;
     return -(v1 * v1);
 }
 
@@ -1350,7 +1350,7 @@ void CBaldurChitin::SetSoundVolumes()
 // 0x424D90
 void CBaldurChitin::LoadOptions()
 {
-    CGameOptions* pOptions = &(m_pObjectGame->m_cOptions);
+    CGameOptions* pOptions = m_pObjectGame->GetOptions();
 
     pOptions->m_nTooltips = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         TOOLTIPS_KEY,
@@ -1470,7 +1470,7 @@ void CBaldurChitin::PreLoadFonts()
 // 0x425040
 void CBaldurChitin::SaveOptions()
 {
-    CGameOptions* pOptions = &(m_pObjectGame->m_cOptions);
+    CGameOptions* pOptions = m_pObjectGame->GetOptions();
     CString sString;
 
     if (m_bFullscreen) {

@@ -1622,7 +1622,7 @@ BOOL CScreenCreateChar::ResetAbility(CGameSprite* pSprite, const CString& sMin, 
             nRolls--;
         }
     } else {
-        nAbility = static_cast<BYTE>(g_pBaldurChitin->GetObjectGame()->m_cOptions.m_nDefaultCharGenPoints);
+        nAbility = static_cast<BYTE>(g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nDefaultCharGenPoints);
     }
 
     BOOL bResult;
@@ -1769,8 +1769,8 @@ void CScreenCreateChar::AllocateAbilities(CGameSprite* pSprite)
 {
     CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
-    INT v1 = pGame->m_cOptions.m_nDefaultCharGenPoints;
-    m_nExtraAbilityPoints = pGame->m_cOptions.m_nDefaultCharGenPointsPool + 6 * v1;
+    INT v1 = pGame->GetOptions()->m_nDefaultCharGenPoints;
+    m_nExtraAbilityPoints = pGame->GetOptions()->m_nDefaultCharGenPointsPool + 6 * v1;
 
     ResetAbility(pSprite,
         CRuleTables::MIN_STR,

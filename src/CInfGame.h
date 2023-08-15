@@ -136,6 +136,7 @@ public:
     CVidBitmap* GetMasterBitmap();
     CNamedCreatureVariableHash* GetNamedCreatures();
     void SetTempCursor(BYTE tempCursor);
+    CGameOptions* GetOptions();
 
     const CRuleTables& GetRuleTables() { return m_ruleTables; }
 

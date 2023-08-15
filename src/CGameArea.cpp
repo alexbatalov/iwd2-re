@@ -144,17 +144,17 @@ void CGameArea::OnActivation()
         g_pBaldurChitin->cSoundMixer.UpdateSoundList();
 
         if (g_pBaldurChitin->field_1C4A == 1 && byte_8D2138 == TRUE) {
-            if (dword_8D212C == g_pBaldurChitin->GetObjectGame()->m_cOptions.m_nVolumeAmbients) {
+            if (dword_8D212C == g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nVolumeAmbients) {
                 g_pBaldurChitin->cSoundMixer.SetChannelVolume(16, dword_8D212C);
                 g_pBaldurChitin->cSoundMixer.SetChannelVolume(17, dword_8D212C);
             } else {
-                g_pBaldurChitin->cSoundMixer.SetChannelVolume(16, g_pBaldurChitin->GetObjectGame()->m_cOptions.m_nVolumeAmbients);
-                g_pBaldurChitin->cSoundMixer.SetChannelVolume(17, g_pBaldurChitin->GetObjectGame()->m_cOptions.m_nVolumeAmbients);
+                g_pBaldurChitin->cSoundMixer.SetChannelVolume(16, g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nVolumeAmbients);
+                g_pBaldurChitin->cSoundMixer.SetChannelVolume(17, g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nVolumeAmbients);
             }
             byte_8D2138 = FALSE;
         } else {
-            g_pBaldurChitin->cSoundMixer.SetChannelVolume(16, g_pBaldurChitin->GetObjectGame()->m_cOptions.m_nVolumeAmbients);
-            g_pBaldurChitin->cSoundMixer.SetChannelVolume(17, g_pBaldurChitin->GetObjectGame()->m_cOptions.m_nVolumeAmbients);
+            g_pBaldurChitin->cSoundMixer.SetChannelVolume(16, g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nVolumeAmbients);
+            g_pBaldurChitin->cSoundMixer.SetChannelVolume(17, g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nVolumeAmbients);
         }
 
         SetTimeOfDay(m_pGame->GetWorldTimer()->m_gameTime % CTimerWorld::TIMESCALE_MSEC_PER_DAY, FALSE);

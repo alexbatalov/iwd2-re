@@ -164,7 +164,7 @@ void CUIManager::TimerAsynchronousUpdate()
             while (pos != NULL) {
                 CUIPanel* pPanel = m_lPanels.GetNext(pos);
                 if (!pPanel->m_bNeedAsyncUpdate) {
-                    if (g_pBaldurChitin->GetObjectGame()->m_cOptions.m_nTooltips == INT_MAX && !field_76) {
+                    if (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nTooltips == INT_MAX && !field_76) {
                         continue;
                     }
 
@@ -457,7 +457,7 @@ void CUIManager::InvalidateCursorRect(const CRect& rect)
 void CUIManager::ForceToolTip()
 {
     field_76 = 1;
-    field_1C = g_pBaldurChitin->GetObjectGame()->m_cOptions.m_nTooltips;
+    field_1C = g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nTooltips;
 }
 
 // 0x4D46F0

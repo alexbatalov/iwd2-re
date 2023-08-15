@@ -153,7 +153,7 @@ DWORD CUIPanel::TimerAsynchronousUpdate()
         while (pos != NULL) {
             CUIControlBase* pControl = m_lControls.GetNext(pos);
             if (pControl->m_bActive
-                && (g_pBaldurChitin->GetObjectGame()->m_cOptions.m_nTooltips != INT_MAX || m_pManager->field_76)
+                && (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nTooltips != INT_MAX || m_pManager->field_76)
                 && pControl->IsOver(pt)) {
                 pControl->TimerAsynchronousUpdate(TRUE);
                 nID = pControl->m_nID;
