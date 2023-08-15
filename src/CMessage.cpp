@@ -7,6 +7,7 @@
 #include "CScreenLoad.h"
 #include "CScreenMultiPlayer.h"
 #include "CScreenSinglePlayer.h"
+#include "CUtil.h"
 
 // 0x84CF76
 const BYTE CBaldurMessage::DELETEAREA_EMPTY_VOTE = 101;
@@ -287,6 +288,65 @@ CString CBaldurMessage::GetVersionControlShutdownClientString()
 
 // -----------------------------------------------------------------------------
 
+// 0x45DEA0
+CMessage::CMessage(LONG caller, LONG target)
+{
+    m_sourceId = caller;
+    m_targetId = target;
+}
+
+// 0x4051F0
+CMessage::~CMessage()
+{
+}
+
+// 0x405140
+SHORT CMessage::GetCommType()
+{
+    // __FILE__: .\Include\CMessage.h
+    // __LINE__: 965
+    UTIL_ASSERT(FALSE);
+}
+
+// 0x405160
+BYTE CMessage::GetMsgType()
+{
+    // __FILE__: .\Include\CMessage.h
+    // __LINE__: 966
+    UTIL_ASSERT(FALSE);
+}
+
+// 0x405180
+BYTE CMessage::GetMsgSubType()
+{
+    // __FILE__: .\Include\CMessage.h
+    // __LINE__: 967
+    UTIL_ASSERT(FALSE);
+}
+
+// 0x4051A0
+void CMessage::MarshalMessage(BYTE** pData, DWORD* dwSize)
+{
+    *pData = NULL;
+    *dwSize = 0;
+}
+
+// 0x4051C0
+BOOL CMessage::UnmarshalMessage(BYTE* pData, DWORD dwSize)
+{
+    return FALSE;
+}
+
+// 0x4051D0
+void CMessage::Run()
+{
+    // __FILE__: .\Include\CMessage.h
+    // __LINE__: 972
+    UTIL_ASSERT(FALSE);
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x4F7470
 CMessageHandler::CMessageHandler()
 {
@@ -382,4 +442,10 @@ void CMessageHandler::PostAsynchronousUpdate()
 
         g_pBaldurChitin->GetBaldurMessage()->m_bPlayerShutdown = FALSE;
     }
+}
+
+// 0x4F7500
+void CMessageHandler::AddMessage(CMessage* message, BOOL bForcePassThrough)
+{
+    // TODO: Incomplete.
 }

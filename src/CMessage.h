@@ -90,12 +90,31 @@ public:
     /* 00F6 */ unsigned char field_F6;
 };
 
+class CMessage {
+public:
+    CMessage(LONG caller, LONG target);
+    /* 0000 */ virtual ~CMessage();
+    /* 0004 */ virtual SHORT GetCommType();
+    /* 0008 */ virtual BYTE GetMsgType();
+    /* 000C */ virtual BYTE GetMsgSubType();
+    /* 0010 */ virtual void MarshalMessage(BYTE** pData, DWORD* dwSize);
+    /* 0014 */ virtual BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize);
+    /* 0018 */ virtual void Run();
+
+    LONG GetTarget() { return m_targetId; }
+    LONG GetSource() { return m_sourceId; }
+
+    /* 0004 */ LONG m_targetId;
+    /* 0008 */ LONG m_sourceId;
+};
+
 class CMessageHandler {
 public:
     CMessageHandler();
     ~CMessageHandler();
     void AsynchronousUpdate();
     void PostAsynchronousUpdate();
+    void AddMessage(CMessage* message, BOOL bForcePassThrough);
 
     /* 001C */ BOOLEAN m_bLastArbitrationLockStatus;
 };
