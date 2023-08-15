@@ -60,6 +60,7 @@ public:
     void UpdateBuyDrinksPanel();
     void OnBuyItemButtonClick();
     void OnSellItemButtonClick();
+    void OnIdentifyItemButtonClick();
     void CheckEnablePanels(BOOL bEnable);
     void OnCancelButtonClick();
     void CloseBag(BOOL bSaveFile);
@@ -114,6 +115,13 @@ class CUIControlButtonStoreBuySellSell : public CUIControlButton {
 public:
     CUIControlButtonStoreBuySellSell(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonStoreBuySellSell() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonStoreIdentifyIdentify : public CUIControlButton {
+public:
+    CUIControlButtonStoreIdentifyIdentify(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonStoreIdentifyIdentify() override;
     void OnLButtonClick(CPoint pt) override;
 };
 
