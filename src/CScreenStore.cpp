@@ -450,6 +450,12 @@ void CScreenStore::CancelEngine()
     m_bInCancelEngine = FALSE;
 }
 
+// 0x67DD30
+void CScreenStore::OnErrorButtonClick(INT nButton)
+{
+    // TODO: Incomplete.
+}
+
 // 0x67E420
 void CScreenStore::GetChatEditBoxStatus(CString& sChatText, BOOL& bInputCapture)
 {
@@ -871,4 +877,32 @@ void CUIControlButtonStoreBuyDrinksDrink::OnLButtonClick(CPoint pt)
     pStore->OnBuyDrinkButtonClick(m_nID - CRESUI_CONTROLBUTTONID_STORE_BUYDRINK_DRINK0);
 
     renderLock.Unlock();
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x683C30
+CUIControlButtonStoreError::CUIControlButtonStoreError(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->GetTlkTable().Fetch(11973, strRes); // "Done"
+    SetText(strRes.szText);
+}
+
+// 0x683CE0
+CUIControlButtonStoreError::~CUIControlButtonStoreError()
+{
+}
+
+// 0x683D80
+void CUIControlButtonStoreError::OnLButtonClick(CPoint pt)
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 13133
+    UTIL_ASSERT(pStore != NULL);
+
+    pStore->OnErrorButtonClick(m_nID);
 }

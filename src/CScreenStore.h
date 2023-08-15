@@ -70,6 +70,7 @@ public:
     void OnBuyDrinkButtonClick(INT nButton);
     void CheckEnablePanels(BOOL bEnable);
     void OnCancelButtonClick();
+    void OnErrorButtonClick(INT nButton);
     void CloseBag(BOOL bSaveFile);
 
     /* 0106 */ CKeyInfo m_pVirtualKeys[CSCREENSTORE_VIRTUAL_KEYS];
@@ -172,6 +173,13 @@ class CUIControlButtonStoreBuyDrinksDrink : public CUIControlButton {
 public:
     CUIControlButtonStoreBuyDrinksDrink(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonStoreBuyDrinksDrink() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonStoreError : public CUIControlButton {
+public:
+    CUIControlButtonStoreError(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonStoreError() override;
     void OnLButtonClick(CPoint pt) override;
 };
 
