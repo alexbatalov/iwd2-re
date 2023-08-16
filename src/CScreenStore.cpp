@@ -1593,6 +1593,41 @@ BOOL CUIControlButtonStoreGroupItem::Render(BOOL bForce)
 
 // -----------------------------------------------------------------------------
 
+// 0x6828E0
+CUIControlButtonStoreStoreSpell::CUIControlButtonStoreStoreSpell(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON | RBUTTON, 0)
+{
+    m_nSelectedFrame = 0;
+    m_resRef = "";
+}
+
+// 0x682990
+CUIControlButtonStoreStoreSpell::~CUIControlButtonStoreStoreSpell()
+{
+}
+
+// 0x682A30
+void CUIControlButtonStoreStoreSpell::OnLButtonClick(CPoint pt)
+{
+    // TODO: Incomplete.
+}
+
+// 0x682C00
+void CUIControlButtonStoreStoreSpell::OnRButtonClick(CPoint pt)
+{
+    // TODO: Incomplete.
+}
+
+// 0x682D10
+BOOL CUIControlButtonStoreStoreSpell::Render(BOOL bForce)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x683080
 CUIControlButtonStoreRentRoomRoomSelect::CUIControlButtonStoreRentRoomRoomSelect(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
