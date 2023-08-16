@@ -30,6 +30,9 @@
 // Seen in `CScreenSinglePlayer::UpdateModifyCharacterPanel` assertion.
 #define CINFGAME_MAXCHARACTERS 6
 
+// Seen in `CInfGame::GetArea` assertion.
+#define CINFGAME_MAX_AREAS 12
+
 class CGameArea;
 class CItem;
 
@@ -74,6 +77,7 @@ public:
     BOOLEAN ExtendedDayNightAreaActive();
     void UpdatePortraitToolTip(DWORD dwControlId, STRREF dwStrId);
     CGameArea* GetArea(CString sName);
+    CGameArea* GetArea(SHORT nArea);
     BOOL Is3DSound(int nSoundChannel);
     float GetSoundReverbMix(int nSoundChannel, int nReverb);
     CResRef GetAnimationBam(SHORT nPortrait, BYTE range);
@@ -203,7 +207,7 @@ public:
     /* 3672 */ CVidBitmap m_rgbMasterBitmap;
     /* 372C */ CGameObjectArray m_cObjectArray;
     /* 37E0 */ BYTE m_visibleArea;
-    /* 37E2 */ CGameArea* m_gameAreas[12];
+    /* 37E2 */ CGameArea* m_gameAreas[CINFGAME_MAX_AREAS];
     /* 3812 */ CGameArea* m_pGameAreaMaster;
     /* 3816 */ LONG m_characters[6];
     /* 382E */ LONG m_characterPortraits[6];

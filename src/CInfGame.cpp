@@ -1905,7 +1905,7 @@ void CInfGame::EnablePortrait(BYTE nControlId, BOOL bEnable)
 // 0x5AFE60
 BOOLEAN CInfGame::ExtendedDayNightAreaActive()
 {
-    for (int index = 0; index < 12; index++) {
+    for (int index = 0; index < CINFGAME_MAX_AREAS; index++) {
         if ((m_gameAreas[index]->m_header.m_areaType & 0x40) != 0) {
             return TRUE;
         }
@@ -1967,7 +1967,7 @@ void CInfGame::UpdatePortraitToolTip(DWORD dwControlId, STRREF dwStrId)
 // 0x5B7510
 CGameArea* CInfGame::GetArea(CString sName)
 {
-    for (int index = 0; index < 12; index++) {
+    for (int index = 0; index < CINFGAME_MAX_AREAS; index++) {
         if (m_gameAreas[index] != NULL) {
             if (m_gameAreas[index]->m_resRef == sName) {
                 return m_gameAreas[index];
@@ -1976,6 +1976,16 @@ CGameArea* CInfGame::GetArea(CString sName)
     }
 
     return NULL;
+}
+
+// 0x68DE70
+CGameArea* CInfGame::GetArea(SHORT nArea)
+{
+    // __FILE__: .\Include\InfGame.h
+    // __LINE__: 1416
+    UTIL_ASSERT(nArea < CINFGAME_MAX_AREAS);
+
+    return m_gameAreas[nArea];
 }
 
 // 0x5BB800
@@ -2351,7 +2361,7 @@ void CInfGame::sub_5BF6A0(int a1)
 // 0x5C04F0
 BOOLEAN CInfGame::FindAreaID(DWORD nAreaId)
 {
-    for (int index = 0; index < 12; index++) {
+    for (int index = 0; index < CINFGAME_MAX_AREAS; index++) {
         if (m_gameAreas[index] != NULL) {
             if (m_gameAreas[index]->m_nInitialAreaId == nAreaId) {
                 return TRUE;
