@@ -26,6 +26,25 @@ CRITICAL_SECTION CScreenStore::m_critSect;
 // 0x8F8198
 BOOLEAN CScreenStore::m_bInCancelEngine;
 
+// -----------------------------------------------------------------------------
+
+// 0x672360
+CScreenStoreItem::CScreenStoreItem()
+{
+    m_cResSpell = "";
+    m_pItem = NULL;
+    m_bEnabled = FALSE;
+    m_bSelected = FALSE;
+    m_nValue = 0;
+    m_nSingleValue = 0;
+    m_nStoreCount = 1;
+    m_nMaxCount = 1;
+    m_nCount = 1;
+    m_nSlot = -1;
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x6709E0
 CScreenStore::CScreenStore()
 {

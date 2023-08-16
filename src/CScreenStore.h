@@ -19,6 +19,22 @@
 
 class CStore;
 
+class CScreenStoreItem {
+public:
+    CScreenStoreItem();
+
+    /* 0000 */ CResRef m_cResSpell;
+    /* 0008 */ CItem* m_pItem;
+    /* 000C */ BOOL m_bSelected;
+    /* 0010 */ BOOL m_bEnabled;
+    /* 0014 */ INT m_nSlot;
+    /* 0018 */ LONG m_nValue;
+    /* 001C */ LONG m_nSingleValue;
+    /* 0020 */ DWORD m_nCount;
+    /* 0024 */ DWORD m_nMaxCount;
+    /* 0028 */ DWORD m_nStoreCount;
+};
+
 class CScreenStore : public CBaldurEngine {
 public:
     static const CString TOKEN_HP;
