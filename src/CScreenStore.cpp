@@ -861,6 +861,158 @@ void CUIControlScrollBarStoreBuyDrinksDrink::InvalidateItems()
 
 // -----------------------------------------------------------------------------
 
+// 0x680CB0
+CUIControlScrollBarStoreSpell::CUIControlScrollBarStoreSpell(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo)
+    : CUIControlScrollBar(panel, controlInfo)
+{
+}
+
+// 0x632C00
+CUIControlScrollBarStoreSpell::~CUIControlScrollBarStoreSpell()
+{
+}
+
+// NOTE: Inlined.
+void CUIControlScrollBarStoreSpell::UpdateScrollBar()
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 11118
+    UTIL_ASSERT(pStore != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 11120
+    UTIL_ASSERT(pGame != NULL);
+
+    AdjustScrollBar(pStore->m_nTopSpellItem, pStore->GetNumSpellItems(), 6);
+}
+
+// 0x680CD0
+void CUIControlScrollBarStoreSpell::OnScrollUp()
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 11150
+    UTIL_ASSERT(pStore != NULL);
+
+    INT nNewTopSpellItem = max(pStore->m_nTopSpellItem - 1, 0);
+    if (nNewTopSpellItem != pStore->m_nTopSpellItem) {
+        // NOTE: Uninline.
+        pStore->SetTopSpellItem(nNewTopSpellItem);
+
+        InvalidateItems();
+
+        // NOTE: Uninline.
+        UpdateScrollBar();
+    }
+}
+
+// 0x680DC0
+void CUIControlScrollBarStoreSpell::OnScrollDown()
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 11186
+    UTIL_ASSERT(pStore != NULL);
+
+    INT nNewTopSpellItem = max(min(pStore->m_nTopSpellItem + 1, pStore->GetNumSpellItems() - 6), 0);
+    if (nNewTopSpellItem != pStore->m_nTopSpellItem) {
+        // NOTE: Uninline.
+        pStore->SetTopSpellItem(nNewTopSpellItem);
+
+        InvalidateItems();
+
+        // NOTE: Uninline.
+        UpdateScrollBar();
+    }
+}
+
+// 0x680EC0
+void CUIControlScrollBarStoreSpell::OnPageUp(DWORD nLines)
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 11222
+    UTIL_ASSERT(pStore != NULL);
+
+    INT nStep = min(nLines, 5);
+    INT nNewTopSpellItem = max(pStore->m_nTopSpellItem - nStep, 0);
+    if (nNewTopSpellItem != pStore->m_nTopSpellItem) {
+        // NOTE: Uninline.
+        pStore->SetTopSpellItem(nNewTopSpellItem);
+
+        InvalidateItems();
+
+        // NOTE: Uninline.
+        UpdateScrollBar();
+    }
+}
+
+// 0x680FC0
+void CUIControlScrollBarStoreSpell::OnPageDown(DWORD nLines)
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 11262
+    UTIL_ASSERT(pStore != NULL);
+
+    INT nStep = nStep = min(nLines, 5);
+    INT nNewTopSpellItem = max(min(pStore->m_nTopSpellItem + nStep, pStore->GetNumSpellItems() - 6), 0);
+    if (nNewTopSpellItem != pStore->m_nTopSpellItem) {
+        // NOTE: Uninline.
+        pStore->SetTopSpellItem(nNewTopSpellItem);
+
+        InvalidateItems();
+
+        // NOTE: Uninline.
+        UpdateScrollBar();
+    }
+}
+
+// 0x6810E0
+void CUIControlScrollBarStoreSpell::OnScroll()
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 11302
+    UTIL_ASSERT(pStore != NULL);
+
+    // NOTE: Uninline.
+    pStore->SetTopSpellItem(max(field_144 * (pStore->GetNumSpellItems() - 6), 0) / field_142);
+
+    InvalidateItems();
+
+    // NOTE: Uninline.
+    UpdateScrollBar();
+}
+
+// 0x6811D0
+void CUIControlScrollBarStoreSpell::InvalidateItems()
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 11334
+    UTIL_ASSERT(pStore != NULL);
+
+    CSingleLock renderLock(&(pStore->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    pStore->UpdateMainPanel();
+
+    renderLock.Unlock();
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x683080
 CUIControlButtonStoreRentRoomRoomSelect::CUIControlButtonStoreRentRoomRoomSelect(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)

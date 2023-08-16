@@ -161,6 +161,19 @@ public:
     void UpdateScrollBar();
 };
 
+class CUIControlScrollBarStoreSpell : public CUIControlScrollBar {
+public:
+    CUIControlScrollBarStoreSpell(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo);
+    ~CUIControlScrollBarStoreSpell() override;
+    void OnScroll() override;
+    void OnScrollUp() override;
+    void OnScrollDown() override;
+    void OnPageUp(DWORD nLines) override;
+    void OnPageDown(DWORD nLines) override;
+    void InvalidateItems();
+    void UpdateScrollBar();
+};
+
 class CUIControlButtonStoreRentRoomRoomSelect : public CUIControlButton3State {
 public:
     CUIControlButtonStoreRentRoomRoomSelect(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
