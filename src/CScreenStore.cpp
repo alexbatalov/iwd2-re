@@ -676,13 +676,13 @@ void CScreenStore::DestroySpellItems()
 
     POSITION pos = m_lSpellItems.GetHeadPosition();
     while (pos != NULL) {
-        CScreenStoreItem* pItem = m_lStoreItems.GetAt(pos);
+        CScreenStoreItem* pItem = m_lSpellItems.GetAt(pos);
         delete pItem;
 
-        m_lStoreItems.GetNext(pos);
+        m_lSpellItems.GetNext(pos);
     }
 
-    m_lStoreItems.RemoveAll();
+    m_lSpellItems.RemoveAll();
 }
 
 // 0x677980
