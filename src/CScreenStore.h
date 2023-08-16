@@ -62,6 +62,8 @@ public:
     void UpdateBuySpellPanel();
     void UpdateRentRoomPanel();
     void UpdateBuyDrinksPanel();
+    INT GetNumDrinkItems();
+    void SetTopDrinkItem(INT nTopDrinkItem);
     void OnBuyItemButtonClick();
     void OnSellItemButtonClick();
     void OnIdentifyItemButtonClick();

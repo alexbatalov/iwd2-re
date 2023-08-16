@@ -390,6 +390,22 @@ void CScreenStore::UpdateBuyDrinksPanel()
     // TODO: Incomplete.
 }
 
+// NOTE: Inlined.
+INT CScreenStore::GetNumDrinkItems()
+{
+    return m_pStore->m_nDrinks;
+}
+
+// 0x6765D0
+void CScreenStore::SetTopDrinkItem(INT nTopDrinkItem)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 3468
+    UTIL_ASSERT(0 <= nTopDrinkItem && nTopDrinkItem <= GetNumDrinkItems());
+
+    m_nTopDrinkItem = nTopDrinkItem;
+}
+
 // 0x678050
 void CScreenStore::OnBuyItemButtonClick()
 {
