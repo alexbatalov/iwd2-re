@@ -91,6 +91,7 @@ public:
     INT GetNumDrinkItems();
     void SetTopDrinkItem(INT nTopDrinkItem);
     void GetGroupItem(INT nIndex, CScreenStoreItem& cItem);
+    void DestroyGroupItems(BOOL bShutDown);
     void OnBuyItemButtonClick();
     void OnSellItemButtonClick();
     void OnIdentifyItemButtonClick();
