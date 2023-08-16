@@ -100,6 +100,7 @@ public:
     void DestroyIdentifyItems();
     void UpdateGroupCost();
     void UpdateStoreCost();
+    void UpdateSpellCost();
     void OnBuyItemButtonClick();
     void OnSellItemButtonClick();
     void OnIdentifyItemButtonClick();
@@ -131,7 +132,7 @@ public:
     /* 04EC */ CStore* m_pBag;
     /* 04F0 */ LONG m_nStoreCost;
     /* 04F4 */ LONG m_nGroupCost;
-    /* 04F8 */ int field_4F8;
+    /* 04F8 */ DWORD m_dwSpellCost;
     /* 04FC */ int field_4FC;
     /* 0500 */ DWORD m_dwRoomType;
     /* 0580 */ int field_580;

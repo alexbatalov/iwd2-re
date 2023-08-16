@@ -190,7 +190,7 @@ void CScreenStore::EngineGameInit()
     m_nTopIdentifyItem = 0;
     m_nStoreCost = 0;
     m_nGroupCost = 0;
-    field_4F8 = 0;
+    m_dwSpellCost = 0;
     field_4FC = 0;
     m_pStore = 0;
     m_pBag = NULL;
@@ -773,6 +773,22 @@ void CScreenStore::UpdateStoreCost()
         }
 
         m_lStoreItems.GetNext(pos);
+    }
+}
+
+// 0x677E30
+void CScreenStore::UpdateSpellCost()
+{
+    m_dwSpellCost = 0;
+
+    POSITION pos = m_lSpellItems.GetHeadPosition();
+    while (pos != NULL) {
+        CScreenStoreItem* pItem = m_lSpellItems.GetAt(pos);
+        if (pItem->m_bSelected) {
+            m_dwSpellCost += pItem->m_nValue;
+        }
+
+        m_lSpellItems.GetNext(pos);
     }
 }
 
