@@ -65,6 +65,8 @@ public:
     void UpdateBuyDrinksPanel();
     INT GetNumGroupItems();
     void SetTopGroupItem(INT nTopGroupItem);
+    INT GetNumIdentifyItems();
+    void SetTopIdentifyItem(INT nTopIdentifyItem);
     INT GetNumSpellItems();
     void SetTopSpellItem(INT nTopSpellItem);
     INT GetNumDrinkItems();
@@ -92,7 +94,8 @@ public:
     /* 0464 */ int field_464;
     /* 0484 */ INT m_nTopSpellItem;
     /* 0488 */ CPtrList m_lSpellItems;
-    /* 04A4 */ int field_4A4;
+    /* 04A4 */ INT m_nTopIdentifyItem;
+    /* 04A8 */ CPtrList m_lIdentifyItems;
     /* 04C4 */ INT m_nTopDrinkItem;
     /* 04E8 */ CStore* m_pStore;
     /* 04EC */ CStore* m_pBag;
@@ -155,6 +158,19 @@ class CUIControlScrollBarStoreBuyDrinksDrink : public CUIControlScrollBar {
 public:
     CUIControlScrollBarStoreBuyDrinksDrink(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo);
     ~CUIControlScrollBarStoreBuyDrinksDrink() override;
+    void OnScroll() override;
+    void OnScrollUp() override;
+    void OnScrollDown() override;
+    void OnPageUp(DWORD nLines) override;
+    void OnPageDown(DWORD nLines) override;
+    void InvalidateItems();
+    void UpdateScrollBar();
+};
+
+class CUIControlScrollBarStoreIdentify : public CUIControlScrollBar {
+public:
+    CUIControlScrollBarStoreIdentify(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo);
+    ~CUIControlScrollBarStoreIdentify() override;
     void OnScroll() override;
     void OnScrollUp() override;
     void OnScrollDown() override;
