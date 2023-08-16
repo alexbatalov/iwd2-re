@@ -63,6 +63,8 @@ public:
     void UpdateBuySpellPanel();
     void UpdateRentRoomPanel();
     void UpdateBuyDrinksPanel();
+    INT GetNumSpellItems();
+    void SetTopSpellItem(INT nTopSpellItem);
     INT GetNumDrinkItems();
     void SetTopDrinkItem(INT nTopDrinkItem);
     void OnBuyItemButtonClick();
@@ -86,6 +88,7 @@ public:
     /* 0444 */ int field_444;
     /* 0464 */ int field_464;
     /* 0484 */ INT m_nTopSpellItem;
+    /* 0488 */ CPtrList m_lSpellItems;
     /* 04A4 */ int field_4A4;
     /* 04C4 */ INT m_nTopDrinkItem;
     /* 04E8 */ CStore* m_pStore;

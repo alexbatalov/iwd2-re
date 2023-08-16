@@ -390,6 +390,22 @@ void CScreenStore::UpdateBuyDrinksPanel()
 }
 
 // NOTE: Inlined.
+INT CScreenStore::GetNumSpellItems()
+{
+    return m_lSpellItems.GetCount();
+}
+
+// 0x676590
+void CScreenStore::SetTopSpellItem(INT nTopSpellItem)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 3441
+    UTIL_ASSERT(0 <= nTopSpellItem && nTopSpellItem <= GetNumSpellItems());
+
+    m_nTopSpellItem = nTopSpellItem;
+}
+
+// NOTE: Inlined.
 INT CScreenStore::GetNumDrinkItems()
 {
     return m_pStore->m_nDrinks;
