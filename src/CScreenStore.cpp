@@ -556,6 +556,49 @@ void CScreenStore::DestroyGroupItems(BOOL bShutDown)
     }
 }
 
+// 0x676D80
+void CScreenStore::GetStoreItem(INT nIndex, CScreenStoreItem& cItem)
+{
+    CScreenStoreItem cDefaultItem;
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 3896
+    UTIL_ASSERT(pGame != NULL);
+
+    // TODO: `See CScreenStore::GetGroupItem`.
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 3898
+    // UTIL_ASSERT(pSave != NULL);
+
+    if (nIndex >= 0 && nIndex < m_lStoreItems.GetCount()) {
+        CScreenStoreItem* pItem = m_lStoreItems.GetAt(m_lStoreItems.FindIndex(nIndex));
+        cItem.m_cResSpell = pItem->m_cResSpell;
+        cItem.m_pItem = pItem->m_pItem;
+        cItem.m_bSelected = pItem->m_bSelected;
+        cItem.m_bEnabled = pItem->m_bEnabled;
+        cItem.m_nSlot = pItem->m_nSlot;
+        cItem.m_nValue = pItem->m_nValue;
+        cItem.m_nSingleValue = pItem->m_nSingleValue;
+        cItem.m_nCount = pItem->m_nCount;
+        cItem.m_nMaxCount = pItem->m_nMaxCount;
+        cItem.m_nStoreCount = pItem->m_nStoreCount;
+    } else {
+        cItem.m_cResSpell = cDefaultItem.m_cResSpell;
+        cItem.m_pItem = cDefaultItem.m_pItem;
+        cItem.m_bSelected = cDefaultItem.m_bSelected;
+        cItem.m_bEnabled = cDefaultItem.m_bEnabled;
+        cItem.m_nSlot = cDefaultItem.m_nSlot;
+        cItem.m_nValue = cDefaultItem.m_nValue;
+        cItem.m_nSingleValue = cDefaultItem.m_nSingleValue;
+        cItem.m_nCount = cDefaultItem.m_nCount;
+        cItem.m_nMaxCount = cDefaultItem.m_nMaxCount;
+        cItem.m_nStoreCount = cDefaultItem.m_nStoreCount;
+    }
+}
+
 // 0x678050
 void CScreenStore::OnBuyItemButtonClick()
 {
