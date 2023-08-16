@@ -235,6 +235,18 @@ public:
     /* 066E */ CItem m_item;
 };
 
+class CUIControlButtonStoreGroupItem : public CUIControlButton3State {
+public:
+    CUIControlButtonStoreGroupItem(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonStoreGroupItem() override;
+    BOOL Render(BOOL bForce) override;
+    void OnLButtonClick(CPoint pt) override;
+    void OnLButtonDoubleClick(CPoint pt) override;
+    void OnRButtonClick(CPoint pt) override;
+
+    /* 066E */ CItem m_item;
+};
+
 class CUIControlButtonStoreRentRoomRoomSelect : public CUIControlButton3State {
 public:
     CUIControlButtonStoreRentRoomRoomSelect(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

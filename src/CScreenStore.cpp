@@ -1551,6 +1551,48 @@ BOOL CUIControlButtonStoreStoreItem::Render(BOOL bForce)
 
 // -----------------------------------------------------------------------------
 
+// 0x681D90
+CUIControlButtonStoreGroupItem::CUIControlButtonStoreGroupItem(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON | RBUTTON, 0)
+{
+    m_nSelectedFrame = 0;
+}
+
+// 0x681E30
+CUIControlButtonStoreGroupItem::~CUIControlButtonStoreGroupItem()
+{
+}
+
+// 0x681EE0
+void CUIControlButtonStoreGroupItem::OnLButtonClick(CPoint pt)
+{
+    // TODO: Incomplete.
+}
+
+// NOTE: Odd location.
+//
+// 0x685090
+void CUIControlButtonStoreGroupItem::OnLButtonDoubleClick(CPoint pt)
+{
+    // TODO: Incomplete.
+}
+
+// 0x6821A0
+void CUIControlButtonStoreGroupItem::OnRButtonClick(CPoint pt)
+{
+    // TODO: Incomplete.
+}
+
+// 0x6822F0
+BOOL CUIControlButtonStoreGroupItem::Render(BOOL bForce)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x683080
 CUIControlButtonStoreRentRoomRoomSelect::CUIControlButtonStoreRentRoomRoomSelect(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
