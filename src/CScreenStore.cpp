@@ -554,6 +554,8 @@ void CScreenStore::DestroyGroupItems(BOOL bShutDown)
 
         m_lGroupItems.GetNext(pos);
     }
+
+    m_lGroupItems.RemoveAll();
 }
 
 // 0x676D80
