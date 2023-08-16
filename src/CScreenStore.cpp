@@ -667,6 +667,22 @@ void CScreenStore::GetSpellItem(INT nIndex, CScreenStoreItem& cItem)
     }
 }
 
+// 0x677950
+void CScreenStore::DestroySpellItems()
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    POSITION pos = m_lSpellItems.GetHeadPosition();
+    while (pos != NULL) {
+        CScreenStoreItem* pItem = m_lStoreItems.GetAt(pos);
+        delete pItem;
+
+        m_lStoreItems.GetNext(pos);
+    }
+
+    m_lStoreItems.RemoveAll();
+}
+
 // 0x678050
 void CScreenStore::OnBuyItemButtonClick()
 {
