@@ -93,6 +93,7 @@ public:
     void GetGroupItem(INT nIndex, CScreenStoreItem& cItem);
     void DestroyGroupItems(BOOL bShutDown);
     void GetStoreItem(INT nIndex, CScreenStoreItem& cItem);
+    void DestroyStoreItems(BOOL bShutDown);
     void OnBuyItemButtonClick();
     void OnSellItemButtonClick();
     void OnIdentifyItemButtonClick();

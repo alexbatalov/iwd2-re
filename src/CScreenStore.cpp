@@ -599,6 +599,31 @@ void CScreenStore::GetStoreItem(INT nIndex, CScreenStoreItem& cItem)
     }
 }
 
+// 0x677430
+void CScreenStore::DestroyStoreItems(BOOL bShutDown)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    POSITION pos = m_lStoreItems.GetHeadPosition();
+    while (pos != NULL) {
+        CScreenStoreItem* pItem = m_lStoreItems.GetAt(pos);
+
+        if (bShutDown || pGame == NULL) {
+            if (pItem->m_pItem != NULL) {
+                delete pItem->m_pItem;
+            }
+        } else {
+            pGame->AddDisposableItem(pItem->m_pItem);
+        }
+
+        delete pItem;
+
+        m_lStoreItems.GetNext(pos);
+    }
+
+    m_lStoreItems.RemoveAll();
+}
+
 // 0x678050
 void CScreenStore::OnBuyItemButtonClick()
 {
