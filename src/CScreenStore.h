@@ -96,6 +96,7 @@ public:
     void DestroyStoreItems(BOOL bShutDown);
     void GetSpellItem(INT nIndex, CScreenStoreItem& cItem);
     void DestroySpellItems();
+    void GetIdentifyItem(INT nIndex, CScreenStoreItem& cItem);
     void OnBuyItemButtonClick();
     void OnSellItemButtonClick();
     void OnIdentifyItemButtonClick();
@@ -121,7 +122,7 @@ public:
     /* 0484 */ INT m_nTopSpellItem;
     /* 0488 */ CTypedPtrList<CPtrList, CScreenStoreItem*> m_lSpellItems;
     /* 04A4 */ INT m_nTopIdentifyItem;
-    /* 04A8 */ CPtrList m_lIdentifyItems;
+    /* 04A8 */ CTypedPtrList<CPtrList, CScreenStoreItem*> m_lIdentifyItems;
     /* 04C4 */ INT m_nTopDrinkItem;
     /* 04E8 */ CStore* m_pStore;
     /* 04EC */ CStore* m_pBag;
