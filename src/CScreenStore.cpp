@@ -7,7 +7,6 @@
 #include "CScreenWorld.h"
 #include "CStore.h"
 #include "CUIControlEdit.h"
-#include "CUIControlScrollBar.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -690,6 +689,158 @@ void CUIControlButtonStoreBuySpellBuy::OnLButtonClick(CPoint pt)
     UTIL_ASSERT(pStore != NULL);
 
     pStore->OnBuySpellButtonClick();
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x67F620
+CUIControlScrollBarStoreBuyDrinksDrink::CUIControlScrollBarStoreBuyDrinksDrink(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo)
+    : CUIControlScrollBar(panel, controlInfo)
+{
+}
+
+// 0x632C00
+CUIControlScrollBarStoreBuyDrinksDrink::~CUIControlScrollBarStoreBuyDrinksDrink()
+{
+}
+
+// NOTE: Inlined.
+void CUIControlScrollBarStoreBuyDrinksDrink::UpdateScrollBar()
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 10015
+    UTIL_ASSERT(pStore != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 10017
+    UTIL_ASSERT(pGame != NULL);
+
+    AdjustScrollBar(pStore->m_nTopDrinkItem, pStore->GetNumDrinkItems(), 8);
+}
+
+// 0x67F660
+void CUIControlScrollBarStoreBuyDrinksDrink::OnScrollUp()
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 10047
+    UTIL_ASSERT(pStore != NULL);
+
+    INT nNewTopDrinkItem = max(pStore->m_nTopDrinkItem - 1, 0);
+    if (nNewTopDrinkItem != pStore->m_nTopDrinkItem) {
+        // NOTE: Uninline.
+        pStore->SetTopDrinkItem(nNewTopDrinkItem);
+
+        InvalidateItems();
+
+        // NOTE: Uninline.
+        UpdateScrollBar();
+    }
+}
+
+// 0x67F760
+void CUIControlScrollBarStoreBuyDrinksDrink::OnScrollDown()
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 10083
+    UTIL_ASSERT(pStore != NULL);
+
+    INT nNewTopDrinkItem = max(min(pStore->m_nTopDrinkItem + 1, pStore->GetNumDrinkItems() - 8), 0);
+    if (nNewTopDrinkItem != pStore->m_nTopDrinkItem) {
+        // NOTE: Uninline.
+        pStore->SetTopDrinkItem(nNewTopDrinkItem);
+
+        InvalidateItems();
+
+        // NOTE: Uninline.
+        UpdateScrollBar();
+    }
+}
+
+// 0x67F870
+void CUIControlScrollBarStoreBuyDrinksDrink::OnPageUp(DWORD nLines)
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 10119
+    UTIL_ASSERT(pStore != NULL);
+
+    INT nStep = min(nLines, 7);
+    INT nNewTopDrinkItem = max(pStore->m_nTopDrinkItem - nStep, 0);
+    if (nNewTopDrinkItem != pStore->m_nTopDrinkItem) {
+        // NOTE: Uninline.
+        pStore->SetTopDrinkItem(nNewTopDrinkItem);
+
+        InvalidateItems();
+
+        // NOTE: Uninline.
+        UpdateScrollBar();
+    }
+}
+
+// 0x67F980
+void CUIControlScrollBarStoreBuyDrinksDrink::OnPageDown(DWORD nLines)
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 10159
+    UTIL_ASSERT(pStore != NULL);
+
+    INT nStep = nStep = min(nLines, 7);
+    INT nNewTopDrinkItem = max(min(pStore->m_nTopDrinkItem + nStep, pStore->GetNumDrinkItems() - 8), 0);
+    if (nNewTopDrinkItem != pStore->m_nTopDrinkItem) {
+        // NOTE: Uninline.
+        pStore->SetTopDrinkItem(nNewTopDrinkItem);
+
+        InvalidateItems();
+
+        // NOTE: Uninline.
+        UpdateScrollBar();
+    }
+}
+
+// 0x67FAA0
+void CUIControlScrollBarStoreBuyDrinksDrink::OnScroll()
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 10199
+    UTIL_ASSERT(pStore != NULL);
+
+    // NOTE: Uninline.
+    pStore->SetTopDrinkItem(max(field_144 * (pStore->GetNumDrinkItems() - 8), 0) / field_142);
+
+    InvalidateItems();
+
+    // NOTE: Uninline.
+    UpdateScrollBar();
+}
+
+// 0x67FBA0
+void CUIControlScrollBarStoreBuyDrinksDrink::InvalidateItems()
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 10231
+    UTIL_ASSERT(pStore != NULL);
+
+    CSingleLock renderLock(&(pStore->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    pStore->UpdateMainPanel();
+
+    renderLock.Unlock();
 }
 
 // -----------------------------------------------------------------------------

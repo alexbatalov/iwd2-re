@@ -5,6 +5,7 @@
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
+#include "CUIControlScrollBar.h"
 #include "CVidFont.h"
 
 #define CSCREENSTORE_VIRTUAL_KEYS 91
@@ -142,6 +143,19 @@ public:
     CUIControlButtonStoreBuySpellBuy(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonStoreBuySpellBuy() override;
     void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlScrollBarStoreBuyDrinksDrink : public CUIControlScrollBar {
+public:
+    CUIControlScrollBarStoreBuyDrinksDrink(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo);
+    ~CUIControlScrollBarStoreBuyDrinksDrink() override;
+    void OnScroll() override;
+    void OnScrollUp() override;
+    void OnScrollDown() override;
+    void OnPageUp(DWORD nLines) override;
+    void OnPageDown(DWORD nLines) override;
+    void InvalidateItems();
+    void UpdateScrollBar();
 };
 
 class CUIControlButtonStoreRentRoomRoomSelect : public CUIControlButton3State {
