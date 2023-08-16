@@ -97,6 +97,7 @@ public:
     void GetSpellItem(INT nIndex, CScreenStoreItem& cItem);
     void DestroySpellItems();
     void GetIdentifyItem(INT nIndex, CScreenStoreItem& cItem);
+    void DestroyIdentifyItems();
     void OnBuyItemButtonClick();
     void OnSellItemButtonClick();
     void OnIdentifyItemButtonClick();

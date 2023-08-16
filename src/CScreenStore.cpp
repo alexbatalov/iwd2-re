@@ -728,6 +728,22 @@ void CScreenStore::GetIdentifyItem(INT nIndex, CScreenStoreItem& cItem)
     }
 }
 
+// 0x677DA0
+void CScreenStore::DestroyIdentifyItems()
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    POSITION pos = m_lIdentifyItems.GetHeadPosition();
+    while (pos != NULL) {
+        CScreenStoreItem* pItem = m_lIdentifyItems.GetAt(pos);
+        delete pItem;
+
+        m_lIdentifyItems.GetNext(pos);
+    }
+
+    m_lIdentifyItems.RemoveAll();
+}
+
 // 0x678050
 void CScreenStore::OnBuyItemButtonClick()
 {
