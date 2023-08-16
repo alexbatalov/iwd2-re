@@ -165,7 +165,7 @@ void CScreenStore::EngineGameInit()
     m_pCurrentScrollBar = NULL;
     m_pMainPanel = NULL;
     m_nTopGroupItem = 0;
-    field_464 = 0;
+    m_nTopStoreItem = 0;
     m_nTopSpellItem = 0;
     m_nTopDrinkItem = 0;
     m_nTopIdentifyItem = 0;
@@ -419,6 +419,22 @@ void CScreenStore::SetTopIdentifyItem(INT nTopIdentifyItem)
     UTIL_ASSERT(0 <= nTopIdentifyItem && nTopIdentifyItem <= GetNumIdentifyItems());
 
     m_nTopIdentifyItem = nTopIdentifyItem;
+}
+
+// NOTE: Inlined.
+INT CScreenStore::GetNumStoreItems()
+{
+    return m_lStoreItems.GetCount();
+}
+
+// NOTE: Inlined
+void CScreenStore::SetTopStoreItem(INT nTopStoreItem)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 3414
+    UTIL_ASSERT(0 <= nTopStoreItem && nTopStoreItem <= GetNumStoreItems());
+
+    m_nTopStoreItem = nTopStoreItem;
 }
 
 // NOTE: Inlined.
@@ -881,6 +897,158 @@ void CUIControlScrollBarStoreBuyDrinksDrink::InvalidateItems()
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
     // __LINE__: 10231
+    UTIL_ASSERT(pStore != NULL);
+
+    CSingleLock renderLock(&(pStore->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    pStore->UpdateMainPanel();
+
+    renderLock.Unlock();
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x67FC40
+CUIControlScrollBarStoreStore::CUIControlScrollBarStoreStore(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo)
+    : CUIControlScrollBar(panel, controlInfo)
+{
+}
+
+// 0x632C00
+CUIControlScrollBarStoreStore::~CUIControlScrollBarStoreStore()
+{
+}
+
+// NOTE: Inlined.
+void CUIControlScrollBarStoreStore::UpdateScrollBar()
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 10291
+    UTIL_ASSERT(pStore != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 10293
+    UTIL_ASSERT(pGame != NULL);
+
+    AdjustScrollBar(pStore->m_nTopStoreItem, pStore->GetNumStoreItems(), 6);
+}
+
+// 0x67FC60
+void CUIControlScrollBarStoreStore::OnScrollUp()
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 10323
+    UTIL_ASSERT(pStore != NULL);
+
+    INT nNewTopStoreItem = max(pStore->m_nTopStoreItem - 1, 0);
+    if (nNewTopStoreItem != pStore->m_nTopStoreItem) {
+        // NOTE: Uninline.
+        pStore->SetTopStoreItem(nNewTopStoreItem);
+
+        InvalidateItems();
+
+        // NOTE: Uninline.
+        UpdateScrollBar();
+    }
+}
+
+// 0x67FD50
+void CUIControlScrollBarStoreStore::OnScrollDown()
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 10359
+    UTIL_ASSERT(pStore != NULL);
+
+    INT nNewTopStoreItem = max(min(pStore->m_nTopStoreItem + 1, pStore->GetNumStoreItems() - 6), 0);
+    if (nNewTopStoreItem != pStore->m_nTopStoreItem) {
+        // NOTE: Uninline.
+        pStore->SetTopStoreItem(nNewTopStoreItem);
+
+        InvalidateItems();
+
+        // NOTE: Uninline.
+        UpdateScrollBar();
+    }
+}
+
+// 0x67FE50
+void CUIControlScrollBarStoreStore::OnPageUp(DWORD nLines)
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 10395
+    UTIL_ASSERT(pStore != NULL);
+
+    INT nStep = min(nLines, 5);
+    INT nNewTopStoreItem = max(pStore->m_nTopStoreItem - nStep, 0);
+    if (nNewTopStoreItem != pStore->m_nTopStoreItem) {
+        // NOTE: Uninline.
+        pStore->SetTopStoreItem(nNewTopStoreItem);
+
+        InvalidateItems();
+
+        // NOTE: Uninline.
+        UpdateScrollBar();
+    }
+}
+
+// 0x67FF50
+void CUIControlScrollBarStoreStore::OnPageDown(DWORD nLines)
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 10435
+    UTIL_ASSERT(pStore != NULL);
+
+    INT nStep = nStep = min(nLines, 5);
+    INT nNewTopStoreItem = max(min(pStore->m_nTopStoreItem + nStep, pStore->GetNumStoreItems() - 6), 0);
+    if (nNewTopStoreItem != pStore->m_nTopStoreItem) {
+        // NOTE: Uninline.
+        pStore->SetTopStoreItem(nNewTopStoreItem);
+
+        InvalidateItems();
+
+        // NOTE: Uninline.
+        UpdateScrollBar();
+    }
+}
+
+// 0x680070
+void CUIControlScrollBarStoreStore::OnScroll()
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 10475
+    UTIL_ASSERT(pStore != NULL);
+
+    // NOTE: Uninline.
+    pStore->SetTopStoreItem(max(field_144 * (pStore->GetNumStoreItems() - 6), 0) / field_142);
+
+    InvalidateItems();
+
+    // NOTE: Uninline.
+    UpdateScrollBar();
+}
+
+// 0x680160
+void CUIControlScrollBarStoreStore::InvalidateItems()
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 10507
     UTIL_ASSERT(pStore != NULL);
 
     CSingleLock renderLock(&(pStore->GetManager()->field_36), FALSE);
