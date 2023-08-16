@@ -99,6 +99,7 @@ public:
     void GetIdentifyItem(INT nIndex, CScreenStoreItem& cItem);
     void DestroyIdentifyItems();
     void UpdateGroupCost();
+    void UpdateStoreCost();
     void OnBuyItemButtonClick();
     void OnSellItemButtonClick();
     void OnIdentifyItemButtonClick();
@@ -128,7 +129,7 @@ public:
     /* 04C4 */ INT m_nTopDrinkItem;
     /* 04E8 */ CStore* m_pStore;
     /* 04EC */ CStore* m_pBag;
-    /* 04F0 */ int field_4F0;
+    /* 04F0 */ LONG m_nStoreCost;
     /* 04F4 */ LONG m_nGroupCost;
     /* 04F8 */ int field_4F8;
     /* 04FC */ int field_4FC;
