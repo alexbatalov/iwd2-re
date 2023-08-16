@@ -189,7 +189,7 @@ void CScreenStore::EngineGameInit()
     m_nTopDrinkItem = 0;
     m_nTopIdentifyItem = 0;
     field_4F0 = 0;
-    field_4F4 = 0;
+    m_nGroupCost = 0;
     field_4F8 = 0;
     field_4FC = 0;
     m_pStore = 0;
@@ -742,6 +742,22 @@ void CScreenStore::DestroyIdentifyItems()
     }
 
     m_lIdentifyItems.RemoveAll();
+}
+
+// 0x677DD0
+void CScreenStore::UpdateGroupCost()
+{
+    m_nGroupCost = 0;
+
+    POSITION pos = m_lGroupItems.GetHeadPosition();
+    while (pos != NULL) {
+        CScreenStoreItem* pItem = m_lGroupItems.GetAt(pos);
+        if (pItem->m_bSelected) {
+            m_nGroupCost += pItem->m_nValue;
+        }
+
+        m_lGroupItems.GetNext(pos);
+    }
 }
 
 // 0x678050
