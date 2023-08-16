@@ -1511,6 +1511,46 @@ void CUIControlScrollBarStoreSpell::InvalidateItems()
 
 // -----------------------------------------------------------------------------
 
+// 0x681270
+CUIControlButtonStoreStoreItem::CUIControlButtonStoreStoreItem(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON | RBUTTON, 0)
+{
+    m_nSelectedFrame = 0;
+}
+
+// 0x681310
+CUIControlButtonStoreStoreItem::~CUIControlButtonStoreStoreItem()
+{
+}
+
+// 0x6813C0
+void CUIControlButtonStoreStoreItem::OnLButtonClick(CPoint pt)
+{
+    // TODO: Incomplete.
+}
+
+// 0x681500
+void CUIControlButtonStoreStoreItem::OnLButtonDoubleClick(CPoint pt)
+{
+    // TODO: Incomplete.
+}
+
+// 0x681690
+void CUIControlButtonStoreStoreItem::OnRButtonClick(CPoint pt)
+{
+    // TODO: Incomplete.
+}
+
+// 0x6817A0
+BOOL CUIControlButtonStoreStoreItem::Render(BOOL bForce)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x683080
 CUIControlButtonStoreRentRoomRoomSelect::CUIControlButtonStoreRentRoomRoomSelect(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)

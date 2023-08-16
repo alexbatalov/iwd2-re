@@ -2,6 +2,7 @@
 #define CSCREENSTORE_H_
 
 #include "CBaldurEngine.h"
+#include "CItem.h"
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
@@ -220,6 +221,18 @@ public:
     void OnPageDown(DWORD nLines) override;
     void InvalidateItems();
     void UpdateScrollBar();
+};
+
+class CUIControlButtonStoreStoreItem : public CUIControlButton3State {
+public:
+    CUIControlButtonStoreStoreItem(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonStoreStoreItem() override;
+    BOOL Render(BOOL bForce) override;
+    void OnLButtonClick(CPoint pt) override;
+    void OnLButtonDoubleClick(CPoint pt) override;
+    void OnRButtonClick(CPoint pt) override;
+
+    /* 066E */ CItem m_item;
 };
 
 class CUIControlButtonStoreRentRoomRoomSelect : public CUIControlButton3State {
