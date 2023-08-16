@@ -90,6 +90,7 @@ public:
     void SetTopSpellItem(INT nTopSpellItem);
     INT GetNumDrinkItems();
     void SetTopDrinkItem(INT nTopDrinkItem);
+    void GetGroupItem(INT nIndex, CScreenStoreItem& cItem);
     void OnBuyItemButtonClick();
     void OnSellItemButtonClick();
     void OnIdentifyItemButtonClick();
@@ -109,7 +110,7 @@ public:
     /* 043C */ BOOL m_bCapsLockKeyOn;
     /* 0440 */ CUIPanel* m_pMainPanel;
     /* 0444 */ INT m_nTopGroupItem;
-    /* 0448 */ CPtrList m_lGroupItems;
+    /* 0448 */ CTypedPtrList<CPtrList, CScreenStoreItem*> m_lGroupItems;
     /* 0464 */ INT m_nTopStoreItem;
     /* 0468 */ CPtrList m_lStoreItems;
     /* 0484 */ INT m_nTopSpellItem;
