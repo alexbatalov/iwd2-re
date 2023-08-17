@@ -152,6 +152,7 @@ public:
     /* 0588 */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
     /* 05A4 */ CItem* field_5A4;
     /* 05A8 */ int field_5A8;
+    /* 05AC */ CResRef m_cResInfoSpell;
     /* 05B4 */ CUIPanel* m_pButtonBar;
     /* 05B8 */ BOOL m_bStoreStarted;
     /* 05BC */ int field_5BC;

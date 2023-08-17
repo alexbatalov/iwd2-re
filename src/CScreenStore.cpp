@@ -2255,7 +2255,36 @@ void CUIControlButtonStoreStoreSpell::OnLButtonClick(CPoint pt)
 // 0x682C00
 void CUIControlButtonStoreStoreSpell::OnRButtonClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 12252
+    UTIL_ASSERT(pStore != NULL);
+
+    CSingleLock renderLock(&(pStore->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    INT nIndex;
+    POSITION pos;
+    CScreenStoreItem* pItem;
+
+    switch (m_pPanel->m_nID) {
+    case 5:
+        nIndex = pStore->m_nTopSpellItem + m_nID - 8;
+        pos = pStore->m_lGroupItems.FindIndex(nIndex);
+        if (pos != NULL) {
+            pItem = pStore->m_lGroupItems.GetAt(pos);
+            pStore->m_cResInfoSpell = pItem->m_cResSpell;
+            pStore->SummonPopup(14);
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 12274
+        UTIL_ASSERT(FALSE);
+    }
+
+    renderLock.Unlock();
 }
 
 // 0x682D10
