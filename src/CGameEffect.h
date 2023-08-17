@@ -280,6 +280,8 @@ public:
 
 class CGameEffect : public CGameEffectBase {
 public:
+    static const CString EFFECT_NAME[];
+
     static CGameEffect* DecodeEffect(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, const CPoint& target);
 
     CGameEffect(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target, BOOL usesDice);
