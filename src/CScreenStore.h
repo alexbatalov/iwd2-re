@@ -7,6 +7,7 @@
 #include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
 #include "CUIControlButtonPlusMinus.h"
+#include "CUIControlEdit.h"
 #include "CUIControlScrollBar.h"
 #include "CVidFont.h"
 
@@ -370,6 +371,13 @@ public:
     CUIControlButtonStoreRequesterPlusMinus(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonStoreRequesterPlusMinus() override;
     void AdjustValue() override;
+};
+
+class CUIControlEditStoreRequesterAmount : public CUIControlEdit {
+public:
+    CUIControlEditStoreRequesterAmount(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo);
+    ~CUIControlEditStoreRequesterAmount() override;
+    void KillFocus() override;
 };
 
 #endif /* CSCREENSTORE_H_ */

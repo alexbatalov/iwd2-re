@@ -6,7 +6,6 @@
 #include "CScreenInventory.h"
 #include "CScreenWorld.h"
 #include "CStore.h"
-#include "CUIControlEdit.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -2726,4 +2725,46 @@ void CUIControlButtonStoreRequesterPlusMinus::AdjustValue()
         // __LINE__: 13445
         UTIL_ASSERT(FALSE);
     }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x6847B0
+CUIControlEditStoreRequesterAmount::CUIControlEditStoreRequesterAmount(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo)
+    : CUIControlEdit(panel, controlInfo, 0)
+{
+}
+
+// 0x684800
+CUIControlEditStoreRequesterAmount::~CUIControlEditStoreRequesterAmount()
+{
+}
+
+// 0x6848D0
+void CUIControlEditStoreRequesterAmount::KillFocus()
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 13498
+    UTIL_ASSERT(pStore != NULL);
+
+    CScreenStoreItem cItem;
+
+    if (pStore->field_14E6) {
+        pStore->GetStoreItem(pStore->field_14E2, cItem);
+    } else {
+        pStore->GetGroupItem(pStore->field_14E2, cItem);
+    }
+
+    DWORD nValue = atol(m_sText);
+
+    // NOTE: Unsigned compare.
+    if (nValue > 0 && nValue <= cItem.m_nMaxCount) {
+        pStore->field_14DE = nValue;
+    }
+
+    pStore->UpdateRequesterPanel();
+
+    CUIControlEdit::KillFocus();
 }
