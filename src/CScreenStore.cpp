@@ -2181,7 +2181,46 @@ void CUIControlButtonStoreGroupItem::OnLButtonDoubleClick(CPoint pt)
 // 0x6821A0
 void CUIControlButtonStoreGroupItem::OnRButtonClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 11922
+    UTIL_ASSERT(pStore != NULL);
+
+    CSingleLock renderLock(&(pStore->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    INT nIndex;
+    POSITION pos;
+    CScreenStoreItem* pItem;
+
+    switch (m_nID) {
+    case 2:
+        nIndex = pStore->m_nTopGroupItem + m_nID - 13;
+        pos = pStore->m_lGroupItems.FindIndex(nIndex);
+        if (pos != NULL) {
+            pItem = pStore->m_lGroupItems.GetAt(pos);
+            pStore->field_5A4 = pItem->m_pItem;
+            pStore->field_5A8 = pStore->m_pBag == NULL && pItem->m_pItem->GetItemType() == 58;
+            pStore->SummonPopup(12);
+        }
+        break;
+    case 4:
+        nIndex = pStore->m_nTopIdentifyItem + m_nID - 8;
+        pos = pStore->m_lIdentifyItems.FindIndex(nIndex);
+        if (pos != NULL) {
+            pItem = pStore->m_lIdentifyItems.GetAt(pos);
+            pStore->field_5A4 = pItem->m_pItem;
+            pStore->SummonPopup(12);
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 11957
+        UTIL_ASSERT(FALSE);
+    }
+
+    renderLock.Unlock();
 }
 
 // 0x6822F0
