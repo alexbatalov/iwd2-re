@@ -930,6 +930,19 @@ void CScreenStore::CloseBag(BOOL bSaveFile)
     m_pBag = NULL;
 }
 
+// NOTE: Inlined.
+void CScreenStore::SelectStoreItem(INT nIndex, BOOL bSelected)
+{
+    if (nIndex >= 0 && nIndex < m_lStoreItems.GetCount()) {
+        CScreenStoreItem* pItem = m_lStoreItems.GetAt(m_lStoreItems.FindIndex(nIndex));
+        pItem->m_bSelected = bSelected;
+        if (!bSelected) {
+            pItem->m_nCount = 1;
+            pItem->m_nValue = pItem->m_nSingleValue;
+        }
+    }
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x67EA20
@@ -1849,7 +1862,31 @@ CUIControlButtonStoreStoreItem::~CUIControlButtonStoreStoreItem()
 // 0x6813C0
 void CUIControlButtonStoreStoreItem::OnLButtonClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 11431
+    UTIL_ASSERT(pStore != NULL);
+
+    CScreenStoreItem cItem;
+    INT nIndex;
+
+    switch (m_nID) {
+    case 2:
+        nIndex = pStore->m_nTopStoreItem + m_nID - 5;
+        pStore->GetStoreItem(nIndex, cItem);
+
+        // NOTE: Uninline.
+        pStore->SelectStoreItem(nIndex, !cItem.m_bSelected);
+
+        pStore->UpdateStoreCost();
+        pStore->UpdateMainPanel();
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 11455
+        UTIL_ASSERT(FALSE);
+    }
 }
 
 // 0x681500

@@ -113,6 +113,8 @@ public:
     void OnErrorButtonClick(INT nButton);
     void CloseBag(BOOL bSaveFile);
 
+    void SelectStoreItem(INT nIndex, BOOL bSelected);
+
     /* 0106 */ CKeyInfo m_pVirtualKeys[CSCREENSTORE_VIRTUAL_KEYS];
     /* 039E */ BYTE m_pVirtualKeysFlags[CSCREENSTORE_VIRTUAL_KEYS];
     /* 0439 */ BOOLEAN m_bCtrlKeyDown;
