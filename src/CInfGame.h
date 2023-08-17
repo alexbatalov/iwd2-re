@@ -35,6 +35,7 @@
 
 class CGameArea;
 class CItem;
+class CStore;
 
 class CInfGame {
 public:
@@ -65,6 +66,7 @@ public:
     void LoadGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace);
     void NewGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace);
     void ReleaseServerStore(const CResRef& store);
+    CStore* GetServerStore(const CResRef& store);
     void UpdatePortrait(SHORT nPortrait, DWORD dwPanelId);
     void sub_5AF420(SHORT nPortrait, DWORD dwPanelId);
     SHORT GetCharacterPortraitNum(LONG nCharacterId);
@@ -263,10 +265,8 @@ public:
     /* 4B3C */ LONG m_nAIIndex;
     /* 4B40 */ int field_4B40;
     /* 4B44 */ int field_4B44;
-    /* 4B48 */ unsigned char field_4B48[48];
-    /* 4B78 */ int field_4B78;
-    /* 4B7C */ int field_4B7C;
-    /* 4B80 */ int field_4B80;
+    /* 4B48 */ CStore* m_aServerStore[12];
+    /* 4B78 */ BYTE m_nServerStoreDemands[12];
     /* 4B84 */ CString field_4B84;
     /* 4B88 */ CString field_4B88;
     /* 4B8C */ CString field_4B8C;

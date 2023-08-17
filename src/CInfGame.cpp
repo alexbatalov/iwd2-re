@@ -26,6 +26,7 @@
 #include "CScreenWorld.h"
 #include "CScreenWorldMap.h"
 #include "CSearchBitmap.h"
+#include "CStore.h"
 #include "CUIControlBase.h"
 #include "CUIManager.h"
 #include "CUIPanel.h"
@@ -787,11 +788,9 @@ void CInfGame::InitGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlac
         UTIL_ASSERT_MSG(FALSE, "Could not clean out TempSave directory");
     }
 
-    memset(field_4B48, 0, sizeof(field_4B48));
-
-    field_4B78 = 0;
-    field_4B7C = 0;
-    field_4B80 = 0;
+    // TODO: Use loop.
+    memset(m_aServerStore, 0, sizeof(m_aServerStore));
+    memset(m_nServerStoreDemands, 0, sizeof(m_nServerStoreDemands));
 
     dword_8E752C = 0;
 
@@ -1764,6 +1763,27 @@ void CInfGame::NewGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace
 void CInfGame::ReleaseServerStore(const CResRef& store)
 {
     // TODO: Incomplete.
+}
+
+// 0x5ADF60
+CStore* CInfGame::GetServerStore(const CResRef& store)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 10079
+    UTIL_ASSERT(g_pChitin->cNetwork.GetSessionOpen() && g_pChitin->cNetwork.GetSessionHosting());
+
+    for (int cnt = 0; cnt < 12; cnt++) {
+        if (m_aServerStore[cnt] != NULL
+            && store == m_aServerStore[cnt]->m_resRef) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+            // __LINE__: 10084
+            UTIL_ASSERT(m_nServerStoreDemands[cnt] > 0);
+
+            return m_aServerStore[cnt];
+        }
+    }
+
+    return NULL;
 }
 
 // 0x5AF360
