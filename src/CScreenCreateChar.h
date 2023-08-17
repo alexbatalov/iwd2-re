@@ -152,6 +152,7 @@ public:
     void DismissPopup(CGameSprite* pSprite);
     void sub_617D80();
     void UpdateClassEntry(CUIControlTextDisplay* pText, const CAIObjectType& typeAI, CDerivedStats* DStats, DWORD nSpecialization, BYTE nClass, DWORD dwFlags);
+    int GetRaceFeatColumn(BYTE nRace, BYTE nSubRace);
 
     /* 0106 */ C2DArray field_106;
     /* 012A */ C2DArray m_tSubRace;
@@ -585,8 +586,6 @@ public:
     CUIControlButtonCharGen6235C0(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonCharGen6235C0() override;
     BOOL Render(BOOL bForce) override;
-
-    int sub_623BF0(BYTE nRace, BYTE nSubRace);
 };
 
 #endif /* CSCREENCREATECHAR_H_ */

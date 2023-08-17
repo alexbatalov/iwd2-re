@@ -3688,7 +3688,6 @@ void CScreenCreateChar::CancelEngine()
     while (GetTopPopup() != NULL) {
         OnCancelButtonClick();
     }
-
 }
 
 // 0x617D80
@@ -3710,6 +3709,89 @@ void CScreenCreateChar::UpdateClassEntry(CUIControlTextDisplay* pText, const CAI
         typeAI.m_nGender != CAIOBJECTTYPE_SEX_FEMALE);
 
     UpdateText(pText, "%s", FetchString(12136) + ":" + sClass);
+}
+
+// 0x623BF0
+int CScreenCreateChar::GetRaceFeatColumn(BYTE nRace, BYTE nSubRace)
+{
+    switch (nRace) {
+    case CAIOBJECTTYPE_R_HUMAN:
+        switch (nSubRace) {
+        case CAIOBJECTTYPE_SUBRACE_PURERACE:
+            return 0;
+        case CAIOBJECTTYPE_SUBRACE_HUMAN_AASIMAR:
+            return 1;
+        case CAIOBJECTTYPE_SUBRACE_HUMAN_TIEFLING:
+            return 2;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+            // __LINE__: 17883
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case CAIOBJECTTYPE_R_ELF:
+        switch (nSubRace) {
+        case CAIOBJECTTYPE_SUBRACE_PURERACE:
+            return 3;
+        case CAIOBJECTTYPE_SUBRACE_ELF_DROW:
+            return 4;
+        case CAIOBJECTTYPE_SUBRACE_ELF_WILD:
+            return 5;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+            // __LINE__: 17901
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case CAIOBJECTTYPE_R_HALF_ELF:
+        return 14;
+    case CAIOBJECTTYPE_R_DWARF:
+        switch (nSubRace) {
+        case CAIOBJECTTYPE_SUBRACE_PURERACE:
+            return 6;
+        case CAIOBJECTTYPE_SUBRACE_DWARF_GOLD:
+            return 7;
+        case CAIOBJECTTYPE_SUBRACE_DWARF_GRAY:
+            return 8;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+            // __LINE__: 17919
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case CAIOBJECTTYPE_R_HALFLING:
+        switch (nSubRace) {
+        case CAIOBJECTTYPE_SUBRACE_PURERACE:
+            return 9;
+        case CAIOBJECTTYPE_SUBRACE_HALFLING_STRONGHEART:
+            return 10;
+        case CAIOBJECTTYPE_SUBRACE_HALFLING_GHOSTWISE:
+            return 11;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+            // __LINE__: 17937
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case CAIOBJECTTYPE_R_GNOME:
+        switch (nSubRace) {
+        case CAIOBJECTTYPE_SUBRACE_PURERACE:
+            return 12;
+        case CAIOBJECTTYPE_SUBRACE_GNOME_DEEP:
+            return 13;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+            // __LINE__: 17951
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case CAIOBJECTTYPE_R_HALF_ORC:
+        return 15;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 17961
+        UTIL_ASSERT(FALSE);
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -7677,12 +7759,4 @@ BOOL CUIControlButtonCharGen6235C0::Render(BOOL bForce)
     // TODO: Incomplete.
 
     return FALSE;
-}
-
-// 0x623BF0
-int CUIControlButtonCharGen6235C0::sub_623BF0(BYTE nRace, BYTE nSubRace)
-{
-    // TODO: Incomplete.
-
-    return 0;
 }
