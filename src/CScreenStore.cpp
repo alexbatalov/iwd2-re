@@ -289,6 +289,12 @@ CUIPanel* CScreenStore::GetTopPopup()
     return m_lPopupStack.GetTailPosition() != NULL ? m_lPopupStack.GetTail() : NULL;
 }
 
+// 0x672F50
+void CScreenStore::SummonPopup(DWORD dwPopupId)
+{
+    // TODO: Incomplete.
+}
+
 // 0x6732F0
 void CScreenStore::ResetErrorPanel(CUIPanel* pPanel)
 {
@@ -1892,7 +1898,52 @@ void CUIControlButtonStoreStoreItem::OnLButtonClick(CPoint pt)
 // 0x681500
 void CUIControlButtonStoreStoreItem::OnLButtonDoubleClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 11479
+    UTIL_ASSERT(pStore != NULL);
+
+    CScreenStoreItem cItem;
+    INT nIndex;
+
+    switch (m_nID) {
+    case 2:
+        nIndex = pStore->m_nTopStoreItem + m_nID - 5;
+        pStore->GetStoreItem(nIndex, cItem);
+
+        // NOTE: Original code is slightly different. There is only one
+        // `CSingleLock`.
+        if (pStore->m_pStore->m_header.m_nStoreType == 4) {
+            if (cItem.m_pItem->GetMaxStackable() > 1
+                && cItem.m_pItem->GetUsageCount(0) > 1) {
+                pStore->field_14DE = cItem.m_pItem->GetUsageCount(0);
+                pStore->field_14E2 = nIndex;
+                pStore->field_14E6 = 1;
+
+                CSingleLock renderLock(&(pStore->GetManager()->field_36), FALSE);
+                renderLock.Lock(INFINITE);
+
+                pStore->SummonPopup(20);
+
+                renderLock.Unlock();
+            }
+        } else {
+            if (cItem.m_nStoreCount != -1) {
+                CSingleLock renderLock(&(pStore->GetManager()->field_36), FALSE);
+                renderLock.Lock(INFINITE);
+
+                pStore->SummonPopup(20);
+
+                renderLock.Unlock();
+            }
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 11523
+        UTIL_ASSERT(FALSE);
+    }
 }
 
 // 0x681690

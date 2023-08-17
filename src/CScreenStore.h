@@ -73,6 +73,7 @@ public:
 
     void EnableMainPanel(BOOL bEnable);
     CUIPanel* GetTopPopup();
+    void SummonPopup(DWORD dwPopupId);
     void ResetErrorPanel(CUIPanel* pPanel);
     void UpdateMainPanel();
     void UpdateBuySellPanel();
@@ -150,6 +151,9 @@ public:
     /* 05DA */ CVidFont m_preLoadFontRealms;
     /* 0ADA */ CVidFont m_preLoadFontStnSml;
     /* 0FDA */ CVidFont m_preLoadFontTool;
+    /* 14DE */ int field_14DE;
+    /* 14E2 */ int field_14E2;
+    /* 14E6 */ int field_14E6;
 };
 
 class CUIControlButtonStoreBarDone : public CUIControlButton {
