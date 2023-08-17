@@ -102,12 +102,15 @@ public:
     /* 0110 */ CItem* m_pTempItem;
     /* 0114 */ int field_114;
     /* 0118 */ int field_118;
+    /* 011C */ unsigned char field_11C;
+    /* 011D */ unsigned char field_11D;
     /* 011E */ unsigned char field_11E;
     /* 011F */ unsigned char field_11F;
     /* 0120 */ CKeyInfo m_pVirtualKeys[CSCREENINVENTORY_VIRTUAL_KEYS];
     /* 03F0 */ BYTE m_pVirtualKeysFlags[CSCREENINVENTORY_VIRTUAL_KEYS];
     /* 044A */ BOOLEAN m_bCtrlKeyDown;
     /* 044C */ CPoint m_cLastMousePosition;
+    /* 0454 */ int field_454;
     /* 0488 */ int field_488;
     /* 048C */ int field_48C;
     /* 0490 */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
