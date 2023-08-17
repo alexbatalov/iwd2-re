@@ -69,6 +69,7 @@ public:
     void sub_5AF420(SHORT nPortrait, DWORD dwPanelId);
     SHORT GetCharacterPortraitNum(LONG nCharacterId);
     SHORT GetFixedOrderCharacterPortraitNum(LONG nCharacterId);
+    void RemoveFamiliarResRef(const CResRef& resRef, BYTE nAlignment, BYTE nLevel);
     void WorldEngineActivated(CVidMode* pVidMode);
     void WorldEngineDeactivated();
     void OnPortraitLClick(DWORD id);
@@ -219,6 +220,7 @@ public:
     /* 38A8 */ CTypedPtrList<CPtrList, int*> m_allies; // NOTE: Stores actual ints disguised as pointers.
     /* 38C4 */ CTypedPtrList<CPtrList, int*> m_familiars; // NOTES: Stores actual ints disguised as pointers.
     /* 38E0 */ unsigned char field_38E0[72];
+    /* 3928 */ CTypedPtrList<CPtrList, CResRef*> m_familiarResRefs[9][9];
     /* 4204 */ int field_4204;
     /* 4208 */ CString m_sTempDir;
     /* 420C */ CString m_sTempSaveDir;

@@ -1858,6 +1858,22 @@ SHORT CInfGame::GetFixedOrderCharacterPortraitNum(LONG nCharacterId)
     return -1;
 }
 
+// 0x5AF700
+void CInfGame::RemoveFamiliarResRef(const CResRef& resRef, BYTE nAlignment, BYTE nLevel)
+{
+    if (nAlignment < 9 && nLevel < 9) {
+        POSITION pos = m_familiarResRefs[nAlignment][nLevel].GetHeadPosition();
+        while (pos != NULL) {
+            POSITION curr = pos;
+            CResRef* pResRef = m_familiarResRefs[nAlignment][nLevel].GetNext(pos);
+            if (*pResRef == resRef) {
+                m_familiarResRefs[nAlignment][nLevel].RemoveAt(curr);
+                break;
+            }
+        }
+    }
+}
+
 // 0x5AF7F0
 void CInfGame::WorldEngineActivated(CVidMode* pVidMode)
 {
