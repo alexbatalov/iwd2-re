@@ -1949,7 +1949,35 @@ void CUIControlButtonStoreStoreItem::OnLButtonDoubleClick(CPoint pt)
 // 0x681690
 void CUIControlButtonStoreStoreItem::OnRButtonClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 11551
+    UTIL_ASSERT(pStore != NULL);
+
+    CSingleLock renderLock(&(pStore->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    INT nIndex;
+    POSITION pos;
+
+    switch (m_nID) {
+    case 2:
+        nIndex = pStore->m_nTopStoreItem + m_nID - 5;
+        pos = pStore->m_lStoreItems.FindIndex(nIndex);
+        if (pos != NULL) {
+            pStore->field_5A4 = pStore->m_lStoreItems.GetAt(pos)->m_pItem;
+            pStore->field_5A8 = 0;
+            pStore->SummonPopup(12);
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 11570
+        UTIL_ASSERT(FALSE);
+    }
+
+    renderLock.Unlock();
 }
 
 // 0x6817A0
