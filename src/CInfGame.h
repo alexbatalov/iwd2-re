@@ -65,6 +65,7 @@ public:
     void SaveMultiPlayerPermissions();
     void LoadGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace);
     void NewGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace);
+    void DemandServerStore(const CResRef& store, BOOL bSaveToDisk);
     void ReleaseServerStore(const CResRef& store);
     CStore* GetServerStore(const CResRef& store);
     void UpdatePortrait(SHORT nPortrait, DWORD dwPanelId);

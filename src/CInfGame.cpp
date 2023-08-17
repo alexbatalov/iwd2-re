@@ -1759,6 +1759,52 @@ void CInfGame::NewGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace
     m_nReputation = -10;
 }
 
+// 0x5ADC90
+void CInfGame::DemandServerStore(const CResRef& store, BOOL bSaveToDisk)
+{
+    int cnt;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 9987
+    UTIL_ASSERT(g_pChitin->cNetwork.GetSessionOpen() && g_pChitin->cNetwork.GetSessionHosting());
+
+    for (cnt = 0; cnt < 12; cnt++) {
+        if (m_aServerStore[cnt] != NULL
+            && store == m_aServerStore[cnt]->m_resRef) {
+            if (bSaveToDisk) {
+                m_aServerStore[cnt]->Marshal(m_sTempDir);
+            }
+
+            m_nServerStoreDemands[cnt]++;
+
+            return;
+        }
+    }
+
+    for (cnt = 0; cnt < 12; cnt++) {
+        if (m_aServerStore[cnt] == NULL) {
+            m_aServerStore[cnt] = new CStore(store);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+            // __LINE__: 10007
+            UTIL_ASSERT(m_aServerStore[cnt] != NULL);
+
+            if (m_aServerStore[cnt]->m_resRef == "") {
+                delete m_aServerStore[cnt];
+                m_aServerStore[cnt] = NULL;
+            } else {
+                m_nServerStoreDemands[cnt] = 1;
+            }
+
+            return;
+        }
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 10019
+    UTIL_ASSERT(FALSE);
+}
+
 // 0x5ADE90
 void CInfGame::ReleaseServerStore(const CResRef& store)
 {
