@@ -290,6 +290,7 @@ public:
     /* 0008 */ virtual BOOL ApplyEffect(CGameSprite* pSprite);
     /* 001C */ virtual BOOL UsesDice();
 
+    BOOL Compare(const CGameEffect& other);
     ITEM_EFFECT* GetItemEffect();
     void CopyFromBase(CGameEffectBase* pBase);
     void SetEffectID(WORD effectID);

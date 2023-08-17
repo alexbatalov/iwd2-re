@@ -835,6 +835,22 @@ ITEM_EFFECT* CGameEffect::GetItemEffect()
     return effect;
 }
 
+// 0x48C5B0
+BOOL CGameEffect::Compare(const CGameEffect& other)
+{
+    return m_effectID == other.m_effectID
+        && m_effectAmount == other.m_effectAmount
+        && m_dwFlags == other.m_dwFlags
+        && m_durationType == other.m_durationType
+        && m_duration == other.m_duration
+        && m_source == other.m_source
+        && m_sourceID == other.m_sourceID
+        && m_targetType == other.m_targetType
+        && m_probabilityUpper == other.m_probabilityUpper
+        && m_probabilityLower == other.m_probabilityLower
+        && m_spellLevel == other.m_spellLevel;
+}
+
 // 0x48C670
 void CGameEffect::CopyFromBase(CGameEffectBase* pBase)
 {
