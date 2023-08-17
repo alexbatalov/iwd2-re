@@ -7499,8 +7499,11 @@ void CUIControlScrollBarCharGenFeats::InvalidateItems()
     CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
-    // __LINE__: 11445
+    // __LINE__: 17284
     UTIL_ASSERT(pCreateChar != NULL);
+
+    CSingleLock renderLock(&(pCreateChar->GetManager()->field_36), FALSE);
+    renderLock.Lock();
 
     INT nGameSprite = pCreateChar->GetSpriteId();
 
@@ -7520,6 +7523,8 @@ void CUIControlScrollBarCharGenFeats::InvalidateItems()
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
     }
+
+    renderLock.Unlock();
 }
 
 // -----------------------------------------------------------------------------
