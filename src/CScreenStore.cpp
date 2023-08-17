@@ -880,6 +880,46 @@ void CScreenStore::OnCancelButtonClick()
     // TODO: Incomplete.
 }
 
+// 0x67DA90
+STRREF CScreenStore::GetPanelButtonToolTip(INT nButtonIndex)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 8353
+    UTIL_ASSERT(0 <= nButtonIndex && nButtonIndex < CSCREENSTORE_NUM_BOTTOMBUTTONS);
+
+    if (m_cResStore == "") {
+        return -1;
+    }
+
+    STRREF strText;
+    switch (m_adwButtonPanelId[nButtonIndex]) {
+    case -1:
+        strText = -1;
+        break;
+    case 2:
+        strText = 14288; // "Buy and Sell"
+        break;
+    case 4:
+        strText = 14292; // "Identify"
+        break;
+    case 5:
+        strText = 12138; // "Healing"
+        break;
+    case 7:
+        strText = 14287; // "Rooms"
+        break;
+    case 8:
+        strText = 14289; // "Drinks"
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 8393
+        UTIL_ASSERT(FALSE);
+    }
+
+    return strText;
+}
+
 // 0x67E840
 void CScreenStore::CancelEngine()
 {

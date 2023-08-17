@@ -12,7 +12,7 @@
 #define CSCREENSTORE_VIRTUAL_KEYS 91
 #define CSCREENSTORE_ERROR_BUTTONS 3
 
-#define CSCREENSTORE_NUM_BOTTOMBUTTON 4
+#define CSCREENSTORE_NUM_BOTTOMBUTTONS 4
 
 #define CRESUI_CONTROLBUTTONID_STORE_BUYDRINK_DRINK0 40
 #define CRESUI_CONTROLBUTTONID_STORE_BUYDRINK_DRINK7 47
@@ -75,6 +75,7 @@ public:
     CUIPanel* GetTopPopup();
     void SummonPopup(DWORD dwPopupId);
     void ResetErrorPanel(CUIPanel* pPanel);
+    BOOL IsCharacterDead();
     void UpdateMainPanel();
     void UpdateBuySellPanel();
     void UpdateIdentifyPanel();
@@ -114,6 +115,7 @@ public:
     void CheckEnablePanels(BOOL bEnable);
     void OnDoneButtonClick();
     void OnCancelButtonClick();
+    STRREF GetPanelButtonToolTip(INT nButtonIndex);
     void OnErrorButtonClick(INT nButton);
     void OpenBag(const CResRef& resRef);
     void CloseBag(BOOL bSaveFile);
@@ -140,6 +142,8 @@ public:
     /* 04A4 */ INT m_nTopIdentifyItem;
     /* 04A8 */ CTypedPtrList<CPtrList, CScreenStoreItem*> m_lIdentifyItems;
     /* 04C4 */ INT m_nTopDrinkItem;
+    /* 04C8 */ CResRef m_cResStore;
+    /* 04D8 */ DWORD m_adwButtonPanelId[CSCREENSTORE_NUM_BOTTOMBUTTONS];
     /* 04E8 */ CStore* m_pStore;
     /* 04EC */ CStore* m_pBag;
     /* 04F0 */ LONG m_nStoreCost;
