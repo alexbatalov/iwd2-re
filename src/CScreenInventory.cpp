@@ -310,9 +310,8 @@ void CScreenInventory::EngineGameInit()
     m_cUIManager.GetPanel(8)->SetActive(FALSE);
     m_cUIManager.GetPanel(9)->SetActive(FALSE);
     m_cUIManager.GetPanel(50)->SetActive(FALSE);
-    m_cUIManager.GetPanel(2)->SetActive(FALSE);
 
-    CUIPanel* pPanel = m_cUIManager.GetPanel(0);
+    CUIPanel* pPanel = m_cUIManager.GetPanel(2);
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
     // __LINE__: 632
