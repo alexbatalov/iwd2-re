@@ -92,8 +92,10 @@ public:
     INT GetNumDrinkItems();
     void SetTopDrinkItem(INT nTopDrinkItem);
     void GetGroupItem(INT nIndex, CScreenStoreItem& cItem);
+    void UpdateGroupItems();
     void DestroyGroupItems(BOOL bShutDown);
     void GetStoreItem(INT nIndex, CScreenStoreItem& cItem);
+    void UpdateStoreItems();
     void DestroyStoreItems(BOOL bShutDown);
     void GetSpellItem(INT nIndex, CScreenStoreItem& cItem);
     void DestroySpellItems();

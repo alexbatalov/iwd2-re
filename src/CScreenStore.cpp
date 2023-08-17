@@ -537,6 +537,12 @@ void CScreenStore::GetGroupItem(INT nIndex, CScreenStoreItem& cItem)
     }
 }
 
+// 0x676780
+void CScreenStore::UpdateGroupItems()
+{
+    // TODO: Incomplete.
+}
+
 // 0x676D10
 void CScreenStore::DestroyGroupItems(BOOL bShutDown)
 {
@@ -605,6 +611,12 @@ void CScreenStore::GetStoreItem(INT nIndex, CScreenStoreItem& cItem)
         cItem.m_nMaxCount = cDefaultItem.m_nMaxCount;
         cItem.m_nStoreCount = cDefaultItem.m_nStoreCount;
     }
+}
+
+// 0x676EF0
+void CScreenStore::UpdateStoreItems()
+{
+    // TODO: Incomplete.
 }
 
 // 0x677430
@@ -2119,7 +2131,51 @@ void CUIControlButtonStoreGroupItem::OnLButtonClick(CPoint pt)
 // 0x685090
 void CUIControlButtonStoreGroupItem::OnLButtonDoubleClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 13747
+    UTIL_ASSERT(pStore != NULL);
+
+    CScreenStoreItem cItem;
+    INT nIndex;
+
+    switch (m_nID) {
+    case 2:
+        nIndex = pStore->m_nTopGroupItem + m_nID - 13;
+        pStore->GetGroupItem(nIndex, cItem);
+
+        if (cItem.m_pItem->GetItemType() == 58
+            && pStore->m_pBag == NULL
+            && cItem.m_pItem->GetResRef() != pStore->m_pStore->m_resRef) {
+            pStore->OpenBag(cItem.m_pItem->GetResRef());
+
+            pStore->UpdateStoreItems();
+
+            // NOTE: Uninline.
+            pStore->SetTopStoreItem(0);
+
+            // NOTE: Uninline.
+            pStore->UpdateStoreCost();
+
+            pStore->UpdateGroupItems();
+
+            // NOTE: Uninline.
+            pStore->SetTopGroupItem(0);
+
+            // NOTE: Uninline.
+            pStore->UpdateGroupCost();
+
+            pStore->UpdateMainPanel();
+        }
+        break;
+    case 4:
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 13810
+        UTIL_ASSERT(FALSE);
+    }
 }
 
 // 0x6821A0
