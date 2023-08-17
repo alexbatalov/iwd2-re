@@ -4586,6 +4586,9 @@ void CUIControlScrollBarCharGenSkills::InvalidateItems()
     // __LINE__: 11445
     UTIL_ASSERT(pCreateChar != NULL);
 
+    CSingleLock renderLock(&(pCreateChar->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
     INT nGameSprite = pCreateChar->GetSpriteId();
 
     CGameSprite* pSprite;
@@ -4604,6 +4607,8 @@ void CUIControlScrollBarCharGenSkills::InvalidateItems()
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
     }
+
+    renderLock.Unlock();
 }
 
 // -----------------------------------------------------------------------------
