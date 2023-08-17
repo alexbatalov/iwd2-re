@@ -1762,7 +1762,24 @@ void CInfGame::NewGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace
 // 0x5ADE90
 void CInfGame::ReleaseServerStore(const CResRef& store)
 {
-    // TODO: Incomplete.
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 10042
+    UTIL_ASSERT(g_pChitin->cNetwork.GetSessionOpen() && g_pChitin->cNetwork.GetSessionHosting());
+
+    for (int cnt = 0; cnt < 12; cnt++) {
+        if (m_aServerStore[cnt] != NULL
+            && store == m_aServerStore[cnt]->m_resRef) {
+            m_nServerStoreDemands[cnt]--;
+
+            if (m_nServerStoreDemands[cnt] == 0) {
+                m_aServerStore[cnt]->Marshal(m_sTempDir);
+
+                delete m_aServerStore[cnt];
+
+                m_aServerStore[cnt] = NULL;
+            }
+        }
+    }
 }
 
 // 0x5ADF60
