@@ -1860,6 +1860,12 @@ void CScreenInventory::EndSwap()
     }
 }
 
+// 0x6305B0
+void CScreenInventory::SwapWithPortrait(INT nButtonId, BOOL bShowError)
+{
+    // TODO: Incomplete.
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x631E10
@@ -2427,6 +2433,47 @@ void CUIControlButtonInventoryHistoryUse::OnLButtonClick(CPoint pt)
     pInventory->OnUseButtonClick();
 
     renderLock.Unlock();
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x635000
+CUIControlPortraitInventory::CUIControlPortraitInventory(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlPortraitGeneral(panel, controlInfo)
+{
+    field_666 = 0;
+}
+
+// 0x6350E0
+CUIControlPortraitInventory::~CUIControlPortraitInventory()
+{
+}
+
+// 0x635180
+void CUIControlPortraitInventory::OnLButtonClick(CPoint pt)
+{
+    CScreenInventory* pInventory = g_pBaldurChitin->m_pEngineInventory;
+
+    if (pInventory->m_pTempItem != NULL) {
+        pInventory->BeginSwap();
+        pInventory->SwapWithPortrait(m_nID, TRUE);
+        pInventory->EndSwap();
+        field_666 = 1;
+    } else {
+        CUIControlPortraitGeneral::OnLButtonClick(pt);
+        field_666 = 0;
+    }
+}
+
+// 0x635220
+void CUIControlPortraitInventory::OnLButtonDoubleClick(CPoint pt)
+{
+    if (field_666) {
+        OnLButtonClick(pt);
+    } else {
+        // NOTE: Uninline.
+        CUIControlPortraitGeneral::OnLButtonDoubleClick(pt);
+    }
 }
 
 // -----------------------------------------------------------------------------

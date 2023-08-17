@@ -7,6 +7,7 @@
 #include "CItem.h"
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
+#include "CUIControlFactory.h"
 
 #define CSCREENINVENTORY_VIRTUAL_KEYS 90
 #define CSCREENINVENTORY_ERROR_BUTTONS 3
@@ -97,6 +98,7 @@ public:
     INT MapInventoryIdToButtonId(INT nInventoryId);
     void BeginSwap();
     void EndSwap();
+    void SwapWithPortrait(INT nButtonId, BOOL bShowError);
 
     /* 0106 */ CGameAnimation m_animation;
     /* 0110 */ CItem* m_pTempItem;
@@ -222,6 +224,16 @@ public:
     CUIControlButtonInventoryHistoryUse(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonInventoryHistoryUse() override;
     void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlPortraitInventory : public CUIControlPortraitGeneral {
+public:
+    CUIControlPortraitInventory(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlPortraitInventory() override;
+    void OnLButtonClick(CPoint pt) override;
+    void OnLButtonDoubleClick(CPoint pt) override;
+
+    /* 0666 */ int field_666;
 };
 
 class CUIControlButtonInventoryError : public CUIControlButton {
