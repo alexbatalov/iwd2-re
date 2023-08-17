@@ -1988,6 +1988,37 @@ CGameArea* CInfGame::GetArea(SHORT nArea)
     return m_gameAreas[nArea];
 }
 
+// 0x5BACE0
+SHORT CInfGame::GetNumQuickWeaponSlots(SHORT nPortrait)
+{
+    SHORT nSlots;
+
+    // NOTE: Uninline.
+    LONG nCharacterId = GetCharacterId(nPortrait);
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = m_cObjectArray.GetShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        nSlots = static_cast<SHORT>(pSprite->GetNumQuickWeaponSlots());
+    } else {
+        nSlots = 0;
+    }
+
+    m_cObjectArray.ReleaseShare(nCharacterId,
+        CGameObjectArray::THREAD_ASYNCH,
+        INFINITE);
+
+    return nSlots;
+}
+
 // 0x5BB800
 BOOL CInfGame::Is3DSound(int nSoundChannel)
 {

@@ -78,6 +78,7 @@ public:
     void UpdatePortraitToolTip(DWORD dwControlId, STRREF dwStrId);
     CGameArea* GetArea(CString sName);
     CGameArea* GetArea(SHORT nArea);
+    SHORT GetNumQuickWeaponSlots(SHORT nPortrait);
     BOOL Is3DSound(int nSoundChannel);
     float GetSoundReverbMix(int nSoundChannel, int nReverb);
     CResRef GetAnimationBam(SHORT nPortrait, BYTE range);
