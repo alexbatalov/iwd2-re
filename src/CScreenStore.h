@@ -6,6 +6,7 @@
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
+#include "CUIControlButtonPlusMinus.h"
 #include "CUIControlScrollBar.h"
 #include "CVidFont.h"
 
@@ -120,6 +121,7 @@ public:
     void OnErrorButtonClick(INT nButton);
     void OpenBag(const CResRef& resRef);
     void CloseBag(BOOL bSaveFile);
+    void UpdateRequesterPanel();
 
     void SelectGroupItem(INT nIndex, BOOL bSelected);
     void SelectIdentifyItem(INT nIndex, BOOL bSelected);
@@ -361,6 +363,13 @@ public:
     CUIControlButtonStoreRequesterCancel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonStoreRequesterCancel() override;
     void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonStoreRequesterPlusMinus : public CUIControlButtonPlusMinus {
+public:
+    CUIControlButtonStoreRequesterPlusMinus(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonStoreRequesterPlusMinus() override;
+    void AdjustValue() override;
 };
 
 #endif /* CSCREENSTORE_H_ */

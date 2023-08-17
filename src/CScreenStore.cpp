@@ -1050,6 +1050,12 @@ void CScreenStore::CloseBag(BOOL bSaveFile)
     m_pBag = NULL;
 }
 
+// 0x67E890
+void CScreenStore::UpdateRequesterPanel()
+{
+    // TODO: Incomplete.
+}
+
 // NOTE: Inlined.
 void CScreenStore::SelectGroupItem(INT nIndex, BOOL bSelected)
 {
@@ -2666,4 +2672,58 @@ void CUIControlButtonStoreRequesterCancel::OnLButtonClick(CPoint pt)
     UTIL_ASSERT(pStore != NULL);
 
     pStore->OnCancelButtonClick();
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x6845B0
+CUIControlButtonStoreRequesterPlusMinus::CUIControlButtonStoreRequesterPlusMinus(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButtonPlusMinus(panel, controlInfo)
+{
+}
+
+// 0x6845F0
+CUIControlButtonStoreRequesterPlusMinus::~CUIControlButtonStoreRequesterPlusMinus()
+{
+}
+
+// 0x684690
+void CUIControlButtonStoreRequesterPlusMinus::AdjustValue()
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 13432
+    UTIL_ASSERT(pStore != NULL);
+
+    switch (m_nID) {
+    case 3:
+        if (1) {
+            CScreenStoreItem cItem;
+
+            if (pStore->field_14E6 == 0) {
+                pStore->GetGroupItem(pStore->field_14E2, cItem);
+            } else {
+                pStore->GetStoreItem(pStore->field_14E2, cItem);
+            }
+
+            // NOTE: Unsigned compare.
+            if (static_cast<DWORD>(pStore->field_14DE) < cItem.m_nMaxCount) {
+                pStore->field_14DE++;
+                pStore->UpdateRequesterPanel();
+            }
+        }
+        break;
+    case 4:
+        // NOTE: Signed compare.
+        if (pStore->field_14DE > 1) {
+            pStore->field_14DE--;
+            pStore->UpdateRequesterPanel();
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 13445
+        UTIL_ASSERT(FALSE);
+    }
 }
