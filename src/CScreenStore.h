@@ -115,6 +115,7 @@ public:
     void CheckEnablePanels(BOOL bEnable);
     void OnDoneButtonClick();
     void OnCancelButtonClick();
+    SHORT GetPanelButtonSequence(INT nButtonIndex);
     STRREF GetPanelButtonToolTip(INT nButtonIndex);
     void OnErrorButtonClick(INT nButton);
     void OpenBag(const CResRef& resRef);

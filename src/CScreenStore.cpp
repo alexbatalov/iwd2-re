@@ -880,6 +880,46 @@ void CScreenStore::OnCancelButtonClick()
     // TODO: Incomplete.
 }
 
+// 0x67D9D0
+SHORT CScreenStore::GetPanelButtonSequence(INT nButtonIndex)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 8283
+    UTIL_ASSERT(0 <= nButtonIndex && nButtonIndex < CSCREENSTORE_NUM_BOTTOMBUTTONS);
+
+    if (m_cResStore == "") {
+        return 0;
+    }
+
+    SHORT nSequence;
+    switch (m_adwButtonPanelId[nButtonIndex]) {
+    case -1:
+        nSequence = 0;
+        break;
+    case 2:
+        nSequence = 0;
+        break;
+    case 4:
+        nSequence = 1;
+        break;
+    case 5:
+        nSequence = 3;
+        break;
+    case 7:
+        nSequence = 6;
+        break;
+    case 8:
+        nSequence = 5;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 8323
+        UTIL_ASSERT(FALSE);
+    }
+
+    return nSequence;
+}
+
 // 0x67DA90
 STRREF CScreenStore::GetPanelButtonToolTip(INT nButtonIndex)
 {
