@@ -191,7 +191,7 @@ void CScreenStore::EngineGameInit()
     m_nStoreCost = 0;
     m_nGroupCost = 0;
     m_dwSpellCost = 0;
-    field_4FC = 0;
+    m_dwIdentifyCost = 0;
     m_pStore = 0;
     m_pBag = NULL;
     field_580 = -1;
@@ -766,6 +766,22 @@ void CScreenStore::UpdateGroupCost()
     }
 }
 
+// NOTE: Inlined.
+void CScreenStore::UpdateIdentifyCost()
+{
+    m_dwIdentifyCost = 0;
+
+    POSITION pos = m_lIdentifyItems.GetHeadPosition();
+    while (pos != NULL) {
+        CScreenStoreItem* pItem = m_lIdentifyItems.GetAt(pos);
+        if (pItem->m_bSelected) {
+            m_dwIdentifyCost += pItem->m_nValue;
+        }
+
+        m_lIdentifyItems.GetNext(pos);
+    }
+}
+
 // 0x677E00
 void CScreenStore::UpdateStoreCost()
 {
@@ -914,6 +930,12 @@ void CScreenStore::UpdatePartyGoldStatus()
     }
 }
 
+// 0x684A20
+void CScreenStore::OpenBag(const CResRef& resRef)
+{
+    // TODO: Incomplete.
+}
+
 // 0x684CD0
 void CScreenStore::CloseBag(BOOL bSaveFile)
 {
@@ -934,6 +956,32 @@ void CScreenStore::CloseBag(BOOL bSaveFile)
 
     delete m_pBag;
     m_pBag = NULL;
+}
+
+// NOTE: Inlined.
+void CScreenStore::SelectGroupItem(INT nIndex, BOOL bSelected)
+{
+    if (nIndex >= 0 && nIndex < m_lGroupItems.GetCount()) {
+        CScreenStoreItem* pItem = m_lGroupItems.GetAt(m_lGroupItems.FindIndex(nIndex));
+        pItem->m_bSelected = bSelected;
+        if (!bSelected) {
+            pItem->m_nCount = 1;
+            pItem->m_nValue = pItem->m_nSingleValue;
+        }
+    }
+}
+
+// NOTE: Inlined.
+void CScreenStore::SelectIdentifyItem(INT nIndex, BOOL bSelected)
+{
+    if (nIndex >= 0 && nIndex < m_lIdentifyItems.GetCount()) {
+        CScreenStoreItem* pItem = m_lIdentifyItems.GetAt(m_lIdentifyItems.FindIndex(nIndex));
+        pItem->m_bSelected = bSelected;
+        if (!bSelected) {
+            pItem->m_nCount = 1;
+            pItem->m_nValue = pItem->m_nSingleValue;
+        }
+    }
 }
 
 // NOTE: Inlined.
@@ -2005,7 +2053,65 @@ CUIControlButtonStoreGroupItem::~CUIControlButtonStoreGroupItem()
 // 0x681EE0
 void CUIControlButtonStoreGroupItem::OnLButtonClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 11850
+    UTIL_ASSERT(pStore != NULL);
+
+    CScreenStoreItem cItem;
+    INT nIndex;
+
+    switch (m_nID) {
+    case 2:
+        nIndex = pStore->m_nTopGroupItem + m_nID - 13;
+        pStore->GetGroupItem(nIndex, cItem);
+
+        if (cItem.m_pItem->GetItemType() == 58) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+            // __LINE__: 11874
+            UTIL_ASSERT(pStore->GetBag() == NULL);
+
+            pStore->OpenBag(cItem.m_pItem->GetResRef());
+            INT nInventory = pStore->m_pBag->m_lInventory.GetCount();
+            pStore->CloseBag(FALSE);
+
+            if (nInventory == 0) {
+                // NOTE: Uninline.
+                pStore->SelectGroupItem(nIndex, !cItem.m_bSelected);
+
+                // NOTE: Uninline.
+                pStore->UpdateGroupCost();
+
+                pStore->UpdateMainPanel();
+            }
+        } else {
+            // NOTE: Uninline.
+            pStore->SelectGroupItem(nIndex, !cItem.m_bSelected);
+
+            // NOTE: Uninline.
+            pStore->UpdateGroupCost();
+
+            pStore->UpdateMainPanel();
+        }
+        break;
+    case 4:
+        nIndex = pStore->m_nTopIdentifyItem + m_nID - 8;
+        pStore->GetIdentifyItem(nIndex, cItem);
+
+        // NOTE: Uninline.
+        pStore->SelectIdentifyItem(nIndex, !cItem.m_bSelected);
+
+        // NOTE: Uninline.
+        pStore->UpdateIdentifyCost();
+
+        pStore->UpdateMainPanel();
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 11894
+        UTIL_ASSERT(FALSE);
+    }
 }
 
 // NOTE: Odd location.

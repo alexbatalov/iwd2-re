@@ -100,6 +100,7 @@ public:
     void GetIdentifyItem(INT nIndex, CScreenStoreItem& cItem);
     void DestroyIdentifyItems();
     void UpdateGroupCost();
+    void UpdateIdentifyCost();
     void UpdateStoreCost();
     void UpdateSpellCost();
     void OnBuyItemButtonClick();
@@ -112,9 +113,15 @@ public:
     void OnDoneButtonClick();
     void OnCancelButtonClick();
     void OnErrorButtonClick(INT nButton);
+    void OpenBag(const CResRef& resRef);
     void CloseBag(BOOL bSaveFile);
 
+    void SelectGroupItem(INT nIndex, BOOL bSelected);
+    void SelectIdentifyItem(INT nIndex, BOOL bSelected);
     void SelectStoreItem(INT nIndex, BOOL bSelected);
+
+    // Seen in `CUIControlButtonStoreGroupItem::OnLButtonClick` assertion.
+    CStore* GetBag() { return m_pBag; }
 
     /* 0106 */ CKeyInfo m_pVirtualKeys[CSCREENSTORE_VIRTUAL_KEYS];
     /* 039E */ BYTE m_pVirtualKeysFlags[CSCREENSTORE_VIRTUAL_KEYS];
@@ -136,7 +143,7 @@ public:
     /* 04F0 */ LONG m_nStoreCost;
     /* 04F4 */ LONG m_nGroupCost;
     /* 04F8 */ DWORD m_dwSpellCost;
-    /* 04FC */ int field_4FC;
+    /* 04FC */ DWORD m_dwIdentifyCost;
     /* 0500 */ DWORD m_dwRoomType;
     /* 0580 */ int field_580;
     /* 0584 */ int field_584;
