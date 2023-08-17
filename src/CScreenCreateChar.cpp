@@ -6488,7 +6488,7 @@ void CUIControlScrollBarCharGenHatedRace::UpdateScrollBar()
     // __LINE__: 15194
     UTIL_ASSERT(pCreateChar != NULL);
 
-    AdjustScrollBar(pCreateChar->m_nTopFeat, CSCREENCREATECHAR_NUM_HATEDRACES, 11);
+    AdjustScrollBar(pCreateChar->m_nTopHatedRace, CSCREENCREATECHAR_NUM_HATEDRACES, 11);
 }
 
 // 0x61F720
