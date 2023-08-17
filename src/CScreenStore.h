@@ -123,6 +123,7 @@ public:
     void OpenBag(const CResRef& resRef);
     void CloseBag(BOOL bSaveFile);
     void UpdateRequesterPanel();
+    DWORD GetDefaultMainPanel();
 
     void SelectGroupItem(INT nIndex, BOOL bSelected);
     void SelectIdentifyItem(INT nIndex, BOOL bSelected);

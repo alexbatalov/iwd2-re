@@ -1055,6 +1055,28 @@ void CScreenStore::UpdateRequesterPanel()
     // TODO: Incomplete.
 }
 
+// 0x6849B0
+DWORD CScreenStore::GetDefaultMainPanel()
+{
+    switch (m_pStore->m_header.m_nStoreType) {
+    case 0:
+    case 4:
+        return 2;
+    case 1:
+        return 8;
+    case 2:
+        return 7;
+    case 3:
+        return 5;
+    case 5:
+        return -1;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 13563
+        UTIL_ASSERT(FALSE);
+    }
+}
+
 // NOTE: Inlined.
 void CScreenStore::SelectGroupItem(INT nIndex, BOOL bSelected)
 {
