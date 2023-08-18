@@ -1174,12 +1174,12 @@ BOOL CVidInf::FXBltToBack(CRect& rFXRect, INT x, INT y, INT nRefPointX, INT nRef
     if (rSrc.bottom > rSrc.top && rSrc.right > rSrc.left) {
         if (bUseFX) {
             while (1) {
-                HRESULT hr = g_pChitin->cVideo.cVidBlitter.BltFast(pSurfaces[CVIDINF_SURFACE_BACK],
-                    pt.x,
-                    pt.y,
+                HRESULT hr = g_pChitin->cVideo.cVidBlitter.Blt(pSurfaces[CVIDINF_SURFACE_BACK],
+                    CRect(pt, rSrc.Size()),
                     GetFXSurfacePtr(dwFlags),
                     rSrc,
-                    DDBLTFAST_WAIT | DDBLTFAST_SRCCOLORKEY);
+                    DDBLT_WAIT | DDBLT_KEYSRC | DDBLT_DDFX,
+                    &fx);
                 CheckResults(hr);
                 if (hr != DDERR_SURFACELOST && hr != DDERR_WASSTILLDRAWING) {
                     break;
@@ -1187,12 +1187,12 @@ BOOL CVidInf::FXBltToBack(CRect& rFXRect, INT x, INT y, INT nRefPointX, INT nRef
             }
         } else {
             while (1) {
-                HRESULT hr = g_pChitin->cVideo.cVidBlitter.Blt(pSurfaces[CVIDINF_SURFACE_BACK],
-                    CRect(pt, rSrc.Size()),
+                HRESULT hr = g_pChitin->cVideo.cVidBlitter.BltFast(pSurfaces[CVIDINF_SURFACE_BACK],
+                    pt.x,
+                    pt.y,
                     GetFXSurfacePtr(dwFlags),
                     rSrc,
-                    DDBLT_WAIT | DDBLT_KEYSRC | DDBLT_DDFX,
-                    &fx);
+                    DDBLTFAST_WAIT | DDBLTFAST_SRCCOLORKEY);
                 CheckResults(hr);
                 if (hr != DDERR_SURFACELOST && hr != DDERR_WASSTILLDRAWING) {
                     break;
