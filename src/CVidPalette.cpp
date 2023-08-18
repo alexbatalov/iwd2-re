@@ -329,7 +329,7 @@ void CVidPalette::SetRange(USHORT nRange, USHORT nValue, CVidBitmap& bmpMasterPa
     // TODO: Check.
     m_rangeColors[nRange] = static_cast<BYTE>(nValue);
 
-    RGBQUAD* pTmpPalette = m_pPalette + 12 * nRange + 1;
+    RGBQUAD* pTmpPalette = m_pPalette + 12 * nRange + 4;
     bmpMasterPalette.pRes->Demand();
     for (int nIndex = 0; nIndex < 12; nIndex++) {
         bmpMasterPalette.GetPixelColor(*pTmpPalette++, nIndex, nValue, TRUE);
