@@ -29,6 +29,7 @@ public:
     /* 00A0 */ void SetColorEffectAll(BYTE effectType, COLORREF tintColor, BYTE periodLength) override;
     /* 00A4 */ void SetColorRange(BYTE colorRange, BYTE rangeValue) override;
     /* 00A8 */ void SetColorRangeAll(BYTE rangeValue) override;
+    /* 00AC */ SHORT SetSequence(SHORT nSequence) override;
     /* 00C8 */ SHORT GetCurrentFrame() override;
     /* 00CC */ BOOLEAN GetCurrentSequenceAndFrame(SHORT nSequence, SHORT nFrame) override;
     /* 00D0 */ BOOLEAN GetCurrentResRef(CString& resBody, CString& resWeapon, CString& resShield, CString& resHelmet) override;
@@ -90,7 +91,7 @@ public:
     /* 1443 */ unsigned char field_1443;
     /* 1444 */ unsigned char field_1444;
     /* 1448 */ unsigned char field_1448;
-    /* 144C */ unsigned char field_144C;
+    /* 144C */ CHAR field_144C;
     /* 144D */ unsigned char field_144D;
 };
 

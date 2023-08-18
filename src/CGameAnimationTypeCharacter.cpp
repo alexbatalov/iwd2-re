@@ -1469,3 +1469,480 @@ void CGameAnimationTypeCharacter::Render(CInfinity* pInfinity, CVidMode* pVidMod
             dwRenderFlags);
     }
 }
+
+// 0x6CDA00
+SHORT CGameAnimationTypeCharacter::SetSequence(SHORT nSequence)
+{
+    BOOL bRandomFrame = FALSE;
+
+    m_renderWeapons = TRUE;
+    m_renderHelmet = TRUE;
+
+    switch (nSequence) {
+    case 1:
+        m_currentVidCellBase = &m_g1VidCellBase;
+
+        if (m_currentVidCellWeapon != NULL) {
+            m_currentVidCellWeaponBase = &m_g1VidCellWeaponBase;
+        }
+
+        if (m_currentVidCellShield != NULL) {
+            m_currentVidCellShieldBase = &m_g1VidCellShieldBase;
+        }
+
+        if (m_currentVidCellHelmet != NULL) {
+            m_currentVidCellHelmetBase = &m_g1VidCellHelmetBase;
+        }
+
+        m_currentBamSequence = 9;
+
+        if (field_1448 != 0) {
+            field_144C = '9';
+            m_g1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "G1" + field_144C), field_1444, TRUE);
+        }
+        break;
+    case 2:
+        m_currentVidCellBase = &m_caVidCellBase;
+        m_renderWeapons = FALSE;
+
+        if (m_currentVidCellHelmet != NULL) {
+            m_currentVidCellHelmetBase = &m_caVidCellHelmetBase;
+        }
+
+        switch (rand() % 4) {
+        case 0:
+            m_currentBamSequence = 1;
+            if (field_1448 != 0) {
+                field_144C = 0;
+                m_caVidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "CA" + field_144C), field_1444, TRUE);
+            }
+            break;
+        case 1:
+            m_currentBamSequence = 3;
+            if (field_1448 != 0) {
+                field_144C = 0;
+                m_caVidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "CA" + field_144C), field_1444, TRUE);
+            }
+            break;
+        case 2:
+            m_currentBamSequence = 5;
+            if (field_1448 != 0) {
+                field_144C = 0;
+                m_caVidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "CA" + field_144C), field_1444, TRUE);
+            }
+            break;
+        case 3:
+            m_currentBamSequence = 7;
+            if (field_1448 != 0) {
+                field_144C = 0;
+                m_caVidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "CA" + field_144C), field_1444, TRUE);
+            }
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+            // __LINE__: 20415
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 3:
+        m_currentVidCellBase = &m_caVidCellBase;
+        m_renderWeapons = FALSE;
+
+        if (m_currentVidCellHelmet != NULL) {
+            m_currentVidCellHelmetBase = &m_caVidCellHelmetBase;
+        }
+
+        switch (rand() % 4) {
+        case 0:
+            m_currentBamSequence = 0;
+            if (field_1448 != 0) {
+                field_144C = 0;
+                m_caVidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "CA" + field_144C), field_1444, TRUE);
+            }
+            break;
+        case 1:
+            m_currentBamSequence = 2;
+            if (field_1448 != 0) {
+                field_144C = 0;
+                m_caVidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "CA" + field_144C), field_1444, TRUE);
+            }
+            break;
+        case 2:
+            m_currentBamSequence = 4;
+            if (field_1448 != 0) {
+                field_144C = 0;
+                m_caVidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "CA" + field_144C), field_1444, TRUE);
+            }
+            break;
+        case 3:
+            m_currentBamSequence = 6;
+            if (field_1448 != 0) {
+                field_144C = 0;
+                m_caVidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "CA" + field_144C), field_1444, TRUE);
+            }
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+            // __LINE__: 20465
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 4:
+        m_currentVidCellBase = &m_g1VidCellBase;
+
+        if (m_currentVidCellWeapon != NULL) {
+            m_currentVidCellWeaponBase = &m_g1VidCellWeaponBase;
+        }
+
+        if (m_currentVidCellShield != NULL) {
+            m_currentVidCellShieldBase = &m_g1VidCellShieldBase;
+        }
+
+        if (m_currentVidCellHelmet != NULL) {
+            m_currentVidCellHelmetBase = &m_g1VidCellHelmetBase;
+        }
+
+        m_currentBamSequence = 4;
+
+        if (field_1448 != 0) {
+            field_144C = '4';
+            m_g1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "G1" + field_144C), field_1444, TRUE);
+        }
+        break;
+    case 5:
+        m_currentVidCellBase = &m_g1VidCellBase;
+
+        m_renderWeapons = FALSE;
+        m_renderHelmet = FALSE;
+        m_currentBamSequence = 5;
+
+        if (field_1448 != 0) {
+            field_144C = '5';
+            m_g1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "G1" + field_144C), field_1444, TRUE);
+        }
+        break;
+    case 6:
+        if (1) {
+            INT nChance = rand() % 100;
+            if (nChance < 60) {
+                if ((m_currentBamSequence != 2
+                        && m_currentBamSequence != 7
+                        && m_currentBamSequence != 8)
+                    || m_currentVidCellBase != &m_g1VidCellBase) {
+                    bRandomFrame = TRUE;
+                }
+
+                m_currentBamSequence = 2;
+
+                if (field_1448 != 0) {
+                    field_144C = '2';
+                    m_g1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "G1" + field_144C), field_1444, TRUE);
+                }
+            } else if (nChance < 97) {
+                m_currentBamSequence = 7;
+
+                if (field_1448 != 0) {
+                    field_144C = '7';
+                    m_g1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "G1" + field_144C), field_1444, TRUE);
+                }
+            } else {
+                m_currentBamSequence = 0;
+
+                if (field_1448 != 0) {
+                    field_144C = '8';
+                    m_g1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "G1" + field_144C), field_1444, TRUE);
+                }
+            }
+
+            m_currentVidCellBase = &m_g1VidCellBase;
+
+            if (m_currentVidCellWeapon != NULL) {
+                m_currentVidCellWeaponBase = &m_g1VidCellWeaponBase;
+            }
+
+            if (m_currentVidCellShield != NULL) {
+                m_currentVidCellShieldBase = &m_g1VidCellShieldBase;
+            }
+
+            if (m_currentVidCellHelmet != NULL) {
+                m_currentVidCellHelmetBase = &m_g1VidCellHelmetBase;
+            }
+        }
+        break;
+    case 7:
+        if (m_weaponCode == 5) {
+            if (m_currentBamSequence != 3
+                || m_currentVidCellBase != &m_g1VidCellBase) {
+                bRandomFrame = TRUE;
+            }
+
+            m_currentBamSequence = 3;
+
+            if (field_1448 != 0) {
+                field_144C = '3';
+                m_g1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "G1" + field_144C), field_1444, TRUE);
+            }
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+            // __LINE__: 20618
+            UTIL_ASSERT(m_currentVidCellShield == NULL);
+        } else {
+            if (m_currentBamSequence != 1
+                || m_currentVidCellBase != &m_g1VidCellBase) {
+                bRandomFrame = TRUE;
+            }
+
+            m_currentBamSequence = 1;
+
+            if (field_1448 != 0) {
+                field_144C = 0;
+                m_g1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "G1" + field_144C), field_1444, TRUE);
+            }
+
+            if (m_currentVidCellShield != NULL) {
+                m_currentVidCellShieldBase = &m_g1VidCellShieldBase;
+            }
+        }
+
+        m_currentVidCellBase = &m_g1VidCellBase;
+
+        if (m_currentVidCellWeapon != NULL) {
+            m_currentVidCellWeaponBase = &m_g1VidCellWeaponBase;
+        }
+
+        if (m_currentVidCellHelmet != NULL) {
+            m_currentVidCellHelmetBase = &m_g1VidCellHelmetBase;
+        }
+        break;
+    case 8:
+        m_currentVidCellBase = &m_a1VidCellBase;
+
+        if (m_currentVidCellWeapon != NULL) {
+            m_currentVidCellWeaponBase = &m_a1VidCellWeaponBase;
+        }
+
+        if (m_currentVidCellShield != NULL) {
+            m_currentVidCellShieldBase = &m_a1VidCellShieldBase;
+        }
+
+        if (m_currentVidCellHelmet != NULL) {
+            m_currentVidCellHelmetBase = &m_a1VidCellHelmetBase;
+        }
+
+        m_currentBamSequence = 0;
+
+        if (field_1448 != 0) {
+            field_144C = 0;
+        }
+        break;
+    case 9:
+        m_currentVidCellBase = &m_g1VidCellBase;
+
+        m_renderWeapons = FALSE;
+        m_renderHelmet = FALSE;
+        m_currentBamSequence = 6;
+
+        if (field_1448 != 0) {
+            field_144C = '6';
+            m_g1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "G1" + field_144C), field_1444, TRUE);
+        }
+        break;
+    case 10:
+        m_currentVidCellBase = &m_g1VidCellBase;
+
+        if (m_currentVidCellWeapon != NULL) {
+            m_currentVidCellWeaponBase = &m_g1VidCellWeaponBase;
+        }
+
+        if (m_currentVidCellShield != NULL) {
+            m_currentVidCellShieldBase = &m_g1VidCellShieldBase;
+        }
+
+        if (m_currentVidCellHelmet != NULL) {
+            m_currentVidCellHelmetBase = &m_g1VidCellHelmetBase;
+        }
+
+        m_currentBamSequence = 0;
+
+        if (field_1448 != 0) {
+            field_144C = '1';
+            m_g1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "G1" + field_144C), field_1444, TRUE);
+        }
+        break;
+    case 11:
+        m_currentVidCellBase = &m_a1VidCellBase;
+
+        if (m_currentVidCellWeapon != NULL) {
+            m_currentVidCellWeaponBase = &m_a1VidCellWeaponBase;
+        }
+
+        if (m_currentVidCellShield != NULL) {
+            m_currentVidCellShieldBase = &m_a1VidCellShieldBase;
+        }
+
+        if (m_currentVidCellHelmet != NULL) {
+            m_currentVidCellHelmetBase = &m_a1VidCellHelmetBase;
+        }
+
+        m_currentBamSequence = 0;
+        nSequence = 0;
+
+        if (field_1448 != 0) {
+            field_144C = 0;
+        }
+        break;
+    case 12:
+        m_currentVidCellBase = &m_a2VidCellBase;
+
+        if (m_currentVidCellWeapon != NULL) {
+            m_currentVidCellWeaponBase = &m_a2VidCellWeaponBase;
+        }
+
+        if (m_currentVidCellShield != NULL) {
+            m_currentVidCellShieldBase = &m_a2VidCellShieldBase;
+        }
+
+        if (m_currentVidCellHelmet != NULL) {
+            m_currentVidCellHelmetBase = &m_a2VidCellHelmetBase;
+        }
+
+        m_currentBamSequence = 0;
+        nSequence = 0;
+
+        if (field_1448 != 0) {
+            field_144C = 0;
+        }
+        break;
+    case 13:
+        m_currentVidCellBase = &m_a3VidCellBase;
+
+        if (m_currentVidCellWeapon != NULL) {
+            m_currentVidCellWeaponBase = &m_a3VidCellWeaponBase;
+        }
+
+        if (m_currentVidCellShield != NULL) {
+            m_currentVidCellShieldBase = &m_a3VidCellShieldBase;
+        }
+
+        if (m_currentVidCellHelmet != NULL) {
+            m_currentVidCellHelmetBase = &m_a3VidCellHelmetBase;
+        }
+
+        m_currentBamSequence = 0;
+        nSequence = 0;
+
+        if (field_1448 != 0) {
+            field_144C = 0;
+        }
+        break;
+    case 14:
+    case 15:
+        nSequence = 7;
+
+        if (m_weaponCode == 5) {
+            if (m_currentBamSequence != 3
+                || m_currentVidCellBase != &m_g1VidCellBase) {
+                bRandomFrame = TRUE;
+            }
+
+            m_currentBamSequence = 3;
+
+            if (field_1448 != 0) {
+                field_144C = '3';
+                m_g1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "G1" + field_144C), field_1444, TRUE);
+            }
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+            // __LINE__: 20618
+            UTIL_ASSERT(m_currentVidCellShield == NULL);
+        } else {
+            if (m_currentBamSequence != 1
+                || m_currentVidCellBase != &m_g1VidCellBase) {
+                bRandomFrame = TRUE;
+            }
+
+            m_currentBamSequence = 1;
+
+            if (field_1448 != 0) {
+                field_144C = 0;
+                m_g1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "G1" + field_144C), field_1444, TRUE);
+            }
+
+            if (m_currentVidCellShield != NULL) {
+                m_currentVidCellShieldBase = &m_g1VidCellShieldBase;
+            }
+        }
+
+        m_currentVidCellBase = &m_g1VidCellBase;
+
+        if (m_currentVidCellWeapon != NULL) {
+            m_currentVidCellWeaponBase = &m_g1VidCellWeaponBase;
+        }
+
+        if (m_currentVidCellHelmet != NULL) {
+            m_currentVidCellHelmetBase = &m_g1VidCellHelmetBase;
+        }
+        break;
+    case 17:
+        m_currentVidCellBase = &m_g1VidCellBase;
+
+        if (m_currentVidCellWeapon != NULL) {
+            m_currentVidCellWeaponBase = &m_g1VidCellWeaponBase;
+        }
+
+        if (m_currentVidCellShield != NULL) {
+            m_currentVidCellShieldBase = &m_g1VidCellShieldBase;
+        }
+
+        if (m_currentVidCellHelmet != NULL) {
+            m_currentVidCellHelmetBase = &m_g1VidCellHelmetBase;
+        }
+
+        m_currentBamSequence = 10;
+
+        if (field_1448 != 0) {
+            field_144C = '9';
+            m_g1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "G1" + field_144C), field_1444, TRUE);
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+        // __LINE__: 20708
+        UTIL_ASSERT(FALSE);
+    }
+
+    ChangeDirection(m_currentBamDirection);
+
+    SHORT nFrame = 0;
+    if (bRandomFrame) {
+        BYTE nSequenceLength = m_currentVidCell->GetSequenceLength(m_currentVidCell->m_nCurrentSequence, FALSE);
+        if (nSequenceLength != 0) {
+            nFrame = rand() % nSequenceLength;
+        }
+    }
+    m_currentVidCell->FrameSet(nFrame);
+
+    if (m_renderWeapons) {
+        if (m_currentVidCellWeapon != NULL) {
+            m_currentVidCellWeapon->FrameSet(nFrame);
+        }
+
+        if (m_currentVidCellShield != NULL) {
+            m_currentVidCellShield->FrameSet(nFrame);
+        }
+    }
+
+    if (m_renderHelmet) {
+        if (m_currentVidCellHelmet != NULL) {
+            m_currentVidCellHelmet->FrameSet(nFrame);
+        }
+    }
+
+    if (nSequence == 1) {
+        DecrementFrame();
+    }
+
+    field_144D = static_cast<unsigned char>(nSequence);
+
+    return nSequence;
+}
