@@ -1053,7 +1053,7 @@ void CVidInf::FXBltBackTo(const CPoint& ptTopLeft, const CRect& rFXRect, const C
         }
     }
 
-    if (pt.y > rSrc.top && pt.x > rSrc.left) {
+    if (rSrc.bottom > rSrc.top && rSrc.right > rSrc.left) {
         if (bUseFX) {
             fx.dwSize = sizeof(fx);
             while (1) {
