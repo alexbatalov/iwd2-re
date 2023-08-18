@@ -6268,19 +6268,19 @@ void CUIControlButtonCharGenColorChoice::OnLButtonClick(CPoint pt)
                 switch (colorRange) {
                 case 1:
                     ptLocation.x = 3;
-                    rangeValue = tPortraitColor.GetAtLong(ptLocation);
+                    rangeValue = static_cast<BYTE>(tPortraitColor.GetAtLong(ptLocation));
                     break;
                 case 2:
                     ptLocation.x = 2;
-                    rangeValue = tPortraitColor.GetAtLong(ptLocation);
+                    rangeValue = static_cast<BYTE>(tPortraitColor.GetAtLong(ptLocation));
                     break;
                 case 3:
                     ptLocation.x = 0;
-                    rangeValue = tPortraitColor.GetAtLong(ptLocation);
+                    rangeValue = static_cast<BYTE>(tPortraitColor.GetAtLong(ptLocation));
                     break;
                 case 6:
                     ptLocation.x = 1;
-                    rangeValue = tPortraitColor.GetAtLong(ptLocation);
+                    rangeValue = static_cast<BYTE>(tPortraitColor.GetAtLong(ptLocation));
                     break;
                 }
             } else {
