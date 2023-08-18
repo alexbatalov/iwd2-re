@@ -493,7 +493,7 @@ BOOL CVidCell::IsEndOfSequence(BOOLEAN bDemanded)
         bResult = TRUE;
         // FIXME: Repeating calls.
         // NOTE: Uninline.
-        if (GetResSequences()[m_nCurrentSequence].nFrames - 1 == m_nCurrentFrame) {
+        if (m_nCurrentFrame < GetResSequences()[m_nCurrentSequence].nFrames - 1) {
             // NOTE: Uninline.
             if (GetResSequences()[m_nCurrentSequence].nFrames != 0) {
                 bResult = FALSE;
