@@ -10,6 +10,7 @@ public:
     CGameAnimationTypeCharacter(USHORT animationID, BYTE* colorRangeValues, WORD facing);
     /* 0000 */ ~CGameAnimationTypeCharacter() override;
     /* 0008 */ void CalculateGCBoundsRect(CRect& rGCBounds, const CPoint& pos, const CPoint& ptReference, LONG posZ, LONG nWidth, LONG nHeight) override;
+    /* 000C */ void ChangeDirection(SHORT nDirection) override;
     /* 0020 */ CVidPalette* GetAnimationPalette(BYTE range) override;
     /* 0028 */ BOOLEAN CanLieDown() override;
     /* 002C */ BOOLEAN DetectedByInfravision() override;

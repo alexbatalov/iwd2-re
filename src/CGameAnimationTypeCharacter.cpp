@@ -640,6 +640,62 @@ void CGameAnimationTypeCharacter::CalculateGCBoundsRect(CRect& rGCBounds, const 
     rGCBounds.bottom = rGCBounds.top + nHeight;
 }
 
+// 0x6C6320
+void CGameAnimationTypeCharacter::ChangeDirection(SHORT nDirection)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 18436
+    UTIL_ASSERT(m_currentVidCell != NULL && m_currentVidCellBase != NULL);
+
+    SHORT nFrame = m_currentVidCell->m_nCurrentFrame;
+    m_currentBamDirection = nDirection;
+    m_currentVidCell = m_currentVidCellBase;
+
+    if (m_currentBamDirection > m_extendDirectionTest) {
+        m_currentVidCell->SequenceSet(9 * m_currentBamSequence - m_currentBamSequence + 16);
+    } else {
+        m_currentVidCell->SequenceSet(9 * m_currentBamSequence + m_currentBamDirection);
+    }
+
+    m_currentVidCell->FrameSet(nFrame);
+
+    if (m_currentVidCellWeapon != NULL) {
+        m_currentVidCellWeapon = m_currentVidCellWeaponBase;
+
+        if (m_currentBamDirection > m_extendDirectionTest) {
+            m_currentVidCellWeapon->SequenceSet(9 * m_currentBamSequence - m_currentBamSequence + 16);
+        } else {
+            m_currentVidCellWeapon->SequenceSet(9 * m_currentBamSequence + m_currentBamDirection);
+        }
+
+        m_currentVidCellWeapon->FrameSet(nFrame);
+    }
+
+    if (m_currentVidCellShield != NULL) {
+        m_currentVidCellShield = m_currentVidCellShieldBase;
+
+        if (m_currentBamDirection > m_extendDirectionTest) {
+            m_currentVidCellShield->SequenceSet(9 * m_currentBamSequence - m_currentBamSequence + 16);
+        } else {
+            m_currentVidCellShield->SequenceSet(9 * m_currentBamSequence + m_currentBamDirection);
+        }
+
+        m_currentVidCellShield->FrameSet(nFrame);
+    }
+
+    if (m_currentVidCellHelmet != NULL) {
+        m_currentVidCellShield = m_currentVidCellShieldBase;
+
+        if (m_currentBamDirection > m_extendDirectionTest) {
+            m_currentVidCellShield->SequenceSet(9 * m_currentBamSequence - m_currentBamSequence + 16);
+        } else {
+            m_currentVidCellShield->SequenceSet(9 * m_currentBamSequence + m_currentBamDirection);
+        }
+
+        m_currentVidCellShield->FrameSet(nFrame);
+    }
+}
+
 // 0x6CBD40
 CVidPalette* CGameAnimationTypeCharacter::GetAnimationPalette(BYTE range)
 {
