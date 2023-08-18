@@ -38,7 +38,7 @@ public:
     ~CInfinity();
 
     BOOL FXBltFrom(INT nDestSurface, CRect& rFXRect, INT x, INT y, INT nRefPointX, INT nRefPointY, DWORD dwFlags);
-    BOOL FXPrep(CRect& rFXRect, DWORD dwFlags, int a3, const CPoint& ptPos, const CPoint& ptReference);
+    BOOL FXPrep(CRect& rFXRect, DWORD dwFlags, INT nDestSurface, const CPoint& ptPos, const CPoint& ptReference);
     BOOL FXLock(CRect& rBack, DWORD dwFlags);
     BOOL FXTextOut(CVidFont* pFont, const CString& sString, INT x, INT y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded);
     BOOL FXRender(CVidCell* pVidCell, INT nRefPointX, INT nRefPointY, DWORD dwFlags, INT nTransValue);

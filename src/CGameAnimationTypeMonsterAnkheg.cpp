@@ -454,7 +454,7 @@ void CGameAnimationTypeMonsterAnkheg::SetColorEffectAll(BYTE effectType, COLORRE
 }
 
 // 0x6C3910
-void CGameAnimationTypeMonsterAnkheg::Render(CInfinity* pInfinity, CVidMode* pVidMode, int a3, const CRect& rectFX, const CPoint& ptNewPos, const CPoint& ptReference, DWORD dwRenderFlags, COLORREF rgbTintColor, const CRect& rGCBounds, BOOL bDithered, BOOL bFadeOut, LONG posZ, BYTE transparency)
+void CGameAnimationTypeMonsterAnkheg::Render(CInfinity* pInfinity, CVidMode* pVidMode, INT nSurface, const CRect& rectFX, const CPoint& ptNewPos, const CPoint& ptReference, DWORD dwRenderFlags, COLORREF rgbTintColor, const CRect& rGCBounds, BOOL bDithered, BOOL bFadeOut, LONG posZ, BYTE transparency)
 {
     // TODO: Incomplete.
 }

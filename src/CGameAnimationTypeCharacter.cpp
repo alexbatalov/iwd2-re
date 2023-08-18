@@ -1251,7 +1251,7 @@ void CGameAnimationTypeCharacter::SetColorRangeAll(BYTE rangeValue)
 }
 
 // 0x6CD400
-void CGameAnimationTypeCharacter::Render(CInfinity* pInfinity, CVidMode* pVidMode, int a3, const CRect& rectFX, const CPoint& ptNewPos, const CPoint& ptReference, DWORD dwRenderFlags, COLORREF rgbTintColor, const CRect& rGCBounds, BOOL bDithered, BOOL bFadeOut, LONG posZ, BYTE transparency)
+void CGameAnimationTypeCharacter::Render(CInfinity* pInfinity, CVidMode* pVidMode, INT nSurface, const CRect& rectFX, const CPoint& ptNewPos, const CPoint& ptReference, DWORD dwRenderFlags, COLORREF rgbTintColor, const CRect& rGCBounds, BOOL bDithered, BOOL bFadeOut, LONG posZ, BYTE transparency)
 {
     // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
     // __LINE__: 20146
@@ -1275,7 +1275,7 @@ void CGameAnimationTypeCharacter::Render(CInfinity* pInfinity, CVidMode* pVidMod
         dwRenderFlags |= 0x2;
     }
 
-    pInfinity->FXPrep(rFXRect, dwRenderFlags, a3, ptPos, ptReference);
+    pInfinity->FXPrep(rFXRect, dwRenderFlags, nSurface, ptPos, ptReference);
 
     if (pInfinity->FXLock(rFXRect, dwRenderFlags)) {
         m_currentVidCell->SetTintColor(rgbTintColor);
@@ -1460,7 +1460,7 @@ void CGameAnimationTypeCharacter::Render(CInfinity* pInfinity, CVidMode* pVidMod
             pInfinity->FXUnlock(dwRenderFlags, &rFXRect, CPoint(0, 0));
         }
 
-        pInfinity->FXBltFrom(a3,
+        pInfinity->FXBltFrom(nSurface,
             rFXRect,
             ptPos.x,
             ptPos.y,

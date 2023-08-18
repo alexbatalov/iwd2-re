@@ -379,7 +379,7 @@ void CGameAnimationTypeTownStatic::SetColorRangeAll(BYTE rangeValue)
 }
 
 // 0x6A55C0
-void CGameAnimationTypeTownStatic::Render(CInfinity* pInfinity, CVidMode* pVidMode, int a3, const CRect& rectFX, const CPoint& ptNewPos, const CPoint& ptReference, DWORD dwRenderFlags, COLORREF rgbTintColor, const CRect& rGCBounds, BOOL bDithered, BOOL bFadeOut, LONG posZ, BYTE transparency)
+void CGameAnimationTypeTownStatic::Render(CInfinity* pInfinity, CVidMode* pVidMode, INT nSurface, const CRect& rectFX, const CPoint& ptNewPos, const CPoint& ptReference, DWORD dwRenderFlags, COLORREF rgbTintColor, const CRect& rGCBounds, BOOL bDithered, BOOL bFadeOut, LONG posZ, BYTE transparency)
 {
     // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
     // __LINE__: 2340
@@ -403,7 +403,7 @@ void CGameAnimationTypeTownStatic::Render(CInfinity* pInfinity, CVidMode* pVidMo
         dwRenderFlags |= 0x2;
     }
 
-    pInfinity->FXPrep(rFXRect, dwRenderFlags, a3, ptPos, ptReference);
+    pInfinity->FXPrep(rFXRect, dwRenderFlags, nSurface, ptPos, ptReference);
 
     if (pInfinity->FXLock(rFXRect, dwRenderFlags)) {
         COLORREF oldTintColor = m_currentVidCell->GetTintColor();
@@ -440,7 +440,7 @@ void CGameAnimationTypeTownStatic::Render(CInfinity* pInfinity, CVidMode* pVidMo
             pInfinity->FXUnlock(dwRenderFlags, &rFXRect, CPoint(0, 0));
         }
 
-        pInfinity->FXBltFrom(a3,
+        pInfinity->FXBltFrom(nSurface,
             rFXRect,
             ptPos.x,
             ptPos.y,
