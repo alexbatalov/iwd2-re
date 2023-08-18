@@ -22,6 +22,7 @@ public:
     /* 0084 */ BOOL IsEndOfSequence() override;
     /* 0088 */ void IncrementFrame() override;
     /* 008C */ void DecrementFrame() override;
+    /* 0090 */ void Render(CInfinity* pInfinity, CVidMode* pVidMode, int a3, const CRect& rectFX, const CPoint& ptNewPos, const CPoint& ptReference, DWORD dwRenderFlags, COLORREF rgbTintColor, const CRect& rGCBounds, BOOL bDithered, BOOL bFadeOut, LONG posZ, BYTE transparency) override;
     /* 0094 */ void ClearColorEffects(BYTE colorRange) override;
     /* 0098 */ void ClearColorEffectsAll() override;
     /* 009C */ void SetColorEffect(BYTE effectType, BYTE colorRange, COLORREF tintColor, BYTE periodLength) override;
@@ -74,8 +75,8 @@ public:
     /* 1400 */ CVidPalette m_helmetPalette;
     /* 1424 */ SHORT m_currentBamSequence;
     /* 1426 */ SHORT m_currentBamDirection;
-    /* 1428 */ unsigned char field_1428;
-    /* 142C */ unsigned char field_142C;
+    /* 1428 */ BOOLEAN m_renderWeapons;
+    /* 142C */ BOOLEAN m_renderHelmet;
     /* 1430 */ BOOL m_bEquipHelmet;
     /* 1434 */ unsigned char field_1434;
     /* 1438 */ BOOL m_falseColor;

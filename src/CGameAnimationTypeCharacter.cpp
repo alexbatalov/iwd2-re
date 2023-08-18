@@ -3,6 +3,7 @@
 #include "CBaldurChitin.h"
 #include "CGameSprite.h"
 #include "CInfGame.h"
+#include "CInfinity.h"
 #include "CUtil.h"
 
 // 0x6C40B0
@@ -18,8 +19,8 @@ CGameAnimationTypeCharacter::CGameAnimationTypeCharacter(USHORT animationID, BYT
     m_falseColor = TRUE;
     m_moveScale = 9;
     m_moveScaleCurrent = 9;
-    field_1428 = 1;
-    field_142C = 1;
+    m_renderWeapons = TRUE;
+    m_renderHelmet = TRUE;
     m_bEquipHelmet = TRUE;
     field_1434 = 0;
     m_armorCode = '1';
@@ -637,7 +638,7 @@ void CGameAnimationTypeCharacter::CalculateFxRect(CRect& rFx, CPoint& ptReferenc
     m_currentVidCell->GetCurrentCenterPoint(charCenter, FALSE);
     ptReference = charCenter;
 
-    if (field_1428) {
+    if (m_renderWeapons) {
         if (m_currentVidCellWeapon != NULL
             && m_currentVidCellWeapon->GetResRef().IsValid()) {
             CPoint weaponCenter;
@@ -653,7 +654,7 @@ void CGameAnimationTypeCharacter::CalculateFxRect(CRect& rFx, CPoint& ptReferenc
         }
 
         // FIXME: Redundant.
-        if (field_1428) {
+        if (m_renderWeapons) {
             if (m_currentVidCellShield != NULL
                 && m_currentVidCellShield->GetResRef().IsValid()) {
                 CPoint shieldCenter;
@@ -670,7 +671,7 @@ void CGameAnimationTypeCharacter::CalculateFxRect(CRect& rFx, CPoint& ptReferenc
         }
     }
 
-    if (field_142C) {
+    if (m_renderHelmet) {
         if (m_currentVidCellHelmet != NULL
             && m_currentVidCellHelmet->GetResRef().IsValid()) {
             CPoint helmetCenter;
@@ -693,7 +694,7 @@ void CGameAnimationTypeCharacter::CalculateFxRect(CRect& rFx, CPoint& ptReferenc
     charSize.cy += ptReference.y - charCenter.y;
     rFx.SetRect(0, 0, charSize.cx, charSize.cy);
 
-    if (field_1428) {
+    if (m_renderWeapons) {
         if (m_currentVidCellWeapon != NULL
             && m_currentVidCellWeapon->GetResRef().IsValid()) {
             CSize weaponSize;
@@ -711,7 +712,7 @@ void CGameAnimationTypeCharacter::CalculateFxRect(CRect& rFx, CPoint& ptReferenc
         }
 
         // FIXME: Redundant.
-        if (field_1428) {
+        if (m_renderWeapons) {
             if (m_currentVidCellShield != NULL
                 && m_currentVidCellShield->GetResRef().IsValid()) {
                 CSize shieldSize;
@@ -730,7 +731,7 @@ void CGameAnimationTypeCharacter::CalculateFxRect(CRect& rFx, CPoint& ptReferenc
         }
     }
 
-    if (field_142C) {
+    if (m_renderHelmet) {
         if (m_currentVidCellHelmet != NULL
             && m_currentVidCellHelmet->GetResRef().IsValid()) {
             CSize helmetSize;
@@ -1246,5 +1247,225 @@ void CGameAnimationTypeCharacter::SetColorRangeAll(BYTE rangeValue)
         for (BYTE colorRange = 0; colorRange < CVidPalette::NUM_RANGES; colorRange++) {
             SetColorRange(colorRange | 0x30, rangeValue);
         }
+    }
+}
+
+// 0x6CD400
+void CGameAnimationTypeCharacter::Render(CInfinity* pInfinity, CVidMode* pVidMode, int a3, const CRect& rectFX, const CPoint& ptNewPos, const CPoint& ptReference, DWORD dwRenderFlags, COLORREF rgbTintColor, const CRect& rGCBounds, BOOL bDithered, BOOL bFadeOut, LONG posZ, BYTE transparency)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 20146
+    UTIL_ASSERT(pInfinity != NULL && pVidMode != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 20147
+    UTIL_ASSERT(m_currentVidCell != NULL);
+
+    CPoint ptPos(ptNewPos.x, ptNewPos.y + posZ);
+    CRect rFXRect(rectFX);
+
+    if (m_currentBamDirection > m_extendDirectionTest) {
+        dwRenderFlags |= CInfinity::MIRROR_FX;
+    }
+
+    dwRenderFlags |= CInfinity::FXPREP_COPYFROMBACK;
+    dwRenderFlags |= 0x4;
+
+    if (transparency) {
+        dwRenderFlags |= 0x2;
+    }
+
+    pInfinity->FXPrep(rFXRect, dwRenderFlags, a3, ptPos, ptReference);
+
+    if (pInfinity->FXLock(rFXRect, dwRenderFlags)) {
+        m_currentVidCell->SetTintColor(rgbTintColor);
+
+        if (m_renderHelmet) {
+            if (m_currentVidCellHelmet != NULL) {
+                m_currentVidCellHelmet->SetTintColor(rgbTintColor);
+            }
+        }
+
+        if (m_renderWeapons) {
+            if (m_currentVidCellShield != NULL) {
+                m_currentVidCellShield->SetTintColor(rgbTintColor);
+            }
+
+            // FIXME: Redunant.
+            if (m_renderWeapons) {
+                if (m_currentVidCellWeapon != NULL) {
+                    m_currentVidCellWeapon->SetTintColor(rgbTintColor);
+                }
+            }
+        }
+
+        SHORT nDirection;
+        if (m_currentBamDirection > m_extendDirectionTest) {
+            nDirection = 16 - m_currentBamDirection;
+        } else {
+            nDirection = m_currentBamDirection;
+        }
+
+        switch (nDirection) {
+        case 0:
+        case 1:
+        case 2:
+            pInfinity->FXRender(m_currentVidCell,
+                ptReference.x,
+                ptReference.y,
+                dwRenderFlags,
+                transparency);
+
+            if (m_renderHelmet) {
+                if (m_currentVidCellHelmet != NULL && m_currentVidCellHelmet->GetResRef().IsValid()) {
+                    pInfinity->FXRender(m_currentVidCellHelmet,
+                        ptReference.x,
+                        ptReference.y,
+                        dwRenderFlags,
+                        transparency);
+                }
+            }
+
+            if (m_renderWeapons) {
+                if (m_currentVidCellShield != NULL && m_currentVidCellShield->GetResRef().IsValid()) {
+                    pInfinity->FXRender(m_currentVidCellShield,
+                        ptReference.x,
+                        ptReference.y,
+                        dwRenderFlags,
+                        transparency);
+                }
+
+                // FIXME: Redunant.
+                if (m_renderWeapons) {
+                    if (m_currentVidCellWeapon != NULL && m_currentVidCellWeapon->GetResRef().IsValid()) {
+                        pInfinity->FXRender(m_currentVidCellWeapon,
+                            ptReference.x,
+                            ptReference.y,
+                            dwRenderFlags,
+                            transparency);
+                    }
+                }
+            }
+
+            break;
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+            if (m_renderWeapons) {
+                if (m_currentVidCellWeapon != NULL && m_currentVidCellWeapon->GetResRef().IsValid()) {
+                    pInfinity->FXRender(m_currentVidCellWeapon,
+                        ptReference.x,
+                        ptReference.y,
+                        dwRenderFlags,
+                        transparency);
+                }
+            }
+
+            pInfinity->FXRender(m_currentVidCell,
+                ptReference.x,
+                ptReference.y,
+                dwRenderFlags,
+                transparency);
+
+            if (m_renderHelmet) {
+                if (m_currentVidCellHelmet != NULL && m_currentVidCellHelmet->GetResRef().IsValid()) {
+                    pInfinity->FXRender(m_currentVidCellHelmet,
+                        ptReference.x,
+                        ptReference.y,
+                        dwRenderFlags,
+                        transparency);
+                }
+            }
+
+            if (m_renderWeapons) {
+                if (m_currentVidCellShield != NULL && m_currentVidCellShield->GetResRef().IsValid()) {
+                    pInfinity->FXRender(m_currentVidCellShield,
+                        ptReference.x,
+                        ptReference.y,
+                        dwRenderFlags,
+                        transparency);
+                }
+
+                // FIXME: Redunant.
+                if (m_renderWeapons) {
+                    if (m_currentVidCellWeapon != NULL && m_currentVidCellWeapon->GetResRef().IsValid()) {
+                        pInfinity->FXRender(m_currentVidCellWeapon,
+                            ptReference.x,
+                            ptReference.y,
+                            dwRenderFlags,
+                            transparency);
+                    }
+                }
+            }
+
+            break;
+        case 8:
+            if (m_renderWeapons) {
+                if (m_currentVidCellShield != NULL && m_currentVidCellShield->GetResRef().IsValid()) {
+                    pInfinity->FXRender(m_currentVidCellShield,
+                        ptReference.x,
+                        ptReference.y,
+                        dwRenderFlags,
+                        transparency);
+                }
+
+                // FIXME: Redunant.
+                if (m_renderWeapons) {
+                    if (m_currentVidCellWeapon != NULL && m_currentVidCellWeapon->GetResRef().IsValid()) {
+                        pInfinity->FXRender(m_currentVidCellWeapon,
+                            ptReference.x,
+                            ptReference.y,
+                            dwRenderFlags,
+                            transparency);
+                    }
+                }
+            }
+
+            pInfinity->FXRender(m_currentVidCell,
+                ptReference.x,
+                ptReference.y,
+                dwRenderFlags,
+                transparency);
+
+            if (m_renderHelmet) {
+                if (m_currentVidCellHelmet != NULL && m_currentVidCellHelmet->GetResRef().IsValid()) {
+                    pInfinity->FXRender(m_currentVidCellHelmet,
+                        ptReference.x,
+                        ptReference.y,
+                        dwRenderFlags,
+                        transparency);
+                }
+            }
+
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+            // __LINE__: 20263
+            UTIL_ASSERT(FALSE);
+        }
+
+        pInfinity->FXRenderClippingPolys(ptPos.x,
+            ptPos.y - posZ,
+            posZ,
+            ptReference,
+            CRect(rGCBounds.left, rGCBounds.top - posZ, rGCBounds.right, rGCBounds.bottom - posZ),
+            bDithered,
+            dwRenderFlags);
+
+        if (bFadeOut) {
+            pInfinity->FXUnlock(dwRenderFlags, &rFXRect, ptPos + ptReference);
+        } else {
+            pInfinity->FXUnlock(dwRenderFlags, &rFXRect, CPoint(0, 0));
+        }
+
+        pInfinity->FXBltFrom(a3,
+            rFXRect,
+            ptPos.x,
+            ptPos.y,
+            ptReference.x,
+            ptReference.y,
+            dwRenderFlags);
     }
 }
