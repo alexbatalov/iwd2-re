@@ -18,6 +18,16 @@ CGameAnimation::~CGameAnimation()
     }
 }
 
+// NOTE: Inlined.
+void CGameAnimation::CalculateFxRect(CRect& rFx, CPoint& ptReference, LONG posZ)
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2071
+    UTIL_ASSERT(m_animation != NULL);
+
+    m_animation->CalculateFxRect(rFx, ptReference, posZ);
+}
+
 // 0x56E210
 void CGameAnimation::CalculateGCBoundsRect(CRect& rGCBounds, const CPoint& pos, const CPoint& ptReference, LONG posZ, LONG nWidth, LONG nHeight)
 {

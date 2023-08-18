@@ -13,6 +13,7 @@ public:
 
     USHORT GetAnimationId();
 
+    void CalculateFxRect(CRect& rFx, CPoint& ptReference, LONG posZ);
     void ChangeDirection(SHORT nDirection);
     void GetAnimationResRef(CString& resRef, BYTE range);
     const CRect& GetEllipseRect();
