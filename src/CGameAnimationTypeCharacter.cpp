@@ -626,6 +626,129 @@ SHORT CGameAnimationTypeCharacter::GetCurrentFrame()
     return m_currentVidCell->m_nCurrentFrame;
 }
 
+// 0x6C5FB0
+void CGameAnimationTypeCharacter::CalculateFxRect(CRect& rFx, CPoint& ptReference, LONG posZ)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 18293
+    UTIL_ASSERT(m_currentVidCell != NULL);
+
+    CPoint charCenter;
+    m_currentVidCell->GetCurrentCenterPoint(charCenter, FALSE);
+    ptReference = charCenter;
+
+    if (field_1428) {
+        if (m_currentVidCellWeapon != NULL
+            && m_currentVidCellWeapon->GetResRef().IsValid()) {
+            CPoint weaponCenter;
+            m_currentVidCellWeapon->GetCurrentCenterPoint(weaponCenter, FALSE);
+
+            if (weaponCenter.x > ptReference.x) {
+                ptReference.x = weaponCenter.x;
+            }
+
+            if (weaponCenter.y > ptReference.y) {
+                ptReference.y = weaponCenter.y;
+            }
+        }
+
+        // FIXME: Redundant.
+        if (field_1428) {
+            if (m_currentVidCellShield != NULL
+                && m_currentVidCellShield->GetResRef().IsValid()) {
+                CPoint shieldCenter;
+                m_currentVidCellShield->GetCurrentCenterPoint(shieldCenter, FALSE);
+
+                if (shieldCenter.x > ptReference.x) {
+                    ptReference.x = shieldCenter.x;
+                }
+
+                if (shieldCenter.y > ptReference.y) {
+                    ptReference.y = shieldCenter.y;
+                }
+            }
+        }
+    }
+
+    if (field_142C) {
+        if (m_currentVidCellHelmet != NULL
+            && m_currentVidCellHelmet->GetResRef().IsValid()) {
+            CPoint helmetCenter;
+            m_currentVidCellHelmet->GetCurrentCenterPoint(helmetCenter, FALSE);
+
+            if (helmetCenter.x > ptReference.x) {
+                ptReference.x = helmetCenter.x;
+            }
+
+            if (helmetCenter.y > ptReference.y) {
+                ptReference.y = helmetCenter.y;
+            }
+        }
+    }
+
+    CSize charSize;
+    m_currentVidCell->GetCurrentFrameSize(charSize, FALSE);
+
+    charSize.cx += ptReference.x - charCenter.x;
+    charSize.cy += ptReference.y - charCenter.y;
+    rFx.SetRect(0, 0, charSize.cx, charSize.cy);
+
+    if (field_1428) {
+        if (m_currentVidCellWeapon != NULL
+            && m_currentVidCellWeapon->GetResRef().IsValid()) {
+            CSize weaponSize;
+            m_currentVidCellWeapon->GetCurrentFrameSize(weaponSize, FALSE);
+
+            CPoint weaponCenter;
+            m_currentVidCellWeapon->GetCurrentCenterPoint(weaponCenter, FALSE);
+
+            if (weaponCenter.x > ptReference.x) {
+                ptReference.x = weaponCenter.x;
+            }
+
+            rFx.right = max(rFx.right, ptReference.x - weaponCenter.x + weaponSize.cx);
+            rFx.bottom = max(rFx.bottom, ptReference.y - weaponCenter.y + weaponSize.cy);
+        }
+
+        // FIXME: Redundant.
+        if (field_1428) {
+            if (m_currentVidCellShield != NULL
+                && m_currentVidCellShield->GetResRef().IsValid()) {
+                CSize shieldSize;
+                m_currentVidCellShield->GetCurrentFrameSize(shieldSize, FALSE);
+
+                CPoint shieldCenter;
+                m_currentVidCellShield->GetCurrentCenterPoint(shieldCenter, FALSE);
+
+                if (shieldCenter.x > ptReference.x) {
+                    ptReference.x = shieldCenter.x;
+                }
+
+                rFx.right = max(rFx.right, ptReference.x - shieldCenter.x + shieldSize.cx);
+                rFx.bottom = max(rFx.bottom, ptReference.y - shieldCenter.y + shieldSize.cy);
+            }
+        }
+    }
+
+    if (field_142C) {
+        if (m_currentVidCellHelmet != NULL
+            && m_currentVidCellHelmet->GetResRef().IsValid()) {
+            CSize helmetSize;
+            m_currentVidCellHelmet->GetCurrentFrameSize(helmetSize, FALSE);
+
+            CPoint helmetCenter;
+            m_currentVidCellHelmet->GetCurrentCenterPoint(helmetCenter, FALSE);
+
+            if (helmetCenter.x > ptReference.x) {
+                ptReference.x = helmetCenter.x;
+            }
+
+            rFx.right = max(rFx.right, ptReference.x - helmetCenter.x + helmetSize.cx);
+            rFx.bottom = max(rFx.bottom, ptReference.y - helmetCenter.y + helmetSize.cy);
+        }
+    }
+}
+
 // 0x6C62C0
 void CGameAnimationTypeCharacter::CalculateGCBoundsRect(CRect& rGCBounds, const CPoint& pos, const CPoint& ptReference, LONG posZ, LONG nWidth, LONG nHeight)
 {
