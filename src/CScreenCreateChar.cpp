@@ -1884,7 +1884,119 @@ void CScreenCreateChar::ResetSkillsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 // 0x60CA10
 void CScreenCreateChar::ResetFeatsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    INT nFeatNumber;
+
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    CString sNumber;
+
+    for (int index = 0; index < CGAMESPRITE_FEAT_NUMFEATS; index++) {
+        pSprite->SetFeatValue(ruleTables.GetSkillId(index), 0);
+    }
+
+    pSprite->field_562C = 1;
+    pSprite->ProcessEffectList();
+
+    INT nExtraFeats = pSprite->GetExtraSkillPoints(pSprite->m_startTypeAI.m_nClass);
+    field_14AE = nExtraFeats;
+    m_nExtraFeats = nExtraFeats;
+
+    for (nFeatNumber = 0; nFeatNumber < ruleTables.m_tFeats.GetHeight(); nFeatNumber++) {
+        int value = atol(ruleTables.m_tFeats.GetAt(CPoint(pSprite->m_startTypeAI.m_nClass + 2, nFeatNumber)));
+        pSprite->SetFeatValue(nFeatNumber, value);
+    }
+
+    if (pSprite->m_startTypeAI.m_nClass == CAIOBJECTTYPE_C_CLERIC) {
+        int offset;
+        switch (pSprite->GetSpecialization()) {
+        case SPECMASK_CLERIC_ILMATER:
+            offset = 0;
+            break;
+        case SPECMASK_CLERIC_LATHANDER:
+            offset = 1;
+            break;
+        case SPECMASK_CLERIC_SELUNE:
+            offset = 2;
+            break;
+        case SPECMASK_CLERIC_HELM:
+            offset = 3;
+            break;
+        case SPECMASK_CLERIC_OGHMA:
+            offset = 4;
+            break;
+        case SPECMASK_CLERIC_TEMPUS:
+            offset = 5;
+            break;
+        case SPECMASK_CLERIC_BANE:
+            offset = 6;
+            break;
+        case SPECMASK_CLERIC_MASK:
+            offset = 7;
+            break;
+        case SPECMASK_CLERIC_TALOS:
+            offset = 8;
+            break;
+        }
+
+        for (nFeatNumber = 0; nFeatNumber < ruleTables.m_tFeats.GetHeight(); nFeatNumber++) {
+            int value = atol(ruleTables.m_tFeats.GetAt(CPoint(offset + 14, nFeatNumber)));
+            if (value > 0 && value > pSprite->GetFeatValue(nFeatNumber)) {
+                pSprite->SetFeatValue(nFeatNumber, value);
+            }
+        }
+    }
+
+    for (nFeatNumber = 0; nFeatNumber < ruleTables.m_tFeats.GetHeight(); nFeatNumber++) {
+        int offset = GetRaceFeatColumn(pSprite->m_startTypeAI.m_nRace, pSprite->m_startTypeAI.m_nSubRace);
+        int value = atol(ruleTables.m_tFeats.GetAt(CPoint(offset + 23, nFeatNumber)));
+        if (value > 0 && value > pSprite->GetFeatValue(nFeatNumber)) {
+            pSprite->SetFeatValue(nFeatNumber, value);
+        }
+    }
+
+    sNumber.Format("%d", m_nExtraFeats);
+
+    g_pBaldurChitin->GetTlkTable().SetToken(TOKEN_NUMBER, sNumber);
+    UpdateHelp(pPanel->m_nID, 92, 36476);
+
+    for (m_nTopFeat = 0; m_nTopFeat < CGAMESPRITE_FEAT_NUMFEATS; m_nTopFeat++) {
+        m_storedFeats[m_nTopFeat] = pSprite->GetFeatValue(m_nTopFeat);
+    }
+
+    for (m_nTopFeat = 0; m_nTopFeat < CGAMESPRITE_FEAT_NUMFEATS; m_nTopFeat++) {
+        if (pSprite->sub_763A40(m_nTopFeat, 1)) {
+            break;
+        }
+    }
+
+    INT nSlot = 0;
+    for (INT nButtonId = 15; nButtonId < 35; nButtonId += 2) {
+        CUIControlButton* pButton;
+
+        UINT nFeatNumber = ruleTables.GetFeatId(nSlot);
+
+        BOOL bEnabled = pSprite->sub_763A40(nFeatNumber, 1);
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nButtonId - 1));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 3477
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->SetEnabled(bEnabled);
+        pButton->SetActive(bEnabled);
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nButtonId));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 3484
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->SetEnabled(bEnabled);
+        pButton->SetActive(bEnabled);
+
+        nSlot++;
+    }
 }
 
 // 0x60CEB0
