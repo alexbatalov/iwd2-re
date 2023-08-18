@@ -367,6 +367,8 @@ CGameAnimationTypeMonsterOld::CGameAnimationTypeMonsterOld(USHORT animationID, B
     m_g1VidCellBase.SetResRef(CResRef(m_resRef + "G1"), FALSE, TRUE);
     m_g2VidCellBase.SetResRef(CResRef(m_resRef + "G2"), FALSE, TRUE);
 
+    m_currentVidCellBase = &m_g1VidCellBase;
+
     if (!MIRROR_BAM) {
         // NOTE: Uninline.
         m_g1VidCellExtend.SetResRef(CResRef(m_resRef + "G1E"), FALSE, TRUE);
