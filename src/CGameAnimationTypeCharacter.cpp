@@ -1,13 +1,530 @@
 #include "CGameAnimationTypeCharacter.h"
 
 #include "CBaldurChitin.h"
+#include "CGameSprite.h"
 #include "CInfGame.h"
 #include "CUtil.h"
 
 // 0x6C40B0
 CGameAnimationTypeCharacter::CGameAnimationTypeCharacter(USHORT animationID, BYTE* colorRangeValues, WORD facing)
+    : m_charPalette(CVidPalette::TYPE_RANGE)
+    , m_weaponPalette(CVidPalette::TYPE_RANGE)
+    , m_shieldPalette(CVidPalette::TYPE_RANGE)
+    , m_helmetPalette(CVidPalette::TYPE_RANGE)
 {
-    // TODO: Incomplete.
+    field_144D = 0;
+    m_animationID = animationID;
+    field_1444 = 0;
+    m_falseColor = TRUE;
+    m_moveScale = 9;
+    m_moveScaleCurrent = 9;
+    field_1428 = 1;
+    field_142C = 1;
+    m_bEquipHelmet = TRUE;
+    field_1434 = 0;
+    m_armorCode = '1';
+    field_1441 = 66;
+    m_bDetectedByInfravision = TRUE;
+    field_144C = 0;
+    m_bInvulnerable = FALSE;
+    m_bCanLieDown = TRUE;
+    field_1448 = 0;
+
+    SetNeckOffsets(0, 10, -10, 10, -10, 0, -10, -10, 0, -10, 10, -10, 10, 0, 10, 10);
+
+    switch (animationID & 0xF) {
+    case 0:
+    case 1:
+    case 5:
+        m_nSndFreq = 5;
+        break;
+    default:
+        m_nSndFreq = 4;
+        m_pSndDeath = "FAL_01B";
+        break;
+    }
+
+    switch (animationID & 0xF00) {
+    case 0x000:
+        m_armorMaxCode = '4';
+        field_1442 = 67;
+        field_1448 = 1;
+
+        switch (animationID & 0xF) {
+        case 0:
+            if ((animationID & 0xF0) == 0) {
+                m_resRef = "CHMB";
+                m_resRefPaperDoll = m_resRef;
+                m_heightCodeHelmet = "WQL";
+                m_heightCode = m_heightCodeHelmet;
+            } else {
+                m_resRef = "CHFB";
+                m_resRefPaperDoll = m_resRef;
+                m_heightCodeHelmet = "WQN";
+                m_heightCode = m_heightCodeHelmet;
+            }
+            break;
+        case 1:
+            if ((animationID & 0xF0) != 0) {
+                m_resRef = "CEFB";
+            } else {
+                m_resRef = "CEMB";
+            }
+            m_resRefPaperDoll = m_resRef;
+            m_heightCodeHelmet = "WQM";
+            m_heightCode = m_heightCodeHelmet;
+            break;
+        case 2:
+            if ((animationID & 0xF0) != 0) {
+                m_resRef = "CIFB";
+                m_resRefPaperDoll = "CDFB";
+                m_heightCodeHelmet = "WQS";
+                m_heightCode = m_heightCodeHelmet;
+            } else {
+                m_resRef = "CDMB";
+                m_resRefPaperDoll = m_resRef;
+                m_heightCodeHelmet = "WQS";
+                m_heightCode = m_heightCodeHelmet;
+            }
+            break;
+        case 3:
+            if ((animationID & 0xF0) != 0) {
+                m_resRef = "CIFB";
+                m_resRefPaperDoll = m_resRef;
+            } else {
+                m_resRef = "CIMB";
+                m_resRefPaperDoll = m_resRef;
+                m_heightCodeShieldPaperDoll = "WQH";
+            }
+            m_heightCodeHelmet = "WQS";
+            m_heightCode = m_heightCodeHelmet;
+            break;
+        case 4:
+            if ((animationID & 0xF0) != 0) {
+                m_resRef = "CIFB";
+                m_resRefPaperDoll = "CGFB";
+            } else {
+                m_resRef = "CDMB";
+                m_resRefPaperDoll = "CGMB";
+            }
+            m_heightCodeHelmet = "WQS";
+            m_heightCode = m_heightCodeHelmet;
+            m_heightCodeShieldPaperDoll = "WQH";
+            break;
+        case 5:
+            if ((animationID & 0xF0) == 0) {
+                m_resRef = "CHMB";
+                m_resRefPaperDoll = "COMB";
+                m_heightCodeHelmet = "WQL";
+                m_heightCode = m_heightCodeHelmet;
+            } else {
+                m_resRef = "CHFB";
+                m_resRefPaperDoll = "COFB";
+                m_heightCodeHelmet = "WQN";
+                m_heightCode = m_heightCodeHelmet;
+            }
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+            // __LINE__: 17851
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 0x100:
+        m_armorMaxCode = '4';
+        field_1442 = 70;
+        field_1448 = 1;
+
+        switch (animationID & 0xF) {
+        case 0:
+            if ((animationID & 0xF0) == 0) {
+                m_resRef = "CHMB";
+                m_resRefPaperDoll = m_resRef;
+                m_heightCodeHelmet = "WQL";
+                m_heightCode = m_heightCodeHelmet;
+            } else {
+                m_resRef = "CHFB";
+                m_resRefPaperDoll = m_resRef;
+                m_heightCodeHelmet = "WQN";
+                m_heightCode = m_heightCodeHelmet;
+            }
+            break;
+        case 1:
+            if ((animationID & 0xF0) != 0) {
+                m_resRef = "CEFB";
+            } else {
+                m_resRef = "CEMB";
+            }
+            m_resRefPaperDoll = m_resRef;
+            m_heightCodeHelmet = "WQM";
+            m_heightCode = m_heightCodeHelmet;
+            break;
+        case 2:
+            if ((animationID & 0xF0) != 0) {
+                m_resRef = "CIFB";
+                m_resRefPaperDoll = "CDFB";
+                m_heightCodeHelmet = "WQS";
+                m_heightCode = m_heightCodeHelmet;
+            } else {
+                m_resRef = "CDMB";
+                m_resRefPaperDoll = m_resRef;
+                m_heightCodeHelmet = "WQS";
+                m_heightCode = m_heightCodeHelmet;
+            }
+            break;
+        case 3:
+            if ((animationID & 0xF0) != 0) {
+                m_resRef = "CIFB";
+                m_resRefPaperDoll = m_resRef;
+            } else {
+                m_resRef = "CIMB";
+                m_resRefPaperDoll = m_resRef;
+                m_heightCodeShieldPaperDoll = "WQH";
+            }
+            m_heightCodeHelmet = "WQS";
+            m_heightCode = m_heightCodeHelmet;
+            break;
+        case 4:
+            if ((animationID & 0xF0) != 0) {
+                m_resRef = "CIFB";
+                m_resRefPaperDoll = "CGFB";
+            } else {
+                m_resRef = "CDMB";
+                m_resRefPaperDoll = "CGMB";
+            }
+            m_heightCodeHelmet = "WQS";
+            m_heightCode = m_heightCodeHelmet;
+            m_heightCodeShieldPaperDoll = "WQH";
+            break;
+        case 5:
+            if ((animationID & 0xF0) == 0) {
+                m_resRef = "CHMB";
+                m_resRefPaperDoll = "COMB";
+                m_heightCodeHelmet = "WQL";
+                m_heightCode = m_heightCodeHelmet;
+            } else {
+                m_resRef = "CHFB";
+                m_resRefPaperDoll = "COFB";
+                m_heightCodeHelmet = "WQN";
+                m_heightCode = m_heightCodeHelmet;
+            }
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+            // __LINE__: 17946
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 0x200:
+        m_armorMaxCode = '4';
+        field_1441 = 87;
+        field_1442 = 87;
+        field_1448 = 1;
+
+        switch (animationID & 0xF) {
+        case 0:
+            if ((animationID & 0xF0) == 0) {
+                m_resRef = "CHMW";
+            } else {
+                m_resRef = "CHFW";
+            }
+            m_resRefPaperDoll = m_resRef;
+            m_heightCodeHelmet = "WQN";
+            m_heightCode = m_heightCodeHelmet;
+            break;
+        case 1:
+            if ((animationID & 0xF0) != 0) {
+                m_resRef = "CEFW";
+            } else {
+                m_resRef = "CEMW";
+            }
+            m_resRefPaperDoll = m_resRef;
+            m_heightCodeHelmet = "WQM";
+            m_heightCode = m_heightCodeHelmet;
+            break;
+        case 2:
+        case 3:
+            if ((animationID & 0xF0) == 0) {
+                m_resRef = "CDMW";
+                m_resRefPaperDoll = m_resRef;
+            } else {
+                m_resRef = "CDMW";
+                m_resRefPaperDoll = "CDFW";
+            }
+            m_heightCodeHelmet = "WQS";
+            m_heightCode = m_heightCodeHelmet;
+            break;
+        case 4:
+            if ((animationID & 0xF0) == 0) {
+                m_resRef = "CDMW";
+                m_resRefPaperDoll = "CGMW";
+            } else {
+                m_resRef = "CDMW";
+                m_resRefPaperDoll = "CGFW";
+            }
+            m_heightCodeHelmet = "WQS";
+            m_heightCode = m_heightCodeHelmet;
+            m_heightCodeShieldPaperDoll = "WQH";
+            break;
+        case 5:
+            if ((animationID & 0xF0) == 0) {
+                m_resRef = "CHMW";
+                m_resRefPaperDoll = "COMW";
+                m_heightCodeHelmet = "WQL";
+                m_heightCode = m_heightCodeHelmet;
+            } else {
+                m_resRef = "CHFW";
+                m_resRefPaperDoll = "COFW";
+                m_heightCodeHelmet = "WQN";
+                m_heightCode = m_heightCodeHelmet;
+            }
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+            // __LINE__: 18029
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 0x300:
+        m_bEquipHelmet = TRUE;
+        m_armorMaxCode = '4';
+        field_1441 = 84;
+        field_1442 = 67;
+        field_1448 = 1;
+
+        switch (animationID & 0xF) {
+        case 0:
+            if ((animationID & 0xF0) == 0) {
+                m_resRef = "CHMT";
+                m_resRefPaperDoll = m_resRef;
+                m_heightCodeHelmet = "WQL";
+                m_heightCode = m_heightCodeHelmet;
+            } else {
+                m_resRef = "CHFT";
+                m_resRefPaperDoll = m_resRef;
+                m_heightCodeHelmet = "WQN";
+                m_heightCode = m_heightCodeHelmet;
+            }
+            break;
+        case 1:
+            if ((animationID & 0xF0) != 0) {
+                m_resRef = "CEFT";
+            } else {
+                m_resRef = "CEMT";
+            }
+            m_resRefPaperDoll = m_resRef;
+            m_heightCodeHelmet = "WQM";
+            m_heightCode = m_heightCodeHelmet;
+            break;
+        case 2:
+            if ((animationID & 0xF0) != 0) {
+                m_resRef = "CIFT";
+                m_resRefPaperDoll = "CDFT";
+            } else {
+                m_resRef = "CDMT";
+                m_resRefPaperDoll = m_resRef;
+            }
+            m_heightCodeHelmet = "WQS";
+            m_heightCode = m_heightCodeHelmet;
+            break;
+        case 3:
+            if ((animationID & 0xF0) != 0) {
+                m_resRef = "CIFT";
+                m_resRefPaperDoll = m_resRef;
+            } else {
+                m_resRef = "CIMT";
+                m_resRefPaperDoll = m_resRef;
+                m_heightCodeShieldPaperDoll = "WQH";
+            }
+            m_heightCodeHelmet = "WQS";
+            m_heightCode = m_heightCodeHelmet;
+            break;
+        case 4:
+            if ((animationID & 0xF0) != 0) {
+                m_resRef = "CIFT";
+                m_resRefPaperDoll = "CDFT";
+            } else {
+                m_resRefPaperDoll = "CDMT";
+                m_resRef = m_resRefPaperDoll;
+            }
+            m_heightCodeHelmet = "WQS";
+            m_heightCode = m_heightCodeHelmet;
+            m_heightCodeShieldPaperDoll = "WQH";
+            break;
+        case 5:
+            if ((animationID & 0xF0) != 0) {
+                m_resRef = "CHFT";
+                m_resRefPaperDoll = "COFB";
+                m_heightCodeHelmet = "WQN";
+                m_heightCode = m_heightCodeHelmet;
+            } else {
+                m_resRef = "CHMT";
+                m_resRefPaperDoll = "COMB";
+            }
+            m_heightCodeHelmet = "WQL";
+            m_heightCode = m_heightCodeHelmet;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+            // __LINE__: 18121
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 0x400:
+        m_armorMaxCode = '1';
+
+        switch (animationID & 0xF) {
+        case 0:
+            m_resRef = "UDRZ";
+            field_1441 = 90;
+            field_1442 = 90;
+            m_heightCodeHelmet = "WPM";
+            m_heightCode = m_heightCodeHelmet;
+            m_nSndFreq = 5;
+            break;
+        case 1:
+            m_bInvulnerable = TRUE;
+            m_resRef = "CTES";
+            field_1441 = 83;
+            field_1442 = 83;
+            m_heightCodeHelmet = "WPL";
+            m_heightCode = m_heightCodeHelmet;
+            m_nSndFreq = 4;
+            break;
+        case 2:
+            m_bEquipHelmet = FALSE;
+            m_resRef = "CMNK";
+            m_resRefPaperDoll = m_resRef;
+            field_1441 = 75;
+            field_1442 = 75;
+            m_heightCodeHelmet = "WPM";
+            m_heightCode = m_heightCodeHelmet;
+            m_nSndFreq = 5;
+            break;
+        case 3:
+            m_colorChunks = -1;
+            m_resRef = "MSKL";
+            m_resRefPaperDoll = m_resRef;
+            field_1441 = 76;
+            field_1442 = 76;
+            m_heightCodeHelmet = "WPM";
+            m_heightCode = m_heightCodeHelmet;
+            m_colorBlood = 37;
+            m_bDetectedByInfravision = FALSE;
+            m_nSndFreq = 5;
+            break;
+        case 4:
+            m_colorChunks = -1;
+            m_falseColor = FALSE;
+            m_bEquipHelmet = FALSE;
+            m_bCanLieDown = FALSE;
+            m_resRef = "USAR";
+            m_resRefPaperDoll = m_resRef;
+            field_1441 = 82;
+            field_1442 = 82;
+            m_heightCodeHelmet = "WPL";
+            m_heightCode = m_heightCodeHelmet;
+            m_nSndFreq = 5;
+            break;
+        case 5:
+            m_colorChunks = -1;
+            m_resRef = "MDGU";
+            m_resRefPaperDoll = m_resRef;
+            field_1441 = 85;
+            field_1442 = 85;
+            m_heightCodeHelmet = "WPL";
+            m_heightCode = m_heightCodeHelmet;
+            m_colorBlood = 34;
+            m_bDetectedByInfravision = FALSE;
+            m_nSndFreq = 5;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+            // __LINE__: 18218
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 0x500:
+        m_armorMaxCode = '1';
+        field_1441 = 77;
+        field_1442 = 77;
+        field_1448 = 1;
+
+        switch (animationID & 0xF) {
+        case 0:
+            if ((animationID & 0xF0) != 0) {
+                m_resRef = "CHFM";
+                m_resRefPaperDoll = m_resRef;
+                m_heightCodeHelmet = "WQN";
+                m_heightCode = m_heightCodeHelmet;
+            } else {
+                m_resRef = "CHMM";
+                m_resRefPaperDoll = m_resRef;
+                m_heightCodeHelmet = "WQL";
+                m_heightCode = m_heightCodeHelmet;
+            }
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+            // __LINE__: 18146
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+        // __LINE__: 18223
+        UTIL_ASSERT(FALSE);
+    }
+
+    // NOTE: Uninline.
+    m_g1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "G1"), field_1444, TRUE);
+    m_caVidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "CA"), field_1444, TRUE);
+    m_a1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A1"), field_1444, TRUE);
+    m_a2VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A3"), field_1444, TRUE);
+    m_a3VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A5"), field_1444, TRUE);
+
+    m_currentVidCellBase = &m_g1VidCellBase;
+    m_currentVidCell = &m_g1VidCellBase;
+
+    if (m_falseColor) {
+        for (BYTE colorRange = 0; colorRange < 7; colorRange++) {
+            m_charPalette.SetRange(colorRange,
+                colorRangeValues[colorRange],
+                *g_pBaldurChitin->GetObjectGame()->GetMasterBitmap());
+        }
+
+        m_g1VidCellBase.SetPalette(m_charPalette);
+        m_caVidCellBase.SetPalette(m_charPalette);
+        m_a1VidCellBase.SetPalette(m_charPalette);
+        m_a2VidCellBase.SetPalette(m_charPalette);
+        m_a3VidCellBase.SetPalette(m_charPalette);
+    }
+
+    m_weaponCode = 4;
+
+    m_g1VidCellWeaponBase.SetPalette(m_weaponPalette);
+    m_a1VidCellWeaponBase.SetPalette(m_weaponPalette);
+    m_a2VidCellWeaponBase.SetPalette(m_weaponPalette);
+    m_a3VidCellWeaponBase.SetPalette(m_weaponPalette);
+    m_currentVidCellWeaponBase = NULL;
+    m_currentVidCellWeapon = NULL;
+
+    m_g1VidCellShieldBase.SetPalette(m_shieldPalette);
+    m_a1VidCellShieldBase.SetPalette(m_shieldPalette);
+    m_a2VidCellShieldBase.SetPalette(m_shieldPalette);
+    m_a3VidCellShieldBase.SetPalette(m_shieldPalette);
+    m_currentVidCellShieldBase = NULL;
+    m_currentVidCellShield = NULL;
+
+    m_g1VidCellHelmetBase.SetPalette(m_helmetPalette);
+    m_caVidCellHelmetBase.SetPalette(m_helmetPalette);
+    m_a1VidCellHelmetBase.SetPalette(m_helmetPalette);
+    m_a2VidCellHelmetBase.SetPalette(m_helmetPalette);
+    m_a3VidCellHelmetBase.SetPalette(m_helmetPalette);
+    m_currentVidCellHelmetBase = NULL;
+    m_currentVidCellHelmet = NULL;
+
+    m_currentBamSequence = 1;
+    m_extendDirectionTest = CGameSprite::DIR_N;
+    ChangeDirection(facing);
 }
 
 // 0x6C5D70
