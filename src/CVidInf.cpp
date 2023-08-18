@@ -914,7 +914,7 @@ BOOL CVidInf::FXPrep(CRect& rFXRect, DWORD dwFlags, const CPoint& ptPos, const C
     fx.dwSize = sizeof(fx);
     fx.dwFillColor = field_24;
 
-    if (GetFXSurfacePtr(dwFlags) != NULL) {
+    if (GetFXSurfacePtr(dwFlags) == NULL) {
         return FALSE;
     }
 
