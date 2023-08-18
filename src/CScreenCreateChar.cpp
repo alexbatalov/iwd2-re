@@ -6218,7 +6218,105 @@ CUIControlButtonCharGenColorChoice::~CUIControlButtonCharGenColorChoice()
 // 0x61E9C0
 void CUIControlButtonCharGenColorChoice::OnLButtonClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
+    BOOL v2 = FALSE;
+
+    CSingleLock renderLock(&(pCreateChar->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    INT nGameSprite = pCreateChar->GetSpriteId();
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        BYTE colorRange = pCreateChar->field_56E;
+        BYTE rangeValue;
+        if (GetColorRange(rangeValue)) {
+            pSprite->m_baseStats.m_colors[colorRange] = rangeValue;
+            pSprite->m_animation.GetAnimation()->SetColorRange(colorRange, rangeValue);
+            pCreateChar->DismissPopup(pSprite);
+            v2 = TRUE;
+        } else if (m_nID == 35) {
+            CResRef portraitColorResRef("portcolr");
+            C2DArray tPortraitColor;
+            CString v1;
+            CString sPortraitLarge;
+
+            sPortraitLarge = pSprite->m_baseStats.m_portraitLarge;
+            v1 = sPortraitLarge.Left(8);
+
+            tPortraitColor.Load(portraitColorResRef);
+            v2 = TRUE;
+
+            BOOL bDemanded = tPortraitColor.Demand();
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+            // __LINE__: 14472
+            UTIL_ASSERT(bDemanded == TRUE);
+
+            CPoint ptLocation;
+            BOOLEAN bFound = tPortraitColor.Find(v1, ptLocation, TRUE);
+
+            if (bFound) {
+                switch (colorRange) {
+                case 1:
+                    ptLocation.x = 3;
+                    rangeValue = tPortraitColor.GetAtLong(ptLocation);
+                    break;
+                case 2:
+                    ptLocation.x = 2;
+                    rangeValue = tPortraitColor.GetAtLong(ptLocation);
+                    break;
+                case 3:
+                    ptLocation.x = 0;
+                    rangeValue = tPortraitColor.GetAtLong(ptLocation);
+                    break;
+                case 6:
+                    ptLocation.x = 1;
+                    rangeValue = tPortraitColor.GetAtLong(ptLocation);
+                    break;
+                }
+            } else {
+                switch (colorRange) {
+                case 1:
+                    rangeValue = 39;
+                    break;
+                case 2:
+                    rangeValue = 41;
+                    break;
+                case 3:
+                    rangeValue = 12;
+                    break;
+                case 6:
+                    rangeValue = 0;
+                    break;
+                }
+            }
+
+            tPortraitColor.Release();
+
+            pSprite->m_baseStats.m_colors[colorRange] = rangeValue;
+            pSprite->m_animation.GetAnimation()->SetColorRange(colorRange, rangeValue);
+            pCreateChar->DismissPopup(pSprite);
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    renderLock.Unlock();
+
+    if (v2 == TRUE) {
+        pCreateChar->sub_612800();
+    }
 }
 
 // 0x61EE60
