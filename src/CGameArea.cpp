@@ -83,6 +83,14 @@ void CGameArea::ApplyWindToAmbients(BYTE nPercentVolume)
     m_sndAmbientNight.SetVolume(m_sndAmbientNightVolume * m_sndAmbientVolume / 100);
 }
 
+// 0x46F5A0
+BOOLEAN CGameArea::CanSaveGame(STRREF& strError)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // NOTE: Similar to `CInfGame::ProgressBarCallback`.
 //
 // 0x474E10

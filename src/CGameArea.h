@@ -82,6 +82,7 @@ public:
     INT SetListManipulationThreadId(DWORD ThreadID);
     void AddObject(LONG id, BYTE listType);
     void ApplyWindToAmbients(BYTE nPercentVolume);
+    BOOLEAN CanSaveGame(STRREF& strError);
     void ProgressBarCallback(DWORD dwSize, BOOLEAN bInitialize);
     void SetListenPosition();
     void OnActivation();
@@ -151,6 +152,7 @@ public:
     /* 0ADA */ CNamedCreatureVariableHash m_namedCreatures;
     /* 0AE8 */ SHORT m_nCurrentSong;
     /* 0AEA */ INT m_nBattleSongCounter;
+    /* 0B16 */ BOOL field_B16;
 };
 
 #endif /* CGAMEAREA_H_ */

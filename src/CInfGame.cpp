@@ -1759,6 +1759,30 @@ void CInfGame::NewGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace
     m_nReputation = -10;
 }
 
+// 0x5AC0A0
+BOOLEAN CInfGame::sub_5AC0A0(CGameArea* pArea)
+{
+    if (!m_bInLoadGame
+        && pArea != NULL
+        && pArea->m_bAreaLoaded) {
+        return pArea->field_B16;
+    } else {
+        return FALSE;
+    }
+}
+
+// 0x5AC0D0
+void CInfGame::sub_5AC0D0()
+{
+    STRREF strError;
+
+    for (int index = 0; index < CINFGAME_MAX_AREAS; index++) {
+        if (m_gameAreas[index] != NULL && m_gameAreas[index]->m_bAreaLoaded) {
+            m_gameAreas[index]->field_B16 = !m_gameAreas[index]->CanSaveGame(strError);
+        }
+    }
+}
+
 // 0x5ADC90
 void CInfGame::DemandServerStore(const CResRef& store, BOOL bSaveToDisk)
 {
