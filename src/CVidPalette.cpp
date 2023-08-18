@@ -128,6 +128,35 @@ void CVidPalette::SetType(USHORT nType)
     }
 }
 
+// 0x7BF020
+void CVidPalette::CalculateSubRanges()
+{
+    RGBQUAD* pSrc = m_pPalette + 6;
+    RGBQUAD* pDest = m_pPalette + 88;
+
+    for (int v1 = 0; v1 < 6; v1++) {
+        RGBQUAD* pNext = pSrc + 12;
+
+        for (int v2 = v1; v2 < 6; v2++) {
+            for (int v3 = 0; v3 < 8; v3++) {
+                pDest->rgbRed = (pSrc->rgbRed + pNext->rgbRed) / 2;
+                pDest->rgbGreen = (pSrc->rgbGreen + pNext->rgbGreen) / 2;
+                pDest->rgbBlue = (pSrc->rgbBlue + pNext->rgbBlue) / 2;
+                pDest++;
+                pSrc++;
+                pNext++;
+            }
+
+            pSrc -= 8;
+            pNext += 4;
+        }
+
+        pSrc += 12;
+    }
+
+    m_bSubRangesCalculated = TRUE;
+}
+
 // #binary-identical
 // 0x7BF100
 INT CVidPalette::GetReservedEntries(DWORD dwFlags)

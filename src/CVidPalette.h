@@ -30,6 +30,7 @@ public:
     ~CVidPalette();
     void SetAUCounter();
     void SetType(USHORT nType);
+    void CalculateSubRanges();
     INT GetReservedEntries(DWORD dwFlags);
     void Realize(DWORD* pDestPalette, INT nBpp, DWORD dwFlags, CVIDIMG_PALETTEAFFECT* pAffectArgs, DWORD nTransVal);
     void SetPalette(RGBQUAD* pPalette, int nEntries, USHORT nType);
