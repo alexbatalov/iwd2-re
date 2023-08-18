@@ -1878,7 +1878,70 @@ void CScreenCreateChar::ResetStartOverPanel(CUIPanel* pPanel, CGameSprite* pSpri
 // 0x60C700
 void CScreenCreateChar::ResetSkillsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    INT iSkillNumber;
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    CString sNumber;
+
+    for (iSkillNumber = 0; iSkillNumber < CGAMESPRITE_SKILL_NUMSKILLS; iSkillNumber++) {
+        pSprite->SetSkillValue(ruleTables.GetSkillId(iSkillNumber), 0);
+    }
+
+    pSprite->field_562C = 1;
+    pSprite->ProcessEffectList();
+
+    INT nExtraSkillPoints = pSprite->GetExtraSkillPoints(pSprite->m_startTypeAI.m_nClass);
+    field_15E0 = nExtraSkillPoints;
+    m_nExtraSkillPoints = nExtraSkillPoints;
+
+    sNumber.Format("%d", nExtraSkillPoints);
+    g_pBaldurChitin->m_cTlkTable.SetToken(TOKEN_NUMBER, sNumber);
+    UpdateHelp(pPanel->m_nID, 92, 17248);
+
+    for (iSkillNumber = 0; iSkillNumber < ruleTables.m_tSkills.GetHeight(); iSkillNumber++) {
+        int value = atol(ruleTables.m_tSkills.GetAt(CPoint(pSprite->m_startTypeAI.m_nClass + 3, iSkillNumber)));
+        pSprite->SetSkillValue(iSkillNumber, value);
+    }
+
+    m_nTopSkill = 0;
+    while (m_nTopSkill < CGAMESPRITE_SKILL_NUMSKILLS) {
+        m_storedSkills[m_nTopSkill] = pSprite->GetSkillValue(m_nTopSkill);
+        m_nTopSkill++;
+    }
+
+    // Scroll to first available skill.
+    m_nTopSkill = 0;
+    while (m_nTopSkill < CGAMESPRITE_SKILL_NUMSKILLS) {
+        if (pSprite->GetSkillCost(ruleTables.GetSkillId(m_nTopSkill), pSprite->m_startTypeAI.m_nClass) != 0) {
+            break;
+        }
+        m_nTopSkill++;
+    }
+
+    for (UINT nSlot = 0; nSlot < SKILL_SLOTS; nSlot++) {
+        CUIControlButton* pButton;
+        INT nCost = pSprite->GetSkillCost(ruleTables.GetSkillId(nSlot), pSprite->m_startTypeAI.m_nClass);
+
+        BOOL bEnabled = nCost != 0 && m_nExtraSkillPoints >= nCost;
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(2 * nSlot + 14));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 3307
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->SetEnabled(bEnabled);
+        pButton->SetActive(bEnabled);
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(2 * nSlot + 15));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 3314
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->SetEnabled(bEnabled);
+        pButton->SetActive(bEnabled);
+    }
 }
 
 // 0x60CA10
