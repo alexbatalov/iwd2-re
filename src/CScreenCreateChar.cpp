@@ -7481,7 +7481,7 @@ void CUIControlScrollBarCharGenFeats::OnScroll()
     CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
-    // __LINE__: 11418
+    // __LINE__: 17253
     UTIL_ASSERT(pCreateChar != NULL);
 
     INT nTopFeat = max(FEAT_COUNT * field_144, 0) / field_142;
