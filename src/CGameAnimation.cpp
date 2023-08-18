@@ -93,6 +93,28 @@ const CRect& CGameAnimation::GetEllipseRect()
 }
 
 // NOTE: Inlined.
+void CGameAnimation::Render(CInfinity* pInfinity, CVidMode* pVidMode, int a3, const CRect& rectFX, const CPoint& ptNewPos, const CPoint& ptReference, DWORD dwRenderFlags, COLORREF rgbTintColor, const CRect& rGCBounds, BOOL bDithered, BOOL bFadeOut, LONG posZ, BYTE transparency)
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2106
+    UTIL_ASSERT(m_animation != NULL);
+
+    m_animation->Render(pInfinity,
+        pVidMode,
+        a3,
+        rectFX,
+        ptNewPos,
+        ptReference,
+        dwRenderFlags,
+        rgbTintColor,
+        rGCBounds,
+        bDithered,
+        bFadeOut,
+        posZ,
+        transparency);
+}
+
+// NOTE: Inlined.
 CGameAnimationType* CGameAnimation::GetAnimation()
 {
     // __FILE__: .\Include\ObjAnimation.h

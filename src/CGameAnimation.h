@@ -4,6 +4,8 @@
 #include "mfc.h"
 
 class CGameAnimationType;
+class CInfinity;
+class CVidMode;
 
 class CGameAnimation {
 public:
@@ -19,6 +21,7 @@ public:
     const CRect& GetEllipseRect();
     void SetAnimationType(USHORT animationID, BYTE* colorRangeValues, WORD facing);
     CGameAnimationType* GetAnimation();
+    void Render(CInfinity* pInfinity, CVidMode* pVidMode, int a3, const CRect& rectFX, const CPoint& ptNewPos, const CPoint& ptReference, DWORD dwRenderFlags, COLORREF rgbTintColor, const CRect& rGCBounds, BOOL bDithered, BOOL bFadeOut, LONG posZ, BYTE transparency);
 
     /* 0004 */ CGameAnimationType* m_animation;
     /* 0008 */ short field_8;
