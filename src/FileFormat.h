@@ -6,13 +6,18 @@
 class CCreatureFileHeader {
 public:
     /* 0000 */ DWORD m_name;
+    /* 0004 */ DWORD m_apparentName;
     /* 0008 */ DWORD m_flags;
     /* 000C */ int field_C;
     /* 0010 */ int field_10;
     /* 0014 */ int field_14;
     /* 0018 */ DWORD m_generalState;
+    /* 001C */ short field_1C;
     /* 001E */ short field_1E;
+    /* 0020 */ short m_animationType;
+    /* 0022 */ short field_22;
     /* 0024 */ BYTE m_colors[7];
+    /* 002B */ BYTE m_effectVersion;
     /* 002C */ RESREF m_portraitSmall;
     /* 0034 */ RESREF m_portraitLarge;
     /* 003C */ unsigned char field_3C;

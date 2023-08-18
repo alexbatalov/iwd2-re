@@ -130,7 +130,7 @@ public:
     void sub_610DC0();
     void OnCharacterExportItemSelect(INT nItem);
     void sub_611AF0();
-    void sub_612800();
+    void UpdateCharacterAppearance();
     void sub_612930();
     void CompleteCharacterSkills();
     void sub_613310();

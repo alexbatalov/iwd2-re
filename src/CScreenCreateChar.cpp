@@ -1496,7 +1496,7 @@ void CScreenCreateChar::ResetColorsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 
         tPortraitColor.Release();
 
-        sub_612800();
+        UpdateCharacterAppearance();
     }
 }
 
@@ -3167,9 +3167,31 @@ void CScreenCreateChar::sub_611AF0()
 }
 
 // 0x612800
-void CScreenCreateChar::sub_612800()
+void CScreenCreateChar::UpdateCharacterAppearance()
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetShare(GetSpriteId(),
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        field_196.SetAnimationType(pSprite->m_baseStats.m_animationType, pSprite->m_baseStats.m_colors, 0);
+
+        pSprite->UnequipAll(TRUE);
+        pSprite->EquipAll(TRUE);
+
+        field_196.SetSequence(pSprite->GetIdleSequence());
+
+        pGame->GetObjectArray()->ReleaseShare(GetSpriteId(),
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
 }
 
 // 0x612930
@@ -3885,7 +3907,7 @@ void CUIControlButtonCharGenMenu::OnLButtonClick(CPoint pt)
             dwPopupId = 6;
             break;
         case 6:
-            pCreateChar->sub_612800();
+            pCreateChar->UpdateCharacterAppearance();
             dwPopupId = 13;
             break;
         case 7:
@@ -6408,7 +6430,7 @@ void CUIControlButtonCharGenColorChoice::OnLButtonClick(CPoint pt)
     renderLock.Unlock();
 
     if (v2 == TRUE) {
-        pCreateChar->sub_612800();
+        pCreateChar->UpdateCharacterAppearance();
     }
 }
 
