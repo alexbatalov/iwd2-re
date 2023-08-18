@@ -6405,13 +6405,21 @@ BOOL CUIControlButtonCharGenColorChoice::GetColorRange(BYTE& colorRange)
             return TRUE;
         }
 
-        return FALSE;
+        break;
     case 3:
-        colorRange = atoi(pCreateChar->m_tSkinColor.GetAt(CPoint(0, v1)));
-        return TRUE;
+        if (v1 < pCreateChar->m_tSkinColor.GetHeight()) {
+            colorRange = atoi(pCreateChar->m_tSkinColor.GetAt(CPoint(0, v1)));
+            return TRUE;
+        }
+
+        break;
     case 6:
-        colorRange = atoi(pCreateChar->m_tHairColor.GetAt(CPoint(0, v1)));
-        return TRUE;
+        if (v1 < pCreateChar->m_tHairColor.GetHeight()) {
+            colorRange = atoi(pCreateChar->m_tHairColor.GetAt(CPoint(0, v1)));
+            return TRUE;
+        }
+
+        break;
     default:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
         // __LINE__: 14837
