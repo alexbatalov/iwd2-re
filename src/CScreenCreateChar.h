@@ -581,10 +581,10 @@ public:
     void AdjustValue() override;
 };
 
-class CUIControlButtonCharGen6235C0 : public CUIControlButton {
+class CUIControlButtonCharGenFeatsCircle : public CUIControlButton {
 public:
-    CUIControlButtonCharGen6235C0(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
-    ~CUIControlButtonCharGen6235C0() override;
+    CUIControlButtonCharGenFeatsCircle(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGenFeatsCircle() override;
     BOOL Render(BOOL bForce) override;
 };
 

@@ -7974,18 +7974,18 @@ void CUIControlButtonCharGenFeatsPlusMinus::AdjustValue()
 // -----------------------------------------------------------------------------
 
 // 0x6235C0
-CUIControlButtonCharGen6235C0::CUIControlButtonCharGen6235C0(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+CUIControlButtonCharGenFeatsCircle::CUIControlButtonCharGenFeatsCircle(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
 {
 }
 
 // 0x623610
-CUIControlButtonCharGen6235C0::~CUIControlButtonCharGen6235C0()
+CUIControlButtonCharGenFeatsCircle::~CUIControlButtonCharGenFeatsCircle()
 {
 }
 
 // 0x6236B0
-BOOL CUIControlButtonCharGen6235C0::Render(BOOL bForce)
+BOOL CUIControlButtonCharGenFeatsCircle::Render(BOOL bForce)
 {
     CVidCell vcIcon;
 

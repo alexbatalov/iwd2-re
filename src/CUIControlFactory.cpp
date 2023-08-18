@@ -2148,7 +2148,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 88:
             case 89:
             case 90:
-                return new CUIControlButtonCharGen6235C0(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+                return new CUIControlButtonCharGenFeatsCircle(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 91:
                 return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
             case 92:
