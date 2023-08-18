@@ -2,6 +2,7 @@
 
 #include "CBaldurChitin.h"
 #include "CGameAnimationType.h"
+#include "CGameArea.h"
 #include "CGameObjectArray.h"
 #include "CGameSprite.h"
 #include "CInfCursor.h"
@@ -5980,9 +5981,101 @@ void CUIControlButtonCharGenAppearanceCustom::OnLButtonClick(CPoint pt)
 // 0x61DAC0
 BOOL CUIControlButtonCharGen7795D0::Render(BOOL bForce)
 {
-    // TODO: Incomplete.
+    // 0x8F3B9C
+    static DWORD nCounter;
 
-    return FALSE;
+    CVidCell vcAppearance;
+
+    if (!m_bActive && !m_bInactiveRender) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount == 0 && !bForce) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount != 0) {
+        CSingleLock lock(&(m_pPanel->m_pManager->field_56), FALSE);
+        lock.Lock(INFINITE);
+        m_nRenderCount--;
+        lock.Unlock();
+    }
+
+    CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
+
+    INT nGameSprite = pCreateChar->GetSpriteId();
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nGameSprite,
+            CGameObjectArray::THREAD_1,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc != CGameObjectArray::SUCCESS) {
+        return FALSE;
+    }
+
+    CPoint ptPos(m_pPanel->m_ptOrigin.x + m_ptOrigin.x + m_size.cx / 2,
+        m_pPanel->m_ptOrigin.y + m_ptOrigin.y + m_size.cy / 2);
+    CSize size(128 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1),
+        160 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1));
+
+    CRect rPreview(ptPos, size);
+
+    CRect rClip;
+    rClip.IntersectRect(rPreview, m_rDirty);
+
+    // FIXME: Creates area on every render.
+    CGameArea* pArea = new CGameArea(0);
+    CInfinity* pInfinity = pArea->GetInfinity();
+    pInfinity->pVidMode = g_pBaldurChitin->GetCurrentVideoMode();
+    pInfinity->rViewPort.SetRect(0, 0, CVideo::SCREENWIDTH, CVideo::SCREENHEIGHT);
+
+    if ((nCounter & 1) != 0) {
+        pCreateChar->field_196.m_animation->IncrementFrame();
+        pCreateChar->field_196.m_animation->GetCurrentFrame();
+        if (pCreateChar->field_196.m_animation->IsEndOfSequence()) {
+            pCreateChar->field_196.SetSequence(pSprite->GetIdleSequence());
+        }
+    }
+    nCounter++;
+
+    CRect rFx;
+    CPoint ptReference;
+    pCreateChar->field_196.CalculateFxRect(rFx, ptReference, 0);
+
+    ptPos.x += pInfinity->nCurrentX;
+    ptPos.y += pInfinity->nCurrentY + 20;
+
+    CSingleLock renderLock(&(m_pPanel->m_pManager->field_56), FALSE);
+    renderLock.Lock(INFINITE);
+
+    pCreateChar->field_196.Render(pInfinity,
+        pInfinity->pVidMode,
+        0,
+        rFx,
+        ptPos,
+        ptReference,
+        0x20000,
+        RGB(255, 255, 255),
+        rClip,
+        FALSE,
+        FALSE,
+        0,
+        0);
+
+    renderLock.Unlock();
+
+    delete pArea;
+
+    g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nGameSprite,
+        CGameObjectArray::THREAD_1,
+        INFINITE);
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------

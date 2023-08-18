@@ -15,7 +15,7 @@ INT CGameArea::dword_8D212C;
 BOOLEAN CGameArea::byte_8D2138;
 
 // 0x469B60
-CGameArea::CGameArea()
+CGameArea::CGameArea(BYTE id)
 {
     // TODO: Incomplete.
 }

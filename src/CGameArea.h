@@ -76,7 +76,7 @@ typedef struct {
 
 class CGameArea {
 public:
-    CGameArea();
+    CGameArea(BYTE id);
     ~CGameArea();
 
     INT SetListManipulationThreadId(DWORD ThreadID);
