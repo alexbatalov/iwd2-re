@@ -7,7 +7,7 @@
 CGameAnimation::CGameAnimation()
 {
     m_animation = NULL;
-    field_8 = 0;
+    m_nSequence = 0;
 }
 
 // NOTE: Inlined.
@@ -122,4 +122,16 @@ CGameAnimationType* CGameAnimation::GetAnimation()
     UTIL_ASSERT(m_animation != NULL);
 
     return m_animation;
+}
+
+// NOTE: Inlined.
+void CGameAnimation::SetSequence(SHORT nSequence)
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2113
+    UTIL_ASSERT(m_animation != NULL);
+
+    m_nSequence = nSequence;
+
+    m_animation->SetSequence(nSequence);
 }
