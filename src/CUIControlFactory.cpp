@@ -1830,7 +1830,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 0:
                 return new CUIControlButtonCharGenPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 1:
-                return new CUIControlButtonCharGen7795D0(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+                return new CUIControlButtonCharGenHairSkinAppearance(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 2:
             case 3:
             case 4:
@@ -2316,13 +2316,13 @@ CUIControlButtonCharGenAppearanceRight::~CUIControlButtonCharGenAppearanceRight(
 // -----------------------------------------------------------------------------
 
 // 0x7795D0
-CUIControlButtonCharGen7795D0::CUIControlButtonCharGen7795D0(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+CUIControlButtonCharGenHairSkinAppearance::CUIControlButtonCharGenHairSkinAppearance(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
 {
 }
 
 // 0x779620
-CUIControlButtonCharGen7795D0::~CUIControlButtonCharGen7795D0()
+CUIControlButtonCharGenHairSkinAppearance::~CUIControlButtonCharGenHairSkinAppearance()
 {
 }
 

@@ -6001,7 +6001,7 @@ void CUIControlButtonCharGenAppearanceCustom::OnLButtonClick(CPoint pt)
 // pair (originally in `CUIControlButtons.cpp`, now in `CUIControlFactory.cpp`).
 //
 // 0x61DAC0
-BOOL CUIControlButtonCharGen7795D0::Render(BOOL bForce)
+BOOL CUIControlButtonCharGenHairSkinAppearance::Render(BOOL bForce)
 {
     // 0x8F3B9C
     static DWORD nCounter;
