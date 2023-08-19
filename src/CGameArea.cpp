@@ -17,7 +17,88 @@ BOOLEAN CGameArea::byte_8D2138;
 // 0x469B60
 CGameArea::CGameArea(BYTE id)
 {
-    // TODO: Incomplete.
+    field_B0E = 0;
+    field_24E = 0;
+    field_3D6 = 0;
+    m_firstRender = 0;
+    m_dwLastProgressRenderTickCount = 0;
+    m_dwLastProgressMsgTickCount = 0;
+    m_sndAmbientDayVolume = 0;
+    m_sndAmbientNightVolume = 0;
+    field_3EC = 0;
+    field_41A = 0;
+    m_nCurrentSong = 0;
+    m_id = id;
+    field_1ED = 0;
+    field_1EE = 0;
+    field_1F8 = 0;
+    m_bAreaLoaded = 0;
+    InitializeCriticalSection(&field_1FC);
+    InitializeCriticalSection(&field_214);
+    m_nListManipulationThreadCounter = 0;
+    m_ListManipulationThreadId = 0;
+
+    // NOTE: Inlining.
+    if (m_nListManipulationThreadCounter > 0) {
+        m_nListManipulationThreadCounter = m_nListManipulationThreadCounter - 1;
+    }
+
+    if (m_nListManipulationThreadCounter == 0) {
+        m_ListManipulationThreadId = 0;
+    }
+
+    m_pGame = NULL;
+    m_nScrollState = 0;
+    m_nKeyScrollState = 0;
+    field_240 = 0;
+    m_iPicked = CGameObjectArray::INVALID_INDEX;
+    m_iPickedTarget = CGameObjectArray::INVALID_INDEX;
+    field_252 = 0;
+    m_visibility.field_58 = 0;
+    memset(&m_header, 0, sizeof(m_header));
+    m_groupMove = 0;
+    field_432 = 0;
+    field_434 = 0;
+    field_318 = 0;
+    field_41E = 0;
+    m_nInitialAreaID = 0;
+    m_nBattleSongCounter = 0;
+    field_3DC = -1;
+    field_3E0 = -1;
+    field_3E4 = -1;
+    m_ptOldViewPos.x = -1;
+    m_ptOldViewPos.y = -1;
+    field_3EE = -1;
+    field_426 = -1;
+    field_3E8 = -1;
+    field_3F2 = -1;
+    field_241 = 0;
+    field_242 = CGameObjectArray::INVALID_INDEX;
+    m_sndAmbientVolume = 100;
+    m_cInfinity.m_pArea = this;
+    m_nCurrentSong = -1;
+    field_438 = 0;
+    field_436 = 0;
+    field_98A = 0;
+    field_AE6 = 1;
+    field_98E = 10;
+
+    // NOTE: This assignment is slightly incorrect. Original code refers to
+    // other offsets (0x8A8168 and 0x8A8154 respectively). It can mean two
+    // things:
+    // - There was second set of terrain table defaults, which is exactly the
+    // same as in `CGameObject`.
+    // - Such split was a result of some compiler optimization.
+    //
+    // Since both sets have the same values, there is no harm to reuse what's
+    // already present.
+    memcpy(&m_terrainTable, CGameObject::DEFAULT_TERRAIN_TABLE, 16);
+    memcpy(&m_visibleTerrainTable, CGameObject::DEFAULT_VISIBLE_TERRAIN_TABLE, 16);
+
+    dword_8D212C = 0;
+    byte_8D2138 = 0;
+
+    field_B16 = 0;
 }
 
 // 0x46A070

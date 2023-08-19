@@ -3,6 +3,10 @@
 
 #include "mfc.h"
 
+class CSearchBitmap {
+public:
+};
+
 class CSearchRequest {
 public:
     static LONG MINNODES;

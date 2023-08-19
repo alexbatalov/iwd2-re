@@ -3,15 +3,25 @@
 
 #include "mfc.h"
 
+#include "CGameAreaNotes.h"
 #include "CInfinity.h"
+#include "CSearchBitmap.h"
 #include "CSound.h"
 #include "CVariableHash.h"
+#include "CVidBitmap.h"
+#include "CVisibility.h"
 #include "FileFormat.h"
 
 class CInfGame;
 class CVidMode;
 
-typedef struct {
+class CAreaFileHeader {
+public:
+    CAreaFileHeader()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
     RESREF m_areaName;
     DWORD m_lastSaved;
     DWORD m_flags;
@@ -33,9 +43,15 @@ typedef struct {
     DWORD field_50;
     DWORD field_54;
     DWORD field_58;
-} CAreaFileHeader;
+};
 
-typedef struct {
+class CAreaSoundsAndMusic {
+public:
+    CAreaSoundsAndMusic()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
     DWORD m_dayMusic;
     DWORD m_nightMusic;
     DWORD m_battleWinningMusic;
@@ -54,9 +70,15 @@ typedef struct {
     DWORD m_nightAmbientVolume;
     DWORD m_reverb;
     DWORD m_notUsed[15];
-} CAreaSoundsAndMusic;
+};
 
-typedef struct {
+class CAreaFileRestEncounter {
+public:
+    CAreaFileRestEncounter()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
     /* 0000 */ SCRIPTNAME m_scriptName;
     /* 0020 */ STRREF m_randomCreatureString[10];
     /* 0048 */ RESREF m_randomCreature[10];
@@ -72,7 +94,7 @@ typedef struct {
     /* 00AC */ WORD m_wFlags;
     /* 00AE */ BYTE m_weights[10];
     /* 00B8 */ DWORD m_notUsed[11];
-} CAreaFileRestEncounter;
+};
 
 class CGameArea {
 public:
@@ -120,38 +142,76 @@ public:
     /* 0000 */ CAreaFileHeader m_header;
     /* 005C */ CAreaSoundsAndMusic m_headerSound;
     /* 00EC */ CAreaFileRestEncounter m_headerRestEncounter;
+    /* 01EC */ BYTE m_id;
+    /* 01ED */ unsigned char field_1ED;
+    /* 01EE */ unsigned char field_1EE;
     /* 01EF */ BOOLEAN m_bAreaLoaded;
     /* 01F0 */ CResRef m_resRef;
+    /* 01F8 */ int field_1F8;
+    /* 01FC */ CRITICAL_SECTION field_1FC;
     /* 0214 */ CRITICAL_SECTION field_214;
     /* 022C */ INT m_nListManipulationThreadCounter;
     /* 0230 */ DWORD m_ListManipulationThreadId;
     /* 0234 */ CInfGame* m_pGame;
     /* 0238 */ LONG m_nScrollState;
     /* 023C */ LONG m_nKeyScrollState;
+    /* 0240 */ unsigned char field_240;
+    /* 0241 */ unsigned char field_241;
+    /* 0242 */ LONG field_242;
+    /* 0246 */ LONG m_iPicked;
+    /* 024A */ LONG m_iPickedTarget;
+    /* 024E */ int field_24E;
+    /* 0252 */ int field_252;
     /* 0256 */ CPoint m_ptMousePos;
+    /* 025E */ CVidBitmap m_bmLum;
+    /* 0318 */ int field_318;
+    /* 031C */ CVidBitmap m_bmHeight;
+    /* 03D6 */ int field_3D6;
     /* 03DA */ BYTE m_firstRender;
     /* 03DC */ int field_3DC;
     /* 03E0 */ int field_3E0;
     /* 03E4 */ int field_3E4;
     /* 03E8 */ int field_3E8;
+    /* 03EC */ short field_3EC;
+    /* 03EE */ int field_3EE;
+    /* 03F2 */ int field_3F2;
     /* 03F6 */ BOOL m_groupMove;
+    /* 03FA */ BYTE m_terrainTable[16];
+    /* 040A */ BYTE m_visibleTerrainTable[16];
+    /* 041A */ int field_41A;
+    /* 041E */ int field_41E;
     /* 0422 */ DWORD m_nInitialAreaId;
+    /* 0422 */ int m_nInitialAreaID;
+    /* 0426 */ int field_426;
     /* 042A */ DWORD m_dwLastProgressRenderTickCount;
     /* 042E */ DWORD m_dwLastProgressMsgTickCount;
+    /* 0432 */ unsigned char field_432;
+    /* 0434 */ short field_434;
+    /* 0436 */ unsigned char field_436;
+    /* 0438 */ int field_438;
+    /* 043C */ CGameAreaNotes m_cGameAreaNotes;
     /* 04CC */ CInfinity m_cInfinity;
+    /* 076C */ CSearchBitmap m_search;
+    /* 0860 */ CVisibilityMap m_visibility;
     /* 08BC */ CSound m_sndAmbientDay;
     /* 0920 */ CSound m_sndAmbientNight;
     /* 0984 */ BYTE m_sndAmbientVolume;
     /* 0986 */ WORD m_sndAmbientDayVolume;
     /* 0988 */ WORD m_sndAmbientNightVolume;
+    /* 098A */ int field_98A;
+    /* 098E */ int field_98E;
     /* 0992 */ CTypedPtrList<CPtrList, int*> m_lVertSort; // NOTE: Stores actual ints disguised as pointers.
     /* 09E6 */ CTypedPtrList<CPtrList, int*> m_lVertSortAdd; // NOTE: Stores actual ints disguised as pointers.
     /* 0A02 */ CTypedPtrList<CPtrList, int*> m_lVertSortBackAdd; // NOTE: Stores actual ints disguised as pointers.
     /* 0A1E */ CTypedPtrList<CPtrList, int*> m_lVertSortFlightAdd; // NOTE: Stores actual ints disguised as pointers.
+    /* 0AC6 */ CPoint m_ptOldViewPos;
     /* 0ACE */ CVariableHash m_variables;
     /* 0ADA */ CNamedCreatureVariableHash m_namedCreatures;
+    /* 0AE6 */ unsigned char field_AE6;
     /* 0AE8 */ SHORT m_nCurrentSong;
     /* 0AEA */ INT m_nBattleSongCounter;
+    /* 0B0E */ int field_B0E;
+    /* 0B12 */ int field_B12;
     /* 0B16 */ BOOL field_B16;
 };
 
