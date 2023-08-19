@@ -335,3 +335,9 @@ CGameArea* CGameObject::GetArea()
 {
     return m_pArea;
 }
+
+// 0x4530B0
+LONG CGameObject::GetId()
+{
+    return m_id;
+}

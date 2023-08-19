@@ -67,6 +67,7 @@ public:
     /* 0068 */ virtual BOOLEAN func_68();
 
     CGameArea* GetArea();
+    LONG GetId();
 
     /* 0004 */ BYTE m_objectType;
     /* 0006 */ CPoint m_pos;
