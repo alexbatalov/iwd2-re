@@ -1860,10 +1860,107 @@ void CScreenInventory::EndSwap()
     }
 }
 
+// 0x62F360
+void CScreenInventory::SwapWithSlot(INT nButtonId, BOOL bShowError, WORD wCount, BOOL bAutoStacking)
+{
+}
+
 // 0x6305B0
 void CScreenInventory::SwapWithPortrait(INT nButtonId, BOOL bShowError)
 {
     // TODO: Incomplete.
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x62CF70
+CUIControlButtonInventorySlot::CUIControlButtonInventorySlot(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON | RBUTTON, 1)
+{
+    field_666 = FALSE;
+    field_66A = FALSE;
+    SetNeedAsyncUpdate();
+}
+
+// 0x62D010
+CUIControlButtonInventorySlot::~CUIControlButtonInventorySlot()
+{
+}
+
+// 0x62D760
+void CUIControlButtonInventorySlot::OnMouseMove(CPoint pt)
+{
+    if (field_666) {
+        if (!IsOver(pt)) {
+            field_66A = TRUE;
+        }
+    }
+}
+
+// 0x62D7B0
+BOOL CUIControlButtonInventorySlot::OnLButtonDown(CPoint pt)
+{
+    if (!m_bActive) {
+        return FALSE;
+    }
+
+    if ((m_nMouseButtons & LBUTTON) == 0) {
+        return FALSE;
+    }
+
+    m_bPressed = TRUE;
+    m_pPanel->m_pManager->SetCapture(this, CUIManager::MOUSELBUTTON);
+
+    InvalidateRect();
+
+    m_pPanel->m_pManager->field_2D = 0;
+    m_pPanel->m_pManager->field_32 = m_nID;
+    m_pPanel->m_pManager->field_1C = 0;
+
+    CScreenInventory* pInventory = g_pBaldurChitin->m_pEngineInventory;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 6524
+    UTIL_ASSERT(pInventory != NULL);
+
+    if (!pInventory->m_bMultiPlayerViewable) {
+        return FALSE;
+    }
+
+    pInventory->BeginSwap();
+    pInventory->SwapWithSlot(m_nID, TRUE, -1, TRUE);
+    pInventory->EndSwap();
+
+    field_666 = TRUE;
+    field_66A = FALSE;
+
+    return TRUE;
+}
+
+// 0x62D890
+void CUIControlButtonInventorySlot::OnLButtonUp(CPoint pt)
+{
+    // TODO: Incomplete.
+}
+
+// 0x62DA20
+void CUIControlButtonInventorySlot::OnLButtonDoubleClick(CPoint pt)
+{
+    // TODO: Incomplete.
+}
+
+// 0x62DBF0
+void CUIControlButtonInventorySlot::OnRButtonClick(CPoint pt)
+{
+    // TODO: Incomplete.
+}
+
+// 0x62DDE0
+BOOL CUIControlButtonInventorySlot::Render(BOOL bForce)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------------

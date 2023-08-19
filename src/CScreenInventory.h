@@ -98,6 +98,7 @@ public:
     INT MapInventoryIdToButtonId(INT nInventoryId);
     void BeginSwap();
     void EndSwap();
+    void SwapWithSlot(INT nButtonId, BOOL bShowError, WORD wCount, BOOL bAutoStacking);
     void SwapWithPortrait(INT nButtonId, BOOL bShowError);
 
     /* 0106 */ CGameAnimation m_animation;
@@ -135,6 +136,21 @@ public:
     /* 142E */ C2DArray field_142E;
     /* 1452 */ C2DArray field_1452;
     /* 1476 */ C2DArray field_1476;
+};
+
+class CUIControlButtonInventorySlot : public CUIControlButton {
+public:
+    CUIControlButtonInventorySlot(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonInventorySlot() override;
+    void OnMouseMove(CPoint pt) override;
+    BOOL OnLButtonDown(CPoint pt) override;
+    void OnLButtonUp(CPoint pt) override;
+    BOOL Render(BOOL bForce) override;
+    void OnLButtonDoubleClick(CPoint pt) override;
+    void OnRButtonClick(CPoint pt) override;
+
+    /* 0666 */ BOOL field_666;
+    /* 066A */ BOOL field_66A;
 };
 
 class CUIControlButtonInventoryColor : public CUIControlButton {
