@@ -1,6 +1,9 @@
 #include "CInfinity.h"
 
 #include "CChitin.h"
+#include "CGameArea.h"
+#include "CInfTileSet.h"
+#include "CResWED.h"
 #include "CUtil.h"
 #include "CVidInf.h"
 
@@ -81,7 +84,105 @@ const CResRef CInfinity::THUNDERRESREFS[3] = {
 // 0x5CC360
 CInfinity::CInfinity()
 {
-    // TODO: Incomplete.
+    pVidMode = NULL;
+    m_areaType = 0;
+    field_20 = 0;
+    bWEDDemanded = FALSE;
+    bInitialized = FALSE;
+    bRefreshVRamRect = FALSE;
+    m_bResizedViewPort = FALSE;
+    nAreaX = 0;
+    nAreaY = 0;
+    nCurrentTileX = 0;
+    nCurrentTileY = 0;
+    nCurrentX = 0;
+    nCurrentY = 0;
+    m_ptCurrentPosExact.x = 0;
+    m_ptCurrentPosExact.y = 0;
+    nOffsetX = 0;
+    nOffsetY = 0;
+    nNewX = 0;
+    nNewY = 0;
+    field_98 = 0;
+    field_9C = 0;
+    field_A0 = 0;
+    field_A4 = 0;
+    field_A8 = 0;
+    field_AC = 0;
+    field_B0 = 0;
+    field_B4 = 0;
+    nTilesX = 0;
+    nTilesY = 0;
+    rViewPort.left = 0;
+    rViewPort.top = 0;
+    rViewPort.right = 0;
+    rViewPort.bottom = 0;
+    nVisibleTilesX = 0;
+    nVisibleTilesY = 0;
+    m_bMovieBroadcast = FALSE;
+    pResWED = NULL;
+    pVRPool = NULL;
+    rVRamRect.left = -1;
+    rVRamRect.top = -1;
+    rVRamRect.right = -1;
+    rVRamRect.bottom = -1;
+    field_68 = -1;
+    field_6C = -1;
+    field_70 = -1;
+    field_74 = -1;
+    field_196 = 0;
+    pTileSets[0] = NULL;
+    pTileSets[1] = NULL;
+    pTileSets[2] = NULL;
+    pTileSets[3] = NULL;
+    pTileSets[4] = NULL;
+    m_rgbGlobalLighting = RGB(255, 255, 255);
+    nThunderLength = 0;
+    nCurrentLightningFrequency = 0;
+    nNextLightningFrequency = 0;
+    field_124 = 0;
+    field_128 = 0;
+    nNextRainLevel = 0;
+    nCurrentSnowLevel = 0;
+    field_134 = 0;
+    field_138 = 0;
+    field_13C = 0;
+    nTimeToNextThunder = -1;
+    m_bStartLightning = FALSE;
+    m_bStopLightning = FALSE;
+    m_rgbTimeOfDayGlobalLighting = RGB(CVidPalette::NO_TINT, CVidPalette::NO_TINT, CVidPalette::NO_TINT);
+    m_rgbLightningGlobalLighting = RGB(0, 0, 0);
+    bRenderCallLightning = FALSE;
+    cLightningPoint.x = -1;
+    cLightningPoint.y = -1;
+    nRenderLightningTimer = -1;
+    m_lightningStrikeProb = 1;
+    m_rgbOverCastGlobalLighting = RGB(CVidPalette::NO_TINT, CVidPalette::NO_TINT, CVidPalette::NO_TINT);
+    m_rgbTimeOfDayRainColor = RGB(110, 110, 110);
+    m_rgbRainColor = RGB(110, 110, 110);
+    m_requestDayNightCode = 1;
+    field_15E = 0;
+    m_renderDayNightCode = 1;
+    field_15B = 1;
+    m_dayLightIntensity = -1;
+    m_nLastTickCount = GetTickCount();
+    m_ptScrollDest.x = -1;
+    m_autoScrollSpeed = 0;
+    m_ptScrollDest.y = -1;
+    m_nScrollDelay = 0;
+    m_updateListenPosition = 1;
+    m_pArea = NULL;
+    m_vbMessageScreen.SetResRef(CResRef(""), TRUE, TRUE);
+    m_vbMessageScreen.m_bDoubleSize = FALSE;
+    m_strMessageText = -1;
+    m_nMessageEndTime = -1;
+    m_bRenderMessage = 0;
+    field_286 = 0;
+    field_28C = 0;
+    field_294 = 0;
+    field_290 = 0;
+    field_29C = 0;
+    field_298 = 0;
 }
 
 // 0x5CC710
