@@ -2015,6 +2015,12 @@ CCreatureFileHeader* CGameSprite::GetBaseStats()
     return &m_baseStats;
 }
 
+// 0x4531A0
+CDerivedStats* CGameSprite::GetDerivedStats()
+{
+    return &m_derivedStats;
+}
+
 // NOTE: Inlined.
 CGameAnimation* CGameSprite::GetAnimation()
 {

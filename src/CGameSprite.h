@@ -255,6 +255,7 @@ public:
 
     void SetResRef(const CResRef& resRef);
     CCreatureFileHeader* GetBaseStats();
+    CDerivedStats* GetDerivedStats();
 
     CGameAnimation* GetAnimation();
 
