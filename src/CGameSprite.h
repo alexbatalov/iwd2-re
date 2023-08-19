@@ -254,6 +254,7 @@ public:
     void DisplaySkills(CUIControlTextDisplay* pText);
 
     void SetResRef(const CResRef& resRef);
+    CCreatureFileHeader* GetBaseStats();
 
     CGameAnimation* GetAnimation();
 

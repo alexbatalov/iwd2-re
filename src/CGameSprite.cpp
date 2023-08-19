@@ -2009,6 +2009,12 @@ void CGameSprite::SetResRef(const CResRef& resRef)
     m_resRef = resRef;
 }
 
+// 0x453190
+CCreatureFileHeader* CGameSprite::GetBaseStats()
+{
+    return &m_baseStats;
+}
+
 // NOTE: Inlined.
 CGameAnimation* CGameSprite::GetAnimation()
 {
