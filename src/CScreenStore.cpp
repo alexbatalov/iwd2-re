@@ -342,6 +342,12 @@ void CScreenStore::ResetErrorPanel(CUIPanel* pPanel)
     }
 }
 
+// 0x673A00
+void CScreenStore::SwitchMainPanel(DWORD dwMainPanelId)
+{
+    // TODO: Incomplete.
+}
+
 // 0x673FE0
 void CScreenStore::UpdateMainPanel()
 {
@@ -880,6 +886,20 @@ void CScreenStore::OnCancelButtonClick()
     // TODO: Incomplete.
 }
 
+// NOTE: Inlined.
+DWORD CScreenStore::GetPanelButtonPanelId(INT nButtonIndex)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 8251
+    UTIL_ASSERT(0 <= nButtonIndex && nButtonIndex < CSCREENSTORE_NUM_BOTTOMBUTTONS);
+
+    if (m_cResStore != "") {
+        return m_adwButtonPanelId[nButtonIndex];
+    }
+
+    return MAXDWORD;
+}
+
 // 0x67D9D0
 SHORT CScreenStore::GetPanelButtonSequence(INT nButtonIndex)
 {
@@ -1151,6 +1171,67 @@ void CUIControlButtonStoreBarDone::OnLButtonClick(CPoint pt)
 
         g_pBaldurChitin->m_pEngineWorld->StopStore();
     }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x67EC40
+CUIControlButtonStoreBarPanel::CUIControlButtonStoreBarPanel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
+{
+    m_nNotSelectedFrame = m_nNormalFrame;
+    m_nSelectedFrame = 0;
+}
+
+// 0x67ECB0
+CUIControlButtonStoreBarPanel::~CUIControlButtonStoreBarPanel()
+{
+}
+
+// 0x67ED50
+void CUIControlButtonStoreBarPanel::OnLButtonClick(CPoint pt)
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 9634
+    UTIL_ASSERT(pStore != NULL);
+
+    CSingleLock renderLock(&(pStore->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    // NOTE: Uninline.
+    DWORD dwPanelId = pStore->GetPanelButtonPanelId(m_nID - 1);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 9641
+    UTIL_ASSERT(dwPanelId != MAXDWORD);
+
+    pStore->SwitchMainPanel(dwPanelId);
+
+    renderLock.Unlock();
+}
+
+// 0x67EE60
+BOOL CUIControlButtonStoreBarPanel::Render(BOOL bForce)
+{
+    if (!m_bActive && !m_bInactiveRender) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount == 0 && !bForce) {
+        return FALSE;
+    }
+
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 9681
+    UTIL_ASSERT(pStore != NULL);
+
+    m_cVidCell.SequenceSet(pStore->GetPanelButtonSequence(m_nID - 1));
+
+    return CUIControlButton3State::Render(bForce);
 }
 
 // -----------------------------------------------------------------------------

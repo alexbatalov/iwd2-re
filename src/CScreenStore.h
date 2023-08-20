@@ -78,6 +78,7 @@ public:
     void SummonPopup(DWORD dwPopupId);
     void ResetErrorPanel(CUIPanel* pPanel);
     BOOL IsCharacterDead();
+    void SwitchMainPanel(DWORD dwMainPanelId);
     void UpdateMainPanel();
     void UpdateBuySellPanel();
     void UpdateIdentifyPanel();
@@ -117,6 +118,7 @@ public:
     void CheckEnablePanels(BOOL bEnable);
     void OnDoneButtonClick();
     void OnCancelButtonClick();
+    DWORD GetPanelButtonPanelId(INT nButtonIndex);
     SHORT GetPanelButtonSequence(INT nButtonIndex);
     STRREF GetPanelButtonToolTip(INT nButtonIndex);
     void OnErrorButtonClick(INT nButton);
@@ -180,6 +182,14 @@ class CUIControlButtonStoreBarDone : public CUIControlButton {
 public:
     CUIControlButtonStoreBarDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonStoreBarDone() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonStoreBarPanel : public CUIControlButton3State {
+public:
+    CUIControlButtonStoreBarPanel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonStoreBarPanel() override;
+    BOOL Render(BOOL bRender) override;
     void OnLButtonClick(CPoint pt) override;
 };
 
