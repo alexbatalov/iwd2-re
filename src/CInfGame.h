@@ -12,6 +12,7 @@
 #include "CInfButtonArray.h"
 #include "CMoveList.h"
 #include "CMultiplayerSettings.h"
+#include "CResGame.h"
 #include "CRuleTables.h"
 #include "CStrRes.h"
 #include "CTimerWorld.h"
@@ -334,6 +335,12 @@ public:
     /* 4E2C */ CGroupedSpellList m_spellsByDomain[9];
     /* 50D8 */ BOOL field_50D8;
     /* 50DC */ unsigned char field_50DC;
+};
+
+class CGameFile : public CResHelper<CResGame, 1013> {
+public:
+    void* GetData();
+    DWORD GetDataSize();
 };
 
 #endif /* CINFGAME_H_ */

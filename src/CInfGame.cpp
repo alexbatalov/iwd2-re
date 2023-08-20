@@ -3675,3 +3675,33 @@ void CGroupedSpellList::Load(const C2DArray& Table, const INT& nClassColumn, con
         }
     }
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x5C7AC0
+void* CGameFile::GetData()
+{
+    if (pRes != NULL) {
+        return pRes->Demand();
+    } else {
+        return NULL;
+    }
+}
+
+// 0x5C7AD0
+DWORD CGameFile::GetDataSize()
+{
+    if (pRes == NULL) {
+        return 0;
+    }
+
+    if (pRes->Demand() == NULL) {
+        return 0;
+    }
+
+    DWORD nSize = pRes->m_nResSizeActual;
+
+    pRes->Release();
+
+    return nSize;
+}
