@@ -2841,3 +2841,78 @@ void CUIControlButtonStoreCloseBag::OnLButtonClick(CPoint pt)
 
     pStore->CheckEnablePortaits(1);
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x685290
+CUIControlButtonStoreOpenBag::CUIControlButtonStoreOpenBag(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->GetTlkTable().Fetch(24891, strRes); // "Open Container"
+    SetText(strRes.szText);
+}
+
+// 0x685340
+CUIControlButtonStoreOpenBag::~CUIControlButtonStoreOpenBag()
+{
+}
+
+// 0x6853E0
+void CUIControlButtonStoreOpenBag::OnLButtonClick(CPoint pt)
+{
+    POSITION pos;
+
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 13847
+    UTIL_ASSERT(pStore != NULL);
+
+    CItem* pItem = pStore->field_5A4;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 13851
+    UTIL_ASSERT(pItem != NULL);
+
+    CSingleLock renderLock(&(pStore->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    pStore->OpenBag(pItem->GetResRef());
+    pStore->UpdateStoreItems();
+
+    pos = pStore->m_lStoreItems.GetHeadPosition();
+    while (pos != NULL) {
+        CScreenStoreItem* pItem = pStore->m_lStoreItems.GetAt(pos);
+        pItem->m_bSelected = FALSE;
+
+        pStore->m_lStoreItems.GetNext(pos);
+    }
+
+    // NOTE: Uninline.
+    pStore->SetTopStoreItem(0);
+
+    // NOTE: Uninline.
+    pStore->UpdateStoreCost();
+
+    pStore->UpdateGroupItems();
+
+    pos = pStore->m_lGroupItems.GetHeadPosition();
+    while (pos != NULL) {
+        CScreenStoreItem* pItem = pStore->m_lGroupItems.GetAt(pos);
+        pItem->m_bSelected = FALSE;
+
+        pStore->m_lGroupItems.GetNext(pos);
+    }
+
+    // NOTE: Uninline.
+    pStore->SetTopGroupItem(0);
+
+    // NOTE: Uninline.
+    pStore->UpdateGroupCost();
+
+    pStore->UpdateMainPanel();
+    pStore->OnDoneButtonClick();
+
+    renderLock.Unlock();
+}

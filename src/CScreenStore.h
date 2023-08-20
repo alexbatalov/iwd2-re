@@ -388,4 +388,11 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonStoreOpenBag : public CUIControlButton {
+public:
+    CUIControlButtonStoreOpenBag(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonStoreOpenBag() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 #endif /* CSCREENSTORE_H_ */
