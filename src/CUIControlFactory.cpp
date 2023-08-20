@@ -1471,6 +1471,204 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             }
         }
     } else if (pPanel->m_pManager->m_cResRef == "GUIINV") {
+        // 0x771437
+        switch (pPanel->m_nID) {
+        case 0:
+            // 0x77147A
+            switch (controlInfo->nID) {
+            case 4:
+                return new CUIControlButtonGeneralSpellbook(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 5:
+                return new CUIControlButtonGeneralWorld(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 6:
+                return new CUIControlButtonGeneralJournal(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 7:
+                return new CUIControlButtonGeneralMap(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 8:
+                return new CUIControlButtonGeneralCharacter(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 9:
+                return new CUIControlButtonGeneralOptions(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 10:
+                return new CUIControlButtonClock(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 12:
+                return new CUIControlButtonRest(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 13:
+                return new CUIControlButtonGeneralMultiPlayer(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 14:
+                return new CUIControlButtonAI(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 1:
+            // 0x7715DE
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                return new CUIControlPortraitInventory(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 50:
+            case 51:
+            case 52:
+            case 53:
+            case 54:
+            case 55:
+                return new CUIControlButton77DCC0(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 2:
+            // 0x77164E
+            switch (controlInfo->nID) {
+            case 5:
+            case 6:
+            case 7:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+            case 15:
+            case 16:
+            case 17:
+            case 21:
+            case 22:
+            case 23:
+            case 24:
+            case 25:
+            case 30:
+            case 31:
+            case 32:
+            case 33:
+            case 34:
+            case 35:
+            case 36:
+            case 37:
+            case 38:
+            case 39:
+            case 40:
+            case 41:
+            case 42:
+            case 43:
+            case 44:
+            case 45:
+            case 68:
+            case 69:
+            case 70:
+            case 71:
+            case 72:
+            case 73:
+            case 74:
+            case 75:
+            case 76:
+            case 77:
+            case 78:
+            case 79:
+            case 80:
+            case 81:
+            case 101:
+            case 102:
+            case 103:
+            case 104:
+            case 105:
+            case 106:
+            case 107:
+            case 108:
+                return new CUIControlButtonInventorySlot(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 50:
+                return new CUIControlButtonInventoryAppearance(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 62:
+            case 63:
+            case 82:
+            case 83:
+                return new CUIControlButtonInventoryColor(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 66:
+                return new CUIControlScrollBarInventoryGround(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 84:
+                return new CUIControlButtonCharacterPortrait(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 85:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 86:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 109:
+            case 110:
+            case 111:
+            case 112:
+                return new CUIControlButtonInventoryWeaponSet(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 3:
+            // 0x771EB7
+            if (controlInfo->nID <= CRESUI_CONTROLBUTTONID_INVENTORYCOLOR_LASTCOLOR
+                || controlInfo->nID == 35) {
+                return new CUIControlButtonInventoryColorChoice(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 4:
+            // 0x771F04
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlButtonInventoryRequesterItem(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 1:
+                return new CUIControlButtonInventoryRequesterCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 2:
+                return new CUIControlButtonInventoryRequesterDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 3:
+            case 4:
+                return new CUIControlButtonInventoryRequesterPlusMinus(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 6:
+                return new CUIControlEditInventoryRequesterAmount(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo));
+                break;
+            }
+            break;
+        case 5:
+            // 0x772013
+            switch (controlInfo->nID) {
+            case 2:
+                return new CUIControlButtonInventoryHistoryIcon(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 4:
+                return new CUIControlButtonInventoryHistoryDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 5:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 6:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 7:
+                return new CUIControlButtonInventoryHistoryImage(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 8:
+                return new CUIControlButtonInventoryHistoryAbilities(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 9:
+                return new CUIControlButtonInventoryHistoryUse(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 6:
+            // 0x772162
+            switch (controlInfo->nID) {
+            case 1:
+            case 2:
+            case 3:
+                return new CUIControlButtonInventoryAbilitiesAbility(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 7:
+                return new CUIControlButtonInventoryHistoryDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 8:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 9:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 10:
+                return new CUIControlButtonInventoryHistoryCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+        case 7:
+        case 8:
+        case 9:
+        case 50:
+            // 0x772230
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 2:
+                return new CUIControlButtonInventoryError(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 3:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            }
+        }
     } else if (pPanel->m_pManager->m_cResRef == "GUIREC") {
     } else if (pPanel->m_pManager->m_cResRef == "GUISPL" || pPanel->m_pManager->m_cResRef == "GUISPL08") {
         // 0x775B04
