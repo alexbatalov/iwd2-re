@@ -62,7 +62,7 @@ public:
         };
         BYTE m_classLevels[11];
     };
-    /* 01A0 */ int field_1A0;
+    /* 01A0 */ STRREF m_biography;
     /* 01B4 */ int field_1B4;
     /* 01B8 */ DWORD m_feats[3];
     /* 01D0 */ BYTE m_featBow;
