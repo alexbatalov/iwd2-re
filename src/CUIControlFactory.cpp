@@ -831,6 +831,255 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
         }
     } else if (pPanel->m_pManager->m_cResRef == "GUIW" || pPanel->m_pManager->m_cResRef == "GUIW08" || pPanel->m_pManager->m_cResRef == "GUIW10" || pPanel->m_pManager->m_cResRef == "GUIW12" || pPanel->m_pManager->m_cResRef == "GUIW16" || pPanel->m_pManager->m_cResRef == "GUIW20") {
     } else if (pPanel->m_pManager->m_cResRef == "GUISTORE") {
+        // 0x76F98A
+        switch (pPanel->m_nID) {
+        case 0:
+            // 0x76F9C2
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlButtonGeneralWorld(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 4:
+                return new CUIControlButtonGeneralSpellbook(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 5:
+                return new CUIControlButtonGeneralInventory(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 6:
+                return new CUIControlButtonGeneralJournal(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 7:
+                return new CUIControlButtonGeneralMap(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 8:
+                return new CUIControlButtonGeneralCharacter(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 9:
+                return new CUIControlButtonGeneralOptions(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 10:
+                return new CUIControlButtonClock(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 12:
+                return new CUIControlButtonRest(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 13:
+                return new CUIControlButtonGeneralMultiPlayer(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 14:
+                return new CUIControlButtonAI(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 1:
+            // 0x76FB47
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                return new CUIControlPortraitStore(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 50:
+            case 51:
+            case 52:
+            case 53:
+            case 54:
+            case 55:
+                return new CUIControlButton77DCC0(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 2:
+            // 0x76FCF5
+            switch (controlInfo->nID) {
+            case 2:
+                return new CUIControlButtonStoreBuySellBuy(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 3:
+                return new CUIControlButtonStoreBuySellSell(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+                return new CUIControlButtonStoreStoreItem(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 11:
+                return new CUIControlScrollBarStoreStore(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 12:
+                return new CUIControlScrollBarStoreGroup(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 13:
+            case 14:
+            case 15:
+            case 16:
+            case 17:
+            case 18:
+                return new CUIControlButtonStoreGroupItem(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 44:
+                return new CUIControlEncumbrance(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 50:
+                return new CUIControlButtonStoreCloseBag(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+                return NULL;
+            }
+            break;
+        case 3:
+            // 0x76FBA1
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlButtonStoreBarDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                return new CUIControlButtonStoreBarPanel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 4:
+            // 0x76FEA2
+            switch (controlInfo->nID) {
+            case 5:
+                return new CUIControlButtonStoreIdentifyIdentify(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 7:
+                return new CUIControlScrollBarStoreIdentify(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+                return new CUIControlButtonStoreGroupItem(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 23:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 24:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            }
+            break;
+        case 5:
+            // 0x76FF86
+            switch (controlInfo->nID) {
+            case 5:
+                return new CUIControlButtonStoreBuySpellBuy(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 7:
+                return new CUIControlScrollBarStoreSpell(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+                return new CUIControlButtonStoreStoreSpell(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 23:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 24:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            }
+            break;
+        case 7:
+            // 0x770078
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+                return new CUIControlButtonStoreRentRoomRoomPicture(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+                return new CUIControlButtonStoreRentRoomRoomSelect(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 11:
+                return new CUIControlButtonStoreRentRoomRent(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 12:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 13:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            }
+            break;
+        case 8:
+            // 0x77016D
+            switch (controlInfo->nID) {
+            case 5:
+                return new CUIControlScrollBarStoreBuyDrinksDrink(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 13:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 14:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 40:
+            case 41:
+            case 42:
+            case 43:
+            case 44:
+            case 45:
+            case 46:
+            case 47:
+                return new CUIControlButtonStoreBuyDrinksDrink(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 10:
+        case 11:
+            // 0x77021A
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+                return new CUIControlButtonStoreError(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 3:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            }
+            break;
+        case 12:
+            // 0x77028B
+            switch (controlInfo->nID) {
+            case 2:
+                return new CUIControlButtonInventoryHistoryIcon(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 4:
+                return new CUIControlButtonStorePopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 5:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 6:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 7:
+                return new CUIControlButtonInventoryHistoryImage(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 9:
+                return new CUIControlButtonStoreOpenBag(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 14:
+            // 0x770388
+            switch (controlInfo->nID) {
+            case 2:
+                return new CUIControlButtonSpellbookSpellInfoIcon(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 3:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 4:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 5:
+                return new CUIControlButtonStorePopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 15:
+            // 0x76FC25
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlButtonStoreBarDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                return new CUIControlButtonStoreBarPanel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 6:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 7:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 8:
+                return new CUIControlEditMultiPlayerChat(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo));
+            }
+            break;
+        case 20:
+            // 0x77041E
+            switch (controlInfo->nID) {
+            case 0:
+                // return new CUIControlButtonStoreRequesterItem(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 1:
+                return new CUIControlButtonStoreRequesterCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 2:
+                return new CUIControlButtonStoreRequesterDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 3:
+            case 4:
+                return new CUIControlButtonStoreRequesterPlusMinus(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 6:
+                return new CUIControlEditStoreRequesterAmount(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo));
+            }
+            break;
+        }
     } else if (pPanel->m_pManager->m_cResRef == "GUIOPT") {
         // 0x77052B
         switch (pPanel->m_nID) {
