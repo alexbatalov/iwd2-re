@@ -2294,6 +2294,19 @@ BOOL CUIControlButtonInventoryColorChoice::GetColorRange(BYTE& colorRange)
 
 // -----------------------------------------------------------------------------
 
+// 0x632BE0
+CUIControlScrollBarInventoryGround::CUIControlScrollBarInventoryGround(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo)
+    : CUIControlScrollBar(panel, controlInfo)
+{
+}
+
+// 0x67F640
+CUIControlScrollBarInventoryGround::~CUIControlScrollBarInventoryGround()
+{
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x633090
 CUIControlButtonInventoryRequesterItem::CUIControlButtonInventoryRequesterItem(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)

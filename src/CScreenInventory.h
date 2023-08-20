@@ -11,6 +11,7 @@
 #include "CUIControlButtonPlusMinus.h"
 #include "CUIControlEdit.h"
 #include "CUIControlFactory.h"
+#include "CUIControlScrollBar.h"
 
 #define CSCREENINVENTORY_VIRTUAL_KEYS 90
 #define CSCREENINVENTORY_ERROR_BUTTONS 3
@@ -178,6 +179,12 @@ public:
 
     /* 0666 */ CVidCell* m_pDecal;
     /* 066A */ CVidPalette* m_pPalette;
+};
+
+class CUIControlScrollBarInventoryGround : public CUIControlScrollBar {
+public:
+    CUIControlScrollBarInventoryGround(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo);
+    ~CUIControlScrollBarInventoryGround() override;
 };
 
 class CUIControlButtonInventoryRequesterItem : public CUIControlButton {
