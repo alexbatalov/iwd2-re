@@ -1575,6 +1575,12 @@ void CScreenInventory::UpdateAbilitiesPanel()
     // TODO: Incomplete.
 }
 
+// 0x630930
+void CScreenInventory::SwapWithAppearance()
+{
+    // TODO: Incomplete.
+}
+
 // 0x630BD0
 INT CScreenInventory::MapButtonIdToInventoryId(INT nButton)
 {
@@ -1958,6 +1964,51 @@ void CUIControlButtonInventorySlot::OnRButtonClick(CPoint pt)
 
 // 0x62DDE0
 BOOL CUIControlButtonInventorySlot::Render(BOOL bForce)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x7797B0
+CUIControlButtonInventoryAppearance::CUIControlButtonInventoryAppearance(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+}
+
+// 0x779800
+CUIControlButtonInventoryAppearance::~CUIControlButtonInventoryAppearance()
+{
+}
+
+// 0x62E770
+BOOL CUIControlButtonInventoryAppearance::OnLButtonDown(CPoint pt)
+{
+    if (!m_bActive) {
+        return FALSE;
+    }
+
+    if ((m_nMouseButtons & LBUTTON) == 0) {
+        return FALSE;
+    }
+
+    CScreenInventory* pInventory = g_pBaldurChitin->m_pEngineInventory;
+
+    if (!pInventory->m_bMultiPlayerViewable) {
+        return FALSE;
+    }
+
+    pInventory->BeginSwap();
+    pInventory->SwapWithAppearance();
+    pInventory->EndSwap();
+
+    return TRUE;
+}
+
+// 0x62E7D0
+BOOL CUIControlButtonInventoryAppearance::Render(BOOL bForce)
 {
     // TODO: Incomplete.
 

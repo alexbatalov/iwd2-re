@@ -98,6 +98,7 @@ public:
     void UpdateRequesterPanel();
     void UpdateHistoryPanel(BOOL a1);
     void UpdateAbilitiesPanel();
+    void SwapWithAppearance();
     INT MapButtonIdToInventoryId(INT nButton);
     INT MapInventoryIdToButtonId(INT nInventoryId);
     void BeginSwap();
@@ -155,6 +156,14 @@ public:
 
     /* 0666 */ BOOL field_666;
     /* 066A */ BOOL field_66A;
+};
+
+class CUIControlButtonInventoryAppearance : public CUIControlButton {
+public:
+    CUIControlButtonInventoryAppearance(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonInventoryAppearance() override;
+    BOOL OnLButtonDown(CPoint pt) override;
+    BOOL Render(BOOL bForce) override;
 };
 
 class CUIControlButtonInventoryColor : public CUIControlButton {
