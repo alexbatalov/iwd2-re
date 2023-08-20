@@ -666,6 +666,46 @@ CInfGame::CInfGame()
     g_pChitin->cDimm.AddToDirectoryList(m_sCharactersDir, TRUE);
 
     // TODO: Incomplete.
+
+    m_hSearchThread = CreateSemaphoreA(NULL, 0, 1, NULL);
+    if (m_hSearchThread != NULL) {
+        // TODO: Incomplete.
+
+        C2DArray tSpells;
+        tSpells.Load(CResRef(CRuleTables::LISTSPLL));
+        m_spells.Load(tSpells, 7);
+
+        for (unsigned int spellcasterClassIndex = 0; spellcasterClassIndex < 7; spellcasterClassIndex++) {
+            m_spellsByClass[spellcasterClassIndex].Load(tSpells,
+                spellcasterClassIndex,
+                7,
+                NULL);
+        }
+
+        C2DArray tDomainSpells;
+        tDomainSpells.Load(CResRef(CRuleTables::LISTDOMN));
+
+        for (unsigned int domainIndex = 0; domainIndex < 9; domainIndex++) {
+            m_spellsByDomain[domainIndex].Load(tDomainSpells,
+                domainIndex,
+                9,
+                &m_spells);
+        }
+
+        C2DArray tInnateSpells;
+        tInnateSpells.Load(CResRef(CRuleTables::LISTINNT));
+        m_innateSpells.Load(tInnateSpells, 0);
+
+        C2DArray tSongs;
+        tSongs.Load(CResRef(CRuleTables::LISTSONG));
+        m_songs.Load(tSongs, 0);
+
+        C2DArray tShapeshifts;
+        tShapeshifts.Load(CResRef(CRuleTables::LISTSHAP));
+        m_shapeshifts.Load(tShapeshifts, 0);
+
+        // TODO: Incomplete (spells validation).
+    }
 }
 
 // 0x59ECB0
@@ -3399,4 +3439,208 @@ void CInfGame::SetTempCursor(BYTE tempCursor)
 CGameOptions* CInfGame::GetOptions()
 {
     return &m_cOptions;
+}
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Inlined.
+CSpellResRefList::CSpellResRefList()
+{
+    m_pList = NULL;
+    m_nCount = 0;
+}
+
+// NOTE: Inlined.
+CSpellResRefList::~CSpellResRefList()
+{
+    if (m_pList != NULL) {
+        delete m_pList;
+    }
+    m_nCount = 0;
+}
+
+// FIXME: `nResRefColumn` should not be reference.
+//
+// 0x5C9FD0
+void CSpellResRefList::Load(const C2DArray& Table, const INT& nResRefColumn)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 23354
+    UTIL_ASSERT(Table.GetWidth() > 0);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 23355
+    UTIL_ASSERT(Table.GetHeight() > 0);
+
+    // FIXME: Uses unsigned compare.
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 23356
+    UTIL_ASSERT(nResRefColumn < Table.GetWidth());
+
+    if (m_pList != NULL) {
+        delete m_pList;
+        m_nCount = 0;
+    }
+
+    m_pList = new CResRef[Table.GetHeight()];
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 23369
+    UTIL_ASSERT(m_pList != NULL);
+
+    for (int index = 0; index < Table.GetHeight(); index++) {
+        m_pList[index] = Table.GetAt(CPoint(nResRefColumn, index));
+    }
+
+    m_nCount = Table.GetHeight();
+}
+
+// 0x5CA160
+bool CSpellResRefList::Find(const CResRef& resRef, int& nID)
+{
+    for (int index = 0; index < m_nCount; index++) {
+        if (m_pList[index] == resRef) {
+            nID = index;
+            return true;
+        }
+    }
+
+    nID = 0;
+    return false;
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x59EB90
+CSpellList::CSpellList()
+{
+    m_pList = NULL;
+    m_nCount = 0;
+}
+
+// 0x59EBA0
+CSpellList::~CSpellList()
+{
+    if (m_pList != NULL) {
+        delete m_pList;
+    }
+    m_nCount = 0;
+}
+
+// 0x5CA1B0
+void CSpellList::Load(const std::vector<CSpellListEntry>& spells)
+{
+    if (spells.empty()) {
+        return;
+    }
+
+    size_t size = spells.size();
+    if (size == 0) {
+        return;
+    }
+
+    m_pList = new CSpellListEntry[size];
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 23430
+    UTIL_ASSERT(m_pList != NULL);
+
+    for (size_t index = 0; index < size; index++) {
+        m_pList[index] = spells[index];
+    }
+
+    m_nCount = size;
+}
+
+// 0x5CA250
+bool CSpellList::GetSpellLevel(int& nID, int& nLevel)
+{
+    for (int index = 0; index < m_nCount; index++) {
+        if (m_pList[index].m_nID == nID) {
+            nLevel = m_pList[index].m_nLevel;
+            return true;
+        }
+    }
+
+    nLevel = 0;
+    return false;
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x59EB60
+CGroupedSpellList::CGroupedSpellList()
+{
+    m_nHighestLevel = 0;
+}
+
+// 0x59ECA0
+CGroupedSpellList::~CGroupedSpellList()
+{
+}
+
+// FIXME: `nClassColumn` should not be reference.
+// FIXME: `nResRefColumn` should not be reference.
+//
+// 0x5CA2A0
+void CGroupedSpellList::Load(const C2DArray& Table, const INT& nClassColumn, const INT& nResRefColumn, CSpellResRefList* pSpells)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 23495
+    UTIL_ASSERT(Table.GetWidth() > 0);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 23496
+    UTIL_ASSERT(Table.GetHeight() > 0);
+
+    // FIXME: Uses unsigned compare.
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 23497
+    UTIL_ASSERT(nClassColumn < Table.GetWidth());
+
+    // FIXME: Uses unsigned compare.
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 23498
+    UTIL_ASSERT(nResRefColumn < Table.GetWidth());
+
+    std::vector<CSpellListEntry> lists[9];
+
+    for (int index = 0; index < Table.GetHeight(); index++) {
+        int nLevel = atol(Table.GetAt(CPoint(nClassColumn, index)));
+        int nID = index;
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+        // __LINE__: 23509
+        UTIL_ASSERT(nLevel <= CSPELLLIST_MAX_LEVELS);
+
+        CString sName = Table.GetAt(CPoint(nResRefColumn, index));
+        CResRef resRef(sName);
+
+        sName = sName.Left(strlen("**"));
+        if (nLevel > 0 && sName != "**") {
+            if (pSpells != NULL) {
+                bool result = pSpells->Find(resRef, nID);
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+                // __LINE__: 23524
+                UTIL_ASSERT(result == true);
+            }
+
+            CSpellListEntry entry;
+            entry.m_nID = nID;
+            entry.m_nLevel = nLevel;
+            lists[nLevel - 1].push_back(entry);
+        }
+    }
+
+    // NOTE: Unsigned compare, implying `m_nHighestLevel` is also unsigned.
+    for (UINT nLevel = 1; nLevel <= CSPELLLIST_MAX_LEVELS; nLevel++) {
+        if (lists[nLevel - 1].size() != 0) {
+            m_lists[nLevel - 1].Load(lists[nLevel - 1]);
+
+            if (nLevel > m_nHighestLevel) {
+                m_nHighestLevel = nLevel;
+            }
+        }
+    }
 }

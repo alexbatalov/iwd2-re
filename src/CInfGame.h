@@ -3,6 +3,8 @@
 
 #include "mfc.h"
 
+#include <vector>
+
 #include "CAIGroup.h"
 #include "CGameJournal.h"
 #include "CGameObjectArray.h"
@@ -36,6 +38,51 @@
 class CGameArea;
 class CItem;
 class CStore;
+
+// NOTE: The following spell-list related classes are new in IWD2, there are
+// alsmost no hints about their names or structure. They were declared/defined
+// in `InfGame.h` and `InfGame.cpp` respectively, but should ideally moved
+// somewhere else.
+
+#define CSPELLLIST_MAX_LEVELS 9
+
+class CSpellResRefList {
+public:
+    CSpellResRefList();
+    ~CSpellResRefList();
+    void Load(const C2DArray& Table, const INT& nResRefColumn);
+    bool Find(const CResRef& resRef, int& nID);
+
+    /* 0000 */ CResRef* m_pList;
+    /* 0004 */ int m_nCount;
+};
+
+class CSpellListEntry {
+public:
+    /* 0000 */ int m_nID;
+    /* 0004 */ int m_nLevel;
+};
+
+class CSpellList {
+public:
+    CSpellList();
+    ~CSpellList();
+    void Load(const std::vector<CSpellListEntry>& spells);
+    bool GetSpellLevel(int& nID, int& nLevel);
+
+    /* 0000 */ CSpellListEntry* m_pList;
+    /* 0004 */ int m_nCount;
+};
+
+class CGroupedSpellList {
+public:
+    CGroupedSpellList();
+    ~CGroupedSpellList();
+    void Load(const C2DArray& Table, const INT& nClassColumn, const INT& nResRefColumn, CSpellResRefList* pSpells);
+
+    /* 0000 */ CSpellList m_lists[CSPELLLIST_MAX_LEVELS];
+    /* 0048 */ UINT m_nHighestLevel;
+};
 
 class CInfGame {
 public:
@@ -278,6 +325,12 @@ public:
     /* 4BD5 */ BOOLEAN m_bExpansion;
     /* 4BD6 */ BOOLEAN field_4BD6;
     /* 4BD8 */ DWORD m_nDifficultyLevel;
+    /* 4BF8 */ CSpellResRefList m_spells;
+    /* 4C00 */ CSpellResRefList m_innateSpells;
+    /* 4C08 */ CSpellResRefList m_songs;
+    /* 4C10 */ CSpellResRefList m_shapeshifts;
+    /* 4C18 */ CGroupedSpellList m_spellsByClass[7];
+    /* 4E2C */ CGroupedSpellList m_spellsByDomain[9];
     /* 50D8 */ BOOL field_50D8;
     /* 50DC */ unsigned char field_50DC;
 };
