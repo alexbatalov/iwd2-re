@@ -442,6 +442,39 @@ BOOL CVidFont::TextOutEx(INT nSurface, const CString& sString, int x, int y, con
     return FALSE;
 }
 
+// 0x7A0490
+BOOL CVidFont::Load(BOOL bDemanded)
+{
+    CSingleLock renderLock(&REGISTRY_CRITICAL_SECTION, FALSE);
+
+    if (!g_pChitin->cVideo.m_bIs3dAccelerated) {
+        return TRUE;
+    }
+
+    if (g_pChitin->field_1A0) {
+        return TRUE;
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVidFont3d.cpp
+    // __LINE__: 75
+    UTIL_ASSERT(renderLock.Lock(INFINITE) != 0);
+
+    int rc = RegisterFont();
+    if (rc == 2) {
+        renderLock.Unlock();
+        return FALSE;
+    }
+
+    if (rc != 3 && LoadToTexture(bDemanded) == 2) {
+        Unload();
+        renderLock.Unlock();
+        return FALSE;
+    }
+
+    renderLock.Unlock();
+    return TRUE;
+}
+
 // 0x7A05A0
 int CVidFont::RegisterFont()
 {
@@ -460,6 +493,14 @@ void CVidFont::Unload()
 void CVidFont::UnloadAllFonts()
 {
     // TODO: Incomplete.
+}
+
+// 0x7A0B20
+INT CVidFont::LoadToTexture(BOOL bDemanded)
+{
+    // TODO: Incomplete.
+
+    return 2;
 }
 
 // 0x7A1090

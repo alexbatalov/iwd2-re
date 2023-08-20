@@ -29,8 +29,10 @@ public:
     BOOL TextOut(const CString& sString, int x, int y, const CRect& rClip, INT nSurface);
     BOOL TextOut(const CString& sString, WORD* pSurface, LONG lPitch, int x, int y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded);
     BOOL TextOutEx(INT nSurface, const CString& sString, int x, int y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded);
+    BOOL Load(BOOL bDemanded);
     int RegisterFont();
     void Unload();
+    INT LoadToTexture(BOOL bDemanded);
     BOOL TextOut3d(const CString& sText, WORD* pSurface, LONG lPitch, INT x, INT y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded);
     BOOL TextOut3d(const CString& sText, int x, int y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded);
 
