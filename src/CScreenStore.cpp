@@ -2790,3 +2790,54 @@ void CUIControlEditStoreRequesterAmount::KillFocus()
 
     CUIControlEdit::KillFocus();
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x684E00
+CUIControlButtonStoreCloseBag::CUIControlButtonStoreCloseBag(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->GetTlkTable().Fetch(24892, strRes); // "Close Bag"
+    SetText(strRes.szText);
+}
+
+// 0x684EF0
+CUIControlButtonStoreCloseBag::~CUIControlButtonStoreCloseBag()
+{
+}
+
+// 0x684F90
+void CUIControlButtonStoreCloseBag::OnLButtonClick(CPoint pt)
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 13714
+    UTIL_ASSERT(pStore != NULL);
+
+    pStore->CloseBag(TRUE);
+    pStore->UpdateStoreItems();
+    pStore->UpdateGroupItems();
+
+    POSITION pos = pStore->m_lGroupItems.GetHeadPosition();
+    while (pos != NULL) {
+        CScreenStoreItem* pItem = pStore->m_lGroupItems.GetAt(pos);
+        pItem->m_bSelected = FALSE;
+
+        pStore->m_lGroupItems.GetNext(pos);
+    }
+
+    // NOTE: Uninline.
+    pStore->SetTopGroupItem(0);
+
+    // NOTE: Uninline.
+    pStore->UpdateGroupCost();
+
+    pStore->UpdateMainPanel();
+
+    CRect rControlFrame(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
+    m_pPanel->InvalidateRect(&rControlFrame);
+
+    pStore->CheckEnablePortaits(1);
+}

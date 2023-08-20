@@ -381,4 +381,11 @@ public:
     void KillFocus() override;
 };
 
+class CUIControlButtonStoreCloseBag : public CUIControlButton {
+public:
+    CUIControlButtonStoreCloseBag(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonStoreCloseBag() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 #endif /* CSCREENSTORE_H_ */
