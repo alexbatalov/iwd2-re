@@ -346,6 +346,13 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonStorePopupDone : public CUIControlButton {
+public:
+    CUIControlButtonStorePopupDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonStorePopupDone() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlButtonStoreError : public CUIControlButton {
 public:
     CUIControlButtonStoreError(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

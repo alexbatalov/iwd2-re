@@ -2613,6 +2613,34 @@ void CUIControlButtonStoreBuyDrinksDrink::OnLButtonClick(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x683AA0
+CUIControlButtonStorePopupDone::CUIControlButtonStorePopupDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->GetTlkTable().Fetch(11973, strRes); // "Done"
+    SetText(strRes.szText);
+}
+
+// 0x683B50
+CUIControlButtonStorePopupDone::~CUIControlButtonStorePopupDone()
+{
+}
+
+// 0x683BF0
+void CUIControlButtonStorePopupDone::OnLButtonClick(CPoint pt)
+{
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 13079
+    UTIL_ASSERT(pStore != NULL);
+
+    pStore->OnDoneButtonClick();
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x683C30
 CUIControlButtonStoreError::CUIControlButtonStoreError(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
