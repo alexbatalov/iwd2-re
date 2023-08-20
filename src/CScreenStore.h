@@ -360,6 +360,15 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonStoreRequesterItem : public CUIControlButton {
+public:
+    CUIControlButtonStoreRequesterItem(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonStoreRequesterItem() override;
+    BOOL Render(BOOL bForce) override;
+
+    /* 0666 */ CResRef m_resRef;
+};
+
 class CUIControlButtonStoreRequesterDone : public CUIControlButton {
 public:
     CUIControlButtonStoreRequesterDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

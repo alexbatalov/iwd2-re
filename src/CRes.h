@@ -109,6 +109,10 @@ public:
         }
     }
 
+    T* GetRes() {
+        return pRes;
+    }
+
     const CResRef& GetResRef() const
     {
         return cResRef;
