@@ -3288,6 +3288,37 @@ INT CInfGame::GetClassMask(BYTE& nClass)
     UTIL_ASSERT_MSG(FALSE, "CInfGame::GetClassMask() - Invalid class mask!");
 }
 
+// 0x5CAAD0
+BYTE CInfGame::GetSpellType(const CResRef& resRef)
+{
+    int nID;
+
+    // NOTE: Uninline.
+    if (m_songs.Find(resRef, nID)) {
+        return 3;
+    }
+
+    // NOTE: Uninline.
+    if (m_shapeshifts.Find(resRef, nID)) {
+        return 4;
+    }
+
+    if (m_innateSpells.Find(resRef, nID)) {
+        return 2;
+    }
+
+    if (m_spells.Find(resRef, nID)) {
+        return 1;
+    }
+
+    CString sError(" ");
+    sError.Format("*** Invalid spell: %s\n", (LPCSTR)resRef.GetResRefStr());
+
+    // TODO: Report error.
+
+    return 0;
+}
+
 // 0x5CADF0
 void CInfGame::sub_5CADF0()
 {
