@@ -2389,6 +2389,34 @@ BOOL CUIControlButtonInventoryHistoryIcon::Render(BOOL bForce)
 
 // -----------------------------------------------------------------------------
 
+// 0x634280
+CUIControlButtonInventoryAbilitiesAbility::CUIControlButtonInventoryAbilitiesAbility(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
+{
+    // TODO: Incomplete.
+}
+
+// 0x634280
+CUIControlButtonInventoryAbilitiesAbility::~CUIControlButtonInventoryAbilitiesAbility()
+{
+}
+
+// 0x634430
+BOOL CUIControlButtonInventoryAbilitiesAbility::Render(BOOL bForce)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x6345A0
+void CUIControlButtonInventoryAbilitiesAbility::OnLButtonClick(CPoint pt)
+{
+    // TODO: Incomplete.
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x6347C0
 CUIControlButtonInventoryHistoryDone::CUIControlButtonInventoryHistoryDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)

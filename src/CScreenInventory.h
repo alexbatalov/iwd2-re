@@ -7,6 +7,7 @@
 #include "CItem.h"
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
+#include "CUIControlButton3State.h"
 #include "CUIControlFactory.h"
 
 #define CSCREENINVENTORY_VIRTUAL_KEYS 90
@@ -201,6 +202,14 @@ public:
 
     /* 0666 */ CItem* m_pItem;
     /* 066A */ CItem m_item;
+};
+
+class CUIControlButtonInventoryAbilitiesAbility : public CUIControlButton3State {
+public:
+    CUIControlButtonInventoryAbilitiesAbility(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonInventoryAbilitiesAbility() override;
+    BOOL Render(BOOL bForce) override;
+    void OnLButtonClick(CPoint pt) override;
 };
 
 class CUIControlButtonInventoryHistoryDone : public CUIControlButton {
