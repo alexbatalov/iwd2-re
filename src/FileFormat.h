@@ -62,6 +62,7 @@ public:
         };
         BYTE m_classLevels[11];
     };
+    /* 00A4 */ STRREF m_speech[63];
     /* 01A0 */ STRREF m_biography;
     /* 01B4 */ int field_1B4;
     /* 01B8 */ DWORD m_feats[3];

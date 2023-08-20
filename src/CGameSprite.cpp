@@ -375,6 +375,26 @@ void CGameSprite::MakeGlobal()
     }
 }
 
+// 0x700FE0
+SHORT CGameSprite::GetNumSounds(SHORT nOffset, SHORT nMaxNum)
+{
+    SHORT nSounds = 0;
+
+    if (m_secondarySounds == "") {
+        for (INT nIndex = 0; nIndex < nMaxNum; nIndex++) {
+            if (m_baseStats.m_speech[nOffset + nIndex] == -1) {
+                break;
+            }
+
+            nSounds++;
+        }
+    } else {
+        nSounds = nMaxNum;
+    }
+
+    return nSounds;
+}
+
 // 0x7011E0
 void CGameSprite::PlaySound(BYTE soundID, BOOL showText, BOOL showCircle, BOOL overrideOption)
 {

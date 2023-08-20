@@ -209,6 +209,7 @@ public:
     void DropPath();
     void OnLightningStrike();
     void MakeGlobal();
+    SHORT GetNumSounds(SHORT nOffset, SHORT nMaxNum);
     void PlaySound(BYTE soundID, BOOL showText, BOOL showCircle, BOOL overrideOption);
     BOOL IsSpellSchool(BYTE spellSchool);
     void SetFootstepChannel();
@@ -287,6 +288,7 @@ public:
     /* 5690 */ LONG m_targetId;
     /* 5694 */ CPoint m_targetPoint;
     /* 70F2 */ int field_70F2;
+    /* 7252 */ CResRef m_secondarySounds;
     /* 72A4 */ BOOL field_72A4;
     /* 9D15 */ unsigned char field_9D15;
 };
