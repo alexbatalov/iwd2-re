@@ -210,6 +210,7 @@ public:
     void OnLightningStrike();
     void MakeGlobal();
     void PlaySound(BYTE soundID, BOOL showText, BOOL showCircle, BOOL overrideOption);
+    BOOL IsSpellSchool(BYTE spellSchool);
     void SetFootstepChannel();
     SHORT GetIdleSequence();
     BYTE GetChannel();
