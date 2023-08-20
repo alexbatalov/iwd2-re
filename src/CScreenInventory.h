@@ -105,6 +105,7 @@ public:
     void EndSwap();
     void SwapWithSlot(INT nButtonId, BOOL bShowError, WORD wCount, BOOL bAutoStacking);
     void SwapWithPortrait(INT nButtonId, BOOL bShowError);
+    void SwapWithWeaponSet(UINT nIndex);
 
     /* 0106 */ CGameAnimation m_animation;
     /* 0110 */ CItem* m_pTempItem;
@@ -164,6 +165,13 @@ public:
     ~CUIControlButtonInventoryAppearance() override;
     BOOL OnLButtonDown(CPoint pt) override;
     BOOL Render(BOOL bForce) override;
+};
+
+class CUIControlButtonInventoryWeaponSet : public CUIControlButton3State {
+public:
+    CUIControlButtonInventoryWeaponSet(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonInventoryWeaponSet() override;
+    void OnLButtonClick(CPoint pt) override;
 };
 
 class CUIControlButtonInventoryColor : public CUIControlButton {

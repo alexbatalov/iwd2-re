@@ -1878,6 +1878,12 @@ void CScreenInventory::SwapWithPortrait(INT nButtonId, BOOL bShowError)
     // TODO: Incomplete.
 }
 
+// 0x6312D0
+void CScreenInventory::SwapWithWeaponSet(UINT nIndex)
+{
+    // TODO: Incomplete.
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x62CF70
@@ -2013,6 +2019,35 @@ BOOL CUIControlButtonInventoryAppearance::Render(BOOL bForce)
     // TODO: Incomplete.
 
     return FALSE;
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x6314F0
+CUIControlButtonInventoryWeaponSet::CUIControlButtonInventoryWeaponSet(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
+{
+}
+
+// 0x631540
+CUIControlButtonInventoryWeaponSet::~CUIControlButtonInventoryWeaponSet()
+{
+}
+
+// 0x6315E0
+void CUIControlButtonInventoryWeaponSet::OnLButtonClick(CPoint pt)
+{
+    CScreenInventory* pInventory = g_pBaldurChitin->m_pEngineInventory;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 9262
+    UTIL_ASSERT(pInventory != NULL);
+
+    if (pInventory->m_bMultiPlayerViewable) {
+        pInventory->BeginSwap();
+        pInventory->SwapWithWeaponSet(m_nID - 109);
+        pInventory->EndSwap();
+    }
 }
 
 // -----------------------------------------------------------------------------
