@@ -595,6 +595,11 @@ BOOL CUIControlEdit::Render(BOOL bForce)
         return FALSE;
     }
 
+    if (field_8A1) {
+        m_cVidFont.Load(FALSE);
+        field_8A1 = 0;
+    }
+
     if (m_nRenderCount != 0) {
         CSingleLock lock(&(m_pPanel->m_pManager->field_56), FALSE);
         lock.Lock(INFINITE);
