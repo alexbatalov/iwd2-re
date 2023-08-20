@@ -2349,6 +2349,28 @@ void CUIControlButtonInventoryRequesterCancel::OnLButtonClick(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x633880
+CUIControlButtonInventoryRequesterPlusMinus::CUIControlButtonInventoryRequesterPlusMinus(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButtonPlusMinus(panel, controlInfo)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->GetTlkTable().Fetch(13727, strRes);
+    SetText(strRes.szText);
+}
+
+// 0x6338C0
+CUIControlButtonInventoryRequesterPlusMinus::~CUIControlButtonInventoryRequesterPlusMinus()
+{
+}
+
+// 0x633960
+void CUIControlButtonInventoryRequesterPlusMinus::AdjustValue()
+{
+    // TODO: Incomplete.
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x633D50
 CUIControlButtonInventoryHistoryIcon::CUIControlButtonInventoryHistoryIcon(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)

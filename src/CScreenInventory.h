@@ -8,6 +8,7 @@
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
+#include "CUIControlButtonPlusMinus.h"
 #include "CUIControlFactory.h"
 
 #define CSCREENINVENTORY_VIRTUAL_KEYS 90
@@ -190,6 +191,13 @@ public:
     CUIControlButtonInventoryRequesterCancel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonInventoryRequesterCancel() override;
     void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonInventoryRequesterPlusMinus : public CUIControlButtonPlusMinus {
+public:
+    CUIControlButtonInventoryRequesterPlusMinus(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonInventoryRequesterPlusMinus() override;
+    void AdjustValue() override;
 };
 
 class CUIControlButtonInventoryHistoryIcon : public CUIControlButton {
