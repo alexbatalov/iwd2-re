@@ -129,6 +129,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CGameTimer.cpp"
     "src/CGameTimer.h"
     "src/ChDataTypes.h"
+    "src/CIcon.cpp"
+    "src/CIcon.h"
     "src/CImm.cpp"
     "src/CImm.h"
     "src/CImmunities.cpp"
