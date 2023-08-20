@@ -213,6 +213,7 @@ public:
     void PlaySound(BYTE soundID, BOOL showText, BOOL showCircle, BOOL overrideOption);
     BOOL IsSpellSchool(BYTE spellSchool);
     void SetFootstepChannel();
+    BYTE GetSound(BYTE soundID);
     SHORT GetIdleSequence();
     BYTE GetChannel();
     CItem* GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot);
@@ -288,6 +289,9 @@ public:
     /* 5690 */ LONG m_targetId;
     /* 5694 */ CPoint m_targetPoint;
     /* 70F2 */ int field_70F2;
+    /* 710A */ SHORT field_710A;
+    /* 710C */ SHORT field_710C;
+    /* 710E */ SHORT field_710E;
     /* 7252 */ CResRef m_secondarySounds;
     /* 72A4 */ BOOL field_72A4;
     /* 9D15 */ unsigned char field_9D15;

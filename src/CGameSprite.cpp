@@ -435,6 +435,159 @@ void CGameSprite::SetFootstepChannel()
     }
 }
 
+// 0x703330
+BYTE CGameSprite::GetSound(BYTE soundID)
+{
+    // NOTE: Unused.
+    STR_RES strRes;
+
+    SHORT nNumSounds;
+    BYTE nSound;
+
+    switch (soundID) {
+    case 2:
+        nNumSounds = GetNumSounds(7, 2);
+        if (nNumSounds != 0) {
+            nSound = rand() % nNumSounds + 7;
+        } else {
+            nSound = 7;
+        }
+        break;
+    case 3:
+        nNumSounds = GetNumSounds(9, 2);
+        if (nNumSounds != 0) {
+            nSound = rand() % nNumSounds + 9;
+        } else {
+            nSound = 9;
+        }
+        break;
+    case 4:
+        nNumSounds = GetNumSounds(11, 2);
+        if (nNumSounds != 0) {
+            nSound = rand() % nNumSounds + 11;
+        } else {
+            nSound = 11;
+        }
+        break;
+    case 5:
+        nNumSounds = GetNumSounds(2, 5);
+        if (nNumSounds != 0) {
+            nSound = rand() % nNumSounds + 2;
+        } else {
+            nSound = 2;
+        }
+        break;
+    case 6:
+        nNumSounds = GetNumSounds(33, 3);
+        if (nNumSounds != 0) {
+            nSound = rand() % nNumSounds + 33;
+        } else {
+            nSound = 33;
+        }
+        break;
+    case 7:
+        nNumSounds = GetNumSounds(36, 2);
+        if (nNumSounds != 0) {
+            nSound = rand() % nNumSounds + 36;
+        } else {
+            nSound = 36;
+        }
+        break;
+    case 8:
+        nNumSounds = GetNumSounds(13, 2);
+        if (nNumSounds != 0) {
+            nSound = rand() % nNumSounds + 13;
+        } else {
+            nSound = 13;
+        }
+        break;
+    case 9:
+        if (field_710C > 8) {
+            nSound = field_710E + 29;
+            field_710E++;
+            if (field_710E >= GetNumSounds(29, 4)) {
+                field_710E = 0;
+            }
+            field_710A = 0;
+            field_710C = 0;
+        } else {
+            nNumSounds = GetNumSounds(15, 7);
+            if (nNumSounds > 0) {
+                nSound = field_710A % nNumSounds;
+            } else {
+                nSound = 0;
+            }
+            field_710A++;
+            field_710C++;
+        }
+        break;
+    case 10:
+        nNumSounds = GetNumSounds(15, 7);
+        if (nNumSounds != 0) {
+            nSound = rand() % nNumSounds + 15;
+        } else {
+            nSound = 15;
+        }
+        break;
+    case 11:
+        nNumSounds = GetNumSounds(22, 7);
+        if (nNumSounds != 0) {
+            nSound = rand() % nNumSounds + 22;
+        } else {
+            nSound = 22;
+        }
+        break;
+    case 12:
+        nNumSounds = GetNumSounds(29, 4);
+        if (nNumSounds != 0) {
+            nSound = rand() % nNumSounds + 29;
+        } else {
+            nSound = 29;
+        }
+        break;
+    case 13:
+        nNumSounds = GetNumSounds(38, 2);
+        if (nNumSounds != 0) {
+            nSound = rand() % nNumSounds + 38;
+        } else {
+            nSound = 38;
+        }
+        break;
+    case 14:
+        nNumSounds = GetNumSounds(40, 4);
+        if (nNumSounds != 0) {
+            nSound = rand() % nNumSounds + 40;
+        } else {
+            nSound = 40;
+        }
+        break;
+    case 15:
+        // FIXME: Not sure if it can overrun `m_speech` and treat `m_biography`
+        // as sound?
+        nNumSounds = GetNumSounds(44, 20);
+        if (nNumSounds != 0) {
+            nSound = rand() % nNumSounds + 44;
+        } else {
+            nSound = 44;
+        }
+        break;
+    case 16:
+        nNumSounds = GetNumSounds(40, 2);
+        if (nNumSounds != 0) {
+            nSound = rand() % nNumSounds + 40;
+        } else {
+            nSound = 40;
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+        // __LINE__: 7658
+        UTIL_ASSERT(FALSE);
+    }
+
+    return nSound;
+}
+
 // 0x7071F0
 SHORT CGameSprite::GetIdleSequence()
 {
