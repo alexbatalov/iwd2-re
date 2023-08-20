@@ -180,6 +180,15 @@ public:
     /* 066A */ CVidPalette* m_pPalette;
 };
 
+class CUIControlButtonInventoryRequesterItem : public CUIControlButton {
+public:
+    CUIControlButtonInventoryRequesterItem(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonInventoryRequesterItem() override;
+    BOOL Render(BOOL bForce) override;
+
+    /* 0666 */ CResRef m_resRef;
+};
+
 class CUIControlButtonInventoryRequesterDone : public CUIControlButton {
 public:
     CUIControlButtonInventoryRequesterDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

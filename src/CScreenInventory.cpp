@@ -2,6 +2,7 @@
 
 #include "CBaldurChitin.h"
 #include "CGameSprite.h"
+#include "CIcon.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CScreenWorld.h"
@@ -2289,6 +2290,91 @@ BOOL CUIControlButtonInventoryColorChoice::GetColorRange(BYTE& colorRange)
         // __LINE__: 10006
         UTIL_ASSERT(FALSE);
     }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x633090
+CUIControlButtonInventoryRequesterItem::CUIControlButtonInventoryRequesterItem(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+    m_resRef = "";
+}
+
+// 0x633130
+CUIControlButtonInventoryRequesterItem::~CUIControlButtonInventoryRequesterItem()
+{
+}
+
+// 0x6331D0
+BOOL CUIControlButtonInventoryRequesterItem::Render(BOOL bForce)
+{
+    CVidCell vcIcon;
+
+    if (!m_bActive && !m_bInactiveRender) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount == 0 && !bForce) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount != 0) {
+        CSingleLock lock(&(m_pPanel->m_pManager->field_56), FALSE);
+        lock.Lock(INFINITE);
+        m_nRenderCount--;
+        lock.Unlock();
+    }
+
+    CVidMode* pVidMode = g_pBaldurChitin->GetCurrentVideoMode();
+
+    if (m_resRef == "") {
+        return FALSE;
+    }
+
+    // NOTE: Uninline.
+    vcIcon.SetResRef(m_resRef, m_pPanel->m_pManager->m_bDoubleSize, TRUE);
+
+    vcIcon.SequenceSet(1);
+    vcIcon.FrameSet(0);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 10458
+    UTIL_ASSERT(vcIcon.GetRes() != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 10459
+    UTIL_ASSERT(pVidMode != NULL);
+
+    if (vcIcon.pRes == NULL) {
+        return FALSE;
+    }
+
+    // NOTE: Original code is slightly different.
+    INT x = m_pPanel->m_ptOrigin.x + m_ptOrigin.x;
+    INT y = m_pPanel->m_ptOrigin.y + m_ptOrigin.y;
+    LONG nWidth = CIcon::ICON_SIZE_SM.cx * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1);
+    LONG nHeight = CIcon::ICON_SIZE_SM.cy * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1);
+
+    if (m_size.cx > nWidth) {
+        x += (m_size.cx - nWidth) / 2;
+    }
+
+    if (m_size.cy > nHeight) {
+        y += (m_size.cy - nHeight) / 2;
+    }
+
+    CSize iconSize;
+    vcIcon.GetCurrentFrameSize(iconSize, FALSE);
+
+    CRect rFrame(x, y, x + nWidth, y + nHeight);
+
+    CRect rClip;
+    rClip.IntersectRect(rFrame, m_rDirty);
+
+    vcIcon.Render(0, x, y, rClip, NULL, 0, 0, -1);
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------
