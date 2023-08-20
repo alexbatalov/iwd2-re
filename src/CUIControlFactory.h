@@ -136,6 +136,22 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlEncumbrance : public CUIControlButton {
+public:
+    CUIControlEncumbrance(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlEncumbrance() override;
+    BOOL Render(BOOL bForce) override;
+
+    void SetEncumbrance(int a1, int a2);
+    void SetVolume(int a1, int a2);
+
+    /* 0666 */ CVidFont field_666;
+    /* 0B66 */ int field_B66;
+    /* 0B6A */ int field_B6A;
+    /* 0B6E */ int field_B6E;
+    /* 0B72 */ int field_B72;
+};
+
 class CUIControlButtonGeneralBase : public CUIControlButton3State {
 public:
     CUIControlButtonGeneralBase(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

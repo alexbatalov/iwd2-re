@@ -2490,6 +2490,54 @@ void CUIControlButtonRest::OnLButtonClick(CPoint pt)
     g_pBaldurChitin->GetActiveEngine()->OnRestButtonClick();
 }
 
+// -----------------------------------------------------------------------------
+
+// 0x77C4C0
+CUIControlEncumbrance::CUIControlEncumbrance(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, 0, 1)
+{
+    field_662 = 0;
+    field_B6A = 0;
+    field_B66 = 0;
+    field_B72 = 0;
+    field_B6E = 0;
+}
+
+// 0x77C560
+CUIControlEncumbrance::~CUIControlEncumbrance()
+{
+}
+
+// 0x77C610
+void CUIControlEncumbrance::SetEncumbrance(int a1, int a2)
+{
+    if (field_B66 != a1 || field_B6A != a2) {
+        field_B66 = a1;
+        field_B6A = a2;
+        InvalidateRect();
+    }
+}
+
+// 0x77C640
+void CUIControlEncumbrance::SetVolume(int a1, int a2)
+{
+    if (field_B6E != a1 || field_B72 != a2) {
+        field_B6E = a1;
+        field_B72 = a2;
+        InvalidateRect();
+    }
+}
+
+// 0x77C670
+BOOL CUIControlEncumbrance::Render(BOOL bForce)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x77CD30
 CUIControlButtonGeneralBase::CUIControlButtonGeneralBase(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
