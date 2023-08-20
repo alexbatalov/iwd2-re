@@ -2371,6 +2371,25 @@ void CUIControlButtonInventoryRequesterPlusMinus::AdjustValue()
 
 // -----------------------------------------------------------------------------
 
+// 0x633B80
+CUIControlEditInventoryRequesterAmount::CUIControlEditInventoryRequesterAmount(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo)
+    : CUIControlEdit(panel, controlInfo, 0)
+{
+}
+
+// 0x633BD0
+CUIControlEditInventoryRequesterAmount::~CUIControlEditInventoryRequesterAmount()
+{
+}
+
+// 0x633CA0
+void CUIControlEditInventoryRequesterAmount::KillFocus()
+{
+    // TODO: Incomplete.
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x633D50
 CUIControlButtonInventoryHistoryIcon::CUIControlButtonInventoryHistoryIcon(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
