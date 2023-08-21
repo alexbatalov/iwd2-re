@@ -620,3 +620,9 @@ SHORT CGameAIBase::GetVisualRange()
 {
     return m_pArea->m_visibility.field_E * 32;
 }
+
+// 0x6F2C30
+SHORT CGameAIBase::GetHelpRange()
+{
+    return m_pArea->m_visibility.field_E * 48;
+}

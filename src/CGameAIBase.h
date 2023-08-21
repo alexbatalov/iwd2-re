@@ -34,6 +34,7 @@ public:
     /* 0098 */ virtual SHORT GetVisualRange();
     /* 009C */ virtual const BYTE* GetVisibleTerrainTable();
     /* 00A0 */ virtual const BYTE* GetTerrainTable();
+    /* 00A8 */ virtual SHORT GetHelpRange();
     /* 00AC */ virtual void ApplyTriggers();
 
     void CheckTimers(LONG cycles);
