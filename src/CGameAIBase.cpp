@@ -614,3 +614,9 @@ void CGameAIBase::SetDefaultScript(CAIScript* script)
 
     m_defaultScript = script;
 }
+
+// 0x6F2C20
+SHORT CGameAIBase::GetVisualRange()
+{
+    return m_pArea->m_visibility.field_E * 32;
+}

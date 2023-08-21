@@ -3,6 +3,7 @@
 
 class CVisibilityMap {
 public:
+    /* 000E */ short field_E;
     /* 0058 */ int field_58;
 };
 

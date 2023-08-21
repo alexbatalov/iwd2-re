@@ -31,6 +31,7 @@ public:
     /* 0088 */ virtual void InsertAction(const CAIAction& action);
     /* 0090 */ virtual void SetCurrAction(const CAIAction& action);
     /* 0094 */ virtual void SetScript(SHORT level, CAIScript* script);
+    /* 0098 */ virtual SHORT GetVisualRange();
     /* 009C */ virtual const BYTE* GetVisibleTerrainTable();
     /* 00A0 */ virtual const BYTE* GetTerrainTable();
     /* 00AC */ virtual void ApplyTriggers();
