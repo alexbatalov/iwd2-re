@@ -7,6 +7,7 @@
 #include "CItem.h"
 #include "CScreenInventory.h"
 #include "CUtil.h"
+#include "CVariableHash.h"
 
 // 0x85BB38
 const BYTE CGameSprite::DIR_S = 0;
@@ -262,6 +263,361 @@ BOOLEAN CGameSprite::SHOW_CHARACTER_HP;
 
 // 0x8F950D
 BOOLEAN CGameSprite::GRAVITY_IS_DOWN;
+
+// 0x6EF990
+CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, DWORD expirationTime, WORD huntingRange, WORD followRange, DWORD timeOfDayVisible, CPoint startPos, WORD facing)
+{
+    int index;
+
+    field_7540 = 0;
+    field_7544 = 0;
+    field_5101 = 0;
+    field_5102 = 0;
+    field_5103 = 0;
+    m_bEscapingArea = 0;
+    field_4D32 = 0;
+    field_4DFE = 0;
+    field_5320 = 0;
+    field_5322 = 0;
+    field_5326 = 0;
+    field_533E = 0;
+    field_533C = 0;
+    field_5340 = 0;
+    field_5344 = 0;
+    m_skipDeltaDirection = 0;
+    m_deltaDirection = 0;
+    m_walkBackwards = 0;
+    field_53C6 = 0;
+    field_54EE = 0;
+    field_54F4 = 0;
+    field_556E = 0;
+    field_5572 = 0;
+    field_5372 = 0;
+    field_5376 = 0;
+    m_nCommandPause = 0;
+    field_557A = 0;
+    field_557E = 0;
+    field_558E = 0;
+    field_559E = 0;
+    field_55A0 = 0;
+    field_5604 = 0;
+    field_5606 = 0;
+    field_560E = 0;
+    field_5610 = 0;
+    field_5618 = 0;
+    field_561C = 0;
+    field_5624 = 0;
+    field_5630 = 0;
+    field_5632 = 0;
+    field_5636 = 0;
+    field_7118 = 0;
+    field_711C = 0;
+    field_7226 = 0;
+    field_7292 = 0;
+    m_currentActionId = 0;
+    field_72A8 = 0;
+    field_72B6 = 0;
+    field_72D6 = 0;
+    field_72DE = 0;
+    field_7532 = 0;
+    field_7536 = 0;
+    field_9D08 = 0;
+    field_9D0C = 0;
+    field_9D10 = 0;
+    m_objectType = TYPE_SPRITE;
+    m_resRef = "";
+    field_532C = 0;
+    field_5330 = 0;
+    field_5334 = 0;
+    field_5338 = 1.875;
+    m_bGlobal = FALSE;
+    field_534A = 0;
+    field_534E = 0;
+    field_5352 = 0;
+    field_5356 = 0;
+    m_posDest.x = 0;
+    m_posDest.y = 0;
+    field_5362 = 0;
+    field_5366 = 0;
+    field_536A = 0;
+    field_536E = 0;
+    m_nSequence = -1;
+    m_nNewDirection = facing & 0xF;
+    m_nDirection = facing & 0xF;
+    m_pPath = 0;
+    m_nPath = 0;
+    m_currPath = 0;
+    field_53CE = 0;
+    field_54F2 = 17;
+    field_53D2 = 0;
+    m_currentSearchRequest = 0;
+    field_4BB4 = 0;
+    field_56EC = 0;
+    field_5644 = 0;
+    m_talkingCounter = 0;
+    field_54F6 = 0;
+    field_54F8 = 0;
+    m_curResponseNum = -1;
+    m_curResponseSetNum = -1;
+    m_curScriptNum = -1;
+    m_curAction = CAIAction::NULL_ACTION;
+    m_interrupt = FALSE;
+    field_5608 = 0;
+    field_5628 = 0;
+    m_lastRGBColor = 0x8000;
+    m_bVisibilityUpdated = TRUE;
+    m_targetId = (int)CGameObjectArray::INVALID_INDEX;
+    m_targetPoint.x = -1;
+    m_targetPoint.y = -1;
+    m_targetAreaSize = 0;
+    m_destMarker.SetType(CMarker::RECTICLE);
+    field_722E = CGameObjectArray::INVALID_INDEX;
+    m_typeAI.Set(CAIObjectType::ANYONE);
+    m_liveTypeAI.Set(CAIObjectType::ANYONE);
+    m_startTypeAI.Set(CAIObjectType::ANYONE);
+    field_3F6 = 0;
+    field_3FA = 0;
+    field_3FE = 0;
+    field_402 = 0;
+    field_406 = 0;
+    field_40A = 0;
+    m_defaultScript = NULL;
+    field_54BC = 0;
+    field_54C0 = 0;
+    field_54C4 = (int)CGameObjectArray::INVALID_INDEX;
+    m_followStart = 0;
+    field_5576 = 0;
+    field_5620 = 0;
+    field_561E = 0;
+    field_44A = 0;
+    field_54C = 0;
+    field_560C = 0;
+    field_5616 = 0;
+    field_5612 = 0;
+    field_5614 = 0;
+    field_54E8 = -1;
+    field_54EA = 0;
+    field_5622 = -2;
+    field_72A2 = 0;
+    m_bAllowEffectListCall = TRUE;
+    field_72AA = 0;
+    field_7292 = 0;
+    field_5582 = 0;
+    field_9D14 = 0;
+    field_9D15 = 0;
+    field_5638 = 0;
+    field_563C = 0;
+    field_5640 = 0;
+    m_groupPosition = 0;
+    m_groupMove = 0;
+    field_562C = 0;
+    field_5592 = 0;
+    field_5596 = 0;
+    field_559A = 0;
+    m_nNumberOfTimesTalkedTo = 0;
+    field_4FF8 = 0;
+    field_710A = 0;
+    field_710C = 0;
+    field_710E = 0;
+    field_7110 = 0x7FFF;
+    field_7114 = 0;
+    m_nHappiness = 0;
+    m_bHappinessChanged = FALSE;
+    field_72AE = 1;
+    m_lastRegenerationTime = g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime;
+
+    CButtonData buttonData;
+
+    for (index = 0; index < 8; index++) {
+        field_342C[index] = buttonData;
+    }
+
+    for (index = 0; index < 9; index++) {
+        field_360C[index] = buttonData;
+    }
+
+    for (index = 0; index < 3; index++) {
+        field_3828[index] = buttonData;
+    }
+
+    for (index = 0; index < 9; index++) {
+        field_38DC[index] = buttonData;
+    }
+
+    for (index = 0; index < 9; index++) {
+        field_3AF8[index] = buttonData;
+    }
+
+    field_70F6 = rand() % 20 + 1;
+    field_70F7 = rand() % 20 + 1;
+    field_70F8 = rand() % 20 + 1;
+    field_70F9 = rand() % 20 + 1;
+    field_70FA = rand() % 100;
+    field_55F2 = 0;
+    field_55F6 = 0;
+    field_55FA = 0;
+    field_55FE = 0;
+    field_5602 = 0;
+
+    for (index = 0; index < 20; index++) {
+        field_55A2[index] = -65538;
+    }
+
+    memset(field_5004, 0, sizeof(field_5004));
+
+    field_54B8 = 0;
+    field_54A8 = 0;
+    field_54AC = 0;
+    field_54B0 = -1;
+    field_54B4 = -1;
+    field_54A4 = 0;
+    m_bSelected = FALSE;
+    field_50BA = 0;
+    field_50B6 = 0;
+    field_53DA = 0;
+    field_53DC = 0;
+    field_53DE = 0x1E1EFF;
+    field_53E2 = 0;
+    field_53E6 = 0;
+    field_50FE = 0;
+
+    // NOTE: See `CGameArea` note on default terrain tables.
+    memcpy(m_terrainTable, DEFAULT_TERRAIN_TABLE, 16);
+    memcpy(m_visibleTerrainTable, DEFAULT_VISIBLE_TERRAIN_TABLE, 16);
+    memcpy(m_flightTerrainTable, DEFAULT_VISIBLE_TERRAIN_TABLE, 16);
+
+    if (g_pBaldurChitin->GetObjectGame()->GetObjectArray()->Add(&m_id, this, INFINITE) == CGameObjectArray::SUCCESS) {
+        m_pSpriteEffectArray = NULL;
+        m_pSpriteEffectArrayPosition = NULL;
+        m_spriteEffectDuration = 0;
+        field_5202 = 0;
+        field_5304 = 0;
+        field_532A = 3;
+        field_4C53 = 0;
+        field_4C54 = 0;
+        field_4C58 = 0;
+        field_4C5C = 0;
+        field_4C60 = 0;
+        field_4C64 = 0;
+        field_4C68 = 0;
+
+        field_7548[0].SetResRef(CResRef("SanctuC"), FALSE, TRUE);
+        field_7548[1].SetResRef(CResRef("EntangC"), FALSE, TRUE);
+        field_7548[6].SetResRef(CResRef("MGoInvC"), FALSE, TRUE);
+        field_7548[3].SetResRef(CResRef("ShieldC"), FALSE, TRUE);
+        field_7548[4].SetResRef(CResRef("GreaseC"), FALSE, TRUE);
+        field_7548[5].SetResRef(CResRef("WebC"), FALSE, TRUE);
+        field_7548[7].SetResRef(CResRef("GoInvuC"), FALSE, TRUE);
+        field_7548[8].SetResRef(CResRef("SoFlamC"), FALSE, TRUE);
+        field_7548[9].SetResRef(CResRef("AMShelC"), FALSE, TRUE);
+        field_7548[10].SetResRef(CResRef("ORSpheC"), FALSE, TRUE);
+        field_7548[11].SetResRef(CResRef("PFNMisC"), FALSE, TRUE);
+        field_7548[12].SetResRef(CResRef("CoFearC"), FALSE, TRUE);
+        field_7548[13].SetResRef(CResRef("EShielC"), FALSE, TRUE);
+        field_7548[14].SetResRef(CResRef("FiAuraC"), FALSE, TRUE);
+        field_7548[15].SetResRef(CResRef("FrAuraC"), FALSE, TRUE);
+        field_7548[16].SetResRef(CResRef("IPlaguC"), FALSE, TRUE);
+        field_7548[17].SetResRef(CResRef("SShellC"), FALSE, TRUE);
+        field_7548[18].SetResRef(CResRef("SoLatC1"), FALSE, TRUE);
+        field_7548[19].SetResRef(CResRef("SoLatC2"), FALSE, TRUE);
+        field_7548[20].SetResRef(CResRef("GSoLaC1"), FALSE, TRUE);
+        field_7548[21].SetResRef(CResRef("GSoLaC2"), FALSE, TRUE);
+        field_7548[22].SetResRef(CResRef("SEyesC1"), FALSE, TRUE);
+        field_7548[23].SetResRef(CResRef("SEyesC2"), FALSE, TRUE);
+        field_7548[26].SetResRef(CResRef("FShiRC1"), FALSE, TRUE);
+        field_7548[28].SetResRef(CResRef("FShiRC1"), FALSE, TRUE);
+        field_7548[27].SetResRef(CResRef("FShiBC1"), FALSE, TRUE);
+        field_7548[29].SetResRef(CResRef("FShiBC1"), FALSE, TRUE);
+        field_7548[31].SetResRef(CResRef("DArmorC"), FALSE, TRUE);
+        field_7548[30].SetResRef(CResRef("TShellC"), FALSE, TRUE);
+        field_7548[2].SetResRef(CResRef("Wisp"), FALSE, TRUE);
+
+        field_9088[7].SetResRef(CResRef("AFT_M05"), TRUE, TRUE);
+        field_9088[8].SetResRef(CResRef("MISC_01C"), TRUE, TRUE);
+        field_9088[9].SetResRef(CResRef("AFT_M04"), TRUE, TRUE);
+        field_9088[10].SetResRef(CResRef("AFT_M03"), TRUE, TRUE);
+        field_9088[11].SetResRef(CResRef("AFT_M01"), TRUE, TRUE);
+        field_9088[12].SetResRef(CResRef("AFT_P02"), TRUE, TRUE);
+        field_9088[13].SetResRef(CResRef("AFT_P03"), TRUE, TRUE);
+        field_9088[17].SetResRef(CResRef("AFT_P25"), TRUE, TRUE);
+        field_9088[18].SetResRef(CResRef("AFT_P20"), TRUE, TRUE);
+        field_9088[20].SetResRef(CResRef("AFT_P26"), TRUE, TRUE);
+        field_9088[0].SetResRef(CResRef("AFT_P01"), TRUE, TRUE);
+        field_9088[6].SetResRef(CResRef("AFT_M02"), TRUE, TRUE);
+        field_9088[3].SetResRef(CResRef("EFF_M11C"), TRUE, TRUE);
+
+        m_type = type;
+        m_expirationTime = expirationTime;
+        m_huntingRange = huntingRange;
+        m_followRange = followRange;
+        m_posStart = startPos;
+        m_timeOfDayVisible = timeOfDayVisible;
+
+        field_50AA = 1;
+        field_50AE = 1;
+
+        memset(&m_baseStats, 0, sizeof(m_baseStats));
+
+        field_4BAC = 0;
+        field_4BB0 = 0;
+        m_dialogWait = 0;
+        m_dialogWaitTarget = CGameObjectArray::INVALID_INDEX;
+        field_724C = 1;
+        field_56E4 = "";
+        field_712E = 0;
+        field_711E = 1;
+
+        if (m_portraitIconVidCell.pRes != NULL) {
+            m_portraitIconVidCell.pRes->Request();
+        }
+
+        field_722A = g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime;
+        m_interactingWith.Set(CAIObjectType::NOONE);
+        field_7234 = 0;
+        field_7238 = 1;
+        field_723C = 0;
+        field_7240 = 0;
+        m_secondarySounds = "";
+
+        memset(field_725A, 0, sizeof(field_725A));
+
+        field_727E = 0;
+        field_72B2 = new CVariableHash(16);
+        field_72E6 = 0;
+
+        SleepEx(10, FALSE);
+        Unmarshal(pCreature, creatureSize, facing, a3);
+        SleepEx(10, FALSE);
+        UnmarshalScripts();
+        SleepEx(10, FALSE);
+
+        // NOTE: Inlining as `STR_RES` object is immediately destroyed.
+        if (1) {
+            STR_RES strRes;
+            g_pBaldurChitin->GetTlkTable().Fetch(m_baseStats.m_name, strRes);
+            m_sName = strRes.szText;
+        }
+
+        for (index = 0; index < 3; index++) {
+            g_pBaldurChitin->GetTlkTable().Fetch(m_baseStats.m_speech[33 + index],
+                m_speech[33 + index]);
+        }
+
+        for (index = 0; index < 7; index++) {
+            g_pBaldurChitin->GetTlkTable().Fetch(m_baseStats.m_speech[15 + index],
+                m_speech[15 + index]);
+        }
+
+        for (index = 0; index < 2; index++) {
+            m_sndWalk[index].m_nVolumeVariance = 50;
+        }
+
+        // TODO: Incomplete(0x6F2552).
+    } else {
+        // FIXME: Does not look cool.
+        delete this;
+    }
+}
 
 // 0x6F2990
 BOOL CGameSprite::DoesIntersect(CRect r)
@@ -598,6 +954,22 @@ SHORT CGameSprite::GetIdleSequence()
     } else {
         return 6; // SEQ_HEAD_TURN
     }
+}
+
+// 0x70CF90
+void CGameSprite::Unmarshal(BYTE* pCreature, LONG creatureSize, WORD facing, int a4)
+{
+    // TODO: Incomplete.
+
+    memcpy(&m_baseStats, pCreature + 8, sizeof(m_baseStats));
+
+    m_animation.SetAnimationType(m_baseStats.m_animationType, m_baseStats.m_colors, facing);
+}
+
+// 0x70E750
+void CGameSprite::UnmarshalScripts()
+{
+    // TODO: Incomplete.
 }
 
 // 0x70F270

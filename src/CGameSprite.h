@@ -2,12 +2,16 @@
 #define CGAMESPRITE_H_
 
 #include "CAIObjectType.h"
+#include "CButtonData.h"
 #include "CDerivedStats.h"
 #include "CGameAIBase.h"
 #include "CGameAnimation.h"
 #include "CGameSpriteEquipment.h"
+#include "CMarker.h"
 #include "CResRef.h"
 #include "CSound.h"
+#include "CStrRes.h"
+#include "CVidCell.h"
 #include "FileFormat.h"
 
 #define CGAMESPRITE_FEAT_AEGIS_OF_RIME 0
@@ -104,7 +108,9 @@
 
 #define CGAMESPRITE_SKILL_NUMSKILLS 16
 
+class CSearchRequest;
 class CUIControlTextDisplay;
+class CVariableHash;
 
 class CGameSprite : public CGameAIBase {
 public:
@@ -196,6 +202,7 @@ public:
     static BOOLEAN SHOW_CHARACTER_HP;
     static BOOLEAN GRAVITY_IS_DOWN;
 
+    CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, DWORD expirationTime, WORD huntingRange, WORD followRange, DWORD timeOfDayVisible, CPoint startPos, WORD facing);
     /* 0014 */ LONG GetTargetId() override;
     /* 0038 */ BOOL DoesIntersect(CRect r);
     /* 003C */ BOOL OnSearchMap() override;
@@ -215,6 +222,8 @@ public:
     void SetFootstepChannel();
     BYTE GetSound(BYTE soundID);
     SHORT GetIdleSequence();
+    void Unmarshal(BYTE* pCreature, LONG creatureSize, WORD facing, int a4);
+    void UnmarshalScripts();
     BYTE GetChannel();
     CItem* GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot);
     void UnequipAll(BOOL a1);
@@ -267,33 +276,231 @@ public:
     /* 05A4 */ CCreatureFileHeader m_baseStats;
     /* 0920 */ CDerivedStats m_derivedStats;
     /* 1778 */ CDerivedStats m_tempStats;
+    /* 342C */ CButtonData field_342C[8];
+    /* 360C */ CButtonData field_360C[9];
+    /* 3828 */ CButtonData field_3828[3];
+    /* 38DC */ CButtonData field_38DC[9];
+    /* 3AF8 */ CButtonData field_3AF8[9];
     /* 3D38 */ BYTE m_nLastSpellbookClassIndex;
     /* 3D39 */ BYTE m_nLastSpellbookSpellLevel;
     /* 3DFA */ CAIObjectType m_liveTypeAI;
     /* 3E36 */ CAIObjectType m_startTypeAI;
+    /* 3E72 */ WORD m_type;
+    /* 3E74 */ DWORD m_expirationTime;
+    /* 3E78 */ WORD m_huntingRange;
+    /* 3E7A */ WORD m_followRange;
+    /* 3E7C */ CPoint m_posStart;
+    /* 3E84 */ DWORD m_timeOfDayVisible;
     /* 4AD8 */ CGameSpriteEquipment m_equipment;
+    /* 4BAC */ int field_4BAC;
+    /* 4BB0 */ int field_4BB0;
+    /* 4BB4 */ unsigned char field_4BB4;
     /* 4C52 */ BOOLEAN m_bGlobal;
     /* 4C53 */ unsigned char field_4C53;
+    /* 4C54 */ int field_4C54;
+    /* 4C58 */ int field_4C58;
+    /* 4C5C */ int field_4C5C;
+    /* 4C60 */ int field_4C60;
+    /* 4C64 */ int field_4C64;
     /* 4C68 */ unsigned char field_4C68;
     /* 4C6A */ CSound m_sndWalk[2];
+    /* 4D32 */ int field_4D32;
     /* 4D36 */ CSound m_sndArmor[2];
+    /* 4DFE */ unsigned char field_4DFE;
     /* 4E00 */ CSound m_sndReady;
     /* 4E64 */ CSound m_sndDeath;
+    /* 4FF4 */ int m_nNumberOfTimesTalkedTo;
+    /* 4FF8 */ int field_4FF8;
+    /* 5004 */ unsigned char field_5004[96];
+    /* 5064 */ short m_nHappiness;
+    /* 5066 */ CAIObjectType m_interactingWith;
+    /* 50AA */ int field_50AA;
+    /* 50AE */ int field_50AE;
+    /* 50B2 */ BOOL m_bSelected;
+    /* 50B6 */ int field_50B6;
+    /* 50BA */ unsigned char field_50BA;
     /* 50BB */ BYTE m_terrainTable[16];
     /* 50CB */ BYTE m_visibleTerrainTable[16];
+    /* 50DB */ BYTE m_flightTerrainTable[16];
     /* 50EC */ CGameAnimation m_animation;
+    /* 50F6 */ short* m_pSpriteEffectArray;
+    /* 50FA */ CPoint* m_pSpriteEffectArrayPosition;
+    /* 50FE */ unsigned char field_50FE;
+    /* 5100 */ BYTE m_spriteEffectDuration;
+    /* 5101 */ unsigned char field_5101;
+    /* 5102 */ unsigned char field_5102;
+    /* 5103 */ unsigned char field_5103;
+    /* 5202 */ int field_5202;
+    /* 5304 */ int field_5304;
+    /* 5320 */ unsigned char field_5320;
+    /* 5321 */ BOOLEAN m_bEscapingArea;
+    /* 5322 */ int field_5322;
+    /* 5326 */ int field_5326;
+    /* 532A */ unsigned char field_532A;
+    /* 532C */ int field_532C;
+    /* 5330 */ int field_5330;
+    /* 5334 */ int field_5334;
+    /* 5338 */ float field_5338;
+    /* 533C */ short field_533C;
+    /* 533E */ unsigned char field_533E;
+    /* 533F */ BOOLEAN m_bVisibilityUpdated;
+    /* 5340 */ int field_5340;
+    /* 5344 */ int field_5344;
+    /* 5348 */ SHORT m_nSequence;
+    /* 534A */ int field_534A;
+    /* 534E */ int field_534E;
+    /* 5352 */ int field_5352;
+    /* 5356 */ int field_5356;
+    /* 535A */ CPoint m_posDest;
+    /* 5362 */ int field_5362;
+    /* 5366 */ int field_5366;
+    /* 536A */ int field_536A;
+    /* 536E */ int field_536E;
+    /* 5372 */ int field_5372;
+    /* 5376 */ int field_5376;
+    /* 537A */ SHORT m_skipDeltaDirection;
+    /* 537C */ SHORT m_deltaDirection;
+    /* 537E */ SHORT m_nNewDirection;
+    /* 5380 */ SHORT m_nDirection;
     /* 5382 */ LONG* m_pPath;
+    /* 5386 */ short m_nPath;
+    /* 53C0 */ short m_currPath;
+    /* 53C2 */ BOOL m_walkBackwards;
+    /* 53C6 */ int field_53C6;
+    /* 53CA */ COLORREF m_lastRGBColor;
+    /* 53CE */ int field_53CE;
+    /* 53D2 */ int field_53D2;
+    /* 53D6 */ CSearchRequest* m_currentSearchRequest;
+    /* 53DA */ short field_53DA;
+    /* 53DC */ short field_53DC;
+    /* 53DE */ int field_53DE;
+    /* 53E2 */ int field_53E2;
+    /* 53E6 */ int field_53E6;
+    /* 54A4 */ int field_54A4;
+    /* 54A8 */ int field_54A8;
+    /* 54AC */ int field_54AC;
+    /* 54B0 */ int field_54B0;
+    /* 54B4 */ int field_54B4;
+    /* 54B8 */ int field_54B8;
+    /* 54BC */ int field_54BC;
+    /* 54C0 */ int field_54C0;
+    /* 54C4 */ LONG field_54C4;
+    /* 54C8 */ int m_followStart;
+    /* 54E8 */ short field_54E8;
+    /* 54EA */ int field_54EA;
+    /* 54EE */ int field_54EE;
+    /* 54F2 */ short field_54F2;
+    /* 54F4 */ short field_54F4;
+    /* 54F6 */ short field_54F6;
+    /* 54F8 */ short field_54F8;
+    /* 556E */ int field_556E;
+    /* 5572 */ int field_5572;
+    /* 5576 */ short field_5576;
+    /* 5578 */ SHORT m_nCommandPause;
+    /* 557A */ int field_557A;
+    /* 557E */ int field_557E;
+    /* 5582 */ int field_5582;
     /* 5586 */ POSITION m_groupPosition;
     /* 558A */ BOOL m_groupMove;
+    /* 558E */ int field_558E;
+    /* 5592 */ int field_5592;
+    /* 5596 */ int field_5596;
+    /* 559A */ int field_559A;
+    /* 559E */ short field_559E;
+    /* 55A0 */ short field_55A0;
+    /* 55A2 */ int field_55A2[20];
+    /* 55F2 */ int field_55F2;
+    /* 55F6 */ int field_55F6;
+    /* 55FA */ int field_55FA;
+    /* 55FE */ int field_55FE;
+    /* 5602 */ unsigned char field_5602;
+    /* 5604 */ short field_5604;
+    /* 5606 */ short field_5606;
+    /* 5608 */ int field_5608;
+    /* 560C */ short field_560C;
+    /* 560E */ short field_560E;
+    /* 5610 */ short field_5610;
+    /* 5612 */ short field_5612;
+    /* 5614 */ short field_5614;
+    /* 5616 */ short field_5616;
+    /* 5618 */ int field_5618;
+    /* 561C */ short field_561C;
+    /* 561E */ short field_561E;
+    /* 5620 */ short field_5620;
+    /* 5622 */ short field_5622;
+    /* 5624 */ int field_5624;
+    /* 5628 */ int field_5628;
     /* 562C */ int field_562C;
+    /* 5630 */ unsigned char field_5630;
+    /* 5632 */ int field_5632;
+    /* 5636 */ unsigned char field_5636;
+    /* 5638 */ int field_5638;
+    /* 563C */ int field_563C;
+    /* 5640 */ int field_5640;
+    /* 5644 */ int field_5644;
+    /* 5648 */ CMarker m_marker;
+    /* 566C */ CMarker m_destMarker;
     /* 5690 */ LONG m_targetId;
     /* 5694 */ CPoint m_targetPoint;
+    /* 569C */ short m_targetAreaSize;
+    /* 56E4 */ CResRef field_56E4;
+    /* 56EC */ unsigned char field_56EC;
+    /* 56EE */ STR_RES m_speech[64];
     /* 70F2 */ int field_70F2;
+    /* 70F6 */ BYTE field_70F6;
+    /* 70F7 */ BYTE field_70F7;
+    /* 70F8 */ BYTE field_70F8;
+    /* 70F9 */ BYTE field_70F9;
+    /* 70FA */ BYTE field_70FA;
     /* 710A */ SHORT field_710A;
     /* 710C */ SHORT field_710C;
     /* 710E */ SHORT field_710E;
+    /* 7110 */ int field_7110;
+    /* 7114 */ int field_7114;
+    /* 7118 */ int field_7118;
+    /* 711C */ short field_711C;
+    /* 711E */ int field_711E;
+    /* 7122 */ LONG m_dialogWait;
+    /* 7126 */ LONG m_dialogWaitTarget;
+    /* 712A */ int m_talkingCounter;
+    /* 712E */ unsigned char field_712E;
+    /* 714C */ CVidCell m_portraitIconVidCell;
+    /* 7226 */ int field_7226;
+    /* 722A */ ULONG field_722A;
+    /* 722E */ LONG field_722E;
+    /* 7234 */ int field_7234;
+    /* 7238 */ int field_7238;
+    /* 723C */ int field_723C;
+    /* 7240 */ int field_7240;
+    /* 7244 */ ULONG m_lastRegenerationTime;
+    /* 724C */ unsigned char field_724C;
+    /* 724D */ BOOLEAN m_bHappinessChanged;
     /* 7252 */ CResRef m_secondarySounds;
+    /* 725A */ unsigned char field_725A[32];
+    /* 727E */ int field_727E;
+    /* 7292 */ int field_7292;
+    /* 7296 */ SHORT m_currentActionId;
+    /* 72A2 */ short field_72A2;
     /* 72A4 */ BOOL field_72A4;
+    /* 72A4 */ BOOL m_bAllowEffectListCall;
+    /* 72A8 */ unsigned char field_72A8;
+    /* 72AA */ int field_72AA;
+    /* 72AE */ int field_72AE;
+    /* 72B2 */ CVariableHash* field_72B2;
+    /* 72B6 */ int field_72B6;
+    /* 72D6 */ int field_72D6;
+    /* 72DE */ int field_72DE;
+    /* 72E6 */ int field_72E6;
+    /* 7532 */ int field_7532;
+    /* 7536 */ int field_7536;
+    /* 7540 */ int field_7540;
+    /* 7544 */ int field_7544;
+    /* 7548 */ CVidCell field_7548[32];
+    /* 9088 */ CSound field_9088[32];
+    /* 9D08 */ int field_9D08;
+    /* 9D0C */ int field_9D0C;
+    /* 9D10 */ int field_9D10;
+    /* 9D14 */ unsigned char field_9D14;
     /* 9D15 */ unsigned char field_9D15;
 };
 
