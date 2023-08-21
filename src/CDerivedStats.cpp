@@ -9,6 +9,10 @@
 CDerivedStats::CDerivedStats()
 {
     // TODO: Incomplete.
+
+    BonusInit();
+
+    // TODO: Incomplete.
 }
 
 // 0x4440F0
@@ -197,6 +201,144 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
 
         // TODO: Incomplete.
     }
+}
+
+// 0x445E40
+void CDerivedStats::BonusInit()
+{
+    int index;
+
+    m_generalState = 0;
+    field_4 = 0;
+    field_6 = 0;
+    field_8 = 0;
+    field_A = 0;
+    field_C = 0;
+    field_E = 0;
+    field_10 = 0;
+    field_12 = 0;
+
+    // TODO: Incomplete.
+
+    field_16 = 0;
+    field_18 = 0;
+    field_1A = 0;
+    field_1C = 0;
+    field_1E = 0;
+    field_20 = 0;
+    m_nResistFire = 0;
+    m_nResistCold = 0;
+    m_nResistElectricity = 0;
+    m_nResistAcid = 0;
+    m_nResistMagic = 0;
+    m_nResistMagicFire = 0;
+    m_nResistMagicCold = 0;
+    m_nResistSlashing = 0;
+    m_nResistCrushing = 0;
+    m_nResistPiercing = 0;
+    field_36 = 0;
+
+    memset(field_144, 0, 64);
+
+    field_38 = 0;
+    field_3A = 0;
+    field_3C = 0;
+    field_3E = 0;
+    m_nLevel = 0;
+    field_52 = 0;
+    m_nSTR = 0;
+    m_nINT = 0;
+    m_nWIS = 0;
+    m_nDEX = 0;
+    m_nCON = 0;
+    m_nCHR = 0;
+    field_60 = 0;
+    field_64 = 0;
+    field_68 = 0;
+    field_70 = 0;
+    field_74 = 0;
+    field_6C = 0;
+
+    for (index = 0; index < 8; index++) {
+        m_favoredEnemies[index] = CAIObjectType::R_NO_RACE;
+    }
+
+    field_86 = 0;
+    field_88 = 0;
+    field_8A = 0;
+    field_8C = 0;
+    field_8E = 0;
+    field_90 = 0;
+    field_92 = 0;
+    m_nLayOnHandsAmount = 0;
+    field_96 = 0;
+    field_9A = 0;
+    field_B2 = 0;
+    field_9E = 0;
+    m_nSpecialization = 0;
+    field_A6 = 0;
+    field_AA = 0;
+
+    for (index = 0; index < 8; index++) {
+        field_EC[index] = 0;
+    }
+
+    field_10C = 0;
+    field_AE = 0;
+    field_B4 = 0;
+    field_B6 = 0;
+    field_B8 = 0;
+    field_BA = 0;
+    field_BC = 0;
+    field_C0 = 0;
+    field_C4 = 0;
+    field_C6 = 0;
+    field_C8 = 0;
+    field_CA = 0;
+    field_CC = 0;
+    field_D0 = 0;
+    field_D4 = 0;
+    field_D8 = 0;
+    field_DC = 0;
+    field_E0 = 0;
+    field_E4 = 0;
+    field_E8 = 0;
+    field_110 = 0;
+    field_112 = 0;
+    field_114 = 0;
+    field_116 = 0;
+    field_118 = 0;
+    field_11A = 0;
+    field_11C = 0;
+    field_11E = 0;
+    field_120 = 0;
+    field_122 = 0;
+    field_124 = 0;
+    field_128 = 0;
+    field_12C = 0;
+    field_130 = 0;
+    field_134 = 0;
+    field_138 = 0;
+    field_13C = 0;
+    field_140 = 0;
+    field_184 = 0;
+
+    // TODO: Incomplete.
+
+    field_DA8 = 0;
+
+    m_barbarianLevel = 0;
+    m_bardLevel = 0;
+    m_clericLevel = 0;
+    m_druidLevel = 0;
+    m_fighterLevel = 0;
+    m_monkLevel = 0;
+    m_paladinLevel = 0;
+    m_rangerLevel = 0;
+    m_rogueLevel = 0;
+    m_sorcererLevel = 0;
+    m_wizardLevel = 0;
+    m_classMask = 0;
 }
 
 // 0x4464E0

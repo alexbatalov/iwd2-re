@@ -12,6 +12,7 @@ class CDerivedStats {
 public:
     CDerivedStats();
     void Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature, int a3, int a4);
+    void BonusInit();
     CDerivedStats& operator+=(const CDerivedStats& other);
     void CheckLimits();
     LONG GetAtOffset(SHORT offset);
@@ -173,6 +174,7 @@ public:
     /* 0554 */ CPtrList field_554;
     /* 0570 */ CPtrList field_570;
     /* 0590 */ CPtrList field_590;
+    /* 0DA8 */ int field_DA8;
     /* 0DAC */ unsigned char field_DAC[160];
     /* 0E4C */ int field_E4C;
     /* 0E50 */ int field_E50;
