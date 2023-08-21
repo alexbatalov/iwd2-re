@@ -107,7 +107,7 @@ void C2DArray::Load(const CResRef& cResRef)
         m_nSizeX = sizeX;
 
         if (m_pNamesX != NULL) {
-            delete m_pNamesX;
+            delete[] m_pNamesX;
         }
 
         m_pNamesX = new CString[m_nSizeX];
@@ -134,13 +134,13 @@ void C2DArray::Load(const CResRef& cResRef)
         m_nSizeY = sizeY;
 
         if (m_pNamesY != NULL) {
-            delete m_pNamesY;
+            delete[] m_pNamesY;
         }
 
         m_pNamesY = new CString[m_nSizeY];
 
         if (m_pArray != NULL) {
-            delete m_pArray;
+            delete[] m_pArray;
         }
 
         m_pArray = new CString[m_nSizeX * m_nSizeY];
