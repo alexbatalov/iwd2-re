@@ -1858,7 +1858,7 @@ void CScreenConnection::OnDoneButtonClick()
         INT nErrorCode;
         if (pNetwork->CreatePlayer(nErrorCode)) {
             pSettings->InitializeSettings();
-            pSettings->field_B8 = 1;
+            pSettings->m_bFirstConnected = TRUE;
             pSettings->SetPlayerReady(pNetwork->m_idLocalPlayer, FALSE, TRUE);
 
             DismissPopup();
@@ -3485,7 +3485,7 @@ void CScreenConnection::AutoStartDirectPlayLobby()
 
         CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
         pSettings->InitializeSettings();
-        pSettings->field_B8 = 1;
+        pSettings->m_bFirstConnected = TRUE;
         pSettings->SetPlayerReady(g_pChitin->cNetwork.m_idLocalPlayer, FALSE, TRUE);
 
         renderLock.Lock();

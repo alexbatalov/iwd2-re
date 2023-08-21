@@ -132,6 +132,8 @@ public:
     BOOL Render(BOOL bForce) override;
     void OnLButtonClick(CPoint pt) override;
 
+    void SetPortrait(const CResRef& resRef);
+
     /* 0666 */ CResRef m_portraitResRef;
 };
 

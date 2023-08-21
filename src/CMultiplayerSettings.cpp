@@ -109,7 +109,7 @@ void CMultiplayerSettings::InitializeSettings()
     field_9E = 0;
     field_A7 = 0;
     field_A8 = 0;
-    field_B8 = 0;
+    m_bFirstConnected = FALSE;
 
     m_nDifficultyLevel = GetPrivateProfileIntA("Game Options",
         "Difficulty Level",

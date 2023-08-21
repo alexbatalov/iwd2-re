@@ -1,6 +1,7 @@
 #include "CScreenSinglePlayer.h"
 
 #include "CBaldurChitin.h"
+#include "CGameSprite.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CScreenCreateChar.h"
@@ -655,7 +656,7 @@ BOOL CScreenSinglePlayer::IsMainDoneButtonClickable()
 
     BOOL bResult;
     if (field_45C == 1) {
-        BOOL v1 = pSettings->field_B8 == 0;
+        BOOL v1 = pSettings->m_bFirstConnected == FALSE;
 
         for (INT nPlayer = 0; nPlayer < 6; nPlayer++) {
             if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
@@ -932,7 +933,156 @@ void CScreenSinglePlayer::CheckCharacterButtons(INT nCharacterSlot, BOOL& bReady
 // 0x662170
 void CScreenSinglePlayer::UpdateMainPanelCharacter(CUIPanel* pPanel, INT nCharacterSlot)
 {
-    // TODO: Incomplete.
+    // NOTE: Unused.
+    CString v1;
+
+    CString sPlayerName;
+    CString sCharacterName;
+    CResRef portraitResRef;
+
+    CNetwork* pNetwork = &(g_pBaldurChitin->cNetwork);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 1855
+    UTIL_ASSERT(0 <= nCharacterSlot && nCharacterSlot < CINFGAME_MAXCHARACTERS);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 1856
+    UTIL_ASSERT(pGame != NULL);
+
+    CMultiplayerSettings* pSettings = pGame->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 1860
+    UTIL_ASSERT(pSettings != NULL);
+
+    BOOL bSlotFree;
+    BOOL bSlotFull;
+    BOOL bSlotLoading;
+    BOOL bSlotCreating;
+    BOOL bReadyActive;
+    BOOL bModifyPlayerActive;
+    BOOL bModifyCharacterActive;
+
+    if (!pSettings->m_bFirstConnected) {
+        LONG nCharacterId = pGame->GetCharacterSlot(nCharacterSlot);
+
+        bSlotFree = pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_NO_CHARACTER;
+        bSlotFull = pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_CHARACTER
+            && nCharacterId != CGameObjectArray::INVALID_INDEX;
+        bSlotLoading = pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_CHARACTER
+            && nCharacterId == CGameObjectArray::INVALID_INDEX;
+        bSlotCreating = pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_CREATING_CHARACTER;
+
+        if (bSlotFull) {
+            CGameSprite* pSprite;
+            BYTE rc;
+            do {
+                rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    reinterpret_cast<CGameObject**>(&pSprite),
+                    INFINITE);
+            } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+            if (rc == CGameObjectArray::SUCCESS) {
+                portraitResRef = pSprite->GetBaseStats()->m_portraitSmall;
+
+                // NOTE: Uninline.
+                sCharacterName = pSprite->GetName();
+
+                g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            } else {
+                sCharacterName = FetchString(10262); // "Error"
+            }
+        }
+
+        INT nPlayerSlot = pSettings->GetCharacterControlledByPlayer(nCharacterSlot);
+        if (nPlayerSlot == -1) {
+            nPlayerSlot = 0;
+        }
+
+        pNetwork->GetPlayerName(nPlayerSlot, sPlayerName);
+
+        // FIXME: Unused.
+        pNetwork->GetPlayerID(nPlayerSlot);
+
+        CheckCharacterButtons(nCharacterSlot,
+            bReadyActive,
+            bModifyPlayerActive,
+            bModifyCharacterActive);
+    }
+
+    CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nCharacterSlot + 18));
+    CUIControlLabel* pLabel = static_cast<CUIControlLabel*>(pPanel->GetControl(nCharacterSlot + 0x10000024));
+
+    if (!pSettings->m_bFirstConnected && pSettings->m_bArbitrationLockAllowInput) {
+        BOOLEAN bOldActive = pButton->m_bActive;
+
+        pButton->SetActive(bModifyCharacterActive);
+        pButton->SetInactiveRender(bModifyCharacterActive);
+
+        pLabel->SetActive(bModifyCharacterActive);
+        pLabel->SetInactiveRender(bModifyCharacterActive);
+
+        if (bModifyCharacterActive) {
+            if (bSlotFree) {
+                sCharacterName = FetchString(10264); // "Create Character"
+            }
+
+            pButton->m_nTextFlags |= 0x20;
+            pButton->SetText(sCharacterName);
+        } else {
+            if (bSlotLoading) {
+                sCharacterName = FetchString(10265); // "Loading Character..."
+            }
+
+            if (bSlotCreating) {
+                sCharacterName = FetchString(10266); // "Creating Character..."
+            }
+
+            if (bSlotFree) {
+                sCharacterName = FetchString(10267); // "No Character"
+            }
+
+            pLabel->SetText(sCharacterName);
+        }
+
+        if (bModifyCharacterActive != bOldActive) {
+            CRect rButtonFrame(pPanel->m_ptOrigin + pButton->m_ptOrigin,
+                pButton->m_size);
+            pPanel->InvalidateRect(&rButtonFrame);
+
+            CRect rLabelFrame(pPanel->m_ptOrigin + pLabel->m_ptOrigin,
+                pButton->m_size);
+            pPanel->InvalidateRect(&rLabelFrame);
+        }
+    } else {
+        pButton->SetText(CString(""));
+        pButton->SetActive(FALSE);
+        pButton->SetInactiveRender(FALSE);
+
+        pLabel->SetText(CString(""));
+        pLabel->SetActive(FALSE);
+        pLabel->SetInactiveRender(FALSE);
+    }
+
+    CUIControlButtonSinglePlayerPortrait* pPortrait = static_cast<CUIControlButtonSinglePlayerPortrait*>(pPanel->GetControl(nCharacterSlot + 6));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 1983
+    UTIL_ASSERT(pPortrait != NULL);
+
+    pPortrait->SetEnabled(sub_665280(nCharacterSlot));
+
+    if (!pSettings->m_bFirstConnected || !pSettings->m_bArbitrationLockAllowInput || !bSlotFull) {
+        portraitResRef = "";
+    }
+
+    pPortrait->SetPortrait(portraitResRef);
 }
 
 // 0x6627C0
@@ -1010,7 +1160,7 @@ BOOL CScreenSinglePlayer::IsModifyButtonClickable()
     // __LINE__: 2656
     UTIL_ASSERT(pGame != NULL);
 
-    return !pGame->GetMultiplayerSettings()->field_B8
+    return !pGame->GetMultiplayerSettings()->m_bFirstConnected
         && (g_pBaldurChitin->cNetwork.FindPlayerLocationByID(g_pBaldurChitin->cNetwork.m_idLocalPlayer, FALSE) != -1
             || g_pBaldurChitin->cNetwork.GetSessionHosting())
         && field_45C == 2
@@ -1196,7 +1346,7 @@ void CScreenSinglePlayer::StartSinglePlayer(INT nEngineState)
     // __LINE__: 3023
     UTIL_ASSERT(pSettings != NULL);
 
-    if (pSettings->field_B8) {
+    if (pSettings->m_bFirstConnected) {
         CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(25));
 
         // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
@@ -1539,6 +1689,15 @@ void CUIControlButtonSinglePlayerPortrait::OnLButtonClick(CPoint pt)
     UTIL_ASSERT(pSinglePlayer != NULL);
 
     pSinglePlayer->OnPortraitButtonClick(m_nID - 6);
+}
+
+// 0x64F930
+void CUIControlButtonSinglePlayerPortrait::SetPortrait(const CResRef& resRef)
+{
+    if (m_portraitResRef != resRef) {
+        m_portraitResRef = resRef;
+        InvalidateRect();
+    }
 }
 
 // 0x665AE0
