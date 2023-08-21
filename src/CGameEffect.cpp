@@ -916,6 +916,28 @@ void CGameEffect::sub_493400(BOOL a1)
     }
 }
 
+// 0x594020
+void CGameEffect::sub_594020(BOOL bEnabled)
+{
+    if (bEnabled) {
+        m_flags |= 0x1;
+    } else {
+        m_flags &= ~0x1;
+    }
+}
+
+// 0x594040
+void CGameEffect::SetSource(const CPoint& pt)
+{
+    m_source = pt;
+}
+
+// 0x594060
+void CGameEffect::SetSourceId(LONG sourceID)
+{
+    m_sourceID = sourceID;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.

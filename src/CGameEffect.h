@@ -296,6 +296,9 @@ public:
     void SetEffectID(WORD effectID);
     void SetDWFlags(DWORD dwFlags);
     void sub_493400(BOOL a1);
+    void sub_594020(BOOL bEnabled);
+    void SetSource(const CPoint& pt);
+    void SetSourceId(LONG sourceID);
 
     /* 010C */ LONG m_sourceID;
     /* 0124 */ CSound m_sound;
