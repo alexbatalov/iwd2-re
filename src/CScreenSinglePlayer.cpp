@@ -866,7 +866,67 @@ void CScreenSinglePlayer::CheckEnableCharacters()
 // 0x661F40
 void CScreenSinglePlayer::CheckCharacterButtons(INT nCharacterSlot, BOOL& bReadyActive, BOOL& bModifyPlayerActive, BOOL& bModifyCharacterActive)
 {
-    // TODO: Incomplete.
+    CNetwork* pNetwork = &(g_pBaldurChitin->cNetwork);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 1756
+    UTIL_ASSERT(0 <= nCharacterSlot && nCharacterSlot < CINFGAME_MAXCHARACTERS);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 1759
+    UTIL_ASSERT(pGame != NULL);
+
+    CMultiplayerSettings* pSettings = pGame->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 1761
+    UTIL_ASSERT(pSettings != NULL);
+
+    LONG nCharacterId = pGame->GetCharacterSlot(nCharacterSlot);
+    BOOL bSlotFree = pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_NO_CHARACTER;
+    BOOL bSlotFull = pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_CHARACTER
+        && nCharacterId != CGameObjectArray::INVALID_INDEX;
+
+    // FIXME: Calls `GetCharacterStatus` twice and result is ignored both times.
+    pSettings->GetCharacterStatus(nCharacterSlot);
+    pSettings->GetCharacterStatus(nCharacterSlot);
+
+    INT nPlayerSlot = pSettings->GetCharacterControlledByPlayer(nCharacterSlot);
+    if (nPlayerSlot == -1) {
+        nPlayerSlot = 0;
+    }
+
+    PLAYER_ID idPlayer = pNetwork->GetPlayerID(nPlayerSlot);
+    BOOL bPlayerExists = pNetwork->FindPlayerLocationByID(pNetwork->m_idLocalPlayer, FALSE) != -1;
+    BOOL bIsHost = pNetwork->GetSessionHosting();
+
+    // FIXME: Unused.
+    pSettings->GetCharacterReady(nCharacterSlot);
+
+    BOOL bIsLocalPlayer = idPlayer != 0 && idPlayer == pNetwork->m_idLocalPlayer;
+
+    switch (field_45C) {
+    case 1:
+        bReadyActive = bIsLocalPlayer
+            && bSlotFull
+            && pSettings->m_bArbitrationLockAllowInput;
+        bModifyPlayerActive = (bPlayerExists || bIsHost)
+            && (bSlotFull || bSlotFree)
+            && pSettings->m_bArbitrationLockAllowInput;
+        bModifyCharacterActive = TRUE;
+        break;
+    case 2:
+        bReadyActive = FALSE;
+        bModifyPlayerActive = (bPlayerExists || bIsHost) && bSlotFull;
+        bModifyCharacterActive = FALSE;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+        // __LINE__: 1812
+        UTIL_ASSERT(FALSE);
+    }
 }
 
 // 0x662170
