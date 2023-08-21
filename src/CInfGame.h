@@ -198,6 +198,10 @@ public:
     CNamedCreatureVariableHash* GetNamedCreatures();
     void SetTempCursor(BYTE tempCursor);
     CGameOptions* GetOptions();
+    SHORT GetState();
+    void SetState(SHORT nState);
+    BYTE GetIconIndex();
+    void SetIconIndex(BYTE iconIndex);
 
     const CRuleTables& GetRuleTables() { return m_ruleTables; }
 
@@ -254,6 +258,8 @@ public:
     /* 1B92 */ BOOLEAN m_bFromNewGame;
     /* 1B94 */ BOOLEAN m_bAnotherPlayerJoinedGame;
     /* 1B96 */ SHORT m_nState;
+    /* 1B98 */ BYTE m_iconIndex;
+    /* 1B99 */ CResRef m_iconResRef;
     /* 1BA1 */ unsigned char m_tempCursor;
     /* 1BAA */ CGamePermission m_singlePlayerPermissions;
     /* 1BB2 */ CMultiplayerSettings m_multiplayerSettings;

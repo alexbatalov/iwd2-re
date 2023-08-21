@@ -3472,6 +3472,31 @@ CGameOptions* CInfGame::GetOptions()
     return &m_cOptions;
 }
 
+// 0x594070
+SHORT CInfGame::GetState()
+{
+    return m_nState;
+}
+
+// 0x594080
+void CInfGame::SetState(SHORT nState)
+{
+    m_nState = nState;
+}
+
+// 0x594090
+BYTE CInfGame::GetIconIndex()
+{
+    return m_iconIndex;
+}
+
+// 0x5940A0
+void CInfGame::SetIconIndex(BYTE iconIndex)
+{
+    m_iconIndex = iconIndex;
+    m_iconResRef = "";
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
