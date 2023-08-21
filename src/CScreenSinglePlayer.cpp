@@ -1076,7 +1076,7 @@ void CScreenSinglePlayer::UpdateMainPanelCharacter(CUIPanel* pPanel, INT nCharac
     // __LINE__: 1983
     UTIL_ASSERT(pPortrait != NULL);
 
-    pPortrait->SetEnabled(sub_665280(nCharacterSlot));
+    pPortrait->SetEnabled(IsPortraitButtonClickable(nCharacterSlot));
 
     if (!pSettings->m_bFirstConnected || !pSettings->m_bArbitrationLockAllowInput || !bSlotFull) {
         portraitResRef = "";
@@ -1530,7 +1530,7 @@ void CScreenSinglePlayer::sub_6644B0(CUIPanel* pPanel)
 }
 
 // 0x665280
-BOOL CScreenSinglePlayer::sub_665280(INT nCharacterSlot)
+BOOL CScreenSinglePlayer::IsPortraitButtonClickable(INT nCharacterSlot)
 {
     CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
@@ -1538,9 +1538,19 @@ BOOL CScreenSinglePlayer::sub_665280(INT nCharacterSlot)
     // __LINE__: 3649
     UTIL_ASSERT(pGame != NULL);
 
-    // TODO: Incomplete.
+    CMultiplayerSettings* pSettings = pGame->GetMultiplayerSettings();
 
-    return FALSE;
+    LONG nCharacterId = pGame->GetCharacterSlot(nCharacterSlot);
+
+    BOOL bSlotFull = pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_CHARACTER
+        && nCharacterId == CGameObjectArray::INVALID_INDEX;
+
+    // NOTE: Unused.
+    g_pBaldurChitin->cNetwork.FindPlayerLocationByID(g_pBaldurChitin->cNetwork.m_idLocalPlayer, FALSE);
+
+    return !pSettings->m_bFirstConnected
+        && bSlotFull
+        && pSettings->m_bArbitrationLockStatus;
 }
 
 // 0x665340

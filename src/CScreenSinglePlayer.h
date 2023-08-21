@@ -80,7 +80,7 @@ public:
     void UpdatePartySelectionPanel();
     void OnPartySelectionDoneButtonClick();
     void sub_6644B0(CUIPanel* pPanel);
-    BOOL sub_665280(INT nCharacterSlot);
+    BOOL IsPortraitButtonClickable(INT nCharacterSlot);
     void OnPortraitButtonClick(INT nButton);
     void OnLogoutButtonClick();
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
