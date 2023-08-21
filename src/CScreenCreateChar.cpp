@@ -1,6 +1,7 @@
 #include "CScreenCreateChar.h"
 
 #include "CBaldurChitin.h"
+#include "CCreatureFile.h"
 #include "CGameAnimationType.h"
 #include "CGameArea.h"
 #include "CGameObjectArray.h"
