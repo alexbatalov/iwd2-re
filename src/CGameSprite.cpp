@@ -2222,6 +2222,12 @@ INT CGameSprite::GetSkillCost(UINT iSkillNumber, BYTE nClass)
     int v1 = 0;
     int v2 = 0;
     int v3 = 0;
+
+    // A way to bypass condition below without `goto`. Need a better
+    // understanding of the calculations to get rid of it.
+    // TODO: Review calculations.
+    bool check = true;
+
     for (iClassType = 1; iClassType <= CAIOBJECT_CLASS_MAX; iClassType++) {
         if (m_derivedStats.HasClass(iClassType)) {
             INT nCost = atol(ruleTables.m_tSkillCosts.GetAt(CPoint(iClassType - 1, iSkillNumber)));
@@ -2229,10 +2235,12 @@ INT CGameSprite::GetSkillCost(UINT iSkillNumber, BYTE nClass)
                 v3 = 1;
                 if (iClassType == nClass) {
                     v2 = 1;
+                    check = false;
                     break;
                 }
 
                 if (v1 > 0) {
+                    check = false;
                     break;
                 }
             } else if (nCost == 2) {
@@ -2252,8 +2260,10 @@ INT CGameSprite::GetSkillCost(UINT iSkillNumber, BYTE nClass)
         }
     }
 
-    if (v1 <= 0) {
-        return v1;
+    if (check) {
+        if (v1 <= 0) {
+            return v1;
+        }
     }
 
     INT nLevels = 0;
