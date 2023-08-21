@@ -1983,7 +1983,26 @@ INT CRuleTables::GetMaxDruidShapeshifts(CCreatureFileHeader& BStats, INT nLevel)
 // 0x5437E0
 void CRuleTables::GetNextLevel(BYTE nClass, CDerivedStats& DStats, CGameSprite* pSprite) const
 {
-    // TODO: Incomplete.
+    int v1 = DStats.m_nLevel;
+    int v2 = DStats.sub_447390();
+    int v3 = 0;
+
+    if (pSprite != NULL && v2 != 0) {
+        v3 = pSprite->GetEffectiveCharacterLevel() - v1;
+    }
+
+    int xp;
+    do {
+        v1++;
+        xp = atol(m_tExperienceLevels.GetAt(CPoint(v1 + v3 - 1, 0)));
+    } while (v2 >= xp && xp != -1);
+
+    BYTE nClassLevel = static_cast<BYTE>(DStats.GetClassLevel(nClass));
+    if (v1 >= 30) {
+        v1 = 30;
+    }
+
+    DStats.SetClassLevel(nClass, nClassLevel + (v1 - DStats.m_nLevel));
 }
 
 // NOTE: Even though `xplevel.2da` contains entries for all classes, only
