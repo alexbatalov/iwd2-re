@@ -129,7 +129,7 @@ public:
     void OnCharacterImportItemSelect(INT nItem);
     void sub_610DC0();
     void OnCharacterExportItemSelect(INT nItem);
-    void sub_611AF0();
+    void UpdateCharacterStats(CGameSprite* pSprite);
     void UpdateCharacterAppearance();
     void sub_612930();
     void CompleteCharacterSkills();

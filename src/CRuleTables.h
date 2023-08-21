@@ -387,6 +387,7 @@ public:
     INT GetStartingGold(CGameSprite* pSprite) const;
     INT GetStartingExperiencePoints(CGameSprite* pSprite) const;
     INT GetMaxDruidShapeshifts(CCreatureFileHeader& BStats, INT nLevel) const;
+    void GetNextLevel(BYTE nClass, CDerivedStats& DStats, CGameSprite* pSprite) const;
     DWORD GetNextLevelXP(BYTE nLevel) const;
     void GetStartArea(CResRef& cResArea, CPoint& ptView) const;
     CPoint GetStartPoint(INT nCharacterSlot) const;
@@ -435,6 +436,7 @@ public:
     BOOLEAN IsHatedRace(BYTE& nRace, const CCreatureFileHeader& BStats) const;
     INT GetHatedRaceBonus(BYTE& nRace, const CCreatureFileHeader& BStats) const;
     INT GetEncumbranceMod(CGameSprite* pSprite) const;
+    void sub_546B60(CGameSprite* pSprite, int& a2, int& a3, int& a4, BOOL a5) const;
     DWORD GetMaxSpellLevel(BYTE& nClass, INT& nLevel) const;
     BYTE GetSpecializationIndex(BYTE nClass, DWORD nSpecialization) const;
     DWORD GetSpecializationMask(BYTE nClass, BYTE nIndex) const;

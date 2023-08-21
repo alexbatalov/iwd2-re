@@ -3336,9 +3336,172 @@ void CScreenCreateChar::OnCharacterExportItemSelect(INT nItem)
 }
 
 // 0x611AF0
-void CScreenCreateChar::sub_611AF0()
+void CScreenCreateChar::UpdateCharacterStats(CGameSprite* pSprite)
 {
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+    CAIObjectType typeAI(pSprite->m_startTypeAI);
+
+    // NOTE: Unused (besides assignment).
+    CDerivedStats DStats;
+
+    pSprite->GetDerivedStats()->m_barbarianLevel = 0;
+    pSprite->GetDerivedStats()->m_bardLevel = 0;
+    pSprite->GetDerivedStats()->m_clericLevel = 0;
+    pSprite->GetDerivedStats()->m_druidLevel = 0;
+    pSprite->GetDerivedStats()->m_fighterLevel = 0;
+    pSprite->GetDerivedStats()->m_monkLevel = 0;
+    pSprite->GetDerivedStats()->m_paladinLevel = 0;
+    pSprite->GetDerivedStats()->m_rangerLevel = 0;
+    pSprite->GetDerivedStats()->m_rogueLevel = 0;
+    pSprite->GetDerivedStats()->m_sorcererLevel = 0;
+    pSprite->GetDerivedStats()->m_wizardLevel = 0;
+    pSprite->GetDerivedStats()->m_nLevel = 0;
+    pSprite->GetDerivedStats()->m_classMask = 0;
+    pSprite->GetDerivedStats()->field_64 = 0;
+
     // TODO: Incomplete.
+    // DStats = *pSprite->GetDerivedStats();
+
+    ruleTables.GetNextLevel(typeAI.m_nClass, *pSprite->GetDerivedStats(), pSprite);
+
+    pSprite->GetBaseStats()->m_barbarianLevel = pSprite->GetDerivedStats()->m_barbarianLevel;
+    pSprite->GetBaseStats()->m_bardLevel = pSprite->GetDerivedStats()->m_bardLevel;
+    pSprite->GetBaseStats()->m_clericLevel = pSprite->GetDerivedStats()->m_clericLevel;
+    pSprite->GetBaseStats()->m_druidLevel = pSprite->GetDerivedStats()->m_druidLevel;
+    pSprite->GetBaseStats()->m_fighterLevel = pSprite->GetDerivedStats()->m_fighterLevel;
+    pSprite->GetBaseStats()->m_monkLevel = pSprite->GetDerivedStats()->m_monkLevel;
+    pSprite->GetBaseStats()->m_paladinLevel = pSprite->GetDerivedStats()->m_paladinLevel;
+    pSprite->GetBaseStats()->m_rangerLevel = pSprite->GetDerivedStats()->m_rangerLevel;
+    pSprite->GetBaseStats()->m_rogueLevel = pSprite->GetDerivedStats()->m_rogueLevel;
+    pSprite->GetBaseStats()->m_sorcererLevel = pSprite->GetDerivedStats()->m_sorcererLevel;
+    pSprite->GetBaseStats()->m_wizardLevel = pSprite->GetDerivedStats()->m_wizardLevel;
+    pSprite->GetBaseStats()->m_characterLevel = pSprite->GetDerivedStats()->m_nLevel;
+
+    pSprite->field_562C = 1;
+    pSprite->ProcessEffectList();
+
+    int v1;
+    int v2;
+    int v3;
+    ruleTables.sub_546B60(pSprite, v1, v2, v3, FALSE);
+
+    pSprite->GetBaseStats()->m_attackBase = v1;
+    pSprite->GetDerivedStats()->m_nLayOnHandsAmount = ruleTables.GetLayOnHandsAmount(typeAI, *pSprite->GetDerivedStats());
+    pSprite->GetBaseStats()->m_colors[0] = 30;
+    pSprite->GetBaseStats()->m_colors[1] = 39;
+    pSprite->GetBaseStats()->m_colors[2] = 41;
+    pSprite->GetBaseStats()->m_colors[3] = 12;
+    pSprite->GetBaseStats()->m_colors[4] = 23;
+    pSprite->GetBaseStats()->m_colors[5] = 30;
+    pSprite->GetBaseStats()->m_colors[6] = 0;
+
+    DWORD genderID;
+    switch (typeAI.m_nGender) {
+    case CAIOBJECTTYPE_SEX_MALE:
+        genderID = 0x0;
+        break;
+    case CAIOBJECTTYPE_SEX_FEMALE:
+        genderID = 0x10;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 6653
+        UTIL_ASSERT(FALSE);
+    }
+
+    DWORD raceID;
+    switch (typeAI.m_nRace) {
+    case CAIOBJECTTYPE_R_HUMAN:
+        raceID = 0x0;
+        break;
+    case CAIOBJECTTYPE_R_ELF:
+    case CAIOBJECTTYPE_R_HALF_ELF:
+        raceID = 0x1;
+        break;
+    case CAIOBJECTTYPE_R_DWARF:
+        raceID = 0x2;
+        break;
+    case CAIOBJECTTYPE_R_HALFLING:
+        raceID = 0x3;
+        break;
+    case CAIOBJECTTYPE_R_GNOME:
+        raceID = 0x4;
+        break;
+    case CAIOBJECTTYPE_R_HALF_ORC:
+        raceID = 0x5;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 6686
+        UTIL_ASSERT(FALSE);
+    }
+
+    DWORD classID;
+    switch (typeAI.m_nClass) {
+    case CAIOBJECTTYPE_C_BARBARIAN:
+    case CAIOBJECTTYPE_C_FIGHTER:
+    case CAIOBJECTTYPE_C_MONK:
+    case CAIOBJECTTYPE_C_PALADIN:
+    case CAIOBJECTTYPE_C_RANGER:
+        classID = 0x100;
+        break;
+    case CAIOBJECTTYPE_C_BARD:
+    case CAIOBJECTTYPE_C_ROGUE:
+        classID = 0x300;
+        break;
+    case CAIOBJECTTYPE_C_CLERIC:
+    case CAIOBJECTTYPE_C_DRUID:
+        classID = 0x000;
+        break;
+    case CAIOBJECTTYPE_C_SORCERER:
+    case CAIOBJECTTYPE_C_WIZARD:
+        classID = 0x200;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 6721
+        UTIL_ASSERT(FALSE);
+    }
+
+    USHORT animationID = static_cast<USHORT>(genderID | raceID | classID | 0x6000);
+
+    // NOTE: Looks like inlined `CGameAnimation::SetAnimationType` but without
+    // post-assignment assertion.
+    if (pSprite->m_animation.m_animation != NULL) {
+        delete pSprite->m_animation.m_animation;
+    }
+    pSprite->m_animation.m_animation = CGameAnimationType::SetAnimationType(animationID,
+        pSprite->GetBaseStats()->m_colors,
+        0);
+    pSprite->GetBaseStats()->m_animationType = animationID;
+
+    CString sRace = ruleTables.GetRaceString(typeAI.m_nRace, typeAI.m_nSubRace);
+    pSprite->GetBaseStats()->m_resistFireBase = static_cast<BYTE>(atol(ruleTables.m_tRaceRsMd.GetAt(CRuleTables::FIRE, sRace)));
+    pSprite->GetBaseStats()->m_resistColdBase = static_cast<BYTE>(atol(ruleTables.m_tRaceRsMd.GetAt(CRuleTables::COLD, sRace)));
+    pSprite->GetBaseStats()->m_resistElectricityBase = static_cast<BYTE>(atol(ruleTables.m_tRaceRsMd.GetAt(CRuleTables::ELEC, sRace)));
+    pSprite->GetBaseStats()->m_resistAcidBase = static_cast<BYTE>(atol(ruleTables.m_tRaceRsMd.GetAt(CRuleTables::ACID, sRace)));
+    pSprite->GetBaseStats()->m_resistMagicBase = static_cast<BYTE>(atol(ruleTables.m_tRaceRsMd.GetAt(CRuleTables::SPELL, sRace)));
+    pSprite->GetBaseStats()->m_resistMagicFireBase = static_cast<BYTE>(atol(ruleTables.m_tRaceRsMd.GetAt(CRuleTables::MAGIC_FIRE, sRace)));
+    pSprite->GetBaseStats()->m_resistMagicColdBase = static_cast<BYTE>(atol(ruleTables.m_tRaceRsMd.GetAt(CRuleTables::MAGIC_COLD, sRace)));
+    pSprite->GetBaseStats()->m_resistSlashingBase = static_cast<BYTE>(atol(ruleTables.m_tRaceRsMd.GetAt(CRuleTables::SLASHING, sRace)));
+    pSprite->GetBaseStats()->m_resistCrushingBase = static_cast<BYTE>(atol(ruleTables.m_tRaceRsMd.GetAt(CRuleTables::BLUDGEONING, sRace)));
+    pSprite->GetBaseStats()->m_resistPiercingBase = static_cast<BYTE>(atol(ruleTables.m_tRaceRsMd.GetAt(CRuleTables::PIERCING, sRace)));
+
+    CString sClass = ruleTables.GetClassString(typeAI.m_nClass, pSprite->GetSpecialization());
+    pSprite->GetBaseStats()->m_resistFireBase += static_cast<BYTE>(atol(ruleTables.m_tClassRsMd.GetAt(CRuleTables::FIRE, sClass)));
+    pSprite->GetBaseStats()->m_resistColdBase += static_cast<BYTE>(atol(ruleTables.m_tClassRsMd.GetAt(CRuleTables::COLD, sClass)));
+    pSprite->GetBaseStats()->m_resistElectricityBase += static_cast<BYTE>(atol(ruleTables.m_tClassRsMd.GetAt(CRuleTables::ELEC, sClass)));
+    pSprite->GetBaseStats()->m_resistAcidBase += static_cast<BYTE>(atol(ruleTables.m_tClassRsMd.GetAt(CRuleTables::ACID, sClass)));
+    pSprite->GetBaseStats()->m_resistMagicBase += static_cast<BYTE>(atol(ruleTables.m_tClassRsMd.GetAt(CRuleTables::SPELL, sClass)));
+    pSprite->GetBaseStats()->m_resistMagicFireBase += static_cast<BYTE>(atol(ruleTables.m_tClassRsMd.GetAt(CRuleTables::MAGIC_FIRE, sClass)));
+    pSprite->GetBaseStats()->m_resistMagicColdBase += static_cast<BYTE>(atol(ruleTables.m_tClassRsMd.GetAt(CRuleTables::MAGIC_COLD, sClass)));
+    pSprite->GetBaseStats()->m_resistSlashingBase += static_cast<BYTE>(atol(ruleTables.m_tClassRsMd.GetAt(CRuleTables::SLASHING, sClass)));
+    pSprite->GetBaseStats()->m_resistCrushingBase += static_cast<BYTE>(atol(ruleTables.m_tClassRsMd.GetAt(CRuleTables::BLUDGEONING, sClass)));
+    pSprite->GetBaseStats()->m_resistPiercingBase += static_cast<BYTE>(atol(ruleTables.m_tClassRsMd.GetAt(CRuleTables::PIERCING, sClass)));
+
+    // TODO: Incomplete (base skills).
+
+    UpdateCharacterAppearance();
 }
 
 // 0x612800

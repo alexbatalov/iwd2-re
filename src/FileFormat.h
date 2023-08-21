@@ -5,6 +5,11 @@
 
 class CCreatureFileHeader {
 public:
+    CCreatureFileHeader()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
     /* 0000 */ DWORD m_name;
     /* 0004 */ DWORD m_apparentName;
     /* 0008 */ DWORD m_flags;
@@ -31,16 +36,16 @@ public:
     /* 004A */ unsigned char field_4A;
     /* 004B */ unsigned char field_4B;
     /* 004C */ unsigned char field_4C;
-    /* 004D */ unsigned char field_4D;
-    /* 004E */ unsigned char field_4E;
-    /* 004F */ unsigned char field_4F;
-    /* 0050 */ unsigned char field_50;
-    /* 0051 */ unsigned char field_51;
-    /* 0052 */ unsigned char field_52;
-    /* 0053 */ unsigned char field_53;
-    /* 0054 */ unsigned char field_54;
-    /* 0055 */ unsigned char field_55;
-    /* 0056 */ unsigned char field_56;
+    /* 004D */ signed char m_resistFireBase;
+    /* 004E */ signed char m_resistColdBase;
+    /* 004F */ signed char m_resistElectricityBase;
+    /* 0050 */ signed char m_resistAcidBase;
+    /* 0051 */ signed char m_resistMagicBase;
+    /* 0052 */ signed char m_resistMagicFireBase;
+    /* 0053 */ signed char m_resistMagicColdBase;
+    /* 0054 */ signed char m_resistSlashingBase;
+    /* 0055 */ signed char m_resistCrushingBase;
+    /* 0056 */ signed char m_resistPiercingBase;
     /* 0057 */ unsigned char field_57;
     /* 0058 */ unsigned char field_58;
     /* 005D */ unsigned char field_5D;

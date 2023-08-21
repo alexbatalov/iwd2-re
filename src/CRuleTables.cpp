@@ -1980,6 +1980,12 @@ INT CRuleTables::GetMaxDruidShapeshifts(CCreatureFileHeader& BStats, INT nLevel)
     return nShapeshifts;
 }
 
+// 0x5437E0
+void CRuleTables::GetNextLevel(BYTE nClass, CDerivedStats& DStats, CGameSprite* pSprite) const
+{
+    // TODO: Incomplete.
+}
+
 // NOTE: Even though `xplevel.2da` contains entries for all classes, only
 // `FIGHTER` is used to determine XP progression. This is leftover from earlier
 // 2E games where every class has it's own progression.
@@ -3195,6 +3201,12 @@ INT CRuleTables::GetEncumbranceMod(CGameSprite* pSprite) const
     }
 
     return nEncMod;
+}
+
+// 0x546B60
+void CRuleTables::sub_546B60(CGameSprite* pSprite, int& a2, int& a3, int& a4, BOOL a5) const
+{
+    // TODO: Incomplete.
 }
 
 // FIXME: For unknown reason `nClass` and `nLevel` params are passed as

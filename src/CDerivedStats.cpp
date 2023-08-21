@@ -17,7 +17,7 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
     int index;
 
     field_92 = 0;
-    field_94 = 0;
+    m_nLayOnHandsAmount = 0;
 
     m_generalState = pCreature->m_generalState;
     field_4 = pCreature->field_1E;
@@ -38,16 +38,16 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
     field_1C = pCreature->field_4A;
     field_1E = pCreature->field_4B;
     field_20 = pCreature->field_4C;
-    field_22 = pCreature->field_4D;
-    field_24 = pCreature->field_4E;
-    field_26 = pCreature->field_4F;
-    field_28 = pCreature->field_50;
-    field_2A = pCreature->field_51;
-    field_2C = pCreature->field_52;
-    field_2E = pCreature->field_53;
-    field_30 = pCreature->field_54;
-    field_32 = pCreature->field_55;
-    field_34 = pCreature->field_56;
+    m_nResistFire = pCreature->m_resistFireBase;
+    m_nResistCold = pCreature->m_resistColdBase;
+    m_nResistElectricity = pCreature->m_resistElectricityBase;
+    m_nResistAcid = pCreature->m_resistAcidBase;
+    m_nResistMagic = pCreature->m_resistMagicBase;
+    m_nResistMagicFire = pCreature->m_resistMagicFireBase;
+    m_nResistMagicCold = pCreature->m_resistMagicColdBase;
+    m_nResistSlashing = pCreature->m_resistSlashingBase;
+    m_nResistCrushing = pCreature->m_resistCrushingBase;
+    m_nResistPiercing = pCreature->m_resistPiercingBase;
     field_36 = pCreature->field_57;
     field_3A = pCreature->field_5D;
     field_3C = pCreature->field_5F;
@@ -219,16 +219,16 @@ CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
     field_1C += other.field_1C;
     field_1E += other.field_1E;
     field_20 += other.field_20;
-    field_22 += other.field_22;
-    field_24 += other.field_24;
-    field_26 += other.field_26;
-    field_28 += other.field_28;
-    field_2A += other.field_2A;
-    field_2C += other.field_2C;
-    field_2E += other.field_2E;
-    field_30 += other.field_30;
-    field_32 += other.field_32;
-    field_34 += other.field_34;
+    m_nResistFire += other.m_nResistFire;
+    m_nResistCold += other.m_nResistCold;
+    m_nResistElectricity += other.m_nResistElectricity;
+    m_nResistAcid += other.m_nResistAcid;
+    m_nResistMagic += other.m_nResistMagic;
+    m_nResistMagicFire += other.m_nResistMagicFire;
+    m_nResistMagicCold += other.m_nResistMagicCold;
+    m_nResistSlashing += other.m_nResistSlashing;
+    m_nResistCrushing += other.m_nResistCrushing;
+    m_nResistPiercing += other.m_nResistPiercing;
     field_36 += other.field_36;
     field_B8 += other.field_B8;
     field_38 += other.field_38;
@@ -255,7 +255,7 @@ CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
     field_8E += other.field_8E;
     field_90 += other.field_90;
     field_92 += other.field_92;
-    field_94 += other.field_94;
+    m_nLayOnHandsAmount += other.m_nLayOnHandsAmount;
     field_96 |= other.field_96;
     field_9A |= other.field_9A;
     field_B2 += other.field_B2;
@@ -346,7 +346,7 @@ void CDerivedStats::CheckLimits()
     field_8E = min(max(field_8E, 0), 255);
     field_90 = max(field_90, 0);
     field_92 = max(field_92, 0);
-    field_94 = max(field_94, 0);
+    m_nLayOnHandsAmount = max(m_nLayOnHandsAmount, 0);
     field_B2 = min(field_B2, 255);
 }
 
@@ -381,25 +381,25 @@ LONG CDerivedStats::GetAtOffset(SHORT offset)
     case 12:
         return field_144[8];
     case 14:
-        return field_22;
+        return m_nResistFire;
     case 15:
-        return field_24;
+        return m_nResistCold;
     case 16:
-        return field_26;
+        return m_nResistElectricity;
     case 17:
-        return field_28;
+        return m_nResistAcid;
     case 18:
-        return field_2A;
+        return m_nResistMagic;
     case 19:
-        return field_2C;
+        return m_nResistMagicFire;
     case 20:
-        return field_2E;
+        return m_nResistMagicCold;
     case 21:
-        return field_30;
+        return m_nResistSlashing;
     case 22:
-        return field_32;
+        return m_nResistCrushing;
     case 23:
-        return field_34;
+        return m_nResistPiercing;
     case 24:
         return field_36;
     case 25:
@@ -471,7 +471,7 @@ LONG CDerivedStats::GetAtOffset(SHORT offset)
     case 56:
         return field_92;
     case 57:
-        return field_94;
+        return m_nLayOnHandsAmount;
     case 58:
         return field_96;
     case 59:
