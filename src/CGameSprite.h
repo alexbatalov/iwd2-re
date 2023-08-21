@@ -214,6 +214,7 @@ public:
     /* 00C4 */ virtual void ResetAIType();
 
     void DropPath();
+    void DropSearchRequest();
     void OnLightningStrike();
     void MakeGlobal();
     SHORT GetNumSounds(SHORT nOffset, SHORT nMaxNum);

@@ -700,6 +700,30 @@ void CGameSprite::DropPath()
     }
 }
 
+// 0x6FF320
+void CGameSprite::DropSearchRequest()
+{
+    if (m_currentSearchRequest != NULL) {
+        CSingleLock searchLock(&(g_pBaldurChitin->GetObjectGame()->field_1B58), TRUE);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+        // __LINE__: 5590
+        UTIL_ASSERT(m_currentSearchRequest->m_serviceState != CSearchRequest::STATE_STALE);
+
+        if ((m_currentSearchRequest->m_serviceState == CSearchRequest::STATE_WAITING
+                && m_currentSearchRequest->m_collisionDelay == 0)
+            || m_currentSearchRequest->m_serviceState == CSearchRequest::STATE_PROCESSING) {
+            m_currentSearchRequest->m_serviceState = CSearchRequest::STATE_STALE;
+        } else {
+            delete m_currentSearchRequest;
+        }
+
+        m_currentSearchRequest = NULL;
+
+        searchLock.Unlock();
+    }
+}
+
 // 0x700BB0
 void CGameSprite::OnFormationButton(const CPoint& pt)
 {
