@@ -1998,6 +1998,8 @@ void CRuleTables::GetNextLevel(BYTE nClass, CDerivedStats& DStats, CGameSprite* 
     } while (v2 >= xp && xp != -1);
 
     BYTE nClassLevel = static_cast<BYTE>(DStats.GetClassLevel(nClass));
+
+    v1--;
     if (v1 >= 30) {
         v1 = 30;
     }
