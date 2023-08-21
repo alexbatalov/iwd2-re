@@ -15,6 +15,9 @@
 // `CScreenSinglePlayer::OnErrorButtonClick` assertion. Renamed for clarity.
 #define CSCREENSINGLEPLAYER_ERROR_BUTTONS 3
 
+class CAIObjectType;
+class CDerivedStats;
+
 class CScreenSinglePlayer : public CBaldurEngine {
 public:
     static const CString TOKEN_GOLD;
@@ -76,7 +79,7 @@ public:
     void OnErrorButtonClick(INT nButton);
     void ResetErrorPanel(CUIPanel* pPanel);
     void StartSinglePlayer(INT nEngineState);
-    void sub_663EB0();
+    void UpdateExperienceEntry(CUIControlTextDisplay* pText, const CAIObjectType& typeAI, CDerivedStats& DStats, DWORD nSpecialization, BYTE nBestClass, DWORD dwFlags);
     void UpdatePartySelectionPanel();
     void OnPartySelectionDoneButtonClick();
     void sub_6644B0(CUIPanel* pPanel);
