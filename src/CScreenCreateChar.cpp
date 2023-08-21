@@ -4193,7 +4193,7 @@ void CScreenCreateChar::UpdateClassEntry(CUIControlTextDisplay* pText, const CAI
         sClass,
         typeAI.m_nGender != CAIOBJECTTYPE_SEX_FEMALE);
 
-    UpdateText(pText, "%s", FetchString(12136) + ":" + sClass);
+    UpdateText(pText, "%s", FetchString(12136) + ": " + sClass);
 }
 
 // 0x623BF0
