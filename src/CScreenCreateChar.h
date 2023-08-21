@@ -131,7 +131,7 @@ public:
     void OnCharacterExportItemSelect(INT nItem);
     void UpdateCharacterStats(CGameSprite* pSprite);
     void UpdateCharacterAppearance();
-    void sub_612930();
+    void CompleteCharacterAbilities(CGameSprite* pSprite);
     void CompleteCharacterSkills();
     void sub_613310();
     void RemoveItems();

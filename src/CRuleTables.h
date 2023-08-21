@@ -384,6 +384,7 @@ public:
     void sub_5425E0(const CAIObjectType& typeAI, int a2, BYTE& a3, BYTE& a4, BYTE& a5, BYTE& a6, BYTE& a7, BYTE& a8) const;
     INT FindSavingThrow(CDerivedStats& stats, const CString& sSavingThrow) const;
     INT GetSavingThrow(const CAIObjectType& typeAI, CDerivedStats& DStats, BYTE nCON, const CString& sSavingThrow) const;
+    INT GetStartingHitPoints(const CAIObjectType& typeAI, CDerivedStats& DStats, BYTE nCON) const;
     INT GetStartingGold(CGameSprite* pSprite) const;
     INT GetStartingExperiencePoints(CGameSprite* pSprite) const;
     INT GetMaxDruidShapeshifts(CCreatureFileHeader& BStats, INT nLevel) const;

@@ -17,8 +17,8 @@ public:
     /* 0010 */ int field_10;
     /* 0014 */ int field_14;
     /* 0018 */ DWORD m_generalState;
-    /* 001C */ short field_1C;
-    /* 001E */ short field_1E;
+    /* 001C */ SHORT m_hitPoints;
+    /* 001E */ WORD m_maxHitPointsBase;
     /* 0020 */ short m_animationType;
     /* 0022 */ short field_22;
     /* 0024 */ BYTE m_colors[7];
@@ -33,9 +33,9 @@ public:
     /* 0046 */ short field_46;
     /* 0048 */ BYTE m_attackBase;
     /* 0049 */ unsigned char field_49;
-    /* 004A */ unsigned char field_4A;
-    /* 004B */ unsigned char field_4B;
-    /* 004C */ unsigned char field_4C;
+    /* 004A */ BYTE m_saveVSFortitudeBase;
+    /* 004B */ BYTE m_saveVSReflexBase;
+    /* 004C */ BYTE m_saveVSWillBase;
     /* 004D */ signed char m_resistFireBase;
     /* 004E */ signed char m_resistColdBase;
     /* 004F */ signed char m_resistElectricityBase;

@@ -3608,9 +3608,58 @@ void CScreenCreateChar::UpdateCharacterAppearance()
 }
 
 // 0x612930
-void CScreenCreateChar::sub_612930()
+void CScreenCreateChar::CompleteCharacterAbilities(CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    CAIObjectType typeAI(pSprite->m_startTypeAI);
+    CDerivedStats DStats;
+
+    DStats.m_barbarianLevel = 0;
+    DStats.m_bardLevel = 0;
+    DStats.m_clericLevel = 0;
+    DStats.m_druidLevel = 0;
+    DStats.m_fighterLevel = 0;
+    DStats.m_monkLevel = 0;
+    DStats.m_paladinLevel = 0;
+    DStats.m_rangerLevel = 0;
+    DStats.m_rogueLevel = 0;
+    DStats.m_sorcererLevel = 0;
+    DStats.m_wizardLevel = 0;
+
+    pSprite->field_562C = 1;
+    pSprite->ProcessEffectList();
+
+    INT nHitPoints = ruleTables.GetStartingHitPoints(typeAI,
+        *pSprite->GetDerivedStats(),
+        pSprite->GetBaseStats()->m_CONBase);
+
+    pSprite->GetBaseStats()->m_maxHitPointsBase = nHitPoints;
+    pSprite->GetBaseStats()->m_hitPoints = nHitPoints;
+
+    pSprite->field_7234 = 0;
+
+    pSprite->GetBaseStats()->m_saveVSFortitudeBase = ruleTables.GetSavingThrow(typeAI,
+        *pSprite->GetDerivedStats(),
+        pSprite->GetBaseStats()->m_CONBase,
+        CRuleTables::FORTITUDE);
+    pSprite->GetBaseStats()->m_saveVSReflexBase = ruleTables.GetSavingThrow(typeAI,
+        *pSprite->GetDerivedStats(),
+        pSprite->GetBaseStats()->m_CONBase,
+        CRuleTables::REFLEX);
+    pSprite->GetBaseStats()->m_saveVSWillBase = ruleTables.GetSavingThrow(typeAI,
+        *pSprite->GetDerivedStats(),
+        pSprite->GetBaseStats()->m_CONBase,
+        CRuleTables::WILL);
+
+    // TODO: Incomplete (clearing some STL container at 0x4A88).
+
+    pSprite->sub_71E760(DStats, 1);
+
+    pSprite->GetBaseStats()->field_10 = ruleTables.GetStartingExperiencePoints(pSprite);
+
+    pSprite->field_562C = 1;
+    pSprite->ProcessEffectList();
 }
 
 // 0x612DE0

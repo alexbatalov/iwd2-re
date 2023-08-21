@@ -1929,6 +1929,14 @@ INT CRuleTables::GetSavingThrow(const CAIObjectType& typeAI, CDerivedStats& DSta
     return nSavingThrow;
 }
 
+// 0x542FA0
+INT CRuleTables::GetStartingHitPoints(const CAIObjectType& typeAI, CDerivedStats& DStats, BYTE nCON) const
+{
+    // TODO: Incomplete.
+
+    return 0;
+}
+
 // 0x542FE0
 INT CRuleTables::GetStartingGold(CGameSprite* pSprite) const
 {

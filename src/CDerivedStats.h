@@ -28,7 +28,7 @@ public:
     INT GetBestClass();
 
     /* 0000 */ DWORD m_generalState;
-    /* 0004 */ short field_4;
+    /* 0004 */ SHORT m_nMaxHitPoints;
     /* 0006 */ short field_6;
     /* 0008 */ short field_8;
     /* 000A */ short field_A;
@@ -40,9 +40,9 @@ public:
     /* 0016 */ short field_16;
     /* 0018 */ short field_18;
     /* 001A */ short field_1A;
-    /* 001C */ short field_1C;
-    /* 001E */ short field_1E;
-    /* 0020 */ short field_20;
+    /* 001C */ SHORT m_nSaveVSFortitude;
+    /* 001E */ SHORT m_nSaveVSReflex;
+    /* 0020 */ SHORT m_nSaveVSWill;
     /* 0022 */ SHORT m_nResistFire;
     /* 0024 */ SHORT m_nResistCold;
     /* 0026 */ SHORT m_nResistElectricity;

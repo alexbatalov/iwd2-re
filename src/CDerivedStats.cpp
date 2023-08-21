@@ -24,7 +24,7 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
     m_nLayOnHandsAmount = 0;
 
     m_generalState = pCreature->m_generalState;
-    field_4 = pCreature->field_1E;
+    m_nMaxHitPoints = pCreature->m_maxHitPointsBase;
     field_6 = 0;
     field_8 = 0;
     field_A = 0;
@@ -39,9 +39,9 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
     field_16 = 0;
     field_18 = 0;
     field_1A = pCreature->field_49;
-    field_1C = pCreature->field_4A;
-    field_1E = pCreature->field_4B;
-    field_20 = pCreature->field_4C;
+    m_nSaveVSFortitude = pCreature->m_saveVSFortitudeBase;
+    m_nSaveVSReflex = pCreature->m_saveVSReflexBase;
+    m_nSaveVSWill = pCreature->m_saveVSWillBase;
     m_nResistFire = pCreature->m_resistFireBase;
     m_nResistCold = pCreature->m_resistColdBase;
     m_nResistElectricity = pCreature->m_resistElectricityBase;
@@ -209,7 +209,7 @@ void CDerivedStats::BonusInit()
     int index;
 
     m_generalState = 0;
-    field_4 = 0;
+    m_nMaxHitPoints = 0;
     field_6 = 0;
     field_8 = 0;
     field_A = 0;
@@ -223,9 +223,9 @@ void CDerivedStats::BonusInit()
     field_16 = 0;
     field_18 = 0;
     field_1A = 0;
-    field_1C = 0;
-    field_1E = 0;
-    field_20 = 0;
+    m_nSaveVSFortitude = 0;
+    m_nSaveVSReflex = 0;
+    m_nSaveVSWill = 0;
     m_nResistFire = 0;
     m_nResistCold = 0;
     m_nResistElectricity = 0;
@@ -346,7 +346,7 @@ CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
 {
     int index;
 
-    field_4 += other.field_4;
+    m_nMaxHitPoints += other.m_nMaxHitPoints;
     field_6 += other.field_6;
     field_8 += other.field_8;
     field_A += other.field_A;
@@ -358,9 +358,9 @@ CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
     field_16 += other.field_16;
     field_18 += other.field_18;
     field_1A += other.field_1A;
-    field_1C += other.field_1C;
-    field_1E += other.field_1E;
-    field_20 += other.field_20;
+    m_nSaveVSFortitude += other.m_nSaveVSFortitude;
+    m_nSaveVSReflex += other.m_nSaveVSReflex;
+    m_nSaveVSWill += other.m_nSaveVSWill;
     m_nResistFire += other.m_nResistFire;
     m_nResistCold += other.m_nResistCold;
     m_nResistElectricity += other.m_nResistElectricity;
@@ -448,16 +448,16 @@ void CDerivedStats::CheckLimits()
         m_generalState &= ~0xFFFFF03F;
     }
 
-    field_4 = min(field_4, 1);
+    m_nMaxHitPoints = max(m_nMaxHitPoints, 1);
     field_E = min(max(field_E, -20), 20);
     field_10 = min(max(field_10, -20), 20);
     field_12 = min(max(field_12, -20), 20);
     field_14 = min(max(field_14, -20), 20);
     field_18 = min(max(field_18, -255), 255);
     field_1A = min(max(field_1A, 0), 5);
-    field_1C = min(max(field_1C, -40), 40);
-    field_1E = min(max(field_1E, -40), 40);
-    field_20 = min(max(field_20, -40), 40);
+    m_nSaveVSFortitude = min(max(m_nSaveVSFortitude, -40), 40);
+    m_nSaveVSReflex = min(max(m_nSaveVSReflex, -40), 40);
+    m_nSaveVSWill = min(max(m_nSaveVSWill, -40), 40);
     field_144[10] = min(max(field_144[10], -128), 127);
     field_144[9] = min(max(field_144[9], -128), 127);
     field_144[6] = min(max(field_144[6], -128), 127);
@@ -497,7 +497,7 @@ LONG CDerivedStats::GetAtOffset(SHORT offset)
 {
     switch (offset) {
     case 1:
-        return field_4;
+        return m_nMaxHitPoints;
     case 2:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\CDerivedStats.cpp
         // __LINE__: 1323
@@ -515,11 +515,11 @@ LONG CDerivedStats::GetAtOffset(SHORT offset)
     case 8:
         return field_1A;
     case 9:
-        return field_1C;
+        return m_nSaveVSFortitude;
     case 10:
-        return field_1E;
+        return m_nSaveVSReflex;
     case 11:
-        return field_20;
+        return m_nSaveVSWill;
     case 12:
         return field_144[8];
     case 14:

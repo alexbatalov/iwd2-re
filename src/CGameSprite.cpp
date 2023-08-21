@@ -1314,6 +1314,12 @@ void CGameSprite::sub_72DE60()
     // TODO: Incomplete.
 }
 
+// 0x71E760
+void CGameSprite::sub_71E760(CDerivedStats& DStats, int a2)
+{
+    // TODO: Incomplete.
+}
+
 // 0x71F6E0
 int CGameSprite::sub_71F6E0()
 {
