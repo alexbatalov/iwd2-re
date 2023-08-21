@@ -5084,6 +5084,7 @@ void CUIControlButtonCharGenSkillsPlusMinus::AdjustValue()
     case 27:
     case 29:
     case 31:
+    case 33:
     case 35:
         bInc = FALSE;
         break;
