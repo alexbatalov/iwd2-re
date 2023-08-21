@@ -220,7 +220,7 @@ BOOL CVidBitmap::RenderDirect(INT nSurface, INT x, INT y, const CRect& rClip, DW
 
         INT nSkipTop = rClip.top - y;
         if (nSkipTop > 0) {
-            bmpSize.cx -= nSkipTop;
+            bmpSize.cy -= nSkipTop;
             rSurface.top += nSkipTop;
         }
     }
@@ -237,6 +237,7 @@ BOOL CVidBitmap::RenderDirect(INT nSurface, INT x, INT y, const CRect& rClip, DW
         if (nSkipLeft > 0) {
             nDataJump += nBytesPerPixel * nSkipLeft;
             pData += nBytesPerPixel * nSkipLeft;
+            bmpSize.cx -= nSkipLeft;
             rSurface.left += nSkipLeft;
         }
     }
