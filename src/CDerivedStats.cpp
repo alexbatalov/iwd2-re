@@ -85,9 +85,9 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
     field_60 = pCreature->field_C;
     field_64 = pCreature->field_10;
     field_68 = pCreature->field_14;
-    field_70 = pCreature->field_266;
+    m_nMoraleRecoveryTime = pCreature->m_moraleRecoveryTime;
     field_74 = pCreature->field_3C;
-    field_6C = pCreature->field_265;
+    m_nMoraleBreak = pCreature->m_moraleBreak;
 
     for (index = 0; index < 8; index++) {
         m_favoredEnemies[index] = pCreature->m_favoredEnemies[index];
@@ -255,9 +255,9 @@ void CDerivedStats::BonusInit()
     field_60 = 0;
     field_64 = 0;
     field_68 = 0;
-    field_70 = 0;
+    m_nMoraleRecoveryTime = 0;
     field_74 = 0;
-    field_6C = 0;
+    m_nMoraleBreak = 0;
 
     for (index = 0; index < 8; index++) {
         m_favoredEnemies[index] = CAIObjectType::R_NO_RACE;
@@ -386,10 +386,10 @@ CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
     field_60 += other.field_60;
     field_64 += other.field_64;
     field_68 += other.field_68;
-    field_6C += other.field_6C;
-    field_70 += other.field_70;
+    m_nMoraleBreak += other.m_nMoraleBreak;
+    m_nMoraleRecoveryTime += other.m_nMoraleRecoveryTime;
     field_74 += other.field_74;
-    field_6C += other.field_6C;
+    m_nMoraleBreak += other.m_nMoraleBreak;
     field_86 += other.field_86;
     field_88 += other.field_88;
     field_8A += other.field_8A;
@@ -478,9 +478,9 @@ void CDerivedStats::CheckLimits()
     field_60 = min(max(field_60, -1), 0);
     field_64 = min(max(field_64, -1), 0);
     field_68 = min(max(field_68, -1), 0);
-    field_70 = min(max(field_70, -1), 0);
+    m_nMoraleRecoveryTime = min(max(m_nMoraleRecoveryTime, -1), 0);
     field_74 = min(max(field_74, 10), 200);
-    field_6C = min(max(field_6C, 10), 200);
+    m_nMoraleBreak = min(max(m_nMoraleBreak, 10), 200);
     field_86 = min(max(field_86, -128), 127);
     field_88 = min(max(field_88, 0), 100);
     field_8A = min(max(field_8A, 0), 100);
@@ -591,9 +591,9 @@ LONG CDerivedStats::GetAtOffset(SHORT offset)
     case 45:
         return field_68;
     case 46:
-        return field_6C;
+        return m_nMoraleBreak;
     case 47:
-        return field_70;
+        return m_nMoraleRecoveryTime;
     case 48:
         return field_74;
     case 49:

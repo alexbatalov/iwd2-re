@@ -1,5 +1,6 @@
 #include "CGameSprite.h"
 
+#include "CAIScript.h"
 #include "CBaldurChitin.h"
 #include "CBaldurEngine.h"
 #include "CGameArea.h"
@@ -986,7 +987,71 @@ void CGameSprite::Unmarshal(BYTE* pCreature, LONG creatureSize, WORD facing, int
 // 0x70E750
 void CGameSprite::UnmarshalScripts()
 {
-    // TODO: Incomplete.
+    CString sFileName;
+
+    sFileName = m_baseStats.field_26C;
+    if (sFileName != "") {
+        field_3F6 = new CAIScript(CResRef(sFileName));
+        if (field_3F6->IsEmpty()) {
+            delete field_3F6;
+            field_3F6 = NULL;
+        }
+    }
+
+    sFileName = m_baseStats.field_1AC;
+    if (sFileName != "") {
+        field_3FA = new CAIScript(CResRef(sFileName));
+        if (field_3FA->IsEmpty()) {
+            delete field_3FA;
+            field_3FA = NULL;
+        }
+    }
+
+    sFileName = m_baseStats.field_1A4;
+    if (sFileName != "") {
+        field_3FE = new CAIScript(CResRef(sFileName));
+        if (field_3FE->IsEmpty()) {
+            delete field_3FE;
+            field_3FE = NULL;
+        }
+    }
+
+    sFileName = m_baseStats.field_274;
+    if (sFileName != "") {
+        field_402 = new CAIScript;
+        field_402->Read(CResRef(sFileName), g_pBaldurChitin->GetObjectGame()->m_bPlayerScriptStyle);
+        if (field_402->IsEmpty()) {
+            delete field_402;
+            field_402 = NULL;
+        }
+    }
+
+    sFileName = m_baseStats.field_27C;
+    if (sFileName != "") {
+        field_406 = new CAIScript(CResRef(sFileName));
+        if (field_406->IsEmpty()) {
+            delete field_406;
+            field_406 = NULL;
+        }
+    }
+
+    sFileName = m_baseStats.field_284;
+    if (sFileName != "") {
+        field_40A = new CAIScript(CResRef(sFileName));
+        if (field_40A->IsEmpty()) {
+            delete field_40A;
+            field_40A = NULL;
+        }
+    }
+
+    sFileName = m_baseStats.field_28C;
+    if (sFileName != "") {
+        m_defaultScript = new CAIScript(CResRef(sFileName));
+        if (m_defaultScript->IsEmpty()) {
+            delete m_defaultScript;
+            m_defaultScript = NULL;
+        }
+    }
 }
 
 // 0x70EC00

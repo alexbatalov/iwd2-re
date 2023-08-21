@@ -40,3 +40,9 @@ void CAIScript::Read(CResRef cNewResRef, BOOL a2)
 {
     // TODO: Incomplete.
 }
+
+// NOTE: Inlined.
+BOOL CAIScript::IsEmpty()
+{
+    return m_caList.IsEmpty();
+}

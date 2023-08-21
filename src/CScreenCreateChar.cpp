@@ -3205,7 +3205,7 @@ void CScreenCreateChar::StartCreateChar(INT nCharacterSlot, INT nEngineState)
     pSprite->GetBaseStats()->m_skills[15] = 0;
     pSprite->GetBaseStats()->m_morale = 10;
     pSprite->GetBaseStats()->m_moraleBreak = 0;
-    pSprite->GetBaseStats()->field_266 = 1;
+    pSprite->GetBaseStats()->m_moraleRecoveryTime = 1;
     pSprite->m_dialog = "MULTIG";
     pSprite->GetBaseStats()->field_3C = 100;
 

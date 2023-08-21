@@ -86,8 +86,8 @@ public:
     /* 0060 */ int field_60;
     /* 0064 */ int field_64;
     /* 0068 */ int field_68;
-    /* 006C */ int field_6C;
-    /* 0070 */ int field_70;
+    /* 006C */ DWORD m_nMoraleBreak;
+    /* 0070 */ DWORD m_nMoraleRecoveryTime;
     /* 0074 */ short field_74;
     /* 0076 */ short m_favoredEnemies[8];
     /* 0086 */ short field_86;

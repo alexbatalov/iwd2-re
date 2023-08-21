@@ -48,8 +48,14 @@ public:
     /* 0056 */ signed char m_resistPiercingBase;
     /* 0057 */ unsigned char field_57;
     /* 0058 */ unsigned char field_58;
+    /* 0059 */ unsigned char field_59;
+    /* 005A */ unsigned char field_5A;
+    /* 005B */ unsigned char field_5B;
+    /* 005C */ unsigned char field_5C;
     /* 005D */ unsigned char field_5D;
+    /* 005E */ unsigned char field_5E;
     /* 005F */ unsigned char field_5F;
+    /* 0060 */ unsigned char field_60[34];
     /* 0082 */ BYTE m_characterLevel;
     /* 0083 */ union {
         struct {
@@ -67,10 +73,14 @@ public:
         };
         BYTE m_classLevels[11];
     };
+    /* 008E */ unsigned char field_8E[22];
     /* 00A4 */ STRREF m_speech[63];
     /* 01A0 */ STRREF m_biography;
+    /* 01A4 */ RESREF field_1A4;
+    /* 01AC */ RESREF field_1AC;
     /* 01B4 */ int field_1B4;
     /* 01B8 */ DWORD m_feats[3];
+    /* 01C4 */ unsigned char field_1C4[12];
     /* 01D0 */ BYTE m_featBow;
     /* 01D1 */ BYTE m_featCrossbow;
     /* 01D2 */ BYTE m_featMissile;
@@ -97,21 +107,30 @@ public:
     /* 01E7 */ BYTE m_featExtraSmiting;
     /* 01E8 */ BYTE m_featExtraTurning;
     /* 01E9 */ BYTE m_featBastardSword;
+    /* 01EA */ unsigned char field_1EA[38];
     /* 0210 */ BYTE m_skills[64];
+    /* 0250 */ unsigned char field_250;
+    /* 0251 */ unsigned char field_251;
+    /* 0252 */ unsigned char field_252;
     /* 0253 */ BYTE m_favoredEnemies[8];
+    /* 025B */ unsigned char field_25B;
+    /* 025C */ unsigned char field_25C;
+    /* 025D */ unsigned char field_25D;
     /* 025E */ BYTE m_STRBase;
     /* 025F */ BYTE m_DEXBase;
     /* 0260 */ BYTE m_CONBase;
     /* 0261 */ BYTE m_INTBase;
     /* 0262 */ BYTE m_WISBase;
     /* 0263 */ BYTE m_CHRBase;
-    /* 025B */ unsigned char field_25B;
-    /* 025D */ unsigned char field_25D;
-    /* 0265 */ unsigned char field_265;
-    /* 0264 */ unsigned char m_morale;
-    /* 0265 */ unsigned char m_moraleBreak;
-    /* 0266 */ short field_266;
+    /* 0264 */ BYTE m_morale;
+    /* 0265 */ BYTE m_moraleBreak;
+    /* 0266 */ WORD m_moraleRecoveryTime;
     /* 0268 */ DWORD m_specialization;
+    /* 026C */ RESREF field_26C;
+    /* 0274 */ RESREF field_274;
+    /* 027C */ RESREF field_27C;
+    /* 0284 */ RESREF field_284;
+    /* 028C */ RESREF field_28C;
 };
 
 class CCreatureFileItem {

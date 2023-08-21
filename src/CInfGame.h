@@ -269,6 +269,7 @@ public:
     /* 3672 */ CVidBitmap m_rgbMasterBitmap;
     /* 372C */ CGameObjectArray m_cObjectArray;
     /* 37E0 */ BYTE m_visibleArea;
+    /* 37E1 */ BOOLEAN m_bPlayerScriptStyle;
     /* 37E2 */ CGameArea* m_gameAreas[CINFGAME_MAX_AREAS];
     /* 3812 */ CGameArea* m_pGameAreaMaster;
     /* 3816 */ LONG m_characters[6];

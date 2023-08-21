@@ -18,6 +18,8 @@ public:
     void Add(const CAICondition& condition, const CAIResponseSet& responseSet);
     void Read(CResRef cNewResRef, BOOL a2);
 
+    BOOL IsEmpty();
+
     /* 0000 */ CResRef m_cResRef;
     /* 0008 */ int field_8;
     /* 000C */ CTypedPtrList<CPtrList, CAIConditionResponse*> m_caList;
