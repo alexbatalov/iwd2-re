@@ -3154,7 +3154,82 @@ void CScreenCreateChar::DecCurrentPortrait(CGameSprite* pSprite)
 // 0x610540
 void CScreenCreateChar::StartCreateChar(INT nCharacterSlot, INT nEngineState)
 {
-    // TODO: Incomplete.
+    // 0x8B35E0
+    static WORD facing[6][2] = {
+        { 12, 0 },
+        { 8, 0 },
+        { 6, 0 },
+        { 0, 0 },
+        { 0, 0 },
+        { 14, 0 },
+    };
+
+    field_14A4 = 0;
+    field_14A8 = 0;
+    field_556 = nCharacterSlot;
+    field_552 = nEngineState;
+    m_nFirstStep = 0;
+    m_nCurrentStep = 0;
+
+    CCreatureFile cCreatureData;
+
+    // NOTE: Uninline.
+    cCreatureData.SetResRef(CResRef("CHARBASE"), TRUE, TRUE);
+
+    CGameSprite* pSprite = new CGameSprite(reinterpret_cast<BYTE*>(cCreatureData.GetData()),
+        cCreatureData.GetDataSize(),
+        0,
+        0,
+        -1,
+        0,
+        0,
+        INT_MAX,
+        CPoint(-1, -1),
+        facing[nCharacterSlot][0]);
+
+    pSprite->SetResRef(cCreatureData.GetResRef());
+
+    cCreatureData.Release();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 5725
+    UTIL_ASSERT(pSprite != NULL);
+
+    m_nGameSprite = pSprite->m_id;
+
+    pSprite->m_bGlobal = TRUE;
+    pSprite->GetBaseStats()->m_flags = 0x800;
+    pSprite->GetBaseStats()->field_10 = 0;
+    pSprite->GetBaseStats()->field_3E = 10;
+    pSprite->GetBaseStats()->field_49 = 1;
+    pSprite->GetBaseStats()->m_skills[15] = 0;
+    pSprite->GetBaseStats()->m_morale = 10;
+    pSprite->GetBaseStats()->m_moraleBreak = 0;
+    pSprite->GetBaseStats()->field_266 = 1;
+    pSprite->m_dialog = "MULTIG";
+    pSprite->GetBaseStats()->field_3C = 100;
+
+    pSprite->field_562C = 1;
+    pSprite->ProcessEffectList();
+
+    STRREF strTitle = 28210; // "Finish"
+    if (nEngineState == 4) {
+        strTitle = 13956; // "Export"
+    }
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(0);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 5737
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(8));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 5739
+    UTIL_ASSERT(pPanel != NULL);
+
+    pButton->SetText(FetchString(strTitle));
 }
 
 // 0x610850

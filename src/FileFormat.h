@@ -108,6 +108,8 @@ public:
     /* 025B */ unsigned char field_25B;
     /* 025D */ unsigned char field_25D;
     /* 0265 */ unsigned char field_265;
+    /* 0264 */ unsigned char m_morale;
+    /* 0265 */ unsigned char m_moraleBreak;
     /* 0266 */ short field_266;
     /* 0268 */ DWORD m_specialization;
 };

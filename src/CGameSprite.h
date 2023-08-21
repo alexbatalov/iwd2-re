@@ -445,6 +445,7 @@ public:
     /* 569C */ short m_targetAreaSize;
     /* 56E4 */ CResRef field_56E4;
     /* 56EC */ unsigned char field_56EC;
+    /* 56DC */ CResRef m_dialog;
     /* 56EE */ STR_RES m_speech[64];
     /* 70F2 */ int field_70F2;
     /* 70F6 */ BYTE field_70F6;
