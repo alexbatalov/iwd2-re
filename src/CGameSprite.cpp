@@ -598,15 +598,8 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
             m_sName = strRes.szText;
         }
 
-        for (index = 0; index < 3; index++) {
-            g_pBaldurChitin->GetTlkTable().Fetch(m_baseStats.m_speech[33 + index],
-                m_speech[33 + index]);
-        }
-
-        for (index = 0; index < 7; index++) {
-            g_pBaldurChitin->GetTlkTable().Fetch(m_baseStats.m_speech[15 + index],
-                m_speech[15 + index]);
-        }
+        // NOTE: Uninline.
+        FetchCommonStrings();
 
         for (index = 0; index < 2; index++) {
             m_sndWalk[index].m_nVolumeVariance = 50;
@@ -994,6 +987,22 @@ void CGameSprite::Unmarshal(BYTE* pCreature, LONG creatureSize, WORD facing, int
 void CGameSprite::UnmarshalScripts()
 {
     // TODO: Incomplete.
+}
+
+// 0x70EC00
+void CGameSprite::FetchCommonStrings()
+{
+    int index;
+
+    for (index = 0; index < 3; index++) {
+        g_pBaldurChitin->GetTlkTable().Fetch(m_baseStats.m_speech[33 + index],
+            m_speech[33 + index]);
+    }
+
+    for (index = 0; index < 7; index++) {
+        g_pBaldurChitin->GetTlkTable().Fetch(m_baseStats.m_speech[15 + index],
+            m_speech[15 + index]);
+    }
 }
 
 // 0x70F270

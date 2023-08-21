@@ -225,6 +225,7 @@ public:
     SHORT GetIdleSequence();
     void Unmarshal(BYTE* pCreature, LONG creatureSize, WORD facing, int a4);
     void UnmarshalScripts();
+    void FetchCommonStrings();
     BYTE GetChannel();
     CItem* GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot);
     void UnequipAll(BOOL a1);
