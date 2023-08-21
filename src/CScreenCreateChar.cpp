@@ -1960,7 +1960,7 @@ void CScreenCreateChar::ResetFeatsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
     pSprite->field_562C = 1;
     pSprite->ProcessEffectList();
 
-    INT nExtraFeats = pSprite->GetExtraSkillPoints(pSprite->m_startTypeAI.m_nClass);
+    INT nExtraFeats = pSprite->GetExtraFeats(pSprite->m_startTypeAI.m_nClass);
     field_14AE = nExtraFeats;
     m_nExtraFeats = nExtraFeats;
 
