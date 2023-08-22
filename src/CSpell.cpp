@@ -1,5 +1,6 @@
 #include "CSpell.h"
 
+#include "CGameSprite.h"
 #include "CUtil.h"
 
 // 0x54A380
@@ -155,6 +156,85 @@ STRREF CSpell::GetGenericName() const
     }
 
     return nGenericName;
+}
+
+// 0x54AA40
+BOOL CSpell::CheckUsableBy(CGameSprite* pSprite) const
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CSpell.cpp
+    // __LINE__: 623
+    UTIL_ASSERT(pSprite != NULL);
+
+    // NOTE: Uninline.
+    DWORD dwNotUsableBy = GetNotUsableBy() & 0xE0000000;
+
+    DWORD dwClassMask = pSprite->GetAIType().m_nClassMask;
+
+    if ((dwClassMask & CLASSMASK_CLERIC) != 0
+        && (dwNotUsableBy & 0x40000000) == 0) {
+        return TRUE;
+    }
+
+    if ((dwClassMask & CLASSMASK_DRUID) != 0
+        && (dwNotUsableBy & 0x80000000) == 0) {
+        return TRUE;
+    }
+
+    if ((dwClassMask & CLASSMASK_SORCERER) != 0
+        && (dwNotUsableBy & 0x80000000) == 0) {
+        return TRUE;
+    }
+
+    if ((dwClassMask & CLASSMASK_WIZARD) != 0) {
+        // NOTE: Uninline.
+        BYTE nSchool = GetSchool();
+
+        // NOTE: Uninline.
+        dwNotUsableBy |= GetNotUsableBy() & 0x7FC0;
+
+        switch (pSprite->GetSpecialization()) {
+        case SPECMASK_WIZARD_ABJURER:
+            return nSchool != 5 && nSchool != 8
+                ? (dwNotUsableBy & 0x40) == 0
+                : FALSE;
+        case SPECMASK_WIZARD_CONJURER:
+            return nSchool != 6
+                ? (dwNotUsableBy & 0x80) == 0
+                : FALSE;
+        case SPECMASK_WIZARD_DIVINER:
+            return nSchool != 2
+                ? (dwNotUsableBy & 0x100) == 0
+                : FALSE;
+        case SPECMASK_WIZARD_ENCHANTER:
+            return nSchool != 6
+                ? (dwNotUsableBy & 0x200) == 0
+                : FALSE;
+        case SPECMASK_WIZARD_ILLUSIONIST:
+            return nSchool != 7 && nSchool != 1
+                ? (dwNotUsableBy & 0x400) == 0
+                : FALSE;
+        case SPECMASK_WIZARD_EVOKER:
+            return nSchool != 3 && nSchool != 2
+                ? (dwNotUsableBy & 0x800) == 0
+                : FALSE;
+        case SPECMASK_WIZARD_NECROMANCER:
+            return nSchool != 5 && nSchool != 4
+                ? (dwNotUsableBy & 0x1000) == 0
+                : FALSE;
+        case SPECMASK_WIZARD_TRANSMUTER:
+            return nSchool != 7 && nSchool != 1
+                ? (dwNotUsableBy & 0x2000) == 0
+                : FALSE;
+        }
+
+        return (dwNotUsableBy & 0x4000) != 0;
+    }
+
+    if ((dwNotUsableBy & 0x0) == 0) {
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 // 0x54AD30

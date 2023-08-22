@@ -3,6 +3,8 @@
 
 #include "CResSpell.h"
 
+class CGameSprite;
+
 class CSpell : public CResHelper<CResSpell, 1006> {
 public:
     BOOL Demand();
@@ -12,6 +14,7 @@ public:
     SPELL_ABILITY* GetAbility(LONG nAbilityNo) const;
     SHORT GetLevel() const;
     DWORD GetNotUsableBy() const;
+    BOOL CheckUsableBy(CGameSprite* pSprite) const;
     STRREF GetGenericName() const;
     STRREF GetDescription() const;
     SHORT GetCasterType() const;
