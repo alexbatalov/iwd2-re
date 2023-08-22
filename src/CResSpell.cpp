@@ -111,13 +111,13 @@ BOOL CResSpell::Parse(void* pData)
     }
 
     m_pHeader = reinterpret_cast<SPELL_HEADER*>(pData);
-    if (m_pHeader->nFileType != 'SPL ') {
+    if (memcmp(&(m_pHeader->nFileType), "SPL ", 4) != 0) {
         // __FILE__: C:\Projects\Icewind2\src\Baldur\BalDataTypes.cpp
         // __LINE__: 1771
         UTIL_ASSERT_MSG(FALSE, CString("Spell file header type isn't 'SPL '") + CString(": ") + CString(reinterpret_cast<const char*>(m_pDimmKeyTableEntry->resRef.GetResRef()), RESREF_SIZE) + CString(".SPL"));
     }
 
-    if (m_pHeader->nFileVersion != 'V2.0') {
+    if (memcmp(&(m_pHeader->nFileVersion), "V2.0", 4) != 0) {
         // __FILE__: C:\Projects\Icewind2\src\Baldur\BalDataTypes.cpp
         // __LINE__: 1784
         UTIL_ASSERT_MSG(FALSE, CString("Spell file version isn't ") + CString("SPL V2.0") + CString(": ") + CString(reinterpret_cast<const char*>(m_pDimmKeyTableEntry->resRef.GetResRef()), RESREF_SIZE) + CString(".SPL"));
