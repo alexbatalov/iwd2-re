@@ -101,7 +101,7 @@ SHORT CSpell::GetLevel() const
         if (pRes != NULL) {
             pRes->Demand();
             if (pRes != NULL) {
-                nLevel = pRes->m_pHeader->spellLevel;
+                nLevel = static_cast<SHORT>(pRes->m_pHeader->spellLevel);
                 pRes->Release();
             } else {
                 // __FILE__: C:\Projects\Icewind2\src\Baldur\CSpell.cpp
