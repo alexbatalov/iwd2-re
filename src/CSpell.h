@@ -3,6 +3,7 @@
 
 #include "CResSpell.h"
 
+class CGameEffect;
 class CGameSprite;
 
 class CSpell : public CResHelper<CResSpell, 1006> {
@@ -18,6 +19,7 @@ public:
     STRREF GetGenericName() const;
     STRREF GetDescription() const;
     SHORT GetCasterType() const;
+    CGameEffect* GetCastingEffect(int nEffect) const;
     SHORT GetCastingEffectNo() const;
     WORD GetAnimationType() const;
     DWORD GetItemFlags() const;

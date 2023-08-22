@@ -1,5 +1,6 @@
 #include "CSpell.h"
 
+#include "CGameEffect.h"
 #include "CGameSprite.h"
 #include "CUtil.h"
 
@@ -279,6 +280,31 @@ SHORT CSpell::GetCasterType() const
     }
 
     return nCasterType;
+}
+
+// 0x54AE00
+CGameEffect* CSpell::GetCastingEffect(int nEffect) const
+{
+    CGameEffect* pEffect = NULL;
+
+    if (GetResRef() != "") {
+        if (pRes != NULL) {
+            pRes->Demand();
+
+            if (nEffect < pRes->GetCastingEffectNo()) {
+                CPoint source(-1, -1);
+                CPoint target(-1, -1);
+                pEffect = CGameEffect::DecodeEffect(pRes->GetCastingEffect(nEffect),
+                    source,
+                    -1,
+                    target);
+            }
+
+            pRes->Release();
+        }
+    }
+
+    return pEffect;
 }
 
 // 0x54AEC0
