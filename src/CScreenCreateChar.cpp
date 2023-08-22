@@ -3655,7 +3655,7 @@ void CScreenCreateChar::CompleteCharacterAbilities(CGameSprite* pSprite)
         pSprite->GetBaseStats()->m_CONBase,
         CRuleTables::WILL);
 
-    // TODO: Incomplete (clearing some STL container at 0x4A88).
+    pSprite->m_innateSpells.Clear();
 
     pSprite->sub_71E760(DStats, 1);
 
