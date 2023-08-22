@@ -387,6 +387,7 @@ public:
     INT GetStartingHitPoints(const CAIObjectType& typeAI, CDerivedStats& DStats, BYTE nCON) const;
     INT GetStartingGold(CGameSprite* pSprite) const;
     INT GetStartingExperiencePoints(CGameSprite* pSprite) const;
+    INT GetMaxKnownSpells(const BYTE& nClass, const CAIObjectType& typeAI, CDerivedStats& DStats, DWORD nSpecialization, UINT nLevel, INT& nMaxSpells) const;
     INT GetMaxDruidShapeshifts(CCreatureFileHeader& BStats, INT nLevel) const;
     void GetNextLevel(BYTE nClass, CDerivedStats& DStats, CGameSprite* pSprite) const;
     DWORD GetNextLevelXP(BYTE nLevel) const;

@@ -1972,6 +1972,154 @@ INT CRuleTables::GetStartingExperiencePoints(CGameSprite* pSprite) const
     return atol(m_tStartingExperiencePoints.GetAt(VALUE, sRace));
 }
 
+// 0x5431E0
+INT CRuleTables::GetMaxKnownSpells(const BYTE& nClass, const CAIObjectType& typeAI, CDerivedStats& DStats, DWORD nSpecialization, UINT nSpellLevel, INT& nBonus) const
+{
+    CString sSpellLevel;
+    CString sClassLevel;
+    CString sAbility;
+
+    sSpellLevel.Format("%d", nSpellLevel);
+
+    nBonus = 0;
+    INT nMaxSpells = 0;
+    INT nValue;
+
+    switch (nClass) {
+    case CAIOBJECTTYPE_C_BARD:
+    case CAIOBJECTTYPE_C_SORCERER:
+        sAbility.Format("%d", DStats.m_nCHR);
+        break;
+    case CAIOBJECTTYPE_C_CLERIC:
+    case CAIOBJECTTYPE_C_DRUID:
+    case CAIOBJECTTYPE_C_PALADIN:
+    case CAIOBJECTTYPE_C_RANGER:
+        sAbility.Format("%d", DStats.m_nWIS);
+        break;
+    case CAIOBJECTTYPE_C_WIZARD:
+        sAbility.Format("%d", DStats.m_nINT);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+        // __LINE__: 2886
+        UTIL_ASSERT(FALSE);
+    }
+
+    switch (nClass) {
+    case CAIOBJECTTYPE_C_BARD:
+        if ((typeAI.m_nClassMask & CLASSMASK_BARD) != 0) {
+            sClassLevel.Format("%d", DStats.GetClassLevel(CAIOBJECTTYPE_C_BARD));
+            nValue = atol(m_tMaxSpellsBard.GetAt(sSpellLevel, sClassLevel));
+            if (nValue > nBonus) {
+                nMaxSpells = nValue;
+                nBonus = 0;
+
+                if (nValue > 0) {
+                    nBonus = atol(m_tMaxSpellsBonus.GetAt(sSpellLevel, sAbility));
+                }
+            }
+        }
+        break;
+    case CAIOBJECTTYPE_C_CLERIC:
+        if ((typeAI.m_nClassMask & CLASSMASK_CLERIC) != 0) {
+            // NOTE: Unusual case - uses `GetClassMaskLevel` instead of
+            // `GetClassLevel` in other branches.
+            sClassLevel.Format("%d", DStats.GetClassMaskLevel(CLASSMASK_CLERIC));
+            nValue = atol(m_tMaxSpellsCleric.GetAt(sSpellLevel, sClassLevel));
+            if (nValue > nBonus) {
+                nMaxSpells = nValue;
+                nBonus = 0;
+
+                if (nValue > 0) {
+                    nBonus = atol(m_tMaxSpellsBonus.GetAt(sSpellLevel, sAbility));
+                }
+            }
+        }
+        break;
+    case CAIOBJECTTYPE_C_DRUID:
+        if ((typeAI.m_nClassMask & CLASSMASK_DRUID) != 0) {
+            // NOTE: Unusual case - uses `GetClassMaskLevel` instead of
+            // `GetClassLevel` in other branches.
+            sClassLevel.Format("%d", DStats.GetClassMaskLevel(CLASSMASK_DRUID));
+            nValue = atol(m_tMaxSpellsDruid.GetAt(sSpellLevel, sClassLevel));
+            if (nValue > nBonus) {
+                nMaxSpells = nValue;
+                nBonus = 0;
+
+                if (nValue > 0) {
+                    nBonus = atol(m_tMaxSpellsBonus.GetAt(sSpellLevel, sAbility));
+                }
+            }
+        }
+        break;
+    case CAIOBJECTTYPE_C_PALADIN:
+        if ((typeAI.m_nClassMask & CLASSMASK_PALADIN) != 0) {
+            sClassLevel.Format("%d", DStats.GetClassLevel(CAIOBJECTTYPE_C_PALADIN));
+            nValue = atol(m_tMaxSpellsPaladin.GetAt(sSpellLevel, sClassLevel));
+            if (nValue > nBonus) {
+                nMaxSpells = nValue;
+                nBonus = 0;
+
+                if (nValue > 0) {
+                    nBonus = atol(m_tMaxSpellsBonus.GetAt(sSpellLevel, sAbility));
+                }
+            }
+        }
+        break;
+    case CAIOBJECTTYPE_C_RANGER:
+        if ((typeAI.m_nClassMask & CLASSMASK_RANGER) != 0) {
+            sClassLevel.Format("%d", DStats.GetClassLevel(CAIOBJECTTYPE_C_RANGER));
+            nValue = atol(m_tMaxSpellsRanger.GetAt(sSpellLevel, sClassLevel));
+            if (nValue > nBonus) {
+                nMaxSpells = nValue;
+                nBonus = 0;
+
+                if (nValue > 0) {
+                    nBonus = atol(m_tMaxSpellsBonus.GetAt(sSpellLevel, sAbility));
+                }
+            }
+        }
+        break;
+    case CAIOBJECTTYPE_C_SORCERER:
+        if ((typeAI.m_nClassMask & CLASSMASK_SORCERER) != 0) {
+            sClassLevel.Format("%d", DStats.GetClassLevel(CAIOBJECTTYPE_C_SORCERER));
+            nValue = atol(m_tMaxSpellsSorcerer.GetAt(sSpellLevel, sClassLevel));
+            if (nValue > nBonus) {
+                nMaxSpells = nValue;
+                nBonus = 0;
+
+                if (nValue > 0) {
+                    nBonus = atol(m_tMaxSpellsBonus.GetAt(sSpellLevel, sAbility));
+                }
+            }
+        }
+        break;
+    case CAIOBJECTTYPE_C_WIZARD:
+        if ((typeAI.m_nClassMask & CLASSMASK_WIZARD) != 0) {
+            sClassLevel.Format("%d", DStats.GetClassLevel(CAIOBJECTTYPE_C_WIZARD));
+            nValue = atol(m_tMaxSpellsWizard.GetAt(sSpellLevel, sClassLevel));
+
+            if ((nSpecialization & SPECMASK_WIZARD_UNIVERSAL) == 0 && nValue > 0) {
+                nValue++;
+            }
+
+            if (nValue > nBonus) {
+                nMaxSpells = nValue;
+                nBonus = 0;
+
+                if (nValue > 0) {
+                    nBonus = atol(m_tMaxSpellsBonus.GetAt(sSpellLevel, sAbility));
+                }
+            }
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+        // __LINE__: 3043
+        UTIL_ASSERT(FALSE);
+    }
+}
+
 // 0x543770
 INT CRuleTables::GetMaxDruidShapeshifts(CCreatureFileHeader& BStats, INT nLevel) const
 {
