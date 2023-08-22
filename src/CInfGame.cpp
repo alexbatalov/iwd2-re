@@ -3138,7 +3138,7 @@ void CInfGame::ResetMultiPlayerPermissions()
 // TODO: Move to `CRuleTables`.
 //
 // 0x5CA5D0
-INT CInfGame::GetSpellcasterIndex(BYTE& nClass)
+UINT CInfGame::GetSpellcasterIndex(const BYTE& nClass)
 {
     switch (nClass) {
     case CAIOBJECTTYPE_C_BARD:
@@ -3169,7 +3169,7 @@ INT CInfGame::GetSpellcasterIndex(BYTE& nClass)
 // TODO: Move to `CRuleTables`.
 //
 // 0x5CA730
-BYTE CInfGame::GetSpellcasterClass(INT& nIndex)
+BYTE CInfGame::GetSpellcasterClass(const UINT& nIndex)
 {
     switch (nIndex) {
     case 0:
@@ -3200,7 +3200,7 @@ BYTE CInfGame::GetSpellcasterClass(INT& nIndex)
 // TODO: Move to `CRuleTables`.
 //
 // 0x5CA870
-DWORD CInfGame::GetSpellcasterClassMask(INT& nIndex)
+DWORD CInfGame::GetSpellcasterClassMask(const UINT& nIndex)
 {
     switch (nIndex) {
     case 0:
@@ -3228,25 +3228,25 @@ DWORD CInfGame::GetSpellcasterClassMask(INT& nIndex)
 // TODO: Move to `CRuleTables`.
 //
 // 0x5CA910
-INT CInfGame::GetSpellcasterDomainIndex(INT& a1)
+UINT CInfGame::GetSpellcasterDomainIndex(const DWORD& nSpecialization)
 {
-    if ((a1 & 0x8000) != 0) {
+    if ((nSpecialization & SPECMASK_CLERIC_ILMATER) != 0) {
         return 0;
-    } else if ((a1 & 0x10000) != 0) {
+    } else if ((nSpecialization & SPECMASK_CLERIC_LATHANDER) != 0) {
         return 1;
-    } else if ((a1 & 0x20000) != 0) {
+    } else if ((nSpecialization & SPECMASK_CLERIC_SELUNE) != 0) {
         return 2;
-    } else if ((a1 & 0x40000) != 0) {
+    } else if ((nSpecialization & SPECMASK_CLERIC_HELM) != 0) {
         return 3;
-    } else if ((a1 & 0x80000) != 0) {
+    } else if ((nSpecialization & SPECMASK_CLERIC_OGHMA) != 0) {
         return 4;
-    } else if ((a1 & 0x100000) != 0) {
+    } else if ((nSpecialization & SPECMASK_CLERIC_TEMPUS) != 0) {
         return 5;
-    } else if ((a1 & 0x200000) != 0) {
+    } else if ((nSpecialization & SPECMASK_CLERIC_BANE) != 0) {
         return 6;
-    } else if ((a1 & 0x400000) != 0) {
+    } else if ((nSpecialization & SPECMASK_CLERIC_MASK) != 0) {
         return 7;
-    } else if ((a1 & 0x800000) != 0) {
+    } else if ((nSpecialization & SPECMASK_CLERIC_TALOS) != 0) {
         return 8;
     }
 
@@ -3256,7 +3256,7 @@ INT CInfGame::GetSpellcasterDomainIndex(INT& a1)
 }
 
 // 0x5CA9E0
-INT CInfGame::GetClassMask(BYTE& nClass)
+DWORD CInfGame::GetClassMask(const BYTE& nClass)
 {
     switch (nClass) {
     case CAIOBJECTTYPE_C_BARBARIAN:
@@ -3291,7 +3291,7 @@ INT CInfGame::GetClassMask(BYTE& nClass)
 // 0x5CAAD0
 BYTE CInfGame::GetSpellType(const CResRef& resRef)
 {
-    int nID;
+    UINT nID;
 
     // NOTE: Uninline.
     if (m_songs.Find(resRef, nID)) {
@@ -3570,7 +3570,7 @@ void CSpellResRefList::Load(const C2DArray& Table, const INT& nResRefColumn)
 }
 
 // 0x5CA160
-bool CSpellResRefList::Find(const CResRef& resRef, int& nID)
+bool CSpellResRefList::Find(const CResRef& resRef, UINT& nID)
 {
     for (int index = 0; index < m_nCount; index++) {
         if (m_pList[index] == resRef) {
@@ -3698,7 +3698,7 @@ void CGroupedSpellList::Load(const C2DArray& Table, const INT& nClassColumn, con
 
     for (int index = 0; index < Table.GetHeight(); index++) {
         int nLevel = atol(Table.GetAt(CPoint(nClassColumn, index)));
-        int nID = index;
+        UINT nID = index;
 
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
         // __LINE__: 23509

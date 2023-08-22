@@ -3,6 +3,9 @@
 
 #include "BalDataTypes.h"
 
+#define CSPELLLIST_MAX_LEVELS 9
+#define CSPELLLIST_NUM_CLASSES 7
+
 class CCreatureFileHeader {
 public:
     CCreatureFileHeader()

@@ -126,6 +126,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CGameSprite.h"
     "src/CGameSpriteEquipment.cpp"
     "src/CGameSpriteEquipment.h"
+    "src/CGameSpriteSpells.cpp"
+    "src/CGameSpriteSpells.h"
     "src/CGameSpy.cpp"
     "src/CGameSpy.h"
     "src/CGameTimer.cpp"

@@ -45,14 +45,12 @@ class CStore;
 // in `InfGame.h` and `InfGame.cpp` respectively, but should ideally moved
 // somewhere else.
 
-#define CSPELLLIST_MAX_LEVELS 9
-
 class CSpellResRefList {
 public:
     CSpellResRefList();
     ~CSpellResRefList();
     void Load(const C2DArray& Table, const INT& nResRefColumn);
-    bool Find(const CResRef& resRef, int& nID);
+    bool Find(const CResRef& resRef, UINT& nID);
     const CResRef& Get(int& nIndex);
 
     /* 0000 */ CResRef* m_pList;
@@ -175,11 +173,11 @@ public:
     INT sub_5C93E0();
     void ResetMultiPlayerPermissions();
 
-    INT GetSpellcasterIndex(BYTE& nClass);
-    BYTE GetSpellcasterClass(INT& nIndex);
-    DWORD GetSpellcasterClassMask(INT& nIndex);
-    INT GetSpellcasterDomainIndex(INT& a1);
-    INT GetClassMask(BYTE& nClass);
+    UINT GetSpellcasterIndex(const BYTE& nClass);
+    BYTE GetSpellcasterClass(const UINT& nIndex);
+    DWORD GetSpellcasterClassMask(const UINT& nIndex);
+    UINT GetSpellcasterDomainIndex(const DWORD& dwMask);
+    DWORD GetClassMask(const BYTE& nClass);
     BYTE GetSpellType(const CResRef& resRef);
     void sub_5CADF0();
 

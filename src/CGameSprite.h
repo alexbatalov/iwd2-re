@@ -7,6 +7,7 @@
 #include "CGameAIBase.h"
 #include "CGameAnimation.h"
 #include "CGameSpriteEquipment.h"
+#include "CGameSpriteSpells.h"
 #include "CMarker.h"
 #include "CResRef.h"
 #include "CSound.h"
@@ -274,6 +275,33 @@ public:
 
     CGameAnimation* GetAnimation();
 
+    // NOTE: See `CGameSpriteSpells` for explanation of the overall ugliness of
+    // the following functions.
+
+    CGameSpriteGroupedSpellList* GetSpells(BYTE& nClass);
+    CGameSpriteSpellList* GetSpellsAtLevel(BYTE& nClass, UINT& nLevel);
+    UINT GetNumSpells();
+    BOOLEAN sub_724900();
+    BOOLEAN sub_724920();
+    BOOLEAN AddKnownSpell(const BYTE& nClass, const UINT& nSpellLevel, const CResRef& resRef, const unsigned int& a4, const unsigned int& a5, const unsigned int& a6);
+    BOOLEAN AddDomainSpell(const UINT& nSpellLevel, const CResRef& resRef, const unsigned int& a3, const unsigned int& a4, const unsigned int& a5);
+    BOOLEAN AddInnateSpell(const CResRef& resRef, const unsigned int& a2, const unsigned int& a3, const unsigned int& a4);
+    BOOLEAN AddSong(const CResRef& resRef, const unsigned int& a2, const unsigned int& a3, const unsigned int& a4);
+    BOOLEAN AddShapeshift(const CResRef& resRef, const unsigned int& a2);
+    BOOLEAN sub_724C40(const unsigned int& a1);
+    BOOLEAN RemoveKnownSpell(const BYTE& nClass, const UINT& nSpellLevel, const CResRef& resRef, const unsigned int& a4, const unsigned int& a5, const unsigned int& a6);
+    BOOLEAN RemoveDomainSpell(const UINT& nSpellLevel, const CResRef& resRef, const unsigned int& a3, const unsigned int& a4, const unsigned int& a5);
+    BOOLEAN RemoveInnateSpell(const CResRef& resRef, const unsigned int& a2, const unsigned int& a3, const unsigned int& a4);
+    BOOLEAN RemoveSong(const CResRef& resRef, const unsigned int& a2, const unsigned int& a3, const unsigned int& a4);
+    BOOLEAN RemoveShapeshift(const CResRef& resRef);
+    BOOLEAN sub_724FD0(const BYTE& nClass, const UINT& nSpellLevel, const CResRef& resRef, const unsigned int& a4, const unsigned int& a5);
+    BOOLEAN sub_725110(const UINT& nSpellLevel, const CResRef& resRef, const unsigned int& a4, const unsigned int& a5);
+    BOOLEAN sub_725210(const CResRef& resRef, const unsigned int& a2, const unsigned int& a3);
+    BOOLEAN sub_725270(const CResRef& resRef, const unsigned int& a2, const unsigned int& a3);
+    BOOLEAN sub_725330(const CResRef& resRef, const DWORD& dwClassMask, UINT nLevel, BOOLEAN a4);
+    BOOLEAN sub_7256B0(const CResRef& resRef, const UINT& nLevel, BOOLEAN a3);
+    BOOLEAN sub_725840(const CResRef& resRef, BOOLEAN a2);
+
     /* 0598 */ CResRef m_resRef;
     /* 05A0 */ CString m_sName;
     /* 05A4 */ CCreatureFileHeader m_baseStats;
@@ -294,6 +322,11 @@ public:
     /* 3E7A */ WORD m_followRange;
     /* 3E7C */ CPoint m_posStart;
     /* 3E84 */ DWORD m_timeOfDayVisible;
+    /* 4284 */ CGameSpriteGroupedSpellList m_spellsByClass[CSPELLLIST_NUM_CLASSES];
+    /* 4984 */ CGameSpriteGroupedSpellList m_domainSpells;
+    /* 4A84 */ CGameSpriteSpellList m_innateSpells;
+    /* 4AA0 */ CGameSpriteSpellList m_songs;
+    /* 4ABC */ CGameSpriteSpellList m_shapeshifts;
     /* 4AD8 */ CGameSpriteEquipment m_equipment;
     /* 4BAC */ int field_4BAC;
     /* 4BB0 */ int field_4BB0;

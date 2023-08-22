@@ -8,9 +8,7 @@
 #include "CUIControlScrollBar.h"
 #include "CVidCell.h"
 #include "CVidFont.h"
-
-// TODO: Move somewhere.
-#define CSPELLLIST_NUM_CLASSES 7
+#include "FileFormat.h"
 
 #define CSCREENSPELLBOOK_VIRTUAL_KEYS 92
 #define CSCREENSPELLBOOK_ERROR_BUTTONS 3

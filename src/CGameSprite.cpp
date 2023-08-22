@@ -2699,3 +2699,439 @@ CGameAnimation* CGameSprite::GetAnimation()
 {
     return &m_animation;
 }
+
+// FIXME: `nClass` should not be reference.
+//
+// 0x724730
+CGameSpriteGroupedSpellList* CGameSprite::GetSpells(BYTE& nClass)
+{
+    UINT nClassIndex = g_pBaldurChitin->GetObjectGame()->GetSpellcasterIndex(nClass);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 25826
+    UTIL_ASSERT(nClassIndex < CSPELLLIST_NUM_CLASSES);
+
+    return &(m_spellsByClass[nClassIndex]);
+}
+
+// FIXME: `nClass` should not be reference.
+// FIXME: `nLevel` should not be reference.
+//
+// 0x724790
+CGameSpriteSpellList* CGameSprite::GetSpellsAtLevel(BYTE& nClass, UINT& nLevel)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 25835
+    UTIL_ASSERT(nLevel < CSPELLLIST_MAX_LEVELS);
+
+    UINT nClassIndex = g_pBaldurChitin->GetObjectGame()->GetSpellcasterIndex(nClass);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 25838
+    UTIL_ASSERT(nClassIndex < CSPELLLIST_NUM_CLASSES);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 2521
+    UTIL_ASSERT(nLevel < CSPELLLIST_MAX_LEVELS);
+
+    return &(m_spellsByClass[nClassIndex].m_lists[nLevel]);
+}
+
+// 0x724840
+UINT CGameSprite::GetNumSpells()
+{
+    UINT nCount = 0;
+
+    for (int index = 0; index < CSPELLLIST_NUM_CLASSES; index++) {
+        // NOTE: Uninline.
+        nCount += m_spellsByClass[index].GetNumSpells();
+    }
+
+    // NOTE: Uninline.
+    nCount += m_domainSpells.GetNumSpells();
+
+    return nCount;
+}
+
+// 0x724900
+BOOLEAN CGameSprite::sub_724900()
+{
+    DWORD dwClassMask = GetAIType().m_nClassMask;
+
+    return (dwClassMask & (CLASSMASK_BARD | CLASSMASK_CLERIC | CLASSMASK_DRUID | CLASSMASK_PALADIN | CLASSMASK_RANGER)) != 0
+        || (dwClassMask & (CLASSMASK_SORCERER | CLASSMASK_WIZARD)) != 0;
+}
+
+// 0x724920
+BOOLEAN CGameSprite::sub_724920()
+{
+    return (GetAIType().m_nClassMask & CLASSMASK_BARD) != 0;
+}
+
+// FIXME: Review references (latter params unclear).
+//
+// 0x724930
+BOOLEAN CGameSprite::AddKnownSpell(const BYTE& nClass, const UINT& nSpellLevel, const CResRef& resRef, const unsigned int& a4, const unsigned int& a5, const unsigned int& a6)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 25936
+    UTIL_ASSERT(nSpellLevel < CSPELLLIST_MAX_LEVELS);
+
+    UINT nClassIndex = g_pBaldurChitin->GetObjectGame()->GetSpellcasterIndex(nClass);
+
+    UINT nID = 0;
+    if (g_pBaldurChitin->GetObjectGame()->m_spells.Find(resRef, nID) != TRUE) {
+        return FALSE;
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 2572
+    UTIL_ASSERT(nClassIndex < CSPELLLIST_NUM_CLASSES);
+
+    // NOTE: Uninline.
+    return m_spellsByClass[nClassIndex].Add(nID, nSpellLevel, a4, a5, a6);
+}
+
+// 0x724A40
+BOOLEAN CGameSprite::AddDomainSpell(const UINT& nSpellLevel, const CResRef& resRef, const unsigned int& a3, const unsigned int& a4, const unsigned int& a5)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 25954
+    UTIL_ASSERT(nSpellLevel < CSPELLLIST_MAX_LEVELS);
+
+    UINT nID = 0;
+    if (g_pBaldurChitin->GetObjectGame()->m_spells.Find(resRef, nID) != TRUE) {
+        return FALSE;
+    }
+
+    // NOTE: Uninline.
+    m_domainSpells.Add(nID, nSpellLevel, a3, a4, a5);
+
+    return TRUE;
+}
+
+// 0x724B10
+BOOLEAN CGameSprite::AddInnateSpell(const CResRef& resRef, const unsigned int& a2, const unsigned int& a3, const unsigned int& a4)
+{
+    UINT nID = 0;
+    if (g_pBaldurChitin->GetObjectGame()->GetInnateSpells()->Find(resRef, nID) != TRUE) {
+        return FALSE;
+    }
+
+    m_innateSpells.Add(nID, a2, a3, a4);
+
+    return TRUE;
+}
+
+// 0x724B70
+BOOLEAN CGameSprite::AddSong(const CResRef& resRef, const unsigned int& a2, const unsigned int& a3, const unsigned int& a4)
+{
+    UINT nID = 0;
+    if (g_pBaldurChitin->GetObjectGame()->GetSongs()->Find(resRef, nID) != TRUE) {
+        return FALSE;
+    }
+
+    m_songs.Add(nID, a2, a3, a4);
+
+    return TRUE;
+}
+
+// 0x724BD0
+BOOLEAN CGameSprite::AddShapeshift(const CResRef& resRef, const unsigned int& a2)
+{
+    UINT nID = 0;
+    if (g_pBaldurChitin->GetObjectGame()->GetShapeshifts()->Find(resRef, nID) != TRUE) {
+        return FALSE;
+    }
+
+    m_shapeshifts.Add(nID, 0, 0, a2);
+
+    return TRUE;
+}
+
+// 0x724C40
+BOOLEAN CGameSprite::sub_724C40(const unsigned int& a1)
+{
+    m_shapeshifts.field_14 += a1;
+
+    for (UINT nIndex = 0; nIndex < m_shapeshifts.m_List.size(); nIndex++) {
+        CGameSpriteSpellListEntry* pEntry = m_shapeshifts.Get(nIndex);
+
+        m_shapeshifts.Add(pEntry->m_nID,
+            m_shapeshifts.field_14 - pEntry->field_4,
+            0,
+            0);
+    }
+
+    return FALSE;
+}
+
+// 0x724D30
+BOOLEAN CGameSprite::RemoveKnownSpell(const BYTE& nClass, const UINT& nSpellLevel, const CResRef& resRef, const unsigned int& a4, const unsigned int& a5, const unsigned int& a6)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 25954
+    UTIL_ASSERT(nSpellLevel < CSPELLLIST_MAX_LEVELS);
+
+    UINT nClassIndex = g_pBaldurChitin->GetObjectGame()->GetSpellcasterIndex(nClass);
+
+    UINT nID;
+    if (g_pBaldurChitin->GetObjectGame()->m_spells.Find(resRef, nID) != TRUE) {
+        return FALSE;
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 2572
+    UTIL_ASSERT(nClassIndex < CSPELLLIST_NUM_CLASSES);
+
+    return m_spellsByClass[nClassIndex].Remove(nID, nSpellLevel, a4, a5, a6);
+}
+
+// 0x724E00
+BOOLEAN CGameSprite::RemoveDomainSpell(const UINT& nSpellLevel, const CResRef& resRef, const unsigned int& a3, const unsigned int& a4, const unsigned int& a5)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 26073
+    UTIL_ASSERT(nSpellLevel < CSPELLLIST_MAX_LEVELS);
+
+    if (!m_derivedStats.HasClass(CAIOBJECTTYPE_C_CLERIC)) {
+        return FALSE;
+    }
+
+    UINT nID = 0;
+    if (g_pBaldurChitin->GetObjectGame()->m_spells.Find(resRef, nID) != TRUE) {
+        return FALSE;
+    }
+
+    return m_domainSpells.Remove(nID, nSpellLevel, a3, a4, a5);
+}
+
+// 0x724EA0
+BOOLEAN CGameSprite::RemoveInnateSpell(const CResRef& resRef, const unsigned int& a2, const unsigned int& a3, const unsigned int& a4)
+{
+    UINT nID = 0;
+    if (g_pBaldurChitin->GetObjectGame()->GetInnateSpells()->Find(resRef, nID) != TRUE) {
+        return FALSE;
+    }
+
+    return m_innateSpells.Remove(nID, a2, a3, a4);
+}
+
+// 0x724F00
+BOOLEAN CGameSprite::RemoveSong(const CResRef& resRef, const unsigned int& a2, const unsigned int& a3, const unsigned int& a4)
+{
+    UINT nID = 0;
+    if (g_pBaldurChitin->GetObjectGame()->GetSongs()->Find(resRef, nID) != TRUE) {
+        return FALSE;
+    }
+
+    return m_songs.Remove(nID, a2, a3, a4);
+}
+
+// 0x724F60
+BOOLEAN CGameSprite::RemoveShapeshift(const CResRef& resRef)
+{
+    UINT nID = 0;
+    if (g_pBaldurChitin->GetObjectGame()->GetShapeshifts()->Find(resRef, nID) != TRUE) {
+        return FALSE;
+    }
+
+    return m_shapeshifts.Remove(nID, 1, 0, 0);
+}
+
+// 0x724FD0
+BOOLEAN CGameSprite::sub_724FD0(const BYTE& nClass, const UINT& nSpellLevel, const CResRef& resRef, const unsigned int& a4, const unsigned int& a5)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 26177
+    UTIL_ASSERT(nSpellLevel < CSPELLLIST_MAX_LEVELS);
+
+    UINT nClassIndex = g_pBaldurChitin->GetObjectGame()->GetSpellcasterIndex(nClass);
+
+    UINT nID;
+    if (g_pBaldurChitin->GetObjectGame()->m_spells.Find(resRef, nID) != TRUE) {
+        return FALSE;
+    }
+
+    // __FILE__: .\Include\FileFormat.h
+    // __LINE__: 2572
+    UTIL_ASSERT(nClassIndex < CSPELLLIST_NUM_CLASSES);
+
+    // NOTE: Uninline.
+    return m_spellsByClass[nClassIndex].sub_7260B0(nID, nSpellLevel, a4, a5);
+}
+
+// 0x725110
+BOOLEAN CGameSprite::sub_725110(const UINT& nSpellLevel, const CResRef& resRef, const unsigned int& a4, const unsigned int& a5)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 26211
+    UTIL_ASSERT(nSpellLevel < CSPELLLIST_MAX_LEVELS);
+
+    UINT nID;
+    if (g_pBaldurChitin->GetObjectGame()->m_spells.Find(resRef, nID) != TRUE) {
+        return FALSE;
+    }
+
+    // NOTE: Uninline.
+    CGameSpriteSpellList* pList = m_domainSpells.GetSpellsAtLevel(nSpellLevel);
+
+    // NOTE: Uninline.
+    return pList->sub_725CC0(nID, a4, a5);
+}
+
+// 0x725210
+BOOLEAN CGameSprite::sub_725210(const CResRef& resRef, const unsigned int& a2, const unsigned int& a3)
+{
+    UINT nID;
+    if (g_pBaldurChitin->GetObjectGame()->GetInnateSpells()->Find(resRef, nID) != TRUE) {
+        return FALSE;
+    }
+
+    return m_innateSpells.sub_725C50(nID, a2, a3);
+}
+
+// 0x725270
+BOOLEAN CGameSprite::sub_725270(const CResRef& resRef, const unsigned int& a2, const unsigned int& a3)
+{
+    UINT nID;
+    if (g_pBaldurChitin->GetObjectGame()->GetInnateSpells()->Find(resRef, nID) != TRUE) {
+        return FALSE;
+    }
+
+    // NOTE: Uninline.
+    return m_innateSpells.sub_725CC0(nID, a2, a3);
+}
+
+// FIXME: `dwClassMask` should not be reference.
+//
+// 0x725330
+BOOLEAN CGameSprite::sub_725330(const CResRef& resRef, const DWORD& dwClassMask, UINT nLevel, BOOLEAN a4)
+{
+    BOOLEAN v1 = FALSE;
+    UINT nStartLevel = 0;
+    UINT nEndLevel = 9;
+
+    if (nLevel < CSPELLLIST_MAX_LEVELS) {
+        nStartLevel = nLevel;
+        nStartLevel = nLevel + 1;
+    }
+
+    UINT nID;
+    if (!g_pBaldurChitin->GetObjectGame()->m_spells.Find(resRef, nID)) {
+        return FALSE;
+    }
+
+    for (UINT nClassIndex = 0; nClassIndex < CSPELLLIST_NUM_CLASSES; nClassIndex++) {
+        if (v1) {
+            break;
+        }
+
+        if ((g_pBaldurChitin->GetObjectGame()->GetSpellcasterClassMask(nClassIndex) & dwClassMask) != 0) {
+            for (UINT nCurrLevel = nStartLevel; nCurrLevel < nEndLevel; nCurrLevel++) {
+                if (v1) {
+                    break;
+                }
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+                // __LINE__: 26902
+                UTIL_ASSERT(nClassIndex < CSPELLLIST_NUM_CLASSES);
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+                // __LINE__: 26903
+                UTIL_ASSERT(nCurrLevel < CSPELLLIST_MAX_LEVELS);
+
+                UINT nIndex = 0;
+                v1 = m_spellsByClass[nClassIndex].m_lists[nCurrLevel].Find(nID, nIndex);
+                if (v1 == TRUE && a4 == TRUE) {
+                    // __FILE__: .\Include\FileFormat.h
+                    // __LINE__: 2565
+                    UTIL_ASSERT(nClassIndex < CSPELLLIST_NUM_CLASSES);
+
+                    // NOTE: Uninline.
+                    v1 = m_spellsByClass[nClassIndex].m_lists[nCurrLevel].CheckF8(nIndex);
+                }
+            }
+        }
+    }
+
+    if (!v1) {
+        if ((dwClassMask & CLASSMASK_CLERIC) == CLASSMASK_CLERIC) {
+            for (UINT nCurrLevel = nStartLevel; nCurrLevel < nEndLevel; nCurrLevel++) {
+                if (v1) {
+                    break;
+                }
+
+                UINT nIndex = 0;
+
+                // NOTE: Uninline.
+                v1 = m_domainSpells.Find(nID, nStartLevel, nIndex);
+                if (v1 == TRUE && a4 == TRUE) {
+                    // NOTE: Uninline.
+                    v1 = m_innateSpells.CheckF8(nIndex);
+                }
+            }
+        }
+    }
+
+    return v1;
+}
+
+// 0x7256B0
+BOOLEAN CGameSprite::sub_7256B0(const CResRef& resRef, const UINT& nLevel, BOOLEAN a3)
+{
+    BOOLEAN v1 = FALSE;
+    UINT nStartLevel = 0;
+    UINT nEndLevel = 9;
+
+    if (nLevel < CSPELLLIST_MAX_LEVELS) {
+        nStartLevel = nLevel;
+        // TODO: Looks odd, should it be `nLevel + 1` as in the function above
+        // (0x725330) to check only one specific level?
+        nEndLevel = nLevel - 1;
+    }
+
+    UINT nID;
+    if (!g_pBaldurChitin->GetObjectGame()->m_spells.Find(resRef, nID)) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+        // __LINE__: 26395
+        UTIL_ASSERT(FALSE);
+    }
+
+    for (UINT nCurrLevel = nStartLevel; nCurrLevel < nEndLevel; nCurrLevel++) {
+        if (v1) {
+            break;
+        }
+
+        UINT nIndex;
+
+        // NOTE: Uninline.
+        v1 = m_domainSpells.Find(nID, nStartLevel, nIndex);
+        if (v1 == TRUE && a3 == TRUE) {
+            // NOTE: Uninline.
+            v1 = m_innateSpells.CheckF8(nIndex);
+        }
+    }
+
+    return v1;
+}
+
+// 0x725840
+BOOLEAN CGameSprite::sub_725840(const CResRef& resRef, BOOLEAN a2)
+{
+    UINT nID;
+    if (!g_pBaldurChitin->GetObjectGame()->GetInnateSpells()->Find(resRef, nID)) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+        // __LINE__: 26420
+        UTIL_ASSERT(FALSE);
+    }
+
+    UINT nIndex;
+    BOOLEAN v1 = m_innateSpells.Find(nID, nIndex);
+
+    if (v1 && a2 == TRUE) {
+        v1 = m_innateSpells.CheckF8(nIndex);
+    }
+
+    return v1;
+}
