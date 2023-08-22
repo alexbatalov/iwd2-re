@@ -3497,6 +3497,24 @@ void CInfGame::SetIconIndex(BYTE iconIndex)
     m_iconResRef = "";
 }
 
+// 0x58FEC0
+CSpellResRefList* CInfGame::GetSongs()
+{
+    return &m_songs;
+}
+
+// 0x5F67F0
+CSpellResRefList* CInfGame::GetInnateSpells()
+{
+    return &m_innateSpells;
+}
+
+// 0x5F6800
+CSpellResRefList* CInfGame::GetShapeshifts()
+{
+    return &m_innateSpells;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.

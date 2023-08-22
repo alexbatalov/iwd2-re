@@ -203,6 +203,9 @@ public:
     void SetState(SHORT nState);
     BYTE GetIconIndex();
     void SetIconIndex(BYTE iconIndex);
+    CSpellResRefList* GetSongs();
+    CSpellResRefList* GetInnateSpells();
+    CSpellResRefList* GetShapeshifts();
 
     const CRuleTables& GetRuleTables() { return m_ruleTables; }
 
