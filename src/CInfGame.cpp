@@ -3565,6 +3565,23 @@ bool CSpellResRefList::Find(const CResRef& resRef, int& nID)
     return false;
 }
 
+// FIXME: `nIndex` should not be reference.
+// TODO: Is it `operator[]`?
+//
+// 0x5F6790
+const CResRef& CSpellResRefList::Get(int& nIndex)
+{
+    // __FILE__: .\Include\InfGame.h
+    // __LINE__: 652
+    UTIL_ASSERT(nIndex < m_nCount);
+
+    // __FILE__: .\Include\InfGame.h
+    // __LINE__: 653
+    UTIL_ASSERT(m_pList != NULL);
+
+    return m_pList[nIndex];
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x59EB90

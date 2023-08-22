@@ -53,6 +53,7 @@ public:
     ~CSpellResRefList();
     void Load(const C2DArray& Table, const INT& nResRefColumn);
     bool Find(const CResRef& resRef, int& nID);
+    const CResRef& Get(int& nIndex);
 
     /* 0000 */ CResRef* m_pList;
     /* 0004 */ int m_nCount;
