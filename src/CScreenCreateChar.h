@@ -351,10 +351,10 @@ public:
     BOOL Render(BOOL bForce) override;
     void OnLButtonClick(CPoint pt) override;
 
-    void sub_61B290(CResRef cResRef);
+    void SetSpell(CResRef cResRef);
 
-    /* 066E */ CResRef field_66E;
-    /* 0676 */ CResRef field_676;
+    /* 066E */ CResRef m_iconResRef;
+    /* 0676 */ CResRef m_spellResRef;
 };
 
 class CUIControlButtonCharGenGenderSelection : public CUIControlButton3State {

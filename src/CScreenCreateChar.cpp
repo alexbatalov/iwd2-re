@@ -8,6 +8,7 @@
 #include "CGameSprite.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CSpell.h"
 #include "CUIControlFactory.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -5474,8 +5475,8 @@ CUIControlButtonCharGen61B120::CUIControlButtonCharGen61B120(CUIPanel* panel, UI
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 1)
 {
     m_nSelectedFrame = 0;
-    field_66E = "";
-    field_676 = "";
+    m_iconResRef = "";
+    m_spellResRef = "";
 }
 
 // 0x61B1F0
@@ -5483,10 +5484,39 @@ CUIControlButtonCharGen61B120::~CUIControlButtonCharGen61B120()
 {
 }
 
+// FIXME: `cResRef` should be reference.
+//
 // 0x61B290
-void CUIControlButtonCharGen61B120::sub_61B290(CResRef cResRef)
+void CUIControlButtonCharGen61B120::SetSpell(CResRef cResRef)
 {
-    // TODO: Incomplete.
+    CString sIconResRef;
+
+    if (m_spellResRef != cResRef) {
+        m_spellResRef = cResRef;
+        m_iconResRef = "";
+
+        if (m_spellResRef != "") {
+            CSpell cSpell;
+            cSpell.SetResRef(m_spellResRef, TRUE, TRUE);
+            cSpell.Demand();
+
+            if (cSpell.pRes != NULL) {
+                RESREF iconResRef;
+                cSpell.GetIcon(iconResRef);
+                m_iconResRef = iconResRef;
+
+                m_iconResRef.CopyToString(sIconResRef);
+                sIconResRef.SetAt(sIconResRef.GetLength() - 1, 'B');
+                m_iconResRef = sIconResRef;
+
+                SetToolTipStrRef(cSpell.GetGenericName(), -1, -1);
+            }
+
+            cSpell.Release();
+        } else {
+            SetToolTipStrRef(-1, -1, -1);
+        }
+    }
 }
 
 // 0x61B460
