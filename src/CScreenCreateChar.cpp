@@ -5697,6 +5697,7 @@ void CUIControlButtonCharGenClassSelection::OnLButtonClick(CPoint pt)
         case 6:
         case 9:
         case 10:
+        case 11:
             pCreateChar->UpdateHelp(m_pPanel->m_nID, 16, strDescription);
             pCreateChar->UpdatePopupPanel(m_pPanel->m_nID, pSprite);
             break;
