@@ -14,6 +14,12 @@ const BYTE CUIControlButton::LBUTTON = 1;
 // 0x84C921
 const BYTE CUIControlButton::RBUTTON = 2;
 
+// 0x84C924
+const COLORREF CUIControlButton::TINT_DISABLED = RGB(180, 180, 180);
+
+// 0x84C928
+const COLORREF CUIControlButton::TINT_INVALID = RGB(180, 180, 180);
+
 // 0x8AB9B4
 const int CUIControlButton::dword_8AB9B4 = 2;
 

@@ -10,6 +10,9 @@ public:
     static const BYTE LBUTTON;
     static const BYTE RBUTTON;
 
+    static const COLORREF TINT_DISABLED;
+    static const COLORREF TINT_INVALID;
+
     static const int dword_8AB9B4;
 
     CUIControlButton(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo, BYTE nMouseButtons, unsigned char a5);
