@@ -7586,9 +7586,45 @@ void CUIControlButtonCharGen620220::OnLButtonClick(CPoint pt)
 // 0x620970
 BOOL CUIControlButtonCharGen620220::Render(BOOL bForce)
 {
-    // TODO: Incomplete.
+    if (!m_bActive && !m_bInactiveRender) {
+        return FALSE;
+    }
 
-    return FALSE;
+    if (m_nRenderCount == 0 && !bForce) {
+        return FALSE;
+    }
+
+    if (!CUIControlButton3State::Render(bForce)) {
+        return FALSE;
+    }
+
+    if (m_spellResRef != "" && m_iconResRef != "") {
+        CRect rControlFrame(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
+
+        if (m_bPressed) {
+            rControlFrame.OffsetRect(field_63E, field_642);
+        }
+
+        CPoint pos = rControlFrame.TopLeft();
+
+        CRect rClip;
+        rClip.IntersectRect(rControlFrame, m_rDirty);
+
+        CIcon::RenderIcon(0,
+            pos,
+            m_size,
+            rClip,
+            m_iconResRef,
+            m_pPanel->m_pManager->m_bDoubleSize,
+            m_bEnabled ? 0x1 : 0,
+            0,
+            FALSE,
+            0,
+            FALSE,
+            0);
+    }
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------
