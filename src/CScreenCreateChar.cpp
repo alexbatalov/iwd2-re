@@ -1570,12 +1570,6 @@ void CScreenCreateChar::ResetClassPanel(CUIPanel* pPanel, CGameSprite* pSprite)
     UpdateHelp(pPanel->m_nID, 16, 17242);
 }
 
-// 0x60BB80
-void CScreenCreateChar::sub_60BB80()
-{
-    // TODO: Incomplete.
-}
-
 // 0x60BBE0
 void CScreenCreateChar::ResetGenderPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {

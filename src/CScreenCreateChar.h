@@ -88,7 +88,6 @@ public:
     void sub_60AF60(CUIPanel* pPanel, CGameSprite* pSprite);
     void sub_60B610(CUIPanel* pPanel, CGameSprite* pSprite);
     void ResetClassPanel(CUIPanel* pPanel, CGameSprite* pSprite);
-    void sub_60BB80();
     void ResetGenderPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void ResetRacePanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void ResetAlignmentPanel(CUIPanel* pPanel, CGameSprite* pSprite);
