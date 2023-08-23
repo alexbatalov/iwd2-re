@@ -22,6 +22,8 @@ public:
 
 class CGameSpriteSpellList {
 public:
+    CGameSpriteSpellList();
+    ~CGameSpriteSpellList();
     BOOLEAN Add(const UINT& nID, const unsigned int& a2, const unsigned int& a3, const unsigned int& a4);
     BOOLEAN Remove(const UINT& nID, BOOLEAN a2, const unsigned& a3, const unsigned& a4);
     BOOLEAN sub_725C50(const UINT& nID, const unsigned int& a2, const BOOLEAN& a3);
@@ -43,6 +45,8 @@ public:
 
 class CGameSpriteGroupedSpellList {
 public:
+    CGameSpriteGroupedSpellList();
+    ~CGameSpriteGroupedSpellList();
     CGameSpriteSpellList* GetSpellsAtLevel(const UINT& nLevel);
     UINT GetNumSpells();
     UINT sub_725F00();
@@ -58,6 +62,13 @@ public:
 
     /* 0000 */ CGameSpriteSpellList m_lists[CSPELLLIST_MAX_LEVELS];
     /* 0048 */ UINT m_nHighestLevel;
+};
+
+class CGameSpriteSpells {
+public:
+    CGameSpriteGroupedSpellList* Get(const UINT& nClassIndex);
+
+    /* 0000 */ CGameSpriteGroupedSpellList m_spellsByClass[CSPELLLIST_NUM_CLASSES];
 };
 
 #endif /* CGAMESPRITESPELLS_H_ */

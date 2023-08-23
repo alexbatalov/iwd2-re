@@ -279,7 +279,7 @@ public:
     // the following functions.
 
     CGameSpriteGroupedSpellList* GetSpells(BYTE& nClass);
-    CGameSpriteSpellList* GetSpellsAtLevel(BYTE& nClass, UINT& nLevel);
+    CGameSpriteSpellList* GetSpellsAtLevel(const BYTE& nClass, const UINT& nLevel);
     UINT GetNumSpells();
     BOOLEAN sub_724900();
     BOOLEAN sub_724920();
@@ -322,7 +322,7 @@ public:
     /* 3E7A */ WORD m_followRange;
     /* 3E7C */ CPoint m_posStart;
     /* 3E84 */ DWORD m_timeOfDayVisible;
-    /* 4284 */ CGameSpriteGroupedSpellList m_spellsByClass[CSPELLLIST_NUM_CLASSES];
+    /* 4284 */ CGameSpriteSpells m_spells;
     /* 4984 */ CGameSpriteGroupedSpellList m_domainSpells;
     /* 4A84 */ CGameSpriteSpellList m_innateSpells;
     /* 4AA0 */ CGameSpriteSpellList m_songs;

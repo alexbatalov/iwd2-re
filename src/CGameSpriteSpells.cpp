@@ -2,6 +2,23 @@
 
 #include "CUtil.h"
 
+// 0x443350
+CGameSpriteSpellList::CGameSpriteSpellList()
+{
+    field_10 = 0;
+    field_14 = 0;
+    field_18 = 0;
+}
+
+// 0x443370
+CGameSpriteSpellList::~CGameSpriteSpellList()
+{
+    if (m_List.size() != 0) {
+        field_14 = 0;
+        field_18 = 0;
+    }
+}
+
 // 0x725950
 BOOLEAN CGameSpriteSpellList::Add(const UINT& nID, const unsigned int& a2, const unsigned int& a3, const unsigned int& a4)
 {
@@ -240,6 +257,17 @@ void CGameSpriteSpellList::Clear()
 
 // -----------------------------------------------------------------------------
 
+// 0x443320
+CGameSpriteGroupedSpellList::CGameSpriteGroupedSpellList()
+{
+    m_nHighestLevel = 0;
+}
+
+// 0x4433F0
+CGameSpriteGroupedSpellList::~CGameSpriteGroupedSpellList()
+{
+}
+
 // 0x58FE80
 CGameSpriteSpellList* CGameSpriteGroupedSpellList::GetSpellsAtLevel(const UINT& nLevel)
 {
@@ -384,4 +412,16 @@ void CGameSpriteGroupedSpellList::Clear()
     }
 
     m_nHighestLevel = 0;
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x5946E0
+CGameSpriteGroupedSpellList* CGameSpriteSpells::Get(const UINT& nClassIndex)
+{
+    // __FILE__: .\Include\FileFormat.h
+    // __LINE__: 2572
+    UTIL_ASSERT(nClassIndex < CSPELLLIST_NUM_CLASSES);
+
+    return &(m_spellsByClass[nClassIndex]);
 }

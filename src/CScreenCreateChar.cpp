@@ -1558,7 +1558,7 @@ void CScreenCreateChar::ResetClassPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 
     for (UINT nClassIndex = 0; nClassIndex < CSPELLLIST_NUM_CLASSES; nClassIndex++) {
         // NOTE: Uninline.
-        pSprite->m_spellsByClass[nClassIndex].Clear();
+        pSprite->m_spells.m_spellsByClass[nClassIndex].Clear();
     }
 
     // NOTE: Uninline.

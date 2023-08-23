@@ -2711,14 +2711,14 @@ CGameSpriteGroupedSpellList* CGameSprite::GetSpells(BYTE& nClass)
     // __LINE__: 25826
     UTIL_ASSERT(nClassIndex < CSPELLLIST_NUM_CLASSES);
 
-    return &(m_spellsByClass[nClassIndex]);
+    return &(m_spells.m_spellsByClass[nClassIndex]);
 }
 
 // FIXME: `nClass` should not be reference.
 // FIXME: `nLevel` should not be reference.
 //
 // 0x724790
-CGameSpriteSpellList* CGameSprite::GetSpellsAtLevel(BYTE& nClass, UINT& nLevel)
+CGameSpriteSpellList* CGameSprite::GetSpellsAtLevel(const BYTE& nClass, const UINT& nLevel)
 {
     // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
     // __LINE__: 25835
@@ -2734,7 +2734,7 @@ CGameSpriteSpellList* CGameSprite::GetSpellsAtLevel(BYTE& nClass, UINT& nLevel)
     // __LINE__: 2521
     UTIL_ASSERT(nLevel < CSPELLLIST_MAX_LEVELS);
 
-    return &(m_spellsByClass[nClassIndex].m_lists[nLevel]);
+    return &(m_spells.m_spellsByClass[nClassIndex].m_lists[nLevel]);
 }
 
 // 0x724840
@@ -2744,7 +2744,7 @@ UINT CGameSprite::GetNumSpells()
 
     for (int index = 0; index < CSPELLLIST_NUM_CLASSES; index++) {
         // NOTE: Uninline.
-        nCount += m_spellsByClass[index].GetNumSpells();
+        nCount += m_spells.m_spellsByClass[index].GetNumSpells();
     }
 
     // NOTE: Uninline.
@@ -2784,12 +2784,11 @@ BOOLEAN CGameSprite::AddKnownSpell(const BYTE& nClass, const UINT& nSpellLevel, 
         return FALSE;
     }
 
-    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
-    // __LINE__: 2572
-    UTIL_ASSERT(nClassIndex < CSPELLLIST_NUM_CLASSES);
+    // NOTE: Uninline.
+    CGameSpriteGroupedSpellList* pSpellsByLevel = m_spells.Get(nClassIndex);
 
     // NOTE: Uninline.
-    return m_spellsByClass[nClassIndex].Add(nID, nSpellLevel, a4, a5, a6);
+    return pSpellsByLevel->Add(nID, nSpellLevel, a4, a5, a6);
 }
 
 // 0x724A40
@@ -2880,11 +2879,10 @@ BOOLEAN CGameSprite::RemoveKnownSpell(const BYTE& nClass, const UINT& nSpellLeve
         return FALSE;
     }
 
-    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
-    // __LINE__: 2572
-    UTIL_ASSERT(nClassIndex < CSPELLLIST_NUM_CLASSES);
+    // NOTE: Uninline.
+    CGameSpriteGroupedSpellList* pSpellsByLevel = m_spells.Get(nClassIndex);
 
-    return m_spellsByClass[nClassIndex].Remove(nID, nSpellLevel, a4, a5, a6);
+    return pSpellsByLevel->Remove(nID, nSpellLevel, a4, a5, a6);
 }
 
 // 0x724E00
@@ -2953,12 +2951,11 @@ BOOLEAN CGameSprite::sub_724FD0(const BYTE& nClass, const UINT& nSpellLevel, con
         return FALSE;
     }
 
-    // __FILE__: .\Include\FileFormat.h
-    // __LINE__: 2572
-    UTIL_ASSERT(nClassIndex < CSPELLLIST_NUM_CLASSES);
+    // NOTE: Uninline.
+    CGameSpriteGroupedSpellList* pSpellsByLevel = m_spells.Get(nClassIndex);
 
     // NOTE: Uninline.
-    return m_spellsByClass[nClassIndex].sub_7260B0(nID, nSpellLevel, a4, a5);
+    return pSpellsByLevel->sub_7260B0(nID, nSpellLevel, a4, a5);
 }
 
 // 0x725110
@@ -3042,14 +3039,14 @@ BOOLEAN CGameSprite::sub_725330(const CResRef& resRef, const DWORD& dwClassMask,
                 UTIL_ASSERT(nCurrLevel < CSPELLLIST_MAX_LEVELS);
 
                 UINT nIndex = 0;
-                v1 = m_spellsByClass[nClassIndex].m_lists[nCurrLevel].Find(nID, nIndex);
+                v1 = m_spells.m_spellsByClass[nClassIndex].m_lists[nCurrLevel].Find(nID, nIndex);
                 if (v1 == TRUE && a4 == TRUE) {
                     // __FILE__: .\Include\FileFormat.h
                     // __LINE__: 2565
                     UTIL_ASSERT(nClassIndex < CSPELLLIST_NUM_CLASSES);
 
                     // NOTE: Uninline.
-                    v1 = m_spellsByClass[nClassIndex].m_lists[nCurrLevel].CheckF8(nIndex);
+                    v1 = m_spells.m_spellsByClass[nClassIndex].m_lists[nCurrLevel].CheckF8(nIndex);
                 }
             }
         }
