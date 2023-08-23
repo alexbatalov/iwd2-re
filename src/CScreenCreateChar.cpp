@@ -1550,7 +1550,24 @@ void CScreenCreateChar::sub_60B610(CUIPanel* pPanel, CGameSprite* pSprite)
 // 0x60BA30
 void CScreenCreateChar::ResetClassPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    CAIObjectType typeAI(pSprite->m_startTypeAI);
+    typeAI.m_nClass = 0;
+    pSprite->m_startTypeAI.Set(typeAI);
+
+    pSprite->GetBaseStats()->m_specialization = 0;
+
+    for (UINT nClassIndex = 0; nClassIndex < CSPELLLIST_NUM_CLASSES; nClassIndex++) {
+        // NOTE: Uninline.
+        pSprite->m_spellsByClass[nClassIndex].Clear();
+    }
+
+    // NOTE: Uninline.
+    pSprite->m_domainSpells.Clear();
+
+    // NOTE: Uninline.
+    pSprite->m_innateSpells.Clear();
+
+    UpdateHelp(pPanel->m_nID, 16, 17242);
 }
 
 // 0x60BB80
