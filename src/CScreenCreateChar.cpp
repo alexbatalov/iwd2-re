@@ -7634,8 +7634,8 @@ CUIControlButtonCharGen620AE0::CUIControlButtonCharGen620AE0(CUIPanel* panel, UI
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 1)
 {
     m_nSelectedFrame = 0;
-    field_66E = "";
-    field_676 = "";
+    m_iconResRef = "";
+    m_spellResRef = "";
 }
 
 // 0x620BB0
@@ -7643,10 +7643,39 @@ CUIControlButtonCharGen620AE0::~CUIControlButtonCharGen620AE0()
 {
 }
 
+// FIXME: `cResRef` should be reference.
+//
 // 0x620C50
-void CUIControlButtonCharGen620AE0::sub_620C50(CResRef cResRef)
+void CUIControlButtonCharGen620AE0::SetSpell(CResRef cResRef)
 {
-    // TODO: Incomplete.
+    CString sIconResRef;
+
+    if (m_spellResRef != cResRef) {
+        m_spellResRef = cResRef;
+        m_iconResRef = "";
+
+        if (m_spellResRef != "") {
+            CSpell cSpell;
+            cSpell.SetResRef(m_spellResRef, TRUE, TRUE);
+            cSpell.Demand();
+
+            if (cSpell.pRes != NULL) {
+                RESREF iconResRef;
+                cSpell.GetIcon(iconResRef);
+                m_iconResRef = iconResRef;
+
+                m_iconResRef.CopyToString(sIconResRef);
+                sIconResRef.SetAt(sIconResRef.GetLength() - 1, 'B');
+                m_iconResRef = sIconResRef;
+
+                SetToolTipStrRef(cSpell.GetGenericName(), -1, -1);
+            }
+
+            cSpell.Release();
+        } else {
+            SetToolTipStrRef(-1, -1, -1);
+        }
+    }
 }
 
 // 0x620E10
