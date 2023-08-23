@@ -2118,6 +2118,8 @@ INT CRuleTables::GetMaxKnownSpells(const BYTE& nClass, const CAIObjectType& type
         // __LINE__: 3043
         UTIL_ASSERT(FALSE);
     }
+
+    return nMaxSpells;
 }
 
 // 0x543770
