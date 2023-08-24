@@ -2341,6 +2341,26 @@ CGameEffect* CGameEffectEndNonDetection::Copy()
     return copy;
 }
 
+// 0x4B4CA0
+BOOL CGameEffectEndNonDetection::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetBaseStats()->m_generalState &= ~0x200000;
+    pSprite->GetDerivedStats()->m_generalState &= ~0x200000;
+
+    pSprite->m_timedEffectList.RemoveAllOfType(pSprite,
+        CGAMEEFFECT_NONDETECTION,
+        pSprite->m_timedEffectList.m_posCurrent,
+        -1);
+    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+        CGAMEEFFECT_NONDETECTION,
+        pSprite->m_equipedEffectList.m_posCurrent,
+        -1);
+
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
