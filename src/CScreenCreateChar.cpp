@@ -7598,7 +7598,7 @@ void CUIControlButtonCharGenCancel::OnLButtonClick(CPoint pt)
 // -----------------------------------------------------------------------------
 
 // 0x620220
-CUIControlButtonCharGen620220::CUIControlButtonCharGen620220(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+CUIControlButtonCharGenMemorizedArcaneSpellSelection::CUIControlButtonCharGenMemorizedArcaneSpellSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 1)
 {
     m_nSelectedFrame = 0;
@@ -7607,14 +7607,14 @@ CUIControlButtonCharGen620220::CUIControlButtonCharGen620220(CUIPanel* panel, UI
 }
 
 // 0x6202F0
-CUIControlButtonCharGen620220::~CUIControlButtonCharGen620220()
+CUIControlButtonCharGenMemorizedArcaneSpellSelection::~CUIControlButtonCharGenMemorizedArcaneSpellSelection()
 {
 }
 
 // FIXME: `cResRef` should be reference.
 //
 // 0x620390
-void CUIControlButtonCharGen620220::SetSpell(CResRef cResRef)
+void CUIControlButtonCharGenMemorizedArcaneSpellSelection::SetSpell(CResRef cResRef)
 {
     CString sIconResRef;
 
@@ -7647,13 +7647,76 @@ void CUIControlButtonCharGen620220::SetSpell(CResRef cResRef)
 }
 
 // 0x620560
-void CUIControlButtonCharGen620220::OnLButtonClick(CPoint pt)
+void CUIControlButtonCharGenMemorizedArcaneSpellSelection::OnLButtonClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
+
+    INT nGameSprite = pCreateChar->GetSpriteId();
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        CDerivedStats& DStats = *pSprite->GetDerivedStats();
+        CAIObjectType& typeAI = pSprite->m_startTypeAI;
+
+        CSpell cSpell;
+        cSpell.SetResRef(m_spellResRef, TRUE, TRUE);
+        cSpell.Demand();
+
+        STRREF strDescription = cSpell.GetDescription();
+
+        cSpell.Release();
+
+        CGameSpriteSpellList* pList = pSprite->GetSpellsAtLevel(typeAI.m_nClass, 0);
+        UINT nButtonIndex = m_nID - 2;
+
+        if (nButtonIndex < pList->m_List.size()) {
+            UINT nID = pList->Get(nButtonIndex)->m_nID;
+
+            // NOTE: Original code is an unreadable mess consisting mostly of
+            // inlined functions.
+            //
+            // TODO: The code looks unsafe as checking for resref is the only
+            // way to stop this loop.
+            while (m_spellResRef != g_pBaldurChitin->GetObjectGame()->m_spells.Get(nID)) {
+                nButtonIndex++;
+                nID = pList->Get(nButtonIndex)->m_nID;
+            }
+
+            if (m_bSelected) {
+                pSprite->GetSpells(typeAI.m_nClass)->Remove(nID, 0, 0, 1, 0);
+                pCreateChar->field_4EE++;
+                SetSelected(FALSE);
+            } else {
+                if (pCreateChar->field_4EE > 0
+                    && cSpell.pRes != NULL
+                    && cSpell.CheckUsableBy(pSprite) == TRUE) {
+                    pSprite->GetSpells(typeAI.m_nClass)->Add(nID, 0, 1, 0, 0);
+                    pCreateChar->field_4EE--;
+                    SetSelected(TRUE);
+                }
+            }
+
+            pCreateChar->UpdateHelp(m_pPanel->m_nID, 27, strDescription);
+            pCreateChar->UpdatePopupPanel(m_pPanel->m_nID, pSprite);
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
 }
 
 // 0x620970
-BOOL CUIControlButtonCharGen620220::Render(BOOL bForce)
+BOOL CUIControlButtonCharGenMemorizedArcaneSpellSelection::Render(BOOL bForce)
 {
     if (!m_bActive && !m_bInactiveRender) {
         return FALSE;

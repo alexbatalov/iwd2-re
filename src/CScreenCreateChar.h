@@ -461,10 +461,10 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
-class CUIControlButtonCharGen620220 : public CUIControlButton3State {
+class CUIControlButtonCharGenMemorizedArcaneSpellSelection : public CUIControlButton3State {
 public:
-    CUIControlButtonCharGen620220(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
-    ~CUIControlButtonCharGen620220() override;
+    CUIControlButtonCharGenMemorizedArcaneSpellSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGenMemorizedArcaneSpellSelection() override;
     BOOL Render(BOOL bForce) override;
     void OnLButtonClick(CPoint pt) override;
 
