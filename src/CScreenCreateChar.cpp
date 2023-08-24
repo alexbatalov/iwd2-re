@@ -1007,7 +1007,7 @@ void CScreenCreateChar::ResetPopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
         ResetSkillsPanel(pPanel, pSprite);
         break;
     case 7:
-        sub_60A5C0(pPanel, pSprite);
+        ResetArcaneSpellsPanel(pPanel, pSprite);
         break;
     case 8:
         ResetRacePanel(pPanel, pSprite);
@@ -1524,9 +1524,66 @@ void CScreenCreateChar::ResetClericWizardSpecializationPanel(CUIPanel* pPanel, C
 }
 
 // 0x60A5C0
-void CScreenCreateChar::sub_60A5C0(CUIPanel* pPanel, CGameSprite* pSprite)
+void CScreenCreateChar::ResetArcaneSpellsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    CAIObjectType typeAI(pSprite->m_startTypeAI);
+
+    field_14A2 = 1;
+
+    if ((typeAI.m_nClassMask & CAIOBJECTTYPE_C_BARD) != 0) {
+        INT nBardClass = pSprite->GetDerivedStats()->GetClassLevel(CAIObjectType::C_BARD);
+        field_4EE = atol(ruleTables.m_tKnownSpellsBard.GetAt(CPoint(field_14A2 - 1, nBardClass - 1)));
+    } else if ((typeAI.m_nClassMask & CAIOBJECTTYPE_C_SORCERER) != 0) {
+        INT nBardClass = pSprite->GetDerivedStats()->GetClassLevel(CAIObjectType::C_BARD);
+        field_4EE = atol(ruleTables.m_tKnownSpellsSorcerer.GetAt(CPoint(field_14A2 - 1, nBardClass - 1)));
+    } else {
+        INT nBonus = 0;
+        ruleTables.GetMaxKnownSpells(typeAI.m_nClass,
+            typeAI,
+            *pSprite->GetDerivedStats(),
+            pSprite->GetSpecialization(),
+            1,
+            nBonus);
+        if ((pSprite->GetSpecialization() & SPECMASK_WIZARD_UNIVERSAL) != 0) {
+            field_4EE = nBonus + 2;
+        } else {
+            field_4EE = nBonus + 3;
+        }
+    }
+
+    CGameSpriteGroupedSpellList* pSpells = pSprite->GetSpells(typeAI.m_nClass);
+
+    // NOTE: Uninline.
+    pSpells->Clear();
+
+    // NOTE: Uninline.
+    pSprite->m_domainSpells.Clear();
+
+    for (DWORD nButtonID = 2; nButtonID <= 25; nButtonID++) {
+        CUIControlButton3State* pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(nButtonID));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 2528
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->SetSelected(FALSE);
+    }
+
+    CString sNumber;
+    sNumber.Format("%d", field_4EE);
+
+    g_pBaldurChitin->GetTlkTable().SetToken(TOKEN_NUMBER, sNumber);
+
+    UpdateLabel(pPanel,
+        0x10000000,
+        "%s: %s %d",
+        (LPCSTR)FetchString(31614), // "Arcane Spell Selection"
+        (LPCSTR)FetchString(7192), // "Level"
+        field_14A2);
+
+    UpdateHelp(pPanel->m_nID, 27, 17250);
 }
 
 // 0x60A920
