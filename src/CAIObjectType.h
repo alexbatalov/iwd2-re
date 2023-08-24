@@ -98,6 +98,28 @@
 #define CAIOBJECTTYPE_EA_INANIMATE 127
 #define CAIOBJECTTYPE_EA_ANYTHING 126
 
+#define CAIOBJECTTYPE_G_HUMANOID 1
+#define CAIOBJECTTYPE_G_ANIMAL 2
+#define CAIOBJECTTYPE_G_DEAD 3
+#define CAIOBJECTTYPE_G_UNDEAD 4
+#define CAIOBJECTTYPE_G_GIANTHUMANOID 5
+#define CAIOBJECTTYPE_G_FROZEN 6
+#define CAIOBJECTTYPE_G_MONSTER 255
+#define CAIOBJECTTYPE_G_WEAPON 101
+#define CAIOBJECTTYPE_G_ARMOR 102
+#define CAIOBJECTTYPE_G_AMULET 103
+#define CAIOBJECTTYPE_G_BELT 104
+#define CAIOBJECTTYPE_G_BOOTS 105
+#define CAIOBJECTTYPE_G_AMMO 106
+#define CAIOBJECTTYPE_G_GENERAL_ITEM 0
+#define CAIOBJECTTYPE_G_HELMET 107
+#define CAIOBJECTTYPE_G_KEY 108
+#define CAIOBJECTTYPE_G_POTION 109
+#define CAIOBJECTTYPE_G_RING 110
+#define CAIOBJECTTYPE_G_SCROLL 111
+#define CAIOBJECTTYPE_G_SHIELD 112
+#define CAIOBJECTTYPE_G_GLOVES 113
+
 #define CAIOBJECTTYPE_R_HUMAN 1
 #define CAIOBJECTTYPE_R_ELF 2
 #define CAIOBJECTTYPE_R_HALF_ELF 3
@@ -235,6 +257,28 @@ public:
     static const BYTE EA_ARENAPC;
     static const BYTE EA_INANIMATE;
     static const BYTE EA_ANYTHING;
+
+    static const BYTE G_HUMANOID;
+    static const BYTE G_ANIMAL;
+    static const BYTE G_DEAD;
+    static const BYTE G_UNDEAD;
+    static const BYTE G_GIANTHUMANOID;
+    static const BYTE G_FROZEN;
+    static const BYTE G_MONSTER;
+    static const BYTE G_WEAPON;
+    static const BYTE G_ARMOR;
+    static const BYTE G_AMULET;
+    static const BYTE G_BELT;
+    static const BYTE G_BOOTS;
+    static const BYTE G_AMMO;
+    static const BYTE G_GENERAL_ITEM;
+    static const BYTE G_HELMET;
+    static const BYTE G_KEY;
+    static const BYTE G_POTION;
+    static const BYTE G_RING;
+    static const BYTE G_SCROLL;
+    static const BYTE G_SHIELD;
+    static const BYTE G_GLOVES;
 
     static const BYTE R_HUMAN;
     static const BYTE R_ELF;
