@@ -106,7 +106,7 @@ public:
     void UpdateGenderPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateAbilitiesPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateSkillsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
-    void sub_60EF70(CUIPanel* pPanel, CGameSprite* pSprite);
+    void UpdateArcaneSpellsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateMemorizeArcaneSpellsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateMemorizeDivineSpellsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateMemorizeDomainSpellsPanel(CUIPanel* pPanel, CGameSprite* pSprite);

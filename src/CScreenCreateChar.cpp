@@ -2103,7 +2103,7 @@ void CScreenCreateChar::UpdatePopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
         UpdateSkillsPanel(pPanel, pSprite);
         break;
     case 7:
-        sub_60EF70(pPanel, pSprite);
+        UpdateArcaneSpellsPanel(pPanel, pSprite);
         break;
     case 8:
         if (1) {
@@ -2881,9 +2881,68 @@ void CScreenCreateChar::UpdateSkillsPanel(CUIPanel* pPanel, CGameSprite* pSprite
 }
 
 // 0x60EF70
-void CScreenCreateChar::sub_60EF70(CUIPanel* pPanel, CGameSprite* pSprite)
+void CScreenCreateChar::UpdateArcaneSpellsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(26));
+    CResRef resRef;
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    UINT nClassIndex = pGame->GetSpellcasterIndex(pSprite->m_startTypeAI.m_nClass);
+
+    HighlightLabel(pPanel,
+        0x1000001B,
+        field_4EE != 0,
+        COLOR_LABEL_HIGHLIGHT_BONUS);
+    UpdateLabel(pPanel,
+        0x1000001B,
+        "%d",
+        field_4EE);
+
+    UINT nSpells = pGame->m_spellsByClass[nClassIndex].m_lists[0].m_nCount;
+    UINT nIndex = 0;
+
+    for (DWORD nButtonID = 2; nButtonID <= 25; nButtonID++) {
+        CUIControlButtonCharGenKnownArcaneSpellSelection* pButton = static_cast<CUIControlButtonCharGenKnownArcaneSpellSelection*>(pPanel->GetControl(nButtonID));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 4695
+        UTIL_ASSERT(pButton != NULL);
+
+        // NOTE: Implementation is different. Original code has many inlined
+        // stuff which is likely impossible to replicate one to one.
+        while (nIndex < nSpells) {
+            UINT nID = pGame->m_spellsByClass[nClassIndex].m_lists[0].Get(nIndex);
+            resRef = pGame->m_spells.Get(nID);
+
+            CSpell cSpell;
+            cSpell.SetResRef(resRef, TRUE, TRUE);
+            BOOL bUsable = cSpell.pRes != NULL && cSpell.CheckUsableBy(pSprite) == TRUE;
+            cSpell.Release();
+
+            if (bUsable) {
+                break;
+            }
+
+            nIndex++;
+        }
+
+        if (nIndex < nSpells) {
+            pButton->SetSpell(resRef);
+            pButton->SetEnabled(TRUE);
+        } else {
+            pButton->SetSpell(CResRef(""));
+            pButton->SetEnabled(FALSE);
+        }
+
+        nIndex++;
+    }
+
+    CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(0));
+    BOOL bIsDoneClickable = IsDoneButtonClickable(pSprite);
+    pDone->SetEnabled(bIsDoneClickable);
+
+    CUIControlButton* pAutoPick = static_cast<CUIControlButton*>(pPanel->GetControl(30));
+    pAutoPick->SetEnabled(!bIsDoneClickable);
 }
 
 // 0x60F430
