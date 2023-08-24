@@ -2364,7 +2364,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 11:
             case 12:
             case 13:
-                return new CUIControlButtonCharGen620AE0(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+                return new CUIControlButtonCharGenMemorizedDivineSpellSelection(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 26:
                 return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
             case 27:

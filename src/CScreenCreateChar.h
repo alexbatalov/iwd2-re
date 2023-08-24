@@ -474,10 +474,10 @@ public:
     /* 0676 */ CResRef m_spellResRef;
 };
 
-class CUIControlButtonCharGen620AE0 : public CUIControlButton3State {
+class CUIControlButtonCharGenMemorizedDivineSpellSelection : public CUIControlButton3State {
 public:
-    CUIControlButtonCharGen620AE0(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
-    ~CUIControlButtonCharGen620AE0() override;
+    CUIControlButtonCharGenMemorizedDivineSpellSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGenMemorizedDivineSpellSelection() override;
     BOOL Render(BOOL bForce) override;
     void OnLButtonClick(CPoint pt) override;
 

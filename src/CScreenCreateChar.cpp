@@ -7762,7 +7762,7 @@ BOOL CUIControlButtonCharGenMemorizedArcaneSpellSelection::Render(BOOL bForce)
 // -----------------------------------------------------------------------------
 
 // 0x620AE0
-CUIControlButtonCharGen620AE0::CUIControlButtonCharGen620AE0(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+CUIControlButtonCharGenMemorizedDivineSpellSelection::CUIControlButtonCharGenMemorizedDivineSpellSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 1)
 {
     m_nSelectedFrame = 0;
@@ -7771,14 +7771,14 @@ CUIControlButtonCharGen620AE0::CUIControlButtonCharGen620AE0(CUIPanel* panel, UI
 }
 
 // 0x620BB0
-CUIControlButtonCharGen620AE0::~CUIControlButtonCharGen620AE0()
+CUIControlButtonCharGenMemorizedDivineSpellSelection::~CUIControlButtonCharGenMemorizedDivineSpellSelection()
 {
 }
 
 // FIXME: `cResRef` should be reference.
 //
 // 0x620C50
-void CUIControlButtonCharGen620AE0::SetSpell(CResRef cResRef)
+void CUIControlButtonCharGenMemorizedDivineSpellSelection::SetSpell(CResRef cResRef)
 {
     CString sIconResRef;
 
@@ -7811,13 +7811,83 @@ void CUIControlButtonCharGen620AE0::SetSpell(CResRef cResRef)
 }
 
 // 0x620E10
-void CUIControlButtonCharGen620AE0::OnLButtonClick(CPoint pt)
+void CUIControlButtonCharGenMemorizedDivineSpellSelection::OnLButtonClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
+
+    INT nGameSprite = pCreateChar->GetSpriteId();
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        BOOLEAN bPickingDomainSpells = pCreateChar->field_4D6;
+        UINT nButtonIndex = m_nID - 2;
+        STRREF strDescription;
+        CResRef resRef;
+        CAIObjectType& typeAI = pSprite->m_startTypeAI;
+
+        // FIXME: This is a **copy**. Obviously this should be a pointer or
+        // reference, since there is no need for a copy. I bet they simply
+        // forgot to add a star.
+        CGameSpriteSpellList spells = bPickingDomainSpells
+            ? pSprite->m_domainSpells.m_lists[0]
+            : *pSprite->GetSpellsAtLevel(pSprite->GetAIType().m_nClass, 0);
+
+        if (nButtonIndex < spells.m_List.size()) {
+            // NOTE: Uninline.
+            UINT nID = spells.Get(nButtonIndex)->m_nID;
+
+            // NOTE: Uninline.
+            resRef = g_pBaldurChitin->GetObjectGame()->m_spells.Get(nID);
+
+            if (resRef != "") {
+                CSpell cSpell;
+                cSpell.SetResRef(resRef, TRUE, TRUE);
+                cSpell.Demand();
+                strDescription = cSpell.GetDescription();
+                cSpell.Release();
+            }
+
+            if (m_bSelected) {
+                if (bPickingDomainSpells) {
+                    pSprite->RemoveDomainSpell(0, resRef, 0, 1, 0);
+                } else {
+                    pSprite->GetSpells(typeAI.m_nClass)->Remove(nID, 0, 0, 1, 0);
+                }
+                pCreateChar->field_4EE++;
+                SetSelected(FALSE);
+            } else {
+                if (pCreateChar->field_4EE > 0) {
+                    if (bPickingDomainSpells) {
+                        pSprite->AddDomainSpell(0, resRef, 1, 0, 0);
+                    } else {
+                        pSprite->GetSpells(typeAI.m_nClass)->Add(nID, 0, 1, 0, 0);
+                    }
+                    pCreateChar->field_4EE--;
+                    SetSelected(TRUE);
+                }
+            }
+
+            pCreateChar->UpdateHelp(m_pPanel->m_nID, 27, strDescription);
+            pCreateChar->UpdatePopupPanel(m_pPanel->m_nID, pSprite);
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
 }
 
 // 0x6212D0
-BOOL CUIControlButtonCharGen620AE0::Render(BOOL bForce)
+BOOL CUIControlButtonCharGenMemorizedDivineSpellSelection::Render(BOOL bForce)
 {
     if (!m_bActive && !m_bInactiveRender) {
         return FALSE;
