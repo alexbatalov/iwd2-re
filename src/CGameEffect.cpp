@@ -2211,6 +2211,26 @@ CGameEffect* CGameEffectInfravisionOff::Copy()
     return copy;
 }
 
+// 0x4B4B40
+BOOL CGameEffectInfravisionOff::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetBaseStats()->m_generalState &= ~0x20000;
+    pSprite->GetDerivedStats()->m_generalState &= ~0x20000;
+
+    pSprite->m_timedEffectList.RemoveAllOfType(pSprite,
+        CGAMEEFFECT_INFRAVISION,
+        pSprite->m_timedEffectList.m_posCurrent,
+        -1);
+    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+        CGAMEEFFECT_INFRAVISION,
+        pSprite->m_equipedEffectList.m_posCurrent,
+        -1);
+
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
