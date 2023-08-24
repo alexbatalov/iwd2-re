@@ -3572,9 +3572,9 @@ void CSpellResRefList::Load(const C2DArray& Table, const INT& nResRefColumn)
 // 0x5CA160
 bool CSpellResRefList::Find(const CResRef& resRef, UINT& nID)
 {
-    for (int index = 0; index < m_nCount; index++) {
-        if (m_pList[index] == resRef) {
-            nID = index;
+    for (UINT nIndex = 0; nIndex < m_nCount; nIndex++) {
+        if (m_pList[nIndex] == resRef) {
+            nID = nIndex;
             return true;
         }
     }
@@ -3587,7 +3587,7 @@ bool CSpellResRefList::Find(const CResRef& resRef, UINT& nID)
 // TODO: Is it `operator[]`?
 //
 // 0x5F6790
-const CResRef& CSpellResRefList::Get(int& nIndex)
+const CResRef& CSpellResRefList::Get(UINT& nIndex)
 {
     // __FILE__: .\Include\InfGame.h
     // __LINE__: 652
@@ -3644,17 +3644,33 @@ void CSpellList::Load(const std::vector<CSpellListEntry>& spells)
 }
 
 // 0x5CA250
-bool CSpellList::GetSpellLevel(int& nID, int& nLevel)
+bool CSpellList::GetSpellLevel(const UINT& nID, UINT& nLevel)
 {
-    for (int index = 0; index < m_nCount; index++) {
-        if (m_pList[index].m_nID == nID) {
-            nLevel = m_pList[index].m_nLevel;
+    for (UINT nIndex = 0; nIndex < m_nCount; nIndex++) {
+        if (m_pList[nIndex].m_nID == nID) {
+            nLevel = m_pList[nIndex].m_nLevel;
             return true;
         }
     }
 
     nLevel = 0;
     return false;
+}
+
+// TODO: Is it `operator[]`?
+//
+// NOTE: Inlined.
+UINT CSpellList::Get(UINT nIndex)
+{
+    // __FILE__: .\Include\InfGame.h
+    // __LINE__: 724
+    UTIL_ASSERT(nIndex < m_nCount);
+
+    // __FILE__: .\Include\InfGame.h
+    // __LINE__: 725
+    UTIL_ASSERT(m_pList != NULL);
+
+    return m_pList[nIndex].m_nID;
 }
 
 // -----------------------------------------------------------------------------

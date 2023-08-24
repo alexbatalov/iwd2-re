@@ -51,16 +51,16 @@ public:
     ~CSpellResRefList();
     void Load(const C2DArray& Table, const INT& nResRefColumn);
     bool Find(const CResRef& resRef, UINT& nID);
-    const CResRef& Get(int& nIndex);
+    const CResRef& Get(UINT& nIndex);
 
     /* 0000 */ CResRef* m_pList;
-    /* 0004 */ int m_nCount;
+    /* 0004 */ UINT m_nCount;
 };
 
 class CSpellListEntry {
 public:
-    /* 0000 */ int m_nID;
-    /* 0004 */ int m_nLevel;
+    /* 0000 */ UINT m_nID;
+    /* 0004 */ UINT m_nLevel;
 };
 
 class CSpellList {
@@ -68,10 +68,12 @@ public:
     CSpellList();
     ~CSpellList();
     void Load(const std::vector<CSpellListEntry>& spells);
-    bool GetSpellLevel(int& nID, int& nLevel);
+    bool GetSpellLevel(const UINT& nID, UINT& nLevel);
+
+    UINT Get(UINT nIndex);
 
     /* 0000 */ CSpellListEntry* m_pList;
-    /* 0004 */ int m_nCount;
+    /* 0004 */ UINT m_nCount;
 };
 
 class CGroupedSpellList {

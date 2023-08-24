@@ -3392,7 +3392,7 @@ void CRuleTables::sub_546B60(CGameSprite* pSprite, int& a2, int& a3, int& a4, BO
 // pointers.
 //
 // 0x547130
-DWORD CRuleTables::GetMaxSpellLevel(BYTE& nClass, INT& nLevel) const
+DWORD CRuleTables::GetMaxSpellLevel(const BYTE& nClass, const UINT& nLevel) const
 {
     switch (nClass) {
     case 0:
