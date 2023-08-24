@@ -6,6 +6,7 @@
 #include "CDerivedStats.h"
 #include "CGameAIBase.h"
 #include "CGameAnimation.h"
+#include "CGameEffect.h"
 #include "CGameSpriteEquipment.h"
 #include "CGameSpriteSpells.h"
 #include "CMarker.h"
@@ -431,6 +432,8 @@ public:
     /* 54F4 */ short field_54F4;
     /* 54F6 */ short field_54F6;
     /* 54F8 */ short field_54F8;
+    /* 54FA */ CGameEffectList m_equipedEffectList;
+    /* 5526 */ CGameEffectList m_timedEffectList;
     /* 556E */ int field_556E;
     /* 5572 */ int field_5572;
     /* 5576 */ short field_5576;

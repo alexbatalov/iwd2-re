@@ -1635,4 +1635,15 @@ public:
     CGameEffect* Copy() override;
 };
 
+class CGameEffectList : public CTypedPtrList<CPtrList, CGameEffect*> {
+public:
+    CGameEffectList();
+    ~CGameEffectList() override;
+
+    /* 001C */ POSITION m_posNext;
+    /* 0020 */ POSITION m_posCurrent;
+    /* 0024 */ BOOL m_newEffect;
+    /* 0028 */ BOOL m_retry;
+};
+
 #endif /* CGAMEEFFECT_H_ */
