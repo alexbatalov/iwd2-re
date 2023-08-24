@@ -992,6 +992,35 @@ CGameEffect* CGameEffectAwaken::Copy()
     return copy;
 }
 
+// 0x4A5540
+BOOL CGameEffectAwaken::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetBaseStats()->m_generalState &= ~0x1;
+    pSprite->GetDerivedStats()->m_generalState &= ~0x1;
+
+    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+        CGAMEEFFECT_SLEEP,
+        pSprite->m_equipedEffectList.m_posCurrent,
+        -1);
+    pSprite->m_timedEffectList.RemoveAllOfType(pSprite,
+        CGAMEEFFECT_SLEEP,
+        pSprite->m_timedEffectList.m_posCurrent,
+        -1);
+
+    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+        CGAMEEFFECT_PORTRAITICON,
+        pSprite->m_equipedEffectList.m_posCurrent,
+        14);
+    pSprite->m_timedEffectList.RemoveAllOfType(pSprite,
+        CGAMEEFFECT_PORTRAITICON,
+        pSprite->m_timedEffectList.m_posCurrent,
+        14);
+
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
@@ -4943,4 +4972,10 @@ CGameEffectList::~CGameEffectList()
         delete pEffect;
     }
     RemoveAll();
+}
+
+// 0x4C08E0
+void CGameEffectList::RemoveAllOfType(CGameSprite* pSprite, WORD effectID, POSITION posLeave, LONG effectAmount)
+{
+    // TODO: Incomplete.
 }

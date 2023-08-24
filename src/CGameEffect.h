@@ -301,6 +301,7 @@ public:
     void SetSourceId(LONG sourceID);
 
     /* 010C */ LONG m_sourceID;
+    /* 0110 */ BOOL m_done;
     /* 0124 */ CSound m_sound;
 };
 
@@ -320,6 +321,7 @@ class CGameEffectAwaken : public CGameEffect {
 public:
     CGameEffectAwaken(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectBerserk : public CGameEffect {
@@ -1639,6 +1641,8 @@ class CGameEffectList : public CTypedPtrList<CPtrList, CGameEffect*> {
 public:
     CGameEffectList();
     ~CGameEffectList() override;
+
+    void RemoveAllOfType(CGameSprite* pSprite, WORD effectID, POSITION posLeave, LONG effectAmount);
 
     /* 001C */ POSITION m_posNext;
     /* 0020 */ POSITION m_posCurrent;
