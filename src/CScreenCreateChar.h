@@ -86,7 +86,7 @@ public:
     void sub_60A5C0(CUIPanel* pPanel, CGameSprite* pSprite);
     void sub_60A920(CUIPanel* pPanel, CGameSprite* pSprite);
     void sub_60AF60(CUIPanel* pPanel, CGameSprite* pSprite);
-    void sub_60B610(CUIPanel* pPanel, CGameSprite* pSprite);
+    void ResetMemorizeDomainSpellsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void ResetClassPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void ResetGenderPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void ResetRacePanel(CUIPanel* pPanel, CGameSprite* pSprite);

@@ -1033,7 +1033,7 @@ void CScreenCreateChar::ResetPopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
         break;
     case 17:
         if (field_4D6) {
-            sub_60B610(pPanel, pSprite);
+            ResetMemorizeDomainSpellsPanel(pPanel, pSprite);
         } else {
             sub_60AF60(pPanel, pSprite);
         }
@@ -1542,9 +1542,58 @@ void CScreenCreateChar::sub_60AF60(CUIPanel* pPanel, CGameSprite* pSprite)
 }
 
 // 0x60B610
-void CScreenCreateChar::sub_60B610(CUIPanel* pPanel, CGameSprite* pSprite)
+void CScreenCreateChar::ResetMemorizeDomainSpellsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    UpdateLabel(pPanel,
+        0x10000000,
+        "%s: %s %d",
+        (LPCSTR)FetchString(39848), // "Memorize Domain Spells"
+        (LPCSTR)FetchString(7192), // "Level"
+        field_14A2);
+
+    for (UINT nLevel = 0; nLevel < CSPELLLIST_MAX_LEVELS; nLevel++) {
+        // NOTE: Uninline.
+        for (UINT nIndex = 0; nIndex < pSprite->m_domainSpells.GetSpellsAtLevel(nLevel)->m_List.size(); nIndex++) {
+            UINT nID = pSprite->m_domainSpells.GetSpellsAtLevel(nLevel)->Get(nIndex)->m_nID;
+            pSprite->m_domainSpells.sub_7260B0(nID, 0, 1, 0);
+            pSprite->m_domainSpells.Remove(nID, 0, 0, 1, 0);
+        }
+    }
+
+    // NOTE: Uninline.
+    pSprite->m_domainSpells.Clear();
+
+    DWORD dwClericSpecialization = pSprite->GetSpecialization() & SPECMASK_CLERIC;
+    UINT nDomainIndex = g_pBaldurChitin->GetObjectGame()->GetSpellcasterDomainIndex(dwClericSpecialization);
+    CGroupedSpellList* pSpells = &(g_pBaldurChitin->GetObjectGame()->m_spellsByDomain[nDomainIndex]);
+
+    for (UINT nIndex = 0; nIndex < pSpells->m_lists[0].m_nCount; nIndex++) {
+        // NOTE: Uninline.
+        UINT nID = pSpells->m_lists[0].Get(nIndex);
+
+        // NOTE: Uninline.
+        const CResRef& resRef = g_pBaldurChitin->GetObjectGame()->m_spells.Get(nID);
+
+        pSprite->AddDomainSpell(0, resRef, 0, 0, 0);
+    }
+
+    field_4EE = 1;
+
+    for (DWORD nButtonID = 2; nButtonID <= 13; nButtonID++) {
+        CUIControlButton3State* pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(nButtonID));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 2795
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->SetSelected(FALSE);
+    }
+
+    CString sNumber;
+    sNumber.Format("%d", field_4EE);
+    g_pBaldurChitin->GetTlkTable().SetToken(TOKEN_NUMBER, sNumber);
+
+    UpdateHelp(pPanel->m_nID, 27, 39852);
 }
 
 // 0x60BA30
