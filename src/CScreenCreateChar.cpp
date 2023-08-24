@@ -1029,7 +1029,7 @@ void CScreenCreateChar::ResetPopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
         UpdateHelp(pPanel->m_nID, 8, 17256);
         break;
     case 16:
-        sub_60A920(pPanel, pSprite);
+        ResetMemorizeArcaneSpellsPanel(pPanel, pSprite);
         break;
     case 17:
         if (field_4D6) {
@@ -1530,9 +1530,101 @@ void CScreenCreateChar::sub_60A5C0(CUIPanel* pPanel, CGameSprite* pSprite)
 }
 
 // 0x60A920
-void CScreenCreateChar::sub_60A920(CUIPanel* pPanel, CGameSprite* pSprite)
+void CScreenCreateChar::ResetMemorizeArcaneSpellsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    // NOTE: Unused.
+    CResRef v1;
+
+    CDerivedStats& DStats = *pSprite->GetDerivedStats();
+    CAIObjectType& typeAI = pSprite->m_startTypeAI;
+
+    INT nMaxKnownSpellsBonus = 0;
+    UINT nMaxKnownSpellsBase;
+    UINT nMaxKnownSpells;
+
+    UINT nClassIndex;
+    UINT nLevel;
+
+    for (nClassIndex = 0; nClassIndex < CSPELLLIST_NUM_CLASSES; nClassIndex++) {
+        for (nLevel = 0; nLevel < CSPELLLIST_MAX_LEVELS; nLevel++) {
+            if (typeAI.m_nClass == CAIOBJECTTYPE_C_BARD
+                || typeAI.m_nClass == CAIOBJECTTYPE_C_SORCERER) {
+                nMaxKnownSpellsBase = ruleTables.GetMaxKnownSpells(typeAI.m_nClass,
+                    typeAI,
+                    DStats,
+                    pSprite->GetSpecialization(),
+                    nLevel + 1,
+                    nMaxKnownSpellsBonus);
+                nMaxKnownSpells = nMaxKnownSpellsBase + nMaxKnownSpellsBonus;
+            } else {
+                nMaxKnownSpells = 0;
+            }
+
+            // NOTE: Uninline.
+            pSprite->m_spells.GetSpellsAtLevel(nClassIndex, nLevel)->field_14 = nMaxKnownSpells;
+
+            // NOTE: Uninline.
+            pSprite->m_spells.GetSpellsAtLevel(nClassIndex, nLevel)->field_18 = 0;
+        }
+    }
+
+    pSprite->field_562C = 1;
+    pSprite->ProcessEffectList();
+
+    nMaxKnownSpellsBase = ruleTables.GetMaxKnownSpells(typeAI.m_nClass,
+        typeAI,
+        DStats,
+        pSprite->GetSpecialization(),
+        1,
+        nMaxKnownSpellsBonus);
+    nMaxKnownSpells = nMaxKnownSpellsBase + nMaxKnownSpellsBonus;
+
+    if (nMaxKnownSpells >= pSprite->GetSpellsAtLevel(typeAI.m_nClass, 0)->m_List.size()) {
+        nMaxKnownSpells = pSprite->GetSpellsAtLevel(typeAI.m_nClass, 0)->m_List.size();
+    }
+
+    field_4EE = nMaxKnownSpells;
+
+    UpdateLabel(pPanel,
+        0x10000000,
+        "%s: %s %d",
+        (LPCSTR)FetchString(17189), // "Memorize Arcane Spells"
+        (LPCSTR)FetchString(7192), // "Level"
+        field_14A2);
+
+    for (nClassIndex = 0; nClassIndex < CSPELLLIST_NUM_CLASSES; nClassIndex++) {
+        for (nLevel = 0; nLevel < CSPELLLIST_MAX_LEVELS; nLevel++) {
+            for (UINT nIndex = 0;; nIndex++) {
+                // NOTE: Uninline.
+                CGameSpriteSpellList* pSpells = pSprite->m_spells.GetSpellsAtLevel(nClassIndex, nLevel);
+
+                if (nIndex >= pSpells->m_List.size()) {
+                    break;
+                }
+
+                CGameSpriteSpellListEntry* pEntry = pSpells->Get(nIndex);
+                pSprite->m_spells.m_spellsByClass[nClassIndex].sub_7260B0(pEntry->m_nID, nLevel, 0, 1);
+            }
+        }
+    }
+
+    for (DWORD nButtonID = 2; nButtonID <= 13; nButtonID++) {
+        CUIControlButton3State* pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(nButtonID));
+
+        // __FILE__: .\Include\ObjCreature.h
+        // __LINE__: 2625
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->SetSelected(FALSE);
+    }
+
+    CString sNumber;
+    sNumber.Format("%d", field_4EE);
+    g_pBaldurChitin->GetTlkTable().SetToken(TOKEN_NUMBER, sNumber);
+
+    UpdateHelp(pPanel->m_nID, 27, 17253);
 }
 
 // 0x60AF60

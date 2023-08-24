@@ -84,7 +84,7 @@ public:
     void ResetColorsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void ResetClericWizardSpecializationPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void sub_60A5C0(CUIPanel* pPanel, CGameSprite* pSprite);
-    void sub_60A920(CUIPanel* pPanel, CGameSprite* pSprite);
+    void ResetMemorizeArcaneSpellsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void ResetMemorizeDivineSpellsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void ResetMemorizeDomainSpellsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void ResetClassPanel(CUIPanel* pPanel, CGameSprite* pSprite);
