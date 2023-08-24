@@ -1212,6 +1212,35 @@ CGameEffect* CGameEffectCurePoison::Copy()
     return copy;
 }
 
+// 0x4A76B0
+BOOL CGameEffectCurePoison::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+        CGAMEEFFECT_POISON,
+        pSprite->m_equipedEffectList.m_posCurrent,
+        -1);
+    pSprite->m_timedEffectList.RemoveAllOfType(pSprite,
+        CGAMEEFFECT_POISON,
+        pSprite->m_timedEffectList.m_posCurrent,
+        -1);
+
+    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+        CGAMEEFFECT_PORTRAITICON,
+        pSprite->m_equipedEffectList.m_posCurrent,
+        6);
+    pSprite->m_timedEffectList.RemoveAllOfType(pSprite,
+        CGAMEEFFECT_PORTRAITICON,
+        pSprite->m_timedEffectList.m_posCurrent,
+        6);
+
+    pSprite->GetBaseStats()->m_generalState &= ~0x4000;
+    pSprite->GetDerivedStats()->m_generalState &= ~0x4000;
+
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
