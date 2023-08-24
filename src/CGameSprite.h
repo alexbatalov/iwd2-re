@@ -248,6 +248,7 @@ public:
     BOOL Orderable(BOOL bIgnoreControl);
     DWORD GetSpecialization();
     BOOL ProcessEffectList();
+    BOOL HandleEffects();
     void SelectWeaponAbility(unsigned char a1, unsigned char a2, unsigned char a3, unsigned char a4);
     BOOL HasClassMask(DWORD dwMask);
     INT GetClassLevel(INT iClassType);

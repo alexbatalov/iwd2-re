@@ -1623,7 +1623,38 @@ BOOL CGameSprite::ProcessEffectList()
 {
     // TODO: Incomplete.
 
+    // NOTE: This functions is huge. The next function call is necessary to
+    // move on with character editor.
+    HandleEffects();
+
     return FALSE;
+}
+
+// 0x734550
+BOOL CGameSprite::HandleEffects()
+{
+    BOOL bRetry;
+    BOOL v1;
+    BOOL v2;
+
+    do {
+        bRetry = FALSE;
+
+        m_derivedStats.Reload(this, &m_baseStats, &m_spells, &m_domainSpells);
+        m_derivedStats.m_nTurnUndeadLevel = GetTurnUndeadLevel();
+        m_derivedStats.m_nBackstabDamageMultiplier = GetBackstabDamageMultiplier();
+        m_derivedStats.m_nLayOnHandsAmount = GetLayOnHandsAmount();
+
+        ResetAIType();
+
+        field_50AE = 1;
+
+        // TODO: Incomplete.
+        v1 = FALSE;
+        v2 = FALSE;
+    } while (bRetry);
+
+    return v1 && v2;
 }
 
 // 0x74F830

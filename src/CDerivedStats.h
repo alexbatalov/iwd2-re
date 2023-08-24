@@ -5,13 +5,15 @@
 
 #include <set>
 
-class CGameSprite;
 class CCreatureFileHeader;
+class CGameSprite;
+class CGameSpriteGroupedSpellList;
+class CGameSpriteSpells;
 
 class CDerivedStats {
 public:
     CDerivedStats();
-    void Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature, int a3, int a4);
+    void Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature, CGameSpriteSpells* pSpells, CGameSpriteGroupedSpellList* pDomainSpells);
     void BonusInit();
     CDerivedStats& operator+=(const CDerivedStats& other);
     void CheckLimits();
@@ -95,8 +97,8 @@ public:
     /* 008A */ short field_8A;
     /* 008C */ short field_8C;
     /* 008E */ short field_8E;
-    /* 0090 */ short field_90;
-    /* 0092 */ short field_92;
+    /* 0090 */ SHORT m_nTurnUndeadLevel;
+    /* 0092 */ SHORT m_nBackstabDamageMultiplier;
     /* 0094 */ SHORT m_nLayOnHandsAmount;
     /* 0096 */ short field_96;
     /* 009A */ int field_9A;

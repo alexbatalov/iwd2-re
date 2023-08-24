@@ -2,6 +2,7 @@
 
 #include "CGameEffect.h"
 #include "CGameSprite.h"
+#include "CGameSpriteSpells.h"
 #include "CUtil.h"
 #include "FileFormat.h"
 
@@ -16,11 +17,11 @@ CDerivedStats::CDerivedStats()
 }
 
 // 0x4440F0
-void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature, int a3, int a4)
+void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature, CGameSpriteSpells* pSpells, CGameSpriteGroupedSpellList* pDomainSpells)
 {
     int index;
 
-    field_92 = 0;
+    m_nBackstabDamageMultiplier = 0;
     m_nLayOnHandsAmount = 0;
 
     m_generalState = pCreature->m_generalState;
@@ -101,7 +102,7 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
     field_8A = 0;
     field_8C = 100;
     field_8E = 100;
-    field_90 = 0;
+    m_nTurnUndeadLevel = 0;
     field_96 = 0;
     field_9A = 0;
     field_B2 = 0;
@@ -268,8 +269,8 @@ void CDerivedStats::BonusInit()
     field_8A = 0;
     field_8C = 0;
     field_8E = 0;
-    field_90 = 0;
-    field_92 = 0;
+    m_nTurnUndeadLevel = 0;
+    m_nBackstabDamageMultiplier = 0;
     m_nLayOnHandsAmount = 0;
     field_96 = 0;
     field_9A = 0;
@@ -395,8 +396,8 @@ CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
     field_8A += other.field_8A;
     field_8C += other.field_8C;
     field_8E += other.field_8E;
-    field_90 += other.field_90;
-    field_92 += other.field_92;
+    m_nTurnUndeadLevel += other.m_nTurnUndeadLevel;
+    m_nBackstabDamageMultiplier += other.m_nBackstabDamageMultiplier;
     m_nLayOnHandsAmount += other.m_nLayOnHandsAmount;
     field_96 |= other.field_96;
     field_9A |= other.field_9A;
@@ -486,8 +487,8 @@ void CDerivedStats::CheckLimits()
     field_8A = min(max(field_8A, 0), 100);
     field_8C = min(max(field_8C, 0), 255);
     field_8E = min(max(field_8E, 0), 255);
-    field_90 = max(field_90, 0);
-    field_92 = max(field_92, 0);
+    m_nTurnUndeadLevel = max(m_nTurnUndeadLevel, 0);
+    m_nBackstabDamageMultiplier = max(m_nBackstabDamageMultiplier, 0);
     m_nLayOnHandsAmount = max(m_nLayOnHandsAmount, 0);
     field_B2 = min(field_B2, 255);
 }
@@ -609,9 +610,9 @@ LONG CDerivedStats::GetAtOffset(SHORT offset)
     case 54:
         return field_8E;
     case 55:
-        return field_90;
+        return m_nTurnUndeadLevel;
     case 56:
-        return field_92;
+        return m_nBackstabDamageMultiplier;
     case 57:
         return m_nLayOnHandsAmount;
     case 58:
