@@ -107,7 +107,7 @@ public:
     void UpdateAbilitiesPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateSkillsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void sub_60EF70(CUIPanel* pPanel, CGameSprite* pSprite);
-    void sub_60F430(CUIPanel* pPanel, CGameSprite* pSprite);
+    void UpdateMemorizeArcaneSpellsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateMemorizeDivineSpellsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateMemorizeDomainSpellsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateClassPanel(CUIPanel* pPanel, CGameSprite* pSprite);

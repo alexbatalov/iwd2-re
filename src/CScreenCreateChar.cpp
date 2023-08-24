@@ -2132,7 +2132,7 @@ void CScreenCreateChar::UpdatePopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
         UpdateHatedRacePanel(pPanel, pSprite);
         break;
     case 16:
-        sub_60F430(pPanel, pSprite);
+        UpdateMemorizeArcaneSpellsPanel(pPanel, pSprite);
         break;
     case 17:
         if (field_4D6) {
@@ -2887,9 +2887,63 @@ void CScreenCreateChar::sub_60EF70(CUIPanel* pPanel, CGameSprite* pSprite)
 }
 
 // 0x60F430
-void CScreenCreateChar::sub_60F430(CUIPanel* pPanel, CGameSprite* pSprite)
+void CScreenCreateChar::UpdateMemorizeArcaneSpellsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(26));
+
+    CGameSpriteSpellList* pSpells = pSprite->GetSpellsAtLevel(pSprite->m_startTypeAI.m_nClass, 0);
+    UINT nSpells = pSpells->m_List.size();
+    CResRef resRef;
+
+    UINT nIndex = 0;
+    for (DWORD nButtonID = 2; nButtonID <= 13; nButtonID++) {
+        CUIControlButtonCharGenMemorizedArcaneSpellSelection* pButton = static_cast<CUIControlButtonCharGenMemorizedArcaneSpellSelection*>(pPanel->GetControl(nButtonID));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 4781
+        UTIL_ASSERT(pButton != NULL);
+
+        // NOTE: Implementation is different. Original code has many inlined
+        // stuff which is likely impossible to replicate one to one.
+        while (nIndex < nSpells) {
+            // TODO: Unclear.
+            pSpells->CheckF8(nIndex);
+
+            UINT nID = pSpells->m_List[nIndex].m_nID;
+            resRef = g_pBaldurChitin->GetObjectGame()->m_spells.Get(nID);
+
+            CSpell cSpell;
+            cSpell.SetResRef(resRef, TRUE, TRUE);
+            cSpell.Demand();
+            BOOL bUsable = cSpell.pRes != NULL && cSpell.CheckUsableBy(pSprite) == TRUE;
+            cSpell.Release();
+
+            if (bUsable) {
+                break;
+            }
+
+            nIndex++;
+        }
+
+        if (nIndex < nSpells) {
+            pButton->SetSpell(resRef);
+            pButton->SetEnabled(TRUE);
+        } else {
+            pButton->SetSpell(CResRef(""));
+            pButton->SetEnabled(FALSE);
+        }
+
+        nIndex++;
+    }
+
+    CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(0));
+    pDone->SetEnabled(IsDoneButtonClickable(pSprite));
+
+    HighlightLabel(pPanel,
+        0x1000001B,
+        field_4EE != 0,
+        COLOR_LABEL_HIGHLIGHT_BONUS);
+    UpdateLabel(pPanel, 0x1000001B, "%d", field_4EE);
 }
 
 // 0x60F810
