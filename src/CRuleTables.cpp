@@ -2619,7 +2619,7 @@ SHORT CRuleTables::GetLayOnHandsAmount(const CAIObjectType& typeAI, CDerivedStat
         nPaladinLevel *= static_cast<int>(v2);
     }
 
-    return nPaladinLevel;
+    return static_cast<SHORT>(nPaladinLevel);
 }
 
 // 0x5449F0

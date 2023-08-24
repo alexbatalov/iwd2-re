@@ -1364,7 +1364,7 @@ SHORT CGameSprite::GetBackstabDamageMultiplier()
     }
 
     INT nLevel = DStats->GetBardMonkRogueLevel();
-    return atol(g_pBaldurChitin->GetObjectGame()->GetRuleTables().m_tBackstabMultiplier.GetAt(CPoint(nLevel, 0)));
+    return static_cast<SHORT>(atol(g_pBaldurChitin->GetObjectGame()->GetRuleTables().m_tBackstabMultiplier.GetAt(CPoint(nLevel, 0))));
 }
 
 // 0x71B9A0
