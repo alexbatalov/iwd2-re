@@ -7,8 +7,10 @@
 #include "CInfGame.h"
 #include "CItem.h"
 #include "CScreenInventory.h"
+#include "CSpell.h"
 #include "CUtil.h"
 #include "CVariableHash.h"
+#include "IcewindMisc.h"
 
 // 0x85BB38
 const BYTE CGameSprite::DIR_S = 0;
@@ -1393,6 +1395,118 @@ DWORD CGameSprite::GetCarriedWeight()
     return weight;
 }
 
+// 0x71E9F0
+void CGameSprite::AddKnownDivineSpells(const BYTE& nClass)
+{
+    switch (nClass) {
+    case CAIOBJECTTYPE_C_CLERIC:
+    case CAIOBJECTTYPE_C_DRUID:
+    case CAIOBJECTTYPE_C_PALADIN:
+    case CAIOBJECTTYPE_C_RANGER:
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+        // __LINE__: 21545
+        UTIL_ASSERT(FALSE);
+    }
+
+    if ((nClass == CAIOBJECTTYPE_C_CLERIC && m_startTypeAI.IsClassValid(CAIOBJECTTYPE_C_CLERIC) != 0)
+        || (nClass == CAIOBJECTTYPE_C_DRUID && m_startTypeAI.IsClassValid(CAIOBJECTTYPE_C_DRUID) != 0)
+        || (nClass == CAIOBJECTTYPE_C_PALADIN && m_startTypeAI.IsClassValid(CAIOBJECTTYPE_C_PALADIN) != 0)
+        || (nClass == CAIOBJECTTYPE_C_RANGER && m_startTypeAI.IsClassValid(CAIOBJECTTYPE_C_RANGER) != 0)) {
+        // NOTE: Original code is slightly different (full of inlined
+        // functions).
+        UINT nClassIndex = g_pBaldurChitin->GetObjectGame()->GetSpellcasterIndex(nClass);
+        CGroupedSpellList* pGameSpells = &(g_pBaldurChitin->GetObjectGame()->m_spellsByClass[nClassIndex]);
+
+        // NOTE: Uninline.
+        CGameSpriteGroupedSpellList* pSpriteSpells = GetSpells(nClass);
+
+        CResRef resRef;
+
+        UINT nClassLevel = m_derivedStats.GetClassLevel(nClass);
+        UINT nMaxSpellLevel = g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetMaxSpellLevel(nClass, nClassLevel);
+
+        for (UINT nLevel = 0; nLevel < nMaxSpellLevel; nLevel++) {
+            for (UINT nIndex = 0; nIndex < pGameSpells->m_lists[nLevel].m_nCount; nIndex++) {
+                // NOTE: Uninline.
+                UINT nID = pGameSpells->m_lists[nLevel].Get(nIndex);
+
+                UINT temp;
+                if (!pSpriteSpells->m_lists[nLevel].Find(nID, temp)) {
+                    // NOTE: Uninline.
+                    resRef = g_pBaldurChitin->GetObjectGame()->m_spells.Get(nID);
+
+                    CSpell cSpell;
+                    cSpell.SetResRef(resRef, TRUE, TRUE);
+
+                    DWORD dwClassFlags;
+                    switch (nClass) {
+                    case CAIOBJECTTYPE_C_CLERIC:
+                    case CAIOBJECTTYPE_C_PALADIN:
+                        dwClassFlags = 0x40000000;
+                        break;
+                    case CAIOBJECTTYPE_C_DRUID:
+                    case CAIOBJECTTYPE_C_RANGER:
+                        dwClassFlags = 0x80000000;
+                        break;
+                    default:
+                        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+                        // __LINE__: 21606
+                        UTIL_ASSERT(FALSE);
+                    }
+
+                    if (cSpell.pRes != NULL) {
+                        // FIXME: Calls `GetNotUsableBy` many times.
+                        if ((cSpell.GetNotUsableBy() & dwClassFlags) != 0) {
+                            continue;
+                        }
+
+                        if ((cSpell.GetNotUsableBy() & 0x4) != 0
+                            && IcewindMisc::IsGood(this)) {
+                            continue;
+                        }
+
+                        if ((cSpell.GetNotUsableBy() & 0x2) != 0
+                            && IcewindMisc::IsEvil(this)) {
+                            continue;
+                        }
+
+                        if ((cSpell.GetNotUsableBy() & 0x8) != 0
+                            && !IcewindMisc::IsGood(this)
+                            && !IcewindMisc::IsEvil(this)) {
+                            continue;
+                        }
+
+                        if ((cSpell.GetNotUsableBy() & 0x10) != 0
+                            && IcewindMisc::IsLawful(this)) {
+                            continue;
+                        }
+
+                        if ((cSpell.GetNotUsableBy() & 0x1) != 0
+                            && IcewindMisc::IsChaotic(this)) {
+                            continue;
+                        }
+
+                        if ((cSpell.GetNotUsableBy() & 0x20) != 0
+                            && !IcewindMisc::IsLawful(this)
+                            && !IcewindMisc::IsChaotic(this)) {
+                            continue;
+                        }
+
+                        // NOTE: Uninline.
+                        bool bResult = AddKnownSpell(nClass, nLevel, resRef, 0, 0, 0);
+
+                        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+                        // __LINE__: 21648
+                        UTIL_ASSERT(bResult == true);
+                    }
+                }
+            }
+        }
+    }
+}
+
 // 0x71FBA0
 void CGameSprite::GetNumInventoryPersonalSlots(INT& nUsedSlots, INT& nTotalSlots)
 {
@@ -2703,7 +2817,7 @@ CGameAnimation* CGameSprite::GetAnimation()
 // FIXME: `nClass` should not be reference.
 //
 // 0x724730
-CGameSpriteGroupedSpellList* CGameSprite::GetSpells(BYTE& nClass)
+CGameSpriteGroupedSpellList* CGameSprite::GetSpells(const BYTE& nClass)
 {
     UINT nClassIndex = g_pBaldurChitin->GetObjectGame()->GetSpellcasterIndex(nClass);
 

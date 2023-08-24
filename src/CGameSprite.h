@@ -238,6 +238,7 @@ public:
     SHORT GetLayOnHandsAmount();
     INT GetNumQuickWeaponSlots();
     DWORD GetCarriedWeight();
+    void AddKnownDivineSpells(const BYTE& nClass);
     void GetNumInventoryPersonalSlots(INT& nUsedSlots, INT& nTotalSlots);
     void sub_72DE60();
     void sub_71E760(CDerivedStats& DStats, int a2);
@@ -278,7 +279,7 @@ public:
     // NOTE: See `CGameSpriteSpells` for explanation of the overall ugliness of
     // the following functions.
 
-    CGameSpriteGroupedSpellList* GetSpells(BYTE& nClass);
+    CGameSpriteGroupedSpellList* GetSpells(const BYTE& nClass);
     CGameSpriteSpellList* GetSpellsAtLevel(const BYTE& nClass, const UINT& nLevel);
     UINT GetNumSpells();
     BOOLEAN sub_724900();
