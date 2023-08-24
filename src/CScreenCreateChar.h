@@ -343,10 +343,10 @@ public:
     BYTE GetAlignment();
 };
 
-class CUIControlButtonCharGen61B120 : public CUIControlButton3State {
+class CUIControlButtonCharGenKnownArcaneSpellSelection : public CUIControlButton3State {
 public:
-    CUIControlButtonCharGen61B120(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
-    ~CUIControlButtonCharGen61B120() override;
+    CUIControlButtonCharGenKnownArcaneSpellSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGenKnownArcaneSpellSelection() override;
     BOOL Render(BOOL bForce) override;
     void OnLButtonClick(CPoint pt) override;
 

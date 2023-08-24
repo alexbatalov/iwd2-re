@@ -5483,7 +5483,7 @@ BYTE CUIControlButtonCharGenAlignmentSelection::GetAlignment()
 // -----------------------------------------------------------------------------
 
 // 0x61B120
-CUIControlButtonCharGen61B120::CUIControlButtonCharGen61B120(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+CUIControlButtonCharGenKnownArcaneSpellSelection::CUIControlButtonCharGenKnownArcaneSpellSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 1)
 {
     m_nSelectedFrame = 0;
@@ -5492,14 +5492,14 @@ CUIControlButtonCharGen61B120::CUIControlButtonCharGen61B120(CUIPanel* panel, UI
 }
 
 // 0x61B1F0
-CUIControlButtonCharGen61B120::~CUIControlButtonCharGen61B120()
+CUIControlButtonCharGenKnownArcaneSpellSelection::~CUIControlButtonCharGenKnownArcaneSpellSelection()
 {
 }
 
 // FIXME: `cResRef` should be reference.
 //
 // 0x61B290
-void CUIControlButtonCharGen61B120::SetSpell(CResRef cResRef)
+void CUIControlButtonCharGenKnownArcaneSpellSelection::SetSpell(CResRef cResRef)
 {
     CString sIconResRef;
 
@@ -5532,13 +5532,71 @@ void CUIControlButtonCharGen61B120::SetSpell(CResRef cResRef)
 }
 
 // 0x61B460
-void CUIControlButtonCharGen61B120::OnLButtonClick(CPoint pt)
+void CUIControlButtonCharGenKnownArcaneSpellSelection::OnLButtonClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
+
+    INT nGameSprite = pCreateChar->GetSpriteId();
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        CDerivedStats& DStats = *pSprite->GetDerivedStats();
+        CAIObjectType& typeAI = pSprite->m_startTypeAI;
+
+        CSpell cSpell;
+        cSpell.SetResRef(m_spellResRef, TRUE, TRUE);
+        cSpell.Demand();
+        cSpell.GetDescription(); // // NOTE: Unused.
+        cSpell.Release();
+
+        UINT nMaxKnownSpells = 0;
+        INT nMaxKnownSpellsBonus = 0;
+
+        if (typeAI.m_nClass == CAIOBJECTTYPE_C_BARD
+            || typeAI.m_nClass == CAIOBJECTTYPE_C_SORCERER) {
+            nMaxKnownSpells = g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetMaxKnownSpells(typeAI.m_nClass,
+                typeAI,
+                DStats,
+                pSprite->GetSpecialization(),
+                1,
+                nMaxKnownSpellsBonus);
+            nMaxKnownSpells += nMaxKnownSpellsBonus;
+        }
+
+        if (m_bSelected) {
+            SetSelected(FALSE);
+            pCreateChar->field_4EE++;
+            pSprite->RemoveKnownSpell(typeAI.m_nClass, 0, m_spellResRef, 1, 0, 0);
+        } else {
+            if (pCreateChar->field_4EE > 0
+                && cSpell.pRes != NULL
+                && cSpell.CheckUsableBy(pSprite) == TRUE) {
+                SetSelected(TRUE);
+                pCreateChar->field_4EE--;
+                pSprite->AddKnownSpell(typeAI.m_nClass, 0, m_spellResRef, nMaxKnownSpells, 0, 0);
+            }
+        }
+
+        pCreateChar->UpdateHelp(m_pPanel->m_nID, 27, cSpell.GetDescription());
+        pCreateChar->UpdatePopupPanel(m_pPanel->m_nID, pSprite);
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
 }
 
 // 0x61B750
-BOOL CUIControlButtonCharGen61B120::Render(BOOL bForce)
+BOOL CUIControlButtonCharGenKnownArcaneSpellSelection::Render(BOOL bForce)
 {
     if (!m_bActive && !m_bInactiveRender) {
         return FALSE;

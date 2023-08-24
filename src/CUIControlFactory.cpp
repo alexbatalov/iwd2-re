@@ -2199,7 +2199,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 23:
             case 24:
             case 25:
-                return new CUIControlButtonCharGen61B120(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+                return new CUIControlButtonCharGenKnownArcaneSpellSelection(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 26:
                 return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
             case 27:
