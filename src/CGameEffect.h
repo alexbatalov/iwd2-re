@@ -984,6 +984,7 @@ class CGameEffectDispelInvisible : public CGameEffect {
 public:
     CGameEffectDispelInvisible(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectShowArea : public CGameEffect {
