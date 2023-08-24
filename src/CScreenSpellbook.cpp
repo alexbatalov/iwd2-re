@@ -1577,6 +1577,12 @@ void CUIControlButtonSpellbookLevelSelection::OnLButtonClick(CPoint pt)
     pSpellbook->UpdateMainPanel();
 }
 
+// 0x66EE20
+void CUIControlButtonSpellbookLevelSelection::OnLButtonDoubleClick(CPoint pt)
+{
+    OnLButtonClick(pt);
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x66EDE0
@@ -1633,4 +1639,10 @@ void CUIControlButtonSpellbookClassSelection::OnLButtonClick(CPoint pt)
         }
         break;
     }
+}
+
+// 0x66EE20
+void CUIControlButtonSpellbookClassSelection::OnLButtonDoubleClick(CPoint pt)
+{
+    OnLButtonClick(pt);
 }

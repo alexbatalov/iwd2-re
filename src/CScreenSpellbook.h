@@ -167,6 +167,7 @@ public:
     CUIControlButtonSpellbookLevelSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonSpellbookLevelSelection() override;
     void OnLButtonClick(CPoint pt) override;
+    void OnLButtonDoubleClick(CPoint pt) override;
 };
 
 class CUIControlButtonSpellbookClassSelection : public CUIControlButton3State {
@@ -174,6 +175,7 @@ public:
     CUIControlButtonSpellbookClassSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonSpellbookClassSelection() override;
     void OnLButtonClick(CPoint pt) override;
+    void OnLButtonDoubleClick(CPoint pt) override;
 };
 
 #endif /* CSCREENSPELLBOOK_H_ */
