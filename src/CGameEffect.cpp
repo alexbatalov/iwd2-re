@@ -3462,6 +3462,40 @@ CGameEffect* CGameEffectForceVisible::Copy()
     return copy;
 }
 
+// 0x4B2990
+BOOL CGameEffectForceVisible::ApplyEffect(CGameSprite* pSprite)
+{
+    if ((pSprite->GetBaseStats()->m_generalState & 0x400000) != 0
+        || (pSprite->GetDerivedStats()->m_generalState & 0x400000) != 0) {
+        pSprite->GetBaseStats()->field_2FC |= 0x1;
+    } else {
+        pSprite->GetBaseStats()->m_generalState &= ~0x10;
+        pSprite->GetDerivedStats()->m_generalState &= ~0x10;
+    }
+
+    pSprite->m_timedEffectList.RemoveAllOfType(pSprite,
+        CGAMEEFFECT_INVISIBLE,
+        pSprite->m_timedEffectList.m_posCurrent,
+        -1);
+    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+        CGAMEEFFECT_INVISIBLE,
+        pSprite->m_equipedEffectList.m_posCurrent,
+        -1);
+
+    pSprite->m_timedEffectList.RemoveAllOfType(pSprite,
+        CGAMEEFFECT_PORTRAITICON,
+        pSprite->m_timedEffectList.m_posCurrent,
+        2);
+    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+        CGAMEEFFECT_PORTRAITICON,
+        pSprite->m_equipedEffectList.m_posCurrent,
+        2);
+
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.

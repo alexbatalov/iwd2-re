@@ -134,6 +134,7 @@ public:
     /* 027C */ RESREF field_27C;
     /* 0284 */ RESREF field_284;
     /* 028C */ RESREF field_28C;
+    /* 02FC */ unsigned char field_2FC;
 };
 
 class CCreatureFileItem {
