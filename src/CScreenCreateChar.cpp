@@ -2136,7 +2136,7 @@ void CScreenCreateChar::UpdatePopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
         break;
     case 17:
         if (field_4D6) {
-            sub_60FA40(pPanel, pSprite);
+            UpdateMemorizeDomainSpellsPanel(pPanel, pSprite);
         } else {
             sub_60F810(pPanel, pSprite);
         }
@@ -2899,9 +2899,41 @@ void CScreenCreateChar::sub_60F810(CUIPanel* pPanel, CGameSprite* pSprite)
 }
 
 // 0x60FA40
-void CScreenCreateChar::sub_60FA40(CUIPanel* pPanel, CGameSprite* pSprite)
+void CScreenCreateChar::UpdateMemorizeDomainSpellsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(26));
+
+    CGameSpriteSpellList* pSpells = &(pSprite->m_domainSpells.m_lists[0]);
+    UINT nSpells = pSpells->m_List.size();
+
+    UINT nIndex = 0;
+    for (DWORD nButtonID = 2; nButtonID <= 13; nButtonID++) {
+        CUIControlButtonCharGenMemorizedDivineSpellSelection* pButton = static_cast<CUIControlButtonCharGenMemorizedDivineSpellSelection*>(pPanel->GetControl(nButtonID));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 4863
+        UTIL_ASSERT(pButton != NULL);
+
+        if (nIndex < nSpells) {
+            UINT nID = pSpells->Get(nIndex)->m_nID;
+            pButton->SetSpell(g_pBaldurChitin->GetObjectGame()->m_spells.Get(nID));
+            pButton->SetEnabled(TRUE);
+        } else {
+            pButton->SetSpell(CResRef(""));
+            pButton->SetEnabled(FALSE);
+        }
+
+        nIndex++;
+    }
+
+    CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(0));
+    pDone->SetEnabled(IsDoneButtonClickable(pSprite));
+
+    HighlightLabel(pPanel,
+        0x1000001B,
+        field_4EE != 0,
+        COLOR_LABEL_HIGHLIGHT_BONUS);
+    UpdateLabel(pPanel, 0x1000001B, "%d", field_4EE);
 }
 
 // 0x60FC60

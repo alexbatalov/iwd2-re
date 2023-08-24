@@ -109,7 +109,7 @@ public:
     void sub_60EF70(CUIPanel* pPanel, CGameSprite* pSprite);
     void sub_60F430(CUIPanel* pPanel, CGameSprite* pSprite);
     void sub_60F810(CUIPanel* pPanel, CGameSprite* pSprite);
-    void sub_60FA40(CUIPanel* pPanel, CGameSprite* pSprite);
+    void UpdateMemorizeDomainSpellsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateClassPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateAlignmentPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateClericWizardSpecializationPanel(CUIPanel* pPanel, CGameSprite* pSprite);
