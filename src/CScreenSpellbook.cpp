@@ -372,7 +372,8 @@ void CScreenSpellbook::OnPortraitLClick(DWORD nPortrait)
         // NOTE: Unused.
         CUIPanel* pPanel = m_cUIManager.GetPanel(2);
 
-        if (nPortrait < g_pBaldurChitin->GetObjectGame()->m_nCharacters) {
+        // NOTE: Unsigned compare.
+        if (nPortrait < static_cast<DWORD>(g_pBaldurChitin->GetObjectGame()->m_nCharacters)) {
             DWORD nOldPortrait = m_nSelectedCharacter;
             m_nSelectedCharacter = nPortrait;
 
