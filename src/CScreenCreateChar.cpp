@@ -1035,7 +1035,7 @@ void CScreenCreateChar::ResetPopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
         if (field_4D6) {
             ResetMemorizeDomainSpellsPanel(pPanel, pSprite);
         } else {
-            sub_60AF60(pPanel, pSprite);
+            ResetMemorizeDivineSpellsPanel(pPanel, pSprite);
         }
         break;
     case 18:
@@ -1536,9 +1536,96 @@ void CScreenCreateChar::sub_60A920(CUIPanel* pPanel, CGameSprite* pSprite)
 }
 
 // 0x60AF60
-void CScreenCreateChar::sub_60AF60(CUIPanel* pPanel, CGameSprite* pSprite)
+void CScreenCreateChar::ResetMemorizeDivineSpellsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+    CResRef resRef;
+
+    UINT nClassIndex;
+    UINT nLevel;
+
+    for (nClassIndex = 0; nClassIndex < CSPELLLIST_NUM_CLASSES; nClassIndex++) {
+        for (nLevel = 0; nLevel < CSPELLLIST_MAX_LEVELS; nLevel++) {
+            // NOTE: Uninline.
+            pSprite->m_spells.GetSpellsAtLevel(nClassIndex, nLevel)->field_14 = 0;
+
+            // NOTE: Uninline.
+            pSprite->m_spells.GetSpellsAtLevel(nClassIndex, nLevel)->field_18 = 0;
+        }
+    }
+
+    for (nLevel = 0; nLevel < CSPELLLIST_MAX_LEVELS; nLevel++) {
+        pSprite->m_domainSpells.m_lists[nLevel].field_14 = 0;
+        pSprite->m_domainSpells.m_lists[nLevel].field_18 = 0;
+    }
+
+    pSprite->field_562C = 1;
+    pSprite->ProcessEffectList();
+
+    UpdateLabel(pPanel,
+        0x10000000,
+        "%s: %s %d",
+        (LPCSTR)FetchString(17224), // "Memorize Divine Spells"
+        (LPCSTR)FetchString(7192), // "Level"
+        field_14A2);
+
+    for (nClassIndex = 0; nClassIndex < CSPELLLIST_NUM_CLASSES; nClassIndex++) {
+        for (nLevel = 0; nLevel < CSPELLLIST_MAX_LEVELS; nLevel++) {
+            // NOTE: Uninline.
+            for (UINT nIndex = 0; nIndex < pSprite->m_spells.GetSpellsAtLevel(nClassIndex, nLevel)->m_List.size(); nIndex++) {
+                UINT nID = pSprite->m_spells.GetSpellsAtLevel(nClassIndex, nLevel)->Get(nIndex)->m_nID;
+
+                // __FILE__: .\Include\ObjCreature.h
+                // __LINE__: 1741
+                UTIL_ASSERT(nClassIndex <= CSPELLLIST_NUM_CLASSES);
+
+                pSprite->m_spells.Get(nClassIndex)->sub_7260B0(nID, nLevel, 0, 1);
+
+                // __FILE__: .\Include\ObjCreature.h
+                // __LINE__: 1741
+                UTIL_ASSERT(nClassIndex <= CSPELLLIST_NUM_CLASSES);
+
+                // NOTE: Uninline.
+                pSprite->m_spells.Get(nClassIndex)->Remove(nID, nLevel, 0, 1, 0);
+            }
+        }
+    }
+
+    pSprite->AddKnownDivineSpells(CAIOBJECTTYPE_C_CLERIC);
+    pSprite->AddKnownDivineSpells(CAIOBJECTTYPE_C_DRUID);
+    pSprite->AddKnownDivineSpells(CAIOBJECTTYPE_C_PALADIN);
+    pSprite->AddKnownDivineSpells(CAIOBJECTTYPE_C_RANGER);
+
+    INT nMaxKnownSpellsBonus;
+    UINT nMaxKnownSpellsBase = ruleTables.GetMaxKnownSpells(pSprite->m_startTypeAI.m_nClass,
+        pSprite->m_startTypeAI,
+        *pSprite->GetDerivedStats(),
+        pSprite->GetSpecialization(),
+        1,
+        nMaxKnownSpellsBonus);
+    UINT nMaxKnownSpells = nMaxKnownSpellsBase + nMaxKnownSpellsBonus;
+
+    if (nMaxKnownSpells >= pSprite->GetSpellsAtLevel(pSprite->m_startTypeAI.m_nClass, 0)->m_List.size()) {
+        nMaxKnownSpells = pSprite->GetSpellsAtLevel(pSprite->m_startTypeAI.m_nClass, 0)->m_List.size();
+    }
+
+    field_4EE = nMaxKnownSpells;
+
+    for (DWORD nButtonID = 2; nButtonID <= 13; nButtonID++) {
+        CUIControlButton3State* pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(nButtonID));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 2724
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->SetSelected(FALSE);
+    }
+
+    CString sNumber;
+    sNumber.Format("%d", field_4EE);
+    g_pBaldurChitin->GetTlkTable().SetToken(TOKEN_NUMBER, sNumber);
+
+    UpdateHelp(pPanel->m_nID, 27, 17254);
 }
 
 // 0x60B610

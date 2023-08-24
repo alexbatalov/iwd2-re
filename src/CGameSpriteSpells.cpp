@@ -425,3 +425,17 @@ CGameSpriteGroupedSpellList* CGameSpriteSpells::Get(const UINT& nClassIndex)
 
     return &(m_spellsByClass[nClassIndex]);
 }
+
+// NOTE: Inlined.
+CGameSpriteSpellList* CGameSpriteSpells::GetSpellsAtLevel(UINT nClassIndex, UINT nLevel)
+{
+    // __FILE__: .\Include\ObjCreature.h
+    // __LINE__: 1750
+    UTIL_ASSERT(nLevel < CSPELLLIST_MAX_LEVELS);
+
+    // __FILE__: .\Include\ObjCreature.h
+    // __LINE__: 1751
+    UTIL_ASSERT(nClassIndex < CSPELLLIST_NUM_CLASSES);
+
+    return m_spellsByClass[nClassIndex].GetSpellsAtLevel(nLevel);
+}

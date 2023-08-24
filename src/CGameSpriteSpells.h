@@ -67,6 +67,7 @@ public:
 class CGameSpriteSpells {
 public:
     CGameSpriteGroupedSpellList* Get(const UINT& nClassIndex);
+    CGameSpriteSpellList* GetSpellsAtLevel(UINT nClassIndex, UINT nLevel);
 
     /* 0000 */ CGameSpriteGroupedSpellList m_spellsByClass[CSPELLLIST_NUM_CLASSES];
 };
