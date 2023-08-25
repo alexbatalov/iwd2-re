@@ -2637,6 +2637,23 @@ CGameEffect* CGameEffectCureDeafness::Copy()
     return copy;
 }
 
+// 0x4B6200
+BOOL CGameEffectCureDeafness::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_DEAFNESS,
+        pSprite->GetTimedEffectList()->GetPosCurrent(),
+        -1);
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_DEAFNESS,
+        pSprite->GetEquipedEffectList()->GetPosCurrent(),
+        -1);
+
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
