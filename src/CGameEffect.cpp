@@ -1,7 +1,10 @@
 #include "CGameEffect.h"
 
+#include "CBaldurChitin.h"
 #include "CGameSprite.h"
+#include "CInfGame.h"
 #include "CUtil.h"
+#include "CVidPalette.h"
 
 // NOTE: Not used. It does not include many effects. Formatting is odd.
 //
@@ -833,6 +836,23 @@ ITEM_EFFECT* CGameEffect::GetItemEffect()
     effect->special = m_special;
 
     return effect;
+}
+
+// 0x4A4D10
+void CGameEffect::DisplayStringRef(CGameSprite* pSprite, STRREF str)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    if ((pGame->GetOptions()->m_nEffectTextLevel & 0x8) != 0
+        && pGame->m_bInLoadGame != TRUE
+        && pGame->m_bInLoadArea != TRUE) {
+        g_pBaldurChitin->GetBaldurMessage()->sub_43E0E0(pSprite->GetNameRef(),
+            str,
+            CVidPalette::RANGE_COLORS[pSprite->GetBaseStats()->m_colors[2]],
+            RGB(0xD7, 0xD7, 0xBE),
+            -1,
+            pSprite->GetId(),
+            pSprite->GetId());
+    }
 }
 
 // 0x48C5B0

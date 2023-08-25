@@ -258,6 +258,7 @@ public:
     /* 1B78 */ CTimerWorld m_worldTime;
     /* 1B7E */ BOOL m_bGameLoaded;
     /* 1B82 */ BOOLEAN m_bInLoadGame;
+    /* 1B83 */ BOOLEAN m_bInLoadArea;
     /* 1B84 */ unsigned char field_1B84;
     /* 1B92 */ BOOLEAN m_bFromNewGame;
     /* 1B94 */ BOOLEAN m_bAnotherPlayerJoinedGame;

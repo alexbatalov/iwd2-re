@@ -292,6 +292,7 @@ public:
 
     BOOL Compare(const CGameEffect& other);
     ITEM_EFFECT* GetItemEffect();
+    void DisplayStringRef(CGameSprite* pSprite, STRREF str);
     void CopyFromBase(CGameEffectBase* pBase);
     void SetEffectID(WORD effectID);
     void SetDWFlags(DWORD dwFlags);

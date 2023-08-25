@@ -56,6 +56,7 @@ public:
     static const BYTE CLEAR_ENTRY;
     static const BYTE LIGHT_SCALE;
     static const BYTE NO_TINT;
+    static const COLORREF RANGE_COLORS[];
     static BYTE m_SuppressTintMasks[7];
 
     int m_nAUCounter;
