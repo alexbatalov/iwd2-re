@@ -4044,6 +4044,35 @@ CGameEffect* CGameEffectRemovePanic::Copy()
     return copy;
 }
 
+// 0x4BDAB0
+BOOL CGameEffectRemovePanic::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetBaseStats()->m_generalState &= ~STATE_PANIC;
+    pSprite->GetDerivedStats()->m_generalState &= ~STATE_PANIC;
+
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_PANIC,
+        pSprite->GetEquipedEffectList()->GetPosCurrent(),
+        -1);
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_PANIC,
+        pSprite->GetTimedEffectList()->GetPosCurrent(),
+        -1);
+
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_PORTRAITICON,
+        pSprite->GetEquipedEffectList()->GetPosCurrent(),
+        36);
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_PORTRAITICON,
+        pSprite->GetTimedEffectList()->GetPosCurrent(),
+        36);
+
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
