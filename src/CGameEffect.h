@@ -536,6 +536,7 @@ class CGameEffectSilence : public CGameEffect {
 public:
     CGameEffectSilence(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectSleep : public CGameEffect {

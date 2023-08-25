@@ -1791,6 +1791,28 @@ CGameEffect* CGameEffectSilence::Copy()
     return copy;
 }
 
+// 0x4B1340
+BOOL CGameEffectSilence::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType != 0) {
+        // NOTE: Uninline.
+        DisplayStringRef(pSprite, 14676);
+    }
+
+    // NOTE: Uninline.
+    AddPortraitIcon(pSprite, 34);
+
+    if (m_durationType == 1) {
+        pSprite->GetBaseStats()->m_generalState |= STATE_SILENCED;
+        pSprite->GetDerivedStats()->m_generalState |= STATE_SILENCED;
+        m_done = TRUE;
+    } else {
+        pSprite->GetDerivedStats()->m_generalState |= STATE_SILENCED;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
