@@ -4091,6 +4091,23 @@ CGameEffect* CGameEffectRemoveHold::Copy()
     return copy;
 }
 
+// 0x4BDB50
+BOOL CGameEffectRemoveHold::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_HOLDCREATURE,
+        pSprite->GetEquipedEffectList()->GetPosCurrent(),
+        -1);
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_HOLDCREATURE,
+        pSprite->GetTimedEffectList()->GetPosCurrent(),
+        -1);
+
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.

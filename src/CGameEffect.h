@@ -1246,6 +1246,7 @@ class CGameEffectRemoveHold : public CGameEffect {
 public:
     CGameEffectRemoveHold(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectRestoreMovementRate : public CGameEffect {
