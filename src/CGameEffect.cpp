@@ -2440,6 +2440,20 @@ CGameEffect* CGameEffectNonDetection::Copy()
     return copy;
 }
 
+// 0x4B4C60
+BOOL CGameEffectNonDetection::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_durationType == 1) {
+        pSprite->GetBaseStats()->m_generalState |= STATE_NONDETECTION;
+        pSprite->GetDerivedStats()->m_generalState |= STATE_NONDETECTION;
+        m_done = TRUE;
+    } else {
+        pSprite->GetDerivedStats()->m_generalState |= STATE_NONDETECTION;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
