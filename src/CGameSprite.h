@@ -6,7 +6,7 @@
 #include "CDerivedStats.h"
 #include "CGameAIBase.h"
 #include "CGameAnimation.h"
-#include "CGameEffect.h"
+#include "CGameEffectList.h"
 #include "CGameSpriteEquipment.h"
 #include "CGameSpriteSpells.h"
 #include "CMarker.h"

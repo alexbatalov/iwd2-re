@@ -112,6 +112,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CGameArea.h"
     "src/CGameEffect.cpp"
     "src/CGameEffect.h"
+    "src/CGameEffectList.cpp"
+    "src/CGameEffectList.h"
     "src/CGameJournal.cpp"
     "src/CGameJournal.h"
     "src/CGameObject.cpp"
