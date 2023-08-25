@@ -2310,6 +2310,20 @@ CGameEffect* CGameEffectInfravision::Copy()
     return copy;
 }
 
+// 0x4B4B00
+BOOL CGameEffectInfravision::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_durationType == 1) {
+        pSprite->GetBaseStats()->m_generalState |= STATE_INFRAVISION;
+        pSprite->GetDerivedStats()->m_generalState |= STATE_INFRAVISION;
+        m_done = TRUE;
+    } else {
+        pSprite->GetDerivedStats()->m_generalState |= STATE_INFRAVISION;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.

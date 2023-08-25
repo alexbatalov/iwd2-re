@@ -688,6 +688,7 @@ class CGameEffectInfravision : public CGameEffect {
 public:
     CGameEffectInfravision(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectInfravisionOff : public CGameEffect {
