@@ -3339,8 +3339,8 @@ void CInfGame::sub_5CADF0()
         } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
         if (rc == CGameObjectArray::SUCCESS) {
-            if ((pSprite->m_baseStats.m_generalState & 0x800) == 0
-                && (pSprite->m_derivedStats.m_generalState & 0x800) == 0) {
+            if ((pSprite->m_baseStats.m_generalState & STATE_DEAD) == 0
+                && (pSprite->m_derivedStats.m_generalState & STATE_DEAD) == 0) {
                 pSprite->field_9D15 = 1;
             }
 

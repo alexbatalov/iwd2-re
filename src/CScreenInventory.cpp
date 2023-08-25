@@ -1811,7 +1811,7 @@ void CScreenInventory::BeginSwap()
     } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
     if (rc == CGameObjectArray::SUCCESS) {
-        if ((pSprite->m_derivedStats.m_generalState & 0x800) == 0) {
+        if ((pSprite->m_derivedStats.m_generalState & STATE_DEAD) == 0) {
             CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
             renderLock.Lock(INFINITE);
 
@@ -1849,7 +1849,7 @@ void CScreenInventory::EndSwap()
     } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
     if (rc == CGameObjectArray::SUCCESS) {
-        if ((pSprite->m_derivedStats.m_generalState & 0x800) == 0) {
+        if ((pSprite->m_derivedStats.m_generalState & STATE_DEAD) == 0) {
             CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
             renderLock.Lock(INFINITE);
 

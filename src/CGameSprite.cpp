@@ -638,7 +638,7 @@ const BYTE* CGameSprite::GetVisibleTerrainTable()
 // 0x
 BOOL CGameSprite::OnSearchMap()
 {
-    return ((m_listType == LIST_FRONT || (m_derivedStats.m_generalState & 0x1) != 0))
+    return ((m_listType == LIST_FRONT || (m_derivedStats.m_generalState & STATE_SLEEPING) != 0))
         && m_pArea != NULL
         && m_pos.x >= 0
         && m_pos.y >= 0;

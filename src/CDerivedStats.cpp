@@ -445,8 +445,8 @@ CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
 // 0x4468F0
 void CDerivedStats::CheckLimits()
 {
-    if ((m_generalState & 0x800) != 0) {
-        m_generalState &= ~0xFFFFF03F;
+    if ((m_generalState & STATE_DEAD) != 0) {
+        m_generalState &= STATE_ANY_DEATH;
     }
 
     m_nMaxHitPoints = max(m_nMaxHitPoints, 1);

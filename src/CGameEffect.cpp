@@ -995,8 +995,8 @@ CGameEffect* CGameEffectAwaken::Copy()
 // 0x4A5540
 BOOL CGameEffectAwaken::ApplyEffect(CGameSprite* pSprite)
 {
-    pSprite->GetBaseStats()->m_generalState &= ~0x1;
-    pSprite->GetDerivedStats()->m_generalState &= ~0x1;
+    pSprite->GetBaseStats()->m_generalState &= ~STATE_SLEEPING;
+    pSprite->GetDerivedStats()->m_generalState &= ~STATE_SLEEPING;
 
     pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_SLEEP,
@@ -1060,8 +1060,8 @@ CGameEffect* CGameEffectCalm::Copy()
 // 0x4A5E50
 BOOL CGameEffectCalm::ApplyEffect(CGameSprite* pSprite)
 {
-    pSprite->GetBaseStats()->m_generalState &= ~0x2;
-    pSprite->GetDerivedStats()->m_generalState &= ~0x2;
+    pSprite->GetBaseStats()->m_generalState &= ~STATE_BERSERK;
+    pSprite->GetDerivedStats()->m_generalState &= ~STATE_BERSERK;
 
     pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_BERSERK,
@@ -1233,8 +1233,8 @@ BOOL CGameEffectCurePoison::ApplyEffect(CGameSprite* pSprite)
         pSprite->GetTimedEffectList()->m_posCurrent,
         6);
 
-    pSprite->GetBaseStats()->m_generalState &= ~0x4000;
-    pSprite->GetDerivedStats()->m_generalState &= ~0x4000;
+    pSprite->GetBaseStats()->m_generalState &= ~STATE_POISONED;
+    pSprite->GetDerivedStats()->m_generalState &= ~STATE_POISONED;
 
     m_done = TRUE;
 
@@ -1843,8 +1843,8 @@ CGameEffect* CGameEffectUnstun::Copy()
 // 0x4B2810
 BOOL CGameEffectUnstun::ApplyEffect(CGameSprite* pSprite)
 {
-    pSprite->GetBaseStats()->m_generalState &= ~0x8;
-    pSprite->GetDerivedStats()->m_generalState &= ~0x8;
+    pSprite->GetBaseStats()->m_generalState &= ~STATE_STUNNED;
+    pSprite->GetDerivedStats()->m_generalState &= ~STATE_STUNNED;
 
     pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_STUN,
@@ -2214,8 +2214,8 @@ CGameEffect* CGameEffectInfravisionOff::Copy()
 // 0x4B4B40
 BOOL CGameEffectInfravisionOff::ApplyEffect(CGameSprite* pSprite)
 {
-    pSprite->GetBaseStats()->m_generalState &= ~0x20000;
-    pSprite->GetDerivedStats()->m_generalState &= ~0x20000;
+    pSprite->GetBaseStats()->m_generalState &= ~STATE_INFRAVISION;
+    pSprite->GetDerivedStats()->m_generalState &= ~STATE_INFRAVISION;
 
     pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_INFRAVISION,
@@ -2344,8 +2344,8 @@ CGameEffect* CGameEffectEndNonDetection::Copy()
 // 0x4B4CA0
 BOOL CGameEffectEndNonDetection::ApplyEffect(CGameSprite* pSprite)
 {
-    pSprite->GetBaseStats()->m_generalState &= ~0x200000;
-    pSprite->GetDerivedStats()->m_generalState &= ~0x200000;
+    pSprite->GetBaseStats()->m_generalState &= ~STATE_NONDETECTION;
+    pSprite->GetDerivedStats()->m_generalState &= ~STATE_NONDETECTION;
 
     pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_NONDETECTION,
@@ -3138,12 +3138,12 @@ CGameEffect* CGameEffectDispelInvisible::Copy()
 // 0x4B2900
 BOOL CGameEffectDispelInvisible::ApplyEffect(CGameSprite* pSprite)
 {
-    if ((pSprite->m_tempStats.m_generalState & 0x200000) == 0) {
-        pSprite->GetBaseStats()->m_generalState &= ~0x10;
-        pSprite->GetDerivedStats()->m_generalState &= ~0x10;
+    if ((pSprite->m_tempStats.m_generalState & STATE_NONDETECTION) == 0) {
+        pSprite->GetBaseStats()->m_generalState &= ~STATE_INVISIBLE;
+        pSprite->GetDerivedStats()->m_generalState &= ~STATE_INVISIBLE;
 
-        pSprite->GetBaseStats()->m_generalState &= ~0x400000;
-        pSprite->GetDerivedStats()->m_generalState &= ~0x400000;
+        pSprite->GetBaseStats()->m_generalState &= ~STATE_IMPROVEDINVISIBILITY;
+        pSprite->GetDerivedStats()->m_generalState &= ~STATE_IMPROVEDINVISIBILITY;
 
         pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
             CGAMEEFFECT_INVISIBLE,
@@ -3505,12 +3505,12 @@ CGameEffect* CGameEffectForceVisible::Copy()
 // 0x4B2990
 BOOL CGameEffectForceVisible::ApplyEffect(CGameSprite* pSprite)
 {
-    if ((pSprite->GetBaseStats()->m_generalState & 0x400000) != 0
-        || (pSprite->GetDerivedStats()->m_generalState & 0x400000) != 0) {
+    if ((pSprite->GetBaseStats()->m_generalState & STATE_IMPROVEDINVISIBILITY) != 0
+        || (pSprite->GetDerivedStats()->m_generalState & STATE_IMPROVEDINVISIBILITY) != 0) {
         pSprite->GetBaseStats()->field_2FC |= 0x1;
     } else {
-        pSprite->GetBaseStats()->m_generalState &= ~0x10;
-        pSprite->GetDerivedStats()->m_generalState &= ~0x10;
+        pSprite->GetBaseStats()->m_generalState &= ~STATE_INVISIBLE;
+        pSprite->GetDerivedStats()->m_generalState &= ~STATE_INVISIBLE;
     }
 
     pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
