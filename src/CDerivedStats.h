@@ -101,7 +101,7 @@ public:
     /* 0034 */ SHORT m_nResistPiercing;
     /* 0036 */ short field_36;
     /* 0038 */ short field_38;
-    /* 003A */ short field_3A;
+    /* 003A */ SHORT m_nIntoxication;
     /* 003C */ short field_3C;
     /* 003E */ short field_3E;
     /* 0042 */ DWORD m_classMask;

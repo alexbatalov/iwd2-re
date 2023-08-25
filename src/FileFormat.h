@@ -56,7 +56,7 @@ public:
     /* 005B */ unsigned char field_5B;
     /* 005C */ unsigned char field_5C;
     /* 005D */ unsigned char field_5D;
-    /* 005E */ unsigned char field_5E;
+    /* 005E */ BYTE m_intoxication;
     /* 005F */ unsigned char field_5F;
     /* 0060 */ unsigned char field_60[34];
     /* 0082 */ BYTE m_characterLevel;

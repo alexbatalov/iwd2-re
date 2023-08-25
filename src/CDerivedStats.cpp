@@ -54,7 +54,8 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
     m_nResistCrushing = pCreature->m_resistCrushingBase;
     m_nResistPiercing = pCreature->m_resistPiercingBase;
     field_36 = pCreature->field_57;
-    field_3A = pCreature->field_5D;
+    field_38 = pCreature->field_5D;
+    m_nIntoxication = pCreature->m_intoxication;
     field_3C = pCreature->field_5F;
 
     memcpy(field_144, pCreature->m_skills, 64);
@@ -242,7 +243,7 @@ void CDerivedStats::BonusInit()
     memset(field_144, 0, 64);
 
     field_38 = 0;
-    field_3A = 0;
+    m_nIntoxication = 0;
     field_3C = 0;
     field_3E = 0;
     m_nLevel = 0;
@@ -375,7 +376,7 @@ CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
     field_36 += other.field_36;
     field_B8 += other.field_B8;
     field_38 += other.field_38;
-    field_3A += other.field_3A;
+    m_nIntoxication += other.m_nIntoxication;
     field_3C += other.field_3C;
     m_nLevel += other.m_nLevel;
     m_nSTR += other.m_nSTR;
@@ -467,7 +468,7 @@ void CDerivedStats::CheckLimits()
     field_144[11] = min(max(field_144[11], -128), 127);
     field_144[15] = min(max(field_144[15], -128), 127);
     field_38 = min(max(field_38, 0), 100);
-    field_3A = min(max(field_3A, 0), 100);
+    m_nIntoxication = min(max(m_nIntoxication, 0), 100);
     field_3C = min(max(field_3C, 0), 100);
     m_nLevel = min(m_nLevel, 50);
     m_nSTR = min(max(m_nSTR, 1), 40);
@@ -558,7 +559,7 @@ LONG CDerivedStats::GetAtOffset(SHORT offset)
     case 30:
         return field_38;
     case 31:
-        return field_3A;
+        return m_nIntoxication;
     case 32:
         return field_3C;
     case 33:

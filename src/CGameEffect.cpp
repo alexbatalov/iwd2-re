@@ -4164,6 +4164,35 @@ CGameEffect* CGameEffectRemoveIntoxication::Copy()
     return copy;
 }
 
+// 0x4BDC20
+BOOL CGameEffectRemoveIntoxication::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetBaseStats()->m_intoxication = 0;
+    pSprite->GetDerivedStats()->m_nIntoxication = 0;
+
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_INTOXICATION,
+        pSprite->GetEquipedEffectList()->GetPosCurrent(),
+        -1);
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_INTOXICATION,
+        pSprite->GetTimedEffectList()->GetPosCurrent(),
+        -1);
+
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_PORTRAITICON,
+        pSprite->GetEquipedEffectList()->GetPosCurrent(),
+        5);
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_PORTRAITICON,
+        pSprite->GetTimedEffectList()->GetPosCurrent(),
+        5);
+
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
