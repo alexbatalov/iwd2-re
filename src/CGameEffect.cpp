@@ -1300,6 +1300,20 @@ CGameEffect* CGameEffectDefrost::Copy()
     return copy;
 }
 
+// 0x4ADCC0
+BOOL CGameEffectDefrost::ApplyEffect(CGameSprite* pSprite)
+{
+    if ((pSprite->GetDerivedStats()->m_generalState & STATE_FROZEN_DEATH) != 0) {
+        pSprite->GetDerivedStats()->m_generalState &= ~STATE_FROZEN_DEATH;
+        pSprite->ResetAITypeLive();
+        pSprite->GetBaseStats()->m_hitPoints = 1;
+    }
+
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
