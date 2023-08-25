@@ -998,22 +998,22 @@ BOOL CGameEffectAwaken::ApplyEffect(CGameSprite* pSprite)
     pSprite->GetBaseStats()->m_generalState &= ~0x1;
     pSprite->GetDerivedStats()->m_generalState &= ~0x1;
 
-    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_SLEEP,
-        pSprite->m_equipedEffectList.m_posCurrent,
+        pSprite->GetEquipedEffectList()->m_posCurrent,
         -1);
-    pSprite->m_timedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_SLEEP,
-        pSprite->m_timedEffectList.m_posCurrent,
+        pSprite->GetTimedEffectList()->m_posCurrent,
         -1);
 
-    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_PORTRAITICON,
-        pSprite->m_equipedEffectList.m_posCurrent,
+        pSprite->GetEquipedEffectList()->m_posCurrent,
         14);
-    pSprite->m_timedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_PORTRAITICON,
-        pSprite->m_timedEffectList.m_posCurrent,
+        pSprite->GetTimedEffectList()->m_posCurrent,
         14);
 
     m_done = TRUE;
@@ -1063,22 +1063,22 @@ BOOL CGameEffectCalm::ApplyEffect(CGameSprite* pSprite)
     pSprite->GetBaseStats()->m_generalState &= ~0x2;
     pSprite->GetDerivedStats()->m_generalState &= ~0x2;
 
-    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_BERSERK,
-        pSprite->m_equipedEffectList.m_posCurrent,
+        pSprite->GetEquipedEffectList()->m_posCurrent,
         -1);
-    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_BERSERK,
-        pSprite->m_timedEffectList.m_posCurrent,
+        pSprite->GetTimedEffectList()->m_posCurrent,
         -1);
 
-    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_PORTRAITICON,
-        pSprite->m_equipedEffectList.m_posCurrent,
+        pSprite->GetEquipedEffectList()->m_posCurrent,
         4);
-    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_PORTRAITICON,
-        pSprite->m_timedEffectList.m_posCurrent,
+        pSprite->GetTimedEffectList()->m_posCurrent,
         4);
 
     m_done = TRUE;
@@ -1215,22 +1215,22 @@ CGameEffect* CGameEffectCurePoison::Copy()
 // 0x4A76B0
 BOOL CGameEffectCurePoison::ApplyEffect(CGameSprite* pSprite)
 {
-    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_POISON,
-        pSprite->m_equipedEffectList.m_posCurrent,
+        pSprite->GetEquipedEffectList()->m_posCurrent,
         -1);
-    pSprite->m_timedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_POISON,
-        pSprite->m_timedEffectList.m_posCurrent,
+        pSprite->GetTimedEffectList()->m_posCurrent,
         -1);
 
-    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_PORTRAITICON,
-        pSprite->m_equipedEffectList.m_posCurrent,
+        pSprite->GetEquipedEffectList()->m_posCurrent,
         6);
-    pSprite->m_timedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_PORTRAITICON,
-        pSprite->m_timedEffectList.m_posCurrent,
+        pSprite->GetTimedEffectList()->m_posCurrent,
         6);
 
     pSprite->GetBaseStats()->m_generalState &= ~0x4000;
@@ -1846,40 +1846,40 @@ BOOL CGameEffectUnstun::ApplyEffect(CGameSprite* pSprite)
     pSprite->GetBaseStats()->m_generalState &= ~0x8;
     pSprite->GetDerivedStats()->m_generalState &= ~0x8;
 
-    pSprite->m_timedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_STUN,
-        pSprite->m_timedEffectList.m_posCurrent,
+        pSprite->GetTimedEffectList()->m_posCurrent,
         -1);
-    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_STUN,
-        pSprite->m_equipedEffectList.m_posCurrent,
+        pSprite->GetEquipedEffectList()->m_posCurrent,
         -1);
 
-    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_PORTRAITICON,
-        pSprite->m_equipedEffectList.m_posCurrent,
+        pSprite->GetEquipedEffectList()->m_posCurrent,
         44);
-    pSprite->m_timedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_PORTRAITICON,
-        pSprite->m_timedEffectList.m_posCurrent,
+        pSprite->GetTimedEffectList()->m_posCurrent,
         44);
 
-    pSprite->m_timedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_HOLDCREATURE,
-        pSprite->m_timedEffectList.m_posCurrent,
+        pSprite->GetTimedEffectList()->m_posCurrent,
         -1);
-    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_HOLDCREATURE,
-        pSprite->m_equipedEffectList.m_posCurrent,
+        pSprite->GetEquipedEffectList()->m_posCurrent,
         -1);
 
-    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_PORTRAITICON,
-        pSprite->m_equipedEffectList.m_posCurrent,
+        pSprite->GetEquipedEffectList()->m_posCurrent,
         13);
-    pSprite->m_timedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_PORTRAITICON,
-        pSprite->m_timedEffectList.m_posCurrent,
+        pSprite->GetTimedEffectList()->m_posCurrent,
         13);
 
     m_done = TRUE;
@@ -2217,13 +2217,13 @@ BOOL CGameEffectInfravisionOff::ApplyEffect(CGameSprite* pSprite)
     pSprite->GetBaseStats()->m_generalState &= ~0x20000;
     pSprite->GetDerivedStats()->m_generalState &= ~0x20000;
 
-    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_INFRAVISION,
-        pSprite->m_equipedEffectList.m_posCurrent,
+        pSprite->GetEquipedEffectList()->m_posCurrent,
         -1);
-    pSprite->m_timedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_INFRAVISION,
-        pSprite->m_timedEffectList.m_posCurrent,
+        pSprite->GetTimedEffectList()->m_posCurrent,
         -1);
 
     m_done = TRUE;
@@ -2347,13 +2347,13 @@ BOOL CGameEffectEndNonDetection::ApplyEffect(CGameSprite* pSprite)
     pSprite->GetBaseStats()->m_generalState &= ~0x200000;
     pSprite->GetDerivedStats()->m_generalState &= ~0x200000;
 
-    pSprite->m_timedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_NONDETECTION,
-        pSprite->m_timedEffectList.m_posCurrent,
+        pSprite->GetTimedEffectList()->m_posCurrent,
         -1);
-    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_NONDETECTION,
-        pSprite->m_equipedEffectList.m_posCurrent,
+        pSprite->GetEquipedEffectList()->m_posCurrent,
         -1);
 
     m_done = TRUE;
@@ -3145,13 +3145,13 @@ BOOL CGameEffectDispelInvisible::ApplyEffect(CGameSprite* pSprite)
         pSprite->GetBaseStats()->m_generalState &= ~0x400000;
         pSprite->GetDerivedStats()->m_generalState &= ~0x400000;
 
-        pSprite->m_timedEffectList.RemoveAllOfType(pSprite,
+        pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
             CGAMEEFFECT_INVISIBLE,
-            pSprite->m_timedEffectList.m_posCurrent,
+            pSprite->GetTimedEffectList()->m_posCurrent,
             -1);
-        pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+        pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
             CGAMEEFFECT_INVISIBLE,
-            pSprite->m_equipedEffectList.m_posCurrent,
+            pSprite->GetEquipedEffectList()->m_posCurrent,
             -1);
     }
 
@@ -3513,22 +3513,22 @@ BOOL CGameEffectForceVisible::ApplyEffect(CGameSprite* pSprite)
         pSprite->GetDerivedStats()->m_generalState &= ~0x10;
     }
 
-    pSprite->m_timedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_INVISIBLE,
-        pSprite->m_timedEffectList.m_posCurrent,
+        pSprite->GetTimedEffectList()->m_posCurrent,
         0);
-    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_INVISIBLE,
-        pSprite->m_equipedEffectList.m_posCurrent,
+        pSprite->GetEquipedEffectList()->m_posCurrent,
         0);
 
-    pSprite->m_timedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_INVISIBLE,
-        pSprite->m_timedEffectList.m_posCurrent,
+        pSprite->GetTimedEffectList()->m_posCurrent,
         2);
-    pSprite->m_equipedEffectList.RemoveAllOfType(pSprite,
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
         CGAMEEFFECT_INVISIBLE,
-        pSprite->m_equipedEffectList.m_posCurrent,
+        pSprite->GetEquipedEffectList()->m_posCurrent,
         2);
 
     m_done = TRUE;

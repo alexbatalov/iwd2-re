@@ -275,6 +275,8 @@ public:
     void SetResRef(const CResRef& resRef);
     CCreatureFileHeader* GetBaseStats();
     CDerivedStats* GetDerivedStats();
+    CGameEffectList* GetEquipedEffectList();
+    CGameEffectList* GetTimedEffectList();
 
     CGameAnimation* GetAnimation();
 

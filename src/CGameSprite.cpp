@@ -2839,6 +2839,18 @@ CDerivedStats* CGameSprite::GetDerivedStats()
     return &m_derivedStats;
 }
 
+// 0x4531C0
+CGameEffectList* CGameSprite::GetEquipedEffectList()
+{
+    return &m_equipedEffectList;
+}
+
+// 0x4531D0
+CGameEffectList* CGameSprite::GetTimedEffectList()
+{
+    return &m_timedEffectList;
+}
+
 // NOTE: Inlined.
 CGameAnimation* CGameSprite::GetAnimation()
 {
