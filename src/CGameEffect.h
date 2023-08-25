@@ -302,6 +302,8 @@ public:
     void SetSource(const CPoint& pt);
     void SetSourceId(LONG sourceID);
 
+    static void AddPortraitIcon(CGameSprite* pSprite, int icon);
+
     /* 010C */ LONG m_sourceID;
     /* 0110 */ BOOL m_done;
     /* 0124 */ CSound m_sound;

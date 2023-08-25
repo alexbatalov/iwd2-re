@@ -981,6 +981,16 @@ void CGameEffect::SetSourceId(LONG sourceID)
     m_sourceID = sourceID;
 }
 
+// 0x4C42A0
+void CGameEffect::AddPortraitIcon(CGameSprite* pSprite, int icon)
+{
+    // NOTE: Uninline.
+    pSprite->AddPortraitIcon(icon);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    pGame->UpdatePortrait(pGame->GetCharacterPortraitNum(pSprite->GetId()), 1);
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.

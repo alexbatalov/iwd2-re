@@ -2851,6 +2851,23 @@ CGameEffectList* CGameSprite::GetTimedEffectList()
     return &m_timedEffectList;
 }
 
+// 0x4AEF20
+void CGameSprite::AddPortraitIcon(int icon)
+{
+    if (m_portraitIcons.Find(reinterpret_cast<int*>(icon), 0) == NULL) {
+        m_portraitIcons.AddTail(reinterpret_cast<int*>(icon));
+    }
+}
+
+// NOTE: Inlined.
+void CGameSprite::RemovePortraitIcon(int icon)
+{
+    POSITION pos = m_portraitIcons.Find(reinterpret_cast<int*>(icon), 0);
+    if (pos != NULL) {
+        m_portraitIcons.RemoveAt(pos);
+    }
+}
+
 // NOTE: Inlined.
 CGameAnimation* CGameSprite::GetAnimation()
 {

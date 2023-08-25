@@ -277,6 +277,8 @@ public:
     CDerivedStats* GetDerivedStats();
     CGameEffectList* GetEquipedEffectList();
     CGameEffectList* GetTimedEffectList();
+    void AddPortraitIcon(int icon);
+    void RemovePortraitIcon(int icon);
 
     CGameAnimation* GetAnimation();
 
@@ -508,6 +510,7 @@ public:
     /* 7126 */ LONG m_dialogWaitTarget;
     /* 712A */ int m_talkingCounter;
     /* 712E */ unsigned char field_712E;
+    /* 7130 */ CTypedPtrList<CPtrList, int*> m_portraitIcons; // NOTE: Stores actual ints disguised as pointers.
     /* 714C */ CVidCell m_portraitIconVidCell;
     /* 7226 */ int field_7226;
     /* 722A */ ULONG field_722A;
