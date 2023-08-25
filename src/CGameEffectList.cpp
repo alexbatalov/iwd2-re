@@ -23,6 +23,12 @@ CGameEffectList::~CGameEffectList()
     RemoveAll();
 }
 
+// 0x452F30
+POSITION CGameEffectList::GetPosCurrent()
+{
+    return m_posCurrent;
+}
+
 // 0x4C08E0
 void CGameEffectList::RemoveAllOfType(CGameSprite* pSprite, WORD effectID, POSITION posLeave, LONG effectAmount)
 {

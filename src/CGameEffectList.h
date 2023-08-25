@@ -11,6 +11,7 @@ public:
     CGameEffectList();
     ~CGameEffectList() override;
 
+    POSITION GetPosCurrent();
     void RemoveAllOfType(CGameSprite* pSprite, WORD effectID, POSITION posLeave, LONG effectAmount);
 
     /* 001C */ POSITION m_posNext;
