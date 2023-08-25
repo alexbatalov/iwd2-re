@@ -2906,6 +2906,14 @@ CGameEffect* CGameEffectSTRExtra::Copy()
     return copy;
 }
 
+// 0x4B7740
+BOOL CGameEffectSTRExtra::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 15953
+    UTIL_ASSERT(FALSE);
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
@@ -2958,6 +2966,14 @@ CGameEffect* CGameEffectProtectionFromCreature::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4B7970
+BOOL CGameEffectProtectionFromCreature::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 16143
+    UTIL_ASSERT_MSG(FALSE, "CGameEffectProtectionCircle game effect not supported in Icewind II (-rjf)");
 }
 
 // -----------------------------------------------------------------------------
@@ -3138,6 +3154,14 @@ CGameEffect* CGameEffectRetreatFrom::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4B8180
+BOOL CGameEffectRetreatFrom::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 16918
+    UTIL_ASSERT_MSG(FALSE, "CGameEffectRetreatFrom game effect not supported in Icewind II (-rjf)");
 }
 
 // -----------------------------------------------------------------------------
@@ -4391,6 +4415,14 @@ CGameEffect* CGameEffectHoldCreatureSpell::Copy()
     return copy;
 }
 
+// 0x4BE270
+BOOL CGameEffectHoldCreatureSpell::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 21645
+    UTIL_ASSERT_MSG(FALSE, "CGameEffectHoldCreatureSpell game effect not supported in Icewind II (-rjf)");
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
@@ -4697,6 +4729,14 @@ CGameEffect* CGameEffectIgnoreDialogPause::Copy()
     return copy;
 }
 
+// 0x4BF080
+BOOL CGameEffectIgnoreDialogPause::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 22409
+    UTIL_ASSERT_MSG(FALSE, "CGameEffectIgnoreDialogPause game effect not supported in Icewind II (-rjf)");
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
@@ -4823,6 +4863,14 @@ CGameEffect* CGameEffectImmunityLevelDecrement::Copy()
     return copy;
 }
 
+// 0x4BF0B0
+BOOL CGameEffectImmunityLevelDecrement::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 22530
+    UTIL_ASSERT_MSG(FALSE, "CGameEffectImmunityLevelDecrement game effect not supported in Icewind II (-rjf)");
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
@@ -4877,6 +4925,14 @@ CGameEffect* CGameEffectImmunitySchool::Copy()
     return copy;
 }
 
+// 0x4BF0E0
+BOOL CGameEffectImmunitySchool::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 22603
+    UTIL_ASSERT_MSG(FALSE, "CGameEffectImmunitySchool game effect not supported in Icewind II (-rjf)");
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49BF10
@@ -4893,6 +4949,14 @@ CGameEffect* CGameEffectImmunitySecondaryType::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4BF110
+BOOL CGameEffectImmunitySecondaryType::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 22629
+    UTIL_ASSERT_MSG(FALSE, "CGameEffectImmunitySecondaryType game effect not supported in Icewind II (-rjf)");
 }
 
 // -----------------------------------------------------------------------------
@@ -4967,6 +5031,14 @@ CGameEffect* CGameEffectPowerWordKill::Copy()
     return copy;
 }
 
+// 0x4C0130
+BOOL CGameEffectPowerWordKill::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 24032
+    UTIL_ASSERT_MSG(FALSE, "CGameEffectPowerWordKill game effect not supported in Icewind II (-rjf)");
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49C3C0
@@ -4983,6 +5055,14 @@ CGameEffect* CGameEffectPowerWordStun::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4C0160
+BOOL CGameEffectPowerWordStun::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 24057
+    UTIL_ASSERT_MSG(FALSE, "CGameEffectPowerWordStun game effect not supported in Icewind II (-rjf)");
 }
 
 // -----------------------------------------------------------------------------
@@ -5003,6 +5083,14 @@ CGameEffect* CGameEffectImprisonment::Copy()
     return copy;
 }
 
+// 0x4C0190
+BOOL CGameEffectImprisonment::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 24141
+    UTIL_ASSERT_MSG(FALSE, "CGameEffectImprisonment game effect not supported in Icewind II (-rjf)");
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49C5A0
@@ -5021,6 +5109,14 @@ CGameEffect* CGameEffectFreedom::Copy()
     return copy;
 }
 
+// 0x4C01C0
+BOOL CGameEffectFreedom::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 24166
+    UTIL_ASSERT_MSG(FALSE, "CGameEffectFreedom game effect not supported in Icewind II (-rjf)");
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49C690
@@ -5037,6 +5133,14 @@ CGameEffect* CGameEffectMaze::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4C01F0
+BOOL CGameEffectMaze::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 24214
+    UTIL_ASSERT_MSG(FALSE, "CGameEffectMaze game effect not supported in Icewind II (-rjf)");
 }
 
 // -----------------------------------------------------------------------------
@@ -5111,6 +5215,14 @@ CGameEffect* CGameEffectPowerWordSleep::Copy()
     return copy;
 }
 
+// 0x4C0220
+BOOL CGameEffectPowerWordSleep::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 24337
+    UTIL_ASSERT_MSG(FALSE, "CGameEffectPowerWordSleep game effect not supported in Icewind II (-rjf)");
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49CB40
@@ -5145,6 +5257,14 @@ CGameEffect* CGameEffectProtectionCircle::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4C0650
+BOOL CGameEffectProtectionCircle::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 24445
+    UTIL_ASSERT_MSG(FALSE, "CGameEffectProtectionCircle game effect not supported in Icewind II (-rjf)");
 }
 
 // -----------------------------------------------------------------------------
@@ -5219,6 +5339,14 @@ CGameEffect* CGameEffectImmunitySchoolDecrement::Copy()
     return copy;
 }
 
+// 0x4C0680
+BOOL CGameEffectImmunitySchoolDecrement::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 24543
+    UTIL_ASSERT_MSG(FALSE, "CGameEffectImmunitySchoolDecrement game effect not supported in Icewind II (-rjf)");
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49D0E0
@@ -5255,6 +5383,14 @@ CGameEffect* CGameEffectRevealMagic::Copy()
     return copy;
 }
 
+// 0x4C06B0
+BOOL CGameEffectRevealMagic::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 24592
+    UTIL_ASSERT_MSG(FALSE, "CGameEffectRevealMagic game effect not supported in Icewind II (-rjf)");
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49D2C0
@@ -5271,6 +5407,14 @@ CGameEffect* CGameEffectSecondaryTypeDecrement::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4C06E0
+BOOL CGameEffectSecondaryTypeDecrement::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 24620
+    UTIL_ASSERT_MSG(FALSE, "CGameEffectSecondaryTypeDecrement game effect not supported in Icewind II (-rjf)");
 }
 
 // -----------------------------------------------------------------------------
@@ -5291,6 +5435,14 @@ CGameEffect* CGameEffectBounceSchoolDecrement::Copy()
     return copy;
 }
 
+// 0x4C0710
+BOOL CGameEffectBounceSchoolDecrement::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 24645
+    UTIL_ASSERT_MSG(FALSE, "CGameEffectBounceSchoolDecrement game effect not supported in Icewind II (-rjf)");
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49D4A0
@@ -5307,6 +5459,14 @@ CGameEffect* CGameEffectBounceSecondaryTypeDecrement::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4C0740
+BOOL CGameEffectBounceSecondaryTypeDecrement::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 24671
+    UTIL_ASSERT_MSG(FALSE, "CGameEffectBounceSecondaryTypeDecrement game effect not supported in Icewind II (-rjf)");
 }
 
 // -----------------------------------------------------------------------------
@@ -5327,6 +5487,14 @@ CGameEffect* CGameEffectDispelSchoolOne::Copy()
     return copy;
 }
 
+// 0x4C0770
+BOOL CGameEffectDispelSchoolOne::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 24696
+    UTIL_ASSERT_MSG(FALSE, "CGameEffectDispelSchoolOne game effect not supported in Icewind II (-rjf)");
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49D680
@@ -5345,6 +5513,14 @@ CGameEffect* CGameEffectDispelSecondaryTypeOne::Copy()
     return copy;
 }
 
+// 0x4C07A0
+BOOL CGameEffectDispelSecondaryTypeOne::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 24696
+    UTIL_ASSERT_MSG(FALSE, "CGameEffectDispelSecondaryTypeOne game effect not supported in Icewind II (-rjf)");
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49D770
@@ -5361,4 +5537,12 @@ CGameEffect* CGameEffectTimeStop::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4C07D0
+BOOL CGameEffectTimeStop::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 24747
+    UTIL_ASSERT_MSG(FALSE, "CGameEffectTimeStop game effect not supported in Icewind II (-rjf)");
 }
