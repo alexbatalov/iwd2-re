@@ -1476,6 +1476,34 @@ CGameEffect* CGameEffectMorale::Copy()
     return copy;
 }
 
+// 0x4AF420
+BOOL CGameEffectMorale::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        pSprite->GetBaseStats()->m_morale += static_cast<BYTE>(m_effectAmount);
+        break;
+    case 1:
+        pSprite->GetBaseStats()->m_morale = static_cast<BYTE>(m_effectAmount);
+        break;
+    case 2:
+        pSprite->GetBaseStats()->m_morale = pSprite->GetBaseStats()->m_morale * static_cast<BYTE>(m_effectAmount) / 100;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 9248
+        UTIL_ASSERT(FALSE);
+    }
+
+    if (pSprite->GetBaseStats()->m_morale > 20) {
+        pSprite->GetBaseStats()->m_morale = 20;
+    }
+
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
