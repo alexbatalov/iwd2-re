@@ -2572,6 +2572,35 @@ CGameEffect* CGameEffectCureDisease::Copy()
     return copy;
 }
 
+// 0x4B6090
+BOOL CGameEffectCureDisease::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_DISEASE,
+        pSprite->GetEquipedEffectList()->GetPosCurrent(),
+        -1);
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_DISEASE,
+        pSprite->GetTimedEffectList()->GetPosCurrent(),
+        -1);
+
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_PORTRAITICON,
+        pSprite->GetEquipedEffectList()->GetPosCurrent(),
+        7);
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_PORTRAITICON,
+        pSprite->GetTimedEffectList()->GetPosCurrent(),
+        7);
+
+    pSprite->GetBaseStats()->m_generalState &= ~STATE_DISEASED;
+    pSprite->GetDerivedStats()->m_generalState &= ~STATE_DISEASED;
+
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
