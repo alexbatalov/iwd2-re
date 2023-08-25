@@ -4126,6 +4126,26 @@ CGameEffect* CGameEffectRestoreMovementRate::Copy()
     return copy;
 }
 
+// 0x4BDBA0
+BOOL CGameEffectRestoreMovementRate::ApplyEffect(CGameSprite* pSprite)
+{
+    // NOTE: Uninline.
+    pSprite->GetAnimation()->ResetMoveScale();
+
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_MOVEMENTRATE_176,
+        pSprite->GetEquipedEffectList()->GetPosCurrent(),
+        -1);
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_MOVEMENTRATE_176,
+        pSprite->GetTimedEffectList()->GetPosCurrent(),
+        -1);
+
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.

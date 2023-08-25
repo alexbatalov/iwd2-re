@@ -83,6 +83,16 @@ void CGameAnimation::SetAnimationType(USHORT animationID, BYTE* colorRangeValues
 }
 
 // NOTE: Inlined.
+void CGameAnimation::ResetMoveScale()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2090
+    UTIL_ASSERT(m_animation != NULL);
+
+    m_animation->ResetMoveScale();
+}
+
+// NOTE: Inlined.
 const CRect& CGameAnimation::GetEllipseRect()
 {
     // __FILE__: .\Include\ObjAnimation.h
