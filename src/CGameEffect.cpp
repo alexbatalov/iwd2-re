@@ -838,6 +838,29 @@ ITEM_EFFECT* CGameEffect::GetItemEffect()
     return effect;
 }
 
+// 0x4A4BB0
+void CGameEffect::DisplayString(CGameSprite* pSprite)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    if ((pGame->GetOptions()->m_nEffectTextLevel & 0x8) != 0
+        && pGame->m_bInLoadGame != TRUE
+        && pGame->m_bInLoadArea != TRUE) {
+        CString sEffectID;
+        sEffectID.Format("%d", m_effectID);
+
+        STRREF str = atol(pGame->GetRuleTables().m_tEffectText.GetAt(CRuleTables::STRREF_STR, sEffectID));
+        if (str != -1) {
+            g_pBaldurChitin->GetBaldurMessage()->sub_43E0E0(pSprite->GetNameRef(),
+                str,
+                CVidPalette::RANGE_COLORS[pSprite->GetBaseStats()->m_colors[2]],
+                RGB(0xD7, 0xD7, 0xBE),
+                -1,
+                pSprite->GetId(),
+                pSprite->GetId());
+        }
+    }
+}
+
 // 0x4A4D10
 void CGameEffect::DisplayStringRef(CGameSprite* pSprite, STRREF str)
 {

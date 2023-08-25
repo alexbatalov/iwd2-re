@@ -289,6 +289,7 @@ public:
     /* 0004 */ virtual CGameEffect* Copy();
     /* 0008 */ virtual BOOL ApplyEffect(CGameSprite* pSprite);
     /* 001C */ virtual BOOL UsesDice();
+    /* 0020 */ virtual void DisplayString(CGameSprite* pSprite);
 
     BOOL Compare(const CGameEffect& other);
     ITEM_EFFECT* GetItemEffect();
