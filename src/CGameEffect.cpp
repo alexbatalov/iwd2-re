@@ -2507,6 +2507,35 @@ CGameEffect* CGameEffectCureFeebleMindedness::Copy()
     return copy;
 }
 
+// 0x4B56F0
+BOOL CGameEffectCureFeebleMindedness::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetBaseStats()->m_generalState &= ~STATE_FEEBLEMINDED;
+    pSprite->GetDerivedStats()->m_generalState &= ~STATE_FEEBLEMINDED;
+
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_FEEBLEMINDEDNESS,
+        pSprite->GetTimedEffectList()->GetPosCurrent(),
+        -1);
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_FEEBLEMINDEDNESS,
+        pSprite->GetEquipedEffectList()->GetPosCurrent(),
+        -1);
+
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_PORTRAITICON,
+        pSprite->GetEquipedEffectList()->GetPosCurrent(),
+        54);
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_PORTRAITICON,
+        pSprite->GetTimedEffectList()->GetPosCurrent(),
+        54);
+
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
