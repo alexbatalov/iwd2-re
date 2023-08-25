@@ -2451,6 +2451,26 @@ CGameEffect* CGameEffectCureBlindness::Copy()
     return copy;
 }
 
+// 0x4B55B0
+BOOL CGameEffectCureBlindness::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetBaseStats()->m_generalState &= ~STATE_BLIND;
+    pSprite->GetDerivedStats()->m_generalState &= ~STATE_BLIND;
+
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_BLINDNESS,
+        pSprite->GetTimedEffectList()->GetPosCurrent(),
+        -1);
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_BLINDNESS,
+        pSprite->GetEquipedEffectList()->GetPosCurrent(),
+        -1);
+
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
