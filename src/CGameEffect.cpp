@@ -2256,6 +2256,25 @@ CGameEffect* CGameEffectCastingFailure::Copy()
     return copy;
 }
 
+// 0x4B4140
+BOOL CGameEffectCastingFailure::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        pSprite->GetDerivedStats()->m_nSpellFailureArcane += static_cast<SHORT>(m_effectAmount);
+        break;
+    case 1:
+        pSprite->GetDerivedStats()->m_nSpellFailureDivine += static_cast<SHORT>(m_effectAmount);
+        break;
+    case 2:
+        pSprite->GetDerivedStats()->m_nSpellFailureArcane += static_cast<SHORT>(m_effectAmount);
+        pSprite->GetDerivedStats()->m_nSpellFailureDivine += static_cast<SHORT>(m_effectAmount);
+        break;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.

@@ -137,8 +137,8 @@ public:
     /* 0074 */ short field_74;
     /* 0076 */ short m_favoredEnemies[8];
     /* 0086 */ short field_86;
-    /* 0088 */ short field_88;
-    /* 008A */ short field_8A;
+    /* 0088 */ SHORT m_nSpellFailureArcane; // #guess
+    /* 008A */ SHORT m_nSpellFailureDivine; // #guess
     /* 008C */ short field_8C;
     /* 008E */ short field_8E;
     /* 0090 */ SHORT m_nTurnUndeadLevel;

@@ -99,8 +99,8 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
     field_A6 = 0;
     field_AA = 0;
     field_86 = 0;
-    field_88 = 0;
-    field_8A = 0;
+    m_nSpellFailureArcane = 0;
+    m_nSpellFailureDivine = 0;
     field_8C = 100;
     field_8E = 100;
     m_nTurnUndeadLevel = 0;
@@ -266,8 +266,8 @@ void CDerivedStats::BonusInit()
     }
 
     field_86 = 0;
-    field_88 = 0;
-    field_8A = 0;
+    m_nSpellFailureArcane = 0;
+    m_nSpellFailureDivine = 0;
     field_8C = 0;
     field_8E = 0;
     m_nTurnUndeadLevel = 0;
@@ -393,8 +393,8 @@ CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
     field_74 += other.field_74;
     m_nMoraleBreak += other.m_nMoraleBreak;
     field_86 += other.field_86;
-    field_88 += other.field_88;
-    field_8A += other.field_8A;
+    m_nSpellFailureArcane += other.m_nSpellFailureArcane;
+    m_nSpellFailureDivine += other.m_nSpellFailureDivine;
     field_8C += other.field_8C;
     field_8E += other.field_8E;
     m_nTurnUndeadLevel += other.m_nTurnUndeadLevel;
@@ -484,8 +484,8 @@ void CDerivedStats::CheckLimits()
     field_74 = min(max(field_74, 10), 200);
     m_nMoraleBreak = min(max(m_nMoraleBreak, 10), 200);
     field_86 = min(max(field_86, -128), 127);
-    field_88 = min(max(field_88, 0), 100);
-    field_8A = min(max(field_8A, 0), 100);
+    m_nSpellFailureArcane = min(max(m_nSpellFailureArcane, 0), 100);
+    m_nSpellFailureDivine = min(max(m_nSpellFailureDivine, 0), 100);
     field_8C = min(max(field_8C, 0), 255);
     field_8E = min(max(field_8E, 0), 255);
     m_nTurnUndeadLevel = max(m_nTurnUndeadLevel, 0);
@@ -603,9 +603,9 @@ LONG CDerivedStats::GetAtOffset(SHORT offset)
     case 50:
         return field_86;
     case 51:
-        return field_88;
+        return m_nSpellFailureArcane;
     case 52:
-        return field_8A;
+        return m_nSpellFailureDivine;
     case 53:
         return field_8C;
     case 54:
