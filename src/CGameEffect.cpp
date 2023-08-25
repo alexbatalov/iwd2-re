@@ -4009,6 +4009,23 @@ CGameEffect* CGameEffectDispelSanctuary::Copy()
     return copy;
 }
 
+// 0x4BDA60
+BOOL CGameEffectDispelSanctuary::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_SANCTUARY,
+        pSprite->GetTimedEffectList()->GetPosCurrent(),
+        -1);
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_SANCTUARY,
+        pSprite->GetEquipedEffectList()->GetPosCurrent(),
+        -1);
+
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
