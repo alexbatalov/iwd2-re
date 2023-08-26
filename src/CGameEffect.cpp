@@ -1,8 +1,10 @@
 #include "CGameEffect.h"
 
 #include "CBaldurChitin.h"
+#include "CBaldurProjector.h"
 #include "CGameSprite.h"
 #include "CInfGame.h"
+#include "CScreenWorld.h"
 #include "CUtil.h"
 #include "CVidPalette.h"
 
@@ -4300,6 +4302,20 @@ CGameEffect* CGameEffectPlayMovie::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4BD540
+BOOL CGameEffectPlayMovie::ApplyEffect(CGameSprite* pSprite)
+{
+    CString sFileName("");
+
+    if (g_pBaldurChitin->m_pEngineProjector->ResolveMovieFileName(m_res, sFileName) == TRUE) {
+        g_pBaldurChitin->m_pEngineWorld->ReadyMovie(m_res, FALSE);
+    }
+
+    m_done = TRUE;
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------

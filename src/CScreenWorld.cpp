@@ -440,6 +440,12 @@ BOOL CScreenWorld::TogglePauseGame(char a2, char a3, int a4)
     return TRUE;
 }
 
+// 0x68E6E0
+BOOLEAN CScreenWorld::ReadyMovie(const CResRef& movieResRef, BOOLEAN bForcedFromServer)
+{
+    return FALSE;
+}
+
 // 0x691B50
 void CScreenWorld::StopStore()
 {
