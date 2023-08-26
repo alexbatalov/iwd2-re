@@ -4911,6 +4911,45 @@ CGameEffect* CGameEffectSelectiveToHitBonus::Copy()
     return copy;
 }
 
+// 0x4BE600
+BOOL CGameEffectSelectiveToHitBonus::ApplyEffect(CGameSprite* pSprite)
+{
+    CAIObjectType type(CAIObjectType::ANYONE);
+
+    CSelectiveBonus* pBonus = new CSelectiveBonus;
+
+    switch (m_dwFlags) {
+    case 2:
+        type.m_nEnemyAlly = static_cast<BYTE>(m_effectAmount);
+        break;
+    case 3:
+        type.m_nGeneral = static_cast<BYTE>(m_effectAmount);
+        break;
+    case 4:
+        type.m_nRace = static_cast<BYTE>(m_effectAmount);
+        break;
+    case 5:
+        type.m_nClass = static_cast<BYTE>(m_effectAmount);
+        break;
+    case 6:
+        type.m_nSpecific = static_cast<BYTE>(m_effectAmount);
+        break;
+    case 7:
+        type.m_nGender = static_cast<BYTE>(m_effectAmount);
+        break;
+    case 8:
+        type.m_nAlignment = static_cast<BYTE>(m_effectAmount);
+        break;
+    }
+
+    pBonus->m_type.Set(type);
+    pBonus->m_bonus = m_effectAmount2;
+
+    pSprite->GetDerivedStats()->m_cToHitBonusList.AddTail(pBonus);
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
