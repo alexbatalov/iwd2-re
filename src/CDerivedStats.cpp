@@ -109,9 +109,7 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
     m_nTranslucent = 0;
     m_bIdentifyMode = FALSE;
 
-    for (index = 0; index < 8; index++) {
-        field_EC[index] = 0;
-    }
+    m_spellStates.reset();
 
     field_10C = 0;
     m_bCasterHold = FALSE;
@@ -281,9 +279,7 @@ void CDerivedStats::BonusInit()
     m_nMoveSilentlyMTPBonus = 0;
     m_nHideInShadowsMTPBonus = 0;
 
-    for (index = 0; index < 8; index++) {
-        field_EC[index] = 0;
-    }
+    m_spellStates.reset();
 
     field_10C = 0;
     m_bCasterHold = FALSE;
@@ -407,9 +403,7 @@ CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
     m_nMoveSilentlyMTPBonus += other.m_nMoveSilentlyMTPBonus;
     m_nHideInShadowsMTPBonus += other.m_nHideInShadowsMTPBonus;
 
-    for (index = 0; index < 8; index++) {
-        field_EC[index] |= other.field_EC[index];
-    }
+    m_spellStates |= other.m_spellStates;
 
     field_10C |= other.field_10C;
     m_nStoneSkins += other.m_nStoneSkins;
