@@ -934,6 +934,7 @@ class CGameEffectName : public CGameEffect {
 public:
     CGameEffectName(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectXP : public CGameEffect {

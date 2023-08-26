@@ -3295,6 +3295,16 @@ CGameEffect* CGameEffectName::Copy()
     return copy;
 }
 
+// 0x4B7AE0
+BOOL CGameEffectName::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetBaseStats()->m_name = m_effectAmount;
+
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
