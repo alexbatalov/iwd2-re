@@ -4996,6 +4996,14 @@ CGameEffect* CGameEffectSetDoNoJump::Copy()
     return copy;
 }
 
+// 0x4BECF0
+BOOL CGameEffectSetDoNoJump::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetDerivedStats()->m_bDoNotJump = m_dwFlags;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
