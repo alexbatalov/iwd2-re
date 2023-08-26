@@ -5140,6 +5140,14 @@ CGameEffect* CGameEffectSeeInvisible::Copy()
     return copy;
 }
 
+// 0x4BF060
+BOOL CGameEffectSeeInvisible::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetDerivedStats()->m_bSeeInvisible = m_dwFlags;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
