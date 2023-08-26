@@ -156,7 +156,10 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
 
     // TODO: Incomplete.
 
-    memset(field_DAC, 0, sizeof(field_DAC));
+    for (int buttonIndex = 0; buttonIndex < 40; buttonIndex++) {
+        m_disabledButtons[buttonIndex] = FALSE;
+    }
+
     field_E4C = 0;
     field_E50 = 0;
     field_E54 = 0;

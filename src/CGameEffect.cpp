@@ -4147,6 +4147,17 @@ CGameEffect* CGameEffectDisableButton::Copy()
     return copy;
 }
 
+// 0x4BC560
+BOOL CGameEffectDisableButton::ApplyEffect(CGameSprite* pSprite)
+{
+    unsigned int buttonIndex = static_cast<unsigned int>(m_dwFlags);
+    if (buttonIndex < 40) {
+        pSprite->GetDerivedStats()->m_disabledButtons[buttonIndex] = TRUE;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.

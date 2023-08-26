@@ -514,7 +514,7 @@ public:
     /* 0570 */ CPtrList field_570;
     /* 0590 */ CPtrList field_590;
     /* 0DA8 */ int field_DA8;
-    /* 0DAC */ unsigned char field_DAC[160];
+    /* 0DAC */ BOOL m_disabledButtons[40];
     /* 0E4C */ int field_E4C;
     /* 0E50 */ int field_E50;
     /* 0E54 */ int field_E54;
