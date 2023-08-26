@@ -3114,6 +3114,21 @@ CGameEffect* CGameEffectDurationCasting::Copy()
     return copy;
 }
 
+// 0x4B7930
+BOOL CGameEffectDurationCasting::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        pSprite->GetDerivedStats()->m_nSpellDurationModMage = static_cast<BYTE>(m_effectAmount);
+        break;
+    case 1:
+        pSprite->GetDerivedStats()->m_nSpellDurationModPriest = static_cast<BYTE>(m_effectAmount);
+        break;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
