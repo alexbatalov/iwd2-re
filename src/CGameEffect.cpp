@@ -2783,6 +2783,24 @@ CGameEffect* CGameEffectDeafness::Copy()
     return copy;
 }
 
+// 0x4B6130
+BOOL CGameEffectDeafness::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_DEAFENED, TRUE);
+
+    if (m_secondaryType != 0) {
+        // NOTE: Uninline.
+        DisplayStringRef(pSprite, 14073); // "Deafness"
+    }
+
+    // NOTE: Uninline.
+    AddPortraitIcon(pSprite, 83);
+
+    m_done = FALSE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
