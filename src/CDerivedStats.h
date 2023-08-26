@@ -489,8 +489,8 @@ public:
     /* 01C0 */ CPtrList field_1C0;
     /* 01DC */ CImmunitiesSpellLevel m_cImmunitiesSpellLevel;
     /* 0204 */ CPtrList field_204;
-    /* 0220 */ CPtrList field_220;
-    /* 023C */ CPtrList field_23C;
+    /* 0220 */ CSelectiveBonusList m_cToHitBonusList;
+    /* 023C */ CSelectiveBonusList m_cDamageBonusList;
     /* 0258 */ CPtrList field_258;
     /* 0274 */ CPtrList field_274;
     /* 0290 */ CPtrList field_290;
