@@ -4336,6 +4336,18 @@ CGameEffect* CGameEffectSanctuary::Copy()
     return copy;
 }
 
+// 0x4BD5E0
+BOOL CGameEffectSanctuary::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetDerivedStats()->field_10C |= 0x1;
+    pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_SANCTUARY);
+
+    // NOTE: Uninline.
+    AddPortraitIcon(pSprite, 91);
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
