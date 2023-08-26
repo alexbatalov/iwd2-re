@@ -1374,10 +1374,11 @@ public:
     BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
-class CGameEffectSelectDamageBonus : public CGameEffect {
+class CGameEffectSelectiveDamageBonus : public CGameEffect {
 public:
-    CGameEffectSelectDamageBonus(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
+    CGameEffectSelectiveDamageBonus(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectRestrictEquipItem : public CGameEffect {
