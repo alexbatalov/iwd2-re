@@ -3,6 +3,14 @@
 
 #include "mfc.h"
 
+class CImmunitiesSpellLevel {
+public:
+    void ClearAll();
+    CImmunitiesSpellLevel& operator=(const CImmunitiesSpellLevel& other);
+
+    /* 0000 */ BOOL m_levels[10];
+};
+
 class CWeaponIdentification {
 public:
     WORD m_itemType;

@@ -2,6 +2,7 @@
 #define CDERIVEDSTATS_H_
 
 #include "CAIObjectType.h"
+#include "CImmunities.h"
 
 #include <set>
 
@@ -195,6 +196,7 @@ public:
     /* 0188 */ CPtrList field_188;
     /* 01A4 */ CPtrList field_1A4;
     /* 01C0 */ CPtrList field_1C0;
+    /* 01DC */ CImmunitiesSpellLevel m_cImmunitiesSpellLevel;
     /* 0204 */ CPtrList field_204;
     /* 0220 */ CPtrList field_220;
     /* 023C */ CPtrList field_23C;
