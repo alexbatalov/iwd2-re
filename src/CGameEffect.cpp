@@ -5068,6 +5068,14 @@ CGameEffect* CGameEffectMentalSpeed::Copy()
     return copy;
 }
 
+// 0x4BEFE0
+BOOL CGameEffectMentalSpeed::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetDerivedStats()->m_nMentalSpeed = static_cast<BYTE>(m_effectAmount);
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
