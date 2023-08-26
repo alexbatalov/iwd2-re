@@ -2417,6 +2417,28 @@ CGameEffect* CGameEffectTranslucent::Copy()
     return copy;
 }
 
+// 0x4BBB90
+BOOL CGameEffectTranslucent::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        pSprite->GetDerivedStats()->m_nTranslucent = static_cast<BYTE>(m_effectAmount);
+        break;
+    case 1:
+        pSprite->GetBaseStats()->m_generalState |= STATE_FADE_IN;
+        pSprite->GetBaseStats()->m_fadeSpeed = static_cast<BYTE>(m_effectAmount);
+        m_done = TRUE;
+        break;
+    case 2:
+        pSprite->GetBaseStats()->m_generalState |= STATE_FADE_OUT;
+        pSprite->GetBaseStats()->m_fadeSpeed = static_cast<BYTE>(m_effectAmount);
+        m_done = TRUE;
+        break;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x55F5E0
