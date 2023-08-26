@@ -3377,6 +3377,23 @@ CGameEffect* CGameEffectPortrait::Copy()
     return copy;
 }
 
+// 0x4B7ED0
+BOOL CGameEffectPortrait::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        m_res.GetResRef(pSprite->GetBaseStats()->m_portraitSmall);
+        break;
+    case 1:
+        m_res.GetResRef(pSprite->GetBaseStats()->m_portraitLarge);
+        break;
+    }
+
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
