@@ -5442,6 +5442,18 @@ CGameEffect* CGameEffectMinHitPoints::Copy()
     return copy;
 }
 
+// 0x4C0100
+BOOL CGameEffectMinHitPoints::ApplyEffect(CGameSprite* pSprite)
+{
+    if (pSprite->GetDerivedStats()->m_nMinHitPoints > 0) {
+        m_done = TRUE;
+    } else {
+        pSprite->GetDerivedStats()->m_nMinHitPoints = m_effectAmount;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49C2D0
