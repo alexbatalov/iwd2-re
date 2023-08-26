@@ -3880,6 +3880,14 @@ CGameEffect* CGameEffectNon_CumulativeLuck::Copy()
     return copy;
 }
 
+// 0x4BAFC0
+BOOL CGameEffectNon_CumulativeLuck::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetDerivedStats()->m_nLuck += static_cast<BYTE>(m_effectAmount);
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
