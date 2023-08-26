@@ -4702,6 +4702,14 @@ CGameEffect* CGameEffectDestroySelf::Copy()
     return copy;
 }
 
+// 0x4BDDE0
+BOOL CGameEffectDestroySelf::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->m_removeFromArea = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.

@@ -356,7 +356,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     m_currentSearchRequest = 0;
     field_4BB4 = 0;
     field_56EC = 0;
-    field_5644 = 0;
+    m_removeFromArea = FALSE;
     m_talkingCounter = 0;
     field_54F6 = 0;
     field_54F8 = 0;

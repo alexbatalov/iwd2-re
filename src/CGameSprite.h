@@ -482,7 +482,7 @@ public:
     /* 5638 */ int field_5638;
     /* 563C */ int field_563C;
     /* 5640 */ int field_5640;
-    /* 5644 */ int field_5644;
+    /* 5644 */ BOOL m_removeFromArea;
     /* 5648 */ CMarker m_marker;
     /* 566C */ CMarker m_destMarker;
     /* 5690 */ LONG m_targetId;
