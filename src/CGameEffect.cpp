@@ -5086,6 +5086,14 @@ CGameEffect* CGameEffectPhysicalSpeed::Copy()
     return copy;
 }
 
+// 0x4BF000
+BOOL CGameEffectPhysicalSpeed::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetDerivedStats()->m_nPhysicalSpeed = static_cast<BYTE>(m_effectAmount);
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
