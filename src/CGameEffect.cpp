@@ -2579,6 +2579,56 @@ CGameEffect* CGameEffectDamageMod::Copy()
     return copy;
 }
 
+// 0x4B5220
+BOOL CGameEffectDamageMod::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        pSprite->GetDerivedStats()->m_nDamageBonus += static_cast<SHORT>(m_effectAmount);
+        if (pSprite->GetDerivedStats()->m_nDamageBonus > 20) {
+            pSprite->GetDerivedStats()->m_nDamageBonus = 20;
+        }
+        if (pSprite->GetDerivedStats()->m_nDamageBonus < -20) {
+            pSprite->GetDerivedStats()->m_nDamageBonus = -20;
+        }
+        break;
+    case 1:
+        pSprite->GetDerivedStats()->m_nDamageModFire += static_cast<SHORT>(m_effectAmount);
+        break;
+    case 2:
+        pSprite->GetDerivedStats()->m_nDamageModCold += static_cast<SHORT>(m_effectAmount);
+        break;
+    case 3:
+        pSprite->GetDerivedStats()->m_nDamageModElectricity += static_cast<SHORT>(m_effectAmount);
+        break;
+    case 4:
+        pSprite->GetDerivedStats()->m_nDamageModAcid += static_cast<SHORT>(m_effectAmount);
+        break;
+    case 5:
+        pSprite->GetDerivedStats()->m_nDamageModMagic += static_cast<SHORT>(m_effectAmount);
+        break;
+    case 6:
+        pSprite->GetDerivedStats()->m_nDamageModPoison += static_cast<SHORT>(m_effectAmount);
+        break;
+    case 7:
+        pSprite->GetDerivedStats()->m_nDamageModSlashing += static_cast<SHORT>(m_effectAmount);
+        break;
+    case 8:
+        pSprite->GetDerivedStats()->m_nDamageModPiercing += static_cast<SHORT>(m_effectAmount);
+        break;
+    case 9:
+        pSprite->GetDerivedStats()->m_nDamageModCrushing += static_cast<SHORT>(m_effectAmount);
+        break;
+    case 10:
+        pSprite->GetDerivedStats()->m_nDamageModMissile += static_cast<SHORT>(m_effectAmount);
+        break;
+    }
+
+    m_done = FALSE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
