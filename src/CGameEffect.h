@@ -1307,6 +1307,7 @@ class CGameEffectMissileTHAC0Bonus : public CGameEffect {
 public:
     CGameEffectMissileTHAC0Bonus(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectDestroySelf : public CGameEffect {

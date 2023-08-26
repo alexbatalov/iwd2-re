@@ -4684,6 +4684,14 @@ CGameEffect* CGameEffectMissileTHAC0Bonus::Copy()
     return copy;
 }
 
+// 0x4BDE00
+BOOL CGameEffectMissileTHAC0Bonus::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetDerivedStats()->m_nMissileTHAC0Bonus = static_cast<BYTE>(m_effectAmount);
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
