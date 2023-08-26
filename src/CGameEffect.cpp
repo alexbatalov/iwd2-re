@@ -2653,6 +2653,24 @@ CGameEffect* CGameEffectFeebleMindedness::Copy()
     return copy;
 }
 
+// 0x4B5610
+BOOL CGameEffectFeebleMindedness::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType != 0) {
+        // NOTE: Uninline.
+        DisplayStringRef(pSprite, 14407); // "Feebleminded"
+    }
+
+    pSprite->GetDerivedStats()->m_generalState |= STATE_FEEBLEMINDED;
+
+    // NOTE: Uninline.
+    AddPortraitIcon(pSprite, 54);
+
+    pSprite->GetDerivedStats()->m_nINT = 3;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
