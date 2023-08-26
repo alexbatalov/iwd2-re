@@ -5050,6 +5050,14 @@ CGameEffect* CGameEffectAuraCleansing::Copy()
     return copy;
 }
 
+// 0x4BEFC0
+BOOL CGameEffectAuraCleansing::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetDerivedStats()->m_bAuraCleansing = m_dwFlags;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
