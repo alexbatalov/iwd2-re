@@ -4102,6 +4102,15 @@ CGameEffect* CGameEffectPortraitIcon::Copy()
     return copy;
 }
 
+// 0x4BC500
+BOOL CGameEffectPortraitIcon::ApplyEffect(CGameSprite* pSprite)
+{
+    // NOTE: Uninline.
+    AddPortraitIcon(pSprite, m_dwFlags);
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
