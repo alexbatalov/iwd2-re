@@ -4034,6 +4034,20 @@ CGameEffect* CGameEffectDisplayString::Copy()
     return copy;
 }
 
+// 0x4BBC40
+BOOL CGameEffectDisplayString::ApplyEffect(CGameSprite* pSprite)
+{
+    STRREF str = static_cast<STRREF>(m_effectAmount);
+    if (str != -1) {
+        // NOTE: Uninline.
+        DisplayStringRef(pSprite, str);
+    }
+
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
