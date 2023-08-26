@@ -4640,6 +4640,14 @@ CGameEffect* CGameEffectPauseCaster::Copy()
     return copy;
 }
 
+// 0x4BDCB0
+BOOL CGameEffectPauseCaster::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetDerivedStats()->m_bCasterHold = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
