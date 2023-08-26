@@ -50,6 +50,115 @@
         | STATE_STONE_DEATH     \
         | STATE_FROZEN_DEATH)
 
+// STATS.IDS
+
+#define STAT_MAXHITPOINTS 1
+#define STAT_ARMORCLASS 2
+#define STAT_ACBLUDGEONINGMOD 3
+#define STAT_ACMISSILEMOD 4
+#define STAT_ACPIERCINGMOD 5
+#define STAT_ACSLASHINGMOD 6
+#define STAT_THAC0 7
+#define STAT_NUMBEROFATTACKS 8
+#define STAT_SAVEFORTITUDE 9
+#define STAT_SAVEREFLEX 10
+#define STAT_SAVEWILL 11
+#define STAT_KNOWLEDGEARCANA 12
+#define STAT_RESISTFIRE 14
+#define STAT_RESISTCOLD 15
+#define STAT_RESISTELECTRICITY 16
+#define STAT_RESISTACID 17
+#define STAT_RESISTMAGIC 18
+#define STAT_RESISTMAGICFIRE 19
+#define STAT_RESISTMAGICCOLD 20
+#define STAT_RESISTSLASHING 21
+#define STAT_RESISTBLUDGEONING 22
+#define STAT_RESISTPIERCING 23
+#define STAT_RESISTMISSILE 24
+#define STAT_ALCHEMY 25
+#define STAT_LOCKPICKING 26
+#define STAT_MOVESILENTLY 27
+#define STAT_TRAPS 28
+#define STAT_PICKPOCKET 29
+#define STAT_FATIGUE 30
+#define STAT_INTOXICATION 31
+#define STAT_LUCK 32
+#define STAT_TRACKING 33
+#define STAT_LEVEL 34
+#define STAT_SEX 35
+#define STAT_STR 36
+#define STAT_STREXTRA 37
+#define STAT_INT 38
+#define STAT_WIS 39
+#define STAT_DEX 40
+#define STAT_CON 41
+#define STAT_CHR 42
+#define STAT_XPVALUE 43
+#define STAT_XP 44
+#define STAT_GOLD 45
+#define STAT_MORALEBREAK 46
+#define STAT_MORALERECOVERYTIME 47
+#define STAT_REPUTATION 48
+#define STAT_HATEDRACE 49
+#define STAT_DAMAGEBONUS 50
+#define STAT_SPELLFAILUREMAGE 51
+#define STAT_SPELLFAILUREPRIEST 52
+#define STAT_SPELLDURATIONMODMAGE 53
+#define STAT_SPELLDURATIONMODPRIEST 54
+#define STAT_TURNUNDEADLEVEL 55
+#define STAT_BACKSTABDAMAGEMULTIPLIER 56
+#define STAT_LAYONHANDSAMOUNT 57
+#define STAT_HELD 58
+#define STAT_POLYMORPHED 59
+#define STAT_TRANSLUCENT 60
+#define STAT_IDENTIFYMODE 61
+#define STAT_ENTANGLE 62
+#define STAT_SANCTUARY 63
+#define STAT_MINORGLOBE 64
+#define STAT_SHIELDGLOBE 65
+#define STAT_GREASE 66
+#define STAT_WEB 67
+#define STAT_LEVEL2 68
+#define STAT_LEVEL3 69
+#define STAT_CASTERHOLD 70
+#define STAT_ENCUMBERANCE 71
+#define STAT_MISSILETHAC0BONUS 72
+#define STAT_MAGICDAMAGERESISTANCE 73
+#define STAT_RESISTPOISON 74
+#define STAT_DONOTJUMP 75
+#define STAT_AURACLEANSING 76
+#define STAT_MENTALSPEED 77
+#define STAT_PHYSICALSPEED 78
+#define STAT_CASTINGLEVELBONUSMAGE 79
+#define STAT_CASTINGLEVELBONUSCLERIC 80
+#define STAT_SEEINVISIBLE 81
+#define STAT_IGNOREDIALOGPAUSE 82
+#define STAT_MINHITPOINTS 83
+#define STAT_THAC0BONUSRIGHT 84
+#define STAT_THAC0BONUSLEFT 85
+#define STAT_DAMAGEBONUSRIGHT 86
+#define STAT_DAMAGEBONUSLEFT 87
+#define STAT_STONESKINS 88
+#define STAT_KIT 89
+#define STAT_HIDEINSHADOWS 90
+#define STAT_MOVESILENTLYMTPBONUS 91
+#define STAT_HIDEINSHADOWSMTPBONUS 92
+#define STAT_SUBRACE 93
+#define STAT_USEMAGICDEVICE 94
+#define STAT_CLASSLEVELSUM 95
+#define STAT_CLASSLEVELBARBARIAN 96
+#define STAT_CLASSLEVELBARD 97
+#define STAT_CLASSLEVELCLERIC 98
+#define STAT_CLASSLEVELDRUID 99
+#define STAT_CLASSLEVELFIGHTER 100
+#define STAT_CLASSLEVELMONK 101
+#define STAT_CLASSLEVELPALADIN 102
+#define STAT_CLASSLEVELRANGER 103
+#define STAT_CLASSLEVELROGUE 104
+#define STAT_CLASSLEVELSORCERER 105
+#define STAT_CLASSLEVELWIZARD 106
+#define STAT_107 107
+
 class CCreatureFileHeader;
 class CGameSprite;
 class CGameSpriteGroupedSpellList;
@@ -63,8 +172,8 @@ public:
     CDerivedStats& operator+=(const CDerivedStats& other);
     void CheckLimits();
     LONG GetAtOffset(SHORT offset);
-    int sub_447390();
-    unsigned char sub_4473A0();
+    int GetXP();
+    BYTE GetLevel();
     DWORD GetSorcererWizardLevel();
     DWORD GetBardMonkRogueLevel();
     BOOL HasClassMask(INT iClassType);
@@ -80,13 +189,13 @@ public:
     /* 0008 */ short field_8;
     /* 000A */ short field_A;
     /* 000C */ short field_C;
-    /* 000E */ short field_E;
-    /* 0010 */ short field_10;
-    /* 0012 */ short field_12;
-    /* 0014 */ short field_14;
+    /* 000E */ SHORT m_nACCrushingMod;
+    /* 0010 */ SHORT m_nACMissileMod;
+    /* 0012 */ SHORT m_nACPiercingMod;
+    /* 0014 */ SHORT m_nACSlashingMod;
     /* 0016 */ short field_16;
-    /* 0018 */ short field_18;
-    /* 001A */ short field_1A;
+    /* 0018 */ SHORT m_nTHAC0;
+    /* 001A */ SHORT m_nNumberOfAttacks;
     /* 001C */ SHORT m_nSaveVSFortitude;
     /* 001E */ SHORT m_nSaveVSReflex;
     /* 0020 */ SHORT m_nSaveVSWill;
@@ -100,11 +209,11 @@ public:
     /* 0030 */ SHORT m_nResistSlashing;
     /* 0032 */ SHORT m_nResistCrushing;
     /* 0034 */ SHORT m_nResistPiercing;
-    /* 0036 */ short field_36;
-    /* 0038 */ short field_38;
+    /* 0036 */ SHORT m_nResistMissile;
+    /* 0038 */ SHORT m_nFatigue;
     /* 003A */ SHORT m_nIntoxication;
-    /* 003C */ short field_3C;
-    /* 003E */ short field_3E;
+    /* 003C */ SHORT m_nLuck;
+    /* 003E */ DWORD m_nSubRace;
     /* 0042 */ DWORD m_classMask;
     /* 0046 */ BYTE m_nLevel;
     union {
@@ -123,54 +232,54 @@ public:
         };
         /* 0047 */ BYTE m_nClassLevels[CAIOBJECT_CLASS_MAX];
     };
-    /* 0052 */ short field_52;
+    /* 0052 */ SHORT m_nSex;
     /* 0054 */ SHORT m_nSTR;
     /* 0056 */ SHORT m_nINT;
     /* 0058 */ SHORT m_nWIS;
     /* 005A */ SHORT m_nDEX;
     /* 005C */ SHORT m_nCON;
     /* 005E */ SHORT m_nCHR;
-    /* 0060 */ int field_60;
-    /* 0064 */ int field_64;
-    /* 0068 */ int field_68;
+    /* 0060 */ DWORD m_nXPValue;
+    /* 0064 */ DWORD m_nXP;
+    /* 0068 */ DWORD m_nGold;
     /* 006C */ DWORD m_nMoraleBreak;
     /* 0070 */ DWORD m_nMoraleRecoveryTime;
-    /* 0074 */ short field_74;
-    /* 0076 */ short m_favoredEnemies[8];
-    /* 0086 */ short field_86;
+    /* 0074 */ SHORT m_nReputation;
+    /* 0076 */ SHORT m_favoredEnemies[8];
+    /* 0086 */ SHORT m_nDamageBonus;
     /* 0088 */ SHORT m_nSpellFailureArcane; // #guess
     /* 008A */ SHORT m_nSpellFailureDivine; // #guess
-    /* 008C */ short field_8C;
-    /* 008E */ short field_8E;
+    /* 008C */ SHORT m_nSpellDurationModMage;
+    /* 008E */ SHORT m_nSpellDurationModPriest;
     /* 0090 */ SHORT m_nTurnUndeadLevel;
     /* 0092 */ SHORT m_nBackstabDamageMultiplier;
     /* 0094 */ SHORT m_nLayOnHandsAmount;
-    /* 0096 */ short field_96;
-    /* 009A */ int field_9A;
-    /* 009E */ int field_9E;
-    /* 00A2 */ int m_nSpecialization;
-    /* 00A6 */ int field_A6;
-    /* 00AA */ int field_AA;
-    /* 00AE */ int field_AE;
-    /* 00B2 */ short field_B2;
-    /* 00B4 */ short field_B4;
-    /* 00B6 */ short field_B6;
-    /* 00B8 */ short field_B8;
-    /* 00BA */ short field_BA;
-    /* 00BC */ int field_BC;
-    /* 00C0 */ int field_C0;
-    /* 00C4 */ short field_C4;
-    /* 00C6 */ short field_C6;
-    /* 00C8 */ short field_C8;
-    /* 00CA */ short field_CA;
-    /* 00CC */ int field_CC;
-    /* 00D0 */ int field_D0;
-    /* 00D4 */ int field_D4;
-    /* 00D8 */ int field_D8;
-    /* 00DC */ int field_DC;
-    /* 00E0 */ int field_E0;
-    /* 00E4 */ int field_E4;
-    /* 00E8 */ int field_E8;
+    /* 0096 */ BOOL m_bHeld;
+    /* 009A */ BOOL m_bPolymorphed;
+    /* 009E */ BOOL m_bIdentifyMode;
+    /* 00A2 */ DWORD m_nSpecialization;
+    /* 00A6 */ LONG m_nMoveSilentlyMTPBonus;
+    /* 00AA */ LONG m_nHideInShadowsMTPBonus;
+    /* 00AE */ BOOL m_bCasterHold;
+    /* 00B2 */ SHORT m_nTranslucent;
+    /* 00B4 */ SHORT m_nEncumberance;
+    /* 00B6 */ SHORT m_nMissileTHAC0Bonus;
+    /* 00B8 */ SHORT m_nMagicDamageResistance;
+    /* 00BA */ SHORT m_nResistPoison;
+    /* 00BC */ BOOL m_bDoNotJump;
+    /* 00C0 */ BOOL m_bAuraCleansing;
+    /* 00C4 */ SHORT m_nMentalSpeed;
+    /* 00C6 */ SHORT m_nPhysicalSpeed;
+    /* 00C8 */ SHORT m_nCastingLevelBonusMage;
+    /* 00CA */ SHORT m_nCastingLevelBonusCleric;
+    /* 00CC */ BOOL m_bSeeInvisible;
+    /* 00D0 */ BOOL m_bIgnoreDialogPause;
+    /* 00D4 */ LONG m_nMinHitPoints;
+    /* 00D8 */ LONG m_THAC0BonusRight;
+    /* 00DC */ LONG m_THAC0BonusLeft;
+    /* 00E0 */ LONG m_DamageBonusRight;
+    /* 00E4 */ LONG m_DamageBonusLeft;
+    /* 00E8 */ LONG m_nStoneSkins;
     /* 00EC */ int field_EC[8];
     /* 010C */ int field_10C;
     /* 0110 */ short field_110;
@@ -191,7 +300,7 @@ public:
     /* 0138 */ int field_138;
     /* 013C */ int field_13C;
     /* 0140 */ int field_140;
-    /* 0144 */ BYTE field_144[64];
+    /* 0144 */ BYTE m_nSkills[64];
     /* 0184 */ int field_184;
     /* 0188 */ CPtrList field_188;
     /* 01A4 */ CPtrList field_1A4;

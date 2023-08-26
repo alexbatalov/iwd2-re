@@ -3675,15 +3675,15 @@ void CScreenCreateChar::StartCreateChar(INT nCharacterSlot, INT nEngineState)
 
     pSprite->m_bGlobal = TRUE;
     pSprite->GetBaseStats()->m_flags = 0x800;
-    pSprite->GetBaseStats()->field_10 = 0;
+    pSprite->GetBaseStats()->m_xp = 0;
     pSprite->GetBaseStats()->field_3E = 10;
-    pSprite->GetBaseStats()->field_49 = 1;
+    pSprite->GetBaseStats()->m_numberOfAttacksBase = 1;
     pSprite->GetBaseStats()->m_skills[15] = 0;
     pSprite->GetBaseStats()->m_morale = 10;
     pSprite->GetBaseStats()->m_moraleBreak = 0;
     pSprite->GetBaseStats()->m_moraleRecoveryTime = 1;
     pSprite->m_dialog = "MULTIG";
-    pSprite->GetBaseStats()->field_3C = 100;
+    pSprite->GetBaseStats()->m_reputation = 100;
 
     pSprite->field_562C = 1;
     pSprite->ProcessEffectList();
@@ -3908,7 +3908,7 @@ void CScreenCreateChar::UpdateCharacterStats(CGameSprite* pSprite)
     pSprite->GetDerivedStats()->m_wizardLevel = 0;
     pSprite->GetDerivedStats()->m_nLevel = 0;
     pSprite->GetDerivedStats()->m_classMask = 0;
-    pSprite->GetDerivedStats()->field_64 = 0;
+    pSprite->GetDerivedStats()->m_nXP = 0;
 
     // TODO: Incomplete.
     // DStats = *pSprite->GetDerivedStats();
@@ -4132,7 +4132,7 @@ void CScreenCreateChar::CompleteCharacterAbilities(CGameSprite* pSprite)
 
     pSprite->sub_71E760(DStats, 1);
 
-    pSprite->GetBaseStats()->field_10 = ruleTables.GetStartingExperiencePoints(pSprite);
+    pSprite->GetBaseStats()->m_xp = ruleTables.GetStartingExperiencePoints(pSprite);
 
     pSprite->field_562C = 1;
     pSprite->ProcessEffectList();

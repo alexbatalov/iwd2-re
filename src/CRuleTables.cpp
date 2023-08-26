@@ -2142,7 +2142,7 @@ INT CRuleTables::GetMaxDruidShapeshifts(CCreatureFileHeader& BStats, INT nLevel)
 void CRuleTables::GetNextLevel(BYTE nClass, CDerivedStats& DStats, CGameSprite* pSprite) const
 {
     int v1 = DStats.m_nLevel;
-    int v2 = DStats.sub_447390();
+    int v2 = DStats.GetXP();
     int v3 = 0;
 
     if (pSprite != NULL && v2 != 0) {

@@ -2103,7 +2103,7 @@ BOOL CGameSprite::sub_763200(UINT nFeatNumber, INT a2)
                    || m_derivedStats.GetClassLevel(CAIOBJECTTYPE_C_PALADIN) >= 15
                    || m_derivedStats.GetClassLevel(CAIOBJECTTYPE_C_RANGER) >= 15
                    || m_derivedStats.GetClassLevel(CAIOBJECTTYPE_C_RANGER) >= 8)
-            && m_derivedStats.field_144[13] >= 10;
+            && m_derivedStats.m_nSkills[13] >= 10;
     case CGAMESPRITE_FEAT_AMBIDEXTERITY:
         return nDEX >= 15;
     case CGAMESPRITE_FEAT_ARMOR_PROF:
@@ -2804,18 +2804,18 @@ void CGameSprite::DisplaySkills(CUIControlTextDisplay* pText)
 
     for (int index = 0; index < CGAMESPRITE_SKILL_NUMSKILLS; index++) {
         INT nSkillId = ruleTables.GetSkillId(index);
-        if (m_baseStats.m_skills[nSkillId] == m_derivedStats.field_144[nSkillId]) {
-            if (m_derivedStats.field_144[nSkillId] != 0) {
+        if (m_baseStats.m_skills[nSkillId] == m_derivedStats.m_nSkills[nSkillId]) {
+            if (m_derivedStats.m_nSkills[nSkillId] != 0) {
                 CBaldurEngine::UpdateText(pText,
                     "%s: %d",
                     (LPCSTR)CBaldurEngine::FetchString(ruleTables.GetSkillName(nSkillId)),
-                    m_derivedStats.field_144[nSkillId]);
+                    m_derivedStats.m_nSkills[nSkillId]);
             }
         } else {
             CBaldurEngine::UpdateText(pText,
                 "%s: %d (%d)",
                 (LPCSTR)CBaldurEngine::FetchString(ruleTables.GetSkillName(nSkillId)),
-                m_derivedStats.field_144[nSkillId],
+                m_derivedStats.m_nSkills[nSkillId],
                 m_baseStats.m_skills[nSkillId]);
         }
     }

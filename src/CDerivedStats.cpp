@@ -30,16 +30,16 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
     field_8 = 0;
     field_A = 0;
     field_C = pCreature->field_3E;
-    field_E = pCreature->field_40;
-    field_10 = pCreature->field_42;
-    field_12 = pCreature->field_44;
-    field_14 = pCreature->field_46;
+    m_nACCrushingMod = pCreature->m_armorClassCrushingAdjustment;
+    m_nACMissileMod = pCreature->m_armorClassMissileAdjustment;
+    m_nACPiercingMod = pCreature->m_armorClassPiercingAdjustment;
+    m_nACSlashingMod = pCreature->m_armorClassSlashingAdjustment;
 
     // TODO: Incomplete.
 
     field_16 = 0;
-    field_18 = 0;
-    field_1A = pCreature->field_49;
+    m_nTHAC0 = 0;
+    m_nNumberOfAttacks = pCreature->m_numberOfAttacksBase;
     m_nSaveVSFortitude = pCreature->m_saveVSFortitudeBase;
     m_nSaveVSReflex = pCreature->m_saveVSReflexBase;
     m_nSaveVSWill = pCreature->m_saveVSWillBase;
@@ -53,14 +53,14 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
     m_nResistSlashing = pCreature->m_resistSlashingBase;
     m_nResistCrushing = pCreature->m_resistCrushingBase;
     m_nResistPiercing = pCreature->m_resistPiercingBase;
-    field_36 = pCreature->field_57;
-    field_38 = pCreature->field_5D;
+    m_nResistMissile = pCreature->m_resistMissileBase;
+    m_nFatigue = pCreature->m_fatigue;
     m_nIntoxication = pCreature->m_intoxication;
-    field_3C = pCreature->field_5F;
+    m_nLuck = pCreature->m_luckBase;
 
-    memcpy(field_144, pCreature->m_skills, 64);
+    memcpy(m_nSkills, pCreature->m_skills, 64);
 
-    field_3E = pCreature->field_25B;
+    m_nSubRace = pCreature->m_subrace;
 
     m_nLevel = pCreature->m_characterLevel;
     m_barbarianLevel = pCreature->m_barbarianLevel;
@@ -75,7 +75,7 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
     m_sorcererLevel = pCreature->m_sorcererLevel;
     m_wizardLevel = pCreature->m_wizardLevel;
 
-    field_52 = pCreature->field_25D;
+    m_nSex = pCreature->m_sex;
 
     m_nSTR = pCreature->m_STRBase;
     m_nINT = pCreature->m_INTBase;
@@ -84,11 +84,11 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
     m_nCON = pCreature->m_CONBase;
     m_nCHR = pCreature->m_CHRBase;
 
-    field_60 = pCreature->field_C;
-    field_64 = pCreature->field_10;
-    field_68 = pCreature->field_14;
+    m_nXPValue = pCreature->m_xpValue;
+    m_nXP = pCreature->m_xp;
+    m_nGold = pCreature->m_gold;
     m_nMoraleRecoveryTime = pCreature->m_moraleRecoveryTime;
-    field_74 = pCreature->field_3C;
+    m_nReputation = pCreature->m_reputation;
     m_nMoraleBreak = pCreature->m_moraleBreak;
 
     for (index = 0; index < 8; index++) {
@@ -96,42 +96,42 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
     }
 
     m_nSpecialization = pCreature->m_specialization;
-    field_A6 = 0;
-    field_AA = 0;
-    field_86 = 0;
+    m_nMoveSilentlyMTPBonus = 0;
+    m_nHideInShadowsMTPBonus = 0;
+    m_nDamageBonus = 0;
     m_nSpellFailureArcane = 0;
     m_nSpellFailureDivine = 0;
-    field_8C = 100;
-    field_8E = 100;
+    m_nSpellDurationModMage = 100;
+    m_nSpellDurationModPriest = 100;
     m_nTurnUndeadLevel = 0;
-    field_96 = 0;
-    field_9A = 0;
-    field_B2 = 0;
-    field_9E = 0;
+    m_bHeld = FALSE;
+    m_bPolymorphed = FALSE;
+    m_nTranslucent = 0;
+    m_bIdentifyMode = FALSE;
 
     for (index = 0; index < 8; index++) {
         field_EC[index] = 0;
     }
 
     field_10C = 0;
-    field_AE = 0;
-    field_B4 = 0;
-    field_B8 = pCreature->field_58;
-    field_BA = 0;
-    field_BC = 0;
-    field_C0 = 0;
-    field_C4 = 0;
-    field_C6 = 0;
-    field_C8 = 0;
-    field_CA = 0;
-    field_CC = 0;
-    field_D0 = 0;
-    field_D4 = 0;
-    field_D8 = 0;
-    field_DC = 0;
-    field_E0 = 0;
-    field_E4 = 0;
-    field_E8 = 0;
+    m_bCasterHold = FALSE;
+    m_nEncumberance = 0;
+    m_nMagicDamageResistance = pCreature->m_resistMagicDamageBase;
+    m_nResistPoison = 0;
+    m_bDoNotJump = FALSE;
+    m_bAuraCleansing = FALSE;
+    m_nMentalSpeed = 0;
+    m_nPhysicalSpeed = 0;
+    m_nCastingLevelBonusMage = 0;
+    m_nCastingLevelBonusCleric = 0;
+    m_bSeeInvisible = FALSE;
+    m_bIgnoreDialogPause = FALSE;
+    m_nMinHitPoints = 0;
+    m_THAC0BonusRight = 0;
+    m_THAC0BonusLeft = 0;
+    m_DamageBonusRight = 0;
+    m_DamageBonusLeft = 0;
+    m_nStoneSkins = 0;
     field_110 = 0;
     field_112 = 0;
     field_114 = 0;
@@ -216,15 +216,15 @@ void CDerivedStats::BonusInit()
     field_8 = 0;
     field_A = 0;
     field_C = 0;
-    field_E = 0;
-    field_10 = 0;
-    field_12 = 0;
+    m_nACCrushingMod = 0;
+    m_nACMissileMod = 0;
+    m_nACPiercingMod = 0;
 
     // TODO: Incomplete.
 
     field_16 = 0;
-    field_18 = 0;
-    field_1A = 0;
+    m_nTHAC0 = 0;
+    m_nNumberOfAttacks = 0;
     m_nSaveVSFortitude = 0;
     m_nSaveVSReflex = 0;
     m_nSaveVSWill = 0;
@@ -238,73 +238,73 @@ void CDerivedStats::BonusInit()
     m_nResistSlashing = 0;
     m_nResistCrushing = 0;
     m_nResistPiercing = 0;
-    field_36 = 0;
+    m_nResistMissile = 0;
 
-    memset(field_144, 0, 64);
+    memset(m_nSkills, 0, 64);
 
-    field_38 = 0;
+    m_nFatigue = 0;
     m_nIntoxication = 0;
-    field_3C = 0;
-    field_3E = 0;
+    m_nLuck = 0;
+    m_nSubRace = 0;
     m_nLevel = 0;
-    field_52 = 0;
+    m_nSex = 0;
     m_nSTR = 0;
     m_nINT = 0;
     m_nWIS = 0;
     m_nDEX = 0;
     m_nCON = 0;
     m_nCHR = 0;
-    field_60 = 0;
-    field_64 = 0;
-    field_68 = 0;
+    m_nXPValue = 0;
+    m_nXP = 0;
+    m_nGold = 0;
     m_nMoraleRecoveryTime = 0;
-    field_74 = 0;
+    m_nReputation = 0;
     m_nMoraleBreak = 0;
 
     for (index = 0; index < 8; index++) {
         m_favoredEnemies[index] = CAIObjectType::R_NO_RACE;
     }
 
-    field_86 = 0;
+    m_nDamageBonus = 0;
     m_nSpellFailureArcane = 0;
     m_nSpellFailureDivine = 0;
-    field_8C = 0;
-    field_8E = 0;
+    m_nSpellDurationModMage = 0;
+    m_nSpellDurationModPriest = 0;
     m_nTurnUndeadLevel = 0;
     m_nBackstabDamageMultiplier = 0;
     m_nLayOnHandsAmount = 0;
-    field_96 = 0;
-    field_9A = 0;
-    field_B2 = 0;
-    field_9E = 0;
+    m_bHeld = FALSE;
+    m_bPolymorphed = FALSE;
+    m_nTranslucent = 0;
+    m_bIdentifyMode = FALSE;
     m_nSpecialization = 0;
-    field_A6 = 0;
-    field_AA = 0;
+    m_nMoveSilentlyMTPBonus = 0;
+    m_nHideInShadowsMTPBonus = 0;
 
     for (index = 0; index < 8; index++) {
         field_EC[index] = 0;
     }
 
     field_10C = 0;
-    field_AE = 0;
-    field_B4 = 0;
-    field_B6 = 0;
-    field_B8 = 0;
-    field_BA = 0;
-    field_BC = 0;
-    field_C0 = 0;
-    field_C4 = 0;
-    field_C6 = 0;
-    field_C8 = 0;
-    field_CA = 0;
-    field_CC = 0;
-    field_D0 = 0;
-    field_D4 = 0;
-    field_D8 = 0;
-    field_DC = 0;
-    field_E0 = 0;
-    field_E4 = 0;
-    field_E8 = 0;
+    m_bCasterHold = FALSE;
+    m_nEncumberance = 0;
+    m_nMissileTHAC0Bonus = 0;
+    m_nMagicDamageResistance = 0;
+    m_nResistPoison = 0;
+    m_bDoNotJump = FALSE;
+    m_bAuraCleansing = FALSE;
+    m_nMentalSpeed = 0;
+    m_nPhysicalSpeed = 0;
+    m_nCastingLevelBonusMage = 0;
+    m_nCastingLevelBonusCleric = 0;
+    m_bSeeInvisible = FALSE;
+    m_bIgnoreDialogPause = FALSE;
+    m_nMinHitPoints = 0;
+    m_THAC0BonusRight = 0;
+    m_THAC0BonusLeft = 0;
+    m_DamageBonusRight = 0;
+    m_DamageBonusLeft = 0;
+    m_nStoneSkins = 0;
     field_110 = 0;
     field_112 = 0;
     field_114 = 0;
@@ -353,13 +353,13 @@ CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
     field_8 += other.field_8;
     field_A += other.field_A;
     field_C += other.field_C;
-    field_E += other.field_E;
-    field_10 += other.field_10;
-    field_12 += other.field_12;
-    field_14 += other.field_14;
+    m_nACCrushingMod += other.m_nACCrushingMod;
+    m_nACMissileMod += other.m_nACMissileMod;
+    m_nACPiercingMod += other.m_nACPiercingMod;
+    m_nACSlashingMod += other.m_nACSlashingMod;
     field_16 += other.field_16;
-    field_18 += other.field_18;
-    field_1A += other.field_1A;
+    m_nTHAC0 += other.m_nTHAC0;
+    m_nNumberOfAttacks += other.m_nNumberOfAttacks;
     m_nSaveVSFortitude += other.m_nSaveVSFortitude;
     m_nSaveVSReflex += other.m_nSaveVSReflex;
     m_nSaveVSWill += other.m_nSaveVSWill;
@@ -373,11 +373,11 @@ CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
     m_nResistSlashing += other.m_nResistSlashing;
     m_nResistCrushing += other.m_nResistCrushing;
     m_nResistPiercing += other.m_nResistPiercing;
-    field_36 += other.field_36;
-    field_B8 += other.field_B8;
-    field_38 += other.field_38;
+    m_nResistMissile += other.m_nResistMissile;
+    m_nMagicDamageResistance += other.m_nMagicDamageResistance;
+    m_nFatigue += other.m_nFatigue;
     m_nIntoxication += other.m_nIntoxication;
-    field_3C += other.field_3C;
+    m_nLuck += other.m_nLuck;
     m_nLevel += other.m_nLevel;
     m_nSTR += other.m_nSTR;
     m_nINT += other.m_nINT;
@@ -385,35 +385,35 @@ CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
     m_nDEX += other.m_nDEX;
     m_nCON += other.m_nCON;
     m_nCHR += other.m_nCHR;
-    field_60 += other.field_60;
-    field_64 += other.field_64;
-    field_68 += other.field_68;
+    m_nXPValue += other.m_nXPValue;
+    m_nXP += other.m_nXP;
+    m_nGold += other.m_nGold;
     m_nMoraleBreak += other.m_nMoraleBreak;
     m_nMoraleRecoveryTime += other.m_nMoraleRecoveryTime;
-    field_74 += other.field_74;
+    m_nReputation += other.m_nReputation;
     m_nMoraleBreak += other.m_nMoraleBreak;
-    field_86 += other.field_86;
+    m_nDamageBonus += other.m_nDamageBonus;
     m_nSpellFailureArcane += other.m_nSpellFailureArcane;
     m_nSpellFailureDivine += other.m_nSpellFailureDivine;
-    field_8C += other.field_8C;
-    field_8E += other.field_8E;
+    m_nSpellDurationModMage += other.m_nSpellDurationModMage;
+    m_nSpellDurationModPriest += other.m_nSpellDurationModPriest;
     m_nTurnUndeadLevel += other.m_nTurnUndeadLevel;
     m_nBackstabDamageMultiplier += other.m_nBackstabDamageMultiplier;
     m_nLayOnHandsAmount += other.m_nLayOnHandsAmount;
-    field_96 |= other.field_96;
-    field_9A |= other.field_9A;
-    field_B2 += other.field_B2;
-    field_9E |= other.field_9E;
-    field_A6 += other.field_A6;
-    field_AA += other.field_AA;
+    m_bHeld |= other.m_bHeld;
+    m_bPolymorphed |= other.m_bPolymorphed;
+    m_nTranslucent += other.m_nTranslucent;
+    m_bIdentifyMode |= other.m_bIdentifyMode;
+    m_nMoveSilentlyMTPBonus += other.m_nMoveSilentlyMTPBonus;
+    m_nHideInShadowsMTPBonus += other.m_nHideInShadowsMTPBonus;
 
     for (index = 0; index < 8; index++) {
         field_EC[index] |= other.field_EC[index];
     }
 
     field_10C |= other.field_10C;
-    field_E8 += other.field_E8;
-    field_AE |= other.field_AE;
+    m_nStoneSkins += other.m_nStoneSkins;
+    m_bCasterHold |= other.m_bCasterHold;
     field_184 |= other.field_184;
     field_110 += other.field_110;
     field_112 += other.field_112;
@@ -435,7 +435,7 @@ CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
     field_140 += other.field_140;
 
     for (index = 0; index < 64; index++) {
-        field_144[index] += other.field_144[index];
+        m_nSkills[index] += other.m_nSkills[index];
     }
 
     CheckLimits();
@@ -451,25 +451,25 @@ void CDerivedStats::CheckLimits()
     }
 
     m_nMaxHitPoints = max(m_nMaxHitPoints, 1);
-    field_E = min(max(field_E, -20), 20);
-    field_10 = min(max(field_10, -20), 20);
-    field_12 = min(max(field_12, -20), 20);
-    field_14 = min(max(field_14, -20), 20);
-    field_18 = min(max(field_18, -255), 255);
-    field_1A = min(max(field_1A, 0), 5);
+    m_nACCrushingMod = min(max(m_nACCrushingMod, -20), 20);
+    m_nACMissileMod = min(max(m_nACMissileMod, -20), 20);
+    m_nACPiercingMod = min(max(m_nACPiercingMod, -20), 20);
+    m_nACSlashingMod = min(max(m_nACSlashingMod, -20), 20);
+    m_nTHAC0 = min(max(m_nTHAC0, -255), 255);
+    m_nNumberOfAttacks = min(max(m_nNumberOfAttacks, 0), 5);
     m_nSaveVSFortitude = min(max(m_nSaveVSFortitude, -40), 40);
     m_nSaveVSReflex = min(max(m_nSaveVSReflex, -40), 40);
     m_nSaveVSWill = min(max(m_nSaveVSWill, -40), 40);
-    field_144[10] = min(max(field_144[10], -128), 127);
-    field_144[9] = min(max(field_144[9], -128), 127);
-    field_144[6] = min(max(field_144[6], -128), 127);
-    field_144[14] = min(max(field_144[14], -128), 127);
-    field_144[12] = min(max(field_144[12], -128), 127);
-    field_144[11] = min(max(field_144[11], -128), 127);
-    field_144[15] = min(max(field_144[15], -128), 127);
-    field_38 = min(max(field_38, 0), 100);
+    m_nSkills[10] = min(max(m_nSkills[10], -128), 127);
+    m_nSkills[9] = min(max(m_nSkills[9], -128), 127);
+    m_nSkills[6] = min(max(m_nSkills[6], -128), 127);
+    m_nSkills[14] = min(max(m_nSkills[14], -128), 127);
+    m_nSkills[12] = min(max(m_nSkills[12], -128), 127);
+    m_nSkills[11] = min(max(m_nSkills[11], -128), 127);
+    m_nSkills[15] = min(max(m_nSkills[15], -128), 127);
+    m_nFatigue = min(max(m_nFatigue, 0), 100);
     m_nIntoxication = min(max(m_nIntoxication, 0), 100);
-    field_3C = min(max(field_3C, 0), 100);
+    m_nLuck = min(max(m_nLuck, 0), 100);
     m_nLevel = min(m_nLevel, 50);
     m_nSTR = min(max(m_nSTR, 1), 40);
     m_nINT = min(max(m_nINT, 1), 40);
@@ -477,240 +477,241 @@ void CDerivedStats::CheckLimits()
     m_nDEX = min(max(m_nDEX, 1), 40);
     m_nCON = min(max(m_nCON, 1), 40);
     m_nCHR = min(max(m_nCHR, 1), 40);
-    field_60 = min(max(field_60, -1), 0);
-    field_64 = min(max(field_64, -1), 0);
-    field_68 = min(max(field_68, -1), 0);
+    m_nXPValue = min(max(m_nXPValue, -1), 0);
+    m_nXP = min(max(m_nXP, -1), 0);
+    m_nGold = min(max(m_nGold, -1), 0);
     m_nMoraleRecoveryTime = min(max(m_nMoraleRecoveryTime, -1), 0);
-    field_74 = min(max(field_74, 10), 200);
+    m_nReputation = min(max(m_nReputation, 10), 200);
     m_nMoraleBreak = min(max(m_nMoraleBreak, 10), 200);
-    field_86 = min(max(field_86, -128), 127);
+    m_nDamageBonus = min(max(m_nDamageBonus, -128), 127);
     m_nSpellFailureArcane = min(max(m_nSpellFailureArcane, 0), 100);
     m_nSpellFailureDivine = min(max(m_nSpellFailureDivine, 0), 100);
-    field_8C = min(max(field_8C, 0), 255);
-    field_8E = min(max(field_8E, 0), 255);
+    m_nSpellDurationModMage = min(max(m_nSpellDurationModMage, 0), 255);
+    m_nSpellDurationModPriest = min(max(m_nSpellDurationModPriest, 0), 255);
     m_nTurnUndeadLevel = max(m_nTurnUndeadLevel, 0);
     m_nBackstabDamageMultiplier = max(m_nBackstabDamageMultiplier, 0);
     m_nLayOnHandsAmount = max(m_nLayOnHandsAmount, 0);
-    field_B2 = min(field_B2, 255);
+    m_nTranslucent = min(m_nTranslucent, 255);
 }
 
 // 0x446DD0
 LONG CDerivedStats::GetAtOffset(SHORT offset)
 {
     switch (offset) {
-    case 1:
+    case STAT_MAXHITPOINTS:
         return m_nMaxHitPoints;
-    case 2:
+    case STAT_ARMORCLASS:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\CDerivedStats.cpp
         // __LINE__: 1323
         UTIL_ASSERT_MSG(FALSE, "armor class not available -rjf");
-    case 3:
-        return field_E;
-    case 4:
-        return field_10;
-    case 5:
-        return field_12;
-    case 6:
-        return field_14;
-    case 7:
-        return field_18;
-    case 8:
-        return field_1A;
-    case 9:
+    case STAT_ACBLUDGEONINGMOD:
+        return m_nACCrushingMod;
+    case STAT_ACMISSILEMOD:
+        return m_nACMissileMod;
+    case STAT_ACPIERCINGMOD:
+        return m_nACPiercingMod;
+    case STAT_ACSLASHINGMOD:
+        return m_nACSlashingMod;
+    case STAT_THAC0:
+        return m_nTHAC0;
+    case STAT_NUMBEROFATTACKS:
+        return m_nNumberOfAttacks;
+    case STAT_SAVEFORTITUDE:
         return m_nSaveVSFortitude;
-    case 10:
+    case STAT_SAVEREFLEX:
         return m_nSaveVSReflex;
-    case 11:
+    case STAT_SAVEWILL:
         return m_nSaveVSWill;
-    case 12:
-        return field_144[8];
-    case 14:
+    case STAT_KNOWLEDGEARCANA:
+        return m_nSkills[8];
+    case STAT_RESISTFIRE:
         return m_nResistFire;
-    case 15:
+    case STAT_RESISTCOLD:
         return m_nResistCold;
-    case 16:
+    case STAT_RESISTELECTRICITY:
         return m_nResistElectricity;
-    case 17:
+    case STAT_RESISTACID:
         return m_nResistAcid;
-    case 18:
+    case STAT_RESISTMAGIC:
         return m_nResistMagic;
-    case 19:
+    case STAT_RESISTMAGICFIRE:
         return m_nResistMagicFire;
-    case 20:
+    case STAT_RESISTMAGICCOLD:
         return m_nResistMagicCold;
-    case 21:
+    case STAT_RESISTSLASHING:
         return m_nResistSlashing;
-    case 22:
+    case STAT_RESISTBLUDGEONING:
         return m_nResistCrushing;
-    case 23:
+    case STAT_RESISTPIERCING:
         return m_nResistPiercing;
-    case 24:
-        return field_36;
-    case 25:
-        return field_144[0];
-    case 26:
-        return field_144[10];
-    case 27:
-        return field_144[9];
-    case 28:
-        return field_144[12];
-    case 29:
-        return field_144[11];
-    case 30:
-        return field_38;
-    case 31:
+    case STAT_RESISTMISSILE:
+        return m_nResistMissile;
+    case STAT_ALCHEMY:
+        return m_nSkills[0];
+    case STAT_LOCKPICKING:
+        return m_nSkills[10];
+    case STAT_MOVESILENTLY:
+        return m_nSkills[9];
+    case STAT_TRAPS:
+        return m_nSkills[12];
+    case STAT_PICKPOCKET:
+        return m_nSkills[11];
+    case STAT_FATIGUE:
+        return m_nFatigue;
+    case STAT_INTOXICATION:
         return m_nIntoxication;
-    case 32:
-        return field_3C;
-    case 33:
-        return field_144[15];
-    case 34:
+    case STAT_LUCK:
+        return m_nLuck;
+    case STAT_TRACKING:
+        return m_nSkills[15];
+    case STAT_LEVEL:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\CDerivedStats.cpp
         // __LINE__: 1397
         UTIL_ASSERT(FALSE);
-    case 35:
-        return field_52;
-    case 36:
+    case STAT_SEX:
+        return m_nSex;
+    case STAT_STR:
         return m_nSTR;
-    case 37:
+    case STAT_STREXTRA:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\CDerivedStats.cpp
         // __LINE__: 1412
         UTIL_ASSERT(FALSE);
-    case 38:
+    case STAT_INT:
         return m_nINT;
-    case 39:
+    case STAT_WIS:
         return m_nWIS;
-    case 40:
+    case STAT_DEX:
         return m_nDEX;
-    case 41:
+    case STAT_CON:
         return m_nCON;
-    case 42:
+    case STAT_CHR:
         return m_nCHR;
-    case 43:
-        return field_60;
-    case 44:
-        return field_64;
-    case 45:
-        return field_68;
-    case 46:
+    case STAT_XPVALUE:
+        return m_nXPValue;
+    case STAT_XP:
+        return m_nXP;
+    case STAT_GOLD:
+        return m_nGold;
+    case STAT_MORALEBREAK:
         return m_nMoraleBreak;
-    case 47:
+    case STAT_MORALERECOVERYTIME:
         return m_nMoraleRecoveryTime;
-    case 48:
-        return field_74;
-    case 49:
+    case STAT_REPUTATION:
+        return m_nReputation;
+    case STAT_HATEDRACE:
         return m_favoredEnemies[0];
-    case 50:
-        return field_86;
-    case 51:
+    case STAT_DAMAGEBONUS:
+        return m_nDamageBonus;
+    case STAT_SPELLFAILUREMAGE:
         return m_nSpellFailureArcane;
-    case 52:
+    case STAT_SPELLFAILUREPRIEST:
         return m_nSpellFailureDivine;
-    case 53:
-        return field_8C;
-    case 54:
-        return field_8E;
-    case 55:
+    case STAT_SPELLDURATIONMODMAGE:
+        return m_nSpellDurationModMage;
+    case STAT_SPELLDURATIONMODPRIEST:
+        return m_nSpellDurationModPriest;
+    case STAT_TURNUNDEADLEVEL:
         return m_nTurnUndeadLevel;
-    case 56:
+    case STAT_BACKSTABDAMAGEMULTIPLIER:
         return m_nBackstabDamageMultiplier;
-    case 57:
+    case STAT_LAYONHANDSAMOUNT:
         return m_nLayOnHandsAmount;
-    case 58:
-        return field_96;
-    case 59:
-        return field_9A;
-    case 60:
-        return field_B2;
-    case 61:
-        return field_9E;
-    case 68:
+    case STAT_HELD:
+        return m_bHeld;
+    case STAT_POLYMORPHED:
+        return m_bPolymorphed;
+    case STAT_TRANSLUCENT:
+        return m_nTranslucent;
+    case STAT_IDENTIFYMODE:
+        return m_bIdentifyMode;
+    case STAT_LEVEL2:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\CDerivedStats.cpp
         // __LINE__: 1400
         UTIL_ASSERT(FALSE);
-    case 69:
+    case STAT_LEVEL3:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\CDerivedStats.cpp
         // __LINE__: 1403
         UTIL_ASSERT(FALSE);
-    case 70:
-        return field_AE;
-    case 71:
-        return field_B4;
-    case 72:
-        return field_B6;
-    case 73:
-        return field_B8;
-    case 74:
-        return field_BA;
-    case 75:
-        return field_BC;
-    case 76:
-        return field_C0;
-    case 77:
-        return field_C4;
-    case 78:
-        return field_C6;
-    case 79:
-        return field_C8;
-    case 80:
-        return field_CA;
-    case 81:
-        return field_CC;
-    case 82:
-        return field_D0;
-    case 83:
-        return field_D4;
-    case 84:
-        return field_D8;
-    case 85:
-        return field_DC;
-    case 86:
-        return field_E0;
-    case 87:
-        return field_E4;
-    case 88:
-        return field_E8;
-    case 89:
+    case STAT_CASTERHOLD:
+        return m_bCasterHold;
+    case STAT_ENCUMBERANCE:
+        return m_nEncumberance;
+    case STAT_MISSILETHAC0BONUS:
+        return m_nMissileTHAC0Bonus;
+    case STAT_MAGICDAMAGERESISTANCE:
+        return m_nMagicDamageResistance;
+    case STAT_RESISTPOISON:
+        return m_nResistPoison;
+    case STAT_DONOTJUMP:
+        return m_bDoNotJump;
+    case STAT_AURACLEANSING:
+        return m_bAuraCleansing;
+    case STAT_MENTALSPEED:
+        return m_nMentalSpeed;
+    case STAT_PHYSICALSPEED:
+        return m_nPhysicalSpeed;
+    case STAT_CASTINGLEVELBONUSMAGE:
+        return m_nCastingLevelBonusMage;
+    case STAT_CASTINGLEVELBONUSCLERIC:
+        return m_nCastingLevelBonusCleric;
+    case STAT_SEEINVISIBLE:
+        return m_bSeeInvisible;
+    case STAT_IGNOREDIALOGPAUSE:
+        return m_bIgnoreDialogPause;
+    case STAT_MINHITPOINTS:
+        return m_nMinHitPoints;
+    case STAT_THAC0BONUSRIGHT:
+        return m_THAC0BonusRight;
+    case STAT_THAC0BONUSLEFT:
+        return m_THAC0BonusLeft;
+    case STAT_DAMAGEBONUSRIGHT:
+        return m_DamageBonusRight;
+    case STAT_DAMAGEBONUSLEFT:
+        return m_DamageBonusLeft;
+    case STAT_STONESKINS:
+        return m_nStoneSkins;
+    case STAT_KIT:
         return m_nSpecialization;
-    case 90:
-        return field_144[6];
-    case 91:
-        return field_A6;
-    case 92:
-        return field_AA;
-    case 93:
-        return field_3E;
-    case 94:
-        return field_144[14];
-    case 95:
+    case STAT_HIDEINSHADOWS:
+        return m_nSkills[6];
+    case STAT_MOVESILENTLYMTPBONUS:
+        return m_nMoveSilentlyMTPBonus;
+    case STAT_HIDEINSHADOWSMTPBONUS:
+        return m_nHideInShadowsMTPBonus;
+    case STAT_SUBRACE:
+        return m_nSubRace;
+    case STAT_USEMAGICDEVICE:
+        return m_nSkills[14];
+    case STAT_CLASSLEVELSUM:
         return m_nLevel;
-    case 96:
-    case 97:
-    case 98:
-    case 99:
-    case 100:
-    case 101:
-    case 102:
-    case 103:
-    case 104:
-    case 105:
-    case 106:
-        return GetClassLevel(offset - 95);
-    case 107:
-        return 1984;
+    case STAT_CLASSLEVELBARBARIAN:
+    case STAT_CLASSLEVELBARD:
+    case STAT_CLASSLEVELCLERIC:
+    case STAT_CLASSLEVELDRUID:
+    case STAT_CLASSLEVELFIGHTER:
+    case STAT_CLASSLEVELMONK:
+    case STAT_CLASSLEVELPALADIN:
+    case STAT_CLASSLEVELRANGER:
+    case STAT_CLASSLEVELROGUE:
+    case STAT_CLASSLEVELSORCERER:
+    case STAT_CLASSLEVELWIZARD:
+        // NOTE: Uninline.
+        return GetClassLevel(offset - STAT_CLASSLEVELSUM);
+    case STAT_107:
+        return field_184;
     default:
         return 0;
     }
 }
 
 // 0x447390
-int CDerivedStats::sub_447390()
+int CDerivedStats::GetXP()
 {
-    return field_64;
+    return m_nXP;
 }
 
 // 0x4473A0
-unsigned char CDerivedStats::sub_4473A0()
+BYTE CDerivedStats::GetLevel()
 {
     return m_nLevel;
 }
