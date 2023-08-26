@@ -3430,6 +3430,27 @@ CGameEffect* CGameEffectHoldCreature::Copy()
     return copy;
 }
 
+// 0x4B8090
+BOOL CGameEffectHoldCreature::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType != 0) {
+        // NOTE: Uninline.
+        DisplayStringRef(pSprite, 14102); // "Held"
+    }
+
+    pSprite->field_9D15 = 1;
+
+    // NOTE: Uninline.
+    AddPortraitIcon(pSprite, 13);
+
+    pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_HELD);
+    pSprite->GetDerivedStats()->m_generalState |= STATE_HELPLESS;
+
+    m_done = FALSE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
