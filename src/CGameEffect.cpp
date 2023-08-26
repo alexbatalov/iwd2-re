@@ -4808,6 +4808,29 @@ CGameEffect* CGameEffectResistanceToPoison::Copy()
     return copy;
 }
 
+// 0x4BE1D0
+BOOL CGameEffectResistanceToPoison::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        if (pSprite->GetDerivedStats()->m_nResistPoison < m_effectAmount) {
+            pSprite->GetDerivedStats()->m_nResistPoison = static_cast<BYTE>(m_effectAmount);
+        }
+        break;
+    case 1:
+        pSprite->GetDerivedStats()->m_nResistPoison += static_cast<SHORT>(m_effectAmount);
+        break;
+    }
+
+    if (pSprite->GetDerivedStats()->m_nResistPoison < 0) {
+        pSprite->GetDerivedStats()->m_nResistPoison = 0;
+    } else if (pSprite->GetDerivedStats()->m_nResistPoison > 100) {
+        pSprite->GetDerivedStats()->m_nResistPoison = 100;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
