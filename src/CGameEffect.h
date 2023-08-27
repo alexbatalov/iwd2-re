@@ -1392,6 +1392,7 @@ class CGameEffectRestrictEquipItemType : public CGameEffect {
 public:
     CGameEffectRestrictEquipItemType(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectApplyEffectEquipItem : public CGameEffect {
