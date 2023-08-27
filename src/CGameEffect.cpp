@@ -4245,6 +4245,37 @@ CGameEffect* CGameEffectDisableSpellType::Copy()
     return copy;
 }
 
+// 0x4BC580
+BOOL CGameEffectDisableSpellType::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        pSprite->GetDerivedStats()->m_disabledSpellTypes[0] = TRUE;
+        pSprite->GetDerivedStats()->m_disabledSpellTypes[1] = TRUE;
+        pSprite->GetDerivedStats()->m_disabledSpellTypes[2] = TRUE;
+        break;
+    case 1:
+        pSprite->GetDerivedStats()->m_disabledSpellTypes[0] = TRUE;
+        pSprite->GetDerivedStats()->m_disabledSpellTypes[1] = TRUE;
+        break;
+    case 2:
+        pSprite->GetDerivedStats()->m_disabledSpellTypes[0] = TRUE;
+        break;
+    case 3:
+        pSprite->GetDerivedStats()->m_disabledSpellTypes[1] = TRUE;
+        break;
+    case 4:
+        pSprite->GetDerivedStats()->m_disabledSpellTypes[2] = TRUE;
+        break;
+    }
+
+    if (g_pBaldurChitin->GetActiveEngine()->GetSelectedCharacter() == g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(pSprite->GetId())) {
+        g_pBaldurChitin->GetObjectGame()->m_cButtonArray.UpdateState();
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.

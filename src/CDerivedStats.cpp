@@ -160,9 +160,9 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
         m_disabledButtons[buttonIndex] = FALSE;
     }
 
-    field_E4C = 0;
-    field_E50 = 0;
-    field_E54 = 0;
+    m_disabledSpellTypes[0] = FALSE;
+    m_disabledSpellTypes[1] = FALSE;
+    m_disabledSpellTypes[2] = FALSE;
 
     if (pSprite != NULL) {
         CAIObjectType typeAI(pSprite->GetAIType());

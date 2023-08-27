@@ -515,9 +515,7 @@ public:
     /* 0590 */ CPtrList field_590;
     /* 0DA8 */ int field_DA8;
     /* 0DAC */ BOOL m_disabledButtons[40];
-    /* 0E4C */ int field_E4C;
-    /* 0E50 */ int field_E50;
-    /* 0E54 */ int field_E54;
+    /* 0E4C */ BOOL m_disabledSpellTypes[3];
 };
 
 #endif /* CDERIVEDSTATS_H_ */
