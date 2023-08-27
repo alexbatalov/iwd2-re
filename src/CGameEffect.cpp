@@ -4938,6 +4938,35 @@ CGameEffect* CGameEffectImmunityToPortraitIcon::Copy()
     return copy;
 }
 
+// 0x4B7A10
+BOOL CGameEffectImmunityToPortraitIcon::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_PORTRAITICON,
+        pSprite->GetEquipedEffectList()->GetPosCurrent(),
+        m_dwFlags);
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
+        CGAMEEFFECT_PORTRAITICON,
+        pSprite->GetTimedEffectList()->GetPosCurrent(),
+        m_dwFlags);
+
+    ITEM_EFFECT* effect = new ITEM_EFFECT;
+    effect->effectID = CGAMEEFFECT_PORTRAITICON;
+    effect->dwFlags = m_dwFlags;
+
+    CPoint target(-1, -1);
+    CPoint source(-1, -1);
+
+    CGameEffect* pEffect = DecodeEffect(effect, source, -1, target);
+    pEffect->m_compareIdAndFlagsOnly = TRUE;
+
+    pSprite->GetDerivedStats()->m_cImmunitiesEffect.AddTail(pEffect);
+
+    delete effect;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
