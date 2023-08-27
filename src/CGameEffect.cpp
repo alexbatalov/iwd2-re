@@ -3340,6 +3340,16 @@ CGameEffect* CGameEffectImmunityToSpellLevel::Copy()
     return copy;
 }
 
+// 0x4B7AC0
+BOOL CGameEffectImmunityToSpellLevel::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_effectAmount < 10) {
+        pSprite->GetDerivedStats()->m_cImmunitiesSpellLevel.m_levels[m_effectAmount] = TRUE;
+    }
+
+    return true;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
