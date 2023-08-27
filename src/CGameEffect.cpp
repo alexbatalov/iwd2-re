@@ -801,6 +801,12 @@ BOOL CGameEffect::UsesDice()
     return FALSE;
 }
 
+// 0x4A2E40
+void CGameEffect::PlaySound(const CResRef& soundResRef, CGameSprite* pSprite)
+{
+    // TODO: Incomplete.
+}
+
 // 0x4A4B00
 ITEM_EFFECT* CGameEffect::GetItemEffect()
 {
@@ -4896,6 +4902,16 @@ CGameEffect* CGameEffectPlaySound::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4BE240
+BOOL CGameEffectPlaySound::ApplyEffect(CGameSprite* pSprite)
+{
+    PlaySound(m_res, pSprite);
+
+    m_done = TRUE;
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------

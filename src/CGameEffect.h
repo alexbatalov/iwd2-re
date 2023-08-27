@@ -292,6 +292,7 @@ public:
     /* 0020 */ virtual void DisplayString(CGameSprite* pSprite);
 
     BOOL Compare(const CGameEffect& other);
+    void PlaySound(const CResRef& soundResRef, CGameSprite* pSprite);
     ITEM_EFFECT* GetItemEffect();
     void DisplayStringRef(CGameSprite* pSprite, STRREF str);
     void CopyFromBase(CGameEffectBase* pBase);
@@ -1355,6 +1356,7 @@ class CGameEffectPlaySound : public CGameEffect {
 public:
     CGameEffectPlaySound(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectHoldCreatureSpell : public CGameEffect {
