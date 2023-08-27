@@ -3328,6 +3328,25 @@ CGameEffect* CGameEffectImmunityToEffect::Copy()
     return copy;
 }
 
+// 0x4B79A0
+BOOL CGameEffectImmunityToEffect::ApplyEffect(CGameSprite* pSprite)
+{
+    ITEM_EFFECT* effect = new ITEM_EFFECT;
+    effect->effectID = static_cast<WORD>(m_dwFlags);
+
+    CPoint target(-1, -1);
+    CPoint source(-1, -1);
+
+    CGameEffect* pEffect = DecodeEffect(effect, source, -1, target);
+    pEffect->m_compareIdOnly = TRUE;
+
+    pSprite->GetDerivedStats()->m_cImmunitiesEffect.AddTail(pEffect);
+
+    delete effect;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
