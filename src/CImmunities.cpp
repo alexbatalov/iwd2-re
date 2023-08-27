@@ -151,3 +151,75 @@ CImmunitiesItemEquipList& CImmunitiesItemEquipList::operator=(const CImmunitiesI
 
     return *this;
 }
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Inlined.
+CImmunitiesItemTypeEquip::CImmunitiesItemTypeEquip()
+{
+    m_type = 0;
+    m_pEffect = NULL;
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x443650
+CImmunitiesItemTypeEquipList::~CImmunitiesItemTypeEquipList()
+{
+    ClearAll();
+}
+
+// 0x4E71B0
+void CImmunitiesItemTypeEquipList::ClearAll()
+{
+    POSITION pos = GetHeadPosition();
+    while (pos != NULL) {
+        CImmunitiesItemTypeEquip* pEntry = GetNext(pos);
+        delete pEntry;
+    }
+    RemoveAll();
+}
+
+// 0x4E7590
+BOOL CImmunitiesItemTypeEquipList::OnList(DWORD type, STRREF& strError, CGameEffect*& pEffect)
+{
+    POSITION pos = GetHeadPosition();
+    while (pos != NULL) {
+        CImmunitiesItemTypeEquip* pEntry = GetNext(pos);
+        if (pEntry->m_type == type) {
+            strError = pEntry->m_error;
+
+            // FIXME: Looks unsafe - unconditionally attempts to copy effect
+            // without checking for null.
+            pEffect = pEntry->m_pEffect->Copy();
+
+            return TRUE;
+        }
+    }
+
+    strError = -1;
+    pEffect = NULL;
+    return FALSE;
+}
+
+// 0x4E75F0
+CImmunitiesItemTypeEquipList& CImmunitiesItemTypeEquipList::operator=(const CImmunitiesItemTypeEquipList& other)
+{
+    // FIXME: Missing `ClearAll`.
+
+    POSITION pos = other.GetHeadPosition();
+    while (pos != NULL) {
+        CImmunitiesItemTypeEquip* pEntry = other.GetNext(pos);
+        CImmunitiesItemTypeEquip* pCopy = new CImmunitiesItemTypeEquip;
+        pCopy->m_error = pEntry->m_error;
+
+        // FIXME: Looks unsafe - unconditionally attempts to copy effect without
+        // checking for null.
+        pCopy->m_pEffect = pEntry->m_pEffect->Copy();
+
+        pCopy->m_type = pEntry->m_type;
+        AddTail(pCopy);
+    }
+
+    return *this;
+}

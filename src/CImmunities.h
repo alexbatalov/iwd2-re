@@ -59,4 +59,21 @@ public:
     CImmunitiesItemEquipList& operator=(const CImmunitiesItemEquipList& other);
 };
 
+class CImmunitiesItemTypeEquip {
+public:
+    CImmunitiesItemTypeEquip();
+
+    /* 0000 */ DWORD m_type;
+    /* 0004 */ STRREF m_error;
+    /* 0008 */ CGameEffect* m_pEffect;
+};
+
+class CImmunitiesItemTypeEquipList : public CTypedPtrList<CPtrList, CImmunitiesItemTypeEquip*> {
+public:
+    ~CImmunitiesItemTypeEquipList() override;
+    void ClearAll();
+    BOOL OnList(DWORD type, STRREF& strError, CGameEffect*& pEffect);
+    CImmunitiesItemTypeEquipList& operator=(const CImmunitiesItemTypeEquipList& other);
+};
+
 #endif /* CIMMUNITIES_H_ */
