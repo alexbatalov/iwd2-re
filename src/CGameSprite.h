@@ -225,6 +225,7 @@ public:
     void SetFootstepChannel();
     BYTE GetSound(BYTE soundID);
     SHORT GetIdleSequence();
+    void SetSequence(SHORT nSequence);
     void Unmarshal(BYTE* pCreature, LONG creatureSize, WORD facing, int a4);
     void UnmarshalScripts();
     void FetchCommonStrings();

@@ -976,6 +976,12 @@ SHORT CGameSprite::GetIdleSequence()
     }
 }
 
+// 0x707230
+void CGameSprite::SetSequence(SHORT nSequence)
+{
+    // TODO: Incomplete.
+}
+
 // 0x70CF90
 void CGameSprite::Unmarshal(BYTE* pCreature, LONG creatureSize, WORD facing, int a4)
 {

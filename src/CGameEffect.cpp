@@ -4073,6 +4073,18 @@ CGameEffect* CGameEffectSetSequence::Copy()
     return copy;
 }
 
+// 0x4BBC00
+BOOL CGameEffectSetSequence::ApplyEffect(CGameSprite* pSprite)
+{
+    if ((pSprite->m_tempStats.m_generalState & STATE_DEAD) == 0) {
+        pSprite->SetSequence(static_cast<BYTE>(m_dwFlags));
+
+        m_done = TRUE;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.

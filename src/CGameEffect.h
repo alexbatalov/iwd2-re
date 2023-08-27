@@ -1138,6 +1138,7 @@ class CGameEffectSetSequence : public CGameEffect {
 public:
     CGameEffectSetSequence(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectDisplayString : public CGameEffect {
