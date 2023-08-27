@@ -2401,6 +2401,20 @@ CGameEffect* CGameEffectBlur::Copy()
     return copy;
 }
 
+// 0x4A5DC0
+BOOL CGameEffectBlur::ApplyEffect(CGameSprite* pSprite)
+{
+    if ((pSprite->GetDerivedStats()->m_generalState & STATE_BLUR) == 0) {
+        pSprite->GetDerivedStats()->m_generalState |= STATE_BLUR;
+        pSprite->GetDerivedStats()->field_10C |= 0x1000000;
+
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 109);
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
