@@ -5025,6 +5025,26 @@ CGameEffect* CGameEffectRestrictEquipItem::Copy()
     return copy;
 }
 
+// 0x4BE880
+BOOL CGameEffectRestrictEquipItem::ApplyEffect(CGameSprite* pSprite)
+{
+    CImmunitiesItemEquip* pItemEquip = new CImmunitiesItemEquip;
+    pItemEquip->m_error = m_effectAmount;
+    pItemEquip->m_res = m_res;
+
+    // FIXME: `pEffect` is not set, which will probably lead to crash, see
+    // `CImmunitiesItemEquipList::OnList` and
+    // `CImmunitiesItemEquipList::operator=` implementations.
+
+    if (m_dwFlags != 0) {
+        pSprite->GetDerivedStats()->m_cImmunitiesItemUse.AddTail(pItemEquip);
+    } else {
+        pSprite->GetDerivedStats()->m_cImmunitiesItemEquip.AddTail(pItemEquip);
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
