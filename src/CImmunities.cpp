@@ -1,5 +1,7 @@
 #include "CImmunities.h"
 
+#include "CGameEffect.h"
+
 // 0x4E6FF0
 void CImmunitiesSpellLevel::ClearAll()
 {
@@ -74,6 +76,77 @@ CSelectiveBonusList& CSelectiveBonusList::operator=(const CSelectiveBonusList& o
     while (pos != NULL) {
         CSelectiveBonus* pBonus = other.GetNext(pos);
         AddTail(new CSelectiveBonus(*pBonus));
+    }
+
+    return *this;
+}
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Inlined.
+CImmunitiesItemEquip::CImmunitiesItemEquip()
+{
+    m_pEffect = NULL;
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4435E0
+CImmunitiesItemEquipList::~CImmunitiesItemEquipList()
+{
+    ClearAll();
+}
+
+// 0x4E71B0
+void CImmunitiesItemEquipList::ClearAll()
+{
+    POSITION pos = GetHeadPosition();
+    while (pos != NULL) {
+        CImmunitiesItemEquip* pEntry = GetNext(pos);
+        delete pEntry;
+    }
+    RemoveAll();
+}
+
+// 0x4E7460
+BOOL CImmunitiesItemEquipList::OnList(const CResRef& resRef, STRREF& strError, CGameEffect*& pEffect)
+{
+    POSITION pos = GetHeadPosition();
+    while (pos != NULL) {
+        CImmunitiesItemEquip* pEntry = GetNext(pos);
+        if (pEntry->m_res == resRef) {
+            strError = pEntry->m_error;
+
+            // FIXME: Looks unsafe - unconditionally attempts to copy effect
+            // without checking for null.
+            pEffect = pEntry->m_pEffect->Copy();
+
+            return TRUE;
+        }
+    }
+
+    strError = -1;
+    pEffect = NULL;
+    return FALSE;
+}
+
+// 0x4E74D0
+CImmunitiesItemEquipList& CImmunitiesItemEquipList::operator=(const CImmunitiesItemEquipList& other)
+{
+    // FIXME: Missing `ClearAll`.
+
+    POSITION pos = other.GetHeadPosition();
+    while (pos != NULL) {
+        CImmunitiesItemEquip* pEntry = other.GetNext(pos);
+        CImmunitiesItemEquip* pCopy = new CImmunitiesItemEquip;
+        pCopy->m_error = pEntry->m_error;
+
+        // FIXME: Looks unsafe - unconditionally attempts to copy effect without
+        // checking for null.
+        pCopy->m_pEffect = pEntry->m_pEffect->Copy();
+
+        pCopy->m_res = pEntry->m_res;
+        AddTail(pCopy);
     }
 
     return *this;

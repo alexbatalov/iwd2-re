@@ -3,7 +3,11 @@
 
 #include "mfc.h"
 
+#include "BalDataTypes.h"
 #include "CAIObjectType.h"
+#include "CResRef.h"
+
+class CGameEffect;
 
 class CImmunitiesSpellLevel {
 public:
@@ -36,6 +40,23 @@ public:
     void ClearAll();
     LONG GetBonus(const CAIObjectType& type);
     CSelectiveBonusList& operator=(const CSelectiveBonusList& other);
+};
+
+class CImmunitiesItemEquip {
+public:
+    CImmunitiesItemEquip();
+
+    /* 0000 */ CResRef m_res;
+    /* 0008 */ STRREF m_error;
+    /* 000C */ CGameEffect* m_pEffect;
+};
+
+class CImmunitiesItemEquipList : public CTypedPtrList<CPtrList, CImmunitiesItemEquip*> {
+public:
+    ~CImmunitiesItemEquipList() override;
+    void ClearAll();
+    BOOL OnList(const CResRef& resRef, STRREF& strError, CGameEffect*& pEffect);
+    CImmunitiesItemEquipList& operator=(const CImmunitiesItemEquipList& other);
 };
 
 #endif /* CIMMUNITIES_H_ */

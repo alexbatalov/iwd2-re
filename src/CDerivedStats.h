@@ -491,9 +491,9 @@ public:
     /* 0204 */ CPtrList field_204;
     /* 0220 */ CSelectiveBonusList m_cToHitBonusList;
     /* 023C */ CSelectiveBonusList m_cDamageBonusList;
-    /* 0258 */ CPtrList field_258;
+    /* 0258 */ CImmunitiesItemEquipList m_cImmunitiesItemEquip;
     /* 0274 */ CPtrList field_274;
-    /* 0290 */ CPtrList field_290;
+    /* 0290 */ CImmunitiesItemEquipList field_290;
     /* 02AC */ CPtrList field_2AC;
     /* 02C8 */ CPtrList field_2C8;
     /* 02E4 */ CPtrList field_2E4;
@@ -501,7 +501,7 @@ public:
     /* 03E4 */ CPtrList field_3E4;
     /* 0400 */ CPtrList field_400;
     /* 041C */ CPtrList field_41C;
-    /* 0438 */ CPtrList field_438;
+    /* 0438 */ CImmunitiesItemEquipList m_cImmunitiesItemUse;
     /* 0454 */ CPtrList field_454;
     /* 04AC */ CPtrList field_4AC;
     /* 0480 */ std::set<int> m_naturalImmunities;
