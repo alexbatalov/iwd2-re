@@ -2048,6 +2048,22 @@ CGameEffect* CGameEffectVocalize::Copy()
     return copy;
 }
 
+// 0x4B2A40
+BOOL CGameEffectVocalize::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType != 0) {
+        // NOTE: Uninline.
+        DisplayStringRef(pSprite, 14776); // "Vocalize"
+    }
+
+    pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_VOCALIZE);
+
+    // NOTE: Uninline.
+    AddPortraitIcon(pSprite, 139);
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
