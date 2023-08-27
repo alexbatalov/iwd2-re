@@ -2685,6 +2685,31 @@ CGameEffect* CGameEffectBlindness::Copy()
     return copy;
 }
 
+// 0x4B53A0
+BOOL CGameEffectBlindness::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType != 0) {
+        // NOTE: Uninline.
+        DisplayStringRef(pSprite, 14674); // "Blinded"
+    }
+
+    if ((pSprite->GetDerivedStats()->m_generalState & STATE_BLIND) == 0) {
+        pSprite->GetDerivedStats()->m_generalState |= STATE_BLIND;
+
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 8);
+
+        int v1 = -2;
+        if (pSprite->sub_763150(CGAMESPRITE_FEAT_BLIND_FIGHT)) {
+            v1 = 0;
+        }
+
+        pSprite->GetDerivedStats()->field_C += v1;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
