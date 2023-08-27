@@ -3402,6 +3402,58 @@ CGameEffect* CGameEffectXP::Copy()
     return copy;
 }
 
+// 0x4B7B00
+BOOL CGameEffectXP::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        switch (m_durationType) {
+        case 1:
+            pSprite->GetBaseStats()->m_xp += m_effectAmount;
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+            break;
+        default:
+            pSprite->m_bonusStats.m_nXP += m_effectAmount;
+            m_done = FALSE;
+            break;
+        }
+        break;
+    case 1:
+        switch (m_durationType) {
+        case 1:
+            pSprite->GetBaseStats()->m_xp = m_effectAmount;
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+            break;
+        default:
+            pSprite->GetDerivedStats()->m_nXP = m_effectAmount;
+            m_done = FALSE;
+            break;
+        }
+        break;
+    case 2:
+        switch (m_durationType) {
+        case 1:
+            pSprite->GetBaseStats()->m_xp = pSprite->GetBaseStats()->m_xp * m_effectAmount / 100;
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+            break;
+        default:
+            pSprite->GetDerivedStats()->m_nXP = pSprite->GetBaseStats()->m_xp * m_effectAmount / 100;
+            m_done = FALSE;
+            break;
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 16415
+        UTIL_ASSERT(FALSE);
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.

@@ -315,6 +315,7 @@ public:
     /* 05A4 */ CCreatureFileHeader m_baseStats;
     /* 0920 */ CDerivedStats m_derivedStats;
     /* 1778 */ CDerivedStats m_tempStats;
+    /* 25D0 */ CDerivedStats m_bonusStats;
     /* 342C */ CButtonData field_342C[8];
     /* 360C */ CButtonData field_360C[9];
     /* 3828 */ CButtonData field_3828[3];

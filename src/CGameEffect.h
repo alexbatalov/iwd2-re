@@ -307,6 +307,7 @@ public:
 
     /* 010C */ LONG m_sourceID;
     /* 0110 */ BOOL m_done;
+    /* 0114 */ BOOL m_forceRepass;
     /* 0124 */ CSound m_sound;
 };
 
@@ -946,6 +947,7 @@ class CGameEffectXP : public CGameEffect {
 public:
     CGameEffectXP(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectGold : public CGameEffect {
