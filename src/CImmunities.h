@@ -9,6 +9,14 @@
 
 class CGameEffect;
 
+class CImmunitiesEffect : public CTypedPtrList<CPtrList, CGameEffect*> {
+public:
+    ~CImmunitiesEffect() override;
+    void ClearAll();
+    BOOL OnList(CGameEffect* pEffect);
+    CImmunitiesEffect& operator=(const CImmunitiesEffect& other);
+};
+
 class CImmunitiesSpellLevel {
 public:
     void ClearAll();

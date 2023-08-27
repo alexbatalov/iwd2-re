@@ -485,7 +485,7 @@ public:
     /* 0144 */ BYTE m_nSkills[64];
     /* 0184 */ int field_184;
     /* 0188 */ CPtrList field_188;
-    /* 01A4 */ CPtrList field_1A4;
+    /* 01A4 */ CImmunitiesEffect m_cImmunitiesEffect;
     /* 01C0 */ CPtrList field_1C0;
     /* 01DC */ CImmunitiesSpellLevel m_cImmunitiesSpellLevel;
     /* 0204 */ CPtrList field_204;
@@ -496,7 +496,7 @@ public:
     /* 0290 */ CImmunitiesItemEquipList field_290;
     /* 02AC */ CImmunitiesItemTypeEquipList field_2AC;
     /* 02C8 */ CPtrList field_2C8;
-    /* 02E4 */ CPtrList field_2E4;
+    /* 02E4 */ CImmunitiesEffect m_cBounceEffect;
     /* 03C8 */ CPtrList field_3C8;
     /* 03E4 */ CPtrList field_3E4;
     /* 0400 */ CPtrList field_400;

@@ -2,6 +2,58 @@
 
 #include "CGameEffect.h"
 
+// 0x443420
+CImmunitiesEffect::~CImmunitiesEffect()
+{
+    ClearAll();
+}
+
+// 0x4E6E50
+CImmunitiesEffect& CImmunitiesEffect::operator=(const CImmunitiesEffect& other)
+{
+    // FIXME: Missing `ClearAll`.
+
+    POSITION pos = other.GetHeadPosition();
+    while (pos != NULL) {
+        CGameEffect* pEffect = other.GetNext(pos);
+        AddTail(pEffect->Copy());
+    }
+
+    return *this;
+}
+
+// 0x4E6E80
+void CImmunitiesEffect::ClearAll()
+{
+    POSITION pos = GetHeadPosition();
+    while (pos != NULL) {
+        CGameEffect* pEffect = GetNext(pos);
+        delete pEffect;
+    }
+    RemoveAll();
+}
+
+// 0x4E6EB0
+BOOL CImmunitiesEffect::OnList(CGameEffect* pEffect)
+{
+    POSITION pos = GetHeadPosition();
+    while (pos != NULL) {
+        CGameEffect* pCurrEffect = GetNext(pos);
+        if (pCurrEffect->Compare(*pEffect)
+            || (pCurrEffect->m_compareIdOnly
+                && pCurrEffect->m_effectID == pEffect->m_effectID)
+            || (pCurrEffect->m_compareIdAndFlagsOnly
+                && pCurrEffect->m_effectID == pEffect->m_effectID
+                && pCurrEffect->m_dwFlags == pEffect->m_dwFlags)) {
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x4E6FF0
 void CImmunitiesSpellLevel::ClearAll()
 {

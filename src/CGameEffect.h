@@ -308,6 +308,8 @@ public:
     /* 010C */ LONG m_sourceID;
     /* 0110 */ BOOL m_done;
     /* 0114 */ BOOL m_forceRepass;
+    /* 011C */ BOOL m_compareIdOnly;
+    /* 0120 */ BOOL m_compareIdAndFlagsOnly;
     /* 0124 */ CSound m_sound;
 };
 
