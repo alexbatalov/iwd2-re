@@ -53,6 +53,7 @@ public:
     void HideInterface();
     void UnhideInterface();
     void SetPendingChapterChange(BYTE nChapter, BYTE* szChapterResRef);
+    void SetPendingMovie(BYTE* szMovieResRef);
 
     void CompressTime(DWORD deltaTime) { m_deltaTime = deltaTime; }
 
@@ -77,6 +78,8 @@ public:
     /* 1153 */ BOOLEAN m_bChapterTransitionPending;
     /* 1154 */ INT m_nChapterTransition;
     /* 1158 */ RESREF m_szChapterTransitionResRef;
+    /* 1160 */ BOOLEAN m_bMoviePending;
+    /* 1161 */ RESREF m_szMovieResRef;
     /* 119D */ BOOLEAN field_119D;
     /* 11CA */ BYTE m_nAutoHideInterface;
     /* 11CC */ INT m_nAutoUnhideInterface;

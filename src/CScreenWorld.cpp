@@ -484,6 +484,13 @@ void CScreenWorld::SetPendingChapterChange(BYTE nChapter, BYTE* szChapterResRef)
     }
 }
 
+// 0x6930F0
+void CScreenWorld::SetPendingMovie(BYTE* szMovieResRef)
+{
+    m_bMoviePending = TRUE;
+    memcpy(m_szMovieResRef, szMovieResRef, RESREF_SIZE);
+}
+
 // 0x697970
 CUIControlButtonClock::CUIControlButtonClock(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
