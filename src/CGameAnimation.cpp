@@ -165,16 +165,6 @@ void CGameAnimation::SetColorRangeAll(BYTE rangeValue)
 }
 
 // NOTE: Inlined.
-CGameAnimationType* CGameAnimation::GetAnimation()
-{
-    // __FILE__: .\Include\ObjAnimation.h
-    // __LINE__: 2111
-    UTIL_ASSERT(m_animation != NULL);
-
-    return m_animation;
-}
-
-// NOTE: Inlined.
 void CGameAnimation::SetSequence(SHORT nSequence)
 {
     // __FILE__: .\Include\ObjAnimation.h

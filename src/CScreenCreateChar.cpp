@@ -1452,49 +1452,49 @@ void CScreenCreateChar::ResetColorsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
         pSprite->m_baseStats.m_colors[0] = 30;
 
         if (bFound) {
-            pSprite->GetAnimation()->GetAnimation()->SetColorRange(0, pSprite->m_baseStats.m_colors[0]);
+            pSprite->GetAnimation()->SetColorRange(0, pSprite->m_baseStats.m_colors[0]);
 
             ptLocation.x = 3;
             pSprite->m_baseStats.m_colors[1] = static_cast<BYTE>(tPortraitColor.GetAtLong(ptLocation));
-            pSprite->GetAnimation()->GetAnimation()->SetColorRange(1, pSprite->m_baseStats.m_colors[1]);
+            pSprite->GetAnimation()->SetColorRange(1, pSprite->m_baseStats.m_colors[1]);
 
             ptLocation.x = 2;
             pSprite->m_baseStats.m_colors[2] = static_cast<BYTE>(tPortraitColor.GetAtLong(ptLocation));
-            pSprite->GetAnimation()->GetAnimation()->SetColorRange(2, pSprite->m_baseStats.m_colors[2]);
+            pSprite->GetAnimation()->SetColorRange(2, pSprite->m_baseStats.m_colors[2]);
 
             ptLocation.x = 0;
             pSprite->m_baseStats.m_colors[3] = static_cast<BYTE>(tPortraitColor.GetAtLong(ptLocation));
-            pSprite->GetAnimation()->GetAnimation()->SetColorRange(3, pSprite->m_baseStats.m_colors[3]);
+            pSprite->GetAnimation()->SetColorRange(3, pSprite->m_baseStats.m_colors[3]);
 
             pSprite->m_baseStats.m_colors[4] = 23;
-            pSprite->GetAnimation()->GetAnimation()->SetColorRange(4, pSprite->m_baseStats.m_colors[4]);
+            pSprite->GetAnimation()->SetColorRange(4, pSprite->m_baseStats.m_colors[4]);
 
             pSprite->m_baseStats.m_colors[5] = 30;
-            pSprite->GetAnimation()->GetAnimation()->SetColorRange(5, pSprite->m_baseStats.m_colors[5]);
+            pSprite->GetAnimation()->SetColorRange(5, pSprite->m_baseStats.m_colors[5]);
 
             ptLocation.x = 1;
             pSprite->m_baseStats.m_colors[6] = static_cast<BYTE>(tPortraitColor.GetAtLong(ptLocation));
-            pSprite->GetAnimation()->GetAnimation()->SetColorRange(6, pSprite->m_baseStats.m_colors[6]);
+            pSprite->GetAnimation()->SetColorRange(6, pSprite->m_baseStats.m_colors[6]);
         } else {
-            pSprite->GetAnimation()->GetAnimation()->SetColorRange(0, pSprite->m_baseStats.m_colors[0]);
+            pSprite->GetAnimation()->SetColorRange(0, pSprite->m_baseStats.m_colors[0]);
 
             pSprite->m_baseStats.m_colors[1] = 39;
-            pSprite->GetAnimation()->GetAnimation()->SetColorRange(1, pSprite->m_baseStats.m_colors[1]);
+            pSprite->GetAnimation()->SetColorRange(1, pSprite->m_baseStats.m_colors[1]);
 
             pSprite->m_baseStats.m_colors[2] = 41;
-            pSprite->GetAnimation()->GetAnimation()->SetColorRange(2, pSprite->m_baseStats.m_colors[2]);
+            pSprite->GetAnimation()->SetColorRange(2, pSprite->m_baseStats.m_colors[2]);
 
             pSprite->m_baseStats.m_colors[3] = 12;
-            pSprite->GetAnimation()->GetAnimation()->SetColorRange(3, pSprite->m_baseStats.m_colors[3]);
+            pSprite->GetAnimation()->SetColorRange(3, pSprite->m_baseStats.m_colors[3]);
 
             pSprite->m_baseStats.m_colors[4] = 23;
-            pSprite->GetAnimation()->GetAnimation()->SetColorRange(4, pSprite->m_baseStats.m_colors[4]);
+            pSprite->GetAnimation()->SetColorRange(4, pSprite->m_baseStats.m_colors[4]);
 
             pSprite->m_baseStats.m_colors[5] = 30;
-            pSprite->GetAnimation()->GetAnimation()->SetColorRange(5, pSprite->m_baseStats.m_colors[5]);
+            pSprite->GetAnimation()->SetColorRange(5, pSprite->m_baseStats.m_colors[5]);
 
             pSprite->m_baseStats.m_colors[6] = 0;
-            pSprite->GetAnimation()->GetAnimation()->SetColorRange(6, pSprite->m_baseStats.m_colors[6]);
+            pSprite->GetAnimation()->SetColorRange(6, pSprite->m_baseStats.m_colors[6]);
         }
 
         tPortraitColor.Release();
@@ -7418,7 +7418,7 @@ void CUIControlButtonCharGenColorChoice::OnLButtonClick(CPoint pt)
         BYTE rangeValue;
         if (GetColorRange(rangeValue)) {
             pSprite->m_baseStats.m_colors[colorRange] = rangeValue;
-            pSprite->m_animation.GetAnimation()->SetColorRange(colorRange, rangeValue);
+            pSprite->m_animation.SetColorRange(colorRange, rangeValue);
             pCreateChar->DismissPopup(pSprite);
             v2 = TRUE;
         } else if (m_nID == 35) {
@@ -7481,7 +7481,7 @@ void CUIControlButtonCharGenColorChoice::OnLButtonClick(CPoint pt)
             tPortraitColor.Release();
 
             pSprite->m_baseStats.m_colors[colorRange] = rangeValue;
-            pSprite->m_animation.GetAnimation()->SetColorRange(colorRange, rangeValue);
+            pSprite->m_animation.SetColorRange(colorRange, rangeValue);
             pCreateChar->DismissPopup(pSprite);
         }
 
