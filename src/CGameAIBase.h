@@ -7,6 +7,7 @@
 
 class CAIScript;
 class CAITrigger;
+class CGameEffect;
 class CGameTimer;
 
 class CGameAIBase : public CGameObject {
@@ -18,6 +19,9 @@ public:
     static const SHORT ACTION_NO_ACTION;
     static const SHORT ACTION_STOPPED;
 
+    static const BYTE EFFECT_LIST_TIMED;
+    static const BYTE EFFECT_LIST_EQUIPED;
+
     static const CString DEAD_GLOBAL_PREFIX;
     static CAIAction m_aiAction;
 
@@ -27,6 +31,7 @@ public:
     /* 0048 */ void RemoveFromArea() override;
     /* 006C */ virtual void ClearActions(BOOL a1);
     /* 0074 */ virtual void AddAction(const CAIAction& action);
+    /* 0078 */ virtual void AddEffect(CGameEffect* pEffect, BYTE list, BOOL noSave, BOOL immediateApply);
     /* 007C */ virtual void ClearAI(BOOLEAN a1);
     /* 0088 */ virtual void InsertAction(const CAIAction& action);
     /* 0090 */ virtual void SetCurrAction(const CAIAction& action);

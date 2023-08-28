@@ -4,6 +4,7 @@
 #include "CAITrigger.h"
 #include "CBaldurChitin.h"
 #include "CGameArea.h"
+#include "CGameEffect.h"
 #include "CGameTimer.h"
 #include "CInfGame.h"
 #include "CScreenWorld.h"
@@ -27,6 +28,12 @@ const SHORT CGameAIBase::ACTION_NO_ACTION = 2;
 
 // 0x8485CE
 const SHORT CGameAIBase::ACTION_STOPPED = -3;
+
+// 0x8485E8
+const BYTE CGameAIBase::EFFECT_LIST_TIMED = 1;
+
+// 0x8485E9
+const BYTE CGameAIBase::EFFECT_LIST_EQUIPED = 2;
 
 // 0x8D1408
 const CString CGameAIBase::DEAD_GLOBAL_PREFIX("_DEAD");
@@ -88,7 +95,6 @@ CGameAIBase::CGameAIBase()
     field_595 = 1;
     field_596 = 0;
     m_randValue = rand() & 0x7FFF;
-
 }
 
 // 0x44D160
@@ -270,6 +276,14 @@ void CGameAIBase::AddAction(const CAIAction& action)
     copy->m_string2 = action.m_string2;
     copy->m_internalFlags = action.m_internalFlags;
     m_queuedActions.AddHead(copy);
+}
+
+// 0x44CE20
+void CGameAIBase::AddEffect(CGameEffect* pEffect, BYTE list, BOOL noSave, BOOL immediateApply)
+{
+    if (pEffect != NULL) {
+        delete pEffect;
+    }
 }
 
 // 0x44CE40

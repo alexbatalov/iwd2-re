@@ -2,6 +2,7 @@
 
 #include "CBaldurChitin.h"
 #include "CGameAIBase.h"
+#include "CGameEffect.h"
 #include "CInfGame.h"
 #include "CScreenConnection.h"
 #include "CScreenCreateChar.h"
@@ -21,6 +22,9 @@ const BYTE CBaldurMessage::MSG_TYPE_CMESSAGE = 67;
 
 // 0x84CED7
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_ADD_ACTION = 0;
+
+// 0x84CED8
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_ADD_EFFECT = 1;
 
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
@@ -540,6 +544,67 @@ void CMessageAddAction::Run()
         if ((pSprite->GetObjectType() & CGameObject::TYPE_AIBASE) != 0) {
             pSprite->AddAction(m_action);
             pSprite->m_interrupt = TRUE;
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4533D0
+CMessageAddEffect::CMessageAddEffect(CGameEffect* effect, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_effect = effect;
+}
+
+// 0x453410
+CMessageAddEffect::~CMessageAddEffect()
+{
+    if (m_effect != NULL) {
+        delete m_effect;
+        m_effect = NULL;
+    }
+}
+
+// 0x40A0D0
+SHORT CMessageAddEffect::GetCommType()
+{
+    return SEND;
+}
+
+// 0x40A0E0
+BYTE CMessageAddEffect::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4533C0
+BYTE CMessageAddEffect::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_ADD_EFFECT;
+}
+
+// 0x4F8CA0
+void CMessageAddEffect::Run()
+{
+    CGameAIBase* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if ((pSprite->GetObjectType() & CGameObject::TYPE_AIBASE) != 0) {
+            pSprite->AddEffect(m_effect, CGameAIBase::EFFECT_LIST_TIMED, FALSE, TRUE);
+            m_effect = NULL;
         }
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,

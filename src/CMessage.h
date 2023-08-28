@@ -7,10 +7,13 @@
 #include "CChatBuffer.h"
 #include "CResRef.h"
 
+class CGameEffect;
+
 class CBaldurMessage {
 public:
     static const BYTE MSG_TYPE_CMESSAGE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_ADD_ACTION;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_ADD_EFFECT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -141,6 +144,18 @@ public:
     void Run() override;
 
     /* 000C */ CAIAction m_action;
+};
+
+class CMessageAddEffect : public CMessage {
+public:
+    CMessageAddEffect(CGameEffect* effect, LONG caller, LONG target);
+    ~CMessageAddEffect() override;
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ CGameEffect* m_effect;
 };
 
 class CMessageStoreRelease : public CMessage {
