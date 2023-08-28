@@ -52,6 +52,7 @@ public:
     void ClearChatMessages();
     void HideInterface();
     void UnhideInterface();
+    void SetPendingChapterChange(BYTE nChapter, BYTE* szChapterResRef);
 
     void CompressTime(DWORD deltaTime) { m_deltaTime = deltaTime; }
 
@@ -73,6 +74,9 @@ public:
     /* 10F4 */ int field_10F4;
     /* 1151 */ BOOLEAN m_bEndMajorEventListenToJoin;
     /* 1152 */ BOOLEAN m_bEndMajorEventPauseStatus;
+    /* 1153 */ BOOLEAN m_bChapterTransitionPending;
+    /* 1154 */ INT m_nChapterTransition;
+    /* 1158 */ RESREF m_szChapterTransitionResRef;
     /* 119D */ BOOLEAN field_119D;
     /* 11CA */ BYTE m_nAutoHideInterface;
     /* 11CC */ INT m_nAutoUnhideInterface;

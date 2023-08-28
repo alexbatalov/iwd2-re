@@ -470,6 +470,20 @@ void CScreenWorld::UnhideInterface()
     // TODO: Incomplete.
 }
 
+// 0x693090
+void CScreenWorld::SetPendingChapterChange(BYTE nChapter, BYTE* szChapterResRef)
+{
+    if (nChapter <= CGameJournal::NUM_CHAPTERS) {
+        m_bChapterTransitionPending = TRUE;
+        m_nChapterTransition = nChapter;
+        memcpy(m_szChapterTransitionResRef, szChapterResRef, RESREF_SIZE);
+    } else {
+        m_bChapterTransitionPending = FALSE;
+        m_nChapterTransition = -1;
+        memset(m_szChapterTransitionResRef, 0, RESREF_SIZE);
+    }
+}
+
 // 0x697970
 CUIControlButtonClock::CUIControlButtonClock(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
