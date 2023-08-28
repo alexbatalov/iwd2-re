@@ -1,6 +1,7 @@
 #include "CMessage.h"
 
 #include "CBaldurChitin.h"
+#include "CGameAIBase.h"
 #include "CInfGame.h"
 #include "CScreenConnection.h"
 #include "CScreenCreateChar.h"
@@ -9,11 +10,17 @@
 #include "CScreenSinglePlayer.h"
 #include "CUtil.h"
 
+// 0x848208
+const SHORT CMessage::SEND = 1;
+
 // 0x84820E
 const SHORT CMessage::BROADCAST_FORCED = 4;
 
 // 0x84CED6
 const BYTE CBaldurMessage::MSG_TYPE_CMESSAGE = 67;
+
+// 0x84CED7
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_ADD_ACTION = 0;
 
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
@@ -481,6 +488,64 @@ void CMessageHandler::PostAsynchronousUpdate()
 void CMessageHandler::AddMessage(CMessage* message, BOOL bForcePassThrough)
 {
     // TODO: Incomplete.
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F4F90
+CMessageAddAction::CMessageAddAction(const CAIAction& action, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    // NOTE: Uninline.
+    m_action = action;
+}
+
+// 0x405240
+CMessageAddAction::~CMessageAddAction()
+{
+}
+
+// 0x40A0D0
+SHORT CMessageAddAction::GetCommType()
+{
+    return SEND;
+}
+
+// 0x40A0E0
+BYTE CMessageAddAction::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x405210
+BYTE CMessageAddAction::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_ADD_ACTION;
+}
+
+// 0x4F83C0
+void CMessageAddAction::Run()
+{
+    CGameAIBase* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if ((pSprite->GetObjectType() & CGameObject::TYPE_AIBASE) != 0) {
+            pSprite->AddAction(m_action);
+            pSprite->m_interrupt = TRUE;
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
 }
 
 // -----------------------------------------------------------------------------

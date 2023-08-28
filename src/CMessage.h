@@ -3,12 +3,14 @@
 
 #include "mfc.h"
 
+#include "CAIAction.h"
 #include "CChatBuffer.h"
 #include "CResRef.h"
 
 class CBaldurMessage {
 public:
     static const BYTE MSG_TYPE_CMESSAGE;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_ADD_ACTION;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -99,6 +101,7 @@ public:
 
 class CMessage {
 public:
+    static const SHORT SEND;
     static const SHORT BROADCAST_FORCED;
 
     CMessage(LONG caller, LONG target);
@@ -126,6 +129,18 @@ public:
     void AddMessage(CMessage* message, BOOL bForcePassThrough);
 
     /* 001C */ BOOLEAN m_bLastArbitrationLockStatus;
+};
+
+class CMessageAddAction : public CMessage {
+public:
+    CMessageAddAction(const CAIAction& action, LONG caller, LONG target);
+    ~CMessageAddAction() override;
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ CAIAction m_action;
 };
 
 class CMessageStoreRelease : public CMessage {
