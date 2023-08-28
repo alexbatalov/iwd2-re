@@ -4129,6 +4129,63 @@ CGameEffect* CGameEffectReputation::Copy()
     return copy;
 }
 
+// 0x4B7F10
+BOOL CGameEffectReputation::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        switch (m_durationType) {
+        case 1:
+            pSprite->GetBaseStats()->m_reputation += static_cast<BYTE>(m_effectAmount);
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+            break;
+        default:
+            pSprite->m_bonusStats.m_nReputation += static_cast<SHORT>(m_effectAmount);
+            m_done = FALSE;
+            break;
+        }
+        break;
+    case 1:
+        switch (m_durationType) {
+        case 1:
+            pSprite->GetBaseStats()->m_reputation = static_cast<BYTE>(m_effectAmount);
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+            break;
+        default:
+            pSprite->GetDerivedStats()->m_nReputation = static_cast<BYTE>(m_effectAmount);
+
+            if (pSprite->GetDerivedStats()->m_nReputation < 0) {
+                pSprite->GetDerivedStats()->m_nReputation = 0;
+            }
+
+            m_done = FALSE;
+            break;
+        }
+        break;
+    case 2:
+        switch (m_durationType) {
+        case 1:
+            pSprite->GetBaseStats()->m_reputation = pSprite->GetBaseStats()->m_reputation * static_cast<BYTE>(m_effectAmount) / 100;
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+            break;
+        default:
+            pSprite->GetDerivedStats()->m_nReputation = pSprite->GetBaseStats()->m_reputation * static_cast<BYTE>(m_effectAmount) / 100;
+            m_done = FALSE;
+            break;
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 16716
+        UTIL_ASSERT(FALSE);
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
