@@ -410,6 +410,22 @@ public:
     BOOL sub_40D920(const CPoint& pt) const;
     void SetCenter(const CPoint& pt);
     void SetRect(const CRect& rect);
+    BYTE GetGeneral();
+    BYTE GetRace();
+    BYTE GetClass();
+    BYTE GetSpecific();
+    BYTE GetGender();
+    BYTE GetAlignment();
+    void SetEnemyAlly(BYTE nEnemyAlly);
+    void SetGeneral(BYTE nGeneral);
+    void SetRace(BYTE nRace);
+    void SetSpecific(BYTE nSpecific);
+    void SetGender(BYTE nGender);
+    void SetAlignment(BYTE nAlignment);
+    void SetName(const CString& sName);
+    int GetInstance();
+    void SetInstance(int nInstance);
+    void SetClass(BYTE nClass);
 
     /* 0000 */ CString m_sName;
     /* 0004 */ BYTE m_nEnemyAlly;

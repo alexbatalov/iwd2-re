@@ -954,3 +954,99 @@ void CAIObjectType::AddClass(BYTE nClass)
         break;
     }
 }
+
+// 0x45B390
+BYTE CAIObjectType::GetGeneral()
+{
+    return m_nGeneral;
+}
+
+// 0x45B3A0
+BYTE CAIObjectType::GetRace()
+{
+    return m_nRace;
+}
+
+// 0x45B3B0
+BYTE CAIObjectType::GetClass()
+{
+    return m_nClass;
+}
+
+// 0x45B3C0
+BYTE CAIObjectType::GetSpecific()
+{
+    return m_nSpecific;
+}
+
+// 0x45B3D0
+BYTE CAIObjectType::GetGender()
+{
+    return m_nGender;
+}
+
+// 0x45B3E0
+BYTE CAIObjectType::GetAlignment()
+{
+    return m_nAlignment;
+}
+
+// 0x45B3F0
+void CAIObjectType::SetEnemyAlly(BYTE nEnemyAlly)
+{
+    m_nEnemyAlly = nEnemyAlly;
+}
+
+// 0x45B400
+void CAIObjectType::SetGeneral(BYTE nGeneral)
+{
+    m_nGeneral = nGeneral;
+}
+
+// 0x45B410
+void CAIObjectType::SetRace(BYTE nRace)
+{
+    m_nRace = nRace;
+}
+
+// 0x45B420
+void CAIObjectType::SetSpecific(BYTE nSpecific)
+{
+    m_nSpecific = nSpecific;
+}
+
+// 0x45B430
+void CAIObjectType::SetGender(BYTE nGender)
+{
+    m_nGender = nGender;
+}
+
+// 0x45B440
+void CAIObjectType::SetAlignment(BYTE nAlignment)
+{
+    m_nAlignment = nAlignment;
+}
+
+// 0x45B450
+void CAIObjectType::SetName(const CString& sName)
+{
+    m_sName = sName;
+}
+
+// 0x45B460
+int CAIObjectType::GetInstance()
+{
+    return m_nInstance;
+}
+
+// 0x45B470
+void CAIObjectType::SetInstance(int nInstance)
+{
+    m_nInstance = nInstance;
+}
+
+// 0x45B480
+void CAIObjectType::SetClass(BYTE nClass)
+{
+    m_nClass = nClass;
+}
