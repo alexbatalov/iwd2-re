@@ -1745,6 +1745,103 @@ CGameEffect* CGameEffectSaveVsFortitude::Copy()
     return copy;
 }
 
+// 0x4B0D10
+BOOL CGameEffectSaveVsFortitude::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        switch (m_durationType) {
+        case 1:
+            pSprite->GetBaseStats()->m_saveVSFortitudeBase += static_cast<BYTE>(m_effectAmount);
+
+            if (pSprite->GetBaseStats()->m_saveVSFortitudeBase > 40) {
+                pSprite->GetBaseStats()->m_saveVSFortitudeBase = 40;
+            }
+
+            if (pSprite->GetBaseStats()->m_saveVSFortitudeBase < -40) {
+                pSprite->GetBaseStats()->m_saveVSFortitudeBase = -40;
+            }
+
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+            break;
+        default:
+            pSprite->m_bonusStats.m_nSaveVSFortitude += static_cast<SHORT>(m_effectAmount);
+            m_done = FALSE;
+            break;
+        }
+        break;
+    case 1:
+        switch (m_durationType) {
+        case 1:
+            pSprite->GetBaseStats()->m_saveVSFortitudeBase = static_cast<BYTE>(m_effectAmount);
+
+            if (pSprite->GetBaseStats()->m_saveVSFortitudeBase > 40) {
+                pSprite->GetBaseStats()->m_saveVSFortitudeBase = 40;
+            }
+
+            if (pSprite->GetBaseStats()->m_saveVSFortitudeBase < -40) {
+                pSprite->GetBaseStats()->m_saveVSFortitudeBase = -40;
+            }
+
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+            break;
+        default:
+            pSprite->GetDerivedStats()->m_nSaveVSFortitude = static_cast<BYTE>(m_effectAmount);
+
+            if (pSprite->GetDerivedStats()->m_nSaveVSFortitude > 40) {
+                pSprite->GetDerivedStats()->m_nSaveVSFortitude = 40;
+            }
+
+            if (pSprite->GetDerivedStats()->m_nSaveVSFortitude < -40) {
+                pSprite->GetDerivedStats()->m_nSaveVSFortitude = -40;
+            }
+
+            m_done = FALSE;
+            break;
+        }
+        break;
+    case 2:
+        switch (m_durationType) {
+        case 1:
+            pSprite->GetBaseStats()->m_saveVSFortitudeBase = pSprite->GetBaseStats()->m_saveVSFortitudeBase * static_cast<BYTE>(m_effectAmount) / 100;
+
+            if (pSprite->GetBaseStats()->m_saveVSFortitudeBase > 40) {
+                pSprite->GetBaseStats()->m_saveVSFortitudeBase = 40;
+            }
+
+            if (pSprite->GetBaseStats()->m_saveVSFortitudeBase < -40) {
+                pSprite->GetBaseStats()->m_saveVSFortitudeBase = -40;
+            }
+
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+            break;
+        default:
+            pSprite->GetDerivedStats()->m_nSaveVSFortitude = pSprite->GetBaseStats()->m_saveVSFortitudeBase * static_cast<BYTE>(m_effectAmount) / 100;
+
+            if (pSprite->GetDerivedStats()->m_nSaveVSFortitude > 40) {
+                pSprite->GetDerivedStats()->m_nSaveVSFortitude = 40;
+            }
+
+            if (pSprite->GetDerivedStats()->m_nSaveVSFortitude < -40) {
+                pSprite->GetDerivedStats()->m_nSaveVSFortitude = -40;
+            }
+
+            m_done = FALSE;
+            break;
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 10621
+        UTIL_ASSERT(FALSE);
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
