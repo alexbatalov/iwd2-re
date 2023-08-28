@@ -3719,6 +3719,91 @@ CGameEffect* CGameEffectIntoxication::Copy()
     return copy;
 }
 
+// 0x4B7440
+BOOL CGameEffectIntoxication::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        switch (m_durationType) {
+        case 1:
+            pSprite->GetBaseStats()->m_intoxication += static_cast<BYTE>(m_effectAmount);
+
+            if (pSprite->GetBaseStats()->m_intoxication > 100) {
+                pSprite->GetBaseStats()->m_intoxication = 100;
+            }
+
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+            break;
+        default:
+            pSprite->m_bonusStats.m_nIntoxication += static_cast<SHORT>(m_effectAmount);
+            m_done = FALSE;
+            break;
+        }
+        break;
+    case 1:
+        switch (m_durationType) {
+        case 1:
+            pSprite->GetBaseStats()->m_intoxication = static_cast<BYTE>(m_effectAmount);
+
+            if (pSprite->GetBaseStats()->m_intoxication > 100) {
+                pSprite->GetBaseStats()->m_intoxication = 100;
+            }
+
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+            break;
+        default:
+            pSprite->GetDerivedStats()->m_nIntoxication += static_cast<BYTE>(m_effectAmount);
+
+            if (pSprite->GetDerivedStats()->m_nIntoxication > 100) {
+                pSprite->GetDerivedStats()->m_nIntoxication = 100;
+            }
+
+            if (pSprite->GetDerivedStats()->m_nIntoxication < 0) {
+                pSprite->GetDerivedStats()->m_nIntoxication = 0;
+            }
+
+            m_done = FALSE;
+            break;
+        }
+        break;
+    case 2:
+        switch (m_durationType) {
+        case 1:
+            pSprite->GetBaseStats()->m_intoxication = pSprite->GetBaseStats()->m_intoxication * static_cast<BYTE>(m_effectAmount) / 100;
+
+            if (pSprite->GetBaseStats()->m_intoxication > 100) {
+                pSprite->GetBaseStats()->m_intoxication = 100;
+            }
+
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+            break;
+        default:
+            pSprite->GetDerivedStats()->m_nIntoxication = pSprite->GetBaseStats()->m_intoxication * static_cast<BYTE>(m_effectAmount) / 100;
+
+            if (pSprite->GetDerivedStats()->m_nIntoxication > 100) {
+                pSprite->GetDerivedStats()->m_nIntoxication = 100;
+            }
+
+            if (pSprite->GetDerivedStats()->m_nIntoxication < 0) {
+                pSprite->GetDerivedStats()->m_nIntoxication = 0;
+            }
+
+            m_done = FALSE;
+            break;
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 15742
+        UTIL_ASSERT(FALSE);
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
