@@ -43,6 +43,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CLEAR_DIALOG_ACTIONS = 6;
 // 0x84CEDE
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CLEAR_GROUP_SLOT = 7;
 
+// 0x84CEDF
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CLEAR_TRIGGERS = 8;
+
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
@@ -815,6 +818,56 @@ void CMessageClearGroupSlot::Run()
     if (pGame->m_groupInventory[m_slotNum] != NULL) {
         delete pGame->m_groupInventory[m_slotNum];
         pGame->m_groupInventory[m_slotNum] = NULL;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F52D0
+CMessageClearTriggers::CMessageClearTriggers(LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+}
+
+// 0x40A0D0
+SHORT CMessageClearTriggers::GetCommType()
+{
+    return SEND;
+}
+
+// 0x40A0E0
+BYTE CMessageClearTriggers::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4F52F0
+BYTE CMessageClearTriggers::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CLEAR_TRIGGERS;
+}
+
+// 0x4FA2D0
+void CMessageClearTriggers::Run()
+{
+    CGameAIBase* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if ((pSprite->GetObjectType() & CGameObject::TYPE_AIBASE) != 0) {
+            pSprite->ClearTriggers();
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
     }
 }
 

@@ -18,6 +18,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_CLEAR_ACTIONS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_CLEAR_DIALOG_ACTIONS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_CLEAR_GROUP_SLOT;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_CLEAR_TRIGGERS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -201,6 +202,15 @@ public:
     void Run() override;
 
     /* 000C */ SHORT m_slotNum;
+};
+
+class CMessageClearTriggers : public CMessage {
+public:
+    CMessageClearTriggers(LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
 };
 
 class CMessageStoreRelease : public CMessage {
