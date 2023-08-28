@@ -1504,6 +1504,52 @@ CGameEffect* CGameEffectHaste::Copy()
     return copy;
 }
 
+// 0x4AE000
+BOOL CGameEffectHaste::ApplyEffect(CGameSprite* pSprite)
+{
+    if ((pSprite->GetDerivedStats()->m_generalState & STATE_HASTED) == 0) {
+        if (m_secondaryType != 0) {
+            // NOTE: Uninline.
+            DisplayStringRef(pSprite, 14023); // "Hasted"
+
+            // NOTE: Probably should be outside of condition.
+            if ((pSprite->GetDerivedStats()->m_generalState & STATE_SLOWED) != 0) {
+                pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
+                    CGAMEEFFECT_SLOW,
+                    pSprite->GetEquipedEffectList()->GetPosCurrent(),
+                    -1);
+                pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
+                    CGAMEEFFECT_SLOW,
+                    pSprite->GetTimedEffectList()->GetPosCurrent(),
+                    -1);
+            }
+        }
+
+        pSprite->GetDerivedStats()->m_generalState |= STATE_HASTED;
+
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 38);
+
+        if (pSprite->GetDerivedStats()->m_nNumberOfAttacks < 5) {
+            pSprite->GetDerivedStats()->m_nNumberOfAttacks += 1;
+        }
+
+        pSprite->m_derivedStats.field_C += 4;
+
+        if (pSprite->GetAnimation()->GetMoveScale() != 0) {
+            pSprite->GetAnimation()->SetMoveScale(pSprite->GetAnimation()->GetMoveScaleDefault() * 2);
+
+            if (m_secondaryType != 0) {
+                pSprite->DropPath();
+            }
+        }
+
+        AddColorEffect(pSprite, 64, 64, 64, 15);
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
