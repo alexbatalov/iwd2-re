@@ -297,7 +297,7 @@ public:
     /* 4220 */ CString m_sSaveGame;
     /* 4224 */ CString m_sSaveDir;
     /* 4228 */ CString m_sMultiplayerSaveDir;
-    /* 4348 */ unsigned char field_4248[400];
+    /* 4248 */ CItem* m_groupInventory[100];
     /* 43D8 */ int field_43D8;
     /* 43DC */ short field_43DC;
     /* 43E2 */ int field_43E2;

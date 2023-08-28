@@ -764,7 +764,9 @@ void CInfGame::InitGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlac
 
     field_43DC = 0;
 
-    memset(field_4248, 0, sizeof(field_4248));
+    for (int slot = 0; slot < 100; slot++) {
+        m_groupInventory[slot] = NULL;
+    }
 
     field_43E2 = -1;
     field_43E6 = 0;

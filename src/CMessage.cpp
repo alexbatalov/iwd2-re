@@ -5,6 +5,7 @@
 #include "CGameEffect.h"
 #include "CGameSprite.h"
 #include "CInfGame.h"
+#include "CItem.h"
 #include "CScreenConnection.h"
 #include "CScreenCreateChar.h"
 #include "CScreenLoad.h"
@@ -38,6 +39,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CLEAR_ACTIONS = 5;
 
 // 0x84CEDD
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CLEAR_DIALOG_ACTIONS = 6;
+
+// 0x84CEDE
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CLEAR_GROUP_SLOT = 7;
 
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
@@ -774,6 +778,43 @@ void CMessageClearDialogActions::Run()
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F5290
+CMessageClearGroupSlot::CMessageClearGroupSlot(SHORT slotNum, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_slotNum = slotNum;
+}
+
+// 0x453510
+SHORT CMessageClearGroupSlot::GetCommType()
+{
+    return BROADCAST;
+}
+
+// 0x40A0E0
+BYTE CMessageClearGroupSlot::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4F52C0
+BYTE CMessageClearGroupSlot::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CLEAR_DIALOG_ACTIONS;
+}
+
+// 0x4FA0C0
+void CMessageClearGroupSlot::Run()
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    if (pGame->m_groupInventory[m_slotNum] != NULL) {
+        delete pGame->m_groupInventory[m_slotNum];
+        pGame->m_groupInventory[m_slotNum] = NULL;
     }
 }
 
