@@ -14,6 +14,7 @@ public:
     static const BYTE MSG_TYPE_CMESSAGE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_ADD_ACTION;
     static const BYTE MSG_SUBTYPE_CMESSAGE_ADD_EFFECT;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_CHANGE_DIRECTION;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -105,6 +106,7 @@ public:
 class CMessage {
 public:
     static const SHORT SEND;
+    static const SHORT BROADCAST;
     static const SHORT BROADCAST_FORCED;
 
     CMessage(LONG caller, LONG target);
@@ -156,6 +158,17 @@ public:
     void Run() override;
 
     /* 000C */ CGameEffect* m_effect;
+};
+
+class CMessageChangeDirection : public CMessage {
+public:
+    CMessageChangeDirection(SHORT face, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ SHORT m_face;
 };
 
 class CMessageStoreRelease : public CMessage {

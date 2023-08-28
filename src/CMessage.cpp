@@ -3,6 +3,7 @@
 #include "CBaldurChitin.h"
 #include "CGameAIBase.h"
 #include "CGameEffect.h"
+#include "CGameSprite.h"
 #include "CInfGame.h"
 #include "CScreenConnection.h"
 #include "CScreenCreateChar.h"
@@ -13,6 +14,9 @@
 
 // 0x848208
 const SHORT CMessage::SEND = 1;
+
+// 0x84820A
+const SHORT CMessage::BROADCAST = 2;
 
 // 0x84820E
 const SHORT CMessage::BROADCAST_FORCED = 4;
@@ -25,6 +29,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_ADD_ACTION = 0;
 
 // 0x84CED8
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_ADD_EFFECT = 1;
+
+// 0x84CEDB
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CHANGE_DIRECTION = 4;
 
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
@@ -605,6 +612,57 @@ void CMessageAddEffect::Run()
         if ((pSprite->GetObjectType() & CGameObject::TYPE_AIBASE) != 0) {
             pSprite->AddEffect(m_effect, CGameAIBase::EFFECT_LIST_TIMED, FALSE, TRUE);
             m_effect = NULL;
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F5200
+CMessageChangeDirection::CMessageChangeDirection(SHORT face, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_face = face;
+}
+
+// 0x453510
+SHORT CMessageChangeDirection::GetCommType()
+{
+    return BROADCAST;
+}
+
+// 0x40A0E0
+BYTE CMessageChangeDirection::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4F5230
+BYTE CMessageChangeDirection::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CHANGE_DIRECTION;
+}
+
+// 0x4F9A70
+void CMessageChangeDirection::Run()
+{
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
+            pSprite->SetDirection(m_face);
         }
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,

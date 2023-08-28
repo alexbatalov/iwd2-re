@@ -964,6 +964,12 @@ BYTE CGameSprite::GetSound(BYTE soundID)
     return nSound;
 }
 
+// 0x706C80
+void CGameSprite::SetDirection(SHORT direction)
+{
+    // TODO: Incomplete.
+}
+
 // 0x7071F0
 SHORT CGameSprite::GetIdleSequence()
 {
