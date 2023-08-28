@@ -41,10 +41,10 @@ CBaldurMessage::CBaldurMessage()
     field_3 = 0;
     field_5 = 0;
     field_4 = 0;
-    field_D3 = 0;
-    field_D4 = 0;
+    m_bDialogRequestPending = FALSE;
+    m_bDialogReplyReturned = FALSE;
     field_D5 = 0;
-    field_D6 = 0;
+    m_nDialogReplyUpdates = 0;
     field_DA = 0;
     field_DB = 0;
     field_DC = 0;
@@ -293,6 +293,30 @@ CString CBaldurMessage::GetVersionControlShutdownServerString()
 CString CBaldurMessage::GetVersionControlShutdownClientString()
 {
     return m_sVersionControlShutdownClientString;
+}
+
+// 0x4F4F50
+BOOLEAN CBaldurMessage::GetDialogRequestPending()
+{
+    return m_bDialogRequestPending;
+}
+
+// 0x4F4F50
+BOOLEAN CBaldurMessage::GetDialogReplyReturned()
+{
+    return m_bDialogReplyReturned;
+}
+
+// 0x4F4F70
+INT CBaldurMessage::GetDialogReplyUpdates()
+{
+    return m_nDialogReplyUpdates;
+}
+
+// 0x4F4F80
+void CBaldurMessage::SetDialogReplyUpdates(INT nValue)
+{
+    m_nDialogReplyUpdates = nValue;
 }
 
 // -----------------------------------------------------------------------------

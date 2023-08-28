@@ -44,6 +44,10 @@ public:
     BOOL sub_43E0E0(DWORD a1, DWORD a2, COLORREF a3, COLORREF a4, int a5, int a6, int a7);
     CString GetVersionControlShutdownServerString();
     CString GetVersionControlShutdownClientString();
+    BOOLEAN GetDialogRequestPending();
+    BOOLEAN GetDialogReplyReturned();
+    INT GetDialogReplyUpdates();
+    void SetDialogReplyUpdates(INT bValue);
 
     /* 0000 */ unsigned char field_0;
     /* 0001 */ unsigned char field_1;
@@ -68,10 +72,10 @@ public:
     /* 009A */ CCriticalSection field_9A;
     /* 00BA */ int field_BA[6];
     /* 00D2 */ unsigned char field_D2;
-    /* 00D3 */ unsigned char field_D3;
-    /* 00D4 */ unsigned char field_D4;
+    /* 00D3 */ BOOLEAN m_bDialogRequestPending;
+    /* 00D4 */ BOOLEAN m_bDialogReplyReturned;
     /* 00D5 */ unsigned char field_D5;
-    /* 00D6 */ int field_D6;
+    /* 00D6 */ INT m_nDialogReplyUpdates;
     /* 00DA */ unsigned char field_DA;
     /* 00DB */ unsigned char field_DB;
     /* 00DC */ unsigned char field_DC;
