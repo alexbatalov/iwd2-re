@@ -15,6 +15,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_ADD_ACTION;
     static const BYTE MSG_SUBTYPE_CMESSAGE_ADD_EFFECT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_CHANGE_DIRECTION;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_CLEAR_ACTIONS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -169,6 +170,15 @@ public:
     void Run() override;
 
     /* 000C */ SHORT m_face;
+};
+
+class CMessageClearActions : public CMessage {
+public:
+    CMessageClearActions(LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
 };
 
 class CMessageStoreRelease : public CMessage {
