@@ -1860,6 +1860,103 @@ CGameEffect* CGameEffectSaveVsRelfex::Copy()
     return copy;
 }
 
+// 0x4B0F20
+BOOL CGameEffectSaveVsRelfex::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        switch (m_durationType) {
+        case 1:
+            pSprite->GetBaseStats()->m_saveVSReflexBase += static_cast<BYTE>(m_effectAmount);
+
+            if (pSprite->GetBaseStats()->m_saveVSReflexBase > 40) {
+                pSprite->GetBaseStats()->m_saveVSReflexBase = 40;
+            }
+
+            if (pSprite->GetBaseStats()->m_saveVSReflexBase < -40) {
+                pSprite->GetBaseStats()->m_saveVSReflexBase = -40;
+            }
+
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+            break;
+        default:
+            pSprite->m_bonusStats.m_nSaveVSReflex += static_cast<SHORT>(m_effectAmount);
+            m_done = FALSE;
+            break;
+        }
+        break;
+    case 1:
+        switch (m_durationType) {
+        case 1:
+            pSprite->GetBaseStats()->m_saveVSReflexBase = static_cast<BYTE>(m_effectAmount);
+
+            if (pSprite->GetBaseStats()->m_saveVSReflexBase > 40) {
+                pSprite->GetBaseStats()->m_saveVSReflexBase = 40;
+            }
+
+            if (pSprite->GetBaseStats()->m_saveVSReflexBase < -40) {
+                pSprite->GetBaseStats()->m_saveVSReflexBase = -40;
+            }
+
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+            break;
+        default:
+            pSprite->GetDerivedStats()->m_nSaveVSReflex = static_cast<BYTE>(m_effectAmount);
+
+            if (pSprite->GetDerivedStats()->m_nSaveVSReflex > 40) {
+                pSprite->GetDerivedStats()->m_nSaveVSReflex = 40;
+            }
+
+            if (pSprite->GetDerivedStats()->m_nSaveVSReflex < -40) {
+                pSprite->GetDerivedStats()->m_nSaveVSReflex = -40;
+            }
+
+            m_done = FALSE;
+            break;
+        }
+        break;
+    case 2:
+        switch (m_durationType) {
+        case 1:
+            pSprite->GetBaseStats()->m_saveVSReflexBase = pSprite->GetBaseStats()->m_saveVSReflexBase * static_cast<BYTE>(m_effectAmount) / 100;
+
+            if (pSprite->GetBaseStats()->m_saveVSReflexBase > 40) {
+                pSprite->GetBaseStats()->m_saveVSReflexBase = 40;
+            }
+
+            if (pSprite->GetBaseStats()->m_saveVSReflexBase < -40) {
+                pSprite->GetBaseStats()->m_saveVSReflexBase = -40;
+            }
+
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+            break;
+        default:
+            pSprite->GetDerivedStats()->m_nSaveVSReflex = pSprite->GetBaseStats()->m_saveVSReflexBase * static_cast<BYTE>(m_effectAmount) / 100;
+
+            if (pSprite->GetDerivedStats()->m_nSaveVSReflex > 40) {
+                pSprite->GetDerivedStats()->m_nSaveVSReflex = 40;
+            }
+
+            if (pSprite->GetDerivedStats()->m_nSaveVSReflex < -40) {
+                pSprite->GetDerivedStats()->m_nSaveVSReflex = -40;
+            }
+
+            m_done = FALSE;
+            break;
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 10730
+        UTIL_ASSERT(FALSE);
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
