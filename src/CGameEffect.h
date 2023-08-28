@@ -295,6 +295,8 @@ public:
     void PlaySound(const CResRef& soundResRef, CGameSprite* pSprite);
     ITEM_EFFECT* GetItemEffect();
     void DisplayStringRef(CGameSprite* pSprite, STRREF str);
+    void AddColorEffect(CGameSprite* pSprite, BYTE r, BYTE g, BYTE b, BYTE periodLength);
+    void AddColorEffect(CGameSprite* pSprite, BYTE r, BYTE g, BYTE b);
     void CopyFromBase(CGameEffectBase* pBase);
     void SetEffectID(WORD effectID);
     void SetDWFlags(DWORD dwFlags);

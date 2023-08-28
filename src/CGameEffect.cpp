@@ -886,6 +886,30 @@ void CGameEffect::DisplayStringRef(CGameSprite* pSprite, STRREF str)
     }
 }
 
+// 0x4A4EF0
+void CGameEffect::AddColorEffect(CGameSprite* pSprite, BYTE r, BYTE g, BYTE b, BYTE periodLength)
+{
+    pSprite->field_5638 = 1;
+
+    COLORREF tintColor = RGB(r, g, b);
+
+    // NOTE: Uninline.
+    pSprite->GetAnimation()->SetColorEffectAll(1, tintColor, periodLength);
+
+    CColorEffect* pColorEffect = new CColorEffect;
+    pColorEffect->m_effectType = 1;
+    pColorEffect->m_range = -1;
+    pColorEffect->m_tintColor = tintColor;
+    pColorEffect->m_periodLength = periodLength;
+    pSprite->GetDerivedStats()->m_appliedColorEffects.AddTail(pColorEffect);
+}
+
+// 0x4A4FA0
+void CGameEffect::AddColorEffect(CGameSprite* pSprite, BYTE r, BYTE g, BYTE b)
+{
+    AddColorEffect(pSprite, r, g, b, 1);
+}
+
 // 0x48C5B0
 BOOL CGameEffect::Compare(const CGameEffect& other)
 {
