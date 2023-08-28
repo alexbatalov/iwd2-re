@@ -145,6 +145,26 @@ void CGameAnimation::SetColorEffectAll(BYTE effectType, COLORREF tintColor, BYTE
 }
 
 // NOTE: Inlined.
+void CGameAnimation::SetColorRange(BYTE colorRange, BYTE rangeValue)
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2111
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->SetColorRange(colorRange, rangeValue);
+}
+
+// NOTE: Inlined.
+void CGameAnimation::SetColorRangeAll(BYTE rangeValue)
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2112
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->SetColorRangeAll(rangeValue);
+}
+
+// NOTE: Inlined.
 CGameAnimationType* CGameAnimation::GetAnimation()
 {
     // __FILE__: .\Include\ObjAnimation.h

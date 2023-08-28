@@ -4,12 +4,131 @@
 #include "CUtil.h"
 
 // NOTE: Inlined.
+CColorRange::CColorRange()
+{
+    m_range = 0;
+    m_color = 0;
+}
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Inlined.
 CColorEffect::CColorEffect()
 {
     m_effectType = -1;
     m_range = 0;
     m_tintColor = 0;
     m_periodLength = 1;
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x448430
+CColorRanges::CColorRanges()
+{
+}
+
+// 0x443730
+CColorRanges::~CColorRanges()
+{
+    ClearAll();
+}
+
+// 0x4E71B0
+void CColorRanges::ClearAll()
+{
+    POSITION pos = GetHeadPosition();
+    while (pos != NULL) {
+        CColorRange* pColorRange = GetNext(pos);
+        delete pColorRange;
+    }
+    RemoveAll();
+}
+
+// 0x442E50
+ULONG CColorRanges::Marshal(BYTE** ppData)
+{
+    *ppData = NULL;
+
+    LONG nSize = sizeof(CColorRange) * GetCount();
+
+    // NOTE: Signed compare.
+    if (nSize > 0) {
+        BYTE* pData = new BYTE[nSize];
+        int offset = 0;
+
+        POSITION pos = GetHeadPosition();
+        while (pos != NULL) {
+            CColorRange* pColorEffect = GetNext(pos);
+
+            pData[offset] = pColorEffect->m_range;
+            pData[offset + 1] = pColorEffect->m_color;
+
+            offset += sizeof(CColorRange);
+        }
+
+        *ppData = pData;
+    }
+
+    return nSize;
+}
+
+// 0x442EA0
+void CColorRanges::Unmarshal(BYTE* pData, ULONG nSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CColorEffects.cpp
+    // __LINE__: 170
+    UTIL_ASSERT(nSize % sizeof(CColorRange) == 0);
+
+    int count = nSize / sizeof(CColorRange);
+    int offset = 0;
+
+    for (int index = 0; index < count; index++) {
+        CColorRange* pColorRange = new CColorRange;
+        pColorRange->m_range = pData[offset];
+        pColorRange->m_color = pData[offset + 1];
+        AddTail(pColorRange);
+
+        offset += sizeof(CColorRange);
+    }
+}
+
+// 0x442F10
+CColorRanges& CColorRanges::operator=(const CColorRanges& other)
+{
+    // NOTE: Uninline.
+    ClearAll();
+
+    POSITION pos = other.GetHeadPosition();
+    while (pos != NULL) {
+        CColorRange* pColorRange = other.GetNext(pos);
+
+        CColorRange* pCopy = new CColorRange;
+        pCopy->m_range = pColorRange->m_range;
+        pCopy->m_color = pColorRange->m_color;
+
+        AddTail(pCopy);
+    }
+
+    return *this;
+}
+
+// 0x442F90
+void CColorRanges::Apply(CGameSprite* pSprite)
+{
+    POSITION pos = GetHeadPosition();
+    while (pos != NULL) {
+        CColorRange* pColorRange = GetNext(pos);
+
+        if (pColorRange->m_range != -1) {
+            // NOTE: Uninline.
+            pSprite->GetAnimation()->SetColorRange(pColorRange->m_range,
+                pColorRange->m_color);
+        } else {
+            // NOTE: Uninline.
+            pSprite->GetAnimation()->SetColorRangeAll(pColorRange->m_color);
+        }
+    }
 }
 
 // -----------------------------------------------------------------------------

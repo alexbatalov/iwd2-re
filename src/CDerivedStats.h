@@ -512,7 +512,7 @@ public:
     /* 051C */ CPtrList field_51C;
     /* 0538 */ CPtrList field_538;
     /* 0554 */ CPtrList field_554;
-    /* 0570 */ CPtrList field_570;
+    /* 0574 */ CColorRanges m_appliedColorRanges;
     /* 0590 */ CColorEffects m_appliedColorEffects;
     /* 0DA8 */ int field_DA8;
     /* 0DAC */ BOOL m_disabledButtons[40];
