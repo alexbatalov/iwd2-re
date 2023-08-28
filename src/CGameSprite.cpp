@@ -1642,6 +1642,12 @@ BOOL CGameSprite::ProcessEffectList()
     return FALSE;
 }
 
+// 0x7332D0
+void CGameSprite::ClearDialogActions()
+{
+    // TODO: Incomplete.
+}
+
 // 0x734550
 BOOL CGameSprite::HandleEffects()
 {
