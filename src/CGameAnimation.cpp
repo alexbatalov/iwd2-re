@@ -154,6 +154,16 @@ void CGameAnimation::Render(CInfinity* pInfinity, CVidMode* pVidMode, INT nSurfa
         transparency);
 }
 
+// NOTE: Uninline.
+void CGameAnimation::ClearColorEffectsAll()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2108
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->ClearColorEffectsAll();
+}
+
 // NOTE: Inlined.
 void CGameAnimation::SetColorEffect(BYTE effectType, BYTE colorRange, COLORREF tintColor, BYTE periodLength)
 {

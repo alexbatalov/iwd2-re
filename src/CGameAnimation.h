@@ -24,6 +24,7 @@ public:
     void ResetMoveScale();
     const CRect& GetEllipseRect();
     void SetAnimationType(USHORT animationID, BYTE* colorRangeValues, WORD facing);
+    void ClearColorEffectsAll();
     void SetColorEffect(BYTE effectType, BYTE colorRange, COLORREF tintColor, BYTE periodLength);
     void SetColorEffectAll(BYTE effectType, COLORREF tintColor, BYTE periodLength);
     void SetColorRange(BYTE colorRange, BYTE rangeValue);

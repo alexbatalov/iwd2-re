@@ -52,6 +52,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CLEAR_TRIGGERS = 8;
 // 0x84CEE0
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_COLOR_CHANGE = 9;
 
+// 0x84CEE1
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_COLOR_RESET = 10;
+
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
@@ -927,6 +930,63 @@ void CMessageColorChange::Run()
                 // NOTE: Uninline.
                 pSprite->GetAnimation()->SetColorRange(index, m_colors[index]);
             }
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F5350
+CMessageColorReset::CMessageColorReset(LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+}
+
+// 0x4088A0
+SHORT CMessageColorReset::GetCommType()
+{
+    return BROADCAST_OTHERS;
+}
+
+// 0x40A0E0
+BYTE CMessageColorReset::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4F5370
+BYTE CMessageColorReset::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_COLOR_RESET;
+}
+
+// 0x4FA840
+void CMessageColorReset::Run()
+{
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
+            BYTE* colors = pSprite->GetBaseStats()->m_colors;
+            for (int index = 0; index < 7; index++) {
+                // NOTE: Uninline.
+                pSprite->GetAnimation()->SetColorRange(index, colors[index]);
+            }
+
+            // NOTE: Uninline.
+            pSprite->GetAnimation()->ClearColorEffectsAll();
         }
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
