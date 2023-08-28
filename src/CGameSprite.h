@@ -282,6 +282,9 @@ public:
     CGameEffectList* GetTimedEffectList();
     void AddPortraitIcon(int icon);
     void RemovePortraitIcon(int icon);
+    CGameSpriteSpellList* GetInnateSpells();
+    CGameSpriteSpellList* GetSongs();
+    CGameSpriteSpellList* GetShapeshifts();
 
     CGameAnimation* GetAnimation();
 

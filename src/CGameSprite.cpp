@@ -2886,6 +2886,24 @@ void CGameSprite::RemovePortraitIcon(int icon)
     }
 }
 
+// 0x5F6810
+CGameSpriteSpellList* CGameSprite::GetInnateSpells()
+{
+    return &m_innateSpells;
+}
+
+// 0x5F6820
+CGameSpriteSpellList* CGameSprite::GetSongs()
+{
+    return &m_songs;
+}
+
+// 0x58FED0
+CGameSpriteSpellList* CGameSprite::GetShapeshifts()
+{
+    return &m_shapeshifts;
+}
+
 // NOTE: Inlined.
 CGameAnimation* CGameSprite::GetAnimation()
 {
