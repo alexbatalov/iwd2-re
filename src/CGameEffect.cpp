@@ -3616,6 +3616,91 @@ CGameEffect* CGameEffectFatigue::Copy()
     return copy;
 }
 
+// 0x4B7270
+BOOL CGameEffectFatigue::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        switch (m_durationType) {
+        case 1:
+            pSprite->GetBaseStats()->m_fatigue += static_cast<BYTE>(m_effectAmount);
+
+            if (pSprite->GetBaseStats()->m_fatigue > 100) {
+                pSprite->GetBaseStats()->m_fatigue = 100;
+            }
+
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+            break;
+        default:
+            pSprite->m_bonusStats.m_nFatigue += static_cast<SHORT>(m_effectAmount);
+            m_done = FALSE;
+            break;
+        }
+        break;
+    case 1:
+        switch (m_durationType) {
+        case 1:
+            pSprite->GetBaseStats()->m_fatigue = static_cast<BYTE>(m_effectAmount);
+
+            if (pSprite->GetBaseStats()->m_fatigue > 100) {
+                pSprite->GetBaseStats()->m_fatigue = 100;
+            }
+
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+            break;
+        default:
+            pSprite->GetDerivedStats()->m_nFatigue += static_cast<BYTE>(m_effectAmount);
+
+            if (pSprite->GetDerivedStats()->m_nFatigue > 100) {
+                pSprite->GetDerivedStats()->m_nFatigue = 100;
+            }
+
+            if (pSprite->GetDerivedStats()->m_nFatigue < 0) {
+                pSprite->GetDerivedStats()->m_nFatigue = 0;
+            }
+
+            m_done = FALSE;
+            break;
+        }
+        break;
+    case 2:
+        switch (m_durationType) {
+        case 1:
+            pSprite->GetBaseStats()->m_fatigue = pSprite->GetBaseStats()->m_fatigue * static_cast<BYTE>(m_effectAmount) / 100;
+
+            if (pSprite->GetBaseStats()->m_fatigue > 100) {
+                pSprite->GetBaseStats()->m_fatigue = 100;
+            }
+
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+            break;
+        default:
+            pSprite->GetDerivedStats()->m_nFatigue = pSprite->GetBaseStats()->m_fatigue * static_cast<BYTE>(m_effectAmount) / 100;
+
+            if (pSprite->GetDerivedStats()->m_nFatigue > 100) {
+                pSprite->GetDerivedStats()->m_nFatigue = 100;
+            }
+
+            if (pSprite->GetDerivedStats()->m_nFatigue < 0) {
+                pSprite->GetDerivedStats()->m_nFatigue = 0;
+            }
+
+            m_done = FALSE;
+            break;
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 15630
+        UTIL_ASSERT(FALSE);
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.

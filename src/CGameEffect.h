@@ -888,6 +888,7 @@ class CGameEffectFatigue : public CGameEffect {
 public:
     CGameEffectFatigue(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectIntoxication : public CGameEffect {
