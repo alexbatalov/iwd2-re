@@ -754,8 +754,8 @@ CGameAnimationTypeMonster::CGameAnimationTypeMonster(USHORT animationID, BYTE* c
     }
 
     // NOTE: Uninline.
-    m_g1VidCellBase.SetResRef(CResRef(m_resRef + "G1"), FALSE, TRUE);
-    m_g2VidCellBase.SetResRef(CResRef(m_resRef + "G2"), FALSE, TRUE);
+    m_g1VidCellBase.SetResRef(CResRef(m_resRef + "G1"), FALSE, TRUE, TRUE);
+    m_g2VidCellBase.SetResRef(CResRef(m_resRef + "G2"), FALSE, TRUE, TRUE);
 
     m_currentVidCellBase = &m_g1VidCellBase;
     m_currentVidCell = &m_g1VidCellBase;
@@ -1281,7 +1281,7 @@ SHORT CGameAnimationTypeMonster::SetSequence(SHORT nSequence)
             m_splitBamChar = '4';
 
             // NOTE: Uninline.
-            m_g1VidCellBase.SetResRef(CResRef(m_resRef + "G1" + m_splitBamChar), FALSE, TRUE);
+            m_g1VidCellBase.SetResRef(CResRef(m_resRef + "G1" + m_splitBamChar), FALSE, TRUE, TRUE);
         }
         break;
     case 2:
@@ -1293,7 +1293,7 @@ SHORT CGameAnimationTypeMonster::SetSequence(SHORT nSequence)
             m_splitBamChar = '6';
 
             // NOTE: Uninline.
-            m_g2VidCellBase.SetResRef(CResRef(m_resRef + "G2" + m_splitBamChar), FALSE, TRUE);
+            m_g2VidCellBase.SetResRef(CResRef(m_resRef + "G2" + m_splitBamChar), FALSE, TRUE, TRUE);
         }
         break;
     case 3:
@@ -1305,7 +1305,7 @@ SHORT CGameAnimationTypeMonster::SetSequence(SHORT nSequence)
             m_splitBamChar = '6';
 
             // NOTE: Uninline.
-            m_g2VidCellBase.SetResRef(CResRef(m_resRef + "G2" + m_splitBamChar), FALSE, TRUE);
+            m_g2VidCellBase.SetResRef(CResRef(m_resRef + "G2" + m_splitBamChar), FALSE, TRUE, TRUE);
         }
         break;
     case 4:
@@ -1321,7 +1321,7 @@ SHORT CGameAnimationTypeMonster::SetSequence(SHORT nSequence)
             m_splitBamChar = '3';
 
             // NOTE: Uninline.
-            m_g1VidCellBase.SetResRef(CResRef(m_resRef + "G1" + m_splitBamChar), FALSE, TRUE);
+            m_g1VidCellBase.SetResRef(CResRef(m_resRef + "G1" + m_splitBamChar), FALSE, TRUE, TRUE);
         }
         break;
     case 6:
@@ -1341,7 +1341,7 @@ SHORT CGameAnimationTypeMonster::SetSequence(SHORT nSequence)
             m_splitBamChar = '2';
 
             // NOTE: Uninline.
-            m_g1VidCellBase.SetResRef(CResRef(m_resRef + "G1" + m_splitBamChar), FALSE, TRUE);
+            m_g1VidCellBase.SetResRef(CResRef(m_resRef + "G1" + m_splitBamChar), FALSE, TRUE, TRUE);
         }
         break;
     case 14:
@@ -1364,7 +1364,7 @@ SHORT CGameAnimationTypeMonster::SetSequence(SHORT nSequence)
             m_splitBamChar = '\0';
 
             // NOTE: Uninline.
-            m_g1VidCellBase.SetResRef(CResRef(m_resRef + "G1" + m_splitBamChar), FALSE, TRUE);
+            m_g1VidCellBase.SetResRef(CResRef(m_resRef + "G1" + m_splitBamChar), FALSE, TRUE, TRUE);
         }
         break;
     default:

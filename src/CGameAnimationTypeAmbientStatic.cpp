@@ -93,10 +93,10 @@ CGameAnimationTypeAmbientStatic::CGameAnimationTypeAmbientStatic(USHORT animatio
     }
 
     // NOTE: Uninline.
-    m_g1VidCellBase.SetResRef(CResRef(sName + "G1"), FALSE, TRUE);
+    m_g1VidCellBase.SetResRef(CResRef(sName + "G1"), FALSE, TRUE, TRUE);
 
     if (!MIRROR_BAM) {
-        m_g1VidCellExtend.SetResRef(CResRef(sName + "G1E"), FALSE, TRUE);
+        m_g1VidCellExtend.SetResRef(CResRef(sName + "G1E"), FALSE, TRUE, TRUE);
     }
 
     m_currentVidCellExtend = &m_g1VidCellExtend;

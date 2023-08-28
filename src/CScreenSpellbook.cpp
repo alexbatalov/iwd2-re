@@ -247,7 +247,7 @@ void CScreenSpellbook::EngineGameInit()
     m_cUIManager.GetPanel(50)->SetActive(FALSE);
 
     // NOTE: Uninline.
-    m_vcFlash.SetResRef(CResRef("FLASH"), g_pBaldurChitin->field_4A28, TRUE);
+    m_vcFlash.SetResRef(CResRef("FLASH"), g_pBaldurChitin->field_4A28, TRUE, TRUE);
 }
 
 // 0x5D72C0
@@ -1478,7 +1478,7 @@ BOOL CUIControlButtonSpellbookSpellInfoIcon::Render(BOOL bForce)
     rClip.IntersectRect(rControlFrame, m_rDirty);
 
     // NOTE: Uninline.
-    vcIcon.SetResRef(m_iconResRef, m_pPanel->m_pManager->m_bDoubleSize, TRUE);
+    vcIcon.SetResRef(m_iconResRef, m_pPanel->m_pManager->m_bDoubleSize, TRUE, TRUE);
 
     if (vcIcon.pRes == NULL) {
         return FALSE;

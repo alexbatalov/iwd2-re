@@ -214,7 +214,7 @@ CGameAnimationTypeMonsterMulti::CGameAnimationTypeMonsterMulti(USHORT animationI
         for (BYTE quad = 0; quad < m_nQuadrants; quad++) {
             CString sSuffix = static_cast<char>(quad + '1');
 
-            m_g2VidCellBase[quad].SetResRef(CResRef(m_resRef + '2' + sSuffix + m_splitBamChar + m_splitDirectionBamChar), m_bDoubleBlit, TRUE);
+            m_g2VidCellBase[quad].SetResRef(CResRef(m_resRef + '2' + sSuffix + m_splitBamChar + m_splitDirectionBamChar), m_bDoubleBlit, TRUE, TRUE);
 
             m_g2VidCellBase[quad].m_cPalette.m_nAUCounterBase = reinterpret_cast<int>(m_g2VidCellBase);
         }
@@ -222,11 +222,11 @@ CGameAnimationTypeMonsterMulti::CGameAnimationTypeMonsterMulti(USHORT animationI
         for (BYTE quad = 0; quad < m_nQuadrants; quad++) {
             CString sSuffix = static_cast<char>(quad + '1');
 
-            m_g1VidCellBase[quad].SetResRef(CResRef(m_resRef + "G1" + sSuffix), m_bDoubleBlit, TRUE);
-            m_g2VidCellBase[quad].SetResRef(CResRef(m_resRef + "G2" + sSuffix), m_bDoubleBlit, TRUE);
-            m_g3VidCellBase[quad].SetResRef(CResRef(m_resRef + "G3" + sSuffix), m_bDoubleBlit, TRUE);
-            m_g4VidCellBase[quad].SetResRef(CResRef(m_resRef + "G4" + sSuffix), m_bDoubleBlit, TRUE);
-            m_g5VidCellBase[quad].SetResRef(CResRef(m_resRef + "G5" + sSuffix), m_bDoubleBlit, TRUE);
+            m_g1VidCellBase[quad].SetResRef(CResRef(m_resRef + "G1" + sSuffix), m_bDoubleBlit, TRUE, TRUE);
+            m_g2VidCellBase[quad].SetResRef(CResRef(m_resRef + "G2" + sSuffix), m_bDoubleBlit, TRUE, TRUE);
+            m_g3VidCellBase[quad].SetResRef(CResRef(m_resRef + "G3" + sSuffix), m_bDoubleBlit, TRUE, TRUE);
+            m_g4VidCellBase[quad].SetResRef(CResRef(m_resRef + "G4" + sSuffix), m_bDoubleBlit, TRUE, TRUE);
+            m_g5VidCellBase[quad].SetResRef(CResRef(m_resRef + "G5" + sSuffix), m_bDoubleBlit, TRUE, TRUE);
 
             m_g1VidCellBase[quad].m_cPalette.m_nAUCounterBase = reinterpret_cast<int>(m_g1VidCellBase);
             m_g2VidCellBase[quad].m_cPalette.m_nAUCounterBase = reinterpret_cast<int>(m_g2VidCellBase);

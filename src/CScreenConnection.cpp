@@ -295,7 +295,7 @@ void CScreenConnection::EngineActivated()
     m_preLoadFontStnSml.RegisterFont();
 
     // NOTE: Uninline.
-    m_vcTorch.SetResRef(CResRef("MMTRCHB"), g_pBaldurChitin->field_4A28, TRUE);
+    m_vcTorch.SetResRef(CResRef("MMTRCHB"), g_pBaldurChitin->field_4A28, TRUE, TRUE);
 
     if (field_FA8) {
         DWORD dwSectorsPerCluster;

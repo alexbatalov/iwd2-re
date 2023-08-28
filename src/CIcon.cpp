@@ -28,7 +28,7 @@ void CIcon::RenderIcon(int a1, const CPoint& pos, const CSize& size, const CRect
 
     if (cResIcon != "") {
         // NOTE: Uninline.
-        vcIcon.SetResRef(cResIcon, bDoubleSize, TRUE);
+        vcIcon.SetResRef(cResIcon, bDoubleSize, TRUE, TRUE);
 
         if (vcIcon.pRes != NULL) {
             vcIcon.SequenceSet(1);
@@ -71,7 +71,7 @@ void CIcon::RenderIcon(int a1, const CPoint& pos, const CSize& size, const CRect
 
             if (wCount > 0) {
                 // NOTE: Uninline.
-                vcNumber.SetResRef(CResRef("NUMBER"), bDoubleSize, TRUE);
+                vcNumber.SetResRef(CResRef("NUMBER"), bDoubleSize, TRUE, TRUE);
 
                 vcNumber.SequenceSet(0);
 
@@ -96,7 +96,7 @@ void CIcon::RenderIcon(int a1, const CPoint& pos, const CSize& size, const CRect
                 } while (wRemaining > 0);
             } else if (bForceCount) {
                 // NOTE: Uninline.
-                vcNumber.SetResRef(CResRef("NUMBER"), bDoubleSize, TRUE);
+                vcNumber.SetResRef(CResRef("NUMBER"), bDoubleSize, TRUE, TRUE);
 
                 vcNumber.SequenceSet(0);
                 vcNumber.FrameSet(0);
@@ -113,7 +113,7 @@ void CIcon::RenderIcon(int a1, const CPoint& pos, const CSize& size, const CRect
 
             if (wSecondCount > 0 || bForceSecondCount) {
                 // NOTE: Uninline.
-                vcNumber.SetResRef(CResRef("NUMBER"), bDoubleSize, TRUE);
+                vcNumber.SetResRef(CResRef("NUMBER"), bDoubleSize, TRUE, TRUE);
 
                 vcNumber.SequenceSet(0);
 

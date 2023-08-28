@@ -2786,7 +2786,7 @@ BOOL CUIControlButtonStoreRequesterItem::Render(BOOL bForce)
     CVidMode* pVidMode = g_pBaldurChitin->GetCurrentVideoMode();
 
     // NOTE: Uninline.
-    vcIcon.SetResRef(m_resRef, m_pPanel->m_pManager->m_bDoubleSize, TRUE);
+    vcIcon.SetResRef(m_resRef, m_pPanel->m_pManager->m_bDoubleSize, TRUE, TRUE);
 
     vcIcon.SequenceSet(1);
     vcIcon.FrameSet(0);

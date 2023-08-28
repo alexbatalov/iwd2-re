@@ -9460,7 +9460,7 @@ BOOL CUIControlButtonCharGenFeatsCircle::Render(BOOL bForce)
         rClip.IntersectRect(rControlRect, m_rDirty);
 
         // NOTE: Uninline.
-        vcIcon.SetResRef(CResRef("GUIPFC"), m_pPanel->m_pManager->m_bDoubleSize, TRUE);
+        vcIcon.SetResRef(CResRef("GUIPFC"), m_pPanel->m_pManager->m_bDoubleSize, TRUE, TRUE);
 
         if (nKnobValue >= nValue) {
             vcIcon.FrameSet(1);

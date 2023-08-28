@@ -51,7 +51,7 @@ CUIControlButton::CUIControlButton(CUIPanel* panel, UI_CONTROL_BUTTON* controlIn
     field_662 = 1;
 
     // NOTE: Uninline.
-    m_cVidCell.SetResRef(CResRef(controlInfo->refBam), m_pPanel->m_pManager->m_bDoubleSize, FALSE);
+    m_cVidCell.SetResRef(CResRef(controlInfo->refBam), m_pPanel->m_pManager->m_bDoubleSize, FALSE, TRUE);
 
     m_cVidCell.SequenceSet(controlInfo->nSequence);
     m_cVidCell.FrameSet(m_nNormalFrame);

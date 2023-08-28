@@ -27,7 +27,7 @@ CVidCell::CVidCell()
 CVidCell::CVidCell(CResRef cNewResRef, BOOL bDoubleSize)
 {
     // NOTE: Uninline.
-    SetResRef(cNewResRef, bDoubleSize, TRUE);
+    SetResRef(cNewResRef, bDoubleSize, TRUE, TRUE);
 
     field_C8 = 1;
     m_nCurrentFrame = 0;
@@ -1958,6 +1958,19 @@ BOOL CVidCell::FXRender3d(INT nRefPtX, INT nRefPtY, const CRect& rFXRect, const 
     // TODO: Incomplete.
 
     return FALSE;
+}
+
+// 0x58FC70
+void CVidCell::SetResRef(const CResRef& cNewResRef, BOOL bDoubleSize, BOOL bSetAutoRequest, BOOL bWarningIfMissing)
+{
+    CResHelper<CResCell, 1000>::SetResRef(cNewResRef, bSetAutoRequest, bWarningIfMissing);
+    m_header.SetResRef(cNewResRef, bSetAutoRequest, FALSE);
+
+    if (pRes != NULL) {
+        pRes->m_bCacheHeader = m_header.GetResRef() == "";
+    }
+
+    m_bDoubleSize = bDoubleSize;
 }
 
 // NOTE: Inlined in many places. Seen in `CVidCell::GetFrameCenterPoint`

@@ -100,9 +100,9 @@ CGameAnimationTypeMonsterQuadrant::CGameAnimationTypeMonsterQuadrant(USHORT anim
     for (quad = 0; quad < m_nQuadrants; quad++) {
         CString sSuffix = static_cast<char>(quad + '1');
 
-        m_g1VidCellBase[quad].SetResRef(CResRef(m_resRef + "G1" + v1 + sSuffix), FALSE, TRUE);
-        m_g2VidCellBase[quad].SetResRef(CResRef(m_resRef + "G2" + v1 + sSuffix), FALSE, TRUE);
-        m_g3VidCellBase[quad].SetResRef(CResRef(m_resRef + "G3" + v1 + sSuffix), FALSE, TRUE);
+        m_g1VidCellBase[quad].SetResRef(CResRef(m_resRef + "G1" + v1 + sSuffix), FALSE, TRUE, TRUE);
+        m_g2VidCellBase[quad].SetResRef(CResRef(m_resRef + "G2" + v1 + sSuffix), FALSE, TRUE, TRUE);
+        m_g3VidCellBase[quad].SetResRef(CResRef(m_resRef + "G3" + v1 + sSuffix), FALSE, TRUE, TRUE);
 
         m_g1VidCellBase[quad].m_cPalette.m_nAUCounterBase = reinterpret_cast<int>(m_g1VidCellBase);
         m_g2VidCellBase[quad].m_cPalette.m_nAUCounterBase = reinterpret_cast<int>(m_g2VidCellBase);
@@ -125,9 +125,9 @@ CGameAnimationTypeMonsterQuadrant::CGameAnimationTypeMonsterQuadrant(USHORT anim
         for (quad = 0; quad < m_nQuadrants; quad++) {
             CString sSuffix = static_cast<char>(quad + '1');
 
-            m_g1VidCellExtend[quad].SetResRef(CResRef(m_resRef + "G1" + v1 + sSuffix + "E"), FALSE, TRUE);
-            m_g2VidCellExtend[quad].SetResRef(CResRef(m_resRef + "G2" + v1 + sSuffix + "E"), FALSE, TRUE);
-            m_g3VidCellExtend[quad].SetResRef(CResRef(m_resRef + "G3" + v1 + sSuffix + "E"), FALSE, TRUE);
+            m_g1VidCellExtend[quad].SetResRef(CResRef(m_resRef + "G1" + v1 + sSuffix + "E"), FALSE, TRUE, TRUE);
+            m_g2VidCellExtend[quad].SetResRef(CResRef(m_resRef + "G2" + v1 + sSuffix + "E"), FALSE, TRUE, TRUE);
+            m_g3VidCellExtend[quad].SetResRef(CResRef(m_resRef + "G3" + v1 + sSuffix + "E"), FALSE, TRUE, TRUE);
 
             m_g1VidCellExtend[quad].m_cPalette.m_nAUCounterBase = reinterpret_cast<int>(m_g1VidCellExtend);
             m_g2VidCellExtend[quad].m_cPalette.m_nAUCounterBase = reinterpret_cast<int>(m_g2VidCellExtend);

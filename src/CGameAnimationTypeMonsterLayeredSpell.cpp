@@ -76,12 +76,12 @@ CGameAnimationTypeMonsterLayeredSpell::CGameAnimationTypeMonsterLayeredSpell(USH
         UTIL_ASSERT(m_currentVidCell != NULL);
     }
 
-    m_g1VidCellBase.SetResRef(CResRef(m_resRef + "G1"), FALSE, TRUE);
-    m_g2VidCellBase.SetResRef(CResRef(m_resRef + "G2"), FALSE, TRUE);
+    m_g1VidCellBase.SetResRef(CResRef(m_resRef + "G1"), FALSE, TRUE, TRUE);
+    m_g2VidCellBase.SetResRef(CResRef(m_resRef + "G2"), FALSE, TRUE, TRUE);
 
     if (!MIRROR_BAM) {
-        m_g1VidCellExtend.SetResRef(CResRef(m_resRef + "G1E"), FALSE, TRUE);
-        m_g2VidCellExtend.SetResRef(CResRef(m_resRef + "G2E"), FALSE, TRUE);
+        m_g1VidCellExtend.SetResRef(CResRef(m_resRef + "G1E"), FALSE, TRUE, TRUE);
+        m_g2VidCellExtend.SetResRef(CResRef(m_resRef + "G2E"), FALSE, TRUE, TRUE);
     }
 
     m_currentVidCellBase = &m_g1VidCellBase;

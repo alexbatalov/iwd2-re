@@ -122,43 +122,43 @@ CGameAnimationTypeCharacterOld::CGameAnimationTypeCharacterOld(USHORT animationI
         UTIL_ASSERT(FALSE);
     }
 
-    m_g1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "G1"), FALSE, TRUE);
-    m_w2VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "W2"), FALSE, TRUE);
-    m_caVidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "CA"), FALSE, TRUE);
-    m_a1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A1"), FALSE, TRUE);
-    m_a2VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A3"), FALSE, TRUE);
-    m_a3VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A5"), FALSE, TRUE);
+    m_g1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "G1"), FALSE, TRUE, TRUE);
+    m_w2VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "W2"), FALSE, TRUE, TRUE);
+    m_caVidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "CA"), FALSE, TRUE, TRUE);
+    m_a1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A1"), FALSE, TRUE, TRUE);
+    m_a2VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A3"), FALSE, TRUE, TRUE);
+    m_a3VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A5"), FALSE, TRUE, TRUE);
 
     if (!MIRROR_BAM) {
-        m_g1VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "G1E"), FALSE, TRUE);
-        m_w2VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "W2E"), FALSE, TRUE);
-        m_caVidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "CAE"), FALSE, TRUE);
-        m_a1VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A1E"), FALSE, TRUE);
-        m_a2VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A3E"), FALSE, TRUE);
-        m_a3VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A5E"), FALSE, TRUE);
+        m_g1VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "G1E"), FALSE, TRUE, TRUE);
+        m_w2VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "W2E"), FALSE, TRUE, TRUE);
+        m_caVidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "CAE"), FALSE, TRUE, TRUE);
+        m_a1VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A1E"), FALSE, TRUE, TRUE);
+        m_a2VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A3E"), FALSE, TRUE, TRUE);
+        m_a3VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A5E"), FALSE, TRUE, TRUE);
     }
 
-    m_g1VidCellShadowBase.SetResRef(CResRef(m_resRef + m_armorCode + "G1"), FALSE, TRUE);
-    m_w2VidCellShadowBase.SetResRef(CResRef(m_resRef + m_armorCode + "W2"), FALSE, TRUE);
-    m_caVidCellShadowBase.SetResRef(CResRef(m_resRef + m_armorCode + "CA"), FALSE, TRUE);
-    m_a1VidCellShadowBase.SetResRef(CResRef(m_resRef + m_armorCode + "A1"), FALSE, TRUE);
-    m_a2VidCellShadowBase.SetResRef(CResRef(m_resRef + m_armorCode + "A3"), FALSE, TRUE);
-    m_a3VidCellShadowBase.SetResRef(CResRef(m_resRef + m_armorCode + "A5"), FALSE, TRUE);
+    m_g1VidCellShadowBase.SetResRef(CResRef(m_resRef + m_armorCode + "G1"), FALSE, TRUE, TRUE);
+    m_w2VidCellShadowBase.SetResRef(CResRef(m_resRef + m_armorCode + "W2"), FALSE, TRUE, TRUE);
+    m_caVidCellShadowBase.SetResRef(CResRef(m_resRef + m_armorCode + "CA"), FALSE, TRUE, TRUE);
+    m_a1VidCellShadowBase.SetResRef(CResRef(m_resRef + m_armorCode + "A1"), FALSE, TRUE, TRUE);
+    m_a2VidCellShadowBase.SetResRef(CResRef(m_resRef + m_armorCode + "A3"), FALSE, TRUE, TRUE);
+    m_a3VidCellShadowBase.SetResRef(CResRef(m_resRef + m_armorCode + "A5"), FALSE, TRUE, TRUE);
 
     if (MIRROR_BAM) {
-        m_g1VidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "G1X"), FALSE, TRUE);
-        m_w2VidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "W2X"), FALSE, TRUE);
-        m_caVidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "CAX"), FALSE, TRUE);
-        m_a1VidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A1X"), FALSE, TRUE);
-        m_a2VidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A3X"), FALSE, TRUE);
-        m_a3VidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A5X"), FALSE, TRUE);
+        m_g1VidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "G1X"), FALSE, TRUE, TRUE);
+        m_w2VidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "W2X"), FALSE, TRUE, TRUE);
+        m_caVidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "CAX"), FALSE, TRUE, TRUE);
+        m_a1VidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A1X"), FALSE, TRUE, TRUE);
+        m_a2VidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A3X"), FALSE, TRUE, TRUE);
+        m_a3VidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A5X"), FALSE, TRUE, TRUE);
     } else {
-        m_g1VidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "G1E"), FALSE, TRUE);
-        m_w2VidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "W2E"), FALSE, TRUE);
-        m_caVidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "CAE"), FALSE, TRUE);
-        m_a1VidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A1E"), FALSE, TRUE);
-        m_a2VidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A3E"), FALSE, TRUE);
-        m_a3VidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A5E"), FALSE, TRUE);
+        m_g1VidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "G1E"), FALSE, TRUE, TRUE);
+        m_w2VidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "W2E"), FALSE, TRUE, TRUE);
+        m_caVidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "CAE"), FALSE, TRUE, TRUE);
+        m_a1VidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A1E"), FALSE, TRUE, TRUE);
+        m_a2VidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A3E"), FALSE, TRUE, TRUE);
+        m_a3VidCellShadowExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A5E"), FALSE, TRUE, TRUE);
     }
 
     m_currentVidCellBase = &m_g1VidCellBase;

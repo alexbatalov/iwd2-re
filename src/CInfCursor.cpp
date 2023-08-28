@@ -124,13 +124,13 @@ CVidCell* CInfCursor::GetCurrentCursor()
 void CInfCursor::Initialize()
 {
     // NOTE: Uninline.
-    m_vcArrow.SetResRef(CResRef("CURSARW"), FALSE, TRUE);
+    m_vcArrow.SetResRef(CResRef("CURSARW"), FALSE, TRUE, TRUE);
 
     // NOTE: Uninline.
-    m_vcCursors.SetResRef(CResRef("CURSORS"), FALSE, TRUE);
+    m_vcCursors.SetResRef(CResRef("CURSORS"), FALSE, TRUE, TRUE);
 
     // NOTE: Uninline.
-    m_vcToolTip.SetResRef(CResRef("TOOLTIP"), FALSE, TRUE);
+    m_vcToolTip.SetResRef(CResRef("TOOLTIP"), FALSE, TRUE, TRUE);
 
     m_vcToolTip.Initialize();
 

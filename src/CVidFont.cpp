@@ -198,7 +198,7 @@ void CVidFont::SetColor(COLORREF rgbForegroundColor, COLORREF rgbBackgroundColor
 void CVidFont::SetResRef(const CResRef& cNewResRef, BOOL bDoubleSize, BOOL bSetAutoRequest)
 {
     // NOTE: Uninline.
-    CVidCell::SetResRef(cNewResRef, bDoubleSize, bSetAutoRequest);
+    CVidCell::SetResRef(cNewResRef, bDoubleSize, bSetAutoRequest, TRUE);
 
     m_rgbForegroundColor = RGB(255, 255, 255);
     m_rgbBackgroundColor = RGB(255, 255, 255);

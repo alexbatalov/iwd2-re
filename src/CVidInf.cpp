@@ -1765,7 +1765,7 @@ void CVidInf::LoadFogOWarSurfaces(const CString& a2)
             }
 
             // NOTE: Uninline.
-            tileVidCell.SetResRef(CResRef(field_73A), FALSE, TRUE);
+            tileVidCell.SetResRef(CResRef(field_73A), FALSE, TRUE, TRUE);
 
             tileVidCell.SequenceSet(0);
             tileVidCell.pRes->Demand();
@@ -2050,7 +2050,7 @@ void CVidInf::RenderPointerImage(CVidCell* pPointerVidCell, INT nSurface, INT nN
 
     if (nNumber > 0) {
         // NOTE: Uninline.
-        numberVidCell.SetResRef(CResRef("NUMBER"), FALSE, TRUE);
+        numberVidCell.SetResRef(CResRef("NUMBER"), FALSE, TRUE, TRUE);
 
         numberVidCell.SequenceSet(0);
         numberVidCell.SetTintColor(pPointerVidCell->GetTintColor());

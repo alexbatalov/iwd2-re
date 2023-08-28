@@ -57,7 +57,7 @@ CUIControlSlider::CUIControlSlider(CUIPanel* panel, UI_CONTROL_SLIDER* controlIn
     m_mosBackground.m_bDoubleSize = m_pPanel->m_pManager->m_bDoubleSize;
 
     // NOTE: Uninline.
-    m_vcKnob.SetResRef(CResRef(controlInfo->refKnob), m_pPanel->m_pManager->m_bDoubleSize, FALSE);
+    m_vcKnob.SetResRef(CResRef(controlInfo->refKnob), m_pPanel->m_pManager->m_bDoubleSize, FALSE, TRUE);
 
     m_vcKnob.SequenceSet(m_nSequence);
 }

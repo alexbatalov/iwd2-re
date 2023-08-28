@@ -50,7 +50,7 @@ CGameAnimationTypeFlying::CGameAnimationTypeFlying(USHORT animationID, BYTE* col
     m_falseColor = FALSE;
 
     // NOTE: Uninline.
-    m_g1VidCellBase.SetResRef(CResRef(v1 + "G1"), FALSE, TRUE);
+    m_g1VidCellBase.SetResRef(CResRef(v1 + "G1"), FALSE, TRUE, TRUE);
 
     m_currentVidCellBase = &m_g1VidCellBase;
     m_currentVidCell = &m_g1VidCellBase;

@@ -158,11 +158,11 @@ CGameAnimationTypeAmbient::CGameAnimationTypeAmbient(USHORT animationID, BYTE* c
     }
 
     // NOTE: Uninline.
-    m_g1VidCellBase.SetResRef(CResRef(m_resRef + "G1"), FALSE, TRUE);
+    m_g1VidCellBase.SetResRef(CResRef(m_resRef + "G1"), FALSE, TRUE, TRUE);
 
     if (!MIRROR_BAM) {
         // NOTE: Uninline.
-        m_g1VidCellExtend.SetResRef(CResRef(m_resRef + "G1E"), FALSE, TRUE);
+        m_g1VidCellExtend.SetResRef(CResRef(m_resRef + "G1E"), FALSE, TRUE, TRUE);
     }
 
     m_currentVidCellExtend = &m_g1VidCellExtend;

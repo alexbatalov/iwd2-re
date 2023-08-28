@@ -34,15 +34,15 @@ CGameAnimationTypeMonsterAnkheg::CGameAnimationTypeMonsterAnkheg(USHORT animatio
     }
 
     // NOTE: Uninline.
-    m_g1VidCellBase.SetResRef(CResRef(m_resRef + "G1"), FALSE, TRUE);
-    m_g2VidCellBase.SetResRef(CResRef(m_resRef + "G2"), FALSE, TRUE);
-    m_g3VidCellBase.SetResRef(CResRef(m_resRef + "G3"), FALSE, TRUE);
+    m_g1VidCellBase.SetResRef(CResRef(m_resRef + "G1"), FALSE, TRUE, TRUE);
+    m_g2VidCellBase.SetResRef(CResRef(m_resRef + "G2"), FALSE, TRUE, TRUE);
+    m_g3VidCellBase.SetResRef(CResRef(m_resRef + "G3"), FALSE, TRUE, TRUE);
 
     if (!MIRROR_BAM) {
         // NOTE: Uninline.
-        m_g1VidCellExtend.SetResRef(CResRef(m_resRef + "G1E"), FALSE, TRUE);
-        m_g2VidCellExtend.SetResRef(CResRef(m_resRef + "G2E"), FALSE, TRUE);
-        m_g3VidCellExtend.SetResRef(CResRef(m_resRef + "G3E"), FALSE, TRUE);
+        m_g1VidCellExtend.SetResRef(CResRef(m_resRef + "G1E"), FALSE, TRUE, TRUE);
+        m_g2VidCellExtend.SetResRef(CResRef(m_resRef + "G2E"), FALSE, TRUE, TRUE);
+        m_g3VidCellExtend.SetResRef(CResRef(m_resRef + "G3E"), FALSE, TRUE, TRUE);
     }
 
     m_currentVidCellExtend = &m_g1VidCellExtend;
@@ -50,15 +50,15 @@ CGameAnimationTypeMonsterAnkheg::CGameAnimationTypeMonsterAnkheg(USHORT animatio
     m_currentVidCell = &m_g1VidCellBase;
 
     // NOTE: Uninline.
-    m_g1VidCellHoleBase.SetResRef(CResRef(m_resRef + "DG1"), FALSE, TRUE);
-    m_g2VidCellHoleBase.SetResRef(CResRef(m_resRef + "DG2"), FALSE, TRUE);
-    m_g3VidCellHoleBase.SetResRef(CResRef(m_resRef + "DG3"), FALSE, TRUE);
+    m_g1VidCellHoleBase.SetResRef(CResRef(m_resRef + "DG1"), FALSE, TRUE, TRUE);
+    m_g2VidCellHoleBase.SetResRef(CResRef(m_resRef + "DG2"), FALSE, TRUE, TRUE);
+    m_g3VidCellHoleBase.SetResRef(CResRef(m_resRef + "DG3"), FALSE, TRUE, TRUE);
 
     if (!MIRROR_BAM) {
         // NOTE: Uninline.
-        m_g1VidCellHoleExtend.SetResRef(CResRef(m_resRef + "DG1E"), FALSE, TRUE);
-        m_g2VidCellHoleExtend.SetResRef(CResRef(m_resRef + "DG2E"), FALSE, TRUE);
-        m_g3VidCellHoleExtend.SetResRef(CResRef(m_resRef + "DG3E"), FALSE, TRUE);
+        m_g1VidCellHoleExtend.SetResRef(CResRef(m_resRef + "DG1E"), FALSE, TRUE, TRUE);
+        m_g2VidCellHoleExtend.SetResRef(CResRef(m_resRef + "DG2E"), FALSE, TRUE, TRUE);
+        m_g3VidCellHoleExtend.SetResRef(CResRef(m_resRef + "DG3E"), FALSE, TRUE, TRUE);
     }
 
     m_currentVidCellHoleExtend = &m_g1VidCellHoleExtend;

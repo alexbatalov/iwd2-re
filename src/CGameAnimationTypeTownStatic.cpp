@@ -126,7 +126,7 @@ CGameAnimationTypeTownStatic::CGameAnimationTypeTownStatic(USHORT animationID, B
     }
 
     // NOTE: Uninline.
-    m_g1VidCellBase.SetResRef(CResRef(sName), FALSE, TRUE);
+    m_g1VidCellBase.SetResRef(CResRef(sName), FALSE, TRUE, TRUE);
 
     m_currentVidCellBase = &m_g1VidCellBase;
     m_currentVidCell = &m_g1VidCellBase;
