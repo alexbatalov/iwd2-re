@@ -19,6 +19,9 @@ const SHORT CMessage::SEND = 1;
 // 0x84820A
 const SHORT CMessage::BROADCAST = 2;
 
+// 0x84820C
+const SHORT CMessage::BROADCAST_OTHERS = 3;
+
 // 0x84820E
 const SHORT CMessage::BROADCAST_FORCED = 4;
 
@@ -45,6 +48,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CLEAR_GROUP_SLOT = 7;
 
 // 0x84CEDF
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CLEAR_TRIGGERS = 8;
+
+// 0x84CEE0
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_COLOR_CHANGE = 9;
 
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
@@ -863,6 +869,64 @@ void CMessageClearTriggers::Run()
     if (rc == CGameObjectArray::SUCCESS) {
         if ((pSprite->GetObjectType() & CGameObject::TYPE_AIBASE) != 0) {
             pSprite->ClearTriggers();
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F5300
+CMessageColorChange::CMessageColorChange(BYTE* colors, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    for (int index = 0; index < 7; index++) {
+        m_colors[index] = colors[index];
+    }
+}
+
+// 0x4088A0
+SHORT CMessageColorChange::GetCommType()
+{
+    return BROADCAST_OTHERS;
+}
+
+// 0x40A0E0
+BYTE CMessageColorChange::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4F5340
+BYTE CMessageColorChange::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_COLOR_CHANGE;
+}
+
+// 0x4FA570
+void CMessageColorChange::Run()
+{
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
+            for (int index = 0; index < 7; index++) {
+                pSprite->GetBaseStats()->m_colors[index] = m_colors[index];
+
+                // NOTE: Uninline.
+                pSprite->GetAnimation()->SetColorRange(index, m_colors[index]);
+            }
         }
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,

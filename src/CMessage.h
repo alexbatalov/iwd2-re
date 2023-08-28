@@ -19,6 +19,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_CLEAR_DIALOG_ACTIONS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_CLEAR_GROUP_SLOT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_CLEAR_TRIGGERS;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_COLOR_CHANGE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -111,6 +112,7 @@ class CMessage {
 public:
     static const SHORT SEND;
     static const SHORT BROADCAST;
+    static const SHORT BROADCAST_OTHERS;
     static const SHORT BROADCAST_FORCED;
 
     CMessage(LONG caller, LONG target);
@@ -211,6 +213,17 @@ public:
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
     void Run() override;
+};
+
+class CMessageColorChange : public CMessage {
+public:
+    CMessageColorChange(BYTE* colors, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ BYTE m_colors[7];
 };
 
 class CMessageStoreRelease : public CMessage {
