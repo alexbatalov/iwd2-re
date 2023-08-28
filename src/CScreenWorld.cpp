@@ -369,6 +369,17 @@ void CScreenWorld::OnRButtonUp(CPoint pt)
     }
 }
 
+// 0x68C340
+void CScreenWorld::StartScroll(CPoint dest, SHORT speed)
+{
+    CGameArea* pArea = g_pBaldurChitin->GetObjectGame()->GetVisibleArea();
+    CInfinity* pInfinity = pArea->GetInfinity();
+
+    pInfinity->m_ptScrollDest = dest;
+    pInfinity->m_nLastTickCount = GetTickCount();
+    pInfinity->m_autoScrollSpeed = static_cast<SHORT>(CChitin::TIMER_UPDATES_PER_SECOND * speed / 24);
+}
+
 // 0x68C3D0
 void CScreenWorld::AsynchronousUpdate(BOOL bActiveEngine)
 {
