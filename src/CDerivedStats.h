@@ -2,6 +2,7 @@
 #define CDERIVEDSTATS_H_
 
 #include "CAIObjectType.h"
+#include "CColorEffects.h"
 #include "CImmunities.h"
 
 #include <bitset>
@@ -512,7 +513,7 @@ public:
     /* 0538 */ CPtrList field_538;
     /* 0554 */ CPtrList field_554;
     /* 0570 */ CPtrList field_570;
-    /* 0590 */ CPtrList field_590;
+    /* 0590 */ CColorEffects m_appliedColorEffects;
     /* 0DA8 */ int field_DA8;
     /* 0DAC */ BOOL m_disabledButtons[40];
     /* 0E4C */ BOOL m_disabledSpellTypes[3];

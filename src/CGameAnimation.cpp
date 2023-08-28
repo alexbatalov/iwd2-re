@@ -125,6 +125,26 @@ void CGameAnimation::Render(CInfinity* pInfinity, CVidMode* pVidMode, INT nSurfa
 }
 
 // NOTE: Inlined.
+void CGameAnimation::SetColorEffect(BYTE effectType, BYTE colorRange, COLORREF tintColor, BYTE periodLength)
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2109
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->SetColorEffect(effectType, colorRange, tintColor, periodLength);
+}
+
+// NOTE: Inlined.
+void CGameAnimation::SetColorEffectAll(BYTE effectType, COLORREF tintColor, BYTE periodLength)
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2110
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->SetColorEffectAll(effectType, tintColor, periodLength);
+}
+
+// NOTE: Inlined.
 CGameAnimationType* CGameAnimation::GetAnimation()
 {
     // __FILE__: .\Include\ObjAnimation.h

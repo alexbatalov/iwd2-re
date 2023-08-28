@@ -56,6 +56,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CChatBuffer.h"
     "src/CChitin.cpp"
     "src/CChitin.h"
+    "src/CColorEffects.cpp"
+    "src/CColorEffects.h"
     "src/CCreatureFile.cpp"
     "src/CCreatureFile.h"
     "src/CCrypt.cpp"
