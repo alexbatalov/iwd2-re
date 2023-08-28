@@ -18,6 +18,9 @@ public:
     void CalculateFxRect(CRect& rFx, CPoint& ptReference, LONG posZ);
     void ChangeDirection(SHORT nDirection);
     void GetAnimationResRef(CString& resRef, BYTE range);
+    BYTE GetMoveScale();
+    BYTE GetMoveScaleDefault();
+    void SetMoveScale(BYTE scale);
     void ResetMoveScale();
     const CRect& GetEllipseRect();
     void SetAnimationType(USHORT animationID, BYTE* colorRangeValues, WORD facing);

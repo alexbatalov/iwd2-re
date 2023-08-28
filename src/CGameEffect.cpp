@@ -989,6 +989,42 @@ void CGameEffect::SetSourceId(LONG sourceID)
     m_sourceID = sourceID;
 }
 
+// 0x4C4080
+void CGameEffect::AddSlowEffect(CGameSprite* pSprite)
+{
+    if ((pSprite->GetDerivedStats()->m_generalState & STATE_HASTED) != 0) {
+        pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
+            CGAMEEFFECT_HASTE,
+            pSprite->GetEquipedEffectList()->GetPosCurrent(),
+            -1);
+        pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
+            CGAMEEFFECT_HASTE,
+            pSprite->GetTimedEffectList()->GetPosCurrent(),
+            -1);
+    }
+
+    pSprite->GetDerivedStats()->m_generalState |= STATE_SLOWED;
+    pSprite->GetDerivedStats()->field_C -= 2;
+    pSprite->GetDerivedStats()->m_nTHAC0 -= 2;
+    pSprite->GetDerivedStats()->m_nSaveVSReflex -= 2;
+    pSprite->m_bonusStats.m_nDamageBonus -= 2;
+
+    if (pSprite->GetDerivedStats()->m_nNumberOfAttacks > 2) {
+        pSprite->GetDerivedStats()->m_nNumberOfAttacks -= 1;
+    }
+
+    if (pSprite->GetAnimation()->GetMoveScale() != 0) {
+        pSprite->GetAnimation()->SetMoveScale(pSprite->GetAnimation()->GetMoveScaleDefault() / 2);
+
+        if (m_secondaryType != 0) {
+            pSprite->DropPath();
+        }
+    }
+
+    // NOTE: Uninline.
+    AddPortraitIcon(pSprite, 41);
+}
+
 // 0x4C42A0
 void CGameEffect::AddPortraitIcon(CGameSprite* pSprite, int icon)
 {
@@ -2146,6 +2182,23 @@ CGameEffect* CGameEffectSlow::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4B1650
+BOOL CGameEffectSlow::ApplyEffect(CGameSprite* pSprite)
+{
+    if (g_pBaldurChitin->GetObjectGame()->field_43E6 != 1) {
+        if (m_secondaryType != 0) {
+            // NOTE: Uninline.
+            DisplayStringRef(pSprite, 14668); // "Slowed"
+        }
+
+        AddSlowEffect(pSprite);
+    } else {
+        m_done = TRUE;
+    }
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------

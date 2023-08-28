@@ -303,6 +303,7 @@ public:
     void SetSource(const CPoint& pt);
     void SetSourceId(LONG sourceID);
 
+    void AddSlowEffect(CGameSprite* pSprite);
     static void AddPortraitIcon(CGameSprite* pSprite, int icon);
 
     /* 010C */ LONG m_sourceID;
@@ -556,6 +557,7 @@ class CGameEffectSlow : public CGameEffect {
 public:
     CGameEffectSlow(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectSparkle : public CGameEffect {

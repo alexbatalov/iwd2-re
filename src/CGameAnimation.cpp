@@ -83,6 +83,36 @@ void CGameAnimation::SetAnimationType(USHORT animationID, BYTE* colorRangeValues
 }
 
 // NOTE: Inlined.
+BYTE CGameAnimation::GetMoveScale()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2087
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->GetMoveScale();
+}
+
+// NOTE: Inlined.
+BYTE CGameAnimation::GetMoveScaleDefault()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2088
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->GetMoveScaleDefault();
+}
+
+// NOTE: Inlined.
+void CGameAnimation::SetMoveScale(BYTE scale)
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2089
+    UTIL_ASSERT(m_animation != NULL);
+
+    m_animation->SetMoveScale(scale);
+}
+
+// NOTE: Inlined.
 void CGameAnimation::ResetMoveScale()
 {
     // __FILE__: .\Include\ObjAnimation.h
