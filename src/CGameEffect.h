@@ -320,6 +320,7 @@ class CGameEffectAC : public CGameEffect {
 public:
     CGameEffectAC(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectAttackNo : public CGameEffect {

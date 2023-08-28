@@ -1077,6 +1077,39 @@ CGameEffect* CGameEffectAC::Copy()
     return copy;
 }
 
+// 0x4A51E0
+BOOL CGameEffectAC::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        pSprite->GetDerivedStats()->field_C += static_cast<SHORT>(m_effectAmount);
+        break;
+    case 1:
+        pSprite->GetDerivedStats()->field_6 = max(pSprite->GetDerivedStats()->field_6, static_cast<SHORT>(m_effectAmount));
+        break;
+    case 2:
+        pSprite->GetDerivedStats()->field_8 = max(pSprite->GetDerivedStats()->field_8, static_cast<SHORT>(m_effectAmount));
+        break;
+    case 3:
+        pSprite->GetDerivedStats()->field_A = max(pSprite->GetDerivedStats()->field_A, static_cast<SHORT>(m_effectAmount));
+        break;
+    case 4:
+        pSprite->GetDerivedStats()->m_nACCrushingMod += static_cast<SHORT>(m_effectAmount);
+        break;
+    case 5:
+        pSprite->GetDerivedStats()->m_nACPiercingMod += static_cast<SHORT>(m_effectAmount);
+        break;
+    case 6:
+        pSprite->GetDerivedStats()->m_nACSlashingMod += static_cast<SHORT>(m_effectAmount);
+        break;
+    case 7:
+        pSprite->GetDerivedStats()->m_nACMissileMod += static_cast<SHORT>(m_effectAmount);
+        break;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
