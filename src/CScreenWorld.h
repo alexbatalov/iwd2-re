@@ -64,6 +64,7 @@ public:
     void SetPendingMovie(BYTE* szMovieResRef);
     void StartSaveGameMultiplayerHost();
     void StartMovieMultiplayerHost(BYTE* cMovieResRef);
+    void SetPendingMapWorld(PLAYER_ID idController, SHORT facingDirection);
 
     void CompressTime(DWORD deltaTime) { m_deltaTime = deltaTime; }
 
@@ -94,6 +95,9 @@ public:
     /* 1158 */ RESREF m_szChapterTransitionResRef;
     /* 1160 */ BOOLEAN m_bMoviePending;
     /* 1161 */ RESREF m_szMovieResRef;
+    /* 1169 */ BOOLEAN m_bPendingMapWorld;
+    /* 116A */ PLAYER_ID m_idPendingMapWorldController;
+    /* 116E */ SHORT m_nPendingMapWorldDirection;
     /* 119C */ BOOLEAN m_bPlayEndCredits;
     /* 119D */ BOOLEAN field_119D;
     /* 11CA */ BYTE m_nAutoHideInterface;

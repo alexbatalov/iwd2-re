@@ -663,6 +663,14 @@ void CScreenWorld::StartMovieMultiplayerHost(BYTE* cMovieResRef)
     m_movie = "";
 }
 
+// 0x6933F0
+void CScreenWorld::SetPendingMapWorld(PLAYER_ID idController, SHORT facingDirection)
+{
+    m_bPendingMapWorld = TRUE;
+    m_idPendingMapWorldController = idController;
+    m_nPendingMapWorldDirection = facingDirection;
+}
+
 // 0x697970
 CUIControlButtonClock::CUIControlButtonClock(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
