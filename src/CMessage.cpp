@@ -300,6 +300,14 @@ BOOLEAN CBaldurMessage::ChapterAnnounceStatus(BYTE nChapter, CResRef cResRef)
     return FALSE;
 }
 
+// 0x4354E0
+BOOLEAN CBaldurMessage::SendMapWorldAnnounceStatus(BOOLEAN bActive, PLAYER_ID idController, LONG nLeavingEdge)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // FIXME: `cResMovie` should be reference.
 //
 // 0x4369E0

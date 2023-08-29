@@ -7,6 +7,9 @@
 #include "CChatBuffer.h"
 #include "CResRef.h"
 
+// TODO: Reuse from `CNetwork.h`.
+typedef DWORD PLAYER_ID;
+
 class CGameEffect;
 
 class CBaldurMessage {
@@ -51,6 +54,7 @@ public:
     BOOLEAN SendSignal(BYTE signalType, BYTE signalToSend);
     BOOLEAN SendProgressBarStatus(LONG nActionProgress, LONG nActionTarget, BOOLEAN bWaiting, LONG nWaitingReason, BOOLEAN bTimeoutVisible, DWORD nSecondsToTimeout);
     BOOLEAN ChapterAnnounceStatus(BYTE nChapter, CResRef cResRef);
+    BOOLEAN SendMapWorldAnnounceStatus(BOOLEAN bActive, PLAYER_ID idController, LONG nLeavingEdge);
     BOOLEAN MovieAnnounceStatus(CResRef cResMovie);
     void WeatherBroadcast(WORD wWeatherFlags);
     void TimeSynchBroadcast(ULONG nGameTime, BOOLEAN bCompressTime);

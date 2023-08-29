@@ -65,6 +65,7 @@ public:
     void StartSaveGameMultiplayerHost();
     void StartMovieMultiplayerHost(BYTE* cMovieResRef);
     void SetPendingMapWorld(PLAYER_ID idController, SHORT facingDirection);
+    void StartMapWorldMultiplayerHost(PLAYER_ID idController, SHORT facingDirection);
 
     void CompressTime(DWORD deltaTime) { m_deltaTime = deltaTime; }
 

@@ -6,6 +6,7 @@
 #include "CGameSprite.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CScreenWorldMap.h"
 #include "CUIControlScrollBar.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
@@ -669,6 +670,25 @@ void CScreenWorld::SetPendingMapWorld(PLAYER_ID idController, SHORT facingDirect
     m_bPendingMapWorld = TRUE;
     m_idPendingMapWorldController = idController;
     m_nPendingMapWorldDirection = facingDirection;
+}
+
+// 0x693410
+void CScreenWorld::StartMapWorldMultiplayerHost(PLAYER_ID idController, SHORT facingDirection)
+{
+    m_idPendingMapWorldController = idController;
+    m_nPendingMapWorldDirection = facingDirection;
+
+    g_pBaldurChitin->GetBaldurMessage()->SendMapWorldAnnounceStatus(1, idController, facingDirection);
+
+    CScreenWorldMap* pWorldMap = g_pBaldurChitin->m_pEngineWorldMap;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 8748
+    UTIL_ASSERT(pWorldMap != NULL);
+
+    pWorldMap->StartWorldMap(1, facingDirection, idController == g_pChitin->cNetwork.m_idLocalPlayer);
+
+    g_pBaldurChitin->GetActiveEngine()->SelectEngine(pWorldMap);
 }
 
 // 0x697970
