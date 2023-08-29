@@ -6,6 +6,7 @@
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CUIControlScrollBar.h"
+#include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
 
@@ -521,6 +522,14 @@ void CScreenWorld::AddGold(DWORD dwGold)
 void CScreenWorld::StopStore()
 {
     // TODO: Incomplete.
+}
+
+// 0x692630
+void CScreenWorld::RemoveText(POSITION pos)
+{
+    if (g_pBaldurChitin->GetObjectGame()->m_bGameLoaded) {
+        field_EA8->RemoveString(pos);
+    }
 }
 
 // 0x692690

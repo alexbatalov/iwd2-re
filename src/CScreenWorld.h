@@ -10,6 +10,8 @@
 
 #define CSCREENWORLD_VIRTUAL_KEYS 92
 
+class CUIControlTextDisplay;
+
 class CScreenWorld : public CBaldurEngine {
 public:
     static const LONG BORED_TIME;
@@ -53,6 +55,7 @@ public:
     void SetCurrentXP(DWORD dwCurrentXP);
     void AddGold(DWORD dwGold);
     void StopStore();
+    void RemoveText(POSITION pos);
     void ClearChatMessages();
     void HideInterface();
     void UnhideInterface();
@@ -70,6 +73,7 @@ public:
     /* 0B68 */ CKeyInfo m_pVirtualKeys[CSCREENWORLD_VIRTUAL_KEYS];
     /* 0E48 */ BYTE m_pVirtualKeysFlags[CSCREENWORLD_VIRTUAL_KEYS];
     /* 0EA4 */ int field_EA4;
+    /* 0EA8 */ CUIControlTextDisplay* field_EA8;
     /* 0F46 */ CWeather m_weather;
     /* 10DA */ DWORD m_deltaTime;
     /* 10DE */ int field_10DE;
