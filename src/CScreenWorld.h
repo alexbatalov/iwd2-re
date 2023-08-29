@@ -62,6 +62,7 @@ public:
     void UnhideInterface();
     void SetPendingChapterChange(BYTE nChapter, BYTE* szChapterResRef);
     void SetPendingMovie(BYTE* szMovieResRef);
+    void StartSaveGameMultiplayerHost();
 
     void CompressTime(DWORD deltaTime) { m_deltaTime = deltaTime; }
 

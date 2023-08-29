@@ -579,6 +579,35 @@ void CScreenWorld::SetPendingMovie(BYTE* szMovieResRef)
     memcpy(m_szMovieResRef, szMovieResRef, RESREF_SIZE);
 }
 
+// 0x693110
+void CScreenWorld::StartSaveGameMultiplayerHost()
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // FIXME: What for?
+    CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
+
+    BOOLEAN bListenToJoin = pGame->GetMultiplayerSettings()->m_bJoinRequests;
+    pGame->GetMultiplayerSettings()->SetListenToJoinOption(FALSE, TRUE);
+
+    pWorld->m_bEndMajorEventListenToJoin = bListenToJoin;
+    pWorld->m_bEndMajorEventPauseStatus = pWorld->m_bPaused;
+    pWorld->m_bHardPaused = TRUE;
+
+    if (!pWorld->m_bPaused) {
+        // "Paused for saving game"
+        g_pBaldurChitin->GetBaldurMessage()->sub_43E0E0(-1,
+            19716,
+            RGB(255, 0, 0),
+            RGB(255, 0, 0),
+            -1,
+            CGameObjectArray::INVALID_INDEX,
+            CGameObjectArray::INVALID_INDEX);
+
+        pWorld->TogglePauseGame(0, 1, g_pChitin->cNetwork.m_idLocalPlayer);
+    }
+}
+
 // 0x697970
 CUIControlButtonClock::CUIControlButtonClock(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
