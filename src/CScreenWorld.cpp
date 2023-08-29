@@ -457,6 +457,22 @@ BOOLEAN CScreenWorld::ReadyMovie(const CResRef& movieResRef, BOOLEAN bForcedFrom
     return FALSE;
 }
 
+// 0x68E950
+BOOLEAN CScreenWorld::ReadyEndCredits(BOOLEAN bForcedFromServer)
+{
+    // NOTE: Unused.
+    CString v1;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+        g_pBaldurChitin->GetBaldurMessage()->RequestClientSignal(CBaldurMessage::SIGNAL_END_GAME);
+        m_bPlayEndCredits = TRUE;
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
+
 // 0x691B50
 void CScreenWorld::StopStore()
 {

@@ -67,6 +67,9 @@ const BYTE CBaldurMessage::SIGNAL_SERVER = 83;
 // 0x84CFBD
 const BYTE CBaldurMessage::SIGNAL_END_MAJOR_EVENT = 49;
 
+// 0x84CFC2
+const BYTE CBaldurMessage::SIGNAL_END_GAME = 54;
+
 // 0x84CFC4
 const DWORD CBaldurMessage::SIGNAL_SECONDSTOMPTIMEOUT = 200;
 
@@ -263,6 +266,14 @@ void CBaldurMessage::SetSignalDefaultSecondsToTimeout()
     if (m_dwSignalSecondsToTimeout <= 30 || m_dwSignalSecondsToTimeout > 9999) {
         m_dwSignalSecondsToTimeout = SIGNAL_SECONDSTOMPTIMEOUT;
     }
+}
+
+// 0x4331A0
+BOOLEAN CBaldurMessage::RequestClientSignal(BYTE signalToSend)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // 0x4333C0

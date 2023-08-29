@@ -49,6 +49,7 @@ public:
     void AsynchronousUpdate(BOOL bActiveEngine);
     BOOL TogglePauseGame(char a2, char a3, int a4);
     BOOLEAN ReadyMovie(const CResRef& movieResRef, BOOLEAN bForcedFromServer);
+    BOOLEAN ReadyEndCredits(BOOLEAN bForcedFromServer);
     void StopStore();
     void ClearChatMessages();
     void HideInterface();
@@ -81,6 +82,7 @@ public:
     /* 1158 */ RESREF m_szChapterTransitionResRef;
     /* 1160 */ BOOLEAN m_bMoviePending;
     /* 1161 */ RESREF m_szMovieResRef;
+    /* 119C */ BOOLEAN m_bPlayEndCredits;
     /* 119D */ BOOLEAN field_119D;
     /* 11CA */ BYTE m_nAutoHideInterface;
     /* 11CC */ INT m_nAutoUnhideInterface;

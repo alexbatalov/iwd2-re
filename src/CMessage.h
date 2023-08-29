@@ -26,6 +26,7 @@ public:
     static const BYTE DELETEAREA_EMPTY_VOTE;
     static const BYTE SIGNAL_SERVER;
     static const BYTE SIGNAL_END_MAJOR_EVENT;
+    static const BYTE SIGNAL_END_GAME;
     static const DWORD SIGNAL_SECONDSTOMPTIMEOUT;
 
     CBaldurMessage();
@@ -46,6 +47,7 @@ public:
     BOOL ObjectControl();
     BOOLEAN SendChatMessage(CString& sChatMessage);
     void SetSignalDefaultSecondsToTimeout();
+    BOOLEAN RequestClientSignal(BYTE signalToSend);
     BOOLEAN SendSignal(BYTE signalType, BYTE signalToSend);
     BOOLEAN SendProgressBarStatus(LONG nActionProgress, LONG nActionTarget, BOOLEAN bWaiting, LONG nWaitingReason, BOOLEAN bTimeoutVisible, DWORD nSecondsToTimeout);
     BOOLEAN ChapterAnnounceStatus(BYTE nChapter, CResRef cResRef);
