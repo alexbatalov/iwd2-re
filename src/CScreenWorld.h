@@ -130,6 +130,13 @@ public:
     /* 0748 */ CVidCell field_748;
 };
 
+class CUIControlButtonWorldDeathLoad : public CUIControlButton {
+public:
+    CUIControlButtonWorldDeathLoad(CUIPanel* pPanel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonWorldDeathLoad() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlButtonWorldDeathQuit : public CUIControlButton {
 public:
     CUIControlButtonWorldDeathQuit(CUIPanel* pPanel, UI_CONTROL_BUTTON* controlInfo);

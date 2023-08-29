@@ -7,6 +7,7 @@
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CScreenConnection.h"
+#include "CScreenLoad.h"
 #include "CScreenWorldMap.h"
 #include "CUIControlScrollBar.h"
 #include "CUIControlTextDisplay.h"
@@ -973,6 +974,66 @@ CUIControlButtonClock::CUIControlButtonClock(CUIPanel* panel, UI_CONTROL_BUTTON*
 // 0x697C20
 CUIControlButtonClock::~CUIControlButtonClock()
 {
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x697FF0
+CUIControlButtonWorldDeathLoad::CUIControlButtonWorldDeathLoad(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    SetText(CBaldurEngine::FetchString(15590)); // "Load"
+}
+
+// 0x6980A0
+CUIControlButtonWorldDeathLoad::~CUIControlButtonWorldDeathLoad()
+{
+}
+
+// 0x698140
+void CUIControlButtonWorldDeathLoad::OnLButtonClick(CPoint pt)
+{
+    CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 12190
+    UTIL_ASSERT(pWorld != NULL);
+
+    pWorld->StopDeath();
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 12195
+    UTIL_ASSERT(pGame != NULL);
+
+    CScreenLoad* pLoad = g_pBaldurChitin->m_pEngineLoad;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 12208
+    UTIL_ASSERT(pLoad != NULL);
+
+    pLoad->StartLoad(g_pChitin->cNetwork.GetSessionOpen() ? 3 : 2);
+    pWorld->SelectEngine(pLoad);
+
+    if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+        && !pGame->GetMultiplayerSettings()->m_bArbitrationLockStatus) {
+
+        for (BYTE nSlot = 0; nSlot < CINFGAME_MAXCHARACTERS; nSlot++) {
+            // NOTE: Uninline.
+            LONG nCharacterId = pGame->GetFixedOrderCharacterId(nSlot);
+
+            if (nCharacterId != CGameObjectArray::INVALID_INDEX) {
+                g_pBaldurChitin->GetBaldurMessage()->ObjectControlRequest(nCharacterId);
+            }
+        }
+
+        g_pBaldurChitin->GetBaldurMessage()->ObjectControl();
+        pGame->GetMultiplayerSettings()->SetArbitrationLockAllowInput(FALSE);
+        pGame->GetMultiplayerSettings()->SetArbitrationLockStatus(TRUE, 1);
+    }
+
+    pGame->DestroyGame(1, 0);
 }
 
 // -----------------------------------------------------------------------------
