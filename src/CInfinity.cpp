@@ -2,7 +2,6 @@
 
 #include "CChitin.h"
 #include "CGameArea.h"
-#include "CInfTileSet.h"
 #include "CResWED.h"
 #include "CUtil.h"
 #include "CVidInf.h"
@@ -80,6 +79,257 @@ const CResRef CInfinity::THUNDERRESREFS[3] = {
     CResRef("Amb_E13b"),
     CResRef("Amb_E13f"),
 };
+
+// 0x5CAF50
+CInfTileSet::~CInfTileSet()
+{
+    if (m_pResTiles != NULL) {
+        for (int index = 0; index < m_nTiles; index++) {
+            CResInfTile* pTile = m_pResTiles[index];
+            if (pTile != NULL) {
+                // NOTE: Uninline.
+                m_pVRamPool->EmptyTile(pTile->m_nVRamTile);
+
+                g_pChitin->cDimm.Dump(m_pResTiles[index], 1, 0);
+
+                if (m_pResTiles[index] != NULL) {
+                    delete m_pResTiles[index];
+                    m_pResTiles[index] = NULL;
+                }
+            }
+
+            if (index % 700 == 699) {
+                SleepEx(60, FALSE);
+            }
+        }
+
+        free(m_pResTiles);
+    }
+
+    m_nTiles = 0;
+}
+
+// 0x5CB090
+int CInfTileSet::AttachToVRam(int nTile)
+{
+    if (m_pVRamPool == NULL) {
+        return -1;
+    }
+
+    if (nTile < 0 || nTile >= m_nTiles) {
+        return -1;
+    }
+
+    CResInfTile* pTile = m_pResTiles[nTile];
+    if (pTile == NULL) {
+        return -1;
+    }
+
+    if (pTile->m_nVRamTile < 0) {
+        int nVRamTile = m_pVRamPool->AssociateTile(this, nTile);
+        m_pResTiles[nTile]->m_nVRamFlags &= 0x2;
+        if (nVRamTile == -1) {
+            return 0;
+        }
+    } else {
+        m_pVRamPool->m_pTileDefs[pTile->m_nVRamTile].nRefCount++;
+    }
+
+    return m_pVRamPool->m_pTileDefs[pTile->m_nVRamTile].nRefCount;
+}
+
+// 0x5CB190
+int CInfTileSet::DetachFromVRam(int nTile)
+{
+    if (m_pVRamPool == NULL) {
+        return -1;
+    }
+
+    if (nTile < 0 || nTile >= m_nTiles) {
+        return -1;
+    }
+
+    CResInfTile* pTile = m_pResTiles[nTile];
+    if (pTile == NULL) {
+        return -1;
+    }
+
+    if (pTile->m_nVRamTile < 0) {
+        return -1;
+    }
+
+    m_pVRamPool->m_pTileDefs[pTile->m_nVRamTile].nRefCount--;
+
+    if (m_pVRamPool->m_pTileDefs[pTile->m_nVRamTile].nRefCount > 0) {
+        return m_pVRamPool->m_pTileDefs[pTile->m_nVRamTile].nRefCount;
+    }
+
+    m_pVRamPool->EmptyTile(pTile->m_nVRamTile);
+
+    return 0;
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x5CBC80
+CResInfTile::CResInfTile(BOOLEAN a1, BOOLEAN a2)
+{
+    m_nVRamTile = -1;
+
+    // TODO: Wrong.
+    m_nVRamFlags = 0;
+
+    field_68 = 0;
+
+    if (a1) {
+        m_pDualTileRes = new CResTile();
+    } else {
+        m_pDualTileRes = NULL;
+    }
+
+    dwFlags &= 0x2;
+    dwFlags |= 0x1;
+}
+
+// 0x5CBD90
+CResInfTile::~CResInfTile()
+{
+    if (m_pDualTileRes != NULL) {
+        delete m_pDualTileRes;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x5CBDF0
+CVRamPool::CVRamPool()
+{
+    m_nVTiles = 0;
+    m_pTileDefs = NULL;
+    m_pSurfaces = NULL;
+}
+
+// 0x5CBE00
+CVRamPool::~CVRamPool()
+{
+    // NOTE: Uninline.
+    DetachSurfaces();
+}
+
+// 0x5CBE70
+BOOL CVRamPool::AttachSurfaces(CVidMode* pVidMode)
+{
+    if (pVidMode->GetType() != 0) {
+        return FALSE;
+    }
+
+    if (pVidMode == NULL) {
+        return FALSE;
+    }
+
+    CVidInf* pVidInf = static_cast<CVidInf*>(pVidMode);
+
+    if (pVidInf->m_nVRamSurfaces <= 0) {
+        return FALSE;
+    }
+
+    if (!g_pChitin->cVideo.Is3dAccelerated() && pVidInf->m_pVRamSurfaces == NULL) {
+        return FALSE;
+    }
+
+    m_pSurfaces = pVidInf->m_pVRamSurfaces;
+    m_nVTiles = pVidInf->m_nVRamSurfaces;
+    m_pTileDefs = reinterpret_cast<TileDefinition*>(malloc(sizeof(TileDefinition) * m_nVTiles));
+
+    for (int index = 0; index < m_nVTiles; index++) {
+        m_pTileDefs[index].nTile = -1;
+        m_pTileDefs[index].pTileSet = NULL;
+        m_pTileDefs[index].nRefCount = 0;
+    }
+
+    return TRUE;
+}
+
+// 0x5CBF30
+void CVRamPool::ClearAll()
+{
+    for (int index = 0; index < m_nVTiles; index++) {
+        if (m_pTileDefs[index].pTileSet != NULL) {
+            m_pTileDefs[index].pTileSet->m_pResTiles[m_pTileDefs[index].nTile]->m_nVRamTile = -1;
+        }
+
+        m_pTileDefs[index].nTile = -1;
+        m_pTileDefs[index].pTileSet = NULL;
+        m_pTileDefs[index].nRefCount = 0;
+    }
+}
+
+// 0x5CBF90
+BOOL CVRamPool::DetachSurfaces()
+{
+    // NOTE: Uninline.
+    ClearAll();
+
+    if (m_pTileDefs != NULL) {
+        free(m_pTileDefs);
+        m_pTileDefs = NULL;
+    }
+
+    m_pSurfaces = NULL;
+    m_nVTiles = 0;
+
+    return TRUE;
+}
+
+// 0x5CC010
+void CVRamPool::InvalidateAll()
+{
+    for (int index = 0; index < m_nVTiles; index++) {
+        if (m_pTileDefs[index].pTileSet != NULL) {
+            m_pTileDefs[index].pTileSet->m_pResTiles[m_pTileDefs[index].nTile]->m_nVRamFlags &= ~0x2;
+        }
+    }
+}
+
+// NOTE: Inlined.
+int CVRamPool::AssociateTile(CInfTileSet* pTileSet, int nTile)
+{
+    if (pTileSet != NULL) {
+        for (int index = 0; index < m_nVTiles; index++) {
+            if (m_pTileDefs[index].nTile == -1) {
+                m_pTileDefs[index].nTile = nTile;
+                m_pTileDefs[index].pTileSet = pTileSet;
+                m_pTileDefs[index].nRefCount = 1;
+                pTileSet->m_pResTiles[nTile]->m_nVRamTile = index;
+                return index;
+            }
+        }
+    }
+
+    return -1;
+}
+
+// NOTE: Inlined.
+BOOL CVRamPool::EmptyTile(int nVTile)
+{
+    if (nVTile < 0 || nVTile >= m_nVTiles) {
+        return FALSE;
+    }
+
+    TileDefinition* pTileDef = &(m_pTileDefs[nVTile]);
+
+    if (pTileDef->pTileSet != NULL) {
+        pTileDef->pTileSet->m_pResTiles[pTileDef->nTile]->m_nVRamTile = -1;
+    }
+
+    pTileDef->nTile = -1;
+    pTileDef->pTileSet = NULL;
+    pTileDef->nRefCount = 0;
+
+    return TRUE;
+}
+
+// -----------------------------------------------------------------------------
 
 // 0x5CC360
 CInfinity::CInfinity()

@@ -3,16 +3,69 @@
 
 #include "mfc.h"
 
+#include <ddraw.h>
+
 #include "CResRef.h"
+#include "CResTile.h"
 #include "CVidBitmap.h"
 
 class CGameArea;
-class CInfTileSet;
 class CResWED;
 class CVidCell;
 class CVidFont;
 class CVidMode;
 class CVRamPool;
+
+class CResInfTile : public CResTile {
+public:
+    CResInfTile(BOOLEAN a1, BOOLEAN a2);
+    ~CResInfTile() override;
+
+    /* 0064 */ int m_nVRamTile;
+    /* 0068 */ int field_68;
+    /* 006C */ CResTile* m_pDualTileRes;
+    /* 0070 */ unsigned char m_nVRamFlags;
+};
+
+class CInfTileSet {
+public:
+    CInfTileSet();
+    ~CInfTileSet();
+
+    int AttachToVRam(int nTile);
+    int DetachFromVRam(int nTile);
+
+    /* 0000 */ int field_0;
+    /* 0004 */ int field_4;
+    /* 0008 */ CVidTile m_cVidTile;
+    /* 00B0 */ CVRamPool* m_pVRamPool;
+    /* 00B4 */ CResInfTile** m_pResTiles;
+    /* 00B8 */ int m_nTiles;
+};
+
+typedef struct TileDefinition {
+    /* 0000 */ int nTile;
+    /* 0004 */ int nRefCount;
+    /* 0008 */ CInfTileSet* pTileSet;
+} TileDefinition;
+
+class CVRamPool {
+public:
+    CVRamPool();
+    ~CVRamPool();
+
+    BOOL AttachSurfaces(CVidMode* pVidMode);
+    void ClearAll();
+    BOOL DetachSurfaces();
+    void InvalidateAll();
+
+    int AssociateTile(CInfTileSet* pTileSet, int nTile);
+    BOOL EmptyTile(int nVTile);
+
+    int m_nVTiles;
+    IDirectDrawSurface** m_pSurfaces;
+    TileDefinition* m_pTileDefs;
+};
 
 class CInfinity {
 public:

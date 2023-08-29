@@ -11,7 +11,6 @@
 #include "CGameObject.h"
 #include "CGameSprite.h"
 #include "CInfCursor.h"
-#include "CInfinity.h"
 #include "CItem.h"
 #include "CScreenCharacter.h"
 #include "CScreenInventory.h"
