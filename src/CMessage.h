@@ -51,6 +51,7 @@ public:
     BOOLEAN SendSignal(BYTE signalType, BYTE signalToSend);
     BOOLEAN SendProgressBarStatus(LONG nActionProgress, LONG nActionTarget, BOOLEAN bWaiting, LONG nWaitingReason, BOOLEAN bTimeoutVisible, DWORD nSecondsToTimeout);
     BOOLEAN ChapterAnnounceStatus(BYTE nChapter, CResRef cResRef);
+    BOOLEAN MovieAnnounceStatus(CResRef cResMovie);
     void WeatherBroadcast(WORD wWeatherFlags);
     void TimeSynchBroadcast(ULONG nGameTime, BOOLEAN bCompressTime);
     void TimeChangeToServer(ULONG deltaTime);

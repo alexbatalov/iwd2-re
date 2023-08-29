@@ -1,6 +1,7 @@
 #include "CScreenWorld.h"
 
 #include "CBaldurChitin.h"
+#include "CBaldurProjector.h"
 #include "CGameArea.h"
 #include "CGameSprite.h"
 #include "CInfCursor.h"
@@ -606,6 +607,60 @@ void CScreenWorld::StartSaveGameMultiplayerHost()
 
         pWorld->TogglePauseGame(0, 1, g_pChitin->cNetwork.m_idLocalPlayer);
     }
+}
+
+// 0x6931E0
+void CScreenWorld::StartMovieMultiplayerHost(BYTE* cMovieResRef)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // FIXME: What for?
+    CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
+
+    BOOLEAN bListenToJoin = pGame->GetMultiplayerSettings()->m_bJoinRequests;
+    pGame->GetMultiplayerSettings()->SetListenToJoinOption(FALSE, TRUE);
+
+    pWorld->m_bEndMajorEventListenToJoin = bListenToJoin;
+    pWorld->m_bEndMajorEventPauseStatus = pWorld->m_bPaused;
+    pWorld->m_bHardPaused = TRUE;
+
+    if (!pWorld->m_bPaused) {
+        // "Paused for movie"
+        g_pBaldurChitin->GetBaldurMessage()->sub_43E0E0(-1,
+            17557,
+            RGB(255, 0, 0),
+            RGB(255, 0, 0),
+            -1,
+            CGameObjectArray::INVALID_INDEX,
+            CGameObjectArray::INVALID_INDEX);
+
+        pWorld->TogglePauseGame(0, 1, g_pChitin->cNetwork.m_idLocalPlayer);
+    }
+
+    g_pBaldurChitin->GetBaldurMessage()->MovieAnnounceStatus(CResRef(cMovieResRef));
+
+    m_movie = cMovieResRef;
+
+    if (m_movie == CInfinity::DAWN_MOVIE
+        || m_movie == CInfinity::DUSK_MOVIE
+        || m_movie == "DEATH1") {
+        g_pBaldurChitin->m_pEngineProjector->field_145 = 1;
+    }
+
+    if (m_movie == CInfinity::DAWN_MOVIE) {
+        pWorld->m_bSetDayOnActivate = TRUE;
+    } else if (m_movie == CInfinity::DUSK_MOVIE) {
+        pWorld->m_bSetNightOnActivate = TRUE;
+    } else if (m_movie == "DEATH1") {
+        g_pBaldurChitin->GetActiveEngine()->SelectEngine(pWorld);
+        pWorld->m_bGameOverPanel = TRUE;
+    }
+
+    g_pBaldurChitin->GetObjectCursor()->m_bVisible = FALSE;
+
+    g_pBaldurChitin->m_pEngineProjector->PlayMovie(m_movie);
+
+    m_movie = "";
 }
 
 // 0x697970

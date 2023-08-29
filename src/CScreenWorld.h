@@ -63,6 +63,7 @@ public:
     void SetPendingChapterChange(BYTE nChapter, BYTE* szChapterResRef);
     void SetPendingMovie(BYTE* szMovieResRef);
     void StartSaveGameMultiplayerHost();
+    void StartMovieMultiplayerHost(BYTE* cMovieResRef);
 
     void CompressTime(DWORD deltaTime) { m_deltaTime = deltaTime; }
 
@@ -77,8 +78,11 @@ public:
     /* 0EA4 */ int field_EA4;
     /* 0EA8 */ CUIControlTextDisplay* field_EA8;
     /* 0F46 */ CWeather m_weather;
+    /* 10D4 */ BOOLEAN m_bSetNightOnActivate;
+    /* 10D5 */ BOOLEAN m_bSetDayOnActivate;
     /* 10DA */ DWORD m_deltaTime;
     /* 10DE */ int field_10DE;
+    /* 10E2 */ CResRef m_movie;
     /* 10EB */ BOOLEAN m_bInControlOfStore;
     /* 10EC */ BOOL m_bGameOverPanel;
     /* 10F0 */ int field_10F0;

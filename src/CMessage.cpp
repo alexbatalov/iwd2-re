@@ -300,6 +300,16 @@ BOOLEAN CBaldurMessage::ChapterAnnounceStatus(BYTE nChapter, CResRef cResRef)
     return FALSE;
 }
 
+// FIXME: `cResMovie` should be reference.
+//
+// 0x4369E0
+BOOLEAN CBaldurMessage::MovieAnnounceStatus(CResRef cResMovie)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x436F50
 void CBaldurMessage::WeatherBroadcast(WORD wWeatherFlags)
 {
