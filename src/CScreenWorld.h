@@ -10,6 +10,7 @@
 
 #define CSCREENWORLD_VIRTUAL_KEYS 92
 
+class CGameSprite;
 class CUIControlTextDisplay;
 
 class CScreenWorld : public CBaldurEngine {
@@ -70,6 +71,7 @@ public:
     void StartReformPartyMultiplayerHost();
     void SetPendingRest(INT nHP, BOOLEAN bRenting, BOOLEAN bMovie);
     void CheckEndOfHardPause();
+    void SetDialogTokens(CGameSprite* pCharacter);
 
     void CompressTime(DWORD deltaTime) { m_deltaTime = deltaTime; }
 

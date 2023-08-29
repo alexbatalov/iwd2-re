@@ -731,6 +731,203 @@ void CScreenWorld::CheckEndOfHardPause()
     }
 }
 
+// 0x694BD0
+void CScreenWorld::SetDialogTokens(CGameSprite* pCharacter)
+{
+    STR_RES strRes;
+
+    CTlkTable& tlk = g_pBaldurChitin->GetTlkTable();
+
+    tlk.SetToken(CInfGame::TOKEN_GABBER, pCharacter->GetName());
+
+    CGameSprite* pSprite;
+    BYTE rc;
+
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(g_pBaldurChitin->GetObjectGame()->m_characters[0],
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        tlk.SetToken(CInfGame::TOKEN_PLAYER1, pSprite->GetName());
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(g_pBaldurChitin->GetObjectGame()->m_characters[0],
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(g_pBaldurChitin->GetObjectGame()->m_characters[1],
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        tlk.SetToken(CInfGame::TOKEN_PLAYER2, pSprite->GetName());
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(g_pBaldurChitin->GetObjectGame()->m_characters[1],
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(g_pBaldurChitin->GetObjectGame()->m_characters[2],
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        tlk.SetToken(CInfGame::TOKEN_PLAYER3, pSprite->GetName());
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(g_pBaldurChitin->GetObjectGame()->m_characters[2],
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(g_pBaldurChitin->GetObjectGame()->m_characters[3],
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        tlk.SetToken(CInfGame::TOKEN_PLAYER4, pSprite->GetName());
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(g_pBaldurChitin->GetObjectGame()->m_characters[3],
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(g_pBaldurChitin->GetObjectGame()->m_characters[4],
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        tlk.SetToken(CInfGame::TOKEN_PLAYER5, pSprite->GetName());
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(g_pBaldurChitin->GetObjectGame()->m_characters[4],
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(g_pBaldurChitin->GetObjectGame()->m_characters[5],
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        tlk.SetToken(CInfGame::TOKEN_PLAYER6, pSprite->GetName());
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(g_pBaldurChitin->GetObjectGame()->m_characters[5],
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    STRREF strRace;
+    switch (pCharacter->GetAIType().m_nRace) {
+    case CAIOBJECTTYPE_R_HUMAN:
+        strRace = 7193;
+        break;
+    case CAIOBJECTTYPE_R_ELF:
+        strRace = 7194;
+        break;
+    case CAIOBJECTTYPE_R_HALF_ELF:
+        strRace = 7197;
+        break;
+    case CAIOBJECTTYPE_R_DWARF:
+        strRace = 7182;
+        break;
+    case CAIOBJECTTYPE_R_HALFLING:
+        strRace = 7195;
+        break;
+    case CAIOBJECTTYPE_R_GNOME:
+        strRace = 7196;
+        break;
+    case CAIOBJECTTYPE_R_HALF_ORC:
+        strRace = 22;
+        break;
+    default:
+        strRace = -1;
+        break;
+    }
+
+    tlk.Fetch(strRace, strRes);
+    tlk.SetToken(CInfGame::TOKEN_GABBER_RACE, strRes.szText);
+
+    if (pCharacter->GetAIType().m_nGender == CAIObjectType::SEX_FEMALE) {
+        tlk.field_58 = byte_8BA28C;
+
+        tlk.Fetch(27475, strRes); // "ma'am"
+        tlk.SetToken(CInfGame::TOKEN_GABBER_SIRMAAM, strRes.szText);
+
+        tlk.Fetch(27476, strRes); // "girl"
+        tlk.SetToken(CInfGame::TOKEN_GABBER_GIRLBOY, strRes.szText);
+
+        tlk.Fetch(27479, strRes); // "sister"
+        tlk.SetToken(CInfGame::TOKEN_GABBER_BROTHERSISTER, strRes.szText);
+
+        tlk.Fetch(27480, strRes); // "lady"
+        tlk.SetToken(CInfGame::TOKEN_GABBER_LADYLORD, strRes.szText);
+
+        tlk.Fetch(27483, strRes); // "female"
+        tlk.SetToken(CInfGame::TOKEN_GABBER_MALEFEMALE, strRes.szText);
+
+        tlk.Fetch(27485, strRes); // "she"
+        tlk.SetToken(CInfGame::TOKEN_GABBER_HESHE, strRes.szText);
+
+        tlk.Fetch(27487, strRes); // "her"
+        tlk.SetToken(CInfGame::TOKEN_GABBER_HISHER, strRes.szText);
+
+        tlk.Fetch(strRace, strRes);
+        tlk.SetToken(CInfGame::TOKEN_GABBER_RACE, strRes.szText);
+
+        tlk.Fetch(27487, strRes); // "her"
+        tlk.SetToken(CInfGame::TOKEN_GABBER_HIMHER, strRes.szText);
+
+        tlk.Fetch(27490, strRes); // "woman"
+        tlk.SetToken(CInfGame::TOKEN_GABBER_MANWOMAN, strRes.szText);
+    } else {
+        tlk.field_58 = byte_8FB954;
+
+        tlk.Fetch(27473, strRes); // "sir"
+        tlk.SetToken(CInfGame::TOKEN_GABBER_SIRMAAM, strRes.szText);
+
+        tlk.Fetch(27477, strRes); // "boy"
+        tlk.SetToken(CInfGame::TOKEN_GABBER_GIRLBOY, strRes.szText);
+
+        tlk.Fetch(27478, strRes); // "brother"
+        tlk.SetToken(CInfGame::TOKEN_GABBER_BROTHERSISTER, strRes.szText);
+
+        tlk.Fetch(27481, strRes); // "lord"
+        tlk.SetToken(CInfGame::TOKEN_GABBER_LADYLORD, strRes.szText);
+
+        tlk.Fetch(27482, strRes); // "male"
+        tlk.SetToken(CInfGame::TOKEN_GABBER_MALEFEMALE, strRes.szText);
+
+        tlk.Fetch(27484, strRes); // "he"
+        tlk.SetToken(CInfGame::TOKEN_GABBER_HESHE, strRes.szText);
+
+        tlk.Fetch(27486, strRes); // "his"
+        tlk.SetToken(CInfGame::TOKEN_GABBER_HISHER, strRes.szText);
+
+        tlk.Fetch(27488, strRes); // "him"
+        tlk.SetToken(CInfGame::TOKEN_GABBER_HIMHER, strRes.szText);
+
+        tlk.Fetch(27489, strRes); // "man"
+        tlk.SetToken(CInfGame::TOKEN_GABBER_MANWOMAN, strRes.szText);
+    }
+}
+
 // 0x697970
 CUIControlButtonClock::CUIControlButtonClock(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
