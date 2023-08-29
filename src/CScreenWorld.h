@@ -56,6 +56,7 @@ public:
     BOOLEAN ReadyEndCredits(BOOLEAN bForcedFromServer);
     void SetCurrentXP(DWORD dwCurrentXP);
     void AddGold(DWORD dwGold);
+    void StopContainer();
     void StopStore();
     void RemoveText(POSITION pos);
     void SetItemMarker(POSITION pos, LONG lMarker);
@@ -119,6 +120,13 @@ public:
     /* 119E */ BOOLEAN m_bPendingReformParty;
     /* 11CA */ BYTE m_nAutoHideInterface;
     /* 11CC */ INT m_nAutoUnhideInterface;
+};
+
+class CUIControlButtonWorldContainerClose : public CUIControlButton {
+public:
+    CUIControlButtonWorldContainerClose(CUIPanel* pPanel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonWorldContainerClose() override;
+    void OnLButtonClick(CPoint pt) override;
 };
 
 class CUIControlButtonClock : public CUIControlButton3State {

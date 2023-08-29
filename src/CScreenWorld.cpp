@@ -522,6 +522,12 @@ void CScreenWorld::AddGold(DWORD dwGold)
     pGame->AddPartyGold(dwGold);
 }
 
+// 0x690EB0
+void CScreenWorld::StopContainer()
+{
+    // TODO: Incomplete.
+}
+
 // 0x691B50
 void CScreenWorld::StopStore()
 {
@@ -963,6 +969,38 @@ void CScreenWorld::DisableKeyRepeat()
     m_pVirtualKeys[56].SetRepeat(0, 0);
     m_pVirtualKeys[57].SetRepeat(0, 0);
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x6977E0
+CUIControlButtonWorldContainerClose::CUIControlButtonWorldContainerClose(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+}
+
+// 0x697830
+CUIControlButtonWorldContainerClose::~CUIControlButtonWorldContainerClose()
+{
+}
+
+// 0x6978D0
+void CUIControlButtonWorldContainerClose::OnLButtonClick(CPoint pt)
+{
+    CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 11471
+    UTIL_ASSERT(pWorld != NULL);
+
+    CSingleLock renderLock(&(pWorld->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    pWorld->StopContainer();
+
+    renderLock.Unlock();
+}
+
+// -----------------------------------------------------------------------------
 
 // 0x697970
 CUIControlButtonClock::CUIControlButtonClock(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
