@@ -1859,7 +1859,7 @@ BOOL CVidCell::Blt8To32ClearShadow(DWORD* pSurface, LONG lPitch, DWORD dwFlags)
                 BYTE nColor = *pFrameData;
                 if (nColor != nTransparentColor) {
                     if (m_bShadowOn && nColor == 1) {
-                        *pSurface = (*pSurface / 1) & 0x7F7F7F;
+                        *pSurface = (*pSurface / 2) & 0x7F7F7F;
                     } else {
                         *pSurface = CVidImage::rgbTempPal[nColor];
                     }
