@@ -73,6 +73,7 @@ public:
     void CheckEndOfHardPause();
     void SetDialogTokens(CGameSprite* pCharacter);
     void EnableKeyRepeat();
+    void DisableKeyRepeat();
 
     void CompressTime(DWORD deltaTime) { m_deltaTime = deltaTime; }
 

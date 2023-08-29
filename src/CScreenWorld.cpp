@@ -942,6 +942,20 @@ void CScreenWorld::EnableKeyRepeat()
     m_pVirtualKeys[57].SetRepeat(1, 1);
 }
 
+// 0x698730
+void CScreenWorld::DisableKeyRepeat()
+{
+    m_pVirtualKeys[49].SetRepeat(0, 0);
+    m_pVirtualKeys[50].SetRepeat(0, 0);
+    m_pVirtualKeys[51].SetRepeat(0, 0);
+    m_pVirtualKeys[52].SetRepeat(0, 0);
+    m_pVirtualKeys[53].SetRepeat(0, 0);
+    m_pVirtualKeys[54].SetRepeat(0, 0);
+    m_pVirtualKeys[55].SetRepeat(0, 0);
+    m_pVirtualKeys[56].SetRepeat(0, 0);
+    m_pVirtualKeys[57].SetRepeat(0, 0);
+}
+
 // 0x697970
 CUIControlButtonClock::CUIControlButtonClock(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
