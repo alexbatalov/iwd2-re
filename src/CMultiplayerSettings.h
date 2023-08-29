@@ -57,6 +57,7 @@ public:
     void ResetServerOnLoadGame();
 
     CString GetAreaStartName();
+    BOOLEAN GetListenToJoinOption();
 
     /* 0000 */ CGamePermission m_pcPermissions[6];
     /* 0030 */ CGamePermission m_cDefaultPermissions;

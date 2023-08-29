@@ -641,7 +641,7 @@ void CScreenChapter::StartChapterMultiplayerHost(BYTE nChapter, BYTE* resRef)
 {
     g_pBaldurChitin->GetObjectGame()->SetCurrentChapter(nChapter);
 
-    BOOLEAN bJoinRequests = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->m_bJoinRequests;
+    BOOLEAN bJoinRequests = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->GetListenToJoinOption();
     g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->SetListenToJoinOption(FALSE, TRUE);
     g_pBaldurChitin->m_pEngineWorld->m_bEndMajorEventListenToJoin = bJoinRequests;
     g_pBaldurChitin->m_pEngineWorld->m_bEndMajorEventPauseStatus = g_pBaldurChitin->m_pEngineWorld->m_bPaused;

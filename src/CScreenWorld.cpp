@@ -605,7 +605,7 @@ void CScreenWorld::StartSaveGameMultiplayerHost()
     // FIXME: What for?
     CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
 
-    BOOLEAN bListenToJoin = pGame->GetMultiplayerSettings()->m_bJoinRequests;
+    BOOLEAN bListenToJoin = pGame->GetMultiplayerSettings()->GetListenToJoinOption();
     pGame->GetMultiplayerSettings()->SetListenToJoinOption(FALSE, TRUE);
 
     pWorld->m_bEndMajorEventListenToJoin = bListenToJoin;
@@ -634,7 +634,7 @@ void CScreenWorld::StartMovieMultiplayerHost(BYTE* cMovieResRef)
     // FIXME: What for?
     CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
 
-    BOOLEAN bListenToJoin = pGame->GetMultiplayerSettings()->m_bJoinRequests;
+    BOOLEAN bListenToJoin = pGame->GetMultiplayerSettings()->GetListenToJoinOption();
     pGame->GetMultiplayerSettings()->SetListenToJoinOption(FALSE, TRUE);
 
     pWorld->m_bEndMajorEventListenToJoin = bListenToJoin;

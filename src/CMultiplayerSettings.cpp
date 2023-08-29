@@ -508,3 +508,11 @@ CString CMultiplayerSettings::GetAreaStartName()
 {
     return m_sAreaName;
 }
+
+// NOTE: Odd location.
+//
+// 0x452F40
+BOOLEAN CMultiplayerSettings::GetListenToJoinOption()
+{
+    return m_bJoinRequests;
+}
