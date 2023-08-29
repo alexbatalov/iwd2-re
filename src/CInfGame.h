@@ -153,6 +153,7 @@ public:
     DWORD GetScrollSpeed();
     void AddDisposableItem(CItem* pItem);
     void DestroyDisposableItems();
+    void AddPartyGold(LONG dwAddPartyGold);
     void sub_5BF6A0(int a1);
     BOOLEAN FindAreaID(DWORD nAreaId);
     CStringList* GetSaveGames();

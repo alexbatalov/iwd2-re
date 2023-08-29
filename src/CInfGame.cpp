@@ -2548,6 +2548,12 @@ void CInfGame::DestroyDisposableItems()
     }
 }
 
+// 0x5BF610
+void CInfGame::AddPartyGold(LONG dwAddPartyGold)
+{
+    // TODO: Incomplete.
+}
+
 // 0x5BF6A0
 void CInfGame::sub_5BF6A0(int a1)
 {

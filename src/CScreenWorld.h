@@ -51,6 +51,7 @@ public:
     BOOLEAN ReadyMovie(const CResRef& movieResRef, BOOLEAN bForcedFromServer);
     BOOLEAN ReadyEndCredits(BOOLEAN bForcedFromServer);
     void SetCurrentXP(DWORD dwCurrentXP);
+    void AddGold(DWORD dwGold);
     void StopStore();
     void ClearChatMessages();
     void HideInterface();

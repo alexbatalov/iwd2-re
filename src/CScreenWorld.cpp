@@ -7,6 +7,7 @@
 #include "CInfGame.h"
 #include "CUIControlScrollBar.h"
 #include "CUIPanel.h"
+#include "CUtil.h"
 
 // 0x85A1EC
 const LONG CScreenWorld::BORED_TIME = 3000;
@@ -502,6 +503,18 @@ void CScreenWorld::SetCurrentXP(DWORD dwCurrentXP)
     }
 
     delete pSpriteList;
+}
+
+// 0x6907E0
+void CScreenWorld::AddGold(DWORD dwGold)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 5054
+    UTIL_ASSERT(pGame != NULL);
+
+    pGame->AddPartyGold(dwGold);
 }
 
 // 0x691B50
