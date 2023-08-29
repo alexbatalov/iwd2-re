@@ -7,7 +7,9 @@
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CScreenConnection.h"
+#include "CScreenInventory.h"
 #include "CScreenLoad.h"
+#include "CScreenMap.h"
 #include "CScreenWorldMap.h"
 #include "CUIControlScrollBar.h"
 #include "CUIControlTextDisplay.h"
@@ -1065,12 +1067,99 @@ void CUIControlButtonWorldContainerClose::OnLButtonClick(CPoint pt)
 CUIControlButtonClock::CUIControlButtonClock(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
 {
-    // TODO: Incomplete.
+    // NOTE: Uninline.
+    m_vcGear.SetResRef(CResRef("CGEAR"), g_pBaldurChitin->field_4A28, TRUE, TRUE);
+
+    SetNeedAsyncUpdate();
+
+    m_bSelected = TRUE;
 }
 
 // 0x697C20
 CUIControlButtonClock::~CUIControlButtonClock()
 {
+}
+
+// 0x697D80
+void CUIControlButtonClock::TimerAsynchronousUpdate(BOOLEAN bInside)
+{
+    if (m_bActive) {
+        if (bInside
+            && !m_bToolTipActive
+            && m_pPanel->m_pManager->field_1C >= g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nTooltips) {
+            ActivateToolTip();
+            m_bToolTipActive = TRUE;
+        }
+
+        CTimerWorld* pTimerWorld = g_pBaldurChitin->GetObjectGame()->GetWorldTimer();
+
+        BYTE nSequenceLength = m_vcGear.GetSequenceLength(m_vcGear.m_nCurrentSequence, FALSE);
+        m_vcGear.FrameSet(pTimerWorld->m_gameTime % nSequenceLength);
+
+        InvalidateRect();
+
+        m_bSelected = pTimerWorld->m_active;
+    }
+}
+
+// 0x697CE0
+void CUIControlButtonClock::ActivateToolTip()
+{
+    CString sTime;
+
+    CTimerWorld::GetCurrentTimeString(g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime,
+        16410,
+        sTime);
+
+    g_pBaldurChitin->GetObjectCursor()->SetToolTip(-1, this, sTime);
+}
+
+// NOTE: Always returns `TRUE` which is a bit unusual for `Render` function.
+//
+// 0x697E40
+BOOL CUIControlButtonClock::Render(BOOL bForce)
+{
+    if (!m_bActive && !m_bInactiveRender) {
+        return TRUE;
+    }
+
+    if (m_nRenderCount == 0 && !bForce) {
+        return TRUE;
+    }
+
+    if (m_nRenderCount != 0) {
+        CSingleLock lock(&(m_pPanel->m_pManager->field_56), FALSE);
+        lock.Lock(INFINITE);
+        m_nRenderCount--;
+        lock.Unlock();
+    }
+
+    CPoint pt = m_pPanel->m_ptOrigin + m_ptOrigin;
+
+    CRect rControlFrame(pt, m_size);
+
+    CRect rClip;
+    rClip.IntersectRect(rControlFrame, m_rDirty);
+
+    m_vcGear.Render(0, pt.x, pt.y, rClip, NULL, 0, 0, -1);
+
+    return TRUE;
+}
+
+// 0x697F90
+void CUIControlButtonClock::OnLButtonClick(CPoint)
+{
+    CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 11721
+    UTIL_ASSERT(pWorld != NULL);
+
+    if (g_pBaldurChitin->GetActiveEngine() == g_pBaldurChitin->m_pEngineWorld
+        || g_pBaldurChitin->GetActiveEngine() == g_pBaldurChitin->m_pEngineInventory
+        || g_pBaldurChitin->GetActiveEngine() == g_pBaldurChitin->m_pEngineMap) {
+        pWorld->TogglePauseGame(1, 1, 0);
+    }
 }
 
 // -----------------------------------------------------------------------------

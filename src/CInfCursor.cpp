@@ -236,6 +236,14 @@ void CInfCursor::SetGreyScale(BOOLEAN bGreyScale)
     }
 }
 
+// FIXME: `toolTipRef` should not be reference.
+//
+// 0x5976E0
+void CInfCursor::SetToolTip(const STRREF& toolTipRef, CUIControlBase* pControl, const CString& sExtraText)
+{
+    // TODO: Incomplete.
+}
+
 // 0x597740
 void CInfCursor::SetToolTip(STRREF nStrRef, CUIControlBase* pControl, SHORT nHotKeyIndex1, SHORT nHotKeyIndex2, CString sKey, STRREF nSecondaryStrRef, STRREF nTertiaryStrRef)
 {

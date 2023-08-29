@@ -142,8 +142,12 @@ class CUIControlButtonClock : public CUIControlButton3State {
 public:
     CUIControlButtonClock(CUIPanel* pPanel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonClock() override;
+    void TimerAsynchronousUpdate(BOOLEAN bInside) override;
+    void ActivateToolTip() override;
+    BOOL Render(BOOL bForce) override;
+    void OnLButtonClick(CPoint) override;
 
-    /* 066E */ CVidCell field_66E;
+    /* 066E */ CVidCell m_vcGear;
     /* 0748 */ CVidCell field_748;
 };
 

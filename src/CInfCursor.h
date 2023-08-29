@@ -37,6 +37,7 @@ public:
     void Initialize();
     void SetCursor(INT nNewCursor, BOOLEAN bForce);
     void SetGreyScale(BOOLEAN bGreyScale);
+    void SetToolTip(const STRREF& toolTipRef, CUIControlBase* pControl, const CString& sExtraText);
     void SetToolTip(STRREF nStrRef, CUIControlBase* pControl, SHORT nHotKeyIndex1, SHORT nHotKeyIndex2, CString sKey, STRREF nSecondaryStrRef, STRREF nTertiaryStrRef);
     void SetCustomCursor(CResRef customResRef, BOOLEAN bAnimating, INT nPointerNumber);
     void SetScrollArrowDirection();
