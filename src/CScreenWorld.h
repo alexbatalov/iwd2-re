@@ -66,6 +66,7 @@ public:
     void StartMovieMultiplayerHost(BYTE* cMovieResRef);
     void SetPendingMapWorld(PLAYER_ID idController, SHORT facingDirection);
     void StartMapWorldMultiplayerHost(PLAYER_ID idController, SHORT facingDirection);
+    void SetPendingReformParty();
 
     void CompressTime(DWORD deltaTime) { m_deltaTime = deltaTime; }
 
@@ -101,6 +102,7 @@ public:
     /* 116E */ SHORT m_nPendingMapWorldDirection;
     /* 119C */ BOOLEAN m_bPlayEndCredits;
     /* 119D */ BOOLEAN field_119D;
+    /* 119E */ BOOLEAN m_bPendingReformParty;
     /* 11CA */ BYTE m_nAutoHideInterface;
     /* 11CC */ INT m_nAutoUnhideInterface;
 };

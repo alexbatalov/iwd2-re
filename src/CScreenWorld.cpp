@@ -691,6 +691,12 @@ void CScreenWorld::StartMapWorldMultiplayerHost(PLAYER_ID idController, SHORT fa
     g_pBaldurChitin->GetActiveEngine()->SelectEngine(pWorldMap);
 }
 
+// 0x6934A0
+void CScreenWorld::SetPendingReformParty()
+{
+    m_bPendingReformParty = TRUE;
+}
+
 // 0x697970
 CUIControlButtonClock::CUIControlButtonClock(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
