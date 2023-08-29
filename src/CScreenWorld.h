@@ -56,6 +56,7 @@ public:
     void AddGold(DWORD dwGold);
     void StopStore();
     void RemoveText(POSITION pos);
+    void SetItemMarker(POSITION pos, LONG lMarker);
     void ClearChatMessages();
     void HideInterface();
     void UnhideInterface();

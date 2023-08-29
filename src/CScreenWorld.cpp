@@ -532,6 +532,14 @@ void CScreenWorld::RemoveText(POSITION pos)
     }
 }
 
+// 0x692660
+void CScreenWorld::SetItemMarker(POSITION pos, LONG lMarker)
+{
+    if (g_pBaldurChitin->GetObjectGame()->m_bGameLoaded) {
+        field_EA8->SetItemMarker(pos, lMarker);
+    }
+}
+
 // 0x692690
 void CScreenWorld::ClearChatMessages()
 {
