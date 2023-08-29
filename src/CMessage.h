@@ -56,6 +56,7 @@ public:
     BOOLEAN ChapterAnnounceStatus(BYTE nChapter, CResRef cResRef);
     BOOLEAN SendMapWorldAnnounceStatus(BOOLEAN bActive, PLAYER_ID idController, LONG nLeavingEdge);
     BOOLEAN MovieAnnounceStatus(CResRef cResMovie);
+    BOOLEAN SendReformPartyAnnounceStatus();
     void WeatherBroadcast(WORD wWeatherFlags);
     void TimeSynchBroadcast(ULONG nGameTime, BOOLEAN bCompressTime);
     void TimeChangeToServer(ULONG deltaTime);

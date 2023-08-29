@@ -318,6 +318,14 @@ BOOLEAN CBaldurMessage::MovieAnnounceStatus(CResRef cResMovie)
     return FALSE;
 }
 
+// 0x436DF0
+BOOLEAN CBaldurMessage::SendReformPartyAnnounceStatus()
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x436F50
 void CBaldurMessage::WeatherBroadcast(WORD wWeatherFlags)
 {

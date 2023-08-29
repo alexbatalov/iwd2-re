@@ -67,6 +67,7 @@ public:
     void SetPendingMapWorld(PLAYER_ID idController, SHORT facingDirection);
     void StartMapWorldMultiplayerHost(PLAYER_ID idController, SHORT facingDirection);
     void SetPendingReformParty();
+    void StartReformPartyMultiplayerHost();
 
     void CompressTime(DWORD deltaTime) { m_deltaTime = deltaTime; }
 
@@ -76,6 +77,7 @@ public:
     /* 013A */ BOOL m_bCapsLockKeyOn;
     /* 013E */ BOOLEAN m_bPaused;
     /* 0146 */ BOOL m_bHardPaused;
+    /* 0152 */ BOOL m_bPausedBeforePickParty;
     /* 0B68 */ CKeyInfo m_pVirtualKeys[CSCREENWORLD_VIRTUAL_KEYS];
     /* 0E48 */ BYTE m_pVirtualKeysFlags[CSCREENWORLD_VIRTUAL_KEYS];
     /* 0EA4 */ int field_EA4;

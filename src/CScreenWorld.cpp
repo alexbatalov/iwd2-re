@@ -697,6 +697,16 @@ void CScreenWorld::SetPendingReformParty()
     m_bPendingReformParty = TRUE;
 }
 
+// 0x6934B0
+void CScreenWorld::StartReformPartyMultiplayerHost()
+{
+    g_pBaldurChitin->GetBaldurMessage()->SendReformPartyAnnounceStatus();
+
+    m_bPausedBeforePickParty = m_bPaused;
+
+    g_pBaldurChitin->GetActiveEngine()->SelectEngine(g_pBaldurChitin->m_pEngineWorld);
+}
+
 // 0x697970
 CUIControlButtonClock::CUIControlButtonClock(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
