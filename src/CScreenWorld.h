@@ -50,6 +50,7 @@ public:
     BOOL TogglePauseGame(char a2, char a3, int a4);
     BOOLEAN ReadyMovie(const CResRef& movieResRef, BOOLEAN bForcedFromServer);
     BOOLEAN ReadyEndCredits(BOOLEAN bForcedFromServer);
+    void SetCurrentXP(DWORD dwCurrentXP);
     void StopStore();
     void ClearChatMessages();
     void HideInterface();

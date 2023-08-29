@@ -473,6 +473,37 @@ BOOLEAN CScreenWorld::ReadyEndCredits(BOOLEAN bForcedFromServer)
     }
 }
 
+// 0x6906F0
+void CScreenWorld::SetCurrentXP(DWORD dwCurrentXP)
+{
+    CAIGroup* pGroup = g_pBaldurChitin->GetObjectGame()->GetGroup();
+    LONG* pSpriteList = pGroup->GetGroupList();
+    INT nCount = pGroup->GetCount();
+
+    CGameSprite* pSprite;
+
+    for (INT nIndex = 0; nIndex < nCount; nIndex++) {
+        BYTE rc;
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(pSpriteList[nIndex],
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            pSprite->GetBaseStats()->m_xp = dwCurrentXP;
+            pSprite->field_562C = 1;
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(pSpriteList[nIndex],
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+
+    delete pSpriteList;
+}
+
 // 0x691B50
 void CScreenWorld::StopStore()
 {
