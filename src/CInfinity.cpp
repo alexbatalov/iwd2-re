@@ -1,10 +1,11 @@
 #include "CInfinity.h"
 
-#include "CChitin.h"
+#include "CBaldurChitin.h"
 #include "CGameArea.h"
 #include "CResWED.h"
 #include "CUtil.h"
 #include "CVidInf.h"
+#include "CVisibility.h"
 
 // 0x851934
 const DWORD CInfinity::FXPREP_COPYFROMBACK = 0x80;
@@ -169,6 +170,38 @@ int CInfTileSet::DetachFromVRam(int nTile)
     return 0;
 }
 
+// NOTE: Inlined.
+BOOLEAN CInfTileSet::GetTileRenderCode(INT nTile, TILE_CODE& tileCode)
+{
+    if (nTile < 0 || nTile > m_nTiles) {
+        return FALSE;
+    }
+
+    if (m_pResTiles[nTile] == NULL) {
+        return FALSE;
+    }
+
+    tileCode = m_pResTiles[nTile]->m_renderCode;
+
+    return TRUE;
+}
+
+// NOTE: Inlined.
+BOOLEAN CInfTileSet::SetTileRenderCode(INT nTile, TILE_CODE& tileCode)
+{
+    if (nTile < 0 || nTile > m_nTiles) {
+        return FALSE;
+    }
+
+    if (m_pResTiles[nTile] == NULL) {
+        return FALSE;
+    }
+
+    m_pResTiles[nTile]->m_renderCode = tileCode;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x5CBC80
@@ -179,7 +212,7 @@ CResInfTile::CResInfTile(BOOLEAN a1, BOOLEAN a2)
     // TODO: Wrong.
     m_nVRamFlags = 0;
 
-    field_68 = 0;
+    m_renderCode = CVisibilityMap::EXPLORED_FULL;
 
     if (a1) {
         m_pDualTileRes = new CResTile();
@@ -438,7 +471,117 @@ CInfinity::CInfinity()
 // 0x5CC710
 CInfinity::~CInfinity()
 {
+    if (bWEDDemanded) {
+        FreeWED();
+    }
+
+    rViewPort.top = 0;
+    rViewPort.left = 0;
+    rViewPort.right = 0;
+    rViewPort.bottom = 0;
+    field_20 = 0;
+    nAreaX = 0;
+    nAreaY = 0;
+    nOffsetX = 0;
+    nOffsetY = 0;
+    nNewX = 0;
+    nNewY = 0;
+    nTilesX = 0;
+    nTilesY = 0;
+    nVisibleTilesX = 0;
+    nVisibleTilesY = 0;
+    pResWED = NULL;
+    pVRPool = NULL;
+}
+
+// 0x5CCD00
+BOOL CInfinity::AttachVRamPool(CVRamPool* pNewVRPool)
+{
+    if (pNewVRPool == NULL) {
+        return FALSE;
+    }
+
+    pVRPool = pNewVRPool;
+
+    for (int index = 0; index < 5; index++) {
+        pTileSets[index]->m_pVRamPool = pNewVRPool;
+    }
+
+    return TRUE;
+}
+
+// 0x5CD2E0
+BOOL CInfinity::CancelRequestRect(int a1)
+{
     // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x5CDA70
+BOOL CInfinity::DetachVRamRect()
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x5CDC60
+BOOL CInfinity::DrawEllipse(const CPoint& ptCenter, const CSize& axes, COLORREF rgbColor)
+{
+    CPoint ptObjCenter;
+    ptObjCenter.x = ptCenter.x + rViewPort.left - nCurrentX;
+    ptObjCenter.y = ptCenter.y + rViewPort.top - nCurrentY;
+
+    rgbColor = g_pChitin->GetCurrentVideoMode()->ApplyFadeAmount(rgbColor);
+    rgbColor = g_pChitin->GetCurrentVideoMode()->ApplyBrightnessContrast(rgbColor);
+    return pVidMode->DrawEllipse(ptObjCenter,
+        axes,
+        rViewPort,
+        rgbColor);
+}
+
+// 0x5CDFC0
+CPoint CInfinity::GetWorldCoordinates(const CPoint& ptScreen)
+{
+    CPoint ptWorld;
+
+    if (rViewPort.PtInRect(ptScreen)) {
+        ptWorld.x = ptScreen.x + nNewX - rViewPort.left;
+        ptWorld.y = ptScreen.y + nNewY - rViewPort.top;
+    } else {
+        ptWorld.x = -1;
+        ptWorld.y = -1;
+    }
+
+    return ptWorld;
+}
+
+// 0x5CE020
+BOOL CInfinity::FreeWED()
+{
+    if (!bWEDDemanded) {
+        return FALSE;
+    }
+
+    bInitialized = FALSE;
+    CancelRequestRect(field_15E);
+    DetachVRamRect();
+    pResWED->Release();
+    pResWED->CancelRequest();
+
+    for (int index = 0; index < 5; index++) {
+        if (pTileSets[index] != NULL) {
+            delete pTileSets[index];
+            pTileSets[index] = NULL;
+        }
+    }
+
+    bWEDDemanded = FALSE;
+    nTilesX = 0;
+    nTilesY = 0;
+
+    return TRUE;
 }
 
 // 0x5CE0A0
@@ -537,11 +680,94 @@ BOOL CInfinity::FXUnlock(DWORD dwFlags, const CRect* pFxRect, const CPoint& ptRe
     return static_cast<CVidInf*>(g_pChitin->GetCurrentVideoMode())->FXUnlock(dwFlags, pFxRect, ptRef);
 }
 
+// 0x5CE960
+COLORREF CInfinity::GetGlobalLighting()
+{
+    // TODO: Incomplete.
+
+    return 0;
+}
+
 // 0x5CECB0
 void CInfinity::GetViewPosition(INT& x, INT& y)
 {
     x = nNewX;
     y = nNewY;
+}
+
+// 0x5D1100
+BOOL CInfinity::SetViewPort(const CRect& rRect)
+{
+    LONG oldLeft = rViewPort.left;
+    LONG oldTop = rViewPort.top;
+
+    if (!bWEDDemanded) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\Infinity.cpp
+        // __LINE__: 5615
+        UTIL_ASSERT(FALSE);
+    }
+
+    rViewPort = rRect;
+
+    if ((nCurrentX != m_ptScrollDest.x || nCurrentY != m_ptScrollDest.y)
+        && (m_ptScrollDest.x != -1 || m_ptScrollDest.y != -1)) {
+        m_ptScrollDest.x += rViewPort.left - oldLeft;
+        m_ptScrollDest.y += rViewPort.top - oldTop;
+    }
+
+    SetViewPosition(rViewPort.left + nCurrentX - oldLeft,
+        rViewPort.top + nCurrentY - oldTop,
+        TRUE);
+    m_bResizedViewPort = TRUE;
+
+    return TRUE;
+}
+
+// 0x5D11F0
+BOOL CInfinity::SetViewPosition(INT x, INT y, BOOLEAN bSetExactScale)
+{
+    CSingleLock posLock(&m_currentPosCritSect, FALSE);
+    posLock.Lock(INFINITE);
+
+    if (x < 0) {
+        x = 0;
+        m_ptCurrentPosExact.x = 0;
+    }
+
+    if (x > nAreaX - rViewPort.Width()) {
+        x = nAreaX - rViewPort.Width();
+        if (x < 0) {
+            x /= 2;
+        }
+        m_ptCurrentPosExact.x = 10000 * x;
+    }
+
+    if (y < 0) {
+        y = 0;
+        m_ptCurrentPosExact.y = 0;
+    }
+
+    if (y > nAreaY - rViewPort.Height()) {
+        y = nAreaY - rViewPort.Height();
+        if (y < 0) {
+            y = 0;
+        }
+        m_ptCurrentPosExact.y = 10000 * y;
+    }
+
+    nNewX = x;
+    nNewY = y;
+
+    if (bSetExactScale == TRUE) {
+        m_ptCurrentPosExact.x = 10000 * x;
+        m_ptCurrentPosExact.y = 10000 * y;
+    }
+
+    m_updateListenPosition = TRUE;
+
+    posLock.Unlock();
+
+    return TRUE;
 }
 
 // 0x5D1340
@@ -639,7 +865,45 @@ void CInfinity::SetApproachingDusk()
 // 0x5D1C00
 void CInfinity::UpdateLightning()
 {
-    // TODO: Incomplete.
+    g_pBaldurChitin->GetCurrentVideoMode()->rgbGlobalTint = GetGlobalLighting();
+}
+
+// 0x5D2350
+void CInfinity::SwapVRamTiles(WORD wFromTile, WORD wToTile)
+{
+    TILE_CODE tileCode = CVisibilityMap::EXPLORED_FULL;
+
+    INT nRet = pTileSets[0]->DetachFromVRam(wFromTile);
+
+    // NOTE: Uninline.
+    pTileSets[0]->GetTileRenderCode(wFromTile, tileCode);
+
+    if (nRet != -1) {
+        pTileSets[0]->AttachToVRam(wToTile);
+
+        // NOTE: Uninline.
+        pTileSets[0]->SetTileRenderCode(wToTile, tileCode);
+    }
+}
+
+// FIXME: `resRef` should be reference.
+//
+// 0x5D23D0
+void CInfinity::SetMessageScreen(CResRef resRef, DWORD strText, DWORD nDuration)
+{
+    m_vbMessageScreen.SetResRef(resRef, TRUE, TRUE);
+    m_vbMessageScreen.m_bDoubleSize = g_pBaldurChitin->field_4A2C;
+
+    field_286++;
+    m_strMessageText = strText;
+
+    if (nDuration == -1) {
+        m_nMessageEndTime = -1;
+    } else {
+        m_nMessageEndTime = GetTickCount() + nDuration;
+    }
+
+    m_bRenderMessage = TRUE;
 }
 
 // 0x452C30

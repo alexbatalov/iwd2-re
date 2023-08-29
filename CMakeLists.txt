@@ -340,6 +340,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CVidPalette.h"
     "src/CVidPoly.cpp"
     "src/CVidPoly.h"
+    "src/CVisibility.cpp"
+    "src/CVisibility.h"
     "src/CVoice.cpp"
     "src/CVoice.h"
     "src/CWarp.cpp"

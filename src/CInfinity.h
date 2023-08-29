@@ -16,13 +16,20 @@ class CVidFont;
 class CVidMode;
 class CVRamPool;
 
+typedef struct {
+    BYTE tileNW;
+    BYTE tileNE;
+    BYTE tileSW;
+    BYTE tileSE;
+} TILE_CODE;
+
 class CResInfTile : public CResTile {
 public:
     CResInfTile(BOOLEAN a1, BOOLEAN a2);
     ~CResInfTile() override;
 
     /* 0064 */ int m_nVRamTile;
-    /* 0068 */ int field_68;
+    /* 0068 */ TILE_CODE m_renderCode;
     /* 006C */ CResTile* m_pDualTileRes;
     /* 0070 */ unsigned char m_nVRamFlags;
 };
@@ -34,6 +41,9 @@ public:
 
     int AttachToVRam(int nTile);
     int DetachFromVRam(int nTile);
+
+    BOOLEAN GetTileRenderCode(INT nTile, TILE_CODE& tileCode);
+    BOOLEAN SetTileRenderCode(INT nTile, TILE_CODE& tileCode);
 
     /* 0000 */ int field_0;
     /* 0004 */ int field_4;
@@ -95,6 +105,12 @@ public:
     CInfinity();
     ~CInfinity();
 
+    BOOL AttachVRamPool(CVRamPool* pNewVRPool);
+    BOOL CancelRequestRect(int a1);
+    BOOL DetachVRamRect();
+    BOOL DrawEllipse(const CPoint& ptCenter, const CSize& axes, COLORREF rgbColor);
+    CPoint GetWorldCoordinates(const CPoint& ptScreen);
+    BOOL FreeWED();
     BOOL FXBltFrom(INT nDestSurface, CRect& rFXRect, INT x, INT y, INT nRefPointX, INT nRefPointY, DWORD dwFlags);
     BOOL FXPrep(CRect& rFXRect, DWORD dwFlags, INT nDestSurface, const CPoint& ptPos, const CPoint& ptReference);
     BOOL FXLock(CRect& rBack, DWORD dwFlags);
@@ -102,7 +118,10 @@ public:
     BOOL FXRender(CVidCell* pVidCell, INT nRefPointX, INT nRefPointY, DWORD dwFlags, INT nTransValue);
     BOOL FXRenderClippingPolys(INT nPosX, INT nPosY, INT nPosZ, const CPoint& ptRef, const CRect& rGCBounds, BOOLEAN bDithered, DWORD dwBlitFlags);
     BOOL FXUnlock(DWORD dwFlags, const CRect* pFxRect, const CPoint& ptRef);
+    COLORREF GetGlobalLighting();
     void GetViewPosition(INT& x, INT& y);
+    BOOL SetViewPort(const CRect& rRect);
+    BOOL SetViewPosition(INT x, INT y, BOOLEAN bSetExactScale);
     void CallLightning(INT xWorldPos, INT yWorldPos);
     void SetCurrentWeather(COLORREF rgbOvercast, SHORT nWeather, int nWeatherLevel, int nLightningFrequency);
     void SetDay();
@@ -112,6 +131,8 @@ public:
     void SetApproachingDawn();
     void SetApproachingDusk();
     void UpdateLightning();
+    void SwapVRamTiles(WORD wFromTile, WORD wToTile);
+    void SetMessageScreen(CResRef resRef, DWORD strText, DWORD nDuration);
 
     void SetAreaType(WORD areaType);
 
