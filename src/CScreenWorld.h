@@ -4,6 +4,7 @@
 #include "CBaldurEngine.h"
 
 #include "CKeyInfo.h"
+#include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
 #include "CVidCell.h"
 #include "CWeather.h"
@@ -61,6 +62,7 @@ public:
     void ClearChatMessages();
     void HideInterface();
     void UnhideInterface();
+    void StopDeath();
     void SetPendingChapterChange(BYTE nChapter, BYTE* szChapterResRef);
     void SetPendingMovie(BYTE* szMovieResRef);
     void StartSaveGameMultiplayerHost();
@@ -126,6 +128,13 @@ public:
 
     /* 066E */ CVidCell field_66E;
     /* 0748 */ CVidCell field_748;
+};
+
+class CUIControlButtonWorldDeathQuit : public CUIControlButton {
+public:
+    CUIControlButtonWorldDeathQuit(CUIPanel* pPanel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonWorldDeathQuit() override;
+    void OnLButtonClick(CPoint pt) override;
 };
 
 #endif /* CSCREENWORLD_H_ */

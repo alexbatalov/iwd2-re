@@ -6,6 +6,7 @@
 #include "CGameSprite.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CScreenConnection.h"
 #include "CScreenWorldMap.h"
 #include "CUIControlScrollBar.h"
 #include "CUIControlTextDisplay.h"
@@ -560,6 +561,12 @@ void CScreenWorld::UnhideInterface()
     // TODO: Incomplete.
 }
 
+// 0x692E80
+void CScreenWorld::StopDeath()
+{
+    // TODO: Incomplete.
+}
+
 // 0x693090
 void CScreenWorld::SetPendingChapterChange(BYTE nChapter, BYTE* szChapterResRef)
 {
@@ -966,4 +973,49 @@ CUIControlButtonClock::CUIControlButtonClock(CUIPanel* panel, UI_CONTROL_BUTTON*
 // 0x697C20
 CUIControlButtonClock::~CUIControlButtonClock()
 {
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x6982C0
+CUIControlButtonWorldDeathQuit::CUIControlButtonWorldDeathQuit(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    SetText(CBaldurEngine::FetchString(15417)); // "Quit"
+}
+
+// 0x698370
+CUIControlButtonWorldDeathQuit::~CUIControlButtonWorldDeathQuit()
+{
+}
+
+// 0x698410
+void CUIControlButtonWorldDeathQuit::OnLButtonClick(CPoint pt)
+{
+    CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 12285
+    UTIL_ASSERT(pWorld != NULL);
+
+    pWorld->StopDeath();
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 12289
+    UTIL_ASSERT(pGame != NULL);
+
+    pWorld->SelectEngine(g_pBaldurChitin->m_pEngineConnection);
+
+    if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+        if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+            g_pBaldurChitin->m_pEngineConnection->ShowSessionTerminatedMessage();
+        }
+
+        g_pChitin->cNetwork.CloseSession(TRUE);
+        g_pBaldurChitin->GetBaldurMessage()->m_bPlayerShutdown = FALSE;
+    }
+
+    pGame->DestroyGame(1, 0);
 }
