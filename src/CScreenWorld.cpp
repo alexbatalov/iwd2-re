@@ -972,6 +972,65 @@ void CScreenWorld::DisableKeyRepeat()
 
 // -----------------------------------------------------------------------------
 
+// 0x6974B0
+CUIControlButtonWorldContainerIcon::CUIControlButtonWorldContainerIcon(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+    field_662 = 0;
+}
+
+// 0x697540
+CUIControlButtonWorldContainerIcon::~CUIControlButtonWorldContainerIcon()
+{
+}
+
+// 0x6975E0
+BOOL CUIControlButtonWorldContainerIcon::Render(BOOL bForce)
+{
+    CVidCell vcIcon;
+
+    if (!m_bActive && !m_bInactiveRender) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount == 0 && !bForce) {
+        return FALSE;
+    }
+
+    CVidMode* pVidMode = g_pBaldurChitin->GetCurrentVideoMode();
+
+    if (m_resRef == "") {
+        return FALSE;
+    }
+
+    // NOTE: Uninline.
+    vcIcon.SetResRef(m_resRef, m_pPanel->m_pManager->m_bDoubleSize, TRUE, TRUE);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 11411
+    UTIL_ASSERT(vcIcon.GetRes() != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 11412
+    UTIL_ASSERT(pVidMode != NULL);
+
+    CPoint pt = m_pPanel->m_ptOrigin + m_ptOrigin;
+
+    CSize size;
+    vcIcon.GetCurrentFrameSize(size, FALSE);
+
+    CRect rFrame(pt, size);
+
+    CRect rClip;
+    rClip.IntersectRect(rFrame, m_rDirty);
+
+    vcIcon.Render(0, pt.x, pt.y, rClip, NULL, 0, 0, -1);
+
+    return TRUE;
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x6977E0
 CUIControlButtonWorldContainerClose::CUIControlButtonWorldContainerClose(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)

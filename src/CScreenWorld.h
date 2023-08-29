@@ -122,6 +122,15 @@ public:
     /* 11CC */ INT m_nAutoUnhideInterface;
 };
 
+class CUIControlButtonWorldContainerIcon : public CUIControlButton {
+public:
+    CUIControlButtonWorldContainerIcon(CUIPanel* pPanel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonWorldContainerIcon() override;
+    BOOL Render(BOOL bForce) override;
+
+    /* 0666 */ CResRef m_resRef;
+};
+
 class CUIControlButtonWorldContainerClose : public CUIControlButton {
 public:
     CUIControlButtonWorldContainerClose(CUIPanel* pPanel, UI_CONTROL_BUTTON* controlInfo);
