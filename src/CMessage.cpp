@@ -284,6 +284,14 @@ BOOLEAN CBaldurMessage::SendSignal(BYTE signalType, BYTE signalToSend)
     return FALSE;
 }
 
+// 0x433580
+BOOLEAN CBaldurMessage::NonBlockingWaitForSignal(BYTE signalType, BYTE signalToWaitFor)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x433BE0
 BOOLEAN CBaldurMessage::SendProgressBarStatus(LONG nActionProgress, LONG nActionTarget, BOOLEAN bWaiting, LONG nWaitingReason, BOOLEAN bTimeoutVisible, DWORD nSecondsToTimeout)
 {

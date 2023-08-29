@@ -52,6 +52,7 @@ public:
     void SetSignalDefaultSecondsToTimeout();
     BOOLEAN RequestClientSignal(BYTE signalToSend);
     BOOLEAN SendSignal(BYTE signalType, BYTE signalToSend);
+    BOOLEAN NonBlockingWaitForSignal(BYTE signalType, BYTE signalToWaitFor);
     BOOLEAN SendProgressBarStatus(LONG nActionProgress, LONG nActionTarget, BOOLEAN bWaiting, LONG nWaitingReason, BOOLEAN bTimeoutVisible, DWORD nSecondsToTimeout);
     BOOLEAN ChapterAnnounceStatus(BYTE nChapter, CResRef cResRef);
     BOOLEAN SendMapWorldAnnounceStatus(BOOLEAN bActive, PLAYER_ID idController, LONG nLeavingEdge);

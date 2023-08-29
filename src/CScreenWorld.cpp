@@ -716,6 +716,21 @@ void CScreenWorld::SetPendingRest(INT nHP, BOOLEAN bRenting, BOOLEAN bMovie)
     m_bRestMovie = bMovie;
 }
 
+// 0x693680
+void CScreenWorld::CheckEndOfHardPause()
+{
+    if (g_pBaldurChitin->GetBaldurMessage()->NonBlockingWaitForSignal(CBaldurMessage::SIGNAL_SERVER, CBaldurMessage::SIGNAL_END_MAJOR_EVENT) == TRUE) {
+        m_bHardPaused = FALSE;
+
+        if (!m_bEndMajorEventPauseStatus
+            && g_pBaldurChitin->m_pEngineWorld->m_bPaused == TRUE) {
+            TogglePauseGame(0, 1, g_pBaldurChitin->cNetwork.m_idLocalPlayer);
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->SetListenToJoinOption(m_bEndMajorEventListenToJoin, TRUE);
+    }
+}
+
 // 0x697970
 CUIControlButtonClock::CUIControlButtonClock(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)

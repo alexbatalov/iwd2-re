@@ -69,6 +69,7 @@ public:
     void SetPendingReformParty();
     void StartReformPartyMultiplayerHost();
     void SetPendingRest(INT nHP, BOOLEAN bRenting, BOOLEAN bMovie);
+    void CheckEndOfHardPause();
 
     void CompressTime(DWORD deltaTime) { m_deltaTime = deltaTime; }
 
