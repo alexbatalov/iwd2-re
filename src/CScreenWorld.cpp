@@ -928,6 +928,20 @@ void CScreenWorld::SetDialogTokens(CGameSprite* pCharacter)
     }
 }
 
+// 0x6986A0
+void CScreenWorld::EnableKeyRepeat()
+{
+    m_pVirtualKeys[49].SetRepeat(1, 1);
+    m_pVirtualKeys[50].SetRepeat(1, 1);
+    m_pVirtualKeys[51].SetRepeat(1, 1);
+    m_pVirtualKeys[52].SetRepeat(1, 1);
+    m_pVirtualKeys[53].SetRepeat(1, 1);
+    m_pVirtualKeys[54].SetRepeat(1, 1);
+    m_pVirtualKeys[55].SetRepeat(1, 1);
+    m_pVirtualKeys[56].SetRepeat(1, 1);
+    m_pVirtualKeys[57].SetRepeat(1, 1);
+}
+
 // 0x697970
 CUIControlButtonClock::CUIControlButtonClock(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)

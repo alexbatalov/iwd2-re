@@ -72,6 +72,7 @@ public:
     void SetPendingRest(INT nHP, BOOLEAN bRenting, BOOLEAN bMovie);
     void CheckEndOfHardPause();
     void SetDialogTokens(CGameSprite* pCharacter);
+    void EnableKeyRepeat();
 
     void CompressTime(DWORD deltaTime) { m_deltaTime = deltaTime; }
 
