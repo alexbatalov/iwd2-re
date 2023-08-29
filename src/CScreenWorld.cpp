@@ -707,6 +707,15 @@ void CScreenWorld::StartReformPartyMultiplayerHost()
     g_pBaldurChitin->GetActiveEngine()->SelectEngine(g_pBaldurChitin->m_pEngineWorld);
 }
 
+// 0x6934F0
+void CScreenWorld::SetPendingRest(INT nHP, BOOLEAN bRenting, BOOLEAN bMovie)
+{
+    m_bRestPending = TRUE;
+    m_nRestHP = nHP;
+    m_bRestRenting = bRenting;
+    m_bRestMovie = bMovie;
+}
+
 // 0x697970
 CUIControlButtonClock::CUIControlButtonClock(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)

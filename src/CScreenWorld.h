@@ -68,6 +68,7 @@ public:
     void StartMapWorldMultiplayerHost(PLAYER_ID idController, SHORT facingDirection);
     void SetPendingReformParty();
     void StartReformPartyMultiplayerHost();
+    void SetPendingRest(INT nHP, BOOLEAN bRenting, BOOLEAN bMovie);
 
     void CompressTime(DWORD deltaTime) { m_deltaTime = deltaTime; }
 
@@ -102,6 +103,10 @@ public:
     /* 1169 */ BOOLEAN m_bPendingMapWorld;
     /* 116A */ PLAYER_ID m_idPendingMapWorldController;
     /* 116E */ SHORT m_nPendingMapWorldDirection;
+    /* 1170 */ BOOLEAN m_bRestPending;
+    /* 1171 */ BOOLEAN m_bRestRenting;
+    /* 1172 */ INT m_nRestHP;
+    /* 1176 */ BOOLEAN m_bRestMovie;
     /* 119C */ BOOLEAN m_bPlayEndCredits;
     /* 119D */ BOOLEAN field_119D;
     /* 119E */ BOOLEAN m_bPendingReformParty;
