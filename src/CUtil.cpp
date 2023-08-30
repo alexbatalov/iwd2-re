@@ -175,6 +175,44 @@ int CUtil::Find(const CString& sString, char ch, int start)
     return -1;
 }
 
+// 0x781180
+int CUtil::FindOneOf(const CString& sString, const CString& sSeparators, int start)
+{
+    CString sMutableSeparators(sSeparators);
+
+    if (g_pChitin->field_1A0) {
+        int nIndex = 0;
+        while (nIndex < sMutableSeparators.GetLength()) {
+            if (IsDBCSLeadByte(sMutableSeparators[nIndex])) {
+                sMutableSeparators = sMutableSeparators.Left(nIndex) + sMutableSeparators.Mid(nIndex + 1);
+                nIndex--;
+            }
+            nIndex++;
+        }
+
+        if (sMutableSeparators.IsEmpty()) {
+            return -1;
+        }
+    }
+
+    int nIndex = start;
+    while (nIndex < sString.GetLength()) {
+        if (IsDBCSLeadByte(sMutableSeparators[nIndex])) {
+            nIndex++;
+        } else {
+            for (int pos = 0; pos < sMutableSeparators.GetLength(); pos++) {
+                if (sString[nIndex] == sMutableSeparators[pos]) {
+                    return nIndex;
+                }
+            }
+        }
+
+        nIndex++;
+    }
+
+    return -1;
+}
+
 // 0x781470
 void CUtil::TrimLeft(CString& sString)
 {
