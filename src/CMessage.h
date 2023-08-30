@@ -5,6 +5,7 @@
 
 #include "CAIAction.h"
 #include "CChatBuffer.h"
+#include "CColorEffects.h"
 #include "CResRef.h"
 
 // TODO: Reuse from `CNetwork.h`.
@@ -24,6 +25,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_CLEAR_TRIGGERS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_COLOR_CHANGE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_COLOR_RESET;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_COLOR_UPDATE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -243,6 +245,19 @@ public:
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
     void Run() override;
+};
+
+class CMessageColorUpdate : public CMessage {
+public:
+    CMessageColorUpdate(CGameSprite* pSprite, LONG caller, LONG target);
+    ~CMessageColorUpdate() override;
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ CColorRanges m_appliedColorRanges;
+    /* */ CColorEffects m_appliedColorEffects;
 };
 
 class CMessageStoreRelease : public CMessage {

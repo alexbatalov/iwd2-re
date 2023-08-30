@@ -55,6 +55,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_COLOR_CHANGE = 9;
 // 0x84CEE1
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_COLOR_RESET = 10;
 
+// 0x84CEE2
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_COLOR_UPDATE = 11;
+
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
@@ -1032,6 +1035,70 @@ void CMessageColorReset::Run()
 
             // NOTE: Uninline.
             pSprite->GetAnimation()->ClearColorEffectsAll();
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4FA960
+CMessageColorUpdate::CMessageColorUpdate(CGameSprite* pSprite, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_appliedColorRanges = pSprite->GetDerivedStats()->m_appliedColorRanges;
+    m_appliedColorEffects = pSprite->GetDerivedStats()->m_appliedColorEffects;
+}
+
+// 0x4F6FC0
+CMessageColorUpdate::~CMessageColorUpdate()
+{
+}
+
+// 0x453510
+SHORT CMessageColorUpdate::GetCommType()
+{
+    return BROADCAST;
+}
+
+// 0x40A0E0
+BYTE CMessageColorUpdate::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4FAA10
+BYTE CMessageColorUpdate::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_COLOR_UPDATE;
+}
+
+// 0x4FACF0
+void CMessageColorUpdate::Run()
+{
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
+            BYTE* colors = pSprite->GetBaseStats()->m_colors;
+            for (int index = 0; index < 7; index++) {
+                // NOTE: Uninline.
+                pSprite->GetAnimation()->SetColorRange(index, colors[index]);
+            }
+
+            m_appliedColorRanges.Apply(pSprite);
+            m_appliedColorEffects.Apply(pSprite);
         }
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
