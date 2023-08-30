@@ -119,6 +119,7 @@ public:
     void IncCurrentPortrait(CGameSprite* pSprite);
     void DecCurrentPortrait(CGameSprite* pSprite);
     void StartCreateChar(INT nCharacterSlot, INT nEngineState);
+    void CancelCreateChar();
     void RecallMemoryAbilities(BYTE& nSTR, BYTE& nDEX, BYTE& nCON, BYTE& nINT, BYTE& nWIS, BYTE& nCHR, INT& nExtra);
     INT GetNumHatedRaces();
     void SetTopHatedRace(INT nTopHatedRace);

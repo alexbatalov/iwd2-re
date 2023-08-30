@@ -9,6 +9,9 @@
 #include "CIcon.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CScreenConnection.h"
+#include "CScreenMultiPlayer.h"
+#include "CScreenSinglePlayer.h"
 #include "CSpell.h"
 #include "CUIControlFactory.h"
 #include "CUIPanel.h"
@@ -3708,6 +3711,29 @@ void CScreenCreateChar::StartCreateChar(INT nCharacterSlot, INT nEngineState)
     pButton->SetText(FetchString(strTitle));
 }
 
+// NOTE: Inlined.
+void CScreenCreateChar::CancelCreateChar()
+{
+    CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 5811
+    UTIL_ASSERT(pSettings != NULL);
+
+    DeleteCharacter();
+
+    if (field_552 != 4
+        && pSettings->GetCharacterStatus(field_556) != CMultiplayerSettings::CHARSTATUS_CHARACTER) {
+        pSettings->SignalCharacterStatus(field_556,
+            CMultiplayerSettings::CHARSTATUS_SIGNAL_CREATION_CANCEL,
+            TRUE,
+            TRUE);
+    }
+
+    field_556 = -1;
+    field_552 = 0;
+}
+
 // 0x610850
 void CScreenCreateChar::RecallMemoryAbilities(BYTE& nSTR, BYTE& nDEX, BYTE& nCON, BYTE& nINT, BYTE& nWIS, BYTE& nCHR, INT& nExtra)
 {
@@ -4605,7 +4631,113 @@ void CScreenCreateChar::OnCancelButtonClick()
 // 0x6175A0
 void CScreenCreateChar::OnMainCancelButtonClick()
 {
-    // TODO: Incomplete.
+    // NOTE: Original code is different. Somehow it casts `CScreenSinglePlayer`
+    // as `CScreenMultiPlayer` into one variable with only one assertion at
+    // line 9758 (seen in multiplayer path below).
+    if (g_pChitin->cNetwork.m_nServiceProvider == CNetwork::SERV_PROV_NULL) {
+        CScreenSinglePlayer* pSinglePlayer = g_pBaldurChitin->m_pEngineSinglePlayer;
+
+        UTIL_ASSERT(pSinglePlayer != NULL);
+    } else {
+        CScreenMultiPlayer* pMultiPlayer = g_pBaldurChitin->m_pEngineMultiPlayer;
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 9758
+        UTIL_ASSERT(pMultiPlayer != NULL);
+    }
+
+    CScreenConnection* pConnection = g_pBaldurChitin->m_pEngineConnection;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 9762
+    UTIL_ASSERT(pConnection != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 9764
+    UTIL_ASSERT(pGame != NULL);
+
+    g_pChitin->cVideo.ResetDoubleSizeData();
+
+    if (m_nCurrentStep > 0) {
+        // NOTE: Uninline.
+        INT nGameSprite = GetSpriteId();
+
+        CGameSprite* pSprite;
+        BYTE rc;
+        do {
+            rc = pGame->GetObjectArray()->GetShare(nGameSprite,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            field_149E = 0;
+
+            SummonPopup(53, pSprite);
+
+            pGame->GetObjectArray()->ReleaseShare(nGameSprite,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    } else {
+        switch (field_552) {
+        case 1:
+            // NOTE: Uninline.
+            CancelCreateChar();
+
+            pGame->DestroyGame(1, 0);
+
+            SelectEngine(pConnection);
+            break;
+        case 2:
+            // NOTE: Uninline.
+            CancelCreateChar();
+
+            if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+                g_pChitin->cNetwork.CloseSession(TRUE);
+            }
+
+            pGame->DestroyGame(1, 0);
+
+            pConnection->SetEliminateInitialize(TRUE);
+            SelectEngine(pConnection);
+            break;
+        case 3:
+            // NOTE: Uninline.
+            CancelCreateChar();
+
+            // NOTE: Original code is different. It uses one variable for
+            // either `CScreenSinglePlayer` or `CScreenMultiPlayer` which was
+            // set earlier. It calls `StartMultiPlayer` which seems to be binary
+            // identical to `StartSinglePlayer`.
+            if (g_pChitin->cNetwork.m_nServiceProvider == CNetwork::SERV_PROV_NULL) {
+                g_pBaldurChitin->m_pEngineSinglePlayer->field_45C = 1;
+                g_pBaldurChitin->m_pEngineSinglePlayer->StartSinglePlayer(1);
+                g_pBaldurChitin->m_pEngineSinglePlayer->field_138E = 1;
+                SelectEngine(g_pBaldurChitin->m_pEngineSinglePlayer);
+            } else {
+                g_pBaldurChitin->m_pEngineMultiPlayer->field_45C = 1;
+                g_pBaldurChitin->m_pEngineMultiPlayer->StartMultiPlayer(1);
+                g_pBaldurChitin->m_pEngineMultiPlayer->field_138E = 1;
+                SelectEngine(g_pBaldurChitin->m_pEngineMultiPlayer);
+            }
+
+            break;
+        case 4:
+            // NOTE: Uninline.
+            CancelCreateChar();
+
+            SelectEngine(pConnection);
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+            // __LINE__: 9845
+            UTIL_ASSERT(FALSE);
+        }
+    }
 }
 
 // NOTE: Inlined.
