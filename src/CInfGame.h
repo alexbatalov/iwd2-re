@@ -88,6 +88,17 @@ public:
 
 class CInfGame {
 public:
+    static const SHORT KILL_INNOCENT;
+    static const SHORT INJURE_INNOCENT;
+    static const SHORT STEAL;
+    static const SHORT KILL_FIST;
+    static const SHORT MONEY_CHURCH;
+    static const SHORT MONEY_BEGGAR;
+    static const SHORT MAGIC_CHURCH;
+    static const SHORT KILL_EVIL;
+    static const SHORT BASE_CHURCH;
+    static const SHORT REPUTATION_MULTIPLIER;
+
     static const SHORT FEEDBACK_GOLD;
 
     CInfGame();
@@ -154,6 +165,7 @@ public:
     BOOL RemoveCharacterFromFamiliars(LONG nCharacterId);
     DWORD GetScrollSpeed();
     void ReputationAdjustment(SHORT reputationAdjustment, BOOL set);
+    void ChangeReputation(SHORT eventCode);
     void AddDisposableItem(CItem* pItem);
     void DestroyDisposableItems();
     void AddPartyGold(LONG dwAddPartyGold);

@@ -33,6 +33,36 @@
 
 #define FIFTY_THREE 53
 
+// 0x851884
+const SHORT CInfGame::KILL_INNOCENT = 0;
+
+// 0x851886
+const SHORT CInfGame::INJURE_INNOCENT = 1;
+
+// 0x851888
+const SHORT CInfGame::STEAL = 2;
+
+// 0x85188A
+const SHORT CInfGame::KILL_FIST = 3;
+
+// 0x85188C
+const SHORT CInfGame::MONEY_CHURCH = 4;
+
+// 0x85188E
+const SHORT CInfGame::MONEY_BEGGAR = 5;
+
+// 0x851890
+const SHORT CInfGame::MAGIC_CHURCH = 6;
+
+// 0x851892
+const SHORT CInfGame::KILL_EVIL = 7;
+
+// 0x851894
+const SHORT CInfGame::BASE_CHURCH = 8;
+
+// 0x851896
+const SHORT CInfGame::REPUTATION_MULTIPLIER = 10;
+
 // 0x8518BE
 const SHORT CInfGame::FEEDBACK_GOLD = 1;
 
@@ -2512,6 +2542,13 @@ DWORD CInfGame::GetScrollSpeed()
 void CInfGame::ReputationAdjustment(SHORT reputationAdjustment, BOOL set)
 {
     // TODO: Incomplete.
+}
+
+// 0x5BDF80
+void CInfGame::ChangeReputation(SHORT eventCode)
+{
+    LONG repMod = atol(m_ruleTables.m_tReputationMod.GetAt(CPoint(eventCode, m_nReputation / REPUTATION_MULTIPLIER - 1)));
+    ReputationAdjustment(static_cast<SHORT>(repMod), FALSE);
 }
 
 // 0x5BF4B0
