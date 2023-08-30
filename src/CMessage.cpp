@@ -373,6 +373,26 @@ BOOLEAN CBaldurMessage::DemandSettingsNightmareMode(BOOLEAN wait)
     return FALSE;
 }
 
+// 0x43DF60
+BOOL CBaldurMessage::DisplayText(const CString& sName, const CString& sText, COLORREF rgbNameColor, COLORREF rgbTextColor, LONG lMarker, LONG caller, LONG target)
+{
+    if (g_pBaldurChitin->GetObjectGame()->m_bInLoadGame == TRUE) {
+        return FALSE;
+    }
+
+    CMessageDisplayText* pMessage = new CMessageDisplayText(sName,
+        sText,
+        rgbNameColor,
+        rgbTextColor,
+        lMarker,
+        caller,
+        target);
+
+    g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+
+    return TRUE;
+}
+
 // 0x43E0E0
 BOOL CBaldurMessage::sub_43E0E0(DWORD a1, DWORD a2, COLORREF a3, COLORREF a4, int a5, int a6, int a7)
 {
@@ -1199,6 +1219,11 @@ CMessageDisplayText::CMessageDisplayText(const CString& name, const CString& tex
     m_textColor = textColor;
     m_marker = marker;
     m_moveToTop = FALSE;
+}
+
+// 0x43E090
+CMessageDisplayText::~CMessageDisplayText()
+{
 }
 
 // 0x43E170

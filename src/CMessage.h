@@ -66,6 +66,7 @@ public:
     void TimeSynchBroadcast(ULONG nGameTime, BOOLEAN bCompressTime);
     void TimeChangeToServer(ULONG deltaTime);
     BOOLEAN DemandSettingsNightmareMode(BOOLEAN wait);
+    BOOL DisplayText(const CString& sName, const CString& sText, COLORREF rgbNameColor, COLORREF rgbTextColor, LONG lMarker, LONG caller, LONG target);
     BOOL sub_43E0E0(DWORD a1, DWORD a2, COLORREF a3, COLORREF a4, int a5, int a6, int a7);
     CString GetVersionControlShutdownServerString();
     CString GetVersionControlShutdownClientString();
@@ -276,6 +277,7 @@ public:
 class CMessageDisplayText : public CMessage {
 public:
     CMessageDisplayText(const CString& name, const CString& text, COLORREF nameColor, COLORREF textColor, LONG marker, LONG caller, LONG target);
+    ~CMessageDisplayText() override;
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
