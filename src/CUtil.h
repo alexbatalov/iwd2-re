@@ -16,6 +16,7 @@ public:
     static int Find(const CString& sString, char ch, int start);
     static int FindOneOf(const CString& sString, const CString& sSeparators, int start);
     static void MakeReverse(CString& sString);
+    static BOOL IsDBCSTrailByte(const CString& sString, int end);
     static void TrimLeft(CString& sString);
     static void TrimRight(CString& sString);
 

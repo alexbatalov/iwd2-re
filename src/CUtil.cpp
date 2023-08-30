@@ -233,6 +233,21 @@ void CUtil::MakeReverse(CString& sString)
     sString = sReversed;
 }
 
+// 0x7815D0
+BOOL CUtil::IsDBCSTrailByte(const CString& sString, int end)
+{
+    // NOTE: Looks odd.
+    int v1 = -2;
+
+    for (int index = 0; index < end; index++) {
+        if (IsDBCSLeadByte(sString[index])) {
+            v1 = index++;
+        }
+    }
+
+    return end - v1 == 1;
+}
+
 // 0x781470
 void CUtil::TrimLeft(CString& sString)
 {
