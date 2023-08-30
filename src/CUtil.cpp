@@ -156,6 +156,25 @@ BYTE CUtil::SplitString(CVidFont* pTextFont, const CString& sSource, WORD nLineL
     return nCurrentLine;
 }
 
+// 0x781100
+int CUtil::Find(const CString& sString, char ch, int start)
+{
+    int nIndex = start;
+    while (nIndex < sString.GetLength()) {
+        if (g_pChitin->field_1A0 && IsDBCSLeadByte(sString[nIndex])) {
+            nIndex++;
+        } else {
+            if (sString[nIndex] == ch) {
+                return nIndex;
+            }
+        }
+
+        nIndex++;
+    }
+
+    return -1;
+}
+
 // 0x781470
 void CUtil::TrimLeft(CString& sString)
 {

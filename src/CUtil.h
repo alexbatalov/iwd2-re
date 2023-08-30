@@ -13,6 +13,7 @@ public:
     static LONG UtilRandInt(LONG nRange, LONG nWeight);
     static int GetCurrentBitsPerPixels();
     static BYTE SplitString(CVidFont* pTextFont, const CString& sSource, WORD nLineLength, BYTE nMaxStrings, CString* pStringsOut, BOOL bDivideWords, BOOL bDemanded, BOOL bCheckRemainderForNewLine, WORD nSuggestedSplitLength);
+    static int Find(const CString& sString, char ch, int start);
     static void TrimLeft(CString& sString);
     static void TrimRight(CString& sString);
 
