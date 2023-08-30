@@ -3,6 +3,7 @@
 
 #include "mfc.h"
 
+#include "BalDataTypes.h"
 #include "CAIAction.h"
 #include "CChatBuffer.h"
 #include "CColorEffects.h"
@@ -28,6 +29,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_COLOR_UPDATE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_CUT_SCENE_MODE_STATUS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXT;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXTREF;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -285,6 +287,22 @@ public:
 
     /* 000C */ CString m_name;
     /* 0010 */ CString m_text;
+    /* 0014 */ COLORREF m_nameColor;
+    /* 0018 */ COLORREF m_textColor;
+    /* 001C */ LONG m_marker;
+    /* 0020 */ BOOLEAN m_moveToTop;
+};
+
+class CMessageDisplayTextRef : public CMessage {
+public:
+    CMessageDisplayTextRef(STRREF name, STRREF text, COLORREF nameColor, COLORREF textColor, LONG marker, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ STRREF m_name;
+    /* 0010 */ STRREF m_text;
     /* 0014 */ COLORREF m_nameColor;
     /* 0018 */ COLORREF m_textColor;
     /* 001C */ LONG m_marker;
