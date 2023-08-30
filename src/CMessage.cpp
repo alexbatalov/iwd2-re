@@ -107,6 +107,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_AISPEED = 38;
 // 0x84CEFE
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_COMMAND_PAUSE = 39;
 
+// 0x84CEFF
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_DIALOG_WAIT = 40;
+
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
@@ -1932,6 +1935,59 @@ void CMessageSetCommandPause::Run()
     if (rc == CGameObjectArray::SUCCESS) {
         if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
             pSprite->m_nCommandPause = m_commandPause;
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F5EB0
+CMessageSetDialogWait::CMessageSetDialogWait(LONG wait, LONG waitTarget, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_wait = wait;
+    m_waitTarget = waitTarget;
+}
+
+// 0x40A0D0
+SHORT CMessageSetDialogWait::GetCommType()
+{
+    return SEND;
+}
+
+// 0x40A0E0
+BYTE CMessageSetDialogWait::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x485A10
+BYTE CMessageSetDialogWait::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_DIALOG_WAIT;
+}
+
+// 0x5062C0
+void CMessageSetDialogWait::Run()
+{
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
+            pSprite->m_dialogWait = m_wait;
+            pSprite->m_dialogWaitTarget = m_waitTarget;
         }
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
