@@ -38,6 +38,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_LEAVE_PARTY;
     static const BYTE MSG_SUBTYPE_CMESSAGE_PARTY_GOLD;
     static const BYTE MSG_SUBTYPE_CMESSAGE_PLAY_SOUND;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_REPUTATION_CHANGE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -129,7 +130,7 @@ public:
     /* 00EE */ BYTE m_nVersionControlShutdownReason;
     /* 00F0 */ DWORD m_dwSignalSecondsToTimeout;
     /* 00F4 */ BOOLEAN m_bMultiplayerSessionShutdown;
-    /* 00F5 */ unsigned char field_F5;
+    /* 00F5 */ BOOLEAN m_bInReputationChange;
     /* 00F6 */ unsigned char field_F6;
 };
 
@@ -406,6 +407,17 @@ public:
     /* 000C */ BOOL m_showText;
     /* 0010 */ BOOL m_showCircle;
     /* 0014 */ BYTE m_soundId;
+};
+
+class CMessageReputationChange : public CMessage {
+public:
+    CMessageReputationChange(SHORT deltaRep, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ SHORT m_deltaRep;
 };
 
 class CMessageStoreRelease : public CMessage {

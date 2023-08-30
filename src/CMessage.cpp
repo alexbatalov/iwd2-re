@@ -98,6 +98,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_PARTY_GOLD = 31;
 // 0x84CEF7
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_PLAY_SOUND = 32;
 
+// 0x84CEFB
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_REPUTATION_CHANGE = 36;
+
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
@@ -171,7 +174,7 @@ CBaldurMessage::CBaldurMessage()
     m_dwSignalSecondsToTimeout = SIGNAL_SECONDSTOMPTIMEOUT;
     m_bPlayerShutdown = FALSE;
     m_bMultiplayerSessionShutdown = FALSE;
-    field_F5 = 0;
+    m_bInReputationChange = FALSE;
     field_F6 = 0;
 }
 
@@ -1792,6 +1795,41 @@ void CMessagePlaySound::Run()
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
     }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F5D30
+CMessageReputationChange::CMessageReputationChange(SHORT deltaRep, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_deltaRep = deltaRep;
+}
+
+// 0x4536E0
+SHORT CMessageReputationChange::GetCommType()
+{
+    return BROADCAST_FORCED_OTHERS;
+}
+
+// 0x40A0E0
+BYTE CMessageReputationChange::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4F5D60
+BYTE CMessageReputationChange::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_REPUTATION_CHANGE;
+}
+
+// 0x504C00
+void CMessageReputationChange::Run()
+{
+    g_pBaldurChitin->GetBaldurMessage()->m_bInReputationChange = TRUE;
+    g_pBaldurChitin->GetObjectGame()->ReputationAdjustment(m_deltaRep, FALSE);
+    g_pBaldurChitin->GetBaldurMessage()->m_bInReputationChange = FALSE;
 }
 
 // -----------------------------------------------------------------------------

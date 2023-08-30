@@ -2508,6 +2508,12 @@ DWORD CInfGame::GetScrollSpeed()
     }
 }
 
+// 0x5BDC00
+void CInfGame::ReputationAdjustment(SHORT reputationAdjustment, BOOL set)
+{
+    // TODO: Incomplete.
+}
+
 // 0x5BF4B0
 void CInfGame::AddDisposableItem(CItem* pItem)
 {

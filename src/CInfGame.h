@@ -153,6 +153,7 @@ public:
     BOOL AddCharacterToFamiliars(LONG nCharacterId);
     BOOL RemoveCharacterFromFamiliars(LONG nCharacterId);
     DWORD GetScrollSpeed();
+    void ReputationAdjustment(SHORT reputationAdjustment, BOOL set);
     void AddDisposableItem(CItem* pItem);
     void DestroyDisposableItems();
     void AddPartyGold(LONG dwAddPartyGold);
