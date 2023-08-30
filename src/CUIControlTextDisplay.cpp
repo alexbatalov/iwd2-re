@@ -739,7 +739,7 @@ BOOL CUIControlTextDisplay::Render(BOOL bForce)
         }
 
         if (rgbCurrentTextColor != pDisplayString->m_rgbTextColor) {
-            if (!field_AAE
+            if (!field_AAF
                 || (g_pChitin->m_sFontName.Compare("") != 0
                     && m_textFont.GetResRef() != "STATES2")) {
                 rgbCurrentTextColor = pDisplayString->m_rgbTextColor;
