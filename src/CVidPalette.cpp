@@ -856,7 +856,234 @@ void CVidPalette::SetRange(USHORT nRange, USHORT nValue, CVidBitmap& bmpMasterPa
 // 0x7BF870
 void CVidPalette::RealizeRange(DWORD* pDestPalette, INT nBpp, DWORD dwFlags, CVIDIMG_PALETTEAFFECT* pAffectArgs, DWORD nTransVal)
 {
-    // TODO: Incomplete.
+    CVidMode* pVidMode = g_pChitin->GetCurrentVideoMode();
+
+    CVidPalette cTmpPalette(TYPE_RANGE);
+
+    // NOTE: Uninline.
+    SetAUCounter();
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVidPal.cpp
+    // __LINE__: 1023
+    UTIL_ASSERT(m_pPalette != NULL);
+
+    CVIDPALETTE_COLOR rgbTint;
+    INT nTintShift;
+    INT nTintMax;
+    USHORT nTintPercentage = 0;
+    BOOL bTint = GetTint(rgbTint, pAffectArgs, nTintShift, nTintMax, dwFlags);
+
+    CVIDPALETTE_COLOR rgbInv;
+    INT nAddShift;
+    USHORT nAddPercentage = 0;
+    BOOL bAdd = GetAdd(rgbInv, pAffectArgs, nAddShift, dwFlags);
+
+    CVIDPALETTE_COLOR rgbLight;
+    USHORT nLightPercentage = 0;
+    BOOL bLight = GetLight(rgbLight, pAffectArgs, dwFlags);
+
+    INT nEntry;
+    if (nBpp == 16) {
+        // TODO: Incomplete.
+    } else {
+        if ((dwFlags & 0x1) != 0) {
+            pDestPalette[0] &= ~0xFF000000;
+            nEntry = 1;
+        } else {
+            nEntry = 0;
+        }
+
+        while (nEntry < 4) {
+            if (nEntry == 1) {
+                COLORREF rgb = pVidMode->ApplyBrightnessContrast(RGB(0, 0, 0));
+                pDestPalette[1] = nTransVal
+                    | (GetRValue(rgb) << pVidMode->m_dwRBitShift)
+                    | (GetGValue(rgb) << pVidMode->m_dwGBitShift)
+                    | (GetBValue(rgb) << pVidMode->m_dwBBitShift);
+            } else {
+                pDestPalette[nEntry] = nTransVal
+                    | (m_pPalette[nEntry].rgbRed << pVidMode->m_dwRBitShift)
+                    | (m_pPalette[nEntry].rgbGreen << pVidMode->m_dwGBitShift)
+                    | (m_pPalette[nEntry].rgbBlue << pVidMode->m_dwBBitShift);
+            }
+            nEntry++;
+        }
+    }
+
+    for (int range = 0; range < 7; range++) {
+        RGBQUAD rgbRangeTint;
+        if (pAffectArgs->pRangeTints[range] != NULL) {
+            if (pAffectArgs->aRangeTintPeriods[range] == 1) {
+                rgbRangeTint.rgbRed = GetRValue(*pAffectArgs->pRangeTints[range]);
+                rgbRangeTint.rgbGreen = GetGValue(*pAffectArgs->pRangeTints[range]);
+                rgbRangeTint.rgbBlue = GetBValue(*pAffectArgs->pRangeTints[range]);
+            } else {
+                nTintPercentage = m_nAUCounter % (2 * pAffectArgs->aRangeTintPeriods[range]);
+                if (nTintPercentage > pAffectArgs->aRangeTintPeriods[range]) {
+                    nTintPercentage = 2 * pAffectArgs->aRangeTintPeriods[range] - nTintPercentage;
+                }
+
+                rgbRangeTint.rgbRed = NO_TINT - nTintPercentage * (NO_TINT - GetRValue(*pAffectArgs->pRangeTints[range])) / pAffectArgs->aRangeTintPeriods[range];
+                rgbRangeTint.rgbGreen = NO_TINT - nTintPercentage * (NO_TINT - GetGValue(*pAffectArgs->pRangeTints[range])) / pAffectArgs->aRangeTintPeriods[range];
+                rgbRangeTint.rgbBlue = NO_TINT - nTintPercentage * (NO_TINT - GetBValue(*pAffectArgs->pRangeTints[range])) / pAffectArgs->aRangeTintPeriods[range];
+            }
+        }
+
+        RGBQUAD rgbRangeInv;
+        if (pAffectArgs->pRangeAdds[range] != NULL) {
+            if (pAffectArgs->aRangeAddPeriods[range] == 1 || pAffectArgs->aRangeAddPeriods[range] == 0) {
+                rgbRangeInv.rgbRed = ~GetRValue(*pAffectArgs->pRangeAdds[range]);
+                rgbRangeInv.rgbGreen = ~GetGValue(*pAffectArgs->pRangeAdds[range]);
+                rgbRangeInv.rgbBlue = ~GetBValue(*pAffectArgs->pRangeAdds[range]);
+            } else {
+                nAddPercentage = m_nAUCounter % (2 * pAffectArgs->aRangeAddPeriods[range]);
+                if (nAddPercentage > pAffectArgs->aRangeAddPeriods[range]) {
+                    nAddPercentage = 2 * pAffectArgs->aRangeAddPeriods[range] - nAddPercentage;
+                }
+
+                rgbRangeInv.rgbRed = ~(nAddPercentage * GetRValue(*pAffectArgs->pRangeAdds[range]) / pAffectArgs->aRangeAddPeriods[range]);
+                rgbRangeInv.rgbGreen = ~(nAddPercentage * GetGValue(*pAffectArgs->pRangeAdds[range]) / pAffectArgs->aRangeAddPeriods[range]);
+                rgbRangeInv.rgbBlue = ~(nAddPercentage * GetBValue(*pAffectArgs->pRangeAdds[range]) / pAffectArgs->aRangeAddPeriods[range]);
+            }
+        }
+
+        RGBQUAD rgbRangeLight;
+        if (pAffectArgs->pRangeLights[range] != NULL) {
+            if (pAffectArgs->aRangeLightPeriods[range] == 1) {
+                rgbRangeLight.rgbRed = GetRValue(*pAffectArgs->pRangeLights[range]);
+                rgbRangeLight.rgbGreen = GetGValue(*pAffectArgs->pRangeLights[range]);
+                rgbRangeLight.rgbBlue = GetBValue(*pAffectArgs->pRangeLights[range]);
+                nLightPercentage = 1;
+            } else {
+                nLightPercentage = m_nAUCounter % (2 * pAffectArgs->aRangeLightPeriods[range]);
+                if (nLightPercentage > pAffectArgs->aRangeLightPeriods[range]) {
+                    nLightPercentage = 2 * pAffectArgs->aRangeLightPeriods[range] - nLightPercentage;
+                }
+
+                rgbRangeLight.rgbRed = nLightPercentage * GetRValue(*pAffectArgs->pRangeLights[range]) / pAffectArgs->aRangeLightPeriods[range];
+                rgbRangeLight.rgbGreen = nLightPercentage * GetGValue(*pAffectArgs->pRangeLights[range]) / pAffectArgs->aRangeLightPeriods[range];
+                rgbRangeLight.rgbBlue = nLightPercentage * GetBValue(*pAffectArgs->pRangeLights[range]) / pAffectArgs->aRangeLightPeriods[range];
+            }
+        } else {
+            nLightPercentage = 0;
+        }
+
+        CVIDPALETTE_COLOR* pCurrTint;
+        CVIDPALETTE_COLOR rgbRangeTintRatio;
+        if ((pAffectArgs->suppressTints & CVidPalette::m_SuppressTintMasks[range]) != 0
+            && (nLightPercentage != 0 || nAddPercentage != 0)) {
+            if (nLightPercentage > nAddPercentage) {
+                rgbRangeTintRatio.rgbRed += nLightPercentage * (nTintMax - rgbTint.rgbRed) / pAffectArgs->aRangeLightPeriods[range];
+                rgbRangeTintRatio.rgbGreen += nLightPercentage * (nTintMax - rgbTint.rgbGreen) / pAffectArgs->aRangeLightPeriods[range];
+                rgbRangeTintRatio.rgbBlue += nLightPercentage * (nTintMax - rgbTint.rgbBlue) / pAffectArgs->aRangeLightPeriods[range];
+            } else {
+                rgbRangeTintRatio.rgbRed += nAddPercentage * (nTintMax - rgbTint.rgbRed) / pAffectArgs->aRangeAddPeriods[range];
+                rgbRangeTintRatio.rgbGreen += nAddPercentage * (nTintMax - rgbTint.rgbGreen) / pAffectArgs->aRangeAddPeriods[range];
+                rgbRangeTintRatio.rgbBlue += nAddPercentage * (nTintMax - rgbTint.rgbBlue) / pAffectArgs->aRangeAddPeriods[range];
+            }
+
+            if (pVidMode->m_nFade != CVidMode::NUM_FADE_FRAMES) {
+                pVidMode->ApplyFadeAmount(&rgbRangeTintRatio);
+            }
+
+            pCurrTint = &rgbRangeTintRatio;
+        } else {
+            pCurrTint = &rgbTint;
+        }
+
+        for (int index = 0; index < 12; index++) {
+            RGBQUAD rgb = m_pPalette[nEntry];
+
+            if ((dwFlags & 0x80000) != 0) {
+                BYTE v2 = (rgb.rgbRed + rgb.rgbGreen + rgb.rgbBlue) / 4;
+                rgb.rgbRed = v2;
+                rgb.rgbGreen = v2;
+                rgb.rgbBlue = v2;
+            }
+
+            if ((dwFlags & 0x2000000) != 0) {
+                BYTE v3 = (rgb.rgbRed + rgb.rgbGreen + rgb.rgbBlue) / 4;
+                rgb.rgbRed = min(v3 + 21, 255);
+                rgb.rgbGreen = v3;
+                rgb.rgbBlue = v3 - min(v3, 32);
+            }
+
+            if (pAffectArgs->pRangeTints[range] != NULL) {
+                rgb.rgbRed = (rgbRangeTint.rgbRed * rgb.rgbRed) >> 8;
+                rgb.rgbGreen = (rgbRangeTint.rgbGreen * rgb.rgbGreen) >> 8;
+                rgb.rgbBlue = (rgbRangeTint.rgbBlue * rgb.rgbBlue) >> 8;
+            }
+
+            if (pAffectArgs->pRangeAdds[range] != NULL) {
+                rgb.rgbRed = ~rgb.rgbRed;
+                rgb.rgbGreen = ~rgb.rgbGreen;
+                rgb.rgbBlue = ~rgb.rgbBlue;
+
+                rgb.rgbRed = (rgbRangeInv.rgbRed * rgb.rgbRed) >> 8;
+                rgb.rgbGreen = (rgbRangeInv.rgbGreen * rgb.rgbGreen) >> 8;
+                rgb.rgbBlue = (rgbRangeInv.rgbBlue * rgb.rgbBlue) >> 8;
+
+                rgb.rgbRed = ~rgb.rgbRed;
+                rgb.rgbGreen = ~rgb.rgbGreen;
+                rgb.rgbBlue = ~rgb.rgbBlue;
+            }
+
+            if (pAffectArgs->pRangeLights[range] != NULL) {
+                rgb.rgbRed = min(rgbRangeLight.rgbRed * rgb.rgbRed / 8, 255);
+                rgb.rgbGreen = min(rgbRangeLight.rgbGreen * rgb.rgbGreen / 8, 255);
+                rgb.rgbBlue = min(rgbRangeLight.rgbBlue * rgb.rgbBlue / 8, 255);
+            }
+
+            if (bTint) {
+                rgb.rgbRed = (pCurrTint->rgbRed * rgb.rgbRed) >> nTintShift;
+                rgb.rgbGreen = (pCurrTint->rgbGreen * rgb.rgbGreen) >> nTintShift;
+                rgb.rgbBlue = (pCurrTint->rgbBlue * rgb.rgbBlue) >> nTintShift;
+            }
+
+            if (bAdd) {
+                rgb.rgbRed = ~rgb.rgbRed;
+                rgb.rgbGreen = ~rgb.rgbGreen;
+                rgb.rgbBlue = ~rgb.rgbBlue;
+
+                rgb.rgbRed = (rgbInv.rgbRed * rgb.rgbRed) >> nAddShift;
+                rgb.rgbGreen = (rgbInv.rgbGreen * rgb.rgbGreen) >> nAddShift;
+                rgb.rgbBlue = (rgbInv.rgbBlue * rgb.rgbBlue) >> nAddShift;
+
+                rgb.rgbRed = ~rgb.rgbRed;
+                rgb.rgbGreen = ~rgb.rgbGreen;
+                rgb.rgbBlue = ~rgb.rgbBlue;
+            }
+
+            if (bLight) {
+                rgb.rgbRed = min(rgbLight.rgbRed * rgb.rgbRed / 8, 255);
+                rgb.rgbGreen = min(rgbLight.rgbGreen * rgb.rgbGreen / 8, 255);
+                rgb.rgbBlue = min(rgbLight.rgbBlue * rgb.rgbBlue / 8, 255);
+            }
+
+            cTmpPalette.m_pPalette[nEntry++] = rgb;
+        }
+    }
+
+    if ((dwFlags & 0xFFFF0000) != 0 || !m_bSubRangesCalculated) {
+        cTmpPalette.CalculateSubRanges();
+    } else {
+        memcpy(&(cTmpPalette.m_pPalette[88]), &(m_pPalette[88]), sizeof(RGBQUAD) * (256 - 88));
+    }
+
+    if (nBpp == 16) {
+        // TODO: Incomplete.
+    } else {
+        for (int index = 4; index < m_nEntries; index++) {
+            DWORD color = nTransVal
+                | (cTmpPalette.m_pPalette[index].rgbRed << pVidMode->m_dwRBitShift)
+                | (cTmpPalette.m_pPalette[index].rgbGreen << pVidMode->m_dwGBitShift)
+                | (cTmpPalette.m_pPalette[index].rgbBlue << pVidMode->m_dwBBitShift);
+            if (color == (255 << pVidMode->m_dwGBitShift)) {
+                color = 254 << pVidMode->m_dwGBitShift;
+            }
+            pDestPalette[index] = color;
+        }
+    }
 }
 
 // 0x7C04B0
