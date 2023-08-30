@@ -1717,6 +1717,14 @@ BOOL CGameSprite::HandleEffects()
     return v1 && v2;
 }
 
+// 0x751CD0
+SHORT CGameSprite::LeaveParty()
+{
+    // TODO: Incomplete.
+
+    return ACTION_DONE;
+}
+
 // 0x74F830
 void CGameSprite::SelectWeaponAbility(unsigned char a1, unsigned char a2, unsigned char a3, unsigned char a4)
 {
