@@ -4319,13 +4319,13 @@ void CScreenCreateChar::OnSoundItemSelect(INT nItem)
             // __LINE__: 7999
             UTIL_ASSERT(m_pSounds != NULL);
 
-            CUIPanel* pPanel = m_cUIManager.GetPanel(18);
+            CUIPanel* pPanel = m_cUIManager.GetPanel(19);
 
             // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
             // __LINE__: 8003
             UTIL_ASSERT(pPanel != NULL);
 
-            CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(4));
+            CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(45));
 
             // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
             // __LINE__: 8005
