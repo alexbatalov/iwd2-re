@@ -213,6 +213,26 @@ int CUtil::FindOneOf(const CString& sString, const CString& sSeparators, int sta
     return -1;
 }
 
+// 0x781330
+void CUtil::MakeReverse(CString& sString)
+{
+    CString sReversed;
+
+    int nIndex = 0;
+    while (nIndex < sString.GetLength()) {
+        if (g_pChitin->field_1A0 && IsDBCSLeadByte(sString[nIndex])) {
+            sReversed = sString.Mid(nIndex, 2) + sReversed;
+            nIndex++;
+        } else {
+            sReversed = sString.Mid(nIndex, 1) + sReversed;
+        }
+
+        nIndex++;
+    }
+
+    sString = sReversed;
+}
+
 // 0x781470
 void CUtil::TrimLeft(CString& sString)
 {

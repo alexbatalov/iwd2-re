@@ -15,6 +15,7 @@ public:
     static BYTE SplitString(CVidFont* pTextFont, const CString& sSource, WORD nLineLength, BYTE nMaxStrings, CString* pStringsOut, BOOL bDivideWords, BOOL bDemanded, BOOL bCheckRemainderForNewLine, WORD nSuggestedSplitLength);
     static int Find(const CString& sString, char ch, int start);
     static int FindOneOf(const CString& sString, const CString& sSeparators, int start);
+    static void MakeReverse(CString& sString);
     static void TrimLeft(CString& sString);
     static void TrimRight(CString& sString);
 
