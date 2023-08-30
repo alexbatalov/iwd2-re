@@ -2381,7 +2381,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
                 return new CUIControlButtonCharGenPortrait(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 2:
             case 4:
-                return new CUIControlTextDisplayCharGen621440(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo));
+                return new CUIControlTextDisplayCharGenPortraits(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo));
             case 3:
             case 5:
                 return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
@@ -2404,7 +2404,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 51:
                 return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
             case 47:
-                return new CUIControlButtonCharGen621570(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+                return new CUIControlButtonCharGenSoundPlay(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 50:
                 return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
             }

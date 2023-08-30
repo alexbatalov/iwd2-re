@@ -127,12 +127,12 @@ const CString CScreenCreateChar::TOKEN_MAXIMUM("MAXIMUM");
 // 0x605C40
 CScreenCreateChar::CScreenCreateChar()
 {
-    field_196.m_animation = NULL;
+    m_animation.m_animation = NULL;
     m_nFirstStep = 0;
     m_nCurrentStep = 0;
     m_nExtraFeats = 0;
     m_nExtraAbilityPoints = 0;
-    field_4EE = 0;
+    m_nExtraSpells = 0;
     m_nExtraSkillPoints = 0;
     field_4F6 = 0;
     field_4FE = 0;
@@ -163,7 +163,7 @@ CScreenCreateChar::CScreenCreateChar()
 
     m_nCurrentPortrait = 0;
     m_nTopHatedRace = 0;
-    field_56E = 0;
+    m_nRange = 0;
     m_nMemorySTR = 0;
     field_570 = 0;
 
@@ -278,16 +278,16 @@ CScreenCreateChar::CScreenCreateChar()
     m_bCtrlKeyDown = FALSE;
     m_bShiftKeyDown = FALSE;
     m_bCapsLockKeyOn = FALSE;
-    field_4D6 = 0;
+    m_bPickingDomainSpells = FALSE;
     m_nGameSprite = CGameObjectArray::INVALID_INDEX;
-    field_552 = 0;
-    field_556 = -1;
+    m_nEngineState = 0;
+    m_nCharacterSlot = -1;
     m_pPortraits = NULL;
     m_pCharacters = NULL;
     m_pSounds = NULL;
-    field_14A2 = 1;
+    m_nSpellLevel = 1;
     field_14A3 = 1;
-    field_149E = 0;
+    m_nErrorState = 0;
     m_nTopFeat = 0;
     field_14AE = 0;
     m_hatedRaces[0] = CAIObjectType::R_BUGBEAR;
@@ -382,9 +382,9 @@ BYTE* CScreenCreateChar::GetVirtualKeysFlags()
 // 0x606D00
 CScreenCreateChar::~CScreenCreateChar()
 {
-    if (field_196.m_animation != NULL) {
-        delete field_196.m_animation;
-        field_196.m_animation = NULL;
+    if (m_animation.m_animation != NULL) {
+        delete m_animation.m_animation;
+        m_animation.m_animation = NULL;
     }
 }
 
@@ -1035,7 +1035,7 @@ void CScreenCreateChar::ResetPopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
         ResetMemorizeArcaneSpellsPanel(pPanel, pSprite);
         break;
     case 17:
-        if (field_4D6) {
+        if (m_bPickingDomainSpells) {
             ResetMemorizeDomainSpellsPanel(pPanel, pSprite);
         } else {
             ResetMemorizeDivineSpellsPanel(pPanel, pSprite);
@@ -1054,7 +1054,7 @@ void CScreenCreateChar::ResetPopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
         ResetExportPanel(pPanel, pSprite);
         break;
     case 51:
-        sub_609170(pPanel, pSprite);
+        ResetBiographyPanel(pPanel, pSprite);
         break;
     case 52:
         ResetMonkPaladinSpecializationPanel(pPanel, pSprite);
@@ -1169,7 +1169,7 @@ void CScreenCreateChar::ResetSubRacePanel(CUIPanel* pPanel, CGameSprite* pSprite
 }
 
 // 0x609170
-void CScreenCreateChar::sub_609170(CUIPanel* pPanel, CGameSprite* pSprite)
+void CScreenCreateChar::ResetBiographyPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
     // TODO: Incomplete.
 }
@@ -1533,14 +1533,14 @@ void CScreenCreateChar::ResetArcaneSpellsPanel(CUIPanel* pPanel, CGameSprite* pS
 
     CAIObjectType typeAI(pSprite->m_startTypeAI);
 
-    field_14A2 = 1;
+    m_nSpellLevel = 1;
 
     if ((typeAI.m_nClassMask & CAIOBJECTTYPE_C_BARD) != 0) {
         INT nBardClass = pSprite->GetDerivedStats()->GetClassLevel(CAIObjectType::C_BARD);
-        field_4EE = atol(ruleTables.m_tKnownSpellsBard.GetAt(CPoint(field_14A2 - 1, nBardClass - 1)));
+        m_nExtraSpells = atol(ruleTables.m_tKnownSpellsBard.GetAt(CPoint(m_nSpellLevel - 1, nBardClass - 1)));
     } else if ((typeAI.m_nClassMask & CAIOBJECTTYPE_C_SORCERER) != 0) {
         INT nBardClass = pSprite->GetDerivedStats()->GetClassLevel(CAIObjectType::C_BARD);
-        field_4EE = atol(ruleTables.m_tKnownSpellsSorcerer.GetAt(CPoint(field_14A2 - 1, nBardClass - 1)));
+        m_nExtraSpells = atol(ruleTables.m_tKnownSpellsSorcerer.GetAt(CPoint(m_nSpellLevel - 1, nBardClass - 1)));
     } else {
         INT nBonus = 0;
         ruleTables.GetMaxKnownSpells(typeAI.m_nClass,
@@ -1550,9 +1550,9 @@ void CScreenCreateChar::ResetArcaneSpellsPanel(CUIPanel* pPanel, CGameSprite* pS
             1,
             nBonus);
         if ((pSprite->GetSpecialization() & SPECMASK_WIZARD_UNIVERSAL) != 0) {
-            field_4EE = nBonus + 2;
+            m_nExtraSpells = nBonus + 2;
         } else {
-            field_4EE = nBonus + 3;
+            m_nExtraSpells = nBonus + 3;
         }
     }
 
@@ -1575,7 +1575,7 @@ void CScreenCreateChar::ResetArcaneSpellsPanel(CUIPanel* pPanel, CGameSprite* pS
     }
 
     CString sNumber;
-    sNumber.Format("%d", field_4EE);
+    sNumber.Format("%d", m_nExtraSpells);
 
     g_pBaldurChitin->GetTlkTable().SetToken(TOKEN_NUMBER, sNumber);
 
@@ -1584,7 +1584,7 @@ void CScreenCreateChar::ResetArcaneSpellsPanel(CUIPanel* pPanel, CGameSprite* pS
         "%s: %s %d",
         (LPCSTR)FetchString(31614), // "Arcane Spell Selection"
         (LPCSTR)FetchString(7192), // "Level"
-        field_14A2);
+        m_nSpellLevel);
 
     UpdateHelp(pPanel->m_nID, 27, 17250);
 }
@@ -1645,14 +1645,14 @@ void CScreenCreateChar::ResetMemorizeArcaneSpellsPanel(CUIPanel* pPanel, CGameSp
         nMaxKnownSpells = pSprite->GetSpellsAtLevel(typeAI.m_nClass, 0)->m_List.size();
     }
 
-    field_4EE = nMaxKnownSpells;
+    m_nExtraSpells = nMaxKnownSpells;
 
     UpdateLabel(pPanel,
         0x10000000,
         "%s: %s %d",
         (LPCSTR)FetchString(17189), // "Memorize Arcane Spells"
         (LPCSTR)FetchString(7192), // "Level"
-        field_14A2);
+        m_nSpellLevel);
 
     for (nClassIndex = 0; nClassIndex < CSPELLLIST_NUM_CLASSES; nClassIndex++) {
         for (nLevel = 0; nLevel < CSPELLLIST_MAX_LEVELS; nLevel++) {
@@ -1681,7 +1681,7 @@ void CScreenCreateChar::ResetMemorizeArcaneSpellsPanel(CUIPanel* pPanel, CGameSp
     }
 
     CString sNumber;
-    sNumber.Format("%d", field_4EE);
+    sNumber.Format("%d", m_nExtraSpells);
     g_pBaldurChitin->GetTlkTable().SetToken(TOKEN_NUMBER, sNumber);
 
     UpdateHelp(pPanel->m_nID, 27, 17253);
@@ -1719,7 +1719,7 @@ void CScreenCreateChar::ResetMemorizeDivineSpellsPanel(CUIPanel* pPanel, CGameSp
         "%s: %s %d",
         (LPCSTR)FetchString(17224), // "Memorize Divine Spells"
         (LPCSTR)FetchString(7192), // "Level"
-        field_14A2);
+        m_nSpellLevel);
 
     for (nClassIndex = 0; nClassIndex < CSPELLLIST_NUM_CLASSES; nClassIndex++) {
         for (nLevel = 0; nLevel < CSPELLLIST_MAX_LEVELS; nLevel++) {
@@ -1761,7 +1761,7 @@ void CScreenCreateChar::ResetMemorizeDivineSpellsPanel(CUIPanel* pPanel, CGameSp
         nMaxKnownSpells = pSprite->GetSpellsAtLevel(pSprite->m_startTypeAI.m_nClass, 0)->m_List.size();
     }
 
-    field_4EE = nMaxKnownSpells;
+    m_nExtraSpells = nMaxKnownSpells;
 
     for (DWORD nButtonID = 2; nButtonID <= 13; nButtonID++) {
         CUIControlButton3State* pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(nButtonID));
@@ -1774,7 +1774,7 @@ void CScreenCreateChar::ResetMemorizeDivineSpellsPanel(CUIPanel* pPanel, CGameSp
     }
 
     CString sNumber;
-    sNumber.Format("%d", field_4EE);
+    sNumber.Format("%d", m_nExtraSpells);
     g_pBaldurChitin->GetTlkTable().SetToken(TOKEN_NUMBER, sNumber);
 
     UpdateHelp(pPanel->m_nID, 27, 17254);
@@ -1788,7 +1788,7 @@ void CScreenCreateChar::ResetMemorizeDomainSpellsPanel(CUIPanel* pPanel, CGameSp
         "%s: %s %d",
         (LPCSTR)FetchString(39848), // "Memorize Domain Spells"
         (LPCSTR)FetchString(7192), // "Level"
-        field_14A2);
+        m_nSpellLevel);
 
     for (UINT nLevel = 0; nLevel < CSPELLLIST_MAX_LEVELS; nLevel++) {
         // NOTE: Uninline.
@@ -1816,7 +1816,7 @@ void CScreenCreateChar::ResetMemorizeDomainSpellsPanel(CUIPanel* pPanel, CGameSp
         pSprite->AddDomainSpell(0, resRef, 0, 0, 0);
     }
 
-    field_4EE = 1;
+    m_nExtraSpells = 1;
 
     for (DWORD nButtonID = 2; nButtonID <= 13; nButtonID++) {
         CUIControlButton3State* pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(nButtonID));
@@ -1829,7 +1829,7 @@ void CScreenCreateChar::ResetMemorizeDomainSpellsPanel(CUIPanel* pPanel, CGameSp
     }
 
     CString sNumber;
-    sNumber.Format("%d", field_4EE);
+    sNumber.Format("%d", m_nExtraSpells);
     g_pBaldurChitin->GetTlkTable().SetToken(TOKEN_NUMBER, sNumber);
 
     UpdateHelp(pPanel->m_nID, 27, 39852);
@@ -2156,7 +2156,7 @@ void CScreenCreateChar::ResetStartOverPanel(CUIPanel* pPanel, CGameSprite* pSpri
     CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(2));
     pText->RemoveAll();
 
-    if (field_149E == 4) {
+    if (m_nErrorState == 4) {
         // "You have some unallocated points left.  Are you sure you wish to continue?"
         pText->DisplayString(CString(""),
             FetchString(1552),
@@ -2423,7 +2423,7 @@ void CScreenCreateChar::UpdatePopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
         UpdateMemorizeArcaneSpellsPanel(pPanel, pSprite);
         break;
     case 17:
-        if (field_4D6) {
+        if (m_bPickingDomainSpells) {
             UpdateMemorizeDomainSpellsPanel(pPanel, pSprite);
         } else {
             UpdateMemorizeDivineSpellsPanel(pPanel, pSprite);
@@ -3179,12 +3179,12 @@ void CScreenCreateChar::UpdateArcaneSpellsPanel(CUIPanel* pPanel, CGameSprite* p
 
     HighlightLabel(pPanel,
         0x1000001B,
-        field_4EE != 0,
+        m_nExtraSpells != 0,
         COLOR_LABEL_HIGHLIGHT_BONUS);
     UpdateLabel(pPanel,
         0x1000001B,
         "%d",
-        field_4EE);
+        m_nExtraSpells);
 
     UINT nSpells = pGame->m_spellsByClass[nClassIndex].m_lists[0].m_nCount;
     UINT nIndex = 0;
@@ -3288,9 +3288,9 @@ void CScreenCreateChar::UpdateMemorizeArcaneSpellsPanel(CUIPanel* pPanel, CGameS
 
     HighlightLabel(pPanel,
         0x1000001B,
-        field_4EE != 0,
+        m_nExtraSpells != 0,
         COLOR_LABEL_HIGHLIGHT_BONUS);
-    UpdateLabel(pPanel, 0x1000001B, "%d", field_4EE);
+    UpdateLabel(pPanel, 0x1000001B, "%d", m_nExtraSpells);
 }
 
 // 0x60F810
@@ -3326,9 +3326,9 @@ void CScreenCreateChar::UpdateMemorizeDivineSpellsPanel(CUIPanel* pPanel, CGameS
 
     HighlightLabel(pPanel,
         0x1000001B,
-        field_4EE != 0,
+        m_nExtraSpells != 0,
         COLOR_LABEL_HIGHLIGHT_BONUS);
-    UpdateLabel(pPanel, 0x1000001B, "%d", field_4EE);
+    UpdateLabel(pPanel, 0x1000001B, "%d", m_nExtraSpells);
 }
 
 // 0x60FA40
@@ -3364,9 +3364,9 @@ void CScreenCreateChar::UpdateMemorizeDomainSpellsPanel(CUIPanel* pPanel, CGameS
 
     HighlightLabel(pPanel,
         0x1000001B,
-        field_4EE != 0,
+        m_nExtraSpells != 0,
         COLOR_LABEL_HIGHLIGHT_BONUS);
-    UpdateLabel(pPanel, 0x1000001B, "%d", field_4EE);
+    UpdateLabel(pPanel, 0x1000001B, "%d", m_nExtraSpells);
 }
 
 // 0x60FC60
@@ -3645,8 +3645,8 @@ void CScreenCreateChar::StartCreateChar(INT nCharacterSlot, INT nEngineState)
 
     field_14A4 = 0;
     field_14A8 = 0;
-    field_556 = nCharacterSlot;
-    field_552 = nEngineState;
+    m_nCharacterSlot = nCharacterSlot;
+    m_nEngineState = nEngineState;
     m_nFirstStep = 0;
     m_nCurrentStep = 0;
 
@@ -3722,16 +3722,16 @@ void CScreenCreateChar::CancelCreateChar()
 
     DeleteCharacter();
 
-    if (field_552 != 4
-        && pSettings->GetCharacterStatus(field_556) != CMultiplayerSettings::CHARSTATUS_CHARACTER) {
-        pSettings->SignalCharacterStatus(field_556,
+    if (m_nEngineState != 4
+        && pSettings->GetCharacterStatus(m_nCharacterSlot) != CMultiplayerSettings::CHARSTATUS_CHARACTER) {
+        pSettings->SignalCharacterStatus(m_nCharacterSlot,
             CMultiplayerSettings::CHARSTATUS_SIGNAL_CREATION_CANCEL,
             TRUE,
             TRUE);
     }
 
-    field_556 = -1;
-    field_552 = 0;
+    m_nCharacterSlot = -1;
+    m_nEngineState = 0;
 }
 
 // 0x610850
@@ -3789,7 +3789,7 @@ BYTE CScreenCreateChar::GetHatedRace(INT nIndex)
 }
 
 // 0x6108D0
-void CScreenCreateChar::sub_6108D0(INT a1)
+void CScreenCreateChar::OnPortraitLargeItemSelect(INT nItem)
 {
     INT nGameSprite = GetSpriteId();
 
@@ -3803,7 +3803,7 @@ void CScreenCreateChar::sub_6108D0(INT a1)
     } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
     if (rc == CGameObjectArray::SUCCESS) {
-        if (a1 != m_nPortraitLargeIndex) {
+        if (nItem != m_nPortraitLargeIndex) {
             // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
             // __LINE__: 6064
             UTIL_ASSERT(m_pPortraits != NULL);
@@ -3825,7 +3825,7 @@ void CScreenCreateChar::sub_6108D0(INT a1)
                     pText->m_rgbTextColor);
             }
 
-            m_nPortraitLargeIndex = a1;
+            m_nPortraitLargeIndex = nItem;
 
             if (m_nPortraitLargeIndex != -1) {
                 pText->SetItemTextColor(pText->GetItemBossPosition(m_nPortraitLargeIndex),
@@ -3842,7 +3842,7 @@ void CScreenCreateChar::sub_6108D0(INT a1)
 }
 
 // 0x610A40
-void CScreenCreateChar::sub_610A40(INT a1)
+void CScreenCreateChar::OnPortraitSmallItemSelect(INT nItem)
 {
     INT nGameSprite = GetSpriteId();
 
@@ -3856,7 +3856,7 @@ void CScreenCreateChar::sub_610A40(INT a1)
     } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
     if (rc == CGameObjectArray::SUCCESS) {
-        if (a1 != m_nPortraitSmallIndex) {
+        if (nItem != m_nPortraitSmallIndex) {
             // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
             // __LINE__: 6136
             UTIL_ASSERT(m_pPortraits != NULL);
@@ -3878,7 +3878,7 @@ void CScreenCreateChar::sub_610A40(INT a1)
                     pText->m_rgbTextColor);
             }
 
-            m_nPortraitSmallIndex = a1;
+            m_nPortraitSmallIndex = nItem;
 
             if (m_nPortraitSmallIndex != -1) {
                 pText->SetItemTextColor(pText->GetItemBossPosition(m_nPortraitSmallIndex),
@@ -4096,12 +4096,12 @@ void CScreenCreateChar::UpdateCharacterAppearance()
     } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
     if (rc == CGameObjectArray::SUCCESS) {
-        field_196.SetAnimationType(pSprite->m_baseStats.m_animationType, pSprite->m_baseStats.m_colors, 0);
+        m_animation.SetAnimationType(pSprite->m_baseStats.m_animationType, pSprite->m_baseStats.m_colors, 0);
 
         pSprite->UnequipAll(TRUE);
         pSprite->EquipAll(TRUE);
 
-        field_196.SetSequence(pSprite->GetIdleSequence());
+        m_animation.SetSequence(pSprite->GetIdleSequence());
 
         pGame->GetObjectArray()->ReleaseShare(GetSpriteId(),
             CGameObjectArray::THREAD_ASYNCH,
@@ -4427,7 +4427,7 @@ BOOL CScreenCreateChar::IsDoneButtonClickable(CGameSprite* pSprite)
         bClickable = m_nExtraSkillPoints == 0;
         break;
     case 7:
-        bClickable = field_4EE == 0;
+        bClickable = m_nExtraSpells == 0;
         break;
     case 8:
         bClickable = typeAI.m_nRace != 0;
@@ -4445,10 +4445,10 @@ BOOL CScreenCreateChar::IsDoneButtonClickable(CGameSprite* pSprite)
         bClickable = pSprite->m_baseStats.m_favoredEnemies[0] != CAIObjectType::R_NO_RACE;
         break;
     case 16:
-        bClickable = field_4EE == 0;
+        bClickable = m_nExtraSpells == 0;
         break;
     case 17:
-        bClickable = field_4EE == 0;
+        bClickable = m_nExtraSpells == 0;
         break;
     case 18:
         bClickable = m_nPortraitSmallIndex >= 0 && m_nPortraitLargeIndex >= 0;
@@ -4553,8 +4553,8 @@ void CScreenCreateChar::OnCancelButtonClick()
             SummonPopup(7, pSprite);
             break;
         case 17:
-            if (field_4D6) {
-                field_4D6 = 0;
+            if (m_bPickingDomainSpells) {
+                m_bPickingDomainSpells = FALSE;
                 DismissPopup(pSprite);
                 SummonPopup(17, pSprite);
             } else {
@@ -4674,8 +4674,7 @@ void CScreenCreateChar::OnMainCancelButtonClick()
         } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
         if (rc == CGameObjectArray::SUCCESS) {
-            field_149E = 0;
-
+            m_nErrorState = 0;
             SummonPopup(53, pSprite);
 
             pGame->GetObjectArray()->ReleaseShare(nGameSprite,
@@ -4683,7 +4682,7 @@ void CScreenCreateChar::OnMainCancelButtonClick()
                 INFINITE);
         }
     } else {
-        switch (field_552) {
+        switch (m_nEngineState) {
         case 1:
             // NOTE: Uninline.
             CancelCreateChar();
@@ -6261,14 +6260,14 @@ void CUIControlButtonCharGenKnownArcaneSpellSelection::OnLButtonClick(CPoint pt)
 
         if (m_bSelected) {
             SetSelected(FALSE);
-            pCreateChar->field_4EE++;
+            pCreateChar->m_nExtraSpells++;
             pSprite->RemoveKnownSpell(typeAI.m_nClass, 0, m_spellResRef, 1, 0, 0);
         } else {
-            if (pCreateChar->field_4EE > 0
+            if (pCreateChar->m_nExtraSpells > 0
                 && cSpell.pRes != NULL
                 && cSpell.CheckUsableBy(pSprite) == TRUE) {
                 SetSelected(TRUE);
-                pCreateChar->field_4EE--;
+                pCreateChar->m_nExtraSpells--;
                 pSprite->AddKnownSpell(typeAI.m_nClass, 0, m_spellResRef, nMaxKnownSpells, 0, 0);
             }
         }
@@ -7345,17 +7344,17 @@ BOOL CUIControlButtonCharGenHairSkinAppearance::Render(BOOL bForce)
     pInfinity->rViewPort.SetRect(0, 0, CVideo::SCREENWIDTH, CVideo::SCREENHEIGHT);
 
     if ((nCounter & 1) != 0) {
-        pCreateChar->field_196.m_animation->IncrementFrame();
-        pCreateChar->field_196.m_animation->GetCurrentFrame();
-        if (pCreateChar->field_196.m_animation->IsEndOfSequence()) {
-            pCreateChar->field_196.SetSequence(pSprite->GetIdleSequence());
+        pCreateChar->m_animation.m_animation->IncrementFrame();
+        pCreateChar->m_animation.m_animation->GetCurrentFrame();
+        if (pCreateChar->m_animation.m_animation->IsEndOfSequence()) {
+            pCreateChar->m_animation.SetSequence(pSprite->GetIdleSequence());
         }
     }
     nCounter++;
 
     CRect rFx;
     CPoint ptReference;
-    pCreateChar->field_196.CalculateFxRect(rFx, ptReference, 0);
+    pCreateChar->m_animation.CalculateFxRect(rFx, ptReference, 0);
 
     ptPos.x += pInfinity->nCurrentX;
     ptPos.y += pInfinity->nCurrentY + 20;
@@ -7363,7 +7362,7 @@ BOOL CUIControlButtonCharGenHairSkinAppearance::Render(BOOL bForce)
     CSingleLock renderLock(&(m_pPanel->m_pManager->field_56), FALSE);
     renderLock.Lock(INFINITE);
 
-    pCreateChar->field_196.Render(pInfinity,
+    pCreateChar->m_animation.Render(pInfinity,
         pInfinity->pVidMode,
         0,
         rFx,
@@ -7441,16 +7440,16 @@ void CUIControlButtonCharGenHairSkinColor::OnLButtonClick(CPoint pt)
 
     switch (m_nID) {
     case 2:
-        pCreateChar->field_56E = 6;
+        pCreateChar->m_nRange = CVIDPALETTE_RANGE_HAIR;
         break;
     case 3:
-        pCreateChar->field_56E = 3;
+        pCreateChar->m_nRange = CVIDPALETTE_RANGE_SKIN;
         break;
     case 4:
-        pCreateChar->field_56E = 2;
+        pCreateChar->m_nRange = CVIDPALETTE_RANGE_MAIN_CLOTH;
         break;
     case 5:
-        pCreateChar->field_56E = 1;
+        pCreateChar->m_nRange = CVIDPALETTE_RANGE_MINOR_CLOTH;
         break;
     default:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
@@ -7639,7 +7638,7 @@ void CUIControlButtonCharGenColorChoice::OnLButtonClick(CPoint pt)
     } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
     if (rc == CGameObjectArray::SUCCESS) {
-        BYTE colorRange = pCreateChar->field_56E;
+        BYTE colorRange = pCreateChar->m_nRange;
         BYTE rangeValue;
         if (GetColorRange(rangeValue)) {
             pSprite->m_baseStats.m_colors[colorRange] = rangeValue;
@@ -7669,36 +7668,36 @@ void CUIControlButtonCharGenColorChoice::OnLButtonClick(CPoint pt)
 
             if (bFound) {
                 switch (colorRange) {
-                case 1:
+                case CVIDPALETTE_RANGE_MINOR_CLOTH:
                     ptLocation.x = 3;
                     rangeValue = static_cast<BYTE>(tPortraitColor.GetAtLong(ptLocation));
                     break;
-                case 2:
+                case CVIDPALETTE_RANGE_MAIN_CLOTH:
                     ptLocation.x = 2;
                     rangeValue = static_cast<BYTE>(tPortraitColor.GetAtLong(ptLocation));
                     break;
-                case 3:
+                case CVIDPALETTE_RANGE_SKIN:
                     ptLocation.x = 0;
                     rangeValue = static_cast<BYTE>(tPortraitColor.GetAtLong(ptLocation));
                     break;
-                case 6:
+                case CVIDPALETTE_RANGE_HAIR:
                     ptLocation.x = 1;
                     rangeValue = static_cast<BYTE>(tPortraitColor.GetAtLong(ptLocation));
                     break;
                 }
             } else {
                 switch (colorRange) {
-                case 1:
-                    rangeValue = 39;
+                case CVIDPALETTE_RANGE_MINOR_CLOTH:
+                    rangeValue = CVIDPALETTE_CLOTH_DK_BROWN_1;
                     break;
-                case 2:
-                    rangeValue = 41;
+                case CVIDPALETTE_RANGE_MAIN_CLOTH:
+                    rangeValue = CVIDPALETTE_CLOTH_DK_BROWN_2;
                     break;
-                case 3:
-                    rangeValue = 12;
+                case CVIDPALETTE_RANGE_SKIN:
+                    rangeValue = CVIDPALETTE_SKIN_PINK;
                     break;
-                case 6:
-                    rangeValue = 0;
+                case CVIDPALETTE_RANGE_HAIR:
+                    rangeValue = CVIDPALETTE_HAIR_BLACK;
                     break;
                 }
             }
@@ -7795,9 +7794,9 @@ BOOL CUIControlButtonCharGenColorChoice::GetColorRange(BYTE& colorRange)
 
     // NOTE: Signed comparisons below.
     INT v1 = m_nID;
-    switch (pCreateChar->field_56E) {
-    case 1:
-    case 2:
+    switch (pCreateChar->m_nRange) {
+    case CVIDPALETTE_RANGE_MINOR_CLOTH:
+    case CVIDPALETTE_RANGE_MAIN_CLOTH:
         if (v1 < 31) {
             colorRange = v1 + 36;
             return TRUE;
@@ -7809,14 +7808,14 @@ BOOL CUIControlButtonCharGenColorChoice::GetColorRange(BYTE& colorRange)
         }
 
         break;
-    case 3:
+    case CVIDPALETTE_RANGE_SKIN:
         if (v1 < pCreateChar->m_tSkinColor.GetHeight()) {
             colorRange = atoi(pCreateChar->m_tSkinColor.GetAt(CPoint(0, v1)));
             return TRUE;
         }
 
         break;
-    case 6:
+    case CVIDPALETTE_RANGE_HAIR:
         if (v1 < pCreateChar->m_tHairColor.GetHeight()) {
             colorRange = atoi(pCreateChar->m_tHairColor.GetAt(CPoint(0, v1)));
             return TRUE;
@@ -8380,14 +8379,14 @@ void CUIControlButtonCharGenMemorizedArcaneSpellSelection::OnLButtonClick(CPoint
 
             if (m_bSelected) {
                 pSprite->GetSpells(typeAI.m_nClass)->Remove(nID, 0, 0, 1, 0);
-                pCreateChar->field_4EE++;
+                pCreateChar->m_nExtraSpells++;
                 SetSelected(FALSE);
             } else {
-                if (pCreateChar->field_4EE > 0
+                if (pCreateChar->m_nExtraSpells > 0
                     && cSpell.pRes != NULL
                     && cSpell.CheckUsableBy(pSprite) == TRUE) {
                     pSprite->GetSpells(typeAI.m_nClass)->Add(nID, 0, 1, 0, 0);
-                    pCreateChar->field_4EE--;
+                    pCreateChar->m_nExtraSpells--;
                     SetSelected(TRUE);
                 }
             }
@@ -8515,7 +8514,7 @@ void CUIControlButtonCharGenMemorizedDivineSpellSelection::OnLButtonClick(CPoint
     } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
     if (rc == CGameObjectArray::SUCCESS) {
-        BOOLEAN bPickingDomainSpells = pCreateChar->field_4D6;
+        BOOLEAN bPickingDomainSpells = pCreateChar->m_bPickingDomainSpells;
         UINT nButtonIndex = m_nID - 2;
         STRREF strDescription;
         CResRef resRef;
@@ -8549,16 +8548,16 @@ void CUIControlButtonCharGenMemorizedDivineSpellSelection::OnLButtonClick(CPoint
                 } else {
                     pSprite->GetSpells(typeAI.m_nClass)->Remove(nID, 0, 0, 1, 0);
                 }
-                pCreateChar->field_4EE++;
+                pCreateChar->m_nExtraSpells++;
                 SetSelected(FALSE);
             } else {
-                if (pCreateChar->field_4EE > 0) {
+                if (pCreateChar->m_nExtraSpells > 0) {
                     if (bPickingDomainSpells) {
                         pSprite->AddDomainSpell(0, resRef, 1, 0, 0);
                     } else {
                         pSprite->GetSpells(typeAI.m_nClass)->Add(nID, 0, 1, 0, 0);
                     }
-                    pCreateChar->field_4EE--;
+                    pCreateChar->m_nExtraSpells--;
                     SetSelected(TRUE);
                 }
             }
@@ -8620,7 +8619,7 @@ BOOL CUIControlButtonCharGenMemorizedDivineSpellSelection::Render(BOOL bForce)
 // -----------------------------------------------------------------------------
 
 // 0x621440
-CUIControlTextDisplayCharGen621440::CUIControlTextDisplayCharGen621440(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo)
+CUIControlTextDisplayCharGenPortraits::CUIControlTextDisplayCharGenPortraits(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo)
     : CUIControlTextDisplay(panel, controlInfo, TRUE)
 {
     // NOTE: Uninline.
@@ -8628,12 +8627,12 @@ CUIControlTextDisplayCharGen621440::CUIControlTextDisplayCharGen621440(CUIPanel*
 }
 
 // 0x603670
-CUIControlTextDisplayCharGen621440::~CUIControlTextDisplayCharGen621440()
+CUIControlTextDisplayCharGenPortraits::~CUIControlTextDisplayCharGenPortraits()
 {
 }
 
 // 0x621480
-void CUIControlTextDisplayCharGen621440::OnItemSelected(LONG lMarker)
+void CUIControlTextDisplayCharGenPortraits::OnItemSelected(LONG lMarker)
 {
     CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
 
@@ -8643,10 +8642,10 @@ void CUIControlTextDisplayCharGen621440::OnItemSelected(LONG lMarker)
 
     switch (m_nID) {
     case 2:
-        pCreateChar->sub_6108D0(lMarker);
+        pCreateChar->OnPortraitLargeItemSelect(lMarker);
         break;
     case 4:
-        pCreateChar->sub_610A40(lMarker);
+        pCreateChar->OnPortraitSmallItemSelect(lMarker);
         break;
     default:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
@@ -8685,7 +8684,7 @@ void CUIControlTextDisplayCharGenImportCharacters::OnItemSelected(LONG lMarker)
 // -----------------------------------------------------------------------------
 
 // 0x621570
-CUIControlButtonCharGen621570::CUIControlButtonCharGen621570(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+CUIControlButtonCharGenSoundPlay::CUIControlButtonCharGenSoundPlay(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
 {
     CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
@@ -8698,12 +8697,12 @@ CUIControlButtonCharGen621570::CUIControlButtonCharGen621570(CUIPanel* panel, UI
 }
 
 // 0x621640
-CUIControlButtonCharGen621570::~CUIControlButtonCharGen621570()
+CUIControlButtonCharGenSoundPlay::~CUIControlButtonCharGenSoundPlay()
 {
 }
 
 // 0x6216E0
-void CUIControlButtonCharGen621570::OnLButtonClick(CPoint pt)
+void CUIControlButtonCharGenSoundPlay::OnLButtonClick(CPoint pt)
 {
     CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
 

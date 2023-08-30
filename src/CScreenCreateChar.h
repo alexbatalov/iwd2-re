@@ -74,7 +74,7 @@ public:
     void ResetImportPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void ResetMonkPaladinSpecializationPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void ResetSubRacePanel(CUIPanel* pPanel, CGameSprite* pSprite);
-    void sub_609170(CUIPanel* pPanel, CGameSprite* pSprite);
+    void ResetBiographyPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateCharacterList(CUIPanel* pPanel, DWORD dwTextId, INT nSelected);
     void ResetCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdatePortraitList(CUIPanel* pPanel, DWORD dwTextId, INT nSelectedIndex);
@@ -124,8 +124,8 @@ public:
     INT GetNumHatedRaces();
     void SetTopHatedRace(INT nTopHatedRace);
     BYTE GetHatedRace(INT nIndex);
-    void sub_6108D0(INT a1);
-    void sub_610A40(INT a1);
+    void OnPortraitLargeItemSelect(INT a1);
+    void OnPortraitSmallItemSelect(INT a1);
     void OnCharacterImportItemSelect(INT nItem);
     void sub_610DC0();
     void OnCharacterExportItemSelect(INT nItem);
@@ -158,19 +158,19 @@ public:
     /* 012A */ C2DArray m_tSubRace;
     /* 014E */ C2DArray m_tHairColor;
     /* 0172 */ C2DArray m_tSkinColor;
-    /* 0196 */ CGameAnimation field_196;
+    /* 0196 */ CGameAnimation m_animation;
     /* 01A0 */ CKeyInfo m_pVirtualKeys[CSCREENCREATECHAR_VIRTUAL_KEYS];
     /* 0470 */ BYTE m_pVirtualKeysFlags[CSCREENCREATECHAR_VIRTUAL_KEYS];
     /* 04CA */ BOOL m_bCtrlKeyDown;
     /* 04CE */ BOOL m_bShiftKeyDown;
     /* 04D2 */ BOOL m_bCapsLockKeyOn;
-    /* 04D6 */ int field_4D6;
-    /* 04DA */ int m_nFirstStep;
+    /* 04D6 */ BOOL m_bPickingDomainSpells;
+    /* 04DA */ INT m_nFirstStep;
     /* 04DE */ INT m_nCurrentStep;
     /* 04E2 */ INT m_nGameSprite;
     /* 04E6 */ INT m_nExtraFeats;
     /* 04EA */ INT m_nExtraAbilityPoints;
-    /* 04EE */ int field_4EE;
+    /* 04EE */ INT m_nExtraSpells;
     /* 04F2 */ INT m_nExtraSkillPoints;
     /* 04F6 */ int field_4F6;
     /* 04FE */ int field_4FE;
@@ -197,11 +197,11 @@ public:
     /* 052E */ INT m_nModCHR;
     /* 0532 */ INT m_nCurrentPortrait;
     /* 0536 */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
-    /* 0552 */ int field_552;
-    /* 0556 */ int field_556;
+    /* 0552 */ INT m_nEngineState;
+    /* 0556 */ INT m_nCharacterSlot;
     /* 055A */ BYTE m_hatedRaces[CSCREENCREATECHAR_NUM_HATEDRACES];
-    /* 056A */ int m_nTopHatedRace;
-    /* 056E */ unsigned char field_56E;
+    /* 056A */ INT m_nTopHatedRace;
+    /* 056E */ BYTE m_nRange;
     /* 056F */ BYTE m_nMemorySTR;
     /* 0570 */ unsigned char field_570;
     /* 0571 */ BYTE m_nMemoryDEX;
@@ -222,8 +222,8 @@ public:
     /* 059E */ CVidFont m_preLoadFontRealms;
     /* 0A9E */ CVidFont m_preLoadFontStnSml;
     /* 0F9E */ CVidFont m_preLoadFontTool;
-    /* 149E */ INT field_149E;
-    /* 14A2 */ unsigned char field_14A2;
+    /* 149E */ INT m_nErrorState;
+    /* 14A2 */ BYTE m_nSpellLevel;
     /* 14A3 */ unsigned char field_14A3;
     /* 14A4 */ int field_14A4;
     /* 14A8 */ int field_14A8;
@@ -488,10 +488,10 @@ public:
     /* 0676 */ CResRef m_spellResRef;
 };
 
-class CUIControlTextDisplayCharGen621440 : public CUIControlTextDisplay {
+class CUIControlTextDisplayCharGenPortraits : public CUIControlTextDisplay {
 public:
-    CUIControlTextDisplayCharGen621440(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo);
-    ~CUIControlTextDisplayCharGen621440() override;
+    CUIControlTextDisplayCharGenPortraits(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo);
+    ~CUIControlTextDisplayCharGenPortraits() override;
     void OnItemSelected(LONG lMarker) override;
 };
 
@@ -502,10 +502,10 @@ public:
     void OnItemSelected(LONG lMarker) override;
 };
 
-class CUIControlButtonCharGen621570 : public CUIControlButton {
+class CUIControlButtonCharGenSoundPlay : public CUIControlButton {
 public:
-    CUIControlButtonCharGen621570(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
-    ~CUIControlButtonCharGen621570() override;
+    CUIControlButtonCharGenSoundPlay(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGenSoundPlay() override;
     void OnLButtonClick(CPoint pt) override;
 };
 
