@@ -173,7 +173,7 @@ CScreenCreateChar::CScreenCreateChar()
     m_nPortraitSmallIndex = 0;
     m_nPortraitLargeIndex = 0;
     m_nCustomSoundSetIndex = 0;
-    field_58A = 0;
+    m_nCustomSoundIndex = 0;
     m_nCharacterIndex = 0;
     field_596 = 0;
     field_14A4 = 0;
@@ -1359,7 +1359,7 @@ void CScreenCreateChar::ResetCustomSoundsPanel(CUIPanel* pPanel, CGameSprite* pS
     pText->SetItemTextColor(pos, CBaldurChitin::TEXTDISPLAY_COLOR_SELECT);
 
     m_nCustomSoundSetIndex = 0;
-    field_58A = 3;
+    m_nCustomSoundIndex = 3;
 
     UpdateHelp(pPanel->m_nID, 50, 11315);
 }
@@ -4201,9 +4201,102 @@ void CScreenCreateChar::ImportCharacter()
 }
 
 // 0x613EF0
-void CScreenCreateChar::sub_613EF0()
+void CScreenCreateChar::OnPlayButtonClick()
 {
-    // TODO: Incomplete.
+    INT nGameSprite = GetSpriteId();
+
+    // NOTE: Unused.
+    STR_RES strRes;
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (m_pSounds->FindIndex(m_nCustomSoundSetIndex) != NULL) {
+            // NOTE: Unused.
+            CString v2;
+
+            CString sSuffix;
+            CString sSoundSetName;
+            CString sDirName;
+            CString sBaseName;
+
+            int v1 = m_nCustomSoundIndex;
+
+            while (1) {
+                if (m_nCustomSoundSetIndex != -1) {
+                    POSITION pos = m_pSounds->FindIndex(m_nCustomSoundSetIndex);
+                    if (pos != NULL) {
+                        sSoundSetName = m_pSounds->GetAt(pos);
+                    }
+                }
+
+                sDirName = g_pBaldurChitin->GetObjectGame()->GetDirSounds() + sSoundSetName + '\\';
+
+                g_pBaldurChitin->cDimm.AddToDirectoryList(sDirName, TRUE);
+
+                CString sFileName;
+                CString sPattern;
+
+                sPattern = g_pBaldurChitin->GetObjectGame()->GetDirSounds() + "\\" + sSoundSetName + "\\*.wav";
+
+                WIN32_FIND_DATAA findFileData;
+                HANDLE hFindFile = FindFirstFileA(sPattern, &findFileData);
+                if (hFindFile != INVALID_HANDLE_VALUE) {
+                    sFileName = findFileData.cFileName;
+
+                    if ((findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
+                        sFileName.MakeUpper();
+                        sFileName = sFileName.SpanExcluding(".");
+                        sFileName = sFileName.Left(sFileName.GetLength() - 2);
+                        sBaseName = sFileName;
+                    }
+
+                    // FIXME: Leaking `hFindFile`.
+                }
+
+                if (m_nCustomSoundIndex < 10) {
+                    sSuffix.Format("0%d", m_nCustomSoundIndex);
+                } else {
+                    sSuffix.Format("%d", m_nCustomSoundIndex);
+                }
+
+                sFileName = sBaseName + sSuffix;
+
+                if (m_nCustomSoundIndex == 40) {
+                    m_nCustomSoundIndex = 0;
+                } else {
+                    m_nCustomSoundIndex++;
+                }
+
+                if (m_nCustomSoundIndex == 30) {
+                    m_nCustomSoundIndex = 34;
+                }
+
+                CSound cSound(CResRef(sFileName), 0, 0, 0, INT_MAX, FALSE);
+                cSound.SetFireForget(TRUE);
+
+                if (cSound.GetRes() != NULL) {
+                    cSound.Play(FALSE);
+                    break;
+                }
+
+                if (v1 == m_nCustomSoundIndex) {
+                    break;
+                }
+            }
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
 }
 
 // 0x614450
@@ -4250,7 +4343,7 @@ void CScreenCreateChar::OnSoundItemSelect(INT nItem)
                     CBaldurChitin::TEXTDISPLAY_COLOR_SELECT);
             }
 
-            field_58A = 3;
+            m_nCustomSoundIndex = 3;
 
             UpdatePopupPanel(GetTopPopup()->m_nID, pSprite);
         }
@@ -8486,7 +8579,7 @@ void CUIControlButtonCharGen621570::OnLButtonClick(CPoint pt)
     // __LINE__: 16327
     UTIL_ASSERT(pCreateChar != NULL);
 
-    pCreateChar->sub_613EF0();
+    pCreateChar->OnPlayButtonClick();
 }
 
 // -----------------------------------------------------------------------------

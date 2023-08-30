@@ -136,7 +136,7 @@ public:
     void RemoveItems();
     void DeleteCharacter();
     void ImportCharacter();
-    void sub_613EF0();
+    void OnPlayButtonClick();
     void OnSoundItemSelect(INT nItem);
     BOOL IsDoneButtonClickable(CGameSprite* pSprite);
     void OnDoneButtonClick();
@@ -213,7 +213,7 @@ public:
     /* 057E */ INT m_nPortraitLargeIndex;
     /* 0582 */ CStringList* m_pPortraits;
     /* 0586 */ INT m_nCustomSoundSetIndex;
-    /* 058A */ int field_58A;
+    /* 058A */ INT m_nCustomSoundIndex;
     /* 058E */ INT m_nCharacterIndex;
     /* 0592 */ CStringList* m_pCharacters;
     /* 0596 */ int field_596;
