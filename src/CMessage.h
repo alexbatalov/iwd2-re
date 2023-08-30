@@ -31,6 +31,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXTREF;
     static const BYTE MSG_SUBTYPE_CMESSAGE_DROP_PATH;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_ENTER_STORE_MODE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -132,6 +133,7 @@ public:
     static const SHORT BROADCAST;
     static const SHORT BROADCAST_OTHERS;
     static const SHORT BROADCAST_FORCED;
+    static const SHORT BROADCAST_FORCED_OTHERS;
 
     CMessage(LONG caller, LONG target);
     /* 0000 */ virtual ~CMessage();
@@ -317,6 +319,20 @@ public:
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
     void Run() override;
+};
+
+class CMessageEnterStoreMode : public CMessage {
+public:
+    CMessageEnterStoreMode(const CAIObjectType& cAIProprietor, const CAIObjectType& cAICustomer, const CResRef cResStore, LONG caller, LONG target);
+    ~CMessageEnterStoreMode();
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ CAIObjectType m_cAIProprietor;
+    /* 0048 */ CAIObjectType m_cAICustomer;
+    /* 0084 */ CResRef m_cResStore;
 };
 
 class CMessageStoreRelease : public CMessage {

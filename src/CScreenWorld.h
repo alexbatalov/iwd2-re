@@ -11,6 +11,7 @@
 
 #define CSCREENWORLD_VIRTUAL_KEYS 92
 
+class CAIObjectType;
 class CGameSprite;
 class CUIControlTextDisplay;
 
@@ -57,6 +58,7 @@ public:
     void SetCurrentXP(DWORD dwCurrentXP);
     void AddGold(DWORD dwGold);
     void StopContainer();
+    void StartStore(const CAIObjectType& cAIProprietor, const CAIObjectType& cAICustomer, CResRef cResStore, BOOLEAN bInitiate);
     void StopStore();
     void DisplayText(const CString& sName, const CString& sText, COLORREF rgbNameColor, COLORREF rgbTextColor, LONG lMarker, BOOLEAN bMoveToTop);
     void RemoveText(POSITION pos);

@@ -29,6 +29,9 @@ const SHORT CMessage::BROADCAST_OTHERS = 3;
 // 0x84820E
 const SHORT CMessage::BROADCAST_FORCED = 4;
 
+// 0x848210
+const SHORT CMessage::BROADCAST_FORCED_OTHERS = 5;
+
 // 0x84CED6
 const BYTE CBaldurMessage::MSG_TYPE_CMESSAGE = 67;
 
@@ -73,6 +76,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXTREF = 17;
 
 // 0x84CEEB
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_DROP_PATH = 20;
+
+// 0x84CEEE
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_ENTER_STORE_MODE = 23;
 
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
@@ -1432,6 +1438,51 @@ void CMessageDropPath::Run()
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
     }
+}
+
+// -----------------------------------------------------------------------------
+
+// FIXME: `cResStore` should be reference.
+//
+// 0x4F5520
+CMessageEnterStoreMode::CMessageEnterStoreMode(const CAIObjectType& cAIProprietor, const CAIObjectType& cAICustomer, const CResRef cResStore, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_cAIProprietor.Set(cAIProprietor);
+    m_cAICustomer.Set(cAICustomer);
+    m_cResStore = cResStore;
+}
+
+// 0x4F5630
+CMessageEnterStoreMode::~CMessageEnterStoreMode()
+{
+}
+
+// 0x4536E0
+SHORT CMessageEnterStoreMode::GetCommType()
+{
+    return BROADCAST_FORCED_OTHERS;
+}
+
+// 0x40A0E0
+BYTE CMessageEnterStoreMode::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4F5600
+BYTE CMessageEnterStoreMode::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_ENTER_STORE_MODE;
+}
+
+// 0x4FF480
+void CMessageEnterStoreMode::Run()
+{
+    g_pBaldurChitin->m_pEngineWorld->StartStore(m_cAIProprietor,
+        m_cAICustomer,
+        m_cResStore,
+        FALSE);
 }
 
 // -----------------------------------------------------------------------------

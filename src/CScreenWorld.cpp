@@ -530,6 +530,14 @@ void CScreenWorld::StopContainer()
     // TODO: Incomplete.
 }
 
+// FIXME: `cResStore` should be reference.
+//
+// 0x6913C0
+void CScreenWorld::StartStore(const CAIObjectType& cAIProprietor, const CAIObjectType& cAICustomer, CResRef cResStore, BOOLEAN bInitiate)
+{
+    // TODO: Incomplete.
+}
+
 // 0x691B50
 void CScreenWorld::StopStore()
 {
