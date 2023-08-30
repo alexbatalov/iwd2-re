@@ -101,6 +101,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_PLAY_SOUND = 32;
 // 0x84CEFB
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_REPUTATION_CHANGE = 36;
 
+// 0x84CEFD
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_AISPEED = 38;
+
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
@@ -1830,6 +1833,57 @@ void CMessageReputationChange::Run()
     g_pBaldurChitin->GetBaldurMessage()->m_bInReputationChange = TRUE;
     g_pBaldurChitin->GetObjectGame()->ReputationAdjustment(m_deltaRep, FALSE);
     g_pBaldurChitin->GetBaldurMessage()->m_bInReputationChange = FALSE;
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F5D90
+CMessageSetAISpeed::CMessageSetAISpeed(BYTE speed, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_nAISpeed = speed;
+}
+
+// 0x453510
+SHORT CMessageSetAISpeed::GetCommType()
+{
+    return BROADCAST;
+}
+
+// 0x40A0E0
+BYTE CMessageSetAISpeed::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4F5DB0
+BYTE CMessageSetAISpeed::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_AISPEED;
+}
+
+// 0x505660
+void CMessageSetAISpeed::Run()
+{
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
+            pSprite->m_AISpeed = m_nAISpeed;
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
 }
 
 // -----------------------------------------------------------------------------
