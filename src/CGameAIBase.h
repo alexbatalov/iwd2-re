@@ -58,6 +58,7 @@ public:
     SHORT DoubleClickRButtonPoint();
     SHORT DoubleClickRButtonObject(CGameObject* target);
     SHORT MoveCursorPoint();
+    SHORT TakePartyGold();
     SHORT StartMusic();
 
     SCRIPTNAME& GetScriptName();

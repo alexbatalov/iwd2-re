@@ -5,6 +5,7 @@
 #include "CBaldurChitin.h"
 #include "CGameArea.h"
 #include "CGameEffect.h"
+#include "CGameSprite.h"
 #include "CGameTimer.h"
 #include "CInfGame.h"
 #include "CScreenWorld.h"
@@ -598,6 +599,32 @@ SHORT CGameAIBase::DoubleClickRButtonObject(CGameObject* target)
 
     // NOTE: Uninline.
     return DoubleClickLButton(dest);
+}
+
+// 0x465110
+SHORT CGameAIBase::TakePartyGold()
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    DWORD gold = m_curAction.m_specificID;
+    if (gold > pGame->m_nPartyGold) {
+        gold = pGame->m_nPartyGold;
+    }
+
+    if (m_objectType == TYPE_SPRITE) {
+        static_cast<CGameSprite*>(this)->GetBaseStats()->m_gold += gold;
+        static_cast<CGameSprite*>(this)->GetDerivedStats()->m_nGold += gold;
+    }
+
+    CMessagePartyGold* pMessage = new CMessagePartyGold(TRUE,
+        TRUE,
+        -static_cast<LONG>(gold),
+        m_id,
+        m_id);
+
+    g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+
+    return ACTION_DONE;
 }
 
 // 0x4668B0
