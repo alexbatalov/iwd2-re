@@ -30,6 +30,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_CUT_SCENE_MODE_STATUS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXTREF;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_DROP_PATH;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -307,6 +308,15 @@ public:
     /* 0018 */ COLORREF m_textColor;
     /* 001C */ LONG m_marker;
     /* 0020 */ BOOLEAN m_moveToTop;
+};
+
+class CMessageDropPath : public CMessage {
+public:
+    CMessageDropPath(LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
 };
 
 class CMessageStoreRelease : public CMessage {

@@ -71,6 +71,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXT = 16;
 // 0x84CEE8
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXTREF = 17;
 
+// 0x84CEEB
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_DROP_PATH = 20;
+
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
@@ -1369,6 +1372,66 @@ void CMessageDisplayTextRef::Run()
         m_textColor,
         m_marker,
         m_moveToTop);
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4BD900
+CMessageDropPath::CMessageDropPath(LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+}
+
+// 0x453510
+SHORT CMessageDropPath::GetCommType()
+{
+    return BROADCAST;
+}
+
+// 0x40A0E0
+BYTE CMessageDropPath::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4B34E0
+BYTE CMessageDropPath::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_DROP_PATH;
+}
+
+// 0x4FD830
+void CMessageDropPath::Run()
+{
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
+            pSprite->DropPath();
+            pSprite->DropSearchRequest();
+
+            if (pSprite->m_nSequence == CGameSprite::SEQ_WALK) {
+                pSprite->SetSequence(CGameSprite::SEQ_READY);
+            }
+
+            if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
+                || g_pChitin->cNetwork.m_idLocalPlayer == pSprite->m_remotePlayerID) {
+                pSprite->m_bSendSpriteUpdate = TRUE;
+            }
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
 }
 
 // -----------------------------------------------------------------------------

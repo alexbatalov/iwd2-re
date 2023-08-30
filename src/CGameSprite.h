@@ -16,6 +16,26 @@
 #include "CVidCell.h"
 #include "FileFormat.h"
 
+// SEQUENCE.IDS
+
+#define CGAMESPRITE_SEQ_ATTACK 0
+#define CGAMESPRITE_SEQ_AWAKE 1
+#define CGAMESPRITE_SEQ_CAST 2
+#define CGAMESPRITE_SEQ_CONJURE 3
+#define CGAMESPRITE_SEQ_DAMAGE 4
+#define CGAMESPRITE_SEQ_DIE 5
+#define CGAMESPRITE_SEQ_HEAD_TURN 6
+#define CGAMESPRITE_SEQ_READY 7
+#define CGAMESPRITE_SEQ_SHOOT 8
+#define CGAMESPRITE_SEQ_TWITCH 9
+#define CGAMESPRITE_SEQ_WALK 10
+#define CGAMESPRITE_SEQ_ATTACK_SLASH 11
+#define CGAMESPRITE_SEQ_ATTACK_BACKSLASH 12
+#define CGAMESPRITE_SEQ_ATTACK_JAB 13
+#define CGAMESPRITE_SEQ_EMERGE 14
+#define CGAMESPRITE_SEQ_HIDE 15
+#define CGAMESPRITE_SEQ_SLEEP 17
+
 #define CGAMESPRITE_FEAT_AEGIS_OF_RIME 0
 #define CGAMESPRITE_FEAT_AMBIDEXTERITY 1
 #define CGAMESPRITE_FEAT_AQUA_MORTIS 2
@@ -133,6 +153,21 @@ public:
     static const BYTE DIR_SEE;
     static const BYTE DIR_SSE;
     static const BYTE NUM_DIR;
+
+    static const BYTE SEQ_ATTACK;
+    static const BYTE SEQ_AWAKE;
+    static const BYTE SEQ_CAST;
+    static const BYTE SEQ_CONJURE;
+    static const BYTE SEQ_DAMAGE;
+    static const BYTE SEQ_DIE;
+    static const BYTE SEQ_EMERGE;
+    static const BYTE SEQ_HEAD_TURN;
+    static const BYTE SEQ_HIDE;
+    static const BYTE SEQ_READY;
+    static const BYTE SEQ_SHOOT;
+    static const BYTE SEQ_SLEEP;
+    static const BYTE SEQ_TWITCH;
+    static const BYTE SEQ_WALK;
 
     static const CPoint PORTRAIT_ICON_SIZE;
     static const CResRef SPIN110;
@@ -545,6 +580,7 @@ public:
     /* 72D6 */ int field_72D6;
     /* 72DE */ int field_72DE;
     /* 72E6 */ int field_72E6;
+    /* 752E */ BOOL m_bSendSpriteUpdate;
     /* 7532 */ int field_7532;
     /* 7536 */ int field_7536;
     /* 7540 */ int field_7540;
