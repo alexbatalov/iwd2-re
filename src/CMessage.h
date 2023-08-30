@@ -26,6 +26,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_COLOR_CHANGE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_COLOR_RESET;
     static const BYTE MSG_SUBTYPE_CMESSAGE_COLOR_UPDATE;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_CUT_SCENE_MODE_STATUS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -258,6 +259,17 @@ public:
 
     /* 000C */ CColorRanges m_appliedColorRanges;
     /* */ CColorEffects m_appliedColorEffects;
+};
+
+class CMessageCutSceneModeStatus : public CMessage {
+public:
+    CMessageCutSceneModeStatus(BOOLEAN mode, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ BOOLEAN m_cutSceneMode;
 };
 
 class CMessageStoreRelease : public CMessage {

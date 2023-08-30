@@ -2,8 +2,10 @@
 
 #include "CBaldurChitin.h"
 #include "CGameAIBase.h"
+#include "CGameArea.h"
 #include "CGameEffect.h"
 #include "CGameSprite.h"
+#include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CItem.h"
 #include "CScreenConnection.h"
@@ -11,6 +13,8 @@
 #include "CScreenLoad.h"
 #include "CScreenMultiPlayer.h"
 #include "CScreenSinglePlayer.h"
+#include "CScreenWorld.h"
+#include "CUIPanel.h"
 #include "CUtil.h"
 
 // 0x848208
@@ -57,6 +61,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_COLOR_RESET = 10;
 
 // 0x84CEE2
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_COLOR_UPDATE = 11;
+
+// 0x84CEE6
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CUT_SCENE_MODE_STATUS = 15;
 
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
@@ -1104,6 +1111,76 @@ void CMessageColorUpdate::Run()
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F53C0
+CMessageCutSceneModeStatus::CMessageCutSceneModeStatus(BOOLEAN mode, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_cutSceneMode = mode;
+}
+
+// 0x43E170
+SHORT CMessageCutSceneModeStatus::GetCommType()
+{
+    return BROADCAST_FORCED;
+}
+
+// 0x40A0E0
+BYTE CMessageCutSceneModeStatus::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x453470
+BYTE CMessageCutSceneModeStatus::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CUT_SCENE_MODE_STATUS;
+}
+
+// 0x4FBFD0
+void CMessageCutSceneModeStatus::Run()
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    if (pGame->field_43E2 == 1282) {
+        pGame->field_43E6 = 0;
+
+        // NOTE: Unused.
+        CString sError("Trying to start a cut scene while in a dialog.");
+    } else {
+        if (m_cutSceneMode) {
+            CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
+            if (pWorld->m_bPaused == TRUE
+                && g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+                if (!pWorld->TogglePauseGame(0, 1, 0)) {
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+                    // __LINE__: 8396
+                    UTIL_ASSERT(FALSE);
+                }
+            }
+
+            pGame->field_43E2 = 322;
+            pGame->field_43E6 = 1;
+
+            g_pBaldurChitin->GetObjectCursor()->SetCursor(0, FALSE);
+
+            pGame->SetTempCursor(4);
+            pGame->GetVisibleArea()->m_nScrollState = 0;
+
+            g_pBaldurChitin->GetActiveEngine()->SelectEngine(pWorld);
+        } else {
+            if (pGame->field_43E2 == 322) {
+                pGame->field_43E2 = -1;
+
+                g_pBaldurChitin->m_pEngineWorld->GetManager()->GetPanel(1)->SetActive(TRUE);
+                g_pBaldurChitin->m_pEngineWorld->GetManager()->GetPanel(1)->InvalidateRect(NULL);
+            }
+            pGame->field_43E6 = 0;
+        }
     }
 }
 
