@@ -1006,6 +1006,12 @@ BYTE CGameSprite::GetSound(BYTE soundID)
     return nSound;
 }
 
+// 0x706B40
+void CGameSprite::SetDirection(const CPoint& posDest)
+{
+    // TODO: Incomplete.
+}
+
 // 0x706C80
 void CGameSprite::SetDirection(SHORT direction)
 {

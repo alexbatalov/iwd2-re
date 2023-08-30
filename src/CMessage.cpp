@@ -110,6 +110,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_COMMAND_PAUSE = 39;
 // 0x84CEFF
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_DIALOG_WAIT = 40;
 
+// 0x84CF00
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_DIRECTION = 41;
+
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
@@ -1988,6 +1991,59 @@ void CMessageSetDialogWait::Run()
         if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
             pSprite->m_dialogWait = m_wait;
             pSprite->m_dialogWaitTarget = m_waitTarget;
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// FIXME: `face` should be reference.
+//
+// 0x4F5EE0
+CMessageSetDirection::CMessageSetDirection(CPoint face, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_face = face;
+}
+
+// 0x453510
+SHORT CMessageSetDirection::GetCommType()
+{
+    return BROADCAST;
+}
+
+// 0x40A0E0
+BYTE CMessageSetDirection::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4F5F10
+BYTE CMessageSetDirection::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_DIRECTION;
+}
+
+// 0x506530
+void CMessageSetDirection::Run()
+{
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
+            pSprite->SetDirection(m_face);
         }
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,

@@ -259,6 +259,7 @@ public:
     BOOL IsSpellSchool(BYTE spellSchool);
     void SetFootstepChannel();
     BYTE GetSound(BYTE soundID);
+    void SetDirection(const CPoint& posDest);
     void SetDirection(SHORT direction);
     SHORT GetIdleSequence();
     void SetSequence(SHORT nSequence);

@@ -42,6 +42,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_AISPEED;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_COMMAND_PAUSE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_DIALOG_WAIT;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_SET_DIRECTION;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -455,6 +456,17 @@ public:
 
     /* 000C */ LONG m_wait;
     /* 0010 */ LONG m_waitTarget;
+};
+
+class CMessageSetDirection : public CMessage {
+public:
+    CMessageSetDirection(CPoint face, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ CPoint m_face;
 };
 
 class CMessageStoreRelease : public CMessage {
