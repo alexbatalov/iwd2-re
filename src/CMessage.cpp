@@ -397,11 +397,23 @@ BOOL CBaldurMessage::DisplayText(const CString& sName, const CString& sText, COL
 }
 
 // 0x43E0E0
-BOOL CBaldurMessage::sub_43E0E0(DWORD a1, DWORD a2, COLORREF a3, COLORREF a4, int a5, int a6, int a7)
+BOOL CBaldurMessage::DisplayTextRef(STRREF name, STRREF text, COLORREF rgbNameColor, COLORREF rgbTextColor, LONG lMarker, LONG caller, LONG target)
 {
-    // TODO: Incomplete.
+    if (g_pBaldurChitin->GetObjectGame()->m_bInLoadGame == TRUE) {
+        return FALSE;
+    }
 
-    return FALSE;
+    CMessageDisplayTextRef* pMessage = new CMessageDisplayTextRef(name,
+        text,
+        rgbNameColor,
+        rgbTextColor,
+        lMarker,
+        caller,
+        target);
+
+    g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+
+    return TRUE;
 }
 
 // 0x605AA0

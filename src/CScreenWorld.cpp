@@ -620,7 +620,7 @@ void CScreenWorld::StartSaveGameMultiplayerHost()
 
     if (!pWorld->m_bPaused) {
         // "Paused for saving game"
-        g_pBaldurChitin->GetBaldurMessage()->sub_43E0E0(-1,
+        g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(-1,
             19716,
             RGB(255, 0, 0),
             RGB(255, 0, 0),
@@ -649,7 +649,7 @@ void CScreenWorld::StartMovieMultiplayerHost(BYTE* cMovieResRef)
 
     if (!pWorld->m_bPaused) {
         // "Paused for movie"
-        g_pBaldurChitin->GetBaldurMessage()->sub_43E0E0(-1,
+        g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(-1,
             17557,
             RGB(255, 0, 0),
             RGB(255, 0, 0),

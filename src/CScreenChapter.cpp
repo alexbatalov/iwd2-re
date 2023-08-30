@@ -648,7 +648,7 @@ void CScreenChapter::StartChapterMultiplayerHost(BYTE nChapter, BYTE* resRef)
     g_pBaldurChitin->m_pEngineWorld->m_bHardPaused = TRUE;
 
     if (!g_pBaldurChitin->m_pEngineWorld->m_bPaused) {
-        g_pBaldurChitin->m_cBaldurMessage.sub_43E0E0(-1,
+        g_pBaldurChitin->m_cBaldurMessage.DisplayTextRef(-1,
             17556,
             RGB(255, 0, 0),
             RGB(255, 0, 0),

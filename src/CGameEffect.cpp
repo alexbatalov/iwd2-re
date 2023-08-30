@@ -858,7 +858,7 @@ void CGameEffect::DisplayString(CGameSprite* pSprite)
 
         STRREF str = atol(pGame->GetRuleTables().m_tEffectText.GetAt(CRuleTables::STRREF_STR, sEffectID));
         if (str != -1) {
-            g_pBaldurChitin->GetBaldurMessage()->sub_43E0E0(pSprite->GetNameRef(),
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(pSprite->GetNameRef(),
                 str,
                 CVidPalette::RANGE_COLORS[pSprite->GetBaseStats()->m_colors[2]],
                 RGB(0xD7, 0xD7, 0xBE),
@@ -876,7 +876,7 @@ void CGameEffect::DisplayStringRef(CGameSprite* pSprite, STRREF str)
     if ((pGame->GetOptions()->m_nEffectTextLevel & 0x8) != 0
         && pGame->m_bInLoadGame != TRUE
         && pGame->m_bInLoadArea != TRUE) {
-        g_pBaldurChitin->GetBaldurMessage()->sub_43E0E0(pSprite->GetNameRef(),
+        g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(pSprite->GetNameRef(),
             str,
             CVidPalette::RANGE_COLORS[pSprite->GetBaseStats()->m_colors[2]],
             RGB(0xD7, 0xD7, 0xBE),

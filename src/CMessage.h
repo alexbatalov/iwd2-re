@@ -69,7 +69,7 @@ public:
     void TimeChangeToServer(ULONG deltaTime);
     BOOLEAN DemandSettingsNightmareMode(BOOLEAN wait);
     BOOL DisplayText(const CString& sName, const CString& sText, COLORREF rgbNameColor, COLORREF rgbTextColor, LONG lMarker, LONG caller, LONG target);
-    BOOL sub_43E0E0(DWORD a1, DWORD a2, COLORREF a3, COLORREF a4, int a5, int a6, int a7);
+    BOOL DisplayTextRef(STRREF name, STRREF text, COLORREF rgbNameColor, COLORREF rgbTextColor, LONG lMarker, LONG caller, LONG target);
     CString GetVersionControlShutdownServerString();
     CString GetVersionControlShutdownClientString();
     BOOLEAN GetDialogRequestPending();

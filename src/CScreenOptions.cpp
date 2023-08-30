@@ -2318,7 +2318,7 @@ void CUIControlSliderOptionsSlider::OnThumbFinalChange()
                 if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
                     && g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
                     // 11314 - "Difficulty Level"
-                    g_pBaldurChitin->m_cBaldurMessage.sub_43E0E0(11314,
+                    g_pBaldurChitin->m_cBaldurMessage.DisplayTextRef(11314,
                         dwNewDifficultyStrId,
                         RGB(215, 215, 190),
                         RGB(215, 215, 190),
