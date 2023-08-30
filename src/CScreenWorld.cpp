@@ -536,6 +536,12 @@ void CScreenWorld::StopStore()
     // TODO: Incomplete.
 }
 
+// 0x692290
+void CScreenWorld::DisplayText(const CString& sName, const CString& sText, COLORREF rgbNameColor, COLORREF rgbTextColor, LONG lMarker, BOOLEAN bMoveToTop)
+{
+    // TODO: Incomplete.
+}
+
 // 0x692630
 void CScreenWorld::RemoveText(POSITION pos)
 {

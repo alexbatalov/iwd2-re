@@ -65,6 +65,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_COLOR_UPDATE = 11;
 // 0x84CEE6
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CUT_SCENE_MODE_STATUS = 15;
 
+// 0x84CEE7
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXT = 16;
+
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
@@ -1182,6 +1185,49 @@ void CMessageCutSceneModeStatus::Run()
             pGame->field_43E6 = 0;
         }
     }
+}
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Inlined.
+CMessageDisplayText::CMessageDisplayText(const CString& name, const CString& text, COLORREF nameColor, COLORREF textColor, LONG marker, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_name = name;
+    m_text = text;
+    m_nameColor = nameColor;
+    m_textColor = textColor;
+    m_marker = marker;
+    m_moveToTop = FALSE;
+}
+
+// 0x43E170
+SHORT CMessageDisplayText::GetCommType()
+{
+    return BROADCAST_FORCED;
+}
+
+// 0x40A0E0
+BYTE CMessageDisplayText::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x43E060
+BYTE CMessageDisplayText::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CUT_SCENE_MODE_STATUS;
+}
+
+// 0x4FC4F0
+void CMessageDisplayText::Run()
+{
+    g_pBaldurChitin->m_pEngineWorld->DisplayText(m_name,
+        m_text,
+        m_nameColor,
+        m_textColor,
+        m_marker,
+        m_moveToTop);
 }
 
 // -----------------------------------------------------------------------------

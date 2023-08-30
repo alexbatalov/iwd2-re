@@ -58,6 +58,7 @@ public:
     void AddGold(DWORD dwGold);
     void StopContainer();
     void StopStore();
+    void DisplayText(const CString& sName, const CString& sText, COLORREF rgbNameColor, COLORREF rgbTextColor, LONG lMarker, BOOLEAN bMoveToTop);
     void RemoveText(POSITION pos);
     void SetItemMarker(POSITION pos, LONG lMarker);
     void ClearChatMessages();

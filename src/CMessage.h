@@ -27,6 +27,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_COLOR_RESET;
     static const BYTE MSG_SUBTYPE_CMESSAGE_COLOR_UPDATE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_CUT_SCENE_MODE_STATUS;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -270,6 +271,22 @@ public:
     void Run() override;
 
     /* 000C */ BOOLEAN m_cutSceneMode;
+};
+
+class CMessageDisplayText : public CMessage {
+public:
+    CMessageDisplayText(const CString& name, const CString& text, COLORREF nameColor, COLORREF textColor, LONG marker, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ CString m_name;
+    /* 0010 */ CString m_text;
+    /* 0014 */ COLORREF m_nameColor;
+    /* 0018 */ COLORREF m_textColor;
+    /* 001C */ LONG m_marker;
+    /* 0020 */ BOOLEAN m_moveToTop;
 };
 
 class CMessageStoreRelease : public CMessage {
