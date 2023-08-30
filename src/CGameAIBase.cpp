@@ -627,6 +627,31 @@ SHORT CGameAIBase::TakePartyGold()
     return ACTION_DONE;
 }
 
+// 0x4651A0
+SHORT CGameAIBase::GivePartyGold()
+{
+    DWORD gold = m_curAction.m_specificID;
+
+    if (m_objectType == TYPE_SPRITE && m_curAction.m_actionID == CAIAction::GIVEPARTYGOLD) {
+        if (gold > static_cast<CGameSprite*>(this)->GetDerivedStats()->m_nGold) {
+            gold = static_cast<CGameSprite*>(this)->GetDerivedStats()->m_nGold;
+        }
+
+        static_cast<CGameSprite*>(this)->GetBaseStats()->m_gold -= gold;
+        static_cast<CGameSprite*>(this)->GetDerivedStats()->m_nGold -= gold;
+    }
+
+    CMessagePartyGold* pMessage = new CMessagePartyGold(TRUE,
+        TRUE,
+        gold,
+        m_id,
+        m_id);
+
+    g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+
+    return ACTION_DONE;
+}
+
 // 0x4668B0
 SHORT CGameAIBase::StartMusic()
 {

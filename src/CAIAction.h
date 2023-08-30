@@ -18,6 +18,7 @@ public:
     static const SHORT REALLYFORCESPELL;
     static const SHORT SPELLNODEC;
     static const SHORT SPELLPOINTNODEC;
+    static const SHORT GIVEPARTYGOLD;
 
     static const CAIAction NULL_ACTION;
 
