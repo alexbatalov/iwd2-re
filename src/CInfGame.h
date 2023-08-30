@@ -88,6 +88,8 @@ public:
 
 class CInfGame {
 public:
+    static const SHORT FEEDBACK_GOLD;
+
     CInfGame();
     ~CInfGame();
     void StartSearchThread();
@@ -163,6 +165,7 @@ public:
     CString GetDirScripts();
     static void StartCharacterTerminationSequence();
     void ReadyCharacterTerminationSequence(int a1, int a2);
+    void FeedBack(SHORT feedBackId, LONG value, BOOLEAN a3);
     CString GetDirPortraits();
     CString GetDirCharacters();
     BYTE GetCharactersControlled();
@@ -298,6 +301,7 @@ public:
     /* 4220 */ CString m_sSaveGame;
     /* 4224 */ CString m_sSaveDir;
     /* 4228 */ CString m_sMultiplayerSaveDir;
+    /* 4238 */ DWORD m_nPartyGold;
     /* 4248 */ CItem* m_groupInventory[100];
     /* 43D8 */ int field_43D8;
     /* 43DC */ short field_43DC;

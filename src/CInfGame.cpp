@@ -33,6 +33,9 @@
 
 #define FIFTY_THREE 53
 
+// 0x8518BE
+const SHORT CInfGame::FEEDBACK_GOLD = 1;
+
 // 0x8AFC50
 static const char* off_8AFC50[FIFTY_THREE] = {
     "Inventory",
@@ -2693,6 +2696,12 @@ void CInfGame::ReadyCharacterTerminationSequence(int a1, int a2)
         g_pBaldurChitin->m_pEngineWorld->field_10F0 = a1;
         g_pBaldurChitin->m_pEngineWorld->field_10F4 = a2;
     }
+}
+
+// 0x5C2630
+void CInfGame::FeedBack(SHORT feedBackId, LONG value, BOOLEAN a3)
+{
+    // TODO: Incomplete.
 }
 
 // 0x5C3210

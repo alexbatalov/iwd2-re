@@ -92,6 +92,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_INSERT_ACTION = 27;
 // 0x84CEF4
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_LEAVE_PARTY = 29;
 
+// 0x84CEF6
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_PARTY_GOLD = 31;
+
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
@@ -1670,6 +1673,68 @@ void CMessageLeaveParty::Run()
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F5B90
+CMessagePartyGold::CMessagePartyGold(BOOLEAN bFeedback, BOOLEAN bAdj, LONG gold, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_bFeedback = bFeedback;
+    m_bAdjustment = bAdj;
+    m_gold = gold;
+}
+
+// 0x43E170
+SHORT CMessagePartyGold::GetCommType()
+{
+    return BROADCAST_FORCED;
+}
+
+// 0x40A0E0
+BYTE CMessagePartyGold::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x465190
+BYTE CMessagePartyGold::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_PARTY_GOLD;
+}
+
+// 0x503150
+void CMessagePartyGold::Run()
+{
+    if (m_bAdjustment == TRUE) {
+        if (m_bFeedback) {
+            if (!g_pChitin->cNetwork.GetSessionOpen()
+                || g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+                g_pBaldurChitin->GetObjectGame()->FeedBack(CInfGame::FEEDBACK_GOLD,
+                    m_gold,
+                    TRUE);
+            }
+        }
+
+        if (m_gold < 0) {
+            // NOTE: Unsigned compare.
+            if (static_cast<DWORD>(-m_gold) > g_pBaldurChitin->GetObjectGame()->m_nPartyGold) {
+                g_pBaldurChitin->GetObjectGame()->m_nPartyGold = 0;
+            } else {
+                g_pBaldurChitin->GetObjectGame()->m_nPartyGold += m_gold;
+            }
+        } else {
+            g_pBaldurChitin->GetObjectGame()->m_nPartyGold += m_gold;
+        }
+    } else {
+        g_pBaldurChitin->GetObjectGame()->m_nPartyGold = m_gold;
+    }
+
+    CBaldurEngine* pActiveEngine = g_pBaldurChitin->GetActiveEngine();
+    if (pActiveEngine != NULL) {
+        pActiveEngine->UpdatePartyGoldStatus();
     }
 }
 
