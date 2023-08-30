@@ -80,6 +80,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_DROP_PATH = 20;
 // 0x84CEEE
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_ENTER_STORE_MODE = 23;
 
+// 0x84CEEF
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_EXIT_DIALOG_MODE = 24;
+
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
@@ -1483,6 +1486,41 @@ void CMessageEnterStoreMode::Run()
         m_cAICustomer,
         m_cResStore,
         FALSE);
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F56E0
+CMessageExitDialogMode::CMessageExitDialogMode(BOOLEAN bButtonPushed, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_bButtonPushed = bButtonPushed;
+}
+
+// 0x4536E0
+SHORT CMessageExitDialogMode::GetCommType()
+{
+    return BROADCAST_FORCED_OTHERS;
+}
+
+// 0x40A0E0
+BYTE CMessageExitDialogMode::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4F5700
+BYTE CMessageExitDialogMode::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_EXIT_DIALOG_MODE;
+}
+
+// 0x4FFB70
+void CMessageExitDialogMode::Run()
+{
+    g_pBaldurChitin->m_pEngineWorld->field_1150 = 0;
+    g_pBaldurChitin->m_pEngineWorld->EndDialog(1, 1);
+    g_pBaldurChitin->m_pEngineWorld->field_F04 = 0;
 }
 
 // -----------------------------------------------------------------------------

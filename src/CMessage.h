@@ -32,6 +32,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXTREF;
     static const BYTE MSG_SUBTYPE_CMESSAGE_DROP_PATH;
     static const BYTE MSG_SUBTYPE_CMESSAGE_ENTER_STORE_MODE;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_EXIT_DIALOG_MODE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -333,6 +334,17 @@ public:
     /* 000C */ CAIObjectType m_cAIProprietor;
     /* 0048 */ CAIObjectType m_cAICustomer;
     /* 0084 */ CResRef m_cResStore;
+};
+
+class CMessageExitDialogMode : public CMessage {
+public:
+    CMessageExitDialogMode(BOOLEAN bButtonPushed, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ BOOLEAN m_bButtonPushed;
 };
 
 class CMessageStoreRelease : public CMessage {

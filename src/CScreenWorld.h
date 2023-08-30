@@ -55,6 +55,7 @@ public:
     BOOL TogglePauseGame(char a2, char a3, int a4);
     BOOLEAN ReadyMovie(const CResRef& movieResRef, BOOLEAN bForcedFromServer);
     BOOLEAN ReadyEndCredits(BOOLEAN bForcedFromServer);
+    void EndDialog(BOOLEAN bForceExecution, BOOLEAN fullEnd);
     void SetCurrentXP(DWORD dwCurrentXP);
     void AddGold(DWORD dwGold);
     void StopContainer();
@@ -94,6 +95,7 @@ public:
     /* 0E48 */ BYTE m_pVirtualKeysFlags[CSCREENWORLD_VIRTUAL_KEYS];
     /* 0EA4 */ int field_EA4;
     /* 0EA8 */ CUIControlTextDisplay* field_EA8;
+    /* 0F04 */ unsigned char field_F04;
     /* 0F46 */ CWeather m_weather;
     /* 10D4 */ BOOLEAN m_bSetNightOnActivate;
     /* 10D5 */ BOOLEAN m_bSetDayOnActivate;
@@ -104,6 +106,7 @@ public:
     /* 10EC */ BOOL m_bGameOverPanel;
     /* 10F0 */ int field_10F0;
     /* 10F4 */ int field_10F4;
+    /* 1150 */ unsigned char field_1150;
     /* 1151 */ BOOLEAN m_bEndMajorEventListenToJoin;
     /* 1152 */ BOOLEAN m_bEndMajorEventPauseStatus;
     /* 1153 */ BOOLEAN m_bChapterTransitionPending;

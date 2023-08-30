@@ -481,6 +481,12 @@ BOOLEAN CScreenWorld::ReadyEndCredits(BOOLEAN bForcedFromServer)
     }
 }
 
+// 0x68F9D0
+void CScreenWorld::EndDialog(BOOLEAN bForceExecution, BOOLEAN fullEnd)
+{
+    // TODO: Incomplete.
+}
+
 // 0x6906F0
 void CScreenWorld::SetCurrentXP(DWORD dwCurrentXP)
 {
