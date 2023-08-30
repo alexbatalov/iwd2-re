@@ -34,6 +34,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_ENTER_STORE_MODE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_EXIT_DIALOG_MODE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_EXIT_STORE_MODE;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_INSERT_ACTION;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -355,6 +356,18 @@ public:
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
     void Run() override;
+};
+
+class CMessageInsertAction : public CMessage {
+public:
+    CMessageInsertAction(const CAIAction& action, LONG caller, LONG target);
+    ~CMessageInsertAction() override;
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ CAIAction m_action;
 };
 
 class CMessageStoreRelease : public CMessage {

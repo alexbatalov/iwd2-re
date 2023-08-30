@@ -86,6 +86,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_EXIT_DIALOG_MODE = 24;
 // 0x84CEF0
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_EXIT_STORE_MODE = 25;
 
+// 0x84CEF2
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_INSERT_ACTION = 27;
+
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
@@ -1557,6 +1560,64 @@ void CMessageExitStoreMode::Run()
 {
     g_pBaldurChitin->GetActiveEngine()->SelectEngine(g_pBaldurChitin->m_pEngineWorld);
     g_pBaldurChitin->m_pEngineWorld->StopStore();
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F5830
+CMessageInsertAction::CMessageInsertAction(const CAIAction& action, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    // NOTE: Uninline.
+    m_action = action;
+}
+
+// 0x45BD40
+CMessageInsertAction::~CMessageInsertAction()
+{
+}
+
+// 0x40A0D0
+SHORT CMessageInsertAction::GetCommType()
+{
+    return SEND;
+}
+
+// 0x40A0E0
+BYTE CMessageInsertAction::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x45BD10
+BYTE CMessageInsertAction::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_INSERT_ACTION;
+}
+
+// 0x501730
+void CMessageInsertAction::Run()
+{
+    CGameAIBase* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if ((pSprite->GetObjectType() & CGameObject::TYPE_AIBASE) != 0) {
+            pSprite->InsertAction(m_action);
+            pSprite->m_interrupt = TRUE;
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
 }
 
 // -----------------------------------------------------------------------------
