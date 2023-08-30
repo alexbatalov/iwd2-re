@@ -2553,7 +2553,23 @@ void CInfGame::DestroyDisposableItems()
 // 0x5BF610
 void CInfGame::AddPartyGold(LONG dwAddPartyGold)
 {
-    // TODO: Incomplete.
+    if (dwAddPartyGold != 0) {
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+            CMessagePartyGold* pMessage = new CMessagePartyGold(FALSE,
+                TRUE,
+                dwAddPartyGold,
+                CGameObjectArray::INVALID_INDEX,
+                CGameObjectArray::INVALID_INDEX);
+
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+        } else {
+            if (dwAddPartyGold >= 0 || static_cast<DWORD>(-dwAddPartyGold) <= m_nPartyGold) {
+                m_nPartyGold += dwAddPartyGold;
+            } else {
+                m_nPartyGold = 0;
+            }
+        }
+    }
 }
 
 // 0x5BF6A0
