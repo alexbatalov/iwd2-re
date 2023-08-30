@@ -95,6 +95,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_LEAVE_PARTY = 29;
 // 0x84CEF6
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_PARTY_GOLD = 31;
 
+// 0x84CEF7
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_PLAY_SOUND = 32;
+
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
@@ -1735,6 +1738,59 @@ void CMessagePartyGold::Run()
     CBaldurEngine* pActiveEngine = g_pBaldurChitin->GetActiveEngine();
     if (pActiveEngine != NULL) {
         pActiveEngine->UpdatePartyGoldStatus();
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F5BC0
+CMessagePlaySound::CMessagePlaySound(BYTE soundId, BOOL text, BOOL circle, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_soundId = soundId;
+    m_showText = text;
+    m_showCircle = circle;
+}
+
+// 0x43E170
+SHORT CMessagePlaySound::GetCommType()
+{
+    return BROADCAST_FORCED;
+}
+
+// 0x40A0E0
+BYTE CMessagePlaySound::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4A8DE0
+BYTE CMessagePlaySound::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_PLAY_SOUND;
+}
+
+// 0x503430
+void CMessagePlaySound::Run()
+{
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
+            pSprite->PlaySound(m_soundId, m_showText, m_showCircle, FALSE);
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
     }
 }
 
