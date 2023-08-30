@@ -33,6 +33,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_DROP_PATH;
     static const BYTE MSG_SUBTYPE_CMESSAGE_ENTER_STORE_MODE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_EXIT_DIALOG_MODE;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_EXIT_STORE_MODE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -345,6 +346,15 @@ public:
     void Run() override;
 
     /* 000C */ BOOLEAN m_bButtonPushed;
+};
+
+class CMessageExitStoreMode : public CMessage {
+public:
+    CMessageExitStoreMode(LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
 };
 
 class CMessageStoreRelease : public CMessage {
