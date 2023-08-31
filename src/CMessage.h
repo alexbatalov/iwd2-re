@@ -5,6 +5,7 @@
 
 #include "BalDataTypes.h"
 #include "CAIAction.h"
+#include "CAITrigger.h"
 #include "CChatBuffer.h"
 #include "CColorEffects.h"
 #include "CResRef.h"
@@ -48,6 +49,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_LAST_ATTACKER;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_LAST_OBJECT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_NUM_TIMES_TALKED_TO;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_SET_TRIGGER;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -530,6 +532,18 @@ public:
     void Run() override;
 
     /* 000C */ LONG m_nNumTimesTalkedTo;
+};
+
+class CMessageSetTrigger : public CMessage {
+public:
+    CMessageSetTrigger(const CAITrigger& trigger, LONG caller, LONG target);
+    ~CMessageSetTrigger() override;
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ CAITrigger m_trigger;
 };
 
 class CMessageStoreRelease : public CMessage {

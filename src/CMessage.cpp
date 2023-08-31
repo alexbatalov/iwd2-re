@@ -125,6 +125,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_LAST_ATTACKER = 46;
 // 0x84CF07
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_NUM_TIMES_TALKED_TO = 48;
 
+// 0x84CF0B
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_TRIGGER = 52;
+
 // 0x84CF06
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_LAST_OBJECT = 47;
 
@@ -2351,6 +2354,63 @@ void CMessageSetNumTimesTalkedTo::Run()
     if (rc == CGameObjectArray::SUCCESS) {
         if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
             pSprite->m_nNumberOfTimesTalkedTo = m_nNumTimesTalkedTo;
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F61B0
+CMessageSetTrigger::CMessageSetTrigger(const CAITrigger& trigger, LONG caller, LONG target)
+    : CMessage(caller, target)
+    , m_trigger(CAITrigger::NO_TRIGGER, 0)
+{
+    m_trigger = trigger;
+}
+
+// 0x409370
+CMessageSetTrigger::~CMessageSetTrigger()
+{
+}
+
+// 0x40A0D0
+SHORT CMessageSetTrigger::GetCommType()
+{
+    return SEND;
+}
+
+// 0x40A0E0
+BYTE CMessageSetTrigger::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x409340
+BYTE CMessageSetTrigger::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_TRIGGER;
+}
+
+// 0x50A360
+void CMessageSetTrigger::Run()
+{
+    CGameAIBase* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if ((pSprite->GetObjectType() & CGameObject::TYPE_AIBASE) != 0) {
+            pSprite->SetTrigger(m_trigger);
         }
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,

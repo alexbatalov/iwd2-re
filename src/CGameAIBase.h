@@ -63,6 +63,7 @@ public:
     SHORT StartMusic();
 
     SCRIPTNAME& GetScriptName();
+    void SetTrigger(const CAITrigger& trigger);
 
     void SetDefaultScript(CAIScript* script);
 

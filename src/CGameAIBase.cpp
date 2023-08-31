@@ -671,6 +671,12 @@ SCRIPTNAME& CGameAIBase::GetScriptName()
     return m_scriptName;
 }
 
+// 0x50A400
+void CGameAIBase::SetTrigger(const CAITrigger& trigger)
+{
+    m_pendingTriggers.AddTail(new CAITrigger(trigger));
+}
+
 // NOTE: Inlined.
 void CGameAIBase::SetDefaultScript(CAIScript* script)
 {
