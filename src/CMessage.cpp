@@ -140,6 +140,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SPRITE_PETRIFY = 56;
 // 0x84CF11
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_START_FOLLOW = 58;
 
+// 0x84CF11
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STOP_ACTIONS = 60;
+
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
@@ -2580,6 +2583,75 @@ void CMessageStartFollow::Run()
     if (rc == CGameObjectArray::SUCCESS) {
         if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
             pSprite->m_followStart = 1;
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F6480
+CMessageStopActions::CMessageStopActions(LONG caller, LONG target, CGameSprite* pSprite)
+    : CMessage(caller, target)
+{
+    if (pSprite != NULL) {
+        pSprite->DropPath();
+        pSprite->DropSearchRequest();
+        pSprite->ClearActions(FALSE);
+        pSprite->SetCurrAction(CAIAction::NULL_ACTION);
+        pSprite->SetIdleSequence();
+        pSprite->m_targetPoint.x = -1;
+        pSprite->m_targetPoint.y = -1;
+    }
+}
+
+// 0x4088A0
+SHORT CMessageStopActions::GetCommType()
+{
+    return BROADCAST_OTHERS;
+}
+
+// 0x40A0E0
+BYTE CMessageStopActions::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4088B0
+BYTE CMessageStopActions::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STOP_ACTIONS;
+}
+
+// 0x50F9F0
+void CMessageStopActions::Run()
+{
+    CGameAIBase* pAIBase;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pAIBase),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pAIBase->GetObjectType() == CGameObject::TYPE_SPRITE) {
+            CGameSprite* pSprite = static_cast<CGameSprite*>(pAIBase);
+            pSprite->DropPath();
+            pSprite->DropSearchRequest();
+            pSprite->ClearActions(FALSE);
+            pSprite->SetCurrAction(CAIAction::NULL_ACTION);
+            pSprite->SetIdleSequence();
+            pSprite->m_targetPoint.x = -1;
+            pSprite->m_targetPoint.y = -1;
+        } else if ((pAIBase->GetObjectType() & CGameObject::TYPE_AIBASE) != 0) {
+            pAIBase->ClearActions(FALSE);
+            pAIBase->SetCurrAction(CAIAction::NULL_ACTION);
         }
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,

@@ -261,6 +261,7 @@ public:
     BYTE GetSound(BYTE soundID);
     void SetDirection(const CPoint& posDest);
     void SetDirection(SHORT direction);
+    void SetIdleSequence();
     SHORT GetIdleSequence();
     void SetSequence(SHORT nSequence);
     void Unmarshal(BYTE* pCreature, LONG creatureSize, WORD facing, int a4);

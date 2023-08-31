@@ -29,6 +29,7 @@ public:
     void SetColorEffectAll(BYTE effectType, COLORREF tintColor, BYTE periodLength);
     void SetColorRange(BYTE colorRange, BYTE rangeValue);
     void SetColorRangeAll(BYTE rangeValue);
+    BOOL IsEndOfSequence();
     void Render(CInfinity* pInfinity, CVidMode* pVidMode, INT nSurface, const CRect& rectFX, const CPoint& ptNewPos, const CPoint& ptReference, DWORD dwRenderFlags, COLORREF rgbTintColor, const CRect& rGCBounds, BOOL bDithered, BOOL bFadeOut, LONG posZ, BYTE transparency);
     void SetSequence(SHORT nSequence);
 

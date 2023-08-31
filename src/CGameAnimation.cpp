@@ -133,6 +133,16 @@ const CRect& CGameAnimation::GetEllipseRect()
 }
 
 // NOTE: Inlined.
+BOOL CGameAnimation::IsEndOfSequence()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2103
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->IsEndOfSequence();
+}
+
+// NOTE: Inlined.
 void CGameAnimation::Render(CInfinity* pInfinity, CVidMode* pVidMode, INT nSurface, const CRect& rectFX, const CPoint& ptNewPos, const CPoint& ptReference, DWORD dwRenderFlags, COLORREF rgbTintColor, const CRect& rGCBounds, BOOL bDithered, BOOL bFadeOut, LONG posZ, BYTE transparency)
 {
     // __FILE__: .\Include\ObjAnimation.h

@@ -1018,6 +1018,20 @@ void CGameSprite::SetDirection(SHORT direction)
     // TODO: Incomplete.
 }
 
+// 0x707170
+void CGameSprite::SetIdleSequence()
+{
+    // NOTE: Uninline.
+    SHORT nIdleSequence = GetIdleSequence();
+
+    // NOTE: Uninline.
+    BOOL bIsEndOfSequence = m_animation.IsEndOfSequence();
+
+    if (m_nSequence != nIdleSequence || bIsEndOfSequence) {
+        SetSequence(nIdleSequence);
+    }
+}
+
 // 0x7071F0
 SHORT CGameSprite::GetIdleSequence()
 {
