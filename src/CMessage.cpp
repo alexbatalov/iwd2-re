@@ -113,6 +113,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_DIALOG_WAIT = 40;
 // 0x84CF00
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_DIRECTION = 41;
 
+// 0x84CF03
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_HAPPINESS = 44;
+
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
@@ -2044,6 +2047,58 @@ void CMessageSetDirection::Run()
     if (rc == CGameObjectArray::SUCCESS) {
         if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
             pSprite->SetDirection(m_face);
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F5F40
+CMessageSetHappiness::CMessageSetHappiness(SHORT happiness, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_happiness = happiness;
+}
+
+// 0x40A0D0
+SHORT CMessageSetHappiness::GetCommType()
+{
+    return SEND;
+}
+
+// 0x40A0E0
+BYTE CMessageSetHappiness::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4F5F70
+BYTE CMessageSetHappiness::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_HAPPINESS;
+}
+
+// 0x506D20
+void CMessageSetHappiness::Run()
+{
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
+            pSprite->m_nHappiness = m_happiness;
+            pSprite->m_bHappinessChanged = TRUE;
         }
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,

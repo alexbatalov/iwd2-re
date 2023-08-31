@@ -43,6 +43,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_COMMAND_PAUSE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_DIALOG_WAIT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_DIRECTION;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_SET_HAPPINESS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -467,6 +468,17 @@ public:
     void Run() override;
 
     /* 000C */ CPoint m_face;
+};
+
+class CMessageSetHappiness : public CMessage {
+public:
+    CMessageSetHappiness(SHORT happiness, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ SHORT m_happiness;
 };
 
 class CMessageStoreRelease : public CMessage {
