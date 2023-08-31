@@ -47,7 +47,7 @@ CGameAIBase::CGameAIBase()
 {
     field_592 = 0;
     m_objectType = CGameObject::TYPE_AIBASE;
-    field_6E.Set(CAIObjectType::NOONE);
+    m_lAttacker.Set(CAIObjectType::NOONE);
     field_AE.Set(CAIObjectType::NOONE);
     field_EA.Set(CAIObjectType::NOONE);
     field_126.Set(CAIObjectType::NOONE);

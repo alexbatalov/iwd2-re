@@ -66,7 +66,7 @@ public:
 
     void SetDefaultScript(CAIScript* script);
 
-    /* 006E */ CAIObjectType field_6E;
+    /* 006E */ CAIObjectType m_lAttacker;
     /* 00AE */ CAIObjectType field_AE;
     /* 00EA */ CAIObjectType field_EA;
     /* 0126 */ CAIObjectType field_126;
