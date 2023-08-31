@@ -2363,6 +2363,12 @@ CGameEffect* CGameEffectSpellMemorizationMage::Copy()
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
+CGameEffectStoneToFlesh::CGameEffectStoneToFlesh()
+{
+    m_effectID = CGAMEEFFECT_STONETOFLESH;
+}
+
+// NOTE: Inlined.
 CGameEffectStoneToFlesh::CGameEffectStoneToFlesh(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
     : CGameEffect(effect, source, sourceID, target, FALSE)
 {
@@ -4853,6 +4859,12 @@ BOOL CGameEffectNon_CumulativeLuck::ApplyEffect(CGameSprite* pSprite)
 }
 
 // -----------------------------------------------------------------------------
+
+// NOTE: Inlined.
+CGameEffectPetrification::CGameEffectPetrification()
+{
+    m_effectID = CGAMEEFFECT_PETRIFICATION;
+}
 
 // NOTE: Inlined.
 CGameEffectPetrification::CGameEffectPetrification(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)

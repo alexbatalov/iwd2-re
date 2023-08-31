@@ -51,6 +51,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_NUM_TIMES_TALKED_TO;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_TRIGGER;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SPRITE_DEATH;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_SPRITE_PETRIFY;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -556,6 +557,17 @@ public:
     void Run() override;
 
     /* 000C */ DWORD m_nDeathType;
+};
+
+class CMessageSpritePetrify : public CMessage {
+public:
+    CMessageSpritePetrify(BOOLEAN bPetrify, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ BOOLEAN m_bPetrify;
 };
 
 class CMessageStoreRelease : public CMessage {

@@ -582,6 +582,7 @@ public:
 
 class CGameEffectStoneToFlesh : public CGameEffect {
 public:
+    CGameEffectStoneToFlesh();
     CGameEffectStoneToFlesh(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
 };
@@ -1141,6 +1142,7 @@ public:
 
 class CGameEffectPetrification : public CGameEffect {
 public:
+    CGameEffectPetrification();
     CGameEffectPetrification(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
 };
