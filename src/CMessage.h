@@ -54,6 +54,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_SPRITE_PETRIFY;
     static const BYTE MSG_SUBTYPE_CMESSAGE_START_FOLLOW;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STOP_ACTIONS;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_STOP_FOLLOW;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -584,6 +585,15 @@ public:
 class CMessageStopActions : public CMessage {
 public:
     CMessageStopActions(LONG caller, LONG target, CGameSprite* pSprite);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+};
+
+class CMessageStopFollow : public CMessage {
+public:
+    CMessageStopFollow(LONG caller, LONG target);
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
