@@ -146,6 +146,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STOP_ACTIONS = 60;
 // 0x84CF12
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STOP_FOLLOW = 61;
 
+// 0x84CF17
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_UPDATE_REACTION = 64;
+
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
@@ -2705,6 +2708,57 @@ void CMessageStopFollow::Run()
     if (rc == CGameObjectArray::SUCCESS) {
         if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
             pSprite->m_followStart = 0;
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F6780
+CMessageUpdateReaction::CMessageUpdateReaction(LONG nReaction, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_nReaction = nReaction;
+}
+
+// 0x453510
+SHORT CMessageUpdateReaction::GetCommType()
+{
+    return BROADCAST;
+}
+
+// 0x40A0E0
+BYTE CMessageUpdateReaction::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x45DEC0
+BYTE CMessageUpdateReaction::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_UPDATE_REACTION;
+}
+
+// 0x510D50
+void CMessageUpdateReaction::Run()
+{
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
+            pSprite->m_reactionRoll = static_cast<BYTE>(m_nReaction);
         }
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
