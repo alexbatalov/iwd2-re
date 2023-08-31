@@ -67,16 +67,16 @@ public:
     void SetDefaultScript(CAIScript* script);
 
     /* 006E */ CAIObjectType m_lAttacker;
-    /* 00AE */ CAIObjectType field_AE;
+    /* 00AE */ CAIObjectType m_lOrderedBy;
     /* 00EA */ CAIObjectType field_EA;
     /* 0126 */ CAIObjectType field_126;
     /* 0162 */ CAIObjectType field_162;
-    /* 019E */ CAIObjectType field_19E;
-    /* 01DA */ CAIObjectType field_1DA;
-    /* 0216 */ CAIObjectType field_216;
-    /* 0252 */ CAIObjectType field_252;
-    /* 028E */ CAIObjectType field_28E;
-    /* 02CA */ CAIObjectType field_2CA;
+    /* 019E */ CAIObjectType m_lHitter;
+    /* 01DA */ CAIObjectType m_lHelp;
+    /* 0216 */ CAIObjectType m_lTrigger;
+    /* 0252 */ CAIObjectType m_lSeen;
+    /* 028E */ CAIObjectType m_lTalkedTo;
+    /* 02CA */ CAIObjectType m_lHeard;
     /* 0306 */ CAIObjectType field_306;
     /* 0342 */ CAIObjectType field_342;
     /* 037E */ CAIObjectType field_37E;

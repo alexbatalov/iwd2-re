@@ -46,6 +46,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_HAPPINESS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_IN_CUT_SCENE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_LAST_ATTACKER;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_SET_LAST_OBJECT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -504,6 +505,19 @@ public:
     void Run() override;
 
     /* 000C */ CAIObjectType m_lAttacker;
+};
+
+class CMessageSetLastObject : public CMessage {
+public:
+    CMessageSetLastObject(const CAIObjectType& lAttacker, WORD type, LONG caller, LONG target);
+    ~CMessageSetLastObject() override;
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ CAIObjectType m_lAttacker;
+    /* 0048 */ WORD m_type;
 };
 
 class CMessageStoreRelease : public CMessage {

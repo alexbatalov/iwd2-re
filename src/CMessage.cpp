@@ -122,6 +122,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_IN_CUT_SCENE = 45;
 // 0x84CF05
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_LAST_ATTACKER = 46;
 
+// 0x84CF06
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_LAST_OBJECT = 47;
+
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
@@ -2212,6 +2215,88 @@ void CMessageSetLastAttacker::Run()
     if (rc == CGameObjectArray::SUCCESS) {
         if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
             pSprite->m_lAttacker.Set(m_lAttacker);
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x45B780
+CMessageSetLastObject::CMessageSetLastObject(const CAIObjectType& lAttacker, WORD type, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_lAttacker.Set(lAttacker);
+    m_type = type;
+}
+
+// 0x45B840
+CMessageSetLastObject::~CMessageSetLastObject()
+{
+}
+
+// 0x40A0D0
+SHORT CMessageSetLastObject::GetCommType()
+{
+    return SEND;
+}
+
+// 0x40A0E0
+BYTE CMessageSetLastObject::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x45B810
+BYTE CMessageSetLastObject::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_LAST_OBJECT;
+}
+
+// 0x507BA0
+void CMessageSetLastObject::Run()
+{
+    CGameAIBase* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if ((pSprite->GetObjectType() & CGameObject::TYPE_AIBASE) != 0) {
+            switch (m_type) {
+            case 2:
+                pSprite->m_lAttacker.Set(m_lAttacker);
+                break;
+            case 3:
+                pSprite->m_lHelp.Set(m_lAttacker);
+                break;
+            case 6:
+                pSprite->m_lOrderedBy.Set(m_lAttacker);
+                break;
+            case 7:
+                pSprite->m_lTalkedTo.Set(m_lAttacker);
+                break;
+            case 32:
+                pSprite->m_lHitter.Set(m_lAttacker);
+                break;
+            case 47:
+                pSprite->m_lHeard.Set(m_lAttacker);
+                break;
+            case 16412:
+                pSprite->m_lSeen.Set(m_lAttacker);
+                break;
+            default:
+                pSprite->m_lTrigger.Set(m_lAttacker);
+                break;
+            }
         }
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
