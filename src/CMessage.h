@@ -52,6 +52,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_TRIGGER;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SPRITE_DEATH;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SPRITE_PETRIFY;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_START_FOLLOW;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -568,6 +569,15 @@ public:
     void Run() override;
 
     /* 000C */ BOOLEAN m_bPetrify;
+};
+
+class CMessageStartFollow : public CMessage {
+public:
+    CMessageStartFollow(LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
 };
 
 class CMessageStoreRelease : public CMessage {
