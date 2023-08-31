@@ -284,6 +284,7 @@ public:
 
     static CGameEffect* DecodeEffect(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, const CPoint& target);
 
+    CGameEffect();
     CGameEffect(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target, BOOL usesDice);
     /* 0000 */ ~CGameEffect();
     /* 0004 */ virtual CGameEffect* Copy();
@@ -311,9 +312,11 @@ public:
     /* 010C */ LONG m_sourceID;
     /* 0110 */ BOOL m_done;
     /* 0114 */ BOOL m_forceRepass;
+    /* 0118 */ int field_118;
     /* 011C */ BOOL m_compareIdOnly;
     /* 0120 */ BOOL m_compareIdAndFlagsOnly;
     /* 0124 */ CSound m_sound;
+    /* 0188 */ int field_188;
 };
 
 class CGameEffectAC : public CGameEffect {
@@ -400,6 +403,7 @@ public:
 
 class CGameEffectDeath : public CGameEffect {
 public:
+    CGameEffectDeath();
     CGameEffectDeath(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
 

@@ -50,6 +50,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_LAST_OBJECT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_NUM_TIMES_TALKED_TO;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_TRIGGER;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_SPRITE_DEATH;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -544,6 +545,17 @@ public:
     void Run() override;
 
     /* 000C */ CAITrigger m_trigger;
+};
+
+class CMessageSpriteDeath : public CMessage {
+public:
+    CMessageSpriteDeath(DWORD nDeathType, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ DWORD m_nDeathType;
 };
 
 class CMessageStoreRelease : public CMessage {

@@ -733,6 +733,19 @@ CGameEffect* CGameEffect::DecodeEffect(ITEM_EFFECT* effect, const CPoint& source
     UTIL_ASSERT_MSG(FALSE, (LPCSTR)sError);
 }
 
+// 0x452C80
+CGameEffect::CGameEffect()
+{
+    m_sourceID = -1;
+    m_done = FALSE;
+    m_forceRepass = FALSE;
+    field_118 = 0;
+    m_compareIdOnly = FALSE;
+    m_compareIdAndFlagsOnly = FALSE;
+    m_secondaryType = 1;
+    field_188 = 0;
+}
+
 // 0x48C310
 CGameEffect::CGameEffect(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target, BOOL usesDice)
 {
@@ -1417,6 +1430,13 @@ CGameEffect* CGameEffectDamage::Copy()
 }
 
 // -----------------------------------------------------------------------------
+
+// NOTE: Inlined.
+CGameEffectDeath::CGameEffectDeath()
+{
+    m_effectID = CGAMEEFFECT_DEATH;
+    field_18C = 1;
+}
 
 // NOTE: Inlined.
 CGameEffectDeath::CGameEffectDeath(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
