@@ -61,6 +61,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_DIALOG_RESREF;
     static const BYTE MSG_SUBTYPE_CMESSAGE_ESCAPE_AREA;
     static const BYTE MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXTREF_SEND;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_SET_CURRENT_ACTION_ID;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -675,6 +676,17 @@ public:
     /* 0018 */ COLORREF m_textColor;
     /* 001C */ LONG m_marker;
     /* 0020 */ BOOLEAN m_moveToTop;
+};
+
+class CMessageSetCurrentActionId : public CMessage {
+public:
+    CMessageSetCurrentActionId(SHORT actionId, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ SHORT m_actionId;
 };
 
 class CMessageStoreRelease : public CMessage {

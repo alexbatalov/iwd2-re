@@ -164,6 +164,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_ESCAPE_AREA = 69;
 // 0x84CF1D
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXTREF_SEND = 70;
 
+// 0x84CF1E
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_CURRENT_ACTION_ID = 71;
+
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
@@ -3101,6 +3104,57 @@ void CMessageDisplayTextRefSend::Run()
         m_textColor,
         m_marker,
         m_moveToTop);
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F5DF0
+CMessageSetCurrentActionId::CMessageSetCurrentActionId(SHORT actionId, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_actionId = actionId;
+}
+
+// 0x453510
+SHORT CMessageSetCurrentActionId::GetCommType()
+{
+    return BROADCAST;
+}
+
+// 0x40A0E0
+BYTE CMessageSetCurrentActionId::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4F5E20
+BYTE CMessageSetCurrentActionId::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_CURRENT_ACTION_ID;
+}
+
+// 0x505B60
+void CMessageSetCurrentActionId::Run()
+{
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
+            pSprite->m_currentActionId = m_actionId;
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
 }
 
 // -----------------------------------------------------------------------------
