@@ -174,6 +174,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_START_TEXT_SCREEN = 74;
 // 0x84CF27
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_FAMILIAR_ADD = 80;
 
+// 0x84CF28
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_FAMILIAR_REMOVE_RESREF = 81;
+
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
@@ -3259,6 +3262,43 @@ void CMessageFamiliarAdd::Run()
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
     }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F57A0
+CMessageFamiliarRemoveResRef::CMessageFamiliarRemoveResRef(const CResRef& resRef, BYTE nAlignment, BYTE nLevel, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_resRef = resRef;
+    m_nAlignment = nAlignment;
+    m_nLevel = nLevel;
+}
+
+// 0x4536E0
+SHORT CMessageFamiliarRemoveResRef::GetCommType()
+{
+    return BROADCAST_FORCED_OTHERS;
+}
+
+// 0x40A0E0
+BYTE CMessageFamiliarRemoveResRef::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4F5820
+BYTE CMessageFamiliarRemoveResRef::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_FAMILIAR_REMOVE_RESREF;
+}
+
+// 0x500440
+void CMessageFamiliarRemoveResRef::Run()
+{
+    g_pBaldurChitin->GetObjectGame()->RemoveFamiliarResRef(m_resRef,
+        m_nAlignment,
+        m_nLevel);
 }
 
 // -----------------------------------------------------------------------------

@@ -64,6 +64,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_CURRENT_ACTION_ID;
     static const BYTE MSG_SUBTYPE_CMESSAGE_START_TEXT_SCREEN;
     static const BYTE MSG_SUBTYPE_CMESSAGE_FAMILIAR_ADD;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_FAMILIAR_REMOVE_RESREF;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -711,6 +712,19 @@ public:
     void Run() override;
 
     /* 000C */ BOOLEAN m_bFamiliarAdd;
+};
+
+class CMessageFamiliarRemoveResRef : public CMessage {
+public:
+    CMessageFamiliarRemoveResRef(const CResRef& resRef, BYTE nAlignment, BYTE nLevel, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ CResRef m_resRef;
+    /* 0014 */ BYTE m_nAlignment;
+    /* 0015 */ BYTE m_nLevel;
 };
 
 class CMessageStoreRelease : public CMessage {
