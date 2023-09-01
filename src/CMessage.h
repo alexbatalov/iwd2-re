@@ -60,6 +60,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_VISIBILITY_MAP_MOVE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_DIALOG_RESREF;
     static const BYTE MSG_SUBTYPE_CMESSAGE_ESCAPE_AREA;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXTREF_SEND;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -656,6 +657,24 @@ public:
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
     void Run() override;
+};
+
+// NOTE: Same as `CMessageDisplayTextRef` but with different CommType (`SEND`
+// instead of `BROADCAST_FORCED`).
+class CMessageDisplayTextRefSend : public CMessage {
+public:
+    CMessageDisplayTextRefSend(STRREF name, STRREF text, COLORREF nameColor, COLORREF textColor, LONG marker, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ STRREF m_name;
+    /* 0010 */ STRREF m_text;
+    /* 0014 */ COLORREF m_nameColor;
+    /* 0018 */ COLORREF m_textColor;
+    /* 001C */ LONG m_marker;
+    /* 0020 */ BOOLEAN m_moveToTop;
 };
 
 class CMessageStoreRelease : public CMessage {

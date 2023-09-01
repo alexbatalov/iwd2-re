@@ -161,6 +161,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_DIALOG_RESREF = 68;
 // 0x84CF1C
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_ESCAPE_AREA = 69;
 
+// 0x84CF1D
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXTREF_SEND = 70;
+
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
@@ -2997,6 +3000,107 @@ void CMessageEscapeArea::Run()
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
     }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x48AC30
+CMessageDisplayTextRefSend::CMessageDisplayTextRefSend(STRREF name, STRREF text, COLORREF nameColor, COLORREF textColor, LONG marker, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_name = name;
+    m_text = text;
+    m_nameColor = nameColor;
+    m_textColor = textColor;
+    m_marker = marker;
+    m_moveToTop = FALSE;
+}
+
+// 0x40A0D0
+SHORT CMessageDisplayTextRefSend::GetCommType()
+{
+    return SEND;
+}
+
+// 0x40A0E0
+BYTE CMessageDisplayTextRefSend::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x489670
+BYTE CMessageDisplayTextRefSend::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXTREF_SEND;
+}
+
+// 0x4FCC30
+void CMessageDisplayTextRefSend::Run()
+{
+    STR_RES strResName;
+    STR_RES strResText;
+    CString sName("");
+
+    BYTE rc;
+    CGameSprite* pSprite;
+
+    if (m_name >= -7 && m_name != -1) {
+        LONG nCharacterId = g_pBaldurChitin->GetObjectGame()->GetCharacterSlot(-2 - m_name);
+
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            sName = pSprite->GetName();
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    } else {
+        g_pBaldurChitin->GetTlkTable().Fetch(m_name, strResName);
+        sName = strResName.szText;
+    }
+
+    g_pBaldurChitin->GetTlkTable().Fetch(m_text, strResText);
+
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (strResText.cSound.GetRes() != NULL) {
+            if (strResText.cSound.m_nLooping == 0) {
+                strResText.cSound.SetFireForget(TRUE);
+            }
+
+            strResText.cSound.SetChannel(14, reinterpret_cast<DWORD>(pSprite->GetArea()));
+
+            // FIXME: Calls `GetPos` twice.
+            strResText.cSound.Play(pSprite->GetPos().x,
+                pSprite->GetPos().y,
+                0,
+                FALSE);
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    g_pBaldurChitin->m_pEngineWorld->DisplayText(sName,
+        strResText.szText,
+        m_nameColor,
+        m_textColor,
+        m_marker,
+        m_moveToTop);
 }
 
 // -----------------------------------------------------------------------------
