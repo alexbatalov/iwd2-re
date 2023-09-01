@@ -63,6 +63,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXTREF_SEND;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_CURRENT_ACTION_ID;
     static const BYTE MSG_SUBTYPE_CMESSAGE_START_TEXT_SCREEN;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_FAMILIAR_ADD;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -699,6 +700,17 @@ public:
     void Run() override;
 
     /* 000C */ CResRef m_screen;
+};
+
+class CMessageFamiliarAdd : public CMessage {
+public:
+    CMessageFamiliarAdd(BOOLEAN bFamiliarAdd, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ BOOLEAN m_bFamiliarAdd;
 };
 
 class CMessageStoreRelease : public CMessage {

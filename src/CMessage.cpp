@@ -171,6 +171,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_CURRENT_ACTION_ID = 71;
 // 0x84CF21
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_START_TEXT_SCREEN = 74;
 
+// 0x84CF27
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_FAMILIAR_ADD = 80;
+
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
@@ -3197,6 +3200,65 @@ void CMessageStartTextScreen::Run()
     m_screen.CopyToString(sScreen);
 
     g_pBaldurChitin->GetActiveEngine()->SelectEngine(g_pBaldurChitin->m_pEngineChapter);
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F5780
+CMessageFamiliarAdd::CMessageFamiliarAdd(BOOLEAN bFamiliarAdd, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_bFamiliarAdd = bFamiliarAdd;
+}
+
+// 0x43E170
+SHORT CMessageFamiliarAdd::GetCommType()
+{
+    return BROADCAST_FORCED;
+}
+
+// 0x40A0E0
+BYTE CMessageFamiliarAdd::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x453480
+BYTE CMessageFamiliarAdd::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_FAMILIAR_ADD;
+}
+
+// 0x500170
+void CMessageFamiliarAdd::Run()
+{
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
+            if (pSprite->m_bGlobal) {
+                if (m_bFamiliarAdd) {
+                    pSprite->SetAIType(CAIObjectType(CAIObjectType::EA_FAMILIAR), TRUE, FALSE);
+                    g_pBaldurChitin->GetObjectGame()->AddCharacterToFamiliars(m_targetId);
+                } else {
+                    pSprite->SetAIType(CAIObjectType(CAIObjectType::EA_NEUTRAL), TRUE, FALSE);
+                    g_pBaldurChitin->GetObjectGame()->RemoveCharacterFromFamiliars(m_targetId);
+                }
+            }
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
 }
 
 // -----------------------------------------------------------------------------
