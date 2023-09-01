@@ -158,6 +158,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_VISIBILITY_MAP_MOVE = 66;
 // 0x84CF1B
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_DIALOG_RESREF = 68;
 
+// 0x84CF1C
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_ESCAPE_AREA = 69;
+
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
@@ -2938,6 +2941,56 @@ void CMessageSetDialogResRef::Run()
     if (rc == CGameObjectArray::SUCCESS) {
         if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
             pSprite->m_dialog = m_cResRefDialog;
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F5680
+CMessageEscapeArea::CMessageEscapeArea(LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+}
+
+// 0x4536E0
+SHORT CMessageEscapeArea::GetCommType()
+{
+    return BROADCAST_FORCED_OTHERS;
+}
+
+// 0x40A0E0
+BYTE CMessageEscapeArea::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4F56A0
+BYTE CMessageEscapeArea::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_ESCAPE_AREA;
+}
+
+// 0x4FF670
+void CMessageEscapeArea::Run()
+{
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
+            pSprite->m_bEscapingArea = TRUE;
         }
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,

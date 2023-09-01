@@ -59,6 +59,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_VERBAL_CONSTANT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_VISIBILITY_MAP_MOVE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_DIALOG_RESREF;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_ESCAPE_AREA;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -646,6 +647,15 @@ public:
     void Run() override;
 
     /* 000C */ CResRef m_cResRefDialog;
+};
+
+class CMessageEscapeArea : public CMessage {
+public:
+    CMessageEscapeArea(LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
 };
 
 class CMessageStoreRelease : public CMessage {
