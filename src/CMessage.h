@@ -56,6 +56,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_STOP_ACTIONS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STOP_FOLLOW;
     static const BYTE MSG_SUBTYPE_CMESSAGE_UPDATE_REACTION;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_VERBAL_CONSTANT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -610,6 +611,17 @@ public:
     void Run() override;
 
     /* 000C */ LONG m_nReaction;
+};
+
+class CMessageVerbalConstant : public CMessage {
+public:
+    CMessageVerbalConstant(LONG verbalConstant, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ LONG m_verbalConstant;
 };
 
 class CMessageStoreRelease : public CMessage {

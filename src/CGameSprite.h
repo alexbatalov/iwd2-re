@@ -256,6 +256,7 @@ public:
     void MakeGlobal();
     SHORT GetNumSounds(SHORT nOffset, SHORT nMaxNum);
     void PlaySound(BYTE soundID, BOOL showText, BOOL showCircle, BOOL overrideOption);
+    void VerbalConstant(LONG verbalConstant);
     BOOL IsSpellSchool(BYTE spellSchool);
     void SetFootstepChannel();
     BYTE GetSound(BYTE soundID);

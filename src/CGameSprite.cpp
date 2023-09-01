@@ -819,6 +819,12 @@ void CGameSprite::PlaySound(BYTE soundID, BOOL showText, BOOL showCircle, BOOL o
     // TODO: Incomplete.
 }
 
+// 0x702900
+void CGameSprite::VerbalConstant(LONG verbalConstant)
+{
+    // TODO: Incomplete.
+}
+
 // 0x703170
 BOOL CGameSprite::IsSpellSchool(BYTE spellSchool)
 {
