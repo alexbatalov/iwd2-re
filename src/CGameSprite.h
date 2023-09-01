@@ -445,8 +445,7 @@ public:
     /* 5366 */ int field_5366;
     /* 536A */ int field_536A;
     /* 536E */ int field_536E;
-    /* 5372 */ int field_5372;
-    /* 5376 */ int field_5376;
+    /* 5372 */ CPoint m_posLastVisMapEntry;
     /* 537A */ SHORT m_skipDeltaDirection;
     /* 537C */ SHORT m_deltaDirection;
     /* 537E */ SHORT m_nNewDirection;

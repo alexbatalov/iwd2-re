@@ -71,3 +71,15 @@ const BYTE CVisibilityMap::FOGOWAR_MASK = 0xF0;
 
 // 0x84EDEF
 const BYTE CVisibilityMap::FOGOWAR_SHIFT = 4;
+
+// 0x551840
+void CVisibilityMap::AddCharacter(const CPoint& pos, LONG charId, const BYTE* pVisibleTerrainTable)
+{
+    // TODO: Incomplete.
+}
+
+// 0x5533B0
+void CVisibilityMap::RemoveCharacter(const CPoint& pos, LONG charId, const BYTE* pVisibleTerrainTable)
+{
+    // TODO: Incomplete.
+}

@@ -337,8 +337,8 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     field_54F4 = 0;
     field_556E = 0;
     field_5572 = 0;
-    field_5372 = 0;
-    field_5376 = 0;
+    m_posLastVisMapEntry.x = 0;
+    m_posLastVisMapEntry.y = 0;
     m_nCommandPause = 0;
     field_557A = 0;
     field_557E = 0;

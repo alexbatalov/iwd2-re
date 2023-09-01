@@ -34,6 +34,9 @@ public:
     static const BYTE FOGOWAR_MASK;
     static const BYTE FOGOWAR_SHIFT;
 
+    void AddCharacter(const CPoint& pos, LONG charId, const BYTE* pVisibleTerrainTable);
+    void RemoveCharacter(const CPoint& pos, LONG charId, const BYTE* pVisibleTerrainTable);
+
     /* 000E */ short field_E;
     /* 0058 */ int field_58;
 };

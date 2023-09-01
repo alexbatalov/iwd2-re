@@ -152,6 +152,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_UPDATE_REACTION = 64;
 // 0x84CF18
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_VERBAL_CONSTANT = 65;
 
+// 0x84CF19
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_VISIBILITY_MAP_MOVE = 66;
+
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
@@ -2813,6 +2816,72 @@ void CMessageVerbalConstant::Run()
     if (rc == CGameObjectArray::SUCCESS) {
         if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
             pSprite->VerbalConstant(m_verbalConstant);
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F67C0
+CMessageVisibilityMapMove::CMessageVisibilityMapMove(BOOLEAN moveOn, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_moveOntoList = moveOn;
+}
+
+// 0x453510
+SHORT CMessageVisibilityMapMove::GetCommType()
+{
+    return BROADCAST;
+}
+
+// 0x40A0E0
+BYTE CMessageVisibilityMapMove::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4AD370
+BYTE CMessageVisibilityMapMove::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_VISIBILITY_MAP_MOVE;
+}
+
+// 0x5111F0
+void CMessageVisibilityMapMove::Run()
+{
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
+            if (m_moveOntoList) {
+                CGameArea* pArea = pSprite->GetArea();
+                if (pArea != NULL) {
+                    pArea->m_visibility.AddCharacter(pSprite->GetPos(),
+                        pSprite->GetId(),
+                        pSprite->GetVisibleTerrainTable());
+                    pSprite->m_posLastVisMapEntry = pSprite->GetPos();
+                }
+            } else {
+                CGameArea* pArea = pSprite->GetArea();
+                if (pArea != NULL) {
+                    pArea->m_visibility.RemoveCharacter(pSprite->GetPos(),
+                        pSprite->GetId(),
+                        pSprite->GetVisibleTerrainTable());
+                }
+            }
         }
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
