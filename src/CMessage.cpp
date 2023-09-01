@@ -8,6 +8,7 @@
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CItem.h"
+#include "CScreenChapter.h"
 #include "CScreenConnection.h"
 #include "CScreenCreateChar.h"
 #include "CScreenLoad.h"
@@ -166,6 +167,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXTREF_SEND = 70;
 
 // 0x84CF1E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_CURRENT_ACTION_ID = 71;
+
+// 0x84CF21
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_START_TEXT_SCREEN = 74;
 
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
@@ -3155,6 +3159,44 @@ void CMessageSetCurrentActionId::Run()
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
     }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F6810
+CMessageStartTextScreen::CMessageStartTextScreen(const CResRef& ref, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_screen = ref;
+}
+
+// 0x4088A0
+SHORT CMessageStartTextScreen::GetCommType()
+{
+    return BROADCAST_OTHERS;
+}
+
+// 0x40A0E0
+BYTE CMessageStartTextScreen::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4535F0
+BYTE CMessageStartTextScreen::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_START_TEXT_SCREEN;
+}
+
+// 0x508D30
+void CMessageStartTextScreen::Run()
+{
+    // NOTE: Unused.
+    CString sScreen;
+
+    m_screen.CopyToString(sScreen);
+
+    g_pBaldurChitin->GetActiveEngine()->SelectEngine(g_pBaldurChitin->m_pEngineChapter);
 }
 
 // -----------------------------------------------------------------------------
