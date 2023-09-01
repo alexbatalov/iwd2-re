@@ -58,6 +58,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_UPDATE_REACTION;
     static const BYTE MSG_SUBTYPE_CMESSAGE_VERBAL_CONSTANT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_VISIBILITY_MAP_MOVE;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_SET_DIALOG_RESREF;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -634,6 +635,17 @@ public:
     void Run() override;
 
     /* 000C */ BOOLEAN m_moveOntoList;
+};
+
+class CMessageSetDialogResRef : public CMessage {
+public:
+    CMessageSetDialogResRef(CResRef dialog, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ CResRef m_cResRefDialog;
 };
 
 class CMessageStoreRelease : public CMessage {
