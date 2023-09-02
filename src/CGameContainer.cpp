@@ -14,6 +14,21 @@ BOOLEAN CGameContainer::DoAIUpdate(BOOLEAN active, LONG counter)
     return active && (counter & m_AISpeed) == (m_AISpeed & m_id);
 }
 
+// 0x47D820
+void CGameContainer::AIUpdate()
+{
+    if (m_bDeleteMe) {
+        RemoveFromArea();
+        return;
+    }
+
+    if (m_drawPoly > 0) {
+        m_drawPoly--;
+    }
+
+    ProcessAI();
+}
+
 // 0x47E040
 void CGameContainer::DebugDump(const CString& message, BOOLEAN bEchoToScreen)
 {

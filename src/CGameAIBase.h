@@ -34,6 +34,7 @@ public:
     /* 0078 */ virtual void AddEffect(CGameEffect* pEffect, BYTE list, BOOL noSave, BOOL immediateApply);
     /* 007C */ virtual void ClearAI(BOOLEAN a1);
     /* 0088 */ virtual void InsertAction(const CAIAction& action);
+    /* 008C */ virtual void ProcessAI();
     /* 0090 */ virtual void SetCurrAction(const CAIAction& action);
     /* 0094 */ virtual void SetScript(SHORT level, CAIScript* script);
     /* 0098 */ virtual SHORT GetVisualRange();

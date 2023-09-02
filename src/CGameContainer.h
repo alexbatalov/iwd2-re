@@ -8,6 +8,7 @@ class CItem;
 
 class CGameContainer : public CGameAIBase {
 public:
+    /* 000C */ void AIUpdate() override;
     /* 0030 */ void DebugDump(const CString& message, BOOLEAN bEchoToScreen) override;
     /* 0048 */ void RemoveFromArea() override;
     /* 0050 */ BOOLEAN DoAIUpdate(BOOLEAN active, LONG counter) override;
@@ -21,6 +22,7 @@ public:
 
     /* 05AE */ CTypedPtrList<CPtrList, CItem*> m_lstItems;
     /* 05CA */ WORD m_containerType;
+    /* 0863 */ BOOLEAN m_bDeleteMe;
     /* 0864 */ RESREF m_scriptRes;
     /* 088C */ WORD m_lockDifficulty;
     /* 088E */ DWORD m_dwFlags;

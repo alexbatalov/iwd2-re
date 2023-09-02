@@ -243,6 +243,12 @@ void CGameAIBase::ClearTriggers()
     m_pendingTriggers.RemoveAll();
 }
 
+// 0x45C730
+void CGameAIBase::ProcessAI()
+{
+    // TODO: Incomplete.
+}
+
 // 0x45D130
 void CGameAIBase::RemoveFromArea()
 {
