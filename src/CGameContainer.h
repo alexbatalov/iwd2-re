@@ -10,6 +10,7 @@ class CGameContainer : public CGameAIBase {
 public:
     /* 0030 */ void DebugDump(const CString& message, BOOLEAN bEchoToScreen) override;
     /* 0048 */ void RemoveFromArea() override;
+    /* 0050 */ BOOLEAN DoAIUpdate(BOOLEAN active, LONG counter) override;
 
     void SetFlags(DWORD dwFlags);
     void SetTrapActivated(WORD active);

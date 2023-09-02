@@ -8,6 +8,12 @@
 #include "CScreenWorld.h"
 #include "CUtil.h"
 
+// 0x47D7F0
+BOOLEAN CGameContainer::DoAIUpdate(BOOLEAN active, LONG counter)
+{
+    return active && (counter & m_AISpeed) == (m_AISpeed & m_id);
+}
+
 // 0x47E040
 void CGameContainer::DebugDump(const CString& message, BOOLEAN bEchoToScreen)
 {
