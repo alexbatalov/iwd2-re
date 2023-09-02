@@ -1,6 +1,8 @@
 #include "CGameContainer.h"
 
 #include "CBaldurChitin.h"
+#include "CItem.h"
+#include "CResRef.h"
 
 // 0x481750
 void CGameContainer::SetFlags(DWORD dwFlags)
@@ -30,4 +32,22 @@ void CGameContainer::SetDrawPoly(SHORT time)
         }
     }
     m_drawPoly = time;
+}
+
+// 0x4817F0
+SHORT CGameContainer::FindItemSlot(const CResRef& res)
+{
+    POSITION pos = m_lstItems.GetHeadPosition();
+
+    SHORT nSlot = 0;
+    while (pos != NULL) {
+        CItem* pItem = m_lstItems.GetNext(pos);
+        if (pItem->GetResRef() == res) {
+            return nSlot;
+        }
+
+        nSlot++;
+    }
+
+    return -1;
 }
