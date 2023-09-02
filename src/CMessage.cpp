@@ -3,8 +3,11 @@
 #include "CBaldurChitin.h"
 #include "CGameAIBase.h"
 #include "CGameArea.h"
+#include "CGameContainer.h"
+#include "CGameDoor.h"
 #include "CGameEffect.h"
 #include "CGameSprite.h"
+#include "CGameTrigger.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CItem.h"
@@ -113,6 +116,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_DIALOG_WAIT = 40;
 
 // 0x84CF00
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_DIRECTION = 41;
+
+// 0x84CF01
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_DRAW_POLY = 42;
 
 // 0x84CF03
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_HAPPINESS = 44;
@@ -254,7 +260,7 @@ CBaldurMessage::CBaldurMessage()
     m_bPlayerShutdown = FALSE;
     m_bMultiplayerSessionShutdown = FALSE;
     m_bInReputationChange = FALSE;
-    field_F6 = 0;
+    m_bInMessageSetDrawPoly = FALSE;
 }
 
 // 0x429720
@@ -2112,6 +2118,65 @@ void CMessageSetDirection::Run()
         if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
             pSprite->SetDirection(m_face);
         }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x47D7B0
+CMessageSetDrawPoly::CMessageSetDrawPoly(SHORT time, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_time = time;
+}
+
+// 0x453510
+SHORT CMessageSetDrawPoly::GetCommType()
+{
+    return BROADCAST;
+}
+
+// 0x40A0E0
+BYTE CMessageSetDrawPoly::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x47D7E0
+BYTE CMessageSetDrawPoly::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_DRAW_POLY;
+}
+
+// 0x5067B0
+void CMessageSetDrawPoly::Run()
+{
+    CGameAIBase* pAIBase;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pAIBase),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        g_pBaldurChitin->GetBaldurMessage()->m_bInMessageSetDrawPoly = TRUE;
+
+        if (pAIBase->GetObjectType() == CGameObject::TYPE_DOOR) {
+            static_cast<CGameDoor*>(pAIBase)->SetDrawPoly(m_time);
+        } else if (pAIBase->GetObjectType() == CGameObject::TYPE_TRIGGER) {
+            static_cast<CGameTrigger*>(pAIBase)->SetDrawPoly(m_time);
+        } else if (pAIBase->GetObjectType() == CGameObject::TYPE_CONTAINER) {
+            static_cast<CGameContainer*>(pAIBase)->SetDrawPoly(m_time);
+        }
+
+        g_pBaldurChitin->GetBaldurMessage()->m_bInMessageSetDrawPoly = FALSE;
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
             CGameObjectArray::THREAD_ASYNCH,

@@ -44,6 +44,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_COMMAND_PAUSE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_DIALOG_WAIT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_DIRECTION;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_SET_DRAW_POLY;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_HAPPINESS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_IN_CUT_SCENE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_LAST_ATTACKER;
@@ -158,7 +159,7 @@ public:
     /* 00F0 */ DWORD m_dwSignalSecondsToTimeout;
     /* 00F4 */ BOOLEAN m_bMultiplayerSessionShutdown;
     /* 00F5 */ BOOLEAN m_bInReputationChange;
-    /* 00F6 */ unsigned char field_F6;
+    /* 00F6 */ BOOLEAN m_bInMessageSetDrawPoly;
 };
 
 class CMessage {
@@ -490,6 +491,17 @@ public:
     void Run() override;
 
     /* 000C */ CPoint m_face;
+};
+
+class CMessageSetDrawPoly : public CMessage {
+public:
+    CMessageSetDrawPoly(SHORT time, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ SHORT m_time;
 };
 
 class CMessageSetHappiness : public CMessage {
