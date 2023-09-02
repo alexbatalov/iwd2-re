@@ -13,6 +13,7 @@ public:
     void SetTrapDetected(WORD state);
     void SetDrawPoly(SHORT time);
     SHORT FindItemSlot(const CResRef& res);
+    SHORT CountItem(const CResRef& res);
 
     /* 05AE */ CTypedPtrList<CPtrList, CItem*> m_lstItems;
     /* 088E */ DWORD m_dwFlags;

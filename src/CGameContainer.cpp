@@ -51,3 +51,23 @@ SHORT CGameContainer::FindItemSlot(const CResRef& res)
 
     return -1;
 }
+
+// 0x481830
+SHORT CGameContainer::CountItem(const CResRef& res)
+{
+    POSITION pos = m_lstItems.GetHeadPosition();
+
+    SHORT nCount = 0;
+    while (pos != NULL) {
+        CItem* pItem = m_lstItems.GetNext(pos);
+        if (pItem->GetResRef() == res) {
+            if (pItem->GetMaxStackable() > 1) {
+                nCount += pItem->GetUsageCount(0);
+            } else {
+                nCount++;
+            }
+        }
+    }
+
+    return nCount;
+}
