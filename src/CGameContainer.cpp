@@ -1,8 +1,28 @@
 #include "CGameContainer.h"
 
 #include "CBaldurChitin.h"
+#include "CInfGame.h"
 #include "CItem.h"
 #include "CResRef.h"
+#include "CUtil.h"
+
+// 0x47FE10
+void CGameContainer::RemoveFromArea()
+{
+    CGameObject::RemoveFromArea();
+
+    BYTE rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->Delete(m_id,
+        CGameObjectArray::THREAD_ASYNCH,
+        NULL,
+        INFINITE);
+    if (rc != CGameObjectArray::SUCCESS) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameContainer.cpp
+        // __LINE__: 1597
+        UTIL_ASSERT(FALSE);
+    }
+
+    delete this;
+}
 
 // 0x481750
 void CGameContainer::SetFlags(DWORD dwFlags)

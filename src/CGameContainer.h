@@ -8,6 +8,8 @@ class CResRef;
 
 class CGameContainer : public CGameAIBase {
 public:
+    /* 0048 */ void RemoveFromArea() override;
+
     void SetFlags(DWORD dwFlags);
     void SetTrapActivated(WORD active);
     void SetTrapDetected(WORD state);
