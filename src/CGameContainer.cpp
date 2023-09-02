@@ -2,6 +2,12 @@
 
 #include "CBaldurChitin.h"
 
+// 0x481760
+void CGameContainer::SetTrapActivated(WORD active)
+{
+    m_trapActivated = active;
+}
+
 // 0x481770
 void CGameContainer::SetTrapDetected(WORD state)
 {
