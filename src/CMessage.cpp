@@ -189,6 +189,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STOP_ESCAPE_AREA = 82;
 // 0x84CF2E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE = 87;
 
+// 0x84CF3B
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_DEMAND = 100;
+
 // 0x84CF76
 const BYTE CBaldurMessage::DELETEAREA_EMPTY_VOTE = 101;
 
@@ -3444,4 +3447,39 @@ BYTE CMessageStoreRelease::GetMsgType()
 BYTE CMessageStoreRelease::GetMsgSubType()
 {
     return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F6CC0
+CMessageStoreDemand::CMessageStoreDemand(const CResRef& store, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_store = store;
+}
+
+// 0x43E170
+SHORT CMessageStoreDemand::GetCommType()
+{
+    return BROADCAST_FORCED;
+}
+
+// 0x40A0E0
+BYTE CMessageStoreDemand::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x47E030
+BYTE CMessageStoreDemand::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_DEMAND;
+}
+
+// 0x5144D0
+void CMessageStoreDemand::Run()
+{
+    if (g_pChitin->cNetwork.GetSessionHosting()) {
+        g_pBaldurChitin->GetObjectGame()->DemandServerStore(m_store, FALSE);
+    }
 }

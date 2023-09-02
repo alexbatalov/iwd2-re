@@ -68,6 +68,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_FAMILIAR_REMOVE_RESREF;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STOP_ESCAPE_AREA;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_DEMAND;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
     static const BYTE SIGNAL_SERVER;
@@ -755,6 +756,17 @@ public:
     /* 0004 */ SHORT GetCommType() override;
     /* 0008 */ BYTE GetMsgType() override;
     /* 000C */ BYTE GetMsgSubType() override;
+
+    CResRef m_store;
+};
+
+class CMessageStoreDemand : public CMessage {
+public:
+    CMessageStoreDemand(const CResRef& store, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
 
     CResRef m_store;
 };
