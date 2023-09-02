@@ -2,6 +2,12 @@
 
 #include "CBaldurChitin.h"
 
+// 0x481750
+void CGameContainer::SetFlags(DWORD dwFlags)
+{
+    m_dwFlags = dwFlags;
+}
+
 // 0x481760
 void CGameContainer::SetTrapActivated(WORD active)
 {
