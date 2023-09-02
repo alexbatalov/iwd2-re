@@ -2,12 +2,13 @@
 #define CGAMECONTAINER_H_
 
 #include "CGameAIBase.h"
+#include "CResRef.h"
 
 class CItem;
-class CResRef;
 
 class CGameContainer : public CGameAIBase {
 public:
+    /* 0030 */ void DebugDump(const CString& message, BOOLEAN bEchoToScreen) override;
     /* 0048 */ void RemoveFromArea() override;
 
     void SetFlags(DWORD dwFlags);
@@ -18,9 +19,16 @@ public:
     SHORT CountItem(const CResRef& res);
 
     /* 05AE */ CTypedPtrList<CPtrList, CItem*> m_lstItems;
+    /* 05CA */ WORD m_containerType;
+    /* 0864 */ RESREF m_scriptRes;
+    /* 088C */ WORD m_lockDifficulty;
     /* 088E */ DWORD m_dwFlags;
+    /* 0892 */ WORD m_trapDetectionDifficulty;
+    /* 0894 */ WORD m_trapRemovalDifficulty;
     /* 0896 */ WORD m_trapActivated;
     /* 0898 */ WORD m_trapDetected;
+    /* 089A */ CPoint m_posTrapOrigin;
+    /* 08C4 */ CResRef m_keyType;
     /* 08D0 */ SHORT m_drawPoly;
 };
 
