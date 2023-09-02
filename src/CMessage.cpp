@@ -3424,7 +3424,7 @@ void CMessageStopEscapeArea::Run()
 
 // -----------------------------------------------------------------------------
 
-// NOTE: Inlined.
+// 0x4F6540
 CMessageStoreRelease::CMessageStoreRelease(const CResRef& store, LONG caller, LONG target)
     : CMessage(caller, target)
 {
@@ -3447,6 +3447,14 @@ BYTE CMessageStoreRelease::GetMsgType()
 BYTE CMessageStoreRelease::GetMsgSubType()
 {
     return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
+}
+
+// 0x50FE00
+void CMessageStoreRelease::Run()
+{
+    if (g_pChitin->cNetwork.GetSessionHosting()) {
+        g_pBaldurChitin->GetObjectGame()->ReleaseServerStore(m_store);
+    }
 }
 
 // -----------------------------------------------------------------------------

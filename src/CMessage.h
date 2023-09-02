@@ -753,9 +753,10 @@ public:
 class CMessageStoreRelease : public CMessage {
 public:
     CMessageStoreRelease(const CResRef& store, LONG caller, LONG target);
-    /* 0004 */ SHORT GetCommType() override;
-    /* 0008 */ BYTE GetMsgType() override;
-    /* 000C */ BYTE GetMsgSubType() override;
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
 
     CResRef m_store;
 };
