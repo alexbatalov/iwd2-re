@@ -69,6 +69,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_COLOR_RESET = 10;
 // 0x84CEE2
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_COLOR_UPDATE = 11;
 
+// 0x84CEE5
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CONTAINER_STATUS = 14;
+
 // 0x84CEE6
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CUT_SCENE_MODE_STATUS = 15;
 
@@ -1263,6 +1266,59 @@ void CMessageColorUpdate::Run()
             m_appliedColorRanges.Apply(pSprite);
             m_appliedColorEffects.Apply(pSprite);
         }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F5380
+CMessageContainerStatus::CMessageContainerStatus(DWORD flags, WORD trapActivated, WORD trapDetected, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_dwFlags = flags;
+    m_trapActivated = trapActivated;
+    m_trapDetected = trapDetected;
+}
+
+// 0x43E170
+SHORT CMessageContainerStatus::GetCommType()
+{
+    return BROADCAST_FORCED;
+}
+
+// 0x40A0E0
+BYTE CMessageContainerStatus::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x47D7A0
+BYTE CMessageContainerStatus::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CONTAINER_STATUS;
+}
+
+// 0x4FBD50
+void CMessageContainerStatus::Run()
+{
+    CGameContainer* pContainer;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pContainer),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        pContainer->SetFlags(m_dwFlags);
+        pContainer->SetTrapActivated(m_trapActivated);
+        pContainer->SetTrapDetected(m_trapDetected);
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
             CGameObjectArray::THREAD_ASYNCH,

@@ -28,6 +28,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_COLOR_CHANGE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_COLOR_RESET;
     static const BYTE MSG_SUBTYPE_CMESSAGE_COLOR_UPDATE;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_CONTAINER_STATUS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_CUT_SCENE_MODE_STATUS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXTREF;
@@ -302,6 +303,19 @@ public:
 
     /* 000C */ CColorRanges m_appliedColorRanges;
     /* */ CColorEffects m_appliedColorEffects;
+};
+
+class CMessageContainerStatus : public CMessage {
+public:
+    CMessageContainerStatus(DWORD flags, WORD trapActivated, WORD trapDetected, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ DWORD m_dwFlags;
+    /* 0010 */ WORD m_trapDetected;
+    /* 0012 */ WORD m_trapActivated;
 };
 
 class CMessageCutSceneModeStatus : public CMessage {
