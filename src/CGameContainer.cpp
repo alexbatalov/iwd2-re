@@ -2,6 +2,12 @@
 
 #include "CBaldurChitin.h"
 
+// 0x481770
+void CGameContainer::SetTrapDetected(WORD state)
+{
+    m_trapDetected = state;
+}
+
 // 0x481780
 void CGameContainer::SetDrawPoly(SHORT time)
 {

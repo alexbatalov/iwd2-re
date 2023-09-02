@@ -5,8 +5,10 @@
 
 class CGameContainer : public CGameAIBase {
 public:
+    void SetTrapDetected(WORD state);
     void SetDrawPoly(SHORT time);
 
+    /* 0898 */ WORD m_trapDetected;
     /* 08D0 */ SHORT m_drawPoly;
 };
 
