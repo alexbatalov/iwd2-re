@@ -14,8 +14,8 @@ public:
 
     CVidPoly();
 
-    LONG CalculateLineVIntersection(const CPoint& lineStart, const CPoint& lineEnd, LONG vertical, const CPoint& linePrev);
-    BOOLEAN IsPtInPoly(const CPoint* pPoly, SHORT nPoly, const CPoint& pt);
+    static LONG CalculateLineVIntersection(const CPoint& lineStart, const CPoint& lineEnd, LONG vertical, const CPoint& linePrev);
+    static BOOLEAN IsPtInPoly(const CPoint* pPoly, SHORT nPoly, const CPoint& pt);
     BOOL FillPoly(WORD* pSurface, LONG lPitch, const CRect& rClip, DWORD dwColor, DWORD dwFlags, const CPoint& ptRef);
     void SetPoly(WORD* pVertices, WORD nVertices);
     void SetPoly(CVIDPOLY_VERTEX* pVertices, WORD nVertices);
