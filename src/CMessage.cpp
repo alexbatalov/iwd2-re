@@ -126,6 +126,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_DIRECTION = 41;
 // 0x84CF01
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_DRAW_POLY = 42;
 
+// 0x84CF02
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_FORCE_ACTION_PICK = 43;
+
 // 0x84CF03
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_HAPPINESS = 44;
 
@@ -2304,6 +2307,57 @@ void CMessageSetDrawPoly::Run()
         }
 
         g_pBaldurChitin->GetBaldurMessage()->m_bInMessageSetDrawPoly = FALSE;
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F5F20
+CMessageSetForceActionPick::CMessageSetForceActionPick(BOOLEAN forceActionPick, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_forceActionPick = forceActionPick;
+}
+
+// 0x40A0D0
+SHORT CMessageSetForceActionPick::GetCommType()
+{
+    return SEND;
+}
+
+// 0x40A0E0
+BYTE CMessageSetForceActionPick::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x466F70
+BYTE CMessageSetForceActionPick::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_FORCE_ACTION_PICK;
+}
+
+// 0x506A90
+void CMessageSetForceActionPick::Run()
+{
+    CGameAIBase* pAIBase;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pAIBase),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if ((pAIBase->GetObjectType() & CGameObject::TYPE_AIBASE) != 0) {
+            pAIBase->m_forceActionPick = m_forceActionPick;
+        }
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
             CGameObjectArray::THREAD_ASYNCH,

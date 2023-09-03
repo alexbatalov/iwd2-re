@@ -110,7 +110,7 @@ public:
     /* 0554 */ SCRIPTNAME m_scriptName;
     /* 0574 */ BOOL m_inCutScene;
     /* 0578 */ BOOL m_firstCall;
-    /* 057C */ int field_57C;
+    /* 057C */ BOOL m_forceActionPick;
     /* 0580 */ int field_580;
     /* 0584 */ LONG m_randValue;
     /* 0588 */ int field_588;

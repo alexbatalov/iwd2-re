@@ -89,7 +89,7 @@ CGameAIBase::CGameAIBase()
     m_pendingTriggers.AddTail(new CAITrigger(trigger));
 
     m_firstCall = TRUE;
-    field_57C = 0;
+    m_forceActionPick = FALSE;
     field_580 = 0;
     field_592 = -1;
     field_588 = 0;
