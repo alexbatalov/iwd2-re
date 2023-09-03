@@ -81,6 +81,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXT = 16;
 // 0x84CEE8
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXTREF = 17;
 
+// 0x84CEEA
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_DOOR_STATUS = 19;
+
 // 0x84CEEB
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_DROP_PATH = 20;
 
@@ -1543,6 +1546,68 @@ void CMessageDisplayTextRef::Run()
         m_textColor,
         m_marker,
         m_moveToTop);
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4FD370
+CMessageDoorStatus::CMessageDoorStatus(CGameDoor* pDoor, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    if (pDoor != NULL) {
+        m_bOpen = (pDoor->m_dwFlags & 0x1) != 0;
+        m_dwFlags = pDoor->m_dwFlags;
+        m_trapDetected = pDoor->m_trapDetected;
+        m_trapActivated = pDoor->m_trapActivated;
+    } else {
+        m_bOpen = FALSE;
+        m_dwFlags = 0;
+        m_trapDetected = 0;
+        m_trapActivated = 0;
+    }
+}
+
+// 0x43E170
+SHORT CMessageDoorStatus::GetCommType()
+{
+    return BROADCAST_FORCED;
+}
+
+// 0x40A0E0
+BYTE CMessageDoorStatus::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4FD3D0
+BYTE CMessageDoorStatus::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_DOOR_STATUS;
+}
+
+// 0x4FD5F0
+void CMessageDoorStatus::Run()
+{
+    CGameDoor* pDoor;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pDoor),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        pDoor->OnDoorStatusUpdate(m_bOpen,
+            m_dwFlags,
+            m_trapActivated,
+            m_trapDetected);
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
 }
 
 // -----------------------------------------------------------------------------

@@ -13,6 +13,7 @@
 // TODO: Reuse from `CNetwork.h`.
 typedef DWORD PLAYER_ID;
 
+class CGameDoor;
 class CGameEffect;
 
 class CBaldurMessage {
@@ -32,6 +33,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_CUT_SCENE_MODE_STATUS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXTREF;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_DOOR_STATUS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_DROP_PATH;
     static const BYTE MSG_SUBTYPE_CMESSAGE_ENTER_STORE_MODE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_EXIT_DIALOG_MODE;
@@ -360,6 +362,20 @@ public:
     /* 0018 */ COLORREF m_textColor;
     /* 001C */ LONG m_marker;
     /* 0020 */ BOOLEAN m_moveToTop;
+};
+
+class CMessageDoorStatus : public CMessage {
+public:
+    CMessageDoorStatus(CGameDoor* pDoor, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ DWORD m_dwFlags;
+    /* 0010 */ WORD m_trapDetected;
+    /* 0012 */ WORD m_trapActivated;
+    /* 0014 */ BOOLEAN m_bOpen;
 };
 
 class CMessageDropPath : public CMessage {
