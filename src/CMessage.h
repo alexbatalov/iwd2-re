@@ -59,6 +59,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_START_FOLLOW;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STOP_ACTIONS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STOP_FOLLOW;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_UNLOCK;
     static const BYTE MSG_SUBTYPE_CMESSAGE_UPDATE_REACTION;
     static const BYTE MSG_SUBTYPE_CMESSAGE_VERBAL_CONSTANT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_VISIBILITY_MAP_MOVE;
@@ -652,6 +653,17 @@ public:
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
     void Run() override;
+};
+
+class CMessageUnlock : public CMessage {
+public:
+    CMessageUnlock(DWORD flags, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ DWORD m_dwFlags;
 };
 
 class CMessageUpdateReaction : public CMessage {

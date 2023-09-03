@@ -159,6 +159,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STOP_ACTIONS = 60;
 // 0x84CF12
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STOP_FOLLOW = 61;
 
+// 0x84CF16
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_UNLOCK = 63;
+
 // 0x84CF17
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_UPDATE_REACTION = 64;
 
@@ -2928,6 +2931,78 @@ void CMessageStopFollow::Run()
     if (rc == CGameObjectArray::SUCCESS) {
         if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
             pSprite->m_followStart = 0;
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F6760
+CMessageUnlock::CMessageUnlock(DWORD flags, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_dwFlags = flags;
+}
+
+// 0x40A0D0
+SHORT CMessageUnlock::GetCommType()
+{
+    return SEND;
+}
+
+// 0x40A0E0
+BYTE CMessageUnlock::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x466F80
+BYTE CMessageUnlock::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_UNLOCK;
+}
+
+// 0x5109E0
+void CMessageUnlock::Run()
+{
+    CGameAIBase* pAIBase;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pAIBase),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pAIBase->GetObjectType() == CGameObject::TYPE_DOOR) {
+            CGameDoor* pDoor = static_cast<CGameDoor*>(pAIBase);
+
+            // TODO: Unclear.
+            pDoor->m_dwFlags ^= (pDoor->m_dwFlags ^ m_dwFlags) & 0x2;
+
+            CMessageDoorStatus* pMessage = new CMessageDoorStatus(pDoor,
+                m_targetId,
+                m_targetId);
+
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+        } else if (pAIBase->GetObjectType() == CGameObject::TYPE_CONTAINER) {
+            CGameContainer* pContainer = static_cast<CGameContainer*>(pAIBase);
+
+            pContainer->SetFlags(m_dwFlags);
+
+            CMessageContainerStatus* pMessage = new CMessageContainerStatus(pContainer->m_dwFlags,
+                pContainer->m_trapActivated,
+                pContainer->m_trapDetected,
+                m_targetId,
+                m_targetId);
+
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
         }
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
