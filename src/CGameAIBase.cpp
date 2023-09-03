@@ -3,6 +3,7 @@
 #include "CAIScript.h"
 #include "CAITrigger.h"
 #include "CBaldurChitin.h"
+#include "CBaldurProjector.h"
 #include "CGameArea.h"
 #include "CGameEffect.h"
 #include "CGameSprite.h"
@@ -655,6 +656,21 @@ SHORT CGameAIBase::GivePartyGold()
         m_id);
 
     g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+
+    return ACTION_DONE;
+}
+
+// 0x465F30
+SHORT CGameAIBase::StartMovie()
+{
+    CString sMovieFileName;
+
+    CBaldurProjector* pProjector = g_pBaldurChitin->m_pEngineProjector;
+    if (!pProjector->ResolveMovieFileName(CResRef(m_curAction.GetString1()), sMovieFileName)) {
+        return ACTION_ERROR;
+    }
+
+    g_pBaldurChitin->m_pEngineWorld->ReadyMovie(CResRef(m_curAction.GetString1()), FALSE);
 
     return ACTION_DONE;
 }
