@@ -5,6 +5,11 @@
 
 class CSearchBitmap {
 public:
+    void AddDoor(CPoint* pPoints, USHORT nPoints, BOOL bOpaque);
+    void RemoveDoor(CPoint* pPoints, USHORT nPoints);
+
+    /* 00BA */ BYTE* m_pDynamicCost;
+    /* 00E6 */ CSize m_GridSquareDimensions;
 };
 
 class CSearchRequest {

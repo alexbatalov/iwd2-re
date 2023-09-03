@@ -225,6 +225,46 @@ void CGameDoor::SetCursor(int nToolTip)
     }
 }
 
+// 0x48AC80
+void CGameDoor::OnDoorStatusUpdate(BOOLEAN bDoorOpened, DWORD dwFlags, WORD nTrapActivated, WORD nTrapDetected)
+{
+    if ((m_dwFlags & 0x1) == 0 || bDoorOpened) {
+        if ((m_dwFlags & 0x1) == 0 && bDoorOpened == TRUE) {
+            m_dwFlags |= 0x1;
+            m_pos = m_ptClosedDest;
+            m_tiledObject.m_wAIState = CTiledObject::STATE_PRIMARY_TILE;
+
+            if (m_pClosedSearch != NULL) {
+                m_pArea->m_search.RemoveDoor(m_pClosedSearch, m_nClosedSearch);
+            }
+
+            if (m_pOpenSearch != NULL) {
+                m_pArea->m_search.AddDoor(m_pOpenSearch,
+                    m_nOpenSearch,
+                    (m_dwFlags & 0x400) != 0);
+            }
+        }
+    } else {
+        m_dwFlags &= ~0x1;
+        m_pos = m_ptOpenDest;
+        m_tiledObject.m_wAIState = CTiledObject::STATE_SECONDARY_TILE;
+
+        if (m_pOpenSearch != NULL) {
+            m_pArea->m_search.RemoveDoor(m_pOpenSearch, m_nOpenSearch);
+        }
+
+        if (m_pClosedSearch != NULL) {
+            m_pArea->m_search.AddDoor(m_pClosedSearch,
+                m_nClosedSearch,
+                (m_dwFlags & 0x400) != 0);
+        }
+    }
+
+    m_dwFlags = dwFlags;
+    m_trapDetected = nTrapDetected;
+    m_trapActivated = nTrapActivated;
+}
+
 // 0x48B350
 void CGameDoor::SetDrawPoly(SHORT time)
 {

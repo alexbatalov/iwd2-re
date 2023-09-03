@@ -286,6 +286,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CStrRes.h"
     "src/CSwitchCDStatus.cpp"
     "src/CSwitchCDStatus.h"
+    "src/CTiledObject.cpp"
+    "src/CTiledObject.h"
     "src/CTimerWorld.cpp"
     "src/CTimerWorld.h"
     "src/CTlkFileOverride.cpp"

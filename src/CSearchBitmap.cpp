@@ -30,6 +30,32 @@ LONG CSearchRequest::MINNODESBACK = 200;
 // 0x8AE1E4
 LONG CSearchRequest::MAXNODESBACK = 1000;
 
+// -----------------------------------------------------------------------------
+
+// 0x548EE0
+void CSearchBitmap::AddDoor(CPoint* pPoints, USHORT nPoints, BOOL bOpaque)
+{
+    BYTE doorToggle = 0x80;
+
+    if (bOpaque) {
+        doorToggle |= 0x1;
+    }
+
+    for (USHORT nIndex = 0; nIndex < nPoints; nIndex++) {
+        m_pDynamicCost[m_GridSquareDimensions.cx * pPoints[nIndex].y + pPoints[nIndex].x] |= doorToggle;
+    }
+}
+
+// 0x548F30
+void CSearchBitmap::RemoveDoor(CPoint* pPoints, USHORT nPoints)
+{
+    for (USHORT nIndex = 0; nIndex < nPoints; nIndex++) {
+        m_pDynamicCost[m_GridSquareDimensions.cx * pPoints[nIndex].y + pPoints[nIndex].x] &= ~0x81;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x5492E0
 void SearchThreadMain(void* userInfo)
 {
