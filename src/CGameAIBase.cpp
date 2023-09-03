@@ -6,6 +6,7 @@
 #include "CGameArea.h"
 #include "CGameEffect.h"
 #include "CGameSprite.h"
+#include "CGameTiledObject.h"
 #include "CGameTimer.h"
 #include "CInfGame.h"
 #include "CScreenWorld.h"
@@ -654,6 +655,26 @@ SHORT CGameAIBase::GivePartyGold()
         m_id);
 
     g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+
+    return ACTION_DONE;
+}
+
+// 0x466120
+SHORT CGameAIBase::ChangeTileState(CGameTiledObject* target)
+{
+    if (target == NULL) {
+        return ACTION_ERROR;
+    }
+
+    if (m_curAction.m_specificID != 0) {
+        if ((target->m_dwFlags & 0x1) != 0) {
+            target->ToggleState();
+        }
+    } else {
+        if ((target->m_dwFlags & 0x1) == 0) {
+            target->ToggleState();
+        }
+    }
 
     return ACTION_DONE;
 }

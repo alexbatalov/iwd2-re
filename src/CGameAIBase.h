@@ -8,6 +8,7 @@
 class CAIScript;
 class CAITrigger;
 class CGameEffect;
+class CGameTiledObject;
 class CGameTimer;
 
 class CGameAIBase : public CGameObject {
@@ -61,6 +62,7 @@ public:
     SHORT MoveCursorPoint();
     SHORT TakePartyGold();
     SHORT GivePartyGold();
+    SHORT ChangeTileState(CGameTiledObject* target);
     SHORT StartMusic();
 
     SCRIPTNAME& GetScriptName();
