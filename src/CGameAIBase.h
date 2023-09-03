@@ -62,6 +62,7 @@ public:
     SHORT MoveCursorPoint();
     SHORT TakePartyGold();
     SHORT GivePartyGold();
+    SHORT GiveOrder(CGameAIBase* sprite);
     SHORT StartMovie();
     SHORT ChangeTileState(CGameTiledObject* target);
     SHORT StartMusic();

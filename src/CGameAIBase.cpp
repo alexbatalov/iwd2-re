@@ -660,6 +660,23 @@ SHORT CGameAIBase::GivePartyGold()
     return ACTION_DONE;
 }
 
+// 0x4654C0
+SHORT CGameAIBase::GiveOrder(CGameAIBase* sprite)
+{
+    if (sprite == NULL) {
+        return ACTION_ERROR;
+    }
+
+    CAITrigger trigger(CAITrigger::RECEIVEDORDER, m_typeAI, m_curAction.m_specificID);
+
+    CMessageSetTrigger* pMessage = new CMessageSetTrigger(trigger,
+        m_id,
+        sprite->GetId());
+    g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+
+    return ACTION_DONE;
+}
+
 // 0x465F30
 SHORT CGameAIBase::StartMovie()
 {
