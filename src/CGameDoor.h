@@ -2,9 +2,11 @@
 #define CGAMEDOOR_H_
 
 #include "CGameAIBase.h"
+#include "CResRef.h"
 
 class CGameDoor : public CGameAIBase {
 public:
+    /* 0030 */ void DebugDump(const CString& message, BOOLEAN bEchoToScreen) override;
     /* 0034 */ BOOL IsOver(const CPoint& pt) override;
 
     void SetDrawPoly(SHORT time);
@@ -16,6 +18,15 @@ public:
     /* 05CC */ WORD m_nOpenPolygon;
     /* 05CE */ CPoint* m_pClosedPolygon;
     /* 05D2 */ WORD m_nClosedPolygon;
+    /* 05F0 */ RESREF m_scriptRes;
+    /* 0648 */ WORD m_trapDetectionDifficulty;
+    /* 064A */ WORD m_trapDisarmingDifficulty;
+    /* 064C */ WORD m_trapActivated;
+    /* 064E */ WORD m_trapDetected;
+    /* 0650 */ WORD m_posXTrapOrigin;
+    /* 0652 */ WORD m_posYTrapOrigin;
+    /* 0654 */ CResRef m_keyType;
+    /* 0660 */ DWORD m_lockDifficulty;
     /* 0664 */ SHORT m_drawPoly;
 };
 
