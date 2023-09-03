@@ -13,6 +13,7 @@
 #include "FileFormat.h"
 
 class CInfGame;
+class CTiledObject;
 class CVidMode;
 
 class CAreaFileHeader {
@@ -204,6 +205,7 @@ public:
     /* 09E6 */ CTypedPtrList<CPtrList, int*> m_lVertSortAdd; // NOTE: Stores actual ints disguised as pointers.
     /* 0A02 */ CTypedPtrList<CPtrList, int*> m_lVertSortBackAdd; // NOTE: Stores actual ints disguised as pointers.
     /* 0A1E */ CTypedPtrList<CPtrList, int*> m_lVertSortFlightAdd; // NOTE: Stores actual ints disguised as pointers.
+    /* 0A8E */ CTypedPtrList<CPtrList, CTiledObject*> m_lTiledObjects;
     /* 0AC6 */ CPoint m_ptOldViewPos;
     /* 0ACE */ CVariableHash m_variables;
     /* 0ADA */ CNamedCreatureVariableHash m_namedCreatures;

@@ -6,6 +6,7 @@
 #include "CGameSprite.h"
 #include "CInfGame.h"
 #include "CScreenWorld.h"
+#include "CTiledObject.h"
 #include "CUtil.h"
 
 // 0x8D212C

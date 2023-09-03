@@ -9,6 +9,7 @@ class CGameDoor : public CGameAIBase {
 public:
     /* 0030 */ void DebugDump(const CString& message, BOOLEAN bEchoToScreen) override;
     /* 0034 */ BOOL IsOver(const CPoint& pt) override;
+    /* 0048 */ void RemoveFromArea() override;
     /* 0058 */ void SetCursor(int nToolTip) override;
 
     void OnDoorStatusUpdate(BOOLEAN bDoorOpened, DWORD dwFlags, WORD nTrapActivated, WORD nTrapDetected);

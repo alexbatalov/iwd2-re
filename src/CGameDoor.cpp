@@ -131,6 +131,26 @@ BOOL CGameDoor::IsOver(const CPoint& pt)
     return TRUE;
 }
 
+// 0x4892B0
+void CGameDoor::RemoveFromArea()
+{
+    m_pArea->m_lTiledObjects.RemoveAt(m_tiledObject.m_posAreaList);
+
+    CGameObject::RemoveFromArea();
+
+    BYTE rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->Delete(m_id,
+        CGameObjectArray::THREAD_ASYNCH,
+        NULL,
+        INFINITE);
+    if (rc != CGameObjectArray::SUCCESS) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameDoor.cpp
+        // __LINE__: 1269
+        UTIL_ASSERT(FALSE);
+    }
+
+    delete this;
+}
+
 // 0x489330
 void CGameDoor::SetCursor(int nToolTip)
 {
