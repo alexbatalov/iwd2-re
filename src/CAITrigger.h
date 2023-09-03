@@ -8,6 +8,7 @@ public:
     static const SHORT NO_TRIGGER;
     static const SHORT ONCREATION;
     static const SHORT RECEIVEDORDER;
+    static const SHORT UNLOCKED;
 
     CAITrigger(const CAITrigger& trigger);
     CAITrigger(SHORT triggerID, const CAIObjectType& cause, LONG specificID);

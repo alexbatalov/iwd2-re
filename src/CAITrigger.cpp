@@ -9,6 +9,9 @@ const SHORT CAITrigger::RECEIVEDORDER = 6;
 // 0x847E04
 const SHORT CAITrigger::ONCREATION = 54;
 
+// 0x847E46
+const SHORT CAITrigger::UNLOCKED = 87;
+
 // 0x4816B0
 CAITrigger::CAITrigger(const CAITrigger& trigger)
 {

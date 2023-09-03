@@ -66,6 +66,7 @@ public:
     SHORT StartMovie();
     SHORT ChangeTileState(CGameTiledObject* target);
     SHORT StartMusic();
+    SHORT Lock(CGameAIBase* pObject);
 
     SCRIPTNAME& GetScriptName();
     void SetTrigger(const CAITrigger& trigger);

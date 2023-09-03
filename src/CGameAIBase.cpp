@@ -5,6 +5,8 @@
 #include "CBaldurChitin.h"
 #include "CBaldurProjector.h"
 #include "CGameArea.h"
+#include "CGameContainer.h"
+#include "CGameDoor.h"
 #include "CGameEffect.h"
 #include "CGameSprite.h"
 #include "CGameTiledObject.h"
@@ -721,6 +723,64 @@ SHORT CGameAIBase::StartMusic()
 
     // TODO: Check cast.
     m_pArea->PlaySong(static_cast<SHORT>(m_curAction.m_specificID), m_curAction.m_specificID2);
+
+    return ACTION_DONE;
+}
+
+// 0x467110
+SHORT CGameAIBase::Lock(CGameAIBase* pObject)
+{
+    if (pObject == NULL) {
+        return ACTION_ERROR;
+    }
+
+    if (pObject->GetObjectType() != TYPE_DOOR
+        && pObject->GetObjectType() != TYPE_CONTAINER) {
+        return ACTION_ERROR;
+    }
+
+    CMessageSetForceActionPick* pSetForceActionPick = new CMessageSetForceActionPick(TRUE,
+        m_id,
+        pObject->GetId());
+    g_pBaldurChitin->GetMessageHandler()->AddMessage(pSetForceActionPick, FALSE);
+
+    CAITrigger trigger(CAITrigger::NO_TRIGGER, 0);
+
+    if (pObject->GetObjectType() == TYPE_DOOR) {
+        CGameDoor* pDoor = static_cast<CGameDoor*>(pObject);
+        if ((pDoor->m_dwFlags & 0x2) == 0) {
+            trigger = CAITrigger(CAITrigger::UNLOCKED, m_typeAI, 0);
+
+            CMessageSetTrigger* pSetTrigger = new CMessageSetTrigger(trigger,
+                m_id,
+                pDoor->GetId());
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(pSetTrigger, FALSE);
+
+            pDoor->m_dwFlags |= 0x2;
+
+            CMessageUnlock* pUnlock = new CMessageUnlock(pDoor->m_dwFlags,
+                m_id,
+                pDoor->GetId());
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(pUnlock, FALSE);
+        }
+    }
+
+    if (pObject->GetObjectType() == TYPE_CONTAINER) {
+        CGameContainer* pContainer = static_cast<CGameContainer*>(pObject);
+        if ((pContainer->m_dwFlags & 0x1) == 0) {
+            trigger = CAITrigger(CAITrigger::UNLOCKED, m_typeAI, 0);
+
+            CMessageSetTrigger* pSetTrigger = new CMessageSetTrigger(trigger,
+                m_id,
+                pContainer->GetId());
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(pSetTrigger, FALSE);
+
+            CMessageUnlock* pUnlock = new CMessageUnlock(pContainer->m_dwFlags | 0x1,
+                m_id,
+                pContainer->GetId());
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(pUnlock, FALSE);
+        }
+    }
 
     return ACTION_DONE;
 }
