@@ -785,6 +785,49 @@ SHORT CGameAIBase::Lock(CGameAIBase* pObject)
     return ACTION_DONE;
 }
 
+// 0x467720
+SHORT CGameAIBase::DetectSecretDoor(CGameDoor* target)
+{
+    if (target == NULL) {
+        return ACTION_ERROR;
+    }
+
+    CGameDoor* pDoor;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(target->GetId(),
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pDoor),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc != CGameObjectArray::SUCCESS) {
+        return ACTION_ERROR;
+    }
+
+    if ((pDoor->m_dwFlags & 0x80) != 0) {
+        if ((pDoor->m_dwFlags & 0x100) == 0) {
+            pDoor->SetDrawPoly(400);
+
+            pDoor->m_dwFlags |= 0x100;
+
+            CMessageDoorStatus* pDoorStatus = new CMessageDoorStatus(pDoor,
+                m_id,
+                target->GetId());
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(pDoorStatus, FALSE);
+        } else {
+            pDoor->SetDrawPoly(400);
+        }
+    }
+
+    g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(target->GetId(),
+        CGameObjectArray::THREAD_ASYNCH,
+        INFINITE);
+
+    return ACTION_DONE;
+}
+
 // 0x460D60
 SCRIPTNAME& CGameAIBase::GetScriptName()
 {
