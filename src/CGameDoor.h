@@ -7,6 +7,7 @@
 
 class CGameDoor : public CGameAIBase {
 public:
+    /* 000C */ void AIUpdate() override;
     /* 0030 */ void DebugDump(const CString& message, BOOLEAN bEchoToScreen) override;
     /* 0034 */ BOOL IsOver(const CPoint& pt) override;
     /* 0048 */ void RemoveFromArea() override;
@@ -40,6 +41,7 @@ public:
     /* 0664 */ SHORT m_drawPoly;
     /* 0666 */ CPoint m_ptOpenDest;
     /* 066E */ CPoint m_ptClosedDest;
+    /* 070A */ int m_nAICounter;
 };
 
 #endif /* CGAMEDOOR_H_ */

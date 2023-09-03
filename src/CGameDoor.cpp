@@ -9,6 +9,27 @@
 #include "CUtil.h"
 #include "CVidPoly.h"
 
+// 0x487460
+void CGameDoor::AIUpdate()
+{
+    if (m_drawPoly > 0) {
+        m_drawPoly--;
+    }
+
+    ProcessAI();
+
+    if (g_pBaldurChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL
+        && g_pBaldurChitin->cNetwork.GetSessionHosting() == TRUE) {
+        if (m_nAICounter++ == 225) {
+            m_nAICounter = 0;
+
+            CMessageDoorStatus* pMessage = new CMessageDoorStatus(this, m_id, m_id);
+
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+        }
+    }
+}
+
 // 0x47E040
 void CGameDoor::DebugDump(const CString& message, BOOLEAN bEchoToScreen)
 {
