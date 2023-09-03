@@ -8,11 +8,13 @@ class CGameDoor : public CGameAIBase {
 public:
     /* 0030 */ void DebugDump(const CString& message, BOOLEAN bEchoToScreen) override;
     /* 0034 */ BOOL IsOver(const CPoint& pt) override;
+    /* 0058 */ void SetCursor(int nToolTip) override;
 
     void SetDrawPoly(SHORT time);
 
     /* 05A0 */ CRect m_rOpenBounding;
     /* 05B0 */ CRect m_rClosedBounding;
+    /* 05C0 */ DWORD m_cursorType;
     /* 05C4 */ DWORD m_dwFlags;
     /* 05C8 */ CPoint* m_pOpenPolygon;
     /* 05CC */ WORD m_nOpenPolygon;
