@@ -421,6 +421,7 @@ public:
     /* 5004 */ unsigned char field_5004[96];
     /* 5064 */ short m_nHappiness;
     /* 5066 */ CAIObjectType m_interactingWith;
+    /* 50A2 */ LONG m_triggerId;
     /* 50AA */ int field_50AA;
     /* 50AE */ int field_50AE;
     /* 50B2 */ BOOL m_bSelected;

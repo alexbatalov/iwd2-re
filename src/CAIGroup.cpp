@@ -415,6 +415,37 @@ CAIGroup::CAIGroup(SHORT id)
     m_groupChanged = FALSE;
 }
 
+// 0x4052D0
+void CAIGroup::SetGroupTriggerId(LONG triggerId)
+{
+    if (m_memberList.IsEmpty()) {
+        return;
+    }
+
+    POSITION pos = m_memberList.GetHeadPosition();
+    while (pos != NULL) {
+        LONG memberId = reinterpret_cast<LONG>(m_memberList.GetNext(pos));
+
+        CGameSprite* pSprite;
+
+        BYTE rc;
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(memberId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            pSprite->m_triggerId = triggerId;
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(memberId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+}
+
 // 0x4060C0
 LONG CAIGroup::GetGroupLeader()
 {

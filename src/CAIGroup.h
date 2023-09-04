@@ -77,6 +77,7 @@ public:
 
     CAIGroup(SHORT id = -1);
 
+    void SetGroupTriggerId(LONG triggerId);
     LONG GetGroupLeader();
     LONG* GetGroupList();
     void Add(CGameSprite* pSprite);
