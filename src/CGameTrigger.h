@@ -7,14 +7,18 @@
 class CGameTrigger : public CGameAIBase {
 public:
     /* 0030 */ void DebugDump(const CString& message, BOOLEAN bEchoToScreen) override;
+    /* 0034 */ BOOL IsOver(const CPoint& pt) override;
 
     void SetDrawPoly(SHORT time);
 
     /* 0598 */ WORD m_triggerType;
+    /* 059A */ CRect m_rBounding;
     /* 05AE */ RESREF m_newArea;
     /* 05B6 */ SCRIPTNAME m_newEntryPoint;
     /* 05D6 */ DWORD m_dwFlags;
     /* 05DA */ STRREF m_description;
+    /* 05DE */ CPoint* m_pPolygon;
+    /* 05E2 */ WORD m_nPolygon;
     /* 05E6 */ RESREF m_scriptRes;
     /* 060E */ WORD m_trapDetectionDifficulty;
     /* 0610 */ WORD m_trapDisarmingDifficulty;

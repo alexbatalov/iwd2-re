@@ -2,7 +2,9 @@
 
 #include "CBaldurChitin.h"
 #include "CGameArea.h"
+#include "CInfGame.h"
 #include "CScreenWorld.h"
+#include "CVidPoly.h"
 
 // 0x4CE1C0
 void CGameTrigger::DebugDump(const CString& message, BOOLEAN bEchoToScreen)
@@ -168,6 +170,46 @@ void CGameTrigger::DebugDump(const CString& message, BOOLEAN bEchoToScreen)
         }
         break;
     }
+}
+
+// 0x4CEBE0
+BOOL CGameTrigger::IsOver(const CPoint& pt)
+{
+    if ((m_dwFlags & 0x100) != 0) {
+        return FALSE;
+    }
+
+    if (m_triggerType == 0) {
+        if (m_trapActivated == 0) {
+            return FALSE;
+        }
+
+        if (m_trapDetected == 0) {
+            return FALSE;
+        }
+
+        if (g_pBaldurChitin->GetObjectGame()->GetState() != 2) {
+            return FALSE;
+        }
+
+        if (g_pBaldurChitin->GetObjectGame()->GetIconIndex() != 36) {
+            return FALSE;
+        }
+    }
+
+    if (m_rBounding.PtInRect(pt)) {
+        return FALSE;
+    }
+
+    if (!g_pBaldurChitin->GetObjectGame()->GetGroup()->IsPartyLeader()) {
+        return FALSE;
+    }
+
+    if (m_pPolygon != NULL) {
+        return CVidPoly::IsPtInPoly(m_pPolygon, m_nPolygon, pt);
+    }
+
+    return TRUE;
 }
 
 // 0x4D0230
