@@ -343,6 +343,8 @@ public:
     CGameSpriteSpellList* GetShapeshifts();
 
     CGameAnimation* GetAnimation();
+    CGameSpriteEquipment* GetEquipment();
+    SHORT GetHappiness();
 
     // NOTE: See `CGameSpriteSpells` for explanation of the overall ugliness of
     // the following functions.

@@ -2981,10 +2981,22 @@ CGameSpriteSpellList* CGameSprite::GetShapeshifts()
     return &m_shapeshifts;
 }
 
-// NOTE: Inlined.
+// 0x45B730
 CGameAnimation* CGameSprite::GetAnimation()
 {
     return &m_animation;
+}
+
+// 0x45B740
+CGameSpriteEquipment* CGameSprite::GetEquipment()
+{
+    return &m_equipment;
+}
+
+// 0x45B750
+SHORT CGameSprite::GetHappiness()
+{
+    return m_nHappiness;
 }
 
 // FIXME: `nClass` should not be reference.
