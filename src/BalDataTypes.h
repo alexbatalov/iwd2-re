@@ -3,8 +3,10 @@
 
 #include "ChDataTypes.h"
 
+#define SCRIPTNAME_SIZE 32
+
 typedef DWORD STRREF;
-typedef char SCRIPTNAME[32];
+typedef char SCRIPTNAME[SCRIPTNAME_SIZE];
 
 #pragma pack(push)
 #pragma pack(2)

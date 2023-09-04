@@ -2,11 +2,26 @@
 #define CGAMETRIGGER_H_
 
 #include "CGameAIBase.h"
+#include "CResRef.h"
 
 class CGameTrigger : public CGameAIBase {
 public:
+    /* 0030 */ void DebugDump(const CString& message, BOOLEAN bEchoToScreen) override;
+
     void SetDrawPoly(SHORT time);
 
+    /* 0598 */ WORD m_triggerType;
+    /* 05AE */ RESREF m_newArea;
+    /* 05B6 */ SCRIPTNAME m_newEntryPoint;
+    /* 05D6 */ DWORD m_dwFlags;
+    /* 05DA */ STRREF m_description;
+    /* 05E6 */ RESREF m_scriptRes;
+    /* 060E */ WORD m_trapDetectionDifficulty;
+    /* 0610 */ WORD m_trapDisarmingDifficulty;
+    /* 0612 */ WORD m_trapActivated;
+    /* 0614 */ WORD m_trapDetected;
+    /* 0616 */ CPoint m_posTrapOrigin;
+    /* 061E */ CResRef m_keyType;
     /* 0626 */ SHORT m_drawPoly;
 };
 
