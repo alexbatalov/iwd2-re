@@ -131,6 +131,24 @@ void CAIAction::Decode(CGameAIBase* caller)
     m_acteeID2.Decode(caller);
 }
 
+// 0x405090
+CAIAction& CAIAction::operator=(const CAIAction& other)
+{
+    m_actionID = other.m_actionID;
+    m_specificID = other.m_specificID;
+    m_actorID.Set(other.m_actorID);
+    m_acteeID.Set(other.m_acteeID);
+    m_acteeID2.Set(other.m_acteeID2);
+    m_dest = other.m_dest;
+    m_specificID2 = other.m_specificID2;
+    m_specificID3 = other.m_specificID3;
+    m_string1 = other.m_string1;
+    m_string2 = other.m_string2;
+    m_internalFlags = other.m_internalFlags;
+
+    return *this;
+}
+
 // 0x452B70
 const CPoint& CAIAction::GetDest() const
 {

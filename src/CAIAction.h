@@ -29,6 +29,7 @@ public:
     BOOL OfType(SHORT type) const;
     void Read(CString sData);
     void Decode(CGameAIBase* caller);
+    CAIAction& operator=(const CAIAction& other);
 
     const CPoint& GetDest() const;
     SHORT GetActionID() const;
