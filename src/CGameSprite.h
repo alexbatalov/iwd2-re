@@ -9,6 +9,7 @@
 #include "CGameEffectList.h"
 #include "CGameSpriteEquipment.h"
 #include "CGameSpriteSpells.h"
+#include "CGameStatsSprite.h"
 #include "CMarker.h"
 #include "CResRef.h"
 #include "CSound.h"
@@ -384,6 +385,7 @@ public:
     /* 4BAC */ int field_4BAC;
     /* 4BB0 */ int field_4BB0;
     /* 4BB4 */ unsigned char field_4BB4;
+    /* 4BB6 */ CGameStatsSprite m_cGameStats;
     /* 4C52 */ BOOLEAN m_bGlobal;
     /* 4C53 */ unsigned char field_4C53;
     /* 4C54 */ int field_4C54;

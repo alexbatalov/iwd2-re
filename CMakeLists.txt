@@ -140,6 +140,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CGameSpy.h"
     "src/CGameStatic.cpp"
     "src/CGameStatic.h"
+    "src/CGameStatsSprite.cpp"
+    "src/CGameStatsSprite.h"
     "src/CGameText.cpp"
     "src/CGameText.h"
     "src/CGameTiledObject.cpp"
