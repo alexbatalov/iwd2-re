@@ -11,12 +11,14 @@ public:
     /* 0030 */ void DebugDump(const CString& message, BOOLEAN bEchoToScreen) override;
     /* 0034 */ BOOL IsOver(const CPoint& pt) override;
     /* 0048 */ void RemoveFromArea() override;
+    /* 0058 */ void SetCursor(int nToolTip) override;
     /* 00B8 */ virtual BOOL IsOverActivate(const CPoint& pt);
 
     void SetDrawPoly(SHORT time);
 
     /* 0598 */ WORD m_triggerType;
     /* 059A */ CRect m_rBounding;
+    /* 05AA */ DWORD m_cursorType;
     /* 05AE */ RESREF m_newArea;
     /* 05B6 */ SCRIPTNAME m_newEntryPoint;
     /* 05D6 */ DWORD m_dwFlags;
