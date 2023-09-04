@@ -6,6 +6,30 @@
 #define CSPELLLIST_MAX_LEVELS 9
 #define CSPELLLIST_NUM_CLASSES 7
 
+class CAreaFileStaticObject {
+public:
+    CAreaFileStaticObject()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    /* 0000 */ SCRIPTNAME m_scriptName;
+    /* 0020 */ WORD m_posX;
+    /* 0022 */ WORD m_posY;
+    /* 0024 */ DWORD m_timeOfDayVisible;
+    /* 0028 */ RESREF m_resRef;
+    /* 0030 */ DWORD m_nSequence;
+    /* 0034 */ DWORD m_dwFlags;
+    /* 0038 */ short m_height;
+    /* 003A */ WORD m_translucency;
+    /* 003C */ WORD m_startFrameRange;
+    /* 003E */ BYTE m_probability;
+    /* 003F */ BYTE m_period;
+    /* 0040 */ RESREF m_paletteResRef;
+    /* 0048 */ WORD m_sizeX;
+    /* 004A */ WORD m_sizeY;
+};
+
 class CCreatureFileHeader {
 public:
     CCreatureFileHeader()

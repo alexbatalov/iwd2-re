@@ -305,3 +305,9 @@ BOOLEAN CTimerWorld::IsDusk()
     ULONG time = m_gameTime % TIMESCALE_MSEC_PER_DAY;
     return time >= TIME_DUSK && time < TIME_NIGHT;
 }
+
+// 0x45B500
+BYTE CTimerWorld::GetCurrentHour()
+{
+    return m_gameTime % TIMESCALE_MSEC_PER_DAY / TIMESCALE_MSEC_PER_SEC / TIMESCALE_SEC_PER_MIN / TIMESCALE_MIN_PER_HOUR;
+}

@@ -345,8 +345,8 @@ public:
     /* 4B1C */ CMoveList m_cLimboList;
     /* 4B38 */ int field_4B38;
     /* 4B3C */ LONG m_nAIIndex;
-    /* 4B40 */ int field_4B40;
-    /* 4B44 */ int field_4B44;
+    /* 4B40 */ LONG m_nTimeStop;
+    /* 4B44 */ LONG m_nTimeStopCaster;
     /* 4B48 */ CStore* m_aServerStore[12];
     /* 4B78 */ BYTE m_nServerStoreDemands[12];
     /* 4B84 */ CString field_4B84;

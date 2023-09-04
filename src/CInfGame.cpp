@@ -847,8 +847,8 @@ void CInfGame::InitGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlac
     pAIGame->SetDefaultScript(pScript);
 
     m_nAIIndex = pAIGame->m_id;
-    field_4B40 = 0;
-    field_4B44 = -1;
+    m_nTimeStop = 0;
+    m_nTimeStopCaster = -1;
 
     if (!g_pChitin->cDimm.DirectoryRemoveFiles(m_sTempDir)) {
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp

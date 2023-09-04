@@ -53,6 +53,7 @@ public:
     BOOLEAN IsNight();
     BOOLEAN IsDawn();
     BOOLEAN IsDusk();
+    BYTE GetCurrentHour();
 
     ULONG m_gameTime;
     BOOLEAN m_active;
