@@ -4,6 +4,7 @@
 #include "CGameArea.h"
 #include "CInfGame.h"
 #include "CScreenWorld.h"
+#include "CUtil.h"
 #include "CVidPoly.h"
 
 // 0x4CD630
@@ -234,6 +235,24 @@ BOOL CGameTrigger::IsOverActivate(const CPoint& pt)
     }
 
     return TRUE;
+}
+
+// 0x4CFC20
+void CGameTrigger::RemoveFromArea()
+{
+    CGameObject::RemoveFromArea();
+
+    BYTE rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->Delete(m_id,
+        CGameObjectArray::THREAD_ASYNCH,
+        NULL,
+        INFINITE);
+    if (rc != CGameObjectArray::SUCCESS) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameTrigger.cpp
+        // __LINE__: 111
+        UTIL_ASSERT(FALSE);
+    }
+
+    delete this;
 }
 
 // 0x4D0230
