@@ -23,6 +23,7 @@ public:
     static const CAIAction NULL_ACTION;
 
     CAIAction();
+    CAIAction(SHORT actionID, const CAIObjectType& actee, LONG specificID, LONG specificID2, LONG specificID3);
     CAIAction(const CAIAction& action);
     ~CAIAction();
     BOOL OfType(SHORT type) const;

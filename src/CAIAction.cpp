@@ -48,7 +48,7 @@ CAIAction::CAIAction()
     m_internalFlags = 0;
 }
 
-// NOTE: Inlined.
+// 0x409090
 CAIAction::CAIAction(const CAIAction& action)
 {
     m_actionID = action.m_actionID;
@@ -62,6 +62,24 @@ CAIAction::CAIAction(const CAIAction& action)
     m_string2 = action.m_string2;
     m_dest = action.m_dest;
     m_internalFlags = action.m_internalFlags;
+}
+
+// 0x408E80
+CAIAction::CAIAction(SHORT actionID, const CAIObjectType& actee, LONG specificID, LONG specificID2, LONG specificID3)
+{
+    // NOTE: For unknown reason it creates and immediately destroys `CAIAction`
+    // instance. This instance and its properties are not used.
+    // FIXME: Remove.
+    if (1) {
+        CAIAction action;
+    }
+
+    m_actionID = actionID;
+    m_acteeID = actee;
+    m_specificID = specificID;
+    m_specificID2 = specificID2;
+    m_specificID3 = specificID3;
+    m_internalFlags = 0;
 }
 
 // 0x403B40
