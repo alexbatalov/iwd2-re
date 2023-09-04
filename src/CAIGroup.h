@@ -80,6 +80,7 @@ public:
 
     void SetGroupTriggerId(LONG triggerId);
     void RemoveFromSearch(CSearchBitmap* search);
+    void AddToSearch(CSearchBitmap* search);
     LONG GetGroupLeader();
     LONG* GetGroupList();
     void Add(CGameSprite* pSprite);

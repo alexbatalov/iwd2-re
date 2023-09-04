@@ -485,6 +485,43 @@ void CAIGroup::RemoveFromSearch(CSearchBitmap* search)
     }
 }
 
+// 0x405F60
+void CAIGroup::AddToSearch(CSearchBitmap* search)
+{
+    POSITION pos = m_memberList.GetHeadPosition();
+    while (pos != NULL) {
+        LONG memberId = reinterpret_cast<LONG>(m_memberList.GetNext(pos));
+
+        CGameSprite* pSprite;
+
+        BYTE rc;
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(memberId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            CPoint pos = pSprite->GetPos();
+            BYTE nPersonalSpace = pSprite->GetAnimation()->GetPersonalSpace();
+            BYTE nEnemyAlly = pSprite->GetAIType().m_nEnemyAlly;
+
+            pos.x /= CPathSearch::GRID_SQUARE_SIZEX;
+            pos.y /= CPathSearch::GRID_SQUARE_SIZEY;
+            search->AddObject(pos,
+                nEnemyAlly,
+                nPersonalSpace,
+                pSprite->field_54A8,
+                pSprite->field_7430);
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(memberId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+}
+
 // 0x4060C0
 LONG CAIGroup::GetGroupLeader()
 {

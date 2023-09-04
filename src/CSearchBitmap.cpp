@@ -32,6 +32,12 @@ LONG CSearchRequest::MAXNODESBACK = 1000;
 
 // -----------------------------------------------------------------------------
 
+// 0x547E60
+void CSearchBitmap::AddObject(const CPoint& point, BYTE sourceSide, BYTE personalSpaceRange, int a4, unsigned char& a5)
+{
+    // TODO: Incomplete.
+}
+
 // 0x548020
 void CSearchBitmap::RemoveObject(const CPoint& point, BYTE sourceSide, BYTE personalSpaceRange, int a4, unsigned char& a5)
 {
