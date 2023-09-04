@@ -17,6 +17,21 @@ void CGameTrigger::AIUpdate()
     ProcessAI();
 }
 
+// 0x4CE180
+BOOLEAN CGameTrigger::CompressTime(DWORD deltaTime)
+{
+    if (m_triggerType == 0) {
+        // NOTE: Unsigned compare.
+        if (deltaTime > static_cast<DWORD>(m_drawPoly)) {
+            m_drawPoly = 0;
+        } else {
+            m_drawPoly = static_cast<SHORT>(m_drawPoly - deltaTime);
+        }
+    }
+
+    return TRUE;
+}
+
 // 0x4CE1C0
 void CGameTrigger::DebugDump(const CString& message, BOOLEAN bEchoToScreen)
 {
