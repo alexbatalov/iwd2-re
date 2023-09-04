@@ -39,6 +39,9 @@ public:
     LONG GetSpecifics3() const;
     CString GetString1() const;
 
+    void SetString2(CString sText);
+    void SetString1(CString sText);
+
     SHORT m_actionID;
     CAIObjectType m_actorID;
     CAIObjectType m_acteeID;

@@ -166,3 +166,19 @@ CString CAIAction::GetString1() const
 {
     return m_string1;
 }
+
+// FIXME: `str` should be reference.
+//
+// 0x41CD10
+void CAIAction::SetString2(CString str)
+{
+    m_string2 = str;
+}
+
+// FIXME: `str` should be reference.
+//
+// 0x41CD60
+void CAIAction::SetString1(CString str)
+{
+    m_string1 = str;
+}
