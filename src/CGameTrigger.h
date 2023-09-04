@@ -7,6 +7,7 @@
 class CGameTrigger : public CGameAIBase {
 public:
     /* 000C */ void AIUpdate() override;
+    /* 001C */ CPoint& GetPos() override;
     /* 002C */ BOOLEAN CompressTime(DWORD deltaTime) override;
     /* 0030 */ void DebugDump(const CString& message, BOOLEAN bEchoToScreen) override;
     /* 0034 */ BOOL IsOver(const CPoint& pt) override;
@@ -33,6 +34,7 @@ public:
     /* 0616 */ CPoint m_posTrapOrigin;
     /* 061E */ CResRef m_keyType;
     /* 0626 */ SHORT m_drawPoly;
+    /* 0628 */ CPoint field_628;
 };
 
 #endif /* CGAMETRIGGER_H_ */

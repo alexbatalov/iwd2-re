@@ -363,3 +363,9 @@ void CGameTrigger::SetDrawPoly(SHORT time)
     }
     m_drawPoly = time;
 }
+
+// 0x4D02A0
+CPoint& CGameTrigger::GetPos()
+{
+    return (m_dwFlags & 0x200) != 0 ? field_628 : m_pos;
+}
