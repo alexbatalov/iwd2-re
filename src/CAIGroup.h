@@ -89,6 +89,7 @@ public:
     BOOL IsPartyLeader();
     void Sort();
     void GroupCancelMove();
+    void ClearActions();
     BOOL InList(LONG characterId);
 
     BYTE GetCount();
