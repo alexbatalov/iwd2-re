@@ -212,6 +212,20 @@ BOOL CGameTrigger::IsOver(const CPoint& pt)
     return TRUE;
 }
 
+// 0x4CECB0
+BOOL CGameTrigger::IsOverActivate(const CPoint& pt)
+{
+    if (m_rBounding.PtInRect(pt)) {
+        return FALSE;
+    }
+
+    if (m_pPolygon != NULL) {
+        return CVidPoly::IsPtInPoly(m_pPolygon, m_nPolygon, pt);
+    }
+
+    return TRUE;
+}
+
 // 0x4D0230
 void CGameTrigger::SetDrawPoly(SHORT time)
 {
