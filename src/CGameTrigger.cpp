@@ -6,6 +6,16 @@
 #include "CScreenWorld.h"
 #include "CVidPoly.h"
 
+// 0x4CD630
+void CGameTrigger::AIUpdate()
+{
+    if (m_drawPoly > 0) {
+        m_drawPoly--;
+    }
+
+    ProcessAI();
+}
+
 // 0x4CE1C0
 void CGameTrigger::DebugDump(const CString& message, BOOLEAN bEchoToScreen)
 {
