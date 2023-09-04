@@ -17,6 +17,7 @@
 #define CAIGROUP_FORMATION_FOLLOW 0
 #define CAIGROUP_FORMATION_MAX_SIZE 12
 
+class CAITrigger;
 class CGameSprite;
 class CSearchBitmap;
 
@@ -90,6 +91,7 @@ public:
     void Sort();
     void GroupCancelMove();
     void ClearActions();
+    void AddTrigger(CAITrigger& trigger);
     BOOL InList(LONG characterId);
 
     BYTE GetCount();

@@ -1,5 +1,6 @@
 #include "CAIGroup.h"
 
+#include "CAITrigger.h"
 #include "CBaldurChitin.h"
 #include "CGameObjectArray.h"
 #include "CGameSprite.h"
@@ -708,6 +709,36 @@ void CAIGroup::ClearActions()
             g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
 
             g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(memberId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+}
+
+// 0x4091B0
+void CAIGroup::AddTrigger(CAITrigger& trigger)
+{
+    POSITION pos = m_memberList.GetHeadPosition();
+    while (pos != NULL) {
+        LONG memberId = reinterpret_cast<LONG>(m_memberList.GetNext(pos));
+
+        CGameSprite* pSprite;
+
+        BYTE rc;
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(memberId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            CMessageSetTrigger* pMessage = new CMessageSetTrigger(trigger,
+                memberId,
+                memberId);
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(memberId,
                 CGameObjectArray::THREAD_ASYNCH,
                 INFINITE);
         }
