@@ -235,11 +235,11 @@ void CGameDoor::SetCursor(int nToolTip)
 
                     if (rc == CGameObjectArray::SUCCESS) {
                         if (nNewCursor == 26) {
-                            if (pSprite->GetBaseStats()->m_skills[10] == 0) {
+                            if (pSprite->GetBaseStats()->m_skills[CGAMESPRITE_SKILL_OPEN_LOCK] == 0) {
                                 g_pBaldurChitin->GetObjectCursor()->SetGreyScale(TRUE);
                             }
                         } else {
-                            if (pSprite->GetBaseStats()->m_skills[5] == 0) {
+                            if (pSprite->GetBaseStats()->m_skills[CGAMESPRITE_SKILL_DISABLE_DEVICE] == 0) {
                                 g_pBaldurChitin->GetObjectCursor()->SetGreyScale(TRUE);
                             }
                         }

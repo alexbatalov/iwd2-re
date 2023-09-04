@@ -3681,7 +3681,7 @@ void CScreenCreateChar::StartCreateChar(INT nCharacterSlot, INT nEngineState)
     pSprite->GetBaseStats()->m_xp = 0;
     pSprite->GetBaseStats()->field_3E = 10;
     pSprite->GetBaseStats()->m_numberOfAttacksBase = 1;
-    pSprite->GetBaseStats()->m_skills[15] = 0;
+    pSprite->GetBaseStats()->m_skills[CGAMESPRITE_SKILL_WILDERNESS_LORE] = 0;
     pSprite->GetBaseStats()->m_morale = 10;
     pSprite->GetBaseStats()->m_moraleBreak = 0;
     pSprite->GetBaseStats()->m_moraleRecoveryTime = 1;

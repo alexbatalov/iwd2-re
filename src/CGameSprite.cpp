@@ -2251,7 +2251,7 @@ BOOL CGameSprite::sub_763200(UINT nFeatNumber, INT a2)
         return nDEX >= 13 && m_baseStats.m_attackBase >= 2;
     case CGAMESPRITE_FEAT_ENVENOM_WEAPON:
         return m_baseStats.m_rogueLevel > 0
-            && m_baseStats.m_skills[0] >= 8;
+            && m_baseStats.m_skills[CGAMESPRITE_SKILL_ALCHEMY] >= 8;
     case CGAMESPRITE_FEAT_EXOTIC_BASTARD:
         return GetFeatValue(CGAMESPRITE_FEAT_EXOTIC_BASTARD) != 2
             || m_baseStats.m_fighterLevel >= 4;
@@ -2320,7 +2320,8 @@ BOOL CGameSprite::sub_763200(UINT nFeatNumber, INT a2)
                 }
             }
 
-            return nWeaponSpecializations >= 2 && m_baseStats.m_skills[3] >= 4;
+            return nWeaponSpecializations >= 2
+                && m_baseStats.m_skills[CGAMESPRITE_SKILL_CONCENTRATION] >= 4;
         }
     case CGAMESPRITE_FEAT_MERCANTILE_BACKGROUND:
         // TODO: Incomplete.

@@ -324,7 +324,7 @@ void CGameTrigger::SetCursor(int nToolTip)
                     } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
                     if (rc == CGameObjectArray::SUCCESS) {
-                        if (pSprite->GetBaseStats()->m_skills[5] == 0) {
+                        if (pSprite->GetBaseStats()->m_skills[CGAMESPRITE_SKILL_DISABLE_DEVICE] == 0) {
                             g_pBaldurChitin->GetObjectCursor()->SetGreyScale(TRUE);
                         }
 
