@@ -183,6 +183,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CNetworkWindow.h"
     "src/CParticle.cpp"
     "src/CParticle.h"
+    "src/CPathSearch.cpp"
+    "src/CPathSearch.h"
     "src/CProgressBar.cpp"
     "src/CProgressBar.h"
     "src/CRes.cpp"

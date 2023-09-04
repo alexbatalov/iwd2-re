@@ -133,6 +133,16 @@ const CRect& CGameAnimation::GetEllipseRect()
 }
 
 // NOTE: Inlined.
+BYTE CGameAnimation::GetPersonalSpace()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2093
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->GetPersonalSpace();
+}
+
+// NOTE: Inlined.
 BOOL CGameAnimation::IsEndOfSequence()
 {
     // __FILE__: .\Include\ObjAnimation.h

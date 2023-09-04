@@ -18,6 +18,7 @@
 #define CAIGROUP_FORMATION_MAX_SIZE 12
 
 class CGameSprite;
+class CSearchBitmap;
 
 class CAIGroup {
 public:
@@ -78,6 +79,7 @@ public:
     CAIGroup(SHORT id = -1);
 
     void SetGroupTriggerId(LONG triggerId);
+    void RemoveFromSearch(CSearchBitmap* search);
     LONG GetGroupLeader();
     LONG* GetGroupList();
     void Add(CGameSprite* pSprite);

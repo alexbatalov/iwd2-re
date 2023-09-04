@@ -4,6 +4,8 @@
 #include "CGameObjectArray.h"
 #include "CGameSprite.h"
 #include "CInfGame.h"
+#include "CPathSearch.h"
+#include "CSearchBitmap.h"
 
 // 0x8479E4
 const LONG CAIGroup::OFFSET_MULTIPLIER = 1000;
@@ -438,6 +440,43 @@ void CAIGroup::SetGroupTriggerId(LONG triggerId)
 
         if (rc == CGameObjectArray::SUCCESS) {
             pSprite->m_triggerId = triggerId;
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(memberId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+}
+
+// 0x405E00
+void CAIGroup::RemoveFromSearch(CSearchBitmap* search)
+{
+    POSITION pos = m_memberList.GetHeadPosition();
+    while (pos != NULL) {
+        LONG memberId = reinterpret_cast<LONG>(m_memberList.GetNext(pos));
+
+        CGameSprite* pSprite;
+
+        BYTE rc;
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(memberId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            CPoint pos = pSprite->GetPos();
+            BYTE nPersonalSpace = pSprite->GetAnimation()->GetPersonalSpace();
+            BYTE nEnemyAlly = pSprite->GetAIType().m_nEnemyAlly;
+
+            pos.x /= CPathSearch::GRID_SQUARE_SIZEX;
+            pos.y /= CPathSearch::GRID_SQUARE_SIZEY;
+            search->RemoveObject(pos,
+                nEnemyAlly,
+                nPersonalSpace,
+                pSprite->field_54A8,
+                pSprite->field_7430);
 
             g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(memberId,
                 CGameObjectArray::THREAD_ASYNCH,

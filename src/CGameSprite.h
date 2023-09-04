@@ -602,6 +602,7 @@ public:
     /* 72D6 */ int field_72D6;
     /* 72DE */ int field_72DE;
     /* 72E6 */ int field_72E6;
+    /* 7430 */ unsigned char field_7430;
     /* 752E */ BOOL m_bSendSpriteUpdate;
     /* 7532 */ int field_7532;
     /* 7536 */ int field_7536;

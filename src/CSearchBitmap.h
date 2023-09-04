@@ -5,6 +5,7 @@
 
 class CSearchBitmap {
 public:
+    void RemoveObject(const CPoint& point, BYTE sourceSide, BYTE personalSpaceRange, int a4, unsigned char& a5);
     void AddDoor(CPoint* pPoints, USHORT nPoints, BOOL bOpaque);
     void RemoveDoor(CPoint* pPoints, USHORT nPoints);
 
