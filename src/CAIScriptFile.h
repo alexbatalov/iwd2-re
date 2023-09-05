@@ -4,6 +4,7 @@
 #include "mfc.h"
 
 #include "CAIIdList.h"
+#include "CAIObjectType.h"
 
 class CAICondition;
 class CAIResponse;
@@ -26,6 +27,7 @@ public:
     BYTE DecodeSpecialCase(CString sName);
     LONG ParseInt(CString sID, CString sListName);
     void ParseError(CString sError);
+    CAIObjectType ParseObjectAtomic(CString sLine);
     CString ReadToChar(CString sLine, char c);
     CString ReadAfterChar(CString sLine, char c);
     BOOL LoadAllLists(CString a1);

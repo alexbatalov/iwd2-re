@@ -152,6 +152,17 @@ void CAIScriptFile::ParseError(CString sError)
     m_errors += sError;
 }
 
+// 0x41DE10
+CAIObjectType CAIScriptFile::ParseObjectAtomic(CString sLine)
+{
+    CAIObjectType type;
+
+    // NOTE: Original code is different.
+    type.m_SpecialCase[0] = DecodeSpecialCase(sLine);
+
+    return type;
+}
+
 // FIXME: `CAIUtil::ReadToChar` is better (does not use `operator+` every
 // character).
 //
