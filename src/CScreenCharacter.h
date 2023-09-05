@@ -10,6 +10,7 @@
 #define CSCREENCHARACTER_VIRTUAL_KEYS 90
 #define CSCREENCHARACTER_ERROR_BUTTONS 3
 
+class CDerivedStats;
 class CGameSprite;
 class CUIPanel;
 
@@ -42,6 +43,7 @@ public:
     /* 00E0 */ void OnPortraitLClick(DWORD nPortrait) override;
     /* 00F0 */ void OnRestButtonClick() override;
 
+    void UpdateSavingThrows(CUIControlTextDisplay* pText, CDerivedStats& DStats);
     CString GetCurrentPortrait(CGameSprite* pSprite);
     void ResetAppearancePanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateAppearancePanel(CGameSprite* pSprite);

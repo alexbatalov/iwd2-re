@@ -235,6 +235,42 @@ void CScreenCharacter::OnPortraitLClick(DWORD nPortrait)
     }
 }
 
+// 0x5D79B0
+void CScreenCharacter::UpdateSavingThrows(CUIControlTextDisplay* pText, CDerivedStats& DStats)
+{
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    UpdateTextForceColor(pText,
+        RGB(200, 200, 0),
+        "%s",
+        FetchString(17379)); // "Saving Throws"
+
+    UpdateText(pText,
+        "%s: %+d",
+        FetchString(17380), // "Fortitude"
+        DStats.m_nSaveVSFortitude);
+
+    INT nTrapSenseBonus = ruleTables.GetTrapSenseBonus(DStats);
+    if (nTrapSenseBonus != 0) {
+        UpdateText(pText,
+            "%s: %+d (%s: %d)",
+            FetchString(17381), // "Reflex"
+            DStats.m_nSaveVSReflex,
+            FetchString(39802), // "Traps"
+            nTrapSenseBonus);
+    } else {
+        UpdateText(pText,
+            "%s: %+d",
+            FetchString(17381), // "Reflex"
+            DStats.m_nSaveVSReflex);
+    }
+
+    UpdateText(pText,
+        "%s: %+d",
+        FetchString(17382), // "Will"
+        DStats.m_nSaveVSWill);
+}
+
 // 0x5D7B80
 CString CScreenCharacter::GetCurrentPortrait(CGameSprite* pSprite)
 {
