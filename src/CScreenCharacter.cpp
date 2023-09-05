@@ -542,6 +542,32 @@ void CScreenCharacter::UpdateCharacterList(CUIPanel* pPanel, DWORD dwTextId, INT
     pText->SetTopString(pText->m_plstStrings->FindIndex(0));
 }
 
+// FIXME: `sName` should be reference.
+//
+// 0x5D87F0
+BOOLEAN CScreenCharacter::IsNameOnExportList(CString sName)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 2472
+    UTIL_ASSERT(m_pCharacters != NULL);
+
+    CString sExistingName;
+
+    POSITION pos = m_pCharacters->GetHeadPosition();
+    while (pos != NULL) {
+        // FIXME: Unnecessary copy.
+        sExistingName = m_pCharacters->GetAt(pos);
+
+        if (sExistingName == sName) {
+            return TRUE;
+        }
+
+        m_pCharacters->GetNext(pos);
+    }
+
+    return FALSE;
+}
+
 // 0x5D8190
 void CScreenCharacter::UpdatePortraitList(CUIPanel* pPanel, DWORD dwControlId, INT nSelected)
 {
