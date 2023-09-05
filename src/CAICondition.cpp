@@ -40,11 +40,42 @@ void CAICondition::Add(const CAITrigger& trigger)
 }
 
 // 0x404150
-BOOL CAICondition::Hold(CTypedPtrList<CPtrList, CAITrigger*>& triggerList, CGameAIBase* caller)
+BOOLEAN CAICondition::Hold(CTypedPtrList<CPtrList, CAITrigger*>& triggerList, CGameAIBase* caller)
 {
-    // TODO: Incomplete.
+    LONG nOrCounter = 0;
+    BOOLEAN bFound = FALSE;
 
-    return FALSE;
+    POSITION pos = m_triggerList.GetHeadPosition();
+    if (pos == NULL) {
+        return TRUE;
+    }
+
+    while (pos != NULL) {
+        if (nOrCounter <= 0) {
+            bFound = FALSE;
+        }
+
+        CAITrigger* node = m_triggerList.GetNext(pos);
+        if (node->m_triggerID == CAITRIGGER_OR) {
+            nOrCounter = node->m_specificID;
+        } else {
+            nOrCounter--;
+        }
+
+        bFound |= TriggerHolds(node, triggerList, caller);
+        if (bFound) {
+            while (nOrCounter > 0 && pos != NULL) {
+                m_triggerList.GetNext(pos);
+                nOrCounter--;
+            }
+        } else {
+            if (nOrCounter <= 0) {
+                break;
+            }
+        }
+    }
+
+    return bFound;
 }
 
 // 0x4041D0

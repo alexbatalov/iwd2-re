@@ -12,7 +12,7 @@ public:
     ~CAICondition();
     void Set(const CAICondition& condition);
     void Add(const CAITrigger& trigger);
-    BOOL Hold(CTypedPtrList<CPtrList, CAITrigger*>& triggerList, CGameAIBase* caller);
+    BOOLEAN Hold(CTypedPtrList<CPtrList, CAITrigger*>& triggerList, CGameAIBase* caller);
     BOOL TriggerHolds(CAITrigger* pTrigger, CTypedPtrList<CPtrList, CAITrigger*>& triggerList, CGameAIBase* caller);
     void Read(CString sData);
 
