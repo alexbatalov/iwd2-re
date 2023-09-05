@@ -1732,7 +1732,16 @@ void CGameSprite::ClearStoredPaths()
 // 0x7332D0
 void CGameSprite::ClearDialogActions()
 {
-    // TODO: Incomplete.
+    SHORT actionID = m_curAction.m_actionID;
+    if (actionID == 8
+        || actionID == 137
+        || actionID == 139
+        || actionID == 198) {
+        SetCurrAction(CAIAction::NULL_ACTION);
+
+        CMessageDropPath* pMessage = new CMessageDropPath(m_id, m_id);
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+    }
 }
 
 // 0x734550
