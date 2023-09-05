@@ -132,6 +132,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CGamePermission.h"
     "src/CGameSound.cpp"
     "src/CGameSound.h"
+    "src/CGameSpawning.cpp"
+    "src/CGameSpawning.h"
     "src/CGameSprite.cpp"
     "src/CGameSprite.h"
     "src/CGameSpriteEquipment.cpp"

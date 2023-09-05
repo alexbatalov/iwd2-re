@@ -6,6 +6,35 @@
 #define CSPELLLIST_MAX_LEVELS 9
 #define CSPELLLIST_NUM_CLASSES 7
 
+class CAreaFileRandomMonsterSpawningPoint {
+public:
+    CAreaFileRandomMonsterSpawningPoint()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    /* 0000 */ SCRIPTNAME m_scriptName;
+    /* 0020 */ WORD m_posX;
+    /* 0022 */ WORD m_posY;
+    /* 0024 */ RESREF m_randomCreature[10];
+    /* 0074 */ WORD m_randomCreatureNum;
+    /* 0076 */ WORD m_difficulty;
+    /* 0078 */ WORD m_spawningRate;
+    /* 007A */ WORD m_wFlags;
+    /* 007C */ DWORD m_lifeSpan;
+    /* 0080 */ WORD m_huntingRange;
+    /* 0082 */ WORD m_followRange;
+    /* 0084 */ WORD m_maxTypeNum;
+    /* 0086 */ WORD m_activated;
+    /* 0088 */ DWORD m_timeOfDayVisible;
+    /* 008C */ WORD m_probDay;
+    /* 008E */ WORD m_probNight;
+    /* 0090 */ DWORD m_frequency;
+    /* 0094 */ DWORD m_countdown;
+    /* 0098 */ BYTE m_weights[10];
+    /* 00A2 */ WORD m_notUsed[19];
+};
+
 class CAreaFileSoundObject {
 public:
     CAreaFileSoundObject()
