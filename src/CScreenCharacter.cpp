@@ -589,6 +589,58 @@ void CScreenCharacter::UpdatePortraitList(CUIPanel* pPanel, DWORD dwControlId, I
     pText->SetTopString(pText->m_plstStrings->FindIndex(0));
 }
 
+// 0x5D8300
+void CScreenCharacter::ResetCustomSoundsPanel(CUIPanel* pPanel, CGameSprite* pSprite)
+{
+    CString sSound;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 2137
+    UTIL_ASSERT(pGame != NULL);
+
+    m_pSounds = pGame->GetSounds();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 2146
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(45));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 2148
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+    pText->m_rgbHighlightColor = CBaldurChitin::TEXTDISPLAY_COLOR_HIGHLIGHT;
+    pText->field_A68 = 32767;
+
+    INT nIndex = 0;
+    POSITION pos = m_pSounds->GetHeadPosition();
+    while (pos != NULL) {
+        // FIXME: Unnecessary copy.
+        sSound = m_pSounds->GetAt(pos);
+        pText->DisplayString(CString(""),
+            sSound,
+            pText->m_rgbLabelColor,
+            pText->m_rgbTextColor,
+            nIndex,
+            FALSE,
+            TRUE);
+
+        m_pSounds->GetNext(pos);
+        nIndex++;
+    }
+
+    pos = pText->m_plstStrings->FindIndex(0);
+    pText->SetTopString(pos);
+
+    m_nCustomSoundSetIndex = -1;
+    m_nCustomSoundIndex = 3;
+
+    UpdateHelp(pPanel->m_nID, 8, 11315);
+}
+
 // 0x5DBA80
 void CScreenCharacter::TimerSynchronousUpdate()
 {

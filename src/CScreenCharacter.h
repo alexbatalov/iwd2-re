@@ -50,6 +50,7 @@ public:
     void ResetCustomPortraitsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateCustomPortraitsPanel(CGameSprite* pSprite);
     void UpdatePortraitList(CUIPanel* pPanel, DWORD dwControlId, INT nSelected);
+    void ResetCustomSoundsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void ResetClassPanel(CGameSprite* pSprite, int a2);
     void ResetExportPanel(CGameSprite* pSprite);
     void UpdateCharacterList(CUIPanel* pPanel, DWORD dwTextId, INT nSelected);
@@ -101,8 +102,11 @@ public:
     /* 0806 */ int field_806;
     /* 080A */ int field_80A;
     /* 080E */ CStringList* m_pPortraits;
+    /* 0812 */ INT m_nCustomSoundSetIndex;
+    /* 0816 */ INT m_nCustomSoundIndex;
     /* 0836 */ CResRef m_cResPortraitSmall;
     /* 083E */ CResRef m_cResPortraitLarge;
+    /* 084A */ CStringList* m_pSounds;
     /* 086E */ CVidFont m_preLoadFontRealms;
     /* 0D6E */ CVidFont m_preLoadFontStnSml;
     /* 126E */ CVidFont m_preLoadFontTool;
