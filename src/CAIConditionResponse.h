@@ -6,6 +6,7 @@
 
 class CAIConditionResponse {
 public:
+    CAIConditionResponse();
     CAIConditionResponse(const CAICondition& condition, const CAIResponseSet& responseSet);
     ~CAIConditionResponse();
 

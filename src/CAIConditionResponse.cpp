@@ -2,6 +2,11 @@
 
 #include "CAIUtil.h"
 
+// NOTE: Inlined.
+CAIConditionResponse::CAIConditionResponse()
+{
+}
+
 // 0x40F960
 CAIConditionResponse::CAIConditionResponse(const CAICondition& condition, const CAIResponseSet& responseSet)
 {

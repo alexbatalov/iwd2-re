@@ -3,9 +3,34 @@
 #include "CAIAction.h"
 #include "CAIConditionResponse.h"
 #include "CAITrigger.h"
+#include "CAIUtil.h"
 #include "CBaldurChitin.h"
 #include "CGameAIBase.h"
 #include "CInfGame.h"
+
+// NOTE: Inlined.
+CAIPlayerScript::CAIPlayerScript()
+{
+}
+
+// NOTE: Inlined.
+CAIPlayerScript::~CAIPlayerScript()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Inlined.
+CAINonPlayerScript::CAINonPlayerScript()
+{
+}
+
+// NOTE: Inlined.
+CAINonPlayerScript::~CAINonPlayerScript()
+{
+}
+
+// -----------------------------------------------------------------------------
 
 // NOTE: Inlined in `CAIScriptFile::CAIScriptFile`.
 CAIScript::CAIScript()
@@ -90,10 +115,89 @@ void CAIScript::Add(const CAICondition& condition, const CAIResponseSet& respons
     m_caList.AddTail(new CAIConditionResponse(condition, responseSet));
 }
 
+// FIXME: `cNewResRef` should be reference.
+//
 // 0x40F160
-void CAIScript::Read(CResRef cNewResRef, BOOL a2)
+void CAIScript::Read(CResRef cNewResRef, BOOL playerScript)
 {
-    // TODO: Incomplete.
+    // 0x8C8004
+    static DWORD counter;
+
+    POSITION pos = m_caList.GetHeadPosition();
+    while (pos != NULL) {
+        CAIConditionResponse* node = m_caList.GetNext(pos);
+        if (node != NULL) {
+            delete node;
+        }
+    }
+    m_caList.RemoveAll();
+
+    // NOTE: Unused.
+    CFile file;
+
+    m_cResRef = cNewResRef;
+
+    CString sText;
+
+    if (playerScript) {
+        // NOTE: Lots of inlined stuff from this point.
+        CAIPlayerScript cPScript;
+        cPScript.SetResRef(cNewResRef, TRUE, TRUE);
+
+        if (cPScript.GetRes() == NULL) {
+            return;
+        }
+
+        cPScript.GetRes()->Demand();
+        sText = cPScript.GetRes()->GetText();
+        cPScript.GetRes()->Release();
+    } else {
+        // NOTE: Lots of inlined stuff from this point.
+        CAINonPlayerScript cNPScript;
+        cNPScript.SetResRef(cNewResRef, TRUE, TRUE);
+
+        if (cNPScript.GetRes() != NULL) {
+            cNPScript.GetRes()->Demand();
+            sText = cNPScript.GetRes()->GetText();
+            cNPScript.GetRes()->Release();
+        } else {
+            CAIPlayerScript cPScript;
+            cPScript.SetResRef(cNewResRef, TRUE, TRUE);
+
+            if (cPScript.GetRes() == NULL) {
+                return;
+            }
+
+            cPScript.GetRes()->Demand();
+            sText = cPScript.GetRes()->GetText();
+            cPScript.GetRes()->Release();
+        }
+    }
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    BOOL bInLoad = pGame->m_bInLoadGame == TRUE || pGame->m_bInLoadArea == TRUE;
+
+    CString v1 = CAIUtil::ReadBetween(sText, CString("SC\n"));
+    CString v2 = CAIUtil::ReadBetween(v1, CString("CR\n"));
+
+    while (v2.GetLength() > 0) {
+        if (bInLoad == TRUE) {
+            if ((counter & 31) == 31) {
+                SleepEx(25, FALSE);
+            }
+            counter++;
+        }
+
+        CAIConditionResponse* pConditionResponse = new CAIConditionResponse();
+        pConditionResponse->Read(v2);
+
+        // NOTE: Uninline.
+        Add(pConditionResponse->m_condition, pConditionResponse->m_responseSet);
+
+        delete pConditionResponse;
+
+        v2 = CAIUtil::ReadBetween(v1, CString("CR\n"));
+    }
 }
 
 // NOTE: Inlined.

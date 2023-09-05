@@ -4,6 +4,7 @@
 #include "mfc.h"
 
 #include "CResRef.h"
+#include "CResText.h"
 
 class CAICondition;
 class CAIConditionResponse;
@@ -11,6 +12,18 @@ class CAIResponse;
 class CAIResponseSet;
 class CAITrigger;
 class CGameAIBase;
+
+class CAIPlayerScript : public CResHelper<CResText, 1017> {
+public:
+    CAIPlayerScript();
+    ~CAIPlayerScript();
+};
+
+class CAINonPlayerScript : public CResHelper<CResText, 1007> {
+public:
+    CAINonPlayerScript();
+    ~CAINonPlayerScript();
+};
 
 class CAIScript {
 public:
@@ -20,7 +33,7 @@ public:
 
     CAIResponse* Find(CTypedPtrList<CPtrList, CAITrigger*>& triggerList, CGameAIBase* caller);
     void Add(const CAICondition& condition, const CAIResponseSet& responseSet);
-    void Read(CResRef cNewResRef, BOOL a2);
+    void Read(CResRef cNewResRef, BOOL playerScript);
 
     BOOL IsEmpty();
 
