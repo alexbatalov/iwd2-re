@@ -9,6 +9,9 @@ const SHORT CAIAction::NO_ACTION = 0;
 // 0x8477C0
 const SHORT CAIAction::SPELL = 31;
 
+// 0x847824
+const SHORT CAIAction::LEADER = 88;
+
 // 0x847832
 const SHORT CAIAction::SPELLPOINT = 95;
 
@@ -45,6 +48,23 @@ CAIAction::CAIAction()
     m_specificID3 = 0;
     m_string1 = "";
     m_string2 = "";
+    m_internalFlags = 0;
+}
+
+// NOTE: Inlined.
+CAIAction::CAIAction(SHORT actionID, const CPoint& dest, LONG specificID, LONG specificID2)
+{
+    // NOTE: For unknown reason it creates and immediately destroys `CAIAction`
+    // instance. This instance and its properties are not used.
+    // FIXME: Remove.
+    if (1) {
+        CAIAction action;
+    }
+
+    m_actionID = actionID;
+    m_dest = dest;
+    m_specificID = specificID;
+    m_specificID2 = specificID2;
     m_internalFlags = 0;
 }
 

@@ -11,6 +11,7 @@ class CAIAction {
 public:
     static const SHORT NO_ACTION;
     static const SHORT SPELL;
+    static const SHORT LEADER;
     static const SHORT SPELLPOINT;
     static const SHORT FORCESPELL;
     static const SHORT FORCESPELLPOINT;
@@ -24,6 +25,7 @@ public:
 
     CAIAction();
     CAIAction(SHORT actionID, const CAIObjectType& actee, LONG specificID, LONG specificID2, LONG specificID3);
+    CAIAction(SHORT actionID, const CPoint& dest, LONG specificID, LONG specificID2);
     CAIAction(const CAIAction& action);
     ~CAIAction();
     BOOL OfType(SHORT type) const;

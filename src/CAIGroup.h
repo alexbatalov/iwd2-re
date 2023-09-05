@@ -93,6 +93,7 @@ public:
     void ClearActions();
     void AddTrigger(CAITrigger& trigger);
     BOOL InList(LONG characterId);
+    void FollowLeader(CPoint target, BOOL additive);
 
     BYTE GetCount();
 

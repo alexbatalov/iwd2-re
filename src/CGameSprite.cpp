@@ -63,6 +63,12 @@ const BYTE CGameSprite::DIR_SSE = 15;
 // 0x85BB48
 const BYTE CGameSprite::NUM_DIR = 16;
 
+// 0x85BB6E
+const BYTE CGameSprite::SOUND_SELECT_ACTION = 11;
+
+// 0x85BB9C
+const SHORT CGameSprite::USER_OVERRIDE_COUNT = 75;
+
 // 0x85BBB0
 const BYTE CGameSprite::SEQ_ATTACK = CGAMESPRITE_SEQ_ATTACK;
 
@@ -408,7 +414,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     m_curAction = CAIAction::NULL_ACTION;
     m_interrupt = FALSE;
     field_5608 = 0;
-    field_5628 = 0;
+    m_inFormation = FALSE;
     m_lastRGBColor = 0x8000;
     m_bVisibilityUpdated = TRUE;
     m_targetId = (int)CGameObjectArray::INVALID_INDEX;
@@ -431,7 +437,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     field_54C0 = 0;
     field_54C4 = (int)CGameObjectArray::INVALID_INDEX;
     m_followStart = 0;
-    field_5576 = 0;
+    m_userCommandPause = 0;
     field_5620 = 0;
     field_561E = 0;
     field_44A = 0;

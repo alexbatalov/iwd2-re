@@ -171,6 +171,10 @@ public:
     static const BYTE DIR_SSE;
     static const BYTE NUM_DIR;
 
+    static const BYTE SOUND_SELECT_ACTION;
+
+    static const SHORT USER_OVERRIDE_COUNT;
+
     static const BYTE SEQ_ATTACK;
     static const BYTE SEQ_AWAKE;
     static const BYTE SEQ_CAST;
@@ -506,7 +510,7 @@ public:
     /* 5526 */ CGameEffectList m_timedEffectList;
     /* 556E */ int field_556E;
     /* 5572 */ int field_5572;
-    /* 5576 */ short field_5576;
+    /* 5576 */ SHORT m_userCommandPause;
     /* 5578 */ SHORT m_nCommandPause;
     /* 557A */ int field_557A;
     /* 557E */ int field_557E;
@@ -540,7 +544,7 @@ public:
     /* 5620 */ short field_5620;
     /* 5622 */ short field_5622;
     /* 5624 */ int field_5624;
-    /* 5628 */ int field_5628;
+    /* 5628 */ BOOL m_inFormation;
     /* 562C */ int field_562C;
     /* 5630 */ unsigned char field_5630;
     /* 5632 */ int field_5632;
