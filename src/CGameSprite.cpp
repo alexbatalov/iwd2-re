@@ -1606,6 +1606,12 @@ void CGameSprite::GetNumInventoryPersonalSlots(INT& nUsedSlots, INT& nTotalSlots
     }
 }
 
+// 0x720310
+void CGameSprite::CheckSequence(BYTE& sequence)
+{
+    // TODO: Incomplete.
+}
+
 // 0x72DE60
 void CGameSprite::sub_72DE60()
 {

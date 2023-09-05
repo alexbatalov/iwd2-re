@@ -54,6 +54,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_LAST_ATTACKER;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_LAST_OBJECT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_NUM_TIMES_TALKED_TO;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_SET_SEQUENCE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_TRIGGER;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SPRITE_DEATH;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SPRITE_PETRIFY;
@@ -604,6 +605,17 @@ public:
     void Run() override;
 
     /* 000C */ LONG m_nNumTimesTalkedTo;
+};
+
+class CMessageSetSequence : public CMessage {
+public:
+    CMessageSetSequence(BYTE sequence, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ BYTE m_sequence;
 };
 
 class CMessageSetTrigger : public CMessage {

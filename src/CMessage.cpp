@@ -7,6 +7,7 @@
 #include "CGameDoor.h"
 #include "CGameEffect.h"
 #include "CGameSprite.h"
+#include "CGameStatic.h"
 #include "CGameTrigger.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
@@ -140,6 +141,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_LAST_ATTACKER = 46;
 
 // 0x84CF07
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_NUM_TIMES_TALKED_TO = 48;
+
+// 0x84CF09
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_SEQUENCE = 50;
 
 // 0x84CF0B
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_TRIGGER = 52;
@@ -2649,6 +2653,72 @@ void CMessageSetNumTimesTalkedTo::Run()
     if (rc == CGameObjectArray::SUCCESS) {
         if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
             pSprite->m_nNumberOfTimesTalkedTo = m_nNumTimesTalkedTo;
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x453530
+CMessageSetSequence::CMessageSetSequence(BYTE sequence, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_sequence = sequence;
+}
+
+// 0x453510
+SHORT CMessageSetSequence::GetCommType()
+{
+    return BROADCAST;
+}
+
+// 0x40A0E0
+BYTE CMessageSetSequence::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x453550
+BYTE CMessageSetSequence::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_SEQUENCE;
+}
+
+// 0x5088A0
+void CMessageSetSequence::Run()
+{
+    CGameObject* pObject;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pObject->GetObjectType() == CGameObject::TYPE_SPRITE) {
+            CGameSprite* pSprite = static_cast<CGameSprite*>(pObject);
+
+            // NOTE: Uninline.
+            if (pSprite->GetAnimation()->GetAnimationId() != 0xEC0B) {
+                pSprite->CheckSequence(m_sequence);
+            }
+
+            pSprite->SetSequence(m_sequence);
+
+            if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
+                || g_pChitin->cNetwork.m_idLocalPlayer == pSprite->m_remotePlayerID) {
+                pSprite->m_bSendSpriteUpdate = TRUE;
+            }
+        } else if (pObject->GetObjectType() == CGameObject::TYPE_STATIC) {
+            CGameStatic* pStatic = static_cast<CGameStatic*>(pObject);
+            pStatic->m_vidCell.SequenceSet(m_sequence);
         }
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
