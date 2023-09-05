@@ -613,7 +613,176 @@ BOOL CAIObjectType::OfType(const CAIObjectType& type, BOOL bCheckForNonSprites, 
         return FALSE;
     }
 
-    // TODO: Incomplete.
+    if (type.m_nEnemyAlly != EA_ALL
+        && type.m_nEnemyAlly != EA_ANYTHING
+        && m_nEnemyAlly != type.m_nEnemyAlly) {
+        if (type.m_nEnemyAlly == EA_ALLY) {
+            if (m_nEnemyAlly > EA_GOODCUTOFF) {
+                return FALSE;
+            }
+        } else if (type.m_nEnemyAlly == EA_ENEMY) {
+            if (m_nEnemyAlly < EA_EVILCUTOFF) {
+                return FALSE;
+            }
+        } else if ((type.m_nEnemyAlly != EA_GOODCUTOFF || m_nEnemyAlly > EA_GOODCUTOFF)
+            && (type.m_nEnemyAlly != EA_EVILCUTOFF || m_nEnemyAlly < EA_EVILCUTOFF)
+            && (type.m_nEnemyAlly != EA_NOTGOOD || m_nEnemyAlly < EA_NOTGOOD)
+            && (type.m_nEnemyAlly != EA_NOTEVIL || m_nEnemyAlly > EA_NOTEVIL)) {
+            return FALSE;
+        }
+    }
+
+    if (type.m_nGeneral != 0 && m_nGeneral != type.m_nGeneral) {
+        return FALSE;
+    }
+
+    if (type.m_nRace != 0 && m_nRace != type.m_nRace) {
+        return FALSE;
+    }
+
+    if (type.m_nSubRace != 0 && m_nSubRace != type.m_nSubRace) {
+        return FALSE;
+    }
+
+    if (type.m_nClass != 0 && m_nClass != type.m_nClass) {
+        switch (type.m_nClass) {
+        case CAIOBJECTTYPE_C_BARBARIAN:
+            if ((m_nClassMask & CLASSMASK_BARBARIAN) == 0) {
+                return FALSE;
+            }
+            break;
+        case CAIOBJECTTYPE_C_BARD:
+            if ((m_nClassMask & CLASSMASK_BARD) == 0) {
+                return FALSE;
+            }
+            break;
+        case CAIOBJECTTYPE_C_CLERIC:
+            if ((m_nClassMask & CLASSMASK_CLERIC) == 0) {
+                return FALSE;
+            }
+            break;
+        case CAIOBJECTTYPE_C_DRUID:
+            if ((m_nClassMask & CLASSMASK_DRUID) == 0) {
+                return FALSE;
+            }
+            break;
+        case CAIOBJECTTYPE_C_FIGHTER:
+            if ((m_nClassMask & CLASSMASK_FIGHTER) == 0) {
+                return FALSE;
+            }
+            break;
+        case CAIOBJECTTYPE_C_MONK:
+            if ((m_nClassMask & CLASSMASK_MONK) == 0) {
+                return FALSE;
+            }
+            break;
+        case CAIOBJECTTYPE_C_PALADIN:
+            if ((m_nClassMask & CLASSMASK_PALADIN) == 0) {
+                return FALSE;
+            }
+            break;
+        case CAIOBJECTTYPE_C_RANGER:
+            if ((m_nClassMask & CLASSMASK_RANGER) == 0) {
+                return FALSE;
+            }
+            break;
+        case CAIOBJECTTYPE_C_ROGUE:
+            if ((m_nClassMask & CLASSMASK_ROGUE) == 0) {
+                return FALSE;
+            }
+            break;
+        case CAIOBJECTTYPE_C_SORCERER:
+            if ((m_nClassMask & CLASSMASK_SORCERER) == 0) {
+                return FALSE;
+            }
+            break;
+        case CAIOBJECTTYPE_C_WIZARD:
+            if ((m_nClassMask & CLASSMASK_WIZARD) == 0) {
+                return FALSE;
+            }
+            break;
+        }
+    }
+
+    if (type.m_nClassMask != 0 && (type.m_nClassMask & m_nClassMask) == 0) {
+        return FALSE;
+    }
+
+    if (type.m_nSpecific != 0 && m_nSpecific != type.m_nSpecific) {
+        return FALSE;
+    }
+
+    if (type.m_nGender != 0 && m_nGender != type.m_nGender) {
+        return FALSE;
+    }
+
+    if (type.m_nAlignment != 0 && m_nAlignment != type.m_nAlignment) {
+        // TODO: Add constants.
+        switch (type.m_nAlignment) {
+        case 1:
+            if ((m_nAlignment & 0xF) != 1) {
+                return FALSE;
+            }
+            break;
+        case 2:
+            if ((m_nAlignment & 0xF) != 2) {
+                return FALSE;
+            }
+            break;
+        case 3:
+            if ((m_nAlignment & 0xF) != 3) {
+                return FALSE;
+            }
+            break;
+        case 16:
+            if ((m_nAlignment & 0xF0) != 16) {
+                return FALSE;
+            }
+            break;
+        case 32:
+            if ((m_nAlignment & 0xF0) != 32) {
+                return FALSE;
+            }
+            break;
+        case 48:
+            if ((m_nAlignment & 0xF0) != 48) {
+                return FALSE;
+            }
+            break;
+        }
+    }
+
+    if (type.m_nInstance != -1
+        && m_nInstance != type.m_nInstance
+        && m_sName != type.m_sName) {
+        return FALSE;
+    }
+
+    // NOTE: Original code is slightly different.
+    CString sThisName(m_sName);
+    CString sOtherName(type.m_sName);
+    CString sTemp;
+    int pos;
+
+    sTemp = "";
+    for (pos = 0; pos < sOtherName.GetLength(); pos++) {
+        if (sOtherName[pos] != ' ') {
+            sTemp += sOtherName[pos];
+        }
+    }
+    sOtherName = sTemp;
+
+    sTemp = "";
+    for (pos = 0; pos < sThisName.GetLength(); pos++) {
+        if (sThisName[pos] != ' ') {
+            sTemp += sThisName[pos];
+        }
+    }
+    sThisName = sTemp;
+
+    if (type.m_sName != "" && sThisName != sOtherName) {
+        return FALSE;
+    }
 
     return TRUE;
 }
