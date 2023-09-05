@@ -1750,6 +1750,26 @@ void CGameSprite::ClearDialogActions()
     }
 }
 
+// 0x7337D0
+void CGameSprite::ClearAI(BOOLEAN bSetSequence)
+{
+    ClearActions(FALSE);
+    ClearTriggers();
+    SetCurrAction(CAIAction::NULL_ACTION);
+
+    if (bSetSequence) {
+        if (m_nSequence != GetIdleSequence()
+            && m_nSequence != SEQ_TWITCH
+            && m_nSequence != SEQ_SLEEP
+            && m_nSequence != SEQ_DIE) {
+            if (GetVertListType() != LIST_FLIGHT) {
+                CMessage* pMessage = new CMessageSetSequence(GetIdleSequence(), m_id, m_id);
+                g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+            }
+        }
+    }
+}
+
 // 0x734550
 BOOL CGameSprite::HandleEffects()
 {
