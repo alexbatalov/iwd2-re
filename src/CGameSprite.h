@@ -310,6 +310,7 @@ public:
     BOOL Orderable(BOOL bIgnoreControl);
     DWORD GetSpecialization();
     BOOL ProcessEffectList();
+    void ClearStoredPaths();
     void ClearDialogActions();
     BOOL HandleEffects();
     SHORT LeaveParty();
@@ -477,6 +478,8 @@ public:
     /* 5380 */ SHORT m_nDirection;
     /* 5382 */ LONG* m_pPath;
     /* 5386 */ short m_nPath;
+    /* 5388 */ CTypedPtrList<CPtrList, int*> m_pPathTemp;
+    /* 53A4 */ CTypedPtrList<CPtrList, int*> m_nPathTemp;
     /* 53C0 */ short m_currPath;
     /* 53C2 */ BOOL m_walkBackwards;
     /* 53C6 */ int field_53C6;

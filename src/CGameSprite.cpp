@@ -1716,6 +1716,19 @@ BOOL CGameSprite::ProcessEffectList()
     return FALSE;
 }
 
+// 0x733290
+void CGameSprite::ClearStoredPaths()
+{
+    POSITION pos = m_pPathTemp.GetHeadPosition();
+    while (pos != NULL) {
+        int* node = m_pPathTemp.GetNext(pos);
+        delete node;
+    }
+
+    m_pPathTemp.RemoveAll();
+    m_nPathTemp.RemoveAll();
+}
+
 // 0x7332D0
 void CGameSprite::ClearDialogActions()
 {
