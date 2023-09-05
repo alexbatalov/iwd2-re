@@ -1,5 +1,7 @@
 #include "CAITrigger.h"
 
+#include "CAIUtil.h"
+
 // 0x847D98
 const SHORT CAITrigger::NO_TRIGGER = 0;
 
@@ -66,5 +68,21 @@ BOOL CAITrigger::OfType(const CAITrigger& trigger) const
 // 0x420EA0
 void CAITrigger::Read(const CString& sData)
 {
-    // TODO: Incomplete.
+    CString sMutableData(sData);
+
+    CString v1 = CAIUtil::ReadTo(sMutableData, CString("OB\n"), FALSE);
+
+    sscanf(v1,
+        "%d %ld %ld %ld %ld ",
+        &m_triggerID,
+        &m_specificID,
+        &m_flags,
+        &m_specific2,
+        &m_specific3);
+
+    m_string1 = CAIUtil::ReadBetween(sMutableData, CString('"'));
+    m_string2 = CAIUtil::ReadBetween(sMutableData, CString('"'));
+
+    CString v2 = CAIUtil::ReadBetween(sMutableData, CString("OB\n"));
+    m_triggerCause.Read(v2);
 }
