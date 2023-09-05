@@ -568,6 +568,36 @@ BOOLEAN CScreenCharacter::IsNameOnExportList(CString sName)
     return FALSE;
 }
 
+// 0x5D88E0
+void CScreenCharacter::ResetBiographyPanel(CGameSprite* pSprite)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(12);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 2658
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(0));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 2661
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+
+    CString sBiography;
+
+    sBiography = FetchString(pSprite->GetBaseStats()->m_biography);
+
+    pText->DisplayString(CString(""),
+        sBiography,
+        pText->m_rgbLabelColor,
+        pText->m_rgbTextColor,
+        -1,
+        FALSE,
+        TRUE);
+}
+
 // 0x5D8190
 void CScreenCharacter::UpdatePortraitList(CUIPanel* pPanel, DWORD dwControlId, INT nSelected)
 {

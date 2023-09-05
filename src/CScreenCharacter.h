@@ -55,6 +55,7 @@ public:
     void ResetExportPanel(CGameSprite* pSprite);
     void UpdateCharacterList(CUIPanel* pPanel, DWORD dwTextId, INT nSelected);
     BOOLEAN IsNameOnExportList(CString sName);
+    void ResetBiographyPanel(CGameSprite* pSprite);
     void EnableMainPanel(BOOL bEnable);
     STRREF GetRangerHatedRaceStrref(BYTE nRace);
     void UpdateMainPanel(BOOL bCharacterChanged);
