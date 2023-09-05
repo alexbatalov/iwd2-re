@@ -13,6 +13,7 @@ public:
     static const CString VALUE;
 
     CItem();
+    CItem(CResRef id, WORD useCount1, WORD useCount2, WORD useCount3, int wear, DWORD flags);
     ~CItem();
 
     CCreatureFileItem GetItemFile();

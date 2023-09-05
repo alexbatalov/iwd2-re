@@ -304,6 +304,7 @@ public:
     void AddKnownDivineSpells(const BYTE& nClass);
     void GetNumInventoryPersonalSlots(INT& nUsedSlots, INT& nTotalSlots);
     void CheckSequence(BYTE& sequence);
+    void SetMonkAbilities();
     void sub_72DE60();
     void sub_71E760(CDerivedStats& DStats, int a2);
     int sub_71F6E0();

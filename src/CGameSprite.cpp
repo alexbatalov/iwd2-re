@@ -1612,6 +1612,88 @@ void CGameSprite::CheckSequence(BYTE& sequence)
     // TODO: Incomplete.
 }
 
+// 0x723390
+void CGameSprite::SetMonkAbilities()
+{
+    if (GetAIType().IsClassValid(CAIObjectType::C_MONK)) {
+        if (m_equipment.m_selectedWeapon == 10) {
+            if (m_equipment.m_items[10] != NULL) {
+                m_equipment.m_items[10]->Unequip(this, 10, FALSE, FALSE);
+            }
+        }
+
+        if (m_equipment.m_items[10] != NULL) {
+            delete m_equipment.m_items[10];
+        }
+
+        CDerivedStats* pStats = &m_derivedStats;
+        if (!m_bAllowEffectListCall) {
+            pStats = &m_tempStats;
+        }
+
+        CItem* pItem;
+        switch (pStats->GetClassLevel(CAIOBJECTTYPE_C_MONK)) {
+        case 1:
+        case 2:
+        case 3:
+            pItem = new CItem(CResRef("00MFIST1"), 0, 0, 0, 0, 0);
+            break;
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+            pItem = new CItem(CResRef("00MFIST2"), 0, 0, 0, 0, 0);
+            break;
+        case 8:
+        case 9:
+            pItem = new CItem(CResRef("00MFIST3"), 0, 0, 0, 0, 0);
+            break;
+        case 10:
+        case 11:
+            pItem = new CItem(CResRef("00MFIST4"), 0, 0, 0, 0, 0);
+            break;
+        case 12:
+            pItem = new CItem(CResRef("00MFIST5"), 0, 0, 0, 0, 0);
+            break;
+        case 13:
+        case 14:
+        case 15:
+            pItem = new CItem(CResRef("00MFIST6"), 0, 0, 0, 0, 0);
+            break;
+        case 16:
+        case 17:
+        case 18:
+        case 19:
+        case 20:
+            pItem = new CItem(CResRef("00MFIST7"), 0, 0, 0, 0, 0);
+            break;
+        case 21:
+        case 22:
+        case 23:
+        case 24:
+        case 25:
+            pItem = new CItem(CResRef("00MFIST8"), 0, 0, 0, 0, 0);
+            break;
+        case 26:
+        case 27:
+        case 28:
+        case 29:
+        case 30:
+            pItem = new CItem(CResRef("00MFIST9"), 0, 0, 0, 0, 0);
+            break;
+        default:
+            pItem = new CItem(CResRef("00MFIST1"), 0, 0, 0, 0, 0);
+            break;
+        }
+
+        m_equipment.m_items[10] = pItem;
+
+        if (m_equipment.m_selectedWeapon == 10) {
+            m_equipment.m_items[10]->Equip(this, 10, FALSE);
+        }
+    }
+}
+
 // 0x72DE60
 void CGameSprite::sub_72DE60()
 {

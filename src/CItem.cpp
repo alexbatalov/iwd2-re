@@ -19,6 +19,44 @@ CItem::CItem()
     m_useCount3 = 0;
 }
 
+// FIXME: `id` should be reference.
+//
+// 0x4E7E90
+CItem::CItem(CResRef id, WORD useCount1, WORD useCount2, WORD useCount3, int wear, DWORD flags)
+{
+    CString sResRef;
+    id.CopyToString(sResRef);
+    sResRef.MakeUpper();
+
+    m_useCount1 = useCount1;
+    m_useCount2 = useCount2;
+    m_useCount3 = useCount3;
+
+    // TODO: Incomplete.
+
+    // NOTE: Uninline.
+    if (GetMaxStackable() > 1) {
+        m_useCount1 = max(m_useCount1, 1);
+        m_useCount2 = max(m_useCount2, 1);
+        m_useCount3 = max(m_useCount3, 1);
+    }
+
+    m_flags = flags;
+    m_wear = wear;
+
+    // NOTE: Uninline.
+    GetAbilityCount();
+
+    // NOTE: Uninline.
+    if (GetLoreValue() == 0) {
+        m_flags |= 0x1;
+    }
+
+    if ((m_flags & 0x1) == 0) {
+        m_flags |= 0x8;
+    }
+}
+
 // 0x4E8180
 CItem::~CItem()
 {
