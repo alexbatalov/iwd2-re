@@ -14,6 +14,9 @@ const SHORT CAITrigger::ONCREATION = 54;
 // 0x847E46
 const SHORT CAITrigger::UNLOCKED = 87;
 
+// 0x847F48
+const SHORT CAITrigger::STATUSTRIGGER = 0x4000;
+
 // 0x4816B0
 CAITrigger::CAITrigger(const CAITrigger& trigger)
 {

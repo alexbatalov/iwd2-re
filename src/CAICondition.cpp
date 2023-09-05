@@ -1,6 +1,8 @@
 #include "CAICondition.h"
 
+#include "CAITrigger.h"
 #include "CAIUtil.h"
+#include "CGameAIBase.h"
 
 // NOTE: Inlined.
 CAICondition::CAICondition()
@@ -41,6 +43,43 @@ void CAICondition::Add(const CAITrigger& trigger)
 BOOL CAICondition::Hold(CTypedPtrList<CPtrList, CAITrigger*>& triggerList, CGameAIBase* caller)
 {
     // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x4041D0
+BOOL CAICondition::TriggerHolds(CAITrigger* pTrigger, CTypedPtrList<CPtrList, CAITrigger*>& triggerList, CGameAIBase* caller)
+{
+    SHORT triggerID = pTrigger->m_triggerID;
+
+    if ((CAITrigger::STATUSTRIGGER & triggerID) != 0) {
+        BOOL triggerHolds = caller->EvaluateStatusTrigger(*pTrigger);
+        if ((pTrigger->m_flags & 0x1) != 0) {
+            triggerHolds = !triggerHolds;
+        }
+        return triggerHolds;
+    }
+
+    POSITION pos = triggerList.GetHeadPosition();
+    while (pos != NULL) {
+        pTrigger->m_triggerCause.Decode(caller);
+
+        CAITrigger* node = triggerList.GetNext(pos);
+        BOOL triggerHolds = node->OfType(*pTrigger);
+        if ((pTrigger->m_flags & 0x1) != 0) {
+            triggerHolds = !triggerHolds;
+        }
+
+        if (triggerHolds) {
+            if (triggerID == CAITRIGGER_ATTACKEDBY
+                || triggerID == CAITRIGGER_HELP
+                || triggerID == CAITRIGGER_HELPEX) {
+                caller->field_342.Set(node->m_triggerCause);
+            }
+
+            return TRUE;
+        }
+    }
 
     return FALSE;
 }

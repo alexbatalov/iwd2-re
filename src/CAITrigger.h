@@ -228,6 +228,7 @@ public:
     static const SHORT ONCREATION;
     static const SHORT RECEIVEDORDER;
     static const SHORT UNLOCKED;
+    static const SHORT STATUSTRIGGER;
 
     CAITrigger(const CAITrigger& trigger);
     CAITrigger(SHORT triggerID, const CAIObjectType& cause, LONG specificID);
