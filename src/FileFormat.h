@@ -6,6 +6,31 @@
 #define CSPELLLIST_MAX_LEVELS 9
 #define CSPELLLIST_NUM_CLASSES 7
 
+class CAreaFileSoundObject {
+public:
+    CAreaFileSoundObject()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    /* 0000 */ SCRIPTNAME m_scriptName;
+    /* 0020 */ WORD m_posX;
+    /* 0022 */ WORD m_posY;
+    /* 0024 */ WORD m_range;
+    /* 0026 */ BYTE structureAlignment1[2];
+    /* 0028 */ DWORD m_pitchVariance;
+    /* 002C */ WORD m_volumeVariance;
+    /* 002E */ WORD m_volume;
+    /* 0030 */ RESREF m_soundObject[10];
+    /* 0080 */ WORD m_soundObjectNum;
+    /* 0082 */ BYTE structureAlignment2[2];
+    /* 0084 */ DWORD m_period;
+    /* 0088 */ DWORD m_periodVariance;
+    /* 008C */ DWORD m_timeOfDayActive;
+    /* 0090 */ DWORD m_dwFlags;
+    /* 0094 */ DWORD m_notUsed[16];
+};
+
 class CAreaFileStaticObject {
 public:
     CAreaFileStaticObject()
