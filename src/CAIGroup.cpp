@@ -418,6 +418,14 @@ CAIGroup::CAIGroup(SHORT id)
     m_groupChanged = FALSE;
 }
 
+// FIXME: `action` should be reference.
+//
+// 0x404D00
+void CAIGroup::GroupAction(CAIAction action, BOOL override, CAIAction* leaderAction)
+{
+    // TODO: Incomplete.
+}
+
 // 0x4052D0
 void CAIGroup::SetGroupTriggerId(LONG triggerId)
 {
@@ -712,6 +720,54 @@ void CAIGroup::ClearActions()
                 CGameObjectArray::THREAD_ASYNCH,
                 INFINITE);
         }
+    }
+}
+
+// 0x4088C0
+void CAIGroup::GroupSetTarget(LONG iObject)
+{
+    if (m_memberList.IsEmpty()) {
+        return;
+    }
+
+    CAIObjectType target(0, 0, 0, 0, 0, 0, 0, 0, iObject, 0, 0);
+    CAIObjectType actee(0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0);
+
+    if (m_memberList.GetCount() > 1) {
+        CGameSprite* pSprite;
+
+        BYTE rc;
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(iObject,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            actee.Set(pSprite->GetAIType());
+            actee.m_nInstance = -1;
+            actee.m_sName = CString("");
+
+            GroupAction(CAIAction(CAIAction::GROUPATTACK, actee, 0, 0, 0),
+                TRUE,
+                NULL);
+
+            // FIXME: Both params immediately destroyed after call which means
+            // they are constructed just for the call which leads to pretty
+            // ugly invocation.
+            GroupAction(CAIAction(CAIAction::ATTACK, target, 0, 0, 0),
+                TRUE,
+                &CAIAction(CAIAction::ATTACK, target, 0, 0, 0));
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(iObject,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    } else {
+        GroupAction(CAIAction(CAIAction::ATTACK, target, 0, 0, 0),
+            TRUE,
+            NULL);
     }
 }
 

@@ -6,11 +6,17 @@
 // 0x847784
 const SHORT CAIAction::NO_ACTION = 0;
 
+// 0x84778A
+const SHORT CAIAction::ATTACK = 3;
+
 // 0x8477C0
 const SHORT CAIAction::SPELL = 31;
 
 // 0x847824
 const SHORT CAIAction::LEADER = 88;
+
+// 0x847830
+const SHORT CAIAction::GROUPATTACK = 94;
 
 // 0x847832
 const SHORT CAIAction::SPELLPOINT = 95;

@@ -3,6 +3,8 @@
 
 #include "mfc.h"
 
+#include "CAIAction.h"
+
 #define CAIGROUP_FORMATION_GATHER 2
 #define CAIGROUP_FORMATION_T 1
 #define CAIGROUP_FORMATION_RANK 7
@@ -79,6 +81,7 @@ public:
 
     CAIGroup(SHORT id = -1);
 
+    void GroupAction(CAIAction action, BOOL override, CAIAction* leaderAction);
     void SetGroupTriggerId(LONG triggerId);
     void RemoveFromSearch(CSearchBitmap* search);
     void AddToSearch(CSearchBitmap* search);
@@ -91,6 +94,7 @@ public:
     void Sort();
     void GroupCancelMove();
     void ClearActions();
+    void GroupSetTarget(LONG iObject);
     void AddTrigger(CAITrigger& trigger);
     BOOL InList(LONG characterId);
     void FollowLeader(CPoint target, BOOL additive);

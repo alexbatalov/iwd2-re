@@ -10,8 +10,10 @@ class CGameAIBase;
 class CAIAction {
 public:
     static const SHORT NO_ACTION;
+    static const SHORT ATTACK;
     static const SHORT SPELL;
     static const SHORT LEADER;
+    static const SHORT GROUPATTACK;
     static const SHORT SPELLPOINT;
     static const SHORT FORCESPELL;
     static const SHORT FORCESPELLPOINT;
