@@ -7,7 +7,10 @@
 
 class CAICondition;
 class CAIConditionResponse;
+class CAIResponse;
 class CAIResponseSet;
+class CAITrigger;
+class CGameAIBase;
 
 class CAIScript {
 public:
@@ -15,6 +18,7 @@ public:
     CAIScript(CResRef cNewResRef);
     ~CAIScript();
 
+    CAIResponse* Find(CTypedPtrList<CPtrList, CAITrigger*>& triggerList, CGameAIBase* caller);
     void Add(const CAICondition& condition, const CAIResponseSet& responseSet);
     void Read(CResRef cNewResRef, BOOL a2);
 

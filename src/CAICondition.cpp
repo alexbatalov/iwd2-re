@@ -37,6 +37,14 @@ void CAICondition::Add(const CAITrigger& trigger)
     m_triggerList.AddTail(new CAITrigger(trigger));
 }
 
+// 0x404150
+BOOL CAICondition::Hold(CTypedPtrList<CPtrList, CAITrigger*>& triggerList, CGameAIBase* caller)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x404290
 void CAICondition::Read(CString sData)
 {

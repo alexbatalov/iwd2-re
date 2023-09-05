@@ -12,6 +12,9 @@ const SHORT CAIAction::ATTACK = 3;
 // 0x8477C0
 const SHORT CAIAction::SPELL = 31;
 
+// 0x8477C6
+const SHORT CAIAction::CONTINUE = 36;
+
 // 0x847824
 const SHORT CAIAction::LEADER = 88;
 
