@@ -10,6 +10,7 @@
 #define CSCREENCHARACTER_VIRTUAL_KEYS 90
 #define CSCREENCHARACTER_ERROR_BUTTONS 3
 
+class CCreatureFileHeader;
 class CDerivedStats;
 class CGameSprite;
 class CUIPanel;
@@ -57,6 +58,7 @@ public:
     BOOLEAN IsNameOnExportList(CString sName);
     void ResetBiographyPanel(CGameSprite* pSprite);
     void ResetClassDescriptionPanel(CGameSprite* pSprite);
+    void UpdateAbilitiesPanel(CGameSprite* pSprite);
     void EnableMainPanel(BOOL bEnable);
     STRREF GetRangerHatedRaceStrref(BYTE nRace);
     void UpdateMainPanel(BOOL bCharacterChanged);
@@ -110,9 +112,11 @@ public:
     /* 0836 */ CResRef m_cResPortraitSmall;
     /* 083E */ CResRef m_cResPortraitLarge;
     /* 084A */ CStringList* m_pSounds;
+    /* 085A */ CCreatureFileHeader* m_pTempBaseStats;
     /* 086E */ CVidFont m_preLoadFontRealms;
     /* 0D6E */ CVidFont m_preLoadFontStnSml;
     /* 126E */ CVidFont m_preLoadFontTool;
+    /* 1778 */ INT m_nExtraAbilityPoints;
     /* 17A4 */ int field_17A4;
 };
 

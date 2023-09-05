@@ -630,6 +630,162 @@ void CScreenCharacter::ResetClassDescriptionPanel(CGameSprite* pSprite)
         TRUE);
 }
 
+// 0x5DAA40
+void CScreenCharacter::UpdateAbilitiesPanel(CGameSprite* pSprite)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(7);
+
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(28));
+
+    HighlightLabel(pPanel,
+        0x10000002,
+        m_nExtraAbilityPoints > 0,
+        COLOR_LABEL_HIGHLIGHT_BONUS);
+    UpdateLabel(pPanel,
+        0x10000002,
+        "%d",
+        m_nExtraAbilityPoints);
+
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    // STR
+    UpdateLabel(pPanel,
+        0x10000003,
+        "%d",
+        pSprite->m_baseStats.m_STRBase);
+    UpdateLabel(pPanel,
+        0x10000024,
+        "%+d",
+        ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_STRBase));
+    HighlightLabel(pPanel,
+        0x10000024,
+        pSprite->m_baseStats.m_STRBase != 10 && pSprite->m_baseStats.m_STRBase != 11,
+        pSprite->m_baseStats.m_STRBase < 10 ? RGB(255, 0, 0) : RGB(0, 255, 0));
+
+    // DEX
+    UpdateLabel(pPanel,
+        0x10000004,
+        "%d",
+        pSprite->m_baseStats.m_DEXBase);
+    UpdateLabel(pPanel,
+        0x10000025,
+        "%+d",
+        ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_DEXBase));
+    HighlightLabel(pPanel,
+        0x10000025,
+        pSprite->m_baseStats.m_DEXBase != 10 && pSprite->m_baseStats.m_DEXBase != 11,
+        pSprite->m_baseStats.m_DEXBase < 10 ? RGB(255, 0, 0) : RGB(0, 255, 0));
+
+    // CON
+    UpdateLabel(pPanel,
+        0x10000005,
+        "%d",
+        pSprite->m_baseStats.m_CONBase);
+    UpdateLabel(pPanel,
+        0x10000026,
+        "%+d",
+        ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_CONBase));
+    HighlightLabel(pPanel,
+        0x10000026,
+        pSprite->m_baseStats.m_CONBase != 10 && pSprite->m_baseStats.m_CONBase != 11,
+        pSprite->m_baseStats.m_CONBase < 10 ? RGB(255, 0, 0) : RGB(0, 255, 0));
+
+    // INT
+    UpdateLabel(pPanel,
+        0x10000006,
+        "%d",
+        pSprite->m_baseStats.m_INTBase);
+    UpdateLabel(pPanel,
+        0x10000027,
+        "%+d",
+        ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_INTBase));
+    HighlightLabel(pPanel,
+        0x10000027,
+        pSprite->m_baseStats.m_INTBase != 10 && pSprite->m_baseStats.m_INTBase != 11,
+        pSprite->m_baseStats.m_INTBase < 10 ? RGB(255, 0, 0) : RGB(0, 255, 0));
+
+    // WIS
+    UpdateLabel(pPanel,
+        0x10000007,
+        "%d",
+        pSprite->m_baseStats.m_WISBase);
+    UpdateLabel(pPanel,
+        0x10000028,
+        "%+d",
+        ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_WISBase));
+    HighlightLabel(pPanel,
+        0x10000028,
+        pSprite->m_baseStats.m_WISBase != 10 && pSprite->m_baseStats.m_WISBase != 11,
+        pSprite->m_baseStats.m_WISBase < 10 ? RGB(255, 0, 0) : RGB(0, 255, 0));
+
+    // CHR
+    UpdateLabel(pPanel,
+        0x10000008,
+        "%d",
+        pSprite->m_baseStats.m_CHRBase);
+    UpdateLabel(pPanel,
+        0x10000029,
+        "%+d",
+        ruleTables.GetAbilityScoreModifier(pSprite->m_baseStats.m_CHRBase));
+    HighlightLabel(pPanel,
+        0x10000029,
+        pSprite->m_baseStats.m_CHRBase != 10 && pSprite->m_baseStats.m_CHRBase != 11,
+        pSprite->m_baseStats.m_CHRBase < 10 ? RGB(255, 0, 0) : RGB(0, 255, 0));
+
+    CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(0));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 3664
+    UTIL_ASSERT(pButton != NULL);
+
+    pButton->SetEnabled(IsDoneButtonClickable(pSprite));
+
+    for (INT nIndex = 0; nIndex < 12; nIndex += 2) {
+        CUIControlButton* pButton;
+
+        BOOL bCanInc = m_nExtraAbilityPoints != 0;
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(16 + nIndex));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 3685
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->SetActive(bCanInc);
+        pButton->SetEnabled(bCanInc);
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(17 + nIndex));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 3685
+        UTIL_ASSERT(pButton != NULL);
+
+        BOOL bCanDec;
+        switch (nIndex) {
+        case 0:
+            bCanDec = m_pTempBaseStats->m_STRBase < pSprite->m_baseStats.m_STRBase;
+            break;
+        case 2:
+            bCanDec = m_pTempBaseStats->m_DEXBase < pSprite->m_baseStats.m_DEXBase;
+            break;
+        case 4:
+            bCanDec = m_pTempBaseStats->m_CONBase < pSprite->m_baseStats.m_CONBase;
+            break;
+        case 6:
+            bCanDec = m_pTempBaseStats->m_INTBase < pSprite->m_baseStats.m_INTBase;
+            break;
+        case 8:
+            bCanDec = m_pTempBaseStats->m_WISBase < pSprite->m_baseStats.m_WISBase;
+            break;
+        case 10:
+            bCanDec = m_pTempBaseStats->m_CHRBase < pSprite->m_baseStats.m_CHRBase;
+            break;
+        }
+
+        pButton->SetActive(bCanDec);
+        pButton->SetEnabled(bCanDec);
+    }
+}
+
 // 0x5D8190
 void CScreenCharacter::UpdatePortraitList(CUIPanel* pPanel, DWORD dwControlId, INT nSelected)
 {
