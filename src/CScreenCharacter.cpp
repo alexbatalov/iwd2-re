@@ -598,6 +598,38 @@ void CScreenCharacter::ResetBiographyPanel(CGameSprite* pSprite)
         TRUE);
 }
 
+// 0x5D8A10
+void CScreenCharacter::ResetClassDescriptionPanel(CGameSprite* pSprite)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(52);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 2729
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(0));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 2732
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+
+    CString sDescription;
+
+    BYTE nBestClass = pSprite->GetDerivedStats()->GetBestClass();
+    STRREF strDescription = g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetClassDescriptionStringRef(nBestClass, 0);
+    sDescription = FetchString(strDescription);
+
+    pText->DisplayString(CString(""),
+        sDescription,
+        pText->m_rgbLabelColor,
+        pText->m_rgbTextColor,
+        -1,
+        FALSE,
+        TRUE);
+}
+
 // 0x5D8190
 void CScreenCharacter::UpdatePortraitList(CUIPanel* pPanel, DWORD dwControlId, INT nSelected)
 {
