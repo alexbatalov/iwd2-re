@@ -39,6 +39,7 @@ public:
     /* 00A4 */ CKeyInfo* GetVirtualKeys() override;
     /* 00A8 */ BYTE* GetVirtualKeysFlags() override;
     /* 00C4 */ void TimerSynchronousUpdate() override;
+    /* 00E0 */ void OnPortraitLClick(DWORD nPortrait) override;
     /* 00F0 */ void OnRestButtonClick() override;
 
     CString GetCurrentPortrait(CGameSprite* pSprite);
@@ -73,6 +74,7 @@ public:
     void CheckDropSlot(INT nSlot);
     void ResetErrorPanel(CUIPanel* pPanel);
     void UpdateCustomizePanel(CGameSprite* pSprite);
+    void CheckMultiPlayerViewableModifyable();
     void OnCustomizeButtonClick();
     void OnAppearanceButtonClick();
     void OnSoundsButtonClick();

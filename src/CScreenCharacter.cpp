@@ -210,6 +210,31 @@ void CScreenCharacter::EngineDeactivated()
     }
 }
 
+// 0x5D78E0
+void CScreenCharacter::OnPortraitLClick(DWORD nPortrait)
+{
+    // NOTE: Unsigned compare.
+    if (nPortrait < static_cast<DWORD>(g_pBaldurChitin->GetObjectGame()->GetNumCharacters())) {
+        m_nSelectedCharacter = nPortrait;
+
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+            // NOTE: Uninline.
+            LONG nCharacterId = g_pBaldurChitin->GetObjectGame()->GetCharacterId(static_cast<SHORT>(nPortrait));
+
+            for (SHORT index = 0; index < 6; index++) {
+                if (g_pBaldurChitin->GetObjectGame()->m_characters[index] == nCharacterId) {
+                    g_pBaldurChitin->GetBaldurMessage()->UpdateDemandCharacters(0, index, 0);
+                }
+            }
+        }
+
+        CheckMultiPlayerViewableModifyable();
+        UpdateCursorShape(0);
+        UpdateMainPanel(TRUE);
+        m_cUIManager.InvalidateRect(NULL);
+    }
+}
+
 // 0x5D7B80
 CString CScreenCharacter::GetCurrentPortrait(CGameSprite* pSprite)
 {
@@ -1145,6 +1170,12 @@ void CScreenCharacter::UpdateCustomizePanel(CGameSprite* pSprite)
     UTIL_ASSERT(pButton != NULL);
 
     pButton->SetEnabled(bEnabled);
+}
+
+// 0x5E94C0
+void CScreenCharacter::CheckMultiPlayerViewableModifyable()
+{
+    // TODO: Incomplete.
 }
 
 // 0x5E9600
