@@ -5,6 +5,7 @@
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
+#include "CUIControlTextDisplay.h"
 #include "CVidFont.h"
 
 #define CSCREENCHARACTER_VIRTUAL_KEYS 90
@@ -184,6 +185,13 @@ public:
     CUIControlButtonCharacterCustomizeMenu(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonCharacterCustomizeMenu() override;
     void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlTextDisplayCharacterPortraits : public CUIControlTextDisplay {
+public:
+    CUIControlTextDisplayCharacterPortraits(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo);
+    ~CUIControlTextDisplayCharacterPortraits() override;
+    void OnItemSelected(LONG lMarker) override;
 };
 
 #endif /* CSCREENCHARACTER_H_ */

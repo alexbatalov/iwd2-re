@@ -9,7 +9,6 @@
 #include "CScreenCreateChar.h"
 #include "CScreenWorld.h"
 #include "CUIControlFactory.h"
-#include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
 
@@ -2192,5 +2191,43 @@ void CUIControlButtonCharacterCustomizeMenu::OnLButtonClick(CPoint pt)
     case 9:
         pCharacter->OnCustomizeBiographyButtonClick();
         break;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x5EEE40
+CUIControlTextDisplayCharacterPortraits::CUIControlTextDisplayCharacterPortraits(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo)
+    : CUIControlTextDisplay(panel, controlInfo, TRUE)
+{
+    // NOTE: Uninline.
+    SetNeedMouseMove();
+}
+
+// 0x621470
+CUIControlTextDisplayCharacterPortraits::~CUIControlTextDisplayCharacterPortraits()
+{
+}
+
+// 0x5EEE70
+void CUIControlTextDisplayCharacterPortraits::OnItemSelected(LONG lMarker)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 15169
+    UTIL_ASSERT(pCharacter != NULL);
+
+    switch (m_nID) {
+    case 2:
+        pCharacter->OnPortraitLargeItemSelect(lMarker);
+        break;
+    case 3:
+        pCharacter->OnPortraitSmallItemSelect(lMarker);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 15182
+        UTIL_ASSERT(FALSE);
     }
 }
