@@ -1798,6 +1798,42 @@ void CScreenCharacter::OnPortraitSmallItemSelect(INT nItem)
     }
 }
 
+// 0x5E9D80
+void CScreenCharacter::OnCustomPortraitsButtonClick()
+{
+    CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 11592
+    UTIL_ASSERT(pGame != NULL);
+
+    // NOTE: Uninline.
+    LONG nCharacterId = pGame->GetCharacterId(m_nSelectedCharacter);
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        SummonPopup(19, pSprite, 1);
+
+        pGame->GetObjectArray()->ReleaseDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    renderLock.Unlock();
+}
+
 // 0x5E9E90
 void CScreenCharacter::OnPlayButtonClick()
 {

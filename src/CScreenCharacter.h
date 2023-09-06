@@ -89,6 +89,7 @@ public:
     void OnSoundsButtonClick();
     void OnPortraitLargeItemSelect(INT nItem);
     void OnPortraitSmallItemSelect(INT nItem);
+    void OnCustomPortraitsButtonClick();
     void OnPlayButtonClick();
     void OnSoundItemSelect(INT nItem);
 
