@@ -5,6 +5,7 @@
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
+#include "CUIControlScrollBar.h"
 #include "CUIControlTextDisplay.h"
 #include "CVidFont.h"
 
@@ -87,6 +88,9 @@ public:
     void CheckDropSlot(INT nSlot);
     void ResetErrorPanel(CUIPanel* pPanel);
     void UpdateCustomizePanel(CGameSprite* pSprite);
+    INT GetNumHatedRaces();
+    void SetTopHatedRace(INT nTopHatedRace);
+    BYTE GetHatedRace(INT nIndex);
     void CheckMultiPlayerViewableModifyable();
     void OnCustomizeButtonClick();
     void OnAppearanceButtonClick();
@@ -139,6 +143,19 @@ public:
     /* 1778 */ INT m_nExtraAbilityPoints;
     /* 17A0 */ int field_17A0;
     /* 17A4 */ int field_17A4;
+};
+
+class CUIControlScrollBarCharacterHatedRace : public CUIControlScrollBar {
+public:
+    CUIControlScrollBarCharacterHatedRace(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo);
+    ~CUIControlScrollBarCharacterHatedRace() override;
+    void OnScroll() override;
+    void OnScrollUp() override;
+    void OnScrollDown() override;
+    void OnPageUp(DWORD nLines) override;
+    void OnPageDown(DWORD nLines) override;
+    void UpdateScrollBar();
+    void InvalidateItems();
 };
 
 class CUIControlButtonCharacterHatedRaceSelection : public CUIControlButton3State {

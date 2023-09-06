@@ -1544,6 +1544,32 @@ void CScreenCharacter::UpdateCustomizePanel(CGameSprite* pSprite)
     pButton->SetEnabled(bEnabled);
 }
 
+// NOTE: Inlined.
+INT CScreenCharacter::GetNumHatedRaces()
+{
+    return CSCREENCHARACTER_NUM_HATEDRACES;
+}
+
+// NOTE: Uninline.
+void CScreenCharacter::SetTopHatedRace(INT nTopHatedRace)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 10613
+    UTIL_ASSERT(0 <= nTopHatedRace && nTopHatedRace <= GetNumHatedRaces());
+
+    m_nTopHatedRace = nTopHatedRace;
+}
+
+// NOTE: Uninline.
+BYTE CScreenCharacter::GetHatedRace(INT nIndex)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 10639
+    UTIL_ASSERT(0 <= nIndex && nIndex < CSCREENCHARACTER_NUM_HATEDRACES);
+
+    return m_hatedRaces[nIndex];
+}
+
 // 0x5E94C0
 void CScreenCharacter::CheckMultiPlayerViewableModifyable()
 {
@@ -2043,6 +2069,179 @@ void CScreenCharacter::OnSoundItemSelect(INT nItem)
 
 // -----------------------------------------------------------------------------
 
+// 0x5EE210
+CUIControlScrollBarCharacterHatedRace::CUIControlScrollBarCharacterHatedRace(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo)
+    : CUIControlScrollBar(panel, controlInfo)
+{
+}
+
+// 0x632C00
+CUIControlScrollBarCharacterHatedRace::~CUIControlScrollBarCharacterHatedRace()
+{
+}
+
+// NOTE: Inlined.
+void CUIControlScrollBarCharacterHatedRace::UpdateScrollBar()
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 14602
+    UTIL_ASSERT(pCharacter != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 14604
+    UTIL_ASSERT(pGame != NULL);
+
+    AdjustScrollBar(pCharacter->m_nTopHatedRace, CSCREENCREATECHAR_NUM_HATEDRACES, 11);
+}
+
+// 0x5EE230
+void CUIControlScrollBarCharacterHatedRace::OnScrollUp()
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 14634
+    UTIL_ASSERT(pCharacter != NULL);
+
+    INT nTopHatedRace = max(pCharacter->m_nTopHatedRace - 1, 0);
+
+    if (nTopHatedRace != pCharacter->m_nTopHatedRace) {
+        // NOTE: Uninline.
+        pCharacter->SetTopHatedRace(nTopHatedRace);
+
+        InvalidateItems();
+
+        // NOTE: Uninline.
+        UpdateScrollBar();
+    }
+}
+
+// 0x5EE310
+void CUIControlScrollBarCharacterHatedRace::OnScrollDown()
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 14670
+    UTIL_ASSERT(pCharacter != NULL);
+
+    INT nTopHatedRace = min(pCharacter->m_nTopHatedRace + 1, 5);
+
+    if (nTopHatedRace != pCharacter->m_nTopHatedRace) {
+        // NOTE: Uninline.
+        pCharacter->SetTopHatedRace(nTopHatedRace);
+
+        InvalidateItems();
+
+        // NOTE: Uninline.
+        UpdateScrollBar();
+    }
+}
+
+// 0x5EE3F0
+void CUIControlScrollBarCharacterHatedRace::OnPageUp(DWORD nLines)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 14706
+    UTIL_ASSERT(pCharacter != NULL);
+
+    INT nStep = min(nLines, 11);
+    INT nTopHatedRace = max(pCharacter->m_nTopHatedRace - nStep, 0);
+
+    if (nTopHatedRace != pCharacter->m_nTopHatedRace) {
+        // NOTE: Uninline.
+        pCharacter->SetTopHatedRace(nTopHatedRace);
+
+        InvalidateItems();
+
+        // NOTE: Uninline.
+        UpdateScrollBar();
+    }
+}
+
+// 0x5EE4F0
+void CUIControlScrollBarCharacterHatedRace::OnPageDown(DWORD nLines)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 14744
+    UTIL_ASSERT(pCharacter != NULL);
+
+    INT nStep = min(nLines, 11);
+    INT nTopHatedRace = min(pCharacter->m_nTopHatedRace + nStep, 5);
+
+    if (nTopHatedRace != pCharacter->m_nTopHatedRace) {
+        // NOTE: Uninline.
+        pCharacter->SetTopHatedRace(nTopHatedRace);
+
+        InvalidateItems();
+
+        // NOTE: Uninline.
+        UpdateScrollBar();
+    }
+}
+
+// 0x5EE5F0
+void CUIControlScrollBarCharacterHatedRace::OnScroll()
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 14782
+    UTIL_ASSERT(pCharacter != NULL);
+
+    // NOTE: Uninline.
+    pCharacter->SetTopHatedRace(5 * field_144 / field_142);
+
+    InvalidateItems();
+
+    // NOTE: Uninline.
+    UpdateScrollBar();
+}
+
+// 0x5EE6D0
+void CUIControlScrollBarCharacterHatedRace::InvalidateItems()
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 14814
+    UTIL_ASSERT(pCharacter != NULL);
+
+    CSingleLock renderLock(&(pCharacter->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    INT nGameSprite = g_pBaldurChitin->GetObjectGame()->GetCharacterId(pCharacter->GetSelectedCharacter());
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        pCharacter->UpdatePopupPanel(m_pPanel->m_nID, pSprite);
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    renderLock.Unlock();
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x5EE820
 CUIControlButtonCharacterHatedRaceSelection::CUIControlButtonCharacterHatedRaceSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
@@ -2079,11 +2278,8 @@ void CUIControlButtonCharacterHatedRaceSelection::OnLButtonClick(CPoint pt)
     if (rc == CGameObjectArray::SUCCESS) {
         INT nIndex = pCharacter->m_nTopHatedRace + m_nID - 22;
 
-        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
-        // __LINE__: 10639
-        UTIL_ASSERT(0 <= nIndex && nIndex < CSCREENCHARACTER_NUM_HATEDRACES);
-
-        pSprite->GetBaseStats()->m_favoredEnemies[pCharacter->field_17A0] = pCharacter->m_hatedRaces[nIndex];
+        // NOTE: Uninline.
+        pSprite->GetBaseStats()->m_favoredEnemies[pCharacter->field_17A0] = pCharacter->GetHatedRace(nIndex);
 
         STRREF strHelp;
         switch (pSprite->GetBaseStats()->m_favoredEnemies[pCharacter->field_17A0]) {
