@@ -1798,6 +1798,64 @@ void CScreenCharacter::OnPortraitSmallItemSelect(INT nItem)
     }
 }
 
+// 0x5EA480
+void CScreenCharacter::OnSoundItemSelect(INT nItem)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // NOTE: Uninline.
+    INT nGameSprite = pGame->GetCharacterId(m_nSelectedCharacter);
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (nItem != m_nCustomSoundSetIndex) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+            // __LINE__: 12046
+            UTIL_ASSERT(m_pSounds != NULL);
+
+            CUIPanel* pPanel = m_cUIManager.GetPanel(20);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+            // __LINE__: 12050
+            UTIL_ASSERT(pPanel != NULL);
+
+            CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(5));
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+            // __LINE__: 12052
+            UTIL_ASSERT(pText != NULL);
+
+            if (m_nCustomSoundSetIndex != -1) {
+                pText->SetItemTextColor(pText->GetItemBossPosition(m_nCustomSoundSetIndex),
+                    pText->m_rgbTextColor);
+            }
+
+            m_nCustomSoundSetIndex = nItem;
+
+            if (m_nCustomSoundSetIndex != -1) {
+                pText->SetItemTextColor(pText->GetItemBossPosition(m_nCustomSoundSetIndex),
+                    CBaldurChitin::TEXTDISPLAY_COLOR_SELECT);
+            }
+
+            m_nCustomSoundIndex = 3;
+
+            UpdatePopupPanel(GetTopPopup()->m_nID, pSprite);
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x5EAC00
