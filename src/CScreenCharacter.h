@@ -86,6 +86,7 @@ public:
     void OnCustomizeButtonClick();
     void OnAppearanceButtonClick();
     void OnSoundsButtonClick();
+    void OnPortraitLargeItemSelect(INT nItem);
 
     static void ResetBiography(CGameSprite* pSprite);
 
@@ -106,8 +107,8 @@ public:
     /* 07FA */ BOOL m_bMultiPlayerViewable;
     /* 07FE */ BOOL m_bMultiPlayerModifyable;
     /* 0802 */ int m_nCurrentPortrait;
-    /* 0806 */ int field_806;
-    /* 080A */ int field_80A;
+    /* 0806 */ int m_nPortraitLargeIndex;
+    /* 080A */ int m_nPortraitSmallIndex;
     /* 080E */ CStringList* m_pPortraits;
     /* 0812 */ INT m_nCustomSoundSetIndex;
     /* 0816 */ INT m_nCustomSoundIndex;
