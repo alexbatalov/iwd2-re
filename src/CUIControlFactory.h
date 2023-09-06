@@ -23,6 +23,13 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonCharacterAppearanceRight : public CUIControlButton {
+public:
+    CUIControlButtonCharacterAppearanceRight(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharacterAppearanceRight() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlButtonCharGenPortrait : public CUIControlButton {
 public:
     CUIControlButtonCharGenPortrait(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

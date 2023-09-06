@@ -47,6 +47,7 @@ public:
 
     void UpdateSavingThrows(CUIControlTextDisplay* pText, CDerivedStats& DStats);
     CString GetCurrentPortrait(CGameSprite* pSprite);
+    void IncCurrentPortrait(CGameSprite* pSprite);
     void DecCurrentPortrait(CGameSprite* pSprite);
     void ResetAppearancePanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateAppearancePanel(CGameSprite* pSprite);

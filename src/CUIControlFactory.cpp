@@ -2697,6 +2697,19 @@ CUIControlButtonCharacterAppearanceLeft::~CUIControlButtonCharacterAppearanceLef
 
 // -----------------------------------------------------------------------------
 
+// 0x778C00
+CUIControlButtonCharacterAppearanceRight::CUIControlButtonCharacterAppearanceRight(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+}
+
+// 0x778C50
+CUIControlButtonCharacterAppearanceRight::~CUIControlButtonCharacterAppearanceRight()
+{
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x778FC0
 CUIControlButtonCharGenPortrait::CUIControlButtonCharGenPortrait(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)

@@ -287,6 +287,26 @@ CString CScreenCharacter::GetCurrentPortrait(CGameSprite* pSprite)
 }
 
 // NOTE: Inlined.
+void CScreenCharacter::IncCurrentPortrait(CGameSprite* pSprite)
+{
+    INT nCount;
+    switch (pSprite->m_startTypeAI.m_nGender) {
+    case CAIOBJECTTYPE_SEX_MALE:
+        nCount = CScreenCreateChar::MALE_PORTRAITS_COUNT;
+        break;
+    case CAIOBJECTTYPE_SEX_FEMALE:
+        nCount = CScreenCreateChar::FEMALE_PORTRAITS_COUNT;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 1808
+        UTIL_ASSERT(FALSE);
+    }
+
+    m_nCurrentPortrait = (m_nCurrentPortrait + 1) % nCount;
+}
+
+// NOTE: Inlined.
 void CScreenCharacter::DecCurrentPortrait(CGameSprite* pSprite)
 {
     INT nCount;
@@ -2486,6 +2506,50 @@ void CUIControlButtonCharacterAppearanceLeft::OnLButtonClick(CPoint pt)
         CResRef portraitResRef;
 
         pCharacter->DecCurrentPortrait(pSprite);
+        sPortrait = pCharacter->GetCurrentPortrait(pSprite);
+
+        pCharacter->m_cResPortraitSmallTemp = sPortrait + "S";
+        pCharacter->m_cResPortraitLargeTemp = sPortrait + "L";
+
+        pCharacter->UpdatePopupPanel(m_pPanel->m_nID, pSprite);
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Unclear why this function is separated from constructor/destructor
+// pair (originally in `CUIControlButtons.cpp`, now in `CUIControlFactory.cpp`).
+//
+// 0x5EF130
+void CUIControlButtonCharacterAppearanceRight::OnLButtonClick(CPoint pt)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 15273
+    UTIL_ASSERT(pGame != NULL && pCharacter != NULL);
+
+    INT nGameSprite = pGame->GetCharacterId(pCharacter->GetSelectedCharacter());
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        CString sPortrait;
+        CResRef portraitResRef;
+
+        pCharacter->IncCurrentPortrait(pSprite);
         sPortrait = pCharacter->GetCurrentPortrait(pSprite);
 
         pCharacter->m_cResPortraitSmallTemp = sPortrait + "S";
