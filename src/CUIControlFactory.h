@@ -16,6 +16,13 @@ public:
     virtual void OnHotAreaClick(CPoint pt);
 };
 
+class CUIControlButtonCharacterAbilitiesHotArea : public CUIControlButtonHotArea {
+public:
+    CUIControlButtonCharacterAbilitiesHotArea(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharacterAbilitiesHotArea() override;
+    void OnHotAreaClick(CPoint pt) override;
+};
+
 class CUIControlButtonCharacterAppearanceLeft : public CUIControlButton {
 public:
     CUIControlButtonCharacterAppearanceLeft(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

@@ -2069,6 +2069,67 @@ void CScreenCharacter::OnSoundItemSelect(INT nItem)
 
 // -----------------------------------------------------------------------------
 
+// 0x5EE000
+void CUIControlButtonCharacterAbilitiesHotArea::OnHotAreaClick(CPoint pt)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 14501
+    UTIL_ASSERT(pCharacter != NULL);
+
+    CString sValue;
+    DWORD strDescription;
+    BYTE nMin;
+    BYTE nMax;
+    switch (m_nID) {
+    case 30:
+        strDescription = 9582;
+        nMin = pCharacter->m_nMinSTR;
+        nMax = pCharacter->m_nMaxSTR;
+        break;
+    case 31:
+        strDescription = 9584;
+        nMin = pCharacter->m_nMinDEX;
+        nMax = pCharacter->m_nMaxDEX;
+        break;
+    case 32:
+        strDescription = 9583;
+        nMin = pCharacter->m_nMinCON;
+        nMax = pCharacter->m_nMaxCON;
+        break;
+    case 33:
+        strDescription = 9585;
+        nMin = pCharacter->m_nMinINT;
+        nMax = pCharacter->m_nMaxINT;
+        break;
+    case 34:
+        strDescription = 9586;
+        nMin = pCharacter->m_nMinWIS;
+        nMax = pCharacter->m_nMaxWIS;
+        break;
+    case 35:
+        strDescription = 9587;
+        nMin = pCharacter->m_nMinCHR;
+        nMax = pCharacter->m_nMaxCHR;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 14541
+        UTIL_ASSERT(FALSE);
+    }
+
+    sValue.Format("%d", nMin);
+    g_pBaldurChitin->GetTlkTable().SetToken(CScreenCreateChar::TOKEN_MINIMUM, sValue);
+
+    sValue.Format("%d", nMax);
+    g_pBaldurChitin->GetTlkTable().SetToken(CScreenCreateChar::TOKEN_MAXIMUM, sValue);
+
+    pCharacter->UpdateHelp(m_pPanel->m_nID, 29, strDescription);
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x5EE210
 CUIControlScrollBarCharacterHatedRace::CUIControlScrollBarCharacterHatedRace(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo)
     : CUIControlScrollBar(panel, controlInfo)
