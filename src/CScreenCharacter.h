@@ -111,6 +111,7 @@ public:
     /* 0300 */ CKeyInfo m_pVirtualKeys[CSCREENCHARACTER_VIRTUAL_KEYS];
     /* 05D0 */ BYTE m_pVirtualKeysFlags[CSCREENCHARACTER_VIRTUAL_KEYS];
     /* 062A */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
+    /* 077C */ WORD field_77C;
     /* 07B4 */ BOOLEAN m_bCtrlKeyDown;
     /* 07C6 */ INT m_nErrorState;
     /* 07CA */ DWORD m_dwErrorTextId;
@@ -134,6 +135,7 @@ public:
     /* 0832 */ CString field_832;
     /* 0836 */ CResRef m_cResPortraitSmallTemp;
     /* 083E */ CResRef m_cResPortraitLargeTemp;
+    /* 0846 */ DWORD m_nSpecialization;
     /* 084A */ CStringList* m_pSounds;
     /* 084E */ CResRef m_cResSoundSet;
     /* 0856 */ CString field_856;
@@ -163,6 +165,15 @@ public:
     /* 17A0 */ int field_17A0;
     /* 17A4 */ int field_17A4;
     /* 1840 */ int field_1840;
+};
+
+class CUIControlButtonCharacterSpecializationSelection : public CUIControlButton3State {
+public:
+    CUIControlButtonCharacterSpecializationSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharacterSpecializationSelection() override;
+    void OnLButtonClick(CPoint pt) override;
+
+    DWORD GetSpecialization();
 };
 
 class CUIControlButtonCharacterAbilitiesPlusMinus : public CUIControlButtonPlusMinus {

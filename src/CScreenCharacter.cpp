@@ -2069,6 +2069,202 @@ void CScreenCharacter::OnSoundItemSelect(INT nItem)
 
 // -----------------------------------------------------------------------------
 
+// 0x5ED4A0
+CUIControlButtonCharacterSpecializationSelection::CUIControlButtonCharacterSpecializationSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 1)
+{
+    m_nSelectedFrame = 0;
+}
+
+// 0x5ED500
+CUIControlButtonCharacterSpecializationSelection::~CUIControlButtonCharacterSpecializationSelection()
+{
+}
+
+// 0x5ED5A0
+DWORD CUIControlButtonCharacterSpecializationSelection::GetSpecialization()
+{
+    BYTE nClass = g_pBaldurChitin->m_pEngineCharacter->m_nClass;
+
+    switch (nClass) {
+    case CAIOBJECTTYPE_C_WIZARD:
+        switch (m_nID) {
+        case 2:
+            return SPECMASK_WIZARD_UNIVERSAL;
+        case 3:
+            return SPECMASK_WIZARD_ABJURER;
+        case 4:
+            return SPECMASK_WIZARD_CONJURER;
+        case 5:
+            return SPECMASK_WIZARD_DIVINER;
+        case 6:
+            return SPECMASK_WIZARD_ENCHANTER;
+        case 7:
+            return SPECMASK_WIZARD_ILLUSIONIST;
+        case 8:
+            return SPECMASK_WIZARD_EVOKER;
+        case 9:
+            return SPECMASK_WIZARD_NECROMANCER;
+        case 10:
+            return SPECMASK_WIZARD_TRANSMUTER;
+        }
+        break;
+    case CAIOBJECTTYPE_C_PALADIN:
+        switch (m_nID) {
+        case 2:
+            return SPECMASK_PALADIN_ILMATER;
+        case 3:
+            return SPECMASK_PALADIN_HELM;
+        case 4:
+            return SPECMASK_PALADIN_MYSTRA;
+        }
+        break;
+    case CAIOBJECTTYPE_C_MONK:
+        switch (m_nID) {
+        case 2:
+            return SPECMASK_MONK_OLD_ORDER;
+        case 3:
+            return SPECMASK_MONK_BROKEN_ONES;
+        case 4:
+            return SPECMASK_MONK_DARK_MOON;
+        }
+        break;
+    case CAIOBJECTTYPE_C_CLERIC:
+        switch (m_nID) {
+        case 2:
+            return SPECMASK_CLERIC_ILMATER;
+        case 3:
+            return SPECMASK_CLERIC_LATHANDER;
+        case 4:
+            return SPECMASK_CLERIC_SELUNE;
+        case 5:
+            return SPECMASK_CLERIC_HELM;
+        case 6:
+            return SPECMASK_CLERIC_OGHMA;
+        case 7:
+            return SPECMASK_CLERIC_TEMPUS;
+        case 8:
+            return SPECMASK_CLERIC_BANE;
+        case 9:
+            return SPECMASK_CLERIC_MASK;
+        case 10:
+            return SPECMASK_CLERIC_TALOS;
+        }
+    }
+
+    return 0;
+}
+
+// 0x5ED6F0
+void CUIControlButtonCharacterSpecializationSelection::OnLButtonClick(CPoint pt)
+{
+    CUIControlButton3State::OnLButtonClick(pt);
+
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    INT nGameSprite = g_pBaldurChitin->GetObjectGame()->GetCharacterId(pCharacter->GetSelectedCharacter());
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        DWORD nSpecialization = GetSpecialization();
+
+        // TODO: Looks odd.
+        pCharacter->m_nSpecialization = nSpecialization | static_cast<WORD>(pCharacter->field_77C);
+
+        STRREF strDescription;
+        switch (nSpecialization) {
+        case SPECMASK_CLERIC_ILMATER:
+            strDescription = 38118;
+            break;
+        case SPECMASK_CLERIC_LATHANDER:
+            strDescription = 38119;
+            break;
+        case SPECMASK_CLERIC_SELUNE:
+            strDescription = 38120;
+            break;
+        case SPECMASK_CLERIC_HELM:
+            strDescription = 38121;
+            break;
+        case SPECMASK_CLERIC_OGHMA:
+            strDescription = 38122;
+            break;
+        case SPECMASK_CLERIC_TEMPUS:
+            strDescription = 38123;
+            break;
+        case SPECMASK_CLERIC_BANE:
+            strDescription = 38124;
+            break;
+        case SPECMASK_CLERIC_MASK:
+            strDescription = 38125;
+            break;
+        case SPECMASK_CLERIC_TALOS:
+            strDescription = 38126;
+            break;
+        case SPECMASK_MONK_OLD_ORDER:
+            strDescription = 39410;
+            break;
+        case SPECMASK_MONK_BROKEN_ONES:
+            strDescription = 39411;
+            break;
+        case SPECMASK_MONK_DARK_MOON:
+            strDescription = 39412;
+            break;
+        case SPECMASK_PALADIN_ILMATER:
+            strDescription = 39407;
+            break;
+        case SPECMASK_PALADIN_HELM:
+            strDescription = 39408;
+            break;
+        case SPECMASK_PALADIN_MYSTRA:
+            strDescription = 39409;
+            break;
+        case SPECMASK_WIZARD_ABJURER:
+            strDescription = 9564;
+            break;
+        case SPECMASK_WIZARD_CONJURER:
+            strDescription = 9565;
+            break;
+        case SPECMASK_WIZARD_DIVINER:
+            strDescription = 9566;
+            break;
+        case SPECMASK_WIZARD_ENCHANTER:
+            strDescription = 9567;
+            break;
+        case SPECMASK_WIZARD_ILLUSIONIST:
+            strDescription = 9568;
+            break;
+        case SPECMASK_WIZARD_EVOKER:
+            strDescription = 9569;
+            break;
+        case SPECMASK_WIZARD_NECROMANCER:
+            strDescription = 9570;
+            break;
+        case SPECMASK_WIZARD_TRANSMUTER:
+            strDescription = 9571;
+            break;
+        case SPECMASK_WIZARD_UNIVERSAL:
+            strDescription = 9563;
+        }
+
+        pCharacter->UpdateHelp(m_pPanel->m_nID, 13, strDescription);
+        pCharacter->UpdatePopupPanel(m_pPanel->m_nID, pSprite);
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x5ED9D0
 CUIControlButtonCharacterAbilitiesPlusMinus::CUIControlButtonCharacterAbilitiesPlusMinus(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButtonPlusMinus(panel, controlInfo)
