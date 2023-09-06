@@ -5,6 +5,7 @@
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
+#include "CUIControlButtonPlusMinus.h"
 #include "CUIControlScrollBar.h"
 #include "CUIControlTextDisplay.h"
 #include "CVidFont.h"
@@ -161,6 +162,15 @@ public:
     /* 179C */ INT m_nModCHR;
     /* 17A0 */ int field_17A0;
     /* 17A4 */ int field_17A4;
+    /* 1840 */ int field_1840;
+};
+
+class CUIControlButtonCharacterAbilitiesPlusMinus : public CUIControlButtonPlusMinus {
+public:
+    CUIControlButtonCharacterAbilitiesPlusMinus(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharacterAbilitiesPlusMinus() override;
+    BOOL OnLButtonDown(CPoint pt) override;
+    void AdjustValue() override;
 };
 
 class CUIControlScrollBarCharacterHatedRace : public CUIControlScrollBar {

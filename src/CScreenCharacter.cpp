@@ -2069,6 +2069,200 @@ void CScreenCharacter::OnSoundItemSelect(INT nItem)
 
 // -----------------------------------------------------------------------------
 
+// 0x5ED9D0
+CUIControlButtonCharacterAbilitiesPlusMinus::CUIControlButtonCharacterAbilitiesPlusMinus(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButtonPlusMinus(panel, controlInfo)
+{
+}
+
+// 0x5EDA10
+CUIControlButtonCharacterAbilitiesPlusMinus::~CUIControlButtonCharacterAbilitiesPlusMinus()
+{
+}
+
+// 0x619220
+BOOL CUIControlButtonCharacterAbilitiesPlusMinus::OnLButtonDown(CPoint pt)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 14242
+    UTIL_ASSERT(pCharacter != NULL);
+
+    CString sValue;
+
+    STRREF strHelp;
+    BYTE nMin;
+    BYTE nMax;
+    switch (m_nID) {
+    case 16:
+    case 17:
+        strHelp = 9582;
+        nMin = pCharacter->m_nMinSTR;
+        nMax = pCharacter->m_nMaxSTR;
+        break;
+    case 18:
+    case 19:
+        strHelp = 9584;
+        nMin = pCharacter->m_nMinDEX;
+        nMax = pCharacter->m_nMaxDEX;
+        break;
+    case 20:
+    case 21:
+        strHelp = 9583;
+        nMin = pCharacter->m_nMinCON;
+        nMax = pCharacter->m_nMaxCON;
+        break;
+    case 22:
+    case 23:
+        strHelp = 9585;
+        nMin = pCharacter->m_nMinINT;
+        nMax = pCharacter->m_nMaxINT;
+        break;
+    case 24:
+    case 25:
+        strHelp = 9586;
+        nMin = pCharacter->m_nMinWIS;
+        nMax = pCharacter->m_nMaxWIS;
+        break;
+    case 26:
+    case 27:
+        strHelp = 9587;
+        nMin = pCharacter->m_nMinCHR;
+        nMax = pCharacter->m_nMaxCHR;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 14288
+        UTIL_ASSERT(FALSE);
+    }
+
+    if (!m_bActive) {
+        return FALSE;
+    }
+
+    if ((m_nMouseButtons & LBUTTON) == 0) {
+        return FALSE;
+    }
+
+    sValue.Format("%d", nMin);
+    g_pBaldurChitin->GetTlkTable().SetToken(CScreenCreateChar::TOKEN_MINIMUM, sValue);
+
+    sValue.Format("%d", nMax);
+    g_pBaldurChitin->GetTlkTable().SetToken(CScreenCreateChar::TOKEN_MAXIMUM, sValue);
+
+    pCharacter->UpdateHelp(m_pPanel->m_nID, 29, strHelp);
+
+    return CUIControlButtonPlusMinus::OnLButtonDown(pt);
+}
+
+// 0x5EDD50
+void CUIControlButtonCharacterAbilitiesPlusMinus::AdjustValue()
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    INT nGameSprite = pCharacter->field_1840;
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        BYTE nMin;
+        BYTE nMax;
+        BYTE* pBase;
+        BYTE* pValue;
+        BOOL bInc;
+        switch (m_nID) {
+        case 16:
+        case 17:
+            nMin = pCharacter->m_nMinSTR;
+            nMax = pCharacter->m_nMaxSTR;
+            pBase = &(pCharacter->m_pTempBaseStats->m_STRBase);
+            pValue = &(pSprite->GetBaseStats()->m_STRBase);
+            bInc = m_nID == 16;
+            break;
+        case 18:
+        case 19:
+            nMin = pCharacter->m_nMinDEX;
+            nMax = pCharacter->m_nMaxDEX;
+            pBase = &(pCharacter->m_pTempBaseStats->m_DEXBase);
+            pValue = &(pSprite->GetBaseStats()->m_DEXBase);
+            bInc = m_nID == 18;
+            break;
+        case 20:
+        case 21:
+            nMin = pCharacter->m_nMinCON;
+            nMax = pCharacter->m_nMaxCON;
+            pBase = &(pCharacter->m_pTempBaseStats->m_CONBase);
+            pValue = &(pSprite->GetBaseStats()->m_CONBase);
+            bInc = m_nID == 20;
+            break;
+        case 22:
+        case 23:
+            nMin = pCharacter->m_nMinINT;
+            nMax = pCharacter->m_nMaxINT;
+            pBase = &(pCharacter->m_pTempBaseStats->m_INTBase);
+            pValue = &(pSprite->GetBaseStats()->m_INTBase);
+            bInc = m_nID == 22;
+            break;
+        case 24:
+        case 25:
+            nMin = pCharacter->m_nMinWIS;
+            nMax = pCharacter->m_nMaxWIS;
+            pBase = &(pCharacter->m_pTempBaseStats->m_WISBase);
+            pValue = &(pSprite->GetBaseStats()->m_WISBase);
+            bInc = m_nID == 24;
+            break;
+        case 26:
+        case 27:
+            nMin = pCharacter->m_nMinCHR;
+            nMax = pCharacter->m_nMaxCHR;
+            pBase = &(pCharacter->m_pTempBaseStats->m_CHRBase);
+            pValue = &(pSprite->GetBaseStats()->m_CHRBase);
+            bInc = m_nID == 26;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+            // __LINE__: 14431
+            UTIL_ASSERT(FALSE);
+        }
+
+        if (bInc) {
+            if (pCharacter->m_nExtraAbilityPoints > 0) {
+                if (*pValue < nMax) {
+                    (*pValue)++;
+                    pCharacter->m_nExtraAbilityPoints--;
+                    pCharacter->UpdatePopupPanel(m_pPanel->m_nID, pSprite);
+                } else {
+                    pCharacter->UpdateHelp(m_pPanel->m_nID, 29, 14838);
+                }
+            }
+        } else {
+            if (*pValue > *pBase) {
+                if (*pBase > nMin) {
+                    (*pBase)--;
+                    pCharacter->m_nExtraAbilityPoints++;
+                    pCharacter->UpdatePopupPanel(m_pPanel->m_nID, pSprite);
+                } else {
+                    pCharacter->UpdateHelp(m_pPanel->m_nID, 29, 14840);
+                }
+            }
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x5EE000
 void CUIControlButtonCharacterAbilitiesHotArea::OnHotAreaClick(CPoint pt)
 {
