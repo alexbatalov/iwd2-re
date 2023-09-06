@@ -8685,7 +8685,7 @@ void CUIControlTextDisplayCharGenImportCharacters::OnItemSelected(LONG lMarker)
 
 // 0x621570
 CUIControlButtonCharGenSoundPlay::CUIControlButtonCharGenSoundPlay(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
 
