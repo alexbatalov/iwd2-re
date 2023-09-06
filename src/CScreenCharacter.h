@@ -195,4 +195,11 @@ public:
     void OnItemSelected(LONG lMarker) override;
 };
 
+class CUIControlTextDisplayCharacterSoundSounds : public CUIControlTextDisplay {
+public:
+    CUIControlTextDisplayCharacterSoundSounds(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo);
+    ~CUIControlTextDisplayCharacterSoundSounds() override;
+    void OnItemSelected(LONG lMarker) override;
+};
+
 #endif /* CSCREENCHARACTER_H_ */

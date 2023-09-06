@@ -2289,3 +2289,30 @@ void CUIControlTextDisplayCharacterPortraits::OnItemSelected(LONG lMarker)
         UTIL_ASSERT(FALSE);
     }
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x5EF6F0
+CUIControlTextDisplayCharacterSoundSounds::CUIControlTextDisplayCharacterSoundSounds(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo)
+    : CUIControlTextDisplay(panel, controlInfo, TRUE)
+{
+    // NOTE: Uninline.
+    SetNeedMouseMove();
+}
+
+// 0x621470
+CUIControlTextDisplayCharacterSoundSounds::~CUIControlTextDisplayCharacterSoundSounds()
+{
+}
+
+// 0x5EF720
+void CUIControlTextDisplayCharacterSoundSounds::OnItemSelected(LONG lMarker)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 15472
+    UTIL_ASSERT(pCharacter != NULL);
+
+    pCharacter->OnSoundItemSelect(lMarker);
+}
