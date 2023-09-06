@@ -89,6 +89,7 @@ public:
     void OnSoundsButtonClick();
     void OnPortraitLargeItemSelect(INT nItem);
     void OnPortraitSmallItemSelect(INT nItem);
+    void OnPlayButtonClick();
     void OnSoundItemSelect(INT nItem);
 
     static void ResetBiography(CGameSprite* pSprite);

@@ -1798,6 +1798,115 @@ void CScreenCharacter::OnPortraitSmallItemSelect(INT nItem)
     }
 }
 
+// 0x5E9E90
+void CScreenCharacter::OnPlayButtonClick()
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    INT nGameSprite = pGame->GetCharacterId(m_nSelectedCharacter);
+
+    // NOTE: Unused.
+    STR_RES strRes;
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (m_pSounds->FindIndex(m_nCustomSoundSetIndex) != NULL) {
+            // NOTE: Unused.
+            CString v2;
+
+            CString sSuffix;
+            CString sSoundSetName;
+            CString sDirName;
+            CString sBaseName;
+
+            int v1 = m_nCustomSoundIndex;
+
+            while (1) {
+                if (m_nCustomSoundSetIndex != -1) {
+                    POSITION pos = m_pSounds->FindIndex(m_nCustomSoundSetIndex);
+                    if (pos != NULL) {
+                        sSoundSetName = m_pSounds->GetAt(pos);
+                    }
+                }
+
+                memcpy(pSprite->field_725A,
+                    sSoundSetName.GetBuffer(sSoundSetName.GetLength()),
+                    min(sSoundSetName.GetLength(), 32));
+
+                if (sSoundSetName.GetLength() < 32) {
+                    pSprite->field_725A[sSoundSetName.GetLength()] = '\0';
+                }
+
+                sDirName = g_pBaldurChitin->GetObjectGame()->GetDirSounds() + sSoundSetName + '\\';
+
+                g_pBaldurChitin->cDimm.AddToDirectoryList(sDirName, TRUE);
+
+                CString sFileName;
+                CString sPattern;
+
+                sPattern = g_pBaldurChitin->GetObjectGame()->GetDirSounds() + "\\" + sSoundSetName + "\\*.wav";
+
+                WIN32_FIND_DATAA findFileData;
+                HANDLE hFindFile = FindFirstFileA(sPattern, &findFileData);
+                if (hFindFile != INVALID_HANDLE_VALUE) {
+                    sFileName = findFileData.cFileName;
+
+                    if ((findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
+                        sFileName.MakeUpper();
+                        sFileName = sFileName.SpanExcluding(".");
+                        sFileName = sFileName.Left(sFileName.GetLength() - 2);
+                        sBaseName = sFileName;
+                    }
+
+                    // FIXME: Leaking `hFindFile`.
+                }
+
+                if (m_nCustomSoundIndex < 10) {
+                    sSuffix.Format("0%d", m_nCustomSoundIndex);
+                } else {
+                    sSuffix.Format("%d", m_nCustomSoundIndex);
+                }
+
+                sFileName = sBaseName + sSuffix;
+
+                if (m_nCustomSoundIndex == 40) {
+                    m_nCustomSoundIndex = 0;
+                } else {
+                    m_nCustomSoundIndex++;
+                }
+
+                if (m_nCustomSoundIndex == 30) {
+                    m_nCustomSoundIndex = 34;
+                }
+
+                CSound cSound(CResRef(sFileName), 0, 0, 0, INT_MAX, FALSE);
+                cSound.SetFireForget(TRUE);
+
+                if (cSound.GetRes() != NULL) {
+                    cSound.Play(FALSE);
+                    break;
+                }
+
+                if (v1 == m_nCustomSoundIndex) {
+                    break;
+                }
+            }
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
 // 0x5EA480
 void CScreenCharacter::OnSoundItemSelect(INT nItem)
 {
