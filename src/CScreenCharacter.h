@@ -109,9 +109,15 @@ public:
     /* 080E */ CStringList* m_pPortraits;
     /* 0812 */ INT m_nCustomSoundSetIndex;
     /* 0816 */ INT m_nCustomSoundIndex;
-    /* 0836 */ CResRef m_cResPortraitSmall;
-    /* 083E */ CResRef m_cResPortraitLarge;
+    /* 081A */ unsigned char field_81A;
+    /* 081B */ CResRef m_cResPortraitSmall;
+    /* 0823 */ CResRef m_cResPortraitLarge;
+    /* 0832 */ CString field_832;
+    /* 0836 */ CResRef m_cResPortraitSmallTemp;
+    /* 083E */ CResRef m_cResPortraitLargeTemp;
     /* 084A */ CStringList* m_pSounds;
+    /* 084E */ CResRef m_cResSoundSet;
+    /* 0856 */ CString field_856;
     /* 085A */ CCreatureFileHeader* m_pTempBaseStats;
     /* 086E */ CVidFont m_preLoadFontRealms;
     /* 0D6E */ CVidFont m_preLoadFontStnSml;

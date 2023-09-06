@@ -1,6 +1,7 @@
 #include "CScreenCharacter.h"
 
 #include "CAIObjectType.h"
+#include "CAIScript.h"
 #include "CBaldurChitin.h"
 #include "CGameSprite.h"
 #include "CInfCursor.h"
@@ -294,8 +295,8 @@ void CScreenCharacter::ResetAppearancePanel(CUIPanel* pPanel, CGameSprite* pSpri
     m_nCurrentPortrait = 0;
     sPortrait = GetCurrentPortrait(pSprite);
 
-    m_cResPortraitSmall = sPortrait + "S";
-    m_cResPortraitLarge = sPortrait + "L";
+    m_cResPortraitSmallTemp = sPortrait + "S";
+    m_cResPortraitLargeTemp = sPortrait + "L";
 }
 
 // 0x5D7D30
@@ -1513,7 +1514,51 @@ void CScreenCharacter::CheckMultiPlayerViewableModifyable()
 // 0x5E9600
 void CScreenCharacter::OnCustomizeButtonClick()
 {
-    // TODO: Incomplete.
+    CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 11209
+    UTIL_ASSERT(pGame != NULL);
+
+    // NOTE: Uninline.
+    LONG nCharacterId = pGame->GetCharacterId(m_nSelectedCharacter);
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        m_cResPortraitSmall = pSprite->GetBaseStats()->m_portraitSmall;
+        m_cResPortraitLarge = pSprite->GetBaseStats()->m_portraitLarge;
+        m_cResPortraitSmallTemp = m_cResPortraitSmall;
+        m_cResPortraitLargeTemp = m_cResPortraitLarge;
+        m_cResSoundSet = pSprite->m_secondarySounds;
+        field_856 = pSprite->field_725A;
+
+        if (pSprite->field_402 != NULL) {
+            pSprite->field_402->m_cResRef.CopyToString(field_832);
+            field_832.MakeUpper();
+        } else {
+            field_832 = "NONE";
+        }
+
+        SummonPopup(17, pSprite, 1);
+
+        pGame->GetObjectArray()->ReleaseDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    renderLock.Unlock();
 }
 
 // 0x5E9800
