@@ -2401,6 +2401,38 @@ void CUIControlTextDisplayCharacterPortraits::OnItemSelected(LONG lMarker)
 
 // -----------------------------------------------------------------------------
 
+// 0x5EF540
+CUIControlButtonCharacterSoundPlay::CUIControlButtonCharacterSoundPlay(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 15391
+    UTIL_ASSERT(pCharacter != NULL);
+
+    SetText(CBaldurEngine::FetchString(17318));
+}
+
+// 0x5EF610
+CUIControlButtonCharacterSoundPlay::~CUIControlButtonCharacterSoundPlay()
+{
+}
+
+// 0x5EF6B0
+void CUIControlButtonCharacterSoundPlay::OnLButtonClick(CPoint pt)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 15418
+    UTIL_ASSERT(pCharacter != NULL);
+
+    pCharacter->OnPlayButtonClick();
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x5EF6F0
 CUIControlTextDisplayCharacterSoundSounds::CUIControlTextDisplayCharacterSoundSounds(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo)
     : CUIControlTextDisplay(panel, controlInfo, TRUE)

@@ -196,6 +196,13 @@ public:
     void OnItemSelected(LONG lMarker) override;
 };
 
+class CUIControlButtonCharacterSoundPlay : public CUIControlButton {
+public:
+    CUIControlButtonCharacterSoundPlay(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharacterSoundPlay() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlTextDisplayCharacterSoundSounds : public CUIControlTextDisplay {
 public:
     CUIControlTextDisplayCharacterSoundSounds(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo);
