@@ -1508,7 +1508,47 @@ void CScreenCharacter::UpdateCustomizePanel(CGameSprite* pSprite)
 // 0x5E94C0
 void CScreenCharacter::CheckMultiPlayerViewableModifyable()
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 11144
+    UTIL_ASSERT(pGame != NULL);
+
+    // NOTE: Uninline.
+    LONG nCharacterId = pGame->GetCharacterId(m_nSelectedCharacter);
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        m_bMultiPlayerViewable = g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL
+            ? g_pChitin->cNetwork.m_idLocalPlayer == pSprite->m_remotePlayerID
+            : TRUE;
+        m_bMultiPlayerModifyable = m_bMultiPlayerViewable;
+
+        if (!pSprite->Orderable(TRUE)) {
+            m_bMultiPlayerViewable = FALSE;
+        }
+
+        if (!m_bMultiPlayerViewable) {
+            if (g_pBaldurChitin->cNetwork.GetSessionOpen()) {
+                m_bMultiPlayerViewable = g_pBaldurChitin->cNetwork.GetSessionHosting()
+                    || pGame->m_singlePlayerPermissions.GetSinglePermission(CGamePermission::LEADER)
+                    || pGame->m_singlePlayerPermissions.GetSinglePermission(CGamePermission::CHAR_RECORDS);
+            }
+        }
+
+        pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
 }
 
 // 0x5E9600

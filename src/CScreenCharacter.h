@@ -103,6 +103,8 @@ public:
     /* 07D2 */ INT m_strErrorButtonText[CSCREENCHARACTER_ERROR_BUTTONS];
     /* 07DE */ INT m_nCharacterIndex;
     /* 07E2 */ CStringList* m_pCharacters;
+    /* 07FA */ BOOL m_bMultiPlayerViewable;
+    /* 07FE */ BOOL m_bMultiPlayerModifyable;
     /* 0802 */ int m_nCurrentPortrait;
     /* 0806 */ int field_806;
     /* 080A */ int field_80A;
