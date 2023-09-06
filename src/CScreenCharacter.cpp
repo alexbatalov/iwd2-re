@@ -1736,6 +1736,69 @@ void CScreenCharacter::OnPortraitLargeItemSelect(INT nItem)
     }
 }
 
+// 0x5E9BD0
+void CScreenCharacter::OnPortraitSmallItemSelect(INT nItem)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 11512
+    UTIL_ASSERT(pGame != NULL);
+
+    // FIXME: What for?
+    SHORT nPortrait = g_pBaldurChitin->m_pEngineCharacter->GetSelectedCharacter();
+
+    // NOTE: Uninline.
+    INT nGameSprite = pGame->GetCharacterId(nPortrait);
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (nItem != m_nPortraitSmallIndex) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+            // __LINE__: 11532
+            UTIL_ASSERT(m_pPortraits != NULL);
+
+            CUIPanel* pPanel = m_cUIManager.GetPanel(19);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+            // __LINE__: 11536
+            UTIL_ASSERT(pPanel != NULL);
+
+            CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(3));
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+            // __LINE__: 11538
+            UTIL_ASSERT(pText != NULL);
+
+            if (m_nPortraitSmallIndex != -1) {
+                pText->SetItemTextColor(pText->GetItemBossPosition(m_nPortraitSmallIndex),
+                    pText->m_rgbTextColor);
+            }
+
+            m_nPortraitSmallIndex = nItem;
+
+            if (m_nPortraitSmallIndex != -1) {
+                pText->SetItemTextColor(pText->GetItemBossPosition(m_nPortraitSmallIndex),
+                    CBaldurChitin::TEXTDISPLAY_COLOR_SELECT);
+            }
+
+            UpdatePopupPanel(GetTopPopup()->m_nID, pSprite);
+        }
+
+        pGame->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x5EAC00
