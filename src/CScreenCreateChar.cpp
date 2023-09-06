@@ -79,6 +79,9 @@ const char* CScreenCreateChar::MALE_PORTRAITS[] = {
     "HMB2_",
 };
 
+// 0x853AAC
+const DWORD CScreenCreateChar::MALE_PORTRAITS_COUNT = sizeof(MALE_PORTRAITS) / sizeof(MALE_PORTRAITS[0]);
+
 // 0x853AB0
 const char* CScreenCreateChar::FEMALE_PORTRAITS[] = {
     "2FBAR1_",
@@ -114,6 +117,9 @@ const char* CScreenCreateChar::FEMALE_PORTRAITS[] = {
     "HFW2_",
     "HFW3_",
 };
+
+// 0x853B30
+const DWORD CScreenCreateChar::FEMALE_PORTRAITS_COUNT = sizeof(FEMALE_PORTRAITS) / sizeof(FEMALE_PORTRAITS[0]);
 
 // 0x8F3B7C
 const CString CScreenCreateChar::TOKEN_NUMBER("number");
@@ -3597,10 +3603,10 @@ void CScreenCreateChar::IncCurrentPortrait(CGameSprite* pSprite)
     INT nCount;
     switch (pSprite->m_startTypeAI.m_nGender) {
     case CAIOBJECTTYPE_SEX_MALE:
-        nCount = sizeof(MALE_PORTRAITS) / sizeof(MALE_PORTRAITS[0]);
+        nCount = MALE_PORTRAITS_COUNT;
         break;
     case CAIOBJECTTYPE_SEX_FEMALE:
-        nCount = sizeof(FEMALE_PORTRAITS) / sizeof(FEMALE_PORTRAITS[0]);
+        nCount = FEMALE_PORTRAITS_COUNT;
         break;
     default:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
@@ -3611,15 +3617,16 @@ void CScreenCreateChar::IncCurrentPortrait(CGameSprite* pSprite)
     m_nCurrentPortrait = (m_nCurrentPortrait + 1) % nCount;
 }
 
+// NOTE: Inlined.
 void CScreenCreateChar::DecCurrentPortrait(CGameSprite* pSprite)
 {
     INT nCount;
     switch (pSprite->m_startTypeAI.m_nGender) {
     case CAIOBJECTTYPE_SEX_MALE:
-        nCount = sizeof(MALE_PORTRAITS) / sizeof(MALE_PORTRAITS[0]);
+        nCount = MALE_PORTRAITS_COUNT;
         break;
     case CAIOBJECTTYPE_SEX_FEMALE:
-        nCount = sizeof(FEMALE_PORTRAITS) / sizeof(FEMALE_PORTRAITS[0]);
+        nCount = FEMALE_PORTRAITS_COUNT;
         break;
     default:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp

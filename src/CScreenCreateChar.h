@@ -29,7 +29,9 @@ class CVidCell;
 class CScreenCreateChar : public CBaldurEngine {
 public:
     static const char* MALE_PORTRAITS[];
+    static const DWORD MALE_PORTRAITS_COUNT;
     static const char* FEMALE_PORTRAITS[];
+    static const DWORD FEMALE_PORTRAITS_COUNT;
     static const CString TOKEN_NUMBER;
     static const CString TOKEN_MINIMUM;
     static const CString TOKEN_MAXIMUM;

@@ -2684,6 +2684,19 @@ void CUIControlButtonHotArea::OnHotAreaClick(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x778B10
+CUIControlButtonCharacterAppearanceLeft::CUIControlButtonCharacterAppearanceLeft(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+}
+
+// 0x778B60
+CUIControlButtonCharacterAppearanceLeft::~CUIControlButtonCharacterAppearanceLeft()
+{
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x778FC0
 CUIControlButtonCharGenPortrait::CUIControlButtonCharGenPortrait(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
