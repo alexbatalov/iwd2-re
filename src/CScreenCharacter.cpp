@@ -2437,6 +2437,34 @@ void CUIControlTextDisplayCharacterPortraits::OnItemSelected(LONG lMarker)
 
 // -----------------------------------------------------------------------------
 
+// 0x5EF370
+CUIControlButtonCharacterAppearanceCustom::CUIControlButtonCharacterAppearanceCustom(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->GetTlkTable().Fetch(17545, strRes); // "Custom"
+    SetText(strRes.szText);
+}
+
+// 0x5EF460
+CUIControlButtonCharacterAppearanceCustom::~CUIControlButtonCharacterAppearanceCustom()
+{
+}
+
+// 0x5EF500
+void CUIControlButtonCharacterAppearanceCustom::OnLButtonClick(CPoint pt)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 15363
+    UTIL_ASSERT(pCharacter != NULL);
+
+    pCharacter->OnCustomPortraitsButtonClick();
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x5EF540
 CUIControlButtonCharacterSoundPlay::CUIControlButtonCharacterSoundPlay(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)

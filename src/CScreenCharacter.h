@@ -204,6 +204,13 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonCharacterAppearanceCustom : public CUIControlButton {
+public:
+    CUIControlButtonCharacterAppearanceCustom(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharacterAppearanceCustom() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlTextDisplayCharacterSoundSounds : public CUIControlTextDisplay {
 public:
     CUIControlTextDisplayCharacterSoundSounds(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo);
