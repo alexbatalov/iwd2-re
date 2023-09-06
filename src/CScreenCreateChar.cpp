@@ -8157,7 +8157,7 @@ void CUIControlScrollBarCharGenHatedRace::InvalidateItems()
 
 // 0x61FCE0
 CUIControlButtonCharGenHatedRaceSelection::CUIControlButtonCharGenHatedRaceSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
-    : CUIControlButton3State(panel, controlInfo, LBUTTON, 1)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
 {
     m_nNotSelectedFrame = m_nNormalFrame;
     m_nSelectedFrame = 0;
