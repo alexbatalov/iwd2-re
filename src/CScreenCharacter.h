@@ -11,6 +11,8 @@
 #define CSCREENCHARACTER_VIRTUAL_KEYS 90
 #define CSCREENCHARACTER_ERROR_BUTTONS 3
 
+#define CSCREENCHARACTER_NUM_HATEDRACES 16
+
 class CCreatureFileHeader;
 class CDerivedStats;
 class CGameSprite;
@@ -111,6 +113,8 @@ public:
     /* 07D2 */ INT m_strErrorButtonText[CSCREENCHARACTER_ERROR_BUTTONS];
     /* 07DE */ INT m_nCharacterIndex;
     /* 07E2 */ CStringList* m_pCharacters;
+    /* 07E6 */ BYTE m_hatedRaces[CSCREENCHARACTER_NUM_HATEDRACES];
+    /* 07F6 */ INT m_nTopHatedRace;
     /* 07FA */ BOOL m_bMultiPlayerViewable;
     /* 07FE */ BOOL m_bMultiPlayerModifyable;
     /* 0802 */ int m_nCurrentPortrait;
@@ -133,7 +137,15 @@ public:
     /* 0D6E */ CVidFont m_preLoadFontStnSml;
     /* 126E */ CVidFont m_preLoadFontTool;
     /* 1778 */ INT m_nExtraAbilityPoints;
+    /* 17A0 */ int field_17A0;
     /* 17A4 */ int field_17A4;
+};
+
+class CUIControlButtonCharacterHatedRaceSelection : public CUIControlButton3State {
+public:
+    CUIControlButtonCharacterHatedRaceSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharacterHatedRaceSelection() override;
+    void OnLButtonClick(CPoint pt) override;
 };
 
 class CUIControlButtonCharacterCustomize : public CUIControlButton {

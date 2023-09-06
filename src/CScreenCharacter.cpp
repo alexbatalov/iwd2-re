@@ -2043,6 +2043,115 @@ void CScreenCharacter::OnSoundItemSelect(INT nItem)
 
 // -----------------------------------------------------------------------------
 
+// 0x5EE820
+CUIControlButtonCharacterHatedRaceSelection::CUIControlButtonCharacterHatedRaceSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
+{
+    m_nNotSelectedFrame = m_nNormalFrame;
+    m_nSelectedFrame = 0;
+}
+
+// 0x5EE890
+CUIControlButtonCharacterHatedRaceSelection::~CUIControlButtonCharacterHatedRaceSelection()
+{
+}
+
+// 0x5EE930
+void CUIControlButtonCharacterHatedRaceSelection::OnLButtonClick(CPoint pt)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 14903
+    UTIL_ASSERT(pCharacter != NULL);
+
+    INT nGameSprite = g_pBaldurChitin->GetObjectGame()->GetCharacterId(pCharacter->GetSelectedCharacter());
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        INT nIndex = pCharacter->m_nTopHatedRace + m_nID - 22;
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 10639
+        UTIL_ASSERT(0 <= nIndex && nIndex < CSCREENCHARACTER_NUM_HATEDRACES);
+
+        pSprite->GetBaseStats()->m_favoredEnemies[pCharacter->field_17A0] = pCharacter->m_hatedRaces[nIndex];
+
+        STRREF strHelp;
+        switch (pSprite->GetBaseStats()->m_favoredEnemies[pCharacter->field_17A0]) {
+        case CAIOBJECTTYPE_R_OGRE:
+            strHelp = 15998;
+            break;
+        case CAIOBJECTTYPE_R_WYVERN:
+            strHelp = 37619;
+            break;
+        case CAIOBJECTTYPE_R_GIANT:
+            strHelp = 3291;
+            break;
+        case CAIOBJECTTYPE_R_GOBLIN:
+            strHelp = 3292;
+            break;
+        case CAIOBJECTTYPE_R_LIZARDMAN:
+            strHelp = 3293;
+            break;
+        case CAIOBJECTTYPE_R_ORC:
+            strHelp = 3294;
+            break;
+        case CAIOBJECTTYPE_R_SALAMANDER:
+            strHelp = 3295;
+            break;
+        case CAIOBJECTTYPE_R_TROLL:
+            strHelp = 3299;
+            break;
+        case CAIOBJECTTYPE_R_UMBERHULK:
+            strHelp = 3300;
+            break;
+        case CAIOBJECTTYPE_R_UNDEAD:
+            strHelp = 3297;
+            break;
+        case CAIOBJECTTYPE_R_YUANTI:
+            strHelp = 3301;
+            break;
+        case CAIOBJECTTYPE_R_HARPY:
+            strHelp = 37618;
+            break;
+        case CAIOBJECTTYPE_R_BUGBEAR:
+            strHelp = 8032;
+            break;
+        case CAIOBJECTTYPE_R_HOOK_HORROR:
+            strHelp = 37608;
+            break;
+        case CAIOBJECTTYPE_R_DRIDER:
+            strHelp = 41079;
+            break;
+        case CAIOBJECTTYPE_R_SHAPESHIFTER:
+            strHelp = 37609;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+            // __LINE__: 15003
+            UTIL_ASSERT(FALSE);
+        }
+
+        pCharacter->UpdateHelp(m_pPanel->m_nID, 8, strHelp);
+        pCharacter->UpdatePopupPanel(m_pPanel->m_nID, pSprite);
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x5EAC00
 CUIControlButtonCharacterCustomize::CUIControlButtonCharacterCustomize(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
