@@ -1530,7 +1530,41 @@ void CScreenCharacter::OnScriptButtonClick()
 // 0x5E4D50
 void CScreenCharacter::OnExportButtonClick()
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 8728
+    UTIL_ASSERT(pGame != NULL);
+
+    CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    // NOTE: Uninline.
+    LONG nCharacterId = pGame->GetCharacterId(GetSelectedCharacter());
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (m_bMultiPlayerModifyable
+            && (pSprite->GetBaseStats()->m_flags & 0x800) != 0
+            && !pSprite->GetDerivedStats()->m_bPolymorphed) {
+            SummonPopup(13, pSprite, 1);
+        }
+
+        pGame->GetObjectArray()->ReleaseDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    renderLock.Unlock();
 }
 
 // 0x5E5330
