@@ -3491,6 +3491,33 @@ void CUIControlButtonCharacterPopupCancel::OnLButtonClick(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x5ED100
+CUIControlTextDisplayCharacterExportCharacters::CUIControlTextDisplayCharacterExportCharacters(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo)
+    : CUIControlTextDisplay(panel, controlInfo, TRUE)
+{
+    // NOTE: Uninline.
+    SetNeedMouseMove();
+}
+
+// 0x621470
+CUIControlTextDisplayCharacterExportCharacters::~CUIControlTextDisplayCharacterExportCharacters()
+{
+}
+
+// 0x5ED130
+void CUIControlTextDisplayCharacterExportCharacters::OnItemSelected(LONG lMarker)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 13651
+    UTIL_ASSERT(pCharacter != NULL);
+
+    pCharacter->OnCharacterItemSelect(lMarker);
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x5ED170
 CUIControlEditCharacter::CUIControlEditCharacter(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo)
     : CUIControlEdit(panel, controlInfo, 0)

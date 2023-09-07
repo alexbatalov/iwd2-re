@@ -274,6 +274,13 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlTextDisplayCharacterExportCharacters : public CUIControlTextDisplay {
+public:
+    CUIControlTextDisplayCharacterExportCharacters(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo);
+    ~CUIControlTextDisplayCharacterExportCharacters() override;
+    void OnItemSelected(LONG lMarker) override;
+};
+
 class CUIControlEditCharacter : public CUIControlEdit {
 public:
     CUIControlEditCharacter(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo);
