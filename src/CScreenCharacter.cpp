@@ -3431,6 +3431,36 @@ void CUIControlButtonInformationBiography::OnLButtonClick(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x5EC5A0
+CUIControlButtonCharacterPopupDone::CUIControlButtonCharacterPopupDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo, INT nType)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    if (nType == 0) {
+        SetText(CBaldurEngine::FetchString(11973)); // "Done"
+    } else {
+        SetText(CBaldurEngine::FetchString(36789)); // "Next"
+    }
+}
+
+// 0x5EC680
+CUIControlButtonCharacterPopupDone::~CUIControlButtonCharacterPopupDone()
+{
+}
+
+// 0x5EC720
+void CUIControlButtonCharacterPopupDone::OnLButtonClick(CPoint pt)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 13241
+    UTIL_ASSERT(pCharacter != NULL);
+
+    pCharacter->OnDoneButtonClick();
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x5EEBD0
 CUIControlButtonCharacterCustomizeMenu::CUIControlButtonCharacterCustomizeMenu(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
