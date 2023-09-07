@@ -280,6 +280,13 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonCharacterError : public CUIControlButton {
+public:
+    CUIControlButtonCharacterError(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharacterError() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlTextDisplayCharacterExportCharacters : public CUIControlTextDisplay {
 public:
     CUIControlTextDisplayCharacterExportCharacters(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo);
