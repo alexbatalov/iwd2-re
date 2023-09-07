@@ -3771,6 +3771,57 @@ void CUIControlButtonCharacterPopupCancel::OnLButtonClick(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x5ECE40
+CUIControlTextDisplayCharacterScriptScripts::CUIControlTextDisplayCharacterScriptScripts(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo)
+    : CUIControlTextDisplay(panel, controlInfo, TRUE)
+{
+    // NOTE: Uninline.
+    SetNeedMouseMove();
+}
+
+// 0x621470
+CUIControlTextDisplayCharacterScriptScripts::~CUIControlTextDisplayCharacterScriptScripts()
+{
+}
+
+// 0x5ED130
+void CUIControlTextDisplayCharacterScriptScripts::OnItemSelected(LONG lMarker)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 13512
+    UTIL_ASSERT(pCharacter != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 13514
+    UTIL_ASSERT(pGame != NULL);
+
+    INT nGameSprite = pGame->GetCharacterId(pCharacter->GetSelectedCharacter());
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        pCharacter->OnScriptItemSelect(lMarker);
+        pCharacter->UpdatePopupPanel(m_pPanel->m_nID, pSprite);
+
+        pGame->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x5ECFD0
 CUIControlButtonCharacterError::CUIControlButtonCharacterError(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)

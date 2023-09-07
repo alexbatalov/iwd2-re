@@ -283,6 +283,13 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlTextDisplayCharacterScriptScripts : public CUIControlTextDisplay {
+public:
+    CUIControlTextDisplayCharacterScriptScripts(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo);
+    ~CUIControlTextDisplayCharacterScriptScripts() override;
+    void OnItemSelected(LONG lMarker) override;
+};
+
 class CUIControlButtonCharacterError : public CUIControlButton {
 public:
     CUIControlButtonCharacterError(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
