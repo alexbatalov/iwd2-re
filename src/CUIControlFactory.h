@@ -37,6 +37,13 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonCharacterFeatsHotArea : public CUIControlButtonHotArea {
+public:
+    CUIControlButtonCharacterFeatsHotArea(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharacterFeatsHotArea() override;
+    void OnHotAreaClick(CPoint pt) override;
+};
+
 class CUIControlButtonCharGenPortrait : public CUIControlButton {
 public:
     CUIControlButtonCharGenPortrait(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

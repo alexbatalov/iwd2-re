@@ -4230,6 +4230,56 @@ void CUIControlTextDisplayCharacterSoundSounds::OnItemSelected(LONG lMarker)
 
 // -----------------------------------------------------------------------------
 
+// NOTE: Unclear why this function is separated from constructor/destructor
+// pair (originally in `CUIControlButtons.cpp`, now in `CUIControlFactory.cpp`).
+//
+// 0x5F6830
+void CUIControlButtonCharacterFeatsHotArea::OnHotAreaClick(CPoint pt)
+{
+    DWORD offset;
+    switch (m_nID) {
+    case 93:
+        offset = 0;
+        break;
+    case 94:
+        offset = 1;
+        break;
+    case 95:
+        offset = 2;
+        break;
+    case 96:
+        offset = 3;
+        break;
+    case 97:
+        offset = 4;
+        break;
+    case 98:
+        offset = 5;
+        break;
+    case 99:
+        offset = 6;
+        break;
+    case 100:
+        offset = 7;
+        break;
+    case 101:
+        offset = 8;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 17020
+        UTIL_ASSERT(FALSE);
+    }
+
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    DWORD id = ruleTables.GetFeatId(offset + g_pBaldurChitin->m_pEngineCharacter->m_nTopFeat);
+    STRREF strDescription = ruleTables.GetFeatDescription(id);
+    g_pBaldurChitin->m_pEngineCharacter->UpdateHelp(m_pPanel->m_nID, 92, strDescription);
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x5F6910
 CUIControlScrollBarCharacterFeats::CUIControlScrollBarCharacterFeats(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo)
     : CUIControlScrollBar(panel, controlInfo)

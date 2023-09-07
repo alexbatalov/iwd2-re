@@ -2723,6 +2723,19 @@ CUIControlButtonCharacterAppearanceRight::~CUIControlButtonCharacterAppearanceRi
 
 // -----------------------------------------------------------------------------
 
+// 0x778CF0
+CUIControlButtonCharacterFeatsHotArea::CUIControlButtonCharacterFeatsHotArea(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButtonHotArea(panel, controlInfo)
+{
+}
+
+// 0x778D40
+CUIControlButtonCharacterFeatsHotArea::~CUIControlButtonCharacterFeatsHotArea()
+{
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x778FC0
 CUIControlButtonCharGenPortrait::CUIControlButtonCharGenPortrait(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
