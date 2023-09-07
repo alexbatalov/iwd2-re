@@ -1712,6 +1712,76 @@ void CScreenCharacter::UpdateCustomizePanel(CGameSprite* pSprite)
     pButton->SetEnabled(bEnabled);
 }
 
+// 0x5E8460
+void CScreenCharacter::OnCharacterItemSelect(INT nItem)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // NOTE: Uninline.
+    INT nGameSprite = pGame->GetCharacterId(m_nSelectedCharacter);
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (nItem != m_nCharacterIndex) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+            // __LINE__: 10552
+            UTIL_ASSERT(m_pCharacters != NULL);
+
+            CUIPanel* pPanel = m_cUIManager.GetPanel(13);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+            // __LINE__: 10556
+            UTIL_ASSERT(pPanel != NULL);
+
+            CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(0));
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+            // __LINE__: 10558
+            UTIL_ASSERT(pText != NULL);
+
+            if (m_nCharacterIndex != -1) {
+                pText->SetItemTextColor(pText->GetItemBossPosition(m_nCharacterIndex),
+                    pText->m_rgbTextColor);
+            }
+
+            m_nCharacterIndex = nItem;
+
+            if (m_nCharacterIndex != -1) {
+                pText->SetItemTextColor(pText->GetItemBossPosition(m_nCharacterIndex),
+                    CBaldurChitin::TEXTDISPLAY_COLOR_SELECT);
+
+                CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(6));
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+                // __LINE__: 10577
+                UTIL_ASSERT(pEdit != NULL);
+
+                POSITION pos = m_pCharacters->FindIndex(m_nCharacterIndex);
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+                // __LINE__: 10579
+                UTIL_ASSERT(pos != NULL);
+
+                pEdit->SetText(m_pCharacters->GetAt(pos));
+            }
+
+            UpdatePopupPanel(GetTopPopup()->m_nID, pSprite);
+        }
+
+        pGame->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
 // NOTE: Inlined.
 INT CScreenCharacter::GetNumHatedRaces()
 {

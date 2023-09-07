@@ -91,6 +91,7 @@ public:
     void CheckDropSlot(INT nSlot);
     void ResetErrorPanel(CUIPanel* pPanel);
     void UpdateCustomizePanel(CGameSprite* pSprite);
+    void OnCharacterItemSelect(INT nItem);
     INT GetNumHatedRaces();
     void SetTopHatedRace(INT nTopHatedRace);
     BYTE GetHatedRace(INT nIndex);
