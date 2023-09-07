@@ -1612,6 +1612,25 @@ void CGameSprite::CheckSequence(BYTE& sequence)
     // TODO: Incomplete.
 }
 
+// Returns `TRUE` if object contains quest items or containers (such as potion
+// bags). See STREF #26585.
+//
+// 0x723350
+BOOL CGameSprite::HaveUnexportableItems()
+{
+    for (INT nSlot = 0; nSlot < 51; nSlot++) {
+        CItem* pItem = m_equipment.m_items[nSlot];
+        if (pItem != NULL) {
+            if (pItem->GetItemType() == 58
+                || (pItem->GetFlagsFile() & 0x800) != 0) {
+                return TRUE;
+            }
+        }
+    }
+
+    return FALSE;
+}
+
 // 0x723390
 void CGameSprite::SetMonkAbilities()
 {

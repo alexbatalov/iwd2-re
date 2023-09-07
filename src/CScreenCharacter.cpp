@@ -1533,6 +1533,12 @@ void CScreenCharacter::OnLevelUpButtonClick()
     // TODO: Incomplete.
 }
 
+// 0x5E56F0
+void CScreenCharacter::LevelUp(CGameSprite* pSprite)
+{
+    // TODO: Incomplete.
+}
+
 // 0x5E6840
 void CScreenCharacter::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId)
 {
@@ -1718,6 +1724,183 @@ void CScreenCharacter::UpdateCustomizePanel(CGameSprite* pSprite)
     UTIL_ASSERT(pButton != NULL);
 
     pButton->SetEnabled(bEnabled);
+}
+
+// 0x5E7FF0
+void CScreenCharacter::OnErrorButtonClick(INT nButton)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 10276
+    UTIL_ASSERT(0 <= nButton && nButton < GetNumErrorButtons());
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 10278
+    UTIL_ASSERT(pGame != NULL);
+
+    CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    // NOTE: Uninline.
+    INT nGameSprite = pGame->GetCharacterId(m_nSelectedCharacter);
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        switch (m_nErrorState) {
+        case 0:
+            switch (nButton) {
+            case 0:
+                DismissPopup(pSprite);
+                break;
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+                // __LINE__: 10340
+                UTIL_ASSERT(FALSE);
+            }
+            break;
+        case 1:
+            switch (nButton) {
+            case 0:
+                DismissPopup(pSprite);
+
+                CInfGame::dword_8E7524 = FALSE;
+                pGame->RestParty(1, 0);
+                break;
+            case 1:
+                DismissPopup(pSprite);
+
+                CInfGame::dword_8E7524 = TRUE;
+                pGame->RestParty(1, 0);
+                CInfGame::dword_8E7524 = FALSE;
+                break;
+            case 2:
+                DismissPopup(pSprite);
+                break;
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+                // __LINE__: 10327
+                UTIL_ASSERT(FALSE);
+            }
+            break;
+        case 2:
+            switch (nButton) {
+            case 0:
+                DismissPopup(pSprite);
+                LevelUp(pSprite);
+                break;
+            case 1:
+                DismissPopup(pSprite);
+                break;
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+                // __LINE__: 10371
+                UTIL_ASSERT(FALSE);
+            }
+            break;
+        case 3:
+            switch (nButton) {
+            case 0:
+                DismissPopup(pSprite);
+                break;
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+                // __LINE__: 10353
+                UTIL_ASSERT(FALSE);
+            }
+            break;
+        case 6:
+            switch (nButton) {
+            case 0:
+                if (1) {
+                    DismissPopup(pSprite);
+
+                    LONG nCharacterId = pGame->GetCharacterId(m_nSelectedCharacter);
+
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+                    // __LINE__: 10426
+                    UTIL_ASSERT(nCharacterId != CGameObjectArray::INVALID_INDEX);
+
+                    pGame->CharacterExport(nCharacterId, field_176E);
+
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+                    // __LINE__: 10430
+                    UTIL_ASSERT(m_pCharacters != NULL);
+
+                    delete m_pCharacters;
+                    m_pCharacters = NULL;
+
+                    DismissPopup(pSprite);
+                }
+                break;
+            case 1:
+                DismissPopup(pSprite);
+                break;
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+                // __LINE__: 10443
+                UTIL_ASSERT(FALSE);
+            }
+            break;
+        case 7:
+            switch (nButton) {
+            case 0:
+                DismissPopup(pSprite);
+
+                if (pSprite->HaveUnexportableItems()) {
+                    m_nErrorState = 6;
+                    m_dwErrorTextId = 26586;
+                    m_strErrorButtonText[0] = 13912;
+                    m_strErrorButtonText[1] = 13913;
+                    SummonPopup(10, pSprite, 1);
+                } else {
+                    LONG nCharacterId = pGame->GetCharacterId(m_nSelectedCharacter);
+
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+                    // __LINE__: 10395
+                    UTIL_ASSERT(nCharacterId != CGameObjectArray::INVALID_INDEX);
+
+                    pGame->CharacterExport(nCharacterId, field_176E);
+
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+                    // __LINE__: 10399
+                    UTIL_ASSERT(m_pCharacters != NULL);
+
+                    delete m_pCharacters;
+                    m_pCharacters = NULL;
+
+                    DismissPopup(pSprite);
+                }
+                break;
+            case 1:
+                DismissPopup(pSprite);
+                break;
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+                // __LINE__: 10413
+                UTIL_ASSERT(FALSE);
+            }
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+            // __LINE__: 10449
+            UTIL_ASSERT(FALSE);
+        }
+
+        pGame->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    renderLock.Unlock();
 }
 
 // 0x5E8460

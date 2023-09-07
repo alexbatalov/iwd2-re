@@ -925,6 +925,12 @@ CString CInfGame::GetDirSounds()
     return m_sSoundsDir;
 }
 
+// 0x5A1AB0
+void CInfGame::CharacterExport(LONG nCharacterId, CString sFileName)
+{
+    // TODO: Incomplete.
+}
+
 // 0x5AC110
 BOOLEAN CInfGame::CanSaveGame(STRREF& strError, unsigned char a2, unsigned char a3)
 {

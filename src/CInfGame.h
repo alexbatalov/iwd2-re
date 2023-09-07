@@ -112,6 +112,7 @@ public:
     void sub_5A0160();
     LONG ImportCharacter(const CString& sFileName, INT nIndex);
     CString GetDirSounds();
+    void CharacterExport(LONG nCharacterId, CString sFileName);
     BOOLEAN CanSaveGame(STRREF& strError, unsigned char a2, unsigned char a3);
     BOOL SaveGame(unsigned char a1, unsigned char a2, unsigned char a3);
     void ProgressBarCallback(DWORD dwSize, BOOLEAN bInitialize);

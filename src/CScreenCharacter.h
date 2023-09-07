@@ -90,11 +90,13 @@ public:
     void OnScriptButtonClick();
     void OnExportButtonClick();
     void OnLevelUpButtonClick();
+    void LevelUp(CGameSprite* pSprite);
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
     void CheckDropEquipment();
     void CheckDropSlot(INT nSlot);
     void ResetErrorPanel(CUIPanel* pPanel);
     void UpdateCustomizePanel(CGameSprite* pSprite);
+    void OnErrorButtonClick(INT nButton);
     void OnCharacterItemSelect(INT nItem);
     INT GetNumHatedRaces();
     void SetTopHatedRace(INT nTopHatedRace);
@@ -110,6 +112,9 @@ public:
     void OnSoundItemSelect(INT nItem);
 
     static void ResetBiography(CGameSprite* pSprite);
+
+    // NOTE: Seen in `OnErrorButtonClick` assertion.
+    int GetNumErrorButtons() { return m_nNumErrorButtons; }
 
     /* 0106 */ BYTE m_nClass;
     /* 01B0 */ BOOL m_bShiftKeyDown;
@@ -150,6 +155,7 @@ public:
     /* 086E */ CVidFont m_preLoadFontRealms;
     /* 0D6E */ CVidFont m_preLoadFontStnSml;
     /* 126E */ CVidFont m_preLoadFontTool;
+    /* 176E */ CString field_176E;
     /* 1778 */ INT m_nExtraAbilityPoints;
     /* 177C */ BYTE m_nMinSTR;
     /* 177D */ BYTE m_nMinDEX;
