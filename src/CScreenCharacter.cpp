@@ -3491,6 +3491,83 @@ void CUIControlButtonCharacterPopupCancel::OnLButtonClick(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x5ED170
+CUIControlEditCharacter::CUIControlEditCharacter(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo)
+    : CUIControlEdit(panel, controlInfo, 0)
+{
+}
+
+// 0x5ED1C0
+CUIControlEditCharacter::~CUIControlEditCharacter()
+{
+}
+
+// 0x5ED290
+void CUIControlEditCharacter::OnKeyDown(SHORT nKey)
+{
+    CUIControlEdit::OnKeyDown(nKey);
+
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 13706
+    UTIL_ASSERT(pCharacter != NULL);
+
+    INT nGameSprite = g_pBaldurChitin->GetObjectGame()->GetCharacterId(pCharacter->GetSelectedCharacter());
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (m_nID == 6) {
+            pCharacter->OnCharacterItemSelect(-1);
+        }
+
+        pCharacter->UpdatePopupPanel(m_pPanel->m_nID, pSprite);
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// 0x5ED390
+void CUIControlEditCharacter::OnEditReturn(CString sText)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    INT nGameSprite = g_pBaldurChitin->GetObjectGame()->GetCharacterId(pCharacter->GetSelectedCharacter());
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (m_nID == 6) {
+            pCharacter->OnCharacterItemSelect(-1);
+        }
+
+        pCharacter->UpdatePopupPanel(m_pPanel->m_nID, pSprite);
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x5EEBD0
 CUIControlButtonCharacterCustomizeMenu::CUIControlButtonCharacterCustomizeMenu(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)

@@ -6,6 +6,7 @@
 #include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
 #include "CUIControlButtonPlusMinus.h"
+#include "CUIControlEdit.h"
 #include "CUIControlScrollBar.h"
 #include "CUIControlTextDisplay.h"
 #include "CVidFont.h"
@@ -271,6 +272,14 @@ public:
     CUIControlButtonCharacterPopupCancel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo, INT nType);
     ~CUIControlButtonCharacterPopupCancel() override;
     void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlEditCharacter : public CUIControlEdit {
+public:
+    CUIControlEditCharacter(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo);
+    ~CUIControlEditCharacter() override;
+    void OnKeyDown(SHORT nKey) override;
+    void OnEditReturn(CString sText) override;
 };
 
 class CUIControlButtonCharacterCustomizeMenu : public CUIControlButton {
