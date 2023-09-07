@@ -96,6 +96,7 @@ public:
     void CheckDropSlot(INT nSlot);
     void ResetErrorPanel(CUIPanel* pPanel);
     void UpdateCustomizePanel(CGameSprite* pSprite);
+    void OnScriptItemSelect(INT nItem);
     void OnErrorButtonClick(INT nButton);
     void OnCharacterItemSelect(INT nItem);
     INT GetNumHatedRaces();
@@ -125,6 +126,8 @@ public:
     /* 062A */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
     /* 077C */ WORD field_77C;
     /* 07B4 */ BOOLEAN m_bCtrlKeyDown;
+    /* 07BE */ CStringList* m_pScripts;
+    /* 07C2 */ INT m_nScriptIndex;
     /* 07C6 */ INT m_nErrorState;
     /* 07CA */ DWORD m_dwErrorTextId;
     /* 07CE */ INT m_nNumErrorButtons;

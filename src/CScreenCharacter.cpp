@@ -1726,6 +1726,103 @@ void CScreenCharacter::UpdateCustomizePanel(CGameSprite* pSprite)
     pButton->SetEnabled(bEnabled);
 }
 
+// 0x5E7C50
+void CScreenCharacter::OnScriptItemSelect(INT nItem)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 10164
+    UTIL_ASSERT(pGame != NULL);
+
+    CString sScript;
+    CString sTitle;
+    CString sDescription;
+
+    if (nItem >= 0) {
+        CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+        renderLock.Lock(INFINITE);
+
+        // NOTE: Uninline.
+        INT nGameSprite = pGame->GetCharacterId(m_nSelectedCharacter);
+
+        CGameSprite* pSprite;
+        BYTE rc;
+        do {
+            rc = pGame->GetObjectArray()->GetDeny(nGameSprite,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (nItem != m_nScriptIndex) {
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+                // __LINE__: 10198
+                UTIL_ASSERT(m_pScripts != NULL);
+
+                CUIPanel* pPanel = m_cUIManager.GetPanel(11);
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+                // __LINE__: 10202
+                UTIL_ASSERT(pPanel != NULL);
+
+                CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(2));
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+                // __LINE__: 10204
+                UTIL_ASSERT(pText != NULL);
+
+                if (m_nScriptIndex != -1) {
+                    pText->SetItemTextColor(pText->GetItemBossPosition(m_nScriptIndex),
+                        pText->m_rgbTextColor);
+                }
+
+                m_nScriptIndex = nItem;
+
+                if (m_nScriptIndex != -1) {
+                    pText->SetItemTextColor(pText->GetItemBossPosition(m_nScriptIndex),
+                        CBaldurChitin::TEXTDISPLAY_COLOR_SELECT);
+                }
+
+                CUIControlTextDisplay* pDescriptionText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(4));
+                pDescriptionText->RemoveAll();
+
+                sScript = m_pScripts->GetAt(m_pScripts->FindIndex(m_nScriptIndex));
+                pGame->GetRuleTables().GetScriptDescription(sScript, sTitle, sDescription);
+
+                if (sScript != "none") {
+                    pDescriptionText->DisplayString(CString(""),
+                        sTitle + ' ' + sDescription,
+                        pDescriptionText->m_rgbLabelColor,
+                        pDescriptionText->m_rgbTextColor,
+                        -1,
+                        FALSE,
+                        TRUE);
+                } else {
+                    pDescriptionText->DisplayString(CString(""),
+                        sTitle,
+                        pDescriptionText->m_rgbLabelColor,
+                        pDescriptionText->m_rgbTextColor,
+                        -1,
+                        FALSE,
+                        TRUE);
+                }
+
+                pDescriptionText->SetTopString(pDescriptionText->m_plstStrings->FindIndex(0));
+
+                UpdatePopupPanel(GetTopPopup()->m_nID, pSprite);
+            }
+
+            pGame->GetObjectArray()->ReleaseDeny(nGameSprite,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+
+        renderLock.Unlock();
+    }
+}
+
 // 0x5E7FF0
 void CScreenCharacter::OnErrorButtonClick(INT nButton)
 {
