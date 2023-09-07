@@ -952,6 +952,47 @@ void CScreenCharacter::TimerSynchronousUpdate()
     pVidMode->Flip(TRUE);
 }
 
+// 0x5DB950
+void CScreenCharacter::GetPartyInformation(DWORD& nPartyChapterKillsXPValue, DWORD& nPartyChapterKillsNumber, DWORD& nPartyGameKillsXPValue, DWORD& nPartyGameKillsNumber)
+{
+    nPartyChapterKillsXPValue = 0;
+    nPartyChapterKillsNumber = 0;
+    nPartyGameKillsXPValue = 0;
+    nPartyGameKillsNumber = 0;
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 4093
+    UTIL_ASSERT(pGame != NULL);
+
+    for (SHORT nIndex = 0; nIndex < pGame->GetNumCharacters(); nIndex) {
+        LONG nCharacterId = pGame->GetCharacterId(nIndex);
+
+        CGameSprite* pSprite;
+
+        BYTE rc;
+        do {
+            rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            nPartyChapterKillsXPValue += pSprite->m_cGameStats.m_nChapterKillsXPValue;
+            nPartyChapterKillsNumber += pSprite->m_cGameStats.m_nChapterKillsNumber;
+
+            nPartyGameKillsXPValue += pSprite->m_cGameStats.m_nGameKillsXPValue;
+            nPartyGameKillsNumber += pSprite->m_cGameStats.m_nGameKillsNumber;
+
+            pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+}
+
 // 0x5DBB20
 void CScreenCharacter::EnableMainPanel(BOOL bEnable)
 {
