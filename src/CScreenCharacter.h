@@ -266,6 +266,13 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonCharacterPopupCancel : public CUIControlButton {
+public:
+    CUIControlButtonCharacterPopupCancel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo, INT nType);
+    ~CUIControlButtonCharacterPopupCancel() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlButtonCharacterCustomizeMenu : public CUIControlButton {
 public:
     CUIControlButtonCharacterCustomizeMenu(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

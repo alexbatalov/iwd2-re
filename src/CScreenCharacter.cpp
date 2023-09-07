@@ -3461,6 +3461,36 @@ void CUIControlButtonCharacterPopupDone::OnLButtonClick(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x5EC760
+CUIControlButtonCharacterPopupCancel::CUIControlButtonCharacterPopupCancel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo, INT nType)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    if (nType == 1) {
+        SetText(CBaldurEngine::FetchString(12896)); // "Back"
+    } else {
+        SetText(CBaldurEngine::FetchString(13727)); // "Cancel"
+    }
+}
+
+// 0x5EC840
+CUIControlButtonCharacterPopupCancel::~CUIControlButtonCharacterPopupCancel()
+{
+}
+
+// 0x5EC8E0
+void CUIControlButtonCharacterPopupCancel::OnLButtonClick(CPoint pt)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 13302
+    UTIL_ASSERT(pCharacter != NULL);
+
+    pCharacter->OnCancelButtonClick();
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x5EEBD0
 CUIControlButtonCharacterCustomizeMenu::CUIControlButtonCharacterCustomizeMenu(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
