@@ -124,6 +124,7 @@ public:
     /* 0300 */ CKeyInfo m_pVirtualKeys[CSCREENCHARACTER_VIRTUAL_KEYS];
     /* 05D0 */ BYTE m_pVirtualKeysFlags[CSCREENCHARACTER_VIRTUAL_KEYS];
     /* 062A */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
+    /* 064A */ SHORT m_nTopFeat;
     /* 077C */ WORD field_77C;
     /* 07B4 */ BOOLEAN m_bCtrlKeyDown;
     /* 07BE */ CStringList* m_pScripts;
@@ -345,6 +346,19 @@ public:
     CUIControlTextDisplayCharacterSoundSounds(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo);
     ~CUIControlTextDisplayCharacterSoundSounds() override;
     void OnItemSelected(LONG lMarker) override;
+};
+
+class CUIControlScrollBarCharacterFeats : public CUIControlScrollBar {
+public:
+    CUIControlScrollBarCharacterFeats(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo);
+    ~CUIControlScrollBarCharacterFeats() override;
+    void OnScroll() override;
+    void OnScrollUp() override;
+    void OnScrollDown() override;
+    void OnPageUp(DWORD nLines) override;
+    void OnPageDown(DWORD nLines) override;
+    void UpdateScrollBar();
+    void InvalidateItems();
 };
 
 #endif /* CSCREENCHARACTER_H_ */

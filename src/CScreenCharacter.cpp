@@ -14,6 +14,9 @@
 #include "CUIPanel.h"
 #include "CUtil.h"
 
+#define FEAT_COUNT CGAMESPRITE_FEAT_NUMFEATS
+#define FEAT_SLOTS 9
+
 // 0x8F3324
 const CString CScreenCharacter::TOKEN_SPELLLEVEL("SPELLLEVEL");
 
@@ -4223,4 +4226,153 @@ void CUIControlTextDisplayCharacterSoundSounds::OnItemSelected(LONG lMarker)
     UTIL_ASSERT(pCharacter != NULL);
 
     pCharacter->OnSoundItemSelect(lMarker);
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x5F6910
+CUIControlScrollBarCharacterFeats::CUIControlScrollBarCharacterFeats(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo)
+    : CUIControlScrollBar(panel, controlInfo)
+{
+}
+
+// 0x632C00
+CUIControlScrollBarCharacterFeats::~CUIControlScrollBarCharacterFeats()
+{
+}
+
+// NOTE: Inlined.
+void CUIControlScrollBarCharacterFeats::UpdateScrollBar()
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 17070
+    UTIL_ASSERT(pCharacter != NULL);
+
+    AdjustScrollBar(pCharacter->m_nTopFeat, FEAT_COUNT, FEAT_SLOTS);
+}
+
+// 0x5F6930
+void CUIControlScrollBarCharacterFeats::OnScrollUp()
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 17095
+    UTIL_ASSERT(pCharacter != NULL);
+
+    pCharacter->m_nTopFeat = max(pCharacter->m_nTopFeat - 1, 0);
+
+    InvalidateItems();
+
+    // NOTE: Uninline.
+    UpdateScrollBar();
+}
+
+// 0x5F69D0
+void CUIControlScrollBarCharacterFeats::OnScrollDown()
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 17119
+    UTIL_ASSERT(pCharacter != NULL);
+
+    if (pCharacter->m_nTopFeat < FEAT_COUNT - FEAT_SLOTS) {
+        pCharacter->m_nTopFeat++;
+    }
+
+    InvalidateItems();
+
+    // NOTE: Uninline.
+    UpdateScrollBar();
+}
+
+// 0x5F6A80
+void CUIControlScrollBarCharacterFeats::OnPageUp(DWORD nLines)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 17148
+    UTIL_ASSERT(pCharacter != NULL);
+
+    INT nStep = min(nLines, FEAT_SLOTS - 1);
+    pCharacter->m_nTopFeat = max(pCharacter->m_nTopFeat - nStep, 0);
+
+    InvalidateItems();
+
+    // NOTE: Uninline.
+    UpdateScrollBar();
+}
+
+// 0x5F6B30
+void CUIControlScrollBarCharacterFeats::OnPageDown(DWORD nLines)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 17176
+    UTIL_ASSERT(pCharacter != NULL);
+
+    INT nStep = min(nLines, FEAT_SLOTS - 1);
+    pCharacter->m_nTopFeat += nStep;
+
+    InvalidateItems();
+
+    // NOTE: Uninline.
+    UpdateScrollBar();
+}
+
+// 0x5F6BD0
+void CUIControlScrollBarCharacterFeats::OnScroll()
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 17204
+    UTIL_ASSERT(pCharacter != NULL);
+
+    INT nTopFeat = max(FEAT_COUNT * field_144, 0) / field_142;
+    pCharacter->m_nTopFeat = max(min(nTopFeat - FEAT_SLOTS, FEAT_COUNT - FEAT_SLOTS), 0);
+
+    InvalidateItems();
+
+    // NOTE: Uninline.
+    UpdateScrollBar();
+}
+
+// 0x5F6CA0
+void CUIControlScrollBarCharacterFeats::InvalidateItems()
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 17235
+    UTIL_ASSERT(pCharacter != NULL);
+
+    CSingleLock renderLock(&(pCharacter->GetManager()->field_36), FALSE);
+    renderLock.Lock();
+
+    INT nGameSprite = pCharacter->field_1840;
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        pCharacter->UpdatePopupPanel(m_pPanel->m_nID, pSprite);
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    renderLock.Unlock();
 }
