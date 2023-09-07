@@ -1804,6 +1804,45 @@ void CScreenCharacter::CancelEngine()
     }
 }
 
+// 0x5E86D0
+void CScreenCharacter::UpdateCharacterStatus(LONG nCharacterId)
+{
+    CBaldurEngine::UpdateCharacterStatus(nCharacterId);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    if (pGame != NULL && field_17A4 == 0) {
+        if (pGame->GetCharacterId(GetSelectedCharacter()) == nCharacterId) {
+            CGameSprite* pSprite;
+
+            BYTE rc;
+            do {
+                rc = pGame->GetObjectArray()->GetDeny(nCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    reinterpret_cast<CGameObject**>(&pSprite),
+                    INFINITE);
+            } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+            if (rc == CGameObjectArray::SUCCESS) {
+                BOOL bIsDead = (pSprite->GetDerivedStats()->m_generalState & STATE_DEAD) != 0;
+
+                pGame->GetObjectArray()->ReleaseDeny(nCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+
+                if (bIsDead) {
+                    while (GetTopPopup() != NULL) {
+                        OnCancelButtonClick();
+                    }
+                }
+            }
+
+            if (GetTopPopup() == NULL) {
+                UpdateMainPanel(FALSE);
+            }
+        }
+    }
+}
+
 // NOTE: Inlined.
 INT CScreenCharacter::GetNumHatedRaces()
 {

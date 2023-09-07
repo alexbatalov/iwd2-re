@@ -49,6 +49,7 @@ public:
     /* 00E0 */ void OnPortraitLClick(DWORD nPortrait) override;
     /* 00F0 */ void OnRestButtonClick() override;
     /* 0104 */ void CancelEngine() override;
+    /* 0108 */ void UpdateCharacterStatus(LONG nCharacterId) override;
 
     void UpdateSavingThrows(CUIControlTextDisplay* pText, CDerivedStats& DStats);
     CString GetCurrentPortrait(CGameSprite* pSprite);
