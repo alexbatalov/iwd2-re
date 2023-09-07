@@ -17,6 +17,9 @@
 #define FEAT_COUNT CGAMESPRITE_FEAT_NUMFEATS
 #define FEAT_SLOTS 9
 
+#define SKILL_COUNT CGAMESPRITE_SKILL_NUMSKILLS
+#define SKILL_SLOTS 9
+
 // 0x8F3324
 const CString CScreenCharacter::TOKEN_SPELLLEVEL("SPELLLEVEL");
 
@@ -4400,6 +4403,152 @@ void CUIControlScrollBarCharacterFeats::InvalidateItems()
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
     // __LINE__: 17235
+    UTIL_ASSERT(pCharacter != NULL);
+
+    CSingleLock renderLock(&(pCharacter->GetManager()->field_36), FALSE);
+    renderLock.Lock();
+
+    INT nGameSprite = pCharacter->field_1840;
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        pCharacter->UpdatePopupPanel(m_pPanel->m_nID, pSprite);
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    renderLock.Unlock();
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x5F7F90
+CUIControlScrollBarCharacterSkills::CUIControlScrollBarCharacterSkills(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo)
+    : CUIControlScrollBar(panel, controlInfo)
+{
+}
+
+// 0x632C00
+CUIControlScrollBarCharacterSkills::~CUIControlScrollBarCharacterSkills()
+{
+}
+
+// NOTE: Inlined.
+void CUIControlScrollBarCharacterSkills::UpdateScrollBar()
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 18162
+    UTIL_ASSERT(pCharacter != NULL);
+
+    AdjustScrollBar(pCharacter->m_nTopSkill, SKILL_COUNT, SKILL_SLOTS);
+}
+
+// 0x5F7FB0
+void CUIControlScrollBarCharacterSkills::OnScrollUp()
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 18187
+    UTIL_ASSERT(pCharacter != NULL);
+
+    pCharacter->m_nTopSkill = max(pCharacter->m_nTopSkill - 1, 0);
+
+    InvalidateItems();
+
+    // NOTE: Uninline.
+    UpdateScrollBar();
+}
+
+// 0x5F8050
+void CUIControlScrollBarCharacterSkills::OnScrollDown()
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 18211
+    UTIL_ASSERT(pCharacter != NULL);
+
+    pCharacter->m_nTopSkill++;
+
+    InvalidateItems();
+
+    // NOTE: Uninline.
+    UpdateScrollBar();
+}
+
+// 0x5F80E0
+void CUIControlScrollBarCharacterSkills::OnPageUp(DWORD nLines)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 18235
+    UTIL_ASSERT(pCharacter != NULL);
+
+    INT nStep = min(nLines, SKILL_SLOTS - 1);
+    pCharacter->m_nTopSkill = max(pCharacter->m_nTopSkill - nStep, 0);
+
+    InvalidateItems();
+
+    // NOTE: Uninline.
+    UpdateScrollBar();
+}
+
+// 0x5F8190
+void CUIControlScrollBarCharacterSkills::OnPageDown(DWORD nLines)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 11362
+    UTIL_ASSERT(pCharacter != NULL);
+
+    INT nStep = min(nLines, SKILL_SLOTS - 1);
+    pCharacter->m_nTopSkill += nStep;
+
+    InvalidateItems();
+
+    // NOTE: Uninline.
+    UpdateScrollBar();
+}
+
+// 0x5F8230
+void CUIControlScrollBarCharacterSkills::OnScroll()
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 18291
+    UTIL_ASSERT(pCharacter != NULL);
+
+    pCharacter->m_nTopSkill = max(SKILL_COUNT * field_144, 0) / field_142;
+
+    InvalidateItems();
+
+    // NOTE: Uninline.
+    UpdateScrollBar();
+}
+
+// 0x5F82E0
+void CUIControlScrollBarCharacterSkills::InvalidateItems()
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 18318
     UTIL_ASSERT(pCharacter != NULL);
 
     CSingleLock renderLock(&(pCharacter->GetManager()->field_36), FALSE);

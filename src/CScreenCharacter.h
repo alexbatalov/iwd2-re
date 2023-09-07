@@ -121,6 +121,7 @@ public:
     /* 01B0 */ BOOL m_bShiftKeyDown;
     /* 01B4 */ BOOL m_bCapsLockKeyOn;
     /* 01B8 */ BOOLEAN field_1B8;
+    /* 02BA */ SHORT m_nTopSkill;
     /* 0300 */ CKeyInfo m_pVirtualKeys[CSCREENCHARACTER_VIRTUAL_KEYS];
     /* 05D0 */ BYTE m_pVirtualKeysFlags[CSCREENCHARACTER_VIRTUAL_KEYS];
     /* 062A */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
@@ -352,6 +353,19 @@ class CUIControlScrollBarCharacterFeats : public CUIControlScrollBar {
 public:
     CUIControlScrollBarCharacterFeats(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo);
     ~CUIControlScrollBarCharacterFeats() override;
+    void OnScroll() override;
+    void OnScrollUp() override;
+    void OnScrollDown() override;
+    void OnPageUp(DWORD nLines) override;
+    void OnPageDown(DWORD nLines) override;
+    void UpdateScrollBar();
+    void InvalidateItems();
+};
+
+class CUIControlScrollBarCharacterSkills : public CUIControlScrollBar {
+public:
+    CUIControlScrollBarCharacterSkills(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo);
+    ~CUIControlScrollBarCharacterSkills() override;
     void OnScroll() override;
     void OnScrollUp() override;
     void OnScrollDown() override;
