@@ -1369,6 +1369,14 @@ void CScreenCharacter::OnDoneButtonClick()
     // TODO: Incomplete.
 }
 
+// 0x5E3B80
+BOOL CScreenCharacter::OnCancelButtonClick()
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x5E46C0
 void CScreenCharacter::OnInformationButtonClick()
 {
@@ -1779,6 +1787,20 @@ void CScreenCharacter::OnCharacterItemSelect(INT nItem)
         pGame->GetObjectArray()->ReleaseDeny(nGameSprite,
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
+    }
+}
+
+// 0x5E8690
+void CScreenCharacter::CancelEngine()
+{
+    while (GetTopPopup() != NULL) {
+        if (!OnCancelButtonClick()) {
+            break;
+        }
+    }
+
+    while (m_lPopupStack.GetTailPosition() != NULL) {
+        DismissPopup(NULL);
     }
 }
 

@@ -48,6 +48,7 @@ public:
     /* 00C4 */ void TimerSynchronousUpdate() override;
     /* 00E0 */ void OnPortraitLClick(DWORD nPortrait) override;
     /* 00F0 */ void OnRestButtonClick() override;
+    /* 0104 */ void CancelEngine() override;
 
     void UpdateSavingThrows(CUIControlTextDisplay* pText, CDerivedStats& DStats);
     CString GetCurrentPortrait(CGameSprite* pSprite);
@@ -80,6 +81,7 @@ public:
     void DismissPopup(CGameSprite* pSprite);
     BOOL IsDoneButtonClickable(CGameSprite* pSprite);
     void OnDoneButtonClick();
+    BOOL OnCancelButtonClick();
     void OnInformationButtonClick();
     void OnBiographyButtonClick();
     void OnCustomizeBiographyButtonClick();
