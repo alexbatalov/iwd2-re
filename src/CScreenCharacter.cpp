@@ -6,8 +6,10 @@
 #include "CGameSprite.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CItem.h"
 #include "CScreenCreateChar.h"
 #include "CScreenWorld.h"
+#include "CSpell.h"
 #include "CUIControlFactory.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -1098,6 +1100,131 @@ STRREF CScreenCharacter::GetRangerHatedRaceStrref(BYTE nRace)
 void CScreenCharacter::UpdateMainPanel(BOOL bCharacterChanged)
 {
     // TODO: Incomplete.
+}
+
+// 0x5E0200
+void CScreenCharacter::UpdateMiscInformation(CUIControlTextDisplay* pText, CGameSprite* pSprite)
+{
+    CResRef resRef;
+    CString sFavouriteSpellName;
+    CString sFavouriteWeaponName;
+
+    DWORD nPartyChapterKillsXPValue;
+    DWORD nPartyChapterKillsNumber;
+    DWORD nPartyGameKillsXPValue;
+    DWORD nPartyGameKillsNumber;
+    GetPartyInformation(nPartyChapterKillsXPValue,
+        nPartyChapterKillsNumber,
+        nPartyGameKillsXPValue,
+        nPartyGameKillsNumber);
+
+    UpdateTextForceColor(pText,
+        RGB(200, 200, 0),
+        "%s",
+        FetchString(40320)); // "Favorites"
+
+    pSprite->m_cGameStats.GetFavouriteSpell(resRef);
+    if (resRef != NULL) {
+        CSpell cSpell;
+        cSpell.SetResRef(resRef, TRUE, TRUE);
+
+        cSpell.Demand();
+        if (cSpell.GetRes() != NULL) {
+            sFavouriteSpellName = FetchString(cSpell.GetGenericName());
+        } else {
+            sFavouriteSpellName = "Bad spell resref";
+        }
+    }
+
+    UpdateText(pText,
+        "%s: %s",
+        FetchString(11949), // "Favorite Spell (if applicable)"
+        sFavouriteSpellName);
+
+    sFavouriteWeaponName = "";
+
+    pSprite->m_cGameStats.GetFavouriteWeapon(resRef);
+    if (resRef != "") {
+        CItem cWeapon(resRef, 0, 0, 0, 0, 0);
+
+        if (cWeapon.GetRes() != NULL) {
+            STRREF strType;
+            switch (cWeapon.GetItemType()) {
+            case 5:
+                strType = 10476; // "Bow and <WEAPONNAME>"
+                break;
+            case 14:
+                strType = 10478; // "Sling and <WEAPONNAME>"
+                break;
+            case 31:
+                strType = 10477; // "Crossbow and <WEAPONNAME>"
+                break;
+            default:
+                strType = 10479; // "<WEAPONNAME>"
+                break;
+            }
+
+            g_pBaldurChitin->GetTlkTable().SetToken(TOKEN_WEAPONNAME,
+                FetchString(cWeapon.GetGenericName()));
+
+            sFavouriteWeaponName = FetchString(strType);
+        }
+    }
+
+    UpdateText(pText,
+        "%s: %s",
+        FetchString(11950), // "Favorite Weapon"
+        sFavouriteWeaponName);
+
+    UpdateText(pText, "");
+
+    UpdateTextForceColor(pText,
+        RGB(200, 200, 0),
+        "%s",
+        FetchString(40322)); // "Combat Statistics"
+
+    STRREF strName;
+    pSprite->m_cGameStats.GetStrongestKill(strName);
+
+    UpdateText(pText,
+        "%s: %s",
+        FetchString(11947), // "Most Powerful Vanquished"
+        FetchString(strName));
+
+    ULONG nCurrentTimeWithParty;
+    pSprite->m_cGameStats.GetTimeWithParty(nCurrentTimeWithParty);
+
+    CString sCurrentTimeWithParty;
+    CTimerWorld::GetCurrentTimeString(nCurrentTimeWithParty, 16043, sCurrentTimeWithParty);
+
+    UpdateText(pText,
+        "%s: %s",
+        FetchString(11948), // "Time Spent with Party"
+        sCurrentTimeWithParty);
+
+    UpdateText(pText,
+        "%s: %d",
+        FetchString(11953), // "Experience Value of Kills"
+        pSprite->m_cGameStats.m_nGameKillsXPValue);
+
+    UpdateText(pText,
+        "%s: %d",
+        FetchString(11954), // "Number of Kills"
+        pSprite->m_cGameStats.m_nGameKillsNumber);
+
+    UpdateText(pText,
+        "%s: %d%%",
+        FetchString(11951), // "Total Experience Value in Party"
+        nPartyGameKillsXPValue > 0
+            ? 100 * pSprite->m_cGameStats.m_nGameKillsXPValue / nPartyGameKillsXPValue
+            : 0);
+
+    UpdateText(pText,
+        "%s: %d%%",
+        FetchString(11952), // "Percentage of Total Kills in Party"
+        nPartyGameKillsNumber > 0
+            ? 100 * pSprite->m_cGameStats.m_nGameKillsNumber / nPartyGameKillsNumber
+            : 0);
 }
 
 // 0x5E0880
