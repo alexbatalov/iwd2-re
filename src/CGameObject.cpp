@@ -121,7 +121,7 @@ CGameObject::CGameObject()
     m_AISpeed = AI_SPEED_NORMAL;
     m_typeAI.Set(CAIObjectType::NOT_SPRITE);
     m_remotePlayerID = 0;
-    field_66 = -1;
+    m_remoteObjectID = CGameObjectArray::INVALID_INDEX;
     field_6B = 0;
     field_1C = 0;
     m_listType = LIST_FRONT;

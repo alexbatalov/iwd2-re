@@ -34,6 +34,12 @@ public:
     static const INT SERV_PROV_IPX;
     static const INT SERV_PROV_NULL;
 
+    static const INT SPEC_MSG_HEADER_LENGTH;
+    static const INT SPEC_MSG_FLAG;
+    static const INT SPEC_MSG_TYPE;
+    static const INT SPEC_MSG_SUBTYPE;
+    static const BYTE SPEC_MSG_FLAG_ENABLED;
+
     static const INT ERROR_NONE;
     static const INT ERROR_PLAYEREXISTS;
     static const INT ERROR_CANNOTCREATEPLAYER;

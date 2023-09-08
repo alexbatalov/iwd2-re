@@ -127,6 +127,7 @@ public:
     /* 119E */ BOOLEAN m_bPendingReformParty;
     /* 11CA */ BYTE m_nAutoHideInterface;
     /* 11CC */ INT m_nAutoUnhideInterface;
+    /* 1204 */ unsigned char field_1204;
 };
 
 class CUIControlButtonWorldContainerIcon : public CUIControlButton {

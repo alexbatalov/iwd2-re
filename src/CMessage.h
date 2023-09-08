@@ -234,6 +234,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ SHORT m_face;
@@ -245,6 +247,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 };
 
@@ -254,6 +258,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 };
 
@@ -263,6 +269,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ SHORT m_slotNum;
@@ -274,6 +282,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 };
 
@@ -283,6 +293,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ BYTE m_colors[7];
@@ -294,6 +306,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 };
 
@@ -304,10 +318,12 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ CColorRanges m_appliedColorRanges;
-    /* */ CColorEffects m_appliedColorEffects;
+    /* 0028 */ CColorEffects m_appliedColorEffects;
 };
 
 class CMessageContainerStatus : public CMessage {
@@ -316,6 +332,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ DWORD m_dwFlags;
@@ -329,6 +347,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ BOOLEAN m_cutSceneMode;
@@ -357,6 +377,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ STRREF m_name;
@@ -373,6 +395,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ DWORD m_dwFlags;
@@ -387,6 +411,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 };
 
@@ -410,6 +436,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ BOOLEAN m_bButtonPushed;
@@ -421,6 +449,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 };
 
@@ -442,6 +472,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 };
 
@@ -451,6 +483,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ LONG m_gold;
@@ -464,6 +498,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ BOOL m_showText;
@@ -477,6 +513,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ SHORT m_deltaRep;
@@ -488,6 +526,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ BYTE m_nAISpeed;
@@ -499,6 +539,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ SHORT m_commandPause;
@@ -522,6 +564,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ CPoint m_face;
@@ -533,6 +577,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ SHORT m_time;
@@ -544,6 +590,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ BOOLEAN m_forceActionPick;
@@ -555,6 +603,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ SHORT m_happiness;
@@ -566,6 +616,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ BOOL m_status;
@@ -602,6 +654,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ LONG m_nNumTimesTalkedTo;
@@ -613,6 +667,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ BYTE m_sequence;
@@ -636,6 +692,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ DWORD m_nDeathType;
@@ -647,6 +705,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ BOOLEAN m_bPetrify;
@@ -658,6 +718,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 };
 
@@ -667,6 +729,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 };
 
@@ -676,6 +740,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 };
 
@@ -685,6 +751,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ DWORD m_dwFlags;
@@ -696,6 +764,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ LONG m_nReaction;
@@ -707,6 +777,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ LONG m_verbalConstant;
@@ -718,6 +790,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ BOOLEAN m_moveOntoList;
@@ -740,6 +814,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 };
 
@@ -751,6 +827,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ STRREF m_name;
@@ -767,6 +845,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ SHORT m_actionId;
@@ -789,6 +869,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ BOOLEAN m_bFamiliarAdd;
@@ -800,6 +882,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     /* 000C */ CResRef m_resRef;
@@ -813,6 +897,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 };
 
@@ -822,6 +908,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     CResRef m_store;
@@ -833,6 +921,8 @@ public:
     SHORT GetCommType() override;
     BYTE GetMsgType() override;
     BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
 
     CResRef m_store;

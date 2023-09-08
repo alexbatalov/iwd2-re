@@ -80,7 +80,7 @@ public:
     /* 005C */ LONG m_id;
     /* 0060 */ SHORT m_canBeSeen;
     /* 0062 */ DWORD m_remotePlayerID;
-    /* 0066 */ int field_66;
+    /* 0066 */ LONG m_remoteObjectID;
     /* 006A */ BYTE m_AISpeed;
     /* 006B */ unsigned char field_6B;
     /* 006C */ unsigned char field_6C;

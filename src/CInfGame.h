@@ -9,6 +9,7 @@
 #include "CGameJournal.h"
 #include "CGameObjectArray.h"
 #include "CGameOptions.h"
+#include "CGameRemoteObjectArray.h"
 #include "CInfButtonArray.h"
 #include "CInfinity.h"
 #include "CMoveList.h"
@@ -227,6 +228,9 @@ public:
 
     const CRuleTables& GetRuleTables() { return m_ruleTables; }
 
+    // NOTE: Remote cousin of `GetObjectArray`.
+    CGameRemoteObjectArray* GetRemoteObjectArray() { return &m_cRemoteObjectArray; }
+
     LONG GetFixedOrderCharacterId(SHORT nSlot);
 
     static const CString FOGOWAR_RESREF;
@@ -291,6 +295,7 @@ public:
     /* 366E */ int field_366E;
     /* 3672 */ CVidBitmap m_rgbMasterBitmap;
     /* 372C */ CGameObjectArray m_cObjectArray;
+    /* 375A */ CGameRemoteObjectArray m_cRemoteObjectArray;
     /* 37E0 */ BYTE m_visibleArea;
     /* 37E1 */ BOOLEAN m_bPlayerScriptStyle;
     /* 37E2 */ CGameArea* m_gameAreas[CINFGAME_MAX_AREAS];
