@@ -354,7 +354,7 @@ void CScreenConnection::EngineActivated()
         dword_8F3768 = 1;
         break;
     case 1:
-        if (g_pBaldurChitin->cSoundMixer.sub_7ACA20() != 1) {
+        if (g_pBaldurChitin->cSoundMixer.GetSongPlaying() != 1) {
             g_pBaldurChitin->cSoundMixer.StopMusic(TRUE);
         }
 
@@ -363,9 +363,9 @@ void CScreenConnection::EngineActivated()
         dword_8F3768 = 2;
         break;
     default:
-        g_pBaldurChitin->cSoundMixer.sub_7ACA20();
+        g_pBaldurChitin->cSoundMixer.GetSongPlaying();
 
-        if (g_pBaldurChitin->cSoundMixer.sub_7ACA20() != 1
+        if (g_pBaldurChitin->cSoundMixer.GetSongPlaying() != 1
             && g_pBaldurChitin->cSoundMixer.m_nCurrentSong != 1) {
             dword_8F3768 = 1;
         }

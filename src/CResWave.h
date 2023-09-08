@@ -16,7 +16,7 @@ public:
     BOOL Parse(void* pData);
     BOOL ParseNormalWave(void* pData);
     BOOL ParseCompressedWave(void* pData);
-    BOOL CopyWaveData(BYTE* pWaveData);
+    int CopyWaveData(BYTE* pWaveData);
 
     /* 0050 */ BOOL m_bCompressed;
     /* 0054 */ BOOL m_bParsed;

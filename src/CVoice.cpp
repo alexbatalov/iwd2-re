@@ -83,3 +83,13 @@ void CVoice::ResetVolume()
         m_pSound->ResetVolume();
     }
 }
+
+// NOTE: Inlined in `CSoundMixer::UpdateSoundList`.
+int CVoice::GetPriority()
+{
+    if (m_pSound != NULL) {
+        return m_pSound->m_nPriority;
+    }
+
+    return m_nPriority;
+}

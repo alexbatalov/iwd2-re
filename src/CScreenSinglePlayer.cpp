@@ -1204,8 +1204,8 @@ void CScreenSinglePlayer::CancelEngine()
         OnCancelButtonClick();
     }
 
-    g_pBaldurChitin->field_4F38 = g_pBaldurChitin->cSoundMixer.sub_7AC840();
-    g_pBaldurChitin->field_4F3C = g_pBaldurChitin->cSoundMixer.sub_7AC890();
+    g_pBaldurChitin->field_4F38 = g_pBaldurChitin->cSoundMixer.GetSectionPlaying();
+    g_pBaldurChitin->field_4F3C = g_pBaldurChitin->cSoundMixer.GetMusicPosition();
 }
 
 // 0x663860

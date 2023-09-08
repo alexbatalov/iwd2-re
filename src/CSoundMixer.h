@@ -11,6 +11,8 @@
 #include "CSoundProperties.h"
 #include "CUnknown2.h"
 
+#define CSOUNDMIXER_MAX_SONGS 75
+
 class CSound;
 
 class CSoundMixer {
@@ -28,12 +30,15 @@ public:
     void InitializeChannels(int nNewMaxChannels);
     BOOL ReleaseAll();
     void RemoveWaiting(CSound* pSoundPtr);
+    void SetChannelVolume(int nChannelNumber, int nNewVolume);
     void SetListenPosition(int nNewXCoordinate, int nNewYCoordinate, int nNewZCoordinate);
     void SetPanRange(int nNewPanRange);
     void UpdateSoundList();
+    BOOL UpdateSoundList(INT nPriority);
     void UpdateSoundPositions();
     void UpdateQueue();
     void SetMusicPath(CString& sMusicPath);
+    BOOL SetMusicSongs(INT nNumSongs, CHAR** ppSongFiles);
     void SetMusicVolume(int nNewVolume);
     void StartSong(INT nSong, DWORD dwFlags);
     void StartSong(INT nSong, INT nSection, INT nPosition, DWORD dwFlags);
@@ -41,19 +46,20 @@ public:
     void Lock();
     void Unlock();
     void UpdateMusic();
-    int sub_7AC840();
-    int sub_7AC890();
-    int sub_7ACA20();
+    int GetSectionPlaying();
+    int GetMusicPosition();
+    BOOL sub_7ACA10();
+    int GetSongPlaying();
     int sub_7ACA30();
 
-    void SetChannelVolume(int nChannelNumber, int nNewVolume);
+    void SetChannelVolumeFast(int nChannelNumber, int nNewVolume);
     int GetChannelVolumeFast(int nChannelNumber);
     BOOL IsSoundWaiting(CSound* pSound);
     void RemoveFromLoopingList(CSound* pSound);
 
     BOOL GetMixerInitialized() { return m_bMixerInitialized; }
 
-    static BYTE m_tSqrtTable[10000];
+    static BYTE m_tSqrtTable[10001];
 
     /* 0000 */ int field_0;
     /* 0004 */ IDirectSound* m_pDirectSound; // #guess
@@ -76,7 +82,7 @@ public:
     /* 00D0 */ int field_D0;
     /* 00D4 */ int field_D4;
     /* 00D8 */ int m_nMaxChannels;
-    /* 00DC */ int field_DC;
+    /* 00DC */ int m_nMaxVoices;
     /* 00E0 */ int m_nPanRange;
     /* 00E4 */ int m_nXCoordinate;
     /* 00E8 */ int m_nYCoordinate;
@@ -89,7 +95,7 @@ public:
     /* 0114 */ CString m_sMusicPath; // #guess
     /* 0118 */ BOOL m_bMusicInitialized;
     /* 011C */ int m_nCurrentSong;
-    /* 0120 */ int m_nNumSongs;
+    /* 0120 */ INT m_nNumSongs;
     /* 0124 */ int m_nLastSong;
     /* 0128 */ CSoundProperties m_cSoundProperties; // #guess
     /* 013C */ IDirectSound3DListener* m_pDirectSound3DListener; // #guess

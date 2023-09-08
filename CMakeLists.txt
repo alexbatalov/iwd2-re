@@ -13,6 +13,16 @@ set(CMAKE_MFC_FLAG 2)
 add_executable(${EXECUTABLE_NAME} WIN32)
 
 target_sources(${EXECUTABLE_NAME} PUBLIC
+    "src/music/adecode.cpp"
+    "src/music/adecode.h"
+    "src/music/audio.cpp"
+    "src/music/audio.h"
+    "src/music/music.cpp"
+    "src/music/music.h"
+    "src/music/sectionsize.cpp"
+    "src/music/sectionsize.h"
+    "src/music/sound.cpp"
+    "src/music/sound.h"
     "src/BalDataTypes.h"
     "src/C2DArray.cpp"
     "src/C2DArray.h"
@@ -380,6 +390,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/resource.h"
     "src/resource.rc"
 )
+
+target_include_directories(${EXECUTABLE_NAME} PUBLIC src)
 
 target_compile_definitions(${EXECUTABLE_NAME} PUBLIC
     _AFXDLL

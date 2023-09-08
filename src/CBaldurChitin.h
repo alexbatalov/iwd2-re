@@ -66,6 +66,8 @@ public:
     static const CString PRINTSCREEN_FILE_NAME;
     static const CString ICON_RES_ID;
 
+    static CHAR* SONGS[100];
+
     CBaldurChitin();
     ~CBaldurChitin();
     void Init(HINSTANCE hInstance);
@@ -141,6 +143,7 @@ public:
     /* 00EC */ void GetGameSpyGameName(CString& sGameSpyName) override;
     /* 00F0 */ void GetGameSpyCode(CString& sGameSpyCode) override;
     /* 00F4 */ void GetPanicCDStrings(CString& sMediaRemoved, CString& sPlaceCD, CString& sInDrive) override;
+    /* 00F8 */ void OnMixerInitialize() override;
     /* 00FC */ BOOL Is3DSound(int nSoundChannel) override;
     /* 0100 */ float GetSoundReverbMix(int nSoundChannel, int nReverb) override;
     /* 0104 */ BOOL GetEAXActive() override;

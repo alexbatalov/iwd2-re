@@ -24,7 +24,7 @@ public:
     BOOL ExclusivePlay(BOOL bReplay);
     BOOL ExclusiveStop();
     DWORD GetPlayTime();
-    void ResetVolume();
+    BOOL ResetVolume();
     BOOL SetChannel(int nNewChannel, DWORD nArea);
 
     BOOL IsSoundPlaying();

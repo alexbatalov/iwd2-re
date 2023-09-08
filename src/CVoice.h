@@ -22,6 +22,8 @@ public:
     int GetChannel();
     void ResetVolume();
 
+    int GetPriority();
+
     /* 0004 */ CSound* m_pSound;
     /* 0008 */ IDirectSoundBuffer* m_pSoundBuffer;
     /* 000C */ int m_nChannel;

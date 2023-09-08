@@ -7,12 +7,14 @@
 #include "CSoundChannel.h"
 #include "CUtil.h"
 #include "CVoice.h"
+#include "music/music.h"
+#include "music/sound.h"
 
-static void MusicDebugFunc(CHAR* a1);
-static BOOL MusicCompressQuery(CHAR* a1);
+static void MusicDebug(char* string);
+static int MusicCompressQuery(char* name);
 
 // 0x9039D8
-BYTE CSoundMixer::m_tSqrtTable[10000];
+BYTE CSoundMixer::m_tSqrtTable[10001];
 
 // 0x7AAD80
 CSoundMixer::CSoundMixer()
@@ -27,7 +29,7 @@ CSoundMixer::CSoundMixer()
     field_D0 = 0;
     field_D4 = 0;
     m_nMaxChannels = 0;
-    field_DC = 0;
+    m_nMaxVoices = 0;
     m_nPanRange = 0;
     m_nXCoordinate = 0;
     m_nYCoordinate = 0;
@@ -52,7 +54,7 @@ CSoundMixer::CSoundMixer()
     m_aMusicSlots.SetSize(10);
 
     // NOTE: Generated assembly is different.
-    for (int i = 0; i < 10000; i++) {
+    for (int i = 0; i < 10001; i++) {
         m_tSqrtTable[i] = static_cast<BYTE>(sqrt(static_cast<double>(i)));
     }
 
@@ -142,9 +144,8 @@ void CSoundMixer::CleanUp()
     }
 
     if (m_bMusicInitialized) {
-        // TODO: Incomplete.
-        // musicClose();
-        // soundClose();
+        musicClose();
+        soundClose();
     }
 
     m_bMusicInitialized = FALSE;
@@ -214,7 +215,7 @@ void CSoundMixer::Initialize(CWnd* pWnd, int nNewMaxVoices, int nNewMaxChannels)
     field_CC = 0;
     field_D0 = 0;
     m_nMaxChannels = -1;
-    field_DC = nNewMaxVoices;
+    m_nMaxVoices = nNewMaxVoices;
     m_nPanRange = 1;
     m_bInPositionUpdate = FALSE;
     m_bInReleaseAll = FALSE;
@@ -282,13 +283,12 @@ void CSoundMixer::Initialize(CWnd* pWnd, int nNewMaxVoices, int nNewMaxChannels)
         }
     }
 
-    // TODO: Incomplete.
-    // if (soundInit(m_hWnd, m_pDirectSound, 16, 8192, 22050) == 0) {
-    //     if (musicInit(MusicCompressQuery) == 0) {
-    //         musicSetDebugFunc(MusicDebugFunc);
-    //         m_bMusicInitialized = TRUE;
-    //     }
-    // }
+    if (soundInit(m_hWnd, m_pDirectSound, 16, 0x2000, 22050) == SOUND_NO_ERROR) {
+        if (musicInit(MusicCompressQuery) == 0) {
+            musicSetDebugFunc(MusicDebug);
+            m_bMusicInitialized = TRUE;
+        }
+    }
 
     if (m_bMusicInitialized) {
         g_pChitin->OnMixerInitialize();
@@ -415,6 +415,33 @@ void CSoundMixer::RemoveWaiting(CSound* pSoundPtr)
     Unlock();
 }
 
+// 0x7AB990
+void CSoundMixer::SetChannelVolume(int nChannelNumber, int nNewVolume)
+{
+    Lock();
+
+    if (nChannelNumber >= 0 && nChannelNumber <= m_nMaxChannels) {
+        if (nNewVolume < 0) {
+            nNewVolume = 0;
+        } else if (nNewVolume > 100) {
+            nNewVolume = 100;
+        }
+
+        CSoundChannel* pSoundChannel = static_cast<CSoundChannel*>(m_aChannels[nChannelNumber]);
+        pSoundChannel->SetVolume(nNewVolume);
+
+        POSITION pos = m_lVoices.GetHeadPosition();
+        while (pos != NULL) {
+            CVoice* pVoice = static_cast<CVoice*>(m_lVoices.GetNext(pos));
+            if (pVoice->GetChannel() == nChannelNumber) {
+                pVoice->ResetVolume();
+            }
+        }
+    }
+
+    Unlock();
+}
+
 // 0x7ABA90
 void CSoundMixer::SetListenPosition(int nNewXCoordinate, int nNewYCoordinate, int nNewZCoordinate)
 {
@@ -449,7 +476,155 @@ void CSoundMixer::SetPanRange(int nNewPanRange)
 // 0x7ABBA0
 void CSoundMixer::UpdateSoundList()
 {
-    // TODO: Incomplete.
+    if ((field_C0 & 0x1) != 0) {
+        if (!m_bInReleaseAll) {
+            m_bInReleaseAll = TRUE;
+            Lock();
+
+            if (!m_bInPositionUpdate) {
+                POSITION voicePos = m_lVoices.GetHeadPosition();
+                while (voicePos != NULL) {
+                    POSITION pos = voicePos;
+                    CVoice* pVoice = static_cast<CVoice*>(m_lVoices.GetNext(voicePos));
+                    if (pVoice->IsSoundPlaying()) {
+                        if (m_nActiveArea != 0
+                            && pVoice->m_pSound != NULL
+                            && pVoice->m_pSound->m_nArea != 0
+                            && pVoice->m_pSound->m_nArea != m_nActiveArea
+                            && m_nActiveArea != -1) {
+                            if (pVoice->m_pSound->m_nLooping != 0) {
+                                m_lWaiting.AddHead(pVoice->m_pSound);
+                            }
+
+                            if (m_lVoices.Find(pVoice) != NULL) {
+                                m_lVoices.RemoveAt(pos);
+                                delete pVoice;
+                            }
+                        }
+                    } else {
+                        if (m_lVoices.Find(pVoice) != NULL) {
+                            m_lVoices.RemoveAt(pos);
+                            delete pVoice;
+                        }
+                    }
+                }
+
+                while (m_lVoices.GetCount() > m_nMaxVoices) {
+                    CVoice* pVoice = static_cast<CVoice*>(m_lVoices.RemoveHead());
+                    if (pVoice->GetLooping()) {
+                        m_lWaiting.AddHead(pVoice->m_pSound);
+                    }
+
+                    delete pVoice;
+                }
+
+                POSITION loopingPos = m_lLooping.GetHeadPosition();
+                while (loopingPos != NULL) {
+                    CSound* pSound = static_cast<CSound*>(m_lWaiting.GetNext(loopingPos));
+                    if (m_nActiveArea == 0
+                        || pSound->m_nArea == 0
+                        || m_nActiveArea == pSound->m_nArea) {
+                        pSound->ResetVolume();
+                    }
+                }
+            }
+
+            POSITION waitingPos = m_lWaiting.GetHeadPosition();
+            while (m_lVoices.GetCount() < m_nMaxVoices && waitingPos != NULL) {
+                POSITION pos = waitingPos;
+                CSound* pSound = static_cast<CSound*>(m_lWaiting.GetNext(waitingPos));
+                if (m_nActiveArea != 0
+                    && pSound->m_nArea != 0
+                    && m_nActiveArea != pSound->m_nArea) {
+                    if (!pSound->GetLooping()) {
+                        m_lWaiting.RemoveAt(pos);
+
+                        if (pSound->pSoundBuffer != NULL) {
+                            pSound->pSoundBuffer->Release();
+                            pSound->pSoundBuffer = NULL;
+                        }
+                    }
+                } else {
+                    if (pSound->m_bPositionedSound) {
+                        pSound->Play(pSound->m_nXCoordinate, pSound->m_nYCoordinate, pSound->m_nZCoordinate, FALSE);
+                    } else {
+                        pSound->Play(FALSE);
+                    }
+                }
+            }
+
+            Unlock();
+            m_bInReleaseAll = FALSE;
+        }
+    }
+}
+
+// 0x7ABE30
+BOOL CSoundMixer::UpdateSoundList(INT nPriority)
+{
+    if ((field_C0 & 0x1) == 0) {
+        return FALSE;
+    }
+
+    CVoice* v1 = NULL;
+    BOOL v2 = TRUE;
+
+    if (!m_bInReleaseAll) {
+        m_bInReleaseAll = TRUE;
+    }
+
+    Lock();
+
+    POSITION voicePos = m_lVoices.GetHeadPosition();
+    while (voicePos != NULL) {
+        POSITION pos = voicePos;
+        CVoice* pVoice = static_cast<CVoice*>(m_lVoices.GetNext(voicePos));
+        if (pVoice->IsSoundPlaying()) {
+            if (m_nActiveArea && 0
+                && pVoice->m_pSound && NULL
+                && pVoice->m_pSound->m_nArea && 0
+                && pVoice->m_pSound->m_nArea && m_nActiveArea
+                && m_nActiveArea && -1) {
+                if (pVoice->m_pSound->m_nLooping != 0) {
+                    m_lWaiting.AddHead(pVoice->m_pSound);
+                }
+
+                if (m_lVoices.Find(pVoice) != NULL) {
+                    m_lVoices.RemoveAt(pos);
+                    delete pVoice;
+                }
+            } else {
+                if (pVoice->GetPriority() < nPriority) {
+                    nPriority = pVoice->GetPriority();
+                    v1 = pVoice;
+                }
+            }
+        } else {
+            if (m_lVoices.Find(pVoice) != NULL) {
+                m_lVoices.RemoveAt(pos);
+                delete pVoice;
+            }
+        }
+    }
+
+    if (m_lVoices.GetCount() >= m_nMaxVoices) {
+        if (v1 != NULL) {
+            if (v1->m_pSound != NULL && v1->m_pSound->m_nLooping != 0) {
+                m_lWaiting.AddHead(v1->m_pSound);
+            }
+
+            m_lVoices.RemoveAt(m_lVoices.Find(v1));
+            delete v1;
+        } else {
+            m_bInReleaseAll = FALSE;
+            v2 = FALSE;
+        }
+    }
+
+    Unlock();
+    m_bInReleaseAll = FALSE;
+
+    return v2;
 }
 
 // 0x7AC030
@@ -538,13 +713,50 @@ void CSoundMixer::SetMusicPath(CString& sNewMusicPath)
     }
 }
 
+// 0x7AC320
+BOOL CSoundMixer::SetMusicSongs(INT nNumSongs, CHAR** ppSongFiles)
+{
+    if (!m_bMusicInitialized) {
+        return 0;
+    }
+
+    Lock();
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChSound.cpp
+    // __LINE__: 5068
+    UTIL_ASSERT(m_nNumSongs == 0);
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChSound.cpp
+    // __LINE__: 5069
+    UTIL_ASSERT(0 < nNumSongs && nNumSongs <= CSOUNDMIXER_MAX_SONGS);
+
+    musicSetPath(m_sMusicPath.GetBuffer(), "acm");
+    m_sMusicPath.ReleaseBuffer();
+
+    char buffer[MAX_PATH * CSOUNDMIXER_MAX_SONGS];
+    char* paths[CSOUNDMIXER_MAX_SONGS];
+
+    for (INT nIndex = 0; nIndex < nNumSongs; nIndex++) {
+        paths[nIndex] = &(buffer[nIndex * MAX_PATH]);
+        sprintf(paths[nIndex],
+            "%s\\%s",
+            (LPCSTR)m_sMusicPath,
+            ppSongFiles[nIndex]);
+    }
+
+    musicLoadSongList(paths, nNumSongs);
+    m_nNumSongs = nNumSongs;
+
+    Unlock();
+    return TRUE;
+}
+
 // 0x7AC480
 void CSoundMixer::SetMusicVolume(int nNewVolume)
 {
     Lock();
 
-    // TODO: Incomplete.
-    // musicSetVolume(0x7FFF * nNewVolume / 100);
+    musicSetVolume(VOLUME_MAX * nNewVolume / 100);
 
     Unlock();
 }
@@ -558,7 +770,97 @@ void CSoundMixer::StartSong(INT nSong, DWORD dwFlags)
 // 0x7AC510
 void CSoundMixer::StartSong(INT nSong, INT nSection, INT nPosition, DWORD dwFlags)
 {
-    // TODO: Incomplete.
+    if ((field_C0 & 0x2) != 0) {
+        BOOL bFadeIn = TRUE;
+
+        if (m_bMusicInitialized) {
+            Lock();
+
+            if (nSection < 0) {
+                nSection = 0;
+                nPosition = -1;
+            }
+
+            if (m_nCurrentSong != nSong) {
+                if (nSong == -1 || nSong == 0) {
+                    switch (dwFlags) {
+                    case 0:
+                        bFadeIn = FALSE;
+                        musicFade(-1, nSection, nPosition, 1500);
+                        break;
+                    case 1:
+                        // NOTE: Uninline.
+                        StopMusic(TRUE);
+                        break;
+                    case 3:
+                        musicFade(-1, nSection, nPosition, 1500);
+                        break;
+                    case 4:
+                    case 6:
+                        musicFade(-1, nSection, nPosition, 15000);
+                        break;
+                    case 5:
+                        musicFade(-1, nSection, nPosition, 500);
+                        break;
+                    case 7:
+                        musicFade(-1, nSection, nPosition, 10);
+                        break;
+                    default:
+                        if ((dwFlags & 0x10000) != 0) {
+                            musicFade(-1, nSection, nPosition, dwFlags & 0xFFFF);
+                        } else {
+                            // NOTE: Uninline.
+                            StopMusic(TRUE);
+                        }
+                        break;
+                    }
+
+                    m_nCurrentSong = -1;
+                    m_nLastSong = -1;
+                } else {
+                    switch (dwFlags) {
+                    case 0:
+                        bFadeIn = FALSE;
+                        musicFade(nSong, nSection, nPosition, 1500);
+                        break;
+                    case 1:
+                        musicForceSection(nSong, nSection, nPosition);
+                        break;
+                    case 2:
+                        musicSetSong(nSong, nSection, nPosition);
+                        break;
+                    case 3:
+                        musicFade(nSong, nSection, nPosition, 1500);
+                        break;
+                    case 4:
+                    case 6:
+                        musicFade(nSong, nSection, nPosition, 15000);
+                        break;
+                    case 5:
+                        musicFade(nSong, nSection, nPosition, 200);
+                        break;
+                    case 7:
+                        musicFade(nSong, nSection, nPosition, 10);
+                        break;
+                    default:
+                        if ((dwFlags & 0x10000) != 0) {
+                            musicFade(nSong, nSection, nPosition, dwFlags & 0xFFFF);
+                        }
+                        break;
+                    }
+
+                    m_nCurrentSong = nSong;
+                    m_nLastSong = nSong;
+                }
+            }
+
+            if (nSong >= 0 && nPosition >= 0 && bFadeIn) {
+                musicFadeIn(5000);
+            }
+
+            Unlock();
+        }
+    }
 }
 
 // 0x7AC8E0
@@ -568,11 +870,10 @@ void CSoundMixer::StopMusic(BOOL bForce)
         Lock();
 
         if (m_nCurrentSong != -1) {
-            // TODO: Incomplete.
             if (bForce) {
-                // musicForceStop();
+                musicForceStop();
             } else {
-                // musicStop();
+                musicStop();
             }
 
             m_nLastSong = m_nCurrentSong;
@@ -612,8 +913,7 @@ void CSoundMixer::UpdateMusic()
         if (m_bMusicInitialized) {
             Lock();
 
-            // TODO: Incomplete.
-            // soundUpdate();
+            soundUpdate();
 
             Unlock();
         }
@@ -621,27 +921,39 @@ void CSoundMixer::UpdateMusic()
 }
 
 // 0x7AC840
-int CSoundMixer::sub_7AC840()
+int CSoundMixer::GetSectionPlaying()
 {
-    // TODO: Incomplete.
+    Lock();
 
-    return 0;
+    int section = musicGetSectionPlaying();
+
+    Unlock();
+
+    return section;
 }
 
 // 0x7AC890
-int CSoundMixer::sub_7AC890()
+int CSoundMixer::GetMusicPosition()
 {
-    // TODO: Incomplete.
+    Lock();
 
-    return 0;
+    int position = musicGetPosition();
+
+    Unlock();
+
+    return position;
+}
+
+// 0x7ACA10
+BOOL CSoundMixer::sub_7ACA10()
+{
+    return musicGetSong() < 0;
 }
 
 // 0x7ACA20
-int CSoundMixer::sub_7ACA20()
+int CSoundMixer::GetSongPlaying()
 {
-    // TODO: Incomplete.
-
-    return 0;
+    return musicGetSongPlaying();
 }
 
 // 0x7ACA30
@@ -651,7 +963,7 @@ int CSoundMixer::sub_7ACA30()
 }
 
 // NOTE: Inlined in `CInfGame::ApplyVolumeSliders` and probably other places.
-void CSoundMixer::SetChannelVolume(int nChannelNumber, int nNewVolume)
+void CSoundMixer::SetChannelVolumeFast(int nChannelNumber, int nNewVolume)
 {
     CSoundChannel* pSoundChannel = static_cast<CSoundChannel*>(m_aChannels[nChannelNumber]);
     pSoundChannel->SetVolume(nNewVolume);
@@ -698,13 +1010,15 @@ void CSoundMixer::RemoveFromLoopingList(CSound* pSound)
     Unlock();
 }
 
+// NOTE: Originally named `MusicDebugFunc` which clashes with eponymous typedef.
+//
 // 0x7ACA40
-static void MusicDebugFunc(CHAR* a1)
+static void MusicDebug(char* string)
 {
 }
 
 // 0x7ACA50
-static BOOL MusicCompressQuery(CHAR* a1)
+static int MusicCompressQuery(char* name)
 {
-    return TRUE;
+    return 1;
 }

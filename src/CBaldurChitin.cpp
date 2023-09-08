@@ -39,6 +39,7 @@
 #include "CScreenWorld.h"
 #include "CScreenWorldMap.h"
 #include "CSearchBitmap.h"
+#include "CSoundChannel.h"
 #include "CUtil.h"
 #include "resource.h"
 
@@ -140,6 +141,9 @@ const CString CBaldurChitin::PRINTSCREEN_FILE_NAME("iwd2");
 
 // 0x8CD43C
 const CString CBaldurChitin::ICON_RES_ID("IDI_GAMEICON");
+
+// 0x8CF478
+CHAR* CBaldurChitin::SONGS[100];
 
 // 0x421E40
 CBaldurChitin::CBaldurChitin()
@@ -1874,6 +1878,82 @@ void CBaldurChitin::OnMultiplayerPlayerVisible(PLAYER_ID playerID)
 void CBaldurChitin::SynchronousUpdate()
 {
     CChitin::SynchronousUpdate();
+}
+
+// 0x425FC0
+void CBaldurChitin::OnMixerInitialize()
+{
+    CResRef musicResRef;
+    musicResRef = "music";
+
+    C2DArray tMusic;
+    CString sFileName;
+
+    tMusic.Load(musicResRef);
+
+    INT nNumSongs = 0;
+    for (INT nRow = 0; nRow < tMusic.GetHeight(); nRow++) {
+        if (tMusic.GetAt(CPoint(0, nRow)) == "*") {
+            break;
+        }
+
+        nNumSongs++;
+    }
+
+    // NOTE: Original code is slightly different.
+    for (INT nSong = 0; nSong < nNumSongs && nSong < 100; nSong++) {
+        sFileName = tMusic.GetAt(CPoint(0, nSong));
+        if (sFileName == "*") {
+            sFileName = "";
+        }
+
+        SONGS[nSong] = new CHAR[sFileName.GetLength() + 1];
+        if (SONGS[nSong] == NULL) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CBaldurChitin.cpp
+            // __LINE__: 2946
+            UTIL_ASSERT_MSG(FALSE, "Problem loading songs from music.2da into the songs list!");
+        }
+
+        memcpy(SONGS[nSong], sFileName.GetBuffer(), sFileName.GetLength());
+        sFileName.ReleaseBuffer();
+
+        SONGS[nSong][sFileName.GetLength()] = '\0';
+    }
+
+    CString sMusicPath("");
+    if (lAliases.ResolveFileName(CString("hd0:\\music"), sMusicPath) == TRUE) {
+        DWORD dwAttrs = GetFileAttributesA(sMusicPath);
+        if (dwAttrs != -1 && (dwAttrs & FILE_ATTRIBUTE_DIRECTORY) != 0) {
+            cSoundMixer.SetMusicPath(sMusicPath);
+        }
+    }
+
+    cSoundMixer.SetMusicSongs(nNumSongs, SONGS);
+
+    C2DArray tChannels;
+    tChannels.Load(CResRef("SNDCHANN"));
+
+    cSoundMixer.SetPanRange(1024);
+
+    for (UINT nChannel = 0; nChannel < 21; nChannel++) {
+        CSoundChannel* pChannel = static_cast<CSoundChannel*>(cSoundMixer.m_aChannels.GetAt(nChannel));
+        if ((nChannel < 6 || nChannel > 13) && nChannel != 0) {
+            pChannel->SetType(0);
+        } else {
+            pChannel->SetType(3);
+        }
+
+        pChannel->SetVolumeInit(tChannels.GetAtLong(CPoint(0, nChannel)));
+    }
+
+    if (g_pBaldurChitin->pActiveEngine == g_pBaldurChitin->m_pEngineChapter) {
+        g_pBaldurChitin->m_pEngineChapter->OnMixerInitialize();
+    }
+
+    // NOTE: Original code is slightly different.
+    for (INT nSong = 0; nSong < 100; nSong++) {
+        delete SONGS[nSong];
+    }
 }
 
 // 0x426600
