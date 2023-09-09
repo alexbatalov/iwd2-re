@@ -43,6 +43,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_PARTY_GOLD;
     static const BYTE MSG_SUBTYPE_CMESSAGE_PLAY_SOUND;
     static const BYTE MSG_SUBTYPE_CMESSAGE_REPUTATION_CHANGE;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_SET_ACTIVE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_AISPEED;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_COMMAND_PAUSE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_DIALOG_WAIT;
@@ -522,6 +523,19 @@ public:
     void Run() override;
 
     /* 000C */ SHORT m_deltaRep;
+};
+
+class CMessageSetActive : public CMessage {
+public:
+    CMessageSetActive(BOOL active, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ BOOL m_active;
 };
 
 class CMessageSetAISpeed : public CMessage {

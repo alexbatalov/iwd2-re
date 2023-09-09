@@ -604,7 +604,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
         m_posStart = startPos;
         m_timeOfDayVisible = timeOfDayVisible;
 
-        field_50AA = 1;
+        m_activeAI = TRUE;
         field_50AE = 1;
 
         memset(&m_baseStats, 0, sizeof(m_baseStats));
