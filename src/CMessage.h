@@ -71,6 +71,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXTREF_SEND;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_CURRENT_ACTION_ID;
     static const BYTE MSG_SUBTYPE_CMESSAGE_START_TEXT_SCREEN;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_STATIC_START;
     static const BYTE MSG_SUBTYPE_CMESSAGE_FAMILIAR_ADD;
     static const BYTE MSG_SUBTYPE_CMESSAGE_FAMILIAR_REMOVE_RESREF;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STOP_ESCAPE_AREA;
@@ -877,6 +878,19 @@ public:
     void Run() override;
 
     /* 000C */ CResRef m_screen;
+};
+
+class CMessageStaticStart : public CMessage {
+public:
+    CMessageStaticStart(BOOLEAN bStart, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ BOOLEAN m_bStart;
 };
 
 class CMessageFamiliarAdd : public CMessage {
