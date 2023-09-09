@@ -8,6 +8,7 @@
 #include "CAITrigger.h"
 #include "CChatBuffer.h"
 #include "CColorEffects.h"
+#include "CImmunities.h"
 #include "CResRef.h"
 #include "FileFormat.h"
 
@@ -84,6 +85,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_START_COMBAT_MUSIC;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_DEMAND;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_WEAPON_IMMUNITIES_UPDATE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
     static const BYTE SIGNAL_SERVER;
@@ -1046,6 +1048,20 @@ public:
     void Run() override;
 
     CResRef m_store;
+};
+
+class CMessageWeaponImmumityUpdate : public CMessage {
+public:
+    CMessageWeaponImmumityUpdate(CGameSprite* pSprite, LONG caller, LONG target);
+    ~CMessageWeaponImmumityUpdate() override;
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ CImmunitiesWeapon m_weaponImmunities;
 };
 
 #endif /* CMESSAGE_H_ */
