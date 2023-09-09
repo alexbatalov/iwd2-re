@@ -27,10 +27,24 @@ public:
 
 class CWeaponIdentification {
 public:
-    WORD m_itemType;
-    DWORD m_itemFlags;
-    DWORD m_itemFlagMask;
-    DWORD m_attributes;
+    CWeaponIdentification();
+    CWeaponIdentification(const CWeaponIdentification& other);
+    BOOL OfType(const CWeaponIdentification& other) const;
+
+    /* 0000 */ WORD m_itemType;
+    /* 0002 */ DWORD m_itemFlags;
+    /* 0006 */ DWORD m_itemFlagMask;
+    /* 000A */ DWORD m_attributes;
+};
+
+class CImmunitiesWeapon : public CTypedPtrList<CPtrList, CWeaponIdentification*> {
+public:
+    ~CImmunitiesWeapon() override;
+    void ClearAll();
+    BOOL OnList(const CWeaponIdentification& other);
+    CImmunitiesWeapon& operator=(const CImmunitiesWeapon& other);
+    ULONG Marshal(BYTE** ptrPtr);
+    void Unmarshal(BYTE* data, ULONG nSize);
 };
 
 class CSelectiveBonus {

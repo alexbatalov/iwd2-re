@@ -1,6 +1,7 @@
 #include "CImmunities.h"
 
 #include "CGameEffect.h"
+#include "CUtil.h"
 
 // 0x443420
 CImmunitiesEffect::~CImmunitiesEffect()
@@ -70,6 +71,147 @@ CImmunitiesSpellLevel& CImmunitiesSpellLevel::operator=(const CImmunitiesSpellLe
     }
 
     return *this;
+}
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Inlined.
+CWeaponIdentification::CWeaponIdentification()
+{
+    m_itemType = 0;
+    m_itemFlags = 0;
+    m_itemFlagMask = 0;
+    m_attributes = 0;
+}
+
+// NOTE: Inlined.
+CWeaponIdentification::CWeaponIdentification(const CWeaponIdentification& other)
+{
+    m_itemType = other.m_itemType;
+    m_itemFlags = other.m_itemFlags;
+    m_itemFlagMask = other.m_itemFlagMask;
+    m_attributes = other.m_attributes;
+}
+
+// 0x4E70A0
+BOOL CWeaponIdentification::OfType(const CWeaponIdentification& other) const
+{
+    return (other.m_itemType == m_itemType || other.m_itemType == 0)
+        && (((other.m_itemFlags ^ m_itemFlags) & 0x2) != 0 || (other.m_itemFlagMask & 0x2) == 0)
+        && (((other.m_itemFlags ^ m_itemFlags) & 0x10) != 0 || (other.m_itemFlagMask & 0x10) == 0)
+        && (((other.m_itemFlags ^ m_itemFlags) & 0x40) != 0 || (other.m_itemFlagMask & 0x40) == 0)
+        && (((other.m_itemFlags ^ m_itemFlags) & 0x100) != 0 || (other.m_itemFlagMask & 0x100) == 0)
+        && (((other.m_itemFlags ^ m_itemFlags) & 0x200) != 0 || (other.m_itemFlagMask & 0x200) == 0)
+        && (other.m_attributes >= m_attributes);
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x443500
+CImmunitiesWeapon::~CImmunitiesWeapon()
+{
+    ClearAll();
+}
+
+// 0x4E7150
+CImmunitiesWeapon& CImmunitiesWeapon::operator=(const CImmunitiesWeapon& other)
+{
+    // FIXME: Missing `ClearAll`.
+
+    POSITION pos = other.GetHeadPosition();
+    while (pos != NULL) {
+        CWeaponIdentification* pBonus = other.GetNext(pos);
+        AddTail(new CWeaponIdentification(*pBonus));
+    }
+
+    return *this;
+}
+
+// 0x4E71B0
+void CImmunitiesWeapon::ClearAll()
+{
+    POSITION pos = GetHeadPosition();
+    while (pos != NULL) {
+        CWeaponIdentification* pWeaponIdentification = GetNext(pos);
+        delete pWeaponIdentification;
+    }
+    RemoveAll();
+}
+
+// 0x4E71E0
+BOOL CImmunitiesWeapon::OnList(const CWeaponIdentification& other)
+{
+    POSITION pos = GetHeadPosition();
+    while (pos != NULL) {
+        CWeaponIdentification* pBonus = GetNext(pos);
+        if (other.OfType(*pBonus)) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+// 0x4E7220
+ULONG CImmunitiesWeapon::Marshal(BYTE** ptrPtr)
+{
+    *ptrPtr = NULL;
+
+    LONG length = sizeof(CWeaponIdentification) * GetCount();
+    if (length > 0) {
+        // NOTE: Original code is slightly different.
+        BYTE* ptr = new BYTE[length];
+        int offset = 0;
+
+        POSITION pos = GetHeadPosition();
+        while (pos != NULL) {
+            CWeaponIdentification* pWeaponIdentification = GetNext(pos);
+
+            *reinterpret_cast<WORD*>(ptr + offset) = pWeaponIdentification->m_itemType;
+            offset += sizeof(WORD);
+
+            *reinterpret_cast<DWORD*>(ptr + offset) = pWeaponIdentification->m_itemFlags;
+            offset += sizeof(DWORD);
+
+            *reinterpret_cast<DWORD*>(ptr + offset) = pWeaponIdentification->m_itemFlagMask;
+            offset += sizeof(DWORD);
+
+            *reinterpret_cast<DWORD*>(ptr + offset) = pWeaponIdentification->m_attributes;
+            offset += sizeof(DWORD);
+        }
+
+        *ptrPtr = ptr;
+    }
+
+    return length;
+}
+
+// 0x4E7290
+void CImmunitiesWeapon::Unmarshal(BYTE* data, ULONG nSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CImmunities.cpp
+    // __LINE__: 746
+    UTIL_ASSERT(nSize % sizeof(CWeaponIdentification) == 0);
+
+    int count = nSize / sizeof(CWeaponIdentification);
+    int offset = 0;
+
+    for (int index = 0; index < count; index++) {
+        CWeaponIdentification* pWeaponIdentification = new CWeaponIdentification;
+
+        pWeaponIdentification->m_itemType = *reinterpret_cast<WORD*>(data + offset);
+        offset += sizeof(WORD);
+
+        pWeaponIdentification->m_itemFlags = *reinterpret_cast<DWORD*>(data + offset);
+        offset += sizeof(DWORD);
+
+        pWeaponIdentification->m_itemFlagMask = *reinterpret_cast<DWORD*>(data + offset);
+        offset += sizeof(DWORD);
+
+        pWeaponIdentification->m_attributes = *reinterpret_cast<DWORD*>(data + offset);
+        offset += sizeof(DWORD);
+
+        AddTail(pWeaponIdentification);
+    }
 }
 
 // -----------------------------------------------------------------------------
