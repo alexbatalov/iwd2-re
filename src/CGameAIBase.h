@@ -9,6 +9,7 @@ class CAIScript;
 class CAITrigger;
 class CGameDoor;
 class CGameEffect;
+class CGameSpawning;
 class CGameTiledObject;
 class CGameTimer;
 class CGameTrigger;
@@ -72,6 +73,7 @@ public:
     SHORT StartMusic();
     SHORT Lock(CGameAIBase* pObject);
     SHORT DetectSecretDoor(CGameDoor* target);
+    SHORT SpawnPtActivate(CGameSpawning* target);
 
     SCRIPTNAME& GetScriptName();
     void SetTrigger(const CAITrigger& trigger);

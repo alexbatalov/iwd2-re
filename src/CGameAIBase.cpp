@@ -8,6 +8,7 @@
 #include "CGameContainer.h"
 #include "CGameDoor.h"
 #include "CGameEffect.h"
+#include "CGameSpawning.h"
 #include "CGameSprite.h"
 #include "CGameTiledObject.h"
 #include "CGameTimer.h"
@@ -854,6 +855,27 @@ SHORT CGameAIBase::DetectSecretDoor(CGameDoor* target)
     g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(target->GetId(),
         CGameObjectArray::THREAD_ASYNCH,
         INFINITE);
+
+    return ACTION_DONE;
+}
+
+// 0x4679E0
+SHORT CGameAIBase::SpawnPtActivate(CGameSpawning* target)
+{
+    if (target != NULL) {
+        return ACTION_ERROR;
+    }
+
+    if (target->GetObjectType() != TYPE_SPAWNING) {
+        return ACTION_ERROR;
+    }
+
+    if (!target->m_spawningObject.m_activated) {
+        CMessageSpawnPtActivate* pMessage = new CMessageSpawnPtActivate(TRUE,
+            m_id,
+            target->GetId());
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+    }
 
     return ACTION_DONE;
 }
