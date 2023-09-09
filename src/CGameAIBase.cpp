@@ -10,6 +10,7 @@
 #include "CGameEffect.h"
 #include "CGameSpawning.h"
 #include "CGameSprite.h"
+#include "CGameStatic.h"
 #include "CGameTiledObject.h"
 #include "CGameTimer.h"
 #include "CGameTrigger.h"
@@ -917,6 +918,27 @@ SHORT CGameAIBase::SpawnPtSpawn(CGameSpawning* target)
             m_id,
             target->GetId());
         g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+    }
+
+    return ACTION_DONE;
+}
+
+// 0x467BB0
+SHORT CGameAIBase::StaticStart(CGameStatic* target, BOOL bStart)
+{
+    if (target != NULL) {
+        return ACTION_ERROR;
+    }
+
+    if (target->GetObjectType() != TYPE_STATIC) {
+        return ACTION_ERROR;
+    }
+
+    // TODO: Check, not sure if that's right.
+    if (bStart == (target->m_header.m_dwFlags & 0x8)) {
+        CMessageStaticStart* pMessage = new CMessageStaticStart(bStart,
+            m_id,
+            target->GetId());
     }
 
     return ACTION_DONE;
