@@ -11,6 +11,7 @@ class CGameDoor;
 class CGameEffect;
 class CGameTiledObject;
 class CGameTimer;
+class CGameTrigger;
 
 class CGameAIBase : public CGameObject {
 public:
@@ -67,6 +68,7 @@ public:
     SHORT GiveOrder(CGameAIBase* sprite);
     SHORT StartMovie();
     SHORT ChangeTileState(CGameTiledObject* target);
+    SHORT TriggerActivation(CGameTrigger* target);
     SHORT StartMusic();
     SHORT Lock(CGameAIBase* pObject);
     SHORT DetectSecretDoor(CGameDoor* target);

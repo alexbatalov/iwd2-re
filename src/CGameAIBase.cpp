@@ -11,6 +11,7 @@
 #include "CGameSprite.h"
 #include "CGameTiledObject.h"
 #include "CGameTimer.h"
+#include "CGameTrigger.h"
 #include "CInfGame.h"
 #include "CScreenWorld.h"
 #include "CTimerWorld.h"
@@ -716,6 +717,29 @@ SHORT CGameAIBase::ChangeTileState(CGameTiledObject* target)
             target->ToggleState();
         }
     }
+
+    return ACTION_DONE;
+}
+
+// 0x466170
+SHORT CGameAIBase::TriggerActivation(CGameTrigger* target)
+{
+    if (target == NULL) {
+        return ACTION_ERROR;
+    }
+
+    if (m_curAction.m_specificID != 0) {
+        target->m_dwFlags &= ~0x100;
+    } else {
+        target->m_dwFlags |= 0x100;
+    }
+
+    CMessageTriggerStatus* pMessage = new CMessageTriggerStatus(target->m_dwFlags,
+        target->m_trapActivated,
+        target->m_trapDetected,
+        m_id,
+        target->GetId());
+    g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
 
     return ACTION_DONE;
 }
