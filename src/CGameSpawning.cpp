@@ -76,6 +76,12 @@ void CGameSpawning::RemoveFromArea()
     delete this;
 }
 
+// 0x4C9CE0
+void CGameSpawning::Spawn(const CPoint& ptFacingTowards, INT nTotalCharacterLevels)
+{
+    // TODO: Incomplete.
+}
+
 // 0x4CA430
 void CGameSpawning::Marshal(CAreaFileRandomMonsterSpawningPoint** pSpawningObject)
 {
