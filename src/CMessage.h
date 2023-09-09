@@ -71,6 +71,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXTREF_SEND;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_CURRENT_ACTION_ID;
     static const BYTE MSG_SUBTYPE_CMESSAGE_START_TEXT_SCREEN;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_SPAWNPT_ACTIVATE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SPAWNPT_SPAWN;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STATIC_START;
     static const BYTE MSG_SUBTYPE_CMESSAGE_FAMILIAR_ADD;
@@ -879,6 +880,19 @@ public:
     void Run() override;
 
     /* 000C */ CResRef m_screen;
+};
+
+class CMessageSpawnPtActivate : public CMessage {
+public:
+    CMessageSpawnPtActivate(BOOLEAN bActivate, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ BOOLEAN m_bActivate;
 };
 
 class CMessageSpawnPtSpawn : public CMessage {
