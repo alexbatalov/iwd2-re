@@ -61,6 +61,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_START_FOLLOW;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STOP_ACTIONS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STOP_FOLLOW;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_TRIGGER_STATUS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_UNLOCK;
     static const BYTE MSG_SUBTYPE_CMESSAGE_UPDATE_REACTION;
     static const BYTE MSG_SUBTYPE_CMESSAGE_VERBAL_CONSTANT;
@@ -743,6 +744,21 @@ public:
     void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
     BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
+};
+
+class CMessageTriggerStatus : public CMessage {
+public:
+    CMessageTriggerStatus(DWORD flags, WORD trapActivated, WORD trapDetected, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ DWORD m_dwFlags;
+    /* 0010 */ WORD m_trapDetected;
+    /* 0012 */ WORD m_trapActivated;
 };
 
 class CMessageUnlock : public CMessage {
