@@ -880,6 +880,27 @@ SHORT CGameAIBase::SpawnPtActivate(CGameSpawning* target)
     return ACTION_DONE;
 }
 
+// 0x467A80
+SHORT CGameAIBase::SpawnPtDeactivate(CGameSpawning* target)
+{
+    if (target != NULL) {
+        return ACTION_ERROR;
+    }
+
+    if (target->GetObjectType() != TYPE_SPAWNING) {
+        return ACTION_ERROR;
+    }
+
+    if (target->m_spawningObject.m_activated) {
+        CMessageSpawnPtActivate* pMessage = new CMessageSpawnPtActivate(FALSE,
+            m_id,
+            target->GetId());
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+    }
+
+    return ACTION_DONE;
+}
+
 // 0x460D60
 SCRIPTNAME& CGameAIBase::GetScriptName()
 {

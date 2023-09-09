@@ -74,6 +74,7 @@ public:
     SHORT Lock(CGameAIBase* pObject);
     SHORT DetectSecretDoor(CGameDoor* target);
     SHORT SpawnPtActivate(CGameSpawning* target);
+    SHORT SpawnPtDeactivate(CGameSpawning* target);
 
     SCRIPTNAME& GetScriptName();
     void SetTrigger(const CAITrigger& trigger);
