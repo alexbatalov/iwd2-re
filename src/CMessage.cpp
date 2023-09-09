@@ -220,6 +220,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STATIC_START = 77;
 // 0x84CF25
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_ADD_ITEM = 78;
 
+// 0x84CF26
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_REMOVE_ITEM = 79;
+
 // 0x84CF27
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_FAMILIAR_ADD = 80;
 
@@ -7837,6 +7840,161 @@ void CMessageStoreAddItem::Run()
                             CGameObjectArray::THREAD_ASYNCH,
                             INFINITE);
                     }
+                }
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F6670
+CMessageStoreRemoveItem::CMessageStoreRemoveItem(const CResRef& store, const CResRef& itemId, int a3, int a4, int a5, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_store = store;
+    m_itemId = itemId;
+    field_1C = a3;
+    field_20 = a4;
+    field_24 = a5;
+}
+
+// 0x848F48
+SHORT CMessageStoreRemoveItem::GetCommType()
+{
+    return BROADCAST_FORCED_OTHERS;
+}
+
+// 0x40A0E0
+BYTE CMessageStoreRemoveItem::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x47E020
+BYTE CMessageStoreRemoveItem::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_REMOVE_ITEM;
+}
+
+// 0x5102B0
+void CMessageStoreRemoveItem::MarshalMessage(BYTE** pData, DWORD* dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 26219
+    UTIL_ASSERT(pData != NULL && dwSize != NULL);
+
+    *dwSize = RESREF_SIZE
+        + RESREF_SIZE
+        + sizeof(int)
+        + sizeof(int)
+        + sizeof(int);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 26225
+    UTIL_ASSERT(*dwSize <= STATICBUFFERSIZE);
+
+    DWORD cnt = 0;
+
+    memcpy(*pData + cnt, m_store.GetResRef(), RESREF_SIZE);
+    cnt += RESREF_SIZE;
+
+    memcpy(*pData + cnt, m_itemId.GetResRef(), RESREF_SIZE);
+    cnt += RESREF_SIZE;
+
+    *reinterpret_cast<int*>(*pData + cnt) = field_1C;
+    cnt += sizeof(int);
+
+    *reinterpret_cast<int*>(*pData + cnt) = field_20;
+    cnt += sizeof(int);
+
+    *reinterpret_cast<int*>(*pData + cnt) = field_24;
+    cnt += sizeof(int);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 26247
+    UTIL_ASSERT(cnt == *dwSize);
+}
+
+// 0x510370
+BOOL CMessageStoreRemoveItem::UnmarshalMessage(BYTE* pData, DWORD dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 26270
+    UTIL_ASSERT(pData != NULL);
+
+    DWORD cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    m_store = pData + cnt;
+    cnt += RESREF_SIZE;
+
+    m_itemId = pData + cnt;
+    cnt += RESREF_SIZE;
+
+    field_1C = *reinterpret_cast<int*>(pData + cnt);
+    cnt += sizeof(int);
+
+    field_20 = *reinterpret_cast<int*>(pData + cnt);
+    cnt += sizeof(int);
+
+    field_24 = *reinterpret_cast<int*>(pData + cnt);
+    cnt += sizeof(int);
+
+    // NOTE: Missing trailing guard.
+
+    return TRUE;
+}
+
+// 0x5103F0
+void CMessageStoreRemoveItem::Run()
+{
+    CStore* pStore;
+
+    if (g_pChitin->cNetwork.GetSessionHosting()) {
+        pStore = g_pBaldurChitin->GetObjectGame()->GetServerStore(m_store);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+        // __LINE__: 26322
+        UTIL_ASSERT(pStore != NULL);
+
+        if (pStore->GetItemIndex(m_itemId) != INT_MAX) {
+            pStore->RemoveItemExt(m_itemId,
+                field_1C,
+                field_20,
+                field_24,
+                NULL);
+        }
+    } else if (g_pChitin->cNetwork.GetSessionOpen()) {
+        CStore::InvalidateStore(m_store);
+    }
+
+    pStore = g_pBaldurChitin->m_pEngineStore->m_pStore;
+    if (pStore != NULL) {
+        if (pStore->m_resRef == m_store) {
+            if (pStore->GetItemIndex(m_itemId) != INT_MAX) {
+                pStore->RemoveItemExt(m_itemId,
+                    field_1C,
+                    field_20,
+                    field_24,
+                    NULL);
+
+                g_pBaldurChitin->m_pEngineStore->UpdateStoreItems();
+                g_pBaldurChitin->m_pEngineStore->UpdateStoreCost();
+                g_pBaldurChitin->m_pEngineStore->UpdateMainPanel();
+            }
+        } else {
+            pStore = g_pBaldurChitin->m_pEngineStore->m_pBag;
+            if (pStore != NULL && pStore->m_resRef == m_store) {
+                if (pStore->GetItemIndex(m_itemId) != INT_MAX) {
+                    pStore->RemoveItemExt(m_itemId,
+                        field_1C,
+                        field_20,
+                        field_24,
+                        NULL);
+
+                    g_pBaldurChitin->m_pEngineStore->UpdateGroupItems();
+                    g_pBaldurChitin->m_pEngineStore->UpdateGroupCost();
+                    g_pBaldurChitin->m_pEngineStore->UpdateMainPanel();
                 }
             }
         }

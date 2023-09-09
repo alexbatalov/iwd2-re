@@ -23,6 +23,7 @@ public:
     BOOL GetItem(INT nIndex, CItem& cItem);
     CResRef GetItemId(INT nIndex);
     INT GetItemIndex(const CResRef& itemId);
+    INT RemoveItemExt(CResRef resRef, int a2, int a3, int a4, BOOLEAN* a5);
     INT AddItemExt(CItem& cItem, DWORD storeFlags);
     void CompressItems();
     BOOL GetSpell(INT nIndex, CResRef& spellResRef, DWORD& dwCost);

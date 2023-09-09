@@ -458,6 +458,14 @@ void sub_54CAF0()
     // TODO: Incomplete.
 }
 
+// 0x54C1D0
+INT CStore::RemoveItemExt(CResRef resRef, int a2, int a3, int a4, BOOLEAN* a5)
+{
+    // TODO: Incomplete.
+
+    return 0;
+}
+
 // 0x54C5B0
 INT CStore::AddItemExt(CItem& cItem, DWORD storeFlags)
 {

@@ -77,6 +77,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_SPAWNPT_SPAWN;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STATIC_START;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_ADD_ITEM;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_REMOVE_ITEM;
     static const BYTE MSG_SUBTYPE_CMESSAGE_FAMILIAR_ADD;
     static const BYTE MSG_SUBTYPE_CMESSAGE_FAMILIAR_REMOVE_RESREF;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STOP_ESCAPE_AREA;
@@ -949,6 +950,23 @@ public:
 
     /* 000C */ CResRef m_store;
     /* 0014 */ CCreatureFileItem m_item;
+};
+
+class CMessageStoreRemoveItem : public CMessage {
+public:
+    CMessageStoreRemoveItem(const CResRef& store, const CResRef& itemId, int a3, int a4, int a5, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ CResRef m_store;
+    /* 0014 */ CResRef m_itemId;
+    /* 001C */ int field_1C;
+    /* 0020 */ int field_20;
+    /* 0024 */ int field_24;
 };
 
 class CMessageFamiliarAdd : public CMessage {
