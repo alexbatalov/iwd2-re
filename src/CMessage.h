@@ -82,6 +82,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_FAMILIAR_REMOVE_RESREF;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STOP_ESCAPE_AREA;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_START_COMBAT_MUSIC;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_DEMAND;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
@@ -1019,6 +1020,19 @@ public:
     void Run() override;
 
     CResRef m_store;
+};
+
+class CMessageStartCombatMusic : public CMessage {
+public:
+    CMessageStartCombatMusic(int slot, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ int m_slot;
 };
 
 class CMessageStoreDemand : public CMessage {
