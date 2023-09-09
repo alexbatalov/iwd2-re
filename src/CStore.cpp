@@ -458,6 +458,14 @@ void sub_54CAF0()
     // TODO: Incomplete.
 }
 
+// 0x54C5B0
+INT CStore::AddItemExt(CItem& cItem, DWORD storeFlags)
+{
+    // TODO: Incomplete.
+
+    return -1;
+}
+
 // 0x54CB60
 void CStore::CompressItems()
 {
@@ -522,6 +530,12 @@ void sub_54CFE0()
 
 // 0x54D130
 void sub_54D130()
+{
+    // TODO: Incomplete.
+}
+
+// 0x54CCB0
+void CStore::InvalidateStore(const CResRef& resRef)
 {
     // TODO: Incomplete.
 }

@@ -9,6 +9,7 @@
 #include "CChatBuffer.h"
 #include "CColorEffects.h"
 #include "CResRef.h"
+#include "FileFormat.h"
 
 // TODO: Reuse from `CNetwork.h`.
 typedef DWORD PLAYER_ID;
@@ -75,6 +76,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_SPAWNPT_ACTIVATE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SPAWNPT_SPAWN;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STATIC_START;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_ADD_ITEM;
     static const BYTE MSG_SUBTYPE_CMESSAGE_FAMILIAR_ADD;
     static const BYTE MSG_SUBTYPE_CMESSAGE_FAMILIAR_REMOVE_RESREF;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STOP_ESCAPE_AREA;
@@ -933,6 +935,20 @@ public:
     void Run() override;
 
     /* 000C */ BOOLEAN m_bStart;
+};
+
+class CMessageStoreAddItem : public CMessage {
+public:
+    CMessageStoreAddItem(const CResRef& store, const CCreatureFileItem& item, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ CResRef m_store;
+    /* 0014 */ CCreatureFileItem m_item;
 };
 
 class CMessageFamiliarAdd : public CMessage {

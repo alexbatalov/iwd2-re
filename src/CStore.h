@@ -23,9 +23,12 @@ public:
     BOOL GetItem(INT nIndex, CItem& cItem);
     CResRef GetItemId(INT nIndex);
     INT GetItemIndex(const CResRef& itemId);
+    INT AddItemExt(CItem& cItem, DWORD storeFlags);
     void CompressItems();
     BOOL GetSpell(INT nIndex, CResRef& spellResRef, DWORD& dwCost);
     BOOL GetDrink(INT nIndex, STRREF& strName, DWORD& dwCost, DWORD& dwRumorChance);
+
+    static void InvalidateStore(const CResRef& resRef);
 
     /* 0000 */ CResRef m_resRef;
     /* 0008 */ CStoreFileHeader m_header;

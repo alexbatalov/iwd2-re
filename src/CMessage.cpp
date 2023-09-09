@@ -20,7 +20,9 @@
 #include "CScreenLoad.h"
 #include "CScreenMultiPlayer.h"
 #include "CScreenSinglePlayer.h"
+#include "CScreenStore.h"
 #include "CScreenWorld.h"
+#include "CStore.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
 
@@ -214,6 +216,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SPAWNPT_SPAWN = 76;
 
 // 0x84CF24
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STATIC_START = 77;
+
+// 0x84CF25
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_ADD_ITEM = 78;
 
 // 0x84CF27
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_FAMILIAR_ADD = 80;
@@ -7678,6 +7683,163 @@ void CMessageStaticStart::Run()
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F65C0
+CMessageStoreAddItem::CMessageStoreAddItem(const CResRef& store, const CCreatureFileItem& item, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_store = store;
+    memcpy(&m_item, &item, sizeof(CCreatureFileItem));
+}
+
+// 0x4536E0
+SHORT CMessageStoreAddItem::GetCommType()
+{
+    return BROADCAST_FORCED_OTHERS;
+}
+
+// 0x40A0E0
+BYTE CMessageStoreAddItem::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4F6660
+BYTE CMessageStoreAddItem::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_ADD_ITEM;
+}
+
+// 0x50FE30
+void CMessageStoreAddItem::MarshalMessage(BYTE** pData, DWORD* dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 26002
+    UTIL_ASSERT(pData != NULL && dwSize != NULL);
+
+    *dwSize = RESREF_SIZE
+        + sizeof(CCreatureFileItem);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 26011
+    UTIL_ASSERT(*dwSize <= STATICBUFFERSIZE);
+
+    DWORD cnt = 0;
+
+    memcpy(*pData + cnt, m_store.GetResRef(), RESREF_SIZE);
+    cnt += RESREF_SIZE;
+
+    memcpy(*pData + cnt, &m_item, sizeof(CCreatureFileItem));
+    cnt += sizeof(CCreatureFileItem);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 26032
+    UTIL_ASSERT(cnt == *dwSize);
+}
+
+// 0x50FED0
+BOOL CMessageStoreAddItem::UnmarshalMessage(BYTE* pData, DWORD dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 26056
+    UTIL_ASSERT(pData != NULL);
+
+    DWORD cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    m_store = pData + cnt;
+    cnt += RESREF_SIZE;
+
+    memcpy(&m_item, pData + cnt, sizeof(CCreatureFileItem));
+    cnt += sizeof(CCreatureFileItem);
+
+    // NOTE: Missing trailing guard.
+
+    return TRUE;
+}
+
+// 0x50FF30
+void CMessageStoreAddItem::Run()
+{
+    CStore* pStore;
+
+    if (g_pChitin->cNetwork.GetSessionHosting()) {
+        pStore = g_pBaldurChitin->GetObjectGame()->GetServerStore(m_store);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+        // __LINE__: 26111
+        UTIL_ASSERT(pStore != NULL);
+
+        pStore->AddItemExt(CItem(m_item), 1);
+    } else if (g_pChitin->cNetwork.GetSessionOpen()) {
+        CStore::InvalidateStore(m_store);
+    }
+
+    pStore = g_pBaldurChitin->m_pEngineStore->m_pStore;
+    if (pStore != NULL) {
+        if (pStore->m_resRef == m_store) {
+            CItem item(m_item);
+            pStore->AddItemExt(item, 1);
+            g_pBaldurChitin->m_pEngineStore->UpdateStoreItems();
+            g_pBaldurChitin->m_pEngineStore->UpdateStoreCost();
+
+            if (g_pBaldurChitin->m_pEngineWorld->field_EE0 != CGameObjectArray::BAD_INDEX) {
+                CGameObject* pObject;
+
+                BYTE rc;
+                do {
+                    rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_targetId,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        &pObject,
+                        INFINITE);
+                } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+                if (rc == CGameObjectArray::SUCCESS) {
+                    if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
+                        || g_pChitin->cNetwork.m_idLocalPlayer == pObject->m_remotePlayerID) {
+                        g_pBaldurChitin->m_pEngineStore->UpdateMainPanel();
+                    }
+
+                    g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_targetId,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        INFINITE);
+                }
+            }
+        } else {
+            pStore = g_pBaldurChitin->m_pEngineStore->m_pBag;
+            if (pStore != NULL && pStore->m_resRef == m_store) {
+                CItem item(m_item);
+                pStore->AddItemExt(item, 1);
+                g_pBaldurChitin->m_pEngineStore->UpdateGroupItems();
+                g_pBaldurChitin->m_pEngineStore->UpdateGroupCost();
+
+                if (g_pBaldurChitin->m_pEngineWorld->field_EE0 != CGameObjectArray::BAD_INDEX) {
+                    CGameObject* pObject;
+
+                    BYTE rc;
+                    do {
+                        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_targetId,
+                            CGameObjectArray::THREAD_ASYNCH,
+                            &pObject,
+                            INFINITE);
+                    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+                    if (rc == CGameObjectArray::SUCCESS) {
+                        if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
+                            || g_pChitin->cNetwork.m_idLocalPlayer == pObject->m_remotePlayerID) {
+                            g_pBaldurChitin->m_pEngineStore->UpdateMainPanel();
+                        }
+
+                        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_targetId,
+                            CGameObjectArray::THREAD_ASYNCH,
+                            INFINITE);
+                    }
+                }
+            }
+        }
     }
 }
 

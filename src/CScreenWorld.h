@@ -96,6 +96,7 @@ public:
     /* 0E48 */ BYTE m_pVirtualKeysFlags[CSCREENWORLD_VIRTUAL_KEYS];
     /* 0EA4 */ int field_EA4;
     /* 0EA8 */ CUIControlTextDisplay* field_EA8;
+    /* 0EE0 */ LONG field_EE0;
     /* 0F04 */ unsigned char field_F04;
     /* 0F46 */ CWeather m_weather;
     /* 10D4 */ BOOLEAN m_bSetNightOnActivate;

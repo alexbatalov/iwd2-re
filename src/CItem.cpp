@@ -19,6 +19,12 @@ CItem::CItem()
     m_useCount3 = 0;
 }
 
+// 0x4E7B60
+CItem::CItem(const CCreatureFileItem& item)
+{
+    // TODO: Incomplete.
+}
+
 // FIXME: `id` should be reference.
 //
 // 0x4E7E90
