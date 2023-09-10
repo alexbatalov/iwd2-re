@@ -21,6 +21,7 @@
 #include "CScreenStore.h"
 #include "CScreenWorld.h"
 #include "CScreenWorldMap.h"
+#include "CUIControlEditMultiLine.h"
 #include "CUIControlLabel.h"
 #include "CUIControlScrollBar.h"
 #include "CUIManager.h"
@@ -2451,8 +2452,9 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 2:
                 return new CUIControlButtonCharGenPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 3:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlEditScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 4:
+                return new CUIControlEditMultiLineScroller(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo));
             case 5:
                 return new CUIControlButtonCharacterBiographyClear(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 6:

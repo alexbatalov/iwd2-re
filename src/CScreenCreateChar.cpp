@@ -13,6 +13,7 @@
 #include "CScreenMultiPlayer.h"
 #include "CScreenSinglePlayer.h"
 #include "CSpell.h"
+#include "CUIControlEditMultiLine.h"
 #include "CUIControlFactory.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -1177,7 +1178,21 @@ void CScreenCreateChar::ResetSubRacePanel(CUIPanel* pPanel, CGameSprite* pSprite
 // 0x609170
 void CScreenCreateChar::ResetBiographyPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    CUIControlEditMultiLine* pEdit = static_cast<CUIControlEditMultiLine*>(pPanel->GetControl(4));
+    pEdit->Remove();
+
+    CString sBiography;
+
+    // NOTE: Unused.
+    STR_RES strRes;
+
+    if (pSprite->GetBaseStats()->m_biography == -1) {
+        pSprite->GetBaseStats()->m_biography = g_pBaldurChitin->GetTlkTable().m_override.Add(CString(""));
+    }
+
+    sBiography = FetchString(pSprite->GetBaseStats()->m_biography);
+    pEdit->SetText(sBiography);
+    m_cUIManager.SetCapture(pEdit, CUIManager::KEYBOARD);
 }
 
 // 0x6092F0
