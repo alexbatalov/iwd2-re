@@ -330,6 +330,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CUIControlButtonPlusMinus.h"
     "src/CUIControlEdit.cpp"
     "src/CUIControlEdit.h"
+    "src/CUIControlEditMultiLine.cpp"
+    "src/CUIControlEditMultiLine.h"
     "src/CUIControlFactory.cpp"
     "src/CUIControlFactory.h"
     "src/CUIControlLabel.cpp"

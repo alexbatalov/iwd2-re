@@ -1,6 +1,7 @@
 #include "CUIControlScrollBar.h"
 
 #include "CBaldurChitin.h"
+#include "CUIControlEditMultiLine.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIManager.h"
 #include "CUIPanel.h"
@@ -489,6 +490,121 @@ void CUIControlScrollBar::TimerAsynchronousUpdate(BOOLEAN bInside)
         }
     }
 }
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Odd location.
+//
+// 0x778A00
+CUIControlEditScrollBar::CUIControlEditScrollBar(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo)
+    : CUIControlScrollBar(panel, controlInfo)
+{
+}
+
+// 0x632C00
+CUIControlEditScrollBar::~CUIControlEditScrollBar()
+{
+}
+
+// 0x4E5950
+void CUIControlEditScrollBar::OnLButtonUp(CPoint pt)
+{
+    if (field_146) {
+        if (m_nTextDisplayID != -1) {
+            CUIControlEditMultiLineScroller* pEdit = static_cast<CUIControlEditMultiLineScroller*>(m_pPanel->GetControl(m_nTextDisplayID));
+            if (pEdit->field_86E == 0) {
+                if (field_144 != 0) {
+                    field_144 = 0;
+                    InvalidateRect();
+                }
+            }
+        }
+    }
+
+    if (m_bActive) {
+        if (IsOver(pt)) {
+            OnLButtonClick(pt);
+        } else {
+            field_146 = 0;
+        }
+    }
+}
+
+// 0x4E59E0
+void CUIControlEditScrollBar::OnScroll()
+{
+    if (m_nTextDisplayID != -1) {
+        CUIControlEditMultiLineScroller* pEdit = static_cast<CUIControlEditMultiLineScroller*>(m_pPanel->GetControl(m_nTextDisplayID));
+
+        // NOTE: Uninline.
+        pEdit->OnScroll(field_144, field_142);
+    }
+}
+
+// 0x4E5B60
+void CUIControlEditScrollBar::OnScrollUp()
+{
+    if (m_nTextDisplayID != -1) {
+        CUIControlEditMultiLineScroller* pEdit = static_cast<CUIControlEditMultiLineScroller*>(m_pPanel->GetControl(m_nTextDisplayID));
+
+        // NOTE: Uninline.
+        pEdit->OnScrollUp();
+    }
+}
+
+// 0x4E5C60
+void CUIControlEditScrollBar::OnScrollDown()
+{
+    if (m_nTextDisplayID != -1) {
+        CUIControlEditMultiLineScroller* pEdit = static_cast<CUIControlEditMultiLineScroller*>(m_pPanel->GetControl(m_nTextDisplayID));
+
+        // NOTE: Uninline.
+        pEdit->OnScrollDown();
+    }
+}
+
+// 0x4E5D70
+void CUIControlEditScrollBar::OnScrollButtonUp(BYTE nDirection)
+{
+    switch (nDirection) {
+    case CUICONTROLBUTTONSCROLLBAR_DIRECTION_UP:
+        if (m_nTextDisplayID != -1) {
+            CUIControlEditMultiLineScroller* pEdit = static_cast<CUIControlEditMultiLineScroller*>(m_pPanel->GetControl(m_nTextDisplayID));
+            pEdit->field_898 = 0;
+        }
+        break;
+    case CUICONTROLBUTTONSCROLLBAR_DIRECTION_DOWN:
+        if (m_nTextDisplayID != -1) {
+            CUIControlEditMultiLineScroller* pEdit = static_cast<CUIControlEditMultiLineScroller*>(m_pPanel->GetControl(m_nTextDisplayID));
+            pEdit->field_899 = 0;
+        }
+        break;
+    }
+}
+
+// 0x4E5DC0
+void CUIControlEditScrollBar::OnPageUp(DWORD nLines)
+{
+    if (m_nTextDisplayID != -1) {
+        CUIControlEditMultiLineScroller* pEdit = static_cast<CUIControlEditMultiLineScroller*>(m_pPanel->GetControl(m_nTextDisplayID));
+
+        // NOTE: Uninline.
+        pEdit->OnPageUp(nLines);
+    }
+}
+
+// 0x4E5EE0
+void CUIControlEditScrollBar::OnPageDown(DWORD nLines)
+{
+    if (m_nTextDisplayID != -1) {
+        CUIControlEditMultiLineScroller* pEdit = static_cast<CUIControlEditMultiLineScroller*>(m_pPanel->GetControl(m_nTextDisplayID));
+
+        // NOTE: Uninline.
+        pEdit->OnPageDown(nLines);
+    }
+}
+
+// -----------------------------------------------------------------------------
 
 // NOTE: Inlined in `CUIControlScrollBar::CUIControlScrollBar`.
 CUIControlButtonScrollBar::CUIControlButtonScrollBar(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo, CUIControlScrollBar* pScrollBar, BYTE nDirection)

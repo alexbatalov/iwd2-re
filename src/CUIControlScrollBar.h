@@ -50,6 +50,19 @@ public:
     /* 0148 */ short field_148;
 };
 
+class CUIControlEditScrollBar : public CUIControlScrollBar {
+public:
+    CUIControlEditScrollBar(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo);
+    ~CUIControlEditScrollBar() override;
+    void OnLButtonUp(CPoint pt) override;
+    void OnScroll() override;
+    void OnScrollUp() override;
+    void OnScrollDown() override;
+    void OnScrollButtonUp(BYTE nDirection) override;
+    void OnPageUp(DWORD nLines) override;
+    void OnPageDown(DWORD nLines) override;
+};
+
 class CUIControlButtonScrollBar : public CUIControlButton {
 public:
     CUIControlButtonScrollBar(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo, CUIControlScrollBar* scrollBar, BYTE nDirection);
