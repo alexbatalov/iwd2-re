@@ -25,6 +25,10 @@ CTlkFileOverrideTextEntry::CTlkFileOverrideTextEntry()
 // NOTE: Inlined in `CTlkTable::CTlkTable`.
 CTlkFileOverrideText::CTlkFileOverrideText()
 {
+    // NOTE: This value is not initialized in the original code which leads to
+    // wrong results when adding first string.
+    m_nNextFreeOffset = 0;
+
     m_bOpen = FALSE;
 }
 
