@@ -9,6 +9,7 @@
 #include "CIcon.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CScreenCharacter.h"
 #include "CScreenConnection.h"
 #include "CScreenMultiPlayer.h"
 #include "CScreenSinglePlayer.h"
@@ -9115,7 +9116,52 @@ CUIControlButtonCharacterBiographyRevert::~CUIControlButtonCharacterBiographyRev
 // 0x6228A0
 void CUIControlButtonCharacterBiographyRevert::OnLButtonClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 16950
+    UTIL_ASSERT(pCreateChar != NULL);
+
+    CUIControlEditMultiLine* pEdit = static_cast<CUIControlEditMultiLine*>(m_pPanel->GetControl(4));
+    pEdit->Remove();
+
+    // NOTE: Uninline.
+    LONG nCharacterId = g_pBaldurChitin->m_pEngineCreateChar->GetSpriteId();
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        CScreenCharacter::ResetBiography(pSprite);
+
+        STRREF strBiography = pSprite->GetBaseStats()->m_biography;
+        CString sBiography;
+
+        // NOTE: Unused.
+        STR_RES strRes;
+
+        if (strBiography == -1) {
+            pSprite->GetBaseStats()->m_biography = g_pBaldurChitin->GetTlkTable().m_override.Add(CString(""));
+            strBiography = pSprite->GetBaseStats()->m_biography;
+        }
+
+        sBiography = CBaldurEngine::FetchString(strBiography);
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+
+        pEdit->SetText(sBiography);
+
+        pCreateChar->GetManager()->SetCapture(pEdit, CUIManager::KEYBOARD);
+    }
 }
 
 // -----------------------------------------------------------------------------
