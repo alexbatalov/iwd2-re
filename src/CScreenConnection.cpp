@@ -1280,7 +1280,7 @@ void CScreenConnection::QuickLoadGame()
     if (bExists) {
         pGame->LoadGame(TRUE, FALSE);
         pGame->MultiplayerSetCharacterCreationLocation();
-        pGame->sub_5BF6A0(0);
+        pGame->SetupCharacters(FALSE);
 
         for (INT nSlot = 0; nSlot < 6; nSlot++) {
             if (pGame->GetCharacterId(nSlot) == CGameObjectArray::INVALID_INDEX) {

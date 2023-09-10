@@ -1863,6 +1863,20 @@ void CInfGame::sub_5AC0D0()
     }
 }
 
+// 0x5AD8A0
+BOOL CInfGame::SelectCharacter(LONG characterId, BOOLEAN bPlaySelectSound)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x5ADAE0
+void CInfGame::SelectToolbar()
+{
+    // TODO: Incomplete.
+}
+
 // 0x5ADC90
 void CInfGame::DemandServerStore(const CResRef& store, BOOL bSaveToDisk)
 {
@@ -2456,6 +2470,12 @@ INT CInfGame::GetCharacterSlotFromId(LONG nCharacterId)
     return -1;
 }
 
+// 0x5BD6B0
+void CInfGame::UpdateCharacterSlots()
+{
+    // TODO: Incomplete.
+}
+
 // 0x5BD9D0
 BOOL CInfGame::AddCharacterToAllies(LONG nCharacterId)
 {
@@ -2622,7 +2642,21 @@ void CInfGame::AddPartyGold(LONG dwAddPartyGold)
 }
 
 // 0x5BF6A0
-void CInfGame::sub_5BF6A0(int a1)
+void CInfGame::SetupCharacters(BOOLEAN bProgressBarInPlace)
+{
+    // TODO: Incomplete.
+}
+
+// 0x5BFC40
+LONG CInfGame::GetProtagonist()
+{
+    // TODO: Incomplete.
+
+    return CGameObjectArray::INVALID_INDEX;
+}
+
+// 0x5BFE10
+void CInfGame::SetProtagonist(LONG nId)
 {
     // TODO: Incomplete.
 }

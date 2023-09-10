@@ -136,12 +136,13 @@ public:
     void UpdateCharacterAppearance();
     void CompleteCharacterAbilities(CGameSprite* pSprite);
     void CompleteCharacterSkills(CGameSprite* pSprite);
-    void sub_613310();
+    void CompleteCharacterWrapup(CGameSprite* pSprite);
     void RemoveItems();
     void DeleteCharacter();
     void ImportCharacter(const CString& sCharacter);
     void OnPlayButtonClick();
     void OnSoundItemSelect(INT nItem);
+    void sub_614AE0(CGameSprite* pSprite);
     BOOL IsDoneButtonClickable(CGameSprite* pSprite);
     void OnDoneButtonClick();
     void SetSpriteId(INT nSpriteId);
@@ -256,10 +257,10 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
-class CUIControlButtonCharGen614950 : public CUIControlButton {
+class CUIControlButtonCharGenAccept : public CUIControlButton {
 public:
-    CUIControlButtonCharGen614950(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
-    ~CUIControlButtonCharGen614950() override;
+    CUIControlButtonCharGenAccept(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGenAccept() override;
     void OnLButtonClick(CPoint pt) override;
 };
 

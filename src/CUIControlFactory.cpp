@@ -1986,7 +1986,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 7:
                 return new CUIControlButtonCharGenMenu(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 8:
-                return new CUIControlButtonCharGen614950(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+                return new CUIControlButtonCharGenAccept(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 9:
                 return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
             case 10:

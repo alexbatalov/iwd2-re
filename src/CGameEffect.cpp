@@ -1573,6 +1573,12 @@ BOOL CGameEffectHaste::ApplyEffect(CGameSprite* pSprite)
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
+CGameEffectHeal::CGameEffectHeal()
+{
+    m_effectID = CGAMEEFFECT_HEAL;
+}
+
+// NOTE: Inlined.
 CGameEffectHeal::CGameEffectHeal(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
     : CGameEffect(effect, source, sourceID, target, TRUE)
 {

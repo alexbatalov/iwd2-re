@@ -432,6 +432,7 @@ public:
 
 class CGameEffectHeal : public CGameEffect {
 public:
+    CGameEffectHeal();
     CGameEffectHeal(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
 };

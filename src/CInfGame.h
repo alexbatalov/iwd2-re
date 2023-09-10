@@ -131,6 +131,8 @@ public:
     void NewGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace);
     BOOLEAN sub_5AC0A0(CGameArea* pArea);
     void sub_5AC0D0();
+    BOOL SelectCharacter(LONG characterId, BOOLEAN bPlaySelectSound);
+    void SelectToolbar();
     void DemandServerStore(const CResRef& store, BOOL bSaveToDisk);
     void ReleaseServerStore(const CResRef& store);
     CStore* GetServerStore(const CResRef& store);
@@ -161,6 +163,7 @@ public:
     BOOL ClearCharacterSlot(INT nCharacterSlot);
     LONG GetCharacterSlot(INT nCharacterSlot);
     INT GetCharacterSlotFromId(LONG nCharacterId);
+    void UpdateCharacterSlots();
     BOOL AddCharacterToAllies(LONG nCharacterId);
     BOOL RemoveCharacterFromAllies(LONG nCharacterId);
     BOOL AddCharacterToFamiliars(LONG nCharacterId);
@@ -171,7 +174,9 @@ public:
     void AddDisposableItem(CItem* pItem);
     void DestroyDisposableItems();
     void AddPartyGold(LONG dwAddPartyGold);
-    void sub_5BF6A0(int a1);
+    void SetupCharacters(BOOLEAN bProgressBarInPlace);
+    LONG GetProtagonist();
+    void SetProtagonist(LONG nId);
     BOOLEAN FindAreaID(DWORD nAreaId);
     CStringList* GetSaveGames();
     CString GetDirSaveRoot();

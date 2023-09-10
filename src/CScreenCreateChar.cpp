@@ -4,6 +4,7 @@
 #include "CCreatureFile.h"
 #include "CGameAnimationType.h"
 #include "CGameArea.h"
+#include "CGameEffect.h"
 #include "CGameObjectArray.h"
 #include "CGameSprite.h"
 #include "CIcon.h"
@@ -13,6 +14,7 @@
 #include "CScreenConnection.h"
 #include "CScreenMultiPlayer.h"
 #include "CScreenSinglePlayer.h"
+#include "CScreenWorld.h"
 #include "CSpell.h"
 #include "CUIControlEditMultiLine.h"
 #include "CUIControlFactory.h"
@@ -4216,7 +4218,7 @@ void CScreenCreateChar::CompleteCharacterSkills(CGameSprite* pSprite)
 }
 
 // 0x613310
-void CScreenCreateChar::sub_613310()
+void CScreenCreateChar::CompleteCharacterWrapup(CGameSprite* pSprite)
 {
     // TODO: Incomplete.
 }
@@ -4423,6 +4425,12 @@ void CScreenCreateChar::OnSoundItemSelect(INT nItem)
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
     }
+}
+
+// 0x614AE0
+void CScreenCreateChar::sub_614AE0(CGameSprite* pSprite)
+{
+    // TODO: Incomplete.
 }
 
 // 0x615B70
@@ -5651,23 +5659,168 @@ void CUIControlButtonCharGenMenu::OnLButtonClick(CPoint pt)
 // -----------------------------------------------------------------------------
 
 // 0x614950
-CUIControlButtonCharGen614950::CUIControlButtonCharGen614950(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+CUIControlButtonCharGenAccept::CUIControlButtonCharGenAccept(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
 {
     STR_RES strRes;
-    g_pBaldurChitin->GetTlkTable().Fetch(28210, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(28210, strRes); // "Finish"
     SetText(strRes.szText);
 }
 
 // 0x614A40
-CUIControlButtonCharGen614950::~CUIControlButtonCharGen614950()
+CUIControlButtonCharGenAccept::~CUIControlButtonCharGenAccept()
 {
 }
 
 // 0x614EF0
-void CUIControlButtonCharGen614950::OnLButtonClick(CPoint pt)
+void CUIControlButtonCharGenAccept::OnLButtonClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CSingleLock renderLock(&(m_pPanel->m_pManager->field_36), FALSE);
+
+    CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 8412
+    UTIL_ASSERT(pGame != NULL);
+
+    if (pCreateChar->m_nEngineState != 4) {
+        INT nGameSprite = pCreateChar->GetSpriteId();
+
+        CGameSprite* pSprite;
+        BYTE rc;
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc != CGameObjectArray::SUCCESS) {
+            return;
+        }
+
+        pCreateChar->CompleteCharacterWrapup(pSprite);
+
+        pSprite->field_562C = 1;
+        pSprite->ProcessEffectList();
+
+        CGameEffectHeal* pHeal = new CGameEffectHeal();
+        pHeal->m_effectAmount = 200;
+        pHeal->m_dwFlags = 0x10000;
+        pSprite->AddEffect(pHeal,
+            CGameAIBase::EFFECT_LIST_TIMED,
+            TRUE,
+            TRUE);
+
+        pGame->SetCharacterSlot(pCreateChar->m_nCharacterSlot, nGameSprite);
+
+        if (pCreateChar->m_nCharacterSlot == 0) {
+            pGame->SetProtagonist(nGameSprite);
+        }
+
+        if (static_cast<BYTE>(pCreateChar->field_1628) == 0) {
+            pCreateChar->sub_614AE0(pSprite);
+        }
+        pCreateChar->field_1628 = 0;
+
+        CMessagePartyGold* pMessageGold = new CMessagePartyGold(TRUE,
+            TRUE,
+            pSprite->GetBaseStats()->m_gold,
+            nGameSprite,
+            nGameSprite);
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessageGold, FALSE);
+
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+            INT playerSlot = g_pChitin->cNetwork.FindPlayerLocationByID(g_pChitin->cNetwork.m_idLocalPlayer, FALSE);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+            // __LINE__: 8487
+            UTIL_ASSERT_MSG(playerSlot >= 0 && playerSlot < CINFGAME_MAXCHARACTERS, "CUIControlButtonCharGenAccept::OnLButtonClick:  Bad Player Slot!");
+
+            pGame->GetMultiplayerSettings()->SetCharacterControlledByPlayer(pCreateChar->m_nCharacterSlot,
+                playerSlot,
+                TRUE,
+                FALSE);
+        }
+
+        pSprite->m_bGlobal = TRUE;
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+
+        // NOTE: Unused.
+        CCreatureFile v1;
+
+        // NOTE: Unused.
+        CString v2("merlin");
+    }
+
+    switch (pCreateChar->m_nEngineState) {
+    case 1:
+        g_pChitin->cVideo.ResetDoubleSizeData();
+
+        // NOTE: Uninline.
+        pCreateChar->StopCreateChar();
+
+        pGame->UpdateCharacterSlots();
+        pGame->SetupCharacters(FALSE);
+
+        pCreateChar->SelectEngine(g_pBaldurChitin->m_pEngineWorld);
+
+        pGame->SelectCharacter(pGame->GetProtagonist(), FALSE);
+        pGame->SelectToolbar();
+        break;
+    case 2:
+    case 3:
+        g_pChitin->cVideo.ResetDoubleSizeData();
+
+        // NOTE: Uninline.
+        pCreateChar->StopCreateChar();
+
+        if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL) {
+            g_pBaldurChitin->m_pEngineSinglePlayer->field_45C = 1;
+            g_pBaldurChitin->m_pEngineSinglePlayer->StartSinglePlayer(1);
+            pCreateChar->SelectEngine(g_pBaldurChitin->m_pEngineSinglePlayer);
+        } else {
+            g_pBaldurChitin->m_pEngineMultiPlayer->field_45C = 1;
+            g_pBaldurChitin->m_pEngineMultiPlayer->StartMultiPlayer(1);
+            pCreateChar->SelectEngine(g_pBaldurChitin->m_pEngineMultiPlayer);
+        }
+        break;
+    case 4:
+        if (1) {
+            renderLock.Lock(INFINITE);
+
+            INT nGameSprite = pCreateChar->GetSpriteId();
+
+            CGameSprite* pSprite;
+            BYTE rc;
+            do {
+                rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    reinterpret_cast<CGameObject**>(&pSprite),
+                    INFINITE);
+            } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+            if (rc == CGameObjectArray::SUCCESS) {
+                pCreateChar->SummonPopup(21, pSprite);
+
+                g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            }
+
+            renderLock.Unlock();
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+        // __LINE__: 8591
+        UTIL_ASSERT(FALSE);
+    }
 }
 
 // -----------------------------------------------------------------------------
