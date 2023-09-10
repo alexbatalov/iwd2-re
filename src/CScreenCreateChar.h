@@ -121,6 +121,7 @@ public:
     void IncCurrentPortrait(CGameSprite* pSprite);
     void DecCurrentPortrait(CGameSprite* pSprite);
     void StartCreateChar(INT nCharacterSlot, INT nEngineState);
+    void StopCreateChar();
     void CancelCreateChar();
     void RecallMemoryAbilities(BYTE& nSTR, BYTE& nDEX, BYTE& nCON, BYTE& nINT, BYTE& nWIS, BYTE& nCHR, INT& nExtra);
     INT GetNumHatedRaces();
@@ -134,11 +135,11 @@ public:
     void UpdateCharacterStats(CGameSprite* pSprite);
     void UpdateCharacterAppearance();
     void CompleteCharacterAbilities(CGameSprite* pSprite);
-    void CompleteCharacterSkills();
+    void CompleteCharacterSkills(CGameSprite* pSprite);
     void sub_613310();
     void RemoveItems();
     void DeleteCharacter();
-    void ImportCharacter();
+    void ImportCharacter(const CString& sCharacter);
     void OnPlayButtonClick();
     void OnSoundItemSelect(INT nItem);
     BOOL IsDoneButtonClickable(CGameSprite* pSprite);
@@ -155,6 +156,15 @@ public:
     void sub_617D80();
     void UpdateClassEntry(CUIControlTextDisplay* pText, const CAIObjectType& typeAI, CDerivedStats* DStats, DWORD nSpecialization, BYTE nClass, DWORD dwFlags);
     int GetRaceFeatColumn(BYTE nRace, BYTE nSubRace);
+
+    // NOTE: Seen in `OnDoneButtonClick` assertion.
+    INT GetPortraitSmallIndex() { return m_nPortraitSmallIndex; }
+
+    // NOTE: Seen in `OnDoneButtonClick` assertion.
+    INT GetPortraitLargeIndex() { return m_nPortraitLargeIndex; }
+
+    // NOTE: Seen in `OnDoneButtonClick` assertion.
+    INT GetCustomSoundSetIndex() { return m_nCustomSoundSetIndex; }
 
     /* 0106 */ C2DArray field_106;
     /* 012A */ C2DArray m_tSubRace;

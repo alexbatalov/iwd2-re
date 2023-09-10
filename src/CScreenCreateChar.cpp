@@ -189,6 +189,7 @@ CScreenCreateChar::CScreenCreateChar()
     field_596 = 0;
     field_14A4 = 0;
     field_14A8 = 0;
+    field_1624 = NULL;
 
     SetVideoMode(0);
 
@@ -3735,6 +3736,27 @@ void CScreenCreateChar::StartCreateChar(INT nCharacterSlot, INT nEngineState)
 }
 
 // NOTE: Inlined.
+void CScreenCreateChar::StopCreateChar()
+{
+    CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 5772
+    UTIL_ASSERT(pSettings != NULL);
+
+    if (m_nEngineState != 4
+        && pSettings->GetCharacterStatus(m_nCharacterSlot) != CMultiplayerSettings::CHARSTATUS_CHARACTER) {
+        pSettings->SignalCharacterStatus(m_nCharacterSlot,
+            CMultiplayerSettings::CHARSTATUS_SIGNAL_CREATION_COMPLETE,
+            TRUE,
+            TRUE);
+    }
+
+    m_nCharacterSlot = -1;
+    m_nEngineState = 0;
+}
+
+// NOTE: Inlined.
 void CScreenCreateChar::CancelCreateChar()
 {
     CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
@@ -4188,7 +4210,7 @@ void CScreenCreateChar::CompleteCharacterAbilities(CGameSprite* pSprite)
 }
 
 // 0x612DE0
-void CScreenCreateChar::CompleteCharacterSkills()
+void CScreenCreateChar::CompleteCharacterSkills(CGameSprite* pSprite)
 {
     // TODO: Incomplete.
 }
@@ -4244,7 +4266,7 @@ void CScreenCreateChar::DeleteCharacter()
 }
 
 // 0x613B20
-void CScreenCreateChar::ImportCharacter()
+void CScreenCreateChar::ImportCharacter(const CString& sCharacter)
 {
     // TODO: Incomplete.
 }
@@ -4512,7 +4534,519 @@ BOOL CScreenCreateChar::IsDoneButtonClickable(CGameSprite* pSprite)
 // 0x615F50
 void CScreenCreateChar::OnDoneButtonClick()
 {
-    // TODO: Incomplete.
+    CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    CString sExportName;
+    CString sCharacter;
+    CString sName;
+    CResRef cResRef;
+    CString sSound;
+    CString sSoundSetDir;
+    CString sBadChars(".?:<>|*/\\\"");
+    POSITION pos;
+
+    STR_RES strRes;
+
+    INT nGameSprite = m_nGameSprite;
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        CUIPanel* pPanel = GetTopPopup();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 9042
+        UTIL_ASSERT(pPanel != NULL);
+
+        CAIObjectType typeAI(pSprite->m_startTypeAI);
+
+        if (IsDoneButtonClickable(pSprite)) {
+            switch (pPanel->m_nID) {
+            case 1:
+                DismissPopup(pSprite);
+                SummonPopup(11, pSprite);
+                break;
+            case 2:
+                if (m_nCurrentStep < 8) {
+                    m_nCurrentStep++;
+                }
+
+                DismissPopup(pSprite);
+                UpdateCharacterStats(pSprite);
+                break;
+            case 3:
+                if (m_nCurrentStep < 8) {
+                    m_nCurrentStep++;
+                }
+
+                DismissPopup(pSprite);
+                break;
+            case 4:
+                if (m_nExtraAbilityPoints > 0) {
+                    m_nErrorState = 4;
+                    SummonPopup(53, pSprite);
+                } else {
+                    if (m_nCurrentStep < 8) {
+                        m_nCurrentStep++;
+                    }
+
+                    DismissPopup(pSprite);
+                    CompleteCharacterAbilities(pSprite);
+                }
+                break;
+            case 5:
+                sName = static_cast<CUIControlEdit*>(pPanel->GetControl(2))->GetText();
+                sName.TrimLeft();
+                sName.TrimRight();
+
+                // NOTE: Original code is slightly different. It loops thru
+                // characters one by one and checks for '<' and '>'.
+                sName.Replace('<', '_');
+                sName.Replace('>', '_');
+
+                pSprite->m_sName = sName;
+                pSprite->m_baseStats.m_name = -1;
+
+                if (m_nCurrentStep < 8) {
+                    m_nCurrentStep++;
+                }
+
+                DismissPopup(pSprite);
+                break;
+            case 6:
+                DismissPopup(pSprite);
+                SummonPopup(55, pSprite);
+                break;
+            case 7:
+                if (typeAI.IsClassValid(CAIObjectType::C_SORCERER)) {
+                    if (m_nCurrentStep < 8) {
+                        m_nCurrentStep++;
+                    }
+
+                    DismissPopup(pSprite);
+                    CompleteCharacterSkills(pSprite);
+                } else {
+                    DismissPopup(pSprite);
+                    SummonPopup(16, pSprite);
+                }
+                break;
+            case 8:
+                if (m_nCurrentStep < 8) {
+                    m_nCurrentStep++;
+                }
+
+                DismissPopup(pSprite);
+                break;
+            case 11:
+                if (m_nCurrentStep < 8) {
+                    m_nCurrentStep++;
+                }
+
+                DismissPopup(pSprite);
+                break;
+            case 12:
+                if (m_nCurrentStep < 8) {
+                    m_nCurrentStep++;
+                }
+
+                DismissPopup(pSprite);
+                DismissPopup(pSprite);
+                UpdateCharacterStats(pSprite);
+                break;
+            case 13:
+                if (m_animation.m_animation != NULL) {
+                    delete m_animation.m_animation;
+                    m_animation.m_animation = NULL;
+                }
+
+                DismissPopup(pSprite);
+                SummonPopup(19, pSprite);
+                break;
+            case 14:
+                DismissPopup(pSprite);
+                break;
+            case 15:
+                if (m_nCurrentStep < 8) {
+                    m_nCurrentStep++;
+                }
+
+                DismissPopup(pSprite);
+                CompleteCharacterSkills(pSprite);
+                break;
+            case 16:
+                if (typeAI.m_nClass == 0 || typeAI.m_nClass > CAIOBJECT_CLASS_MAX) {
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+                    // __LINE__: 9205
+                    UTIL_ASSERT(FALSE);
+                }
+
+                if (m_nCurrentStep < 8) {
+                    m_nCurrentStep++;
+                }
+
+                DismissPopup(pSprite);
+                CompleteCharacterSkills(pSprite);
+                break;
+            case 17:
+                switch (typeAI.m_nClass) {
+                case 3:
+                    if (!m_bPickingDomainSpells) {
+                        m_bPickingDomainSpells = TRUE;
+
+                        DismissPopup(pSprite);
+                        SummonPopup(17, pSprite);
+                    } else {
+                        m_bPickingDomainSpells = FALSE;
+
+                        if (m_nCurrentStep < 8) {
+                            m_nCurrentStep++;
+                        }
+
+                        DismissPopup(pSprite);
+                        CompleteCharacterSkills(pSprite);
+                    }
+                    break;
+                case 4:
+                case 7:
+                case 8:
+                    if (m_nCurrentStep < 8) {
+                        m_nCurrentStep++;
+                    }
+
+                    DismissPopup(pSprite);
+                    CompleteCharacterSkills(pSprite);
+                    break;
+                default:
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+                    // __LINE__: 9234
+                    UTIL_ASSERT(FALSE);
+                }
+                break;
+            case 18:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+                // __LINE__: 9324
+                UTIL_ASSERT((GetPortraitSmallIndex() >= 0) && (GetPortraitLargeIndex() >= 0));
+
+                pos = m_pPortraits->FindIndex(m_nPortraitSmallIndex);
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+                // __LINE__: 9328
+                UTIL_ASSERT(pos != NULL);
+
+                cResRef = m_pPortraits->GetAt(pos);
+                cResRef.GetResRef(pSprite->m_baseStats.m_portraitSmall);
+
+                pos = m_pPortraits->FindIndex(m_nPortraitLargeIndex);
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+                // __LINE__: 9334
+                UTIL_ASSERT(pos != NULL);
+
+                cResRef = m_pPortraits->GetAt(pos);
+                cResRef.GetResRef(pSprite->m_baseStats.m_portraitLarge);
+
+                DismissPopup(pSprite);
+                DismissPopup(pSprite);
+
+                if (m_nCurrentStep < 8) {
+                    m_nCurrentStep++;
+                }
+
+                UpdateMainPanel(pSprite);
+                break;
+            case 19:
+                if (1) {
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+                    // __LINE__: 9354
+                    UTIL_ASSERT(GetCustomSoundSetIndex() >= 0);
+
+                    cResRef = "";
+
+                    if (m_nCustomSoundSetIndex != -1) {
+                        pos = m_pSounds->FindIndex(m_nCustomSoundSetIndex);
+                        if (pos != NULL) {
+                            sSound = m_pSounds->GetAt(pos);
+                        }
+                    }
+
+                    memcpy(pSprite->field_725A, sSound.GetBuffer(sSound.GetLength()), min(sSound.GetLength(), 32));
+
+                    if (sSound.GetLength() < 32) {
+                        pSprite->field_725A[sSound.GetLength()] = '\0';
+                    }
+
+                    sSoundSetDir = g_pBaldurChitin->GetObjectGame()->GetDirSounds() + sSound + '\\';
+                    g_pBaldurChitin->cDimm.AddToDirectoryList(sSoundSetDir, TRUE);
+
+                    CString sFileName;
+                    CString sPattern;
+
+                    sPattern = g_pBaldurChitin->GetObjectGame()->GetDirSounds() + '\\' + sSound + "\\*.wav";
+
+                    WIN32_FIND_DATAA findFileData;
+                    HANDLE hFindFile = FindFirstFileA(sPattern, &findFileData);
+                    if (hFindFile != INVALID_HANDLE_VALUE) {
+                        sFileName = findFileData.cFileName;
+
+                        if ((findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
+                            sFileName.MakeUpper();
+                            sFileName = sFileName.SpanExcluding(".");
+                            sFileName = sFileName.Left(sFileName.GetLength() - 2);
+                            cResRef = sFileName;
+                            pSprite->m_secondarySounds = cResRef;
+                        }
+
+                        // FIXME: Leaking `hFindFile`.
+                    }
+
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+                    // __LINE__: 9393
+                    UTIL_ASSERT(m_pSounds != NULL);
+
+                    delete m_pSounds;
+                    m_pSounds = NULL;
+
+                    if (m_nCurrentStep < 8) {
+                        m_nCurrentStep++;
+                    }
+
+                    DismissPopup(pSprite);
+
+                    // FIXME: Unused.
+                    CAIObjectType typeAI(pSprite->m_startTypeAI);
+
+                    if (pSprite->GetBaseStats()->m_biography == -1) {
+                        CScreenCharacter::ResetBiography(pSprite);
+                    }
+                }
+                break;
+            case 20:
+                if (1) {
+                    g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_nGameSprite,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        INFINITE);
+
+                    pos = m_pCharacters->FindIndex(m_nCharacterIndex);
+                    if (pos != NULL) {
+                        sCharacter = m_pCharacters->GetAt(pos);
+                        ImportCharacter(sCharacter);
+                    }
+
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+                    // __LINE__: 9419
+                    UTIL_ASSERT(m_pCharacters != NULL);
+
+                    delete m_pCharacters;
+                    m_pCharacters = NULL;
+
+                    BYTE rc;
+                    do {
+                        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_nGameSprite,
+                            CGameObjectArray::THREAD_ASYNCH,
+                            reinterpret_cast<CGameObject**>(&pSprite),
+                            INFINITE);
+                    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+                    if (rc == CGameObjectArray::SUCCESS) {
+                        DismissPopup(pSprite);
+                    }
+                }
+                break;
+            case 21:
+                if (1) {
+                    CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(7));
+
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+                    // __LINE__: 9457
+                    UTIL_ASSERT(pEdit != NULL);
+
+                    sExportName = pEdit->GetText();
+                    sExportName.TrimLeft();
+                    sExportName.TrimRight();
+
+                    for (int index = 0; index < sExportName.GetLength(); index++) {
+                        if (sBadChars.Find(sExportName[index]) >= 0) {
+                            sExportName.SetAt(index, '_');
+                        }
+                    }
+
+                    if (sExportName == "aux" || sExportName == "con" || sExportName == "prn") {
+                        sExportName += "_";
+                    }
+
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+                    // __LINE__: 9480
+                    UTIL_ASSERT(GetSpriteId() != CGameObjectArray::INVALID_INDEX);
+
+                    g_pBaldurChitin->GetObjectGame()->CharacterExport(GetSpriteId(), sExportName);
+
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+                    // __LINE__: 9484
+                    UTIL_ASSERT(m_pCharacters != NULL);
+
+                    delete m_pCharacters;
+                    m_pCharacters = NULL;
+
+                    DismissPopup(pSprite);
+
+                    g_pChitin->cVideo.ResetDoubleSizeData();
+
+                    StopCreateChar();
+
+                    g_pBaldurChitin->GetActiveEngine()->SelectEngine(g_pBaldurChitin->m_pEngineConnection);
+                }
+                break;
+            case 51:
+                if (1) {
+                    CUIPanel* pPanel = m_cUIManager.GetPanel(51);
+                    CUIControlEditMultiLine* pEdit = static_cast<CUIControlEditMultiLine*>(pPanel->GetControl(4));
+
+                    g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        INFINITE);
+
+                    // TODO: Unclear.
+                    if (pSprite->GetBaseStats()->m_biography == m_nCharacterSlot + 62016) {
+                        if (g_pBaldurChitin->GetTlkTable().m_override.Fetch(pSprite->GetBaseStats()->m_biography, strRes)) {
+                            g_pBaldurChitin->GetTlkTable().m_override.Remove(pSprite->GetBaseStats()->m_biography);
+                        }
+                    } else {
+                        pSprite->GetBaseStats()->m_biography = m_nCharacterSlot + 62016;
+                    }
+
+                    strRes.szText = pEdit->GetText();
+
+                    g_pBaldurChitin->GetTlkTable().m_override.AddUserEntry(pSprite->GetBaseStats()->m_biography, strRes);
+
+                    DismissPopup(pSprite);
+
+                    renderLock.Unlock();
+
+                    // Object has been already released.
+                    return;
+                }
+                break;
+            case 52:
+                if (m_nCurrentStep < 8) {
+                    m_nCurrentStep++;
+                }
+
+                DismissPopup(pSprite);
+                DismissPopup(pSprite);
+                UpdateCharacterStats(pSprite);
+                break;
+            case 53:
+                if (m_nErrorState == 4) {
+                    if (m_nCurrentStep < 8) {
+                        m_nCurrentStep++;
+                    }
+
+                    DismissPopup(pSprite);
+                    DismissPopup(pSprite);
+                    CompleteCharacterAbilities(pSprite);
+                } else {
+                    DismissPopup(pSprite);
+
+                    g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        INFINITE);
+
+                    DeleteCharacter();
+                    StartCreateChar(m_nCharacterSlot, m_nEngineState);
+
+                    // NOTE: Uninline.
+                    INT nGameSprite = GetSpriteId();
+
+                    CGameSprite* pSprite;
+                    BYTE rc;
+                    do {
+                        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nGameSprite,
+                            CGameObjectArray::THREAD_ASYNCH,
+                            reinterpret_cast<CGameObject**>(&pSprite),
+                            INFINITE);
+                    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+                    if (rc == CGameObjectArray::SUCCESS) {
+                        UpdateMainPanel(pSprite);
+
+                        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nGameSprite,
+                            CGameObjectArray::THREAD_ASYNCH,
+                            INFINITE);
+                    }
+
+                    renderLock.Unlock();
+
+                    // Object has been already released.
+                    return;
+                }
+                break;
+            case 54:
+                if (m_nCurrentStep < 8) {
+                    m_nCurrentStep++;
+                }
+
+                DismissPopup(pSprite);
+                DismissPopup(pSprite);
+                break;
+            case 55:
+                switch (typeAI.m_nClass) {
+                case CAIOBJECTTYPE_C_BARBARIAN:
+                case CAIOBJECTTYPE_C_BARD:
+                case CAIOBJECTTYPE_C_FIGHTER:
+                case CAIOBJECTTYPE_C_MONK:
+                case CAIOBJECTTYPE_C_PALADIN:
+                case CAIOBJECTTYPE_C_ROGUE:
+                    if (m_nCurrentStep < 8) {
+                        m_nCurrentStep++;
+                    }
+
+                    DismissPopup(pSprite);
+                    CompleteCharacterSkills(pSprite);
+                    break;
+                case CAIOBJECTTYPE_C_CLERIC:
+                case CAIOBJECTTYPE_C_DRUID:
+                    DismissPopup(pSprite);
+                    SummonPopup(17, pSprite);
+                    break;
+                case CAIOBJECTTYPE_C_RANGER:
+                    DismissPopup(pSprite);
+                    SummonPopup(15, pSprite);
+                    break;
+                case CAIOBJECTTYPE_C_SORCERER:
+                case CAIOBJECTTYPE_C_WIZARD:
+                    DismissPopup(pSprite);
+                    SummonPopup(7, pSprite);
+                    break;
+                default:
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+                    // __LINE__: 9279
+                    UTIL_ASSERT(FALSE);
+                }
+                break;
+            default:
+                if (m_nCurrentStep < 8) {
+                    m_nCurrentStep++;
+                }
+
+                DismissPopup(pSprite);
+                break;
+            }
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    renderLock.Unlock();
 }
 
 // NOTE: Inlined.
