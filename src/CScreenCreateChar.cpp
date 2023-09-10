@@ -9086,7 +9086,10 @@ CUIControlButtonCharacterBiographyClear::~CUIControlButtonCharacterBiographyClea
 // 0x6226F0
 void CUIControlButtonCharacterBiographyClear::OnLButtonClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CUIControlEditMultiLine* pEdit = static_cast<CUIControlEditMultiLine*>(m_pPanel->GetControl(4));
+    pEdit->Remove();
+
+    g_pBaldurChitin->m_pEngineCreateChar->GetManager()->SetCapture(pEdit, CUIManager::KEYBOARD);
 }
 
 // -----------------------------------------------------------------------------
