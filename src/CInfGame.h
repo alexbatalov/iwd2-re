@@ -340,6 +340,7 @@ public:
     /* 4808 */ CNamedCreatureVariableHash m_namedCreatures;
     /* 4814 */ STR_RES field_4814;
     /* 487C */ STR_RES field_487C;
+    /* 4A8A */ LONG m_nProtagonistId;
     /* 4A8E */ unsigned char field_4A8E;
     /* 4A8F */ unsigned char field_4A8F;
     /* 4A9A */ DWORD m_dwLastProgressRenderTickCount;

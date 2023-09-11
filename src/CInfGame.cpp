@@ -2658,7 +2658,139 @@ LONG CInfGame::GetProtagonist()
 // 0x5BFE10
 void CInfGame::SetProtagonist(LONG nId)
 {
-    // TODO: Incomplete.
+    STR_RES strRes;
+
+    if (g_pBaldurChitin->m_pEngineWorld->field_F04) {
+        nId = g_pBaldurChitin->m_pEngineWorld->field_EE0;
+    }
+
+    STRREF strSurfaceUnderdark = 25688; // "sun-lander"
+
+    if (nId == -1) {
+        return;
+    }
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(g_pBaldurChitin->GetObjectGame()->m_characters[0],
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc != CGameObjectArray::SUCCESS) {
+        return;
+    }
+
+    // NOTE: Original code is slightly different. It sets token only if
+    // `GetName` returns non-NULL, but this implementation already returns
+    // reference.
+    g_pBaldurChitin->GetTlkTable().SetToken(TOKEN_CHARACTER, pSprite->GetName());
+
+    STRREF strRace;
+    switch (pSprite->GetAIType().m_nRace) {
+    case CAIOBJECTTYPE_R_HUMAN:
+        strRace = 7193;
+        break;
+    case CAIOBJECTTYPE_R_ELF:
+        strRace = 7194;
+        break;
+    case CAIOBJECTTYPE_R_HALF_ELF:
+        strRace = 7197;
+        break;
+    case CAIOBJECTTYPE_R_DWARF:
+        strRace = 7182;
+        if (pSprite->GetAIType().m_nSubRace == 2
+            || pSprite->GetAIType().m_nSubRace == 1) {
+            strSurfaceUnderdark = 25689; // "outsider"
+        }
+        break;
+    case CAIOBJECTTYPE_R_HALFLING:
+        strRace = 7195;
+        break;
+    case CAIOBJECTTYPE_R_GNOME:
+        strRace = 7196;
+        if (pSprite->GetAIType().m_nSubRace == 1) {
+            strSurfaceUnderdark = 25689; // "outsider"
+        }
+        break;
+    case CAIOBJECTTYPE_R_HALF_ORC:
+        strRace = 22;
+        break;
+    default:
+        strRace = -1;
+        break;
+    }
+
+    g_pBaldurChitin->GetTlkTable().Fetch(strRace, strRes);
+    g_pBaldurChitin->GetTlkTable().SetToken(CInfGame::TOKEN_RACE, strRes.szText);
+
+    g_pBaldurChitin->GetTlkTable().Fetch(strSurfaceUnderdark, strRes);
+    g_pBaldurChitin->GetTlkTable().SetToken(CInfGame::TOKEN_SURFACE_UNDERDARK, strRes.szText);
+
+    if (pSprite->GetAIType().m_nGender == CAIObjectType::SEX_FEMALE) {
+        g_pBaldurChitin->GetTlkTable().Fetch(27475, strRes); // "ma'am"
+        g_pBaldurChitin->GetTlkTable().SetToken(CInfGame::TOKEN_SIRMAAM, strRes.szText);
+
+        g_pBaldurChitin->GetTlkTable().Fetch(27476, strRes); // "girl"
+        g_pBaldurChitin->GetTlkTable().SetToken(CInfGame::TOKEN_GIRLBOY, strRes.szText);
+
+        g_pBaldurChitin->GetTlkTable().Fetch(27479, strRes); // "sister"
+        g_pBaldurChitin->GetTlkTable().SetToken(CInfGame::TOKEN_BROTHERSISTER, strRes.szText);
+
+        g_pBaldurChitin->GetTlkTable().Fetch(27480, strRes); // "lady"
+        g_pBaldurChitin->GetTlkTable().SetToken(CInfGame::TOKEN_LADYLORD, strRes.szText);
+
+        g_pBaldurChitin->GetTlkTable().Fetch(27483, strRes); // "female"
+        g_pBaldurChitin->GetTlkTable().SetToken(CInfGame::TOKEN_MALEFEMALE, strRes.szText);
+
+        g_pBaldurChitin->GetTlkTable().Fetch(27485, strRes); // "she"
+        g_pBaldurChitin->GetTlkTable().SetToken(CInfGame::TOKEN_HESHE, strRes.szText);
+
+        g_pBaldurChitin->GetTlkTable().Fetch(27487, strRes); // "her"
+        g_pBaldurChitin->GetTlkTable().SetToken(CInfGame::TOKEN_HISHER, strRes.szText);
+
+        g_pBaldurChitin->GetTlkTable().Fetch(27487, strRes); // "her"
+        g_pBaldurChitin->GetTlkTable().SetToken(CInfGame::TOKEN_HIMHER, strRes.szText);
+
+        g_pBaldurChitin->GetTlkTable().Fetch(27490, strRes); // "woman"
+        g_pBaldurChitin->GetTlkTable().SetToken(CInfGame::TOKEN_MANWOMAN, strRes.szText);
+    } else {
+        g_pBaldurChitin->GetTlkTable().Fetch(27473, strRes); // "sir"
+        g_pBaldurChitin->GetTlkTable().SetToken(CInfGame::TOKEN_SIRMAAM, strRes.szText);
+
+        g_pBaldurChitin->GetTlkTable().Fetch(27477, strRes); // "boy"
+        g_pBaldurChitin->GetTlkTable().SetToken(CInfGame::TOKEN_GIRLBOY, strRes.szText);
+
+        g_pBaldurChitin->GetTlkTable().Fetch(27478, strRes); // "brother"
+        g_pBaldurChitin->GetTlkTable().SetToken(CInfGame::TOKEN_BROTHERSISTER, strRes.szText);
+
+        g_pBaldurChitin->GetTlkTable().Fetch(27481, strRes); // "lord"
+        g_pBaldurChitin->GetTlkTable().SetToken(CInfGame::TOKEN_LADYLORD, strRes.szText);
+
+        g_pBaldurChitin->GetTlkTable().Fetch(27482, strRes); // "male"
+        g_pBaldurChitin->GetTlkTable().SetToken(CInfGame::TOKEN_MALEFEMALE, strRes.szText);
+
+        g_pBaldurChitin->GetTlkTable().Fetch(27484, strRes); // "he"
+        g_pBaldurChitin->GetTlkTable().SetToken(CInfGame::TOKEN_HESHE, strRes.szText);
+
+        g_pBaldurChitin->GetTlkTable().Fetch(27486, strRes); // "his"
+        g_pBaldurChitin->GetTlkTable().SetToken(CInfGame::TOKEN_HISHER, strRes.szText);
+
+        g_pBaldurChitin->GetTlkTable().Fetch(27488, strRes); // "him"
+        g_pBaldurChitin->GetTlkTable().SetToken(CInfGame::TOKEN_HIMHER, strRes.szText);
+
+        g_pBaldurChitin->GetTlkTable().Fetch(27489, strRes); // "man"
+        g_pBaldurChitin->GetTlkTable().SetToken(CInfGame::TOKEN_MANWOMAN, strRes.szText);
+    }
+
+    m_nProtagonistId = nId;
+
+    g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(g_pBaldurChitin->GetObjectGame()->m_characters[0],
+        CGameObjectArray::THREAD_ASYNCH,
+        INFINITE);
 }
 
 // 0x5C04F0
