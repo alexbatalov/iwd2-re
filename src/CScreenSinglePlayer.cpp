@@ -1257,7 +1257,7 @@ void CScreenSinglePlayer::UpdateMainPanelCharacter(CUIPanel* pPanel, INT nCharac
 
     pPortrait->SetEnabled(IsPortraitButtonClickable(nCharacterSlot));
 
-    if (!pSettings->m_bFirstConnected || !pSettings->m_bArbitrationLockAllowInput || !bSlotFull) {
+    if (pSettings->m_bFirstConnected || !pSettings->m_bArbitrationLockAllowInput || !bSlotFull) {
         portraitResRef = "";
     }
 
