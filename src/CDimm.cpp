@@ -1247,7 +1247,10 @@ DWORD CDimm::LocalGetResourceSize(CRes* pRes)
 int CDimm::LocalReadResource(CRes* pRes, DWORD nNumberOfBytesToRead, DWORD nOffset)
 {
     INT nBytesRead = 0;
+
+    // NOTE: Unused.
     CString sDirName;
+
     CString sExt;
     CString sFileName;
     CFile file;
@@ -1256,12 +1259,16 @@ int CDimm::LocalReadResource(CRes* pRes, DWORD nNumberOfBytesToRead, DWORD nOffs
     if (pRes != NULL && pRes->m_pData != NULL) {
         resRef = pRes->GetResRef();
         if (resRef != "") {
+            BYTE szRes[RESREF_SIZE + 1];
+            resRef.GetResRef(szRes);
+            szRes[RESREF_SIZE] = '\0';
+
             g_pChitin->TranslateType(pRes->GetType(), sExt);
 
             RESID nResID = pRes->GetID();
             GetElementInDirectoryList(~nResID >> 20, sFileName);
 
-            sFileName = sDirName + resRef.GetResRef() + "." + sExt;
+            sFileName = sFileName + szRes + "." + sExt;
 
             int nFixedOffset = pRes->GetFixedResourceDataOffset();
             int nFixedSize = pRes->GetFixedResourceSize();
