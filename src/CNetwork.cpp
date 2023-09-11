@@ -1994,6 +1994,22 @@ BYTE* CNetwork::CreateCopyMessage(const void* lpData, DWORD dwDataSize, unsigned
     return NULL;
 }
 
+// 0x7A8060
+BYTE* CNetwork::FetchSpecificMessage(const CString& sPlayerName, BYTE nSpecMsgType, BYTE nSpecMsgSubType, DWORD& dwSize)
+{
+    // TODO: Incomplete.
+
+    return NULL;
+}
+
+// 0x7A81C0
+BOOLEAN CNetwork::PeekSpecificMessage(const CString& sPlayerName, BYTE nSpecMsgType, BYTE nSpecMsgSubType)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x452B40
 INT CNetwork::GetServiceProvider()
 {

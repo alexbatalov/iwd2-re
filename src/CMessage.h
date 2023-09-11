@@ -88,6 +88,8 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_WEAPON_IMMUNITIES_UPDATE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
+    static const BYTE MSG_TYPE_PLAYER_CHAR;
+    static const BYTE MSG_SUBTYPE_PLAYERCHAR_DEMAND_REPLY;
     static const BYTE SIGNAL_SERVER;
     static const BYTE SIGNAL_END_MAJOR_EVENT;
     static const BYTE SIGNAL_END_GAME;
@@ -107,6 +109,7 @@ public:
     BOOLEAN KickPlayerRequest(const CString& sPlayerName);
     void UpdateDemandCharacters(unsigned char a1, int a2, unsigned char a3);
     BOOLEAN DemandCharacterSlot(SHORT nCharacterSlot, BOOLEAN bDemandFromHost, SHORT nPlayerSlot);
+    BOOLEAN OnDemandCharacterSlotReply(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
     BOOL ObjectControlRequest(LONG localObjectID);
     BOOL ObjectControl();
     BOOLEAN SendChatMessage(CString& sChatMessage);
@@ -122,6 +125,7 @@ public:
     void WeatherBroadcast(WORD wWeatherFlags);
     void TimeSynchBroadcast(ULONG nGameTime, BOOLEAN bCompressTime);
     void TimeChangeToServer(ULONG deltaTime);
+    void HandleBlockingMessages();
     BOOLEAN DemandSettingsNightmareMode(BOOLEAN wait);
     BOOL DisplayText(const CString& sName, const CString& sText, COLORREF rgbNameColor, COLORREF rgbTextColor, LONG lMarker, LONG caller, LONG target);
     BOOL DisplayTextRef(STRREF name, STRREF text, COLORREF rgbNameColor, COLORREF rgbTextColor, LONG lMarker, LONG caller, LONG target);

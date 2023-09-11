@@ -247,6 +247,12 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_WEAPON_IMMUNITIES_UPDATE = 102;
 // 0x84CF76
 const BYTE CBaldurMessage::DELETEAREA_EMPTY_VOTE = 101;
 
+// 0x84CF9F
+const BYTE CBaldurMessage::MSG_TYPE_PLAYER_CHAR = 80;
+
+// 0x84CFA3
+const BYTE CBaldurMessage::MSG_SUBTYPE_PLAYERCHAR_DEMAND_REPLY = 100;
+
 // 0x84CFBC
 const BYTE CBaldurMessage::SIGNAL_SERVER = 83;
 
@@ -417,6 +423,14 @@ BOOLEAN CBaldurMessage::DemandCharacterSlot(SHORT nCharacterSlot, BOOLEAN bDeman
     return FALSE;
 }
 
+// 0x42FA60
+BOOLEAN CBaldurMessage::OnDemandCharacterSlotReply(INT nMsgFrom, BYTE* pMessage, DWORD dwSize)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x430980
 BOOL CBaldurMessage::ObjectControlRequest(LONG localObjectID)
 {
@@ -534,6 +548,12 @@ void CBaldurMessage::TimeSynchBroadcast(ULONG nGameTime, BOOLEAN bCompressTime)
 
 // 0x437240
 void CBaldurMessage::TimeChangeToServer(DWORD deltaTime)
+{
+    // TODO: Incomplete.
+}
+
+// 0x43C4A0
+void CBaldurMessage::HandleBlockingMessages()
 {
     // TODO: Incomplete.
 }
