@@ -5,6 +5,7 @@
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
+#include "CUIControlEdit.h"
 #include "CUIControlScrollBar.h"
 #include "CVidFont.h"
 
@@ -159,6 +160,13 @@ public:
     CUIControlButtonSinglePlayerLogout(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonSinglePlayerLogout() override;
     void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlEditSinglePlayerChat : public CUIControlEdit {
+public:
+    CUIControlEditSinglePlayerChat(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo);
+    ~CUIControlEditSinglePlayerChat() override;
+    void OnEditReturn(CString sText) override;
 };
 
 class CUIControlButtonSinglePlayerModifyCharacterCreate : public CUIControlButton {

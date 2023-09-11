@@ -1846,6 +1846,28 @@ void CUIControlButtonSinglePlayerLogout::OnLButtonClick(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x6661B0
+CUIControlEditSinglePlayerChat::CUIControlEditSinglePlayerChat(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo)
+    : CUIControlEdit(panel, controlInfo, 0)
+{
+    field_8A0 = 0;
+}
+
+// 0x666200
+CUIControlEditSinglePlayerChat::~CUIControlEditSinglePlayerChat()
+{
+}
+
+// 0x6662D0
+void CUIControlEditSinglePlayerChat::OnEditReturn(CString sText)
+{
+    g_pBaldurChitin->GetBaldurMessage()->SendChatMessage(sText);
+    field_868 = "";
+    SetText(CString(""));
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x666360
 CUIControlButtonSinglePlayerModifyCharacterCreate::CUIControlButtonSinglePlayerModifyCharacterCreate(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)

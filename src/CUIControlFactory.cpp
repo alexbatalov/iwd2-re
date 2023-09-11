@@ -745,8 +745,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 26:
                 return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
             case 27:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlEditSinglePlayerChat(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo));
             case 28:
                 return new CUIControlButtonSinglePlayerDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 30:
