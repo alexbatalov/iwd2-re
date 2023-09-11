@@ -1742,7 +1742,7 @@ BOOL CScreenSinglePlayer::IsPortraitButtonClickable(INT nCharacterSlot)
     LONG nCharacterId = pGame->GetCharacterSlot(nCharacterSlot);
 
     BOOL bSlotFull = pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_CHARACTER
-        && nCharacterId == CGameObjectArray::INVALID_INDEX;
+        && nCharacterId != CGameObjectArray::INVALID_INDEX;
 
     // NOTE: Unused.
     g_pBaldurChitin->cNetwork.FindPlayerLocationByID(g_pBaldurChitin->cNetwork.m_idLocalPlayer, FALSE);
