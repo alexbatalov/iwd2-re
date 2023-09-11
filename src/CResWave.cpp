@@ -31,7 +31,7 @@ CResWave::~CResWave()
 void* CResWave::Demand()
 {
     void* pData = CRes::Demand();
-    if (!m_bParsed || GetDemands() <= 1) {
+    if (pData != NULL && (m_pWaveData == NULL || !m_bParsed || GetDemands() <= 1)) {
         Parse(pData);
 
         if (!m_bParsed) {
