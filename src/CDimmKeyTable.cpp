@@ -320,7 +320,7 @@ void CDimmKeyTable::RescanDirectoryNumberAndName(int nDirNumber, const CString& 
                     pos--;
                 }
 
-                int nType = g_pChitin->TranslateType(CString(findFileData.cFileName[pos + 1]));
+                int nType = g_pChitin->TranslateType(CString(&(findFileData.cFileName[pos + 1])));
 
                 // FIXME: Probably wrong, `TranslateType` returns -1 to indicate
                 // error.
