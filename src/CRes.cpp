@@ -138,7 +138,7 @@ CResRef CRes::GetResRef()
 {
     CResRef resRef;
 
-    if (m_pDimmKeyTableEntry != NULL && !m_pDimmKeyTableEntry->resRef.IsValid()) {
+    if (m_pDimmKeyTableEntry != NULL && m_pDimmKeyTableEntry->resRef.IsValid()) {
         resRef = m_pDimmKeyTableEntry->resRef;
     } else {
         resRef = "";
