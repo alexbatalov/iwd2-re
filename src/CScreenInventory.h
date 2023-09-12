@@ -108,6 +108,9 @@ public:
     void SwapWithPortrait(INT nButtonId, BOOL bShowError);
     void SwapWithWeaponSet(UINT nIndex);
 
+    void OnRequesterMinusButtonClick();
+    void OnRequesterPlusButtonClick();
+
     /* 0106 */ CGameAnimation m_animation;
     /* 0110 */ CItem* m_pTempItem;
     /* 0114 */ int field_114;

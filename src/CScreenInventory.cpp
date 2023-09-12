@@ -2067,6 +2067,54 @@ void CScreenInventory::SwapWithWeaponSet(UINT nIndex)
     // TODO: Incomplete.
 }
 
+// NOTE: Inlined.
+void CScreenInventory::OnRequesterMinusButtonClick()
+{
+    CItem* pItem;
+    STRREF description;
+    CResRef cResIcon;
+    CResRef cResItem;
+    WORD wCount;
+
+    MapButtonIdToItemInfo(m_nRequesterButtonId,
+        pItem,
+        description,
+        cResIcon,
+        cResItem,
+        wCount);
+
+    if (pItem != NULL) {
+        if (m_nRequesterAmount > 1) {
+            m_nRequesterAmount = min(m_nRequesterAmount - 1, wCount);
+            UpdateRequesterPanel();
+        }
+    }
+}
+
+// NOTE: Inlined.
+void CScreenInventory::OnRequesterPlusButtonClick()
+{
+    CItem* pItem;
+    STRREF description;
+    CResRef cResIcon;
+    CResRef cResItem;
+    WORD wCount;
+
+    MapButtonIdToItemInfo(m_nRequesterButtonId,
+        pItem,
+        description,
+        cResIcon,
+        cResItem,
+        wCount);
+
+    if (pItem != NULL) {
+        if (m_nRequesterAmount < wCount) {
+            m_nRequesterAmount = min(m_nRequesterAmount + 1, wCount);
+            UpdateRequesterPanel();
+        }
+    }
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x62CF70
@@ -2734,7 +2782,50 @@ CUIControlButtonInventoryRequesterPlusMinus::~CUIControlButtonInventoryRequester
 // 0x633960
 void CUIControlButtonInventoryRequesterPlusMinus::AdjustValue()
 {
-    // TODO: Incomplete.
+    CScreenInventory* pInventory = g_pBaldurChitin->m_pEngineInventory;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 10641
+    UTIL_ASSERT(pInventory != NULL);
+
+    CItem* pItem;
+    STRREF description;
+    CResRef cResIcon;
+    CResRef cResItem;
+    WORD wCount;
+
+    pInventory->MapButtonIdToItemInfo(pInventory->m_nRequesterButtonId,
+        pItem,
+        description,
+        cResIcon,
+        cResItem,
+        wCount);
+    if (pItem != NULL) {
+        switch (m_nID) {
+        case 3:
+            // NOTE: Uninline.
+            pInventory->OnRequesterMinusButtonClick();
+            break;
+        case 4:
+            // NOTE: Uninline.
+            pInventory->OnRequesterPlusButtonClick();
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+            // __LINE__: 10678
+            UTIL_ASSERT(pInventory != NULL);
+        }
+    } else {
+        CSingleLock renderLock(&(pInventory->GetManager()->field_36), FALSE);
+        renderLock.Lock(INFINITE);
+
+        CUIControlButtonPlusMinus::OnLButtonUp(CPoint(0, 0));
+
+        pInventory->DismissPopup();
+        pInventory->SetErrorString(10161, RGB(255, 255, 255));
+
+        renderLock.Unlock();
+    }
 }
 
 // -----------------------------------------------------------------------------
