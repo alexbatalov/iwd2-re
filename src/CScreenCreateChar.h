@@ -559,10 +559,10 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
-class CUIControlButtonCharacterBiographyClear : public CUIControlButton {
+class CUIControlButtonCharGenBiographyClear : public CUIControlButton {
 public:
-    CUIControlButtonCharacterBiographyClear(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
-    ~CUIControlButtonCharacterBiographyClear() override;
+    CUIControlButtonCharGenBiographyClear(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGenBiographyClear() override;
     void OnLButtonClick(CPoint pt) override;
 };
 

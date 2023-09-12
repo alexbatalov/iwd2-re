@@ -285,6 +285,13 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonCharacterBiographyClear : public CUIControlButton {
+public:
+    CUIControlButtonCharacterBiographyClear(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharacterBiographyClear() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlTextDisplayCharacterScriptScripts : public CUIControlTextDisplay {
 public:
     CUIControlTextDisplayCharacterScriptScripts(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo);

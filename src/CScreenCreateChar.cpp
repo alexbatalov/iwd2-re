@@ -9754,7 +9754,7 @@ void CUIControlButtonCharGenBiography::OnLButtonClick(CPoint pt)
 // -----------------------------------------------------------------------------
 
 // 0x622580
-CUIControlButtonCharacterBiographyClear::CUIControlButtonCharacterBiographyClear(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+CUIControlButtonCharGenBiographyClear::CUIControlButtonCharGenBiographyClear(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
@@ -9767,12 +9767,12 @@ CUIControlButtonCharacterBiographyClear::CUIControlButtonCharacterBiographyClear
 }
 
 // 0x622650
-CUIControlButtonCharacterBiographyClear::~CUIControlButtonCharacterBiographyClear()
+CUIControlButtonCharGenBiographyClear::~CUIControlButtonCharGenBiographyClear()
 {
 }
 
 // 0x6226F0
-void CUIControlButtonCharacterBiographyClear::OnLButtonClick(CPoint pt)
+void CUIControlButtonCharGenBiographyClear::OnLButtonClick(CPoint pt)
 {
     CUIControlEditMultiLine* pEdit = static_cast<CUIControlEditMultiLine*>(m_pPanel->GetControl(4));
     pEdit->Remove();

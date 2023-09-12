@@ -2455,7 +2455,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 4:
                 return new CUIControlEditMultiLineScroller(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo));
             case 5:
-                return new CUIControlButtonCharacterBiographyClear(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+                return new CUIControlButtonCharGenBiographyClear(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 6:
                 return new CUIControlButtonCharacterBiographyRevert(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             }

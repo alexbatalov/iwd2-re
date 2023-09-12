@@ -10,6 +10,7 @@
 #include "CScreenCreateChar.h"
 #include "CScreenWorld.h"
 #include "CSpell.h"
+#include "CUIControlEditMultiLine.h"
 #include "CUIControlFactory.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -3807,6 +3808,32 @@ void CUIControlButtonCharacterPopupCancel::OnLButtonClick(CPoint pt)
     UTIL_ASSERT(pCharacter != NULL);
 
     pCharacter->OnCancelButtonClick();
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x5ECC60
+CUIControlButtonCharacterBiographyClear::CUIControlButtonCharacterBiographyClear(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    SetText(CBaldurEngine::FetchString(18622)); // "Clear"
+}
+
+// 0x5ECD40
+CUIControlButtonCharacterBiographyClear::~CUIControlButtonCharacterBiographyClear()
+{
+}
+
+// 0x5ECDE0
+void CUIControlButtonCharacterBiographyClear::OnLButtonClick(CPoint pt)
+{
+    if (m_bEnabled) {
+        CUIControlEditMultiLine* pEdit = static_cast<CUIControlEditMultiLine*>(m_pPanel->GetControl(4));
+        pEdit->Remove();
+
+        g_pBaldurChitin->m_pEngineCharacter->field_1B8 = TRUE;
+        g_pBaldurChitin->m_pEngineCharacter->GetManager()->SetCapture(pEdit, CUIManager::KEYBOARD);
+    }
 }
 
 // -----------------------------------------------------------------------------
