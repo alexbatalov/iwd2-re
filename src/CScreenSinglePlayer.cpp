@@ -2433,7 +2433,7 @@ void CUIControlButtonSinglePlayerModifyCharacterCreate::OnLButtonClick(CPoint pt
     // __LINE__: 4642
     UTIL_ASSERT(pSettings != NULL);
 
-    CNetwork* pNetwork = &(g_pBaldurChitin->cNetwork);
+    CNetwork& cNetwork = g_pBaldurChitin->cNetwork;
 
     CSingleLock renderLock(&(pSinglePlayer->GetManager()->field_36), FALSE);
     renderLock.Lock(INFINITE);
@@ -2450,7 +2450,37 @@ void CUIControlButtonSinglePlayerModifyCharacterCreate::OnLButtonClick(CPoint pt
             TRUE,
             TRUE);
 
-        // TODO: Incomplete.
+        INT nLocalPlayer = cNetwork.m_nLocalPlayer;
+        INT nHostPlayer = cNetwork.m_nHostPlayer;
+        CString sPlayerName;
+
+        if (nHostPlayer != -1) {
+            sPlayerName = cNetwork.m_psPlayerName[nHostPlayer];
+        } else {
+            sPlayerName = "";
+        }
+
+        while (pSettings->GetCharacterControlledByPlayer(nCharacterSlot) == nLocalPlayer
+            && pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_NO_CHARACTER) {
+            while (g_pChitin->cNetwork.PeekSpecificMessage(sPlayerName, CBaldurMessage::MSG_TYPE_MPSETTINGS, CBaldurMessage::MSG_SUBTYPE_MPSETTINGS_FULLSET) == TRUE) {
+                g_pBaldurChitin->GetBaldurMessage()->HandleBlockingMessages();
+
+                DWORD dwSize;
+                BYTE* pData = g_pChitin->cNetwork.FetchSpecificMessage(sPlayerName,
+                    CBaldurMessage::MSG_TYPE_MPSETTINGS,
+                    CBaldurMessage::MSG_SUBTYPE_MPSETTINGS_FULLSET,
+                    dwSize);
+                g_pBaldurChitin->GetBaldurMessage()->OnSettingsFullSet(nHostPlayer, pData, dwSize);
+                delete pData;
+            }
+
+            if (g_pChitin->cNetwork.GetSessionOpen() != TRUE) {
+                break;
+            }
+
+            g_pChitin->m_bDisplayStale = TRUE;
+            Sleep(60);
+        }
 
         if (pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_CREATING_CHARACTER) {
             renderLock.Unlock();
