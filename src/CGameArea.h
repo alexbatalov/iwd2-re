@@ -105,6 +105,7 @@ public:
     INT SetListManipulationThreadId(DWORD ThreadID);
     void AddObject(LONG id, BYTE listType);
     void ApplyWindToAmbients(BYTE nPercentVolume);
+    LONG GetGroundPile(const CPoint& ptPos);
     BOOLEAN CanSaveGame(STRREF& strError);
     void ProgressBarCallback(DWORD dwSize, BOOLEAN bInitialize);
     void SetListenPosition();
@@ -202,6 +203,7 @@ public:
     /* 098A */ int field_98A;
     /* 098E */ int field_98E;
     /* 0992 */ CTypedPtrList<CPtrList, int*> m_lVertSort; // NOTE: Stores actual ints disguised as pointers.
+    /* 0992 */ CTypedPtrList<CPtrList, int*> m_lVertSortBack; // NOTE: Stores actual ints disguised as pointers.
     /* 09E6 */ CTypedPtrList<CPtrList, int*> m_lVertSortAdd; // NOTE: Stores actual ints disguised as pointers.
     /* 0A02 */ CTypedPtrList<CPtrList, int*> m_lVertSortBackAdd; // NOTE: Stores actual ints disguised as pointers.
     /* 0A1E */ CTypedPtrList<CPtrList, int*> m_lVertSortFlightAdd; // NOTE: Stores actual ints disguised as pointers.

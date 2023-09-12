@@ -2,9 +2,11 @@
 
 #include "CBaldurChitin.h"
 #include "CChitin.h"
+#include "CGameContainer.h"
 #include "CGameObject.h"
 #include "CGameSprite.h"
 #include "CInfGame.h"
+#include "CPathSearch.h"
 #include "CScreenWorld.h"
 #include "CTiledObject.h"
 #include "CUtil.h"
@@ -163,6 +165,85 @@ void CGameArea::ApplyWindToAmbients(BYTE nPercentVolume)
     m_sndAmbientVolume = nPercentVolume;
     m_sndAmbientDay.SetVolume(m_sndAmbientDayVolume * m_sndAmbientVolume / 100);
     m_sndAmbientNight.SetVolume(m_sndAmbientNightVolume * m_sndAmbientVolume / 100);
+}
+
+// 0x46AF40
+LONG CGameArea::GetGroundPile(const CPoint& ptPos)
+{
+    POSITION pos;
+    LONG iObject;
+    CGameObject* pObject;
+    BYTE rc;
+
+    LONG iGroundPile = CGameObjectArray::INVALID_INDEX;
+
+    CPoint ptGridPos;
+    ptGridPos.x = ptPos.x / CPathSearch::GRID_SQUARE_SIZEX;
+    ptGridPos.y = ptPos.y / CPathSearch::GRID_SQUARE_SIZEY;
+
+    pos = m_lVertSortBack.GetTailPosition();
+    while (pos != NULL) {
+        iObject = reinterpret_cast<LONG>(m_lVertSortBack.GetPrev(pos));
+
+        rc = m_pGame->GetObjectArray()->GetShare(iObject,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (pObject->GetObjectType() == CGameObject::TYPE_CONTAINER
+                && static_cast<CGameContainer*>(pObject)->m_containerType == 4) {
+                if (ptGridPos.x == pObject->GetPos().x / CPathSearch::GRID_SQUARE_SIZEX
+                    && ptGridPos.y == pObject->GetPos().y / CPathSearch::GRID_SQUARE_SIZEY) {
+                    iGroundPile = iObject;
+
+                    m_pGame->GetObjectArray()->ReleaseShare(iObject,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        INFINITE);
+
+                    break;
+                }
+            }
+
+            m_pGame->GetObjectArray()->ReleaseShare(iObject,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+
+    if (iGroundPile == CGameObjectArray::INVALID_INDEX) {
+        pos = m_lVertSortBackAdd.GetTailPosition();
+        while (pos != NULL) {
+            iObject = reinterpret_cast<LONG>(m_lVertSortBackAdd.GetPrev(pos));
+
+            rc = m_pGame->GetObjectArray()->GetShare(iObject,
+                CGameObjectArray::THREAD_ASYNCH,
+                &pObject,
+                INFINITE);
+
+            if (rc == CGameObjectArray::SUCCESS) {
+                if (pObject->GetObjectType() == CGameObject::TYPE_CONTAINER
+                    && static_cast<CGameContainer*>(pObject)->m_containerType == 4) {
+                    if (ptGridPos.x == pObject->GetPos().x / CPathSearch::GRID_SQUARE_SIZEX
+                        && ptGridPos.y == pObject->GetPos().y / CPathSearch::GRID_SQUARE_SIZEY) {
+                        iGroundPile = iObject;
+
+                        m_pGame->GetObjectArray()->ReleaseShare(iObject,
+                            CGameObjectArray::THREAD_ASYNCH,
+                            INFINITE);
+
+                        break;
+                    }
+                }
+
+                m_pGame->GetObjectArray()->ReleaseShare(iObject,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            }
+        }
+    }
+
+    return iGroundPile;
 }
 
 // 0x46F5A0
