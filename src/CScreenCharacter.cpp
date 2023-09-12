@@ -3824,7 +3824,7 @@ CUIControlButtonCharacterBiographyRevert::~CUIControlButtonCharacterBiographyRev
 {
 }
 
-// 0x5ECDE0
+// 0x5ECA90
 void CUIControlButtonCharacterBiographyRevert::OnLButtonClick(CPoint pt)
 {
     if (m_bEnabled) {
