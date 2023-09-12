@@ -1844,6 +1844,102 @@ INT CScreenInventory::MapInventoryIdToButtonId(INT nInventoryId)
     }
 }
 
+// 0x631130
+BOOL CScreenInventory::MapButtonIdToItemInfo(INT nButton, CItem*& pItem, STRREF& description, CResRef& cResIcon, CResRef& cResItem, WORD& wCount)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 9042
+    UTIL_ASSERT(pGame != NULL);
+
+    description = -1;
+    cResIcon = "";
+    cResItem = "";
+    wCount = 0;
+
+    switch (nButton) {
+    case 5:
+    case 6:
+    case 7:
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+    case 16:
+    case 17:
+    case 21:
+    case 22:
+    case 23:
+    case 24:
+    case 25:
+    case 30:
+    case 31:
+    case 32:
+    case 33:
+    case 34:
+    case 35:
+    case 36:
+    case 37:
+    case 38:
+    case 39:
+    case 40:
+    case 41:
+    case 42:
+    case 43:
+    case 44:
+    case 45:
+    case 73:
+    case 74:
+    case 75:
+    case 76:
+    case 77:
+    case 78:
+    case 79:
+    case 80:
+    case 101:
+    case 102:
+    case 103:
+    case 104:
+    case 105:
+    case 106:
+    case 107:
+    case 108:
+        pGame->InventoryInfoPersonal(m_nSelectedCharacter,
+            MapButtonIdToInventoryId(nButton),
+            pItem,
+            description,
+            cResIcon,
+            cResItem,
+            wCount,
+            TRUE);
+        return TRUE;
+    case 68:
+    case 69:
+    case 70:
+    case 71:
+    case 72:
+    case 81:
+        if (1) {
+            LONG nContainerId = FetchGroundPile(m_nSelectedCharacter, FALSE);
+            if (nContainerId != CGameObjectArray::INVALID_INDEX) {
+                pGame->InventoryInfoGround(nContainerId,
+                    field_454 + nButton - 68,
+                    pItem,
+                    description,
+                    cResIcon,
+                    cResItem,
+                    wCount);
+            }
+        }
+        return TRUE;
+    }
+
+    pItem = NULL;
+    return FALSE;
+}
+
 // 0x62F100
 void CScreenInventory::BeginSwap()
 {

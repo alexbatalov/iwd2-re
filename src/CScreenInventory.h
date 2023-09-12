@@ -101,6 +101,7 @@ public:
     void SwapWithAppearance();
     INT MapButtonIdToInventoryId(INT nButton);
     INT MapInventoryIdToButtonId(INT nInventoryId);
+    BOOL MapButtonIdToItemInfo(INT nButton, CItem*& pItem, STRREF& description, CResRef& cResIcon, CResRef& cResItem, WORD& wCount);
     void BeginSwap();
     void EndSwap();
     void SwapWithSlot(INT nButtonId, BOOL bShowError, WORD wCount, BOOL bAutoStacking);
