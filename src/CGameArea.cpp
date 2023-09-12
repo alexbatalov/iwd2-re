@@ -652,6 +652,12 @@ void CGameArea::SetSoundEnvironment()
     }
 }
 
+// 0x4794E0
+void CGameArea::SortLists()
+{
+    // TODO: Incomplete.
+}
+
 // 0x479CC0
 BOOL CGameArea::SetSong(SHORT slot, BYTE song)
 {

@@ -46,6 +46,12 @@ const SHORT CMessage::BROADCAST_FORCED = 4;
 // 0x848210
 const SHORT CMessage::BROADCAST_FORCED_OTHERS = 5;
 
+// 0x84CED4
+const BYTE CBaldurMessage::MSG_TYPE_PROGRESSBAR = 66;
+
+// 0x84CED5
+const BYTE CBaldurMessage::MSG_SUBTYPE_PROGRESSBAR_STATUS = 83;
+
 // 0x84CED6
 const BYTE CBaldurMessage::MSG_TYPE_CMESSAGE = 67;
 
@@ -253,6 +259,15 @@ const BYTE CBaldurMessage::MSG_TYPE_PLAYER_CHAR = 80;
 // 0x84CFA3
 const BYTE CBaldurMessage::MSG_SUBTYPE_PLAYERCHAR_DEMAND_REPLY = 100;
 
+// 0x84CFB0
+const BYTE CBaldurMessage::MSG_TYPE_RESOURCE = 82;
+
+// 0x84CFB1
+const BYTE CBaldurMessage::MSG_SUBTYPE_RESOURCE_DEMAND = 68;
+
+// 0x84CFBB
+const BYTE CBaldurMessage::SIGNAL_ALL_CLIENTS = 67;
+
 // 0x84CFBC
 const BYTE CBaldurMessage::SIGNAL_SERVER = 83;
 
@@ -327,6 +342,22 @@ CBaldurMessage::CBaldurMessage()
 // 0x429720
 CBaldurMessage::~CBaldurMessage()
 {
+}
+
+// 0x4297C0
+BOOLEAN CBaldurMessage::DemandResourceFromServer(const CString& sResName, UINT nType, BOOLEAN bSendMessage, BOOLEAN bWaitForMessage, BOOLEAN bSaveToTemp)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x429A90
+BOOLEAN CBaldurMessage::OnResourceDemanded(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // 0x42B2B0
@@ -489,11 +520,35 @@ BOOLEAN CBaldurMessage::NonBlockingWaitForSignal(BYTE signalType, BYTE signalToW
 {
     // TODO: Incomplete.
 
+    return -1;
+}
+
+// 0x4337D0
+BYTE CBaldurMessage::KickOutWaitingForSignal(BYTE signalType, BYTE signalToWaitFor)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x433950
+BOOLEAN CBaldurMessage::WaitForSignal(BYTE signalType, BYTE signalToWaitFor)
+{
+    // TODO: Incomplete.
+
     return FALSE;
 }
 
 // 0x433BE0
 BOOLEAN CBaldurMessage::SendProgressBarStatus(LONG nActionProgress, LONG nActionTarget, BOOLEAN bWaiting, LONG nWaitingReason, BOOLEAN bTimeoutVisible, DWORD nSecondsToTimeout)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x433D30
+BOOLEAN CBaldurMessage::OnProgressBarStatus(INT nMsgFrom, BYTE* pMessage, DWORD dwSize)
 {
     // TODO: Incomplete.
 
@@ -550,6 +605,14 @@ void CBaldurMessage::TimeSynchBroadcast(ULONG nGameTime, BOOLEAN bCompressTime)
 void CBaldurMessage::TimeChangeToServer(DWORD deltaTime)
 {
     // TODO: Incomplete.
+}
+
+// 0x43C390
+BYTE* CBaldurMessage::PollSpecificMessageType(BYTE nMsgType, BYTE nMsgSubType, INT& nMsgFrom, DWORD& dwSize)
+{
+    // TODO: Incomplete.
+
+    return NULL;
 }
 
 // 0x43C4A0

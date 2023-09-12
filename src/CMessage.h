@@ -20,6 +20,9 @@ class CGameEffect;
 
 class CBaldurMessage {
 public:
+    static const BYTE MSG_TYPE_PROGRESSBAR;
+    static const BYTE MSG_SUBTYPE_PROGRESSBAR_STATUS;
+
     static const BYTE MSG_TYPE_CMESSAGE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_ADD_ACTION;
     static const BYTE MSG_SUBTYPE_CMESSAGE_ADD_EFFECT;
@@ -90,6 +93,11 @@ public:
     static const BYTE DELETEAREA_EMPTY_VOTE;
     static const BYTE MSG_TYPE_PLAYER_CHAR;
     static const BYTE MSG_SUBTYPE_PLAYERCHAR_DEMAND_REPLY;
+
+    static const BYTE MSG_TYPE_RESOURCE;
+    static const BYTE MSG_SUBTYPE_RESOURCE_DEMAND;
+
+    static const BYTE SIGNAL_ALL_CLIENTS;
     static const BYTE SIGNAL_SERVER;
     static const BYTE SIGNAL_END_MAJOR_EVENT;
     static const BYTE SIGNAL_END_GAME;
@@ -97,6 +105,8 @@ public:
 
     CBaldurMessage();
     ~CBaldurMessage();
+    BOOLEAN DemandResourceFromServer(const CString& sResName, UINT nType, BOOLEAN bSendMessage, BOOLEAN bWaitForMessage, BOOLEAN bSaveToTemp);
+    BOOLEAN OnResourceDemanded(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize);
     BOOL SendFullSettingsToClients(const CString& sPlayerName);
     BOOL SendCharacterReadyToServer(INT nCharacterSlot, BOOLEAN bReady);
     BOOL SendImportingOptionToServer(BYTE nImportingBitField);
@@ -117,7 +127,10 @@ public:
     BOOLEAN RequestClientSignal(BYTE signalToSend);
     BOOLEAN SendSignal(BYTE signalType, BYTE signalToSend);
     BOOLEAN NonBlockingWaitForSignal(BYTE signalType, BYTE signalToWaitFor);
+    BYTE KickOutWaitingForSignal(BYTE signalType, BYTE signalToWaitFor);
+    BOOLEAN WaitForSignal(BYTE signalType, BYTE signalToWaitFor);
     BOOLEAN SendProgressBarStatus(LONG nActionProgress, LONG nActionTarget, BOOLEAN bWaiting, LONG nWaitingReason, BOOLEAN bTimeoutVisible, DWORD nSecondsToTimeout);
+    BOOLEAN OnProgressBarStatus(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
     BOOLEAN ChapterAnnounceStatus(BYTE nChapter, CResRef cResRef);
     BOOLEAN SendMapWorldAnnounceStatus(BOOLEAN bActive, PLAYER_ID idController, LONG nLeavingEdge);
     BOOLEAN MovieAnnounceStatus(CResRef cResMovie);
@@ -125,6 +138,7 @@ public:
     void WeatherBroadcast(WORD wWeatherFlags);
     void TimeSynchBroadcast(ULONG nGameTime, BOOLEAN bCompressTime);
     void TimeChangeToServer(ULONG deltaTime);
+    BYTE* PollSpecificMessageType(BYTE nMsgType, BYTE nMsgSubType, INT& nMsgFrom, DWORD& dwSize);
     void HandleBlockingMessages();
     BOOLEAN DemandSettingsNightmareMode(BOOLEAN wait);
     BOOL DisplayText(const CString& sName, const CString& sText, COLORREF rgbNameColor, COLORREF rgbTextColor, LONG lMarker, LONG caller, LONG target);

@@ -110,7 +110,7 @@ public:
     /* 0474 */ STRREF m_strErrorButtonText[CSCREENSINGLEPLAYER_ERROR_BUTTONS];
     /* 0480 */ int field_480;
     /* 0484 */ INT field_484;
-    /* 0488 */ unsigned char field_488;
+    /* 0488 */ BOOLEAN m_bSinglePlayerStartup;
     /* 048A */ BOOL m_bLastLockAllowInput;
     /* 048E */ CVidFont m_preLoadFontRealms;
     /* 098E */ CVidFont m_preLoadFontStnSml;

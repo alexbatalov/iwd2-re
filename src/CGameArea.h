@@ -130,6 +130,7 @@ public:
     void SetDusk(BYTE nIntensity, BOOLEAN bPlayDayNightMovie);
     void SetTimeOfDay(ULONG nTimeOfDay, BOOLEAN bPlayDayNightMovie);
     void SetSoundEnvironment();
+    void SortLists();
     BOOL SetSong(SHORT slot, BYTE song);
     BYTE GetSong(SHORT slot);
     void PlaySong(SHORT slot, DWORD flags);

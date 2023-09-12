@@ -100,6 +100,11 @@ public:
     static const SHORT BASE_CHURCH;
     static const SHORT REPUTATION_MULTIPLIER;
 
+    static const DWORD PROGRESSBAR_AREA_ADDITIONAL;
+    static const DWORD PROGRESSBAR_GAME_ADDITIONAL;
+    static const DWORD PROGRESSBAR_REQUESTS_ADDITIONAL;
+    static const DWORD PROGRESSBAR_CACHING_ADDITIONAL;
+
     static const SHORT FEEDBACK_GOLD;
 
     CInfGame();
@@ -131,6 +136,8 @@ public:
     void NewGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace);
     BOOLEAN sub_5AC0A0(CGameArea* pArea);
     void sub_5AC0D0();
+    void SelectAll(BOOLEAN bPlaySound);
+    void UnselectAll();
     BOOL SelectCharacter(LONG characterId, BOOLEAN bPlaySelectSound);
     void SelectToolbar();
     void DemandServerStore(const CResRef& store, BOOL bSaveToDisk);
@@ -185,6 +192,7 @@ public:
     CStringList* GetSaveGames();
     CString GetDirSaveRoot();
     CString GetDirSave();
+    CString sub_5C0B30();
     CStringList* GetScripts();
     CString GetDirScripts();
     static void StartCharacterTerminationSequence();
@@ -235,6 +243,7 @@ public:
     CSpellResRefList* GetSongs();
     CSpellResRefList* GetInnateSpells();
     CSpellResRefList* GetShapeshifts();
+    CString GetSaveGame();
 
     const CRuleTables& GetRuleTables() { return m_ruleTables; }
 
@@ -348,6 +357,7 @@ public:
     /* 4A8A */ LONG m_nProtagonistId;
     /* 4A8E */ unsigned char field_4A8E;
     /* 4A8F */ unsigned char field_4A8F;
+    /* 4A90 */ BYTE m_nTravelScreenImageToUse;
     /* 4A9A */ DWORD m_dwLastProgressRenderTickCount;
     /* 4A9E */ DWORD m_dwLastProgressMsgTickCount;
     /* 4A00 */ HANDLE m_hSearchThread; // #guess

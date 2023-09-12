@@ -65,6 +65,18 @@ const SHORT CInfGame::BASE_CHURCH = 8;
 // 0x851896
 const SHORT CInfGame::REPUTATION_MULTIPLIER = 10;
 
+// 0x8518AC
+const DWORD CInfGame::PROGRESSBAR_AREA_ADDITIONAL = 3000000;
+
+// 0x8518B0
+const DWORD CInfGame::PROGRESSBAR_GAME_ADDITIONAL = 5000000;
+
+// 0x8518B4
+const DWORD CInfGame::PROGRESSBAR_REQUESTS_ADDITIONAL = 5000000;
+
+// 0x8518B8
+const DWORD CInfGame::PROGRESSBAR_CACHING_ADDITIONAL = 3000000;
+
 // 0x8518BE
 const SHORT CInfGame::FEEDBACK_GOLD = 1;
 
@@ -1865,6 +1877,18 @@ void CInfGame::sub_5AC0D0()
     }
 }
 
+// 0x5AD470
+void CInfGame::SelectAll(BOOLEAN bPlaySound)
+{
+    // TODO: Incomplete.
+}
+
+// 0x5AD7E0
+void CInfGame::UnselectAll()
+{
+    // TODO: Incomplete.
+}
+
 // 0x5AD8A0
 BOOL CInfGame::SelectCharacter(LONG characterId, BOOLEAN bPlaySelectSound)
 {
@@ -2986,6 +3010,14 @@ CString CInfGame::GetDirSave()
     return m_sMultiplayerSaveDir + m_sSaveGame + "\\";
 }
 
+// TODO: Somehow its different from function above. Figure out.
+//
+// 0x5C0B30
+CString CInfGame::sub_5C0B30()
+{
+    return m_sMultiplayerSaveDir + m_sSaveGame + "\\";
+}
+
 // 0x5C2280
 CStringList* CInfGame::GetScripts()
 {
@@ -3925,6 +3957,12 @@ CSpellResRefList* CInfGame::GetInnateSpells()
 CSpellResRefList* CInfGame::GetShapeshifts()
 {
     return &m_innateSpells;
+}
+
+// 0x64D660
+CString CInfGame::GetSaveGame()
+{
+    return m_sSaveGame;
 }
 
 // -----------------------------------------------------------------------------

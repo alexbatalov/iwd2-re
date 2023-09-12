@@ -1,9 +1,11 @@
 #include "CScreenSinglePlayer.h"
 
 #include "CBaldurChitin.h"
+#include "CGameArea.h"
 #include "CGameSprite.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CScreenCharacter.h"
 #include "CScreenConnection.h"
 #include "CScreenCreateChar.h"
 #include "CScreenStart.h"
@@ -151,7 +153,7 @@ CScreenSinglePlayer::CScreenSinglePlayer()
     m_nTopParty = 0;
     m_nParty = 0;
     field_139E = 0;
-    field_488 = 0;
+    m_bSinglePlayerStartup = FALSE;
     m_bLastLockAllowInput = 0;
     field_138E = 0;
 }
@@ -1327,7 +1329,350 @@ void CScreenSinglePlayer::UpdateModifyCharacterPanel()
 // 0x6629E0
 void CScreenSinglePlayer::OnMainDoneButtonClick()
 {
-    // TODO: Incomplete.
+    CString sDefault;
+    INT nMsgFrom;
+    DWORD dwSize;
+    BYTE* pData;
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 2092
+    UTIL_ASSERT(pGame != NULL);
+
+    CNetwork* pNetwork = &(g_pBaldurChitin->cNetwork);
+
+    CBaldurMessage* pMessage = g_pBaldurChitin->GetBaldurMessage();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 2095
+    UTIL_ASSERT(pMessage != NULL);
+
+    CString sSaveGame = pGame->GetSaveGame();
+
+    if (IsMainDoneButtonClickable()) {
+        if (field_45C == 1) {
+            sDefault = "default";
+            pGame->m_sSaveGame = sDefault;
+            CScreenCharacter::SAVE_NAME = sDefault;
+
+            if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL) {
+                CScreenCharacter::SAVE_NAME = sSaveGame;
+            }
+
+            pGame->m_nTravelScreenImageToUse = rand() % 5;
+            pGame->sub_59FA00(TRUE);
+
+            LONG nActionTarget = CInfGame::PROGRESSBAR_CACHING_ADDITIONAL
+                + 2 * CInfGame::PROGRESSBAR_GAME_ADDITIONAL;
+            if (pNetwork->GetSessionHosting() == TRUE) {
+                nActionTarget += CInfGame::PROGRESSBAR_CACHING_ADDITIONAL
+                    + CInfGame::PROGRESSBAR_GAME_ADDITIONAL;
+            }
+
+            m_bSinglePlayerStartup = TRUE;
+            g_pChitin->SetProgressBar(TRUE,
+                9887,
+                0,
+                0,
+                FALSE,
+                0,
+                FALSE,
+                0,
+                FALSE,
+                FALSE,
+                255);
+            g_pChitin->cProgressBar.m_nActionProgress = 0;
+            g_pChitin->cProgressBar.m_nActionTarget = nActionTarget;
+
+            if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+                pGame->UpdateCharacterSlots();
+
+                BOOLEAN bListenToJoinOption = pGame->GetMultiplayerSettings()->GetListenToJoinOption();
+
+                pGame->GetMultiplayerSettings()->SetListenToJoinOption(FALSE, FALSE);
+                pGame->GetMultiplayerSettings()->SetArbitrationLockStatus(FALSE, 0);
+                pGame->SetupCharacters(TRUE);
+
+                for (int area = 0; area < CINFGAME_MAX_AREAS; area++) {
+                    if (pGame->m_gameAreas[area] != NULL) {
+                        pGame->m_gameAreas[area]->SortLists();
+                    }
+                }
+
+                pGame->SaveGame(0, 1, 0);
+
+                // NOTE: Uninline.
+                m_cUIManager.KillCapture();
+
+                pMessage->SendSignal(CBaldurMessage::SIGNAL_ALL_CLIENTS, 64);
+
+                INT nPlayerCount = 0;
+                for (INT nPlayerNumber = 0; nPlayerNumber < 6; nPlayerNumber++) {
+                    if (g_pChitin->cNetwork.GetPlayerID(nPlayerNumber) != 0) {
+                        nPlayerCount++;
+                    }
+                }
+
+                if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+                    g_pChitin->cProgressBar.m_nWaitingReason = 16617;
+                    g_pChitin->cProgressBar.m_bWaiting = TRUE;
+                }
+
+                int v1 = 100;
+                int v2 = 0;
+                while (v1 > 0 && v2 < 2 * nPlayerCount - 2) {
+                    pData = pMessage->PollSpecificMessageType(CBaldurMessage::MSG_TYPE_RESOURCE,
+                        CBaldurMessage::MSG_SUBTYPE_RESOURCE_DEMAND,
+                        nMsgFrom,
+                        dwSize);
+                    if (pData != NULL) {
+                        pMessage->OnResourceDemanded(nMsgFrom, pData, dwSize);
+                        delete pData;
+                        v2++;
+                    }
+
+                    g_pChitin->m_bDisplayStale = TRUE;
+                    Sleep(60);
+
+                    v1--;
+
+                    nPlayerCount = 0;
+                    for (INT nPlayerNumber = 0; nPlayerNumber < 6; nPlayerNumber++) {
+                        if (g_pChitin->cNetwork.GetPlayerID(nPlayerNumber) != 0) {
+                            nPlayerCount++;
+                        }
+                    }
+                }
+
+                if (nPlayerCount > 1) {
+                    while (v2 > 0) {
+                        g_pChitin->m_bDisplayStale = TRUE;
+                        Sleep(60);
+                        v2--;
+                    }
+                }
+
+                g_pChitin->cProgressBar.m_bWaiting = FALSE;
+                g_pBaldurChitin->m_cCachingStatus.InvalidateScreen();
+
+                pGame->DestroyGame(0, 1);
+                pGame->LoadGame(FALSE, TRUE);
+
+                g_pChitin->cProgressBar.m_nActionProgress = g_pChitin->cProgressBar.m_nActionTarget - 1;
+                g_pChitin->m_bDisplayStale = TRUE;
+
+                pGame->sub_59FA00(TRUE);
+
+                g_pChitin->cProgressBar.m_bTimeoutVisible = TRUE;
+                g_pChitin->cProgressBar.m_nSecondsToTimeout = pMessage->m_dwSignalSecondsToTimeout;
+
+                DWORD dwStart = GetTickCount();
+
+                g_pChitin->cProgressBar.m_nActionProgress = g_pChitin->cProgressBar.m_nActionTarget;
+                if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+                    pMessage->SendProgressBarStatus(g_pChitin->cProgressBar.m_nActionProgress,
+                        g_pChitin->cProgressBar.m_nActionTarget,
+                        g_pChitin->cProgressBar.m_bWaiting,
+                        g_pChitin->cProgressBar.m_nWaitingReason,
+                        g_pChitin->cProgressBar.m_bTimeoutVisible,
+                        g_pChitin->cProgressBar.m_nSecondsToTimeout);
+                }
+
+                while (!pMessage->NonBlockingWaitForSignal(CBaldurMessage::SIGNAL_SERVER, 65)) {
+                    DWORD dwElapsedMillis = GetTickCount() - dwStart;
+
+                    DWORD nSecondsToTimeout;
+                    if (dwElapsedMillis < 1000 * pMessage->m_dwSignalSecondsToTimeout) {
+                        nSecondsToTimeout = pMessage->m_dwSignalSecondsToTimeout - dwElapsedMillis / 1000;
+                    } else {
+                        nSecondsToTimeout = 0;
+                        pMessage->KickOutWaitingForSignal(CBaldurMessage::SIGNAL_SERVER, 65);
+                    }
+
+                    if (g_pChitin->cProgressBar.m_nSecondsToTimeout != nSecondsToTimeout) {
+                        g_pChitin->cProgressBar.m_nSecondsToTimeout = nSecondsToTimeout;
+                        pMessage->SendProgressBarStatus(g_pChitin->cProgressBar.m_nActionProgress,
+                            g_pChitin->cProgressBar.m_nActionTarget,
+                            g_pChitin->cProgressBar.m_bWaiting,
+                            g_pChitin->cProgressBar.m_nWaitingReason,
+                            g_pChitin->cProgressBar.m_bTimeoutVisible,
+                            g_pChitin->cProgressBar.m_nSecondsToTimeout);
+                    }
+
+                    while (1) {
+                        pData = pMessage->PollSpecificMessageType(CBaldurMessage::MSG_TYPE_PROGRESSBAR,
+                            CBaldurMessage::MSG_SUBTYPE_PROGRESSBAR_STATUS,
+                            nMsgFrom,
+                            dwSize);
+                        if (pData == NULL) {
+                            break;
+                        }
+
+                        pMessage->OnProgressBarStatus(nMsgFrom, pData, dwSize);
+                        delete pData;
+                    }
+
+                    pData = pMessage->PollSpecificMessageType(CBaldurMessage::MSG_TYPE_RESOURCE,
+                        CBaldurMessage::MSG_SUBTYPE_RESOURCE_DEMAND,
+                        nMsgFrom,
+                        dwSize);
+                    if (pData != NULL) {
+                        pMessage->OnResourceDemanded(nMsgFrom, pData, dwSize);
+                        delete pData;
+                    }
+
+                    g_pChitin->m_bDisplayStale = TRUE;
+                    Sleep(60);
+                }
+
+                g_pChitin->cProgressBar.m_bTimeoutVisible = FALSE;
+
+                pMessage->SendSignal(CBaldurMessage::SIGNAL_ALL_CLIENTS, 66);
+                pGame->GetMultiplayerSettings()->SetListenToJoinOption(bListenToJoinOption, FALSE);
+            } else {
+                // NOTE: Uninline.
+                m_cUIManager.KillCapture();
+
+                if (pGame->m_bGameLoaded) {
+                    pGame->DestroyGame(0, 1);
+                }
+
+                CString v3 = pGame->sub_5C0B30();
+
+                if (!g_pChitin->cDimm.DirectoryRemoveFiles(v3)) {
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+                    // __LINE__: 2385
+                    UTIL_ASSERT(FALSE);
+                }
+
+                g_pChitin->cDimm.m_cKeyTable.RescanEverything();
+
+                if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+                    g_pChitin->cProgressBar.m_nWaitingReason = 16618;
+                    g_pChitin->cProgressBar.m_bWaiting = TRUE;
+                }
+
+                pMessage->WaitForSignal(CBaldurMessage::SIGNAL_ALL_CLIENTS, 64);
+
+                if (pMessage->DemandResourceFromServer(CString("ICEWIND2"), 1013, TRUE, TRUE, FALSE)
+                    && pMessage->DemandResourceFromServer(CString("WORLDMAP"), 1015, TRUE, TRUE, FALSE)) {
+                    pMessage->DemandResourceFromServer(CString("EXPMAP"), 1015, TRUE, TRUE, FALSE);
+
+                    g_pChitin->cProgressBar.m_bWaiting = FALSE;
+                    g_pBaldurChitin->m_cCachingStatus.InvalidateScreen();
+
+                    pGame->LoadGame(FALSE, TRUE);
+
+                    g_pChitin->cProgressBar.m_nActionProgress = g_pChitin->cProgressBar.m_nActionTarget - 1;
+                    g_pChitin->m_bDisplayStale = TRUE;
+
+                    pGame->sub_59FA00(TRUE);
+
+                    if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+                        pMessage->SendProgressBarStatus(g_pChitin->cProgressBar.m_nActionProgress,
+                            g_pChitin->cProgressBar.m_nActionTarget,
+                            g_pChitin->cProgressBar.m_bWaiting,
+                            g_pChitin->cProgressBar.m_nWaitingReason,
+                            g_pChitin->cProgressBar.m_bTimeoutVisible,
+                            g_pChitin->cProgressBar.m_nSecondsToTimeout);
+                    }
+
+                    g_pChitin->cDimm.RemoveFromDirectoryList(v3, TRUE);
+
+                    pMessage->SendSignal(CBaldurMessage::SIGNAL_SERVER, 65);
+                    g_pChitin->cProgressBar.m_nActionProgress = g_pChitin->cProgressBar.m_nActionTarget;
+
+                    while (!pMessage->NonBlockingWaitForSignal(CBaldurMessage::SIGNAL_ALL_CLIENTS, 66)) {
+                        while (1) {
+                            pData = pMessage->PollSpecificMessageType(CBaldurMessage::MSG_TYPE_PROGRESSBAR,
+                                CBaldurMessage::MSG_SUBTYPE_PROGRESSBAR_STATUS,
+                                nMsgFrom,
+                                dwSize);
+                            if (pData == NULL) {
+                                break;
+                            }
+
+                            pMessage->OnProgressBarStatus(nMsgFrom, pData, dwSize);
+                            delete pData;
+                        }
+
+                        g_pChitin->m_bDisplayStale = TRUE;
+                        Sleep(60);
+                    }
+                } else {
+                    g_pChitin->cProgressBar.m_bWaiting = FALSE;
+                    g_pBaldurChitin->m_cCachingStatus.InvalidateScreen();
+                    g_pChitin->cNetwork.CloseSession(TRUE);
+                    g_pChitin->cDimm.RemoveFromDirectoryList(v3, TRUE);
+                }
+            }
+
+            if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+                while (1) {
+                    pData = pMessage->PollSpecificMessageType(CBaldurMessage::MSG_TYPE_PROGRESSBAR,
+                        CBaldurMessage::MSG_SUBTYPE_PROGRESSBAR_STATUS,
+                        nMsgFrom,
+                        dwSize);
+                    if (pData == NULL) {
+                        break;
+                    }
+
+                    pMessage->OnProgressBarStatus(nMsgFrom, pData, dwSize);
+                    delete pData;
+                }
+
+                g_pChitin->m_bDisplayStale = TRUE;
+                Sleep(200);
+            }
+
+            pGame->sub_59FA00(TRUE);
+
+            g_pChitin->cProgressBar.m_bTimeoutVisible = FALSE;
+            g_pChitin->SetProgressBar(FALSE,
+                0,
+                0,
+                0,
+                FALSE,
+                0,
+                FALSE,
+                0,
+                FALSE,
+                FALSE,
+                255);
+
+            m_bSinglePlayerStartup = FALSE;
+
+            if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+                SelectEngine(g_pBaldurChitin->m_pEngineWorld);
+
+                if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL) {
+                    pGame->SelectAll(FALSE);
+                } else {
+                    pGame->SelectCharacter(pGame->GetProtagonist(), FALSE);
+                }
+
+                pGame->SelectToolbar();
+            } else {
+                g_pBaldurChitin->m_pEngineStart->m_nEngineState = 0;
+                SelectEngine(g_pBaldurChitin->m_pEngineConnection);
+
+                if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+                    g_pBaldurChitin->m_pEngineConnection->ShowSessionTerminatedMessage();
+                }
+
+                if (pGame->m_bGameLoaded) {
+                    pGame->DestroyGame(1, 0);
+                }
+            }
+        } else if (field_45C == 2) {
+            SelectEngine(g_pBaldurChitin->m_pEngineWorld);
+        } else {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+            // __LINE__: 2587
+            UTIL_ASSERT(FALSE);
+        }
+    }
 }
 
 // 0x663640
