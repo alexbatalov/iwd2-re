@@ -150,6 +150,7 @@ public:
     void UpdatePortraitToolTip(DWORD dwControlId, STRREF dwStrId);
     CGameArea* GetArea(CString sName);
     CGameArea* GetArea(SHORT nArea);
+    SHORT GetNumGroundSlots(LONG nContainerId);
     SHORT GetNumQuickWeaponSlots(SHORT nPortrait);
     BOOL Is3DSound(int nSoundChannel);
     float GetSoundReverbMix(int nSoundChannel, int nReverb);

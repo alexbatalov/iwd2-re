@@ -8,6 +8,7 @@
 #include "CBaldurProjector.h"
 #include "CGameAIGame.h"
 #include "CGameArea.h"
+#include "CGameContainer.h"
 #include "CGameObject.h"
 #include "CGameSprite.h"
 #include "CInfCursor.h"
@@ -2203,6 +2204,31 @@ CGameArea* CInfGame::GetArea(SHORT nArea)
     UTIL_ASSERT(nArea < CINFGAME_MAX_AREAS);
 
     return m_gameAreas[nArea];
+}
+
+// 0x5B7FF0
+SHORT CInfGame::GetNumGroundSlots(LONG nContainerId)
+{
+    SHORT nSlots;
+
+    CGameContainer* pContainer;
+
+    BYTE rc = m_cObjectArray.GetShare(nContainerId,
+        CGameObjectArray::THREAD_ASYNCH,
+        reinterpret_cast<CGameObject**>(&pContainer),
+        INFINITE);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        nSlots = static_cast<SHORT>(pContainer->m_lstItems.GetCount());
+
+        m_cObjectArray.ReleaseShare(nContainerId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    } else {
+        nSlots = 0;
+    }
+
+    return nSlots;
 }
 
 // 0x5BACE0
