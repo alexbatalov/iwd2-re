@@ -1,30 +1,40 @@
 #ifndef CBUTTONDATA_H_
 #define CBUTTONDATA_H_
 
+#include "BalDataTypes.h"
 #include "CResRef.h"
+
+class CAbilityId {
+public:
+    CAbilityId();
+    CAbilityId& operator=(const CAbilityId& other);
+
+    /* 0000 */ SHORT m_itemType;
+    /* 0002 */ SHORT m_itemNum;
+    /* 0004 */ SHORT m_abilityNum;
+    /* 0006 */ CResRef m_res;
+    /* 000E */ short field_E;
+    /* 0010 */ int field_10;
+    /* 0014 */ int field_14;
+    /* 0018 */ int field_18;
+    /* 001C */ unsigned char field_1C;
+    /* 001D */ unsigned char field_1D;
+    /* 001E */ short field_1E;
+};
 
 class CButtonData {
 public:
     CButtonData();
+    CButtonData& operator=(const CButtonData& other);
 
     /* 0000 */ CResRef m_icon;
-    /* 0008 */ int field_8;
+    /* 0008 */ STRREF m_name;
     /* 000C */ CResRef m_launcherIcon;
-    /* 0014 */ int field_14;
-    /* 0018 */ short field_18;
-    /* 001A */ short field_1A;
-    /* 001C */ short field_1C;
-    /* 001E */ short field_1E;
-    /* 0020 */ CResRef field_20;
-    /* 0028 */ short field_28;
-    /* 002A */ int field_2A;
-    /* 002E */ int field_2E;
-    /* 0032 */ int field_32;
-    /* 0036 */ unsigned char field_36;
-    /* 0037 */ unsigned char field_37;
-    /* 0038 */ short field_38;
-    /* 003A */ unsigned char field_3A;
-    /* 003B */ unsigned char field_3B;
+    /* 0014 */ STRREF m_launcherName;
+    /* 0018 */ SHORT m_count;
+    /* 001A */ CAbilityId m_abilityId;
+    /* 003A */ BOOLEAN m_bDisabled;
+    /* 003B */ BOOLEAN m_bDisplayCount;
 };
 
 #endif /* CBUTTONDATA_H_ */
