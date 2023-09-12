@@ -56,24 +56,24 @@ CGameArea::CGameArea(BYTE id)
     field_240 = 0;
     m_iPicked = CGameObjectArray::INVALID_INDEX;
     m_iPickedTarget = CGameObjectArray::INVALID_INDEX;
-    field_252 = 0;
+    m_nToolTip = 0;
     m_visibility.field_58 = 0;
     memset(&m_header, 0, sizeof(m_header));
-    m_groupMove = 0;
+    m_groupMove = FALSE;
     field_432 = 0;
     field_434 = 0;
     field_318 = 0;
     field_41E = 0;
     m_nInitialAreaID = 0;
     m_nBattleSongCounter = 0;
-    field_3DC = -1;
-    field_3E0 = -1;
-    field_3E4 = -1;
+    m_selectSquare.left = -1;
+    m_selectSquare.top = -1;
+    m_selectSquare.right = -1;
+    m_selectSquare.bottom = -1;
     m_ptOldViewPos.x = -1;
     m_ptOldViewPos.y = -1;
     field_3EE = -1;
     field_426 = -1;
-    field_3E8 = -1;
     field_3F2 = -1;
     field_241 = 0;
     field_242 = CGameObjectArray::INVALID_INDEX;
@@ -254,6 +254,21 @@ BOOLEAN CGameArea::CanSaveGame(STRREF& strError)
     return FALSE;
 }
 
+// 0x46FE30
+void CGameArea::ClearInput()
+{
+    m_nToolTip = 0;
+    m_iPicked = CGameObjectArray::INVALID_INDEX;
+    m_pGame->m_tempCursor = 0;
+    m_pGame->GetGroup()->GroupCancelMove();
+    m_pGame->m_tempCursor = 4;
+    m_groupMove = FALSE;
+    m_selectSquare.left = -1;
+    m_selectSquare.top = -1;
+    m_selectSquare.right = -1;
+    m_selectSquare.bottom = -1;
+}
+
 // NOTE: Similar to `CInfGame::ProgressBarCallback`.
 //
 // 0x474E10
@@ -353,11 +368,11 @@ void CGameArea::OnActivation()
 // 0x475330
 void CGameArea::OnDeactivation()
 {
-    field_3DC = -1;
-    field_3E0 = -1;
-    field_3E4 = -1;
-    field_3E8 = -1;
-    m_groupMove = 0;
+    m_selectSquare.left = -1;
+    m_selectSquare.top = -1;
+    m_selectSquare.right = -1;
+    m_selectSquare.bottom = -1;
+    m_groupMove = FALSE;
 
     if (!m_pGame->field_43E6) {
         m_pGame->m_tempCursor = 4;

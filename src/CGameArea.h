@@ -107,6 +107,7 @@ public:
     void ApplyWindToAmbients(BYTE nPercentVolume);
     LONG GetGroundPile(const CPoint& ptPos);
     BOOLEAN CanSaveGame(STRREF& strError);
+    void ClearInput();
     void ProgressBarCallback(DWORD dwSize, BOOLEAN bInitialize);
     void SetListenPosition();
     void OnActivation();
@@ -163,17 +164,14 @@ public:
     /* 0246 */ LONG m_iPicked;
     /* 024A */ LONG m_iPickedTarget;
     /* 024E */ int field_24E;
-    /* 0252 */ int field_252;
+    /* 0252 */ LONG m_nToolTip;
     /* 0256 */ CPoint m_ptMousePos;
     /* 025E */ CVidBitmap m_bmLum;
     /* 0318 */ int field_318;
     /* 031C */ CVidBitmap m_bmHeight;
     /* 03D6 */ int field_3D6;
     /* 03DA */ BYTE m_firstRender;
-    /* 03DC */ int field_3DC;
-    /* 03E0 */ int field_3E0;
-    /* 03E4 */ int field_3E4;
-    /* 03E8 */ int field_3E8;
+    /* 03DC */ CRect m_selectSquare;
     /* 03EC */ short field_3EC;
     /* 03EE */ int field_3EE;
     /* 03F2 */ int field_3F2;
