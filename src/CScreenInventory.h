@@ -123,7 +123,7 @@ public:
     /* 03F0 */ BYTE m_pVirtualKeysFlags[CSCREENINVENTORY_VIRTUAL_KEYS];
     /* 044A */ BOOLEAN m_bCtrlKeyDown;
     /* 044C */ CPoint m_cLastMousePosition;
-    /* 0454 */ int field_454;
+    /* 0454 */ INT m_nTopGroundItem;
     /* 0458 */ LONG m_nGroundPile[6];
     /* 0470 */ BOOL m_nGroundPileQueried[6];
     /* 0488 */ DWORD m_nRequesterAmount;
@@ -208,6 +208,12 @@ class CUIControlScrollBarInventoryGround : public CUIControlScrollBar {
 public:
     CUIControlScrollBarInventoryGround(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo);
     ~CUIControlScrollBarInventoryGround() override;
+    void OnScroll() override;
+    void OnScrollUp() override;
+    void OnScrollDown() override;
+    void OnPageUp(DWORD nLines) override;
+    void OnPageDown(DWORD nLines) override;
+    void UpdateScrollBar();
 };
 
 class CUIControlButtonInventoryRequesterItem : public CUIControlButton {

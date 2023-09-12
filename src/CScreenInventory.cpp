@@ -11,6 +11,8 @@
 #include "CUIPanel.h"
 #include "CUtil.h"
 
+#define GROUND_SLOTS 5
+
 // 0x855050
 const DWORD CScreenInventory::SLOT_ID[] = {
     101,
@@ -86,7 +88,7 @@ CScreenInventory::CScreenInventory()
     m_animation.m_animation = NULL;
     field_11C = 0;
     field_11D = 0;
-    field_454 = 0;
+    m_nTopGroundItem = 0;
     m_nErrorState = 0;
     m_nNumErrorButtons = 0;
     m_nAbilitiesButtonMode = 0;
@@ -2055,7 +2057,7 @@ BOOL CScreenInventory::MapButtonIdToItemInfo(INT nButton, CItem*& pItem, STRREF&
             LONG nContainerId = FetchGroundPile(m_nSelectedCharacter, FALSE);
             if (nContainerId != CGameObjectArray::INVALID_INDEX) {
                 pGame->InventoryInfoGround(nContainerId,
-                    field_454 + nButton - 68,
+                    m_nTopGroundItem + nButton - 68,
                     pItem,
                     description,
                     cResIcon,
@@ -2716,6 +2718,179 @@ CUIControlScrollBarInventoryGround::CUIControlScrollBarInventoryGround(CUIPanel*
 // 0x67F640
 CUIControlScrollBarInventoryGround::~CUIControlScrollBarInventoryGround()
 {
+}
+
+// 0x632C10
+void CUIControlScrollBarInventoryGround::OnPageDown(DWORD nLines)
+{
+    CScreenInventory* pInventory = g_pBaldurChitin->m_pEngineInventory;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 10061
+    UTIL_ASSERT(pInventory != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 10063
+    UTIL_ASSERT(pGame != NULL);
+
+    LONG nContainerId = pInventory->FetchGroundPile(pInventory->GetSelectedCharacter(), FALSE);
+    if (nContainerId != CGameObjectArray::INVALID_INDEX) {
+        INT nNumGroundSlots = pGame->GetNumGroundSlots(nContainerId);
+
+        INT nStep = min(nLines, GROUND_SLOTS - 1);
+        INT nNewTopGroundItem = max(pInventory->m_nTopGroundItem - nStep, 0);
+        if (pInventory->m_nTopGroundItem != nNewTopGroundItem) {
+            for (INT nButtonId = 68; nButtonId <= 81; nButtonId++) {
+                m_pPanel->GetControl(nButtonId)->InvalidateRect();
+            }
+
+            UpdateScrollBar();
+        }
+    }
+}
+
+// 0x632CE0
+void CUIControlScrollBarInventoryGround::OnPageUp(DWORD nLines)
+{
+    CScreenInventory* pInventory = g_pBaldurChitin->m_pEngineInventory;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 10112
+    UTIL_ASSERT(pInventory != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 10114
+    UTIL_ASSERT(pGame != NULL);
+
+    LONG nContainerId = pInventory->FetchGroundPile(pInventory->GetSelectedCharacter(), FALSE);
+    if (nContainerId != CGameObjectArray::INVALID_INDEX) {
+        INT nNumGroundSlots = pGame->GetNumGroundSlots(nContainerId);
+
+        INT nStep = min(nLines, GROUND_SLOTS - 1);
+        INT nNewTopGroundItem = min(pInventory->m_nTopGroundItem + nStep, nNumGroundSlots);
+        if (pInventory->m_nTopGroundItem != nNewTopGroundItem) {
+            for (INT nButtonId = 68; nButtonId <= 81; nButtonId++) {
+                m_pPanel->GetControl(nButtonId)->InvalidateRect();
+            }
+
+            UpdateScrollBar();
+        }
+    }
+}
+
+// 0x632DB0
+void CUIControlScrollBarInventoryGround::OnScrollDown()
+{
+    CScreenInventory* pInventory = g_pBaldurChitin->m_pEngineInventory;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 10163
+    UTIL_ASSERT(pInventory != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 10165
+    UTIL_ASSERT(pGame != NULL);
+
+    LONG nContainerId = pInventory->FetchGroundPile(pInventory->GetSelectedCharacter(), FALSE);
+    if (nContainerId != CGameObjectArray::INVALID_INDEX) {
+        INT nNumGroundSlots = pGame->GetNumGroundSlots(nContainerId);
+        if (pInventory->m_nTopGroundItem > 0) {
+            pInventory->m_nTopGroundItem--;
+        }
+
+        for (INT nButtonId = 68; nButtonId <= 81; nButtonId++) {
+            m_pPanel->GetControl(nButtonId)->InvalidateRect();
+        }
+
+        UpdateScrollBar();
+    }
+}
+
+// 0x632E60
+void CUIControlScrollBarInventoryGround::OnScrollUp()
+{
+    CScreenInventory* pInventory = g_pBaldurChitin->m_pEngineInventory;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 10209
+    UTIL_ASSERT(pInventory != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 10211
+    UTIL_ASSERT(pGame != NULL);
+
+    LONG nContainerId = pInventory->FetchGroundPile(pInventory->GetSelectedCharacter(), FALSE);
+    if (nContainerId != CGameObjectArray::INVALID_INDEX) {
+        INT nNumGroundSlots = pGame->GetNumGroundSlots(nContainerId);
+        if (pInventory->m_nTopGroundItem < nNumGroundSlots) {
+            pInventory->m_nTopGroundItem++;
+        }
+
+        for (INT nButtonId = 68; nButtonId <= 81; nButtonId++) {
+            m_pPanel->GetControl(nButtonId)->InvalidateRect();
+        }
+
+        UpdateScrollBar();
+    }
+}
+
+// 0x632F20
+void CUIControlScrollBarInventoryGround::OnScroll()
+{
+    CScreenInventory* pInventory = g_pBaldurChitin->m_pEngineInventory;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 10255
+    UTIL_ASSERT(pInventory != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 10257
+    UTIL_ASSERT(pGame != NULL);
+
+    LONG nContainerId = pInventory->FetchGroundPile(pInventory->GetSelectedCharacter(), FALSE);
+    if (nContainerId != CGameObjectArray::INVALID_INDEX) {
+        INT nNumGroundSlots = pGame->GetNumGroundSlots(nContainerId);
+        pInventory->m_nTopGroundItem = max(nNumGroundSlots, 0) * field_144 / field_142;
+
+        for (INT nButtonId = 68; nButtonId <= 81; nButtonId++) {
+            m_pPanel->GetControl(nButtonId)->InvalidateRect();
+        }
+
+        UpdateScrollBar();
+    }
+}
+
+// 0x632FF0
+void CUIControlScrollBarInventoryGround::UpdateScrollBar()
+{
+    CScreenInventory* pInventory = g_pBaldurChitin->m_pEngineInventory;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 10326
+    UTIL_ASSERT(pInventory != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 10328
+    UTIL_ASSERT(pGame != NULL);
+
+    LONG nContainerId = pInventory->FetchGroundPile(pInventory->GetSelectedCharacter(), FALSE);
+    if (nContainerId != CGameObjectArray::INVALID_INDEX) {
+        AdjustScrollBar(pInventory->m_nTopGroundItem,
+            pGame->GetNumGroundSlots(nContainerId) + GROUND_SLOTS,
+            GROUND_SLOTS);
+    }
 }
 
 // -----------------------------------------------------------------------------
