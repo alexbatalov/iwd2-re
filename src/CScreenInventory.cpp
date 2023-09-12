@@ -635,9 +635,62 @@ void CScreenInventory::UpdateCursorShape()
 }
 
 // 0x626940
-void CScreenInventory::FetchGroundPile()
+LONG CScreenInventory::FetchGroundPile(SHORT nPortraitId, BOOL bEvenIfDead)
 {
-    // TODO: Incomplete.
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 1593
+    UTIL_ASSERT(0 <= nPortraitId && nPortraitId < CINFGAME_MAXCHARACTERS);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 1595
+    UTIL_ASSERT(pGame != NULL);
+
+    // NOTE: Uninline.
+    LONG nCharacterId = pGame->GetCharacterId(m_nSelectedCharacter);
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc != CGameObjectArray::SUCCESS) {
+        return CGameObjectArray::INVALID_INDEX;
+    }
+
+    INT nHP = pSprite->GetBaseStats()->m_hitPoints;
+    CGameArea* pArea = pSprite->GetArea();
+
+    pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+        CGameObjectArray::THREAD_ASYNCH,
+        INFINITE);
+
+    if (pArea == NULL || !bEvenIfDead && nHP <= 0) {
+        return CGameObjectArray::INVALID_INDEX;
+    }
+
+    if (!m_nGroundPileQueried[nPortraitId]) {
+        // NOTE: Looks like inlining.
+        CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 1629
+        UTIL_ASSERT(pGame != NULL);
+
+        // NOTE: Uninline.
+        LONG nCharacterId = pGame->GetCharacterId(m_nSelectedCharacter);
+
+        m_nGroundPile[nPortraitId] = pGame->GetGroundPile(nCharacterId);
+        m_nGroundPileQueried[nPortraitId] = TRUE;
+    }
+
+    return m_nGroundPile[nPortraitId];
 }
 
 // 0x626AE0

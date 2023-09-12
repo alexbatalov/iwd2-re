@@ -61,7 +61,7 @@ public:
     void UpdatePersonalItemStatus(LONG nCharacterId);
     void UpdateContainerStatus();
     void UpdateCursorShape();
-    void FetchGroundPile();
+    LONG FetchGroundPile(SHORT nPortraitId, BOOL bEvenIfDead);
     void FlushGroundPiles();
     void EnableMainPanel(BOOL bEnable);
     void UpdateMainPanel(BOOL a1);
@@ -120,6 +120,8 @@ public:
     /* 044A */ BOOLEAN m_bCtrlKeyDown;
     /* 044C */ CPoint m_cLastMousePosition;
     /* 0454 */ int field_454;
+    /* 0458 */ LONG m_nGroundPile[6];
+    /* 0470 */ BOOL m_nGroundPileQueried[6];
     /* 0488 */ int field_488;
     /* 048C */ int field_48C;
     /* 0490 */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
