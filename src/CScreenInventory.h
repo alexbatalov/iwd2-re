@@ -3,6 +3,7 @@
 
 #include "C2DArray.h"
 #include "CBaldurEngine.h"
+#include "CButtonData.h"
 #include "CGameAnimation.h"
 #include "CItem.h"
 #include "CKeyInfo.h"
@@ -66,6 +67,7 @@ public:
     void EnableMainPanel(BOOL bEnable);
     void UpdateMainPanel(BOOL a1);
     void ResetPopupPanel(DWORD dwPanelId);
+    void UpdatePopupPanel(DWORD dwPanelId);
     CUIPanel* GetTopPopup();
     void SummonPopup(DWORD dwPopupId);
     void DismissPopup();
@@ -271,6 +273,8 @@ public:
     ~CUIControlButtonInventoryAbilitiesAbility() override;
     BOOL Render(BOOL bForce) override;
     void OnLButtonClick(CPoint pt) override;
+
+    /* 066E */ CButtonData m_cButtonData;
 };
 
 class CUIControlButtonInventoryHistoryDone : public CUIControlButton {

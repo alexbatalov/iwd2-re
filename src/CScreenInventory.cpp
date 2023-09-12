@@ -840,6 +840,41 @@ void CScreenInventory::ResetPopupPanel(DWORD dwPanelId)
 }
 
 // NOTE: Inlined.
+void CScreenInventory::UpdatePopupPanel(DWORD dwPanelId)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 2116
+    UTIL_ASSERT(pPanel != NULL);
+
+    switch (dwPanelId) {
+    case 3:
+        break;
+    case 4:
+        UpdateRequesterPanel();
+        break;
+    case 5:
+        UpdateHistoryPanel(1);
+        break;
+    case 6:
+        UpdateAbilitiesPanel();
+        break;
+    case 7:
+    case 8:
+    case 9:
+    case 50:
+        // NOTE: Uninline.
+        UpdateErrorPanel(pPanel);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 2143
+        UTIL_ASSERT(FALSE);
+    }
+}
+
+// NOTE: Inlined.
 CUIPanel* CScreenInventory::GetTopPopup()
 {
     return m_lPopupStack.GetTailPosition() != NULL ? m_lPopupStack.GetTail() : NULL;
@@ -3191,7 +3226,7 @@ BOOL CUIControlButtonInventoryHistoryIcon::Render(BOOL bForce)
 CUIControlButtonInventoryAbilitiesAbility::CUIControlButtonInventoryAbilitiesAbility(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
 {
-    // TODO: Incomplete.
+    m_nSelectedFrame = 0;
 }
 
 // 0x634280
@@ -3202,15 +3237,88 @@ CUIControlButtonInventoryAbilitiesAbility::~CUIControlButtonInventoryAbilitiesAb
 // 0x634430
 BOOL CUIControlButtonInventoryAbilitiesAbility::Render(BOOL bForce)
 {
-    // TODO: Incomplete.
+    CResRef iconResRef;
 
-    return FALSE;
+    if (!m_bActive && !m_bInactiveRender) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount == 0 && !bForce) {
+        return FALSE;
+    }
+
+    if (!CUIControlButton3State::Render(bForce)) {
+        return FALSE;
+    }
+
+    iconResRef = m_cButtonData.m_icon;
+    if (iconResRef != "") {
+        CRect rControlFrame(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
+
+        if (m_bPressed) {
+            rControlFrame.OffsetRect(field_63E, field_642);
+        }
+
+        CPoint pos = rControlFrame.TopLeft();
+
+        CRect rClip;
+        rClip.IntersectRect(rControlFrame, m_rDirty);
+
+        CIcon::RenderIcon(0,
+            pos,
+            m_size,
+            rClip,
+            iconResRef,
+            m_pPanel->m_pManager->m_bDoubleSize,
+            m_bEnabled ? 0x1 : 0,
+            0,
+            FALSE,
+            0,
+            FALSE,
+            0);
+    }
+
+    return TRUE;
 }
 
 // 0x6345A0
 void CUIControlButtonInventoryAbilitiesAbility::OnLButtonClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CScreenInventory* pInventory = g_pBaldurChitin->m_pEngineInventory;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 11120
+    UTIL_ASSERT(pInventory != NULL);
+
+    CSingleLock renderLock(&(pInventory->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 11126
+    UTIL_ASSERT(m_cButtonData.m_icon != "");
+
+    int v1;
+    switch (m_nID) {
+    case 1:
+        v1 = 0;
+        break;
+    case 2:
+        v1 = 1;
+        break;
+    case 3:
+        v1 = 2;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 11021
+        UTIL_ASSERT(FALSE);
+    }
+
+    pInventory->field_4AC = v1;
+
+    pInventory->UpdatePopupPanel(m_pPanel->m_nID);
+
+    renderLock.Unlock();
 }
 
 // -----------------------------------------------------------------------------
