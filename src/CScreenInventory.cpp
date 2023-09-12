@@ -3215,9 +3215,83 @@ void CUIControlButtonInventoryHistoryIcon::SetItem(CItem* pItem)
 // 0x634950
 BOOL CUIControlButtonInventoryHistoryIcon::Render(BOOL bForce)
 {
-    // TODO: Incomplete.
+    CVidCell vcIcon;
+    CResRef iconResRef;
 
-    return FALSE;
+    if (!m_bActive && !m_bInactiveRender) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount == 0 && !bForce) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount != 0) {
+        CSingleLock lock(&(m_pPanel->m_pManager->field_56), FALSE);
+        lock.Lock(INFINITE);
+        m_nRenderCount--;
+        lock.Unlock();
+    }
+
+    CVidMode* pVidMode = g_pBaldurChitin->GetCurrentVideoMode();
+
+    if (m_pItem == NULL) {
+        return FALSE;
+    }
+
+    iconResRef = m_pItem->GetItemIcon();
+    if (iconResRef == "") {
+        return FALSE;
+    }
+
+    // NOTE: Uninline.
+    vcIcon.SetResRef(iconResRef, m_pPanel->m_pManager->m_bDoubleSize, TRUE, TRUE);
+
+    vcIcon.SequenceSet(0);
+    vcIcon.FrameSet(0);
+
+    if (vcIcon.pRes != NULL) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 10894
+        UTIL_ASSERT(pVidMode != NULL);
+
+        // NOTE: Original code is slightly different.
+        INT x = m_pPanel->m_ptOrigin.x + m_ptOrigin.x;
+        INT y = m_pPanel->m_ptOrigin.y + m_ptOrigin.y;
+
+        CPoint ptCenter;
+        vcIcon.GetCurrentCenterPoint(ptCenter, FALSE);
+
+        CSize frameSize;
+        vcIcon.GetCurrentFrameSize(frameSize, FALSE);
+
+        LONG nWidth = CIcon::ICON_SIZE_LG.cx * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1);
+        LONG nHeight = CIcon::ICON_SIZE_LG.cy * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1);
+
+        if (m_size.cx > nWidth) {
+            x += (m_size.cx - nWidth) / 2;
+        }
+
+        if (m_size.cy > nHeight) {
+            y += (m_size.cy - nHeight) / 2;
+        }
+
+        CRect rFrame(x, y, x + nWidth, y + nHeight);
+
+        CRect rClip;
+        rClip.IntersectRect(rFrame, m_rDirty);
+
+        vcIcon.Render(0,
+            ptCenter.x + (m_size.cx - frameSize.cx) / 2,
+            ptCenter.y + (m_size.cy - frameSize.cy) / 2,
+            rClip,
+            NULL,
+            0,
+            0x4,
+            -1);
+    }
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------
