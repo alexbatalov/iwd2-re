@@ -2231,6 +2231,39 @@ SHORT CInfGame::GetNumGroundSlots(LONG nContainerId)
     return nSlots;
 }
 
+// 0x5B8040
+void CInfGame::InventoryInfoGround(LONG nContainerId, SHORT nSlotNum, CItem*& pItem, STRREF& description, CResRef& cResIcon, CResRef& cResItem, WORD& wCount)
+{
+    description = -1;
+    cResIcon = "";
+    cResItem = "";
+    wCount = 0;
+
+    CGameContainer* pContainer;
+
+    BYTE rc = m_cObjectArray.GetShare(nContainerId,
+        CGameObjectArray::THREAD_ASYNCH,
+        reinterpret_cast<CGameObject**>(&pContainer),
+        INFINITE);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        pItem = pContainer->GetItem(nSlotNum);
+        if (pItem != NULL) {
+            description = pItem->GetGenericName();
+            cResIcon = pItem->GetItemIcon();
+            cResItem = pItem->GetResRef();
+
+            if (pItem->GetMaxStackable() > 1) {
+                wCount = pItem->GetUsageCount(0);
+            }
+        }
+
+        m_cObjectArray.ReleaseShare(nContainerId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
 // 0x5BACE0
 SHORT CInfGame::GetNumQuickWeaponSlots(SHORT nPortrait)
 {

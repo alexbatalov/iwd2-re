@@ -151,6 +151,7 @@ public:
     CGameArea* GetArea(CString sName);
     CGameArea* GetArea(SHORT nArea);
     SHORT GetNumGroundSlots(LONG nContainerId);
+    void InventoryInfoGround(LONG nContainerId, SHORT nSlotNum, CItem*& pItem, STRREF& description, CResRef& cResIcon, CResRef& cResItem, WORD& wCount);
     SHORT GetNumQuickWeaponSlots(SHORT nPortrait);
     BOOL Is3DSound(int nSoundChannel);
     float GetSoundReverbMix(int nSoundChannel, int nReverb);

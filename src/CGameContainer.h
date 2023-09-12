@@ -13,6 +13,7 @@ public:
     /* 0048 */ void RemoveFromArea() override;
     /* 0050 */ BOOLEAN DoAIUpdate(BOOLEAN active, LONG counter) override;
 
+    CItem* GetItem(SHORT nSlotNum);
     void SetFlags(DWORD dwFlags);
     void SetTrapActivated(WORD active);
     void SetTrapDetected(WORD state);

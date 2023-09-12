@@ -224,6 +224,21 @@ void CGameContainer::RemoveFromArea()
     delete this;
 }
 
+// 0x4802B0
+CItem* CGameContainer::GetItem(SHORT nSlotNum)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameContainer.cpp
+    // __LINE__: 1791
+    UTIL_ASSERT(nSlotNum >= 0);
+
+    POSITION pos = m_lstItems.FindIndex(nSlotNum);
+    if (pos != NULL) {
+        return m_lstItems.GetAt(pos);
+    }
+
+    return NULL;
+}
+
 // 0x481750
 void CGameContainer::SetFlags(DWORD dwFlags)
 {
