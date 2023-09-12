@@ -8,6 +8,12 @@
 #include "CScreenWorld.h"
 #include "CUtil.h"
 
+// 0x47C890
+CGameContainer::CGameContainer(CGameArea* pArea, const CRect& rBound)
+{
+    // TODO: Incomplete.
+}
+
 // 0x47D7F0
 BOOLEAN CGameContainer::DoAIUpdate(BOOLEAN active, LONG counter)
 {

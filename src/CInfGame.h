@@ -150,6 +150,7 @@ public:
     void UpdatePortraitToolTip(DWORD dwControlId, STRREF dwStrId);
     CGameArea* GetArea(CString sName);
     CGameArea* GetArea(SHORT nArea);
+    LONG GetGroundPile(LONG iSprite);
     SHORT GetNumGroundSlots(LONG nContainerId);
     void InventoryInfoGround(LONG nContainerId, SHORT nSlotNum, CItem*& pItem, STRREF& description, CResRef& cResIcon, CResRef& cResItem, WORD& wCount);
     SHORT GetNumQuickWeaponSlots(SHORT nPortrait);

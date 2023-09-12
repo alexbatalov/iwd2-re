@@ -13,6 +13,7 @@
 #include "CGameSprite.h"
 #include "CInfCursor.h"
 #include "CItem.h"
+#include "CPathSearch.h"
 #include "CScreenCharacter.h"
 #include "CScreenInventory.h"
 #include "CScreenJournal.h"
@@ -2204,6 +2205,43 @@ CGameArea* CInfGame::GetArea(SHORT nArea)
     UTIL_ASSERT(nArea < CINFGAME_MAX_AREAS);
 
     return m_gameAreas[nArea];
+}
+
+// 0x5B75C0
+LONG CInfGame::GetGroundPile(LONG iSprite)
+{
+    CGameSprite* pSprite;
+
+    BYTE rc = m_cObjectArray.GetShare(iSprite,
+        CGameObjectArray::THREAD_ASYNCH,
+        reinterpret_cast<CGameObject**>(&pSprite),
+        INFINITE);
+
+    if (rc != CGameObjectArray::SUCCESS) {
+        return CGameObjectArray::INVALID_INDEX;
+    }
+
+    CPoint ptSprite = pSprite->GetPos();
+    LONG iGroundPile = pSprite->GetArea()->GetGroundPile(ptSprite);
+    if (iGroundPile != CGameObjectArray::INVALID_INDEX) {
+        ptSprite.x += CPathSearch::GRID_SQUARE_SIZEX / 2
+            - ptSprite.x % CPathSearch::GRID_SQUARE_SIZEX;
+        ptSprite.y += CPathSearch::GRID_SQUARE_SIZEY / 2
+            - ptSprite.y % CPathSearch::GRID_SQUARE_SIZEY;
+
+        CGameContainer* pContainer = new CGameContainer(pSprite->GetArea(),
+            CRect(ptSprite.x - CPathSearch::GRID_SQUARE_SIZEX / 2,
+                ptSprite.y - CPathSearch::GRID_SQUARE_SIZEY / 2,
+                ptSprite.x + CPathSearch::GRID_SQUARE_SIZEX / 2 + 1,
+                ptSprite.y + CPathSearch::GRID_SQUARE_SIZEY / 2 + 1));
+        iGroundPile = pContainer->GetId();
+    }
+
+    m_cObjectArray.ReleaseShare(iSprite,
+        CGameObjectArray::THREAD_ASYNCH,
+        INFINITE);
+
+    return iGroundPile;
 }
 
 // 0x5B7FF0

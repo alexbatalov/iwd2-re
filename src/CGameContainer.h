@@ -8,6 +8,7 @@ class CItem;
 
 class CGameContainer : public CGameAIBase {
 public:
+    CGameContainer(CGameArea* pArea, const CRect& rBound);
     /* 000C */ void AIUpdate() override;
     /* 0030 */ void DebugDump(const CString& message, BOOLEAN bEchoToScreen) override;
     /* 0048 */ void RemoveFromArea() override;
