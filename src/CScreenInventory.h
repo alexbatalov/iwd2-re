@@ -65,12 +65,12 @@ public:
     void FlushGroundPiles();
     void EnableMainPanel(BOOL bEnable);
     void UpdateMainPanel(BOOL a1);
-    void ResetPopupPanel();
+    void ResetPopupPanel(DWORD dwPanelId);
     CUIPanel* GetTopPopup();
     void SummonPopup(DWORD dwPopupId);
     void DismissPopup();
-    void ResetHistoryPanel();
-    void ResetAbilitiesPanel();
+    void ResetHistoryPanel(CUIPanel* pPanel);
+    void ResetAbilitiesPanel(CUIPanel* pPanel);
     void SelectItemAbility();
     void OnDoneButtonClick();
     void OnCancelButtonClick();

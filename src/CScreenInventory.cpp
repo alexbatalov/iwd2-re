@@ -778,9 +778,63 @@ void CScreenInventory::UpdateMainPanel(BOOL a1)
 }
 
 // 0x627560
-void CScreenInventory::ResetPopupPanel()
+void CScreenInventory::ResetPopupPanel(DWORD dwPanelId)
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 2042
+    UTIL_ASSERT(pGame != NULL);
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 2045
+    UTIL_ASSERT(pPanel != NULL);
+
+    switch (pPanel->m_nID) {
+    case 3:
+        if (1) {
+            LONG nCharacterId = pGame->GetCharacterId(m_nSelectedCharacter);
+
+            CGameSprite* pSprite;
+
+            BYTE rc;
+            do {
+                rc = pGame->GetObjectArray()->GetDeny(nCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    reinterpret_cast<CGameObject**>(&pSprite),
+                    INFINITE);
+            } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+            if (rc == CGameObjectArray::SUCCESS) {
+                field_11F = pSprite->GetBaseStats()->m_colors[field_11E];
+
+                pGame->GetObjectArray()->ReleaseDeny(nCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            }
+        }
+        break;
+    case 4:
+        break;
+    case 5:
+        ResetHistoryPanel(pPanel);
+        break;
+    case 6:
+        ResetAbilitiesPanel(pPanel);
+        break;
+    case 7:
+    case 8:
+    case 9:
+    case 50:
+        ResetErrorPanel(pPanel);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 2088
+        UTIL_ASSERT(FALSE);
+    }
 }
 
 // NOTE: Inlined.
@@ -802,13 +856,13 @@ void CScreenInventory::DismissPopup()
 }
 
 // 0x627C20
-void CScreenInventory::ResetHistoryPanel()
+void CScreenInventory::ResetHistoryPanel(CUIPanel* pPanel)
 {
     // TODO: Incomplete.
 }
 
 // 0x627F20
-void CScreenInventory::ResetAbilitiesPanel()
+void CScreenInventory::ResetAbilitiesPanel(CUIPanel* pPanel)
 {
     // TODO: Incomplete.
 }
