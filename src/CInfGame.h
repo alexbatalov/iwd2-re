@@ -153,6 +153,7 @@ public:
     SHORT GetNumGroundSlots(LONG nContainerId);
     void InventoryInfoGround(LONG nContainerId, SHORT nSlotNum, CItem*& pItem, STRREF& description, CResRef& cResIcon, CResRef& cResItem, WORD& wCount);
     SHORT GetNumQuickWeaponSlots(SHORT nPortrait);
+    void InventoryInfoPersonal(SHORT nPortraitNum, SHORT nSlotNum, CItem*& pItem, STRREF& description, CResRef& cResIcon, CResRef& cResItem, WORD& wCount, BOOL a8);
     BOOL Is3DSound(int nSoundChannel);
     float GetSoundReverbMix(int nSoundChannel, int nReverb);
     CResRef GetAnimationBam(SHORT nPortrait, BYTE range);

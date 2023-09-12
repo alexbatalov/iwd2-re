@@ -4,6 +4,9 @@
 #include "CItem.h"
 #include "CScreenInventory.h"
 
+// 0x85BD87
+const BYTE CGameSpriteEquipment::NUM_SLOT = 51;
+
 // 0x7123F0
 CGameSpriteEquipment::CGameSpriteEquipment()
 {

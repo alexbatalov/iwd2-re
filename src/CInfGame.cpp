@@ -2295,6 +2295,68 @@ SHORT CInfGame::GetNumQuickWeaponSlots(SHORT nPortrait)
     return nSlots;
 }
 
+// 0x5BB600
+void CInfGame::InventoryInfoPersonal(SHORT nPortraitNum, SHORT nSlotNum, CItem*& pItem, STRREF& description, CResRef& cResIcon, CResRef& cResItem, WORD& wCount, BOOL a8)
+{
+    // NOTE: Uninline.
+    LONG nCharacterId = GetCharacterId(nPortraitNum);
+
+    description = -1;
+    cResIcon = "";
+    cResItem = "";
+    wCount = 0;
+
+    if (nSlotNum < CGameSpriteEquipment::NUM_SLOT) {
+        CGameSprite* pSprite;
+
+        BYTE rc;
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (nSlotNum == 43
+                || nSlotNum == 45
+                || nSlotNum == 47
+                || nSlotNum == 49) {
+                if (pSprite->GetEquipment()->m_items[nSlotNum] == NULL && a8 == TRUE) {
+                    if (pSprite->GetEquipment()->m_items[nSlotNum + 1] != NULL) {
+                        // FIXME: Calls `GetItemType` four times.
+                        if (pSprite->GetEquipment()->m_items[nSlotNum + 1]->GetItemType() == 47
+                            || pSprite->GetEquipment()->m_items[nSlotNum + 1]->GetItemType() == 53
+                            || pSprite->GetEquipment()->m_items[nSlotNum + 1]->GetItemType() == 49
+                            || pSprite->GetEquipment()->m_items[nSlotNum + 1]->GetItemType() == 41) {
+                            nSlotNum = 10;
+                        }
+                    } else {
+                        if (pSprite->field_4C68 == (nSlotNum - 43) / 2) {
+                            nSlotNum = 10;
+                        }
+                    }
+                }
+            }
+
+            pItem = pSprite->GetEquipment()->m_items[nSlotNum];
+            if (pItem != NULL) {
+                description = pItem->GetGenericName();
+                cResIcon = pItem->GetItemIcon();
+                cResItem = pItem->GetResRef();
+
+                if (pItem->GetMaxStackable() > 1) {
+                    wCount = pItem->GetUsageCount(0);
+                }
+            }
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+}
+
 // 0x5BB800
 BOOL CInfGame::Is3DSound(int nSoundChannel)
 {

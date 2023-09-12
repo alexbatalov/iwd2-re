@@ -8,6 +8,8 @@ class CItem;
 
 class CGameSpriteEquipment {
 public:
+    static const BYTE NUM_SLOT;
+
     CGameSpriteEquipment();
     ~CGameSpriteEquipment();
     void ClearMarshal(BOOL bUnequip);
