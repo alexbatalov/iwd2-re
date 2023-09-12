@@ -193,8 +193,8 @@ CScreenInventory::CScreenInventory()
     m_pTempItem = NULL;
     field_114 = 0;
     field_118 = -1;
-    field_48C = -1;
-    field_488 = -1;
+    m_nRequesterButtonId = -1;
+    m_nRequesterAmount = -1;
     field_11E = 0;
     field_11F = 0;
     field_4AC = 0;
@@ -289,8 +289,8 @@ void CScreenInventory::EngineGameInit()
     m_pTempItem = NULL;
     field_114 = 0;
     field_118 = -1;
-    field_48C = -1;
-    field_488 = -1;
+    m_nRequesterButtonId = -1;
+    m_nRequesterAmount = -1;
     field_11E = 0;
     field_11F = 0;
     field_4AC = 0;
@@ -2753,7 +2753,34 @@ CUIControlEditInventoryRequesterAmount::~CUIControlEditInventoryRequesterAmount(
 // 0x633CA0
 void CUIControlEditInventoryRequesterAmount::KillFocus()
 {
-    // TODO: Incomplete.
+    CScreenInventory* pInventory = g_pBaldurChitin->m_pEngineInventory;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 10732
+    UTIL_ASSERT(pInventory != NULL);
+
+    CItem* pItem;
+    STRREF description;
+    CResRef cResIcon;
+    CResRef cResItem;
+    WORD wCount;
+
+    pInventory->MapButtonIdToItemInfo(pInventory->m_nRequesterButtonId,
+        pItem,
+        description,
+        cResIcon,
+        cResItem,
+        wCount);
+    if (pItem != NULL) {
+        INT nAmount = atol(m_sText);
+        // NOTE: Signed compare.
+        if (nAmount > 0 && nAmount <= static_cast<SHORT>(wCount)) {
+            pInventory->m_nRequesterAmount = nAmount;
+        }
+        pInventory->UpdateRequesterPanel();
+    }
+
+    CUIControlEdit::KillFocus();
 }
 
 // -----------------------------------------------------------------------------

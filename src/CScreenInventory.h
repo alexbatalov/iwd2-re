@@ -123,8 +123,8 @@ public:
     /* 0454 */ int field_454;
     /* 0458 */ LONG m_nGroundPile[6];
     /* 0470 */ BOOL m_nGroundPileQueried[6];
-    /* 0488 */ int field_488;
-    /* 048C */ int field_48C;
+    /* 0488 */ DWORD m_nRequesterAmount;
+    /* 048C */ DWORD m_nRequesterButtonId;
     /* 0490 */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
     /* 04AC */ int field_4AC;
     /* 04EC */ int field_4EC;
