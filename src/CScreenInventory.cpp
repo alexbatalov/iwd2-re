@@ -597,9 +597,43 @@ void CScreenInventory::UpdatePersonalItemStatus(LONG nCharacterId)
 }
 
 // 0x626780
-void CScreenInventory::UpdateContainerStatus()
+void CScreenInventory::UpdateContainerStatus(LONG nContainerId, SHORT nSlotNum)
 {
-    // TODO: Incomplete.
+    INT nButtonId = nSlotNum + 68;
+    CUIPanel* pMainPanel = m_cUIManager.GetPanel(2);
+
+    CUIPanel* pPanel = GetTopPopup();
+    if (pPanel != NULL) {
+        switch (pPanel->m_nID) {
+        case 4:
+            UpdateRequesterPanel();
+            break;
+        case 5:
+            UpdateHistoryPanel(FALSE);
+            break;
+        case 6:
+            UpdateAbilitiesPanel();
+            break;
+        }
+    } else {
+        if (nContainerId == FetchGroundPile(m_nSelectedCharacter, FALSE)) {
+            if (nSlotNum != -1) {
+                if (nButtonId >= 68 && nButtonId <= 81) {
+                    CUIControlBase* pControl = pMainPanel->GetControl(nButtonId);
+
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+                    // __LINE__: 1494
+                    UTIL_ASSERT(pControl != NULL);
+
+                    pControl->InvalidateRect();
+                }
+            } else {
+                for (nButtonId = 68; nButtonId <= 81; nButtonId++) {
+                    pMainPanel->GetControl(nButtonId)->InvalidateRect();
+                }
+            }
+        }
+    }
 }
 
 // 0x626880

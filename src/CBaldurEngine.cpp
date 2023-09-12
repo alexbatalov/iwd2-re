@@ -854,7 +854,7 @@ void CBaldurEngine::OnPortraitLDblClick(DWORD nPortrait)
 }
 
 // 0x778900
-void CBaldurEngine::UpdateContainerStatus(LONG a2, SHORT a3)
+void CBaldurEngine::UpdateContainerStatus(LONG nContainerId, SHORT nSlotNum)
 {
 }
 

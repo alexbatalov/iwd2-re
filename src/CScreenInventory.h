@@ -51,6 +51,7 @@ public:
     /* 00C0 */ void TimerAsynchronousUpdate() override;
     /* 00C4 */ void TimerSynchronousUpdate() override;
     /* 00E0 */ void OnPortraitLClick(DWORD nPortrait) override;
+    /* 00E8 */ void UpdateContainerStatus(LONG nContainerId, SHORT nSlotNum) override;
     /* 0104 */ void CancelEngine() override;
     /* 0108 */ void UpdateCharacterStatus(LONG nCharacterId) override;
     /* 010C */ void UpdatePartyGoldStatus() override;
@@ -59,7 +60,6 @@ public:
     INT GetPortraitByPosition(CPoint pt);
     void SetErrorString(STRREF strError, COLORREF rgb);
     void UpdatePersonalItemStatus(LONG nCharacterId);
-    void UpdateContainerStatus();
     void UpdateCursorShape();
     LONG FetchGroundPile(SHORT nPortraitId, BOOL bEvenIfDead);
     void FlushGroundPiles();

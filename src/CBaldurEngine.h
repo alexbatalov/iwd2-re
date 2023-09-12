@@ -167,7 +167,7 @@ public:
     /* 00DC */ virtual void SetPickedCharacter(int nNewPickedCharacter);
     /* 00E0 */ virtual void OnPortraitLClick(DWORD nPortrait);
     /* 00E4 */ virtual void OnPortraitLDblClick(DWORD nPortrait);
-    /* 00E8 */ virtual void UpdateContainerStatus(LONG a2, SHORT a3);
+    /* 00E8 */ virtual void UpdateContainerStatus(LONG nContainerId, SHORT nSlotNum);
     /* 00EC */ virtual void UpdatePersonalItemStatus(LONG a2);
     /* 00F0 */ virtual void OnRestButtonClick();
     /* 00F4 */ virtual void UpdateCursorShape(BYTE nCursor);
