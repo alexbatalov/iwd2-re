@@ -2747,6 +2747,12 @@ DWORD CInfGame::GetScrollSpeed()
     }
 }
 
+// 0x5BDBA0
+void CInfGame::sub_5BDBA0(int a1, BOOL a2)
+{
+    // TODO: Incomplete.
+}
+
 // 0x5BDC00
 void CInfGame::ReputationAdjustment(SHORT reputationAdjustment, BOOL set)
 {

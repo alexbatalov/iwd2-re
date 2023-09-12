@@ -180,6 +180,7 @@ public:
     BOOL AddCharacterToFamiliars(LONG nCharacterId);
     BOOL RemoveCharacterFromFamiliars(LONG nCharacterId);
     DWORD GetScrollSpeed();
+    void sub_5BDBA0(int a1, BOOL a2);
     void ReputationAdjustment(SHORT reputationAdjustment, BOOL set);
     void ChangeReputation(SHORT eventCode);
     void AddDisposableItem(CItem* pItem);

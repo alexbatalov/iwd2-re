@@ -253,6 +253,12 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_WEAPON_IMMUNITIES_UPDATE = 102;
 // 0x84CF76
 const BYTE CBaldurMessage::DELETEAREA_EMPTY_VOTE = 101;
 
+// 0x84CF7A
+const BYTE CBaldurMessage::MSG_TYPE_MPSETTINGS = 77;
+
+// 0x84CF7C
+const BYTE CBaldurMessage::MSG_SUBTYPE_MPSETTINGS_FULLSET = 83;
+
 // 0x84CF9F
 const BYTE CBaldurMessage::MSG_TYPE_PLAYER_CHAR = 80;
 
@@ -365,6 +371,12 @@ BOOL CBaldurMessage::SendFullSettingsToClients(const CString& sPlayerName)
 {
     // TODO: Incomplete.
 
+    return FALSE;
+}
+
+// 0x42B420
+BOOL CBaldurMessage::OnSettingsFullSet(INT nMsgFrom, BYTE* pMessage, DWORD dwSize)
+{
     return FALSE;
 }
 

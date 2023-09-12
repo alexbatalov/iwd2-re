@@ -91,6 +91,10 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_WEAPON_IMMUNITIES_UPDATE;
 
     static const BYTE DELETEAREA_EMPTY_VOTE;
+
+    static const BYTE MSG_TYPE_MPSETTINGS;
+    static const BYTE MSG_SUBTYPE_MPSETTINGS_FULLSET;
+
     static const BYTE MSG_TYPE_PLAYER_CHAR;
     static const BYTE MSG_SUBTYPE_PLAYERCHAR_DEMAND_REPLY;
 
@@ -108,6 +112,7 @@ public:
     BOOLEAN DemandResourceFromServer(const CString& sResName, UINT nType, BOOLEAN bSendMessage, BOOLEAN bWaitForMessage, BOOLEAN bSaveToTemp);
     BOOLEAN OnResourceDemanded(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize);
     BOOL SendFullSettingsToClients(const CString& sPlayerName);
+    BOOL OnSettingsFullSet(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
     BOOL SendCharacterReadyToServer(INT nCharacterSlot, BOOLEAN bReady);
     BOOL SendImportingOptionToServer(BYTE nImportingBitField);
     BOOL SendRestrictStoreOptionToServer(BOOLEAN bRestrictStore);
