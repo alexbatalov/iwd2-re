@@ -285,6 +285,13 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonCharacterBiographyRevert : public CUIControlButton {
+public:
+    CUIControlButtonCharacterBiographyRevert(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharacterBiographyRevert() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlButtonCharacterBiographyClear : public CUIControlButton {
 public:
     CUIControlButtonCharacterBiographyClear(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

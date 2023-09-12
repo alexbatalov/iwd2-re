@@ -566,10 +566,10 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
-class CUIControlButtonCharacterBiographyRevert : public CUIControlButton {
+class CUIControlButtonCharGenBiographyRevert : public CUIControlButton {
 public:
-    CUIControlButtonCharacterBiographyRevert(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
-    ~CUIControlButtonCharacterBiographyRevert() override;
+    CUIControlButtonCharGenBiographyRevert(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharGenBiographyRevert() override;
     void OnLButtonClick(CPoint pt) override;
 };
 

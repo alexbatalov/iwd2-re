@@ -9783,7 +9783,7 @@ void CUIControlButtonCharGenBiographyClear::OnLButtonClick(CPoint pt)
 // -----------------------------------------------------------------------------
 
 // 0x622730
-CUIControlButtonCharacterBiographyRevert::CUIControlButtonCharacterBiographyRevert(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+CUIControlButtonCharGenBiographyRevert::CUIControlButtonCharGenBiographyRevert(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
@@ -9796,12 +9796,12 @@ CUIControlButtonCharacterBiographyRevert::CUIControlButtonCharacterBiographyReve
 }
 
 // 0x622800
-CUIControlButtonCharacterBiographyRevert::~CUIControlButtonCharacterBiographyRevert()
+CUIControlButtonCharGenBiographyRevert::~CUIControlButtonCharGenBiographyRevert()
 {
 }
 
 // 0x6228A0
-void CUIControlButtonCharacterBiographyRevert::OnLButtonClick(CPoint pt)
+void CUIControlButtonCharGenBiographyRevert::OnLButtonClick(CPoint pt)
 {
     CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
 

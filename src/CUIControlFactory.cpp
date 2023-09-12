@@ -2457,7 +2457,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 5:
                 return new CUIControlButtonCharGenBiographyClear(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 6:
-                return new CUIControlButtonCharacterBiographyRevert(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+                return new CUIControlButtonCharGenBiographyRevert(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             }
             break;
         case 52:

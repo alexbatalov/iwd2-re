@@ -3170,6 +3170,12 @@ CStringList* CInfGame::GetSounds()
     return pList;
 }
 
+// 0x5C3790
+void CInfGame::ChangeBiography(BYTE nFixedPartyId, CString szBiography)
+{
+    // TODO: Incomplete.
+}
+
 // 0x5C72D0
 BOOLEAN CInfGame::GetGameSpyCharacterInformation(INT nCharacterSlot, CString& sName, CString& sRace, CString& sClass, CString& sLevel)
 {

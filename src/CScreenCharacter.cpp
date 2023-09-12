@@ -3812,6 +3812,69 @@ void CUIControlButtonCharacterPopupCancel::OnLButtonClick(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x5EC920
+CUIControlButtonCharacterBiographyRevert::CUIControlButtonCharacterBiographyRevert(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    SetText(CBaldurEngine::FetchString(2240)); // "Revert"
+}
+
+// 0x5EC9F0
+CUIControlButtonCharacterBiographyRevert::~CUIControlButtonCharacterBiographyRevert()
+{
+}
+
+// 0x5ECDE0
+void CUIControlButtonCharacterBiographyRevert::OnLButtonClick(CPoint pt)
+{
+    if (m_bEnabled) {
+        CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 13354
+        UTIL_ASSERT(pCharacter != NULL);
+
+        CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 13358
+        UTIL_ASSERT(pGame != NULL);
+
+        // NOTE: Uninline.
+        LONG nCharacterId = pGame->GetCharacterId(pCharacter->GetSelectedCharacter());
+
+        CGameSprite* pSprite;
+
+        BYTE rc;
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            // NOTE: Unused.
+            STR_RES strRes;
+
+            CScreenCharacter::ResetBiography(pSprite);
+            STRREF strBiography = pSprite->GetBaseStats()->m_biography;
+
+            pCharacter->DismissPopup(pSprite);
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+
+            CString sBiography = CBaldurEngine::FetchString(strBiography);
+            BYTE nFixedPartyId = static_cast<BYTE>(g_pBaldurChitin->GetObjectGame()->GetFixedOrderCharacterPortraitNum(nCharacterId));
+            g_pBaldurChitin->GetObjectGame()->ChangeBiography(nFixedPartyId, sBiography);
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x5ECC60
 CUIControlButtonCharacterBiographyClear::CUIControlButtonCharacterBiographyClear(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)

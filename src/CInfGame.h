@@ -194,6 +194,7 @@ public:
     CStringList* GetPortraits();
     CStringList* GetImportCharacters();
     CStringList* GetSounds();
+    void ChangeBiography(BYTE nFixedPartyId, CString szBiography);
     BOOLEAN GetGameSpyCharacterInformation(INT nCharacterSlot, CString& sName, CString& sRace, CString& sClass, CString& sLevel);
     void MultiplayerSetCharacterCreationLocation();
     INT sub_5C93E0();
