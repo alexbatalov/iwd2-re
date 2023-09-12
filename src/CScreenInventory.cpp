@@ -1647,7 +1647,49 @@ void CScreenInventory::UpdatePartyGoldStatus()
 // 0x631640
 void CScreenInventory::UpdateRequesterPanel()
 {
-    // TODO: Incomplete.
+    CItem* pItem;
+    STRREF description;
+    CResRef cResIcon;
+    CResRef cResItem;
+    WORD wCount;
+
+    MapButtonIdToItemInfo(m_nRequesterButtonId,
+        pItem,
+        description,
+        cResIcon,
+        cResItem,
+        wCount);
+
+    if (pItem != NULL) {
+        CUIPanel* pPanel = m_cUIManager.GetPanel(4);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 9306
+        UTIL_ASSERT(pPanel != NULL);
+
+        CUIControlButtonInventoryRequesterItem* pButton = static_cast<CUIControlButtonInventoryRequesterItem*>(pPanel->GetControl(0));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 9308
+        UTIL_ASSERT(pButton != NULL);
+
+        CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(6));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 9310
+        UTIL_ASSERT(pEdit != NULL);
+
+        m_nRequesterAmount = min(m_nRequesterAmount, wCount);
+
+        char buffer[80];
+        sprintf(buffer, "%d", m_nRequesterAmount);
+
+        pEdit->SetText(CString(buffer));
+        pEdit->InvalidateRect();
+
+        pButton->m_resRef = cResItem;
+        pButton->InvalidateRect();
+    }
 }
 
 // 0x631790
