@@ -29,6 +29,8 @@ public:
     ~CMultiplayerSettings();
     DWORD GetDataSize();
     void InitializeSettings();
+    void Marshal(BYTE** pData, DWORD* dwSize);
+    void Unmarshal(BYTE* pData, DWORD dwSize);
     BOOLEAN GetPermission(INT nPlayerNumber, INT nPermission);
     void SetPermission(INT nPlayerSlot, INT nPermission, BOOLEAN bPermissionValue, BOOLEAN bFlush);
     void ResetPermissionsForPlayer(INT nPlayerSlot, BOOLEAN bFlush);

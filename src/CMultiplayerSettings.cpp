@@ -143,6 +143,18 @@ void CMultiplayerSettings::InitializeSettings()
     }
 }
 
+// 0x517850
+void CMultiplayerSettings::Marshal(BYTE** pData, DWORD* dwSize)
+{
+    // TODO: Incomplete.
+}
+
+// 0x517B50
+void CMultiplayerSettings::Unmarshal(BYTE* pData, DWORD dwSize)
+{
+    // TODO: Incomplete.
+}
+
 // 0x517FE0
 BOOLEAN CMultiplayerSettings::GetPermission(INT nPlayerSlot, INT nPermission)
 {

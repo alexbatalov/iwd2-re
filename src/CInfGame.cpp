@@ -666,6 +666,9 @@ const CString CInfGame::SILHOUETTE_PORTRAIT_LG("noportlg");
 // 0x8E7524
 BOOL CInfGame::dword_8E7524;
 
+// 0x8E7528
+BOOLEAN CInfGame::byte_8E7528;
+
 // 0x8E752C
 int CInfGame::dword_8E752C;
 

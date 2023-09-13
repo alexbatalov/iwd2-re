@@ -512,10 +512,10 @@ void CScreenSinglePlayer::TimerAsynchronousUpdate()
                             break;
                         }
 
-                        if (g_pChitin->cNetwork.PeekSpecificMessage(sHostName, CBaldurMessage::MSG_TYPE_PLAYER_CHAR, CBaldurMessage::MSG_SUBTYPE_PLAYERCHAR_DEMAND_REPLY) == TRUE) {
+                        if (g_pChitin->cNetwork.PeekSpecificMessage(sHostName, CBaldurMessage::MSG_TYPE_PLAYERCHAR, CBaldurMessage::MSG_SUBTYPE_PLAYERCHAR_DEMAND_REPLY) == TRUE) {
                             DWORD dwSize;
                             BYTE* pMessage = g_pChitin->cNetwork.FetchSpecificMessage(sHostName,
-                                CBaldurMessage::MSG_TYPE_PLAYER_CHAR,
+                                CBaldurMessage::MSG_TYPE_PLAYERCHAR,
                                 CBaldurMessage::MSG_SUBTYPE_PLAYERCHAR_DEMAND_REPLY,
                                 dwSize);
 

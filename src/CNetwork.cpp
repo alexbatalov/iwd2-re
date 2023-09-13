@@ -30,6 +30,15 @@ const INT CNetwork::SERV_PROV_IPX = 1;
 // 0x85E65C
 const INT CNetwork::SERV_PROV_NULL = 0;
 
+// 0x85E660
+const INT CNetwork::SEND_ALL_PLAYERS = 0x100;
+
+// 0x85E664
+const INT CNetwork::SEND_GUARANTEED = 0x200;
+
+// 0x85E66C
+const INT CNetwork::SEND_JOINING_PLAYERS = 0x800;
+
 // 0x85E670
 const INT CNetwork::SPEC_MSG_HEADER_LENGTH = 3;
 
@@ -2010,6 +2019,12 @@ BOOLEAN CNetwork::PeekSpecificMessage(const CString& sPlayerName, BYTE nSpecMsgT
     return FALSE;
 }
 
+// 0x7A84F0
+BOOLEAN CNetwork::SendSpecificMessage(const CString& sPlayerName, DWORD dwFlags, BYTE nSpecMsgType, BYTE nSpecMsgSubType, LPVOID lpData, DWORD nDataSize)
+{
+    return FALSE;
+}
+
 // 0x452B40
 INT CNetwork::GetServiceProvider()
 {
@@ -2026,6 +2041,22 @@ BOOLEAN CNetwork::GetSessionOpen()
 BOOLEAN CNetwork::GetSessionHosting()
 {
     return m_bIsHost;
+}
+
+// NOTE: Inlined.
+PLAYER_ID CNetwork::GetHostPlayerID()
+{
+    return m_nHostPlayer != -1 ? m_pPlayerID[m_nHostPlayer] : 0;
+}
+
+// NOTE: Inlined.
+void CNetwork::GetHostPlayerName(CString& sHostName)
+{
+    if (m_nHostPlayer != -1) {
+        sHostName = m_psPlayerName[m_nHostPlayer];
+    } else {
+        sHostName = "";
+    }
 }
 
 #if DPLAY_COMPAT

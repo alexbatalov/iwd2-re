@@ -4870,9 +4870,9 @@ void CScreenConnection::ShowSessionTerminatedMessage()
     CSingleLock lock(&(m_cUIManager.field_36), FALSE);
     lock.Lock(INFINITE);
 
-    if (g_pBaldurChitin->m_cBaldurMessage.field_E5) {
+    if (g_pBaldurChitin->m_cBaldurMessage.m_bVersionControlShutdown) {
         SummonPopup(23);
-        g_pBaldurChitin->m_cBaldurMessage.field_E5 = 0;
+        g_pBaldurChitin->m_cBaldurMessage.m_bVersionControlShutdown = FALSE;
     } else {
         m_nErrorState = 0;
         m_strErrorText = 10803;

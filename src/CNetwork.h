@@ -34,6 +34,10 @@ public:
     static const INT SERV_PROV_IPX;
     static const INT SERV_PROV_NULL;
 
+    static const INT SEND_ALL_PLAYERS;
+    static const INT SEND_GUARANTEED;
+    static const INT SEND_JOINING_PLAYERS;
+
     static const INT SPEC_MSG_HEADER_LENGTH;
     static const INT SPEC_MSG_FLAG;
     static const INT SPEC_MSG_TYPE;
@@ -99,10 +103,14 @@ public:
     BYTE* CreateCopyMessage(const void* lpData, DWORD dwDataSize, unsigned char a3, unsigned char a4, int a5);
     BYTE* FetchSpecificMessage(const CString& sPlayerName, BYTE nSpecMsgType, BYTE nSpecMsgSubType, DWORD& dwSize);
     BOOLEAN PeekSpecificMessage(const CString& sPlayerName, BYTE nSpecMsgType, BYTE nSpecMsgSubType);
+    BOOLEAN SendSpecificMessage(const CString& sPlayerName, DWORD dwFlags, BYTE nSpecMsgType, BYTE nSpecMsgSubType, LPVOID lpData, DWORD nDataSize);
 
     INT GetServiceProvider();
     BOOLEAN GetSessionOpen();
     BOOLEAN GetSessionHosting();
+
+    PLAYER_ID GetHostPlayerID();
+    void GetHostPlayerName(CString& sHostName);
 
     /* 0000 */ IDirectPlay4A* m_lpDirectPlay;
     /* 0004 */ IDirectPlayLobby3A* m_lpDirectPlayLobby;

@@ -31,6 +31,24 @@
 // 0x8ABE0C
 static const DWORD STATICBUFFERSIZE = 0x4000;
 
+// NOTE: Actual size might be bigger, but `STATICBUFFERSIZE` says it is at
+// leats 0x4000 bytes.
+//
+// 0x8D8FE4
+static BYTE STATICBUFFER[0x4000];
+
+static inline BYTE* CreateBuffer(DWORD len)
+{
+    return len > STATICBUFFERSIZE ? new BYTE[len] : STATICBUFFER;
+}
+
+static inline void DestroyBuffer(BYTE* pBuffer)
+{
+    if (pBuffer != STATICBUFFER) {
+        delete pBuffer;
+    }
+}
+
 // 0x848208
 const SHORT CMessage::SEND = 1;
 
@@ -250,20 +268,101 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_DEMAND = 100;
 // 0x84CF3D
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_WEAPON_IMMUNITIES_UPDATE = 102;
 
+// 0x84CF51
+const BYTE CBaldurMessage::MSG_TYPE_DIALOG = 68;
+
+// 0x84CF52
+const BYTE CBaldurMessage::MSG_SUBTYPE_DIALOG_PERMIT_REQUEST = 82;
+
+// 0x84CF53
+const BYTE CBaldurMessage::MSG_SUBTYPE_DIALOG_PERMIT_REPLY = 114;
+
+// 0x84CF54
+const BYTE CBaldurMessage::MSG_SUBTYPE_DIALOG_CANCEL_REQUEST = 67;
+
+// 0x84CF55
+const BYTE CBaldurMessage::MSG_SUBTYPE_DIALOG_KILL_OR_USE = 75;
+
+// 0x84CF56
+const BYTE CBaldurMessage::DIALOG_REQUESTPENDING = 2;
+
+// 0x84CF57
+const BYTE CBaldurMessage::DIALOG_NOT_PERMITTED = 3;
+
+// 0x84CF58
+const BYTE CBaldurMessage::MSG_TYPE_SWAPITEM = 73;
+
+// 0x84CF59
+const BYTE CBaldurMessage::MSG_SUBTYPE_SWAPITEM_REQUEST = 82;
+
+// 0x84CF5A
+const BYTE CBaldurMessage::MSG_SUBTYPE_SWAPITEM_REPLY = 114;
+
+// 0x84CF6B
+const BYTE CBaldurMessage::MSG_TYPE_BIOGRAPHY = 98;
+
+// 0x84CF6C
+const BYTE CBaldurMessage::MSG_SUBTYPE_BIOGRAPHY_CHANGE = 99;
+
+// 0x84CF6D
+const BYTE CBaldurMessage::MSG_SUBTYPE_BIOGRAPHY_CHANGE_ANNOUNCE = 67;
+
 // 0x84CF76
 const BYTE CBaldurMessage::DELETEAREA_EMPTY_VOTE = 101;
+
+// 0x84CF77
+const BYTE CBaldurMessage::DELETEAREA_PENDING_VOTE = 112;
+
+// 0x84CF78
+const BYTE CBaldurMessage::DELETEAREA_YES_VOTE = 121;
+
+// 0x84CF79
+const BYTE CBaldurMessage::DELETEAREA_NO_VOTE = 110;
 
 // 0x84CF7A
 const BYTE CBaldurMessage::MSG_TYPE_MPSETTINGS = 77;
 
+// 0x84CF7B
+const BYTE CBaldurMessage::MSG_SUBTYPE_MPSETTINGS_FULLDEMAND = 68;
+
 // 0x84CF7C
 const BYTE CBaldurMessage::MSG_SUBTYPE_MPSETTINGS_FULLSET = 83;
 
+// 0x84CF7D
+const BYTE CBaldurMessage::MSG_SUBTYPE_MPSETTINGS_PERMISSION = 112;
+
+// 0x84CF7E
+const BYTE CBaldurMessage::MSG_SUBTYPE_MPSETTINGS_PLAYER_READY = 121;
+
+// 0x84CF7F
+const BYTE CBaldurMessage::MSG_SUBTYPE_MPSETTINGS_CHAR_READY = 114;
+
+// 0x84CF89
+const BYTE CBaldurMessage::MSG_SUBTYPE_MPSETTINGS_NIGHTMAREMODE = 78;
+
+// 0x84CF8A
+const BYTE CBaldurMessage::MSG_SUBTYPE_MPSETTINGS_DEMAND_NIGHTMAREMODE = 110;
+
 // 0x84CF9F
-const BYTE CBaldurMessage::MSG_TYPE_PLAYER_CHAR = 80;
+const BYTE CBaldurMessage::MSG_TYPE_PLAYERCHAR = 80;
+
+// 0x84CFA0
+const BYTE CBaldurMessage::MSG_SUBTYPE_PLAYERCHAR_UPDATE_DEMAND = 85;
+
+// 0x84CFA1
+const BYTE CBaldurMessage::MSG_SUBTYPE_PLAYERCHAR_UPDATE_REPLY = 117;
+
+// 0x84CFA2
+const BYTE CBaldurMessage::MSG_SUBTYPE_PLAYERCHAR_DEMAND_SLOT = 68;
 
 // 0x84CFA3
 const BYTE CBaldurMessage::MSG_SUBTYPE_PLAYERCHAR_DEMAND_REPLY = 100;
+
+// 0x84CFA4
+const BYTE CBaldurMessage::MSG_SUBTYPE_PLAYERCHAR_70 = 70;
+
+// 0x84CFA5
+const BYTE CBaldurMessage::MSG_SUBTYPE_PLAYERCHAR_102 = 102;
 
 // 0x84CFB0
 const BYTE CBaldurMessage::MSG_TYPE_RESOURCE = 82;
@@ -283,61 +382,85 @@ const BYTE CBaldurMessage::SIGNAL_END_MAJOR_EVENT = 49;
 // 0x84CFC2
 const BYTE CBaldurMessage::SIGNAL_END_GAME = 54;
 
+// 0x84CFC3
+const BYTE CBaldurMessage::SIGNAL_MPSYNCH = 53;
+
 // 0x84CFC4
 const DWORD CBaldurMessage::SIGNAL_SECONDSTOMPTIMEOUT = 200;
+
+// 0x84CFC8
+const BYTE CBaldurMessage::MSG_TYPE_MPSYNCH = 115;
+
+// 0x84CFC9
+const BYTE CBaldurMessage::MSG_SUBTYPE_MPSYNCH_REQUEST = 82;
+
+// 0x84CFCA
+const BYTE CBaldurMessage::MSG_SUBTYPE_MPSYNCH_REPLY = 80;
+
+// 0x84CFD3
+const BYTE CBaldurMessage::MSG_TYPE_LEAVEAREALUA = 88;
+
+// 0x84CFD4
+const BYTE CBaldurMessage::MSG_SUBTYPE_LEAVEAREALUA_PERMIT_REQUEST = 82;
+
+// 0x84CFDB
+const BYTE CBaldurMessage::MSG_TYPE_LEAVEAREANAME = 120;
+
+// 0x84CFDC
+const BYTE CBaldurMessage::MSG_SUBTYPE_LEAVEAREANAME_PERMIT_REQUEST = 82;
 
 // 0x4294F0
 CBaldurMessage::CBaldurMessage()
 {
-    field_6 = 0;
+    m_bInHandleBlockingMessages = FALSE;
     m_nVersionControlShutdownReason = 0;
-    field_0 = 0;
-    field_1 = 0;
-    field_2 = 0;
-    field_3 = 0;
-    field_5 = 0;
-    field_4 = 0;
+    m_bInOnObjectAdd = FALSE;
+    m_bInOnObjectDelete = FALSE;
+    m_bInOnRestAnnounce = FALSE;
+    m_bInOnJournalAnnounce = FALSE;
+    m_bInOnAnnounceBiography = FALSE;
+    m_bInOnAreaMapNoteAnnounce = FALSE;
     m_bDialogRequestPending = FALSE;
     m_bDialogReplyReturned = FALSE;
-    field_D5 = 0;
+    m_bDialogReplyValue = FALSE;
     m_nDialogReplyUpdates = 0;
-    field_DA = 0;
-    field_DB = 0;
-    field_DC = 0;
-    field_DD = 0;
-    field_DE = 0;
-    field_DF = 0;
-    field_74 = "";
-    field_73 = 0;
-    field_78 = 0;
+    m_bLeaveAreaLuaRequestPending = FALSE;
+    m_bLeaveAreaLuaReplyReturned = FALSE;
+    m_nLeaveAreaLuaReplyValue = 0;
+    m_bLeaveAreaNameRequestPending = FALSE;
+    m_bLeaveAreaNameReplyReturned = FALSE;
+    m_nLeaveAreaNameReplyValue = 0;
+    m_sDeleteAreaString = "";
+    m_bDeleteAreaPolling = FALSE;
+    m_dwDeleteAreaTimeout = 0;
 
     for (int k = 0; k < 6; k++) {
-        field_82[k] = 0;
-        field_7C[k] = DELETEAREA_EMPTY_VOTE;
+        m_pnDeleteAreaVoters[k] = 0;
+        m_pnDeleteAreaVotes[k] = DELETEAREA_EMPTY_VOTE;
     }
 
-    field_E0 = 0;
-    field_E1 = 0;
-    field_E2 = 0;
-    field_E3 = 0;
-    field_E4 = -1;
-    field_29 = 0;
-    field_2A = 0;
+    m_bMultiplayerSynchClientPending = FALSE;
+    m_bMultiplayerSynchClientFinished = FALSE;
+    m_bMultiplayerSynchServerPending = FALSE;
+    m_bMultiplayerSynchServerFinished = FALSE;
+    m_nMultiplayerSynchClientLocation = -1;
+    m_nSignalQueueStart = 0;
+    m_nSignalQueueEnd = 0;
     m_nSignalQueueSize = 24;
 
     for (BYTE l = 0; l < m_nSignalQueueSize; l++) {
-        field_2B[l] = -1;
-        field_5B[l] = 0;
-        field_43[l] = 0;
+        m_pnSignalFrom[l] = -1;
+        m_pnSignalData[l] = 0;
+        m_pnSignalType[l] = 0;
     }
 
-    field_D2 = 0;
+    m_bRemovedPlayerID = 0;
 
     for (int m = 0; m < 6; m++) {
-        field_BA[m] = 0;
+        m_pRemovedPlayerID[m] = 0;
     }
 
-    field_E5 = 0;
+    m_bVersionControlShutdown = FALSE;
     m_dwSignalSecondsToTimeout = SIGNAL_SECONDSTOMPTIMEOUT;
     m_bPlayerShutdown = FALSE;
     m_bMultiplayerSessionShutdown = FALSE;
@@ -366,26 +489,346 @@ BOOLEAN CBaldurMessage::OnResourceDemanded(INT nMsgFrom, BYTE* pByteMessage, DWO
     return FALSE;
 }
 
+// 0x42B1F0
+BOOL CBaldurMessage::OnSettingsFullDemanded(INT nMsgFrom)
+{
+    CString sPlayerName;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || !g_pChitin->cNetwork.GetSessionHosting()) {
+        return FALSE;
+    }
+
+    g_pChitin->cNetwork.GetPlayerName(nMsgFrom, sPlayerName);
+    SendFullSettingsToClients(sPlayerName);
+
+    return TRUE;
+}
+
 // 0x42B2B0
 BOOL CBaldurMessage::SendFullSettingsToClients(const CString& sPlayerName)
 {
-    // TODO: Incomplete.
+    BYTE* pMessage;
+    DWORD dwSize;
 
-    return FALSE;
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || !g_pChitin->cNetwork.GetSessionHosting()) {
+        return FALSE;
+    }
+
+    CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+
+    dwSize = pSettings->GetDataSize();
+    pSettings->Marshal(&pMessage, &dwSize);
+
+    if (sPlayerName != "") {
+        g_pChitin->cNetwork.SendSpecificMessage(sPlayerName,
+            CNetwork::SEND_GUARANTEED,
+            MSG_TYPE_MPSETTINGS,
+            MSG_SUBTYPE_MPSETTINGS_FULLSET,
+            pMessage,
+            dwSize);
+    } else {
+        g_pChitin->cNetwork.SendSpecificMessage(CString(""),
+            CNetwork::SEND_ALL_PLAYERS | CNetwork::SEND_GUARANTEED | CNetwork::SEND_JOINING_PLAYERS,
+            MSG_TYPE_MPSETTINGS,
+            MSG_SUBTYPE_MPSETTINGS_FULLSET,
+            pMessage,
+            dwSize);
+    }
+
+    delete pMessage;
+
+    return TRUE;
 }
 
 // 0x42B420
 BOOL CBaldurMessage::OnSettingsFullSet(INT nMsgFrom, BYTE* pMessage, DWORD dwSize)
 {
-    return FALSE;
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || g_pChitin->cNetwork.GetSessionHosting() != TRUE) {
+        return FALSE;
+    }
+
+    if (nMsgFrom != g_pChitin->cNetwork.FindPlayerLocationByID(g_pChitin->cNetwork.GetHostPlayerID(), FALSE)) {
+        return FALSE;
+    }
+
+    g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->Unmarshal(pMessage, dwSize);
+
+    return TRUE;
+}
+
+// 0x42B490
+BOOL CBaldurMessage::SendPermissionToServer(const CString& sPlayerName, INT nPermission, BOOLEAN bValue)
+{
+    CString sHostName;
+    DWORD dwSize;
+    BYTE* pMessage;
+    PLAYER_ID playerID;
+    INT nMsgPtr;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || g_pChitin->cNetwork.GetSessionHosting() != TRUE) {
+        return FALSE;
+    }
+
+    g_pChitin->cNetwork.GetHostPlayerName(sHostName);
+
+    if (sHostName == "") {
+        return FALSE;
+    }
+
+    playerID = g_pChitin->cNetwork.FindPlayerIDByName(sPlayerName, FALSE);
+
+    dwSize = sizeof(PLAYER_ID)
+        + sizeof(INT)
+        + sizeof(BOOLEAN);
+    pMessage = CreateBuffer(dwSize);
+    if (pMessage == NULL) {
+        return FALSE;
+    }
+
+    nMsgPtr = 0;
+
+    *reinterpret_cast<PLAYER_ID*>(pMessage + nMsgPtr) = playerID;
+    nMsgPtr += sizeof(PLAYER_ID);
+
+    *reinterpret_cast<INT*>(pMessage + nMsgPtr) = nPermission;
+    nMsgPtr += sizeof(INT);
+
+    *reinterpret_cast<BOOLEAN*>(pMessage + nMsgPtr) = bValue;
+    nMsgPtr += sizeof(BOOLEAN);
+
+    g_pChitin->cNetwork.SendSpecificMessage(sHostName,
+        CNetwork::SEND_GUARANTEED,
+        MSG_TYPE_MPSETTINGS,
+        MSG_SUBTYPE_MPSETTINGS_PERMISSION,
+        pMessage,
+        dwSize);
+
+    DestroyBuffer(pMessage);
+
+    return TRUE;
+}
+
+// 0x42B5E0
+BOOL CBaldurMessage::OnSettingsPermissionSet(INT nMsgFrom, BYTE* pMessage, DWORD dwSize)
+{
+    INT nMsgPtr;
+    PLAYER_ID playerID;
+    INT nPlayerToFind;
+    INT nPermission;
+    BOOLEAN bValue;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()) {
+        return FALSE;
+    }
+
+    if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+        if (!g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->GetPermission(nMsgFrom, CGamePermission::LEADER)) {
+            return FALSE;
+        }
+    } else {
+        if (nMsgFrom != g_pChitin->cNetwork.FindPlayerLocationByID(g_pChitin->cNetwork.GetHostPlayerID(), FALSE)) {
+            return FALSE;
+        }
+    }
+
+    nMsgPtr = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    if (dwSize != nMsgPtr + sizeof(PLAYER_ID) + sizeof(INT) + sizeof(BOOLEAN)) {
+        return FALSE;
+    }
+
+    playerID = *reinterpret_cast<PLAYER_ID*>(pMessage + nMsgPtr);
+    nMsgPtr += sizeof(PLAYER_ID);
+
+    nPermission = *reinterpret_cast<INT*>(pMessage + nMsgPtr);
+    nMsgPtr += sizeof(INT);
+
+    bValue = *reinterpret_cast<BOOLEAN*>(pMessage + nMsgPtr);
+    nMsgPtr += sizeof(BOOLEAN);
+
+    if (playerID != 0) {
+        nPlayerToFind = g_pChitin->cNetwork.FindPlayerLocationByID(playerID, FALSE);
+    } else {
+        nPlayerToFind = -1;
+    }
+
+    if (nPlayerToFind == g_pChitin->cNetwork.m_idLocalPlayer) {
+        g_pBaldurChitin->GetObjectGame()->m_singlePlayerPermissions.SetSinglePermission(nPermission, bValue);
+    }
+
+    g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->SetPermission(nPlayerToFind,
+        nPermission,
+        bValue,
+        TRUE);
+
+    return TRUE;
+}
+
+// 0x42B700
+BOOLEAN CBaldurMessage::SendPlayerReadyToServer(PLAYER_ID idPlayer, BOOLEAN bValue)
+{
+    CString sHostName;
+    DWORD dwSize;
+    BYTE* pMessage;
+    INT nMsgPtr;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || g_pChitin->cNetwork.GetSessionHosting() != TRUE) {
+        return FALSE;
+    }
+
+    g_pChitin->cNetwork.GetHostPlayerName(sHostName);
+
+    if (sHostName == "") {
+        return FALSE;
+    }
+
+    dwSize = sizeof(PLAYER_ID) + sizeof(BOOLEAN);
+    pMessage = CreateBuffer(dwSize);
+    if (pMessage == NULL) {
+        return FALSE;
+    }
+
+    nMsgPtr = 0;
+
+    *reinterpret_cast<PLAYER_ID*>(pMessage + nMsgPtr) = idPlayer;
+    nMsgPtr += sizeof(PLAYER_ID);
+
+    *reinterpret_cast<BOOLEAN*>(pMessage + nMsgPtr) = bValue;
+    nMsgPtr += sizeof(BOOLEAN);
+
+    g_pChitin->cNetwork.SendSpecificMessage(sHostName,
+        CNetwork::SEND_GUARANTEED,
+        MSG_TYPE_MPSETTINGS,
+        MSG_SUBTYPE_MPSETTINGS_PLAYER_READY,
+        pMessage,
+        dwSize);
+
+    DestroyBuffer(pMessage);
+
+    return TRUE;
+}
+
+// 0x42B850
+BOOLEAN CBaldurMessage::OnSettingsPlayerReadySet(INT nMsgFrom, BYTE* pMessage, DWORD dwSize)
+{
+    INT nMsgPtr;
+    PLAYER_ID playerID;
+    BOOLEAN bValue;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || !g_pChitin->cNetwork.GetSessionHosting()) {
+        return FALSE;
+    }
+
+    nMsgPtr = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    if (dwSize != nMsgPtr + sizeof(PLAYER_ID) + sizeof(BOOLEAN)) {
+        return FALSE;
+    }
+
+    playerID = *reinterpret_cast<PLAYER_ID*>(pMessage + nMsgPtr);
+    nMsgPtr += sizeof(PLAYER_ID);
+
+    bValue = *reinterpret_cast<BOOLEAN*>(pMessage + nMsgPtr);
+    nMsgPtr += sizeof(BOOLEAN);
+
+    g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->SetPlayerReady(playerID,
+        bValue,
+        TRUE);
+
+    return TRUE;
 }
 
 // 0x42BC00
-BOOL CBaldurMessage::SendCharacterReadyToServer(INT nCharacterSlot, BOOLEAN bReady)
+BOOL CBaldurMessage::SendCharacterReadyToServer(INT nCharacterSlot, BOOLEAN bCharacterReady)
 {
-    // TODO: Incomplete.
+    CString sHostName;
+    DWORD dwSize;
+    BYTE* pMessage;
+    INT nMsgPtr;
 
-    return FALSE;
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || g_pChitin->cNetwork.GetSessionHosting() != TRUE) {
+        return FALSE;
+    }
+
+    g_pChitin->cNetwork.GetHostPlayerName(sHostName);
+
+    if (sHostName == "") {
+        return FALSE;
+    }
+
+    dwSize = sizeof(INT) + sizeof(BOOLEAN);
+    pMessage = CreateBuffer(dwSize);
+    if (pMessage == NULL) {
+        return FALSE;
+    }
+
+    nMsgPtr = 0;
+
+    *reinterpret_cast<INT*>(pMessage + nMsgPtr) = nCharacterSlot;
+    nMsgPtr += sizeof(INT);
+
+    *reinterpret_cast<BOOLEAN*>(pMessage + nMsgPtr) = bCharacterReady;
+    nMsgPtr += sizeof(BOOLEAN);
+
+    g_pChitin->cNetwork.SendSpecificMessage(sHostName,
+        CNetwork::SEND_GUARANTEED,
+        MSG_TYPE_MPSETTINGS,
+        MSG_SUBTYPE_MPSETTINGS_CHAR_READY,
+        pMessage,
+        dwSize);
+
+    DestroyBuffer(pMessage);
+
+    return TRUE;
+}
+
+// 0x42BD50
+BOOL CBaldurMessage::OnSettingsCharacterReadySet(INT nMsgFrom, BYTE* pMessage, DWORD dwSize)
+{
+    INT nMsgPtr;
+    INT nCharacterSlot;
+    BOOLEAN bValue;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()) {
+        return FALSE;
+    }
+
+    if (!g_pChitin->cNetwork.GetSessionHosting()) {
+        if (nMsgFrom != g_pChitin->cNetwork.FindPlayerLocationByID(g_pChitin->cNetwork.GetHostPlayerID(), FALSE)) {
+            return FALSE;
+        }
+    }
+
+    nMsgPtr = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    if (dwSize != nMsgPtr + sizeof(INT) + sizeof(BOOLEAN)) {
+        return FALSE;
+    }
+
+    nCharacterSlot = *reinterpret_cast<INT*>(pMessage + nMsgPtr);
+    nMsgPtr += sizeof(INT);
+
+    bValue = *reinterpret_cast<BOOLEAN*>(pMessage + nMsgPtr);
+    nMsgPtr += sizeof(BOOLEAN);
+
+    if (g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->GetCharacterControlledByPlayer(nCharacterSlot) != nMsgFrom) {
+        return FALSE;
+    }
+
+    g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->SetCharacterReady(nCharacterSlot,
+        bValue,
+        TRUE);
+
+    SendFullSettingsToClients(CString(""));
+
+    return TRUE;
 }
 
 // 0x42C0E0
@@ -458,8 +901,24 @@ void CBaldurMessage::UpdateDemandCharacters(unsigned char a1, int a2, unsigned c
     // TODO: Incomplete.
 }
 
+// 0x42E0C0
+BOOLEAN CBaldurMessage::OnUpdateDemandCharacterSlot(INT nMsgFrom, BYTE* pMessage, DWORD dwSize)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x42F100
 BOOLEAN CBaldurMessage::DemandCharacterSlot(SHORT nCharacterSlot, BOOLEAN bDemandFromHost, SHORT nPlayerSlot)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x42F390
+BOOLEAN CBaldurMessage::OnDemandCharacterSlot(INT nMsgFrom, BYTE* pMessage, DWORD dwSize)
 {
     // TODO: Incomplete.
 
@@ -484,6 +943,14 @@ BOOL CBaldurMessage::ObjectControlRequest(LONG localObjectID)
 
 // 0x430C50
 BOOL CBaldurMessage::ObjectControl()
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x4319C0
+BOOLEAN CBaldurMessage::OnSwapItemRequest(INT nMsgFrom, BYTE* pMessage, DWORD dwSize)
 {
     // TODO: Incomplete.
 
@@ -567,6 +1034,14 @@ BOOLEAN CBaldurMessage::OnProgressBarStatus(INT nMsgFrom, BYTE* pMessage, DWORD 
     return FALSE;
 }
 
+// 0x434110
+BOOLEAN CBaldurMessage::OnDialogRequestToServer(INT nMsgFrom, BYTE* pMessage, DWORD dwSize)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x434EB0
 BOOLEAN CBaldurMessage::ChapterAnnounceStatus(BYTE nChapter, CResRef cResRef)
 {
@@ -619,10 +1094,378 @@ void CBaldurMessage::TimeChangeToServer(DWORD deltaTime)
     // TODO: Incomplete.
 }
 
+// 0x437950
+BOOLEAN CBaldurMessage::OnLeaveAreaLuaRequestToServer(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x438BF0
+BOOLEAN CBaldurMessage::OnLeaveAreaNameRequestToServer(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x43A910
+BOOLEAN CBaldurMessage::SendBiographyToServer(BYTE nFixedPartyId, CString szBio)
+{
+    CString sHostName;
+    BYTE* pByteMessage;
+    DWORD dwSize;
+    DWORD cnt;
+    DWORD nTextLength;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || g_pChitin->cNetwork.GetSessionHosting() != TRUE) {
+        return FALSE;
+    }
+
+    g_pChitin->cNetwork.GetHostPlayerName(sHostName);
+
+    if (sHostName == "") {
+        return FALSE;
+    }
+
+    nTextLength = szBio.GetLength();
+    dwSize = nTextLength
+        + sizeof(DWORD)
+        + sizeof(BYTE);
+
+    pByteMessage = CreateBuffer(dwSize);
+    if (pByteMessage == NULL) {
+        return FALSE;
+    }
+
+    cnt = 0;
+
+    *reinterpret_cast<DWORD*>(pByteMessage + cnt) = nTextLength;
+    cnt += sizeof(DWORD);
+
+    memcpy(pByteMessage + cnt, szBio.GetBuffer(nTextLength), nTextLength);
+    cnt += nTextLength;
+
+    *reinterpret_cast<BYTE*>(pByteMessage + cnt) = nFixedPartyId;
+    cnt += sizeof(BYTE);
+
+    g_pChitin->cNetwork.SendSpecificMessage(sHostName,
+        CNetwork::SEND_GUARANTEED,
+        MSG_TYPE_BIOGRAPHY,
+        MSG_SUBTYPE_BIOGRAPHY_CHANGE,
+        pByteMessage,
+        dwSize);
+
+    DestroyBuffer(pByteMessage);
+
+    return TRUE;
+}
+
+// 0x43AAD0
+BOOLEAN CBaldurMessage::OnSendBiography(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize)
+{
+    DWORD cnt;
+    DWORD nTextLength;
+    BYTE nFixedPartyId;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()) {
+        return FALSE;
+    }
+
+    cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    nTextLength = *reinterpret_cast<DWORD*>(pByteMessage + cnt);
+    cnt += sizeof(DWORD);
+
+    CString szText(reinterpret_cast<char*>(pByteMessage + cnt), nTextLength);
+    cnt += nTextLength;
+
+    nFixedPartyId = *reinterpret_cast<BYTE*>(pByteMessage + cnt);
+    cnt += sizeof(BYTE);
+
+    g_pBaldurChitin->GetObjectGame()->ChangeBiography(nFixedPartyId, szText);
+
+    return TRUE;
+}
+
+// 0x43AB90
+BOOLEAN CBaldurMessage::AnnounceBiography(BYTE nFixedPartyId, CString szBio)
+{
+    CString sHostName;
+    BYTE* pByteMessage;
+    DWORD dwSize;
+    DWORD cnt;
+    DWORD nTextLength;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || g_pChitin->cNetwork.GetSessionHosting() != TRUE) {
+        return FALSE;
+    }
+
+    g_pChitin->cNetwork.GetHostPlayerName(sHostName);
+
+    if (sHostName == "") {
+        return FALSE;
+    }
+
+    nTextLength = szBio.GetLength();
+    dwSize = nTextLength
+        + sizeof(DWORD)
+        + sizeof(BYTE);
+
+    pByteMessage = CreateBuffer(dwSize);
+    if (pByteMessage == NULL) {
+        return FALSE;
+    }
+
+    cnt = 0;
+
+    *reinterpret_cast<DWORD*>(pByteMessage + cnt) = nTextLength;
+    cnt += sizeof(DWORD);
+
+    memcpy(pByteMessage + cnt, szBio.GetBuffer(nTextLength), nTextLength);
+    cnt += nTextLength;
+
+    *reinterpret_cast<BYTE*>(pByteMessage + cnt) = nFixedPartyId;
+    cnt += sizeof(BYTE);
+
+    g_pChitin->cNetwork.SendSpecificMessage(CString(""),
+        CNetwork::SEND_GUARANTEED | CNetwork::SEND_ALL_PLAYERS,
+        MSG_TYPE_BIOGRAPHY,
+        MSG_SUBTYPE_BIOGRAPHY_CHANGE_ANNOUNCE,
+        pByteMessage,
+        dwSize);
+
+    DestroyBuffer(pByteMessage);
+
+    return TRUE;
+}
+
+// 0x43AD80
+BOOLEAN CBaldurMessage::OnAnnounceBiography(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize)
+{
+    DWORD cnt;
+    DWORD nTextLength;
+    BYTE nFixedPartyId;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()) {
+        return FALSE;
+    }
+
+    cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    nTextLength = *reinterpret_cast<DWORD*>(pByteMessage + cnt);
+    cnt += sizeof(DWORD);
+
+    CString szBio(reinterpret_cast<char*>(pByteMessage + cnt), nTextLength);
+    cnt += nTextLength;
+
+    nFixedPartyId = *reinterpret_cast<BYTE*>(pByteMessage + cnt);
+    cnt += sizeof(BYTE);
+
+    m_bInOnAnnounceBiography = TRUE;
+
+    g_pBaldurChitin->GetObjectGame()->ChangeBiography(nFixedPartyId, szBio);
+
+    m_bInOnAnnounceBiography = FALSE;
+
+    return TRUE;
+}
+
+// FIXME: `sAreaString` should be reference.
+//
+// 0x43B030
+void CBaldurMessage::SetDeleteAreaString(CString sAreaString)
+{
+    m_sDeleteAreaString = sAreaString;
+}
+
+// 0x43B4C0
+CString CBaldurMessage::GetDeleteAreaString()
+{
+    return m_sDeleteAreaString;
+}
+
+// 0x43B780
+BOOLEAN CBaldurMessage::CancelDeleteAreaPoll()
+{
+    BYTE cnt;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || g_pChitin->cNetwork.GetSessionHosting()) {
+        return FALSE;
+    }
+
+    m_sDeleteAreaString = "";
+    m_bDeleteAreaPolling = FALSE;
+    m_dwDeleteAreaTimeout = 0;
+
+    for (cnt = 0; cnt < 6; cnt++) {
+        m_pnDeleteAreaVoters[cnt] = 0;
+        m_pnDeleteAreaVotes[cnt] = DELETEAREA_EMPTY_VOTE;
+    }
+
+    return TRUE;
+}
+
+// 0x43B980
+BOOLEAN CBaldurMessage::DeleteAreaBallotResult()
+{
+    BYTE cnt;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || g_pChitin->cNetwork.GetSessionHosting()) {
+        return FALSE;
+    }
+
+    for (cnt = 0; cnt < CMultiplayerSettings::MAX_PLAYERS; cnt++) {
+        if (cnt != g_pChitin->cNetwork.m_nLocalPlayer) {
+            if (m_pnDeleteAreaVoters[cnt] != g_pChitin->cNetwork.GetPlayerID(cnt)) {
+                return FALSE;
+            }
+        }
+    }
+
+    BOOLEAN bAggregateVote = TRUE;
+
+    for (cnt = 0; cnt < CMultiplayerSettings::MAX_PLAYERS; cnt++) {
+        if (cnt != g_pChitin->cNetwork.m_nLocalPlayer) {
+            if (m_pnDeleteAreaVoters[cnt] != 0
+                && m_pnDeleteAreaVotes[cnt] != DELETEAREA_YES_VOTE) {
+                bAggregateVote = FALSE;
+            }
+        }
+    }
+
+    return bAggregateVote;
+}
+
+// 0x43BA50
+BOOLEAN CBaldurMessage::MultiplayerSynchRequest()
+{
+    CString sHostName;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || g_pChitin->cNetwork.GetSessionHosting() != TRUE) {
+        return FALSE;
+    }
+
+    g_pChitin->cNetwork.GetHostPlayerName(sHostName);
+
+    if (sHostName == "") {
+        return FALSE;
+    }
+
+    g_pChitin->cNetwork.SendSpecificMessage(sHostName,
+        CNetwork::SEND_GUARANTEED,
+        MSG_TYPE_MPSYNCH,
+        MSG_SUBTYPE_MPSYNCH_REQUEST,
+        NULL,
+        0);
+
+    return TRUE;
+}
+
+// 0x43BB60
+BOOLEAN CBaldurMessage::OnMultiplayerSynchRequest(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize)
+{
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || !g_pChitin->cNetwork.GetSessionHosting()) {
+        return FALSE;
+    }
+
+    m_nMultiplayerSynchClientLocation = static_cast<BYTE>(nMsgFrom);
+    m_bMultiplayerSynchClientPending = FALSE;
+    m_bMultiplayerSynchServerPending = TRUE;
+    m_bMultiplayerSynchServerFinished = FALSE;
+
+    // FIXME: Global.
+    g_pBaldurChitin->GetBaldurMessage()->RequestClientSignal(SIGNAL_MPSYNCH);
+
+    return TRUE;
+}
+
+// 0x43BBC0
+BOOLEAN CBaldurMessage::MultiplayerSynchReply()
+{
+    CString sPlayerName;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || !g_pChitin->cNetwork.GetSessionHosting()) {
+        return FALSE;
+    }
+
+    g_pChitin->cNetwork.GetPlayerName(m_nMultiplayerSynchClientLocation, sPlayerName);
+
+    if (sPlayerName == "") {
+        return FALSE;
+    }
+
+    g_pChitin->cNetwork.SendSpecificMessage(sPlayerName,
+        CNetwork::SEND_GUARANTEED,
+        MSG_TYPE_MPSYNCH,
+        MSG_SUBTYPE_MPSYNCH_REPLY,
+        NULL,
+        0);
+
+    m_bMultiplayerSynchServerPending = FALSE;
+    m_bMultiplayerSynchServerFinished = FALSE;
+    m_nMultiplayerSynchClientLocation = -1;
+
+    return TRUE;
+}
+
+// 0x43BCD0
+BOOLEAN CBaldurMessage::OnMultiplayerSynchReply(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize)
+{
+    if (!g_pChitin->cNetwork.GetSessionOpen()) {
+        return FALSE;
+    }
+
+    if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+        return FALSE;
+    }
+
+    m_bMultiplayerSynchClientFinished = TRUE;
+
+    return TRUE;
+}
+
+// FIXME: `sValue` should be reference.
+//
+// 0x43C2F0
+void CBaldurMessage::SetVersionControlShutdownServerString(CString sValue)
+{
+    m_sVersionControlShutdownServerString = sValue;
+}
+
+// FIXME: `sValue` should be reference.
+//
+// 0x43C340
+void CBaldurMessage::SetVersionControlShutdownClientString(CString sValue)
+{
+    m_sVersionControlShutdownClientString = sValue;
+}
+
 // 0x43C390
 BYTE* CBaldurMessage::PollSpecificMessageType(BYTE nMsgType, BYTE nMsgSubType, INT& nMsgFrom, DWORD& dwSize)
 {
-    // TODO: Incomplete.
+    for (INT nPlayerNumber = 0; nPlayerNumber < 6; nPlayerNumber++) {
+        if (g_pChitin->cNetwork.GetPlayerID(nPlayerNumber) != 0) {
+            CString sPlayerName;
+            g_pChitin->cNetwork.GetPlayerName(nPlayerNumber, sPlayerName);
+
+            if (g_pChitin->cNetwork.PeekSpecificMessage(sPlayerName, nMsgType, nMsgSubType) == TRUE) {
+                nMsgFrom = nPlayerNumber;
+                return g_pChitin->cNetwork.FetchSpecificMessage(sPlayerName,
+                    nMsgType,
+                    nMsgSubType,
+                    dwSize);
+            }
+        }
+    }
 
     return NULL;
 }
@@ -630,7 +1473,132 @@ BYTE* CBaldurMessage::PollSpecificMessageType(BYTE nMsgType, BYTE nMsgSubType, I
 // 0x43C4A0
 void CBaldurMessage::HandleBlockingMessages()
 {
-    // TODO: Incomplete.
+    INT nMsgFrom;
+    BYTE* pData;
+    DWORD dwSize;
+
+    m_bInHandleBlockingMessages = TRUE;
+
+    pData = PollSpecificMessageType(MSG_TYPE_RESOURCE,
+        MSG_SUBTYPE_RESOURCE_DEMAND,
+        nMsgFrom,
+        dwSize);
+    if (pData != NULL) {
+        OnResourceDemanded(nMsgFrom, pData, dwSize);
+        delete pData;
+    }
+
+    pData = PollSpecificMessageType(MSG_TYPE_MPSETTINGS,
+        MSG_SUBTYPE_MPSETTINGS_FULLDEMAND,
+        nMsgFrom,
+        dwSize);
+    if (pData != NULL) {
+        OnSettingsFullDemanded(nMsgFrom);
+        delete pData;
+    }
+
+    pData = PollSpecificMessageType(MSG_TYPE_PLAYERCHAR,
+        MSG_SUBTYPE_PLAYERCHAR_UPDATE_DEMAND,
+        nMsgFrom,
+        dwSize);
+    if (pData != NULL) {
+        OnUpdateDemandCharacterSlot(nMsgFrom, pData, dwSize);
+        delete pData;
+    }
+
+    pData = PollSpecificMessageType(MSG_TYPE_PLAYERCHAR,
+        MSG_SUBTYPE_PLAYERCHAR_DEMAND_SLOT,
+        nMsgFrom,
+        dwSize);
+    if (pData != NULL) {
+        OnDemandCharacterSlot(nMsgFrom, pData, dwSize);
+        delete pData;
+    }
+
+    pData = PollSpecificMessageType(MSG_TYPE_SWAPITEM,
+        MSG_SUBTYPE_SWAPITEM_REQUEST,
+        nMsgFrom,
+        dwSize);
+    if (pData != NULL) {
+        OnSwapItemRequest(nMsgFrom, pData, dwSize);
+        delete pData;
+    }
+
+    pData = PollSpecificMessageType(MSG_TYPE_DIALOG,
+        MSG_SUBTYPE_DIALOG_PERMIT_REQUEST,
+        nMsgFrom,
+        dwSize);
+    if (pData != NULL) {
+        OnDialogRequestToServer(nMsgFrom, pData, dwSize);
+        delete pData;
+    }
+
+    pData = PollSpecificMessageType(MSG_TYPE_LEAVEAREALUA,
+        MSG_SUBTYPE_LEAVEAREALUA_PERMIT_REQUEST,
+        nMsgFrom,
+        dwSize);
+    if (pData != NULL) {
+        OnLeaveAreaLuaRequestToServer(nMsgFrom, pData, dwSize);
+        delete pData;
+    }
+
+    pData = PollSpecificMessageType(MSG_TYPE_LEAVEAREANAME,
+        MSG_SUBTYPE_LEAVEAREANAME_PERMIT_REQUEST,
+        nMsgFrom,
+        dwSize);
+    if (pData != NULL) {
+        OnLeaveAreaNameRequestToServer(nMsgFrom, pData, dwSize);
+        delete pData;
+    }
+
+    pData = PollSpecificMessageType(MSG_TYPE_MPSETTINGS,
+        MSG_SUBTYPE_MPSETTINGS_DEMAND_NIGHTMAREMODE,
+        nMsgFrom,
+        dwSize);
+    if (pData != NULL) {
+        OnDemandSettingsNightmareMode(nMsgFrom);
+        delete pData;
+    }
+
+    pData = PollSpecificMessageType(MSG_TYPE_PLAYERCHAR,
+        MSG_SUBTYPE_PLAYERCHAR_70,
+        nMsgFrom,
+        dwSize);
+    if (pData != NULL) {
+        OnDemandSettingsNightmareMode(nMsgFrom);
+        delete pData;
+    }
+
+    m_bInHandleBlockingMessages = FALSE;
+}
+
+// 0x43D3D0
+BOOL CBaldurMessage::SendSettingsNightmareMode(const CString& sPlayerName)
+{
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || !g_pChitin->cNetwork.GetSessionHosting()) {
+        return FALSE;
+    }
+
+    BOOL bNightmareMode = g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nNightmareMode;
+
+    if (sPlayerName != "") {
+        g_pChitin->cNetwork.SendSpecificMessage(sPlayerName,
+            CNetwork::SEND_GUARANTEED,
+            MSG_TYPE_MPSETTINGS,
+            MSG_SUBTYPE_MPSETTINGS_NIGHTMAREMODE,
+            &bNightmareMode,
+            sizeof(bNightmareMode));
+    } else {
+        g_pChitin->cNetwork.SendSpecificMessage(CString(""),
+            CNetwork::SEND_ALL_PLAYERS | CNetwork::SEND_GUARANTEED | CNetwork::SEND_JOINING_PLAYERS,
+            MSG_TYPE_MPSETTINGS,
+            MSG_SUBTYPE_MPSETTINGS_NIGHTMAREMODE,
+            &bNightmareMode,
+            sizeof(bNightmareMode));
+    }
+
+    return TRUE;
 }
 
 // 0x43D590
@@ -639,6 +1607,30 @@ BOOLEAN CBaldurMessage::DemandSettingsNightmareMode(BOOLEAN wait)
     // TODO: Incomplete.
 
     return FALSE;
+}
+
+// 0x43D810
+BOOL CBaldurMessage::OnDemandSettingsNightmareMode(INT nMsgFrom)
+{
+    CString sPlayerName;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || !g_pChitin->cNetwork.GetSessionHosting()) {
+        return FALSE;
+    }
+
+    g_pChitin->cNetwork.GetPlayerName(nMsgFrom, sPlayerName);
+    SendSettingsNightmareMode(sPlayerName);
+
+    return TRUE;
+}
+
+// 0x43DF40
+BOOLEAN CBaldurMessage::OnMovieEndCredits(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize)
+{
+    CInfGame::byte_8E7528 = TRUE;
+    g_pBaldurChitin->m_pEngineWorld->ReadyEndCredits(FALSE);
+    return TRUE;
 }
 
 // 0x43DF60
