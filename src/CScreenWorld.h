@@ -50,6 +50,7 @@ public:
     /* 00C0 */ void TimerAsynchronousUpdate() override;
     /* 00C4 */ void TimerSynchronousUpdate() override;
     /* 00F0 */ void OnRestButtonClick() override;
+    /* 0104 */ void CancelEngine() override;
     /* 010C */ void UpdatePartyGoldStatus() override;
 
     void StartScroll(CPoint dest, SHORT speed);
@@ -61,6 +62,7 @@ public:
     void SetCurrentXP(DWORD dwCurrentXP);
     void AddGold(DWORD dwGold);
     void StopContainer();
+    void StopCommand();
     void StartStore(const CAIObjectType& cAIProprietor, const CAIObjectType& cAICustomer, CResRef cResStore, BOOLEAN bInitiate);
     void StopStore();
     void DisplayText(const CString& sName, const CString& sText, COLORREF rgbNameColor, COLORREF rgbTextColor, LONG lMarker, BOOLEAN bMoveToTop);

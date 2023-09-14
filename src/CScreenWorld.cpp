@@ -536,6 +536,12 @@ void CScreenWorld::StopContainer()
     // TODO: Incomplete.
 }
 
+// 0x6912A0
+void CScreenWorld::StopCommand()
+{
+    // TODO: Incomplete.
+}
+
 // FIXME: `cResStore` should be reference.
 //
 // 0x6913C0
@@ -770,6 +776,37 @@ void CScreenWorld::CheckEndOfHardPause()
         }
 
         g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->SetListenToJoinOption(m_bEndMajorEventListenToJoin, TRUE);
+    }
+}
+
+// 0x693860
+void CScreenWorld::CancelEngine()
+{
+    switch (field_EA4) {
+    case -1:
+    case 0:
+    case 7:
+        break;
+    case 6:
+        StopCommand();
+        field_EA4 = -1;
+        break;
+    case 8:
+        StopContainer();
+        field_EA4 = -1;
+        break;
+    case 15:
+    case 17:
+        StopDeath();
+        field_EA4 = -1;
+        break;
+    case 19:
+    case 21:
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+        // __LINE__: 9124
+        UTIL_ASSERT(FALSE);
     }
 }
 
