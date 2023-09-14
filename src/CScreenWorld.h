@@ -112,6 +112,7 @@ public:
     /* 0EE0 */ LONG field_EE0;
     /* 0EF0 */ int field_EF0;
     /* 0F04 */ unsigned char field_F04;
+    /* 0F37 */ unsigned char field_F37;
     /* 0F46 */ CWeather m_weather;
     /* 10B2 */ short field_10B2;
     /* 10B4 */ int field_10B4;

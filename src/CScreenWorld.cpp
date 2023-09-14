@@ -541,7 +541,34 @@ void CScreenWorld::StopContainer()
 // 0x6912A0
 void CScreenWorld::StopCommand()
 {
-    // TODO: Incomplete.
+    field_F37 = 0;
+
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
+
+    m_cUIManager.GetPanel(6)->SetActive(FALSE);
+
+    for (INT nId = 6; nId <= 17; nId++) {
+        // FIXME: `GetPanel` should be outside of the loop.
+        CUIControlBase* pControl = m_cUIManager.GetPanel(1)->GetControl(nId);
+        if (pControl != NULL) {
+            pControl->SetActive(TRUE);
+        }
+    }
+
+    // FIXME: Global.
+    if (g_pBaldurChitin->m_pEngineWorld->field_11F0) {
+        m_cUIManager.GetPanel(1)->InvalidateRect(NULL);
+    }
+
+    // FIXME: Global.
+    if (g_pBaldurChitin->m_pEngineWorld->field_11F4) {
+        // FIXME: Repeats.
+        m_cUIManager.GetPanel(GetPanel_22_0())->SetActive(TRUE);
+        m_cUIManager.GetPanel(GetPanel_22_0())->InvalidateRect(NULL);
+    }
+
+    field_EA4 = -1;
 }
 
 // FIXME: `cResStore` should be reference.
