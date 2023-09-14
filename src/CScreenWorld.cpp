@@ -856,6 +856,34 @@ void CScreenWorld::CancelEngine()
     }
 }
 
+// 0x694460
+void CScreenWorld::SetChatEditBoxStatus(const CString& sChatText, BOOL bInputCapture)
+{
+    CUIPanel* pPanel = GetManager()->GetPanel(GetPanel_22_0());
+
+    DWORD dwEditId = -1;
+    if (pPanel != NULL) {
+        switch (pPanel->m_nID) {
+        case 19:
+        case 21:
+            dwEditId = 5;
+            break;
+        case 22:
+            dwEditId = 3;
+            break;
+        }
+    }
+
+    CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(dwEditId));
+    if (pEdit != NULL) {
+        pEdit->SetText(sChatText);
+
+        if (bInputCapture) {
+            m_cUIManager.SetCapture(pEdit, CUIManager::KEYBOARD);
+        }
+    }
+}
+
 // 0x694AE0
 void CScreenWorld::UpdatePartyGoldStatus()
 {
