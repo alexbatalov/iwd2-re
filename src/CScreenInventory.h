@@ -53,6 +53,7 @@ public:
     /* 00C4 */ void TimerSynchronousUpdate() override;
     /* 00E0 */ void OnPortraitLClick(DWORD nPortrait) override;
     /* 00E8 */ void UpdateContainerStatus(LONG nContainerId, SHORT nSlotNum) override;
+    /* 00F0 */ void OnRestButtonClick() override;
     /* 0104 */ void CancelEngine() override;
     /* 0108 */ void UpdateCharacterStatus(LONG nCharacterId) override;
     /* 010C */ void UpdatePartyGoldStatus() override;
@@ -78,7 +79,6 @@ public:
     void OnCancelButtonClick();
     void ResetErrorPanel(CUIPanel* pPanel);
     void UpdateErrorPanel(CUIPanel* pPanel);
-    void OnRestButtonClick();
     void IsAbilitiesButtonActive();
     void SetUseButtonMode(INT nMode);
     void SetAbilitiesButtonMode(INT nMode);
