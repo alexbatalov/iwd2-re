@@ -98,8 +98,11 @@ public:
     /* 0EA4 */ int field_EA4;
     /* 0EA8 */ CUIControlTextDisplay* field_EA8;
     /* 0EE0 */ LONG field_EE0;
+    /* 0EF0 */ int field_EF0;
     /* 0F04 */ unsigned char field_F04;
     /* 0F46 */ CWeather m_weather;
+    /* 10B2 */ short field_10B2;
+    /* 10B4 */ int field_10B4;
     /* 10D4 */ BOOLEAN m_bSetNightOnActivate;
     /* 10D5 */ BOOLEAN m_bSetDayOnActivate;
     /* 10DA */ DWORD m_deltaTime;
@@ -127,9 +130,17 @@ public:
     /* 119C */ BOOLEAN m_bPlayEndCredits;
     /* 119D */ BOOLEAN field_119D;
     /* 119E */ BOOLEAN m_bPendingReformParty;
+    /* 11BA */ DWORD field_11BA;
     /* 11CA */ BYTE m_nAutoHideInterface;
     /* 11CC */ INT m_nAutoUnhideInterface;
     /* 1204 */ unsigned char field_1204;
+};
+
+class CUIControlButtonDialog : public CUIControlButton {
+public:
+    CUIControlButtonDialog(CUIPanel* pPanel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonDialog() override;
+    void OnLButtonClick(CPoint pt) override;
 };
 
 class CUIControlButtonWorldContainerIcon : public CUIControlButton {

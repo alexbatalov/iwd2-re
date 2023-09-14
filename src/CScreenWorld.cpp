@@ -1034,6 +1034,40 @@ void CScreenWorld::DisableKeyRepeat()
 
 // -----------------------------------------------------------------------------
 
+// 0x6967A0
+CUIControlButtonDialog::CUIControlButtonDialog(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+}
+
+// 0x6967F0
+CUIControlButtonDialog::~CUIControlButtonDialog()
+{
+}
+
+// 0x696890
+void CUIControlButtonDialog::OnLButtonClick(CPoint pt)
+{
+    CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 10842
+    UTIL_ASSERT(pWorld != NULL);
+
+    if (GetTickCount() > pWorld->field_11BA + 600) {
+        pWorld->field_1150 = 1;
+        if (!pWorld->field_10B4) {
+            pWorld->field_EF0 = pWorld->field_10B2;
+        }
+        pWorld->field_11BA = GetTickCount();
+    }
+
+    SetActive(FALSE);
+    m_pPanel->InvalidateRect(NULL);
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x6974B0
 CUIControlButtonWorldContainerIcon::CUIControlButtonWorldContainerIcon(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
