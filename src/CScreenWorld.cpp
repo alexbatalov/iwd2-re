@@ -448,6 +448,8 @@ void CScreenWorld::TimerSynchronousUpdate()
             pArea->Render(pVidMode, 0);
             pVidMode->DisableScissoring();
         }
+
+        pVidMode->Flip(TRUE);
     }
 }
 
