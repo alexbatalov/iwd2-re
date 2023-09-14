@@ -52,6 +52,7 @@ public:
     /* 00F0 */ void OnRestButtonClick() override;
     /* 0104 */ void CancelEngine() override;
     /* 010C */ void UpdatePartyGoldStatus() override;
+    /* 0110 */ void GetChatEditBoxStatus(CString& sChatText, BOOL& bInputCapture) override;
     /* 0114 */ void SetChatEditBoxStatus(const CString& sChatText, BOOL bInputCapture) override;
 
     void StartScroll(CPoint dest, SHORT speed);
