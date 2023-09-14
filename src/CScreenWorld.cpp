@@ -610,6 +610,50 @@ void CScreenWorld::StopDeath()
     // TODO: Incomplete.
 }
 
+// 0x692FD0
+DWORD CScreenWorld::GetPanel_21_7()
+{
+    if (g_pBaldurChitin->cNetwork.GetSessionOpen()
+        && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+        return 21;
+    } else {
+        return 7;
+    }
+}
+
+// 0x693000
+DWORD CScreenWorld::GetPanel_22_0()
+{
+    if (g_pBaldurChitin->cNetwork.GetSessionOpen()
+        && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+        return 22;
+    } else {
+        return 0;
+    }
+}
+
+// 0x693030
+DWORD CScreenWorld::GetPanel_21_0()
+{
+    if (g_pBaldurChitin->cNetwork.GetSessionOpen()
+        && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+        return 21;
+    } else {
+        return 0;
+    }
+}
+
+// 0x693060
+DWORD CScreenWorld::GetPanel_19_0()
+{
+    if (g_pBaldurChitin->cNetwork.GetSessionOpen()
+        && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+        return 19;
+    } else {
+        return 0;
+    }
+}
+
 // 0x693090
 void CScreenWorld::SetPendingChapterChange(BYTE nChapter, BYTE* szChapterResRef)
 {
@@ -1042,6 +1086,57 @@ void CScreenWorld::SetDialogTokens(CGameSprite* pCharacter)
         tlk.Fetch(27489, strRes); // "man"
         tlk.SetToken(CInfGame::TOKEN_GABBER_MANWOMAN, strRes.szText);
     }
+}
+
+// 0x695570
+void CScreenWorld::sub_695570(BOOL bActive, BOOL bInvalidate)
+{
+    CUIPanel* pActionPanel = m_cUIManager.GetPanel(1);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 10118
+    UTIL_ASSERT(pActionPanel != NULL);
+
+    CUIPanel* pCommandPanel = m_cUIManager.GetPanel(GetPanel_22_0());
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 10120
+    UTIL_ASSERT(pCommandPanel != NULL);
+
+    if (field_11F0) {
+        pActionPanel->SetActive(bActive);
+
+        if (bInvalidate) {
+            pActionPanel->InvalidateRect(NULL);
+        }
+    }
+
+    if (field_11F4) {
+        pCommandPanel->SetActive(bActive);
+
+        if (bInvalidate) {
+            pCommandPanel->InvalidateRect(NULL);
+        }
+    }
+}
+
+// 0x695650
+void CScreenWorld::sub_695650(BOOL bEnable)
+{
+    CUIPanel* pActionPanel = m_cUIManager.GetPanel(1);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 10166
+    UTIL_ASSERT(pActionPanel != NULL);
+
+    CUIPanel* pCommandPanel = m_cUIManager.GetPanel(GetPanel_22_0());
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 10168
+    UTIL_ASSERT(pCommandPanel != NULL);
+
+    pActionPanel->SetEnabled(bEnable);
+    pCommandPanel->SetEnabled(bEnable);
 }
 
 // 0x6984F0

@@ -73,6 +73,10 @@ public:
     void HideInterface();
     void UnhideInterface();
     void StopDeath();
+    DWORD GetPanel_21_7();
+    DWORD GetPanel_22_0();
+    DWORD GetPanel_21_0();
+    DWORD GetPanel_19_0();
     void SetPendingChapterChange(BYTE nChapter, BYTE* szChapterResRef);
     void SetPendingMovie(BYTE* szMovieResRef);
     void StartSaveGameMultiplayerHost();
@@ -84,6 +88,8 @@ public:
     void SetPendingRest(INT nHP, BOOLEAN bRenting, BOOLEAN bMovie);
     void CheckEndOfHardPause();
     void SetDialogTokens(CGameSprite* pCharacter);
+    void sub_695570(BOOL bActive, BOOL bInvalidate);
+    void sub_695650(BOOL bEnable);
     void EnableKeyRepeat();
     void DisableKeyRepeat();
 
@@ -136,6 +142,8 @@ public:
     /* 11BA */ DWORD field_11BA;
     /* 11CA */ BYTE m_nAutoHideInterface;
     /* 11CC */ INT m_nAutoUnhideInterface;
+    /* 11F0 */ int field_11F0;
+    /* 11F4 */ int field_11F4;
     /* 1204 */ unsigned char field_1204;
 };
 
