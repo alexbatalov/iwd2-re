@@ -856,6 +856,61 @@ void CScreenWorld::CancelEngine()
     }
 }
 
+// 0x694210
+void CScreenWorld::CopyChatEditBox(CUIPanel* pFrom, CUIPanel* pTo)
+{
+    DWORD dwFromEditId = -1;
+    if (pFrom != NULL) {
+        switch (pFrom->m_nID) {
+        case 19:
+        case 21:
+            dwFromEditId = 5;
+            break;
+        case 22:
+            dwFromEditId = 3;
+            break;
+        }
+    }
+
+    DWORD dwToEditId = -1;
+    if (pTo != NULL) {
+        switch (pTo->m_nID) {
+        case 19:
+        case 21:
+            dwToEditId = 5;
+            break;
+        case 22:
+            dwToEditId = 3;
+            break;
+        }
+    }
+
+    CString sText;
+    CUIControlEdit* pToEdit = NULL;
+    CUIControlEdit* pFromEdit = NULL;
+
+    if (dwToEditId != -1) {
+        pToEdit = static_cast<CUIControlEdit*>(pTo->GetControl(dwToEditId));
+    }
+
+    if (dwFromEditId != -1) {
+        pFromEdit = static_cast<CUIControlEdit*>(pFrom->GetControl(dwFromEditId));
+    }
+
+    if (pToEdit != NULL) {
+        if (pFromEdit != NULL) {
+            sText = pFromEdit->GetText();
+            pToEdit->SetText(sText);
+
+            if (m_cUIManager.m_pFocusedControl == pFromEdit) {
+                m_cUIManager.SetCapture(pToEdit, CUIManager::KEYBOARD);
+            }
+        } else {
+            pToEdit->SetText(CString(""));
+        }
+    }
+}
+
 // 0x694350
 void CScreenWorld::GetChatEditBoxStatus(CString& sChatText, BOOL& bInputCapture)
 {

@@ -89,6 +89,7 @@ public:
     void StartReformPartyMultiplayerHost();
     void SetPendingRest(INT nHP, BOOLEAN bRenting, BOOLEAN bMovie);
     void CheckEndOfHardPause();
+    void CopyChatEditBox(CUIPanel* pFrom, CUIPanel* pTo);
     void SetDialogTokens(CGameSprite* pCharacter);
     void sub_695570(BOOL bActive, BOOL bInvalidate);
     void sub_695650(BOOL bEnable);
