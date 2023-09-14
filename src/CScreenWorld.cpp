@@ -538,6 +538,53 @@ void CScreenWorld::StopContainer()
     // TODO: Incomplete.
 }
 
+// 0x691140
+void CScreenWorld::StartCommand()
+{
+    switch (field_EA4) {
+    case -1:
+    case 0:
+    case 7:
+        break;
+    case 6:
+        StopCommand();
+        field_EA4 = -1;
+        break;
+    case 8:
+        StopContainer();
+        field_EA4 = -1;
+        break;
+    case 15:
+    case 17:
+        StopDeath();
+        field_EA4 = -1;
+        break;
+    case 19:
+    case 21:
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+        // __LINE__: 5469
+        UTIL_ASSERT(FALSE);
+    }
+
+    field_EA4 = 6;
+    m_cUIManager.ClearTooltip();
+
+    for (INT nId = 6; nId <= 17; nId++) {
+        // FIXME: `GetPanel` should be outside of the loop.
+        CUIControlBase* pControl = m_cUIManager.GetPanel(1)->GetControl(nId);
+        if (pControl != NULL) {
+            pControl->SetActive(FALSE);
+        }
+    }
+
+    m_cUIManager.GetPanel(GetPanel_22_0())->SetActive(FALSE);
+    m_cUIManager.GetPanel(6)->SetActive(TRUE);
+    m_cUIManager.SetCapture(m_cUIManager.GetPanel(6)->GetControl(0), CUIManager::KEYBOARD);
+    m_cUIManager.GetPanel(6)->InvalidateRect(NULL);
+}
+
 // 0x6912A0
 void CScreenWorld::StopCommand()
 {
