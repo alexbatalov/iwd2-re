@@ -970,6 +970,40 @@ void CScreenWorld::SetDialogTokens(CGameSprite* pCharacter)
     }
 }
 
+// 0x6984F0
+void CScreenWorld::OnRestButtonClick()
+{
+    CSingleLock renderLock(&(GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 12373
+    UTIL_ASSERT(pGame != NULL);
+
+    STRREF strError;
+    if (pGame->CanRestParty(strError, 0, 0, 0)) {
+        CInfGame::m_bHealPartyOnRest = GetPrivateProfileIntA("Game Options",
+            "Heal Party on Rest",
+            0,
+            g_pBaldurChitin->GetIniFileName());
+        pGame->RestParty(1, 0);
+        CInfGame::m_bHealPartyOnRest = FALSE;
+    } else {
+        STR_RES strRes;
+        g_pBaldurChitin->GetTlkTable().Fetch(strError, strRes);
+        DisplayText(CString(""),
+            strRes.szText,
+            0,
+            RGB(63, 255, 12),
+            -1,
+            FALSE);
+    }
+
+    renderLock.Unlock();
+}
+
 // 0x6986A0
 void CScreenWorld::EnableKeyRepeat()
 {

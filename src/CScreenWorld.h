@@ -49,6 +49,7 @@ public:
     /* 00A8 */ BYTE* GetVirtualKeysFlags() override;
     /* 00C0 */ void TimerAsynchronousUpdate() override;
     /* 00C4 */ void TimerSynchronousUpdate() override;
+    /* 00F0 */ void OnRestButtonClick() override;
 
     void StartScroll(CPoint dest, SHORT speed);
     void AsynchronousUpdate(BOOL bActiveEngine);

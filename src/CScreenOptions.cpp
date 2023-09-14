@@ -1621,7 +1621,7 @@ void CScreenOptions::OnErrorButtonClick(INT nButton)
             DismissPopup();
             lock.Unlock();
 
-            CInfGame::dword_8E7524 = FALSE;
+            CInfGame::m_bHealPartyOnRest = FALSE;
             pGame->RestParty(1, 0);
             break;
         case 1:
@@ -1629,9 +1629,9 @@ void CScreenOptions::OnErrorButtonClick(INT nButton)
             DismissPopup();
             lock.Unlock();
 
-            CInfGame::dword_8E7524 = FALSE;
+            CInfGame::m_bHealPartyOnRest = FALSE;
             pGame->RestParty(1, 0);
-            CInfGame::dword_8E7524 = TRUE;
+            CInfGame::m_bHealPartyOnRest = TRUE;
             break;
         default:
             lock.Lock(INFINITE);

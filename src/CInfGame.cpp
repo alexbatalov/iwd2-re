@@ -664,7 +664,7 @@ const CString CInfGame::SILHOUETTE_PORTRAIT_SM("noportsm");
 const CString CInfGame::SILHOUETTE_PORTRAIT_LG("noportlg");
 
 // 0x8E7524
-BOOL CInfGame::dword_8E7524;
+BOOL CInfGame::m_bHealPartyOnRest;
 
 // 0x8E7528
 BOOLEAN CInfGame::byte_8E7528;

@@ -941,15 +941,15 @@ void CScreenJournal::OnErrorButtonClick(INT nButton)
         case 0:
             DismissPopup();
 
-            CInfGame::dword_8E7524 = FALSE;
+            CInfGame::m_bHealPartyOnRest = FALSE;
             pGame->RestParty(1, 0);
             break;
         case 1:
             DismissPopup();
 
-            CInfGame::dword_8E7524 = TRUE;
+            CInfGame::m_bHealPartyOnRest = TRUE;
             pGame->RestParty(1, 0);
-            CInfGame::dword_8E7524 = FALSE;
+            CInfGame::m_bHealPartyOnRest = FALSE;
             break;
         case 2:
             DismissPopup();

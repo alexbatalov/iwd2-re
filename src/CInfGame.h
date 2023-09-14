@@ -292,7 +292,7 @@ public:
     static const CString SILHOUETTE_PORTRAIT_SM;
     static const CString SILHOUETTE_PORTRAIT_LG;
 
-    static BOOL dword_8E7524;
+    static BOOL m_bHealPartyOnRest;
     static BOOLEAN byte_8E7528;
     static int dword_8E752C;
 
