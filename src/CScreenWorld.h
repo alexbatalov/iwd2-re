@@ -136,6 +136,14 @@ public:
     /* 1204 */ unsigned char field_1204;
 };
 
+class CUIControlButtonWorldContainerSlot : public CUIControlButton {
+public:
+    CUIControlButtonWorldContainerSlot(CUIPanel* pPanel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonWorldContainerSlot() override;
+    BOOL Render(BOOL bForce) override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlButtonDialog : public CUIControlButton {
 public:
     CUIControlButtonDialog(CUIPanel* pPanel, UI_CONTROL_BUTTON* controlInfo);

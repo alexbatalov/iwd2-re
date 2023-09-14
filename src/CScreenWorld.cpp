@@ -1034,6 +1034,33 @@ void CScreenWorld::DisableKeyRepeat()
 
 // -----------------------------------------------------------------------------
 
+// 0x6956F0
+CUIControlButtonWorldContainerSlot::CUIControlButtonWorldContainerSlot(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+}
+
+// 0x695740
+CUIControlButtonWorldContainerSlot::~CUIControlButtonWorldContainerSlot()
+{
+}
+
+// 0x6957E0
+void CUIControlButtonWorldContainerSlot::OnLButtonClick(CPoint pt)
+{
+    // TODO: Incomplete.
+}
+
+// 0x696140
+BOOL CUIControlButtonWorldContainerSlot::Render(BOOL bForce)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x6967A0
 CUIControlButtonDialog::CUIControlButtonDialog(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
