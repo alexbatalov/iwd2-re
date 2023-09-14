@@ -773,6 +773,41 @@ void CScreenWorld::CheckEndOfHardPause()
     }
 }
 
+// 0x694AE0
+void CScreenWorld::UpdatePartyGoldStatus()
+{
+    CUIPanel* pPanel;
+
+    switch (field_EA4) {
+    case 7:
+    case 19:
+    case 21:
+        pPanel = m_cUIManager.GetPanel(field_EA4);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+        // __LINE__: 9851
+        UTIL_ASSERT(pPanel != NULL);
+
+        UpdateLabel(pPanel,
+            0x10000009,
+            "%d",
+            g_pBaldurChitin->GetObjectGame()->m_nPartyGold);
+        break;
+    case 8:
+        pPanel = m_cUIManager.GetPanel(field_EA4);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+        // __LINE__: 9841
+        UTIL_ASSERT(pPanel != NULL);
+
+        UpdateLabel(pPanel,
+            0x10000036,
+            "%d",
+            g_pBaldurChitin->GetObjectGame()->m_nPartyGold);
+        break;
+    }
+}
+
 // 0x694BD0
 void CScreenWorld::SetDialogTokens(CGameSprite* pCharacter)
 {
