@@ -607,7 +607,31 @@ void CScreenWorld::UnhideInterface()
 // 0x692E80
 void CScreenWorld::StopDeath()
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 7935
+    UTIL_ASSERT(pGame != NULL);
+
+    pGame->SetTempCursor(4);
+
+    pGame->GetWorldTimer()->StartTime();
+
+    m_bPaused = FALSE;
+    pGame->field_43E2 = -1;
+
+    m_cUIManager.GetPanel(17)->SetActive(FALSE);
+    m_cUIManager.GetPanel(1)->SetActive(TRUE);
+    m_cUIManager.GetPanel(GetPanel_22_0())->SetActive(TRUE);
+    m_cUIManager.GetPanel(1)->InvalidateRect(NULL);
+    m_cUIManager.GetPanel(GetPanel_22_0())->InvalidateRect(NULL);
+
+    field_EA4 = -1;
+
+    if (m_cUIManager.m_pFocusedControl != NULL) {
+        // NOTE: Uninline.
+        m_cUIManager.KillCapture();
+    }
 }
 
 // 0x692FD0
