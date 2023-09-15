@@ -68,7 +68,7 @@ public:
     /* 0068 */ BOOLEAN m_pbCharacterReady[6];
     /* 006E */ BYTE m_pnCharacterStatus[6];
     /* 0074 */ PLAYER_ID m_pnLoadGameControlledByPlayer[6];
-    /* 008C */ unsigned char field_8C;
+    /* 008C */ BOOLEAN m_bRefreshCharacters;
     /* 008D */ BYTE m_nImportingBitField;
     /* 008E */ BOOLEAN m_bRestrictStoreOption;
     /* 008F */ BOOLEAN m_bJoinRequests;

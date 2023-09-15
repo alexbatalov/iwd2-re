@@ -85,7 +85,7 @@ void CMultiplayerSettings::InitializeSettings()
         m_pnPlayerReady[nIndex] = 0;
     }
 
-    field_8C = 0;
+    m_bRefreshCharacters = FALSE;
 
     for (INT nPlayerSlot = 0; nPlayerSlot < MAX_PLAYERS; nPlayerSlot++) {
         m_pbCharacterReady[nPlayerSlot] = FALSE;
@@ -146,7 +146,111 @@ void CMultiplayerSettings::InitializeSettings()
 // 0x517850
 void CMultiplayerSettings::Marshal(BYTE** pData, DWORD* dwSize)
 {
-    // TODO: Incomplete.
+    DWORD nMsgPtr = 0;
+    BYTE nPermission;
+    INT nIndexPlayer;
+    INT nIndexCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMultiplayerSettings.cpp
+    // __LINE__: 359
+    UTIL_ASSERT_MSG(pData != NULL && dwSize != NULL, "CMultiplayerSettings::Marshal: Bad pointer to data or data size.");
+
+    *dwSize = GetDataSize();
+    *pData = new BYTE[*dwSize];
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMultiplayerSettings.cpp
+    // __LINE__: 366
+    UTIL_ASSERT(*pData != NULL);
+
+    memset(*pData, 0, *dwSize);
+
+    *reinterpret_cast<BOOLEAN*>(*pData + nMsgPtr) = m_bArbitrationLockStatus;
+    nMsgPtr += sizeof(BOOLEAN);
+
+    *reinterpret_cast<BOOLEAN*>(*pData + nMsgPtr) = m_bArbitrationLockAllowInput;
+    nMsgPtr += sizeof(BOOLEAN);
+
+    for (nPermission = 0; nPermission < CGamePermission::TOTAL_PERMISSIONS; nPermission++) {
+        *reinterpret_cast<BOOLEAN*>(*pData + nMsgPtr) = m_cDefaultPermissions.GetSinglePermission(nPermission);
+        nMsgPtr += sizeof(BOOLEAN);
+    }
+
+    for (nIndexPlayer = 0; nIndexPlayer < 6; nIndexPlayer++) {
+        *reinterpret_cast<PLAYER_ID*>(*pData + nMsgPtr) = g_pChitin->cNetwork.GetPlayerID(nIndexPlayer);
+        nMsgPtr += sizeof(PLAYER_ID);
+
+        for (nPermission = 0; nPermission < CGamePermission::TOTAL_PERMISSIONS; nPermission++) {
+            *reinterpret_cast<BOOLEAN*>(*pData + nMsgPtr) = m_pcPermissions[nIndexPlayer].GetSinglePermission(nPermission);
+            nMsgPtr += sizeof(BOOLEAN);
+        }
+
+        *reinterpret_cast<PLAYER_ID*>(*pData + nMsgPtr) = g_pChitin->cNetwork.field_772[nIndexPlayer];
+        nMsgPtr += sizeof(PLAYER_ID);
+    }
+
+    *reinterpret_cast<BOOLEAN*>(*pData + nMsgPtr) = m_bRefreshCharacters;
+    nMsgPtr += sizeof(BOOLEAN);
+
+    m_bRefreshCharacters = FALSE;
+
+    for (nIndexCharacter = 0; nIndexCharacter < 6; nIndexCharacter++) {
+        *reinterpret_cast<BOOLEAN*>(*pData + nMsgPtr) = m_pbCharacterReady[nIndexCharacter];
+        nMsgPtr += sizeof(BOOLEAN);
+    }
+
+    for (nIndexCharacter = 0; nIndexCharacter < 6; nIndexCharacter++) {
+        *reinterpret_cast<BYTE*>(*pData + nMsgPtr) = m_pnCharacterStatus[nIndexCharacter];
+        nMsgPtr += sizeof(BYTE);
+    }
+
+    for (nIndexCharacter = 0; nIndexCharacter < 6; nIndexCharacter++) {
+        *reinterpret_cast<PLAYER_ID*>(*pData + nMsgPtr) = m_pnCharacterControlledByPlayer[nIndexCharacter];
+        nMsgPtr += sizeof(PLAYER_ID);
+    }
+
+    *reinterpret_cast<BYTE*>(*pData + nMsgPtr) = m_nImportingBitField;
+    nMsgPtr += sizeof(BYTE);
+
+    *reinterpret_cast<BOOLEAN*>(*pData + nMsgPtr) = m_bRestrictStoreOption;
+    nMsgPtr += sizeof(BOOLEAN);
+
+    *reinterpret_cast<BOOLEAN*>(*pData + nMsgPtr) = m_bJoinRequests;
+    nMsgPtr += sizeof(BOOLEAN);
+
+    *reinterpret_cast<LONG*>(*pData + nMsgPtr) = m_ptAreaStart.x;
+    nMsgPtr += sizeof(LONG);
+
+    *reinterpret_cast<LONG*>(*pData + nMsgPtr) = m_ptAreaStart.y;
+    nMsgPtr += sizeof(LONG);
+
+    DWORD nGore = g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bGore;
+    *reinterpret_cast<DWORD*>(*pData + nMsgPtr) = nGore;
+    nMsgPtr += sizeof(DWORD);
+
+    DWORD nGoreOption = g_pBaldurChitin->GetObjectGame()->GetOptions()->field_4;
+    *reinterpret_cast<DWORD*>(*pData + nMsgPtr) = nGoreOption;
+    nMsgPtr += sizeof(DWORD);
+
+    BYTE nAreaStringLength = min(m_sAreaName.GetLength(), 8);
+
+    *reinterpret_cast<BYTE*>(*pData + nMsgPtr) = nAreaStringLength;
+    nMsgPtr += sizeof(BYTE);
+
+    memcpy(*pData + nMsgPtr, m_sAreaName.GetBuffer(m_sAreaName.GetLength()), nAreaStringLength);
+    nMsgPtr += nAreaStringLength;
+
+    *reinterpret_cast<int*>(*pData + nMsgPtr) = m_nDifficultyLevel;
+    nMsgPtr += sizeof(int);
+
+    *reinterpret_cast<int*>(*pData + nMsgPtr) = field_BE;
+    nMsgPtr += sizeof(int);
+
+    *reinterpret_cast<int*>(*pData + nMsgPtr) = field_C2;
+    nMsgPtr += sizeof(int);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMultiplayerSettings.cpp
+    // __LINE__: 482
+    UTIL_ASSERT(nMsgPtr == *dwSize);
 }
 
 // 0x517B50
