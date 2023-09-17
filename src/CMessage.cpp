@@ -569,7 +569,7 @@ BOOL CBaldurMessage::SendPermissionToServer(const CString& sPlayerName, INT nPer
     INT nMsgPtr;
 
     if (!g_pChitin->cNetwork.GetSessionOpen()
-        || g_pChitin->cNetwork.GetSessionHosting() != TRUE) {
+        || g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
         return FALSE;
     }
 
@@ -677,7 +677,7 @@ BOOLEAN CBaldurMessage::SendPlayerReadyToServer(PLAYER_ID idPlayer, BOOLEAN bVal
     INT nMsgPtr;
 
     if (!g_pChitin->cNetwork.GetSessionOpen()
-        || g_pChitin->cNetwork.GetSessionHosting() != TRUE) {
+        || g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
         return FALSE;
     }
 
@@ -753,7 +753,7 @@ BOOL CBaldurMessage::SendCharacterReadyToServer(INT nCharacterSlot, BOOLEAN bCha
     INT nMsgPtr;
 
     if (!g_pChitin->cNetwork.GetSessionOpen()
-        || g_pChitin->cNetwork.GetSessionHosting() != TRUE) {
+        || g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
         return FALSE;
     }
 
