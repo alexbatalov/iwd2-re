@@ -140,6 +140,9 @@ public:
     static const BYTE MSG_TYPE_RESOURCE;
     static const BYTE MSG_SUBTYPE_RESOURCE_DEMAND;
 
+    static const BYTE MSG_TYPE_SIGNAL;
+    static const BYTE MSG_SUBTYPE_SIGNAL;
+    static const BYTE MSG_SUBTYPE_SIGNAL_REQUEST;
     static const BYTE SIGNAL_ALL_CLIENTS;
     static const BYTE SIGNAL_SERVER;
     static const BYTE SIGNAL_END_MAJOR_EVENT;
@@ -200,7 +203,10 @@ public:
     BOOLEAN SendChatMessage(CString& sChatMessage);
     void SetSignalDefaultSecondsToTimeout();
     BOOLEAN RequestClientSignal(BYTE signalToSend);
+    BOOLEAN OnRequestClientSignal(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
+    BOOLEAN RemoveSignalsFromQueue(BYTE signalType, BYTE signalData);
     BOOLEAN SendSignal(BYTE signalType, BYTE signalToSend);
+    BOOLEAN OnSignal(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
     BOOLEAN NonBlockingWaitForSignal(BYTE signalType, BYTE signalToWaitFor);
     BYTE KickOutWaitingForSignal(BYTE signalType, BYTE signalToWaitFor);
     BOOLEAN WaitForSignal(BYTE signalType, BYTE signalToWaitFor);

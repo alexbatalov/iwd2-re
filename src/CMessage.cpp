@@ -397,6 +397,15 @@ const BYTE CBaldurMessage::MSG_TYPE_RESOURCE = 82;
 // 0x84CFB1
 const BYTE CBaldurMessage::MSG_SUBTYPE_RESOURCE_DEMAND = 68;
 
+// 0x84CFB8
+const BYTE CBaldurMessage::MSG_TYPE_SIGNAL = 83;
+
+// 0x84CFB9
+const BYTE CBaldurMessage::MSG_SUBTYPE_SIGNAL = 83;
+
+// 0x84CFBA
+const BYTE CBaldurMessage::MSG_SUBTYPE_SIGNAL_REQUEST = 82;
+
 // 0x84CFBB
 const BYTE CBaldurMessage::SIGNAL_ALL_CLIENTS = 67;
 
@@ -1685,17 +1694,166 @@ void CBaldurMessage::SetSignalDefaultSecondsToTimeout()
 // 0x4331A0
 BOOLEAN CBaldurMessage::RequestClientSignal(BYTE signalToSend)
 {
-    // TODO: Incomplete.
+    DWORD dwSize;
+    INT nMsgPtr;
+    BYTE* pData;
 
-    return FALSE;
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || !g_pChitin->cNetwork.GetSessionHosting()) {
+        return FALSE;
+    }
+
+    dwSize = sizeof(BYTE) + sizeof(BOOLEAN);
+    pData = CreateBuffer(dwSize);
+    if (pData == NULL) {
+        return FALSE;
+    }
+
+    nMsgPtr = 0;
+
+    *reinterpret_cast<BYTE*>(pData + nMsgPtr) = signalToSend;
+    nMsgPtr += sizeof(BYTE);
+
+    *reinterpret_cast<BOOLEAN*>(pData + nMsgPtr) = CInfGame::byte_8E7528;
+    nMsgPtr += sizeof(BOOLEAN);
+
+    g_pChitin->cNetwork.SendSpecificMessage(CString(""),
+        CNetwork::SEND_GUARANTEED | CNetwork::SEND_ALL_PLAYERS,
+        MSG_TYPE_SIGNAL,
+        MSG_SUBTYPE_SIGNAL_REQUEST,
+        pData,
+        dwSize);
+
+    DestroyBuffer(pData);
+
+    return TRUE;
+}
+
+// 0x4332B0
+BOOLEAN CBaldurMessage::OnRequestClientSignal(INT nMsgFrom, BYTE* pMessage, DWORD dwSize)
+{
+    BYTE signalType;
+    INT nMsgPtr;
+
+    nMsgPtr = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    signalType = *reinterpret_cast<BYTE*>(pMessage + nMsgPtr);
+    nMsgPtr += sizeof(BYTE);
+
+    CInfGame::byte_8E7528 = *reinterpret_cast<BOOLEAN*>(pMessage + nMsgPtr) != 0;
+    nMsgPtr += sizeof(BOOLEAN);
+
+    if (signalType == SIGNAL_END_GAME) {
+        g_pBaldurChitin->m_pEngineConnection->ReadyEndCredits();
+    }
+
+    return SendSignal(SIGNAL_SERVER, signalType);
+}
+
+// 0x433310
+BOOLEAN CBaldurMessage::RemoveSignalsFromQueue(BYTE signalType, BYTE signalData)
+{
+    BYTE nStartNewQueue;
+    BYTE nEndNewQueue;
+    BYTE cnt;
+
+    nStartNewQueue = 0;
+    nEndNewQueue = 0;
+    for (cnt = 0; cnt < m_nSignalQueueSize; cnt++) {
+        if (m_pnSignalFrom[cnt] != -1) {
+            if (m_pnSignalType[cnt] == signalType && m_pnSignalData[cnt] == signalData) {
+                m_pnSignalFrom[cnt] = -1;
+                m_pnSignalType[cnt] = 0;
+                m_pnSignalData[cnt] = 0;
+            } else {
+                if (cnt != nEndNewQueue) {
+                    m_pnSignalFrom[nEndNewQueue] = m_pnSignalFrom[cnt];
+                    m_pnSignalType[nEndNewQueue] = m_pnSignalType[cnt];
+                    m_pnSignalData[nEndNewQueue] = m_pnSignalData[cnt];
+
+                    m_pnSignalFrom[cnt] = -1;
+                    m_pnSignalType[cnt] = 0;
+                    m_pnSignalData[cnt] = 0;
+                }
+                nEndNewQueue++;
+            }
+        }
+    }
+
+    m_nSignalQueueStart = nStartNewQueue;
+    m_nSignalQueueEnd = nEndNewQueue;
+
+    return TRUE;
 }
 
 // 0x4333C0
 BOOLEAN CBaldurMessage::SendSignal(BYTE signalType, BYTE signalToSend)
 {
-    // TODO: Incomplete.
+    CString sSendTo;
+    DWORD dwSize;
+    INT nMsgPtr;
+    BYTE* pData;
+    DWORD dwFlags;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()) {
+        return FALSE;
+    }
+
+    dwSize = sizeof(BYTE) + sizeof(BYTE);
+    pData = CreateBuffer(dwSize);
+    if (pData == NULL) {
+        return FALSE;
+    }
+
+    nMsgPtr = 0;
+
+    *reinterpret_cast<BYTE*>(pData + nMsgPtr) = signalType;
+    nMsgPtr += sizeof(BYTE);
+
+    *reinterpret_cast<BYTE*>(pData + nMsgPtr) = signalToSend;
+    nMsgPtr += sizeof(BYTE);
+
+    if (signalType == SIGNAL_SERVER) {
+        g_pChitin->cNetwork.GetHostPlayerName(sSendTo);
+        dwFlags = CNetwork::SEND_GUARANTEED;
+    } else {
+        sSendTo = "";
+        dwFlags = CNetwork::SEND_ALL_PLAYERS | CNetwork::SEND_GUARANTEED;
+    }
+
+    g_pChitin->cNetwork.SendSpecificMessage(sSendTo,
+        dwFlags,
+        MSG_TYPE_SIGNAL,
+        MSG_SUBTYPE_SIGNAL,
+        pData,
+        dwSize);
+
+    DestroyBuffer(pData);
 
     return FALSE;
+}
+
+// 0x433530
+BOOLEAN CBaldurMessage::OnSignal(INT nMsgFrom, BYTE* pMessage, DWORD dwSize)
+{
+    INT nMsgPtr;
+    BYTE signalType;
+    BYTE signalData;
+
+    nMsgPtr = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    signalType = *reinterpret_cast<BYTE*>(pMessage + nMsgPtr);
+    nMsgPtr += sizeof(BYTE);
+
+    signalData = *reinterpret_cast<BYTE*>(pMessage + nMsgPtr);
+    nMsgPtr += sizeof(BYTE);
+
+    m_pnSignalFrom[m_nSignalQueueEnd] = nMsgFrom;
+    m_pnSignalType[m_nSignalQueueEnd] = signalType;
+    m_pnSignalData[m_nSignalQueueEnd] = signalData;
+    m_nSignalQueueEnd = (m_nSignalQueueEnd + 1) % m_nSignalQueueSize;
+
+    return TRUE;
 }
 
 // 0x433580
