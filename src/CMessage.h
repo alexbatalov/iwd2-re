@@ -212,7 +212,13 @@ public:
     BOOLEAN WaitForSignal(BYTE signalType, BYTE signalToWaitFor);
     BOOLEAN SendProgressBarStatus(LONG nActionProgress, LONG nActionTarget, BOOLEAN bWaiting, LONG nWaitingReason, BOOLEAN bTimeoutVisible, DWORD nSecondsToTimeout);
     BOOLEAN OnProgressBarStatus(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
+    BOOLEAN SendDialogRequestToServer(BOOLEAN bTestPermission);
     BOOLEAN OnDialogRequestToServer(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
+    BOOLEAN OnDialogReplyFromServer(BYTE* pByteMessage, DWORD dwSize);
+    BOOLEAN DialogRequestKillOrUse();
+    BOOLEAN OnDialogRequestKillOrUse(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
+    BOOLEAN CancelDialogRequestToServer();
+    BOOLEAN OnCancelDialogRequestToServer(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
     BOOLEAN ChapterAnnounceStatus(BYTE nChapter, CResRef cResRef);
     BOOLEAN SendMapWorldAnnounceStatus(BOOLEAN bActive, PLAYER_ID idController, LONG nLeavingEdge);
     BOOLEAN MovieAnnounceStatus(CResRef cResMovie);

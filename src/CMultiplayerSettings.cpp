@@ -104,9 +104,9 @@ void CMultiplayerSettings::InitializeSettings()
     m_bJoinRequests = TRUE;
     m_bArbitrationLockStatus = FALSE;
     m_bArbitrationLockAllowInput = TRUE;
-    field_A2 = 0;
-    field_A6 = 0;
-    field_9E = 0;
+    m_nHostPermittedDialogDelay = 0;
+    m_bHostPermittedDialog = FALSE;
+    m_idHostPermittedDialog = 0;
     field_A7 = 0;
     field_A8 = 0;
     m_bFirstConnected = FALSE;

@@ -76,9 +76,9 @@ public:
     /* 0091 */ BOOLEAN m_bArbitrationLockAllowInput;
     /* 0092 */ CPoint m_ptAreaStart;
     /* 009A */ CString m_sAreaName;
-    /* 009E */ int field_9E;
-    /* 00A2 */ int field_A2;
-    /* 00A6 */ unsigned char field_A6;
+    /* 009E */ PLAYER_ID m_idHostPermittedDialog;
+    /* 00A2 */ LONG m_nHostPermittedDialogDelay;
+    /* 00A6 */ BOOLEAN m_bHostPermittedDialog;
     /* 00A7 */ unsigned char field_A7;
     /* 00A8 */ unsigned char field_A8;
     /* 00AC */ unsigned char field_AC[6];
