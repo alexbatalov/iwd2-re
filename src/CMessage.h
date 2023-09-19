@@ -137,6 +137,10 @@ public:
     static const BYTE MSG_SUBTYPE_PLAYERCHAR_70;
     static const BYTE MSG_SUBTYPE_PLAYERCHAR_102;
 
+    static const BYTE MSG_TYPE_PAUSING;
+    static const BYTE MSG_SUBTYPE_PAUSING_PERMIT_REQUEST;
+    static const BYTE MSG_SUBTYPE_PAUSING_ANNOUNCE;
+
     static const BYTE MSG_TYPE_RESOURCE;
     static const BYTE MSG_SUBTYPE_RESOURCE_DEMAND;
 
@@ -219,6 +223,10 @@ public:
     BOOLEAN OnDialogRequestKillOrUse(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
     BOOLEAN CancelDialogRequestToServer();
     BOOLEAN OnCancelDialogRequestToServer(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
+    BOOLEAN SendPauseRequestToServer(BOOLEAN bVisualPause, BOOLEAN bPauseToBeSetTo);
+    BOOLEAN OnPauseRequestToServer(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
+    BOOLEAN PauseAnnounceStatus(BOOLEAN bHardPauseStatus, BOOLEAN bPauseStatus, PLAYER_ID idPauser);
+    BOOLEAN OnPauseAnnounceStatus(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
     BOOLEAN ChapterAnnounceStatus(BYTE nChapter, CResRef cResRef);
     BOOLEAN SendMapWorldAnnounceStatus(BOOLEAN bActive, PLAYER_ID idController, LONG nLeavingEdge);
     BOOLEAN MovieAnnounceStatus(CResRef cResMovie);
