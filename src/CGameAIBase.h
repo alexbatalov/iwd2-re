@@ -68,6 +68,7 @@ public:
     SHORT StartTimer();
     SHORT SendTrigger(CGameAIBase* sprite);
     SHORT Wait();
+    SHORT SmallWait();
     SHORT TakePartyGold();
     SHORT GivePartyGold();
     SHORT GiveOrder(CGameAIBase* sprite);

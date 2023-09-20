@@ -691,6 +691,18 @@ SHORT CGameAIBase::Wait()
     return ACTION_DONE;
 }
 
+// 0x4600F0
+SHORT CGameAIBase::SmallWait()
+{
+    m_curAction.m_specificID--;
+
+    if (m_curAction.m_specificID > 0) {
+        return ACTION_INTERRUPTABLE;
+    }
+
+    return ACTION_DONE;
+}
+
 // 0x465110
 SHORT CGameAIBase::TakePartyGold()
 {
