@@ -347,25 +347,8 @@ class CGameSprite;
 class CGameSpriteGroupedSpellList;
 class CGameSpriteSpells;
 
-class CDerivedStats {
+class CDerivedStatsTemplate {
 public:
-    CDerivedStats();
-    void Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature, CGameSpriteSpells* pSpells, CGameSpriteGroupedSpellList* pDomainSpells);
-    void BonusInit();
-    CDerivedStats& operator+=(const CDerivedStats& other);
-    void CheckLimits();
-    LONG GetAtOffset(SHORT offset);
-    int GetXP();
-    BYTE GetLevel();
-    DWORD GetSorcererWizardLevel();
-    DWORD GetBardMonkRogueLevel();
-    BOOL HasClassMask(INT iClassType);
-    DWORD GetClassMaskLevel(DWORD dwMask);
-    DWORD GetClassLevel(INT iClassType);
-    void SetClassLevel(INT iClassType, INT nLevel);
-    BOOL HasClass(INT iClassType);
-    INT GetBestClass();
-
     /* 0000 */ DWORD m_generalState;
     /* 0004 */ SHORT m_nMaxHitPoints;
     /* 0006 */ short field_6;
@@ -485,6 +468,28 @@ public:
     /* 0140 */ int field_140;
     /* 0144 */ BYTE m_nSkills[64];
     /* 0184 */ int field_184;
+};
+
+class CDerivedStats : public CDerivedStatsTemplate {
+public:
+    CDerivedStats();
+    void Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature, CGameSpriteSpells* pSpells, CGameSpriteGroupedSpellList* pDomainSpells);
+    void BonusInit();
+    CDerivedStats& operator+=(const CDerivedStats& other);
+    void CheckLimits();
+    LONG GetAtOffset(SHORT offset);
+    int GetXP();
+    BYTE GetLevel();
+    DWORD GetSorcererWizardLevel();
+    DWORD GetBardMonkRogueLevel();
+    void Marshal(BYTE** pStats, LONG* nStats);
+    BOOL HasClassMask(INT iClassType);
+    DWORD GetClassMaskLevel(DWORD dwMask);
+    DWORD GetClassLevel(INT iClassType);
+    void SetClassLevel(INT iClassType, INT nLevel);
+    BOOL HasClass(INT iClassType);
+    INT GetBestClass();
+
     /* 0188 */ CPtrList field_188;
     /* 01A4 */ CImmunitiesEffect m_cImmunitiesEffect;
     /* 01C0 */ CPtrList field_1C0;

@@ -727,6 +727,15 @@ DWORD CDerivedStats::GetBardMonkRogueLevel()
     return GetClassMaskLevel(CLASSMASK_BARD | CLASSMASK_MONK | CLASSMASK_ROGUE);
 }
 
+// 0x447430
+void CDerivedStats::Marshal(BYTE** pStats, LONG* nStats)
+{
+    *nStats = sizeof(CDerivedStatsTemplate);
+    *pStats = new BYTE[*nStats];
+    // NOTE: Looks unsafe.
+    memcpy(*pStats, this, *nStats);
+}
+
 // 0x447940
 BOOL CDerivedStats::HasClassMask(INT iClassType)
 {
