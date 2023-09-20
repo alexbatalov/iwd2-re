@@ -9,6 +9,52 @@
 
 class CCacheStatus {
 public:
+    static int dword_8A7BA8;
+    static int dword_8A7BAC;
+    static int dword_8A7BB0;
+    static int dword_8A7BB4;
+    static int dword_8A7BB8;
+    static int dword_8A7BBC;
+    static int dword_8A7BC0;
+    static int dword_8A7BC4;
+    static int dword_8A7BC8;
+    static int dword_8A7BCC;
+    static int dword_8A7BD0;
+    static int dword_8A7BD4;
+    static int dword_8A7BD8;
+    static int dword_8A7BDC;
+    static int dword_8A7BE0;
+    static int dword_8A7BE4;
+    static int dword_8A7BE8;
+    static int dword_8A7BEC;
+    static int dword_8A7BF0;
+    static int dword_8A7BF4;
+    static int dword_8A7BF8;
+    static int dword_8A7BFC;
+    static int dword_8A7C00;
+    static int dword_8A7C04;
+    static int dword_8A7C08;
+    static int dword_8A7C0C;
+    static int dword_8A7C10;
+    static int dword_8A7C14;
+    static int dword_8A7C18;
+    static int dword_8A7C1C;
+    static int dword_8A7C20;
+    static int dword_8A7C24;
+    static int dword_8A7C28;
+    static int dword_8A7C2C;
+    static int dword_8A7C30;
+    static int dword_8A7C34;
+    static int dword_8A7C38;
+    static int dword_8A7C3C;
+    static int dword_8D0770;
+    static int dword_8D0B7C;
+    static int dword_8D0B80;
+    static int dword_8D0B8C;
+    static int dword_8D0B90;
+    static int dword_8D0BA0;
+    static int dword_8D0BA4;
+
     CCacheStatus();
     ~CCacheStatus();
 
