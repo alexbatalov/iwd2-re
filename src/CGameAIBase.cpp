@@ -657,6 +657,24 @@ SHORT CGameAIBase::StartTimer()
     return ACTION_DONE;
 }
 
+// 0x45FF40
+SHORT CGameAIBase::SendTrigger(CGameAIBase* sprite)
+{
+    if (sprite == NULL) {
+        return ACTION_ERROR;
+    }
+
+    CAITrigger trigger(CAITrigger::TRIGGER, m_typeAI, m_curAction.m_specificID);
+
+    CMessageSetTrigger* pMessage = new CMessageSetTrigger(trigger,
+        m_id,
+        sprite->GetId());
+
+    g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+
+    return ACTION_DONE;
+}
+
 // 0x465110
 SHORT CGameAIBase::TakePartyGold()
 {

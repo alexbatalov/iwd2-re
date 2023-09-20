@@ -66,6 +66,7 @@ public:
     SHORT DoubleClickRButtonObject(CGameObject* target);
     SHORT MoveCursorPoint();
     SHORT StartTimer();
+    SHORT SendTrigger(CGameAIBase* sprite);
     SHORT TakePartyGold();
     SHORT GivePartyGold();
     SHORT GiveOrder(CGameAIBase* sprite);
