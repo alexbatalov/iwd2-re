@@ -650,7 +650,7 @@ SHORT CGameAIBase::ChangeAIScript()
 // 0x45FED0
 SHORT CGameAIBase::StartTimer()
 {
-    BYTE id = m_curAction.m_specificID;
+    BYTE id = static_cast<BYTE>(m_curAction.m_specificID);
     LONG time = m_curAction.m_specificID2;
 
     POSITION pos = m_timers.GetHeadPosition();
