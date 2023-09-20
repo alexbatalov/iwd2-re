@@ -192,7 +192,21 @@ BOOLEAN CGameAIBase::CompressTime(DWORD deltaTime)
 // 0x44D4B0
 void CGameAIBase::CheckTimers(LONG cycles)
 {
-    // TODO: Incomplete.
+    POSITION pos = m_timers.GetHeadPosition();
+    while (pos != NULL) {
+        POSITION oldPos = pos;
+        CGameTimer* pTimer = m_timers.GetNext(pos);
+        pTimer->m_time -= cycles;
+        if (pTimer->m_time <= 0) {
+            CAITrigger trigger(CAITrigger::TIMEREXPIRED, pTimer->m_id);
+
+            // NOTE: Uninline.
+            SetTrigger(trigger);
+
+            m_timers.RemoveAt(pos);
+            delete pTimer;
+        }
+    }
 }
 
 // 0x44D640

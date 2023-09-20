@@ -227,6 +227,7 @@ public:
     static const SHORT NO_TRIGGER;
     static const SHORT ONCREATION;
     static const SHORT RECEIVEDORDER;
+    static const SHORT TIMEREXPIRED;
     static const SHORT UNLOCKED;
     static const SHORT STATUSTRIGGER;
 
