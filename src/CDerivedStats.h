@@ -483,6 +483,7 @@ public:
     DWORD GetSorcererWizardLevel();
     DWORD GetBardMonkRogueLevel();
     void Marshal(BYTE** pStats, LONG* nStats);
+    void Unmarshal(BYTE* pStats, LONG nStats);
     BOOL HasClassMask(INT iClassType);
     DWORD GetClassMaskLevel(DWORD dwMask);
     DWORD GetClassLevel(INT iClassType);

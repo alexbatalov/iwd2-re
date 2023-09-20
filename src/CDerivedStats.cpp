@@ -736,6 +736,116 @@ void CDerivedStats::Marshal(BYTE** pStats, LONG* nStats)
     memcpy(*pStats, this, *nStats);
 }
 
+// 0x447460
+void CDerivedStats::Unmarshal(BYTE* pStats, LONG nStats)
+{
+    // NOTE: For unknown reason unmarshalling is performed via field-by-field
+    // assignment instead of simple `memcpy` as seen in `Marshal`.
+    CDerivedStatsTemplate* pTemplate = reinterpret_cast<CDerivedStatsTemplate*>(pStats);
+
+    m_generalState = pTemplate->m_generalState;
+    m_nMaxHitPoints = pTemplate->m_nMaxHitPoints;
+    field_6 = pTemplate->field_6;
+    field_8 = pTemplate->field_8;
+    field_A = pTemplate->field_A;
+    field_C = pTemplate->field_C;
+    m_nACCrushingMod = pTemplate->m_nACCrushingMod;
+    m_nACMissileMod = pTemplate->m_nACMissileMod;
+    m_nACPiercingMod = pTemplate->m_nACPiercingMod;
+    m_nACSlashingMod = pTemplate->m_nACSlashingMod;
+    field_16 = pTemplate->field_16;
+    m_nTHAC0 = pTemplate->m_nTHAC0;
+    m_nNumberOfAttacks = pTemplate->m_nNumberOfAttacks;
+    m_nSaveVSFortitude = pTemplate->m_nSaveVSFortitude;
+    m_nSaveVSReflex = pTemplate->m_nSaveVSReflex;
+    m_nSaveVSWill = pTemplate->m_nSaveVSWill;
+    m_nResistFire = pTemplate->m_nResistFire;
+    m_nResistCold = pTemplate->m_nResistCold;
+    m_nResistElectricity = pTemplate->m_nResistElectricity;
+    m_nResistAcid = pTemplate->m_nResistAcid;
+    m_nResistMagic = pTemplate->m_nResistMagic;
+    m_nResistMagicFire = pTemplate->m_nResistMagicFire;
+    m_nResistMagicCold = pTemplate->m_nResistMagicCold;
+    m_nResistSlashing = pTemplate->m_nResistSlashing;
+    m_nResistCrushing = pTemplate->m_nResistCrushing;
+    m_nResistPiercing = pTemplate->m_nResistPiercing;
+    m_nResistMissile = pTemplate->m_nResistMissile;
+    memcpy(m_nSkills, pTemplate->m_nSkills, sizeof(m_nSkills));
+    m_nFatigue = pTemplate->m_nFatigue;
+    m_nIntoxication = pTemplate->m_nIntoxication;
+    m_nLuck = pTemplate->m_nLuck;
+    m_nSubRace = pTemplate->m_nSubRace;
+    m_nSex = pTemplate->m_nSex;
+    m_nSTR = pTemplate->m_nSTR;
+    m_nINT = pTemplate->m_nINT;
+    m_nWIS = pTemplate->m_nWIS;
+    m_nDEX = pTemplate->m_nDEX;
+    m_nCON = pTemplate->m_nCON;
+    m_nCHR = pTemplate->m_nCHR;
+    m_nXPValue = pTemplate->m_nXPValue;
+    m_nXP = pTemplate->m_nXP;
+    m_nGold = pTemplate->m_nGold;
+    m_nMoraleBreak = pTemplate->m_nMoraleBreak;
+    m_nMoraleRecoveryTime = pTemplate->m_nMoraleRecoveryTime;
+    m_nReputation = pTemplate->m_nReputation;
+    memcpy(m_favoredEnemies, pTemplate->m_favoredEnemies, sizeof(m_favoredEnemies));
+    m_nDamageBonus = pTemplate->m_nDamageBonus;
+    m_nSpellFailureArcane = pTemplate->m_nSpellFailureArcane;
+    m_nSpellFailureDivine = pTemplate->m_nSpellFailureDivine;
+    m_nSpellDurationModMage = pTemplate->m_nSpellDurationModMage;
+    m_nSpellDurationModPriest = pTemplate->m_nSpellDurationModPriest;
+    m_nTurnUndeadLevel = pTemplate->m_nTurnUndeadLevel;
+    m_nBackstabDamageMultiplier = pTemplate->m_nBackstabDamageMultiplier;
+    m_nLayOnHandsAmount = pTemplate->m_nLayOnHandsAmount;
+    m_bHeld = pTemplate->m_bHeld;
+    m_bPolymorphed = pTemplate->m_bPolymorphed;
+    m_nTranslucent = pTemplate->m_nTranslucent;
+    m_bIdentifyMode = pTemplate->m_bIdentifyMode;
+    m_nSpecialization = pTemplate->m_nSpecialization;
+    m_nMoveSilentlyMTPBonus = pTemplate->m_nMoveSilentlyMTPBonus;
+    m_nHideInShadowsMTPBonus = pTemplate->m_nHideInShadowsMTPBonus;
+    m_spellStates = pTemplate->m_spellStates;
+    field_10C = pTemplate->field_10C;
+    m_bCasterHold = pTemplate->m_bCasterHold;
+    m_nEncumberance = pTemplate->m_nEncumberance;
+    m_nMissileTHAC0Bonus = pTemplate->m_nMissileTHAC0Bonus;
+    m_nMagicDamageResistance = pTemplate->m_nMagicDamageResistance;
+    m_nResistPoison = pTemplate->m_nResistPoison;
+    m_bDoNotJump = pTemplate->m_bDoNotJump;
+    m_bAuraCleansing = pTemplate->m_bAuraCleansing;
+    m_nMentalSpeed = pTemplate->m_nMentalSpeed;
+    m_nPhysicalSpeed = pTemplate->m_nPhysicalSpeed;
+    m_nCastingLevelBonusMage = pTemplate->m_nCastingLevelBonusMage;
+    m_nCastingLevelBonusCleric = pTemplate->m_nCastingLevelBonusCleric;
+    m_bSeeInvisible = pTemplate->m_bSeeInvisible;
+    m_bIgnoreDialogPause = pTemplate->m_bIgnoreDialogPause;
+    m_nMinHitPoints = pTemplate->m_nMinHitPoints;
+    m_THAC0BonusRight = pTemplate->m_THAC0BonusRight;
+    m_THAC0BonusLeft = pTemplate->m_THAC0BonusLeft;
+    m_DamageBonusRight = pTemplate->m_DamageBonusRight;
+    m_DamageBonusLeft = pTemplate->m_DamageBonusLeft;
+    m_nStoneSkins = pTemplate->m_nStoneSkins;
+    m_nDamageModFire = pTemplate->m_nDamageModFire;
+    m_nDamageModCold = pTemplate->m_nDamageModCold;
+    m_nDamageModElectricity = pTemplate->m_nDamageModElectricity;
+    m_nDamageModAcid = pTemplate->m_nDamageModAcid;
+    m_nDamageModMagic = pTemplate->m_nDamageModMagic;
+    m_nDamageModPoison = pTemplate->m_nDamageModPoison;
+    m_nDamageModSlashing = pTemplate->m_nDamageModSlashing;
+    m_nDamageModPiercing = pTemplate->m_nDamageModPiercing;
+    m_nDamageModCrushing = pTemplate->m_nDamageModCrushing;
+    m_nDamageModMissile = pTemplate->m_nDamageModMissile;
+    field_124 = pTemplate->field_124;
+    field_128 = pTemplate->field_128;
+    field_12C = pTemplate->field_12C;
+    field_130 = pTemplate->field_130;
+    field_134 = pTemplate->field_134;
+    field_138 = pTemplate->field_138;
+    field_13C = pTemplate->field_13C;
+    field_140 = pTemplate->field_140;
+    field_184 = pTemplate->field_184;
+}
+
 // 0x447940
 BOOL CDerivedStats::HasClassMask(INT iClassType)
 {
