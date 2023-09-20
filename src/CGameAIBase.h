@@ -65,6 +65,7 @@ public:
     SHORT DoubleClickRButtonPoint();
     SHORT DoubleClickRButtonObject(CGameObject* target);
     SHORT MoveCursorPoint();
+    SHORT ChangeAIScript();
     SHORT StartTimer();
     SHORT SendTrigger(CGameAIBase* sprite);
     SHORT Wait();

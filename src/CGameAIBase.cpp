@@ -634,6 +634,19 @@ SHORT CGameAIBase::DoubleClickRButtonObject(CGameObject* target)
     return DoubleClickLButton(dest);
 }
 
+// 0x45FD20
+SHORT CGameAIBase::ChangeAIScript()
+{
+    CAIScript* script = new CAIScript(CResRef(m_curAction.GetString1()));
+    SetScript(static_cast<SHORT>(m_curAction.m_specificID), script);
+
+    if (GetObjectType() == TYPE_CONTAINER) {
+        static_cast<CGameContainer*>(this)->SetScriptRes(m_curAction.GetString1());
+    }
+
+    return ACTION_DONE;
+}
+
 // 0x45FED0
 SHORT CGameAIBase::StartTimer()
 {

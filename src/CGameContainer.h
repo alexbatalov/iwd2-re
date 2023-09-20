@@ -22,6 +22,8 @@ public:
     SHORT FindItemSlot(const CResRef& res);
     SHORT CountItem(const CResRef& res);
 
+    void SetScriptRes(CString scriptRes);
+
     /* 05AE */ CTypedPtrList<CPtrList, CItem*> m_lstItems;
     /* 05CA */ WORD m_containerType;
     /* 0863 */ BOOLEAN m_bDeleteMe;

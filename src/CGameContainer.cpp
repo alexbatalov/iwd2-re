@@ -312,3 +312,15 @@ SHORT CGameContainer::CountItem(const CResRef& res)
 
     return nCount;
 }
+
+// FIXME: `scriptRes` should be reference.
+//
+// 0x45FE90
+void CGameContainer::SetScriptRes(CString scriptRes)
+{
+    memset(m_scriptRes, 0, RESREF_SIZE);
+
+    for (int index = 0; index < RESREF_SIZE && index < scriptRes.GetLength(); index++) {
+        m_scriptRes[index] = scriptRes[index];
+    }
+}
