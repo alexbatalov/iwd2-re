@@ -634,6 +634,29 @@ SHORT CGameAIBase::DoubleClickRButtonObject(CGameObject* target)
     return DoubleClickLButton(dest);
 }
 
+// 0x45FED0
+SHORT CGameAIBase::StartTimer()
+{
+    BYTE id = m_curAction.m_specificID;
+    LONG time = m_curAction.m_specificID2;
+
+    POSITION pos = m_timers.GetHeadPosition();
+    while (pos != NULL) {
+        CGameTimer* pTimer = m_timers.GetNext(pos);
+        if (pTimer->m_id == id) {
+            pTimer->m_time = time;
+            return ACTION_DONE;
+        }
+    }
+
+    CGameTimer* pTimer = new CGameTimer();
+    pTimer->m_time = time;
+    pTimer->m_id = id;
+    m_timers.AddTail(pTimer);
+
+    return ACTION_DONE;
+}
+
 // 0x465110
 SHORT CGameAIBase::TakePartyGold()
 {
