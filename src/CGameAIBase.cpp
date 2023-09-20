@@ -675,6 +675,22 @@ SHORT CGameAIBase::SendTrigger(CGameAIBase* sprite)
     return ACTION_DONE;
 }
 
+// 0x4600B0
+SHORT CGameAIBase::Wait()
+{
+    if (m_actionCount == 0) {
+        m_curAction.m_specificID *= 15;
+    }
+
+    m_curAction.m_specificID--;
+
+    if (m_curAction.m_specificID > 0) {
+        return ACTION_INTERRUPTABLE;
+    }
+
+    return ACTION_DONE;
+}
+
 // 0x465110
 SHORT CGameAIBase::TakePartyGold()
 {
