@@ -445,6 +445,70 @@ void CGameAIBase::ApplyTriggers()
     // TODO: Incomplete.
 }
 
+// 0x45F2A0
+SHORT CGameAIBase::MoveView(CPoint dest, int speed)
+{
+    CGameArea* pVisibleArea = g_pBaldurChitin->GetObjectGame()->GetVisibleArea();
+
+    INT x;
+    INT y;
+    pVisibleArea->GetInfinity()->GetViewPosition(x, y);
+
+    if (dest.x < 0) {
+        dest.x = 0;
+    }
+
+    if (dest.y < 0) {
+        dest.y = 0;
+    }
+
+    int maxX = pVisibleArea->GetInfinity()->rViewPort.left
+        - pVisibleArea->GetInfinity()->rViewPort.right
+        + pVisibleArea->GetInfinity()->nAreaX;
+    if (dest.x > maxX) {
+        dest.x = maxX;
+    }
+
+    int maxY = pVisibleArea->GetInfinity()->rViewPort.top
+        - pVisibleArea->GetInfinity()->rViewPort.bottom
+        + pVisibleArea->GetInfinity()->nAreaY;
+    if (dest.y > maxY) {
+        dest.y = maxY;
+    }
+
+    if (m_curAction.m_actionID == CAIACTION_MOVEVIEWPOINTUNTILDONE) {
+        if (!field_594) {
+            CMessageStartScroll* pMessage = new CMessageStartScroll(pVisibleArea,
+                CPoint(x, y),
+                dest,
+                static_cast<BYTE>(speed),
+                m_id,
+                m_id);
+
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+
+            field_594 = TRUE;
+        }
+
+        if (x != dest.x && y != dest.y) {
+            return ACTION_NORMAL;
+        }
+
+        field_594 = FALSE;
+    } else {
+        CMessageStartScroll* pMessage = new CMessageStartScroll(pVisibleArea,
+            CPoint(x, y),
+            dest,
+            static_cast<BYTE>(speed),
+            m_id,
+            m_id);
+
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+    }
+
+    return ACTION_DONE;
+}
+
 // 0x45F6D0
 SHORT CGameAIBase::MoveCursor(CPoint dest, SHORT speed)
 {
