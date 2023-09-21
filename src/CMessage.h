@@ -15,6 +15,7 @@
 // TODO: Reuse from `CNetwork.h`.
 typedef DWORD PLAYER_ID;
 
+class CGameArea;
 class CGameDoor;
 class CGameEffect;
 
@@ -65,6 +66,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_SPRITE_DEATH;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SPRITE_PETRIFY;
     static const BYTE MSG_SUBTYPE_CMESSAGE_START_FOLLOW;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_START_SCROLL;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STOP_ACTIONS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STOP_FOLLOW;
     static const BYTE MSG_SUBTYPE_CMESSAGE_TRIGGER_STATUS;
@@ -878,6 +880,23 @@ public:
     void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
     BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
+};
+
+class CMessageStartScroll : public CMessage {
+public:
+    CMessageStartScroll(CGameArea* pArea, CPoint src, CPoint dest, BYTE speed, LONG caller, LONG target);
+    ~CMessageStartScroll() override;
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ CString m_sAreaString;
+    /* 0010 */ CPoint m_src;
+    /* 0018 */ CPoint m_dest;
+    /* 0020 */ BYTE m_speed;
 };
 
 class CMessageStopActions : public CMessage {

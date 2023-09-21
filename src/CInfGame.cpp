@@ -948,6 +948,14 @@ void CInfGame::CharacterExport(LONG nCharacterId, CString sFileName)
     // TODO: Incomplete.
 }
 
+// 0x5A24D0
+CGameArea* CInfGame::LoadArea(CString areaName, BYTE nTravelScreenImageToUse, BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace)
+{
+    // TODO: Incomplete.
+
+    return NULL;
+}
+
 // 0x5AC110
 BOOLEAN CInfGame::CanSaveGame(STRREF& strError, unsigned char a2, unsigned char a3)
 {

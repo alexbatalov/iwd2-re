@@ -119,6 +119,7 @@ public:
     LONG ImportCharacter(const CString& sFileName, INT nIndex);
     CString GetDirSounds();
     void CharacterExport(LONG nCharacterId, CString sFileName);
+    CGameArea* LoadArea(CString areaName, BYTE nTravelScreenImageToUse, BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace);
     BOOLEAN CanSaveGame(STRREF& strError, unsigned char a2, unsigned char a3);
     BOOL SaveGame(unsigned char a1, unsigned char a2, unsigned char a3);
     void ProgressBarCallback(DWORD dwSize, BOOLEAN bInitialize);
