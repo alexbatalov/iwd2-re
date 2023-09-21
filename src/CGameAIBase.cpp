@@ -539,6 +539,24 @@ SHORT CGameAIBase::MoveViewPoint()
     return MoveView(dest, speed);
 }
 
+// 0x45F660
+SHORT CGameAIBase::MoveViewObject(CGameObject* target)
+{
+    if (target == NULL) {
+        return ACTION_ERROR;
+    }
+
+    CPoint dest(target->GetPos());
+
+    CRect viewPort(target->GetArea()->GetInfinity()->rViewPort);
+    dest.x -= viewPort.Width() / 2;
+    dest.y -= viewPort.Height() / 2;
+
+    SHORT speed = static_cast<SHORT>(m_curAction.m_specificID);
+
+    return MoveView(dest, speed);
+}
+
 // 0x45F6D0
 SHORT CGameAIBase::MoveCursor(CPoint dest, SHORT speed)
 {

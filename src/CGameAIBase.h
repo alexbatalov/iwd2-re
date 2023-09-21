@@ -53,6 +53,7 @@ public:
     void ClearTriggers();
     SHORT MoveView(CPoint dest, int speed);
     SHORT MoveViewPoint();
+    SHORT MoveViewObject(CGameObject* target);
     SHORT MoveCursor(CPoint dest, SHORT speed);
     SHORT ClickLButton(CPoint pt);
     SHORT ClickLButtonPoint();
