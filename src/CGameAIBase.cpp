@@ -509,6 +509,36 @@ SHORT CGameAIBase::MoveView(CPoint dest, int speed)
     return ACTION_DONE;
 }
 
+// 0x45F5D0
+SHORT CGameAIBase::MoveViewPoint()
+{
+    CPoint dest(m_curAction.m_dest);
+
+    CRect viewPort(GetArea()->GetInfinity()->rViewPort);
+    dest.x -= viewPort.Width() / 2;
+    dest.y -= viewPort.Height() / 2;
+
+    if (dest.x < 0) {
+        dest.x = 0;
+    }
+
+    if (dest.x > GetArea()->GetInfinity()->nAreaX) {
+        dest.x = GetArea()->GetInfinity()->nAreaX;
+    }
+
+    if (dest.y < 0) {
+        dest.y = 0;
+    }
+
+    if (dest.y > GetArea()->GetInfinity()->nAreaY) {
+        dest.y = GetArea()->GetInfinity()->nAreaY;
+    }
+
+    SHORT speed = static_cast<SHORT>(m_curAction.m_specificID);
+
+    return MoveView(dest, speed);
+}
+
 // 0x45F6D0
 SHORT CGameAIBase::MoveCursor(CPoint dest, SHORT speed)
 {

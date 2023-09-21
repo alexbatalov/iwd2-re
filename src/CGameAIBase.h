@@ -52,6 +52,7 @@ public:
     void CheckTimers(LONG cycles);
     void ClearTriggers();
     SHORT MoveView(CPoint dest, int speed);
+    SHORT MoveViewPoint();
     SHORT MoveCursor(CPoint dest, SHORT speed);
     SHORT ClickLButton(CPoint pt);
     SHORT ClickLButtonPoint();
