@@ -38,7 +38,8 @@ public:
     /* 0074 */ virtual void AddAction(const CAIAction& action);
     /* 0078 */ virtual void AddEffect(CGameEffect* pEffect, BYTE list, BOOL noSave, BOOL immediateApply);
     /* 007C */ virtual void ClearAI(BOOLEAN a1);
-    /* 0084 */ virtual void ExecuteAction();
+    /* 0080 */ virtual void DoAction();
+    /* 0084 */ virtual SHORT ExecuteAction();
     /* 0088 */ virtual void InsertAction(const CAIAction& action);
     /* 008C */ virtual void ProcessAI();
     /* 0090 */ virtual void SetCurrAction(const CAIAction& action);
@@ -91,6 +92,8 @@ public:
     void SetTrigger(const CAITrigger& trigger);
 
     void SetDefaultScript(CAIScript* script);
+    void ResetCurrResponse();
+    CAIAction& GetNextAction(CAIAction& action);
 
     /* 006E */ CAIObjectType m_lAttacker;
     /* 00AE */ CAIObjectType m_lOrderedBy;

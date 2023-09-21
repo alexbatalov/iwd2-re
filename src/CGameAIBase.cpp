@@ -264,10 +264,33 @@ void CGameAIBase::ClearTriggers()
     m_pendingTriggers.RemoveAll();
 }
 
+// 0x44D780
+void CGameAIBase::DoAction()
+{
+    SHORT actionReturn = ExecuteAction();
+
+    if (actionReturn == ACTION_DONE
+        || actionReturn == ACTION_ERROR
+        || actionReturn == ACTION_STOPPED) {
+        CAIAction action;
+        SetCurrAction(GetNextAction(action));
+        ResetCurrResponse();
+    } else if (m_interrupt && actionReturn == ACTION_INTERRUPTABLE) {
+        CAIAction action;
+        m_actionCount++;
+        SetCurrAction(GetNextAction(action));
+        m_interrupt = FALSE;
+    } else {
+        m_actionCount++;
+    }
+}
+
 // 0x44DC10
-void CGameAIBase::ExecuteAction()
+SHORT CGameAIBase::ExecuteAction()
 {
     // TODO: Incomplete.
+
+    return ACTION_ERROR;
 }
 
 // 0x45C730
@@ -1184,4 +1207,22 @@ SHORT CGameAIBase::GetVisualRange()
 SHORT CGameAIBase::GetHelpRange()
 {
     return m_pArea->m_visibility.field_E * 48;
+}
+
+// NOTE: Inlined.
+void CGameAIBase::ResetCurrResponse()
+{
+    if (m_curAction.m_actionID == CAIAction::NO_ACTION) {
+        m_curResponseNum = -1;
+        m_curResponseSetNum = -1;
+        m_curScriptNum = -1;
+    }
+}
+
+// 0x45B970
+CAIAction& CGameAIBase::GetNextAction(CAIAction& action)
+{
+    // TODO: Incomplete.
+
+    return action;
 }
