@@ -1072,6 +1072,25 @@ void CGameEffect::AddPortraitIcon(CGameSprite* pSprite, int icon)
     pGame->UpdatePortrait(pGame->GetCharacterPortraitNum(pSprite->GetId()), 1);
 }
 
+// 0x4A2E00
+void CGameEffect::ClearItemEffect(ITEM_EFFECT* itemEffect, WORD newEffectId)
+{
+    itemEffect->effectID = newEffectId;
+    itemEffect->targetType = 0;
+    itemEffect->spellLevel = 0;
+    itemEffect->effectAmount = 0;
+    itemEffect->dwFlags = 0;
+    itemEffect->durationType = 0;
+    itemEffect->duration = 0;
+    itemEffect->probabilityUpper = 100;
+    itemEffect->probabilityLower = 0;
+    itemEffect->numDice = 0;
+    itemEffect->diceSize = 0;
+    itemEffect->savingThrow = 0;
+    itemEffect->saveMod = 0;
+    itemEffect->special = 0;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
