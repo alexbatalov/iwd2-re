@@ -7,6 +7,8 @@
 
 class CGameDoor : public CGameAIBase {
 public:
+    static const LONG RANGE_DOOR;
+
     /* 000C */ void AIUpdate() override;
     /* 0030 */ void DebugDump(const CString& message, BOOLEAN bEchoToScreen) override;
     /* 0034 */ BOOL IsOver(const CPoint& pt) override;

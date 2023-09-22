@@ -6,6 +6,9 @@
 
 class CGameTrigger : public CGameAIBase {
 public:
+    static const LONG RANGE_TRIGGER;
+    static const LONG RANGE_EDGE;
+
     /* 000C */ void AIUpdate() override;
     /* 001C */ CPoint& GetPos() override;
     /* 002C */ BOOLEAN CompressTime(DWORD deltaTime) override;

@@ -5,6 +5,15 @@
 
 class CSearchBitmap {
 public:
+    static const BYTE COST_BASE_MELEE;
+    static const BYTE COST_SCALE_MELEE;
+    static const BYTE TRAVEL_WIDTH;
+    static const BYTE PASSABLE;
+    static const BYTE IMPASSABLE;
+    static const BYTE IMPASSABLE_HEIGHT_ONE;
+    static const BYTE IMPASSABLE_HEIGHT_TWO;
+    static const BYTE IMPASSABLE_HEIGHT_THREE;
+
     void AddObject(const CPoint& point, BYTE sourceSide, BYTE personalSpaceRange, int a4, unsigned char& a5);
     void RemoveObject(const CPoint& point, BYTE sourceSide, BYTE personalSpaceRange, int a4, unsigned char& a5);
     void AddDoor(CPoint* pPoints, USHORT nPoints, BOOL bOpaque);

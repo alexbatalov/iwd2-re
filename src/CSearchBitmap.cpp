@@ -1,5 +1,29 @@
 #include "CSearchBitmap.h"
 
+// 0x84EBD8
+const BYTE CSearchBitmap::COST_BASE_MELEE = 100;
+
+// 0x84EBD9
+const BYTE CSearchBitmap::COST_SCALE_MELEE = 15;
+
+// 0x84EBDA
+const BYTE CSearchBitmap::TRAVEL_WIDTH = 2;
+
+// 0x84EBDB
+const BYTE CSearchBitmap::PASSABLE = 0;
+
+// 0x84EBDC
+const BYTE CSearchBitmap::IMPASSABLE = 4;
+
+// 0x84EBDD
+const BYTE CSearchBitmap::IMPASSABLE_HEIGHT_ONE = 1;
+
+// 0x84EBDE
+const BYTE CSearchBitmap::IMPASSABLE_HEIGHT_TWO = 2;
+
+// 0x84EBDF
+const BYTE CSearchBitmap::IMPASSABLE_HEIGHT_THREE = 3;
+
 // 0x84EBE0
 const BYTE CSearchRequest::STATE_WAITING = 0;
 

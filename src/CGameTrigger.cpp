@@ -5,9 +5,21 @@
 #include "CGameSprite.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CPathSearch.h"
 #include "CScreenWorld.h"
 #include "CUtil.h"
 #include "CVidPoly.h"
+
+// 0x8D71DC
+const LONG CGameTrigger::RANGE_TRIGGER = 16
+    * CPathSearch::GRID_SQUARE_SIZEX
+    * CPathSearch::GRID_SQUARE_SIZEX;
+
+// 0x8D71C4
+const LONG CGameTrigger::RANGE_EDGE = (CSearchBitmap::TRAVEL_WIDTH + 10)
+    * (CSearchBitmap::TRAVEL_WIDTH + 10)
+    * CPathSearch::GRID_SQUARE_SIZEX
+    * CPathSearch::GRID_SQUARE_SIZEX;
 
 // 0x4CD630
 void CGameTrigger::AIUpdate()

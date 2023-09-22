@@ -5,9 +5,15 @@
 #include "CGameSprite.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CPathSearch.h"
 #include "CScreenWorld.h"
 #include "CUtil.h"
 #include "CVidPoly.h"
+
+// 0x8D41D8
+const LONG CGameDoor::RANGE_DOOR = 16
+    * CPathSearch::GRID_SQUARE_SIZEX
+    * CPathSearch::GRID_SQUARE_SIZEX;
 
 // 0x487460
 void CGameDoor::AIUpdate()
