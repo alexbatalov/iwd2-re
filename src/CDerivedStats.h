@@ -493,7 +493,7 @@ public:
 
     /* 0188 */ CPtrList field_188;
     /* 01A4 */ CImmunitiesEffect m_cImmunitiesEffect;
-    /* 01C0 */ CPtrList field_1C0;
+    /* 01C0 */ CImmunitiesAIType m_cImmunitiesAIType;
     /* 01DC */ CImmunitiesSpellLevel m_cImmunitiesSpellLevel;
     /* 0204 */ CImmunitiesWeapon m_cImmunitiesWeapon;
     /* 0220 */ CSelectiveBonusList m_cToHitBonusList;

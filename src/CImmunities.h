@@ -17,6 +17,14 @@ public:
     CImmunitiesEffect& operator=(const CImmunitiesEffect& other);
 };
 
+class CImmunitiesAIType : public CTypedPtrList<CPtrList, CAIObjectType*> {
+public:
+    ~CImmunitiesAIType() override;
+    void ClearAll();
+    BOOL OnList(const CAIObjectType& type);
+    CImmunitiesAIType& operator=(const CImmunitiesAIType& other);
+};
+
 class CImmunitiesSpellLevel {
 public:
     void ClearAll();

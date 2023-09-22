@@ -55,6 +55,52 @@ BOOL CImmunitiesEffect::OnList(CGameEffect* pEffect)
 
 // -----------------------------------------------------------------------------
 
+// 0x443490
+CImmunitiesAIType::~CImmunitiesAIType()
+{
+    ClearAll();
+}
+
+// 0x4E73E0
+void CImmunitiesAIType::ClearAll()
+{
+    POSITION pos = GetHeadPosition();
+    while (pos != NULL) {
+        CAIObjectType* type = GetNext(pos);
+        delete type;
+    }
+    RemoveAll();
+}
+
+// 0x4E6F20
+CImmunitiesAIType& CImmunitiesAIType::operator=(const CImmunitiesAIType& other)
+{
+    // FIXME: Missing `ClearAll`.
+
+    POSITION pos = other.GetHeadPosition();
+    while (pos != NULL) {
+        CAIObjectType* type = other.GetNext(pos);
+        AddTail(new CAIObjectType(*type));
+    }
+
+    return *this;
+}
+
+// 0x4E6FB0
+BOOL CImmunitiesAIType::OnList(const CAIObjectType& other)
+{
+    POSITION pos = GetHeadPosition();
+    while (pos != NULL) {
+        CAIObjectType* type = GetNext(pos);
+        if (other.OfType(*type, FALSE, FALSE)) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x4E6FF0
 void CImmunitiesSpellLevel::ClearAll()
 {
