@@ -596,7 +596,34 @@ void CScreenMultiPlayer::OnCancelButtonClick()
 // 0x64AB40
 void CScreenMultiPlayer::EnableMainPanel(BOOL bEnable)
 {
-    // TODO: Incomplete.
+    CUIPanel* pPanel = m_cUIManager.GetPanel(0);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 1776
+    UTIL_ASSERT(pPanel != NULL);
+
+    pPanel->SetEnabled(bEnable);
+
+    if (CVideo::SCREENWIDTH / (g_pBaldurChitin->field_4A28 ? 2 : 1) != CBaldurChitin::DEFAULT_SCREEN_WIDTH) {
+        m_cUIManager.GetPanel(-5)->SetEnabled(bEnable);
+        m_cUIManager.GetPanel(-4)->SetEnabled(bEnable);
+        m_cUIManager.GetPanel(-3)->SetEnabled(bEnable);
+        m_cUIManager.GetPanel(-2)->SetEnabled(bEnable);
+    }
+
+    if (bEnable) {
+        PlayGUISound(RESREF_SOUND_WINDOWCLOSE);
+
+        CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(25));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+        // __LINE__: 1793
+        UTIL_ASSERT(pPanel != NULL);
+
+        field_460 = g_pBaldurChitin->GetBaldurMessage()->m_cChatBuffer.UpdateTextDisplay(pText, field_460);
+
+        pText->ScrollToBottom();
+    }
 }
 
 // 0x64AC60
