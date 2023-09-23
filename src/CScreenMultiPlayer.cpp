@@ -122,7 +122,7 @@ CScreenMultiPlayer::CScreenMultiPlayer()
     field_460 = 0;
     field_464 = 0;
     m_bMultiplayerStartup = 0;
-    field_48A = 0;
+    m_bLastLockAllowInput = FALSE;
     field_138E = 0;
 }
 
@@ -798,7 +798,52 @@ void CScreenMultiPlayer::ResetErrorPanel(CUIPanel* pPanel)
 // 0x64DDB0
 void CScreenMultiPlayer::StartMultiPlayer(INT nEngineState)
 {
-    // TODO: Incomplete.
+    CUIPanel* pPanel = m_cUIManager.GetPanel(0);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 3784
+    UTIL_ASSERT(pPanel != NULL);
+
+    CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 3786
+    UTIL_ASSERT(pSettings != NULL);
+
+    if (pSettings->m_bFirstConnected) {
+        CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(25));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+        // __LINE__: 3794
+        UTIL_ASSERT(pText != NULL);
+
+        pText->DisplayString(CString(""),
+            FetchString(10314),
+            pText->m_rgbLabelColor,
+            pText->m_rgbTextColor,
+            -1,
+            FALSE,
+            TRUE);
+    }
+
+    if (nEngineState == 1) {
+        m_bLastLockAllowInput = pSettings->m_bArbitrationLockAllowInput;
+        if (!m_bLastLockAllowInput) {
+            CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(25));
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+            // __LINE__: 3805
+            UTIL_ASSERT(pText != NULL);
+
+            pText->DisplayString(CString(""),
+                FetchString(11547),
+                pText->m_rgbLabelColor,
+                pText->m_rgbTextColor,
+                -1,
+                FALSE,
+                TRUE);
+        }
+    }
 }
 
 // 0x64DFD0

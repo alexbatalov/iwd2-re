@@ -105,7 +105,7 @@ public:
     /* 0480 */ INT m_nKickPlayerSlot;
     /* 0484 */ INT m_nCharacterSlot;
     /* 0488 */ BOOLEAN m_bMultiplayerStartup;
-    /* 048A */ int field_48A;
+    /* 048A */ BOOL m_bLastLockAllowInput;
     /* 048E */ CVidFont m_preLoadFontRealms;
     /* 098E */ CVidFont m_preLoadFontStnSml;
     /* 0E8E */ CVidFont m_preLoadFontTool;
