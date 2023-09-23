@@ -832,7 +832,53 @@ void CScreenMultiPlayer::EnableMainPanel(BOOL bEnable)
 // 0x64AC60
 void CScreenMultiPlayer::UpdateOptionsPanel()
 {
-    // TODO: Incomplete.
+    CUIControlButton3State* pButton;
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(2);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 1822
+    UTIL_ASSERT(pPanel != NULL);
+
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(15));
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    CMultiplayerSettings* pSettings = pGame->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 1827
+    UTIL_ASSERT(pSettings != NULL);
+
+    DWORD nSelectedButtonID;
+
+    switch (pSettings->m_nImportingBitField) {
+    case 1:
+        nSelectedButtonID = 4;
+        break;
+    case 3:
+        nSelectedButtonID = 3;
+        break;
+    case 7:
+        nSelectedButtonID = 2;
+        break;
+    default:
+        nSelectedButtonID = -1;
+        break;
+    }
+
+    INT nPlayerNumber = g_pBaldurChitin->cNetwork.FindPlayerLocationByID(g_pBaldurChitin->cNetwork.m_idLocalPlayer, FALSE);
+    BOOLEAN bLeader = pSettings->GetPermission(nPlayerNumber, CGamePermission::LEADER);
+    BOOLEAN bIsHost = g_pBaldurChitin->cNetwork.GetSessionHosting();
+    for (DWORD nButtonID = 2; nButtonID <= 4; nButtonID++) {
+        pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(nButtonID));
+        pButton->SetEnabled(bIsHost || bLeader);
+        pButton->SetSelected(nButtonID == nSelectedButtonID);
+    }
+
+    pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(18));
+    pButton->SetEnabled(bIsHost || bLeader);
+    pButton->SetSelected(pSettings->m_bRestrictStoreOption);
 }
 
 // 0x64ADB0
