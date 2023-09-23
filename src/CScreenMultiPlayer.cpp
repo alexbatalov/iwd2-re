@@ -608,7 +608,58 @@ void CScreenMultiPlayer::UpdateOptionsPanel()
 // 0x64ADB0
 void CScreenMultiPlayer::UpdateMainPanel()
 {
-    // TODO: Incomplete.
+    CUIControlButton* pButton;
+    CUIControlTextDisplay* pText;
+    CUIPanel* pPanel = m_cUIManager.GetPanel(0);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 1901
+    UTIL_ASSERT(pPanel != NULL);
+
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(26));
+
+    for (INT nCharacterSlot = 0; nCharacterSlot < 6; nCharacterSlot++) {
+        UpdateMainPanelCharacter(pPanel, nCharacterSlot);
+    }
+
+    CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 1911
+    UTIL_ASSERT(pSettings != NULL);
+
+    pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(25));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 1919
+    UTIL_ASSERT(pText != NULL);
+
+    field_460 = g_pBaldurChitin->GetBaldurMessage()->m_cChatBuffer.UpdateTextDisplay(pText, field_460);
+
+    pButton = static_cast<CUIControlButton*>(pPanel->GetControl(29));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 1925
+    UTIL_ASSERT(pButton != NULL);
+
+    pButton->SetEnabled(!pSettings->m_bFirstConnected
+        && pSettings->m_bArbitrationLockAllowInput);
+
+    pButton = static_cast<CUIControlButton*>(pPanel->GetControl(43));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 13930
+    UTIL_ASSERT(pButton != NULL);
+
+    pButton->SetEnabled(IsModifyButtonClickable());
+
+    pButton = static_cast<CUIControlButton*>(pPanel->GetControl(28));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 1936
+    UTIL_ASSERT(pButton != NULL);
+
+    pButton->SetEnabled(IsMainDoneButtonClickable());
 }
 
 // 0x64AF40
@@ -624,7 +675,7 @@ void CScreenMultiPlayer::CheckCharacterButtons()
 }
 
 // 0x64B340
-void CScreenMultiPlayer::UpdateMainPanelCharacter()
+void CScreenMultiPlayer::UpdateMainPanelCharacter(CUIPanel* pPanel, INT nCharacterSlot)
 {
     // TODO: Incomplete.
 }

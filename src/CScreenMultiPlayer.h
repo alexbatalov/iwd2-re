@@ -67,7 +67,7 @@ public:
     void UpdateMainPanel();
     void CheckEnableCharacters();
     void CheckCharacterButtons();
-    void UpdateMainPanelCharacter();
+    void UpdateMainPanelCharacter(CUIPanel* pPanel, INT nCharacterSlot);
     void UpdatePermissionsPanel();
     void UpdatePermissionsPanelPlayer();
     void UpdateModifyPlayerPanel();
