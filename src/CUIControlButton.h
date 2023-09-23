@@ -13,6 +13,8 @@ public:
     static const COLORREF TINT_DISABLED;
     static const COLORREF TINT_INVALID;
 
+    static const WORD TYPE_WORD_WRAP;
+
     static const int dword_8AB9B4;
 
     CUIControlButton(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo, BYTE nMouseButtons, unsigned char a5);

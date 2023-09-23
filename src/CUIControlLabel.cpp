@@ -6,6 +6,9 @@
 #include "CUtil.h"
 #include "CVidInf.h"
 
+// 0x84C97C
+const WORD CUIControlLabel::TYPE_WORD_WRAP = 0x100;
+
 // 0x4E4000
 CUIControlLabel::CUIControlLabel(CUIPanel* pPanel, UI_CONTROL_LABEL* pControlInfo)
     : CUIControlBase(pPanel, &(pControlInfo->base), 0)

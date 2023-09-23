@@ -20,6 +20,9 @@ const COLORREF CUIControlButton::TINT_DISABLED = RGB(180, 180, 180);
 // 0x84C928
 const COLORREF CUIControlButton::TINT_INVALID = RGB(180, 180, 180);
 
+// 0x84C92C
+const WORD CUIControlButton::TYPE_WORD_WRAP = 0x100;
+
 // 0x8AB9B4
 const int CUIControlButton::dword_8AB9B4 = 2;
 

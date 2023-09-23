@@ -7,6 +7,8 @@
 
 class CUIControlLabel : public CUIControlBase {
 public:
+    static const WORD TYPE_WORD_WRAP;
+
     CUIControlLabel(CUIPanel* pPanel, UI_CONTROL_LABEL* pControlInfo);
     ~CUIControlLabel();
 

@@ -5,8 +5,10 @@
 #include "CInfGame.h"
 #include "CScreenConnection.h"
 #include "CScreenStart.h"
+#include "CUIControlButton.h"
 #include "CUIControlEdit.h"
 #include "CUIControlFactory.h"
+#include "CUIControlLabel.h"
 #include "CUIControlScrollBar.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
@@ -327,7 +329,80 @@ void CScreenMultiPlayer::EngineDeactivated()
 // 0x6490F0
 void CScreenMultiPlayer::EngineInitialized()
 {
-    // TODO: Incomplete.
+    m_cUIManager.fInit(this, CResRef("GUIMP"), g_pBaldurChitin->field_4A28);
+
+    CPoint pt;
+    if (g_pBaldurChitin->field_4A28) {
+        pt.x = CVideo::SCREENWIDTH / 2 - CBaldurChitin::DEFAULT_SCREEN_WIDTH;
+        pt.y = CVideo::SCREENHEIGHT / 2 - CBaldurChitin::DEFAULT_SCREEN_HEIGHT;
+    } else {
+        pt.x = (CVideo::SCREENWIDTH - CBaldurChitin::DEFAULT_SCREEN_WIDTH) / 2;
+        pt.y = (CVideo::SCREENHEIGHT - CBaldurChitin::DEFAULT_SCREEN_HEIGHT) / 2;
+    }
+
+    m_cUIManager.ShiftPanels(pt);
+
+    for (int index = 0; index < 4; index++) {
+        m_cUIManager.AddPanel(&(g_pBaldurChitin->field_49B4[index]));
+    }
+
+    m_pCurrentScrollBar = NULL;
+
+    m_cUIManager.GetPanel(1)->SetActive(FALSE);
+    m_cUIManager.GetPanel(2)->SetActive(FALSE);
+    m_cUIManager.GetPanel(3)->SetActive(FALSE);
+    m_cUIManager.GetPanel(4)->SetActive(FALSE);
+    m_cUIManager.GetPanel(8)->SetActive(FALSE);
+    m_cUIManager.GetPanel(6)->SetActive(FALSE);
+    m_cUIManager.GetPanel(5)->SetActive(FALSE);
+    m_cUIManager.GetPanel(7)->SetActive(FALSE);
+    m_cUIManager.GetPanel(9)->SetActive(FALSE);
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(1);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 452
+    UTIL_ASSERT(pPanel != NULL);
+
+    // NOTE: Uninline.
+    SetPermissionToolTips(pPanel, 64, 13, 18, 17565);
+    SetPermissionToolTips(pPanel, 65, 19, 24, 17566);
+    SetPermissionToolTips(pPanel, 66, 25, 30, 17567);
+    SetPermissionToolTips(pPanel, 67, 31, 36, 17568);
+    SetPermissionToolTips(pPanel, 68, 37, 42, 17569);
+    SetPermissionToolTips(pPanel, 69, 49, 54, 17570);
+    SetPermissionToolTips(pPanel, 70, 55, 60, 17571);
+    SetPermissionToolTips(pPanel, -1, 0, 5, 17564);
+
+    CUIPanel* pPanel0 = m_cUIManager.GetPanel(0);
+    CUIPanel* pPanel4_1 = m_cUIManager.GetPanel(4);
+
+    for (int v1 = 0; v1 < 6; v1++) {
+        CUIControlLabel* pLabel;
+        CUIControlButton* pButton;
+
+        pLabel = static_cast<CUIControlLabel*>(pPanel0->GetControl(v1 + 12 + 0x10000012));
+        pLabel->m_nTextFlags &= ~CUIControlLabel::TYPE_WORD_WRAP;
+
+        pButton = static_cast<CUIControlButton*>(pPanel0->GetControl(v1 + 12));
+        pButton->m_nTextFlags &= ~CUIControlButton::TYPE_WORD_WRAP;
+
+        pButton = static_cast<CUIControlButton*>(pPanel4_1->GetControl(v1));
+        pButton->m_nTextFlags &= ~CUIControlButton::TYPE_WORD_WRAP;
+    }
+
+    // FIXME: Unused.
+    CUIPanel* pPanel9 = m_cUIManager.GetPanel(9);
+
+    // FIXME: Obtains same panel second time.
+    CUIPanel* pPanel4_2 = m_cUIManager.GetPanel(4);
+
+    // NOTE: Looks like this whole loop is not needed as word wrap flag has
+    // been removed in the loop above.
+    for (int v2 = 0; v2 < 6; v2++) {
+        CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel4_2->GetControl(v2));
+        pButton->m_nTextFlags &= ~CUIControlButton::TYPE_WORD_WRAP;
+    }
 }
 
 // 0x649990
@@ -1449,6 +1524,32 @@ void CScreenMultiPlayer::SetChatEditBoxStatus(const CString& sChatText, BOOL bIn
         if (bInputCapture) {
             m_cUIManager.SetCapture(pEdit, CUIManager::KEYBOARD);
         }
+    }
+}
+
+// NOTE: Inlined.
+void CScreenMultiPlayer::SetPermissionToolTips(CUIPanel* pPanel, DWORD a3, DWORD a4, DWORD a5, STRREF strRef)
+{
+    CUIControlBase* pControl;
+
+    if (a3 != -1) {
+        pControl = pPanel->GetControl(a3);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+        // __LINE__: 3368
+        UTIL_ASSERT(pControl != NULL);
+
+        pControl->SetToolTipStrRef(strRef, -1, -1);
+    }
+
+    while (a4 <= a5) {
+        pControl = pPanel->GetControl(a4);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+        // __LINE__: 3376
+        UTIL_ASSERT(pControl != NULL);
+
+        pControl->SetToolTipStrRef(strRef, -1, -1);
     }
 }
 
