@@ -695,9 +695,33 @@ void CScreenMultiPlayer::ClearChatMessages()
 // 0x64D730
 BOOL CScreenMultiPlayer::IsModifyButtonClickable()
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
-    return FALSE;
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 3405
+    UTIL_ASSERT(pGame != NULL);
+
+    CMultiplayerSettings* pSettings = pGame->GetMultiplayerSettings();
+
+    if (pSettings->m_bFirstConnected) {
+        return FALSE;
+    }
+
+    INT nPlayerNumber = g_pBaldurChitin->cNetwork.FindPlayerLocationByID(g_pBaldurChitin->cNetwork.m_idLocalPlayer, FALSE);
+    if ((nPlayerNumber == -1 || !pSettings->GetPermission(nPlayerNumber, CGamePermission::LEADER))
+        && !g_pBaldurChitin->cNetwork.GetSessionHosting()) {
+        return FALSE;
+    }
+
+    if (field_45C != 2) {
+        return FALSE;
+    }
+
+    if (!pSettings->m_bArbitrationLockAllowInput) {
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 // 0x64D7F0
