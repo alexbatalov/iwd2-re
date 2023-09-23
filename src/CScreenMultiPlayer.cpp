@@ -650,7 +650,65 @@ void CScreenMultiPlayer::UpdateModifyPlayerPanel()
 // 0x64C3B0
 void CScreenMultiPlayer::UpdateModifyCharacterPanel()
 {
-    // TODO: Incomplete.
+    // FIXME: Unused.
+    CString v1;
+    CString v2;
+
+    CUIControlButton* pButton;
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(3);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 2618
+    UTIL_ASSERT(pPanel != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 2621
+    UTIL_ASSERT(pGame != NULL);
+
+    CMultiplayerSettings* pSettings = pGame->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 2623
+    UTIL_ASSERT(pSettings != NULL);
+
+    INT nCharacterSlot = field_458;
+    BYTE nLocalPlayer = static_cast<BYTE>(g_pBaldurChitin->cNetwork.m_nLocalPlayer);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 2628
+    UTIL_ASSERT(0 <= nCharacterSlot && nCharacterSlot < CINFGAME_MAXCHARACTERS);
+
+    BOOL bSlotFull = pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_CHARACTER
+        && pGame->GetCharacterSlot(nCharacterSlot) != CGameObjectArray::INVALID_INDEX;
+
+    BOOL bSlotFree = CMultiplayerSettings::CHARSTATUS_NO_CHARACTER == pSettings->GetCharacterStatus(nCharacterSlot);
+    BOOL bIsLocalPlayer = nLocalPlayer == pSettings->GetCharacterControlledByPlayer(nCharacterSlot);
+    BOOL bModifyChars = pGame->m_singlePlayerPermissions.GetSinglePermission(CGamePermission::MODIFY_CHARS);
+
+    pButton = static_cast<CUIControlButton*>(pPanel->GetControl(0));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 2638
+    UTIL_ASSERT(pButton != NULL);
+
+    pButton->SetEnabled(field_45C == 1
+        && bModifyChars
+        && bIsLocalPlayer
+        && bSlotFree);
+
+    pButton = static_cast<CUIControlButton*>(pPanel->GetControl(3));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 2642
+    UTIL_ASSERT(pButton != NULL);
+
+    pButton->SetEnabled(field_45C == 1
+        && bModifyChars
+        && bIsLocalPlayer
+        && bSlotFull);
 }
 
 // 0x64C600
