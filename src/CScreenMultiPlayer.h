@@ -82,7 +82,7 @@ public:
     void OnKickPlayerButtonClick(INT nButton);
     void sub_64E160();
     void ResetViewCharacterPanel(CUIPanel* pPanel);
-    BOOL IsPortraitButtonClickable(INT nButton);
+    BOOL IsPortraitButtonClickable(INT nCharacterSlot);
     void OnPortraitButtonClick(INT nButton);
     void OnLogoutButtonClick();
     void CopyChatEditBox(CUIPanel* pFrom, CUIPanel* pTo);

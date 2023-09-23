@@ -867,11 +867,29 @@ void CScreenMultiPlayer::ResetViewCharacterPanel(CUIPanel* pPanel)
 }
 
 // 0x64F090
-BOOL CScreenMultiPlayer::IsPortraitButtonClickable(INT nButton)
+BOOL CScreenMultiPlayer::IsPortraitButtonClickable(INT nCharacterSlot)
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
-    return FALSE;
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 4311
+    UTIL_ASSERT(pGame != NULL);
+
+    CMultiplayerSettings* pSettings = pGame->GetMultiplayerSettings();
+
+    LONG nCharacterId = pGame->GetCharacterSlot(nCharacterSlot);
+
+    BOOL bSlotFull = pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_CHARACTER
+        && nCharacterId != CGameObjectArray::INVALID_INDEX;
+
+    INT nPlayerNumber = g_pBaldurChitin->cNetwork.FindPlayerLocationByID(g_pBaldurChitin->cNetwork.m_idLocalPlayer, FALSE);
+    BOOLEAN bLeader = pSettings->GetPermission(nPlayerNumber, CGamePermission::LEADER);
+    BOOLEAN bIsHost = g_pBaldurChitin->cNetwork.GetSessionHosting();
+
+    return !pSettings->m_bFirstConnected
+        && bSlotFull
+        && (bLeader || bIsHost)
+        && pSettings->m_bArbitrationLockStatus;
 }
 
 // 0x64F170
