@@ -3,6 +3,8 @@
 #include "CBaldurChitin.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CScreenConnection.h"
+#include "CScreenStart.h"
 #include "CUIControlEdit.h"
 #include "CUIControlFactory.h"
 #include "CUIControlScrollBar.h"
@@ -742,7 +744,72 @@ void CScreenMultiPlayer::CancelEngine()
 // 0x64D970
 void CScreenMultiPlayer::OnErrorButtonClick(INT nButton)
 {
-    // TODO: Incomplete.
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 3611
+    UTIL_ASSERT(0 <= nButton && nButton < CSCREENMULTIPLAYER_ERROR_BUTTONS);
+
+    CSingleLock renderLock(&(GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    switch (m_nErrorState) {
+    case 0:
+        switch (nButton) {
+        case 0:
+            DismissPopup();
+            break;
+        }
+        break;
+    case 2:
+        switch (nButton) {
+        case 0:
+            if (1) {
+                CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+                if (g_pBaldurChitin->cNetwork.GetSessionHosting()) {
+                    g_pBaldurChitin->GetObjectGame()->MultiplayerSetCharacterCreationLocation();
+                    pSettings->SetArbitrationLockStatus(TRUE, 0);
+                } else {
+                    g_pBaldurChitin->m_cBaldurMessage.SendArbitrationLockRequestToServer(TRUE);
+                }
+                DismissPopup();
+            }
+            break;
+        case 1:
+            DismissPopup();
+            break;
+        }
+        break;
+    case 3:
+        switch (nButton) {
+        case 0:
+            if (1) {
+                CString sPlayerName;
+                g_pBaldurChitin->cNetwork.GetPlayerName(m_nKickPlayerSlot, sPlayerName);
+                g_pBaldurChitin->m_cBaldurMessage.KickPlayerRequest(sPlayerName);
+                DismissPopup();
+            }
+            break;
+        case 1:
+            DismissPopup();
+            break;
+        }
+        break;
+    case 4:
+        switch (nButton) {
+        case 0:
+            DismissPopup();
+            g_pBaldurChitin->m_pEngineStart->m_nEngineState = 0;
+            SelectEngine(g_pBaldurChitin->m_pEngineStart);
+            g_pChitin->cNetwork.CloseSession(TRUE);
+            g_pBaldurChitin->m_pEngineConnection->SetEliminateInitialize(TRUE);
+            break;
+        case 1:
+            DismissPopup();
+            break;
+        }
+        break;
+    }
+
+    renderLock.Unlock();
 }
 
 // 0x64DB90
