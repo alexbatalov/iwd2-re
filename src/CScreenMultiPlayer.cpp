@@ -576,9 +576,62 @@ void CScreenMultiPlayer::DismissPopup()
 // 0x64A750
 BOOL CScreenMultiPlayer::IsMainDoneButtonClickable()
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
-    return FALSE;
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 1524
+    UTIL_ASSERT(pGame != NULL);
+
+    CMultiplayerSettings* pSettings = pGame->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 1526
+    UTIL_ASSERT(pSettings != NULL);
+
+    BOOL bResult;
+    switch (field_45C) {
+    case 1:
+        bResult = !pSettings->m_bFirstConnected;
+
+        for (INT nPlayer = 0; nPlayer < 6; nPlayer++) {
+            if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+                && g_pChitin->cNetwork.GetRawPlayerID(nPlayer) != 0
+                && !pSettings->GetPlayerReady(static_cast<SHORT>(nPlayer))) {
+                bResult = FALSE;
+            }
+        }
+
+        for (INT nCharacter = 0; nCharacter < 6; nCharacter++) {
+            if (pSettings->GetCharacterStatus(nCharacter) == CMultiplayerSettings::CHARSTATUS_CREATING_CHARACTER) {
+                bResult = FALSE;
+            }
+
+            if (pGame->GetCharacterSlot(nCharacter) != CGameObjectArray::INVALID_INDEX
+                && !pSettings->GetCharacterReady(nCharacter)) {
+                bResult = g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL;
+            }
+        }
+
+        if (!g_pBaldurChitin->cNetwork.GetSessionHosting()
+            && pSettings->m_bArbitrationLockStatus == TRUE) {
+            bResult = FALSE;
+        }
+
+        if (pGame->GetCharacterSlot(0) == CGameObjectArray::INVALID_INDEX) {
+            bResult = FALSE;
+        }
+
+        break;
+    case 2:
+        bResult = TRUE;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+        // __LINE__: 1592
+        UTIL_ASSERT(FALSE);
+    }
+
+    return bResult;
 }
 
 // 0x64A8B0
