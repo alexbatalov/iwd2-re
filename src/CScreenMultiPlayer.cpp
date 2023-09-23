@@ -584,7 +584,47 @@ BOOL CScreenMultiPlayer::IsMainDoneButtonClickable()
 // 0x64A8B0
 void CScreenMultiPlayer::OnDoneButtonClick()
 {
-    // TODO: Incomplete.
+    CUIPanel* pPanel = GetTopPopup();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 1622
+    UTIL_ASSERT(pPanel != NULL);
+
+    switch (pPanel->m_nID) {
+    case 5:
+        OnErrorButtonClick(0);
+        return;
+    case 6:
+        return;
+    case 7:
+        OnErrorButtonClick(0);
+        return;
+    }
+
+    CSingleLock renderLock(&(GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    switch (pPanel->m_nID) {
+    case 0:
+    case 9:
+        break;
+    case 1:
+    case 2:
+        g_pBaldurChitin->GetObjectGame()->SaveMultiPlayerPermissions();
+        DismissPopup();
+        break;
+    case 3:
+    case 4:
+    case 8:
+        DismissPopup();
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+        // __LINE__: 1671
+        UTIL_ASSERT(FALSE);
+    }
+
+    renderLock.Unlock();
 }
 
 // 0x64AA10
