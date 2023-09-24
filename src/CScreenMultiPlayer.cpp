@@ -971,7 +971,47 @@ void CScreenMultiPlayer::UpdatePermissionsPanelPlayer()
 // 0x64C210
 void CScreenMultiPlayer::UpdateModifyPlayerPanel()
 {
-    // TODO: Incomplete.
+    // FIXME: Unused.
+    CString v1;
+
+    CString sPlayerName;
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(4);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 2549
+    UTIL_ASSERT(pPanel != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    CMultiplayerSettings* pSettings = pGame->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 2553
+    UTIL_ASSERT(pSettings != NULL);
+
+    BOOL bLeader = pSettings->GetPermission(g_pBaldurChitin->cNetwork.m_nLocalPlayer, CGamePermission::LEADER);
+    BOOL bIsHost = g_pBaldurChitin->cNetwork.GetSessionHosting();
+
+    for (INT nPlayerNumber = 0; nPlayerNumber < 6; nPlayerNumber++) {
+        CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nPlayerNumber));
+
+        BOOL bWasActive = pButton->m_bActive;
+        BOOL bActive = g_pBaldurChitin->cNetwork.GetPlayerID(nPlayerNumber) != 0;
+        g_pBaldurChitin->cNetwork.GetPlayerName(nPlayerNumber, sPlayerName);
+
+        pButton->SetText(sPlayerName);
+        pButton->SetActive(bActive);
+        pButton->SetInactiveRender(bActive);
+
+        if (bActive != bWasActive) {
+            pButton->InvalidateRect();
+        }
+
+        if (bActive) {
+            pButton->SetEnabled(bLeader || bIsHost);
+        }
+    }
 }
 
 // 0x64C3B0
