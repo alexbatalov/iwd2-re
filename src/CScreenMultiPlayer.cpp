@@ -1022,7 +1022,37 @@ void CScreenMultiPlayer::UpdateMainPanel()
 // 0x64AF40
 void CScreenMultiPlayer::CheckEnableCharacters()
 {
-    // TODO: Incomplete.
+    CUIPanel* pPanel = m_cUIManager.GetPanel(0);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 1969
+    UTIL_ASSERT(pPanel != NULL);
+
+    for (INT nCharacterSlot = 0; nCharacterSlot < 6; nCharacterSlot++) {
+        CUIControlButton* pButton;
+        CUIControlLabel* pLabel;
+
+        BOOL bReadyActive;
+        BOOL bModifyPlayerActive;
+        BOOL bModifyCharacterActive;
+        CheckCharacterButtons(nCharacterSlot, bReadyActive, bModifyPlayerActive, bModifyCharacterActive);
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nCharacterSlot));
+        pButton->SetActive(bReadyActive);
+        pButton->SetInactiveRender(TRUE);
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nCharacterSlot + 12));
+        pButton->SetActive(bModifyPlayerActive);
+        pButton->SetInactiveRender(TRUE);
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nCharacterSlot + 18));
+        pButton->SetActive(bModifyCharacterActive);
+        pButton->SetInactiveRender(TRUE);
+
+        pLabel = static_cast<CUIControlLabel*>(pPanel->GetControl(nCharacterSlot + 0x10000024));
+        pLabel->SetActive(!bModifyCharacterActive);
+        pLabel->SetInactiveRender(!bModifyCharacterActive);
+    }
 }
 
 // 0x64B090
