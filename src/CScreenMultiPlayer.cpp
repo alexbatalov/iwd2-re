@@ -963,9 +963,70 @@ void CScreenMultiPlayer::UpdatePermissionsPanel()
 }
 
 // 0x64BE30
-void CScreenMultiPlayer::UpdatePermissionsPanelPlayer()
+void CScreenMultiPlayer::UpdatePermissionsPanelPlayer(CUIPanel* pPanel, INT nPlayerSlot)
 {
-    // TODO: Incomplete.
+    // FIXME: Unused
+    CString v1;
+
+    CString sPlayerName;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 2438
+    UTIL_ASSERT(0 <= nPlayerSlot && nPlayerSlot < CINFGAME_MAXCHARACTERS);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 2439
+    UTIL_ASSERT(pPanel != NULL);
+
+    CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 2443
+    UTIL_ASSERT(pPanel != NULL);
+
+    INT nLocalPlayer = g_pBaldurChitin->cNetwork.FindPlayerLocationByID(g_pBaldurChitin->cNetwork.m_idLocalPlayer, FALSE);
+
+    BOOLEAN bLeader = pSettings->GetPermission(nLocalPlayer, CGamePermission::LEADER);
+    BOOLEAN bIsHost = g_pBaldurChitin->cNetwork.GetSessionHosting();
+    PLAYER_ID idPlayer = g_pBaldurChitin->cNetwork.GetPlayerID(nPlayerSlot);
+
+    // TODO: Unclear.
+    BOOL bEnabled = bIsHost || bLeader;
+
+    // TODO: Unclear.
+    BOOL bPortraitEnabled = (bIsHost || bLeader)
+        && nLocalPlayer != nPlayerSlot
+        && g_pBaldurChitin->cNetwork.GetHostPlayerID() != idPlayer;
+
+    CUIControlLabel* pLabel = static_cast<CUIControlLabel*>(pPanel->GetControl(nPlayerSlot + 0x10000005));
+    g_pBaldurChitin->cNetwork.GetPlayerName(nPlayerSlot, sPlayerName);
+    pLabel->SetText(sPlayerName);
+
+    CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nPlayerSlot));
+    pButton->SetEnabled(bPortraitEnabled);
+
+    BOOL bPermission;
+
+    bPermission = pSettings->GetPermission(nPlayerSlot, CGamePermission::PURCHASING);
+    UpdatePermission(pPanel, nPlayerSlot + 19, bEnabled, bPermission);
+
+    bPermission = pSettings->GetPermission(nPlayerSlot, CGamePermission::AREA_TRANSITION);
+    UpdatePermission(pPanel, nPlayerSlot + 25, bEnabled, bPermission);
+
+    bPermission = pSettings->GetPermission(nPlayerSlot, CGamePermission::DIALOG);
+    UpdatePermission(pPanel, nPlayerSlot + 31, bEnabled, bPermission);
+
+    bPermission = pSettings->GetPermission(nPlayerSlot, CGamePermission::CHAR_RECORDS);
+    UpdatePermission(pPanel, nPlayerSlot + 37, bEnabled, bPermission);
+
+    bPermission = pSettings->GetPermission(nPlayerSlot, CGamePermission::PAUSING);
+    UpdatePermission(pPanel, nPlayerSlot + 49, bEnabled, bPermission);
+
+    bPermission = pSettings->GetPermission(nPlayerSlot, CGamePermission::LEADER);
+    UpdatePermission(pPanel, nPlayerSlot + 55, bEnabled, bPermission);
+
+    bPermission = pSettings->GetPermission(nPlayerSlot, CGamePermission::MODIFY_CHARS);
+    UpdatePermission(pPanel, nPlayerSlot + 13, bEnabled, bPermission);
 }
 
 // 0x64C210
@@ -1636,6 +1697,18 @@ void CScreenMultiPlayer::SetPermissionToolTips(CUIPanel* pPanel, DWORD a3, DWORD
         UTIL_ASSERT(pControl != NULL);
 
         pControl->SetToolTipStrRef(strRef, -1, -1);
+    }
+}
+
+// NOTE: Inlined.
+void CScreenMultiPlayer::UpdatePermission(CUIPanel* pPanel, DWORD nButtonID, BOOL bEnabled, BOOL bSelected)
+{
+    CUIControlButton3State* pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(nButtonID));
+    BOOL bWasEnabled = pButton->m_bEnabled;
+    pButton->SetEnabled(bEnabled);
+    pButton->SetSelected(bSelected);
+    if (bEnabled != bWasEnabled) {
+        pButton->InvalidateRect();
     }
 }
 

@@ -69,7 +69,7 @@ public:
     void CheckCharacterButtons();
     void UpdateMainPanelCharacter(CUIPanel* pPanel, INT nCharacterSlot);
     void UpdatePermissionsPanel();
-    void UpdatePermissionsPanelPlayer();
+    void UpdatePermissionsPanelPlayer(CUIPanel* pPanel, INT nPlayerSlot);
     void UpdateModifyPlayerPanel();
     void UpdateModifyCharacterPanel();
     void OnMainDoneButtonClick();
@@ -89,6 +89,7 @@ public:
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
 
     void SetPermissionToolTips(CUIPanel* pPanel, DWORD a3, DWORD a4, DWORD a5, STRREF strToolTip);
+    void UpdatePermission(CUIPanel* pPanel, DWORD nButtonID, BOOL bEnabled, BOOL bSelected);
 
     /* 0106 */ CKeyInfo m_pVirtualKeys[CSCREENMULTIPLAYER_VIRTUAL_KEYS];
     /* 03D6 */ BYTE m_pVirtualKeysFlags[CSCREENMULTIPLAYER_VIRTUAL_KEYS];
