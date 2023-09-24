@@ -5,6 +5,7 @@
 #include "CInfGame.h"
 #include "CScreenConnection.h"
 #include "CScreenStart.h"
+#include "CScreenWorld.h"
 #include "CUIControlButton.h"
 #include "CUIControlEdit.h"
 #include "CUIControlFactory.h"
@@ -402,6 +403,86 @@ void CScreenMultiPlayer::EngineInitialized()
     for (int v2 = 0; v2 < 6; v2++) {
         CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel4_2->GetControl(v2));
         pButton->m_nTextFlags &= ~CUIControlButton::TYPE_WORD_WRAP;
+    }
+}
+
+// 0x649700
+void CScreenMultiPlayer::OnKeyDown(SHORT nKeysFlags)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 593
+    UTIL_ASSERT(pGame != NULL);
+
+    if (nKeysFlags > 0) {
+        for (SHORT nKeyFlag = 0; nKeyFlag < nKeysFlags; nKeyFlag++) {
+            if (!m_cUIManager.OnKeyDown(m_pVirtualKeysFlags[nKeyFlag])) {
+                switch (m_pVirtualKeysFlags[nKeyFlag]) {
+                case VK_TAB:
+                    m_cUIManager.ForceToolTip();
+                    break;
+                case VK_RETURN:
+                    if (GetTopPopup() != NULL) {
+                        if (g_pBaldurChitin->field_1A0) {
+                            // FIXME: Unused.
+                            g_pChitin->GetWnd();
+                            if (g_pBaldurChitin->cImm.field_128) {
+                                m_cUIManager.OnKeyDown(VK_RETURN);
+                                break;
+                            }
+                        }
+                        OnDoneButtonClick();
+                    } else {
+                        if (g_pBaldurChitin->field_1A0) {
+                            // FIXME: Unused.
+                            g_pChitin->GetWnd();
+                            if (g_pBaldurChitin->cImm.field_128) {
+                                m_cUIManager.OnKeyDown(VK_RETURN);
+                                break;
+                            }
+                        }
+                        OnMainDoneButtonClick();
+                    }
+                    break;
+                case VK_ESCAPE:
+                    if (GetTopPopup() != NULL) {
+                        OnCancelButtonClick();
+                    } else {
+                        switch (field_45C) {
+                        case 1:
+                            break;
+                        case 2:
+                            SelectEngine(g_pBaldurChitin->m_pEngineWorld);
+                            break;
+                        default:
+                            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+                            // __LINE__: 3288
+                            UTIL_ASSERT(FALSE);
+                        }
+                    }
+                    break;
+                case VK_SNAPSHOT:
+                    g_pBaldurChitin->GetCurrentVideoMode()->PrintScreen();
+                    break;
+                default:
+                    for (SHORT index = 0; index < CINFGAME_KEYMAP_SIZE; index) {
+                        if (pGame->m_pKeymap[index] == m_pVirtualKeysFlags[nKeyFlag]
+                            && pGame->m_pKeymapFlags[index] == m_bCtrlKeyDown) {
+                            switch (index) {
+                            case 24:
+                                FocusChatEditBox();
+                                break;
+                            default:
+                                break;
+                            }
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
     }
 }
 

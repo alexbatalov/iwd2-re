@@ -44,6 +44,7 @@ public:
     /* 00A0 */ SHORT GetNumVirtualKeys() override;
     /* 00A4 */ CKeyInfo* GetVirtualKeys() override;
     /* 00A8 */ BYTE* GetVirtualKeysFlags() override;
+    /* 00AC */ void OnKeyDown(SHORT nKeysFlags) override;
     /* 00C0 */ void TimerAsynchronousUpdate() override;
     /* 00C4 */ void TimerSynchronousUpdate() override;
     /* 0104 */ void CancelEngine() override;
