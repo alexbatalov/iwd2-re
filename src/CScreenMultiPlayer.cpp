@@ -1026,9 +1026,72 @@ void CScreenMultiPlayer::CheckEnableCharacters()
 }
 
 // 0x64B090
-void CScreenMultiPlayer::CheckCharacterButtons()
+void CScreenMultiPlayer::CheckCharacterButtons(INT nCharacterSlot, BOOL& bReadyActive, BOOL& bModifyPlayerActive, BOOL& bModifyCharacterActive)
 {
-    // TODO: Incomplete.
+    CNetwork* pNetwork = &(g_pBaldurChitin->cNetwork);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 2031
+    UTIL_ASSERT(0 <= nCharacterSlot && nCharacterSlot < CINFGAME_MAXCHARACTERS);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 2034
+    UTIL_ASSERT(pGame != NULL);
+
+    CMultiplayerSettings* pSettings = pGame->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 2036
+    UTIL_ASSERT(pSettings != NULL);
+
+    LONG nCharacterId = pGame->GetCharacterSlot(nCharacterSlot);
+    BOOL bSlotFree = pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_NO_CHARACTER;
+    BOOL bSlotFull = pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_CHARACTER
+        && nCharacterId != CGameObjectArray::INVALID_INDEX;
+    BOOL bSlotLoading = pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_CHARACTER
+        && nCharacterId == CGameObjectArray::INVALID_INDEX;
+    BOOL bSlotCreating = pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_CREATING_CHARACTER;
+
+    INT nPlayerSlot = pSettings->GetCharacterControlledByPlayer(nCharacterSlot);
+    if (nPlayerSlot == -1) {
+        nPlayerSlot = 0;
+    }
+
+    PLAYER_ID idPlayer = pNetwork->GetPlayerID(nPlayerSlot);
+    INT nLocalPlayer = pNetwork->FindPlayerLocationByID(pNetwork->m_idLocalPlayer, FALSE);
+    BOOL bLeader = nLocalPlayer != -1
+        ? pSettings->GetPermission(nLocalPlayer, CGamePermission::LEADER)
+        : FALSE;
+    BOOL bIsHost = pNetwork->GetSessionHosting();
+    BOOLEAN bCharacterReady = pSettings->GetCharacterReady(nCharacterSlot);
+    BOOL bIsLocalPlayer = idPlayer != 0 && idPlayer == pNetwork->m_idLocalPlayer;
+
+    switch (field_45C) {
+    case 1:
+        bReadyActive = bIsLocalPlayer
+            && bSlotFull
+            && pSettings->m_bArbitrationLockAllowInput;
+        bModifyPlayerActive = (bLeader || bIsHost)
+            && (bSlotFull || bSlotFree)
+            && pSettings->m_bArbitrationLockAllowInput;
+        bModifyCharacterActive = bIsLocalPlayer
+            && !bCharacterReady
+            && !bSlotLoading
+            && !bSlotCreating
+            && pSettings->m_bArbitrationLockAllowInput;
+        break;
+    case 2:
+        bReadyActive = FALSE;
+        bModifyPlayerActive = (bLeader || bIsHost) && bSlotFull;
+        bModifyCharacterActive = FALSE;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+        // __LINE__: 2087
+        UTIL_ASSERT(FALSE);
+    }
 }
 
 // 0x64B340

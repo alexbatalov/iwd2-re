@@ -67,7 +67,7 @@ public:
     void UpdateOptionsPanel();
     void UpdateMainPanel();
     void CheckEnableCharacters();
-    void CheckCharacterButtons();
+    void CheckCharacterButtons(INT nCharacterSlot, BOOL& bReadyActive, BOOL& bModifyPlayerActive, BOOL& bModifyCharacterActive);
     void UpdateMainPanelCharacter(CUIPanel* pPanel, INT nCharacterSlot);
     void UpdatePermissionsPanel();
     void UpdatePermissionsPanelPlayer(CUIPanel* pPanel, INT nPlayerSlot);
