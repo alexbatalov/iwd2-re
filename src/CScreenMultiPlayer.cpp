@@ -1,6 +1,7 @@
 #include "CScreenMultiPlayer.h"
 
 #include "CBaldurChitin.h"
+#include "CDerivedStats.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CScreenConnection.h"
@@ -1683,9 +1684,29 @@ void CScreenMultiPlayer::OnKickPlayerButtonClick(INT nButton)
 }
 
 // 0x64E160
-void CScreenMultiPlayer::sub_64E160()
+void CScreenMultiPlayer::UpdateExperienceEntry(CUIControlTextDisplay* pText, const CAIObjectType& typeAI, CDerivedStats& DStats, DWORD nSpecialization, BYTE nBestClass, DWORD dwFlags)
 {
-    // TODO: Incomplete.
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+    CTlkTable& tlk = g_pBaldurChitin->GetTlkTable();
+    CString sValue;
+
+    for (INT iClassType = 1; iClassType <= CAIOBJECT_CLASS_MAX; iClassType++) {
+        BYTE nLevel = static_cast<BYTE>(DStats.GetClassLevel(iClassType));
+        if (nLevel > 0) {
+
+            ruleTables.GetClassStringMixed(static_cast<BYTE>(iClassType),
+                nSpecialization,
+                dwFlags,
+                sValue,
+                typeAI.m_nGender != CAIOBJECTTYPE_SEX_FEMALE);
+            tlk.SetToken(CRuleTables::TOKEN_CLASS, sValue);
+
+            sValue.Format("%d", nLevel);
+            tlk.SetToken(CRuleTables::TOKEN_LEVEL, sValue);
+
+            UpdateText(pText, "%s", FetchString(11293)); // "<CLASS>: Level <LEVEL>"
+        }
+    }
 }
 
 // 0x64E2C0

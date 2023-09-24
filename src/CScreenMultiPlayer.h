@@ -15,6 +15,9 @@
 
 #define CRESUI_CONTROLBUTTONID_MULTIPLAYER_MODIFYPLAYER_PLAYER5 5
 
+class CAIObjectType;
+class CDerivedStats;
+
 class CScreenMultiPlayer : public CBaldurEngine {
 public:
     static const CString TOKEN_GOLD;
@@ -81,7 +84,7 @@ public:
     void ResetErrorPanel(CUIPanel* pPanel);
     void FocusChatEditBox();
     void OnKickPlayerButtonClick(INT nButton);
-    void sub_64E160();
+    void UpdateExperienceEntry(CUIControlTextDisplay* pText, const CAIObjectType& typeAI, CDerivedStats& DStats, DWORD nSpecialization, BYTE nBestClass, DWORD dwFlags);
     void ResetViewCharacterPanel(CUIPanel* pPanel);
     BOOL IsPortraitButtonClickable(INT nCharacterSlot);
     void OnPortraitButtonClick(INT nButton);
