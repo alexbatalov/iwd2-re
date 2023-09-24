@@ -959,7 +959,39 @@ void CScreenMultiPlayer::UpdateMainPanelCharacter(CUIPanel* pPanel, INT nCharact
 // 0x64BCF0
 void CScreenMultiPlayer::UpdatePermissionsPanel()
 {
-    // TODO: Incomplete.
+    CUIPanel* pPanel = m_cUIManager.GetPanel(1);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 2378
+    UTIL_ASSERT(pPanel != NULL);
+
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(73));
+
+    for (INT nPlayerSlot = 0; nPlayerSlot < CINFGAME_MAXCHARACTERS; nPlayerSlot++) {
+        UpdatePermissionsPanelPlayer(pPanel, nPlayerSlot);
+    }
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(72));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 2389
+    UTIL_ASSERT(pText != NULL);
+
+    field_464 = g_pBaldurChitin->GetBaldurMessage()->m_cChatBuffer.UpdateTextDisplay(pText, field_464);
+
+    CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 2395
+    UTIL_ASSERT(pSettings != NULL);
+
+    INT nLocalPlayer = g_pBaldurChitin->cNetwork.FindPlayerLocationByID(g_pBaldurChitin->cNetwork.m_idLocalPlayer, FALSE);
+    BOOLEAN bLeader = pSettings->GetPermission(nLocalPlayer, CGamePermission::LEADER);
+    BOOLEAN bIsHost = g_pBaldurChitin->cNetwork.GetSessionHosting();
+
+    CUIControlButton3State* pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(61));
+    pButton->SetEnabled(bLeader || bIsHost);
+    pButton->SetSelected(pSettings->GetListenToJoinOption());
 }
 
 // 0x64BE30
