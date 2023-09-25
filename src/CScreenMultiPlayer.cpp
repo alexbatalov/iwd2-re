@@ -5,6 +5,7 @@
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CScreenConnection.h"
+#include "CScreenCreateChar.h"
 #include "CScreenStart.h"
 #include "CScreenWorld.h"
 #include "CUIControlButton.h"
@@ -2589,7 +2590,91 @@ CUIControlButtonMultiPlayerModifyCharacterCreate::~CUIControlButtonMultiPlayerMo
 // 0x651950
 void CUIControlButtonMultiPlayerModifyCharacterCreate::OnLButtonClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CScreenMultiPlayer* pMultiPlayer = g_pBaldurChitin->m_pEngineMultiPlayer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 6087
+    UTIL_ASSERT(pMultiPlayer != NULL);
+
+    CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 6089
+    UTIL_ASSERT(pCreateChar != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 6091
+    UTIL_ASSERT(pGame != NULL);
+
+    CMultiplayerSettings* pSettings = pGame->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 6093
+    UTIL_ASSERT(pSettings != NULL);
+
+    CNetwork& cNetwork = g_pBaldurChitin->cNetwork;
+
+    CSingleLock renderLock(&(pMultiPlayer->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    INT nCharacterSlot = pMultiPlayer->field_458;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 6101
+    UTIL_ASSERT(0 <= nCharacterSlot && nCharacterSlot < CINFGAME_MAXCHARACTERS);
+
+    if (pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_NO_CHARACTER) {
+        pSettings->SignalCharacterStatus(nCharacterSlot,
+            CMultiplayerSettings::CHARSTATUS_SIGNAL_CREATION_START,
+            TRUE,
+            TRUE);
+
+        INT nLocalPlayer = cNetwork.m_nLocalPlayer;
+        INT nHostPlayer = cNetwork.m_nHostPlayer;
+        CString sPlayerName;
+
+        if (nHostPlayer != -1) {
+            sPlayerName = cNetwork.m_psPlayerName[nHostPlayer];
+        } else {
+            sPlayerName = "";
+        }
+
+        while (pSettings->GetCharacterControlledByPlayer(nCharacterSlot) == nLocalPlayer
+            && pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_NO_CHARACTER) {
+            while (g_pChitin->cNetwork.PeekSpecificMessage(sPlayerName, CBaldurMessage::MSG_TYPE_MPSETTINGS, CBaldurMessage::MSG_SUBTYPE_MPSETTINGS_FULLSET) == TRUE) {
+                g_pBaldurChitin->GetBaldurMessage()->HandleBlockingMessages();
+
+                DWORD dwSize;
+                BYTE* pData = g_pChitin->cNetwork.FetchSpecificMessage(sPlayerName,
+                    CBaldurMessage::MSG_TYPE_MPSETTINGS,
+                    CBaldurMessage::MSG_SUBTYPE_MPSETTINGS_FULLSET,
+                    dwSize);
+                g_pBaldurChitin->GetBaldurMessage()->OnSettingsFullSet(nHostPlayer, pData, dwSize);
+                delete pData;
+            }
+
+            if (g_pChitin->cNetwork.GetSessionOpen() != TRUE) {
+                break;
+            }
+
+            g_pChitin->m_bDisplayStale = TRUE;
+            Sleep(60);
+        }
+
+        if (pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_CREATING_CHARACTER) {
+            renderLock.Unlock();
+
+            pMultiPlayer->OnDoneButtonClick();
+            pCreateChar->StartCreateChar(nCharacterSlot, 3);
+            pMultiPlayer->SelectEngine(pCreateChar);
+
+            renderLock.Lock();
+        }
+    }
+
+    renderLock.Unlock();
 }
 
 // -----------------------------------------------------------------------------
