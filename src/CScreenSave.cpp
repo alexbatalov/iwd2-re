@@ -1327,9 +1327,45 @@ CUIControlButtonSavePortrait::~CUIControlButtonSavePortrait()
 // 0x65EC90
 BOOL CUIControlButtonSavePortrait::Render(BOOL bForce)
 {
-    // TODO: Incomplete.
+    if (!m_bActive && !m_bInactiveRender) {
+        return FALSE;
+    }
 
-    return FALSE;
+    if (m_nRenderCount == 0 && !bForce) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount != 0) {
+        CSingleLock lock(&(m_pPanel->m_pManager->field_56), FALSE);
+        lock.Lock(INFINITE);
+        m_nRenderCount--;
+        lock.Unlock();
+    }
+
+    CScreenSave* pSave = g_pBaldurChitin->m_pEngineSave;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSave.cpp
+    // __LINE__: 3174
+    UTIL_ASSERT(pSave != NULL);
+
+    INT nGameSlot;
+    if (m_pPanel->m_nID != 0) {
+        nGameSlot = pSave->m_nCurrentGameSlot;
+    } else {
+        nGameSlot = pSave->m_nTopGameSlot + (m_nID - 25) / 6;
+    }
+
+    CRect rControlRect(m_pPanel->m_ptOrigin + m_ptOrigin, m_size);
+
+    CRect rClip;
+    rClip.IntersectRect(rControlRect, m_rDirty);
+
+    // NOTE: Even though it's a rect, only top left corner is used.
+    CRect rArea;
+    rArea.left = m_pPanel->m_ptOrigin.x + m_ptOrigin.x;
+    rArea.top = m_pPanel->m_ptOrigin.y + m_ptOrigin.y;
+
+    return pSave->DrawPortrait((m_nID - 25) % 6, nGameSlot, rArea, rClip);
 }
 
 // -----------------------------------------------------------------------------
