@@ -700,9 +700,26 @@ void CScreenSave::RefreshGameSlots()
 }
 
 // 0x65C850
-void CScreenSave::DrawScreenShot()
+BOOL CScreenSave::DrawScreenShot(INT nSlot, const CRect& rArea, const CRect& rClip)
 {
-    // TODO: Incomplete.
+    CVidBitmap vbScreenShot(CResRef(""), g_pBaldurChitin->field_4A28);
+
+    if (nSlot >= m_nNumGameSlots - 1) {
+        return FALSE;
+    }
+
+    if (m_aGameSlots[nSlot]->m_cResScreenShot.m_pData != NULL) {
+        vbScreenShot.SetRes(&(m_aGameSlots[nSlot]->m_cResScreenShot));
+        vbScreenShot.pRes->DemandLoadedBitmap();
+        vbScreenShot.RenderDirect(0, rArea.left, rArea.top, rClip, 0, 1);
+        vbScreenShot.pRes->ReleaseLoadedBitmap();
+    } else {
+        vbScreenShot.SetResRef(CResRef("ICEWIND2"), TRUE, TRUE);
+        vbScreenShot.m_bDoubleSize = g_pBaldurChitin->field_4A28;
+        vbScreenShot.RenderDirect(0, rArea.left, rArea.top, rClip, 0, 1);
+    }
+
+    return TRUE;
 }
 
 // 0x65CAB0
