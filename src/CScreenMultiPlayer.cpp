@@ -1,9 +1,10 @@
 #include "CScreenMultiPlayer.h"
 
 #include "CBaldurChitin.h"
-#include "CDerivedStats.h"
+#include "CGameSprite.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CMessage.h"
 #include "CScreenConnection.h"
 #include "CScreenCreateChar.h"
 #include "CScreenStart.h"
@@ -2696,7 +2697,132 @@ CUIControlButtonMultiPlayerModifyCharacterDelete::~CUIControlButtonMultiPlayerMo
 // 0x651E30
 void CUIControlButtonMultiPlayerModifyCharacterDelete::OnLButtonClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CScreenMultiPlayer* pMultiPlayer = g_pBaldurChitin->m_pEngineMultiPlayer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 6212
+    UTIL_ASSERT(pMultiPlayer != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 6214
+    UTIL_ASSERT(pGame != NULL);
+
+    CNetwork& cNetwork = g_pBaldurChitin->cNetwork;
+
+    CMultiplayerSettings* pSettings = pGame->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 6217
+    UTIL_ASSERT(pSettings != NULL);
+
+    CSingleLock renderLock(&(pMultiPlayer->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    INT nCharacterSlot = pMultiPlayer->field_458;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 6226
+    UTIL_ASSERT(0 <= nCharacterSlot && nCharacterSlot < CINFGAME_MAXCHARACTERS);
+
+    LONG nCharacterId = pGame->GetCharacterSlot(nCharacterSlot);
+
+    if (pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_CHARACTER
+        && nCharacterId != CGameObjectArray::INVALID_INDEX) {
+        pSettings->SignalCharacterStatus(nCharacterSlot,
+            CMultiplayerSettings::CHARSTATUS_SIGNAL_DELETED,
+            TRUE,
+            TRUE);
+
+        INT nLocalPlayer = cNetwork.m_nLocalPlayer;
+        INT nHostPlayer = cNetwork.m_nHostPlayer;
+        CString sPlayerName;
+
+        if (nHostPlayer != -1) {
+            sPlayerName = cNetwork.m_psPlayerName[nHostPlayer];
+        } else {
+            sPlayerName = "";
+        }
+
+        while (pSettings->GetCharacterControlledByPlayer(nCharacterSlot) == nLocalPlayer
+            && pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_CHARACTER) {
+            while (g_pChitin->cNetwork.PeekSpecificMessage(sPlayerName, CBaldurMessage::MSG_TYPE_MPSETTINGS, CBaldurMessage::MSG_SUBTYPE_MPSETTINGS_FULLSET) == TRUE) {
+                g_pBaldurChitin->GetBaldurMessage()->HandleBlockingMessages();
+
+                DWORD dwSize;
+                BYTE* pData = g_pChitin->cNetwork.FetchSpecificMessage(sPlayerName,
+                    CBaldurMessage::MSG_TYPE_MPSETTINGS,
+                    CBaldurMessage::MSG_SUBTYPE_MPSETTINGS_FULLSET,
+                    dwSize);
+                g_pBaldurChitin->GetBaldurMessage()->OnSettingsFullSet(nHostPlayer, pData, dwSize);
+                delete pData;
+            }
+
+            if (g_pChitin->cNetwork.GetSessionOpen() != TRUE) {
+                break;
+            }
+
+            g_pChitin->m_bDisplayStale = TRUE;
+            Sleep(60);
+        }
+
+        if (pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_NO_CHARACTER) {
+            renderLock.Unlock();
+
+            pMultiPlayer->OnDoneButtonClick();
+
+            if (nCharacterSlot == 0) {
+                pGame->sub_5BDBA0(-1, FALSE);
+            }
+
+            CGameSprite* pSprite;
+
+            BYTE rc;
+            do {
+                rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    reinterpret_cast<CGameObject**>(&pSprite),
+                    INFINITE);
+            } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+            if (rc == CGameObjectArray::SUCCESS) {
+                CMessagePartyGold* pPartyGold = new CMessagePartyGold(TRUE,
+                    TRUE,
+                    -static_cast<LONG>(pSprite->GetBaseStats()->m_gold),
+                    nCharacterId,
+                    nCharacterId);
+                g_pBaldurChitin->GetMessageHandler()->AddMessage(pPartyGold, FALSE);
+
+                pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            }
+
+            pGame->ClearCharacterSlot(nCharacterSlot);
+
+            do {
+                rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    reinterpret_cast<CGameObject**>(&pSprite),
+                    INFINITE);
+            } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+            if (rc == CGameObjectArray::SUCCESS) {
+                pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            }
+
+            if (pGame->GetObjectArray()->Delete(nCharacterId, CGameObjectArray::THREAD_ASYNCH, NULL, INFINITE) == CGameObjectArray::SUCCESS) {
+                delete pSprite;
+            }
+
+            renderLock.Lock(INFINITE);
+        }
+    }
+
+    renderLock.Unlock();
 }
 
 // -----------------------------------------------------------------------------
