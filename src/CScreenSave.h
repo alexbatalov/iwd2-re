@@ -5,6 +5,7 @@
 #include "CKeyInfo.h"
 #include "CResBitmap.h"
 #include "CUIControlButton.h"
+#include "CUIControlEdit.h"
 #include "CUIControlScrollBar.h"
 #include "CVidFont.h"
 
@@ -112,6 +113,15 @@ public:
     /* 04AC */ BOOLEAN m_bCtrlKeyDown;
     /* 04AE */ CVidFont m_preLoadFontRealms;
     /* 09AE */ CVidFont m_preLoadFontStnSml;
+};
+
+class CUIControlEditSaveName : public CUIControlEdit {
+public:
+    CUIControlEditSaveName(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo);
+    ~CUIControlEditSaveName() override;
+    void KillFocus() override;
+    void OnKeyDown(SHORT nKey) override;
+    void OnEditReturn(CString sText) override;
 };
 
 class CUIControlButtonSaveDelete : public CUIControlButton {

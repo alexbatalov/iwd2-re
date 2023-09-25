@@ -565,13 +565,13 @@ BOOL CScreenSave::IsDoneButtonClickable()
     switch (pPanel->m_nID) {
     case 1:
         if (1) {
-            CUIControlBase* pEdit = pPanel->GetControl(3);
+            CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(3));
 
             // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSave.cpp
             // __LINE__ 1097
             UTIL_ASSERT(pEdit != NULL);
 
-            // TODO: Incomplete.
+            sString = pEdit->GetText();
 
             sString.TrimLeft();
             sString.TrimRight();
@@ -994,6 +994,45 @@ void CScreenSave::CancelEngine()
     while (GetTopPopup() != NULL) {
         OnCancelButtonClick();
     }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x65E0E0
+CUIControlEditSaveName::CUIControlEditSaveName(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo)
+    : CUIControlEdit(panel, controlInfo, 0)
+{
+}
+
+// 0x65E130
+CUIControlEditSaveName::~CUIControlEditSaveName()
+{
+}
+
+// 0x65E200
+void CUIControlEditSaveName::OnKeyDown(SHORT nKey)
+{
+    CUIControlEdit::OnKeyDown(nKey);
+
+    CScreenSave* pSave = g_pBaldurChitin->m_pEngineSave;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSave.cpp
+    // __LINE__: 2751
+    UTIL_ASSERT(pSave != NULL);
+
+    // NOTE: Uninline.
+    pSave->UpdateSaveAsPanel();
+}
+
+// 0x65E2A0
+void CUIControlEditSaveName::KillFocus()
+{
+    CUIControlEdit::KillFocus();
+}
+
+// 0x65E2B0
+void CUIControlEditSaveName::OnEditReturn(CString sText)
+{
 }
 
 // -----------------------------------------------------------------------------
