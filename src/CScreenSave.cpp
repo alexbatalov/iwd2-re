@@ -651,7 +651,46 @@ void CScreenSave::StopSave()
 // 0x65BA80
 void CScreenSave::FreeGameSlots()
 {
-    // TODO: Incomplete.
+    for (INT nSlot = 0; nSlot < m_nNumGameSlots; nSlot++) {
+        if (m_aGameSlots[nSlot]->m_cResScreenShot.m_pData != 0) {
+            free(m_aGameSlots[nSlot]->m_cResScreenShot.m_pData);
+            m_aGameSlots[nSlot]->m_cResScreenShot.m_pData = NULL;
+        }
+
+        if (m_aGameSlots[nSlot]->m_cBmpResPortrait0.m_pData != 0) {
+            free(m_aGameSlots[nSlot]->m_cBmpResPortrait0.m_pData);
+            m_aGameSlots[nSlot]->m_cBmpResPortrait0.m_pData = NULL;
+        }
+
+        if (m_aGameSlots[nSlot]->m_cBmpResPortrait1.m_pData != 0) {
+            free(m_aGameSlots[nSlot]->m_cBmpResPortrait1.m_pData);
+            m_aGameSlots[nSlot]->m_cBmpResPortrait1.m_pData = NULL;
+        }
+
+        if (m_aGameSlots[nSlot]->m_cBmpResPortrait2.m_pData != 0) {
+            free(m_aGameSlots[nSlot]->m_cBmpResPortrait2.m_pData);
+            m_aGameSlots[nSlot]->m_cBmpResPortrait2.m_pData = NULL;
+        }
+
+        if (m_aGameSlots[nSlot]->m_cBmpResPortrait3.m_pData != 0) {
+            free(m_aGameSlots[nSlot]->m_cBmpResPortrait3.m_pData);
+            m_aGameSlots[nSlot]->m_cBmpResPortrait3.m_pData = NULL;
+        }
+
+        if (m_aGameSlots[nSlot]->m_cBmpResPortrait4.m_pData != 0) {
+            free(m_aGameSlots[nSlot]->m_cBmpResPortrait4.m_pData);
+            m_aGameSlots[nSlot]->m_cBmpResPortrait4.m_pData = NULL;
+        }
+
+        if (m_aGameSlots[nSlot]->m_cBmpResPortrait5.m_pData != 0) {
+            free(m_aGameSlots[nSlot]->m_cBmpResPortrait5.m_pData);
+            m_aGameSlots[nSlot]->m_cBmpResPortrait5.m_pData = NULL;
+        }
+
+        delete m_aGameSlots[nSlot];
+    }
+
+    m_nNumGameSlots = 0;
 }
 
 // 0x65BCF0
