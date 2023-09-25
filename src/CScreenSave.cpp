@@ -12,6 +12,31 @@
 
 #define GAME_SLOTS 5
 
+// 0x65DF40
+CScreenSaveGameSlot::CScreenSaveGameSlot()
+{
+    m_sFileName = "";
+    m_sSlotName = "";
+    m_cResScreenShot.m_pData = NULL;
+    m_cBmpResPortrait0.m_pData = NULL;
+    m_cBmpResPortrait1.m_pData = NULL;
+    m_cBmpResPortrait2.m_pData = NULL;
+    m_cBmpResPortrait3.m_pData = NULL;
+    m_cBmpResPortrait4.m_pData = NULL;
+    m_cBmpResPortrait5.m_pData = NULL;
+    field_2FC = "";
+    field_304 = "";
+    field_308 = 0;
+    field_30C = 0;
+    field_310 = "";
+    field_314 = "";
+}
+
+// 0x65BC00
+CScreenSaveGameSlot::~CScreenSaveGameSlot()
+{
+}
+
 // 0x659B10
 CScreenSave::CScreenSave()
 {
