@@ -80,7 +80,7 @@ public:
     void FreeGameSlots();
     void RefreshGameSlots();
     void DrawScreenShot();
-    void DrawPortrait();
+    BOOL DrawPortrait(USHORT nPortrait, INT nSlot, const CRect& rArea, const CRect& rClip);
     void EnableMainPanel(BOOL bEnable);
     CUIPanel* GetTopPopup();
     void ShowPopupPanel(DWORD dwPanelId, BOOL bShow);
