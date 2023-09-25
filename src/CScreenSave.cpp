@@ -474,7 +474,104 @@ void CScreenSave::TimerSynchronousUpdate()
 // 0x65AEE0
 void CScreenSave::UpdateMainPanel()
 {
-    // TODO: Incomplete.
+    CUIPanel* pPanel = m_cUIManager.GetPanel(0);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSave.cpp
+    // __LINE__: 783
+    UTIL_ASSERT(pPanel != NULL);
+
+    // NOTE: Unused.
+    CString v1;
+    CString sTime;
+
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(23));
+
+    CUIControlScrollBarSaveGames* pScrollBar = static_cast<CUIControlScrollBarSaveGames*>(pPanel->GetControl(23));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSave.cpp
+    // __LINE__: 796
+    UTIL_ASSERT(pScrollBar != NULL);
+
+    // NOTE: Uninline.
+    pScrollBar->UpdateScrollBar();
+
+    for (INT nSlot = 0; nSlot < GAME_SLOTS; nSlot++) {
+        CUIControlButton* pButton;
+        INT nGameSlot = nSlot + m_nTopGameSlot;
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(55 + nSlot));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSave.cpp
+        // __LINE__: 807
+        UTIL_ASSERT(pButton != NULL);
+
+        // NOTE: Inlining.
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSave.cpp
+        // __LINE__: 894
+        UTIL_ASSERT(0 <= nSlot && nSlot < GAME_SLOTS);
+
+        pButton->SetEnabled(nGameSlot < m_nNumGameSlots);
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(60 + nSlot));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSave.cpp
+        // __LINE__: 813
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->SetEnabled(nGameSlot < m_nNumGameSlots);
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(1 + nSlot));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSave.cpp
+        // __LINE__: 819
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->InvalidateRect();
+
+        for (DWORD nPortrait = 0; nPortrait < 6; nPortrait++) {
+            pButton = static_cast<CUIControlButton*>(pPanel->GetControl(25 + nSlot * 6 + nPortrait));
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenLoad.cpp
+            // __LINE__: 827
+            UTIL_ASSERT(pButton != NULL);
+
+            pButton->InvalidateRect();
+        }
+
+        if (nGameSlot < m_nNumGameSlots) {
+            if (m_aGameSlots[nGameSlot]->m_sFileName != "") {
+                CTimerWorld::GetCurrentTimeString(m_aGameSlots[nGameSlot]->field_308,
+                    20670,
+                    sTime);
+
+                UpdateLabel(pPanel,
+                    0x10000005 + nSlot,
+                    "%s",
+                    (LPCSTR)m_aGameSlots[nGameSlot]->m_sSlotName);
+                UpdateLabel(pPanel,
+                    0x1000000A + nSlot,
+                    "%s, %s",
+                    (LPCSTR)m_aGameSlots[nGameSlot]->field_310,
+                    (LPCSTR)sTime);
+                UpdateLabel(pPanel,
+                    0x1000000F + nSlot,
+                    "%s",
+                    (LPCSTR)m_aGameSlots[nGameSlot]->field_314);
+            } else {
+                UpdateLabel(pPanel,
+                    0x10000005 + nSlot,
+                    "%s",
+                    (LPCSTR)FetchString(15304)); // "Empty"
+                UpdateLabel(pPanel, 0x1000000A + nSlot, "");
+                UpdateLabel(pPanel, 0x1000000F + nSlot, "");
+            }
+        } else {
+            UpdateLabel(pPanel, 0x10000005 + nSlot, "");
+            UpdateLabel(pPanel, 0x1000000A + nSlot, "");
+            UpdateLabel(pPanel, 0x1000000F + nSlot, "");
+        }
+    }
 }
 
 // 0x65B320
