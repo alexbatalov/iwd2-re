@@ -492,7 +492,222 @@ void CScreenMultiPlayer::OnKeyDown(SHORT nKeysFlags)
 // 0x649990
 void CScreenMultiPlayer::TimerAsynchronousUpdate()
 {
-    // TODO: Incomplete.
+    CUIPanel* pPanel = GetTopPopup();
+
+    BOOLEAN bDoMainButtonClick = FALSE;
+
+    CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    CMultiplayerSettings* pSettings = pGame->GetMultiplayerSettings();
+
+    if (field_45C == 2) {
+        g_pBaldurChitin->m_pEngineWorld->AsynchronousUpdate(FALSE);
+    } else {
+        if (pSettings->m_bArbitrationLockAllowInput && !m_bLastLockAllowInput) {
+            CUIPanel* pPanel = m_cUIManager.GetPanel(0);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+            // __LINE__: 896
+            UTIL_ASSERT(pPanel != NULL);
+
+            CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(25));
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+            // __LINE__: 899
+            UTIL_ASSERT(pText != NULL);
+
+            pText->DisplayString(CString(""),
+                FetchString(20605),
+                pText->m_rgbLabelColor,
+                pText->m_rgbTextColor,
+                -1,
+                FALSE,
+                TRUE);
+        }
+
+        m_bLastLockAllowInput = pSettings->m_bArbitrationLockAllowInput;
+
+        if (g_pChitin->cNetwork.MakePlayersVisible() == TRUE) {
+            g_pBaldurChitin->GetBaldurMessage()->SendFullSettingsToClients(CString(""));
+        }
+
+        if (pSettings->m_bFirstConnected == TRUE && pSettings->m_bArbitrationLockStatus == TRUE) {
+            pSettings->m_bFirstConnected = FALSE;
+            m_nErrorState = 1;
+            m_dwErrorTextId = 10247;
+            SummonPopup(6);
+
+            pVidMode->m_bPointerEnabled = FALSE;
+            renderLock.Unlock();
+
+            g_pChitin->m_bDisplayStale = TRUE;
+            pGame->sub_59FA00(TRUE);
+
+            renderLock.Lock(INFINITE);
+
+            BOOLEAN bError = FALSE;
+            for (BYTE cnt = 0; cnt < 6 && !bError; cnt++) {
+                BOOLEAN bFinishedCharacter = FALSE;
+                INT nRetries = 0;
+
+                while (!bFinishedCharacter) {
+                    g_pBaldurChitin->GetBaldurMessage()->DemandCharacterSlot(cnt,
+                        FALSE,
+                        g_pChitin->cNetwork.m_nHostPlayer);
+
+                    DWORD dwStartTickCount = GetTickCount();
+                    BOOLEAN bFinished = FALSE;
+                    CString sHostName;
+
+                    if (g_pChitin->cNetwork.m_nHostPlayer != -1) {
+                        sHostName = g_pChitin->cNetwork.m_psPlayerName[g_pChitin->cNetwork.m_nHostPlayer];
+                    } else {
+                        sHostName = "";
+                    }
+
+                    if (bError) {
+                        bFinishedCharacter = TRUE;
+                        break;
+                    }
+
+                    while (!bFinished) {
+                        if (GetTickCount() >= dwStartTickCount
+                            && GetTickCount() - dwStartTickCount < 5000) {
+
+                        } else {
+                            nRetries++;
+                            if (nRetries < 3) {
+                                break;
+                            }
+
+                            g_pChitin->cNetwork.CloseSession(TRUE);
+                            bError = TRUE;
+                            bFinishedCharacter = TRUE;
+                            break;
+                        }
+
+                        g_pBaldurChitin->GetBaldurMessage()->HandleBlockingMessages();
+                        g_pChitin->m_bDisplayStale = TRUE;
+                        Sleep(60);
+
+                        if (!g_pChitin->cNetwork.GetSessionOpen()) {
+                            bError = TRUE;
+                            bFinishedCharacter = TRUE;
+                            break;
+                        }
+
+                        if (g_pChitin->cNetwork.PeekSpecificMessage(sHostName, CBaldurMessage::MSG_TYPE_PLAYERCHAR, CBaldurMessage::MSG_SUBTYPE_PLAYERCHAR_DEMAND_REPLY) == TRUE) {
+                            DWORD dwSize;
+                            BYTE* pMessage = g_pChitin->cNetwork.FetchSpecificMessage(sHostName,
+                                CBaldurMessage::MSG_TYPE_PLAYERCHAR,
+                                CBaldurMessage::MSG_SUBTYPE_PLAYERCHAR_DEMAND_REPLY,
+                                dwSize);
+
+                            g_pBaldurChitin->GetBaldurMessage()->OnDemandCharacterSlotReply(g_pChitin->cNetwork.m_nHostPlayer,
+                                pMessage,
+                                dwSize);
+
+                            delete pMessage;
+
+                            bFinished = TRUE;
+                            bFinishedCharacter = TRUE;
+                        }
+                    }
+                }
+            }
+
+            DismissPopup();
+
+            pVidMode->m_bPointerEnabled = TRUE;
+            renderLock.Unlock();
+
+            if (bError == 1) {
+                g_pBaldurChitin->m_pEngineStart->m_nEngineState = 0;
+                SelectEngine(g_pBaldurChitin->m_pEngineConnection);
+
+                if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+                    g_pBaldurChitin->m_pEngineConnection->ShowSessionTerminatedMessage();
+                }
+
+                pGame->DestroyGame(1, 0);
+
+                return;
+            }
+
+            CUIPanel* pPanel = m_cUIManager.GetPanel(0);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+            // __LINE__: 1038
+            UTIL_ASSERT(pPanel != NULL);
+
+            CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(25));
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+            // __LINE__: 1040
+            UTIL_ASSERT(pText != NULL);
+
+            pText->DisplayString(CString(""),
+                FetchString(10637),
+                pText->m_rgbLabelColor,
+                pText->m_rgbTextColor,
+                -1,
+                FALSE,
+                TRUE);
+
+            renderLock.Lock(INFINITE);
+            pSettings->SetPlayerReady(g_pChitin->cNetwork.m_idLocalPlayer,
+                TRUE,
+                TRUE);
+        }
+    }
+
+    if (pPanel != NULL) {
+        // NOTE: Uninline.
+        UpdatePopupPanel(pPanel->m_nID);
+
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+            && !g_pChitin->cNetwork.GetSessionHosting()
+            && field_45C == 1
+            && IsMainDoneButtonClickable()) {
+            while (GetTopPopup() != NULL) {
+                OnCancelButtonClick();
+            }
+
+            bDoMainButtonClick = TRUE;
+        }
+    } else {
+        UpdateMainPanel();
+
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+            && !g_pChitin->cNetwork.GetSessionHosting()
+            && field_45C == 1
+            && IsMainDoneButtonClickable()) {
+            bDoMainButtonClick = TRUE;
+        }
+    }
+
+    if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+        && field_45C == 2
+        && pGame->GetMultiplayerSettings()->m_bArbitrationLockStatus == TRUE) {
+        if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+            pGame->MultiplayerSetCharacterCreationLocation();
+        }
+
+        field_45C = 1;
+        StartMultiPlayer(1);
+    }
+
+    renderLock.Unlock();
+
+    if (bDoMainButtonClick) {
+        OnMainDoneButtonClick();
+    }
+
+    UpdateCursorShape(0);
+    m_cUIManager.TimerAsynchronousUpdate();
+    g_pBaldurChitin->GetObjectCursor()->CursorUpdate(pVidMode);
 }
 
 // 0x64A110
