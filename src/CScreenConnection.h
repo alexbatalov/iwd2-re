@@ -154,7 +154,7 @@ public:
     /* 04A2 */ STRREF m_strErrorText;
     /* 04A6 */ INT m_nNumErrorButtons;
     /* 04AA */ STRREF m_strErrorButtonText[CSCREENCONNECTION_ERROR_BUTTONS];
-    /* 04B6 */ unsigned char field_4B6;
+    /* 04B6 */ BOOLEAN m_bEnumeratingAsynchronous;
     /* 04B7 */ BOOLEAN m_bJoinWaiting;
     /* 04B8 */ BOOLEAN m_bJoinComplete;
     /* 04B9 */ BYTE m_nJoinEvent;

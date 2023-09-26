@@ -181,7 +181,7 @@ CScreenConnection::CScreenConnection()
     m_bEMWaiting = FALSE;
     m_nEMEvent = 0;
     m_nEMEventStage = 0;
-    field_4B6 = 0;
+    m_bEnumeratingAsynchronous = FALSE;
     m_bJoinWaiting = FALSE;
     m_bJoinComplete = FALSE;
     m_nJoinEvent = 0;
@@ -755,7 +755,7 @@ void CScreenConnection::TimerAsynchronousUpdate()
                             }
 
                             if (v1) {
-                                field_4B6 = TRUE;
+                                m_bEnumeratingAsynchronous = TRUE;
 
                                 if (g_pChitin->cNetwork.m_bConnectionInitialized == TRUE) {
                                     g_pChitin->cNetwork.EnumerateSessions(TRUE, FALSE);
@@ -1682,7 +1682,7 @@ void CScreenConnection::OnDoneButtonClick()
             }
         }
 
-        if (pNetwork->m_bConnectionInitialized == TRUE && field_4B6 == 1) {
+        if (pNetwork->m_bConnectionInitialized == TRUE && m_bEnumeratingAsynchronous == TRUE) {
             pNetwork->sub_7A61D0();
             m_bEliminateInitialize = TRUE;
         }
@@ -1747,7 +1747,7 @@ void CScreenConnection::OnDoneButtonClick()
                 pVidMode->m_bPointerEnabled = FALSE;
                 renderLock.Unlock();
 
-                if (field_4B6 == 1) {
+                if (m_bEnumeratingAsynchronous == TRUE) {
                     pNetwork->sub_7A61D0();
                     m_bEliminateInitialize = TRUE;
                 }
@@ -3273,7 +3273,237 @@ void CScreenConnection::ResetErrorPanel(CUIPanel* pPanel)
 // 0x600B50
 void CScreenConnection::HandleEMEvent(BYTE nEvent, BYTE nEventStage)
 {
-    // TODO: Incomplete.
+    INT nServiceProviderType;
+    INT nErrorCode;
+    INT nCharacterSlot;
+
+    CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+
+    switch (nEvent) {
+    case 0:
+        switch (nEventStage) {
+        case 1:
+            g_pChitin->cNetwork.GetServiceProviderType(g_pChitin->cNetwork.GetServiceProvider(),
+                nServiceProviderType);
+            if (nServiceProviderType == CNetwork::SERV_PROV_TCP_IP
+                && g_pChitin->cNetwork.m_bConnectionInitialized == TRUE) {
+                g_pChitin->cNetwork.EnumerateSessions(FALSE, FALSE);
+            }
+
+            if (!g_pChitin->cNetwork.HostNewSession()) {
+                m_bEliminateInitialize = TRUE;
+            }
+
+            m_bEMSwapped = FALSE;
+            m_bEMValue = TRUE;
+            m_bEMWaiting = TRUE;
+            m_nEMEvent = 0;
+            m_nEMEventStage = 2;
+            break;
+        case 2:
+            if (g_pChitin->cNetwork.GetSessionHosting()) {
+                renderLock.Lock(INFINITE);
+
+                CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+
+                if (g_pChitin->cNetwork.CreatePlayer(nErrorCode)) {
+                    DismissPopup();
+                    pSettings->InitializeSettings();
+
+                    for (nCharacterSlot = 0; nCharacterSlot < 6; nCharacterSlot++) {
+                        pSettings->SetCharacterControlledByPlayer(nCharacterSlot,
+                            0,
+                            TRUE,
+                            FALSE);
+                    }
+
+                    pSettings->SetPlayerReady(g_pChitin->cNetwork.m_idLocalPlayer,
+                        TRUE,
+                        TRUE);
+
+                    CScreenLoad* pLoad = g_pBaldurChitin->m_pEngineLoad;
+
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
+                    // __LINE__: 5670
+                    UTIL_ASSERT(pLoad != NULL);
+
+                    pLoad->StartLoad(1);
+                    SelectEngine(pLoad);
+
+                    g_pBaldurChitin->GetObjectGame()->LoadMultiPlayerPermissions();
+
+                    pSettings->SetArbitrationLockAllowInput(FALSE);
+                    pSettings->SetArbitrationLockStatus(TRUE, 0);
+
+                    renderLock.Unlock();
+                } else {
+                    m_bEliminateInitialize = TRUE;
+                    g_pChitin->cNetwork.CloseSession(TRUE);
+
+                    // FIXME: Missing `renderLock.Unlock` (which is called
+                    // implicitly anyway).
+                }
+            }
+            break;
+        }
+        break;
+    case 1:
+        switch (nEventStage) {
+        case 1:
+            g_pChitin->cNetwork.GetServiceProviderType(g_pChitin->cNetwork.GetServiceProvider(),
+                nServiceProviderType);
+            if (nServiceProviderType == CNetwork::SERV_PROV_TCP_IP
+                && g_pChitin->cNetwork.m_bConnectionInitialized == TRUE) {
+                g_pChitin->cNetwork.EnumerateSessions(FALSE, FALSE);
+            }
+
+            if (!g_pChitin->cNetwork.HostNewSession()) {
+                m_bEliminateInitialize = TRUE;
+            }
+
+            m_bEMSwapped = FALSE;
+            m_bEMValue = TRUE;
+            m_bEMWaiting = TRUE;
+            m_nEMEvent = 1;
+            m_nEMEventStage = 2;
+            break;
+        case 2:
+            if (g_pChitin->cNetwork.GetSessionHosting()) {
+                renderLock.Lock(INFINITE);
+
+                CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+
+                if (g_pChitin->cNetwork.CreatePlayer(nErrorCode)) {
+                    DismissPopup();
+
+                    renderLock.Unlock();
+
+                    pSettings->InitializeSettings();
+
+                    for (nCharacterSlot = 0; nCharacterSlot < 6; nCharacterSlot++) {
+                        pSettings->SetCharacterControlledByPlayer(nCharacterSlot,
+                            0,
+                            TRUE,
+                            FALSE);
+                    }
+
+                    pSettings->SetPlayerReady(g_pChitin->cNetwork.m_idLocalPlayer, TRUE, TRUE);
+
+                    g_pBaldurChitin->GetObjectGame()->NewGame(TRUE, FALSE);
+
+                    renderLock.Lock(INFINITE);
+
+                    CResRef cResArea;
+                    CString sAreaName;
+                    CPoint ptView;
+                    g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetStartArea(cResArea, ptView);
+                    cResArea.CopyToString(sAreaName);
+
+                    CPoint ptAreaStart = g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetStartPoint(0);
+                    pSettings->SetCharacterCreationLocation(sAreaName, ptAreaStart);
+
+                    g_pBaldurChitin->GetObjectGame()->LoadMultiPlayerPermissions();
+
+                    if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL) {
+                        CScreenSinglePlayer* pSinglePlayer = g_pBaldurChitin->m_pEngineSinglePlayer;
+                        pSinglePlayer->field_45C = 1;
+                        pSinglePlayer->StartSinglePlayer(1);
+                        SelectEngine(pSinglePlayer);
+                    } else {
+                        CScreenMultiPlayer* pMultiPlayer = g_pBaldurChitin->m_pEngineMultiPlayer;
+                        pMultiPlayer->field_45C = 1;
+                        pMultiPlayer->StartMultiPlayer(1);
+                        SelectEngine(pMultiPlayer);
+                    }
+
+                    pSettings->SetArbitrationLockStatus(TRUE, 0);
+
+                    renderLock.Unlock();
+                } else {
+                    g_pChitin->cNetwork.CloseSession(TRUE);
+                    m_bEliminateInitialize = TRUE;
+
+                    // FIXME: Missing `renderLock.Unlock` (which is called
+                    // implicitly anyway).
+                }
+            }
+            break;
+        }
+        break;
+    case 2:
+        switch (nEventStage) {
+        case 1:
+            g_pChitin->cNetwork.GetServiceProviderType(g_pChitin->cNetwork.GetServiceProvider(),
+                nServiceProviderType);
+            if (nServiceProviderType == CNetwork::SERV_PROV_TCP_IP) {
+                CString sAsyncEnum;
+                GetPrivateProfileStringA("Multiplayer",
+                    "AsyncEnumeration",
+                    "0",
+                    sAsyncEnum.GetBuffer(128),
+                    128,
+                    g_pBaldurChitin->GetIniFileName());
+
+                if (sAsyncEnum != "0") {
+                    m_bEnumeratingAsynchronous = TRUE;
+                } else {
+                    m_bEnumeratingAsynchronous = FALSE;
+                }
+
+                if (g_pChitin->cGameSpy.field_0 == 1) {
+                    // TODO: Incomplete.
+                }
+
+                CString sIPAddress = g_pChitin->cNetwork.m_sIPAddress;
+
+                if (g_pChitin->cNetwork.m_bConnectionInitialized == TRUE) {
+                    g_pChitin->cNetwork.EnumerateSessions(FALSE, FALSE);
+                }
+
+                int v1 = 10;
+                if (sIPAddress != "") {
+                    v1 = 60;
+                }
+
+                if (m_bEnumeratingAsynchronous == TRUE || sIPAddress != "") {
+                    // NOTE: Original code is slightly different (loop body
+                    // inlined a couple of times).
+                    while (v1 > 0) {
+                        for (int v2 = 0; v2 < 10; v2++) {
+                            SleepEx(500, FALSE);
+                        }
+
+                        if (g_pChitin->cNetwork.m_bConnectionInitialized == TRUE) {
+                            g_pChitin->cNetwork.EnumerateSessions(m_bEnumeratingAsynchronous,
+                                FALSE);
+                        }
+
+                        if (g_pChitin->cNetwork.m_nTotalSessions != 0) {
+                            break;
+                        }
+
+                        v1 -= 10;
+                    }
+                }
+            } else {
+                if (g_pChitin->cNetwork.m_bConnectionInitialized == TRUE) {
+                    g_pChitin->cNetwork.EnumerateSessions(FALSE, FALSE);
+                }
+            }
+
+            m_bEMSwapped = FALSE;
+            m_bEMValue = TRUE;
+            m_bEMWaiting = TRUE;
+            m_nEMEvent = 2;
+            m_nEMEventStage = 2;
+            break;
+        case 2:
+            m_nSessionIndex = 0;
+            OnJoinGameButtonClick();
+            break;
+        }
+        break;
+    }
 }
 
 // 0x6014A0
