@@ -1926,6 +1926,8 @@ void CScreenMultiPlayer::SetPermissionToolTips(CUIPanel* pPanel, DWORD a3, DWORD
         UTIL_ASSERT(pControl != NULL);
 
         pControl->SetToolTipStrRef(strRef, -1, -1);
+
+        a4++;
     }
 }
 
