@@ -313,13 +313,13 @@ public:
         memset(this, 0, sizeof(*this));
     }
 
-    SCRIPTNAME m_name;
-    WORD m_type;
-    WORD m_resRefType;
-    DWORD m_dwValue;
-    LONG m_intValue;
-    double m_floatValue;
-    SCRIPTNAME m_stringValue;
+    /* 0000 */ SCRIPTNAME m_name;
+    /* 0020 */ WORD m_type;
+    /* 0022 */ WORD m_resRefType;
+    /* 0024 */ DWORD m_dwValue;
+    /* 0028 */ LONG m_intValue;
+    /* 002C */ double m_floatValue;
+    /* 0034 */ SCRIPTNAME m_stringValue;
 };
 
 class CStoreFileHeader {

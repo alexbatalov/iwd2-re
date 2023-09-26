@@ -1,6 +1,8 @@
 #include "CScreenSave.h"
 
 #include "CBaldurChitin.h"
+#include "CGameArea.h"
+#include "CGameSprite.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CScreenCharacter.h"
@@ -27,11 +29,11 @@ CScreenSaveGameSlot::CScreenSaveGameSlot()
     m_cBmpResPortrait3.m_pData = NULL;
     m_cBmpResPortrait4.m_pData = NULL;
     m_cBmpResPortrait5.m_pData = NULL;
-    field_2FC = "";
-    field_304 = "";
-    field_308 = 0;
-    field_30C = 0;
-    field_310 = "";
+    m_cResPortrait = "";
+    m_sCharacterName = "";
+    m_nTime = 0;
+    m_nChapter = 0;
+    m_sChapter = "";
     field_314 = "";
 }
 
@@ -544,7 +546,7 @@ void CScreenSave::UpdateMainPanel()
 
         if (nGameSlot < m_nNumGameSlots) {
             if (m_aGameSlots[nGameSlot]->m_sFileName != "") {
-                CTimerWorld::GetCurrentTimeString(m_aGameSlots[nGameSlot]->field_308,
+                CTimerWorld::GetCurrentTimeString(m_aGameSlots[nGameSlot]->m_nTime,
                     20670,
                     sTime);
 
@@ -555,7 +557,7 @@ void CScreenSave::UpdateMainPanel()
                 UpdateLabel(pPanel,
                     0x1000000A + nSlot,
                     "%s, %s",
-                    (LPCSTR)m_aGameSlots[nGameSlot]->field_310,
+                    (LPCSTR)m_aGameSlots[nGameSlot]->m_sChapter,
                     (LPCSTR)sTime);
                 UpdateLabel(pPanel,
                     0x1000000F + nSlot,
@@ -1109,7 +1111,101 @@ void CScreenSave::DismissPopup()
 // 0x65D360
 void CScreenSave::ResetSaveAsPanel(CUIPanel* pPanel)
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSave.cpp
+    // __LINE__: 2173
+    UTIL_ASSERT(pGame != NULL);
+
+    CString sTime;
+    CString v2;
+
+    // FIXME: Unused.
+    CResRef v1;
+
+    INT nGameSlot = m_nCurrentGameSlot;
+
+    LONG nCharacterId = pGame->GetProtagonist();
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        m_aGameSlots[nGameSlot]->m_cResPortrait = pSprite->GetBaseStats()->m_portraitSmall;
+
+        // NOTE: Uninline.
+        m_aGameSlots[nGameSlot]->m_sCharacterName = pSprite->GetName();
+
+        // FIXME: Unused.
+        ULONG nTimeWithParty;
+        pSprite->m_cGameStats.GetTimeWithParty(nTimeWithParty);
+
+        // TODO: Probably a bug, releasing `iPicked` instead of `nCharacterId`.
+        pGame->GetObjectArray()->ReleaseShare(pGame->GetVisibleArea()->m_iPicked,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    m_aGameSlots[nGameSlot]->m_nTime = pGame->GetWorldTimer()->m_gameTime;
+
+    CVariable* pVariable = pGame->GetVariables()->FindKey(CInfGame::CHAPTER_GLOBAL);
+    if (pVariable != NULL) {
+        m_aGameSlots[nGameSlot]->m_nChapter = pVariable->m_intValue;
+    } else {
+        m_aGameSlots[nGameSlot]->m_nChapter = 0;
+    }
+
+    v2 = "chapters";
+
+    CList<STRREF, STRREF>* pList = pGame->GetRuleTables().GetChapterText(CResRef(v2),
+        m_aGameSlots[nGameSlot]->m_nChapter);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSave.cpp
+    // __LINE__: 2219
+    UTIL_ASSERT(pList != NULL);
+
+    if (pList->GetCount() > 0) {
+        m_aGameSlots[nGameSlot]->m_sChapter = FetchString(pList->GetHead());
+    }
+
+    delete pList;
+
+    CTimerWorld::GetCurrentTimeString(m_aGameSlots[nGameSlot]->m_nTime,
+        20670,
+        sTime);
+
+    UpdateLabel(pPanel,
+        0x10000004,
+        m_aGameSlots[nGameSlot]->m_sChapter,
+        sTime);
+
+    CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(7));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSave.cpp
+    // __LINE__: 2237
+    UTIL_ASSERT(pButton != NULL);
+
+    if (m_aGameSlots[nGameSlot]->m_sFileName == "") {
+        pButton->SetText(FetchString(15589)); // "Save"
+    } else {
+        pButton->SetText(FetchString(15306)); // "Overwrite"
+    }
+
+    CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(3));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSave.cpp
+    // __LINE__: 2250
+    UTIL_ASSERT(pEdit != NULL);
+
+    pEdit->SetText(m_aGameSlots[nGameSlot]->m_sSlotName);
+    m_cUIManager.SetCapture(pEdit, CUIManager::KEYBOARD);
 }
 
 // NOTE: Inlined.

@@ -26,11 +26,11 @@ public:
     /* 01B8 */ CResBitmap m_cBmpResPortrait3;
     /* 0224 */ CResBitmap m_cBmpResPortrait4;
     /* 0290 */ CResBitmap m_cBmpResPortrait5;
-    /* 02FC */ CResRef field_2FC;
-    /* 0304 */ CString field_304;
-    /* 0308 */ ULONG field_308;
-    /* 030C */ int field_30C;
-    /* 0310 */ CString field_310;
+    /* 02FC */ CResRef m_cResPortrait;
+    /* 0304 */ CString m_sCharacterName;
+    /* 0308 */ ULONG m_nTime;
+    /* 030C */ int m_nChapter;
+    /* 0310 */ CString m_sChapter;
     /* 0314 */ CString field_314;
 };
 
