@@ -3,6 +3,9 @@
 #include "CBaldurChitin.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CScreenCharacter.h"
+#include "CScreenConnection.h"
+#include "CScreenLoad.h"
 #include "CScreenOptions.h"
 #include "CScreenWorld.h"
 #include "CUIControlLabel.h"
@@ -1188,6 +1191,9 @@ void CScreenSave::OnErrorButtonClick(INT nButton)
 
             // NOTE: Uninline.
             DeleteSave(m_nCurrentGameSlot);
+
+            RefreshGameSlots();
+            UpdateMainPanel();
             break;
         case 1:
             DismissPopup();
@@ -1221,7 +1227,76 @@ void CScreenSave::OnErrorButtonClick(INT nButton)
 // 0x65DB30
 void CScreenSave::SaveGame(INT nGameSlot, const CString& sSlotName)
 {
-    // TODO: Incomplete.
+    CString sFileName;
+    CString sNumber;
+    CString sMessage;
+    BOOL bSuccess;
+
+    if (m_aGameSlots[nGameSlot]->m_sFileName != "") {
+        // NOTE: Uninline.
+        DeleteSave(nGameSlot);
+
+        sNumber = m_aGameSlots[nGameSlot]->m_sFileName.SpanIncluding("0123456789");
+
+        if (m_aGameSlots[nGameSlot]->m_sFileName[sNumber.GetLength()] != '-') {
+            sNumber.Format("%09d", m_nMaxSlotNumber + 1);
+        }
+    } else {
+        sNumber.Format("%09d", m_nMaxSlotNumber >= 0 ? m_nMaxSlotNumber + 1 : 4);
+    }
+
+    sFileName = sNumber + '-' + sSlotName;
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    pGame->m_sSaveGame = sFileName;
+    CScreenCharacter::SAVE_NAME = sFileName;
+
+    bSuccess = pGame->SaveGame(1, 0, 1);
+
+    switch (m_nEngineState) {
+    case 0:
+        SelectEngine(g_pBaldurChitin->m_pEngineWorld);
+
+        if (bSuccess) {
+            sMessage = FetchString(1682);
+            g_pBaldurChitin->m_pEngineWorld->DisplayText(CString(""),
+                sMessage,
+                0,
+                RGB(63, 255, 12),
+                -1,
+                FALSE);
+        }
+        break;
+    case 1:
+        SelectEngine(g_pBaldurChitin->m_pEngineConnection);
+
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+            if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+                g_pBaldurChitin->m_pEngineConnection->ShowSessionTerminatedMessage();
+            }
+
+            g_pChitin->cNetwork.CloseSession(TRUE);
+            g_pBaldurChitin->GetBaldurMessage()->m_bPlayerShutdown = FALSE;
+        }
+        pGame->DestroyGame(1, 0);
+        break;
+    case 2:
+        break;
+    case 3:
+        if (g_pChitin->cNetwork.GetSessionOpen()) {
+            g_pBaldurChitin->m_pEngineLoad->StartLoad(3);
+        } else {
+            g_pBaldurChitin->m_pEngineLoad->StartLoad(2);
+        }
+
+        SelectEngine(g_pBaldurChitin->m_pEngineLoad);
+        pGame->DestroyGame(1, 0);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSave.cpp
+        // __LINE__: 2619
+        UTIL_ASSERT(FALSE);
+    }
 }
 
 // NOTE: Inlined.
@@ -1236,9 +1311,6 @@ void CScreenSave::DeleteSave(INT nGameSlot)
     UTIL_ASSERT(m_aGameSlots[nGameSlot]->m_sFileName != "");
 
     g_pBaldurChitin->GetObjectGame()->DeleteSaveGame(m_aGameSlots[nGameSlot]->m_sFileName);
-
-    RefreshGameSlots();
-    UpdateMainPanel();
 }
 
 // 0x65E0C0
