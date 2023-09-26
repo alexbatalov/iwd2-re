@@ -2119,12 +2119,12 @@ void CScreenMultiPlayer::SetChatEditBoxStatus(const CString& sChatText, BOOL bIn
 }
 
 // NOTE: Inlined.
-void CScreenMultiPlayer::SetPermissionToolTips(CUIPanel* pPanel, DWORD a3, DWORD a4, DWORD a5, STRREF strRef)
+void CScreenMultiPlayer::SetPermissionToolTips(CUIPanel* pPanel, DWORD nHeaderID, DWORD nFirstButtonID, DWORD nLastButtonID, STRREF strRef)
 {
     CUIControlBase* pControl;
 
-    if (a3 != -1) {
-        pControl = pPanel->GetControl(a3);
+    if (nHeaderID != -1) {
+        pControl = pPanel->GetControl(nHeaderID);
 
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
         // __LINE__: 3368
@@ -2133,16 +2133,14 @@ void CScreenMultiPlayer::SetPermissionToolTips(CUIPanel* pPanel, DWORD a3, DWORD
         pControl->SetToolTipStrRef(strRef, -1, -1);
     }
 
-    while (a4 <= a5) {
-        pControl = pPanel->GetControl(a4);
+    for (DWORD nButtonID = nFirstButtonID; nButtonID < nLastButtonID; nButtonID++) {
+        pControl = pPanel->GetControl(nButtonID);
 
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
         // __LINE__: 3376
         UTIL_ASSERT(pControl != NULL);
 
         pControl->SetToolTipStrRef(strRef, -1, -1);
-
-        a4++;
     }
 }
 

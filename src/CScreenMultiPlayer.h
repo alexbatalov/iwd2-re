@@ -92,7 +92,7 @@ public:
     void CopyChatEditBox(CUIPanel* pFrom, CUIPanel* pTo);
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
 
-    void SetPermissionToolTips(CUIPanel* pPanel, DWORD a3, DWORD a4, DWORD a5, STRREF strToolTip);
+    void SetPermissionToolTips(CUIPanel* pPanel, DWORD nHeaderID, DWORD nFirstButtonID, DWORD nLastButtonID, STRREF strRef);
     void UpdatePermission(CUIPanel* pPanel, DWORD nButtonID, BOOL bEnabled, BOOL bSelected);
 
     /* 0106 */ CKeyInfo m_pVirtualKeys[CSCREENMULTIPLAYER_VIRTUAL_KEYS];
