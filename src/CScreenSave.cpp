@@ -697,7 +697,86 @@ BOOL CScreenSave::IsDoneButtonClickable()
 // 0x65B6A0
 void CScreenSave::OnDoneButtonClick()
 {
-    // TODO: Incomplete.
+    CSingleLock renderLock(&(GetManager()->field_36), FALSE);
+
+    CUIPanel* pPanel = GetTopPopup();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSave.cpp
+    // __LINE__: 1141
+    UTIL_ASSERT(pPanel != NULL);
+
+    INT nGameSlot = m_nCurrentGameSlot;
+    CString sSlotName;
+
+    // FIXME: Obtaining same panel twice.
+    CUIPanel* pSamePanel = GetTopPopup();
+
+    // FIXME: This panel has already been asserted.
+    if (pSamePanel != NULL) {
+        switch (pPanel->m_nID) {
+        case 2:
+        case 3:
+            OnErrorButtonClick(0);
+            return;
+        }
+    }
+
+    if (IsDoneButtonClickable()) {
+        switch (pPanel->m_nID) {
+        case 1:
+            if (1) {
+                renderLock.Lock(INFINITE);
+
+                CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(3));
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSave.cpp
+                // __LINE__: 1172
+                UTIL_ASSERT(pEdit != NULL);
+
+                sSlotName = pEdit->GetText();
+
+                BOOL bSave;
+                if (sSlotName.FindOneOf(".?:<>|*/\"") < 0) {
+                    if (sSlotName != "aux" && sSlotName != "con" && sSlotName != "prn") {
+                        DismissPopup();
+                        bSave = TRUE;
+                    } else {
+                        m_dwErrorTextId = 17132;
+                        SummonPopup(3);
+                        bSave = FALSE;
+                    }
+                } else {
+                    m_dwErrorTextId = 17133;
+                    SummonPopup(3);
+                    bSave = FALSE;
+                }
+
+                renderLock.Unlock();
+
+                if (bSave) {
+                    if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL) {
+                        CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+                        pGame->field_366E = 1;
+                        pGame->field_50DC = 0;
+
+                        if (!g_pChitin->cVideo.Is3dAccelerated()) {
+                            if (!pGame->field_50D8) {
+                                pGame->SynchronousUpdate();
+                            }
+                            pGame->field_50D8 = TRUE;
+                        }
+                    }
+
+                    SaveGame(nGameSlot, sSlotName);
+                }
+            }
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSave.cpp
+            // __LINE__: 1219
+            UTIL_ASSERT(FALSE);
+        }
+    }
 }
 
 // 0x65B920
