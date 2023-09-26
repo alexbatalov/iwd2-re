@@ -184,6 +184,9 @@ void CMultiplayerSettings::Marshal(BYTE** pData, DWORD* dwSize)
             nMsgPtr += sizeof(BOOLEAN);
         }
 
+        *reinterpret_cast<PLAYER_ID*>(*pData + nMsgPtr) = m_pnPlayerReady[nIndexPlayer];
+        nMsgPtr += sizeof(PLAYER_ID);
+
         *reinterpret_cast<PLAYER_ID*>(*pData + nMsgPtr) = g_pChitin->cNetwork.field_772[nIndexPlayer];
         nMsgPtr += sizeof(PLAYER_ID);
     }
@@ -231,13 +234,13 @@ void CMultiplayerSettings::Marshal(BYTE** pData, DWORD* dwSize)
     *reinterpret_cast<DWORD*>(*pData + nMsgPtr) = nGoreOption;
     nMsgPtr += sizeof(DWORD);
 
-    BYTE nAreaStringLength = min(m_sAreaName.GetLength(), 8);
+    BYTE nAreaStringLength = min(m_sAreaName.GetLength(), RESREF_SIZE);
 
     *reinterpret_cast<BYTE*>(*pData + nMsgPtr) = nAreaStringLength;
     nMsgPtr += sizeof(BYTE);
 
     memcpy(*pData + nMsgPtr, m_sAreaName.GetBuffer(m_sAreaName.GetLength()), nAreaStringLength);
-    nMsgPtr += nAreaStringLength;
+    nMsgPtr += RESREF_SIZE;
 
     *reinterpret_cast<int*>(*pData + nMsgPtr) = m_nDifficultyLevel;
     nMsgPtr += sizeof(int);
