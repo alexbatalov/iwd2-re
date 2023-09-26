@@ -306,7 +306,7 @@ void CScreenMultiPlayer::EngineActivated()
     // __LINE__: 331
     UTIL_ASSERT(pPanel != NULL);
 
-    pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(25));
+    pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(72));
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
     // __LINE__: 333
