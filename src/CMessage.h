@@ -9,6 +9,7 @@
 #include "CChatBuffer.h"
 #include "CColorEffects.h"
 #include "CImmunities.h"
+#include "CItem.h"
 #include "CResRef.h"
 #include "FileFormat.h"
 
@@ -19,7 +20,6 @@ class CGameArea;
 class CGameContainer;
 class CGameDoor;
 class CGameEffect;
-class CItem;
 
 class CBaldurMessage {
 public:
@@ -37,6 +37,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_COLOR_CHANGE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_COLOR_RESET;
     static const BYTE MSG_SUBTYPE_CMESSAGE_COLOR_UPDATE;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_CONTAINER_ADD_ITEM;
     static const BYTE MSG_SUBTYPE_CMESSAGE_CONTAINER_ITEMS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_CONTAINER_STATUS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_CUT_SCENE_MODE_STATUS;
@@ -473,6 +474,20 @@ public:
 
     /* 000C */ CColorRanges m_appliedColorRanges;
     /* 0028 */ CColorEffects m_appliedColorEffects;
+};
+
+class CMessageContainerAddItem : public CMessage {
+public:
+    CMessageContainerAddItem(const CItem&, SHORT slotNum, BOOLEAN bCompressContainer, LONG caller, LONG target);
+    ~CMessageContainerAddItem() override;
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ CItem m_item;
+    /* 00FA */ SHORT m_slotNum;
+    /* 00FC */ BOOLEAN m_bCompressContainer;
 };
 
 class CMessageContainerItems : public CMessage {

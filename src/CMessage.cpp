@@ -103,6 +103,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_COLOR_RESET = 10;
 // 0x84CEE2
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_COLOR_UPDATE = 11;
 
+// 0x84CEE3
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CONTAINER_ADD_ITEM = 12;
+
 // 0x84CEE4
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CONTAINER_ITEMS = 13;
 
@@ -4297,6 +4300,87 @@ void CMessageColorReset::Run()
 
             // NOTE: Uninline.
             pSprite->GetAnimation()->ClearColorEffectsAll();
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Inlined
+CMessageContainerAddItem::CMessageContainerAddItem(const CItem& item, SHORT slotNum, BOOLEAN bCompressContainer, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_item.SetResRef(item.cResRef, TRUE);
+    m_item.m_useCount1 = item.m_useCount1;
+    m_item.m_useCount2 = item.m_useCount2;
+    m_item.m_useCount3 = item.m_useCount3;
+    m_item.m_wear = item.m_wear;
+    m_item.m_flags = item.m_flags;
+
+    m_slotNum = slotNum;
+    m_bCompressContainer = m_bCompressContainer;
+}
+
+// 0x47DFC0
+CMessageContainerAddItem::~CMessageContainerAddItem()
+{
+}
+
+// 0x40A0D0
+SHORT CMessageContainerAddItem::GetCommType()
+{
+    return SEND;
+}
+
+// 0x40A0E0
+BYTE CMessageContainerAddItem::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x47DF90
+BYTE CMessageContainerAddItem::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CONTAINER_ADD_ITEM;
+}
+
+// 0x4FB230
+void CMessageContainerAddItem::Run()
+{
+    CGameContainer* pContainer;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pContainer),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pContainer->GetObjectType() == CGameObject::TYPE_CONTAINER) {
+            CItem* pItem;
+
+            if (m_item.cResRef != "") {
+                pItem = new CItem(m_item);
+            } else {
+                pItem = NULL;
+            }
+
+            pContainer->SetItem(m_slotNum, pItem);
+
+            if (m_bCompressContainer) {
+                pContainer->CompressContainer();
+            } else {
+                CMessageContainerItems* pMessage = new CMessageContainerItems(pContainer,
+                    pContainer->GetId(),
+                    pContainer->GetId());
+                g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+            }
         }
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,

@@ -14,6 +14,7 @@ public:
     /* 0048 */ void RemoveFromArea() override;
     /* 0050 */ BOOLEAN DoAIUpdate(BOOLEAN active, LONG counter) override;
 
+    void CompressContainer();
     CItem* GetItem(SHORT nSlotNum);
     void SetItem(SHORT nSlotNum, CItem* pItem);
     void SetFlags(DWORD dwFlags);

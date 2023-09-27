@@ -230,6 +230,12 @@ void CGameContainer::RemoveFromArea()
     delete this;
 }
 
+// 0x4801A0
+void CGameContainer::CompressContainer()
+{
+    // TODO: Incomplete.
+}
+
 // 0x4802B0
 CItem* CGameContainer::GetItem(SHORT nSlotNum)
 {

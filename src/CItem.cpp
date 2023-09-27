@@ -19,6 +19,12 @@ CItem::CItem()
     m_useCount3 = 0;
 }
 
+// 0x4E7900
+CItem::CItem(const CItem& item)
+{
+    // TODO: Incomplete.
+}
+
 // 0x4E7B60
 CItem::CItem(const CCreatureFileItem& item)
 {
