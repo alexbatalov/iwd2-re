@@ -1424,10 +1424,7 @@ void CScreenMultiPlayer::UpdateMainPanelCharacter(CUIPanel* pPanel, INT nCharact
         }
 
         pNetwork->GetPlayerName(nPlayerSlot, sPlayerName);
-
-        // FIXME: Unused.
-        pNetwork->GetPlayerID(nPlayerSlot);
-
+        bPlayerReady = pNetwork->GetPlayerID(nPlayerSlot) != 0;
         bCharacterReady = pSettings->GetCharacterReady(nCharacterSlot);
 
         CheckCharacterButtons(nCharacterSlot,
