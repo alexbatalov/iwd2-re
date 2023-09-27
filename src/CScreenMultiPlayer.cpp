@@ -2766,7 +2766,7 @@ CUIControlButtonMultiPlayerOptionsDone::CUIControlButtonMultiPlayerOptionsDone(C
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
 {
     STR_RES strRes;
-    g_pBaldurChitin->GetTlkTable().Fetch(13727, strRes);
+    g_pBaldurChitin->GetTlkTable().Fetch(11973, strRes);
     SetText(strRes.szText);
 }
 
