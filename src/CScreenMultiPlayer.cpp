@@ -1345,7 +1345,234 @@ void CScreenMultiPlayer::CheckCharacterButtons(INT nCharacterSlot, BOOL& bReadyA
 // 0x64B340
 void CScreenMultiPlayer::UpdateMainPanelCharacter(CUIPanel* pPanel, INT nCharacterSlot)
 {
-    // TODO: Incomplete.
+    // NOTE: Unused.
+    CString v1;
+
+    CString sPlayerName;
+    CString sCharacterName;
+    CResRef portraitResRef;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 2130
+    UTIL_ASSERT(0 <= nCharacterSlot && nCharacterSlot < CINFGAME_MAXCHARACTERS);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 2131
+    UTIL_ASSERT(pPanel);
+
+    CNetwork* pNetwork = &(g_pBaldurChitin->cNetwork);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 2135
+    UTIL_ASSERT(pGame != NULL);
+
+    CMultiplayerSettings* pSettings = pGame->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 2137
+    UTIL_ASSERT(pSettings != NULL);
+
+    BOOL bSlotFree;
+    BOOL bSlotFull;
+    BOOL bSlotLoading;
+    BOOL bSlotCreating;
+    BOOL bReadyActive;
+    BOOL bModifyPlayerActive;
+    BOOL bModifyCharacterActive;
+    BOOLEAN bCharacterReady;
+    BOOLEAN bPlayerReady;
+
+    if (!pSettings->m_bFirstConnected) {
+        LONG nCharacterId = pGame->GetCharacterSlot(nCharacterSlot);
+
+        bSlotFree = pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_NO_CHARACTER;
+        bSlotFull = pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_CHARACTER
+            && nCharacterId != CGameObjectArray::INVALID_INDEX;
+        bSlotLoading = pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_CHARACTER
+            && nCharacterId == CGameObjectArray::INVALID_INDEX;
+        bSlotCreating = pSettings->GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_CREATING_CHARACTER;
+
+        if (bSlotFull) {
+            CGameSprite* pSprite;
+            BYTE rc;
+            do {
+                rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    reinterpret_cast<CGameObject**>(&pSprite),
+                    INFINITE);
+            } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+            if (rc == CGameObjectArray::SUCCESS) {
+                portraitResRef = pSprite->GetBaseStats()->m_portraitSmall;
+
+                // NOTE: Uninline.
+                sCharacterName = pSprite->GetName();
+
+                g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            } else {
+                sCharacterName = FetchString(10262); // "Error"
+            }
+        }
+
+        INT nPlayerSlot = pSettings->GetCharacterControlledByPlayer(nCharacterSlot);
+        if (nPlayerSlot == -1) {
+            nPlayerSlot = 0;
+        }
+
+        pNetwork->GetPlayerName(nPlayerSlot, sPlayerName);
+
+        // FIXME: Unused.
+        pNetwork->GetPlayerID(nPlayerSlot);
+
+        bCharacterReady = pSettings->GetCharacterReady(nCharacterSlot);
+
+        CheckCharacterButtons(nCharacterSlot,
+            bReadyActive,
+            bModifyPlayerActive,
+            bModifyCharacterActive);
+    }
+
+    CUIControlButton3State* pReady = static_cast<CUIControlButton3State*>(pPanel->GetControl(nCharacterSlot));
+    pReady->SetInactiveRender(TRUE);
+
+    if (!pSettings->m_bFirstConnected && pSettings->m_bArbitrationLockAllowInput) {
+        pReady->SetActive(bReadyActive);
+
+        if (pReady->m_bSelected != bCharacterReady) {
+            PlayGUISound(CResRef("GAM_02"));
+        }
+
+        pReady->SetSelected(bCharacterReady);
+    } else {
+        pReady->SetActive(TRUE);
+
+        if (pReady->m_bSelected) {
+            PlayGUISound(CResRef("GAM_02"));
+        }
+
+        pReady->SetSelected(FALSE);
+    }
+
+    CUIControlButton* pButton;
+    CUIControlLabel* pLabel;
+
+    pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nCharacterSlot + 12));
+    pLabel = static_cast<CUIControlLabel*>(pPanel->GetControl(nCharacterSlot + 0x1000001E));
+
+    if (!pSettings->m_bFirstConnected && pSettings->m_bArbitrationLockAllowInput) {
+        BOOLEAN bOldActive = pButton->m_bActive;
+
+        pButton->SetActive(bModifyPlayerActive);
+        pButton->SetInactiveRender(bModifyPlayerActive);
+
+        pLabel->SetActive(!bModifyPlayerActive);
+        pLabel->SetInactiveRender(!bModifyPlayerActive);
+
+        if (bModifyPlayerActive) {
+            if (!bPlayerReady) {
+                sPlayerName = FetchString(10263);
+            }
+
+            pButton->SetText(sPlayerName);
+        } else {
+            if (!bPlayerReady) {
+                sPlayerName = "";
+            }
+
+            pLabel->SetText(sPlayerName);
+        }
+
+        if (bModifyPlayerActive != bOldActive) {
+            CRect rButtonFrame(pPanel->m_ptOrigin + pButton->m_ptOrigin,
+                pButton->m_size);
+            pPanel->InvalidateRect(&rButtonFrame);
+
+            CRect rLabelFrame(pPanel->m_ptOrigin + pLabel->m_ptOrigin,
+                pButton->m_size);
+            pPanel->InvalidateRect(&rLabelFrame);
+        }
+    } else {
+        pButton->SetText(CString(""));
+        pButton->SetActive(FALSE);
+        pButton->SetInactiveRender(FALSE);
+
+        pLabel->SetText(CString(""));
+        pLabel->SetActive(FALSE);
+        pLabel->SetInactiveRender(FALSE);
+    }
+
+    pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nCharacterSlot + 18));
+    pLabel = static_cast<CUIControlLabel*>(pPanel->GetControl(nCharacterSlot + 0x10000024));
+
+    if (!pSettings->m_bFirstConnected && pSettings->m_bArbitrationLockAllowInput) {
+        BOOLEAN bOldActive = pButton->m_bActive;
+
+        pButton->SetActive(bModifyCharacterActive);
+        pButton->SetInactiveRender(bModifyCharacterActive);
+
+        pLabel->SetActive(bModifyCharacterActive);
+        pLabel->SetInactiveRender(bModifyCharacterActive);
+
+        if (bModifyCharacterActive) {
+            if (bSlotFree) {
+                sCharacterName = FetchString(10264); // "Create Character"
+            }
+
+            pButton->m_nTextFlags |= 0x20;
+            pButton->SetText(sCharacterName);
+        } else {
+            if (bSlotLoading) {
+                sCharacterName = FetchString(10265); // "Loading Character..."
+            }
+
+            if (bSlotCreating) {
+                sCharacterName = FetchString(10266); // "Creating Character..."
+            }
+
+            if (bSlotFree) {
+                sCharacterName = FetchString(10267); // "No Character"
+            }
+
+            pLabel->SetText(sCharacterName);
+        }
+
+        if (bModifyCharacterActive != bOldActive) {
+            CRect rButtonFrame(pPanel->m_ptOrigin + pButton->m_ptOrigin,
+                pButton->m_size);
+            pPanel->InvalidateRect(&rButtonFrame);
+
+            CRect rLabelFrame(pPanel->m_ptOrigin + pLabel->m_ptOrigin,
+                pButton->m_size);
+            pPanel->InvalidateRect(&rLabelFrame);
+        }
+    } else {
+        pButton->SetText(CString(""));
+        pButton->SetActive(FALSE);
+        pButton->SetInactiveRender(FALSE);
+
+        pLabel->SetText(CString(""));
+        pLabel->SetActive(FALSE);
+        pLabel->SetInactiveRender(FALSE);
+    }
+
+    CUIControlButtonMultiPlayerPortrait* pPortrait = static_cast<CUIControlButtonMultiPlayerPortrait*>(pPanel->GetControl(nCharacterSlot + 6));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
+    // __LINE__: 2333
+    UTIL_ASSERT(pPortrait != NULL);
+
+    pPortrait->SetEnabled(IsPortraitButtonClickable(nCharacterSlot));
+
+    if (pSettings->m_bFirstConnected || !pSettings->m_bArbitrationLockAllowInput || !bSlotFull) {
+        portraitResRef = "";
+    }
+
+    // NOTE: Uninline.
+    pPortrait->SetPortrait(portraitResRef);
 }
 
 // 0x64BCF0
