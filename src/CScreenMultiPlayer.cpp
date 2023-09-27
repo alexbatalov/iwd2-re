@@ -1414,12 +1414,11 @@ void CScreenMultiPlayer::UpdatePermissionsPanelPlayer(CUIPanel* pPanel, INT nPla
     BOOLEAN bIsHost = g_pBaldurChitin->cNetwork.GetSessionHosting();
     PLAYER_ID idPlayer = g_pBaldurChitin->cNetwork.GetPlayerID(nPlayerSlot);
 
-    // TODO: Unclear.
-    BOOL bEnabled = bIsHost || bLeader;
+    BOOL bIsHostOrLeader = bIsHost || bLeader;
 
-    // TODO: Unclear.
-    BOOL bPortraitEnabled = (bIsHost || bLeader)
+    BOOL bCanBeKicked = bIsHostOrLeader
         && nLocalPlayer != nPlayerSlot
+        && idPlayer != 0
         && g_pBaldurChitin->cNetwork.GetHostPlayerID() != idPlayer;
 
     CUIControlLabel* pLabel = static_cast<CUIControlLabel*>(pPanel->GetControl(nPlayerSlot + 0x10000005));
@@ -1427,30 +1426,30 @@ void CScreenMultiPlayer::UpdatePermissionsPanelPlayer(CUIPanel* pPanel, INT nPla
     pLabel->SetText(sPlayerName);
 
     CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nPlayerSlot));
-    pButton->SetEnabled(bPortraitEnabled);
+    pButton->SetEnabled(bCanBeKicked);
 
     BOOL bPermission;
 
     bPermission = pSettings->GetPermission(nPlayerSlot, CGamePermission::PURCHASING);
-    UpdatePermission(pPanel, nPlayerSlot + 19, bEnabled, bPermission);
+    UpdatePermission(pPanel, nPlayerSlot + 19, bIsHostOrLeader, bPermission);
 
     bPermission = pSettings->GetPermission(nPlayerSlot, CGamePermission::AREA_TRANSITION);
-    UpdatePermission(pPanel, nPlayerSlot + 25, bEnabled, bPermission);
+    UpdatePermission(pPanel, nPlayerSlot + 25, bIsHostOrLeader, bPermission);
 
     bPermission = pSettings->GetPermission(nPlayerSlot, CGamePermission::DIALOG);
-    UpdatePermission(pPanel, nPlayerSlot + 31, bEnabled, bPermission);
+    UpdatePermission(pPanel, nPlayerSlot + 31, bIsHostOrLeader, bPermission);
 
     bPermission = pSettings->GetPermission(nPlayerSlot, CGamePermission::CHAR_RECORDS);
-    UpdatePermission(pPanel, nPlayerSlot + 37, bEnabled, bPermission);
+    UpdatePermission(pPanel, nPlayerSlot + 37, bIsHostOrLeader, bPermission);
 
     bPermission = pSettings->GetPermission(nPlayerSlot, CGamePermission::PAUSING);
-    UpdatePermission(pPanel, nPlayerSlot + 49, bEnabled, bPermission);
+    UpdatePermission(pPanel, nPlayerSlot + 49, bIsHostOrLeader, bPermission);
 
     bPermission = pSettings->GetPermission(nPlayerSlot, CGamePermission::LEADER);
-    UpdatePermission(pPanel, nPlayerSlot + 55, bEnabled, bPermission);
+    UpdatePermission(pPanel, nPlayerSlot + 55, bIsHostOrLeader, bPermission);
 
     bPermission = pSettings->GetPermission(nPlayerSlot, CGamePermission::MODIFY_CHARS);
-    UpdatePermission(pPanel, nPlayerSlot + 13, bEnabled, bPermission);
+    UpdatePermission(pPanel, nPlayerSlot + 13, bIsHostOrLeader, bPermission);
 }
 
 // 0x64C210
