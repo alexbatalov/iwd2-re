@@ -15,6 +15,7 @@ public:
     /* 0050 */ BOOLEAN DoAIUpdate(BOOLEAN active, LONG counter) override;
 
     CItem* GetItem(SHORT nSlotNum);
+    void SetItem(SHORT nSlotNum, CItem* pItem);
     void SetFlags(DWORD dwFlags);
     void SetTrapActivated(WORD active);
     void SetTrapDetected(WORD state);

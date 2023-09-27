@@ -16,8 +16,10 @@
 typedef DWORD PLAYER_ID;
 
 class CGameArea;
+class CGameContainer;
 class CGameDoor;
 class CGameEffect;
+class CItem;
 
 class CBaldurMessage {
 public:
@@ -35,6 +37,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_COLOR_CHANGE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_COLOR_RESET;
     static const BYTE MSG_SUBTYPE_CMESSAGE_COLOR_UPDATE;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_CONTAINER_ITEMS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_CONTAINER_STATUS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_CUT_SCENE_MODE_STATUS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXT;
@@ -470,6 +473,19 @@ public:
 
     /* 000C */ CColorRanges m_appliedColorRanges;
     /* 0028 */ CColorEffects m_appliedColorEffects;
+};
+
+class CMessageContainerItems : public CMessage {
+public:
+    CMessageContainerItems(CGameContainer* pContainer, LONG caller, LONG target);
+    ~CMessageContainerItems() override;
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void Run() override;
+
+    /* 000C */ SHORT m_nItems;
+    /* 000E */ CItem** m_pItems;
 };
 
 class CMessageContainerStatus : public CMessage {

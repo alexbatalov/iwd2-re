@@ -245,6 +245,12 @@ CItem* CGameContainer::GetItem(SHORT nSlotNum)
     return NULL;
 }
 
+// 0x480300
+void CGameContainer::SetItem(SHORT nSlotNum, CItem* pItem)
+{
+    // TODO: Incomplete.
+}
+
 // 0x481750
 void CGameContainer::SetFlags(DWORD dwFlags)
 {

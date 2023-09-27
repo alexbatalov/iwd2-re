@@ -103,6 +103,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_COLOR_RESET = 10;
 // 0x84CEE2
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_COLOR_UPDATE = 11;
 
+// 0x84CEE4
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CONTAINER_ITEMS = 13;
+
 // 0x84CEE5
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CONTAINER_STATUS = 14;
 
@@ -4294,6 +4297,89 @@ void CMessageColorReset::Run()
 
             // NOTE: Uninline.
             pSprite->GetAnimation()->ClearColorEffectsAll();
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4FB3C0
+CMessageContainerItems::CMessageContainerItems(CGameContainer* pContainer, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    if (pContainer != NULL && pContainer->m_lstItems.GetCount() != 0) {
+        m_nItems = pContainer->m_lstItems.GetCount();
+        m_pItems = new CItem*[m_nItems];
+
+        for (SHORT cnt = 0; cnt < m_nItems; cnt++) {
+            m_pItems[cnt] = pContainer->GetItem(cnt);
+        }
+    } else {
+        m_nItems = NULL;
+        m_pItems = NULL;
+    }
+}
+
+// 0x4FB4B0
+CMessageContainerItems::~CMessageContainerItems()
+{
+    for (SHORT cnt = 0; cnt < m_nItems; cnt++) {
+        m_pItems[cnt] = NULL;
+    }
+
+    if (m_pItems != NULL) {
+        delete m_pItems;
+    }
+}
+
+// 0x4088A0
+SHORT CMessageContainerItems::GetCommType()
+{
+    return BROADCAST_OTHERS;
+}
+
+// 0x40A0E0
+BYTE CMessageContainerItems::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4FB480
+BYTE CMessageContainerItems::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CONTAINER_ITEMS;
+}
+
+// 0x4FBA30
+void CMessageContainerItems::Run()
+{
+    CGameContainer* pContainer;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pContainer),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        SHORT maxcnt = max(m_nItems, pContainer->m_lstItems.GetCount());
+        for (SHORT cnt = 0; cnt < m_nItems; cnt++) {
+            CItem* oldItem = pContainer->GetItem(cnt);
+            if (cnt < m_nItems) {
+                pContainer->SetItem(cnt, m_pItems[cnt]);
+            } else {
+                pContainer->SetItem(cnt, NULL);
+            }
+
+            if (oldItem != NULL && oldItem != m_pItems[cnt]) {
+                g_pBaldurChitin->GetObjectGame()->AddDisposableItem(oldItem);
+            }
         }
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
