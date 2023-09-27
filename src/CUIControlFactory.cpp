@@ -635,7 +635,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 68:
             case 69:
             case 70:
-                return new CUIControlButtonMultiPlayerHotArea(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+                return new CUIControlButtonHotArea(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 72:
                 return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
             case 73:
