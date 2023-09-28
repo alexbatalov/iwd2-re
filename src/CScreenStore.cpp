@@ -1112,7 +1112,44 @@ void CScreenStore::CloseBag(BOOL bSaveFile)
 // 0x67E890
 void CScreenStore::UpdateRequesterPanel()
 {
-    // TODO: Incomplete.
+    CScreenStoreItem cItem;
+
+    if (field_14E6 == 0) {
+        GetGroupItem(field_14E2, cItem);
+    } else {
+        GetStoreItem(field_14E2, cItem);
+    }
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(20);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 9423
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlButtonStoreRequesterItem* pButton = static_cast<CUIControlButtonStoreRequesterItem*>(pPanel->GetControl(0));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 9425
+    UTIL_ASSERT(pButton != NULL);
+
+    CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(6));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 9427
+    UTIL_ASSERT(pButton != NULL);
+
+    field_14DE = min(field_14DE, cItem.m_nMaxCount);
+
+    char szCount[4];
+    sprintf(szCount, "%d", field_14DE);
+
+    pEdit->SetText(CString(szCount));
+    pEdit->InvalidateRect();
+
+    if (cItem.m_pItem != NULL) {
+        pButton->m_resRef = cItem.m_pItem->GetItemIcon();
+        pButton->InvalidateRect();
+    }
 }
 
 // 0x6849B0
