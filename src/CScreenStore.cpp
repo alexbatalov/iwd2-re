@@ -859,7 +859,64 @@ void CScreenStore::OnBuySpellButtonClick()
 // 0x67C570
 void CScreenStore::OnRentRoomButtonClick()
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 7233
+    UTIL_ASSERT(pGame != NULL);
+
+    DWORD nPartyGold = pGame->m_nPartyGold;
+
+    DWORD nCost;
+    switch (m_dwRoomType) {
+    case 0:
+        nCost = 0;
+        break;
+    case 1:
+        nCost = m_pStore->m_header.m_nRoomCostPeasant;
+        break;
+    case 2:
+        nCost = m_pStore->m_header.m_nRoomCostMerchant;
+        break;
+    case 3:
+        nCost = m_pStore->m_header.m_nRoomCostNoble;
+        break;
+    case 4:
+        nCost = m_pStore->m_header.m_nRoomCostRoyal;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 8602
+        UTIL_ASSERT(FALSE);
+    }
+
+    CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    if (m_dwRoomType != 0) {
+        if (nCost > nPartyGold) {
+            m_nErrorState = 2;
+            m_strErrorText = 11051;
+            m_strErrorButtonText[0] = 11973;
+            SummonPopup(10);
+        } else {
+            STRREF strError;
+            if (pGame->CanRestParty(strError, 1, 0, 0)) {
+                m_nErrorState = 0;
+                m_strErrorText = 15358;
+                m_strErrorButtonText[0] = 17199;
+                m_strErrorButtonText[1] = 13727;
+                SummonPopup(11);
+            } else {
+                m_nErrorState = 1;
+                m_strErrorText = strError;
+                m_strErrorButtonText[0] = 11973;
+                SummonPopup(10);
+            }
+        }
+    }
+
+    renderLock.Unlock();
 }
 
 // 0x67C710

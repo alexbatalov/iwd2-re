@@ -167,6 +167,7 @@ public:
     /* 05B4 */ CUIPanel* m_pButtonBar;
     /* 05B8 */ BOOL m_bStoreStarted;
     /* 05BC */ int field_5BC;
+    /* 05C0 */ INT m_nErrorState;
     /* 05C4 */ STRREF m_strErrorText;
     /* 05C8 */ INT m_nNumErrorButtons;
     /* 05CC */ STRREF m_strErrorButtonText[CSCREENSTORE_ERROR_BUTTONS];
