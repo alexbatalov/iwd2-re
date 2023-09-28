@@ -1045,7 +1045,46 @@ void CScreenStore::UpdatePartyGoldStatus()
 // 0x684A20
 void CScreenStore::OpenBag(const CResRef& resRef)
 {
-    // TODO: Incomplete.
+    m_pBag = new CStore();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 13588
+    UTIL_ASSERT(m_pBag);
+
+    if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+        if (g_pChitin->cNetwork.GetSessionHosting()) {
+            g_pBaldurChitin->GetObjectGame()->DemandServerStore(resRef, TRUE);
+            m_pBag->SetResRef(resRef);
+        } else {
+            m_pBag->SetResRef(resRef);
+
+            if (m_pBag->m_bLocalCopy && memcmp(m_pBag->m_pVersion, "STORV9.0", 8) == 0) {
+                CMessageStoreDemand* pMessage = new CMessageStoreDemand(resRef,
+                    CGameObjectArray::INVALID_INDEX,
+                    CGameObjectArray::INVALID_INDEX);
+                g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+            } else {
+                BOOL bResult = g_pBaldurChitin->GetBaldurMessage()->DemandResourceFromServer(resRef.GetResRefStr(),
+                    1014,
+                    TRUE,
+                    TRUE,
+                    TRUE);
+                if (!bResult) {
+                    g_pChitin->cNetwork.CloseSession(TRUE);
+                    return;
+                }
+
+                m_pBag->SetResRef(resRef);
+            }
+        }
+    } else {
+        m_pBag->SetResRef(resRef);
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 13623
+    UTIL_ASSERT_MSG(m_pBag->GetType() == CSTOREFILEHEADER_STORETYPE_BAG,
+        (LPCSTR)(resRef.GetResRefStr() + " store file is not type BAG"));
 }
 
 // 0x684CD0

@@ -31,6 +31,9 @@ public:
 
     static void InvalidateStore(const CResRef& resRef);
 
+    // Seen in `CScreenStore::OpenBag`.
+    DWORD GetType() { return m_header.m_nStoreType; }
+
     /* 0000 */ CResRef m_resRef;
     /* 0008 */ CStoreFileHeader m_header;
     /* 00F0 */ CTypedPtrList<CPtrList, CStoreFileItem*> m_lInventory;

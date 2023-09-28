@@ -322,6 +322,9 @@ public:
     /* 0034 */ SCRIPTNAME m_stringValue;
 };
 
+// Seen in `CScreenStore::OpenBag`.
+#define CSTOREFILEHEADER_STORETYPE_BAG 4
+
 class CStoreFileHeader {
 public:
     CStoreFileHeader()
