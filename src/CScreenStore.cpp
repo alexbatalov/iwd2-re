@@ -3112,7 +3112,7 @@ void CUIControlButtonStoreRequesterPlusMinus::AdjustValue()
             }
 
             // NOTE: Unsigned compare.
-            if (static_cast<DWORD>(pStore->field_14DE) < cItem.m_nMaxCount) {
+            if (pStore->field_14DE < cItem.m_nMaxCount) {
                 pStore->field_14DE++;
                 pStore->UpdateRequesterPanel();
             }
@@ -3120,7 +3120,7 @@ void CUIControlButtonStoreRequesterPlusMinus::AdjustValue()
         break;
     case 4:
         // NOTE: Signed compare.
-        if (pStore->field_14DE > 1) {
+        if (static_cast<int>(pStore->field_14DE) > 1) {
             pStore->field_14DE--;
             pStore->UpdateRequesterPanel();
         }
