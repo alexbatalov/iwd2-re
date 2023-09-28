@@ -2477,7 +2477,66 @@ CUIControlButtonStoreStoreSpell::~CUIControlButtonStoreStoreSpell()
 // 0x682A30
 void CUIControlButtonStoreStoreSpell::OnLButtonClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 12197
+    UTIL_ASSERT(pStore != NULL);
+
+    CString sSpell;
+    CString sDescription;
+    INT nIndex;
+    POSITION pos;
+    CScreenStoreItem* pItem;
+    CUIControlTextDisplay* pText;
+
+    switch (m_pPanel->m_nID) {
+    case 5:
+        nIndex = pStore->m_nTopSpellItem + m_nID - 8;
+
+        pos = pStore->m_lSpellItems.GetHeadPosition();
+        while (pos != NULL) {
+            pItem = pStore->m_lSpellItems.GetAt(pos);
+            pItem->m_bSelected = FALSE;
+            pStore->m_lSpellItems.GetNext(pos);
+        }
+
+        if (nIndex >= 0 && nIndex < pStore->m_lSpellItems.GetCount()) {
+            pos = pStore->m_lSpellItems.FindIndex(nIndex);
+            pItem = pStore->m_lSpellItems.GetAt(pos);
+            pItem->m_bSelected = TRUE;
+        }
+
+        // NOTE: Uninline.
+        pStore->UpdateSpellCost();
+
+        pStore->UpdateMainPanel();
+
+        pText = static_cast<CUIControlTextDisplay*>(m_pPanel->GetControl(23));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 12216
+        UTIL_ASSERT(pText != NULL);
+
+        pText->RemoveAll();
+
+        m_resRef.CopyToString(sSpell);
+        g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetSpellDescription(sSpell,
+            sDescription);
+
+        pText->DisplayString(CString(""),
+            sDescription,
+            pText->m_rgbLabelColor,
+            pText->m_rgbTextColor,
+            -1,
+            FALSE,
+            TRUE);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 12224
+        UTIL_ASSERT(FALSE);
+    }
 }
 
 // 0x682C00
