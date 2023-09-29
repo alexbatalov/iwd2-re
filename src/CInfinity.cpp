@@ -1033,9 +1033,22 @@ BOOL CInfinity::FXUnlock(DWORD dwFlags, const CRect* pFxRect, const CPoint& ptRe
 // 0x5CE960
 COLORREF CInfinity::GetGlobalLighting()
 {
-    // TODO: Incomplete.
+    COLORREF rgbGlobalLighting;
+    COLORREF rgbLightningGlobalLighting = m_rgbLightningGlobalLighting;
+    COLORREF rgbOverCastGlobalLighting = m_rgbOverCastGlobalLighting;
+    COLORREF rgbTimeOfDayGlobalLighting = m_rgbTimeOfDayGlobalLighting;
 
-    return 0;
+    rgbGlobalLighting = RGB(min(GetRValue(rgbTimeOfDayGlobalLighting), GetRValue(rgbOverCastGlobalLighting)),
+        min(GetGValue(rgbTimeOfDayGlobalLighting), GetGValue(rgbOverCastGlobalLighting)),
+        min(GetBValue(rgbTimeOfDayGlobalLighting), GetBValue(rgbOverCastGlobalLighting)));
+
+    rgbGlobalLighting = RGB(min(GetRValue(rgbGlobalLighting) + GetRValue(rgbLightningGlobalLighting), 255),
+        min(GetGValue(rgbGlobalLighting) + GetGValue(rgbLightningGlobalLighting), 255),
+        min(GetBValue(rgbGlobalLighting) + GetBValue(rgbLightningGlobalLighting), 255));
+
+    rgbGlobalLighting = g_pChitin->GetCurrentVideoMode()->ApplyFadeAmount(rgbGlobalLighting);
+
+    return rgbGlobalLighting;
 }
 
 // 0x5CECB0
