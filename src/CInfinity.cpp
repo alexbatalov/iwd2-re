@@ -224,6 +224,59 @@ BOOL CInfTileSet::RenderToPrimary(LPDIRECTDRAWSURFACE pSurface, INT nTile, INT n
     return TRUE;
 }
 
+// 0x5CB630
+BOOL CInfTileSet::RenderBlack(CVidMode* pVidMode, INT nSurface, const CRect& rDest, INT x, INT y)
+{
+    if (g_pChitin->cVideo.Is3dAccelerated()) {
+        CVisibilityMap::BltFogOWar3d(x, y, rDest, CVisibilityMap::UNEXPLORED_FULL);
+        return TRUE;
+    }
+
+    DDBLTFX fx;
+    fx.dwSize = sizeof(fx);
+    fx.dwFillColor = pVidMode->ConvertToSurfaceRGB(pVidMode->ApplyBrightnessContrast(RGB(3, 1, 3)));
+
+    LPDIRECTDRAWSURFACE pSurface = pVidMode->pSurfaces[nSurface];
+    if (pSurface == NULL) {
+        return FALSE;
+    }
+
+    CRect rClip(x, y, x + 64, y + 64);
+
+    if (rClip.left < rDest.left) {
+        rClip.left = rDest.left;
+    }
+
+    if (rClip.top < rDest.top) {
+        rClip.top = rDest.top;
+    }
+
+    if (rClip.right > rDest.right) {
+        rClip.right = rDest.right;
+    }
+
+    if (rClip.bottom > rDest.bottom) {
+        rClip.bottom = rDest.bottom;
+    }
+
+    if (rClip.IsRectEmpty()) {
+        return FALSE;
+    }
+
+    HRESULT hr;
+    do {
+        hr = g_pBaldurChitin->cVideo.cVidBlitter.Blt(pSurface,
+            &rClip,
+            NULL,
+            NULL,
+            DDBLT_WAIT | DDBLT_COLORFILL,
+            &fx);
+        pVidMode->CheckResults(hr);
+    } while (hr == DDERR_SURFACELOST || hr == DDERR_WASSTILLDRAWING);
+
+    return TRUE;
+}
+
 // NOTE: Inlined.
 BOOLEAN CInfTileSet::GetTileRenderCode(INT nTile, TILE_CODE& tileCode)
 {

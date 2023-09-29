@@ -39,6 +39,8 @@ public:
 
     static void BltFogOWar(LPDIRECTDRAWSURFACE pSurface, const TILE_CODE& tileCode);
 
+    static void BltFogOWar3d(INT x, INT y, const CRect& rDest, const TILE_CODE& tileCode);
+
     /* 000E */ short field_E;
     /* 0058 */ int field_58;
 };

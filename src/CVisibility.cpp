@@ -89,3 +89,9 @@ void CVisibilityMap::BltFogOWar(LPDIRECTDRAWSURFACE pSurface, const TILE_CODE& t
 {
     // TODO: Incomplete.
 }
+
+// 0x553D00
+void CVisibilityMap::BltFogOWar3d(INT x, INT y, const CRect& rDest, const TILE_CODE& tileCode)
+{
+    // TODO: Incomplete.
+}
