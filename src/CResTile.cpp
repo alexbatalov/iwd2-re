@@ -5,7 +5,7 @@ CResTile::CResTile()
 {
     m_bParsed = FALSE;
     m_pTileData = NULL;
-    field_50 = NULL;
+    m_pPalette = NULL;
 }
 
 // 0x7806D0
@@ -13,7 +13,7 @@ CResTile::~CResTile()
 {
     m_bParsed = FALSE;
     m_pTileData = NULL;
-    field_50 = NULL;
+    m_pPalette = NULL;
 }
 
 // 0x780750
@@ -28,7 +28,7 @@ int CResTile::GetFixedResourceSize()
     return 5120;
 }
 
-void* CResTile::GetTileData()
+BYTE* CResTile::GetTileData()
 {
     if (m_bParsed) {
         return m_pTileData;
@@ -65,7 +65,7 @@ int CResTile::Release()
     if (GetDemands() <= 0) {
         m_bParsed = FALSE;
         m_pTileData = NULL;
-        field_50 = NULL;
+        m_pPalette = NULL;
     }
     return rc;
 }
@@ -89,8 +89,8 @@ BOOL CResTile::Parse(void* pData)
         return FALSE;
     }
 
-    field_50 = pData;
-    m_pTileData = reinterpret_cast<unsigned char*>(pData) + 1024;
+    m_pPalette = reinterpret_cast<RGBQUAD*>(pData);
+    m_pTileData = reinterpret_cast<BYTE*>(pData) + 1024;
 
     m_bParsed = TRUE;
 
