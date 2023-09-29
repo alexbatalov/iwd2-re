@@ -170,6 +170,60 @@ int CInfTileSet::DetachFromVRam(int nTile)
     return 0;
 }
 
+// 0x5CB260
+BOOL CInfTileSet::RenderToPrimary(LPDIRECTDRAWSURFACE pSurface, INT nTile, INT nStencilTile, const TILE_CODE& tileCode, BYTE nDualTileCode, int a6, DWORD dwFlags)
+{
+    DWORD dwNewFlags = 0;
+    CRect rClip(0, 0, 64, 64);
+
+    if ((dwFlags & 0x2) != 0) {
+        dwNewFlags |= 0x8;
+    }
+
+    if ((dwFlags & 0x80000) != 0) {
+        dwNewFlags |= 0x80000;
+    }
+
+    if ((dwFlags & 0x2000000) != 0) {
+        dwNewFlags |= 0x2000000;
+    }
+
+    switch (nDualTileCode) {
+    case 0:
+        m_cVidTile.SetRes(m_pResTiles[nTile]);
+        m_cVidTile.SetTintColor(m_rgbTintColor);
+        m_cVidTile.SetAddColor(m_rgbAddColor);
+        dwNewFlags |= 0x20000;
+        break;
+    case 1:
+        m_cVidTile.SetRes(m_pResTiles[nTile]);
+        m_cVidTile.SetAddColor(m_rgbAddColor);
+        dwNewFlags |= 0x10000;
+        break;
+    case 2:
+        m_cVidTile.SetRes(m_pResTiles[nTile]->m_pDualTileRes);
+        m_cVidTile.SetTintColor(m_rgbTintColor);
+        m_cVidTile.SetAddColor(m_rgbAddColor);
+        dwNewFlags |= 0x20000;
+        break;
+    case 4:
+        m_cVidTile.SetRes(m_pResTiles[nTile]->m_pDualTileRes);
+        m_cVidTile.SetAddColor(m_rgbAddColor);
+        dwNewFlags |= 0x10000;
+        break;
+    }
+
+    if (nStencilTile != -1) {
+        m_cVidTile.Render(pSurface, 0, 0, m_pResTiles[nStencilTile], rClip, dwNewFlags);
+    } else {
+        m_cVidTile.Render(pSurface, 0, 0, rClip, dwNewFlags);
+    }
+
+    CVisibilityMap::BltFogOWar(pSurface, tileCode);
+
+    return TRUE;
+}
+
 // NOTE: Inlined.
 BOOLEAN CInfTileSet::GetTileRenderCode(INT nTile, TILE_CODE& tileCode)
 {

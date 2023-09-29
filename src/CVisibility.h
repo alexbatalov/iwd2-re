@@ -37,6 +37,8 @@ public:
     void AddCharacter(const CPoint& pos, LONG charId, const BYTE* pVisibleTerrainTable);
     void RemoveCharacter(const CPoint& pos, LONG charId, const BYTE* pVisibleTerrainTable);
 
+    static void BltFogOWar(LPDIRECTDRAWSURFACE pSurface, const TILE_CODE& tileCode);
+
     /* 000E */ short field_E;
     /* 0058 */ int field_58;
 };

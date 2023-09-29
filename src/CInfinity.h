@@ -41,12 +41,13 @@ public:
 
     int AttachToVRam(int nTile);
     int DetachFromVRam(int nTile);
+    BOOL RenderToPrimary(LPDIRECTDRAWSURFACE pSurface, INT nTile, INT nStencilTile, const TILE_CODE& tileCode, BYTE nDualTileCode, int a6, DWORD dwFlags);
 
     BOOLEAN GetTileRenderCode(INT nTile, TILE_CODE& tileCode);
     BOOLEAN SetTileRenderCode(INT nTile, TILE_CODE& tileCode);
 
-    /* 0000 */ int field_0;
-    /* 0004 */ int field_4;
+    /* 0000 */ COLORREF m_rgbAddColor;
+    /* 0004 */ COLORREF m_rgbTintColor;
     /* 0008 */ CVidTile m_cVidTile;
     /* 00B0 */ CVRamPool* m_pVRamPool;
     /* 00B4 */ CResInfTile** m_pResTiles;

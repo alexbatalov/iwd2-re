@@ -83,3 +83,9 @@ void CVisibilityMap::RemoveCharacter(const CPoint& pos, LONG charId, const BYTE*
 {
     // TODO: Incomplete.
 }
+
+// 0x551FF0
+void CVisibilityMap::BltFogOWar(LPDIRECTDRAWSURFACE pSurface, const TILE_CODE& tileCode)
+{
+    // TODO: Incomplete.
+}
