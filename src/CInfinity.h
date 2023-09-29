@@ -142,6 +142,7 @@ public:
     void SetCurrentWeather(COLORREF rgbOvercast, SHORT nWeather, int nWeatherLevel, int nLightningFrequency);
     void SetDay();
     void SetNight();
+    void SetDawn(BYTE nIntensity, BOOLEAN bPlayDayNightMovie);
     void SetDusk(BYTE nIntensity, BOOLEAN bPlayDayNightMovie);
     void SetApproachingDawn();
     void SetApproachingDusk();
@@ -152,6 +153,7 @@ public:
     void SetAreaType(WORD areaType);
 
     COLORREF GetFadedColor(COLORREF rgbBrighter, COLORREF rgbDarker, BYTE nIntensity);
+    void SetDawnMultiHost(BYTE nIntensity);
     void SetDuskMultiHost(BYTE nIntensity);
 
     /* 0000 */ CInfTileSet* pTileSets[5];

@@ -1187,9 +1187,37 @@ void CInfinity::SetNight()
 }
 
 // 0x5D1890
-void CInfinity::SetDawn()
+void CInfinity::SetDawn(BYTE nIntensity, BOOLEAN bPlayDayNightMovie)
 {
-    // TODO: Incomplete.
+    if ((m_areaType & 0x40) == 0) {
+        if ((m_areaType & 0x2) != 0) {
+            BYTE nNewIntensity = nIntensity * 2;
+
+            if (nIntensity < TRUE_DAWNDUSK_INTENSITY) {
+                m_dayLightIntensity = nIntensity;
+                m_rgbTimeOfDayGlobalLighting = GetFadedColor(RGB_PRIMEDAWN_COLOR,
+                    RGB_NIGHT_COLOR,
+                    nNewIntensity);
+                m_rgbTimeOfDayRainColor = GetFadedColor(RGB_PRIMEDAWN_RAINCOLOR,
+                    RGB_NIGHT_RAINCOLOR,
+                    nNewIntensity);
+            } else {
+                m_dayLightIntensity = nIntensity;
+                m_rgbTimeOfDayGlobalLighting = GetFadedColor(RGB_DAY_COLOR,
+                    RGB_PRIMEDAWN_COLOR,
+                    nNewIntensity);
+                m_rgbTimeOfDayGlobalLighting = GetFadedColor(RGB_DAY_RAINCOLOR,
+                    RGB_PRIMEDAWN_RAINCOLOR,
+                    nNewIntensity);
+            }
+        } else {
+            if (g_pChitin->cNetwork.GetSessionOpen()
+                && g_pChitin->cNetwork.GetSessionHosting()
+                && g_pBaldurChitin->GetObjectGame()->ExtendedDayNightAreaActive()) {
+                SetDawnMultiHost(nIntensity);
+            }
+        }
+    }
 }
 
 // 0x5D1A40
@@ -1295,6 +1323,15 @@ COLORREF CInfinity::GetFadedColor(COLORREF rgbBrighter, COLORREF rgbDarker, BYTE
     return RGB((GetRValue(rgbBrighter) - GetRValue(rgbDarker)) * nIntensity / 256 + GetRValue(rgbDarker),
         (GetGValue(rgbBrighter) - GetGValue(rgbDarker)) * nIntensity / 256 + GetGValue(rgbDarker),
         (GetBValue(rgbBrighter) - GetBValue(rgbDarker)) * nIntensity / 256 + GetBValue(rgbDarker));
+}
+
+// NOTE: Inlined.
+void CInfinity::SetDawnMultiHost(BYTE nIntensity)
+{
+    if (nIntensity >= TRUE_DAWNDUSK_INTENSITY && !m_bMovieBroadcast) {
+        g_pBaldurChitin->m_pEngineWorld->ReadyMovie(CResRef(DAWN_MOVIE), FALSE);
+        m_bMovieBroadcast = TRUE;
+    }
 }
 
 // NOTE: Inlined.
