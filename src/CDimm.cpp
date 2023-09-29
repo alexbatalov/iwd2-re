@@ -1154,6 +1154,90 @@ BOOL CDimm::GetResFileName(UINT nIndex, CString& sResFileName, WORD& nDrive, BOO
     return TRUE;
 }
 
+// FIXME: `resRef` should be reference.
+//
+// 0x786A80
+INT CDimm::GetResNumber(RESID nResID, CResRef resRef, USHORT nResType)
+{
+    CString sFilePath;
+    CString sBaseName;
+    CString sExtension;
+    CFile file;
+
+    INT nCount = 0;
+
+    if ((nResID & 0xFFF00000) < 0xFC000000) {
+        if ((nResID >> 20) < m_nResFiles) {
+            CResFile* pResFile = m_ppResFiles[nResID >> 20];
+
+            CResCache* pResCache = &(g_pChitin->cDimm.cResCache);
+            EnterCriticalSection(&(g_pChitin->field_35C));
+            while (pResCache->field_110 == 1) {
+                LeaveCriticalSection(&(g_pChitin->field_35C));
+
+                while (pResCache->field_110 == 1) {
+                    SleepEx(50, FALSE);
+                }
+
+                EnterCriticalSection(&(g_pChitin->field_35C));
+            }
+
+            if (pResFile->m_nRefCount <= 0) {
+                pResFile->m_nRefCount = 0;
+                pResFile->OpenFile();
+            }
+
+            pResFile->m_nRefCount += 1;
+
+            LeaveCriticalSection(&(g_pChitin->field_35C));
+
+            if (pResFile->m_bOpen) {
+                if ((nResID & 0xFC000) != 0) {
+                    UINT nIndex = (nResID >> 14) & 0x3F;
+                    if (nIndex - 1 < pResFile->m_pHeader->nFixedRes) {
+                        nCount = pResFile->m_pFixedEntries[nIndex - 1].nNumber;
+                    } else {
+                        nCount = 0;
+                    }
+                } else {
+                    nCount = 1;
+                }
+            }
+
+            EnterCriticalSection(&(g_pChitin->field_35C));
+
+            if (pResFile->m_nRefCount <= 1) {
+                pResFile->CloseFile();
+                pResFile->m_nRefCount = 0;
+            } else {
+                pResFile->m_nRefCount -= 1;
+            }
+
+            LeaveCriticalSection(&(g_pChitin->field_35C));
+        }
+    } else {
+        if (resRef != "") {
+            resRef.CopyToString(sBaseName);
+            g_pChitin->TranslateType(nResType, sExtension);
+            GetElementInDirectoryList(~nResID >> 20, sFilePath);
+
+            sFilePath += sBaseName + "." + sExtension;
+
+            if (file.Open(sFilePath, CFile::OpenFlags::modeRead | CFile::OpenFlags::typeBinary, NULL)) {
+                // NOTE: I'm not sure what type of header we're reading here. It
+                // is assumed to have an integer right after the file signature.
+                unsigned char header[20];
+                file.Read(header, sizeof(header));
+                file.Close();
+
+                nCount = *reinterpret_cast<int*>(header + 8);
+            }
+        }
+    }
+
+    return nCount;
+}
+
 // 0x786DF0
 CRes* CDimm::GetResObject(const CResRef& cResRef, USHORT nResType, BOOL bWarningIfMissing)
 {

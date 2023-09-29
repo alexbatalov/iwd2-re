@@ -46,6 +46,7 @@ public:
     UINT GetResFileID(const CString& sName);
     CResFile* GetResFilePtr(UINT a2);
     BOOL GetResFileName(UINT nIndex, CString& sResFileName, WORD& nDrive, BOOLEAN a5);
+    INT GetResNumber(RESID nResID, CResRef resRef, USHORT nResType);
     CRes* GetResObject(const CResRef& cResRef, USHORT nResType, BOOL bWarningIfMissing);
     RESID GetResID(CResRef cResRef, USHORT nResType);
     BOOL LocalGetFileStatus(const CString& sFileName, CFileStatus& rStatus);
