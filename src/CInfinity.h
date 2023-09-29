@@ -122,7 +122,7 @@ public:
     ~CInfinity();
 
     BOOL AttachVRamPool(CVRamPool* pNewVRPool);
-    BOOL CancelRequestRect(int a1);
+    BOOL CancelRequestRect(unsigned char a1);
     BOOL DetachVRamRect();
     BOOL DrawEllipse(const CPoint& ptCenter, const CSize& axes, COLORREF rgbColor);
     CPoint GetWorldCoordinates(const CPoint& ptScreen);
@@ -136,6 +136,8 @@ public:
     BOOL FXUnlock(DWORD dwFlags, const CRect* pFxRect, const CPoint& ptRef);
     COLORREF GetGlobalLighting();
     void GetViewPosition(INT& x, INT& y);
+    BOOL RequestRect(int x1, int y1, int x2, int y2);
+    BOOL InitViewPort(const CRect& rRect);
     BOOL SetViewPort(const CRect& rRect);
     BOOL SetViewPosition(INT x, INT y, BOOLEAN bSetExactScale);
     void CallLightning(INT xWorldPos, INT yWorldPos);

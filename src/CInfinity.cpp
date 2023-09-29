@@ -861,7 +861,7 @@ BOOL CInfinity::AttachVRamPool(CVRamPool* pNewVRPool)
 }
 
 // 0x5CD2E0
-BOOL CInfinity::CancelRequestRect(int a1)
+BOOL CInfinity::CancelRequestRect(unsigned char a1)
 {
     // TODO: Incomplete.
 
@@ -1082,6 +1082,85 @@ BOOL CInfinity::SetViewPort(const CRect& rRect)
         rViewPort.top + nCurrentY - oldTop,
         TRUE);
     m_bResizedViewPort = TRUE;
+
+    return TRUE;
+}
+
+// 0x5CFE80
+BOOL CInfinity::RequestRect(int x1, int y1, int x2, int y2)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x5D0E90
+BOOL CInfinity::InitViewPort(const CRect& rRect)
+{
+    if (!bWEDDemanded) {
+        return FALSE;
+    }
+
+    nOffsetX = rRect.left;
+    nOffsetY = rRect.top;
+
+    rViewPort.left = rRect.left;
+    rViewPort.top = rRect.top;
+    rViewPort.right = rRect.right;
+    rViewPort.bottom = rRect.bottom;
+
+    EnterCriticalSection(&(m_pArea->field_1FC));
+    m_bResizedViewPort = TRUE;
+    LeaveCriticalSection(&(m_pArea->field_1FC));
+
+    nVisibleTilesX = rRect.Width() / 64 + 1;
+    nVisibleTilesY = rRect.Height() / 64 + 1;
+
+    rVRamRect.left = -1;
+    rVRamRect.top = -1;
+    rVRamRect.right = -1;
+    rVRamRect.bottom = -1;
+
+    field_68 = -1;
+    field_6C = -1;
+    field_70 = -1;
+    field_74 = -1;
+
+    nOffsetX = 0;
+    nOffsetY = 0;
+
+    nNewX = 0;
+    nNewY = 0;
+
+    nCurrentTileX = 0;
+    nCurrentTileY = 0;
+
+    nCurrentX = 0;
+    nCurrentY = 0;
+
+    m_ptCurrentPosExact.x = 0;
+    m_ptCurrentPosExact.y = 0;
+
+    CancelRequestRect(field_15E);
+    DetachVRamRect();
+
+    nCurrentTileX = nCurrentX / 64;
+    nCurrentTileY = nCurrentY / 64;
+
+    nOffsetX = nCurrentX % 64;
+    nOffsetY = nCurrentY % 64;
+
+    if (static_cast<CVidInf*>(g_pChitin->GetCurrentVideoMode())->m_nVRamSurfaces <= CVidMode::word_8BA320) {
+        RequestRect(nCurrentTileX - 3,
+            nCurrentTileY - 3,
+            nCurrentTileX + nVisibleTilesX + 2,
+            nCurrentTileY + nVisibleTilesY + 2);
+    } else {
+        RequestRect(0, 0, nTilesX, nTilesY);
+    }
+
+    bRefreshVRamRect = TRUE;
+    bInitialized = TRUE;
 
     return TRUE;
 }
