@@ -277,6 +277,80 @@ BOOL CInfTileSet::RenderBlack(CVidMode* pVidMode, INT nSurface, const CRect& rDe
     return TRUE;
 }
 
+// 0x5CB780
+BOOL CInfTileSet::RenderToSecondary(LPDIRECTDRAWSURFACE pSurface, INT nSurface, const CRect& rDest, INT x, INT y, DWORD dwFlags, DWORD nColorKey)
+{
+    CVidMode* pVidMode = g_pBaldurChitin->GetCurrentVideoMode();
+
+    LPDIRECTDRAWSURFACE pDestSurface = pVidMode->pSurfaces[nSurface];
+
+    if (pSurface == NULL || pDestSurface == NULL) {
+        return FALSE;
+    }
+
+    INT nDestX = x;
+    INT nDestY = y;
+
+    if (nDestX + 64 < rDest.left || nDestX >= rDest.right) {
+        return TRUE;
+    }
+
+    if (nDestY + 64 < rDest.top || nDestY >= rDest.bottom) {
+        return TRUE;
+    }
+
+    CRect rSrc(0, 0, 64, 64);
+
+    if (nDestY < rDest.top) {
+        rSrc.top = rDest.top - nDestY;
+        nDestY = rDest.top;
+    }
+
+    if (nDestX < rDest.left) {
+        rSrc.left = rDest.left - nDestX;
+        nDestX = rDest.left;
+    }
+
+    if (nDestY + 64 > rDest.bottom) {
+        rSrc.bottom = rDest.bottom - nDestY;
+    }
+
+    if (nDestX + 64 > rDest.right) {
+        rSrc.right = rDest.right - nDestX;
+    }
+
+    if ((dwFlags & 1) != 0) {
+        DDCOLORKEY ddck;
+        ddck.dwColorSpaceLowValue = nColorKey;
+        ddck.dwColorSpaceHighValue = nColorKey;
+        pSurface->SetColorKey(DDCKEY_SRCBLT, &ddck);
+
+        HRESULT hr;
+        do {
+            hr = g_pBaldurChitin->cVideo.cVidBlitter.BltFast(pDestSurface,
+                nDestX,
+                nDestY,
+                pSurface,
+                &rSrc,
+                DDBLTFAST_WAIT | DDBLTFAST_SRCCOLORKEY);
+            pVidMode->CheckResults(hr);
+        } while (hr == DDERR_SURFACELOST || hr == DDERR_WASSTILLDRAWING);
+    } else {
+        HRESULT hr;
+        do {
+            hr = g_pBaldurChitin->cVideo.cVidBlitter.BltFast(pDestSurface,
+                nDestX,
+                nDestY,
+                pSurface,
+                &rSrc,
+                DDBLTFAST_WAIT);
+            pVidMode->CheckResults(hr);
+        } while (hr == DDERR_SURFACELOST || hr == DDERR_WASSTILLDRAWING);
+    }
+
+    return TRUE;
+}
+
 // NOTE: Inlined.
 BOOLEAN CInfTileSet::GetTileRenderCode(INT nTile, TILE_CODE& tileCode)
 {

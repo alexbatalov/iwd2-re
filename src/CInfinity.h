@@ -43,6 +43,7 @@ public:
     int DetachFromVRam(int nTile);
     BOOL RenderToPrimary(LPDIRECTDRAWSURFACE pSurface, INT nTile, INT nStencilTile, const TILE_CODE& tileCode, BYTE nDualTileCode, int a6, DWORD dwFlags);
     BOOL RenderBlack(CVidMode* pVidMode, INT nSurface, const CRect& rDest, INT x, INT y);
+    BOOL RenderToSecondary(LPDIRECTDRAWSURFACE pSurface, INT nSurface, const CRect& rDest, INT x, INT y, DWORD dwFlags, DWORD nColorKey);
 
     BOOLEAN GetTileRenderCode(INT nTile, TILE_CODE& tileCode);
     BOOLEAN SetTileRenderCode(INT nTile, TILE_CODE& tileCode);
