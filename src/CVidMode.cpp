@@ -689,11 +689,31 @@ int CVidMode::GetColorDepth()
 }
 
 // 0x799AA0
-int CVidMode::GetEllipseArcPixelList(LONG a2, LONG a3, BYTE* a4)
+LONG CVidMode::GetEllipseArcPixelList(LONG nMajorAxis, LONG nMinorAxis, BYTE* pPixelList)
 {
-    // TODO: Incomplete.
+    INT nMajorAxisSqrd = nMajorAxis * nMajorAxis;
+    INT nMinorAxisSqrd = nMinorAxis * nMinorAxis;
+    INT nMajorAxisAdjust = 0;
+    INT nMinorAxisAdjust = nMinorAxis * nMajorAxisSqrd * 2;
+    INT nThreshold = nMajorAxisSqrd / 4 - nMinorAxis * nMajorAxisSqrd;
+    LONG nArcLength = 0;
 
-    return 0;
+    do {
+        nThreshold += nMajorAxisAdjust + nMinorAxisSqrd;
+        if (nThreshold < 0) {
+            pPixelList[nArcLength] = 0;
+        } else {
+            pPixelList[nArcLength] = 1;
+            nMinorAxisAdjust -= 2 * nMajorAxisSqrd;
+            nThreshold -= nMinorAxisAdjust;
+        }
+
+        nMajorAxisAdjust += 2 * nMinorAxisSqrd;
+
+        nArcLength++;
+    } while (nMajorAxisAdjust < nMinorAxisAdjust);
+
+    return nArcLength;
 }
 
 // #binary-identical

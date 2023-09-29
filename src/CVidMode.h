@@ -100,7 +100,7 @@ public:
     /* 00B4 */ virtual BOOL EraseScreen(UINT nSurface, COLORREF rgbColor);
     /* 00B8 */ virtual BOOL Flip(BOOL bRenderCursor);
     /* 00BC */ virtual int GetColorDepth();
-    /* 00C0 */ virtual int GetEllipseArcPixelList(LONG a2, LONG a3, BYTE* a4);
+    /* 00C0 */ virtual LONG GetEllipseArcPixelList(LONG nMajorAxis, LONG nMinorAxis, BYTE* pPixelList);
     /* 00C4 */ virtual BOOL GetFXSurface(INT& nSurface, DWORD dwFlags);
     /* 00C8 */ virtual IDirectDrawSurface* GetFXSurfacePtr(DWORD dwFlags);
     /* 00CC */ virtual BOOL GetCursorSurfaceSize(CSize& size);
