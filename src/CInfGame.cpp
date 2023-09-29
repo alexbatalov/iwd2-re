@@ -2112,6 +2112,34 @@ void CInfGame::RemoveFamiliarResRef(const CResRef& resRef, BYTE nAlignment, BYTE
     }
 }
 
+// 0x5AF770
+void CInfGame::RenderPortrait(DWORD portraitId, const CPoint& cpRenderPosition, const CSize& szControl, BOOL bPressed, BOOL reorderHighlight, BOOL selectFromMarker, const CRect& rClip, BOOL bDoubleSize)
+{
+    LONG iSprite = GetCharacterId(static_cast<SHORT>(portraitId));
+    if (iSprite != CGameObjectArray::INVALID_INDEX) {
+        CGameSprite* pSprite;
+
+        BYTE rc = m_cObjectArray.GetShare(iSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            pSprite->RenderPortrait(cpRenderPosition,
+                szControl,
+                bPressed,
+                reorderHighlight,
+                selectFromMarker,
+                rClip,
+                bDoubleSize);
+
+            m_cObjectArray.ReleaseShare(iSprite,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+}
+
 // 0x5AF7F0
 void CInfGame::WorldEngineActivated(CVidMode* pVidMode)
 {

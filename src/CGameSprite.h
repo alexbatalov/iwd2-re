@@ -282,6 +282,7 @@ public:
     BOOL IsSpellSchool(BYTE spellSchool);
     void SetFootstepChannel();
     BYTE GetSound(BYTE soundID);
+    void RenderPortrait(const CPoint& cpRenderPosition, const CSize& szControl, BOOL bPressed, BOOL reorderHighlight, BOOL selectFromMarker, const CRect& rClip, BOOL bDoubleSize);
     void SetDirection(const CPoint& posDest);
     void SetDirection(SHORT direction);
     void SetIdleSequence();

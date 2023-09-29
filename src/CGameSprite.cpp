@@ -1018,6 +1018,12 @@ BYTE CGameSprite::GetSound(BYTE soundID)
     return nSound;
 }
 
+// 0x704D40
+void CGameSprite::RenderPortrait(const CPoint& cpRenderPosition, const CSize& szControl, BOOL bPressed, BOOL reorderHighlight, BOOL selectFromMarker, const CRect& rClip, BOOL bDoubleSize)
+{
+    // TODO: Incomplete.
+}
+
 // 0x706B40
 void CGameSprite::SetDirection(const CPoint& posDest)
 {

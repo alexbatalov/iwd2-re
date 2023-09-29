@@ -2848,6 +2848,34 @@ void CUIControlPortraitStore::OnLButtonClick(CPoint pt)
     g_pBaldurChitin->GetActiveEngine()->OnPortraitLClick(m_nID);
 }
 
+// 0x683830
+BOOL CUIControlPortraitStore::Render(BOOL bForce)
+{
+    if (!m_bActive && !m_bInactiveRender) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount == 0 && !bForce) {
+        return FALSE;
+    }
+
+    if (!CUIControlButton::Render(bForce)) {
+        return FALSE;
+    }
+
+    CPoint pt = m_pPanel->m_ptOrigin + m_ptOrigin;
+    g_pBaldurChitin->GetObjectGame()->RenderPortrait(m_nID,
+        pt,
+        m_size,
+        m_bPressed,
+        0,
+        0,
+        m_rDirty,
+        m_pPanel->m_pManager->m_bDoubleSize);
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x6838E0

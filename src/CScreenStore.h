@@ -347,6 +347,7 @@ class CUIControlPortraitStore : public CUIControlButton {
 public:
     CUIControlPortraitStore(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlPortraitStore() override;
+    BOOL Render(BOOL bForce) override;
     void OnLButtonClick(CPoint pt) override;
 };
 
