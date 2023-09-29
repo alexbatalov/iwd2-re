@@ -99,6 +99,7 @@ public:
     static const COLORREF RGB_NIGHT_RAINCOLOR;
     static const COLORREF RGB_PRIMEDUSK_RAINCOLOR;
     static const COLORREF RGB_PRIMEDAWN_RAINCOLOR;
+    static const BYTE TRUE_DAWNDUSK_INTENSITY;
     static const BYTE SCROLL_DELAY;
     static const CString DAWN_MOVIE;
     static const CString DUSK_MOVIE;
@@ -141,8 +142,7 @@ public:
     void SetCurrentWeather(COLORREF rgbOvercast, SHORT nWeather, int nWeatherLevel, int nLightningFrequency);
     void SetDay();
     void SetNight();
-    void SetDawn();
-    void SetDusk();
+    void SetDusk(BYTE nIntensity, BOOLEAN bPlayDayNightMovie);
     void SetApproachingDawn();
     void SetApproachingDusk();
     void UpdateLightning();
@@ -150,6 +150,9 @@ public:
     void SetMessageScreen(CResRef resRef, DWORD strText, DWORD nDuration);
 
     void SetAreaType(WORD areaType);
+
+    COLORREF GetFadedColor(COLORREF rgbBrighter, COLORREF rgbDarker, BYTE nIntensity);
+    void SetDuskMultiHost(BYTE nIntensity);
 
     /* 0000 */ CInfTileSet* pTileSets[5];
     /* 0014 */ CResWED* pResWED;

@@ -2,7 +2,9 @@
 
 #include "CBaldurChitin.h"
 #include "CGameArea.h"
+#include "CInfGame.h"
 #include "CResWED.h"
+#include "CScreenWorld.h"
 #include "CUtil.h"
 #include "CVidInf.h"
 #include "CVisibility.h"
@@ -45,6 +47,9 @@ const COLORREF CInfinity::RGB_PRIMEDUSK_RAINCOLOR = RGB(90, 90, 100);
 
 // 0x85196C
 const COLORREF CInfinity::RGB_PRIMEDAWN_RAINCOLOR = RGB(90, 90, 100);
+
+// 0x851970
+const BYTE CInfinity::TRUE_DAWNDUSK_INTENSITY = 128;
 
 // 0x85197A
 const BYTE CInfinity::SCROLL_DELAY = 15;
@@ -1188,9 +1193,38 @@ void CInfinity::SetDawn()
 }
 
 // 0x5D1A40
-void CInfinity::SetDusk()
+void CInfinity::SetDusk(BYTE nIntensity, BOOLEAN bPlayDayNightMovie)
 {
-    // TODO: Incomplete.
+    if ((m_areaType & 0x40) == 0) {
+        if ((m_areaType & 0x2) != 0) {
+            BYTE nNewIntensity = nIntensity * 2;
+
+            if (nIntensity < TRUE_DAWNDUSK_INTENSITY) {
+                m_dayLightIntensity = nIntensity;
+                m_rgbTimeOfDayGlobalLighting = GetFadedColor(RGB_PRIMEDUSK_COLOR,
+                    RGB_NIGHT_COLOR,
+                    nNewIntensity);
+                m_rgbTimeOfDayRainColor = GetFadedColor(RGB_PRIMEDUSK_RAINCOLOR,
+                    RGB_NIGHT_RAINCOLOR,
+                    nNewIntensity);
+            } else {
+                m_dayLightIntensity = nIntensity;
+                m_rgbTimeOfDayGlobalLighting = GetFadedColor(RGB_DAY_COLOR,
+                    RGB_PRIMEDUSK_COLOR,
+                    nNewIntensity);
+                m_rgbTimeOfDayGlobalLighting = GetFadedColor(RGB_DAY_RAINCOLOR,
+                    RGB_PRIMEDUSK_RAINCOLOR,
+                    nNewIntensity);
+            }
+        } else {
+            if (g_pChitin->cNetwork.GetSessionOpen()
+                && g_pChitin->cNetwork.GetSessionHosting()
+                && g_pBaldurChitin->GetObjectGame()->ExtendedDayNightAreaActive()) {
+                // NOTE: Uninline.
+                SetDuskMultiHost(nIntensity);
+            }
+        }
+    }
 }
 
 // #noop
@@ -1253,4 +1287,21 @@ void CInfinity::SetMessageScreen(CResRef resRef, DWORD strText, DWORD nDuration)
 void CInfinity::SetAreaType(WORD areaType)
 {
     m_areaType = areaType;
+}
+
+// NOTE: Inlined.
+COLORREF CInfinity::GetFadedColor(COLORREF rgbBrighter, COLORREF rgbDarker, BYTE nIntensity)
+{
+    return RGB((GetRValue(rgbBrighter) - GetRValue(rgbDarker)) * nIntensity / 256 + GetRValue(rgbDarker),
+        (GetGValue(rgbBrighter) - GetGValue(rgbDarker)) * nIntensity / 256 + GetGValue(rgbDarker),
+        (GetBValue(rgbBrighter) - GetBValue(rgbDarker)) * nIntensity / 256 + GetBValue(rgbDarker));
+}
+
+// NOTE: Inlined.
+void CInfinity::SetDuskMultiHost(BYTE nIntensity)
+{
+    if (nIntensity < TRUE_DAWNDUSK_INTENSITY && !m_bMovieBroadcast) {
+        g_pBaldurChitin->m_pEngineWorld->ReadyMovie(CResRef(DUSK_MOVIE), FALSE);
+        m_bMovieBroadcast = TRUE;
+    }
 }
