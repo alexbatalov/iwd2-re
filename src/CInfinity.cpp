@@ -508,6 +508,8 @@ BOOL CInfTileSet::SetResID(RESID nNewID, CResRef cResRef, RESID nNewDualID, CRes
             }
         }
     }
+
+    return TRUE;
 }
 
 // NOTE: Inlined.
