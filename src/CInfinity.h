@@ -91,6 +91,14 @@ public:
     static const DWORD MIRROR_FX;
     static const DWORD MIRROR_FX_UPDOWN;
     static const DWORD CLIPPING_IGNORE_VERTICAL;
+    static const COLORREF RGB_DAY_COLOR;
+    static const COLORREF RGB_NIGHT_COLOR;
+    static const COLORREF RGB_PRIMEDUSK_COLOR;
+    static const COLORREF RGB_PRIMEDAWN_COLOR;
+    static const COLORREF RGB_DAY_RAINCOLOR;
+    static const COLORREF RGB_NIGHT_RAINCOLOR;
+    static const COLORREF RGB_PRIMEDUSK_RAINCOLOR;
+    static const COLORREF RGB_PRIMEDAWN_RAINCOLOR;
     static const BYTE SCROLL_DELAY;
     static const CString DAWN_MOVIE;
     static const CString DUSK_MOVIE;

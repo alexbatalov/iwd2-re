@@ -22,6 +22,30 @@ const DWORD CInfinity::MIRROR_FX_UPDOWN = 0x20;
 // 0x851944
 const DWORD CInfinity::CLIPPING_IGNORE_VERTICAL = 0x400;
 
+// 0x851948
+const COLORREF CInfinity::RGB_DAY_COLOR = RGB(255, 255, 255);
+
+// 0x85194C
+const COLORREF CInfinity::RGB_NIGHT_COLOR = RGB(100, 100, 200);
+
+// 0x851950
+const COLORREF CInfinity::RGB_PRIMEDUSK_COLOR = RGB(255, 200, 200);
+
+// 0x851954
+const COLORREF CInfinity::RGB_PRIMEDAWN_COLOR = RGB(180, 200, 255);
+
+// 0x851960
+const COLORREF CInfinity::RGB_DAY_RAINCOLOR = RGB(110, 110, 110);
+
+// 0x851964
+const COLORREF CInfinity::RGB_NIGHT_RAINCOLOR = RGB(70, 70, 90);
+
+// 0x851968
+const COLORREF CInfinity::RGB_PRIMEDUSK_RAINCOLOR = RGB(90, 90, 100);
+
+// 0x85196C
+const COLORREF CInfinity::RGB_PRIMEDAWN_RAINCOLOR = RGB(90, 90, 100);
+
 // 0x85197A
 const BYTE CInfinity::SCROLL_DELAY = 15;
 
@@ -1133,8 +1157,8 @@ void CInfinity::SetDay()
     m_bMovieBroadcast = FALSE;
     if ((m_areaType & 0x40) == 0 && (m_areaType & 0x2) != 0) {
         m_dayLightIntensity = -1;
-        m_rgbTimeOfDayGlobalLighting = 0xFFFFFF;
-        m_rgbTimeOfDayRainColor = 0x6E6E6E;
+        m_rgbTimeOfDayGlobalLighting = RGB_DAY_COLOR;
+        m_rgbTimeOfDayRainColor = RGB_DAY_RAINCOLOR;
         m_requestDayNightCode &= ~0x2;
         m_requestDayNightCode |= 0x1;
         m_renderDayNightCode &= ~0x2;
@@ -1148,8 +1172,8 @@ void CInfinity::SetNight()
     m_bMovieBroadcast = FALSE;
     if ((m_areaType & 0x2) != 0) {
         m_dayLightIntensity = 0;
-        m_rgbTimeOfDayGlobalLighting = 0xC86464;
-        m_rgbTimeOfDayRainColor = 0x5A4646;
+        m_rgbTimeOfDayGlobalLighting = RGB_NIGHT_COLOR;
+        m_rgbTimeOfDayRainColor = RGB_NIGHT_RAINCOLOR;
         m_requestDayNightCode &= ~0x1;
         m_requestDayNightCode |= 0x2;
         m_renderDayNightCode &= ~0x1;
