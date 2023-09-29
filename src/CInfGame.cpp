@@ -2168,7 +2168,32 @@ void CInfGame::OnPortraitLClick(DWORD id)
 // 0x5AFCB0
 void CInfGame::OnPortraitLDblClick(DWORD id)
 {
-    // TODO: Incomplete.
+    LONG iSprite = GetCharacterId(static_cast<SHORT>(id));
+    if (iSprite != CGameObjectArray::INVALID_INDEX) {
+        CGameSprite* pSprite;
+
+        BYTE rc = m_cObjectArray.GetShare(iSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            CGameArea* pArea = pSprite->GetArea();
+            if (pArea != NULL) {
+                CRect rView(pArea->GetInfinity()->rViewPort);
+                INT x = rView.Width() / -2;
+                INT y = rView.Height() / -2;
+
+                CPoint& pos = pSprite->GetPos();
+
+                pArea->GetInfinity()->SetViewPosition(x + pos.x, y + pos.y, TRUE);
+            }
+
+            m_cObjectArray.ReleaseShare(iSprite,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
 }
 
 // 0x5AFD90
