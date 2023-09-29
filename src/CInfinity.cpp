@@ -1288,6 +1288,86 @@ void CInfinity::UpdateLightning()
     g_pBaldurChitin->GetCurrentVideoMode()->rgbGlobalTint = GetGlobalLighting();
 }
 
+// 0x5D1C30
+void CInfinity::AdjustViewPosition(BYTE nScrollState)
+{
+    LONG nScrollSpeed;
+    DWORD nCurrentTickCount;
+    DWORD nDeltaT;
+    int v1;
+    int v2;
+    int v3;
+
+    if (m_nScrollDelay != 0) {
+        nScrollSpeed = (15 - m_nScrollDelay)
+            * g_pBaldurChitin->GetObjectGame()->GetScrollSpeed()
+            / 15;
+    } else {
+        nScrollSpeed = g_pBaldurChitin->GetObjectGame()->GetScrollSpeed();
+    }
+
+    v1 = 10000 * nScrollSpeed;
+    v2 = (30000 * nScrollSpeed) / 4;
+    v3 = (10000 * nScrollSpeed) / 2;
+
+    nCurrentTickCount = GetTickCount();
+
+    if (nCurrentTickCount >= m_nLastTickCount) {
+        nDeltaT = nCurrentTickCount - m_nLastTickCount;
+        if (nDeltaT > 500) {
+            nDeltaT = 500;
+        }
+    } else {
+        nDeltaT = 500;
+    }
+
+    m_nLastTickCount = nCurrentTickCount;
+
+    if (nScrollState != 0 && nScrollState != 9) {
+        m_ptScrollDest.x = -1;
+        m_ptScrollDest.y = -1;
+
+        switch (nScrollState) {
+        case 1:
+            m_ptCurrentPosExact.y -= v3 * nDeltaT / 50;
+            break;
+        case 2:
+            m_ptCurrentPosExact.x += v3 * nDeltaT / 50;
+            m_ptCurrentPosExact.y -= v2 * nDeltaT / 50;
+            break;
+        case 3:
+            m_ptCurrentPosExact.x += v1 * nDeltaT / 50;
+            break;
+        case 4:
+            m_ptCurrentPosExact.x += v3 * nDeltaT / 50;
+            m_ptCurrentPosExact.y += v2 * nDeltaT / 50;
+            break;
+        case 5:
+            m_ptCurrentPosExact.y += v3 * nDeltaT / 50;
+            break;
+        case 6:
+            m_ptCurrentPosExact.x -= v3 * nDeltaT / 50;
+            m_ptCurrentPosExact.y += v2 * nDeltaT / 50;
+            break;
+        case 7:
+            m_ptCurrentPosExact.x -= v1 * nDeltaT / 50;
+            break;
+        case 8:
+            m_ptCurrentPosExact.x -= v3 * nDeltaT / 50;
+            m_ptCurrentPosExact.y -= v2 * nDeltaT / 50;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\Infinity.cpp
+            // __LINE__: 6461
+            UTIL_ASSERT(FALSE);
+        }
+
+        SetViewPosition(m_ptCurrentPosExact.x / 10000,
+            m_ptCurrentPosExact.y / 10000,
+            FALSE);
+    }
+}
+
 // 0x5D2350
 void CInfinity::SwapVRamTiles(WORD wFromTile, WORD wToTile)
 {

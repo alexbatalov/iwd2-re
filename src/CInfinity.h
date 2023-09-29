@@ -147,6 +147,7 @@ public:
     void SetApproachingDawn();
     void SetApproachingDusk();
     void UpdateLightning();
+    void AdjustViewPosition(BYTE nScrollState);
     void SwapVRamTiles(WORD wFromTile, WORD wToTile);
     void SetMessageScreen(CResRef resRef, DWORD strText, DWORD nDuration);
 
