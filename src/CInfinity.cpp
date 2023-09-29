@@ -224,6 +224,60 @@ BOOL CInfTileSet::RenderToPrimary(LPDIRECTDRAWSURFACE pSurface, INT nTile, INT n
     return TRUE;
 }
 
+// 0x5CB4A0
+BOOL CInfTileSet::Render(CVidMode* pVidMode, INT nSurface, INT nTile, INT nStencilTile, const CRect& rDest, INT x, INT y, const TILE_CODE& tileCode, DWORD dwFlags, DWORD nColorKey, BYTE nDualTileCode, int a12)
+{
+    if (g_pChitin->cVideo.Is3dAccelerated()) {
+        return Render3d(nTile, nStencilTile, rDest, x, y, tileCode, dwFlags, nDualTileCode, a12);
+    }
+
+    g_pChitin->GetCurrentVideoMode()->RenderPointer();
+
+    if (pVidMode == NULL) {
+        return FALSE;
+    }
+
+    TILE_CODE renderCode;
+    if (!GetTileRenderCode(nTile, renderCode)) {
+        return FALSE;
+    }
+
+    if (renderCode.tileNW != tileCode.tileNW
+        || renderCode.tileNE != tileCode.tileNE
+        || renderCode.tileSW != tileCode.tileSW
+        || renderCode.tileSE != tileCode.tileSE) {
+        m_pResTiles[nTile]->dwFlags &= ~0x2;
+    }
+
+    LPDIRECTDRAWSURFACE pSurface;
+    if (m_pVRamPool != NULL && m_pResTiles[nTile]->m_nVRamTile >= 0) {
+        pSurface = m_pVRamPool->m_pSurfaces[m_pResTiles[nTile]->m_nVRamTile];
+
+        if ((m_pResTiles[nTile]->dwFlags & 0x2) == 0) {
+            RenderToPrimary(pSurface,
+                nTile,
+                nStencilTile,
+                tileCode,
+                nDualTileCode,
+                a12,
+                dwFlags);
+            m_pResTiles[nTile]->dwFlags |= 0x2;
+            m_pResTiles[nTile]->m_renderCode = tileCode;
+        }
+    } else {
+        pSurface = pVidMode->GetFXSurfacePtr(dwFlags);
+        RenderToPrimary(pSurface,
+            nTile,
+            nStencilTile,
+            tileCode,
+            nDualTileCode,
+            a12,
+            dwFlags);
+    }
+
+    return RenderToSecondary(pSurface, nSurface, rDest, x, y, dwFlags, nColorKey);
+}
+
 // 0x5CB630
 BOOL CInfTileSet::RenderBlack(CVidMode* pVidMode, INT nSurface, const CRect& rDest, INT x, INT y)
 {
@@ -381,6 +435,14 @@ BOOLEAN CInfTileSet::SetTileRenderCode(INT nTile, TILE_CODE& tileCode)
     m_pResTiles[nTile]->m_renderCode = tileCode;
 
     return TRUE;
+}
+
+// 0x5D29A0
+BOOL CInfTileSet::Render3d(INT nTile, INT nStencilTile, const CRect& rDest, INT x, INT y, const TILE_CODE& tileCode, DWORD dwFlags, BYTE nDualTileCode, int a9)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------------
