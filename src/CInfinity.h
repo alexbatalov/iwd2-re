@@ -45,6 +45,7 @@ public:
     BOOL Render(CVidMode* pVidMode, INT nSurface, INT nTile, INT nStencilTile, const CRect& rDest, INT x, INT y, const TILE_CODE& tileCode, DWORD dwFlags, DWORD nColorKey, BYTE nDualTileCode, int a12);
     BOOL RenderBlack(CVidMode* pVidMode, INT nSurface, const CRect& rDest, INT x, INT y);
     BOOL RenderToSecondary(LPDIRECTDRAWSURFACE pSurface, INT nSurface, const CRect& rDest, INT x, INT y, DWORD dwFlags, DWORD nColorKey);
+    BOOL SetResID(RESID nNewID, CResRef cResRef, RESID nNewDualID, CResRef cDualResRef);
 
     BOOLEAN GetTileRenderCode(INT nTile, TILE_CODE& tileCode);
     BOOLEAN SetTileRenderCode(INT nTile, TILE_CODE& tileCode);

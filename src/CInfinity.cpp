@@ -405,6 +405,82 @@ BOOL CInfTileSet::RenderToSecondary(LPDIRECTDRAWSURFACE pSurface, INT nSurface, 
     return TRUE;
 }
 
+// FIXME: `cResRef` should be reference.
+// FIXME: `cDualResRef` should be reference.
+//
+// 0x5CB930
+BOOL CInfTileSet::SetResID(RESID nNewID, CResRef cResRef, RESID nNewDualID, CResRef cDualResRef)
+{
+    if (m_nTiles != 0) {
+        for (int index = 0; index < m_nTiles; index++) {
+            if (m_pResTiles[index] != NULL) {
+                if (m_pVRamPool != NULL) {
+                    // NOTE: Uninline.
+                    m_pVRamPool->EmptyTile(m_pResTiles[index]->m_nVRamTile);
+                }
+            }
+
+            g_pChitin->cDimm.Dump(m_pResTiles[index], 1, 0);
+
+            if (m_pResTiles[index] != NULL) {
+                delete m_pResTiles[index];
+                m_pResTiles[index] = NULL;
+            }
+        }
+
+        free(m_pResTiles);
+    }
+
+    if (nNewDualID != 0) {
+        m_nTiles = g_pChitin->cDimm.GetResNumber(nNewDualID, cDualResRef, 1003);
+        if (m_nTiles <= 0) {
+            return FALSE;
+        }
+
+        m_pResTiles = reinterpret_cast<CResInfTile**>(malloc(sizeof(CResInfTile*) * m_nTiles));
+
+        for (int index = 0; index < m_nTiles; index++) {
+            m_pResTiles[index] = new CResInfTile(TRUE, FALSE);
+            if (m_pResTiles[index] != NULL) {
+                m_pResTiles[index]->SetID(nNewID + index);
+
+                if (m_pResTiles[index]->m_pDualTileRes == NULL) {
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\Infinity.cpp
+                    // __LINE__: 1139
+                    UTIL_ASSERT(FALSE);
+                }
+
+                m_pResTiles[index]->m_pDualTileRes->SetID(nNewDualID + index);
+
+                m_pResTiles[index]->field_58 = cResRef;
+
+                if (m_pResTiles[index]->m_pDualTileRes == NULL) {
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\Infinity.cpp
+                    // __LINE__: 1175
+                    UTIL_ASSERT(FALSE);
+                }
+
+                m_pResTiles[index]->m_pDualTileRes->field_58 = cDualResRef;
+            }
+        }
+    } else {
+        m_nTiles = g_pChitin->cDimm.GetResNumber(nNewID, cResRef, 1003);
+        if (m_nTiles <= 0) {
+            return FALSE;
+        }
+
+        m_pResTiles = reinterpret_cast<CResInfTile**>(malloc(sizeof(CResInfTile*) * m_nTiles));
+
+        for (int index = 0; index < m_nTiles; index++) {
+            m_pResTiles[index] = new CResInfTile(FALSE, FALSE);
+            if (m_pResTiles[index] != NULL) {
+                m_pResTiles[index]->SetID(nNewID + index);
+                m_pResTiles[index]->field_58 = cResRef;
+            }
+        }
+    }
+}
+
 // NOTE: Inlined.
 BOOLEAN CInfTileSet::GetTileRenderCode(INT nTile, TILE_CODE& tileCode)
 {
