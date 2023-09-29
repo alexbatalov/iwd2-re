@@ -61,6 +61,7 @@ public:
     BOOLEAN ReadyMovie(const CResRef& movieResRef, BOOLEAN bForcedFromServer);
     BOOLEAN ReadyEndCredits(BOOLEAN bForcedFromServer);
     void EndDialog(BOOLEAN bForceExecution, BOOLEAN fullEnd);
+    void SaveScreen();
     void SetCurrentXP(DWORD dwCurrentXP);
     void AddGold(DWORD dwGold);
     void StopContainer();

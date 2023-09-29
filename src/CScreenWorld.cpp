@@ -489,6 +489,28 @@ void CScreenWorld::EndDialog(BOOLEAN bForceExecution, BOOLEAN fullEnd)
     // TODO: Incomplete.
 }
 
+// 0x690640
+void CScreenWorld::SaveScreen()
+{
+    INT x;
+    INT y;
+    CRect rViewPort;
+
+    CGameArea* pArea = g_pBaldurChitin->GetObjectGame()->GetVisibleArea();
+    pArea->GetInfinity()->GetViewPosition(x, y);
+    rViewPort.CopyRect(pArea->GetInfinity()->rViewPort);
+
+    pArea->GetInfinity()->SetViewPort(CInfinity::stru_8E79A8);
+
+    // NOTE: Some inlining, not sure which.
+    if (pArea != NULL) {
+        pArea->Render(pVidMode, 0);
+    }
+
+    pArea->GetInfinity()->SetViewPort(rViewPort);
+    pArea->GetInfinity()->SetViewPosition(x, y, TRUE);
+}
+
 // 0x6906F0
 void CScreenWorld::SetCurrentXP(DWORD dwCurrentXP)
 {
