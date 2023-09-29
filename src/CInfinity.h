@@ -11,6 +11,7 @@
 
 class CGameArea;
 class CResWED;
+class CSearchBitmap;
 class CVidCell;
 class CVidFont;
 class CVidMode;
@@ -136,6 +137,8 @@ public:
     BOOL FXUnlock(DWORD dwFlags, const CRect* pFxRect, const CPoint& ptRef);
     COLORREF GetGlobalLighting();
     void GetViewPosition(INT& x, INT& y);
+    BOOL PostRender(CVidMode* pNewVidMode, int a2, CSearchBitmap* pVisibilityMap);
+    BOOL RenderLightning(int a1, const CRect& rSurface, INT nStartX, INT nStartY, INT nEndX, INT nEndY, COLORREF rgbCenter, COLORREF rgbMiddle, COLORREF rgbOuter);
     BOOL RequestRect(int x1, int y1, int x2, int y2);
     BOOL InitViewPort(const CRect& rRect);
     BOOL SetViewPort(const CRect& rRect);
@@ -158,6 +161,7 @@ public:
     COLORREF GetFadedColor(COLORREF rgbBrighter, COLORREF rgbDarker, BYTE nIntensity);
     void SetDawnMultiHost(BYTE nIntensity);
     void SetDuskMultiHost(BYTE nIntensity);
+    CPoint GetScreenCoordinates(const CPoint& ptWorld);
 
     /* 0000 */ CInfTileSet* pTileSets[5];
     /* 0014 */ CResWED* pResWED;
@@ -198,7 +202,7 @@ public:
     /* 011C */ int nCurrentLightningFrequency;
     /* 0120 */ int nNextLightningFrequency;
     /* 0124 */ int field_124;
-    /* 0128 */ int field_128;
+    /* 0128 */ int nCurrentRainLevel;
     /* 012C */ int nNextRainLevel;
     /* 0130 */ int nCurrentSnowLevel;
     /* 0134 */ int field_134;

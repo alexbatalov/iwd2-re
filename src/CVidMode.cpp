@@ -1234,3 +1234,9 @@ void CVidMode::sub_7BEDE0()
 
     lock.Unlock();
 }
+
+// 0x5CEDE0
+void CVidMode::RenderBlackFade3d()
+{
+    // TODO: Incomplete.
+}

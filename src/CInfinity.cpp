@@ -774,7 +774,7 @@ CInfinity::CInfinity()
     nCurrentLightningFrequency = 0;
     nNextLightningFrequency = 0;
     field_124 = 0;
-    field_128 = 0;
+    nCurrentRainLevel = 0;
     nNextRainLevel = 0;
     nCurrentSnowLevel = 0;
     field_134 = 0;
@@ -1084,6 +1084,77 @@ BOOL CInfinity::SetViewPort(const CRect& rRect)
     m_bResizedViewPort = TRUE;
 
     return TRUE;
+}
+
+// 0x5CEDE0
+BOOL CInfinity::PostRender(CVidMode* pNewVidMode, int a2, CSearchBitmap* pVisibilityMap)
+{
+    CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
+    CSnowStorm* pSnowStorm = &(pWorld->m_weather.m_snowStorm);
+    CRainStorm* pRainStorm = &(pWorld->m_weather.m_rainStorm);
+
+    pVidMode = pNewVidMode;
+    if (pVidMode == NULL) {
+        return FALSE;
+    }
+
+    if (nCurrentRainLevel != 0 && pRainStorm->IsInitialized()) {
+        COLORREF rgbRainColor = g_pChitin->GetCurrentVideoMode()->ApplyFadeAmount(m_rgbRainColor);
+        rgbRainColor = g_pChitin->GetCurrentVideoMode()->ApplyBrightnessContrast(rgbRainColor);
+
+        CRect rClip(nCurrentX,
+            nCurrentY,
+            nCurrentX + rViewPort.Width(),
+            nCurrentY + rViewPort.Height());
+
+        pRainStorm->Render(pVidMode,
+            a2,
+            rClip,
+            rgbRainColor);
+    }
+
+    if (nCurrentSnowLevel != 0 && pSnowStorm->IsInitialized()) {
+        COLORREF rgbSnowColor = g_pChitin->GetCurrentVideoMode()->ApplyBrightnessContrast(m_rgbGlobalLighting);
+
+        CRect rClip(nCurrentX,
+            nCurrentY,
+            nCurrentX + rViewPort.Width(),
+            nCurrentY + rViewPort.Height());
+
+        pSnowStorm->Render(pVidMode,
+            a2,
+            rClip,
+            rgbSnowColor);
+    }
+
+    if (bRenderCallLightning) {
+        CPoint ptLightning = GetScreenCoordinates(cLightningPoint);
+        if (ptLightning.x != -1) {
+            RenderLightning(a2,
+                rViewPort,
+                ptLightning.x,
+                rViewPort.top,
+                ptLightning.x,
+                ptLightning.y,
+                RGB(255, 255, 255),
+                RGB(0, 200, 255),
+                RGB(0, 50, 200));
+        }
+    }
+
+    if (g_pChitin->GetCurrentVideoMode()->m_nFade != CVidMode::NUM_FADE_FRAMES) {
+        CVidMode::RenderBlackFade3d();
+    }
+
+    return TRUE;
+}
+
+// 0x5CFB40
+BOOL CInfinity::RenderLightning(int a1, const CRect& rSurface, INT nStartX, INT nStartY, INT nEndX, INT nEndY, COLORREF rgbCenter, COLORREF rgbMiddle, COLORREF rgbOuter)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // 0x5CFE80
@@ -1515,4 +1586,20 @@ void CInfinity::SetDuskMultiHost(BYTE nIntensity)
         g_pBaldurChitin->m_pEngineWorld->ReadyMovie(CResRef(DUSK_MOVIE), FALSE);
         m_bMovieBroadcast = TRUE;
     }
+}
+
+// NOTE: Inlined.
+CPoint CInfinity::GetScreenCoordinates(const CPoint& ptWorld)
+{
+    CPoint ptScreen;
+
+    ptScreen.x = ptWorld.x - nNewX + rViewPort.left;
+    ptScreen.y = ptWorld.y - nNewY + rViewPort.top;
+
+    if (!rViewPort.PtInRect(ptScreen)) {
+        ptScreen.x = -1;
+        ptScreen.y = -1;
+    }
+
+    return ptScreen;
 }

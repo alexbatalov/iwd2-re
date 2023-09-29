@@ -50,6 +50,7 @@ public:
     void EnableScissoring();
     void DisableScissoring();
     void sub_7BEDE0();
+    static void RenderBlackFade3d();
 
     CVidMode();
     /* 0000 */ virtual BOOLEAN SaveScreen();
