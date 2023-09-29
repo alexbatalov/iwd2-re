@@ -1127,17 +1127,166 @@ BOOL CVidMode::DrawThickLine24(INT nXFrom, INT nYFrom, INT nXTo, INT nYTo, BYTE*
 // 0x7CA840
 LONG CVidMode::DrawEllipse32(const CPoint& ptCenter, const CSize& axis, const DDSURFACEDESC& ddsd, const CRect* rClip, COLORREF rgbColor)
 {
-    // TODO: Incomplete.
+    BYTE* pPixelList = new BYTE[max(axis.cx, axis.cy)];
+    LONG lPitch = ddsd.lPitch / 4;
+    DWORD color = (GetRValue(rgbColor) << m_dwRBitShift) | (GetGValue(rgbColor) << m_dwGBitShift) | (GetBValue(rgbColor) << m_dwBBitShift);
+    LONG nArcLength = GetEllipseArcPixelList(axis.cx, axis.cy, pPixelList);
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo24.cpp
+    // __LINE__: 1474
+    UTIL_ASSERT(nArcLength <= max(axis.cx, axis.cy));
+
+    DrawEllipseHOctant32(ptCenter.x,
+        ptCenter.y - axis.cy,
+        nArcLength,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        lPitch,
+        FALSE,
+        pPixelList,
+        rClip,
+        color);
+
+    DrawEllipseHOctant32(ptCenter.x + 1,
+        ptCenter.y + pPixelList[0] - axis.cy,
+        nArcLength - 1,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        lPitch,
+        TRUE,
+        pPixelList + 1,
+        rClip,
+        color);
+
+    DrawEllipseHOctant32(ptCenter.x,
+        ptCenter.y + axis.cy,
+        nArcLength,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        -lPitch,
+        FALSE,
+        pPixelList,
+        rClip,
+        color);
+
+    DrawEllipseHOctant32(ptCenter.x + 1,
+        ptCenter.y - pPixelList[0] + axis.cy,
+        nArcLength - 1,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        -lPitch,
+        TRUE,
+        pPixelList + 1,
+        rClip,
+        color);
+
+    nArcLength = GetEllipseArcPixelList(axis.cy, axis.cx, pPixelList);
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo24.cpp
+    // __LINE__: 1497
+    UTIL_ASSERT(nArcLength < max(axis.cx, axis.cy));
+
+    DrawEllipseVOctant32(ptCenter.x - axis.cx,
+        ptCenter.y,
+        nArcLength,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        -lPitch,
+        TRUE,
+        pPixelList,
+        rClip,
+        color);
+
+    DrawEllipseVOctant32(ptCenter.x + pPixelList[0] - axis.cx,
+        ptCenter.y + 1,
+        nArcLength - 1,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        lPitch,
+        TRUE,
+        pPixelList + 1,
+        rClip,
+        color);
+
+    DrawEllipseVOctant32(ptCenter.x + axis.cx,
+        ptCenter.y,
+        nArcLength,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        -lPitch,
+        FALSE,
+        pPixelList,
+        rClip,
+        color);
+
+    DrawEllipseVOctant32(ptCenter.x - pPixelList[0] + axis.cx,
+        ptCenter.y + 1,
+        nArcLength - 1,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        lPitch,
+        FALSE,
+        pPixelList + 1,
+        rClip,
+        color);
+
+    delete pPixelList;
 
     return 0;
 }
 
 // 0x7CAB20
-LONG CVidMode::DrawEllipseVOctant32(LONG x, LONG y, INT nArcLength, DWORD* pSurface, LONG lPitch, BOOLEAN clockwise, unsigned char* pArcData, const CRect* rClip, DWORD color)
+LONG CVidMode::DrawEllipseVOctant32(LONG x, LONG y, INT nArcLength, DWORD* pSurface, LONG lPitch, BOOLEAN clockwise, BYTE* pPixelList, const CRect* rClip, DWORD color)
 {
-    // TODO: Incomplete.
+    INT nStep;
 
-    return 0;
+    if (rClip != NULL) {
+        if (lPitch < 0) {
+            pSurface += -lPitch * (y - rClip->top) - rClip->left + x;
+            nStep = -1;
+        } else {
+            pSurface += lPitch * (y - rClip->top) - rClip->left + x;
+            nStep = 1;
+        }
+
+        while (nArcLength != 0) {
+            if (rClip->PtInRect({ x, y })) {
+                *pSurface = color;
+            }
+
+            if (*pPixelList++ != 0) {
+                if (clockwise) {
+                    pSurface++;
+                    x++;
+                } else {
+                    pSurface--;
+                    x--;
+                }
+            }
+
+            pSurface += lPitch;
+            y += nStep;
+
+            nArcLength--;
+        }
+    } else {
+        if (lPitch < 0) {
+            pSurface += -lPitch * y + x;
+        } else {
+            pSurface += lPitch * y + x;
+        }
+
+        while (nArcLength != 0) {
+            *pSurface = color;
+
+            if (*pPixelList++ != 0) {
+                if (clockwise) {
+                    pSurface++;
+                    x++;
+                } else {
+                    pSurface--;
+                    x--;
+                }
+            }
+
+            pSurface += lPitch;
+            nArcLength--;
+        }
+    }
+
+    return x;
 }
 
 // 0x7CAC60
@@ -1147,11 +1296,67 @@ void CVidMode::DrawLightingEffect32(DWORD* pSurface, LONG lPitch, const CPoint& 
 }
 
 // 0x7CB510
-LONG CVidMode::DrawEllipseHOctant32(LONG x, LONG y, INT nArcLength, DWORD* pSurface, LONG lPitch, BOOLEAN clockwise, unsigned char* pArcData, const CRect* rClip, DWORD color)
+LONG CVidMode::DrawEllipseHOctant32(LONG x, LONG y, INT nArcLength, DWORD* pSurface, LONG lPitch, BOOLEAN clockwise, BYTE* pPixelList, const CRect* rClip, DWORD color)
 {
-    // TODO: Incomplete.
+    INT nStep;
 
-    return 0;
+    if (rClip != NULL) {
+        if (lPitch < 0) {
+            pSurface += -lPitch * (y - rClip->top) - rClip->left + x;
+            nStep = -1;
+        } else {
+            pSurface += lPitch * (y - rClip->top) - rClip->left + x;
+            nStep = 1;
+        }
+
+        while (nArcLength != 0) {
+            if (rClip->PtInRect({ x, y })) {
+                *pSurface = color;
+            }
+
+            if (*pPixelList++ != 0) {
+                pSurface += lPitch;
+                y += nStep;
+            }
+
+            if (clockwise) {
+                pSurface++;
+                x++;
+            } else {
+                pSurface--;
+                x--;
+            }
+
+            nArcLength--;
+        }
+    } else {
+        if (lPitch < 0) {
+            pSurface += -lPitch * y + x;
+            nStep = -1;
+        } else {
+            pSurface += lPitch * y + x;
+            nStep = 1;
+        }
+
+        while (nArcLength != 0) {
+            *pSurface = color;
+
+            if (*pPixelList++ != 0) {
+                pSurface += lPitch;
+                y += nStep;
+            }
+
+            if (clockwise) {
+                pSurface++;
+            } else {
+                pSurface--;
+            }
+
+            nArcLength--;
+        }
+    }
+
+    return y;
 }
 
 // 0x7CB670

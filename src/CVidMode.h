@@ -61,8 +61,8 @@ public:
     /* 0014 */ virtual LONG DrawEllipseHOctant24(LONG x, LONG y, INT nArcLength, BYTE* pSurface, LONG lpitch, BOOLEAN clockwise, unsigned char* pArcData, const CRect* rClip, DWORD color);
     /* 0018 */ virtual LONG DrawEllipseVOctant24(LONG x, LONG y, INT nArcLength, BYTE* pSurface, LONG lpitch, BOOLEAN clockwise, unsigned char* pArcData, const CRect* rClip, DWORD color);
     /* 001C */ virtual LONG DrawEllipse32(const CPoint& ptCenter, const CSize& axis, const DDSURFACEDESC& ddsd, const CRect* rClip, COLORREF rgbColor);
-    /* 0020 */ virtual LONG DrawEllipseHOctant32(LONG x, LONG y, INT nArcLength, DWORD* pSurface, LONG lpitch, BOOLEAN clockwise, unsigned char* pArcData, const CRect* rClip, DWORD color);
-    /* 0024 */ virtual LONG DrawEllipseVOctant32(LONG x, LONG y, INT nArcLength, DWORD* pSurface, LONG lpitch, BOOLEAN clockwise, unsigned char* pArcData, const CRect* rClip, DWORD color);
+    /* 0020 */ virtual LONG DrawEllipseHOctant32(LONG x, LONG y, INT nArcLength, DWORD* pSurface, LONG lpitch, BOOLEAN clockwise, BYTE* pPixelList, const CRect* rClip, DWORD color);
+    /* 0024 */ virtual LONG DrawEllipseVOctant32(LONG x, LONG y, INT nArcLength, DWORD* pSurface, LONG lpitch, BOOLEAN clockwise, BYTE* pPixelList, const CRect* rClip, DWORD color);
     /* 0028 */ virtual void DrawLightingEffect16(WORD* pSurface, LONG lpitch, const CPoint& a4, const CSize& a5, unsigned long a6, unsigned long a7);
     /* 002C */ virtual void DrawLightingEffect24(BYTE* pSurface, LONG lpitch, const CPoint& a4, const CSize& a5, unsigned long a6, unsigned long a7);
     /* 0030 */ virtual void DrawLightingEffect32(DWORD* pSurface, LONG lpitch, const CPoint& a4, const CSize& a5, unsigned long a6, unsigned long a7);
