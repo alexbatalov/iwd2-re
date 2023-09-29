@@ -560,8 +560,8 @@ void CScreenWorld::StopContainer()
     // TODO: Incomplete.
 }
 
-// 0x691140
-void CScreenWorld::StartCommand()
+// 0x691090
+void CScreenWorld::CancelPopup()
 {
     switch (field_EA4) {
     case -1:
@@ -589,6 +589,13 @@ void CScreenWorld::StartCommand()
         // __LINE__: 5469
         UTIL_ASSERT(FALSE);
     }
+}
+
+// 0x691140
+void CScreenWorld::StartCommand()
+{
+    // NOTE: Uninline.
+    CancelPopup();
 
     field_EA4 = 6;
     m_cUIManager.ClearTooltip();

@@ -65,6 +65,7 @@ public:
     void SetCurrentXP(DWORD dwCurrentXP);
     void AddGold(DWORD dwGold);
     void StopContainer();
+    void CancelPopup();
     void StartCommand();
     void StopCommand();
     void StartStore(const CAIObjectType& cAIProprietor, const CAIObjectType& cAICustomer, CResRef cResStore, BOOLEAN bInitiate);
