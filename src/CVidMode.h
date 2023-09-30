@@ -51,6 +51,7 @@ public:
     void DisableScissoring();
     void sub_7BEDE0();
     static void RenderBlackFade3d();
+    void ScanLine32(DWORD* pSurface, UINT nMajorAxis, UINT nMinorAxis, INT nMajorAxisAdjust, INT nMinorAxisAdjust, DWORD color);
 
     CVidMode();
     /* 0000 */ virtual BOOLEAN SaveScreen();

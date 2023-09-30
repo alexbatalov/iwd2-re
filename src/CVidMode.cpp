@@ -1373,6 +1373,63 @@ BOOL CVidMode::DrawLine32(INT nXFrom, INT nYFrom, INT nXTo, INT nYTo, DWORD* pSu
     return FALSE;
 }
 
+// 0x7CBD80
+void CVidMode::ScanLine32(DWORD* pSurface, UINT nMajorAxis, UINT nMinorAxis, INT nMajorAxisAdjust, INT nMinorAxisAdjust, DWORD color)
+{
+    int v1 = nMajorAxis / nMinorAxis;
+    int v2 = 2 * nMinorAxis;
+    int v3 = 2 * (nMajorAxis % nMinorAxis);
+    int v4 = v3 / 2 - v2;
+    int v5 = v1 / 2 + 1;
+    int v6 = nMinorAxis - 1;
+    int v7 = v1 / 2 + 1;
+
+    if (v3 != 0) {
+        if ((v1 & 1) != 0) {
+            v4 += nMinorAxis;
+        }
+    } else {
+        if ((v1 & 1) != 0) {
+            v4 += nMinorAxis;
+        } else {
+            v5 -= 1;
+        }
+    }
+
+    while (v5 > 0) {
+        *pSurface = color;
+        pSurface += nMajorAxisAdjust;
+        v5--;
+    }
+
+    pSurface += nMinorAxisAdjust;
+    while (v6 > 0) {
+        v4 += v3;
+
+        int v8 = v1;
+        if (v4 > 0) {
+            v8 += 1;
+            v4 -= v2;
+        }
+
+        while (v8 > 0) {
+            *pSurface = color;
+            pSurface += nMajorAxisAdjust;
+            v8--;
+        }
+
+        pSurface += nMinorAxisAdjust;
+
+        v6--;
+    }
+
+    while (v7 > 0) {
+        *pSurface = color;
+        pSurface += nMajorAxisAdjust;
+        v7--;
+    }
+}
+
 // 0x7CBE70
 BOOL CVidMode::DrawThickLine32(INT nXFrom, INT nYFrom, INT nXTo, INT nYTo, DWORD* pSurface, LONG lPitch, CRect& rSurface, int a8, DWORD color, BOOLEAN bClipped)
 {
