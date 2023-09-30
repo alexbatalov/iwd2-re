@@ -3,7 +3,10 @@
 #include "CBaldurChitin.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CScreenCharacter.h"
 #include "CScreenConnection.h"
+#include "CScreenMultiPlayer.h"
+#include "CScreenSinglePlayer.h"
 #include "CScreenStart.h"
 #include "CScreenWorld.h"
 #include "CUIControlLabel.h"
@@ -25,11 +28,11 @@ CScreenLoadGameSlot::CScreenLoadGameSlot()
     m_cBmpResPortrait3.m_pData = NULL;
     m_cBmpResPortrait4.m_pData = NULL;
     m_cBmpResPortrait5.m_pData = NULL;
-    field_2FC = "";
-    field_304 = "";
-    field_308 = 0;
-    field_30C = 0;
-    field_310 = "";
+    m_cResPortrait = "";
+    m_sCharacterName = "";
+    m_nTime = 0;
+    m_nChapter = 0;
+    m_sChapter = "";
     field_314 = "";
 }
 
@@ -452,7 +455,7 @@ void CScreenLoad::UpdateMainPanel()
         }
 
         if (nGameSlot < m_nNumGameSlots) {
-            CTimerWorld::GetCurrentTimeString(m_aGameSlots[nGameSlot]->field_308, 20670, sTime);
+            CTimerWorld::GetCurrentTimeString(m_aGameSlots[nGameSlot]->m_nTime, 20670, sTime);
 
             UpdateLabel(pPanel,
                 0x10000005 + nSlot,
@@ -461,7 +464,7 @@ void CScreenLoad::UpdateMainPanel()
             UpdateLabel(pPanel,
                 0x1000000A + nSlot,
                 "%s, %s",
-                m_aGameSlots[nGameSlot]->field_310,
+                m_aGameSlots[nGameSlot]->m_sChapter,
                 sTime);
             UpdateLabel(pPanel,
                 0x1000000F + nSlot,
@@ -478,7 +481,147 @@ void CScreenLoad::UpdateMainPanel()
 // 0x63BE80
 void CScreenLoad::LoadGame(INT nSlot)
 {
-    // TODO: Incomplete.
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenLoad.cpp
+    // __LINE__: 849
+    UTIL_ASSERT(0 <= nSlot && nSlot < GAME_SLOTS);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenLoad.cpp
+    // __LINE__: 851
+    UTIL_ASSERT(pGame != NULL);
+
+    INT nGameSlot = nSlot + m_nTopGameSlot;
+    if (nGameSlot < m_nNumGameSlots) {
+        if (!m_bShiftKeyDown
+            && g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL) {
+            CString sFileName(m_aGameSlots[nGameSlot]->m_sFileName);
+            if (pGame->SaveGameExists(sFileName)) {
+                pGame->m_sSaveGame = sFileName;
+                CScreenCharacter::SAVE_NAME = sFileName;
+
+                if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL) {
+                    CScreenCharacter::SAVE_NAME = sFileName;
+                }
+
+                pGame->LoadGame(TRUE, FALSE);
+                FreeGameSlots();
+                m_aGameSlots.SetSize(0);
+
+                if (m_cUIManager.m_pFocusedControl != NULL) {
+                    m_cUIManager.KillCapture();
+                }
+
+                pGame->MultiplayerSetCharacterCreationLocation();
+                pGame->SetupCharacters(FALSE);
+
+                for (INT nCharacterSlot = 0; nCharacterSlot < CINFGAME_MAXCHARACTERS; nCharacterSlot++) {
+                    if (pGame->GetCharacterSlot(nCharacterSlot) != CGameObjectArray::INVALID_INDEX) {
+                        pGame->GetMultiplayerSettings()->SignalCharacterStatus(nCharacterSlot,
+                            CMultiplayerSettings::CHARSTATUS_SIGNAL_IMPORTED,
+                            TRUE,
+                            TRUE);
+                    } else {
+                        pGame->GetMultiplayerSettings()->SignalCharacterStatus(nCharacterSlot,
+                            CMultiplayerSettings::CHARSTATUS_SIGNAL_DELETED,
+                            TRUE,
+                            TRUE);
+                    }
+                }
+
+                pGame->GetMultiplayerSettings()->SetArbitrationLockAllowInput(TRUE);
+                pGame->GetMultiplayerSettings()->SetArbitrationLockStatus(FALSE, 0);
+
+                SelectEngine(g_pBaldurChitin->m_pEngineWorld);
+
+                return;
+            }
+        }
+
+        g_pBaldurChitin->field_4F38 = g_pBaldurChitin->cSoundMixer.GetSectionPlaying();
+        g_pBaldurChitin->field_4F3C = g_pBaldurChitin->cSoundMixer.GetMusicPosition();
+
+        CString sFileName(m_aGameSlots[nGameSlot]->m_sFileName);
+        if (pGame->SaveGameExists(sFileName)) {
+            pGame->m_sSaveGame = sFileName;
+            CScreenCharacter::SAVE_NAME = sFileName;
+
+            if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL) {
+                CScreenCharacter::SAVE_NAME = sFileName;
+            }
+
+            field_C1E = TRUE;
+
+            if (m_nEngineState == 3
+                && (g_pChitin->cNetwork.GetSessionHosting() == TRUE
+                    || g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL)) {
+                pGame->GetMultiplayerSettings()->SetServerOnLoadGame(g_pChitin->cNetwork.m_idLocalPlayer);
+                pGame->LoadGame(TRUE, FALSE);
+                pGame->GetMultiplayerSettings()->ResetServerOnLoadGame();
+            } else {
+                pGame->LoadGame(TRUE, FALSE);
+            }
+
+            field_C1E = FALSE;
+
+            FreeGameSlots();
+            m_aGameSlots.SetSize(0);
+
+            // NOTE: Uninline.
+            m_cUIManager.KillCapture();
+
+            switch (m_nEngineState) {
+            case 0:
+            case 2:
+                SelectEngine(g_pBaldurChitin->m_pEngineWorld);
+                break;
+            case 3:
+                if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+                    g_pBaldurChitin->GetBaldurMessage()->BroadcastDemandCharacterSlotReply(TRUE, 0, FALSE);
+                }
+                // FALLTHROUGH
+            case 1:
+                pGame->GetMultiplayerSettings()->SetArbitrationLockAllowInput(TRUE);
+                pGame->GetRemoteObjectArray()->CleanControlChanges();
+                pGame->MultiplayerSetCharacterCreationLocation();
+
+                for (INT nCharacterSlot = 0; nCharacterSlot < CINFGAME_MAXCHARACTERS; nCharacterSlot++) {
+                    if (pGame->GetCharacterSlot(nCharacterSlot) != CGameObjectArray::INVALID_INDEX) {
+                        pGame->GetMultiplayerSettings()->SignalCharacterStatus(nCharacterSlot,
+                            CMultiplayerSettings::CHARSTATUS_SIGNAL_IMPORTED,
+                            TRUE,
+                            TRUE);
+                    } else {
+                        pGame->GetMultiplayerSettings()->SignalCharacterStatus(nCharacterSlot,
+                            CMultiplayerSettings::CHARSTATUS_SIGNAL_DELETED,
+                            TRUE,
+                            TRUE);
+                    }
+                }
+
+                pGame->GetMultiplayerSettings()->m_bRefreshCharacters = TRUE;
+                g_pBaldurChitin->GetBaldurMessage()->SendFullSettingsToClients(CString(""));
+                pGame->LoadMultiPlayerPermissions();
+
+                if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL) {
+                    CScreenSinglePlayer* pSinglePlayer = g_pBaldurChitin->m_pEngineSinglePlayer;
+                    pSinglePlayer->field_45C = 1;
+                    pSinglePlayer->StartSinglePlayer(1);
+                    SelectEngine(pSinglePlayer);
+                } else {
+                    CScreenMultiPlayer* pMultiPlayer = g_pBaldurChitin->m_pEngineMultiPlayer;
+                    pMultiPlayer->field_45C = 1;
+                    pMultiPlayer->StartMultiPlayer(1);
+                    SelectEngine(pMultiPlayer);
+                }
+                break;
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenLoad.cpp
+                // __LINE__: 1041
+                UTIL_ASSERT(FALSE);
+            }
+        }
+    }
 }
 
 // 0x63C3E0

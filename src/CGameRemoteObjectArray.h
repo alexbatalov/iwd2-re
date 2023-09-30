@@ -5,6 +5,7 @@
 
 class CGameRemoteObjectArray {
 public:
+    BOOL CleanControlChanges();
     BOOL Find(DWORD remotePlayerID, LONG remoteObjectID, LONG& localObjectID);
 };
 

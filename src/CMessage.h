@@ -206,6 +206,7 @@ public:
     BOOLEAN OnUpdateDemandCharacterSlot(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
     BOOLEAN DemandCharacterSlot(SHORT nCharacterSlot, BOOLEAN bDemandFromHost, SHORT nPlayerSlot);
     BOOLEAN OnDemandCharacterSlot(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
+    BOOLEAN BroadcastDemandCharacterSlotReply(BOOLEAN bUpdateAllCharacters, INT nUpdatedCharacterSlot, BOOLEAN bProgressBarInPlace);
     BOOLEAN OnDemandCharacterSlotReply(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
     BOOL ObjectControlRequest(LONG localObjectID);
     BOOL ObjectControl();

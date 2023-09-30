@@ -1656,6 +1656,14 @@ BOOLEAN CBaldurMessage::OnDemandCharacterSlot(INT nMsgFrom, BYTE* pMessage, DWOR
     return FALSE;
 }
 
+// 0x42F480
+BOOLEAN CBaldurMessage::BroadcastDemandCharacterSlotReply(BOOLEAN bUpdateAllCharacters, INT nUpdatedCharacterSlot, BOOLEAN bProgressBarInPlace)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x42FA60
 BOOLEAN CBaldurMessage::OnDemandCharacterSlotReply(INT nMsgFrom, BYTE* pMessage, DWORD dwSize)
 {
