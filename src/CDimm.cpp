@@ -2491,7 +2491,7 @@ BOOL CDimm::WriteSetUp(const CString& sFileName, CString& sResolvedFileName)
     char path[MAX_PATH];
     _getcwd(path, MAX_PATH);
 
-    if (g_pChitin->lAliases.ResolveFileName(sFileName, sResolvedFileNameTemp)) {
+    if (!g_pChitin->lAliases.ResolveFileName(sFileName, sResolvedFileNameTemp)) {
         sResolvedFileNameTemp = sFileName;
     }
 
