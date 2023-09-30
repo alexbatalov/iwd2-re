@@ -1360,9 +1360,206 @@ LONG CVidMode::DrawEllipseHOctant32(LONG x, LONG y, INT nArcLength, DWORD* pSurf
 }
 
 // 0x7CB670
-void CVidMode::DrawRecticle32(const CVIDMODE_RECTICLE_DESCRIPTION& rd, const DDSURFACEDESC& ddsd, const CRect* rClip, COLORREF rgbColor)
+void CVidMode::DrawRecticle32(const CVIDMODE_RECTICLE_DESCRIPTION& recticleDesc, const DDSURFACEDESC& ddsd, const CRect* rClip, COLORREF rgbColor)
 {
-    // TODO: Incomplete.
+    BYTE* pPixelList = new BYTE[max(recticleDesc.xAxis, recticleDesc.yAxis)];
+    LONG lPitch = ddsd.lPitch / 4;
+    DWORD color = (GetRValue(rgbColor) << m_dwRBitShift) | (GetGValue(rgbColor) << m_dwGBitShift) | (GetBValue(rgbColor) << m_dwBBitShift);
+
+    INT v1 = recticleDesc.xAxis + recticleDesc.piePieceXOffset;
+    INT v2 = recticleDesc.yAxis + recticleDesc.piePieceYOffset;
+    INT v3;
+
+    CRect rLineClip;
+    BOOLEAN bLineClipped;
+
+    if (rClip != NULL) {
+        rLineClip.SetRect(rClip->left, rClip->top, rClip->right - 1, rClip->bottom - 1);
+        bLineClipped = TRUE;
+    } else {
+        rLineClip.SetRect(0, 0, 0, 0);
+        bLineClipped = FALSE;
+    }
+
+    LONG nArcLength = GetEllipseArcPixelList(recticleDesc.xAxis,
+        recticleDesc.yAxis,
+        pPixelList);
+
+    nArcLength -= 1;
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo24.cpp
+    // __LINE__: 2097
+    UTIL_ASSERT(nArcLength < max(recticleDesc.xAxis, recticleDesc.yAxis));
+
+    v3 = DrawEllipseHOctant32(recticleDesc.ptCenter.x,
+        recticleDesc.ptCenter.y - v2,
+        nArcLength - recticleDesc.xGap,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        lPitch,
+        FALSE,
+        pPixelList,
+        rClip,
+        color);
+
+    DrawLine32(recticleDesc.ptCenter.x + recticleDesc.xGap - nArcLength,
+        v3,
+        recticleDesc.ptCenter.x,
+        recticleDesc.ptCenter.y + recticleDesc.piePiecePtYOffset - v2,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        lPitch,
+        rLineClip,
+        color,
+        bLineClipped);
+
+    v3 = DrawEllipseHOctant32(recticleDesc.ptCenter.x + 1,
+        recticleDesc.ptCenter.y + pPixelList[0] - v2,
+        nArcLength - recticleDesc.xGap - 1,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        lPitch,
+        TRUE,
+        pPixelList + 1,
+        rClip,
+        color);
+
+    DrawLine32(recticleDesc.ptCenter.x - recticleDesc.xGap + nArcLength,
+        v3,
+        recticleDesc.ptCenter.x,
+        recticleDesc.ptCenter.y + recticleDesc.piePiecePtYOffset - v2,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        lPitch,
+        rLineClip,
+        color,
+        bLineClipped);
+
+    v3 = DrawEllipseHOctant32(recticleDesc.ptCenter.x,
+        recticleDesc.ptCenter.y + v2,
+        nArcLength - recticleDesc.xGap,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        -lPitch,
+        FALSE,
+        pPixelList,
+        rClip,
+        color);
+
+    DrawLine32(recticleDesc.ptCenter.x + recticleDesc.xGap - nArcLength,
+        v3,
+        recticleDesc.ptCenter.x,
+        recticleDesc.ptCenter.y - recticleDesc.piePiecePtYOffset + v2,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        lPitch,
+        rLineClip,
+        color,
+        bLineClipped);
+
+    v3 = DrawEllipseHOctant32(recticleDesc.ptCenter.x + 1,
+        recticleDesc.ptCenter.y - pPixelList[0] + v2,
+        nArcLength - recticleDesc.xGap - 1,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        -lPitch,
+        TRUE,
+        pPixelList + 1,
+        rClip,
+        color);
+
+    DrawLine32(recticleDesc.ptCenter.x - recticleDesc.xGap + nArcLength,
+        v3,
+        recticleDesc.ptCenter.x,
+        recticleDesc.ptCenter.y - recticleDesc.piePiecePtYOffset + v2,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        lPitch,
+        rLineClip,
+        color,
+        bLineClipped);
+
+    nArcLength = GetEllipseArcPixelList(recticleDesc.yAxis,
+        recticleDesc.xAxis,
+        pPixelList);
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo24.cpp
+    // __LINE__: 2097
+    UTIL_ASSERT(nArcLength < max(recticleDesc.xAxis, recticleDesc.yAxis));
+
+    v3 = DrawEllipseVOctant32(recticleDesc.ptCenter.x - v1,
+        recticleDesc.ptCenter.y,
+        nArcLength - recticleDesc.yGap,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        -lPitch,
+        TRUE,
+        pPixelList,
+        rClip,
+        color);
+
+    DrawLine32(v3,
+        recticleDesc.ptCenter.y + recticleDesc.yGap - nArcLength,
+        recticleDesc.ptCenter.x + recticleDesc.piePiecePtXOffset - v1,
+        recticleDesc.ptCenter.y,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        lPitch,
+        rLineClip,
+        color,
+        bLineClipped);
+
+    v3 = DrawEllipseVOctant32(recticleDesc.ptCenter.x + pPixelList[0] - v1,
+        recticleDesc.ptCenter.y + 1,
+        nArcLength - recticleDesc.yGap - 1,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        lPitch,
+        TRUE,
+        pPixelList + 1,
+        rClip,
+        color);
+
+    DrawLine32(v3,
+        recticleDesc.ptCenter.y - recticleDesc.yGap + nArcLength,
+        recticleDesc.ptCenter.x + recticleDesc.piePiecePtXOffset - v1,
+        recticleDesc.ptCenter.y,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        lPitch,
+        rLineClip,
+        color,
+        bLineClipped);
+
+    v3 = DrawEllipseVOctant32(recticleDesc.ptCenter.x + v1,
+        recticleDesc.ptCenter.y,
+        nArcLength - recticleDesc.yGap,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        -lPitch,
+        FALSE,
+        pPixelList,
+        rClip,
+        color);
+
+    DrawLine32(v3,
+        recticleDesc.ptCenter.y + recticleDesc.yGap - nArcLength,
+        recticleDesc.ptCenter.x - recticleDesc.piePiecePtXOffset + v1,
+        recticleDesc.ptCenter.y,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        lPitch,
+        rLineClip,
+        color,
+        bLineClipped);
+
+    v3 = DrawEllipseVOctant32(recticleDesc.ptCenter.x - pPixelList[0] + v1,
+        recticleDesc.ptCenter.y + 1,
+        nArcLength - recticleDesc.yGap - 1,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        lPitch,
+        FALSE,
+        pPixelList + 1,
+        rClip,
+        color);
+
+    DrawLine32(v3,
+        recticleDesc.ptCenter.y - recticleDesc.yGap + nArcLength,
+        recticleDesc.ptCenter.x - recticleDesc.piePiecePtXOffset + v1,
+        recticleDesc.ptCenter.y,
+        reinterpret_cast<DWORD*>(ddsd.lpSurface),
+        lPitch,
+        rLineClip,
+        color,
+        bLineClipped);
+
+    delete pPixelList;
 }
 
 // 0x7CBC40
