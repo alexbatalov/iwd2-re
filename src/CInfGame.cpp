@@ -672,6 +672,12 @@ BOOLEAN CInfGame::byte_8E7528;
 // 0x8E752C
 int CInfGame::dword_8E752C;
 
+// 0x8E52EC
+int CInfGame::dword_8E52EC;
+
+// 0x8E52F0
+int CInfGame::dword_8E52F0;
+
 // 0x59CC30
 CInfGame::CInfGame()
     : m_rgbMasterBitmap(CResRef("MPALETTE"), FALSE, 24)
@@ -966,6 +972,14 @@ BOOLEAN CInfGame::CanSaveGame(STRREF& strError, unsigned char a2, unsigned char 
 
 // 0x5AC430
 BOOL CInfGame::SaveGame(unsigned char a1, unsigned char a2, unsigned char a3)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x5A7E40
+BOOL CInfGame::Unmarshal(BYTE* pGame, LONG nGame, BOOLEAN bProgressBarInPlace)
 {
     // TODO: Incomplete.
 
@@ -1741,7 +1755,187 @@ void CInfGame::SaveMultiPlayerPermissions()
 // 0x5AB190
 void CInfGame::LoadGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace)
 {
-    // TODO: Incomplete.
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 8447
+    UTIL_ASSERT(m_sSaveGame != "");
+
+    g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->sub_518650();
+    g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->sub_518690();
+
+    g_pBaldurChitin->GetTlkTable().m_override.CloseFiles();
+
+    dword_8E52EC = 0;
+    dword_8E52F0 = 0;
+
+    if (!bProgressBarInPlace && bProgressBarRequired == TRUE) {
+        sub_59FA00(TRUE);
+        g_pChitin->SetProgressBar(TRUE,
+            9888,
+            0,
+            0,
+            FALSE,
+            0,
+            FALSE,
+            0,
+            FALSE,
+            FALSE,
+            255);
+        g_pChitin->cProgressBar.m_nActionProgress = 0;
+        g_pChitin->cProgressBar.m_nActionTarget = 8000000;
+        g_pChitin->cProgressBar.m_bDisableMinibars = 1;
+    }
+
+    g_pChitin->m_bDisplayStale = TRUE;
+    SleepEx(25, FALSE);
+
+    if (bProgressBarInPlace || bProgressBarRequired) {
+        g_pChitin->cProgressBar.AddActionTarget(625000);
+    }
+
+    m_bInLoadGame = TRUE;
+
+    BOOL bMusicThreadPriorityChanged = FALSE;
+    int nMusicThreadPriority = GetThreadPriority(g_pChitin->m_hMusicThread);
+
+    if (GetPrivateProfileIntA("Program Options", "Volume Music", 0, g_pChitin->GetIniFileName())) {
+        bMusicThreadPriorityChanged = SetThreadPriority(g_pChitin->m_hMusicThread, 15);
+    }
+
+    InitGame(FALSE, FALSE);
+
+    if (bProgressBarInPlace || bProgressBarRequired) {
+        ProgressBarCallback(312500, FALSE);
+    }
+
+    m_bFromNewGame = FALSE;
+
+    CString sDir = GetDirSave();
+    if (sDir == m_sSaveDir + "default\\") {
+        sDir = m_sMultiplayerSaveDir + m_sSaveGame + "\\";
+    }
+
+    if (!g_pChitin->cDimm.DirectoryCopyFiles(sDir, m_sTempDir)) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+        // __LINE__: 8524
+        UTIL_ASSERT_MSG(FALSE, "Couldn't copy files from Temp to Save directories");
+    }
+
+    if (!g_pChitin->cDimm.UncompressDirectory(m_sTempDir, sDir)) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+        // __LINE__: 8526
+        UTIL_ASSERT_MSG(FALSE, "Couldn't uncompress save game into Temp directory");
+    }
+
+    if (bProgressBarInPlace || bProgressBarRequired) {
+        ProgressBarCallback(312500, FALSE);
+    }
+
+    if (!DeleteFileA(m_sTempDir + "ICEWIND2.BMP")
+        && GetLastError() != ERROR_FILE_NOT_FOUND) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+        // __LINE__: 8541
+        UTIL_ASSERT(FALSE);
+    }
+
+    if (!DeleteFileA(m_sTempDir + "PORTRT0.BMP")
+        && GetLastError() != ERROR_FILE_NOT_FOUND) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+        // __LINE__: 8548
+        UTIL_ASSERT(FALSE);
+    }
+
+    if (!DeleteFileA(m_sTempDir + "PORTRT1.BMP")
+        && GetLastError() != ERROR_FILE_NOT_FOUND) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+        // __LINE__: 8555
+        UTIL_ASSERT(FALSE);
+    }
+
+    if (!DeleteFileA(m_sTempDir + "PORTRT2.BMP")
+        && GetLastError() != ERROR_FILE_NOT_FOUND) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+        // __LINE__: 8562
+        UTIL_ASSERT(FALSE);
+    }
+
+    if (!DeleteFileA(m_sTempDir + "PORTRT3.BMP")
+        && GetLastError() != ERROR_FILE_NOT_FOUND) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+        // __LINE__: 8569
+        UTIL_ASSERT(FALSE);
+    }
+
+    if (!DeleteFileA(m_sTempDir + "PORTRT4.BMP")
+        && GetLastError() != ERROR_FILE_NOT_FOUND) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+        // __LINE__: 8576
+        UTIL_ASSERT(FALSE);
+    }
+
+    if (!DeleteFileA(m_sTempDir + "PORTRT5.BMP")
+        && GetLastError() != ERROR_FILE_NOT_FOUND) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+        // __LINE__: 8583
+        UTIL_ASSERT(FALSE);
+    }
+
+    g_pChitin->cDimm.AddToDirectoryList(m_sTempDir, TRUE);
+
+    g_pBaldurChitin->GetTlkTable().OpenOverride(CString("temp/default.toh"),
+        CString("temp/default.tot"));
+
+    m_cWorldMap.SetResRef(CResRef("WORLDMAP"));
+
+    CGameFile cGameFile;
+    cGameFile.SetResRef(CResRef("ICEWIND2"), TRUE, TRUE);
+
+    Unmarshal(cGameFile.GetData(),
+        cGameFile.GetDataSize(),
+        bProgressBarInPlace | bProgressBarRequired);
+
+    g_pBaldurChitin->cSoundMixer.StartSong(-1, 0x1 | 0x2);
+    SleepEx(500, FALSE);
+    g_pBaldurChitin->cSoundMixer.StopMusic(TRUE);
+
+    cGameFile.Release();
+
+    m_bAnotherPlayerJoinedGame = FALSE;
+
+    if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+        m_cRemoteObjectArray.ChangeControlOnLoadGame();
+    }
+
+    m_bInLoadGame = FALSE;
+
+    if (bMusicThreadPriorityChanged) {
+        SetThreadPriority(g_pChitin->m_hMusicThread, nMusicThreadPriority);
+    }
+
+    m_nLastSaveTime = m_worldTime.m_gameTime;
+
+    if (!bProgressBarInPlace && bProgressBarRequired == TRUE) {
+        g_pChitin->cProgressBar.m_nActionProgress = g_pChitin->cProgressBar.m_nActionTarget;
+        g_pChitin->cProgressBar.m_bDisableMinibars = TRUE;
+
+        g_pChitin->m_bDisplayStale = TRUE;
+        sub_59FA00(TRUE);
+
+        g_pChitin->SetProgressBar(FALSE,
+            0,
+            0,
+            0,
+            FALSE,
+            0,
+            FALSE,
+            0,
+            FALSE,
+            FALSE,
+            255);
+    }
+
+    SelectAll(FALSE);
+
+    g_pBaldurChitin->GetObjectGame()->m_cButtonArray.UpdateState();
 }
 
 // 0x5ABA20
@@ -4275,10 +4469,10 @@ void CGroupedSpellList::Load(const C2DArray& Table, const INT& nClassColumn, con
 // -----------------------------------------------------------------------------
 
 // 0x5C7AC0
-void* CGameFile::GetData()
+BYTE* CGameFile::GetData()
 {
     if (pRes != NULL) {
-        return pRes->Demand();
+        return reinterpret_cast<BYTE*>(pRes->Demand());
     } else {
         return NULL;
     }

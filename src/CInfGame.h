@@ -122,6 +122,7 @@ public:
     CGameArea* LoadArea(CString areaName, BYTE nTravelScreenImageToUse, BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace);
     BOOLEAN CanSaveGame(STRREF& strError, unsigned char a2, unsigned char a3);
     BOOL SaveGame(unsigned char a1, unsigned char a2, unsigned char a3);
+    BOOL Unmarshal(BYTE* pGame, LONG nGame, BOOLEAN bProgressBarInPlace);
     void ProgressBarCallback(DWORD dwSize, BOOLEAN bInitialize);
     char sub_5A9780(BYTE nKey);
     BYTE sub_5A97D0(char ch);
@@ -298,6 +299,10 @@ public:
     static BOOLEAN byte_8E7528;
     static int dword_8E752C;
 
+    // NOTE: Probably does not belong here.
+    static int dword_8E52EC;
+    static int dword_8E52F0;
+
     /* 0000 */ CRuleTables m_ruleTables;
     /* 1B58 */ CCriticalSection field_1B58;
     /* 1B78 */ CTimerWorld m_worldTime;
@@ -367,7 +372,7 @@ public:
     /* 4A00 */ HANDLE m_hSearchThread; // #guess
     /* 4A04 */ CCriticalSection m_disposableItemsCritSect;
     /* 4A24 */ CTypedPtrList<CPtrList, CItem*> m_lDisposableItems;
-    /* 4AA2 */ ULONG field_4AA2;
+    /* 4AA2 */ ULONG m_nLastSaveTime;
     /* 4AB2 */ unsigned char field_4AB2;
     /* 4AB4 */ CVidPalette m_entanglePalette;
     /* 4AD8 */ CVidPalette m_webHoldPalette;
@@ -400,7 +405,7 @@ public:
 
 class CGameFile : public CResHelper<CResGame, 1013> {
 public:
-    void* GetData();
+    BYTE* GetData();
     DWORD GetDataSize();
 };
 

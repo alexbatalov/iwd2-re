@@ -2556,7 +2556,7 @@ void CUIControlButtonOptionsGameCommand::OnLButtonClick(CPoint pt)
             pEngine->SummonPopup(8);
             break;
         case 10:
-            if (pGame->field_4AA2 < pGame->GetWorldTimer()->m_gameTime) {
+            if (pGame->m_nLastSaveTime < pGame->GetWorldTimer()->m_gameTime) {
                 if (pGame->CanSaveGame(dwStrId, 0, 0)) {
                     pEngine->m_dwErrorState = 3;
                     pEngine->m_dwErrorTextId = 16456;

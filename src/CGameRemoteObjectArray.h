@@ -7,6 +7,7 @@ class CGameRemoteObjectArray {
 public:
     BOOL CleanControlChanges();
     BOOL Find(DWORD remotePlayerID, LONG remoteObjectID, LONG& localObjectID);
+    BOOL ChangeControlOnLoadGame();
 };
 
 #endif /* CGAMEREMOTEOBJECTARRAY_H_ */

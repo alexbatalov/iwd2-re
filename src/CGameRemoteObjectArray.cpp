@@ -15,3 +15,11 @@ BOOL CGameRemoteObjectArray::Find(DWORD remotePlayerID, LONG remoteObjectID, LON
 
     return FALSE;
 }
+
+// 0x59BF30
+BOOL CGameRemoteObjectArray::ChangeControlOnLoadGame()
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
