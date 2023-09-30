@@ -37,6 +37,7 @@ public:
     void DestroyKeyTable();
     BOOL DirectoryCopyFiles(const CString& sSource, const CString& sDest);
     BOOL DirectoryRemoveFiles(const CString& sDirectoryName);
+    BOOL UncompressDirectory(const CString& sTempDir, const CString& sSaveDir);
     int Dump(CRes* pRes, int a2, int a3);
     int DumpAll();
     int FindDirectoryInDirectoryList(const CString& sDirName);

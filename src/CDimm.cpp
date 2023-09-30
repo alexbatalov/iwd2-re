@@ -696,6 +696,226 @@ BOOL CDimm::DirectoryRemoveFiles(const CString& sDirectoryName)
     return bResult;
 }
 
+// 0x785190
+BOOL CDimm::UncompressDirectory(const CString& sTempDir, const CString& sSaveDir)
+{
+    CString sResolvedTempDir;
+    CString sSaveFileName;
+    CString sMainSaveFileName("ICEWIND2.SAV");
+    CString sFileName;
+    CString sPattern;
+
+    CFile input;
+    CFile output;
+    CFileStatus cFileStatus;
+
+    BYTE* pDest = NULL;
+    BYTE* pSrc = NULL;
+    DWORD nMaxDestSize = 0;
+
+    sSaveFileName = sSaveDir;
+    if (sSaveFileName.ReverseFind('\\') == sSaveFileName.GetLength() - 1) {
+        sSaveFileName = sSaveFileName.Left(sSaveFileName.GetLength() - 1);
+    }
+
+    if (sSaveFileName.ReverseFind('\\') != -1) {
+        sSaveFileName = sSaveFileName.Right(sSaveFileName.GetLength() - sSaveFileName.ReverseFind('\\') - 1);
+    }
+
+    INT nPrefixLength = 0;
+    while (nPrefixLength < sSaveFileName.GetLength()
+        && sSaveFileName[nPrefixLength] >= '0'
+        && sSaveFileName[nPrefixLength] <= '9') {
+        nPrefixLength++;
+    }
+
+    if (nPrefixLength != 0 && sSaveFileName.Find('-') == nPrefixLength) {
+        sSaveFileName = sSaveFileName.Right(sSaveFileName.GetLength() - nPrefixLength - 1);
+    }
+
+    sSaveFileName += ".SAV";
+
+    if (!g_pChitin->lAliases.ResolveFileName(sTempDir, sResolvedTempDir)) {
+        sResolvedTempDir = sTempDir;
+    }
+
+    sPattern = sResolvedTempDir + "*.*";
+
+    WIN32_FIND_DATAA findFileData;
+    HANDLE hFindFile = FindFirstFileA(sPattern, &findFileData);
+    if (hFindFile == INVALID_HANDLE_VALUE) {
+        return FALSE;
+    }
+
+    do {
+        if ((findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != FILE_ATTRIBUTE_DIRECTORY) {
+            sFileName = findFileData.cFileName;
+            if (sFileName != sSaveFileName
+                && sFileName != sMainSaveFileName
+                && strnicmp(findFileData.cFileName, "ICEWIND2.GAM", 10) != 0
+                && strnicmp(sFileName.Right(3), "BMP", 3) != 0
+                && strnicmp(findFileData.cFileName, "WORLDMAP.WMP", 12) != 0
+                && strncmp(findFileData.cFileName, "EXPMAP.WMP", 10) != 0) {
+                sFileName = sResolvedTempDir + findFileData.cFileName;
+                DeleteFileA(sFileName);
+            }
+        }
+    } while (FindNextFileA(hFindFile, &findFileData));
+
+    FindClose(hFindFile);
+
+    BOOL bNotExists = FALSE;
+    if (!input.Open(sResolvedTempDir + sSaveFileName, CFile::OpenFlags::modeRead | CFile::OpenFlags::typeBinary | CFile::OpenFlags::shareExclusive, NULL)) {
+        if (!input.Open(sResolvedTempDir + sMainSaveFileName, CFile::OpenFlags::modeRead | CFile::OpenFlags::typeBinary | CFile::OpenFlags::shareExclusive, NULL)) {
+            bNotExists = TRUE;
+        }
+    }
+
+    if (bNotExists) {
+        if (sSaveFileName == "default.SAV") {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+
+    input.Seek(0, CFile::SeekPosition::begin);
+
+    char szHeader[8];
+    input.Read(szHeader, sizeof(szHeader));
+    if (strnicmp(szHeader, "SAV V1.0", 8) != 0) {
+        return FALSE;
+    }
+
+    BOOL bResult = TRUE;
+
+    while (input.GetPosition() < input.GetLength()) {
+        DWORD nFileNameLength;
+        input.Read(&nFileNameLength, 4);
+        input.Read(sFileName.GetBuffer(nFileNameLength), nFileNameLength);
+        sFileName.ReleaseBuffer();
+
+        if (output.Open(sResolvedTempDir + sFileName, CFile::OpenFlags::modeWrite | CFile::OpenFlags::typeBinary | CFile::OpenFlags::shareExclusive | CFile::OpenFlags::modeCreate, NULL)) {
+            DWORD nDestSize;
+            input.Read(&nDestSize, 4);
+
+            DWORD nSrcSize;
+            input.Read(&nSrcSize, 4);
+
+            if (nDestSize > nMaxDestSize) {
+                if (pDest != NULL) {
+                    delete pDest;
+                }
+
+                if (pSrc != NULL) {
+                    delete pSrc;
+                }
+
+                nMaxDestSize = max(nDestSize, 65536);
+
+                pDest = new BYTE[nMaxDestSize];
+                if (pDest == NULL) {
+                    bResult = FALSE;
+
+                    output.Close();
+                    break;
+                }
+
+                pSrc = new BYTE[max(nMaxDestSize, nSrcSize)];
+                if (pSrc == NULL) {
+                    bResult = FALSE;
+
+                    output.Close();
+                    break;
+                }
+            }
+
+            input.Read(pSrc, nSrcSize);
+
+            int err = CUtil::Uncompress(pDest, &nDestSize, pSrc, nSrcSize);
+            if (err != 0) {
+                if (err != -5) {
+                    CString sErr;
+                    sErr.Format("z_uncompress returned %d", err);
+                    sErr.Format("Uncompress in load game failed.  Error code %d.\n", err);
+                    sErr += "Please report this error and look at icewind2.log file, too!";
+
+                    bResult = FALSE;
+
+                    output.Close();
+                    break;
+                }
+
+                if (pDest != NULL) {
+                    delete pDest;
+                }
+
+                nMaxDestSize *= 2;
+
+                pDest = new BYTE[nMaxDestSize];
+                if (pDest == NULL) {
+                    bResult = FALSE;
+
+                    output.Close();
+                    break;
+                }
+
+                err = CUtil::Uncompress(pDest, &nDestSize, pSrc, nSrcSize);
+                if (err != 0) {
+                    CString sErr;
+                    sErr.Format("z_uncompress returned %d", err);
+                    sErr.Format("After expansion, uncompress in load game failed.  Error code %d.\n", err);
+                    sErr += "Please report this error and look at icewind2.log file, too!";
+
+                    bResult = FALSE;
+
+                    output.Close();
+                    break;
+                }
+
+                if (pSrc != NULL) {
+                    delete pSrc;
+                }
+
+                pSrc = new BYTE[max(nMaxDestSize, nSrcSize)];
+                if (pSrc == NULL) {
+                    bResult = FALSE;
+
+                    output.Close();
+                    break;
+                }
+            }
+
+            output.Seek(0, CFile::SeekPosition::begin);
+            output.Write(pDest, nDestSize);
+            output.Close();
+        } else {
+            bResult = FALSE;
+            break;
+        }
+    }
+
+    if (pDest != NULL) {
+        delete pDest;
+    }
+
+    if (pSrc != NULL) {
+        delete pSrc;
+    }
+
+    input.Close();
+
+    if (CFile::GetStatus(sResolvedTempDir + sSaveFileName, cFileStatus)) {
+        CFile::Remove(sResolvedTempDir + sSaveFileName);
+    }
+
+    if (CFile::GetStatus(sResolvedTempDir + sMainSaveFileName, cFileStatus)) {
+        CFile::Remove(sResolvedTempDir + sMainSaveFileName);
+    }
+
+    return bResult;
+}
+
 // 0x785C10
 int CDimm::Dump(CRes* pRes, int a2, int a3)
 {
