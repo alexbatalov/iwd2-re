@@ -1368,9 +1368,74 @@ void CVidMode::DrawRecticle32(const CVIDMODE_RECTICLE_DESCRIPTION& rd, const DDS
 // 0x7CBC40
 BOOL CVidMode::DrawLine32(INT nXFrom, INT nYFrom, INT nXTo, INT nYTo, DWORD* pSurface, LONG lPitch, const CRect& rSurface, DWORD color, BOOLEAN bClipped)
 {
-    // TODO: Incomplete.
+    INT nDeltaX;
+    INT nDeltaY;
+    INT nStep;
 
-    return FALSE;
+    if (!bClipped) {
+        if (!ClipLine(nXFrom, nYFrom, nXTo, nYTo, rSurface)) {
+            return FALSE;
+        }
+    }
+
+    if (nYFrom > nYTo) {
+        INT t;
+
+        t = nXTo;
+        nXTo = nXFrom;
+        nXFrom = t;
+
+        t = nYTo;
+        nYTo = nYFrom;
+        nYFrom = t;
+    }
+
+    if (nXTo - nXFrom < 0) {
+        nDeltaX = nXFrom - nXTo;
+        nStep = -1;
+    } else {
+        nDeltaX = nXTo - nXFrom;
+        nStep = 1;
+    }
+
+    nDeltaY = nYTo - nYFrom;
+
+    pSurface += lPitch * (nYFrom - rSurface.top) - rSurface.left + nXFrom;
+
+    if (nDeltaX == 0) {
+        while (nDeltaY >= 0) {
+            *pSurface = color;
+            pSurface += lPitch;
+            nDeltaY--;
+        }
+        return TRUE;
+    }
+
+    if (nDeltaY == 0) {
+        while (nDeltaX >= 0) {
+            *pSurface = color;
+            pSurface += nStep;
+            nDeltaX--;
+        }
+        return TRUE;
+    }
+
+    if (nDeltaX == nDeltaY) {
+        while (nDeltaX >= 0) {
+            *pSurface = color;
+            pSurface += lPitch + nStep;
+            nDeltaX--;
+        }
+        return TRUE;
+    }
+
+    if (nDeltaX < nDeltaY) {
+        ScanLine32(pSurface, nDeltaY, nDeltaX, lPitch, nStep, color);
+    } else {
+        ScanLine32(pSurface, nDeltaX, nDeltaY, nStep, lPitch, color);
+    }
+
+    return TRUE;
 }
 
 // 0x7CBD80
