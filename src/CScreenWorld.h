@@ -151,6 +151,7 @@ public:
     /* 10DA */ DWORD m_deltaTime;
     /* 10DE */ INT m_nChatMessageCount;
     /* 10E2 */ CResRef m_movie;
+    /* 10EA */ BOOLEAN m_bInControlOfDialog;
     /* 10EB */ BOOLEAN m_bInControlOfStore;
     /* 10EC */ BOOL m_bGameOverPanel;
     /* 10F0 */ int field_10F0;

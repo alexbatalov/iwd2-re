@@ -198,6 +198,15 @@ public:
     void OnRButtonClick(CPoint pt) override;
 };
 
+class CUIControlTextDisplayDialog : public CUIControlTextDisplay {
+public:
+    CUIControlTextDisplayDialog(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo, BOOLEAN a3);
+    ~CUIControlTextDisplayDialog() override;
+    /* 0068 */ void HighlightItem(POSITION posBossItem) override;
+    /* 006C */ void UnHighlightItem() override;
+    /* 0074 */ void OnItemSelected(LONG lMarker) override;
+};
+
 class CUIControlButtonRest : public CUIControlButton {
 public:
     CUIControlButtonRest(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

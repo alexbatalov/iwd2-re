@@ -3279,6 +3279,52 @@ void CUIControlButtonAction::OnRButtonClick(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x77A940
+CUIControlTextDisplayDialog::CUIControlTextDisplayDialog(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo, BOOLEAN a3)
+    : CUIControlTextDisplay(panel, controlInfo, a3)
+{
+    // NOTE: Uninline.
+    SetNeedMouseMove();
+}
+
+// 0x621470
+CUIControlTextDisplayDialog::~CUIControlTextDisplayDialog()
+{
+}
+
+// 0x77A8F0
+void CUIControlTextDisplayDialog::HighlightItem(POSITION posBossItem)
+{
+    if (g_pBaldurChitin->m_pEngineWorld->m_bInControlOfDialog) {
+        CUIControlTextDisplay::HighlightItem(posBossItem);
+    }
+}
+
+// 0x77A920
+void CUIControlTextDisplayDialog::UnHighlightItem()
+{
+    if (g_pBaldurChitin->m_pEngineWorld->m_bInControlOfDialog) {
+        CUIControlTextDisplay::UnHighlightItem();
+    }
+}
+
+// 0x77BC80
+void CUIControlTextDisplayDialog::OnItemSelected(LONG lMarker)
+{
+    if (g_pBaldurChitin->m_pEngineWorld->m_bInControlOfDialog) {
+        if (lMarker != -1) {
+            if (GetTickCount() > g_pBaldurChitin->m_pEngineWorld->field_11BA + 600) {
+                g_pBaldurChitin->m_pEngineWorld->m_internalLoadedDialog.m_responseMarker = lMarker;
+                g_pBaldurChitin->m_pEngineWorld->field_11BA = GetTickCount();
+            }
+        } else {
+            g_pBaldurChitin->m_pEngineWorld->m_internalLoadedDialog.m_responseMarker = -1;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x77B410
 CUIControlButtonRest::CUIControlButtonRest(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
