@@ -14,7 +14,7 @@ CInfCursor::CInfCursor()
     field_A02 = NULL;
     field_9FA = 0;
     m_nState = 0;
-    field_A06 = 0;
+    bAnimatingCustom = 0;
     m_nCurrentCursor = -1;
 }
 
@@ -89,7 +89,7 @@ void CInfCursor::CursorUpdate(CVidMode* pVidMode)
                 UTIL_ASSERT(FALSE);
             }
 
-            if (field_A06) {
+            if (bAnimatingCustom) {
                 m_vcCustom.FrameAdvance();
                 g_pBaldurChitin->m_bPointerUpdated = FALSE;
             }
@@ -192,7 +192,7 @@ void CInfCursor::SetCursor(INT nNewCursor, BOOLEAN bForce)
                     }
                 }
 
-                pVidMode->SetPointer(&m_vcCustom, field_A06, -1);
+                pVidMode->SetPointer(&m_vcCustom, bAnimatingCustom, -1);
                 g_pBaldurChitin->m_bPointerUpdated = FALSE;
             }
             break;
@@ -251,9 +251,38 @@ void CInfCursor::SetToolTip(STRREF nStrRef, CUIControlBase* pControl, SHORT nHot
 }
 
 // 0x597C50
-void CInfCursor::SetCustomCursor(CResRef customResRef, BOOLEAN bAnimating, INT nPointerNumber)
+INT CInfCursor::SetCustomCursor(CResRef customResRef, BOOLEAN bAnimating, INT nPointerNumber)
 {
-    // TODO: Incomplete.
+    INT nOldCursor = m_nCurrentCursor;
+
+    GetCurrentCursor()->SetTintColor(RGB(255, 255, 255));
+    g_pBaldurChitin->GetCurrentVideoMode()->m_dwCursorRenderFlags &= ~0xA0000;
+    m_nCurrentCursor = 102;
+    bAnimatingCustom = bAnimating;
+    m_vcCustom.SequenceSet(0);
+
+    if (g_pBaldurChitin->GetCurrentVideoMode()->GetPointer() != &m_vcCustom
+        || m_vcCustom.GetResRef() != customResRef
+        || g_pBaldurChitin->GetCurrentVideoMode()->GetPointerNumber() != nPointerNumber) {
+        if (g_pBaldurChitin->GetCurrentVideoMode()->GetPointer() == &m_vcToolTip) {
+            if (field_A02 != NULL) {
+                field_A02->ResetToolTip();
+                field_A02 = NULL;
+            }
+        }
+
+        if (g_pBaldurChitin->GetCurrentVideoMode()->SetPointer(&m_vcCustom, customResRef, bAnimatingCustom, nPointerNumber)) {
+            g_pBaldurChitin->m_bPointerUpdated = FALSE;
+        } else {
+            g_pBaldurChitin->GetCurrentVideoMode()->SetPointer(&m_vcCustom,
+                CResRef("NOICON"),
+                bAnimatingCustom,
+                nPointerNumber);
+            SetCursor(0, FALSE);
+        }
+    }
+
+    return nOldCursor;
 }
 
 // NOTE: Inlined.
