@@ -225,6 +225,83 @@ CScreenWorld::~CScreenWorld()
     // TODO: Incomplete.
 }
 
+// 0x6869C0
+void CScreenWorld::EngineActivated()
+{
+    if (CChitin::byte_8FB950
+        && g_pChitin->cNetwork.GetSessionOpen() == TRUE
+        && g_pChitin->cNetwork.GetSessionHosting() == TRUE
+        && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL
+        && field_142) {
+        g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(1, 1, 0);
+        field_142 = FALSE;
+    }
+
+    if (m_cUIManager.m_bInitialized) {
+        if (g_pBaldurChitin->GetObjectGame()->m_bGameLoaded == TRUE) {
+            g_pBaldurChitin->field_F9 = TRUE;
+            g_pBaldurChitin->GetObjectGame()->WorldEngineActivated(pVidMode);
+            field_119D = TRUE;
+
+            g_pBaldurChitin->GetObjectCursor()->SetCursor(0, TRUE);
+            g_pBaldurChitin->GetObjectCursor()->m_bVisible = TRUE;
+
+            m_cUIManager.InvalidateRect(NULL);
+
+            if (m_waitingOnResize == 0) {
+                if (g_pBaldurChitin->GetObjectGame()->GetVisibleArea() != NULL) {
+                    CRect rViewPort(g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->GetInfinity()->rViewPort);
+                    field_F22 = rViewPort.left;
+                    field_F26 = rViewPort.top;
+                    field_F2A = rViewPort.right;
+                    field_F2E = rViewPort.bottom;
+                } else {
+                    field_F22 = CInfinity::stru_8E79B8.left;
+                    field_F26 = CInfinity::stru_8E79B8.top;
+                    field_F2A = CInfinity::stru_8E79B8.right;
+                    field_F2E = CInfinity::stru_8E79B8.bottom;
+                }
+            }
+
+            m_waitingOnResize = 2;
+            m_bForceViewSize = TRUE;
+
+            if (m_bSetNightOnActivate) {
+                g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->GetInfinity()->SetNight();
+                m_bSetNightOnActivate = FALSE;
+            }
+
+            if (m_bSetDayOnActivate) {
+                g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->GetInfinity()->SetDay();
+                g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->GetInfinity()->SetDawn(CInfinity::TRUE_DAWNDUSK_INTENSITY, TRUE);
+                m_bSetDayOnActivate = FALSE;
+            }
+
+            if (!m_bHardPaused
+                && m_nAutoHideInterface != 0) {
+                DWORD dwInputMode = g_pBaldurChitin->GetObjectGame()->field_43E2;
+                if (dwInputMode != 0x182 && dwInputMode != 0x502) {
+                    // NOTE: Uninline.
+                    CancelPopup();
+                }
+
+                m_nAutoHideInterface--;
+                HideInterface();
+            }
+
+            CUIControlTextDisplay* pText = m_pActiveChatDisplay;
+            if (pText == NULL) {
+                pText = field_EA8;
+            }
+
+            if (pText != NULL) {
+                m_nChatMessageCount = g_pBaldurChitin->GetBaldurMessage()->m_cChatBuffer.UpdateTextDisplay(pText,
+                    m_nChatMessageCount);
+            }
+        }
+    }
+}
+
 // 0x686D00
 void CScreenWorld::EngineDeactivated()
 {

@@ -22,6 +22,7 @@ public:
 
     CScreenWorld();
     /* 0004 */ ~CScreenWorld() override;
+    /* 0014 */ void EngineActivated() override;
     /* 0018 */ void EngineDeactivated() override;
     /* 0024 */ void EngineGameInit() override;
     /* 0028 */ void EngineGameUninit() override;
@@ -112,6 +113,7 @@ public:
     /* 0136 */ BOOL m_bCtrlKeyDown;
     /* 013A */ BOOL m_bCapsLockKeyOn;
     /* 013E */ BOOLEAN m_bPaused;
+    /* 0142 */ BOOL field_142;
     /* 0146 */ BOOL m_bHardPaused;
     /* 014A */ int field_14A;
     /* 0152 */ BOOL m_bPausedBeforePickParty;
