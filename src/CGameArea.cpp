@@ -57,7 +57,7 @@ CGameArea::CGameArea(BYTE id)
     m_iPicked = CGameObjectArray::INVALID_INDEX;
     m_iPickedTarget = CGameObjectArray::INVALID_INDEX;
     m_nToolTip = 0;
-    m_visibility.field_58 = 0;
+    m_visibility.m_pDynamicHeight = NULL;
     memset(&m_header, 0, sizeof(m_header));
     m_groupMove = FALSE;
     field_432 = 0;
@@ -345,6 +345,24 @@ void CGameArea::ClearInput()
     m_selectSquare.top = -1;
     m_selectSquare.right = -1;
     m_selectSquare.bottom = -1;
+}
+
+// 0x470E60
+void CGameArea::IncrHeightDynamic(const CPoint& point)
+{
+    int index = (m_search.m_GridSquareDimensions.cx * (point.y / 12) + point.x / 16) / 2;
+    if ((m_visibility.m_pDynamicHeight[index] & 0xF0) < 0xF) {
+        m_visibility.m_pDynamicHeight[index] += 16;
+    }
+}
+
+// 0x470EC0
+void CGameArea::DecrHeightDynamic(const CPoint& point)
+{
+    int index = (m_search.m_GridSquareDimensions.cx * (point.y / 12) + point.x / 16) / 2;
+    if ((m_visibility.m_pDynamicHeight[index] & 0xF0) != 0) {
+        m_visibility.m_pDynamicHeight[index] -= 16;
+    }
 }
 
 // NOTE: Similar to `CInfGame::ProgressBarCallback`.

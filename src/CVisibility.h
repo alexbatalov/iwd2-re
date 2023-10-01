@@ -42,7 +42,7 @@ public:
     static void BltFogOWar3d(INT x, INT y, const CRect& rDest, const TILE_CODE& tileCode);
 
     /* 000E */ short field_E;
-    /* 0058 */ int field_58;
+    /* 0058 */ BYTE* m_pDynamicHeight;
 };
 
 #endif /* CVISIBILITY_H_ */

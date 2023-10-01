@@ -109,6 +109,8 @@ public:
     BOOLEAN CanSaveGame(STRREF& strError);
     void CompressTime(DWORD deltaTime);
     void ClearInput();
+    void IncrHeightDynamic(const CPoint& point);
+    void DecrHeightDynamic(const CPoint& point);
     void ProgressBarCallback(DWORD dwSize, BOOLEAN bInitialize);
     void SetListenPosition();
     void OnActivation();
