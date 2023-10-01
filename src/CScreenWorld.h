@@ -105,6 +105,8 @@ public:
 
     void CompressTime(DWORD deltaTime) { m_deltaTime = deltaTime; }
 
+    void CheckPanelInputMode(DWORD dwPanelId, DWORD dwinputModeMask);
+
     /* 0122 */ LONG m_boredCount;
     /* 0126 */ BOOL m_bored;
     /* 012A */ BOOL m_playerShutdown;

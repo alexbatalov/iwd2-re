@@ -1627,6 +1627,20 @@ void CScreenWorld::DisableKeyRepeat()
     m_pVirtualKeys[57].SetRepeat(0, 0);
 }
 
+// NOTE: Inlined.
+void CScreenWorld::CheckPanelInputMode(DWORD dwPanelId, DWORD dwinputModeMask)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 2820
+    UTIL_ASSERT(pPanel != NULL);
+
+    if (pPanel->m_bActive || pPanel->m_bInactiveRender) {
+        pPanel->SetEnabled((g_pBaldurChitin->GetObjectGame()->field_43E2 & dwinputModeMask) != 0);
+    }
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x6956F0
