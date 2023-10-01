@@ -365,7 +365,7 @@ public:
     /* 487C */ STR_RES field_487C;
     /* 48E4 */ BOOLEAN m_bForceDither;
     /* 4A8A */ LONG m_nProtagonistId;
-    /* 4A8E */ unsigned char field_4A8E;
+    /* 4A8E */ BOOLEAN m_bPartyAI;
     /* 4A8F */ unsigned char field_4A8F;
     /* 4A90 */ BYTE m_nTravelScreenImageToUse;
     /* 4A9A */ DWORD m_dwLastProgressRenderTickCount;

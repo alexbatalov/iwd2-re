@@ -163,6 +163,7 @@ public:
     CUIControlButtonAI(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonAI() override;
     BOOL Render(BOOL bForce) override;
+    void OnLButtonClick(CPoint pt) override;
 };
 
 class CUIControlButtonRest : public CUIControlButton {

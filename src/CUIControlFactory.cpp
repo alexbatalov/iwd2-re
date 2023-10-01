@@ -2984,6 +2984,41 @@ CUIControlButtonAI::~CUIControlButtonAI()
 {
 }
 
+// 0x77ACF0
+void CUIControlButtonAI::OnLButtonClick(CPoint pt)
+{
+    if (g_pBaldurChitin->GetActiveEngine() == g_pBaldurChitin->m_pEngineWorld
+        || g_pBaldurChitin->GetActiveEngine() == g_pBaldurChitin->m_pEngineInventory
+        || g_pBaldurChitin->GetActiveEngine() == g_pBaldurChitin->m_pEngineMap) {
+
+        g_pBaldurChitin->GetObjectGame()->m_bPartyAI = !g_pBaldurChitin->GetObjectGame()->m_bPartyAI;
+        if (g_pBaldurChitin->GetObjectGame()->m_bPartyAI) {
+            m_nNormalFrame++;
+            m_nToolTipStrRef = 15918;
+        } else {
+            m_nNormalFrame--;
+            m_nToolTipStrRef = 15917;
+        }
+
+        m_cVidCell.FrameSet(m_nNormalFrame);
+        InvalidateRect();
+
+        if (g_pBaldurChitin->GetActiveEngine() == g_pBaldurChitin->m_pEngineWorld) {
+            STRREF strText = g_pBaldurChitin->GetObjectGame()->m_bPartyAI
+                ? 15918 // "Party AI On"
+                : 15917; // "Party AI Off"
+            g_pBaldurChitin->m_pEngineWorld->DisplayText(CString(""),
+                CBaldurEngine::FetchString(strText),
+                RGB(0, 0, 0),
+                RGB(63, 255, 12),
+                -1,
+                FALSE);
+        }
+    } else {
+        InvalidateRect();
+    }
+}
+
 // 0x77AE50
 BOOL CUIControlButtonAI::Render(BOOL bForce)
 {
@@ -3009,7 +3044,7 @@ BOOL CUIControlButtonAI::Render(BOOL bForce)
     CRect rClip;
     rClip.IntersectRect(rControlFrame, m_rDirty);
 
-    m_nNormalFrame = g_pBaldurChitin->GetObjectGame()->field_4A8E;
+    m_nNormalFrame = g_pBaldurChitin->GetObjectGame()->m_bPartyAI ? 1 : 0;
     m_cVidCell.FrameSet(m_nNormalFrame);
 
     m_cVidCell.Render(0, pt.x, pt.y, rClip, NULL, 0, 0, -1);

@@ -831,7 +831,7 @@ void CInfGame::InitGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlac
     field_4B90 = "";
 
     m_pGameAreaMaster = NULL;
-    field_4A8E = 1;
+    m_bPartyAI = TRUE;
     field_4A8F = 1;
     field_4AB2 = 0;
     m_bGameLoaded = TRUE;
