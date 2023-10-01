@@ -107,6 +107,7 @@ public:
     void ApplyWindToAmbients(BYTE nPercentVolume);
     LONG GetGroundPile(const CPoint& ptPos);
     BOOLEAN CanSaveGame(STRREF& strError);
+    void CompressTime(DWORD deltaTime);
     void ClearInput();
     void ProgressBarCallback(DWORD dwSize, BOOLEAN bInitialize);
     void SetListenPosition();
@@ -202,7 +203,8 @@ public:
     /* 098A */ int field_98A;
     /* 098E */ int field_98E;
     /* 0992 */ CTypedPtrList<CPtrList, int*> m_lVertSort; // NOTE: Stores actual ints disguised as pointers.
-    /* 0992 */ CTypedPtrList<CPtrList, int*> m_lVertSortBack; // NOTE: Stores actual ints disguised as pointers.
+    /* 09AE */ CTypedPtrList<CPtrList, int*> m_lVertSortBack; // NOTE: Stores actual ints disguised as pointers.
+    /* 099A */ CTypedPtrList<CPtrList, int*> m_lVertSortFlight; // NOTE: Stores actual ints disguised as pointers.
     /* 09E6 */ CTypedPtrList<CPtrList, int*> m_lVertSortAdd; // NOTE: Stores actual ints disguised as pointers.
     /* 0A02 */ CTypedPtrList<CPtrList, int*> m_lVertSortBackAdd; // NOTE: Stores actual ints disguised as pointers.
     /* 0A1E */ CTypedPtrList<CPtrList, int*> m_lVertSortFlightAdd; // NOTE: Stores actual ints disguised as pointers.

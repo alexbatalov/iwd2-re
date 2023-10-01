@@ -254,6 +254,84 @@ BOOLEAN CGameArea::CanSaveGame(STRREF& strError)
     return FALSE;
 }
 
+// 0x46F750
+void CGameArea::CompressTime(DWORD deltaTime)
+{
+    LONG iObject;
+    CGameObject* pObject;
+    POSITION pos;
+    BYTE rc;
+
+    pos = m_lVertSortFlight.GetTailPosition();
+    while (pos != NULL) {
+        iObject = reinterpret_cast<LONG>(m_lVertSortFlight.GetPrev(pos));
+
+        do {
+            rc = m_pGame->GetObjectArray()->GetDeny(iObject,
+                CGameObjectArray::THREAD_ASYNCH,
+                &pObject,
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
+                || g_pChitin->cNetwork.m_idLocalPlayer == pObject->m_remotePlayerID) {
+                pObject->CompressTime(deltaTime);
+            }
+
+            m_pGame->GetObjectArray()->ReleaseDeny(iObject,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+
+    pos = m_lVertSort.GetTailPosition();
+    while (pos != NULL) {
+        iObject = reinterpret_cast<LONG>(m_lVertSort.GetPrev(pos));
+
+        do {
+            rc = m_pGame->GetObjectArray()->GetDeny(iObject,
+                CGameObjectArray::THREAD_ASYNCH,
+                &pObject,
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
+                || g_pChitin->cNetwork.m_idLocalPlayer == pObject->m_remotePlayerID) {
+                pObject->CompressTime(deltaTime);
+            }
+
+            m_pGame->GetObjectArray()->ReleaseDeny(iObject,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+
+    pos = m_lVertSortBack.GetTailPosition();
+    while (pos != NULL) {
+        iObject = reinterpret_cast<LONG>(m_lVertSortBack.GetPrev(pos));
+
+        do {
+            rc = m_pGame->GetObjectArray()->GetDeny(iObject,
+                CGameObjectArray::THREAD_ASYNCH,
+                &pObject,
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
+                || g_pChitin->cNetwork.m_idLocalPlayer == pObject->m_remotePlayerID) {
+                pObject->CompressTime(deltaTime);
+            }
+
+            m_pGame->GetObjectArray()->ReleaseDeny(iObject,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+}
+
 // 0x46FE30
 void CGameArea::ClearInput()
 {
