@@ -2984,6 +2984,41 @@ CUIControlButtonAI::~CUIControlButtonAI()
 {
 }
 
+// 0x77AE50
+BOOL CUIControlButtonAI::Render(BOOL bForce)
+{
+    if (!m_bActive && !m_bInactiveRender) {
+        return TRUE;
+    }
+
+    if (m_nRenderCount == 0 && !bForce) {
+        return TRUE;
+    }
+
+    if (m_nRenderCount != 0) {
+        CSingleLock renderLock(&(m_pPanel->m_pManager->field_56), FALSE);
+        renderLock.Lock(INFINITE);
+        m_nRenderCount--;
+        renderLock.Unlock();
+    }
+
+    CPoint pt = m_pPanel->m_ptOrigin + m_ptOrigin;
+
+    CRect rControlFrame(pt, m_size);
+
+    CRect rClip;
+    rClip.IntersectRect(rControlFrame, m_rDirty);
+
+    m_nNormalFrame = g_pBaldurChitin->GetObjectGame()->field_4A8E;
+    m_cVidCell.FrameSet(m_nNormalFrame);
+
+    m_cVidCell.Render(0, pt.x, pt.y, rClip, NULL, 0, 0, -1);
+
+    return TRUE;
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x77B410
 CUIControlButtonRest::CUIControlButtonRest(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
