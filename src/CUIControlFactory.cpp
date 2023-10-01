@@ -2971,6 +2971,34 @@ void CUIControlPortraitGeneral::OnRButtonClick(CPoint pt)
     m_pPanel->m_pManager->m_pWarp->SelectEngine(pWorld);
 }
 
+// 0x77AC40
+BOOL CUIControlPortraitGeneral::Render(BOOL bForce)
+{
+    if (!m_bActive && !m_bInactiveRender) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount == 0 && !bForce) {
+        return FALSE;
+    }
+
+    if (!CUIControlButton::Render(bForce)) {
+        return FALSE;
+    }
+
+    CPoint pt = m_pPanel->m_ptOrigin + m_ptOrigin;
+    g_pBaldurChitin->GetObjectGame()->RenderPortrait(m_nID,
+        pt,
+        m_size,
+        m_bPressed,
+        FALSE,
+        FALSE,
+        m_rDirty,
+        m_pPanel->m_pManager->m_bDoubleSize);
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x779DF0

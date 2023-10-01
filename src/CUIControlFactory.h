@@ -145,6 +145,7 @@ class CUIControlPortraitGeneral : public CUIControlPortraitBase {
 public:
     CUIControlPortraitGeneral(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlPortraitGeneral() override;
+    BOOL Render(BOOL bForce) override;
     void OnLButtonClick(CPoint pt) override;
     void OnLButtonDoubleClick(CPoint pt) override;
     void OnRButtonClick(CPoint pt) override;
