@@ -2969,6 +2969,129 @@ void CUIControlButtonCharacterPortrait::SetPortrait(const CResRef& resRef)
 
 // -----------------------------------------------------------------------------
 
+// 0x779F10
+CUIControlPortraitWorld::CUIControlPortraitWorld(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlPortraitBase(panel, controlInfo, LBUTTON | RBUTTON)
+{
+    m_bHighlighted = FALSE;
+}
+
+// 0x779FB0
+CUIControlPortraitWorld::~CUIControlPortraitWorld()
+{
+}
+
+// 0x779F50
+void CUIControlPortraitWorld::OnLButtonClick(CPoint pt)
+{
+    g_pBaldurChitin->GetObjectGame()->OnPortraitLClick(m_nID);
+}
+
+// 0x779F70
+void CUIControlPortraitWorld::OnLButtonDoubleClick(CPoint pt)
+{
+    g_pBaldurChitin->GetObjectGame()->OnPortraitLDblClick(m_nID);
+}
+
+// 0x77AFD0
+void CUIControlPortraitWorld::OnMouseMove(CPoint pt)
+{
+    if (IsOver(pt)) {
+        if (!m_bPressed) {
+            m_bHighlighted = FALSE;
+            g_pBaldurChitin->GetObjectGame()->SetTempCursor(4);
+            m_cVidCell.FrameSet(m_nPressedFrame);
+            m_bPressed = TRUE;
+
+            CSingleLock renderLock(&(m_pPanel->m_pManager->field_56), FALSE);
+            renderLock.Lock(INFINITE);
+            m_nRenderCount = CUIManager::RENDER_COUNT;
+            renderLock.Unlock();
+        }
+    } else {
+        if (m_bPressed) {
+            if (m_pPanel->m_pManager->m_nCaptureType == CUIManager::MOUSELBUTTON) {
+                m_bHighlighted = TRUE;
+                g_pBaldurChitin->GetObjectGame()->SetTempCursor(14);
+            }
+
+            m_cVidCell.FrameSet(m_nNormalFrame);
+            m_bPressed = FALSE;
+
+            CSingleLock renderLock(&(m_pPanel->m_pManager->field_56), FALSE);
+            renderLock.Lock(INFINITE);
+            m_nRenderCount = CUIManager::RENDER_COUNT;
+            renderLock.Unlock();
+        }
+    }
+}
+
+// 0x77B160
+void CUIControlPortraitWorld::OnLButtonUp(CPoint pt)
+{
+    m_bHighlighted = FALSE;
+    g_pBaldurChitin->GetObjectGame()->SetTempCursor(4);
+
+    m_cVidCell.FrameSet(m_nNormalFrame);
+    m_bPressed = FALSE;
+
+    CSingleLock renderLock(&(m_pPanel->m_pManager->field_56), FALSE);
+    renderLock.Lock(INFINITE);
+    m_nRenderCount = CUIManager::RENDER_COUNT;
+    renderLock.Unlock();
+
+    if (IsOver(pt)) {
+        OnLButtonClick(pt);
+    } else if (m_pPanel->IsOver(m_pPanel->m_ptOrigin + pt)) {
+        // NOTE: Unsigned compare.
+        for (DWORD nID = 0; nID < static_cast<DWORD>(g_pBaldurChitin->GetObjectGame()->GetNumCharacters()); nID++) {
+            CUIControlPortraitWorld* pPortrait = static_cast<CUIControlPortraitWorld*>(m_pPanel->GetControl(nID));
+            if (pPortrait != NULL
+                && nID != m_nID
+                && pPortrait->IsOver(pt)) {
+                g_pBaldurChitin->GetObjectGame()->SwapCharacters(m_nID, nID);
+                g_pBaldurChitin->GetObjectGame()->GetGroup()->Sort();
+                pPortrait->InvalidateRect();
+                break;
+            }
+        }
+    }
+}
+
+// 0x77B310
+void CUIControlPortraitWorld::OnRButtonClick(CPoint pt)
+{
+    g_pBaldurChitin->m_pEngineInventory->OnPortraitLClick(m_nID);
+    g_pBaldurChitin->m_pEngineWorld->SelectEngine(g_pBaldurChitin->m_pEngineInventory);
+    g_pBaldurChitin->m_pEngineInventory->UnPauseGame();
+}
+
+// 0x77B360
+BOOL CUIControlPortraitWorld::Render(BOOL bForce)
+{
+    if (!m_bActive && !m_bInactiveRender) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount == 0 && !bForce) {
+        return FALSE;
+    }
+
+    CPoint pt = m_pPanel->m_ptOrigin + m_ptOrigin;
+    g_pBaldurChitin->GetObjectGame()->RenderPortrait(m_nID,
+        pt,
+        m_size,
+        m_bPressed,
+        m_bHighlighted,
+        TRUE,
+        m_rDirty,
+        m_pPanel->m_pManager->m_bDoubleSize);
+
+    return TRUE;
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x77A050
 CUIControlButtonSelectAll::CUIControlButtonSelectAll(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)

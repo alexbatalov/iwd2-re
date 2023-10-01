@@ -158,6 +158,20 @@ public:
     /* 0666 */ CResRef m_portraitResRef;
 };
 
+class CUIControlPortraitWorld : public CUIControlPortraitBase {
+public:
+    CUIControlPortraitWorld(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlPortraitWorld() override;
+    void OnMouseMove(CPoint pt) override;
+    void OnLButtonUp(CPoint pt) override;
+    BOOL Render(BOOL bForce) override;
+    void OnLButtonClick(CPoint pt) override;
+    void OnLButtonDoubleClick(CPoint pt) override;
+    void OnRButtonClick(CPoint pt) override;
+
+    /* 0666 */ int m_bHighlighted;
+};
+
 class CUIControlButtonSelectAll : public CUIControlButton {
 public:
     CUIControlButtonSelectAll(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

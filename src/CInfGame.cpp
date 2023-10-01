@@ -2198,6 +2198,12 @@ CStore* CInfGame::GetServerStore(const CResRef& store)
     return NULL;
 }
 
+// 0x5AF160
+void CInfGame::SwapCharacters(DWORD pos1, DWORD pos2)
+{
+    // TODO: Incomplete.
+}
+
 // 0x5AF360
 void CInfGame::UpdatePortrait(SHORT nPortrait, DWORD dwPanelId)
 {
