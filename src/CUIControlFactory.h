@@ -158,6 +158,13 @@ public:
     /* 0666 */ CResRef m_portraitResRef;
 };
 
+class CUIControlButtonSelectAll : public CUIControlButton {
+public:
+    CUIControlButtonSelectAll(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonSelectAll() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlButtonAI : public CUIControlButton {
 public:
     CUIControlButtonAI(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

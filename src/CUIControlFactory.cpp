@@ -2969,6 +2969,27 @@ void CUIControlButtonCharacterPortrait::SetPortrait(const CResRef& resRef)
 
 // -----------------------------------------------------------------------------
 
+// 0x77A050
+CUIControlButtonSelectAll::CUIControlButtonSelectAll(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+    m_nToolTipHotKeyIndex1 = 37;
+    m_nToolTipStrRef = 10485;
+}
+
+// 0x77A0D0
+CUIControlButtonSelectAll::~CUIControlButtonSelectAll()
+{
+}
+
+// 0x77A090
+void CUIControlButtonSelectAll::OnLButtonClick(CPoint pt)
+{
+    g_pBaldurChitin->GetObjectGame()->SelectAll(TRUE);
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x77A170
 CUIControlButtonAI::CUIControlButtonAI(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
