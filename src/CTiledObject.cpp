@@ -15,3 +15,9 @@ CTiledObject::CTiledObject()
     m_wAIState = 0;
     m_wRenderState = 0;
 }
+
+// 0x54E980
+void CTiledObject::SetNewResWED(CResWED* pNewResWED)
+{
+    // TODO: Incomplete.
+}

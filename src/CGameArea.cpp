@@ -34,7 +34,7 @@ CGameArea::CGameArea(BYTE id)
     m_id = id;
     field_1ED = 0;
     field_1EE = 0;
-    field_1F8 = 0;
+    m_pResWED = NULL;
     m_bAreaLoaded = 0;
     InitializeCriticalSection(&field_1FC);
     InitializeCriticalSection(&field_214);
@@ -635,6 +635,21 @@ void CGameArea::SetDawn(BYTE nIntensity, BOOLEAN bPlayDayNightMovie)
 void CGameArea::SetDusk(BYTE nIntensity, BOOLEAN bPlayDayNightMovie)
 {
     // TODO: Incomplete.
+}
+
+// 0x4790D0
+void CGameArea::SetNewResWED(CResWED* pNewResWED)
+{
+    POSITION pos;
+    CTiledObject* pTiledObject;
+
+    m_pResWED = pNewResWED;
+
+    pos = m_lTiledObjects.GetHeadPosition();
+    while (pos != NULL) {
+        pTiledObject = m_lTiledObjects.GetNext(pos);
+        pTiledObject->SetNewResWED(pNewResWED);
+    }
 }
 
 // 0x479110

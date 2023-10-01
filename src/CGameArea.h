@@ -129,6 +129,7 @@ public:
     void SetApproachingDusk();
     void SetDawn(BYTE nIntensity, BOOLEAN bPlayDayNightMovie);
     void SetDusk(BYTE nIntensity, BOOLEAN bPlayDayNightMovie);
+    void SetNewResWED(CResWED* pNewResWED);
     void SetTimeOfDay(ULONG nTimeOfDay, BOOLEAN bPlayDayNightMovie);
     void SetSoundEnvironment();
     void SortLists();
@@ -152,7 +153,7 @@ public:
     /* 01EE */ unsigned char field_1EE;
     /* 01EF */ BOOLEAN m_bAreaLoaded;
     /* 01F0 */ CResRef m_resRef;
-    /* 01F8 */ int field_1F8;
+    /* 01F8 */ CResWED* m_pResWED;
     /* 01FC */ CRITICAL_SECTION field_1FC;
     /* 0214 */ CRITICAL_SECTION field_214;
     /* 022C */ INT m_nListManipulationThreadCounter;

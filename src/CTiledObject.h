@@ -13,6 +13,7 @@ public:
     static const WORD STATE_SECONDARY_TILE;
 
     CTiledObject();
+    void SetNewResWED(CResWED* pNewResWED);
 
     /* 0000 */ LONG m_nWedIndex;
     /* 0004 */ CResWED* m_pResWed;
