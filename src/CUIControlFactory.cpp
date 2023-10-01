@@ -3300,6 +3300,40 @@ void CUIControlButtonRest::OnLButtonClick(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x77BD00
+CUIControlEditLua::CUIControlEditLua(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo)
+    : CUIControlEdit(panel, controlInfo, TRUE)
+{
+    CString sKey("String0");
+
+    m_nHistorySize = 10;
+
+    for (BYTE nIndex = 0; nIndex < m_nHistorySize; nIndex++) {
+        sKey.SetAt(sKey.GetLength() - 1, nIndex + '0');
+        GetPrivateProfileStringA("Lua Edit",
+            sKey,
+            "",
+            field_874[nIndex].GetBuffer(128),
+            128,
+            g_pBaldurChitin->GetIniFileName());
+        field_874[nIndex].ReleaseBuffer();
+    }
+
+    if (field_874[0].GetLength() > 0) {
+        m_sText = field_874[0];
+    }
+
+    field_8A6 = 0;
+    field_8A2 = CGameObjectArray::INVALID_INDEX;
+}
+
+// 0x77BE60
+CUIControlEditLua::~CUIControlEditLua()
+{
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x77C4C0
 CUIControlEncumbrance::CUIControlEncumbrance(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, 0, 1)

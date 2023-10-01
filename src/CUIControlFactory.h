@@ -3,6 +3,7 @@
 
 #include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
+#include "CUIControlEdit.h"
 #include "CUIControlTextDisplay.h"
 
 class CBaldurEngine;
@@ -202,6 +203,17 @@ public:
     CUIControlButtonRest(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonRest() override;
     void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlEditLua : public CUIControlEdit {
+public:
+    CUIControlEditLua(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo);
+    ~CUIControlEditLua() override;
+
+    /* 0873 */ BYTE m_nHistorySize;
+    /* 0874 */ CString m_sHistory[10];
+    /* 08A2 */ LONG field_8A2;
+    /* 08A6 */ unsigned char field_8A6;
 };
 
 class CUIControlEncumbrance : public CUIControlButton {
