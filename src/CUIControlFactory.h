@@ -166,6 +166,14 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonAction : public CUIControlButton {
+public:
+    CUIControlButtonAction(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonAction() override;
+    void OnLButtonClick(CPoint pt) override;
+    void OnRButtonClick(CPoint pt) override;
+};
+
 class CUIControlButtonRest : public CUIControlButton {
 public:
     CUIControlButtonRest(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

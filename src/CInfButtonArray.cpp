@@ -56,3 +56,15 @@ void CInfButtonArray::SetSelectedButton(INT nSelectedButton)
 {
     m_nSelectedButton = nSelectedButton;
 }
+
+// 0x58FF20
+void CInfButtonArray::OnLButtonPressed(int buttonID)
+{
+    // TODO: Incomplete.
+}
+
+// 0x594720
+void CInfButtonArray::OnRButtonPressed(int buttonID)
+{
+    // TODO: Incomplete.
+}

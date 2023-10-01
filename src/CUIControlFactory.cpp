@@ -3054,6 +3054,31 @@ BOOL CUIControlButtonAI::Render(BOOL bForce)
 
 // -----------------------------------------------------------------------------
 
+// 0x77A2B0
+CUIControlButtonAction::CUIControlButtonAction(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON | RBUTTON, 0)
+{
+}
+
+// 0x77A370
+CUIControlButtonAction::~CUIControlButtonAction()
+{
+}
+
+// 0x77A2F0
+void CUIControlButtonAction::OnLButtonClick(CPoint pt)
+{
+    g_pBaldurChitin->GetObjectGame()->GetButtonArray()->OnLButtonPressed(m_nID - 6);
+}
+
+// 0x77A320
+void CUIControlButtonAction::OnRButtonClick(CPoint pt)
+{
+    g_pBaldurChitin->GetObjectGame()->GetButtonArray()->OnRButtonPressed(m_nID - 6);
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x77B410
 CUIControlButtonRest::CUIControlButtonRest(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)

@@ -31,6 +31,8 @@ public:
     BOOL ResetState();
     void UpdateState();
     BOOL SetState(INT nState, int a2);
+    void OnLButtonPressed(int buttonID);
+    void OnRButtonPressed(int buttonID);
 
     void SetSelectedButton(INT nSelectedButton);
 
