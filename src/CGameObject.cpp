@@ -5,6 +5,7 @@
 #include "CGameObjectArray.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CScreenWorld.h"
 #include "CTimerWorld.h"
 #include "CUtil.h"
 
@@ -242,7 +243,72 @@ BOOL CGameObject::OnSearchMap()
 // 0x4C7CA0
 void CGameObject::OnActionButton(const CPoint& pt)
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    CAIGroup* pGroup = pGame->GetGroup();
+
+    switch (pGame->GetState()) {
+    case 0:
+        if (pGroup->m_groupChanged || pGame->m_lastClick != pt) {
+            pGroup->m_groupChanged = FALSE;
+            pGame->m_lastClick = pt;
+            pGame->m_lastTarget = CGameObjectArray::INVALID_INDEX;
+
+            if (pGroup->GetCount() != 0) {
+                BOOL bShift = g_pBaldurChitin->m_pEngineWorld->GetShiftKey();
+                if (!bShift) {
+                    pGroup->ClearActions();
+                }
+
+                if (pGroup->GetCount() == 1) {
+                    pGroup->GroupSetTarget(pt,
+                        bShift,
+                        CAIGroup::FORMATION_NONE,
+                        CPoint(-1, -1));
+                } else if (m_pArea->m_groupMove) {
+                    CPoint cursor = m_pArea->m_moveDest + m_pArea->m_moveDest - pt;
+
+                    pGroup->GroupDrawMove(m_pArea->m_moveDest,
+                        pGame->m_curFormation,
+                        cursor);
+
+                    pGroup->GroupSetTarget(pt,
+                        bShift,
+                        pGame->m_curFormation,
+                        cursor);
+                } else {
+                    pGroup->GroupSetTarget(pt,
+                        bShift,
+                        pGame->m_curFormation,
+                        CPoint(-1, -1));
+                }
+            }
+        }
+        break;
+    case 2:
+        pGame->m_lastClick.x = -1;
+        pGame->m_lastClick.y = -1;
+        pGame->m_lastTarget = CGameObjectArray::INVALID_INDEX;
+        break;
+    case 3:
+        pGame->m_lastClick.x = -1;
+        pGame->m_lastClick.y = -1;
+        pGame->m_lastTarget = CGameObjectArray::INVALID_INDEX;
+
+        pGroup->GroupProtectPoint(m_pArea->m_moveDest,
+            pGame->m_curFormation,
+            CPoint(-1, -1),
+            FALSE);
+
+        m_pArea->m_groupMove = FALSE;
+        pGame->m_nState = 0;
+        pGame->GetButtonArray()->m_nSelectedButton = 100;
+        pGame->GetButtonArray()->UpdateState();
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameObject.cpp
+        // __LINE__: 298
+        UTIL_ASSERT(FALSE);
+    }
 }
 
 // 0x4C7EE0

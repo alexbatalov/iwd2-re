@@ -654,6 +654,24 @@ void CAIGroup::Sort()
     }
 }
 
+// 0x4063E0
+void CAIGroup::GroupSetTarget(CPoint target, BOOL additive, SHORT formationType, CPoint cursor)
+{
+    // TODO: Incomplete.
+}
+
+// 0x407280
+void CAIGroup::GroupProtectPoint(CPoint target, SHORT formationType, CPoint cursor, LONG range)
+{
+    // TODO: Incomplete.
+}
+
+// 0x407FC0
+void CAIGroup::GroupDrawMove(CPoint target, SHORT formationType, CPoint cursor)
+{
+    // TODO: Incomplete.
+}
+
 // 0x408660
 void CAIGroup::GroupCancelMove()
 {

@@ -350,6 +350,7 @@ public:
     /* 4224 */ CString m_sSaveDir;
     /* 4228 */ CString m_sMultiplayerSaveDir;
     /* 4238 */ DWORD m_nPartyGold;
+    /* 423C */ SHORT m_curFormation;
     /* 4248 */ CItem* m_groupInventory[100];
     /* 43D8 */ int field_43D8;
     /* 43DC */ short field_43DC;
@@ -375,6 +376,8 @@ public:
     /* 4A04 */ CCriticalSection m_disposableItemsCritSect;
     /* 4A24 */ CTypedPtrList<CPtrList, CItem*> m_lDisposableItems;
     /* 4AA2 */ ULONG m_nLastSaveTime;
+    /* 4AA6 */ CPoint m_lastClick;
+    /* 4AAE */ LONG m_lastTarget;
     /* 4AB2 */ unsigned char field_4AB2;
     /* 4AB4 */ CVidPalette m_entanglePalette;
     /* 4AD8 */ CVidPalette m_webHoldPalette;

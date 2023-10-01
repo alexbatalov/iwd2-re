@@ -92,6 +92,9 @@ public:
     void Remove(CGameSprite* pSprite);
     BOOL IsPartyLeader();
     void Sort();
+    void GroupSetTarget(CPoint target, BOOL additive, SHORT formationType, CPoint cursor);
+    void GroupProtectPoint(CPoint target, SHORT formationType, CPoint cursor, LONG range);
+    void GroupDrawMove(CPoint target, SHORT formationType, CPoint cursor);
     void GroupCancelMove();
     void ClearActions();
     void GroupSetTarget(LONG iObject);

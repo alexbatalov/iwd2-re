@@ -176,8 +176,7 @@ public:
     /* 03DA */ BYTE m_firstRender;
     /* 03DC */ CRect m_selectSquare;
     /* 03EC */ short field_3EC;
-    /* 03EE */ int field_3EE;
-    /* 03F2 */ int field_3F2;
+    /* 03EE */ CPoint m_moveDest;
     /* 03F6 */ BOOL m_groupMove;
     /* 03FA */ BYTE m_terrainTable[16];
     /* 040A */ BYTE m_visibleTerrainTable[16];
