@@ -1693,7 +1693,7 @@ void CUIControlButtonDialog::OnLButtonClick(CPoint pt)
     if (GetTickCount() > pWorld->field_11BA + 600) {
         pWorld->field_1150 = 1;
         if (!pWorld->field_10B4) {
-            pWorld->field_EF0 = pWorld->field_10B2;
+            pWorld->m_internalLoadedDialog.m_responseMarker = pWorld->field_10B2;
         }
         pWorld->field_11BA = GetTickCount();
     }

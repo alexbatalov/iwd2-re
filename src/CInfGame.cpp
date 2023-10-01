@@ -3113,8 +3113,8 @@ void CInfGame::SetProtagonist(LONG nId)
 {
     STR_RES strRes;
 
-    if (g_pBaldurChitin->m_pEngineWorld->field_F04) {
-        nId = g_pBaldurChitin->m_pEngineWorld->field_EE0;
+    if (g_pBaldurChitin->m_pEngineWorld->m_internalLoadedDialog.field_54) {
+        nId = g_pBaldurChitin->m_pEngineWorld->m_internalLoadedDialog.m_characterIndex;
     }
 
     STRREF strSurfaceUnderdark = 25688; // "sun-lander"

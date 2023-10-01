@@ -3,6 +3,7 @@
 
 #include "CBaldurEngine.h"
 
+#include "CGameDialog.h"
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
@@ -126,9 +127,7 @@ public:
     /* 0EA4 */ int field_EA4;
     /* 0EA8 */ CUIControlTextDisplay* field_EA8;
     /* 0EAC */ CUIControlTextDisplay* m_pActiveChatDisplay;
-    /* 0EE0 */ LONG field_EE0;
-    /* 0EF0 */ int field_EF0;
-    /* 0F04 */ unsigned char field_F04;
+    /* 0EB0 */ CGameDialogSprite m_internalLoadedDialog;
     /* 0F22 */ int field_F22;
     /* 0F26 */ int field_F26;
     /* 0F2A */ int field_F2A;

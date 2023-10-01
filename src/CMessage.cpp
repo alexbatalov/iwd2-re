@@ -5707,7 +5707,7 @@ void CMessageExitDialogMode::Run()
 {
     g_pBaldurChitin->m_pEngineWorld->field_1150 = 0;
     g_pBaldurChitin->m_pEngineWorld->EndDialog(1, 1);
-    g_pBaldurChitin->m_pEngineWorld->field_F04 = 0;
+    g_pBaldurChitin->m_pEngineWorld->m_internalLoadedDialog.field_54 = 0;
 }
 
 // -----------------------------------------------------------------------------
@@ -10709,12 +10709,13 @@ void CMessageStoreAddItem::Run()
             g_pBaldurChitin->m_pEngineStore->UpdateStoreItems();
             g_pBaldurChitin->m_pEngineStore->UpdateStoreCost();
 
-            if (g_pBaldurChitin->m_pEngineWorld->field_EE0 != CGameObjectArray::BAD_INDEX) {
+            LONG nCharacterId = g_pBaldurChitin->m_pEngineWorld->m_internalLoadedDialog.m_characterIndex;
+            if (nCharacterId != CGameObjectArray::BAD_INDEX) {
                 CGameObject* pObject;
 
                 BYTE rc;
                 do {
-                    rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_targetId,
+                    rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nCharacterId,
                         CGameObjectArray::THREAD_ASYNCH,
                         &pObject,
                         INFINITE);
@@ -10726,7 +10727,7 @@ void CMessageStoreAddItem::Run()
                         g_pBaldurChitin->m_pEngineStore->UpdateMainPanel();
                     }
 
-                    g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_targetId,
+                    g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nCharacterId,
                         CGameObjectArray::THREAD_ASYNCH,
                         INFINITE);
                 }
@@ -10739,12 +10740,13 @@ void CMessageStoreAddItem::Run()
                 g_pBaldurChitin->m_pEngineStore->UpdateGroupItems();
                 g_pBaldurChitin->m_pEngineStore->UpdateGroupCost();
 
-                if (g_pBaldurChitin->m_pEngineWorld->field_EE0 != CGameObjectArray::BAD_INDEX) {
+                LONG nCharacterId = g_pBaldurChitin->m_pEngineWorld->m_internalLoadedDialog.m_characterIndex;
+                if (nCharacterId != CGameObjectArray::BAD_INDEX) {
                     CGameObject* pObject;
 
                     BYTE rc;
                     do {
-                        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_targetId,
+                        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nCharacterId,
                             CGameObjectArray::THREAD_ASYNCH,
                             &pObject,
                             INFINITE);
@@ -10756,7 +10758,7 @@ void CMessageStoreAddItem::Run()
                             g_pBaldurChitin->m_pEngineStore->UpdateMainPanel();
                         }
 
-                        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_targetId,
+                        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nCharacterId,
                             CGameObjectArray::THREAD_ASYNCH,
                             INFINITE);
                     }
