@@ -327,3 +327,64 @@ void CInfToolTip::Initialize()
     field_5E6 = 0;
     field_5EA = GetSequenceLength(2, FALSE);
 }
+
+// 0x597FD0
+BOOL CInfToolTip::FrameAdvance()
+{
+    CSize frameSize1;
+    CSize frameSize2;
+
+    switch (field_5E2) {
+    case 0:
+        field_5DA++;
+        if (field_5DA >= field_5E8) {
+            field_5DA = 0;
+        }
+
+        field_5DC++;
+        if (field_5DC >= field_5EA) {
+            field_5DC = 0;
+        }
+
+        field_5DE += 8;
+
+        GetFrameSize(1, field_5DA, frameSize1, FALSE);
+        GetFrameSize(2, field_5DC, frameSize2, FALSE);
+
+        field_5DE = field_5E6 + static_cast<SHORT>(frameSize1.cx / 2 + frameSize2.cx / 2);
+        field_5E2 = 2;
+    case 1:
+        field_5DA--;
+        if (field_5DA < 0) {
+            field_5DA = 0;
+        }
+
+        field_5DC--;
+        if (field_5DC < 0) {
+            field_5DC = 0;
+        }
+
+        field_5DE--;
+
+        GetFrameSize(1, field_5DA, frameSize1, FALSE);
+        GetFrameSize(2, field_5DC, frameSize2, FALSE);
+
+        if (field_5DE <= frameSize1.cx / 2 + frameSize2.cx / 2) {
+            field_5E2 = 3;
+        }
+
+        break;
+    case 2:
+        GetFrameSize(1, field_5DA, frameSize1, FALSE);
+        GetFrameSize(2, field_5DC, frameSize2, FALSE);
+
+        field_5DE = field_5E6 + static_cast<SHORT>(frameSize1.cx / 2 + frameSize2.cx / 2);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfCursor.cpp
+        // __LINE__: 884
+        UTIL_ASSERT(FALSE);
+    }
+
+    return TRUE;
+}

@@ -12,6 +12,8 @@ class CVidMode;
 class CInfToolTip : public CVidCell {
 public:
     CInfToolTip();
+    BOOL FrameAdvance() override;
+
     void Initialize();
 
     /* 00DA */ CVidFont m_font;
