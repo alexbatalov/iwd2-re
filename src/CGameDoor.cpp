@@ -179,7 +179,7 @@ void CGameDoor::RemoveFromArea()
 }
 
 // 0x489330
-void CGameDoor::SetCursor(int nToolTip)
+void CGameDoor::SetCursor(LONG nToolTip)
 {
     CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 

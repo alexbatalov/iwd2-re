@@ -60,7 +60,7 @@ public:
     /* 004C */ virtual void Render(int a1, int a2, int a3);
     /* 0050 */ virtual BOOLEAN DoAIUpdate(BOOLEAN active, LONG counter);
     /* 0054 */ virtual void SetAIType(const CAIObjectType& type, int a2);
-    /* 0058 */ virtual void SetCursor(int a1);
+    /* 0058 */ virtual void SetCursor(LONG nToolTip);
     /* 005C */ virtual void SetTarget(CPoint pt, BOOL a2);
     /* 0060 */ virtual void SetVertListPos(POSITION posVertList);
     /* 0064 */ virtual BOOL EvaluateStatusTrigger(const CAITrigger& trigger);

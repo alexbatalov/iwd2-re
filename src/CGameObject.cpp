@@ -3,6 +3,7 @@
 #include "CBaldurChitin.h"
 #include "CGameArea.h"
 #include "CGameObjectArray.h"
+#include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CTimerWorld.h"
 #include "CUtil.h"
@@ -302,9 +303,42 @@ void CGameObject::SetAIType(const CAIObjectType& type, int a2)
 }
 
 // 0x4C7FB0
-void CGameObject::SetCursor(int a1)
+void CGameObject::SetCursor(LONG nToolTip)
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    switch (pGame->GetState()) {
+    case 0:
+        if (pGame->GetGroup()->GetCount() != 0) {
+            g_pBaldurChitin->GetObjectCursor()->SetCursor(4, FALSE);
+        } else {
+            g_pBaldurChitin->GetObjectCursor()->SetCursor(0, FALSE);
+        }
+        break;
+    case 1:
+        if (pGame->GetIconIndex() != -1) {
+            g_pBaldurChitin->GetObjectCursor()->SetCursor(pGame->GetIconIndex(), FALSE);
+        } else {
+            g_pBaldurChitin->GetObjectCursor()->SetCursor(20, FALSE);
+        }
+        break;
+    case 2:
+        if (pGame->GetIconIndex() != -1) {
+            g_pBaldurChitin->GetObjectCursor()->SetCursor(pGame->GetIconIndex(), FALSE);
+            g_pBaldurChitin->GetObjectCursor()->SetGreyScale(TRUE);
+        } else {
+            g_pBaldurChitin->GetObjectCursor()->SetCursor(102, FALSE);
+            g_pBaldurChitin->GetObjectCursor()->SetCustomCursor(pGame->m_iconResRef, FALSE, -1);
+        }
+        break;
+    case 3:
+        g_pBaldurChitin->GetObjectCursor()->SetCursor(16, FALSE);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameObject.cpp
+        // __LINE__: 434
+        UTIL_ASSERT(FALSE);
+    }
 }
 
 // 0x78E750

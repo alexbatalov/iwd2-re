@@ -285,7 +285,7 @@ void CGameTrigger::RemoveFromArea()
 }
 
 // 0x4CFC80
-void CGameTrigger::SetCursor(int nToolTip)
+void CGameTrigger::SetCursor(LONG nToolTip)
 {
     CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
