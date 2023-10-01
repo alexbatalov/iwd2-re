@@ -72,6 +72,7 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CCreatureFile.h"
     "src/CCrypt.cpp"
     "src/CCrypt.h"
+    "src/CDeathSound.h"
     "src/CDerivedStats.cpp"
     "src/CDerivedStats.h"
     "src/CDimm.cpp"

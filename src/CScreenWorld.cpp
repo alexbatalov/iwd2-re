@@ -2,6 +2,7 @@
 
 #include "CBaldurChitin.h"
 #include "CBaldurProjector.h"
+#include "CDeathSound.h"
 #include "CGameArea.h"
 #include "CGameSprite.h"
 #include "CInfCursor.h"
@@ -245,6 +246,116 @@ void CScreenWorld::EngineDeactivated()
         g_pBaldurChitin->GetObjectGame()->WorldEngineDeactivated();
         g_pBaldurChitin->field_F9 = 0;
     }
+}
+
+// 0x686DE0
+void CScreenWorld::EngineGameInit()
+{
+    g_pBaldurChitin->GetObjectGame()->m_bForceDither = FALSE;
+
+    m_cUIManager.fInit(this,
+        CResRef(CString("GUIW") + CBaldurChitin::CHUI_GUIEXT),
+        g_pBaldurChitin->field_4A2C);
+
+    m_pCurrentScrollBar = NULL;
+    m_bored = FALSE;
+    m_boredCount = 0;
+    m_playerShutdown = FALSE;
+    m_bPaused = FALSE;
+    field_14A = 0;
+    field_EA8 = 0;
+    m_pActiveChatDisplay = NULL;
+    field_156 = 0;
+    field_F37 = 0;
+    field_15A = 1;
+    field_F22 = 0;
+    field_F26 = 0;
+    field_F2A = 1;
+    field_F2E = 1;
+    m_bForceViewSize = 0;
+    m_waitingOnResize = 0;
+    field_F44 = 0;
+    m_scrollLockId = CGameObjectArray::INVALID_INDEX;
+    field_EA4 = -1;
+    field_10B2 = -1;
+    field_10B4 = 0;
+    field_10B8 = CGameObjectArray::INVALID_INDEX;
+    field_10BC = CGameObjectArray::INVALID_INDEX;
+    field_10C0 = "";
+    field_10C4 = 0;
+    field_10C8 = 0;
+    field_10D8 = CGameObjectArray::INVALID_INDEX;
+    m_deltaTime = 0;
+    m_nChatMessageCount = 0;
+    m_movie = "";
+    field_1108 = 0;
+    m_bGameOverPanel = FALSE;
+    field_10F0 = 0;
+    field_10F4 = -1;
+    field_10F8 = CGameObjectArray::INVALID_INDEX;
+    field_10FC = -1;
+    m_nPickPartyNumCharacters = -1;
+    m_bSetNightOnActivate = 0;
+    m_bSetDayOnActivate = 0;
+    m_bEndMajorEventListenToJoin = 0;
+    m_bEndMajorEventPauseStatus = 0;
+    m_bChapterTransitionPending = 0;
+    m_nChapterTransition = 255;
+    m_bMoviePending = 0;
+    m_bRestPending = 0;
+    m_bRestRenting = 0;
+    m_nRestHP = 0;
+    m_bRestMovie = 0;
+    m_bPendingMapWorld = 0;
+    m_bPendingReformParty = 0;
+    field_119D = 0;
+    field_1178 = 0;
+    m_nPartySizeCheckStartDelay = 0;
+    field_119F = 0;
+    field_11A0 = -1;
+    m_bPlayEndCredits = FALSE;
+    field_11B6 = -1;
+    field_11BA = -1;
+    field_11BE = 0;
+
+    g_pBaldurChitin->m_pEngineWorld->GetManager()->GetPanel(19)->SetActive(FALSE);
+    g_pBaldurChitin->m_pEngineWorld->GetManager()->GetPanel(21)->SetActive(FALSE);
+    g_pBaldurChitin->m_pEngineWorld->GetManager()->GetPanel(7)->SetActive(FALSE);
+    g_pBaldurChitin->m_pEngineWorld->GetManager()->GetPanel(6)->SetActive(FALSE);
+    g_pBaldurChitin->m_pEngineWorld->GetManager()->GetPanel(8)->SetActive(FALSE);
+    g_pBaldurChitin->m_pEngineWorld->GetManager()->GetPanel(9)->SetActive(FALSE);
+    g_pBaldurChitin->m_pEngineWorld->GetManager()->GetPanel(17)->SetActive(FALSE);
+    g_pBaldurChitin->m_pEngineWorld->GetManager()->GetPanel(22)->SetActive(FALSE);
+    g_pBaldurChitin->m_pEngineWorld->GetManager()->GetPanel(0)->SetActive(FALSE);
+    g_pBaldurChitin->m_pEngineWorld->GetManager()->GetPanel(GetPanel_22_0())->SetActive(TRUE);
+
+    field_EA8 = static_cast<CUIControlTextDisplay*>(g_pBaldurChitin->m_pEngineWorld->GetManager()->GetPanel(GetPanel_22_0())->GetControl(1));
+    m_nAutoHideInterface = 0;
+    m_nAutoUnhideInterface = 0;
+
+    if (!field_11F0) {
+        field_11F0 = TRUE;
+        CInfinity::stru_8E79B8.bottom = field_11F8;
+    }
+
+    if (!field_11F4) {
+        field_11F4 = TRUE;
+        CInfinity::stru_8E79B8.bottom = field_11F8;
+    }
+
+    while (!m_deathSoundList.IsEmpty()) {
+        CDeathSound* pDeathSound = m_deathSoundList.RemoveHead();
+        if (pDeathSound != NULL) {
+            delete pDeathSound;
+        }
+    }
+    m_deathSoundList.RemoveAll();
+}
+
+// 0x5D72C0
+void CScreenWorld::EngineGameUninit()
+{
+    m_cUIManager.fUninit();
 }
 
 // 0x49FC40
@@ -692,7 +803,7 @@ void CScreenWorld::SetItemMarker(POSITION pos, LONG lMarker)
 // 0x692690
 void CScreenWorld::ClearChatMessages()
 {
-    field_10DE = 0;
+    m_nChatMessageCount = 0;
 }
 
 // 0x6926A0
