@@ -123,7 +123,8 @@ public:
 class CUIControlPortraitBase : public CUIControlButton {
 public:
     CUIControlPortraitBase(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo, BYTE nMouseButtons);
-    ~CUIControlPortraitBase();
+    ~CUIControlPortraitBase() override;
+    void ActivateToolTip() override;
 };
 
 class CUIControlTextDisplayJournal : public CUIControlTextDisplay {

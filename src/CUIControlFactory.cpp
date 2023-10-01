@@ -2,6 +2,7 @@
 
 #include "CBaldurChitin.h"
 #include "CBaldurEngine.h"
+#include "CGameSprite.h"
 #include "CInfGame.h"
 #include "CScreenChapter.h"
 #include "CScreenCharacter.h"
@@ -2906,6 +2907,33 @@ CUIControlPortraitBase::CUIControlPortraitBase(CUIPanel* panel, UI_CONTROL_BUTTO
 CUIControlPortraitBase::~CUIControlPortraitBase()
 {
 }
+
+// 0x77AB90
+void CUIControlPortraitBase::ActivateToolTip()
+{
+    LONG nCharacterId = g_pBaldurChitin->GetObjectGame()->GetCharacterSlot(m_nID);
+    if (nCharacterId != CGameObjectArray::INVALID_INDEX) {
+        CGameSprite* pSprite;
+
+        BYTE rc;
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            pSprite->SetCharacterToolTip(this);
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
 
 // 0x779CB0
 CUIControlPortraitGeneral::CUIControlPortraitGeneral(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)

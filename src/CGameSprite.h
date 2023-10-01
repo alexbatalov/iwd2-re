@@ -148,6 +148,7 @@
 #define CGAMESPRITE_SKILL_NUMSKILLS 16
 
 class CSearchRequest;
+class CUIControlBase;
 class CUIControlTextDisplay;
 class CVariableHash;
 
@@ -283,6 +284,7 @@ public:
     void SetFootstepChannel();
     BYTE GetSound(BYTE soundID);
     void RenderPortrait(const CPoint& cpRenderPosition, const CSize& szControl, BOOL bPressed, BOOL reorderHighlight, BOOL selectFromMarker, const CRect& rClip, BOOL bDoubleSize);
+    void SetCharacterToolTip(CUIControlBase* pControl);
     void SetDirection(const CPoint& posDest);
     void SetDirection(SHORT direction);
     void SetIdleSequence();
