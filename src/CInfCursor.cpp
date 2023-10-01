@@ -388,3 +388,43 @@ BOOL CInfToolTip::FrameAdvance()
 
     return TRUE;
 }
+
+// 0x5981D0
+BOOL CInfToolTip::GetFrame()
+{
+    // NOTE: Original code is slightly different. There is some inlining, not
+    // sure which.
+    BAMHEADER* pHeader = pRes->m_bCacheHeader
+        ? pRes->m_pBamHeaderCopy
+        : pRes->m_pBamHeader;
+
+    SHORT nSequences = pHeader->nSequences;
+    if (nSequences == 0) {
+        nSequences = 256;
+    }
+
+    if (m_nCurrentSequence >= nSequences) {
+        m_nCurrentSequence = 0;
+    }
+
+    SHORT nFrames = pRes->m_pSequences[m_nCurrentSequence].nFrames;
+    if (m_nCurrentFrame >= nFrames) {
+        if (field_C8 != 0) {
+            m_nCurrentFrame = 0;
+        } else {
+            m_nCurrentFrame--;
+        }
+    }
+
+    if (m_nCurrentFrame < 0) {
+        if (field_C8 != 0) {
+            m_nCurrentFrame = nFrames - 1;
+        } else {
+            m_nCurrentFrame = 0;
+        }
+    }
+
+    m_pFrame = pRes->GetFrame(m_nCurrentSequence, m_nCurrentFrame, m_bDoubleSize);
+
+    return m_pFrame != NULL;
+}

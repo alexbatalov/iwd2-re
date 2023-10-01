@@ -16,6 +16,10 @@ public:
 
     void Initialize();
 
+    // NOTE: This function is not override of parent's `GetFrame`. I'm not sure
+    // if it's a bug or it is intentional.
+    BOOL GetFrame();
+
     /* 00DA */ CVidFont m_font;
     /* 05DA */ short field_5DA;
     /* 05DC */ short field_5DC;
