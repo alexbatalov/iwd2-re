@@ -268,6 +268,17 @@ public:
     /* 0666 */ WORD m_nAUCounter;
 };
 
+class CUIControlButton85D45C : public CUIControlButton {
+public:
+    CUIControlButton85D45C(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButton85D45C() override;
+    BOOL OnLButtonDown(CPoint pt) override;
+    void OnLButtonUp(CPoint pt) override;
+    void TimerAsynchronousUpdate(BOOLEAN bInside) override;
+
+    /* 0666 */ WORD m_nAUCounter;
+};
+
 class CUIControlButtonRest : public CUIControlButton {
 public:
     CUIControlButtonRest(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);

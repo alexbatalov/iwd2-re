@@ -3629,6 +3629,59 @@ void CUIControlButton85D3E4::TimerAsynchronousUpdate(BOOLEAN bInside)
 
 // -----------------------------------------------------------------------------
 
+// 0x77AA80
+CUIControlButton85D45C::CUIControlButton85D45C(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+    m_nAUCounter = 0;
+}
+
+// 0x77AAE0
+CUIControlButton85D45C::~CUIControlButton85D45C()
+{
+}
+
+// 0x77E0F0
+BOOL CUIControlButton85D45C::OnLButtonDown(CPoint pt)
+{
+    if (!CUIControlButton::OnLButtonDown(pt)) {
+        return FALSE;
+    }
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(m_pPanel->GetControl(3));
+    pText->OnScrollUp();
+
+    m_nAUCounter = 1;
+
+    return TRUE;
+}
+
+// 0x77B7C0
+void CUIControlButton85D45C::OnLButtonUp(CPoint pt)
+{
+    CUIControlButton::OnLButtonUp(pt);
+
+    m_nAUCounter = 0;
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(m_pPanel->GetControl(3));
+    pText->field_A66 = 0;
+}
+
+// 0x77B800
+void CUIControlButton85D45C::TimerAsynchronousUpdate(BOOLEAN bInside)
+{
+    if (m_nAUCounter != 0) {
+        if (m_nAUCounter == 20) {
+            CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(m_pPanel->GetControl(3));
+            pText->OnScrollUp();
+        } else {
+            m_nAUCounter++;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x77B410
 CUIControlButtonRest::CUIControlButtonRest(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
