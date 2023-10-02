@@ -257,6 +257,17 @@ public:
     /* 0074 */ void OnItemSelected(LONG lMarker) override;
 };
 
+class CUIControlButton85D3E4 : public CUIControlButton {
+public:
+    CUIControlButton85D3E4(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButton85D3E4() override;
+    BOOL OnLButtonDown(CPoint pt) override;
+    void OnLButtonUp(CPoint pt) override;
+    void TimerAsynchronousUpdate(BOOLEAN bInside) override;
+
+    /* 0666 */ WORD m_nAUCounter;
+};
+
 class CUIControlButtonRest : public CUIControlButton {
 public:
     CUIControlButtonRest(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
