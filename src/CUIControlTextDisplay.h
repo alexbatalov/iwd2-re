@@ -44,6 +44,7 @@ public:
     /* 0070 */ virtual void OnButtonLClick(CPoint pt);
     /* 0074 */ virtual void OnItemSelected(LONG lMarker);
 
+    void CopyDisplay(CUIControlTextDisplay* pOldDisplay);
     POSITION DisplayString(const CString& sLabel, const CString& sString, COLORREF rgbForegroundColor, COLORREF rgbBackgroundColor, LONG lMarker, BOOLEAN a6, BOOLEAN bTrim);
     void AdjustScrollBar();
     INT GetNumLines(POSITION posBossItem);

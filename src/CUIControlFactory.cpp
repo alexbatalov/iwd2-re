@@ -3423,6 +3423,58 @@ void CUIControlButton85C2CC::OnLButtonUp(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x77A710
+CUIControlButtonContractDialogChatMedium::CUIControlButtonContractDialogChatMedium(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+}
+
+// 0x77A760
+CUIControlButtonContractDialogChatMedium::~CUIControlButtonContractDialogChatMedium()
+{
+}
+
+// 0x77B850
+void CUIControlButtonContractDialogChatMedium::OnLButtonUp(CPoint pt)
+{
+    CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
+
+    if (IsOver(pt)
+        && m_bActive
+        && pWorld->field_EA8 != NULL
+        && pWorld->field_EA8->m_pPanel->m_nID == pWorld->GetPanel_19_0()) {
+        CUIPanel* pNewPanel = m_pPanel->m_pManager->GetPanel(pWorld->GetPanel_21_0());
+
+        m_cVidCell.FrameSet(m_nNormalFrame);
+        m_bPressed = FALSE;
+        InvalidateRect();
+
+        m_pPanel->SetActive(FALSE);
+        pNewPanel->SetActive(TRUE);
+
+        pWorld->field_EA8 = static_cast<CUIControlTextDisplay*>(pNewPanel->GetControl(1));
+        pWorld->m_pActiveChatDisplay = static_cast<CUIControlTextDisplay*>(pNewPanel->GetControl(3));
+
+        static_cast<CUIControlTextDisplay*>(pNewPanel->GetControl(1))->CopyDisplay(static_cast<CUIControlTextDisplay*>(m_pPanel->GetControl(1)));
+        static_cast<CUIControlTextDisplay*>(pNewPanel->GetControl(3))->CopyDisplay(static_cast<CUIControlTextDisplay*>(m_pPanel->GetControl(3)));
+
+        pNewPanel->InvalidateRect(NULL);
+
+        CUIControlButton* pButton = static_cast<CUIControlButton*>(pNewPanel->GetControl(0));
+        if (pButton->m_bPressed) {
+            pButton->m_cVidCell.FrameSet(pButton->m_nNormalFrame);
+            pButton->m_bPressed = FALSE;
+            pButton->InvalidateRect();
+        }
+
+        pWorld->CopyChatEditBox(m_pPanel, pNewPanel);
+    }
+
+    pWorld->GetManager()->InvalidateRect(NULL);
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x77A940
 CUIControlTextDisplayDialog::CUIControlTextDisplayDialog(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo, BOOLEAN a3)
     : CUIControlTextDisplay(panel, controlInfo, a3)

@@ -127,6 +127,12 @@ void CUIControlTextDisplay::SetActive(BOOLEAN bActive)
     }
 }
 
+// 0x4E1F00
+void CUIControlTextDisplay::CopyDisplay(CUIControlTextDisplay* pOldDisplay)
+{
+    // TODO: Incomplete.
+}
+
 // 0x4E20F0
 POSITION CUIControlTextDisplay::DisplayString(const CString& sLabel, const CString& sString, COLORREF rgbLabelColor, COLORREF rgbTextColor, LONG lMarker, BOOLEAN a6, BOOLEAN bTrim)
 {
