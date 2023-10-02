@@ -3385,6 +3385,25 @@ void CUIControlButton85C434::TimerAsynchronousUpdate(BOOLEAN bInside)
 
 // -----------------------------------------------------------------------------
 
+// NOTE: Inlined.
+CUIControlButton85C344::CUIControlButton85C344(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+}
+
+// 0x77A5B0
+CUIControlButton85C344::~CUIControlButton85C344()
+{
+}
+
+// 0x71E750
+void CUIControlButton85C344::OnLButtonUp(CPoint pt)
+{
+    // NOTE: Probably leftover from earlier games.
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x77A940
 CUIControlTextDisplayDialog::CUIControlTextDisplayDialog(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo, BOOLEAN a3)
     : CUIControlTextDisplay(panel, controlInfo, a3)

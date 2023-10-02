@@ -220,6 +220,13 @@ public:
     /* 0666 */ WORD m_nAUCounter;
 };
 
+class CUIControlButton85C344 : public CUIControlButton {
+public:
+    CUIControlButton85C344(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButton85C344() override;
+    void OnLButtonUp(CPoint pt) override;
+};
+
 class CUIControlTextDisplayDialog : public CUIControlTextDisplay {
 public:
     CUIControlTextDisplayDialog(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo, BOOLEAN a3);
