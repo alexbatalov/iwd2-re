@@ -241,6 +241,13 @@ public:
     void OnLButtonUp(CPoint pt) override;
 };
 
+class CUIControlButtonExpandDialogChatSmall : public CUIControlButton {
+public:
+    CUIControlButtonExpandDialogChatSmall(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonExpandDialogChatSmall() override;
+    void OnLButtonUp(CPoint pt) override;
+};
+
 class CUIControlTextDisplayDialog : public CUIControlTextDisplay {
 public:
     CUIControlTextDisplayDialog(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo, BOOLEAN a3);

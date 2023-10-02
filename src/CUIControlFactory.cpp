@@ -3475,6 +3475,61 @@ void CUIControlButtonContractDialogChatMedium::OnLButtonUp(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x77A710
+CUIControlButtonExpandDialogChatSmall::CUIControlButtonExpandDialogChatSmall(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+}
+
+// 0x77A850
+CUIControlButtonExpandDialogChatSmall::~CUIControlButtonExpandDialogChatSmall()
+{
+}
+
+// 0x77BA00
+void CUIControlButtonExpandDialogChatSmall::OnLButtonUp(CPoint pt)
+{
+    CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
+
+    if (IsOver(pt)
+        && m_bActive
+        && pWorld->field_EA8 != NULL
+        && pWorld->field_EA8->m_pPanel->m_nID == pWorld->GetPanel_21_0()) {
+        CUIPanel* pNewPanel = m_pPanel->m_pManager->GetPanel(pWorld->GetPanel_19_0());
+
+        m_cVidCell.FrameSet(m_nNormalFrame);
+        m_bPressed = FALSE;
+        InvalidateRect();
+
+        m_pPanel->SetActive(FALSE);
+        pNewPanel->SetActive(TRUE);
+
+        pWorld->field_EA8 = static_cast<CUIControlTextDisplay*>(pNewPanel->GetControl(1));
+        pWorld->m_pActiveChatDisplay = static_cast<CUIControlTextDisplay*>(pNewPanel->GetControl(3));
+
+        static_cast<CUIControlTextDisplay*>(pNewPanel->GetControl(1))->CopyDisplay(static_cast<CUIControlTextDisplay*>(m_pPanel->GetControl(1)));
+        static_cast<CUIControlTextDisplay*>(pNewPanel->GetControl(3))->CopyDisplay(static_cast<CUIControlTextDisplay*>(m_pPanel->GetControl(3)));
+
+        pNewPanel->InvalidateRect(NULL);
+
+        CUIControlButton* pButton = static_cast<CUIControlButton*>(pNewPanel->GetControl(0));
+        if (pButton->m_bPressed) {
+            pButton->m_cVidCell.FrameSet(pButton->m_nNormalFrame);
+            pButton->m_bPressed = FALSE;
+            pButton->InvalidateRect();
+        }
+
+        pWorld->CopyChatEditBox(m_pPanel, pNewPanel);
+
+        static_cast<CUIControlLabel*>(pNewPanel->GetControl(0x10000009))->SetText(static_cast<CUIControlLabel*>(m_pPanel->GetControl(0x10000009))->GetText());
+        static_cast<CUIControlButtonMultiPlayerPortrait*>(pNewPanel->GetControl(11))->SetPortrait(static_cast<CUIControlButtonMultiPlayerPortrait*>(m_pPanel->GetControl(11))->GetPortrait());
+    }
+
+    pWorld->GetManager()->InvalidateRect(NULL);
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x77A940
 CUIControlTextDisplayDialog::CUIControlTextDisplayDialog(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo, BOOLEAN a3)
     : CUIControlTextDisplay(panel, controlInfo, a3)

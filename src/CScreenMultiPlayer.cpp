@@ -2492,6 +2492,12 @@ void CUIControlButtonMultiPlayerPortrait::OnLButtonClick(CPoint pt)
     pMultiPlayer->OnPortraitButtonClick(m_nID - 6);
 }
 
+// NOTE: Inlined.
+CResRef CUIControlButtonMultiPlayerPortrait::GetPortrait()
+{
+    return m_portraitResRef;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x64FC30

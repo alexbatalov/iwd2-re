@@ -206,3 +206,9 @@ void CUIControlLabel::SetForegroundColor(COLORREF rgbColor)
         }
     }
 }
+
+// 0x77BC60
+CString CUIControlLabel::GetText()
+{
+    return *m_pText;
+}

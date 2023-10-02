@@ -19,6 +19,8 @@ public:
     void SetText(const CString& sString);
     void SetForegroundColor(COLORREF rgbColor);
 
+    CString GetText();
+
     /* 0052 */ CString* m_pText;
     /* 0056 */ SHORT m_nRenderCount;
     /* 0058 */ CVidFont m_cVidFont;

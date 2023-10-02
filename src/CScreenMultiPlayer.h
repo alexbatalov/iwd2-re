@@ -135,6 +135,8 @@ public:
 
     void SetPortrait(const CResRef& resRef);
 
+    CResRef GetPortrait();
+
     /* 0666 */ CResRef m_portraitResRef;
 };
 
