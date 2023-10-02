@@ -317,6 +317,7 @@ public:
     /* 1B98 */ BYTE m_iconIndex;
     /* 1B99 */ CResRef m_iconResRef;
     /* 1BA1 */ unsigned char m_tempCursor;
+    /* 1BA2 */ LONG m_iContainer;
     /* 1BAA */ CGamePermission m_singlePlayerPermissions;
     /* 1BB2 */ CMultiplayerSettings m_multiplayerSettings;
     /* 1C78 */ CInfButtonArray m_cButtonArray;

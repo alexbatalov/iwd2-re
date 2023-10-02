@@ -12,7 +12,6 @@
 #include "CScreenLoad.h"
 #include "CScreenMap.h"
 #include "CScreenWorldMap.h"
-#include "CUIControlScrollBar.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
@@ -1641,6 +1640,24 @@ void CScreenWorld::CheckPanelInputMode(DWORD dwPanelId, DWORD dwinputModeMask)
     }
 }
 
+// NOTE: Inlined.
+INT CScreenWorld::GetNumContainerRows(LONG nContainer)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 6075
+    UTIL_ASSERT(pGame != NULL);
+
+    return (pGame->GetNumGroundSlots(nContainer) + 4) / 5 + 2;
+}
+
+// NOTE: Inlined.
+INT CScreenWorld::GetNumGroupRows()
+{
+    return (CScreenInventory::PERSONAL_INVENTORY_SIZE + 1) / 2;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x6956F0
@@ -1700,6 +1717,360 @@ void CUIControlButtonDialog::OnLButtonClick(CPoint pt)
 
     SetActive(FALSE);
     m_pPanel->InvalidateRect(NULL);
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x696930
+CUIControlScrollBarWorldContainer::CUIControlScrollBarWorldContainer(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo)
+    : CUIControlScrollBar(panel, controlInfo)
+{
+    // TODO: Incomplete.
+}
+
+// 0x632C00
+CUIControlScrollBarWorldContainer::~CUIControlScrollBarWorldContainer()
+{
+}
+
+// 0x696950
+void CUIControlScrollBarWorldContainer::OnPageUp(DWORD nLines)
+{
+    CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 10907
+    UTIL_ASSERT(pWorld != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 10909
+    UTIL_ASSERT(pGame != NULL);
+
+    LONG nContainer = pGame->m_iContainer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 10912
+    UTIL_ASSERT(nContainer != CGameObjectArray::INVALID_INDEX);
+
+    INT nNewTopContainerRow;
+    INT nNewTopGroupRow;
+
+    switch (m_nID) {
+    case 52:
+        // NOTE: Uninline.
+        // NOTE: Unused.
+        pWorld->GetNumContainerRows(nContainer);
+
+        nNewTopContainerRow = max(pWorld->m_nTopGroupRow - (nLines != 0 ? nLines : 2), 0);
+
+        if (pWorld->m_nTopContainerRow != nNewTopContainerRow) {
+            pWorld->m_nTopContainerRow = nNewTopContainerRow;
+
+            // NOTE: Uninline.
+            InvalidateSlots();
+
+            UpdateScrollBar();
+        }
+        break;
+    case 53:
+        nNewTopGroupRow = max(pWorld->m_nTopGroupRow - (nLines != 0 ? nLines : 2), 0);
+        if (pWorld->m_nTopGroupRow != nNewTopGroupRow) {
+            pWorld->m_nTopGroupRow = nNewTopGroupRow;
+
+            // NOTE: Uninline.
+            InvalidateSlots();
+
+            UpdateScrollBar();
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+        // __LINE__: 10945
+        UTIL_ASSERT(FALSE);
+    }
+}
+
+// 0x696B70
+void CUIControlScrollBarWorldContainer::OnPageDown(DWORD nLines)
+{
+    CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 10977
+    UTIL_ASSERT(pWorld != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 10979
+    UTIL_ASSERT(pGame != NULL);
+
+    LONG nContainer = pGame->m_iContainer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 10982
+    UTIL_ASSERT(nContainer != CGameObjectArray::INVALID_INDEX);
+
+    INT nNumContainerRows;
+    INT nNewTopContainerRow;
+    INT nNumGroupRows;
+    INT nNewTopGroupRow;
+
+    switch (m_nID) {
+    case 52:
+        // NOTE: Uninline.
+        nNumContainerRows = pWorld->GetNumContainerRows(nContainer);
+        nNewTopContainerRow = min(nNumContainerRows,
+            pWorld->m_nTopContainerRow + (nLines != 0 ? nLines : 2));
+
+        if (pWorld->m_nTopContainerRow != nNewTopContainerRow) {
+            pWorld->m_nTopContainerRow = nNewTopContainerRow;
+
+            // NOTE: Uninline.
+            InvalidateSlots();
+
+            UpdateScrollBar();
+        }
+        break;
+    case 53:
+        // NOTE: Uninline.
+        nNumGroupRows = pWorld->GetNumGroupRows() - 2;
+        nNewTopGroupRow = min(nNumGroupRows,
+            pWorld->m_nTopGroupRow + (nLines != 0 ? nLines : 2));
+
+        if (pWorld->m_nTopGroupRow != nNewTopGroupRow) {
+            pWorld->m_nTopGroupRow = nNewTopGroupRow;
+
+            // NOTE: Uninline.
+            InvalidateSlots();
+
+            UpdateScrollBar();
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+        // __LINE__: 11015
+        UTIL_ASSERT(FALSE);
+    }
+}
+
+// 0x696DC0
+void CUIControlScrollBarWorldContainer::OnScrollUp()
+{
+    CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 11046
+    UTIL_ASSERT(pWorld != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 11048
+    UTIL_ASSERT(pGame != NULL);
+
+    LONG nContainer = pGame->m_iContainer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 11051
+    UTIL_ASSERT(nContainer != CGameObjectArray::INVALID_INDEX);
+
+    switch (m_nID) {
+    case 52:
+        if (pWorld->m_nTopContainerRow > 0) {
+            pWorld->m_nTopContainerRow--;
+
+            // NOTE: Uninline.
+            InvalidateSlots();
+
+            UpdateScrollBar();
+        }
+        break;
+    case 53:
+        if (pWorld->m_nTopGroupRow > 0) {
+            pWorld->m_nTopGroupRow -= 1;
+
+            // NOTE: Uninline.
+            InvalidateSlots();
+
+            UpdateScrollBar();
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+        // __LINE__: 11080
+        UTIL_ASSERT(FALSE);
+    }
+}
+
+// 0x696F80
+void CUIControlScrollBarWorldContainer::OnScrollDown()
+{
+    CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 11111
+    UTIL_ASSERT(pWorld != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 11113
+    UTIL_ASSERT(pGame != NULL);
+
+    LONG nContainer = pGame->m_iContainer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 11116
+    UTIL_ASSERT(nContainer != CGameObjectArray::INVALID_INDEX);
+
+    switch (m_nID) {
+    case 52:
+        // NOTE: Uninline.
+        if (pWorld->m_nTopContainerRow < pWorld->GetNumContainerRows(nContainer)) {
+            pWorld->m_nTopContainerRow++;
+
+            // NOTE: Uninline.
+            InvalidateSlots();
+
+            UpdateScrollBar();
+        }
+        break;
+    case 53:
+        // NOTE: Uninline.
+        if (pWorld->m_nTopGroupRow < pWorld->GetNumGroupRows() - 2) {
+            pWorld->m_nTopGroupRow++;
+
+            // NOTE: Uninline.
+            InvalidateSlots();
+
+            UpdateScrollBar();
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+        // __LINE__: 11311
+        UTIL_ASSERT(FALSE);
+    }
+}
+
+// 0x697170
+void CUIControlScrollBarWorldContainer::OnScroll()
+{
+    CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 11177
+    UTIL_ASSERT(pWorld != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 11179
+    UTIL_ASSERT(pGame != NULL);
+
+    LONG nContainer = pGame->m_iContainer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 1182
+    UTIL_ASSERT(nContainer != CGameObjectArray::INVALID_INDEX);
+
+    switch (m_nID) {
+    case 52:
+        // NOTE: Uninline.
+        pWorld->m_nTopContainerRow = pWorld->GetNumContainerRows(nContainer) * field_144 / field_142;
+
+        // NOTE: Uninline.
+        InvalidateSlots();
+
+        UpdateScrollBar();
+        break;
+    case 53:
+        // NOTE: Uninline.
+        pWorld->m_nTopGroupRow = (pWorld->GetNumGroupRows() - 2) * field_144 / field_142;
+
+        // NOTE: Uninline.
+        InvalidateSlots();
+
+        UpdateScrollBar();
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+        // __LINE__: 11311
+        UTIL_ASSERT(FALSE);
+    }
+}
+
+// 0x697380
+void CUIControlScrollBarWorldContainer::UpdateScrollBar()
+{
+    CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 11283
+    UTIL_ASSERT(pWorld != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 11285
+    UTIL_ASSERT(pGame != NULL);
+
+    switch (m_nID) {
+    case 52:
+        if (1) {
+            LONG nContainer = pGame->m_iContainer;
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+            // __LINE__: 11296
+            UTIL_ASSERT(nContainer != CGameObjectArray::INVALID_INDEX);
+
+            // NOTE: Uninline.
+            AdjustScrollBar(pWorld->m_nTopContainerRow,
+                pWorld->GetNumContainerRows(nContainer),
+                2);
+        }
+        break;
+    case 53:
+        // NOTE: Uninline.
+        AdjustScrollBar(pWorld->m_nTopGroupRow,
+            pWorld->GetNumGroupRows(),
+            2);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+        // __LINE__: 11311
+        UTIL_ASSERT(FALSE);
+    }
+}
+
+// NOTE: Inlined.
+void CUIControlScrollBarWorldContainer::InvalidateSlots()
+{
+    DWORD nFirstID;
+    DWORD nLastID;
+
+    switch (m_nID) {
+    case 52:
+        nFirstID = 0;
+        nLastID = 9;
+        break;
+    case 53:
+        nFirstID = 10;
+        nLastID = 13;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+        // __LINE__: 11245
+        UTIL_ASSERT(FALSE);
+    }
+
+    for (DWORD nID = nFirstID; nID <= nLastID; nID++) {
+        CUIControlBase* pControl = m_pPanel->GetControl(nID);
+        pControl->InvalidateRect();
+    }
 }
 
 // -----------------------------------------------------------------------------

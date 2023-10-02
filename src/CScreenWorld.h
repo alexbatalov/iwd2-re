@@ -7,6 +7,7 @@
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
+#include "CUIControlScrollBar.h"
 #include "CVidCell.h"
 #include "CWeather.h"
 
@@ -107,6 +108,8 @@ public:
     void CompressTime(DWORD deltaTime) { m_deltaTime = deltaTime; }
 
     void CheckPanelInputMode(DWORD dwPanelId, DWORD dwinputModeMask);
+    INT GetNumContainerRows(LONG nContainer);
+    INT GetNumGroupRows();
 
     /* 0122 */ LONG m_boredCount;
     /* 0126 */ BOOL m_bored;
@@ -135,6 +138,8 @@ public:
     /* 0F32 */ BOOL m_bForceViewSize;
     /* 0F36 */ BYTE m_waitingOnResize;
     /* 0F37 */ unsigned char field_F37;
+    /* 0F3C */ INT m_nTopContainerRow;
+    /* 0F40 */ INT m_nTopGroupRow;
     /* 0F44 */ unsigned char field_F44;
     /* 0F46 */ CWeather m_weather;
     /* 10AE */ LONG m_scrollLockId;
@@ -207,6 +212,20 @@ public:
     CUIControlButtonDialog(CUIPanel* pPanel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonDialog() override;
     void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlScrollBarWorldContainer : public CUIControlScrollBar {
+public:
+    CUIControlScrollBarWorldContainer(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo);
+    ~CUIControlScrollBarWorldContainer();
+    void OnScroll() override;
+    void OnScrollUp() override;
+    void OnScrollDown() override;
+    void OnPageUp(DWORD nLines) override;
+    void OnPageDown(DWORD nLines) override;
+
+    void UpdateScrollBar();
+    void InvalidateSlots();
 };
 
 class CUIControlButtonWorldContainerIcon : public CUIControlButton {
