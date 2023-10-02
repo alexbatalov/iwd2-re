@@ -290,7 +290,7 @@ void CScreenWorld::EngineActivated()
 
             CUIControlTextDisplay* pText = m_pActiveChatDisplay;
             if (pText == NULL) {
-                pText = field_EA8;
+                pText = m_pActiveDialogDisplay;
             }
 
             if (pText != NULL) {
@@ -339,7 +339,7 @@ void CScreenWorld::EngineGameInit()
     m_playerShutdown = FALSE;
     m_bPaused = FALSE;
     field_14A = 0;
-    field_EA8 = 0;
+    m_pActiveDialogDisplay = NULL;
     m_pActiveChatDisplay = NULL;
     field_156 = 0;
     field_F37 = 0;
@@ -405,7 +405,7 @@ void CScreenWorld::EngineGameInit()
     g_pBaldurChitin->m_pEngineWorld->GetManager()->GetPanel(0)->SetActive(FALSE);
     g_pBaldurChitin->m_pEngineWorld->GetManager()->GetPanel(GetPanel_22_0())->SetActive(TRUE);
 
-    field_EA8 = static_cast<CUIControlTextDisplay*>(g_pBaldurChitin->m_pEngineWorld->GetManager()->GetPanel(GetPanel_22_0())->GetControl(1));
+    m_pActiveDialogDisplay = static_cast<CUIControlTextDisplay*>(g_pBaldurChitin->m_pEngineWorld->GetManager()->GetPanel(GetPanel_22_0())->GetControl(1));
     m_nAutoHideInterface = 0;
     m_nAutoUnhideInterface = 0;
 
@@ -864,7 +864,7 @@ void CScreenWorld::DisplayText(const CString& sName, const CString& sText, LONG 
 void CScreenWorld::RemoveText(POSITION pos)
 {
     if (g_pBaldurChitin->GetObjectGame()->m_bGameLoaded) {
-        field_EA8->RemoveString(pos);
+        m_pActiveDialogDisplay->RemoveString(pos);
     }
 }
 
@@ -872,7 +872,7 @@ void CScreenWorld::RemoveText(POSITION pos)
 void CScreenWorld::SetItemMarker(POSITION pos, LONG lMarker)
 {
     if (g_pBaldurChitin->GetObjectGame()->m_bGameLoaded) {
-        field_EA8->SetItemMarker(pos, lMarker);
+        m_pActiveDialogDisplay->SetItemMarker(pos, lMarker);
     }
 }
 

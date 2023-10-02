@@ -3441,8 +3441,8 @@ void CUIControlButtonContractDialogChatMedium::OnLButtonUp(CPoint pt)
 
     if (IsOver(pt)
         && m_bActive
-        && pWorld->field_EA8 != NULL
-        && pWorld->field_EA8->m_pPanel->m_nID == pWorld->GetPanel_19_0()) {
+        && pWorld->m_pActiveDialogDisplay != NULL
+        && pWorld->m_pActiveDialogDisplay->m_pPanel->m_nID == pWorld->GetPanel_19_0()) {
         CUIPanel* pNewPanel = m_pPanel->m_pManager->GetPanel(pWorld->GetPanel_21_0());
 
         m_cVidCell.FrameSet(m_nNormalFrame);
@@ -3452,7 +3452,7 @@ void CUIControlButtonContractDialogChatMedium::OnLButtonUp(CPoint pt)
         m_pPanel->SetActive(FALSE);
         pNewPanel->SetActive(TRUE);
 
-        pWorld->field_EA8 = static_cast<CUIControlTextDisplay*>(pNewPanel->GetControl(1));
+        pWorld->m_pActiveDialogDisplay = static_cast<CUIControlTextDisplay*>(pNewPanel->GetControl(1));
         pWorld->m_pActiveChatDisplay = static_cast<CUIControlTextDisplay*>(pNewPanel->GetControl(3));
 
         static_cast<CUIControlTextDisplay*>(pNewPanel->GetControl(1))->CopyDisplay(static_cast<CUIControlTextDisplay*>(m_pPanel->GetControl(1)));
@@ -3493,8 +3493,8 @@ void CUIControlButtonExpandDialogChatSmall::OnLButtonUp(CPoint pt)
 
     if (IsOver(pt)
         && m_bActive
-        && pWorld->field_EA8 != NULL
-        && pWorld->field_EA8->m_pPanel->m_nID == pWorld->GetPanel_21_0()) {
+        && pWorld->m_pActiveDialogDisplay != NULL
+        && pWorld->m_pActiveDialogDisplay->m_pPanel->m_nID == pWorld->GetPanel_21_0()) {
         CUIPanel* pNewPanel = m_pPanel->m_pManager->GetPanel(pWorld->GetPanel_19_0());
 
         m_cVidCell.FrameSet(m_nNormalFrame);
@@ -3504,7 +3504,7 @@ void CUIControlButtonExpandDialogChatSmall::OnLButtonUp(CPoint pt)
         m_pPanel->SetActive(FALSE);
         pNewPanel->SetActive(TRUE);
 
-        pWorld->field_EA8 = static_cast<CUIControlTextDisplay*>(pNewPanel->GetControl(1));
+        pWorld->m_pActiveDialogDisplay = static_cast<CUIControlTextDisplay*>(pNewPanel->GetControl(1));
         pWorld->m_pActiveChatDisplay = static_cast<CUIControlTextDisplay*>(pNewPanel->GetControl(3));
 
         static_cast<CUIControlTextDisplay*>(pNewPanel->GetControl(1))->CopyDisplay(static_cast<CUIControlTextDisplay*>(m_pPanel->GetControl(1)));
