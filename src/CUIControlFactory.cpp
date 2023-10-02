@@ -3404,6 +3404,25 @@ void CUIControlButton85C344::OnLButtonUp(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// NOTE: Inlined.
+CUIControlButton85C2CC::CUIControlButton85C2CC(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+}
+
+// 0x77A670
+CUIControlButton85C2CC::~CUIControlButton85C2CC()
+{
+}
+
+// 0x71E750
+void CUIControlButton85C2CC::OnLButtonUp(CPoint pt)
+{
+    // NOTE: Probably leftover from earlier games.
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x77A940
 CUIControlTextDisplayDialog::CUIControlTextDisplayDialog(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo, BOOLEAN a3)
     : CUIControlTextDisplay(panel, controlInfo, a3)

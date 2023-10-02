@@ -227,6 +227,13 @@ public:
     void OnLButtonUp(CPoint pt) override;
 };
 
+class CUIControlButton85C2CC : public CUIControlButton {
+public:
+    CUIControlButton85C2CC(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButton85C2CC() override;
+    void OnLButtonUp(CPoint pt) override;
+};
+
 class CUIControlTextDisplayDialog : public CUIControlTextDisplay {
 public:
     CUIControlTextDisplayDialog(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo, BOOLEAN a3);
