@@ -198,6 +198,17 @@ public:
     void OnRButtonClick(CPoint pt) override;
 };
 
+class CUIControlButton85C3BC : public CUIControlButton {
+public:
+    CUIControlButton85C3BC(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButton85C3BC() override;
+    BOOL OnLButtonDown(CPoint pt) override;
+    void OnLButtonUp(CPoint pt) override;
+    void TimerAsynchronousUpdate(BOOLEAN bInside) override;
+
+    /* 0666 */ WORD m_nAUCounter;
+};
+
 class CUIControlTextDisplayDialog : public CUIControlTextDisplay {
 public:
     CUIControlTextDisplayDialog(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo, BOOLEAN a3);
