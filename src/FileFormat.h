@@ -6,6 +6,70 @@
 #define CSPELLLIST_MAX_LEVELS 9
 #define CSPELLLIST_NUM_CLASSES 7
 
+class CSavedGameHeader {
+public:
+    CSavedGameHeader()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    /* 0000 */ DWORD m_worldTime;
+    /* 0004 */ SHORT m_curFormation;
+    /* 0006 */ SHORT m_quickFormations[5];
+    /* 0010 */ DWORD m_nPartyGold;
+    /* 0014 */ WORD m_nPCAreaViewed;
+    /* 0016 */ WORD m_wWeatherFlags;
+    /* 0018 */ DWORD m_partyCreatureTableOffset;
+    /* 001C */ DWORD m_partyCreatureTableCount;
+    /* 0020 */ DWORD m_partyInventoryTableOffset;
+    /* 0024 */ DWORD m_partyInventoryTableCount;
+    /* 0028 */ DWORD m_globalCreatureTableOffset;
+    /* 002C */ DWORD m_globalCreatureTableCount;
+    /* 0030 */ DWORD m_globalVariablesOffset;
+    /* 0034 */ DWORD m_globalVariablesCount;
+    /* 0038 */ RESREF m_currentWorldArea;
+    /* 0040 */ DWORD m_currentLink;
+    /* 0044 */ DWORD m_journalEntriesCount;
+    /* 0048 */ DWORD m_journalEntriesOffset;
+    /* 004C */ LONG m_reputation;
+    /* 0050 */ RESREF m_masterArea;
+    /* 0058 */ DWORD m_dwFlags;
+    /* 005C */ DWORD m_versionNumber;
+    /* 0060 */ DWORD m_familiarsOffset;
+    /* 0064 */ DWORD m_storedLocationsOffset;
+    /* 0068 */ DWORD m_storedLocationsCount;
+    /* 006C */ DWORD m_gameTime;
+    /* 0070 */ DWORD m_storedLocationsOffsetPocketPlane;
+    /* 0074 */ DWORD m_storedLocationsCountPocketPlane;
+    /* 0098 */ unsigned char field_78[52];
+};
+
+// TODO: Incomplete.
+class CSavedGamePartyCreature {
+public:
+    CSavedGamePartyCreature()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    /* 0000 */ WORD m_wFlags;
+    /* 0002 */ WORD m_portraitId;
+    /* 0004 */ DWORD m_creatureOffset;
+    /* 0008 */ DWORD m_creatureSize;
+    /* 000C */ RESREF m_creatureResRef;
+    /* 0014 */ DWORD m_creatureFacing;
+    /* 0018 */ RESREF m_areaName;
+    /* 0020 */ WORD m_posX;
+    /* 0022 */ WORD m_posY;
+    /* 0024 */ WORD m_posViewX;
+    /* 0026 */ WORD m_posViewY;
+    /* 0028 */ WORD m_nModalState;
+    /* 002A */ SHORT m_nHappiness;
+    /* 002C */ LONG m_nNumberOfTimesInteractedWith[24];
+    /* 008C */ unsigned char field_8C[306];
+    /* 01BE */ SCRIPTNAME m_name;
+};
+
 class CAreaFileRandomMonsterSpawningPoint {
 public:
     CAreaFileRandomMonsterSpawningPoint()

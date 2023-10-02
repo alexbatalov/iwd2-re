@@ -30,7 +30,7 @@ public:
     /* 0308 */ ULONG m_nTime;
     /* 030C */ int m_nChapter;
     /* 0310 */ CString m_sChapter;
-    /* 0314 */ CString field_314;
+    /* 0314 */ CString m_sFileTime;
 };
 
 class CScreenLoad : public CBaldurEngine {
@@ -94,12 +94,12 @@ public:
     /* 01CA */ INT m_nNumGameSlots;
     /* 01CE */ INT m_nEngineState;
     /* 01D2 */ CTypedPtrArray<CPtrArray, CScreenLoadGameSlot*> m_aGameSlots;
-    /* 01E6 */ int field_1E6;
+    /* 01E6 */ INT m_nCurrentGameSlot;
     /* 01EA */ DWORD m_dwErrorTextId;
     /* 01EE */ DWORD m_strErrorButtonText[CSCREENLOAD_ERROR_BUTTONS];
     /* 01FA */ INT m_nNumErrorButtons;
     /* 01FE */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
-    /* 021A */ int field_21A;
+    /* 021A */ INT m_nMaxSlotNumber;
     /* 021E */ CVidFont m_preLoadFontRealms;
     /* 071E */ CVidFont m_preLoadFontStnSml;
     /* 0C1E */ int field_C1E;

@@ -11,10 +11,10 @@ CCreatureFile::~CCreatureFile()
 }
 
 // 0x7123B0
-void* CCreatureFile::GetData()
+BYTE* CCreatureFile::GetData()
 {
     if (pRes != NULL) {
-        return pRes->Demand();
+        return reinterpret_cast<BYTE*>(pRes->Demand());
     } else {
         return NULL;
     }
@@ -36,4 +36,12 @@ DWORD CCreatureFile::GetDataSize()
     pRes->Release();
 
     return nSize;
+}
+
+// 0x5C7B00
+void CCreatureFile::ReleaseData()
+{
+    if (pRes != NULL) {
+        pRes->Release();
+    }
 }
