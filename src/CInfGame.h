@@ -164,6 +164,7 @@ public:
     LONG GetGroundPile(LONG iSprite);
     SHORT GetNumGroundSlots(LONG nContainerId);
     void InventoryInfoGround(LONG nContainerId, SHORT nSlotNum, CItem*& pItem, STRREF& description, CResRef& cResIcon, CResRef& cResItem, WORD& wCount);
+    WORD GetContainerType(LONG nContainerId);
     SHORT GetNumQuickWeaponSlots(SHORT nPortrait);
     void InventoryInfoPersonal(SHORT nPortraitNum, SHORT nSlotNum, CItem*& pItem, STRREF& description, CResRef& cResIcon, CResRef& cResItem, WORD& wCount, BOOL a8);
     BOOL Is3DSound(int nSoundChannel);

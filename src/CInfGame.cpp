@@ -2590,6 +2590,28 @@ void CInfGame::InventoryInfoGround(LONG nContainerId, SHORT nSlotNum, CItem*& pI
     }
 }
 
+// 0x5B8130
+WORD CInfGame::GetContainerType(LONG nContainerId)
+{
+    CGameContainer* pContainer;
+
+    BYTE rc = m_cObjectArray.GetShare(nContainerId,
+        CGameObjectArray::THREAD_ASYNCH,
+        reinterpret_cast<CGameObject**>(&pContainer),
+        INFINITE);
+    if (rc != CGameObjectArray::SUCCESS) {
+        return -1;
+    }
+
+    WORD nContainerType = pContainer->m_containerType;
+
+    m_cObjectArray.ReleaseShare(nContainerId,
+        CGameObjectArray::THREAD_ASYNCH,
+        INFINITE);
+
+    return nContainerType;
+}
+
 // 0x5BACE0
 SHORT CInfGame::GetNumQuickWeaponSlots(SHORT nPortrait)
 {
