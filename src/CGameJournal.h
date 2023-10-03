@@ -4,6 +4,7 @@
 #include "mfc.h"
 
 #include "BalDataTypes.h"
+#include "FileFormat.h"
 
 class CUIControlTextDisplay;
 
@@ -14,6 +15,7 @@ public:
 
     /* 0000 */ STRREF m_strText;
     /* 0004 */ LONG m_nTime;
+    /* 0008 */ DWORD m_dwFlags;
     /* 000C */ WORD m_wType;
     /* 000E */ BYTE m_bCharacter;
 };
@@ -30,6 +32,7 @@ public:
     void UpdateTextDisplay(INT nChapter, CUIControlTextDisplay* pText);
     void ClearAllEntries();
     WORD CountEntries();
+    void Unmarshal(CSavedGameJournalEntry* pSavedEntry, DWORD nSavedEntry);
     void RevertEntry(DWORD nIndex);
     void SetQuestDone(STRREF strRef);
     CString GetEntryText(DWORD nIndex);

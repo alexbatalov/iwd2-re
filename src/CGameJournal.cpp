@@ -205,6 +205,35 @@ WORD CGameJournal::CountEntries()
     return nEntries;
 }
 
+// 0x4C6CD0
+void CGameJournal::Unmarshal(CSavedGameJournalEntry* pSavedEntry, DWORD nSavedEntry)
+{
+    for (DWORD cnt = 0; cnt < nSavedEntry; cnt++) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameJournal.cpp
+        // __LINE__: 735
+        UTIL_ASSERT(m_aChapters[(pSavedEntry + cnt)->m_chapter] != NULL);
+
+        CGameJournalEntry* pEntry = new CGameJournalEntry();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameJournal.cpp
+        // __LINE__: 737
+        UTIL_ASSERT(pEntry != NULL);
+
+        pEntry->m_strText = pSavedEntry[cnt].m_strEntry;
+        pEntry->m_nTime = pSavedEntry[cnt].m_time;
+        pEntry->m_wType = pSavedEntry[cnt].m_type;
+
+        pEntry->m_bCharacter = -1;
+        if (pSavedEntry[cnt].m_character != 0) {
+            pEntry->m_bCharacter = pEntry->m_bCharacter;
+        } else {
+            pEntry->m_bCharacter = 1;
+        }
+
+        m_aChapters[pSavedEntry[cnt].m_chapter]->AddTail(pEntry);
+    }
+}
+
 // 0x4C70E0
 void CGameJournal::RevertEntry(DWORD nIndex)
 {

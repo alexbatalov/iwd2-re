@@ -44,6 +44,21 @@ public:
     /* 0098 */ unsigned char field_78[52];
 };
 
+class CSavedGameJournalEntry {
+public:
+    CSavedGameJournalEntry()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    /* 0000 */ STRREF m_strEntry;
+    /* 0004 */ DWORD m_time;
+    /* 0008 */ BYTE m_chapter;
+    /* 0009 */ BYTE m_read;
+    /* 000A */ BYTE m_type;
+    /* 000B */ BYTE m_character;
+};
+
 // TODO: Incomplete.
 class CSavedGamePartyCreature {
 public:
