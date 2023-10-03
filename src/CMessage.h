@@ -95,6 +95,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_START_COMBAT_MUSIC;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_DEMAND;
     static const BYTE MSG_SUBTYPE_CMESSAGE_WEAPON_IMMUNITIES_UPDATE;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_103;
 
     static const BYTE MSG_TYPE_DIALOG;
     static const BYTE MSG_SUBTYPE_DIALOG_PERMIT_REQUEST;
@@ -1246,6 +1247,21 @@ public:
     void Run() override;
 
     /* 000C */ CImmunitiesWeapon m_weaponImmunities;
+};
+
+class CMessage103 : public CMessage {
+public:
+    CMessage103(BOOLEAN a1, PLAYER_ID idPlayer, INT nPortrait, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ BOOLEAN field_C;
+    /* 000E */ PLAYER_ID m_idPlayer;
+    /* 0012 */ INT m_nCharacterPortraitSlotNumber;
 };
 
 #endif /* CMESSAGE_H_ */

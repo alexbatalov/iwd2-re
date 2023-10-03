@@ -13,6 +13,7 @@
 #include "CUIControlEdit.h"
 #include "CUIControlFactory.h"
 #include "CUIControlScrollBar.h"
+#include "CVidFont.h"
 
 #define CSCREENINVENTORY_VIRTUAL_KEYS 90
 #define CSCREENINVENTORY_ERROR_BUTTONS 3
@@ -147,6 +148,9 @@ public:
     /* 0524 */ int field_524;
     /* 0528 */ int field_528;
     /* 052C */ BOOLEAN m_bPauseWarningDisplayed;
+    /* 052E */ CVidFont m_preLoadFontRealms;
+    /* 0A2E */ CVidFont m_preLoadFontStnSml;
+    /* 0F2E */ CVidFont m_preLoadFontTool;
     /* 142E */ C2DArray field_142E;
     /* 1452 */ C2DArray field_1452;
     /* 1476 */ C2DArray field_1476;

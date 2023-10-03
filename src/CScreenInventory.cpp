@@ -252,7 +252,75 @@ CScreenInventory::~CScreenInventory()
 // 0x624F70
 void CScreenInventory::EngineActivated()
 {
-    // TODO: Incomplete.
+    if (CChitin::byte_8FB950
+        && g_pChitin->cNetwork.GetSessionOpen() == TRUE
+        && g_pChitin->cNetwork.GetSessionHosting() == TRUE
+        && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+        g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
+    }
+
+    m_preLoadFontRealms.SetResRef(CResRef("REALMS"), FALSE, TRUE);
+    m_preLoadFontRealms.RegisterFont();
+
+    m_preLoadFontStnSml.SetResRef(CResRef("STONESML"), FALSE, TRUE);
+    m_preLoadFontStnSml.RegisterFont();
+
+    m_preLoadFontTool.SetResRef(CResRef("TOOLFONT"), FALSE, TRUE);
+    m_preLoadFontTool.RegisterFont();
+
+    if (m_cUIManager.m_bInitialized) {
+        CheckMultiPlayerViewable();
+
+        if (!g_pBaldurChitin->m_pEngineWorld->m_bPaused) {
+            g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->StartTime();
+        }
+
+        if (GetTopPopup() != NULL) {
+            // NOTE: Uninline.
+            UpdatePopupPanel(GetTopPopup()->m_nID);
+        } else {
+            UpdateMainPanel(TRUE);
+        }
+
+        if (field_528 != 0) {
+            SetErrorString(11328, RGB(255, 255, 255));
+            field_528 = 0;
+        }
+
+        UpdateCursorShape();
+        CheckEnablePortaits(TRUE);
+        CheckEnableLeftPanel();
+
+        m_nTopGroundItem = 0;
+        memset(m_nGroundPileQueried, 0, sizeof(m_nGroundPileQueried));
+        m_cUIManager.InvalidateRect(NULL);
+
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+            && !g_pChitin->cNetwork.GetSessionHosting()
+            && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+            CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+            // __LINE__: 440
+            UTIL_ASSERT(pGame != NULL);
+
+            // NOTE: Uninline.
+            LONG nCharacterId = pGame->GetCharacterId(m_nSelectedCharacter);
+
+            CMessage103* pMessage = new CMessage103(TRUE,
+                g_pChitin->cNetwork.m_idLocalPlayer,
+                m_nSelectedCharacter,
+                nCharacterId,
+                nCharacterId);
+
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+        } else {
+            if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+                g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->sub_518580(g_pChitin->cNetwork.m_idLocalPlayer,
+                    m_nSelectedCharacter);
+            }
+        }
+    }
 }
 
 // 0x6252D0
