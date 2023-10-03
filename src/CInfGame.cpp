@@ -2612,6 +2612,24 @@ WORD CInfGame::GetContainerType(LONG nContainerId)
     return nContainerType;
 }
 
+// 0x5B8180
+void CInfGame::CompressContainer(LONG nContainerId)
+{
+    CGameContainer* pContainer;
+
+    BYTE rc = m_cObjectArray.GetDeny(nContainerId,
+        CGameObjectArray::THREAD_ASYNCH,
+        reinterpret_cast<CGameObject**>(&pContainer),
+        INFINITE);
+    if (rc = CGameObjectArray::SUCCESS) {
+        pContainer->CompressContainer();
+
+        m_cObjectArray.ReleaseDeny(nContainerId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
 // 0x5BACE0
 SHORT CInfGame::GetNumQuickWeaponSlots(SHORT nPortrait)
 {
