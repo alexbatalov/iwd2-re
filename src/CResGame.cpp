@@ -34,7 +34,7 @@ BOOL CResGame::Parse(void* pData)
         return FALSE;
     }
 
-    if (*reinterpret_cast<DWORD*>(pData) != 'GAME'
+    if (memcmp(pData, "GAME", 4) != 0
         || (memcmp(pData, "GAMEV2.2", 8) != 0
             && memcmp(pData, "GAMEV2.1", 8) != 0
             && memcmp(pData, "GAMEV2.0", 8) != 0
