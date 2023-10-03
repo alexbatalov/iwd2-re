@@ -3288,6 +3288,14 @@ CString CInfGame::sub_5C0B30()
     return m_sMultiplayerSaveDir + m_sSaveGame + "\\";
 }
 
+// 0x5C2250
+BOOL CInfGame::AddCharacterToOverflow(LONG id)
+{
+    m_characterOverflow.AddTail(reinterpret_cast<int*>(id));
+    m_nCharacterOverflowCount++;
+    return TRUE;
+}
+
 // 0x5C2280
 CStringList* CInfGame::GetScripts()
 {

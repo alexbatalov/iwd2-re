@@ -198,6 +198,7 @@ public:
     CString GetDirSaveRoot();
     CString GetDirSave();
     CString sub_5C0B30();
+    BOOL AddCharacterToOverflow(LONG id);
     CStringList* GetScripts();
     CString GetDirScripts();
     static void StartCharacterTerminationSequence();
@@ -334,6 +335,8 @@ public:
     /* 382E */ LONG m_characterPortraits[6];
     /* 3846 */ SHORT m_nCharacters;
     /* 3848 */ CTypedPtrList<CPtrList, int*> m_lstGlobalCreatures; // NOTE: Stores actual ints disguised as pointers.
+    /* 3864 */ CTypedPtrList<CPtrList, int*> m_characterOverflow;
+    /* 3878 */ SHORT m_nCharacterOverflowCount;
     /* 387A */ SHORT m_nReputation;
     /* 3884 */ CAIGroup m_group;
     /* 38A8 */ CTypedPtrList<CPtrList, int*> m_allies; // NOTE: Stores actual ints disguised as pointers.
