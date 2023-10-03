@@ -134,44 +134,45 @@ WORD CWeather::Marshal()
 // 0x5558B0
 void CWeather::AdvanceWeatherLevel(ULONG nCurrentTime)
 {
+    // TODO: Check casts.
     ULONG nTime = nCurrentTime + 6 * WEATHER_TRANSITION_TIME + m_nWeatherDuration - m_nWeatherEndTime;
-    if (nTime < WEATHER_TRANSITION_TIME) {
+    if (nTime < static_cast<ULONG>(WEATHER_TRANSITION_TIME)) {
         m_nWeatherLevel = 0;
         m_bUpgrading = TRUE;
         return;
     }
 
-    if (nTime < 2 * WEATHER_TRANSITION_TIME) {
+    if (nTime < static_cast<ULONG>(2 * WEATHER_TRANSITION_TIME)) {
         m_nWeatherLevel = 4;
         m_bUpgrading = TRUE;
         return;
     }
 
-    if (nTime < 3 * WEATHER_TRANSITION_TIME) {
+    if (nTime < static_cast<ULONG>(3 * WEATHER_TRANSITION_TIME)) {
         m_nWeatherLevel = 8;
         m_bUpgrading = TRUE;
         return;
     }
 
-    if (nTime < m_nWeatherDuration + 3 * WEATHER_TRANSITION_TIME) {
+    if (nTime < static_cast<ULONG>(m_nWeatherDuration + 3 * WEATHER_TRANSITION_TIME)) {
         m_nWeatherLevel = 12;
         m_bUpgrading = TRUE;
         return;
     }
 
-    if (nTime < m_nWeatherDuration + 4 * WEATHER_TRANSITION_TIME) {
+    if (nTime < static_cast<ULONG>(m_nWeatherDuration + 4 * WEATHER_TRANSITION_TIME)) {
         m_nWeatherLevel = 8;
         m_bUpgrading = FALSE;
         return;
     }
 
-    if (nTime < m_nWeatherDuration + 5 * WEATHER_TRANSITION_TIME) {
+    if (nTime < static_cast<ULONG>(m_nWeatherDuration + 5 * WEATHER_TRANSITION_TIME)) {
         m_nWeatherLevel = 4;
         m_bUpgrading = FALSE;
         return;
     }
 
-    if (nTime < m_nWeatherDuration + 6 * WEATHER_TRANSITION_TIME) {
+    if (nTime < static_cast<ULONG>(m_nWeatherDuration + 6 * WEATHER_TRANSITION_TIME)) {
         m_nWeatherLevel = 0;
         m_bUpgrading = FALSE;
         return;
@@ -219,8 +220,9 @@ BYTE CWeather::GetWind()
     }
 
     if (m_nWindLevel == 16) {
-        if (m_nDurationCounter <= WEATHER_TRANSITION_TIME / 5) {
-            return 100 - 500 * m_nDurationCounter / WEATHER_TRANSITION_TIME;
+        // TODO: Check casts.
+        if (m_nDurationCounter <= static_cast<ULONG>(WEATHER_TRANSITION_TIME / 5)) {
+            return static_cast<BYTE>(100 - 500 * m_nDurationCounter / WEATHER_TRANSITION_TIME);
         }
     }
 
@@ -281,11 +283,12 @@ void CWeather::SetWind(SHORT nWindLevel, ULONG nLevelPercentage, BOOLEAN bResetA
                     m_bWindOn = TRUE;
                 }
 
-                if (m_nWindVolumeLevel > WEATHER_TRANSITION_TIME / 5) {
+                // TODO: Check casts.
+                if (m_nWindVolumeLevel > static_cast<ULONG>(WEATHER_TRANSITION_TIME / 5)) {
                     m_sndWind.SetVolume((20 * m_nWindVolumeLevel - 20 * (WEATHER_TRANSITION_TIME / 5)) / (WEATHER_TRANSITION_TIME - WEATHER_TRANSITION_TIME / 5));
                 } else {
                     m_sndWind.SetVolume(0);
-                    g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->ApplyWindToAmbients(100 - 500 * m_nWindVolumeLevel / WEATHER_TRANSITION_TIME);
+                    g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->ApplyWindToAmbients(static_cast<BYTE>(100 - 500 * m_nWindVolumeLevel / WEATHER_TRANSITION_TIME));
                 }
 
                 m_nWindLevel = 16;

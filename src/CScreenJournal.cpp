@@ -516,7 +516,7 @@ void CScreenJournal::UpdateMainPanel()
     pText->m_labelFont.GetFrameSize(64, 0, size, FALSE);
 
     SHORT nFontHeight = pText->m_labelFont.GetFontHeight(FALSE);
-    pText->field_AB4 = (nFontHeight - size.cy - 1) / nFontHeight;
+    pText->field_AB4 = static_cast<short>((nFontHeight - size.cy - 1) / nFontHeight);
 
     pText->DisplayString(CString(""),
         s2.Right(s2.GetLength()),

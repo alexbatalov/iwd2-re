@@ -488,7 +488,7 @@ CBaldurChitin::CBaldurChitin()
         break;
     }
 
-    CVidMode::word_8BA320 = 3 * (((CInfinity::stru_8E7548.right - CInfinity::stru_8E7548.left + 63) / 64 + 1) * ((CInfinity::stru_8E7548.bottom - CInfinity::stru_8E7548.top + 63) / 64 + 1)) / 2;
+    CVidMode::word_8BA320 = static_cast<SHORT>(3 * (((CInfinity::stru_8E7548.right - CInfinity::stru_8E7548.left + 63) / 64 + 1) * ((CInfinity::stru_8E7548.bottom - CInfinity::stru_8E7548.top + 63) / 64 + 1)) / 2);
 
     // TODO: Check assignments to `field_49B4`. In binary they appear in random
     // order.

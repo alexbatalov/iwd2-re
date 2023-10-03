@@ -1882,7 +1882,9 @@ void CGameSprite::ClearAI(BOOLEAN bSetSequence)
             && m_nSequence != SEQ_SLEEP
             && m_nSequence != SEQ_DIE) {
             if (GetVertListType() != LIST_FLIGHT) {
-                CMessage* pMessage = new CMessageSetSequence(GetIdleSequence(), m_id, m_id);
+                CMessage* pMessage = new CMessageSetSequence(static_cast<BYTE>(GetIdleSequence()),
+                    m_id,
+                    m_id);
                 g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
             }
         }

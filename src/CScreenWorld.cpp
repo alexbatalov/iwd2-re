@@ -1757,13 +1757,16 @@ void CUIControlScrollBarWorldContainer::OnPageUp(DWORD nLines)
     INT nNewTopContainerRow;
     INT nNewTopGroupRow;
 
+    // FIXME: What for?
+    INT nStep = abs(static_cast<INT>(nLines));
+
     switch (m_nID) {
     case 52:
         // NOTE: Uninline.
         // NOTE: Unused.
         pWorld->GetNumContainerRows(nContainer);
 
-        nNewTopContainerRow = max(pWorld->m_nTopGroupRow - (nLines != 0 ? nLines : 2), 0);
+        nNewTopContainerRow = max(pWorld->m_nTopGroupRow - (nStep != 0 ? nStep : 2), 0);
 
         if (pWorld->m_nTopContainerRow != nNewTopContainerRow) {
             pWorld->m_nTopContainerRow = nNewTopContainerRow;
@@ -1775,7 +1778,7 @@ void CUIControlScrollBarWorldContainer::OnPageUp(DWORD nLines)
         }
         break;
     case 53:
-        nNewTopGroupRow = max(pWorld->m_nTopGroupRow - (nLines != 0 ? nLines : 2), 0);
+        nNewTopGroupRow = max(pWorld->m_nTopGroupRow - (nStep != 0 ? nStep : 2), 0);
         if (pWorld->m_nTopGroupRow != nNewTopGroupRow) {
             pWorld->m_nTopGroupRow = nNewTopGroupRow;
 
@@ -1818,12 +1821,15 @@ void CUIControlScrollBarWorldContainer::OnPageDown(DWORD nLines)
     INT nNumGroupRows;
     INT nNewTopGroupRow;
 
+    // FIXME: What for?
+    INT nStep = abs(static_cast<INT>(nLines));
+
     switch (m_nID) {
     case 52:
         // NOTE: Uninline.
         nNumContainerRows = pWorld->GetNumContainerRows(nContainer);
         nNewTopContainerRow = min(nNumContainerRows,
-            pWorld->m_nTopContainerRow + (nLines != 0 ? nLines : 2));
+            pWorld->m_nTopContainerRow + (nStep != 0 ? nStep : 2));
 
         if (pWorld->m_nTopContainerRow != nNewTopContainerRow) {
             pWorld->m_nTopContainerRow = nNewTopContainerRow;
@@ -1838,7 +1844,7 @@ void CUIControlScrollBarWorldContainer::OnPageDown(DWORD nLines)
         // NOTE: Uninline.
         nNumGroupRows = pWorld->GetNumGroupRows() - 2;
         nNewTopGroupRow = min(nNumGroupRows,
-            pWorld->m_nTopGroupRow + (nLines != 0 ? nLines : 2));
+            pWorld->m_nTopGroupRow + (nStep != 0 ? nStep : 2));
 
         if (pWorld->m_nTopGroupRow != nNewTopGroupRow) {
             pWorld->m_nTopGroupRow = nNewTopGroupRow;
