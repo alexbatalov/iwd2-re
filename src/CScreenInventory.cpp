@@ -415,7 +415,7 @@ void CScreenInventory::EngineGameInit()
     field_514 = -1;
     field_524 = 0;
     field_51C = 0;
-    field_520 = 0;
+    field_520 = 10;
     field_528 = 0;
 
     m_cUIManager.GetPanel(3)->SetActive(FALSE);
@@ -547,7 +547,61 @@ void CScreenInventory::OnRButtonUp(CPoint pt)
 // 0x625E10
 void CScreenInventory::TimerAsynchronousUpdate()
 {
-    // TODO: Incomplete.
+    g_pBaldurChitin->m_pEngineWorld->AsynchronousUpdate(FALSE);
+
+    if (field_524 >= 0) {
+        if (field_524 == 0) {
+            CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+            renderLock.Lock(INFINITE);
+
+            CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+            // __LINE__: 1071
+            UTIL_ASSERT(pGame != NULL);
+
+            LONG nCharacterId = pGame->GetCharacterId(m_nSelectedCharacter);
+
+            CGameSprite* pSprite;
+
+            BYTE rc;
+            do {
+                rc = pGame->GetObjectArray()->GetDeny(nCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    reinterpret_cast<CGameObject**>(&pSprite),
+                    INFINITE);
+            } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+            if (rc == CGameObjectArray::SUCCESS) {
+                if (field_520 <= CSPELLLIST_MAX_LEVELS) {
+                    m_nErrorState = 4;
+
+                    UINT nIndex = 0;
+                    if (pSprite->GetSpellsAtLevel(5, field_520 - 1)->Find(field_51C, nIndex)) {
+                        m_strErrorText = 10830;
+                        PlayGUISound(CResRef("GAM_44"));
+                    } else {
+                        m_strErrorText = 10831;
+                        PlayGUISound(CResRef("EFF_M10"));
+                    }
+
+                    m_strErrorButtonText[0] = 11973;
+                    SummonPopup(7);
+                }
+
+                pGame->GetObjectArray()->ReleaseDeny(nCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            }
+
+            renderLock.Unlock();
+        }
+        field_524--;
+    }
+
+    UpdateCursorShape();
+    m_cUIManager.TimerAsynchronousUpdate();
+    g_pBaldurChitin->GetObjectCursor()->CursorUpdate(pVidMode);
 }
 
 // 0x626050
