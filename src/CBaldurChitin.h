@@ -106,7 +106,9 @@ public:
     /* 0038 */ void MusicThreadMain(void* userInfo) override;
     /* 003C */ CRes* AllocResObject(int nType) override;
     /* 0040 */ const CString& GetIconRes() override;
-    /* 0044 */ virtual void GetScreenShotFilePrefix(CString& szGameFileName) override;
+    /* 0044 */ void GetScreenShotFilePrefix(CString& szGameFileName) override;
+    /* 0048 */ int TranslateType(const CString& sRes) override;
+    /* 004C */ void TranslateType(int nType, CString& sRes) override;
     /* 0054 */ BOOL FontRectOutline() override;
     /* 0058 */ BOOL InitializeServices(HWND hWnd) override;
     /* 005C */ void SetProgressBar(BOOLEAN bEnabled, LONG nProgressBarCaption, INT nBytesCopied, INT nTotalBytes, BOOLEAN bTravel, LONG nParchmentCaption, BOOLEAN bWaiting, LONG nWaitingReason, BOOLEAN bDisplayMinibars, BOOLEAN bTimeoutCounter, DWORD nSecondsToTimeout) override;

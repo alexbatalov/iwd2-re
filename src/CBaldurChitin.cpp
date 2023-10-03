@@ -1118,6 +1118,123 @@ void CBaldurChitin::SetCDSwitchActivateEngine(BOOL bValue)
     m_cSwitchingCDStatus.m_bActivateEngine = bValue;
 }
 
+// 0x424610
+void CBaldurChitin::TranslateType(int nType, CString& sRes)
+{
+    switch (nType) {
+    case 1001:
+        sRes = "WED";
+        break;
+    case 1002:
+        sRes = "CHU";
+        break;
+    case 1005:
+        sRes = "ITM";
+        break;
+    case 1006:
+        sRes = "SPL";
+        break;
+    case 1007:
+        sRes = "BCS";
+        break;
+    case 1008:
+        sRes = "IDS";
+        break;
+    case 1009:
+        sRes = "CRE";
+        break;
+    case 1010:
+        sRes = "ARE";
+        break;
+    case 1011:
+        sRes = "DLG";
+        break;
+    case 1012:
+        sRes = "2DA";
+        break;
+    case 1013:
+        sRes = "GAM";
+        break;
+    case 1014:
+        sRes = "STO";
+        break;
+    case 1015:
+        sRes = "WMP";
+        break;
+    case 1016:
+        sRes = "EFF";
+        break;
+    case 1017:
+        sRes = "BS";
+        break;
+    case 1018:
+        sRes = "CHR";
+        break;
+    case 1019:
+        sRes = "VVC";
+        break;
+    case 1020:
+        sRes = "VEF";
+        break;
+    case 1022:
+        sRes = "RES";
+        break;
+    case 2050:
+        sRes = "INI";
+        break;
+    default:
+        CChitin::TranslateType(nType, sRes);
+    }
+}
+
+// 0x424800
+int CBaldurChitin::TranslateType(const CString& sRes)
+{
+    if (sRes.CompareNoCase("WED") == 0) {
+        return 1001;
+    } else if (sRes.CompareNoCase("CHU") == 0) {
+        return 1002;
+    } else if (sRes.CompareNoCase("ITM") == 0) {
+        return 1005;
+    } else if (sRes.CompareNoCase("SPL") == 0) {
+        return 1006;
+    } else if (sRes.CompareNoCase("BCS") == 0) {
+        return 1007;
+    } else if (sRes.CompareNoCase("IDS") == 0) {
+        return 1008;
+    } else if (sRes.CompareNoCase("CRE") == 0) {
+        return 1009;
+    } else if (sRes.CompareNoCase("ARE") == 0) {
+        return 1010;
+    } else if (sRes.CompareNoCase("DLG") == 0) {
+        return 1011;
+    } else if (sRes.CompareNoCase("2DA") == 0) {
+        return 1012;
+    } else if (sRes.CompareNoCase("GAM") == 0) {
+        return 1013;
+    } else if (sRes.CompareNoCase("STO") == 0) {
+        return 1014;
+    } else if (sRes.CompareNoCase("WMP") == 0) {
+        return 1015;
+    } else if (sRes.CompareNoCase("EFF") == 0) {
+        return 1016;
+    } else if (sRes.CompareNoCase("BS") == 0) {
+        return 1017;
+    } else if (sRes.CompareNoCase("CHR") == 0) {
+        return 1018;
+    } else if (sRes.CompareNoCase("VVC") == 0) {
+        return 1019;
+    } else if (sRes.CompareNoCase("VEF") == 0) {
+        return 1020;
+    } else if (sRes.CompareNoCase("RES") == 0) {
+        return 1022;
+    } else if (sRes.CompareNoCase("INI") == 0) {
+        return 2050;
+    } else {
+        return CChitin::TranslateType(sRes);
+    }
+}
+
 // 0x424A70
 void CBaldurChitin::OnAltTab(HWND hWnd, BOOL a2)
 {
