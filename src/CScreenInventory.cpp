@@ -326,7 +326,52 @@ void CScreenInventory::EngineActivated()
 // 0x6252D0
 void CScreenInventory::EngineDeactivated()
 {
-    // TODO: Incomplete.
+    if (CChitin::byte_8FB950
+        && g_pChitin->cNetwork.GetSessionOpen() == TRUE
+        && g_pChitin->cNetwork.GetSessionHosting() == TRUE
+        && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+        if (!g_pBaldurChitin->m_pEngineWorld->m_bPaused) {
+            g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
+        }
+    }
+
+    m_preLoadFontRealms.Unload();
+    m_preLoadFontStnSml.Unload();
+    m_preLoadFontTool.Unload();
+
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
+
+    if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+        && !g_pChitin->cNetwork.GetSessionHosting()
+        && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+        CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 509
+        UTIL_ASSERT(pGame != NULL);
+
+        // NOTE: Uninline.
+        LONG nCharacterId = pGame->GetCharacterId(m_nSelectedCharacter);
+
+        CMessage103* pMessage = new CMessage103(FALSE,
+            g_pChitin->cNetwork.m_idLocalPlayer,
+            -1,
+            nCharacterId,
+            nCharacterId);
+
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+    } else {
+        if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+            g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->sub_518580(g_pChitin->cNetwork.m_idLocalPlayer,
+                -1);
+        }
+    }
+
+    if (!g_pBaldurChitin->m_pEngineWorld->m_bPaused
+        && g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL) {
+        g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->StopTime();
+    }
 }
 
 // 0x625490
