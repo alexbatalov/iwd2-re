@@ -2936,6 +2936,78 @@ void CInfGame::ApplyVolumeSliders(BOOLEAN a2)
     g_pBaldurChitin->cSoundMixer.UpdateSoundList();
 }
 
+// 0x5BD070
+BOOL CInfGame::AddCharacterToParty(LONG id, SHORT nPortraitNumber)
+{
+    // NOTE: Uninline.
+    if (GetCharacterPortraitNum(id) != -1) {
+        return FALSE;
+    }
+
+    if (m_nCharacters >= CINFGAME_MAXCHARACTERS) {
+        return FALSE;
+    }
+
+    if (m_allies.Find(reinterpret_cast<int*>(id)) != NULL) {
+        // NOTE: Uninline.
+        RemoveCharacterFromAllies(id);
+    }
+
+    if (m_familiars.Find(reinterpret_cast<int*>(id)) != NULL) {
+        // NOTE: Uninline.
+        RemoveCharacterFromFamiliars(id);
+    }
+
+    POSITION pos = m_lstGlobalCreatures.GetHeadPosition();
+    while (pos != NULL) {
+        POSITION posOld = pos;
+        if (reinterpret_cast<int>(m_lstGlobalCreatures.GetNext(pos)) == id) {
+            m_lstGlobalCreatures.RemoveAt(posOld);
+            break;
+        }
+    }
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(id,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc != CGameObjectArray::SUCCESS) {
+        return FALSE;
+    }
+
+    if (nPortraitNumber == -1 || nPortraitNumber >= CINFGAME_MAXCHARACTERS) {
+        nPortraitNumber = m_nCharacters;
+    }
+
+    m_characterPortraits[nPortraitNumber] = id;
+
+    UpdatePortraitToolTip(nPortraitNumber, pSprite->GetNameRef());
+    pSprite->SetFootstepChannel();
+
+    if ((pSprite->GetBaseStats()->m_generalState & STATE_DEAD) != 0) {
+        pSprite->m_canBeSeen = 4 * (CGameObject::VISIBLE_DELAY + 1);
+    }
+
+    g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(id,
+        CGameObjectArray::THREAD_ASYNCH,
+        INFINITE);
+
+    EnablePortrait(static_cast<BYTE>(nPortraitNumber), TRUE);
+
+    m_nCharacters++;
+
+    CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
+    pWorld->GetManager()->GetPanel(pWorld->GetPanel_22_0())->InvalidateRect(NULL);
+
+    return TRUE;
+}
+
 // 0x5BD4E0
 BOOL CInfGame::SetCharacterSlot(INT nCharacterSlot, LONG nCharacterId)
 {

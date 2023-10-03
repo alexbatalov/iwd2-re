@@ -176,6 +176,7 @@ public:
     BOOL DeleteSaveGame(const CString& sFileName);
     BOOL SaveGameExists(const CString& sSaveGame);
     void ApplyVolumeSliders(BOOLEAN a2);
+    BOOL AddCharacterToParty(LONG id, SHORT nPortraitNumber);
     BOOL SetCharacterSlot(INT nCharacterSlot, LONG nCharacterId);
     BOOL ClearCharacterSlot(INT nCharacterSlot);
     LONG GetCharacterSlot(INT nCharacterSlot);
