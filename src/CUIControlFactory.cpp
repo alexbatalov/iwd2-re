@@ -3247,6 +3247,73 @@ void CUIControlButtonCharacterPortrait::SetPortrait(const CResRef& resRef)
     }
 }
 
+// 0x77DA00
+BOOL CUIControlButtonCharacterPortrait::Render(BOOL bForce)
+{
+    CResRef silhouetteResRef;
+
+    if (!m_bActive && !m_bInactiveRender) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount == 0 && !bForce) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount != 0) {
+        CSingleLock lock(&(m_pPanel->m_pManager->field_56), FALSE);
+        lock.Lock(INFINITE);
+        m_nRenderCount--;
+        lock.Unlock();
+    }
+
+    if (m_portraitResRef == "" || m_portraitResRef == "NONE") {
+        return FALSE;
+    }
+
+    CVidBitmap vbPortrait;
+    vbPortrait.SetResRef(m_portraitResRef, TRUE, FALSE);
+    vbPortrait.m_bDoubleSize = m_pPanel->m_pManager->m_bDoubleSize;
+
+    if (m_pPanel->m_nID == 19 && m_nID == 1) {
+        silhouetteResRef = CInfGame::SILHOUETTE_PORTRAIT_SM;
+    } else {
+        silhouetteResRef = CInfGame::SILHOUETTE_PORTRAIT_LG;
+    }
+
+    if (vbPortrait.pRes == NULL) {
+        vbPortrait.SetResRef(silhouetteResRef, TRUE, TRUE);
+        vbPortrait.m_bDoubleSize = m_pPanel->m_pManager->m_bDoubleSize;
+    }
+
+    // FIXME: Calls `GetBitCount` two times.
+    if (vbPortrait.GetBitCount(FALSE) != 24 && vbPortrait.GetBitCount(FALSE) != 8) {
+        vbPortrait.SetResRef(silhouetteResRef, TRUE, TRUE);
+        vbPortrait.m_bDoubleSize = m_pPanel->m_pManager->m_bDoubleSize;
+    }
+
+    if (vbPortrait.pRes == NULL) {
+        return FALSE;
+    }
+
+    CPoint pt = m_pPanel->m_ptOrigin + m_ptOrigin;
+
+    CSize size;
+    vbPortrait.GetImageDimensions(size, FALSE);
+
+    size.cx = min(size.cx, m_size.cx);
+    size.cy = min(size.cy, m_size.cy);
+
+    CRect rControlFrame(pt, size);
+
+    CRect rClip;
+    rClip.IntersectRect(rControlFrame, m_rDirty);
+
+    BOOL bResult = vbPortrait.RenderDirect(0, pt.x, pt.y, rClip, 0, FALSE);
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x779F10

@@ -156,6 +156,7 @@ class CUIControlButtonCharacterPortrait : public CUIControlButton {
 public:
     CUIControlButtonCharacterPortrait(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonCharacterPortrait() override;
+    BOOL Render(BOOL bForce) override;
     void SetPortrait(const CResRef& resRef);
 
     /* 0666 */ CResRef m_portraitResRef;
