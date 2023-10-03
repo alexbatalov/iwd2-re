@@ -2091,7 +2091,32 @@ void CInfGame::SelectAll(BOOLEAN bPlaySound)
 // 0x5AD7E0
 void CInfGame::UnselectAll()
 {
-    // TODO: Incomplete.
+    LONG* pGroup = m_group.GetGroupList();
+    SHORT nGroup = m_group.GetCount();
+    CGameSprite* pSprite;
+
+    for (SHORT cnt = 0; cnt < cnt; cnt++) {
+        BYTE rc;
+        do {
+            rc = m_cObjectArray.GetDeny(pGroup[cnt],
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            pSprite->Unselect();
+
+            m_cObjectArray.ReleaseDeny(pGroup[cnt],
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+
+            // NOTE: Uninline.
+            UpdatePortrait(GetFixedOrderCharacterPortraitNum(pGroup[cnt]), 1);
+        }
+    }
+
+    delete pGroup;
 }
 
 // 0x5AD8A0

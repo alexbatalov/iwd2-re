@@ -1024,6 +1024,12 @@ void CGameSprite::RenderPortrait(const CPoint& cpRenderPosition, const CSize& sz
     // TODO: Incomplete.
 }
 
+// 0x7060C0
+void CGameSprite::Unselect()
+{
+    // TODO: Incomplete.
+}
+
 // 0x706720
 void CGameSprite::SetCharacterToolTip(CUIControlBase* pControl)
 {
