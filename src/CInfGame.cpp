@@ -3008,6 +3008,105 @@ BOOL CInfGame::AddCharacterToParty(LONG id, SHORT nPortraitNumber)
     return TRUE;
 }
 
+// 0x5BD270
+BOOL CInfGame::RemoveCharacterFromParty(LONG id, BOOL& overflow)
+{
+    CGameSprite* pSprite;
+    BYTE rc;
+    SHORT cnt;
+
+    // NOTE: Uninline.
+    SHORT nPortrait = GetCharacterPortraitNum(id);
+
+    overflow = FALSE;
+
+    if (nPortrait == -1) {
+        if (m_characterOverflow.GetCount() > 0) {
+            POSITION pos = m_characterOverflow.GetHeadPosition();
+            while (pos != NULL) {
+                if (reinterpret_cast<int>(m_characterOverflow.GetAt(pos)) == id) {
+                    break;
+                }
+                m_characterOverflow.GetNext(pos);
+            }
+
+            if (pos != NULL) {
+                do {
+                    rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(id,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        reinterpret_cast<CGameObject**>(&pSprite),
+                        INFINITE);
+                } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+                if (rc == CGameObjectArray::SUCCESS) {
+                    overflow = TRUE;
+                    m_characterOverflow.RemoveAt(pos);
+
+                    g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(id,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        INFINITE);
+
+                    return TRUE;
+                }
+            }
+        }
+        return FALSE;
+    }
+
+    for (cnt = 0; cnt < CINFGAME_MAXCHARACTERS; cnt++) {
+        if (m_characters[cnt] == id) {
+            m_characters[cnt] = -1;
+        }
+    }
+
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(id,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc != CGameObjectArray::SUCCESS) {
+        return FALSE;
+    }
+
+    m_group.Remove(pSprite);
+    pSprite->SetFootstepChannel();
+    pSprite->m_cGameStats.RecordLeaveParty();
+
+    g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(id,
+        CGameObjectArray::THREAD_ASYNCH,
+        INFINITE);
+
+    for (cnt = 0; cnt < m_nCharacters - 1; cnt++) {
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_characterPortraits[cnt],
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            UpdatePortraitToolTip(cnt, pSprite->GetNameRef());
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_characterPortraits[cnt],
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+
+    m_lstGlobalCreatures.AddHead(reinterpret_cast<int*>(id));
+
+    m_nCharacters--;
+    m_characterPortraits[m_nCharacters] = -1;
+
+    EnablePortrait(static_cast<BYTE>(m_nCharacters), FALSE);
+
+    CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
+    pWorld->GetManager()->GetPanel(pWorld->GetPanel_22_0())->InvalidateRect(NULL);
+
+    return TRUE;
+}
+
 // 0x5BD4E0
 BOOL CInfGame::SetCharacterSlot(INT nCharacterSlot, LONG nCharacterId)
 {
