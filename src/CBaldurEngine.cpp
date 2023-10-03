@@ -3,6 +3,7 @@
 #include "CBaldurChitin.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CScreenCharacter.h"
 #include "CScreenInventory.h"
 #include "CScreenJournal.h"
 #include "CScreenMap.h"
@@ -800,6 +801,12 @@ void CBaldurEngine::OnLeftPanelButtonClick(DWORD dwButtonId)
         }
         break;
     case 8:
+        if (g_pBaldurChitin->m_pEngineCharacter != g_pBaldurChitin->GetActiveEngine()) {
+            g_pBaldurChitin->m_pEngineCharacter->OnPortraitLClick(g_pBaldurChitin->GetActiveEngine()->GetSelectedCharacter());
+            g_pBaldurChitin->GetActiveEngine()->SelectEngine(g_pBaldurChitin->m_pEngineCharacter);
+        }
+        break;
+    case 9:
         if (g_pBaldurChitin->m_pEngineOptions != g_pBaldurChitin->GetActiveEngine()) {
             g_pBaldurChitin->m_pEngineOptions->OnPortraitLClick(g_pBaldurChitin->GetActiveEngine()->GetSelectedCharacter());
             g_pBaldurChitin->m_pEngineOptions->m_bFromMainMenu = FALSE;
