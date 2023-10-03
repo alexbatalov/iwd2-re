@@ -517,7 +517,14 @@ void CGameArea::OnActionButtonClickGround(const CPoint& pt)
 // 0x4765C0
 void CGameArea::OnActionButtonDblClk(const CPoint& pt)
 {
-    // TODO: Incomplete.
+    if (m_cInfinity.rViewPort.PtInRect(pt)
+        && g_pBaldurChitin->GetObjectGame()->GetState() == 0) {
+        CRect rView(m_cInfinity.rViewPort);
+        LONG v1 = rView.Width() / -2;
+        LONG v2 = rView.Height() / -2;
+        CPoint ptWorld = m_cInfinity.GetWorldCoordinates(pt);
+        m_cInfinity.SetViewPosition(ptWorld.x + v1, ptWorld.y + v2, TRUE);
+    }
 }
 
 // 0x476680
