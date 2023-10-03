@@ -257,6 +257,127 @@ void CScreenSpellbook::EngineGameUninit()
     m_cUIManager.fUninit();
 }
 
+// 0x6692A0
+void CScreenSpellbook::OnKeyDown(SHORT nKeysFlags)
+{
+    CUIControlScrollBarSpellbookKnownSpells* pScrollBar;
+
+    if (!m_bFlashUnmemorize && !m_bFlashMemorize) {
+        CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+        for (SHORT nKeyFlag = 0; nKeyFlag < nKeysFlags; nKeyFlag++) {
+            switch (m_pVirtualKeysFlags[nKeyFlag]) {
+            case VK_TAB:
+                m_cUIManager.ForceToolTip();
+                break;
+            case VK_RETURN:
+                if (GetTopPopup() != NULL) {
+                    OnDoneButtonClick();
+                }
+                break;
+            case VK_ESCAPE:
+                if (GetTopPopup() != NULL) {
+                    OnCancelButtonClick();
+                } else {
+                    SelectEngine(g_pBaldurChitin->m_pEngineWorld);
+                }
+                break;
+            case VK_PRIOR:
+                if (GetTopPopup() == NULL) {
+                    m_cUIManager.ClearTooltip();
+
+                    pScrollBar = static_cast<CUIControlScrollBarSpellbookKnownSpells*>(m_cUIManager.GetPanel(2)->GetControl(54));
+                    if (pScrollBar != NULL) {
+                        pScrollBar->OnPageUp(-1);
+                    }
+                }
+                break;
+            case VK_NEXT:
+                if (GetTopPopup() == NULL) {
+                    m_cUIManager.ClearTooltip();
+
+                    pScrollBar = static_cast<CUIControlScrollBarSpellbookKnownSpells*>(m_cUIManager.GetPanel(2)->GetControl(54));
+                    if (pScrollBar != NULL) {
+                        pScrollBar->OnPageDown(-1);
+                    }
+                }
+                break;
+            case VK_SNAPSHOT:
+                g_pBaldurChitin->GetCurrentVideoMode()->PrintScreen();
+                break;
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+                if (GetTopPopup() == NULL) {
+                    OnPortraitLClick(m_pVirtualKeysFlags[nKeyFlag] - '1');
+                }
+                break;
+            case VK_NUMPAD1:
+            case VK_NUMPAD2:
+            case VK_NUMPAD3:
+            case VK_NUMPAD4:
+            case VK_NUMPAD5:
+            case VK_NUMPAD6:
+            case VK_NUMPAD7:
+            case VK_NUMPAD8:
+            case VK_NUMPAD9:
+                if (GetTopPopup() == NULL) {
+                    CUIControlButton* pButton = static_cast<CUIControlButton*>(m_cUIManager.GetPanel(2)->GetControl(m_pVirtualKeysFlags[nKeyFlag] - 42));
+                    if (pButton != NULL) {
+                        pButton->OnLButtonClick(CPoint(0, 0));
+                    }
+                }
+                break;
+            default:
+                if (GetTopPopup() == NULL) {
+                    for (SHORT index = 0; index < CINFGAME_KEYMAP_SIZE; index) {
+                        // __FILE__: .\Include\InfGame.h
+                        // __LINE__: 1486
+                        UTIL_ASSERT(index >= 0 && index < CINFGAME_KEYMAP_SIZE);
+
+                        if (pGame->m_pKeymap[index] == m_pVirtualKeysFlags[nKeyFlag]
+                            && pGame->m_pKeymapFlags[index] == m_bCtrlKeyDown) {
+                            switch (index) {
+                            case 0:
+                                g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(5);
+                                break;
+                            case 1:
+                                g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(8);
+                                break;
+                            case 2:
+                                g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(0);
+                                break;
+                            case 3:
+                                g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(6);
+                                break;
+                            case 4:
+                                g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(7);
+                                break;
+                            case 6:
+                                g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(9);
+                                break;
+                            case 7:
+                                g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(13);
+                                break;
+                            case 29:
+                                OnRestButtonClick();
+                                break;
+                            default:
+                                break;
+                            }
+                            break;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+    }
+}
+
 // 0x49FC40
 BOOL CScreenSpellbook::CheckMouseLButton()
 {
