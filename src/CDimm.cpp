@@ -1580,7 +1580,7 @@ int CDimm::LocalReadResource(CRes* pRes, DWORD nNumberOfBytesToRead, DWORD nOffs
                 nFixedOffset += nFixedSize * (pRes->GetID() & 0x3FFF);
             }
 
-            if (file.Open(sFileName, CFile::OpenFlags::modeRead)) {
+            if (file.Open(sFileName, CFile::OpenFlags::modeRead | CFile::OpenFlags::typeBinary)) {
                 file.Seek(nOffset + nFixedOffset, CFile::SeekPosition::begin);
                 nBytesRead = file.Read(reinterpret_cast<BYTE*>(pRes->m_pData) + nOffset, nNumberOfBytesToRead);
                 file.Close();
