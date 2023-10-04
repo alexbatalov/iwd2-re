@@ -1817,7 +1817,43 @@ void CScreenInventory::CopySpell()
 // 0x62B4C0
 void CScreenInventory::DrinkPotion()
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 4698
+    UTIL_ASSERT(pGame != NULL);
+
+    CItem* pItem;
+    STRREF description;
+    CResRef cResIcon;
+    CResRef cResItem;
+    WORD wCount;
+
+    MapButtonIdToItemInfo(m_nRequesterButtonId,
+        pItem,
+        description,
+        cResIcon,
+        cResItem,
+        wCount);
+
+    if (pItem != NULL) {
+        // FIXME: Calls `GetItemType` two times.
+        if (pItem->GetItemType() == 9 || pItem->GetItemType() == 71) {
+            LONG nCharacterId = pGame->GetCharacterId(m_nSelectedCharacter);
+
+            CAIObjectType drinker;
+            drinker.m_nInstance = nCharacterId;
+
+            CAIAction cUseItemAction(CAIAction::USEITEM, drinker, 0, 0, 0);
+            cUseItemAction.m_specificID = MapButtonIdToInventoryId(m_nRequesterButtonId);
+
+            CMessageAddAction* pMessage = new CMessageAddAction(cUseItemAction,
+                nCharacterId,
+                nCharacterId);
+
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+        }
+    }
 }
 
 // 0x62B7D0

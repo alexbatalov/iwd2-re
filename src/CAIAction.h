@@ -14,6 +14,7 @@ public:
     static const SHORT NO_ACTION;
     static const SHORT ATTACK;
     static const SHORT SPELL;
+    static const SHORT USEITEM;
     static const SHORT CONTINUE;
     static const SHORT LEADER;
     static const SHORT GROUPATTACK;
