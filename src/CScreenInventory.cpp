@@ -719,7 +719,70 @@ void CScreenInventory::TimerSynchronousUpdate()
 // 0x626390
 void CScreenInventory::OnPortraitLClick(DWORD nPortrait)
 {
-    // TODO: Incomplete.
+    // NOTE: Unsigned compare.
+    if (nPortrait < static_cast<DWORD>(g_pBaldurChitin->GetObjectGame()->GetNumCharacters())) {
+        DWORD nOldSelectedCharacter = m_nSelectedCharacter;
+        m_nSelectedCharacter = nPortrait;
+
+        CheckMultiPlayerViewable();
+
+        m_nTopGroundItem = 0;
+
+        CUIPanel* pPanel = m_cUIManager.GetPanel(2);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 1313
+        UTIL_ASSERT(pPanel != NULL);
+
+        CUIControlScrollBarInventoryGround* pScrollBar = static_cast<CUIControlScrollBarInventoryGround*>(pPanel->GetControl(66));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 1315
+        UTIL_ASSERT(pScrollBar != NULL);
+
+        pScrollBar->UpdateScrollBar();
+
+        UpdateCursorShape();
+
+        CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+        renderLock.Lock(INFINITE);
+
+        UpdateMainPanel(TRUE);
+        UpdateAppearance();
+
+        renderLock.Unlock();
+
+        pPanel->InvalidateRect(NULL);
+
+        m_cUIManager.GetPanel(1)->GetControl(nOldSelectedCharacter)->InvalidateRect();
+        m_cUIManager.GetPanel(1)->GetControl(m_nSelectedCharacter)->InvalidateRect();
+
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+            && !g_pChitin->cNetwork.GetSessionHosting()
+            && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+            CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+            // __LINE__: 1340
+            UTIL_ASSERT(pGame != NULL);
+
+            // NOTE: Uninline.
+            LONG nCharacterId = pGame->GetCharacterId(m_nSelectedCharacter);
+
+            CMessage103* pMessage = new CMessage103(TRUE,
+                g_pChitin->cNetwork.m_idLocalPlayer,
+                m_nSelectedCharacter,
+                nCharacterId,
+                nCharacterId);
+
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+        } else {
+            if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+                g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->sub_518580(g_pChitin->cNetwork.m_idLocalPlayer,
+                    m_nSelectedCharacter);
+            }
+        }
+    }
 }
 
 // 0x6265E0
