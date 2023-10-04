@@ -47,6 +47,7 @@ public:
     /* 00A0 */ SHORT GetNumVirtualKeys() override;
     /* 00A4 */ CKeyInfo* GetVirtualKeys() override;
     /* 00A8 */ BYTE* GetVirtualKeysFlags() override;
+    /* 00C0 */ void TimerAsynchronousUpdate() override;
     /* 00C4 */ void TimerSynchronousUpdate() override;
     /* 00E0 */ void OnPortraitLClick(DWORD nPortrait) override;
     /* 00F0 */ void OnRestButtonClick() override;

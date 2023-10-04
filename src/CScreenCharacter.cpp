@@ -1148,6 +1148,15 @@ void CScreenCharacter::ResetCustomSoundsPanel(CUIPanel* pPanel, CGameSprite* pSp
     UpdateHelp(pPanel->m_nID, 8, 11315);
 }
 
+// 0x66A540
+void CScreenCharacter::TimerAsynchronousUpdate()
+{
+    g_pBaldurChitin->m_pEngineWorld->AsynchronousUpdate(FALSE);
+    UpdateCursorShape(0);
+    m_cUIManager.TimerAsynchronousUpdate();
+    g_pBaldurChitin->GetObjectCursor()->CursorUpdate(pVidMode);
+}
+
 // 0x5DBA80
 void CScreenCharacter::TimerSynchronousUpdate()
 {
