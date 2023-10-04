@@ -899,7 +899,26 @@ LONG CScreenInventory::FetchGroundPile(SHORT nPortraitId, BOOL bEvenIfDead)
 // 0x626AE0
 void CScreenInventory::FlushGroundPiles()
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 1665
+    UTIL_ASSERT(pGame != NULL);
+
+    for (int index = 0; index < 6; index++) {
+        if (m_nGroundPile[index] != 0
+            && m_nGroundPile[index] != CGameObjectArray::INVALID_INDEX) {
+            CMessageContainerAddItem* pMessage = new CMessageContainerAddItem(CItem(),
+                SHORT_MAX,
+                TRUE,
+                m_nGroundPile[index],
+                m_nGroundPile[index]);
+
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+
+            m_nGroundPile[index] = 0;
+        }
+    }
 }
 
 // 0x626C70
