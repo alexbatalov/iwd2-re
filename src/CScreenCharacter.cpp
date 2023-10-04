@@ -433,6 +433,131 @@ void CScreenCharacter::EngineDeactivated()
     }
 }
 
+// 0x5D6C60
+void CScreenCharacter::EngineGameInit()
+{
+    m_cUIManager.fInit(this, CResRef("GUIREC"), g_pBaldurChitin->field_4A28);
+
+    CPoint pt;
+    if (g_pBaldurChitin->field_4A28) {
+        pt.x = CVideo::SCREENWIDTH / 2 - CBaldurChitin::DEFAULT_SCREEN_WIDTH;
+        pt.y = CVideo::SCREENHEIGHT / 2 - CBaldurChitin::DEFAULT_SCREEN_HEIGHT;
+    } else {
+        pt.x = (CVideo::SCREENWIDTH - CBaldurChitin::DEFAULT_SCREEN_WIDTH) / 2;
+        pt.y = (CVideo::SCREENHEIGHT - CBaldurChitin::DEFAULT_SCREEN_HEIGHT) / 2;
+    }
+
+    m_cUIManager.ShiftPanels(pt);
+
+    for (int index = 0; index < 4; index++) {
+        m_cUIManager.AddPanel(&(g_pBaldurChitin->field_49B4[index]));
+    }
+
+    m_nSelectedCharacter = 0;
+    m_pCurrentScrollBar = NULL;
+    m_pScripts = NULL;
+    m_nScriptIndex = -1;
+    m_pCharacters = NULL;
+    m_pPortraits = NULL;
+    m_pSounds = NULL;
+    m_pTempBaseStats = NULL;
+    m_pTempDerivedStats = NULL;
+    m_pBeforeLevelUpDerivedStats = NULL;
+
+    field_866 = 0;
+    field_86A = 0;
+
+    m_cUIManager.GetPanel(4)->SetActive(FALSE);
+    m_cUIManager.GetPanel(6)->SetActive(FALSE);
+    m_cUIManager.GetPanel(7)->SetActive(FALSE);
+    m_cUIManager.GetPanel(8)->SetActive(FALSE);
+    m_cUIManager.GetPanel(16)->SetActive(FALSE);
+    m_cUIManager.GetPanel(9)->SetActive(FALSE);
+    m_cUIManager.GetPanel(10)->SetActive(FALSE);
+    m_cUIManager.GetPanel(11)->SetActive(FALSE);
+    m_cUIManager.GetPanel(12)->SetActive(FALSE);
+    m_cUIManager.GetPanel(13)->SetActive(FALSE);
+    m_cUIManager.GetPanel(17)->SetActive(FALSE);
+    m_cUIManager.GetPanel(18)->SetActive(FALSE);
+    m_cUIManager.GetPanel(19)->SetActive(FALSE);
+    m_cUIManager.GetPanel(20)->SetActive(FALSE);
+    m_cUIManager.GetPanel(11)->SetActive(FALSE);
+    m_cUIManager.GetPanel(50)->SetActive(FALSE);
+    m_cUIManager.GetPanel(51)->SetActive(FALSE);
+    m_cUIManager.GetPanel(52)->SetActive(FALSE);
+    m_cUIManager.GetPanel(53)->SetActive(FALSE);
+    m_cUIManager.GetPanel(54)->SetActive(FALSE);
+    m_cUIManager.GetPanel(55)->SetActive(FALSE);
+    m_cUIManager.GetPanel(56)->SetActive(FALSE);
+    m_cUIManager.GetPanel(57)->SetActive(FALSE);
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(2);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 797
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlBase* pControl;
+
+    pControl = pPanel->GetControl(0x10000028);
+    UTIL_ASSERT(pControl != NULL) // 801
+    pControl->SetToolTipStrRef(17183, -1, -1); // "Armor Class"
+
+    pControl = pPanel->GetControl(0x10000029);
+    UTIL_ASSERT(pControl != NULL) // 805
+    pControl->SetToolTipStrRef(17184, -1, -1); // "Current Hit Points"
+
+    pControl = pPanel->GetControl(0x1000002A);
+    UTIL_ASSERT(pControl != NULL) // 809
+    pControl->SetToolTipStrRef(17378, -1, -1); // "Maximum Hit Points"
+
+    pControl = pPanel->GetControl(0x1000002F);
+    UTIL_ASSERT(pControl != NULL) // 815
+    pControl->SetToolTipStrRef(1145, -1, -1); // "Strength"
+
+    pControl = pPanel->GetControl(0x10000009);
+    UTIL_ASSERT(pControl != NULL) // 819
+    pControl->SetToolTipStrRef(1151, -1, -1); // "Dexterity"
+
+    pControl = pPanel->GetControl(0x1000000A);
+    UTIL_ASSERT(pControl != NULL) // 823
+    pControl->SetToolTipStrRef(1178, -1, -1); // "Constitution"
+
+    pControl = pPanel->GetControl(0x1000000B);
+    UTIL_ASSERT(pControl != NULL) // 827
+    pControl->SetToolTipStrRef(1179, -1, -1); // "Intelligence"
+
+    pControl = pPanel->GetControl(0x1000000C);
+    UTIL_ASSERT(pControl != NULL) // 831
+    pControl->SetToolTipStrRef(1180, -1, -1); // "Wisdom"
+
+    pControl = pPanel->GetControl(0x1000000D);
+    UTIL_ASSERT(pControl != NULL) // 835
+    pControl->SetToolTipStrRef(1181, -1, -1); // "Charisma"
+
+    pControl = pPanel->GetControl(60);
+    UTIL_ASSERT(pControl != NULL) // 841
+    pControl->SetToolTipStrRef(40316, -1, -1); // "General"
+
+    pControl = pPanel->GetControl(61);
+    UTIL_ASSERT(pControl != NULL) // 845
+    pControl->SetToolTipStrRef(40317, -1, -1); // "Weapons and Armor"
+
+    pControl = pPanel->GetControl(62);
+    UTIL_ASSERT(pControl != NULL) // 849
+    pControl->SetToolTipStrRef(40318, -1, -1); // "Skills and Feats"
+
+    pControl = pPanel->GetControl(63);
+    UTIL_ASSERT(pControl != NULL) // 853
+    pControl->SetToolTipStrRef(33500, -1, -1); // "Miscellaneous"
+}
+
+// 0x5D72C0
+void CScreenCharacter::EngineGameUninit()
+{
+    m_cUIManager.fUninit();
+}
+
 // 0x5D78E0
 void CScreenCharacter::OnPortraitLClick(DWORD nPortrait)
 {
