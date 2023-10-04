@@ -347,6 +347,9 @@ class CGameSprite;
 class CGameSpriteGroupedSpellList;
 class CGameSpriteSpells;
 
+#pragma pack(push)
+#pragma pack(2)
+
 class CDerivedStatsTemplate {
 public:
     /* 0000 */ DWORD m_generalState;
@@ -469,6 +472,8 @@ public:
     /* 0144 */ BYTE m_nSkills[64];
     /* 0184 */ int field_184;
 };
+
+#pragma pack(pop)
 
 class CDerivedStats : public CDerivedStatsTemplate {
 public:
