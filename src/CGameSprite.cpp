@@ -1731,6 +1731,14 @@ void CGameSprite::SetMonkAbilities()
     }
 }
 
+// 0x723CC0
+INT CGameSprite::GetAC()
+{
+    // TODO: Incomplete.
+
+    return 0;
+}
+
 // 0x72DE60
 void CGameSprite::sub_72DE60()
 {

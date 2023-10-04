@@ -310,6 +310,7 @@ public:
     void CheckSequence(BYTE& sequence);
     BOOL HaveUnexportableItems();
     void SetMonkAbilities();
+    INT GetAC();
     void sub_72DE60();
     void sub_71E760(CDerivedStats& DStats, int a2);
     int sub_71F6E0();

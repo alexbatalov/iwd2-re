@@ -67,7 +67,7 @@ public:
     LONG FetchGroundPile(SHORT nPortraitId, BOOL bEvenIfDead);
     void FlushGroundPiles();
     void EnableMainPanel(BOOL bEnable);
-    void UpdateMainPanel(BOOL a1);
+    void UpdateMainPanel(BOOL bClearError);
     void ResetPopupPanel(DWORD dwPanelId);
     void UpdatePopupPanel(DWORD dwPanelId);
     CUIPanel* GetTopPopup();
@@ -153,9 +153,9 @@ public:
     /* 052E */ CVidFont m_preLoadFontRealms;
     /* 0A2E */ CVidFont m_preLoadFontStnSml;
     /* 0F2E */ CVidFont m_preLoadFontTool;
-    /* 142E */ C2DArray field_142E;
-    /* 1452 */ C2DArray field_1452;
-    /* 1476 */ C2DArray field_1476;
+    /* 142E */ C2DArray m_tHairColor;
+    /* 1452 */ C2DArray m_tSkinColor;
+    /* 1476 */ C2DArray m_tSubRace;
 };
 
 class CUIControlButtonInventorySlot : public CUIControlButton {

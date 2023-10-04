@@ -960,9 +960,161 @@ void CScreenInventory::EnableMainPanel(BOOL bEnable)
 }
 
 // 0x626DD0
-void CScreenInventory::UpdateMainPanel(BOOL a1)
+void CScreenInventory::UpdateMainPanel(BOOL bClearError)
 {
-    // TODO: Incomplete.
+    CString sClass;
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    LONG nCharacterId = pGame->GetCharacterId(m_nSelectedCharacter);
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        CAIObjectType& typeAI = pSprite->m_liveTypeAI;
+        INT nHP = pSprite->GetBaseStats()->m_hitPoints;
+        INT nPartyGold = pGame->m_nPartyGold;
+        CCreatureFileHeader* pBStats = pSprite->GetBaseStats();
+        CDerivedStats& DStats = *pSprite->GetDerivedStats();
+
+        CUIPanel* pPanel = m_cUIManager.GetPanel(2);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 1788
+        UTIL_ASSERT(pPanel != NULL);
+
+        m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(66));
+
+        if (pBStats->m_name != -1) {
+            UpdateLabel(pPanel, 0x10000032, "%s", (LPCSTR)FetchString(pBStats->m_name));
+        } else {
+            UpdateLabel(pPanel, 0x10000032, "%s", (LPCSTR)pSprite->GetName());
+        }
+
+        pGame->GetRuleTables().GetClassStringLower(DStats.GetBestClass(),
+            pBStats->m_specialization,
+            pBStats->m_flags,
+            sClass,
+            1);
+
+        UpdateLabel(pPanel, 0x10000040, "%d", nPartyGold);
+
+        if (bClearError) {
+            SetErrorString(-1, RGB(255, 255, 255));
+        }
+
+        CString sRace = pGame->GetRuleTables().GetRaceString(typeAI.m_nRace, 0);
+        CString sSubRaceFile = pGame->GetRuleTables().m_tSrTable.GetAt(CString("SRFILE"), sRace);
+        if (m_tSubRace.GetResRef() != sSubRaceFile) {
+            m_tSubRace.Load(CResRef(sSubRaceFile));
+        }
+
+        INT nSubRaceListIndex = atol(m_tSubRace.GetAt(CPoint(0, typeAI.m_nSubRace)));
+
+        CString sColorFile;
+
+        sColorFile = pGame->GetRuleTables().m_tSrList.GetAt(CPoint(5, nSubRaceListIndex));
+        if (m_tHairColor.GetResRef() != sColorFile) {
+            m_tHairColor.Load(CResRef(sColorFile));
+        }
+
+        sColorFile = pGame->GetRuleTables().m_tSrList.GetAt(CPoint(6, nSubRaceListIndex));
+        if (m_tSkinColor.GetResRef() != sColorFile) {
+            m_tSkinColor.Load(CResRef(sColorFile));
+        }
+
+        if (m_bMultiPlayerViewable) {
+            UpdateLabel(pPanel, 0x10000038, "%d", pSprite->GetAC());
+
+            if (DStats.m_spellStates[SPLSTATE_SUPPRESS_HP_INFO]) {
+                UpdateLabel(pPanel, 0x10000039, "%c", '?');
+            } else {
+                UpdateLabel(pPanel, 0x10000039, "%d", pBStats->m_hitPoints);
+            }
+
+            UpdateLabel(pPanel, 0x1000003A, "%d", DStats.m_nMaxHitPoints);
+        } else {
+            UpdateLabel(pPanel, 0x10000038, "");
+            UpdateLabel(pPanel, 0x10000039, "");
+            UpdateLabel(pPanel, 0x1000003A, "");
+        }
+
+        INT nCurrentWeight;
+        INT nTotalWeight;
+        INT nUsedSlots;
+        INT nTotalSlots;
+        if (m_bMultiPlayerViewable) {
+            nCurrentWeight = pSprite->GetCarriedWeight();
+            nTotalWeight = static_cast<INT>(static_cast<float>(pGame->GetRuleTables().GetEncumbranceMod(pSprite)) / 100.0f
+                * static_cast<float>(atol(pGame->GetRuleTables().m_tStrengthMod.GetAt(CPoint(3, DStats.m_nSTR)))));
+            pSprite->GetNumInventoryPersonalSlots(nUsedSlots, nTotalSlots);
+        } else {
+            nCurrentWeight = 0;
+            nTotalWeight = 0;
+            nUsedSlots = 0;
+            nTotalSlots = 0;
+        }
+
+        CUIControlLabel* pLabel = static_cast<CUIControlLabel*>(pPanel->GetControl(0x10000042));
+
+        UpdateLabel(pPanel,
+            0x10000042,
+            "%d / %d %s",
+            nCurrentWeight,
+            nTotalWeight,
+            FetchString(39537)); // "lb."
+
+        if (nCurrentWeight == 0) {
+            pLabel->SetForegroundColor(RGB(255, 255, 255));
+        } else {
+            float fRatio = static_cast<float>(nCurrentWeight) / static_cast<float>(nTotalSlots);
+            if (fRatio < 0.33f) {
+                pLabel->SetForegroundColor(RGB(0, 255, 0));
+            } else if (fRatio < 0.66f) {
+                pLabel->SetForegroundColor(RGB(255, 255, 0));
+            } else {
+                pLabel->SetForegroundColor(RGB(255, 0, 0));
+            }
+        }
+
+        CUIControlButtonCharacterPortrait* pPortrait = static_cast<CUIControlButtonCharacterPortrait*>(pPanel->GetControl(84));
+        pPortrait->SetPortrait(CResRef(pBStats->m_portraitLarge));
+
+        for (DWORD nButtonID = 109; nButtonID <= 112; nButtonID++) {
+            CUIControlButton3State* pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(nButtonID));
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+            // __LINE__: 1914
+            UTIL_ASSERT(pButton != NULL);
+
+            pButton->SetSelected(pSprite->field_4C68 == nButtonID - 109);
+        }
+
+        pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+
+        if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL
+            && nHP < 0) {
+            CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+            // __LINE__: 1932
+            UTIL_ASSERT(pWorld != NULL);
+
+            if (g_pBaldurChitin->GetActiveEngine() != pWorld) {
+                g_pBaldurChitin->GetActiveEngine()->SelectEngine(pWorld);
+            }
+        }
+    }
 }
 
 // 0x627560
@@ -3015,10 +3167,10 @@ BOOL CUIControlButtonInventoryColorChoice::GetColorRange(BYTE& colorRange)
         }
         return FALSE;
     case 3:
-        colorRange = static_cast<BYTE>(atol(pInventory->field_1452.GetAt(CPoint(0, m_nID))));
+        colorRange = static_cast<BYTE>(atol(pInventory->m_tSkinColor.GetAt(CPoint(0, m_nID))));
         return TRUE;
     case 6:
-        colorRange = static_cast<BYTE>(atol(pInventory->field_142E.GetAt(CPoint(0, m_nID))));
+        colorRange = static_cast<BYTE>(atol(pInventory->m_tHairColor.GetAt(CPoint(0, m_nID))));
         return TRUE;
     default:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
