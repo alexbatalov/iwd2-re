@@ -3251,7 +3251,71 @@ void CUIControlButtonInventorySlot::OnLButtonDoubleClick(CPoint pt)
 // 0x62DBF0
 void CUIControlButtonInventorySlot::OnRButtonClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    CScreenInventory* pInventory = g_pBaldurChitin->m_pEngineInventory;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 6767
+    UTIL_ASSERT(pInventory != NULL);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 6769
+    UTIL_ASSERT(pGame != NULL);
+
+    if (pInventory->m_bMultiPlayerViewable == TRUE) {
+        CSingleLock renderLock(&(pInventory->GetManager()->field_36), FALSE);
+        renderLock.Lock(INFINITE);
+
+        LONG nCharacterId = pInventory->GetSelectedCharacter();
+
+        CGameSprite* pSprite;
+
+        BYTE rc;
+        do {
+            rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+                CGameObjectArray::THREAD_1,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            BOOLEAN bIsLocal;
+            if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+                bIsLocal = g_pChitin->cNetwork.m_idLocalPlayer == pSprite->m_remotePlayerID;
+            } else {
+                bIsLocal = TRUE;
+            }
+
+            pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+                CGameObjectArray::THREAD_1,
+                INFINITE);
+
+            if (bIsLocal) {
+                CItem* pItem;
+                STRREF description;
+                CResRef cResIcon;
+                CResRef cResItem;
+                WORD wCount;
+
+                if ((m_nID < 68 || m_nID > 72) && m_nID != 81) {
+                    pInventory->MapButtonIdToItemInfo(pInventory->m_nRequesterButtonId,
+                        pItem,
+                        description,
+                        cResIcon,
+                        cResItem,
+                        wCount);
+
+                    if (pItem != NULL) {
+                        pInventory->m_nRequesterButtonId = m_nID;
+                        pInventory->SummonPopup(5);
+                    }
+                }
+            }
+        }
+
+        renderLock.Unlock();
+    }
 }
 
 // 0x62DDE0
