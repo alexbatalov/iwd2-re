@@ -1141,7 +1141,40 @@ void CScreenInventory::SummonPopup(DWORD dwPopupId)
 // 0x627990
 void CScreenInventory::DismissPopup()
 {
-    // TODO: Incomplete.
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
+
+    CUIPanel* pPanel = m_lPopupStack.RemoveTail();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenLoad.cpp
+    // __LINE__: 2274
+    UTIL_ASSERT(pPanel != NULL);
+
+    // NOTE: Uninline.
+    ShowPopupPanel(pPanel->m_nID, FALSE);
+
+    CUIPanel* pMainPanel = m_cUIManager.GetPanel(2);
+    pMainPanel->InvalidateRect(NULL);
+
+    if (m_lPopupStack.GetTailPosition() != NULL) {
+        CUIPanel* pPanel = m_lPopupStack.GetTail();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenLoad.cpp
+        // __LINE__: 2291
+        UTIL_ASSERT(pPanel != NULL);
+
+        // NOTE: Uninline.
+        ShowPopupPanel(pPanel->m_nID, TRUE);
+
+        // NOTE: Uninline.
+        EnablePopupPanel(pPanel->m_nID, TRUE);
+
+        // NOTE: Uninline.
+        UpdatePopupPanel(pPanel->m_nID);
+    } else {
+        EnableMainPanel(TRUE);
+        UpdateMainPanel(TRUE);
+    }
 }
 
 // 0x627C20
