@@ -2,6 +2,7 @@
 
 #include "CBaldurChitin.h"
 #include "CGameAnimationTypeCharacter.h"
+#include "CGameArea.h"
 #include "CGameSprite.h"
 #include "CIcon.h"
 #include "CInfCursor.h"
@@ -2940,8 +2941,116 @@ BOOL CUIControlButtonInventoryAppearance::OnLButtonDown(CPoint pt)
 // 0x62E7D0
 BOOL CUIControlButtonInventoryAppearance::Render(BOOL bForce)
 {
-    // TODO: Incomplete.
+    // 0x8F3FC4
+    static SHORT nPrevFrame;
 
+    // FIXME: Unused.
+    CVidCell v1;
+    CVidCell v2;
+    CVidCell v3;
+    CVidCell v4;
+    CString v5;
+    CString v6;
+    CString v7;
+    CString v8;
+
+    if (!m_bActive && !m_bInactiveRender) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount == 0 && !bForce) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount != 0) {
+        CSingleLock renderLock(&(m_pPanel->m_pManager->field_56), FALSE);
+        renderLock.Lock(INFINITE);
+        m_nRenderCount--;
+        renderLock.Unlock();
+    }
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    CScreenInventory* pInventory = g_pBaldurChitin->m_pEngineInventory;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 7364
+    UTIL_ASSERT(pGame != NULL && pInventory != NULL);
+
+    INT nCharacterId = pGame->GetCharacterId(pInventory->GetSelectedCharacter());
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+            CGameObjectArray::THREAD_1,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc != CGameObjectArray::SUCCESS) {
+        return FALSE;
+    }
+
+    if (pInventory->m_bMultiPlayerViewable == TRUE && pSprite->m_animation.m_animation != NULL) {
+        CSingleLock renderLock(&(m_pPanel->m_pManager->field_56), FALSE);
+        renderLock.Lock(INFINITE);
+
+        CPoint ptPos(m_pPanel->m_ptOrigin.x + m_ptOrigin.x + m_size.cx / 2,
+            m_pPanel->m_ptOrigin.y + m_ptOrigin.y + m_size.cy / 2);
+        CSize size(128 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1),
+            160 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1));
+
+        CRect rPreview(ptPos, size);
+
+        CRect rClip;
+        rClip.IntersectRect(rPreview, m_rDirty);
+
+        // FIXME: Creates area on every render.
+        CGameArea* pArea = new CGameArea(0);
+        CInfinity* pInfinity = pArea->GetInfinity();
+        pInfinity->pVidMode = g_pBaldurChitin->GetCurrentVideoMode();
+        pInfinity->rViewPort.SetRect(0, 0, CVideo::SCREENWIDTH, CVideo::SCREENHEIGHT);
+
+        SHORT nCurrentFrame = pSprite->m_animation.m_animation->GetCurrentFrame();
+        if (nCurrentFrame != nPrevFrame) {
+            pInventory->m_animation.m_animation->IncrementFrame();
+            if (pInventory->m_animation.m_animation->IsEndOfSequence()) {
+                pInventory->m_animation.SetSequence(pSprite->GetIdleSequence());
+            }
+        }
+        nPrevFrame = nCurrentFrame;
+
+        CRect rFx;
+        CPoint ptReference;
+        pInventory->m_animation.CalculateFxRect(rFx, ptReference, 0);
+
+        ptPos.x += pInfinity->nCurrentX;
+        ptPos.y += pInfinity->nCurrentY + 25;
+
+        pInventory->m_animation.Render(pInfinity,
+            pInfinity->pVidMode,
+            0,
+            rFx,
+            ptPos,
+            ptReference,
+            0x20000,
+            RGB(255, 255, 255),
+            rClip,
+            FALSE,
+            FALSE,
+            0,
+            0);
+
+        delete pArea;
+
+        renderLock.Unlock();
+
+        pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+            CGameObjectArray::THREAD_1,
+            INFINITE);
+    }
+
+    // NOTE: Always returns `FALSE` which is a bit odd.
     return FALSE;
 }
 
