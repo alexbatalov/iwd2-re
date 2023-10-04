@@ -1603,7 +1603,77 @@ BOOL CScreenInventory::IsUseButtonActive()
 // 0x629B90
 void CScreenInventory::OnUseButtonClick()
 {
-    // TODO: Incomplete.
+    CSingleLock renderLock(&(GetManager()->field_36), FALSE);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 3688
+    UTIL_ASSERT(pGame != NULL);
+
+    CItem* pItem;
+    STRREF description;
+    CResRef cResIcon;
+    CResRef cResItem;
+    WORD wCount;
+
+    MapButtonIdToItemInfo(m_nRequesterButtonId,
+        pItem,
+        description,
+        cResIcon,
+        cResItem,
+        wCount);
+
+    if (pItem != NULL) {
+        if (IsUseButtonActive()) {
+            switch (m_nUseButtonMode) {
+            case 0:
+            case 2:
+            case 4:
+                DrinkPotion();
+                renderLock.Lock(INFINITE);
+                DismissPopup();
+                renderLock.Unlock();
+                PlayGUISound(CResRef("GAM_07"));
+                break;
+            case 1:
+                CopySpell();
+                renderLock.Lock(INFINITE);
+                DismissPopup();
+                renderLock.Unlock();
+                break;
+            case 3:
+                if (1) {
+                    LONG nCharacterId = pGame->GetCharacterId(m_nSelectedCharacter);
+
+                    CGameSprite* pSprite;
+
+                    BYTE rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        reinterpret_cast<CGameObject**>(&pSprite),
+                        INFINITE);
+                    if (rc == CGameObjectArray::SUCCESS) {
+                        g_pBaldurChitin->m_pEngineWorld->StartStore(pSprite->m_liveTypeAI,
+                            pSprite->m_liveTypeAI,
+                            pItem->cResRef,
+                            TRUE);
+
+                        pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+                            CGameObjectArray::THREAD_ASYNCH,
+                            INFINITE);
+                    }
+                }
+                break;
+            }
+        }
+    } else {
+        renderLock.Lock(INFINITE);
+
+        DismissPopup();
+        SetErrorString(10161, RGB(255, 255, 255));
+
+        renderLock.Unlock();
+    }
 }
 
 // 0x629DB0
