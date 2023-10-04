@@ -1828,7 +1828,79 @@ BOOL CScreenInventory::IsErrorButtonClickable(INT nButton)
 // 0x62A2F0
 void CScreenInventory::OnErrorButtonClick(INT nButton)
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 4199
+    UTIL_ASSERT(pGame != NULL);
+
+    CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    if (IsErrorButtonClickable(nButton)) {
+        switch (m_nErrorState) {
+        case 0:
+        case 2:
+        case 4:
+            switch (nButton) {
+            case 0:
+                DismissPopup();
+                break;
+            }
+            break;
+        case 1:
+            switch (nButton) {
+            case 0:
+                DismissPopup();
+
+                CInfGame::m_bHealPartyOnRest = FALSE;
+                pGame->RestParty(1, 0);
+
+                break;
+            case 1:
+                DismissPopup();
+
+                CInfGame::m_bHealPartyOnRest = TRUE;
+                pGame->RestParty(1, 0);
+                CInfGame::m_bHealPartyOnRest = FALSE;
+                break;
+            case 2:
+                DismissPopup();
+                break;
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+                // __LINE__: 4230
+                UTIL_ASSERT(FALSE);
+            }
+            break;
+        case 3:
+            switch (nButton) {
+            case 0:
+                DismissPopup();
+                IdentifyWithSpell();
+                PlayGUISound(CResRef("CAS_P04"));
+                break;
+            case 1:
+                DismissPopup();
+                IdentifyWithScroll();
+                PlayGUISound(CResRef("CAS_P04"));
+                break;
+            case 2:
+                DismissPopup();
+                break;
+            }
+            break;
+        case 5:
+            switch (nButton) {
+            case 0:
+                DismissPopup();
+                break;
+            }
+            break;
+        }
+    }
+
+    renderLock.Unlock();
 }
 
 // 0x62A4B0
