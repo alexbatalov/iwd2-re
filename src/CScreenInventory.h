@@ -71,6 +71,8 @@ public:
     void ResetPopupPanel(DWORD dwPanelId);
     void UpdatePopupPanel(DWORD dwPanelId);
     CUIPanel* GetTopPopup();
+    void ShowPopupPanel(DWORD dwPanelId, BOOL bShow);
+    void EnablePopupPanel(DWORD dwPanelId, BOOL bEnable);
     void SummonPopup(DWORD dwPopupId);
     void DismissPopup();
     void ResetHistoryPanel(CUIPanel* pPanel);
