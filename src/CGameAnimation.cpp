@@ -235,3 +235,13 @@ void CGameAnimation::SetSequence(SHORT nSequence)
 
     m_animation->SetSequence(nSequence);
 }
+
+// NOTE: Inlined.
+BOOLEAN CGameAnimation::GetCurrentResRef(CString& resBody, CString& resWeapon, CString& resShield, CString& resHelmet)
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2120
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->GetCurrentResRef(resBody, resWeapon, resShield, resHelmet);
+}

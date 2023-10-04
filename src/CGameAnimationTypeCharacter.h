@@ -89,7 +89,7 @@ public:
     /* 1441 */ unsigned char field_1441;
     /* 1442 */ unsigned char field_1442;
     /* 1443 */ unsigned char field_1443;
-    /* 1444 */ unsigned char field_1444;
+    /* 1444 */ int field_1444;
     /* 1448 */ unsigned char field_1448;
     /* 144C */ CHAR field_144C;
     /* 144D */ unsigned char field_144D;

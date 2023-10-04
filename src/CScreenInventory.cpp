@@ -1,6 +1,7 @@
 #include "CScreenInventory.h"
 
 #include "CBaldurChitin.h"
+#include "CGameAnimationTypeCharacter.h"
 #include "CGameSprite.h"
 #include "CIcon.h"
 #include "CInfCursor.h"
@@ -2542,6 +2543,65 @@ BOOL CScreenInventory::MapButtonIdToItemInfo(INT nButton, CItem*& pItem, STRREF&
 
     pItem = NULL;
     return FALSE;
+}
+
+// 0x62EEA0
+void CScreenInventory::UpdateAppearance()
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    SHORT nPortrait = m_nSelectedCharacter;
+
+    // NOTE: Uninline.
+    LONG nCharacterId = pGame->GetCharacterId(nPortrait);
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if ((pSprite->m_derivedStats.m_generalState & STATE_DEAD) == 0) {
+            CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+            renderLock.Lock(INFINITE);
+
+            // NOTE: Uninline.
+            m_animation.SetAnimationType(pSprite->GetBaseStats()->m_animationType,
+                pSprite->GetBaseStats()->m_colors,
+                2);
+
+            // NOTE: Probably unsafe cast.
+            static_cast<CGameAnimationTypeCharacter*>(m_animation.m_animation)->field_1444 = g_pBaldurChitin->field_4A28;
+
+            CGameAnimationType* animation = pSprite->m_animation.m_animation;
+            pSprite->m_animation.m_animation = m_animation.m_animation;
+            pSprite->UnequipAll(TRUE);
+            pSprite->EquipAll(TRUE);
+            pSprite->m_animation.m_animation = animation;
+
+            // FIXME: Unused.
+            CString resBody;
+            CString resWeapon;
+            CString resShield;
+            CString resHelmet;
+
+            // NOTE: Uninline.
+            m_animation.GetCurrentResRef(resBody, resWeapon, resShield, resHelmet);
+
+            // NOTE: Uninline.
+            m_animation.SetSequence(pSprite->GetIdleSequence());
+
+            renderLock.Unlock();
+        }
+
+        pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
 }
 
 // 0x62F100

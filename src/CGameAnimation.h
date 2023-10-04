@@ -33,6 +33,7 @@ public:
     BOOL IsEndOfSequence();
     void Render(CInfinity* pInfinity, CVidMode* pVidMode, INT nSurface, const CRect& rectFX, const CPoint& ptNewPos, const CPoint& ptReference, DWORD dwRenderFlags, COLORREF rgbTintColor, const CRect& rGCBounds, BOOL bDithered, BOOL bFadeOut, LONG posZ, BYTE transparency);
     void SetSequence(SHORT nSequence);
+    BOOLEAN GetCurrentResRef(CString& resBody, CString& resWeapon, CString& resShield, CString& resHelmet);
 
     /* 0004 */ CGameAnimationType* m_animation;
     /* 0008 */ SHORT m_nSequence;
