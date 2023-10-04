@@ -1679,7 +1679,55 @@ void CScreenInventory::OnUseButtonClick()
 // 0x629DB0
 void CScreenInventory::OnAbilitiesButtonClick()
 {
-    // TODO: Incomplete.
+    CSingleLock renderLock(&(GetManager()->field_36), FALSE);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 3796
+    UTIL_ASSERT(pGame != NULL);
+
+    CItem* pItem;
+    STRREF description;
+    CResRef cResIcon;
+    CResRef cResItem;
+    WORD wCount;
+
+    MapButtonIdToItemInfo(m_nRequesterButtonId,
+        pItem,
+        description,
+        cResIcon,
+        cResItem,
+        wCount);
+
+    if (pItem != NULL) {
+        if (IsAbilitiesButtonActive()) {
+            switch (m_nAbilitiesButtonMode) {
+            case 0:
+                renderLock.Lock(INFINITE);
+                SummonPopup(6);
+                renderLock.Unlock();
+                break;
+            case 1:
+                renderLock.Lock(INFINITE);
+                m_nErrorState = 3;
+                m_strErrorText = 19394;
+                m_strErrorButtonText[0] = 17105;
+                m_strErrorButtonText[1] = 17106;
+                m_strErrorButtonText[2] = 13727;
+                SummonPopup(9);
+                renderLock.Unlock();
+                break;
+            }
+        }
+    } else {
+        renderLock.Lock(INFINITE);
+
+        DismissPopup();
+        SetErrorString(10161, RGB(255, 255, 255));
+
+        renderLock.Unlock();
+    }
 }
 
 // 0x629F20
