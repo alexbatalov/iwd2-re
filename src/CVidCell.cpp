@@ -1598,7 +1598,7 @@ BOOL CVidCell::Blt8To32(DWORD* pSurface, LONG lPitch, const CPoint& pt, const CR
             nSkipDestH--;
         }
 
-        int nBltH = min(nHeight - ptSource.y, rClip.bottom - pt.y);
+        int nBltH = min(nBltHeight - max(rClip.top - pt.y, 0), rClip.bottom - pt.y);
         while (nBltH > 0) {
             int nRemainingWidth = nWidth;
 
