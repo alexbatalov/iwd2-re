@@ -286,7 +286,29 @@ CScreenCharacter::CScreenCharacter()
 // 0x5D63B0
 CScreenCharacter::~CScreenCharacter()
 {
-    // TODO: Incomplete.
+    if (m_pTempDerivedStats != NULL) {
+        delete m_pTempDerivedStats;
+        m_pTempDerivedStats = NULL;
+    }
+
+    if (m_pBeforeLevelUpDerivedStats != NULL) {
+        delete m_pBeforeLevelUpDerivedStats;
+        m_pBeforeLevelUpDerivedStats = NULL;
+
+        for (UINT nLevel = 0; nLevel < CSPELLLIST_MAX_LEVELS; nLevel++) {
+            if (m_spells.m_lists[nLevel].m_List.size() != 0) {
+                m_spells.m_lists[nLevel].m_List.clear();
+                m_spells.m_lists[nLevel].field_14 = 0;
+                m_spells.m_lists[nLevel].field_18 = 0;
+            }
+        }
+        m_spells.m_nHighestLevel = 0;
+    }
+
+    if (m_pTempBaseStats != NULL) {
+        delete m_pTempBaseStats;
+        m_pTempBaseStats = NULL;
+    }
 }
 
 // 0x49FC40

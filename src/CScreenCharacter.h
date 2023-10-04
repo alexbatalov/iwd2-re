@@ -33,7 +33,7 @@ public:
     static CString SAVE_NAME;
 
     CScreenCharacter();
-    ~CScreenCharacter();
+    /* 0004 */ ~CScreenCharacter() override;
     /* 0014 */ void EngineActivated() override;
     /* 0018 */ void EngineDeactivated() override;
     /* 0030 */ BOOL CheckSystemKeyCtrl() override;
