@@ -2609,9 +2609,11 @@ void CScreenInventory::UpdateAbilitiesPanel()
 }
 
 // 0x630930
-void CScreenInventory::SwapWithAppearance()
+BOOL CScreenInventory::SwapWithAppearance()
 {
     // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // 0x630BD0
@@ -3056,14 +3058,19 @@ void CScreenInventory::EndSwap()
 }
 
 // 0x62F360
-void CScreenInventory::SwapWithSlot(INT nButtonId, BOOL bShowError, WORD wCount, BOOL bAutoStacking)
+BOOL CScreenInventory::SwapWithSlot(INT nButtonId, BOOL bShowError, WORD wCount, BOOL bAutoStacking)
 {
+    // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // 0x6305B0
-void CScreenInventory::SwapWithPortrait(INT nButtonId, BOOL bShowError)
+BOOL CScreenInventory::SwapWithPortrait(INT nButtonId, BOOL bShowError)
 {
     // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // 0x6312D0
@@ -3189,7 +3196,50 @@ BOOL CUIControlButtonInventorySlot::OnLButtonDown(CPoint pt)
 // 0x62D890
 void CUIControlButtonInventorySlot::OnLButtonUp(CPoint pt)
 {
-    // TODO: Incomplete.
+    CScreenInventory* pInventory = g_pBaldurChitin->m_pEngineInventory;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 6585
+    UTIL_ASSERT(pInventory != NULL);
+
+    if (pInventory->m_bMultiPlayerViewable && field_666) {
+        if (IsOver(pt)) {
+            if (field_66A) {
+                pInventory->BeginSwap();
+                pInventory->SwapWithSlot(m_nID, TRUE, -1, TRUE);
+                pInventory->EndSwap();
+            }
+        } else {
+            INT nSlot = pInventory->GetSlotByPosition(pt);
+            if (nSlot == -1) {
+                INT nPortrait = pInventory->GetPortraitByPosition(m_pPanel->m_ptOrigin + pt);
+                if (nPortrait != -1) {
+                    pInventory->BeginSwap();
+                    pInventory->SwapWithPortrait(nPortrait, TRUE);
+                    pInventory->EndSwap();
+                } else {
+                    pInventory->BeginSwap();
+                    pInventory->SwapWithSlot(m_nID, TRUE, -1, TRUE);
+                    pInventory->EndSwap();
+                }
+            } else if (nSlot == 50) {
+                pInventory->BeginSwap();
+                if (!pInventory->SwapWithAppearance()) {
+                    pInventory->SwapWithSlot(m_nID, FALSE, -1, TRUE);
+                }
+                pInventory->EndSwap();
+            } else {
+                pInventory->BeginSwap();
+                if (!pInventory->SwapWithSlot(nSlot, TRUE, -1, TRUE)) {
+                    pInventory->SwapWithSlot(m_nID, FALSE, -1, TRUE);
+                }
+                pInventory->EndSwap();
+            }
+        }
+        field_666 = FALSE;
+    }
+
+    CUIControlButton::OnLButtonUp(pt);
 }
 
 // 0x62DA20

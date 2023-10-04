@@ -103,15 +103,15 @@ public:
     void UpdateRequesterPanel();
     void UpdateHistoryPanel(BOOL a1);
     void UpdateAbilitiesPanel();
-    void SwapWithAppearance();
+    BOOL SwapWithAppearance();
     INT MapButtonIdToInventoryId(INT nButton);
     INT MapInventoryIdToButtonId(INT nInventoryId);
     BOOL MapButtonIdToItemInfo(INT nButton, CItem*& pItem, STRREF& description, CResRef& cResIcon, CResRef& cResItem, WORD& wCount);
     void UpdateAppearance();
     void BeginSwap();
     void EndSwap();
-    void SwapWithSlot(INT nButtonId, BOOL bShowError, WORD wCount, BOOL bAutoStacking);
-    void SwapWithPortrait(INT nButtonId, BOOL bShowError);
+    BOOL SwapWithSlot(INT nButtonId, BOOL bShowError, WORD wCount, BOOL bAutoStacking);
+    BOOL SwapWithPortrait(INT nButtonId, BOOL bShowError);
     void SwapWithWeaponSet(UINT nIndex);
 
     void OnRequesterMinusButtonClick();
