@@ -82,10 +82,10 @@ public:
     void OnCancelButtonClick();
     void ResetErrorPanel(CUIPanel* pPanel);
     void UpdateErrorPanel(CUIPanel* pPanel);
-    void IsAbilitiesButtonActive();
+    BOOL IsAbilitiesButtonActive();
     void SetUseButtonMode(INT nMode);
     void SetAbilitiesButtonMode(INT nMode);
-    void IsUseButtonActive();
+    BOOL IsUseButtonActive();
     void OnUseButtonClick();
     void OnAbilitiesButtonClick();
     void CheckEnableButtons();

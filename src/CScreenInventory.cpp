@@ -1520,9 +1520,11 @@ void CScreenInventory::OnRestButtonClick()
 }
 
 // 0x629230
-void CScreenInventory::IsAbilitiesButtonActive()
+BOOL CScreenInventory::IsAbilitiesButtonActive()
 {
     // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // 0x6294D0
@@ -1591,9 +1593,11 @@ void CScreenInventory::SetAbilitiesButtonMode(INT nMode)
 }
 
 // 0x629740
-void CScreenInventory::IsUseButtonActive()
+BOOL CScreenInventory::IsUseButtonActive()
 {
     // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // 0x629B90
@@ -1611,7 +1615,53 @@ void CScreenInventory::OnAbilitiesButtonClick()
 // 0x629F20
 void CScreenInventory::CheckEnableButtons()
 {
-    // TODO: Incomplete.
+    CUIPanel* pPanel = m_cUIManager.GetPanel(5);
+
+    CItem* pItem;
+    STRREF description;
+    CResRef cResIcon;
+    CResRef cResItem;
+    WORD wCount;
+
+    MapButtonIdToItemInfo(m_nRequesterButtonId,
+        pItem,
+        description,
+        cResIcon,
+        cResItem,
+        wCount);
+
+    if (pItem != NULL) {
+        SetAbilitiesButtonMode((pItem->m_flags & 0x1) == 0);
+
+        CUIControlButton* pAbilitiesButton = static_cast<CUIControlButton*>(pPanel->GetControl(8));
+        if (pAbilitiesButton != NULL) {
+            BOOLEAN bAbilitiesButtonActive = IsAbilitiesButtonActive();
+            pAbilitiesButton->SetActive(bAbilitiesButtonActive);
+            pAbilitiesButton->SetInactiveRender(bAbilitiesButtonActive);
+
+            // FIXME: Calls `GetItemType` three times.
+            if (pItem->GetItemType() == 9) {
+                if (pItem->cResRef == "gberry") {
+                    SetUseButtonMode(2);
+                } else {
+                    SetUseButtonMode(0);
+                }
+            } else if (pItem->GetItemType() == 71) {
+                SetUseButtonMode(4);
+            } else if (pItem->GetItemType() == 58) {
+                SetUseButtonMode(3);
+            } else {
+                SetUseButtonMode(1);
+            }
+
+            CUIControlButton* pUseButton = static_cast<CUIControlButton*>(pPanel->GetControl(9));
+            if (pUseButton != NULL) {
+                BOOLEAN bUseButtonActive = IsUseButtonActive();
+                pUseButton->SetActive(bUseButtonActive);
+                pUseButton->SetInactiveRender(bUseButtonActive);
+            }
+        }
+    }
 }
 
 // 0x62A060
