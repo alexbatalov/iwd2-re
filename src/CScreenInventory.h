@@ -136,7 +136,7 @@ public:
     /* 048C */ DWORD m_nRequesterButtonId;
     /* 0490 */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
     /* 04AC */ int field_4AC;
-    /* 04EC */ int field_4EC;
+    /* 04EC */ CPtrList* field_4EC;
     /* 04F0 */ INT m_nErrorState;
     /* 04F4 */ STRREF m_strErrorText;
     /* 04F8 */ INT m_nNumErrorButtons;

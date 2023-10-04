@@ -202,7 +202,7 @@ CScreenInventory::CScreenInventory()
     field_11E = 0;
     field_11F = 0;
     field_4AC = 0;
-    field_4EC = 0;
+    field_4EC = NULL;
     m_bPauseWarningDisplayed = FALSE;
     field_510 = -1;
     field_514 = -1;
@@ -411,7 +411,7 @@ void CScreenInventory::EngineGameInit()
     field_11E = 0;
     field_11F = 0;
     field_4AC = 0;
-    field_4EC = 0;
+    field_4EC = NULL;
     m_bPauseWarningDisplayed = FALSE;
     field_510 = -1;
     field_514 = -1;
@@ -1421,7 +1421,42 @@ void CScreenInventory::OnDoneButtonClick()
 // 0x628D20
 void CScreenInventory::OnCancelButtonClick()
 {
-    // TODO: Incomplete.
+    CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    CUIPanel* pPanel = GetTopPopup();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 2976
+    UTIL_ASSERT(pPanel != NULL);
+
+    switch (pPanel->m_nID) {
+    case 3:
+    case 7:
+    case 8:
+    case 9:
+        DismissPopup();
+        break;
+    case 4:
+    case 5:
+        m_nRequesterButtonId = -1;
+        DismissPopup();
+        break;
+    case 6:
+        if (field_4EC != NULL) {
+            POSITION pos = field_4EC->GetHeadPosition();
+            while (pos != NULL) {
+                delete field_4EC->GetNext(pos);
+            }
+            field_4EC->RemoveAll();
+            field_4EC = NULL;
+        }
+        field_4EC = NULL;
+        DismissPopup();
+        break;
+    }
+
+    renderLock.Unlock();
 }
 
 // 0x628E70
