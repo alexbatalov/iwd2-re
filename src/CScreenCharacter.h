@@ -2,6 +2,7 @@
 #define CSCREENCHARACTER_H_
 
 #include "CBaldurEngine.h"
+#include "CGameSpriteSpells.h"
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
@@ -121,13 +122,25 @@ public:
     /* 01B0 */ BOOL m_bShiftKeyDown;
     /* 01B4 */ BOOL m_bCapsLockKeyOn;
     /* 01B8 */ BOOLEAN field_1B8;
+    /* 01BA */ CGameSpriteGroupedSpellList m_spells;
+    /* 02B6 */ int field_2B6;
     /* 02BA */ SHORT m_nTopSkill;
     /* 0300 */ CKeyInfo m_pVirtualKeys[CSCREENCHARACTER_VIRTUAL_KEYS];
     /* 05D0 */ BYTE m_pVirtualKeysFlags[CSCREENCHARACTER_VIRTUAL_KEYS];
     /* 062A */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
     /* 064A */ SHORT m_nTopFeat;
     /* 077C */ WORD field_77C;
+    /* 0780 */ int field_780;
+    /* 0798 */ int field_798;
+    /* 079C */ int field_79C;
+    /* 07A0 */ int field_7A0;
+    /* 07A4 */ int field_7A4;
+    /* 07A8 */ int field_7A8;
+    /* 07AC */ int field_7AC;
+    /* 07B0 */ int field_7B0;
     /* 07B4 */ BOOLEAN m_bCtrlKeyDown;
+    /* 07B6 */ INT m_nExtraMageSpells;
+    /* 07BA */ int field_7BA;
     /* 07BE */ CStringList* m_pScripts;
     /* 07C2 */ INT m_nScriptIndex;
     /* 07C6 */ INT m_nErrorState;
@@ -157,10 +170,16 @@ public:
     /* 084E */ CResRef m_cResSoundSet;
     /* 0856 */ CString field_856;
     /* 085A */ CCreatureFileHeader* m_pTempBaseStats;
+    /* 085E */ CDerivedStats* m_pTempDerivedStats;
+    /* 0862 */ CDerivedStats* m_pBeforeLevelUpDerivedStats;
+    /* 0866 */ int field_866;
+    /* 086A */ int field_86A;
     /* 086E */ CVidFont m_preLoadFontRealms;
     /* 0D6E */ CVidFont m_preLoadFontStnSml;
     /* 126E */ CVidFont m_preLoadFontTool;
     /* 176E */ CString field_176E;
+    /* 1772 */ int field_1772;
+    /* 1776 */ int field_1776;
     /* 1778 */ INT m_nExtraAbilityPoints;
     /* 177C */ BYTE m_nMinSTR;
     /* 177D */ BYTE m_nMinDEX;
@@ -182,7 +201,15 @@ public:
     /* 179C */ INT m_nModCHR;
     /* 17A0 */ int field_17A0;
     /* 17A4 */ int field_17A4;
+    /* 17A8 */ int field_17A8;
+    /* 17C0 */ int field_17C0;
+    /* 1800 */ int field_1800;
     /* 1840 */ int field_1840;
+    /* 1844 */ unsigned char field_1844;
+    /* 1846 */ int field_1846;
+    /* 184A */ int field_184A;
+    /* 184E */ int field_184E;
+    /* 1852 */ int field_1852;
 };
 
 class CUIControlButtonCharacterSpecializationSelection : public CUIControlButton3State {
