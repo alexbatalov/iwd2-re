@@ -419,4 +419,11 @@ public:
     void InvalidateItems();
 };
 
+class CUIControlButtonCharacterInformationFolder : public CUIControlButton3State {
+public:
+    CUIControlButtonCharacterInformationFolder(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharacterInformationFolder() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 #endif /* CSCREENCHARACTER_H_ */

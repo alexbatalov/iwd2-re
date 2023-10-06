@@ -5097,3 +5097,53 @@ void CUIControlButtonCharacterSkillsHotArea::OnHotAreaClick(CPoint pt)
     STRREF strDescription = ruleTables.GetSkillDescription(id);
     g_pBaldurChitin->m_pEngineCharacter->UpdateHelp(m_pPanel->m_nID, 92, strDescription);
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x5F8A50
+CUIControlButtonCharacterInformationFolder::CUIControlButtonCharacterInformationFolder(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 1)
+{
+    m_nSelectedFrame = 0;
+}
+
+// 0x5F8AB0
+CUIControlButtonCharacterInformationFolder::~CUIControlButtonCharacterInformationFolder()
+{
+}
+
+// 0x5F8B50
+void CUIControlButtonCharacterInformationFolder::OnLButtonClick(CPoint pt)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 18906
+    UTIL_ASSERT(pCharacter != NULL);
+
+    CUIPanel* pPanel;
+    CUIControlTextDisplay* pText;
+
+    switch (m_nID) {
+    case 60:
+    case 61:
+    case 62:
+    case 63:
+        pCharacter->field_1844 = m_nID - 60;
+
+        pPanel = pCharacter->GetManager()->GetPanel(2);
+        pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(45));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 18921
+        UTIL_ASSERT(pText != NULL);
+
+        pText->SetTopString(pText->m_plstStrings->FindIndex(0));
+        pCharacter->UpdateMainPanel(FALSE);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 18906
+        UTIL_ASSERT(pCharacter != NULL);
+    }
+}
