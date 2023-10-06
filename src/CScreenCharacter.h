@@ -118,6 +118,7 @@ public:
     void OnCustomPortraitsButtonClick();
     void OnPlayButtonClick();
     void OnSoundItemSelect(INT nItem);
+    void sub_5F89B0(CGameSprite* pSprite);
 
     static void ResetBiography(CGameSprite* pSprite);
 
@@ -135,7 +136,9 @@ public:
     /* 0300 */ CKeyInfo m_pVirtualKeys[CSCREENCHARACTER_VIRTUAL_KEYS];
     /* 05D0 */ BYTE m_pVirtualKeysFlags[CSCREENCHARACTER_VIRTUAL_KEYS];
     /* 062A */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
+    /* 0646 */ INT m_nExtraFeats;
     /* 064A */ SHORT m_nTopFeat;
+    /* 0650 */ INT m_storedFeats[75];
     /* 077C */ WORD field_77C;
     /* 0780 */ int field_780;
     /* 0798 */ INT m_nExtraSkillPoints;
@@ -440,6 +443,14 @@ public:
     void OnPageDown(DWORD nLines) override;
     void UpdateScrollBar();
     void InvalidateItems();
+};
+
+class CUIControlButtonCharacterFeatsPlusMinus : public CUIControlButtonPlusMinus {
+public:
+    CUIControlButtonCharacterFeatsPlusMinus(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharacterFeatsPlusMinus() override;
+    BOOL OnLButtonDown(CPoint pt) override;
+    void AdjustValue() override;
 };
 
 class CUIControlScrollBarCharacterSkills : public CUIControlScrollBar {

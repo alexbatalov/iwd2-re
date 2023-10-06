@@ -3053,6 +3053,25 @@ void CScreenCharacter::OnSoundItemSelect(INT nItem)
     }
 }
 
+// 0x5F89B0
+void CScreenCharacter::sub_5F89B0(CGameSprite* pSprite)
+{
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    for (INT nFeat = 0; nFeat < ruleTables.m_tFeats.GetHeight(); nFeat++) {
+        if (m_storedFeats[nFeat] < pSprite->GetFeatValue(nFeat)) {
+            while (pSprite->GetFeatValue(nFeat) > 0) {
+                if (pSprite->sub_763200(nFeat, 1)) {
+                    break;
+                }
+
+                pSprite->SetFeatValue(nFeat, pSprite->GetFeatValue(nFeat) - 1);
+                m_nExtraFeats++;
+            }
+        }
+    }
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x5ED4A0
@@ -5026,6 +5045,197 @@ void CUIControlScrollBarCharacterFeats::InvalidateItems()
     }
 
     renderLock.Unlock();
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x5F6DC0
+CUIControlButtonCharacterFeatsPlusMinus::CUIControlButtonCharacterFeatsPlusMinus(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButtonPlusMinus(panel, controlInfo)
+{
+}
+
+// 0x5F6E00
+CUIControlButtonCharacterFeatsPlusMinus::~CUIControlButtonCharacterFeatsPlusMinus()
+{
+}
+
+// 0x5F6EA0
+BOOL CUIControlButtonCharacterFeatsPlusMinus::OnLButtonDown(CPoint pt)
+{
+    DWORD offset;
+    switch (m_nID) {
+    case 14:
+    case 15:
+        offset = 0;
+        break;
+    case 16:
+    case 17:
+        offset = 1;
+        break;
+    case 18:
+    case 19:
+        offset = 2;
+        break;
+    case 20:
+    case 21:
+        offset = 3;
+        break;
+    case 22:
+    case 23:
+        offset = 4;
+        break;
+    case 24:
+    case 25:
+        offset = 5;
+        break;
+    case 26:
+    case 27:
+        offset = 6;
+        break;
+    case 28:
+    case 29:
+        offset = 7;
+        break;
+    case 30:
+    case 31:
+        offset = 8;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 17366
+        UTIL_ASSERT(FALSE);
+    }
+
+    if (!m_bActive) {
+        return FALSE;
+    }
+
+    if ((m_nMouseButtons & LBUTTON) == 0) {
+        return FALSE;
+    }
+
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    DWORD id = ruleTables.GetFeatId(g_pBaldurChitin->m_pEngineCharacter->m_nTopFeat + offset);
+    STRREF strDescription = ruleTables.GetFeatDescription(id);
+    g_pBaldurChitin->m_pEngineCharacter->UpdateHelp(m_pPanel->m_nID, 92, strDescription);
+
+    return CUIControlButtonPlusMinus::OnLButtonDown(pt);
+}
+
+// 0x5F6FD0
+void CUIControlButtonCharacterFeatsPlusMinus::AdjustValue()
+{
+    BOOL bInc;
+    switch (m_nID) {
+    case 14:
+    case 16:
+    case 18:
+    case 20:
+    case 22:
+    case 24:
+    case 26:
+    case 28:
+    case 30:
+        bInc = TRUE;
+        break;
+    case 15:
+    case 17:
+    case 19:
+    case 21:
+    case 23:
+    case 25:
+    case 27:
+    case 29:
+        bInc = FALSE;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 17444
+        UTIL_ASSERT(FALSE);
+    }
+
+    DWORD offset;
+    switch (m_nID) {
+    case 14:
+    case 15:
+        offset = 0;
+        break;
+    case 16:
+    case 17:
+        offset = 1;
+        break;
+    case 18:
+    case 19:
+        offset = 2;
+        break;
+    case 20:
+    case 21:
+        offset = 3;
+        break;
+    case 22:
+    case 23:
+        offset = 4;
+        break;
+    case 24:
+    case 25:
+        offset = 5;
+        break;
+    case 26:
+    case 27:
+        offset = 6;
+        break;
+    case 28:
+    case 29:
+        offset = 7;
+        break;
+    case 30:
+    case 31:
+        offset = 8;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 17497
+        UTIL_ASSERT(FALSE);
+    }
+
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    INT nGameSprite = pCharacter->field_1840;
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        DWORD id = g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetFeatId(pCharacter->m_nTopFeat + offset);
+        INT nValue = pSprite->GetFeatValue(id);
+
+        if (bInc) {
+            if (pSprite->sub_763A40(id, 1) && pCharacter->m_nExtraFeats > 0) {
+                pSprite->SetFeatValue(id, nValue + 1);
+                pCharacter->m_nExtraFeats--;
+            }
+        } else {
+            if (nValue > 0 && pCharacter->m_storedFeats[id] < pSprite->GetFeatValue(id)) {
+                pSprite->SetFeatValue(id, nValue - 1);
+                pCharacter->m_nExtraFeats++;
+                pCharacter->sub_5F89B0(pSprite);
+            }
+        }
+
+        pCharacter->UpdatePopupPanel(pCharacter->GetTopPopup()->m_nID, pSprite);
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
 }
 
 // -----------------------------------------------------------------------------
