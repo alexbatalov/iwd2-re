@@ -4196,6 +4196,36 @@ void CUIControlButtonInformationBiography::OnLButtonClick(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x5EBC60
+CUIControlButtonCharacter5EBC60::CUIControlButtonCharacter5EBC60(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
+{
+    m_nSelectedFrame = 0;
+    field_676 = "";
+    field_66E = "";
+}
+
+// 0x5EBD30
+CUIControlButtonCharacter5EBC60::~CUIControlButtonCharacter5EBC60()
+{
+}
+
+// 0x5EBFA0
+void CUIControlButtonCharacter5EBC60::OnLButtonClick(CPoint pt)
+{
+    // TODO: Incomplete.
+}
+
+// 0x5EC420
+BOOL CUIControlButtonCharacter5EBC60::Render(BOOL bForce)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x5EC5A0
 CUIControlButtonCharacterPopupDone::CUIControlButtonCharacterPopupDone(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo, INT nType)
     : CUIControlButton(panel, controlInfo, LBUTTON, 0)
