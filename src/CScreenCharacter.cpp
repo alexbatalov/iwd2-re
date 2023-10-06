@@ -91,7 +91,7 @@ CScreenCharacter::CScreenCharacter()
     m_bShiftKeyDown = FALSE;
     m_bCapsLockKeyOn = FALSE;
     field_780 = 0;
-    field_798 = 0;
+    m_nExtraSkillPoints = 0;
     field_79C = 0;
     field_7A0 = 0;
     field_7A4 = 0;
@@ -5172,6 +5172,206 @@ void CUIControlScrollBarCharacterSkills::InvalidateItems()
     }
 
     renderLock.Unlock();
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x5F8400
+CUIControlButtonCharacterSkillsPlusMinus::CUIControlButtonCharacterSkillsPlusMinus(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButtonPlusMinus(panel, controlInfo)
+{
+}
+
+// 0x5F8440
+CUIControlButtonCharacterSkillsPlusMinus::~CUIControlButtonCharacterSkillsPlusMinus()
+{
+}
+
+// 0x5F84E0
+BOOL CUIControlButtonCharacterSkillsPlusMinus::OnLButtonDown(CPoint pt)
+{
+    DWORD offset;
+    switch (m_nID) {
+    case 14:
+    case 15:
+        offset = 0;
+        break;
+    case 16:
+    case 17:
+        offset = 1;
+        break;
+    case 18:
+    case 19:
+        offset = 2;
+        break;
+    case 20:
+    case 21:
+        offset = 3;
+        break;
+    case 22:
+    case 23:
+        offset = 4;
+        break;
+    case 24:
+    case 25:
+        offset = 5;
+        break;
+    case 26:
+    case 27:
+        offset = 6;
+        break;
+    case 28:
+    case 29:
+        offset = 7;
+        break;
+    case 30:
+    case 31:
+        offset = 8;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 18449
+        UTIL_ASSERT(FALSE);
+    }
+
+    if (!m_bActive) {
+        return FALSE;
+    }
+
+    if ((m_nMouseButtons & LBUTTON) == 0) {
+        return FALSE;
+    }
+
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    DWORD id = ruleTables.GetSkillId(g_pBaldurChitin->m_pEngineCharacter->m_nTopSkill + offset);
+    STRREF strDescription = ruleTables.GetSkillDescription(id);
+    g_pBaldurChitin->m_pEngineCharacter->UpdateHelp(m_pPanel->m_nID, 92, strDescription);
+
+    return CUIControlButtonPlusMinus::OnLButtonDown(pt);
+}
+
+// 0x5F8610
+void CUIControlButtonCharacterSkillsPlusMinus::AdjustValue()
+{
+    BOOL bInc;
+    switch (m_nID) {
+    case 14:
+    case 16:
+    case 18:
+    case 20:
+    case 22:
+    case 24:
+    case 26:
+    case 28:
+    case 30:
+        bInc = TRUE;
+        break;
+    case 15:
+    case 17:
+    case 19:
+    case 21:
+    case 23:
+    case 25:
+    case 27:
+    case 29:
+    case 31:
+        bInc = FALSE;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 18527
+        UTIL_ASSERT(FALSE);
+    }
+
+    DWORD offset;
+    switch (m_nID) {
+    case 14:
+    case 15:
+        offset = 0;
+        break;
+    case 16:
+    case 17:
+        offset = 1;
+        break;
+    case 18:
+    case 19:
+        offset = 2;
+        break;
+    case 20:
+    case 21:
+        offset = 3;
+        break;
+    case 22:
+    case 23:
+        offset = 4;
+        break;
+    case 24:
+    case 25:
+        offset = 5;
+        break;
+    case 26:
+    case 27:
+        offset = 6;
+        break;
+    case 28:
+    case 29:
+        offset = 7;
+        break;
+    case 30:
+    case 31:
+        offset = 8;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 18580
+        UTIL_ASSERT(FALSE);
+    }
+
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    INT nGameSprite = pCharacter->field_1840;
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+        DWORD id = ruleTables.GetSkillId(pCharacter->m_nTopSkill + offset);
+        INT nValue = pSprite->GetSkillValue(id);
+
+        // FIXME: Looks wrong (obtaining id from id).
+        INT nCost = pSprite->GetSkillCost(ruleTables.GetSkillId(id),
+            pCharacter->m_nClass);
+
+        if (bInc) {
+            if (nCost != 0 && pCharacter->m_nExtraSkillPoints >= nCost) {
+                pSprite->SetSkillValue(id, nValue + 1);
+                pCharacter->m_nExtraSkillPoints -= nCost;
+            }
+        } else {
+            if (nValue > 0 && pCharacter->m_storedSkills[id] < pSprite->GetSkillValue(id)) {
+                pSprite->SetSkillValue(id, nValue - 1);
+
+                // FIXME: Looks wrong (obtaining id from id).
+                pCharacter->m_nExtraSkillPoints += pSprite->GetSkillCost(ruleTables.GetSkillId(id),
+                    pCharacter->m_nClass);
+            }
+        }
+
+        pCharacter->UpdatePopupPanel(pCharacter->GetTopPopup()->m_nID, pSprite);
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nGameSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
 }
 
 // -----------------------------------------------------------------------------

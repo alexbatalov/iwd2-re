@@ -131,13 +131,14 @@ public:
     /* 01BA */ CGameSpriteGroupedSpellList m_spells;
     /* 02B6 */ int field_2B6;
     /* 02BA */ SHORT m_nTopSkill;
+    /* 02C0 */ INT m_storedSkills[16];
     /* 0300 */ CKeyInfo m_pVirtualKeys[CSCREENCHARACTER_VIRTUAL_KEYS];
     /* 05D0 */ BYTE m_pVirtualKeysFlags[CSCREENCHARACTER_VIRTUAL_KEYS];
     /* 062A */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
     /* 064A */ SHORT m_nTopFeat;
     /* 077C */ WORD field_77C;
     /* 0780 */ int field_780;
-    /* 0798 */ int field_798;
+    /* 0798 */ INT m_nExtraSkillPoints;
     /* 079C */ int field_79C;
     /* 07A0 */ int field_7A0;
     /* 07A4 */ int field_7A4;
@@ -452,6 +453,14 @@ public:
     void OnPageDown(DWORD nLines) override;
     void UpdateScrollBar();
     void InvalidateItems();
+};
+
+class CUIControlButtonCharacterSkillsPlusMinus : public CUIControlButtonPlusMinus {
+public:
+    CUIControlButtonCharacterSkillsPlusMinus(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharacterSkillsPlusMinus() override;
+    BOOL OnLButtonDown(CPoint pt) override;
+    void AdjustValue() override;
 };
 
 class CUIControlButtonCharacterInformationFolder : public CUIControlButton3State {
