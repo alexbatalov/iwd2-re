@@ -1732,6 +1732,12 @@ BOOL CScreenCharacter::OnCancelButtonClick()
     return FALSE;
 }
 
+// 0x5E4560
+void CScreenCharacter::sub_5E4560()
+{
+    // TODO: Incomplete.
+}
+
 // 0x5E46C0
 void CScreenCharacter::OnInformationButtonClick()
 {
@@ -3763,6 +3769,34 @@ void CUIControlButtonCharacterHatedRaceSelection::OnLButtonClick(CPoint pt)
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
     }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x5EAA30
+CUIControlButtonCharacter5EAA30::CUIControlButtonCharacter5EAA30(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+    STR_RES strRes;
+    g_pBaldurChitin->GetTlkTable().Fetch(16559, strRes);
+    SetText(strRes.szText);
+}
+
+// 0x5EAB20
+CUIControlButtonCharacter5EAA30::~CUIControlButtonCharacter5EAA30()
+{
+}
+
+// 0x5EABC0
+void CUIControlButtonCharacter5EAA30::OnLButtonClick(CPoint pt)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 12346
+    UTIL_ASSERT(pCharacter != NULL);
+
+    pCharacter->sub_5E4560();
 }
 
 // -----------------------------------------------------------------------------

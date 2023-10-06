@@ -88,6 +88,7 @@ public:
     BOOL IsDoneButtonClickable(CGameSprite* pSprite);
     void OnDoneButtonClick();
     BOOL OnCancelButtonClick();
+    void sub_5E4560();
     void OnInformationButtonClick();
     void OnBiographyButtonClick();
     void OnCustomizeBiographyButtonClick();
@@ -249,6 +250,13 @@ class CUIControlButtonCharacterHatedRaceSelection : public CUIControlButton3Stat
 public:
     CUIControlButtonCharacterHatedRaceSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonCharacterHatedRaceSelection() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonCharacter5EAA30 : public CUIControlButton {
+public:
+    CUIControlButtonCharacter5EAA30(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharacter5EAA30() override;
     void OnLButtonClick(CPoint pt) override;
 };
 
