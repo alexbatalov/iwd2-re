@@ -1846,6 +1846,12 @@ void CScreenCharacter::OnCustomizeBiographyButtonClick()
     renderLock.Unlock();
 }
 
+// 0x5E4A20
+void CScreenCharacter::sub_5E4A20()
+{
+    // TODO: Incomplete.
+}
+
 // 0x5E4C40
 void CScreenCharacter::OnScriptButtonClick()
 {
@@ -3769,6 +3775,31 @@ void CUIControlButtonCharacterHatedRaceSelection::OnLButtonClick(CPoint pt)
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
     }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x5EA7D0
+CUIControlButtonCharacter5EA7D0::CUIControlButtonCharacter5EA7D0(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+}
+
+// 0x5EA820
+CUIControlButtonCharacter5EA7D0::~CUIControlButtonCharacter5EA7D0()
+{
+}
+
+// 0x5EA8C0
+void CUIControlButtonCharacter5EA7D0::OnLButtonClick(CPoint pt)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 12235
+    UTIL_ASSERT(pCharacter != NULL);
+
+    pCharacter->sub_5E4A20();
 }
 
 // -----------------------------------------------------------------------------

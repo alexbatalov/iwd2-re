@@ -92,6 +92,7 @@ public:
     void OnInformationButtonClick();
     void OnBiographyButtonClick();
     void OnCustomizeBiographyButtonClick();
+    void sub_5E4A20();
     void OnScriptButtonClick();
     void OnExportButtonClick();
     void OnLevelUpButtonClick();
@@ -250,6 +251,13 @@ class CUIControlButtonCharacterHatedRaceSelection : public CUIControlButton3Stat
 public:
     CUIControlButtonCharacterHatedRaceSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonCharacterHatedRaceSelection() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonCharacter5EA7D0 : public CUIControlButton {
+public:
+    CUIControlButtonCharacter5EA7D0(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharacter5EA7D0() override;
     void OnLButtonClick(CPoint pt) override;
 };
 
