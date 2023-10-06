@@ -1852,6 +1852,12 @@ void CScreenCharacter::sub_5E4A20()
     // TODO: Incomplete.
 }
 
+// 0x5E4B30
+void CScreenCharacter::sub_5E4B30()
+{
+    // TODO: Incomplete.
+}
+
 // 0x5E4C40
 void CScreenCharacter::OnScriptButtonClick()
 {
@@ -3800,6 +3806,31 @@ void CUIControlButtonCharacter5EA7D0::OnLButtonClick(CPoint pt)
     UTIL_ASSERT(pCharacter != NULL);
 
     pCharacter->sub_5E4A20();
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x5EA900
+CUIControlButtonCharacter5EA900::CUIControlButtonCharacter5EA900(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+}
+
+// 0x5EA950
+CUIControlButtonCharacter5EA900::~CUIControlButtonCharacter5EA900()
+{
+}
+
+// 0x5EA9F0
+void CUIControlButtonCharacter5EA900::OnLButtonClick(CPoint pt)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 12289
+    UTIL_ASSERT(pCharacter != NULL);
+
+    pCharacter->sub_5E4B30();
 }
 
 // -----------------------------------------------------------------------------
