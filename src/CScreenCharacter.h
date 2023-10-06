@@ -453,6 +453,13 @@ public:
     void AdjustValue() override;
 };
 
+class CUIControlButtonCharacterFeatsCircle : public CUIControlButton {
+public:
+    CUIControlButtonCharacterFeatsCircle(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonCharacterFeatsCircle() override;
+    BOOL Render(BOOL bForce) override;
+};
+
 class CUIControlScrollBarCharacterSkills : public CUIControlScrollBar {
 public:
     CUIControlScrollBarCharacterSkills(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo);

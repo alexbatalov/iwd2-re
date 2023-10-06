@@ -5240,6 +5240,184 @@ void CUIControlButtonCharacterFeatsPlusMinus::AdjustValue()
 
 // -----------------------------------------------------------------------------
 
+// 0x5F7250
+CUIControlButtonCharacterFeatsCircle::CUIControlButtonCharacterFeatsCircle(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 1)
+{
+}
+
+// 0x5F72A0
+CUIControlButtonCharacterFeatsCircle::~CUIControlButtonCharacterFeatsCircle()
+{
+}
+
+// 0x5F7340
+BOOL CUIControlButtonCharacterFeatsCircle::Render(BOOL bForce)
+{
+    CVidCell vcIcon;
+
+    if (!m_bActive && !m_bInactiveRender) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount == 0 && !bForce) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount != 0) {
+        CSingleLock lock(&(m_pPanel->m_pManager->field_56), FALSE);
+        lock.Lock(INFINITE);
+        m_nRenderCount--;
+        lock.Unlock();
+    }
+
+    INT nFirstID;
+    INT nIndex;
+    switch (m_nID) {
+    case 36:
+    case 37:
+    case 38:
+    case 39:
+    case 40:
+        nFirstID = 36;
+        nIndex = 0;
+        break;
+    case 41:
+    case 42:
+    case 43:
+    case 44:
+    case 45:
+        nFirstID = 41;
+        nIndex = 1;
+        break;
+    case 46:
+    case 47:
+    case 48:
+    case 49:
+    case 50:
+        nFirstID = 46;
+        nIndex = 2;
+        break;
+    case 51:
+    case 52:
+    case 53:
+    case 54:
+    case 55:
+        nFirstID = 51;
+        nIndex = 3;
+        break;
+    case 56:
+    case 57:
+    case 58:
+    case 59:
+    case 60:
+        nFirstID = 56;
+        nIndex = 4;
+        break;
+    case 61:
+    case 62:
+    case 63:
+    case 64:
+    case 65:
+        nFirstID = 61;
+        nIndex = 5;
+        break;
+    case 66:
+    case 67:
+    case 68:
+    case 69:
+    case 70:
+        nFirstID = 66;
+        nIndex = 6;
+        break;
+    case 71:
+    case 72:
+    case 73:
+    case 74:
+    case 75:
+        nFirstID = 71;
+        nIndex = 7;
+        break;
+    case 76:
+    case 77:
+    case 78:
+    case 79:
+    case 80:
+        nFirstID = 76;
+        nIndex = 8;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 17714
+        UTIL_ASSERT(FALSE);
+    }
+
+    CScreenCreateChar* pCreateChar = g_pBaldurChitin->m_pEngineCreateChar;
+
+    INT nGameSprite = pCreateChar->GetSpriteId();
+
+    CGameSprite* pSprite;
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nGameSprite,
+            CGameObjectArray::THREAD_1,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc != CGameObjectArray::SUCCESS) {
+        return FALSE;
+    }
+
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+    DWORD v1 = ruleTables.GetFeatId(nIndex + pCreateChar->m_nTopFeat);
+    INT nFeatNumber = ruleTables.GetFeatId(v1);
+    INT nValue = pSprite->GetFeatValue(nFeatNumber);
+    INT nMaxValue = pSprite->GetMaxFeatValue(nFeatNumber);
+    INT nKnobValue = nFirstID - m_nID + 4;
+
+    if ((nValue > 0 || pSprite->sub_763A40(nFeatNumber, 1))
+        && nKnobValue < nMaxValue) {
+        CRect rControlRect(m_pPanel->m_ptOrigin + m_ptOrigin,
+            m_size);
+
+        CRect rClip;
+        rClip.IntersectRect(rControlRect, m_rDirty);
+
+        // NOTE: Uninline.
+        vcIcon.SetResRef(CResRef("GUIPFC"), m_pPanel->m_pManager->m_bDoubleSize, TRUE, TRUE);
+
+        if (nKnobValue >= nValue) {
+            vcIcon.FrameSet(1);
+        } else {
+            vcIcon.FrameSet(0);
+        }
+
+        BOOL bResult = vcIcon.Render(0,
+            rControlRect.left,
+            rControlRect.top,
+            rClip,
+            NULL,
+            0,
+            0,
+            -1);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 17756
+        UTIL_ASSERT(bResult);
+    }
+
+    pCreateChar->UpdatePopupPanel(pCreateChar->GetTopPopup()->m_nID, pSprite);
+
+    g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nGameSprite,
+        CGameObjectArray::THREAD_1,
+        INFINITE);
+
+    return TRUE;
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x5F7F90
 CUIControlScrollBarCharacterSkills::CUIControlScrollBarCharacterSkills(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo)
     : CUIControlScrollBar(panel, controlInfo)
