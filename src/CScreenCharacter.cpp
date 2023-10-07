@@ -1160,6 +1160,57 @@ void CScreenCharacter::ResetAbilitiesPanel(CGameSprite* pSprite, int a2)
     UpdateHelp(pPanel->m_nID, 29, 27337);
 }
 
+// 0x5DA490
+void CScreenCharacter::UpdateHatedRacePanel(CGameSprite* pSprite)
+{
+    CCreatureFileHeader& BStats = *pSprite->GetBaseStats();
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(16);
+
+    if (pPanel != NULL) {
+        m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(1));
+
+        for (INT nSlot = 0; nSlot < 11; nSlot++) {
+            INT nIndex = m_nTopHatedRace + nSlot;
+
+            // NOTE: Uninline.
+            BYTE nRace = GetHatedRace(nIndex);
+
+            CUIControlButtonCharacterHatedRaceSelection* pButton = static_cast<CUIControlButtonCharacterHatedRaceSelection*>(pPanel->GetControl(nSlot + 22));
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+            // __LINE__: 3391
+            UTIL_ASSERT(pButton != NULL);
+
+            STRREF strRace = GetRangerHatedRaceStrref(nRace);
+            pButton->SetText(FetchString(strRace));
+
+            pButton->SetSelected(m_hatedRaces[nIndex] == BStats.m_favoredEnemies[field_17A0]);
+            pButton->SetEnabled(!g_pBaldurChitin->GetObjectGame()->GetRuleTables().IsHatedRace(nRace, BStats) || pButton->m_bSelected);
+        }
+
+        CUIControlScrollBarCharacterHatedRace* pScrollBar = static_cast<CUIControlScrollBarCharacterHatedRace*>(pPanel->GetControl(1));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 3403
+        UTIL_ASSERT(pScrollBar != NULL);
+
+        // NOTE: Uninline.
+        pScrollBar->UpdateScrollBar();
+
+        CUIControlButton* pDoneButton = static_cast<CUIControlButton*>(pPanel->GetControl(10));
+        pDoneButton->SetEnabled(IsDoneButtonClickable(pSprite));
+
+        CUIControlButton* pCancelButton = static_cast<CUIControlButton*>(pPanel->GetControl(11));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 3413
+        UTIL_ASSERT(pCancelButton != NULL);
+
+        pCancelButton->SetEnabled(TRUE);
+    }
+}
+
 // 0x5DAA40
 void CScreenCharacter::UpdateAbilitiesPanel(CGameSprite* pSprite)
 {
