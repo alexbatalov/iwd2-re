@@ -1895,6 +1895,584 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             }
         }
     } else if (pPanel->m_pManager->m_cResRef == "GUIREC") {
+        // 0x772293
+        switch (pPanel->m_nID) {
+        case 0:
+            switch (controlInfo->nID) {
+            case 4:
+                return new CUIControlButtonGeneralSpellbook(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 5:
+                return new CUIControlButtonGeneralInventory(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 6:
+                return new CUIControlButtonGeneralJournal(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 7:
+                return new CUIControlButtonGeneralMap(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 8:
+                return new CUIControlButtonGeneralWorld(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 9:
+                return new CUIControlButtonGeneralOptions(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 10:
+                return new CUIControlButtonClock(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 12:
+                return new CUIControlButtonRest(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 13:
+                return new CUIControlButtonGeneralMultiPlayer(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 14:
+                return new CUIControlButtonAI(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 1:
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                return new CUIControlPortraitGeneral(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 50:
+            case 51:
+            case 52:
+            case 53:
+            case 54:
+            case 55:
+                return new CUIControlButton77DCC0(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 2:
+            // 0x7724A3
+            switch (controlInfo->nID) {
+            case 1:
+                return new CUIControlButtonCharacterInformation(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 2:
+                return new CUIControlButtonCharacterPortrait(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 36:
+                return new CUIControlButtonCharacterExport(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 37:
+                return new CUIControlButtonCharacterLevelUp(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 45:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 46:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 50:
+                return new CUIControlButtonCharacterCustomize(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 51:
+                return new CUIControlButtonCharacter5EAA30(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 52:
+                return new CUIControlButtonCharacter5EA7D0(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 53:
+                return new CUIControlButtonCharacter5EA900(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 59:
+                return new CUIControlButtonInformationBiography(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 60:
+            case 61:
+            case 62:
+            case 63:
+                return new CUIControlButtonCharacterInformationFolder(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 4:
+            // 0x7726CF
+            switch (controlInfo->nID) {
+            case 24:
+                return new CUIControlButtonInformationDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 26:
+                return new CUIControlButtonInformationBiography(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 6:
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlButtonCharacterPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 1);
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+                return new CUIControlButtonCharacterSpecializationSelection(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 11:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 12:
+                return new CUIControlButtonCharacterPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 1);
+            case 13:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            }
+            break;
+        case 7:
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlButtonCharacterPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 1);
+            case 16:
+            case 17:
+            case 18:
+            case 19:
+            case 20:
+            case 21:
+            case 22:
+            case 23:
+            case 24:
+            case 25:
+            case 26:
+            case 27:
+                return new CUIControlButtonCharacterAbilitiesPlusMinus(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 28:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 29:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 30:
+            case 31:
+            case 32:
+            case 33:
+            case 34:
+            case 35:
+                return new CUIControlButtonCharacterAbilitiesHotArea(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 36:
+                return new CUIControlButtonCharacterPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 1);
+            }
+            break;
+        case 8:
+            // 0x77293D
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+            case 15:
+            case 16:
+            case 17:
+            case 18:
+            case 19:
+            case 20:
+            case 21:
+            case 22:
+            case 23:
+            case 24:
+            case 25:
+            case 26:
+            case 27:
+            case 28:
+            case 29:
+                return new CUIControlButtonCharacter5EBC60(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 30:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 31:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 32:
+                return new CUIControlButtonCharacterPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 1);
+            case 33:
+                return new CUIControlButtonCharacterPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 1);
+            }
+            break;
+        case 9:
+        case 10:
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+                return new CUIControlButtonCharacterError(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 3:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            }
+            break;
+        case 11:
+            switch (controlInfo->nID) {
+            case 2:
+                return new CUIControlTextDisplayCharacterScriptScripts(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo));
+            case 3:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 4:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 5:
+                return new CUIControlButtonCharacterPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 0);
+            case 6:
+                return new CUIControlButtonCharacterPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 0);
+            case 7:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            }
+            break;
+        case 12:
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 1:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 2:
+                return new CUIControlButtonCharacterPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 0);
+            }
+            break;
+        case 13:
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlTextDisplayCharacterExportCharacters(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo));
+            case 1:
+            case 3:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 2:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 4:
+                return new CUIControlButtonCharacterPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 0);
+            case 5:
+                return new CUIControlButtonCharacterPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 0);
+            case 6:
+                return new CUIControlEditCharacter(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo));
+            }
+            break;
+        case 16:
+            switch (controlInfo->nID) {
+            case 1:
+                return new CUIControlScrollBarCharacterHatedRace(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 8:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 9:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 10:
+                return new CUIControlButtonCharacterPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 1);
+            case 11:
+                return new CUIControlButtonCharacterPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 1);
+            case 22:
+            case 23:
+            case 24:
+            case 25:
+            case 26:
+            case 27:
+            case 28:
+            case 29:
+            case 30:
+            case 31:
+            case 32:
+                return new CUIControlButtonCharacterHatedRaceSelection(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 17:
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 3:
+            case 9:
+                return new CUIControlButtonCharacterCustomizeMenu(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 5:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 6:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 7:
+                return new CUIControlButtonCharacterPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 0);
+            case 8:
+                return new CUIControlButtonCharacterPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 0);
+            }
+            break;
+        case 18:
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlButtonCharGenAppearancePortrait(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 1:
+                return new CUIControlButtonCharacterAppearanceLeft(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 2:
+                return new CUIControlButtonCharacterAppearanceRight(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 3:
+                return new CUIControlButtonCharacterPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 0);
+            case 4:
+                return new CUIControlButtonCharacterPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 0);
+            case 5:
+                return new CUIControlButtonCharacterAppearanceCustom(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 19:
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+                return new CUIControlButtonCharacterPortrait(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 2:
+            case 3:
+                return new CUIControlTextDisplayCharacterPortraits(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo));
+            case 4:
+            case 5:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 10:
+                return new CUIControlButtonCharacterPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 0);
+            case 11:
+                return new CUIControlButtonCharacterPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 0);
+            }
+            break;
+        case 20:
+            switch (controlInfo->nID) {
+            case 5:
+                return new CUIControlTextDisplayCharacterSoundSounds(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo));
+            case 6:
+            case 9:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 7:
+                return new CUIControlButtonCharacterSoundPlay(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 8:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 10:
+                return new CUIControlButtonCharacterPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 0);
+            case 11:
+                return new CUIControlButtonCharacterPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 0);
+            }
+            break;
+        case 50:
+            // 0x77354E
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 2:
+                return new CUIControlButtonCharacterError(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 3:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\UIControlButtons.cpp
+                // __LINE__: 4364
+                UTIL_ASSERT(FALSE);
+            }
+            break;
+        case 51:
+            switch (controlInfo->nID) {
+            case 1:
+                return new CUIControlButtonCharacterPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 0);
+            case 2:
+                return new CUIControlButtonCharacterPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 0);
+            case 3:
+                return new CUIControlEditScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 4:
+                return new CUIControlEditMultiLineScroller(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo));
+            case 5:
+                return new CUIControlButtonCharacterBiographyClear(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 6:
+                return new CUIControlButtonCharacterBiographyRevert(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 52:
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 1:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 2:
+                return new CUIControlButtonCharacterPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 0);
+            }
+            break;
+        case 53:
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 1:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 2:
+                return new CUIControlButtonCharacterPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 0);
+            }
+            break;
+        case 54:
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlButtonCharacterPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 1);
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+                return new CUIControlButtonCharacterClassSelection(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 13:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 14:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 27:
+                return new CUIControlButtonCharacterPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 0);
+            }
+            break;
+        case 55:
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlButtonCharacterPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 1);
+            case 14:
+            case 15:
+            case 16:
+            case 17:
+            case 18:
+            case 19:
+            case 20:
+            case 21:
+            case 22:
+            case 23:
+            case 24:
+            case 25:
+            case 26:
+            case 27:
+            case 28:
+            case 29:
+            case 30:
+            case 31:
+                return new CUIControlButtonCharacterSkillsPlusMinus(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 91:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 92:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 93:
+            case 94:
+            case 95:
+            case 96:
+            case 97:
+            case 98:
+            case 99:
+            case 100:
+            case 101:
+                return new CUIControlButtonCharacterSkillsHotArea(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 104:
+                return new CUIControlScrollBarCharacterSkills(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 105:
+                return new CUIControlButtonCharacterPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 1);
+            }
+            break;
+        case 56:
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlButtonCharacterPopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 1);
+            case 14:
+            case 15:
+            case 16:
+            case 17:
+            case 18:
+            case 19:
+            case 20:
+            case 21:
+            case 22:
+            case 23:
+            case 24:
+            case 25:
+            case 26:
+            case 27:
+            case 28:
+            case 29:
+            case 30:
+            case 31:
+                return new CUIControlButtonCharacterFeatsPlusMinus(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 36:
+            case 37:
+            case 38:
+            case 39:
+            case 40:
+            case 41:
+            case 42:
+            case 43:
+            case 44:
+            case 45:
+            case 46:
+            case 47:
+            case 48:
+            case 49:
+            case 50:
+            case 51:
+            case 52:
+            case 53:
+            case 54:
+            case 55:
+            case 56:
+            case 57:
+            case 58:
+            case 59:
+            case 60:
+            case 61:
+            case 62:
+            case 63:
+            case 64:
+            case 65:
+            case 66:
+            case 67:
+            case 68:
+            case 69:
+            case 70:
+            case 71:
+            case 72:
+            case 73:
+            case 74:
+            case 75:
+            case 76:
+            case 77:
+            case 78:
+            case 79:
+            case 80:
+                return new CUIControlButtonCharacterFeatsCircle(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 91:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 92:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 93:
+            case 94:
+            case 95:
+            case 96:
+            case 97:
+            case 98:
+            case 99:
+            case 100:
+            case 101:
+                return new CUIControlButtonCharacterFeatsHotArea(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 104:
+                return new CUIControlScrollBarCharacterFeats(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 105:
+                return new CUIControlButtonCharacterPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 1);
+            }
+            break;
+        case 57:
+            // 0x77385F
+            switch (controlInfo->nID) {
+            case 1:
+                return new CUIControlButtonCharacterPopupCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo), 0);
+            case 2:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 3:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 4:
+                return new CUIControlScrollbarCharacter5F9410(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 27:
+            case 28:
+            case 29:
+            case 30:
+            case 31:
+            case 32:
+            case 33:
+            case 34:
+            case 35:
+            case 36:
+            case 37:
+                return new CUIControlCharacterHotArea778ED0(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 71:
+            case 72:
+            case 73:
+            case 74:
+            case 75:
+            case 76:
+            case 77:
+            case 78:
+            case 79:
+            case 80:
+            case 81:
+                return new CUIControlCharacterHotArea778ED0(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\UIControlButtons.cpp
+            // __LINE__: 4603
+            UTIL_ASSERT(FALSE);
+        }
     } else if (pPanel->m_pManager->m_cResRef == "GUISPL" || pPanel->m_pManager->m_cResRef == "GUISPL08") {
         // 0x775B04
         switch (pPanel->m_nID) {
