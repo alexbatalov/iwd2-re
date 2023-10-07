@@ -2356,6 +2356,28 @@ void CScreenCharacter::UpdateCustomizePanel(CGameSprite* pSprite)
     pButton->SetEnabled(bEnabled);
 }
 
+// NOTE: Inlined.
+void CScreenCharacter::UpdateScriptPanel(CGameSprite* pSprite)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(11);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 10006
+    UTIL_ASSERT(pPanel != NULL);
+
+    if (m_pCurrentScrollBar == NULL) {
+        m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(3));
+    }
+
+    CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(5));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 10015
+    UTIL_ASSERT(pButton != NULL);
+
+    pButton->SetEnabled(IsDoneButtonClickable(pSprite));
+}
+
 // 0x5E7790
 void CScreenCharacter::RefreshScripts()
 {
