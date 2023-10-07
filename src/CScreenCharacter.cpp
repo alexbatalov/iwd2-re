@@ -1078,6 +1078,88 @@ void CScreenCharacter::ResetClassDescriptionPanel(CGameSprite* pSprite)
         TRUE);
 }
 
+// 0x5D9610
+BOOL CScreenCharacter::ResetAbility(CGameSprite* pSprite, const CString& sMin, const CString& sMax, const CString& sMod, BYTE& nAbility, BYTE& nMin, BYTE& nMax, INT& nMod)
+{
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+    INT nBestClass = pSprite->m_derivedStats.GetBestClass();
+
+    CString sRace = ruleTables.GetRaceString(pSprite->m_startTypeAI.m_nRace, pSprite->m_startTypeAI.m_nSubRace);
+    BYTE nMinRaceReq = static_cast<BYTE>(atol(ruleTables.m_tAbilityRaceReq.GetAt(sMin, sRace)));
+    BYTE nMaxRaceReq = static_cast<BYTE>(atol(ruleTables.m_tAbilityRaceReq.GetAt(sMax, sRace)));
+    BYTE nRaceAdj = static_cast<BYTE>(atol(ruleTables.m_tAbilityRaceAdj.GetAt(sMod, sRace)));
+
+    CString sClass = ruleTables.GetClassString(nBestClass, pSprite->m_baseStats.m_specialization);
+    BYTE nMinClassReq = static_cast<BYTE>(atol(ruleTables.m_tAbilityClassReq.GetAt(sMin, sClass)));
+
+    nMax = 50;
+    nMin = max(nMinRaceReq + nRaceAdj, nMinClassReq);
+    nMin = max(nMin, 1);
+    nMod = nRaceAdj;
+
+    return TRUE;
+}
+
+// 0x5D97B0
+void CScreenCharacter::ResetAbilitiesPanel(CGameSprite* pSprite, int a2)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(7);
+
+    if (a2) {
+        m_nExtraAbilityPoints = pSprite->GetDerivedStats()->m_nLevel / 4 - m_pTempDerivedStats->m_nLevel / 4;
+        ResetAbility(pSprite,
+            CRuleTables::MIN_STR,
+            CRuleTables::MAX_STR,
+            CRuleTables::MOD_STR,
+            pSprite->GetBaseStats()->m_STRBase,
+            m_nMinSTR,
+            m_nMaxSTR,
+            m_nModSTR);
+        ResetAbility(pSprite,
+            CRuleTables::MIN_DEX,
+            CRuleTables::MAX_DEX,
+            CRuleTables::MOD_DEX,
+            pSprite->GetBaseStats()->m_DEXBase,
+            m_nMinDEX,
+            m_nMaxDEX,
+            m_nModDEX);
+        ResetAbility(pSprite,
+            CRuleTables::MIN_CON,
+            CRuleTables::MAX_CON,
+            CRuleTables::MOD_CON,
+            pSprite->GetBaseStats()->m_CONBase,
+            m_nMinCON,
+            m_nMaxCON,
+            m_nModCON);
+        ResetAbility(pSprite,
+            CRuleTables::MIN_INT,
+            CRuleTables::MAX_INT,
+            CRuleTables::MOD_INT,
+            pSprite->GetBaseStats()->m_INTBase,
+            m_nMinINT,
+            m_nMaxINT,
+            m_nModINT);
+        ResetAbility(pSprite,
+            CRuleTables::MIN_WIS,
+            CRuleTables::MAX_WIS,
+            CRuleTables::MOD_WIS,
+            pSprite->GetBaseStats()->m_WISBase,
+            m_nMinWIS,
+            m_nMaxWIS,
+            m_nModWIS);
+        ResetAbility(pSprite,
+            CRuleTables::MIN_CHR,
+            CRuleTables::MAX_CHR,
+            CRuleTables::MOD_CHR,
+            pSprite->GetBaseStats()->m_CHRBase,
+            m_nMinCHR,
+            m_nMaxCHR,
+            m_nModCHR);
+    }
+
+    UpdateHelp(pPanel->m_nID, 29, 27337);
+}
+
 // 0x5DAA40
 void CScreenCharacter::UpdateAbilitiesPanel(CGameSprite* pSprite)
 {

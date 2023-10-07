@@ -81,6 +81,8 @@ public:
     BOOLEAN IsNameOnExportList(CString sName);
     void ResetBiographyPanel(CGameSprite* pSprite);
     void ResetClassDescriptionPanel(CGameSprite* pSprite);
+    BOOL ResetAbility(CGameSprite* pSprite, const CString& sMin, const CString& sMax, const CString& sMod, BYTE& nAbility, BYTE& nMin, BYTE& nMax, INT& nMod);
+    void ResetAbilitiesPanel(CGameSprite* pSprite, int a2);
     void UpdateAbilitiesPanel(CGameSprite* pSprite);
     void GetPartyInformation(DWORD& nPartyChapterKillsXPValue, DWORD& nPartyChapterKillsNumber, DWORD& nPartyGameKillsXPValue, DWORD& nPartyGameKillsNumber);
     void EnableMainPanel(BOOL bEnable);
