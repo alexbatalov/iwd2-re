@@ -1546,7 +1546,7 @@ void CScreenCharacter::GetPartyInformation(DWORD& nPartyChapterKillsXPValue, DWO
     // __LINE__: 4093
     UTIL_ASSERT(pGame != NULL);
 
-    for (SHORT nIndex = 0; nIndex < pGame->GetNumCharacters(); nIndex) {
+    for (SHORT nIndex = 0; nIndex < pGame->GetNumCharacters(); nIndex++) {
         LONG nCharacterId = pGame->GetCharacterId(nIndex);
 
         CGameSprite* pSprite;
@@ -1981,7 +1981,7 @@ void CScreenCharacter::UpdateMiscInformation(CUIControlTextDisplay* pText, CGame
         FetchString(40320)); // "Favorites"
 
     pSprite->m_cGameStats.GetFavouriteSpell(resRef);
-    if (resRef != NULL) {
+    if (resRef != "") {
         CSpell cSpell;
         cSpell.SetResRef(resRef, TRUE, TRUE);
 
