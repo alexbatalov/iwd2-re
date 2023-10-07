@@ -3072,6 +3072,18 @@ void CScreenCharacter::sub_5F89B0(CGameSprite* pSprite)
     }
 }
 
+// 0x5F8C90
+void CScreenCharacter::sub_5F8C90(int a1)
+{
+    // TODO: Incomplete.
+}
+
+// 0x5F91F0
+void CScreenCharacter::sub_5F91F0(int a1)
+{
+    // TODO: Incomplete.
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x5ED4A0
@@ -5810,6 +5822,26 @@ void CUIControlButtonCharacterSkillsHotArea::OnHotAreaClick(CPoint pt)
     DWORD id = ruleTables.GetSkillId(offset + g_pBaldurChitin->m_pEngineCharacter->m_nTopSkill);
     STRREF strDescription = ruleTables.GetSkillDescription(id);
     g_pBaldurChitin->m_pEngineCharacter->UpdateHelp(m_pPanel->m_nID, 92, strDescription);
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x5F8C10
+void CUIControlCharacterHotArea778ED0::OnHotAreaClick(CPoint pt)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 18958
+    UTIL_ASSERT(pCharacter != NULL);
+
+    if (m_nID >= 27 && m_nID <= 37) {
+        pCharacter->sub_5F8C90(m_nID - 37);
+        pCharacter->UpdatePopupPanel(57, NULL);
+    } else if (m_nID >= 71 && m_nID <= 81) {
+        pCharacter->sub_5F91F0(pCharacter->field_1852 + m_nID - 71);
+        pCharacter->UpdatePopupPanel(57, NULL);
+    }
 }
 
 // -----------------------------------------------------------------------------

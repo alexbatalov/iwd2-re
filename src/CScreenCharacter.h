@@ -119,6 +119,8 @@ public:
     void OnPlayButtonClick();
     void OnSoundItemSelect(INT nItem);
     void sub_5F89B0(CGameSprite* pSprite);
+    void sub_5F8C90(int a1);
+    void sub_5F91F0(int a1);
 
     static void ResetBiography(CGameSprite* pSprite);
 

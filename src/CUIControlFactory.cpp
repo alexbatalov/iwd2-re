@@ -2975,6 +2975,19 @@ CUIControlButtonCharacterSkillsHotArea::~CUIControlButtonCharacterSkillsHotArea(
 
 // -----------------------------------------------------------------------------
 
+// 0x778ED0
+CUIControlCharacterHotArea778ED0::CUIControlCharacterHotArea778ED0(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButtonHotArea(panel, controlInfo)
+{
+}
+
+// 0x778F20
+CUIControlCharacterHotArea778ED0::~CUIControlCharacterHotArea778ED0()
+{
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x778FC0
 CUIControlButtonCharGenPortrait::CUIControlButtonCharGenPortrait(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton(panel, controlInfo, LBUTTON, 1)
