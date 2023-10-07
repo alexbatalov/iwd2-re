@@ -2325,6 +2325,79 @@ void CScreenCharacter::ResetErrorPanel(CUIPanel* pPanel)
     }
 }
 
+// 0x5E73B0
+void CScreenCharacter::ResetScriptPanel(CUIPanel* pPanel)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    const CRuleTables& rule = pGame->GetRuleTables();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 9880
+    UTIL_ASSERT(pPanel != NULL);
+
+    CString sScript;
+    CString sTitle;
+    CString sDescription;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 9887
+    UTIL_ASSERT(m_pScripts == NULL);
+
+    RefreshScripts();
+
+    m_nScriptIndex = -1;
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(4));
+    pText->RemoveAll();
+
+    LONG nCharacterId = pGame->GetCharacterId(m_nSelectedCharacter);
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pSprite->field_402 != NULL) {
+            pSprite->field_402->m_cResRef.CopyToString(sScript);
+            sScript.MakeUpper();
+        } else {
+            sScript = "none";
+        }
+
+        if (sScript != "" && sScript.CompareNoCase("none") != 0) {
+            rule.GetScriptDescription(sScript, sTitle, sDescription);
+            pText->DisplayString(CString(""),
+                sTitle + ' ' + sDescription,
+                pText->m_rgbLabelColor,
+                pText->m_rgbTextColor,
+                -1,
+                FALSE,
+                TRUE);
+        } else {
+            rule.GetScriptDescription(sScript, sTitle, sDescription);
+            pText->DisplayString(CString(""),
+                sTitle,
+                pText->m_rgbLabelColor,
+                pText->m_rgbTextColor,
+                -1,
+                FALSE,
+                TRUE);
+        }
+
+        pText->SetTopString(pText->m_plstStrings->FindIndex(0));
+
+        pGame->GetObjectArray()->ReleaseDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
 // 0x5E76D0
 void CScreenCharacter::UpdateCustomizePanel(CGameSprite* pSprite)
 {

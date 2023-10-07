@@ -114,6 +114,7 @@ public:
     void CheckDropEquipment();
     void CheckDropSlot(INT nSlot);
     void ResetErrorPanel(CUIPanel* pPanel);
+    void ResetScriptPanel(CUIPanel* pPanel);
     void UpdateCustomizePanel(CGameSprite* pSprite);
     void UpdateScriptPanel(CGameSprite* pSprite);
     void RefreshScripts();
