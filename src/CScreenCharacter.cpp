@@ -2356,6 +2356,127 @@ void CScreenCharacter::UpdateCustomizePanel(CGameSprite* pSprite)
     pButton->SetEnabled(bEnabled);
 }
 
+// 0x5E7790
+void CScreenCharacter::RefreshScripts()
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    const CRuleTables& rule = pGame->GetRuleTables();
+
+    CString sScript;
+    CString sTitle;
+    CString sDescription;
+    CStringList lStandardScripts;
+    CStringList lCustomScripts;
+    CString sOtherScript;
+    POSITION pos1;
+    POSITION pos2;
+
+    m_nScriptIndex = -1;
+    if (m_pScripts != NULL) {
+        delete m_pScripts;
+        m_pScripts = NULL;
+    }
+
+    m_pScripts = pGame->GetScripts();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 10062
+    UTIL_ASSERT(m_pScripts != NULL);
+
+    BOOL bNoneFound = FALSE;
+    pos1 = m_pScripts->GetHeadPosition();
+    while (pos1 != NULL) {
+        sScript = m_pScripts->GetAt(pos1);
+        sScript.MakeUpper();
+        rule.GetScriptDescription(sScript, sTitle, sDescription);
+
+        if (sScript.CompareNoCase("none") != 0) {
+            if (sDescription.Compare("") != 0) {
+                pos2 = lStandardScripts.GetHeadPosition();
+                while (pos2 != NULL) {
+                    sOtherScript = lStandardScripts.GetAt(pos2);
+                    if (sOtherScript.Compare(sScript) < 0) {
+                        break;
+                    }
+                    lStandardScripts.GetNext(pos2);
+                }
+
+                if (pos2 != NULL) {
+                    lStandardScripts.InsertBefore(pos2, sScript);
+                } else {
+                    lStandardScripts.AddTail(sScript);
+                }
+            } else {
+                lCustomScripts.AddTail(sScript);
+            }
+        } else {
+            bNoneFound = TRUE;
+        }
+
+        m_pScripts->GetNext(pos1);
+    }
+
+    m_pScripts->AddTail(&lStandardScripts);
+    m_pScripts->AddTail(&lCustomScripts);
+
+    if (bNoneFound) {
+        m_pScripts->AddHead("None");
+    }
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(11);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 10114
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(2));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 10116
+    UTIL_ASSERT(pText != NULL);
+
+    pText->m_rgbHighlightColor = CBaldurChitin::TEXTDISPLAY_COLOR_HIGHLIGHT;
+    pText->RemoveAll();
+    pText->field_A68 = 0x7FFE;
+
+    INT nIndex = 0;
+    pos1 = m_pScripts->GetHeadPosition();
+    while (pos1 != NULL) {
+        sScript = m_pScripts->GetAt(pos1);
+        rule.GetScriptDescription(sScript, sTitle, sDescription);
+        if (sScript.CompareNoCase("none") != 0) {
+            pText->DisplayString(CString(""),
+                sTitle + ' ' + sDescription,
+                pText->m_rgbLabelColor,
+                pText->m_rgbTextColor,
+                nIndex,
+                FALSE,
+                TRUE);
+        } else {
+            pText->DisplayString(CString(""),
+                sScript,
+                pText->m_rgbLabelColor,
+                pText->m_rgbTextColor,
+                nIndex,
+                FALSE,
+                TRUE);
+        }
+
+        pText->DisplayString(CString(""),
+            CString(""),
+            pText->m_rgbLabelColor,
+            pText->m_rgbTextColor,
+            -1,
+            FALSE,
+            TRUE);
+
+        m_pScripts->GetNext(pos1);
+        nIndex++;
+    }
+
+    pText->SetTopString(pText->m_plstStrings->FindIndex(0));
+}
+
 // 0x5E7C50
 void CScreenCharacter::OnScriptItemSelect(INT nItem)
 {

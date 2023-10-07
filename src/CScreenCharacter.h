@@ -115,6 +115,7 @@ public:
     void CheckDropSlot(INT nSlot);
     void ResetErrorPanel(CUIPanel* pPanel);
     void UpdateCustomizePanel(CGameSprite* pSprite);
+    void RefreshScripts();
     void OnScriptItemSelect(INT nItem);
     void OnErrorButtonClick(INT nButton);
     void OnCharacterItemSelect(INT nItem);
