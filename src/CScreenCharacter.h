@@ -488,4 +488,16 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlScrollbarCharacter5F9410 : public CUIControlScrollBar {
+public:
+    CUIControlScrollbarCharacter5F9410(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo);
+    ~CUIControlScrollbarCharacter5F9410() override;
+    void OnScroll() override;
+    void OnScrollUp() override;
+    void OnScrollDown() override;
+    void OnPageUp(DWORD nLines) override;
+    void OnPageDown(DWORD nLines) override;
+    void UpdateScrollBar();
+};
+
 #endif /* CSCREENCHARACTER_H_ */

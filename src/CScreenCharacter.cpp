@@ -5861,3 +5861,127 @@ void CUIControlButtonCharacterInformationFolder::OnLButtonClick(CPoint pt)
         UTIL_ASSERT(pCharacter != NULL);
     }
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x5F9410
+CUIControlScrollbarCharacter5F9410::CUIControlScrollbarCharacter5F9410(CUIPanel* panel, UI_CONTROL_SCROLLBAR* controlInfo)
+    : CUIControlScrollBar(panel, controlInfo)
+{
+}
+
+// 0x632C00
+CUIControlScrollbarCharacter5F9410::~CUIControlScrollbarCharacter5F9410()
+{
+}
+
+// NOTE: Inlined.
+void CUIControlScrollbarCharacter5F9410::UpdateScrollBar()
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 19222
+    UTIL_ASSERT(pCharacter);
+
+    AdjustScrollBar(pCharacter->field_1852, pCharacter->field_184E, 11);
+}
+
+// 0x5F9430
+void CUIControlScrollbarCharacter5F9410::OnScrollUp()
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 19250
+    UTIL_ASSERT(pCharacter);
+
+    pCharacter->field_1852 = max(pCharacter->field_1852 - 1, 0);
+
+    pCharacter->UpdatePopupPanel(57, NULL);
+
+    // NOTE: Uninline.
+    UpdateScrollBar();
+}
+
+// 0x5F94C0
+void CUIControlScrollbarCharacter5F9410::OnScrollDown()
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 19277
+    UTIL_ASSERT(pCharacter);
+
+    if (pCharacter->field_1852 < pCharacter->field_184E - 11) {
+        // NOTE: Original code is slightly different.
+        pCharacter->field_1852 = min(pCharacter->field_1852 + 1, pCharacter->field_184E - 11);
+    }
+
+    pCharacter->UpdatePopupPanel(57, NULL);
+
+    // NOTE: Uninline.
+    UpdateScrollBar();
+}
+
+// 0x5F9580
+void CUIControlScrollbarCharacter5F9410::OnPageUp(DWORD nLines)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 19310
+    UTIL_ASSERT(pCharacter);
+
+    if (pCharacter->field_184E > 11) {
+        // NOTE: Original code is slightly different.
+        INT nStep = min(nLines, 10);
+        pCharacter->field_1852 = max(pCharacter->field_1852 - nLines, 0);
+
+        pCharacter->UpdatePopupPanel(57, NULL);
+
+        // NOTE: Uninline.
+        UpdateScrollBar();
+    }
+}
+
+// 0x5F9640
+void CUIControlScrollbarCharacter5F9410::OnPageDown(DWORD nLines)
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 19353
+    UTIL_ASSERT(pCharacter);
+
+    if (pCharacter->field_184E > 11) {
+        // NOTE: Original code is slightly different.
+        INT nStep = min(nLines, 11);
+        pCharacter->field_1852 = min(pCharacter->field_1852 + nStep, pCharacter->field_184E - 11);
+
+        pCharacter->UpdatePopupPanel(57, NULL);
+
+        // NOTE: Uninline.
+        UpdateScrollBar();
+    }
+}
+
+// 0x5F9720
+void CUIControlScrollbarCharacter5F9410::OnScroll()
+{
+    CScreenCharacter* pCharacter = g_pBaldurChitin->m_pEngineCharacter;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 19396
+    UTIL_ASSERT(pCharacter);
+
+    int v1 = max(pCharacter->field_184E - 1, 0) * field_144 / field_142;
+    pCharacter->field_1852 = min(max(v1, 0), pCharacter->field_184E - 11);
+
+    if (pCharacter->field_184E > 11) {
+        pCharacter->UpdatePopupPanel(57, NULL);
+    }
+
+    // NOTE: Uninline.
+    UpdateScrollBar();
+}
