@@ -1677,6 +1677,285 @@ STRREF CScreenCharacter::GetRangerHatedRaceStrref(BYTE nRace)
 // 0x5DBDE0
 void CScreenCharacter::UpdateMainPanel(BOOL bCharacterChanged)
 {
+    // FIXME: Unused.
+    CString v1;
+    CString v2;
+    CString v3;
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    const CRuleTables& rule = pGame->GetRuleTables();
+
+    LONG nCharacterId = pGame->GetCharacterId(m_nSelectedCharacter);
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        CCreatureFileHeader& BStats = *pSprite->GetBaseStats();
+        CDerivedStats& DStats = *pSprite->GetDerivedStats();
+        CAIObjectType& typeAI = pSprite->m_startTypeAI;
+
+        CUIPanel* pPanel = m_cUIManager.GetPanel(2);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 4497
+        UTIL_ASSERT(pPanel != NULL);
+
+        m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(46));
+
+        if (m_bMultiPlayerViewable) {
+            // STR
+            UpdateLabel(pPanel, 0x1000002F, "%d", DStats.m_nSTR);
+            HighlightLabel(pPanel,
+                0x1000002F,
+                DStats.m_nSTR != BStats.m_STRBase,
+                CBaldurEngine::COLOR_LABEL_HIGHLIGHT_BONUS);
+            UpdateLabel(pPanel,
+                0x10000035,
+                "%+d",
+                rule.GetAbilityScoreModifier(DStats.m_nSTR));
+            HighlightLabel(pPanel,
+                0x10000035,
+                DStats.m_nSTR != 10 && DStats.m_nSTR != 11,
+                DStats.m_nSTR < 10 ? RGB(255, 0, 0) : RGB(0, 255, 0));
+
+            // DEX
+            UpdateLabel(pPanel, 0x10000009, "%d", DStats.m_nDEX);
+            UpdateLabel(pPanel,
+                0x10000036,
+                "%+d",
+                rule.GetAbilityScoreModifier(DStats.m_nDEX));
+            HighlightLabel(pPanel,
+                0x10000036,
+                DStats.m_nDEX != 10 && DStats.m_nDEX != 11,
+                DStats.m_nDEX < 10 ? RGB(255, 0, 0) : RGB(0, 255, 0));
+
+            // CON
+            UpdateLabel(pPanel, 0x1000000A, "%d", DStats.m_nCON);
+            UpdateLabel(pPanel,
+                0x10000037,
+                "%+d",
+                rule.GetAbilityScoreModifier(DStats.m_nCON));
+            HighlightLabel(pPanel,
+                0x10000037,
+                DStats.m_nCON != 10 && DStats.m_nCON != 11,
+                DStats.m_nCON < 10 ? RGB(255, 0, 0) : RGB(0, 255, 0));
+
+            // INT
+            UpdateLabel(pPanel, 0x1000000B, "%d", DStats.m_nINT);
+            UpdateLabel(pPanel,
+                0x10000038,
+                "%+d",
+                rule.GetAbilityScoreModifier(DStats.m_nINT));
+            HighlightLabel(pPanel,
+                0x10000038,
+                DStats.m_nINT != 10 && DStats.m_nINT != 11,
+                DStats.m_nINT < 10 ? RGB(255, 0, 0) : RGB(0, 255, 0));
+
+            // WIS
+            UpdateLabel(pPanel, 0x1000000C, "%d", DStats.m_nWIS);
+            UpdateLabel(pPanel,
+                0x10000039,
+                "%+d",
+                rule.GetAbilityScoreModifier(DStats.m_nWIS));
+            HighlightLabel(pPanel,
+                0x10000039,
+                DStats.m_nWIS != 10 && DStats.m_nWIS != 11,
+                DStats.m_nWIS < 10 ? RGB(255, 0, 0) : RGB(0, 255, 0));
+
+            // CHR
+            UpdateLabel(pPanel, 0x1000000D, "%d", DStats.m_nCHR);
+            UpdateLabel(pPanel,
+                0x1000003A,
+                "%+d",
+                rule.GetAbilityScoreModifier(DStats.m_nCHR));
+            HighlightLabel(pPanel,
+                0x1000003A,
+                DStats.m_nCHR != 10 && DStats.m_nCHR != 11,
+                DStats.m_nCHR < 10 ? RGB(255, 0, 0) : RGB(0, 255, 0));
+        } else {
+            // STR
+            UpdateLabel(pPanel, 0x1000002F, "");
+            UpdateLabel(pPanel, 0x10000035, "");
+
+            // DEX
+            UpdateLabel(pPanel, 0x10000009, "");
+            UpdateLabel(pPanel, 0x10000036, "");
+
+            // CON
+            UpdateLabel(pPanel, 0x1000000A, "");
+            UpdateLabel(pPanel, 0x10000037, "");
+
+            // INT
+            UpdateLabel(pPanel, 0x1000000B, "");
+            UpdateLabel(pPanel, 0x10000038, "");
+
+            // WIS
+            UpdateLabel(pPanel, 0x1000000C, "");
+            UpdateLabel(pPanel, 0x10000039, "");
+
+            // CHR
+            UpdateLabel(pPanel, 0x1000000D, "");
+            UpdateLabel(pPanel, 0x1000003A, "");
+        }
+
+        HighlightLabel(pPanel,
+            0x10000009,
+            DStats.m_nDEX != BStats.m_DEXBase,
+            CBaldurEngine::COLOR_LABEL_HIGHLIGHT_BONUS);
+        HighlightLabel(pPanel,
+            0x1000000A,
+            DStats.m_nCON != BStats.m_CONBase,
+            CBaldurEngine::COLOR_LABEL_HIGHLIGHT_BONUS);
+        HighlightLabel(pPanel,
+            0x1000000B,
+            DStats.m_nINT != BStats.m_INTBase,
+            CBaldurEngine::COLOR_LABEL_HIGHLIGHT_BONUS);
+        HighlightLabel(pPanel,
+            0x1000000C,
+            DStats.m_nWIS != BStats.m_WISBase,
+            CBaldurEngine::COLOR_LABEL_HIGHLIGHT_BONUS);
+        HighlightLabel(pPanel,
+            0x1000000D,
+            DStats.m_nCHR != BStats.m_CHRBase,
+            CBaldurEngine::COLOR_LABEL_HIGHLIGHT_BONUS);
+
+        if (m_bMultiPlayerViewable) {
+            if (DStats.m_spellStates[SPLSTATE_SUPPRESS_HP_INFO]) {
+                UpdateLabel(pPanel, 0x10000029, "%c", '?');
+            } else {
+                UpdateLabel(pPanel, 0x10000029, "%d", BStats.m_hitPoints);
+            }
+
+            UpdateLabel(pPanel, 0x1000002A, "%d", DStats.m_nMaxHitPoints);
+            UpdateLabel(pPanel, 0x10000028, "%d", pSprite->GetAC());
+        } else {
+            UpdateLabel(pPanel, 0x10000029, "");
+            UpdateLabel(pPanel, 0x1000002A, "");
+            UpdateLabel(pPanel, 0x10000028, "");
+        }
+
+        if (BStats.m_name != -1) {
+            UpdateLabel(pPanel, 0x1000000E, "%s", (LPCSTR)FetchString(BStats.m_name));
+        } else {
+            UpdateLabel(pPanel, 0x1000000E, "%s", (LPCSTR)pSprite->GetName());
+        }
+
+        CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(45));
+
+        SHORT nTopString = 0;
+        if (!bCharacterChanged) {
+            nTopString = pText->field_5A;
+        }
+
+        CString sNameSeparator;
+        sNameSeparator.Format("%c", '!');
+        pText->m_sNameSeparator = sNameSeparator;
+
+        pText->RemoveAll();
+
+        if (m_bMultiPlayerViewable) {
+            for (DWORD nButtonID = 60; nButtonID <= 63; nButtonID++) {
+                CUIControlButtonCharacterInformationFolder* pButton = static_cast<CUIControlButtonCharacterInformationFolder*>(pPanel->GetControl(nButtonID));
+                pButton->SetSelected(field_1844 == nButtonID - 60);
+            }
+
+            switch (field_1844) {
+            case 0:
+                UpdateGeneralInformation(pText, pSprite);
+                break;
+            case 1:
+                UpdateEquipmentInformation(pText, pSprite);
+                break;
+            case 2:
+                UpdateTextForceColor(pText,
+                    RGB(200, 200, 0),
+                    "%s",
+                    FetchString(11983));
+                pSprite->DisplaySkills(pText);
+
+                UpdateText(pText, "");
+
+                UpdateTextForceColor(pText,
+                    RGB(200, 200, 0),
+                    "%s",
+                    FetchString(36361));
+                pSprite->DisplayFeats(pText);
+                break;
+            case 3:
+                UpdateMiscInformation(pText, pSprite);
+                break;
+            }
+        }
+
+        pText->SetTopString(pText->m_plstStrings->FindIndex(nTopString));
+
+        CheckMultiPlayerViewableModifyable();
+
+        CUIControlButtonCharacterPortrait* pPortrait = static_cast<CUIControlButtonCharacterPortrait*>(pPanel->GetControl(2));
+        pPortrait->SetPortrait(BStats.m_portraitLarge);
+
+        CUIControlButton* pButton;
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(1));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 4840
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->SetEnabled(m_bMultiPlayerViewable);
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(50));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 4851
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->SetEnabled(m_bMultiPlayerModifyable
+            && (DStats.m_generalState & STATE_DEAD) == 0);
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(36));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 4856
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->SetEnabled(m_bMultiPlayerModifyable
+            && (BStats.m_flags & 0x800) != 0
+            && !DStats.m_bPolymorphed
+            && (DStats.m_generalState & STATE_DEAD) == 0);
+
+        pButton = static_cast<CUIControlButton*>(pPanel->GetControl(37));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 4866
+        UTIL_ASSERT(pButton != NULL);
+
+        // pButton->SetEnabled(IsLevelUpButtonClickable(pSprite)
+        //     && (DStats.m_generalState & STATE_DEAD) == 0);
+
+        pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// 0x5DC9D0
+void CScreenCharacter::UpdateGeneralInformation(CUIControlTextDisplay* pText, CGameSprite* pSprite)
+{
+    // TODO: Incomplete.
+}
+
+// 0x5DE2C0
+void CScreenCharacter::UpdateEquipmentInformation(CUIControlTextDisplay* pText, CGameSprite* pSprite)
+{
     // TODO: Incomplete.
 }
 

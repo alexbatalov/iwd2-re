@@ -89,6 +89,8 @@ public:
     void EnableMainPanel(BOOL bEnable);
     STRREF GetRangerHatedRaceStrref(BYTE nRace);
     void UpdateMainPanel(BOOL bCharacterChanged);
+    void UpdateGeneralInformation(CUIControlTextDisplay* pText, CGameSprite* pSprite);
+    void UpdateEquipmentInformation(CUIControlTextDisplay* pText, CGameSprite* pSprite);
     void UpdateMiscInformation(CUIControlTextDisplay* pText, CGameSprite* pSprite);
     void ResetPopupPanel(DWORD dwPanelId, CGameSprite* pSprite, int a3);
     void UpdatePopupPanel(DWORD dwPanelId, CGameSprite* pSprite);
