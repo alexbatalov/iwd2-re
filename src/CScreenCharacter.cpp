@@ -6340,7 +6340,7 @@ void CUIControlButtonCharacterInformationFolder::OnLButtonClick(CPoint pt)
     case 61:
     case 62:
     case 63:
-        pCharacter->field_1844 = m_nID - 60;
+        pCharacter->field_1844 = static_cast<BYTE>(m_nID) - 60;
 
         pPanel = pCharacter->GetManager()->GetPanel(2);
         pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(45));
