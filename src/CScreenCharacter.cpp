@@ -3492,6 +3492,32 @@ void CScreenCharacter::OnSoundItemSelect(INT nItem)
     }
 }
 
+// 0x5EA620
+void CScreenCharacter::ResetCustomizeBiographyPanel(CUIPanel* pPanel, CGameSprite* pSprite)
+{
+    CUIControlEditMultiLine* pEdit = static_cast<CUIControlEditMultiLine*>(pPanel->GetControl(4));
+    pEdit->Remove();
+
+    STRREF strBiography = pSprite->GetBaseStats()->m_biography;
+
+    CString sBiography;
+    STR_RES strRes;
+
+    if (strBiography == -1) {
+        strBiography = g_pBaldurChitin->GetTlkTable().m_override.Add(CString(""));
+        pSprite->GetBaseStats()->m_biography = strBiography;
+    }
+
+    sBiography = FetchString(strBiography);
+    pEdit->SetText(sBiography);
+
+    field_1B8 = TRUE;
+    m_cUIManager.SetCapture(pEdit, CUIManager::KEYBOARD);
+
+    CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(6));
+    pButton->SetEnabled(g_pBaldurChitin->GetTlkTable().m_override.Fetch(strBiography, strRes));
+}
+
 // 0x5F89B0
 void CScreenCharacter::sub_5F89B0(CGameSprite* pSprite)
 {
