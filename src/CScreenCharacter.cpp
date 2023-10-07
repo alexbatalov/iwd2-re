@@ -2542,7 +2542,7 @@ void CScreenCharacter::OnScriptItemSelect(INT nItem)
                 sScript = m_pScripts->GetAt(m_pScripts->FindIndex(m_nScriptIndex));
                 pGame->GetRuleTables().GetScriptDescription(sScript, sTitle, sDescription);
 
-                if (sScript != "none") {
+                if (sScript.CompareNoCase("none") != 0) {
                     pDescriptionText->DisplayString(CString(""),
                         sTitle + ' ' + sDescription,
                         pDescriptionText->m_rgbLabelColor,
