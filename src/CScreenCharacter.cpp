@@ -613,7 +613,37 @@ void CScreenCharacter::EngineGameUninit()
 // 0x5D76E0
 void CScreenCharacter::OnMouseMove(CPoint pt)
 {
-    // TODO: Incomplete.
+    CUIPanel* pPanel;
+
+    if (m_cUIManager.GetPanel(11)->m_bActive) {
+        pPanel = m_cUIManager.GetPanel(11);
+        if (pPanel->GetControl(2)->IsOver(pt - pPanel->m_ptOrigin)) {
+            m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(3));
+        } else {
+            m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(7));
+        }
+    } else if (m_cUIManager.GetPanel(16)->m_bActive) {
+        pPanel = m_cUIManager.GetPanel(16);
+        if (pPanel->GetControl(8)->IsOver(pt - pPanel->m_ptOrigin)) {
+            m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(9));
+        } else {
+            m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(1));
+        }
+    } else if (m_cUIManager.GetPanel(56)->m_bActive) {
+        pPanel = m_cUIManager.GetPanel(56);
+        if (pPanel->GetControl(92)->IsOver(pt - pPanel->m_ptOrigin)) {
+            m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(91));
+        } else {
+            m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(104));
+        }
+    } else if (m_cUIManager.GetPanel(57)->m_bActive) {
+        pPanel = m_cUIManager.GetPanel(57);
+        if (pPanel->GetControl(2)->IsOver(pt - pPanel->m_ptOrigin)) {
+            m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(4));
+        } else {
+            m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(3));
+        }
+    }
 
     m_cUIManager.OnMouseMove(pt);
 }
