@@ -4667,7 +4667,7 @@ CUIControlButtonCharacterCustomizeMenu::CUIControlButtonCharacterCustomizeMenu(C
     case 3:
         dwText = 17111; // "Script"
         break;
-    case 4:
+    case 9:
         dwText = 18003; // "Biography"
         break;
     default:
