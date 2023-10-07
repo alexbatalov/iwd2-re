@@ -359,6 +359,58 @@ BOOL CScreenCharacter::CheckSystemKeyCapsLock()
     return field_1B8;
 }
 
+// 0x49FC40
+BOOL CScreenCharacter::CheckMouseMove()
+{
+    return TRUE;
+}
+
+// 0x49FC40
+BOOL CScreenCharacter::CheckMouseLButton()
+{
+    return TRUE;
+}
+
+// 0x5D76C0
+void CScreenCharacter::OnLButtonDblClk(CPoint pt)
+{
+    m_cUIManager.OnLButtonDblClk(pt);
+}
+
+// 0x636970
+void CScreenCharacter::OnLButtonDown(CPoint pt)
+{
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
+    m_cUIManager.OnLButtonDown(pt);
+}
+
+// 0x6369A0
+void CScreenCharacter::OnLButtonUp(CPoint pt)
+{
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
+    m_cUIManager.OnLButtonUp(pt);
+}
+
+// 0x49FC40
+BOOL CScreenCharacter::CheckMouseRButton()
+{
+    return TRUE;
+}
+
+// 0x6369D0
+void CScreenCharacter::OnRButtonDown(CPoint pt)
+{
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
+    m_cUIManager.OnRButtonDown(pt);
+}
+
+// 0x636A00
+void CScreenCharacter::OnRButtonUp(CPoint pt)
+{
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
+    m_cUIManager.OnRButtonUp(pt);
+}
+
 // 0x699600
 SHORT CScreenCharacter::GetNumVirtualKeys()
 {
@@ -556,6 +608,14 @@ void CScreenCharacter::EngineGameInit()
 void CScreenCharacter::EngineGameUninit()
 {
     m_cUIManager.fUninit();
+}
+
+// 0x5D76E0
+void CScreenCharacter::OnMouseMove(CPoint pt)
+{
+    // TODO: Incomplete.
+
+    m_cUIManager.OnMouseMove(pt);
 }
 
 // 0x5D78E0
