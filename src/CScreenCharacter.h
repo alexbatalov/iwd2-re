@@ -127,6 +127,7 @@ public:
     void OnScriptItemSelect(INT nItem);
     void OnErrorButtonClick(INT nButton);
     void OnCharacterItemSelect(INT nItem);
+    void UpdateClassSelectionPanel(CGameSprite* pSprite);
     INT GetNumHatedRaces();
     void SetTopHatedRace(INT nTopHatedRace);
     BYTE GetHatedRace(INT nIndex);
@@ -338,6 +339,8 @@ public:
     CUIControlButtonCharacterClassSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonCharacterClassSelection() override;
     void OnLButtonClick(CPoint pt) override;
+
+    BYTE GetClass();
 };
 
 class CUIControlButtonInformationDone : public CUIControlButton {

@@ -3497,6 +3497,100 @@ void CScreenCharacter::UpdateCharacterStatus(LONG nCharacterId)
     }
 }
 
+// 0x5E8B70
+void CScreenCharacter::UpdateClassSelectionPanel(CGameSprite* pSprite)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(54);
+
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(14));
+
+    const CRuleTables& rule = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    CDerivedStats DStats;
+    DStats = *pSprite->GetDerivedStats();
+
+    rule.GetNextLevel(pSprite->m_startTypeAI.GetClass(),
+        DStats,
+        pSprite);
+
+    for (DWORD nButtonID = 2; nButtonID <= 12; nButtonID++) {
+        CUIControlButtonCharacterClassSelection* pButton = static_cast<CUIControlButtonCharacterClassSelection*>(pPanel->GetControl(nButtonID));
+        BYTE nClass = static_cast<BYTE>(nButtonID - 1);
+
+        INT nChange = 0;
+        if (m_nClass == nClass) {
+            nChange = DStats.m_nLevel - m_pTempDerivedStats->m_nLevel;
+            pButton->SetSelected(TRUE);
+        } else {
+            pButton->SetSelected(FALSE);
+        }
+
+        INT nExtraLevels = nChange + pSprite->GetDerivedStats()->GetClassLevel(nClass);
+        if (nExtraLevels > 0) {
+            UpdateLabel(pPanel, nButtonID + 0x1000000D, "%d", nExtraLevels);
+        } else {
+            UpdateLabel(pPanel, nButtonID + 0x1000000D, "");
+        }
+
+        BOOL bEnabled;
+
+        // TODO: Unclear jumps.
+        switch (pSprite->m_startTypeAI.GetRace()) {
+        case CAIOBJECTTYPE_R_HUMAN:
+            // NOTE: Uninline.
+            bEnabled = rule.IsValidAlignment(pButton->GetClass(),
+                pSprite->m_startTypeAI.GetAlignment(),
+                0);
+            break;
+        case CAIOBJECTTYPE_R_ELF:
+        case CAIOBJECTTYPE_R_HALF_ELF:
+        case CAIOBJECTTYPE_R_DWARF:
+        case CAIOBJECTTYPE_R_HALFLING:
+        case CAIOBJECTTYPE_R_GNOME:
+        case CAIOBJECTTYPE_R_HALF_ORC:
+            if (nClass > 0 || nClass <= 11) {
+                bEnabled = rule.IsValidAlignment(pButton->GetClass(),
+                    pSprite->m_startTypeAI.GetAlignment(),
+                    0);
+                break;
+            }
+            break;
+        default:
+            bEnabled = FALSE;
+            break;
+        }
+
+        if (bEnabled) {
+            // NOTE: Uninline.
+            switch (pButton->GetClass()) {
+            case CAIOBJECTTYPE_C_PALADIN:
+                if ((pSprite->GetBaseStats()->field_2FB & 0x8) != 0) {
+                    bEnabled = FALSE;
+                }
+                break;
+            case CAIOBJECTTYPE_C_RANGER:
+                if ((pSprite->GetBaseStats()->field_2FB & 0x4) != 0) {
+                    bEnabled = FALSE;
+                }
+                break;
+            }
+        }
+
+        pButton->SetEnabled(bEnabled);
+    }
+
+    CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(0));
+    pDone->SetEnabled(IsDoneButtonClickable(pSprite));
+
+    CUIControlButton* pCancelButton = static_cast<CUIControlButton*>(pPanel->GetControl(27));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 11109
+    UTIL_ASSERT(pCancelButton != NULL);
+
+    pCancelButton->SetEnabled(TRUE);
+}
+
 // NOTE: Inlined.
 INT CScreenCharacter::GetNumHatedRaces()
 {
@@ -5008,47 +5102,9 @@ CUIControlButtonCharacterClassSelection::CUIControlButtonCharacterClassSelection
 
     CString sClass;
     STR_RES strRes;
-    BYTE nClass;
 
-    switch (m_nID) {
-    case 2:
-        nClass = CAIOBJECTTYPE_C_BARBARIAN;
-        break;
-    case 3:
-        nClass = CAIOBJECTTYPE_C_BARD;
-        break;
-    case 4:
-        nClass = CAIOBJECTTYPE_C_CLERIC;
-        break;
-    case 5:
-        nClass = CAIOBJECTTYPE_C_DRUID;
-        break;
-    case 6:
-        nClass = CAIOBJECTTYPE_C_FIGHTER;
-        break;
-    case 7:
-        nClass = CAIOBJECTTYPE_C_MONK;
-        break;
-    case 8:
-        nClass = CAIOBJECTTYPE_C_PALADIN;
-        break;
-    case 9:
-        nClass = CAIOBJECTTYPE_C_RANGER;
-        break;
-    case 10:
-        nClass = CAIOBJECTTYPE_C_ROGUE;
-        break;
-    case 11:
-        nClass = CAIOBJECTTYPE_C_SORCERER;
-        break;
-    case 12:
-        nClass = CAIOBJECTTYPE_C_WIZARD;
-        break;
-    default:
-        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
-        // __LINE__: 12808
-        UTIL_ASSERT(FALSE);
-    }
+    // NOTE: Uninline.
+    BYTE nClass = GetClass();
 
     ruleTables.GetClassStringLower(nClass, 0x4000, 0, sClass, 1);
     SetText(sClass);
@@ -5160,6 +5216,54 @@ void CUIControlButtonCharacterClassSelection::OnLButtonClick(CPoint pt)
     }
 
     renderLock.Unlock();
+}
+
+// NOTE: Inlined.
+BYTE CUIControlButtonCharacterClassSelection::GetClass()
+{
+    BYTE nClass;
+
+    switch (m_nID) {
+    case 2:
+        nClass = CAIOBJECTTYPE_C_BARBARIAN;
+        break;
+    case 3:
+        nClass = CAIOBJECTTYPE_C_BARD;
+        break;
+    case 4:
+        nClass = CAIOBJECTTYPE_C_CLERIC;
+        break;
+    case 5:
+        nClass = CAIOBJECTTYPE_C_DRUID;
+        break;
+    case 6:
+        nClass = CAIOBJECTTYPE_C_FIGHTER;
+        break;
+    case 7:
+        nClass = CAIOBJECTTYPE_C_MONK;
+        break;
+    case 8:
+        nClass = CAIOBJECTTYPE_C_PALADIN;
+        break;
+    case 9:
+        nClass = CAIOBJECTTYPE_C_RANGER;
+        break;
+    case 10:
+        nClass = CAIOBJECTTYPE_C_ROGUE;
+        break;
+    case 11:
+        nClass = CAIOBJECTTYPE_C_SORCERER;
+        break;
+    case 12:
+        nClass = CAIOBJECTTYPE_C_WIZARD;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 12808
+        UTIL_ASSERT(FALSE);
+    }
+
+    return nClass;
 }
 
 // -----------------------------------------------------------------------------

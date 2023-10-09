@@ -292,6 +292,7 @@ public:
     /* 0284 */ RESREF field_284;
     /* 028C */ RESREF field_28C;
     /* 02FA */ BYTE m_fadeSpeed;
+    /* 02FB */ unsigned char field_2FB;
     /* 02FC */ unsigned char field_2FC;
 };
 
