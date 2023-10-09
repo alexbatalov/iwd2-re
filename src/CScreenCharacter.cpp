@@ -1190,6 +1190,27 @@ void CScreenCharacter::ResetAbilitiesPanel(CGameSprite* pSprite, int a2)
     UpdateHelp(pPanel->m_nID, 29, 27337);
 }
 
+// 0x5DA120
+void CScreenCharacter::ResetClassSelectionPanel(CUIPanel* pPanel, CGameSprite* pSprite)
+{
+    pSprite->SetAIType(m_typeAI, TRUE, TRUE);
+
+    CAIObjectType typeAI;
+    typeAI.Set(pSprite->m_startTypeAI);
+    typeAI.m_nClassMask = 0;
+
+    for (INT iClassType = 1; iClassType <= CAIOBJECT_CLASS_MAX; iClassType++) {
+        if (pSprite->GetDerivedStats()->GetClassLevel(iClassType) != 0) {
+            typeAI.AddClass(iClassType);
+        }
+    }
+
+    pSprite->SetAIType(typeAI, TRUE, TRUE);
+    m_nClass = 0;
+
+    UpdateHelp(pPanel->m_nID, 13, 17242);
+}
+
 // 0x5DA490
 void CScreenCharacter::UpdateHatedRacePanel(CGameSprite* pSprite)
 {

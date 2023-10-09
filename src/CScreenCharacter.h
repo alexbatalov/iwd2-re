@@ -1,6 +1,7 @@
 #ifndef CSCREENCHARACTER_H_
 #define CSCREENCHARACTER_H_
 
+#include "CAIObjectType.h"
 #include "CBaldurEngine.h"
 #include "CGameSpriteSpells.h"
 #include "CKeyInfo.h"
@@ -83,6 +84,7 @@ public:
     void ResetClassDescriptionPanel(CGameSprite* pSprite);
     BOOL ResetAbility(CGameSprite* pSprite, const CString& sMin, const CString& sMax, const CString& sMod, BYTE& nAbility, BYTE& nMin, BYTE& nMax, INT& nMod);
     void ResetAbilitiesPanel(CGameSprite* pSprite, int a2);
+    void ResetClassSelectionPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateHatedRacePanel(CGameSprite* pSprite);
     void UpdateAbilitiesPanel(CGameSprite* pSprite);
     void GetPartyInformation(DWORD& nPartyChapterKillsXPValue, DWORD& nPartyChapterKillsNumber, DWORD& nPartyGameKillsXPValue, DWORD& nPartyGameKillsNumber);
@@ -146,6 +148,7 @@ public:
     int GetNumErrorButtons() { return m_nNumErrorButtons; }
 
     /* 0106 */ BYTE m_nClass;
+    /* 012C */ CAIObjectType m_typeAI;
     /* 01B0 */ BOOL m_bShiftKeyDown;
     /* 01B4 */ BOOL m_bCapsLockKeyOn;
     /* 01B8 */ BOOLEAN field_1B8;
