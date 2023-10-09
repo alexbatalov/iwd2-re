@@ -311,6 +311,7 @@ public:
     BOOL HaveUnexportableItems();
     void SetMonkAbilities();
     INT GetAC();
+    INT sub_723F60();
     void sub_72DE60();
     void sub_71E760(CDerivedStats& DStats, int a2);
     int sub_71F6E0();
@@ -386,6 +387,8 @@ public:
     BOOLEAN sub_725330(const CResRef& resRef, const DWORD& dwClassMask, UINT nLevel, BOOLEAN a4);
     BOOLEAN sub_7256B0(const CResRef& resRef, const UINT& nLevel, BOOLEAN a3);
     BOOLEAN sub_725840(const CResRef& resRef, BOOLEAN a2);
+
+    INT sub_726270(UINT nFeatNumber);
 
     /* 0598 */ CResRef m_resRef;
     /* 05A0 */ CString m_sName;

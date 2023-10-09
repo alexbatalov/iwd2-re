@@ -29,6 +29,8 @@ public:
     static BOOLEAN IsLawful(CGameSprite* pSprite);
     static BOOLEAN IsChaotic(CGameSprite* pSprite);
     static BOOLEAN IsPC(CGameSprite* pSprite);
+    static INT GetSneakAttackRolls(CGameSprite* pSprite);
+    static INT GetSneakAttackDice();
 };
 
 #endif /* ICEWINDMISC_H_ */

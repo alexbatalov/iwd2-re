@@ -182,3 +182,19 @@ BOOLEAN IcewindMisc::IsPC(CGameSprite* pSprite)
 {
     return pSprite->GetAIType().m_nEnemyAlly == CAIObjectType::EA_PC;
 }
+
+// 0x585D50
+INT IcewindMisc::GetSneakAttackRolls(CGameSprite* pSprite)
+{
+    if ((pSprite->GetAIType().m_nClassMask & CLASSMASK_ROGUE) != 0) {
+        return (pSprite->GetDerivedStats()->GetClassLevel(CAIOBJECTTYPE_C_ROGUE) - 1) / 2 + 1;
+    } else {
+        return 0;
+    }
+}
+
+// 0x585D80
+INT IcewindMisc::GetSneakAttackDice()
+{
+    return 6;
+}

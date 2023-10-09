@@ -14,6 +14,7 @@
 #include "CUIControlFactory.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
+#include "IcewindMisc.h"
 
 #define FEAT_COUNT CGAMESPRITE_FEAT_NUMFEATS
 #define FEAT_SLOTS 9
@@ -2139,7 +2140,465 @@ void CScreenCharacter::UpdateMainPanel(BOOL bCharacterChanged)
 // 0x5DC9D0
 void CScreenCharacter::UpdateGeneralInformation(CUIControlTextDisplay* pText, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    const CRuleTables& rule = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+    CTlkTable& tlk = g_pBaldurChitin->GetTlkTable();
+    CString sValue;
+
+    DWORD nSpecialization = pSprite->GetSpecialization();
+    CDerivedStats* pDStats = pSprite->GetDerivedStats();
+    CCreatureFileHeader* pBStats = pSprite->GetBaseStats();
+    const CAIObjectType& typeAI = pSprite->GetAIType();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 4914
+    UTIL_ASSERT(pDStats != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 4916
+    UTIL_ASSERT(pBStats != NULL);
+
+    INT nLevel = pDStats->m_nLevel;
+
+    UpdateTextForceColor(pText,
+        RGB(200, 200, 0),
+        "%s - %s %d",
+        (LPCSTR)FetchString(40308), // "Levels"
+        (LPCSTR)FetchString(40309), // "Character Level"
+        nLevel);
+
+    for (INT iClassType = 1; iClassType <= CAIOBJECT_CLASS_MAX; iClassType++) {
+        BYTE nClassLevel = static_cast<BYTE>(pDStats->GetClassLevel(iClassType));
+        if (nClassLevel) {
+            rule.GetClassStringMixed(iClassType,
+                nSpecialization,
+                pBStats->m_flags,
+                sValue,
+                typeAI.m_nGender != 2);
+            UpdateText(pText,
+                "%s: %d",
+                (LPCSTR)sValue,
+                nClassLevel);
+        }
+    }
+
+    UpdateText(pText, "");
+
+    if ((pDStats->m_generalState & STATE_DEAD) != 0) {
+        UpdateText(pText, "%s", (LPCSTR)FetchString(11829)); // "DEAD"
+    }
+
+    // FIXME: Calls `GetEffectiveCharacterLevel` twice.
+    if (pSprite->GetEffectiveCharacterLevel() != nLevel) {
+        UpdateText(pText,
+            "%s: %d",
+            (LPCSTR)FetchString(40311), // "Effective Character Level"
+            pSprite->GetEffectiveCharacterLevel());
+    }
+
+    rule.GetClassStringMixed(pSprite->GetRacialFavoredClass(nSpecialization),
+        nSpecialization,
+        pBStats->m_flags,
+        sValue,
+        typeAI.m_nGender != 2);
+    UpdateText(pText,
+        "%s: %s",
+        (LPCSTR)FetchString(40310), // "Favored Class"
+        (LPCSTR)sValue);
+
+    UpdateText(pText, "");
+
+    UpdateTextForceColor(pText,
+        RGB(200, 200, 0),
+        "%s",
+        (LPCSTR)FetchString(17089)); // "Experience"
+
+    sValue.Format("%d", pDStats->GetXP());
+    tlk.SetToken(CRuleTables::TOKEN_EXPERIENCE, sValue);
+
+    UpdateText(pText, "%s", (LPCSTR)FetchString(36928)); // "Current: <EXPERIENCE>"
+
+    if (pDStats->m_nLevel < 30) {
+        sValue.Format("%d", rule.GetNextLevelXP(pSprite->GetEffectiveCharacterLevel() + 1));
+    } else {
+        sValue.Format("%s", (LPCSTR)FetchString(24342)); // "Godhood"
+    }
+
+    UpdateText(pText,
+        "%s: %s",
+        (LPCSTR)FetchString(17091), // "Next Level"
+        (LPCSTR)sValue);
+
+    INT nMulticlassingPenalty = pSprite->GetMulticlassingPenalty();
+    if (nMulticlassingPenalty > 0) {
+        sValue.Format("%d%%", nMulticlassingPenalty);
+        tlk.SetToken(CRuleTables::XPPENALTY, sValue);
+        UpdateText(pText, "%s", (LPCSTR)FetchString(39418)); // "Multiclassing Penalty: <XPPENALTY>"
+    }
+
+    UpdateText(pText, "");
+
+    if (pSprite->m_portraitIcons.GetCount() > 0) {
+        CString sCode;
+        CString sDescription;
+
+        UpdateTextForceColor(pText,
+            RGB(200, 200, 0),
+            "%s",
+            (LPCSTR)FetchString(32052)); // "Current Effects"
+
+        POSITION pos = pSprite->m_portraitIcons.GetHeadPosition();
+        while (pos != NULL) {
+            INT nState = reinterpret_cast<int>(pSprite->m_portraitIcons.GetAt(pos));
+            sCode.Format("%c", nState + 'B');
+            rule.GetCharacterStateDescription(nState, sDescription);
+            pText->DisplayString(sCode,
+                sDescription,
+                pText->m_rgbLabelColor,
+                pText->m_rgbTextColor,
+                -1,
+                FALSE,
+                TRUE);
+        }
+
+        UpdateText(pText, "");
+    }
+
+    BOOL bHasActiveFeats = FALSE;
+    if (pDStats->m_spellStates[SPLSTATE_FEAT_ARTERIAL_STRIKE]
+        || pSprite->sub_726270(CGAMESPRITE_FEAT_EXPERTISE) > 0
+        || pDStats->m_spellStates[SPLSTATE_FEAT_HAMSTRING]
+        || pSprite->sub_726270(CGAMESPRITE_FEAT_POWER_ATTACK) > 0
+        || pDStats->m_spellStates[SPLSTATE_FEAT_RAPID_SHOT]) {
+        UpdateTextForceColor(pText,
+            RGB(200, 200, 0),
+            "%s",
+            (LPCSTR)FetchString(40312)); // "Active Feats"
+        bHasActiveFeats = TRUE;
+    }
+
+    if (pSprite->sub_763150(CGAMESPRITE_FEAT_ARTERIAL_STRIKE)
+        && pDStats->m_spellStates[SPLSTATE_FEAT_ARTERIAL_STRIKE]) {
+        UpdateText(pText, "%s", (LPCSTR)FetchString(35774)); // "Arterial Strike"
+    }
+
+    if (pSprite->sub_763150(CGAMESPRITE_FEAT_EXPERTISE)
+        && pSprite->sub_726270(CGAMESPRITE_FEAT_EXPERTISE) > 0) {
+        UpdateText(pText,
+            "%s %d",
+            (LPCSTR)FetchString(35785), // "Expertise"
+            pSprite->sub_726270(CGAMESPRITE_FEAT_EXPERTISE));
+    }
+
+    if (pSprite->sub_763150(CGAMESPRITE_FEAT_HAMSTRING)
+        && pDStats->m_spellStates[SPLSTATE_FEAT_HAMSTRING]) {
+        UpdateText(pText, "%s", (LPCSTR)FetchString(35787)); // "Hamstring"
+    }
+
+    if (pSprite->sub_763150(CGAMESPRITE_FEAT_POWER_ATTACK)
+        && pSprite->sub_726270(CGAMESPRITE_FEAT_POWER_ATTACK) > 0) {
+        UpdateText(pText,
+            "%s %d",
+            (LPCSTR)FetchString(35794), // "Power Attack"
+            pSprite->sub_726270(CGAMESPRITE_FEAT_POWER_ATTACK));
+    }
+
+    if (pSprite->sub_763150(CGAMESPRITE_FEAT_RAPID_SHOT)
+        && pDStats->m_spellStates[SPLSTATE_FEAT_RAPID_SHOT]) {
+        UpdateText(pText, "%s", (LPCSTR)FetchString(35796)); // "Rapid Shot"
+    }
+
+    if (bHasActiveFeats) {
+        UpdateText(pText, "");
+    }
+
+    UpdateTextForceColor(pText,
+        RGB(200, 200, 0),
+        "%s",
+        (LPCSTR)FetchString(1048)); // "Race"
+
+    rule.GetRaceStringMixed(typeAI.m_nRace,
+        sValue,
+        typeAI.m_nSubRace);
+
+    UpdateText(pText, "%s", (LPCSTR)sValue);
+    UpdateText(pText, "");
+
+    UpdateTextForceColor(pText,
+        RGB(200, 200, 0),
+        "%s",
+        (LPCSTR)FetchString(1049)); // "Alignment"
+
+    rule.GetAlignmentStringMixed(typeAI.m_nAlignment,
+        sValue);
+
+    UpdateText(pText, "%s", (LPCSTR)sValue);
+    UpdateText(pText, "");
+
+    UpdateSavingThrows(pText, *pDStats);
+    UpdateText(pText, "");
+
+    BOOL bHasClassFeatures = FALSE;
+    if (pSprite->HasClassMask(CLASSMASK_ROGUE | CLASSMASK_PALADIN | CLASSMASK_MONK | CLASSMASK_CLERIC)) {
+        UpdateTextForceColor(pText,
+            RGB(200, 200, 0),
+            "%s",
+            (LPCSTR)FetchString(40314)); // "Class Features"
+        bHasClassFeatures = TRUE;
+    }
+
+    if (pSprite->HasClassMask(CLASSMASK_PALADIN | CLASSMASK_CLERIC) && pDStats->m_nTurnUndeadLevel != 0) {
+        UpdateText(pText,
+            "%s: %d",
+            (LPCSTR)FetchString(12126), // "Turn Undead Level"
+            pDStats->m_nTurnUndeadLevel);
+    }
+
+    if (pSprite->HasClassLevel(CAIOBJECTTYPE_C_MONK)) {
+        sValue.Format("%+d", pSprite->sub_723F60());
+        tlk.SetToken(TOKEN_NUMBER, sValue);
+
+        UpdateText(pText,
+            "%s",
+            (LPCSTR)FetchString(39431)); // "Monk Wisdom Bonus: <number> to AC"
+    }
+
+    if (pSprite->HasClassLevel(CAIOBJECTTYPE_C_PALADIN)) {
+        UpdateText(pText,
+            "%s: %d",
+            (LPCSTR)FetchString(12127), // "Lay on Hands Amount"
+            pDStats->m_nLayOnHandsAmount);
+    }
+
+    if (pSprite->GetClassLevel(CAIOBJECTTYPE_C_MONK) >= 7) {
+        UpdateText(pText,
+            "%s: %d",
+            (LPCSTR)FetchString(39749), // "Wholeness of Body"
+            rule.GetWholenessOfBodyAmount(typeAI, *pDStats));
+    }
+
+    INT nLathanderRenewal = rule.GetLathanderRenewalAmount(typeAI, *pDStats);
+    if (nLathanderRenewal > 0) {
+        UpdateText(pText,
+            "%s: %d",
+            (LPCSTR)FetchString(38143), // "Lathander's Renewal"
+            nLathanderRenewal);
+    }
+
+    if (pSprite->HasClassLevel(CAIOBJECTTYPE_C_ROGUE)) {
+        UpdateText(pText,
+            "%s: %dd%d",
+            (LPCSTR)FetchString(24898), // "Sneak Attack Damage"
+            IcewindMisc::GetSneakAttackRolls(pSprite),
+            IcewindMisc::GetSneakAttackDice());
+    }
+
+    if (bHasClassFeatures) {
+        UpdateText(pText, "");
+    }
+
+    if (pSprite->HasClassLevel(CAIOBJECTTYPE_C_RANGER)) {
+        UpdateTextForceColor(pText,
+            RGB(200, 200, 0),
+            "%s",
+            FetchString(15982)); // "Favored Enemies"
+
+        for (INT nIndex = 0; nIndex < 8; nIndex++) {
+            BYTE nRace = pBStats->m_favoredEnemies[nIndex];
+            if (nRace != CAIObjectType::R_NO_RACE) {
+                STRREF strRace;
+                switch (nRace) {
+                case CAIOBJECTTYPE_R_OGRE:
+                    strRace = 15975; // "Ogres"
+                    break;
+                case CAIOBJECTTYPE_R_WYVERN:
+                    strRace = 37617; // "Wyverns"
+                    break;
+                case CAIOBJECTTYPE_R_GIANT:
+                    strRace = 61; // "Giants"
+                    break;
+                case CAIOBJECTTYPE_R_GOBLIN:
+                    strRace = 29518; // "Goblins"
+                    break;
+                case CAIOBJECTTYPE_R_LIZARDMAN:
+                    strRace = 3275; // "Lizard Men"
+                    break;
+                case CAIOBJECTTYPE_R_ORC:
+                    strRace = 3271; // "Orcs"
+                    break;
+                case CAIOBJECTTYPE_R_SALAMANDER:
+                    strRace = 3272; // "Salamanders"
+                    break;
+                case CAIOBJECTTYPE_R_TROLL:
+                    strRace = 3276; // "Trolls"
+                    break;
+                case CAIOBJECTTYPE_R_UMBERHULK:
+                    strRace = 3277; // "Umber Hulks"
+                    break;
+                case CAIOBJECTTYPE_R_UNDEAD:
+                    strRace = 3278; // "Undead"
+                    break;
+                case CAIOBJECTTYPE_R_YUANTI:
+                    strRace = 30849; // "Yuan-ti"
+                    break;
+                case CAIOBJECTTYPE_R_HARPY:
+                    strRace = 37616; // "Harpies"
+                    break;
+                case CAIOBJECTTYPE_R_BUGBEAR:
+                    // FIXME: The rest of the list are plurals and there is
+                    // 28367 - "Bugbears".
+                    strRace = 28366; // "Bugbear"
+                    break;
+                case CAIOBJECTTYPE_R_HOOK_HORROR:
+                    strRace = 37606; // "Hook Horrors"
+                    break;
+                case CAIOBJECTTYPE_R_DRIDER:
+                    strRace = 37607; // "Driders"
+                    break;
+                case CAIOBJECTTYPE_R_SHAPESHIFTER:
+                    strRace = 37605; // "Shapeshifters"
+                    break;
+                default:
+                    strRace = -1;
+                    break;
+                }
+
+                UpdateText(pText,
+                    "%s: +%d",
+                    (LPCSTR)FetchString(strRace),
+                    rule.GetHatedRaceBonus(nRace, *pBStats));
+            }
+        }
+
+        UpdateText(pText, "");
+    }
+
+    if (pSprite->HasClassMask(CLASSMASK_WIZARD | CLASSMASK_SORCERER | CLASSMASK_RANGER | CLASSMASK_PALADIN | CLASSMASK_DRUID | CLASSMASK_CLERIC | CLASSMASK_BARD)) {
+        // TODO: Incomplete (spells).
+    }
+
+    UpdateTextForceColor(pText,
+        RGB(200, 200, 0),
+        "%s",
+        (LPCSTR)FetchString(40315)); // "Ability Statistics"
+
+    INT nTotalWeight = static_cast<INT>(static_cast<float>(rule.GetEncumbranceMod(pSprite)) / 100.0f
+        * static_cast<float>(atol(rule.m_tStrengthMod.GetAt(CPoint(3, pDStats->m_nSTR)))));
+
+    UpdateText(pText,
+        "%s: %d %s",
+        (LPCSTR)FetchString(10338), // "Weight Allowance"
+        nTotalWeight,
+        (LPCSTR)FetchString(39537)); // "lb."
+
+    INT nModCON = rule.GetAbilityScoreModifier(pDStats->m_nCON);
+
+    CString sHitPointsPerLvl;
+    if (nModCON != 0) {
+        sHitPointsPerLvl.Format("%s: %+d",
+            (LPCSTR)FetchString(10342), // "Hit Points/Level"
+            nModCON);
+    } else {
+        sHitPointsPerLvl.Format("%s: %d",
+            (LPCSTR)FetchString(10342), // "Hit Points/Level"
+            0);
+    }
+
+    UpdateText(pText, "%s", sHitPointsPerLvl);
+
+    if (pDStats->m_nResistAcid != 0
+        || pDStats->m_nResistCold != 0
+        || pDStats->m_nResistElectricity != 0
+        || pDStats->m_nResistFire != 0
+        || pDStats->m_nResistMissile != 0
+        || pDStats->m_nResistPoison != 0
+        || pDStats->m_nResistCrushing != 0
+        || pDStats->m_nResistPiercing != 0
+        || pDStats->m_nResistSlashing != 0
+        || pDStats->m_nMagicDamageResistance != 0) {
+        UpdateTextForceColor(pText,
+            RGB(200, 200, 0),
+            "%s",
+            (LPCSTR)FetchString(15544)); // "Resistances"
+
+        if (pDStats->m_nResistAcid != 0) {
+            UpdateText(pText,
+                "%s: %d",
+                (LPCSTR)FetchString(15578), // "Acid"
+                pDStats->m_nResistAcid);
+        }
+
+        if (pDStats->m_nResistCold != 0) {
+            UpdateText(pText,
+                "%s: %d",
+                (LPCSTR)FetchString(15546), // "Cold"
+                pDStats->m_nResistCold);
+        }
+
+        if (pDStats->m_nResistElectricity != 0) {
+            UpdateText(pText,
+                "%s: %d",
+                (LPCSTR)FetchString(15577), // "Electricity"
+                pDStats->m_nResistElectricity);
+        }
+
+        if (pDStats->m_nResistFire != 0) {
+            UpdateText(pText,
+                "%s: %d",
+                (LPCSTR)FetchString(15545), // "Fire"
+                pDStats->m_nResistFire);
+        }
+
+        if (pDStats->m_nResistMissile != 0) {
+            UpdateText(pText,
+                "%s: %d",
+                (LPCSTR)FetchString(11767), // "Missile"
+                pDStats->m_nResistMissile);
+        }
+
+        if (pDStats->m_nResistPoison != 0) {
+            UpdateText(pText,
+                "%s: %d",
+                (LPCSTR)FetchString(38135), // "Poison"
+                pDStats->m_nResistPoison);
+        }
+
+        if (pDStats->m_nResistCrushing != 0) {
+            UpdateText(pText,
+                "%s: %d",
+                (LPCSTR)FetchString(11770), // "Bludgeoning"
+                pDStats->m_nResistCrushing);
+        }
+
+        if (pDStats->m_nResistPiercing != 0) {
+            UpdateText(pText,
+                "%s: %d",
+                (LPCSTR)FetchString(11769), // "Piercing"
+                pDStats->m_nResistPiercing);
+        }
+
+        if (pDStats->m_nResistSlashing != 0) {
+            UpdateText(pText,
+                "%s: %d",
+                (LPCSTR)FetchString(11768), // "Slashing"
+                pDStats->m_nResistSlashing);
+        }
+
+        if (pDStats->m_nMagicDamageResistance != 0) {
+            UpdateText(pText,
+                "%s: %d",
+                (LPCSTR)FetchString(40319), // "Magic Damage"
+                pDStats->m_nMagicDamageResistance);
+        }
+    }
+
+    UpdateText(pText, "");
+
+    UpdateText(pText,
+        "%s: %d",
+        (LPCSTR)FetchString(15581), // "Spell Resistance"
+        pDStats->m_nResistMagic);
+
+    // TODO: Incomplete (checking unknown STL container for damage reductions).
 }
 
 // 0x5DE2C0

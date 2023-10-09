@@ -1739,6 +1739,14 @@ INT CGameSprite::GetAC()
     return 0;
 }
 
+// 0x723F60
+INT CGameSprite::sub_723F60()
+{
+    // TODO: Incomplete.
+
+    return 0;
+}
+
 // 0x72DE60
 void CGameSprite::sub_72DE60()
 {
@@ -3612,5 +3620,31 @@ BOOLEAN CGameSprite::sub_725840(const CResRef& resRef, BOOLEAN a2)
         v1 = m_innateSpells.CheckF8(nIndex);
     }
 
+    return v1;
+}
+
+// 0x726270
+INT CGameSprite::sub_726270(UINT nFeatNumber)
+{
+    INT v1 = 0;
+    if (sub_763150(nFeatNumber)) {
+        switch (nFeatNumber) {
+        case CGAMESPRITE_FEAT_ARTERIAL_STRIKE:
+            v1 = field_4C5C;
+            break;
+        case CGAMESPRITE_FEAT_EXPERTISE:
+            v1 = field_4C54;
+            break;
+        case CGAMESPRITE_FEAT_HAMSTRING:
+            v1 = field_4C60;
+            break;
+        case CGAMESPRITE_FEAT_POWER_ATTACK:
+            v1 = field_4C58;
+            break;
+        case CGAMESPRITE_FEAT_RAPID_SHOT:
+            v1 = field_4C64;
+            break;
+        }
+    }
     return v1;
 }
