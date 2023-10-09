@@ -1553,6 +1553,48 @@ void CScreenCharacter::TimerSynchronousUpdate()
     pVidMode->Flip(TRUE);
 }
 
+// 0x5DB840
+void CScreenCharacter::UpdateSpellsPanel(CGameSprite* pSprite)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(8);
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(31));
+
+    for (DWORD nButtonID = 0; nButtonID <= 29; nButtonID++) {
+        CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nButtonID));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 4036
+        UTIL_ASSERT(pButton != NULL);
+
+        pButton->SetActive(pButton->m_bEnabled);
+    }
+
+    HighlightLabel(pPanel,
+        0x10000022,
+        m_nExtraMageSpells != 0,
+        COLOR_LABEL_HIGHLIGHT_BONUS);
+    UpdateLabel(pPanel,
+        0x10000022,
+        "%d",
+        m_nExtraMageSpells);
+
+    CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(33));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 4049
+    UTIL_ASSERT(pDone != NULL);
+
+    pDone->SetEnabled(IsDoneButtonClickable(pSprite));
+
+    CUIControlButton* pCancelButton = static_cast<CUIControlButton*>(pPanel->GetControl(32));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 4054
+    UTIL_ASSERT(pCancelButton != NULL);
+
+    pCancelButton->SetEnabled(TRUE);
+}
+
 // 0x5DB950
 void CScreenCharacter::GetPartyInformation(DWORD& nPartyChapterKillsXPValue, DWORD& nPartyChapterKillsNumber, DWORD& nPartyGameKillsXPValue, DWORD& nPartyGameKillsNumber)
 {
