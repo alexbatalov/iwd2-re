@@ -206,6 +206,156 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
     }
 }
 
+// 0x445330
+CDerivedStats& CDerivedStats::operator=(const CDerivedStats& other)
+{
+    m_generalState = other.m_generalState;
+    m_nMaxHitPoints = other.m_nMaxHitPoints;
+    field_6 = other.field_6;
+    field_8 = other.field_8;
+    field_A = other.field_A;
+    field_C = other.field_C;
+    m_nACCrushingMod = other.m_nACCrushingMod;
+    m_nACMissileMod = other.m_nACMissileMod;
+    m_nACPiercingMod = other.m_nACPiercingMod;
+    m_nACSlashingMod = other.m_nACSlashingMod;
+
+    // TODO: Incomplete (copying unknown STL container).
+
+    field_16 = other.field_16;
+    m_nTHAC0 = other.m_nTHAC0;
+    m_nNumberOfAttacks = other.m_nNumberOfAttacks;
+    m_nSaveVSFortitude = other.m_nSaveVSFortitude;
+    m_nSaveVSReflex = other.m_nSaveVSReflex;
+    m_nSaveVSWill = other.m_nSaveVSWill;
+    m_nResistFire = other.m_nResistFire;
+    m_nResistCold = other.m_nResistCold;
+    m_nResistElectricity = other.m_nResistElectricity;
+    m_nResistAcid = other.m_nResistAcid;
+    m_nResistMagic = other.m_nResistMagic;
+    m_nResistMagicFire = other.m_nResistMagicFire;
+    m_nResistMagicCold = other.m_nResistMagicCold;
+    m_nResistSlashing = other.m_nResistSlashing;
+    m_nResistCrushing = other.m_nResistCrushing;
+    m_nResistPiercing = other.m_nResistPiercing;
+    m_nResistMissile = other.m_nResistMissile;
+    m_nFatigue = other.m_nFatigue;
+    m_nIntoxication = other.m_nIntoxication;
+    m_nLuck = other.m_nLuck;
+    m_nSubRace = other.m_nSubRace;
+    m_classMask = other.m_classMask;
+    m_nLevel = other.m_nLevel;
+    memcpy(m_nClassLevels, other.m_nClassLevels, sizeof(m_nClassLevels));
+    m_nSex = other.m_nSex;
+    m_nSTR = other.m_nSTR;
+    m_nINT = other.m_nINT;
+    m_nWIS = other.m_nWIS;
+    m_nDEX = other.m_nDEX;
+    m_nCON = other.m_nCON;
+    m_nCHR = other.m_nCHR;
+    m_nXPValue = other.m_nXPValue;
+    m_nXP = other.m_nXP;
+    m_nGold = other.m_nGold;
+    m_nMoraleBreak = other.m_nMoraleBreak;
+    m_nMoraleRecoveryTime = other.m_nMoraleRecoveryTime;
+    m_nReputation = other.m_nReputation;
+    m_nMoraleBreak = other.m_nMoraleBreak;
+    memcpy(m_favoredEnemies, other.m_favoredEnemies, sizeof(m_favoredEnemies));
+    m_nDamageBonus = other.m_nDamageBonus;
+    m_nSpellFailureArcane = other.m_nSpellFailureArcane;
+    m_nSpellFailureDivine = other.m_nSpellFailureDivine;
+    m_nSpellDurationModMage = other.m_nSpellDurationModMage;
+    m_nSpellDurationModPriest = other.m_nSpellDurationModPriest;
+    m_nTurnUndeadLevel = other.m_nTurnUndeadLevel;
+    m_nBackstabDamageMultiplier = other.m_nBackstabDamageMultiplier;
+    m_nLayOnHandsAmount = other.m_nLayOnHandsAmount;
+    m_bHeld = other.m_bHeld;
+    m_bPolymorphed = other.m_bPolymorphed;
+    m_bIdentifyMode = other.m_bIdentifyMode;
+    m_nSpecialization = other.m_nSpecialization;
+    m_nMoveSilentlyMTPBonus = other.m_nMoveSilentlyMTPBonus;
+    m_nHideInShadowsMTPBonus = other.m_nHideInShadowsMTPBonus;
+    m_bCasterHold = other.m_bCasterHold;
+    m_nTranslucent = other.m_nTranslucent;
+    m_nEncumberance = other.m_nEncumberance;
+    m_nMissileTHAC0Bonus = other.m_nMissileTHAC0Bonus;
+    m_nMagicDamageResistance = other.m_nMagicDamageResistance;
+    m_nResistPoison = other.m_nResistPoison;
+    m_bDoNotJump = other.m_bDoNotJump;
+    m_bAuraCleansing = other.m_bAuraCleansing;
+    m_nMentalSpeed = other.m_nMentalSpeed;
+    m_nPhysicalSpeed = other.m_nPhysicalSpeed;
+    m_nCastingLevelBonusMage = other.m_nCastingLevelBonusMage;
+    m_nCastingLevelBonusCleric = other.m_nCastingLevelBonusCleric;
+    m_bSeeInvisible = other.m_bSeeInvisible;
+    m_bIgnoreDialogPause = other.m_bIgnoreDialogPause;
+    m_nMinHitPoints = other.m_nMinHitPoints;
+    m_THAC0BonusRight = other.m_THAC0BonusRight;
+    m_THAC0BonusLeft = other.m_THAC0BonusLeft;
+    m_DamageBonusRight = other.m_DamageBonusRight;
+    m_DamageBonusLeft = other.m_DamageBonusLeft;
+    m_nStoneSkins = other.m_nStoneSkins;
+    m_spellStates = other.m_spellStates;
+    // m_cImmunitiesProjectile = other.m_cImmunitiesProjectile;
+    m_cImmunitiesEffect = other.m_cImmunitiesEffect;
+    m_cImmunitiesAIType = other.m_cImmunitiesAIType;
+    m_cImmunitiesSpellLevel = other.m_cImmunitiesSpellLevel;
+    m_cImmunitiesWeapon = other.m_cImmunitiesWeapon;
+    m_cToHitBonusList = other.m_cToHitBonusList;
+    m_cDamageBonusList = other.m_cDamageBonusList;
+    m_cImmunitiesItemEquip = other.m_cImmunitiesItemEquip;
+    m_cImmunitiesItemTypeEquip = other.m_cImmunitiesItemTypeEquip;
+    field_290 = other.field_290;
+    field_2AC = other.field_2AC;
+    m_appliedColorRanges = other.m_appliedColorRanges;
+    m_appliedColorEffects = other.m_appliedColorEffects;
+    // m_cBounceProjectile = other.m_cBounceProjectile;
+    m_cBounceEffect = other.m_cBounceEffect;
+    // m_cBounceSpellLevel = other.m_cBounceSpellLevel;
+    // m_cBounceProjectileLevelDec = other.m_cBounceProjectileLevelDec;
+    // m_cImmunitiesProjectileLevelDec = other.m_cImmunitiesProjectileLevelDec;
+    // field_3C8 = other.field_3C8;
+    // field_3E4 = other.field_3E4;
+    // field_400 = other.field_400;
+    // field_41C = other.field_41C;
+    m_cImmunitiesItemUse = other.m_cImmunitiesItemUse;
+    m_cImmunitiesItemTypeUse = other.m_cImmunitiesItemTypeUse;
+
+    // TODO: Incomplete (copying unknown STL container).
+
+    m_naturalImmunities = other.m_naturalImmunities;
+
+    // TODO: Incomplete (copying unknown STL container).
+
+    // field_4AC = other.field_4AC;
+    // field_4C8 = other.field_4C8;
+    // field_4E4 = other.field_4E4;
+    // field_500 = other.field_500;
+    // field_51C = other.field_51C;
+    // field_538 = other.field_538;
+
+    field_128 = other.field_128;
+    field_12C = other.field_12C;
+    field_130 = other.field_130;
+    field_134 = other.field_134;
+    field_138 = other.field_138;
+    field_13C = other.field_13C;
+    field_140 = other.field_140;
+
+    memcpy(m_nSkills, other.m_nSkills, sizeof(m_nSkills));
+
+    // field_5AC = other.field_5AC;
+    // field_CAC = other.field_CAC;
+
+    // NOTE: Original code uses loop.
+    memcpy(m_disabledButtons, other.m_disabledButtons, sizeof(m_disabledButtons));
+
+    // NOTE: Original code uses loop.
+    memcpy(m_disabledSpellTypes, other.m_disabledSpellTypes, sizeof(m_disabledSpellTypes));
+
+    return *this;
+}
+
 // 0x445E40
 void CDerivedStats::BonusInit()
 {

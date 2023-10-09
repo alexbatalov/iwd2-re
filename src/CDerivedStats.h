@@ -479,6 +479,7 @@ class CDerivedStats : public CDerivedStatsTemplate {
 public:
     CDerivedStats();
     void Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature, CGameSpriteSpells* pSpells, CGameSpriteGroupedSpellList* pDomainSpells);
+    CDerivedStats& operator=(const CDerivedStats& other);
     void BonusInit();
     CDerivedStats& operator+=(const CDerivedStats& other);
     void CheckLimits();
