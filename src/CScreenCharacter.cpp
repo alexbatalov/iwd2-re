@@ -1262,6 +1262,132 @@ void CScreenCharacter::UpdateHatedRacePanel(CGameSprite* pSprite)
     }
 }
 
+// 0x5DA6E0
+void CScreenCharacter::UpdateSpecializationPanel(CGameSprite* pSprite)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(6);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 3440
+    UTIL_ASSERT(pPanel != NULL);
+
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(11));
+
+    const CRuleTables& rule = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    for (DWORD nButtonID = 2; nButtonID <= 10; nButtonID++) {
+        CUIControlButtonCharacterSpecializationSelection* pButton = static_cast<CUIControlButtonCharacterSpecializationSelection*>(pPanel->GetControl(nButtonID));
+        DWORD nSpecialization = pButton->GetSpecialization();
+        BOOLEAN bSelected = (nSpecialization & m_nSpecialization) != 0;
+        BOOLEAN bEnabled = rule.IsValidAlignment(m_nClass,
+            pSprite->m_startTypeAI.GetAlignment(),
+            nSpecialization);
+
+        switch (m_nClass) {
+        case CAIOBJECTTYPE_C_WIZARD:
+            if (1) {
+                CString sClass;
+                pButton->SetSelected(bSelected);
+                pButton->SetEnabled(bEnabled);
+
+                rule.GetClassStringLower(CAIOBJECTTYPE_C_WIZARD,
+                    pButton->GetSpecialization(),
+                    0,
+                    sClass,
+                    1);
+                pButton->SetText(sClass);
+            }
+            break;
+        case CAIOBJECTTYPE_C_CLERIC:
+            if (1) {
+                pButton->SetSelected(bSelected);
+                pButton->SetEnabled(bEnabled);
+
+                STRREF strSpecialization;
+                switch (nButtonID) {
+                case 2:
+                    strSpecialization = 38097;
+                    break;
+                case 3:
+                    strSpecialization = 38098;
+                    break;
+                case 4:
+                    strSpecialization = 38099;
+                    break;
+                case 5:
+                    strSpecialization = 38100;
+                    break;
+                case 6:
+                    strSpecialization = 38101;
+                    break;
+                case 7:
+                    strSpecialization = 38102;
+                    break;
+                case 8:
+                    strSpecialization = 38103;
+                    break;
+                case 9:
+                    strSpecialization = 38106;
+                    break;
+                case 10:
+                    strSpecialization = 38107;
+                    break;
+                }
+
+                pButton->SetText(FetchString(strSpecialization));
+            }
+            break;
+        default:
+            if (nButtonID <= 4) {
+                pButton->SetSelected(bSelected);
+                pButton->SetEnabled(bEnabled);
+
+                switch (m_nClass) {
+                case CAIOBJECTTYPE_C_PALADIN:
+                    switch (nButtonID) {
+                    case 2:
+                        pButton->SetText(FetchString(36875));
+                        break;
+                    case 3:
+                        pButton->SetText(FetchString(36872));
+                        break;
+                    case 4:
+                        pButton->SetText(FetchString(36873));
+                        break;
+                    }
+                    break;
+                case CAIOBJECTTYPE_C_MONK:
+                    switch (nButtonID) {
+                    case 2:
+                        pButton->SetText(FetchString(36877));
+                        break;
+                    case 3:
+                        pButton->SetText(FetchString(36878));
+                        break;
+                    case 4:
+                        pButton->SetText(FetchString(36879));
+                        break;
+                    }
+                    break;
+                default:
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+                    // __LINE__: 3500
+                    UTIL_ASSERT(FALSE);
+                }
+            } else {
+                pButton->SetSelected(FALSE);
+                pButton->SetEnabled(FALSE);
+                pButton->SetActive(FALSE);
+                pButton->SetInactiveRender(FALSE);
+            }
+            break;
+        }
+    }
+
+    CUIControlButton* pDone = static_cast<CUIControlButton*>(pPanel->GetControl(0));
+    pDone->SetEnabled(IsDoneButtonClickable(pSprite));
+}
+
 // 0x5DAA40
 void CScreenCharacter::UpdateAbilitiesPanel(CGameSprite* pSprite)
 {

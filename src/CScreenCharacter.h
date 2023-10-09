@@ -86,6 +86,7 @@ public:
     void ResetAbilitiesPanel(CGameSprite* pSprite, int a2);
     void ResetClassSelectionPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void UpdateHatedRacePanel(CGameSprite* pSprite);
+    void UpdateSpecializationPanel(CGameSprite* pSprite);
     void UpdateAbilitiesPanel(CGameSprite* pSprite);
     void UpdateSpellsPanel(CGameSprite* pSprite);
     void GetPartyInformation(DWORD& nPartyChapterKillsXPValue, DWORD& nPartyChapterKillsNumber, DWORD& nPartyGameKillsXPValue, DWORD& nPartyGameKillsNumber);
