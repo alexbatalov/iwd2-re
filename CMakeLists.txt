@@ -123,6 +123,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CGameAnimationTypeTownStatic.h"
     "src/CGameArea.cpp"
     "src/CGameArea.h"
+    "src/CGameAreaNotes.cpp"
+    "src/CGameAreaNotes.h"
     "src/CGameContainer.cpp"
     "src/CGameContainer.h"
     "src/CGameDialog.cpp"

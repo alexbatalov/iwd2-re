@@ -94,7 +94,11 @@ public:
     CUIControlButtonMapAreaMap(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonMapAreaMap() override;
 
+    CPoint ConvertScreenToWorldCoords(CPoint pt);
     void SetMap(CGameArea* pArea);
+    void sub_645610(DWORD id);
+
+    /* 07B8 */ DWORD m_nLastNoteID;
 };
 
 class CUIControlButtonMapError : public CUIControlButton {
@@ -116,6 +120,18 @@ public:
     CUIControlButtonMapNoteCancel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonMapNoteCancel() override;
     void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonMapNote : public CUIControlButton {
+public:
+    CUIControlButtonMapNote(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonMapNote() override;
+
+    /* 0666 */ unsigned char field_666;
+    /* 0667 */ unsigned char fiedl_667;
+    /* 0668 */ int field_668;
+    /* 066C */ CResRef m_areaResRef;
+    /* 0674 */ CPoint m_ptWorld;
 };
 
 #endif /* CSCREENMAP_H_ */

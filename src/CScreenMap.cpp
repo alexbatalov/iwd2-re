@@ -826,8 +826,22 @@ CUIControlButtonMapAreaMap::~CUIControlButtonMapAreaMap()
     // TODO: Incomplete.
 }
 
+// 0x6436B0
+CPoint CUIControlButtonMapAreaMap::ConvertScreenToWorldCoords(CPoint pt)
+{
+    // TODO: Incomplete.
+
+    return CPoint(0, 0);
+}
+
 // 0x644CC0
 void CUIControlButtonMapAreaMap::SetMap(CGameArea* pArea)
+{
+    // TODO: Incomplete.
+}
+
+// 0x645610
+void CUIControlButtonMapAreaMap::sub_645610(DWORD id)
 {
     // TODO: Incomplete.
 }
@@ -905,4 +919,24 @@ void CUIControlButtonMapNoteCancel::OnLButtonClick(CPoint pt)
     UTIL_ASSERT(pMap != NULL);
 
     pMap->OnCancelButtonClick();
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x6460D0
+CUIControlButtonMapNote::CUIControlButtonMapNote(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, RBUTTON, 0)
+{
+    SetNeedMouseMove();
+    field_666 = 0;
+    field_668 = 0;
+    m_nDisabledFrame = 0;
+    m_nNormalFrame = 0;
+    m_nPressedFrame = 1;
+    m_cVidCell.FrameSet(0);
+}
+
+// 0x646190
+CUIControlButtonMapNote::~CUIControlButtonMapNote()
+{
 }

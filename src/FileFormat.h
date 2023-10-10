@@ -163,6 +163,21 @@ public:
     /* 004A */ WORD m_sizeY;
 };
 
+class CAreaUserNote {
+public:
+    CAreaUserNote()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    /* 0000 */ WORD m_startX;
+    /* 0002 */ WORD m_startY;
+    /* 0004 */ STRREF m_note;
+    /* 0008 */ DWORD m_dwflags;
+    /* 000C */ DWORD m_id;
+    /* 0010 */ DWORD m_notUsed[9];
+};
+
 class CCreatureFileHeader {
 public:
     CCreatureFileHeader()
