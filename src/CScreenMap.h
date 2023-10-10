@@ -4,6 +4,7 @@
 #include "CBaldurEngine.h"
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
+#include "CUIControlButton3State.h"
 #include "CVidFont.h"
 
 #define CSCREENMAP_VIRTUAL_KEYS 90
@@ -98,6 +99,7 @@ public:
     void SetMap(CGameArea* pArea);
     void sub_645610(DWORD id);
 
+    /* 071A */ CGameArea* m_pArea;
     /* 07B8 */ DWORD m_nLastNoteID;
 };
 
@@ -132,6 +134,17 @@ public:
     /* 0668 */ int field_668;
     /* 066C */ CResRef m_areaResRef;
     /* 0674 */ CPoint m_ptWorld;
+};
+
+class CUIControlButtonMapNoteFlagChoice : public CUIControlButton3State {
+public:
+    CUIControlButtonMapNoteFlagChoice(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonMapNoteFlagChoice() override;
+    BOOL OnLButtonDown(CPoint pt) override;
+    BOOL Render(BOOL bForce) override;
+    void OnLButtonClick(CPoint pt) override;
+
+    /* 066E */ BOOL field_66E;
 };
 
 #endif /* CSCREENMAP_H_ */

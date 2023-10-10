@@ -940,3 +940,72 @@ CUIControlButtonMapNote::CUIControlButtonMapNote(CUIPanel* panel, UI_CONTROL_BUT
 CUIControlButtonMapNote::~CUIControlButtonMapNote()
 {
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x6464E0
+CUIControlButtonMapNoteFlagChoice::CUIControlButtonMapNoteFlagChoice(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
+{
+    // NOTE: Uninline.
+    m_cVidCell.SetResRef(CResRef("FLAG1"), m_pPanel->m_pManager->m_bDoubleSize, TRUE, TRUE);
+
+    BYTE nSequence = static_cast<BYTE>(m_nID - 4);
+    BYTE nNumberSequences = static_cast<BYTE>(m_cVidCell.GetNumberSequences(FALSE));
+    if (nNumberSequences > nSequence) {
+        m_cVidCell.SequenceSet(nSequence);
+        m_nNormalFrame = 0;
+        m_nPressedFrame = 1;
+        m_nDisabledFrame = 0;
+        m_nSelectedFrame = 2;
+        m_nNotSelectedFrame = 0;
+        field_66E = TRUE;
+    } else {
+        field_66E = FALSE;
+    }
+}
+
+// 0x646790
+CUIControlButtonMapNoteFlagChoice::~CUIControlButtonMapNoteFlagChoice()
+{
+}
+
+// 0x646830
+BOOL CUIControlButtonMapNoteFlagChoice::Render(BOOL bForce)
+{
+    if (field_66E) {
+        return CUIControlButton3State::Render(bForce);
+    } else {
+        return FALSE;
+    }
+}
+
+// 0x646850
+BOOL CUIControlButtonMapNoteFlagChoice::OnLButtonDown(CPoint pt)
+{
+    if (field_66E) {
+        return CUIControlButton::OnLButtonDown(pt);
+    } else {
+        return FALSE;
+    }
+}
+
+// 0x646880
+void CUIControlButtonMapNoteFlagChoice::OnLButtonClick(CPoint pt)
+{
+    if (field_66E) {
+        SHORT nSequence = m_cVidCell.m_nCurrentSequence;
+
+        CScreenMap* pMap = g_pBaldurChitin->m_pEngineMap;
+        CUIPanel* pPanel = pMap->GetManager()->GetPanel(2);
+        CUIControlButtonMapAreaMap* pMapControl = static_cast<CUIControlButtonMapAreaMap*>(pPanel->GetControl(2));
+        pMapControl->m_pArea->m_cGameAreaNotes.field_8D = min(static_cast<BYTE>(nSequence), 7);
+    }
+
+    for (DWORD nButtonID = 4; nButtonID < 12; nButtonID++) {
+        CUIControlButtonMapNoteFlagChoice* pButton = static_cast<CUIControlButtonMapNoteFlagChoice*>(m_pPanel->GetControl(nButtonID));
+        pButton->SetSelected(nButtonID == m_nID);
+    }
+
+    g_pBaldurChitin->m_pEngineMap->GetManager()->SetCapture(m_pPanel->GetControl(1), CUIManager::KEYBOARD);
+}
