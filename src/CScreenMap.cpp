@@ -929,6 +929,33 @@ void CUIControlButtonMapNoteCancel::OnLButtonClick(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x645C40
+CUIControlButtonMapNoteDelete::CUIControlButtonMapNoteDelete(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+}
+
+// 0x645C90
+CUIControlButtonMapNoteDelete::~CUIControlButtonMapNoteDelete()
+{
+}
+
+// 0x645D30
+void CUIControlButtonMapNoteDelete::OnLButtonClick(CPoint pt)
+{
+    CScreenMap* pMap = g_pBaldurChitin->m_pEngineMap;
+
+    // NOTE: Original code is slightly different - it obtains same control
+    // twice.
+    CUIPanel* pPanel = pMap->GetManager()->GetPanel(2);
+    CUIControlButtonMapAreaMap* pMapControl = static_cast<CUIControlButtonMapAreaMap*>(pPanel->GetControl(2));
+    pMapControl->m_pArea->m_cGameAreaNotes.DeleteANote(pMapControl->m_pArea->m_cGameAreaNotes.field_74);
+
+    pMap->OnCancelButtonClick();
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x645DB0
 CUIControlEditMultiLineMapNote::CUIControlEditMultiLineMapNote(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo)
     : CUIControlEditMultiLine(panel, controlInfo, 0)

@@ -126,6 +126,13 @@ public:
     void OnLButtonClick(CPoint pt) override;
 };
 
+class CUIControlButtonMapNoteDelete : public CUIControlButton {
+public:
+    CUIControlButtonMapNoteDelete(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonMapNoteDelete() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlEditMultiLineMapNote : public CUIControlEditMultiLine {
 public:
     CUIControlEditMultiLineMapNote(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo);
