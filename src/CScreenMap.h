@@ -5,6 +5,7 @@
 #include "CKeyInfo.h"
 #include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
+#include "CUIControlEditMultiLine.h"
 #include "CVidFont.h"
 
 #define CSCREENMAP_VIRTUAL_KEYS 90
@@ -123,6 +124,13 @@ public:
     CUIControlButtonMapNoteCancel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonMapNoteCancel() override;
     void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlEditMultiLineMapNote : public CUIControlEditMultiLine {
+public:
+    CUIControlEditMultiLineMapNote(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo);
+    ~CUIControlEditMultiLineMapNote();
+    void OnEditReturn(CString sText) override;
 };
 
 class CUIControlButtonMapShowNotes : public CUIControlButton3State {

@@ -929,6 +929,32 @@ void CUIControlButtonMapNoteCancel::OnLButtonClick(CPoint pt)
 
 // -----------------------------------------------------------------------------
 
+// 0x645DB0
+CUIControlEditMultiLineMapNote::CUIControlEditMultiLineMapNote(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo)
+    : CUIControlEditMultiLine(panel, controlInfo, 0)
+{
+    m_nTextCapitalization = 0;
+}
+
+// 0x645E00
+CUIControlEditMultiLineMapNote::~CUIControlEditMultiLineMapNote()
+{
+}
+
+// 0x645EC0
+void CUIControlEditMultiLineMapNote::OnEditReturn(CString sText)
+{
+    CScreenMap* pMap = g_pBaldurChitin->m_pEngineMap;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+    // __LINE__: 4382
+    UTIL_ASSERT(pMap != NULL);
+
+    pMap->OnDoneButtonClick();
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x645F30
 CUIControlButtonMapShowNotes::CUIControlButtonMapShowNotes(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
     : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
