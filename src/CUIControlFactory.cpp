@@ -2674,20 +2674,58 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             break;
         case 2:
             // 0x773BFE
-            // TODO: Incomplete.
+            switch (controlInfo->nID) {
+            case 1:
+                return new CUIControlButtonMapWorld(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 2:
+                return new CUIControlButtonMapAreaMap(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 3:
+                return new CUIControlButtonMapShowNotes(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
             break;
         case 3:
         case 4:
             // 0x773CE0
-            // TODO: Incomplete.
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+                return new CUIControlButtonMapError(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 3:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            }
             break;
         case 5:
             // 0x773D56
-            // TODO: Incomplete.
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlButtonMapNoteDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 1:
+                return new CUIControlEditMultiLineMapNote(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo));
+            case 2:
+                return new CUIControlButtonMapNoteCancel(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 3:
+                return new CUIControlButtonMapNoteDelete(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+                return new CUIControlButtonMapNoteFlagChoice(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
             break;
         case 50:
             // 0x773E6C
-            // TODO: Incomplete.
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 2:
+                return new CUIControlButtonMapError(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            case 3:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            }
             break;
         }
     } else if (pPanel->m_pManager->m_cResRef == "GUIWMAP") {
