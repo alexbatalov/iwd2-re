@@ -1031,6 +1031,72 @@ CUIControlButtonMapNote::~CUIControlButtonMapNote()
 {
 }
 
+// 0x646230
+void CUIControlButtonMapNote::OnRButtonClick(CPoint pt)
+{
+    if (field_666) {
+        CUIControlButtonMapAreaMap* pMapControl = static_cast<CUIControlButtonMapAreaMap*>(m_pPanel->GetControl(2));
+        CGameArea* pArea = pMapControl->m_pArea;
+
+        CSingleLock renderLock(&(m_pPanel->m_pManager->field_36), FALSE);
+        renderLock.Lock(INFINITE);
+
+        pArea->m_cGameAreaNotes.field_70 = 0;
+
+        CPoint ptWorld = pMapControl->ConvertScreenToWorldCoords(pt);
+        pArea->m_cGameAreaNotes.m_cAreaNote.m_startX = static_cast<WORD>(ptWorld.x);
+        pArea->m_cGameAreaNotes.m_cAreaNote.m_startY = static_cast<WORD>(ptWorld.y);
+        pArea->m_cGameAreaNotes.m_cAreaNote.m_id = m_nID;
+
+        CScreenMap* pMap = g_pBaldurChitin->m_pEngineMap;
+
+        CUIControlEditMultiLineMapNote* pEdit = static_cast<CUIControlEditMultiLineMapNote*>(pMap->GetManager()->GetPanel(5)->GetControl(1));
+
+        STRREF strNote = pArea->m_cGameAreaNotes.GetNoteButtonText(m_nID);
+
+        STR_RES strRes;
+        g_pBaldurChitin->GetTlkTable().Fetch(strNote, strRes);
+        pEdit->SetText(strRes.szText);
+
+        pArea->m_cGameAreaNotes.field_74 = m_nID;
+        pMap->SummonPopup(5);
+
+        pMap->GetManager()->SetCapture(pEdit, CUIManager::KEYBOARD);
+
+        renderLock.Unlock();
+    }
+}
+
+// 0x646410
+void CUIControlButtonMapNote::SetInactiveRender(BOOL bInactiveRender)
+{
+    CUIControlButtonMapAreaMap* pMapControl = static_cast<CUIControlButtonMapAreaMap*>(m_pPanel->GetControl(2));
+    if (m_areaResRef == pMapControl->m_pArea->m_resRef) {
+        if (g_pBaldurChitin->GetObjectGame()->m_bShowAreaNotes) {
+            CUIControlBase::SetInactiveRender(bInactiveRender);
+        }
+    }
+}
+
+// 0x646470
+BOOL CUIControlButtonMapNote::Render(BOOL bForce)
+{
+    if (field_666) {
+        return CUIControlButton::Render(bForce);
+    } else {
+        return FALSE;
+    }
+}
+
+// 0x646490
+void CUIControlButtonMapNote::OnMouseMove(CPoint pt)
+{
+    if (field_666) {
+        CUIControlButtonMapAreaMap* pMapControl = static_cast<CUIControlButtonMapAreaMap*>(m_pPanel->GetControl(2));
+        g_pBaldurChitin->m_pEngineMap->UpdateNoteText(pMapControl->m_pArea->m_cGameAreaNotes.GetNoteButtonText(m_nID));
+    }
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x6464E0

@@ -151,6 +151,10 @@ class CUIControlButtonMapNote : public CUIControlButton {
 public:
     CUIControlButtonMapNote(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonMapNote() override;
+    void OnMouseMove(CPoint pt) override;
+    BOOL Render(BOOL bForce) override;
+    void SetInactiveRender(BOOL bInactiveRender) override;
+    void OnRButtonClick(CPoint pt) override;
 
     /* 0666 */ unsigned char field_666;
     /* 0667 */ unsigned char fiedl_667;
