@@ -97,6 +97,7 @@ public:
 
     CPoint ConvertScreenToWorldCoords(CPoint pt);
     void SetMap(CGameArea* pArea);
+    void SetActiveNotes(BOOL bActive);
     void sub_645610(DWORD id);
 
     /* 071A */ CGameArea* m_pArea;
@@ -121,6 +122,13 @@ class CUIControlButtonMapNoteCancel : public CUIControlButton {
 public:
     CUIControlButtonMapNoteCancel(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonMapNoteCancel() override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
+class CUIControlButtonMapShowNotes : public CUIControlButton3State {
+public:
+    CUIControlButtonMapShowNotes(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonMapShowNotes() override;
     void OnLButtonClick(CPoint pt) override;
 };
 

@@ -376,7 +376,7 @@ public:
     /* 48E4 */ BOOLEAN m_bForceDither;
     /* 4A8A */ LONG m_nProtagonistId;
     /* 4A8E */ BOOLEAN m_bPartyAI;
-    /* 4A8F */ unsigned char field_4A8F;
+    /* 4A8F */ BOOLEAN m_bShowAreaNotes;
     /* 4A90 */ BYTE m_nTravelScreenImageToUse;
     /* 4A9A */ DWORD m_dwLastProgressRenderTickCount;
     /* 4A9E */ DWORD m_dwLastProgressMsgTickCount;

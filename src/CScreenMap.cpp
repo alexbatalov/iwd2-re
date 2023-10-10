@@ -840,6 +840,12 @@ void CUIControlButtonMapAreaMap::SetMap(CGameArea* pArea)
     // TODO: Incomplete.
 }
 
+// 0x645350
+void CUIControlButtonMapAreaMap::SetActiveNotes(BOOL bActive)
+{
+    // TODO: Incomplete.
+}
+
 // 0x645610
 void CUIControlButtonMapAreaMap::sub_645610(DWORD id)
 {
@@ -919,6 +925,37 @@ void CUIControlButtonMapNoteCancel::OnLButtonClick(CPoint pt)
     UTIL_ASSERT(pMap != NULL);
 
     pMap->OnCancelButtonClick();
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x645F30
+CUIControlButtonMapShowNotes::CUIControlButtonMapShowNotes(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton3State(panel, controlInfo, LBUTTON, 0)
+{
+    m_nToolTipStrRef = 21436;
+    SetSelected(TRUE);
+    m_nSelectedFrame = 0;
+}
+
+// 0x645FD0
+CUIControlButtonMapShowNotes::~CUIControlButtonMapShowNotes()
+{
+}
+
+// 0x646070
+void CUIControlButtonMapShowNotes::OnLButtonClick(CPoint pt)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    pGame->m_bShowAreaNotes = !pGame->m_bShowAreaNotes;
+
+    // NOTE: Original code is slightly different - it obtains same control
+    // twice.
+    CUIControlButtonMapAreaMap* pMapControl = static_cast<CUIControlButtonMapAreaMap*>(m_pPanel->GetControl(2));
+    pMapControl->SetActiveNotes(pGame->m_bShowAreaNotes);
+    pMapControl->InvalidateRect();
+
+    CUIControlButton3State::SetSelected(pGame->m_bShowAreaNotes);
 }
 
 // -----------------------------------------------------------------------------
