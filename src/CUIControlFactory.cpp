@@ -19,6 +19,7 @@
 #include "CScreenSave.h"
 #include "CScreenSinglePlayer.h"
 #include "CScreenSpellbook.h"
+#include "CScreenStart.h"
 #include "CScreenStore.h"
 #include "CScreenWorld.h"
 #include "CScreenWorldMap.h"
@@ -36,13 +37,31 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
     // __LINE__: 106
     UTIL_ASSERT(controlInfo != NULL);
 
-    // TODO: Incomplete.
-
     if (controlInfo->nID >= 0xFFFFFFF) {
         return new CUIControlLabel(pPanel, reinterpret_cast<UI_CONTROL_LABEL*>(controlInfo));
     }
 
     if (pPanel->m_pManager->m_cResRef == "START") {
+        switch (pPanel->m_nID) {
+        case 0:
+            switch (controlInfo->nID) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+                return new CUIControlButtonStartMenu(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+            break;
+        case 4:
+            switch (controlInfo->nID) {
+            case 0:
+                return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
+            case 1:
+                return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
+            case 2:
+                return new CUIControlButtonStart670770(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
+            }
+        }
     } else if (pPanel->m_pManager->m_cResRef == "GUIMOVIE") {
         switch (pPanel->m_nID) {
         case 1:
@@ -231,8 +250,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 0:
                 return new CUIControlButtonSaveScreenShot(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 3:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlEditSaveName(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo));
             case 7:
                 return new CUIControlButtonSavePopupDone(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             case 8:
@@ -1651,8 +1669,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 5:
                 return new CUIControlTextDisplay(pPanel, reinterpret_cast<UI_CONTROL_TEXTDISPLAY*>(controlInfo), TRUE);
             case 6:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlEditMultiLineJournalAnnotation(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo));
             }
             break;
         case 7:
@@ -1674,14 +1691,12 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             // 0x7712F8
             switch (controlInfo->nID) {
             case 0:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlEditMultiLineJournalAnnotation(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo));
             case 1:
             case 2:
             case 3:
             case 4:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlButtonJournalAnnotate(pPanel, reinterpret_cast<UI_CONTROL_BUTTON*>(controlInfo));
             }
             break;
         case 50:
@@ -2805,8 +2820,7 @@ CUIControlBase* CUIControlBase::CreateControl(CUIPanel* pPanel, UI_CONTROL* cont
             case 6:
                 return new CUIControlScrollBar(pPanel, reinterpret_cast<UI_CONTROL_SCROLLBAR*>(controlInfo));
             case 7:
-                // TODO: Incomplete.
-                return NULL;
+                return new CUIControlEditMultiPlayerChat(pPanel, reinterpret_cast<UI_CONTROL_EDIT*>(controlInfo));
             }
             break;
         }

@@ -66,14 +66,14 @@ public:
     /* 0180 */ CVidFont field_180;
 };
 
-class CUIControlButtonStartMenu : CUIControlButton {
+class CUIControlButtonStartMenu : public CUIControlButton {
 public:
     CUIControlButtonStartMenu(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonStartMenu();
     void OnLButtonClick(CPoint pt) override;
 };
 
-class CUIControlButtonStart670770 : CUIControlButton {
+class CUIControlButtonStart670770 : public CUIControlButton {
 public:
     CUIControlButtonStart670770(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonStart670770();
