@@ -83,6 +83,13 @@ CSize CWorldMap::GetMapSize(DWORD nMap)
         pData->m_nHeight * (g_pBaldurChitin->field_4A28 ? 2 : 1));
 }
 
+// 0x559540
+CSize CWorldMap::GetAreaPosition(CWorldMapArea* pArea)
+{
+    return CSize(pArea->m_mapLocationX * (g_pBaldurChitin->field_4A28 ? 2 : 1),
+        pArea->m_mapLocationY * (g_pBaldurChitin->field_4A28 ? 2 : 1));
+}
+
 // 0x559580
 DWORD CWorldMap::GetNumAreas(DWORD nMap)
 {
