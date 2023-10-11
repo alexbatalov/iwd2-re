@@ -3991,6 +3991,25 @@ CWorldMap* CInfGame::GetWorldMap(CString sArea)
     return &m_cWorldMap;
 }
 
+// 0x5C79C0
+BOOL CInfGame::sub_5C79C0(CString sArea)
+{
+    CString v1;
+
+    // NOTE: Not sure what first condition is for.
+    if (sArea
+        && sArea[0] != '\0'
+        && sArea[1] != '\0'
+        && sArea[2] != '\0') {
+        v1 = sArea.Mid(2);
+        if (atoi(v1) >= 9000) {
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
 // 0x5C93E0
 INT CInfGame::sub_5C93E0()
 {

@@ -220,6 +220,7 @@ public:
     BOOLEAN GetGameSpyCharacterInformation(INT nCharacterSlot, CString& sName, CString& sRace, CString& sClass, CString& sLevel);
     void MultiplayerSetCharacterCreationLocation();
     CWorldMap* GetWorldMap(CString sArea);
+    BOOL sub_5C79C0(CString sArea);
     INT sub_5C93E0();
     void ResetMultiPlayerPermissions();
 
