@@ -250,6 +250,53 @@ void CScreenWorldMap::EngineDeactivated()
     g_pBaldurChitin->GetObjectGame()->m_tempCursor = 4;
 }
 
+// 0x699F10
+void CScreenWorldMap::EngineGameInit()
+{
+    m_cUIManager.fInit(this, CResRef("GUIWMAP"), g_pBaldurChitin->field_4A28);
+
+    CPoint pt;
+    if (g_pBaldurChitin->field_4A28) {
+        pt.x = CVideo::SCREENWIDTH / 2 - CBaldurChitin::DEFAULT_SCREEN_WIDTH;
+        pt.y = CVideo::SCREENHEIGHT / 2 - CBaldurChitin::DEFAULT_SCREEN_HEIGHT;
+    } else {
+        pt.x = (CVideo::SCREENWIDTH - CBaldurChitin::DEFAULT_SCREEN_WIDTH) / 2;
+        pt.y = (CVideo::SCREENHEIGHT - CBaldurChitin::DEFAULT_SCREEN_HEIGHT) / 2;
+    }
+
+    m_cUIManager.ShiftPanels(pt);
+
+    for (int index = 0; index < 4; index++) {
+        m_cUIManager.AddPanel(&(g_pBaldurChitin->field_49B4[index]));
+    }
+
+    m_ptMapView.x = 0;
+    m_ptMapView.y = 0;
+    m_nSelectedCharacter = 0;
+    m_pCurrentScrollBar = NULL;
+    field_FCA = RGB(224, 180, 15);
+    m_vfLabel.SetColor(field_FCA, field_FCA, FALSE);
+    field_FCE = 0;
+    m_nSelectedArea = -1;
+    m_ptMapStartMousePos.x = 0;
+    m_ptMapStartMousePos.y = 0;
+    m_bOverSelectedArea = FALSE;
+    m_bMapLeftDown = FALSE;
+    m_bMapDragging = FALSE;
+    m_pPath = NULL;
+    m_pMainPanel = NULL;
+    m_pChatDisplay = NULL;
+    field_104A = 0;
+    m_ptMapStartView.x = 0;
+    m_ptMapStartView.y = 0;
+}
+
+// 0x5D72C0
+void CScreenWorldMap::EngineGameUninit()
+{
+    m_cUIManager.fUninit();
+}
+
 // 0x49FC40
 BOOL CScreenWorldMap::CheckMouseMove()
 {
