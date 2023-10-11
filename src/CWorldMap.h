@@ -23,6 +23,7 @@ public:
     CWorldMapLinks* GetLink(DWORD nMap, DWORD nLink);
     BOOL GetAreaIndex(DWORD nMap, const CResRef& cResArea, DWORD& nArea);
     CWorldMapList* GetAllLinks(DWORD nMap, DWORD nArea);
+    DWORD GetLinkIndex(DWORD nMap, DWORD nSrcArea, DWORD nDstArea);
 
     CResRef m_cResRef;
     CWorldMapHeader m_cHeader;

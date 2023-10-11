@@ -190,6 +190,32 @@ CWorldMapList* CWorldMap::GetAllLinks(DWORD nMap, DWORD nArea)
     return pLinks;
 }
 
+// 0x559A70
+DWORD CWorldMap::GetLinkIndex(DWORD nMap, DWORD nSrcArea, DWORD nDstArea)
+{
+    CWorldMapList* pLinks = GetAllLinks(nMap, nSrcArea);
+    CWorldMapLinks* pLink;
+    DWORD nFoundLink = -1;
+    DWORD nLink;
+
+    POSITION pos = pLinks->GetHeadPosition();
+    while (pos != NULL) {
+        nLink = pLinks->GetNext(pos);
+
+        // NOTE: Uninline.
+        pLink = GetLink(nMap, nLink);
+
+        if (pLink->m_nArea == nDstArea) {
+            nFoundLink = nLink;
+            break;
+        }
+    }
+
+    delete pLinks;
+
+    return nFoundLink;
+}
+
 // 0x55A550
 void* CWorldMapFile::GetData()
 {
