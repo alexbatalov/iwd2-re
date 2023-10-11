@@ -216,6 +216,28 @@ DWORD CWorldMap::GetLinkIndex(DWORD nMap, DWORD nSrcArea, DWORD nDstArea)
     return nFoundLink;
 }
 
+// 0x55A230
+DWORD CWorldMap::FindSourceAreaIndex(DWORD nMap, DWORD nLink)
+{
+    DWORD nArea;
+    CWorldMapList* pLinks;
+    POSITION pos;
+
+    for (nArea = 0; nArea < m_pData[nMap].m_nAreas; nArea++) {
+        pLinks = GetAllLinks(nMap, nArea);
+
+        pos = pLinks->Find(nLink);
+
+        delete pLinks;
+
+        if (pos != NULL) {
+            return nArea;
+        }
+    }
+
+    return -1;
+}
+
 // 0x55A550
 void* CWorldMapFile::GetData()
 {

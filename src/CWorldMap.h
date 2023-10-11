@@ -24,6 +24,7 @@ public:
     BOOL GetAreaIndex(DWORD nMap, const CResRef& cResArea, DWORD& nArea);
     CWorldMapList* GetAllLinks(DWORD nMap, DWORD nArea);
     DWORD GetLinkIndex(DWORD nMap, DWORD nSrcArea, DWORD nDstArea);
+    DWORD FindSourceAreaIndex(DWORD nMap, DWORD nLink);
 
     CResRef m_cResRef;
     CWorldMapHeader m_cHeader;
