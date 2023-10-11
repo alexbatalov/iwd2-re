@@ -1,6 +1,7 @@
 #include "CWorldMap.h"
 
 #include "CBaldurChitin.h"
+#include "CGameArea.h"
 #include "CInfGame.h"
 #include "CUtil.h"
 
@@ -262,6 +263,37 @@ void CWorldMap::EnableArea(DWORD nMap, const CResRef& cResArea, BOOL bEnable)
             m_ppAreas[nMap][nArea].m_dwFlags &= ~0x2;
         }
     }
+}
+
+// 0x55A3A0
+DWORD CWorldMap::sub_55A3A0()
+{
+    CResRef cResArea = g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->m_resRef;
+    CString sResArea;
+    cResArea.CopyToString(sResArea);
+    return sub_55A450(sResArea);
+}
+
+// 0x55A450
+DWORD CWorldMap::sub_55A450(CString sResArea)
+{
+    if (sResArea.GetLength() <= 3
+        || sResArea[0] == '\0'
+        || sResArea[1] == '\0'
+        || sResArea[2] == '\0') {
+        return 0;
+    }
+
+    INT nNumber = atoi(sResArea.Mid(2));
+    if (nNumber < 4000) {
+        return 0;
+    }
+
+    if (nNumber < 6000) {
+        return 1;
+    }
+
+    return 2;
 }
 
 // 0x55A550

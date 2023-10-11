@@ -27,6 +27,8 @@ public:
     DWORD FindSourceAreaIndex(DWORD nMap, DWORD nLink);
     void SetExplorable(DWORD nMap, const CResRef& cResArea, BOOL bExplorable);
     void EnableArea(DWORD nMap, const CResRef& cResArea, BOOL bEnable);
+    DWORD sub_55A3A0();
+    DWORD sub_55A450(CString sResArea);
 
     CResRef m_cResRef;
     CWorldMapHeader m_cHeader;
