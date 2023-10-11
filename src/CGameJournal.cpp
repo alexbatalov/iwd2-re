@@ -115,6 +115,14 @@ BOOL CGameJournal::AddEntry(STRREF strText, INT nChapter, LONG nTime, WORD nType
     return FALSE;
 }
 
+// 0x4C6580
+BOOL CGameJournal::InsertEntryAfter(CString strText, DWORD nEntry, DWORD nType)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x4C6970
 BOOL CGameJournal::IsEntryChanged(DWORD nIndex)
 {
@@ -232,6 +240,12 @@ void CGameJournal::Unmarshal(CSavedGameJournalEntry* pSavedEntry, DWORD nSavedEn
 
         m_aChapters[pSavedEntry[cnt].m_chapter]->AddTail(pEntry);
     }
+}
+
+// 0x4C6D90
+void CGameJournal::ChangeEntry(STRREF strRef, CString szNewText)
+{
+    // TODO: Incomplete.
 }
 
 // 0x4C70E0

@@ -28,11 +28,13 @@ public:
     ~CGameJournal();
     BOOL AddEntry(STRREF strText, WORD nType);
     BOOL AddEntry(STRREF strText, INT nChapter, LONG nTime, WORD nType);
+    BOOL InsertEntryAfter(CString strText, DWORD nEntry, DWORD nType);
     BOOL IsEntryChanged(DWORD nIndex);
     void UpdateTextDisplay(INT nChapter, CUIControlTextDisplay* pText);
     void ClearAllEntries();
     WORD CountEntries();
     void Unmarshal(CSavedGameJournalEntry* pSavedEntry, DWORD nSavedEntry);
+    void ChangeEntry(STRREF strRef, CString szNewText);
     void RevertEntry(DWORD nIndex);
     void SetQuestDone(STRREF strRef);
     CString GetEntryText(DWORD nIndex);

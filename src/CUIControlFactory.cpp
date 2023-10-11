@@ -3734,6 +3734,45 @@ CUIControlEditMultiLineJournalAnnotation::~CUIControlEditMultiLineJournalAnnotat
 
 // -----------------------------------------------------------------------------
 
+// 0x779AA0
+CUIControlButtonJournalAnnotate::CUIControlButtonJournalAnnotate(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo)
+    : CUIControlButton(panel, controlInfo, LBUTTON, 0)
+{
+}
+
+// 0x779B20
+CUIControlButtonJournalAnnotate::~CUIControlButtonJournalAnnotate()
+{
+}
+
+// 0x5ECCF0
+BOOL CUIControlButtonJournalAnnotate::OnLButtonDown(CPoint pt)
+{
+    if (m_bEnabled) {
+        return CUIControlButton::OnLButtonDown(pt);
+    } else {
+        return FALSE;
+    }
+}
+
+// 0x5EC9B0
+void CUIControlButtonJournalAnnotate::OnLButtonUp(CPoint pt)
+{
+    if (m_bEnabled) {
+        CUIControlButton::OnLButtonUp(pt);
+    }
+}
+
+// 0x779AD0
+void CUIControlButtonJournalAnnotate::OnLButtonDoubleClick(CPoint pt)
+{
+    if (m_bEnabled) {
+        CUIControlButton::OnLButtonDoubleClick(pt);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x779BC0
 CUIControlTextDisplayJournal::CUIControlTextDisplayJournal(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo)
     : CUIControlTextDisplay(panel, controlInfo, TRUE)

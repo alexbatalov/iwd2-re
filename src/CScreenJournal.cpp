@@ -5,6 +5,7 @@
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CScreenWorld.h"
+#include "CUIControlFactory.h"
 #include "CUIControlScrollBar.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
@@ -1055,4 +1056,52 @@ void CUIControlButtonJournalError::OnLButtonClick(CPoint pt)
     UTIL_ASSERT(pJournal != NULL);
 
     pJournal->OnErrorButtonClick(m_nID);
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x637EA0
+void CUIControlButtonJournalAnnotate::OnLButtonClick(CPoint pt)
+{
+    if (m_bEnabled) {
+        CScreenJournal* pScreen = g_pBaldurChitin->m_pEngineJournal;
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreenjournal.cpp
+        // __LINE__: 2088
+        UTIL_ASSERT(pScreen != NULL);
+
+        CGameJournal* pJournal = g_pBaldurChitin->GetObjectGame()->GetJournal();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreenjournal.cpp
+        // __LINE__: 2090
+        UTIL_ASSERT(pJournal != NULL);
+
+        CString sText;
+
+        switch (m_nID) {
+        case 1:
+            sText = static_cast<CUIControlEditMultiLineJournalAnnotation*>(m_pPanel->GetControl(0))->GetText();
+            if (!pScreen->field_EA0) {
+                pJournal->ChangeEntry(pScreen->field_E9C, sText);
+            } else {
+                pJournal->InsertEntryAfter(sText, pScreen->field_E9C, 0);
+            }
+            break;
+        case 3:
+            if (!pScreen->field_EA0) {
+                pJournal->RevertEntry(pScreen->field_E9C);
+            }
+            break;
+        case 4:
+            if (!pScreen->field_EA0) {
+                pJournal->ChangeEntry(pScreen->field_E9C, CString(""));
+            }
+            break;
+        }
+
+        CSingleLock renderLock(&(pScreen->GetManager()->field_36), FALSE);
+        renderLock.Lock(INFINITE);
+        pScreen->DismissPopup();
+        renderLock.Unlock();
+    }
 }

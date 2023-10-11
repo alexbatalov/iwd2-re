@@ -135,6 +135,16 @@ public:
     ~CUIControlEditMultiLineJournalAnnotation() override;
 };
 
+class CUIControlButtonJournalAnnotate : public CUIControlButton {
+public:
+    CUIControlButtonJournalAnnotate(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
+    ~CUIControlButtonJournalAnnotate() override;
+    BOOL OnLButtonDown(CPoint pt) override;
+    void OnLButtonUp(CPoint pt) override;
+    void OnLButtonDoubleClick(CPoint pt) override;
+    void OnLButtonClick(CPoint pt) override;
+};
+
 class CUIControlPortraitBase : public CUIControlButton {
 public:
     CUIControlPortraitBase(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo, BYTE nMouseButtons);
