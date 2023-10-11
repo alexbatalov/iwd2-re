@@ -4,6 +4,7 @@
 #include "CUIControlButton.h"
 #include "CUIControlButton3State.h"
 #include "CUIControlEdit.h"
+#include "CUIControlEditMultiLine.h"
 #include "CUIControlTextDisplay.h"
 
 class CBaldurEngine;
@@ -126,6 +127,12 @@ public:
     CUIControlButtonOptionsHotArea(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonOptionsHotArea() override;
     void OnHotAreaClick(CPoint pt) override;
+};
+
+class CUIControlEditMultiLineJournalAnnotation : public CUIControlEditMultiLine {
+public:
+    CUIControlEditMultiLineJournalAnnotation(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo);
+    ~CUIControlEditMultiLineJournalAnnotation() override;
 };
 
 class CUIControlPortraitBase : public CUIControlButton {

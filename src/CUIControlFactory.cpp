@@ -3719,6 +3719,21 @@ CUIControlButtonOptionsHotArea::~CUIControlButtonOptionsHotArea()
 {
 }
 
+// -----------------------------------------------------------------------------
+
+// 0x779990
+CUIControlEditMultiLineJournalAnnotation::CUIControlEditMultiLineJournalAnnotation(CUIPanel* panel, UI_CONTROL_EDIT* controlInfo)
+    : CUIControlEditMultiLine(panel, controlInfo, 0)
+{
+}
+
+// 0x7799E0
+CUIControlEditMultiLineJournalAnnotation::~CUIControlEditMultiLineJournalAnnotation()
+{
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x779BC0
 CUIControlTextDisplayJournal::CUIControlTextDisplayJournal(CUIPanel* panel, UI_CONTROL_TEXTDISPLAY* controlInfo)
     : CUIControlTextDisplay(panel, controlInfo, TRUE)
