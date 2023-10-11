@@ -6,6 +6,8 @@
 #include "CResWorldMap.h"
 #include "FileFormat.h"
 
+typedef CList<DWORD, DWORD> CWorldMapList;
+
 class CWorldMap {
 public:
     CWorldMap();
@@ -20,6 +22,7 @@ public:
     CWorldMapArea* GetArea(DWORD nMap, DWORD nArea);
     CWorldMapLinks* GetLink(DWORD nMap, DWORD nLink);
     BOOL GetAreaIndex(DWORD nMap, const CResRef& cResArea, DWORD& nArea);
+    CWorldMapList* GetAllLinks(DWORD nMap, DWORD nArea);
 
     CResRef m_cResRef;
     CWorldMapHeader m_cHeader;

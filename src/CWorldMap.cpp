@@ -151,6 +151,45 @@ BOOL CWorldMap::GetAreaIndex(DWORD nMap, const CResRef& cResArea, DWORD& nArea)
     return FALSE;
 }
 
+// 0x559840
+CWorldMapList* CWorldMap::GetAllLinks(DWORD nMap, DWORD nArea)
+{
+    CWorldMapList* pLinks = new CWorldMapList();
+    DWORD nLinkStart;
+    DWORD nLinkCount;
+    DWORD nLink;
+
+    nLinkStart = m_ppAreas[nMap][nArea].m_nNorthEdgeStartingLink;
+    nLinkCount = nLinkStart + m_ppAreas[nMap][nArea].m_nNorthEdgeCount;
+
+    for (nLink = nLinkStart; nLink < nLinkCount; nLink++) {
+        pLinks->AddTail(nLink);
+    }
+
+    nLinkStart = m_ppAreas[nMap][nArea].m_nSouthEdgeStartingLink;
+    nLinkCount = nLinkStart + m_ppAreas[nMap][nArea].m_nSouthEdgeCount;
+
+    for (nLink = nLinkStart; nLink < nLinkCount; nLink++) {
+        pLinks->AddTail(nLink);
+    }
+
+    nLinkStart = m_ppAreas[nMap][nArea].m_nWestEdgeStartingLink;
+    nLinkCount = nLinkStart + m_ppAreas[nMap][nArea].m_nWestEdgeCount;
+
+    for (nLink = nLinkStart; nLink < nLinkCount; nLink++) {
+        pLinks->AddTail(nLink);
+    }
+
+    nLinkStart = m_ppAreas[nMap][nArea].m_nEastEdgeStartingLink;
+    nLinkCount = nLinkStart + m_ppAreas[nMap][nArea].m_nEastEdgeCount;
+
+    for (nLink = nLinkStart; nLink < nLinkCount; nLink++) {
+        pLinks->AddTail(nLink);
+    }
+
+    return pLinks;
+}
+
 // 0x55A550
 void* CWorldMapFile::GetData()
 {
