@@ -3972,6 +3972,25 @@ void CInfGame::MultiplayerSetCharacterCreationLocation()
     }
 }
 
+// 0x5C78F0
+CWorldMap* CInfGame::GetWorldMap(CString sArea)
+{
+    CString v1;
+
+    // NOTE: Not sure what first condition is for.
+    if (sArea
+        && sArea[0] != '\0'
+        && sArea[1] != '\0'
+        && sArea[2] != '\0') {
+        v1 = sArea.Mid(2);
+        if (atoi(v1) >= 9000) {
+            return &m_cOtherWorldMap;
+        }
+    }
+
+    return &m_cWorldMap;
+}
+
 // 0x5C93E0
 INT CInfGame::sub_5C93E0()
 {

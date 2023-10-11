@@ -219,6 +219,7 @@ public:
     void ChangeBiography(BYTE nFixedPartyId, CString szBiography);
     BOOLEAN GetGameSpyCharacterInformation(INT nCharacterSlot, CString& sName, CString& sRace, CString& sClass, CString& sLevel);
     void MultiplayerSetCharacterCreationLocation();
+    CWorldMap* GetWorldMap(CString sArea);
     INT sub_5C93E0();
     void ResetMultiPlayerPermissions();
 
@@ -367,6 +368,7 @@ public:
     /* 43EA */ CGameOptions m_cOptions; // #guess
     /* 44C8 */ CGameJournal m_cJournal;
     /* 44DC */ CWorldMap m_cWorldMap;
+    /* 44F8 */ CWorldMap m_cOtherWorldMap;
     /* 4514 */ BYTE m_pKeymap[CINFGAME_KEYMAP_SIZE];
     /* 4688 */ BOOLEAN m_pKeymapFlags[CINFGAME_KEYMAP_SIZE];
     /* 47FC */ CVariableHash m_variables;
