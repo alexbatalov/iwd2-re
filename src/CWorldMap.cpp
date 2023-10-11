@@ -251,6 +251,19 @@ void CWorldMap::SetExplorable(DWORD nMap, const CResRef& cResArea, BOOL bExplora
     }
 }
 
+// 0x55A320
+void CWorldMap::EnableArea(DWORD nMap, const CResRef& cResArea, BOOL bEnable)
+{
+    DWORD nArea;
+    if (GetAreaIndex(nMap, cResArea, nArea)) {
+        if (bEnable) {
+            m_ppAreas[nMap][nArea].m_dwFlags |= 0x2 | 0x1;
+        } else {
+            m_ppAreas[nMap][nArea].m_dwFlags &= ~0x2;
+        }
+    }
+}
+
 // 0x55A550
 void* CWorldMapFile::GetData()
 {
