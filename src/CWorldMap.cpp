@@ -238,6 +238,19 @@ DWORD CWorldMap::FindSourceAreaIndex(DWORD nMap, DWORD nLink)
     return -1;
 }
 
+// 0x55A2C0
+void CWorldMap::SetExplorable(DWORD nMap, const CResRef& cResArea, BOOL bExplorable)
+{
+    DWORD nArea;
+    if (GetAreaIndex(nMap, cResArea, nArea)) {
+        if (bExplorable) {
+            m_ppAreas[nMap][nArea].m_dwFlags |= 0x4 | 0x1;
+        } else {
+            m_ppAreas[nMap][nArea].m_dwFlags &= ~0x4;
+        }
+    }
+}
+
 // 0x55A550
 void* CWorldMapFile::GetData()
 {

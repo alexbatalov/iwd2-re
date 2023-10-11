@@ -25,6 +25,7 @@ public:
     CWorldMapList* GetAllLinks(DWORD nMap, DWORD nArea);
     DWORD GetLinkIndex(DWORD nMap, DWORD nSrcArea, DWORD nDstArea);
     DWORD FindSourceAreaIndex(DWORD nMap, DWORD nLink);
+    void SetExplorable(DWORD nMap, const CResRef& cResArea, BOOL bExplorable);
 
     CResRef m_cResRef;
     CWorldMapHeader m_cHeader;
