@@ -1,5 +1,6 @@
 #include "CWorldMap.h"
 
+#include "CBaldurChitin.h"
 #include "CUtil.h"
 
 // 0x558870
@@ -70,6 +71,16 @@ CWorldMapData* CWorldMap::GetMap(DWORD nMap)
     UTIL_ASSERT(nMap < m_cHeader.m_nMapCount);
 
     return &(m_pData[nMap]);
+}
+
+// 0x5594D0
+CSize CWorldMap::GetMapSize(DWORD nMap)
+{
+    // NOTE: Uninline.
+    CWorldMapData* pData = GetMap(nMap);
+
+    return CSize(pData->m_nWidth * (g_pBaldurChitin->field_4A28 ? 2 : 1),
+        pData->m_nHeight * (g_pBaldurChitin->field_4A28 ? 2 : 1));
 }
 
 // 0x559580

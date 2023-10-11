@@ -14,6 +14,7 @@ public:
     void ClearData();
     void SetResRef(const CResRef& cResRef);
     CWorldMapData* GetMap(DWORD nMap);
+    CSize GetMapSize(DWORD nMap);
     DWORD GetNumAreas(DWORD nMap);
     CWorldMapArea* GetArea(DWORD nMap, DWORD nArea);
     CWorldMapLinks* GetLink(DWORD nMap, DWORD nLink);
