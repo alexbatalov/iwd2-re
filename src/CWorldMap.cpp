@@ -1,6 +1,7 @@
 #include "CWorldMap.h"
 
 #include "CBaldurChitin.h"
+#include "CInfGame.h"
 #include "CUtil.h"
 
 // 0x558870
@@ -126,6 +127,28 @@ CWorldMapLinks* CWorldMap::GetLink(DWORD nMap, DWORD nLink)
     UTIL_ASSERT(nLink < m_pData[nMap].m_nLinks);
 
     return &(m_ppLinks[nMap][nLink]);
+}
+
+// 0x5596A0
+BOOL CWorldMap::GetAreaIndex(DWORD nMap, const CResRef& cResArea, DWORD& nArea)
+{
+    CString v1;
+
+    CPoint pt;
+    if (g_pBaldurChitin->GetObjectGame()->GetRuleTables().m_tAreaLoad.Find(CString(cResArea.GetResRef()), pt, TRUE) != TRUE) {
+        return FALSE;
+    }
+
+    v1 = g_pBaldurChitin->GetObjectGame()->GetRuleTables().m_tAreaLoad.GetAt(pt);
+
+    for (DWORD nIndex = 0; nIndex < m_pData[nMap].m_nAreas; nIndex++) {
+        if (v1 == CString(m_ppAreas[nMap][nIndex].m_resCurrentArea)) {
+            nArea = nIndex;
+            return TRUE;
+        }
+    }
+
+    return FALSE;
 }
 
 // 0x55A550

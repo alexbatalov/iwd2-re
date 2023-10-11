@@ -19,6 +19,7 @@ public:
     DWORD GetNumAreas(DWORD nMap);
     CWorldMapArea* GetArea(DWORD nMap, DWORD nArea);
     CWorldMapLinks* GetLink(DWORD nMap, DWORD nLink);
+    BOOL GetAreaIndex(DWORD nMap, const CResRef& cResArea, DWORD& nArea);
 
     CResRef m_cResRef;
     CWorldMapHeader m_cHeader;
