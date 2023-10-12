@@ -93,10 +93,7 @@ public:
     /* 0FFE */ int field_FFE;
     /* 1002 */ int m_nCurrentLink;
     /* 1006 */ CResRef m_cResCurrentArea;
-    /* 100E */ CArray<CRect, CRect&> field_100E;
-    /* 1012 */ CRect* field_1012;
-    /* 1016 */ DWORD field_1016;
-    /* 101A */ DWORD field_101A;
+    /* 100E */ CArray<CRect> m_aAreaRect;
     /* 1022 */ CCriticalSection field_1022;
     /* 1042 */ CUIPanel* m_pMainPanel;
     /* 1046 */ CUIControlTextDisplay* m_pChatDisplay;

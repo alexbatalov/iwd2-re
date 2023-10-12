@@ -612,13 +612,8 @@ void CScreenWorldMap::StopWorldMap(BOOLEAN bAreaClicked)
     CSingleLock lock(&field_1022, FALSE);
     lock.Lock(INFINITE);
 
-    if (field_1012 != NULL) {
-        delete field_1012;
-        field_1012 = NULL;
-    }
-
-    field_101A = 0;
-    field_1016 = 0;
+    // NOTE: Uninline.
+    m_aAreaRect.SetSize(0);
 
     lock.Unlock();
 
@@ -694,7 +689,7 @@ DWORD CScreenWorldMap::FindAreaHit(const CPoint& pt)
 
     DWORD nNumAreas = pWorldMap->GetNumAreas(pWorldMap->sub_55A3A0());
     for (DWORD nArea = 0; nArea < nNumAreas; nArea++) {
-        CRect rArea = field_1012[nArea];
+        CRect rArea = m_aAreaRect[nArea];
         if (rArea.PtInRect(ptMapPos)
             && (pWorldMap->GetArea(pWorldMap->sub_55A3A0(), nArea)->m_dwFlags & 0x4) != 0) {
             nFoundArea = nArea;
@@ -708,8 +703,8 @@ DWORD CScreenWorldMap::FindAreaHit(const CPoint& pt)
 // 0x69CF90
 void CScreenWorldMap::InvalidateArea(DWORD nArea)
 {
-    if (nArea != -1 && field_1016 > 0) {
-        CRect rArea = field_1012[nArea];
+    if (nArea != -1 && m_aAreaRect.GetCount() > 0) {
+        CRect rArea = m_aAreaRect[nArea];
         CRect rControl(m_pMapControl->m_ptOrigin, m_pMapControl->m_size);
 
         rArea.OffsetRect(-m_ptMapView);
@@ -756,7 +751,7 @@ void CScreenWorldMap::GetMarkerPosition(CPoint& ptMarker)
         DWORD nArea;
         if (pWorldMap->GetAreaIndex(pWorldMap->sub_55A3A0(), m_cResCurrentArea, nArea)
             || pWorldMap->GetAreaIndex(pWorldMap->sub_55A3A0(), CResRef("AR2626"), nArea)) {
-            CRect rArea = field_1012[nArea];
+            CRect rArea = m_aAreaRect[nArea];
             ptMarker.x = (rArea.left + rArea.right) / 2;
             ptMarker.y = rArea.top;
         } else {
