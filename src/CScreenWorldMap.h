@@ -10,6 +10,7 @@
 
 #define CSCREENWORLDMAP_VIRTUAL_KEYS 90
 
+class CUIControlButtonWorldMapWorldMap;
 class CUIControlTextDisplay;
 class CUIPanel;
 
@@ -58,6 +59,7 @@ public:
     BOOL DrawMap(const CRect& r);
     void StartWorldMap(INT nEngineState, LONG nLeavingEdge, BOOLEAN bInControl);
     void StopWorldMap(BOOLEAN bAreaClicked);
+    void InvalidateArea(DWORD nArea);
     void GetMarkerPosition(CPoint& ptMarker);
     void ClearChatMessages();
 
@@ -69,7 +71,7 @@ public:
     /* 0436 */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
     /* 0452 */ INT m_nEngineState;
     /* 0456 */ CPoint m_ptMapView;
-    /* 045E */ void* m_pMapControl;
+    /* 045E */ CUIControlButtonWorldMapWorldMap* m_pMapControl;
     /* 0462 */ CVidMosaic m_vmMap;
     /* 0516 */ CVidCell m_vcAreas;
     /* 05F0 */ CVidCell m_vcMarker;
@@ -90,6 +92,7 @@ public:
     /* 1006 */ CResRef m_cResCurrentArea;
     /* 100E */ CArray<CRect, CRect&> field_100E;
     /* 1012 */ CRect* field_1012;
+    /* 1016 */ DWORD field_1016;
     /* 1022 */ CCriticalSection field_1022;
     /* 1042 */ CUIPanel* m_pMainPanel;
     /* 1046 */ CUIControlTextDisplay* m_pChatDisplay;

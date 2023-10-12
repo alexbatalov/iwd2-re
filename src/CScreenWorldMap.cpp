@@ -465,6 +465,25 @@ void CScreenWorldMap::StopWorldMap(BOOLEAN bAreaClicked)
     // TODO: Incomplete.
 }
 
+// 0x69CF90
+void CScreenWorldMap::InvalidateArea(DWORD nArea)
+{
+    if (nArea != -1 && field_1016 > 0) {
+        CRect rArea = field_1012[nArea];
+        CRect rControl(m_pMapControl->m_ptOrigin, m_pMapControl->m_size);
+
+        rArea.OffsetRect(-m_ptMapView);
+        rArea.OffsetRect(m_pMapControl->m_ptOrigin);
+
+        CRect rDirty;
+        rDirty.IntersectRect(rArea, rControl);
+
+        if (!rDirty.IsRectNull()) {
+            m_pMapControl->m_pPanel->InvalidateRect(&rDirty);
+        }
+    }
+}
+
 // 0x69FFC0
 void CScreenWorldMap::GetMarkerPosition(CPoint& ptMarker)
 {
