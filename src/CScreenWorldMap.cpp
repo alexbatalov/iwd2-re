@@ -9,6 +9,7 @@
 #include "CTimerWorld.h"
 #include "CUIControlEdit.h"
 #include "CUIControlScrollBar.h"
+#include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
 
@@ -219,6 +220,129 @@ BYTE* CScreenWorldMap::GetVirtualKeysFlags()
 CScreenWorldMap::~CScreenWorldMap()
 {
     // TODO: Incomplete.
+}
+
+// 0x699760
+void CScreenWorldMap::EngineActivated()
+{
+    if (CChitin::byte_8FB950
+        && g_pChitin->cNetwork.GetSessionOpen() == TRUE
+        && g_pChitin->cNetwork.GetSessionHosting() == TRUE
+        && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+        g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
+    }
+
+    if (m_cUIManager.m_bInitialized) {
+        m_preLoadFontRealms.SetResRef(CResRef("REALMS"), FALSE, TRUE);
+        m_preLoadFontRealms.RegisterFont();
+
+        m_preLoadFontTool.SetResRef(CResRef("TOOLFONT"), FALSE, TRUE);
+        m_preLoadFontTool.RegisterFont();
+
+        CUIPanel* pLeftPanel = m_cUIManager.GetPanel(0);
+        CUIPanel* pRightPanel = m_cUIManager.GetPanel(1);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+        // __LINE__: 328
+        UTIL_ASSERT(pLeftPanel != NULL);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+        // __LINE__: 329
+        UTIL_ASSERT(pRightPanel != NULL);
+
+        pLeftPanel->SetEnabled(FALSE);
+        pRightPanel->SetEnabled(FALSE);
+
+        CheckEnablePortaits(1);
+        CheckEnableLeftPanel();
+
+        m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(m_pMainPanel->GetControl(6));
+
+        UpdateCursorShape(0);
+        g_pBaldurChitin->GetObjectCursor()->SetCursor(0, FALSE);
+
+        m_nToolTip = 0;
+        m_cUIManager.InvalidateRect(NULL);
+
+        if (m_pChatDisplay != NULL) {
+            field_104A = g_pBaldurChitin->GetBaldurMessage()->m_cChatBuffer.UpdateTextDisplay(m_pChatDisplay,
+                field_104A);
+            m_pChatDisplay->ScrollToBottom();
+        }
+
+        CResRef cResRef = "WorldE";
+
+        C2DArray tWorldE;
+        tWorldE.Load(cResRef);
+        if (tWorldE.Demand()) {
+            tWorldE.Release();
+
+            CString sResArea;
+
+            CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+            pGame->GetVisibleArea()->m_resRef.CopyToString(sResArea);
+
+            CWorldMap* pWorldMap = pGame->GetWorldMap(sResArea);
+            DWORD nMap = pWorldMap->sub_55A3A0();
+
+            for (INT y = 0; y < tWorldE.GetHeight(); y++) {
+                CString sOtherResArea;
+                sOtherResArea = tWorldE.GetAt(CPoint(1, y));
+                if (sOtherResArea.GetLength() > 0) {
+                    DWORD nMap = pWorldMap->sub_55A450(sOtherResArea);
+
+                    pWorldMap->SetExplorable(nMap,
+                        CResRef(sOtherResArea),
+                        FALSE);
+
+                    CString sVarName = tWorldE.GetAt(CPoint(0, y));
+
+                    CVariable* pVar = g_pBaldurChitin->GetObjectGame()->GetVariables()->FindKey(sVarName);
+                    if (pVar != NULL) {
+                        if (pVar->GetName() != "") {
+                            if (pVar->m_intValue != 0) {
+                                pWorldMap->EnableArea(nMap,
+                                    CResRef(sOtherResArea),
+                                    TRUE);
+
+                                g_pBaldurChitin->GetBaldurMessage()->SendMapWorldRevealArea(sOtherResArea);
+                            } else {
+                                pWorldMap->EnableArea(nMap,
+                                    CResRef(sOtherResArea),
+                                    FALSE);
+                            }
+                        }
+                    }
+                }
+            }
+
+            pWorldMap->SetExplorable(nMap, CResRef(sResArea), TRUE);
+
+            DWORD nArea;
+            if (pWorldMap->GetAreaIndex(nMap, CResRef(sResArea), nArea)) {
+                // FIXME: Unused.
+                pWorldMap->GetArea(nMap, nArea);
+
+                DWORD nMap = pWorldMap->sub_55A3A0();
+                CWorldMapList* pLinks = pWorldMap->GetAllLinks(nMap, nArea);
+
+                POSITION pos = pLinks->GetHeadPosition();
+                while (pos != NULL) {
+                    DWORD nLink = pLinks->GetNext(pos);
+                    CWorldMapLinks* pLink = pWorldMap->GetLink(nMap, nLink);
+                    CWorldMapArea* pArea = pWorldMap->GetArea(nMap, pLink->m_nArea);
+                    if (pArea != NULL) {
+                        pWorldMap->SetExplorable(nMap,
+                            CResRef(pArea->m_resCurrentArea),
+                            (pArea->m_dwFlags & 0x1) != 0);
+                    }
+                }
+
+                delete pLinks;
+            }
+        }
+    }
 }
 
 // 0x699E40

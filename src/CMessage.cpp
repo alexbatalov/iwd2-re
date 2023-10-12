@@ -2512,8 +2512,26 @@ BOOLEAN CBaldurMessage::ChapterAnnounceStatus(BYTE nChapter, CResRef cResRef)
     return FALSE;
 }
 
+// 0x435360
+BOOLEAN CBaldurMessage::SendMapWorldCancelRequestToServer()
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x4354E0
 BOOLEAN CBaldurMessage::SendMapWorldAnnounceStatus(BOOLEAN bActive, PLAYER_ID idController, LONG nLeavingEdge)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// FIXME: `sAreaResRef` should be reference.
+//
+// 0x436050
+BOOLEAN CBaldurMessage::SendMapWorldRevealArea(CString sAreaResRef)
 {
     // TODO: Incomplete.
 

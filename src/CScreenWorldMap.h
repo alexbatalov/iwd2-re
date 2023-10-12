@@ -20,6 +20,7 @@ public:
 
     CScreenWorldMap();
     /* 0004 */ ~CScreenWorldMap() override;
+    /* 0014 */ void EngineActivated() override;
     /* 0018 */ void EngineDeactivated() override;
     /* 0024 */ void EngineGameInit() override;
     /* 0028 */ void EngineGameUninit() override;

@@ -236,7 +236,9 @@ public:
     BOOLEAN PauseAnnounceStatus(BOOLEAN bHardPauseStatus, BOOLEAN bPauseStatus, PLAYER_ID idPauser);
     BOOLEAN OnPauseAnnounceStatus(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
     BOOLEAN ChapterAnnounceStatus(BYTE nChapter, CResRef cResRef);
+    BOOLEAN SendMapWorldCancelRequestToServer();
     BOOLEAN SendMapWorldAnnounceStatus(BOOLEAN bActive, PLAYER_ID idController, LONG nLeavingEdge);
+    BOOLEAN SendMapWorldRevealArea(CString sAreaResRef);
     BOOLEAN MovieAnnounceStatus(CResRef cResMovie);
     BOOLEAN SendReformPartyAnnounceStatus();
     void WeatherBroadcast(WORD wWeatherFlags);
