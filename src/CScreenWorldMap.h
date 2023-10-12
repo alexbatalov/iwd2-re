@@ -59,6 +59,7 @@ public:
     BOOL DrawMap(const CRect& r);
     void StartWorldMap(INT nEngineState, LONG nLeavingEdge, BOOLEAN bInControl);
     void StopWorldMap(BOOLEAN bAreaClicked);
+    CRect GetAreaRect(DWORD nMap, DWORD nArea);
     DWORD FindAreaHit(const CPoint& pt);
     void InvalidateArea(DWORD nArea);
     void GetMarkerPosition(CPoint& ptMarker);

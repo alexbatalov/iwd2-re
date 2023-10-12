@@ -465,6 +465,54 @@ void CScreenWorldMap::StopWorldMap(BOOLEAN bAreaClicked)
     // TODO: Incomplete.
 }
 
+// 0x69CC10
+CRect CScreenWorldMap::GetAreaRect(DWORD nMap, DWORD nArea)
+{
+    CString sLabel;
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+    // __LINE__: 2768
+    UTIL_ASSERT(pGame != NULL);
+
+    CString sResArea;
+
+    pGame->GetVisibleArea()->m_resRef.CopyToString(sResArea);
+
+    CWorldMap* pWorldMap = pGame->GetWorldMap(sResArea);
+
+    CWorldMapArea* pArea = pWorldMap->GetArea(nMap, nArea);
+
+    CSize frameCenter;
+    m_vcAreas.GetFrameCenterPoint(static_cast<SHORT>(pArea->m_sequence), 0, frameCenter, FALSE);
+
+    CSize frameSize;
+    m_vcAreas.GetFrameSize(static_cast<SHORT>(pArea->m_sequence), 0, frameSize, FALSE);
+
+    CSize areaPos = pWorldMap->GetAreaPosition(pArea);
+
+    CRect rArea;
+    rArea.left = areaPos.cx;
+    rArea.top = areaPos.cy;
+    rArea.right = rArea.left + frameSize.cx;
+    rArea.bottom = rArea.top + frameSize.cy;
+    rArea.OffsetRect(-frameCenter.cx, -frameCenter.cy);
+
+    if (pArea->m_strLabel != -1) {
+        sLabel = FetchString(pArea->m_strLabel);
+        LONG nLength = m_vfLabel.GetStringLength(sLabel, FALSE);
+        LONG nHeight = m_vfLabel.GetFontHeight(FALSE) + 11;
+        LONG nSideExpand = max(nLength - rArea.Width(), 0) / 2 + 1;
+        rArea.InflateRect(nSideExpand,
+            0,
+            nSideExpand,
+            nHeight);
+    }
+
+    return rArea;
+}
+
 // 0x69CE20
 DWORD CScreenWorldMap::FindAreaHit(const CPoint& pt)
 {
