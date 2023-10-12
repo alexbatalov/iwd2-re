@@ -58,6 +58,7 @@ public:
     BOOL DrawMap(const CRect& r);
     void StartWorldMap(INT nEngineState, LONG nLeavingEdge, BOOLEAN bInControl);
     void StopWorldMap(BOOLEAN bAreaClicked);
+    void GetMarkerPosition(CPoint& ptMarker);
     void ClearChatMessages();
 
     /* 0106 */ CKeyInfo m_pVirtualKeys[CSCREENWORLDMAP_VIRTUAL_KEYS];
@@ -88,6 +89,7 @@ public:
     /* 1002 */ int m_nCurrentLink;
     /* 1006 */ CResRef m_cResCurrentArea;
     /* 100E */ CArray<CRect, CRect&> field_100E;
+    /* 1012 */ CRect* field_1012;
     /* 1022 */ CCriticalSection field_1022;
     /* 1042 */ CUIPanel* m_pMainPanel;
     /* 1046 */ CUIControlTextDisplay* m_pChatDisplay;

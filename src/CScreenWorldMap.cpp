@@ -1,6 +1,7 @@
 #include "CScreenWorldMap.h"
 
 #include "CBaldurChitin.h"
+#include "CGameArea.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CScreenMap.h"
@@ -462,6 +463,48 @@ void CScreenWorldMap::StartWorldMap(INT nEngineState, LONG nLeavingEdge, BOOLEAN
 void CScreenWorldMap::StopWorldMap(BOOLEAN bAreaClicked)
 {
     // TODO: Incomplete.
+}
+
+// 0x69FFC0
+void CScreenWorldMap::GetMarkerPosition(CPoint& ptMarker)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+    // __LINE__: 4208
+    UTIL_ASSERT(pGame != NULL);
+
+    CString sResArea;
+
+    pGame->GetVisibleArea()->m_resRef.CopyToString(sResArea);
+
+    CWorldMap* pWorldMap = pGame->GetWorldMap(sResArea);
+
+    if (m_nCurrentLink != -1) {
+        DWORD nSrcArea = pWorldMap->FindSourceAreaIndex(pWorldMap->sub_55A3A0(), m_nCurrentLink);
+        DWORD nDstArea = pWorldMap->GetLink(pWorldMap->sub_55A3A0(), m_nCurrentLink)->m_nArea;
+        CWorldMapArea* pSrcArea = pWorldMap->GetArea(pWorldMap->sub_55A3A0(), nSrcArea);
+        CWorldMapArea* pDstArea = pWorldMap->GetArea(pWorldMap->sub_55A3A0(), nDstArea);
+        ptMarker.y = (pSrcArea->m_mapLocationY + pDstArea->m_mapLocationY) / 2;
+        ptMarker.x = (pWorldMap->GetAreaPosition(pSrcArea).cx + pWorldMap->GetAreaPosition(pDstArea).cx) / 2;
+    } else {
+        if (m_cResCurrentArea == "") {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+            // __LINE__: 4258
+            UTIL_ASSERT(FALSE);
+        }
+
+        DWORD nArea;
+        if (pWorldMap->GetAreaIndex(pWorldMap->sub_55A3A0(), m_cResCurrentArea, nArea)
+            || pWorldMap->GetAreaIndex(pWorldMap->sub_55A3A0(), CResRef("AR2626"), nArea)) {
+            CRect rArea = field_1012[nArea];
+            ptMarker.x = (rArea.left + rArea.right) / 2;
+            ptMarker.y = rArea.top;
+        } else {
+            ptMarker.x = 0;
+            ptMarker.y = 0;
+        }
+    }
 }
 
 // 0x6A01C0
