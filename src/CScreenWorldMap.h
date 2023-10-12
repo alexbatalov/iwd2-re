@@ -57,6 +57,7 @@ public:
     void OnMapMouseUp(const CPoint& ptMousePos);
     void OnMapMouseMove(const CPoint& ptMousePos);
     void OnMapAsyncUpdate();
+    void OnAreaMouseClick(DWORD nArea, const CPoint& ptMousePos);
     BOOL DrawMap(const CRect& r);
     void StartWorldMap(INT nEngineState, LONG nLeavingEdge, BOOLEAN bInControl);
     void StopWorldMap(BOOLEAN bAreaClicked);

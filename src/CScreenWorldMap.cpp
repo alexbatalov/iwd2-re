@@ -554,7 +554,27 @@ void CScreenWorldMap::OnMapMouseDown(const CPoint& ptMousePos)
 // 0x69A840
 void CScreenWorldMap::OnMapMouseUp(const CPoint& ptMousePos)
 {
-    // TODO: Incomplete.
+    if (m_nEngineState == 1
+        && m_bInControl
+        && !m_bClickedArea
+        && m_nSelectedArea != -1) {
+        DWORD nSelectedArea = -1;
+        if (m_pMapControl->IsOver(ptMousePos)) {
+            nSelectedArea = FindAreaHit(ptMousePos - m_pMapControl->m_ptOrigin);
+        }
+
+        if (nSelectedArea == m_nSelectedArea) {
+            OnAreaMouseClick(m_nSelectedArea, ptMousePos);
+        }
+
+        InvalidateArea(m_nSelectedArea);
+
+        m_nSelectedArea = -1;
+        m_bOverSelectedArea = FALSE;
+    }
+
+    m_bMapLeftDown = FALSE;
+    m_bMapDragging = FALSE;
 }
 
 // 0x69A920
@@ -580,6 +600,12 @@ void CScreenWorldMap::OnMapMouseMove(const CPoint& ptMousePos)
 
 // 0x69A9D0
 void CScreenWorldMap::OnMapAsyncUpdate()
+{
+    // TODO: Incomplete.
+}
+
+// 0x69ACF0
+void CScreenWorldMap::OnAreaMouseClick(DWORD nArea, const CPoint& ptMousePos)
 {
     // TODO: Incomplete.
 }
