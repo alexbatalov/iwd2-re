@@ -34,8 +34,10 @@ BOOL CResWorldMap::Parse(void* pData)
         return FALSE;
     }
 
-    DWORD* header = reinterpret_cast<DWORD*>(pData);
-    if (header[0] != 'WMAP' || header[1] != 'V1.0') {
+    // NOTE: Original code is slightly different. It checks separately for
+    // `nFileType` and `nFileVersion` probably using cast to unknown generic
+    // file header struct.
+    if (memcmp(pData, "WMAPV1.0", 8) != 0) {
         return FALSE;
     }
 

@@ -62,7 +62,116 @@ void CWorldMap::ClearData()
 // 0x558960
 void CWorldMap::SetResRef(const CResRef& cResRef)
 {
-    // TODO: Incomplete.
+    CWorldMapFile cWorldMapFile;
+
+    ClearData();
+
+    m_cResRef = cResRef;
+
+    cWorldMapFile.SetResRef(cResRef, TRUE, TRUE);
+
+    // NOTE: Uninline.
+    BYTE* pData = cWorldMapFile.GetData();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CWorldMap.cpp
+    // __LINE__: 249
+    UTIL_ASSERT(pData != NULL);
+
+    // NOTE: Uninline.
+    DWORD nData = cWorldMapFile.GetDataSize();
+
+    DWORD cnt = 8;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CWorldMap.cpp
+    // __LINE__: 254
+    UTIL_ASSERT(cnt <= nData);
+
+    m_cHeader = *reinterpret_cast<CWorldMapHeader*>(pData + cnt);
+    cnt += sizeof(CWorldMapHeader);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CWorldMap.cpp
+    // __LINE__: 258
+    UTIL_ASSERT(m_cHeader.m_nMapCount > 0);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CWorldMap.cpp
+    // __LINE__: 260
+    UTIL_ASSERT(cnt <= nData);
+
+    m_pData = new CWorldMapData[m_cHeader.m_nMapCount];
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CWorldMap.cpp
+    // __LINE__: 264
+    UTIL_ASSERT(m_pData);
+
+    m_ppAreas = new CWorldMapArea*[m_cHeader.m_nMapCount];
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CWorldMap.cpp
+    // __LINE__: 266
+    UTIL_ASSERT(m_ppAreas);
+
+    m_ppLinks = new CWorldMapLinks*[m_cHeader.m_nMapCount];
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CWorldMap.cpp
+    // __LINE__: 268
+    UTIL_ASSERT(m_ppLinks);
+
+    DWORD nMap;
+
+    for (nMap = 0; nMap < m_cHeader.m_nMapCount; nMap++) {
+        cnt = m_cHeader.m_nMapOffset + sizeof(CWorldMapData) * nMap;
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CWorldMap.cpp
+        // __LINE__: 274
+        UTIL_ASSERT(cnt <= nData);
+
+        memcpy(&(m_pData[nMap]), pData + cnt, sizeof(CWorldMapData));
+    }
+
+    for (nMap = 0; nMap < m_cHeader.m_nMapCount; nMap++) {
+        DWORD nAreas = m_pData[nMap].m_nAreas;
+        if (nAreas != 0) {
+            m_ppAreas[nMap] = new CWorldMapArea[nAreas];
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CWorldMap.cpp
+            // __LINE__: 284
+            UTIL_ASSERT(m_ppAreas[nMap] != NULL);
+
+            for (DWORD nArea = 0; nArea < nAreas; nArea++) {
+                cnt = m_pData[nMap].m_nAreasOffset + sizeof(CWorldMapArea) * nArea;
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\CWorldMap.cpp
+                // __LINE__: 289
+                UTIL_ASSERT(cnt + sizeof(CWorldMapArea) <= nData);
+
+                memcpy(&(m_ppAreas[nMap][nArea]), pData + cnt, sizeof(CWorldMapArea));
+            }
+        } else {
+            m_ppAreas[nMap] = NULL;
+        }
+    }
+
+    for (nMap = 0; nMap < m_cHeader.m_nMapCount; nMap++) {
+        DWORD nLinks = m_pData[nMap].m_nLinks;
+        if (nLinks != 0) {
+            m_ppLinks[nMap] = new CWorldMapLinks[nLinks];
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CWorldMap.cpp
+            // __LINE__: 305
+            UTIL_ASSERT(m_ppAreas[nMap] != NULL);
+
+            for (DWORD nLink = 0; nLink < nLinks; nLink++) {
+                cnt = m_pData[nMap].m_nAreasOffset + sizeof(CWorldMapLinks) * nLink;
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\CWorldMap.cpp
+                // __LINE__: 310
+                UTIL_ASSERT(cnt + sizeof(CWorldMapLinks) <= nData);
+
+                memcpy(&(m_ppLinks[nMap][nLink]), pData + cnt, sizeof(CWorldMapLinks));
+            }
+        } else {
+            m_ppLinks[nMap] = NULL;
+        }
+    }
 }
 
 // 0x559490
@@ -297,10 +406,10 @@ DWORD CWorldMap::sub_55A450(CString sResArea)
 }
 
 // 0x55A550
-void* CWorldMapFile::GetData()
+BYTE* CWorldMapFile::GetData()
 {
     if (pRes != NULL) {
-        return pRes->Demand();
+        return static_cast<BYTE*>(pRes->Demand());
     } else {
         return NULL;
     }
