@@ -560,7 +560,22 @@ void CScreenWorldMap::OnMapMouseUp(const CPoint& ptMousePos)
 // 0x69A920
 void CScreenWorldMap::OnMapMouseMove(const CPoint& ptMousePos)
 {
-    // TODO: Incomplete.
+    if (m_bMapLeftDown) {
+        if (m_nEngineState == 0
+            || !m_bInControl
+            || m_bClickedArea
+            || m_nEngineState != 1
+            || m_nSelectedArea == -1) {
+            CPoint pt = ptMousePos - m_ptMapStartMousePos;
+            if (pt.x < -5 || pt.x > 5 || pt.y <= -5 || pt.y >= 5) {
+                m_bMapDragging = TRUE;
+            }
+
+            if (m_bMapDragging) {
+                SetMapView(m_ptMapStartView - pt);
+            }
+        }
+    }
 }
 
 // 0x69A9D0
