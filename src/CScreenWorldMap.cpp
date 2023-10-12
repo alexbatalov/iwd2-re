@@ -465,6 +465,37 @@ void CScreenWorldMap::StopWorldMap(BOOLEAN bAreaClicked)
     // TODO: Incomplete.
 }
 
+// 0x69CE20
+DWORD CScreenWorldMap::FindAreaHit(const CPoint& pt)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+    // __LINE__: 2824
+    UTIL_ASSERT(pGame != NULL);
+
+    CString sResArea;
+
+    pGame->GetVisibleArea()->m_resRef.CopyToString(sResArea);
+
+    CWorldMap* pWorldMap = pGame->GetWorldMap(sResArea);
+
+    CPoint ptMapPos = m_ptMapView + pt;
+    DWORD nFoundArea = -1;
+
+    DWORD nNumAreas = pWorldMap->GetNumAreas(pWorldMap->sub_55A3A0());
+    for (DWORD nArea = 0; nArea < nNumAreas; nArea++) {
+        CRect rArea = field_1012[nArea];
+        if (rArea.PtInRect(ptMapPos)
+            && (pWorldMap->GetArea(pWorldMap->sub_55A3A0(), nArea)->m_dwFlags & 0x4) != 0) {
+            nFoundArea = nArea;
+            break;
+        }
+    }
+
+    return nFoundArea;
+}
+
 // 0x69CF90
 void CScreenWorldMap::InvalidateArea(DWORD nArea)
 {
