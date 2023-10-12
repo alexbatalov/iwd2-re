@@ -95,6 +95,7 @@ public:
     /* 100E */ CArray<CRect, CRect&> field_100E;
     /* 1012 */ CRect* field_1012;
     /* 1016 */ DWORD field_1016;
+    /* 101A */ DWORD field_101A;
     /* 1022 */ CCriticalSection field_1022;
     /* 1042 */ CUIPanel* m_pMainPanel;
     /* 1046 */ CUIControlTextDisplay* m_pChatDisplay;

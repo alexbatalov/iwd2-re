@@ -462,7 +462,44 @@ void CScreenWorldMap::StartWorldMap(INT nEngineState, LONG nLeavingEdge, BOOLEAN
 // 0x69C9E0
 void CScreenWorldMap::StopWorldMap(BOOLEAN bAreaClicked)
 {
-    // TODO: Incomplete.
+    if (m_bInControl == TRUE && !bAreaClicked) {
+        if (!g_pChitin->cNetwork.GetSessionOpen()
+            || g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+            g_pBaldurChitin->GetBaldurMessage()->SendMapWorldAnnounceStatus(FALSE, 0, 0);
+        }
+
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+            && !g_pChitin->cNetwork.GetSessionHosting()) {
+            g_pBaldurChitin->GetBaldurMessage()->SendMapWorldCancelRequestToServer();
+        }
+    }
+
+    if (m_nEngineState == 1) {
+        CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+        // __LINE__: 2646
+        UTIL_ASSERT(pGame != NULL);
+
+        pGame->SelectAll(FALSE);
+        pGame->GetGroup()->ClearActions();
+    }
+
+    CSingleLock lock(&field_1022, FALSE);
+    lock.Lock(INFINITE);
+
+    if (field_1012 != NULL) {
+        delete field_1012;
+        field_1012 = NULL;
+    }
+
+    field_101A = 0;
+    field_1016 = 0;
+
+    lock.Unlock();
+
+    m_cUIManager.GetPanel(2)->SetActive(FALSE);
+    m_cUIManager.GetPanel(3)->SetActive(FALSE);
 }
 
 // 0x69CC10
