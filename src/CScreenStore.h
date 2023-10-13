@@ -150,6 +150,7 @@ public:
     /* 04A8 */ CTypedPtrList<CPtrList, CScreenStoreItem*> m_lIdentifyItems;
     /* 04C4 */ INT m_nTopDrinkItem;
     /* 04C8 */ CResRef m_cResStore;
+    /* 04D0 */ CResRef m_cResBag;
     /* 04D8 */ DWORD m_adwButtonPanelId[CSCREENSTORE_NUM_BOTTOMBUTTONS];
     /* 04E8 */ CStore* m_pStore;
     /* 04EC */ CStore* m_pBag;

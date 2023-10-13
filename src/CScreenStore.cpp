@@ -128,7 +128,24 @@ BYTE* CScreenStore::GetVirtualKeysFlags()
 // 0x671830
 CScreenStore::~CScreenStore()
 {
-    // TODO: Incomplete.
+    if (m_pStore != NULL) {
+        delete m_pStore;
+        m_pStore = NULL;
+    }
+
+    m_cResStore = "";
+    m_cResBag = "";
+
+    DestroyGroupItems(TRUE);
+
+    // NOTE: Uninlie.
+    DestroySpellItems();
+
+    // NOTE: Uninline.
+    DestroyIdentifyItems();
+
+    // NOTE: Uninline.
+    DestroyStoreItems(TRUE);
 
     DeleteCriticalSection(&m_critSect);
 }
