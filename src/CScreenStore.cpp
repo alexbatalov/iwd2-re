@@ -481,6 +481,54 @@ void CScreenStore::SwitchMainPanel(DWORD dwMainPanelId)
     LeaveCriticalSection(&m_critSect);
 }
 
+// 0x673B60
+void CScreenStore::CheckEnablePanels(BOOL bEnable)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 2055
+    UTIL_ASSERT(m_pMainPanel != NULL);
+
+    CUIPanel* pRightPanel = m_cUIManager.GetPanel(1);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 2057
+    UTIL_ASSERT(pRightPanel != NULL);
+
+    CUIPanel* pLeftPanel = m_cUIManager.GetPanel(0);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 2059
+    UTIL_ASSERT(pLeftPanel != NULL);
+
+    pLeftPanel->SetEnabled(FALSE);
+
+    if (bEnable) {
+        switch (m_pMainPanel->m_nID) {
+        case 2:
+        case 4:
+        case 5:
+        case 8:
+            pRightPanel->SetEnabled(TRUE);
+            break;
+        case 7:
+            pRightPanel->SetEnabled(FALSE);
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+            // __LINE__: 2100
+            UTIL_ASSERT(FALSE);
+        }
+    } else {
+        pRightPanel->SetEnabled(FALSE);
+    }
+
+    // NOTE: Uninline.
+    CheckEnableButtonBar();
+
+    CheckEnablePortaits(1);
+    CheckEnableLeftPanel();
+}
+
 // 0x673D20
 void CScreenStore::ResetMainPanel()
 {
@@ -1060,12 +1108,6 @@ void CScreenStore::OnRentRoomButtonClick()
 
 // 0x67C710
 void CScreenStore::OnBuyDrinkButtonClick(INT nButton)
-{
-    // TODO: Incomplete.
-}
-
-// 0x673B60
-void CScreenStore::CheckEnablePanels(BOOL bEnable)
 {
     // TODO: Incomplete.
 }

@@ -82,6 +82,7 @@ public:
     BOOL IsCharacterDead();
     void CheckEnableButtonBar();
     void SwitchMainPanel(DWORD dwMainPanelId);
+    void CheckEnablePanels(BOOL bEnable);
     void ResetMainPanel();
     void UpdateMainPanel();
     void UpdateBuySellPanel();
@@ -119,7 +120,6 @@ public:
     void OnBuySpellButtonClick();
     void OnRentRoomButtonClick();
     void OnBuyDrinkButtonClick(INT nButton);
-    void CheckEnablePanels(BOOL bEnable);
     void OnDoneButtonClick();
     void OnCancelButtonClick();
     DWORD GetPanelButtonPanelId(INT nButtonIndex);
