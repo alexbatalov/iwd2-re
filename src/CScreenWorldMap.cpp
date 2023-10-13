@@ -619,7 +619,34 @@ void CScreenWorldMap::OnDoneButtonClick()
 // 0x69A4D0
 void CScreenWorldMap::SetMapView(const CPoint& ptMapView)
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+    // __LINE__: 1438
+    UTIL_ASSERT(pGame != NULL);
+
+    CString sArea;
+    pGame->GetVisibleArea()->m_resRef.CopyToString(sArea);
+
+    CWorldMap* pWorldMap = pGame->GetWorldMap(sArea);
+
+    if (pGame->sub_5C79C0(sArea)) {
+        CSize cViewSize = m_pMapControl->m_size;
+        cViewSize.cx += 1;
+        cViewSize.cy += 1;
+
+        CSize cMapSize = pWorldMap->GetMapSize(pWorldMap->sub_55A3A0());
+
+        CPoint ptNewView;
+        ptNewView.x = max(min(ptMapView.x, cMapSize.cx - cViewSize.cx), 0);
+        ptNewView.y = max(min(ptMapView.y, cMapSize.cy - cViewSize.cy), 0);
+
+        if (ptNewView != m_ptMapView) {
+            m_ptMapView = ptNewView;
+            m_pMapControl->InvalidateRect();
+            m_nToolTip = 0;
+        }
+    }
 }
 
 // 0x69A640
