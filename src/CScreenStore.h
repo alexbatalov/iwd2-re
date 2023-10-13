@@ -124,6 +124,7 @@ public:
     SHORT GetPanelButtonSequence(INT nButtonIndex);
     STRREF GetPanelButtonToolTip(INT nButtonIndex);
     void OnErrorButtonClick(INT nButton);
+    void FocusChatEditBox();
     void OpenBag(const CResRef& resRef);
     void CloseBag(BOOL bSaveFile);
     void UpdateRequesterPanel();

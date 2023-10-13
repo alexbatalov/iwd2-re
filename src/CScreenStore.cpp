@@ -1142,6 +1142,29 @@ void CScreenStore::OnErrorButtonClick(INT nButton)
     // TODO: Incomplete.
 }
 
+// 0x67E380
+void CScreenStore::FocusChatEditBox()
+{
+    if (g_pBaldurChitin->cNetwork.GetSessionOpen()
+        && g_pBaldurChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+        if (GetTopPopup() == NULL) {
+            CUIPanel* pPanel = m_cUIManager.GetPanel(15);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+            // __LINE__: 9055
+            UTIL_ASSERT(pPanel != NULL);
+
+            CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(8));
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+            // __LINE__: 9057
+            UTIL_ASSERT(pEdit != NULL);
+
+            m_cUIManager.SetCapture(pEdit, CUIManager::KEYBOARD);
+        }
+    }
+}
+
 // 0x67E420
 void CScreenStore::GetChatEditBoxStatus(CString& sChatText, BOOL& bInputCapture)
 {
