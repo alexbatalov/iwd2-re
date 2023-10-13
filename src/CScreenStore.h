@@ -82,6 +82,7 @@ public:
     BOOL IsCharacterDead();
     void CheckEnableButtonBar();
     void SwitchMainPanel(DWORD dwMainPanelId);
+    void ResetMainPanel();
     void UpdateMainPanel();
     void UpdateBuySellPanel();
     void UpdateIdentifyPanel();

@@ -438,6 +438,52 @@ void CScreenStore::CheckEnableButtonBar()
 // 0x673A00
 void CScreenStore::SwitchMainPanel(DWORD dwMainPanelId)
 {
+    EnterCriticalSection(&m_critSect);
+
+    if (m_pBag != NULL) {
+        CloseBag(TRUE);
+        UpdateStoreItems();
+    }
+
+    if (m_pMainPanel != NULL) {
+        m_pMainPanel->SetActive(FALSE);
+    }
+
+    m_pMainPanel = m_cUIManager.GetPanel(dwMainPanelId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 2013
+    UTIL_ASSERT(m_pMainPanel != NULL);
+
+    m_pMainPanel->SetActive(TRUE);
+    m_pMainPanel->InvalidateRect(NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 2017
+    UTIL_ASSERT(m_pButtonBar != NULL);
+
+    for (INT nButtonIndex = 0; nButtonIndex < CSCREENSTORE_NUM_BOTTOMBUTTONS; nButtonIndex++) {
+        CUIControlButton3State* pButton = static_cast<CUIControlButton3State*>(m_pButtonBar->GetControl(nButtonIndex + 1));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 2022
+        UTIL_ASSERT(pButton != NULL);
+
+        // NOTE: Uninline.
+        DWORD dwId = GetPanelButtonPanelId(nButtonIndex);
+
+        pButton->SetSelected(dwId == dwMainPanelId);
+    }
+
+    ResetMainPanel();
+    UpdateMainPanel();
+
+    LeaveCriticalSection(&m_critSect);
+}
+
+// 0x673D20
+void CScreenStore::ResetMainPanel()
+{
     // TODO: Incomplete.
 }
 
