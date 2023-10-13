@@ -652,7 +652,48 @@ void CScreenWorldMap::SetMapView(const CPoint& ptMapView)
 // 0x69A640
 void CScreenWorldMap::OnMapMouseDown(const CPoint& ptMousePos)
 {
-    // TODO: Incomplete.
+    m_ptMapStartMousePos = ptMousePos;
+    m_ptMapStartView = m_ptMapView;
+    m_bMapLeftDown = TRUE;
+    m_bMapDragging = FALSE;
+    m_bOverSelectedArea = FALSE;
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+    // __LINE__: 1495
+    UTIL_ASSERT(pGame != NULL);
+
+    CString sArea;
+    pGame->GetVisibleArea()->m_resRef.CopyToString(sArea);
+
+    CWorldMap* pWorldMap = pGame->GetWorldMap(sArea);
+
+    if (m_nEngineState == 1
+        && m_bInControl
+        && !m_bClickedArea) {
+        m_nSelectedArea = -1;
+
+        if (m_pMapControl->IsOver(ptMousePos)) {
+            m_nSelectedArea = FindAreaHit(ptMousePos - m_pMapControl->m_ptOrigin);
+        }
+
+        if (m_nSelectedArea != -1) {
+            CWorldMapArea* pArea = pWorldMap->GetArea(pWorldMap->sub_55A3A0(), m_nSelectedArea);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+            // __LINE__: 1513
+            UTIL_ASSERT(pArea != NULL);
+
+            if ((pArea->m_dwFlags & 0x1) != 0 && (pArea->m_dwFlags & 0x4) != 0) {
+                m_bOverSelectedArea = TRUE;
+                InvalidateArea(m_nSelectedArea);
+            } else {
+                m_nSelectedArea = -1;
+                m_bOverSelectedArea = FALSE;
+            }
+        }
+    }
 }
 
 // 0x69A840
