@@ -12,6 +12,7 @@
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
+#include "CVidInf.h"
 
 // 0x8F89DC
 const LONG FATIGUE_TIME_CAP = 24 * CTimerWorld::TIMESCALE_MSEC_PER_HOUR;
@@ -613,9 +614,178 @@ void CScreenWorldMap::OnAreaMouseClick(DWORD nArea, const CPoint& ptMousePos)
 // 0x69BA70
 BOOL CScreenWorldMap::DrawMap(const CRect& r)
 {
-    // TODO: Incomplete.
+    BOOL bResult;
 
-    return FALSE;
+    CSingleLock renderLock(&field_1022, FALSE);
+    renderLock.Lock(INFINITE);
+
+    if (m_aAreaRect.GetCount() != 0) {
+        CString sLabel;
+
+        CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+        // __LINE__: 2244
+        UTIL_ASSERT(pGame != NULL);
+
+        CString sArea;
+        pGame->GetVisibleArea()->m_resRef.CopyToString(sArea);
+
+        CWorldMap* pWorldMap = pGame->GetWorldMap(sArea);
+
+        CVidInf* pVidInf = static_cast<CVidInf*>(g_pBaldurChitin->GetCurrentVideoMode());
+
+        CRect rControl(m_pMapControl->m_pPanel->m_ptOrigin + m_pMapControl->m_ptOrigin,
+            m_pMapControl->m_size);
+
+        CRect rMap1(r);
+        rMap1.OffsetRect(rControl.TopLeft());
+
+        CRect rClip;
+        rClip.IntersectRect(rControl, rMap1);
+
+        CSize mapSize = pWorldMap->GetMapSize(pWorldMap->sub_55A3A0());
+
+        if (mapSize.cx >= m_pMapControl->m_size.cx) {
+            mapSize.cx = m_pMapControl->m_size.cx;
+        }
+
+        if (mapSize.cy >= m_pMapControl->m_size.cy) {
+            mapSize.cy = m_pMapControl->m_size.cy;
+        }
+
+        CRect rMap2(r);
+        rMap2.OffsetRect(m_ptMapView);
+
+        CRect rMosaic;
+        rMosaic.IntersectRect(CRect(m_ptMapView, mapSize), rMap2);
+
+        BOOL bResult = m_vmMap.Render(CVIDINF_SURFACE_BACK,
+            rControl.left - m_ptMapView.x,
+            rControl.top - m_ptMapView.y,
+            rMosaic,
+            rClip,
+            0,
+            FALSE);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+        // __LINE__: 2266
+        UTIL_ASSERT(bResult);
+
+        if (pVidInf->BKLock(rClip)) {
+            int v1 = rControl.left - rClip.left;
+            int v2 = rControl.top - rClip.top;
+            rClip.OffsetRect(-rClip.left, -rClip.top);
+
+            m_vcAreas.pRes->Demand();
+            m_vfLabel.pRes->Demand();
+
+            if (field_FCA != RGB(250, 250, 250)) {
+                field_FCA = RGB(250, 250, 250);
+                m_vfLabel.SetColor(field_FCA, RGB(0, 0, 0), FALSE);
+            }
+
+            for (DWORD nArea = 0; nArea < pWorldMap->GetNumAreas(pWorldMap->sub_55A3A0()); nArea++) {
+                CWorldMapArea* pArea = pWorldMap->GetArea(pWorldMap->sub_55A3A0(), nArea);
+                if ((pArea->m_dwFlags & 0x1) != 0) {
+                    CRect rArea = m_aAreaRect[nArea];
+
+                    CRect rAreaDirty;
+                    rAreaDirty.IntersectRect(rMosaic, rArea);
+
+                    if (!rAreaDirty.IsRectEmpty()) {
+                        COLORREF rgbColor;
+
+                        if (pArea->m_sequence == 23) {
+                            rgbColor = RGB(170, 170, 170);
+                        } else if ((pArea->m_dwFlags & 0x8) != 0) {
+                            rgbColor = RGB(0, 0, 0);
+                        } else if ((pArea->m_dwFlags & 0x4) != 0) {
+                            rgbColor = RGB(255, 220, 90);
+                        } else {
+                            rgbColor = RGB(224, 180, 15);
+                        }
+
+                        if (!m_bMapDragging
+                            && m_nEngineState == 1
+                            && m_bInControl
+                            && !m_bClickedArea) {
+                            if (nArea == m_nSelectedArea && m_bOverSelectedArea) {
+                                rgbColor = RGB(255, 255, 255);
+                            } else if (nArea == field_FCE && m_nSelectedArea == -1) {
+                                rgbColor = sub_69CB40(rgbColor);
+                            }
+                        }
+
+                        m_vcAreas.SequenceSet(static_cast<SHORT>(pArea->m_sequence));
+                        m_vcAreas.RealizePalette(0x1);
+
+                        bResult = pVidInf->BKRender(&m_vcAreas,
+                            v1 - m_ptMapView.x + pWorldMap->GetAreaPosition(pArea).cx,
+                            v2 - m_ptMapView.y + pWorldMap->GetAreaPosition(pArea).cy,
+                            rClip,
+                            TRUE,
+                            0);
+
+                        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+                        // __LINE__: 2358
+                        UTIL_ASSERT(bResult);
+
+                        if (field_FCA != rgbColor) {
+                            field_FCA = rgbColor;
+                            m_vfLabel.SetColor(field_FCA, RGB(0, 0, 0), FALSE);
+                        }
+
+                        if (pArea->m_strLabel != -1) {
+                            sLabel = FetchString(pArea->m_strLabel);
+
+                            bResult = pVidInf->BKTextOut(&m_vfLabel,
+                                sLabel,
+                                v1 + rArea.left + (rArea.Width() - m_vfLabel.GetStringLength(sLabel, FALSE)) / 2 - m_ptMapView.x,
+                                v2 + rArea.bottom - m_vfLabel.GetFontHeight(FALSE) / (g_pBaldurChitin->field_4A28 ? 2 : 1) - m_ptMapView.y,
+                                rClip,
+                                0,
+                                TRUE);
+
+                            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+                            // __LINE__: 2372
+                            UTIL_ASSERT(bResult);
+                        }
+                    }
+                }
+            }
+
+            m_vcAreas.pRes->Release();
+            m_vfLabel.pRes->Release();
+
+            CPoint ptMarker;
+            GetMarkerPosition(ptMarker);
+
+            m_vcMarker.pRes->Demand();
+            m_vcMarker.RealizePalette(0x1);
+            bResult = pVidInf->BKRender(&m_vcMarker,
+                v1 + ptMarker.x - m_ptMapView.x,
+                v2 + ptMarker.y - m_ptMapView.y,
+                rClip,
+                FALSE, // FIXME: Should be `TRUE`, res is demanded.
+                0);
+            m_vcMarker.pRes->Release();
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+            // __LINE__: 2390
+            UTIL_ASSERT(bResult);
+
+            pVidInf->BKUnlock();
+        }
+
+        bResult = TRUE;
+    } else {
+        bResult = FALSE;
+    }
+
+    renderLock.Unlock();
+
+    return bResult;
 }
 
 // 0x69C2A0
@@ -660,6 +830,18 @@ void CScreenWorldMap::StopWorldMap(BOOLEAN bAreaClicked)
 
     m_cUIManager.GetPanel(2)->SetActive(FALSE);
     m_cUIManager.GetPanel(3)->SetActive(FALSE);
+}
+
+// 0x69CB40
+COLORREF CScreenWorldMap::sub_69CB40(COLORREF rgb)
+{
+    int v1 = (g_pBaldurChitin->nAUCounter / 2) & 7;
+    short v2 = v1 < 4 ? 3 - v1 : v1 - 4;
+
+    // TODO: Check, probably wrong.
+    return RGB(GetRValue(rgb) + v2 * (191 - GetRValue(rgb)) / 3,
+        GetGValue(rgb) - v2 * GetGValue(rgb) / 3,
+        GetBValue(rgb) - v2 * GetBValue(rgb) / 3);
 }
 
 // 0x69CC10
