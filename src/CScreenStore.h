@@ -20,6 +20,7 @@
 #define CRESUI_CONTROLBUTTONID_STORE_BUYDRINK_DRINK7 47
 
 class CStore;
+class CUIControlTextDisplay;
 
 class CScreenStoreItem {
 public:
@@ -78,6 +79,7 @@ public:
     void SummonPopup(DWORD dwPopupId);
     void ResetErrorPanel(CUIPanel* pPanel);
     BOOL IsCharacterDead();
+    void CheckEnableButtonBar();
     void SwitchMainPanel(DWORD dwMainPanelId);
     void UpdateMainPanel();
     void UpdateBuySellPanel();
@@ -166,7 +168,7 @@ public:
     /* 05A8 */ int field_5A8;
     /* 05AC */ CResRef m_cResInfoSpell;
     /* 05B4 */ CUIPanel* m_pButtonBar;
-    /* 05B8 */ BOOL m_bStoreStarted;
+    /* 05B8 */ CUIControlTextDisplay* m_pChatDisplay;
     /* 05BC */ INT m_nChatMessageCount;
     /* 05C0 */ INT m_nErrorState;
     /* 05C4 */ STRREF m_strErrorText;

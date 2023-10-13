@@ -153,7 +153,59 @@ CScreenStore::~CScreenStore()
 // 0x671A20
 void CScreenStore::EngineActivated()
 {
-    // TODO: Incomplete.
+    if (CChitin::byte_8FB950
+        && g_pChitin->cNetwork.GetSessionOpen() == TRUE
+        && g_pChitin->cNetwork.GetSessionHosting() == TRUE
+        && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+        g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0);
+    }
+
+    if (m_cUIManager.m_bInitialized) {
+        // NOTE: Unused.
+        CResRef v1;
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 364
+        UTIL_ASSERT(m_pButtonBar != NULL);
+
+        m_preLoadFontRealms.SetResRef(CResRef("REALMS"), FALSE, TRUE);
+        m_preLoadFontRealms.RegisterFont();
+
+        m_preLoadFontStnSml.SetResRef(CResRef("STONESML"), FALSE, TRUE);
+        m_preLoadFontStnSml.RegisterFont();
+
+        m_preLoadFontTool.SetResRef(CResRef("TOOLFONT"), FALSE, TRUE);
+        m_preLoadFontTool.RegisterFont();
+
+        for (INT nButtonIndex = 0; nButtonIndex < CSCREENSTORE_NUM_BOTTOMBUTTONS; nButtonIndex++) {
+            CUIControlButton* pButton = static_cast<CUIControlButton*>(m_pButtonBar->GetControl(nButtonIndex + 1));
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+            // __LINE__: 386
+            UTIL_ASSERT(pButton != NULL);
+
+            pButton->SetToolTipStrRef(GetPanelButtonToolTip(nButtonIndex), -1, -1);
+        }
+
+        if (m_pChatDisplay != NULL) {
+            m_nChatMessageCount = g_pBaldurChitin->GetBaldurMessage()->m_cChatBuffer.UpdateTextDisplay(m_pChatDisplay,
+                m_nChatMessageCount);
+            m_pChatDisplay->ScrollToBottom();
+        }
+
+        if (GetTopPopup() == NULL) {
+            UpdateMainPanel();
+        }
+
+        // NOTE: Uninline.
+        CheckEnableButtonBar();
+
+        CheckEnablePortaits(1);
+        CheckEnableLeftPanel();
+        g_pBaldurChitin->GetObjectCursor()->m_bVisible = TRUE;
+        UpdateCursorShape(0);
+        m_cUIManager.InvalidateRect(NULL);
+    }
 }
 
 // 0x671CC0
@@ -214,7 +266,7 @@ void CScreenStore::EngineGameInit()
     field_580 = -1;
     field_584 = -1;
     m_pButtonBar = NULL;
-    m_bStoreStarted = FALSE;
+    m_pChatDisplay = NULL;
     m_nChatMessageCount = 0;
 
     m_cUIManager.GetPanel(4)->SetActive(FALSE);
@@ -356,6 +408,24 @@ void CScreenStore::ResetErrorPanel(CUIPanel* pPanel)
         UTIL_ASSERT(0 <= nButton && nButton < CSCREENSTORE_ERROR_BUTTONS);
 
         pButton->SetText(FetchString(m_strErrorButtonText[nButton]));
+    }
+}
+
+// NOTE: Inlined.
+void CScreenStore::CheckEnableButtonBar()
+{
+    for (INT nButtonIndex = 0; nButtonIndex < CSCREENSTORE_NUM_BOTTOMBUTTONS; nButtonIndex++) {
+        CUIControlButton* pButton = static_cast<CUIControlButton*>(m_pButtonBar->GetControl(nButtonIndex + 1));
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 1967
+        UTIL_ASSERT(pButton != NULL);
+
+        // NOTE: Uninline.
+        DWORD dwId = GetPanelButtonPanelId(nButtonIndex);
+
+        pButton->SetActive(dwId != -1);
+        pButton->SetInactiveRender(dwId != -1);
     }
 }
 
