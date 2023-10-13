@@ -928,7 +928,7 @@ CUIControlButtonWorldMapWorldMap::~CUIControlButtonWorldMapWorldMap()
 // 0x6A07B0
 BOOL CUIControlButtonWorldMapWorldMap::Render(BOOL bForce)
 {
-    if (!m_bActive || !m_bInactiveRender) {
+    if (!m_bActive && !m_bInactiveRender) {
         return FALSE;
     }
 
