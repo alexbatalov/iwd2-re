@@ -97,9 +97,15 @@ public:
 
     void EnableMainPanel(BOOL bEnable);
     CUIPanel* GetTopPopup();
+    void ShowPopupPanel(DWORD dwPanelId, BOOL bShow);
+    void EnablePopupPanel(DWORD dwPanelId, BOOL bEnable);
+    void ResetPopupPanel(DWORD dwPanelId);
+    void UpdatePopupPanel(DWORD dwPanelId);
     void SummonPopup(DWORD dwPopupId);
     void DismissPopup();
     void ResetErrorPanel(CUIPanel* pPanel);
+    void sub_6734F0(CUIPanel* pPanel);
+    void sub_673740(CUIPanel* pPanel);
     BOOL IsCharacterDead();
     void CheckEnableButtonBar();
     void SwitchMainPanel(DWORD dwMainPanelId);

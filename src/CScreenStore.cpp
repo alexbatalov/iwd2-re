@@ -419,16 +419,154 @@ CUIPanel* CScreenStore::GetTopPopup()
     return m_lPopupStack.GetTailPosition() != NULL ? m_lPopupStack.GetTail() : NULL;
 }
 
+// NOTE: Inlined.
+void CScreenStore::ShowPopupPanel(DWORD dwPanelId, BOOL bShow)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    pPanel->SetActive(bShow);
+    pPanel->SetInactiveRender(bShow);
+
+    if (bShow) {
+        pPanel->InvalidateRect(NULL);
+        PlayGUISound(RESREF_SOUND_WINDOWOPEN);
+    }
+}
+
+// NOTE: Inlined.
+void CScreenStore::EnablePopupPanel(DWORD dwPanelId, BOOL bEnable)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 1375
+    UTIL_ASSERT(pPanel != NULL);
+
+    pPanel->SetEnabled(bEnable);
+}
+
+// NOTE: Inlined.
+void CScreenStore::ResetPopupPanel(DWORD dwPanelId)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 1402
+    UTIL_ASSERT(pPanel != NULL);
+
+    switch (pPanel->m_nID) {
+    case 10:
+    case 11:
+        ResetErrorPanel(pPanel);
+        break;
+    case 12:
+        sub_6734F0(pPanel);
+        break;
+    case 14:
+        sub_673740(pPanel);
+        break;
+    case 20:
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 1423
+        UTIL_ASSERT(FALSE);
+    }
+}
+
+// NOTE: Inlined.
+void CScreenStore::UpdatePopupPanel(DWORD dwPanelId)
+{
+    switch (dwPanelId) {
+    case 12:
+        if (1) {
+            CUIControlBase* pControl = m_cUIManager.GetPanel(12)->GetControl(9);
+            pControl->SetActive(field_5A8);
+            pControl->SetInactiveRender(field_5A8);
+        }
+        break;
+    case 20:
+        UpdateRequesterPanel();
+        break;
+    }
+}
+
 // 0x672F50
 void CScreenStore::SummonPopup(DWORD dwPopupId)
 {
-    // TODO: Incomplete.
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
+
+    if (!m_lPopupStack.IsEmpty()) {
+        CUIPanel* pPanel = m_lPopupStack.GetTail();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 1547
+        UTIL_ASSERT(pPanel != NULL);
+
+        // NOTE: Uninline.
+        EnablePopupPanel(pPanel->m_nID, FALSE);
+    } else {
+        EnableMainPanel(FALSE);
+    }
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPopupId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 1553
+    UTIL_ASSERT(pPanel != NULL);
+
+    m_lPopupStack.AddTail(pPanel);
+
+    // NOTE: Uninline.
+    ResetPopupPanel(pPanel->m_nID);
+
+    // NOTE: Uninline.
+    ShowPopupPanel(pPanel->m_nID, TRUE);
+
+    // NOTE: Uninline.
+    EnablePopupPanel(pPanel->m_nID, TRUE);
+
+    // NOTE: Uninline.
+    UpdatePopupPanel(pPanel->m_nID);
 }
 
 // 0x673170
 void CScreenStore::DismissPopup()
 {
-    // TODO: Incomplete.
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
+
+    CUIPanel* pPanel = m_lPopupStack.RemoveTail();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 1598
+    UTIL_ASSERT(pPanel != NULL);
+
+    // NOTE: Uninline.
+    ShowPopupPanel(pPanel->m_nID, FALSE);
+
+    m_pMainPanel->InvalidateRect(NULL);
+
+    if (m_lPopupStack.GetTailPosition() != NULL) {
+        CUIPanel* pPanel = m_lPopupStack.GetTail();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 1615
+        UTIL_ASSERT(pPanel != NULL);
+
+        // NOTE: Uninline.
+        ShowPopupPanel(pPanel->m_nID, TRUE);
+
+        // NOTE: Uninline.
+        EnablePopupPanel(pPanel->m_nID, TRUE);
+
+        // NOTE: Uninline.
+        UpdatePopupPanel(pPanel->m_nID);
+    } else {
+        EnableMainPanel(TRUE);
+        UpdateMainPanel();
+    }
 }
 
 // 0x6732F0
@@ -476,6 +614,18 @@ void CScreenStore::ResetErrorPanel(CUIPanel* pPanel)
 
         pButton->SetText(FetchString(m_strErrorButtonText[nButton]));
     }
+}
+
+// 0x6734F0
+void CScreenStore::sub_6734F0(CUIPanel* pPanel)
+{
+    // TODO: Incomplete.
+}
+
+// 0x673740
+void CScreenStore::sub_673740(CUIPanel* pPanel)
+{
+    // TODO: Incomplete.
 }
 
 // NOTE: Inlined.
