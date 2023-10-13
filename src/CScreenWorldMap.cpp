@@ -142,7 +142,7 @@ CScreenWorldMap::CScreenWorldMap()
     m_pPath = NULL;
     m_pMainPanel = NULL;
     m_pChatDisplay = NULL;
-    field_104A = 0;
+    m_nChatMessageCount = 0;
 }
 
 // 0x49FC40
@@ -266,8 +266,8 @@ void CScreenWorldMap::EngineActivated()
         m_cUIManager.InvalidateRect(NULL);
 
         if (m_pChatDisplay != NULL) {
-            field_104A = g_pBaldurChitin->GetBaldurMessage()->m_cChatBuffer.UpdateTextDisplay(m_pChatDisplay,
-                field_104A);
+            m_nChatMessageCount = g_pBaldurChitin->GetBaldurMessage()->m_cChatBuffer.UpdateTextDisplay(m_pChatDisplay,
+                m_nChatMessageCount);
             m_pChatDisplay->ScrollToBottom();
         }
 
@@ -412,7 +412,7 @@ void CScreenWorldMap::EngineGameInit()
     m_pPath = NULL;
     m_pMainPanel = NULL;
     m_pChatDisplay = NULL;
-    field_104A = 0;
+    m_nChatMessageCount = 0;
     m_ptMapStartView.x = 0;
     m_ptMapStartView.y = 0;
 }
@@ -546,7 +546,7 @@ void CScreenWorldMap::OnRButtonUp(CPoint pt)
 void CScreenWorldMap::TimerAsynchronousUpdate()
 {
     if (m_pChatDisplay != NULL) {
-        field_104A = g_pBaldurChitin->GetBaldurMessage()->m_cChatBuffer.UpdateTextDisplay(m_pChatDisplay, field_104A);
+        m_nChatMessageCount = g_pBaldurChitin->GetBaldurMessage()->m_cChatBuffer.UpdateTextDisplay(m_pChatDisplay, m_nChatMessageCount);
     }
 
     if (m_nEngineState == 0) {
@@ -1063,7 +1063,7 @@ void CScreenWorldMap::GetMarkerPosition(CPoint& ptMarker)
 // 0x6A01C0
 void CScreenWorldMap::ClearChatMessages()
 {
-    field_104A = 0;
+    m_nChatMessageCount = 0;
 }
 
 // NOTE: Inlined.

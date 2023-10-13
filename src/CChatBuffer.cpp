@@ -54,13 +54,13 @@ void CChatBuffer::ClearMessages()
 }
 
 // 0x442CF0
-int CChatBuffer::UpdateTextDisplay(CUIControlTextDisplay* pText, int a2)
+int CChatBuffer::UpdateTextDisplay(CUIControlTextDisplay* pText, INT nCount)
 {
     // __FILE__: C:\Projects\Icewind2\src\Baldur\CChatBuffer.cpp
     // __LINE__: 186
     UTIL_ASSERT(pText != NULL);
 
-    int v1 = m_nMessageCount - a2;
+    int v1 = m_nMessageCount - nCount;
     if (m_lMessages.GetCount() < v1) {
         v1 = m_lMessages.GetCount();
     }

@@ -166,7 +166,7 @@ public:
     /* 05AC */ CResRef m_cResInfoSpell;
     /* 05B4 */ CUIPanel* m_pButtonBar;
     /* 05B8 */ BOOL m_bStoreStarted;
-    /* 05BC */ int field_5BC;
+    /* 05BC */ INT m_nChatMessageCount;
     /* 05C0 */ INT m_nErrorState;
     /* 05C4 */ STRREF m_strErrorText;
     /* 05C8 */ INT m_nNumErrorButtons;

@@ -127,8 +127,8 @@ CScreenMultiPlayer::CScreenMultiPlayer()
     m_bCapsLockKeyOn = FALSE;
     field_458 = -1;
     field_45C = 0;
-    field_460 = 0;
-    field_464 = 0;
+    m_nChatMessageCount = 0;
+    m_nPermissionsChatMessageCount = 0;
     m_bMultiplayerStartup = 0;
     m_bLastLockAllowInput = FALSE;
     field_138E = 0;
@@ -297,7 +297,7 @@ void CScreenMultiPlayer::EngineActivated()
     // __LINE__: 325
     UTIL_ASSERT(pText != NULL);
 
-    field_460 = pChatBuffer->UpdateTextDisplay(pText, field_460);
+    m_nChatMessageCount = pChatBuffer->UpdateTextDisplay(pText, m_nChatMessageCount);
     pText->ScrollToBottom();
 
     pPanel = m_cUIManager.GetPanel(1);
@@ -312,7 +312,7 @@ void CScreenMultiPlayer::EngineActivated()
     // __LINE__: 333
     UTIL_ASSERT(pText != NULL);
 
-    field_464 = pChatBuffer->UpdateTextDisplay(pText, field_464);
+    m_nPermissionsChatMessageCount = pChatBuffer->UpdateTextDisplay(pText, m_nPermissionsChatMessageCount);
     pText->ScrollToBottom();
 }
 
@@ -739,7 +739,7 @@ void CScreenMultiPlayer::ResetPopupPanel(DWORD dwPanelId)
             // __LINE__: 1235
             UTIL_ASSERT(pText != NULL);
 
-            field_464 = pChatBuffer->UpdateTextDisplay(pText, field_464);
+            m_nPermissionsChatMessageCount = pChatBuffer->UpdateTextDisplay(pText, m_nPermissionsChatMessageCount);
         }
         break;
     case 2:
@@ -1122,7 +1122,7 @@ void CScreenMultiPlayer::EnableMainPanel(BOOL bEnable)
         // __LINE__: 1793
         UTIL_ASSERT(pPanel != NULL);
 
-        field_460 = g_pBaldurChitin->GetBaldurMessage()->m_cChatBuffer.UpdateTextDisplay(pText, field_460);
+        m_nChatMessageCount = g_pBaldurChitin->GetBaldurMessage()->m_cChatBuffer.UpdateTextDisplay(pText, m_nChatMessageCount);
 
         pText->ScrollToBottom();
     }
@@ -1209,7 +1209,7 @@ void CScreenMultiPlayer::UpdateMainPanel()
     // __LINE__: 1919
     UTIL_ASSERT(pText != NULL);
 
-    field_460 = g_pBaldurChitin->GetBaldurMessage()->m_cChatBuffer.UpdateTextDisplay(pText, field_460);
+    m_nChatMessageCount = g_pBaldurChitin->GetBaldurMessage()->m_cChatBuffer.UpdateTextDisplay(pText, m_nChatMessageCount);
 
     pButton = static_cast<CUIControlButton*>(pPanel->GetControl(29));
 
@@ -1593,7 +1593,7 @@ void CScreenMultiPlayer::UpdatePermissionsPanel()
     // __LINE__: 2389
     UTIL_ASSERT(pText != NULL);
 
-    field_464 = g_pBaldurChitin->GetBaldurMessage()->m_cChatBuffer.UpdateTextDisplay(pText, field_464);
+    m_nPermissionsChatMessageCount = g_pBaldurChitin->GetBaldurMessage()->m_cChatBuffer.UpdateTextDisplay(pText, m_nPermissionsChatMessageCount);
 
     CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
 
@@ -1809,7 +1809,7 @@ void CScreenMultiPlayer::ClearChatMessages()
         pText->RemoveAll();
     }
 
-    field_460 = 0;
+    m_nChatMessageCount = 0;
 
     pPanel = m_cUIManager.GetPanel(1);
     if (pPanel != NULL) {
@@ -1822,7 +1822,7 @@ void CScreenMultiPlayer::ClearChatMessages()
         pText->RemoveAll();
     }
 
-    field_464 = 0;
+    m_nPermissionsChatMessageCount = 0;
 }
 
 // 0x64D730

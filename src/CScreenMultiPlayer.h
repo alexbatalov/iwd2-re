@@ -103,8 +103,8 @@ public:
     /* 043C */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
     /* 0458 */ int field_458;
     /* 045C */ int field_45C;
-    /* 0460 */ int field_460;
-    /* 0464 */ int field_464;
+    /* 0460 */ INT m_nChatMessageCount;
+    /* 0464 */ INT m_nPermissionsChatMessageCount;
     /* 0468 */ INT m_nErrorState;
     /* 046C */ STRREF m_dwErrorTextId;
     /* 0470 */ INT m_nNumErrorButtons;

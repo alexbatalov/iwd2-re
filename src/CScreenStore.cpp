@@ -198,7 +198,7 @@ void CScreenStore::EngineGameInit()
     field_584 = -1;
     m_pButtonBar = NULL;
     m_bStoreStarted = FALSE;
-    field_5BC = 0;
+    m_nChatMessageCount = 0;
 
     m_cUIManager.GetPanel(4)->SetActive(FALSE);
     m_cUIManager.GetPanel(2)->SetActive(FALSE);

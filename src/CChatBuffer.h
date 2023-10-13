@@ -11,7 +11,7 @@ public:
     ~CChatBuffer();
     void AddMessage(const CString& sMessage);
     void ClearMessages();
-    int UpdateTextDisplay(CUIControlTextDisplay* pText, int a2);
+    int UpdateTextDisplay(CUIControlTextDisplay* pText, INT nCount);
 
     CTypedPtrList<CPtrList, CString*> m_lMessages;
     int m_nMessageCount;

@@ -102,7 +102,7 @@ public:
     /* 1022 */ CCriticalSection field_1022;
     /* 1042 */ CUIPanel* m_pMainPanel;
     /* 1046 */ CUIControlTextDisplay* m_pChatDisplay;
-    /* 104A */ int field_104A;
+    /* 104A */ INT m_nChatMessageCount;
     /* 104E */ BOOLEAN m_bInControl;
     /* 104F */ BOOLEAN m_bClickedArea;
     /* 1050 */ int field_1050;
