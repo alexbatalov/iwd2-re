@@ -43,6 +43,26 @@ public:
     static const CString TOKEN_HP;
     static const CString TOKEN_ITEMNAME;
     static const CString TOKEN_ITEMCOST;
+    static const INT STORE_SLOTS;
+    static const INT GROUP_SLOTS;
+    static const INT SPELL_SLOTS;
+    static const INT DRINK_SLOTS;
+    static const INT IDENTIFY_SLOTS;
+    static const INT NUM_BOTTOMBUTTONS;
+    static const WORD SEQUENCE_BUYSELL;
+    static const WORD SEQUENCE_IDENTIFY;
+    static const WORD SEQUENCE_STEAL;
+    static const WORD SEQUENCE_BUYSPELL;
+    static const WORD SEQUENCE_DONATE;
+    static const WORD SEQUENCE_BUYDRINK;
+    static const WORD SEQUENCE_RENTROOM;
+    static const DWORD ROOMTYPE_NONE;
+    static const DWORD ROOMTYPE_PEASANT;
+    static const DWORD ROOMTYPE_MERCHANT;
+    static const DWORD ROOMTYPE_NOBLE;
+    static const DWORD ROOMTYPE_ROYAL;
+    static const DWORD NUM_ROOMTYPES;
+    static const DWORD SELL_MAXNUM_STORETOBAG;
 
     // FIXME: Make instance member.
     static CRITICAL_SECTION m_critSect;

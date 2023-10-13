@@ -11,6 +11,66 @@
 #include "CUIPanel.h"
 #include "CUtil.h"
 
+// 0x859330
+const INT CScreenStore::STORE_SLOTS = 6;
+
+// 0x859334
+const INT CScreenStore::GROUP_SLOTS = 6;
+
+// 0x859338
+const INT CScreenStore::SPELL_SLOTS = 6;
+
+// 0x85933C
+const INT CScreenStore::DRINK_SLOTS = 8;
+
+// 0x859340
+const INT CScreenStore::IDENTIFY_SLOTS = 6;
+
+// 0x859344
+const INT CScreenStore::NUM_BOTTOMBUTTONS = CSCREENSTORE_NUM_BOTTOMBUTTONS;
+
+// 0x859348
+const WORD CScreenStore::SEQUENCE_BUYSELL = 0;
+
+// 0x85934A
+const WORD CScreenStore::SEQUENCE_IDENTIFY = 1;
+
+// 0x85934C
+const WORD CScreenStore::SEQUENCE_STEAL = 2;
+
+// 0x85934E
+const WORD CScreenStore::SEQUENCE_BUYSPELL = 3;
+
+// 0x859350
+const WORD CScreenStore::SEQUENCE_DONATE = 4;
+
+// 0x859352
+const WORD CScreenStore::SEQUENCE_BUYDRINK = 5;
+
+// 0x859354
+const WORD CScreenStore::SEQUENCE_RENTROOM = 6;
+
+// 0x859358
+const DWORD CScreenStore::ROOMTYPE_NONE = 0;
+
+// 0x85935C
+const DWORD CScreenStore::ROOMTYPE_PEASANT = 1;
+
+// 0x859360
+const DWORD CScreenStore::ROOMTYPE_MERCHANT = 2;
+
+// 0x859364
+const DWORD CScreenStore::ROOMTYPE_NOBLE = 3;
+
+// 0x859368
+const DWORD CScreenStore::ROOMTYPE_ROYAL = 4;
+
+// 0x85936C
+const DWORD CScreenStore::NUM_ROOMTYPES = 4;
+
+// 0x859370
+const DWORD CScreenStore::SELL_MAXNUM_STORETOBAG = 999;
+
 // 0x8F8194
 const CString CScreenStore::TOKEN_HP("HP");
 
