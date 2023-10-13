@@ -421,6 +421,7 @@ public:
     /* 4BB0 */ int field_4BB0;
     /* 4BB4 */ unsigned char field_4BB4;
     /* 4BB6 */ CGameStatsSprite m_cGameStats;
+    /* 4C4A */ CResRef m_currentArea;
     /* 4C52 */ BOOLEAN m_bGlobal;
     /* 4C53 */ unsigned char field_4C53;
     /* 4C54 */ int field_4C54;

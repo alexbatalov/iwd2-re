@@ -359,6 +359,8 @@ public:
     /* 4220 */ CString m_sSaveGame;
     /* 4224 */ CString m_sSaveDir;
     /* 4228 */ CString m_sMultiplayerSaveDir;
+    /* 422C */ CResRef m_cResCurrentWorldArea;
+    /* 4234 */ DWORD m_nCurrentWorldLink;
     /* 4238 */ DWORD m_nPartyGold;
     /* 423C */ SHORT m_curFormation;
     /* 4248 */ CItem* m_groupInventory[100];

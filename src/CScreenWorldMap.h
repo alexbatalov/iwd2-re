@@ -7,6 +7,7 @@
 #include "CVidCell.h"
 #include "CVidFont.h"
 #include "CVidMosaic.h"
+#include "CWorldMap.h"
 
 #define CSCREENWORLDMAP_VIRTUAL_KEYS 90
 
@@ -85,8 +86,8 @@ public:
     /* 05F0 */ CVidCell m_vcMarker;
     /* 06CA */ CVidFont m_vfLabel;
     /* 0FCA */ COLORREF field_FCA;
-    /* 0FCE */ int field_FCE;
-    /* 0FD2 */ INT m_nSelectedArea;
+    /* 0FCE */ DWORD m_nHighlightArea;
+    /* 0FD2 */ DWORD m_nSelectedArea;
     /* 0FD6 */ BOOL m_bOverSelectedArea;
     /* 0FDA */ CPoint m_ptMapStartMousePos;
     /* 0FE2 */ CPoint m_ptMapStartView;
@@ -94,9 +95,9 @@ public:
     /* 0FEE */ BOOL m_bMapDragging;
     /* 0FF2 */ int field_FF2;
     /* 0FF6 */ int field_FF6;
-    /* 0FFA */ void* m_pPath;
-    /* 0FFE */ int field_FFE;
-    /* 1002 */ int m_nCurrentLink;
+    /* 0FFA */ CWorldMapList* m_pPath;
+    /* 0FFE */ LONG m_nLeavingEdge;
+    /* 1002 */ DWORD m_nCurrentLink;
     /* 1006 */ CResRef m_cResCurrentArea;
     /* 100E */ CArray<CRect> m_aAreaRect;
     /* 1022 */ CCriticalSection field_1022;
@@ -106,7 +107,7 @@ public:
     /* 104E */ BOOLEAN m_bInControl;
     /* 104F */ BOOLEAN m_bClickedArea;
     /* 1050 */ int field_1050;
-    /* 1054 */ int m_nToolTip;
+    /* 1054 */ DWORD m_nToolTip;
     /* 1058 */ CVidFont m_preLoadFontRealms;
     /* 1558 */ CVidFont m_preLoadFontTool;
 };
