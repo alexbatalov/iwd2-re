@@ -364,6 +364,12 @@ void CScreenStore::SummonPopup(DWORD dwPopupId)
     // TODO: Incomplete.
 }
 
+// 0x673170
+void CScreenStore::DismissPopup()
+{
+    // TODO: Incomplete.
+}
+
 // 0x6732F0
 void CScreenStore::ResetErrorPanel(CUIPanel* pPanel)
 {
@@ -1138,6 +1144,70 @@ void CScreenStore::CancelEngine()
 
 // 0x67DD30
 void CScreenStore::OnErrorButtonClick(INT nButton)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 8632
+    UTIL_ASSERT(0 <= nButton && nButton < GetNumErrorButtons());
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 8634
+    UTIL_ASSERT(pGame != NULL);
+
+    CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    switch (m_nErrorState) {
+    case 0:
+        switch (nButton) {
+        case 0:
+            DismissPopup();
+            RestParty();
+            UpdateMainPanel();
+            break;
+        case 1:
+            DismissPopup();
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+            // __LINE__: 8656
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 1:
+        switch (nButton) {
+        case 0:
+            DismissPopup();
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+            // __LINE__: 8669
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 2:
+        switch (nButton) {
+        case 0:
+            DismissPopup();
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+            // __LINE__: 8682
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 8688
+        UTIL_ASSERT(FALSE);
+    }
+
+    renderLock.Unlock();
+}
+
+// 0x67DEA0
+void CScreenStore::RestParty()
 {
     // TODO: Incomplete.
 }

@@ -77,6 +77,7 @@ public:
     void EnableMainPanel(BOOL bEnable);
     CUIPanel* GetTopPopup();
     void SummonPopup(DWORD dwPopupId);
+    void DismissPopup();
     void ResetErrorPanel(CUIPanel* pPanel);
     BOOL IsCharacterDead();
     void CheckEnableButtonBar();
@@ -124,6 +125,7 @@ public:
     SHORT GetPanelButtonSequence(INT nButtonIndex);
     STRREF GetPanelButtonToolTip(INT nButtonIndex);
     void OnErrorButtonClick(INT nButton);
+    void RestParty();
     void FocusChatEditBox();
     void OpenBag(const CResRef& resRef);
     void CloseBag(BOOL bSaveFile);
@@ -136,6 +138,9 @@ public:
 
     // Seen in `CUIControlButtonStoreGroupItem::OnLButtonClick` assertion.
     CStore* GetBag() { return m_pBag; }
+
+    // Seen in `CScreenStore::OnErrorButtonClick` assertion.
+    INT GetNumErrorButtons() { return m_nNumErrorButtons; }
 
     /* 0106 */ CKeyInfo m_pVirtualKeys[CSCREENSTORE_VIRTUAL_KEYS];
     /* 039E */ BYTE m_pVirtualKeysFlags[CSCREENSTORE_VIRTUAL_KEYS];
