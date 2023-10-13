@@ -1,6 +1,7 @@
 #ifndef CSCREENSTORE_H_
 #define CSCREENSTORE_H_
 
+#include "CAIObjectType.h"
 #include "CBaldurEngine.h"
 #include "CItem.h"
 #include "CKeyInfo.h"
@@ -144,6 +145,8 @@ public:
     void OnBuyDrinkButtonClick(INT nButton);
     void OnDoneButtonClick();
     void OnCancelButtonClick();
+    void StopStore();
+    void DeleteStore();
     DWORD GetPanelButtonPanelId(INT nButtonIndex);
     SHORT GetPanelButtonSequence(INT nButtonIndex);
     STRREF GetPanelButtonToolTip(INT nButtonIndex);
@@ -197,6 +200,7 @@ public:
     /* 04F8 */ DWORD m_dwSpellCost;
     /* 04FC */ DWORD m_dwIdentifyCost;
     /* 0500 */ DWORD m_dwRoomType;
+    /* 0540 */ CAIObjectType m_cAICustomer;
     /* 0580 */ int field_580;
     /* 0584 */ int field_584;
     /* 0588 */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;

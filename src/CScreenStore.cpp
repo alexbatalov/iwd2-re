@@ -1265,6 +1265,58 @@ void CScreenStore::OnCancelButtonClick()
     // TODO: Incomplete.
 }
 
+// 0x67D7B0
+void CScreenStore::StopStore()
+{
+    if (m_pStore != NULL) {
+        if (m_pBag != NULL) {
+            CloseBag(TRUE);
+        }
+
+        if (g_pChitin->cNetwork.GetSessionHosting()) {
+            g_pBaldurChitin->GetObjectGame()->ReleaseServerStore(m_pStore->m_resRef);
+        } else {
+            CMessageStoreRelease* pMessageStoreRelease = new CMessageStoreRelease(m_pStore->m_resRef,
+                CGameObjectArray::INVALID_INDEX,
+                CGameObjectArray::INVALID_INDEX);
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessageStoreRelease, FALSE);
+        }
+
+        CMessage101* pMessage101 = new CMessage101(FALSE,
+            m_cAICustomer.m_nInstance,
+            m_cAICustomer.m_nInstance,
+            FALSE);
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage101, FALSE);
+
+        // NOTE: Uninline.
+        DeleteStore();
+    }
+}
+
+// NOTE: Inlined.
+void CScreenStore::DeleteStore()
+{
+    if (m_pStore != NULL) {
+        delete m_pStore;
+        m_pStore = NULL;
+    }
+
+    m_pButtonBar = NULL;
+    m_pChatDisplay = NULL;
+    m_cResStore = "";
+
+    DestroyGroupItems(FALSE);
+
+    // NOTE: Uninline.
+    DestroyStoreItems(FALSE);
+
+    // NOTE: Uninline.
+    DestroySpellItems();
+
+    // NOTE: Uninline.
+    DestroyIdentifyItems();
+}
+
 // NOTE: Inlined.
 DWORD CScreenStore::GetPanelButtonPanelId(INT nButtonIndex)
 {

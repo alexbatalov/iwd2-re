@@ -274,6 +274,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_START_COMBAT_MUSIC = 94;
 // 0x84CF3B
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_DEMAND = 100;
 
+// 0x84CF3C
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_101 = 101;
+
 // 0x84CF3D
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_WEAPON_IMMUNITIES_UPDATE = 102;
 
@@ -11587,6 +11590,150 @@ void CMessageStoreDemand::Run()
 {
     if (g_pChitin->cNetwork.GetSessionHosting()) {
         g_pBaldurChitin->GetObjectGame()->DemandServerStore(m_store, FALSE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Very rare case - parameter after `caller` / `target` pair.
+//
+// 0x4F6D40
+CMessage101::CMessage101(BOOLEAN a1, LONG caller, LONG target, BOOLEAN a4)
+    : CMessage(caller, target)
+{
+    field_C = a1;
+    field_D = a4;
+}
+
+// 0x43E170
+SHORT CMessage101::GetCommType()
+{
+    return BROADCAST_FORCED;
+}
+
+// 0x40A0E0
+BYTE CMessage101::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4F6D70
+BYTE CMessage101::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_101;
+}
+
+// 0x514500
+void CMessage101::MarshalMessage(BYTE** pData, DWORD* dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 30131
+    UTIL_ASSERT(pData != NULL && dwSize != NULL);
+
+    CGameObject* pObject;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        PLAYER_ID remotePlayerID = pObject->m_remotePlayerID;
+        LONG remoteObjectID = pObject->m_remoteObjectID;
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+
+        *dwSize = sizeof(PLAYER_ID)
+            + sizeof(LONG)
+            + sizeof(BOOLEAN)
+            + sizeof(BOOLEAN);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+        // __LINE__: 30153
+        UTIL_ASSERT(*dwSize <= STATICBUFFERSIZE);
+
+        DWORD cnt = 0;
+
+        *reinterpret_cast<PLAYER_ID*>(*pData + cnt) = remotePlayerID;
+        cnt += sizeof(PLAYER_ID);
+
+        *reinterpret_cast<LONG*>(*pData + cnt) = remoteObjectID;
+        cnt += sizeof(LONG);
+
+        *reinterpret_cast<BOOLEAN*>(*pData + cnt) = field_C;
+        cnt += sizeof(BOOLEAN);
+
+        *reinterpret_cast<BOOLEAN*>(*pData + cnt) = field_D;
+        cnt += sizeof(BOOLEAN);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+        // __LINE__: 30180
+        UTIL_ASSERT(cnt == *dwSize);
+    } else {
+        *dwSize = 0;
+    }
+}
+
+// 0x514630
+BOOL CMessage101::UnmarshalMessage(BYTE* pData, DWORD dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 30207
+    UTIL_ASSERT(pData != NULL);
+
+    DWORD cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    PLAYER_ID remotePlayerID = *reinterpret_cast<PLAYER_ID*>(pData + cnt);
+    cnt += sizeof(PLAYER_ID);
+
+    LONG remoteObjectID = *reinterpret_cast<LONG*>(pData + cnt);
+    cnt += sizeof(LONG);
+
+    LONG localObjectID;
+    if (g_pBaldurChitin->GetObjectGame()->GetRemoteObjectArray()->Find(remotePlayerID, remoteObjectID, localObjectID) != TRUE) {
+        return FALSE;
+    }
+
+    m_targetId = localObjectID;
+
+    field_C = *reinterpret_cast<BOOLEAN*>(pData + cnt);
+    cnt += sizeof(BOOLEAN);
+
+    field_D = *reinterpret_cast<BOOLEAN*>(pData + cnt);
+    cnt += sizeof(BOOLEAN);
+
+    // NOTE: Missing trailing guard.
+
+    return TRUE;
+}
+
+// 0x5146C0
+void CMessage101::Run()
+{
+    CGameObject* pObject;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pObject->GetObjectType() == CGameObject::TYPE_SPRITE) {
+            CGameSprite* pSprite = static_cast<CGameSprite*>(pObject);
+            pSprite->sub_723BF0(field_C, field_D);
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
     }
 }
 

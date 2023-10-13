@@ -95,6 +95,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_START_COMBAT_MUSIC;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_DEMAND;
     static const BYTE MSG_SUBTYPE_CMESSAGE_WEAPON_IMMUNITIES_UPDATE;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_101;
     static const BYTE MSG_SUBTYPE_CMESSAGE_103;
 
     static const BYTE MSG_TYPE_DIALOG;
@@ -1235,6 +1236,20 @@ public:
     void Run() override;
 
     CResRef m_store;
+};
+
+class CMessage101 : public CMessage {
+public:
+    CMessage101(BOOLEAN a1, LONG caller, LONG target, BOOLEAN a4);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ BOOLEAN field_C;
+    /* 000D */ BOOLEAN field_D;
 };
 
 class CMessageWeaponImmumityUpdate : public CMessage {
