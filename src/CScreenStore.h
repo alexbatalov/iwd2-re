@@ -127,8 +127,10 @@ public:
     void UpdateStoreItems();
     void DestroyStoreItems(BOOL bShutDown);
     void GetSpellItem(INT nIndex, CScreenStoreItem& cItem);
+    void UpdateSpellItems();
     void DestroySpellItems();
     void GetIdentifyItem(INT nIndex, CScreenStoreItem& cItem);
+    void UpdateIdentityItems();
     void DestroyIdentifyItems();
     void UpdateGroupCost();
     void UpdateIdentifyCost();

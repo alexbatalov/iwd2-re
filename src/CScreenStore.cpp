@@ -592,7 +592,75 @@ void CScreenStore::CheckEnablePanels(BOOL bEnable)
 // 0x673D20
 void CScreenStore::ResetMainPanel()
 {
-    // TODO: Incomplete.
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 2133
+    UTIL_ASSERT(m_pMainPanel != NULL);
+
+    switch (m_pMainPanel->m_nID) {
+    case 2:
+        UpdateGroupItems();
+        UpdateStoreItems();
+
+        // NOTE: Uninline.
+        SelectAllGroupItems(FALSE);
+
+        // NOTE: Uninline.
+        SelectAllStoreItems(FALSE);
+
+        // NOTE: Uninline.
+        SetTopGroupItem(0);
+
+        // NOTE: Uninline.
+        SetTopStoreItem(0);
+
+        // NOTE: Uninline.
+        UpdateGroupCost();
+
+        // NOT: Uninline.
+        UpdateStoreCost();
+
+        CheckEnablePanels(TRUE);
+        break;
+    case 4:
+        UpdateIdentityItems();
+
+        // NOTE: Uninline.
+        SelectAllIdentifyItems(FALSE);
+
+        // NOTE: Uninline.
+        SetTopIdentifyItem(0);
+
+        // NOTE: Uninline.
+        UpdateIdentifyCost();
+
+        CheckEnablePanels(TRUE);
+        break;
+    case 5:
+        UpdateSpellItems();
+
+        // NOTE: Uninline.
+        SelectAllSpellItems(FALSE);
+
+        SetTopSpellItem(0);
+        UpdateSpellCost();
+
+        CheckEnablePanels(TRUE);
+        break;
+    case 7:
+        m_dwRoomType = 1;
+
+        CheckEnablePanels(TRUE);
+        break;
+    case 8:
+        SetTopDrinkItem(0);
+
+        CheckEnablePanels(TRUE);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 2287
+        UTIL_ASSERT(FALSE);
+    }
 }
 
 // 0x673FE0
@@ -940,6 +1008,12 @@ void CScreenStore::GetSpellItem(INT nIndex, CScreenStoreItem& cItem)
     }
 }
 
+// 0x677610
+void CScreenStore::UpdateSpellItems()
+{
+    // TODO: Incomplete.
+}
+
 // 0x677950
 void CScreenStore::DestroySpellItems()
 {
@@ -997,6 +1071,12 @@ void CScreenStore::GetIdentifyItem(INT nIndex, CScreenStoreItem& cItem)
         cItem.m_nMaxCount = cDefaultItem.m_nMaxCount;
         cItem.m_nStoreCount = cDefaultItem.m_nStoreCount;
     }
+}
+
+// 0x677AF0
+void CScreenStore::UpdateIdentityItems()
+{
+    // TODO: Incomplete.
 }
 
 // 0x677DA0
