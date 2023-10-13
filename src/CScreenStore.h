@@ -149,6 +149,7 @@ public:
     STRREF GetPanelButtonToolTip(INT nButtonIndex);
     void OnErrorButtonClick(INT nButton);
     void RestParty();
+    BOOL IsCharacterViewable(SHORT nPortraitNum);
     void FocusChatEditBox();
     void OpenBag(const CResRef& resRef);
     void CloseBag(BOOL bSaveFile);

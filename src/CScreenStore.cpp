@@ -1,6 +1,7 @@
 #include "CScreenStore.h"
 
 #include "CBaldurChitin.h"
+#include "CGameSprite.h"
 #include "CIcon.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
@@ -1438,6 +1439,44 @@ void CScreenStore::OnErrorButtonClick(INT nButton)
 void CScreenStore::RestParty()
 {
     // TODO: Incomplete.
+}
+
+// 0x67E2A0
+BOOL CScreenStore::IsCharacterViewable(SHORT nPortraitNum)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    BOOL bViewable = FALSE;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 8998
+    UTIL_ASSERT(pGame != NULL);
+
+    // NOTE: Uninline.
+    LONG nCharacterId = pGame->GetCharacterId(m_nSelectedCharacter);
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+            bViewable = g_pChitin->cNetwork.m_idLocalPlayer == pSprite->m_remotePlayerID;
+        } else {
+            bViewable = TRUE;
+        }
+
+        pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    return bViewable;
 }
 
 // 0x67E380
