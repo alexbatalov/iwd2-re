@@ -45,12 +45,14 @@ public:
     /* 00A0 */ SHORT GetNumVirtualKeys() override;
     /* 00A4 */ CKeyInfo* GetVirtualKeys() override;
     /* 00A8 */ BYTE* GetVirtualKeysFlags() override;
+    /* 00AC */ void OnKeyDown(SHORT nKeysFlags) override;
     /* 00C0 */ void TimerAsynchronousUpdate() override;
     /* 00C4 */ void TimerSynchronousUpdate() override;
     /* 0110 */ void GetChatEditBoxStatus(CString& sChatText, BOOL& bInputCapture) override;
     /* 0114 */ void SetChatEditBoxStatus(const CString& sChatText, BOOL bInputCapture) override;
 
     void UpdateMainPanel();
+    void OnCancelButtonClick();
     void OnDoneButtonClick();
     void SetMapView(const CPoint& ptMapView);
     void OnMapMouseDown(const CPoint& ptMousePos);
@@ -67,6 +69,7 @@ public:
     void InvalidateArea(DWORD nArea);
     void GetMarkerPosition(CPoint& ptMarker);
     void ClearChatMessages();
+    void FocusChatEditBox();
 
     /* 0106 */ CKeyInfo m_pVirtualKeys[CSCREENWORLDMAP_VIRTUAL_KEYS];
     /* 03D6 */ BYTE m_pVirtualKeysFlags[CSCREENWORLDMAP_VIRTUAL_KEYS];

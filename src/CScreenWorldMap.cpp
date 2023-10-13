@@ -429,6 +429,66 @@ BOOL CScreenWorldMap::CheckMouseMove()
     return TRUE;
 }
 
+// 0x69A0A0
+void CScreenWorldMap::OnKeyDown(SHORT nKeysFlags)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+    // __LINE__: 688
+    UTIL_ASSERT(pGame != NULL);
+
+    for (SHORT nKeyFlag = 0; nKeyFlag < nKeysFlags; nKeyFlag++) {
+        if (!m_cUIManager.OnKeyDown(m_pVirtualKeysFlags[nKeyFlag])) {
+            switch (m_pVirtualKeysFlags[nKeyFlag]) {
+            case VK_TAB:
+                m_cUIManager.ForceToolTip();
+                m_nToolTip = pGame->GetOptions()->m_nTooltips;
+                break;
+            case VK_RETURN:
+                OnDoneButtonClick();
+                break;
+            case VK_ESCAPE:
+                OnCancelButtonClick();
+                break;
+            case VK_UP:
+                if (!m_bMapDragging) {
+                    SetMapView(CPoint(m_ptMapView.x, m_ptMapView.y - 20));
+                }
+                break;
+            case VK_DOWN:
+                if (!m_bMapDragging) {
+                    SetMapView(CPoint(m_ptMapView.x, m_ptMapView.y + 20));
+                }
+                break;
+            case VK_SNAPSHOT:
+                g_pBaldurChitin->GetCurrentVideoMode()->PrintScreen();
+                break;
+            default:
+                for (SHORT index = 0; index < CINFGAME_KEYMAP_SIZE; index) {
+                    // __FILE__: .\Include\InfGame.h
+                    // __LINE__: 1486
+                    UTIL_ASSERT(index >= 0 && index < CINFGAME_KEYMAP_SIZE);
+
+                    // __FILE__: .\Include\InfGame.h
+                    // __LINE__: 1487
+                    UTIL_ASSERT(index >= 0 && index < CINFGAME_KEYMAP_SIZE);
+
+                    if (pGame->m_pKeymap[index] == m_pVirtualKeysFlags[nKeyFlag]
+                        && pGame->m_pKeymapFlags[index] == m_bCtrlKeyDown) {
+                        switch (index) {
+                        case 24:
+                            FocusChatEditBox();
+                            break;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
 // 0x69A400
 void CScreenWorldMap::OnMouseMove(CPoint pt)
 {
@@ -515,11 +575,29 @@ void CScreenWorldMap::UpdateMainPanel()
 }
 
 // NOTE: Inlined.
+void CScreenWorldMap::OnCancelButtonClick()
+{
+    switch (m_nEngineState) {
+    case 0:
+        StopWorldMap(FALSE);
+        SelectEngine(g_pBaldurChitin->m_pEngineMap);
+        break;
+    case 1:
+        if (m_bInControl && !m_bClickedArea) {
+            StopWorldMap(FALSE);
+            SelectEngine(g_pBaldurChitin->m_pEngineWorld);
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+        // __LINE__: 1362
+        UTIL_ASSERT(FALSE);
+    }
+}
+
+// NOTE: Inlined.
 void CScreenWorldMap::OnDoneButtonClick()
 {
-    CSingleLock renderLock(&(GetManager()->field_36), FALSE);
-    renderLock.Lock(INFINITE);
-
     switch (m_nEngineState) {
     case 0:
         StopWorldMap(FALSE);
@@ -536,8 +614,6 @@ void CScreenWorldMap::OnDoneButtonClick()
         // __LINE__: 1405
         UTIL_ASSERT(FALSE);
     }
-
-    renderLock.Unlock();
 }
 
 // 0x69A4D0
@@ -990,6 +1066,28 @@ void CScreenWorldMap::ClearChatMessages()
     field_104A = 0;
 }
 
+// NOTE: Inlined.
+void CScreenWorldMap::FocusChatEditBox()
+{
+    if (g_pBaldurChitin->cNetwork.GetSessionOpen()) {
+        if (m_lPopupStack.GetTailPosition() == NULL || m_lPopupStack.GetTail() == NULL) {
+            CUIPanel* pPanel = m_cUIManager.GetPanel(3);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+            // __LINE__: 4403
+            UTIL_ASSERT(pPanel != NULL);
+
+            CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(7));
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorldMap.cpp
+            // __LINE__: 4405
+            UTIL_ASSERT(pEdit != NULL);
+
+            m_cUIManager.SetCapture(pEdit, CUIManager::KEYBOARD);
+        }
+    }
+}
+
 // 0x6A01D0
 void CScreenWorldMap::GetChatEditBoxStatus(CString& sChatText, BOOL& bInputCapture)
 {
@@ -1088,8 +1186,13 @@ void CUIControlButtonWorldMapDone::OnLButtonClick(CPoint pt)
     // __LINE__: 4609
     UTIL_ASSERT(pWorldMap != NULL);
 
+    CSingleLock renderLock(&(pWorldMap->GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
     // NOTE: Uninline.
     pWorldMap->OnDoneButtonClick();
+
+    renderLock.Unlock();
 }
 
 // -----------------------------------------------------------------------------
