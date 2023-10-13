@@ -249,6 +249,8 @@ BOOL CWorldMap::GetAreaIndex(DWORD nMap, const CResRef& cResArea, DWORD& nArea)
         return FALSE;
     }
 
+    pt.x = 1;
+
     v1 = g_pBaldurChitin->GetObjectGame()->GetRuleTables().m_tAreaLoad.GetAt(pt);
 
     for (DWORD nIndex = 0; nIndex < m_pData[nMap].m_nAreas; nIndex++) {
