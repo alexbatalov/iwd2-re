@@ -156,6 +156,12 @@ public:
     void SelectGroupItem(INT nIndex, BOOL bSelected);
     void SelectIdentifyItem(INT nIndex, BOOL bSelected);
     void SelectStoreItem(INT nIndex, BOOL bSelected);
+    void SelectSpellItem(INT nIndex, BOOL bSelected);
+
+    void SelectAllGroupItems(BOOL bSelected);
+    void SelectAllIdentifyItems(BOOL bSelected);
+    void SelectAllStoreItems(BOOL bSelected);
+    void SelectAllSpellItems(BOOL bSelected);
 
     // Seen in `CUIControlButtonStoreGroupItem::OnLButtonClick` assertion.
     CStore* GetBag() { return m_pBag; }

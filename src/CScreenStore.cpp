@@ -1598,6 +1598,58 @@ void CScreenStore::SelectStoreItem(INT nIndex, BOOL bSelected)
     }
 }
 
+// NOTE: Inlined.
+void CScreenStore::SelectSpellItem(INT nIndex, BOOL bSelected)
+{
+    // NOTE: Uninline.
+    SelectAllSpellItems(FALSE);
+
+    if (nIndex >= 0 && nIndex < m_lSpellItems.GetCount()) {
+        CScreenStoreItem* pItem = m_lSpellItems.GetAt(m_lSpellItems.FindIndex(nIndex));
+        pItem->m_bSelected = TRUE;
+    }
+}
+
+// NOTE: Inlined.
+void CScreenStore::SelectAllGroupItems(BOOL bSelected)
+{
+    POSITION pos = m_lGroupItems.GetHeadPosition();
+    while (pos != NULL) {
+        CScreenStoreItem* pItem = m_lGroupItems.GetNext(pos);
+        pItem->m_bSelected = bSelected;
+    }
+}
+
+// NOTE: Inlined.
+void CScreenStore::SelectAllIdentifyItems(BOOL bSelected)
+{
+    POSITION pos = m_lIdentifyItems.GetHeadPosition();
+    while (pos != NULL) {
+        CScreenStoreItem* pItem = m_lIdentifyItems.GetNext(pos);
+        pItem->m_bSelected = bSelected;
+    }
+}
+
+// NOTE: Inlined.
+void CScreenStore::SelectAllStoreItems(BOOL bSelected)
+{
+    POSITION pos = m_lStoreItems.GetHeadPosition();
+    while (pos != NULL) {
+        CScreenStoreItem* pItem = m_lStoreItems.GetNext(pos);
+        pItem->m_bSelected = bSelected;
+    }
+}
+
+// NOTE: Inlined.
+void CScreenStore::SelectAllSpellItems(BOOL bSelected)
+{
+    POSITION pos = m_lSpellItems.GetHeadPosition();
+    while (pos != NULL) {
+        CScreenStoreItem* pItem = m_lSpellItems.GetNext(pos);
+        pItem->m_bSelected = bSelected;
+    }
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x67EA20
@@ -2908,26 +2960,14 @@ void CUIControlButtonStoreStoreSpell::OnLButtonClick(CPoint pt)
     CString sSpell;
     CString sDescription;
     INT nIndex;
-    POSITION pos;
-    CScreenStoreItem* pItem;
     CUIControlTextDisplay* pText;
 
     switch (m_pPanel->m_nID) {
     case 5:
         nIndex = pStore->m_nTopSpellItem + m_nID - 8;
 
-        pos = pStore->m_lSpellItems.GetHeadPosition();
-        while (pos != NULL) {
-            pItem = pStore->m_lSpellItems.GetAt(pos);
-            pItem->m_bSelected = FALSE;
-            pStore->m_lSpellItems.GetNext(pos);
-        }
-
-        if (nIndex >= 0 && nIndex < pStore->m_lSpellItems.GetCount()) {
-            pos = pStore->m_lSpellItems.FindIndex(nIndex);
-            pItem = pStore->m_lSpellItems.GetAt(pos);
-            pItem->m_bSelected = TRUE;
-        }
+        // NOTE: Uninline.
+        pStore->SelectSpellItem(nIndex, TRUE);
 
         // NOTE: Uninline.
         pStore->UpdateSpellCost();
@@ -3559,13 +3599,8 @@ void CUIControlButtonStoreCloseBag::OnLButtonClick(CPoint pt)
     pStore->UpdateStoreItems();
     pStore->UpdateGroupItems();
 
-    POSITION pos = pStore->m_lGroupItems.GetHeadPosition();
-    while (pos != NULL) {
-        CScreenStoreItem* pItem = pStore->m_lGroupItems.GetAt(pos);
-        pItem->m_bSelected = FALSE;
-
-        pStore->m_lGroupItems.GetNext(pos);
-    }
+    // NOTE: Uninline.
+    pStore->SelectAllGroupItems(FALSE);
 
     // NOTE: Uninline.
     pStore->SetTopGroupItem(0);
@@ -3600,8 +3635,6 @@ CUIControlButtonStoreOpenBag::~CUIControlButtonStoreOpenBag()
 // 0x6853E0
 void CUIControlButtonStoreOpenBag::OnLButtonClick(CPoint pt)
 {
-    POSITION pos;
-
     CScreenStore* pStore = g_pBaldurChitin->m_pEngineStore;
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
@@ -3620,13 +3653,8 @@ void CUIControlButtonStoreOpenBag::OnLButtonClick(CPoint pt)
     pStore->OpenBag(pItem->GetResRef());
     pStore->UpdateStoreItems();
 
-    pos = pStore->m_lStoreItems.GetHeadPosition();
-    while (pos != NULL) {
-        CScreenStoreItem* pItem = pStore->m_lStoreItems.GetAt(pos);
-        pItem->m_bSelected = FALSE;
-
-        pStore->m_lStoreItems.GetNext(pos);
-    }
+    // NOTE: Uninline.
+    pStore->SelectAllStoreItems(FALSE);
 
     // NOTE: Uninline.
     pStore->SetTopStoreItem(0);
@@ -3636,13 +3664,8 @@ void CUIControlButtonStoreOpenBag::OnLButtonClick(CPoint pt)
 
     pStore->UpdateGroupItems();
 
-    pos = pStore->m_lGroupItems.GetHeadPosition();
-    while (pos != NULL) {
-        CScreenStoreItem* pItem = pStore->m_lGroupItems.GetAt(pos);
-        pItem->m_bSelected = FALSE;
-
-        pStore->m_lGroupItems.GetNext(pos);
-    }
+    // NOTE: Uninline.
+    pStore->SelectAllGroupItems(FALSE);
 
     // NOTE: Uninline.
     pStore->SetTopGroupItem(0);
