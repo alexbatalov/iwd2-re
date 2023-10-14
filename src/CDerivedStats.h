@@ -478,6 +478,7 @@ public:
 class CDerivedStats : public CDerivedStatsTemplate {
 public:
     CDerivedStats();
+    ~CDerivedStats();
     void Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature, CGameSpriteSpells* pSpells, CGameSpriteGroupedSpellList* pDomainSpells);
     CDerivedStats& operator=(const CDerivedStats& other);
     void BonusInit();

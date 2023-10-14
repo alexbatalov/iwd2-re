@@ -16,6 +16,11 @@ CDerivedStats::CDerivedStats()
     // TODO: Incomplete.
 }
 
+// 0x5D6650
+CDerivedStats::~CDerivedStats()
+{
+}
+
 // 0x4440F0
 void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature, CGameSpriteSpells* pSpells, CGameSpriteGroupedSpellList* pDomainSpells)
 {
