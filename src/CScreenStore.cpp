@@ -890,6 +890,40 @@ void CScreenStore::sub_673740(CUIPanel* pPanel)
     // TODO: Incomplete.
 }
 
+// 0x673930
+BOOL CScreenStore::IsCharacterAlive(SHORT nPortraitNum)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    BOOL bAlive;
+
+    // NOTE: Uninline.
+    LONG nCharacterId = pGame->GetCharacterId(nPortraitNum);
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if ((pSprite->GetDerivedStats()->m_generalState & STATE_DEAD) != 0) {
+            bAlive = FALSE;
+        } else {
+            bAlive = TRUE;
+        }
+
+        pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    return bAlive;
+}
+
 // NOTE: Inlined.
 void CScreenStore::CheckEnableButtonBar()
 {

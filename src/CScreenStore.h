@@ -108,7 +108,7 @@ public:
     void ResetErrorPanel(CUIPanel* pPanel);
     void sub_6734F0(CUIPanel* pPanel);
     void sub_673740(CUIPanel* pPanel);
-    BOOL IsCharacterDead();
+    BOOL IsCharacterAlive(SHORT nPortraitNum);
     void CheckEnableButtonBar();
     void SwitchMainPanel(DWORD dwMainPanelId);
     void CheckEnablePanels(BOOL bEnable);
