@@ -107,6 +107,7 @@ public:
     void sub_645610(DWORD id);
 
     /* 071A */ CGameArea* m_pArea;
+    /* 071E */ BOOLEAN field_71E;
     /* 07B8 */ DWORD m_nLastNoteID;
 };
 

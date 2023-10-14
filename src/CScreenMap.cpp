@@ -409,7 +409,20 @@ BOOL CScreenMap::CheckMouseLButton()
 // 0x640D80
 void CScreenMap::OnLButtonDblClk(CPoint pt)
 {
-    // TODO: Incomplete.
+    m_cUIManager.OnLButtonDblClk(pt);
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(2);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+    // __LINE__: 686
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlButtonMapAreaMap* pMapControl = static_cast<CUIControlButtonMapAreaMap*>(pPanel->GetControl(2));
+    if (pMapControl->m_bActive
+        && pMapControl->field_71E
+        && pMapControl->IsOver(pt - pPanel->m_ptOrigin)) {
+        m_bSelectWorldOnUp = TRUE;
+    }
 }
 
 // 0x636970
