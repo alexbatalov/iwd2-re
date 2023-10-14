@@ -462,7 +462,41 @@ void CScreenMap::OnPortraitLClick(DWORD nPortrait)
 // 0x641130
 void CScreenMap::OnPortraitLDblClick(DWORD nPortrait)
 {
-    // TODO: Incomplete.
+    CUIPanel* pPanel = m_cUIManager.GetPanel(2);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+    // __LINE__: 938
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlButtonMapAreaMap* pMapControl = static_cast<CUIControlButtonMapAreaMap*>(pPanel->GetControl(2));
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // NOTE: Uninline.
+    LONG nCharacterId = pGame->GetCharacterId(static_cast<SHORT>(nPortrait));
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pSprite->GetArea() == pMapControl->m_pArea) {
+            CPoint pt;
+            pt.x = pSprite->GetPos().x - pMapControl->m_pArea->GetInfinity()->rViewPort.Width() / 2;
+            pt.y = pSprite->GetPos().y - pMapControl->m_pArea->GetInfinity()->rViewPort.Height() / 2;
+            pMapControl->CenterViewPort(pt);
+        }
+
+        pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
 }
 
 // 0x641270
@@ -829,6 +863,12 @@ CPoint CUIControlButtonMapAreaMap::ConvertScreenToWorldCoords(CPoint pt)
     // TODO: Incomplete.
 
     return CPoint(0, 0);
+}
+
+// 0x6437A0
+void CUIControlButtonMapAreaMap::CenterViewPort(const CPoint& pt)
+{
+    // TODO: Incomplete.
 }
 
 // 0x644CC0

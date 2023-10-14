@@ -97,6 +97,7 @@ public:
     ~CUIControlButtonMapAreaMap() override;
 
     CPoint ConvertScreenToWorldCoords(CPoint pt);
+    void CenterViewPort(const CPoint& pt);
     void SetMap(CGameArea* pArea);
     void SetActiveNotes(BOOL bActive);
     void sub_645610(DWORD id);
