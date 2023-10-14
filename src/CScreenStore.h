@@ -158,6 +158,7 @@ public:
     DWORD GetPanelButtonPanelId(INT nButtonIndex);
     SHORT GetPanelButtonSequence(INT nButtonIndex);
     STRREF GetPanelButtonToolTip(INT nButtonIndex);
+    BOOL IsCharacterInRange(SHORT nPortraitNum);
     void OnErrorButtonClick(INT nButton);
     void RestParty();
     BOOL IsCharacterViewable(SHORT nPortraitNum);

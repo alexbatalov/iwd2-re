@@ -1145,7 +1145,50 @@ void CScreenStore::UpdateRentRoomPanel()
 // 0x676300
 void CScreenStore::UpdateBuyDrinksPanel()
 {
-    // TODO: Incomplete.
+    // FIXME: Unused.
+    CString v1;
+
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(m_pMainPanel->GetControl(5));
+
+    DWORD nPartyGold = g_pBaldurChitin->GetObjectGame()->m_nPartyGold;
+
+    UpdateLabel(m_pMainPanel,
+        0x10000011,
+        "%s",
+        (LPCSTR)FetchString(m_pStore->m_header.m_strName));
+
+    UpdateLabel(m_pMainPanel,
+        0x10000012,
+        "%d",
+        nPartyGold);
+
+    BOOL bCharacterViewable = IsCharacterViewable(static_cast<SHORT>(m_nSelectedCharacter));
+
+    for (INT nIndex = 0; nIndex < DRINK_SLOTS; nIndex++) {
+        CUIControlButton* pButton = static_cast<CUIControlButton*>(m_pMainPanel->GetControl(nIndex + 40));
+        STRREF strName;
+        DWORD dwCost;
+        DWORD dwRumorChance;
+        if (IsCharacterInRange(m_nSelectedCharacter)
+            && m_pStore->GetDrink(m_nTopDrinkItem + nIndex, strName, dwCost, dwRumorChance)) {
+            pButton->SetText(FetchString(strName));
+            pButton->SetEnabled(bCharacterViewable);
+            UpdateLabel(m_pMainPanel, nIndex + 0x1000001D, "%d", dwCost);
+        } else {
+            pButton->SetText(CString(""));
+            pButton->SetEnabled(FALSE);
+            UpdateLabel(m_pMainPanel, nIndex + 0x1000001D, "");
+        }
+    }
+
+    CUIControlScrollBarStoreBuyDrinksDrink* pDrinkBar = static_cast<CUIControlScrollBarStoreBuyDrinksDrink*>(m_pMainPanel->GetControl(5));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 3289
+    UTIL_ASSERT(pDrinkBar != NULL);
+
+    // NOTE: Uninline.
+    pDrinkBar->UpdateScrollBar();
 }
 
 // NOTE: Inlined.
@@ -1833,6 +1876,14 @@ void CScreenStore::CancelEngine()
     }
 
     m_bInCancelEngine = FALSE;
+}
+
+// 0x67DB60
+BOOL CScreenStore::IsCharacterInRange(SHORT nPortraitNum)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // 0x67DD30
