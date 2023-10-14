@@ -54,6 +54,10 @@ public:
     void EnableMainPanel(BOOL bEnable);
     void UpdateMainPanel();
     CUIPanel* GetTopPopup();
+    void ShowPopupPanel(DWORD dwPanelId, BOOL bShow);
+    void EnablePopupPanel(DWORD dwPanelId, BOOL bEnable);
+    void ResetPopupPanel(DWORD dwPanelId);
+    void UpdatePopupPanel(DWORD dwPanelId);
     void SummonPopup(DWORD dwPopupId);
     void DismissPopup();
     void ResetErrorPanel(CUIPanel* pPanel);

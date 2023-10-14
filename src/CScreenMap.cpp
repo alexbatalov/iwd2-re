@@ -611,16 +611,143 @@ CUIPanel* CScreenMap::GetTopPopup()
     return m_lPopupStack.GetTailPosition() != NULL ? m_lPopupStack.GetTail() : NULL;
 }
 
+// NOTE: Inlined.
+void CScreenMap::ShowPopupPanel(DWORD dwPanelId, BOOL bShow)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    pPanel->SetActive(bShow);
+    pPanel->SetInactiveRender(bShow);
+
+    if (bShow) {
+        pPanel->InvalidateRect(NULL);
+        PlayGUISound(RESREF_SOUND_WINDOWOPEN);
+    }
+}
+
+// NOTE: Inlined.
+void CScreenMap::EnablePopupPanel(DWORD dwPanelId, BOOL bEnable)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+    // __LINE__: 1301
+    UTIL_ASSERT(pPanel != NULL);
+
+    pPanel->SetEnabled(bEnable);
+}
+
+// NOTE: Inlined.
+void CScreenMap::ResetPopupPanel(DWORD dwPanelId)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+    // __LINE__: 1328
+    UTIL_ASSERT(pPanel != NULL);
+
+    switch (pPanel->m_nID) {
+    case 3:
+    case 4:
+    case 50:
+        ResetErrorPanel(pPanel);
+        break;
+    case 5:
+        ResetAreaNotePanel(pPanel);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+        // __LINE__: 1344
+        UTIL_ASSERT(FALSE);
+    }
+}
+
+// NOTE: Inlined.
+void CScreenMap::UpdatePopupPanel(DWORD dwPanelId)
+{
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+    // __LINE__: 1372
+    UTIL_ASSERT(pPanel != NULL);
+}
+
 // 0x641990
 void CScreenMap::SummonPopup(DWORD dwPopupId)
 {
-    // TODO: Incomplete.
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
+
+    if (!m_lPopupStack.IsEmpty()) {
+        CUIPanel* pPanel = m_lPopupStack.GetTail();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+        // __LINE__: 1450
+        UTIL_ASSERT(pPanel != NULL);
+
+        // NOTE: Uninline.
+        EnablePopupPanel(pPanel->m_nID, FALSE);
+    } else {
+        EnableMainPanel(FALSE);
+    }
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPopupId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+    // __LINE__: 1456
+    UTIL_ASSERT(pPanel != NULL);
+
+    m_lPopupStack.AddTail(pPanel);
+
+    // NOTE: Uninline.
+    ResetPopupPanel(pPanel->m_nID);
+
+    // NOTE: Uninline.
+    ShowPopupPanel(pPanel->m_nID, TRUE);
+
+    // NOTE: Uninline.
+    EnablePopupPanel(pPanel->m_nID, TRUE);
+
+    // NOTE: Uninline.
+    UpdatePopupPanel(pPanel->m_nID);
 }
 
 // 0x641BA0
 void CScreenMap::DismissPopup()
 {
-    // TODO: Incomplete.
+    // NOTE: Uninline.
+    m_cUIManager.KillCapture();
+
+    CUIPanel* pPanel = m_lPopupStack.RemoveTail();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+    // __LINE__: 1501
+    UTIL_ASSERT(pPanel != NULL);
+
+    // NOTE: Uninline.
+    ShowPopupPanel(pPanel->m_nID, FALSE);
+
+    m_cUIManager.GetPanel(2)->InvalidateRect(NULL);
+
+    if (m_lPopupStack.GetTailPosition() != NULL) {
+        CUIPanel* pPanel = m_lPopupStack.GetTail();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+        // __LINE__: 1518
+        UTIL_ASSERT(pPanel != NULL);
+
+        // NOTE: Uninline.
+        ShowPopupPanel(pPanel->m_nID, TRUE);
+
+        // NOTE: Uninline.
+        EnablePopupPanel(pPanel->m_nID, TRUE);
+
+        // NOTE: Uninline.
+        UpdatePopupPanel(pPanel->m_nID);
+    } else {
+        EnableMainPanel(TRUE);
+        UpdateMainPanel();
+    }
 }
 
 // 0x641D00
