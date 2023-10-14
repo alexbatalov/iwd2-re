@@ -287,3 +287,11 @@ void CGameAreaNotes::Invalidate()
         pControl->InvalidateRect();
     }
 }
+
+// FIXME: `szTemp` should be reference.
+//
+// 0x642670
+void CGameAreaNotes::SetStringBuffer(CString szTemp)
+{
+    m_szBuffer = szTemp;
+}

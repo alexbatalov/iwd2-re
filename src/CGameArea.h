@@ -143,6 +143,7 @@ public:
     CVariableHash* GetVariables();
     CAreaFileRestEncounter* GetHeaderRestEncounter();
     CNamedCreatureVariableHash* GetNamedCreatures();
+    CGameAreaNotes* GetAreaNotes();
 
     static INT dword_8D212C;
     static BOOLEAN byte_8D2138;

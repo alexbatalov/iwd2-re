@@ -26,6 +26,7 @@ public:
     void Marshal(BYTE**& pArea, DWORD& cnt);
     BOOL DeleteANote(DWORD id);
     void Invalidate();
+    void SetStringBuffer(CString szTemp);
 
     /* 0000 */ DWORD** m_areaNoteGrid;
     /* 0004 */ BOOL m_bInitialized;

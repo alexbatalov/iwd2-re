@@ -904,3 +904,9 @@ CNamedCreatureVariableHash* CGameArea::GetNamedCreatures()
 {
     return &m_namedCreatures;
 }
+
+// 0x43A5B0
+CGameAreaNotes* CGameArea::GetAreaNotes()
+{
+    return &m_cGameAreaNotes;
+}

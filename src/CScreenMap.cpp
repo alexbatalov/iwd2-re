@@ -793,7 +793,44 @@ void CScreenMap::OnCancelButtonClick()
 // 0x6424D0
 void CScreenMap::OnDoneButtonClick()
 {
-    // TODO: Incomplete.
+    if (GetTopPopup() != NULL) {
+        switch (GetTopPopup()->m_nID) {
+        case 3:
+        case 4:
+        case 50:
+            OnErrorButtonClick(0);
+            break;
+        case 5:
+            if (1) {
+                CUIControlButtonMapAreaMap* pMapControl = static_cast<CUIControlButtonMapAreaMap*>(GetManager()->GetPanel(2)->GetControl(2));
+
+                CGameArea* pArea = pMapControl->m_pArea;
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+                // __LINE__: 1936
+                UTIL_ASSERT(pArea != NULL);
+
+                CUIPanel* pPanel = GetTopPopup();
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+                // __LINE__: 1938
+                UTIL_ASSERT(pPanel != NULL);
+
+                CUIControlEditMultiLineMapNote* pEdit = static_cast<CUIControlEditMultiLineMapNote*>(pPanel->GetControl(1));
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+                // __LINE__: 1940
+                UTIL_ASSERT(pEdit != NULL);
+
+                CGameAreaNotes* pNotes = pArea->GetAreaNotes();
+                pNotes->SetStringBuffer(pEdit->GetText());
+                pNotes->Add();
+
+                DismissPopup();
+            }
+            break;
+        }
+    }
 }
 
 // 0x6426C0
