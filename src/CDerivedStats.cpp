@@ -4,7 +4,6 @@
 #include "CGameSprite.h"
 #include "CGameSpriteSpells.h"
 #include "CUtil.h"
-#include "FileFormat.h"
 
 // 0x443B30
 CDerivedStats::CDerivedStats()
@@ -96,7 +95,7 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
     m_nReputation = pCreature->m_reputation;
     m_nMoraleBreak = pCreature->m_moraleBreak;
 
-    for (index = 0; index < 8; index++) {
+    for (index = 0; index < MAX_HATED_RACES; index++) {
         m_favoredEnemies[index] = pCreature->m_favoredEnemies[index];
     }
 
@@ -417,7 +416,7 @@ void CDerivedStats::BonusInit()
     m_nReputation = 0;
     m_nMoraleBreak = 0;
 
-    for (index = 0; index < 8; index++) {
+    for (index = 0; index < MAX_HATED_RACES; index++) {
         m_favoredEnemies[index] = CAIObjectType::R_NO_RACE;
     }
 

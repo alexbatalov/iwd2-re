@@ -3201,7 +3201,7 @@ INT CGameSprite::GetNextHatedRacesSlot()
 {
     INT nIndex;
 
-    for (nIndex = 0; nIndex < 8; nIndex++) {
+    for (nIndex = 0; nIndex < MAX_HATED_RACES; nIndex++) {
         if (m_baseStats.m_favoredEnemies[nIndex] == CAIObjectType::R_NO_RACE) {
             break;
         }

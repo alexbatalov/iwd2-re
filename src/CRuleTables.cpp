@@ -3312,7 +3312,7 @@ STRREF CRuleTables::GetSpeechStringRef(CString& sSoundSet, INT nSpeech) const
 // 0x546800
 BOOLEAN CRuleTables::IsHatedRace(const CAIObjectType& typeAI, const CCreatureFileHeader& BStats) const
 {
-    for (int index = 0; index < 8; index++) {
+    for (int index = 0; index < MAX_HATED_RACES; index++) {
         if (typeAI.m_nRace == BStats.m_favoredEnemies[index]) {
             return TRUE;
         }
@@ -3326,7 +3326,7 @@ BOOLEAN CRuleTables::IsHatedRace(const CAIObjectType& typeAI, const CCreatureFil
 // 0x546830
 BOOLEAN CRuleTables::IsHatedRace(BYTE& nRace, const CCreatureFileHeader& BStats) const
 {
-    for (int index = 0; index < 8; index++) {
+    for (int index = 0; index < MAX_HATED_RACES; index++) {
         if (BStats.m_favoredEnemies[index] == nRace) {
             return TRUE;
         }
@@ -3344,7 +3344,7 @@ INT CRuleTables::GetHatedRaceBonus(BYTE& nRace, const CCreatureFileHeader& BStat
     INT nFavoredEnemyIndex = 0;
     INT nCnt;
 
-    for (nCnt = 0; nCnt < 8; nCnt++) {
+    for (nCnt = 0; nCnt < MAX_HATED_RACES; nCnt++) {
         if (BStats.m_favoredEnemies[nCnt] == CAIObjectType::R_NO_RACE) {
             break;
         }

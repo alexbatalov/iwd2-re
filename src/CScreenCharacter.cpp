@@ -2402,7 +2402,7 @@ void CScreenCharacter::UpdateGeneralInformation(CUIControlTextDisplay* pText, CG
             "%s",
             FetchString(15982)); // "Favored Enemies"
 
-        for (INT nIndex = 0; nIndex < 8; nIndex++) {
+        for (INT nIndex = 0; nIndex < MAX_HATED_RACES; nIndex++) {
             BYTE nRace = pBStats->m_favoredEnemies[nIndex];
             if (nRace != CAIObjectType::R_NO_RACE) {
                 STRREF strRace;

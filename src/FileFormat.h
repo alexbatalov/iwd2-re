@@ -3,6 +3,8 @@
 
 #include "BalDataTypes.h"
 
+#define MAX_HATED_RACES 8
+
 #define CSPELLLIST_MAX_LEVELS 9
 #define CSPELLLIST_NUM_CLASSES 7
 
@@ -287,7 +289,7 @@ public:
     /* 0250 */ unsigned char field_250;
     /* 0251 */ unsigned char field_251;
     /* 0252 */ unsigned char field_252;
-    /* 0253 */ BYTE m_favoredEnemies[8];
+    /* 0253 */ BYTE m_favoredEnemies[MAX_HATED_RACES];
     /* 025B */ BYTE m_subrace;
     /* 025C */ unsigned char field_25C;
     /* 025D */ BYTE m_sex;

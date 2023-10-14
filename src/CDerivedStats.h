@@ -4,6 +4,7 @@
 #include "CAIObjectType.h"
 #include "CColorEffects.h"
 #include "CImmunities.h"
+#include "FileFormat.h"
 
 #include <bitset>
 #include <set>
@@ -414,7 +415,7 @@ public:
     /* 006C */ DWORD m_nMoraleBreak;
     /* 0070 */ DWORD m_nMoraleRecoveryTime;
     /* 0074 */ SHORT m_nReputation;
-    /* 0076 */ SHORT m_favoredEnemies[8];
+    /* 0076 */ SHORT m_favoredEnemies[MAX_HATED_RACES];
     /* 0086 */ SHORT m_nDamageBonus;
     /* 0088 */ SHORT m_nSpellFailureArcane; // #guess
     /* 008A */ SHORT m_nSpellFailureDivine; // #guess

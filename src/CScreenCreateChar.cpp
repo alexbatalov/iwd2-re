@@ -1036,7 +1036,7 @@ void CScreenCreateChar::ResetPopupPanel(DWORD dwPanelId, CGameSprite* pSprite)
         ResetColorsPanel(pPanel, pSprite);
         break;
     case 15:
-        for (index = 0; index < 8; index++) {
+        for (index = 0; index < MAX_HATED_RACES; index++) {
             pSprite->m_baseStats.m_favoredEnemies[index] = -1;
         }
         m_nTopHatedRace = 0;
