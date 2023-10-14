@@ -77,14 +77,18 @@ public:
     void UpdatePortraitList(CUIPanel* pPanel, DWORD dwControlId, INT nSelected);
     void ResetCustomSoundsPanel(CUIPanel* pPanel, CGameSprite* pSprite);
     void ResetClassPanel(CGameSprite* pSprite, int a2);
+    void ResetHatedRacePanel(CGameSprite* pSprite);
     void ResetExportPanel(CGameSprite* pSprite);
     void UpdateCharacterList(CUIPanel* pPanel, DWORD dwTextId, INT nSelected);
     BOOLEAN IsNameOnExportList(CString sName);
     void ResetBiographyPanel(CGameSprite* pSprite);
     void ResetClassDescriptionPanel(CGameSprite* pSprite);
+    void sub_5D8B50(CGameSprite* pSprite);
     BOOL ResetAbility(CGameSprite* pSprite, const CString& sMin, const CString& sMax, const CString& sMod, BYTE& nAbility, BYTE& nMin, BYTE& nMax, INT& nMod);
     void ResetAbilitiesPanel(CGameSprite* pSprite, int a2);
+    void ResetSpellsPanel(CGameSprite* pSprite, int a2);
     void ResetClassSelectionPanel(CUIPanel* pPanel, CGameSprite* pSprite);
+    void ResetFeatsPanel(CUIPanel* pPanel, CGameSprite* pSprite, int a3);
     void UpdateHatedRacePanel(CGameSprite* pSprite);
     void UpdateSpecializationPanel(CGameSprite* pSprite);
     void UpdateAbilitiesPanel(CGameSprite* pSprite);
@@ -141,6 +145,7 @@ public:
     void OnPlayButtonClick();
     void OnSoundItemSelect(INT nItem);
     void ResetCustomizeBiographyPanel(CUIPanel* pPanel, CGameSprite* pSprite);
+    void ResetSkillsPanel(CUIPanel* pPanel, CGameSprite* pSprite, int a3);
     void sub_5F89B0(CGameSprite* pSprite);
     void sub_5F8C90(int a1);
     void sub_5F91F0(int a1);
@@ -235,7 +240,7 @@ public:
     /* 1794 */ INT m_nModINT;
     /* 1798 */ INT m_nModWIS;
     /* 179C */ INT m_nModCHR;
-    /* 17A0 */ int field_17A0;
+    /* 17A0 */ INT m_nHatedRaceIndex;
     /* 17A4 */ int field_17A4;
     /* 17A8 */ int field_17A8;
     /* 17C0 */ int field_17C0;

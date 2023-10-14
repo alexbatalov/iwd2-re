@@ -116,7 +116,7 @@ CScreenCharacter::CScreenCharacter()
     m_nSpecialization = 0;
     field_1772 = 0;
     field_1776 = 0;
-    field_17A0 = 0;
+    m_nHatedRaceIndex = 0;
     m_nClass = 0;
     field_17A4 = 0;
     m_nMinSTR = 0;
@@ -934,6 +934,21 @@ void CScreenCharacter::ResetClassPanel(CGameSprite* pSprite, int a2)
     UpdateHelp(pPanel->m_nID, 13, description);
 }
 
+// NOTE: Inlined.
+void CScreenCharacter::ResetHatedRacePanel(CGameSprite* pSprite)
+{
+    m_nHatedRaceIndex = pSprite->GetNextHatedRacesSlot();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 2286
+    UTIL_ASSERT((pSprite->GetNextHatedRacesSlot() < MAX_HATED_RACES));
+
+    pSprite->GetBaseStats()->m_favoredEnemies[m_nHatedRaceIndex] = CAIObjectType::R_NO_RACE;
+    m_nTopHatedRace = 0;
+
+    UpdateHelp(16, 8, 17256);
+}
+
 // 0x5D8570
 void CScreenCharacter::ResetExportPanel(CGameSprite* pSprite)
 {
@@ -1109,6 +1124,12 @@ void CScreenCharacter::ResetClassDescriptionPanel(CGameSprite* pSprite)
         TRUE);
 }
 
+// 0x5D8B50
+void CScreenCharacter::sub_5D8B50(CGameSprite* pSprite)
+{
+    // TODO: Incomplete.
+}
+
 // 0x5D9610
 BOOL CScreenCharacter::ResetAbility(CGameSprite* pSprite, const CString& sMin, const CString& sMax, const CString& sMod, BYTE& nAbility, BYTE& nMin, BYTE& nMax, INT& nMod)
 {
@@ -1191,6 +1212,12 @@ void CScreenCharacter::ResetAbilitiesPanel(CGameSprite* pSprite, int a2)
     UpdateHelp(pPanel->m_nID, 29, 27337);
 }
 
+// 0x5D9970
+void CScreenCharacter::ResetSpellsPanel(CGameSprite* pSprite, int a2)
+{
+    // TODO: Incomplete.
+}
+
 // 0x5DA120
 void CScreenCharacter::ResetClassSelectionPanel(CUIPanel* pPanel, CGameSprite* pSprite)
 {
@@ -1210,6 +1237,12 @@ void CScreenCharacter::ResetClassSelectionPanel(CUIPanel* pPanel, CGameSprite* p
     m_nClass = 0;
 
     UpdateHelp(pPanel->m_nID, 13, 17242);
+}
+
+// 0x5DA200
+void CScreenCharacter::ResetFeatsPanel(CUIPanel* pPanel, CGameSprite* pSprite, int a3)
+{
+    // TODO: Incomplete.
 }
 
 // 0x5DA490
@@ -1237,7 +1270,7 @@ void CScreenCharacter::UpdateHatedRacePanel(CGameSprite* pSprite)
             STRREF strRace = GetRangerHatedRaceStrref(nRace);
             pButton->SetText(FetchString(strRace));
 
-            pButton->SetSelected(m_hatedRaces[nIndex] == BStats.m_favoredEnemies[field_17A0]);
+            pButton->SetSelected(m_hatedRaces[nIndex] == BStats.m_favoredEnemies[m_nHatedRaceIndex]);
             pButton->SetEnabled(!g_pBaldurChitin->GetObjectGame()->GetRuleTables().IsHatedRace(nRace, BStats) || pButton->m_bSelected);
         }
 
@@ -2735,7 +2768,78 @@ void CScreenCharacter::UpdateMiscInformation(CUIControlTextDisplay* pText, CGame
 // 0x5E0880
 void CScreenCharacter::ResetPopupPanel(DWORD dwPanelId, CGameSprite* pSprite, int a3)
 {
-    // TODO: Incomplete.
+    CUIPanel* pPanel = m_cUIManager.GetPanel(dwPanelId);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+    // __LINE__: 6473
+    UTIL_ASSERT(pPanel != NULL);
+
+    switch (pPanel->m_nID) {
+    case 4:
+    case 57:
+        break;
+    case 6:
+        ResetClassPanel(pSprite, a3);
+        break;
+    case 7:
+        ResetAbilitiesPanel(pSprite, a3);
+        break;
+    case 8:
+        ResetSpellsPanel(pSprite, a3);
+        break;
+    case 9:
+    case 10:
+    case 50:
+        ResetErrorPanel(pPanel);
+        break;
+    case 11:
+        ResetScriptPanel(pPanel);
+        break;
+    case 12:
+        ResetBiographyPanel(pSprite);
+        break;
+    case 13:
+        ResetExportPanel(pSprite);
+        break;
+    case 16:
+        // NOTE: Uninline.
+        ResetHatedRacePanel(pSprite);
+        break;
+    case 17:
+        UpdateHelp(pPanel->m_nID, 5, 11327);
+        break;
+    case 18:
+        ResetAppearancePanel(pPanel, pSprite);
+        break;
+    case 19:
+        ResetCustomPortraitsPanel(pPanel, pSprite);
+        break;
+    case 20:
+        ResetCustomSoundsPanel(pPanel, pSprite);
+        break;
+    case 51:
+        ResetCustomizeBiographyPanel(pPanel, pSprite);
+        break;
+    case 52:
+        ResetClassDescriptionPanel(pSprite);
+        break;
+    case 53:
+        sub_5D8B50(pSprite);
+        break;
+    case 54:
+        ResetClassSelectionPanel(pPanel, pSprite);
+        break;
+    case 55:
+        ResetSkillsPanel(pPanel, pSprite, a3);
+        break;
+    case 56:
+        ResetFeatsPanel(pPanel, pSprite, a3);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCharacter.cpp
+        // __LINE__: 6569
+        UTIL_ASSERT(FALSE);
+    }
 }
 
 // 0x5E0B20
@@ -4599,6 +4703,12 @@ void CScreenCharacter::ResetCustomizeBiographyPanel(CUIPanel* pPanel, CGameSprit
     pButton->SetEnabled(g_pBaldurChitin->GetTlkTable().m_override.Fetch(strBiography, strRes));
 }
 
+// 0x5F7850
+void CScreenCharacter::ResetSkillsPanel(CUIPanel* pPanel, CGameSprite* pSprite, int a3)
+{
+    // TODO: Incomplete.
+}
+
 // 0x5F89B0
 void CScreenCharacter::sub_5F89B0(CGameSprite* pSprite)
 {
@@ -5293,10 +5403,10 @@ void CUIControlButtonCharacterHatedRaceSelection::OnLButtonClick(CPoint pt)
         INT nIndex = pCharacter->m_nTopHatedRace + m_nID - 22;
 
         // NOTE: Uninline.
-        pSprite->GetBaseStats()->m_favoredEnemies[pCharacter->field_17A0] = pCharacter->GetHatedRace(nIndex);
+        pSprite->GetBaseStats()->m_favoredEnemies[pCharacter->m_nHatedRaceIndex] = pCharacter->GetHatedRace(nIndex);
 
         STRREF strHelp;
-        switch (pSprite->GetBaseStats()->m_favoredEnemies[pCharacter->field_17A0]) {
+        switch (pSprite->GetBaseStats()->m_favoredEnemies[pCharacter->m_nHatedRaceIndex]) {
         case CAIOBJECTTYPE_R_OGRE:
             strHelp = 15998;
             break;
