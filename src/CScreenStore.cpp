@@ -298,6 +298,58 @@ BOOL CScreenStore::GetCtrlKey()
     return m_bCtrlKeyDown;
 }
 
+// 0x49FC40
+BOOL CScreenStore::CheckMouseMove()
+{
+    return TRUE;
+}
+
+// 0x49FC40
+BOOL CScreenStore::CheckMouseLButton()
+{
+    return TRUE;
+}
+
+// 0x5D76C0
+void CScreenStore::OnLButtonDblClk(CPoint pt)
+{
+    m_cUIManager.OnLButtonDblClk(pt);
+}
+
+// 0x636970
+void CScreenStore::OnLButtonDown(CPoint pt)
+{
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
+    m_cUIManager.OnLButtonDown(pt);
+}
+
+// 0x6369A0
+void CScreenStore::OnLButtonUp(CPoint pt)
+{
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
+    m_cUIManager.OnLButtonUp(pt);
+}
+
+// 0x49FC40
+BOOL CScreenStore::CheckMouseRButton()
+{
+    return TRUE;
+}
+
+// 0x6369D0
+void CScreenStore::OnRButtonDown(CPoint pt)
+{
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
+    m_cUIManager.OnRButtonDown(pt);
+}
+
+// 0x636A00
+void CScreenStore::OnRButtonUp(CPoint pt)
+{
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
+    m_cUIManager.OnRButtonUp(pt);
+}
+
 // 0x6717F0
 SHORT CScreenStore::GetNumVirtualKeys()
 {
