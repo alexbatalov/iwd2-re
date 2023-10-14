@@ -86,6 +86,7 @@ public:
     /* 0050 */ BOOL CheckSystemKeyCapsLock() override;
     /* 0054 */ void SetSystemKeyCapsLock(BOOL bValue) override;
     /* 0058 */ BOOL GetCapsLockKey() override;
+    /* 0064 */ void OnMouseMove(CPoint pt) override;
     /* 00A0 */ SHORT GetNumVirtualKeys() override;
     /* 00A4 */ CKeyInfo* GetVirtualKeys() override;
     /* 00A8 */ BYTE* GetVirtualKeysFlags() override;
@@ -227,7 +228,7 @@ public:
     /* 05DA */ CVidFont m_preLoadFontRealms;
     /* 0ADA */ CVidFont m_preLoadFontStnSml;
     /* 0FDA */ CVidFont m_preLoadFontTool;
-    /* 14DA */ int field_14DA;
+    /* 14DA */ CUIControlScrollBar* field_14DA;
     /* 14DE */ DWORD field_14DE;
     /* 14E2 */ int field_14E2;
     /* 14E6 */ int field_14E6;

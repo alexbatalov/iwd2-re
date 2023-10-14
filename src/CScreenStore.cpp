@@ -117,7 +117,7 @@ CScreenStore::CScreenStore()
     m_nNumErrorButtons = 0;
     field_5D8 = 0;
     field_5D9 = 0;
-    field_14DA = 0;
+    field_14DA = NULL;
     field_14DE = 0;
     field_14E2 = 0;
     field_14E6 = 0;
@@ -576,6 +576,41 @@ void CScreenStore::OnKeyDown(SHORT nKeysFlags)
             }
         }
     }
+}
+
+// 0x6723B0
+void CScreenStore::OnMouseMove(CPoint pt)
+{
+    CUIPanel* pPanel;
+    CUIControlBase* pControl;
+    CUIControlScrollBar* pScrollBar;
+
+    // FIXME: Calls `GetPanel` with the same ID.
+    if (m_cUIManager.GetPanel(2)->m_bActive) {
+        pPanel = m_cUIManager.GetPanel(2);
+        pControl = pPanel->GetControl(11);
+
+        // NOTE: Odd condition - only checks `x`.
+        if (pControl != NULL
+            && pt.x - pPanel->m_ptOrigin.x < pControl->m_ptOrigin.x + pControl->m_size.cx) {
+            pScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(11));
+        } else {
+            pScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(12));
+        }
+        field_14DA = pScrollBar;
+        m_pCurrentScrollBar = pScrollBar;
+    } else if (m_cUIManager.GetPanel(4)->m_bActive) {
+        pPanel = m_cUIManager.GetPanel(4);
+        pControl = pPanel->GetControl(23);
+        if (pControl != NULL && pControl->IsOver(pt - pPanel->m_ptOrigin)) {
+            pScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(24));
+        } else {
+            pScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(7));
+        }
+        m_pCurrentScrollBar = pScrollBar;
+    }
+
+    m_cUIManager.OnMouseMove(pt);
 }
 
 // 0x672D50
