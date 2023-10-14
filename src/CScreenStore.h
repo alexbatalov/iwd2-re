@@ -92,6 +92,7 @@ public:
     /* 00A8 */ BYTE* GetVirtualKeysFlags() override;
     /* 00AC */ void OnKeyDown(SHORT nKeysFlags) override;
     /* 00C4 */ void TimerSynchronousUpdate() override;
+    /* 00E0 */ void OnPortraitLClick(DWORD nPortrait) override;
     /* 0104 */ void CancelEngine() override;
     /* 010C */ void UpdatePartyGoldStatus() override;
     /* 0110 */ void GetChatEditBoxStatus(CString& sChatText, BOOL& bInputCapture) override;
@@ -139,7 +140,7 @@ public:
     void UpdateSpellItems();
     void DestroySpellItems();
     void GetIdentifyItem(INT nIndex, CScreenStoreItem& cItem);
-    void UpdateIdentityItems();
+    void UpdateIdentifyItems();
     void DestroyIdentifyItems();
     void UpdateGroupCost();
     void UpdateIdentifyCost();

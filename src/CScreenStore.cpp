@@ -613,6 +613,151 @@ void CScreenStore::OnMouseMove(CPoint pt)
     m_cUIManager.OnMouseMove(pt);
 }
 
+// 0x6724D0
+void CScreenStore::OnPortraitLClick(DWORD nPortrait)
+{
+    LONG nNewCharacterId;
+    LONG nOldCharacterId;
+    CGameSprite* pNewSprite;
+    CGameSprite* pOldSprite;
+    BYTE rc;
+    CMessage* pMessage;
+
+    if (m_cUIManager.GetPanel(1)->m_bActive
+        && (IsCharacterInRange(static_cast<SHORT>(nPortrait))
+            || (m_pMainPanel->m_nID == 5
+                && !IsCharacterAlive(static_cast<SHORT>(nPortrait))))) {
+        DWORD nOldSelectedCharacter = m_nSelectedCharacter;
+        m_nSelectedCharacter = nPortrait;
+
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+            // NOTE: Uninline.
+            LONG nCharacterId = g_pBaldurChitin->GetObjectGame()->GetCharacterId(static_cast<SHORT>(nPortrait));
+
+            for (SHORT index = 0; index < CINFGAME_MAXCHARACTERS; index++) {
+                if (g_pBaldurChitin->GetObjectGame()->m_characters[index] == nCharacterId) {
+                    g_pBaldurChitin->GetBaldurMessage()->UpdateDemandCharacters(0, index, 0);
+                }
+            }
+        }
+
+        // NOTE: Uninline.
+        nNewCharacterId = g_pBaldurChitin->GetObjectGame()->GetCharacterId(static_cast<SHORT>(nPortrait));
+
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nNewCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pNewSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            // NOTE: Uninline.
+            nOldCharacterId = g_pBaldurChitin->GetObjectGame()->GetCharacterId(static_cast<SHORT>(nOldSelectedCharacter));
+
+            do {
+                rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nOldCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    reinterpret_cast<CGameObject**>(&pOldSprite),
+                    INFINITE);
+            } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+            if (rc == CGameObjectArray::SUCCESS) {
+                m_cAICustomer.Set(pNewSprite->GetAIType());
+
+                pMessage = new CMessage101(TRUE,
+                    pNewSprite->GetId(),
+                    pNewSprite->GetId(),
+                    FALSE);
+                g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+
+                pMessage = new CMessage101(FALSE,
+                    pOldSprite->GetId(),
+                    pOldSprite->GetId(),
+                    FALSE);
+                g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+
+                g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nOldCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+
+                // FIXME: Leaks share if new sprite if old not found.
+                g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nNewCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            }
+        }
+
+        if (m_pBag != NULL) {
+            CloseBag(TRUE);
+            UpdateStoreItems();
+            CheckEnablePortaits(1);
+        }
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 1040
+        UTIL_ASSERT(m_pMainPanel != NULL);
+
+        switch (m_pMainPanel->m_nID) {
+        case 2:
+            UpdateGroupItems();
+
+            // NOTE: Uninline.
+            SelectAllGroupItems(FALSE);
+
+            // NOTE: Uninline.
+            SetTopGroupItem(0);
+
+            // NOTE: Uninline.
+            UpdateGroupCost();
+
+            break;
+        case 4:
+            UpdateIdentifyItems();
+
+            // NOTE: Uninline.
+            SelectAllIdentifyItems(FALSE);
+
+            // NOTE: Uninline.
+            SetTopIdentifyItem(0);
+
+            // NOTE: Uninline.
+            UpdateIdentifyCost();
+
+            break;
+        case 5:
+            UpdateSpellItems();
+
+            // NOTE: Uninline.
+            UpdateSpellCost();
+
+            break;
+        }
+
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+            && !g_pChitin->cNetwork.GetSessionHosting()
+            && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+            pMessage = new CMessage101(TRUE,
+                m_nSelectedCharacter,
+                m_nSelectedCharacter,
+                FALSE);
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+
+            pMessage = new CMessage101(FALSE,
+                nOldSelectedCharacter,
+                nOldSelectedCharacter,
+                FALSE);
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+        }
+
+        UpdateMainPanel();
+
+        m_cUIManager.GetPanel(1)->GetControl(nOldSelectedCharacter)->InvalidateRect();
+        m_cUIManager.GetPanel(1)->GetControl(m_nSelectedCharacter)->InvalidateRect();
+        m_cUIManager.InvalidateRect(NULL);
+    }
+}
+
 // 0x672D50
 void CScreenStore::TimerSynchronousUpdate()
 {
@@ -1069,7 +1214,7 @@ void CScreenStore::ResetMainPanel()
         CheckEnablePanels(TRUE);
         break;
     case 4:
-        UpdateIdentityItems();
+        UpdateIdentifyItems();
 
         // NOTE: Uninline.
         SelectAllIdentifyItems(FALSE);
@@ -1651,7 +1796,7 @@ void CScreenStore::GetIdentifyItem(INT nIndex, CScreenStoreItem& cItem)
 }
 
 // 0x677AF0
-void CScreenStore::UpdateIdentityItems()
+void CScreenStore::UpdateIdentifyItems()
 {
     // TODO: Incomplete.
 }
