@@ -1835,7 +1835,56 @@ void CScreenStore::OnDoneButtonClick()
 // 0x67CE40
 void CScreenStore::OnCancelButtonClick()
 {
-    // TODO: Incomplete.
+    CUIPanel* pPanel = GetTopPopup();
+    if (pPanel != NULL) {
+        CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+        renderLock.Lock(INFINITE);
+
+        if (g_pBaldurChitin->m_pEngineWorld->m_bInControlOfStore
+            || m_bInCancelEngine) {
+            switch (pPanel->m_nID) {
+            case 10:
+            case 11:
+                DismissPopup();
+                break;
+            case 12:
+                field_5A4 = NULL;
+                field_5A8 = 0;
+                DismissPopup();
+                break;
+            case 14:
+                m_cResInfoSpell = CResRef("");
+                DismissPopup();
+                break;
+            case 20:
+                if (field_14E6) {
+                    // NOTE: Uninline.
+                    SelectStoreItem(field_14E2, FALSE);
+
+                    // NOTE: Uninline.
+                    UpdateStoreCost();
+                } else {
+                    // NOTE: Uninline.
+                    SelectGroupItem(field_14E2, FALSE);
+
+                    // NOTE: Uninline.
+                    UpdateGroupCost();
+                }
+
+                field_14E2 = -1;
+                field_14E6 = 1;
+                UpdateMainPanel();
+                DismissPopup();
+                break;
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+                // __LINE__: 7735
+                UTIL_ASSERT(FALSE);
+            }
+        }
+
+        renderLock.Unlock();
+    }
 }
 
 // 0x67D7B0
