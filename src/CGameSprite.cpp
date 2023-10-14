@@ -3196,6 +3196,20 @@ SHORT CGameSprite::GetHappiness()
     return m_nHappiness;
 }
 
+// 0x7245F0
+INT CGameSprite::GetNextHatedRacesSlot()
+{
+    INT nIndex;
+
+    for (nIndex = 0; nIndex < 8; nIndex++) {
+        if (m_baseStats.m_favoredEnemies[nIndex] == CAIObjectType::R_NO_RACE) {
+            break;
+        }
+    }
+
+    return nIndex;
+}
+
 // FIXME: `nClass` should not be reference.
 //
 // 0x724730

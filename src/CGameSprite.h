@@ -362,6 +362,8 @@ public:
     CGameSpriteEquipment* GetEquipment();
     SHORT GetHappiness();
 
+    INT GetNextHatedRacesSlot();
+
     // NOTE: See `CGameSpriteSpells` for explanation of the overall ugliness of
     // the following functions.
 
