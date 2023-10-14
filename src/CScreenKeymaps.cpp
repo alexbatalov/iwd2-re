@@ -755,12 +755,11 @@ void CScreenKeymaps::StartKeymaps()
     g_pBaldurChitin->GetObjectGame()->LoadKeymap();
 
     for (SHORT index = 0; index < CINFGAME_KEYMAP_SIZE; index++) {
-        // __FILE__: .\Include\InfGame.h
-        // __LINE__: 1486
-        UTIL_ASSERT(index >= 0 && index < CINFGAME_KEYMAP_SIZE);
+        // NOTE: Uninline.
+        m_pKeymap[index] = g_pBaldurChitin->GetObjectGame()->GetKeymap(index);
 
-        m_pKeymap[index] = g_pBaldurChitin->GetObjectGame()->m_pKeymap[index];
-        m_pKeymapFlags[index] = g_pBaldurChitin->GetObjectGame()->m_pKeymapFlags[index];
+        // NOTE: Uninline.
+        m_pKeymapFlags[index] = g_pBaldurChitin->GetObjectGame()->GetKeymapFlag(index);
     }
 }
 

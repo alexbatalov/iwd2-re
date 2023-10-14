@@ -334,12 +334,9 @@ void CScreenSpellbook::OnKeyDown(SHORT nKeysFlags)
             default:
                 if (GetTopPopup() == NULL) {
                     for (SHORT index = 0; index < CINFGAME_KEYMAP_SIZE; index) {
-                        // __FILE__: .\Include\InfGame.h
-                        // __LINE__: 1486
-                        UTIL_ASSERT(index >= 0 && index < CINFGAME_KEYMAP_SIZE);
-
-                        if (pGame->m_pKeymap[index] == m_pVirtualKeysFlags[nKeyFlag]
-                            && pGame->m_pKeymapFlags[index] == m_bCtrlKeyDown) {
+                        // NOTE: Uninline.
+                        if (pGame->GetKeymap(index) == m_pVirtualKeysFlags[nKeyFlag]
+                            && pGame->GetKeymapFlag(index) == m_bCtrlKeyDown) {
                             switch (index) {
                             case 0:
                                 g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(5);

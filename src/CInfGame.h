@@ -264,6 +264,9 @@ public:
 
     LONG GetFixedOrderCharacterId(SHORT nSlot);
 
+    BYTE GetKeymap(SHORT index);
+    BYTE GetKeymapFlag(SHORT index);
+
     static const CString FOGOWAR_RESREF;
     static const CString SAVE_OBJECT_LIST_NAME;
     static const CString CHAPTER_GLOBAL;

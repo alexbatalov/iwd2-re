@@ -470,8 +470,8 @@ void CScreenMultiPlayer::OnKeyDown(SHORT nKeysFlags)
                     break;
                 default:
                     for (SHORT index = 0; index < CINFGAME_KEYMAP_SIZE; index) {
-                        if (pGame->m_pKeymap[index] == m_pVirtualKeysFlags[nKeyFlag]
-                            && pGame->m_pKeymapFlags[index] == m_bCtrlKeyDown) {
+                        if (pGame->GetKeymap(index) == m_pVirtualKeysFlags[nKeyFlag]
+                            && pGame->GetKeymapFlag(index) == m_bCtrlKeyDown) {
                             switch (index) {
                             case 24:
                                 FocusChatEditBox();

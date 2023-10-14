@@ -4517,6 +4517,26 @@ CString CInfGame::GetSaveGame()
     return m_sSaveGame;
 }
 
+// NOTE: Inlined.
+BYTE CInfGame::GetKeymap(SHORT index)
+{
+    // __FILE__: .\Include\InfGame.h
+    // __LINE__: 1486
+    UTIL_ASSERT(index >= 0 && index < CINFGAME_KEYMAP_SIZE);
+
+    return m_pKeymap[index];
+}
+
+// NOTE: Inlined.
+BYTE CInfGame::GetKeymapFlag(SHORT index)
+{
+    // __FILE__: .\Include\InfGame.h
+    // __LINE__: 1487
+    UTIL_ASSERT(index >= 0 && index < CINFGAME_KEYMAP_SIZE);
+
+    return m_pKeymapFlags[index];
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
