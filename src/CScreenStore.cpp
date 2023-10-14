@@ -1139,7 +1139,94 @@ void CScreenStore::UpdateBuySpellPanel()
 // 0x675E80
 void CScreenStore::UpdateRentRoomPanel()
 {
-    // TODO: Incomplete.
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(m_pMainPanel->GetControl(13));
+
+    DWORD nInnFlags = m_pStore->m_header.m_nInnFlags;
+    DWORD nPartyGold = g_pBaldurChitin->GetObjectGame()->m_nPartyGold;
+
+    UpdateLabel(m_pMainPanel,
+        0x10000008,
+        "%s",
+        (LPCSTR)FetchString(m_pStore->m_header.m_strName));
+
+    UpdateLabel(m_pMainPanel,
+        0x10000009,
+        "%d",
+        nPartyGold);
+
+    // NOTE: Uninline.
+    UpdateLabel(m_pMainPanel, 0x1000000D, "%d", GetRoomCost());
+
+    for (INT nIndex = 0; nIndex < NUM_ROOMTYPES; nIndex++) {
+        CUIControlButtonStoreRentRoomRoomPicture* pPicture = static_cast<CUIControlButtonStoreRentRoomRoomPicture*>(m_pMainPanel->GetControl(nIndex));
+
+        BOOL bEnabled;
+        switch (nIndex) {
+        case 0:
+            bEnabled = (nInnFlags & 0x1) != 0;
+            break;
+        case 1:
+            bEnabled = (nInnFlags & 0x2) != 0;
+            break;
+        case 2:
+            bEnabled = (nInnFlags & 0x4) != 0;
+            break;
+        case 3:
+            bEnabled = (nInnFlags & 0x8) != 0;
+            break;
+        }
+
+        // NOTE: Uninline.
+        pPicture->SetSelected(pPicture->GetRoomType() == m_dwRoomType);
+
+        pPicture->SetEnabled(bEnabled);
+
+        CUIControlButtonStoreRentRoomRoomSelect* pSelect = static_cast<CUIControlButtonStoreRentRoomRoomSelect*>(m_pMainPanel->GetControl(nIndex + 4));
+
+        // NOTE: Uninline.
+        pSelect->SetSelected(pSelect->GetRoomType() == m_dwRoomType);
+
+        pSelect->SetEnabled(bEnabled);
+    }
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(m_pMainPanel->GetControl(12));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 3184
+    UTIL_ASSERT(pText != NULL);
+
+    switch (m_dwRoomType) {
+    case ROOMTYPE_NONE:
+        break;
+    case ROOMTYPE_PEASANT:
+        pText->RemoveAll();
+        UpdateText(pText, "%s", (LPCSTR)FetchString(17389));
+        break;
+    case ROOMTYPE_MERCHANT:
+        pText->RemoveAll();
+        UpdateText(pText, "%s", (LPCSTR)FetchString(17517));
+        break;
+    case ROOMTYPE_NOBLE:
+        pText->RemoveAll();
+        UpdateText(pText, "%s", (LPCSTR)FetchString(17521));
+        break;
+    case ROOMTYPE_ROYAL:
+        pText->RemoveAll();
+        UpdateText(pText, "%s", (LPCSTR)FetchString(17519));
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 3211
+        UTIL_ASSERT(FALSE);
+    }
+
+    CUIControlButton* pRent = static_cast<CUIControlButton*>(m_pMainPanel->GetControl(11));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 3218
+    UTIL_ASSERT(pRent != NULL);
+
+    pRent->SetEnabled(m_dwRoomType != ROOMTYPE_NONE);
 }
 
 // 0x676300
@@ -1650,28 +1737,8 @@ void CScreenStore::OnRentRoomButtonClick()
 
     DWORD nPartyGold = pGame->m_nPartyGold;
 
-    DWORD nCost;
-    switch (m_dwRoomType) {
-    case 0:
-        nCost = 0;
-        break;
-    case 1:
-        nCost = m_pStore->m_header.m_nRoomCostPeasant;
-        break;
-    case 2:
-        nCost = m_pStore->m_header.m_nRoomCostMerchant;
-        break;
-    case 3:
-        nCost = m_pStore->m_header.m_nRoomCostNoble;
-        break;
-    case 4:
-        nCost = m_pStore->m_header.m_nRoomCostRoyal;
-        break;
-    default:
-        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
-        // __LINE__: 8602
-        UTIL_ASSERT(FALSE);
-    }
+    // NOTE: Uninline.
+    DWORD nCost = GetRoomCost();
 
     CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
     renderLock.Lock(INFINITE);
@@ -1884,6 +1951,36 @@ BOOL CScreenStore::IsCharacterInRange(SHORT nPortraitNum)
     // TODO: Incomplete.
 
     return FALSE;
+}
+
+// NOTE: Inlined.
+DWORD CScreenStore::GetRoomCost()
+{
+    DWORD dwCost;
+
+    switch (m_dwRoomType) {
+    case ROOMTYPE_NONE:
+        dwCost = 0;
+        break;
+    case ROOMTYPE_PEASANT:
+        dwCost = m_pStore->m_header.m_nRoomCostPeasant;
+        break;
+    case ROOMTYPE_MERCHANT:
+        dwCost = m_pStore->m_header.m_nRoomCostMerchant;
+        break;
+    case ROOMTYPE_NOBLE:
+        dwCost = m_pStore->m_header.m_nRoomCostNoble;
+        break;
+    case ROOMTYPE_ROYAL:
+        dwCost = m_pStore->m_header.m_nRoomCostRoyal;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 8602
+        UTIL_ASSERT(FALSE);
+    }
+
+    return dwCost;
 }
 
 // 0x67DD30
@@ -3729,28 +3826,37 @@ void CUIControlButtonStoreRentRoomRoomSelect::OnLButtonClick(CPoint pt)
     // __LINE__: 12503
     UTIL_ASSERT(pStore != NULL);
 
+    // NOTE: Uninline.
+    pStore->m_dwRoomType = GetRoomType();
+
+    pStore->UpdateMainPanel();
+}
+
+// NOTE: Inlined.
+DWORD CUIControlButtonStoreRentRoomRoomSelect::GetRoomType()
+{
+    DWORD dwRoomType;
+
     switch (m_nID) {
     case 4:
-        pStore->m_dwRoomType = 1;
-        pStore->UpdateMainPanel();
+        dwRoomType = 1;
         break;
     case 5:
-        pStore->m_dwRoomType = 2;
-        pStore->UpdateMainPanel();
+        dwRoomType = 2;
         break;
     case 6:
-        pStore->m_dwRoomType = 3;
-        pStore->UpdateMainPanel();
+        dwRoomType = 3;
         break;
     case 7:
-        pStore->m_dwRoomType = 4;
-        pStore->UpdateMainPanel();
+        dwRoomType = 4;
         break;
     default:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
         // __LINE__: 12472
         UTIL_ASSERT(FALSE);
     }
+
+    return dwRoomType;
 }
 
 // -----------------------------------------------------------------------------
@@ -3779,28 +3885,37 @@ void CUIControlButtonStoreRentRoomRoomPicture::OnLButtonClick(CPoint pt)
     // __LINE__: 12612
     UTIL_ASSERT(pStore != NULL);
 
+    // NOTE: Uninline.
+    pStore->m_dwRoomType = GetRoomType();
+
+    pStore->UpdateMainPanel();
+}
+
+// NOTE: Inlined.
+DWORD CUIControlButtonStoreRentRoomRoomPicture::GetRoomType()
+{
+    DWORD dwRoomType;
+
     switch (m_nID) {
     case 0:
-        pStore->m_dwRoomType = 1;
-        pStore->UpdateMainPanel();
+        dwRoomType = 1;
         break;
     case 1:
-        pStore->m_dwRoomType = 2;
-        pStore->UpdateMainPanel();
+        dwRoomType = 2;
         break;
     case 2:
-        pStore->m_dwRoomType = 3;
-        pStore->UpdateMainPanel();
+        dwRoomType = 3;
         break;
     case 3:
-        pStore->m_dwRoomType = 4;
-        pStore->UpdateMainPanel();
+        dwRoomType = 4;
         break;
     default:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
         // __LINE__: 12581
         UTIL_ASSERT(FALSE);
     }
+
+    return dwRoomType;
 }
 
 // -----------------------------------------------------------------------------

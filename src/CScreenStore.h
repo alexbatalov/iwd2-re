@@ -159,6 +159,7 @@ public:
     SHORT GetPanelButtonSequence(INT nButtonIndex);
     STRREF GetPanelButtonToolTip(INT nButtonIndex);
     BOOL IsCharacterInRange(SHORT nPortraitNum);
+    DWORD GetRoomCost();
     void OnErrorButtonClick(INT nButton);
     void RestParty();
     BOOL IsCharacterViewable(SHORT nPortraitNum);
@@ -383,6 +384,8 @@ public:
     CUIControlButtonStoreRentRoomRoomSelect(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonStoreRentRoomRoomSelect() override;
     void OnLButtonClick(CPoint pt) override;
+
+    DWORD GetRoomType();
 };
 
 class CUIControlButtonStoreRentRoomRoomPicture : public CUIControlButton3State {
@@ -390,6 +393,8 @@ public:
     CUIControlButtonStoreRentRoomRoomPicture(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonStoreRentRoomRoomPicture() override;
     void OnLButtonClick(CPoint pt) override;
+
+    DWORD GetRoomType();
 };
 
 class CUIControlButtonStoreRentRoomRent : public CUIControlButton {
