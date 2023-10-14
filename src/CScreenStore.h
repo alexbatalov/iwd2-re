@@ -207,6 +207,7 @@ public:
     /* 04FC */ DWORD m_dwIdentifyCost;
     /* 0500 */ DWORD m_dwRoomType;
     /* 0540 */ CAIObjectType m_cAICustomer;
+    /* 057C */ int field_57C;
     /* 0580 */ int field_580;
     /* 0584 */ int field_584;
     /* 0588 */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
@@ -220,9 +221,12 @@ public:
     /* 05C4 */ STRREF m_strErrorText;
     /* 05C8 */ INT m_nNumErrorButtons;
     /* 05CC */ STRREF m_strErrorButtonText[CSCREENSTORE_ERROR_BUTTONS];
+    /* 05D8 */ unsigned char field_5D8;
+    /* 05D9 */ unsigned char field_5D9;
     /* 05DA */ CVidFont m_preLoadFontRealms;
     /* 0ADA */ CVidFont m_preLoadFontStnSml;
     /* 0FDA */ CVidFont m_preLoadFontTool;
+    /* 14DA */ int field_14DA;
     /* 14DE */ DWORD field_14DE;
     /* 14E2 */ int field_14E2;
     /* 14E6 */ int field_14E6;
