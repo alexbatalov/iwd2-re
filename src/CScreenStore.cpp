@@ -481,6 +481,103 @@ void CScreenStore::EngineGameUninit()
     m_cUIManager.fUninit();
 }
 
+// 0x671FC0
+void CScreenStore::OnKeyDown(SHORT nKeysFlags)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 661
+    UTIL_ASSERT(pGame != NULL);
+
+    for (SHORT nKeyFlag = 0; nKeyFlag < nKeysFlags; nKeyFlag++) {
+        if (!m_cUIManager.OnKeyDown(m_pVirtualKeysFlags[nKeyFlag])) {
+            switch (m_pVirtualKeysFlags[nKeyFlag]) {
+            case VK_TAB:
+                m_cUIManager.ForceToolTip();
+                break;
+            case 13:
+                if (GetTopPopup() == NULL) {
+                    if (g_pBaldurChitin->m_pEngineWorld->m_bInControlOfStore) {
+                        if (m_pStore->GetType() == 4) {
+                            SelectEngine(g_pBaldurChitin->m_pEngineInventory);
+                        } else {
+                            SelectEngine(g_pBaldurChitin->m_pEngineWorld);
+                        }
+
+                        StopStore();
+                    }
+                } else {
+                    OnDoneButtonClick();
+                }
+                break;
+            case VK_ESCAPE:
+                if (GetTopPopup() == NULL) {
+                    if (g_pBaldurChitin->m_pEngineWorld->m_bInControlOfStore) {
+                        SelectEngine(g_pBaldurChitin->m_pEngineWorld);
+                        StopStore();
+                    }
+                } else {
+                    OnCancelButtonClick();
+                }
+                break;
+            case VK_SNAPSHOT:
+                g_pBaldurChitin->GetCurrentVideoMode()->PrintScreen();
+                break;
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+                if (GetTopPopup() == NULL) {
+                    OnPortraitLClick(m_pVirtualKeysFlags[nKeyFlag] - '1');
+                }
+                break;
+            case VK_ADD:
+                if (GetTopPopup() != NULL
+                    && GetTopPopup()->m_nID == 20) {
+                    CScreenStoreItem cItem;
+                    if (field_14E6) {
+                        GetStoreItem(field_14E2, cItem);
+                    } else {
+                        GetGroupItem(field_14E2, cItem);
+                    }
+
+                    if (field_14DE < cItem.m_nMaxCount) {
+                        field_14DE += 1;
+                        UpdateRequesterPanel();
+                    }
+                }
+                break;
+            case VK_SUBTRACT:
+                if (GetTopPopup() != NULL
+                    && GetTopPopup()->m_nID == 20) {
+                    // NOTE: Signed compare.
+                    if (static_cast<int>(field_14DE) > 0) {
+                        field_14DE -= 1;
+                        UpdateRequesterPanel();
+                    }
+                }
+                break;
+            default:
+                for (SHORT index = 0; index < CINFGAME_KEYMAP_SIZE; index) {
+                    if (pGame->GetKeymap(index) == m_pVirtualKeysFlags[nKeyFlag]
+                        && pGame->GetKeymapFlag(index) == m_bCtrlKeyDown) {
+                        switch (index) {
+                        case 24:
+                            FocusChatEditBox();
+                            break;
+                        }
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+    }
+}
+
 // 0x672D50
 void CScreenStore::TimerSynchronousUpdate()
 {
