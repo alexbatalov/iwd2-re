@@ -803,7 +803,48 @@ void CScreenMap::ResetErrorPanel(CUIPanel* pPanel)
 // 0x641F10
 void CScreenMap::ResetAreaNotePanel(CUIPanel* pPanel)
 {
-    // TODO: Incomplete.
+    CUIControlButton* pButton;
+
+    pButton = static_cast<CUIControlButton*>(pPanel->GetControl(0));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+    // __LINE__: 1610
+    UTIL_ASSERT(pButton != NULL);
+
+    pButton->SetText(FetchString(11973));
+
+    pButton = static_cast<CUIControlButton*>(pPanel->GetControl(2));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+    // __LINE__: 1614
+    UTIL_ASSERT(pButton != NULL);
+
+    pButton->SetText(FetchString(13727));
+
+    pButton = static_cast<CUIControlButton*>(pPanel->GetControl(3));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+    // __LINE__: 1618
+    UTIL_ASSERT(pButton != NULL);
+
+    pButton->SetText(FetchString(13957));
+
+    CGameArea* pArea = static_cast<CUIControlButtonMapAreaMap*>(GetManager()->GetPanel(2)->GetControl(2))->m_pArea;
+    CUIControlButtonMapNote* pNoteControl = static_cast<CUIControlButtonMapNote*>(GetManager()->GetPanel(2)->GetControl(pArea->m_cGameAreaNotes.field_74));
+
+    SHORT nSequence;
+    if (pNoteControl != NULL) {
+        nSequence = pNoteControl->m_cVidCell.m_nCurrentSequence;
+    } else {
+        nSequence = 0;
+    }
+
+    for (DWORD nButtonID = 4; nButtonID < 12; nButtonID++) {
+        CUIControlButtonMapNoteFlagChoice* pButton = static_cast<CUIControlButtonMapNoteFlagChoice*>(pPanel->GetControl(nButtonID));
+        pButton->SetSelected(nButtonID - 4 == nSequence);
+    }
+
+    static_cast<CUIControlButtonMapAreaMap*>(GetManager()->GetPanel(2)->GetControl(2))->m_pArea->m_cGameAreaNotes.field_8D = min(static_cast<BYTE>(nSequence), 7);
 }
 
 // 0x642130
