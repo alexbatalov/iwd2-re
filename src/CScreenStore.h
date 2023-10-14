@@ -179,6 +179,9 @@ public:
     void SelectAllStoreItems(BOOL bSelected);
     void SelectAllSpellItems(BOOL bSelected);
 
+    void SetGroupItemCount(INT nIndex, DWORD nCount);
+    void SetStoreItemCount(INT nIndex, DWORD nCount);
+
     // Seen in `CUIControlButtonStoreGroupItem::OnLButtonClick` assertion.
     CStore* GetBag() { return m_pBag; }
 

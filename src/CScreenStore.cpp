@@ -1778,7 +1778,58 @@ void CScreenStore::OnBuyDrinkButtonClick(INT nButton)
 // 0x67CBD0
 void CScreenStore::OnDoneButtonClick()
 {
-    // TODO: Incomplete.
+    CUIPanel* pPanel = GetTopPopup();
+    if (pPanel != NULL) {
+        if (pPanel->m_nID == 10 || pPanel->m_nID == 11) {
+            OnErrorButtonClick(0);
+        } else {
+            CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+            renderLock.Lock(INFINITE);
+
+            switch (pPanel->m_nID) {
+            case 12:
+                field_5A4 = 0;
+                field_5A8 = 0;
+                break;
+            case 14:
+                m_cResInfoSpell = CResRef("");
+                break;
+            case 20:
+                if (field_14E6) {
+                    // NOTE: Uninline.
+                    SelectStoreItem(field_14E2, TRUE);
+
+                    // NOTE: Uninline.
+                    SetStoreItemCount(field_14E2, field_14DE);
+
+                    // NOTE: Uninline.
+                    UpdateStoreCost();
+                } else {
+                    // NOTE: Uninline.
+                    SelectGroupItem(field_14E2, TRUE);
+
+                    // NOTE: Uninline.
+                    SetStoreItemCount(field_14E2, field_14DE);
+
+                    // NOTE: Uninline.
+                    UpdateGroupCost();
+                }
+
+                field_14E2 = -1;
+                field_14E6 = 1;
+                UpdateMainPanel();
+                break;
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+                // __LINE__: 7642
+                UTIL_ASSERT(FALSE);
+            }
+
+            DismissPopup();
+
+            renderLock.Unlock();
+        }
+    }
 }
 
 // 0x67CE40
@@ -2378,6 +2429,26 @@ void CScreenStore::SelectAllSpellItems(BOOL bSelected)
     while (pos != NULL) {
         CScreenStoreItem* pItem = m_lSpellItems.GetNext(pos);
         pItem->m_bSelected = bSelected;
+    }
+}
+
+// NOTE: Inlined.
+void CScreenStore::SetGroupItemCount(INT nIndex, DWORD nCount)
+{
+    if (nIndex >= 0 && nIndex < m_lGroupItems.GetCount()) {
+        CScreenStoreItem* pItem = m_lGroupItems.GetAt(m_lGroupItems.FindIndex(nIndex));
+        pItem->m_nCount = min(nCount, pItem->m_nMaxCount);
+        pItem->m_nValue = pItem->m_nCount * pItem->m_nSingleValue;
+    }
+}
+
+// NOTE: Inlined.
+void CScreenStore::SetStoreItemCount(INT nIndex, DWORD nCount)
+{
+    if (nIndex >= 0 && nIndex < m_lStoreItems.GetCount()) {
+        CScreenStoreItem* pItem = m_lStoreItems.GetAt(m_lStoreItems.FindIndex(nIndex));
+        pItem->m_nCount = min(nCount, pItem->m_nMaxCount);
+        pItem->m_nValue = pItem->m_nCount * pItem->m_nSingleValue;
     }
 }
 
