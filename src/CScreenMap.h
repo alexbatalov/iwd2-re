@@ -108,6 +108,7 @@ public:
 
     /* 071A */ CGameArea* m_pArea;
     /* 071E */ BOOLEAN field_71E;
+    /* 075A */ BYTE field_75A;
     /* 07B8 */ DWORD m_nLastNoteID;
 };
 

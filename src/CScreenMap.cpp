@@ -469,7 +469,81 @@ void CScreenMap::OnRButtonUp(CPoint pt)
 // 0x640ED0
 void CScreenMap::OnPortraitLClick(DWORD nPortrait)
 {
-    // TODO: Incomplete.
+    CGameSprite* pOldSprite;
+    CGameSprite* pSelectedSprite;
+    LONG iOldSprite;
+    LONG iSelectedSprite;
+    BYTE rc;
+
+    // NOTE: Unsigned compare.
+    if (nPortrait < static_cast<DWORD>(g_pBaldurChitin->GetObjectGame()->GetNumCharacters())) {
+        DWORD nOldSelectedCharacter = m_nSelectedCharacter;
+        m_nSelectedCharacter = nPortrait;
+
+        CUIPanel* pPanel = m_cUIManager.GetPanel(2);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+        // __LINE__: 862
+        UTIL_ASSERT(pPanel != NULL);
+
+        CUIControlButtonMapAreaMap* pMapControl = static_cast<CUIControlButtonMapAreaMap*>(pPanel->GetControl(2));
+
+        // NOTE: Uninline.
+        iOldSprite = g_pBaldurChitin->GetObjectGame()->GetCharacterId(static_cast<SHORT>(nOldSelectedCharacter));
+
+        if (iOldSprite != CGameObjectArray::INVALID_INDEX) {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(iOldSprite,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pOldSprite),
+                INFINITE);
+            if (rc != CGameObjectArray::SUCCESS) {
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+                // __LINE__: 873
+                UTIL_ASSERT(FALSE);
+            }
+        }
+
+        // NOTE: Uninline.
+        iSelectedSprite = g_pBaldurChitin->GetObjectGame()->GetCharacterId(static_cast<SHORT>(m_nSelectedCharacter));
+
+        if (iSelectedSprite != CGameObjectArray::INVALID_INDEX) {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(iSelectedSprite,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSelectedSprite),
+                INFINITE);
+            if (rc != CGameObjectArray::SUCCESS) {
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+                // __LINE__: 881
+                UTIL_ASSERT(FALSE);
+            }
+        }
+
+        if (pMapControl->m_bActive || pMapControl->m_bInactiveRender) {
+            pMapControl->field_75A = CUIManager::RENDER_COUNT;
+        }
+
+        if (iOldSprite == CGameObjectArray::INVALID_INDEX
+            || pOldSprite->GetArea() != pSelectedSprite->GetArea()) {
+            UpdateMainPanel();
+            pPanel->InvalidateRect(NULL);
+        }
+
+        if (iOldSprite != CGameObjectArray::INVALID_INDEX) {
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(iOldSprite,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(iSelectedSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+
+        if (iOldSprite != CGameObjectArray::INVALID_INDEX) {
+            m_cUIManager.GetPanel(1)->GetControl(nOldSelectedCharacter)->InvalidateRect();
+        }
+
+        m_cUIManager.GetPanel(1)->GetControl(m_nSelectedCharacter)->InvalidateRect();
+    }
 }
 
 // 0x641130
