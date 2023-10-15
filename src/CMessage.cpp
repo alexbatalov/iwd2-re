@@ -283,6 +283,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_WEAPON_IMMUNITIES_UPDATE = 102;
 // 0x84CF3E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_103 = 103;
 
+// 0x84CF49
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_AREA_EXPLORED = 114;
+
 // 0x84CF51
 const BYTE CBaldurMessage::MSG_TYPE_DIALOG = 68;
 
@@ -12032,5 +12035,87 @@ void CMessage103::Run()
         UTIL_ASSERT(m_nCharacterPortraitSlotNumber >= -1 && m_nCharacterPortraitSlotNumber < CMultiplayerSettings::MAX_CHARACTERS);
 
         pGame->GetMultiplayerSettings()->sub_518580(m_idPlayer, m_nCharacterPortraitSlotNumber);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F6E00
+CMessageSetAreaExplored::CMessageSetAreaExplored(BOOLEAN bExplored, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_bExplored = bExplored;
+}
+
+// 0x453510
+SHORT CMessageSetAreaExplored::GetCommType()
+{
+    return BROADCAST;
+}
+
+// 0x40A0E0
+BYTE CMessageSetAreaExplored::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4536A0
+BYTE CMessageSetAreaExplored::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_AREA_EXPLORED;
+}
+
+// 0x516420
+void CMessageSetAreaExplored::MarshalMessage(BYTE** pData, DWORD* dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 31807
+    UTIL_ASSERT(pData != NULL && dwSize != NULL);
+
+    *dwSize = sizeof(BOOLEAN);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 31812
+    UTIL_ASSERT(*dwSize <= STATICBUFFERSIZE);
+
+    DWORD cnt = 0;
+
+    *reinterpret_cast<BOOLEAN*>(*pData + cnt) = m_bExplored;
+    cnt += sizeof(BOOLEAN);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 31820
+    UTIL_ASSERT(cnt == *dwSize);
+}
+
+// 0x5164B0
+BOOL CMessageSetAreaExplored::UnmarshalMessage(BYTE* pData, DWORD dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 31844
+    UTIL_ASSERT(pData != NULL);
+
+    DWORD cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    m_bExplored = *reinterpret_cast<BOOLEAN*>(pData + cnt);
+    cnt += sizeof(BOOLEAN);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 31851
+    UTIL_ASSERT(cnt == dwSize);
+
+    return TRUE;
+}
+
+// 0x516510
+void CMessageSetAreaExplored::Run()
+{
+    CGameArea* pArea = g_pBaldurChitin->GetObjectGame()->GetVisibleArea();
+    if (pArea != NULL) {
+        if (m_bExplored) {
+            pArea->m_visibility.SetAreaExplored();
+        } else {
+            pArea->m_visibility.SetAreaUnexplored();
+        }
     }
 }
