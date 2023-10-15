@@ -3,6 +3,8 @@
 
 #include "mfc.h"
 
+class CGameArea;
+
 class CSearchBitmap {
 public:
     static const BYTE COST_BASE_MELEE;
@@ -19,8 +21,11 @@ public:
     void AddDoor(CPoint* pPoints, USHORT nPoints, BOOL bOpaque);
     void RemoveDoor(CPoint* pPoints, USHORT nPoints);
 
+    CGameArea* GetArea() { return m_pArea; }
+
     /* 00BA */ BYTE* m_pDynamicCost;
     /* 00E6 */ CSize m_GridSquareDimensions;
+    /* 00EE */ CGameArea* m_pArea;
 };
 
 class CSearchRequest {

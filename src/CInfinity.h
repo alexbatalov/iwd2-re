@@ -163,6 +163,8 @@ public:
     void SetDuskMultiHost(BYTE nIntensity);
     CPoint GetScreenCoordinates(const CPoint& ptWorld);
 
+    void UpdateListenPosition() { m_updateListenPosition = TRUE; }
+
     /* 0000 */ CInfTileSet* pTileSets[5];
     /* 0014 */ CResWED* pResWED;
     /* 0018 */ CVRamPool* pVRPool;
