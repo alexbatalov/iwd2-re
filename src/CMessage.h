@@ -97,6 +97,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_WEAPON_IMMUNITIES_UPDATE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_101;
     static const BYTE MSG_SUBTYPE_CMESSAGE_103;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_SET_AREA_TYPE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_AREA_EXPLORED;
 
     static const BYTE MSG_TYPE_DIALOG;
@@ -1280,6 +1281,19 @@ public:
     /* 000C */ BOOLEAN field_C;
     /* 000E */ PLAYER_ID m_idPlayer;
     /* 0012 */ INT m_nCharacterPortraitSlotNumber;
+};
+
+class CMessageSetAreaType : public CMessage {
+public:
+    CMessageSetAreaType(WORD areaType, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ WORD m_areaType;
 };
 
 class CMessageSetAreaExplored : public CMessage {

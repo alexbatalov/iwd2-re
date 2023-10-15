@@ -283,6 +283,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_WEAPON_IMMUNITIES_UPDATE = 102;
 // 0x84CF3E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_103 = 103;
 
+// 0x84CF44
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_AREA_TYPE = 109;
+
 // 0x84CF49
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_AREA_EXPLORED = 114;
 
@@ -12035,6 +12038,124 @@ void CMessage103::Run()
         UTIL_ASSERT(m_nCharacterPortraitSlotNumber >= -1 && m_nCharacterPortraitSlotNumber < CMultiplayerSettings::MAX_CHARACTERS);
 
         pGame->GetMultiplayerSettings()->sub_518580(m_idPlayer, m_nCharacterPortraitSlotNumber);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4536B0
+CMessageSetAreaType::CMessageSetAreaType(WORD areaType, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_areaType = areaType;
+}
+
+// 0x4536E0
+SHORT CMessageSetAreaType::GetCommType()
+{
+    return BROADCAST_FORCED_OTHERS;
+}
+
+// 0x40A0E0
+BYTE CMessageSetAreaType::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4536F0
+BYTE CMessageSetAreaType::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_AREA_TYPE;
+}
+
+// 0x515F60
+void CMessageSetAreaType::MarshalMessage(BYTE** pData, DWORD* dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 31544
+    UTIL_ASSERT(pData != NULL && dwSize != NULL);
+
+    CGameObject* pObject;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        CGameArea* pArea = pObject->GetArea();
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+
+        *dwSize = sizeof(WORD);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+        // __LINE__: 31563
+        UTIL_ASSERT(*dwSize <= STATICBUFFERSIZE);
+
+        DWORD cnt = 0;
+
+        // NOTE: Unclear why it obtains `areaType` from target's area instead of
+        // using `m_areaType` which is set in constructor.
+        *reinterpret_cast<WORD*>(*pData + cnt) = pArea->m_header.m_areaType;
+        cnt += sizeof(WORD);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+        // __LINE__: 31570
+        UTIL_ASSERT(cnt == *dwSize);
+    } else {
+        *dwSize = 0;
+    }
+}
+
+// 0x516080
+BOOL CMessageSetAreaType::UnmarshalMessage(BYTE* pData, DWORD dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 31594
+    UTIL_ASSERT(pData != NULL);
+
+    DWORD cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    m_areaType = *reinterpret_cast<WORD*>(pData + cnt);
+    cnt += sizeof(WORD);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 31601
+    UTIL_ASSERT(cnt == dwSize);
+
+    return TRUE;
+}
+
+// 0x5160E0
+void CMessageSetAreaType::Run()
+{
+    CGameObject* pObject;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        CGameArea* pArea = pObject->GetArea();
+        if (pArea != NULL) {
+            pArea->m_header.m_areaType = m_areaType;
+            g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->GetInfinity()->m_areaType = m_areaType;
+            g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->m_header.m_areaType = m_areaType;
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
     }
 }
 
