@@ -3125,6 +3125,12 @@ void CGameSprite::DisplaySkills(CUIControlTextDisplay* pText)
     }
 }
 
+// 0x766380
+void CGameSprite::MoveOntoArea(CGameArea* pArea, const CPoint& dest, SHORT facingDirection)
+{
+    // TODO: Incomplete.
+}
+
 // 0x42FDC0
 void CGameSprite::SetResRef(const CResRef& resRef)
 {

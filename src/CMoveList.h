@@ -5,6 +5,8 @@
 
 #include "CResRef.h"
 
+class CGameArea;
+
 class CMoveListEntry {
 public:
     CMoveListEntry();
@@ -21,6 +23,7 @@ public:
     CMoveList();
     ~CMoveList() override;
     void ClearAll();
+    void CheckLoad(CGameArea* pArea);
 };
 
 #endif /* CMOVELIST_H_ */

@@ -348,6 +348,7 @@ public:
     INT GetMulticlassingPenalty();
     void DisplayFeats(CUIControlTextDisplay* pText);
     void DisplaySkills(CUIControlTextDisplay* pText);
+    void MoveOntoArea(CGameArea* pArea, const CPoint& dest, SHORT facingDirection);
 
     void SetResRef(const CResRef& resRef);
     CCreatureFileHeader* GetBaseStats();

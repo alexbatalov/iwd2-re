@@ -1,6 +1,10 @@
 #include "CMoveList.h"
 
+#include "CBaldurChitin.h"
+#include "CGameArea.h"
 #include "CGameObjectArray.h"
+#include "CGameSprite.h"
+#include "CInfGame.h"
 
 // 0x5170A0
 CMoveListEntry::CMoveListEntry()
@@ -33,4 +37,34 @@ void CMoveList::ClearAll()
         delete pEntry;
     }
     RemoveAll();
+}
+
+// 0x517210
+void CMoveList::CheckLoad(CGameArea* pArea)
+{
+    CResRef areaResRef = pArea->m_resRef;
+
+    POSITION pos = GetHeadPosition();
+    while (pos != NULL) {
+        CMoveListEntry* pNode = GetNext(pos);
+        if (pNode->m_areaResRef == areaResRef) {
+            CGameSprite* pSprite;
+
+            BYTE rc;
+            do {
+                rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(pNode->m_nSpriteId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    reinterpret_cast<CGameObject**>(&pSprite),
+                    INFINITE);
+            } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+            if (rc == CGameObjectArray::SUCCESS) {
+                pSprite->MoveOntoArea(pArea, pNode->m_ptDestination, pNode->m_nFacing);
+
+                g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(pNode->m_nSpriteId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            }
+        }
+    }
 }
