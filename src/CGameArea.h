@@ -13,6 +13,7 @@
 #include "FileFormat.h"
 
 class CInfGame;
+class CObjectMarker;
 class CTiledObject;
 class CVidMode;
 
@@ -175,7 +176,7 @@ public:
     /* 025E */ CVidBitmap m_bmLum;
     /* 0318 */ int field_318;
     /* 031C */ CVidBitmap m_bmHeight;
-    /* 03D6 */ int field_3D6;
+    /* 03D6 */ CObjectMarker* m_pObjectMarker;
     /* 03DA */ BYTE m_firstRender;
     /* 03DC */ CRect m_selectSquare;
     /* 03EC */ short field_3EC;

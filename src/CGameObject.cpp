@@ -352,7 +352,7 @@ void CGameObject::RemoveFromArea()
 }
 
 // 0x78E750
-void CGameObject::Render(int a1, int a2, int a3)
+void CGameObject::Render(CGameArea* pArea, CVidMode* pVidMode, int a3)
 {
 }
 

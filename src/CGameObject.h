@@ -57,7 +57,7 @@ public:
     /* 0040 */ virtual void OnActionButton(const CPoint& pt);
     /* 0044 */ virtual void OnFormationButton(const CPoint& pt);
     /* 0048 */ virtual void RemoveFromArea();
-    /* 004C */ virtual void Render(int a1, int a2, int a3);
+    /* 004C */ virtual void Render(CGameArea* pArea, CVidMode* pVidMode, int a3);
     /* 0050 */ virtual BOOLEAN DoAIUpdate(BOOLEAN active, LONG counter);
     /* 0054 */ virtual void SetAIType(const CAIObjectType& type, int a2);
     /* 0058 */ virtual void SetCursor(LONG nToolTip);

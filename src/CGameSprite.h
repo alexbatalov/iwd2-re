@@ -283,6 +283,7 @@ public:
     BOOL IsSpellSchool(BYTE spellSchool);
     void SetFootstepChannel();
     BYTE GetSound(BYTE soundID);
+    void RenderMarkers(CVidMode* pVidMode, int a2);
     void RenderPortrait(const CPoint& cpRenderPosition, const CSize& szControl, BOOL bPressed, BOOL reorderHighlight, BOOL selectFromMarker, const CRect& rClip, BOOL bDoubleSize);
     void RenderToMapScreen(const CRect& rClipBase, const CPoint& ptCharPos);
     void Unselect();
@@ -446,8 +447,9 @@ public:
     /* 5064 */ short m_nHappiness;
     /* 5066 */ CAIObjectType m_interactingWith;
     /* 50A2 */ LONG m_triggerId;
+    /* 50A6 */ BOOL m_active;
     /* 50AA */ BOOL m_activeAI;
-    /* 50AE */ int field_50AE;
+    /* 50AE */ BOOL m_activeImprisonment;
     /* 50B2 */ BOOL m_bSelected;
     /* 50B6 */ int field_50B6;
     /* 50BA */ unsigned char field_50BA;

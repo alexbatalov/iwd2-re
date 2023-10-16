@@ -22,7 +22,7 @@ CGameArea::CGameArea(BYTE id)
 {
     field_B0E = 0;
     field_24E = 0;
-    field_3D6 = 0;
+    m_pObjectMarker = NULL;
     m_firstRender = 0;
     m_dwLastProgressRenderTickCount = 0;
     m_dwLastProgressMsgTickCount = 0;

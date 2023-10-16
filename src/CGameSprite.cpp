@@ -605,7 +605,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
         m_timeOfDayVisible = timeOfDayVisible;
 
         m_activeAI = TRUE;
-        field_50AE = 1;
+        m_activeImprisonment = TRUE;
 
         memset(&m_baseStats, 0, sizeof(m_baseStats));
 
@@ -1016,6 +1016,12 @@ BYTE CGameSprite::GetSound(BYTE soundID)
     }
 
     return nSound;
+}
+
+// 0x704770
+void CGameSprite::RenderMarkers(CVidMode* pVidMode, int a2)
+{
+    // TODO: Incomplete.
 }
 
 // 0x704D40
@@ -1936,7 +1942,7 @@ BOOL CGameSprite::HandleEffects()
 
         ResetAIType();
 
-        field_50AE = 1;
+        m_activeImprisonment = TRUE;
 
         // TODO: Incomplete.
         v1 = FALSE;
