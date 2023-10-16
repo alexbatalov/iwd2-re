@@ -104,10 +104,10 @@ BOOL CGameAreaNotes::AddButton(CPoint pt)
     memcpy(pControlInfo, m_pControlInfo, sizeof(UI_CONTROL_BUTTON));
     pControlInfo->base.x = static_cast<WORD>(pt.x * m_ptButtonSize.x);
     pControlInfo->base.y = static_cast<WORD>(pt.y * m_ptButtonSize.y);
-    pControlInfo->base.nID = ++m_pMapControl->m_nLastNoteID;
+    pControlInfo->base.nID = ++m_pMapControl->m_nUserNoteId;
 
     pPanel->AddControl(&(pControlInfo->base));
-    pMapControl->sub_645610(pControlInfo->base.nID);
+    pMapControl->AddNote(pControlInfo->base.nID);
 
     CUIControlButtonMapNote* pNoteControl = static_cast<CUIControlButtonMapNote*>(pPanel->GetControl(pControlInfo->base.nID));
     pNoteControl->m_areaResRef = m_rArea;

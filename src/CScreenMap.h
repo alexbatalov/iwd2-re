@@ -7,12 +7,20 @@
 #include "CUIControlButton3State.h"
 #include "CUIControlEditMultiLine.h"
 #include "CVidFont.h"
+#include "CVidMosaic.h"
 
 #define CSCREENMAP_VIRTUAL_KEYS 90
 #define CSCREENMAP_ERROR_BUTTONS 3
 
 class CGameArea;
+class CGameSprite;
 class CUIPanel;
+class CVidInf;
+
+typedef struct MAP_CHAR_POSITIONS {
+    CPoint ptPos;
+    LONG id;
+} MAP_CHAR_POSITIONS;
 
 class CScreenMap : public CBaldurEngine {
 public:
@@ -98,18 +106,52 @@ public:
 class CUIControlButtonMapAreaMap : public CUIControlButton {
 public:
     CUIControlButtonMapAreaMap(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
-    ~CUIControlButtonMapAreaMap() override;
+    /* 0000 */ ~CUIControlButtonMapAreaMap() override;
+    /* 0014 */ void OnMouseMove(CPoint pt) override;
+    /* 0018 */ BOOL OnLButtonDown(CPoint pt) override;
+    /* 001C */ void OnLButtonUp(CPoint pt) override;
+    /* 0030 */ void TimerAsynchronousUpdate(BOOLEAN bInside) override;
+    /* 0050 */ void InvalidateRect() override;
+    /* 0058 */ BOOL Render(BOOL bForce) override;
+    /* 0064 */ BOOL NeedRender() override;
+    /* 0068 */ void OnLButtonClick(CPoint pt) override;
+    /* 0070 */ void OnRButtonClick(CPoint pt) override;
 
+    BOOLEAN sub_642C90(CGameSprite* pSprite, const CPoint& pt);
     CPoint ConvertScreenToWorldCoords(CPoint pt);
     void CenterViewPort(const CPoint& pt);
+    void SetRenderCharacter(SHORT nPortrait, WORD nVisualRange);
+    BOOL RenderCharactersOnly(const CPoint& pt);
+    void RenderCharacters(const CRect& rClip);
+    void RenderFogOfWar(CVidInf* pVidInf, const CPoint& pt, const CRect& rClip);
+    void InvalidateNotes();
+    void RenderViewRect(CVidInf* pVidInf, const CRect& r1, const CRect& r2);
     void SetMap(CGameArea* pArea);
+    void GetStartPosition(CPoint& pt);
     void SetActiveNotes(BOOL bActive);
-    void sub_645610(DWORD id);
+    void AddNote(DWORD id);
+    void RemoveNote(DWORD id);
 
+    /* 0666 */ CVidMosaic m_vmMap;
     /* 071A */ CGameArea* m_pArea;
     /* 071E */ BOOLEAN field_71E;
+    /* 071F */ BOOLEAN field_71F;
+    /* 0720 */ BOOLEAN field_720;
+    /* 0722 */ LONG field_722;
+    /* 0726 */ LONG field_726;
+    /* 072A */ CRect field_72A;
+    /* 073A */ CCriticalSection m_critSect;
     /* 075A */ BYTE field_75A;
-    /* 07B8 */ DWORD m_nLastNoteID;
+    /* 075B */ unsigned char field_75B;
+    /* 075C */ CPoint field_75C;
+    /* 0764 */ CPoint field_764;
+    /* 076C */ unsigned char field_76C;
+    /* 076E */ MAP_CHAR_POSITIONS m_charPositions[6];
+    /* 07B6 */ USHORT m_nCharInArea;
+    /* 07B8 */ DWORD m_nUserNoteId;
+    /* 07BC */ BOOLEAN field_7BC;
+    /* 07BE */ CList<DWORD> field_7BE;
+    /* 07DA */ unsigned char field_7DA;
 };
 
 class CUIControlButtonMapError : public CUIControlButton {

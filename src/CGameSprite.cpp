@@ -1024,6 +1024,12 @@ void CGameSprite::RenderPortrait(const CPoint& cpRenderPosition, const CSize& sz
     // TODO: Incomplete.
 }
 
+// 0x705AD0
+void CGameSprite::RenderToMapScreen(const CRect& rClipBase, const CPoint& ptCharPos)
+{
+    // TODO: Incomplete.
+}
+
 // 0x7060C0
 void CGameSprite::Unselect()
 {

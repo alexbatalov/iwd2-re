@@ -284,6 +284,7 @@ public:
     void SetFootstepChannel();
     BYTE GetSound(BYTE soundID);
     void RenderPortrait(const CPoint& cpRenderPosition, const CSize& szControl, BOOL bPressed, BOOL reorderHighlight, BOOL selectFromMarker, const CRect& rClip, BOOL bDoubleSize);
+    void RenderToMapScreen(const CRect& rClipBase, const CPoint& ptCharPos);
     void Unselect();
     void SetCharacterToolTip(CUIControlBase* pControl);
     void SetDirection(const CPoint& posDest);
