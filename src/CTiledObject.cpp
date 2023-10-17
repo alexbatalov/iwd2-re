@@ -16,6 +16,12 @@ CTiledObject::CTiledObject()
     m_wRenderState = 0;
 }
 
+// 0x54E830
+void CTiledObject::Initialize(CResWED* pResWed, CResRef resID, POSITION posAreaList, WORD wInitialState)
+{
+    // TODO: Incomplete.
+}
+
 // 0x54E980
 void CTiledObject::SetNewResWED(CResWED* pNewResWED)
 {

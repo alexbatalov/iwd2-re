@@ -141,6 +141,23 @@ public:
     /* 0094 */ DWORD m_notUsed[16];
 };
 
+class CAreaFileTiledObject {
+public:
+    CAreaFileTiledObject()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    /* 0000 */ SCRIPTNAME m_scriptName;
+    /* 0020 */ RESREF m_tileID;
+    /* 0028 */ DWORD m_dwFlags;
+    /* 002C */ DWORD m_primarySearchSquaresStart;
+    /* 0030 */ WORD m_primarySearchSquaresCount;
+    /* 0032 */ WORD m_secondarySearchSquaresCount;
+    /* 0034 */ DWORD m_secondarySearchSquaresStart;
+    /* 0038 */ DWORD m_notUsed[12];
+};
+
 class CAreaFileStaticObject {
 public:
     CAreaFileStaticObject()
@@ -163,6 +180,12 @@ public:
     /* 0040 */ RESREF m_paletteResRef;
     /* 0048 */ WORD m_sizeX;
     /* 004A */ WORD m_sizeY;
+};
+
+class CAreaPoint {
+public:
+    WORD m_xPos;
+    WORD m_yPos;
 };
 
 class CAreaUserNote {
