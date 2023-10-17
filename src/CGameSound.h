@@ -7,6 +7,7 @@
 
 class CGameSound : public CGameObject {
 public:
+    CGameSound(CGameArea* pArea, CAreaFileSoundObject* pSoundObject);
     /* 0000 */ ~CGameSound() override;
     /* 0048 */ void RemoveFromArea() override;
 
@@ -17,6 +18,10 @@ public:
     /* 006E */ CAreaFileSoundObject m_soundObject;
     /* 0142 */ CSound m_looping;
     /* 01A6 */ BOOL m_bLoopPlaying;
+    /* 01AA */ LONG m_period;
+    /* 01AE */ LONG m_periodCount;
+    /* 01B2 */ BYTE m_currentSound;
+    /* 01B4 */ DWORD m_timeOfDayActive;
 };
 
 #endif /* CGAMESOUND_H_ */
