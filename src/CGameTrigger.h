@@ -11,6 +11,7 @@ public:
     static const LONG RANGE_EDGE;
 
     CGameTrigger(CGameArea* pArea, CAreaFileTriggerObject* pTriggerObject, CAreaPoint* pPoints, WORD maxPts);
+    /* 0000 */ ~CGameTrigger() override;
     /* 000C */ void AIUpdate() override;
     /* 001C */ CPoint& GetPos() override;
     /* 002C */ BOOLEAN CompressTime(DWORD deltaTime) override;

@@ -139,6 +139,28 @@ CGameTrigger::CGameTrigger(CGameArea* pArea, CAreaFileTriggerObject* pTriggerObj
     }
 }
 
+// 0x4CD150
+CGameTrigger::~CGameTrigger()
+{
+    if (m_pPolygon != NULL) {
+        delete m_pPolygon;
+    }
+
+    if (field_644 != NULL) {
+        delete field_644;
+        field_644 = NULL;
+    }
+
+    // When there is only one element its an unowned pointer to `m_rBounding`.
+    if (field_630.GetCount() > 1) {
+        for (INT nIndex = 0; nIndex < field_630.GetCount(); nIndex++) {
+            delete field_630[nIndex];
+        }
+    }
+
+    field_630.SetSize(0);
+}
+
 // 0x4CD630
 void CGameTrigger::AIUpdate()
 {
