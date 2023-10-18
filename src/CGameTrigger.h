@@ -3,12 +3,14 @@
 
 #include "CGameAIBase.h"
 #include "CResRef.h"
+#include "FileFormat.h"
 
 class CGameTrigger : public CGameAIBase {
 public:
     static const LONG RANGE_TRIGGER;
     static const LONG RANGE_EDGE;
 
+    CGameTrigger(CGameArea* pArea, CAreaFileTriggerObject* pTriggerObject, CAreaPoint* pPoints, WORD maxPts);
     /* 000C */ void AIUpdate() override;
     /* 001C */ CPoint& GetPos() override;
     /* 002C */ BOOLEAN CompressTime(DWORD deltaTime) override;
@@ -19,6 +21,7 @@ public:
     /* 00B8 */ virtual BOOL IsOverActivate(const CPoint& pt);
 
     void SetDrawPoly(SHORT time);
+    void sub_481890(CRect* r, CArray<CRect*>& ary);
 
     /* 0598 */ WORD m_triggerType;
     /* 059A */ CRect m_rBounding;
@@ -29,7 +32,9 @@ public:
     /* 05DA */ STRREF m_description;
     /* 05DE */ CPoint* m_pPolygon;
     /* 05E2 */ WORD m_nPolygon;
+    /* 05E4 */ WORD m_boundingRange;
     /* 05E6 */ RESREF m_scriptRes;
+    /* 05EE */ SCRIPTNAME m_scriptName;
     /* 060E */ WORD m_trapDetectionDifficulty;
     /* 0610 */ WORD m_trapDisarmingDifficulty;
     /* 0612 */ WORD m_trapActivated;
@@ -38,6 +43,8 @@ public:
     /* 061E */ CResRef m_keyType;
     /* 0626 */ SHORT m_drawPoly;
     /* 0628 */ CPoint field_628;
+    /* 0630 */ CArray<CRect*> field_630;
+    /* 0644 */ CAreaPoint* field_644;
 };
 
 #endif /* CGAMETRIGGER_H_ */

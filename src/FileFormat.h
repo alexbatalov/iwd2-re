@@ -141,6 +141,42 @@ public:
     /* 0094 */ DWORD m_notUsed[16];
 };
 
+class CAreaFileTriggerObject {
+public:
+    CAreaFileTriggerObject()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    /* 0000 */ SCRIPTNAME m_scriptName;
+    /* 0020 */ WORD m_triggerType;
+    /* 0022 */ WORD m_boundingRectLeft;
+    /* 0024 */ WORD m_boundingRectTop;
+    /* 0026 */ WORD m_boundingRectRight;
+    /* 0028 */ WORD m_boundingRectBottom;
+    /* 002A */ WORD m_pickPointCount;
+    /* 002C */ DWORD m_pickPointStart;
+    /* 0030 */ DWORD m_triggerValue;
+    /* 0034 */ DWORD m_cursorType;
+    /* 0038 */ RESREF m_newArea;
+    /* 0040 */ SCRIPTNAME m_newEntryPoint;
+    /* 0060 */ DWORD m_dwFlags;
+    /* 0064 */ STRREF m_description;
+    /* 0068 */ WORD m_trapDetectionDifficulty;
+    /* 006A */ WORD m_trapDisarmingDifficulty;
+    /* 006C */ WORD m_trapActivated;
+    /* 006E */ WORD m_trapDetected;
+    /* 0070 */ WORD m_posXTrapOrigin;
+    /* 0072 */ WORD m_posYTrapOrigin;
+    /* 0074 */ RESREF m_keyType;
+    /* 007C */ RESREF m_script;
+    /* 0084 */ WORD m_transitionWalkToX;
+    /* 0086 */ WORD m_transitionWalkToY;
+    /* 0088 */ LONG field_88;
+    /* 008C */ LONG field_8C;
+    /* 0090 */ DWORD m_notUsed[13];
+};
+
 class CAreaFileTiledObject {
 public:
     CAreaFileTiledObject()
