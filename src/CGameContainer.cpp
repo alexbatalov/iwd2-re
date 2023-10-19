@@ -1,17 +1,244 @@
 #include "CGameContainer.h"
 
+#include "CAIScript.h"
 #include "CBaldurChitin.h"
 #include "CGameArea.h"
 #include "CInfGame.h"
 #include "CItem.h"
+#include "CPathSearch.h"
 #include "CResRef.h"
 #include "CScreenWorld.h"
 #include "CUtil.h"
 
+// 0x8D3988
+const CResRef CGameContainer::RESREF_AR6051("AR6051");
+
+// 0x47BFA0
+CGameContainer::CGameContainer(CGameArea* pArea, CAreaFileContainer* pContainerObject, CAreaPoint* pPoints, WORD maxPts, CCreatureFileItem* pItems, DWORD maxItems)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameContainer.cpp
+    // __LINE__: 113
+    UTIL_ASSERT(pArea != NULL && pContainerObject != NULL && pPoints != NULL && pContainerObject->m_pickPointStart + pContainerObject->m_pickPointCount <= maxPts);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameContainer.cpp
+    // __LINE__: 114
+    UTIL_ASSERT(pItems != NULL && pContainerObject->m_startingItem + pContainerObject->m_itemCount <= maxItems);
+
+    // FIXME: Probably should reuse `RESREF_AR6051`.
+    //
+    // 0x8D3998
+    static CResRef stru_8D3998("AR6051");
+
+    BOOL bIsAR6051 = FALSE;
+    if (pArea->m_resRef == stru_8D3998) {
+        bIsAR6051 = TRUE;
+    }
+
+    m_objectType = TYPE_CONTAINER;
+
+    if (pContainerObject->m_containerType == 4
+        && pContainerObject->m_boundingRectLeft == 0
+        && pContainerObject->m_boundingRectTop == 0
+        && pContainerObject->m_boundingRectRight == 0
+        && pContainerObject->m_boundingRectBottom == 0) {
+        pContainerObject->m_boundingRectLeft = CPathSearch::GRID_SQUARE_SIZEX * (pContainerObject->m_posX / CPathSearch::GRID_SQUARE_SIZEX);
+        pContainerObject->m_boundingRectRight = CPathSearch::GRID_SQUARE_SIZEX * (pContainerObject->m_posX / (CPathSearch::GRID_SQUARE_SIZEX + 1)) - 1;
+        pContainerObject->m_boundingRectTop = CPathSearch::GRID_SQUARE_SIZEY * (pContainerObject->m_posY / CPathSearch::GRID_SQUARE_SIZEY);
+        pContainerObject->m_boundingRectBottom = CPathSearch::GRID_SQUARE_SIZEY * (pContainerObject->m_posY / (CPathSearch::GRID_SQUARE_SIZEY + 1)) - 1;
+    }
+
+    m_rBounding.left = pContainerObject->m_boundingRectLeft;
+    m_rBounding.top = pContainerObject->m_boundingRectTop;
+    m_rBounding.right = pContainerObject->m_boundingRectRight + 1;
+    m_rBounding.bottom = pContainerObject->m_boundingRectBottom + 1;
+    m_nPolygon = pContainerObject->m_pickPointCount;
+
+    memcpy(m_scriptRes, pContainerObject->m_script, RESREF_SIZE);
+
+    strncpy(m_scriptName, pContainerObject->m_scriptName, SCRIPTNAME_SIZE);
+
+    CAIScript* pScript = new CAIScript(CResRef(pContainerObject->m_script));
+    SetScript(0, pScript);
+
+    m_lockDifficulty = pContainerObject->m_lockDifficulty;
+    m_dwFlags = pContainerObject->m_dwFlags;
+    m_trapDetectionDifficulty = pContainerObject->m_trapDetectionDifficulty;
+    m_trapRemovalDifficulty = pContainerObject->m_trapRemovalDifficulty;
+    m_trapActivated = pContainerObject->m_trapActivated;
+    m_trapDetected = pContainerObject->m_trapDetected;
+    m_posTrapOrigin.x = pContainerObject->m_posXTrapOrigin;
+    m_posTrapOrigin.y = pContainerObject->m_posYTrapOrigin;
+    m_triggerRange = pContainerObject->m_triggerRange;
+    strncpy(m_ownedBy, pContainerObject->m_ownedBy, SCRIPTNAME_SIZE);
+    m_keyType = pContainerObject->m_keyType;
+    m_breakDifficulty = pContainerObject->m_breakDifficulty;
+    m_drawPoly = 0;
+
+    if (m_nPolygon != 0) {
+        m_pPolygon = new CPoint[m_nPolygon];
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameTrigger.cpp
+        // __LINE__: 169
+        UTIL_ASSERT(FALSE);
+
+        WORD adjust = 0;
+        for (WORD cnt = 0; cnt < m_nPolygon; cnt++) {
+            m_pPolygon[cnt - adjust].x = pPoints[cnt + pContainerObject->m_pickPointStart].m_xPos;
+            m_pPolygon[cnt - adjust].y = pPoints[cnt + pContainerObject->m_pickPointStart].m_yPos;
+            if (cnt >= 2) {
+                int x2 = m_pPolygon[cnt - adjust - 2].x;
+                int y2 = m_pPolygon[cnt - adjust - 2].y;
+
+                int x1 = m_pPolygon[cnt - adjust - 1].x;
+                int y1 = m_pPolygon[cnt - adjust - 1].y;
+
+                int x0 = m_pPolygon[cnt - adjust].x;
+                int y0 = m_pPolygon[cnt - adjust].y;
+
+                if ((x2 == x1 && x1 == x0)
+                    || (y2 == y1 && y1 == y0)
+                    || (x2 != x1
+                        && x1 != x0
+                        && 1000 * (y2 - y1) / (x2 - x1) != 1000 * (y1 - y0) / (x1 - x0))) {
+                    m_pPolygon[cnt - adjust - 1] = m_pPolygon[cnt - adjust];
+                    adjust++;
+                }
+            }
+        }
+
+        m_nPolygon -= adjust;
+    } else {
+        m_pPolygon = NULL;
+    }
+
+    for (DWORD nItem = pContainerObject->m_startingItem; nItem < pContainerObject->m_startingItem + pContainerObject->m_itemCount; nItem++) {
+        CItem* pItem = new CItem(CResRef(pItems[nItem].m_itemId),
+            pItems[nItem].m_usageCount[0],
+            pItems[nItem].m_usageCount[1],
+            pItems[nItem].m_usageCount[2],
+            pItems[nItem].m_wear,
+            pItems[nItem].m_dynamicFlags);
+
+        if (pItem->cResRef != "") {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameContainer.cpp
+            // __LINE__: 225
+            m_lstItems.AddTail(pItem);
+        } else {
+            delete pItem;
+        }
+    }
+
+    m_containerType = pContainerObject->m_containerType;
+
+    if (m_containerType == 4) {
+        m_ptWalkToUse.x = (pContainerObject->m_boundingRectLeft + pContainerObject->m_boundingRectRight) / 2;
+        m_ptWalkToUse.y = (pContainerObject->m_boundingRectTop + pContainerObject->m_boundingRectBottom) / 2;
+        RefreshRenderPile();
+    } else {
+        m_ptWalkToUse.x = pContainerObject->m_posX;
+        m_ptWalkToUse.y = pContainerObject->m_posY;
+    }
+
+    m_pArea = pArea;
+
+    BYTE rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->Add(&m_id,
+        this,
+        INFINITE);
+    if (rc == CGameObjectArray::SUCCESS) {
+        m_pArea = NULL;
+
+        m_typeAI.m_nInstance = m_id;
+        AddToArea(pArea, m_ptWalkToUse, 0, LIST_BACK);
+        m_bDeleteMe = FALSE;
+
+        if (bIsAR6051 == TRUE) {
+            SHORT nSlotNum = 0;
+            POSITION pos = m_lstItems.GetHeadPosition();
+            while (pos != NULL) {
+                CItem* pItem = m_lstItems.GetNext(pos);
+                if (pItem != NULL) {
+                    sub_480480(nSlotNum, pItem);
+                }
+                nSlotNum++;
+            }
+        }
+
+        CVariable name;
+        CString sScriptName(m_scriptName);
+
+        m_typeAI.SetName(CString(m_scriptName));
+
+        sScriptName.TrimLeft();
+        if (sScriptName != "") {
+            name.SetName(CString(m_scriptName));
+            name.m_intValue = m_id;
+            pArea->GetNamedCreatures()->AddKey(name);
+        }
+
+        sub_481890(&m_rBounding, field_8D6);
+
+        field_8EA = NULL;
+
+        if (m_nPolygon != 0) {
+            field_8EA = new CAreaPoint[m_nPolygon];
+
+            for (WORD cnt = 0; cnt < m_nPolygon; cnt++) {
+                field_8EA[cnt].m_xPos = static_cast<WORD>(m_pPolygon[cnt].x);
+                field_8EA[cnt].m_yPos = static_cast<WORD>(m_pPolygon[cnt].y);
+            }
+        } else {
+            field_8EA = NULL;
+        }
+
+        field_8D2 = 0;
+    } else {
+        delete this;
+    }
+}
+
 // 0x47C890
 CGameContainer::CGameContainer(CGameArea* pArea, const CRect& rBound)
 {
-    // TODO: Incomplete.
+    m_objectType = TYPE_CONTAINER;
+    m_rBounding = rBound;
+    m_nPolygon = 0;
+    m_pPolygon = NULL;
+    m_containerType = 4;
+    m_ptWalkToUse.x = (rBound.left + rBound.right) / 2;
+    m_ptWalkToUse.y = (rBound.top + rBound.bottom) / 2;
+    m_posTrapOrigin.x = 0;
+    m_posTrapOrigin.y = 0;
+    m_nPileVidCell = 0;
+    m_lockDifficulty = 0;
+    m_dwFlags = 0;
+    m_trapDetectionDifficulty = 0;
+    m_trapRemovalDifficulty = 0;
+    m_trapActivated = 0;
+    m_trapDetected = 0;
+    m_posTrapOrigin.y = 0;
+    m_triggerRange = 0;
+    memset(m_ownedBy, 0, SCRIPTNAME_SIZE);
+    memset(m_scriptRes, 0, RESREF_SIZE);
+    memset(m_scriptName, 0, SCRIPTNAME_SIZE);
+    m_keyType = "";
+    m_breakDifficulty = 0;
+    m_drawPoly = 0;
+
+    m_pArea = pArea;
+
+    BYTE rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->Add(&m_id,
+        this,
+        INFINITE);
+    if (rc == CGameObjectArray::SUCCESS) {
+        m_pArea = NULL;
+
+        AddToArea(pArea, m_ptWalkToUse, 0, LIST_BACK);
+        m_bDeleteMe = FALSE;
+        field_8EA = NULL;
+        field_8D2 = 0;
+    } else {
+        delete this;
+    }
 }
 
 // 0x47D7F0
@@ -255,6 +482,34 @@ CItem* CGameContainer::GetItem(SHORT nSlotNum)
 void CGameContainer::SetItem(SHORT nSlotNum, CItem* pItem)
 {
     // TODO: Incomplete.
+}
+
+// 0x480480
+void CGameContainer::sub_480480(SHORT nSlotNum, CItem* pItem)
+{
+    // TODO: Incomplete.
+}
+
+// 0x481160
+void CGameContainer::RefreshRenderPile()
+{
+    if (m_containerType == 4) {
+        m_nPileVidCell = 0;
+
+        POSITION pos = m_lstItems.GetHeadPosition();
+        while (pos != NULL && m_nPileVidCell < 3) {
+            CItem* pItem = m_lstItems.GetNext(pos);
+            if (pItem != NULL) {
+                m_pileVidCell[m_nPileVidCell].SetResRef(pItem->GetGroundIcon(), FALSE, TRUE, TRUE);
+
+                if (m_pileVidCell[m_nPileVidCell].cResRef != "") {
+                    m_pileVidCell[m_nPileVidCell].SequenceSet(0);
+                    m_pileVidCell[m_nPileVidCell].FrameSet(0);
+                    m_nPileVidCell++;
+                }
+            }
+        }
+    }
 }
 
 // 0x481750

@@ -3,11 +3,16 @@
 
 #include "CGameAIBase.h"
 #include "CResRef.h"
+#include "CVidCell.h"
+#include "FileFormat.h"
 
 class CItem;
 
 class CGameContainer : public CGameAIBase {
 public:
+    static const CResRef RESREF_AR6051;
+
+    CGameContainer(CGameArea* pArea, CAreaFileContainer* pContainerObject, CAreaPoint* pPoints, WORD maxPts, CCreatureFileItem* pItems, DWORD maxItems);
     CGameContainer(CGameArea* pArea, const CRect& rBound);
     /* 000C */ void AIUpdate() override;
     /* 0030 */ void DebugDump(const CString& message, BOOLEAN bEchoToScreen) override;
@@ -17,6 +22,8 @@ public:
     void CompressContainer();
     CItem* GetItem(SHORT nSlotNum);
     void SetItem(SHORT nSlotNum, CItem* pItem);
+    void sub_480480(SHORT nSlotNum, CItem* pItem);
+    void RefreshRenderPile();
     void SetFlags(DWORD dwFlags);
     void SetTrapActivated(WORD active);
     void SetTrapDetected(WORD state);
@@ -26,8 +33,13 @@ public:
 
     void SetScriptRes(CString scriptRes);
 
+    /* 0598 */ CRect m_rBounding;
+    /* 05A8 */ CPoint* m_pPolygon;
+    /* 05AC */ WORD m_nPolygon;
     /* 05AE */ CTypedPtrList<CPtrList, CItem*> m_lstItems;
     /* 05CA */ WORD m_containerType;
+    /* 05CC */ CPoint m_ptWalkToUse;
+    /* 05D4 */ CVidCell m_pileVidCell[3];
     /* 0863 */ BOOLEAN m_bDeleteMe;
     /* 0864 */ RESREF m_scriptRes;
     /* 088C */ WORD m_lockDifficulty;
@@ -37,8 +49,15 @@ public:
     /* 0896 */ WORD m_trapActivated;
     /* 0898 */ WORD m_trapDetected;
     /* 089A */ CPoint m_posTrapOrigin;
+    /* 0862 */ BYTE m_nPileVidCell;
+    /* 08A2 */ WORD m_triggerRange;
+    /* 08A4 */ SCRIPTNAME m_ownedBy;
     /* 08C4 */ CResRef m_keyType;
+    /* 08CC */ DWORD m_breakDifficulty;
+    /* 08EA */ CAreaPoint* field_8EA;
     /* 08D0 */ SHORT m_drawPoly;
+    /* 08D2 */ int field_8D2;
+    /* 08D6 */ CArray<CRect*> field_8D6;
 };
 
 #endif /* CGAMECONTAINER_H_ */

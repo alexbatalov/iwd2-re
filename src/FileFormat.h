@@ -116,6 +116,42 @@ public:
     /* 00A2 */ WORD m_notUsed[19];
 };
 
+class CAreaFileContainer {
+public:
+    CAreaFileContainer()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    /* 0000 */ SCRIPTNAME m_scriptName;
+    /* 0020 */ WORD m_posX;
+    /* 0022 */ WORD m_posY;
+    /* 0024 */ WORD m_containerType;
+    /* 0026 */ WORD m_lockDifficulty;
+    /* 0028 */ DWORD m_dwFlags;
+    /* 002C */ WORD m_trapDetectionDifficulty;
+    /* 002E */ WORD m_trapRemovalDifficulty;
+    /* 0030 */ WORD m_trapActivated;
+    /* 0032 */ WORD m_trapDetected;
+    /* 0034 */ WORD m_posXTrapOrigin;
+    /* 0036 */ WORD m_posYTrapOrigin;
+    /* 0038 */ WORD m_boundingRectLeft;
+    /* 003A */ WORD m_boundingRectTop;
+    /* 003C */ WORD m_boundingRectRight;
+    /* 003E */ WORD m_boundingRectBottom;
+    /* 0040 */ DWORD m_startingItem;
+    /* 0044 */ DWORD m_itemCount;
+    /* 0048 */ RESREF m_script;
+    /* 0050 */ DWORD m_pickPointStart;
+    /* 0054 */ WORD m_pickPointCount;
+    /* 0056 */ WORD m_triggerRange;
+    /* 0058 */ SCRIPTNAME m_ownedBy;
+    /* 0078 */ RESREF m_keyType;
+    /* 0080 */ DWORD m_breakDifficulty;
+    /* 0084 */ STRREF m_strNotPickable;
+    /* 0088 */ DWORD m_notUsed[14];
+};
+
 class CAreaFileSoundObject {
 public:
     CAreaFileSoundObject()
