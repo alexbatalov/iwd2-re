@@ -8,11 +8,13 @@
 
 class CGameDialogEntry;
 class CGameDialogReply;
+class CGameSprite;
 
 class CGameDialogSprite {
 public:
     void ClearMarshal();
     void EndDialog();
+    BOOL EnterDialog(DWORD index, CGameSprite* pSprite, int a3);
     void UpdateDialogColors();
 
     /* 0000 */ CResRef m_file;
@@ -38,6 +40,7 @@ class CGameDialogEntry : public CTypedPtrArray<CPtrArray, CGameDialogReply*> {
 public:
     ~CGameDialogEntry() override;
     void RemoveReplies(LONG lMarker, COLORREF rgbNameColor, const CString& sName);
+    void Handle(CGameSprite* pSprite, COLORREF playerColor, int a3);
 
     /* 0014 */ STRREF m_dialogText;
     /* 0018 */ CAICondition m_startCondition;

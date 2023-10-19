@@ -55,6 +55,22 @@ void CGameDialogSprite::EndDialog()
     cSound.Play(FALSE);
 }
 
+// 0x483EB0
+BOOL CGameDialogSprite::EnterDialog(DWORD index, CGameSprite* pSprite, int a3)
+{
+    CGameDialogEntry* pEntry = m_dialogEntries[index];
+    if (pEntry == NULL) {
+        m_currentEntryIndex = 0;
+        return FALSE;
+    }
+
+    m_currentEntryIndex = index;
+    m_waitingForResponse = TRUE;
+    m_responseMarker = -1;
+    pEntry->Handle(pSprite, m_playerColor, a3);
+    return TRUE;
+}
+
 // 0x4845C0
 void CGameDialogSprite::UpdateDialogColors()
 {
@@ -134,4 +150,10 @@ void CGameDialogEntry::RemoveReplies(LONG lMarker, COLORREF rgbNameColor, const 
             -1,
             FALSE);
     }
+}
+
+// 0x484900
+void CGameDialogEntry::Handle(CGameSprite* pSprite, COLORREF playerColor, int a3)
+{
+    // TODO: Incomplete.
 }
