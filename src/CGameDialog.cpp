@@ -42,3 +42,46 @@ CGameDialogEntry::~CGameDialogEntry()
     }
     RemoveAll();
 }
+
+// 0x484730
+void CGameDialogEntry::RemoveReplies(LONG lMarker, COLORREF rgbNameColor, const CString& sName)
+{
+    STR_RES strRes;
+    BOOLEAN bRemoveIfPicked = FALSE;
+    STRREF strReplyText;
+
+    for (INT nIndex = 0; nIndex < GetCount(); nIndex++) {
+        CGameDialogReply* pReply = GetAt(nIndex);
+        if ((pReply->m_flags & 0x20) == 0) {
+            if (pReply->m_displayPosition != NULL) {
+                if (nIndex == lMarker) {
+                    bRemoveIfPicked = pReply->m_removeIfPicked;
+                    strReplyText = pReply->m_replyText;
+                }
+
+                g_pBaldurChitin->m_pEngineWorld->RemoveText(pReply->m_displayPosition);
+                pReply->m_displayPosition = NULL;
+            }
+        }
+    }
+
+    if (!bRemoveIfPicked) {
+        if (lMarker >= 0 && lMarker < GetCount()) {
+            strReplyText = GetAt(lMarker)->m_replyText;
+        }
+
+        g_pBaldurChitin->GetTlkTable().Fetch(strReplyText, strRes);
+
+        g_pBaldurChitin->m_pEngineWorld->DisplayText(sName,
+            strRes.szText,
+            rgbNameColor,
+            RGB(160, 200, 215),
+            -1,
+            FALSE);
+
+        g_pBaldurChitin->m_pEngineWorld->DisplayText(CString(""),
+            CString(""),
+            -1,
+            FALSE);
+    }
+}

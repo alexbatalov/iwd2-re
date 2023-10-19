@@ -33,6 +33,7 @@ public:
 class CGameDialogEntry : public CTypedPtrArray<CPtrArray, CGameDialogReply*> {
 public:
     ~CGameDialogEntry() override;
+    void RemoveReplies(LONG lMarker, COLORREF rgbNameColor, const CString& sName);
 
     /* 0014 */ STRREF m_dialogText;
     /* 0018 */ CAICondition m_startCondition;
