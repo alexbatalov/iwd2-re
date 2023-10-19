@@ -279,6 +279,54 @@ CGameDoor::CGameDoor(CGameArea* pArea, CAreaFileDoorObject* pDoorObject, CAreaPo
     }
 }
 
+// 0x4866E0
+CGameDoor::~CGameDoor()
+{
+    if (m_pOpenPolygon != NULL) {
+        delete m_pOpenPolygon;
+    }
+
+    if (m_pClosedPolygon != NULL) {
+        delete m_pClosedPolygon;
+    }
+
+    if (m_pOpenSearch != NULL) {
+        delete m_pOpenSearch;
+    }
+
+    if (m_pClosedSearch != NULL) {
+        delete m_pClosedSearch;
+    }
+
+    if (field_6EE != NULL) {
+        delete field_6EE;
+        field_6EE = NULL;
+    }
+
+    // When there is only one element its an unowned pointer to
+    // `m_rClosedBounding`.
+    if (field_6DA.GetCount() > 1) {
+        for (INT nIndex = 0; nIndex < field_6DA.GetCount(); nIndex++) {
+            delete field_6DA[nIndex];
+        }
+    }
+    field_6DA.SetSize(0);
+
+    if (field_706 != NULL) {
+        delete field_706;
+        field_706 = NULL;
+    }
+
+    // When there is only one element its an unowned pointer to
+    // `m_rOpenBounding`.
+    if (field_6F2.GetCount() > 1) {
+        for (INT nIndex = 0; nIndex < field_6F2.GetCount(); nIndex++) {
+            delete field_6F2[nIndex];
+        }
+    }
+    field_6F2.SetSize(0);
+}
+
 // 0x487460
 void CGameDoor::AIUpdate()
 {
