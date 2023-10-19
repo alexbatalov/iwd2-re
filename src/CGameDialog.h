@@ -11,6 +11,8 @@ class CGameDialogReply;
 
 class CGameDialogSprite {
 public:
+    void UpdateDialogColors();
+
     /* 0000 */ CResRef m_file;
     /* 0008 */ CTypedPtrArray<CPtrArray, CGameDialogEntry*> m_dialogEntries;
     /* 001C */ CTypedPtrArray<CPtrArray, CGameDialogEntry*> m_dialogEntriesOrdered;
