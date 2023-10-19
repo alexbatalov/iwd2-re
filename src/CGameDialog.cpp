@@ -30,3 +30,15 @@ void CGameDialogSprite::UpdateDialogColors()
         }
     }
 }
+
+// 0x484680
+CGameDialogEntry::~CGameDialogEntry()
+{
+    for (INT nIndex = 0; nIndex < GetCount(); nIndex++) {
+        CGameDialogReply* pReply = GetAt(nIndex);
+        if (pReply != NULL) {
+            delete pReply;
+        }
+    }
+    RemoveAll();
+}

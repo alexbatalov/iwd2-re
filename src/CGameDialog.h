@@ -32,6 +32,8 @@ public:
 
 class CGameDialogEntry : public CTypedPtrArray<CPtrArray, CGameDialogReply*> {
 public:
+    ~CGameDialogEntry() override;
+
     /* 0014 */ STRREF m_dialogText;
     /* 0018 */ CAICondition m_startCondition;
     /* 0034 */ BOOL m_picked;
