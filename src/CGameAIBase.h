@@ -145,4 +145,12 @@ public:
     /* 0596 */ unsigned char field_596;
 };
 
+class CGameAIGame : public CGameAIBase {
+public:
+    CGameAIGame();
+    /* 0000 */ ~CGameAIGame() override;
+    /* 0028 */ BOOLEAN CanSaveGame(STRREF& strError) override;
+    /* 002C */ BOOLEAN CompressTime(DWORD deltaTime) override;
+};
+
 #endif /* CGAMEAIBASE_H_ */

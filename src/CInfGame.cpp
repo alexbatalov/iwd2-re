@@ -6,7 +6,6 @@
 #include "CBaldurChitin.h"
 #include "CBaldurEngine.h"
 #include "CBaldurProjector.h"
-#include "CGameAIGame.h"
 #include "CGameArea.h"
 #include "CGameContainer.h"
 #include "CGameObject.h"
