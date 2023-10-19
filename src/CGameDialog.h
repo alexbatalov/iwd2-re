@@ -12,6 +12,7 @@ class CGameDialogReply;
 class CGameDialogSprite {
 public:
     void ClearMarshal();
+    void EndDialog();
     void UpdateDialogColors();
 
     /* 0000 */ CResRef m_file;
@@ -28,7 +29,9 @@ public:
     /* 0050 */ LONG m_dialogFreezeMultiplayer;
     /* 0054 */ unsigned char field_54;
     /* 0055 */ unsigned char field_55;
-    /* 0056 */ int field_56;
+    /* 0056 */ CString field_56;
+    /* 005A */ BOOL m_bMusicThreadPriorityChanged;
+    /* 005E */ int m_nMusicThreadPriority;
 };
 
 class CGameDialogEntry : public CTypedPtrArray<CPtrArray, CGameDialogReply*> {

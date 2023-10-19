@@ -1,6 +1,8 @@
 #include "CGameDialog.h"
 
 #include "CBaldurChitin.h"
+#include "CGameArea.h"
+#include "CInfGame.h"
 #include "CScreenWorld.h"
 #include "CUIControlTextDisplay.h"
 #include "CUtil.h"
@@ -26,6 +28,31 @@ void CGameDialogSprite::ClearMarshal()
 
     m_dialogEntries.RemoveAll();
     m_dialogEntriesOrdered.RemoveAll();
+}
+
+// 0x483CF0
+void CGameDialogSprite::EndDialog()
+{
+    if (m_bMusicThreadPriorityChanged == TRUE) {
+        SetThreadPriority(g_pChitin->m_hMusicThread, m_nMusicThreadPriority);
+    }
+
+    g_pBaldurChitin->m_pEngineWorld->EnableKeyRepeat();
+
+    m_waitingForResponse = FALSE;
+    m_responseMarker = -1;
+    field_54 = 0;
+    field_56 = "";
+
+    CResRef cResRef("SilentDH");
+
+    CSound cSound;
+    cSound.SetResRef(cResRef, TRUE, TRUE);
+    if (cSound.m_nLooping == 0) {
+        cSound.SetFireForget(TRUE);
+    }
+    cSound.SetChannel(6, reinterpret_cast<DWORD>(g_pBaldurChitin->GetObjectGame()->GetVisibleArea()));
+    cSound.Play(FALSE);
 }
 
 // 0x4845C0
