@@ -1229,6 +1229,35 @@ CAIAction& CGameAIBase::GetNextAction(CAIAction& action)
 
 // -----------------------------------------------------------------------------
 
+// 0x45E250
+CGameAIArea::CGameAIArea()
+{
+    BYTE rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->Add(&m_id, this, INFINITE);
+    if (rc != CGameObjectArray::SUCCESS) {
+        delete this;
+    }
+}
+
+// 0x45E2D0
+CGameAIArea::~CGameAIArea()
+{
+}
+
+// 0x47C830
+BOOLEAN CGameAIArea::CanSaveGame(STRREF& strError)
+{
+    strError = -1;
+    return TRUE;
+}
+
+// 0x766660
+BOOLEAN CGameAIArea::CompressTime(DWORD deltaTime)
+{
+    return TRUE;
+}
+
+// -----------------------------------------------------------------------------
+
 // 0x45E2E0
 CGameAIGame::CGameAIGame()
 {
