@@ -177,6 +177,56 @@ public:
     /* 0090 */ DWORD m_notUsed[13];
 };
 
+class CAreaFileDoorObject {
+public:
+    CAreaFileDoorObject()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    SCRIPTNAME m_scriptName;
+    RESREF m_doorID;
+    DWORD m_dwFlags;
+    DWORD m_openSelectionPointStart;
+    WORD m_openSelectionPointCount;
+    WORD m_closedSelectionPointCount;
+    DWORD m_closedSelectionPointStart;
+    WORD m_openBoundingRectLeft;
+    WORD m_openBoundingRectTop;
+    WORD m_openBoundingRectRight;
+    WORD m_openBoundingRectBottom;
+    WORD m_closedBoundingRectLeft;
+    WORD m_closedBoundingRectTop;
+    WORD m_closedBoundingRectRight;
+    WORD m_closedBoundingRectBottom;
+    DWORD m_openSearchSquaresStart;
+    WORD m_openSearchSquaresCount;
+    WORD m_closedSearchSquaresCount;
+    DWORD m_closedSearchSquaresStart;
+    SHORT m_hitPoints;
+    SHORT m_armourClass;
+    RESREF m_openSound;
+    RESREF m_closeSound;
+    DWORD m_cursorType;
+    WORD m_trapDetectionDifficulty;
+    WORD m_trapDisarmingDifficulty;
+    WORD m_trapActivated;
+    WORD m_trapDetected;
+    WORD m_posXTrapOrigin;
+    WORD m_posYTrapOrigin;
+    RESREF m_keyType;
+    RESREF m_script;
+    DWORD m_detectionDifficulty;
+    DWORD m_lockDifficulty;
+    WORD m_posXWalkTo1;
+    WORD m_posYWalkTo1;
+    WORD m_posXWalkTo2;
+    WORD m_posYWalkTo2;
+    STRREF m_strNotPickable;
+    SCRIPTNAME m_triggerName;
+    DWORD m_notUsed[3];
+};
+
 class CAreaFileTiledObject {
 public:
     CAreaFileTiledObject()

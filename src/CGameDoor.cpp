@@ -1,5 +1,6 @@
 #include "CGameDoor.h"
 
+#include "CAIScript.h"
 #include "CBaldurChitin.h"
 #include "CGameArea.h"
 #include "CGameSprite.h"
@@ -14,6 +15,269 @@
 const LONG CGameDoor::RANGE_DOOR = 16
     * CPathSearch::GRID_SQUARE_SIZEX
     * CPathSearch::GRID_SQUARE_SIZEX;
+
+// 0x485AC0
+CGameDoor::CGameDoor(CGameArea* pArea, CAreaFileDoorObject* pDoorObject, CAreaPoint* pPoints, WORD maxPts)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameDoor.cpp
+    // __LINE__: 107
+    UTIL_ASSERT(pArea != NULL && pDoorObject != NULL && pPoints != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameDoor.cpp
+    // __LINE__: 108
+    UTIL_ASSERT(pDoorObject->m_openSelectionPointStart + pDoorObject->m_openSelectionPointCount <= maxPts);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameDoor.cpp
+    // __LINE__: 109
+    UTIL_ASSERT(pDoorObject->m_closedSelectionPointStart + pDoorObject->m_closedSelectionPointCount <= maxPts);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameDoor.cpp
+    // __LINE__: 110
+    UTIL_ASSERT(pDoorObject->m_openSearchSquaresStart + pDoorObject->m_openSearchSquaresCount <= maxPts);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameDoor.cpp
+    // __LINE__: 111
+    UTIL_ASSERT(pDoorObject->m_closedSearchSquaresStart + pDoorObject->m_closedSearchSquaresCount <= maxPts);
+
+    m_objectType = TYPE_DOOR;
+    m_resID = pDoorObject->m_doorID;
+
+    m_rOpenBounding.left = pDoorObject->m_openBoundingRectLeft;
+    m_rOpenBounding.top = pDoorObject->m_openBoundingRectTop;
+    m_rOpenBounding.right = pDoorObject->m_openBoundingRectRight;
+    m_rOpenBounding.bottom = pDoorObject->m_openBoundingRectBottom;
+
+    m_rClosedBounding.left = pDoorObject->m_closedBoundingRectLeft;
+    m_rClosedBounding.top = pDoorObject->m_closedBoundingRectTop;
+    m_rClosedBounding.right = pDoorObject->m_closedBoundingRectRight;
+    m_rClosedBounding.bottom = pDoorObject->m_closedBoundingRectBottom;
+
+    m_cursorType = pDoorObject->m_cursorType;
+    m_dwFlags = pDoorObject->m_dwFlags;
+    m_nOpenPolygon = pDoorObject->m_openSelectionPointCount;
+    m_nClosedPolygon = pDoorObject->m_closedSelectionPointCount;
+
+    m_ptDest1.x = pDoorObject->m_posXWalkTo1;
+    m_ptDest1.y = pDoorObject->m_posYWalkTo1;
+
+    m_ptDest2.x = pDoorObject->m_posXWalkTo2;
+    m_ptDest2.y = pDoorObject->m_posYWalkTo2;
+
+    m_strNotPickable = pDoorObject->m_strNotPickable;
+
+    POSITION pos = pArea->m_lTiledObjects.AddTail(&m_tiledObject);
+    WORD wInitialState = (m_dwFlags & 0x1) != 0
+        ? CTiledObject::STATE_PRIMARY_TILE
+        : CTiledObject::STATE_SECONDARY_TILE;
+    m_tiledObject.Initialize(pArea->m_pResWED,
+        m_resID,
+        pos,
+        wInitialState);
+
+    memcpy(m_scriptRes, pDoorObject->m_script, RESREF_SIZE);
+
+    strncpy(m_scriptName, pDoorObject->m_scriptName, SCRIPTNAME_SIZE);
+
+    CAIScript* pScript = new CAIScript(CResRef(pDoorObject->m_script));
+    SetScript(0, pScript);
+
+    m_hitPoints = pDoorObject->m_hitPoints != 0 ? pDoorObject->m_hitPoints : 20;
+    m_armourClass = pDoorObject->m_armourClass;
+    m_openSound = pDoorObject->m_openSound;
+    m_closeSound = pDoorObject->m_closeSound;
+    m_trapDetectionDifficulty = pDoorObject->m_trapDetectionDifficulty;
+    m_trapDisarmingDifficulty = pDoorObject->m_trapDisarmingDifficulty;
+    m_trapActivated = pDoorObject->m_trapActivated;
+    m_trapDetected = pDoorObject->m_trapDetected;
+    m_posXTrapOrigin = pDoorObject->m_posXTrapOrigin;
+    m_posYTrapOrigin = pDoorObject->m_posYTrapOrigin;
+    m_keyType = pDoorObject->m_keyType;
+    m_detectionDifficulty = pDoorObject->m_detectionDifficulty;
+    m_lockDifficulty = pDoorObject->m_lockDifficulty;
+    m_drawPoly = 0;
+
+    if (m_nOpenPolygon != 0) {
+        m_pOpenPolygon = new CPoint[m_nOpenPolygon];
+
+        if (m_pOpenPolygon == NULL) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameDoor.cpp
+            // __LINE__: 170
+            UTIL_ASSERT(FALSE);
+        }
+
+        WORD adjust = 0;
+        for (WORD cnt = 0; cnt < m_nOpenPolygon; cnt++) {
+            m_pOpenPolygon[cnt - adjust].x = pPoints[cnt + pDoorObject->m_openSelectionPointStart].m_xPos;
+            m_pOpenPolygon[cnt - adjust].y = pPoints[cnt + pDoorObject->m_openSelectionPointStart].m_yPos;
+            if (cnt >= 2) {
+                int x2 = m_pOpenPolygon[cnt - adjust - 2].x;
+                int y2 = m_pOpenPolygon[cnt - adjust - 2].y;
+
+                int x1 = m_pOpenPolygon[cnt - adjust - 1].x;
+                int y1 = m_pOpenPolygon[cnt - adjust - 1].y;
+
+                int x0 = m_pOpenPolygon[cnt - adjust].x;
+                int y0 = m_pOpenPolygon[cnt - adjust].y;
+
+                if ((x2 == x1 && x1 == x0)
+                    || (y2 == y1 && y1 == y0)
+                    || (x2 != x1
+                        && x1 != x0
+                        && 1000 * (y2 - y1) / (x2 - x1) != 1000 * (y1 - y0) / (x1 - x0))) {
+                    m_pOpenPolygon[cnt - adjust - 1] = m_pOpenPolygon[cnt - adjust];
+                    adjust++;
+                }
+            }
+        }
+
+        m_nOpenPolygon -= adjust;
+    } else {
+        m_pOpenPolygon = NULL;
+    }
+
+    if (m_nClosedPolygon != 0) {
+        m_pClosedPolygon = new CPoint[m_nClosedPolygon];
+
+        if (m_pClosedPolygon == NULL) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameDoor.cpp
+            // __LINE__: 206
+            UTIL_ASSERT(FALSE);
+        }
+
+        WORD adjust = 0;
+        for (WORD cnt = 0; cnt < m_nClosedPolygon; cnt++) {
+            m_pClosedPolygon[cnt - adjust].x = pPoints[cnt + pDoorObject->m_closedSelectionPointStart].m_xPos;
+            m_pClosedPolygon[cnt - adjust].y = pPoints[cnt + pDoorObject->m_closedSelectionPointStart].m_yPos;
+            if (cnt >= 2) {
+                int x2 = m_pClosedPolygon[cnt - adjust - 2].x;
+                int y2 = m_pClosedPolygon[cnt - adjust - 2].y;
+
+                int x1 = m_pClosedPolygon[cnt - adjust - 1].x;
+                int y1 = m_pClosedPolygon[cnt - adjust - 1].y;
+
+                int x0 = m_pClosedPolygon[cnt - adjust].x;
+                int y0 = m_pClosedPolygon[cnt - adjust].y;
+
+                if ((x2 == x1 && x1 == x0)
+                    || (y2 == y1 && y1 == y0)
+                    || (x2 != x1
+                        && x1 != x0
+                        && 1000 * (y2 - y1) / (x2 - x1) != 1000 * (y1 - y0) / (x1 - x0))) {
+                    m_pClosedPolygon[cnt - adjust - 1] = m_pClosedPolygon[cnt - adjust];
+                    adjust++;
+                }
+            }
+        }
+
+        m_nClosedPolygon -= adjust;
+    } else {
+        m_pClosedPolygon = NULL;
+    }
+
+    m_nOpenSearch = pDoorObject->m_openSearchSquaresCount;
+    if (m_nOpenSearch != 0) {
+        m_pOpenSearch = new CPoint[m_nOpenSearch];
+
+        if (m_pOpenSearch == NULL) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameDoor.cpp
+            // __LINE__: 243
+            UTIL_ASSERT(FALSE);
+        }
+
+        for (WORD cnt = 0; cnt < m_nOpenSearch; cnt++) {
+            m_pOpenSearch[cnt].x = pPoints[pDoorObject->m_openSearchSquaresStart + cnt].m_xPos;
+            m_pOpenSearch[cnt].y = pPoints[pDoorObject->m_openSearchSquaresStart + cnt].m_yPos;
+        }
+
+        if ((m_dwFlags & 0x1) != 0) {
+            pArea->m_search.AddDoor(m_pOpenSearch,
+                m_nOpenSearch,
+                (m_dwFlags & 0x400) != 0);
+        }
+    } else {
+        m_pOpenSearch = NULL;
+    }
+
+    m_ptOpenDest.x = (pDoorObject->m_openBoundingRectLeft + pDoorObject->m_openBoundingRectRight) / 2;
+    m_ptOpenDest.y = pDoorObject->m_openBoundingRectBottom;
+
+    m_nClosedSearch = pDoorObject->m_openSearchSquaresCount;
+    if (m_nClosedSearch != 0) {
+        m_pClosedSearch = new CPoint[m_nClosedSearch];
+
+        if (m_pClosedSearch == NULL) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameDoor.cpp
+            // __LINE__: 270
+            UTIL_ASSERT(FALSE);
+        }
+
+        for (WORD cnt = 0; cnt < m_nClosedSearch; cnt++) {
+            m_pClosedSearch[cnt].x = pPoints[pDoorObject->m_closedSearchSquaresStart + cnt].m_xPos;
+            m_pClosedSearch[cnt].y = pPoints[pDoorObject->m_closedSearchSquaresStart + cnt].m_yPos;
+        }
+
+        if ((m_dwFlags & 0x1) == 0) {
+            pArea->m_search.AddDoor(m_pClosedSearch,
+                m_nClosedSearch,
+                (m_dwFlags & 0x400) != 0);
+        }
+    } else {
+        m_pClosedSearch = NULL;
+    }
+
+    m_ptClosedDest.x = (pDoorObject->m_closedBoundingRectLeft + pDoorObject->m_closedBoundingRectRight) / 2;
+    m_ptClosedDest.y = pDoorObject->m_closedBoundingRectBottom;
+
+    BYTE rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->Add(&m_id,
+        this,
+        INFINITE);
+    if (rc == CGameObjectArray::SUCCESS) {
+        if ((m_dwFlags & 0x1) != 0) {
+            AddToArea(pArea, m_ptOpenDest, 0, LIST_FRONT);
+        } else {
+            AddToArea(pArea, m_ptClosedDest, 0, LIST_FRONT);
+        }
+
+        m_typeAI.SetName(CString(m_scriptName));
+
+        CVariable name;
+        name.SetName(CString(m_scriptName));
+        name.m_intValue = m_id;
+        pArea->GetNamedCreatures()->AddKey(name);
+
+        sub_481890(&m_rClosedBounding, field_6DA);
+        sub_481890(&m_rOpenBounding, field_6F2);
+
+        field_6EE = NULL;
+        field_706 = NULL;
+
+        if (m_nClosedPolygon != 0) {
+            field_6EE = new CAreaPoint[m_nClosedPolygon];
+
+            for (WORD cnt = 0; cnt < m_nClosedPolygon; cnt++) {
+                field_6EE[cnt].m_xPos = static_cast<WORD>(m_pClosedPolygon[cnt].x);
+                field_6EE[cnt].m_yPos = static_cast<WORD>(m_pClosedPolygon[cnt].y);
+            }
+        } else {
+            field_6EE = NULL;
+        }
+
+        if (m_nOpenPolygon != 0) {
+            field_706 = new CAreaPoint[m_nOpenPolygon];
+
+            for (WORD cnt = 0; cnt < m_nOpenPolygon; cnt++) {
+                field_706[cnt].m_xPos = static_cast<WORD>(m_pOpenPolygon[cnt].x);
+                field_706[cnt].m_yPos = static_cast<WORD>(m_pOpenPolygon[cnt].y);
+            }
+        } else {
+            field_706 = NULL;
+        }
+
+        m_nAICounter = 0;
+    } else {
+        delete this;
+    }
+}
 
 // 0x487460
 void CGameDoor::AIUpdate()

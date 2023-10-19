@@ -95,6 +95,8 @@ public:
     void ResetCurrResponse();
     CAIAction& GetNextAction(CAIAction& action);
 
+    void sub_481890(CRect* r, CArray<CRect*>& ary);
+
     /* 006E */ CAIObjectType m_lAttacker;
     /* 00AE */ CAIObjectType m_lOrderedBy;
     /* 00EA */ CAIObjectType field_EA;

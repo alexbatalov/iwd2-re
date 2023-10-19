@@ -1227,6 +1227,12 @@ CAIAction& CGameAIBase::GetNextAction(CAIAction& action)
     return action;
 }
 
+// 0x481890
+void CGameAIBase::sub_481890(CRect* r, CArray<CRect*>& ary)
+{
+    // TODO: Incomplete.
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x45E250

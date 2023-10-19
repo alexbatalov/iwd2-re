@@ -22,7 +22,6 @@ public:
     /* 00B8 */ virtual BOOL IsOverActivate(const CPoint& pt);
 
     void SetDrawPoly(SHORT time);
-    void sub_481890(CRect* r, CArray<CRect*>& ary);
 
     /* 0598 */ WORD m_triggerType;
     /* 059A */ CRect m_rBounding;

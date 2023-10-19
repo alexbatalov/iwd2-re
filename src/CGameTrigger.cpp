@@ -521,9 +521,3 @@ CPoint& CGameTrigger::GetPos()
 {
     return (m_dwFlags & 0x200) != 0 ? field_628 : m_pos;
 }
-
-// 0x481890
-void CGameTrigger::sub_481890(CRect* r, CArray<CRect*>& ary)
-{
-    // TODO: Incomplete.
-}
