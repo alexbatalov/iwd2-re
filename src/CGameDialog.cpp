@@ -5,6 +5,29 @@
 #include "CUIControlTextDisplay.h"
 #include "CUtil.h"
 
+// 0x483970
+void CGameDialogSprite::ClearMarshal()
+{
+    m_characterIndex = 0;
+    m_talkerIndex = 0;
+    m_dialogFreezeCounter = 6;
+    m_dialogFreezeMultiplayer = 0;
+    m_file = "";
+    m_waitingForResponse = FALSE;
+    m_currentEntryIndex = 0;
+    m_responseMarker = -1;
+
+    for (INT nIndex = 0; nIndex < m_dialogEntries.GetCount(); nIndex++) {
+        CGameDialogEntry* pEntry = m_dialogEntries.GetAt(nIndex);
+        if (pEntry != NULL) {
+            delete pEntry;
+        }
+    }
+
+    m_dialogEntries.RemoveAll();
+    m_dialogEntriesOrdered.RemoveAll();
+}
+
 // 0x4845C0
 void CGameDialogSprite::UpdateDialogColors()
 {

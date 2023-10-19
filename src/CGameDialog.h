@@ -11,6 +11,7 @@ class CGameDialogReply;
 
 class CGameDialogSprite {
 public:
+    void ClearMarshal();
     void UpdateDialogColors();
 
     /* 0000 */ CResRef m_file;
