@@ -95,3 +95,17 @@ void CAITrigger::Read(const CString& sData)
     CString v2 = CAIUtil::ReadBetween(sMutableData, CString("OB\n"));
     m_triggerCause.Read(v2);
 }
+
+// 0x466480
+CAITrigger& CAITrigger::operator=(const CAITrigger& other)
+{
+    m_triggerID = other.m_triggerID;
+    m_specificID = other.m_specificID;
+    m_triggerCause.Set(other.m_triggerCause);
+    m_flags = other.m_flags;
+    m_specific2 = other.m_specific2;
+    m_specific3 = other.m_specific3;
+    m_string1 = other.m_string1;
+    m_string2 = other.m_string2;
+    return *this;
+}

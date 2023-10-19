@@ -238,6 +238,7 @@ public:
     ~CAITrigger();
     BOOL OfType(const CAITrigger& trigger) const;
     void Read(const CString& sData);
+    CAITrigger& operator=(const CAITrigger& other);
 
     SHORT m_triggerID;
     LONG m_specificID;
