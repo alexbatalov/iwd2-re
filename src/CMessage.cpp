@@ -148,6 +148,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_PARTY_GOLD = 31;
 // 0x84CEF7
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_PLAY_SOUND = 32;
 
+// 0x84CEFA
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_REMOVE_REPLIES = 35;
+
 // 0x84CEFB
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_REPUTATION_CHANGE = 36;
 
@@ -6309,6 +6312,163 @@ void CMessagePlaySound::Run()
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
     }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F5CA0
+CMessageRemoveReplies::CMessageRemoveReplies(LONG entryIndex, LONG marker, COLORREF nameColor, const CString& name, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_entryIndex = entryIndex;
+    m_marker = marker;
+    m_nameColor = nameColor;
+    m_name = name;
+}
+
+// 0x484570
+CMessageRemoveReplies::~CMessageRemoveReplies()
+{
+}
+
+// 0x43E170
+SHORT CMessageRemoveReplies::GetCommType()
+{
+    return BROADCAST_FORCED;
+}
+
+// 0x40A0E0
+BYTE CMessageRemoveReplies::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x484540
+BYTE CMessageRemoveReplies::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_REMOVE_REPLIES;
+}
+
+// 0x504740
+void CMessageRemoveReplies::MarshalMessage(BYTE** pData, DWORD* dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 15506
+    UTIL_ASSERT(pData != NULL && dwSize != NULL);
+
+    CGameObject* pObject;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        PLAYER_ID remotePlayerID = pObject->m_remotePlayerID;
+        LONG remoteObjectID = pObject->m_remoteObjectID;
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+
+        SHORT stringLen = static_cast<SHORT>(m_name.GetLength());
+
+        *dwSize = sizeof(PLAYER_ID)
+            + sizeof(LONG)
+            + sizeof(SHORT)
+            + stringLen
+            + sizeof(LONG)
+            + sizeof(LONG)
+            + sizeof(COLORREF);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+        // __LINE__: 15531
+        UTIL_ASSERT(*dwSize <= STATICBUFFERSIZE);
+
+        DWORD cnt = 0;
+
+        *reinterpret_cast<PLAYER_ID*>(*pData + cnt) = remotePlayerID;
+        cnt += sizeof(PLAYER_ID);
+
+        *reinterpret_cast<LONG*>(*pData + cnt) = remoteObjectID;
+        cnt += sizeof(LONG);
+
+        *reinterpret_cast<SHORT*>(*pData + cnt) = stringLen;
+        cnt += sizeof(SHORT);
+
+        memcpy(*pData + cnt, m_name.GetBuffer(stringLen), stringLen);
+        cnt += stringLen;
+
+        *reinterpret_cast<LONG*>(*pData + cnt) = m_entryIndex;
+        cnt += sizeof(LONG);
+
+        *reinterpret_cast<LONG*>(*pData + cnt) = m_marker;
+        cnt += sizeof(LONG);
+
+        *reinterpret_cast<LONG*>(*pData + cnt) = m_nameColor;
+        cnt += sizeof(COLORREF);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+        // __LINE__: 15571
+        UTIL_ASSERT(cnt == *dwSize);
+    } else {
+        *dwSize = 0;
+    }
+}
+
+// 0x5048E0
+BOOL CMessageRemoveReplies::UnmarshalMessage(BYTE* pData, DWORD dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 15599
+    UTIL_ASSERT(pData != NULL);
+
+    DWORD cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    PLAYER_ID remotePlayerID = *reinterpret_cast<PLAYER_ID*>(pData + cnt);
+    cnt += sizeof(PLAYER_ID);
+
+    LONG remoteObjectID = *reinterpret_cast<LONG*>(pData + cnt);
+    cnt += sizeof(LONG);
+
+    LONG localObjectID;
+    if (g_pBaldurChitin->GetObjectGame()->GetRemoteObjectArray()->Find(remotePlayerID, remoteObjectID, localObjectID) != TRUE) {
+        localObjectID = CGameObjectArray::INVALID_INDEX;
+    }
+
+    m_targetId = localObjectID;
+
+    SHORT stringLen = *reinterpret_cast<SHORT*>(pData + cnt);
+    cnt += sizeof(SHORT);
+
+    m_name = CString(reinterpret_cast<char*>(pData + cnt), stringLen);
+    cnt += stringLen;
+
+    m_entryIndex = *reinterpret_cast<LONG*>(pData + cnt);
+    cnt += sizeof(LONG);
+
+    m_marker = *reinterpret_cast<LONG*>(pData + cnt);
+    cnt += sizeof(LONG);
+
+    m_nameColor = *reinterpret_cast<COLORREF*>(pData + cnt);
+    cnt += sizeof(COLORREF);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 15641
+    UTIL_ASSERT(cnt == dwSize);
+
+    return TRUE;
+}
+
+// 0x504A00
+void CMessageRemoveReplies::Run()
+{
+    g_pBaldurChitin->m_pEngineWorld->m_internalLoadedDialog.m_dialogEntries[m_entryIndex]->RemoveReplies(m_marker,
+        m_nameColor,
+        m_name);
 }
 
 // -----------------------------------------------------------------------------

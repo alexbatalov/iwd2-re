@@ -52,6 +52,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_LEAVE_PARTY;
     static const BYTE MSG_SUBTYPE_CMESSAGE_PARTY_GOLD;
     static const BYTE MSG_SUBTYPE_CMESSAGE_PLAY_SOUND;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_REMOVE_REPLIES;
     static const BYTE MSG_SUBTYPE_CMESSAGE_REPUTATION_CHANGE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_ACTIVE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_AISPEED;
@@ -690,6 +691,23 @@ public:
     /* 000C */ BOOL m_showText;
     /* 0010 */ BOOL m_showCircle;
     /* 0014 */ BYTE m_soundId;
+};
+
+class CMessageRemoveReplies : public CMessage {
+public:
+    CMessageRemoveReplies(LONG entryIndex, LONG marker, COLORREF nameColor, const CString& name, LONG caller, LONG target);
+    ~CMessageRemoveReplies() override;
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ CString m_name;
+    /* 0010 */ LONG m_entryIndex;
+    /* 0014 */ LONG m_marker;
+    /* 0018 */ COLORREF m_nameColor;
 };
 
 class CMessageReputationChange : public CMessage {
