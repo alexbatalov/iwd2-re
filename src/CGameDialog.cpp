@@ -2,6 +2,7 @@
 
 #include "CBaldurChitin.h"
 #include "CGameArea.h"
+#include "CGameSprite.h"
 #include "CInfGame.h"
 #include "CScreenWorld.h"
 #include "CUIControlTextDisplay.h"
@@ -28,6 +29,39 @@ void CGameDialogSprite::ClearMarshal()
 
     m_dialogEntries.RemoveAll();
     m_dialogEntriesOrdered.RemoveAll();
+}
+
+// 0x4839F0
+BOOL CGameDialogSprite::StartDialog(CGameSprite* pSprite)
+{
+    g_pBaldurChitin->m_pEngineWorld->DisableKeyRepeat();
+
+    m_nMusicThreadPriority = GetThreadPriority(g_pChitin->m_hMusicThread);
+    if (GetPrivateProfileIntA("Program Options", "Volume Music", 0, g_pChitin->GetIniFileName())) {
+        m_bMusicThreadPriorityChanged = SetThreadPriority(g_pChitin->m_hMusicThread, 15);
+    }
+
+    for (INT nIndex = 0; nIndex < m_dialogEntriesOrdered.GetCount(); nIndex++) {
+        CGameDialogEntry* pEntry = m_dialogEntriesOrdered.GetAt(nIndex);
+        if (pEntry != NULL
+            && pEntry->m_startCondition.Hold(CTypedPtrList<CPtrList, CAITrigger*>(), pSprite)) {
+            // FIXME: Unused.
+            LONG nCharacterId = g_pBaldurChitin->GetObjectGame()->GetProtagonist();
+
+            CMessage* pMessage = new CMessageEnterDialog(pEntry->m_dialogIndex,
+                TRUE,
+                pSprite->GetId(),
+                pSprite->GetId());
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+
+            field_54 = 1;
+            field_56 = "";
+
+            return TRUE;
+        }
+    }
+
+    return FALSE;
 }
 
 // 0x483CF0

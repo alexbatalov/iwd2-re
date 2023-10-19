@@ -13,6 +13,7 @@ class CGameSprite;
 class CGameDialogSprite {
 public:
     void ClearMarshal();
+    BOOL StartDialog(CGameSprite* pSprite);
     void EndDialog();
     BOOL EnterDialog(DWORD index, CGameSprite* pSprite, int a3);
     void UpdateDialogColors();
