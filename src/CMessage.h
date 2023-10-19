@@ -45,6 +45,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXTREF;
     static const BYTE MSG_SUBTYPE_CMESSAGE_DOOR_STATUS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_DROP_PATH;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_ENTER_DIALOG;
     static const BYTE MSG_SUBTYPE_CMESSAGE_ENTER_STORE_MODE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_EXIT_DIALOG_MODE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_EXIT_STORE_MODE;
@@ -589,6 +590,20 @@ public:
     /* 0010 */ WORD m_trapDetected;
     /* 0012 */ WORD m_trapActivated;
     /* 0014 */ BOOLEAN m_bOpen;
+};
+
+class CMessageEnterDialog : public CMessage {
+public:
+    CMessageEnterDialog(DWORD entryNum, BOOLEAN a2, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ DWORD m_entryNum;
+    /* 0010 */ BOOLEAN field_10;
 };
 
 class CMessageDropPath : public CMessage {
