@@ -241,6 +241,36 @@ CGameContainer::CGameContainer(CGameArea* pArea, const CRect& rBound)
     }
 }
 
+// 0x47CAC0
+CGameContainer::~CGameContainer()
+{
+    POSITION pos = m_lstItems.GetHeadPosition();
+    while (pos != NULL) {
+        CItem* pItem = m_lstItems.GetNext(pos);
+        if (pItem != NULL) {
+            delete pItem;
+        }
+    }
+    m_lstItems.RemoveAll();
+
+    if (m_pPolygon != NULL) {
+        delete m_pPolygon;
+    }
+
+    if (field_8EA != NULL) {
+        delete field_8EA;
+        field_8EA = NULL;
+    }
+
+    // When there is only one element its an unowned pointer to `m_rBounding`.
+    if (field_8D6.GetCount() > 1) {
+        for (INT nIndex = 0; nIndex < field_8D6.GetCount(); nIndex++) {
+            delete field_8D6[nIndex];
+        }
+    }
+    field_8D6.SetSize(0);
+}
+
 // 0x47D7F0
 BOOLEAN CGameContainer::DoAIUpdate(BOOLEAN active, LONG counter)
 {
