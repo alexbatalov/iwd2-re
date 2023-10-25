@@ -1743,6 +1743,12 @@ void CGameSprite::SetMonkAbilities()
     }
 }
 
+// 0x7238A0
+LONG CGameSprite::GetLevel()
+{
+    return m_derivedStats.GetAtOffset(STAT_CLASSLEVELSUM);
+}
+
 // 0x723BF0
 void CGameSprite::sub_723BF0(BOOLEAN a1, BOOLEAN a2)
 {

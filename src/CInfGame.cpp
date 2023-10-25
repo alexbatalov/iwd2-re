@@ -4129,6 +4129,37 @@ void CInfGame::ResetMultiPlayerPermissions()
     pSettings->SetImportingCharacterOption(nImportingBitField);
 }
 
+// 0x5C9AC0
+LONG CInfGame::GetAveragePartyLevel()
+{
+    LONG nAverageLevel = 0;
+
+    for (SHORT nPortrait = 0; nPortrait < m_nCharacters; nPortrait++) {
+        // NOTE: Uninline.
+        LONG nCharacterId = GetCharacterId(nPortrait);
+
+        if (nCharacterId != CGameObjectArray::INVALID_INDEX) {
+            CGameSprite* pSprite;
+            m_cObjectArray.GetShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+
+            nAverageLevel += pSprite->GetLevel();
+
+            m_cObjectArray.ReleaseShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+
+    if (nAverageLevel == 0 || nAverageLevel / m_nCharacters < 1) {
+        return 1;
+    }
+
+    return nAverageLevel / m_nCharacters;
+}
+
 // NOTE: Unclear why `nClass` is passed as pointer.
 // TODO: Move to `CRuleTables`.
 //
