@@ -18,6 +18,7 @@
 #include "CScreenWorld.h"
 #include "CTimerWorld.h"
 #include "CUtil.h"
+#include "CVariableHash.h"
 
 // 0x8485C4
 const SHORT CGameAIBase::ACTION_DONE = -1;
@@ -1231,6 +1232,14 @@ CAIAction& CGameAIBase::GetNextAction(CAIAction& action)
 void CGameAIBase::sub_481890(CRect* r, CArray<CRect*>& ary)
 {
     // TODO: Incomplete.
+}
+
+// 0x4686C0
+CVariable* CGameAIBase::GetGlobalVariable(const CString& sScope, const CString& sName, int a3)
+{
+    // TODO: Incomplete.
+
+    return NULL;
 }
 
 // -----------------------------------------------------------------------------

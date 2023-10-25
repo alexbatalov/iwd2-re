@@ -14,6 +14,7 @@ class CGameStatic;
 class CGameTiledObject;
 class CGameTimer;
 class CGameTrigger;
+class CVariable;
 
 class CGameAIBase : public CGameObject {
 public:
@@ -96,6 +97,7 @@ public:
     CAIAction& GetNextAction(CAIAction& action);
 
     void sub_481890(CRect* r, CArray<CRect*>& ary);
+    static CVariable* GetGlobalVariable(const CString& sScope, const CString& sName, int a3);
 
     /* 006E */ CAIObjectType m_lAttacker;
     /* 00AE */ CAIObjectType m_lOrderedBy;

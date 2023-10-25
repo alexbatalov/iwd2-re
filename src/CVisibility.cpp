@@ -546,7 +546,7 @@ void CVisibilityMap::BltFogOWar3d(INT x, INT y, const CRect& rDest, const TILE_C
     // TODO: Incomplete.
 }
 
-// NOTE: Inlined.
+// 0x76B120
 SHORT CVisibilityMap::PointToTile(const CPoint& pos)
 {
     return static_cast<SHORT>(pos.x / SQUARE_SIZEX + m_nWidth * (pos.y / SQUARE_SIZEY));
