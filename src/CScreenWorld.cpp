@@ -120,6 +120,10 @@ CScreenWorld::CScreenWorld()
     m_pVirtualKeys[91] = CKeyInfo(VK_NEXT, 0, 0);
 
     // TODO: Incomplete.
+
+    InitializeCriticalSection(&field_106);
+
+    // TODO: Incomplete.
 }
 
 // 0x49FC40

@@ -87,6 +87,44 @@ public:
     /* 01BE */ SCRIPTNAME m_name;
 };
 
+class CAreaFileCreature {
+public:
+    CAreaFileCreature()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    /* 0000 */ SCRIPTNAME m_scriptName;
+    /* 0020 */ WORD m_posX;
+    /* 0022 */ WORD m_posY;
+    /* 0024 */ WORD m_startingPosX;
+    /* 0026 */ WORD m_startingPosY;
+    /* 0028 */ DWORD m_dwFlags;
+    /* 002C */ WORD m_type;
+    /* 002E */ char m_cFirstResSlot;
+    /* 002F */ BYTE structureAlignment1[1];
+    /* 0030 */ DWORD m_animationType;
+    /* 0034 */ WORD m_facing;
+    /* 0036 */ BYTE structureAlignment2[2];
+    /* 0038 */ DWORD m_expirationTime;
+    /* 003C */ WORD m_huntingRange;
+    /* 003E */ WORD m_followRange;
+    /* 0040 */ DWORD m_timeOfDayVisible;
+    /* 0044 */ DWORD m_numberTimesTalkedTo;
+    /* 0048 */ RESREF m_dialogOverride;
+    /* 0050 */ RESREF m_overrideScriptOverride;
+    /* 0058 */ RESREF m_special3ScriptOverride;
+    /* 0060 */ RESREF m_special2ScriptOverride;
+    /* 0068 */ RESREF m_combatScriptOverride;
+    /* 0070 */ RESREF m_movementScriptOverride;
+    /* 0078 */ RESREF m_teamScriptOverride;
+    /* 0080 */ RESREF m_creatureData;
+    /* 0088 */ DWORD m_creatureOffset;
+    /* 008C */ DWORD m_creatureSize;
+    /* 0090 */ RESREF m_special1ScriptOverride;
+    /* 0098 */ DWORD m_notUsed[30];
+};
+
 class CAreaFileRandomMonsterSpawningPoint {
 public:
     CAreaFileRandomMonsterSpawningPoint()
@@ -114,6 +152,20 @@ public:
     /* 0094 */ DWORD m_countdown;
     /* 0098 */ BYTE m_weights[10];
     /* 00A2 */ WORD m_notUsed[19];
+};
+
+class CAreaFileCharacterEntryPoint {
+public:
+    CAreaFileCharacterEntryPoint()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    /* 0000 */ SCRIPTNAME m_entryName;
+    /* 0020 */ WORD m_startX;
+    /* 0022 */ WORD m_startY;
+    /* 0024 */ DWORD m_facing;
+    /* 0028 */ DWORD m_notUsed[16];
 };
 
 class CAreaFileContainer {
@@ -398,8 +450,8 @@ public:
     /* 008E */ unsigned char field_8E[22];
     /* 00A4 */ STRREF m_speech[63];
     /* 01A0 */ STRREF m_biography;
-    /* 01A4 */ RESREF field_1A4;
-    /* 01AC */ RESREF field_1AC;
+    /* 01A4 */ RESREF m_scriptTeam;
+    /* 01AC */ RESREF m_scriptSpecial1;
     /* 01B4 */ int field_1B4;
     /* 01B8 */ DWORD m_feats[3];
     /* 01C4 */ unsigned char field_1C4[12];
@@ -448,11 +500,11 @@ public:
     /* 0265 */ BYTE m_moraleBreak;
     /* 0266 */ WORD m_moraleRecoveryTime;
     /* 0268 */ DWORD m_specialization;
-    /* 026C */ RESREF field_26C;
-    /* 0274 */ RESREF field_274;
-    /* 027C */ RESREF field_27C;
-    /* 0284 */ RESREF field_284;
-    /* 028C */ RESREF field_28C;
+    /* 026C */ RESREF m_scriptOverRide;
+    /* 0274 */ RESREF m_scriptSpecial2;
+    /* 027C */ RESREF m_scriptCombat;
+    /* 0284 */ RESREF m_scriptSpecial3;
+    /* 028C */ RESREF m_scriptMovement;
     /* 02FA */ BYTE m_fadeSpeed;
     /* 02FB */ unsigned char field_2FB;
     /* 02FC */ unsigned char field_2FC;

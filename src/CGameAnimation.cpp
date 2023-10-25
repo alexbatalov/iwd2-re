@@ -69,6 +69,16 @@ void CGameAnimation::GetAnimationResRef(CString& resRef, BYTE range)
 }
 
 // NOTE: Inlined.
+BOOLEAN CGameAnimation::CanLieDown()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2081
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->CanLieDown();
+}
+
+// NOTE: Inlined.
 void CGameAnimation::SetAnimationType(USHORT animationID, BYTE* colorRangeValues, WORD facing)
 {
     if (m_animation != NULL) {
@@ -76,10 +86,16 @@ void CGameAnimation::SetAnimationType(USHORT animationID, BYTE* colorRangeValues
     }
 
     m_animation = CGameAnimationType::SetAnimationType(animationID, colorRangeValues, facing);
+}
 
+// NOTE: Inlined.
+BYTE CGameAnimation::GetListType()
+{
     // __FILE__: .\Include\ObjAnimation.h
     // __LINE__: 2086
     UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->GetListType();
 }
 
 // NOTE: Inlined.

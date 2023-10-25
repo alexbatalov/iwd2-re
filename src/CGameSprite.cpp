@@ -426,13 +426,13 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     m_typeAI.Set(CAIObjectType::ANYONE);
     m_liveTypeAI.Set(CAIObjectType::ANYONE);
     m_startTypeAI.Set(CAIObjectType::ANYONE);
-    field_3F6 = 0;
-    field_3FA = 0;
-    field_3FE = 0;
-    field_402 = 0;
-    field_406 = 0;
-    field_40A = 0;
-    m_defaultScript = NULL;
+    m_overrideScript = 0;
+    m_special1Script = 0;
+    m_teamScript = 0;
+    m_special2Script = 0;
+    m_combatScript = 0;
+    m_special3Script = 0;
+    m_movementScript = NULL;
     field_54BC = 0;
     field_54C0 = 0;
     field_54C4 = (int)CGameObjectArray::INVALID_INDEX;
@@ -1107,67 +1107,67 @@ void CGameSprite::UnmarshalScripts()
 {
     CString sFileName;
 
-    sFileName = m_baseStats.field_26C;
+    sFileName = m_baseStats.m_scriptOverRide;
     if (sFileName != "") {
-        field_3F6 = new CAIScript(CResRef(sFileName));
-        if (field_3F6->IsEmpty()) {
-            delete field_3F6;
-            field_3F6 = NULL;
+        m_overrideScript = new CAIScript(CResRef(sFileName));
+        if (m_overrideScript->IsEmpty()) {
+            delete m_overrideScript;
+            m_overrideScript = NULL;
         }
     }
 
-    sFileName = m_baseStats.field_1AC;
+    sFileName = m_baseStats.m_scriptSpecial1;
     if (sFileName != "") {
-        field_3FA = new CAIScript(CResRef(sFileName));
-        if (field_3FA->IsEmpty()) {
-            delete field_3FA;
-            field_3FA = NULL;
+        m_special1Script = new CAIScript(CResRef(sFileName));
+        if (m_special1Script->IsEmpty()) {
+            delete m_special1Script;
+            m_special1Script = NULL;
         }
     }
 
-    sFileName = m_baseStats.field_1A4;
+    sFileName = m_baseStats.m_scriptTeam;
     if (sFileName != "") {
-        field_3FE = new CAIScript(CResRef(sFileName));
-        if (field_3FE->IsEmpty()) {
-            delete field_3FE;
-            field_3FE = NULL;
+        m_teamScript = new CAIScript(CResRef(sFileName));
+        if (m_teamScript->IsEmpty()) {
+            delete m_teamScript;
+            m_teamScript = NULL;
         }
     }
 
-    sFileName = m_baseStats.field_274;
+    sFileName = m_baseStats.m_scriptSpecial2;
     if (sFileName != "") {
-        field_402 = new CAIScript;
-        field_402->Read(CResRef(sFileName), g_pBaldurChitin->GetObjectGame()->m_bPlayerScriptStyle);
-        if (field_402->IsEmpty()) {
-            delete field_402;
-            field_402 = NULL;
+        m_special2Script = new CAIScript;
+        m_special2Script->Read(CResRef(sFileName), g_pBaldurChitin->GetObjectGame()->m_bPlayerScriptStyle);
+        if (m_special2Script->IsEmpty()) {
+            delete m_special2Script;
+            m_special2Script = NULL;
         }
     }
 
-    sFileName = m_baseStats.field_27C;
+    sFileName = m_baseStats.m_scriptCombat;
     if (sFileName != "") {
-        field_406 = new CAIScript(CResRef(sFileName));
-        if (field_406->IsEmpty()) {
-            delete field_406;
-            field_406 = NULL;
+        m_combatScript = new CAIScript(CResRef(sFileName));
+        if (m_combatScript->IsEmpty()) {
+            delete m_combatScript;
+            m_combatScript = NULL;
         }
     }
 
-    sFileName = m_baseStats.field_284;
+    sFileName = m_baseStats.m_scriptSpecial3;
     if (sFileName != "") {
-        field_40A = new CAIScript(CResRef(sFileName));
-        if (field_40A->IsEmpty()) {
-            delete field_40A;
-            field_40A = NULL;
+        m_special3Script = new CAIScript(CResRef(sFileName));
+        if (m_special3Script->IsEmpty()) {
+            delete m_special3Script;
+            m_special3Script = NULL;
         }
     }
 
-    sFileName = m_baseStats.field_28C;
+    sFileName = m_baseStats.m_scriptMovement;
     if (sFileName != "") {
-        m_defaultScript = new CAIScript(CResRef(sFileName));
-        if (m_defaultScript->IsEmpty()) {
-            delete m_defaultScript;
-            m_defaultScript = NULL;
+        m_movementScript = new CAIScript(CResRef(sFileName));
+        if (m_movementScript->IsEmpty()) {
+            delete m_movementScript;
+            m_movementScript = NULL;
         }
     }
 }
@@ -1186,6 +1186,84 @@ void CGameSprite::FetchCommonStrings()
         g_pBaldurChitin->GetTlkTable().Fetch(m_baseStats.m_speech[15 + index],
             m_speech[15 + index]);
     }
+}
+
+// 0x70EC70
+void CGameSprite::LoadAreaInformation(CAreaFileCreature* pCreature)
+{
+    m_nNumberOfTimesTalkedTo = pCreature->m_numberTimesTalkedTo;
+
+    CString tempRes;
+
+    tempRes = CString(reinterpret_cast<char*>(pCreature->m_dialogOverride), RESREF_SIZE);
+    if (tempRes != "") {
+        m_dialog = tempRes;
+    }
+
+    tempRes = CString(reinterpret_cast<char*>(pCreature->m_overrideScriptOverride), RESREF_SIZE);
+    tempRes.TrimLeft();
+    if (tempRes != "") {
+        CAIScript* pScript = new CAIScript(CResRef(tempRes));
+
+        CResRef(tempRes).GetResRef(m_baseStats.m_scriptOverRide);
+        SetScript(0, pScript);
+    }
+
+    tempRes = CString(reinterpret_cast<char*>(pCreature->m_special3ScriptOverride), RESREF_SIZE);
+    tempRes.TrimLeft();
+    if (tempRes != "") {
+        CAIScript* pScript = new CAIScript(CResRef(tempRes));
+
+        CResRef(tempRes).GetResRef(m_baseStats.m_scriptSpecial3);
+        SetScript(5, pScript);
+    }
+
+    tempRes = CString(reinterpret_cast<char*>(pCreature->m_special2ScriptOverride), RESREF_SIZE);
+    tempRes.TrimLeft();
+    if (tempRes != "") {
+        CAIScript* pScript = new CAIScript(CResRef(tempRes));
+
+        CResRef(tempRes).GetResRef(m_baseStats.m_scriptSpecial2);
+        SetScript(3, pScript);
+    }
+
+    tempRes = CString(reinterpret_cast<char*>(pCreature->m_combatScriptOverride), RESREF_SIZE);
+    tempRes.TrimLeft();
+    if (tempRes != "") {
+        CAIScript* pScript = new CAIScript(CResRef(tempRes));
+
+        CResRef(tempRes).GetResRef(m_baseStats.m_scriptCombat);
+        SetScript(4, pScript);
+    }
+
+    tempRes = CString(reinterpret_cast<char*>(pCreature->m_movementScriptOverride), RESREF_SIZE);
+    tempRes.TrimLeft();
+    if (tempRes != "") {
+        CAIScript* pScript = new CAIScript(CResRef(tempRes));
+
+        CResRef(tempRes).GetResRef(m_baseStats.m_scriptMovement);
+        SetScript(6, pScript);
+    }
+
+    tempRes = CString(reinterpret_cast<char*>(pCreature->m_teamScriptOverride), RESREF_SIZE);
+    tempRes.TrimLeft();
+    if (tempRes != "") {
+        CAIScript* pScript = new CAIScript(CResRef(tempRes));
+
+        CResRef(tempRes).GetResRef(m_baseStats.m_scriptTeam);
+        SetScript(2, pScript);
+    }
+
+    tempRes = CString(reinterpret_cast<char*>(pCreature->m_special1ScriptOverride), RESREF_SIZE);
+    tempRes.TrimLeft();
+    if (tempRes != "") {
+        CAIScript* pScript = new CAIScript(CResRef(tempRes));
+
+        CResRef(tempRes).GetResRef(m_baseStats.m_scriptSpecial1);
+        SetScript(1, pScript);
+    }
+
+    memcpy(m_scriptName, pCreature->m_scriptName, SCRIPTNAME_SIZE);
 }
 
 // 0x70F270

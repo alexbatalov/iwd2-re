@@ -3454,8 +3454,8 @@ void CScreenCharacter::ResetScriptPanel(CUIPanel* pPanel)
     } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
     if (rc == CGameObjectArray::SUCCESS) {
-        if (pSprite->field_402 != NULL) {
-            pSprite->field_402->m_cResRef.CopyToString(sScript);
+        if (pSprite->m_special2Script != NULL) {
+            pSprite->m_special2Script->m_cResRef.CopyToString(sScript);
             sScript.MakeUpper();
         } else {
             sScript = "none";
@@ -4259,8 +4259,8 @@ void CScreenCharacter::OnCustomizeButtonClick()
         m_cResSoundSet = pSprite->m_secondarySounds;
         field_856 = pSprite->field_725A;
 
-        if (pSprite->field_402 != NULL) {
-            pSprite->field_402->m_cResRef.CopyToString(field_832);
+        if (pSprite->m_special2Script != NULL) {
+            pSprite->m_special2Script->m_cResRef.CopyToString(field_832);
             field_832.MakeUpper();
         } else {
             field_832 = "NONE";

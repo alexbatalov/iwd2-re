@@ -210,6 +210,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CPathSearch.h"
     "src/CProgressBar.cpp"
     "src/CProgressBar.h"
+    "src/CProjectile.cpp"
+    "src/CProjectile.h"
     "src/CRes.cpp"
     "src/CRes.h"
     "src/CResArea.cpp"

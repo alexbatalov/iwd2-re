@@ -122,7 +122,9 @@ public:
     CInfinity();
     ~CInfinity();
 
+    BOOL AttachWED(CResWED* resNewWED, WORD areaType, BYTE dayNightCode);
     BOOL AttachVRamPool(CVRamPool* pNewVRPool);
+    void CacheTiles();
     BOOL CancelRequestRect(unsigned char a1);
     BOOL DetachVRamRect();
     BOOL DrawEllipse(const CPoint& ptCenter, const CSize& axes, COLORREF rgbColor);

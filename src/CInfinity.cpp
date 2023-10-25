@@ -844,6 +844,14 @@ CInfinity::~CInfinity()
     pVRPool = NULL;
 }
 
+// 0x5CC7F0
+BOOL CInfinity::AttachWED(CResWED* resNewWED, WORD areaType, BYTE dayNightCode)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x5CCD00
 BOOL CInfinity::AttachVRamPool(CVRamPool* pNewVRPool)
 {
@@ -858,6 +866,12 @@ BOOL CInfinity::AttachVRamPool(CVRamPool* pNewVRPool)
     }
 
     return TRUE;
+}
+
+// 0x5CCD30
+void CInfinity::CacheTiles()
+{
+    // TODO: Incomplete.
 }
 
 // 0x5CD2E0

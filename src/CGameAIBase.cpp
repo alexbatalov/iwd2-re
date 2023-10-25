@@ -80,13 +80,13 @@ CGameAIBase::CGameAIBase()
     field_550 = 0;
     field_552 = 0;
     field_44A = 0;
-    field_3F6 = NULL;
-    field_3FA = NULL;
-    field_3FE = NULL;
-    field_402 = NULL;
-    field_406 = NULL;
-    field_40A = NULL;
-    m_defaultScript = NULL;
+    m_overrideScript = NULL;
+    m_special1Script = NULL;
+    m_teamScript = NULL;
+    m_special2Script = NULL;
+    m_combatScript = NULL;
+    m_special3Script = NULL;
+    m_movementScript = NULL;
     m_inCutScene = FALSE;
     m_reactionRoll = 10;
     field_550 = rand() % 120;
@@ -135,39 +135,39 @@ CGameAIBase::~CGameAIBase()
         }
     }
 
-    if (field_3F6 != NULL) {
-        delete field_3F6;
-        field_3F6 = NULL;
+    if (m_overrideScript != NULL) {
+        delete m_overrideScript;
+        m_overrideScript = NULL;
     }
 
-    if (field_3FA != NULL) {
-        delete field_3FA;
-        field_3FA = NULL;
+    if (m_special1Script != NULL) {
+        delete m_special1Script;
+        m_special1Script = NULL;
     }
 
-    if (field_3FE != NULL) {
-        delete field_3FE;
-        field_3FE = NULL;
+    if (m_teamScript != NULL) {
+        delete m_teamScript;
+        m_teamScript = NULL;
     }
 
-    if (field_402 != NULL) {
-        delete field_402;
-        field_402 = NULL;
+    if (m_special2Script != NULL) {
+        delete m_special2Script;
+        m_special2Script = NULL;
     }
 
-    if (field_406 != NULL) {
-        delete field_406;
-        field_406 = NULL;
+    if (m_combatScript != NULL) {
+        delete m_combatScript;
+        m_combatScript = NULL;
     }
 
-    if (field_40A != NULL) {
-        delete field_40A;
-        field_40A = NULL;
+    if (m_special3Script != NULL) {
+        delete m_special3Script;
+        m_special3Script = NULL;
     }
 
-    if (m_defaultScript != NULL) {
-        delete m_defaultScript;
-        m_defaultScript = NULL;
+    if (m_movementScript != NULL) {
+        delete m_movementScript;
+        m_movementScript = NULL;
     }
 }
 
@@ -419,46 +419,46 @@ void CGameAIBase::SetScript(SHORT level, CAIScript* script)
 {
     switch (level) {
     case 0:
-        if (field_3F6 != NULL) {
-            delete field_3F6;
+        if (m_overrideScript != NULL) {
+            delete m_overrideScript;
         }
-        field_3F6 = script;
+        m_overrideScript = script;
         break;
     case 1:
-        if (field_3FA != NULL) {
-            delete field_3FA;
+        if (m_special1Script != NULL) {
+            delete m_special1Script;
         }
-        field_3FA = script;
+        m_special1Script = script;
         break;
     case 2:
-        if (field_3FE != NULL) {
-            delete field_3FE;
+        if (m_teamScript != NULL) {
+            delete m_teamScript;
         }
-        field_3FE = script;
+        m_teamScript = script;
         break;
     case 3:
-        if (field_402 != NULL) {
-            delete field_402;
+        if (m_special2Script != NULL) {
+            delete m_special2Script;
         }
-        field_402 = script;
+        m_special2Script = script;
         break;
     case 4:
-        if (field_406 != NULL) {
-            delete field_406;
+        if (m_combatScript != NULL) {
+            delete m_combatScript;
         }
-        field_406 = script;
+        m_combatScript = script;
         break;
     case 5:
-        if (field_40A != NULL) {
-            delete field_40A;
+        if (m_special3Script != NULL) {
+            delete m_special3Script;
         }
-        field_40A = script;
+        m_special3Script = script;
         break;
     case 6:
-        if (m_defaultScript != NULL) {
-            delete m_defaultScript;
+        if (m_movementScript != NULL) {
+            delete m_movementScript;
         }
-        m_defaultScript = script;
+        m_movementScript = script;
         break;
     }
 }
@@ -1191,11 +1191,11 @@ void CGameAIBase::SetTrigger(const CAITrigger& trigger)
 // NOTE: Inlined.
 void CGameAIBase::SetDefaultScript(CAIScript* script)
 {
-    if (m_defaultScript != NULL) {
-        delete m_defaultScript;
+    if (m_movementScript != NULL) {
+        delete m_movementScript;
     }
 
-    m_defaultScript = script;
+    m_movementScript = script;
 }
 
 // 0x6F2C20

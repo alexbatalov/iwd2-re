@@ -55,6 +55,8 @@ public:
     BOOLEAN IsDusk();
     BYTE GetCurrentHour();
 
+    ULONG GetCurrentDayTime();
+
     ULONG m_gameTime;
     BOOLEAN m_active;
     BYTE m_nLastPercentage;

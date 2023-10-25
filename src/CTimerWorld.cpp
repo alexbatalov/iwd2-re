@@ -311,3 +311,9 @@ BYTE CTimerWorld::GetCurrentHour()
 {
     return m_gameTime % TIMESCALE_MSEC_PER_DAY / TIMESCALE_MSEC_PER_SEC / TIMESCALE_SEC_PER_MIN / TIMESCALE_MIN_PER_HOUR;
 }
+
+// NOTE: Inlined.
+ULONG CTimerWorld::GetCurrentDayTime()
+{
+    return m_gameTime % TIMESCALE_MSEC_PER_DAY;
+}

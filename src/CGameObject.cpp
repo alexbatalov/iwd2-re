@@ -425,7 +425,7 @@ BOOL CGameObject::EvaluateStatusTrigger(const CAITrigger& trigger)
 }
 
 // 0x6A3C60
-BOOLEAN CGameObject::func_68()
+BOOLEAN CGameObject::IsProjectile()
 {
     return FALSE;
 }

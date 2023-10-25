@@ -5,6 +5,7 @@
 
 #include "CGameAreaNotes.h"
 #include "CInfinity.h"
+#include "CMemINI.h"
 #include "CSearchBitmap.h"
 #include "CSound.h"
 #include "CVariableHash.h"
@@ -14,6 +15,7 @@
 
 class CInfGame;
 class CObjectMarker;
+class CSpawnFile;
 class CTiledObject;
 class CVidMode;
 
@@ -74,6 +76,53 @@ public:
     DWORD m_notUsed[15];
 };
 
+class CAreaFileOffsets {
+public:
+    CAreaFileOffsets()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    DWORD m_creatureTableOffset;
+    WORD m_creatureTableCount;
+    WORD m_triggerObjectListCount;
+    DWORD m_triggerObjectListOffset;
+    DWORD m_randomMonsterSpawningPointTableOffset;
+    DWORD m_randomMonsterSpawningPointTableCount;
+    DWORD m_characterEntryPointTableOffset;
+    DWORD m_characterEntryPointTableCount;
+    DWORD m_containerListOffset;
+    WORD m_containerListCount;
+    WORD m_itemObjectsCount;
+    DWORD m_itemObjectsOffset;
+    DWORD m_pointsOffset;
+    WORD m_pointsCount;
+    WORD m_soundObjectCount;
+    DWORD m_soundObjectOffset;
+    DWORD m_areaScriptVariablesOffset;
+    WORD m_areaScriptVariablesCount;
+    WORD m_tiledObjectFlagsCount;
+    DWORD m_tiledObjectFlagsOffset;
+    RESREF m_script;
+    DWORD m_visibilityMapCount;
+    DWORD m_visibilityMapOffset;
+    DWORD m_doorObjectListCount;
+    DWORD m_doorObjectListOffset;
+    DWORD m_staticObjectListCount;
+    DWORD m_staticObjectListOffset;
+    DWORD m_tiledObjectListCount;
+    DWORD m_tiledObjectListOffset;
+    DWORD m_areaSoundsAndMusicOffset;
+    DWORD m_restingEncounterOffset;
+    DWORD m_userMapNotesOffset;
+    DWORD m_userMapNotesCount;
+    DWORD m_projectileTableOffset;
+    DWORD m_projectileTableCount;
+    RESREF m_restMovieDay;
+    RESREF m_restMovieNight;
+    DWORD m_notUsed[14];
+};
+
 class CAreaFileRestEncounter {
 public:
     CAreaFileRestEncounter()
@@ -110,8 +159,10 @@ public:
     BOOLEAN CanSaveGame(STRREF& strError);
     void CompressTime(DWORD deltaTime);
     void ClearInput();
+    void ClearMarshal();
     void IncrHeightDynamic(const CPoint& point);
     void DecrHeightDynamic(const CPoint& point);
+    void Unmarshal(BYTE* pArea, LONG areaSize, const CString& sName, BOOLEAN bProgressBarInPlace);
     void ProgressBarCallback(DWORD dwSize, BOOLEAN bInitialize);
     void SetListenPosition();
     void OnActivation();
@@ -152,8 +203,9 @@ public:
     /* 0000 */ CAreaFileHeader m_header;
     /* 005C */ CAreaSoundsAndMusic m_headerSound;
     /* 00EC */ CAreaFileRestEncounter m_headerRestEncounter;
+    /* 01D0 */ CTypedPtrList<CPtrList, CAreaFileCharacterEntryPoint*> m_entryPoints;
     /* 01EC */ BYTE m_id;
-    /* 01ED */ unsigned char field_1ED;
+    /* 01ED */ BYTE m_nCharacters;
     /* 01EE */ unsigned char field_1EE;
     /* 01EF */ BOOLEAN m_bAreaLoaded;
     /* 01F0 */ CResRef m_resRef;
@@ -174,7 +226,7 @@ public:
     /* 0252 */ LONG m_nToolTip;
     /* 0256 */ CPoint m_ptMousePos;
     /* 025E */ CVidBitmap m_bmLum;
-    /* 0318 */ int field_318;
+    /* 0318 */ CVidBitmap* m_pbmLumNight;
     /* 031C */ CVidBitmap m_bmHeight;
     /* 03D6 */ CObjectMarker* m_pObjectMarker;
     /* 03DA */ BYTE m_firstRender;
@@ -184,7 +236,7 @@ public:
     /* 03F6 */ BOOL m_groupMove;
     /* 03FA */ BYTE m_terrainTable[16];
     /* 040A */ BYTE m_visibleTerrainTable[16];
-    /* 041A */ int field_41A;
+    /* 041A */ LONG m_nAIIndex;
     /* 041E */ int field_41E;
     /* 0422 */ DWORD m_nInitialAreaId;
     /* 0422 */ int m_nInitialAreaID;
@@ -212,6 +264,9 @@ public:
     /* 09E6 */ CTypedPtrList<CPtrList, int*> m_lVertSortAdd; // NOTE: Stores actual ints disguised as pointers.
     /* 0A02 */ CTypedPtrList<CPtrList, int*> m_lVertSortBackAdd; // NOTE: Stores actual ints disguised as pointers.
     /* 0A1E */ CTypedPtrList<CPtrList, int*> m_lVertSortFlightAdd; // NOTE: Stores actual ints disguised as pointers.
+    /* 0A3A */ CTypedPtrList<CPtrList, int*> m_lVertSortRemove; // NOTE: Stores actual ints disguised as pointers.
+    /* 0A56 */ CTypedPtrList<CPtrList, int*> m_lVertSortBackRemove; // NOTE: Stores actual ints disguised as pointers.
+    /* 0A72 */ CTypedPtrList<CPtrList, int*> m_lVertSortFlightRemove; // NOTE: Stores actual ints disguised as pointers.
     /* 0A8E */ CTypedPtrList<CPtrList, CTiledObject*> m_lTiledObjects;
     /* 0AC6 */ CPoint m_ptOldViewPos;
     /* 0ACE */ CVariableHash m_variables;
@@ -219,8 +274,9 @@ public:
     /* 0AE6 */ unsigned char field_AE6;
     /* 0AE8 */ SHORT m_nCurrentSong;
     /* 0AEA */ INT m_nBattleSongCounter;
+    /* 0AEE */ CMemINI INIFile;
     /* 0B0E */ int field_B0E;
-    /* 0B12 */ int field_B12;
+    /* 0B12 */ CSpawnFile* mpSpawner;
     /* 0B16 */ BOOL field_B16;
 };
 

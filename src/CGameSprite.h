@@ -296,6 +296,7 @@ public:
     void Unmarshal(BYTE* pCreature, LONG creatureSize, WORD facing, int a4);
     void UnmarshalScripts();
     void FetchCommonStrings();
+    void LoadAreaInformation(CAreaFileCreature* pCreature);
     BYTE GetChannel();
     CItem* GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot);
     void UnequipAll(BOOL a1);

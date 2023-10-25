@@ -64,7 +64,7 @@ public:
     /* 005C */ virtual void SetTarget(CPoint pt, BOOL a2);
     /* 0060 */ virtual void SetVertListPos(POSITION posVertList);
     /* 0064 */ virtual BOOL EvaluateStatusTrigger(const CAITrigger& trigger);
-    /* 0068 */ virtual BOOLEAN func_68();
+    /* 0068 */ virtual BOOLEAN IsProjectile();
 
     CGameArea* GetArea();
     LONG GetId();

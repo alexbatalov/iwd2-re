@@ -111,6 +111,7 @@ public:
     INT GetNumContainerRows(LONG nContainer);
     INT GetNumGroupRows();
 
+    /* 0106 */ CRITICAL_SECTION field_106;
     /* 0122 */ LONG m_boredCount;
     /* 0126 */ BOOL m_bored;
     /* 012A */ BOOL m_playerShutdown;
