@@ -378,7 +378,7 @@ CNamedCreatureVariableHashEntry* CNamedCreatureVariableHashEntry::sub_550CF0()
     CNamedCreatureVariableHashEntry* var = this;
 
     while (var->m_pNext != NULL) {
-        var = m_pNext;
+        var = var->m_pNext;
     }
 
     return var;
