@@ -18,7 +18,7 @@ public:
 
     void AccessFileInCache(UINT nIndex);
     void AddFileToCache(UINT nIndex, const CTime& cTime, DWORD nSize);
-    BOOL CopyFile(UINT nIndex, const CString& a3, const CString& a4, const CString& a5);
+    BOOL CopyFile(UINT nIndex, const CString& sName, const CString& sSrcFileName, const CString& sDstFileName);
     BOOL DeleteFileFromCache(UINT nIndex);
     void FlushCache(int a2);
     BOOL IsCacheSpaceAvailable();

@@ -134,7 +134,7 @@ void CResCache::AddFileToCache(UINT nIndex, const CTime& cTime, DWORD nSize)
         Entry* pEntry = m_lEntries.GetNext(pos);
         if (nIndex == pEntry->nIndex) {
             existingEntryFound = TRUE;
-            existingEntryPos = pos;
+            existingEntryPos = curr;
         } else {
             if (!prevEntryFound) {
                 if (pEntry->cTime < cTime) {
@@ -185,11 +185,181 @@ void CResCache::AddFileToCache(UINT nIndex, const CTime& cTime, DWORD nSize)
 }
 
 // 0x78C4F0
-BOOL CResCache::CopyFile(UINT nIndex, const CString& a3, const CString& a4, const CString& a5)
+BOOL CResCache::CopyFile(UINT nIndex, const CString& sName, const CString& sSrcFileName, const CString& sDstFileName)
 {
-    // TODO: Incomplete.
+    CFile input;
+    CFile output;
+    BOOL bCompressed = FALSE;
 
-    return FALSE;
+    if (!input.Open(sSrcFileName, CFile::OpenFlags::modeRead | CFile::OpenFlags::shareDenyWrite | CFile::OpenFlags::typeBinary, NULL)) {
+        return FALSE;
+    }
+
+    char header[12];
+    if (input.Read(header, sizeof(header)) != sizeof(header)) {
+        input.Close();
+        return FALSE;
+    }
+
+    INT nSize;
+    INT nTotalBytesToRead;
+    if (_strnicmp(header, "BIFCV1.0", 8) == 0) {
+        nSize = *(reinterpret_cast<INT*>(header + 8));
+        bCompressed = TRUE;
+        nTotalBytesToRead = nSize;
+    } else {
+        nTotalBytesToRead = static_cast<INT>(input.GetLength());
+        input.Seek(CFile::SeekPosition::begin, 0);
+        nSize = nTotalBytesToRead;
+    }
+
+    INT nTotalBytesRead = 0;
+
+    field_118 = 0;
+
+    if (GetUnusedSize() < nSize) {
+        FlushCache(nSize);
+        if (GetUnusedSize() < nSize) {
+            int v1 = nSize - GetUnusedSize();
+            m_nCacheSize += v1 + m_nAvailableCacheSize;
+            m_nAvailableCacheSize += v1;
+            if (GetUnusedSize() < nSize) {
+                m_nCacheSize -= v1;
+                m_nAvailableCacheSize -= v1;
+                input.Close();
+                return FALSE;
+            }
+        }
+    }
+
+    DWORD nCompressedBufferSize = 0;
+    BYTE* pCompressedBuffer = NULL;
+
+    DWORD nBufferSize = 1024;
+    BYTE* pBuffer = new BYTE[nBufferSize];
+    if (pBuffer == NULL) {
+        input.Close();
+        return FALSE;
+    }
+
+    if (!output.Open(sDstFileName, CFile::OpenFlags::modeWrite | CFile::OpenFlags::modeCreate | CFile::OpenFlags::typeBinary, NULL)) {
+        delete pBuffer;
+        input.Close();
+        return FALSE;
+    }
+
+    // FIXME: Unused.
+    GetTickCount();
+
+    DWORD nLastDisplayRefreshTime = GetTickCount();
+    DWORD nLastBroadcastTime = GetTickCount();
+
+    field_114 = 1;
+
+    if (bCompressed) {
+        nTotalBytesToRead = static_cast<INT>(input.GetLength()) - sizeof(header);
+    }
+
+    INT nBytesRead;
+    while (nTotalBytesRead < nTotalBytesToRead) {
+        if (bCompressed) {
+            DWORD chunkHeader[2];
+            if (input.Read(chunkHeader, sizeof(chunkHeader)) == sizeof(chunkHeader)) {
+                nTotalBytesRead += sizeof(chunkHeader);
+
+                DWORD nUncompressedChunkSize = chunkHeader[0];
+                DWORD nCompressedChunkSize = chunkHeader[1];
+
+                if (nBufferSize < nUncompressedChunkSize) {
+                    delete pBuffer;
+
+                    nBufferSize = nUncompressedChunkSize;
+                    pBuffer = new BYTE[nBufferSize];
+                    if (pBuffer == NULL) {
+                        if (pCompressedBuffer != NULL) {
+                            delete pCompressedBuffer;
+                        }
+                        return FALSE;
+                    }
+                }
+
+                if (nCompressedBufferSize < nCompressedChunkSize) {
+                    if (pCompressedBuffer != NULL) {
+                        delete pCompressedBuffer;
+                    }
+
+                    nCompressedBufferSize = max(nCompressedChunkSize, 1024);
+                    pCompressedBuffer = new BYTE[nCompressedBufferSize];
+                    if (pBuffer == NULL) {
+                        delete pBuffer;
+                        return FALSE;
+                    }
+                }
+
+                nBytesRead = input.Read(pCompressedBuffer, nCompressedChunkSize);
+                if (nBytesRead != nCompressedChunkSize) {
+                    field_118 = 1;
+
+                    delete pCompressedBuffer;
+                    delete pBuffer;
+
+                    return FALSE;
+                }
+
+                int err = CUtil::Uncompress(pBuffer, &nUncompressedChunkSize, pCompressedBuffer, nCompressedChunkSize);
+
+                // __FILE__: C:\Projects\Icewind2\src\chitin\ChDimm.cpp
+                // __LINE__: 11308
+                UTIL_ASSERT(err == 0);
+
+                output.Write(pBuffer, nUncompressedChunkSize);
+            } else {
+                field_118 = 1;
+            }
+        } else {
+            nBytesRead = input.Read(pBuffer, nBufferSize);
+            output.Write(pBuffer, nBytesRead);
+        }
+
+        if (field_118 == 1) {
+            nTotalBytesRead = nTotalBytesToRead;
+            g_pChitin->cProgressBar.m_nActionProgress = nTotalBytesRead;
+        } else {
+            nTotalBytesRead += nBytesRead;
+            g_pChitin->cProgressBar.m_nActionProgress += nBytesRead;
+        }
+
+        if (GetTickCount() - nLastDisplayRefreshTime) {
+            g_pChitin->m_bDisplayStale = TRUE;
+            nLastDisplayRefreshTime = GetTickCount();
+            SleepEx(10, 0);
+        }
+
+        if (GetTickCount() - nLastBroadcastTime >= 2000) {
+            nLastBroadcastTime = GetTickCount();
+            g_pChitin->BroadcastMultiplayerProgressBarInfo();
+        }
+    }
+
+    field_114 = 0;
+
+    input.Close();
+    output.Close();
+
+    if (pCompressedBuffer != NULL) {
+        delete pCompressedBuffer;
+    }
+
+    delete pBuffer;
+
+    if (field_118 == 1) {
+        CFile::Remove(sDstFileName);
+        return FALSE;
+    }
+
+    AddFileToCache(nIndex, CTime::GetTickCount(), nSize);
+
+    return TRUE;
 }
 
 // 0x78CAC0
