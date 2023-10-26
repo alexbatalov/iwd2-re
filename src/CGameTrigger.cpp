@@ -58,9 +58,11 @@ CGameTrigger::CGameTrigger(CGameArea* pArea, CAreaFileTriggerObject* pTriggerObj
     if (m_nPolygon != 0) {
         m_pPolygon = new CPoint[m_nPolygon];
 
-        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameTrigger.cpp
-        // __LINE__: 149
-        UTIL_ASSERT(FALSE);
+        if (m_pPolygon == NULL) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameTrigger.cpp
+            // __LINE__: 149
+            UTIL_ASSERT(FALSE);
+        }
 
         WORD adjust = 0;
         for (WORD cnt = 0; cnt < m_nPolygon; cnt++) {
