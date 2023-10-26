@@ -35,7 +35,8 @@ BOOL CResArea::Parse(void* pData)
     }
 
     AREA_HEADER* header = reinterpret_cast<AREA_HEADER*>(pData);
-    if (header->nFileType != 'AREA' || header->nFileVersion != 'V9.1') {
+    if (memcmp(&(header->nFileType), "AREA", 4) != 0
+        || memcmp(&(header->nFileVersion), "V9.1", 4) != 0) {
         return FALSE;
     }
 
