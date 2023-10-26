@@ -6,6 +6,7 @@
 #include "CGameAreaNotes.h"
 #include "CInfinity.h"
 #include "CMemINI.h"
+#include "CResArea.h"
 #include "CSearchBitmap.h"
 #include "CSound.h"
 #include "CVariableHash.h"
@@ -278,6 +279,13 @@ public:
     /* 0B0E */ int field_B0E;
     /* 0B12 */ CSpawnFile* mpSpawner;
     /* 0B16 */ BOOL field_B16;
+};
+
+class CAreaFile : public CResHelper<CResArea, 1010> {
+public:
+    BYTE* GetData();
+    DWORD GetDataSize();
+    void ReleaseData();
 };
 
 #endif /* CGAMEAREA_H_ */

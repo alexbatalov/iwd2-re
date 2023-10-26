@@ -1755,3 +1755,41 @@ CGameAreaNotes* CGameArea::GetAreaNotes()
 {
     return &m_cGameAreaNotes;
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x47A020
+BYTE* CAreaFile::GetData()
+{
+    if (pRes != NULL) {
+        return static_cast<BYTE*>(pRes->Demand());
+    } else {
+        return NULL;
+    }
+}
+
+// 0x47A030
+DWORD CAreaFile::GetDataSize()
+{
+    if (pRes == NULL) {
+        return 0;
+    }
+
+    if (pRes->Demand() == NULL) {
+        return 0;
+    }
+
+    DWORD nSize = pRes->m_nResSizeActual;
+
+    pRes->Release();
+
+    return nSize;
+}
+
+// 0x5C7B00
+void CAreaFile::ReleaseData()
+{
+    if (pRes != NULL) {
+        pRes->Release();
+    }
+}
