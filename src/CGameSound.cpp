@@ -105,6 +105,12 @@ CGameSound::~CGameSound()
     }
 }
 
+// 0x766660
+BOOLEAN CGameSound::CompressTime(DWORD deltaTime)
+{
+    return TRUE;
+}
+
 // 0x4C95B0
 void CGameSound::RemoveFromArea()
 {

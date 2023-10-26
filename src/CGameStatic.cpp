@@ -44,6 +44,12 @@ CGameStatic::~CGameStatic()
 {
 }
 
+// 0x766660
+BOOLEAN CGameStatic::CompressTime(DWORD deltaTime)
+{
+    return TRUE;
+}
+
 // 0x4CA840
 BOOLEAN CGameStatic::DoAIUpdate(BOOLEAN active, LONG counter)
 {

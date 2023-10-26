@@ -58,6 +58,12 @@ CGameSpawning::~CGameSpawning()
 {
 }
 
+// 0x766660
+BOOLEAN CGameSpawning::CompressTime(DWORD deltaTime)
+{
+    return TRUE;
+}
+
 // 0x4CA3D0
 void CGameSpawning::RemoveFromArea()
 {

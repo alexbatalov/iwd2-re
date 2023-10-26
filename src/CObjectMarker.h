@@ -10,6 +10,7 @@ public:
     CObjectMarker();
     /* 0000 */ ~CObjectMarker() override;
     /* 0008 */ void AddToArea(CGameArea* pNewArea, const CPoint& pos, LONG posZ, BYTE listType) override;
+    /* 002C */ BOOLEAN CompressTime(DWORD deltaTime) override;
     /* 0048 */ void RemoveFromArea() override;
     /* 004C */ void Render(CGameArea* pArea, CVidMode* pVidMode, int a3) override;
 

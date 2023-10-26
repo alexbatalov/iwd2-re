@@ -15,6 +15,12 @@ CObjectMarker::~CObjectMarker()
 {
 }
 
+// 0x766660
+BOOLEAN CObjectMarker::CompressTime(DWORD deltaTime)
+{
+    return TRUE;
+}
+
 // 0x766730
 void CObjectMarker::AddToArea(CGameArea* pNewArea, const CPoint& pos, LONG posZ, BYTE listType)
 {
