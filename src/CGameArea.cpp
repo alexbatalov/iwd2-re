@@ -121,7 +121,30 @@ CGameArea::CGameArea(BYTE id)
 // 0x46A070
 CGameArea::~CGameArea()
 {
-    // TODO: Incomplete.
+    EnterCriticalSection(&(g_pBaldurChitin->m_pEngineWorld->field_106));
+
+    if (mpSpawner != NULL) {
+        delete mpSpawner;
+        mpSpawner = NULL;
+    }
+
+    if (m_bAreaLoaded) {
+        ClearMarshal();
+    }
+
+    DeleteCriticalSection(&field_1FC);
+
+    if (m_nListManipulationThreadCounter > 0) {
+        m_nListManipulationThreadCounter--;
+    }
+
+    if (m_nListManipulationThreadCounter == 0) {
+        m_ListManipulationThreadId = 0;
+    }
+
+    DeleteCriticalSection(&field_214);
+
+    LeaveCriticalSection(&(g_pBaldurChitin->m_pEngineWorld->field_106));
 }
 
 // 0x46A2E0
