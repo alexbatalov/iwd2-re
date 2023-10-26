@@ -15,6 +15,7 @@ class CSearchBitmap;
 class CVidCell;
 class CVidFont;
 class CVidMode;
+class CVisibilityMap;
 class CVRamPool;
 
 typedef struct {
@@ -37,6 +38,8 @@ public:
 
 class CInfTileSet {
 public:
+    static int dword_8F2700;
+
     CInfTileSet();
     ~CInfTileSet();
 
@@ -52,6 +55,7 @@ public:
     BOOLEAN SetTileRenderCode(INT nTile, TILE_CODE& tileCode);
 
     BOOL Render3d(INT nTile, INT nStencilTile, const CRect& rDest, INT x, INT y, const TILE_CODE& tileCode, DWORD dwFlags, BYTE nDualTileCode, int a9);
+    static void sub_5D2DE0();
 
     /* 0000 */ COLORREF m_rgbAddColor;
     /* 0004 */ COLORREF m_rgbTintColor;
@@ -102,6 +106,9 @@ public:
     static const COLORREF RGB_PRIMEDAWN_RAINCOLOR;
     static const BYTE TRUE_DAWNDUSK_INTENSITY;
     static const BYTE SCROLL_DELAY;
+    static const DWORD RENDER_ERROR;
+    static const DWORD RENDER_OK;
+    static const DWORD RENDER_MESSAGESCREEN;
     static const CString DAWN_MOVIE;
     static const CString DUSK_MOVIE;
     static const CString NIGHT_RESREF_SUFFIX;
@@ -128,6 +135,7 @@ public:
     BOOL CancelRequestRect(unsigned char a1);
     BOOL DetachVRamRect();
     BOOL DrawEllipse(const CPoint& ptCenter, const CSize& axes, COLORREF rgbColor);
+    BOOL DrawHighlightRect(const CRect& rSquare, COLORREF rgbColor, BYTE width);
     CPoint GetWorldCoordinates(const CPoint& ptScreen);
     BOOL FreeWED();
     BOOL FXBltFrom(INT nDestSurface, CRect& rFXRect, INT x, INT y, INT nRefPointX, INT nRefPointY, DWORD dwFlags);
@@ -140,6 +148,7 @@ public:
     COLORREF GetGlobalLighting();
     void GetViewPosition(INT& x, INT& y);
     BOOL PostRender(CVidMode* pNewVidMode, int a2, CSearchBitmap* pVisibilityMap);
+    DWORD Render(CVidMode* pNewVidMode, INT nSurface, INT nScrollState, CVisibilityMap* pVisibilityMap);
     BOOL RenderLightning(int a1, const CRect& rSurface, INT nStartX, INT nStartY, INT nEndX, INT nEndY, COLORREF rgbCenter, COLORREF rgbMiddle, COLORREF rgbOuter);
     BOOL RequestRect(int x1, int y1, int x2, int y2);
     BOOL InitViewPort(const CRect& rRect);

@@ -1,5 +1,7 @@
 #include "CTiledObject.h"
 
+#include "CInfinity.h"
+
 // 0x84EC08
 const WORD CTiledObject::STATE_PRIMARY_TILE = 1;
 
@@ -14,6 +16,12 @@ CTiledObject::CTiledObject()
     m_nWedIndex = 0;
     m_wAIState = 0;
     m_wRenderState = 0;
+}
+
+// 0x54E5B0
+void CTiledObject::CheckTileState(CInfinity& cInfinity)
+{
+    // TODO: Incomplete.
 }
 
 // 0x54E830

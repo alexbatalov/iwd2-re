@@ -19,6 +19,9 @@
 // 0x85A1EC
 const LONG CScreenWorld::BORED_TIME = 3000;
 
+// 0x8F85BC
+int CScreenWorld::dword_8F85BC;
+
 // 0x685610
 CScreenWorld::CScreenWorld()
 {

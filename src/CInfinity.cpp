@@ -9,6 +9,9 @@
 #include "CVidInf.h"
 #include "CVisibility.h"
 
+// 0x8F2700
+int CInfTileSet::dword_8F2700;
+
 // 0x851934
 const DWORD CInfinity::FXPREP_COPYFROMBACK = 0x80;
 
@@ -53,6 +56,15 @@ const BYTE CInfinity::TRUE_DAWNDUSK_INTENSITY = 128;
 
 // 0x85197A
 const BYTE CInfinity::SCROLL_DELAY = 15;
+
+// 0x851980
+const DWORD CInfinity::RENDER_ERROR = 0;
+
+// 0x851984
+const DWORD CInfinity::RENDER_OK = 1;
+
+// 0x851988
+const DWORD CInfinity::RENDER_MESSAGESCREEN = 2;
 
 // NOTE: Not sure if it belongs to `CInfinity`. Also unclear what's the need for
 // separate setting which looks to be in sync with
@@ -562,6 +574,12 @@ BOOL CInfTileSet::Render3d(INT nTile, INT nStencilTile, const CRect& rDest, INT 
     return FALSE;
 }
 
+// 0x5D2DE0
+void CInfTileSet::sub_5D2DE0()
+{
+    // TODO: Incomplete.
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x5CBC80
@@ -997,6 +1015,13 @@ BOOL CInfinity::DrawEllipse(const CPoint& ptCenter, const CSize& axes, COLORREF 
         rgbColor);
 }
 
+// 0x5CDDC0
+BOOL CInfinity::DrawHighlightRect(const CRect& rSquare, COLORREF rgbColor, BYTE width)
+{
+    // TODO: Incomplete.
+    return FALSE;
+}
+
 // 0x5CDFC0
 CPoint CInfinity::GetWorldCoordinates(const CPoint& ptScreen)
 {
@@ -1253,6 +1278,12 @@ BOOL CInfinity::PostRender(CVidMode* pNewVidMode, int a2, CSearchBitmap* pVisibi
     }
 
     return TRUE;
+}
+
+// 0x5CEFD0
+DWORD CInfinity::Render(CVidMode* pNewVidMode, INT nSurface, INT nScrollState, CVisibilityMap* pVisibilityMap)
+{
+    return 1;
 }
 
 // 0x5CFB40

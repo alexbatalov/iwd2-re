@@ -1449,9 +1449,226 @@ void CGameArea::OnLightningStrike()
 }
 
 // 0x477740
-void CGameArea::Render(CVidMode* pVidMode, int a2)
+void CGameArea::Render(CVidMode* pVidMode, INT nSurface)
 {
-    // TODO: Incomplete.
+    POSITION pos;
+    LONG iObject;
+    CGameObject* pObject;
+    BYTE rc;
+
+    if (!m_bAreaLoaded) {
+        return;
+    }
+
+    g_pBaldurChitin->GetObjectGame()->BeginListManipulation(this);
+    EnterCriticalSection(&field_1FC);
+
+    if (CCacheStatus::dword_8D0BA8) {
+        CCacheStatus::dword_8D0BA8 = FALSE;
+
+        CVidMode* pCurrentVidMode = g_pChitin->GetCurrentVideoMode();
+        pCurrentVidMode->m_bFadeTo = FALSE;
+        pCurrentVidMode->m_nFade = 0;
+
+        CScreenWorld::dword_8F85BC = 3;
+    }
+
+    if (m_firstRender > 0) {
+        if (m_cInfinity.pVRPool != NULL) {
+            m_cInfinity.pVRPool->ClearAll();
+        }
+    }
+
+    pos = m_lTiledObjects.GetHeadPosition();
+    while (pos != NULL) {
+        CTiledObject* pTiledObject = m_lTiledObjects.GetNext(pos);
+        pTiledObject->CheckTileState(m_cInfinity);
+    }
+
+    if (m_nKeyScrollState != 0) {
+        m_cInfinity.Render(pVidMode, nSurface, m_nKeyScrollState, &m_visibility);
+        m_nKeyScrollState = 0;
+    } else {
+        m_cInfinity.Render(pVidMode, nSurface, m_nScrollState, &m_visibility);
+    }
+
+    CInfTileSet::dword_8F2700 = 0;
+
+    if (m_cInfinity.Render(pVidMode, nSurface, m_nScrollState, &m_visibility) != CInfinity::RENDER_MESSAGESCREEN) {
+        pos = m_lVertSort.GetHeadPosition();
+        while (pos != NULL) {
+            iObject = reinterpret_cast<LONG>(m_lVertSort.GetNext(pos));
+
+            do {
+                rc = m_pGame->GetObjectArray()->GetShare(iObject,
+                    CGameObjectArray::THREAD_1,
+                    &pObject,
+                    INFINITE);
+            } while (rc == CGameObjectArray::DENIED);
+
+            if (rc == CGameObjectArray::SUCCESS) {
+                BYTE nObjectType = pObject->GetObjectType();
+                if (pObject->m_posZ <= 0) {
+                    switch (nObjectType) {
+                    case 17:
+                    case 33:
+                    case 65:
+                        pObject->Render(this, pVidMode, nSurface);
+                        break;
+                    case 48:
+                        if (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bStaticAnimations
+                            || (static_cast<CGameStatic*>(pObject)->m_header.m_dwFlags & 0x10) == 16) {
+                            pObject->Render(this, pVidMode, nSurface);
+                        }
+                        break;
+                    }
+                }
+
+                m_pGame->GetObjectArray()->ReleaseShare(iObject,
+                    CGameObjectArray::THREAD_1,
+                    INFINITE);
+            }
+        }
+
+        pos = m_lVertSortBack.GetHeadPosition();
+        while (pos != NULL) {
+            iObject = reinterpret_cast<LONG>(m_lVertSortBack.GetNext(pos));
+
+            do {
+                rc = m_pGame->GetObjectArray()->GetShare(iObject,
+                    CGameObjectArray::THREAD_1,
+                    &pObject,
+                    INFINITE);
+            } while (rc == CGameObjectArray::DENIED);
+
+            if (rc == CGameObjectArray::SUCCESS) {
+                pObject->Render(this, pVidMode, nSurface);
+
+                m_pGame->GetObjectArray()->ReleaseShare(iObject,
+                    CGameObjectArray::THREAD_1,
+                    INFINITE);
+            }
+        }
+
+        pos = m_lVertSort.GetHeadPosition();
+        while (pos != NULL) {
+            iObject = reinterpret_cast<LONG>(m_lVertSort.GetNext(pos));
+
+            do {
+                rc = m_pGame->GetObjectArray()->GetShare(iObject,
+                    CGameObjectArray::THREAD_1,
+                    &pObject,
+                    INFINITE);
+            } while (rc == CGameObjectArray::DENIED);
+
+            if (rc == CGameObjectArray::SUCCESS) {
+                BYTE nObjectType = pObject->GetObjectType();
+                switch (nObjectType) {
+                case 17:
+                case 33:
+                case 65:
+                    if (pObject->m_posZ > 0) {
+                        pObject->Render(this, pVidMode, nSurface);
+                    }
+                    break;
+                case 48:
+                    if (pObject->m_posZ > 0) {
+                        if (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bStaticAnimations
+                            || (static_cast<CGameStatic*>(pObject)->m_header.m_dwFlags & 0x10) == 16) {
+                            pObject->Render(this, pVidMode, nSurface);
+                        }
+                    }
+                    break;
+                default:
+                    pObject->Render(this, pVidMode, nSurface);
+                    break;
+                }
+
+                m_pGame->GetObjectArray()->ReleaseShare(iObject,
+                    CGameObjectArray::THREAD_1,
+                    INFINITE);
+            }
+        }
+
+        pos = m_lVertSortFlight.GetHeadPosition();
+        while (pos != NULL) {
+            iObject = reinterpret_cast<LONG>(m_lVertSortFlight.GetNext(pos));
+
+            do {
+                rc = m_pGame->GetObjectArray()->GetShare(iObject,
+                    CGameObjectArray::THREAD_1,
+                    &pObject,
+                    INFINITE);
+            } while (rc == CGameObjectArray::DENIED);
+
+            if (rc == CGameObjectArray::SUCCESS) {
+                pObject->Render(this, pVidMode, nSurface);
+
+                m_pGame->GetObjectArray()->ReleaseShare(iObject,
+                    CGameObjectArray::THREAD_1,
+                    INFINITE);
+            }
+        }
+
+        m_cInfinity.PostRender(pVidMode, nSurface, &m_search);
+
+        if (g_pChitin->cVideo.Is3dAccelerated()) {
+            CInfTileSet::sub_5D2DE0();
+        }
+
+        switch (m_pGame->GetState()) {
+        case 0:
+            if (abs(m_selectSquare.Width()) > 8 || abs(m_selectSquare.Height()) > 8) {
+                CRect highlightRect;
+                highlightRect.left = m_selectSquare.left;
+                highlightRect.top = m_selectSquare.top;
+                highlightRect.right = m_cInfinity.nCurrentX + min(max(m_selectSquare.right - m_cInfinity.nCurrentX, 0), m_cInfinity.rViewPort.Width() - 1);
+                highlightRect.bottom = m_cInfinity.nCurrentY + min(max(m_selectSquare.bottom - m_cInfinity.nCurrentY, 0), m_cInfinity.rViewPort.Height() - 1);
+                m_cInfinity.DrawHighlightRect(highlightRect, RGB(0, 255, 0), 1);
+            }
+            break;
+        case 3:
+            if (abs(m_selectSquare.Width()) > 8 || abs(m_selectSquare.Height()) > 8) {
+                int width = abs(m_selectSquare.Width());
+                int height = abs(m_selectSquare.Height());
+
+                CSize axes;
+                axes.cx = static_cast<LONG>(sqrt(width * width + (4 * height / 3) * (4 * height / 3)));
+                axes.cy = 3 * axes.cx / 4;
+                m_cInfinity.DrawEllipse(m_moveDest, axes, RGB(0, 255, 0));
+            }
+            break;
+        }
+
+        for (SHORT nPortrait = 0; nPortrait < m_nCharacters; nPortrait++) {
+            iObject = g_pBaldurChitin->GetObjectGame()->GetCharacterId(nPortrait);
+
+            do {
+                rc = m_pGame->GetObjectArray()->GetShare(iObject,
+                    CGameObjectArray::THREAD_1,
+                    &pObject,
+                    INFINITE);
+            } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+            if (rc == CGameObjectArray::SUCCESS) {
+                static_cast<CGameSprite*>(pObject)->RenderDamageArrow(this, pVidMode, nSurface);
+
+                m_pGame->GetObjectArray()->ReleaseShare(iObject,
+                    CGameObjectArray::THREAD_1,
+                    INFINITE);
+            }
+        }
+    }
+
+    if (m_firstRender > 0) {
+        if (!g_pBaldurChitin->m_pEngineWorld->m_bPaused) {
+            g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->StartTime();
+        }
+        m_firstRender = 0;
+    }
+
+    LeaveCriticalSection(&field_1FC);
+    g_pBaldurChitin->GetObjectGame()->EndListManipulation(this);
 }
 
 // 0x477EE0

@@ -1092,6 +1092,12 @@ void CGameSprite::SetSequence(SHORT nSequence)
     // TODO: Incomplete.
 }
 
+// 0x708FC0
+void CGameSprite::RenderDamageArrow(CGameArea* pArea, CVidMode *pVidMode, INT nSurface)
+{
+    // TODO: Incomplete.
+}
+
 // 0x70CF90
 void CGameSprite::Unmarshal(BYTE* pCreature, LONG creatureSize, WORD facing, int a4)
 {

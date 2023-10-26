@@ -293,6 +293,7 @@ public:
     void SetIdleSequence();
     SHORT GetIdleSequence();
     void SetSequence(SHORT nSequence);
+    void RenderDamageArrow(CGameArea* pArea, CVidMode *pVidMode, INT nSurface);
     void Unmarshal(BYTE* pCreature, LONG creatureSize, WORD facing, int a4);
     void UnmarshalScripts();
     void FetchCommonStrings();

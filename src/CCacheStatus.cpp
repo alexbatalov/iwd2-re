@@ -137,6 +137,9 @@ int CCacheStatus::dword_8D0BA0 = dword_8A7BCC + 2;
 // 0x8D0BA4
 int CCacheStatus::dword_8D0BA4;
 
+// 0x8D0BA8;
+BOOL CCacheStatus::dword_8D0BA8;
+
 // 0x4400D0
 CCacheStatus::CCacheStatus()
 {

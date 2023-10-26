@@ -54,6 +54,7 @@ public:
     static int dword_8D0B90;
     static int dword_8D0BA0;
     static int dword_8D0BA4;
+    static BOOL dword_8D0BA8;
 
     CCacheStatus();
     ~CCacheStatus();

@@ -177,7 +177,7 @@ public:
     void OnMouseMove(const CPoint& pt);
     void RemoveObject(POSITION posVertList, BYTE listType, LONG id);
     void OnLightningStrike();
-    void Render(CVidMode* pVidMode, int a2);
+    void Render(CVidMode* pVidMode, INT nSurface);
     void SetDay();
     void SetNight();
     void SetApproachingDawn();
