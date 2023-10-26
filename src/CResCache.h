@@ -27,6 +27,8 @@ public:
     BOOL ValidateFile(UINT nResFileID, LONG a3);
 
     static GetDiskFreeSpaceExAFunc* pfnGetDiskFreeSpaceExA;
+    static int dword_8FB92C;
+    static CString stru_8FB90C[7];
     static CString DEFAULT_CACHE_DIRECTORY; // #guess
 
     /* 0000 */ BOOL m_bInitialized;

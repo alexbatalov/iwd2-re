@@ -8,6 +8,12 @@
 // 0x8E7514
 GetDiskFreeSpaceExAFunc* CResCache::pfnGetDiskFreeSpaceExA;
 
+// 0x8FB92C
+int CResCache::dword_8FB92C;
+
+// 0x8FB90C
+CString CResCache::stru_8FB90C[7];
+
 // 0x8FB928
 CString CResCache::DEFAULT_CACHE_DIRECTORY("hd0:\\cache\\");
 
@@ -189,9 +195,58 @@ BOOL CResCache::CopyFile(UINT nIndex, const CString& a3, const CString& a4, cons
 // 0x78CAC0
 BOOL CResCache::DeleteFileFromCache(UINT nIndex)
 {
-    // TODO: Incomplete.
+    CString sDirName;
+    CString sFileName;
+    CString sResolvedFileName;
+    CFile file;
 
-    return FALSE;
+    if (!m_bInitialized) {
+        return FALSE;
+    }
+
+    sDirName = m_sDirName;
+    if (g_pChitin->cDimm.FindDirectoryInDirectoryList(sDirName) == DIMM_NOT_IN_DIRECTORY_LIST) {
+        if (!g_pChitin->cDimm.AddToDirectoryList(sDirName, FALSE)) {
+            return FALSE;
+        }
+    }
+
+    if (!(g_pChitin->cDimm.m_cKeyTable.m_bInitialized && nIndex < g_pChitin->cDimm.m_cKeyTable.m_nResFiles)) {
+        return FALSE;
+    }
+
+    sFileName = reinterpret_cast<char*>(g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries) + g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries[nIndex].nFileNameOffset;
+
+    CString sBaseName = sFileName.Mid(sFileName.ReverseFind('\\') + 1);
+    sBaseName.SetAt(sBaseName.Find('.'), '\0');
+
+    for (int index = 0; index < dword_8FB92C; index++) {
+        if (stru_8FB90C[index] == sBaseName) {
+            return FALSE;
+        }
+    }
+
+    if (!g_pChitin->lAliases.ResolveFileName(sDirName + sFileName, sResolvedFileName)) {
+        sResolvedFileName = sDirName + sFileName;
+    }
+
+    if (!file.Open(sResolvedFileName, CFile::OpenFlags::shareDenyWrite, NULL)) {
+        return FALSE;
+    }
+
+    file.Close();
+
+    CFile::Remove(sResolvedFileName);
+
+    if (g_pChitin->cDimm.m_cKeyTable.m_bInitialized) {
+        if (nIndex < g_pChitin->cDimm.m_cKeyTable.m_nResFiles) {
+            if (g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries != NULL) {
+                g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries[nIndex].bDrives &= ~0x200;
+            }
+        }
+    }
+
+    return TRUE;
 }
 
 // #binary-identical
