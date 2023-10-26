@@ -170,7 +170,8 @@ BOOL CResWED::Parse(void* pData)
     }
 
     m_pHeader = reinterpret_cast<WED_WEDHEADER*>(pData);
-    if (m_pHeader->nFileType != 'WED ' || m_pHeader->nFileVersion != 'V1.3') {
+    if (memcmp(&(m_pHeader->nFileType), "WED ", 4) != 0
+        || memcmp(&(m_pHeader->nFileVersion), "V1.3", 4) != 0) {
         return FALSE;
     }
 
