@@ -110,6 +110,16 @@ const CResRef CInfinity::THUNDERRESREFS[3] = {
     CResRef("Amb_E13f"),
 };
 
+// NOTE: Inlined.
+CInfTileSet::CInfTileSet()
+{
+    m_pResTiles = NULL;
+    m_pVRamPool = NULL;
+    m_nTiles = 0;
+    m_rgbTintColor = RGB(255, 255, 255);
+    m_rgbAddColor = RGB(0, 0, 0);
+}
+
 // 0x5CAF50
 CInfTileSet::~CInfTileSet()
 {
@@ -847,9 +857,91 @@ CInfinity::~CInfinity()
 // 0x5CC7F0
 BOOL CInfinity::AttachWED(CResWED* resNewWED, WORD areaType, BYTE dayNightCode)
 {
-    // TODO: Incomplete.
+    RESID nID;
+    RESID nDualID;
+    CResRef rrTileSet;
+    CResRef rrDualTileSet;
 
-    return FALSE;
+    if (resNewWED == NULL) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\Infinity.cpp
+        // __LINE__: 1810
+        UTIL_ASSERT(FALSE);
+    }
+
+    if (pResWED != NULL) {
+        FreeWED();
+    }
+
+    pResWED = resNewWED;
+    m_areaType = areaType;
+    bWEDDemanded = TRUE;
+
+    if (pResWED->Demand() == NULL) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\Infinity.cpp
+        // __LINE__: 1827
+        UTIL_ASSERT_MSG(FALSE, "Demand for WED file failed.");
+    }
+
+    nTilesX = pResWED->m_pLayers[0].nTilesAcross;
+    nAreaX = nTilesX * 64;
+    nTilesY = pResWED->m_pLayers[0].nTilesDown;
+    nAreaY = nTilesY * 64;
+
+    pTileSets[0] = new CInfTileSet();
+
+    if ((m_areaType & 0x40) != 0 && dayNightCode == 2) {
+        rrTileSet = pResWED->m_pLayers[0].rrTileSet;
+        rrDualTileSet = rrTileSet;
+
+        nID = g_pChitin->cDimm.GetResID(rrTileSet, 1003);
+        nDualID = g_pChitin->cDimm.GetResID(rrDualTileSet, 1003);
+        if (nID == -1) {
+            CString sTileSet;
+            rrTileSet.CopyToString(sTileSet);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\Infinity.cpp
+            // __LINE__: 1875
+            UTIL_ASSERT_MSG(FALSE, CString("Tile set") + sTileSet + " not found");
+        }
+
+        pTileSets[0]->SetResID(nDualID, rrDualTileSet, 0, CResRef(""));
+    } else {
+        rrTileSet = pResWED->m_pLayers[0].rrTileSet;
+        nID = g_pChitin->cDimm.GetResID(rrTileSet, 1003);
+        if (nID == -1) {
+            CString sTileSet;
+            rrTileSet.CopyToString(sTileSet);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\Infinity.cpp
+            // __LINE__: 1898
+            UTIL_ASSERT_MSG(FALSE, CString("Tile set") + sTileSet + " not found");
+        }
+
+        pTileSets[0]->SetResID(nID, rrTileSet, 0, CResRef(""));
+    }
+
+    for (int index = 1; index < 5; index++) {
+        pTileSets[index] = new CInfTileSet();
+
+        if ((m_areaType & 0x4) != 0) {
+            rrTileSet = pResWED->m_pLayers[index].rrTileSet;
+            rrDualTileSet = rrTileSet;
+            rrDualTileSet += RAIN_RESREF_SUFFIX;
+            nID = g_pChitin->cDimm.GetResID(rrTileSet, 1003);
+            if (nID != -1) {
+                nDualID = g_pChitin->cDimm.GetResID(rrDualTileSet, 1003);
+                pTileSets[index]->SetResID(nID, rrTileSet, nDualID, rrDualTileSet);
+            }
+        } else {
+            rrTileSet = pResWED->m_pLayers[index].rrTileSet;
+            nID = g_pChitin->cDimm.GetResID(rrTileSet, 1003);
+            if (nID != -1) {
+                pTileSets[index]->SetResID(nID, rrTileSet, 0, CResRef(""));
+            }
+        }
+    }
+
+    return TRUE;
 }
 
 // 0x5CCD00
