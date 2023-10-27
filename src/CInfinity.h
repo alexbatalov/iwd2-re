@@ -7,6 +7,7 @@
 
 #include "CResRef.h"
 #include "CResTile.h"
+#include "CSound.h"
 #include "CVidBitmap.h"
 
 class CGameArea;
@@ -172,6 +173,7 @@ public:
     void SetApproachingDusk();
     void UpdateLightning();
     void AdjustViewPosition(BYTE nScrollState);
+    void AIUpdate();
     void SwapVRamTiles(WORD wFromTile, WORD wToTile);
     void SetMessageScreen(CResRef resRef, DWORD strText, DWORD nDuration);
     DWORD RenderMessageScreen(CVidMode* pNewVidMode, INT nSurface);
@@ -222,6 +224,7 @@ public:
     /* 00AC */ int field_AC;
     /* 00B0 */ int field_B0;
     /* 00B4 */ int field_B4;
+    /* 00B8 */ CSound sndThunder;
     /* 011C */ int nCurrentLightningFrequency;
     /* 0120 */ int nNextLightningFrequency;
     /* 0124 */ int field_124;
@@ -265,7 +268,7 @@ public:
     /* 01C6 */ CVidBitmap m_vbMessageScreen;
     /* 0280 */ DWORD m_strMessageText;
     /* 0284 */ BOOLEAN m_bRenderMessage;
-    /* 0286 */ int field_286;
+    /* 0286 */ WORD field_286;
     /* 0288 */ DWORD m_nMessageEndTime;
     /* 028C */ BOOL m_bScreenShake;
     /* 0290 */ CPoint m_screenShakeDelta;

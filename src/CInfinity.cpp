@@ -2592,6 +2592,132 @@ void CInfinity::AdjustViewPosition(BYTE nScrollState)
     }
 }
 
+// 0x5D1F30
+void CInfinity::AIUpdate()
+{
+    if (m_bRenderMessage
+        && m_nMessageEndTime != -1
+        && m_nMessageEndTime < GetTickCount()) {
+        m_bRenderMessage = FALSE;
+        m_nMessageEndTime = -1;
+        for (WORD cnt = 0; cnt < field_286; cnt++) {
+            if (m_vbMessageScreen.GetRes() != NULL) {
+                m_vbMessageScreen.GetRes()->CancelRequest();
+            }
+        }
+        field_286 = 0;
+    }
+
+    if (m_nScrollDelay > 0) {
+        m_nScrollDelay--;
+    }
+
+    if (m_updateListenPosition) {
+        m_updateListenPosition = FALSE;
+        m_pArea->SetListenPosition();
+    }
+
+    CVidMode* pVidMode = g_pChitin->GetCurrentVideoMode();
+    if (pVidMode->m_bFadeTo) {
+        if (pVidMode->m_nFade > 0) {
+            pVidMode->m_nFade--;
+        }
+    } else {
+        if (pVidMode->m_nFade < CVidMode::NUM_FADE_FRAMES) {
+            pVidMode->m_nFade++;
+        }
+    }
+
+    if (g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_active) {
+        if (nThunderLength > 0) {
+            nThunderLength--;
+            if (nThunderLength <= 0) {
+                nThunderLength = 0;
+                m_bStopLightning = TRUE;
+                nTimeToNextThunder = -1;
+            }
+        }
+
+        if (nRenderLightningTimer >= 0) {
+            nRenderLightningTimer--;
+            if (nRenderLightningTimer <= 0) {
+                nRenderLightningTimer = -1;
+                bRenderCallLightning = FALSE;
+            }
+        }
+
+        if (nTimeToNextThunder != -1) {
+            nTimeToNextThunder--;
+            if (nTimeToNextThunder <= 0) {
+                nTimeToNextThunder = -1;
+                m_bStartLightning = TRUE;
+            }
+        } else {
+            switch (nCurrentLightningFrequency) {
+            case 64:
+                nTimeToNextThunder = rand() % 1000 + 150;
+                break;
+            case 128:
+                nTimeToNextThunder = rand() % 700 + 100;
+                break;
+            case 192:
+                nTimeToNextThunder = rand() % 200 + 45;
+                break;
+            }
+        }
+
+        if (m_bStartLightning) {
+            INT nNumber;
+
+            m_bStartLightning = FALSE;
+
+            nNumber = rand();
+            m_rgbRainColor = RGB(255, 255, 255);
+            m_rgbLightningGlobalLighting = RGB(nNumber % 155, nNumber % 155, nNumber % 155);
+
+            // NOTE: Uninline.
+            sndThunder.SetResRef(THUNDERRESREFS[rand() % 3], TRUE, TRUE);
+
+            sndThunder.SetChannel(1, 0);
+
+            switch (nNextRainLevel) {
+            case 0:
+                sndThunder.SetVolume(rand() % 10 + 40);
+                break;
+            case 4:
+                sndThunder.SetVolume(rand() % 10 + 50);
+                break;
+            case 8:
+                sndThunder.SetVolume(rand() % 10 + 80);
+                break;
+            case 12:
+                sndThunder.SetVolume(rand() % 10 + 90);
+                break;
+            }
+
+            if (!g_pChitin->cNetwork.GetSessionOpen()
+                || g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+                if (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bWeatherEnabled
+                    && sndThunder.GetVolume() > 85
+                    && rand() % 100 < m_lightningStrikeProb) {
+                    m_pArea->OnLightningStrike();
+                }
+            }
+
+            sndThunder.Play(FALSE);
+
+            nThunderLength = (rand() % 15) + 1;
+        }
+
+        if (m_bStopLightning) {
+            m_bStopLightning = FALSE;
+            m_rgbLightningGlobalLighting = RGB(0, 0, 0);
+            m_rgbRainColor = m_rgbTimeOfDayRainColor;
+            nTimeToNextThunder = -1;
+        }
+    }
+}
+
 // 0x5D2350
 void CInfinity::SwapVRamTiles(WORD wFromTile, WORD wToTile)
 {
