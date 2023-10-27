@@ -5,6 +5,7 @@
 #include "CInfGame.h"
 #include "CResWED.h"
 #include "CScreenWorld.h"
+#include "CTiledObject.h"
 #include "CUtil.h"
 #include "CVidInf.h"
 #include "CVisibility.h"
@@ -1095,9 +1096,74 @@ void CInfinity::ScrollingCancelRequestRect(unsigned char a1)
 // 0x5CDA70
 BOOL CInfinity::DetachVRamRect()
 {
-    // TODO: Incomplete.
+    if (rVRamRect.left < 0) {
+        return FALSE;
+    }
 
-    return FALSE;
+    for (int y = rVRamRect.top; y <= rVRamRect.bottom; y++) {
+        for (int x = rVRamRect.left; x <= rVRamRect.right; x++) {
+            WED_TILEDATA* pTileData = pResWED->GetTileData(0, x, y);
+            if (pTileData != NULL) {
+                if ((pTileData->bFlags & 0x1) == 0) {
+                    WORD* pTileList = pResWED->GetTileList(0);
+                    if (pTileList != NULL) {
+                        if ((CTiledObject::STATE_SECONDARY_TILE & pTileData->wFlags) != 0
+                            && pTileData->nSecondary != -1) {
+                            pTileSets[0]->DetachFromVRam(pTileData->nSecondary);
+                        } else {
+                            for (WORD index = 0; index < pTileData->nNumTiles; index++) {
+                                pTileSets[0]->DetachFromVRam(pTileList[index + pTileData->nStartingTile]);
+                            }
+                        }
+                    }
+                }
+
+                if ((pTileData->bFlags & 0x1E) != 0) {
+                    UINT nLayer;
+                    switch (pTileData->bFlags & 0x1E) {
+                    case 4:
+                        nLayer = 2;
+                        break;
+                    case 8:
+                        nLayer = 3;
+                        break;
+                    case 16:
+                        nLayer = 4;
+                        break;
+                    default:
+                        nLayer = 1;
+                        break;
+                    }
+
+                    WED_LAYERHEADER* pLayer = pResWED->GetLayerHeader(nLayer);
+                    if (pLayer != NULL) {
+                        // NOTE: The following code shadows some variables. Find
+                        // better names here or in the outside loops.
+                        for (WORD y = 0; y < pLayer->nTilesDown; y++) {
+                            for (WORD x = 0; x < pLayer->nTilesAcross; x++) {
+                                WED_TILEDATA* pTileData = pResWED->GetTileData(nLayer, x, y);
+                                if (pTileData != NULL) {
+                                    WORD* pTileList = pResWED->GetTileList(nLayer);
+                                    if (pTileList != NULL) {
+                                        for (WORD index = 0; index < pTileData->nNumTiles; index++) {
+                                            pTileSets[nLayer]->DetachFromVRam(pTileList[index + pTileData->nStartingTile]);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    rVRamRect.left = -1;
+    rVRamRect.top = -1;
+    rVRamRect.right = -1;
+    rVRamRect.bottom = -1;
+
+    return TRUE;
 }
 
 // 0x5CDC60
