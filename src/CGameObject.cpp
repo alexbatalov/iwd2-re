@@ -152,6 +152,7 @@ void CGameObject::AddToArea(CGameArea* pNewArea, const CPoint& pos, LONG posZ, B
     if (m_posVertList == NULL && m_pArea == NULL) {
         m_pos = pos;
         m_posZ = posZ;
+        m_pArea = pNewArea;
         m_listType = listType;
         pNewArea->AddObject(m_id, listType);
     }
