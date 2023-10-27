@@ -285,16 +285,22 @@ UINT CResFile::ReadResource(RESID resID, LPVOID lpBuf, UINT nCount, UINT nOffset
     if (m_pHeader != NULL) {
         if ((resID & 0xFC000) != 0) {
             UINT nIndex = (resID >> 14) & 0x3F;
-            if (nIndex < m_pHeader->nFixedRes) {
-                BIFF_FIXEDTABLEENTRY* pEntry = &(m_pFixedEntries[nIndex]);
-                if (nCount > pEntry->nSize) {
-                    nCount = pEntry->nSize;
-                }
-
-                m_cFile.Seek(nOffset + pEntry->nOffset, CFile::SeekPosition::begin);
-                return m_cFile.Read(static_cast<unsigned char*>(lpBuf) + nOffset, nCount);
+            if (nIndex > m_pHeader->nFixedRes) {
+                return 0;
             }
-            return 0;
+
+            BIFF_FIXEDTABLEENTRY* pEntry = &(m_pFixedEntries[nIndex - 1]);
+            UINT nNumber = resID & 0x3FFF;
+            if (nNumber >= pEntry->nNumber) {
+                return 0;
+            }
+
+            if (nCount > pEntry->nSize) {
+                nCount = pEntry->nSize;
+            }
+
+            m_cFile.Seek(nOffset + pEntry->nOffset + nNumber * pEntry->nSize, CFile::SeekPosition::begin);
+            return m_cFile.Read(static_cast<unsigned char*>(lpBuf) + nOffset, nCount);
         } else {
             UINT nIndex = resID & 0x3FFF;
             if (nIndex < m_pHeader->nVarRes) {
