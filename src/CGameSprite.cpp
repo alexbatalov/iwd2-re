@@ -66,6 +66,9 @@ const BYTE CGameSprite::NUM_DIR = 16;
 // 0x85BB6E
 const BYTE CGameSprite::SOUND_SELECT_ACTION = 11;
 
+// 0x85BB74
+const SHORT CGameSprite::EXACT_SCALE = 10;
+
 // 0x85BB9C
 const SHORT CGameSprite::USER_OVERRIDE_COUNT = 75;
 

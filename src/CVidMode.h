@@ -46,9 +46,10 @@ public:
     BOOL DrawEllipse3d(const CPoint& ptCenter, const CSize& axis, const CRect& rClip, COLORREF rgbColor);
     BOOL DrawRecticle3d(const CVIDMODE_RECTICLE_DESCRIPTION& rd, const CRect& rClip, COLORREF rgbColor);
     void CheckResults3d(int a1);
-    void Set3dClipRect(const CRect& rClip);
+    static void Set3dClipRect(const CRect& rClip);
     void EnableScissoring();
     void DisableScissoring();
+    static void RenderTint3d(COLORREF rgbTint, const CRect& rClip);
     void sub_7BEDE0();
     static void RenderBlackFade3d();
     void ScanLine32(DWORD* pSurface, UINT nMajorAxis, UINT nMinorAxis, INT nMajorAxisAdjust, INT nMinorAxisAdjust, DWORD color);

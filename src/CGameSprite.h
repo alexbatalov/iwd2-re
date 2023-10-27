@@ -173,6 +173,7 @@ public:
     static const BYTE NUM_DIR;
 
     static const BYTE SOUND_SELECT_ACTION;
+    static const SHORT EXACT_SCALE;
 
     static const SHORT USER_OVERRIDE_COUNT;
 

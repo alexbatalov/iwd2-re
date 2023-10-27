@@ -2,6 +2,7 @@
 
 #include "CBaldurChitin.h"
 #include "CGameArea.h"
+#include "CGameSprite.h"
 #include "CInfGame.h"
 #include "CResWED.h"
 #include "CScreenWorld.h"
@@ -581,6 +582,16 @@ void CInfTileSet::sub_5D2DE0()
     // TODO: Incomplete.
 }
 
+// NOTE: Inlined.
+void CInfTileSet::Invalidate()
+{
+    for (int index = 0; index < m_nTiles; index++) {
+        if (m_pResTiles[index] != NULL && m_pVRamPool != NULL) {
+            m_pResTiles[index]->m_nVRamFlags &= ~0x2;
+        }
+    }
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x5CBC80
@@ -825,7 +836,7 @@ CInfinity::CInfinity()
     m_requestDayNightCode = 1;
     field_15E = 0;
     m_renderDayNightCode = 1;
-    field_15B = 1;
+    m_oldRenderDayNightCode = 1;
     m_dayLightIntensity = -1;
     m_nLastTickCount = GetTickCount();
     m_ptScrollDest.x = -1;
@@ -840,11 +851,11 @@ CInfinity::CInfinity()
     m_nMessageEndTime = -1;
     m_bRenderMessage = 0;
     field_286 = 0;
-    field_28C = 0;
-    field_294 = 0;
-    field_290 = 0;
-    field_29C = 0;
-    field_298 = 0;
+    m_bScreenShake = FALSE;
+    m_screenShakeDelta.x = 0;
+    m_screenShakeDelta.y = 0;
+    m_screenShakeDecrease.x = 0;
+    m_screenShakeDecrease.y = 0;
 }
 
 // 0x5CC710
@@ -1614,7 +1625,362 @@ BOOL CInfinity::PostRender(CVidMode* pNewVidMode, int a2, CSearchBitmap* pVisibi
 // 0x5CEFD0
 DWORD CInfinity::Render(CVidMode* pNewVidMode, INT nSurface, INT nScrollState, CVisibilityMap* pVisibilityMap)
 {
-    return 1;
+    ULONG currTime = g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime;
+    BYTE currRenderDayNightCode = m_renderDayNightCode;
+    BYTE nRainCode = 0;
+    DWORD dwRenderFlag = 0;
+
+    if (g_pBaldurChitin->GetObjectGame()->m_nTimeStop != 0) {
+        currTime = 0;
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\Infinity.cpp
+    // __LINE__: 4184
+    UTIL_ASSERT(pVisibilityMap != NULL);
+
+    pVidMode = pNewVidMode;
+    if (pVidMode == NULL) {
+        return RENDER_ERROR;
+    }
+
+    if (m_bRenderMessage) {
+        return RenderMessageScreen(pNewVidMode, nSurface);
+    }
+
+    if (nScrollState != 0
+        || (m_ptScrollDest.x == -1 && m_ptScrollDest.y == -1)) {
+        AdjustViewPosition(nScrollState);
+    } else {
+        Scroll(m_ptScrollDest, m_autoScrollSpeed);
+    }
+
+    if (!bInitialized) {
+        return RENDER_ERROR;
+    }
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    BOOL bWorldTimerActive = pGame->GetWorldTimer()->m_active;
+    BOOL bTimeStop = pGame->m_nTimeStop;
+
+    if (m_bScreenShake) {
+        if (bWorldTimerActive && !bTimeStop) {
+            SetViewPosition(nNewX + (m_screenShakeDelta.x >> CGameSprite::EXACT_SCALE),
+                nNewY + (m_screenShakeDelta.y >> CGameSprite::EXACT_SCALE),
+                TRUE);
+
+            if (m_screenShakeDelta.x > 0 && (currTime & 7) < 4) {
+                m_screenShakeDelta.x = min(m_screenShakeDecrease.x, m_screenShakeDelta.x) - m_screenShakeDelta.x;
+                if (rand() % 2 == 0) {
+                    m_screenShakeDelta.x = -m_screenShakeDelta.x;
+                }
+            } else {
+                m_screenShakeDelta.x = -m_screenShakeDelta.x;
+            }
+
+            if (m_screenShakeDelta.y > 0 && (currTime & 7) < 4) {
+                m_screenShakeDelta.y = min(m_screenShakeDecrease.y, m_screenShakeDelta.y) - m_screenShakeDelta.y;
+            } else {
+                m_screenShakeDelta.y = -m_screenShakeDelta.y;
+            }
+        }
+    }
+
+    if (currRenderDayNightCode != m_oldRenderDayNightCode) {
+        CResWED* pNewResWED;
+        if ((currRenderDayNightCode & 2) != 0) {
+            CResRef wedResRef = pResWED->GetResRef();
+            wedResRef += NIGHT_RESREF_SUFFIX;
+            pNewResWED = static_cast<CResWED*>(g_pChitin->cDimm.GetResObject(wedResRef, 1001, TRUE));
+        } else {
+        }
+
+        if (pNewResWED != NULL) {
+            FreeWED();
+            g_pChitin->cDimm.ReleaseResObject(pResWED);
+
+            pResWED = pNewResWED;
+            pResWED->Request();
+            AttachWED(pResWED, m_areaType, currRenderDayNightCode);
+
+            // NOTE: Uninline.
+            AttachVRamPool(&(g_pBaldurChitin->GetObjectGame()->m_cVRamPool));
+
+            m_pArea->SetNewResWED(pResWED);
+
+            if (pVRPool != NULL) {
+                // NOTE: Uninline.
+                pVRPool->InvalidateAll();
+            }
+        }
+
+        bRefreshVRamRect = TRUE;
+        bInitialized = TRUE;
+        m_oldRenderDayNightCode = currRenderDayNightCode;
+    }
+
+    COLORREF rgbNewGlobalLighting = GetGlobalLighting();
+    if (rgbNewGlobalLighting != m_rgbGlobalLighting) {
+        if (!g_pChitin->cVideo.Is3dAccelerated()) {
+            if (pVRPool != NULL) {
+                // NOTE: Uninline.
+                pVRPool->InvalidateAll();
+            }
+        }
+        m_rgbGlobalLighting = rgbNewGlobalLighting;
+    }
+
+    pVidMode->rgbGlobalTint = m_rgbGlobalLighting;
+
+    if ((m_areaType & 0x4) != 0) {
+        int oldRainLevel = nCurrentRainLevel;
+        if (oldRainLevel != nNextRainLevel) {
+            nCurrentRainLevel = nNextRainLevel;
+            if (oldRainLevel == 0 || nCurrentRainLevel == 0) {
+                // NOTE: Uninline.
+                InvalidateRainTiles();
+            }
+        }
+
+        if (nCurrentRainLevel != 0) {
+            nRainCode = 4;
+        }
+    }
+
+    if (nNewX != nCurrentX
+        || nNewY != nCurrentY
+        || bRefreshVRamRect
+        || m_bResizedViewPort) {
+        if (bRefreshVRamRect) {
+            bRefreshVRamRect = FALSE;
+            CancelRequestRect(field_15E);
+            DetachVRamRect();
+        }
+
+        if (m_bResizedViewPort) {
+            CVidMode::Set3dClipRect(rViewPort);
+        }
+
+        m_bResizedViewPort = FALSE;
+
+        nCurrentX = nNewX;
+        nCurrentY = nNewY;
+
+        if (nCurrentX >= 0) {
+            nCurrentTileX = nCurrentX / 64;
+            nOffsetX = 64 - nCurrentX % 64;
+        } else {
+            nCurrentTileX = (nCurrentX - 63) / 64;
+            nOffsetX = -nCurrentX % 64;
+        }
+
+        if (nCurrentY >= 0) {
+            nCurrentTileY = nCurrentY / 64;
+            nOffsetY = 64 - nCurrentY % 64;
+        } else {
+            nCurrentTileY = (nCurrentY - 63) / 64;
+            nOffsetY = -nCurrentY % 64;
+        }
+
+        nVisibleTilesX = nOffsetX != 0
+            ? (rViewPort.Width() - nOffsetX) / 64 + 2
+            : rViewPort.Width() / 64 + 1;
+
+        nVisibleTilesY = nOffsetY != 0
+            ? (rViewPort.Height() - nOffsetY) / 64 + 2
+            : rViewPort.Height() / 64 + 1;
+
+        if (((rViewPort.Width() - nOffsetX) & 63) != 0) {
+            nVisibleTilesX++;
+        }
+
+        if (((rViewPort.Height() - nOffsetY) & 63) != 0) {
+            nVisibleTilesX++;
+        }
+
+        if (nScrollState == 0 || nScrollState == 9) {
+            RequestRect(nCurrentTileX - 3,
+                nCurrentTileY - 3,
+                nCurrentTileX + nVisibleTilesX + 2,
+                nCurrentTileY + nVisibleTilesY + 2);
+        } else {
+            ScrollingRequestRect(nCurrentTileX,
+                nCurrentTileY,
+                nCurrentTileX + nVisibleTilesX - 1,
+                nCurrentTileY + nVisibleTilesY - 1,
+                nScrollState);
+        }
+
+        AttachVRamRect(nCurrentTileX,
+            nCurrentTileY,
+            nCurrentTileX + nVisibleTilesX - 1,
+            nCurrentTileY + nVisibleTilesY - 1);
+    } else if (field_196) {
+        if (nCurrentX >= 0) {
+            nCurrentTileX = nCurrentX / 64;
+        } else {
+            nCurrentTileX = (nCurrentX - 63) / 64;
+        }
+
+        if (nCurrentY >= 0) {
+            nCurrentTileY = nCurrentY / 64;
+        } else {
+            nCurrentTileY = (nCurrentY - 63) / 64;
+        }
+
+        RequestRect(nCurrentTileX,
+            nCurrentTileY,
+            nCurrentTileX + nVisibleTilesX + 2,
+            nCurrentTileY + nVisibleTilesY + 2);
+    }
+
+    for (int nTileY = nCurrentTileY; nTileY < nCurrentTileY + nVisibleTilesY; nTileY++) {
+        for (int nTileX = nCurrentTileX; nTileX < nCurrentTileX + nVisibleTilesX; nTileX++) {
+            int x;
+            if (nOffsetX) {
+                x = nOffsetX + (nTileX - nCurrentTileX - 1) * 64;
+            } else {
+                x = (nTileX - nCurrentTileX) * 64;
+            }
+            x += rViewPort.left;
+
+            int y;
+            if (nOffsetY) {
+                y = nOffsetY + (nTileY - nCurrentTileY - 1) * 64;
+            } else {
+                y = (nTileY - nCurrentTileY) * 64;
+            }
+            y += rViewPort.top;
+
+            WED_TILEDATA* pTileData = pResWED->GetTileData(0, nTileX, nTileY);
+            if (pTileData != NULL) {
+                dwRenderFlag &= ~0x3;
+                if ((pTileData->bFlags & 0x1E) != 0) {
+                    UINT nLayer;
+                    switch (pTileData->bFlags & 0x1E) {
+                    case 4:
+                        nLayer = 2;
+                        break;
+                    case 8:
+                        nLayer = 3;
+                        break;
+                    case 16:
+                        nLayer = 4;
+                        break;
+                    default:
+                        nLayer = 1;
+                        break;
+                    }
+
+                    if (pResWED->GetLayerHeader(nLayer) != NULL) {
+                        WED_TILEDATA* pSubData = pResWED->GetTileData(nLayer, 0, 0);
+                        if (pSubData != NULL) {
+                            WORD* pTileList = pResWED->GetTileList(nLayer);
+                            if (pTileList != NULL) {
+                                pTileSets[nLayer]->m_rgbTintColor = m_rgbGlobalLighting;
+
+                                pTileSets[nLayer]->Render(pVidMode,
+                                    nSurface,
+                                    pTileList[pSubData->nStartingTile + (currTime / 2) % pSubData->nNumTiles],
+                                    -1,
+                                    rViewPort,
+                                    x,
+                                    y,
+                                    CVisibilityMap::EXPLORED_FULL,
+                                    0,
+                                    0,
+                                    nRainCode,
+                                    0);
+
+                                dwRenderFlag |= 0x3;
+                            }
+                        }
+                    }
+                }
+
+                if ((pTileData->bFlags & 0x1) == 0) {
+                    WORD* pTileList = pResWED->GetTileList(0);
+                    if (pTileList != NULL) {
+                        int nAnimSpeed = pTileData->bAnimSpeed;
+                        if (nAnimSpeed == 0) {
+                            nAnimSpeed = 1;
+                        }
+
+                        pTileSets[0]->m_rgbTintColor = m_rgbGlobalLighting;
+
+                        WORD nTile;
+                        if ((CTiledObject::STATE_SECONDARY_TILE & pTileData->wFlags) != 0
+                            && pTileData->nSecondary != -1) {
+                            nTile = pTileData->nSecondary;
+                        } else {
+                            nTile = pTileList[pTileData->nStartingTile + (currTime / nAnimSpeed) % pTileData->nNumTiles];
+                        }
+
+                        TILE_CODE tileCode;
+                        pVisibilityMap->GetTileCode(nTileY * nTilesX + nTileX, tileCode);
+
+                        if ((pTileData->bFlags & 0x1E) != 0) {
+                            pTileSets[0]->Render(pVidMode,
+                                nSurface,
+                                nTile,
+                                pTileData->nSecondary,
+                                rViewPort,
+                                x,
+                                y,
+                                tileCode,
+                                dwRenderFlag,
+                                pVidMode->field_24,
+                                0,
+                                0);
+                        } else {
+                            pTileSets[0]->Render(pVidMode,
+                                nSurface,
+                                nTile,
+                                -1,
+                                rViewPort,
+                                x,
+                                y,
+                                tileCode,
+                                dwRenderFlag,
+                                0,
+                                0,
+                                0);
+                        }
+                    }
+                } else {
+                    if ((pTileData->bFlags & 0x1E) == 0) {
+                        pTileSets[0]->RenderBlack(pVidMode,
+                            nSurface,
+                            rViewPort,
+                            x,
+                            y);
+                    }
+                }
+            } else {
+                pTileSets[0]->RenderBlack(pVidMode,
+                    nSurface,
+                    rViewPort,
+                    x,
+                    y);
+            }
+        }
+    }
+
+    if (m_bScreenShake) {
+        if (bWorldTimerActive
+            && !bTimeStop
+            && nNewX != -1) {
+            SetViewPosition(nNewX, nNewY, TRUE);
+            if (m_screenShakeDelta.x == 0 || m_screenShakeDelta.y == 0) {
+                m_bScreenShake = FALSE;
+            }
+        }
+    }
+
+    if (g_pChitin->cVideo.Is3dAccelerated()) {
+        CVidMode::RenderTint3d(m_rgbGlobalLighting, rViewPort);
+    }
+
+    return RENDER_OK;
 }
 
 // 0x5CFB40
@@ -1686,6 +2052,14 @@ BOOL CInfinity::RequestRect(int x1, int y1, int x2, int y2)
     field_74 = y2;
 
     field_196 = 0;
+
+    return TRUE;
+}
+
+// 0x5D00C0
+BOOL CInfinity::ScrollingRequestRect(int x1, int y1, int x2, int y2, INT nScrollState)
+{
+    // TODO: Incomplete.
 
     return TRUE;
 }
@@ -1987,6 +2361,12 @@ void CInfinity::CallLightning(INT xWorldPos, INT yWorldPos)
     nRenderLightningTimer = 30;
 }
 
+// 0x5D1380
+void CInfinity::Scroll(CPoint ptDest, SHORT speed)
+{
+    // TODO: Incomplete.
+}
+
 // 0x5D1750
 void CInfinity::SetCurrentWeather(COLORREF rgbOvercast, SHORT nWeather, int nWeatherLevel, int nLightningFrequency)
 {
@@ -2250,6 +2630,14 @@ void CInfinity::SetMessageScreen(CResRef resRef, DWORD strText, DWORD nDuration)
     m_bRenderMessage = TRUE;
 }
 
+// 0x5D2530
+DWORD CInfinity::RenderMessageScreen(CVidMode* pNewVidMode, INT nSurface)
+{
+    // TODO: Incomplete.
+
+    return RENDER_MESSAGESCREEN;
+}
+
 // 0x452C30
 void CInfinity::SetAreaType(WORD areaType)
 {
@@ -2296,4 +2684,15 @@ CPoint CInfinity::GetScreenCoordinates(const CPoint& ptWorld)
     }
 
     return ptScreen;
+}
+
+// NOTE: Inlined.
+void CInfinity::InvalidateRainTiles()
+{
+    if ((m_areaType & 0x4) != 0) {
+        for (int index = 1; index < 5; index++) {
+            // NOTE: Uninline.
+            pTileSets[index]->Invalidate();
+        }
+    }
 }

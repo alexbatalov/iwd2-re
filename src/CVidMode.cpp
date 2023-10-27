@@ -1048,7 +1048,7 @@ void CVidMode::Set3dClipRect(const CRect& rClip)
             CVideo::SCREENHEIGHT - rClip.bottom,
             rClip.Width(),
             rClip.Height());
-        CheckResults3d(0);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
     }
 }
 
@@ -1070,6 +1070,12 @@ void CVidMode::DisableScissoring()
         glDisable(GL_SCISSOR_TEST);
         CheckResults3d(0);
     }
+}
+
+// 0x7BD270
+void CVidMode::RenderTint3d(COLORREF rgbTint, const CRect& rClip)
+{
+    // TODO: Incomplete.
 }
 
 // 0x7C8B40

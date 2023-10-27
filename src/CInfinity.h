@@ -57,6 +57,8 @@ public:
     BOOL Render3d(INT nTile, INT nStencilTile, const CRect& rDest, INT x, INT y, const TILE_CODE& tileCode, DWORD dwFlags, BYTE nDualTileCode, int a9);
     static void sub_5D2DE0();
 
+    void Invalidate();
+
     /* 0000 */ COLORREF m_rgbAddColor;
     /* 0004 */ COLORREF m_rgbTintColor;
     /* 0008 */ CVidTile m_cVidTile;
@@ -153,12 +155,14 @@ public:
     DWORD Render(CVidMode* pNewVidMode, INT nSurface, INT nScrollState, CVisibilityMap* pVisibilityMap);
     BOOL RenderLightning(int a1, const CRect& rSurface, INT nStartX, INT nStartY, INT nEndX, INT nEndY, COLORREF rgbCenter, COLORREF rgbMiddle, COLORREF rgbOuter);
     BOOL RequestRect(int x1, int y1, int x2, int y2);
+    BOOL ScrollingRequestRect(int x1, int y1, int x2, int y2, INT nScrollState);
     void CancelRequestTile(int x, int y, unsigned char a3);
     void RequestTile(int x, int y, unsigned char a3, int priority);
     BOOL InitViewPort(const CRect& rRect);
     BOOL SetViewPort(const CRect& rRect);
     BOOL SetViewPosition(INT x, INT y, BOOLEAN bSetExactScale);
     void CallLightning(INT xWorldPos, INT yWorldPos);
+    void Scroll(CPoint ptDest, SHORT speed);
     void SetCurrentWeather(COLORREF rgbOvercast, SHORT nWeather, int nWeatherLevel, int nLightningFrequency);
     void SetDay();
     void SetNight();
@@ -170,6 +174,7 @@ public:
     void AdjustViewPosition(BYTE nScrollState);
     void SwapVRamTiles(WORD wFromTile, WORD wToTile);
     void SetMessageScreen(CResRef resRef, DWORD strText, DWORD nDuration);
+    DWORD RenderMessageScreen(CVidMode* pNewVidMode, INT nSurface);
 
     void SetAreaType(WORD areaType);
 
@@ -177,6 +182,7 @@ public:
     void SetDawnMultiHost(BYTE nIntensity);
     void SetDuskMultiHost(BYTE nIntensity);
     CPoint GetScreenCoordinates(const CPoint& ptWorld);
+    void InvalidateRainTiles();
 
     void UpdateListenPosition() { m_updateListenPosition = TRUE; }
 
@@ -232,7 +238,7 @@ public:
     /* 0150 */ CPoint cLightningPoint;
     /* 0158 */ WORD m_areaType;
     /* 015A */ BYTE m_renderDayNightCode;
-    /* 015B */ unsigned char field_15B;
+    /* 015B */ unsigned char m_oldRenderDayNightCode;
     /* 015C */ BYTE m_dayLightIntensity;
     /* 015D */ BYTE m_requestDayNightCode;
     /* 015E */ unsigned char field_15E;
@@ -261,11 +267,9 @@ public:
     /* 0284 */ BOOLEAN m_bRenderMessage;
     /* 0286 */ int field_286;
     /* 0288 */ DWORD m_nMessageEndTime;
-    /* 028C */ int field_28C;
-    /* 0290 */ int field_290;
-    /* 0294 */ int field_294;
-    /* 0298 */ int field_298;
-    /* 029C */ int field_29C;
+    /* 028C */ BOOL m_bScreenShake;
+    /* 0290 */ CPoint m_screenShakeDelta;
+    /* 0298 */ CPoint m_screenShakeDecrease;
 };
 
 #endif /* CINFINITY_H_ */
