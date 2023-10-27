@@ -1027,9 +1027,69 @@ void CInfinity::CacheTiles()
 // 0x5CD2E0
 BOOL CInfinity::CancelRequestRect(unsigned char a1)
 {
-    // TODO: Incomplete.
+    if (field_68 < 0) {
+        return FALSE;
+    }
 
-    return FALSE;
+    if (field_196) {
+        ScrollingCancelRequestRect(a1);
+    }
+
+    int nMinX = field_68;
+    int nMinY = field_6C;
+    int nMaxX = field_70;
+    int nMaxY = field_74;
+
+    if (nMinX < 0) {
+        nMinX = 0;
+    }
+
+    if (nMinX >= nTilesX) {
+        nMinX = nTilesX - 1;
+    }
+
+    if (nMaxX < 0) {
+        nMaxX = 0;
+    }
+
+    if (nMaxX >= nTilesX) {
+        nMaxX = nTilesX - 1;
+    }
+
+    if (nMinY < 0) {
+        nMinY = 0;
+    }
+
+    if (nMinY >= nTilesY) {
+        nMinY = nTilesY - 1;
+    }
+
+    if (nMaxY < 0) {
+        nMaxY = 0;
+    }
+
+    if (nMaxY >= nTilesY) {
+        nMaxY = nTilesY - 1;
+    }
+
+    for (int y = nMinY; y <= nMaxY; y++) {
+        for (int x = nMinX; x <= nMaxX; x++) {
+            CancelRequestTile(x, y, a1);
+        }
+    }
+
+    field_68 = -1;
+    field_6C = -1;
+    field_70 = -1;
+    field_74 = -1;
+
+    return TRUE;
+}
+
+// 0x5CD3C0
+void CInfinity::ScrollingCancelRequestRect(unsigned char a1)
+{
+    // TODO: Incomplete.
 }
 
 // 0x5CDA70
@@ -1340,6 +1400,12 @@ BOOL CInfinity::RequestRect(int x1, int y1, int x2, int y2)
     // TODO: Incomplete.
 
     return FALSE;
+}
+
+// 0x5D07B0
+void CInfinity::CancelRequestTile(int x, int y, unsigned char a3)
+{
+    // TODO: Incomplete.
 }
 
 // 0x5D0E90

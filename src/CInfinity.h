@@ -133,6 +133,7 @@ public:
     BOOL AttachVRamPool(CVRamPool* pNewVRPool);
     void CacheTiles();
     BOOL CancelRequestRect(unsigned char a1);
+    void ScrollingCancelRequestRect(unsigned char a1);
     BOOL DetachVRamRect();
     BOOL DrawEllipse(const CPoint& ptCenter, const CSize& axes, COLORREF rgbColor);
     BOOL DrawHighlightRect(const CRect& rSquare, COLORREF rgbColor, BYTE width);
@@ -151,6 +152,7 @@ public:
     DWORD Render(CVidMode* pNewVidMode, INT nSurface, INT nScrollState, CVisibilityMap* pVisibilityMap);
     BOOL RenderLightning(int a1, const CRect& rSurface, INT nStartX, INT nStartY, INT nEndX, INT nEndY, COLORREF rgbCenter, COLORREF rgbMiddle, COLORREF rgbOuter);
     BOOL RequestRect(int x1, int y1, int x2, int y2);
+    void CancelRequestTile(int x, int y, unsigned char a3);
     BOOL InitViewPort(const CRect& rRect);
     BOOL SetViewPort(const CRect& rRect);
     BOOL SetViewPosition(INT x, INT y, BOOLEAN bSetExactScale);
