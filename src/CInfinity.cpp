@@ -1025,6 +1025,171 @@ void CInfinity::CacheTiles()
     }
 }
 
+// 0x5CCE90
+BOOL CInfinity::AttachVRamRect(int x1, int y1, int x2, int y2)
+{
+    if (x1 < 0) {
+        x1 = 0;
+    }
+
+    if (x1 >= nTilesX) {
+        x1 = nTilesX - 1;
+    }
+
+    if (x2 < 0) {
+        x2 = 0;
+    }
+
+    if (x2 >= nTilesX) {
+        x2 = nTilesX - 1;
+    }
+
+    if (y1 < 0) {
+        y1 = 0;
+    }
+
+    if (y1 >= nTilesY) {
+        y1 = nTilesY - 1;
+    }
+
+    if (y2 < 0) {
+        y2 = 0;
+    }
+
+    if (y2 >= nTilesY) {
+        y2 = nTilesY - 1;
+    }
+
+    if (rVRamRect.left >= 0) {
+        for (int y = rVRamRect.top; y <= rVRamRect.bottom; y++) {
+            for (int x = rVRamRect.left; x <= rVRamRect.right; x++) {
+                if (x < x1 || x > x2 || y < y1 || y > y2) {
+                    WED_TILEDATA* pTileData = pResWED->GetTileData(0, x, y);
+                    if (pTileData != NULL) {
+                        if ((pTileData->bFlags & 0x1) == 0) {
+                            WORD* pTileList = pResWED->GetTileList(0);
+                            if (pTileList != NULL) {
+                                if ((CTiledObject::STATE_SECONDARY_TILE & pTileData->wFlags) != 0
+                                    && pTileData->nSecondary != -1) {
+                                    pTileSets[0]->DetachFromVRam(pTileData->nSecondary);
+                                } else {
+                                    for (WORD index = 0; index < pTileData->nNumTiles; index++) {
+                                        pTileSets[0]->DetachFromVRam(pTileList[index + pTileData->nStartingTile]);
+                                    }
+                                }
+                            }
+                        }
+
+                        if ((pTileData->bFlags & 0x1E) != 0) {
+                            UINT nLayer;
+                            switch (pTileData->bFlags & 0x1E) {
+                            case 4:
+                                nLayer = 2;
+                                break;
+                            case 8:
+                                nLayer = 3;
+                                break;
+                            case 16:
+                                nLayer = 4;
+                                break;
+                            default:
+                                nLayer = 1;
+                                break;
+                            }
+
+                            WED_LAYERHEADER* pLayer = pResWED->GetLayerHeader(nLayer);
+                            if (pLayer != NULL) {
+                                // NOTE: The following code shadows some variables. Find
+                                // better names here or in the outside loops.
+                                for (WORD y = 0; y < pLayer->nTilesDown; y++) {
+                                    for (WORD x = 0; x < pLayer->nTilesAcross; x++) {
+                                        WED_TILEDATA* pTileData = pResWED->GetTileData(nLayer, x, y);
+                                        if (pTileData != NULL) {
+                                            WORD* pTileList = pResWED->GetTileList(nLayer);
+                                            if (pTileList != NULL) {
+                                                for (WORD index = 0; index < pTileData->nNumTiles; index++) {
+                                                    pTileSets[nLayer]->DetachFromVRam(pTileList[index + pTileData->nStartingTile]);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    for (int y = y1; y <= y2; y++) {
+        for (int x = x1; x <= x2; x++) {
+            if (x < x1 || x > x2 || y < y1 || y > y2) {
+                WED_TILEDATA* pTileData = pResWED->GetTileData(0, x, y);
+                if (pTileData != NULL) {
+                    if ((pTileData->bFlags & 0x1) == 0) {
+                        WORD* pTileList = pResWED->GetTileList(0);
+                        if (pTileList != NULL) {
+                            if ((CTiledObject::STATE_SECONDARY_TILE & pTileData->wFlags) != 0
+                                && pTileData->nSecondary != -1) {
+                                pTileSets[0]->AttachToVRam(pTileData->nSecondary);
+                            } else {
+                                for (WORD index = 0; index < pTileData->nNumTiles; index++) {
+                                    pTileSets[0]->AttachToVRam(pTileList[index + pTileData->nStartingTile]);
+                                }
+                            }
+                        }
+                    }
+
+                    if ((pTileData->bFlags & 0x1E) != 0) {
+                        UINT nLayer;
+                        switch (pTileData->bFlags & 0x1E) {
+                        case 4:
+                            nLayer = 2;
+                            break;
+                        case 8:
+                            nLayer = 3;
+                            break;
+                        case 16:
+                            nLayer = 4;
+                            break;
+                        default:
+                            nLayer = 1;
+                            break;
+                        }
+
+                        WED_LAYERHEADER* pLayer = pResWED->GetLayerHeader(nLayer);
+                        if (pLayer != NULL) {
+                            // NOTE: The following code shadows some variables. Find
+                            // better names here or in the outside loops.
+                            for (WORD y = 0; y < pLayer->nTilesDown; y++) {
+                                for (WORD x = 0; x < pLayer->nTilesAcross; x++) {
+                                    WED_TILEDATA* pTileData = pResWED->GetTileData(nLayer, x, y);
+                                    if (pTileData != NULL) {
+                                        WORD* pTileList = pResWED->GetTileList(nLayer);
+                                        if (pTileList != NULL) {
+                                            for (WORD index = 0; index < pTileData->nNumTiles; index++) {
+                                                pTileSets[nLayer]->AttachToVRam(pTileList[index + pTileData->nStartingTile]);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    rVRamRect.left = x1;
+    rVRamRect.right = x2;
+    rVRamRect.top = y1;
+    rVRamRect.bottom = y2;
+
+    return TRUE;
+}
+
 // 0x5CD2E0
 BOOL CInfinity::CancelRequestRect(unsigned char a1)
 {

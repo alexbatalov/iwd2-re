@@ -132,6 +132,7 @@ public:
     BOOL AttachWED(CResWED* resNewWED, WORD areaType, BYTE dayNightCode);
     BOOL AttachVRamPool(CVRamPool* pNewVRPool);
     void CacheTiles();
+    BOOL AttachVRamRect(int x1, int y1, int x2, int y2);
     BOOL CancelRequestRect(unsigned char a1);
     void ScrollingCancelRequestRect(unsigned char a1);
     BOOL DetachVRamRect();
