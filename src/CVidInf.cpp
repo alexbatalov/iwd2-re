@@ -31,6 +31,12 @@ CVidInf::CVidInf()
     field_174 = 1;
 }
 
+// 0x7ABB90
+int CVidInf::GetType()
+{
+    return 0;
+}
+
 // 0x79AFE0
 int CVidInf::GetNumVRamSurfaces()
 {

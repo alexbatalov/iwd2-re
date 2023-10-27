@@ -36,6 +36,7 @@ public:
     /* 00C8 */ IDirectDrawSurface* GetFXSurfacePtr(DWORD dwFlags) override;
     /* 00CC */ BOOL GetCursorSurfaceSize(CSize& size) override;
     /* 00D0 */ BOOL GetFXSize(CSize& size) override;
+    /* 00E0 */ int GetType() override;
     /* 00E4 */ int GetNumVRamSurfaces() override;
     /* 00E8 */ void LoadFogOWarSurfaces(const CString& a2) override;
     /* 00F8 */ BOOL RenderPointer(UINT nSurface) override;
