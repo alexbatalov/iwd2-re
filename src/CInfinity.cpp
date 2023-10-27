@@ -1135,7 +1135,11 @@ BOOL CInfinity::AttachVRamRect(int x1, int y1, int x2, int y2)
 
     for (int y = y1; y <= y2; y++) {
         for (int x = x1; x <= x2; x++) {
-            if (x < x1 || x > x2 || y < y1 || y > y2) {
+            if (rVRamRect.left < 0
+                || x < rVRamRect.left
+                || x > rVRamRect.right
+                || y < rVRamRect.top
+                || y > rVRamRect.bottom) {
                 WED_TILEDATA* pTileData = pResWED->GetTileData(0, x, y);
                 if (pTileData != NULL) {
                     if ((pTileData->bFlags & 0x1) == 0) {
