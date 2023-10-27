@@ -450,7 +450,7 @@ BOOL CScreenWorld::CheckMouseLButton()
 // 0x68C020
 void CScreenWorld::OnLButtonDblClk(CPoint pt)
 {
-    OnLButtonDblClk(pt);
+    m_cUIManager.OnLButtonDblClk(pt);
 
     if ((g_pBaldurChitin->GetObjectGame()->field_43E2 & 0x1) != 0) {
         CGameArea* pArea = g_pBaldurChitin->GetObjectGame()->GetVisibleArea();
