@@ -80,7 +80,7 @@ WED_TILEDATA* CResWED::GetTileData(UINT nLayer, int nXTile, int nYTile)
     if (m_bParsed) {
         if (nLayer < m_pHeader->nLayers) {
             if (nXTile >= 0 && nXTile < m_pLayers[nLayer].nTilesAcross && nYTile >= 0 && nYTile < m_pLayers[nLayer].nTilesDown) {
-                return reinterpret_cast<WED_TILEDATA*>(reinterpret_cast<unsigned char*>(m_pHeader) + m_pLayers[nLayer].nOffsetToTileData + sizeof(WED_TILEDATA) * nXTile + sizeof(WED_TILEDATA) * nYTile);
+                return reinterpret_cast<WED_TILEDATA*>(reinterpret_cast<unsigned char*>(m_pHeader) + m_pLayers[nLayer].nOffsetToTileData + sizeof(WED_TILEDATA) * nXTile + sizeof(WED_TILEDATA) * nYTile * m_pLayers[nLayer].nTilesAcross);
             }
         }
     }
