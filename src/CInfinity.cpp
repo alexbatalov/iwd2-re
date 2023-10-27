@@ -1639,6 +1639,169 @@ void CInfinity::CancelRequestTile(int x, int y, unsigned char a3)
     // TODO: Incomplete.
 }
 
+// 0x5D0AD0
+void CInfinity::RequestTile(int x, int y, unsigned char a3, int priority)
+{
+    BYTE v1 = (a3 & 0x4) != 0 ? 0x4 : 0x1;
+    a3 &= 0x3;
+
+    WED_TILEDATA* pTileData = pResWED->GetTileData(0, x, y);
+    if (pTileData == NULL) {
+        return;
+    }
+
+    if ((pTileData->bFlags & 0x1) == 0) {
+        WORD* pTileList = pResWED->GetTileList(0);
+        if (pTileList != NULL) {
+            if ((CTiledObject::STATE_SECONDARY_TILE & pTileData->wFlags) != 0
+                && pTileData->nSecondary != -1) {
+                if (pTileData->nSecondary >= 0 && pTileData->nSecondary < pTileSets[0]->m_nTiles) {
+                    CResInfTile* pRes = pTileSets[0]->m_pResTiles[pTileData->nSecondary];
+                    if (pRes != NULL) {
+                        if ((a3 & 1) != 0) {
+                            pRes->SetPriority(priority);
+                            pRes->Request();
+                        }
+
+                        if ((a3 & 0x2) != 0) {
+                            if (pRes->m_pDualTileRes != NULL) {
+                                pRes->m_pDualTileRes->SetPriority(priority);
+                                pRes->m_pDualTileRes->Request();
+                            }
+                        }
+
+                        // FIXME: Will never be true.
+                        if ((a3 & 0x4) != 0) {
+                            if (pRes->m_pDualTileRes != NULL) {
+                                pRes->m_pDualTileRes->SetPriority(priority);
+                                pRes->m_pDualTileRes->Request();
+                            }
+                        }
+                    }
+                } else {
+                    for (WORD index = 0; index < pTileData->nNumTiles; index++) {
+                        int nTile = pTileList[index + pTileData->nStartingTile];
+                        if (nTile < pTileSets[0]->m_nTiles) {
+                            CResInfTile* pRes = pTileSets[0]->m_pResTiles[nTile];
+                            if (pRes != NULL) {
+                                if ((a3 & 1) != 0) {
+                                    pRes->SetPriority(priority);
+                                    pRes->Request();
+                                }
+
+                                if ((a3 & 0x2) != 0) {
+                                    if (pRes->m_pDualTileRes != NULL) {
+                                        pRes->m_pDualTileRes->SetPriority(priority);
+                                        pRes->m_pDualTileRes->Request();
+                                    }
+                                }
+
+                                // FIXME: Will never be true.
+                                if ((a3 & 0x4) != 0) {
+                                    if (pRes->m_pDualTileRes != NULL) {
+                                        pRes->m_pDualTileRes->SetPriority(priority);
+                                        pRes->m_pDualTileRes->Request();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if ((pTileData->bFlags & 0x1E) != 0) {
+        UINT nLayer;
+        switch (pTileData->bFlags & 0x1E) {
+        case 4:
+            nLayer = 2;
+            break;
+        case 8:
+            nLayer = 3;
+            break;
+        case 16:
+            nLayer = 4;
+            break;
+        default:
+            nLayer = 1;
+            break;
+        }
+
+        WED_LAYERHEADER* pLayer = pResWED->GetLayerHeader(nLayer);
+        if (pLayer != NULL) {
+            // NOTE: The following code shadows some variables. Find
+            // better names here or in the outside loops.
+            for (WORD y = 0; y < pLayer->nTilesDown; y++) {
+                for (WORD x = 0; x < pLayer->nTilesAcross; x++) {
+                    WED_TILEDATA* pTileData = pResWED->GetTileData(nLayer, x, y);
+                    if (pTileData != NULL) {
+                        WORD* pTileList = pResWED->GetTileList(nLayer);
+                        if (pTileList != NULL) {
+                            for (WORD index = 0; index < pTileData->nNumTiles; index++) {
+                                int nTile = pTileList[index + pTileData->nStartingTile];
+                                if (nTile < pTileSets[0]->m_nTiles) {
+                                    CResInfTile* pRes = pTileSets[0]->m_pResTiles[nTile];
+                                    if (pRes != NULL) {
+                                        if ((v1 & 1) != 0) {
+                                            pRes->SetPriority(priority);
+                                            pRes->Request();
+                                        }
+
+                                        // FIXME: Will never be true.
+                                        if ((v1 & 0x2) != 0) {
+                                            if (pRes->m_pDualTileRes != NULL) {
+                                                pRes->m_pDualTileRes->SetPriority(priority);
+                                                pRes->m_pDualTileRes->Request();
+                                            }
+                                        }
+
+                                        if ((v1 & 0x4) != 0) {
+                                            if (pRes->m_pDualTileRes != NULL) {
+                                                pRes->m_pDualTileRes->SetPriority(priority);
+                                                pRes->m_pDualTileRes->Request();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (pTileData->nSecondary != -1) {
+        if (pResWED->GetTileList(0) != NULL) {
+            if (pTileData->nSecondary >= 0 && pTileData->nSecondary < pTileSets[0]->m_nTiles) {
+                CResInfTile* pRes = pTileSets[0]->m_pResTiles[pTileData->nSecondary];
+                if (pRes != NULL) {
+                    if ((a3 & 1) != 0) {
+                        pRes->SetPriority(priority);
+                        pRes->Request();
+                    }
+
+                    if ((a3 & 0x2) != 0) {
+                        if (pRes->m_pDualTileRes != NULL) {
+                            pRes->m_pDualTileRes->SetPriority(priority);
+                            pRes->m_pDualTileRes->Request();
+                        }
+                    }
+
+                    // FIXME: Will never be true.
+                    if ((a3 & 0x4) != 0) {
+                        if (pRes->m_pDualTileRes != NULL) {
+                            pRes->m_pDualTileRes->SetPriority(priority);
+                            pRes->m_pDualTileRes->Request();
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 // 0x5D0E90
 BOOL CInfinity::InitViewPort(const CRect& rRect)
 {

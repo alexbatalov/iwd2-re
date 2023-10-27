@@ -154,6 +154,7 @@ public:
     BOOL RenderLightning(int a1, const CRect& rSurface, INT nStartX, INT nStartY, INT nEndX, INT nEndY, COLORREF rgbCenter, COLORREF rgbMiddle, COLORREF rgbOuter);
     BOOL RequestRect(int x1, int y1, int x2, int y2);
     void CancelRequestTile(int x, int y, unsigned char a3);
+    void RequestTile(int x, int y, unsigned char a3, int priority);
     BOOL InitViewPort(const CRect& rRect);
     BOOL SetViewPort(const CRect& rRect);
     BOOL SetViewPosition(INT x, INT y, BOOLEAN bSetExactScale);
