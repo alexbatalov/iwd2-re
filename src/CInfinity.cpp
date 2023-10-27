@@ -181,7 +181,7 @@ int CInfTileSet::AttachToVRam(int nTile)
 
     if (pTile->m_nVRamTile < 0) {
         int nVRamTile = m_pVRamPool->AssociateTile(this, nTile);
-        m_pResTiles[nTile]->m_nVRamFlags &= 0x2;
+        m_pResTiles[nTile]->m_nVRamFlags &= ~0x2;
         if (nVRamTile == -1) {
             return 0;
         }
@@ -299,14 +299,14 @@ BOOL CInfTileSet::Render(CVidMode* pVidMode, INT nSurface, INT nTile, INT nStenc
         || renderCode.tileNE != tileCode.tileNE
         || renderCode.tileSW != tileCode.tileSW
         || renderCode.tileSE != tileCode.tileSE) {
-        m_pResTiles[nTile]->dwFlags &= ~0x2;
+        m_pResTiles[nTile]->m_nVRamFlags &= ~0x2;
     }
 
     LPDIRECTDRAWSURFACE pSurface;
     if (m_pVRamPool != NULL && m_pResTiles[nTile]->m_nVRamTile >= 0) {
         pSurface = m_pVRamPool->m_pSurfaces[m_pResTiles[nTile]->m_nVRamTile];
 
-        if ((m_pResTiles[nTile]->dwFlags & 0x2) == 0) {
+        if ((m_pResTiles[nTile]->m_nVRamFlags & 0x2) == 0) {
             RenderToPrimary(pSurface,
                 nTile,
                 nStencilTile,
@@ -314,7 +314,7 @@ BOOL CInfTileSet::Render(CVidMode* pVidMode, INT nSurface, INT nTile, INT nStenc
                 nDualTileCode,
                 a12,
                 dwFlags);
-            m_pResTiles[nTile]->dwFlags |= 0x2;
+            m_pResTiles[nTile]->m_nVRamFlags |= 0x2;
             m_pResTiles[nTile]->m_renderCode = tileCode;
         }
     } else {
@@ -610,7 +610,7 @@ CResInfTile::CResInfTile(BOOLEAN a1, BOOLEAN a2)
         m_pDualTileRes = NULL;
     }
 
-    dwFlags &= 0x2;
+    dwFlags &= ~0x2;
     dwFlags |= 0x1;
 }
 
