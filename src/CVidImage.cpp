@@ -414,7 +414,7 @@ BOOL CVidTile::BltTile8To32(DWORD* pSurface, LONG lPitch, BYTE* pData, const CSi
                 pSurface += 2;
             }
 
-            pSurface += nSurfaceJump;
+            pSurface = reinterpret_cast<DWORD*>(reinterpret_cast<BYTE*>(pSurface) + nSurfaceJump);
             pData += nDataJump;
 
             y++;
@@ -434,7 +434,7 @@ BOOL CVidTile::BltTile8To32(DWORD* pSurface, LONG lPitch, BYTE* pData, const CSi
                 pSurface += 2;
             }
 
-            pSurface += nSurfaceJump;
+            pSurface = reinterpret_cast<DWORD*>(reinterpret_cast<BYTE*>(pSurface) + nSurfaceJump);
             pData += nDataJump;
         }
     } else {
@@ -443,7 +443,7 @@ BOOL CVidTile::BltTile8To32(DWORD* pSurface, LONG lPitch, BYTE* pData, const CSi
                 *pSurface++ = rgbTempPal[*pData++];
             }
 
-            pSurface += nSurfaceJump;
+            pSurface = reinterpret_cast<DWORD*>(reinterpret_cast<BYTE*>(pSurface) + nSurfaceJump);
             pData += nDataJump;
         }
     }
@@ -491,7 +491,7 @@ BOOL CVidTile::BltStencilTile8To32(DWORD* pSurface, LONG lPitch, BYTE* pData, BY
             }
         }
 
-        pSurface += nSurfaceJump;
+        pSurface = reinterpret_cast<DWORD*>(reinterpret_cast<BYTE*>(pSurface) + nSurfaceJump);
         pData += nDataJump;
     }
 
