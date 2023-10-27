@@ -1628,9 +1628,66 @@ BOOL CInfinity::RenderLightning(int a1, const CRect& rSurface, INT nStartX, INT 
 // 0x5CFE80
 BOOL CInfinity::RequestRect(int x1, int y1, int x2, int y2)
 {
-    // TODO: Incomplete.
+    CRect r(0, 0, nTilesX, nTilesY);
 
-    return FALSE;
+    CancelRequestRect(field_15E);
+
+    BYTE flags;
+    if ((m_areaType & 0x40) != 0) {
+        flags = m_requestDayNightCode;
+    } else {
+        flags = 1;
+    }
+
+    if ((m_areaType & 0x4) != 0 && nCurrentRainLevel != 0) {
+        flags |= 0x4;
+    }
+
+    field_15E = flags;
+
+    int nMinX = max(x1 + 3, 0);
+    int nMaxX = min(x2 - 3, nTilesX - 1);
+    int nMinY = max(y1 + 3, 0);
+    int nMaxY = min(y2 - 3, nTilesY - 1);
+
+    for (int y = nMinY; y < nMaxY; y++) {
+        for (int x = nMinX; x < nMaxX; x++) {
+            RequestTile(x, y, flags, CDimm::PRIORITY_HIGH);
+        }
+    }
+
+    for (int delta = 0; delta < 3; delta++) {
+        for (int x = x1; x < x2; x++) {
+            if (r.PtInRect(CPoint(x, y1 + delta))) {
+                RequestTile(x, y1 + delta, flags, CDimm::PRIORITY_MEDIUM);
+            }
+
+            if (r.PtInRect(CPoint(x, y1 - delta))) {
+                RequestTile(x, y1 - delta, flags, CDimm::PRIORITY_MEDIUM);
+            }
+        }
+    }
+
+    for (int y = y1 + 3; y < y2 - 3; y++) {
+        for (int delta = 0; delta < 3; delta++) {
+            if (r.PtInRect(CPoint(x1 + delta, y))) {
+                RequestTile(x1 + delta, y, flags, CDimm::PRIORITY_MEDIUM);
+            }
+
+            if (r.PtInRect(CPoint(x1 - delta, y))) {
+                RequestTile(x1 - delta, y, flags, CDimm::PRIORITY_MEDIUM);
+            }
+        }
+    }
+
+    field_68 = x1;
+    field_6C = y1;
+    field_70 = x2;
+    field_74 = y2;
+
+    field_196 = 0;
+
+    return TRUE;
 }
 
 // 0x5D07B0
