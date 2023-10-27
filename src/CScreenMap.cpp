@@ -1656,7 +1656,7 @@ void CUIControlButtonMapAreaMap::RenderFogOfWar(CVidInf* pVidInf, const CPoint& 
 void CUIControlButtonMapAreaMap::InvalidateRect()
 {
     if (m_bActive || m_bInactiveRender) {
-        InvalidateRect();
+        CUIControlButton::InvalidateRect();
         InvalidateNotes();
     }
 }
