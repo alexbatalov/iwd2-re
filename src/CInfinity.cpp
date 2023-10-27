@@ -981,7 +981,47 @@ BOOL CInfinity::AttachVRamPool(CVRamPool* pNewVRPool)
 // 0x5CCD30
 void CInfinity::CacheTiles()
 {
-    // TODO: Incomplete.
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL) {
+        DWORD dwFlags = 0;
+
+        ULONG nTime = g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime;
+        ULONG nDelta = (CTimerWorld::TIME_DAY - CTimerWorld::TIME_DAWN) / 2;
+        if (nTime >= nDelta + CTimerWorld::TIME_DAWN
+            && nTime < nDelta + CTimerWorld::TIME_DUSK
+            && (m_areaType & 0x40) != 0) {
+            dwFlags |= 0x2;
+        } else {
+            dwFlags |= 0x1;
+        }
+
+        if ((m_areaType & 0x4) != 0 && nCurrentRainLevel != 0) {
+            dwFlags |= 0x4;
+        }
+
+        for (int index = 0; index < 5; index++) {
+            if (pTileSets[index] != NULL && pTileSets[index]->m_pResTiles != NULL) {
+                for (int tile = 0; tile < pTileSets[index]->m_nTiles; tile++) {
+                    if (tile % 10 < (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nTilesPrecachePercent + 5) / 10) {
+                        CResTile* pRes = NULL;
+                        if ((dwFlags & 0x6) != 0) {
+                            pRes = pTileSets[index]->m_pResTiles[tile]->m_pDualTileRes;
+                        }
+
+                        if (pRes == NULL) {
+                            pRes = pTileSets[index]->m_pResTiles[tile];
+                        }
+
+                        if (pRes != NULL) {
+                            if (pRes->Demand() != NULL) {
+                                pRes->Release();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 // 0x5CD2E0
