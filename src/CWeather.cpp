@@ -209,7 +209,88 @@ void CWeather::SetCurrentWeather(CGameArea* pArea, WORD wWeatherFlags)
 // 0x556230
 void CWeather::SetCurrentWeather(CGameArea* pArea, ULONG nCurrentTime, BYTE nWeatherType)
 {
-    // TODO: Incomplete.
+    if (g_pBaldurChitin->cNetwork.GetSessionOpen()
+        || g_pBaldurChitin->cNetwork.GetSessionHosting()) {
+        if (m_nCurrentWeather != 0 || nWeatherType == 0) {
+            CancelCurrentWeather(pArea, nCurrentTime);
+        }
+
+        if (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bWeatherEnabled) {
+            INT x;
+            INT y;
+
+            switch (nWeatherType) {
+            case 1:
+                if (pArea->m_header.m_lightningProbability == 0) {
+                    m_nLightningFreq = 0;
+                } else if (pArea->m_header.m_lightningProbability < 33) {
+                    m_nLightningFreq = 64;
+                } else if (pArea->m_header.m_lightningProbability < 66) {
+                    m_nLightningFreq = 128;
+                } else {
+                    m_nLightningFreq = 192;
+                }
+
+                pArea->GetInfinity()->GetViewPosition(x, y);
+                m_rainStorm.GenerateDrops(CPoint(x, y), CInfinity::stru_8E79B8);
+                m_nCurrentWeather = 1;
+                m_bUpgrading = TRUE;
+                m_nWeatherLevel = 0;
+                m_nWeatherStageEndTime = nCurrentTime + WEATHER_TRANSITION_TIME;
+
+                if (g_pBaldurChitin->cNetwork.GetSessionOpen()) {
+                    m_nWeatherDuration = WEATHER_DURATION_MULTIPLAYER;
+                } else {
+                    m_nWeatherDuration = WEATHER_DURATION_MIN + rand() % (WEATHER_DURATION_MAX - WEATHER_DURATION_MIN);
+                }
+
+                m_nWeatherEndTime = nCurrentTime + m_nWeatherDuration + 6 * WEATHER_TRANSITION_TIME;
+                m_nDurationCounter = 0;
+                m_rgbCurrentOverCastColor = RGB(CVidPalette::NO_TINT, CVidPalette::NO_TINT, CVidPalette::NO_TINT);
+
+                if (g_pBaldurChitin->cNetwork.GetSessionOpen()
+                    && g_pBaldurChitin->cNetwork.GetSessionHosting()) {
+                    g_pBaldurChitin->GetBaldurMessage()->WeatherBroadcast(Marshal());
+                }
+
+                pArea->GetInfinity()->SetCurrentWeather(m_rgbCurrentOverCastColor,
+                    m_nCurrentWeather,
+                    m_nWeatherLevel,
+                    0);
+                m_nLastTimeChecked = nCurrentTime;
+                break;
+            case 2:
+                pArea->GetInfinity()->GetViewPosition(x, y);
+                m_snowStorm.GenerateFlakes(CPoint(x, y), CInfinity::stru_8E79B8);
+                m_nCurrentWeather = 2;
+                m_nWeatherLevel = 0;
+                m_bUpgrading = TRUE;
+                m_nWeatherStageEndTime = nCurrentTime + WEATHER_TRANSITION_TIME;
+
+                if (g_pBaldurChitin->cNetwork.GetSessionOpen()) {
+                    m_nWeatherDuration = WEATHER_DURATION_MULTIPLAYER;
+                } else {
+                    m_nWeatherDuration = WEATHER_DURATION_MIN + rand() % (WEATHER_DURATION_MAX - WEATHER_DURATION_MIN);
+                }
+
+                m_nWeatherEndTime = nCurrentTime + m_nWeatherDuration + 6 * WEATHER_TRANSITION_TIME;
+                m_nDurationCounter = 0;
+                m_rgbCurrentOverCastColor = RGB(CVidPalette::NO_TINT, CVidPalette::NO_TINT, CVidPalette::NO_TINT);
+
+                if (g_pBaldurChitin->cNetwork.GetSessionOpen()
+                    && g_pBaldurChitin->cNetwork.GetSessionHosting()) {
+                    g_pBaldurChitin->GetBaldurMessage()->WeatherBroadcast(Marshal());
+                }
+
+                pArea->GetInfinity()->SetCurrentWeather(m_rgbCurrentOverCastColor,
+                    m_nCurrentWeather,
+                    m_nWeatherLevel,
+                    0);
+                m_nLastTimeChecked = nCurrentTime;
+                break;
+            }
+        }
+    }
 }
 
 // 0x5564F0
