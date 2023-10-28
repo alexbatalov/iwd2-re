@@ -65,7 +65,7 @@ void CGameStatic::AIUpdate()
 {
     CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
     if ((pGame->m_nTimeStop == 0 || pGame->m_nTimeStopCaster == m_id)
-        && (m_header.m_dwFlags & 0x8) != 0) {
+        && (m_header.m_dwFlags & 0x8) == 0) {
         m_vidCell.FrameAdvance();
     }
 }
