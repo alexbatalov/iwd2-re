@@ -776,7 +776,7 @@ void CRainStorm::AsynchronousUpdate()
                     m_pRainDrops[index].m_vel.z = 0;
 
                     m_pRainDrops[index].m_pos.x = (rNewWorldViewPort.left + rand() % rNewWorldViewPort.Width()) << CParticle::RESOLUTION_INC;
-                    m_pRainDrops[index].m_pos.y = (rand() % (4 / rNewWorldViewPort.bottom / 3 - 4 * rNewWorldViewPort.top / 3) + 4 * rNewWorldViewPort.top / 3 + 100) << CParticle::RESOLUTION_INC;
+                    m_pRainDrops[index].m_pos.y = (rand() % (4 * rNewWorldViewPort.bottom / 3 - 4 * rNewWorldViewPort.top / 3) + 4 * rNewWorldViewPort.top / 3 + 100) << CParticle::RESOLUTION_INC;
                     m_pRainDrops[index].m_pos.z = 100 << CParticle::RESOLUTION_INC;
                 }
             }
@@ -884,7 +884,7 @@ void CSnowStorm::AsynchronousUpdate()
                     UTIL_ASSERT(m_pSnowFlakes != NULL);
 
                     m_pSnowFlakes[index].m_pos.x = (rNewWorldViewPort.left + rand() % rNewWorldViewPort.Width()) << CParticle::RESOLUTION_INC;
-                    m_pSnowFlakes[index].m_pos.y = (rand() % (4 / rNewWorldViewPort.bottom / 3 - 4 * rNewWorldViewPort.top / 3) + 4 * rNewWorldViewPort.top / 3 + 100) << CParticle::RESOLUTION_INC;
+                    m_pSnowFlakes[index].m_pos.y = (rand() % (4 * rNewWorldViewPort.bottom / 3 - 4 * rNewWorldViewPort.top / 3) + 4 * rNewWorldViewPort.top / 3 + 100) << CParticle::RESOLUTION_INC;
                     m_pSnowFlakes[index].m_pos.z = 100 << CParticle::RESOLUTION_INC;
                 }
             }
