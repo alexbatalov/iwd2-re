@@ -7,6 +7,21 @@
 #include "CVidInf.h"
 #include "CVidPalette.h"
 
+// 0x84EE74
+const COLORREF CWeather::OVERCAST_COLOR = RGB(180, 180, 180);
+
+// 0x84EE78
+const COLORREF CWeather::RGB_OVERCAST_INCREMENT = RGB(75, 75, 75);
+
+// 0x84EE7C
+const USHORT CWeather::VOLUME_LIGHT = 20;
+
+// 0x84EE7E
+const USHORT CWeather::VOLUME_MEDIUM = 50;
+
+// 0x84EE80
+const USHORT CWeather::VOLUME_HEAVY = 100;
+
 // 0x8E2074
 const SHORT CWeather::WEATHER_DURATION_MIN = CTimerWorld::TIMESCALE_MSEC_PER_HOUR + CTimerWorld::TIMESCALE_MSEC_PER_SEC * CTimerWorld::TIMESCALE_SEC_PER_MIN;
 
@@ -207,7 +222,7 @@ void CWeather::CompressTime()
                     nDensity = 0;
                 } else {
                     m_nWeatherEndTime = m_nWeatherStageEndTime;
-                    m_rgbCurrentOverCastColor = RGB(180, 180, 180);
+                    m_rgbCurrentOverCastColor = OVERCAST_COLOR;
                     nDensity = 0;
                 }
                 break;
@@ -219,11 +234,12 @@ void CWeather::CompressTime()
                         m_nWeatherDuration = WEATHER_DURATION_MIN + rand() % (WEATHER_DURATION_MAX - WEATHER_DURATION_MIN);
                     }
                     m_nWeatherEndTime = nCurrentTime + m_nWeatherDuration + 5 * WEATHER_TRANSITION_TIME;
-                    nDensity = 50 / WEATHER_TRANSITION_TIME;
+                    m_rgbCurrentOverCastColor = OVERCAST_COLOR;
+                    nDensity = CRainStorm::DENSITY_LIGHT_STORM / WEATHER_TRANSITION_TIME;
                 } else {
                     m_nWeatherEndTime = nCurrentTime + 2 * WEATHER_TRANSITION_TIME;
-                    m_rgbCurrentOverCastColor = RGB(180, 180, 180);
-                    nDensity = 50 - 50 / WEATHER_TRANSITION_TIME;
+                    m_rgbCurrentOverCastColor = OVERCAST_COLOR;
+                    nDensity = CRainStorm::DENSITY_LIGHT_STORM - CRainStorm::DENSITY_LIGHT_STORM / WEATHER_TRANSITION_TIME;
                 }
                 break;
             case 8:
@@ -234,11 +250,12 @@ void CWeather::CompressTime()
                         m_nWeatherDuration = WEATHER_DURATION_MIN + rand() % (WEATHER_DURATION_MAX - WEATHER_DURATION_MIN);
                     }
                     m_nWeatherEndTime = nCurrentTime + m_nWeatherDuration + 4 * WEATHER_TRANSITION_TIME;
-                    nDensity = 100 / WEATHER_TRANSITION_TIME + 50;
+                    m_rgbCurrentOverCastColor = OVERCAST_COLOR;
+                    nDensity = (CRainStorm::DENSITY_MEDIUM_STORM - CRainStorm::DENSITY_LIGHT_STORM) / WEATHER_TRANSITION_TIME + CRainStorm::DENSITY_LIGHT_STORM;
                 } else {
                     m_nWeatherEndTime = nCurrentTime + 3 * WEATHER_TRANSITION_TIME;
-                    m_rgbCurrentOverCastColor = RGB(180, 180, 180);
-                    nDensity = 150 - 100 / WEATHER_TRANSITION_TIME;
+                    m_rgbCurrentOverCastColor = OVERCAST_COLOR;
+                    nDensity = CRainStorm::DENSITY_MEDIUM_STORM - (CRainStorm::DENSITY_MEDIUM_STORM - CRainStorm::DENSITY_LIGHT_STORM) / WEATHER_TRANSITION_TIME;
                 }
                 break;
             case 12:
@@ -248,7 +265,8 @@ void CWeather::CompressTime()
                     m_nWeatherDuration = WEATHER_DURATION_MIN + rand() % (WEATHER_DURATION_MAX - WEATHER_DURATION_MIN);
                 }
                 m_nWeatherEndTime = nCurrentTime + m_nWeatherDuration + 3 * WEATHER_TRANSITION_TIME;
-                nDensity = 250 / WEATHER_TRANSITION_TIME;
+                m_rgbCurrentOverCastColor = OVERCAST_COLOR;
+                nDensity = CRainStorm::DENSITY_HEAVY_STORM / WEATHER_TRANSITION_TIME;
                 break;
             }
 
@@ -310,7 +328,7 @@ void CWeather::ResetWeather(CGameArea* pArea)
                             nDensity = 0;
                         } else {
                             m_nWeatherEndTime = m_nWeatherStageEndTime;
-                            m_rgbCurrentOverCastColor = RGB(180, 180, 180);
+                            m_rgbCurrentOverCastColor = OVERCAST_COLOR;
                             nDensity = 0;
                         }
                         break;
@@ -321,12 +339,13 @@ void CWeather::ResetWeather(CGameArea* pArea)
                             } else {
                                 m_nWeatherDuration = WEATHER_DURATION_MIN + rand() % (WEATHER_DURATION_MAX - WEATHER_DURATION_MIN);
                             }
-                            m_nWeatherEndTime = nCurrentTime + m_nWeatherDuration + 6 * WEATHER_TRANSITION_TIME;
-                            nDensity = 50 / WEATHER_TRANSITION_TIME;
+                            m_nWeatherEndTime = nCurrentTime + m_nWeatherDuration + 5 * WEATHER_TRANSITION_TIME;
+                            m_rgbCurrentOverCastColor = OVERCAST_COLOR;
+                            nDensity = CRainStorm::DENSITY_LIGHT_STORM / WEATHER_TRANSITION_TIME;
                         } else {
                             m_nWeatherEndTime = nCurrentTime + 2 * WEATHER_TRANSITION_TIME;
-                            m_rgbCurrentOverCastColor = RGB(180, 180, 180);
-                            nDensity = 50 - 50 / WEATHER_TRANSITION_TIME;
+                            m_rgbCurrentOverCastColor = OVERCAST_COLOR;
+                            nDensity = CRainStorm::DENSITY_LIGHT_STORM - CRainStorm::DENSITY_LIGHT_STORM / WEATHER_TRANSITION_TIME;
                         }
                         break;
                     case 8:
@@ -337,11 +356,12 @@ void CWeather::ResetWeather(CGameArea* pArea)
                                 m_nWeatherDuration = WEATHER_DURATION_MIN + rand() % (WEATHER_DURATION_MAX - WEATHER_DURATION_MIN);
                             }
                             m_nWeatherEndTime = nCurrentTime + m_nWeatherDuration + 4 * WEATHER_TRANSITION_TIME;
-                            nDensity = 100 / WEATHER_TRANSITION_TIME;
+                            m_rgbCurrentOverCastColor = OVERCAST_COLOR;
+                            nDensity = (CRainStorm::DENSITY_MEDIUM_STORM - CRainStorm::DENSITY_LIGHT_STORM) / WEATHER_TRANSITION_TIME + CRainStorm::DENSITY_LIGHT_STORM;
                         } else {
                             m_nWeatherEndTime = nCurrentTime + 3 * WEATHER_TRANSITION_TIME;
-                            m_rgbCurrentOverCastColor = RGB(180, 180, 180);
-                            nDensity = 150 - 100 / WEATHER_TRANSITION_TIME;
+                            m_rgbCurrentOverCastColor = OVERCAST_COLOR;
+                            nDensity = CRainStorm::DENSITY_MEDIUM_STORM - (CRainStorm::DENSITY_MEDIUM_STORM - CRainStorm::DENSITY_LIGHT_STORM) / WEATHER_TRANSITION_TIME;
                         }
                         break;
                     case 12:
@@ -350,8 +370,9 @@ void CWeather::ResetWeather(CGameArea* pArea)
                         } else {
                             m_nWeatherDuration = WEATHER_DURATION_MIN + rand() % (WEATHER_DURATION_MAX - WEATHER_DURATION_MIN);
                         }
-                        m_nWeatherEndTime = nCurrentTime + m_nWeatherDuration + 2 * WEATHER_TRANSITION_TIME;
-                        nDensity = 250 / WEATHER_TRANSITION_TIME;
+                        m_nWeatherEndTime = nCurrentTime + m_nWeatherDuration + 3 * WEATHER_TRANSITION_TIME;
+                        m_rgbCurrentOverCastColor = OVERCAST_COLOR;
+                        nDensity = CRainStorm::DENSITY_HEAVY_STORM;
                         break;
                     }
 
@@ -524,7 +545,7 @@ void CWeather::SetRainSound(SHORT nRainLevel, ULONG nLevelPercentage)
                     m_sndRain.SetChannel(1, 0);
                     m_sndRain.Play(TRUE);
                 }
-                m_sndRain.SetVolume(20 * m_nRainVolumeLevel / WEATHER_TRANSITION_TIME);
+                m_sndRain.SetVolume(VOLUME_LIGHT * m_nRainVolumeLevel / WEATHER_TRANSITION_TIME);
                 break;
             case 8:
                 if (!m_sndRain.IsSoundPlaying()) {
@@ -532,7 +553,7 @@ void CWeather::SetRainSound(SHORT nRainLevel, ULONG nLevelPercentage)
                     m_sndRain.SetChannel(1, 0);
                     m_sndRain.Play(TRUE);
                 }
-                m_sndRain.SetVolume(50 * m_nRainVolumeLevel / WEATHER_TRANSITION_TIME);
+                m_sndRain.SetVolume(VOLUME_MEDIUM * m_nRainVolumeLevel / WEATHER_TRANSITION_TIME);
                 break;
             case 12:
                 if (!m_sndRain.IsSoundPlaying()) {
@@ -540,7 +561,7 @@ void CWeather::SetRainSound(SHORT nRainLevel, ULONG nLevelPercentage)
                     m_sndRain.SetChannel(1, 0);
                     m_sndRain.Play(TRUE);
                 }
-                m_sndRain.SetVolume(100 * m_nRainVolumeLevel / WEATHER_TRANSITION_TIME);
+                m_sndRain.SetVolume(VOLUME_HEAVY * m_nRainVolumeLevel / WEATHER_TRANSITION_TIME);
                 break;
             }
         }
@@ -567,7 +588,7 @@ void CWeather::SetWind(SHORT nWindLevel, ULONG nLevelPercentage, BOOLEAN bResetA
 
                 // TODO: Check casts.
                 if (m_nWindVolumeLevel > static_cast<ULONG>(WEATHER_TRANSITION_TIME / 5)) {
-                    m_sndWind.SetVolume((20 * m_nWindVolumeLevel - 20 * (WEATHER_TRANSITION_TIME / 5)) / (WEATHER_TRANSITION_TIME - WEATHER_TRANSITION_TIME / 5));
+                    m_sndWind.SetVolume((VOLUME_LIGHT * m_nWindVolumeLevel - VOLUME_LIGHT * (WEATHER_TRANSITION_TIME / 5)) / (WEATHER_TRANSITION_TIME - WEATHER_TRANSITION_TIME / 5));
                 } else {
                     m_sndWind.SetVolume(0);
                     g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->ApplyWindToAmbients(static_cast<BYTE>(100 - 500 * m_nWindVolumeLevel / WEATHER_TRANSITION_TIME));
@@ -583,7 +604,7 @@ void CWeather::SetWind(SHORT nWindLevel, ULONG nLevelPercentage, BOOLEAN bResetA
                     m_bWindOn = TRUE;
                 }
 
-                m_sndWind.SetVolume(50 * nLevelPercentage / WEATHER_TRANSITION_TIME);
+                m_sndWind.SetVolume(VOLUME_MEDIUM * nLevelPercentage / WEATHER_TRANSITION_TIME);
                 m_nWindLevel = 32;
                 break;
             case 48:
@@ -594,7 +615,7 @@ void CWeather::SetWind(SHORT nWindLevel, ULONG nLevelPercentage, BOOLEAN bResetA
                     m_bWindOn = TRUE;
                 }
 
-                m_sndWind.SetVolume(100 * nLevelPercentage / WEATHER_TRANSITION_TIME);
+                m_sndWind.SetVolume(VOLUME_HEAVY * nLevelPercentage / WEATHER_TRANSITION_TIME);
                 m_nWindLevel = 48;
                 break;
             }
@@ -703,20 +724,22 @@ void CWeather::UpdateRain()
         case 0:
             if (m_bUpgrading) {
                 if (nCurrentTime < m_nWeatherStageEndTime) {
-                    BYTE color = static_cast<BYTE>(255 - 75 * m_nDurationCounter / WEATHER_TRANSITION_TIME);
-                    m_rgbCurrentOverCastColor = RGB(color, color, color);
+                    m_rgbCurrentOverCastColor = RGB(255 - GetRValue(RGB_OVERCAST_INCREMENT) * m_nDurationCounter / WEATHER_TRANSITION_TIME,
+                        255 - GetGValue(RGB_OVERCAST_INCREMENT) * m_nDurationCounter / WEATHER_TRANSITION_TIME,
+                        255 - GetBValue(RGB_OVERCAST_INCREMENT) * m_nDurationCounter / WEATHER_TRANSITION_TIME);
                     SetWind(m_nCurrentWeather != 1 ? 16 : 0, m_nDurationCounter, TRUE);
                     m_nDurationCounter += nCurrentTime - m_nLastTimeChecked;
                 } else {
                     m_nWeatherLevel = 4;
-                    m_rgbCurrentOverCastColor = RGB(180, 180, 180);
+                    m_rgbCurrentOverCastColor = OVERCAST_COLOR;
                     m_nWeatherStageEndTime = nCurrentTime + WEATHER_TRANSITION_TIME;
                     m_nDurationCounter = 0;
                 }
             } else {
                 if (nCurrentTime < m_nWeatherStageEndTime) {
-                    BYTE color = static_cast<BYTE>(75 * m_nDurationCounter / WEATHER_TRANSITION_TIME - 76);
-                    m_rgbCurrentOverCastColor = RGB(color, color, color);
+                    m_rgbCurrentOverCastColor = RGB(GetRValue(RGB_OVERCAST_INCREMENT) * m_nDurationCounter / WEATHER_TRANSITION_TIME + GetRValue(OVERCAST_COLOR),
+                        GetGValue(RGB_OVERCAST_INCREMENT) * m_nDurationCounter / WEATHER_TRANSITION_TIME + GetGValue(OVERCAST_COLOR),
+                        GetBValue(RGB_OVERCAST_INCREMENT) * m_nDurationCounter / WEATHER_TRANSITION_TIME + GetBValue(OVERCAST_COLOR));
                     SetWind(m_nCurrentWeather != 1 ? 16 : 0, WEATHER_TRANSITION_TIME - m_nDurationCounter, TRUE);
                     m_nDurationCounter += nCurrentTime - m_nLastTimeChecked;
                 } else {
@@ -732,11 +755,11 @@ void CWeather::UpdateRain()
                 if (m_bUpgrading) {
                     SetWind(32, m_nDurationCounter, TRUE);
                     SetRainSound(8, m_nDurationCounter);
-                    m_rainStorm.m_nCurrentDensity = static_cast<USHORT>(50 * m_nDurationCounter / WEATHER_TRANSITION_TIME);
+                    m_rainStorm.m_nCurrentDensity = static_cast<USHORT>(CRainStorm::DENSITY_LIGHT_STORM * m_nDurationCounter / WEATHER_TRANSITION_TIME);
                 } else {
                     SetWind(32, WEATHER_TRANSITION_TIME - m_nDurationCounter, TRUE);
                     SetRainSound(8, WEATHER_TRANSITION_TIME - m_nDurationCounter);
-                    m_rainStorm.m_nCurrentDensity = static_cast<USHORT>(50 - 50 * m_nDurationCounter / WEATHER_TRANSITION_TIME);
+                    m_rainStorm.m_nCurrentDensity = static_cast<USHORT>(CRainStorm::DENSITY_LIGHT_STORM - CRainStorm::DENSITY_LIGHT_STORM * m_nDurationCounter / WEATHER_TRANSITION_TIME);
                 }
             } else {
                 if (m_bUpgrading) {
@@ -757,20 +780,20 @@ void CWeather::UpdateRain()
                 if (m_bUpgrading) {
                     SetWind(48, m_nDurationCounter, TRUE);
                     SetRainSound(12, m_nDurationCounter);
-                    m_rainStorm.m_nCurrentDensity = static_cast<USHORT>(100 * m_nDurationCounter / WEATHER_TRANSITION_TIME + 50);
+                    m_rainStorm.m_nCurrentDensity = static_cast<USHORT>((CRainStorm::DENSITY_MEDIUM_STORM - CRainStorm::DENSITY_LIGHT_STORM) * m_nDurationCounter / WEATHER_TRANSITION_TIME + CSnowStorm::DENSITY_LIGHT_STORM);
                 } else {
                     SetWind(48, WEATHER_TRANSITION_TIME - m_nDurationCounter, TRUE);
                     SetRainSound(12, WEATHER_TRANSITION_TIME - m_nDurationCounter);
-                    m_rainStorm.m_nCurrentDensity = static_cast<USHORT>(150 - 100 * m_nDurationCounter / WEATHER_TRANSITION_TIME);
+                    m_rainStorm.m_nCurrentDensity = static_cast<USHORT>(CRainStorm::DENSITY_MEDIUM_STORM - (CRainStorm::DENSITY_MEDIUM_STORM - CRainStorm::DENSITY_LIGHT_STORM) * m_nDurationCounter / WEATHER_TRANSITION_TIME);
                 }
             } else {
                 if (m_bUpgrading) {
                     m_nWeatherLevel = 12;
-                    m_rainStorm.m_nCurrentDensity = 250;
+                    m_rainStorm.m_nCurrentDensity = CRainStorm::DENSITY_HEAVY_STORM;
                     m_nWeatherStageEndTime = nCurrentTime + m_nWeatherDuration;
                 } else {
                     m_nWeatherLevel = 4;
-                    m_rainStorm.m_nCurrentDensity = 50;
+                    m_rainStorm.m_nCurrentDensity = CRainStorm::DENSITY_LIGHT_STORM;
                     m_nWeatherStageEndTime = nCurrentTime + WEATHER_TRANSITION_TIME;
                 }
 
@@ -794,7 +817,7 @@ void CWeather::UpdateRain()
                 m_nDurationCounter = 0;
                 m_nWeatherLevel = 8;
                 m_bUpgrading = FALSE;
-                m_rainStorm.m_nCurrentDensity = 150;
+                m_rainStorm.m_nCurrentDensity = CRainStorm::DENSITY_MEDIUM_STORM;
             }
             break;
         }
@@ -827,19 +850,21 @@ void CWeather::UpdateSnow()
         case 0:
             if (m_bUpgrading) {
                 if (nCurrentTime < m_nWeatherStageEndTime) {
-                    BYTE color = static_cast<BYTE>(255 - 75 * m_nDurationCounter / WEATHER_TRANSITION_TIME);
-                    m_rgbCurrentOverCastColor = RGB(color, color, color);
+                    m_rgbCurrentOverCastColor = RGB(255 - GetRValue(RGB_OVERCAST_INCREMENT) * m_nDurationCounter / WEATHER_TRANSITION_TIME,
+                        255 - GetGValue(RGB_OVERCAST_INCREMENT) * m_nDurationCounter / WEATHER_TRANSITION_TIME,
+                        255 - GetBValue(RGB_OVERCAST_INCREMENT) * m_nDurationCounter / WEATHER_TRANSITION_TIME);
                     m_nDurationCounter += nCurrentTime - m_nLastTimeChecked;
                 } else {
                     m_nWeatherLevel = 4;
-                    m_rgbCurrentOverCastColor = RGB(180, 180, 180);
+                    m_rgbCurrentOverCastColor = OVERCAST_COLOR;
                     m_nWeatherStageEndTime = nCurrentTime + WEATHER_TRANSITION_TIME;
                     m_nDurationCounter = 0;
                 }
             } else {
                 if (nCurrentTime < m_nWeatherStageEndTime) {
-                    BYTE color = static_cast<BYTE>(75 * m_nDurationCounter / WEATHER_TRANSITION_TIME - 76);
-                    m_rgbCurrentOverCastColor = RGB(color, color, color);
+                    m_rgbCurrentOverCastColor = RGB(GetRValue(RGB_OVERCAST_INCREMENT) * m_nDurationCounter / WEATHER_TRANSITION_TIME + GetRValue(OVERCAST_COLOR),
+                        GetGValue(RGB_OVERCAST_INCREMENT) * m_nDurationCounter / WEATHER_TRANSITION_TIME + GetGValue(OVERCAST_COLOR),
+                        GetBValue(RGB_OVERCAST_INCREMENT) * m_nDurationCounter / WEATHER_TRANSITION_TIME + GetBValue(OVERCAST_COLOR));
                     m_nDurationCounter += nCurrentTime - m_nLastTimeChecked;
                 } else {
                     CancelCurrentWeather(pArea, nCurrentTime);
@@ -852,9 +877,9 @@ void CWeather::UpdateSnow()
                 m_nDurationCounter += nCurrentTime - m_nLastTimeChecked;
                 m_nLastTimeChecked = nCurrentTime;
                 if (m_bUpgrading) {
-                    m_snowStorm.m_nCurrentDensity = static_cast<USHORT>(50 * m_nDurationCounter / WEATHER_TRANSITION_TIME);
+                    m_snowStorm.m_nCurrentDensity = static_cast<USHORT>(CSnowStorm::DENSITY_LIGHT_STORM * m_nDurationCounter / WEATHER_TRANSITION_TIME);
                 } else {
-                    m_snowStorm.m_nCurrentDensity = static_cast<USHORT>(50 - 50 * m_nDurationCounter / WEATHER_TRANSITION_TIME);
+                    m_snowStorm.m_nCurrentDensity = static_cast<USHORT>(CSnowStorm::DENSITY_LIGHT_STORM - CSnowStorm::DENSITY_LIGHT_STORM * m_nDurationCounter / WEATHER_TRANSITION_TIME);
                 }
             } else {
                 if (m_bUpgrading) {
@@ -872,18 +897,18 @@ void CWeather::UpdateSnow()
                 m_nDurationCounter += nCurrentTime - m_nLastTimeChecked;
                 m_nLastTimeChecked = nCurrentTime;
                 if (m_bUpgrading) {
-                    m_snowStorm.m_nCurrentDensity = static_cast<USHORT>(100 * m_nDurationCounter / WEATHER_TRANSITION_TIME + 50);
+                    m_snowStorm.m_nCurrentDensity = static_cast<USHORT>((CSnowStorm::DENSITY_MEDIUM_STORM - CSnowStorm::DENSITY_LIGHT_STORM) * m_nDurationCounter / WEATHER_TRANSITION_TIME + CSnowStorm::DENSITY_LIGHT_STORM);
                 } else {
-                    m_snowStorm.m_nCurrentDensity = static_cast<USHORT>(150 - 100 * m_nDurationCounter / WEATHER_TRANSITION_TIME);
+                    m_snowStorm.m_nCurrentDensity = static_cast<USHORT>(CSnowStorm::DENSITY_MEDIUM_STORM - (CSnowStorm::DENSITY_MEDIUM_STORM - CSnowStorm::DENSITY_LIGHT_STORM) * m_nDurationCounter / WEATHER_TRANSITION_TIME);
                 }
             } else {
                 if (m_bUpgrading) {
                     m_nWeatherLevel = 12;
-                    m_snowStorm.m_nCurrentDensity = 250;
+                    m_snowStorm.m_nCurrentDensity = CSnowStorm::DENSITY_HEAVY_STORM;
                     m_nWeatherStageEndTime = nCurrentTime + m_nWeatherDuration;
                 } else {
                     m_nWeatherLevel = 4;
-                    m_snowStorm.m_nCurrentDensity = 50;
+                    m_snowStorm.m_nCurrentDensity = CSnowStorm::DENSITY_LIGHT_STORM;
                     m_nWeatherStageEndTime = nCurrentTime + WEATHER_TRANSITION_TIME;
                 }
 
@@ -909,7 +934,7 @@ void CWeather::UpdateSnow()
                 m_nDurationCounter = 0;
                 m_nWeatherLevel = 8;
                 m_bUpgrading = FALSE;
-                m_snowStorm.m_nCurrentDensity = 150;
+                m_snowStorm.m_nCurrentDensity = CSnowStorm::DENSITY_MEDIUM_STORM;
             }
             break;
         }
@@ -924,6 +949,20 @@ void CWeather::UpdateSnow()
         m_nLastTimeChecked = nCurrentTime;
     }
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x84EE82
+const BYTE CRainStorm::DENSITY_LIGHT_STORM = 50;
+
+// 0x84EE83
+const BYTE CRainStorm::DENSITY_MEDIUM_STORM = 150;
+
+// 0x84EE84
+const BYTE CRainStorm::DENSITY_HEAVY_STORM = 250;
+
+// 0x84EE85
+const BYTE CRainStorm::RAINDROP_MAX_HEIGHT = 100;
 
 // NOTE: Inlined in `CWeather::CWeather`.
 CRainStorm::CRainStorm()
@@ -977,8 +1016,8 @@ void CRainStorm::AsynchronousUpdate()
                     m_pRainDrops[index].m_vel.z = 0;
 
                     m_pRainDrops[index].m_pos.x = (rNewWorldViewPort.left + rand() % rNewWorldViewPort.Width()) << CParticle::RESOLUTION_INC;
-                    m_pRainDrops[index].m_pos.y = (rand() % (4 * rNewWorldViewPort.bottom / 3 - 4 * rNewWorldViewPort.top / 3) + 4 * rNewWorldViewPort.top / 3 + 100) << CParticle::RESOLUTION_INC;
-                    m_pRainDrops[index].m_pos.z = 100 << CParticle::RESOLUTION_INC;
+                    m_pRainDrops[index].m_pos.y = (rand() % (4 * rNewWorldViewPort.bottom / 3 - 4 * rNewWorldViewPort.top / 3) + 4 * rNewWorldViewPort.top / 3 + RAINDROP_MAX_HEIGHT) << CParticle::RESOLUTION_INC;
+                    m_pRainDrops[index].m_pos.z = RAINDROP_MAX_HEIGHT << CParticle::RESOLUTION_INC;
                 }
             }
 
@@ -995,7 +1034,7 @@ void CRainStorm::GenerateDrops(const CPoint& ptViewPort, const CRect& rBounds)
     m_pRainDrops = new CRainDrop[250];
     if (m_pRainDrops != NULL) {
         for (int i = 0; i < 250; i++) {
-            WORD z = rand() % 100;
+            WORD z = rand() % RAINDROP_MAX_HEIGHT;
             m_pRainDrops[i].m_pos.x = (ptViewPort.x + rand() % rBounds.Width()) << CParticle::RESOLUTION_INC;
             m_pRainDrops[i].m_pos.y = (4 * ptViewPort.y / 3 + z + rand() % (4 * rBounds.Height() / 3)) << CParticle::RESOLUTION_INC;
             m_pRainDrops[i].m_pos.z = z << CParticle::RESOLUTION_INC;
@@ -1037,6 +1076,20 @@ void CRainStorm::UnInitialize()
 
     lock.Unlock();
 }
+
+// -----------------------------------------------------------------------------
+
+// 0x84EE86
+const BYTE CSnowStorm::DENSITY_LIGHT_STORM = 50;
+
+// 0x84EE87
+const BYTE CSnowStorm::DENSITY_MEDIUM_STORM = 150;
+
+// 0x84EE88
+const BYTE CSnowStorm::DENSITY_HEAVY_STORM = 250;
+
+// 0x84EE89
+const BYTE CSnowStorm::SNOWFLAKE_MAX_HEIGHT = 100;
 
 // NOTE: Inlined in `CWeather::CWeather`.
 CSnowStorm::CSnowStorm()
@@ -1085,8 +1138,8 @@ void CSnowStorm::AsynchronousUpdate()
                     UTIL_ASSERT(m_pSnowFlakes != NULL);
 
                     m_pSnowFlakes[index].m_pos.x = (rNewWorldViewPort.left + rand() % rNewWorldViewPort.Width()) << CParticle::RESOLUTION_INC;
-                    m_pSnowFlakes[index].m_pos.y = (rand() % (4 * rNewWorldViewPort.bottom / 3 - 4 * rNewWorldViewPort.top / 3) + 4 * rNewWorldViewPort.top / 3 + 100) << CParticle::RESOLUTION_INC;
-                    m_pSnowFlakes[index].m_pos.z = 100 << CParticle::RESOLUTION_INC;
+                    m_pSnowFlakes[index].m_pos.y = (rand() % (4 * rNewWorldViewPort.bottom / 3 - 4 * rNewWorldViewPort.top / 3) + 4 * rNewWorldViewPort.top / 3 + SNOWFLAKE_MAX_HEIGHT) << CParticle::RESOLUTION_INC;
+                    m_pSnowFlakes[index].m_pos.z = SNOWFLAKE_MAX_HEIGHT << CParticle::RESOLUTION_INC;
                 }
             }
 
@@ -1103,7 +1156,7 @@ void CSnowStorm::GenerateFlakes(const CPoint& ptViewPort, const CRect& rBounds)
     m_pSnowFlakes = new CSnowFlake[250];
     if (m_pSnowFlakes != NULL) {
         for (int index = 0; index < 250; index++) {
-            WORD z = rand() % 100;
+            WORD z = rand() % SNOWFLAKE_MAX_HEIGHT;
             m_pSnowFlakes[index].m_pos.x = (ptViewPort.x + rand() % rBounds.Width()) << CParticle::RESOLUTION_INC;
             m_pSnowFlakes[index].m_pos.y = (4 * ptViewPort.y / 3 + z + rand() % (4 * rBounds.Height() / 3)) << CParticle::RESOLUTION_INC;
             m_pSnowFlakes[index].m_pos.z = z << CParticle::RESOLUTION_INC;
@@ -1115,7 +1168,9 @@ void CSnowStorm::GenerateFlakes(const CPoint& ptViewPort, const CRect& rBounds)
 void CSnowStorm::Render(CVidMode* pVidMode, int a2, const CRect& rClip, COLORREF rgbColor)
 {
     CRect& rSurface = g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->GetInfinity()->rViewPort;
-    COLORREF rgbSnowColor = RGB(GetRValue(rgbColor) * 230, GetGValue(rgbColor) * 230, GetBValue(rgbColor) * 230);
+    COLORREF rgbSnowColor = RGB(GetRValue(rgbColor) * GetRValue(CSnowFlake::SNOWFLAKE_BASE_COLOR),
+        GetGValue(rgbColor) * GetGValue(CSnowFlake::SNOWFLAKE_BASE_COLOR),
+        GetBValue(rgbColor) * GetBValue(CSnowFlake::SNOWFLAKE_BASE_COLOR));
 
     CSingleLock renderLock(&m_cCriticalSection, TRUE);
     if (m_pSnowFlakes != NULL && static_cast<CVidInf*>(pVidMode)->BKLock(rSurface)) {
@@ -1147,6 +1202,20 @@ void CSnowStorm::UnInitialize()
     lock.Unlock();
 }
 
+// -----------------------------------------------------------------------------
+
+// 0x84EE8C
+const COLORREF CSnowFlake::SNOWFLAKE_BASE_COLOR = RGB(230, 230, 230);
+
+// 0x84EE90
+const BYTE CSnowFlake::MAX_DRIFT_WIDTH = 10;
+
+// 0x84EE91
+const BYTE CSnowFlake::MIN_DRIFT_WIDTH = 5;
+
+// 0x84EE92
+const BYTE CSnowFlake::DEFAULT_MELT_TIME = 30;
+
 // 0x8E207E
 const SHORT CSnowFlake::DRIFT_VELOCITY = 1 << RESOLUTION_INC;
 
@@ -1163,8 +1232,8 @@ CSnowFlake::CSnowFlake()
     m_wType |= CONSTANT_VELOCITY;
     m_nGravity = 500;
     m_nDriftCounter = 0;
-    m_nMeltTime = 30;
-    m_nDriftWidth = rand() % 5 + 5;
+    m_nMeltTime = DEFAULT_MELT_TIME;
+    m_nDriftWidth = MIN_DRIFT_WIDTH + rand() % (MAX_DRIFT_WIDTH - MIN_DRIFT_WIDTH);
 }
 
 // 0x558590
@@ -1212,6 +1281,11 @@ BYTE CSnowFlake::AsynchronousUpdate(const CRect& rOldViewPort, const CRect& rNew
     return AIRBORN;
 }
 
+// -----------------------------------------------------------------------------
+
+// 0x84EE94
+const SHORT CRainDrop::VELOCITY_LIGHT_WIND_INC = 100;
+
 // 0x8E207C
 const SHORT CRainDrop::VELOCITY_LIGHT_WIND = 1 << RESOLUTION_INC;
 
@@ -1246,7 +1320,7 @@ BYTE CRainDrop::AsynchronousUpdate(const CRect& rOldViewPort, const CRect& rNewV
     }
 
     if (m_vel.x < VELOCITY_LIGHT_WIND) {
-        m_vel.x += 100;
+        m_vel.x += VELOCITY_LIGHT_WIND_INC;
     }
 
     if (g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_active) {

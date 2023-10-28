@@ -12,6 +12,7 @@ class CVidMode;
 
 class CRainDrop : public CParticle {
 public:
+    static const SHORT VELOCITY_LIGHT_WIND_INC;
     static const SHORT VELOCITY_LIGHT_WIND;
     static const SHORT VELOCITY_MED_WIND;
     static const SHORT VELOCITY_HIGH_WIND;
@@ -22,6 +23,10 @@ public:
 
 class CSnowFlake : public CParticle {
 public:
+    static const COLORREF SNOWFLAKE_BASE_COLOR;
+    static const BYTE MAX_DRIFT_WIDTH;
+    static const BYTE MIN_DRIFT_WIDTH;
+    static const BYTE DEFAULT_MELT_TIME;
     static const SHORT DRIFT_VELOCITY;
 
     CSnowFlake();
@@ -35,6 +40,11 @@ public:
 
 class CRainStorm {
 public:
+    static const BYTE DENSITY_LIGHT_STORM;
+    static const BYTE DENSITY_MEDIUM_STORM;
+    static const BYTE DENSITY_HEAVY_STORM;
+    static const BYTE RAINDROP_MAX_HEIGHT;
+
     CRainStorm();
     ~CRainStorm();
     void AsynchronousUpdate();
@@ -53,6 +63,11 @@ public:
 
 class CSnowStorm {
 public:
+    static const BYTE DENSITY_LIGHT_STORM;
+    static const BYTE DENSITY_MEDIUM_STORM;
+    static const BYTE DENSITY_HEAVY_STORM;
+    static const BYTE SNOWFLAKE_MAX_HEIGHT;
+
     CSnowStorm();
     ~CSnowStorm();
     void AsynchronousUpdate();
@@ -70,6 +85,11 @@ public:
 
 class CWeather {
 public:
+    static const COLORREF OVERCAST_COLOR;
+    static const COLORREF RGB_OVERCAST_INCREMENT;
+    static const USHORT VOLUME_LIGHT;
+    static const USHORT VOLUME_MEDIUM;
+    static const USHORT VOLUME_HEAVY;
     static const SHORT WEATHER_DURATION_MIN;
     static const SHORT WEATHER_DURATION_MAX;
     static const SHORT WEATHER_DURATION_MULTIPLAYER;
