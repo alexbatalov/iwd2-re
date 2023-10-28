@@ -494,7 +494,116 @@ void CWeather::UpdateRain()
 // 0x5575D0
 void CWeather::UpdateSnow()
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    CGameArea* pArea = pGame->m_pGameAreaMaster;
+    ULONG nCurrentTime = pGame->GetWorldTimer()->m_gameTime;
+
+    if (pArea != NULL
+        && nCurrentTime > m_nLastTimeChecked) {
+        if (nCurrentTime > m_nWeatherEndTime + 1) {
+            CancelCurrentWeather(pArea, nCurrentTime);
+        }
+
+        switch (m_nWeatherLevel) {
+        case 0:
+            if (m_bUpgrading) {
+                if (nCurrentTime < m_nWeatherStageEndTime) {
+                    BYTE color = static_cast<BYTE>(255 - 75 * m_nDurationCounter / WEATHER_TRANSITION_TIME);
+                    m_rgbCurrentOverCastColor = RGB(color, color, color);
+                    m_nDurationCounter += nCurrentTime - m_nLastTimeChecked;
+                } else {
+                    m_nWeatherLevel = 4;
+                    m_rgbCurrentOverCastColor = RGB(180, 180, 180);
+                    m_nWeatherStageEndTime = nCurrentTime + WEATHER_TRANSITION_TIME;
+                    m_nDurationCounter = 0;
+                }
+            } else {
+                if (nCurrentTime < m_nWeatherStageEndTime) {
+                    BYTE color = static_cast<BYTE>(75 * m_nDurationCounter / WEATHER_TRANSITION_TIME - 76);
+                    m_rgbCurrentOverCastColor = RGB(color, color, color);
+                    m_nDurationCounter += nCurrentTime - m_nLastTimeChecked;
+                } else {
+                    CancelCurrentWeather(pArea, nCurrentTime);
+                    return;
+                }
+            }
+            break;
+        case 4:
+            if (nCurrentTime < m_nWeatherStageEndTime) {
+                m_nDurationCounter += nCurrentTime - m_nLastTimeChecked;
+                m_nLastTimeChecked = nCurrentTime;
+                if (m_bUpgrading) {
+                    m_snowStorm.m_nCurrentDensity = static_cast<USHORT>(50 * m_nDurationCounter / WEATHER_TRANSITION_TIME);
+                } else {
+                    m_snowStorm.m_nCurrentDensity = static_cast<USHORT>(50 - 50 * m_nDurationCounter / WEATHER_TRANSITION_TIME);
+                }
+            } else {
+                if (m_bUpgrading) {
+                    m_nWeatherLevel = 8;
+                } else {
+                    m_nWeatherLevel = 0;
+                }
+
+                m_nWeatherStageEndTime = nCurrentTime + WEATHER_TRANSITION_TIME;
+                m_nDurationCounter = 0;
+            }
+            break;
+        case 8:
+            if (nCurrentTime < m_nWeatherStageEndTime) {
+                m_nDurationCounter += nCurrentTime - m_nLastTimeChecked;
+                m_nLastTimeChecked = nCurrentTime;
+                if (m_bUpgrading) {
+                    m_snowStorm.m_nCurrentDensity = static_cast<USHORT>(100 * m_nDurationCounter / WEATHER_TRANSITION_TIME + 50);
+                } else {
+                    m_snowStorm.m_nCurrentDensity = static_cast<USHORT>(150 - 100 * m_nDurationCounter / WEATHER_TRANSITION_TIME);
+                }
+            } else {
+                if (m_bUpgrading) {
+                    m_nWeatherLevel = 12;
+                    m_snowStorm.m_nCurrentDensity = 250;
+                    m_nWeatherStageEndTime = nCurrentTime + m_nWeatherDuration;
+                } else {
+                    m_nWeatherLevel = 4;
+                    m_snowStorm.m_nCurrentDensity = 50;
+                    m_nWeatherStageEndTime = nCurrentTime + WEATHER_TRANSITION_TIME;
+                }
+
+                m_nDurationCounter = 0;
+            }
+            break;
+        case 12:
+            if (nCurrentTime < m_nWeatherStageEndTime) {
+                // FIXME: Probably a bug - checks for rain probability, but
+                // should check for snow.
+                if (nCurrentTime % CTimerWorld::TIMESCALE_MSEC_PER_HOUR == 0
+                    && !g_pBaldurChitin->cNetwork.GetSessionOpen()
+                    && pArea->m_header.m_rainProbability != 0
+                    && rand() % 100 < pArea->m_header.m_rainProbability) {
+                    m_nWeatherDuration = WEATHER_DURATION_MIN + rand() % (WEATHER_DURATION_MAX - WEATHER_DURATION_MIN);
+                    m_nWeatherStageEndTime = nCurrentTime + m_nWeatherDuration;
+                    m_nWeatherEndTime = m_nWeatherStageEndTime + 3 * WEATHER_TRANSITION_TIME;
+                }
+                m_nLastTimeChecked = nCurrentTime;
+                return;
+            } else {
+                m_nWeatherStageEndTime = nCurrentTime + WEATHER_TRANSITION_TIME;
+                m_nDurationCounter = 0;
+                m_nWeatherLevel = 8;
+                m_bUpgrading = FALSE;
+                m_snowStorm.m_nCurrentDensity = 150;
+            }
+            break;
+        }
+
+        if ((pArea->m_header.m_areaType & 0x4) != 0) {
+            pArea->GetInfinity()->SetCurrentWeather(m_rgbCurrentOverCastColor,
+                m_nCurrentWeather,
+                m_nWeatherLevel,
+                m_nLightningFreq);
+        }
+
+        m_nLastTimeChecked = nCurrentTime;
+    }
 }
 
 // NOTE: Inlined in `CWeather::CWeather`.
