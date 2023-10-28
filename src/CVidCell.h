@@ -11,6 +11,7 @@ class CVidPoly;
 
 class CVidCell : public CVidImage, public CResHelper<CResCell, 1000> {
 public:
+    static DWORD dword_8BAC88;
     static BOOL TRANSLUCENT_BLTS_ON;
     static BOOL TRANSLUCENT_SHADOWS_ON;
 

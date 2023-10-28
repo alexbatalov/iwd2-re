@@ -88,6 +88,118 @@ void CGameStatic::RemoveFromArea()
     delete this;
 }
 
+// 0x4CA970
+void CGameStatic::Render(CGameArea* pArea, CVidMode* pVidMode, INT nSurface)
+{
+    CInfinity* pInfinity = m_pArea->GetInfinity();
+    DWORD dwFlags = 0;
+    BOOLEAN v1 = FALSE;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameStatic.cpp
+    // __LINE__: 264
+    UTIL_ASSERT(pVidMode != NULL);
+
+    if ((m_header.m_dwFlags & 0x1) != 0
+        && ((m_header.m_timeOfDayVisible >> g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->GetCurrentHour()) & 1) != 0
+        && m_pArea->m_visibility.IsTileExplored(m_pArea->m_visibility.PointToTile(CPoint(m_pos.x, m_pos.y - m_posZ)))) {
+        CPoint ptReference;
+        m_vidCell.GetCurrentCenterPoint(ptReference, FALSE);
+
+        CSize frameSize;
+        m_vidCell.GetCurrentFrameSize(frameSize, FALSE);
+
+        CRect rBounds(0, 0, frameSize.cx, frameSize.cy);
+
+        CRect rFrame;
+        rFrame.left = m_pos.x - ptReference.x;
+        rFrame.top = m_pos.y - m_posZ - ptReference.y;
+        rFrame.right = rFrame.left + rBounds.Width();
+        rFrame.bottom = rFrame.top + rBounds.Height();
+
+        CRect rClip;
+        rClip.left = pInfinity->nCurrentX;
+        rClip.top = pInfinity->nCurrentY;
+        rClip.right = rClip.left + pInfinity->rViewPort.Width();
+        rClip.bottom = rClip.top + pInfinity->rViewPort.Height();
+
+        CRect rDirty;
+        if (rDirty.IntersectRect(rFrame, rClip)) {
+            if ((m_header.m_dwFlags & 0x4) != 0) {
+                if (g_pChitin->cVideo.Is3dAccelerated()) {
+                    dwFlags |= 0x80000000;
+                }
+                dwFlags |= 0x30000;
+                m_vidCell.SetTintColor(m_pArea->GetTintColor(CPoint(m_pos.x, m_pos.y - m_posZ),
+                    m_listType));
+            }
+
+            if (!g_pChitin->cVideo.Is3dAccelerated()) {
+                if (!m_pArea->m_visibility.IsTileVisible(m_pArea->m_visibility.PointToTile(CPoint(m_pos.x, m_pos.y - m_posZ)))) {
+                    v1 = TRUE;
+                }
+            }
+
+            if ((m_header.m_dwFlags & 0x2) != 0) {
+                dwFlags |= 0x8;
+            }
+
+            if (m_header.m_translucency != 0 || (m_header.m_dwFlags & 0x2) != 0) {
+                dwFlags |= CInfinity::FXPREP_COPYFROMBACK;
+            } else {
+                dwFlags |= CInfinity::FXPREP_CLEARFILL;
+                dwFlags |= 0x1;
+            }
+
+            if (m_header.m_translucency != 0) {
+                dwFlags |= 0x2;
+            }
+
+            pInfinity->FXPrep(rBounds,
+                dwFlags,
+                nSurface,
+                CPoint(m_pos.x, m_pos.y - m_posZ),
+                ptReference);
+
+            if (pInfinity->FXLock(rBounds, dwFlags)) {
+                if (m_header.m_translucency != 0) {
+                    pInfinity->FXRender(&m_vidCell,
+                        ptReference.x,
+                        ptReference.y,
+                        dwFlags | 0x2,
+                        m_header.m_translucency);
+                } else {
+                    pInfinity->FXRender(&m_vidCell,
+                        ptReference.x,
+                        ptReference.y,
+                        dwFlags | 0x4000000,
+                        0);
+                }
+
+                if (v1) {
+                    pInfinity->FXUnlock(dwFlags, &rBounds, ptReference + m_pos);
+                } else {
+                    pInfinity->FXUnlock(dwFlags, NULL, CPoint(0, 0));
+                }
+
+                if (g_pChitin->cVideo.Is3dAccelerated()) {
+                    if ((m_header.m_dwFlags & 0x4) != 0) {
+                        CVidCell::dword_8BAC88 = pInfinity->GetGlobalLighting();
+                        dwFlags |= 0x80030000;
+                    }
+                }
+
+                pInfinity->FXBltFrom(nSurface,
+                    rBounds,
+                    m_pos.x,
+                    m_pos.y - m_posZ,
+                    ptReference.x,
+                    ptReference.y,
+                    dwFlags);
+            }
+        }
+    }
+}
+
 // 0x4CAD30
 void CGameStatic::Marshal(CAreaFileStaticObject** pStaticObject)
 {

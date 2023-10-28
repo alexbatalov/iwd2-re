@@ -1,9 +1,9 @@
 #ifndef CGAMESTATIC_H_
 #define CGAMESTATIC_H_
 
-#include "FileFormat.h"
 #include "CGameObject.h"
 #include "CVidCell.h"
+#include "FileFormat.h"
 
 class CGameStatic : public CGameObject {
 public:
@@ -12,7 +12,8 @@ public:
     /* 000C */ void AIUpdate() override;
     /* 002C */ BOOLEAN CompressTime(DWORD deltaTime) override;
     /* 0048 */ void RemoveFromArea() override;
-    /* 0050 */ virtual BOOLEAN DoAIUpdate(BOOLEAN active, LONG counter);
+    /* 004C */ void Render(CGameArea* pArea, CVidMode* pVidMode, INT nSurface) override;
+    /* 0050 */ BOOLEAN DoAIUpdate(BOOLEAN active, LONG counter) override;
 
     void Marshal(CAreaFileStaticObject** pStaticObject);
 

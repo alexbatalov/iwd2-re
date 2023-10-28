@@ -532,6 +532,16 @@ void CGameArea::DecrHeightDynamic(const CPoint& point)
     }
 }
 
+// 0x470F10
+COLORREF CGameArea::GetTintColor(const CPoint& cPoint, BYTE listType)
+{
+    COLORREF rgbColor = RGB(255, 255, 255);
+
+    // TODO: Incomplete.
+
+    return rgbColor;
+}
+
 // 0x472DE0
 void CGameArea::Unmarshal(BYTE* pArea, LONG areaSize, const CString& sName, BOOLEAN bProgressBarInPlace)
 {

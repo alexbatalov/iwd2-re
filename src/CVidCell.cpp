@@ -4,6 +4,9 @@
 #include "CVidMode.h"
 #include "CVidPoly.h"
 
+// 0x8BAC88
+DWORD CVidCell::dword_8BAC88 = -1;
+
 // 0x9064F4
 BOOL CVidCell::TRANSLUCENT_BLTS_ON;
 
