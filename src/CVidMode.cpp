@@ -6,6 +6,14 @@
 #include "CUtil.h"
 #include "CVidCell.h"
 
+typedef struct CVIDMODE_CLIP_OUTCODE {
+    unsigned int all;
+    unsigned int left : 4;
+    unsigned int right : 4;
+    unsigned int bottom : 4;
+    unsigned int top : 4;
+} CVIDMODE_CLIP_OUTCODE;
+
 // 0x8FB964
 const CString CVidMode::SCREEN_SHOT_EXTENSION("bmp");
 
@@ -136,9 +144,80 @@ COLORREF CVidMode::GetGlobalTintColor()
 // 0x795980
 BOOL CVidMode::ClipLine(INT& nXFrom, INT& nYFrom, INT& nXTo, INT& nYTo, const CRect& rClip)
 {
-    // TODO: Incomplete.
+    CVIDMODE_CLIP_OUTCODE fromCode;
+    CVIDMODE_CLIP_OUTCODE toCode;
+    CVIDMODE_CLIP_OUTCODE finalCode;
+    INT x;
+    INT y;
 
-    return FALSE;
+    while (1) {
+        memset(&fromCode, 0, sizeof(fromCode));
+        memset(&toCode, 0, sizeof(toCode));
+
+        if (nYFrom < rClip.top) {
+            fromCode.top |= 1;
+            fromCode.all += 8;
+        } else if (nYFrom > rClip.bottom) {
+            fromCode.bottom |= 1;
+            fromCode.all += 4;
+        }
+
+        if (nXFrom < rClip.left) {
+            fromCode.left |= 1;
+            fromCode.all += 1;
+        } else if (nXFrom > rClip.right) {
+            fromCode.right |= 1;
+            fromCode.all += 2;
+        }
+
+        if (nYTo < rClip.top) {
+            toCode.top |= 1;
+            toCode.all += 8;
+        } else if (nYTo > rClip.bottom) {
+            toCode.bottom |= 1;
+            toCode.all += 4;
+        }
+
+        if (nXTo < rClip.left) {
+            toCode.left |= 1;
+            toCode.all += 1;
+        } else if (nXTo > rClip.right) {
+            toCode.right |= 1;
+            toCode.all += 2;
+        }
+
+        if (fromCode.all == 0 && toCode.all == 0) {
+            return TRUE;
+        }
+
+        if ((fromCode.all & toCode.all) != 0) {
+            return FALSE;
+        }
+
+        finalCode = fromCode.all != 0 ? fromCode : toCode;
+
+        if (finalCode.top) {
+            y = rClip.top;
+            x = nXFrom + (nXTo - nXFrom) * (y - nYFrom) / (nYTo - nYFrom);
+        } else if (finalCode.bottom) {
+            y = rClip.bottom;
+            x = nXFrom + (nXTo - nXFrom) * (y - nYFrom) / (nYTo - nYFrom);
+        } else if (finalCode.right) {
+            x = rClip.right;
+            y = nYFrom + (nYTo - nYFrom) * (x - nXFrom) / (nXTo - nXFrom);
+        } else if (finalCode.left) {
+            x = rClip.left;
+            y = nYFrom + (nYTo - nYFrom) * (x - nXFrom) / (nXTo - nXFrom);
+        }
+
+        if (finalCode.all == fromCode.all) {
+            nXFrom = x;
+            nYFrom = y;
+        } else {
+            nXTo = x;
+            nYTo = y;
+        }
+    }
 }
 
 // #binary-identical
