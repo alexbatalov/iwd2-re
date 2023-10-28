@@ -31,6 +31,8 @@ public:
     void RenderBlob32(DWORD* pSurface, LONG lPitch, LONG lX, LONG lY, const CRect& rClipRect, USHORT nFlag, DWORD dwColor);
     void Render3d(const CRect& rClipRect, const CRect& rLockedRect, USHORT nFlag, USHORT nBlobSize);
 
+    void RenderDot32(DWORD* pSurface, LONG lPitch, LONG lX, LONG lY, const CRect& rClipRect, DWORD color);
+
     SHORT m_nTimeStamp;
     SHORT m_nTailLength;
     SHORT m_nRenderTime;

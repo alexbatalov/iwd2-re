@@ -1,5 +1,8 @@
 #include "CParticle.h"
 
+#include "CChitin.h"
+#include "CVidMode.h"
+
 // 0x85EB60
 const USHORT CParticle::CONNECT = 0;
 
@@ -118,7 +121,91 @@ BYTE CParticle::AsynchronousUpdate()
 // 0x7C36A0
 void CParticle::Render(LPVOID pSurface, LONG lPitch, const CRect& rClipRect, USHORT nFlag, USHORT nBlobSize)
 {
-    // TODO: Incomplete.
+    CVidMode* pVidMode = g_pChitin->GetCurrentVideoMode();
+    DWORD color = pVidMode->ReduceColor(m_rgbColor);
+    LONG nXPrev = m_pos.x;
+    LONG nYPrev = m_pos.y;
+    LONG nZPrev = m_pos.z;
+    LONG nZPrevVel = m_vel.z;
+    SHORT nLoops = min(m_nTailLength, m_nTimeStamp) + 1;
+    SHORT nBpp = g_pChitin->cVideo.Is3dAccelerated() ? 32 : g_pChitin->cVideo.GetBitsPerPixels();
+
+    switch (nFlag) {
+    case CONNECT:
+        switch (nBpp) {
+        case 16:
+            // TODO: Incomplete.
+            break;
+        case 24:
+            // TODO: Incomplete.
+            break;
+        case 32:
+            if (nLoops > 0) {
+                pVidMode->DrawLine32((nXPrev - m_vel.x) >> RESOLUTION_INC,
+                    (3 * (nYPrev - m_vel.y) / 4 - nZPrev + nZPrevVel) >> RESOLUTION_INC,
+                    nXPrev >> RESOLUTION_INC,
+                    (3 * nYPrev / 4 - nZPrev) >> RESOLUTION_INC,
+                    reinterpret_cast<DWORD*>(pSurface),
+                    lPitch / 4,
+                    rClipRect,
+                    color,
+                    FALSE);
+            }
+            break;
+        }
+        break;
+    case DOTS:
+        switch (nBpp) {
+        case 16:
+            // TODO: Incomplete.
+            break;
+        case 24:
+            // TODO: Incomplete.
+            break;
+        case 32:
+            while (nLoops > 0) {
+                RenderDot32(reinterpret_cast<DWORD*>(pSurface),
+                    lPitch / 4,
+                    nXPrev >> RESOLUTION_INC,
+                    (3 * nYPrev / 4 - nZPrev) >> RESOLUTION_INC,
+                    rClipRect,
+                    color);
+                nXPrev -= m_vel.x;
+                nYPrev -= m_vel.y;
+                nZPrev -= nZPrevVel;
+                nZPrevVel += GRAVITY;
+                nLoops--;
+            }
+            break;
+        }
+        break;
+    case BLOB:
+        switch (nBpp) {
+        case 16:
+            // TODO: Incomplete.
+            break;
+        case 24:
+            // TODO: Incomplete.
+            break;
+        case 32:
+            while (nLoops > 0) {
+                RenderBlob32(reinterpret_cast<DWORD*>(pSurface),
+                    lPitch / 4,
+                    nXPrev >> RESOLUTION_INC,
+                    (3 * nYPrev / 4 - nZPrev) >> RESOLUTION_INC,
+                    rClipRect,
+                    nBlobSize,
+                    color);
+                nXPrev -= m_vel.x;
+                nYPrev -= m_vel.y;
+                nZPrev -= nZPrevVel;
+                nZPrevVel += GRAVITY;
+                nLoops--;
+            }
+            break;
+        }
+        break;
+    }
 }
 
 // 0x7C3FD0
@@ -163,4 +250,15 @@ void CParticle::RenderBlob32(DWORD* pSurface, LONG lPitch, LONG lX, LONG lY, con
 void CParticle::Render3d(const CRect& rClipRect, const CRect& rLockedRect, USHORT nFlag, USHORT nBlobSize)
 {
     // TODO: Incomplete.
+}
+
+// NOTE: Convenience.
+void CParticle::RenderDot32(DWORD* pSurface, LONG lPitch, LONG lX, LONG lY, const CRect& rClipRect, DWORD color)
+{
+    CPoint pt;
+    pt.x = lX;
+    pt.y = lY;
+    if (rClipRect.PtInRect(pt)) {
+        pSurface[pt.x + lPitch * (pt.y - rClipRect.top) - rClipRect.left] = color;
+    }
 }
