@@ -772,7 +772,7 @@ BOOL CVidCell::Render(WORD* pSurface, LONG lPitch, INT nRefPointX, INT nRefPoint
                     dwFlags);
                 break;
             case 32:
-                bSuccess = sub_7D0730(reinterpret_cast<DWORD*>(pSurface)
+                bSuccess = Blt8To32Brightest(reinterpret_cast<DWORD*>(pSurface)
                         + lPitch / 4 * (nRefPointY - m_pFrame->nCenterY)
                         + (nRefPointX - m_pFrame->nCenterX),
                     lPitch,
@@ -1878,9 +1878,94 @@ BOOL CVidCell::Blt8To32ClearShadow(DWORD* pSurface, LONG lPitch, DWORD dwFlags)
 }
 
 // 0x7D0730
-BOOL CVidCell::sub_7D0730(DWORD* pSurface, LONG lPitch, DWORD dwFlags)
+BOOL CVidCell::Blt8To32Brightest(DWORD* pSurface, LONG lPitch, DWORD dwFlags)
 {
-    // TODO: Incomplete.
+    int nWidth = m_pFrame->nWidth;
+    int nHeight = m_pFrame->nHeight;
+
+    if (nWidth == 0 || nHeight == 0) {
+        return TRUE;
+    }
+
+    BYTE* pFrameData = pRes->GetFrameData(m_pFrame, m_bDoubleSize);
+
+    if (!m_bPaletteChanged) {
+        m_cPalette.SetPalette(pRes->m_pPalette, 256, CVidPalette::TYPE_RESOURCE);
+    }
+
+    m_cPalette.Realize(CVidImage::rgbTempPal, 32, dwFlags, &m_paletteAffects, 255);
+
+    if (!m_bShadowOn) {
+        CVidImage::rgbTempPal[CVidPalette::SHADOW_ENTRY] = g_pChitin->GetCurrentVideoMode()->field_24;
+    }
+
+    BAMHEADER* pBamHeader = pRes->m_bCacheHeader
+        ? pRes->m_pBamHeaderCopy
+        : pRes->m_pBamHeader;
+    BYTE nTransparentColor = pBamHeader->nTransparentColor;
+
+    // NOTE: Original code is different, not sure if the implementation is
+    // right.
+    if (pRes->GetCompressed(m_pFrame, m_bDoubleSize)) {
+        int nRunLength = 0;
+        int pos = 0;
+        for (int y = 0; y < nHeight; y++) {
+            int nRemainingWidth = nWidth;
+            while (nRemainingWidth != 0) {
+                BYTE nColor = pFrameData[pos];
+                if (nColor == nTransparentColor) {
+                    if (nRunLength == 0) {
+                        nRunLength = pFrameData[pos + 1] + 1;
+                    }
+
+                    if (nRemainingWidth == nRunLength) {
+                        pos += 2;
+
+                        pSurface += nRemainingWidth;
+                        nRunLength = 0;
+                        nRemainingWidth = 0;
+                    } else if (nRemainingWidth > nRunLength) {
+                        pos += 2;
+
+                        pSurface += nRunLength;
+                        nRemainingWidth -= nRunLength;
+                        nRunLength = 0;
+                    } else {
+                        pSurface += nRemainingWidth;
+                        nRunLength -= nRemainingWidth;
+                        nRemainingWidth = 0;
+                    }
+                } else {
+                    pos++;
+
+                    // NOTE: Not present in uncompressed data branch.
+                    if ((CVidImage::rgbTempPal[nColor] & 0xF0F0F0) != 0) {
+                        *pSurface = RGB(max(GetRValue(*pSurface), GetRValue(CVidImage::rgbTempPal[nColor])),
+                            max(GetGValue(*pSurface), GetGValue(CVidImage::rgbTempPal[nColor])),
+                            max(GetBValue(*pSurface), GetBValue(CVidImage::rgbTempPal[nColor])));
+                    }
+
+                    pSurface++;
+                    nRemainingWidth--;
+                }
+            }
+            pSurface += lPitch / 4 - nWidth;
+        }
+    } else {
+        for (int y = 0; y < nHeight; y++) {
+            for (int x = 0; x < nWidth; x++) {
+                BYTE nColor = *pFrameData;
+                if (nColor != nTransparentColor) {
+                    *pSurface = RGB(max(GetRValue(*pSurface), GetRValue(CVidImage::rgbTempPal[nColor])),
+                        max(GetGValue(*pSurface), GetGValue(CVidImage::rgbTempPal[nColor])),
+                        max(GetBValue(*pSurface), GetBValue(CVidImage::rgbTempPal[nColor])));
+                }
+                pFrameData++;
+                pSurface++;
+            }
+            pSurface += lPitch / 4 - nWidth;
+        }
+    }
 
     return TRUE;
 }

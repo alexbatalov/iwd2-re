@@ -66,7 +66,7 @@ public:
     BOOL Blt8To32(DWORD* pSurface, LONG lPitch, DWORD dwFlags, INT nTransVal);
     BOOL Blt8To32(DWORD* pSurface, LONG lPitch, const CPoint& pt, const CRect& rClip, DWORD dwFlags, const CPoint& ptSource, INT nTransVal);
     BOOL Blt8To32ClearShadow(DWORD* pSurface, LONG lPitch, DWORD dwFlags);
-    BOOL sub_7D0730(DWORD* pSurface, LONG lPitch, DWORD dwFlags);
+    BOOL Blt8To32Brightest(DWORD* pSurface, LONG lPitch, DWORD dwFlags);
     BOOL sub_7D0950(DWORD* pSurface, LONG lPitch, DWORD dwFlags, INT nTransVal);
 
     BOOL sub_7B49D0(WORD* pSurface, LONG lPitch, DWORD dwFlags);
