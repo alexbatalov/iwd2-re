@@ -1585,6 +1585,63 @@ void CInfinity::GetPointsOctant0(POINT* pPoints, int nStartX, int nStartY, int n
     pPoints[nIndex].y = nStartY;
 }
 
+// 0x5CEB90
+void CInfinity::GetPointsOctant1(POINT* pPoints, int nStartX, int nStartY, int nDx, int nDy, int nXDirection)
+{
+    int v1 = 2 * nDx;
+    int v2 = 2 * nDx - 2 * nDy;
+    int v3 = 2 * nDx - nDy;
+    int nPointCounter = 9;
+    int nIndex = 0;
+
+    pPoints[nIndex].x = nStartX;
+    pPoints[nIndex].y = nStartY;
+    nIndex++;
+
+    while (nDy > 10) {
+        if (v3 < 0) {
+            v3 += v1;
+        } else {
+            v3 += v2;
+            nStartX += nXDirection;
+        }
+
+        nStartY++;
+
+        if (nPointCounter-- == 0) {
+            pPoints[nIndex].x = nStartX + rand() % 10;
+            pPoints[nIndex].y = nStartY + rand() % 10;
+            nIndex++;
+            nPointCounter = 9;
+        }
+
+        nDy--;
+    }
+
+    while (nDy > 0) {
+        if (v3 < 0) {
+            v3 += v1;
+        } else {
+            v3 += v2;
+            nStartX += nXDirection;
+        }
+
+        nStartY++;
+
+        if (nPointCounter-- == 0) {
+            pPoints[nIndex].x = nStartX + rand() % nDy;
+            pPoints[nIndex].y = nStartY;
+            nIndex++;
+            nPointCounter = 9;
+        }
+
+        nDy--;
+    }
+
+    pPoints[nIndex].x = nStartX;
+    pPoints[nIndex].y = nStartY;
+}
+
 // 0x5CECB0
 void CInfinity::GetViewPosition(INT& x, INT& y)
 {

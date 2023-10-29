@@ -152,6 +152,7 @@ public:
     BOOL FXUnlock(DWORD dwFlags, const CRect* pFxRect, const CPoint& ptRef);
     COLORREF GetGlobalLighting();
     void GetPointsOctant0(POINT* pPoints, int nStartX, int nStartY, int nDx, int nDy, int nXDirection);
+    void GetPointsOctant1(POINT* pPoints, int nStartX, int nStartY, int nDx, int nDy, int nXDirection);
     void GetViewPosition(INT& x, INT& y);
     BOOL PostRender(CVidMode* pNewVidMode, int a2, CSearchBitmap* pVisibilityMap);
     DWORD Render(CVidMode* pNewVidMode, INT nSurface, INT nScrollState, CVisibilityMap* pVisibilityMap);
