@@ -1528,6 +1528,63 @@ COLORREF CInfinity::GetGlobalLighting()
     return rgbGlobalLighting;
 }
 
+// 0x5CEA70
+void CInfinity::GetPointsOctant0(POINT* pPoints, int nStartX, int nStartY, int nDx, int nDy, int nXDirection)
+{
+    int v1 = 2 * nDy;
+    int v2 = 2 * nDy - 2 * nDx;
+    int v3 = 2 * nDy - nDx;
+    int nPointCounter = 9;
+    int nIndex = 0;
+
+    pPoints[nIndex].x = nStartX;
+    pPoints[nIndex].y = nStartY;
+    nIndex++;
+
+    while (nDx > 10) {
+        if (v3 < 0) {
+            v3 += v1;
+        } else {
+            v3 += v2;
+            nStartY++;
+        }
+
+        nStartX += nXDirection;
+
+        if (nPointCounter-- == 0) {
+            pPoints[nIndex].x = nStartX + rand() % 10;
+            pPoints[nIndex].y = nStartY + rand() % 10;
+            nIndex++;
+            nPointCounter = 9;
+        }
+
+        nDx--;
+    }
+
+    while (nDx > 0) {
+        if (v3 < 0) {
+            v3 += v1;
+        } else {
+            v3 += v2;
+            nStartY++;
+        }
+
+        nStartX += nXDirection;
+
+        if (nPointCounter-- == 0) {
+            pPoints[nIndex].x = nStartX;
+            pPoints[nIndex].y = nStartY + rand() % nDx;
+            nIndex++;
+            nPointCounter = 9;
+        }
+
+        nDx--;
+    }
+
+    pPoints[nIndex].x = nStartX;
+    pPoints[nIndex].y = nStartY;
+}
+
 // 0x5CECB0
 void CInfinity::GetViewPosition(INT& x, INT& y)
 {

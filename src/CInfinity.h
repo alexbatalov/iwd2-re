@@ -151,6 +151,7 @@ public:
     BOOL FXRenderClippingPolys(INT nPosX, INT nPosY, INT nPosZ, const CPoint& ptRef, const CRect& rGCBounds, BOOLEAN bDithered, DWORD dwBlitFlags);
     BOOL FXUnlock(DWORD dwFlags, const CRect* pFxRect, const CPoint& ptRef);
     COLORREF GetGlobalLighting();
+    void GetPointsOctant0(POINT* pPoints, int nStartX, int nStartY, int nDx, int nDy, int nXDirection);
     void GetViewPosition(INT& x, INT& y);
     BOOL PostRender(CVidMode* pNewVidMode, int a2, CSearchBitmap* pVisibilityMap);
     DWORD Render(CVidMode* pNewVidMode, INT nSurface, INT nScrollState, CVisibilityMap* pVisibilityMap);
