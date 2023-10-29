@@ -157,7 +157,7 @@ public:
     void GetViewPosition(INT& x, INT& y);
     BOOL PostRender(CVidMode* pNewVidMode, int a2, CSearchBitmap* pVisibilityMap);
     DWORD Render(CVidMode* pNewVidMode, INT nSurface, INT nScrollState, CVisibilityMap* pVisibilityMap);
-    BOOL RenderLightning(int a1, const CRect& rSurface, INT nStartX, INT nStartY, INT nEndX, INT nEndY, COLORREF rgbCenter, COLORREF rgbMiddle, COLORREF rgbOuter);
+    BOOL RenderLightning(INT nSurface, CRect& rSurface, INT nStartX, INT nStartY, INT nEndX, INT nEndY, COLORREF rgbCenter, COLORREF rgbMiddle, COLORREF rgbOuter);
     BOOL RequestRect(int x1, int y1, int x2, int y2);
     BOOL ScrollingRequestRect(int x1, int y1, int x2, int y2, INT nScrollState);
     void CancelRequestTile(int x, int y, unsigned char a3);

@@ -40,6 +40,7 @@ public:
     COLORREF GetGlobalTintColor();
     BOOL CheckResults(HRESULT hr);
     BOOL LockSurface(UINT nIndex, LPDDSURFACEDESC pSurfaceDesc, const CRect& rect);
+    BOOL PolyLine(INT nSurface, CRect& rSurface, LPPOINT lpPoints, int nCount, COLORREF rgbColor, int nThickness);
     BOOL UnLockSurface(UINT nIndex, LPVOID lpSurfaceData);
     static void SetWindowedMode(HWND hWnd);
     BOOL DrawLine3d(INT nXFrom, INT nYFrom, INT nXTo, INT nYTo, const CRect& rSurface, COLORREF rgbColor);

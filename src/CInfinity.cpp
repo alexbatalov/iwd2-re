@@ -2142,11 +2142,69 @@ DWORD CInfinity::Render(CVidMode* pNewVidMode, INT nSurface, INT nScrollState, C
 }
 
 // 0x5CFB40
-BOOL CInfinity::RenderLightning(int a1, const CRect& rSurface, INT nStartX, INT nStartY, INT nEndX, INT nEndY, COLORREF rgbCenter, COLORREF rgbMiddle, COLORREF rgbOuter)
+BOOL CInfinity::RenderLightning(INT nSurface, CRect& rSurface, INT nStartX, INT nStartY, INT nEndX, INT nEndY, COLORREF rgbCenter, COLORREF rgbMiddle, COLORREF rgbOuter)
 {
-    // TODO: Incomplete.
+    int nRange;
+    int nSeg1;
+    int nSeg2;
+    int nSeg3;
+    int nSeg4;
+    POINT pPoints[5];
+    POINT* pSegPoints1;
+    POINT* pSegPoints2;
+    POINT* pSegPoints3;
+    POINT* pSegPoints4;
 
-    return FALSE;
+    if (pVidMode == NULL) {
+        pVidMode = g_pChitin->GetCurrentVideoMode();
+    }
+
+    // NOTE: Original code is messy.
+    pPoints[0].x = nStartX;
+    pPoints[0].y = nStartY;
+    pPoints[1].x = pPoints[0].x + (nEndX - pPoints[0].x) / 4;
+    pPoints[1].y = pPoints[0].y + (nEndY - pPoints[0].y) / 4;
+    pPoints[2].x = pPoints[1].x + (nEndX - pPoints[1].x) / 4;
+    pPoints[2].y = pPoints[1].y + (nEndY - pPoints[1].y) / 4;
+    pPoints[3].x = pPoints[2].x + (nEndX - pPoints[2].x) / 4;
+    pPoints[3].y = pPoints[2].y + (nEndY - pPoints[2].y) / 4;
+    pPoints[4].x = nEndX;
+    pPoints[4].y = nEndY;
+
+    nRange = abs((nEndX - nStartX) / 4) + abs((nEndY - nStartY) / 4);
+    pPoints[1].x += rand() % nRange - nRange / 2;
+    pPoints[1].y += rand() % nRange - nRange / 2;
+    pPoints[2].x += rand() % nRange - nRange / 2;
+    pPoints[2].y += rand() % nRange - nRange / 2;
+    pPoints[3].x += rand() % nRange - nRange / 2;
+    pPoints[3].y += rand() % nRange - nRange / 2;
+
+    nSeg1 = GetSegmentPoints(&pSegPoints1, pPoints[0].x, pPoints[0].y, pPoints[1].x, pPoints[1].y);
+    nSeg2 = GetSegmentPoints(&pSegPoints2, pPoints[1].x, pPoints[1].y, pPoints[2].x, pPoints[2].y);
+    nSeg3 = GetSegmentPoints(&pSegPoints3, pPoints[2].x, pPoints[2].y, pPoints[3].x, pPoints[3].y);
+    nSeg4 = GetSegmentPoints(&pSegPoints4, pPoints[3].x, pPoints[3].y, pPoints[4].x, pPoints[4].y);
+
+    pVidMode->PolyLine(nSurface, rSurface, pSegPoints1, nSeg1, rgbOuter, 5);
+    pVidMode->PolyLine(nSurface, rSurface, pSegPoints2, nSeg2, rgbOuter, 5);
+    pVidMode->PolyLine(nSurface, rSurface, pSegPoints3, nSeg3, rgbOuter, 5);
+    pVidMode->PolyLine(nSurface, rSurface, pSegPoints4, nSeg4, rgbOuter, 5);
+
+    pVidMode->PolyLine(nSurface, rSurface, pSegPoints1, nSeg1, rgbMiddle, 3);
+    pVidMode->PolyLine(nSurface, rSurface, pSegPoints2, nSeg2, rgbMiddle, 3);
+    pVidMode->PolyLine(nSurface, rSurface, pSegPoints3, nSeg3, rgbMiddle, 3);
+    pVidMode->PolyLine(nSurface, rSurface, pSegPoints4, nSeg4, rgbMiddle, 3);
+
+    pVidMode->PolyLine(nSurface, rSurface, pSegPoints1, nSeg1, rgbCenter, 1);
+    pVidMode->PolyLine(nSurface, rSurface, pSegPoints2, nSeg2, rgbCenter, 1);
+    pVidMode->PolyLine(nSurface, rSurface, pSegPoints3, nSeg3, rgbCenter, 1);
+    pVidMode->PolyLine(nSurface, rSurface, pSegPoints4, nSeg4, rgbCenter, 1);
+
+    delete[] pSegPoints1;
+    delete[] pSegPoints2;
+    delete[] pSegPoints3;
+    delete[] pSegPoints4;
+
+    return TRUE;
 }
 
 // 0x5CFE80

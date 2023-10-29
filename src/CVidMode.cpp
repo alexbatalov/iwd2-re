@@ -944,6 +944,67 @@ BOOL CVidMode::LockSurface(UINT nIndex, LPDDSURFACEDESC pSurfaceDesc, const CRec
     return hr == DD_OK;
 }
 
+// 0x79A080
+BOOL CVidMode::PolyLine(INT nSurface, CRect& rSurface, LPPOINT lpPoints, int nCount, COLORREF rgbColor, int nThickness)
+{
+    BOOL bResult;
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo.cpp
+    // __LINE__: 5104
+    UTIL_ASSERT(nSurface != -1 && (nThickness > 0));
+
+    DDSURFACEDESC ddsd;
+    if (!LockSurface(nSurface, &ddsd, rSurface)) {
+        return FALSE;
+    }
+
+    switch (g_pChitin->cVideo.GetBitsPerPixels()) {
+    case 16:
+        // TODO: Incomplete.
+        break;
+    case 24:
+        // TODO: Incomplete.
+        break;
+    case 32:
+        if (nThickness == 1) {
+            while (nCount - 1 > 0) {
+                bResult = DrawLine32(lpPoints[0].x,
+                    lpPoints[0].y,
+                    lpPoints[1].x,
+                    lpPoints[1].y,
+                    reinterpret_cast<DWORD*>(ddsd.lpSurface),
+                    ddsd.lPitch / 4,
+                    rSurface,
+                    (GetRValue(rgbColor) << m_dwRBitShift) | (GetGValue(rgbColor) << m_dwGBitShift) | (GetBValue(rgbColor) << m_dwBBitShift),
+                    FALSE);
+                lpPoints++;
+                nCount--;
+            }
+        } else {
+            while (nCount - 1 > 0) {
+                bResult = DrawThickLine32(lpPoints[0].x,
+                    lpPoints[0].y,
+                    lpPoints[1].x,
+                    lpPoints[1].y,
+                    reinterpret_cast<DWORD*>(ddsd.lpSurface),
+                    ddsd.lPitch / 4,
+                    rSurface,
+                    nThickness,
+                    (GetRValue(rgbColor) << m_dwRBitShift) | (GetGValue(rgbColor) << m_dwGBitShift) | (GetBValue(rgbColor) << m_dwBBitShift),
+                    FALSE);
+                lpPoints++;
+                nCount--;
+            }
+        }
+        break;
+    }
+
+    // NOTE: Uninline.
+    UnLockSurface(nSurface, ddsd.lpSurface);
+
+    return bResult;
+}
+
 // #binary-identical
 // 0x79A670
 BOOL CVidMode::SetPointer(CVidCell* pVidCell, BOOLEAN bAnimating, INT nPointerNumber)
