@@ -1368,6 +1368,46 @@ BOOL CInfinity::DrawHighlightRect(const CRect& rSquare, COLORREF rgbColor, BYTE 
     return FALSE;
 }
 
+// 0x5CDED0
+INT CInfinity::GetSegmentPoints(POINT** ppPoints, int nEndX, int nEndY, int nStartX, int nStartY)
+{
+    int nTmp;
+    int nXDirection = 1;
+    int nDx;
+    int nDy;
+    int nNumPts;
+
+    if (nEndY > nStartY) {
+        nTmp = nStartY;
+        nStartY = nEndY;
+        nEndY = nTmp;
+
+        nTmp = nStartX;
+        nStartX = nEndX;
+        nEndX = nTmp;
+    }
+
+    nDx = nStartX - nEndX;
+    nDy = nStartY - nEndY;
+
+    if (nDx < 0) {
+        nDx = -nDx;
+        nXDirection = -1;
+    }
+
+    if (nDx > nDy) {
+        nNumPts = nDx / 10 + 2;
+        *ppPoints = new POINT[nNumPts];
+        GetPointsOctant0(*ppPoints, nEndX, nEndY, nDx, nDy, nXDirection);
+    } else {
+        nNumPts = nDy / 10 + 2;
+        *ppPoints = new POINT[nNumPts];
+        GetPointsOctant1(*ppPoints, nEndX, nEndY, nDx, nDy, nXDirection);
+    }
+
+    return nNumPts;
+}
+
 // 0x5CDFC0
 CPoint CInfinity::GetWorldCoordinates(const CPoint& ptScreen)
 {

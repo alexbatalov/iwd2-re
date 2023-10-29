@@ -141,6 +141,7 @@ public:
     BOOL DetachVRamRect();
     BOOL DrawEllipse(const CPoint& ptCenter, const CSize& axes, COLORREF rgbColor);
     BOOL DrawHighlightRect(const CRect& rSquare, COLORREF rgbColor, BYTE width);
+    INT GetSegmentPoints(POINT** ppPoints, int nEndX, int nEndY, int nStartX, int nStartY);
     CPoint GetWorldCoordinates(const CPoint& ptScreen);
     BOOL FreeWED();
     BOOL FXBltFrom(INT nDestSurface, CRect& rFXRect, INT x, INT y, INT nRefPointX, INT nRefPointY, DWORD dwFlags);
