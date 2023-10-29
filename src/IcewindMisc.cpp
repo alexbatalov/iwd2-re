@@ -1,7 +1,111 @@
 #include "IcewindMisc.h"
 
+#include "CBaldurChitin.h"
+#include "CGameAnimationType.h"
+#include "CGameEffect.h"
 #include "CGameSprite.h"
+#include "CInfGame.h"
 #include "CUtil.h"
+
+// 0x5845D0
+INT IcewindMisc::Roll(INT nRolls, INT nSides)
+{
+    INT nResult = 0;
+
+    while (nRolls > 0) {
+        nResult += (nSides != 0 ? rand() % nSides : 0) + 1;
+        nRolls--;
+    }
+
+    return nResult;
+}
+
+// NOTE: Unclear if it returns CPoint or CSize.
+//
+// 0x584610
+CPoint IcewindMisc::sub_584610(INT nDirection)
+{
+    switch (nDirection) {
+    case 0:
+        return CPoint(0, 20);
+    case 1:
+        return CPoint(-10, 18);
+    case 2:
+        return CPoint(-19, 14);
+    case 3:
+        return CPoint(-25, 8);
+    case 4:
+        return CPoint(-20, 0);
+    case 5:
+        return CPoint(-25, -8);
+    case 6:
+        return CPoint(-19, -14);
+    case 7:
+        return CPoint(-10, -18);
+    case 8:
+        return CPoint(0, -20);
+    case 9:
+        return CPoint(10, -18);
+    case 10:
+        return CPoint(19, -14);
+    case 11:
+        return CPoint(25, -8);
+    case 12:
+        return CPoint(20, 0);
+    case 13:
+        return CPoint(25, 8);
+    case 14:
+        return CPoint(19, 14);
+    case 15:
+        return CPoint(10, 18);
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\IcewindMisc.cpp
+        // __LINE__: 57
+        UTIL_ASSERT(FALSE);
+    }
+}
+
+// 0x5847B0
+CPoint IcewindMisc::sub_5847B0(const CPoint& pt, int x, int y, int radius)
+{
+    if (x != 0 || y != 0) {
+        float v1 = static_cast<float>(sqrt(static_cast<float>(radius * radius) / static_cast<float>(x * x + y * y)));
+        return CPoint(pt.x + static_cast<int>(x * v1), pt.y + static_cast<int>(y * v1));
+    } else {
+        return pt;
+    }
+}
+
+// 0x584880
+void IcewindMisc::sub_584880(CGameSprite* pSprite, STRREF strRef, INT nNumber)
+{
+    if (strRef != -1 && (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x8) != 0) {
+        if (nNumber != 0) {
+            STR_RES strRes;
+            g_pBaldurChitin->GetTlkTable().Fetch(strRef, strRes);
+
+            if (strRes.szText != "") {
+                CString sText;
+                sText.Format("%s (%d)", (LPCSTR)strRes.szText, nNumber);
+                g_pBaldurChitin->GetBaldurMessage()->DisplayText(pSprite->GetName(),
+                    sText,
+                    CVidPalette::RANGE_COLORS[pSprite->GetBaseStats()->m_colors[CVIDPALETTE_RANGE_MAIN_CLOTH]],
+                    RGB(215, 215, 190),
+                    -1,
+                    pSprite->GetId(),
+                    pSprite->GetId());
+            }
+        } else {
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(pSprite->GetNameRef(),
+                strRef,
+                CVidPalette::RANGE_COLORS[pSprite->GetBaseStats()->m_colors[CVIDPALETTE_RANGE_MAIN_CLOTH]],
+                RGB(215, 215, 190),
+                -1,
+                pSprite->GetId(),
+                pSprite->GetId());
+        }
+    }
+}
 
 // 0x584A40
 BOOLEAN IcewindMisc::IsUndead(CGameSprite* pSprite)
@@ -74,6 +178,82 @@ BOOLEAN IcewindMisc::IsFungus(CGameSprite* pSprite)
     return FALSE;
 }
 
+// NOTE: Name might be wrong.
+//
+// 0x584BC0
+BOOLEAN IcewindMisc::IsLarge(CGameSprite* pSprite)
+{
+    // NOTE: No assertion, so it's not pSprite->GetAnimation()->GetAnimationId()
+    USHORT nID = pSprite->m_animation.m_animation->m_animationID;
+
+    switch (nID) {
+    case 0xA000: // Wyvern
+    case 0xE048: // Beetle, Rhinocerous
+    case 0xE050: // Remorhaz
+    case 0xE108: // Cyclops
+    case 0xE118: // Ettin
+    case 0xE138: // Giant, Frost
+    case 0xE218: // Elemental, Earth
+    case 0xE228: // Elemental, Fire
+    case 0xE238: // Elemental, Water
+    case 0xE51D: // Golem, Iron
+    case 0xE528: // Golem, Ice
+    case 0xE759: // Umber Hulk
+    case 0xE7F9: // Umber Hulk, Vodyanoi
+    case 0xE899: // Lizard Man, King
+    case 0xEB39:
+    case 0xEB52:
+    case 0xEB8A:
+    case 0xEC0B: // Dragon, White Young
+    case 0xEC1D:
+    case 0xED09: // Cornugon
+    case 0xED19: // Glabrezu
+    case 0xF308: // Giant, Fire
+    case 0xF41B: // Sahuagin, Large
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+// 0x584CB0
+BOOLEAN IcewindMisc::IsOutsider(CGameSprite* pSprite)
+{
+    if (pSprite->GetAIType().m_nRace == CAIOBJECTTYPE_R_ELEMENTAL) {
+        return TRUE;
+    }
+
+    if (pSprite->m_typeAI.m_nRace == CAIOBJECTTYPE_R_HUMAN) {
+        if (pSprite->m_typeAI.m_nSubRace == CAIOBJECTTYPE_SUBRACE_HUMAN_AASIMAR
+            || pSprite->m_typeAI.m_nSubRace == CAIOBJECTTYPE_SUBRACE_HUMAN_TIEFLING) {
+            return TRUE;
+        }
+    }
+
+    if (pSprite->GetClassLevel(CAIOBJECTTYPE_C_MONK) >= 20) {
+        return TRUE;
+    }
+
+    // NOTE: No assertion, so it's not pSprite->GetAnimation()->GetAnimationId()
+    USHORT nID = pSprite->m_animation.m_animation->m_animationID;
+
+    switch (nID) {
+    case 0x7F05: // Djinni
+    case 0x7F06: // Djinni w/legs
+    case 0x7F2E: // Raver
+    case 0x7F32: // Slayer
+    case 0xE7C9: // Abishai, White
+    case 0xEBD8: // Salamander
+    case 0xEBE8: // Salamander, Frost
+    case 0xED09: // Cornugon
+    case 0xED19: // Glabrezu
+    case 0xED28: // Lemure
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 // 0x584D60
 BOOLEAN IcewindMisc::IsElf(CGameSprite* pSprite)
 {
@@ -92,10 +272,23 @@ BOOLEAN IcewindMisc::IsHalfElf(CGameSprite* pSprite)
     return pSprite->GetAIType().m_nRace == CAIOBJECTTYPE_R_HALF_ELF;
 }
 
+// 0x584DC0
+BOOLEAN IcewindMisc::IsBlind(CGameSprite* pSprite)
+{
+    return (pSprite->GetBaseStats()->m_generalState & STATE_BLIND) != 0
+        || (pSprite->GetDerivedStats()->m_generalState & STATE_BLIND) != 0;
+}
+
 // 0x584DF0
 BOOLEAN IcewindMisc::IsGolem(CGameSprite* pSprite)
 {
     return pSprite->GetAIType().m_nRace == CAIOBJECTTYPE_R_GOLEM;
+}
+
+// 0x584E10
+BOOLEAN IcewindMisc::IsMinotaur(CGameSprite* pSprite)
+{
+    return pSprite->m_animation.m_animation->m_animationID == 0xE708;
 }
 
 // 0x584E30
@@ -145,6 +338,103 @@ BOOLEAN IcewindMisc::IsPaladin(CGameSprite* pSprite)
     return (pSprite->GetAIType().m_nClassMask & CLASSMASK_PALADIN) != 0;
 }
 
+// 0x584FA0
+BOOLEAN IcewindMisc::IsAcquatic(CGameSprite* pSprite)
+{
+    // NOTE: No assertion, so it's not pSprite->GetAnimation()->GetAnimationId()
+    USHORT nID = pSprite->m_animation.m_animation->m_animationID;
+
+    switch (nID) {
+    case 0xE238: // Elemental, Water
+    case 0xE252: // Water Weird
+    case 0xE3A8: // Drowned Dead
+    case 0xE7E8: // Troll, Scrag
+    case 0xE7F9: // Umber Hulk, Vodyanoi
+    case 0xF40B: // Sahuagin
+    case 0xF41B: // Sahuagin, Large
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+// 0x584FF0
+BOOLEAN IcewindMisc::IsLiving(CGameSprite* pSprite)
+{
+    if (pSprite->GetAIType().m_nGeneral == CAIObjectType::G_UNDEAD) {
+        return FALSE;
+    }
+
+    if (pSprite->GetAIType().m_nRace == CAIOBJECTTYPE_R_GOLEM) {
+        return FALSE;
+    }
+
+    // NOTE: No assertion, so it's not pSprite->GetAnimation()->GetAnimationId()
+    USHORT nID = pSprite->m_animation.m_animation->m_animationID;
+
+    switch (nID) {
+    case 0x7902: // Slime, Mustard
+    case 0xE218: // Elemental, Earth
+    case 0xE228: // Elemental, Fire
+    case 0xE238: // Elemental, Water
+    case 0xE252: // Water Weird
+    case 0xEB08: // Animated Plate
+    case 0xEB18: // Animated Plate 2
+    case 0xEB28: // Animated Plate 3
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+// 0x585070
+BOOLEAN IcewindMisc::sud_585070(CGameSprite* pSprite)
+{
+    if (pSprite->GetAIType().m_nGeneral == CAIObjectType::G_UNDEAD) {
+        return TRUE;
+    }
+
+    if (pSprite->GetAIType().m_nRace == CAIOBJECTTYPE_R_ELEMENTAL) {
+        return TRUE;
+    }
+
+    if (pSprite->GetAIType().m_nRace == CAIOBJECTTYPE_R_GOLEM) {
+        return TRUE;
+    }
+
+    if (pSprite->m_typeAI.m_nRace == CAIOBJECTTYPE_R_HUMAN) {
+        if (pSprite->m_typeAI.m_nSubRace == CAIOBJECTTYPE_SUBRACE_HUMAN_AASIMAR
+            || pSprite->m_typeAI.m_nSubRace == CAIOBJECTTYPE_SUBRACE_HUMAN_TIEFLING) {
+            return TRUE;
+        }
+    }
+
+    // NOTE: No assertion, so it's not pSprite->GetAnimation()->GetAnimationId()
+    USHORT nID = pSprite->m_animation.m_animation->m_animationID;
+
+    switch (nID) {
+    case 0x7F05: // Djinni
+    case 0x7F06: // Djinni w/legs
+    case 0x7F2E: // Raver
+    case 0xEB08: // Animated Plate
+    case 0xEB18: // Animated Plate 2
+    case 0xEB28: // Animated Plate 3
+    case 0xEBCD: // Tanari
+    case 0xEBD8: // Salamander
+    case 0xEBE8: // Salamander, Frost
+    case 0xEC1D:
+    case 0xED09: // Cornugon
+    case 0xED19: // Glabrezu
+    case 0xED28: // Lemure
+    case 0xEF50: // Keg 1
+    case 0xEF60: // Keg 2
+    case 0xEF70: // Keg 3
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 // 0x585170
 BOOLEAN IcewindMisc::IsMale(CGameSprite* pSprite)
 {
@@ -177,10 +467,351 @@ BOOLEAN IcewindMisc::IsChaotic(CGameSprite* pSprite)
     return FALSE;
 }
 
+// 0x5851D0
+BOOLEAN IcewindMisc::IsDead(CGameSprite* pSprite)
+{
+    DWORD generalState = pSprite->GetDerivedStats()->m_generalState;
+    return (generalState & STATE_DEAD) != 0
+        || (generalState & (STATE_STONE_DEATH | STATE_FROZEN_DEATH)) != 0;
+}
+
 // 0x5851F0
 BOOLEAN IcewindMisc::IsPC(CGameSprite* pSprite)
 {
     return pSprite->GetAIType().m_nEnemyAlly == CAIObjectType::EA_PC;
+}
+
+// 0x585210
+BOOLEAN IcewindMisc::sub_585210(CGameSprite* pSprite)
+{
+    BYTE nRace = pSprite->GetAIType().m_nRace;
+    return nRace > 0 && nRace <= CAIOBJECTTYPE_R_GNOME;
+}
+
+// 0x585230
+BOOLEAN IcewindMisc::sub_585230(CGameSprite* pSprite1, CGameSprite* pSprite2)
+{
+    if (pSprite1->GetAIType().m_nEnemyAlly <= CAIObjectType::EA_CONTROLCUTOFF
+        && pSprite2->GetAIType().m_nEnemyAlly <= CAIObjectType::EA_CONTROLCUTOFF) {
+        return TRUE;
+    }
+
+    if (pSprite1->GetAIType().m_nEnemyAlly >= CAIObjectType::EA_EVILCUTOFF
+        && pSprite2->GetAIType().m_nEnemyAlly >= CAIObjectType::EA_EVILCUTOFF) {
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+// 0x5852A0
+BOOLEAN IcewindMisc::sub_5852A0(CGameSprite* pSprite1, CGameSprite* pSprite2)
+{
+    if (pSprite1->GetAIType().m_nEnemyAlly <= CAIObjectType::EA_GOODCUTOFF
+        && pSprite2->GetAIType().m_nEnemyAlly >= CAIObjectType::EA_EVILCUTOFF) {
+        return TRUE;
+    }
+
+    if (pSprite1->GetAIType().m_nEnemyAlly >= CAIObjectType::EA_EVILCUTOFF
+        && pSprite2->GetAIType().m_nEnemyAlly <= CAIObjectType::EA_GOODCUTOFF) {
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+// 0x585310
+BOOLEAN IcewindMisc::sub_585310(CGameSprite* pSprite)
+{
+    return CAIObjectType::EA_GOODCUTOFF >= pSprite->GetAIType().m_nEnemyAlly;
+}
+
+// 0x585330
+BOOLEAN IcewindMisc::IsAlignmentSame(CGameSprite* pSprite1, CGameSprite* pSprite2)
+{
+    return pSprite1->GetAIType().m_nAlignment == pSprite2->GetAIType().m_nAlignment;
+}
+
+// 0x585350
+BOOLEAN IcewindMisc::IsGoodEvilSame(CGameSprite* pSprite1, CGameSprite* pSprite2)
+{
+    return ((pSprite1->GetAIType().m_nAlignment ^ pSprite2->GetAIType().m_nAlignment) & 0xF) == 0;
+}
+
+// 0x585380
+CGameEffect* IcewindMisc::sub_585380(CGameObject* pObject, DWORD numDice, DWORD diceSize, LONG effectAmount, BYTE spellLevel, DWORD savingThrow)
+{
+    return CreateEffectDamage(pObject, 0x400000, numDice, diceSize, effectAmount, spellLevel, savingThrow);
+}
+
+// 0x5853B0
+CGameEffect* IcewindMisc::sub_5853B0(CGameObject* pObject, DWORD numDice, DWORD diceSize, LONG effectAmount, BYTE spellLevel, DWORD savingThrow)
+{
+    return CreateEffectDamage(pObject, 0x80000, numDice, diceSize, effectAmount, spellLevel, savingThrow);
+}
+
+// 0x5853E0
+CGameEffect* IcewindMisc::sub_5853E0(CGameObject* pObject, DWORD numDice, DWORD diceSize, LONG effectAmount, BYTE spellLevel, DWORD savingThrow)
+{
+    return CreateEffectDamage(pObject, 0x20000, numDice, diceSize, effectAmount, spellLevel, savingThrow);
+}
+
+// 0x585410
+CGameEffect* IcewindMisc::sub_585410(CGameObject* pObject, DWORD numDice, DWORD diceSize, LONG effectAmount, BYTE spellLevel, DWORD savingThrow)
+{
+    return CreateEffectDamage(pObject, 0, numDice, diceSize, effectAmount, spellLevel, savingThrow);
+}
+
+// 0x585440
+CGameEffect* IcewindMisc::CreateEffectDamage(CGameObject* pObject, DWORD dwFlags, DWORD numDice, DWORD diceSize, LONG effectAmount, BYTE spellLevel, DWORD savingThrow)
+{
+    ITEM_EFFECT effect;
+    CGameEffect::ClearItemEffect(&effect, CGAMEEFFECT_DAMAGE);
+    effect.effectAmount = effectAmount;
+    effect.dwFlags = dwFlags;
+    effect.spellLevel = spellLevel;
+    effect.numDice = numDice;
+    effect.diceSize = diceSize;
+    effect.durationType = 1;
+    effect.savingThrow = savingThrow;
+    effect.targetType = 2;
+    effect.duration = 0;
+
+    CGameEffectDamage* pEffect = static_cast<CGameEffectDamage*>(CGameEffect::DecodeEffect(&effect,
+        CPoint(-1, -1),
+        -1,
+        CPoint(-1, -1)));
+
+    pEffect->m_source = pObject->GetPos();
+    pEffect->m_sourceID = pObject->GetId();
+
+    if (pObject->GetObjectType() == CGameObject::TYPE_SPRITE) {
+        sub_5860F0(static_cast<CGameSprite*>(pObject), pEffect);
+    }
+
+    return pEffect;
+}
+
+// 0x5855B0
+CGameEffect* IcewindMisc::CreateEffectSTR(CGameObject* pObject, int effectAmount, DWORD duration, BYTE spellLevel)
+{
+    ITEM_EFFECT effect;
+    CGameEffect::ClearItemEffect(&effect, CGAMEEFFECT_STR);
+    effect.spellLevel = spellLevel;
+    effect.effectAmount = effectAmount;
+    effect.durationType = 0;
+    effect.dwFlags = 0;
+    effect.savingThrow = 0;
+    effect.duration = duration;
+    effect.targetType = 2;
+
+    CGameEffect* pEffect = CGameEffect::DecodeEffect(&effect,
+        CPoint(-1, -1),
+        -1,
+        CPoint(-1, -1));
+
+    pEffect->m_source = pObject->GetPos();
+    pEffect->m_sourceID = pObject->GetId();
+    pEffect->m_flags |= 0x1;
+
+    return pEffect;
+}
+
+// 0x585650
+CGameEffect* IcewindMisc::CreateEffectBerserk(CGameObject* pObject, DWORD duration, BYTE spellLevel, DWORD savingThrow)
+{
+    ITEM_EFFECT effect;
+    CGameEffect::ClearItemEffect(&effect, CGAMEEFFECT_BERSERK);
+    effect.durationType = 0;
+    effect.duration = duration;
+    effect.spellLevel = spellLevel;
+    effect.savingThrow = savingThrow;
+    effect.targetType = 2;
+
+    CGameEffect* pEffect = CGameEffect::DecodeEffect(&effect,
+        CPoint(-1, -1),
+        -1,
+        CPoint(-1, -1));
+
+    pEffect->m_source = pObject->GetPos();
+    pEffect->m_sourceID = pObject->GetId();
+    pEffect->m_flags |= 0x1;
+
+    return pEffect;
+}
+
+// 0x5856F0
+CGameEffect* IcewindMisc::CreateEffectPortraitIcon(CGameObject* pObject, DWORD dwFlags, DWORD duration, BYTE spellLevel, DWORD savingThrow)
+{
+    ITEM_EFFECT effect;
+    CGameEffect::ClearItemEffect(&effect, CGAMEEFFECT_PORTRAITICON);
+    effect.spellLevel = spellLevel;
+    effect.dwFlags = dwFlags;
+    effect.duration = duration;
+    effect.durationType = 0;
+    effect.savingThrow = savingThrow;
+    effect.targetType = 2;
+
+    CGameEffect* pEffect = CGameEffect::DecodeEffect(&effect,
+        CPoint(-1, -1),
+        -1,
+        CPoint(-1, -1));
+
+    pEffect->m_source = pObject->GetPos();
+    pEffect->m_sourceID = pObject->GetId();
+    pEffect->m_flags |= 0x1;
+
+    return pEffect;
+}
+
+// 0x585790
+CGameEffect* IcewindMisc::CreateEffectDisplayString(CGameObject* pObject, int effectAmount, BYTE spellLevel, DWORD savingThrow)
+{
+    ITEM_EFFECT effect;
+    CGameEffect::ClearItemEffect(&effect, CGAMEEFFECT_DISPLAYSTRING);
+    effect.effectAmount = effectAmount;
+    effect.spellLevel = spellLevel;
+    effect.durationType = 1;
+    effect.savingThrow = savingThrow;
+    effect.targetType = 2;
+
+    CGameEffect* pEffect = CGameEffect::DecodeEffect(&effect,
+        CPoint(-1, -1),
+        -1,
+        CPoint(-1, -1));
+
+    pEffect->m_source = pObject->GetPos();
+    pEffect->m_sourceID = pObject->GetId();
+
+    return pEffect;
+}
+
+// 0x5858D0
+CGameEffect* IcewindMisc::CreateEffectHitPoints(CGameObject* pObject, int effectAmount, DWORD duration, BYTE spellLevel, BYTE targetType)
+{
+    ITEM_EFFECT effect;
+    CGameEffect::ClearItemEffect(&effect, CGAMEEFFECT_HITPOINTS);
+    effect.targetType = targetType;
+    effect.effectAmount = effectAmount;
+    effect.spellLevel = spellLevel;
+    effect.dwFlags = 0;
+
+    if (duration != 0) {
+        effect.durationType = 0;
+        effect.duration = duration;
+    } else {
+        effect.durationType = 1;
+    }
+
+    effect.numDice = 0;
+    effect.diceSize = 0;
+    effect.savingThrow = 0;
+
+    CGameEffect* pEffect = CGameEffect::DecodeEffect(&effect,
+        CPoint(-1, -1),
+        -1,
+        CPoint(-1, -1));
+
+    pEffect->m_source = pObject->GetPos();
+    pEffect->m_sourceID = pObject->GetId();
+    pEffect->m_flags |= 0x1;
+
+    return pEffect;
+}
+
+// 0x585990
+CGameEffect* IcewindMisc::CreateEffectImmunitySpell(CGameObject* pObject, const BYTE* res, DWORD dwFlags, DWORD duration, BYTE spellLevel, BYTE targetType)
+{
+    ITEM_EFFECT effect;
+    CGameEffect::ClearItemEffect(&effect, CGAMEEFFECT_IMMUNITYSPELL);
+    effect.targetType = targetType;
+    effect.dwFlags = dwFlags;
+    effect.durationType = 0;
+    effect.spellLevel = spellLevel;
+    effect.duration = duration;
+    strncpy(reinterpret_cast<char*>(effect.res),
+        reinterpret_cast<const char*>(res),
+        RESREF_SIZE);
+    effect.savingThrow = 0;
+
+    CGameEffect* pEffect = CGameEffect::DecodeEffect(&effect,
+        CPoint(-1, -1),
+        -1,
+        CPoint(-1, -1));
+
+    pEffect->m_source = pObject->GetPos();
+    pEffect->m_sourceID = pObject->GetId();
+
+    return pEffect;
+}
+
+// 0x585AE0
+CGameEffect* IcewindMisc::CreateEffectRandomSummon(CGameObject* pObject, DWORD duration, BYTE spellLevel, DWORD savingThrow)
+{
+    ITEM_EFFECT effect;
+    CGameEffect::ClearItemEffect(&effect, CGAMEEFFECT_RANDOMSUMMON);
+    effect.durationType = 0;
+    effect.duration = duration;
+    effect.spellLevel = spellLevel;
+    effect.savingThrow = savingThrow;
+    effect.targetType = 2;
+
+    CGameEffect* pEffect = CGameEffect::DecodeEffect(&effect,
+        CPoint(-1, -1),
+        -1,
+        CPoint(-1, -1));
+
+    pEffect->m_source = pObject->GetPos();
+    pEffect->m_sourceID = pObject->GetId();
+    pEffect->m_flags |= 0x1;
+
+    return pEffect;
+}
+
+// 0x585B80
+CGameEffect* IcewindMisc::CreateEffectStun(CGameObject* pObject, DWORD duration, BYTE spellLevel, DWORD savingThrow)
+{
+    ITEM_EFFECT effect;
+    CGameEffect::ClearItemEffect(&effect, CGAMEEFFECT_STUN);
+    effect.durationType = 0;
+    effect.duration = duration;
+    effect.spellLevel = spellLevel;
+    effect.savingThrow = savingThrow;
+    effect.targetType = 2;
+    effect.dwFlags = 0;
+
+    CGameEffect* pEffect = CGameEffect::DecodeEffect(&effect,
+        CPoint(-1, -1),
+        -1,
+        CPoint(-1, -1));
+
+    pEffect->m_source = pObject->GetPos();
+    pEffect->m_sourceID = pObject->GetId();
+    pEffect->m_flags |= 0x1;
+
+    return pEffect;
+}
+
+// 0x585C20
+CGameEffect* IcewindMisc::CreateEffectSkillUnsummon(CGameObject* pObject, DWORD duration, BYTE spellLevel)
+{
+    ITEM_EFFECT effect;
+    CGameEffect::ClearItemEffect(&effect, CGAMEEFFECT_SKILLUNSUMMON);
+    effect.spellLevel = spellLevel;
+    effect.duration = duration;
+    effect.durationType = 4;
+    effect.targetType = 2;
+    effect.savingThrow = 0;
+
+    CGameEffect* pEffect = CGameEffect::DecodeEffect(&effect,
+        CPoint(-1, -1),
+        -1,
+        CPoint(-1, -1));
+
+    pEffect->m_source = pObject->GetPos();
+    pEffect->m_sourceID = pObject->GetId();
+
+    return pEffect;
 }
 
 // 0x585D50
@@ -197,4 +828,71 @@ INT IcewindMisc::GetSneakAttackRolls(CGameSprite* pSprite)
 INT IcewindMisc::GetSneakAttackDice()
 {
     return 6;
+}
+
+// 0x585D90
+INT IcewindMisc::sub_585D90()
+{
+    return 21;
+}
+
+// 0x585DA0
+BOOLEAN IcewindMisc::sub_585DA0(CGameSprite* pSprite)
+{
+    return (pSprite->GetClassLevel(CAIOBJECTTYPE_C_ROGUE) >= 2
+               || pSprite->HasClassLevel(CAIOBJECTTYPE_C_MONK))
+        && (pSprite->GetDerivedStats()->m_generalState & (STATE_DEAD | STATE_HELPLESS | STATE_STUNNED | STATE_SLEEPING)) == 0
+        && pSprite->m_nSequence != 5
+        && !pSprite->sub_724690(2)
+        && !pSprite->sub_724690(3);
+}
+
+// 0x5860F0
+void IcewindMisc::sub_5860F0(CGameSprite* pSprite, CGameEffect* pEffect)
+{
+    if (pEffect->m_effectID == CGAMEEFFECT_DAMAGE) {
+        int nDamageMod;
+
+        switch (pEffect->m_dwFlags) {
+        case 0x0:
+        case 0x4000000:
+        case 0x8000000:
+            nDamageMod = pSprite->GetDerivedStats()->m_nDamageModCrushing;
+            break;
+            break;
+        case 0x10000:
+            nDamageMod = pSprite->GetDerivedStats()->m_nDamageModAcid;
+            break;
+        case 0x20000:
+            nDamageMod = pSprite->GetDerivedStats()->m_nDamageModCold;
+            break;
+        case 0x40000:
+            nDamageMod = pSprite->GetDerivedStats()->m_nDamageModElectricity;
+            break;
+        case 0x80000:
+            nDamageMod = pSprite->GetDerivedStats()->m_nDamageModFire;
+            break;
+        case 0x100000:
+        case 0x2000000:
+            nDamageMod = pSprite->GetDerivedStats()->m_nDamageModPiercing;
+            break;
+        case 0x200000:
+            nDamageMod = pSprite->GetDerivedStats()->m_nDamageModPoison;
+            break;
+        case 0x400000:
+        case 0x10000000:
+            nDamageMod = pSprite->GetDerivedStats()->m_nDamageModMagic;
+            break;
+        case 0x1000000:
+            nDamageMod = pSprite->GetDerivedStats()->m_nDamageModSlashing;
+            break;
+        default:
+            nDamageMod = 0;
+            break;
+        }
+
+        if (nDamageMod != 0) {
+            pEffect->m_effectAmount += nDamageMod * (pEffect->m_effectAmount + pEffect->m_numDice * pEffect->m_diceSize / 2) / 100;
+        }
+    }
 }

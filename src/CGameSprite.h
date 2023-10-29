@@ -370,6 +370,7 @@ public:
     SHORT GetHappiness();
 
     INT GetNextHatedRacesSlot();
+    BOOL sub_724690(SHORT a1);
 
     // NOTE: See `CGameSpriteSpells` for explanation of the overall ugliness of
     // the following functions.

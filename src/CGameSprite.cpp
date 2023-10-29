@@ -3321,6 +3321,14 @@ INT CGameSprite::GetNextHatedRacesSlot()
     return nIndex;
 }
 
+// 0x724690
+BOOL CGameSprite::sub_724690(SHORT a1)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // FIXME: `nClass` should not be reference.
 //
 // 0x724730
