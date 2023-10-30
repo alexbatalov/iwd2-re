@@ -105,6 +105,12 @@ BOOL CGameDialogSprite::EnterDialog(DWORD index, CGameSprite* pSprite, int a3)
     return TRUE;
 }
 
+// 0x483F00
+void CGameDialogSprite::AsynchronousUpdate()
+{
+    // TODO: Incomplete.
+}
+
 // 0x4845C0
 void CGameDialogSprite::UpdateDialogColors()
 {

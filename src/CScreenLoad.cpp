@@ -78,7 +78,7 @@ CScreenLoad::CScreenLoad()
     m_bShiftKeyDown = FALSE;
     m_nTopGameSlot = 0;
     m_nNumGameSlots = 0;
-    field_C1E = 0;
+    m_bInLoadGame = FALSE;
 }
 
 // 0x49FC40
@@ -551,7 +551,7 @@ void CScreenLoad::LoadGame(INT nSlot)
                 CScreenCharacter::SAVE_NAME = sFileName;
             }
 
-            field_C1E = TRUE;
+            m_bInLoadGame = TRUE;
 
             if (m_nEngineState == 3
                 && (g_pChitin->cNetwork.GetSessionHosting() == TRUE
@@ -563,7 +563,7 @@ void CScreenLoad::LoadGame(INT nSlot)
                 pGame->LoadGame(TRUE, FALSE);
             }
 
-            field_C1E = FALSE;
+            m_bInLoadGame = FALSE;
 
             FreeGameSlots();
             m_aGameSlots.SetSize(0);

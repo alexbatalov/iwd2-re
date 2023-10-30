@@ -16,6 +16,7 @@ public:
     BOOL StartDialog(CGameSprite* pSprite);
     void EndDialog();
     BOOL EnterDialog(DWORD index, CGameSprite* pSprite, int a3);
+    void AsynchronousUpdate();
     void UpdateDialogColors();
 
     /* 0000 */ CResRef m_file;

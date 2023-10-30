@@ -257,9 +257,9 @@ public:
     /* 1A2A */ int field_1A2A;
     /* 1A2E */ int field_1A2E;
     /* 1A32 */ int field_1A32[16];
-    /* 1A72 */ unsigned char field_1A72[64];
-    /* 1AB2 */ unsigned char field_1AB2[64];
-    /* 1AF2 */ unsigned char field_1AF2[64];
+    /* 1A72 */ DWORD field_1A72[16];
+    /* 1AB2 */ DWORD field_1AB2[16];
+    /* 1AF2 */ DWORD field_1AF2[16];
     /* 1B32 */ unsigned char field_1B32[64];
     /* 1C32 */ CRITICAL_SECTION field_1C32;
     /* 1C4A */ unsigned char field_1C4A;

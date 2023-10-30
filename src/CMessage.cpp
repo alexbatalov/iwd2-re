@@ -8958,7 +8958,7 @@ void CMessageStartScroll::Run()
         CGameArea* pArea = g_pBaldurChitin->GetObjectGame()->GetArea(m_sAreaString);
         if (pArea != NULL || g_pBaldurChitin->cDimm.m_cKeyTable.FindKey(CResRef(m_sAreaString), 1010, TRUE) == NULL) {
             if (pArea != g_pBaldurChitin->GetObjectGame()->GetVisibleArea()) {
-                g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->field_24E = 0;
+                g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->m_bPicked = FALSE;
                 g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->m_iPicked = CGameObjectArray::INVALID_INDEX;
                 g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->m_nToolTip = 0;
                 g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->OnDeactivation();
@@ -8967,7 +8967,7 @@ void CMessageStartScroll::Run()
             }
         } else {
             pArea = g_pBaldurChitin->GetObjectGame()->LoadArea(m_sAreaString, -1, FALSE, FALSE);
-            g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->field_24E = 0;
+            g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->m_bPicked = FALSE;
             g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->m_iPicked = CGameObjectArray::INVALID_INDEX;
             g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->m_nToolTip = 0;
             g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->OnDeactivation();

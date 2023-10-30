@@ -102,7 +102,7 @@ public:
     /* 021A */ INT m_nMaxSlotNumber;
     /* 021E */ CVidFont m_preLoadFontRealms;
     /* 071E */ CVidFont m_preLoadFontStnSml;
-    /* 0C1E */ int field_C1E;
+    /* 0C1E */ BOOL m_bInLoadGame;
 };
 
 class CUIControlButtonLoadDelete : public CUIControlButton {

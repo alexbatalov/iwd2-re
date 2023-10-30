@@ -158,6 +158,7 @@ public:
     void ApplyWindToAmbients(BYTE nPercentVolume);
     LONG GetGroundPile(const CPoint& ptPos);
     BOOLEAN CanSaveGame(STRREF& strError);
+    void AIUpdate();
     void CompressTime(DWORD deltaTime);
     void ClearInput();
     void ClearMarshal();
@@ -192,6 +193,9 @@ public:
     BOOL SetSong(SHORT slot, BYTE song);
     BYTE GetSong(SHORT slot);
     void PlaySong(SHORT slot, DWORD flags);
+    void sub_47A060();
+    int ExitSpawn();
+    int EnterSpawn();
 
     CInfinity* GetInfinity();
     CVariableHash* GetVariables();
@@ -224,7 +228,7 @@ public:
     /* 0242 */ LONG field_242;
     /* 0246 */ LONG m_iPicked;
     /* 024A */ LONG m_iPickedTarget;
-    /* 024E */ int field_24E;
+    /* 024E */ BOOL m_bPicked;
     /* 0252 */ LONG m_nToolTip;
     /* 0256 */ CPoint m_ptMousePos;
     /* 025E */ CVidBitmap m_bmLum;

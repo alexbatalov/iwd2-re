@@ -18,6 +18,7 @@
 #include "CPathSearch.h"
 #include "CProjectile.h"
 #include "CResWED.h"
+#include "CScreenLoad.h"
 #include "CScreenWorld.h"
 #include "CSpawn.h"
 #include "CTiledObject.h"
@@ -33,7 +34,7 @@ BOOLEAN CGameArea::byte_8D2138;
 CGameArea::CGameArea(BYTE id)
 {
     field_B0E = 0;
-    field_24E = 0;
+    m_bPicked = FALSE;
     m_pObjectMarker = NULL;
     m_firstRender = 0;
     m_dwLastProgressRenderTickCount = 0;
@@ -289,6 +290,12 @@ BOOLEAN CGameArea::CanSaveGame(STRREF& strError)
     // TODO: Incomplete.
 
     return FALSE;
+}
+
+// 0x46E3D0
+void CGameArea::AIUpdate()
+{
+    // TODO: Incomplete.
 }
 
 // 0x46F750
@@ -2004,6 +2011,32 @@ CNamedCreatureVariableHash* CGameArea::GetNamedCreatures()
 CGameAreaNotes* CGameArea::GetAreaNotes()
 {
     return &m_cGameAreaNotes;
+}
+
+// 0x47A060
+void CGameArea::sub_47A060()
+{
+    // TODO: Incomplete.
+}
+
+// 0x47A140
+int CGameArea::ExitSpawn()
+{
+    if (mpSpawner != NULL) {
+        return mpSpawner->ExitSpawn(this);
+    } else {
+        return 0;
+    }
+}
+
+// 0x47A160
+int CGameArea::EnterSpawn()
+{
+    if (mpSpawner != NULL && !g_pBaldurChitin->m_pEngineLoad->m_bInLoadGame) {
+        return mpSpawner->EnterSpawn(this);
+    } else {
+        return 0;
+    }
 }
 
 // -----------------------------------------------------------------------------

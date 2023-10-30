@@ -68,3 +68,9 @@ void CMoveList::CheckLoad(CGameArea* pArea)
         }
     }
 }
+
+// 0x517300
+void CMoveList::AIUpdate()
+{
+    // TODO: Incomplete.
+}

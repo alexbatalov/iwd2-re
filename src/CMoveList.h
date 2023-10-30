@@ -24,6 +24,7 @@ public:
     ~CMoveList() override;
     void ClearAll();
     void CheckLoad(CGameArea* pArea);
+    void AIUpdate();
 };
 
 #endif /* CMOVELIST_H_ */

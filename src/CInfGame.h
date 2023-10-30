@@ -399,7 +399,7 @@ public:
     /* 4AB2 */ unsigned char field_4AB2;
     /* 4AB4 */ CVidPalette m_entanglePalette;
     /* 4AD8 */ CVidPalette m_webHoldPalette;
-    /* 4AFC */ int field_4AFC;
+    /* 4AFC */ LONG m_nCharacterTerminationSequenceDelay;
     /* 4B00 */ CMoveList m_cMoveList;
     /* 4B1C */ CMoveList m_cLimboList;
     /* 4B38 */ int field_4B38;

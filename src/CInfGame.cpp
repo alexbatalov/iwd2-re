@@ -857,7 +857,7 @@ void CInfGame::InitGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlac
 
     sub_5A0160();
 
-    field_4AFC = 0;
+    m_nCharacterTerminationSequenceDelay = 0;
 
     m_cMoveList.ClearAll();
     m_cLimboList.ClearAll();
@@ -3626,7 +3626,7 @@ void CInfGame::ReadyCharacterTerminationSequence(int a1, int a2)
 
         pGame->m_tempCursor = 4;
         pGame->m_gameAreas[pGame->m_visibleArea]->m_nScrollState = 0;
-        pGame->field_4AFC = 150;
+        pGame->m_nCharacterTerminationSequenceDelay = 150;
 
         g_pBaldurChitin->m_pEngineWorld->field_10F0 = a1;
         g_pBaldurChitin->m_pEngineWorld->field_10F4 = a2;

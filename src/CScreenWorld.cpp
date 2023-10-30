@@ -7,6 +7,7 @@
 #include "CGameSprite.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CScreenChapter.h"
 #include "CScreenConnection.h"
 #include "CScreenInventory.h"
 #include "CScreenLoad.h"
@@ -256,16 +257,9 @@ void CScreenWorld::EngineActivated()
 
             if (m_waitingOnResize == 0) {
                 if (g_pBaldurChitin->GetObjectGame()->GetVisibleArea() != NULL) {
-                    CRect rViewPort(g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->GetInfinity()->rViewPort);
-                    field_F22 = rViewPort.left;
-                    field_F26 = rViewPort.top;
-                    field_F2A = rViewPort.right;
-                    field_F2E = rViewPort.bottom;
+                    m_newViewSize = g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->GetInfinity()->rViewPort;
                 } else {
-                    field_F22 = CInfinity::stru_8E79B8.left;
-                    field_F26 = CInfinity::stru_8E79B8.top;
-                    field_F2A = CInfinity::stru_8E79B8.right;
-                    field_F2E = CInfinity::stru_8E79B8.bottom;
+                    m_newViewSize = CInfinity::stru_8E79B8;
                 }
             }
 
@@ -351,10 +345,10 @@ void CScreenWorld::EngineGameInit()
     field_156 = 0;
     field_F37 = 0;
     field_15A = 1;
-    field_F22 = 0;
-    field_F26 = 0;
-    field_F2A = 1;
-    field_F2E = 1;
+    m_newViewSize.left = 0;
+    m_newViewSize.top = 0;
+    m_newViewSize.right = 1;
+    m_newViewSize.bottom = 1;
     m_bForceViewSize = 0;
     m_waitingOnResize = 0;
     field_F44 = 0;
@@ -362,8 +356,8 @@ void CScreenWorld::EngineGameInit()
     field_EA4 = -1;
     field_10B2 = -1;
     field_10B4 = 0;
-    field_10B8 = CGameObjectArray::INVALID_INDEX;
-    field_10BC = CGameObjectArray::INVALID_INDEX;
+    m_interactionIndex = CGameObjectArray::INVALID_INDEX;
+    m_interactionTarget = CGameObjectArray::INVALID_INDEX;
     field_10C0 = "";
     field_10C4 = 0;
     field_10C8 = 0;
@@ -375,8 +369,8 @@ void CScreenWorld::EngineGameInit()
     m_bGameOverPanel = FALSE;
     field_10F0 = 0;
     field_10F4 = -1;
-    field_10F8 = CGameObjectArray::INVALID_INDEX;
-    field_10FC = -1;
+    m_autoPauseId = CGameObjectArray::INVALID_INDEX;
+    m_autoPauseRef = -1;
     m_nPickPartyNumCharacters = -1;
     m_bSetNightOnActivate = 0;
     m_bSetDayOnActivate = 0;
@@ -392,10 +386,10 @@ void CScreenWorld::EngineGameInit()
     m_bPendingMapWorld = 0;
     m_bPendingReformParty = 0;
     field_119D = 0;
-    field_1178 = 0;
+    m_nBattleCryTimeOut = 0;
     m_nPartySizeCheckStartDelay = 0;
-    field_119F = 0;
-    field_11A0 = -1;
+    m_bLeaveAreaLuaPanicPending = 0;
+    m_ulLeaveAreaLuaPanicTimer = -1;
     m_bPlayEndCredits = FALSE;
     field_11B6 = -1;
     field_11BA = -1;
@@ -585,7 +579,681 @@ void CScreenWorld::StartScroll(CPoint dest, SHORT speed)
 // 0x68C3D0
 void CScreenWorld::AsynchronousUpdate(BOOL bActiveEngine)
 {
-    // TODO: Incomplete.
+    CGameSprite* pSprite;
+    BYTE rc;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 2887
+    UTIL_ASSERT(pGame != NULL);
+
+    DWORD nTickCount = GetTickCount();
+    g_pBaldurChitin->field_1AB2[0] += nTickCount - g_pBaldurChitin->field_1AF2[0];
+    g_pBaldurChitin->field_1AF2[0] = nTickCount;
+
+    if (m_bPlayEndCredits) {
+        if (g_pBaldurChitin->GetBaldurMessage()->NonBlockingWaitForSignal(CBaldurMessage::SIGNAL_SERVER, CBaldurMessage::SIGNAL_END_GAME)) {
+            g_pBaldurChitin->m_pEngineConnection->ReadyEndCredits();
+            g_pBaldurChitin->m_pEngineConnection->field_FB0 = 0;
+            g_pBaldurChitin->GetActiveEngine()->SelectEngine(g_pBaldurChitin->m_pEngineConnection);
+
+            if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+                if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+                    g_pBaldurChitin->m_pEngineConnection->ShowSessionTerminatedMessage();
+                }
+
+                g_pChitin->cNetwork.CloseSession(TRUE);
+                g_pBaldurChitin->GetBaldurMessage()->m_bPlayerShutdown = FALSE;
+            }
+
+            pGame->DestroyGame(1, 0);
+            m_bPlayEndCredits = FALSE;
+        }
+        return;
+    }
+
+    if (m_playerShutdown) {
+        g_pBaldurChitin->m_pEngineConnection->field_FB0 = 0;
+        SelectEngine(g_pBaldurChitin->m_pEngineConnection);
+        pGame->DestroyGame(1, 0);
+    }
+
+    if (pGame->m_bGameLoaded) {
+        if (pGame->GetWorldTimer()->m_active
+            && field_EA4 != 0
+            && m_nPartySizeCheckStartDelay <= 0
+            && pGame->m_characterOverflow.GetCount() > 0) {
+            if (!g_pChitin->cNetwork.GetSessionOpen()) {
+                m_bPausedBeforePickParty = m_bPaused;
+            }
+
+            if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+                m_bPendingReformParty = TRUE;
+            }
+        }
+
+        if (m_nPartySizeCheckStartDelay > 0) {
+            m_nPartySizeCheckStartDelay -= 1;
+        }
+
+        pGame->GetWorldTimer()->UpdateTime(FALSE);
+
+        if (g_pBaldurChitin->cNetwork.GetSessionOpen()
+            && g_pBaldurChitin->cNetwork.GetSessionHosting()) {
+            if ((pGame->GetWorldTimer()->m_gameTime % CTimerWorld::MULTIPLAYER_TIME_SYNCH_INTERVAL) == 0) {
+                g_pBaldurChitin->GetBaldurMessage()->TimeSynchBroadcast(pGame->GetWorldTimer()->m_gameTime,
+                    FALSE);
+            }
+        }
+
+        if (bActiveEngine) {
+            // NOTE: Uninline.
+            CheckPanelInputMode(1, 0x20);
+
+            // NOTE: Uninline.
+            CheckPanelInputMode(GetPanel_22_0(), 0x8);
+
+            // NOTE: Uninline.
+            CheckPanelInputMode(6, 0x80);
+
+            // NOTE: Uninline.
+            CheckPanelInputMode(GetPanel_21_7(), 0x100);
+
+            // NOTE: Uninline.
+            CheckPanelInputMode(GetPanel_19_0(), 0x100);
+
+            // NOTE: Uninline.
+            CheckPanelInputMode(GetPanel_21_0(), 0x100);
+
+            // NOTE: Uninline.
+            CheckPanelInputMode(8, 0x200);
+
+            // NOTE: Uninline.
+            CheckPanelInputMode(17, 0x1000);
+
+            CheckEnablePortaits(1);
+            CheckEnableLeftPanel();
+            m_cUIManager.TimerAsynchronousUpdate();
+        }
+
+        if (m_deltaTime != 0) {
+            for (INT nArea = 0; nArea < CINFGAME_MAX_AREAS; nArea++) {
+                CGameArea* pArea = pGame->m_gameAreas[nArea];
+                if (pArea != NULL) {
+                    pArea->CompressTime(m_deltaTime);
+
+                    if (bActiveEngine) {
+                        if (pArea == pGame->GetVisibleArea()) {
+                            pArea->SortLists();
+                        }
+                    }
+                }
+            }
+
+            m_deltaTime = 0;
+
+            m_weather.CompressTime();
+        }
+
+        for (SHORT nPortrait = 0; nPortrait < pGame->GetNumCharacters(); nPortrait++) {
+            LONG nCharacterId = pGame->m_characterPortraits[nPortrait];
+
+            rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+            if (rc == CGameObjectArray::SUCCESS) {
+                if (pSprite->GetArea() == NULL) {
+                    CDerivedStats* pDStats = pSprite->GetDerivedStats();
+                    if (!pSprite->m_bAllowEffectListCall) {
+                        pDStats = &(pSprite->m_tempStats);
+                    }
+
+                    if ((pDStats->m_generalState & STATE_DEAD) != 0) {
+                        if (pSprite->DoAIUpdate(pGame->GetWorldTimer()->m_active, g_pChitin->nAUCounter)) {
+                            do {
+                                rc = pGame->GetObjectArray()->GetDeny(nCharacterId,
+                                    CGameObjectArray::THREAD_ASYNCH,
+                                    reinterpret_cast<CGameObject**>(&pSprite),
+                                    INFINITE);
+                            } while (rc == CGameObjectArray::SHARED);
+
+                            if (rc == CGameObjectArray::SUCCESS) {
+                                pSprite->ProcessAI();
+
+                                pGame->GetObjectArray()->ReleaseDeny(nCharacterId,
+                                    CGameObjectArray::THREAD_ASYNCH,
+                                    INFINITE);
+                            }
+                        }
+                    }
+                }
+
+                pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            }
+        }
+
+        CGameAIGame* pAIGame;
+
+        do {
+            rc = pGame->GetObjectArray()->GetDeny(pGame->m_nAIIndex,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pAIGame),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (pAIGame->GetVertListPos() == NULL) {
+                if (pGame->GetVisibleArea() != NULL) {
+                    pAIGame->AddToArea(pGame->GetVisibleArea(),
+                        CPoint(0, 0),
+                        0, CGameObject::LIST_FRONT);
+                }
+            }
+
+            pAIGame->ProcessAI();
+
+            pGame->GetObjectArray()->ReleaseDeny(pGame->m_nAIIndex,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+
+        pGame->sub_5AC0D0();
+
+        for (INT nArea = 0; nArea < CINFGAME_MAX_AREAS; nArea++) {
+            CGameArea* pArea = pGame->GetArea(nArea);
+            if (pArea != NULL) {
+                if (pArea == pGame->GetVisibleArea()
+                    && pArea->m_firstRender == 0) {
+                    pArea->m_bPicked = FALSE;
+                    CUIPanel* pPanel = m_cUIManager.GetPanel(1);
+                    if (!m_cUIManager.field_0
+                        && pPanel->m_bActive
+                        && pPanel->IsOver(g_pChitin->m_ptPointer)) {
+                        for (SHORT nPortrait = 0; nPortrait < pGame->GetNumCharacters(); nPortrait++) {
+                            CUIControlBase* pPortrait = pPanel->GetControl(nPortrait);
+                            if (pPortrait->IsOver(g_pChitin->m_ptPointer - pPanel->m_ptOrigin)) {
+                                do {
+                                    rc = pGame->GetObjectArray()->GetShare(pGame->GetCharacterId(nPortrait),
+                                        CGameObjectArray::THREAD_ASYNCH,
+                                        reinterpret_cast<CGameObject**>(&pSprite),
+                                        INFINITE);
+                                } while (rc == CGameObjectArray::SHARED);
+
+                                if (rc == CGameObjectArray::SUCCESS) {
+                                    if (pSprite->GetArea() == pArea) {
+                                        CDerivedStats* pDStats = pSprite->m_bAllowEffectListCall
+                                            ? &(pSprite->m_derivedStats)
+                                            : &(pSprite->m_tempStats);
+                                        if ((pDStats->m_generalState & STATE_DEAD) != 0) {
+                                            pArea->m_iPicked = pGame->GetCharacterId(nPortrait);
+                                            pArea->m_nToolTip = 0;
+
+                                            if (pSprite->Orderable(FALSE)) {
+                                                pArea->m_iPickedTarget = pSprite->GetTargetId();
+                                            }
+
+                                            pArea->m_bPicked = TRUE;
+                                        }
+                                    }
+                                    pGame->GetObjectArray()->ReleaseShare(pGame->GetCharacterId(nPortrait),
+                                        CGameObjectArray::THREAD_ASYNCH,
+                                        INFINITE);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                pArea->AIUpdate();
+
+                BOOL bAreaCanBeDeleted;
+                if (pArea->m_nCharacters != 0
+                    || pArea == pGame->m_pGameAreaMaster
+                    || pGame->m_nCharacterTerminationSequenceDelay != 0) {
+                    bAreaCanBeDeleted = FALSE;
+                } else {
+                    INT nAreas = 0;
+                    for (INT nArea = 0; nArea < CINFGAME_MAX_AREAS; nArea++) {
+                        if (pGame->GetArea(nArea) != NULL) {
+                            nAreas++;
+                        }
+                    }
+
+                    if (nAreas > 1) {
+                        // NOTE: Calls unknown empty `CGameArea` function,
+                        // probably `ForceChaseCode` which was likely
+                        // superceeded by INI spawner.
+                        // pArea->ForceChaseCode();
+
+                        pArea->ExitSpawn();
+                        pArea->sub_47A060();
+
+                        if (g_pChitin->cNetwork.GetSessionOpen()) {
+                            bAreaCanBeDeleted = FALSE;
+                        } else {
+                            bAreaCanBeDeleted = TRUE;
+                        }
+                    } else {
+                        bAreaCanBeDeleted = FALSE;
+                    }
+                }
+
+                if (!bAreaCanBeDeleted) {
+                    if (m_waitingOnResize > 0) {
+                        EnterCriticalSection(&(pArea->field_1FC));
+
+                        if (!EqualRect(pArea->GetInfinity()->rViewPort, m_newViewSize)
+                            || m_bForceViewSize) {
+                            INT x;
+                            INT y;
+                            pArea->GetInfinity()->GetViewPosition(x, y);
+                            pArea->GetInfinity()->SetViewPort(m_newViewSize);
+                            pArea->GetInfinity()->SetViewPosition(x, y, TRUE);
+                        }
+                        m_cUIManager.InvalidateRect(NULL);
+
+                        LeaveCriticalSection(&(pArea->field_1FC));
+                    }
+                } else {
+                    DeleteArea(pArea);
+                }
+            }
+        }
+
+        if (m_waitingOnResize > 0) {
+            m_waitingOnResize--;
+        }
+
+        if (m_waitingOnResize == 0) {
+            m_bForceViewSize = FALSE;
+        }
+
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+            && g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+            DeleteAreaMultiplayer();
+        }
+
+        if (bActiveEngine) {
+            g_pBaldurChitin->GetObjectCursor()->CursorUpdate(pVidMode);
+
+            if (m_bored) {
+                if (pGame->GetWorldTimer()->m_active) {
+                    m_boredCount++;
+                }
+
+                for (SHORT nAttempt = 0; m_boredCount > pGame->GetOptions()->m_nBoredTime && nAttempt < 2 * pGame->GetNumCharacters(); nAttempt++) {
+                    SHORT nPortrait = pGame->GetNumCharacters() != 0
+                        ? rand() % pGame->GetNumCharacters()
+                        : 0;
+
+                    do {
+                        rc = pGame->GetObjectArray()->GetShare(pGame->GetCharacterId(nPortrait),
+                            CGameObjectArray::THREAD_ASYNCH,
+                            reinterpret_cast<CGameObject**>(&pSprite),
+                            INFINITE);
+                    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+                    if (rc == CGameObjectArray::SUCCESS) {
+                        if (pSprite->Orderable(FALSE)) {
+                            CMessagePlaySound* pPlaySound = new CMessagePlaySound(4,
+                                TRUE,
+                                TRUE,
+                                pSprite->GetId(),
+                                pSprite->GetId());
+                            g_pBaldurChitin->GetMessageHandler()->AddMessage(pPlaySound, FALSE);
+                            m_boredCount = pGame->GetOptions()->m_nBoredTime
+                                - pGame->GetOptions()->m_nBoredTime / 4;
+                        }
+
+                        pGame->GetObjectArray()->ReleaseShare(pGame->GetCharacterId(nPortrait),
+                            CGameObjectArray::THREAD_ASYNCH,
+                            INFINITE);
+                    } else {
+                        break;
+                    }
+                }
+            } else {
+                m_boredCount = 0;
+                m_bored = TRUE;
+            }
+        }
+
+        if (m_scrollLockId != CGameObjectArray::INVALID_INDEX) {
+            CGameObject* pObject;
+
+            // FIXME: Result is ignored.
+            pGame->GetObjectArray()->GetShare(m_scrollLockId,
+                CGameObjectArray::THREAD_ASYNCH,
+                &pObject,
+                INFINITE);
+
+            CPoint ptPos = pObject->GetPos();
+            CRect rViewPort = pObject->GetArea()->GetInfinity()->rViewPort;
+
+            CGameArea* pVisibleArea = pGame->GetVisibleArea();
+            pVisibleArea->GetInfinity()->m_ptScrollDest.x = ptPos.x - rViewPort.Width() / 2;
+            pVisibleArea->GetInfinity()->m_ptScrollDest.y = ptPos.y - rViewPort.Height() / 2;
+            pVisibleArea->GetInfinity()->m_nLastTickCount = GetTickCount();
+            pVisibleArea->GetInfinity()->m_autoScrollSpeed = 0;
+
+            pGame->GetObjectArray()->ReleaseShare(m_scrollLockId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+
+        if (pGame->GetWorldTimer()->m_active) {
+            pGame->m_cLimboList.AIUpdate();
+        }
+
+        m_internalLoadedDialog.AsynchronousUpdate();
+
+        if (m_pActiveDialogDisplay != NULL) {
+            CUIControlTextDisplay* pText;
+            switch (m_pActiveDialogDisplay->m_pPanel->m_nID) {
+            case 0:
+            case 4:
+            case 7:
+            case 22:
+                pText = m_pActiveDialogDisplay;
+                break;
+            case 19:
+                pText = static_cast<CUIControlTextDisplay*>(m_pActiveDialogDisplay->m_pPanel->GetControl(3));
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+                // __LINE__: 3288
+                UTIL_ASSERT(pText == m_pActiveChatDisplay);
+
+                break;
+            case 21:
+                pText = static_cast<CUIControlTextDisplay*>(m_pActiveDialogDisplay->m_pPanel->GetControl(3));
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+                // __LINE__: 3293
+                UTIL_ASSERT(pText == m_pActiveChatDisplay);
+
+                break;
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+                // __LINE__: 3297
+                UTIL_ASSERT(FALSE);
+            }
+
+            if (pText != NULL) {
+                m_nChatMessageCount = g_pBaldurChitin->GetBaldurMessage()->m_cChatBuffer.UpdateTextDisplay(pText,
+                    m_nChatMessageCount);
+            }
+        }
+
+        if (pGame->field_43E6 || !pGame->GetWorldTimer()->m_active) {
+            m_interactionIndex = CGameObjectArray::INVALID_INDEX;
+            m_interactionTarget = CGameObjectArray::INVALID_INDEX;
+        } else {
+            HandleAmbiance();
+            HandleDeathReaction();
+        }
+
+        if (pGame->m_nCharacterTerminationSequenceDelay > 0) {
+            if (--pGame->m_nCharacterTerminationSequenceDelay <= 0) {
+                CInfGame::StartCharacterTerminationSequence();
+            }
+        }
+
+        if (m_autoPauseId != CGameObjectArray::INVALID_INDEX) {
+            if (!pGame->field_43E6) {
+                if (m_autoPauseRef != -1) {
+                    g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(m_autoPauseName,
+                        m_autoPauseRef,
+                        m_autoPauseColor,
+                        RGB(215, 215, 190),
+                        -1,
+                        m_autoPauseId,
+                        m_autoPauseId);
+                }
+
+                if (!g_pBaldurChitin->m_pEngineWorld->m_bPaused) {
+                    if (!g_pBaldurChitin->m_pEngineWorld->TogglePauseGame(0, 1, 0)) {
+                        g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(m_autoPauseName,
+                            17122,
+                            m_autoPauseColor,
+                            RGB(215, 215, 190),
+                            -1,
+                            m_autoPauseId,
+                            m_autoPauseId);
+                    }
+                }
+
+                if (pGame->GetOptions()->m_bAutoPauseCenter) {
+                    SHORT nPortrait = pGame->GetCharacterPortraitNum(m_autoPauseId);
+                    if (nPortrait != -1) {
+                        pGame->OnPortraitLDblClick(nPortrait);
+                    }
+                }
+            }
+            m_autoPauseId = CGameObjectArray::INVALID_INDEX;
+        }
+
+        if (field_EA4 == 17) {
+            CUIPanel* pPanel = m_cUIManager.GetPanel(17);
+
+            if (m_bHardPaused) {
+                static_cast<CUIControlButton*>(pPanel->GetControl(1))->SetEnabled(FALSE);
+                static_cast<CUIControlButton*>(pPanel->GetControl(2))->SetEnabled(FALSE);
+            } else {
+                static_cast<CUIControlButton*>(pPanel->GetControl(1))->SetEnabled(TRUE);
+                static_cast<CUIControlButton*>(pPanel->GetControl(2))->SetEnabled(TRUE);
+            }
+
+            if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+                && !g_pChitin->cNetwork.GetSessionHosting()) {
+                static_cast<CUIControlButton*>(pPanel->GetControl(1))->SetEnabled(FALSE);
+            }
+        }
+
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+            && g_pChitin->cNetwork.GetSessionHosting() == TRUE
+            && m_bLeaveAreaLuaPanicPending == TRUE
+            && pGame->GetWorldTimer()->m_gameTime >= m_ulLeaveAreaLuaPanicTimer) {
+            m_bLeaveAreaLuaPanicPending = FALSE;
+            m_ulLeaveAreaLuaPanicTimer = -1;
+            LeaveAreaLuaPanic(m_ptLeaveAreaLuaPanicLocation,
+                m_nLeaveAreaLuaPanicDirection,
+                m_sLeaveAreaLuaPanicAreaName,
+                m_sLeaveAreaLuaPanicParchment);
+        }
+
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+            && g_pChitin->cNetwork.GetSessionHosting() == TRUE
+            && m_bChapterTransitionPending == TRUE) {
+            BOOLEAN bPermitted = TRUE;
+            if (pGame->field_43E2 == 386 || pGame->field_43E2 == 1282) {
+                bPermitted = FALSE;
+            }
+            if (pGame->GetMultiplayerSettings()->m_bHostPermittedDialog == TRUE) {
+                bPermitted = FALSE;
+            }
+
+            if (m_bHardPaused != TRUE && bPermitted) {
+                m_bChapterTransitionPending = FALSE;
+
+                if (pGame->GetCurrentChapter() < m_nChapterTransition) {
+                    g_pBaldurChitin->m_pEngineChapter->StartChapterMultiplayerHost(m_nChapterTransition,
+                        m_szChapterTransitionResRef);
+                    m_bChapterTransitionPending = FALSE;
+                    m_nChapterTransition = 255;
+                }
+            }
+        }
+
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+            && g_pChitin->cNetwork.GetSessionHosting() == TRUE
+            && m_bMoviePending == TRUE) {
+            BOOLEAN bPermitted = TRUE;
+            if (pGame->field_43E2 == 386 || pGame->field_43E2 == 1282) {
+                bPermitted = FALSE;
+            }
+            if (pGame->GetMultiplayerSettings()->m_bHostPermittedDialog == TRUE) {
+                bPermitted = FALSE;
+            }
+
+            if (m_bHardPaused != TRUE && bPermitted == TRUE) {
+                StartMovieMultiplayerHost(m_szMovieResRef);
+                m_bMoviePending = FALSE;
+            }
+        }
+
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+            && g_pChitin->cNetwork.GetSessionHosting() == TRUE
+            && m_bPendingMapWorld == TRUE) {
+            BOOLEAN bPermitted = TRUE;
+            if (pGame->field_43E2 == 386 || pGame->field_43E2 == 1282) {
+                bPermitted = FALSE;
+            }
+            if (pGame->GetMultiplayerSettings()->m_bHostPermittedDialog == TRUE) {
+                bPermitted = FALSE;
+            }
+
+            if (m_bHardPaused != TRUE && bPermitted == TRUE) {
+                // NOTE: Uninline.
+                StartMapWorldMultiplayerHost(m_idPendingMapWorldController,
+                    m_nPendingMapWorldDirection);
+
+                m_bPendingMapWorld = FALSE;
+            }
+        }
+
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+            && g_pChitin->cNetwork.GetSessionHosting() == TRUE
+            && m_bRestPending == TRUE) {
+            BOOLEAN bPermitted = TRUE;
+            if (pGame->field_43E2 == 386 || pGame->field_43E2 == 1282) {
+                bPermitted = FALSE;
+            }
+            if (pGame->GetMultiplayerSettings()->m_bHostPermittedDialog == TRUE) {
+                bPermitted = FALSE;
+            }
+
+            if (m_bHardPaused != TRUE && bPermitted == TRUE) {
+                StartRestMultiplayerHost(m_nRestHP,
+                    m_bRestRenting,
+                    m_bRestMovie);
+                m_bRestPending = FALSE;
+            }
+        }
+
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+            && g_pChitin->cNetwork.GetSessionHosting() == TRUE
+            && m_bPendingReformParty == TRUE) {
+            BOOLEAN bPermitted = TRUE;
+            if (pGame->field_43E2 == 386 || pGame->field_43E2 == 1282) {
+                bPermitted = FALSE;
+            }
+            if (pGame->GetMultiplayerSettings()->m_bHostPermittedDialog == TRUE) {
+                bPermitted = FALSE;
+            }
+
+            if (m_bHardPaused != TRUE && bPermitted == TRUE) {
+                // NOTE: Uninline.
+                StartReformPartyMultiplayerHost();
+
+                m_bPendingReformParty = FALSE;
+            }
+        }
+
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+            && g_pChitin->cNetwork.GetSessionHosting() == TRUE
+            && pGame->GetMultiplayerSettings()->m_bHostPermittedDialog == TRUE) {
+            if (pGame->field_43E2 != 386 && pGame->field_43E2 != 1282) {
+                if (++pGame->GetMultiplayerSettings()->m_nHostPermittedDialogDelay >= 30) {
+                    g_pBaldurChitin->GetBaldurMessage()->DialogRequestKillOrUse();
+                    pGame->GetMultiplayerSettings()->m_nHostPermittedDialogDelay = 0;
+                }
+            } else {
+                pGame->GetMultiplayerSettings()->m_nHostPermittedDialogDelay = 0;
+            }
+        }
+
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+            && g_pChitin->cNetwork.GetSessionHosting() == TRUE
+            && m_bHardPaused) {
+            // NOTE: Uninline.
+            CheckEndOfHardPause();
+        }
+
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+            && g_pChitin->cNetwork.GetSessionHosting() == TRUE
+            && g_pBaldurChitin->GetBaldurMessage()->m_bMultiplayerSynchServerPending == TRUE
+            && g_pBaldurChitin->GetBaldurMessage()->m_bMultiplayerSynchServerFinished == FALSE) {
+            // NOTE: Uninline.
+            CheckEndOfMultiplayerSynch();
+        }
+
+        m_weather.Update();
+
+        if (m_bGameOverPanel && m_movie == "") {
+            m_bGameOverPanel = FALSE;
+            StartDeath();
+            field_10F0 = 0;
+        }
+
+        if (m_nBattleCryTimeOut > 0) {
+            m_nBattleCryTimeOut--;
+        }
+
+        DWORD nOtherTickCount = GetTickCount();
+        g_pBaldurChitin->field_1A72[0] += nOtherTickCount - g_pBaldurChitin->field_1AF2[0];
+        g_pBaldurChitin->field_1AF2[0] = nOtherTickCount;
+
+        if (m_comingOutOfDialog > 0) {
+            if (--m_comingOutOfDialog == 0) {
+                if (pGame->field_43E2 != 322) {
+                    pGame->field_43E6 = 0;
+                }
+            }
+        }
+
+        CVidMode* pCurrentVidMode1 = g_pChitin->GetCurrentVideoMode();
+
+        if (pCurrentVidMode1->m_nFade != 0) {
+            m_nBlackOutCountDown = 0;
+        } else {
+            if (m_nBlackOutCountDown == 0) {
+                m_nBlackOutCountDown = 150;
+            }
+        }
+
+        if (m_nBlackOutCountDown > 0) {
+            if (pGame->GetWorldTimer()->m_active) {
+                if (--m_nBlackOutCountDown == 0) {
+                    if (pCurrentVidMode1->m_nFade == 0) {
+                        CVidMode* pCurrentVidMode2 = g_pChitin->GetCurrentVideoMode();
+                        CVidMode::NUM_FADE_FRAMES = 1;
+                        pCurrentVidMode2->m_bFadeTo = FALSE;
+                        pCurrentVidMode2->m_nFade = 0;
+
+                        for (int frame = 0; frame < 20; frame++) {
+                            CVidMode* pCurrentVidMode3 = g_pChitin->GetCurrentVideoMode();
+                            if (!pCurrentVidMode3->m_bFadeTo) {
+                                if (pCurrentVidMode3->m_nFade < CVidMode::NUM_FADE_FRAMES) {
+                                    pCurrentVidMode3->m_nFade++;
+                                }
+                            } else {
+                                if (pCurrentVidMode3->m_nFade > 0) {
+                                    pCurrentVidMode3->m_nFade--;
+                                }
+                            }
+
+                            g_pChitin->m_bDisplayStale = TRUE;
+                            SleepEx(60, FALSE);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 // 0x68DEC0
@@ -855,6 +1523,18 @@ void CScreenWorld::StopStore()
     // TODO: Incomplete.
 }
 
+// 0x691D10
+void CScreenWorld::HandleAmbiance()
+{
+    // TODO: Incomplete.
+}
+
+// 0x692090
+void CScreenWorld::HandleDeathReaction()
+{
+    // TODO: Incomplete.
+}
+
 // 0x692290
 void CScreenWorld::DisplayText(const CString& sName, const CString& sText, COLORREF rgbNameColor, COLORREF rgbTextColor, LONG lMarker, BOOLEAN bMoveToTop)
 {
@@ -897,6 +1577,12 @@ void CScreenWorld::HideInterface()
 
 // 0x692850
 void CScreenWorld::UnhideInterface()
+{
+    // TODO: Incomplete.
+}
+
+// 0x692A50
+void CScreenWorld::StartDeath()
 {
     // TODO: Incomplete.
 }
@@ -1131,6 +1817,12 @@ void CScreenWorld::SetPendingRest(INT nHP, BOOLEAN bRenting, BOOLEAN bMovie)
     m_bRestMovie = bMovie;
 }
 
+// 0x693520
+void CScreenWorld::StartRestMultiplayerHost(INT nHP, BOOLEAN bRenting, BOOLEAN bMovie)
+{
+    // TODO: Incomplete.
+}
+
 // 0x693680
 void CScreenWorld::CheckEndOfHardPause()
 {
@@ -1143,6 +1835,17 @@ void CScreenWorld::CheckEndOfHardPause()
         }
 
         g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->SetListenToJoinOption(m_bEndMajorEventListenToJoin, TRUE);
+    }
+}
+
+// NOTE: Inlined.
+void CScreenWorld::CheckEndOfMultiplayerSynch()
+{
+    if (g_pBaldurChitin->GetBaldurMessage()->NonBlockingWaitForSignal(CBaldurMessage::SIGNAL_SERVER, CBaldurMessage::SIGNAL_MPSYNCH) == TRUE) {
+        g_pBaldurChitin->GetBaldurMessage()->m_bMultiplayerSynchServerFinished = TRUE;
+        if (!g_pBaldurChitin->GetBaldurMessage()->m_bMultiplayerSynchClientPending) {
+            g_pBaldurChitin->GetBaldurMessage()->MultiplayerSynchReply();
+        }
     }
 }
 
@@ -1175,6 +1878,18 @@ void CScreenWorld::CancelEngine()
         // __LINE__: 9124
         UTIL_ASSERT(FALSE);
     }
+}
+
+// 0x693910
+void CScreenWorld::DeleteAreaMultiplayer()
+{
+    // TODO: Incomplete.
+}
+
+// 0x693C60
+void CScreenWorld::DeleteArea(CGameArea* pArea)
+{
+    // TODO: Incomplete.
 }
 
 // 0x694210
@@ -1286,6 +2001,12 @@ void CScreenWorld::SetChatEditBoxStatus(const CString& sChatText, BOOL bInputCap
             m_cUIManager.SetCapture(pEdit, CUIManager::KEYBOARD);
         }
     }
+}
+
+// 0x694620
+void CScreenWorld::LeaveAreaLuaPanic(CPoint ptLocation, SHORT nDirection, CString sAreaName, CString sParchment)
+{
+    // TODO: Incomplete.
 }
 
 // 0x694AE0
