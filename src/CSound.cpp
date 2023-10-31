@@ -307,9 +307,7 @@ BOOL CSound::ExclusivePlay(BOOL bReplay)
                 return FALSE;
             }
 
-            m_pSoundMixer->UpdateSoundList(m_nPriority);
-
-            if (GetRes() == NULL) {
+            if (!m_pSoundMixer->UpdateSoundList(m_nPriority)) {
                 GetRes()->Release();
                 return FALSE;
             }
