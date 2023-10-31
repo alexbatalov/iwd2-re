@@ -520,7 +520,7 @@ void CSoundMixer::UpdateSoundList()
 
                 POSITION loopingPos = m_lLooping.GetHeadPosition();
                 while (loopingPos != NULL) {
-                    CSound* pSound = static_cast<CSound*>(m_lWaiting.GetNext(loopingPos));
+                    CSound* pSound = static_cast<CSound*>(m_lLooping.GetNext(loopingPos));
                     if (m_nActiveArea == 0
                         || pSound->m_nArea == 0
                         || m_nActiveArea == pSound->m_nArea) {
