@@ -2054,7 +2054,7 @@ void CBaldurChitin::OnMixerInitialize()
 
     for (UINT nChannel = 0; nChannel < 21; nChannel++) {
         CSoundChannel* pChannel = static_cast<CSoundChannel*>(cSoundMixer.m_aChannels.GetAt(nChannel));
-        if ((nChannel < 6 || nChannel > 13) && nChannel != 0) {
+        if ((nChannel < 6 || nChannel >= 13) && nChannel != 0) {
             pChannel->SetType(0);
         } else {
             pChannel->SetType(3);
