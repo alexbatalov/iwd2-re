@@ -77,6 +77,44 @@ CSearchBitmap::~CSearchBitmap()
     }
 }
 
+// 0x547A00
+BYTE CSearchBitmap::GetLOSCost(const CPoint& point, const BYTE* terrainTable, SHORT& nTableIndex, BOOLEAN bVisbilityOutDoor)
+{
+    BYTE cost;
+
+    LONG nIndex = point.x + m_GridSquareDimensions.cx * point.y;
+    if (nIndex < m_GridSquareDimensions.cx * m_GridSquareDimensions.cy) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CSearchBitmap.cpp
+        // __LINE__: 225
+        UTIL_ASSERT(terrainTable != NULL);
+
+        switch (m_pDynamicCost[nIndex] & 0x81) {
+        case 0x80:
+            nTableIndex = bVisbilityOutDoor ? 8 : 0;
+            cost = terrainTable[nTableIndex];
+            break;
+        case 0x1:
+            nTableIndex = 8;
+            cost = terrainTable[nTableIndex];
+            break;
+        case 0x81:
+            if (m_resSearch.GetBitCount(TRUE) == 8) {
+                nTableIndex = m_resSearch.GetPixelValue(point.x, point.y, TRUE) >> 4;
+                cost = terrainTable[nTableIndex];
+            } else {
+                nTableIndex = m_resSearch.GetPixelValue(point.x, point.y, TRUE);
+                cost = terrainTable[nTableIndex];
+            }
+            break;
+        }
+    } else {
+        nTableIndex = 8;
+        cost = terrainTable[nTableIndex];
+    }
+
+    return cost;
+}
+
 // 0x547E60
 void CSearchBitmap::AddObject(const CPoint& point, BYTE sourceSide, BYTE personalSpaceRange, int a4, unsigned char& a5)
 {

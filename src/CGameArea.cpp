@@ -13,12 +13,14 @@
 #include "CGameStatic.h"
 #include "CGameTiledObject.h"
 #include "CGameTrigger.h"
+#include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CObjectMarker.h"
 #include "CPathSearch.h"
 #include "CProjectile.h"
 #include "CResWED.h"
 #include "CScreenLoad.h"
+#include "CScreenStore.h"
 #include "CScreenWorld.h"
 #include "CSpawn.h"
 #include "CTiledObject.h"
@@ -66,7 +68,7 @@ CGameArea::CGameArea(BYTE id)
     m_pGame = NULL;
     m_nScrollState = 0;
     m_nKeyScrollState = 0;
-    field_240 = 0;
+    m_bTravelSquare = FALSE;
     m_iPicked = CGameObjectArray::INVALID_INDEX;
     m_iPickedTarget = CGameObjectArray::INVALID_INDEX;
     m_nToolTip = 0;
@@ -95,9 +97,9 @@ CGameArea::CGameArea(BYTE id)
     m_nCurrentSong = -1;
     field_438 = 0;
     field_436 = 0;
-    field_98A = 0;
+    m_startedMusic = FALSE;
     field_AE6 = 1;
-    field_98E = 10;
+    m_startedMusicCounter = 10;
 
     // NOTE: This assignment is slightly incorrect. Original code refers to
     // other offsets (0x8A8168 and 0x8A8154 respectively). It can mean two
@@ -295,7 +297,545 @@ BOOLEAN CGameArea::CanSaveGame(STRREF& strError)
 // 0x46E3D0
 void CGameArea::AIUpdate()
 {
-    // TODO: Incomplete.
+    POSITION pos;
+    LONG iObject;
+    CGameObject* pObject;
+    BYTE rc;
+
+    if (!m_bAreaLoaded) {
+        return;
+    }
+
+    SortLists();
+
+    if (m_firstRender > 0) {
+        if (m_firstRender <= 1 && m_pGame->GetVisibleArea() == this) {
+            return;
+        }
+
+        m_firstRender--;
+    }
+
+    if (field_241 > 0) {
+        field_241--;
+    } else {
+        field_242 = CGameObjectArray::INVALID_INDEX;
+    }
+
+    INT x;
+    INT y;
+    m_cInfinity.GetViewPosition(x, y);
+
+    BOOL bMouseInPlayArea = g_pBaldurChitin->GetActiveEngine() == g_pBaldurChitin->m_pEngineWorld
+        && m_ptMousePos.x >= m_cInfinity.rViewPort.left
+        && m_ptMousePos.x < m_cInfinity.rViewPort.right
+        && m_ptMousePos.y >= m_cInfinity.rViewPort.top
+        && m_ptMousePos.y < m_cInfinity.rViewPort.bottom;
+
+    CPoint ptWorldMouse = m_cInfinity.GetWorldCoordinates(m_ptMousePos);
+
+    if ((g_pBaldurChitin->GetObjectGame()->field_43E2 & 0x4000) != 0) {
+        if (m_pGame->GetVisibleArea() == this
+            && g_pBaldurChitin->GetActiveEngine() == g_pBaldurChitin->m_pEngineWorld) {
+            m_bTravelSquare = FALSE;
+            if (m_ptOldViewPos.x != x || m_ptOldViewPos.y != y) {
+                if (m_firstRender == 0) {
+                    if (m_ptMousePos.x == 0 && x <= 0) {
+                        if (m_nScrollState == 7
+                            || (m_nScrollState == 8 && y <= 0)
+                            || (m_nScrollState == 6 && y >= m_cInfinity.nAreaY - m_cInfinity.rViewPort.Height() - 1)) {
+                            g_pBaldurChitin->GetObjectCursor()->SetCursor(6, FALSE);
+                            g_pBaldurChitin->GetObjectCursor()->m_nDirection = 6;
+                            m_nScrollState = 9;
+                        }
+                    } else if (m_ptMousePos.x == CVideo::SCREENWIDTH - 1
+                        && x >= m_cInfinity.nAreaX - m_cInfinity.rViewPort.Width() - 1) {
+                        if (m_nScrollState == 3
+                            || (m_nScrollState == 2 && y <= 0)
+                            || (m_nScrollState == 4 && y >= m_cInfinity.nAreaY - m_cInfinity.rViewPort.Height() - 1)) {
+                            g_pBaldurChitin->GetObjectCursor()->SetCursor(6, FALSE);
+                            g_pBaldurChitin->GetObjectCursor()->m_nDirection = 2;
+                            m_nScrollState = 9;
+                        }
+                    } else if (m_ptMousePos.y == 0 && y <= 0) {
+                        if (m_nScrollState == 1
+                            || (m_nScrollState == 8 && x <= 0)
+                            || (m_nScrollState == 2 && x >= m_cInfinity.nAreaX - m_cInfinity.rViewPort.Width() - 1)) {
+                            g_pBaldurChitin->GetObjectCursor()->SetCursor(6, FALSE);
+                            g_pBaldurChitin->GetObjectCursor()->m_nDirection = 0;
+                            m_nScrollState = 9;
+                        }
+                    } else if (m_ptMousePos.y == CVideo::SCREENHEIGHT - 1
+                        && y >= m_cInfinity.nAreaY - m_cInfinity.rViewPort.Height() - 1) {
+                        if (m_nScrollState == 5
+                            || (m_nScrollState == 6 && x <= 0)
+                            || (m_nScrollState == 4 && x >= m_cInfinity.nAreaX - m_cInfinity.rViewPort.Width() - 1)) {
+                            g_pBaldurChitin->GetObjectCursor()->SetCursor(6, FALSE);
+                            g_pBaldurChitin->GetObjectCursor()->m_nDirection = 0;
+                            m_nScrollState = 4;
+                        }
+                    }
+                } else {
+                    m_nScrollState = 0;
+                    m_cInfinity.m_nScrollDelay = CInfinity::SCROLL_DELAY;
+                }
+            }
+
+            if (m_groupMove) {
+                if (abs(ptWorldMouse.x - m_moveDest.x) > 8
+                    || abs(ptWorldMouse.y - m_moveDest.y) > 8) {
+                    CPoint ptCursor;
+                    if (bMouseInPlayArea) {
+                        ptCursor.x = 2 * m_moveDest.x - ptWorldMouse.x;
+                        ptCursor.y = 2 * m_moveDest.y - ptWorldMouse.y;
+                    } else {
+                        CPoint ptScreen;
+                        ptScreen.x = min(max(m_cInfinity.rViewPort.left, m_ptMousePos.x), m_cInfinity.rViewPort.right - 1);
+                        ptScreen.y = min(max(m_cInfinity.rViewPort.top, m_ptMousePos.y), m_cInfinity.rViewPort.bottom - 1);
+
+                        CPoint ptWorld = m_cInfinity.GetWorldCoordinates(ptScreen);
+                        ptCursor.x = 2 * m_moveDest.x - ptWorld.x;
+                        ptCursor.y = 2 * m_moveDest.y - ptWorld.y;
+                    }
+
+                    m_pGame->GetGroup()->GroupDrawMove(m_moveDest,
+                        m_pGame->m_curFormation,
+                        ptCursor);
+
+                    if (m_pGame->GetState() == 0) {
+                        m_pGame->SetTempCursor(8);
+                    }
+
+                    if (m_pGame->GetState() == 3) {
+                        if (m_selectSquare.left != -1) {
+                            m_selectSquare.right += x - m_ptOldViewPos.x;
+                            m_selectSquare.bottom += y - m_ptOldViewPos.y;
+                        }
+                    }
+                } else {
+                    m_pGame->GetGroup()->GroupCancelMove();
+                    if (m_pGame->GetState() == 0) {
+                        m_pGame->SetTempCursor(4);
+                    }
+                }
+            } else {
+                if (m_selectSquare.left != -1) {
+                    m_selectSquare.right += x - m_ptOldViewPos.x;
+                    m_selectSquare.bottom += y - m_ptOldViewPos.y;
+
+                    if (m_pGame->GetState() == 0) {
+                        m_pGame->SetTempCursor(0);
+                    }
+                }
+            }
+
+            m_ptOldViewPos.x = x;
+            m_ptOldViewPos.y = y;
+
+            if (m_nScrollState == 0) {
+                if (bMouseInPlayArea) {
+                    if (m_pGame->m_tempCursor == 4) {
+                        BOOL bSquareVisible = m_visibility.IsTileExplored(m_visibility.PointToTile(ptWorldMouse));
+                        if (m_iPicked != CGameObjectArray::INVALID_INDEX
+                            && bSquareVisible) {
+                            rc = m_pGame->GetObjectArray()->GetShare(m_iPicked,
+                                CGameObjectArray::THREAD_ASYNCH,
+                                &pObject,
+                                INFINITE);
+                            if (rc == CGameObjectArray::SUCCESS) {
+                                pObject->SetCursor(m_nToolTip);
+                                m_pGame->GetObjectArray()->ReleaseShare(m_iPicked,
+                                    CGameObjectArray::THREAD_ASYNCH,
+                                    INFINITE);
+                            } else {
+                                g_pBaldurChitin->GetObjectCursor()->SetCursor(0, FALSE);
+                            }
+                        } else {
+                            if (m_pGame->GetGroup()->GetCount() != 0) {
+                                if (bSquareVisible) {
+                                    SHORT searchSquareCode;
+                                    CPoint mouseSearchSquare;
+                                    mouseSearchSquare.x = ptWorldMouse.x / CPathSearch::GRID_SQUARE_SIZEX;
+                                    mouseSearchSquare.y = ptWorldMouse.y / CPathSearch::GRID_SQUARE_SIZEY;
+                                    if (m_search.GetLOSCost(mouseSearchSquare, m_terrainTable, searchSquareCode, 0) != CPathSearch::COST_IMPASSABLE) {
+                                        switch (m_pGame->GetState()) {
+                                        case 0:
+                                            if (searchSquareCode == 14) {
+                                                g_pBaldurChitin->GetObjectCursor()->SetCursor(34, FALSE);
+                                                m_bTravelSquare = TRUE;
+                                            } else {
+                                                g_pBaldurChitin->GetObjectCursor()->SetCursor(6, FALSE);
+                                            }
+                                            break;
+                                        case 1:
+                                        case 2:
+                                            if (g_pBaldurChitin->GetObjectGame()->GetIconIndex() != -1) {
+                                                g_pBaldurChitin->GetObjectCursor()->SetCursor(6, FALSE);
+                                            } else {
+                                                g_pBaldurChitin->GetObjectCursor()->SetCursor(102, FALSE);
+                                                g_pBaldurChitin->GetObjectCursor()->SetCustomCursor(g_pBaldurChitin->GetObjectGame()->m_iconResRef, FALSE, -1);
+                                            }
+                                            break;
+                                        case 3:
+                                            g_pBaldurChitin->GetObjectCursor()->SetCursor(6, FALSE);
+                                            break;
+                                        default:
+                                            // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+                                            // __LINE__: 2809
+                                            UTIL_ASSERT(!"Invalid Game State");
+                                        }
+                                    } else {
+                                        switch (m_pGame->GetState()) {
+                                        case 0:
+                                            g_pBaldurChitin->GetObjectCursor()->SetCursor(4, FALSE);
+                                            break;
+                                        case 1:
+                                            if (g_pBaldurChitin->GetObjectGame()->GetIconIndex() != -1) {
+                                                g_pBaldurChitin->GetObjectCursor()->SetCursor(g_pBaldurChitin->GetObjectGame()->GetIconIndex(), FALSE);
+                                            } else {
+                                                g_pBaldurChitin->GetObjectCursor()->SetCursor(20, FALSE);
+                                            }
+                                            break;
+                                        case 2:
+                                            if (g_pBaldurChitin->GetObjectGame()->GetIconIndex() != -1) {
+                                                g_pBaldurChitin->GetObjectCursor()->SetCursor(g_pBaldurChitin->GetObjectGame()->GetIconIndex(), FALSE);
+                                                g_pBaldurChitin->GetObjectCursor()->SetGreyScale(TRUE);
+                                            } else {
+                                                g_pBaldurChitin->GetObjectCursor()->SetCursor(102, FALSE);
+                                                g_pBaldurChitin->GetObjectCursor()->SetCustomCursor(g_pBaldurChitin->GetObjectGame()->m_iconResRef, FALSE, -1);
+                                            }
+                                            break;
+                                        case 3:
+                                            g_pBaldurChitin->GetObjectCursor()->SetCursor(16, FALSE);
+                                            break;
+                                        default:
+                                            // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+                                            // __LINE__: 2845
+                                            UTIL_ASSERT(!"Invalid Game State");
+                                        }
+                                    }
+                                } else {
+                                    g_pBaldurChitin->GetObjectCursor()->SetCursor(6, FALSE);
+                                }
+                            } else {
+                                g_pBaldurChitin->GetObjectCursor()->SetCursor(0, FALSE);
+                            }
+                        }
+                    } else {
+                        g_pBaldurChitin->GetObjectCursor()->SetCursor(m_pGame->m_tempCursor, FALSE);
+                    }
+                } else {
+                    if (m_pGame->m_tempCursor == 4) {
+                        rc = m_pGame->GetObjectArray()->GetShare(m_iPicked,
+                            CGameObjectArray::THREAD_ASYNCH,
+                            &pObject,
+                            INFINITE);
+                        if (rc == CGameObjectArray::SUCCESS) {
+                            pObject->SetCursor(m_nToolTip);
+                            m_pGame->GetObjectArray()->ReleaseShare(m_iPicked,
+                                CGameObjectArray::THREAD_ASYNCH,
+                                INFINITE);
+                        } else {
+                            g_pBaldurChitin->GetObjectCursor()->SetCursor(0, FALSE);
+                        }
+                    } else {
+                        g_pBaldurChitin->GetObjectCursor()->SetCursor(m_pGame->m_tempCursor, FALSE);
+                    }
+                }
+            }
+        }
+    } else {
+        m_nScrollState = 0;
+        m_nKeyScrollState = 0;
+        if (m_pGame->m_tempCursor != 4) {
+            g_pBaldurChitin->GetObjectCursor()->SetCursor(m_pGame->m_tempCursor, FALSE);
+        } else {
+            g_pBaldurChitin->GetObjectCursor()->SetCursor(0, FALSE);
+        }
+    }
+
+    BOOL bActive = m_pGame->GetWorldTimer()->m_active;
+
+    m_nToolTip++;
+
+    if (mpSpawner != NULL) {
+        mpSpawner->Execute(this);
+    }
+
+    pos = m_lVertSortFlight.GetTailPosition();
+    while (pos != NULL) {
+        iObject = reinterpret_cast<LONG>(m_lVertSortFlight.GetPrev(pos));
+
+        do {
+            rc = m_pGame->GetObjectArray()->GetShare(iObject,
+                CGameObjectArray::THREAD_ASYNCH,
+                &pObject,
+                INFINITE);
+        } while (rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (pObject->DoAIUpdate(bActive, g_pChitin->nAUCounter)) {
+                do {
+                    rc = m_pGame->GetObjectArray()->GetDeny(iObject,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        &pObject,
+                        INFINITE);
+                } while (rc == CGameObjectArray::SHARED);
+
+                if (rc == CGameObjectArray::SUCCESS) {
+                    pObject->AIUpdate();
+
+                    m_pGame->GetObjectArray()->ReleaseDeny(iObject,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        INFINITE);
+                }
+            }
+
+            m_pGame->GetObjectArray()->ReleaseShare(iObject,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+
+    pos = m_lVertSort.GetTailPosition();
+    while (pos != NULL) {
+        iObject = reinterpret_cast<LONG>(m_lVertSort.GetPrev(pos));
+
+        do {
+            rc = m_pGame->GetObjectArray()->GetShare(iObject,
+                CGameObjectArray::THREAD_ASYNCH,
+                &pObject,
+                INFINITE);
+        } while (rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (!m_bPicked
+                && bMouseInPlayArea
+                && m_pGame->GetVisibleArea() == this
+                && pObject->IsOver(ptWorldMouse)) {
+                if (m_iPicked != iObject) {
+                    if (m_pGame->m_tempCursor == 101) {
+                        m_pGame->m_tempCursor = 4;
+                    }
+                    m_nToolTip = 0;
+                }
+
+                m_iPicked = iObject;
+
+                if (pObject->GetObjectType() == CGameObject::TYPE_SPRITE) {
+                    CGameSprite* pSprite = static_cast<CGameSprite*>(pObject);
+                    if (pSprite->Orderable(FALSE)) {
+                        m_iPickedTarget = pSprite->GetTargetId();
+                    }
+                }
+
+                m_bPicked = TRUE;
+            }
+
+            if (pObject->DoAIUpdate(bActive, g_pChitin->nAUCounter)) {
+                do {
+                    rc = m_pGame->GetObjectArray()->GetDeny(iObject,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        &pObject,
+                        INFINITE);
+                } while (rc == CGameObjectArray::SHARED);
+
+                if (rc == CGameObjectArray::SUCCESS) {
+                    pObject->AIUpdate();
+
+                    m_pGame->GetObjectArray()->ReleaseDeny(iObject,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        INFINITE);
+                }
+            }
+
+            m_pGame->GetObjectArray()->ReleaseShare(iObject,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+
+    pos = m_lVertSortBack.GetTailPosition();
+    while (pos != NULL) {
+        iObject = reinterpret_cast<LONG>(m_lVertSortBack.GetPrev(pos));
+
+        do {
+            rc = m_pGame->GetObjectArray()->GetShare(iObject,
+                CGameObjectArray::THREAD_ASYNCH,
+                &pObject,
+                INFINITE);
+        } while (rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (!m_bPicked
+                && bMouseInPlayArea
+                && m_pGame->GetVisibleArea() == this
+                && pObject->IsOver(ptWorldMouse)) {
+                if (m_iPicked != iObject) {
+                    if (m_pGame->m_tempCursor == 101) {
+                        m_pGame->m_tempCursor = 4;
+                    }
+                    m_nToolTip = 0;
+                }
+
+                m_iPicked = iObject;
+
+                if (pObject->GetObjectType() == CGameObject::TYPE_SPRITE) {
+                    CGameSprite* pSprite = static_cast<CGameSprite*>(pObject);
+                    if (pSprite->Orderable(FALSE)) {
+                        m_iPickedTarget = pSprite->GetTargetId();
+                    }
+                }
+
+                m_bPicked = TRUE;
+            }
+
+            if (pObject->DoAIUpdate(bActive, g_pChitin->nAUCounter)) {
+                do {
+                    rc = m_pGame->GetObjectArray()->GetDeny(iObject,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        &pObject,
+                        INFINITE);
+                } while (rc == CGameObjectArray::SHARED);
+
+                if (rc == CGameObjectArray::SUCCESS) {
+                    pObject->AIUpdate();
+
+                    m_pGame->GetObjectArray()->ReleaseDeny(iObject,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        INFINITE);
+                }
+            }
+
+            m_pGame->GetObjectArray()->ReleaseShare(iObject,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+
+    if (m_pGame->GetVisibleArea() == this) {
+        if (!m_bPicked) {
+            if (bMouseInPlayArea) {
+                if (m_pGame->m_tempCursor == 101) {
+                    m_pGame->m_tempCursor = 4;
+                }
+            }
+
+            m_nToolTip = 0;
+            m_iPicked = CGameObjectArray::INVALID_INDEX;
+            m_iPickedTarget = CGameObjectArray::INVALID_INDEX;
+        }
+
+        m_cInfinity.AIUpdate();
+    }
+
+    if (g_pBaldurChitin->nAUCounter % 2 == 0) {
+        g_pBaldurChitin->cSoundMixer.UpdateSoundList();
+
+        CGameAIArea* pAIArea;
+
+        do {
+            rc = m_pGame->GetObjectArray()->GetDeny(m_nAIIndex,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pAIArea),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            pAIArea->ProcessAI();
+
+            m_pGame->GetObjectArray()->ReleaseDeny(m_nAIIndex,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+
+    INT nDeadCharacters = 0;
+    for (SHORT nPortrait = 0; nPortrait < g_pBaldurChitin->GetObjectGame()->GetNumCharacters(); nPortrait++) {
+        CGameSprite* pSprite;
+
+        rc = m_pGame->GetObjectArray()->GetShare(g_pBaldurChitin->GetObjectGame()->GetCharacterId(nPortrait),
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+        if (rc == CGameObjectArray::SUCCESS) {
+            if ((pSprite->GetDerivedStats()->m_generalState & STATE_DEAD) != 0) {
+                nDeadCharacters++;
+            }
+
+            m_pGame->GetObjectArray()->ReleaseShare(g_pBaldurChitin->GetObjectGame()->GetCharacterId(nPortrait),
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+
+    if (nDeadCharacters == g_pBaldurChitin->GetObjectGame()->GetNumCharacters()) {
+        if (m_nCurrentSong != 1) {
+            g_pBaldurChitin->cSoundMixer.StartSong(1, 0x4 | 0x1);
+            m_nCurrentSong = 1;
+        }
+    } else if (m_pGame->GetVisibleArea() == this
+        && g_pBaldurChitin->GetActiveEngine() != g_pBaldurChitin->m_pEngineStore) {
+        if (m_startedMusicCounter > 0) {
+            m_startedMusicCounter--;
+        }
+
+        if (!m_startedMusic) {
+            if (m_startedMusicCounter == 0) {
+                m_startedMusic = TRUE;
+                if (m_nCurrentSong != -1) {
+                    INT nBattleSongCounter = m_nBattleSongCounter;
+                    g_pBaldurChitin->cSoundMixer.StartSong(-1, 0x4 | 0x1);
+                    SleepEx(500, FALSE);
+                    PlaySong(m_nCurrentSong, 0x1);
+                    m_nBattleSongCounter = nBattleSongCounter;
+                } else {
+                    g_pBaldurChitin->cSoundMixer.StartSong(-1, 0x4 | 0x1);
+                }
+            }
+        } else {
+            if (m_startedMusicCounter == 0) {
+                if (m_nBattleSongCounter > 0) {
+                    if (bActive) {
+                        m_nBattleSongCounter--;
+                    }
+
+                    if (m_nBattleSongCounter > 0) {
+                        if (m_nCurrentSong != 3) {
+                            PlaySong(3, 0x2 | 0x1);
+                        }
+                    } else {
+                        if ((m_header.m_flags & 0x4) == 0) {
+                            if (m_nCurrentSong == 3) {
+                                PlaySong(256, 0x2);
+                            }
+                        }
+                    }
+                }
+
+                if ((m_header.m_flags & 0x4) == 0) {
+                    if (m_pGame->GetVisibleArea() == this
+                        && g_pChitin->cSoundMixer.m_nCurrentSong == -1) {
+                        if (!g_pBaldurChitin->GetActiveEngine()->StopMusic()) {
+                            m_nCurrentSong = -1;
+                        }
+                    }
+
+                    if (g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->IsDay()) {
+                        PlaySong(-1, 0x4 | 0x2);
+                        m_nCurrentSong = 0;
+                        m_startedMusic = FALSE;
+                        m_startedMusicCounter = 600;
+                    } else if (g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->IsNight()) {
+                        PlaySong(-1, 0x4 | 0x2);
+                        m_nCurrentSong = 1;
+                        m_startedMusic = FALSE;
+                        m_startedMusicCounter = 600;
+                    }
+                }
+            }
+        }
+    }
 }
 
 // 0x46F750
@@ -689,7 +1229,7 @@ void CGameArea::Unmarshal(BYTE* pArea, LONG areaSize, const CString& sName, BOOL
         m_headerSound.m_alt1Music4 = -1;
     }
 
-    field_98E = 10;
+    m_startedMusicCounter = 10;
 
     ULONG nDayTime = g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->GetCurrentDayTime();
     m_nCurrentSong = (nDayTime < CTimerWorld::TIME_DAY || nDayTime >= CTimerWorld::TIME_DUSK)

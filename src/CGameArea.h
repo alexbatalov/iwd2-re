@@ -223,7 +223,7 @@ public:
     /* 0234 */ CInfGame* m_pGame;
     /* 0238 */ LONG m_nScrollState;
     /* 023C */ LONG m_nKeyScrollState;
-    /* 0240 */ unsigned char field_240;
+    /* 0240 */ BOOLEAN m_bTravelSquare;
     /* 0241 */ unsigned char field_241;
     /* 0242 */ LONG field_242;
     /* 0246 */ LONG m_iPicked;
@@ -262,8 +262,8 @@ public:
     /* 0984 */ BYTE m_sndAmbientVolume;
     /* 0986 */ WORD m_sndAmbientDayVolume;
     /* 0988 */ WORD m_sndAmbientNightVolume;
-    /* 098A */ int field_98A;
-    /* 098E */ int field_98E;
+    /* 098A */ BOOL m_startedMusic;
+    /* 098E */ DWORD m_startedMusicCounter;
     /* 0992 */ CTypedPtrList<CPtrList, int*> m_lVertSort; // NOTE: Stores actual ints disguised as pointers.
     /* 09AE */ CTypedPtrList<CPtrList, int*> m_lVertSortBack; // NOTE: Stores actual ints disguised as pointers.
     /* 099A */ CTypedPtrList<CPtrList, int*> m_lVertSortFlight; // NOTE: Stores actual ints disguised as pointers.

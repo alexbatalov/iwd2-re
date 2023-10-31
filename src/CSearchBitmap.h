@@ -20,6 +20,7 @@ public:
 
     CSearchBitmap();
     ~CSearchBitmap();
+    BYTE GetLOSCost(const CPoint& point, const BYTE* terrainTable, SHORT& nTableIndex, BOOLEAN bVisbilityOutDoor);
     SHORT GetStructureHeight(SHORT nTableIndex);
     void Init(CGameArea* pArea, CString szResRef);
     void Uninit();

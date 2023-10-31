@@ -55,9 +55,9 @@ public:
     /* 0396 */ CInfToolTip m_vcToolTip;
     /* 09EE */ int field_9EE;
     /* 09F2 */ int field_9F2;
-    /* 09F6 */ int m_nCurrentCursor;
-    /* 09FA */ int field_9FA;
-    /* 09FE */ int m_nState;
+    /* 09F6 */ INT m_nCurrentCursor;
+    /* 09FA */ INT m_nDirection;
+    /* 09FE */ INT m_nState;
     /* 0A02 */ CUIControlBase* field_A02;
     /* 0A06 */ BOOLEAN bAnimatingCustom;
 };

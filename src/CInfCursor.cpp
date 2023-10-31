@@ -12,7 +12,7 @@ CInfCursor::CInfCursor()
     field_9F2 = 0;
     field_9EE = 0;
     field_A02 = NULL;
-    field_9FA = 0;
+    m_nDirection = 0;
     m_nState = 0;
     bAnimatingCustom = 0;
     m_nCurrentCursor = -1;
@@ -288,7 +288,7 @@ INT CInfCursor::SetCustomCursor(CResRef customResRef, BOOLEAN bAnimating, INT nP
 // NOTE: Inlined.
 void CInfCursor::SetScrollArrowDirection()
 {
-    switch (field_9FA) {
+    switch (m_nDirection) {
     case 0:
         m_vcArrow.SequenceSet(2);
         break;
