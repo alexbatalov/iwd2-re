@@ -57,6 +57,11 @@ public:
 
     ULONG GetCurrentDayTime();
 
+    static BOOLEAN IsDay(ULONG nTimeOfDay);
+    static BOOLEAN IsNight(ULONG nTimeOfDay);
+    static BOOLEAN IsDawn(ULONG nTimeOfDay);
+    static BOOLEAN IsDusk(ULONG nTimeOfDay);
+
     ULONG m_gameTime;
     BOOLEAN m_active;
     BYTE m_nLastPercentage;

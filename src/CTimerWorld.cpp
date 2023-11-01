@@ -317,3 +317,31 @@ ULONG CTimerWorld::GetCurrentDayTime()
 {
     return m_gameTime % TIMESCALE_MSEC_PER_DAY;
 }
+
+// NOTE: Inlined.
+BOOLEAN CTimerWorld::IsDay(ULONG nTimeOfDay)
+{
+    ULONG time = nTimeOfDay % TIMESCALE_MSEC_PER_DAY;
+    return time >= TIME_DAY && time < TIME_DUSK;
+}
+
+// NOTE: Inlined.
+BOOLEAN CTimerWorld::IsNight(ULONG nTimeOfDay)
+{
+    ULONG time = nTimeOfDay % TIMESCALE_MSEC_PER_DAY;
+    return time >= TIME_NIGHT || time < TIME_DAWN;
+}
+
+// NOTE: Inlined.
+BOOLEAN CTimerWorld::IsDawn(ULONG nTimeOfDay)
+{
+    ULONG time = nTimeOfDay % TIMESCALE_MSEC_PER_DAY;
+    return time >= TIME_DAWN && time < TIME_DAY;
+}
+
+// NOTE: Inlined.
+BOOLEAN CTimerWorld::IsDusk(ULONG nTimeOfDay)
+{
+    ULONG time = nTimeOfDay % TIMESCALE_MSEC_PER_DAY;
+    return time >= TIME_DUSK && time < TIME_NIGHT;
+}

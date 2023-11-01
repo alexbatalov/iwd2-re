@@ -2405,7 +2405,19 @@ void CGameArea::SetNewResWED(CResWED* pNewResWED)
 // 0x479110
 void CGameArea::SetTimeOfDay(ULONG nTimeOfDay, BOOLEAN bPlayDayNightMovie)
 {
-    // TODO: Incomplete.
+    m_sndAmbientVolume = g_pBaldurChitin->m_pEngineWorld->m_weather.GetWind();
+    m_sndAmbientDay.SetVolume(m_sndAmbientDayVolume * m_sndAmbientVolume / 100);
+    m_sndAmbientNight.SetVolume(m_sndAmbientNightVolume * m_sndAmbientVolume / 100);
+
+    if (CTimerWorld::IsDay(nTimeOfDay)) {
+        SetDay();
+    } else if (CTimerWorld::IsDusk(nTimeOfDay)) {
+        SetDusk(255 - static_cast<BYTE>(((nTimeOfDay - CTimerWorld::TIME_DUSK) * 256) / (CTimerWorld::TIME_NIGHT - CTimerWorld::TIME_DUSK)), bPlayDayNightMovie);
+    } else if (CTimerWorld::IsNight(nTimeOfDay)) {
+        SetNight();
+    } else if (CTimerWorld::IsDawn(nTimeOfDay)) {
+        SetDawn(static_cast<BYTE>(((nTimeOfDay - CTimerWorld::TIME_DAWN) * 256) / (CTimerWorld::TIME_DAY - CTimerWorld::TIME_DAWN)), bPlayDayNightMovie);
+    }
 }
 
 // 0x479260
