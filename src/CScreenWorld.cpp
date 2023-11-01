@@ -1819,7 +1819,46 @@ void CScreenWorld::StopStore()
 // 0x691D10
 void CScreenWorld::HandleAmbiance()
 {
-    // TODO: Incomplete.
+    if (m_boredCount != 0) {
+        CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+        if (pGame->GetWorldTimer()->m_active
+            && (pGame->GetWorldTimer()->m_gameTime % 600 == 0 || m_ambianceForce)
+            && (rand() % 100 <= 15 || m_ambianceForce)) {
+            m_ambianceForce = FALSE;
+            g_pBaldurChitin->m_pEngineWorld->m_bored = FALSE;
+            g_pBaldurChitin->m_pEngineWorld->m_boredCount = 0;
+
+            SHORT nPortrait;
+            if (pGame->m_nCharacters != 0) {
+                nPortrait = rand() % pGame->m_nCharacters;
+            } else {
+                nPortrait = 0;
+            }
+
+            LONG nCharacterId = pGame->GetCharacterId(nPortrait);
+            if (m_lastAmbiance != nCharacterId || rand() % 10 == 0) {
+                m_lastAmbiance = nCharacterId;
+
+                CGameSprite* pSprite;
+
+                BYTE rc;
+                do {
+                    rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        reinterpret_cast<CGameObject**>(&pSprite),
+                        INFINITE);
+                } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+                if (rc == CGameObjectArray::SUCCESS) {
+                    // NOTE: Looks like left over from earlier games.
+
+                    pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        INFINITE);
+                }
+            }
+        }
+    }
 }
 
 // 0x692090
