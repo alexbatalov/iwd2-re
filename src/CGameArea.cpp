@@ -2067,7 +2067,41 @@ void CGameArea::OnFormationButtonDown(const CPoint& pt)
 // 0x4767E0
 void CGameArea::OnFormationButtonUp(const CPoint& pt)
 {
-    // TODO: Incomplete.
+    SHORT gameState = g_pBaldurChitin->GetObjectGame()->GetState();
+    CPoint worldMousePoint = m_cInfinity.GetWorldCoordinates(pt);
+    if (gameState == 0) {
+        if (abs(m_moveDest.x - worldMousePoint.x) <= 8
+            && abs(m_moveDest.y - worldMousePoint.y) <= 8
+            && m_iPicked != CGameObjectArray::INVALID_INDEX) {
+            CGameObject* pObject;
+
+            BYTE rc = m_pGame->GetObjectArray()->GetShare(m_iPicked,
+                CGameObjectArray::THREAD_ASYNCH,
+                &pObject,
+                INFINITE);
+            if (rc == CGameObjectArray::SUCCESS) {
+                pObject->OnFormationButton(worldMousePoint);
+                m_pGame->GetObjectArray()->ReleaseShare(m_iPicked,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            }
+        } else {
+            if (m_groupMove) {
+                OnActionButtonClickGround(worldMousePoint);
+            }
+        }
+
+        if (m_groupMove) {
+            m_groupMove = FALSE;
+            m_pGame->GetGroup()->GroupCancelMove();
+            m_pGame->SetTempCursor(4);
+        }
+    } else if (gameState != 3 || m_selectSquare.left == -1) {
+        m_pGame->SetState(0);
+        m_pGame->m_cButtonArray.m_nSelectedButton = 100;
+        m_pGame->m_cButtonArray.UpdateState();
+        m_pGame->SetTempCursor(4);
+    }
 }
 
 // 0x476970
