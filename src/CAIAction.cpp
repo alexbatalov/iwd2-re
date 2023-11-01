@@ -27,6 +27,9 @@ const SHORT CAIAction::GROUPATTACK = 94;
 // 0x847832
 const SHORT CAIAction::SPELLPOINT = 95;
 
+// 0x847850
+const SHORT CAIAction::LEAVEAREALUA = 110;
+
 // 0x847856
 const SHORT CAIAction::FORCESPELL = 113;
 
@@ -77,6 +80,24 @@ CAIAction::CAIAction(SHORT actionID, const CPoint& dest, LONG specificID, LONG s
     m_dest = dest;
     m_specificID = specificID;
     m_specificID2 = specificID2;
+    m_internalFlags = 0;
+}
+
+// NOTE: Inlined.
+CAIAction::CAIAction(SHORT actionID, const CString& name, CPoint pt, LONG specificID)
+{
+    // NOTE: For unknown reason it creates and immediately destroys `CAIAction`
+    // instance. This instance and its properties are not used.
+    // FIXME: Remove.
+    if (1) {
+        CAIAction action;
+    }
+
+    m_actionID = actionID;
+    m_string1 = name;
+    m_dest = pt;
+    m_specificID = specificID;
+    m_specificID2 = 0;
     m_internalFlags = 0;
 }
 

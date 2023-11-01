@@ -19,6 +19,7 @@ public:
     static const SHORT LEADER;
     static const SHORT GROUPATTACK;
     static const SHORT SPELLPOINT;
+    static const SHORT LEAVEAREALUA;
     static const SHORT FORCESPELL;
     static const SHORT FORCESPELLPOINT;
     static const SHORT APPLYSPELL;
@@ -32,6 +33,7 @@ public:
     CAIAction();
     CAIAction(SHORT actionID, const CAIObjectType& actee, LONG specificID, LONG specificID2, LONG specificID3);
     CAIAction(SHORT actionID, const CPoint& dest, LONG specificID, LONG specificID2);
+    CAIAction(SHORT actionID, const CString& name, CPoint pt, LONG specificID);
     CAIAction(const CAIAction& action);
     ~CAIAction();
     BOOL OfType(SHORT type) const;

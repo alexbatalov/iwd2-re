@@ -1575,6 +1575,18 @@ void CScreenWorld::EndDialog(BOOLEAN bForceExecution, BOOLEAN fullEnd)
     // TODO: Incomplete.
 }
 
+// FIXME: `areaName` should be reference.
+//
+// 0x690410
+void CScreenWorld::MoveToArea(CString areaName)
+{
+    // NOTE: Uninline.
+    CAIAction leave(CAIAction::LEAVEAREALUA, areaName, CPoint(0, 0), 0);
+    leave.m_specificID2 = 0;
+
+    g_pBaldurChitin->GetObjectGame()->GetGroup()->GroupAction(leave, TRUE, NULL);
+}
+
 // 0x690640
 void CScreenWorld::SaveScreen()
 {
