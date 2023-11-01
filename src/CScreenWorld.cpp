@@ -1829,15 +1829,87 @@ void CScreenWorld::HandleDeathReaction()
 }
 
 // 0x692290
-void CScreenWorld::DisplayText(const CString& sName, const CString& sText, COLORREF rgbNameColor, COLORREF rgbTextColor, LONG lMarker, BOOLEAN bMoveToTop)
+POSITION CScreenWorld::DisplayText(const CString& sName, const CString& sText, COLORREF rgbNameColor, COLORREF rgbTextColor, LONG lMarker, BOOLEAN bMoveToTop)
 {
-    // TODO: Incomplete.
+    if (g_pBaldurChitin->GetObjectGame()->m_bGameLoaded) {
+        return NULL;
+    }
+
+    POSITION pos = m_pActiveDialogDisplay->DisplayString(sName,
+        sText,
+        rgbNameColor,
+        rgbTextColor,
+        lMarker,
+        bMoveToTop,
+        TRUE);
+
+    if (m_pActiveDialogDisplay->GetNumLines(pos) > 2) {
+        if (GetManager()->GetPanel(GetPanel_22_0())->m_bActive
+            && !m_cUIManager.field_0) {
+            // FIXME: Same panels?
+            CUIPanel* pPanel1 = GetManager()->GetPanel(GetPanel_22_0());
+            CUIPanel* pPanel2 = GetManager()->GetPanel(GetPanel_22_0());
+
+            pPanel2->SetActive(FALSE);
+            pPanel1->SetActive(TRUE);
+
+            CUIControlTextDisplay* pOldDialogDisplay = m_pActiveDialogDisplay;
+            m_pActiveDialogDisplay = static_cast<CUIControlTextDisplay*>(pPanel1->GetControl(1));
+
+            // FIXME: Obtains same control twice.
+            static_cast<CUIControlTextDisplay*>(pPanel1->GetControl(1))->CopyDisplay(pOldDialogDisplay);
+
+            m_pActiveDialogDisplay->SetTopString(pos);
+
+            m_newViewSize = CInfinity::stru_8E79B8;
+            m_waitingOnResize = 2;
+            m_bForceViewSize = FALSE;
+        }
+    }
+
+    return pos;
 }
 
 // 0x692460
-void CScreenWorld::DisplayText(const CString& sName, const CString& sText, LONG lMarker, BOOLEAN bMoveToTop)
+POSITION CScreenWorld::DisplayText(const CString& sName, const CString& sText, LONG lMarker, BOOLEAN bMoveToTop)
 {
-    // TODO: Incomplete.
+    if (g_pBaldurChitin->GetObjectGame()->m_bGameLoaded) {
+        return NULL;
+    }
+
+    POSITION pos = m_pActiveDialogDisplay->DisplayString(sName,
+        sText,
+        m_pActiveDialogDisplay->m_rgbLabelColor,
+        m_pActiveDialogDisplay->m_rgbTextColor,
+        lMarker,
+        bMoveToTop,
+        TRUE);
+
+    if (m_pActiveDialogDisplay->GetNumLines(pos) > 2) {
+        if (GetManager()->GetPanel(GetPanel_22_0())->m_bActive
+            && !m_cUIManager.field_0) {
+            // FIXME: Same panels?
+            CUIPanel* pPanel1 = GetManager()->GetPanel(GetPanel_22_0());
+            CUIPanel* pPanel2 = GetManager()->GetPanel(GetPanel_22_0());
+
+            pPanel2->SetActive(FALSE);
+            pPanel1->SetActive(TRUE);
+
+            CUIControlTextDisplay* pOldDialogDisplay = m_pActiveDialogDisplay;
+            m_pActiveDialogDisplay = static_cast<CUIControlTextDisplay*>(pPanel1->GetControl(1));
+
+            // FIXME: Obtains same control twice.
+            static_cast<CUIControlTextDisplay*>(pPanel1->GetControl(1))->CopyDisplay(pOldDialogDisplay);
+
+            // NOTE: No `SetTopString` as in the function above.
+
+            m_newViewSize = CInfinity::stru_8E79B8;
+            m_waitingOnResize = 2;
+            m_bForceViewSize = FALSE;
+        }
+    }
+
+    return pos;
 }
 
 // 0x692630
