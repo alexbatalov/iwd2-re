@@ -229,7 +229,12 @@ void CScreenWorld::TimerAsynchronousUpdate()
 // 0x6866C0
 CScreenWorld::~CScreenWorld()
 {
-    // TODO: Incomplete.
+    DeleteCriticalSection(&field_106);
+
+    while (!m_deathSoundList.IsEmpty()) {
+        CDeathSound* pDeathSound = m_deathSoundList.RemoveHead();
+        delete pDeathSound;
+    }
 }
 
 // 0x686870
