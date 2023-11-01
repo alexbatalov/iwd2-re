@@ -8,6 +8,18 @@
 #include "CUIControlTextDisplay.h"
 #include "CUtil.h"
 
+// NOTE: Inlined.
+CGameDialogSprite::CGameDialogSprite()
+{
+    ClearMarshal();
+}
+
+// NOTE: Inlined.
+CGameDialogSprite::~CGameDialogSprite()
+{
+    ClearMarshal();
+}
+
 // 0x483970
 void CGameDialogSprite::ClearMarshal()
 {

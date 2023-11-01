@@ -12,6 +12,8 @@ class CGameSprite;
 
 class CGameDialogSprite {
 public:
+    CGameDialogSprite();
+    ~CGameDialogSprite();
     void ClearMarshal();
     BOOL StartDialog(CGameSprite* pSprite);
     void EndDialog();

@@ -9,6 +9,7 @@
 #include "CUIControlButton3State.h"
 #include "CUIControlScrollBar.h"
 #include "CVidCell.h"
+#include "CVidFont.h"
 #include "CWeather.h"
 
 #define CSCREENWORLD_VIRTUAL_KEYS 92
@@ -122,6 +123,7 @@ public:
     INT GetNumGroupRows();
 
     /* 0106 */ CRITICAL_SECTION field_106;
+    /* 011E */ int field_11E;
     /* 0122 */ LONG m_boredCount;
     /* 0126 */ BOOL m_bored;
     /* 012A */ BOOL m_playerShutdown;
@@ -133,9 +135,18 @@ public:
     /* 0142 */ BOOL field_142;
     /* 0146 */ BOOL m_bHardPaused;
     /* 014A */ int field_14A;
+    /* 014E */ int field_14E;
     /* 0152 */ BOOL m_bPausedBeforePickParty;
     /* 0156 */ int field_156;
     /* 015A */ int field_15A;
+    /* 015C */ unsigned char field_15C;
+    /* 015D */ unsigned char field_15D;
+    /* 015E */ short field_15E;
+    /* 0160 */ unsigned char field_160;
+    /* 0162 */ short field_162;
+    /* 0164 */ int field_164;
+    /* 0168 */ CVidFont field_168;
+    /* 0668 */ CVidFont field_668;
     /* 0B68 */ CKeyInfo m_pVirtualKeys[CSCREENWORLD_VIRTUAL_KEYS];
     /* 0E48 */ BYTE m_pVirtualKeysFlags[CSCREENWORLD_VIRTUAL_KEYS];
     /* 0EA4 */ int field_EA4;
@@ -158,8 +169,11 @@ public:
     /* 10C0 */ CString field_10C0;
     /* 10C4 */ int field_10C4;
     /* 10C8 */ int field_10C8;
+    /* 10CC */ int field_10CC;
+    /* 10D0 */ LONG field_10D0;
     /* 10D4 */ BOOLEAN m_bSetNightOnActivate;
     /* 10D5 */ BOOLEAN m_bSetDayOnActivate;
+    /* 10D6 */ BOOL m_ambianceForce;
     /* 10D8 */ int field_10D8;
     /* 10DA */ DWORD m_deltaTime;
     /* 10DE */ INT m_nChatMessageCount;
@@ -174,7 +188,9 @@ public:
     /* 1100 */ COLORREF m_autoPauseColor;
     /* 1104 */ STRREF m_autoPauseName;
     /* 1108 */ int field_1108;
+    /* 110C */ int field_110C;
     /* 1138 */ INT m_nPickPartyNumCharacters;
+    /* 114C */ int field_114C;
     /* 1150 */ unsigned char field_1150;
     /* 1151 */ BOOLEAN m_bEndMajorEventListenToJoin;
     /* 1152 */ BOOLEAN m_bEndMajorEventPauseStatus;
@@ -205,9 +221,11 @@ public:
     /* 11B6 */ int field_11B6;
     /* 11BA */ DWORD field_11BA;
     /* 11BE */ int field_11BE;
+    /* 11C2 */ LONG m_lastAmbiance;
     /* 11C6 */ INT m_comingOutOfDialog;
     /* 11CA */ BYTE m_nAutoHideInterface;
     /* 11CC */ INT m_nAutoUnhideInterface;
+    /* 11D0 */ CRect field_11D0;
     /* 11F0 */ int field_11F0;
     /* 11F4 */ int field_11F4;
     /* 11F8 */ int field_11F8;

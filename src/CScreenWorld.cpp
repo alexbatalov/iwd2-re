@@ -26,7 +26,28 @@ int CScreenWorld::dword_8F85BC;
 // 0x685610
 CScreenWorld::CScreenWorld()
 {
-    // TODO: Incomplete.
+    field_11E = 0;
+    m_bHardPaused = FALSE;
+    field_14E = 0;
+    m_bPausedBeforePickParty = FALSE;
+    field_15C = 0;
+    field_15D = 0;
+    field_15E = 0;
+    field_160 = 0;
+    field_162 = 0;
+    field_164 = 0;
+    m_nTopContainerRow = 0;
+    m_nTopGroupRow = 0;
+    field_10CC = 0;
+    m_ambianceForce = FALSE;
+    m_bInControlOfDialog = FALSE;
+    m_bInControlOfStore = FALSE;
+    field_110C = 0;
+    field_114C = 0;
+    field_1150 = 0;
+    m_nPendingMapWorldDirection = 0;
+    m_nLeaveAreaLuaPanicDirection = 0;
+    m_comingOutOfDialog = 0;
 
     SetVideoMode(0);
 
@@ -123,11 +144,83 @@ CScreenWorld::CScreenWorld()
     m_pVirtualKeys[90] = CKeyInfo(VK_PRIOR, 0, 0);
     m_pVirtualKeys[91] = CKeyInfo(VK_NEXT, 0, 0);
 
-    // TODO: Incomplete.
+    // FIXME: Buffer overrun.
+    m_pVirtualKeys[92] = CKeyInfo(VK_PROCESSKEY, -1, 0);
 
+    m_bored = FALSE;
+    m_boredCount = 0;
+    m_playerShutdown = FALSE;
+    m_bShiftKeyDown = FALSE;
+    m_bCtrlKeyDown = FALSE;
+    m_bCapsLockKeyOn = FALSE;
+    m_bMenuKeyDown = FALSE;
+    m_bPaused = FALSE;
+    field_142 = 0;
+    field_14A = 0;
+    m_pActiveDialogDisplay = NULL;
+    m_pActiveChatDisplay = NULL;
+    field_156 = 0;
+    field_F37 = 0;
+    field_15A = 1;
+    m_newViewSize.left = 0;
+    m_newViewSize.top = 0;
+    m_newViewSize.right = 1;
+    m_newViewSize.bottom = 1;
+    m_bForceViewSize = FALSE;
+    m_waitingOnResize = 0;
+    field_F44 = 0;
+    m_scrollLockId = CGameObjectArray::INVALID_INDEX;
+    field_EA4 = -1;
+    field_10B2 = -1;
+    field_10B4 = 0;
+    m_interactionIndex = CGameObjectArray::INVALID_INDEX;
+    m_interactionTarget = CGameObjectArray::INVALID_INDEX;
+    field_10C0 = "";
+    field_10C4 = 0;
+    field_10C8 = 0;
+    field_10D0 = CGameObjectArray::INVALID_INDEX;
+    m_deltaTime = 0;
+    m_nChatMessageCount = 0;
+    m_movie = "";
+    field_1108 = 0;
+    m_bGameOverPanel = 0;
+    field_10F0 = 0;
+    field_10F4 = -1;
+    m_autoPauseId = CGameObjectArray::INVALID_INDEX;
+    m_autoPauseRef = -1;
+    m_nPickPartyNumCharacters = -1;
+    m_bSetNightOnActivate = FALSE;
+    m_bSetDayOnActivate = FALSE;
+    m_bEndMajorEventListenToJoin = FALSE;
+    m_bEndMajorEventPauseStatus = FALSE;
+    m_bChapterTransitionPending = FALSE;
+    m_nChapterTransition = 255;
+    m_bMoviePending = FALSE;
+    m_bRestPending = FALSE;
+    m_bRestRenting = FALSE;
+    m_nRestHP = 0;
+    m_bRestMovie = FALSE;
+    m_bPendingMapWorld = FALSE;
+    m_bPendingReformParty = FALSE;
+    field_119D = 0;
     InitializeCriticalSection(&field_106);
-
-    // TODO: Incomplete.
+    m_nBattleCryTimeOut = 0;
+    m_nPartySizeCheckStartDelay = 0;
+    m_bLeaveAreaLuaPanicPending = FALSE;
+    m_ulLeaveAreaLuaPanicTimer = -1;
+    m_bPlayEndCredits = FALSE;
+    field_11B6 = -1;
+    field_11BA = -1;
+    field_11BE = 0;
+    m_lastAmbiance = CGameObjectArray::INVALID_INDEX;
+    m_comingOutOfDialog = 0;
+    m_nAutoHideInterface = 0;
+    m_nAutoUnhideInterface = 0;
+    field_11F0 = 1;
+    field_11F4 = 1;
+    field_11D0 = CInfinity::stru_8E79B8;
+    m_nBlackOutCountDown = 0;
+    field_1204 = 0;
 }
 
 // 0x49FC40
