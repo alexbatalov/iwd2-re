@@ -2038,7 +2038,30 @@ void CGameArea::OnActionButtonDblClk(const CPoint& pt)
 // 0x476680
 void CGameArea::OnFormationButtonDown(const CPoint& pt)
 {
-    // TODO: Incomplete.
+    SHORT gameState = g_pBaldurChitin->GetObjectGame()->GetState();
+    CPoint worldMousePoint = m_cInfinity.GetWorldCoordinates(pt);
+    if (pt.x >= m_cInfinity.rViewPort.left
+        && pt.x < m_cInfinity.rViewPort.right
+        && pt.y >= m_cInfinity.rViewPort.top
+        && pt.y < m_cInfinity.rViewPort.bottom
+        && gameState == 0) {
+        if (m_selectSquare.left == -1
+            && m_visibility.IsTileExplored(m_visibility.PointToTile(worldMousePoint))) {
+            // FIXME: Why not `worldMousePoint`?
+            m_moveDest = m_cInfinity.GetWorldCoordinates(pt);
+            if (g_pBaldurChitin->GetObjectGame()->GetGroup()->GetCount() != 0) {
+                if (g_pBaldurChitin->GetObjectCursor()->m_nCurrentCursor == 4) {
+                    m_pGame->GetGroup()->GroupDrawMove(m_moveDest,
+                        m_pGame->m_curFormation,
+                        CPoint(-1, -1));
+                    m_groupMove = TRUE;
+                }
+            }
+        } else {
+            m_moveDest.x = -9;
+            m_moveDest.y = -9;
+        }
+    }
 }
 
 // 0x4767E0
