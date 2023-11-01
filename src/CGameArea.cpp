@@ -2378,7 +2378,59 @@ void CGameArea::SetApproachingDusk()
 // 0x478490
 void CGameArea::SetDawn(BYTE nIntensity, BOOLEAN bPlayDayNightMovie)
 {
-    // TODO: Incomplete.
+    m_sndAmbientDayVolume = static_cast<WORD>(nIntensity * m_headerSound.m_dayAmbientVolume / 256);
+    if (m_sndAmbientDay.IsSoundPlaying()) {
+        m_sndAmbientDay.SetVolume(m_sndAmbientVolume * m_sndAmbientDayVolume / 100);
+    } else {
+        if (m_sndAmbientVolume * m_sndAmbientDayVolume / 100 > 0) {
+            if (g_pChitin->cDimm.GetMemoryAmount() == 1) {
+                // NOTE: Uninline.
+                m_sndAmbientDay.SetResRef(CResRef(m_headerSound.m_dayAmbient), TRUE, TRUE);
+            } else {
+                // NOTE: Uninline.
+                m_sndAmbientDay.SetResRef(CResRef(m_headerSound.m_dayAmbientExtended), TRUE, TRUE);
+            }
+
+            if (m_sndAmbientDay.cResRef != "") {
+                m_sndAmbientDay.SetLoopingFlag(1);
+                m_sndAmbientDay.SetChannel(1, reinterpret_cast<DWORD>(this));
+                m_sndAmbientDay.SetVolume(m_sndAmbientVolume * m_sndAmbientDayVolume / 100);
+                m_sndAmbientDay.Play(FALSE);
+            }
+        }
+    }
+
+    m_sndAmbientNightVolume = static_cast<WORD>(nIntensity * m_headerSound.m_nightAmbientVolume / 256);
+    if (m_sndAmbientNight.IsSoundPlaying()) {
+        m_sndAmbientNight.SetVolume(m_sndAmbientVolume * m_sndAmbientNightVolume / 100);
+    } else {
+        if (m_sndAmbientVolume * m_sndAmbientNightVolume / 100 > 0) {
+            if (g_pChitin->cDimm.GetMemoryAmount() == 1) {
+                // NOTE: Uninline.
+                m_sndAmbientNight.SetResRef(CResRef(m_headerSound.m_nightAmbient), TRUE, TRUE);
+            } else {
+                // NOTE: Uninline.
+                m_sndAmbientNight.SetResRef(CResRef(m_headerSound.m_nightAmbientExtended), TRUE, TRUE);
+            }
+
+            if (m_sndAmbientNight.cResRef != "") {
+                m_sndAmbientNight.SetLoopingFlag(1);
+                m_sndAmbientNight.SetChannel(1, reinterpret_cast<DWORD>(this));
+                m_sndAmbientNight.SetVolume(m_sndAmbientVolume * m_sndAmbientNightVolume / 100);
+                m_sndAmbientNight.Play(FALSE);
+            }
+        }
+    }
+
+    if (nIntensity == CInfinity::TRUE_DAWNDUSK_INTENSITY) {
+        BYTE nSong = GetSong(0);
+        g_pBaldurChitin->sub_4288E0(m_resRef, nSong);
+        PlaySong(0, 0x4 | 0x2);
+    }
+
+    if ((m_cInfinity.m_areaType & 0x2) != 0) {
+        m_cInfinity.SetDusk(nIntensity, bPlayDayNightMovie);
+    }
 }
 
 // 0x478AC0

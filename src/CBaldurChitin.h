@@ -89,6 +89,7 @@ public:
     CMessageHandler* GetMessageHandler();
 
     void sub_4286B0(CResRef cResRef, INT nSong);
+    BOOL sub_4288E0(CResRef cResRef, INT nSong);
 
     /* 0000 */ void SynchronousUpdate() override;
     /* 0008 */ DWORD GetIDSInvalidVideoMode() override;

@@ -2207,6 +2207,14 @@ void CBaldurChitin::sub_4286B0(CResRef cResRef, INT nSong)
     // TODO: Incomplete.
 }
 
+// 0x4288E0
+BOOL CBaldurChitin::sub_4288E0(CResRef cResRef, INT nSong)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x438550
 CScreenWorld* CBaldurChitin::GetScreenWorld()
 {
