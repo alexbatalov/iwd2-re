@@ -232,6 +232,60 @@ CScreenWorld::~CScreenWorld()
     // TODO: Incomplete.
 }
 
+// 0x686870
+int CScreenWorld::GetSelectedCharacter()
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    LONG iSprite = pGame->GetGroup()->GetGroupLeader();
+    SHORT nCharacter;
+
+    if (iSprite == CGameObjectArray::INVALID_INDEX) {
+        BOOLEAN bFoundControlledCharacter = FALSE;
+
+        for (nCharacter = 0; nCharacter < CINFGAME_MAXCHARACTERS; nCharacter++) {
+            // NOTE: Uninline.
+            LONG nCharacterId = pGame->GetCharacterId(nCharacter);
+
+            if (nCharacterId != CGameObjectArray::INVALID_INDEX) {
+                CGameSprite* pSprite;
+
+                BYTE rc;
+                do {
+                    rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        reinterpret_cast<CGameObject**>(&pSprite),
+                        INFINITE);
+                } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+                if (rc == CGameObjectArray::SUCCESS) {
+                    if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
+                        || g_pChitin->cNetwork.m_idLocalPlayer == pSprite->m_remotePlayerID) {
+                        bFoundControlledCharacter = TRUE;
+                    }
+
+                    pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        INFINITE);
+                }
+            }
+
+            if (bFoundControlledCharacter) {
+                break;
+            }
+        }
+
+        if (!bFoundControlledCharacter) {
+            nCharacter = 0;
+        }
+    } else {
+        nCharacter = pGame->GetCharacterPortraitNum(iSprite);
+    }
+
+    m_nSelectedCharacter = nCharacter;
+
+    return m_nSelectedCharacter;
+}
+
 // 0x6869C0
 void CScreenWorld::EngineActivated()
 {
