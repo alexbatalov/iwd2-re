@@ -1061,6 +1061,22 @@ void CGameArea::ClearMarshal()
     LeaveCriticalSection(&(g_pBaldurChitin->m_pEngineWorld->field_106));
 }
 
+// 0x470D20
+BOOLEAN CGameArea::GetEntryPoint(const CString& sName, CPoint& ptEnter, SHORT& facing)
+{
+    POSITION pos = m_entryPoints.GetHeadPosition();
+    while (pos != NULL) {
+        CAreaFileCharacterEntryPoint* pEntryPoint = m_entryPoints.GetNext(pos);
+        if (_strnicmp(pEntryPoint->m_entryName, sName, SCRIPTNAME_SIZE) == 0) {
+            ptEnter.x = pEntryPoint->m_startX;
+            ptEnter.y = pEntryPoint->m_startY;
+            facing = static_cast<SHORT>(pEntryPoint->m_facing);
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 // 0x470E60
 void CGameArea::IncrHeightDynamic(const CPoint& point)
 {

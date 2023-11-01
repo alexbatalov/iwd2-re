@@ -162,6 +162,7 @@ public:
     void CompressTime(DWORD deltaTime);
     void ClearInput();
     void ClearMarshal();
+    BOOLEAN GetEntryPoint(const CString& sName, CPoint& ptEnter, SHORT& facing);
     void IncrHeightDynamic(const CPoint& point);
     void DecrHeightDynamic(const CPoint& point);
     COLORREF GetTintColor(const CPoint& cPoint, BYTE listType);
