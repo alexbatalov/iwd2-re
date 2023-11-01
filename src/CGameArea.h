@@ -163,6 +163,7 @@ public:
     void ClearInput();
     void ClearMarshal();
     BOOLEAN GetEntryPoint(const CString& sName, CPoint& ptEnter, SHORT& facing);
+    int GetHeightOffset(const CPoint& pt, BYTE listType);
     void IncrHeightDynamic(const CPoint& point);
     void DecrHeightDynamic(const CPoint& point);
     COLORREF GetTintColor(const CPoint& cPoint, BYTE listType);

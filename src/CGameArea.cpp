@@ -1077,6 +1077,36 @@ BOOLEAN CGameArea::GetEntryPoint(const CString& sName, CPoint& ptEnter, SHORT& f
     return FALSE;
 }
 
+// 0x470D80
+int CGameArea::GetHeightOffset(const CPoint& pt, BYTE listType)
+{
+    BYTE value;
+    int nOffset = 0;
+
+    if (listType != CGameObject::LIST_FLIGHT
+        && m_bmHeight.GetRes() != NULL) {
+        m_bmHeight.GetPixelValue(value, pt.x / 16, pt.y / 12, TRUE);
+        nOffset = 8 - value;
+        if (nOffset >= 7) {
+            nOffset = 7;
+        } else if (nOffset <= -7) {
+            nOffset = -7;
+        }
+
+        if (nOffset == CGameObject::LIST_FRONT) {
+            int index = (m_search.m_GridSquareDimensions.cx * (pt.y / 12) + pt.x / 16) / 2;
+            if ((m_visibility.m_pDynamicHeight[index] & 0xF0) != 0) {
+                nOffset -= 7;
+            }
+            if (nOffset <= -7) {
+                nOffset = -7;
+            }
+        }
+    }
+
+    return nOffset;
+}
+
 // 0x470E60
 void CGameArea::IncrHeightDynamic(const CPoint& point)
 {
