@@ -2461,7 +2461,231 @@ void CGameArea::SetSoundEnvironment()
 // 0x4794E0
 void CGameArea::SortLists()
 {
-    // TODO: Incomplete.
+    CTypedPtrList<CPtrList, CGameObject*> sortObjectsAdd;
+    CGameObject** pObjects = NULL;
+    LONG iObject;
+    CGameObject* pObject;
+    BYTE rc;
+    POSITION pos;
+    INT cnt;
+    INT cnt2;
+
+    EnterCriticalSection(&(g_pBaldurChitin->m_pEngineWorld->field_106));
+
+    if (AfxIsValidAddress(&m_header, sizeof(m_header), 1)) {
+        g_pBaldurChitin->GetObjectGame()->BeginListManipulation(this);
+
+        INT nFrontAdd = m_lVertSortAdd.GetCount();
+        INT nFront = m_lVertSort.GetCount() - m_lVertSortRemove.GetCount();
+
+        BOOLEAN bSort;
+        if (nFrontAdd != 0
+            || (m_firstRender != 0
+                && m_pGame->GetWorldTimer()->m_gameTime % 5 == 0
+                && g_pBaldurChitin->GetObjectGame()->GetVisibleArea() == this)) {
+            bSort = TRUE;
+
+            if (nFront + nFrontAdd == 0) {
+                LeaveCriticalSection(&(g_pBaldurChitin->m_pEngineWorld->field_106));
+                return;
+            }
+
+            pObjects = new CGameObject*[nFront + nFrontAdd];
+            if (pObjects == NULL) {
+                LeaveCriticalSection(&(g_pBaldurChitin->m_pEngineWorld->field_106));
+                return;
+            }
+        } else {
+            bSort = FALSE;
+        }
+
+        while (!m_lVertSortAdd.IsEmpty()) {
+            iObject = reinterpret_cast<LONG>(m_lVertSortAdd.RemoveHead());
+
+            do {
+                rc = m_pGame->GetObjectArray()->GetShare(iObject,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    &pObject,
+                    INFINITE);
+            } while (rc == CGameObjectArray::DENIED);
+
+            if (rc == CGameObjectArray::SUCCESS) {
+                pos = sortObjectsAdd.GetHeadPosition();
+                while (pos != NULL) {
+                    if (sortObjectsAdd.GetAt(pos)->GetPos().y >= pObject->GetPos().y) {
+                        break;
+                    }
+                    sortObjectsAdd.GetNext(pos);
+                }
+
+                if (pos != NULL) {
+                    sortObjectsAdd.InsertBefore(pos, pObject);
+                } else {
+                    sortObjectsAdd.AddTail(pObject);
+                }
+
+                m_pGame->GetObjectArray()->ReleaseShare(iObject,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            } else if (rc != CGameObjectArray::DELETED) {
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+                // __LINE__: 8076
+                UTIL_ASSERT(FALSE);
+            }
+        }
+
+        cnt = 0;
+        while (!sortObjectsAdd.IsEmpty()) {
+            pObjects[cnt++] = sortObjectsAdd.RemoveHead();
+        }
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+        // __LINE__: 8099
+        UTIL_ASSERT(cnt == nFrontAdd);
+
+        while (!m_lVertSortBackRemove.IsEmpty()) {
+            m_lVertSortBack.RemoveAt(m_lVertSortBackRemove.RemoveHead());
+        }
+
+        while (!m_lVertSortBackAdd.IsEmpty()) {
+            do {
+                // FIXME: Should be outside of the loop.
+                iObject = reinterpret_cast<LONG>(m_lVertSortBackAdd.RemoveHead());
+                rc = m_pGame->GetObjectArray()->GetShare(iObject,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    &pObject,
+                    INFINITE);
+            } while (rc == CGameObjectArray::DENIED);
+
+            if (rc == CGameObjectArray::SUCCESS) {
+                if (m_lVertSortBack.IsEmpty()) {
+                    m_lVertSortBack.AddTail(reinterpret_cast<int*>(pObject->GetId()));
+                } else {
+                    m_lVertSortBack.InsertBefore(m_lVertSortBack.GetTailPosition(),
+                        reinterpret_cast<int*>(pObject->GetId()));
+                }
+
+                m_pGame->GetObjectArray()->ReleaseShare(iObject,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            } else if (rc == CGameObjectArray::DELETED) {
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+                // __LINE__: 8148
+                UTIL_ASSERT(FALSE);
+            }
+        }
+
+        while (!m_lVertSortFlightRemove.IsEmpty()) {
+            m_lVertSortFlight.RemoveAt(m_lVertSortFlightRemove.RemoveHead());
+        }
+
+        while (!m_lVertSortFlightAdd.IsEmpty()) {
+            do {
+                // FIXME: Should be outside of the loop.
+                iObject = reinterpret_cast<LONG>(m_lVertSortFlightAdd.RemoveHead());
+                rc = m_pGame->GetObjectArray()->GetShare(iObject,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    &pObject,
+                    INFINITE);
+            } while (rc == CGameObjectArray::DENIED);
+
+            if (rc == CGameObjectArray::SUCCESS) {
+                if (m_lVertSortFlight.IsEmpty()) {
+                    m_lVertSortFlight.AddTail(reinterpret_cast<int*>(pObject->GetId()));
+                } else {
+                    m_lVertSortFlight.InsertBefore(m_lVertSortFlight.GetTailPosition(),
+                        reinterpret_cast<int*>(pObject->GetId()));
+                }
+
+                m_pGame->GetObjectArray()->ReleaseShare(iObject,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            } else if (rc == CGameObjectArray::DELETED) {
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+                // __LINE__: 8195
+                UTIL_ASSERT(FALSE);
+            }
+        }
+
+        while (!m_lVertSortRemove.IsEmpty()) {
+            m_lVertSort.RemoveAt(m_lVertSortRemove.RemoveHead());
+        }
+
+        if (bSort) {
+            while (!m_lVertSort.IsEmpty()) {
+                iObject = reinterpret_cast<LONG>(m_lVertSort.RemoveHead());
+
+                do {
+                    rc = m_pGame->GetObjectArray()->GetShare(iObject,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        &pObject,
+                        INFINITE);
+                } while (rc == CGameObjectArray::DENIED);
+
+                if (rc == CGameObjectArray::SUCCESS) {
+                    pObjects[cnt++] = pObject;
+                } else {
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+                    // __LINE__: 8263
+                    UTIL_ASSERT(FALSE);
+                }
+            }
+
+            m_lVertSort.RemoveAll();
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+            // __LINE__: 8268
+            UTIL_ASSERT(cnt == nFront + nFrontAdd);
+
+            if (nFront > 1) {
+                for (cnt = 0; cnt < nFront - 1; cnt++) {
+                    BOOL bDone = TRUE;
+
+                    for (cnt2 = 1; cnt < nFront - cnt; cnt++) {
+                        if (pObjects[nFrontAdd + cnt2 - 1]->GetPos().y > pObjects[nFrontAdd + cnt2]->GetPos().y) {
+                            pObject = pObjects[nFrontAdd + cnt2 - 1];
+                            pObjects[nFrontAdd + cnt2 - 1] = pObjects[nFrontAdd + cnt2];
+                            pObjects[nFrontAdd + cnt2] = pObject;
+                            bDone = FALSE;
+                        }
+                    }
+
+                    if (bDone) {
+                        break;
+                    }
+                }
+            }
+
+            cnt = 0;
+            cnt2 = 0;
+            while (cnt < nFrontAdd || cnt2 < nFront) {
+                if (cnt2 != nFront
+                    && (cnt == nFrontAdd || pObjects[cnt]->GetPos().y > pObjects[cnt2]->GetPos().y)) {
+                    pos = m_lVertSort.AddTail(reinterpret_cast<int*>(pObjects[cnt2]->GetId()));
+                    pObjects[cnt2]->SetVertListPos(pos);
+                    m_pGame->GetObjectArray()->ReleaseShare(pObjects[cnt2]->GetId(),
+                        CGameObjectArray::THREAD_ASYNCH,
+                        INFINITE);
+                    cnt2++;
+                } else {
+                    pos = m_lVertSort.AddTail(reinterpret_cast<int*>(pObjects[cnt]->GetId()));
+                    pObjects[cnt]->SetVertListPos(pos);
+                    m_pGame->GetObjectArray()->ReleaseShare(pObjects[cnt]->GetId(),
+                        CGameObjectArray::THREAD_ASYNCH,
+                        INFINITE);
+                    cnt++;
+                }
+            }
+        }
+
+        g_pBaldurChitin->GetObjectGame()->EndListManipulation(this);
+    }
+
+    LeaveCriticalSection(&(g_pBaldurChitin->m_pEngineWorld->field_106));
+
+    if (pObjects != NULL) {
+        delete pObjects;
+    }
 }
 
 // 0x479CC0

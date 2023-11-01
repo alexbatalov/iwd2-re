@@ -272,9 +272,9 @@ public:
     /* 09E6 */ CTypedPtrList<CPtrList, int*> m_lVertSortAdd; // NOTE: Stores actual ints disguised as pointers.
     /* 0A02 */ CTypedPtrList<CPtrList, int*> m_lVertSortBackAdd; // NOTE: Stores actual ints disguised as pointers.
     /* 0A1E */ CTypedPtrList<CPtrList, int*> m_lVertSortFlightAdd; // NOTE: Stores actual ints disguised as pointers.
-    /* 0A3A */ CTypedPtrList<CPtrList, int*> m_lVertSortRemove; // NOTE: Stores actual ints disguised as pointers.
-    /* 0A56 */ CTypedPtrList<CPtrList, int*> m_lVertSortBackRemove; // NOTE: Stores actual ints disguised as pointers.
-    /* 0A72 */ CTypedPtrList<CPtrList, int*> m_lVertSortFlightRemove; // NOTE: Stores actual ints disguised as pointers.
+    /* 0A3A */ CTypedPtrList<CPtrList, POSITION> m_lVertSortRemove;
+    /* 0A56 */ CTypedPtrList<CPtrList, POSITION> m_lVertSortBackRemove;
+    /* 0A72 */ CTypedPtrList<CPtrList, POSITION> m_lVertSortFlightRemove;
     /* 0A8E */ CTypedPtrList<CPtrList, CTiledObject*> m_lTiledObjects;
     /* 0AC6 */ CPoint m_ptOldViewPos;
     /* 0ACE */ CVariableHash m_variables;
