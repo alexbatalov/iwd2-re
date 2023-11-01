@@ -1476,9 +1476,56 @@ BOOL CScreenWorld::TogglePauseGame(char a2, char a3, int a4)
 }
 
 // 0x68E6E0
-BOOLEAN CScreenWorld::ReadyMovie(const CResRef& movieResRef, BOOLEAN bForcedFromServer)
+BOOLEAN CScreenWorld::ReadyMovie(const CResRef& res, BOOLEAN bForcedFromServer)
 {
-    return FALSE;
+    if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+        && !g_pChitin->cNetwork.GetSessionHosting()
+        && !bForcedFromServer) {
+        if (res != CInfinity::DAWN_MOVIE
+            && res != CInfinity::DUSK_MOVIE
+            && res != "DEATH1") {
+            g_pBaldurChitin->GetBaldurMessage()->SendMovieRequestToServer(res);
+        }
+        return FALSE;
+    }
+
+    if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+        && g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+        CString cResString;
+        res.CopyToString(cResString);
+
+        BYTE movieResRef[RESREF_SIZE];
+        memcpy(movieResRef, cResString.GetBuffer(RESREF_SIZE), RESREF_SIZE);
+
+        g_pBaldurChitin->m_pEngineWorld->StartMovieMultiplayerHost(movieResRef);
+        return FALSE;
+    }
+
+    m_movie = res;
+    if (m_movie == CInfinity::DAWN_MOVIE
+        || m_movie == CInfinity::DUSK_MOVIE
+        || m_movie == "DEATH1") {
+        g_pBaldurChitin->m_pEngineProjector->field_145 = 1;
+    }
+
+    if (bForcedFromServer == TRUE) {
+        if (m_movie == CInfinity::DAWN_MOVIE) {
+            g_pBaldurChitin->m_pEngineWorld->m_bSetDayOnActivate = TRUE;
+        } else if (m_movie == CInfinity::DUSK_MOVIE) {
+            g_pBaldurChitin->m_pEngineWorld->m_bSetNightOnActivate = TRUE;
+        }
+
+        if (m_movie == "DEATH1") {
+            g_pBaldurChitin->GetActiveEngine()->SelectEngine(g_pBaldurChitin->m_pEngineWorld);
+            g_pBaldurChitin->m_pEngineWorld->m_bGameOverPanel = TRUE;
+        }
+    }
+
+    g_pBaldurChitin->GetObjectCursor()->m_bVisible = FALSE;
+    g_pBaldurChitin->m_pEngineProjector->PlayMovie(m_movie);
+    m_movie = "";
+
+    return TRUE;
 }
 
 // 0x68E950

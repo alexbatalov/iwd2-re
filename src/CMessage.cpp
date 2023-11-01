@@ -2558,6 +2558,16 @@ BOOLEAN CBaldurMessage::SendMapWorldRevealArea(CString sAreaResRef)
 
 // FIXME: `cResMovie` should be reference.
 //
+// 0x436690
+BOOLEAN CBaldurMessage::SendMovieRequestToServer(CResRef cResMovie)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// FIXME: `cResMovie` should be reference.
+//
 // 0x4369E0
 BOOLEAN CBaldurMessage::MovieAnnounceStatus(CResRef cResMovie)
 {

@@ -67,7 +67,7 @@ public:
     void StartScroll(CPoint dest, SHORT speed);
     void AsynchronousUpdate(BOOL bActiveEngine);
     BOOL TogglePauseGame(char a2, char a3, int a4);
-    BOOLEAN ReadyMovie(const CResRef& movieResRef, BOOLEAN bForcedFromServer);
+    BOOLEAN ReadyMovie(const CResRef& res, BOOLEAN bForcedFromServer);
     BOOLEAN ReadyEndCredits(BOOLEAN bForcedFromServer);
     void EndDialog(BOOLEAN bForceExecution, BOOLEAN fullEnd);
     void SaveScreen();
