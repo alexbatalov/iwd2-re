@@ -1874,7 +1874,44 @@ void CGameArea::ProgressBarCallback(DWORD dwSize, BOOLEAN bInitialize)
 // 0x474F00
 void CGameArea::SetListenPosition()
 {
-    // TODO: Incomplete.
+    BYTE cnt;
+    BYTE range;
+    CPoint ptListen;
+    CPoint ptCheck;
+
+    ptListen.x = m_cInfinity.nNewX + m_cInfinity.rViewPort.Width() / 2;
+    ptListen.y = m_cInfinity.nNewY + m_cInfinity.rViewPort.Height() / 2;
+
+    if (m_visibility.IsTileExplored(m_visibility.PointToTile(ptListen))) {
+        g_pBaldurChitin->cSoundMixer.SetListenPosition(ptListen.x, ptListen.y, 0);
+        return;
+    }
+
+    cnt = 0;
+    range = m_cInfinity.rViewPort.Width() / CVisibilityMap::SQUARE_SIZEX;
+    ptCheck.x = m_cInfinity.nNewX + CVisibilityMap::SQUARE_SIZEX / 2;
+    ptCheck.y = m_cInfinity.nNewY + m_cInfinity.rViewPort.Height() / 2;
+    while (cnt < range) {
+        if (m_visibility.IsTileExplored(m_visibility.PointToTile(ptCheck))) {
+            g_pBaldurChitin->cSoundMixer.SetListenPosition(ptListen.x, ptListen.y, 0);
+            return;
+        }
+        ptCheck.x += CVisibilityMap::SQUARE_SIZEX;
+        cnt++;
+    }
+
+    cnt = 0;
+    range = m_cInfinity.rViewPort.Width() / CVisibilityMap::SQUARE_SIZEX;
+    ptCheck.x = m_cInfinity.nNewX + m_cInfinity.rViewPort.Width() / 2;
+    ptCheck.y = m_cInfinity.nNewY + CVisibilityMap::SQUARE_SIZEY / 2;
+    while (cnt < range) {
+        if (m_visibility.IsTileExplored(m_visibility.PointToTile(ptCheck))) {
+            g_pBaldurChitin->cSoundMixer.SetListenPosition(ptListen.x, ptListen.y, 0);
+            return;
+        }
+        ptCheck.y += CVisibilityMap::SQUARE_SIZEY;
+        cnt++;
+    }
 }
 
 // 0x4750E0
