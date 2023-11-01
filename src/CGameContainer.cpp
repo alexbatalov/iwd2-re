@@ -9,6 +9,7 @@
 #include "CResRef.h"
 #include "CScreenWorld.h"
 #include "CUtil.h"
+#include "CVidPoly.h"
 
 // 0x8D3988
 const CResRef CGameContainer::RESREF_AR6051("AR6051");
@@ -469,6 +470,43 @@ void CGameContainer::DebugDump(const CString& message, BOOLEAN bEchoToScreen)
             }
         }
     }
+}
+
+// 0x47E8A0
+BOOL CGameContainer::IsOver(const CPoint& pt)
+{
+    if (!m_rBounding.PtInRect(pt)) {
+        return FALSE;
+    }
+
+    if (m_containerType == 4) {
+        if (m_lstItems.IsEmpty()) {
+            return FALSE;
+        }
+
+        SHORT cnt = 0;
+        POSITION pos = m_lstItems.GetHeadPosition();
+        while (cnt == 0 && pos != NULL) {
+            CItem* pItem = m_lstItems.GetNext(pos);
+            if (pItem != NULL) {
+                cnt++;
+            }
+        }
+
+        if (cnt == 0) {
+            return FALSE;
+        }
+    }
+
+    if (!g_pBaldurChitin->GetObjectGame()->GetGroup()->IsPartyLeader()) {
+        return FALSE;
+    }
+
+    if (m_pPolygon != NULL) {
+        return CVidPoly::IsPtInPoly(m_pPolygon, m_nPolygon, pt);
+    }
+
+    return TRUE;
 }
 
 // 0x47FE10
