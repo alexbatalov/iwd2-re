@@ -1655,7 +1655,64 @@ void CScreenWorld::AddGold(DWORD dwGold)
 // 0x690EB0
 void CScreenWorld::StopContainer()
 {
-    // TODO: Incomplete.
+    if (GetManager()->field_0 == 0) {
+        if (m_nAutoHideInterface > 0) {
+            m_nAutoHideInterface++;
+        }
+    } else {
+        m_nAutoHideInterface++;
+        UnhideInterface();
+    }
+
+    m_newViewSize = CInfinity::stru_8E79B8;
+    m_waitingOnResize = 2;
+    m_bForceViewSize = FALSE;
+
+    sub_695570(TRUE, FALSE);
+
+    m_cUIManager.GetPanel(8)->SetActive(FALSE);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 5353
+    UTIL_ASSERT(pGame != NULL);
+
+    LONG nContainer = pGame->m_iContainer;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 5355
+    UTIL_ASSERT(nContainer != CGameObjectArray::INVALID_INDEX);
+
+    switch (pGame->GetContainerType(nContainer)) {
+    case 1:
+        PlayGUISound(CResRef("GAM_12A"));
+        break;
+    case 2:
+        PlayGUISound(CResRef("AMB_D05B"));
+        break;
+    case 3:
+        PlayGUISound(CResRef("AMB_D13"));
+        break;
+    case 9:
+        PlayGUISound(CResRef("GAM_05"));
+        break;
+    case 11:
+        PlayGUISound(CResRef("AMB_D13"));
+        break;
+    case 12:
+        PlayGUISound(CResRef("AMB_D05B"));
+        break;
+    }
+
+    pGame->CompressContainer(nContainer);
+
+    if (m_nAutoHideInterface > 0) {
+        m_nAutoHideInterface--;
+        HideInterface();
+    }
+
+    field_EA4 = -1;
 }
 
 // 0x691090
