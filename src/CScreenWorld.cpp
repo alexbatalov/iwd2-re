@@ -1816,6 +1816,21 @@ void CScreenWorld::StopStore()
     // TODO: Incomplete.
 }
 
+// 0x691C70
+CRect CScreenWorld::GetNewViewSize()
+{
+    if (m_waitingOnResize) {
+        return m_newViewSize;
+    }
+
+    CGameArea* pVisibleArea = g_pBaldurChitin->GetObjectGame()->GetVisibleArea();
+    if (pVisibleArea != NULL) {
+        return pVisibleArea->GetInfinity()->rViewPort;
+    }
+
+    return CInfinity::stru_8E79B8;
+}
+
 // 0x691D10
 void CScreenWorld::HandleAmbiance()
 {

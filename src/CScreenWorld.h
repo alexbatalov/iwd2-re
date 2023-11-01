@@ -81,6 +81,7 @@ public:
     void StopCommand();
     void StartStore(const CAIObjectType& cAIProprietor, const CAIObjectType& cAICustomer, CResRef cResStore, BOOLEAN bInitiate);
     void StopStore();
+    CRect GetNewViewSize();
     void HandleAmbiance();
     void HandleDeathReaction();
     POSITION DisplayText(const CString& sName, const CString& sText, COLORREF rgbNameColor, COLORREF rgbTextColor, LONG lMarker, BOOLEAN bMoveToTop);
