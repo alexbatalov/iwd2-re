@@ -2113,7 +2113,35 @@ void CScreenWorld::SetPendingRest(INT nHP, BOOLEAN bRenting, BOOLEAN bMovie)
 // 0x693520
 void CScreenWorld::StartRestMultiplayerHost(INT nHP, BOOLEAN bRenting, BOOLEAN bMovie)
 {
-    // TODO: Incomplete.
+    if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL) {
+        CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+        BOOL bListenToJoin = pGame->GetMultiplayerSettings()->GetListenToJoinOption();
+        pGame->GetMultiplayerSettings()->SetListenToJoinOption(FALSE, TRUE);
+        g_pBaldurChitin->m_pEngineWorld->m_bEndMajorEventListenToJoin = bListenToJoin;
+        g_pBaldurChitin->m_pEngineWorld->m_bEndMajorEventPauseStatus = g_pBaldurChitin->m_pEngineWorld->m_bPaused;
+    }
+
+    for (SHORT nPortrait = 0; nPortrait < g_pBaldurChitin->GetObjectGame()->GetNumCharacters(); nPortrait++) {
+        LONG nCharacterId = g_pBaldurChitin->GetObjectGame()->GetCharacterId(nPortrait);
+
+        CMessage101* pMessage = new CMessage101(FALSE,
+            nCharacterId,
+            nCharacterId,
+            TRUE);
+
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+    }
+
+    CInfGame::m_bHealPartyOnRest = bMovie;
+    g_pBaldurChitin->GetObjectGame()->RestPartyPrivate(nHP, bRenting);
+    CInfGame::m_bHealPartyOnRest = FALSE;
+
+    m_bRestMovie = FALSE;
+
+    if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+        BOOL bListenToJoin = g_pBaldurChitin->m_pEngineWorld->m_bEndMajorEventPauseStatus;
+        g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->SetListenToJoinOption(bListenToJoin, TRUE);
+    }
 }
 
 // 0x693680

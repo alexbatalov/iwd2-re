@@ -212,6 +212,7 @@ public:
     CString GetDirCharacters();
     BYTE GetCharactersControlled();
     BOOLEAN RestParty(int a2, unsigned char a3);
+    BOOLEAN RestPartyPrivate(INT nHP, BOOLEAN bRenting);
     BOOL CanRestParty(STRREF& strError, unsigned char a2, unsigned char a3, unsigned char a4);
     CStringList* GetPortraits();
     CStringList* GetImportCharacters();

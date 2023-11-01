@@ -3692,6 +3692,14 @@ BOOLEAN CInfGame::RestParty(int a2, unsigned char a3)
     return FALSE;
 }
 
+// 0x5C1350
+BOOLEAN CInfGame::RestPartyPrivate(INT nHP, BOOLEAN bRenting)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x5C1E30
 BOOL CInfGame::CanRestParty(STRREF& strError, unsigned char a2, unsigned char a3, unsigned char a4)
 {
