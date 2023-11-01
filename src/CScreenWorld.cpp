@@ -1825,7 +1825,34 @@ void CScreenWorld::HandleAmbiance()
 // 0x692090
 void CScreenWorld::HandleDeathReaction()
 {
-    // TODO: Incomplete.
+    if (!m_deathSoundList.IsEmpty()) {
+        CDeathSound* pDeathSound = m_deathSoundList.GetHead();
+        if (!pDeathSound->m_started) {
+            pDeathSound->m_started = TRUE;
+            if (g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(pDeathSound->m_characterId) != -1) {
+                CMessageVerbalConstant* pVerbalConstant = new CMessageVerbalConstant(pDeathSound->m_soundNum,
+                    pDeathSound->m_characterId,
+                    pDeathSound->m_characterId);
+
+                g_pBaldurChitin->GetMessageHandler()->AddMessage(pVerbalConstant, FALSE);
+
+                if (pDeathSound->m_pTrigger != NULL) {
+                    CMessageSetTrigger* pSetTrigger = new CMessageSetTrigger(*pDeathSound->m_pTrigger,
+                        pDeathSound->m_characterId,
+                        pDeathSound->m_characterId);
+
+                    g_pBaldurChitin->GetMessageHandler()->AddMessage(pSetTrigger, FALSE);
+
+                    delete pDeathSound->m_pTrigger;
+                    pDeathSound->m_pTrigger = NULL;
+                }
+            }
+        } else {
+            if (pDeathSound->m_soundLength-- <= 0) {
+                delete m_deathSoundList.RemoveHead();
+            }
+        }
+    }
 }
 
 // 0x692290
