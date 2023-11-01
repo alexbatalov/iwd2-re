@@ -58,6 +58,7 @@ public:
     /* 00C0 */ void TimerAsynchronousUpdate() override;
     /* 00C4 */ void TimerSynchronousUpdate() override;
     /* 00D0 */ int GetSelectedCharacter() override;
+    /* 00E8 */ void UpdateContainerStatus(LONG nContainerId, SHORT nSlotNum) override;
     /* 00F0 */ void OnRestButtonClick() override;
     /* 0104 */ void CancelEngine() override;
     /* 010C */ void UpdatePartyGoldStatus() override;

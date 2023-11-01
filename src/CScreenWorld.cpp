@@ -1475,6 +1475,31 @@ BOOL CScreenWorld::TogglePauseGame(char a2, char a3, int a4)
     return TRUE;
 }
 
+// 0x68E630
+void CScreenWorld::UpdateContainerStatus(LONG nContainerId, SHORT nSlotNum)
+{
+    SHORT nIndex = nSlotNum - 5 * m_nTopContainerRow;
+    CUIPanel* pPanel = m_cUIManager.GetPanel(8);
+    if (pPanel->m_bActive) {
+        if (nContainerId == g_pBaldurChitin->GetObjectGame()->m_iContainer) {
+            if (nSlotNum == -1) {
+                // NOTE: Signed compare.
+                for (INT nButtonID = 0; nButtonID <= 9; nButtonID++) {
+                    pPanel->GetControl(nButtonID)->InvalidateRect();
+                }
+            } else if (nSlotNum >= 0 && nSlotNum <= 9) {
+                CUIControlBase* pControl = pPanel->GetControl(nSlotNum);
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+                // __LINE__: 4044
+                UTIL_ASSERT(pControl != NULL);
+
+                pControl->InvalidateRect();
+            }
+        }
+    }
+}
+
 // 0x68E6E0
 BOOLEAN CScreenWorld::ReadyMovie(const CResRef& res, BOOLEAN bForcedFromServer)
 {
