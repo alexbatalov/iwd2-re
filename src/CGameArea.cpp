@@ -289,9 +289,85 @@ LONG CGameArea::GetGroundPile(const CPoint& ptPos)
 // 0x46F5A0
 BOOLEAN CGameArea::CanSaveGame(STRREF& strError)
 {
-    // TODO: Incomplete.
+    CGameObjectArray* pObjectArray = m_pGame->GetObjectArray();
+    POSITION pos;
+    LONG iObject;
+    CGameObject* pObject;
+    BYTE rc;
 
-    return FALSE;
+    if ((m_header.m_flags & 0x1) != 0) {
+        strError = 16502;
+        return FALSE;
+    }
+
+    pos = m_lVertSortFlight.GetTailPosition();
+    while (pos != NULL) {
+        iObject = reinterpret_cast<LONG>(m_lVertSortFlight.GetPrev(pos));
+
+        rc = pObjectArray->GetShare(iObject,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (!pObject->CanSaveGame(strError)) {
+                pObjectArray->ReleaseShare(iObject,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+                return FALSE;
+            }
+
+            pObjectArray->ReleaseShare(iObject,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+
+    pos = m_lVertSort.GetTailPosition();
+    while (pos != NULL) {
+        iObject = reinterpret_cast<LONG>(m_lVertSort.GetPrev(pos));
+
+        rc = pObjectArray->GetShare(iObject,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (!pObject->CanSaveGame(strError)) {
+                pObjectArray->ReleaseShare(iObject,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+                return FALSE;
+            }
+
+            pObjectArray->ReleaseShare(iObject,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+
+    pos = m_lVertSortBack.GetTailPosition();
+    while (pos != NULL) {
+        iObject = reinterpret_cast<LONG>(m_lVertSortBack.GetPrev(pos));
+
+        rc = pObjectArray->GetShare(iObject,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (!pObject->CanSaveGame(strError)) {
+                pObjectArray->ReleaseShare(iObject,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+                return FALSE;
+            }
+
+            pObjectArray->ReleaseShare(iObject,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+
+    strError = -1;
+    return TRUE;
 }
 
 // 0x46E3D0
