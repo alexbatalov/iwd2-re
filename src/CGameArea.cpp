@@ -2075,7 +2075,7 @@ void CGameArea::OnDeactivation()
         }
     }
 
-    g_pBaldurChitin->sub_4286B0(m_resRef, g_pBaldurChitin->cSoundMixer.m_nCurrentSong);
+    g_pBaldurChitin->AddMusicPosition(m_resRef, g_pBaldurChitin->cSoundMixer.m_nCurrentSong);
 
     m_firstRender = 0;
 }
@@ -2628,7 +2628,7 @@ void CGameArea::SetDawn(BYTE nIntensity, BOOLEAN bPlayDayNightMovie)
 
     if (nIntensity == CInfinity::TRUE_DAWNDUSK_INTENSITY) {
         BYTE nSong = GetSong(0);
-        g_pBaldurChitin->sub_4288E0(m_resRef, nSong);
+        g_pBaldurChitin->RemoveMusicPosition(m_resRef, nSong);
         PlaySong(0, 0x4 | 0x2);
     }
 
@@ -3163,7 +3163,7 @@ void CGameArea::PlaySong(SHORT slot, DWORD flags)
         if (nSong != g_pChitin->cSoundMixer.m_nCurrentSong) {
             INT nSection;
             INT nPosition;
-            g_pBaldurChitin->sub_428820(m_resRef, nSong, nSection, nPosition);
+            g_pBaldurChitin->GetMusicPosition(m_resRef, nSong, nSection, nPosition);
 
             if (slot == 2 || slot == 3 || slot == 4) {
                 g_pBaldurChitin->cSoundMixer.StartSong(nSong, 0x1);
@@ -3257,7 +3257,7 @@ int CGameArea::EnterSpawn()
 // 0x47A190
 void CGameArea::sub_47A190()
 {
-    g_pBaldurChitin->sub_4286B0(m_resRef, g_pBaldurChitin->cSoundMixer.m_nCurrentSong);
+    g_pBaldurChitin->AddMusicPosition(m_resRef, g_pBaldurChitin->cSoundMixer.m_nCurrentSong);
 }
 
 // -----------------------------------------------------------------------------

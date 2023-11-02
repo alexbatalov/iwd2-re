@@ -38,16 +38,16 @@ class CScreenStore;
 class CScreenWorld;
 class CScreenWorldMap;
 
+class CMusicPosition {
+public:
+    CResRef m_areaResRef;
+    INT m_nSong;
+    INT m_nSection;
+    INT m_nPosition;
+};
+
 class CBaldurChitin : public CChitin {
 public:
-    // TODO: Something sound-related.
-    struct S4F40 {
-        CResRef cResRef;
-        int field_8;
-        int field_C;
-        int field_10;
-    };
-
     static const GUID GUID_BALDUR_GATE;
     static const DWORD MINIMUM_DRIVE_SPACE;
     static const DWORD MINIMUM_DRIVE_SECTORS;
@@ -88,9 +88,9 @@ public:
     CTlkTable& GetTlkTable();
     CMessageHandler* GetMessageHandler();
 
-    void sub_4286B0(CResRef cResRef, INT nSong);
-    BOOL sub_428820(CResRef cResRef, INT nSong, INT& nSection, INT& nPosition);
-    BOOL sub_4288E0(CResRef cResRef, INT nSong);
+    void AddMusicPosition(CResRef cResRef, INT nSong);
+    BOOL GetMusicPosition(CResRef cResRef, INT nSong, INT& nSection, INT& nPosition);
+    BOOL RemoveMusicPosition(CResRef cResRef, INT nSong);
 
     /* 0000 */ void SynchronousUpdate() override;
     /* 0008 */ DWORD GetIDSInvalidVideoMode() override;
@@ -198,7 +198,7 @@ public:
     /* 4A34 */ CVidFont field_4A34;
     /* 4F38 */ int field_4F38;
     /* 4F3C */ int field_4F3C;
-    /* 4F40 */ S4F40* field_4F40;
+    /* 4F40 */ CMusicPosition* m_pMusicPositions;
 };
 
 extern CBaldurChitin* g_pBaldurChitin;

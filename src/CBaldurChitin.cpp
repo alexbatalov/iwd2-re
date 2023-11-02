@@ -83,6 +83,8 @@
 #define NT_SMOOTH_SOUND_KEY "NT Smooth Sound"
 #define MUSIC_THREAD_PRIORITY_KEY "Music Thread Priority"
 
+#define MAX_MUSIC_POSITIONS 64
+
 CChitin* g_pChitin;
 CBaldurChitin* g_pBaldurChitin;
 
@@ -725,9 +727,9 @@ CBaldurChitin::~CBaldurChitin()
         m_pObjectCursor = NULL;
     }
 
-    if (field_4F40 != NULL) {
-        delete field_4F40;
-        field_4F40 = NULL;
+    if (m_pMusicPositions != NULL) {
+        delete m_pMusicPositions;
+        m_pMusicPositions = NULL;
     }
 }
 
@@ -794,12 +796,12 @@ void CBaldurChitin::Init(HINSTANCE hInstance)
     CString path;
     BOOLEAN bOpened;
 
-    field_4F40 = new S4F40[64];
-    for (int k = 0; k < 64; k++) {
-        field_4F40[k].cResRef = "XXXXXXXX";
-        field_4F40[k].field_8 = -1;
-        field_4F40[k].field_C = 0;
-        field_4F40[k].field_10 = 0;
+    m_pMusicPositions = new CMusicPosition[MAX_MUSIC_POSITIONS];
+    for (int k = 0; k < MAX_MUSIC_POSITIONS; k++) {
+        m_pMusicPositions[k].m_areaResRef = "XXXXXXXX";
+        m_pMusicPositions[k].m_nSong = -1;
+        m_pMusicPositions[k].m_nSection = 0;
+        m_pMusicPositions[k].m_nPosition = 0;
     }
 
     g_pChitin->cDimm.AddToDirectoryList(OVERRIDE_DIR_NAME, FALSE);
@@ -2202,23 +2204,88 @@ CInfGame* CBaldurChitin::GetObjectGame()
 }
 
 // 0x4286B0
-void CBaldurChitin::sub_4286B0(CResRef cResRef, INT nSong)
+void CBaldurChitin::AddMusicPosition(CResRef cResRef, INT nSong)
 {
-    // TODO: Incomplete.
+    if (m_pMusicPositions != NULL
+        && cResRef != "XXXXXXXX"
+        && nSong > 0
+        && g_pBaldurChitin->cSoundMixer.GetSongPlaying() == nSong) {
+        INT nSection = g_pBaldurChitin->cSoundMixer.GetSectionPlaying();
+        if (nSection >= 0) {
+            INT nIndex = 0;
+            while (nIndex < MAX_MUSIC_POSITIONS - 1) {
+                if (m_pMusicPositions[nIndex].m_areaResRef == cResRef) {
+                    break;
+                }
+                nIndex++;
+            }
+
+            while (nIndex > 0) {
+                m_pMusicPositions[nIndex] = m_pMusicPositions[nIndex - 1];
+                nIndex--;
+            }
+
+            m_pMusicPositions[0].m_areaResRef = cResRef;
+            m_pMusicPositions[0].m_nSong = nSong;
+            m_pMusicPositions[0].m_nSection = nSection;
+            m_pMusicPositions[0].m_nPosition = g_pBaldurChitin->cSoundMixer.GetMusicPosition();
+        }
+    }
 }
 
 // 0x428820
-BOOL CBaldurChitin::sub_428820(CResRef cResRef, INT nSong, INT& nSection, INT& nPosition)
+BOOL CBaldurChitin::GetMusicPosition(CResRef cResRef, INT nSong, INT& nSection, INT& nPosition)
 {
-    // TODO: Incomplete.
+    if (m_pMusicPositions == NULL) {
+        return FALSE;
+    }
 
+    INT nIndex = 0;
+    while (nIndex < MAX_MUSIC_POSITIONS) {
+        if (m_pMusicPositions[nIndex].m_nSong != -1
+            && m_pMusicPositions[nIndex].m_areaResRef == cResRef) {
+            if (m_pMusicPositions[nIndex].m_nSong == nSong) {
+                nSection = m_pMusicPositions[nIndex].m_nSection;
+                nPosition = m_pMusicPositions[nIndex].m_nPosition;
+                return TRUE;
+            }
+
+            m_pMusicPositions[nIndex].m_nSong = 0;
+            m_pMusicPositions[nIndex].m_nSection = -1;
+            break;
+        }
+        nIndex++;
+    }
+
+    nSection = 0;
+    nPosition = -1;
     return FALSE;
 }
 
 // 0x4288E0
-BOOL CBaldurChitin::sub_4288E0(CResRef cResRef, INT nSong)
+BOOL CBaldurChitin::RemoveMusicPosition(CResRef cResRef, INT nSong)
 {
-    // TODO: Incomplete.
+    if (m_pMusicPositions == NULL) {
+        return FALSE;
+    }
+
+    INT nIndex = 0;
+    while (nIndex < MAX_MUSIC_POSITIONS) {
+        if (m_pMusicPositions[nIndex].m_areaResRef == cResRef && m_pMusicPositions[nIndex].m_nSong == nSong) {
+            while (nIndex < MAX_MUSIC_POSITIONS - 1) {
+                m_pMusicPositions[nIndex] = m_pMusicPositions[nIndex + 1];
+                nIndex++;
+            }
+
+            m_pMusicPositions[nIndex].m_areaResRef = "XXXXXXXX";
+            m_pMusicPositions[nIndex].m_nSong = -1;
+            m_pMusicPositions[nIndex].m_nSection = 0;
+            m_pMusicPositions[nIndex].m_nPosition = 0;
+
+            return TRUE;
+        }
+        nIndex++;
+    }
 
     return FALSE;
 }
