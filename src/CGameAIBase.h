@@ -50,6 +50,7 @@ public:
     /* 00A0 */ virtual const BYTE* GetTerrainTable();
     /* 00A8 */ virtual SHORT GetHelpRange();
     /* 00AC */ virtual void ApplyTriggers();
+    /* 00B4 */ virtual BOOL GetCanSeeInvisible();
 
     void CheckTimers(LONG cycles);
     void ClearTriggers();

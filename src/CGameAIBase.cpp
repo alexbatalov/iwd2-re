@@ -469,6 +469,12 @@ void CGameAIBase::ApplyTriggers()
     // TODO: Incomplete.
 }
 
+// 0x49FC40
+BOOL CGameAIBase::GetCanSeeInvisible()
+{
+    return TRUE;
+}
+
 // 0x45F2A0
 SHORT CGameAIBase::MoveView(CPoint dest, int speed)
 {

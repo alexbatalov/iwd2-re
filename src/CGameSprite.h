@@ -273,6 +273,7 @@ public:
     /* 007C */ void ClearAI(BOOLEAN bSetSequence) override;
     /* 009C */ const BYTE* GetVisibleTerrainTable() override;
     /* 00A0 */ const BYTE* GetTerrainTable() override;
+    /* 00B4 */ BOOL GetCanSeeInvisible() override;
     /* 00BC */ virtual void SetAIType(const CAIObjectType& typeAI, BOOL updateLive, BOOL updateStart);
     /* 00C0 */ virtual void ResetAITypeLive();
     /* 00C4 */ virtual void ResetAIType();

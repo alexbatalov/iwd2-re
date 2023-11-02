@@ -744,6 +744,16 @@ const BYTE* CGameSprite::GetTerrainTable()
     return m_terrainTable;
 }
 
+// 0x6F2C70
+BOOL CGameSprite::GetCanSeeInvisible()
+{
+    return m_curAction.m_actionID == CAIAction::DIALOGUE
+        || m_curAction.m_actionID == CAIAction::STARTDIALOG
+        || m_curAction.m_actionID == CAIAction::STARTDIALOGUENOSET
+        || m_derivedStats.m_bSeeInvisible
+        || (m_baseStats.m_flags & 0x10000) != 0;
+}
+
 // 0x6FF2F0
 void CGameSprite::DropPath()
 {

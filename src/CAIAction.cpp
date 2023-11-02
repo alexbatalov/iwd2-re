@@ -9,6 +9,9 @@ const SHORT CAIAction::NO_ACTION = 0;
 // 0x84778A
 const SHORT CAIAction::ATTACK = 3;
 
+// 0x847792
+const SHORT CAIAction::DIALOGUE = 8;
+
 // 0x8477C0
 const SHORT CAIAction::SPELL = 31;
 
@@ -39,6 +42,9 @@ const SHORT CAIAction::FORCESPELLPOINT = 114;
 // 0x847860
 const SHORT CAIAction::GIVEPARTYGOLD = 118;
 
+// 0x847886
+const SHORT CAIAction::STARTDIALOG = 137;
+
 // 0x8478B4
 const SHORT CAIAction::APPLYSPELL = 160;
 
@@ -50,6 +56,9 @@ const SHORT CAIAction::SPELLNODEC = 191;
 
 // 0x8478F4
 const SHORT CAIAction::SPELLPOINTNODEC = 192;
+
+// 0x847900
+const SHORT CAIAction::STARTDIALOGUENOSET = 198;
 
 // 0x8C6118
 const CAIAction CAIAction::NULL_ACTION;

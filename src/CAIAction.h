@@ -13,6 +13,7 @@ class CAIAction {
 public:
     static const SHORT NO_ACTION;
     static const SHORT ATTACK;
+    static const SHORT DIALOGUE;
     static const SHORT SPELL;
     static const SHORT USEITEM;
     static const SHORT CONTINUE;
@@ -22,11 +23,13 @@ public:
     static const SHORT LEAVEAREALUA;
     static const SHORT FORCESPELL;
     static const SHORT FORCESPELLPOINT;
+    static const SHORT STARTDIALOG;
     static const SHORT APPLYSPELL;
     static const SHORT REALLYFORCESPELL;
     static const SHORT SPELLNODEC;
     static const SHORT SPELLPOINTNODEC;
     static const SHORT GIVEPARTYGOLD;
+    static const SHORT STARTDIALOGUENOSET;
 
     static const CAIAction NULL_ACTION;
 
