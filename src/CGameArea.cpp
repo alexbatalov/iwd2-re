@@ -2998,7 +2998,43 @@ BYTE CGameArea::GetSong(SHORT slot)
 // 0x479E80
 void CGameArea::PlaySong(SHORT slot, DWORD flags)
 {
-    // TODO: Incomplete.
+    if (slot == 2 || slot == 3 || slot == 4) {
+        if (m_headerSound.m_battleStandOffMusic == 0
+            || m_headerSound.m_battleStandOffMusic == -1) {
+            return;
+        }
+    }
+
+    m_nCurrentSong = slot;
+
+    if (slot == 3) {
+        m_nBattleSongCounter = 150;
+    }
+
+    if (g_pBaldurChitin->GetObjectGame()->GetVisibleArea() == this) {
+        INT nSong = GetSong(slot);
+        if (nSong != g_pChitin->cSoundMixer.m_nCurrentSong) {
+            INT nSection;
+            INT nPosition;
+            g_pBaldurChitin->sub_428820(m_resRef, nSong, nSection, nPosition);
+
+            if (slot == 2 || slot == 3 || slot == 4) {
+                g_pBaldurChitin->cSoundMixer.StartSong(nSong, 0x1);
+            } else if (nSong == -1 && flags == 0x1) {
+                g_pBaldurChitin->cSoundMixer.StartSong(-1, nSection, nPosition, 0x2 | 0x1);
+            } else {
+                g_pBaldurChitin->cSoundMixer.StartSong(nSong, nSection, nPosition, flags);
+            }
+
+            if (g_pBaldurChitin->cNetwork.GetSessionHosting() == TRUE) {
+                CMessageStartCombatMusic* pStartCombatMusic = new CMessageStartCombatMusic(slot,
+                    m_nAIIndex,
+                    m_nAIIndex);
+
+                g_pBaldurChitin->GetMessageHandler()->AddMessage(pStartCombatMusic, FALSE);
+            }
+        }
+    }
 }
 
 // 0x453080

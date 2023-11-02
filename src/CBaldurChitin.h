@@ -89,6 +89,7 @@ public:
     CMessageHandler* GetMessageHandler();
 
     void sub_4286B0(CResRef cResRef, INT nSong);
+    BOOL sub_428820(CResRef cResRef, INT nSong, INT& nSection, INT& nPosition);
     BOOL sub_4288E0(CResRef cResRef, INT nSong);
 
     /* 0000 */ void SynchronousUpdate() override;

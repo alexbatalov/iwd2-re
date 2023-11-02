@@ -2207,6 +2207,14 @@ void CBaldurChitin::sub_4286B0(CResRef cResRef, INT nSong)
     // TODO: Incomplete.
 }
 
+// 0x428820
+BOOL CBaldurChitin::sub_428820(CResRef cResRef, INT nSong, INT& nSection, INT& nPosition)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x4288E0
 BOOL CBaldurChitin::sub_4288E0(CResRef cResRef, INT nSong)
 {
