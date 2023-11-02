@@ -407,16 +407,8 @@ void CScreenWorld::EngineActivated()
 
             m_cUIManager.InvalidateRect(NULL);
 
-            if (m_waitingOnResize == 0) {
-                if (g_pBaldurChitin->GetObjectGame()->GetVisibleArea() != NULL) {
-                    m_newViewSize = g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->GetInfinity()->rViewPort;
-                } else {
-                    m_newViewSize = CInfinity::stru_8E79B8;
-                }
-            }
-
-            m_waitingOnResize = 2;
-            m_bForceViewSize = TRUE;
+            // NOTE: Uninline.
+            SetNewViewSize(GetNewViewSize(), TRUE);
 
             if (m_bSetNightOnActivate) {
                 g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->GetInfinity()->SetNight();
@@ -501,7 +493,7 @@ void CScreenWorld::EngineGameInit()
     m_newViewSize.top = 0;
     m_newViewSize.right = 1;
     m_newViewSize.bottom = 1;
-    m_bForceViewSize = 0;
+    m_bForceViewSize = FALSE;
     m_waitingOnResize = 0;
     field_F44 = 0;
     m_scrollLockId = CGameObjectArray::INVALID_INDEX;
@@ -1664,9 +1656,8 @@ void CScreenWorld::StopContainer()
         UnhideInterface();
     }
 
-    m_newViewSize = CInfinity::stru_8E79B8;
-    m_waitingOnResize = 2;
-    m_bForceViewSize = FALSE;
+    // NOTE: Uninline.
+    SetNewViewSize(CInfinity::stru_8E79B8, FALSE);
 
     sub_695570(TRUE, FALSE);
 
@@ -1942,9 +1933,8 @@ POSITION CScreenWorld::DisplayText(const CString& sName, const CString& sText, C
 
             m_pActiveDialogDisplay->SetTopString(pos);
 
-            m_newViewSize = CInfinity::stru_8E79B8;
-            m_waitingOnResize = 2;
-            m_bForceViewSize = FALSE;
+            // NOTE: Uninline.
+            SetNewViewSize(CInfinity::stru_8E79B8, FALSE);
         }
     }
 
@@ -1984,9 +1974,8 @@ POSITION CScreenWorld::DisplayText(const CString& sName, const CString& sText, L
 
             // NOTE: No `SetTopString` as in the function above.
 
-            m_newViewSize = CInfinity::stru_8E79B8;
-            m_waitingOnResize = 2;
-            m_bForceViewSize = FALSE;
+            // NOTE: Uninline.
+            SetNewViewSize(CInfinity::stru_8E79B8, FALSE);
         }
     }
 
@@ -2035,9 +2024,8 @@ void CScreenWorld::HideInterface()
     INT y;
     pGame->GetVisibleArea()->GetInfinity()->GetViewPosition(x, y);
 
-    m_newViewSize = CInfinity::stru_8E7548;
-    m_waitingOnResize = 2;
-    m_bForceViewSize = FALSE;
+    // NOTE: Uninline.
+    SetNewViewSize(CInfinity::stru_8E7548, FALSE);
 
     pGame->GetVisibleArea()->GetInfinity()->SetViewPosition(x + m_newViewSize.left - field_11D0.left,
         y + m_newViewSize.top - field_11D0.top,
@@ -2073,20 +2061,27 @@ void CScreenWorld::UnhideInterface()
         INT y;
         pGame->GetVisibleArea()->GetInfinity()->GetViewPosition(x, y);
 
-        m_newViewSize = field_11D0;
-        m_waitingOnResize = 2;
-        m_bForceViewSize = FALSE;
+        // NOTE: Uninline.
+        SetNewViewSize(field_11D0, FALSE);
 
         pGame->GetVisibleArea()->GetInfinity()->SetViewPosition(x + m_newViewSize.left - oldViewSize.left,
             y + m_newViewSize.top - oldViewSize.top,
             TRUE);
     } else {
-        m_newViewSize = field_11D0;
-        m_waitingOnResize = 2;
-        m_bForceViewSize = FALSE;
+        // NOTE: Uninline.
+        SetNewViewSize(field_11D0, FALSE);
     }
 
     m_cUIManager.InvalidateRect(NULL);
+}
+
+// FIXME: `newViewSize` should be reference.
+//
+// 0x692A10
+void CScreenWorld::SetNewViewSize(CRect newViewSize, BOOL bForceViewSize)
+{
+    m_newViewSize = newViewSize;
+    m_bForceViewSize = bForceViewSize;
 }
 
 // 0x692A50

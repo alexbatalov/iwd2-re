@@ -91,6 +91,7 @@ public:
     void ClearChatMessages();
     void HideInterface();
     void UnhideInterface();
+    void SetNewViewSize(CRect newViewSize, BOOL bForceViewSize);
     void StartDeath();
     void StopDeath();
     DWORD GetPanel_21_7();
