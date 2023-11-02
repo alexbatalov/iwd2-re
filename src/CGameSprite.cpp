@@ -372,7 +372,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     field_5636 = 0;
     field_7118 = 0;
     field_711C = 0;
-    field_7226 = 0;
+    m_firstActionSound = FALSE;
     field_7292 = 0;
     m_currentActionId = 0;
     field_72A8 = 0;
@@ -1083,6 +1083,35 @@ void CGameSprite::RenderPortrait(const CPoint& cpRenderPosition, const CSize& sz
 void CGameSprite::RenderToMapScreen(const CRect& rClipBase, const CPoint& ptCharPos)
 {
     // TODO: Incomplete.
+}
+
+// 0x705FD0
+void CGameSprite::Select()
+{
+    m_bSelected = TRUE;
+    m_firstActionSound = TRUE;
+    m_pArea->m_pGame->GetGroup()->Add(this);
+    if (m_targetId != CGameObjectArray::INVALID_INDEX && Orderable(FALSE)) {
+        CGameObject* pObject;
+
+        BYTE rc;
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+                CGameObjectArray::THREAD_ASYNCH,
+                &pObject,
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (pObject->GetObjectType() == CGameObject::TYPE_SPRITE) {
+                static_cast<CGameSprite*>(pObject)->m_marker.SetType(CMarker::RECTICLE);
+            }
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
 }
 
 // 0x7060C0

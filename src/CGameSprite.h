@@ -292,6 +292,7 @@ public:
     void RenderMarkers(CVidMode* pVidMode, int a2);
     void RenderPortrait(const CPoint& cpRenderPosition, const CSize& szControl, BOOL bPressed, BOOL reorderHighlight, BOOL selectFromMarker, const CRect& rClip, BOOL bDoubleSize);
     void RenderToMapScreen(const CRect& rClipBase, const CPoint& ptCharPos);
+    void Select();
     void Unselect();
     void SetCharacterToolTip(CUIControlBase* pControl);
     void SetDirection(const CPoint& posDest);
@@ -615,7 +616,7 @@ public:
     /* 712E */ unsigned char field_712E;
     /* 7130 */ CTypedPtrList<CPtrList, int*> m_portraitIcons; // NOTE: Stores actual ints disguised as pointers.
     /* 714C */ CVidCell m_portraitIconVidCell;
-    /* 7226 */ int field_7226;
+    /* 7226 */ BOOL m_firstActionSound;
     /* 722A */ ULONG field_722A;
     /* 722E */ LONG field_722E;
     /* 7234 */ int field_7234;
