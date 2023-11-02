@@ -576,7 +576,42 @@ CItem* CGameContainer::GetItem(SHORT nSlotNum)
 // 0x480300
 void CGameContainer::SetItem(SHORT nSlotNum, CItem* pItem)
 {
-    // TODO: Incomplete.
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameContainer.cpp
+    // __LINE__: 1826
+    UTIL_ASSERT(nSlotNum >= 0);
+
+    // 0x8D3978
+    static const CResRef RESREF_AR6051("AR6051");
+
+    if (m_pArea->m_resRef == RESREF_AR6051) {
+        sub_480480(nSlotNum, pItem);
+    }
+
+    POSITION pos = m_lstItems.FindIndex(nSlotNum);
+    if (pos != NULL) {
+        m_lstItems.SetAt(pos, pItem);
+    } else {
+        if (pItem == NULL) {
+            return;
+        }
+
+        m_lstItems.AddTail(pItem);
+    }
+
+    RefreshRenderPile();
+
+    g_pBaldurChitin->GetActiveEngine()->UpdateContainerStatus(m_id, -1);
+
+    if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+        if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
+            || g_pChitin->cNetwork.m_idLocalPlayer == m_remotePlayerID) {
+            CMessageContainerItems* pContainerItems = new CMessageContainerItems(this,
+                m_id,
+                m_id);
+
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(pContainerItems, FALSE);
+        }
+    }
 }
 
 // 0x480480
