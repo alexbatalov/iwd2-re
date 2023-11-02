@@ -3071,6 +3071,12 @@ int CGameArea::EnterSpawn()
     }
 }
 
+// 0x47A190
+void CGameArea::sub_47A190()
+{
+    g_pBaldurChitin->sub_4286B0(m_resRef, g_pBaldurChitin->cSoundMixer.m_nCurrentSong);
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x47A020

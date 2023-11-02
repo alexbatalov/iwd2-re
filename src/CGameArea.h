@@ -198,6 +198,7 @@ public:
     void sub_47A060();
     int ExitSpawn();
     int EnterSpawn();
+    void sub_47A190();
 
     CInfinity* GetInfinity();
     CVariableHash* GetVariables();
