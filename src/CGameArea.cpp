@@ -3034,7 +3034,21 @@ CGameAreaNotes* CGameArea::GetAreaNotes()
 // 0x47A060
 void CGameArea::sub_47A060()
 {
-    // TODO: Incomplete.
+    CMemINISection* pSection = INIFile.GetSection(CString("locals"));
+    if (pSection != NULL && pSection->GetCount() > 0) {
+        POSITION pos = pSection->GetHeadPosition();
+        while (pos != NULL) {
+            CMemINIValue* pValue = pSection->GetNext(pos);
+            if (pValue != NULL) {
+                CVariable* pVariable = CGameAIBase::GetGlobalVariable(CString("GLOBAL"),
+                    pValue->GetName(),
+                    0);
+                if (pVariable != NULL) {
+                    pVariable->m_intValue = atoi(pValue->GetValue());
+                }
+            }
+        }
+    }
 }
 
 // 0x47A140
