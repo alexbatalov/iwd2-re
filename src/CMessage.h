@@ -84,6 +84,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_ESCAPE_AREA;
     static const BYTE MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXTREF_SEND;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_CURRENT_ACTION_ID;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_FADE_COLOR;
     static const BYTE MSG_SUBTYPE_CMESSAGE_START_TEXT_SCREEN;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SPAWNPT_ACTIVATE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SPAWNPT_SPAWN;
@@ -1114,6 +1115,22 @@ public:
     void Run() override;
 
     /* 000C */ SHORT m_actionId;
+};
+
+class CMessageFadeColor : public CMessage {
+public:
+    CMessageFadeColor(BOOLEAN bFadeTo, BYTE redFade, BYTE greenFade, BYTE blueFade, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ BOOLEAN m_bFadeTo;
+    /* 000D */ BYTE m_redFade;
+    /* 000E */ BYTE m_greenFade;
+    /* 000F */ BYTE m_blueFade;
 };
 
 class CMessageStartTextScreen : public CMessage {

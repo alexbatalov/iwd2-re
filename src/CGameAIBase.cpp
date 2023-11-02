@@ -1098,6 +1098,51 @@ SHORT CGameAIBase::DetectSecretDoor(CGameDoor* target)
     return ACTION_DONE;
 }
 
+// 0x467880
+SHORT CGameAIBase::FadeToColor()
+{
+    CMessageFadeColor* pFadeColor = new CMessageFadeColor(TRUE,
+        static_cast<BYTE>(m_curAction.m_dest.x),
+        static_cast<BYTE>(m_curAction.m_dest.y),
+        static_cast<BYTE>(m_curAction.m_specificID),
+        m_id,
+        m_id);
+
+    g_pBaldurChitin->GetMessageHandler()->AddMessage(pFadeColor, FALSE);
+
+    return ACTION_DONE;
+}
+
+// 0x467900
+SHORT CGameAIBase::FadeFromColor()
+{
+    CMessageFadeColor* pFadeColor = new CMessageFadeColor(FALSE,
+        static_cast<BYTE>(m_curAction.m_dest.x),
+        static_cast<BYTE>(m_curAction.m_dest.y),
+        static_cast<BYTE>(m_curAction.m_specificID),
+        m_id,
+        m_id);
+
+    g_pBaldurChitin->GetMessageHandler()->AddMessage(pFadeColor, FALSE);
+
+    return ACTION_DONE;
+}
+
+// 0x467970
+SHORT CGameAIBase::sub_467970()
+{
+    CMessageFadeColor* pFadeColor = new CMessageFadeColor(255,
+        static_cast<BYTE>(m_curAction.m_dest.x),
+        static_cast<BYTE>(m_curAction.m_dest.y),
+        static_cast<BYTE>(m_curAction.m_specificID),
+        m_id,
+        m_id);
+
+    g_pBaldurChitin->GetMessageHandler()->AddMessage(pFadeColor, FALSE);
+
+    return ACTION_DONE;
+}
+
 // 0x4679E0
 SHORT CGameAIBase::SpawnPtActivate(CGameSpawning* target)
 {

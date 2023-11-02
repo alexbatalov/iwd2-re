@@ -2311,9 +2311,8 @@ void CGameArea::Render(CVidMode* pVidMode, INT nSurface)
     if (CCacheStatus::dword_8D0BA8) {
         CCacheStatus::dword_8D0BA8 = FALSE;
 
-        CVidMode* pCurrentVidMode = g_pChitin->GetCurrentVideoMode();
-        pCurrentVidMode->m_bFadeTo = FALSE;
-        pCurrentVidMode->m_nFade = 0;
+        // NOTE: Uninline.
+        g_pChitin->GetCurrentVideoMode()->SetFade(FALSE, 0);
 
         CScreenWorld::dword_8F85BC = 3;
     }

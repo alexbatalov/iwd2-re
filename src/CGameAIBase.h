@@ -85,6 +85,9 @@ public:
     SHORT StartMusic();
     SHORT Lock(CGameAIBase* pObject);
     SHORT DetectSecretDoor(CGameDoor* target);
+    SHORT FadeToColor();
+    SHORT FadeFromColor();
+    SHORT sub_467970();
     SHORT SpawnPtActivate(CGameSpawning* target);
     SHORT SpawnPtDeactivate(CGameSpawning* target);
     SHORT SpawnPtSpawn(CGameSpawning* target);

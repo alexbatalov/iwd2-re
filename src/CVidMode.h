@@ -132,6 +132,10 @@ public:
     /* 0128 */ virtual int GetTextureId();
     /* 012C */ virtual BOOL ActivateVideoMode3d(CVidMode* pPrevVidMode, HWND hWnd, BOOLEAN bFullscreen);
 
+    BOOL GetFullyFaded();
+    void UpdateFade();
+    void SetFade(BOOL bFadeTo, COLORREF rgbFade);
+
     // NOTE: Can be seen via assertion in `CVidMosaic::Render`.
     INT GetNumSurfaces() { return m_nSurfaces; }
 

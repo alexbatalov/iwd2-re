@@ -1359,36 +1359,26 @@ void CScreenWorld::AsynchronousUpdate(BOOL bActiveEngine)
             }
         }
 
-        CVidMode* pCurrentVidMode1 = g_pChitin->GetCurrentVideoMode();
+        BOOL fullyFaded = g_pChitin->GetCurrentVideoMode()->GetFullyFaded();
 
-        if (pCurrentVidMode1->m_nFade != 0) {
-            m_nBlackOutCountDown = 0;
-        } else {
+        if (fullyFaded) {
             if (m_nBlackOutCountDown == 0) {
                 m_nBlackOutCountDown = 150;
             }
+        } else {
+            m_nBlackOutCountDown = 0;
         }
 
         if (m_nBlackOutCountDown > 0) {
             if (pGame->GetWorldTimer()->m_active) {
                 if (--m_nBlackOutCountDown == 0) {
-                    if (pCurrentVidMode1->m_nFade == 0) {
-                        CVidMode* pCurrentVidMode2 = g_pChitin->GetCurrentVideoMode();
-                        CVidMode::NUM_FADE_FRAMES = 1;
-                        pCurrentVidMode2->m_bFadeTo = FALSE;
-                        pCurrentVidMode2->m_nFade = 0;
+                    if (fullyFaded) {
+                        // NOTE: Uninline.
+                        g_pChitin->GetCurrentVideoMode()->SetFade(FALSE, 1);
 
-                        for (int frame = 0; frame < 20; frame++) {
-                            CVidMode* pCurrentVidMode3 = g_pChitin->GetCurrentVideoMode();
-                            if (!pCurrentVidMode3->m_bFadeTo) {
-                                if (pCurrentVidMode3->m_nFade < CVidMode::NUM_FADE_FRAMES) {
-                                    pCurrentVidMode3->m_nFade++;
-                                }
-                            } else {
-                                if (pCurrentVidMode3->m_nFade > 0) {
-                                    pCurrentVidMode3->m_nFade--;
-                                }
-                            }
+                        for (int i = 0; i < 20; i++) {
+                            // NOTE: Uninline.
+                            g_pChitin->GetCurrentVideoMode()->UpdateFade();
 
                             g_pChitin->m_bDisplayStale = TRUE;
                             SleepEx(60, FALSE);

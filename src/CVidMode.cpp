@@ -1930,3 +1930,43 @@ void CVidMode::RenderBlackFade3d()
 {
     // TODO: Incomplete.
 }
+
+// NOTE: Inlined.
+BOOL CVidMode::GetFullyFaded()
+{
+    return m_nFade == 0;
+}
+
+// NOTE: Inlined.
+void CVidMode::UpdateFade()
+{
+    if (m_bFadeTo) {
+        if (m_nFade > 0) {
+            m_nFade--;
+        }
+    } else {
+        if (m_nFade < NUM_FADE_FRAMES) {
+            m_nFade++;
+        }
+    }
+}
+
+// FIXME: `rgbFade` is misleading (both type and meaning). This function is
+// usually called via inlined non-static `CInfinity::SetFade`, but I'm not sure
+// how `CInfinity` instance is obtained in the first place.
+//
+// NOTE: Inlined.
+void CVidMode::SetFade(BOOL bFadeTo, COLORREF rgbFade)
+{
+    if (rgbFade != 0) {
+        NUM_FADE_FRAMES = static_cast<BYTE>(rgbFade);
+    }
+
+    m_bFadeTo = bFadeTo;
+
+    if (m_bFadeTo) {
+        m_nFade = NUM_FADE_FRAMES;
+    } else {
+        m_nFade = 0;
+    }
+}

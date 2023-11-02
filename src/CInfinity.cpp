@@ -2978,16 +2978,8 @@ void CInfinity::AIUpdate()
         m_pArea->SetListenPosition();
     }
 
-    CVidMode* pVidMode = g_pChitin->GetCurrentVideoMode();
-    if (pVidMode->m_bFadeTo) {
-        if (pVidMode->m_nFade > 0) {
-            pVidMode->m_nFade--;
-        }
-    } else {
-        if (pVidMode->m_nFade < CVidMode::NUM_FADE_FRAMES) {
-            pVidMode->m_nFade++;
-        }
-    }
+    // NOTE: Uninline.
+    g_pChitin->GetCurrentVideoMode()->UpdateFade();
 
     if (g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_active) {
         if (nThunderLength > 0) {

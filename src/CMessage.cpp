@@ -244,6 +244,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXTREF_SEND = 70;
 // 0x84CF1E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_CURRENT_ACTION_ID = 71;
 
+// 0x84CF20
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_FADE_COLOR = 73;
+
 // 0x84CF21
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_START_TEXT_SCREEN = 74;
 
@@ -10512,6 +10515,107 @@ void CMessageSetCurrentActionId::Run()
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F5740
+CMessageFadeColor::CMessageFadeColor(BOOLEAN bFadeTo, BYTE redFade, BYTE greenFade, BYTE blueFade, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_bFadeTo = bFadeTo;
+    m_redFade = redFade;
+    m_greenFade = greenFade;
+    m_blueFade = blueFade;
+}
+
+// 0x43E170
+SHORT CMessageFadeColor::GetCommType()
+{
+    return BROADCAST_FORCED;
+}
+
+// 0x40A0E0
+BYTE CMessageFadeColor::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4678F0
+BYTE CMessageFadeColor::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_FADE_COLOR;
+}
+
+// 0x4FFDA0
+void CMessageFadeColor::MarshalMessage(BYTE** pData, DWORD* dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 11772
+    UTIL_ASSERT(pData != NULL && dwSize != NULL);
+
+    *dwSize = sizeof(BOOLEAN)
+        + sizeof(BYTE)
+        + sizeof(BYTE)
+        + sizeof(BYTE);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 11780
+    UTIL_ASSERT(*dwSize <= STATICBUFFERSIZE);
+
+    DWORD cnt = 0;
+
+    (*pData)[cnt++] = m_bFadeTo;
+    (*pData)[cnt++] = m_redFade;
+    (*pData)[cnt++] = m_greenFade;
+    (*pData)[cnt++] = m_blueFade;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 11806
+    UTIL_ASSERT(cnt == *dwSize);
+}
+
+// 0x4FFE40
+BOOL CMessageFadeColor::UnmarshalMessage(BYTE* pData, DWORD dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 11829
+    UTIL_ASSERT(pData != NULL);
+
+    DWORD cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    m_bFadeTo = pData[cnt++];
+    m_redFade = pData[cnt++];
+    m_greenFade = pData[cnt++];
+    m_blueFade = pData[cnt++];
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 11846
+    UTIL_ASSERT(cnt == dwSize);
+
+    return TRUE;
+}
+
+// 0x4FFEB0
+void CMessageFadeColor::Run()
+{
+    g_pBaldurChitin->m_pEngineWorld->m_nBlackOutCountDown = 0;
+
+    // NOTE: Uninlnie.
+    g_pChitin->GetCurrentVideoMode()->SetFade(m_bFadeTo, m_redFade);
+
+    CScreenWorld::dword_8F85BC = 3;
+
+    // NOTE: `m_redFade` name is misleading.
+    if (m_redFade < 10) {
+        for (int i = 0; i < 20; i++) {
+            // NOTE: Uninline.
+            g_pChitin->GetCurrentVideoMode()->UpdateFade();
+
+            g_pChitin->m_bDisplayStale = TRUE;
+            SleepEx(60, FALSE);
+        }
     }
 }
 
