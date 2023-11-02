@@ -1117,7 +1117,48 @@ void CGameSprite::Select()
 // 0x7060C0
 void CGameSprite::Unselect()
 {
-    // TODO: Incomplete.
+    CGameSprite* pSprite = NULL;
+
+    m_bSelected = FALSE;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_id,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pSprite != NULL) {
+            g_pBaldurChitin->GetObjectGame()->GetGroup()->Remove(pSprite);
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_id,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+
+        if (m_targetId != CGameObjectArray::INVALID_INDEX && Orderable(FALSE)) {
+            CGameObject* pObject;
+
+            do {
+                rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    &pObject,
+                    INFINITE);
+            } while (rc == CGameObjectArray::SHARED || CGameObjectArray::DENIED);
+
+            if (rc == CGameObjectArray::SUCCESS) {
+                if (pObject->GetObjectType() == CGameObject::TYPE_SPRITE) {
+                    static_cast<CGameSprite*>(pObject)->m_marker.SetType(CMarker::ELLIPSE);
+                }
+
+                g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            }
+        }
+    }
 }
 
 // 0x706720
