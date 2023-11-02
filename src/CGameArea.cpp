@@ -2189,7 +2189,79 @@ void CGameArea::OnMouseMove(const CPoint& pt)
 // 0x477550
 void CGameArea::RemoveObject(POSITION posVertList, BYTE listType, LONG id)
 {
-    // TODO: Incomplete.
+    POSITION pos;
+
+    EnterCriticalSection(&(g_pBaldurChitin->m_pEngineWorld->field_106));
+
+    if (g_pBaldurChitin->cNetwork.GetSessionOpen()) {
+        switch (listType) {
+        case CGAMEOBJECT_LIST_FRONT:
+            pos = m_lVertSortAdd.GetHeadPosition();
+            while (pos != NULL) {
+                if (reinterpret_cast<LONG>(m_lVertSortAdd.GetAt(pos)) == id) {
+                    m_lVertSortAdd.RemoveAt(pos);
+                    LeaveCriticalSection(&(g_pBaldurChitin->m_pEngineWorld->field_106));
+                    return;
+                }
+
+                m_lVertSortAdd.GetNext(pos);
+            }
+            break;
+        case CGAMEOBJECT_LIST_BACK:
+            pos = m_lVertSortBackAdd.GetHeadPosition();
+            while (pos != NULL) {
+                if (reinterpret_cast<LONG>(m_lVertSortBackAdd.GetAt(pos)) == id) {
+                    m_lVertSortBackAdd.RemoveAt(pos);
+                    LeaveCriticalSection(&(g_pBaldurChitin->m_pEngineWorld->field_106));
+                    return;
+                }
+
+                m_lVertSortBackAdd.GetNext(pos);
+            }
+            break;
+        case CGAMEOBJECT_LIST_FLIGHT:
+            pos = m_lVertSortFlightAdd.GetHeadPosition();
+            while (pos != NULL) {
+                if (reinterpret_cast<LONG>(m_lVertSortFlightAdd.GetAt(pos)) == id) {
+                    m_lVertSortFlightAdd.RemoveAt(pos);
+                    LeaveCriticalSection(&(g_pBaldurChitin->m_pEngineWorld->field_106));
+                    return;
+                }
+
+                m_lVertSortFlightAdd.GetNext(pos);
+            }
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+            // __LINE__: 7070
+            UTIL_ASSERT(FALSE);
+        }
+    }
+
+    // TODO: `Find` calls look redunant.
+    switch (listType) {
+    case CGAMEOBJECT_LIST_FRONT:
+        if (m_lVertSortRemove.Find(posVertList) == NULL) {
+            m_lVertSortRemove.AddTail(posVertList);
+        }
+        break;
+    case CGAMEOBJECT_LIST_BACK:
+        if (m_lVertSortBackRemove.Find(posVertList) == NULL) {
+            m_lVertSortBackRemove.AddTail(posVertList);
+        }
+        break;
+    case CGAMEOBJECT_LIST_FLIGHT:
+        if (m_lVertSortFlightRemove.Find(posVertList) == NULL) {
+            m_lVertSortFlightRemove.AddTail(posVertList);
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+        // __LINE__: 7095
+        UTIL_ASSERT(FALSE);
+    }
+
+    LeaveCriticalSection(&(g_pBaldurChitin->m_pEngineWorld->field_106));
 }
 
 // 0x4774B0
