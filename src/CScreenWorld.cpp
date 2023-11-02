@@ -2018,7 +2018,36 @@ void CScreenWorld::ClearChatMessages()
 // 0x6926A0
 void CScreenWorld::HideInterface()
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    if (!g_pBaldurChitin->field_4A24) {
+        return;
+    }
+
+    if (m_cUIManager.field_0) {
+        return;
+    }
+
+    // NOTE: Uninline.
+    field_11D0 = GetNewViewSize();
+
+    INT x;
+    INT y;
+    pGame->GetVisibleArea()->GetInfinity()->GetViewPosition(x, y);
+
+    m_newViewSize = CInfinity::stru_8E7548;
+    m_waitingOnResize = 2;
+    m_bForceViewSize = FALSE;
+
+    pGame->GetVisibleArea()->GetInfinity()->SetViewPosition(x + m_newViewSize.left - field_11D0.left,
+        y + m_newViewSize.top - field_11D0.top,
+        TRUE);
+
+    m_cUIManager.field_0 = 1;
+
+    if (pGame->field_43E2 == 386 || pGame->field_43E2 == 1282) {
+        m_cUIManager.InvalidateRect(NULL);
+    }
 }
 
 // 0x692850
