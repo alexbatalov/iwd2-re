@@ -1867,6 +1867,60 @@ void CScreenWorld::HandleAmbiance()
     }
 }
 
+// 0x691E80
+void CScreenWorld::StartDeathReaction(const CString& sName)
+{
+    // FIXME: Unused.
+    CString v1;
+    CString v2;
+    CString v3(sName);
+    v3.MakeUpper();
+
+    if (m_deathSoundList.IsEmpty()) {
+        CDeathSound* pDeathSound = new CDeathSound();
+        pDeathSound->m_soundNum = -1;
+        pDeathSound->m_soundLength = 36;
+        pDeathSound->m_characterId = CGameObjectArray::INVALID_INDEX;
+        pDeathSound->m_started = TRUE;
+        m_deathSoundList.AddTail(pDeathSound);
+    }
+
+    SHORT nPortrait;
+    if (g_pBaldurChitin->GetObjectGame()->GetNumCharacters() != 0) {
+        nPortrait = rand() % g_pBaldurChitin->GetObjectGame()->GetNumCharacters();
+    } else {
+        nPortrait = 0;
+    }
+
+    LONG nCharacterId = g_pBaldurChitin->GetObjectGame()->GetCharacterId(nPortrait);
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    // FIXME: Share is not released in some cases.
+    if (rc == CGameObjectArray::SUCCESS
+        && pSprite->Orderable(FALSE)
+        && sName != pSprite->m_scriptName) {
+        CDeathSound* pDeathSound = new CDeathSound();
+        pDeathSound->m_soundNum = pSprite->GetSound(CGameSprite::SOUND_REACT_TO_DEATH);
+        pDeathSound->m_soundLength = pSprite->GetLength(pDeathSound->m_soundNum);
+        pDeathSound->m_characterId = pSprite->GetId();
+        pDeathSound->m_started = FALSE;
+        m_deathSoundList.AddTail(pDeathSound);
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
 // 0x692090
 void CScreenWorld::HandleDeathReaction()
 {

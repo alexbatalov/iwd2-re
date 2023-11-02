@@ -83,6 +83,7 @@ public:
     void StopStore();
     CRect GetNewViewSize();
     void HandleAmbiance();
+    void StartDeathReaction(const CString& sName);
     void HandleDeathReaction();
     POSITION DisplayText(const CString& sName, const CString& sText, COLORREF rgbNameColor, COLORREF rgbTextColor, LONG lMarker, BOOLEAN bMoveToTop);
     POSITION DisplayText(const CString& sName, const CString& sText, LONG lMarker, BOOLEAN bMoveToTop);

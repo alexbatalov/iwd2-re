@@ -66,6 +66,9 @@ const BYTE CGameSprite::NUM_DIR = 16;
 // 0x85BB6E
 const BYTE CGameSprite::SOUND_SELECT_ACTION = 11;
 
+// 0x85BB70
+const BYTE CGameSprite::SOUND_REACT_TO_DEATH = 13;
+
 // 0x85BB74
 const SHORT CGameSprite::EXACT_SCALE = 10;
 
@@ -113,6 +116,9 @@ const BYTE CGameSprite::SEQ_TWITCH = CGAMESPRITE_SEQ_TWITCH;
 
 // 0x85BBBD
 const BYTE CGameSprite::SEQ_WALK = CGAMESPRITE_SEQ_WALK;
+
+// 0x85BCA0
+const LONG CGameSprite::STANDARD_VERBAL_CONSTANT_LENGTH = 300;
 
 // 0x8F94B8
 const CPoint CGameSprite::PORTRAIT_ICON_SIZE(10, 10);
@@ -834,6 +840,36 @@ void CGameSprite::VerbalConstant(LONG verbalConstant)
     // TODO: Incomplete.
 }
 
+// 0x702E60
+LONG CGameSprite::GetLength(LONG verbalConstant)
+{
+    STR_RES strRes;
+
+    if (verbalConstant < 0 || verbalConstant >= 64) {
+        return 0;
+    }
+
+    g_pBaldurChitin->GetTlkTable().Fetch(m_baseStats.m_speech[verbalConstant], strRes);
+
+    if (m_secondarySounds != "") {
+        CString sSoundName;
+        CString sSoundSetName;
+        LONG nNumber = g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetCustomSound(sSoundName, static_cast<BYTE>(verbalConstant));
+        m_secondarySounds.CopyToString(sSoundSetName);
+        sSoundName.TrimLeft();
+        sSoundName.TrimRight();
+        sSoundName = sSoundSetName + sSoundName;
+
+        if (nNumber == 0
+            || g_pBaldurChitin->cDimm.m_cKeyTable.FindKey(CResRef(sSoundName), 4, TRUE) != NULL) {
+            strRes.cSound.SetResRef(CResRef(sSoundName), TRUE, TRUE);
+        }
+    }
+
+    // FIXME: Calls `GetPlayTime` twice.
+    return min(strRes.cSound.GetPlayTime() / 33, 300);
+}
+
 // 0x703170
 BOOL CGameSprite::IsSpellSchool(BYTE spellSchool)
 {
@@ -1096,7 +1132,7 @@ void CGameSprite::SetSequence(SHORT nSequence)
 }
 
 // 0x708FC0
-void CGameSprite::RenderDamageArrow(CGameArea* pArea, CVidMode *pVidMode, INT nSurface)
+void CGameSprite::RenderDamageArrow(CGameArea* pArea, CVidMode* pVidMode, INT nSurface)
 {
     // TODO: Incomplete.
 }

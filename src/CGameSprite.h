@@ -173,6 +173,7 @@ public:
     static const BYTE NUM_DIR;
 
     static const BYTE SOUND_SELECT_ACTION;
+    static const BYTE SOUND_REACT_TO_DEATH;
     static const SHORT EXACT_SCALE;
 
     static const SHORT USER_OVERRIDE_COUNT;
@@ -191,6 +192,8 @@ public:
     static const BYTE SEQ_SLEEP;
     static const BYTE SEQ_TWITCH;
     static const BYTE SEQ_WALK;
+
+    static const LONG STANDARD_VERBAL_CONSTANT_LENGTH;
 
     static const CPoint PORTRAIT_ICON_SIZE;
     static const CResRef SPIN110;
@@ -281,6 +284,7 @@ public:
     SHORT GetNumSounds(SHORT nOffset, SHORT nMaxNum);
     void PlaySound(BYTE soundID, BOOL showText, BOOL showCircle, BOOL overrideOption);
     void VerbalConstant(LONG verbalConstant);
+    LONG GetLength(LONG verbalConstant);
     BOOL IsSpellSchool(BYTE spellSchool);
     void SetFootstepChannel();
     BYTE GetSound(BYTE soundID);
@@ -294,7 +298,7 @@ public:
     void SetIdleSequence();
     SHORT GetIdleSequence();
     void SetSequence(SHORT nSequence);
-    void RenderDamageArrow(CGameArea* pArea, CVidMode *pVidMode, INT nSurface);
+    void RenderDamageArrow(CGameArea* pArea, CVidMode* pVidMode, INT nSurface);
     void Unmarshal(BYTE* pCreature, LONG creatureSize, WORD facing, int a4);
     void UnmarshalScripts();
     void FetchCommonStrings();
