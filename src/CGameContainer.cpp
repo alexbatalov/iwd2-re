@@ -530,7 +530,32 @@ void CGameContainer::RemoveFromArea()
 // 0x4801A0
 void CGameContainer::CompressContainer()
 {
-    // TODO: Incomplete.
+    if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
+        || g_pChitin->cNetwork.m_idLocalPlayer == m_remotePlayerID) {
+        POSITION pos = m_lstItems.GetHeadPosition();
+        while (pos != NULL) {
+            POSITION posOld = pos;
+            CItem* pItem = m_lstItems.GetNext(pos);
+            if (pItem == NULL) {
+                m_lstItems.RemoveAt(posOld);
+            }
+        }
+
+        RefreshRenderPile();
+
+        g_pBaldurChitin->GetActiveEngine()->UpdateContainerStatus(m_id, -1);
+
+        if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
+            || g_pChitin->cNetwork.m_idLocalPlayer == m_remotePlayerID) {
+            if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+                CMessageContainerItems* pContainerItems = new CMessageContainerItems(this,
+                    m_id,
+                    m_id);
+
+                g_pBaldurChitin->GetMessageHandler()->AddMessage(pContainerItems, FALSE);
+            }
+        }
+    }
 }
 
 // 0x4802B0
