@@ -25,6 +25,7 @@ public:
     CItem* GetItem(SHORT nSlotNum);
     void SetItem(SHORT nSlotNum, CItem* pItem);
     void sub_480480(SHORT nSlotNum, CItem* pItem);
+    BOOLEAN PlaceItemInBlankSlot(CItem* pItem, BOOLEAN bCompressContainer, SHORT nRecommendedSlotNum);
     void RefreshRenderPile();
     void SetFlags(DWORD dwFlags);
     void SetTrapActivated(WORD active);

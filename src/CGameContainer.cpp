@@ -560,6 +560,30 @@ void CGameContainer::sub_480480(SHORT nSlotNum, CItem* pItem)
     // TODO: Incomplete.
 }
 
+// 0x480760
+BOOLEAN CGameContainer::PlaceItemInBlankSlot(CItem* pItem, BOOLEAN bCompressContainer, SHORT nRecommendedSlotNum)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameContainer.cpp
+    // __LINE__: 1993
+    UTIL_ASSERT(pItem != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameContainer.cpp
+    // __LINE__: 1995
+    UTIL_ASSERT(nRecommendedSlotNum >= 0);
+
+    CMessageContainerAddItem* pContainerAddItem = new CMessageContainerAddItem(*pItem,
+        nRecommendedSlotNum,
+        bCompressContainer,
+        m_id,
+        m_id);
+
+    g_pBaldurChitin->GetMessageHandler()->AddMessage(pContainerAddItem, FALSE);
+
+    g_pBaldurChitin->GetObjectGame()->AddDisposableItem(pItem);
+
+    return TRUE;
+}
+
 // 0x481160
 void CGameContainer::RefreshRenderPile()
 {
