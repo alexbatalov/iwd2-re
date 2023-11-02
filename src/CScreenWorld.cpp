@@ -2053,7 +2053,40 @@ void CScreenWorld::HideInterface()
 // 0x692850
 void CScreenWorld::UnhideInterface()
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    if (!g_pBaldurChitin->field_4A24) {
+        return;
+    }
+
+    if (!m_cUIManager.field_0) {
+        return;
+    }
+
+    m_cUIManager.field_0 = 0;
+
+    if (pGame->GetVisibleArea() != NULL) {
+        // NOTE: Uninline.
+        CRect oldViewSize = GetNewViewSize();
+
+        INT x;
+        INT y;
+        pGame->GetVisibleArea()->GetInfinity()->GetViewPosition(x, y);
+
+        m_newViewSize = field_11D0;
+        m_waitingOnResize = 2;
+        m_bForceViewSize = FALSE;
+
+        pGame->GetVisibleArea()->GetInfinity()->SetViewPosition(x + m_newViewSize.left - oldViewSize.left,
+            y + m_newViewSize.top - oldViewSize.top,
+            TRUE);
+    } else {
+        m_newViewSize = field_11D0;
+        m_waitingOnResize = 2;
+        m_bForceViewSize = FALSE;
+    }
+
+    m_cUIManager.InvalidateRect(NULL);
 }
 
 // 0x692A50
