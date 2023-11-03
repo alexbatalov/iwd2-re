@@ -381,7 +381,7 @@ public:
     STRREF GetClassDescriptionStringRef(BYTE nClass, DWORD nSpecialist) const;
     INT GetAbilityScoreModifier(INT nScore) const;
     int sub_542560(unsigned short a1, unsigned short a2) const;
-    void sub_5425E0(const CAIObjectType& typeAI, int a2, BYTE& a3, BYTE& a4, BYTE& a5, BYTE& a6, BYTE& a7, BYTE& a8) const;
+    void GetBaseSkillPoints(const CAIObjectType& typeAI, CDerivedStats& DStats, BYTE& nPickPockets, BYTE& nOpenLocks, BYTE& nFindTraps, BYTE& nMoveSilently, BYTE& nHide, BYTE& nUseMagicDevice) const;
     INT FindSavingThrow(CDerivedStats& stats, const CString& sSavingThrow) const;
     INT GetSavingThrow(const CAIObjectType& typeAI, CDerivedStats& DStats, BYTE nCON, const CString& sSavingThrow) const;
     INT GetStartingHitPoints(const CAIObjectType& typeAI, CDerivedStats& DStats, BYTE nCON) const;

@@ -1829,14 +1829,14 @@ int CRuleTables::sub_542560(unsigned short a1, unsigned short a2) const
 }
 
 // 0x5425E0
-void CRuleTables::sub_5425E0(const CAIObjectType& typeAI, int a2, BYTE& a3, BYTE& a4, BYTE& a5, BYTE& a6, BYTE& a7, BYTE& a8) const
+void CRuleTables::GetBaseSkillPoints(const CAIObjectType& typeAI, CDerivedStats& DStats, BYTE& nPickPockets, BYTE& nOpenLocks, BYTE& nFindTraps, BYTE& nMoveSilently, BYTE& nHide, BYTE& nUseMagicDevice) const
 {
-    a3 = 0x80;
-    a4 = 0x80;
-    a5 = 0x80;
-    a6 = 0x80;
-    a7 = 0x80;
-    a8 = 0x80;
+    nPickPockets = 0x80;
+    nOpenLocks = 0x80;
+    nFindTraps = 0x80;
+    nMoveSilently = 0x80;
+    nHide = 0x80;
+    nUseMagicDevice = 0x80;
 }
 
 // 0x542610

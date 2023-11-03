@@ -4344,7 +4344,123 @@ void CScreenCreateChar::DeleteCharacter()
 // 0x613B20
 void CScreenCreateChar::ImportCharacter(const CString& sCharacter)
 {
-    // TODO: Incomplete.
+    CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 7377
+    UTIL_ASSERT(pSettings != NULL);
+
+    CNetwork* pNetwork = &(g_pBaldurChitin->cNetwork);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // FIXME: Meaningless, we've already dereferenced game it to obtain
+    // `pSettings`.
+    //
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 7343
+    UTIL_ASSERT(pGame != NULL);
+
+    DeleteCharacter();
+
+    LONG nCharacterId = pGame->ImportCharacter(sCharacter, m_nCharacterSlot);
+    m_nGameSprite = nCharacterId;
+
+    if (nCharacterId != 0) {
+        CGameSprite* pSprite;
+
+        BYTE rc;
+        do {
+            rc = pGame->GetObjectArray()->GetDeny(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            CAIObjectType typeAI(pSprite->m_startTypeAI);
+            if (!pGame->GetRuleTables().IsValidSubRace(typeAI.m_nRace, typeAI.m_nSubRace)) {
+                typeAI.m_nSubRace = 0;
+            }
+
+            pSprite->m_startTypeAI.Set(typeAI);
+
+            BYTE nImportingBitField = pSettings->m_nImportingBitField;
+            if (pNetwork->GetServiceProvider() == CNetwork::SERV_PROV_NULL) {
+                nImportingBitField = CMultiplayerSettings::IMPORT_ALL;
+            }
+
+            if ((nImportingBitField & CMultiplayerSettings::IMPORT_STATISTICS) != 0) {
+                if ((nImportingBitField & CMultiplayerSettings::IMPORT_EXPERIENCE) == 0) {
+                    RemoveItems(pSprite);
+
+                    CCreatureFileHeader* pBStats = pSprite->GetBaseStats();
+                    CDerivedStats* pDStats = pSprite->GetDerivedStats();
+
+                    // NOTE: Unused.
+                    CAIObjectType typeAI(pSprite->m_startTypeAI);
+                    pGame->GetRuleTables().GetBaseSkillPoints(typeAI,
+                        *pDStats,
+                        pBStats->m_skills[CGAMESPRITE_SKILL_PICK_POCKET],
+                        pBStats->m_skills[CGAMESPRITE_SKILL_OPEN_LOCK],
+                        pBStats->m_skills[CGAMESPRITE_SKILL_SEARCH],
+                        pBStats->m_skills[CGAMESPRITE_SKILL_MOVE_SILENTLY],
+                        pBStats->m_skills[CGAMESPRITE_SKILL_HIDE],
+                        pBStats->m_skills[CGAMESPRITE_SKILL_USE_MAGIC_DEVICE]);
+
+                    // NOTE: Never changed.
+                    CAIObjectType moreTypeAI(pSprite->m_startTypeAI);
+
+                    pBStats->m_characterLevel = 0;
+                    pBStats->m_barbarianLevel = 0;
+                    pBStats->m_bardLevel = 0;
+                    pBStats->m_clericLevel = 0;
+                    pBStats->m_druidLevel = 0;
+                    pBStats->m_fighterLevel = 0;
+                    pBStats->m_monkLevel = 0;
+                    pBStats->m_paladinLevel = 0;
+                    pBStats->m_rangerLevel = 0;
+                    pBStats->m_rogueLevel = 0;
+                    pBStats->m_sorcererLevel = 0;
+                    pBStats->m_wizardLevel = 0;
+
+                    pSprite->m_startTypeAI.Set(moreTypeAI);
+
+                    pBStats->m_xp = 0;
+                    pBStats->m_flags = 0x800;
+                    pBStats->m_skills[CGAMESPRITE_SKILL_WILDERNESS_LORE] = 0;
+                    pBStats->m_moraleBreak = 0;
+                    pBStats->field_3E = 10;
+                    pBStats->m_numberOfAttacksBase = 1;
+                    pBStats->m_morale = 10;
+                    pBStats->m_moraleRecoveryTime = 1;
+                    pSprite->m_dialog = CResRef("MULTIG");
+                    pBStats->m_reputation = 100;
+
+                    pSprite->field_562C = 1;
+                    pSprite->ProcessEffectList();
+
+                    UpdateCharacterStats(pSprite);
+                    CompleteCharacterAbilities(pSprite);
+
+                    m_nCurrentStep = 5;
+                } else if ((nImportingBitField & CMultiplayerSettings::IMPORT_ITEMS) == 0) {
+                    CompleteCharacterSkills(pSprite);
+                    m_nCurrentStep = 6;
+                }
+            } else {
+                m_nCurrentStep = 6;
+            }
+
+            m_nFirstStep = m_nCurrentStep;
+
+            pGame->GetObjectArray()->ReleaseDeny(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+
+            field_1628;
+        }
+    }
 }
 
 // 0x613EF0
