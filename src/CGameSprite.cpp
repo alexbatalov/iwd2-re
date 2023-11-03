@@ -1402,6 +1402,42 @@ BYTE CGameSprite::GetChannel()
     return 13;
 }
 
+// 0x713FE0
+void CGameSprite::GetSelectedWeaponButton(CButtonData& cButtonData)
+{
+    const CRuleTables& rule = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    cButtonData.m_icon = "NOICON";
+    cButtonData.m_count = 0;
+    cButtonData.m_abilityId.m_itemType = 2;
+    cButtonData.m_abilityId.m_itemNum = 10;
+    cButtonData.m_abilityId.m_abilityNum = 1;
+    cButtonData.m_abilityId.field_10 = -1;
+
+    CItem* pItem = m_equipment.m_items[m_nTempSelectedWeapon];
+    if (pItem != NULL) {
+        pItem->Demand();
+        ITEM_ABILITY* pAbility = pItem->GetAbility(m_nTempSelectedWeaponAbility);
+        if (pAbility != NULL) {
+            cButtonData.m_icon = CString(pAbility->quickSlotIcon);
+            cButtonData.m_abilityId.m_itemNum = m_nTempSelectedWeapon;
+            cButtonData.m_abilityId.m_itemType = 2;
+            cButtonData.m_abilityId.m_abilityNum = m_nTempSelectedWeaponAbility;
+            cButtonData.m_abilityId.field_10 = rule.GetItemAbilityDescription(pItem->cResRef,
+                m_nTempSelectedWeaponAbility);
+            if (cButtonData.m_abilityId.field_10 == -1) {
+                cButtonData.m_abilityId.field_10 = pItem->GetGenericName();
+            }
+
+            cButtonData.m_count = 0;
+            if (pItem->GetMaxStackable() > 1) {
+                cButtonData.m_count = pItem->GetUsageCount(m_nTempSelectedWeaponAbility);
+            }
+        }
+        pItem->Release();
+    }
+}
+
 // 0x718650
 CItem* CGameSprite::GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot)
 {

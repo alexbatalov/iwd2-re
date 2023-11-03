@@ -306,6 +306,7 @@ public:
     void FetchCommonStrings();
     void LoadAreaInformation(CAreaFileCreature* pCreature);
     BYTE GetChannel();
+    void GetSelectedWeaponButton(CButtonData& cButtonData);
     CItem* GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot);
     void UnequipAll(BOOL a1);
     void EquipAll(BOOL a1);
@@ -599,6 +600,8 @@ public:
     /* 5690 */ LONG m_targetId;
     /* 5694 */ CPoint m_targetPoint;
     /* 569C */ short m_targetAreaSize;
+    /* 569E */ BYTE m_nTempSelectedWeapon;
+    /* 56DF */ BYTE m_nTempSelectedWeaponAbility;
     /* 56E4 */ CResRef field_56E4;
     /* 56EC */ unsigned char field_56EC;
     /* 56DC */ CResRef m_dialog;
