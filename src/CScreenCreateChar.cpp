@@ -3944,11 +3944,73 @@ void CScreenCreateChar::OnPortraitSmallItemSelect(INT nItem)
 // 0x610BB0
 void CScreenCreateChar::OnCharacterImportItemSelect(INT nItem)
 {
-    // TODO: Incomplete.
+    LONG nCharacterId = GetSpriteId();
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (nItem != m_nCharacterIndex) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+            // __LINE__: 6208
+            UTIL_ASSERT(m_pCharacters != NULL);
+
+            CUIPanel* pPanel = m_cUIManager.GetPanel(20);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+            // __LINE__: 6212
+            UTIL_ASSERT(pPanel != NULL);
+
+            CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(2));
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+            // __LINE__: 6214
+            UTIL_ASSERT(pText != NULL);
+
+            if (m_nCharacterIndex != -1) {
+                pText->SetItemTextColor(pText->GetItemBossPosition(m_nCharacterIndex),
+                    pText->m_rgbTextColor);
+            }
+
+            m_nCharacterIndex = nItem;
+
+            if (m_nCharacterIndex != -1) {
+                pText->SetItemTextColor(pText->GetItemBossPosition(m_nCharacterIndex),
+                    CBaldurChitin::TEXTDISPLAY_COLOR_SELECT);
+            }
+
+            pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(4));
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+            // __LINE__: 6234
+            UTIL_ASSERT(pText != NULL);
+
+            POSITION pos = m_pCharacters->FindIndex(m_nCharacterIndex);
+            CString sCharacter;
+
+            if (pos != NULL) {
+                sCharacter = m_pCharacters->GetAt(pos);
+                UpdateCharacterSummary(sCharacter, pText);
+            }
+
+            UpdatePopupPanel(GetTopPopup()->m_nID, pSprite);
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
 }
 
 // 0x610DC0
-void CScreenCreateChar::sub_610DC0()
+void CScreenCreateChar::UpdateCharacterSummary(const CString& sCharacter, CUIControlTextDisplay* pText)
 {
     // TODO: Incomplete.
 }

@@ -130,7 +130,7 @@ public:
     void OnPortraitLargeItemSelect(INT a1);
     void OnPortraitSmallItemSelect(INT a1);
     void OnCharacterImportItemSelect(INT nItem);
-    void sub_610DC0();
+    void UpdateCharacterSummary(const CString& sCharacter, CUIControlTextDisplay* pText);
     void OnCharacterExportItemSelect(INT nItem);
     void UpdateCharacterStats(CGameSprite* pSprite);
     void UpdateCharacterAppearance();
