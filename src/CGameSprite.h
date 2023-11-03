@@ -342,6 +342,7 @@ public:
     SHORT GetCriticalHitBonus();
     SHORT LeaveParty();
     void SelectWeaponAbility(unsigned char a1, unsigned char a2, unsigned char a3, unsigned char a4);
+    SHORT EquipItem();
     SHORT FindTraps();
     SHORT Turn();
     BOOL HasClassMask(DWORD dwMask);

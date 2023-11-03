@@ -2239,6 +2239,23 @@ void CGameSprite::SelectWeaponAbility(unsigned char a1, unsigned char a2, unsign
     // TODO: Incomplete.
 }
 
+// 0x7579C0
+SHORT CGameSprite::EquipItem()
+{
+    SHORT slot = FindItemPersonal(m_curAction.GetString1(), 0, FALSE);
+    if (slot == -1) {
+        return ACTION_ERROR;
+    }
+
+    if (m_curAction.GetSpecifics()) {
+        m_equipment.m_items[slot]->Equip(this, slot, FALSE);
+    } else {
+        m_equipment.m_items[slot]->Unequip(this, slot, TRUE, FALSE);
+    }
+
+    return ACTION_DONE;
+}
+
 // 0x757A80
 SHORT CGameSprite::FindTraps()
 {
