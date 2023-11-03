@@ -62,6 +62,37 @@ void CInfButtonArray::GetSelectedQuickWeaponData(CButtonData& cButtonData)
     }
 }
 
+// 0x5883C0
+BYTE CInfButtonArray::GetSelectedModalMode()
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    BYTE modalState = 0;
+
+    if (pGame->GetGroup()->GetCount() != 0) {
+        LONG nCharacterId = pGame->GetGroup()->GetGroupLeader();
+
+        CGameSprite* pSprite;
+
+        BYTE rc;
+        do {
+            rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            modalState = pSprite->GetModalState();
+
+            pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+
+    return modalState;
+}
+
 // 0x588FF0
 BOOL CInfButtonArray::ResetState()
 {

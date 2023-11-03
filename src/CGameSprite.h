@@ -378,6 +378,7 @@ public:
     CGameSpriteSpellList* GetInnateSpells();
     CGameSpriteSpellList* GetSongs();
     CGameSpriteSpellList* GetShapeshifts();
+    BYTE GetModalState();
 
     CGameAnimation* GetAnimation();
     CGameSpriteEquipment* GetEquipment();
@@ -448,7 +449,7 @@ public:
     /* 4BB6 */ CGameStatsSprite m_cGameStats;
     /* 4C4A */ CResRef m_currentArea;
     /* 4C52 */ BOOLEAN m_bGlobal;
-    /* 4C53 */ unsigned char field_4C53;
+    /* 4C53 */ BYTE m_nModalState;
     /* 4C54 */ int field_4C54;
     /* 4C58 */ int field_4C58;
     /* 4C5C */ int field_4C5C;

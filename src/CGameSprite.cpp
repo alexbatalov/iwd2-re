@@ -554,7 +554,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
         field_5202 = 0;
         field_5304 = 0;
         field_532A = 3;
-        field_4C53 = 0;
+        m_nModalState = 0;
         field_4C54 = 0;
         field_4C58 = 0;
         field_4C5C = 0;
@@ -2112,7 +2112,7 @@ int CGameSprite::sub_71F6E0()
         break;
     }
 
-    if (field_4C53 == 2) {
+    if (m_nModalState == 2) {
         v1 = 100;
     }
 
@@ -3560,6 +3560,12 @@ CGameSpriteSpellList* CGameSprite::GetSongs()
 CGameSpriteSpellList* CGameSprite::GetShapeshifts()
 {
     return &m_shapeshifts;
+}
+
+// 0x594160
+BYTE CGameSprite::GetModalState()
+{
+    return m_nModalState;
 }
 
 // 0x45B730

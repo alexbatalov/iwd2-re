@@ -31,6 +31,7 @@ public:
     CInfButtonArray();
 
     static void GetSelectedQuickWeaponData(CButtonData& cButtonData);
+    static BYTE GetSelectedModalMode();
     BOOL ResetState();
     void UpdateState();
     BOOL SetState(INT nState, int a2);
