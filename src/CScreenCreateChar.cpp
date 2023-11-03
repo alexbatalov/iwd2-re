@@ -4502,9 +4502,78 @@ void CScreenCreateChar::OnSoundItemSelect(INT nItem)
 }
 
 // 0x614AE0
-void CScreenCreateChar::sub_614AE0(CGameSprite* pSprite)
+BOOLEAN CScreenCreateChar::ExportCharacter(CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    BOOLEAN bExported = FALSE;
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 8262
+    UTIL_ASSERT(pGame != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 8262
+    UTIL_ASSERT(m_pCharacters == NULL);
+
+    m_pCharacters = pGame->GetImportCharacters();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 8270
+    UTIL_ASSERT(m_pCharacters != NULL);
+
+    CString sExportName(pSprite->GetName());
+    CString sBadChars(".?:<>|*/\\\"");
+
+    sExportName.TrimLeft();
+    sExportName.TrimRight();
+
+    for (int index = 0; index < sExportName.GetLength(); index++) {
+        if (sBadChars.Find(sExportName[index]) >= 0) {
+            sExportName.SetAt(index, '_');
+        }
+    }
+
+    if (sExportName.CompareNoCase("aux") == 0
+        || sExportName.CompareNoCase("con") == 0
+        || sExportName.CompareNoCase("prn") == 0) {
+        sExportName += "_";
+    }
+
+    if (sExportName.GetLength() > 8) {
+        sExportName = sExportName.Left(8);
+        sExportName.TrimRight();
+    }
+
+    CString sFileName(sExportName);
+    if (IsNameOnExportList(sFileName)) {
+        if (sExportName.GetLength() > 6) {
+            sExportName = sExportName.Left(6);
+        }
+
+        int index = 0;
+        while (index < 100) {
+            sFileName.Format("%s%2.2d", (LPCSTR)sExportName, index);
+            if (!IsNameOnExportList(sFileName)) {
+                pGame->CharacterExport(pSprite->GetId(), sFileName);
+                bExported = TRUE;
+                break;
+            }
+            index++;
+        }
+    } else {
+        pGame->CharacterExport(pSprite->GetId(), sFileName);
+        bExported = TRUE;
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 8341
+    UTIL_ASSERT(m_pCharacters != NULL);
+
+    delete m_pCharacters;
+    m_pCharacters = NULL;
+
+    return bExported;
 }
 
 // FIXME: `sName` should be reference.
@@ -4983,7 +5052,9 @@ void CScreenCreateChar::OnDoneButtonClick()
                         }
                     }
 
-                    if (sExportName == "aux" || sExportName == "con" || sExportName == "prn") {
+                    if (sExportName.CompareNoCase("aux") == 0
+                        || sExportName.CompareNoCase("con") == 0
+                        || sExportName.CompareNoCase("prn") == 0) {
                         sExportName += "_";
                     }
 
@@ -5817,8 +5888,9 @@ void CUIControlButtonCharGenAccept::OnLButtonClick(CPoint pt)
             pGame->SetProtagonist(nGameSprite);
         }
 
+        // NOTE: Looks odd.
         if (static_cast<BYTE>(pCreateChar->field_1628) == 0) {
-            pCreateChar->sub_614AE0(pSprite);
+            pCreateChar->ExportCharacter(pSprite);
         }
         pCreateChar->field_1628 = 0;
 

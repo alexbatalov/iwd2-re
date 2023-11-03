@@ -142,7 +142,7 @@ public:
     void ImportCharacter(const CString& sCharacter);
     void OnPlayButtonClick();
     void OnSoundItemSelect(INT nItem);
-    void sub_614AE0(CGameSprite* pSprite);
+    BOOLEAN ExportCharacter(CGameSprite* pSprite);
     BOOL IsNameOnExportList(CString sName);
     BOOL IsDoneButtonClickable(CGameSprite* pSprite);
     void OnDoneButtonClick();

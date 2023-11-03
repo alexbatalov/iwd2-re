@@ -737,7 +737,9 @@ void CScreenSave::OnDoneButtonClick()
 
                 BOOL bSave;
                 if (sSlotName.FindOneOf(".?:<>|*/\"") < 0) {
-                    if (sSlotName != "aux" && sSlotName != "con" && sSlotName != "prn") {
+                    if (sSlotName.CompareNoCase("aux") != 0
+                        && sSlotName.CompareNoCase("con") != 0
+                        && sSlotName.CompareNoCase("prn") != 0) {
                         DismissPopup();
                         bSave = TRUE;
                     } else {
