@@ -316,6 +316,7 @@ public:
     SHORT GetLayOnHandsAmount();
     INT GetNumQuickWeaponSlots();
     SHORT FindItemPersonal(const CString& sName, int number, BOOL restrictToEquiped);
+    SHORT CountItemPersonal(const CString& sName);
     DWORD GetCarriedWeight();
     void AddKnownDivineSpells(const BYTE& nClass);
     void GetNumInventoryPersonalSlots(INT& nUsedSlots, INT& nTotalSlots);

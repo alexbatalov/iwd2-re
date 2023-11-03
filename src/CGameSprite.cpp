@@ -1726,6 +1726,28 @@ SHORT CGameSprite::FindItemPersonal(const CString& sName, int number, BOOL restr
     return 0;
 }
 
+// 0x71D3D0
+SHORT CGameSprite::CountItemPersonal(const CString& sName)
+{
+    SHORT number = 0;
+
+    CString sMutableName(sName);
+    sMutableName.MakeUpper();
+
+    for (SHORT slot = 0; slot < 51; slot++) {
+        if (m_equipment.m_items[slot] != NULL
+            && m_equipment.m_items[slot]->cResRef == sName) {
+            if (m_equipment.m_items[slot]->GetMaxStackable() > 1) {
+                number += m_equipment.m_items[slot]->GetUsageCount(0);
+            } else {
+                number++;
+            }
+        }
+    }
+
+    return number;
+}
+
 // 0x71D480
 DWORD CGameSprite::GetCarriedWeight()
 {
