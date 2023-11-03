@@ -4555,6 +4555,14 @@ CString CInfGame::GetSaveGame()
     return m_sSaveGame;
 }
 
+// 0x71AB80
+void CInfGame::SetLastTarget(LONG id)
+{
+    m_lastClick.x = -1;
+    m_lastClick.y = -1;
+    m_lastTarget = id;
+}
+
 // NOTE: Inlined.
 BYTE CInfGame::GetKeymap(SHORT index)
 {

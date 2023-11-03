@@ -258,6 +258,7 @@ public:
     CSpellResRefList* GetInnateSpells();
     CSpellResRefList* GetShapeshifts();
     CString GetSaveGame();
+    void SetLastTarget(LONG id);
 
     const CRuleTables& GetRuleTables() { return m_ruleTables; }
 
