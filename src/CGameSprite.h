@@ -318,6 +318,7 @@ public:
     DWORD GetCarriedWeight();
     void AddKnownDivineSpells(const BYTE& nClass);
     void GetNumInventoryPersonalSlots(INT& nUsedSlots, INT& nTotalSlots);
+    void SetModalState(BYTE modalState, BOOL bUpdateToolbar);
     void CheckSequence(BYTE& sequence);
     BOOL HaveUnexportableItems();
     void SetMonkAbilities();
@@ -339,6 +340,7 @@ public:
     SHORT GetCriticalHitBonus();
     SHORT LeaveParty();
     void SelectWeaponAbility(unsigned char a1, unsigned char a2, unsigned char a3, unsigned char a4);
+    SHORT FindTraps();
     BOOL HasClassMask(DWORD dwMask);
     INT GetClassLevel(INT iClassType);
     void SetClassLevel(INT iClassType, INT nLevel);

@@ -51,6 +51,12 @@ BOOL CInfButtonArray::SetState(INT nState, int a2)
     return FALSE;
 }
 
+// 0x58A340
+void CInfButtonArray::UpdateButtons()
+{
+    // TODO: Incomplete.
+}
+
 // 0x452C50
 void CInfButtonArray::SetSelectedButton(INT nSelectedButton)
 {

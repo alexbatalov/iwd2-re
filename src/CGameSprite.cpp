@@ -7,6 +7,7 @@
 #include "CInfGame.h"
 #include "CItem.h"
 #include "CScreenInventory.h"
+#include "CScreenWorld.h"
 #include "CSpell.h"
 #include "CUtil.h"
 #include "CVariableHash.h"
@@ -1839,6 +1840,12 @@ void CGameSprite::GetNumInventoryPersonalSlots(INT& nUsedSlots, INT& nTotalSlots
     }
 }
 
+// 0x71FC00
+void CGameSprite::SetModalState(BYTE modalState, BOOL bUpdateToolbar)
+{
+    // TODO: Incomplete.
+}
+
 // 0x720310
 void CGameSprite::CheckSequence(BYTE& sequence)
 {
@@ -2183,6 +2190,26 @@ SHORT CGameSprite::LeaveParty()
 void CGameSprite::SelectWeaponAbility(unsigned char a1, unsigned char a2, unsigned char a3, unsigned char a4)
 {
     // TODO: Incomplete.
+}
+
+// 0x757A80
+SHORT CGameSprite::FindTraps()
+{
+    if (!m_typeAI.IsClassValid(CAIObjectType::C_ROGUE)
+        || !m_typeAI.IsClassValid(CAIObjectType::C_MONK)) {
+        return ACTION_ERROR;
+    }
+
+    SetModalState(2, TRUE);
+    ClearActions(FALSE);
+
+    if (g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(m_id) == g_pBaldurChitin->m_pEngineWorld->GetSelectedCharacter()) {
+        g_pBaldurChitin->GetObjectGame()->GetButtonArray()->m_nSelectedButton = 100;
+        g_pBaldurChitin->GetObjectGame()->SetState(0);
+        g_pBaldurChitin->GetObjectGame()->GetButtonArray()->UpdateButtons();
+    }
+
+    return ACTION_DONE;
 }
 
 // 0x762740
