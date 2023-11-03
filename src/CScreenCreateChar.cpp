@@ -5882,6 +5882,19 @@ void CUIControlButtonCharGenAccept::OnLButtonClick(CPoint pt)
             TRUE,
             TRUE);
 
+        ITEM_EFFECT effect;
+        CGameEffect::ClearItemEffect(&effect, CGAMEEFFECT_MAGICAL_REST);
+        effect.durationType = 1;
+
+        CGameEffect* pMagicalRest = CGameEffect::DecodeEffect(&effect,
+            CPoint(-1, -1),
+            -1,
+            CPoint(-1, -1));
+        pSprite->AddEffect(pMagicalRest,
+            CGameAIBase::EFFECT_LIST_TIMED,
+            TRUE,
+            TRUE);
+
         pGame->SetCharacterSlot(pCreateChar->m_nCharacterSlot, nGameSprite);
 
         if (pCreateChar->m_nCharacterSlot == 0) {
