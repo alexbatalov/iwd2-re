@@ -13,7 +13,7 @@ public:
     /* 0002 */ SHORT m_itemNum;
     /* 0004 */ SHORT m_abilityNum;
     /* 0006 */ CResRef m_res;
-    /* 000E */ short field_E;
+    /* 000E */ short m_targetType;
     /* 0010 */ int field_10;
     /* 0014 */ int field_14;
     /* 0018 */ int field_18;

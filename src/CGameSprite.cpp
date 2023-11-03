@@ -1502,6 +1502,40 @@ CItem* CGameSprite::GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot
     return NULL;
 }
 
+// 0x718B30
+BOOL CGameSprite::ReadyCursor()
+{
+    switch (m_currentUseButton.m_abilityId.m_targetType) {
+    case 1:
+        g_pBaldurChitin->GetObjectGame()->SetState(2);
+        g_pBaldurChitin->GetObjectGame()->SetIconIndex(20);
+        g_pBaldurChitin->GetObjectGame()->m_iconResRef = "";
+        return TRUE;
+    case 2:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+        // __LINE__: 18306
+        UTIL_ASSERT(FALSE);
+    case 3:
+        g_pBaldurChitin->GetObjectGame()->SetState(2);
+        g_pBaldurChitin->GetObjectGame()->SetIconIndex(20);
+        g_pBaldurChitin->GetObjectGame()->m_iconResRef = "";
+        return TRUE;
+    case 4:
+        g_pBaldurChitin->GetObjectGame()->SetState(1);
+        g_pBaldurChitin->GetObjectGame()->SetIconIndex(20);
+        g_pBaldurChitin->GetObjectGame()->m_iconResRef = "";
+        return TRUE;
+    case 5:
+    case 6:
+        g_pBaldurChitin->GetObjectGame()->SetState(0);
+        g_pBaldurChitin->GetObjectGame()->GetButtonArray()->SetSelectedButton(100);
+        g_pBaldurChitin->GetObjectGame()->GetButtonArray()->UpdateState();
+        return FALSE;
+    default:
+        return TRUE;
+    }
+}
+
 // 0x71B460
 void CGameSprite::UnequipAll(BOOL animationOnly)
 {
