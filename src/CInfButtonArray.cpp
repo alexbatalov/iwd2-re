@@ -18,7 +18,7 @@ CInfButtonSettings::CInfButtonSettings()
     field_4 = 0;
     field_8 = 0;
     field_1D0 = 0;
-    field_1DC = 0;
+    m_bGreyOut = FALSE;
     field_C = -1;
     field_10 = -1;
 }
@@ -91,6 +91,17 @@ BYTE CInfButtonArray::GetSelectedModalMode()
     }
 
     return modalState;
+}
+
+// 0x588460
+BYTE CInfButtonArray::GetButtonId(INT buttonType)
+{
+    for (BYTE id = 0; id < 12; id++) {
+        if (m_buttonTypes[id] == buttonType && !m_buttonArray[id].m_bGreyOut) {
+            return id;
+        }
+    }
+    return -1;
 }
 
 // 0x588FF0

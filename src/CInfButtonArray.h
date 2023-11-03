@@ -21,7 +21,7 @@ public:
     /* 01CC */ int field_1CC;
     /* 01D0 */ int field_1D0;
     /* 01D8 */ int field_1D8;
-    /* 01DC */ int field_1DC;
+    /* 01DC */ BOOL m_bGreyOut;
 };
 
 class CInfButtonArray {
@@ -32,6 +32,7 @@ public:
 
     static void GetSelectedQuickWeaponData(CButtonData& cButtonData);
     static BYTE GetSelectedModalMode();
+    BYTE GetButtonId(INT buttonType);
     BOOL ResetState();
     void UpdateState();
     BOOL SetState(INT nState, int a2);
@@ -42,6 +43,7 @@ public:
     void SetSelectedButton(INT nSelectedButton);
 
     /* 0000 */ CInfButtonSettings m_buttonArray[12];
+    /* 16B0 */ INT m_buttonTypes[12];
     /* 16E8 */ CVidCell field_16E8;
     /* 17C2 */ CVidCell field_17C2;
     /* 189C */ CVidCell field_189C;
