@@ -143,6 +143,7 @@ public:
     void OnPlayButtonClick();
     void OnSoundItemSelect(INT nItem);
     void sub_614AE0(CGameSprite* pSprite);
+    BOOL IsNameOnExportList(CString sName);
     BOOL IsDoneButtonClickable(CGameSprite* pSprite);
     void OnDoneButtonClick();
     void SetSpriteId(INT nSpriteId);

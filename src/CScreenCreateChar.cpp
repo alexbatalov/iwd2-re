@@ -4445,6 +4445,29 @@ void CScreenCreateChar::sub_614AE0(CGameSprite* pSprite)
     // TODO: Incomplete.
 }
 
+// FIXME: `sName` should be reference.
+//
+// 0x614E00
+BOOL CScreenCreateChar::IsNameOnExportList(CString sName)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenCreateChar.cpp
+    // __LINE__: 8369
+    UTIL_ASSERT(m_pCharacters != NULL);
+
+    CString sCharacter;
+
+    POSITION pos = m_pCharacters->GetHeadPosition();
+    while (pos != NULL) {
+        // FIXME: Unnecessary copy.
+        sCharacter = m_pCharacters->GetNext(pos);
+        if (sCharacter == sName) {
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
 // 0x615B70
 BOOL CScreenCreateChar::IsDoneButtonClickable(CGameSprite* pSprite)
 {
