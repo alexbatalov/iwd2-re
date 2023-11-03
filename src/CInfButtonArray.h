@@ -3,6 +3,8 @@
 
 #include "CVidCell.h"
 
+class CButtonData;
+
 class CInfButtonSettings {
 public:
     CInfButtonSettings();
@@ -28,6 +30,7 @@ public:
 
     CInfButtonArray();
 
+    static void GetSelectedQuickWeaponData(CButtonData& cButtonData);
     BOOL ResetState();
     void UpdateState();
     BOOL SetState(INT nState, int a2);

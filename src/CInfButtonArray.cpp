@@ -1,5 +1,10 @@
 #include "CInfButtonArray.h"
 
+#include "CBaldurChitin.h"
+#include "CButtonData.h"
+#include "CGameSprite.h"
+#include "CInfGame.h"
+
 // 0x851700
 const BYTE CInfButtonArray::STATE_NONE = 0;
 
@@ -27,6 +32,34 @@ CInfButtonSettings::~CInfButtonSettings()
 CInfButtonArray::CInfButtonArray()
 {
     // TODO: Incomplete.
+}
+
+// 0x588240
+void CInfButtonArray::GetSelectedQuickWeaponData(CButtonData& cButtonData)
+{
+    if (g_pBaldurChitin->GetObjectGame()->GetGroup()->GetCount() != 0) {
+        LONG* groupList = g_pBaldurChitin->GetObjectGame()->GetGroup()->GetGroupList();
+        LONG nCharacterId = groupList[0];
+        delete groupList;
+
+        CGameSprite* pSprite;
+
+        BYTE rc;
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            pSprite->GetSelectedWeaponButton(cButtonData);
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
 }
 
 // 0x588FF0
