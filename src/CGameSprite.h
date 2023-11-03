@@ -341,6 +341,7 @@ public:
     SHORT LeaveParty();
     void SelectWeaponAbility(unsigned char a1, unsigned char a2, unsigned char a3, unsigned char a4);
     SHORT FindTraps();
+    SHORT Turn();
     BOOL HasClassMask(DWORD dwMask);
     INT GetClassLevel(INT iClassType);
     void SetClassLevel(INT iClassType, INT nLevel);

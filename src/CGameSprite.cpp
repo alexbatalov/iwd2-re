@@ -2212,6 +2212,26 @@ SHORT CGameSprite::FindTraps()
     return ACTION_DONE;
 }
 
+// 0x75A3F0
+SHORT CGameSprite::Turn()
+{
+    if (!m_typeAI.IsClassValid(CAIObjectType::C_CLERIC)
+        || !m_typeAI.IsClassValid(CAIObjectType::C_PALADIN)) {
+        return ACTION_ERROR;
+    }
+
+    SetModalState(4, TRUE);
+    ClearActions(FALSE);
+
+    if (g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(m_id) == g_pBaldurChitin->m_pEngineWorld->GetSelectedCharacter()) {
+        g_pBaldurChitin->GetObjectGame()->GetButtonArray()->m_nSelectedButton = 100;
+        g_pBaldurChitin->GetObjectGame()->SetState(0);
+        g_pBaldurChitin->GetObjectGame()->GetButtonArray()->UpdateButtons();
+    }
+
+    return ACTION_DONE;
+}
+
 // 0x762740
 BOOL CGameSprite::HasClassMask(DWORD dwMask)
 {
