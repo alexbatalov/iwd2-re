@@ -137,7 +137,7 @@ public:
     void CompleteCharacterAbilities(CGameSprite* pSprite);
     void CompleteCharacterSkills(CGameSprite* pSprite);
     void CompleteCharacterWrapup(CGameSprite* pSprite);
-    void RemoveItems();
+    void RemoveItems(CGameSprite* pSprite);
     void DeleteCharacter();
     void ImportCharacter(const CString& sCharacter);
     void OnPlayButtonClick();

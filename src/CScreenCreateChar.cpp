@@ -4224,9 +4224,21 @@ void CScreenCreateChar::CompleteCharacterWrapup(CGameSprite* pSprite)
 }
 
 // 0x6139C0
-void CScreenCreateChar::RemoveItems()
+void CScreenCreateChar::RemoveItems(CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    pSprite->GetBaseStats()->m_gold = 0;
+    pSprite->SelectWeaponAbility(CGameSpriteEquipment::SLOT_FIST, 0, 0, 1);
+    pSprite->UnequipAll(FALSE);
+
+    CGameSpriteEquipment* pEquipment = pSprite->GetEquipment();
+    for (INT nSlot = 0; nSlot < 51; nSlot++) {
+        if (nSlot != CGameSpriteEquipment::SLOT_FIST) {
+            if (pEquipment->m_items[nSlot] != NULL) {
+                delete pEquipment->m_items[nSlot];
+                pEquipment->m_items[nSlot] = NULL;
+            }
+        }
+    }
 }
 
 // 0x613A30

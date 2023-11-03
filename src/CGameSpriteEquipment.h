@@ -8,6 +8,7 @@ class CItem;
 
 class CGameSpriteEquipment {
 public:
+    static const BYTE SLOT_FIST;
     static const BYTE NUM_SLOT;
 
     CGameSpriteEquipment();
