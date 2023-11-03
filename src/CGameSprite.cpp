@@ -2161,6 +2161,16 @@ BOOL CGameSprite::HandleEffects()
     return v1 && v2;
 }
 
+// 0x73B740
+SHORT CGameSprite::GetCriticalHitBonus()
+{
+    SHORT nCriticalHitBonus = m_derivedStats.m_nCriticalHitBonus;
+    if (sub_763150(CGAMESPRITE_FEAT_IMPROVED_CRITICAL)) {
+        nCriticalHitBonus++;
+    }
+    return nCriticalHitBonus;
+}
+
 // 0x751CD0
 SHORT CGameSprite::LeaveParty()
 {

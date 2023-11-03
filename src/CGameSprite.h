@@ -336,6 +336,7 @@ public:
     void ClearStoredPaths();
     void ClearDialogActions();
     BOOL HandleEffects();
+    SHORT GetCriticalHitBonus();
     SHORT LeaveParty();
     void SelectWeaponAbility(unsigned char a1, unsigned char a2, unsigned char a3, unsigned char a4);
     BOOL HasClassMask(DWORD dwMask);

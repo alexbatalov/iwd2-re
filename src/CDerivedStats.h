@@ -363,7 +363,7 @@ public:
     /* 0010 */ SHORT m_nACMissileMod;
     /* 0012 */ SHORT m_nACPiercingMod;
     /* 0014 */ SHORT m_nACSlashingMod;
-    /* 0016 */ short field_16;
+    /* 0016 */ SHORT m_nCriticalHitBonus;
     /* 0018 */ SHORT m_nTHAC0;
     /* 001A */ SHORT m_nNumberOfAttacks;
     /* 001C */ SHORT m_nSaveVSFortitude;

@@ -41,7 +41,7 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
 
     // TODO: Incomplete.
 
-    field_16 = 0;
+    m_nCriticalHitBonus = 0;
     m_nTHAC0 = 0;
     m_nNumberOfAttacks = pCreature->m_numberOfAttacksBase;
     m_nSaveVSFortitude = pCreature->m_saveVSFortitudeBase;
@@ -226,7 +226,7 @@ CDerivedStats& CDerivedStats::operator=(const CDerivedStats& other)
 
     // TODO: Incomplete (copying unknown STL container).
 
-    field_16 = other.field_16;
+    m_nCriticalHitBonus = other.m_nCriticalHitBonus;
     m_nTHAC0 = other.m_nTHAC0;
     m_nNumberOfAttacks = other.m_nNumberOfAttacks;
     m_nSaveVSFortitude = other.m_nSaveVSFortitude;
@@ -377,7 +377,7 @@ void CDerivedStats::BonusInit()
 
     // TODO: Incomplete.
 
-    field_16 = 0;
+    m_nCriticalHitBonus = 0;
     m_nTHAC0 = 0;
     m_nNumberOfAttacks = 0;
     m_nSaveVSFortitude = 0;
@@ -510,7 +510,7 @@ CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
     m_nACMissileMod += other.m_nACMissileMod;
     m_nACPiercingMod += other.m_nACPiercingMod;
     m_nACSlashingMod += other.m_nACSlashingMod;
-    field_16 += other.field_16;
+    m_nCriticalHitBonus += other.m_nCriticalHitBonus;
     m_nTHAC0 += other.m_nTHAC0;
     m_nNumberOfAttacks += other.m_nNumberOfAttacks;
     m_nSaveVSFortitude += other.m_nSaveVSFortitude;
@@ -907,7 +907,7 @@ void CDerivedStats::Unmarshal(BYTE* pStats, LONG nStats)
     m_nACMissileMod = pTemplate->m_nACMissileMod;
     m_nACPiercingMod = pTemplate->m_nACPiercingMod;
     m_nACSlashingMod = pTemplate->m_nACSlashingMod;
-    field_16 = pTemplate->field_16;
+    m_nCriticalHitBonus = pTemplate->m_nCriticalHitBonus;
     m_nTHAC0 = pTemplate->m_nTHAC0;
     m_nNumberOfAttacks = pTemplate->m_nNumberOfAttacks;
     m_nSaveVSFortitude = pTemplate->m_nSaveVSFortitude;
