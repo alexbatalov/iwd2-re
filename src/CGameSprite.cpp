@@ -1701,6 +1701,31 @@ INT CGameSprite::GetNumQuickWeaponSlots()
     return g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetNumQuickWeaponSlots(m_typeAI.m_nClass);
 }
 
+// 0x71D310
+SHORT CGameSprite::FindItemPersonal(const CString& sName, int number, BOOL restrictToEquiped)
+{
+    CString sMutableName(sName);
+    sMutableName.MakeUpper();
+
+    SHORT end = 51;
+    if (restrictToEquiped) {
+        end = 18;
+    }
+
+    for (SHORT slot = 0; slot < end; slot++) {
+        if (m_equipment.m_items[slot] != NULL
+            && m_equipment.m_items[slot]->cResRef == sName) {
+            if (number > 0) {
+                number--;
+            } else {
+                return slot;
+            }
+        }
+    }
+
+    return 0;
+}
+
 // 0x71D480
 DWORD CGameSprite::GetCarriedWeight()
 {
