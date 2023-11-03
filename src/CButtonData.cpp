@@ -16,7 +16,7 @@ CAbilityId::CAbilityId()
     field_1E = 0;
 }
 
-// NOTE: Inlined.
+// 0x4B9270
 CAbilityId& CAbilityId::operator=(const CAbilityId& other)
 {
     m_itemType = other.m_itemType;
