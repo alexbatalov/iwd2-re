@@ -2951,6 +2951,17 @@ int CRuleTables::GetRaiseDeadCost(const CAIObjectType& type, CDerivedStats& DSta
     return atol(m_tRaiseDeadCost.GetAt(CPoint(0, DStats.m_nLevel - 1)));
 }
 
+// 0x545210
+DWORD CRuleTables::GetItemAbilityDescription(const CResRef& cResItem, INT nAbilityNum) const
+{
+    CString sColumn;
+    CString sRow;
+
+    sColumn.Format("%d", nAbilityNum + 1);
+    cResItem.CopyToString(sRow);
+    return atol(m_tToolTips.GetAt(sColumn, sRow));
+}
+
 // 0x5452C0
 DWORD CRuleTables::GetReputationDescription(SHORT nReputation) const
 {

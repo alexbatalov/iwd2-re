@@ -413,6 +413,7 @@ public:
     void GetRaceStringMixed(BYTE nRace, CString& sClass, BYTE nSubRace) const;
     void GetClassStringGameSpy(BYTE nClass, DWORD nSpecialist, CString& sClass) const;
     INT GetRaiseDeadCost(const CAIObjectType& type, CDerivedStats& DStats) const;
+    DWORD GetItemAbilityDescription(const CResRef& cResItem, INT nAbilityNum) const;
     DWORD GetReputationDescription(SHORT nReputation) const;
     void GetIntoxicationInfo(BYTE nCON, INT& nIntoxicationRate, INT& nRecoveryRate, INT& nIntoxicationCap) const;
     BOOL GetCustomSound(CString& sName, BYTE nSoundId) const;
