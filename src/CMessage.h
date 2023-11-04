@@ -361,6 +361,7 @@ public:
     ~CMessageHandler();
     void AsynchronousUpdate();
     void PostAsynchronousUpdate();
+    BOOL ImportantMessage(BYTE* pData, DWORD dwSize);
     void AddMessage(CMessage* message, BOOL bForcePassThrough);
 
     /* 001C */ BOOLEAN m_bLastArbitrationLockStatus;

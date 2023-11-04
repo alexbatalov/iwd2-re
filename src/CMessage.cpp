@@ -3378,6 +3378,33 @@ void CMessageHandler::PostAsynchronousUpdate()
     }
 }
 
+// 0x4F73F0
+BOOL CMessageHandler::ImportantMessage(BYTE* pData, DWORD dwSize)
+{
+    if (pData[CNetwork::SPEC_MSG_FLAG] == CNetwork::SPEC_MSG_FLAG_ENABLED
+        && pData[CNetwork::SPEC_MSG_TYPE] == 67) {
+        switch (pData[CNetwork::SPEC_MSG_SUBTYPE]) {
+        case 1:
+        case 5:
+        case 8:
+        case 12:
+        case 18:
+        case 27:
+        case 28:
+        case 39:
+        case 40:
+        case 44:
+        case 45:
+        case 52:
+        case 57:
+        case 58:
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
 // 0x4F7500
 void CMessageHandler::AddMessage(CMessage* message, BOOL bForcePassThrough)
 {

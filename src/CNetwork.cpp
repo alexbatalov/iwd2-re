@@ -52,7 +52,7 @@ const INT CNetwork::SPEC_MSG_TYPE = 1;
 const INT CNetwork::SPEC_MSG_SUBTYPE = 2;
 
 // 0x85E680
-const BYTE SPEC_MSG_FLAG_ENABLED = 0xFF;
+const BYTE CNetwork::SPEC_MSG_FLAG_ENABLED = 0xFF;
 
 // 0x85E6A8
 const INT CNetwork::ERROR_NONE = 0;
