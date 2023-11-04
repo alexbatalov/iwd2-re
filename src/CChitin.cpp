@@ -1850,6 +1850,12 @@ void CChitin::OnMultiplayerPlayerLeave(PLAYER_ID playerID, const CString& sPlaye
 {
 }
 
+// 0x4051C0
+BOOL CChitin::MessageCallback(BYTE* pData, DWORD dwSize)
+{
+    return FALSE;
+}
+
 // 0x78E770
 void CChitin::FlipFullScreenMode(BOOLEAN a2)
 {

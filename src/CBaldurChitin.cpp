@@ -1993,6 +1993,12 @@ void CBaldurChitin::OnMultiplayerPlayerVisible(PLAYER_ID playerID)
     }
 }
 
+// 0x425E60
+BOOL CBaldurChitin::MessageCallback(BYTE* pData, DWORD dwSize)
+{
+    return GetMessageHandler()->ImportantMessage(pData, dwSize);
+}
+
 // 0x425FB0
 void CBaldurChitin::SynchronousUpdate()
 {
