@@ -16,6 +16,14 @@ BOOL CGameRemoteObjectArray::Find(DWORD remotePlayerID, LONG remoteObjectID, LON
     return FALSE;
 }
 
+// 0x59BB90
+BOOL CGameRemoteObjectArray::RemovePlayer(DWORD removedPlayerID)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x59BF30
 BOOL CGameRemoteObjectArray::ChangeControlOnLoadGame()
 {

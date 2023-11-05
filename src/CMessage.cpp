@@ -1650,6 +1650,29 @@ BOOLEAN CBaldurMessage::KickPlayerRequest(const CString& sPlayerName)
     return FALSE;
 }
 
+// 0x42D7A0
+BOOL CBaldurMessage::PurgeDroppedPlayers()
+{
+    CSingleLock lock(&field_9A, FALSE);
+
+    if (m_bRemovedPlayerID == TRUE) {
+        lock.Lock(INFINITE);
+
+        for (INT nPlayer = 0; nPlayer < CNETWORK_MAX_PLAYERS; nPlayer++) {
+            if (m_pRemovedPlayerID[nPlayer] != 0) {
+                g_pBaldurChitin->GetObjectGame()->GetRemoteObjectArray()->RemovePlayer(m_pRemovedPlayerID[nPlayer]);
+                m_pRemovedPlayerID[nPlayer] = 0;
+            }
+        }
+
+        m_bRemovedPlayerID = FALSE;
+
+        lock.Unlock();
+    }
+
+    return TRUE;
+}
+
 // 0x42D860
 void CBaldurMessage::UpdateDemandCharacters(unsigned char a1, int a2, unsigned char a3)
 {
