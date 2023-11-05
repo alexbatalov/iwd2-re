@@ -1756,13 +1756,31 @@ BOOLEAN CBaldurMessage::DemandCharacterSlot(SHORT nCharacterSlot, BOOLEAN bDeman
 // 0x42F390
 BOOLEAN CBaldurMessage::OnDemandCharacterSlot(INT nMsgFrom, BYTE* pMessage, DWORD dwSize)
 {
+    CString sSendTo;
+    SHORT nCharacterSlot;
+    BOOLEAN bSendCharInfo;
+
+    if (g_pChitin->cNetwork.GetSessionOpen()) {
+        nCharacterSlot = *reinterpret_cast<SHORT*>(pMessage + CNetwork::SPEC_MSG_HEADER_LENGTH);
+        bSendCharInfo = g_pBaldurChitin->GetObjectGame()->GetCharacterSlot(nCharacterSlot) != CGameObjectArray::INVALID_INDEX;
+        g_pChitin->cNetwork.GetRawPlayerName(nMsgFrom, sSendTo);
+        DemandCharacterSlotReply(sSendTo, nCharacterSlot, bSendCharInfo);
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
+
+// 0x42F480
+BOOLEAN CBaldurMessage::BroadcastDemandCharacterSlotReply(BOOLEAN bUpdateAllCharacters, INT nUpdatedCharacterSlot, BOOLEAN bProgressBarInPlace)
+{
     // TODO: Incomplete.
 
     return FALSE;
 }
 
-// 0x42F480
-BOOLEAN CBaldurMessage::BroadcastDemandCharacterSlotReply(BOOLEAN bUpdateAllCharacters, INT nUpdatedCharacterSlot, BOOLEAN bProgressBarInPlace)
+// 0x42F750
+BOOLEAN CBaldurMessage::DemandCharacterSlotReply(CString& sSendTo, SHORT nCharacterSlot, BOOLEAN bSendCharInfo)
 {
     // TODO: Incomplete.
 
