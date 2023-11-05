@@ -171,7 +171,7 @@ POSITION CUIControlTextDisplay::DisplayString(const CString& sLabel, const CStri
                 // NOTE: Uninline.
                 AdjustScrollBar();
 
-                m_posTopString = m_plstStrings->FindIndex(max(field_A6A, 0));
+                m_posTopString = m_plstStrings->FindIndex(max(nOldCount - field_A6A, 0));
                 if (m_posTopString == NULL) {
                     m_posTopString = m_plstStrings->GetTailPosition();
                 }
