@@ -274,6 +274,7 @@ public:
     BYTE* PollSpecificMessageType(BYTE nMsgType, BYTE nMsgSubType, INT& nMsgFrom, DWORD& dwSize);
     void HandleBlockingMessages();
     BOOL SendSettingsNightmareMode(const CString& sPlayerName);
+    BOOLEAN OnSettingsNightmareMode(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize);
     BOOLEAN DemandSettingsNightmareMode(BOOLEAN wait);
     BOOL OnDemandSettingsNightmareMode(INT nMsgFrom);
     BOOLEAN OnMovieEndCredits(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize);

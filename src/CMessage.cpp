@@ -3226,6 +3226,23 @@ BOOL CBaldurMessage::SendSettingsNightmareMode(const CString& sPlayerName)
     return TRUE;
 }
 
+// 0x43D520
+BOOLEAN CBaldurMessage::OnSettingsNightmareMode(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize)
+{
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+        return FALSE;
+    }
+
+    if (nMsgFrom != g_pChitin->cNetwork.GetHostPlayerID()) {
+        return FALSE;
+    }
+
+    g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nNightmareMode = pByteMessage[CNetwork::SPEC_MSG_HEADER_LENGTH];
+
+    return TRUE;
+}
+
 // 0x43D590
 BOOLEAN CBaldurMessage::DemandSettingsNightmareMode(BOOLEAN wait)
 {
