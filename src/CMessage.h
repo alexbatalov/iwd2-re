@@ -220,6 +220,7 @@ public:
     BOOL ObjectControl();
     BOOLEAN OnSwapItemRequest(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
     BOOLEAN SendChatMessage(CString& sChatMessage);
+    BOOLEAN OnChatMessage(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
     void SetSignalDefaultSecondsToTimeout();
     BOOLEAN RequestClientSignal(BYTE signalToSend);
     BOOLEAN OnRequestClientSignal(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);

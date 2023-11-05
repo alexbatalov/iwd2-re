@@ -1728,6 +1728,21 @@ BOOLEAN CBaldurMessage::SendChatMessage(CString& sChatMessage)
     return FALSE;
 }
 
+// 0x433080
+BOOLEAN CBaldurMessage::OnChatMessage(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize)
+{
+    CString sChatString;
+
+    if (g_pChitin->cNetwork.GetSessionOpen()) {
+        // FIXME: Unncessesary temporary.
+        sChatString = CString(reinterpret_cast<char*>(pByteMessage + 1), dwSize - 1);
+        m_cChatBuffer.AddMessage(sChatString);
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
+
 // 0x433150
 void CBaldurMessage::SetSignalDefaultSecondsToTimeout()
 {
