@@ -186,9 +186,10 @@ class CUIControlButtonMultiPlayerPermissionsPermission : public CUIControlButton
 public:
     CUIControlButtonMultiPlayerPermissionsPermission(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonMultiPlayerPermissionsPermission() override;
+    BOOL Render(BOOL bForce) override;
     void OnLButtonClick(CPoint pt) override;
 
-    /* 066E */ short field_66E;
+    /* 066E */ SHORT m_nDisabledSelectedFrame;
 };
 
 class CUIControlButtonMultiPlayerPermissionsKick : public CUIControlButton {
@@ -209,9 +210,10 @@ class CUIControlButtonMultiPlayerPermissionsListen : public CUIControlButton3Sta
 public:
     CUIControlButtonMultiPlayerPermissionsListen(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonMultiPlayerPermissionsListen() override;
+    BOOL Render(BOOL bForce) override;
     void OnLButtonClick(CPoint pt) override;
 
-    /* 066E */ short field_66E;
+    /* 066E */ SHORT m_nDisabledSelectedFrame;
 };
 
 class CUIControlButtonMultiPlayerPermissionsDone : public CUIControlButton {
@@ -225,9 +227,10 @@ class CUIControlButtonMultiPlayerOptionsImport : public CUIControlButton3State {
 public:
     CUIControlButtonMultiPlayerOptionsImport(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonMultiPlayerOptionsImport() override;
+    BOOL Render(BOOL bForce) override;
     void OnLButtonClick(CPoint pt) override;
 
-    /* 066E */ short field_66E;
+    /* 066E */ SHORT m_nDisabledSelectedFrame;
 };
 
 class CUIControlButtonMultiPlayerOptionsCancel : public CUIControlButton {
@@ -304,9 +307,10 @@ class CUIControlButtonMultiPlayerSelection : public CUIControlButton3State {
 public:
     CUIControlButtonMultiPlayerSelection(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButtonMultiPlayerSelection() override;
+    BOOL Render(BOOL bForce) override;
     void OnLButtonClick(CPoint pt) override;
 
-    /* 066E */ short field_66E;
+    /* 066E */ SHORT m_nDisabledSelectedFrame;
 };
 
 #endif /* CSCREENMULTIPLAYER_H_ */

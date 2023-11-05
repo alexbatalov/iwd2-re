@@ -2691,7 +2691,7 @@ CUIControlButtonMultiPlayerPermissionsPermission::CUIControlButtonMultiPlayerPer
 {
     m_nPressedFrame = 2;
     m_nDisabledFrame = 0;
-    field_66E = 4;
+    m_nDisabledSelectedFrame = 4;
     m_nNotSelectedFrame = 1;
     m_nSelectedFrame = 3;
 }
@@ -2787,6 +2787,27 @@ void CUIControlButtonMultiPlayerPermissionsPermission::OnLButtonClick(CPoint pt)
     pSettings->SetPermission(nPlayer, nPermission, m_bSelected == FALSE, TRUE);
 }
 
+// 0x6512D0
+BOOL CUIControlButtonMultiPlayerPermissionsPermission::Render(BOOL bForce)
+{
+    if (!m_bPressed) {
+        if (m_bEnabled) {
+            if (m_bSelected) {
+                m_cVidCell.FrameSet(m_nSelectedFrame);
+            } else {
+                m_cVidCell.FrameSet(m_nNotSelectedFrame);
+            }
+        } else {
+            if (m_bSelected) {
+                m_cVidCell.FrameSet(m_nDisabledSelectedFrame);
+            } else {
+                m_cVidCell.FrameSet(m_nDisabledFrame);
+            }
+        }
+    }
+    return CUIControlButton::Render(bForce);
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x650A90
@@ -2856,7 +2877,7 @@ CUIControlButtonMultiPlayerPermissionsListen::CUIControlButtonMultiPlayerPermiss
 
     m_nPressedFrame = 2;
     m_nDisabledFrame = 0;
-    field_66E = 4;
+    m_nDisabledSelectedFrame = 4;
     m_nNotSelectedFrame = 1;
     m_nSelectedFrame = 3;
 }
@@ -2876,6 +2897,27 @@ void CUIControlButtonMultiPlayerPermissionsListen::OnLButtonClick(CPoint pt)
     UTIL_ASSERT(pSettings != NULL);
 
     pSettings->SetListenToJoinOption(m_bSelected == FALSE, TRUE);
+}
+
+// 0x6512D0
+BOOL CUIControlButtonMultiPlayerPermissionsListen::Render(BOOL bForce)
+{
+    if (!m_bPressed) {
+        if (m_bEnabled) {
+            if (m_bSelected) {
+                m_cVidCell.FrameSet(m_nSelectedFrame);
+            } else {
+                m_cVidCell.FrameSet(m_nNotSelectedFrame);
+            }
+        } else {
+            if (m_bSelected) {
+                m_cVidCell.FrameSet(m_nDisabledSelectedFrame);
+            } else {
+                m_cVidCell.FrameSet(m_nDisabledFrame);
+            }
+        }
+    }
+    return CUIControlButton::Render(bForce);
 }
 
 // -----------------------------------------------------------------------------
@@ -2916,7 +2958,7 @@ CUIControlButtonMultiPlayerOptionsImport::CUIControlButtonMultiPlayerOptionsImpo
     m_nPressedFrame = 1;
     m_nSelectedFrame = 3;
     m_nDisabledFrame = 2;
-    field_66E = 4;
+    m_nDisabledSelectedFrame = 4;
 }
 
 // 0x651230
@@ -2958,6 +3000,27 @@ void CUIControlButtonMultiPlayerOptionsImport::OnLButtonClick(CPoint pt)
     pSettings->SetImportingCharacterOption(nImportingBitField);
 
     g_pBaldurChitin->m_pEngineMultiPlayer->UpdateHelp(m_pPanel->m_nID, 14, strDescription);
+}
+
+// 0x6512D0
+BOOL CUIControlButtonMultiPlayerOptionsImport::Render(BOOL bForce)
+{
+    if (!m_bPressed) {
+        if (m_bEnabled) {
+            if (m_bSelected) {
+                m_cVidCell.FrameSet(m_nSelectedFrame);
+            } else {
+                m_cVidCell.FrameSet(m_nNotSelectedFrame);
+            }
+        } else {
+            if (m_bSelected) {
+                m_cVidCell.FrameSet(m_nDisabledSelectedFrame);
+            } else {
+                m_cVidCell.FrameSet(m_nDisabledFrame);
+            }
+        }
+    }
+    return CUIControlButton::Render(bForce);
 }
 
 // -----------------------------------------------------------------------------
@@ -3502,7 +3565,7 @@ CUIControlButtonMultiPlayerSelection::CUIControlButtonMultiPlayerSelection(CUIPa
     m_nDisabledFrame = 0;
     m_nNotSelectedFrame = 1;
     m_nSelectedFrame = 3;
-    field_66E = 4;
+    m_nDisabledSelectedFrame = 4;
 }
 
 // 0x652E50
@@ -3550,4 +3613,25 @@ void CUIControlButtonMultiPlayerSelection::OnLButtonClick(CPoint pt)
         // __LINE__: 6876
         UTIL_ASSERT(FALSE);
     }
+}
+
+// 0x6512D0
+BOOL CUIControlButtonMultiPlayerSelection::Render(BOOL bForce)
+{
+    if (!m_bPressed) {
+        if (m_bEnabled) {
+            if (m_bSelected) {
+                m_cVidCell.FrameSet(m_nSelectedFrame);
+            } else {
+                m_cVidCell.FrameSet(m_nNotSelectedFrame);
+            }
+        } else {
+            if (m_bSelected) {
+                m_cVidCell.FrameSet(m_nDisabledSelectedFrame);
+            } else {
+                m_cVidCell.FrameSet(m_nDisabledFrame);
+            }
+        }
+    }
+    return CUIControlButton::Render(bForce);
 }
