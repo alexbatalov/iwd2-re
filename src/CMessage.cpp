@@ -1690,9 +1690,67 @@ BOOLEAN CBaldurMessage::OnUpdateDemandCharacterSlot(INT nMsgFrom, BYTE* pMessage
 // 0x42F100
 BOOLEAN CBaldurMessage::DemandCharacterSlot(SHORT nCharacterSlot, BOOLEAN bDemandFromHost, SHORT nPlayerSlot)
 {
-    // TODO: Incomplete.
+    CString sSendTo;
+    DWORD dwSize;
+    BYTE* pMessage;
 
-    return FALSE;
+    if (!g_pChitin->cNetwork.GetSessionOpen()) {
+        return FALSE;
+    }
+
+    if (bDemandFromHost == TRUE) {
+        if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+            return FALSE;
+        }
+
+        g_pChitin->cNetwork.GetHostPlayerName(sSendTo);
+    } else {
+        g_pChitin->cNetwork.GetPlayerName(nPlayerSlot, sSendTo);
+    }
+
+    if (sSendTo == "") {
+        return FALSE;
+    }
+
+    dwSize = sizeof(SHORT);
+    pMessage = CreateBuffer(dwSize);
+    if (pMessage == NULL) {
+        return FALSE;
+    }
+
+    *reinterpret_cast<SHORT*>(pMessage) = nCharacterSlot;
+
+    g_pChitin->cNetwork.SendSpecificMessage(sSendTo,
+        CNetwork::SEND_GUARANTEED,
+        CBaldurMessage::MSG_TYPE_PLAYERCHAR,
+        CBaldurMessage::MSG_SUBTYPE_PLAYERCHAR_DEMAND_SLOT,
+        pMessage,
+        dwSize);
+
+    DestroyBuffer(pMessage);
+
+    if (bDemandFromHost) {
+        while (!g_pChitin->cNetwork.PeekSpecificMessage(sSendTo, CBaldurMessage::MSG_TYPE_PLAYERCHAR, CBaldurMessage::MSG_SUBTYPE_PLAYERCHAR_DEMAND_REPLY)
+            && g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+            g_pBaldurChitin->GetBaldurMessage()->HandleBlockingMessages();
+
+            g_pChitin->m_bDisplayStale = TRUE;
+            SleepEx(60, FALSE);
+        }
+
+        if (!g_pChitin->cNetwork.GetSessionOpen()) {
+            return FALSE;
+        }
+
+        pMessage = g_pChitin->cNetwork.FetchSpecificMessage(sSendTo,
+            CBaldurMessage::MSG_TYPE_PLAYERCHAR,
+            CBaldurMessage::MSG_SUBTYPE_PLAYERCHAR_DEMAND_REPLY,
+            dwSize);
+        OnDemandCharacterSlotReply(nPlayerSlot, pMessage, dwSize);
+        delete pMessage;
+    }
+
+    return TRUE;
 }
 
 // 0x42F390
