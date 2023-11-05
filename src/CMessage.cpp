@@ -624,7 +624,7 @@ BOOL CBaldurMessage::SendFullSettingsToClients(const CString& sPlayerName)
 BOOL CBaldurMessage::OnSettingsFullSet(INT nMsgFrom, BYTE* pMessage, DWORD dwSize)
 {
     if (!g_pChitin->cNetwork.GetSessionOpen()
-        || g_pChitin->cNetwork.GetSessionHosting() != TRUE) {
+        || g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
         return FALSE;
     }
 
