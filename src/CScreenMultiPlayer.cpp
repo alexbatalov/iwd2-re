@@ -1511,8 +1511,8 @@ void CScreenMultiPlayer::UpdateMainPanelCharacter(CUIPanel* pPanel, INT nCharact
         pButton->SetActive(bModifyCharacterActive);
         pButton->SetInactiveRender(bModifyCharacterActive);
 
-        pLabel->SetActive(bModifyCharacterActive);
-        pLabel->SetInactiveRender(bModifyCharacterActive);
+        pLabel->SetActive(!bModifyCharacterActive);
+        pLabel->SetInactiveRender(!bModifyCharacterActive);
 
         if (bModifyCharacterActive) {
             if (bSlotFree) {
