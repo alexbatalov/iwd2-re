@@ -10,8 +10,8 @@ class CGameOptions {
 public:
     CGameOptions();
 
-    /* 0000 */ BOOL m_bGore;
-    /* 0004 */ int field_4;
+    /* 0000 */ DWORD m_nGore;
+    /* 0004 */ DWORD m_nGoreOption;
     /* 0008 */ DWORD m_nMouseScrollSpeed;
     /* 000C */ BOOL m_bSubtitles;
     /* 0010 */ DWORD m_nGuiFeedbackLevel;

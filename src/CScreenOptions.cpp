@@ -1333,8 +1333,8 @@ void CScreenOptions::UpdateGamePlayPanel(BOOLEAN bInitialUpdate)
 
     pButton = static_cast<CUIControlButton3State*>(pPanel->GetControl(19));
     UTIL_ASSERT(pButton != NULL); // 2267
-    if (pOptions->field_4) {
-        pButton->SetSelected(pOptions->m_bGore);
+    if (pOptions->m_nGoreOption) {
+        pButton->SetSelected(pOptions->m_nGore);
     } else {
         pPanel->GetControl(19)->SetActive(FALSE);
         pPanel->GetControl(19)->SetInactiveRender(FALSE);
@@ -1779,9 +1779,9 @@ void CUIControlButtonOptionsSelection::OnLButtonClick(CPoint pt)
             pOptions->m_bAlwaysDither = m_bSelected;
             break;
         case 19:
-            if (pOptions->field_4) {
+            if (pOptions->m_nGoreOption) {
                 dwStrId = 18023;
-                pOptions->m_bGore = m_bSelected;
+                pOptions->m_nGore = m_bSelected;
             } else {
                 m_bSelected = FALSE;
             }
@@ -2832,7 +2832,7 @@ void CUIControlButtonOptionsHotArea::OnHotAreaClick(CPoint pt)
             dwStrId = 18021;
             break;
         case 27:
-            if (!g_pBaldurChitin->GetObjectGame()->GetOptions()->field_4) {
+            if (!g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nGoreOption) {
                 return;
             }
 

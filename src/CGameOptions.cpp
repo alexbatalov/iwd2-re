@@ -7,8 +7,8 @@ CGameOptions::CGameOptions()
 {
     m_bHotkeysOnToolTips = FALSE;
     m_bDuplicateFloatingText = FALSE;
-    m_bGore = TRUE;
-    field_4 = 0;
+    m_nGore = 1;
+    m_nGoreOption = 0;
     m_nMouseScrollSpeed = 28;
     m_bSubtitles = FALSE;
     m_nGuiFeedbackLevel = 3;

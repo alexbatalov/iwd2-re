@@ -1709,6 +1709,14 @@ BOOLEAN CNetwork::AddPlayerToList(PLAYER_ID dpID, const CString& sPlayerName, BO
     return TRUE;
 }
 
+// 0x7A6D10
+BOOLEAN CNetwork::KickPlayer(PLAYER_ID dpID, BOOLEAN bAIResponsible)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x7A6EA0
 BOOLEAN CNetwork::RemovePlayerFromList(PLAYER_ID dpID, BOOLEAN bAIResponsible)
 {

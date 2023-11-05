@@ -1096,16 +1096,16 @@ BOOL CBaldurMessage::OnSettingsGoreRequirement(INT nMsgFrom, BYTE* pMessage, DWO
     nClientGoreOption = *reinterpret_cast<DWORD*>(pMessage + nMsgPtr);
     nMsgPtr += sizeof(BOOLEAN);
 
-    DWORD nServerGoreOption = g_pBaldurChitin->GetObjectGame()->GetOptions()->field_4;
-    DWORD nServerGore = g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bGore;
+    DWORD nServerGoreOption = g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nGoreOption;
+    DWORD nServerGore = g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nGore;
 
     if (nClientGoreOption < nServerGoreOption) {
-        g_pBaldurChitin->GetObjectGame()->GetOptions()->field_4 = nClientGoreOption;
+        g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nGoreOption = nClientGoreOption;
         bModifiedGore = TRUE;
     }
 
     if (nClientGore < nServerGore) {
-        g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bGore = nClientGore;
+        g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nGore = nClientGore;
         bModifiedGore = TRUE;
     }
 

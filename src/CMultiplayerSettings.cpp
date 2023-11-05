@@ -121,24 +121,24 @@ void CMultiplayerSettings::InitializeSettings()
 
     switch (m_nDifficultyLevel) {
     case 1:
-        field_BE = -50;
-        field_C2 = -50;
+        m_nDifficultyMultiplier = -50;
+        m_nMPDifficultyMultiplier = -50;
         break;
     case 2:
-        field_BE = -25;
-        field_C2 = -25;
+        m_nDifficultyMultiplier = -25;
+        m_nMPDifficultyMultiplier = -25;
         break;
     case 3:
-        field_BE = 0;
-        field_C2 = 0;
+        m_nDifficultyMultiplier = 0;
+        m_nMPDifficultyMultiplier = 0;
         break;
     case 4:
-        field_BE = 50;
-        field_C2 = 50;
+        m_nDifficultyMultiplier = 50;
+        m_nMPDifficultyMultiplier = 50;
         break;
     case 5:
-        field_BE = 100;
-        field_C2 = 100;
+        m_nDifficultyMultiplier = 100;
+        m_nMPDifficultyMultiplier = 100;
         break;
     }
 }
@@ -226,11 +226,11 @@ void CMultiplayerSettings::Marshal(BYTE** pData, DWORD* dwSize)
     *reinterpret_cast<LONG*>(*pData + nMsgPtr) = m_ptAreaStart.y;
     nMsgPtr += sizeof(LONG);
 
-    DWORD nGore = g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bGore;
+    DWORD nGore = g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nGore;
     *reinterpret_cast<DWORD*>(*pData + nMsgPtr) = nGore;
     nMsgPtr += sizeof(DWORD);
 
-    DWORD nGoreOption = g_pBaldurChitin->GetObjectGame()->GetOptions()->field_4;
+    DWORD nGoreOption = g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nGoreOption;
     *reinterpret_cast<DWORD*>(*pData + nMsgPtr) = nGoreOption;
     nMsgPtr += sizeof(DWORD);
 
@@ -245,10 +245,10 @@ void CMultiplayerSettings::Marshal(BYTE** pData, DWORD* dwSize)
     *reinterpret_cast<int*>(*pData + nMsgPtr) = m_nDifficultyLevel;
     nMsgPtr += sizeof(int);
 
-    *reinterpret_cast<int*>(*pData + nMsgPtr) = field_BE;
+    *reinterpret_cast<int*>(*pData + nMsgPtr) = m_nDifficultyMultiplier;
     nMsgPtr += sizeof(int);
 
-    *reinterpret_cast<int*>(*pData + nMsgPtr) = field_C2;
+    *reinterpret_cast<int*>(*pData + nMsgPtr) = m_nMPDifficultyMultiplier;
     nMsgPtr += sizeof(int);
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\CMultiplayerSettings.cpp
@@ -259,7 +259,183 @@ void CMultiplayerSettings::Marshal(BYTE** pData, DWORD* dwSize)
 // 0x517B50
 void CMultiplayerSettings::Unmarshal(BYTE* pData, DWORD dwSize)
 {
-    // TODO: Incomplete.
+    BOOLEAN bGoreTooHigh = FALSE;
+    DWORD nOldGore;
+    DWORD nOldGoreOption;
+    DWORD nMsgPtr;
+    BYTE nPermission;
+    INT nIndexPlayer;
+    INT nIndexCharacter;
+    BYTE nStringLength;
+
+    // NOTE: Unusual variable name (as seen in assertion).
+    DWORD test_size = GetDataSize();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMultiplayerSettings.cpp
+    // __LINE__: 523
+    UTIL_ASSERT_MSG(pData != NULL && dwSize == CNetwork::SPEC_MSG_HEADER_LENGTH + test_size, "CMultiplayerSettings::Unmarshal: Bad pointer to data or data size.");
+
+    nMsgPtr = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    m_bArbitrationLockStatus = *reinterpret_cast<BOOLEAN*>(pData + nMsgPtr);
+    nMsgPtr += sizeof(BOOLEAN);
+
+    m_bArbitrationLockAllowInput = *reinterpret_cast<BOOLEAN*>(pData + nMsgPtr);
+    nMsgPtr += sizeof(BOOLEAN);
+
+    for (nPermission = 0; nPermission < CGamePermission::TOTAL_PERMISSIONS; nPermission++) {
+        BOOLEAN bValue = *reinterpret_cast<BOOLEAN*>(pData + nMsgPtr);
+        nMsgPtr += sizeof(BOOLEAN);
+
+        m_cDefaultPermissions.SetSinglePermission(nPermission, bValue);
+
+        for (nIndexPlayer = 0; nIndexPlayer < 6; nIndexPlayer++) {
+            m_pcPermissions[nIndexPlayer].SetSinglePermission(nPermission, bValue);
+        }
+    }
+
+    for (nIndexPlayer = 0; nIndexPlayer < 6; nIndexPlayer++) {
+        PLAYER_ID playerID = *reinterpret_cast<PLAYER_ID*>(pData + nMsgPtr);
+        nMsgPtr += sizeof(PLAYER_ID);
+
+        INT nPlayer = g_pChitin->cNetwork.FindPlayerLocationByID(playerID, FALSE);
+        if (nPlayer != -1) {
+            for (nPermission = 0; nPermission < CGamePermission::TOTAL_PERMISSIONS; nPermission++) {
+                BOOLEAN bValue = *reinterpret_cast<BOOLEAN*>(pData + nMsgPtr);
+                nMsgPtr += sizeof(BOOLEAN);
+
+                m_pcPermissions[nPlayer].SetSinglePermission(nPermission, bValue);
+
+                if (g_pChitin->cNetwork.GetPlayerID(nPlayer) == g_pChitin->cNetwork.m_idLocalPlayer) {
+                    g_pBaldurChitin->GetObjectGame()->m_singlePlayerPermissions.SetSinglePermission(nPermission, bValue);
+                }
+            }
+        } else {
+            nMsgPtr += sizeof(BOOLEAN) * CGamePermission::TOTAL_PERMISSIONS;
+        }
+
+        m_pnPlayerReady[nIndexPlayer] = *reinterpret_cast<PLAYER_ID*>(pData + nMsgPtr);
+        nMsgPtr += sizeof(PLAYER_ID);
+
+        PLAYER_ID kickedPlayerID = *reinterpret_cast<PLAYER_ID*>(pData + nMsgPtr);
+        nMsgPtr += sizeof(PLAYER_ID);
+
+        if (kickedPlayerID != 0) {
+            g_pChitin->cNetwork.KickPlayer(kickedPlayerID, TRUE);
+        }
+    }
+
+    m_bRefreshCharacters = *reinterpret_cast<BOOLEAN*>(pData + nMsgPtr);
+    nMsgPtr += sizeof(BOOLEAN);
+
+    if (m_bRefreshCharacters == TRUE) {
+        for (nIndexCharacter = 0; nIndexCharacter < 6; nIndexCharacter++) {
+            m_pbCharacterReady[nIndexCharacter] = FALSE;
+            g_pBaldurChitin->GetObjectGame()->ClearCharacterSlot(nIndexCharacter);
+            m_pnCharacterStatus[nIndexCharacter] = 0;
+        }
+        m_bRefreshCharacters = FALSE;
+    }
+
+    for (nIndexCharacter = 0; nIndexCharacter < 6; nIndexCharacter++) {
+        m_pbCharacterReady[nIndexCharacter] = *reinterpret_cast<BOOLEAN*>(pData + nMsgPtr);
+        nMsgPtr += sizeof(BOOLEAN);
+    }
+
+    for (nIndexCharacter = 0; nIndexCharacter < 6; nIndexCharacter++) {
+        BYTE nCharacterStatus = *reinterpret_cast<BYTE*>(pData + nMsgPtr);
+        nMsgPtr += sizeof(BYTE);
+
+        if (nCharacterStatus != m_pnCharacterStatus[nIndexCharacter]) {
+            if (nCharacterStatus == CHARSTATUS_CHARACTER) {
+                if (m_pnCharacterStatus[nIndexCharacter] != CHARSTATUS_CHARACTER
+                    && (m_bFirstConnected != TRUE || m_bArbitrationLockStatus)) {
+                    g_pBaldurChitin->GetBaldurMessage()->DemandCharacterSlot(nIndexCharacter,
+                        FALSE,
+                        g_pChitin->cNetwork.m_nHostPlayer);
+                }
+            } else {
+                if (m_pnCharacterStatus[nIndexCharacter] == CHARSTATUS_CHARACTER) {
+                    g_pBaldurChitin->GetObjectGame()->ClearCharacterSlot(nIndexCharacter);
+                }
+            }
+        }
+
+        m_pnCharacterStatus[nIndexCharacter] = nCharacterStatus;
+    }
+
+    for (nIndexCharacter = 0; nIndexCharacter < 6; nIndexCharacter++) {
+        m_pnCharacterControlledByPlayer[nIndexCharacter] = *reinterpret_cast<PLAYER_ID*>(pData + nMsgPtr);
+        nMsgPtr += sizeof(PLAYER_ID);
+    }
+
+    m_nImportingBitField = *reinterpret_cast<BYTE*>(pData + nMsgPtr);
+    nMsgPtr += sizeof(BYTE);
+
+    m_bRestrictStoreOption = *reinterpret_cast<BOOLEAN*>(pData + nMsgPtr);
+    nMsgPtr += sizeof(BOOLEAN);
+
+    m_bJoinRequests = *reinterpret_cast<BOOLEAN*>(pData + nMsgPtr);
+    nMsgPtr += sizeof(BOOLEAN);
+
+    m_ptAreaStart.x = *reinterpret_cast<LONG*>(pData + nMsgPtr);
+    nMsgPtr += sizeof(LONG);
+
+    m_ptAreaStart.y = *reinterpret_cast<LONG*>(pData + nMsgPtr);
+    nMsgPtr += sizeof(LONG);
+
+    DWORD nGore = *reinterpret_cast<DWORD*>(pData + nMsgPtr);
+    nMsgPtr += sizeof(DWORD);
+
+    if (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nGore < nGore) {
+        nOldGore = g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nGore;
+        nOldGoreOption = g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nGoreOption;
+        bGoreTooHigh = TRUE;
+    }
+
+    g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nGore = nGore;
+
+    DWORD nGoreOption = *reinterpret_cast<DWORD*>(pData + nMsgPtr);
+    nMsgPtr += sizeof(DWORD);
+
+    if (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nGoreOption < nGoreOption) {
+        nOldGore = g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nGore;
+        nOldGoreOption = g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nGoreOption;
+        bGoreTooHigh = TRUE;
+    }
+
+    g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nGoreOption = nGoreOption;
+
+    nStringLength = *reinterpret_cast<BYTE*>(pData + nMsgPtr);
+    nMsgPtr += sizeof(BYTE);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMultiplayerSettings.cpp
+    // __LINE__: 708
+    UTIL_ASSERT(nStringLength <= 8);
+
+    // FIXME: Unnecessary temporary.
+    m_sAreaName = CString(reinterpret_cast<char*>(pData + nMsgPtr), nStringLength);
+    nMsgPtr += 8;
+
+    m_nDifficultyLevel = *reinterpret_cast<int*>(pData + nMsgPtr);
+    g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nDifficultyLevel = m_nDifficultyLevel;
+    nMsgPtr += sizeof(int);
+
+    m_nDifficultyMultiplier = *reinterpret_cast<int*>(pData + nMsgPtr);
+    g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nDifficultyMultiplier = m_nDifficultyMultiplier;
+    nMsgPtr += sizeof(int);
+
+    m_nMPDifficultyMultiplier = *reinterpret_cast<int*>(pData + nMsgPtr);
+    g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nMPDifficultyMultiplier = m_nMPDifficultyMultiplier;
+    nMsgPtr += sizeof(int);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMultiplayerSettings.cpp
+    // __LINE__: 729
+    UTIL_ASSERT(nMsgPtr == dwSize);
+
+    if (bGoreTooHigh) {
+        g_pBaldurChitin->GetBaldurMessage()->SendGoreRequirementToServer(nOldGore, nOldGoreOption);
+    }
 }
 
 // 0x517FE0

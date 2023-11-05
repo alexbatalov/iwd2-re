@@ -1221,18 +1221,18 @@ void CInfGame::LoadOptions()
         0,
         g_pBaldurChitin->GetIniFileName());
 
-    m_cOptions.field_4 = GetPrivateProfileIntA("Game Options",
+    m_cOptions.m_nGoreOption = GetPrivateProfileIntA("Game Options",
         "Grant 2000",
         0,
         g_pBaldurChitin->GetIniFileName());
 
-    if (m_cOptions.field_4) {
-        m_cOptions.m_bGore = GetPrivateProfileIntA("Game Options",
+    if (m_cOptions.m_nGoreOption) {
+        m_cOptions.m_nGore = GetPrivateProfileIntA("Game Options",
             "Chucknomitron",
             0,
             g_pBaldurChitin->GetIniFileName());
     } else {
-        m_cOptions.m_bGore = FALSE;
+        m_cOptions.m_nGore = 0;
     }
 
     m_cOptions.m_bFootStepsSounds = GetPrivateProfileIntA("Game Options",
@@ -1500,11 +1500,11 @@ void CInfGame::SaveOptions()
     WritePrivateProfileStringA("Game Options", "Footsteps", sValue, g_pBaldurChitin->GetIniFileName());
 
     if ((!g_pChitin->cNetwork.GetSessionOpen() || g_pChitin->cNetwork.GetSessionHosting())
-        && m_cOptions.field_4 != 0) {
-        sValue.Format("%d", m_cOptions.field_4);
+        && m_cOptions.m_nGoreOption != 0) {
+        sValue.Format("%d", m_cOptions.m_nGoreOption);
         WritePrivateProfileStringA("Game Options", "Grant 2000", sValue, g_pBaldurChitin->GetIniFileName());
 
-        sValue.Format("%d", m_cOptions.m_bGore);
+        sValue.Format("%d", m_cOptions.m_nGore);
         WritePrivateProfileStringA("Game Options", "Chucknomitron", sValue, g_pBaldurChitin->GetIniFileName());
     }
 

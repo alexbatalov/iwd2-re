@@ -88,6 +88,7 @@ public:
     void UnselectSession();
     BOOLEAN CreatePlayer(INT& nErrorCode);
     BOOLEAN AddPlayerToList(PLAYER_ID dpID, const CString& sPlayerName, BOOLEAN bIsHost, BOOLEAN bMakeVisible);
+    BOOLEAN KickPlayer(PLAYER_ID dpID, BOOLEAN bAIResponsible);
     BOOLEAN RemovePlayerFromList(PLAYER_ID dpID, BOOLEAN bAIResponsible);
     void EnumeratePlayers(BOOLEAN bProtectList);
     BOOLEAN MakePlayerVisible(PLAYER_ID playerID);

@@ -84,9 +84,9 @@ public:
     /* 00AC */ unsigned char field_AC[6];
     /* 00B2 */ BOOLEAN field_B2[6];
     /* 00B8 */ BOOLEAN m_bFirstConnected;
-    /* 00BA */ int m_nDifficultyLevel;
-    /* 00BE */ int field_BE;
-    /* 00C2 */ int field_C2;
+    /* 00BA */ DWORD m_nDifficultyLevel;
+    /* 00BE */ LONG m_nDifficultyMultiplier;
+    /* 00C2 */ LONG m_nMPDifficultyMultiplier;
 };
 
 #endif /* CMULTIPLAYERSETTINGS_H_ */
