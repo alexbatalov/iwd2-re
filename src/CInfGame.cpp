@@ -918,7 +918,49 @@ INT CInfGame::EndListManipulation(CGameArea* pArea)
 // 0x59FA00
 void CInfGame::sub_59FA00(BOOL a1)
 {
-    // TODO: Incomplete.
+    CGameArea* pArea = GetVisibleArea();
+    if (pArea != NULL) {
+        INT nCounter = pArea->m_nListManipulationThreadCounter;
+        if (pArea->m_ListManipulationThreadId == GetCurrentThreadId()) {
+            while (1) {
+                CGameArea* pArea = GetVisibleArea();
+                if (pArea == NULL) {
+                    break;
+                }
+
+                INT nRemainingCounter = pArea->SetListManipulationThreadId(0);
+                LeaveCriticalSection(&(pArea->field_214));
+
+                if (nRemainingCounter == 0) {
+                    break;
+                }
+            }
+
+            while (g_pChitin->m_bDisplayStale == TRUE
+                || (g_pChitin->m_bDisplayStale == TRUE && a1)) {
+                SleepEx(5, FALSE);
+            }
+
+            while (nCounter != 0) {
+                CGameArea* pArea = GetVisibleArea();
+                if (pArea != NULL) {
+                    EnterCriticalSection(&(pArea->field_214));
+                    pArea->SetListManipulationThreadId(GetCurrentThreadId());
+                }
+                nCounter--;
+            }
+        } else {
+            while (g_pChitin->m_bInSynchronousUpdate == TRUE
+                || (g_pChitin->m_bDisplayStale == TRUE && a1)) {
+                SleepEx(5, FALSE);
+            }
+        }
+    } else {
+        while (g_pChitin->m_bInSynchronousUpdate == TRUE
+            || (g_pChitin->m_bDisplayStale == TRUE && a1)) {
+            SleepEx(5, FALSE);
+        }
+    }
 }
 
 // 0x59FB50
