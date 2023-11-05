@@ -1836,7 +1836,7 @@ void CScreenConnection::OnDoneButtonClick()
     } else if (pPanel->m_nID == 8) {
         renderLock.Lock(INFINITE);
 
-        CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(2));
+        CUIControlEdit* pEdit = static_cast<CUIControlEdit*>(pPanel->GetControl(5));
 
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
         // __LINE__: 2977
