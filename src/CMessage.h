@@ -210,6 +210,7 @@ public:
     BOOLEAN SendArbitrationLockAllowInput(BOOLEAN bAllowInput);
     BOOLEAN OnSettingsArbitrationLockAllowInput(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
     BOOLEAN KickPlayerRequest(const CString& sPlayerName);
+    BOOL OnKickPlayerHoofedOut(INT nMsgFrom);
     BOOL AddDroppedPlayer(PLAYER_ID playerID);
     BOOL PurgeDroppedPlayers();
     void UpdateDemandCharacters(unsigned char a1, int a2, unsigned char a3);

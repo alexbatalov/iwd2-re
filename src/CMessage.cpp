@@ -1650,6 +1650,23 @@ BOOLEAN CBaldurMessage::KickPlayerRequest(const CString& sPlayerName)
     return FALSE;
 }
 
+// 0x42D670
+BOOL CBaldurMessage::OnKickPlayerHoofedOut(INT nMsgFrom)
+{
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+        return FALSE;
+    }
+
+    if (g_pChitin->cNetwork.GetPlayerID(nMsgFrom) != g_pChitin->cNetwork.GetHostPlayerID()) {
+        return FALSE;
+    }
+
+    g_pChitin->cNetwork.OnCloseSession();
+
+    return TRUE;
+}
+
 // 0x42D6E0
 BOOL CBaldurMessage::AddDroppedPlayer(PLAYER_ID playerID)
 {
