@@ -1657,9 +1657,73 @@ BOOLEAN CBaldurMessage::OnSettingsArbitrationLockAllowInput(INT nMsgFrom, BYTE* 
 // 0x42D070
 BOOLEAN CBaldurMessage::KickPlayerRequest(const CString& sPlayerName)
 {
-    // TODO: Incomplete.
+    DWORD dwSize;
+    BYTE* pMessage;
+    INT nMsgPtr;
+    CString sHostName;
+    CString sCopyPlayerName;
 
-    return FALSE;
+    // NOTE: Uninline.
+    g_pChitin->cNetwork.GetHostPlayerName(sHostName);
+
+    if (sHostName == "" || sHostName == sPlayerName) {
+        return FALSE;
+    }
+
+    dwSize = sPlayerName.GetLength() + sizeof(BYTE);
+    pMessage = CreateBuffer(dwSize);
+    if (pMessage == NULL) {
+        return FALSE;
+    }
+
+    // FIXME: Always true.
+    if (dwSize != 0) {
+        memset(pMessage, 0, dwSize);
+    }
+
+    nMsgPtr = 0;
+
+    *reinterpret_cast<BYTE*>(pMessage + nMsgPtr) = sPlayerName.GetLength();
+    nMsgPtr += sizeof(BYTE);
+
+    sCopyPlayerName = sPlayerName;
+    memcpy(pMessage + nMsgPtr,
+        sCopyPlayerName.GetBuffer(sCopyPlayerName.GetLength()),
+        sCopyPlayerName.GetLength());
+
+    if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+        if (g_pChitin->cNetwork.FindPlayerLocationByName(sPlayerName, FALSE) == -1) {
+            // FIXME: Leaking `pMessage`.
+            return FALSE;
+        }
+
+        PLAYER_ID playerID = g_pChitin->cNetwork.FindPlayerIDByName(sPlayerName, FALSE);
+
+        KickPlayerServerSupport(sPlayerName);
+        g_pChitin->cNetwork.SendSpecificMessage(sPlayerName,
+            CNetwork::SEND_GUARANTEED,
+            CBaldurMessage::MSG_TYPE_KICK_PLAYER,
+            CBaldurMessage::MSG_SUBTYPE_KICK_PLAYER_HOOFED_OUT,
+            NULL,
+            0);
+
+        SleepEx(500, FALSE);
+
+        if (playerID != 0) {
+            g_pChitin->cNetwork.KickPlayer(playerID, TRUE);
+        }
+    } else {
+        g_pChitin->cNetwork.SendSpecificMessage(sHostName,
+            CNetwork::SEND_GUARANTEED,
+            CBaldurMessage::MSG_TYPE_KICK_PLAYER,
+            CBaldurMessage::MSG_SUBTYPE_KICK_PLAYER_REQUEST,
+            pMessage,
+            dwSize);
+    }
+
+    DestroyBuffer(pMessage);
+
+    return TRUE;
 }
 
 // 0x42D310
