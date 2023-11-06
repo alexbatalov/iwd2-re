@@ -1680,6 +1680,25 @@ BOOL CVidInf::BKRenderLine(int nXFrom, int nYFrom, int nXTo, int nYTo, const CRe
     return FALSE;
 }
 
+// 0x79E2D0
+BOOL CVidInf::BKRenderConvexPoly(CVidPoly* pPoly, const CRect& rClipRect, DWORD dwColor, DWORD dwFlags, const CPoint& ptRef)
+{
+    if (g_pChitin->cVideo.Is3dAccelerated()) {
+        return pPoly->FillConvexPoly3d(rClipRect, dwColor, dwFlags, ptRef);
+    }
+
+    if (m_SurfaceDesc.lpSurface != NULL) {
+        return pPoly->FillConvexPoly(reinterpret_cast<WORD*>(m_SurfaceDesc.lpSurface),
+            m_SurfaceDesc.lPitch,
+            rClipRect,
+            dwColor,
+            dwFlags,
+            ptRef);
+    }
+
+    return FALSE;
+}
+
 // 0x79E340
 BOOL CVidInf::BKTextOut(CVidFont* pFont, const CString& sString, int x, int y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded)
 {

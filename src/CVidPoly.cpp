@@ -270,6 +270,14 @@ BOOL CVidPoly::FillPoly(WORD* pSurface, LONG lPitch, const CRect& rClip, DWORD d
     return FALSE;
 }
 
+// 0x7C15F0
+BOOL CVidPoly::FillConvexPoly3d(const CRect& rClip, DWORD dwColor, DWORD dwFlags, const CPoint& ptRef)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x7C18B0
 void CVidPoly::SetPoly(WORD* pVertices, WORD nVertices)
 {

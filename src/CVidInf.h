@@ -68,6 +68,7 @@ public:
     BOOL BKRender(CParticle* pParticle, const CRect& rClip, USHORT nFlag, USHORT nBlobSize);
     BOOL BKRenderEllipse(const CPoint& ptCenter, const CSize& axes, const CRect& rClip, COLORREF rgbColor);
     BOOL BKRenderLine(int nXFrom, int nYFrom, int nXTo, int nYTo, const CRect& rSurface, COLORREF rgbColor);
+    BOOL BKRenderConvexPoly(CVidPoly* pPoly, const CRect& rClipRect, DWORD dwColor, DWORD dwFlags, const CPoint& ptRef);
     BOOL BKTextOut(CVidFont* pFont, const CString& sString, int x, int y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded);
     void GetFogOWarTileRect(unsigned char a2, CRect& rTileRect);
     void RenderPointerImage(CVidCell* pPointerVidCell, INT nSurface, INT nPointerNumber, INT x, INT y, CRect rClip);
