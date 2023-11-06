@@ -1160,7 +1160,7 @@ void CScreenInventory::UpdateMainPanel(BOOL bClearError)
             // __LINE__: 1914
             UTIL_ASSERT(pButton != NULL);
 
-            pButton->SetSelected(pSprite->field_4C68 == nButtonID - 109);
+            pButton->SetSelected(pSprite->m_nWeaponSet == nButtonID - 109);
         }
 
         pGame->GetObjectArray()->ReleaseShare(nCharacterId,

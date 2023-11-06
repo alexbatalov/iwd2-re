@@ -490,23 +490,23 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     CButtonData buttonData;
 
     for (index = 0; index < 8; index++) {
-        field_342C[index] = buttonData;
+        m_quickWeapons[index] = buttonData;
     }
 
     for (index = 0; index < 9; index++) {
-        field_360C[index] = buttonData;
+        m_quickSpells[index] = buttonData;
     }
 
     for (index = 0; index < 3; index++) {
-        field_3828[index] = buttonData;
+        m_quickItems[index] = buttonData;
     }
 
     for (index = 0; index < 9; index++) {
-        field_38DC[index] = buttonData;
+        m_quickInnates[index] = buttonData;
     }
 
     for (index = 0; index < 9; index++) {
-        field_3AF8[index] = buttonData;
+        m_quickSongs[index] = buttonData;
     }
 
     field_70F6 = rand() % 20 + 1;
@@ -524,7 +524,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
         field_55A2[index] = -65538;
     }
 
-    memset(field_5004, 0, sizeof(field_5004));
+    memset(m_nNumberOfTimesInteractedWith, 0, sizeof(m_nNumberOfTimesInteractedWith));
 
     field_54B8 = 0;
     field_54A8 = 0;
@@ -555,12 +555,12 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
         field_5304 = 0;
         field_532A = 3;
         m_nModalState = 0;
-        field_4C54 = 0;
-        field_4C58 = 0;
-        field_4C5C = 0;
-        field_4C60 = 0;
-        field_4C64 = 0;
-        field_4C68 = 0;
+        field_4C54[0] = 0;
+        field_4C54[1] = 0;
+        field_4C54[2] = 0;
+        field_4C54[3] = 0;
+        field_4C54[4] = 0;
+        m_nWeaponSet = 0;
 
         field_7548[0].SetResRef(CResRef("SanctuC"), FALSE, TRUE, TRUE);
         field_7548[1].SetResRef(CResRef("EntangC"), FALSE, TRUE, TRUE);
@@ -1218,10 +1218,156 @@ void CGameSprite::RenderDamageArrow(CGameArea* pArea, CVidMode* pVidMode, INT nS
     // TODO: Incomplete.
 }
 
+// 0x70B2F0
+void CGameSprite::Marshal(BYTE** pCreature, LONG* creatureSize, WORD* facing, BOOLEAN a4, BOOLEAN a5)
+{
+    UTIL_ASSERT(pCreature != NULL && creatureSize != NULL && facing != NULL);
+
+    // TODO: Incomplete.
+}
+
 // 0x70BEE0
 void CGameSprite::Marshal(CSavedGamePartyCreature& partyCreature, BOOLEAN bNetworkMessage)
 {
-    // TODO: Incomplete.
+    DWORD nIndex;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 12226
+    UTIL_ASSERT(m_bGlobal);
+
+    partyCreature.m_wFlags = 0;
+
+    if (m_bSelected) {
+        partyCreature.m_wFlags |= 0x1;
+    }
+
+    if (bNetworkMessage == TRUE) {
+        partyCreature.m_wFlags |= 0x8000;
+    }
+
+    partyCreature.m_portraitId = g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(m_id);
+
+    memset(partyCreature.m_creatureResRef, 0, RESREF_SIZE);
+
+    BYTE* pCreature;
+    LONG nCreatureSize;
+    WORD facing;
+    Marshal(&pCreature, &nCreatureSize, &facing, TRUE, TRUE);
+
+    // FIXME: Unsafe x64 conversion.
+    partyCreature.m_creatureOffset = reinterpret_cast<DWORD>(pCreature);
+    partyCreature.m_creatureSize = nCreatureSize;
+    partyCreature.m_creatureFacing = facing;
+
+    BOOLEAN v1 = FALSE;
+    for (INT nCharacterSlot = 0; nCharacterSlot < 6; nCharacterSlot++) {
+        if (g_pBaldurChitin->GetObjectGame()->GetCharacterSlot(nCharacterSlot) == m_id) {
+            v1 = TRUE;
+            break;
+        }
+    }
+
+    if (m_pArea != NULL) {
+        m_pArea->m_resRef.GetResRef(partyCreature.m_areaName);
+
+        INT x;
+        INT y;
+        m_pArea->GetInfinity()->GetViewPosition(x, y);
+        partyCreature.m_posViewX = static_cast<WORD>(x);
+        partyCreature.m_posViewY = static_cast<WORD>(y);
+    } else {
+        if (v1 == TRUE) {
+            CResRef sBlankResRef;
+            sBlankResRef = "NO_AREA";
+
+            partyCreature.m_wFlags |= 0x8000;
+            sBlankResRef.GetResRef(partyCreature.m_areaName);
+        } else {
+            m_currentArea.GetResRef(partyCreature.m_areaName);
+        }
+
+        partyCreature.m_posViewX = 0;
+        partyCreature.m_posViewY = 0;
+    }
+
+    partyCreature.m_posX = static_cast<WORD>(m_pos.x);
+    partyCreature.m_posY = static_cast<WORD>(m_pos.y);
+    partyCreature.m_nModalState = m_nModalState;
+
+    for (nIndex = 0; nIndex < 5; nIndex++) {
+        partyCreature.field_28A[nIndex] = field_4C54[nIndex];
+    }
+
+    partyCreature.m_nWeaponSet = m_nWeaponSet;
+
+    for (nIndex = 0; nIndex < 8; nIndex++) {
+        partyCreature.m_quickWeaponsItemNum[nIndex] = m_quickWeapons[nIndex].m_abilityId.m_itemNum;
+        partyCreature.m_quickWeaponsAbilityNum[nIndex] = m_quickWeapons[nIndex].m_abilityId.m_abilityNum;
+        partyCreature.field_2A7[nIndex] = field_3D3A[nIndex];
+    }
+
+    for (nIndex = 0; nIndex < 9; nIndex++) {
+        m_quickSpells[nIndex].m_abilityId.m_res.GetResRef(partyCreature.m_quickSpellsSpellId[nIndex]);
+        partyCreature.m_quickSpellsClass[nIndex] = m_quickSpells[nIndex].m_abilityId.m_nClass;
+        partyCreature.field_280[nIndex] = m_quickSpells[nIndex].m_abilityId.field_1D;
+        partyCreature.field_29E[nIndex] = static_cast<unsigned char>(m_quickSpells[nIndex].m_abilityId.field_1E);
+    }
+
+    for (nIndex = 0; nIndex < 3; nIndex++) {
+        partyCreature.m_quickItemsItemNum[nIndex] = m_quickItems[nIndex].m_abilityId.m_itemNum;
+        partyCreature.m_quickItemsAbilityNum[nIndex] = m_quickItems[nIndex].m_abilityId.m_abilityNum;
+    }
+
+    for (nIndex = 0; nIndex < 9; nIndex++) {
+        m_quickInnates[nIndex].m_abilityId.m_res.GetResRef(partyCreature.m_quickInnatesSpellId[nIndex]);
+    }
+
+    for (nIndex = 0; nIndex < 9; nIndex++) {
+        m_quickSongs[nIndex].m_abilityId.m_res.GetResRef(partyCreature.m_quickSongsSpellId[nIndex]);
+    }
+
+    for (nIndex = 0; nIndex < 9; nIndex++) {
+        partyCreature.field_19A[nIndex] = field_3D14[nIndex];
+    }
+
+    partyCreature.m_nLastSpellbookClassIndex = m_nLastSpellbookClassIndex;
+    partyCreature.m_nLastSpellbookSpellLevel = m_nLastSpellbookSpellLevel;
+    partyCreature.m_nLastSong = m_nLastSong;
+    partyCreature.m_strStrongestKillName = m_cGameStats.m_strStrongestKillName;
+    partyCreature.m_nStrongestKillXPValue = m_cGameStats.m_nStrongestKillXPValue;
+    partyCreature.m_nPreviousTimeWithParty = m_cGameStats.m_nPreviousTimeWithParty;
+    partyCreature.m_nJoinPartyTime = m_cGameStats.m_nJoinPartyTime;
+    partyCreature.m_bWithParty = m_cGameStats.m_bWithParty;
+    partyCreature.m_nChapterKillsXPValue = m_cGameStats.m_nChapterKillsXPValue;
+    partyCreature.m_nChapterKillsNumber = m_cGameStats.m_nChapterKillsNumber;
+    partyCreature.m_nGameKillsXPValue = m_cGameStats.m_nGameKillsXPValue;
+    partyCreature.m_nGameKillsNumber = m_cGameStats.m_nGameKillsNumber;
+
+    for (nIndex = 0; nIndex < 4; nIndex++) {
+        m_cGameStats.m_pSpellStats[nIndex].m_cResRef.GetResRef(partyCreature.m_lSpellStatsName[nIndex]);
+        partyCreature.m_lSpellStatsCount[nIndex] = m_cGameStats.m_pSpellStats[nIndex].m_nTimesUsed;
+    }
+
+    for (nIndex = 0; nIndex < 4; nIndex++) {
+        m_cGameStats.m_pWeaponStats[nIndex].m_cResRef.GetResRef(partyCreature.m_lWeaponStatsName[nIndex]);
+        partyCreature.m_lWeaponStatsCount[nIndex] = m_cGameStats.m_pWeaponStats[nIndex].m_nTimesUsed;
+    }
+
+    partyCreature.m_nHappiness = m_nHappiness;
+
+    for (nIndex = 0; nIndex < 24; nIndex++) {
+        partyCreature.m_nNumberOfTimesInteractedWith[nIndex] = m_nNumberOfTimesInteractedWith[nIndex];
+    }
+
+    if (m_baseStats.m_name == -1) {
+        strncpy(partyCreature.m_name, (LPCSTR)m_sName, SCRIPTNAME_SIZE);
+    } else {
+        partyCreature.m_name[0] = '\0';
+    }
+
+    partyCreature.m_nNumberOfTimesTalkedTo = m_nNumberOfTimesTalkedTo;
+    m_secondarySounds.GetResRef(partyCreature.m_secondarySounds);
+    memcpy(partyCreature.field_25E, field_725A, 32);
 }
 
 // 0x70CF90
@@ -1456,7 +1602,7 @@ CItem* CGameSprite::GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot
 
     switch (ability->launcherType) {
     case 1:
-        launcherSlot = 2 * field_4C68 + 43;
+        launcherSlot = 2 * m_nWeaponSet + 43;
 
         if (m_equipment.m_items[launcherSlot] != NULL
             && m_equipment.m_items[launcherSlot]->GetItemType() == 15) {
@@ -1472,7 +1618,7 @@ CItem* CGameSprite::GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot
 
         break;
     case 2:
-        launcherSlot = 2 * field_4C68 + 43;
+        launcherSlot = 2 * m_nWeaponSet + 43;
 
         if (m_equipment.m_items[launcherSlot] != NULL
             && m_equipment.m_items[launcherSlot]->GetItemType() == 27) {
@@ -1488,7 +1634,7 @@ CItem* CGameSprite::GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot
 
         break;
     case 3:
-        launcherSlot = 2 * field_4C68 + 43;
+        launcherSlot = 2 * m_nWeaponSet + 43;
 
         if (m_equipment.m_items[launcherSlot] != NULL
             && m_equipment.m_items[launcherSlot]->GetItemType() == 18) {
@@ -1581,7 +1727,7 @@ void CGameSprite::UnequipAll(BOOL animationOnly)
         m_equipment.m_items[4]->Unequip(this, 4, TRUE, animationOnly);
     }
 
-    BYTE nIndex = 2 * (field_4C68 + 22);
+    BYTE nIndex = 2 * (m_nWeaponSet + 22);
     if (m_equipment.m_items[nIndex] != NULL) {
         m_equipment.m_items[nIndex]->Unequip(this, nIndex, TRUE, animationOnly);
     }
@@ -1642,7 +1788,7 @@ void CGameSprite::EquipAll(BOOL animationOnly)
     }
 
     BOOL v1 = FALSE;
-    BYTE v2 = 2 * field_4C68 + 43;
+    BYTE v2 = 2 * m_nWeaponSet + 43;
     if (m_equipment.m_selectedWeapon == v2) {
         v1 = TRUE;
     }
@@ -1665,7 +1811,7 @@ void CGameSprite::EquipAll(BOOL animationOnly)
         }
     }
 
-    BYTE v3 = 2 * (field_4C68 + 22);
+    BYTE v3 = 2 * (m_nWeaponSet + 22);
     if (m_equipment.m_items[v3] != NULL && v1 == TRUE) {
         m_equipment.m_items[v3]->Equip(this, v3, animationOnly);
     }
@@ -4088,19 +4234,19 @@ INT CGameSprite::sub_726270(UINT nFeatNumber)
     if (sub_763150(nFeatNumber)) {
         switch (nFeatNumber) {
         case CGAMESPRITE_FEAT_ARTERIAL_STRIKE:
-            v1 = field_4C5C;
+            v1 = field_4C54[2];
             break;
         case CGAMESPRITE_FEAT_EXPERTISE:
-            v1 = field_4C54;
+            v1 = field_4C54[0];
             break;
         case CGAMESPRITE_FEAT_HAMSTRING:
-            v1 = field_4C60;
+            v1 = field_4C54[3];
             break;
         case CGAMESPRITE_FEAT_POWER_ATTACK:
-            v1 = field_4C58;
+            v1 = field_4C54[1];
             break;
         case CGAMESPRITE_FEAT_RAPID_SHOT:
-            v1 = field_4C64;
+            v1 = field_4C54[4];
             break;
         }
     }

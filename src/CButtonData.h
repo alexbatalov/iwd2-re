@@ -17,7 +17,7 @@ public:
     /* 0010 */ int field_10;
     /* 0014 */ int field_14;
     /* 0018 */ int field_18;
-    /* 001C */ unsigned char field_1C;
+    /* 001C */ BYTE m_nClass;
     /* 001D */ unsigned char field_1D;
     /* 001E */ short field_1E;
 };

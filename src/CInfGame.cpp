@@ -2764,7 +2764,7 @@ void CInfGame::InventoryInfoPersonal(SHORT nPortraitNum, SHORT nSlotNum, CItem*&
                             nSlotNum = 10;
                         }
                     } else {
-                        if (pSprite->field_4C68 == (nSlotNum - 43) / 2) {
+                        if (pSprite->m_nWeaponSet == (nSlotNum - 43) / 2) {
                             nSlotNum = 10;
                         }
                     }

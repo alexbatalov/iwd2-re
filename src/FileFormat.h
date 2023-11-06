@@ -61,7 +61,9 @@ public:
     /* 000B */ BYTE m_character;
 };
 
-// TODO: Incomplete.
+#pragma pack(push)
+#pragma pack(2)
+
 class CSavedGamePartyCreature {
 public:
     CSavedGamePartyCreature()
@@ -83,10 +85,44 @@ public:
     /* 0028 */ WORD m_nModalState;
     /* 002A */ SHORT m_nHappiness;
     /* 002C */ LONG m_nNumberOfTimesInteractedWith[24];
-    /* 008C */ unsigned char field_8C[306];
+    /* 008C */ SHORT m_quickWeaponsItemNum[8];
+    /* 009C */ SHORT m_quickWeaponsAbilityNum[8];
+    /* 00AC */ RESREF m_quickSpellsSpellId[9];
+    /* 00F4 */ BYTE m_quickSpellsClass[9];
+    /* 00FE */ SHORT m_quickItemsItemNum[3];
+    /* 0104 */ SHORT m_quickItemsAbilityNum[3];
+    /* 010A */ RESREF m_quickInnatesSpellId[9];
+    /* 0152 */ RESREF m_quickSongsSpellId[9];
+    /* 019A */ int field_19A[9];
     /* 01BE */ SCRIPTNAME m_name;
-    /* 01DE */ unsigned char field_1DE[354];
+    /* 01DE */ LONG m_nNumberOfTimesTalkedTo;
+    /* 01E2 */ STRREF m_strStrongestKillName;
+    /* 01E6 */ DWORD m_nStrongestKillXPValue;
+    /* 01EA */ ULONG m_nPreviousTimeWithParty;
+    /* 01EE */ ULONG m_nJoinPartyTime;
+    /* 01F2 */ BOOL m_bWithParty;
+    /* 01F6 */ DWORD m_nChapterKillsXPValue;
+    /* 01FA */ DWORD m_nChapterKillsNumber;
+    /* 01FE */ DWORD m_nGameKillsXPValue;
+    /* 0202 */ DWORD m_nGameKillsNumber;
+    /* 0206 */ RESREF m_lSpellStatsName[4];
+    /* 0226 */ SHORT m_lSpellStatsCount[4];
+    /* 022E */ RESREF m_lWeaponStatsName[4];
+    /* 024E */ SHORT m_lWeaponStatsCount[4];
+    /* 0256 */ RESREF m_secondarySounds;
+    /* 025E */ unsigned char field_25E[32];
+    /* 027E */ BYTE m_nLastSpellbookClassIndex;
+    /* 027F */ BYTE m_nLastSpellbookSpellLevel;
+    /* 0280 */ BYTE field_280[9];
+    /* 0289 */ BYTE m_nWeaponSet;
+    /* 028A */ int field_28A[5];
+    /* 029E */ unsigned char field_29E[9];
+    /* 02A7 */ BYTE field_2A7[8];
+    /* 02AF */ BYTE m_nLastSong;
+    /* 02B0 */ unsigned char field_2B0[144];
 };
+
+#pragma pack(pop)
 
 class CAreaFileCreature {
 public:

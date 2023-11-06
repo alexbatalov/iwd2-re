@@ -11,7 +11,7 @@ CAbilityId::CAbilityId()
     field_10 = -1;
     field_14 = -1;
     field_18 = -1;
-    field_1C = 0;
+    m_nClass = 0;
     field_1D = 0;
     field_1E = 0;
 }
@@ -27,7 +27,7 @@ CAbilityId& CAbilityId::operator=(const CAbilityId& other)
     field_10 = other.field_10;
     field_14 = other.field_14;
     field_18 = other.field_18;
-    field_1C = other.field_1C;
+    m_nClass = other.m_nClass;
     field_1D = other.field_1D;
     field_1E = other.field_1E;
     return *this;
