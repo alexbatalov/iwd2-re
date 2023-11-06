@@ -1925,6 +1925,12 @@ void CVidMode::sub_7BEDE0()
     lock.Unlock();
 }
 
+// 0x7BD880
+void CVidMode::RenderQuad(const VERTEX_DESC* pVertices, INT nVertices)
+{
+    // TODO: Incomplete.
+}
+
 // 0x5CEDE0
 void CVidMode::RenderBlackFade3d()
 {

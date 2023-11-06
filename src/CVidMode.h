@@ -11,6 +11,19 @@
 class CVidCell;
 
 typedef struct {
+    FLOAT fRed;
+    FLOAT fGreen;
+    FLOAT fBlue;
+    FLOAT fAlpha;
+} POLYCOLOR;
+
+typedef struct {
+    FLOAT fX;
+    FLOAT fY;
+    POLYCOLOR color;
+} VERTEX_DESC;
+
+typedef struct {
     CPoint ptCenter;
     SHORT xAxis;
     SHORT yAxis;
@@ -52,6 +65,7 @@ public:
     void DisableScissoring();
     static void RenderTint3d(COLORREF rgbTint, const CRect& rClip);
     void sub_7BEDE0();
+    static void RenderQuad(const VERTEX_DESC* pVertices, INT nVertices);
     static void RenderBlackFade3d();
     void ScanLine32(DWORD* pSurface, UINT nMajorAxis, UINT nMinorAxis, INT nMajorAxisAdjust, INT nMinorAxisAdjust, DWORD color);
 

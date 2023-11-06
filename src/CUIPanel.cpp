@@ -7,6 +7,7 @@
 #include "CUIManager.h"
 #include "CUtil.h"
 #include "CVidInf.h"
+#include "CVidPoly.h"
 
 // 0x4D2750
 CUIPanel::CUIPanel(CUIManager* manager, UI_PANELHEADER* panelInfo)
@@ -404,7 +405,58 @@ void CUIPanel::Render()
 // 0x4D3610
 void CUIPanel::RenderDither(const CRect& rClip)
 {
-    // TODO: Incomplete.
+    if (m_pManager->field_2E) {
+        if (g_pBaldurChitin->cVideo.Is3dAccelerated()) {
+            VERTEX_DESC verts[4];
+            verts[0].fX = static_cast<float>(rClip.left);
+            verts[0].fY = static_cast<float>(rClip.top);
+            verts[0].color.fRed = 0.0f;
+            verts[0].color.fGreen = 0.0f;
+            verts[0].color.fBlue = 0.0f;
+            verts[0].color.fAlpha = 0.5f;
+            verts[1].fX = static_cast<float>(rClip.left);
+            verts[1].fY = static_cast<float>(rClip.bottom);
+            verts[1].color.fRed = 0.0f;
+            verts[1].color.fGreen = 0.0f;
+            verts[1].color.fBlue = 0.0f;
+            verts[1].color.fAlpha = 0.5f;
+            verts[2].fX = static_cast<float>(rClip.right);
+            verts[2].fY = static_cast<float>(rClip.bottom);
+            verts[2].color.fRed = 0.0f;
+            verts[2].color.fGreen = 0.0f;
+            verts[2].color.fBlue = 0.0f;
+            verts[2].color.fAlpha = 0.5f;
+            verts[2].fX = static_cast<float>(rClip.right);
+            verts[2].fY = static_cast<float>(rClip.top);
+            verts[2].color.fRed = 0.0f;
+            verts[2].color.fGreen = 0.0f;
+            verts[2].color.fBlue = 0.0f;
+            verts[2].color.fAlpha = 0.5f;
+            CVidMode::RenderQuad(verts, 4);
+        } else {
+            CVidInf* pVidInf = static_cast<CVidInf*>(g_pBaldurChitin->GetCurrentVideoMode());
+            if (pVidInf->BKLock(CRect(rClip))) {
+                CVIDPOLY_VERTEX verts[4];
+                verts[0].x = static_cast<WORD>(rClip.left);
+                verts[0].y = static_cast<WORD>(rClip.top);
+                verts[1].x = static_cast<WORD>(rClip.left);
+                verts[1].y = static_cast<WORD>(rClip.bottom);
+                verts[2].x = static_cast<WORD>(rClip.right);
+                verts[2].y = static_cast<WORD>(rClip.bottom);
+                verts[3].x = static_cast<WORD>(rClip.right);
+                verts[3].y = static_cast<WORD>(rClip.top);
+
+                CVidPoly poly;
+                poly.SetPoly(verts, 4);
+                pVidInf->BKRenderConvexPoly(&poly,
+                    rClip,
+                    RGB(0, 0, 0) | (0xFF << 24),
+                    0x2,
+                    rClip.TopLeft());
+                pVidInf->BKUnlock();
+            }
+        }
+    }
 }
 
 // 0x4D3810
