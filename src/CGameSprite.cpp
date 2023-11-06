@@ -1218,6 +1218,12 @@ void CGameSprite::RenderDamageArrow(CGameArea* pArea, CVidMode* pVidMode, INT nS
     // TODO: Incomplete.
 }
 
+// 0x70BEE0
+void CGameSprite::Marshal(CSavedGamePartyCreature& partyCreature, BOOLEAN bNetworkMessage)
+{
+    // TODO: Incomplete.
+}
+
 // 0x70CF90
 void CGameSprite::Unmarshal(BYTE* pCreature, LONG creatureSize, WORD facing, int a4)
 {

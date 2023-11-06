@@ -1990,9 +1990,94 @@ BOOLEAN CBaldurMessage::BroadcastDemandCharacterSlotReply(BOOLEAN bUpdateAllChar
 // 0x42F750
 BOOLEAN CBaldurMessage::DemandCharacterSlotReply(CString& sSendTo, SHORT nCharacterSlot, BOOLEAN bSendCharInfo)
 {
-    // TODO: Incomplete.
+    DWORD dwSize;
+    BYTE* pMessage;
+    DWORD nCustomBio = 0;
+    STR_RES strRes;
+    CSavedGamePartyCreature partyCreature;
+    DWORD dwCreatureDataLoc;
 
-    return FALSE;
+    if (!g_pChitin->cNetwork.GetSessionOpen()) {
+        return FALSE;
+    }
+
+    dwSize = sizeof(SHORT) + sizeof(BOOLEAN);
+
+    if (bSendCharInfo == TRUE) {
+        LONG nCharacterId = g_pBaldurChitin->GetObjectGame()->GetCharacterSlot(nCharacterSlot);
+
+        CGameSprite* pSprite;
+
+        BYTE rc;
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            pSprite->Marshal(partyCreature, TRUE);
+            dwSize += sizeof(CSavedGamePartyCreature);
+
+            dwCreatureDataLoc = dwSize;
+
+            if (g_pBaldurChitin->GetTlkTable().m_override.Fetch(pSprite->GetBaseStats()->m_biography, strRes)) {
+                nCustomBio = strRes.szText.GetLength();
+                dwSize += nCustomBio;
+            }
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        } else {
+            bSendCharInfo = FALSE;
+        }
+    }
+
+    pMessage = CreateBuffer(dwSize);
+    if (pMessage == NULL) {
+        return FALSE;
+    }
+
+    DWORD cnt = 0;
+
+    *reinterpret_cast<SHORT*>(pMessage + cnt) = nCharacterSlot;
+    cnt += sizeof(SHORT);
+
+    *reinterpret_cast<BOOLEAN*>(pMessage + cnt) = bSendCharInfo;
+    cnt += sizeof(BOOLEAN);
+
+    if (bSendCharInfo == TRUE) {
+        BYTE* pCreature = reinterpret_cast<BYTE*>(partyCreature.m_creatureOffset);
+        partyCreature.m_creatureOffset = dwCreatureDataLoc;
+
+        memcpy(pMessage + cnt, &partyCreature, sizeof(CSavedGamePartyCreature));
+        cnt += sizeof(CSavedGamePartyCreature);
+
+        memcpy(pMessage + cnt, pCreature, partyCreature.m_creatureSize);
+        cnt += partyCreature.m_creatureSize;
+
+        delete pCreature;
+
+        *reinterpret_cast<DWORD*>(pMessage + cnt) = nCustomBio;
+        cnt += sizeof(DWORD);
+
+        if (nCustomBio != 0) {
+            memcpy(pMessage + cnt, (LPCSTR)strRes.szText, nCustomBio);
+        }
+    }
+
+    g_pChitin->cNetwork.SendSpecificMessage(sSendTo,
+        CNetwork::SEND_GUARANTEED,
+        CBaldurMessage::MSG_TYPE_PLAYERCHAR,
+        CBaldurMessage::MSG_SUBTYPE_PLAYERCHAR_DEMAND_REPLY,
+        pMessage,
+        dwSize);
+
+    DestroyBuffer(pMessage);
+
+    return TRUE;
 }
 
 // 0x42FA60

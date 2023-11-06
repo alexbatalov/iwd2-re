@@ -85,6 +85,7 @@ public:
     /* 002C */ LONG m_nNumberOfTimesInteractedWith[24];
     /* 008C */ unsigned char field_8C[306];
     /* 01BE */ SCRIPTNAME m_name;
+    /* 01DE */ unsigned char field_1DE[354];
 };
 
 class CAreaFileCreature {

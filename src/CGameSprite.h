@@ -301,6 +301,7 @@ public:
     SHORT GetIdleSequence();
     void SetSequence(SHORT nSequence);
     void RenderDamageArrow(CGameArea* pArea, CVidMode* pVidMode, INT nSurface);
+    void Marshal(CSavedGamePartyCreature& partyCreature, BOOLEAN bNetworkMessage);
     void Unmarshal(BYTE* pCreature, LONG creatureSize, WORD facing, int a4);
     void UnmarshalScripts();
     void FetchCommonStrings();
