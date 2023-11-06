@@ -507,7 +507,52 @@ BOOLEAN CMultiplayerSettings::GetPlayerReady(PLAYER_ID playerID)
 // 0x518390
 void CMultiplayerSettings::SetPlayerReady(PLAYER_ID playerID, BOOLEAN bValue, BOOLEAN bFlush)
 {
-    // TODO: Incomplete.
+    if (g_pChitin->cNetwork.GetSessionOpen()) {
+        BOOL bFoundPlayer = FALSE;
+        BOOL bFoundLocation = FALSE;
+        SHORT nLocation = -1;
+        SHORT nPlayerIndex; // NOTE: Inconsistent type.
+
+        if (g_pChitin->cNetwork.GetSessionHosting()) {
+            if (bValue == TRUE) {
+                for (nPlayerIndex = 0; nPlayerIndex < 6; nPlayerIndex++) {
+                    if (m_pnPlayerReady[nPlayerIndex] != 0 || bFoundLocation) {
+                        if (m_pnPlayerReady[nPlayerIndex] == playerID) {
+                            bFoundPlayer = TRUE;
+                        }
+                    } else {
+                        bFoundLocation = TRUE;
+                        nLocation = nPlayerIndex;
+                    }
+                }
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\CMultiplayerSettings.cpp
+                // __LINE__: 1054
+                UTIL_ASSERT_MSG(bFoundPlayer == TRUE || bFoundLocation == TRUE, "CMultiplayerSettings::SetPlayerReady: No blank slot for new player!");
+
+                if (!bFoundPlayer && bFoundLocation == TRUE) {
+                    m_pnPlayerReady[nLocation] = playerID;
+                }
+
+                if (bFlush == TRUE && bFoundLocation == TRUE && !bFoundPlayer) {
+                    g_pBaldurChitin->GetBaldurMessage()->SendFullSettingsToClients(CString(""));
+                }
+            } else {
+                for (nPlayerIndex = 0; nPlayerIndex < 6; nPlayerIndex++) {
+                    if (m_pnPlayerReady[nPlayerIndex] == playerID) {
+                        bFoundPlayer = TRUE;
+                        m_pnPlayerReady[nPlayerIndex] = 0;
+                    }
+                }
+
+                if (bFlush == TRUE && bFoundPlayer == TRUE) {
+                    g_pBaldurChitin->GetBaldurMessage()->SendFullSettingsToClients(CString(""));
+                }
+            }
+        } else {
+            g_pBaldurChitin->GetBaldurMessage()->SendPlayerReadyToServer(playerID, bValue);
+        }
+    }
 }
 
 // 0x518560
