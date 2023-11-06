@@ -1650,6 +1650,26 @@ BOOLEAN CBaldurMessage::KickPlayerRequest(const CString& sPlayerName)
     return FALSE;
 }
 
+// 0x42D6E0
+BOOL CBaldurMessage::AddDroppedPlayer(PLAYER_ID playerID)
+{
+    CSingleLock lock(&field_9A, FALSE);
+    lock.Lock(INFINITE);
+
+    // NOTE: Original code is slightly different but does the same thing.
+    for (INT nPlayer = 0; nPlayer < CNETWORK_MAX_PLAYERS; nPlayer++) {
+        if (m_pRemovedPlayerID[nPlayer] == 0) {
+            m_pRemovedPlayerID[nPlayer] = playerID;
+            m_bRemovedPlayerID = TRUE;
+            break;
+        }
+    }
+
+    lock.Unlock();
+
+    return TRUE;
+}
+
 // 0x42D7A0
 BOOL CBaldurMessage::PurgeDroppedPlayers()
 {
