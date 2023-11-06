@@ -1662,6 +1662,49 @@ BOOLEAN CBaldurMessage::KickPlayerRequest(const CString& sPlayerName)
     return FALSE;
 }
 
+// 0x42D310
+BOOL CBaldurMessage::OnKickPlayerRequest(INT nMsgFrom, BYTE* pMessage, DWORD dwSize)
+{
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || !g_pChitin->cNetwork.GetSessionHosting()
+        || !g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->GetPermission(nMsgFrom, CGamePermission::LEADER)) {
+        return FALSE;
+    }
+
+    INT nMsgPtr = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    BYTE nNameLength = *reinterpret_cast<BYTE*>(pMessage + nMsgPtr);
+    nMsgPtr += sizeof(BYTE);
+
+    char szPlayerName[32] = { 0 };
+    memcpy(szPlayerName, pMessage + nMsgPtr, nNameLength);
+
+    CString sPlayerName(szPlayerName, nNameLength);
+
+    if (g_pChitin->cNetwork.FindPlayerLocationByName(sPlayerName, FALSE) == -1
+        || g_pChitin->cNetwork.FindPlayerIDByName(sPlayerName, FALSE) == g_pChitin->cNetwork.m_idLocalPlayer) {
+        return FALSE;
+    }
+
+    PLAYER_ID playerID = g_pChitin->cNetwork.FindPlayerIDByName(sPlayerName, FALSE);
+
+    KickPlayerServerSupport(sPlayerName);
+    g_pChitin->cNetwork.SendSpecificMessage(sPlayerName,
+        CNetwork::SEND_GUARANTEED,
+        CBaldurMessage::MSG_TYPE_KICK_PLAYER,
+        CBaldurMessage::MSG_SUBTYPE_KICK_PLAYER_HOOFED_OUT,
+        NULL,
+        0);
+
+    SleepEx(500, FALSE);
+
+    if (playerID != 0) {
+        g_pChitin->cNetwork.KickPlayer(playerID, TRUE);
+    }
+
+    return TRUE;
+}
+
 // 0x42D4E0
 void CBaldurMessage::KickPlayerServerSupport(const CString& sPlayerName)
 {
