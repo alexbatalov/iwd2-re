@@ -455,7 +455,48 @@ BOOLEAN CMultiplayerSettings::GetPermission(INT nPlayerSlot, INT nPermission)
 // 0x518050
 void CMultiplayerSettings::SetPermission(INT nPlayerSlot, INT nPermission, BOOLEAN bPermissionValue, BOOLEAN bFlush)
 {
-    // TODO: Incomplete.
+    if (g_pChitin->cNetwork.GetSessionOpen()) {
+        if (g_pChitin->cNetwork.GetSessionHosting()) {
+            CGamePermission* pPermission;
+            if (nPlayerSlot != -1
+                && g_pChitin->cNetwork.GetPlayerID(nPlayerSlot) != 0) {
+                pPermission = &(m_pcPermissions[nPlayerSlot]);
+            } else {
+                pPermission = &m_cDefaultPermissions;
+            }
+
+            if (g_pChitin->cNetwork.GetPlayerID(nPlayerSlot) == g_pChitin->cNetwork.m_idLocalPlayer) {
+                bPermissionValue = TRUE;
+                g_pBaldurChitin->GetObjectGame()->m_singlePlayerPermissions.SetSinglePermission(nPermission, bPermissionValue);
+            }
+
+            pPermission->SetSinglePermission(nPermission, bPermissionValue);
+
+            if (bPermissionValue == TRUE) {
+                if (nPermission == CGamePermission::LEADER) {
+                    for (INT nOtherPermission = 0; nOtherPermission < CGamePermission::TOTAL_PERMISSIONS; nOtherPermission++) {
+                        pPermission->SetSinglePermission(nOtherPermission, bPermissionValue);
+                    }
+                }
+
+                if (nPermission == CGamePermission::PURCHASING) {
+                    pPermission->SetSinglePermission(CGamePermission::DIALOG, bPermissionValue);
+                }
+            }
+
+            if (bFlush == TRUE) {
+                g_pBaldurChitin->GetBaldurMessage()->SendFullSettingsToClients(CString(""));
+            }
+        } else {
+            CString sPlayerName;
+            if (nPlayerSlot != -1) {
+                g_pChitin->cNetwork.GetPlayerName(nPlayerSlot, sPlayerName);
+            }
+            g_pBaldurChitin->GetBaldurMessage()->SendPermissionToServer(sPlayerName,
+                nPermission,
+                bPermissionValue);
+        }
+    }
 }
 
 // 0x518220
