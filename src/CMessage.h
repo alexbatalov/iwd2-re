@@ -120,6 +120,11 @@ public:
     static const BYTE MSG_SUBTYPE_BIOGRAPHY_CHANGE;
     static const BYTE MSG_SUBTYPE_BIOGRAPHY_CHANGE_ANNOUNCE;
 
+    static const BYTE MSG_TYPE_KICK_PLAYER;
+    static const BYTE MSG_SUBTYPE_KICK_PLAYER_REQUEST;
+    static const BYTE MSG_SUBTYPE_KICK_PLAYER_SERVER_SUPPORT;
+    static const BYTE MSG_SUBTYPE_KICK_PLAYER_HOOFED_OUT;
+
     static const BYTE DELETEAREA_EMPTY_VOTE;
     static const BYTE DELETEAREA_PENDING_VOTE;
     static const BYTE DELETEAREA_YES_VOTE;
@@ -210,6 +215,7 @@ public:
     BOOLEAN SendArbitrationLockAllowInput(BOOLEAN bAllowInput);
     BOOLEAN OnSettingsArbitrationLockAllowInput(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
     BOOLEAN KickPlayerRequest(const CString& sPlayerName);
+    void KickPlayerServerSupport(const CString& sPlayerName);
     BOOLEAN OnKickPlayerServerSupport(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
     BOOL OnKickPlayerHoofedOut(INT nMsgFrom);
     BOOL AddDroppedPlayer(PLAYER_ID playerID);

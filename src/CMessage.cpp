@@ -340,6 +340,18 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_BIOGRAPHY_CHANGE = 99;
 // 0x84CF6D
 const BYTE CBaldurMessage::MSG_SUBTYPE_BIOGRAPHY_CHANGE_ANNOUNCE = 67;
 
+// 0x84CF6E
+const BYTE CBaldurMessage::MSG_TYPE_KICK_PLAYER = 75;
+
+// 0x84CF6F
+const BYTE CBaldurMessage::MSG_SUBTYPE_KICK_PLAYER_REQUEST = 82;
+
+// 0x84CF6F
+const BYTE CBaldurMessage::MSG_SUBTYPE_KICK_PLAYER_SERVER_SUPPORT = 83;
+
+// 0x84CF6F
+const BYTE CBaldurMessage::MSG_SUBTYPE_KICK_PLAYER_HOOFED_OUT = 72;
+
 // 0x84CF76
 const BYTE CBaldurMessage::DELETEAREA_EMPTY_VOTE = 101;
 
@@ -1648,6 +1660,40 @@ BOOLEAN CBaldurMessage::KickPlayerRequest(const CString& sPlayerName)
     // TODO: Incomplete.
 
     return FALSE;
+}
+
+// 0x42D4E0
+void CBaldurMessage::KickPlayerServerSupport(const CString& sPlayerName)
+{
+    DWORD dwSize;
+    BYTE* pMessage;
+    CString sSendTo;
+
+    PLAYER_ID idToKick = g_pChitin->cNetwork.FindPlayerIDByName(sPlayerName, FALSE);
+    if (idToKick != 0) {
+        dwSize = sizeof(PLAYER_ID);
+        pMessage = CreateBuffer(dwSize);
+        if (pMessage != NULL) {
+            *reinterpret_cast<PLAYER_ID*>(pMessage) = idToKick;
+
+            for (INT nPlayer = 0; nPlayer < CNETWORK_MAX_PLAYERS; nPlayer++) {
+                PLAYER_ID playerID = g_pChitin->cNetwork.GetPlayerID(nPlayer);
+                if (playerID != 0
+                    && playerID != g_pChitin->cNetwork.m_idLocalPlayer
+                    && playerID != idToKick) {
+                    g_pChitin->cNetwork.GetPlayerName(nPlayer, sSendTo);
+                    g_pChitin->cNetwork.SendSpecificMessage(sSendTo,
+                        CNetwork::SEND_GUARANTEED,
+                        CBaldurMessage::MSG_TYPE_KICK_PLAYER,
+                        CBaldurMessage::MSG_SUBTYPE_KICK_PLAYER_SERVER_SUPPORT,
+                        pMessage,
+                        dwSize);
+                }
+            }
+
+            DestroyBuffer(pMessage);
+        }
+    }
 }
 
 // 0x42D600
