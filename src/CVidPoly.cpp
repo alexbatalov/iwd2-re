@@ -71,6 +71,197 @@ BOOLEAN CVidPoly::IsPtInPoly(const CPoint* pPoly, SHORT nPoly, const CPoint& pt)
     return (numIntersectingEdges & 1);
 }
 
+// 0x7C0F40
+BOOL CVidPoly::FillConvexPoly(WORD* pSurface, LONG lPitch, const CRect& rClipRect, DWORD dwColor, DWORD dwFlags, const CPoint& ptRef)
+{
+    SHORT nRightXDir;
+    SHORT nLeftXDir;
+    UINT nMinYIndex;
+    UINT nMinYPt;
+    UINT nMaxYPt;
+    UINT nRightX;
+    UINT nLeftX;
+    UINT nRightIndex;
+    UINT nLeftIndex;
+    INT nRightDx;
+    INT nRightDy;
+    UINT nRightAdjUp;
+    UINT nRightRun;
+    INT nRightErrTerm;
+    INT nLeftDx;
+    INT nLeftDy;
+    UINT nLeftAdjUp;
+    UINT nLeftRun;
+    INT nLeftErrTerm;
+    SHORT nIndex;
+    CRect rClip;
+    CPoint ptRefAdjusted;
+
+    ptRefAdjusted.x = ptRef.x;
+    ptRefAdjusted.y = ptRef.y;
+
+    rClip.left = rClipRect.left;
+    rClip.top = rClipRect.top;
+    rClip.right = rClipRect.right - 1;
+    rClip.bottom = rClipRect.bottom - 1;
+
+    nLeftXDir = 1;
+    nRightXDir = 1;
+
+    if (m_nVertices < 3) {
+        return FALSE;
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVidPoly.cpp
+    // __LINE__: 267
+    UTIL_ASSERT_MSG(m_nVertices < CVPOLY_MAX_VERTICIES, "Excessive poly vertex count");
+
+    SetHLineFunction(dwFlags);
+
+    nMinYIndex = 0;
+    nMinYPt = m_pVertices[nMinYIndex].y;
+    nMaxYPt = m_pVertices[nMinYIndex].y;
+    ;
+    for (nIndex = 1; nIndex < m_nVertices; nIndex++) {
+        if (m_pVertices[nIndex].y < nMinYPt) {
+            nMinYPt = m_pVertices[nIndex].y;
+            nMinYIndex = nIndex;
+        } else if (m_pVertices[nIndex].y > nMaxYPt) {
+            nMaxYPt = m_pVertices[nIndex].y;
+        }
+    }
+
+    nRightX = m_pVertices[nMinYIndex].x;
+    nLeftX = m_pVertices[nMinYIndex].x;
+    nRightIndex = (nMinYIndex + 1) % m_nVertices;
+    nLeftIndex = (nMinYIndex + m_nVertices - 1) % m_nVertices;
+
+    nRightDx = m_pVertices[nRightIndex].x - nRightX;
+    if (nRightDx < 0) {
+        nRightXDir = -1;
+        nRightDx = -nRightDx;
+    }
+    nRightDy = m_pVertices[nRightIndex].y - nMaxYPt;
+
+    if (nRightDy > 0) {
+        nRightRun = nRightDx / nRightDy;
+        nRightAdjUp = nRightDx % nRightDy;
+        nRightErrTerm = nRightAdjUp - nRightDy;
+    } else {
+        nRightRun = nRightDx;
+        nRightAdjUp = nRightDx;
+        nRightErrTerm = nRightDx;
+    }
+
+    nLeftDx = m_pVertices[nLeftIndex].x - nLeftX;
+    if (nLeftDx < 0) {
+        nLeftXDir = -1;
+        nLeftDx = -nLeftDx;
+    }
+    nLeftDy = m_pVertices[nLeftIndex].y - nMaxYPt;
+
+    if (nLeftDy > 0) {
+        nLeftRun = nLeftDx / nLeftDy;
+        nLeftAdjUp = nLeftDx % nLeftDy;
+        nLeftErrTerm = nRightAdjUp - nLeftDy;
+    } else {
+        nLeftRun = nLeftDx;
+        nLeftAdjUp = nLeftDx;
+        nLeftErrTerm = nLeftDx;
+    }
+
+    if ((dwFlags & 0x8) != 0) {
+        pSurface = reinterpret_cast<WORD*>(reinterpret_cast<BYTE*>(pSurface) + lPitch * (rClip.bottom - nMinYPt));
+        lPitch = -lPitch;
+    } else {
+        pSurface = reinterpret_cast<WORD*>(reinterpret_cast<BYTE*>(pSurface) + lPitch * (nMinYPt - rClip.top));
+    }
+
+    ptRefAdjusted.y += nMinYPt - rClip.top;
+
+    while (nMinYPt <= nMaxYPt) {
+        if (nMinYPt == m_pVertices[nRightIndex].y) {
+            do {
+                nRightX = m_pVertices[nRightIndex].x;
+                nRightIndex = (nRightIndex + 1) % m_nVertices;
+                nRightDy = m_pVertices[nRightIndex].y - nMinYPt;
+            } while (nRightDy == 0);
+
+            nRightDx = m_pVertices[nRightIndex].x - nRightX;
+            if (nRightDx < 0) {
+                nRightXDir = -1;
+                nRightDx = -nRightDx;
+            } else {
+                nRightXDir = 1;
+            }
+
+            nRightRun = nRightDx / nRightDy;
+            nRightAdjUp = nRightDx % nRightDy;
+            nRightErrTerm = nRightAdjUp - nRightDy;
+        }
+
+        if (nMinYPt >= m_pVertices[nLeftIndex].y) {
+            do {
+                nLeftX = m_pVertices[nLeftIndex].x;
+                nLeftIndex = (nLeftIndex + m_nVertices - 1) % m_nVertices;
+                nLeftDy = m_pVertices[nLeftIndex].y - nMinYPt;
+            } while (nLeftDy == 0);
+
+            nLeftDx = m_pVertices[nLeftIndex].x - nLeftX;
+            if (nLeftDx < 0) {
+                nLeftXDir = -1;
+                nLeftDx = -nLeftDx;
+            } else {
+                nLeftXDir = 1;
+            }
+
+            nLeftRun = nLeftDx / nLeftDy;
+            nLeftAdjUp = nLeftDx % nLeftDy;
+            nLeftErrTerm = nLeftAdjUp - nLeftDy;
+        }
+
+        // NOTE: Signed compare.
+        if (static_cast<LONG>(nMinYPt) >= rClip.top && static_cast<LONG>(nMinYPt) < rClip.bottom) {
+            INT xMin;
+            INT xMax;
+            if (nLeftX > nRightX) {
+                xMax = min(static_cast<LONG>(nLeftX), rClip.right) - rClip.left;
+                xMin = max(static_cast<LONG>(nRightX) - rClip.left, 0);
+            } else {
+                xMax = min(static_cast<LONG>(nRightX), rClip.right) - rClip.left;
+                xMin = max(static_cast<LONG>(nLeftX) - rClip.left, 0);
+            }
+
+            (this->*m_pDrawHLineFunction)(pSurface,
+                xMin,
+                xMax,
+                dwColor,
+                rClip,
+                ptRefAdjusted);
+        }
+
+        nLeftX += nLeftRun * nLeftXDir;
+        nLeftErrTerm += nLeftAdjUp;
+        if (nLeftErrTerm > 0) {
+            nLeftX += nLeftXDir;
+            nLeftErrTerm -= nLeftAdjUp + nLeftDx;
+        }
+
+        nRightX += nRightRun * nRightXDir;
+        nRightErrTerm += nRightAdjUp;
+        if (nRightErrTerm > 0) {
+            nRightX += nRightXDir;
+            nRightErrTerm -= nRightAdjUp + nRightDx;
+        }
+
+        nMinYPt++;
+        ptRefAdjusted.y++;
+        pSurface = reinterpret_cast<WORD*>(reinterpret_cast<BYTE*>(pSurface) + lPitch);
+    }
+
+    return TRUE;
+}
+
 // 0x7C13A0
 BOOL CVidPoly::FillPoly(WORD* pSurface, LONG lPitch, const CRect& rClip, DWORD dwColor, DWORD dwFlags, const CPoint& ptRef)
 {

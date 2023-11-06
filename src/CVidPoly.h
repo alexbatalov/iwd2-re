@@ -3,6 +3,8 @@
 
 #include "mfc.h"
 
+#define CVPOLY_MAX_VERTICIES 256
+
 typedef struct {
     WORD x;
     WORD y;
@@ -16,6 +18,7 @@ public:
 
     static LONG CalculateLineVIntersection(const CPoint& lineStart, const CPoint& lineEnd, LONG vertical, const CPoint& linePrev);
     static BOOLEAN IsPtInPoly(const CPoint* pPoly, SHORT nPoly, const CPoint& pt);
+    BOOL FillConvexPoly(WORD* pSurface, LONG lPitch, const CRect& rClip, DWORD dwColor, DWORD dwFlags, const CPoint& ptRef);
     BOOL FillPoly(WORD* pSurface, LONG lPitch, const CRect& rClip, DWORD dwColor, DWORD dwFlags, const CPoint& ptRef);
     void SetPoly(WORD* pVertices, WORD nVertices);
     void SetPoly(CVIDPOLY_VERTEX* pVertices, WORD nVertices);
