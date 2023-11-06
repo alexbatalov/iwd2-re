@@ -200,8 +200,6 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CMultiplayerSettings.h"
     "src/CNetwork.cpp"
     "src/CNetwork.h"
-    "src/CNetworkWindow.cpp"
-    "src/CNetworkWindow.h"
     "src/CObjectMarker.cpp"
     "src/CObjectMarker.h"
     "src/CParticle.cpp"

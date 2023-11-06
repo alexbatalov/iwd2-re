@@ -914,7 +914,31 @@ void CBaldurChitin::Init(HINSTANCE hInstance)
 // 0x424180
 void CBaldurChitin::MessageThreadMain(void* userInfo)
 {
-    // TODO: Incomplete.
+    RegisterThread();
+
+    while (!m_bExitMessageThread) {
+        INT nMillis;
+        while (!m_bExitMessageThread) {
+            if (g_pChitin->cNetwork.GetSessionOpen()
+                && g_pChitin->cNetwork.m_idLocalPlayer != 0) {
+                break;
+            }
+
+            nMillis = 1000;
+            SleepEx(nMillis, FALSE);
+        }
+
+        while (!m_bExitMessageThread) {
+            if (nMillis < 0) {
+                break;
+            }
+
+            nMillis = g_pChitin->cNetwork.ThreadLoop();
+            if (nMillis > 0) {
+                SleepEx(nMillis, FALSE);
+            }
+        }
+    }
 }
 
 // 0x424220

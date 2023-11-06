@@ -12,13 +12,74 @@
 #include <dplay.h>
 #include <dplobby.h>
 
-#include "CNetworkWindow.h"
-
 #define CNETWORK_MAX_SERVICE_PROVIDERS 5
 #define CNETWORK_MAX_SESSIONS 64
 #define CNETWORK_MAX_PLAYERS 6
 
+// NOTE: Seen in `CNetwork::SendMessage` assertion.
+#define STATIC_MESSAGE_SIZE 0x8000
+
 typedef DWORD PLAYER_ID;
+
+typedef struct cnetworkwindow_queueentry_st {
+    PLAYER_ID idFrom;
+    PLAYER_ID idTo;
+    BYTE* pData;
+    DWORD dwSize;
+} CNETWORKWINDOW_QUEUEENTRY;
+
+class CNetworkWindow {
+public:
+    static const DWORD DEFAULT_PACKET_TIMEOUT;
+    static const DWORD DEFAULT_SENDPACKET_TIMEOUT;
+    static const DWORD DEFAULT_PLAYER_TIMEOUT;
+    static const DWORD MAX_TIMEOUT_TICK_COUNT;
+
+    CNetworkWindow();
+    ~CNetworkWindow();
+    void AddToIncomingQueue(PLAYER_ID idFrom, PLAYER_ID idTo, BYTE* pData, DWORD dwDataSize);
+    BOOLEAN CheckIncomingQueue();
+    BOOLEAN CheckIncomingQueueSpecific(BYTE nSpecMsgType, BYTE nSpecMsgSubType);
+    BOOLEAN CheckOutgoingQueueForAppendableMsgs(DWORD dwSize);
+    void FrameSend(BYTE nFrameKind, WORD nFrameNumber);
+    void Initialize(INT nIndex);
+    void ShutDown();
+    void RemoveFromAllQueues();
+    BYTE* RemoveFromIncomingQueue(PLAYER_ID& idDPFrom, PLAYER_ID& idDPTo, DWORD& dwDataSize, BOOLEAN& bCompressed);
+    BYTE* RemoveFromIncomingQueueSpecific(BYTE nSpecMsgType, BYTE nSpecMsgSubType, PLAYER_ID& idDPFrom, PLAYER_ID& idDPTo, DWORD& dwDataSize, BOOLEAN& bCompressed);
+    void SendCall();
+    void ReceiveCall(BYTE* pData, DWORD dwSize);
+    void TimeoutCall();
+
+    void SetPlayerTimeout();
+    void SetNoMessageTimeout();
+
+    /* 0000 */ BOOLEAN m_bInitialized;
+    /* 0001 */ BOOLEAN m_bVSSent;
+    /* 0002 */ BOOLEAN m_bVSReceived;
+    /* 0003 */ BYTE m_nPlayerNumber;
+    /* 0004 */ WORD m_nAckExpected;
+    /* 0006 */ WORD m_nNextFrameToSend;
+    /* 0008 */ WORD m_nFrameExpected;
+    /* 000A */ WORD m_nTooFar;
+    /* 000C */ WORD m_nOldestFrame;
+    /* 000E */ CNETWORKWINDOW_QUEUEENTRY m_pOutgoingBuffers[1];
+    /* 001E */ CNETWORKWINDOW_QUEUEENTRY m_pIncomingBuffers[1];
+    /* 002E */ CTypedPtrList<CPtrList, CNETWORKWINDOW_QUEUEENTRY*> m_lQueueIncomingMessages;
+    /* 004A */ CTypedPtrList<CPtrList, CNETWORKWINDOW_QUEUEENTRY*> m_lQueueOutgoingMessages;
+    /* 0066 */ BOOLEAN m_pbTimeOutSet[1];
+    /* 0068 */ DWORD m_pnTimeOut[1];
+    /* 006C */ BOOLEAN m_pbArrived[1];
+    /* 006E */ WORD m_nNumBuffered;
+    /* 0070 */ BOOLEAN m_bNoNak;
+    /* 0072 */ DWORD m_nPacketTimeout;
+    /* 0076 */ DWORD m_nAckTimer;
+    /* 007A */ BOOLEAN m_bAckTimerSet;
+    /* 007B */ BOOLEAN m_bSomethingHappened;
+    /* 007C */ DWORD m_nNextEvent;
+    /* 0080 */ DWORD m_nPlayerTimeout;
+    /* 0084 */ DWORD m_nNoMessageTimeout;
+};
 
 class CNetwork {
 public:
@@ -26,7 +87,11 @@ public:
     static const CString JM;
     static const CString JB;
 
+    static const INT MAX_PLAYERS;
+    static const INT MAX_SESSIONS;
     static const INT MAX_SERVICE_PROVIDERS;
+    static const INT MAX_STRING_LENGTH;
+    static const DWORD MAX_TIMEOUT_TICK_COUNT;
 
     static const INT SERV_PROV_TCP_IP;
     static const INT SERV_PROV_MODEM;
@@ -36,6 +101,7 @@ public:
 
     static const INT SEND_ALL_PLAYERS;
     static const INT SEND_GUARANTEED;
+    static const INT SEND_RAW;
     static const INT SEND_JOINING_PLAYERS;
 
     static const INT SPEC_MSG_HEADER_LENGTH;
@@ -43,12 +109,24 @@ public:
     static const INT SPEC_MSG_TYPE;
     static const INT SPEC_MSG_SUBTYPE;
     static const BYTE SPEC_MSG_FLAG_ENABLED;
+    static const DWORD MINIMAL_PACKET_SIZE;
+    static const DWORD MAXIMAL_PACKET_SIZE;
+    static const DWORD dword_85E68C;
+    static const DWORD dword_85E690;
+    static const DWORD dword_85E694;
+    static const DWORD dword_85E698;
+    static const DWORD dword_85E69C;
+    static const DWORD dword_85E6A0;
+    static const DWORD dword_85E6A4;
 
     static const INT ERROR_NONE;
     static const INT ERROR_PLAYEREXISTS;
     static const INT ERROR_CANNOTCREATEPLAYER;
     static const INT ERROR_CANNOTCONNECT;
     static const INT ERROR_INVALIDPASSWORD;
+
+    static BYTE STATIC_MESSAGE_BUFFER[STATIC_MESSAGE_SIZE];
+    static DWORD DYNAMIC_MESSAGE_SIZE;
 
     CNetwork();
     ~CNetwork();
@@ -101,10 +179,20 @@ public:
     INT FindPlayerLocationByID(PLAYER_ID playerID, BOOLEAN bInvisible);
     INT FindPlayerLocationByName(const CString& sPlayerName, BOOLEAN bInvisible);
     void sub_7A73D0(CString& a1);
-    BYTE* CreateCopyMessage(const void* lpData, DWORD dwDataSize, unsigned char a3, unsigned char a4, int a5);
+    INT ThreadLoop();
+    void SlidingWindowReceive();
+    void SlidingWindowTimeouts();
+    BYTE* FetchFrame(PLAYER_ID& id, DWORD& dwSize);
+    BOOLEAN HandleSystemMessage(BYTE* pData, DWORD dwSize);
+    void AddMessageToWindow(PLAYER_ID idTo, DWORD dwFlags, BYTE* pData, DWORD dwSize);
+    BYTE* CreateCopyMessage(const void* lpData, DWORD dwDataSize, BOOLEAN bCompressed, unsigned char a4, INT nFrame);
+    BYTE* FetchMessage(INT& nMsgFrom, INT& nMsgTo, DWORD& dwSize);
     BYTE* FetchSpecificMessage(const CString& sPlayerName, BYTE nSpecMsgType, BYTE nSpecMsgSubType, DWORD& dwSize);
+    BOOLEAN PeekMessage_();
     BOOLEAN PeekSpecificMessage(const CString& sPlayerName, BYTE nSpecMsgType, BYTE nSpecMsgSubType);
+    BOOLEAN SendMessage_(const CString& sPlayerName, DWORD dwFlags, BYTE* pData, DWORD dwSize);
     BOOLEAN SendSpecificMessage(const CString& sPlayerName, DWORD dwFlags, BYTE nSpecMsgType, BYTE nSpecMsgSubType, LPVOID lpData, DWORD nDataSize);
+    BYTE* UncompressMessage(BYTE* pData, DWORD& dwSize);
 
     INT GetServiceProvider();
     BOOLEAN GetSessionOpen();

@@ -414,8 +414,8 @@ public:
     /* 4B88 */ CString field_4B88;
     /* 4B8C */ CString field_4B8C;
     /* 4B90 */ CString field_4B90;
-    // NOTE: Can also be BYTE indicating number of expansion pack.
-    /* 4BD5 */ BOOLEAN m_bExpansion;
+    /* 4BD4 */ unsigned char field_4BD4;
+    /* 4BD5 */ BOOLEAN m_bExpansion; // NOTE: Can also be BYTE indicating number of expansion pack.
     /* 4BD6 */ BOOLEAN field_4BD6;
     /* 4BD8 */ DWORD m_nDifficultyLevel;
     /* 4BF8 */ CSpellResRefList m_spells;
