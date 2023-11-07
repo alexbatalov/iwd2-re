@@ -2,6 +2,7 @@
 
 #include "CUtil.h"
 #include "CVidMode.h"
+#include "CVideo3d.h"
 
 // 0x7B0AA0
 CVidMosaic::CVidMosaic()
@@ -319,6 +320,80 @@ BOOL CVidMosaic::BltMos8To32(DWORD* pSurface, LONG lPitch, UINT nTile, const CRe
     }
 
     return TRUE;
+}
+
+// 0x7C56C0
+void CVidMosaic::RenderTexture(INT x, INT y, const CSize& blitSize, const CRect& rClip, DWORD dwFlags)
+{
+    float x1;
+    float y1;
+    float x2;
+    float y2;
+    float x3;
+    float y3;
+    float x4;
+    float y4;
+
+    x1 = static_cast<float>(x);
+    y1 = static_cast<float>(y);
+    x2 = static_cast<float>(x + blitSize.cx);
+    y2 = static_cast<float>(y + blitSize.cy);
+    x3 = 0.0f;
+    y3 = 0.0f;
+    x4 = static_cast<float>(blitSize.cx) / static_cast<float>(512);
+    y4 = static_cast<float>(blitSize.cy) / static_cast<float>(512);
+
+    if (x < rClip.left) {
+        x1 = static_cast<float>(rClip.left);
+        x3 = static_cast<float>(rClip.left - x) / static_cast<float>(512);
+    }
+
+    if (y < rClip.top) {
+        y1 = static_cast<float>(rClip.top);
+        y3 = static_cast<float>(rClip.top - y) / static_cast<float>(512);
+    }
+
+    if (x + blitSize.cx > rClip.right) {
+        x2 = static_cast<float>(rClip.right);
+        x4 = static_cast<float>(rClip.right - x) / static_cast<float>(512);
+    }
+
+    if (y + blitSize.cy > rClip.bottom) {
+        y2 = static_cast<float>(rClip.bottom);
+        y4 = static_cast<float>(rClip.bottom - y) / static_cast<float>(512);
+    }
+
+    CVideo3d::glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glEnable(GL_BLEND);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    x1 += CVideo3d::SUB_PIXEL_SHIFT;
+    y1 += CVideo3d::SUB_PIXEL_SHIFT;
+    x2 += CVideo3d::SUB_PIXEL_SHIFT;
+    y2 += CVideo3d::SUB_PIXEL_SHIFT;
+
+    CVideo3d::glBegin(GL_TRIANGLE_STRIP);
+    CVideo3d::glTexCoord2f(x3, y3);
+    CVideo3d::glVertex3f(x1, y1, 0.0f);
+    CVideo3d::glTexCoord2f(x3, y4);
+    CVideo3d::glVertex3f(x1, y2, 0.0f);
+    CVideo3d::glTexCoord2f(x4, y3);
+    CVideo3d::glVertex3f(x2, y1, 0.0f);
+    CVideo3d::glTexCoord2f(x4, y4);
+    CVideo3d::glVertex3f(x2, y2, 0.0f);
+    CVideo3d::glEnd();
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glDisable(GL_BLEND);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 }
 
 // 0x7C5A00
