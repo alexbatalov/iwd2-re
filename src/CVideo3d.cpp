@@ -1248,9 +1248,61 @@ GLuint CVidMode::GetTextureId()
 // 0x7BC250
 BOOL CVidMode::DrawLine3d(INT nXFrom, INT nYFrom, INT nXTo, INT nYTo, const CRect& rSurface, COLORREF rgbColor)
 {
-    // TODO: Incomplete.
+    if (!ClipLine(nXFrom, nYFrom, nXTo, nYTo, rSurface)) {
+        return FALSE;
+    }
 
-    return FALSE;
+    float v1 = 0.0f;
+    float v2 = 0.0f;
+
+    if (nXTo == nXFrom) {
+        if (nYTo != nYFrom) {
+            v2 = 1.0f;
+        }
+    } else {
+        if (nYTo == nYFrom) {
+            v1 = 1.0f;
+        }
+    }
+
+    CVideo3d::glColor4f(static_cast<float>(GetRValue(rgbColor)) / 255.0f,
+        static_cast<float>(GetGValue(rgbColor)) / 255.0f,
+        static_cast<float>(GetBValue(rgbColor)) / 255.0f,
+        1.0f);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glDisable(GL_BLEND);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glDisable(GL_TEXTURE_2D);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glLineWidth(1.0f);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glBegin(GL_LINES);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    if (nXFrom > nXTo || nYFrom > nYTo) {
+        CVideo3d::glVertex3f(static_cast<float>(nXTo) + 0.2f,
+            static_cast<float>(nYTo) + 0.2f,
+            0.0f);
+        CVideo3d::glVertex3f(static_cast<float>(nXFrom) + v1 + 0.2f,
+            static_cast<float>(nYFrom) + v2 + 0.2f,
+            0.0f);
+    } else {
+        CVideo3d::glVertex3f(static_cast<float>(nXFrom) + 0.2f,
+            static_cast<float>(nYFrom) + 0.2f,
+            0.0f);
+        CVideo3d::glVertex3f(static_cast<float>(nXTo) + v1 + 0.2f,
+            static_cast<float>(nYTo) + v2 + 0.2f,
+            0.0f);
+    }
+
+    CVideo3d::glEnd();
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    return TRUE;
 }
 
 // 0x7BC580
