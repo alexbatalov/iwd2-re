@@ -1184,6 +1184,65 @@ BOOL CVideo::Initialize3d(HWND hWnd, BOOLEAN bFullscreen, int a4)
     return FALSE;
 }
 
+// 0x7BBC20
+void CVideo::InitializeRenderEnv()
+{
+    CVideo3d::glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glClearDepth(1.0f);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glEnable(GL_TEXTURE_2D);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glDisable(GL_LIGHTING);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glDisable(GL_CULL_FACE);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glFrontFace(GL_CCW);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glCullFace(GL_BACK);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glShadeModel(GL_SMOOTH);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glViewport(0, 0, CVideo::SCREENWIDTH, CVideo::SCREENHEIGHT);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glMatrixMode(GL_PROJECTION);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glPushMatrix();
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glLoadIdentity();
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glOrtho(0.0,
+        static_cast<GLdouble>(CVideo::SCREENWIDTH),
+        static_cast<GLdouble>(CVideo::SCREENHEIGHT),
+        0.0,
+        1.0,
+        -1.0);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glClear(GL_LIGHT0);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    field_136 = GL_RGBA;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x78E6E0

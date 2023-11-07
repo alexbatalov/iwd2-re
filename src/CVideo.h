@@ -32,6 +32,7 @@ public:
     void SetBitsPerPixels(USHORT nNewBpp, BOOLEAN a3);
     void CleanUp3d();
     BOOL Initialize3d(HWND hWnd, BOOLEAN bFullscreen, int a4);
+    void InitializeRenderEnv();
 
     // NOTE: Can be seen via assertion in `CVidMode::LockSurface`.
     USHORT GetBitsPerPixels() { return m_nBpp; }
