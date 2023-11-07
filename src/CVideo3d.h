@@ -398,6 +398,8 @@ typedef int(__stdcall* PFNGLUUNPROJECTPROC)(GLdouble winx, GLdouble winy, GLdoub
 // the original code.
 class CVideo3d {
 public:
+    static const float SUB_PIXEL_SHIFT;
+
     static PFNGLACCUMPROC glAccum;
     static PFNGLALPHAFUNCPROC glAlphaFunc;
     static PFNGLARETEXTURESRESIDENTPROC glAreTexturesResident;
@@ -787,5 +789,4 @@ public:
     static PFNGLUUNPROJECTPROC gluUnProject;
     static BYTE texImageData[512 * 512 * 4];
 };
-
 #endif /* CVIDEO3D_H_ */

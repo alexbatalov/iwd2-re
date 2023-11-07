@@ -4,6 +4,9 @@
 #include "CVidInf.h"
 #include "CVideo.h"
 
+// 0x848398
+const float CVideo3d::SUB_PIXEL_SHIFT = 0.2f;
+
 // 0x907514
 PFNGLACCUMPROC CVideo3d::glAccum;
 
@@ -1344,18 +1347,18 @@ BOOL CVidMode::DrawLine3d(INT nXFrom, INT nYFrom, INT nXTo, INT nYTo, const CRec
     g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 
     if (nXFrom > nXTo || nYFrom > nYTo) {
-        CVideo3d::glVertex3f(static_cast<float>(nXTo) + 0.2f,
-            static_cast<float>(nYTo) + 0.2f,
+        CVideo3d::glVertex3f(static_cast<float>(nXTo) + CVideo3d::SUB_PIXEL_SHIFT,
+            static_cast<float>(nYTo) + CVideo3d::SUB_PIXEL_SHIFT,
             0.0f);
-        CVideo3d::glVertex3f(static_cast<float>(nXFrom) + v1 + 0.2f,
-            static_cast<float>(nYFrom) + v2 + 0.2f,
+        CVideo3d::glVertex3f(static_cast<float>(nXFrom) + v1 + CVideo3d::SUB_PIXEL_SHIFT,
+            static_cast<float>(nYFrom) + v2 + CVideo3d::SUB_PIXEL_SHIFT,
             0.0f);
     } else {
-        CVideo3d::glVertex3f(static_cast<float>(nXFrom) + 0.2f,
-            static_cast<float>(nYFrom) + 0.2f,
+        CVideo3d::glVertex3f(static_cast<float>(nXFrom) + CVideo3d::SUB_PIXEL_SHIFT,
+            static_cast<float>(nYFrom) + CVideo3d::SUB_PIXEL_SHIFT,
             0.0f);
-        CVideo3d::glVertex3f(static_cast<float>(nXTo) + v1 + 0.2f,
-            static_cast<float>(nYTo) + v2 + 0.2f,
+        CVideo3d::glVertex3f(static_cast<float>(nXTo) + v1 + CVideo3d::SUB_PIXEL_SHIFT,
+            static_cast<float>(nYTo) + v2 + CVideo3d::SUB_PIXEL_SHIFT,
             0.0f);
     }
 
@@ -1432,7 +1435,9 @@ void CVidMode::FillRect3d(const VERTEX_DESC* pVertices)
             pVertices[nIndex].color.fGreen,
             pVertices[nIndex].color.fBlue,
             pVertices[nIndex].color.fAlpha);
-        CVideo3d::glVertex3f(pVertices[nIndex].fX, pVertices[nIndex].fY, 0.0f);
+        CVideo3d::glVertex3f(pVertices[nIndex].fX + CVideo3d::SUB_PIXEL_SHIFT,
+            pVertices[nIndex].fY + CVideo3d::SUB_PIXEL_SHIFT,
+            0.0f);
     }
 
     CVideo3d::glEnd();
@@ -1467,7 +1472,9 @@ void CVidMode::RenderFan(const VERTEX_DESC* pVertices, INT nVertices)
             pVertices[nIndex].color.fGreen,
             pVertices[nIndex].color.fBlue,
             pVertices[nIndex].color.fAlpha);
-        CVideo3d::glVertex3f(pVertices[nIndex].fX, pVertices[nIndex].fY, 0.0f);
+        CVideo3d::glVertex3f(pVertices[nIndex].fX + CVideo3d::SUB_PIXEL_SHIFT,
+            pVertices[nIndex].fY + CVideo3d::SUB_PIXEL_SHIFT,
+            0.0f);
     }
 
     CVideo3d::glEnd();
@@ -1500,7 +1507,9 @@ void CVidMode::RenderQuad(const VERTEX_DESC* pVertices, INT nVertices)
             pVertices[nIndex].color.fGreen,
             pVertices[nIndex].color.fBlue,
             pVertices[nIndex].color.fAlpha);
-        CVideo3d::glVertex3f(pVertices[nIndex].fX, pVertices[nIndex].fY, 0.0f);
+        CVideo3d::glVertex3f(pVertices[nIndex].fX + CVideo3d::SUB_PIXEL_SHIFT,
+            pVertices[nIndex].fY + CVideo3d::SUB_PIXEL_SHIFT,
+            0.0f);
     }
 
     CVideo3d::glEnd();
@@ -1537,12 +1546,12 @@ void CVidMode::RenderBlackFade3d()
             0.0f,
             0.0f);
         CVideo3d::glVertex3f(0.0f,
-            static_cast<GLfloat>(CVideo::SCREENHEIGHT) + 0.2f,
+            static_cast<GLfloat>(CVideo::SCREENHEIGHT) + CVideo3d::SUB_PIXEL_SHIFT,
             0.0f);
-        CVideo3d::glVertex3f(static_cast<GLfloat>(CVideo::SCREENWIDTH) + 0.2f,
-            static_cast<GLfloat>(CVideo::SCREENHEIGHT) + 0.2f,
+        CVideo3d::glVertex3f(static_cast<GLfloat>(CVideo::SCREENWIDTH) + CVideo3d::SUB_PIXEL_SHIFT,
+            static_cast<GLfloat>(CVideo::SCREENHEIGHT) + CVideo3d::SUB_PIXEL_SHIFT,
             0.0f);
-        CVideo3d::glVertex3f(static_cast<GLfloat>(CVideo::SCREENWIDTH) + 0.2f,
+        CVideo3d::glVertex3f(static_cast<GLfloat>(CVideo::SCREENWIDTH) + CVideo3d::SUB_PIXEL_SHIFT,
             0.0f,
             0.0f);
 
