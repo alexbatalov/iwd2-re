@@ -59,7 +59,7 @@ public:
     BOOL DrawLine3d(INT nXFrom, INT nYFrom, INT nXTo, INT nYTo, const CRect& rSurface, COLORREF rgbColor);
     BOOL DrawEllipse3d(const CPoint& ptCenter, const CSize& axis, const CRect& rClip, COLORREF rgbColor);
     BOOL DrawRecticle3d(const CVIDMODE_RECTICLE_DESCRIPTION& rd, const CRect& rClip, COLORREF rgbColor);
-    void CheckResults3d(int a1);
+    BOOL CheckResults3d(int rc);
     static void Set3dClipRect(const CRect& rClip);
     void EnableScissoring();
     void DisableScissoring();

@@ -1220,7 +1220,7 @@ void CVidMode::EnableScissoring()
 {
     if (g_pChitin->cVideo.m_bIs3dAccelerated) {
         CVideo3d::glEnable(GL_SCISSOR_TEST);
-        CheckResults3d(0);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
     }
 }
 
@@ -1229,7 +1229,7 @@ void CVidMode::DisableScissoring()
 {
     if (g_pChitin->cVideo.m_bIs3dAccelerated) {
         CVideo3d::glDisable(GL_SCISSOR_TEST);
-        CheckResults3d(0);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
     }
 }
 
@@ -1296,7 +1296,7 @@ BOOL CVidInf::DestroySurfaces3d(CVidMode* pNextVidMode)
 
     GLuint texture1 = 2;
     CVideo3d::glDeleteTextures(1, &texture1);
-    CheckResults3d(0);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 
     GLuint texture2 = 5;
     CVideo3d::glDeleteTextures(1, &texture2);
@@ -1307,7 +1307,7 @@ BOOL CVidInf::DestroySurfaces3d(CVidMode* pNextVidMode)
     for (int index = 0; index < m_nVRamSurfaces; index++) {
         GLuint texture = static_cast<GLuint>(index);
         CVideo3d::glDeleteTextures(1, &texture);
-        CheckResults3d(0);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
     }
 
     sub_7BEDE0();
@@ -1344,9 +1344,68 @@ void CVidInf::DoTextOut3d(UINT nSurface, const CString& sText, int x, int y, COL
 // -----------------------------------------------------------------------------
 
 // 0x7BEA80
-void CVidMode::CheckResults3d(int a1)
+BOOL CVidMode::CheckResults3d(int rc)
 {
-    // TODO: Incomplete.
+    GLenum prevErr = GL_NO_ERROR;
+    INT cnt = 0;
+    CString sFunction;
+    BOOL bResult = TRUE;
+
+    if (rc != 0) {
+        for (int k = 0; k < 255; k++) {
+            GLenum err = CVideo3d::glGetError();
+            if (err == GL_NO_ERROR) {
+                break;
+            }
+
+            if (err != prevErr) {
+                CString sMessage;
+                sMessage.Format("%s: %d occurences\n", sFunction, cnt);
+                cnt = 0;
+
+                switch (err) {
+                case GL_STACK_OVERFLOW:
+                    sFunction = CString("GL_STACK_OVERFLOW");
+                    bResult = FALSE;
+                    break;
+                case GL_STACK_UNDERFLOW:
+                    sFunction = CString("GL_STACK_UNDERFLOW");
+                    bResult = FALSE;
+                    break;
+                case GL_OUT_OF_MEMORY:
+                    sFunction = CString("GL_OUT_OF_MEMORY");
+                    bResult = FALSE;
+                    break;
+                case GL_INVALID_OPERATION:
+                    sFunction = CString("GL_INVALID_OPERATION");
+                    bResult = FALSE;
+                    break;
+                case GL_INVALID_ENUM:
+                    sFunction = CString("GL_INVALID_ENUM");
+                    bResult = FALSE;
+                    break;
+                case GL_INVALID_VALUE:
+                    sFunction = CString("GL_INVALID_VALUE");
+                    bResult = FALSE;
+                    break;
+                default:
+                    sFunction = CString("Unknown Error (default case)");
+                    bResult = FALSE;
+                    break;
+                }
+            } else {
+                cnt++;
+            }
+        }
+
+        if (cnt != 0) {
+            CString sMessage;
+            sMessage.Format("%s: %d occurences\n", sFunction, cnt);
+            cnt = 0;
+        }
+    }
+
+    return bResult;
 }
 
 // 0x7BEDE0
@@ -1358,7 +1417,7 @@ void CVidMode::sub_7BEDE0()
     while (!field_6A.IsEmpty()) {
         GLuint texture = static_cast<GLuint>(field_6A.RemoveHead());
         CVideo3d::glDeleteTextures(1, &texture);
-        CheckResults3d(0);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
     }
 
     lock.Unlock();

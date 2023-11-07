@@ -1228,27 +1228,27 @@ BOOL CVidInf::FXRender(CParticle* pParticle, const CRect& rClip, USHORT nFlag, U
 {
     if (g_pChitin->cVideo.m_bIs3dAccelerated) {
         CVideo3d::glEnable(GL_TEXTURE_2D);
-        CheckResults3d(0);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 
         g_pChitin->cVideo.field_13E = 2;
 
         CVideo3d::glBindTexture(GL_TEXTURE_2D, 2);
-        CheckResults3d(0);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 
         CVideo3d::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        CheckResults3d(0);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 
         CVideo3d::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        CheckResults3d(0);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 
         CVideo3d::glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        CheckResults3d(0);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 
         CVideo3d::glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-        CheckResults3d(0);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 
         CVideo3d::glColor4f(1.0, 1.0, 1.0, 1.0);
-        CheckResults3d(0);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 
         if (g_pChitin->cVideo.field_13A) {
             pParticle->Render(CVideo3d::texImageData,
@@ -1279,27 +1279,27 @@ BOOL CVidInf::FXRender(CPoint* pPoints, INT nPoints, const CRect& rSurface, COLO
 {
     if (g_pChitin->cVideo.m_bIs3dAccelerated) {
         CVideo3d::glEnable(GL_TEXTURE_2D);
-        CheckResults3d(0);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 
         g_pChitin->cVideo.field_13E = 2;
 
         CVideo3d::glBindTexture(GL_TEXTURE_2D, 2);
-        CheckResults3d(0);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 
         CVideo3d::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        CheckResults3d(0);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 
         CVideo3d::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        CheckResults3d(0);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 
         CVideo3d::glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        CheckResults3d(0);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 
         CVideo3d::glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-        CheckResults3d(0);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 
         CVideo3d::glColor4f(1.0, 1.0, 1.0, 1.0);
-        CheckResults3d(0);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 
         if (g_pChitin->cVideo.field_13A) {
             return DrawPoints(pPoints,
