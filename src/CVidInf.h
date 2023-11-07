@@ -55,7 +55,7 @@ public:
     BOOL FXPrep(CRect& rFXRect, DWORD dwFlags, const CPoint& ptPos, const CPoint& ptReference, const CRect& rClip);
     void FXBltBackTo(const CPoint& ptTopLeft, const CRect& rFXRect, const CRect& rClip, DWORD dwFlags);
     BOOL FXBltToBack(CRect& rFXRect, INT x, INT y, INT nRefPointX, INT nRefPointY, const CRect& rClip, DWORD dwFlags);
-    void FXClear(LPVOID pSurface, INT nSize);
+    static void FXClear(LPVOID pSurface, INT nSize);
     BOOL FXLock(CRect& rFXRect, DWORD dwFlags);
     BOOL FXRender(CVidCell* pVidCell, INT nRefPointX, INT nRefPointY, DWORD dwFlags, INT nTransValue);
     BOOL FXRender(CVidCell* pVidCell, INT nRefPtX, INT nRefPtY, const CRect& rClip, BOOLEAN a5, DWORD dwFlags);
