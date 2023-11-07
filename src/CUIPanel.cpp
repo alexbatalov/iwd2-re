@@ -426,12 +426,12 @@ void CUIPanel::RenderDither(const CRect& rClip)
             verts[2].color.fGreen = 0.0f;
             verts[2].color.fBlue = 0.0f;
             verts[2].color.fAlpha = 0.5f;
-            verts[2].fX = static_cast<float>(rClip.right);
-            verts[2].fY = static_cast<float>(rClip.top);
-            verts[2].color.fRed = 0.0f;
-            verts[2].color.fGreen = 0.0f;
-            verts[2].color.fBlue = 0.0f;
-            verts[2].color.fAlpha = 0.5f;
+            verts[3].fX = static_cast<float>(rClip.right);
+            verts[3].fY = static_cast<float>(rClip.top);
+            verts[3].color.fRed = 0.0f;
+            verts[3].color.fGreen = 0.0f;
+            verts[3].color.fBlue = 0.0f;
+            verts[3].color.fAlpha = 0.5f;
             CVidMode::RenderQuad(verts, 4);
         } else {
             CVidInf* pVidInf = static_cast<CVidInf*>(g_pBaldurChitin->GetCurrentVideoMode());
