@@ -14,6 +14,8 @@ class CVidPoly {
 public:
     typedef void (CVidPoly::*DrawHLineFunc)(void* pSurface, int xMin, int xMax, DWORD dwColor, const CRect& rSurface, const CPoint& ptRef);
 
+    static const BYTE m_aDitherMask[];
+
     CVidPoly();
 
     static LONG CalculateLineVIntersection(const CPoint& lineStart, const CPoint& lineEnd, LONG vertical, const CPoint& linePrev);

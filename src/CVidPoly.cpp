@@ -2,6 +2,30 @@
 
 #include "CChitin.h"
 #include "CUtil.h"
+#include "CVidMode.h"
+#include "CVideo3d.h"
+
+// 0x85EAA4
+const BYTE CVidPoly::m_aDitherMask[] = {
+    // clang-format off
+    0xAA, 0xAA, 0xAA, 0xAA, 0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA, 0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA, 0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA, 0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA, 0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA, 0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA, 0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA, 0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA, 0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA, 0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA, 0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA, 0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA, 0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA, 0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA, 0x55, 0x55, 0x55, 0x55,
+    0xAA, 0xAA, 0xAA, 0xAA, 0x55, 0x55, 0x55, 0x55,
+    // clang-format on
+};
 
 // 0x7C0DB0
 CVidPoly::CVidPoly()
@@ -273,9 +297,55 @@ BOOL CVidPoly::FillPoly(WORD* pSurface, LONG lPitch, const CRect& rClip, DWORD d
 // 0x7C15F0
 BOOL CVidPoly::FillConvexPoly3d(const CRect& rClip, DWORD dwColor, DWORD dwFlags, const CPoint& ptRef)
 {
-    // TODO: Incomplete.
+    if (m_nVertices < 3) {
+        return FALSE;
+    }
 
-    return FALSE;
+    CVideo3d::glColor4f(static_cast<float>(GetRValue(dwColor)) / 255.0f,
+        static_cast<float>(GetRValue(dwColor)) / 255.0f,
+        static_cast<float>(GetRValue(dwColor)) / 255.0f,
+        static_cast<float>(dwColor >> 24) / 255.0f);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    if ((dwFlags & 0x2) != 0) {
+        CVideo3d::glPolygonStipple(m_aDitherMask);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+        CVideo3d::glEnable(GL_POLYGON_STIPPLE);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+    }
+
+    CVideo3d::glDisable(GL_BLEND);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glDisable(GL_TEXTURE_2D);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glBegin(GL_POLYGON);
+    for (INT nIndex = 0; nIndex < m_nVertices - 1; nIndex++) {
+        INT nXFrom = m_pVertices[nIndex].x;
+        INT nYFrom = m_pVertices[nIndex].y;
+        INT nXTo = m_pVertices[nIndex + 1].x;
+        INT nYTo = m_pVertices[nIndex + 1].y;
+        if (CVidMode::ClipLine(nXFrom, nYFrom, nXTo, nYTo, rClip)) {
+            CVideo3d::glVertex3f(static_cast<float>(nXFrom) + CVideo3d::SUB_PIXEL_SHIFT,
+                static_cast<float>(nYFrom) + CVideo3d::SUB_PIXEL_SHIFT,
+                0.0f);
+            CVideo3d::glVertex3f(static_cast<float>(nXTo) + CVideo3d::SUB_PIXEL_SHIFT,
+                static_cast<float>(nYTo) + CVideo3d::SUB_PIXEL_SHIFT,
+                0.0f);
+        }
+    }
+
+    CVideo3d::glEnd();
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    if ((dwFlags & 0x2) != 0) {
+        CVideo3d::glDisable(GL_POLYGON_STIPPLE);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+    }
+
+    return TRUE;
 }
 
 // 0x7C18B0
