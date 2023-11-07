@@ -1374,7 +1374,45 @@ void CVidMode::RenderQuad(const VERTEX_DESC* pVertices, INT nVertices)
 // 0x5CEDE0
 void CVidMode::RenderBlackFade3d()
 {
-    // TODO: Incomplete.
+    if (g_pChitin->cVideo.Is3dAccelerated()) {
+        COLORREF rgbColor = g_pChitin->GetCurrentVideoMode()->ApplyBrightnessContrast(RGB(0, 0, 0));
+        GLfloat alpha = 1.0f - static_cast<GLfloat>(g_pChitin->GetCurrentVideoMode()->m_nFade) / static_cast<GLfloat>(CVidMode::NUM_FADE_FRAMES);
+
+        CVideo3d::glDisable(GL_TEXTURE_2D);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+        CVideo3d::glEnable(GL_BLEND);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+        CVideo3d::glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+        CVideo3d::glBegin(GL_QUADS);
+
+        CVideo3d::glColor4f(static_cast<GLfloat>(GetRValue(rgbColor)) / 255.0f,
+            static_cast<GLfloat>(GetGValue(rgbColor)) / 255.0f,
+            static_cast<GLfloat>(GetBValue(rgbColor)) / 255.0f,
+            alpha);
+
+        CVideo3d::glVertex3f(0.0f,
+            0.0f,
+            0.0f);
+        CVideo3d::glVertex3f(0.0f,
+            static_cast<GLfloat>(CVideo::SCREENHEIGHT) + 0.2f,
+            0.0f);
+        CVideo3d::glVertex3f(static_cast<GLfloat>(CVideo::SCREENWIDTH) + 0.2f,
+            static_cast<GLfloat>(CVideo::SCREENHEIGHT) + 0.2f,
+            0.0f);
+        CVideo3d::glVertex3f(static_cast<GLfloat>(CVideo::SCREENWIDTH) + 0.2f,
+            0.0f,
+            0.0f);
+
+        CVideo3d::glEnd();
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+        CVideo3d::glDisable(GL_BLEND);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+    }
 }
 
 // -----------------------------------------------------------------------------
