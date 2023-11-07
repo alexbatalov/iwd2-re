@@ -1234,11 +1234,15 @@ void CVidMode::DisableScissoring()
 }
 
 // 0x7BC200
-int CVidMode::GetTextureId()
+GLuint CVidMode::GetTextureId()
 {
-    // TODO: Incomplete.
+    GLuint textures[1];
 
-    return 0;
+    sub_7BEDE0();
+    CVideo3d::glGenTextures(1, textures);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    return textures[1];
 }
 
 // 0x7BC250

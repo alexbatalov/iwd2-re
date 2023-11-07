@@ -4,6 +4,7 @@
 #include "mfc.h"
 
 #include <ddraw.h>
+#include <gl/gl.h>
 
 #include "CResRef.h"
 #include "CVidPalette.h"
@@ -143,7 +144,7 @@ public:
     /* 011C */ virtual ~CVidMode();
     /* 0120 */ virtual BOOL CreateSurfaces3d();
     /* 0124 */ virtual BOOL DestroySurfaces3d(CVidMode* pNextVidMode);
-    /* 0128 */ virtual int GetTextureId();
+    /* 0128 */ virtual GLuint GetTextureId();
     /* 012C */ virtual BOOL ActivateVideoMode3d(CVidMode* pPrevVidMode, HWND hWnd, BOOLEAN bFullscreen);
 
     BOOL GetFullyFaded();
