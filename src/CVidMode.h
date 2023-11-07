@@ -61,6 +61,7 @@ public:
     BOOL DrawRect3d(const CRect& r, const CRect& rClip, COLORREF rgbColor);
     BOOL DrawEllipse3d(const CPoint& ptCenter, const CSize& axis, const CRect& rClip, COLORREF rgbColor);
     BOOL DrawRecticle3d(const CVIDMODE_RECTICLE_DESCRIPTION& rd, const CRect& rClip, COLORREF rgbColor);
+    BOOL OutlinePoly3d(const CPoint* pPoly, SHORT nVertices, const CRect& rSurface, COLORREF rgbColor, const CPoint& ptOffset);
     static void FillRect3d(const VERTEX_DESC* pVertices);
     BOOL CheckResults3d(int rc);
     static void Set3dClipRect(const CRect& rClip);

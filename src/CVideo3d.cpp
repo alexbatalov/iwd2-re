@@ -1332,6 +1332,28 @@ BOOL CVidMode::DrawRecticle3d(const CVIDMODE_RECTICLE_DESCRIPTION& rd, const CRe
     return FALSE;
 }
 
+// 0x7BD090
+BOOL CVidMode::OutlinePoly3d(const CPoint* pPoly, SHORT nVertices, const CRect& rSurface, COLORREF rgbColor, const CPoint& ptOffset)
+{
+    for (SHORT nIndex = 0; nIndex < nVertices - 1; nIndex++) {
+        DrawLine3d(pPoly[nIndex].x - ptOffset.x,
+            pPoly[nIndex].y - ptOffset.y,
+            pPoly[nIndex + 1].x - ptOffset.x,
+            pPoly[nIndex + 1].y - ptOffset.y,
+            rSurface,
+            rgbColor);
+    }
+
+    DrawLine3d(pPoly[nVertices - 1].x - ptOffset.x,
+        pPoly[nVertices - 1].y - ptOffset.y,
+        pPoly[0].x - ptOffset.x,
+        pPoly[0].y - ptOffset.y,
+        rSurface,
+        rgbColor);
+
+    return TRUE;
+}
+
 // 0x7BD140
 void CVidMode::FillRect3d(const VERTEX_DESC* pVertices)
 {
