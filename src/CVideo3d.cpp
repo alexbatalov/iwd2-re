@@ -1576,6 +1576,78 @@ BOOL CVidInf::ActivateVideoMode3d(CVidMode* pPrevVidMode, HWND hWnd, BOOLEAN bFu
     return TRUE;
 }
 
+// 0x7BDF90
+BOOL CVidInf::CreateSurfaces3d()
+{
+    g_pChitin->SetRenderCount(2);
+    m_dwRBitShift = 0;
+    m_dwGBitShift = 8;
+    m_dwBBitShift = 16;
+
+    // NOTE: Probably useless in 3D, but where is `m_dwGBitCount` and
+    // `m_dwBBitCount`?
+    m_dwRBitCount = 8;
+
+    field_C2 = 0;
+    field_C6 = 0;
+    field_CA = 0;
+
+    m_dwRBitMask = 0xFF;
+    m_dwGBitMask = 0xFF00;
+    m_dwBBitMask = 0xFF0000;
+
+    field_24 = 0;
+
+    g_pChitin->m_nScreenWidth = GetSystemMetrics(SM_CXSCREEN);
+    g_pChitin->m_nScreenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+    m_nVRamSurfaces = 780;
+
+    g_pChitin->cVideo.field_13E = 0;
+    CVideo3d::glBindTexture(GL_TEXTURE_2D, 0);
+
+    CVideo3d::glEnable(GL_TEXTURE_2D);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glTexEnvf(GL_TEXTURE_ENV,
+        GL_TEXTURE_ENV_MODE,
+        static_cast<GLfloat>(GL_DECAL));
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    g_pChitin->cVideo.field_13E = 2;
+    CVideo3d::glBindTexture(GL_TEXTURE_2D, 2);
+
+    CVideo3d::glTexParameterf(GL_TEXTURE_2D,
+        GL_TEXTURE_MAG_FILTER,
+        static_cast<GLfloat>(GL_NEAREST));
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glTexParameterf(GL_TEXTURE_2D,
+        GL_TEXTURE_MIN_FILTER,
+        static_cast<GLfloat>(GL_NEAREST));
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glTexImage2D(GL_TEXTURE_2D,
+        0,
+        GL_RGBA,
+        512,
+        512,
+        0,
+        GL_RGBA,
+        GL_UNSIGNED_BYTE,
+        CVideo3d::texImageData);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    field_178.SetResRef(CResRef("NORMAL"), g_pChitin->field_2EC, TRUE);
+    field_178.SetColor(RGB(255, 255, 255), RGB(0, 0, 0), FALSE);
+    field_178.RegisterFont();
+
+    return TRUE;
+}
+
 // 0x7BE210
 BOOL CVidInf::DestroySurfaces3d(CVidMode* pNextVidMode)
 {
