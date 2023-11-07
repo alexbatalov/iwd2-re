@@ -74,9 +74,9 @@ public:
     BOOL sub_7D1190(DWORD* pSurface, LONG lPitch, DWORD dwFlags);
 
     static void RenderTexture(INT x, INT y, const CRect& rFxRect, CSize dataPitch, const CRect& rClip, DWORD dwFlags);
-    BOOL Render3d(INT x, INT y, DWORD dwFlags, INT nTransVal);
-    BOOL Render3d(INT x, INT y, const CRect& rClip, CVidPoly* pClipPoly, int nPolys, DWORD dwFlags, INT nTransVal, BOOL bDemanded);
-    BOOL Render3d(INT x, INT y, const CRect& rClip, BOOLEAN bDemanded, DWORD dwFlags);
+    BOOL Render3d(INT nRefPtX, INT nRefPtY, DWORD dwFlags, INT nTransVal);
+    BOOL Render3d(INT nRefPtX, INT nRefPtY, const CRect& rClip, CVidPoly* pClipPoly, int nPolys, DWORD dwFlags, INT nTransVal, BOOL bDemanded);
+    BOOL Render3d(INT nRefPtX, INT nRefPtY, const CRect& rClip, BOOLEAN bDemanded, DWORD dwFlags);
     BOOL FXRender3d(INT nRefPtX, INT nRefPtY, const CRect& rFXRect, DWORD dwFlags, INT nTransVal, BOOL bAlphaValues);
     BOOL FXRender3d(INT nRefPtX, INT nRefPtY, const CRect& rFXRect, const CRect& rClip, BOOLEAN a5, DWORD dwFlags, BOOL bAlphaValues);
 
