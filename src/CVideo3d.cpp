@@ -1305,6 +1305,16 @@ BOOL CVidMode::DrawLine3d(INT nXFrom, INT nYFrom, INT nXTo, INT nYTo, const CRec
     return TRUE;
 }
 
+// 0x7BC500
+BOOL CVidMode::DrawRect3d(const CRect& r, const CRect& rClip, COLORREF rgbColor)
+{
+    DrawLine3d(r.left, r.top, r.right, r.top, rClip, rgbColor);
+    DrawLine3d(r.right, r.top, r.right, r.bottom, rClip, rgbColor);
+    DrawLine3d(r.right, r.bottom, r.left, r.bottom, rClip, rgbColor);
+    DrawLine3d(r.left, r.bottom, r.left, r.top, rClip, rgbColor);
+    return TRUE;
+}
+
 // 0x7BC580
 BOOL CVidMode::DrawEllipse3d(const CPoint& ptCenter, const CSize& axis, const CRect& rClip, COLORREF rgbColor)
 {
