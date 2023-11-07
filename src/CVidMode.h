@@ -67,6 +67,7 @@ public:
     void DisableScissoring();
     static void RenderTint3d(COLORREF rgbTint, const CRect& rClip);
     void sub_7BEDE0();
+    static void RenderFan(const VERTEX_DESC* pVertices, INT nVertices);
     static void RenderQuad(const VERTEX_DESC* pVertices, INT nVertices);
     static void RenderBlackFade3d();
     void ScanLine32(DWORD* pSurface, UINT nMajorAxis, UINT nMinorAxis, INT nMajorAxisAdjust, INT nMinorAxisAdjust, DWORD color);

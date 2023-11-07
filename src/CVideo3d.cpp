@@ -1338,6 +1338,35 @@ void CVidMode::RenderTint3d(COLORREF rgbTint, const CRect& rClip)
     // TODO: Incomplete.
 }
 
+// 0x7BD740
+void CVidMode::RenderFan(const VERTEX_DESC* pVertices, INT nVertices)
+{
+    CVideo3d::glDisable(GL_TEXTURE_2D);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glEnable(GL_BLEND);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glBegin(GL_TRIANGLE_FAN);
+
+    for (INT nIndex = 0; nIndex < nVertices; nIndex++) {
+        CVideo3d::glColor4f(pVertices[nIndex].color.fRed,
+            pVertices[nIndex].color.fGreen,
+            pVertices[nIndex].color.fBlue,
+            pVertices[nIndex].color.fAlpha);
+        CVideo3d::glVertex3f(pVertices[nIndex].fX, pVertices[nIndex].fY, 0.0f);
+    }
+
+    CVideo3d::glEnd();
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glDisable(GL_BLEND);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+}
+
 // 0x7BD880
 void CVidMode::RenderQuad(const VERTEX_DESC* pVertices, INT nVertices)
 {
