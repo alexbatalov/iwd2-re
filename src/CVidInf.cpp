@@ -544,36 +544,6 @@ void CVidInf::DestroySurfaces()
     m_nVRamSurfaces = 0;
 }
 
-// 0x7BE210
-BOOL CVidInf::DestroySurfaces3d(CVidMode* pNextVidMode)
-{
-    if (pNextVidMode != NULL && pNextVidMode->GetType() == 0) {
-        return TRUE;
-    }
-
-    field_178.Unload();
-
-    GLuint texture1 = 2;
-    CVideo3d::glDeleteTextures(1, &texture1);
-    CheckResults3d(0);
-
-    GLuint texture2 = 5;
-    CVideo3d::glDeleteTextures(1, &texture2);
-
-    GLuint texture3 = 6;
-    CVideo3d::glDeleteTextures(1, &texture3);
-
-    for (int index = 0; index < m_nVRamSurfaces; index++) {
-        GLuint texture = static_cast<GLuint>(index);
-        CVideo3d::glDeleteTextures(1, &texture);
-        CheckResults3d(0);
-    }
-
-    sub_7BEDE0();
-
-    return TRUE;
-}
-
 // #binary-identical
 // 0x79BFF0
 void CVidInf::DoTextOut(UINT nSurface, const CString& sText, int x, int y, COLORREF color)
@@ -2327,30 +2297,4 @@ void CVidInf::ParsePixelFormat(const DDPIXELFORMAT& ddpf)
         // __LINE__: 9962
         UTIL_ASSERT(FALSE);
     }
-}
-
-// 0x7BE4E0
-BOOL CVidInf::WindowedFlip3d(BOOL bRenderCursor)
-{
-    // TODO: Incomplete.
-
-    return TRUE;
-}
-
-// 0x7BE300
-BOOL CVidInf::RenderPointer3d(UINT nSurface)
-{
-    // TODO: Incomplete.
-
-    return FALSE;
-}
-
-// #binary-identical
-// 0x7BE530
-void CVidInf::DoTextOut3d(UINT nSurface, const CString& sText, int x, int y, COLORREF color)
-{
-    field_178.SetColor(color, 0, 0);
-
-    CRect screenRect(0, 0, CVideo::SCREENWIDTH, CVideo::SCREENHEIGHT);
-    field_178.TextOut3d(sText, x, y + 16, screenRect, 0, 0);
 }

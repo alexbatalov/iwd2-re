@@ -1134,86 +1134,6 @@ BOOL CVidMode::ActivateVideoMode(CVidMode* pPrevVidMode, HWND hWnd, BOOLEAN bFul
     return TRUE;
 }
 
-// 0x7BC100
-BOOL CVidMode::ActivateVideoMode3d(CVidMode* pPrevVidMode, HWND hWnd, BOOLEAN bFullscreen)
-{
-    return TRUE;
-}
-
-// 0x7BC200
-int CVidMode::GetTextureId()
-{
-    // TODO: Incomplete.
-
-    return 0;
-}
-
-// 0x7BC250
-BOOL CVidMode::DrawLine3d(INT nXFrom, INT nYFrom, INT nXTo, INT nYTo, const CRect& rSurface, COLORREF rgbColor)
-{
-    // TODO: Incomplete.
-
-    return FALSE;
-}
-
-// 0x7BC580
-BOOL CVidMode::DrawEllipse3d(const CPoint& ptCenter, const CSize& axis, const CRect& rClip, COLORREF rgbColor)
-{
-    // TODO: Incomplete.
-
-    return FALSE;
-}
-
-// 0x7BC7A0
-BOOL CVidMode::DrawRecticle3d(const CVIDMODE_RECTICLE_DESCRIPTION& rd, const CRect& rClip, COLORREF rgbColor)
-{
-    // TODO: Incomplete.
-
-    return FALSE;
-}
-
-// 0x7BEA80
-void CVidMode::CheckResults3d(int a1)
-{
-    // TODO: Incomplete.
-}
-
-// 0x7BC110
-void CVidMode::Set3dClipRect(const CRect& rClip)
-{
-    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
-        CVideo3d::glScissor(rClip.left,
-            CVideo::SCREENHEIGHT - rClip.bottom,
-            rClip.Width(),
-            rClip.Height());
-        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
-    }
-}
-
-// 0x7BC180
-void CVidMode::EnableScissoring()
-{
-    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
-        CVideo3d::glEnable(GL_SCISSOR_TEST);
-        CheckResults3d(0);
-    }
-}
-
-// 0x7BC1C0
-void CVidMode::DisableScissoring()
-{
-    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
-        CVideo3d::glDisable(GL_SCISSOR_TEST);
-        CheckResults3d(0);
-    }
-}
-
-// 0x7BD270
-void CVidMode::RenderTint3d(COLORREF rgbTint, const CRect& rClip)
-{
-    // TODO: Incomplete.
-}
-
 // 0x7C8B40
 LONG CVidMode::DrawEllipse24(const CPoint& ptCenter, const CSize& axis, const DDSURFACEDESC& ddsd, const CRect* rClip, COLORREF rgbColor)
 {
@@ -1892,45 +1812,6 @@ BOOL CVidMode::Flip(BOOL bRenderCursor)
 // 0x799E60
 void CVidMode::ParsePixelFormat(const DDPIXELFORMAT& ddpf)
 {
-}
-
-// 0x78E6E0
-BOOL CVidMode::CreateSurfaces3d()
-{
-    return FALSE;
-}
-
-// 0x78E6E0
-BOOL CVidMode::DestroySurfaces3d(CVidMode* pNextVidMode)
-{
-    return FALSE;
-}
-
-// 0x7BEDE0
-void CVidMode::sub_7BEDE0()
-{
-    CSingleLock lock(&field_4A, FALSE);
-    lock.Lock(INFINITE);
-
-    while (!field_6A.IsEmpty()) {
-        GLuint texture = static_cast<GLuint>(field_6A.RemoveHead());
-        CVideo3d::glDeleteTextures(1, &texture);
-        CheckResults3d(0);
-    }
-
-    lock.Unlock();
-}
-
-// 0x7BD880
-void CVidMode::RenderQuad(const VERTEX_DESC* pVertices, INT nVertices)
-{
-    // TODO: Incomplete.
-}
-
-// 0x5CEDE0
-void CVidMode::RenderBlackFade3d()
-{
-    // TODO: Incomplete.
 }
 
 // NOTE: Inlined.

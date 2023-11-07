@@ -412,17 +412,3 @@ void CVideo::SetBitsPerPixels(USHORT nNewBpp, BOOLEAN a3)
         }
     }
 }
-
-// 0x7BBA50
-void CVideo::CleanUp3d()
-{
-    // TODO: Incomplete.
-}
-
-// 0x7BBAF0
-BOOL CVideo::Initialize3d(HWND hWnd, BOOLEAN bFullscreen, int a4)
-{
-    // TODO: Incomplete.
-
-    return FALSE;
-}

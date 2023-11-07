@@ -1,5 +1,8 @@
 #include "CVideo3d.h"
 
+#include "CVidInf.h"
+#include "CVideo.h"
+
 // 0x907514
 PFNGLACCUMPROC CVideo3d::glAccum;
 
@@ -1163,3 +1166,200 @@ PFNGLUUNPROJECTPROC CVideo3d::gluUnProject;
 
 // 0x907B20
 BYTE CVideo3d::texImageData[512 * 512 * 4];
+
+// -----------------------------------------------------------------------------
+
+// 0x7BBA50
+void CVideo::CleanUp3d()
+{
+    // TODO: Incomplete.
+}
+
+// 0x7BBAF0
+BOOL CVideo::Initialize3d(HWND hWnd, BOOLEAN bFullscreen, int a4)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x78E6E0
+BOOL CVidMode::CreateSurfaces3d()
+{
+    return FALSE;
+}
+
+// 0x78E6E0
+BOOL CVidMode::DestroySurfaces3d(CVidMode* pNextVidMode)
+{
+    return FALSE;
+}
+
+// 0x7BC100
+BOOL CVidMode::ActivateVideoMode3d(CVidMode* pPrevVidMode, HWND hWnd, BOOLEAN bFullscreen)
+{
+    return TRUE;
+}
+
+// 0x7BC110
+void CVidMode::Set3dClipRect(const CRect& rClip)
+{
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        CVideo3d::glScissor(rClip.left,
+            CVideo::SCREENHEIGHT - rClip.bottom,
+            rClip.Width(),
+            rClip.Height());
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+    }
+}
+
+// 0x7BC180
+void CVidMode::EnableScissoring()
+{
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        CVideo3d::glEnable(GL_SCISSOR_TEST);
+        CheckResults3d(0);
+    }
+}
+
+// 0x7BC1C0
+void CVidMode::DisableScissoring()
+{
+    if (g_pChitin->cVideo.m_bIs3dAccelerated) {
+        CVideo3d::glDisable(GL_SCISSOR_TEST);
+        CheckResults3d(0);
+    }
+}
+
+// 0x7BC200
+int CVidMode::GetTextureId()
+{
+    // TODO: Incomplete.
+
+    return 0;
+}
+
+// 0x7BC250
+BOOL CVidMode::DrawLine3d(INT nXFrom, INT nYFrom, INT nXTo, INT nYTo, const CRect& rSurface, COLORREF rgbColor)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x7BC580
+BOOL CVidMode::DrawEllipse3d(const CPoint& ptCenter, const CSize& axis, const CRect& rClip, COLORREF rgbColor)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x7BC7A0
+BOOL CVidMode::DrawRecticle3d(const CVIDMODE_RECTICLE_DESCRIPTION& rd, const CRect& rClip, COLORREF rgbColor)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x7BD270
+void CVidMode::RenderTint3d(COLORREF rgbTint, const CRect& rClip)
+{
+    // TODO: Incomplete.
+}
+
+// 0x7BD880
+void CVidMode::RenderQuad(const VERTEX_DESC* pVertices, INT nVertices)
+{
+    // TODO: Incomplete.
+}
+
+// 0x5CEDE0
+void CVidMode::RenderBlackFade3d()
+{
+    // TODO: Incomplete.
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x7BE210
+BOOL CVidInf::DestroySurfaces3d(CVidMode* pNextVidMode)
+{
+    if (pNextVidMode != NULL && pNextVidMode->GetType() == 0) {
+        return TRUE;
+    }
+
+    field_178.Unload();
+
+    GLuint texture1 = 2;
+    CVideo3d::glDeleteTextures(1, &texture1);
+    CheckResults3d(0);
+
+    GLuint texture2 = 5;
+    CVideo3d::glDeleteTextures(1, &texture2);
+
+    GLuint texture3 = 6;
+    CVideo3d::glDeleteTextures(1, &texture3);
+
+    for (int index = 0; index < m_nVRamSurfaces; index++) {
+        GLuint texture = static_cast<GLuint>(index);
+        CVideo3d::glDeleteTextures(1, &texture);
+        CheckResults3d(0);
+    }
+
+    sub_7BEDE0();
+
+    return TRUE;
+}
+
+// 0x7BE300
+BOOL CVidInf::RenderPointer3d(UINT nSurface)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x7BE4E0
+BOOL CVidInf::WindowedFlip3d(BOOL bRenderCursor)
+{
+    // TODO: Incomplete.
+
+    return TRUE;
+}
+
+// #binary-identical
+// 0x7BE530
+void CVidInf::DoTextOut3d(UINT nSurface, const CString& sText, int x, int y, COLORREF color)
+{
+    field_178.SetColor(color, 0, 0);
+
+    CRect screenRect(0, 0, CVideo::SCREENWIDTH, CVideo::SCREENHEIGHT);
+    field_178.TextOut3d(sText, x, y + 16, screenRect, 0, 0);
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x7BEA80
+void CVidMode::CheckResults3d(int a1)
+{
+    // TODO: Incomplete.
+}
+
+// 0x7BEDE0
+void CVidMode::sub_7BEDE0()
+{
+    CSingleLock lock(&field_4A, FALSE);
+    lock.Lock(INFINITE);
+
+    while (!field_6A.IsEmpty()) {
+        GLuint texture = static_cast<GLuint>(field_6A.RemoveHead());
+        CVideo3d::glDeleteTextures(1, &texture);
+        CheckResults3d(0);
+    }
+
+    lock.Unlock();
+}
