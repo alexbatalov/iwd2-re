@@ -1417,6 +1417,26 @@ void CVidMode::RenderBlackFade3d()
 
 // -----------------------------------------------------------------------------
 
+// 0x7BDC60
+BOOL CVidInf::ActivateVideoMode3d(CVidMode* pPrevVidMode, HWND hWnd, BOOLEAN bFullscreen)
+{
+    if (pPrevVidMode != NULL && pPrevVidMode->GetType() == 0) {
+        return TRUE;
+    }
+
+    g_pChitin->cVideo.SetBitsPerPixels(32, FALSE);
+    memset(CVidImage::rgbTempPal, 255, sizeof(CVidImage::rgbTempPal));
+
+    if (!CreateSurfaces3d()) {
+        return FALSE;
+    }
+
+    g_pChitin->cVideo.m_pCurrentVidMode = this;
+    g_pChitin->PreLoadFonts();
+
+    return TRUE;
+}
+
 // 0x7BE210
 BOOL CVidInf::DestroySurfaces3d(CVidMode* pNextVidMode)
 {

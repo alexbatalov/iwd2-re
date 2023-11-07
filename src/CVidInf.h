@@ -45,6 +45,7 @@ public:
     /* 010C */ void ParsePixelFormat(const DDPIXELFORMAT& ddpf) override;
     /* 011C */ ~CVidInf() override;
     /* 0124 */ BOOL DestroySurfaces3d(CVidMode* pNextVidMode) override;
+    /* 012C */ BOOL ActivateVideoMode3d(CVidMode* pPrevVidMode, HWND hWnd, BOOLEAN bFullscreen) override;
 
     BOOL FullScreenFlip(BOOL bRenderCursor);
     BOOL WindowedFlip(BOOL bRenderCursor);
