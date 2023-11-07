@@ -1,8 +1,10 @@
 #include "CVidCell.h"
 
 #include "CUtil.h"
+#include "CVidInf.h"
 #include "CVidMode.h"
 #include "CVidPoly.h"
+#include "CVideo3d.h"
 
 // 0x8BAC88
 DWORD CVidCell::dword_8BAC88 = -1;
@@ -2005,7 +2007,187 @@ BOOL CVidCell::sub_7D1190(DWORD* pSurface, LONG lPitch, DWORD dwFlags)
 // 0x7C4240
 void CVidCell::RenderTexture(INT x, INT y, const CRect& rFxRect, CSize dataPitch, const CRect& rClip, DWORD dwFlags)
 {
-    // TODO: Incomplete.
+    CSize texSize(dataPitch);
+    float x1;
+    float y1;
+    float x2;
+    float y2;
+    float x3;
+    float y3;
+    float x4;
+    float y4;
+
+    if (x > rClip.right
+        || y > rClip.bottom
+        || x + rFxRect.Width() < rClip.left
+        || y + rFxRect.Height() < rClip.top) {
+        return;
+    }
+
+    x1 = static_cast<float>(x);
+    y1 = static_cast<float>(y);
+    x2 = static_cast<float>(x + rFxRect.Width());
+    y2 = static_cast<float>(y + rFxRect.Height());
+
+    if (g_pChitin->cVideo.field_13A) {
+        CVideo3d::glTexImage2D(GL_TEXTURE_2D,
+            0,
+            GL_RGBA,
+            512,
+            512,
+            0,
+            GL_RGBA,
+            GL_UNSIGNED_BYTE,
+            CVideo3d::texImageData);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+    } else {
+        CVideo3d::glTexSubImage2D(GL_TEXTURE_2D,
+            0,
+            0,
+            0,
+            texSize.cx,
+            texSize.cy,
+            GL_RGBA,
+            GL_UNSIGNED_BYTE,
+            CVideo3d::texImageData);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+    }
+
+    if ((dwFlags & 0x20) != 0) {
+        y3 = static_cast<float>(rFxRect.bottom) / static_cast<float>(512);
+        y4 = static_cast<float>(rFxRect.top) / static_cast<float>(512);
+
+        if (y < rClip.top) {
+            y1 = static_cast<float>(rClip.top);
+            y3 -= static_cast<float>(rClip.top - y) / static_cast<float>(512);
+        }
+
+        if (y + rFxRect.Height() > rClip.bottom) {
+            y2 = static_cast<float>(rClip.bottom);
+            y4 += static_cast<float>(y + rFxRect.Height() - rClip.bottom) / static_cast<float>(512);
+        }
+    } else {
+        y3 = static_cast<float>(rFxRect.top) / static_cast<float>(512);
+        y4 = static_cast<float>(rFxRect.bottom) / static_cast<float>(512);
+
+        if (y < rClip.top) {
+            y1 = static_cast<float>(rClip.top);
+            y3 = static_cast<float>(rClip.top - y) / static_cast<float>(512);
+        }
+
+        if (y + rFxRect.Height() > rClip.bottom) {
+            y2 = static_cast<float>(rClip.bottom);
+            y4 = static_cast<float>(rClip.bottom - y) / static_cast<float>(512);
+        }
+    }
+
+    if ((dwFlags & 0x10) != 0) {
+        x3 = static_cast<float>(rFxRect.right) / static_cast<float>(512);
+        x4 = static_cast<float>(rFxRect.left) / static_cast<float>(512);
+
+        if (x < rClip.left) {
+            x1 = static_cast<float>(rClip.left);
+            x3 -= static_cast<float>(rClip.left - x) / static_cast<float>(512);
+        }
+
+        if (x + rFxRect.Width() > rClip.right) {
+            x2 = static_cast<float>(rClip.right);
+            x4 += static_cast<float>(x + rFxRect.Width() - rClip.right) / static_cast<float>(512);
+        }
+    } else {
+        x3 = static_cast<float>(rFxRect.left) / static_cast<float>(512);
+        x4 = static_cast<float>(rFxRect.right) / static_cast<float>(512);
+
+        if (x < rClip.left) {
+            x1 = static_cast<float>(rClip.left);
+            x3 = static_cast<float>(rClip.left - x) / static_cast<float>(512);
+        }
+
+        if (x + rFxRect.Width() > rClip.right) {
+            x2 = static_cast<float>(rClip.right);
+            x4 = static_cast<float>(rClip.right - x) / static_cast<float>(512);
+        }
+    }
+
+    CVideo3d::glEnable(GL_BLEND);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    if ((dwFlags & 0x200) != 0) {
+        CVideo3d::glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_COLOR);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+    } else if ((dwFlags & 0x8) != 0) {
+        CVideo3d::glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ONE);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+    } else {
+        CVideo3d::glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+    }
+
+    if ((dwFlags & 0x80000000) != 0) {
+        BYTE r = GetRValue(dword_8BAC88);
+        BYTE g = GetGValue(dword_8BAC88);
+        BYTE b = GetBValue(dword_8BAC88);
+
+        BYTE nBrightnessCorrection = g_pChitin->GetCurrentVideoMode()->m_nBrightnessCorrection;
+        if (nBrightnessCorrection != 0) {
+            r = ~((~nBrightnessCorrection * ~r) >> 8);
+            g = ~((~nBrightnessCorrection * ~g) >> 8);
+            b = ~((~nBrightnessCorrection * ~b) >> 8);
+        }
+
+        BYTE nGammaCorrection = g_pChitin->GetCurrentVideoMode()->m_nGammaCorrection;
+        if (nGammaCorrection != 0) {
+            DWORD nLight = (1 << CVidPalette::LIGHT_SCALE) + nGammaCorrection;
+            r = static_cast<BYTE>(min((nLight * r) / 8, 255));
+            g = static_cast<BYTE>(min((nLight * g) / 8, 255));
+            b = static_cast<BYTE>(min((nLight * b) / 8, 255));
+        }
+
+        CVideo3d::glColor4f(static_cast<float>(r) / 255.0f,
+            static_cast<float>(g) / 255.0,
+            static_cast<float>(b) / 255.0,
+            1.0f);
+    }
+
+    x1 += CVideo3d::SUB_PIXEL_SHIFT;
+    y1 += CVideo3d::SUB_PIXEL_SHIFT;
+    x2 += CVideo3d::SUB_PIXEL_SHIFT;
+    y2 += CVideo3d::SUB_PIXEL_SHIFT;
+
+    CVideo3d::glBegin(GL_TRIANGLE_STRIP);
+    CVideo3d::glTexCoord2f(x3, y3);
+    CVideo3d::glVertex3f(x1, y1, 0.0f);
+    CVideo3d::glTexCoord2f(x3, y4);
+    CVideo3d::glVertex3f(x1, y2, 0.0f);
+    CVideo3d::glTexCoord2f(x4, y3);
+    CVideo3d::glVertex3f(x2, y1, 0.0f);
+    CVideo3d::glTexCoord2f(x4, y4);
+    CVideo3d::glVertex3f(x2, y2, 0.0f);
+    CVideo3d::glEnd();
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    if ((dwFlags & 0x200) != 0) {
+        CVideo3d::glBlendFunc(GL_SRC_COLOR, GL_ONE);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+        CVideo3d::glBegin(GL_TRIANGLE_STRIP);
+        CVideo3d::glTexCoord2f(x3, y3);
+        CVideo3d::glVertex3f(x1, y1, 0.0f);
+        CVideo3d::glTexCoord2f(x3, y4);
+        CVideo3d::glVertex3f(x1, y2, 0.0f);
+        CVideo3d::glTexCoord2f(x4, y3);
+        CVideo3d::glVertex3f(x2, y1, 0.0f);
+        CVideo3d::glTexCoord2f(x4, y4);
+        CVideo3d::glVertex3f(x2, y2, 0.0f);
+        CVideo3d::glEnd();
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+        CVideo3d::glDisable(GL_BLEND);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+    }
+
+    CVideo3d::glDisable(GL_BLEND);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 }
 
 // 0x7C4960
