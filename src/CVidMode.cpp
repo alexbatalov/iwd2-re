@@ -1,10 +1,9 @@
 #include "CVidMode.h"
 
-#include <gl/gl.h>
-
 #include "CChitin.h"
 #include "CUtil.h"
 #include "CVidCell.h"
+#include "CVideo3d.h"
 
 typedef struct CVIDMODE_CLIP_OUTCODE {
     unsigned int all;
@@ -1183,8 +1182,7 @@ void CVidMode::CheckResults3d(int a1)
 void CVidMode::Set3dClipRect(const CRect& rClip)
 {
     if (g_pChitin->cVideo.m_bIs3dAccelerated) {
-        // TODO: Replace with function pointers.
-        glScissor(rClip.left,
+        CVideo3d::glScissor(rClip.left,
             CVideo::SCREENHEIGHT - rClip.bottom,
             rClip.Width(),
             rClip.Height());
@@ -1196,8 +1194,7 @@ void CVidMode::Set3dClipRect(const CRect& rClip)
 void CVidMode::EnableScissoring()
 {
     if (g_pChitin->cVideo.m_bIs3dAccelerated) {
-        // TODO: Replace with function pointers.
-        glEnable(GL_SCISSOR_TEST);
+        CVideo3d::glEnable(GL_SCISSOR_TEST);
         CheckResults3d(0);
     }
 }
@@ -1206,8 +1203,7 @@ void CVidMode::EnableScissoring()
 void CVidMode::DisableScissoring()
 {
     if (g_pChitin->cVideo.m_bIs3dAccelerated) {
-        // TODO: Replace with function pointers.
-        glDisable(GL_SCISSOR_TEST);
+        CVideo3d::glDisable(GL_SCISSOR_TEST);
         CheckResults3d(0);
     }
 }
@@ -1918,7 +1914,7 @@ void CVidMode::sub_7BEDE0()
 
     while (!field_6A.IsEmpty()) {
         GLuint texture = static_cast<GLuint>(field_6A.RemoveHead());
-        glDeleteTextures(1, &texture);
+        CVideo3d::glDeleteTextures(1, &texture);
         CheckResults3d(0);
     }
 

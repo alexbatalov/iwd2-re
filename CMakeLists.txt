@@ -371,6 +371,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CVidCell.h"
     "src/CVideo.cpp"
     "src/CVideo.h"
+    "src/CVideo3d.cpp"
+    "src/CVideo3d.h"
     "src/CVidFont.cpp"
     "src/CVidFont.h"
     "src/CVidImage.cpp"

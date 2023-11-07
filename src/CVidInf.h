@@ -76,8 +76,6 @@ public:
     BOOL RenderPointer3d(UINT nSurface);
     void DoTextOut3d(UINT nSurface, const CString& sText, int x, int y, COLORREF color);
 
-    static unsigned char dword_907B20[512 * 512 * 4];
-
     /* 00F4 */ DDSURFACEDESC m_SurfaceDesc;
     /* 0160 */ CRect m_rLockedRect;
     /* 0170 */ int field_170;

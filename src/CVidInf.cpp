@@ -1,17 +1,13 @@
 #include "CVidInf.h"
 
-#include <gl/gl.h>
-
 #include "CChitin.h"
 #include "CParticle.h"
 #include "CUtil.h"
 #include "CVidImage.h"
 #include "CVidPoly.h"
+#include "CVideo3d.h"
 
 #define SEVEN_EIGHT_ZERO 780
-
-// 0x907B20
-unsigned char CVidInf::dword_907B20[512 * 512 * 4];
 
 // #binary-identical
 // 0x79AF00
@@ -558,18 +554,18 @@ BOOL CVidInf::DestroySurfaces3d(CVidMode* pNextVidMode)
     field_178.Unload();
 
     GLuint texture1 = 2;
-    glDeleteTextures(1, &texture1);
+    CVideo3d::glDeleteTextures(1, &texture1);
     CheckResults3d(0);
 
     GLuint texture2 = 5;
-    glDeleteTextures(1, &texture2);
+    CVideo3d::glDeleteTextures(1, &texture2);
 
     GLuint texture3 = 6;
-    glDeleteTextures(1, &texture3);
+    CVideo3d::glDeleteTextures(1, &texture3);
 
     for (int index = 0; index < m_nVRamSurfaces; index++) {
         GLuint texture = static_cast<GLuint>(index);
-        glDeleteTextures(1, &texture);
+        CVideo3d::glDeleteTextures(1, &texture);
         CheckResults3d(0);
     }
 
@@ -874,7 +870,7 @@ IDirectDrawSurface* CVidInf::GetFXSurfacePtr(DWORD dwFlags)
 LPVOID CVidInf::GetLockedSurface()
 {
     if (g_pChitin->cVideo.m_bIs3dAccelerated) {
-        return dword_907B20;
+        return CVideo3d::texImageData;
     }
 
     // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo.cpp
@@ -908,7 +904,7 @@ BOOL CVidInf::FXPrep(CRect& rFXRect, DWORD dwFlags, const CPoint& ptPos, const C
     CPoint pt = ptReference;
 
     if (g_pChitin->cVideo.Is3dAccelerated()) {
-        memset(CVidInf::dword_907B20, 0, rFXRect.Height() * 2048);
+        memset(CVideo3d::texImageData, 0, rFXRect.Height() * 2048);
         return TRUE;
     }
 
@@ -1261,38 +1257,37 @@ BOOL CVidInf::FXRender(CVidCell* pVidCell, INT nRefPtX, INT nRefPtY, const CRect
 BOOL CVidInf::FXRender(CParticle* pParticle, const CRect& rClip, USHORT nFlag, USHORT nBlobSize)
 {
     if (g_pChitin->cVideo.m_bIs3dAccelerated) {
-        // TODO: Replace with function pointers.
-        glEnable(GL_TEXTURE_2D);
+        CVideo3d::glEnable(GL_TEXTURE_2D);
         CheckResults3d(0);
 
         g_pChitin->cVideo.field_13E = 2;
 
-        glBindTexture(GL_TEXTURE_2D, 2);
+        CVideo3d::glBindTexture(GL_TEXTURE_2D, 2);
         CheckResults3d(0);
 
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        CVideo3d::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         CheckResults3d(0);
 
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        CVideo3d::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         CheckResults3d(0);
 
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        CVideo3d::glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         CheckResults3d(0);
 
-        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+        CVideo3d::glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         CheckResults3d(0);
 
-        glColor4f(1.0, 1.0, 1.0, 1.0);
+        CVideo3d::glColor4f(1.0, 1.0, 1.0, 1.0);
         CheckResults3d(0);
 
         if (g_pChitin->cVideo.field_13A) {
-            pParticle->Render(dword_907B20,
+            pParticle->Render(CVideo3d::texImageData,
                 CVidTile::BYTES_PER_TEXEL * 512,
                 rClip,
                 nFlag,
                 nBlobSize);
         } else {
-            pParticle->Render(dword_907B20,
+            pParticle->Render(CVideo3d::texImageData,
                 CVidTile::BYTES_PER_TEXEL * rClip.Width(),
                 rClip,
                 nFlag,
@@ -1313,34 +1308,33 @@ BOOL CVidInf::FXRender(CParticle* pParticle, const CRect& rClip, USHORT nFlag, U
 BOOL CVidInf::FXRender(CPoint* pPoints, INT nPoints, const CRect& rSurface, COLORREF rgbColor, BOOL bClipped)
 {
     if (g_pChitin->cVideo.m_bIs3dAccelerated) {
-        // TODO: Replace with function pointers.
-        glEnable(GL_TEXTURE_2D);
+        CVideo3d::glEnable(GL_TEXTURE_2D);
         CheckResults3d(0);
 
         g_pChitin->cVideo.field_13E = 2;
 
-        glBindTexture(GL_TEXTURE_2D, 2);
+        CVideo3d::glBindTexture(GL_TEXTURE_2D, 2);
         CheckResults3d(0);
 
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        CVideo3d::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         CheckResults3d(0);
 
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        CVideo3d::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         CheckResults3d(0);
 
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        CVideo3d::glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         CheckResults3d(0);
 
-        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+        CVideo3d::glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         CheckResults3d(0);
 
-        glColor4f(1.0, 1.0, 1.0, 1.0);
+        CVideo3d::glColor4f(1.0, 1.0, 1.0, 1.0);
         CheckResults3d(0);
 
         if (g_pChitin->cVideo.field_13A) {
             return DrawPoints(pPoints,
                 nPoints,
-                reinterpret_cast<WORD*>(dword_907B20),
+                reinterpret_cast<WORD*>(CVideo3d::texImageData),
                 CVidTile::BYTES_PER_TEXEL * 512,
                 rSurface,
                 rgbColor,
@@ -1348,7 +1342,7 @@ BOOL CVidInf::FXRender(CPoint* pPoints, INT nPoints, const CRect& rSurface, COLO
         } else {
             return DrawPoints(pPoints,
                 nPoints,
-                reinterpret_cast<WORD*>(dword_907B20),
+                reinterpret_cast<WORD*>(CVideo3d::texImageData),
                 CVidTile::BYTES_PER_TEXEL * rSurface.Width(),
                 rSurface,
                 rgbColor,
@@ -1401,7 +1395,7 @@ BOOL CVidInf::FXTextOut(CVidFont* pFont, const CString& sString, INT x, INT y, c
             ? CVidTile::BYTES_PER_TEXEL * 512
             : CVidTile::BYTES_PER_TEXEL * m_rLockedRect.Width();
         return pFont->TextOut3d(sString,
-            reinterpret_cast<WORD*>(dword_907B20),
+            reinterpret_cast<WORD*>(CVideo3d::texImageData),
             lPitch,
             x,
             y,
@@ -1468,14 +1462,14 @@ BOOL CVidInf::FXUnlock(DWORD dwFlags, const CRect* pFxRect, const CPoint& ptRef)
             cVidPoly.SetPoly(vertices, 4);
 
             if (g_pChitin->cVideo.field_13A) {
-                cVidPoly.FillPoly(reinterpret_cast<WORD*>(dword_907B20),
+                cVidPoly.FillPoly(reinterpret_cast<WORD*>(CVideo3d::texImageData),
                     CVidTile::BYTES_PER_TEXEL * 512,
                     pFxRect,
                     field_24,
                     dwPolyFlags,
                     ptRef);
             } else {
-                cVidPoly.FillPoly(reinterpret_cast<WORD*>(dword_907B20),
+                cVidPoly.FillPoly(reinterpret_cast<WORD*>(CVideo3d::texImageData),
                     CVidTile::BYTES_PER_TEXEL * m_rLockedRect.Width(),
                     pFxRect,
                     field_24,
@@ -1565,7 +1559,7 @@ BOOL CVidInf::BKUnlock()
 BOOL CVidInf::BKRender(CVidCell* pVidCell, INT x, INT y, const CRect& rClip, BOOLEAN bDemanded, DWORD dwFlags)
 {
     if (g_pChitin->cVideo.m_bIs3dAccelerated) {
-        memset(dword_907B20, 0, 4 * 512 * 512);
+        memset(CVideo3d::texImageData, 0, 4 * 512 * 512);
 
         CRect rNewClip(rClip);
         rNewClip.OffsetRect(m_rLockedRect.left, m_rLockedRect.top);
@@ -1596,9 +1590,9 @@ BOOL CVidInf::BKRender(CVidCell* pVidCell, INT x, INT y, DWORD dwFlags, INT nTra
 {
     if (g_pChitin->cVideo.m_bIs3dAccelerated) {
         if (g_pChitin->cVideo.field_13A) {
-            memset(dword_907B20, 0, m_rLockedRect.Height() * (4 * 512));
+            memset(CVideo3d::texImageData, 0, m_rLockedRect.Height() * (4 * 512));
         } else {
-            memset(dword_907B20, 0, 4 * m_rLockedRect.Width() * m_rLockedRect.Height());
+            memset(CVideo3d::texImageData, 0, 4 * m_rLockedRect.Width() * m_rLockedRect.Height());
         }
 
         return pVidCell->Render3d(m_rLockedRect.left + x,
