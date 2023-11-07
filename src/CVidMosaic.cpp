@@ -44,7 +44,7 @@ BOOL CVidMosaic::Render(INT nSurface, int x, int y, const CRect& rMosaic, const 
     }
 
     if (g_pChitin->cVideo.m_bIs3dAccelerated) {
-        return Render3d(x, y, rMosaic, rClip, dwFlags);
+        return Render3d(x, y, rMosaic, rClip, dwFlags, bDemanded);
     }
 
     if (m_nFxSurface == -1) {
@@ -397,9 +397,118 @@ void CVidMosaic::RenderTexture(INT x, INT y, const CSize& blitSize, const CRect&
 }
 
 // 0x7C5A00
-BOOL CVidMosaic::Render3d(int x, int y, const CRect& rMosaic, const CRect& rClip, DWORD dwFlags)
+BOOL CVidMosaic::Render3d(int x, int y, const CRect& rMosaic, const CRect& rClip, DWORD dwFlags, BOOL bDemanded)
 {
-    // TODO: Incomplete.
+    if (pRes == NULL) {
+        return FALSE;
+    }
 
-    return FALSE;
+    if (!bDemanded) {
+        pRes->Demand();
+    }
+
+    // NOTE: Original code is different and hard to replicate one to one. This
+    // code is based on `CVidMosaic::Render` implementation and adjusted for
+    // 3D stuff.
+    WORD nTileSize = pRes->GetTileSize(m_bDoubleSize);
+    WORD nMosaicWidth = pRes->GetMosaicWidth(m_bDoubleSize);
+    WORD nMosaicHeight = pRes->GetMosaicHeight(m_bDoubleSize);
+
+    INT nFirstTileX = rMosaic.left / nTileSize;
+    INT nFirstTileY = rMosaic.top / nTileSize;
+    INT nLastTileX = rMosaic.right % nTileSize == 0
+        ? rMosaic.right / nTileSize
+        : rMosaic.right / nTileSize + 1;
+    INT nLastTileY = (rMosaic.bottom % nTileSize == 0)
+        ? rMosaic.bottom / nTileSize
+        : rMosaic.bottom / nTileSize + 1;
+
+    nFirstTileX = max(nFirstTileX, 0);
+    nFirstTileY = max(nFirstTileY, 0);
+    nLastTileX = min(nLastTileX, pRes->m_pHeader->nXTiles);
+    nLastTileY = min(nLastTileY, pRes->m_pHeader->nYTiles);
+
+    CVideo3d::glEnable(GL_TEXTURE_2D);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    g_pChitin->cVideo.field_13E = 2;
+    CVideo3d::glBindTexture(GL_TEXTURE_2D, 2);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CRect rTile(0, 0, nTileSize, nTileSize);
+
+    for (INT nTileY = nFirstTileY; nTileY < nLastTileY; nTileY++) {
+        int destY = y + nTileY * nTileSize;
+
+        rTile.bottom = min(nMosaicHeight - nTileY * nTileSize, nTileSize);
+        if (destY + rTile.bottom < rClip.top || destY > rClip.bottom) {
+            continue;
+        }
+
+        for (INT nTileX = nFirstTileX; nTileX < nLastTileX; nTileX++) {
+            int destX = x + nTileX * nTileSize;
+
+            rTile.right = min(nMosaicWidth - nTileX * nTileSize, nTileSize);
+            if (destX + rTile.right < rClip.left || destX > rClip.right) {
+                continue;
+            }
+
+            LONG lPitch = g_pChitin->cVideo.field_13A
+                ? CVidTile::BYTES_PER_TEXEL * 512
+                : CVidTile::BYTES_PER_TEXEL * rTile.right;
+
+            BOOL bSuccess = BltMos8To32(reinterpret_cast<DWORD*>(CVideo3d::texImageData),
+                lPitch,
+                nTileY * pRes->m_pHeader->nXTiles + nTileX,
+                rTile,
+                dwFlags);
+            if (!bSuccess) {
+                if (!bDemanded) {
+                    pRes->Release();
+                }
+                return FALSE;
+            }
+
+            if (g_pChitin->cVideo.field_13A) {
+                CVideo3d::glTexImage2D(GL_TEXTURE_2D,
+                    0,
+                    GL_RGBA,
+                    512,
+                    512,
+                    0,
+                    GL_RGBA,
+                    GL_UNSIGNED_BYTE,
+                    CVideo3d::texImageData);
+                g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+            } else {
+                CVideo3d::glTexSubImage2D(GL_TEXTURE_2D,
+                    0,
+                    0,
+                    0,
+                    rTile.Width(),
+                    rTile.Height(),
+                    GL_RGBA,
+                    GL_UNSIGNED_BYTE,
+                    CVideo3d::texImageData);
+                g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+            }
+
+            RenderTexture(destX, destY, rTile.Size(), rClip, dwFlags);
+        }
+    }
+
+    if (!bDemanded) {
+        pRes->Release();
+    }
+
+    return TRUE;
 }

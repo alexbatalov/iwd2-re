@@ -19,7 +19,7 @@ public:
     int GetTileNumber(int x, int y);
 
     void RenderTexture(INT x, INT y, const CSize& blitSize, const CRect& rClip, DWORD dwFlags);
-    BOOL Render3d(int x, int y, const CRect& rMosaic, const CRect& rClip, DWORD dwFlags);
+    BOOL Render3d(int x, int y, const CRect& rMosaic, const CRect& rClip, DWORD dwFlags, BOOL bDemanded);
 
     /* 00B0 */ BOOL m_bDoubleSize;
 };
