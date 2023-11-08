@@ -18,10 +18,16 @@
 #define CVIDCELL_FXPREP_COPYFROMBACK 0x80
 #define CVIDCELL_FXPREP_CLEARFILL 0x100
 
+#define CVIDINF_FX_WIDTH 512
+#define CVIDINF_FX_HEIGHT 512
+
 class CParticle;
 
 class CVidInf : public CVidMode {
 public:
+    static const INT FX_HEIGHT;
+    static const INT FX_WIDTH;
+
     CVidInf();
     /* 0000 */ BOOLEAN SaveScreen() override;
     /* 005C */ BOOL ActivateVideoMode(CVidMode* pPrevVidMode, HWND hWnd, BOOLEAN bFullscreen) override;

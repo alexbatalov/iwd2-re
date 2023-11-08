@@ -2033,8 +2033,8 @@ void CVidCell::RenderTexture(INT x, INT y, const CRect& rFxRect, CSize dataPitch
         CVideo3d::glTexImage2D(GL_TEXTURE_2D,
             0,
             GL_RGBA,
-            512,
-            512,
+            CVidInf::FX_WIDTH,
+            CVidInf::FX_HEIGHT,
             0,
             GL_RGBA,
             GL_UNSIGNED_BYTE,
@@ -2054,58 +2054,58 @@ void CVidCell::RenderTexture(INT x, INT y, const CRect& rFxRect, CSize dataPitch
     }
 
     if ((dwFlags & 0x20) != 0) {
-        y3 = static_cast<float>(rFxRect.bottom) / static_cast<float>(512);
-        y4 = static_cast<float>(rFxRect.top) / static_cast<float>(512);
+        y3 = static_cast<float>(rFxRect.bottom) / static_cast<float>(CVidInf::FX_HEIGHT);
+        y4 = static_cast<float>(rFxRect.top) / static_cast<float>(CVidInf::FX_HEIGHT);
 
         if (y < rClip.top) {
             y1 = static_cast<float>(rClip.top);
-            y3 -= static_cast<float>(rClip.top - y) / static_cast<float>(512);
+            y3 -= static_cast<float>(rClip.top - y) / static_cast<float>(CVidInf::FX_HEIGHT);
         }
 
         if (y + rFxRect.Height() > rClip.bottom) {
             y2 = static_cast<float>(rClip.bottom);
-            y4 += static_cast<float>(y + rFxRect.Height() - rClip.bottom) / static_cast<float>(512);
+            y4 += static_cast<float>(y + rFxRect.Height() - rClip.bottom) / static_cast<float>(CVidInf::FX_HEIGHT);
         }
     } else {
-        y3 = static_cast<float>(rFxRect.top) / static_cast<float>(512);
-        y4 = static_cast<float>(rFxRect.bottom) / static_cast<float>(512);
+        y3 = static_cast<float>(rFxRect.top) / static_cast<float>(CVidInf::FX_HEIGHT);
+        y4 = static_cast<float>(rFxRect.bottom) / static_cast<float>(CVidInf::FX_HEIGHT);
 
         if (y < rClip.top) {
             y1 = static_cast<float>(rClip.top);
-            y3 = static_cast<float>(rClip.top - y) / static_cast<float>(512);
+            y3 = static_cast<float>(rClip.top - y) / static_cast<float>(CVidInf::FX_HEIGHT);
         }
 
         if (y + rFxRect.Height() > rClip.bottom) {
             y2 = static_cast<float>(rClip.bottom);
-            y4 = static_cast<float>(rClip.bottom - y) / static_cast<float>(512);
+            y4 = static_cast<float>(rClip.bottom - y) / static_cast<float>(CVidInf::FX_HEIGHT);
         }
     }
 
     if ((dwFlags & 0x10) != 0) {
-        x3 = static_cast<float>(rFxRect.right) / static_cast<float>(512);
-        x4 = static_cast<float>(rFxRect.left) / static_cast<float>(512);
+        x3 = static_cast<float>(rFxRect.right) / static_cast<float>(CVidInf::FX_WIDTH);
+        x4 = static_cast<float>(rFxRect.left) / static_cast<float>(CVidInf::FX_WIDTH);
 
         if (x < rClip.left) {
             x1 = static_cast<float>(rClip.left);
-            x3 -= static_cast<float>(rClip.left - x) / static_cast<float>(512);
+            x3 -= static_cast<float>(rClip.left - x) / static_cast<float>(CVidInf::FX_WIDTH);
         }
 
         if (x + rFxRect.Width() > rClip.right) {
             x2 = static_cast<float>(rClip.right);
-            x4 += static_cast<float>(x + rFxRect.Width() - rClip.right) / static_cast<float>(512);
+            x4 += static_cast<float>(x + rFxRect.Width() - rClip.right) / static_cast<float>(CVidInf::FX_WIDTH);
         }
     } else {
-        x3 = static_cast<float>(rFxRect.left) / static_cast<float>(512);
-        x4 = static_cast<float>(rFxRect.right) / static_cast<float>(512);
+        x3 = static_cast<float>(rFxRect.left) / static_cast<float>(CVidInf::FX_WIDTH);
+        x4 = static_cast<float>(rFxRect.right) / static_cast<float>(CVidInf::FX_WIDTH);
 
         if (x < rClip.left) {
             x1 = static_cast<float>(rClip.left);
-            x3 = static_cast<float>(rClip.left - x) / static_cast<float>(512);
+            x3 = static_cast<float>(rClip.left - x) / static_cast<float>(CVidInf::FX_WIDTH);
         }
 
         if (x + rFxRect.Width() > rClip.right) {
             x2 = static_cast<float>(rClip.right);
-            x4 = static_cast<float>(rClip.right - x) / static_cast<float>(512);
+            x4 = static_cast<float>(rClip.right - x) / static_cast<float>(CVidInf::FX_WIDTH);
         }
     }
 
@@ -2240,7 +2240,8 @@ BOOL CVidCell::Render3d(INT nRefPtX, INT nRefPtY, const CRect& rClip, CVidPoly* 
         }
     }
 
-    if (m_pFrame->nWidth > 512 || m_pFrame->nHeight > 512) {
+    // NOTE: No reference to `CVidInf` constants.
+    if (m_pFrame->nWidth > CVIDINF_FX_WIDTH || m_pFrame->nHeight > CVIDINF_FX_HEIGHT) {
         // __FILE__: C:\Projects\Icewind2\src\chitin\ChVidImage3d.cpp
         // __LINE__: 690
         UTIL_ASSERT_MSG(FALSE, "CVidcell larger then fx");
@@ -2271,7 +2272,7 @@ BOOL CVidCell::Render3d(INT nRefPtX, INT nRefPtY, const CRect& rClip, CVidPoly* 
     g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 
     LONG lPitch = g_pChitin->cVideo.field_13A
-        ? CVidTile::BYTES_PER_TEXEL * 512
+        ? CVidTile::BYTES_PER_TEXEL * CVIDINF_FX_WIDTH
         : CVidTile::BYTES_PER_TEXEL * m_pFrame->nWidth;
 
     CVidInf::FXClear(CVideo3d::texImageData, lPitch * m_pFrame->nHeight / CVidTile::BYTES_PER_TEXEL);
@@ -2361,15 +2362,18 @@ BOOL CVidCell::Render3d(INT nRefPtX, INT nRefPtY, const CRect& rClip, BOOLEAN bD
     CVideo3d::glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 
-    for (INT yOffset = 0; yOffset < static_cast<LONG>(m_pFrame->nHeight); yOffset += 512) {
-        for (INT xOffset = 0; xOffset < static_cast<LONG>(m_pFrame->nWidth); xOffset += 512) {
+    for (INT yOffset = 0; yOffset < static_cast<LONG>(m_pFrame->nHeight); yOffset += CVidInf::FX_HEIGHT) {
+        for (INT xOffset = 0; xOffset < static_cast<LONG>(m_pFrame->nWidth); xOffset += CVidInf::FX_WIDTH) {
             if (yOffset != 0 || xOffset != 0) {
-                CVidInf::FXClear(CVideo3d::texImageData, 512 * 512);
+                CVidInf::FXClear(CVideo3d::texImageData, CVidInf::FX_WIDTH * CVidInf::FX_HEIGHT);
             }
 
-            rFrameClip.SetRect(0, 0, min(m_pFrame->nWidth - xOffset, 512), min(m_pFrame->nHeight - yOffset, 512));
+            rFrameClip.SetRect(0,
+                0,
+                min(m_pFrame->nWidth - xOffset, CVidInf::FX_WIDTH),
+                min(m_pFrame->nHeight - yOffset, CVidInf::FX_HEIGHT));
             lPitch = g_pChitin->cVideo.field_13A
-                ? CVidTile::BYTES_PER_TEXEL * 512
+                ? CVidTile::BYTES_PER_TEXEL * CVIDINF_FX_WIDTH
                 : CVidTile::BYTES_PER_TEXEL * rFrameClip.Width();
             ptSource.x = xOffset;
             ptSource.y = yOffset;
@@ -2389,7 +2393,10 @@ BOOL CVidCell::Render3d(INT nRefPtX, INT nRefPtY, const CRect& rClip, BOOLEAN bD
             }
 
             if ((dwFlags & 0x40) == 0) {
-                rFxRect.SetRect(0, 0, min(m_pFrame->nWidth - xOffset, 512), min(m_pFrame->nHeight - yOffset, 512));
+                rFxRect.SetRect(0,
+                    0,
+                    min(m_pFrame->nWidth - xOffset, CVidInf::FX_WIDTH),
+                    min(m_pFrame->nHeight - yOffset, CVidInf::FX_HEIGHT));
 
                 CVideo3d::glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
                 g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);

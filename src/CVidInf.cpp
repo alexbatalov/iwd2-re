@@ -9,6 +9,12 @@
 
 #define SEVEN_EIGHT_ZERO 780
 
+// 0x85DE50
+const INT CVidInf::FX_HEIGHT = CVIDINF_FX_HEIGHT;
+
+// 0x85DE54
+const INT CVidInf::FX_WIDTH = CVIDINF_FX_WIDTH;
+
 // #binary-identical
 // 0x79AF00
 CVidInf::CVidInf()
@@ -340,8 +346,8 @@ BOOL CVidInf::CreateSurfaces(BOOLEAN bFullscreen)
         surfaceDesc.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY | DDSCAPS_OFFSCREENPLAIN;
     }
 
-    surfaceDesc.dwWidth = 512;
-    surfaceDesc.dwHeight = 512;
+    surfaceDesc.dwWidth = CVIDINF_FX_WIDTH;
+    surfaceDesc.dwHeight = CVIDINF_FX_HEIGHT;
 
     hr = g_pChitin->cVideo.m_pDirectDraw2->CreateSurface(&surfaceDesc, &(pSurfaces[CVIDINF_SURFACE_2]), NULL);
     if (hr == DD_OK) {
@@ -353,8 +359,8 @@ BOOL CVidInf::CreateSurfaces(BOOLEAN bFullscreen)
 
             if (g_pChitin->m_bUseMirrorFX) {
                 surfaceDesc.ddsCaps.dwCaps = DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
-                surfaceDesc.dwWidth = 512;
-                surfaceDesc.dwHeight = 512;
+                surfaceDesc.dwWidth = CVIDINF_FX_WIDTH;
+                surfaceDesc.dwHeight = CVIDINF_FX_HEIGHT;
 
                 hr = g_pChitin->cVideo.m_pDirectDraw2->CreateSurface(&surfaceDesc, &(pSurfaces[CVIDINF_SURFACE_3]), NULL);
                 if (hr == DD_OK) {
@@ -785,8 +791,8 @@ BOOL CVidInf::GetCursorSurfaceSize(CSize& size)
 BOOL CVidInf::GetFXSize(CSize& size)
 {
     if (g_pChitin->cVideo.m_bIs3dAccelerated || pSurfaces[CVIDINF_SURFACE_2] != NULL) {
-        size.cx = 512;
-        size.cy = 512;
+        size.cx = CVIDINF_FX_WIDTH;
+        size.cy = CVIDINF_FX_HEIGHT;
         return TRUE;
     }
     return FALSE;
@@ -1252,7 +1258,7 @@ BOOL CVidInf::FXRender(CParticle* pParticle, const CRect& rClip, USHORT nFlag, U
 
         if (g_pChitin->cVideo.field_13A) {
             pParticle->Render(CVideo3d::texImageData,
-                CVidTile::BYTES_PER_TEXEL * 512,
+                CVidTile::BYTES_PER_TEXEL * CVIDINF_FX_WIDTH,
                 rClip,
                 nFlag,
                 nBlobSize);
@@ -1305,7 +1311,7 @@ BOOL CVidInf::FXRender(CPoint* pPoints, INT nPoints, const CRect& rSurface, COLO
             return DrawPoints(pPoints,
                 nPoints,
                 reinterpret_cast<WORD*>(CVideo3d::texImageData),
-                CVidTile::BYTES_PER_TEXEL * 512,
+                CVidTile::BYTES_PER_TEXEL * CVIDINF_FX_WIDTH,
                 rSurface,
                 rgbColor,
                 bClipped);
@@ -1362,7 +1368,7 @@ BOOL CVidInf::FXTextOut(CVidFont* pFont, const CString& sString, INT x, INT y, c
 {
     if (g_pChitin->cVideo.Is3dAccelerated()) {
         LONG lPitch = g_pChitin->cVideo.field_13A
-            ? CVidTile::BYTES_PER_TEXEL * 512
+            ? CVidTile::BYTES_PER_TEXEL * CVIDINF_FX_WIDTH
             : CVidTile::BYTES_PER_TEXEL * m_rLockedRect.Width();
         return pFont->TextOut3d(sString,
             reinterpret_cast<WORD*>(CVideo3d::texImageData),
@@ -1433,7 +1439,7 @@ BOOL CVidInf::FXUnlock(DWORD dwFlags, const CRect* pFxRect, const CPoint& ptRef)
 
             if (g_pChitin->cVideo.field_13A) {
                 cVidPoly.FillPoly(reinterpret_cast<WORD*>(CVideo3d::texImageData),
-                    CVidTile::BYTES_PER_TEXEL * 512,
+                    CVidTile::BYTES_PER_TEXEL * CVIDINF_FX_WIDTH,
                     pFxRect,
                     field_24,
                     dwPolyFlags,
@@ -1529,7 +1535,7 @@ BOOL CVidInf::BKUnlock()
 BOOL CVidInf::BKRender(CVidCell* pVidCell, INT x, INT y, const CRect& rClip, BOOLEAN bDemanded, DWORD dwFlags)
 {
     if (g_pChitin->cVideo.m_bIs3dAccelerated) {
-        memset(CVideo3d::texImageData, 0, 4 * 512 * 512);
+        memset(CVideo3d::texImageData, 0, sizeof(DWORD) * CVIDINF_FX_WIDTH * CVIDINF_FX_HEIGHT);
 
         CRect rNewClip(rClip);
         rNewClip.OffsetRect(m_rLockedRect.left, m_rLockedRect.top);
@@ -1560,9 +1566,9 @@ BOOL CVidInf::BKRender(CVidCell* pVidCell, INT x, INT y, DWORD dwFlags, INT nTra
 {
     if (g_pChitin->cVideo.m_bIs3dAccelerated) {
         if (g_pChitin->cVideo.field_13A) {
-            memset(CVideo3d::texImageData, 0, m_rLockedRect.Height() * (4 * 512));
+            memset(CVideo3d::texImageData, 0, sizeof(DWORD) * CVIDINF_FX_WIDTH * m_rLockedRect.Height());
         } else {
-            memset(CVideo3d::texImageData, 0, 4 * m_rLockedRect.Width() * m_rLockedRect.Height());
+            memset(CVideo3d::texImageData, 0, sizeof(DWORD) * m_rLockedRect.Width() * m_rLockedRect.Height());
         }
 
         return pVidCell->Render3d(m_rLockedRect.left + x,

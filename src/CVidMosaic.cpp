@@ -1,7 +1,7 @@
 #include "CVidMosaic.h"
 
 #include "CUtil.h"
-#include "CVidMode.h"
+#include "CVidInf.h"
 #include "CVideo3d.h"
 
 // 0x7B0AA0
@@ -340,27 +340,27 @@ void CVidMosaic::RenderTexture(INT x, INT y, const CSize& blitSize, const CRect&
     y2 = static_cast<float>(y + blitSize.cy);
     x3 = 0.0f;
     y3 = 0.0f;
-    x4 = static_cast<float>(blitSize.cx) / static_cast<float>(512);
-    y4 = static_cast<float>(blitSize.cy) / static_cast<float>(512);
+    x4 = static_cast<float>(blitSize.cx) / static_cast<float>(CVidInf::FX_WIDTH);
+    y4 = static_cast<float>(blitSize.cy) / static_cast<float>(CVidInf::FX_HEIGHT);
 
     if (x < rClip.left) {
         x1 = static_cast<float>(rClip.left);
-        x3 = static_cast<float>(rClip.left - x) / static_cast<float>(512);
+        x3 = static_cast<float>(rClip.left - x) / static_cast<float>(CVidInf::FX_WIDTH);
     }
 
     if (y < rClip.top) {
         y1 = static_cast<float>(rClip.top);
-        y3 = static_cast<float>(rClip.top - y) / static_cast<float>(512);
+        y3 = static_cast<float>(rClip.top - y) / static_cast<float>(CVidInf::FX_HEIGHT);
     }
 
     if (x + blitSize.cx > rClip.right) {
         x2 = static_cast<float>(rClip.right);
-        x4 = static_cast<float>(rClip.right - x) / static_cast<float>(512);
+        x4 = static_cast<float>(rClip.right - x) / static_cast<float>(CVidInf::FX_WIDTH);
     }
 
     if (y + blitSize.cy > rClip.bottom) {
         y2 = static_cast<float>(rClip.bottom);
-        y4 = static_cast<float>(rClip.bottom - y) / static_cast<float>(512);
+        y4 = static_cast<float>(rClip.bottom - y) / static_cast<float>(CVidInf::FX_HEIGHT);
     }
 
     CVideo3d::glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -463,7 +463,7 @@ BOOL CVidMosaic::Render3d(int x, int y, const CRect& rMosaic, const CRect& rClip
             }
 
             LONG lPitch = g_pChitin->cVideo.field_13A
-                ? CVidTile::BYTES_PER_TEXEL * 512
+                ? CVidTile::BYTES_PER_TEXEL * CVIDINF_FX_WIDTH
                 : CVidTile::BYTES_PER_TEXEL * rTile.right;
 
             BOOL bSuccess = BltMos8To32(reinterpret_cast<DWORD*>(CVideo3d::texImageData),
@@ -482,8 +482,8 @@ BOOL CVidMosaic::Render3d(int x, int y, const CRect& rMosaic, const CRect& rClip
                 CVideo3d::glTexImage2D(GL_TEXTURE_2D,
                     0,
                     GL_RGBA,
-                    512,
-                    512,
+                    CVidInf::FX_WIDTH,
+                    CVidInf::FX_HEIGHT,
                     0,
                     GL_RGBA,
                     GL_UNSIGNED_BYTE,
