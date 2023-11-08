@@ -561,9 +561,157 @@ void CVidBitmap::RenderTexture(INT x, INT y, const CSize& bmpSize, const CRect& 
 // 0x7C6B80
 BOOL CVidBitmap::Render3d(INT x, INT y, const CRect& rClip, DWORD dwFlags, BOOLEAN bDemanded)
 {
-    // TODO: Incomplete.
+    if (pRes == NULL || rClip.IsRectEmpty()) {
+        return FALSE;
+    }
 
-    return FALSE;
+    if (!bDemanded) {
+        pRes->Demand();
+    }
+
+    BYTE* pData = pRes->GetImageData(m_bDoubleSize);
+    m_nBitCount = pRes->GetBitDepth();
+
+    CSize bmpSize;
+    GetImageDimensions(bmpSize, m_bDoubleSize);
+
+    INT nBytesPerPixel;
+    switch (m_nBitCount) {
+    case 8:
+        nBytesPerPixel = 1;
+        break;
+    case 24:
+        nBytesPerPixel = 3;
+        break;
+    default:
+        if (!bDemanded) {
+            pRes->Release();
+        }
+        return FALSE;
+    }
+
+    LONG nDataJump = (-((bmpSize.cx * nBytesPerPixel) & 3)) & 3;
+
+    CVideo3d::glEnable(GL_TEXTURE_2D);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    g_pChitin->cVideo.field_13E = 2;
+    CVideo3d::glBindTexture(GL_TEXTURE_2D, 2);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CSize tileSize;
+    LONG lTilePitch;
+    LONG nTileDataJump = 0;
+
+    BYTE* pTileRowData = pData;
+    for (INT yOffset = 0; yOffset < bmpSize.cy; yOffset += CVidInf::FX_HEIGHT) {
+        BYTE* pTileData = pTileRowData;
+        for (INT xOffset = 0; xOffset < bmpSize.cx; xOffset += CVidInf::FX_WIDTH) {
+            if ((dwFlags & 0x1) != 0) {
+                CVidInf::FXClear(CVideo3d::texImageData, CVidInf::FX_WIDTH * CVidInf::FX_HEIGHT);
+            }
+
+            tileSize.cx = min(bmpSize.cx - xOffset, CVidInf::FX_WIDTH);
+            tileSize.cy = min(bmpSize.cy - yOffset, CVidInf::FX_HEIGHT);
+
+            if (bmpSize.cx > tileSize.cx) {
+                nTileDataJump = nBytesPerPixel * (bmpSize.cx - tileSize.cx);
+            }
+
+            lTilePitch = g_pChitin->cVideo.field_13A
+                ? CVidTile::BYTES_PER_TEXEL * CVIDINF_FX_WIDTH
+                : CVidTile::BYTES_PER_TEXEL * tileSize.cx;
+
+            BOOLEAN bResult = TRUE;
+            switch (m_nBitCount) {
+            case 8:
+                bResult = BltBmp8To32(&(CVideo3d::texImageData[lTilePitch * (tileSize.cy - 1) / CVidTile::BYTES_PER_TEXEL]),
+                    lTilePitch,
+                    pTileData,
+                    tileSize,
+                    nDataJump + nTileDataJump,
+                    dwFlags);
+                break;
+            case 24:
+                if ((dwFlags & 0xFFFF0000) != 0
+                    && g_pChitin->GetCurrentVideoMode()->ApplyBrightnessContrast(RGB(128, 128, 128)) != RGB(128, 128, 128)) {
+                    bResult = BltBmp24To32Tint(&(CVideo3d::texImageData[lTilePitch * (tileSize.cy - 1) / CVidTile::BYTES_PER_TEXEL]),
+                        lTilePitch,
+                        pTileData,
+                        tileSize,
+                        nDataJump + nTileDataJump,
+                        dwFlags);
+                } else {
+                    bResult = BltBmp24To32(&(CVideo3d::texImageData[(lTilePitch * (tileSize.cy - 1) / CVidTile::BYTES_PER_TEXEL)]),
+                        lTilePitch,
+                        pTileData,
+                        tileSize,
+                        nDataJump + nTileDataJump,
+                        dwFlags);
+                }
+                break;
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\chitin\ChVidImage3d.cpp
+                // __LINE__: 2120
+                UTIL_ASSERT(FALSE);
+            }
+
+            if (!bResult) {
+                if (bDemanded) {
+                    pRes->Release();
+                }
+                return FALSE;
+            }
+
+            if (g_pChitin->cVideo.field_13A) {
+                CVideo3d::glTexImage2D(GL_TEXTURE_2D,
+                    0,
+                    GL_RGBA,
+                    CVidInf::FX_WIDTH,
+                    CVidInf::FX_HEIGHT,
+                    0,
+                    GL_RGBA,
+                    GL_UNSIGNED_BYTE,
+                    CVideo3d::texImageData);
+                g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+            } else {
+                CVideo3d::glTexSubImage2D(GL_TEXTURE_2D,
+                    0,
+                    0,
+                    0,
+                    tileSize.cx,
+                    tileSize.cy,
+                    GL_RGBA,
+                    GL_UNSIGNED_BYTE,
+                    CVideo3d::texImageData);
+                g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+            }
+
+            RenderTexture(x + xOffset,
+                y + bmpSize.cy - tileSize.cy - yOffset,
+                tileSize,
+                rClip,
+                dwFlags);
+
+            pTileData += CVidInf::FX_WIDTH * nBytesPerPixel;
+        }
+        pTileRowData += CVidInf::FX_HEIGHT * (nDataJump + bmpSize.cx * nBytesPerPixel);
+    }
+
+    if (!bDemanded) {
+        pRes->Release();
+    }
+
+    return TRUE;
 }
 
 // 0x7C7070
