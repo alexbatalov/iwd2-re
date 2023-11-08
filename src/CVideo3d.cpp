@@ -1172,7 +1172,7 @@ PFNGLUTESSVERTEXPROC CVideo3d::gluTessVertex;
 PFNGLUUNPROJECTPROC CVideo3d::gluUnProject;
 
 // 0x907B20
-BYTE CVideo3d::texImageData[512 * 512 * 4];
+DWORD CVideo3d::texImageData[CVIDINF_FX_WIDTH * CVIDINF_FX_HEIGHT];
 
 // -----------------------------------------------------------------------------
 

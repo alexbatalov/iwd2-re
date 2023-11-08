@@ -807,6 +807,6 @@ public:
     static PFNGLUTESSPROPERTYPROC gluTessProperty;
     static PFNGLUTESSVERTEXPROC gluTessVertex;
     static PFNGLUUNPROJECTPROC gluUnProject;
-    static BYTE texImageData[512 * 512 * 4];
+    static DWORD texImageData[];
 };
 #endif /* CVIDEO3D_H_ */
