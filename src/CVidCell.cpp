@@ -1738,7 +1738,7 @@ BOOL CVidCell::Blt8To32(DWORD* pSurface, LONG lPitch, const CPoint& pt, const CR
                     nRemainingWidth--;
                 }
             }
-            pDest += lPitch / 4 - nWidth;
+            pDest += lPitch / 4 - nBltWidth;
             nBltH--;
         }
     } else {
