@@ -31,6 +31,7 @@ public:
     BOOL BltBmp24To32(DWORD* pSurface, LONG lPitch, BYTE* pData, const CSize& bmpSize, LONG nDataJump, DWORD dwFlags);
     BOOL BltBmp24To32Tint(DWORD* pSurface, LONG lPitch, BYTE* pData, const CSize& bmpSize, LONG nDataJump, DWORD dwFlags);
 
+    void RenderTexture(INT x, INT y, const CSize& bmpSize, const CRect& rClip, DWORD dwFlags);
     BOOL Render3d(INT x, INT y, const CRect& rClip, DWORD dwFlags, BOOLEAN bDemanded);
     BOOL RenderDirect3d(INT x, INT y, const CRect& rClip, DWORD dwFlags, BOOLEAN bDemanded);
 
