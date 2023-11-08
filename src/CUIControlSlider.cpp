@@ -199,11 +199,11 @@ BOOL CUIControlSlider::Render(BOOL bForce)
     CRect rClip(rDirtyRect);
     CRect rMosaic(rDirtyRect);
 
-    rMosaic.OffsetRect(-rMosaic.left, -rMosaic.top);
+    rMosaic.OffsetRect(-rControlRect.left, -rControlRect.top);
 
     m_mosBackground.Render(CVIDINF_SURFACE_BACK,
-        rClip.left,
-        rClip.top,
+        rControlRect.left,
+        rControlRect.top,
         rMosaic,
         rClip,
         0,
