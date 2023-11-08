@@ -213,7 +213,7 @@ public:
     /* 01A8 */ CImm cImm; // #guess
     /* 02E8 */ CString m_sFontName;
     /* 02EC */ int field_2EC;
-    /* 02F0 */ int field_2F0;
+    /* 02F0 */ HMODULE m_hOpenGL;
     /* 02F4 */ int field_2F4;
     /* 02F8 */ HANDLE m_eventTimer;
     /* 02FC */ CRITICAL_SECTION field_2FC;

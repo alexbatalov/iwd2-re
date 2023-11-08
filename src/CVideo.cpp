@@ -62,7 +62,7 @@ static HRESULT WINAPI EnumDisplayModesCallback(LPDDSURFACEDESC lpDDSD, LPVOID lp
 // 0x794FC0
 CVideo::CVideo()
 {
-    field_163 = 0;
+    m_bFullscreen = FALSE;
     m_pDirectDraw = NULL;
     m_pDirectDraw2 = NULL;
     m_pDirectDrawClipper = NULL;
@@ -71,7 +71,7 @@ CVideo::CVideo()
     m_bSupports16bpp = FALSE;
     m_bSupports24bpp = FALSE;
     m_bSupports32bpp = FALSE;
-    field_162 = 0;
+    m_bExclusiveMode = FALSE;
     m_dwMipMapCount16 = 0;
     m_dwMipMapCount24 = 0;
     m_dwMipMapCount32 = 0;
@@ -80,8 +80,8 @@ CVideo::CVideo()
     m_pVidModes[2] = NULL;
     m_pVidModes[3] = NULL;
     m_pCurrentVidMode = NULL;
-    field_12A = 0;
-    field_12E = 0;
+    m_hDC = NULL;
+    m_hGLRC = NULL;
     m_bIs3dAccelerated = FALSE;
     field_136 = 6408;
     field_13A = 0;
@@ -222,8 +222,8 @@ BOOL CVideo::Initialize(HWND hWnd, BOOLEAN bFullscreen)
         // __LINE__: 444
         UTIL_ASSERT(result == DD_OK);
 
-        field_162 = 1;
-        field_163 = 1;
+        m_bExclusiveMode = TRUE;
+        m_bFullscreen = TRUE;
 
         DDSURFACEDESC ddsd = { 0 };
         ddsd.dwSize = sizeof(ddsd);
@@ -247,7 +247,7 @@ BOOL CVideo::Initialize(HWND hWnd, BOOLEAN bFullscreen)
         // __LINE__: 462
         UTIL_ASSERT(result == DD_OK);
 
-        field_162 = 0;
+        m_bExclusiveMode = FALSE;
 
         DDSURFACEDESC ddsd = { 0 };
         ddsd.dwSize = sizeof(ddsd);
@@ -280,29 +280,32 @@ BOOL CVideo::Initialize(HWND hWnd, BOOLEAN bFullscreen)
 }
 
 // 0x795630
-void CVideo::SetExclusiveMode(unsigned char a2)
+void CVideo::SetExclusiveMode(BOOLEAN bExclusiveMode)
 {
-    if (a2 == 0) {
-        if (field_162 == 1 && field_163 == 1) {
+    switch (bExclusiveMode) {
+    case FALSE:
+        if (m_bExclusiveMode == TRUE && m_bFullscreen == TRUE) {
             if (m_pDirectDraw2 != NULL) {
                 HRESULT result = m_pDirectDraw2->SetCooperativeLevel(m_hWnd, DDSCL_NORMAL);
                 // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo.cpp
                 // __LINE__: 536
                 UTIL_ASSERT(result == DD_OK);
 
-                field_162 = 0;
+                m_bExclusiveMode = FALSE;
             }
         }
-    } else if (a2 == 1) {
-        if (field_162 == 0 && field_163 == 1) {
+        break;
+    case TRUE:
+        if (m_bExclusiveMode == FALSE && m_bFullscreen == TRUE) {
             if (m_hWnd != NULL) {
                 HRESULT result = m_pDirectDraw2->SetCooperativeLevel(m_hWnd, DDSCL_FULLSCREEN | DDSCL_EXCLUSIVE);
                 // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo.cpp
                 // __LINE__: 544
                 UTIL_ASSERT(result == DD_OK);
             }
-            field_162 = 1;
+            m_bExclusiveMode = TRUE;
         }
+        break;
     }
 }
 

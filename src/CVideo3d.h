@@ -6,6 +6,26 @@
 #include <gl/gl.h>
 #include <gl/glu.h>
 
+typedef BOOL(__stdcall* PFNSWAPBUFFERSPROC)(HDC);
+typedef int(__stdcall* PFNDESCRIBEPIXELFORMATPROC)(HDC, int, UINT, LPPIXELFORMATDESCRIPTOR);
+typedef int(__stdcall* PFNCHOOSEPIXELFORMATPROC)(HDC, const PIXELFORMATDESCRIPTOR*);
+typedef BOOL(__stdcall* PFNSETPIXELFORMATPROC)(HDC, int, const PIXELFORMATDESCRIPTOR*);
+typedef HGLRC(__stdcall* PFNWGLGETCURRENTCONTEXTPROC)();
+typedef HGLRC(__stdcall* PFNWGLCREATECONTEXTPROC)(HDC);
+typedef HGLRC(__stdcall* PFNWGLCREATELAYERCONTEXTPROC)(HDC, int);
+typedef BOOL(__stdcall* PFNWGLDELETECONTEXTPROC)(HGLRC);
+typedef HDC(__stdcall* PFNWGLGETCURRENTDCPROC)();
+typedef PROC(__stdcall* PFNWGLGETPROCADDRESSPROC)(LPCSTR);
+typedef BOOL(__stdcall* PFNWGLMAKECURRENTPROC)(HDC, HGLRC);
+typedef BOOL(__stdcall* PFNWGLSHARELISTSPROC)(HGLRC, HGLRC);
+typedef BOOL(__stdcall* PFNWGLUSEFONTBITMAPSAPROC)(HDC, DWORD, DWORD, DWORD);
+typedef BOOL(__stdcall* PFNWGLUSEFONTOUTLINESAPROC)(HDC, DWORD, DWORD, DWORD, FLOAT, FLOAT, int, LPGLYPHMETRICSFLOAT);
+typedef BOOL(__stdcall* PFNWGLDESCRIBELAYERPLANEPROC)(HDC, int, int, UINT, LPLAYERPLANEDESCRIPTOR);
+typedef int(__stdcall* PFNWGLSETLAYERPALETTEENTRIESPROC)(HDC, int, int, int, const COLORREF*);
+typedef int(__stdcall* PFNWGLGETLAYERPALETTEENTRIESPROC)(HDC, int, int, int, COLORREF*);
+typedef BOOL(__stdcall* PFNWGLREALIZELAYERPALETTEPROC)(HDC, int, BOOL);
+typedef BOOL(__stdcall* PFNWGLSWAPLAYERBUFFERSPROC)(HDC, UINT);
+
 typedef void(__stdcall* PFNGLACCUMPROC)(GLenum op, GLfloat value);
 typedef void(__stdcall* PFNGLALPHAFUNCPROC)(GLenum func, GLclampf ref);
 typedef GLboolean(__stdcall* PFNGLARETEXTURESRESIDENTPROC)(GLsizei n, const GLuint* textures, GLboolean* residences);

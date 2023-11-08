@@ -712,7 +712,7 @@ BOOL CVidInf::FullScreenFlip(BOOL bRenderCursor)
         }
     }
 
-    return FALSE;
+    return TRUE;
 }
 
 // 0x79C400
@@ -765,7 +765,7 @@ BOOL CVidInf::WindowedFlip(BOOL bRenderCursor)
         }
     }
 
-    return FALSE;
+    return TRUE;
 }
 
 // #binary-identical

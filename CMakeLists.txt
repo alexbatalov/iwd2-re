@@ -66,6 +66,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CChatBuffer.h"
     "src/CChitin.cpp"
     "src/CChitin.h"
+    "src/CChitin3d.cpp"
+    "src/CChitin3d.h"
     "src/CColorEffects.cpp"
     "src/CColorEffects.h"
     "src/CCreatureFile.cpp"
@@ -427,12 +429,6 @@ target_link_libraries(${EXECUTABLE_NAME}
     imm32
     version
     winmm
-)
-
-# TODO: Remove, original binary is not linked with opengl. All gl functions are
-# dynamically bound at runtime.
-target_link_libraries(${EXECUTABLE_NAME}
-    opengl32
 )
 
 target_include_directories(${EXECUTABLE_NAME} SYSTEM PRIVATE "third_party/directplay/include")

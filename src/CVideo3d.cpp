@@ -1,8 +1,11 @@
 #include "CVideo3d.h"
 
+#include "CChitin.h"
+#include "CChitin3d.h"
 #include "CUtil.h"
 #include "CVidInf.h"
 #include "CVideo.h"
+#include "CWarp.h"
 
 // 0x848398
 const float CVideo3d::SUB_PIXEL_SHIFT = 0.2f;
@@ -1176,15 +1179,68 @@ BYTE CVideo3d::texImageData[512 * 512 * 4];
 // 0x7BBA50
 void CVideo::CleanUp3d()
 {
-    // TODO: Incomplete.
+    g_pChitin->UnloadFonts();
+
+    if (m_pCurrentVidMode != NULL) {
+        m_pCurrentVidMode->DeactivateVideoMode(NULL);
+        m_pCurrentVidMode = NULL;
+    }
+
+    if (m_hGLRC != NULL) {
+        CChitin3d::wglMakeCurrent(m_hDC, NULL);
+        CChitin3d::wglDeleteContext(m_hGLRC);
+        m_hGLRC = NULL;
+    }
+
+    if (m_hDC != NULL) {
+        ReleaseDC(g_pChitin->GetWnd()->GetSafeHwnd(), m_hDC);
+        m_hDC = NULL;
+    }
+
+    if (m_bFullscreen) {
+        ChangeDisplaySettingsA(NULL, 0);
+    }
 }
 
 // 0x7BBAF0
 BOOL CVideo::Initialize3d(HWND hWnd, BOOLEAN bFullscreen, int a4)
 {
-    // TODO: Incomplete.
+    m_bFullscreen = bFullscreen;
+    if (bFullscreen) {
+        if (!CVidInf::SetDisplayMode()) {
+            return FALSE;
+        }
 
-    return FALSE;
+        if (a4) {
+            OpenIcon(hWnd);
+        }
+
+        RECT r;
+        SetRect(&r, 0, 0, SCREENWIDTH, SCREENHEIGHT);
+        AdjustWindowRectEx(&r,
+            GetWindowLongA(hWnd, GWL_STYLE),
+            GetMenu(hWnd) != NULL,
+            GetWindowLongA(hWnd, GWL_EXSTYLE));
+        SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, r.right - r.left, r.bottom - r.top, 0);
+    } else {
+        CVidMode::SetWindowedMode(hWnd);
+    }
+
+    m_hDC = GetDC(hWnd);
+    if (!SetPixelFormat(m_hDC)) {
+        return FALSE;
+    }
+
+    m_hGLRC = CChitin3d::wglCreateContext(m_hDC);
+    CChitin3d::wglMakeCurrent(m_hDC, m_hGLRC);
+
+    InitializeRenderEnv();
+
+    if (m_pCurrentVidMode != NULL) {
+        m_pCurrentVidMode->ActivateVideoMode3d(NULL, hWnd, m_bFullscreen);
+    }
+
+    return TRUE;
 }
 
 // 0x7BBC20
@@ -1244,6 +1300,56 @@ void CVideo::InitializeRenderEnv()
     g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 
     field_136 = GL_RGBA;
+}
+
+// 0x7BBF50
+BOOL CVideo::SetPixelFormat(HDC hDC)
+{
+    PIXELFORMATDESCRIPTOR pfd;
+    pfd.nSize = sizeof(pfd);
+    pfd.nVersion = 1;
+    pfd.dwFlags = PFD_SUPPORT_OPENGL | PFD_DRAW_TO_WINDOW | PFD_DOUBLEBUFFER;
+    pfd.iPixelType = PFD_TYPE_RGBA;
+    pfd.cColorBits = g_pChitin->GetSavedBitsPerPixel();
+    pfd.cRedBits = 0;
+    pfd.cRedShift = 0;
+    pfd.cGreenBits = 0;
+    pfd.cGreenShift = 0;
+    pfd.cBlueBits = 0;
+    pfd.cBlueShift = 0;
+    pfd.cAlphaBits = 0;
+    pfd.cAlphaShift = 0;
+    pfd.cAccumBits = 0;
+    pfd.cAccumRedBits = 0;
+    pfd.cAccumGreenBits = 0;
+    pfd.cAccumBlueBits = 0;
+    pfd.cAccumAlphaBits = 0;
+    pfd.cDepthBits = 0;
+    pfd.cStencilBits = 0;
+    pfd.cAuxBuffers = 0;
+    pfd.iLayerType = 0;
+    pfd.bReserved = 0;
+    pfd.dwLayerMask = 0;
+    pfd.dwVisibleMask = 0;
+    pfd.dwDamageMask = 0;
+    pfd.cColorBits = !g_pChitin->field_2F4 ? 32 : 16;
+
+    int iPixelFormat = CChitin3d::ChoosePixelFormat(hDC, &pfd);
+    if (iPixelFormat == 0) {
+        CString sMessage;
+        sMessage.LoadStringA(g_pChitin->GetIDSChoosePixelFormat());
+        MessageBoxA(NULL, sMessage, CChitin::m_sGameName, 0);
+        return FALSE;
+    }
+
+    if (!CChitin3d::SetPixelFormat(hDC, iPixelFormat, &pfd)) {
+        CString sMessage;
+        sMessage.LoadStringA(g_pChitin->GetIDSSetPixelFormat());
+        MessageBoxA(NULL, sMessage, CChitin::m_sGameName, 0);
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------
@@ -1585,6 +1691,75 @@ BOOL CVidInf::ActivateVideoMode3d(CVidMode* pPrevVidMode, HWND hWnd, BOOLEAN bFu
     return TRUE;
 }
 
+// 0x7BDCE0
+BOOL CVidInf::SetDisplayMode()
+{
+    INT i = 0; // NOTE: Signed compare in assertion below.
+    INT iBestMode = 0;
+    DWORD nBestFrequency = 0;
+    DEVMODEA dm;
+    dm.dmSize = sizeof(dm);
+    dm.dmDriverExtra = 0;
+
+    // FIXME: Unused.
+    g_pChitin->GetSavedBitsPerPixel();
+
+    DWORD nBpp = !g_pChitin->field_2F4 ? 32 : 16;
+
+    while (EnumDisplaySettingsA(NULL, i, &dm)) {
+        if (dm.dmBitsPerPel == nBpp
+            && dm.dmPelsWidth == CVideo::SCREENWIDTH
+            && dm.dmPelsHeight == CVideo::SCREENHEIGHT
+            && dm.dmDisplayFrequency <= CVideo::FPS
+            && dm.dmDisplayFrequency >= nBestFrequency) {
+            nBestFrequency = dm.dmDisplayFrequency;
+            iBestMode = i;
+        }
+        i++;
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo3d.cpp
+    // __LINE__: 1832
+    UTIL_ASSERT_MSG(i > 0, "No video modes supported?");
+
+    EnumDisplaySettingsA(NULL, iBestMode, &dm);
+    if (ChangeDisplaySettingsA(&dm, CDS_RESET | CDS_FULLSCREEN) == DISP_CHANGE_SUCCESSFUL) {
+        CVideo::FPS = dm.dmDisplayFrequency;
+        return TRUE;
+    }
+
+    EnumDisplaySettingsA(NULL, iBestMode, &dm);
+    dm.dmFields = DM_PELSHEIGHT | DM_PELSWIDTH | DM_BITSPERPEL;
+    if (ChangeDisplaySettingsA(&dm, CDS_RESET | CDS_FULLSCREEN) == DISP_CHANGE_SUCCESSFUL) {
+        return TRUE;
+    }
+
+    if (CVideo::SCREENWIDTH != GetSystemMetrics(SM_CXFULLSCREEN)
+        || CVideo::SCREENHEIGHT != GetSystemMetrics(SM_CYFULLSCREEN)) {
+        EnumDisplaySettingsA(NULL, iBestMode, &dm);
+        dm.dmFields = DM_PELSHEIGHT | DM_PELSWIDTH;
+        if (ChangeDisplaySettingsA(&dm, CDS_RESET | CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL) {
+            CString sMessage;
+            sMessage.LoadStringA(g_pChitin->GetIDSSetGameResolution());
+            MessageBoxA(NULL, sMessage, CChitin::m_sGameName, 0);
+            return FALSE;
+        }
+    }
+
+    if (CUtil::GetCurrentBitsPerPixels() != nBpp) {
+        EnumDisplaySettingsA(NULL, iBestMode, &dm);
+        dm.dmFields = DM_BITSPERPEL;
+        if (ChangeDisplaySettingsA(&dm, CDS_RESET | CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL) {
+            CString sMessage;
+            sMessage.LoadStringA(g_pChitin->GetIDSSetGameBitDepth());
+            MessageBoxA(NULL, sMessage, CChitin::m_sGameName, 0);
+            return FALSE;
+        }
+    }
+
+    return TRUE;
+}
+
 // 0x7BDF90
 BOOL CVidInf::CreateSurfaces3d()
 {
@@ -1690,16 +1865,61 @@ BOOL CVidInf::DestroySurfaces3d(CVidMode* pNextVidMode)
 // 0x7BE300
 BOOL CVidInf::RenderPointer3d(UINT nSurface)
 {
-    // TODO: Incomplete.
+    CSingleLock positionLock(&(g_pChitin->m_csPointerPosition));
+    CSingleLock renderLock(&m_csRenderPointer);
 
-    return FALSE;
+    if (g_pChitin->m_bPointerUpdated) {
+        return FALSE;
+    }
+
+    renderLock.Lock(INFINITE);
+    CVidCell* pPointerVidCell = m_pPointerVidCell;
+    renderLock.Unlock();
+
+    if (!m_bPointerInside || pPointerVidCell == NULL || !m_bPointerEnabled) {
+        return FALSE;
+    }
+
+    g_pChitin->m_bPointerUpdated = TRUE;
+
+    positionLock.Lock(INFINITE);
+    CPoint pt = g_pChitin->m_ptPointer;
+    positionLock.Unlock();
+
+    CRect rClip(0, 0, CVideo::SCREENWIDTH, CVideo::SCREENHEIGHT);
+
+    renderLock.Lock(INFINITE);
+    pPointerVidCell->StoreBackground(pt.x,
+        pt.y,
+        rClip,
+        m_rPointerStorage,
+        m_nPointerNumber > 0);
+    RenderPointerImage(pPointerVidCell,
+        nSurface,
+        m_nPointerNumber,
+        pt.x,
+        pt.y,
+        m_rPointerStorage);
+    renderLock.Unlock();
+
+    g_pChitin->pActiveEngine->InvalidateCursorRect(m_rPointerStorage);
+
+    return TRUE;
 }
 
 // 0x7BE4E0
 BOOL CVidInf::WindowedFlip3d(BOOL bRenderCursor)
 {
-    // TODO: Incomplete.
+    if (bRenderCursor) {
+        m_rPointerStorage.left = 0;
+        m_rPointerStorage.top = 0;
+        m_rPointerStorage.right = 0;
+        m_rPointerStorage.bottom = 0;
+        g_pChitin->m_bPointerUpdated = FALSE;
+        RenderPointer3d(CVIDINF_SURFACE_BACK);
+    }
 
+    CChitin3d::SwapBuffers(g_pChitin->cVideo.m_hDC);
     return TRUE;
 }
 

@@ -733,22 +733,6 @@ void CChitin::InitializeVariables()
     rand();
 }
 
-// #binary-identical
-// 0x7C8980
-void CChitin::InitVariables3D()
-{
-    field_2F0 = 0;
-    field_2F4 = 0;
-}
-
-// 0x7C8990
-BOOL CChitin::Init3d()
-{
-    // TODO: Incomplete.
-
-    return FALSE;
-}
-
 // 0x790860
 void CChitin::SelectEngine(CWarp* pNewEngine)
 {
@@ -798,13 +782,6 @@ void CChitin::SelectEngine(CWarp* pNewEngine)
         m_bEngineActive = TRUE;
         LeaveCriticalSection(&field_3AC);
     }
-}
-
-// #guess
-// 0x7C8B10
-void CChitin::Shutdown3D()
-{
-    // TODO: Incomplete.
 }
 
 // 0x790E10

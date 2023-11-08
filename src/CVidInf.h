@@ -74,6 +74,7 @@ public:
     BOOL BKTextOut(CVidFont* pFont, const CString& sString, int x, int y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded);
     void GetFogOWarTileRect(unsigned char a2, CRect& rTileRect);
     void RenderPointerImage(CVidCell* pPointerVidCell, INT nSurface, INT nPointerNumber, INT x, INT y, CRect rClip);
+    static BOOL SetDisplayMode();
     BOOL WindowedFlip3d(BOOL bRenderCursor);
     BOOL RenderPointer3d(UINT nSurface);
     void DoTextOut3d(UINT nSurface, const CString& sText, int x, int y, COLORREF color);

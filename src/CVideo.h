@@ -26,13 +26,14 @@ public:
     void CleanUp();
     CVidMode* GetVidMode(int a1);
     BOOL Initialize(HWND hWnd, BOOLEAN bFullscreen);
-    void SetExclusiveMode(unsigned char a2);
+    void SetExclusiveMode(BOOLEAN bExclusiveMode);
     void ChangeBppValue();
     BOOL SetNextBpp(USHORT nNewBpp);
     void SetBitsPerPixels(USHORT nNewBpp, BOOLEAN a3);
     void CleanUp3d();
     BOOL Initialize3d(HWND hWnd, BOOLEAN bFullscreen, int a4);
     void InitializeRenderEnv();
+    BOOL SetPixelFormat(HDC hDC);
 
     // NOTE: Can be seen via assertion in `CVidMode::LockSurface`.
     USHORT GetBitsPerPixels() { return m_nBpp; }
@@ -54,8 +55,8 @@ public:
     /* 011E */ int field_11E;
     /* 0122 */ void* m_doubleSizeData;
     /* 0126 */ size_t m_doubleSizeDataSize; // #guess
-    /* 012A */ int field_12A;
-    /* 012E */ int field_12E;
+    /* 012A */ HDC m_hDC;
+    /* 012E */ HGLRC m_hGLRC;
     /* 0132 */ BOOL m_bIs3dAccelerated;
     /* 0136 */ int field_136;
     /* 013A */ int field_13A;
@@ -65,8 +66,8 @@ public:
     /* 014A */ IDirectDrawClipper* m_pDirectDrawClipper; // #guess
     /* 014E */ CVidMode* m_pVidModes[4];
     /* 015E */ CVidMode* m_pCurrentVidMode;
-    /* 0162 */ unsigned char field_162;
-    /* 0162 */ unsigned char field_163;
+    /* 0162 */ BOOLEAN m_bExclusiveMode;
+    /* 0162 */ BOOLEAN m_bFullscreen;
     /* 0164 */ HWND m_hWnd; // #guess
 };
 
