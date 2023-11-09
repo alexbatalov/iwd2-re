@@ -2336,7 +2336,7 @@ void CGameArea::Render(CVidMode* pVidMode, INT nSurface)
         m_cInfinity.Render(pVidMode, nSurface, m_nScrollState, &m_visibility);
     }
 
-    CInfTileSet::dword_8F2700 = 0;
+    CInfTileSet::m_nTextures = 0;
 
     if (m_cInfinity.Render(pVidMode, nSurface, m_nScrollState, &m_visibility) != CInfinity::RENDER_MESSAGESCREEN) {
         pos = m_lVertSort.GetHeadPosition();

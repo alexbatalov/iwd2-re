@@ -9,10 +9,37 @@
 #include "CTiledObject.h"
 #include "CUtil.h"
 #include "CVidInf.h"
+#include "CVideo3d.h"
 #include "CVisibility.h"
 
+// 0x851928
+const DWORD CInfTileSet::USE_COLORKEY = 1;
+
+// 0x85192C
+const DWORD CInfTileSet::TRANSLUCENT = 2;
+
+// 0x851930
+const BYTE CInfTileSet::byte_851930 = 1;
+
+// 0x851931
+const BYTE CInfTileSet::byte_851931 = 2;
+
+// 0x851932
+const BYTE CInfTileSet::byte_851932 = 4;
+
+// FIXME: Make const.
+//
+// 0x8B28B8
+DWORD CInfTileSet::WATER_ALPHA = 128;
+
+// NOTE: Unclear what this size represent. The number of elements is not
+// validated.
+//
+// 0x8E7E40
+TEXTURE CInfTileSet::m_aTextures[2700];
+
 // 0x8F2700
-int CInfTileSet::dword_8F2700;
+int CInfTileSet::m_nTextures;
 
 // 0x851934
 const DWORD CInfinity::FXPREP_COPYFROMBACK = 0x80;
@@ -571,15 +598,151 @@ BOOLEAN CInfTileSet::SetTileRenderCode(INT nTile, TILE_CODE& tileCode)
 // 0x5D29A0
 BOOL CInfTileSet::Render3d(INT nTile, INT nStencilTile, const CRect& rDest, INT x, INT y, const TILE_CODE& tileCode, DWORD dwFlags, BYTE nDualTileCode, int a9)
 {
-    // TODO: Incomplete.
+    INT nTextureId;
 
-    return FALSE;
+    g_pChitin->GetCurrentVideoMode()->RenderPointer();
+
+    TILE_CODE renderCode;
+    if (!GetTileRenderCode(nTile, renderCode)) {
+        return FALSE;
+    }
+
+    if (renderCode.tileNW != tileCode.tileNW
+        || renderCode.tileNE != tileCode.tileNE
+        || renderCode.tileSW != tileCode.tileSW
+        || renderCode.tileSE != tileCode.tileSE) {
+        m_pResTiles[nTile]->m_nVRamFlags &= ~0x2;
+    }
+
+    if (m_pVRamPool != NULL && m_pResTiles[nTile]->m_nVRamTile >= 0) {
+        nTextureId = m_pResTiles[nTile]->m_nVRamTile + 9;
+
+        if ((m_pResTiles[nTile]->m_nVRamFlags & 0x2) == 0) {
+            ReadyTexture(nTextureId,
+                nTile,
+                nStencilTile,
+                tileCode,
+                nDualTileCode,
+                a9,
+                dwFlags);
+            m_pResTiles[nTile]->m_nVRamFlags |= 0x2;
+            m_pResTiles[nTile]->m_renderCode = tileCode;
+        }
+        RenderTexture(nTextureId, rDest, x, y, tileCode, dwFlags);
+    } else {
+        nTextureId = 2;
+        ReadyTexture(nTextureId,
+            nTile,
+            nStencilTile,
+            tileCode,
+            nDualTileCode,
+            a9,
+            dwFlags);
+        RenderTexture(nTextureId, rDest, x, y, tileCode, dwFlags);
+
+        if (!g_pChitin->cVideo.field_13A) {
+            g_pChitin->cVideo.field_13E = nTextureId;
+            CVideo3d::glBindTexture(GL_TEXTURE_2D, nTextureId);
+            g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+            CVideo3d::glTexImage2D(GL_TEXTURE_2D,
+                0,
+                GL_RGBA,
+                CVidInf::FX_WIDTH,
+                CVidInf::FX_HEIGHT,
+                0,
+                GL_RGBA,
+                GL_UNSIGNED_BYTE,
+                CVideo3d::texImageData);
+            g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+        }
+    }
+
+    return TRUE;
+}
+
+// 0x5D2B90
+BOOL CInfTileSet::ReadyTexture(INT nTextureId, INT nTile, INT nStencilTile, const TILE_CODE& tileCode, BYTE nDualTileCode, int a9, DWORD dwFlags)
+{
+    BOOL bResult;
+
+    DWORD dwAlpha;
+    DWORD dwTextureFlags;
+    if ((dwFlags & TRANSLUCENT) != 0) {
+        dwAlpha = WATER_ALPHA;
+        dwTextureFlags = nStencilTile != -1 ? 0x0 : 0x2;
+    } else {
+        dwAlpha = 255;
+        dwTextureFlags = 0;
+    }
+
+    // NOTE: Original code code is slightly different, each branch have
+    // repeting code implying some inlined function.
+    if (nDualTileCode == 0) {
+        m_cVidTile.SetRes(m_pResTiles[nTile]);
+    } else if (nDualTileCode == byte_851930) {
+        m_cVidTile.SetRes(m_pResTiles[nTile]);
+    } else if (nDualTileCode == byte_851931) {
+        m_cVidTile.SetRes(m_pResTiles[nTile]->m_pDualTileRes);
+    } else if (nDualTileCode == byte_851932) {
+        m_cVidTile.SetRes(m_pResTiles[nTile]->m_pDualTileRes);
+    } else {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\Infinity3d.cpp
+        // __LINE__: 271
+        UTIL_ASSERT(FALSE);
+    }
+
+    if (nStencilTile != -1) {
+        bResult = m_cVidTile.ReadyTexture(nTextureId, m_pResTiles[nStencilTile], dwFlags, dwAlpha);
+    } else {
+        bResult = m_cVidTile.ReadyTexture(nTextureId, dwFlags, dwAlpha);
+    }
+
+    return bResult;
+}
+
+// 0x5D2D20
+void CInfTileSet::RenderTexture(INT nTextureId, const CRect& rDest, INT x, INT y, const TILE_CODE& tileCode, DWORD dwFlags)
+{
+    if (x + 64 < rDest.left
+        || x > rDest.right
+        || y + 64 < rDest.top
+        || y > rDest.bottom) {
+        return;
+    }
+
+    m_cVidTile.RenderTexture(nTextureId,
+        rDest,
+        x,
+        y,
+        (dwFlags & TRANSLUCENT) != 0 ? 0x2 : 0x0);
+
+    m_aTextures[m_nTextures].x = static_cast<SHORT>(x);
+    m_aTextures[m_nTextures].y = static_cast<SHORT>(y);
+    m_aTextures[m_nTextures].left = static_cast<SHORT>(rDest.left);
+    m_aTextures[m_nTextures].top = static_cast<SHORT>(rDest.top);
+    m_aTextures[m_nTextures].right = static_cast<SHORT>(rDest.right);
+    m_aTextures[m_nTextures].bottom = static_cast<SHORT>(rDest.bottom);
+    m_aTextures[m_nTextures].tileCode = tileCode;
+    m_nTextures++;
 }
 
 // 0x5D2DE0
 void CInfTileSet::sub_5D2DE0()
 {
-    // TODO: Incomplete.
+    INT x;
+    INT y;
+    CRect rDest;
+
+    for (int index = 0; index < m_nTextures; index++) {
+        x = m_aTextures[index].x;
+        y = m_aTextures[index].y;
+        rDest.left = m_aTextures[index].left;
+        rDest.top = m_aTextures[index].top;
+        rDest.right = m_aTextures[index].right;
+        rDest.bottom = m_aTextures[index].bottom;
+        CVisibilityMap::BltFogOWar3d(x, y, rDest, m_aTextures[index].tileCode);
+    }
 }
 
 // NOTE: Inlined.

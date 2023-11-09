@@ -26,6 +26,16 @@ typedef struct {
     BYTE tileSE;
 } TILE_CODE;
 
+typedef struct {
+    SHORT left;
+    SHORT top;
+    SHORT right;
+    SHORT bottom;
+    SHORT x;
+    SHORT y;
+    TILE_CODE tileCode;
+} TEXTURE;
+
 class CResInfTile : public CResTile {
 public:
     CResInfTile(BOOLEAN a1, BOOLEAN a2);
@@ -39,7 +49,14 @@ public:
 
 class CInfTileSet {
 public:
-    static int dword_8F2700;
+    static const DWORD USE_COLORKEY;
+    static const DWORD TRANSLUCENT;
+    static const BYTE byte_851930;
+    static const BYTE byte_851931;
+    static const BYTE byte_851932;
+    static DWORD WATER_ALPHA;
+    static TEXTURE m_aTextures[2700];
+    static int m_nTextures;
 
     CInfTileSet();
     ~CInfTileSet();
@@ -56,6 +73,8 @@ public:
     BOOLEAN SetTileRenderCode(INT nTile, TILE_CODE& tileCode);
 
     BOOL Render3d(INT nTile, INT nStencilTile, const CRect& rDest, INT x, INT y, const TILE_CODE& tileCode, DWORD dwFlags, BYTE nDualTileCode, int a9);
+    BOOL ReadyTexture(INT nTextureId, INT nTile, INT nStencilTile, const TILE_CODE& tileCode, BYTE nDualTileCode, int a9, DWORD dwFlags);
+    void RenderTexture(INT nTextureId, const CRect& rDest, INT x, INT y, const TILE_CODE& tileCode, DWORD dwFlags);
     static void sub_5D2DE0();
 
     void Invalidate();

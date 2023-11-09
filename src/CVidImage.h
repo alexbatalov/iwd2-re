@@ -29,6 +29,7 @@ public:
 class CVidTile : public CVidImage {
 public:
     static const INT BYTES_PER_TEXEL;
+    static BYTE m_pPixels[16384];
 
     CVidTile();
     ~CVidTile();
@@ -44,6 +45,11 @@ public:
 
     BOOL BltTile8To32(DWORD* pSurface, LONG lPitch, BYTE* pData, const CSize& blitSize, LONG nDataJump, DWORD dwFlags);
     BOOL BltStencilTile8To32(DWORD* pSurface, LONG lPitch, BYTE* pData, BYTE* pStencilData, const CSize& blitSize, LONG nDataJump, DWORD dwFlags);
+
+    BOOL BltStencilTile8to32_3d(DWORD* pSurface, LONG lPitch, BYTE* pData, BYTE* pStencilData, const CSize& blitSize, LONG nDataJump, DWORD dwAlpha, DWORD dwFlags);
+    BOOL ReadyTexture(INT nTextureId, DWORD dwFlags, DWORD dwAlpha);
+    BOOL ReadyTexture(INT nTextureId, CResTile* pResStencil, DWORD dwFlags, DWORD dwAlpha);
+    void RenderTexture(INT nTextureId, const CRect& rDest, INT x, INT y, DWORD dwFlags);
 
     /* 00A0 */ CResTile* pRes;
     /* 00A4 */ DWORD m_dwFlags;
