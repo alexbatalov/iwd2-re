@@ -170,6 +170,13 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lPara
     case WM_DISPLAYCHANGE:
         g_pChitin->OnDisplayChange();
         break;
+    case WM_SYSKEYDOWN:
+        if (wParam == VK_RETURN) {
+            g_pChitin->OnAltEnter(TRUE);
+        } else if (wParam == VK_F10) {
+            return 0;
+        }
+        break;
     case WM_IME_STARTCOMPOSITION:
         if (g_pChitin->field_1A4) {
             g_pChitin->cImm.OnStartComposition();
