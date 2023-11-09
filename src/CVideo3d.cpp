@@ -1556,7 +1556,56 @@ void CVidMode::FillRect3d(const VERTEX_DESC* pVertices)
 // 0x7BD270
 void CVidMode::RenderTint3d(COLORREF rgbTint, const CRect& rClip)
 {
-    // TODO: Incomplete.
+    BYTE r = GetRValue(rgbTint);
+    BYTE g = GetGValue(rgbTint);
+    BYTE b = GetBValue(rgbTint);
+
+    BYTE nBrightnessCorrection = g_pChitin->GetCurrentVideoMode()->m_nBrightnessCorrection;
+    if (nBrightnessCorrection != 0) {
+        r = ~((~nBrightnessCorrection * ~r) >> 8);
+        g = ~((~nBrightnessCorrection * ~g) >> 8);
+        b = ~((~nBrightnessCorrection * ~b) >> 8);
+    }
+
+    BYTE nGammaCorrection = g_pChitin->GetCurrentVideoMode()->m_nGammaCorrection;
+    if (nGammaCorrection != 0) {
+        DWORD nLight = (1 << CVidPalette::LIGHT_SCALE) + nGammaCorrection;
+        r = static_cast<BYTE>(min((nLight * r) / 8, 255));
+        g = static_cast<BYTE>(min((nLight * g) / 8, 255));
+        b = static_cast<BYTE>(min((nLight * b) / 8, 255));
+    }
+
+    CVideo3d::glDisable(GL_TEXTURE_2D);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glEnable(GL_BLEND);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glBlendFunc(GL_DST_COLOR, GL_SRC_COLOR);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glBegin(GL_QUADS);
+    CVideo3d::glColor4f(static_cast<float>(r) / 512.0f,
+        static_cast<float>(g) / 512.0f,
+        static_cast<float>(b) / 512.0f,
+        1.0f);
+    CVideo3d::glVertex3f(static_cast<float>(rClip.left) + CVideo3d::SUB_PIXEL_SHIFT,
+        static_cast<float>(rClip.top) + CVideo3d::SUB_PIXEL_SHIFT,
+        0.0f);
+    CVideo3d::glVertex3f(static_cast<float>(rClip.left) + CVideo3d::SUB_PIXEL_SHIFT,
+        static_cast<float>(rClip.bottom) + CVideo3d::SUB_PIXEL_SHIFT,
+        0.0f);
+    CVideo3d::glVertex3f(static_cast<float>(rClip.right) + CVideo3d::SUB_PIXEL_SHIFT,
+        static_cast<float>(rClip.bottom) + CVideo3d::SUB_PIXEL_SHIFT,
+        0.0f);
+    CVideo3d::glVertex3f(static_cast<float>(rClip.right) + CVideo3d::SUB_PIXEL_SHIFT,
+        static_cast<float>(rClip.top) + CVideo3d::SUB_PIXEL_SHIFT,
+        0.0f);
+    CVideo3d::glEnd();
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glDisable(GL_BLEND);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 }
 
 // 0x7BD740
