@@ -8,11 +8,22 @@
 
 class CVidFontRegistryEntry {
 public:
-    unsigned int dummy;
+    /* 0000 */ CResRef m_fontResRef;
+    /* 0008 */ BOOL m_bLoaded;
+    /* 000C */ INT m_nRefCount;
+    /* 0010 */ INT m_aTextureIds[8];
+    /* 0030 */ BYTE m_aFirstGlyph[8];
+    /* 0038 */ CSize m_texSize;
+    /* 0040 */ INT m_nFontHeight;
+    /* 0044 */ INT m_nBaseLineHeight;
+    /* 0048 */ INT m_nSequences;
+    /* 004C */ INT* m_aGlyphWidths;
+    /* 0050 */ CPoint* m_aGlyphCoords;
 };
 
 class CVidFont : public CVidCell {
 public:
+    static BOOLEAN byte_8FB974[12];
     static CTypedPtrList<CPtrList, CVidFontRegistryEntry*> REGISTRY;
     static CCriticalSection REGISTRY_CRITICAL_SECTION;
 
@@ -31,10 +42,14 @@ public:
     BOOL TextOutEx(INT nSurface, const CString& sString, int x, int y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded);
     BOOL Load(BOOL bDemanded);
     int RegisterFont();
+    int CheckIfLoaded(BOOL bDemanded);
     void Unload();
     INT LoadToTexture(BOOL bDemanded);
+    void CreateTexture(DWORD* pData, INT nTextureId, const CSize& size);
     BOOL TextOut3d(const CString& sText, WORD* pSurface, LONG lPitch, INT x, INT y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded);
     BOOL TextOut3d(const CString& sText, int x, int y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded);
+    void RenderCharacters(const CString& sString, INT x, INT y, CVidFontRegistryEntry* node, const CRect& rClip);
+    BOOL TextOutEx3d(const CString& sText, int x, int y, const CRect& rClip, DWORD dwFlags, BOOL bDemanded);
 
     static void UnloadAllFonts();
 
@@ -47,7 +62,7 @@ public:
     /* 04EA */ SHORT m_nFontHeight;
     /* 04EC */ COLORREF m_rgbForegroundColor;
     /* 04F0 */ COLORREF m_rgbBackgroundColor;
-    /* 04F4 */ int field_4F4;
+    /* 04F4 */ POSITION m_posRegistryList;
     /* 04F8 */ COLORREF m_rgbPaletteForegroundColor;
     /* 04FC */ COLORREF m_rgbPaletteBackgroundColor;
 };
