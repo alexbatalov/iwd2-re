@@ -1407,7 +1407,7 @@ GLuint CVidMode::GetTextureId()
 {
     GLuint textures[1];
 
-    sub_7BEDE0();
+    DeleteDisposableTextures();
     CVideo3d::glGenTextures(1, textures);
     g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 
@@ -1857,7 +1857,7 @@ BOOL CVidInf::DestroySurfaces3d(CVidMode* pNextVidMode)
         g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
     }
 
-    sub_7BEDE0();
+    DeleteDisposableTextures();
 
     return TRUE;
 }
@@ -2001,13 +2001,13 @@ BOOL CVidMode::CheckResults3d(int rc)
 }
 
 // 0x7BEDE0
-void CVidMode::sub_7BEDE0()
+void CVidMode::DeleteDisposableTextures()
 {
-    CSingleLock lock(&field_4A, FALSE);
+    CSingleLock lock(&m_disposableTexturesCritSect, FALSE);
     lock.Lock(INFINITE);
 
-    while (!field_6A.IsEmpty()) {
-        GLuint texture = static_cast<GLuint>(field_6A.RemoveHead());
+    while (!m_lDisposableTextureIds.IsEmpty()) {
+        GLuint texture = static_cast<GLuint>(reinterpret_cast<INT>(m_lDisposableTextureIds.RemoveHead()));
         CVideo3d::glDeleteTextures(1, &texture);
         g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
     }

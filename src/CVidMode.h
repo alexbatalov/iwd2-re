@@ -68,7 +68,7 @@ public:
     void EnableScissoring();
     void DisableScissoring();
     static void RenderTint3d(COLORREF rgbTint, const CRect& rClip);
-    void sub_7BEDE0();
+    void DeleteDisposableTextures();
     static void RenderFan(const VERTEX_DESC* pVertices, INT nVertices);
     static void RenderQuad(const VERTEX_DESC* pVertices, INT nVertices);
     static void RenderBlackFade3d();
@@ -170,8 +170,8 @@ public:
     /* 0028 */ CCriticalSection m_csRenderPointer;
     /* 0048 */ BOOLEAN m_bFadeTo;
     /* 0049 */ BYTE m_nFade;
-    /* 004A */ CCriticalSection field_4A;
-    /* 006A */ CTypedPtrList<CPtrList, unsigned int> field_6A;
+    /* 004A */ CCriticalSection m_disposableTexturesCritSect;
+    /* 006A */ CTypedPtrList<CPtrList, int*> m_lDisposableTextureIds; // NOTE: Stores actual ints disguised as pointers.
     /* 0086 */ int m_nColorDepth; // #guess
     /* 008A */ CVidCell* m_pPointerVidCell; // #guess
     /* 008E */ BOOLEAN m_bPointerAnimating; // #guess
