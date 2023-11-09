@@ -2,6 +2,7 @@
 
 #include "CChitin.h"
 #include "CVidMode.h"
+#include "CVideo3d.h"
 
 // 0x85EB60
 const USHORT CParticle::CONNECT = 0;
@@ -249,7 +250,117 @@ void CParticle::RenderBlob32(DWORD* pSurface, LONG lPitch, LONG lX, LONG lY, con
 // 0x7CC340
 void CParticle::Render3d(const CRect& rClipRect, const CRect& rLockedRect, USHORT nFlag, USHORT nBlobSize)
 {
-    // TODO: Incomplete.
+    LONG v1 = rClipRect.left - rLockedRect.left;
+    LONG v2 = rClipRect.top - rLockedRect.top;
+    CVidMode* pVidMode = g_pChitin->GetCurrentVideoMode();
+    DWORD color = pVidMode->ReduceColor(m_rgbColor);
+    LONG nXPrev = m_pos.x;
+    LONG nYPrev = m_pos.y;
+    LONG nZPrev = m_pos.z;
+    LONG nZPrevVel = m_vel.z;
+    SHORT nLoops = min(m_nTailLength, m_nTimeStamp) + 1;
+    CPoint pt;
+    INT nPointSize;
+
+    switch (nFlag) {
+    case CONNECT:
+        pVidMode->DrawLine3d(((nXPrev - m_vel.x) >> RESOLUTION_INC) - v1,
+            ((3 * (nYPrev - m_vel.y) / 4 - nZPrev + nZPrevVel) >> RESOLUTION_INC) - v2,
+            nXPrev >> RESOLUTION_INC,
+            (3 * nYPrev / 4 - nZPrev) >> RESOLUTION_INC,
+            rLockedRect,
+            m_rgbColor);
+        break;
+    case DOTS:
+        CVideo3d::glDisable(GL_BLEND);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+        CVideo3d::glDisable(GL_TEXTURE_2D);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+        CVideo3d::glPointSize(static_cast<float>(1));
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+        CVideo3d::glColor4f(static_cast<float>(GetRValue(m_rgbColor)) / 255.0f,
+            static_cast<float>(GetGValue(m_rgbColor)) / 255.0f,
+            static_cast<float>(GetBValue(m_rgbColor)) / 255.0f,
+            1.0f);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+        CVideo3d::glBegin(GL_POINTS);
+        while (nLoops > 0) {
+            pt.x = nXPrev >> RESOLUTION_INC;
+            pt.y = ((3 * nYPrev) / 4 - nZPrev) >> RESOLUTION_INC;
+            if (rClipRect.PtInRect(pt)) {
+                // NOTE: Original code adds `CVideo3d::SUB_PIXEL_SHIFT`, however
+                // it's value (0.2) is too small and due to rounding all points
+                // (snowflakes) appear exactly between pixels (which results in
+                // no snow at all).
+                CVideo3d::glVertex3f(static_cast<float>(pt.x - v1) + 0.5f,
+                    static_cast<float>(pt.y - v2) + 0.5f,
+                    0.0f);
+            }
+
+            nXPrev -= m_vel.x;
+            nYPrev -= m_vel.y;
+            nZPrev -= nZPrevVel;
+            nZPrevVel += GRAVITY;
+            nLoops--;
+        }
+        CVideo3d::glEnd();
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+        break;
+    case BLOB:
+        CVideo3d::glDisable(GL_BLEND);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+        CVideo3d::glDisable(GL_TEXTURE_2D);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+        CVideo3d::glColor4f(static_cast<float>(GetRValue(m_rgbColor)) / 255.0f,
+            static_cast<float>(GetGValue(m_rgbColor)) / 255.0f,
+            static_cast<float>(GetBValue(m_rgbColor)) / 255.0f,
+            1.0f);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+        switch (nBlobSize) {
+        case 3:
+        case 4:
+            nPointSize = 2;
+            break;
+        case 5:
+            nPointSize = 3;
+            break;
+        default:
+            nPointSize = 1;
+            break;
+        }
+
+        CVideo3d::glPointSize(static_cast<float>(nPointSize));
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+        CVideo3d::glBegin(GL_POINTS);
+        while (nLoops > 0) {
+            pt.x = nXPrev >> RESOLUTION_INC;
+            pt.y = ((3 * nYPrev) / 4 - nZPrev) >> RESOLUTION_INC;
+            if (rClipRect.PtInRect(pt)) {
+                // NOTE: See above, but in case of blobs its only meaningful
+                // for point size 1. Point sizes 2 and 3 are always visible.
+                CVideo3d::glVertex3f(static_cast<float>(pt.x - v1) + 0.5f,
+                    static_cast<float>(pt.y - v2) + 0.5f,
+                    0.0f);
+            }
+
+            nXPrev -= m_vel.x;
+            nYPrev -= m_vel.y;
+            nZPrev -= nZPrevVel;
+            nZPrevVel += GRAVITY;
+            nLoops--;
+        }
+        CVideo3d::glEnd();
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+        break;
+    }
 }
 
 // NOTE: Convenience.
