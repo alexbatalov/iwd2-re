@@ -90,6 +90,15 @@ const BYTE CVisibilityMap::FOGOWAR_MASK = 0xF0;
 // 0x84EDEF
 const BYTE CVisibilityMap::FOGOWAR_SHIFT = 4;
 
+// 0x8AE818
+POLYCOLOR CVisibilityMap::FOGOWARSHADE = { 0.0f, 0.0f, 0.0f, 0.5f };
+
+// 0x8AE828
+POLYCOLOR CVisibilityMap::EXPLORESHADE = { 0.0f, 0.0f, 0.0f, 1.0f };
+
+// 0x8E1810
+POLYCOLOR CVisibilityMap::CLEARSHADE;
+
 // 0x551770
 CVisibilityMap::CVisibilityMap()
 {
@@ -543,7 +552,180 @@ void CVisibilityMap::SetAreaVisible(BOOLEAN bVisible)
 // 0x553D00
 void CVisibilityMap::BltFogOWar3d(INT x, INT y, const CRect& rDest, const TILE_CODE& tileCode)
 {
-    // TODO: Incomplete.
+    BYTE aTileCodes[4];
+    CSize aSizes[4];
+    CRect r;
+    BYTE nFogWarCode;
+    BYTE nExploredCode;
+
+    aSizes[0].cx = x;
+    aSizes[0].cy = y;
+    aSizes[1].cx = x + 32;
+    aSizes[1].cy = y;
+    aSizes[2].cx = x;
+    aSizes[2].cy = y + 32;
+    aSizes[3].cx = x + 32;
+    aSizes[3].cy = y + 32;
+
+    aTileCodes[0] = tileCode.tileNW;
+    aTileCodes[1] = tileCode.tileNE;
+    aTileCodes[2] = tileCode.tileSW;
+    aTileCodes[3] = tileCode.tileSE;
+
+    COLORREF rgb = g_pChitin->GetCurrentVideoMode()->ApplyFadeAmount(RGB(0, 0, 0));
+
+    FOGOWARSHADE.fRed = static_cast<float>(GetRValue(rgb)) / 255.0f;
+    EXPLORESHADE.fRed = FOGOWARSHADE.fRed;
+    CLEARSHADE.fRed = FOGOWARSHADE.fRed;
+
+    FOGOWARSHADE.fGreen = static_cast<float>(GetGValue(rgb)) / 255.0f;
+    EXPLORESHADE.fGreen = FOGOWARSHADE.fGreen;
+    CLEARSHADE.fGreen = FOGOWARSHADE.fGreen;
+
+    FOGOWARSHADE.fBlue = static_cast<float>(GetBValue(rgb)) / 255.0f;
+    EXPLORESHADE.fBlue = FOGOWARSHADE.fBlue;
+    CLEARSHADE.fBlue = FOGOWARSHADE.fBlue;
+
+    for (int index = 0; index < 4; index++) {
+        nExploredCode = (aTileCodes[index] & FOGOWAR_EXPLORED_MASK) >> FOGOWAR_EXPLORED_SHIFT;
+        nFogWarCode = (aTileCodes[index] & FOGOWAR_MASK) >> FOGOWAR_SHIFT;
+        r.SetRect(aSizes[index].cx,
+            aSizes[index].cy,
+            aSizes[index].cx + 32,
+            aSizes[index].cy + 32);
+        if (nExploredCode != nFogWarCode) {
+            BltVisibility3d(nFogWarCode, r);
+        }
+        BltExploration3d(nExploredCode, r);
+    }
+}
+
+// 0x553EA0
+void CVisibilityMap::BltExploration3d(BYTE code, const CRect& rDest)
+{
+    VERTEX_DESC verts[6];
+    int cnt = 0;
+
+    verts[0].fX = static_cast<float>(rDest.left + 16);
+    verts[0].fY = static_cast<float>(rDest.top + 16);
+    verts[1].fX = static_cast<float>(rDest.left);
+    verts[1].fY = static_cast<float>(rDest.top);
+    verts[2].fX = static_cast<float>(rDest.left);
+    verts[2].fY = static_cast<float>(rDest.bottom);
+    verts[3].fX = static_cast<float>(rDest.right);
+    verts[3].fY = static_cast<float>(rDest.bottom);
+    verts[4].fX = static_cast<float>(rDest.right);
+    verts[4].fY = static_cast<float>(rDest.top);
+    verts[5].fX = static_cast<float>(rDest.left);
+    verts[5].fY = static_cast<float>(rDest.top);
+
+    if ((code & 0x1) != 0) {
+        verts[1].color = EXPLORESHADE;
+        verts[5].color = EXPLORESHADE;
+        cnt++;
+    } else {
+        verts[1].color = CLEARSHADE;
+        verts[5].color = CLEARSHADE;
+    }
+
+    if ((code & 0x2) != 0) {
+        verts[2].color = EXPLORESHADE;
+        cnt++;
+    } else {
+        verts[2].color = CLEARSHADE;
+    }
+
+    if ((code & 0x4) != 0) {
+        verts[3].color = EXPLORESHADE;
+        cnt++;
+    } else {
+        verts[3].color = CLEARSHADE;
+    }
+
+    if ((code & 0x8) != 0) {
+        verts[4].color = EXPLORESHADE;
+        cnt++;
+    } else {
+        verts[4].color = CLEARSHADE;
+    }
+
+    switch (cnt) {
+    case 3:
+        verts[0].color = EXPLORESHADE;
+        CVidMode::RenderFan(verts, 6);
+        break;
+    case 1:
+        verts[0].color = CLEARSHADE;
+        CVidMode::RenderFan(verts, 6);
+        break;
+    default:
+        CVidMode::FillRect3d(&(verts[1]));
+        break;
+    }
+}
+
+// 0x554170
+void CVisibilityMap::BltVisibility3d(BYTE code, const CRect& rDest)
+{
+    VERTEX_DESC verts[6];
+    int cnt = 0;
+
+    verts[0].fX = static_cast<float>(rDest.left + 16);
+    verts[0].fY = static_cast<float>(rDest.top + 16);
+    verts[1].fX = static_cast<float>(rDest.left);
+    verts[1].fY = static_cast<float>(rDest.top);
+    verts[2].fX = static_cast<float>(rDest.left);
+    verts[2].fY = static_cast<float>(rDest.bottom);
+    verts[3].fX = static_cast<float>(rDest.right);
+    verts[3].fY = static_cast<float>(rDest.bottom);
+    verts[4].fX = static_cast<float>(rDest.right);
+    verts[4].fY = static_cast<float>(rDest.top);
+    verts[5].fX = static_cast<float>(rDest.left);
+    verts[5].fY = static_cast<float>(rDest.top);
+
+    if ((code & 0x1) != 0) {
+        verts[1].color = FOGOWARSHADE;
+        verts[5].color = FOGOWARSHADE;
+        cnt++;
+    } else {
+        verts[1].color = CLEARSHADE;
+        verts[5].color = CLEARSHADE;
+    }
+
+    if ((code & 0x2) != 0) {
+        verts[2].color = FOGOWARSHADE;
+        cnt++;
+    } else {
+        verts[2].color = CLEARSHADE;
+    }
+
+    if ((code & 0x4) != 0) {
+        verts[3].color = FOGOWARSHADE;
+        cnt++;
+    } else {
+        verts[3].color = CLEARSHADE;
+    }
+
+    if ((code & 0x8) != 0) {
+        verts[4].color = FOGOWARSHADE;
+        cnt++;
+    } else {
+        verts[4].color = CLEARSHADE;
+    }
+
+    switch (cnt) {
+    case 3:
+        verts[0].color = FOGOWARSHADE;
+        CVidMode::RenderFan(verts, 6);
+        break;
+    case 1:
+        verts[0].color = CLEARSHADE;
+        CVidMode::RenderFan(verts, 6);
+        break;
+    default:
+        CVidMode::FillRect3d(&(verts[1]));
+        break;
+    }
 }
 
 // 0x76B120

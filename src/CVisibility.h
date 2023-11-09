@@ -2,6 +2,7 @@
 #define CVISIBILITY_H_
 
 #include "CInfinity.h"
+#include "CVidMode.h"
 
 class CGameArea;
 
@@ -40,6 +41,10 @@ public:
     static const BYTE FOGOWAR_MASK;
     static const BYTE FOGOWAR_SHIFT;
 
+    static POLYCOLOR FOGOWARSHADE;
+    static POLYCOLOR EXPLORESHADE;
+    static POLYCOLOR CLEARSHADE;
+
     CVisibilityMap();
     ~CVisibilityMap();
     BOOL AddCharacter(const CPoint& pos, LONG charId, const BYTE* pVisibleTerrainTable);
@@ -69,6 +74,8 @@ public:
     void SetAreaVisible(BOOLEAN bVisible);
 
     static void BltFogOWar3d(INT x, INT y, const CRect& rDest, const TILE_CODE& tileCode);
+    static void BltExploration3d(BYTE code, const CRect& rDest);
+    static void BltVisibility3d(BYTE code, const CRect& rDest);
 
     SHORT PointToTile(const CPoint& pos);
     LONG GetBossTile(LONG n64x64Tile);
