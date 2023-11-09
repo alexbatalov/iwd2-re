@@ -761,6 +761,7 @@ void CWeather::UpdateRain()
                     SetRainSound(8, WEATHER_TRANSITION_TIME - m_nDurationCounter);
                     m_rainStorm.m_nCurrentDensity = static_cast<USHORT>(CRainStorm::DENSITY_LIGHT_STORM - CRainStorm::DENSITY_LIGHT_STORM * m_nDurationCounter / WEATHER_TRANSITION_TIME);
                 }
+                return;
             } else {
                 if (m_bUpgrading) {
                     m_nWeatherLevel = 8;
@@ -786,6 +787,7 @@ void CWeather::UpdateRain()
                     SetRainSound(12, WEATHER_TRANSITION_TIME - m_nDurationCounter);
                     m_rainStorm.m_nCurrentDensity = static_cast<USHORT>(CRainStorm::DENSITY_MEDIUM_STORM - (CRainStorm::DENSITY_MEDIUM_STORM - CRainStorm::DENSITY_LIGHT_STORM) * m_nDurationCounter / WEATHER_TRANSITION_TIME);
                 }
+                return;
             } else {
                 if (m_bUpgrading) {
                     m_nWeatherLevel = 12;
@@ -881,6 +883,7 @@ void CWeather::UpdateSnow()
                 } else {
                     m_snowStorm.m_nCurrentDensity = static_cast<USHORT>(CSnowStorm::DENSITY_LIGHT_STORM - CSnowStorm::DENSITY_LIGHT_STORM * m_nDurationCounter / WEATHER_TRANSITION_TIME);
                 }
+                return;
             } else {
                 if (m_bUpgrading) {
                     m_nWeatherLevel = 8;
@@ -901,6 +904,7 @@ void CWeather::UpdateSnow()
                 } else {
                     m_snowStorm.m_nCurrentDensity = static_cast<USHORT>(CSnowStorm::DENSITY_MEDIUM_STORM - (CSnowStorm::DENSITY_MEDIUM_STORM - CSnowStorm::DENSITY_LIGHT_STORM) * m_nDurationCounter / WEATHER_TRANSITION_TIME);
                 }
+                return;
             } else {
                 if (m_bUpgrading) {
                     m_nWeatherLevel = 12;
