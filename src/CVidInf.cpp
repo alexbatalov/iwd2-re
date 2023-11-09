@@ -1676,7 +1676,7 @@ BOOL CVidInf::BKTextOut(CVidFont* pFont, const CString& sString, int x, int y, c
         CRect rNewClip;
         rNewClip.left = m_rLockedRect.left + rClip.left;
         rNewClip.top = m_rLockedRect.top + rClip.top;
-        rNewClip.top = m_rLockedRect.left + rClip.right;
+        rNewClip.right = m_rLockedRect.left + rClip.right;
         rNewClip.bottom = m_rLockedRect.top + rClip.bottom;
 
         return pFont->TextOut3d(sString,
