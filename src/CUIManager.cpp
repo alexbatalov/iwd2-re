@@ -29,7 +29,7 @@ CUIManager::CUIManager()
     field_2D = 1;
     m_pWarp = NULL;
     m_nCaptureType = 0;
-    field_0 = 0;
+    m_bHidden = FALSE;
     m_bInitialized = FALSE;
     m_pFocusedControl = NULL;
     field_1C = 0;
@@ -56,7 +56,7 @@ void CUIManager::fInit(CWarp* pWarp, CResRef cResRef, BOOL bDoubleSize)
     if (m_bInitialized != TRUE) {
         m_cResRef = cResRef;
         m_pWarp = pWarp;
-        field_0 = 0;
+        m_bHidden = FALSE;
         m_pFocusedControl = NULL;
         field_18 = 1;
         field_1C = 0;
@@ -256,7 +256,7 @@ void CUIManager::OnMouseMove(CPoint pt)
     if (m_pFocusedControl != NULL && m_nCaptureType != KEYBOARD) {
         m_pFocusedControl->OnMouseMove(pt - m_pFocusedControl->m_pPanel->m_ptOrigin);
     } else {
-        if (!field_0) {
+        if (!m_bHidden) {
             POSITION pos = m_lPanels.GetHeadPosition();
             while (pos != NULL) {
                 CUIPanel* pPanel = m_lPanels.GetNext(pos);
@@ -286,7 +286,7 @@ void CUIManager::OnLButtonDown(CPoint pt)
                 m_pFocusedControl->OnLButtonDown(pt - m_pFocusedControl->m_pPanel->m_ptOrigin);
             }
 
-            if (!field_0) {
+            if (!m_bHidden) {
                 POSITION pos = m_lPanels.GetTailPosition();
                 while (pos != NULL) {
                     CUIPanel* pPanel = m_lPanels.GetPrev(pos);
@@ -326,7 +326,7 @@ void CUIManager::OnLButtonDblClk(CPoint pt)
     if (m_bInitialized) {
         if (field_18) {
             if (m_pFocusedControl == NULL || m_nCaptureType == KEYBOARD) {
-                if (!field_0) {
+                if (!m_bHidden) {
                     POSITION pos = m_lPanels.GetTailPosition();
                     while (pos != NULL) {
                         CUIPanel* pPanel = m_lPanels.GetPrev(pos);
@@ -359,7 +359,7 @@ void CUIManager::OnRButtonDown(CPoint pt)
                 m_pFocusedControl->OnRButtonDown(pt - m_pFocusedControl->m_pPanel->m_ptOrigin);
             }
 
-            if (!field_0) {
+            if (!m_bHidden) {
                 POSITION pos = m_lPanels.GetTailPosition();
                 while (pos != NULL) {
                     CUIPanel* pPanel = m_lPanels.GetPrev(pos);
@@ -396,7 +396,7 @@ void CUIManager::OnRButtonUp(CPoint pt)
 // 0x4D4510
 BOOL CUIManager::OnKeyDown(SHORT nKey)
 {
-    if (field_0 == 0) {
+    if (!m_bHidden) {
         if (m_pFocusedControl != NULL && m_nCaptureType == KEYBOARD) {
             m_pFocusedControl->OnKeyDown(nKey);
             return TRUE;
@@ -414,7 +414,7 @@ void CUIManager::Render()
 
     if (m_bInitialized) {
         if (field_18 != 0) {
-            if (field_0 == 0) {
+            if (!m_bHidden) {
                 POSITION pos = m_lPanels.GetHeadPosition();
                 while (pos != NULL) {
                     CUIPanel* pPanel = m_lPanels.GetNext(pos);

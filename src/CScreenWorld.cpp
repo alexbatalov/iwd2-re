@@ -913,7 +913,7 @@ void CScreenWorld::AsynchronousUpdate(BOOL bActiveEngine)
                     && pArea->m_firstRender == 0) {
                     pArea->m_bPicked = FALSE;
                     CUIPanel* pPanel = m_cUIManager.GetPanel(1);
-                    if (!m_cUIManager.field_0
+                    if (!m_cUIManager.m_bHidden
                         && pPanel->m_bActive
                         && pPanel->IsOver(g_pChitin->m_ptPointer)) {
                         for (SHORT nPortrait = 0; nPortrait < pGame->GetNumCharacters(); nPortrait++) {
@@ -1637,7 +1637,7 @@ void CScreenWorld::AddGold(DWORD dwGold)
 // 0x690EB0
 void CScreenWorld::StopContainer()
 {
-    if (GetManager()->field_0 == 0) {
+    if (!GetManager()->m_bHidden) {
         if (m_nAutoHideInterface > 0) {
             m_nAutoHideInterface++;
         }
@@ -1961,7 +1961,7 @@ POSITION CScreenWorld::DisplayText(const CString& sName, const CString& sText, C
 
     if (m_pActiveDialogDisplay->GetNumLines(pos) > 2) {
         if (GetManager()->GetPanel(GetPanel_22_0())->m_bActive
-            && !m_cUIManager.field_0) {
+            && !m_cUIManager.m_bHidden) {
             // FIXME: Same panels?
             CUIPanel* pPanel1 = GetManager()->GetPanel(GetPanel_22_0());
             CUIPanel* pPanel2 = GetManager()->GetPanel(GetPanel_22_0());
@@ -2002,7 +2002,7 @@ POSITION CScreenWorld::DisplayText(const CString& sName, const CString& sText, L
 
     if (m_pActiveDialogDisplay->GetNumLines(pos) > 2) {
         if (GetManager()->GetPanel(GetPanel_22_0())->m_bActive
-            && !m_cUIManager.field_0) {
+            && !m_cUIManager.m_bHidden) {
             // FIXME: Same panels?
             CUIPanel* pPanel1 = GetManager()->GetPanel(GetPanel_22_0());
             CUIPanel* pPanel2 = GetManager()->GetPanel(GetPanel_22_0());
@@ -2057,7 +2057,7 @@ void CScreenWorld::HideInterface()
         return;
     }
 
-    if (m_cUIManager.field_0) {
+    if (m_cUIManager.m_bHidden) {
         return;
     }
 
@@ -2075,7 +2075,7 @@ void CScreenWorld::HideInterface()
         y + m_newViewSize.top - field_11D0.top,
         TRUE);
 
-    m_cUIManager.field_0 = 1;
+    m_cUIManager.m_bHidden = TRUE;
 
     if (pGame->field_43E2 == 386 || pGame->field_43E2 == 1282) {
         m_cUIManager.InvalidateRect(NULL);
@@ -2091,11 +2091,11 @@ void CScreenWorld::UnhideInterface()
         return;
     }
 
-    if (!m_cUIManager.field_0) {
+    if (!m_cUIManager.m_bHidden) {
         return;
     }
 
-    m_cUIManager.field_0 = 0;
+    m_cUIManager.m_bHidden = FALSE;
 
     if (pGame->GetVisibleArea() != NULL) {
         // NOTE: Uninline.

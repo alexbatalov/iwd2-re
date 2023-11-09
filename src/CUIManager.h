@@ -42,7 +42,7 @@ public:
 
     static BYTE RENDER_COUNT;
 
-    /* 0000 */ int field_0;
+    /* 0000 */ BOOL m_bHidden;
     /* 0004 */ BOOL m_bInitialized;
     /* 0008 */ CResRef m_cResRef;
     /* 0010 */ CWarp* m_pWarp; // #guess
