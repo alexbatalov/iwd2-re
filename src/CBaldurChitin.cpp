@@ -1274,13 +1274,14 @@ BOOL CBaldurChitin::InitializeServices(HWND hWnd)
 }
 
 // 0x424AA0
-void CBaldurChitin::FlipFullScreenMode(BOOLEAN a2)
+BOOLEAN CBaldurChitin::FlipFullScreenMode(BOOLEAN bSave)
 {
-    BOOL bWasFullscreen = m_bFullscreen;
-    m_bFullscreen = bWasFullscreen == FALSE;
-    m_nNextFullscreen = bWasFullscreen == FALSE;
+    BOOLEAN bWasFullscreen = m_bFullscreen;
 
-    if (a2) {
+    // NOTE: Uninline.
+    CChitin::FlipFullScreenMode(bSave);
+
+    if (bSave) {
         if (bWasFullscreen) {
             WritePrivateProfileStringA(PROGRAM_OPTIONS_SECTION_KEY,
                 FULL_SCREEN_KEY,
@@ -1307,6 +1308,8 @@ void CBaldurChitin::FlipFullScreenMode(BOOLEAN a2)
                 GetIniFileName());
         }
     }
+
+    return m_bFullscreen;
 }
 
 // 0x424BD0

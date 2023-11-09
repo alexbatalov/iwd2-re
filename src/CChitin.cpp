@@ -963,7 +963,7 @@ void CChitin::EnginesGameUninit()
 }
 
 // 0x7912F0
-BOOLEAN CChitin::OnAltEnter(BOOLEAN a1)
+BOOLEAN CChitin::OnAltEnter(BOOLEAN bSave)
 {
     if (m_bFullscreen) {
         if (field_E4) {
@@ -1004,7 +1004,7 @@ BOOLEAN CChitin::OnAltEnter(BOOLEAN a1)
         return FALSE;
     }
 
-    FlipFullScreenMode(a1);
+    FlipFullScreenMode(bSave);
 
     cVideo.m_pCurrentVidMode = pCurrentVidMode;
     if (!InitGraphics()) {
@@ -1841,11 +1841,12 @@ BOOL CChitin::MessageCallback(BYTE* pData, DWORD dwSize)
 }
 
 // 0x78E770
-void CChitin::FlipFullScreenMode(BOOLEAN a2)
+BOOLEAN CChitin::FlipFullScreenMode(BOOLEAN bSave)
 {
-    BOOL bWasFullscreen = m_bFullscreen;
-    m_bFullscreen = bWasFullscreen == FALSE;
-    m_nNextFullscreen = bWasFullscreen == FALSE;
+    BOOLEAN bNewFullscreen = !m_bFullscreen;
+    m_bFullscreen = bNewFullscreen;
+    m_nNextFullscreen = bNewFullscreen;
+    return bNewFullscreen;
 }
 
 // 0x78E790

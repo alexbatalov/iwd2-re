@@ -91,7 +91,7 @@ public:
     /* 0084 */ virtual void OnMultiplayerPlayerLeave(PLAYER_ID playerID, const CString& sPlayerName);
     /* 0088 */ virtual BOOL MessageCallback(BYTE* pData, DWORD dwSize);
     /* 0090 */ virtual void AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD dw1, DWORD dw2);
-    /* 0094 */ virtual void FlipFullScreenMode(BOOLEAN a2);
+    /* 0094 */ virtual BOOLEAN FlipFullScreenMode(BOOLEAN bSave);
     /* 00A0 */ virtual const char* GetIniFileName();
     /* 00A4 */ virtual const char* GetKeyFileName();
     /* 00A8 */ virtual const char* GetLogFileName();
@@ -111,7 +111,7 @@ public:
     /* 00D8 */ virtual void SetRenderCount(BYTE nCount);
     /* 00DC */ virtual DWORD GetCloseConfirmationFlags();
     /* 00E0 */ virtual void GetCloseConfirmationStr(CString& sString);
-    /* 00E4 */ virtual BOOLEAN OnAltEnter(BOOLEAN a1);
+    /* 00E4 */ virtual BOOLEAN OnAltEnter(BOOLEAN bSave);
     /* 00E8 */ virtual void OnAltTab(HWND hWnd, BOOL a2);
     /* 00EC */ virtual void GetGameSpyGameName(CString& sGameSpyName);
     /* 00F0 */ virtual void GetGameSpyCode(CString& sGameSpyCode);
