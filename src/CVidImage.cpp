@@ -61,6 +61,13 @@ void CVidImage::SetTintColor(COLORREF rgbNewColor)
     m_paletteAffects.rgbTintColor = rgbNewColor;
 }
 
+// 0x7C40D0
+void CVidImage::SetPolyColor(DWORD dwFlags)
+{
+    CVideo3d::glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x7B16E0
