@@ -136,7 +136,7 @@ public:
     /* 00E4 */ virtual int GetNumVRamSurfaces();
     /* 00E8 */ virtual void LoadFogOWarSurfaces(const CString& a2);
     /* 00EC */ virtual void PrintScreen();
-    /* 00F0 */ virtual void RenderFlash(UINT nSurface, COLORREF rgbColor, unsigned char a4, const CRect& a5);
+    /* 00F0 */ virtual void RenderFlash(UINT nSurface, COLORREF rgbColor, unsigned char a4, const CRect& rClip);
     /* 00F4 */ virtual BOOL RenderPoly(UINT nSurface, CRect& a3, POINT* apt, int cpt, COLORREF rgbColor);
     /* 00F8 */ virtual BOOL RenderPointer(UINT nSurface);
     /* 00FC */ virtual BOOL RenderPointer();

@@ -1972,6 +1972,39 @@ BOOL CVidInf::RenderPointer()
     return TRUE;
 }
 
+// 0x79F520
+void CVidInf::RenderFlash(UINT nSurface, COLORREF rgbColor, unsigned char a4, const CRect& rClip)
+{
+    if (g_pChitin->cVideo.Is3dAccelerated()) {
+        RenderFlash3d(rgbColor, rClip);
+        return;
+    }
+
+    // FIXME: Unnecessary.
+    RECT destRect = rClip;
+
+    if (pSurfaces[nSurface] != NULL) {
+        DDBLTFX fx;
+        fx.dwSize = sizeof(fx);
+
+        // NOTE: Uninline.
+        fx.dwFillColor = ConvertToSurfaceRGB(rgbColor);
+
+        do {
+            HRESULT hr = g_pChitin->cVideo.cVidBlitter.Blt(pSurfaces[CVIDINF_SURFACE_FRONT],
+                &destRect,
+                NULL,
+                NULL,
+                DDBLT_WAIT | DDBLT_COLORFILL,
+                NULL);
+            CheckResults(hr);
+            if (hr != DDERR_SURFACELOST && hr != DDERR_WASSTILLDRAWING) {
+                break;
+            }
+        } while (!g_pChitin->field_1932);
+    }
+}
+
 // 0x79F950
 BOOL CVidInf::RenderPointer(UINT nSurface)
 {

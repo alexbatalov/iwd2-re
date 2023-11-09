@@ -1793,7 +1793,7 @@ int CVidMode::GetNumVRamSurfaces()
 }
 
 // 0x7B5450
-void CVidMode::RenderFlash(UINT nSurface, COLORREF rgbColor, unsigned char a4, const CRect& a5)
+void CVidMode::RenderFlash(UINT nSurface, COLORREF rgbColor, unsigned char a4, const CRect& rClip)
 {
 }
 

@@ -45,6 +45,7 @@ public:
     /* 00E0 */ int GetType() override;
     /* 00E4 */ int GetNumVRamSurfaces() override;
     /* 00E8 */ void LoadFogOWarSurfaces(const CString& a2) override;
+    /* 00F0 */ void RenderFlash(UINT nSurface, COLORREF rgbColor, unsigned char a4, const CRect& rClip) override;
     /* 00F8 */ BOOL RenderPointer(UINT nSurface) override;
     /* 00FC */ BOOL RenderPointer() override;
     /* 0100 */ void RestoreSurfaces() override;
