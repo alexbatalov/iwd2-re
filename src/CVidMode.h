@@ -68,6 +68,7 @@ public:
     void EnableScissoring();
     void DisableScissoring();
     static void RenderTint3d(COLORREF rgbTint, const CRect& rClip);
+    static void RenderFlash3d(COLORREF rgbTint, const CRect& rClip);
     void AddDisposableTexture(INT nTextureId);
     void DeleteDisposableTextures();
     static void RenderFan(const VERTEX_DESC* pVertices, INT nVertices);

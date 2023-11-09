@@ -1608,6 +1608,36 @@ void CVidMode::RenderTint3d(COLORREF rgbTint, const CRect& rClip)
     g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
 }
 
+// 0x7BD5A0
+void CVidMode::RenderFlash3d(COLORREF rgbTint, const CRect& rClip)
+{
+    CVideo3d::glDisable(GL_TEXTURE_2D);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glBegin(GL_QUADS);
+    CVideo3d::glColor4f(static_cast<float>(GetRValue(rgbTint)) / 256.0f,
+        static_cast<float>(GetGValue(rgbTint)) / 256.0f,
+        static_cast<float>(GetBValue(rgbTint)) / 256.0f,
+        1.0f);
+    CVideo3d::glVertex3f(static_cast<float>(rClip.left) + CVideo3d::SUB_PIXEL_SHIFT,
+        static_cast<float>(rClip.top) + CVideo3d::SUB_PIXEL_SHIFT,
+        0.0f);
+    CVideo3d::glVertex3f(static_cast<float>(rClip.left) + CVideo3d::SUB_PIXEL_SHIFT,
+        static_cast<float>(rClip.bottom) + CVideo3d::SUB_PIXEL_SHIFT,
+        0.0f);
+    CVideo3d::glVertex3f(static_cast<float>(rClip.right) + CVideo3d::SUB_PIXEL_SHIFT,
+        static_cast<float>(rClip.bottom) + CVideo3d::SUB_PIXEL_SHIFT,
+        0.0f);
+    CVideo3d::glVertex3f(static_cast<float>(rClip.right) + CVideo3d::SUB_PIXEL_SHIFT,
+        static_cast<float>(rClip.top) + CVideo3d::SUB_PIXEL_SHIFT,
+        0.0f);
+    CVideo3d::glEnd();
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glDisable(GL_BLEND);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+}
+
 // 0x7BD740
 void CVidMode::RenderFan(const VERTEX_DESC* pVertices, INT nVertices)
 {
