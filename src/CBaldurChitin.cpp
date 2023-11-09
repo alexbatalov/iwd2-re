@@ -231,7 +231,7 @@ CBaldurChitin::CBaldurChitin()
         field_E4 = 1;
     }
 
-    field_E2 = m_bFullscreen;
+    m_nNextFullscreen = m_bFullscreen;
 
     CVideo::FPS = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         DISPLAY_FREQUENCY_KEY,
@@ -254,7 +254,7 @@ CBaldurChitin::CBaldurChitin()
 
     if (CVideo::SCREENWIDTH >= GetSystemMetrics(SM_CXFULLSCREEN)) {
         field_E4 = 1;
-        field_E2 = 1;
+        m_nNextFullscreen = TRUE;
         m_bFullscreen = TRUE;
     }
 
@@ -1278,7 +1278,7 @@ void CBaldurChitin::FlipFullScreenMode(BOOLEAN a2)
 {
     BOOL bWasFullscreen = m_bFullscreen;
     m_bFullscreen = bWasFullscreen == FALSE;
-    field_E2 = bWasFullscreen == FALSE;
+    m_nNextFullscreen = bWasFullscreen == FALSE;
 
     if (a2) {
         if (bWasFullscreen) {

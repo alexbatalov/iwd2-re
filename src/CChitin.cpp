@@ -637,7 +637,7 @@ void CChitin::InitializeVariables()
     field_142 = 0;
     field_E0 = 0;
     m_bFullscreen = TRUE;
-    field_E2 = 1;
+    m_nNextFullscreen = TRUE;
     field_E4 = 0;
     m_ptScreen.x = 0;
     m_ptScreen.y = 0;
@@ -1845,7 +1845,7 @@ void CChitin::FlipFullScreenMode(BOOLEAN a2)
 {
     BOOL bWasFullscreen = m_bFullscreen;
     m_bFullscreen = bWasFullscreen == FALSE;
-    field_E2 = bWasFullscreen == FALSE;
+    m_nNextFullscreen = bWasFullscreen == FALSE;
 }
 
 // 0x78E790
@@ -2068,7 +2068,7 @@ void CChitin::ShutDown(int nLineNumber, const char* szFileName, const char* text
 void CChitin::SynchronousUpdate()
 {
     if (!cVideo.Is3dAccelerated()) {
-        if (field_E2 != m_bFullscreen) {
+        if (m_nNextFullscreen != m_bFullscreen) {
             if (cVideo.m_nNextBpp != cVideo.m_nBpp) {
                 SaveBitsPerPixel(cVideo.m_nNextBpp);
             }
@@ -2084,7 +2084,7 @@ void CChitin::SynchronousUpdate()
             }
         }
     } else {
-        if (field_E2 != m_bFullscreen) {
+        if (m_nNextFullscreen != m_bFullscreen) {
             OnAltEnter(TRUE);
         }
     }

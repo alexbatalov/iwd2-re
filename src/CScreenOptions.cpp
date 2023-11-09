@@ -989,7 +989,7 @@ void CScreenOptions::CheckGraphicModeOptions(CUIPanel* pPanel)
     }
 
     if (static_cast<CUIControlButton3State*>(pPanel->GetControl(9))->m_bSelected != g_pBaldurChitin->m_bFullscreen) {
-        g_pBaldurChitin->field_E2 = g_pBaldurChitin->m_bFullscreen == FALSE;
+        g_pBaldurChitin->m_nNextFullscreen = g_pBaldurChitin->m_bFullscreen == FALSE;
     }
 }
 

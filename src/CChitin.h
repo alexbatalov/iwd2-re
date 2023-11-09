@@ -163,8 +163,8 @@ public:
     /* 00C4 */ CRITICAL_SECTION field_C4;
     /* 00DC */ CString m_sCommandLine;
     /* 00E0 */ unsigned char field_E0;
-    /* 00E1 */ BOOLEAN m_bFullscreen; // #guess
-    /* 00E2 */ unsigned char field_E2;
+    /* 00E1 */ BOOLEAN m_bFullscreen;
+    /* 00E2 */ BOOLEAN m_nNextFullscreen;
     /* 00E4 */ int field_E4;
     /* 00E8 */ RECT field_E8;
     /* 00F8 */ unsigned char field_F8;
