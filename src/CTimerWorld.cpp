@@ -272,7 +272,7 @@ void CTimerWorld::StopTime()
     m_gameTime--;
     m_nLastPercentage = -1;
 
-    if (g_pBaldurChitin->m_pEngineWorld->GetManager() != NULL) {
+    if (g_pBaldurChitin->m_pEngineWorld->GetManager()->m_bHidden) {
         g_pBaldurChitin->m_pEngineWorld->m_nAutoHideInterface++;
         g_pBaldurChitin->m_pEngineWorld->UnhideInterface();
     }
