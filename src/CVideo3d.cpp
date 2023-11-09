@@ -2000,6 +2000,27 @@ BOOL CVidMode::CheckResults3d(int rc)
     return bResult;
 }
 
+// 0x7BED50
+void CVidMode::AddDisposableTexture(INT nTextureId)
+{
+    CSingleLock lock(&m_disposableTexturesCritSect, FALSE);
+    lock.Lock(INFINITE);
+
+    POSITION pos = m_lDisposableTextureIds.GetHeadPosition();
+    while (pos != NULL) {
+        INT nCurrTextureId = reinterpret_cast<INT>(m_lDisposableTextureIds.GetNext(pos));
+        if (nCurrTextureId == nTextureId) {
+            break;
+        }
+    }
+
+    if (pos == NULL) {
+        m_lDisposableTextureIds.AddTail(reinterpret_cast<INT*>(nTextureId));
+    }
+
+    lock.Unlock();
+}
+
 // 0x7BEDE0
 void CVidMode::DeleteDisposableTextures()
 {
