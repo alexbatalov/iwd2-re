@@ -1742,7 +1742,63 @@ BOOL CVidCell::Blt8To32(DWORD* pSurface, LONG lPitch, const CPoint& pt, const CR
             nBltH--;
         }
     } else {
-        // TODO: Incomplete.
+        INT nSrcJump = ptSource.x;
+        INT nBltH = nBltHeight;
+        INT nBltW = nBltWidth;
+
+        pFrameData += m_pFrame->nWidth * ptSource.y + ptSource.x;
+
+        if (pt.y < rClip.top) {
+            nBltH -= rClip.top - pt.y;
+            pDest += lPitch / 4 * (rClip.top - pt.y);
+            pFrameData += m_pFrame->nWidth * (rClip.top - pt.y);
+        }
+
+        if (pt.y + nBltHeight > rClip.bottom) {
+            nBltH -= pt.y + nBltHeight - rClip.bottom;
+        }
+
+        if (pt.x < rClip.left) {
+            nBltW -= rClip.left - pt.x;
+            nSrcJump += rClip.left - pt.x;
+            pFrameData += rClip.left - pt.x;
+            pSurface += rClip.left - pt.x;
+        }
+
+        if (pt.x + nBltWidth > rClip.right) {
+            nBltW -= pt.x + nBltWidth - rClip.right;
+            nSrcJump += pt.x + nBltWidth - rClip.right;
+        }
+
+        if (nTransVal == 0) {
+            for (int y = 0; y < nBltH; y++) {
+                for (int x = 0; x < nBltW; x++) {
+                    BYTE nColor = *pFrameData;
+                    if (nColor != nTransparentColor) {
+                        *pDest = CVidImage::rgbTempPal[nColor];
+                    }
+                    pFrameData++;
+                    pDest++;
+                }
+                pDest += lPitch / 4 - nBltWidth;
+                pFrameData += nSrcJump;
+            }
+        } else {
+            for (int y = 0; y < nBltH; y++) {
+                for (int x = 0; x < nBltW; x++) {
+                    BYTE nColor = *pFrameData;
+                    if (nColor == nTransparentColor) {
+                        *pDest &= 0xFFFFFF;
+                    } else {
+                        *pDest = (*pDest & 0xFFFFFF) | ((nColor * (*pDest >> 24)) << 16) & 0xFF000000;
+                    }
+                    pFrameData++;
+                    pDest++;
+                }
+                pDest += lPitch / 4 - nBltWidth;
+                pFrameData += nSrcJump;
+            }
+        }
     }
 
     return TRUE;
