@@ -3,6 +3,9 @@
 #include "CUIControlTextDisplay.h"
 #include "CUtil.h"
 
+// 0x8483C0
+const INT CChatBuffer::MAX_MESSAGES = 30;
+
 // #binary-identical
 // 0x442B90
 CChatBuffer::CChatBuffer()
@@ -30,7 +33,7 @@ CChatBuffer::~CChatBuffer()
 void CChatBuffer::AddMessage(const CString& sMessage)
 {
     m_lMessages.AddTail(new CString(sMessage));
-    if (m_lMessages.GetCount() > 30) {
+    if (m_lMessages.GetCount() > MAX_MESSAGES) {
         CString* pString = m_lMessages.GetHead();
         delete pString;
         m_lMessages.RemoveHead();

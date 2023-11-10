@@ -7,6 +7,8 @@ class CUIControlTextDisplay;
 
 class CChatBuffer {
 public:
+    static const INT MAX_MESSAGES;
+
     CChatBuffer();
     ~CChatBuffer();
     void AddMessage(const CString& sMessage);
