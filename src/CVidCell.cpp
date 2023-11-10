@@ -2488,17 +2488,129 @@ BOOL CVidCell::Render3d(INT nRefPtX, INT nRefPtY, const CRect& rClip, BOOLEAN bD
 // 0x7C5210
 BOOL CVidCell::FXRender3d(INT nRefPtX, INT nRefPtY, const CRect& rFXRect, DWORD dwFlags, INT nTransVal, BOOL bAlphaValues)
 {
-    // TODO: Incomplete.
+    BOOL bResult;
 
-    return FALSE;
+    INT nNewTransVal = 255;
+    if (nTransVal != -1) {
+        nNewTransVal = 255 - nTransVal;
+    }
+
+    if (m_pFrame == NULL) {
+        if (!GetFrame(FALSE)) {
+            // __FILE__: C:\Projects\Icewind2\src\chitin\ChVidImage3d.cpp
+            // __LINE__: 960
+            UTIL_ASSERT(FALSE);
+        }
+    }
+
+    if (!bAlphaValues) {
+        if (!m_bPaletteChanged) {
+            m_cPalette.SetPalette(pRes->m_pPalette, 256, CVidPalette::TYPE_RESOURCE);
+        }
+
+        m_cPalette.Realize(CVidImage::rgbTempPal,
+            32,
+            dwFlags,
+            &m_paletteAffects,
+            nNewTransVal);
+
+        if (!m_bShadowOn) {
+            CVidImage::rgbTempPal[CVidPalette::SHADOW_ENTRY] = RGB(0, 0, 0);
+        }
+    }
+
+    CRect rClip(0, 0, CVideo::SCREENWIDTH, CVideo::SCREENHEIGHT);
+    bResult = FXRender3d(nRefPtX, nRefPtY, rFXRect, rClip, TRUE, dwFlags, bAlphaValues);
+    m_pFrame = NULL;
+
+    return bResult;
 }
 
 // 0x7C5330
-BOOL CVidCell::FXRender3d(INT nRefPtX, INT nRefPtY, const CRect& rFXRect, const CRect& rClip, BOOLEAN a5, DWORD dwFlags, BOOL bAlphaValues)
+BOOL CVidCell::FXRender3d(INT nRefPtX, INT nRefPtY, const CRect& rFXRect, const CRect& rClip, BOOLEAN bDemanded, DWORD dwFlags, BOOL bAlphaValues)
 {
-    // TODO: Incomplete.
+    BOOL bResult;
+    CPoint pt(0, 0);
+    CSize size;
+    CRect r;
 
-    return FALSE;
+    if (m_pFrame == NULL) {
+        if (!GetFrame(bDemanded)) {
+            return FALSE;
+        }
+    }
+
+    INT x = nRefPtX - m_pFrame->nCenterX;
+    INT y = nRefPtY - m_pFrame->nCenterY;
+
+    size.cx = min(m_pFrame->nWidth, CVidInf::FX_WIDTH);
+    size.cy = min(m_pFrame->nHeight, CVidInf::FX_HEIGHT);
+
+    if ((dwFlags & 0x40) != 0) {
+        pt.x = x;
+        pt.y = y;
+        r.SetRect(max(x, rClip.left),
+            max(y, rClip.top),
+            min(x + size.cx, rClip.right),
+            min(y + size.cy, rClip.bottom));
+    } else {
+        r.SetRect(pt, pt + size);
+    }
+
+    r.NormalizeRect();
+
+    CVideo3d::glEnable(GL_TEXTURE_2D);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    g_pChitin->cVideo.field_13E = 2;
+    CVideo3d::glBindTexture(GL_TEXTURE_2D, 2);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    LONG lPitch = g_pChitin->cVideo.field_13A
+        ? CVidTile::BYTES_PER_TEXEL * CVIDINF_FX_WIDTH
+        : CVidTile::BYTES_PER_TEXEL * m_pFrame->nWidth;
+
+    bResult = Blt8To32(CVideo3d::texImageData,
+        lPitch,
+        pt,
+        rClip,
+        dwFlags,
+        CPoint(0, 0),
+        bAlphaValues);
+
+    if (bResult) {
+        CVideo3d::glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+        if ((dwFlags & 0x40) == 0) {
+            RenderTexture(x,
+                y,
+                CRect(0, 0, size.cx, size.cy),
+                rFXRect.Size(),
+                rClip,
+                dwFlags);
+        }
+    }
+
+    if (!bDemanded) {
+        pRes->Release();
+    }
+
+    m_pFrame = NULL;
+
+    return bResult;
 }
 
 // 0x58FC70
