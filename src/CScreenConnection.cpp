@@ -402,8 +402,8 @@ void CScreenConnection::EngineInitialized()
 
     m_cUIManager.ShiftPanels(pt);
 
-    for (int n = 0; n < 4; n++) {
-        m_cUIManager.AddPanel(&(g_pBaldurChitin->field_49B4[n]));
+    for (int side = 0; side < 4; side++) {
+        m_cUIManager.AddPanel(&(g_pBaldurChitin->m_aBorderPanels[side]));
     }
 
     m_pCurrentScrollBar = NULL;

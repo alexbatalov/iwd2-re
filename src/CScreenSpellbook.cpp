@@ -208,8 +208,6 @@ void CScreenSpellbook::EngineDeactivated()
 // 0x668ED0
 void CScreenSpellbook::EngineGameInit()
 {
-    int index;
-
     m_cUIManager.fInit(this, CResRef("GUISPL"), g_pBaldurChitin->field_4A28);
 
     CPoint pt;
@@ -223,8 +221,8 @@ void CScreenSpellbook::EngineGameInit()
 
     m_cUIManager.ShiftPanels(pt);
 
-    for (index = 0; index < 4; index++) {
-        m_cUIManager.AddPanel(&(g_pBaldurChitin->field_49B4[index]));
+    for (int side = 0; side < 4; side++) {
+        m_cUIManager.AddPanel(&(g_pBaldurChitin->m_aBorderPanels[side]));
     }
 
     m_nSelectedCharacter = -1;
@@ -236,7 +234,7 @@ void CScreenSpellbook::EngineGameInit()
     m_pFlashCurrentSpell = NULL;
     m_spellResRef = "";
 
-    for (index = 0; index < 24; index++) {
+    for (int index = 0; index < 24; index++) {
         field_148C[index] = CResRef();
         field_154C[index] = 0;
     }

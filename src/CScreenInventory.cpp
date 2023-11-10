@@ -392,8 +392,8 @@ void CScreenInventory::EngineGameInit()
 
     m_cUIManager.ShiftPanels(pt);
 
-    for (int index = 0; index < 4; index++) {
-        m_cUIManager.AddPanel(&(g_pBaldurChitin->field_49B4[index]));
+    for (int side = 0; side < 4; side++) {
+        m_cUIManager.AddPanel(&(g_pBaldurChitin->m_aBorderPanels[side]));
     }
 
     if (m_pTempItem != NULL) {

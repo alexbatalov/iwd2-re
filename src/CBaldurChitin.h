@@ -192,7 +192,7 @@ public:
     /* 49B1 */ unsigned char field_49B1;
     /* 49AC */ CString field_49AC;
     /* 49B2 */ BOOLEAN m_bIsAutoStarting;
-    /* 49B4 */ UI_PANELHEADER field_49B4[4];
+    /* 49B4 */ UI_PANELHEADER m_aBorderPanels[4];
     /* 4A24 */ int field_4A24;
     /* 4A28 */ int field_4A28;
     /* 4A2C */ int field_4A2C;

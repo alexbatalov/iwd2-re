@@ -244,7 +244,7 @@ CBaldurChitin::CBaldurChitin()
 
     cVideo.m_bIs3dAccelerated = FALSE;
 
-    memset(field_49B4, 0, sizeof(field_49B4));
+    memset(m_aBorderPanels, 0, sizeof(m_aBorderPanels));
     field_4A24 = 1;
 
     CVideo::SCREENWIDTH = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
@@ -261,7 +261,9 @@ CBaldurChitin::CBaldurChitin()
     field_4A28 = 0;
     field_4A2C = 0;
 
-    // TODO: Check, assignments to rects are in random order.
+    INT nLogicalScreenWidth;
+    INT nLogicalScreenHeight;
+
     switch (CVideo::SCREENWIDTH) {
     case 2048:
         CInfinity::stru_8E7538.left = 0;
@@ -316,10 +318,16 @@ CBaldurChitin::CBaldurChitin()
 
         CVideo::SCREENHEIGHT = 1536;
         CHUI_GUIEXT = "10";
-        strncpy(reinterpret_cast<char*>(field_49B4[0].refMosaic), "STON10L", RESREF_SIZE);
-        strncpy(reinterpret_cast<char*>(field_49B4[1].refMosaic), "STON10R", RESREF_SIZE);
-        strncpy(reinterpret_cast<char*>(field_49B4[2].refMosaic), "STON10T", RESREF_SIZE);
-        strncpy(reinterpret_cast<char*>(field_49B4[3].refMosaic), "STON10B", RESREF_SIZE);
+        strncpy(reinterpret_cast<char*>(m_aBorderPanels[0].refMosaic), "STON10L", RESREF_SIZE);
+        strncpy(reinterpret_cast<char*>(m_aBorderPanels[1].refMosaic), "STON10R", RESREF_SIZE);
+        strncpy(reinterpret_cast<char*>(m_aBorderPanels[2].refMosaic), "STON10T", RESREF_SIZE);
+        strncpy(reinterpret_cast<char*>(m_aBorderPanels[3].refMosaic), "STON10B", RESREF_SIZE);
+
+        field_4A2C = 1;
+        field_4A28 = 1;
+
+        nLogicalScreenWidth = 1024;
+        nLogicalScreenHeight = 768;
         break;
     case 1600:
         CInfinity::stru_8E7538.left = 0;
@@ -374,6 +382,12 @@ CBaldurChitin::CBaldurChitin()
 
         CVideo::SCREENHEIGHT = 1200;
         CHUI_GUIEXT = "08";
+
+        field_4A2C = 1;
+        field_4A28 = 1;
+
+        nLogicalScreenWidth = 800;
+        nLogicalScreenHeight = 600;
         break;
     case 1024:
         CInfinity::stru_8E7538.left = 0;
@@ -428,10 +442,13 @@ CBaldurChitin::CBaldurChitin()
 
         CVideo::SCREENHEIGHT = 768;
         CHUI_GUIEXT = "10";
-        strncpy(reinterpret_cast<char*>(field_49B4[0].refMosaic), "STON10L", RESREF_SIZE);
-        strncpy(reinterpret_cast<char*>(field_49B4[1].refMosaic), "STON10R", RESREF_SIZE);
-        strncpy(reinterpret_cast<char*>(field_49B4[2].refMosaic), "STON10T", RESREF_SIZE);
-        strncpy(reinterpret_cast<char*>(field_49B4[3].refMosaic), "STON10B", RESREF_SIZE);
+        strncpy(reinterpret_cast<char*>(m_aBorderPanels[0].refMosaic), "STON10L", RESREF_SIZE);
+        strncpy(reinterpret_cast<char*>(m_aBorderPanels[1].refMosaic), "STON10R", RESREF_SIZE);
+        strncpy(reinterpret_cast<char*>(m_aBorderPanels[2].refMosaic), "STON10T", RESREF_SIZE);
+        strncpy(reinterpret_cast<char*>(m_aBorderPanels[3].refMosaic), "STON10B", RESREF_SIZE);
+
+        nLogicalScreenWidth = 1024;
+        nLogicalScreenHeight = 768;
         break;
     case 800:
     default:
@@ -487,40 +504,45 @@ CBaldurChitin::CBaldurChitin()
 
         CVideo::SCREENHEIGHT = 600;
         CHUI_GUIEXT = "08";
+
+        nLogicalScreenWidth = 800;
+        nLogicalScreenHeight = 600;
         break;
     }
 
     CVidMode::word_8BA320 = static_cast<SHORT>(3 * (((CInfinity::stru_8E7548.right - CInfinity::stru_8E7548.left + 63) / 64 + 1) * ((CInfinity::stru_8E7548.bottom - CInfinity::stru_8E7548.top + 63) / 64 + 1)) / 2);
 
-    // TODO: Check assignments to `field_49B4`. In binary they appear in random
-    // order.
-    field_49B4[0].nPanelID = -5;
-    field_49B4[0].x = 0;
-    field_49B4[0].y = 0;
-    field_49B4[0].nWidth = (CVideo::SCREENWIDTH - DEFAULT_SCREEN_WIDTH) / 2;
-    field_49B4[0].nHeight = CVideo::SCREENHEIGHT;
-    field_49B4[0].nType = 1;
+    // Left.
+    m_aBorderPanels[0].nPanelID = -5;
+    m_aBorderPanels[0].x = 0;
+    m_aBorderPanels[0].y = 0;
+    m_aBorderPanels[0].nWidth = (nLogicalScreenWidth - DEFAULT_SCREEN_WIDTH) / 2;
+    m_aBorderPanels[0].nHeight = nLogicalScreenHeight;
+    m_aBorderPanels[0].nType = 1;
 
-    field_49B4[1].nPanelID = -4;
-    field_49B4[1].x = field_49B4[0].nWidth + DEFAULT_SCREEN_WIDTH;
-    field_49B4[1].y = 0;
-    field_49B4[1].nWidth = (CVideo::SCREENWIDTH - DEFAULT_SCREEN_WIDTH) / 2;
-    field_49B4[1].nHeight = CVideo::SCREENHEIGHT;
-    field_49B4[1].nType = 1;
+    // Right.
+    m_aBorderPanels[1].nPanelID = -4;
+    m_aBorderPanels[1].x = m_aBorderPanels[0].nWidth + DEFAULT_SCREEN_WIDTH;
+    m_aBorderPanels[1].y = 0;
+    m_aBorderPanels[1].nWidth = (nLogicalScreenWidth - DEFAULT_SCREEN_WIDTH) / 2;
+    m_aBorderPanels[1].nHeight = nLogicalScreenHeight;
+    m_aBorderPanels[1].nType = 1;
 
-    field_49B4[2].nPanelID = -3;
-    field_49B4[2].x = field_49B4[0].nWidth;
-    field_49B4[2].y = 0;
-    field_49B4[2].nWidth = DEFAULT_SCREEN_WIDTH;
-    field_49B4[2].nHeight = (CVideo::SCREENHEIGHT - DEFAULT_SCREEN_HEIGHT) / 2;
-    field_49B4[2].nType = 1;
+    // Top.
+    m_aBorderPanels[2].nPanelID = -3;
+    m_aBorderPanels[2].x = m_aBorderPanels[0].nWidth;
+    m_aBorderPanels[2].y = 0;
+    m_aBorderPanels[2].nWidth = DEFAULT_SCREEN_WIDTH;
+    m_aBorderPanels[2].nHeight = (nLogicalScreenHeight - DEFAULT_SCREEN_HEIGHT) / 2;
+    m_aBorderPanels[2].nType = 1;
 
-    field_49B4[3].nPanelID = -2;
-    field_49B4[3].x = field_49B4[0].nWidth;
-    field_49B4[3].y = field_49B4[2].nHeight + DEFAULT_SCREEN_HEIGHT;
-    field_49B4[3].nWidth = DEFAULT_SCREEN_WIDTH;
-    field_49B4[3].nHeight = (CVideo::SCREENHEIGHT - DEFAULT_SCREEN_HEIGHT) / 2;
-    field_49B4[3].nType = 1;
+    // Bottom.
+    m_aBorderPanels[3].nPanelID = -2;
+    m_aBorderPanels[3].x = m_aBorderPanels[0].nWidth;
+    m_aBorderPanels[3].y = m_aBorderPanels[2].nHeight + DEFAULT_SCREEN_HEIGHT;
+    m_aBorderPanels[3].nWidth = DEFAULT_SCREEN_WIDTH;
+    m_aBorderPanels[3].nHeight = (nLogicalScreenHeight - DEFAULT_SCREEN_HEIGHT) / 2;
+    m_aBorderPanels[3].nType = 1;
 
     m_ptScreen.x = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
         SCREEN_POSITION_X_KEY,
