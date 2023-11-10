@@ -75,9 +75,94 @@ BYTE* CResBitmap::GetImageData(BOOL bDoubleSize)
         return pBitmapData;
     }
 
-    // TODO: Incomplete (creating double-sized bitmap).
+    if (m_pDimmKeyTableEntry != NULL) {
+        if (m_pDimmKeyTableEntry->resRef == g_pChitin->cVideo.field_114
+            && m_pDimmKeyTableEntry->nResType == g_pChitin->cVideo.field_11C) {
+            return reinterpret_cast<BYTE*>(g_pChitin->cVideo.m_doubleSizeData);
+        }
+        g_pChitin->cVideo.field_114 = m_pDimmKeyTableEntry->resRef;
+        g_pChitin->cVideo.field_11C = m_pDimmKeyTableEntry->nResType;
+    } else {
+        g_pChitin->cVideo.field_114 = CResRef("");
+        g_pChitin->cVideo.field_11C = -1;
+    }
 
-    return NULL;
+    g_pChitin->cVideo.field_11E = 0;
+    g_pChitin->cVideo.SetDoubleSizeData(2 * pBitmapInfoHeader->biHeight * ((2 * pBitmapInfoHeader->biWidth * pBitmapInfoHeader->biBitCount / 8 + 3) & ~3));
+
+    BYTE* pSrc = pBitmapData;
+    BYTE* pDest = reinterpret_cast<BYTE*>(g_pChitin->cVideo.m_doubleSizeData);
+
+    INT nHeight = pBitmapInfoHeader->biHeight;
+    INT nWidth = pBitmapInfoHeader->biWidth;
+    INT nOffset = (2 * pBitmapInfoHeader->biWidth * pBitmapInfoHeader->biBitCount / 8 + 3) & ~3;
+    INT nDestJump = nOffset - 2 * pBitmapInfoHeader->biWidth * pBitmapInfoHeader->biBitCount / 8;
+    INT nSrcJump = ((pBitmapInfoHeader->biWidth * pBitmapInfoHeader->biBitCount / 8 + 3) & ~3) - pBitmapInfoHeader->biWidth * pBitmapInfoHeader->biBitCount / 8;
+
+    BYTE color;
+    BYTE r;
+    BYTE g;
+    BYTE b;
+    int x;
+    int y;
+
+    switch (pBitmapInfoHeader->biBitCount) {
+    case 8:
+        for (y = 0; y < nHeight; y++) {
+            for (x = 0; x < nWidth; x++) {
+                color = *pSrc++;
+                pDest[0] = color;
+                pDest[nOffset] = color;
+                pDest[1] = color;
+                pDest[nOffset + 1] = color;
+                pDest += 2;
+            }
+            pSrc += nSrcJump;
+            pDest += nOffset + nDestJump;
+        }
+        break;
+    case 24:
+        for (y = 0; y < nHeight; y++) {
+            for (x = 0; x < nWidth; x++) {
+                r = *pSrc++;
+                g = *pSrc++;
+                b = *pSrc++;
+
+                pDest[0] = r;
+                pDest[nOffset] = r;
+                pDest++;
+
+                pDest[0] = g;
+                pDest[nOffset] = g;
+                pDest++;
+
+                pDest[0] = b;
+                pDest[nOffset] = b;
+                pDest++;
+
+                pDest[0] = r;
+                pDest[nOffset] = r;
+                pDest++;
+
+                pDest[0] = g;
+                pDest[nOffset] = g;
+                pDest++;
+
+                pDest[0] = b;
+                pDest[nOffset] = b;
+                pDest++;
+            }
+            pSrc += nSrcJump;
+            pDest += nOffset + nDestJump;
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\chitin\ChDataTypes.cpp
+        // __LINE__: 1564
+        UTIL_ASSERT(FALSE);
+    }
+
+    return reinterpret_cast<BYTE*>(g_pChitin->cVideo.m_doubleSizeData);
 }
 
 // 0x77EF70
