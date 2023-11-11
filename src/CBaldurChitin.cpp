@@ -242,7 +242,12 @@ CBaldurChitin::CBaldurChitin()
         CVideo::FPS = 60;
     }
 
-    cVideo.m_bIs3dAccelerated = FALSE;
+    // NOTE: Original code simply sets `m_bIs3dAccelerated` to `FALSE`. In order
+    // to ease testing 3D implementation this value is loaded from settings.
+    cVideo.m_bIs3dAccelerated = GetPrivateProfileIntA(PROGRAM_OPTIONS_SECTION_KEY,
+        IS_3D_ACCELERATED,
+        FALSE,
+        FILE_NAME);
 
     memset(m_aBorderPanels, 0, sizeof(m_aBorderPanels));
     field_4A24 = 1;
