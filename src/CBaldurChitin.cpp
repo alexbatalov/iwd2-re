@@ -799,13 +799,13 @@ CRes* CBaldurChitin::AllocResObject(int nType)
 // 0x4237A0
 void CBaldurChitin::AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD dw1, DWORD dw2)
 {
-    if (!field_E0) {
+    if (!m_bReInitializing) {
         m_cMessageHandler.AsynchronousUpdate();
     }
 
     CChitin::AsynchronousUpdate(nTimerID, uMsg, dwUser, dw1, dw2);
 
-    if (!field_E0) {
+    if (!m_bReInitializing) {
         m_cMessageHandler.PostAsynchronousUpdate();
     }
 }

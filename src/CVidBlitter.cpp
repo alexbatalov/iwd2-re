@@ -95,7 +95,7 @@ void CVidBlitter::Reset()
         g_pChitin->pActiveEngine->EngineDeactivated();
     }
 
-    g_pChitin->field_E0 = 1;
+    g_pChitin->m_bReInitializing = TRUE;
 
     CVidMode* pVidMode = g_pChitin->cVideo.m_pCurrentVidMode;
     g_pChitin->cVideo.CleanUp();

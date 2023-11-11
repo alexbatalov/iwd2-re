@@ -635,7 +635,7 @@ void CChitin::InitializeVariables()
     field_13A = -1;
     field_13E = 0;
     field_142 = 0;
-    field_E0 = 0;
+    m_bReInitializing = FALSE;
     m_bFullscreen = TRUE;
     m_nNextFullscreen = TRUE;
     field_E4 = 0;
@@ -977,7 +977,7 @@ BOOLEAN CChitin::OnAltEnter(BOOLEAN bSave)
     }
 
     field_F8 = 1;
-    field_E0 = 1;
+    m_bReInitializing = TRUE;
 
     if (pActiveEngine != NULL) {
         pActiveEngine->EngineDeactivated();
@@ -1070,7 +1070,7 @@ void CChitin::OnAltTab(HWND hWnd, BOOL a2)
     } else {
         byte_8FB950 = 1;
         field_1C4A = 0;
-        field_E0 = 1;
+        m_bReInitializing = TRUE;
 
         if (pActiveEngine != NULL) {
             pActiveEngine->EngineDeactivated();
@@ -1156,7 +1156,7 @@ int CChitin::AskCloseConfirmation()
     int iResult;
     if (m_bFullscreen) {
         field_F8 = 1;
-        field_E0 = 1;
+        m_bReInitializing = TRUE;
 
         if (pActiveEngine != NULL) {
             pActiveEngine->EngineDeactivated();
@@ -1201,7 +1201,7 @@ int CChitin::AskCloseConfirmation()
             ShutDown(-1, NULL, NULL);
         }
     } else {
-        field_E0 = 1;
+        m_bReInitializing = TRUE;
         iResult = MessageBoxA(NULL, sCloseConfirmation, m_sGameName, dwFlags);
         Resume();
     }
@@ -1280,7 +1280,7 @@ void CChitin::AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD d
     int v1 = 0;
     CSingleLock positionLock(&m_csPointerPosition, FALSE);
 
-    if (!field_E0) {
+    if (!m_bReInitializing) {
         nAUCounter++;
 
         if (field_4C && !m_bExitRSThread) {
@@ -1656,7 +1656,7 @@ void CChitin::Resume()
         }
     }
 
-    field_E0 = 0;
+    m_bReInitializing = FALSE;
 }
 
 // #not-binary-identical
@@ -2008,7 +2008,7 @@ void CChitin::ShutDown(int nLineNumber, const char* szFileName, const char* text
     if (!field_1932) {
         field_1932 = TRUE;
 
-        field_E0 = 1;
+        m_bReInitializing = TRUE;
         if (field_BC != 0) {
             field_BC = timeKillEvent(field_BC);
         }
@@ -2090,7 +2090,7 @@ void CChitin::SynchronousUpdate()
         }
     }
 
-    if (m_bEngineActive && pActiveEngine != NULL && !field_E0) {
+    if (m_bEngineActive && pActiveEngine != NULL && !m_bReInitializing) {
         if (cDimm.m_bCDSwitchActivated == TRUE) {
             SetCDSwitchStatus(TRUE,
                 TRUE,

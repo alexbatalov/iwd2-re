@@ -318,7 +318,7 @@ void CVideo::ChangeBppValue()
             if (g_pChitin->pActiveEngine != NULL) {
                 g_pChitin->pActiveEngine->EngineDeactivated();
             }
-            g_pChitin->field_E0 = 1;
+            g_pChitin->m_bReInitializing = TRUE;
 
             CVidMode* pVidMode = m_pCurrentVidMode;
 

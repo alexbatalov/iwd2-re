@@ -162,7 +162,7 @@ public:
     /* 00C0 */ int field_C0;
     /* 00C4 */ CRITICAL_SECTION field_C4;
     /* 00DC */ CString m_sCommandLine;
-    /* 00E0 */ unsigned char field_E0;
+    /* 00E0 */ BOOLEAN m_bReInitializing;
     /* 00E1 */ BOOLEAN m_bFullscreen;
     /* 00E2 */ BOOLEAN m_nNextFullscreen;
     /* 00E4 */ int field_E4;

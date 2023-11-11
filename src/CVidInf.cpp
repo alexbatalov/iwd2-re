@@ -134,7 +134,7 @@ BOOL CVidInf::ActivateVideoMode(CVidMode* pPrevVidMode, HWND hWnd, BOOLEAN bFull
         if ((g_pChitin->cVideo.m_nBpp == 16 && !g_pChitin->cVideo.m_bSupports16bpp)
             || (g_pChitin->cVideo.m_nBpp == 24 && !g_pChitin->cVideo.m_bSupports24bpp)
             || (g_pChitin->cVideo.m_nBpp == 32 && !g_pChitin->cVideo.m_bSupports32bpp)) {
-            g_pChitin->field_E0 = TRUE;
+            g_pChitin->m_bReInitializing = TRUE;
             PostMessageA(g_pChitin->GetWnd()->GetSafeHwnd(), WM_DESTROY, 0, 0);
             return FALSE;
         }
