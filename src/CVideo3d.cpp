@@ -1487,9 +1487,94 @@ BOOL CVidMode::DrawRect3d(const CRect& r, const CRect& rClip, COLORREF rgbColor)
 // 0x7BC580
 BOOL CVidMode::DrawEllipse3d(const CPoint& ptCenter, const CSize& axis, const CRect& rClip, COLORREF rgbColor)
 {
-    // TODO: Incomplete.
+    BYTE* pPixelList = new BYTE[max(axis.cx, axis.cy)];
+    LONG nArcLength = GetEllipseArcPixelList(axis.cx, axis.cy, pPixelList);
 
-    return FALSE;
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo3d.cpp
+    // __LINE__: 675
+    UTIL_ASSERT(nArcLength <= max(axis.cx, axis.cy));
+
+    DrawEllipseHOctant3d(ptCenter.x,
+        ptCenter.y - axis.cy,
+        nArcLength,
+        -1,
+        1,
+        pPixelList,
+        &rClip,
+        rgbColor);
+
+    DrawEllipseHOctant3d(ptCenter.x + 1,
+        ptCenter.y + pPixelList[0] - axis.cy,
+        nArcLength - 1,
+        1,
+        1,
+        pPixelList + 1,
+        &rClip,
+        rgbColor);
+
+    DrawEllipseHOctant3d(ptCenter.x,
+        ptCenter.y + axis.cy,
+        nArcLength,
+        -1,
+        -1,
+        pPixelList,
+        &rClip,
+        rgbColor);
+
+    DrawEllipseHOctant3d(ptCenter.x + 1,
+        ptCenter.y - pPixelList[0] + axis.cy,
+        nArcLength - 1,
+        1,
+        -1,
+        pPixelList + 1,
+        &rClip,
+        rgbColor);
+
+    nArcLength = GetEllipseArcPixelList(axis.cy, axis.cx, pPixelList);
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo3d.cpp
+    // __LINE__: 698
+    UTIL_ASSERT(nArcLength < max(axis.cx, axis.cy));
+
+    DrawEllipseVOctant3d(ptCenter.x - axis.cx,
+        ptCenter.y,
+        nArcLength,
+        1,
+        -1,
+        pPixelList,
+        &rClip,
+        rgbColor);
+
+    DrawEllipseVOctant3d(ptCenter.x + pPixelList[0] - axis.cx,
+        ptCenter.y + 1,
+        nArcLength - 1,
+        1,
+        1,
+        pPixelList + 1,
+        &rClip,
+        rgbColor);
+
+    DrawEllipseVOctant3d(ptCenter.x + axis.cx,
+        ptCenter.y,
+        nArcLength,
+        -1,
+        -1,
+        pPixelList,
+        &rClip,
+        rgbColor);
+
+    DrawEllipseVOctant3d(ptCenter.x - pPixelList[0] + axis.cx,
+        ptCenter.y + 1,
+        nArcLength - 1,
+        -1,
+        1,
+        pPixelList + 1,
+        &rClip,
+        rgbColor);
+
+    delete pPixelList;
+
+    return TRUE;
 }
 
 // 0x7BC7A0
