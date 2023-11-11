@@ -1493,11 +1493,274 @@ BOOL CVidMode::DrawEllipse3d(const CPoint& ptCenter, const CSize& axis, const CR
 }
 
 // 0x7BC7A0
-BOOL CVidMode::DrawRecticle3d(const CVIDMODE_RECTICLE_DESCRIPTION& rd, const CRect& rClip, COLORREF rgbColor)
+BOOL CVidMode::DrawRecticle3d(const CVIDMODE_RECTICLE_DESCRIPTION& recticleDesc, const CRect& rClip, COLORREF rgbColor)
 {
-    // TODO: Incomplete.
+    BYTE* pPixelList = new BYTE[max(recticleDesc.xAxis, recticleDesc.yAxis)];
+    CRect rLineClip(rClip.left, rClip.top, rClip.right - 1, rClip.bottom - 1);
 
-    return FALSE;
+    INT v1 = recticleDesc.xAxis + recticleDesc.piePieceXOffset;
+    INT v2 = recticleDesc.yAxis + recticleDesc.piePieceYOffset;
+    INT v3;
+
+    LONG nArcLength = GetEllipseArcPixelList(recticleDesc.xAxis,
+        recticleDesc.yAxis,
+        pPixelList);
+
+    nArcLength -= 1;
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo3d.cpp
+    // __LINE__: 757
+    UTIL_ASSERT(nArcLength < max(recticleDesc.xAxis, recticleDesc.yAxis));
+
+    v3 = DrawEllipseHOctant3d(recticleDesc.ptCenter.x,
+        recticleDesc.ptCenter.y - v2,
+        nArcLength - recticleDesc.xGap,
+        -1,
+        1,
+        pPixelList,
+        &rClip,
+        rgbColor);
+
+    DrawLine3d(recticleDesc.ptCenter.x + recticleDesc.xGap - nArcLength,
+        v3,
+        recticleDesc.ptCenter.x,
+        recticleDesc.ptCenter.y + recticleDesc.piePiecePtYOffset - v2,
+        rLineClip,
+        rgbColor);
+
+    v3 = DrawEllipseHOctant3d(recticleDesc.ptCenter.x + 1,
+        recticleDesc.ptCenter.y + pPixelList[0] - v2,
+        nArcLength - recticleDesc.xGap - 1,
+        1,
+        1,
+        pPixelList + 1,
+        &rClip,
+        rgbColor);
+
+    DrawLine3d(recticleDesc.ptCenter.x - recticleDesc.xGap + nArcLength,
+        v3,
+        recticleDesc.ptCenter.x,
+        recticleDesc.ptCenter.y + recticleDesc.piePiecePtYOffset - v2,
+        rLineClip,
+        rgbColor);
+
+    v3 = DrawEllipseHOctant3d(recticleDesc.ptCenter.x,
+        recticleDesc.ptCenter.y + v2,
+        nArcLength - recticleDesc.xGap,
+        -1,
+        -1,
+        pPixelList,
+        &rClip,
+        rgbColor);
+
+    DrawLine3d(recticleDesc.ptCenter.x + recticleDesc.xGap - nArcLength,
+        v3,
+        recticleDesc.ptCenter.x,
+        recticleDesc.ptCenter.y - recticleDesc.piePiecePtYOffset + v2,
+        rLineClip,
+        rgbColor);
+
+    v3 = DrawEllipseHOctant3d(recticleDesc.ptCenter.x + 1,
+        recticleDesc.ptCenter.y - pPixelList[0] + v2,
+        nArcLength - recticleDesc.xGap - 1,
+        1,
+        -1,
+        pPixelList + 1,
+        &rClip,
+        rgbColor);
+
+    DrawLine3d(recticleDesc.ptCenter.x - recticleDesc.xGap + nArcLength,
+        v3,
+        recticleDesc.ptCenter.x,
+        recticleDesc.ptCenter.y - recticleDesc.piePiecePtYOffset + v2,
+        rLineClip,
+        rgbColor);
+
+    nArcLength = GetEllipseArcPixelList(recticleDesc.yAxis,
+        recticleDesc.xAxis,
+        pPixelList);
+
+    // __FILE__: C:\Projects\Icewind2\src\chitin\ChVideo3d.cpp
+    // __LINE__: 789
+    UTIL_ASSERT(nArcLength < max(recticleDesc.xAxis, recticleDesc.yAxis));
+
+    v3 = DrawEllipseVOctant3d(recticleDesc.ptCenter.x - v1,
+        recticleDesc.ptCenter.y,
+        nArcLength - recticleDesc.yGap,
+        1,
+        -1,
+        pPixelList,
+        &rClip,
+        rgbColor);
+
+    DrawLine3d(v3,
+        recticleDesc.ptCenter.y + recticleDesc.yGap - nArcLength,
+        recticleDesc.ptCenter.x + recticleDesc.piePiecePtXOffset - v1,
+        recticleDesc.ptCenter.y,
+        rLineClip,
+        rgbColor);
+
+    v3 = DrawEllipseVOctant3d(recticleDesc.ptCenter.x + pPixelList[0] - v1,
+        recticleDesc.ptCenter.y + 1,
+        nArcLength - recticleDesc.yGap - 1,
+        1,
+        1,
+        pPixelList + 1,
+        &rClip,
+        rgbColor);
+
+    DrawLine3d(v3,
+        recticleDesc.ptCenter.y - recticleDesc.yGap + nArcLength,
+        recticleDesc.ptCenter.x + recticleDesc.piePiecePtXOffset - v1,
+        recticleDesc.ptCenter.y,
+        rLineClip,
+        rgbColor);
+
+    v3 = DrawEllipseVOctant3d(recticleDesc.ptCenter.x + v1,
+        recticleDesc.ptCenter.y,
+        nArcLength - recticleDesc.yGap,
+        -1,
+        -1,
+        pPixelList,
+        &rClip,
+        rgbColor);
+
+    DrawLine3d(v3,
+        recticleDesc.ptCenter.y + recticleDesc.yGap - nArcLength,
+        recticleDesc.ptCenter.x - recticleDesc.piePiecePtXOffset + v1,
+        recticleDesc.ptCenter.y,
+        rLineClip,
+        rgbColor);
+
+    v3 = DrawEllipseVOctant3d(recticleDesc.ptCenter.x - pPixelList[0] + v1,
+        recticleDesc.ptCenter.y + 1,
+        nArcLength - recticleDesc.yGap - 1,
+        -1,
+        1,
+        pPixelList + 1,
+        &rClip,
+        rgbColor);
+
+    DrawLine3d(v3,
+        recticleDesc.ptCenter.y - recticleDesc.yGap + nArcLength,
+        recticleDesc.ptCenter.x - recticleDesc.piePiecePtXOffset + v1,
+        recticleDesc.ptCenter.y,
+        rLineClip,
+        rgbColor);
+
+    delete pPixelList;
+
+    return TRUE;
+}
+
+// 0x7BCBB0
+LONG CVidMode::DrawEllipseHOctant3d(LONG x, LONG y, INT nArcLength, int a4, int a5, BYTE* pPixelList, const CRect* rClip, COLORREF rgbColor)
+{
+    CPoint pt(x, y);
+
+    CVideo3d::glDisable(GL_BLEND);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glDisable(GL_TEXTURE_2D);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glColor4f(static_cast<float>(GetRValue(rgbColor)) / 255.0f,
+        static_cast<float>(GetGValue(rgbColor)) / 255.0f,
+        static_cast<float>(GetBValue(rgbColor)) / 255.0f,
+        1.0f);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glPointSize(1.0f);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glBegin(GL_POINTS);
+    if (rClip != NULL) {
+        while (nArcLength != 0) {
+            if (rClip->PtInRect(pt)) {
+                // NOTE: Original code adds `CVideo3d::SUB_PIXEL_SHIFT`, however
+                // it's value (0.2) is too small and due to rounding all points
+                // in the arc appears between pixels (rendering no arc at all).
+                CVideo3d::glVertex3f(static_cast<float>(pt.x) + 0.5f,
+                    static_cast<float>(pt.y) + 0.5f,
+                    0.0f);
+            }
+            if (*pPixelList++ != 0) {
+                pt.y += a5;
+            }
+            pt.x += a4;
+            nArcLength--;
+        }
+    } else {
+        while (nArcLength != 0) {
+            // NOTE: See rounding issue above.
+            CVideo3d::glVertex3f(static_cast<float>(pt.x) + 0.5f,
+                static_cast<float>(pt.y) + 0.5f,
+                0.0f);
+            if (*pPixelList++ != 0) {
+                pt.y += a5;
+            }
+            pt.x += a4;
+            nArcLength--;
+        }
+    }
+    CVideo3d::glEnd();
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    return pt.y;
+}
+
+// 0x7BCE20
+LONG CVidMode::DrawEllipseVOctant3d(LONG x, LONG y, INT nArcLength, int a4, int a5, BYTE* pPixelList, const CRect* rClip, COLORREF rgbColor)
+{
+    CPoint pt(x, y);
+
+    CVideo3d::glDisable(GL_BLEND);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glDisable(GL_TEXTURE_2D);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glColor4f(static_cast<float>(GetRValue(rgbColor)) / 255.0f,
+        static_cast<float>(GetGValue(rgbColor)) / 255.0f,
+        static_cast<float>(GetBValue(rgbColor)) / 255.0f,
+        1.0f);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glPointSize(1.0f);
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    CVideo3d::glBegin(GL_POINTS);
+    if (rClip != NULL) {
+        while (nArcLength != 0) {
+            if (rClip->PtInRect(pt)) {
+                // NOTE: See rounding issue above.
+                CVideo3d::glVertex3f(static_cast<float>(pt.x) + 0.5f,
+                    static_cast<float>(pt.y) + 0.5f,
+                    0.0f);
+            }
+            if (*pPixelList++ != 0) {
+                pt.x += a4;
+            }
+            pt.y += a5;
+            nArcLength--;
+        }
+    } else {
+        while (nArcLength != 0) {
+            // NOTE: See rounding issue above.
+            CVideo3d::glVertex3f(static_cast<float>(pt.x) + 0.5f,
+                static_cast<float>(pt.y) + 0.5f,
+                0.0f);
+            if (*pPixelList++ != 0) {
+                pt.x += a4;
+            }
+            pt.y += a5;
+            nArcLength--;
+        }
+    }
+    CVideo3d::glEnd();
+    g_pChitin->GetCurrentVideoMode()->CheckResults3d(0);
+
+    return pt.x;
 }
 
 // 0x7BD090

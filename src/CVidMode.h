@@ -60,7 +60,9 @@ public:
     BOOL DrawLine3d(INT nXFrom, INT nYFrom, INT nXTo, INT nYTo, const CRect& rSurface, COLORREF rgbColor);
     BOOL DrawRect3d(const CRect& r, const CRect& rClip, COLORREF rgbColor);
     BOOL DrawEllipse3d(const CPoint& ptCenter, const CSize& axis, const CRect& rClip, COLORREF rgbColor);
-    BOOL DrawRecticle3d(const CVIDMODE_RECTICLE_DESCRIPTION& rd, const CRect& rClip, COLORREF rgbColor);
+    LONG DrawEllipseHOctant3d(LONG x, LONG y, INT nArcLength, int a4, int a5, BYTE* pPixelList, const CRect* rClip, COLORREF rgbColor);
+    LONG DrawEllipseVOctant3d(LONG x, LONG y, INT nArcLength, int a4, int a5, BYTE* pPixelList, const CRect* rClip, COLORREF rgbColor);
+    BOOL DrawRecticle3d(const CVIDMODE_RECTICLE_DESCRIPTION& recticleDesc, const CRect& rClip, COLORREF rgbColor);
     BOOL OutlinePoly3d(const CPoint* pPoly, SHORT nVertices, const CRect& rSurface, COLORREF rgbColor, const CPoint& ptOffset);
     static void FillRect3d(const VERTEX_DESC* pVertices);
     BOOL CheckResults3d(int rc);
