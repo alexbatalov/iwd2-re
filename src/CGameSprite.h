@@ -620,19 +620,19 @@ public:
     /* 710C */ SHORT field_710C;
     /* 710E */ SHORT field_710E;
     /* 7110 */ int field_7110;
-    /* 7114 */ int field_7114;
+    /* 7114 */ BOOL m_moraleFailure;
     /* 7118 */ int field_7118;
     /* 711C */ short field_711C;
     /* 711E */ int field_711E;
     /* 7122 */ LONG m_dialogWait;
     /* 7126 */ LONG m_dialogWaitTarget;
     /* 712A */ int m_talkingCounter;
-    /* 712E */ unsigned char field_712E;
+    /* 712E */ BYTE m_talkingRenderCount;
     /* 7130 */ CTypedPtrList<CPtrList, int*> m_portraitIcons; // NOTE: Stores actual ints disguised as pointers.
     /* 714C */ CVidCell m_portraitIconVidCell;
     /* 7226 */ BOOL m_firstActionSound;
     /* 722A */ ULONG field_722A;
-    /* 722E */ LONG field_722E;
+    /* 722E */ BOOL m_berserkActive;
     /* 7234 */ int field_7234;
     /* 7238 */ int field_7238;
     /* 723C */ int field_723C;
@@ -640,6 +640,7 @@ public:
     /* 7244 */ ULONG m_lastRegenerationTime;
     /* 724C */ unsigned char field_724C;
     /* 724D */ BOOLEAN m_bHappinessChanged;
+    /* 724E */ LONG m_nUnselectableCounter;
     /* 7252 */ CResRef m_secondarySounds;
     /* 725A */ unsigned char field_725A[32];
     /* 727E */ int field_727E;
@@ -655,6 +656,7 @@ public:
     /* 72B6 */ int field_72B6;
     /* 72D6 */ int field_72D6;
     /* 72DE */ int field_72DE;
+    /* 72E2 */ LONG field_72E2;
     /* 72E6 */ int field_72E6;
     /* 7430 */ unsigned char field_7430;
     /* 752E */ BOOL m_bSendSpriteUpdate;

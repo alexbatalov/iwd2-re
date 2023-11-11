@@ -432,7 +432,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     m_targetPoint.y = -1;
     m_targetAreaSize = 0;
     m_destMarker.SetType(CMarker::RECTICLE);
-    field_722E = CGameObjectArray::INVALID_INDEX;
+    field_72E2 = CGameObjectArray::INVALID_INDEX;
     m_typeAI.Set(CAIObjectType::ANYONE);
     m_liveTypeAI.Set(CAIObjectType::ANYONE);
     m_startTypeAI.Set(CAIObjectType::ANYONE);
@@ -481,7 +481,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     field_710C = 0;
     field_710E = 0;
     field_7110 = 0x7FFF;
-    field_7114 = 0;
+    m_moraleFailure = FALSE;
     m_nHappiness = 0;
     m_bHappinessChanged = FALSE;
     field_72AE = 1;
@@ -625,7 +625,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
         m_dialogWaitTarget = CGameObjectArray::INVALID_INDEX;
         field_724C = 1;
         field_56E4 = "";
-        field_712E = 0;
+        m_talkingRenderCount = 0;
         field_711E = 1;
 
         if (m_portraitIconVidCell.pRes != NULL) {
