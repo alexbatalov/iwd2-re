@@ -400,6 +400,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CWorldMap.cpp"
     "src/CWorldMap.h"
     "src/FileFormat.h"
+    "src/IcewindCGameEffects.cpp"
+    "src/IcewindCGameEffects.h"
     "src/IcewindMisc.cpp"
     "src/IcewindMisc.h"
     "src/main.cpp"

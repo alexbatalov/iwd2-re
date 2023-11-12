@@ -7,6 +7,7 @@
 #include "CScreenWorld.h"
 #include "CUtil.h"
 #include "CVidPalette.h"
+#include "IcewindCGameEffects.h"
 
 // NOTE: Not used. It does not include many effects. Formatting is odd.
 //
@@ -378,7 +379,7 @@ CGameEffect* CGameEffect::DecodeEffect(ITEM_EFFECT* effect, const CPoint& source
     case CGAMEEFFECT_TRANSLUCENT:
         return new CGameEffectTranslucent(effect, source, sourceID, target);
     case CGAMEEFFECT_SUMMON:
-        return new CGameEffectSummon(effect, source, sourceID, target);
+        return new IcewindCGameEffectSummon(effect, source, sourceID, target);
     case CGAMEEFFECT_SKILLUNSUMMON:
         return new CGameEffectSkillUnsummon(effect, source, sourceID, target);
     case CGAMEEFFECT_NONDETECTION:
@@ -417,7 +418,7 @@ CGameEffect* CGameEffect::DecodeEffect(ITEM_EFFECT* effect, const CPoint& source
         UTIL_ASSERT_MSG(FALSE, "CGameEffectResistMagicFire game effect not supported in Icewind II (-rjf)");
     case 85:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
-        // __LINE__: 890
+        // __LINE__: 894
         UTIL_ASSERT_MSG(FALSE, "CGameEffectResistMagicCold game effect not supported in Icewind II (-rjf)");
     case CGAMEEFFECT_RESISTSLASHING:
         return new CGameEffectResistSlashing(effect, source, sourceID, target);
@@ -534,7 +535,7 @@ CGameEffect* CGameEffect::DecodeEffect(ITEM_EFFECT* effect, const CPoint& source
     case CGAMEEFFECT_DISPLAYSTRING:
         return new CGameEffectDisplayString(effect, source, sourceID, target);
     case CGAMEEFFECT_CASTINGGLOW:
-        return new CGameEffectCastingGlow(effect, source, sourceID, target);
+        return new IcewindCGameEffectCastingGlow(effect, source, sourceID, target);
     case CGAMEEFFECT_VISUALSPELLHIT:
         return new CGameEffectVisualSpellHit(effect, source, sourceID, target);
     case CGAMEEFFECT_PORTRAITICON:
@@ -569,7 +570,7 @@ CGameEffect* CGameEffect::DecodeEffect(ITEM_EFFECT* effect, const CPoint& source
         UTIL_ASSERT_MSG(FALSE, "CGameEffectMinorGlobe game effect not supported in Icewind II (-rjf)");
     case 156:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
-        // __LINE__: 1822
+        // __LINE__: 822
         UTIL_ASSERT_MSG(FALSE, "CGameEffectShieldGlobe game effect not supported in Icewind II (-rjf)");
     case CGAMEEFFECT_WEBHOLD:
         return new CGameEffectWebHold(effect, source, sourceID, target);
@@ -721,9 +722,342 @@ CGameEffect* CGameEffect::DecodeEffect(ITEM_EFFECT* effect, const CPoint& source
         return new CGameEffectDispelSecondaryTypeOne(effect, source, sourceID, target);
     case CGAMEEFFECT_TIMESTOP:
         return new CGameEffectTimeStop(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_COLORGLOWDISSIPATE:
+        return new IcewindCGameEffectColorGlowDissipate(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_VISUALSPELLHIT:
+        return new IcewindCGameEffectVisualSpellHit(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_SNILLOCSSNOWBALLSWARMDAMAGE:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 1329
+        UTIL_ASSERT_MSG(FALSE, "IcewindCGameEffectSnillocsSnowballSwarmDamage game effect not supported in Icewind II (-rjf)");
+    case ICEWIND_CGAMEEFFECT_CASTINGGLOW:
+        return new IcewindCGameEffectCastingGlow(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_PANIC:
+        return new CGameEffectPanic(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_MAGICALSTONEDAMAGE:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 1340
+        UTIL_ASSERT_MSG(FALSE, "IcewindCGameEffectMagicalStoneDamage game effect not supported in Icewind II (-rjf)");
+    case ICEWIND_CGAMEEFFECT_SAVINGTHROWCHANGE:
+        return new IcewindCGameEffectSavingThrowChange(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_SLOWPOISON:
+        return new IcewindCGameEffectSlowPoison(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_SUMMONINGSPELL:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 1350
+        UTIL_ASSERT_MSG(FALSE, "IcewindCGameEffectSummoningSpell game effect not supported in Icewind II (-rjf)");
+    case ICEWIND_CGAMEEFFECT_VAMPIRICTOUCH:
+        return new IcewindCGameEffectVampiricTouch(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_CREATUREAFFECTEDANIMATION:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 1357
+        UTIL_ASSERT_MSG(FALSE, "IcewindCGameEffectCreatureAffectedAnimation game effect not supported in Icewind II (-rjf)");
+    case ICEWIND_CGAMEEFFECT_ANIMATEDEAD:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 1361
+        UTIL_ASSERT_MSG(FALSE, "IcewindCGameEffectAnimateDead game effect not supported in Icewind II (-rjf)");
+    case ICEWIND_CGAMEEFFECT_PRAYER:
+        return new IcewindCGameEffectPrayer(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_PRAYERBAD:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 1368
+        UTIL_ASSERT_MSG(FALSE, "IcewindCGameEffectPrayerBad game effect not supported in Icewind II (-rjf)");
+    case ICEWIND_CGAMEEFFECT_SUMMONINGSPELLMIXED:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 1372
+        UTIL_ASSERT_MSG(FALSE, "IcewindCGameEffectSummoningSpellMixed game effect not supported in Icewind II (-rjf)");
+    case ICEWIND_CGAMEEFFECT_BELTYNSBURNINGBLOOD:
+        return new IcewindCGameEffectBeltynsBurningBlood(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_SHADOWMONSTERS:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 1379
+        UTIL_ASSERT_MSG(FALSE, "IcewindCGameEffectShadowMonsters game effect not supported in Icewind II (-rjf)");
+    case ICEWIND_CGAMEEFFECT_RECITATION:
+        return new IcewindCGameEffectRecitation(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_RECITATIONBAD:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 1386
+        UTIL_ASSERT_MSG(FALSE, "IcewindCGameEffectRecitationBad game effect not supported in Icewind II (-rjf)");
+    case ICEWIND_CGAMEEFFECT_LICHTOUCH:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 1390
+        UTIL_ASSERT_MSG(FALSE, "IcewindCGameEffectLichTouch game effect not supported in Icewind II (-rjf)");
+    case ICEWIND_CGAMEEFFECT_SOLSSEARINGORB:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 1394
+        UTIL_ASSERT_MSG(FALSE, "IcewindCGameEffectSolsSearingOrb game effect not supported in Icewind II (-rjf)");
+    case ICEWIND_CGAMEEFFECT_OILOFSERPENTSSCALES:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 1398
+        UTIL_ASSERT_MSG(FALSE, "Oil of the Serpent's Scales game effect not supported in Icewind II (-rjf)");
+    case ICEWIND_CGAMEEFFECT_REMOVEEFFECTOFRESOURCE:
+        return new IcewindCGameEffectRemoveEffectOfResource(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_SALAMANDERAURA:
+        return new IcewindCGameEffectSalamanderAura(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_UMBERHULKGAZE:
+        return new IcewindCGameEffectUmberHulkGaze(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_ZOMBIELORDAURA:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 1411
+        UTIL_ASSERT_MSG(FALSE, "Zombie Lord Aura game effect not supported in Icewind II (-rjf)");
+        (effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_IMMUNITYTORESOURCE:
+        return new IcewindCGameEffectImmunityToResource(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_SUMMONCREATURE:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 1418
+        UTIL_ASSERT_MSG(FALSE, "IcewindCGameEffectSummonCreature game effect not supported in Icewind II (-rjf)");
+        (effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_ANIMATIONREMOVE:
+        return new IcewindCGameEffectAnimationRemove(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_IMMUNITYTOEFFECTRESOURCE:
+        return new IcewindCGameEffectImmunityToEffectAndResource(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_SUMMONPOMABS:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 1428
+        UTIL_ASSERT_MSG(FALSE, "IcewindCGameEffectSummonPomabs game effect not supported in Icewind II (-rjf)");
+        (effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_DOMINATE:
+        return new IcewindCGameEffectDominate(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_STATICCHARGE:
+        return new IcewindCGameEffectStaticCharge(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_CLOAKOFFEAR:
+        return new IcewindCGameEffectCloakOfFear(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_FORCEMOVEMENTRATE:
+        if (1) {
+            IcewindCGameEffectForceMovementRate* pEffect = new IcewindCGameEffectForceMovementRate(effect, source, sourceID, target);
+            pEffect->SetEffectID(ICEWIND_CGAMEEFFECT_FORCEMOVEMENTRATE);
+            return pEffect;
+        }
+    case ICEWIND_CGAMEEFFECT_REMOVECONFUSION:
+        return new IcewindCGameEffectRemoveConfusion(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_EYEOFMIND:
+        return new IcewindCGameEffectEyeOfMind(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_EYEYOFSWORD:
+        return new IcewindCGameEffectEyeOfSword(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_EYEOFMAGE:
+        return new IcewindCGameEffectEyeOfMage(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_EYEOFVENOM:
+        return new IcewindCGameEffectEyeOfVenom(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_EYEOFSPIRIT:
+        return new IcewindCGameEffectEyeOfSpirit(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_EYEOFFORTITUDE:
+        return new IcewindCGameEffectEyeOfFortitude(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_EYEOFSTONE:
+        return new IcewindCGameEffectEyeOfStone(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_REMOVESEVENEYES:
+        return new IcewindCGameEffectRemoveSevenEyes(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_REMOVEALLOFTYPE:
+        return new IcewindCGameEffectRemoveAllOfType(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_SOULEATER:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 1477
+        UTIL_ASSERT_MSG(FALSE, "IcewindCGameEffectSoulEater game effect not supported in Icewind II (-rjf)");
+        (effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_SHROUDOFFLAME:
+        return new IcewindCGameEffectShroudOfFlame(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_ANIMALRAGE:
+        return new IcewindCGameEffectAnimalRage(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_TURNUNDEAD:
+        return new IcewindCGameEffectTurnUndead(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_VITRIOLICSPHERE:
+        return new IcewindCGameEffectVitriolicSphere(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_SUPPRESSHPDISPLAY:
+        return new IcewindCGameEffectSuppressHPDisplay(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_FLOATTEXT:
+        return new IcewindCGameEffectFloatText(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_MACEOFDISRUPTION:
+        return new IcewindCGameEffectMaceOfDisruption(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_SLEEP:
+        if (1) {
+            CGameEffectSleep* pEffect = new CGameEffectSleep(effect, source, sourceID, target);
+            pEffect->SetEffectID(ICEWIND_CGAMEEFFECT_SLEEP);
+            return pEffect;
+        }
+    case ICEWIND_CGAMEEFFECT_RANGERTRACKING:
+        return new IcewindCGameEffectRangerTracking(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_IMMUNITYTOBACKSTAB:
+        return new IcewindCGameEffectImmunityToBackstab(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_SETSPELLSTATE:
+        return new IcewindCGameEffectSetSpellState(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_DRAGONGEMCUTSCENE:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 1515
+        UTIL_ASSERT_MSG(FALSE, "IcewindCGameEffectDragonGemCutscene game effect not supported in Icewind II (-rjf)");
+        (effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_IMMUNITYSPELL:
+        if (1) {
+            CGameEffectImmunitySpell* pEffect = new CGameEffectImmunitySpell(effect, source, sourceID, target);
+            pEffect->SetEffectID(ICEWIND_CGAMEEFFECT_IMMUNITYSPELL);
+            return pEffect;
+        }
+    case ICEWIND_CGAMEEFFECT_RODOFSMITING:
+        return new IcewindCGameEffectRodOfSmiting(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_MAGICALREST:
+        return new IcewindCGameEffectMagicalRest(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_BEHOLDERDISPELMAGIC:
+        return new IcewindCGameEffectBeholderDispelMagic(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_HARPYWAIL:
+        return new IcewindCGameEffectHarpyWail(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_JACKALWEREGAZE:
+        return new IcewindCGameEffectJackalwereGaze(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_SETGLOBAL:
+        return new IcewindCGameEffectSetGlobal(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_HIDEINSHADOWS:
+        return new CGameEffectHideInShadows(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_SKILLUSEMAGICDEVICE:
+        return new CGameEffectSkillUseMagicDevice(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_HOPELESSNESS:
+        return new IcewindCGameEffectHopelessness(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_PROTECTIONFROMEVIL:
+        return new IcewindCGameEffectProtectionFromEvil(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_APPLYEFFECTSLIST:
+        if (1) {
+            IcewindCGameEffectApplyEffectsList* pEffect = new IcewindCGameEffectApplyEffectsList(effect, source, sourceID, target);
+            pEffect->sub_493400(TRUE);
+            return pEffect;
+        }
+    case ICEWIND_CGAMEEFFECT_ARMOROFFAITH:
+        return new IcewindCGameEffectArmorOfFaith(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_NAUSEA:
+        return new IcewindCGameEffectNausea(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_ENFEEBLEMENT:
+        return new IcewindCGameEffectEnfeeblement(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_FIRESHIELD:
+        return new IcewindCGameEffectFireshield(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_DEATHWARD:
+        return new IcewindCGameEffectDeathWard(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_HOLYPOWER:
+        return new IcewindCGameEffectHolyPower(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_RIGHTEOUSWRATHOFFAITHFUL:
+        return new IcewindCGameEffectRighteousWrathOfFaithful(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_SUMMONALLY:
+        if (1) {
+            IcewindCGameEffectSummon* pEffect = new IcewindCGameEffectSummon(effect, source, sourceID, target);
+            pEffect->sub_49DB60(1);
+            return pEffect;
+        }
+    case ICEWIND_CGAMEEFFECT_SUMMONENEMY:
+        if (1) {
+            IcewindCGameEffectSummon* pEffect = new IcewindCGameEffectSummon(effect, source, sourceID, target);
+            pEffect->sub_49DB60(2);
+            return pEffect;
+        }
+    case ICEWIND_CGAMEEFFECT_CHARM:
+        if (1) {
+            CGameEffectCharm* pEffect = new CGameEffectCharm(effect, source, sourceID, target);
+            pEffect->SetEffectID(ICEWIND_CGAMEEFFECT_CHARM);
+            return pEffect;
+        }
+    case ICEWIND_CGAMEEFFECT_VISUALEFFECT:
+        return new IcewindCGameEffectVisualEffect(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_OTILUKESRESILIENTSPHERE:
+        return new IcewindCGameEffectOtilukesResilientSphere(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_BARKSKIN:
+        return new IcewindCGameEffectBarkskin(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_BLEEDINGWOUNDS:
+        return new IcewindCGameEffectBleedingWounds(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_AREAOFEFFECT:
+        return new IcewindCGameEffectAreaOfEffect(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_FREEACTION:
+        return new IcewindCGameEffectFreeAction(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_UNCONSCIOUSNESS:
+        return new IcewindCGameEffectUnconsciousness(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_MAGIC_DEATH:
+        if (1) {
+            CGameEffectDeath* pEffect = new CGameEffectDeath(effect, source, sourceID, target);
+            pEffect->SetEffectID(ICEWIND_CGAMEEFFECT_MAGIC_DEATH);
+            return pEffect;
+        }
+    case ICEWIND_CGAMEEFFECT_ENTROPYSHIELD:
+        return new IcewindCGameEffectEntropyShield(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_STORMSHELL:
+        return new IcewindCGameEffectStormShell(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_PROTECTIONFROMELEMENTS:
+        return new IcewindCGameEffectProtectionFromElements(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_HOLDUNDEAD:
+        if (1) {
+            CGameEffectHoldCreature* pEffect = new CGameEffectHoldCreature(effect, source, sourceID, target);
+            pEffect->SetEffectID(ICEWIND_CGAMEEFFECT_HOLDUNDEAD);
+            return pEffect;
+        }
+    case ICEWIND_CGAMEEFFECT_CONTROLUNDEAD:
+        if (1) {
+            CGameEffectCharm* pEffect = new CGameEffectCharm(effect, source, sourceID, target);
+            pEffect->SetEffectID(ICEWIND_CGAMEEFFECT_CONTROLUNDEAD);
+            pEffect->SetDWFlags(0x1);
+            return pEffect;
+        }
+    case ICEWIND_CGAMEEFFECT_AEGIS:
+        return new IcewindCGameEffectAegis(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_EXECUTIONERSEYES:
+        return new IcewindCGameEffectExecutionersEyes(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_BANISH:
+        if (1) {
+            CGameEffectDeath* pEffect = new CGameEffectDeath(effect, source, sourceID, target);
+            pEffect->SetEffectID(ICEWIND_CGAMEEFFECT_MAGIC_DEATH);
+            pEffect->SetDWFlags(0x800);
+            return pEffect;
+        }
+    case ICEWIND_CGAMEEFFECT_WHENSTRUCK:
+        return new IcewindCGameEffectWhenStruck(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_PROJECTILE:
+        return new IcewindCGameEffectProjectile(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_ENERGYDRAIN:
+        return new IcewindCGameEffectEnergyDrain(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_TORTOISESHELL:
+        return new IcewindCGameEffectTortoiseShell(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_BLINK:
+        return new IcewindCGameEffectBlink(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_PERSISTANTEFFECT:
+        return new IcewindCGameEffectPersistantEffect(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_DAYBLINDNESS:
+        return new CGameEffectDayBlindness(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_DAMAGEREDUCTION:
+        return new IcewindCGameEffectDamageReduction(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_DISGUISE:
+        return new CGameEffectDisguise(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_HEROICINSPIRATION:
+        return new CGameEffectHeroicInspiration(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_PREVENTAISLOWDOWN:
+        return new CGameEffectPreventAISlowdown(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_BARBARIANRAGE:
+        return new CGameEffectBarbarianRage(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_MOVEMENTRATEWITHPORTRAIT:
+        return new CGameEffectMovementRateWithPortrait(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_FEATCLEAVE:
+        return new CGameEffectFeatCleave(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_PROTECTIONFORMARROWS:
+        return new IcewindCGameEffectProtectionFromArrows(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_TENSERSTRANSFORMATION:
+        return new IcewindCGameEffectTensersTransformation(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_SLIPPERYMIND:
+        return new CGameEffectSlipperyMind(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_SMITEEVIL:
+        return new IcewindCGameEffectSmiteEvil(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_RESTORATION:
+        return new IcewindCGameEffectRestoration(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_ALICORNLANCEGLOW:
+        return new IcewindCGameEffectAlicornLanceGlow(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_CALLLIGHTNING:
+        return new IcewindCGameEffectCallLightning(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_GLOBEOFINVULNERABILITY:
+        return new IcewindCGameEffectGlobeOfInvulnerability(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_LOWERRESISTANCE:
+        return new IcewindCGameEffectLowerResistance(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_BANE:
+        return new IcewindCGameEffectBane(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_FEATPOWERATTACK:
+        return new IcewindCGameEffectFeatPowerAttack(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_FEATEXPERTISE:
+        return new IcewindCGameEffectFeatExpertise(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_FEATARTERIALSTRIKE:
+        return new IcewindCGameEffectFeatArterialStrike(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_FEATHAMSTRING:
+        return new IcewindCGameEffectFeatHamstring(effect, source, sourceID, target);
+    case ICEWIND_CGAMEEFFECT_FEATRAPIDSHOT:
+        return new IcewindCGameEffectFeatRapidShot(effect, source, sourceID, target);
     }
-
-    // TODO: Incomplete.
 
     CString sError;
     sError.Format("Unknown effect id:  %d", effect->effectID);
@@ -1227,6 +1561,24 @@ CGameEffect* CGameEffectBerserk::Copy()
 
 // -----------------------------------------------------------------------------
 
+// 0x4936E0
+CGameEffectBarbarianRage::CGameEffectBarbarianRage(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
+    : CGameEffect(effect, source, sourceID, target, FALSE)
+{
+}
+
+// 0x493720
+CGameEffect* CGameEffectBarbarianRage::Copy()
+{
+    ITEM_EFFECT* effect = GetItemEffect();
+    CGameEffectBarbarianRage* copy = new CGameEffectBarbarianRage(effect, m_source, m_sourceID, m_target);
+    delete effect;
+    copy->CopyFromBase(this);
+    return copy;
+}
+
+// -----------------------------------------------------------------------------
+
 // NOTE: Inlined.
 CGameEffectCalm::CGameEffectCalm(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
     : CGameEffect(effect, source, sourceID, target, FALSE)
@@ -1274,7 +1626,7 @@ BOOL CGameEffectCalm::ApplyEffect(CGameSprite* pSprite)
 
 // -----------------------------------------------------------------------------
 
-// NOTE: Inlined.
+// 0x493880
 CGameEffectCharm::CGameEffectCharm(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
     : CGameEffect(effect, source, sourceID, target, FALSE)
 {
@@ -1285,6 +1637,24 @@ CGameEffect* CGameEffectCharm::Copy()
 {
     ITEM_EFFECT* effect = GetItemEffect();
     CGameEffectCharm* copy = new CGameEffectCharm(effect, m_source, m_sourceID, m_target);
+    delete effect;
+    copy->CopyFromBase(this);
+    return copy;
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x493970
+CGameEffectSlipperyMind::CGameEffectSlipperyMind(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
+    : CGameEffect(effect, source, sourceID, target, FALSE)
+{
+}
+
+// 0x4939B0
+CGameEffect* CGameEffectSlipperyMind::Copy()
+{
+    ITEM_EFFECT* effect = GetItemEffect();
+    CGameEffectSlipperyMind* copy = new CGameEffectSlipperyMind(effect, m_source, m_sourceID, m_target);
     delete effect;
     copy->CopyFromBase(this);
     return copy;
@@ -1462,6 +1832,12 @@ CGameEffectDeath::CGameEffectDeath(ITEM_EFFECT* effect, const CPoint& source, LO
     : CGameEffect(effect, source, sourceID, target, FALSE)
 {
     field_18C = 0;
+}
+
+// 0x494150
+CGameEffectDeath::CGameEffectDeath(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target, int a5)
+{
+    field_18C = a5;
 }
 
 // 0x452E70
@@ -2298,7 +2674,7 @@ BOOL CGameEffectSilence::ApplyEffect(CGameSprite* pSprite)
 
 // -----------------------------------------------------------------------------
 
-// NOTE: Inlined.
+// 0x495250
 CGameEffectSleep::CGameEffectSleep(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
     : CGameEffect(effect, source, sourceID, target, FALSE)
 {
@@ -2762,6 +3138,24 @@ CGameEffect* CGameEffectSkillStealth::Copy()
 
 // -----------------------------------------------------------------------------
 
+// NOTE: Inlined
+CGameEffectHideInShadows::CGameEffectHideInShadows(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
+    : CGameEffect(effect, source, sourceID, target, FALSE)
+{
+}
+
+// 0x495FD0
+CGameEffect* CGameEffectHideInShadows::Copy()
+{
+    ITEM_EFFECT* effect = GetItemEffect();
+    CGameEffectHideInShadows* copy = new CGameEffectHideInShadows(effect, m_source, m_sourceID, m_target);
+    delete effect;
+    copy->CopyFromBase(this);
+    return copy;
+}
+
+// -----------------------------------------------------------------------------
+
 // NOTE: Inlined.
 CGameEffectCastingFailure::CGameEffectCastingFailure(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
     : CGameEffect(effect, source, sourceID, target, FALSE)
@@ -2973,26 +3367,6 @@ BOOL CGameEffectTranslucent::ApplyEffect(CGameSprite* pSprite)
     }
 
     return TRUE;
-}
-
-// -----------------------------------------------------------------------------
-
-// 0x55F5E0
-CGameEffectSummon::CGameEffectSummon(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
-    : CGameEffect(effect, source, sourceID, target, FALSE)
-{
-    field_18C = 0;
-    field_190 = 0;
-}
-
-// 0x55F620
-CGameEffect* CGameEffectSummon::Copy()
-{
-    ITEM_EFFECT* effect = GetItemEffect();
-    CGameEffectSummon* copy = new CGameEffectSummon(effect, m_source, m_sourceID, m_target);
-    delete effect;
-    copy->CopyFromBase(this);
-    return copy;
 }
 
 // -----------------------------------------------------------------------------
@@ -3228,6 +3602,24 @@ BOOL CGameEffectBlindness::ApplyEffect(CGameSprite* pSprite)
     }
 
     return TRUE;
+}
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Inlined.
+CGameEffectDayBlindness::CGameEffectDayBlindness(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
+    : CGameEffect(effect, source, sourceID, target, FALSE)
+{
+}
+
+// 0x496B80
+CGameEffect* CGameEffectDayBlindness::Copy()
+{
+    ITEM_EFFECT* effect = GetItemEffect();
+    CGameEffectDayBlindness* copy = new CGameEffectDayBlindness(effect, m_source, m_sourceID, m_target);
+    delete effect;
+    copy->CopyFromBase(this);
+    return copy;
 }
 
 // -----------------------------------------------------------------------------
@@ -3644,6 +4036,24 @@ CGameEffect* CGameEffectSkillPickPocket::Copy()
 {
     ITEM_EFFECT* effect = GetItemEffect();
     CGameEffectSkillPickPocket* copy = new CGameEffectSkillPickPocket(effect, m_source, m_sourceID, m_target);
+    delete effect;
+    copy->CopyFromBase(this);
+    return copy;
+}
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Inlined.
+CGameEffectSkillUseMagicDevice::CGameEffectSkillUseMagicDevice(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
+    : CGameEffect(effect, source, sourceID, target, FALSE)
+{
+}
+
+// 0x497730
+CGameEffect* CGameEffectSkillUseMagicDevice::Copy()
+{
+    ITEM_EFFECT* effect = GetItemEffect();
+    CGameEffectSkillUseMagicDevice* copy = new CGameEffectSkillUseMagicDevice(effect, m_source, m_sourceID, m_target);
     delete effect;
     copy->CopyFromBase(this);
     return copy;
@@ -4409,7 +4819,7 @@ BOOL CGameEffectReputation::ApplyEffect(CGameSprite* pSprite)
 
 // -----------------------------------------------------------------------------
 
-// NOTE: Inlined.
+// 0x4982E0
 CGameEffectHoldCreature::CGameEffectHoldCreature(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
     : CGameEffect(effect, source, sourceID, target, FALSE)
 {
@@ -4769,6 +5179,24 @@ CGameEffect* CGameEffectMovementRate::Copy()
 
 // -----------------------------------------------------------------------------
 
+// 0x498F80
+CGameEffectMovementRateWithPortrait::CGameEffectMovementRateWithPortrait(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
+    : CGameEffect(effect, source, sourceID, target, FALSE)
+{
+}
+
+// 0x498FC0
+CGameEffect* CGameEffectMovementRateWithPortrait::Copy()
+{
+    ITEM_EFFECT* effect = GetItemEffect();
+    CGameEffectMovementRateWithPortrait* copy = new CGameEffectMovementRateWithPortrait(effect, m_source, m_sourceID, m_target);
+    delete effect;
+    copy->CopyFromBase(this);
+    return copy;
+}
+
+// -----------------------------------------------------------------------------
+
 // NOTE: Inlined.
 CGameEffectRandomSummon::CGameEffectRandomSummon(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
     : CGameEffect(effect, source, sourceID, target, FALSE)
@@ -5037,24 +5465,6 @@ BOOL CGameEffectDisplayString::ApplyEffect(CGameSprite* pSprite)
     m_done = TRUE;
 
     return TRUE;
-}
-
-// -----------------------------------------------------------------------------
-
-// NOTE: Inlined.
-CGameEffectCastingGlow::CGameEffectCastingGlow(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
-    : CGameEffect(effect, source, sourceID, target, FALSE)
-{
-}
-
-// 0x49DCA0
-CGameEffect* CGameEffectCastingGlow::Copy()
-{
-    ITEM_EFFECT* effect = GetItemEffect();
-    CGameEffectCastingGlow* copy = new CGameEffectCastingGlow(effect, m_source, m_sourceID, m_target);
-    delete effect;
-    copy->CopyFromBase(this);
-    return copy;
 }
 
 // -----------------------------------------------------------------------------
@@ -5477,7 +5887,7 @@ BOOL CGameEffectDispelSanctuary::ApplyEffect(CGameSprite* pSprite)
 
 // -----------------------------------------------------------------------------
 
-// NOTE: Inlined.
+// 0x494920
 CGameEffectRemovePanic::CGameEffectRemovePanic(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
     : CGameEffect(effect, source, sourceID, target, FALSE)
 {
@@ -6349,6 +6759,24 @@ BOOL CGameEffectCastingLevelBonus::ApplyEffect(CGameSprite* pSprite)
     }
 
     return TRUE;
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x499070
+CGameEffectFeatCleave::CGameEffectFeatCleave(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
+    : CGameEffect(effect, source, sourceID, target, FALSE)
+{
+}
+
+// 0x4990B0
+CGameEffect* CGameEffectFeatCleave::Copy()
+{
+    ITEM_EFFECT* effect = GetItemEffect();
+    CGameEffectFindFamiliar* copy = new CGameEffectFindFamiliar(effect, m_source, m_sourceID, m_target);
+    delete effect;
+    copy->CopyFromBase(this);
+    return copy;
 }
 
 // -----------------------------------------------------------------------------
@@ -7241,4 +7669,59 @@ BOOL CGameEffectTimeStop::ApplyEffect(CGameSprite* pSprite)
     // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
     // __LINE__: 24747
     UTIL_ASSERT_MSG(FALSE, "CGameEffectTimeStop game effect not supported in Icewind II (-rjf)");
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x49D860
+CGameEffectDisguise::CGameEffectDisguise(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
+    : CGameEffect(effect, source, sourceID, target, FALSE)
+{
+    field_18C = -1;
+}
+
+// 0x49D8A0
+CGameEffect* CGameEffectDisguise::Copy()
+{
+    ITEM_EFFECT* effect = GetItemEffect();
+    CGameEffectDisguise* copy = new CGameEffectDisguise(effect, m_source, m_sourceID, m_target);
+    delete effect;
+    copy->CopyFromBase(this);
+    return copy;
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x49D980
+CGameEffectHeroicInspiration::CGameEffectHeroicInspiration(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
+    : CGameEffect(effect, source, sourceID, target, FALSE)
+{
+}
+
+// 0x49D9C0
+CGameEffect* CGameEffectHeroicInspiration::Copy()
+{
+    ITEM_EFFECT* effect = GetItemEffect();
+    CGameEffectHeroicInspiration* copy = new CGameEffectHeroicInspiration(effect, m_source, m_sourceID, m_target);
+    delete effect;
+    copy->CopyFromBase(this);
+    return copy;
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x49DA70
+CGameEffectPreventAISlowdown::CGameEffectPreventAISlowdown(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
+    : CGameEffect(effect, source, sourceID, target, FALSE)
+{
+}
+
+// 0x49DAB0
+CGameEffect* CGameEffectPreventAISlowdown::Copy()
+{
+    ITEM_EFFECT* effect = GetItemEffect();
+    CGameEffectPreventAISlowdown* copy = new CGameEffectPreventAISlowdown(effect, m_source, m_sourceID, m_target);
+    delete effect;
+    copy->CopyFromBase(this);
+    return copy;
 }
