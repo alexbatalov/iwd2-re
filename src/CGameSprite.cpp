@@ -6,6 +6,8 @@
 #include "CGameArea.h"
 #include "CInfGame.h"
 #include "CItem.h"
+#include "CScreenCharacter.h"
+#include "CScreenCreateChar.h"
 #include "CScreenInventory.h"
 #include "CScreenWorld.h"
 #include "CSpell.h"
@@ -120,6 +122,255 @@ const BYTE CGameSprite::SEQ_WALK = CGAMESPRITE_SEQ_WALK;
 
 // 0x85BCA0
 const LONG CGameSprite::STANDARD_VERBAL_CONSTANT_LENGTH = 300;
+
+// 0x85C0B4
+const WORD CGameSprite::FEEDBACK_BACKSTAB = 1;
+
+// 0x85C0B6
+const WORD CGameSprite::FEEDBACK_CRITICALHIT = 2;
+
+// 0x85C0B8
+const WORD CGameSprite::FEEDBACK_CRITICALMISS = 3;
+
+// 0x85C0BA
+const WORD CGameSprite::FEEDBACK_TOHIT = 4;
+
+// 0x85C0BC
+const WORD CGameSprite::FEEDBACK_SPELL = 5;
+
+// 0x85C0BE
+const WORD CGameSprite::FEEDBACK_ATTACKS = 6;
+
+// 0x85C0C0
+const WORD CGameSprite::FEEDBACK_MODAL = 7;
+
+// 0x85C0C2
+const WORD CGameSprite::FEEDBACK_LOCKPICKSUCCEEDED = 8;
+
+// 0x85C0C4
+const WORD CGameSprite::FEEDBACK_LOCKPICKFAILED = 9;
+
+// 0x85C0C6
+const WORD CGameSprite::FEEDBACK_TRAPDISARMED = 10;
+
+// 0x85C0C8
+const WORD CGameSprite::FEEDBACK_TRAPDETECTED = 11;
+
+// 0x85C0CA
+const WORD CGameSprite::FEEDBACK_ITEMCURSED = 12;
+
+// 0x85C0CC
+const WORD CGameSprite::FEEDBACK_HIDEFAILED = 13;
+
+// 0x85C0CE
+const WORD CGameSprite::FEEDBACK_TOOHEAVY_SLOWED = 14;
+
+// 0x85C0D0
+const WORD CGameSprite::FEEDBACK_TOOHEAVY_STOPPED = 15;
+
+// 0x85C0D2
+const WORD CGameSprite::FEEDBACK_16 = 16;
+
+// 0x85C0D4
+const WORD CGameSprite::FEEDBACK_HIDESUCCEEDED = 17;
+
+// 0x85C0D6
+const WORD CGameSprite::FEEDBACK_MORALEFAILURE_PANIC = 18;
+
+// 0x85C0D8
+const WORD CGameSprite::FEEDBACK_MORALEFAILURE_RUN = 19;
+
+// 0x85C0DA
+const WORD CGameSprite::FEEDBACK_MORALEFAILURE_BERSERK = 20;
+
+// 0x85C0DC
+const WORD CGameSprite::FEEDBACK_LEVELUP = 21;
+
+// 0x85C0DE
+const WORD CGameSprite::FEEDBACK_SPELLFAILED_INDOORS = 22;
+
+// 0x85C0E0
+const WORD CGameSprite::FEEDBACK_LEAVING_SHADOWS = 23;
+
+// 0x85C0E2
+const WORD CGameSprite::FEEDBACK_BASHDOORSUCCEEDED = 24;
+
+// 0x85C0E4
+const WORD CGameSprite::FEEDBACK_BASHDOORFAILED = 25;
+
+// 0x85C0E6
+const WORD CGameSprite::FEEDBACK_BASHCHESTSUCCEEDED = 26;
+
+// 0x85C0E8
+const WORD CGameSprite::FEEDBACK_BASHCHESTFAILED = 27;
+
+// 0x85C0EA
+const WORD CGameSprite::FEEDBACK_BACKSTAB_UNUSABLE_WEAPON = 28;
+
+// 0x85C0EC
+const WORD CGameSprite::FEEDBACK_29 = 29;
+
+// 0x85C0EE
+const WORD CGameSprite::FEEDBACK_PICKPOCKETFAILED_ARMOR = 30;
+
+// 0x85C0F0
+const WORD CGameSprite::FEEDBACK_PICKPOCKETFAILED_HOSTILE = 31;
+
+// 0x85C0F2
+const WORD CGameSprite::FEEDBACK_PICKPOCKETFAILED_SKILL = 32;
+
+// 0x85C0F4
+const WORD CGameSprite::FEEDBACK_PICKPOCKETFAILED_NOITEMS = 33;
+
+// 0x85C0F6
+const WORD CGameSprite::FEEDBACK_PICKPOCKETFAILED_INVENTORYFULL = 34;
+
+// 0x85C0F8
+const WORD CGameSprite::FEEDBACK_PICKPOCKETSUCCEEDED = 35;
+
+// 0x85C0FA
+const WORD CGameSprite::FEEDBACK_GAINEDSPECIALABILITY = 36;
+
+// 0x85C0FC
+const WORD CGameSprite::FEEDBACK_IMMUNE_TO_WEAPON = 37;
+
+// 0x85C0FE
+const WORD CGameSprite::FEEDBACK_CHARACTER_CONTROL_SEIZURE = 38;
+
+// 0x85C100
+const WORD CGameSprite::FEEDBACK_TRAPDISARMEDFAILED = 39;
+
+// 0x85C102
+const WORD CGameSprite::FEEDBACK_CRITICALHITAVOIDED = 40;
+
+// 0x85C104
+const WORD CGameSprite::FEEDBACK_AURA_CLEANSED = 41;
+
+// 0x85C106
+const WORD CGameSprite::FEEDBACK_ITEM_DROPPED_FULL = 48;
+
+// 0x85C108
+const WORD CGameSprite::FEEDBACK_LOCK_UNPICKABLE = 49;
+
+// 0x85C10A
+const WORD CGameSprite::FEEDBACK_TOOMANYSUMMONED = 50;
+
+// 0x85C10C
+const WORD CGameSprite::FEEDBACK_SILENCED = 51;
+
+// 0x85C10E
+const WORD CGameSprite::FEEDBACK_CRIPPLINGSTRIKESUCCEEDED = 52;
+
+// 0x85C110
+const WORD CGameSprite::FEEDBACK_SNEAK_UNUSABLE_WEAPON = 53;
+
+// 0x85C112
+const WORD CGameSprite::FEEDBACK_EFFECTSEVADED = 54;
+
+// 0x85C114
+const WORD CGameSprite::FEEDBACK_SPELLFAILED_DISRUPTED = 55;
+
+// 0x85C116
+const WORD CGameSprite::FEEDBACK_GAINEDBARDSONG = 56;
+
+// 0x85C118
+const WORD CGameSprite::FEEDBACK_STATICCHARGEEND = 57;
+
+// 0x85C11A
+const WORD CGameSprite::FEEDBACK_IMMUNE_TO_RESOURCE = 58;
+
+// 0x85C11C
+const WORD CGameSprite::FEEDBACK_LEAVEFAILED_INVENTORY = 59;
+
+// 0x85C11E
+const WORD CGameSprite::FEEDBACK_BACKSTAB_AVOIDED = 60;
+
+// 0x85C120
+const WORD CGameSprite::FEEDBACK_SPELLFAILED_CASTFAILURE = 61;
+
+// 0x85C122
+const WORD CGameSprite::FEEDBACK_62 = 62;
+
+// 0x85C124
+const WORD CGameSprite::FEEDBACK_63 = 63;
+
+// 0x85C126
+const WORD CGameSprite::FEEDBACK_CRIPPLINGSTRIKEFAILED = 64;
+
+// 0x85C128
+const WORD CGameSprite::FEEDBACK_USEMAGICDEVICEFAILED = 65;
+
+// 0x85C12A
+const WORD CGameSprite::FEEDBACK_USEMAGICDEVICESUCCEEDED = 66;
+
+// 0x85C12C
+const WORD CGameSprite::FEEDBACK_SEARCHSTART = 67;
+
+// 0x85C12E
+const WORD CGameSprite::FEEDBACK_SEARCHEND = 68;
+
+// 0x85C130
+const WORD CGameSprite::FEEDBACK_69 = 69;
+
+// 0x85C132
+const WORD CGameSprite::FEEDBACK_TURNUNDEADEND = 70;
+
+// 0x85C134
+const WORD CGameSprite::FEEDBACK_71 = 71;
+
+// 0x85C136
+const WORD CGameSprite::FEEDBACK_BATTLESONGSTART = 72;
+
+// 0x85C138
+const WORD CGameSprite::FEEDBACK_BATTLESONGEND = 73;
+
+// 0x85C13A
+const WORD CGameSprite::FEEDBACK_ARTERIALSTRIKESUCCEEDED = 75;
+
+// 0x85C13C
+const WORD CGameSprite::FEEDBACK_HAMSTRINGSUCCEEDED = 76;
+
+// 0x85C13E
+const WORD CGameSprite::FEEDBACK_HEROICINSPIRATION = 80;
+
+// 0x85C140
+const WORD CGameSprite::FEEDBACK_TARGETCONCEALED = 81;
+
+// 0x85C142
+const WORD CGameSprite::FEEDBACK_UNCANNYDODGESUCCEEDED = 82;
+
+// 0x85C144
+const WORD CGameSprite::FEEDBACK_ROLL = 83;
+
+// 0x85C146
+const WORD CGameSprite::FEEDBACK_SPELLFAILURE_CONCENTRATION = 84;
+
+// 0x85C148
+const WORD CGameSprite::FEEDBACK_SPONTANEOUSCASTING = 85;
+
+// 0x85C14A
+const WORD CGameSprite::FEEDBACK_TOGGLEFEAT = 86;
+
+// 0x85C14C
+const WORD CGameSprite::FEEDBACK_CLEAVE = 87;
+
+// 0x85C14E
+const WORD CGameSprite::FEEDBACK_LINGERINGSONG = 88;
+
+// 0x85C150
+const WORD CGameSprite::FEEDBACK_89 = 89;
+
+// 0x85C152
+const WORD CGameSprite::FEEDBACK_CALLLIGHTNINGEND = 90;
+
+// 0x85C154
+const WORD CGameSprite::FEEDBACK_MAGICALWEAPONINUSE = 91;
+
+// 0x85C156
+const WORD CGameSprite::FEEDBACK_LEAVEFAILED_LEVELUP = 92;
+
+// 0x85C158
+const WORD CGameSprite::FEEDBACK_LEAVEFAILED_STORE = 93;
 
 // 0x8F94B8
 const CPoint CGameSprite::PORTRAIT_ICON_SIZE(10, 10);
@@ -319,11 +570,17 @@ const CResRef CGameSprite::SPIN122("SPIN122");
 // 0x8F93F0
 const CResRef CGameSprite::SPIN285("SPIN285");
 
+// 0x8F9924
+const CString CGameSprite::TOKEN_SPECIALABILITY("SPECIALABILITYNAME");
+
 // 0x8F950C
 BOOLEAN CGameSprite::SHOW_CHARACTER_HP;
 
 // 0x8F950D
 BOOLEAN CGameSprite::GRAVITY_IS_DOWN;
+
+// 0x8B85E0
+INT CGameSprite::m_bRollFeedbackEnabled = -1;
 
 // 0x6EF990
 CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, DWORD expirationTime, WORD huntingRange, WORD followRange, DWORD timeOfDayVisible, CPoint startPos, WORD facing)
@@ -2096,6 +2353,12 @@ void CGameSprite::AddKnownDivineSpells(const BYTE& nClass)
     }
 }
 
+// 0x71F170
+void CGameSprite::DisplayTextRef(STRREF nameRef, STRREF textRef, COLORREF nameColor, COLORREF textColor)
+{
+    // TODO: Incomplete.
+}
+
 // 0x71FBA0
 void CGameSprite::GetNumInventoryPersonalSlots(INT& nUsedSlots, INT& nTotalSlots)
 {
@@ -2334,6 +2597,12 @@ STRREF CGameSprite::GetNameRef()
     return strName;
 }
 
+// 0x728270
+void CGameSprite::PlaySound(const CResRef& res)
+{
+    // TODO: Incomplete.
+}
+
 // 0x728460
 BOOL CGameSprite::Orderable(BOOL bIgnoreControl)
 {
@@ -2435,6 +2704,1118 @@ BOOL CGameSprite::HandleEffects()
     } while (bRetry);
 
     return v1 && v2;
+}
+
+// 0x7349A0
+void CGameSprite::FeedBack(WORD nFeedBackId, LONG a3, LONG a4, LONG a5, LONG a6, LONG a7, LONG a8)
+{
+    COLORREF rgbNameColor = CVidPalette::RANGE_COLORS[m_baseStats.m_colors[CVIDPALETTE_RANGE_MAIN_CLOTH]];
+    CString v1;
+    CString v2;
+
+    switch (nFeedBackId) {
+    case FEEDBACK_BACKSTAB:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x2) != 0) {
+            STRREF strBackstabDamage;
+            switch (m_derivedStats.m_nBackstabDamageMultiplier) {
+            case 1:
+                strBackstabDamage = 32110; // "Backstab Normal Damage"
+                break;
+            case 2:
+                strBackstabDamage = 16471; // "Backstab Double Damage"
+                break;
+            case 3:
+                strBackstabDamage = 16472; // "Backstab Triple Damage"
+                break;
+            case 4:
+                strBackstabDamage = 16473; // "Backstab Quadruple Damage"
+                break;
+            case 5:
+                strBackstabDamage = 16474; // "Backstab Quintuple Damage"
+                break;
+            case 6:
+                strBackstabDamage = 16475; // "Backstab Sextuple Damage"
+                break;
+            default:
+                strBackstabDamage = -1;
+                break;
+            }
+
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+                strBackstabDamage,
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_CRITICALHIT:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x2) != 0) {
+            if (a3 != 0) {
+                STR_RES strRes;
+                CString sText;
+                g_pBaldurChitin->GetTlkTable().Fetch(16462, strRes); // "Critical Hit!"
+                sText.Format("%s (%+d)", strRes.szText, a3);
+                g_pBaldurChitin->GetBaldurMessage()->DisplayText(GetName(),
+                    sText,
+                    rgbNameColor,
+                    RGB(215, 215, 190),
+                    -1,
+                    m_id,
+                    m_id);
+            } else {
+                g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+                    16462, // "Critical Hit!"
+                    rgbNameColor,
+                    RGB(215, 215, 190),
+                    -1,
+                    m_id,
+                    m_id);
+            }
+        }
+        break;
+    case FEEDBACK_CRITICALMISS:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x2) != 0) {
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+                16463, // "Critical Miss!"
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_TOHIT:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x1) != 0) {
+            CString sText1;
+            CString sText2;
+            sText2.Format("%d ", a8);
+
+            if (a7 > 0) {
+                STR_RES strRes;
+                g_pBaldurChitin->GetTlkTable().Fetch(733, strRes); // "Off Hand"
+                sText2 += "(" + strRes.szText + ")";
+            }
+
+            if (a5 > 0) {
+                sText1.Format(": %d + %d = %d", a3, a5, a3 + a5);
+            } else if (a5 < 0) {
+                sText1.Format(": %d - %d = %d", a3, -a5, a3 + a5);
+            } else {
+                sText1.Format(": %d", a3);
+            }
+
+            STR_RES strRes;
+            g_pBaldurChitin->GetTlkTable().Fetch(14643, strRes); // "Attack Roll "
+
+            if (strRes.cSound.GetRes() != NULL) {
+                if (!strRes.cSound.GetLooping()) {
+                    strRes.cSound.SetFireForget(TRUE);
+                }
+                strRes.cSound.SetChannel(14, reinterpret_cast<DWORD>(m_pArea));
+                strRes.cSound.Play(m_pos.x, m_pos.y, 0, FALSE);
+            }
+
+            if (strRes.szText != "") {
+                sText1 = strRes.szText + " " + sText2 + sText1;
+            }
+
+            if (a3 == 1) {
+                g_pBaldurChitin->GetTlkTable().Fetch(16463, strRes); // "Critical Miss!"
+            } else {
+                if (a4 != 0) {
+                    g_pBaldurChitin->GetTlkTable().Fetch(16460, strRes); // "Hit"
+                } else {
+                    g_pBaldurChitin->GetTlkTable().Fetch(16461, strRes); // "Miss"
+                }
+            }
+
+            if (strRes.cSound.GetRes() != NULL) {
+                if (!strRes.cSound.GetLooping()) {
+                    strRes.cSound.SetFireForget(TRUE);
+                }
+                strRes.cSound.SetChannel(14, reinterpret_cast<DWORD>(m_pArea));
+                strRes.cSound.Play(m_pos.x, m_pos.y, 0, FALSE);
+            }
+
+            if (strRes.szText != "") {
+                sText1 += " : " + strRes.szText;
+            }
+
+            g_pBaldurChitin->GetBaldurMessage()->DisplayText(GetName(),
+                sText1,
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_SPELL:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x4) != 0) {
+            STR_RES strRes;
+            g_pBaldurChitin->GetTlkTable().Fetch(16464, strRes); // "Casts"
+
+            if (strRes.cSound.GetRes() != NULL) {
+                if (!strRes.cSound.GetLooping()) {
+                    strRes.cSound.SetFireForget(TRUE);
+                }
+                strRes.cSound.SetChannel(14, reinterpret_cast<DWORD>(m_pArea));
+                strRes.cSound.Play(m_pos.x, m_pos.y, 0, FALSE);
+            }
+
+            if (strRes.szText != "") {
+                v1 = strRes.szText;
+            }
+
+            g_pBaldurChitin->GetTlkTable().Fetch(a6, strRes);
+
+            if (strRes.cSound.GetRes() != NULL) {
+                if (!strRes.cSound.GetLooping()) {
+                    strRes.cSound.SetFireForget(TRUE);
+                }
+                strRes.cSound.SetChannel(14, reinterpret_cast<DWORD>(m_pArea));
+                strRes.cSound.Play(m_pos.x, m_pos.y, 0, FALSE);
+            }
+        }
+        break;
+    case FEEDBACK_ATTACKS:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x4) != 0) {
+            STR_RES strRes1;
+            g_pBaldurChitin->GetTlkTable().Fetch(16465, strRes1); // "Attacks"
+
+            if (strRes1.cSound.GetRes() != NULL) {
+                if (!strRes1.cSound.GetLooping()) {
+                    strRes1.cSound.SetFireForget(TRUE);
+                }
+                strRes1.cSound.SetChannel(14, reinterpret_cast<DWORD>(m_pArea));
+                strRes1.cSound.Play(m_pos.x, m_pos.y, 0, FALSE);
+            }
+
+            if (strRes1.szText != "") {
+                v1 = strRes1.szText;
+            }
+
+            CString sName;
+            STR_RES strRes2;
+            if (a6 >= -7 && a6 != -1) {
+                LONG nCharacterId = g_pBaldurChitin->GetObjectGame()->GetCharacterSlot(-2 - a6);
+
+                CGameSprite* pSprite;
+
+                BYTE rc;
+                do {
+                    rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nCharacterId,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        reinterpret_cast<CGameObject**>(&pSprite),
+                        INFINITE);
+                } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+                if (rc == CGameObjectArray::SUCCESS) {
+                    sName = pSprite->GetName();
+                    g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nCharacterId,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        INFINITE);
+                }
+            } else {
+                g_pBaldurChitin->GetTlkTable().Fetch(a6, strRes2);
+                sName = strRes2.szText;
+            }
+
+            if (sName != "") {
+                v1 += " " + sName;
+            }
+
+            g_pBaldurChitin->GetBaldurMessage()->DisplayText(GetName(),
+                v1,
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_MODAL:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x4) != 0) {
+            STR_RES strRes;
+            g_pBaldurChitin->GetTlkTable().Fetch(a6, strRes);
+
+            if (strRes.cSound.GetRes() != NULL) {
+                if (!strRes.cSound.GetLooping()) {
+                    strRes.cSound.SetFireForget(TRUE);
+                }
+                strRes.cSound.SetChannel(14, reinterpret_cast<DWORD>(m_pArea));
+                strRes.cSound.Play(m_pos.x, m_pos.y, 0, FALSE);
+            }
+
+            if (strRes.szText != "") {
+                v1 = strRes.szText;
+            }
+
+            if (a3 != 0) {
+                g_pBaldurChitin->GetTlkTable().Fetch(16469, strRes); // "On"
+            } else {
+                g_pBaldurChitin->GetTlkTable().Fetch(16470, strRes); // "Off"
+            }
+
+            if (strRes.cSound.GetRes() != NULL) {
+                if (!strRes.cSound.GetLooping()) {
+                    strRes.cSound.SetFireForget(TRUE);
+                }
+                strRes.cSound.SetChannel(14, reinterpret_cast<DWORD>(m_pArea));
+                strRes.cSound.Play(m_pos.x, m_pos.y, 0, FALSE);
+            }
+
+            if (strRes.szText != "") {
+                v1 += strRes.szText;
+            }
+
+            g_pBaldurChitin->GetBaldurMessage()->DisplayText(GetName(),
+                v1,
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_LOCKPICKSUCCEEDED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                16517, // "Lock Pick Succeeded"
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_LOCKPICKFAILED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                16518, // "Lock Pick Failed"
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_TRAPDISARMED:
+        PlaySound(CResRef("ACT_09"));
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                16520, // "Trap Disarmed"
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_TRAPDETECTED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                16519, // "Trap Detected"
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_ITEMCURSED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+                16304, // "Item Cursed!"
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_HIDEFAILED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                17120, // "Hide Failed"
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_TOOHEAVY_SLOWED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            if (m_bPlayedEncumberedSlowed || a3 == 1) {
+                g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+                    19503, // "Encumbered: Slowed"
+                    rgbNameColor,
+                    RGB(215, 215, 190),
+                    -1,
+                    m_id,
+                    m_id);
+            }
+        }
+        break;
+    case FEEDBACK_TOOHEAVY_STOPPED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            if (m_bPlayedEncumberedStopped || a3 == 1) {
+                g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+                    19504, // "Encumbered: Can not move"
+                    rgbNameColor,
+                    RGB(215, 215, 190),
+                    -1,
+                    m_id,
+                    m_id);
+            }
+        }
+        break;
+    case FEEDBACK_16:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+                a6,
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_HIDESUCCEEDED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                19944, // "Hide Succeeded"
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_MORALEFAILURE_PANIC:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+                20568, // "Morale Failure: Panic"
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_MORALEFAILURE_RUN:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+                20569, // "Morale Failure: Running"
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_MORALEFAILURE_BERSERK:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+                20570, // "Morale Failure: Berserk"
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_LEVELUP:
+        g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+            17119, //  "Level Up"
+            rgbNameColor,
+            RGB(215, 215, 190),
+            -1,
+            m_id,
+            m_id);
+        break;
+    case FEEDBACK_SPELLFAILED_INDOORS:
+        g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+            9744, // "Spell Failed: Indoors"
+            rgbNameColor,
+            RGB(215, 215, 190),
+            -1,
+            m_id,
+            m_id);
+        break;
+    case FEEDBACK_LEAVING_SHADOWS:
+        PlaySound(CResRef("ACT_07"));
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                4188, // "Leaving Shadows"
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_BASHDOORSUCCEEDED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                9915, // "You have successfully forced the door open!"
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_BASHDOORFAILED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                9913, // "You have failed to force the door."
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_BASHCHESTSUCCEEDED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                9916, // "You have successfully forced the lock open!"
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_BASHCHESTFAILED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                9914, // "You have failed to force the lock."
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_BACKSTAB_UNUSABLE_WEAPON:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x2) != 0) {
+            DisplayTextRef(GetNameRef(),
+                10013, // "Your weapon is unsuitable for backstab."
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_PICKPOCKETFAILED_ARMOR:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                10067, // "Pick Pocket Disabled Due To Armor"
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_PICKPOCKETFAILED_HOSTILE:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                10068, // "Cannot pick pocket hostile creatures"
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_PICKPOCKETFAILED_SKILL:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+                10069, // "Pick Pocket Failed"
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_PICKPOCKETFAILED_NOITEMS:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                18297, // "Pick Pocket Succeeded -- Target Had Nothing to Steal"
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_PICKPOCKETFAILED_INVENTORYFULL:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                10071, // "Inventory Full"
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_PICKPOCKETSUCCEEDED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                10072, // "Pick Pocket Succeeded"
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_GAINEDSPECIALABILITY:
+        if (g_pBaldurChitin->GetActiveEngine() != g_pBaldurChitin->m_pEngineCreateChar) {
+            STR_RES strRes;
+            g_pBaldurChitin->GetTlkTable().Fetch(a6, strRes);
+            g_pBaldurChitin->GetTlkTable().SetToken(TOKEN_SPECIALABILITY, strRes.szText);
+            g_pBaldurChitin->GetTlkTable().Fetch(10514, strRes); // "Gained Special Ability: <SPECIALABILITYNAME>"
+            g_pBaldurChitin->m_pEngineWorld->DisplayText(GetName(),
+                strRes.szText,
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                FALSE);
+            if (g_pBaldurChitin->GetActiveEngine() != g_pBaldurChitin->m_pEngineCharacter) {
+                g_pBaldurChitin->GetActiveEngine()->PlayGUISound(CResRef("GAM_11"));
+            }
+        }
+        break;
+    case FEEDBACK_IMMUNE_TO_WEAPON:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x2) != 0) {
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+                11025, // "Weapon Ineffective."
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_CHARACTER_CONTROL_SEIZURE:
+        g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+            20679, // "Timeout: Server Assumed Control Of Character"
+            rgbNameColor,
+            RGB(215, 215, 190),
+            -1,
+            m_id,
+            m_id);
+        break;
+    case FEEDBACK_TRAPDISARMEDFAILED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                1608, // "Trap Not Disarmed"
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_CRITICALHITAVOIDED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x1) != 0) {
+            CString sText1;
+            CString sText2;
+            STR_RES strRes;
+            sText2.Format("%d ", a8);
+
+            if (a7 > 0) {
+                g_pBaldurChitin->GetTlkTable().Fetch(733, strRes); // "Off Hand"
+                sText2 += "(" + strRes.szText + ")";
+            }
+
+            if (a5 > 0) {
+                sText1.Format(": %d + %d = %d", a3, a5, a3 + a5);
+            } else if (a5 < 0) {
+                sText1.Format(": %d - %d = %d", a3, -a5, a3 + a5);
+            } else {
+                sText1.Format(": %d", a3);
+            }
+
+            g_pBaldurChitin->GetTlkTable().Fetch(39874, strRes); // "Critical Threat Roll"
+
+            if (strRes.szText != "") {
+                sText1 = strRes.szText + " " + sText2 + sText1;
+            }
+
+            if (a4 != 0) {
+                g_pBaldurChitin->GetTlkTable().Fetch(16462, strRes); // "Critical Hit!"
+            } else {
+                g_pBaldurChitin->GetTlkTable().Fetch(33752, strRes); // "Failed!"
+            }
+
+            if (strRes.szText != "") {
+                sText1 += " : " + strRes.szText;
+            }
+
+            g_pBaldurChitin->GetBaldurMessage()->DisplayText(GetName(),
+                sText1,
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+
+            if (a4 != 0) {
+                PlaySound(16, TRUE, FALSE, FALSE);
+            }
+        }
+        break;
+    case FEEDBACK_AURA_CLEANSED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                23797, // "Aura Cleansed"
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_ITEM_DROPPED_FULL:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                10959, // "Inventory Full: The item has been dropped."
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_LOCK_UNPICKABLE:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                23169, // "The mechanism that operates this does not have a conventional lock, and may be warded against simple spells."
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_TOOMANYSUMMONED:
+        g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+            18955, // "Summoning Limit Reached"
+            rgbNameColor,
+            RGB(215, 215, 190),
+            -1,
+            m_id,
+            m_id);
+        break;
+    case FEEDBACK_SILENCED:
+        DisplayTextRef(GetNameRef(),
+            21298, // "Bard Song Silenced"
+            rgbNameColor,
+            RGB(215, 215, 190));
+        break;
+    case FEEDBACK_CRIPPLINGSTRIKESUCCEEDED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x2) != 0) {
+            STR_RES strRes;
+            CString sText;
+            g_pBaldurChitin->GetTlkTable().Fetch(a6, strRes);
+            sText.Format(strRes.szText, a3);
+            if (sub_763150(CGAMESPRITE_FEAT_CRIPPLING_STRIKE)) {
+                g_pBaldurChitin->GetTlkTable().Fetch(25070, strRes); // " with Crippling Strike (-1 Str)"
+                sText.Format(strRes.szText, a3);
+            }
+            g_pBaldurChitin->GetBaldurMessage()->DisplayText(GetName(),
+                sText,
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_SNEAK_UNUSABLE_WEAPON:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x2) != 0) {
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+                24899, // "Weapon is unsuitable for sneak attack"
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_EFFECTSEVADED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x2) != 0) {
+            STRREF strEvasion;
+            if (a6 != -1) {
+                strEvasion = 25368; // "Evades effects from <RESOURCE>"
+
+                STR_RES strRes;
+                CString sText;
+                g_pBaldurChitin->GetTlkTable().Fetch(a6, strRes);
+                g_pBaldurChitin->GetTlkTable().SetToken(CString("RESOURCE"), strRes.szText);
+            } else {
+                strEvasion = 25369; // "Evades effects"
+            }
+
+            STR_RES strRes;
+            CString sText;
+            g_pBaldurChitin->GetTlkTable().Fetch(strEvasion, strRes);
+            sText = strRes.szText;
+            g_pBaldurChitin->GetBaldurMessage()->DisplayText(GetName(),
+                sText,
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_SPELLFAILED_DISRUPTED:
+        DisplayTextRef(GetNameRef(),
+            14796, // "Spell Disrupted"
+            rgbNameColor,
+            RGB(215, 215, 190));
+        break;
+    case FEEDBACK_GAINEDBARDSONG:
+        if (g_pBaldurChitin->GetActiveEngine() != g_pBaldurChitin->m_pEngineCreateChar) {
+            STR_RES strRes;
+            CString sText;
+            g_pBaldurChitin->GetTlkTable().Fetch(a6, strRes);
+            g_pBaldurChitin->GetTlkTable().SetToken(TOKEN_SPECIALABILITY, strRes.szText);
+            g_pBaldurChitin->GetTlkTable().Fetch(26320, strRes); // "Gained Bard Song: <SPECIALABILITYNAME>"
+            g_pBaldurChitin->m_pEngineWorld->DisplayText(GetName(),
+                sText,
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                FALSE);
+        }
+        if (g_pBaldurChitin->GetActiveEngine() != g_pBaldurChitin->m_pEngineCharacter) {
+            g_pBaldurChitin->GetActiveEngine()->PlayGUISound(CResRef("GAM_11"));
+        }
+        break;
+    case FEEDBACK_STATICCHARGEEND:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x2) != 0) {
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+                26518, // "Static charge buildup dissipates harmlessly."
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_IMMUNE_TO_RESOURCE:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x2) != 0) {
+            if (a6 != -1) {
+                STR_RES strRes;
+                CString sText;
+                g_pBaldurChitin->GetTlkTable().Fetch(a6, strRes);
+                g_pBaldurChitin->GetTlkTable().SetToken(CString("RESOURCE"), strRes.szText);
+                g_pBaldurChitin->GetTlkTable().Fetch(26818, strRes); // "Unaffected by effects from <RESOURCE>"
+                sText.Format("%s (%+d)", strRes.szText, a3);
+                g_pBaldurChitin->GetBaldurMessage()->DisplayText(GetName(),
+                    sText,
+                    rgbNameColor,
+                    RGB(215, 215, 190),
+                    -1,
+                    m_id,
+                    m_id);
+            }
+        }
+        break;
+    case FEEDBACK_LEAVEFAILED_INVENTORY:
+        g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+            26826, // "Cannot leave area while remote player is in inventory screen."
+            rgbNameColor,
+            RGB(215, 215, 190),
+            -1,
+            m_id,
+            m_id);
+        break;
+    case FEEDBACK_BACKSTAB_AVOIDED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x2) != 0) {
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+                121, // "The backstab seems to have failed."
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_SPELLFAILED_CASTFAILURE:
+        DisplayTextRef(GetNameRef(),
+            10453, // "Casting Failure"
+            rgbNameColor,
+            RGB(215, 215, 190));
+        break;
+    case FEEDBACK_62:
+        DisplayTextRef(GetNameRef(),
+            18352, // "Blinks out of existence and attack fails"
+            rgbNameColor,
+            RGB(215, 215, 190));
+        break;
+    case FEEDBACK_63:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x2) != 0) {
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+                18353, // "Blinks out of existence and avoids an attack"
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_CRIPPLINGSTRIKEFAILED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x2) != 0) {
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+                18759, // "The crippling strike seems to have failed."
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_USEMAGICDEVICEFAILED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                24197, // "Use Magic Device Failed"
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_USEMAGICDEVICESUCCEEDED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                24198, // "Use Magic Device Succeeded"
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+    case FEEDBACK_SEARCHSTART:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                25085, // "Searching..."
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_SEARCHEND:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                25090, // "Stopped Searching"
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_TURNUNDEADEND:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                25136, // "Stopped Turning Undead"
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_BATTLESONGSTART:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            if (a6 != 0) {
+                STR_RES strRes1;
+                STR_RES strRes2;
+                CString sText;
+
+                g_pBaldurChitin->GetTlkTable().Fetch(25138, strRes1); // "Singing Battlesong"
+                g_pBaldurChitin->GetTlkTable().Fetch(a6, strRes2);
+                sText.Format("%s: %s", strRes1.szText, strRes2.szText);
+
+                g_pBaldurChitin->GetBaldurMessage()->DisplayText(GetName(),
+                    sText,
+                    rgbNameColor,
+                    RGB(215, 215, 190),
+                    -1,
+                    m_id,
+                    m_id);
+            }
+        }
+        break;
+    case FEEDBACK_BATTLESONGEND:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                25141, // "Stopped Singing Battlesong"
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_ARTERIALSTRIKESUCCEEDED:
+        DisplayTextRef(GetNameRef(),
+            37673, // "Arterial Strike feat was used successfully to cause a bleeding wound."
+            rgbNameColor,
+            RGB(215, 215, 190));
+        break;
+    case FEEDBACK_HAMSTRINGSUCCEEDED:
+        DisplayTextRef(GetNameRef(),
+            37675, // "Hamstring feat was used successfully to hinder your opponent's movement by 50%."
+            rgbNameColor,
+            RGB(215, 215, 190));
+        break;
+    case FEEDBACK_HEROICINSPIRATION:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            DisplayTextRef(GetNameRef(),
+                24196, // "Heroic Inspiration"
+                rgbNameColor,
+                RGB(215, 215, 190));
+        }
+        break;
+    case FEEDBACK_TARGETCONCEALED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x1) != 0) {
+            STR_RES strRes;
+            CString sText;
+            g_pBaldurChitin->GetTlkTable().Fetch(37668, strRes); // "Missed <TARGETNAME> due to concealment."
+            sText.Format("%s (%+d)", strRes.szText, a3);
+            g_pBaldurChitin->GetBaldurMessage()->DisplayText(GetName(),
+                sText,
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_UNCANNYDODGESUCCEEDED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x2) != 0) {
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+                39308, // "Uncanny Dodge prevented flank attack."
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_ROLL:
+        if (m_bRollFeedbackEnabled == -1) {
+            if (GetPrivateProfileIntA("Program Options", "EnableRollFeedback", 0, g_pBaldurChitin->GetIniFileName()) != 0) {
+                m_bRollFeedbackEnabled = 1;
+            } else {
+                m_bRollFeedbackEnabled = 0;
+            }
+        }
+
+        if (m_bRollFeedbackEnabled != 0) {
+            if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x2) != 0) {
+                STR_RES strRes;
+                CString sText;
+                g_pBaldurChitin->GetTlkTable().Fetch(a6, strRes);
+                sText.Format(strRes.szText, a3, a4, a5, a7, a8);
+                g_pBaldurChitin->m_pEngineWorld->DisplayText(GetName(),
+                    sText,
+                    rgbNameColor,
+                    RGB(215, 215, 190),
+                    -1,
+                    FALSE);
+                if (g_pBaldurChitin->GetActiveEngine() != g_pBaldurChitin->m_pEngineCharacter) {
+                    g_pBaldurChitin->GetActiveEngine()->PlayGUISound(CResRef("GAM_11"));
+                }
+            }
+        }
+        break;
+    case FEEDBACK_SPELLFAILURE_CONCENTRATION:
+        DisplayTextRef(GetNameRef(),
+            39265, // Spell disrupted because caster failed concentration check required due to of nearness of enemies."
+            rgbNameColor,
+            RGB(215, 215, 190));
+        break;
+    case FEEDBACK_SPONTANEOUSCASTING:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            if (a6 != 0) {
+                STR_RES strRes1;
+                STR_RES strRes2;
+                CString sText;
+
+                g_pBaldurChitin->GetTlkTable().Fetch(39742, strRes1); // "Spontaneous Casting"
+                g_pBaldurChitin->GetTlkTable().Fetch(a6, strRes2);
+                sText.Format("%s: %s", strRes1.szText, strRes2.szText);
+
+                g_pBaldurChitin->GetBaldurMessage()->DisplayText(GetName(),
+                    sText,
+                    rgbNameColor,
+                    RGB(215, 215, 190),
+                    -1,
+                    m_id,
+                    m_id);
+            }
+        }
+        break;
+    case FEEDBACK_TOGGLEFEAT:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            if (a6 != 0) {
+                STR_RES strRes1;
+                STR_RES strRes2;
+                CString sText;
+
+                // 39853: "Stopped Using Feat"
+                // 39823: "Using Feat"
+                g_pBaldurChitin->GetTlkTable().Fetch(a3 == 1 ? 39853 : 39823, strRes1);
+                g_pBaldurChitin->GetTlkTable().Fetch(a6, strRes2);
+
+                if (a4 > 0) {
+                    sText.Format("%s: %s %d", strRes1.szText, strRes2.szText, a4);
+                } else {
+                    sText.Format("%s: %s", strRes1.szText, strRes2.szText);
+                }
+
+                g_pBaldurChitin->GetBaldurMessage()->DisplayText(GetName(),
+                    sText,
+                    rgbNameColor,
+                    RGB(215, 215, 190),
+                    -1,
+                    m_id,
+                    m_id);
+            }
+        }
+        break;
+    case FEEDBACK_CLEAVE:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x4) != 0) {
+            STR_RES strRes;
+            CString sText;
+            g_pBaldurChitin->GetTlkTable().Fetch(39846, strRes); // "Cleave feat adds another level %d attack."
+            sText.Format("%s (%+d)", strRes.szText, a3);
+            g_pBaldurChitin->GetBaldurMessage()->DisplayText(GetName(),
+                sText,
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_LINGERINGSONG:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            if (a6 != 0) {
+                STR_RES strRes1;
+                STR_RES strRes2;
+                CString sText;
+
+                g_pBaldurChitin->GetTlkTable().Fetch(39881, strRes1); // "Using Feat: Lingering Song"
+                g_pBaldurChitin->GetTlkTable().Fetch(a6, strRes2);
+                sText.Format("%s: %s", strRes1.szText, strRes2.szText);
+
+                g_pBaldurChitin->GetBaldurMessage()->DisplayText(GetName(),
+                    sText,
+                    rgbNameColor,
+                    RGB(215, 215, 190),
+                    -1,
+                    m_id,
+                    m_id);
+            }
+        }
+        break;
+    case FEEDBACK_89:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            if (a6 != 0) {
+                STR_RES strRes;
+                CString sText(" ");
+                g_pBaldurChitin->GetTlkTable().Fetch(a6, strRes);
+                sText.Format("%s", strRes.szText);
+                g_pBaldurChitin->GetBaldurMessage()->DisplayText(GetName(),
+                    sText,
+                    rgbNameColor,
+                    RGB(215, 215, 190),
+                    -1,
+                    m_id,
+                    m_id);
+            }
+        }
+        break;
+    case FEEDBACK_CALLLIGHTNINGEND:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x2) != 0) {
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+                41008, // "Call Lightning buildup dissipates harmlessly"
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_MAGICALWEAPONINUSE:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+                10141, // "Magical weapon in use"
+                rgbNameColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                m_id);
+        }
+        break;
+    case FEEDBACK_LEAVEFAILED_LEVELUP:
+        g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+            41398, // "Cannot leave area while remote player is in the level up screen."
+            rgbNameColor,
+            RGB(215, 215, 190),
+            -1,
+            m_id,
+            m_id);
+        break;
+    case FEEDBACK_LEAVEFAILED_STORE:
+        g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(GetNameRef(),
+            41400, // "Cannot leave area while remote player is in the store screen."
+            rgbNameColor,
+            RGB(215, 215, 190),
+            -1,
+            m_id,
+            m_id);
+        break;
+    }
 }
 
 // 0x73B740
