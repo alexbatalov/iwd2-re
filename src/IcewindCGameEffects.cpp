@@ -1056,6 +1056,27 @@ CGameEffect* IcewindCGameEffectVisualEffect::Copy()
     return copy;
 }
 
+// 0x569320
+BOOL IcewindCGameEffectVisualEffect::ApplyEffect(CGameSprite* pSprite)
+{
+    // NOTE: Using `set` (with bounds check).
+    pSprite->GetDerivedStats()->m_spellStatesExtra.set(m_dwFlags, true);
+
+    if (m_dwFlags == SPLSTATEEXTRA_18) {
+        pSprite->GetDerivedStats()->m_spellStatesExtra[SPLSTATEEXTRA_19] = true;
+    }
+
+    if (m_dwFlags == SPLSTATEEXTRA_20) {
+        pSprite->GetDerivedStats()->m_spellStatesExtra[SPLSTATEEXTRA_21] = true;
+    }
+
+    if (m_dwFlags == SPLSTATEEXTRA_22) {
+        pSprite->GetDerivedStats()->m_spellStatesExtra[SPLSTATEEXTRA_23] = true;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A10F0
