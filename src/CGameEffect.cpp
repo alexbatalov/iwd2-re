@@ -1360,6 +1360,12 @@ void CGameEffect::SetSourceId(LONG sourceID)
     m_sourceID = sourceID;
 }
 
+// 0x4C3FA0
+void CGameEffect::AdjustTHAC0(CGameSprite* pSprite, SHORT nValue)
+{
+    pSprite->GetDerivedStats()->m_nTHAC0 += nValue;
+}
+
 // 0x4C4080
 void CGameEffect::AddSlowEffect(CGameSprite* pSprite)
 {
@@ -1417,6 +1423,12 @@ void CGameEffect::AddPortraitIcon(CGameSprite* pSprite, int icon)
 
     CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
     pGame->UpdatePortrait(pGame->GetCharacterPortraitNum(pSprite->GetId()), 1);
+}
+
+// 0x4C42F0
+void CGameEffect::SetSpellState(CGameSprite* pSprite, DWORD dwSpellState)
+{
+    pSprite->GetDerivedStats()->m_spellStates.set(dwSpellState);
 }
 
 // 0x4A2E00

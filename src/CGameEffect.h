@@ -307,9 +307,11 @@ public:
     void SetSource(const CPoint& pt);
     void SetSourceId(LONG sourceID);
 
+    void AdjustTHAC0(CGameSprite* pSprite, SHORT nValue);
     void AddSlowEffect(CGameSprite* pSprite);
     void RemoveAllOfType(CGameSprite* pSprite, WORD effectID, LONG effectAmount);
     void AddPortraitIcon(CGameSprite* pSprite, int icon);
+    void SetSpellState(CGameSprite* pSprite, DWORD dwSpellState);
     static void ClearItemEffect(ITEM_EFFECT* itemEffect, WORD newEffectId);
 
     /* 010C */ LONG m_sourceID;

@@ -1520,6 +1520,25 @@ CGameEffect* IcewindCGameEffectBane::Copy()
     return copy;
 }
 
+// 0x56B710
+BOOL IcewindCGameEffectBane::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        DisplayStringRef(pSprite, 14406); // "Afflicted by Bane"
+        RemoveAllOfType(pSprite, CGAMEEFFECT_NON_CUMULATIVEAID, -1);
+    }
+
+    if (!pSprite->GetDerivedStats()->m_spellStates[CGAMEEFFECT_DURATIONCASTING]) {
+        AddPortraitIcon(pSprite, 35);
+        AddColorEffect(pSprite, 0, 0, 128, 30);
+        SetSpellState(pSprite, CGAMEEFFECT_DURATIONCASTING);
+        AdjustTHAC0(pSprite, -1);
+        pSprite->GetBaseStats()->m_morale--;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A2950
