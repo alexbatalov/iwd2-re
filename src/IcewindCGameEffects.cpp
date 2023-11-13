@@ -1574,6 +1574,52 @@ CGameEffect* IcewindCGameEffectFeatArterialStrike::Copy()
     return copy;
 }
 
+// 0x56BB30
+BOOL IcewindCGameEffectFeatArterialStrike::ApplyEffect(CGameSprite* pSprite)
+{
+    if (!pSprite->sub_763150(CGAMESPRITE_FEAT_ARTERIAL_STRIKE)) {
+        return FALSE;
+    }
+
+    INT nRank = pSprite->sub_726270(CGAMESPRITE_FEAT_ARTERIAL_STRIKE);
+    if (nRank > 0) {
+        pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_FEAT_ARTERIAL_STRIKE] = true;
+        if (m_secondaryType != 0) {
+            if (pSprite->GetDerivedStats()->m_spellStates[CGAMESPRITE_FEAT_HAMSTRING]) {
+                pSprite->FeedBack(CGameSprite::FEEDBACK_TOGGLEFEAT,
+                    1,
+                    0,
+                    0,
+                    35787, // "Hamstring"
+                    0,
+                    0);
+            }
+            pSprite->FeedBack(CGameSprite::FEEDBACK_TOGGLEFEAT,
+                0,
+                0,
+                0,
+                35774, // "Arterial Strike"
+                0,
+                0);
+        }
+        pSprite->GetDerivedStats()->m_spellStates[CGAMESPRITE_FEAT_HAMSTRING] = false;
+    } else {
+        pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_FEAT_ARTERIAL_STRIKE] = false;
+        m_done = TRUE;
+        if (m_secondaryType != 0) {
+            pSprite->FeedBack(CGameSprite::FEEDBACK_TOGGLEFEAT,
+                1,
+                0,
+                0,
+                35774, // "Arterial Strike"
+                0,
+                0);
+        }
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A2C20
