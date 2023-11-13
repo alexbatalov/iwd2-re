@@ -1,5 +1,7 @@
 #include "IcewindCGameEffects.h"
 
+#include "CGameSprite.h"
+
 // 0x49DB70
 IcewindCGameEffectBeltynsBurningBlood::IcewindCGameEffectBeltynsBurningBlood(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
     : CGameEffect(effect, source, sourceID, target, TRUE)
@@ -1606,4 +1608,40 @@ CGameEffect* IcewindCGameEffectFeatRapidShot::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x56BD10
+BOOL IcewindCGameEffectFeatRapidShot::ApplyEffect(CGameSprite* pSprite)
+{
+    if (!pSprite->sub_763150(CGAMESPRITE_FEAT_RAPID_SHOT)) {
+        return FALSE;
+    }
+
+    INT nRank = pSprite->sub_726270(CGAMESPRITE_FEAT_RAPID_SHOT);
+    if (nRank > 0) {
+        pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_FEAT_RAPID_SHOT] = true;
+        if (m_secondaryType != 0) {
+            pSprite->FeedBack(CGameSprite::FEEDBACK_TOGGLEFEAT,
+                0,
+                0,
+                0,
+                35796, // "Rapid Shot"
+                0,
+                0);
+        }
+    } else {
+        pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_FEAT_RAPID_SHOT] = false;
+        m_done = TRUE;
+        if (m_secondaryType != 0) {
+            pSprite->FeedBack(CGameSprite::FEEDBACK_TOGGLEFEAT,
+                1,
+                0,
+                0,
+                35796, // "Rapid Shot"
+                0,
+                0);
+        }
+    }
+
+    return TRUE;
 }
