@@ -1430,6 +1430,13 @@ CGameEffect* IcewindCGameEffectSmiteEvil::Copy()
     return copy;
 }
 
+// 0x56B220
+BOOL IcewindCGameEffectSmiteEvil::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_SMITE_EVIL] = true;
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A24A0
