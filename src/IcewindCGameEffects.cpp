@@ -1198,6 +1198,28 @@ CGameEffect* IcewindCGameEffectStormShell::Copy()
     return copy;
 }
 
+// 0x56A090
+BOOL IcewindCGameEffectStormShell::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        DisplayStringRef(pSprite, 8830); // "Protected by Storm Shell"
+    }
+
+    if (!pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_STORM_SHELL]) {
+        // NOTE: Using `set` (with bounds check).
+        pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_STORM_SHELL, true);
+
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 105);
+
+        pSprite->GetDerivedStats()->m_spellStatesExtra[SPLSTATEEXTRA_17] = true;
+        pSprite->m_bonusStats.m_nResistFire += 15;
+        pSprite->m_bonusStats.m_nResistCold += 15;
+        pSprite->m_bonusStats.m_nResistElectricity += 15;
+    }
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A1870

@@ -528,6 +528,7 @@ class IcewindCGameEffectStormShell : public CGameEffect {
 public:
     IcewindCGameEffectStormShell(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class IcewindCGameEffectProtectionFromElements : public CGameEffect {
