@@ -984,6 +984,35 @@ CGameEffect* IcewindCGameEffectEnfeeblement::Copy()
     return copy;
 }
 
+// 0x568C10
+BOOL IcewindCGameEffectEnfeeblement::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        DisplayStringRef(pSprite, 7924); // "Enfeebled"
+
+        SHORT v1 = rand() % 6 + 1;
+        SHORT v2 = static_cast<BYTE>(m_casterLevel) - 1 > 10
+            ? 5
+            : static_cast<BYTE>(m_casterLevel) / 2;
+        m_effectAmount = v1 + v2;
+    }
+
+    if (!pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_ENFEEBLED]) {
+        pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_ENFEEBLED] = true;
+
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 90);
+
+        pSprite->GetDerivedStats()->m_nSTR -= 15;
+        if (pSprite->GetDerivedStats()->m_nSTR < 1) {
+            pSprite->GetDerivedStats()->m_nSTR = 1;
+        }
+
+        m_done = FALSE;
+    }
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A0D30
