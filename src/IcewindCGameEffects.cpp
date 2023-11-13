@@ -1216,6 +1216,31 @@ CGameEffect* IcewindCGameEffectProtectionFromElements::Copy()
     return copy;
 }
 
+// 0x56A140
+BOOL IcewindCGameEffectProtectionFromElements::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        DisplayStringRef(pSprite, 8842); // "Protected by Protection from the Elements"
+    }
+
+    if (!pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_PROTECTION_FROM_THE_ELEMENTS]) {
+        pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_PROTECTION_FROM_THE_ELEMENTS] = true;
+
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 93);
+
+        AddColorEffect(pSprite, 192, 0, 0, 61);
+        AddColorEffect(pSprite, 0, 192, 0, 43);
+        AddColorEffect(pSprite, 0, 0, 192, 79);
+
+        pSprite->m_bonusStats.m_nResistFire += 15;
+        pSprite->m_bonusStats.m_nResistCold += 15;
+        pSprite->m_bonusStats.m_nResistElectricity += 15;
+        pSprite->m_bonusStats.m_nResistAcid += 15;
+    }
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A1960
