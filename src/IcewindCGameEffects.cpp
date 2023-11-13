@@ -1592,6 +1592,52 @@ CGameEffect* IcewindCGameEffectFeatHamstring::Copy()
     return copy;
 }
 
+// 0x56BC20
+BOOL IcewindCGameEffectFeatHamstring::ApplyEffect(CGameSprite* pSprite)
+{
+    if (!pSprite->sub_763150(CGAMESPRITE_FEAT_HAMSTRING)) {
+        return FALSE;
+    }
+
+    INT nRank = pSprite->sub_726270(CGAMESPRITE_FEAT_HAMSTRING);
+    if (nRank > 0) {
+        pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_FEAT_HAMSTRING] = true;
+        if (m_secondaryType != 0) {
+            if (pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_FEAT_ARTERIAL_STRIKE]) {
+                pSprite->FeedBack(CGameSprite::FEEDBACK_TOGGLEFEAT,
+                    1,
+                    0,
+                    0,
+                    35774, // "Arterial Strike"
+                    0,
+                    0);
+            }
+            pSprite->FeedBack(CGameSprite::FEEDBACK_TOGGLEFEAT,
+                0,
+                0,
+                0,
+                35787, // "Hamstring"
+                0,
+                0);
+        }
+        pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_FEAT_ARTERIAL_STRIKE] = false;
+    } else {
+        pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_FEAT_HAMSTRING] = false;
+        m_done = TRUE;
+        if (m_secondaryType != 0) {
+            pSprite->FeedBack(CGameSprite::FEEDBACK_TOGGLEFEAT,
+                1,
+                0,
+                0,
+                35787, // "Hamstring"
+                0,
+                0);
+        }
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A2D10
