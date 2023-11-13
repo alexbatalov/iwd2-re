@@ -1074,6 +1074,26 @@ CGameEffect* IcewindCGameEffectOtilukesResilientSphere::Copy()
     return copy;
 }
 
+// 0x569320
+BOOL IcewindCGameEffectOtilukesResilientSphere::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        DisplayStringRef(pSprite, 4732); // "Encased in Otiluke's Resilient Sphere"
+    }
+
+    pSprite->field_9D15 = 1;
+
+    // NOTE: Uninline.
+    AddPortraitIcon(pSprite, 100);
+
+    pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_HELD] = true;
+    pSprite->GetDerivedStats()->m_generalState |= STATE_HELPLESS;
+    pSprite->GetDerivedStats()->m_spellStatesExtra[SPLSTATEEXTRA_10] = true;
+    pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_OTILUKES_RESILIENT_SPHERE] = true;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A11E0
