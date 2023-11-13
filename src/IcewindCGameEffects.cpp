@@ -1,6 +1,7 @@
 #include "IcewindCGameEffects.h"
 
 #include "CGameSprite.h"
+#include "IcewindMisc.h"
 
 // 0x49DB70
 IcewindCGameEffectBeltynsBurningBlood::IcewindCGameEffectBeltynsBurningBlood(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
@@ -1410,6 +1411,38 @@ CGameEffect* IcewindCGameEffectTensersTransformation::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x56B0F0
+BOOL IcewindCGameEffectTensersTransformation::ApplyEffect(CGameSprite* pSprite)
+{
+    if (!pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_TENSERS_TRANSFORMATION]) {
+        pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_TENSERS_TRANSFORMATION, true);
+
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 55);
+
+        pSprite->SetColorRange(62);
+
+        if (m_secondaryType) {
+            m_effectAmount2 = IcewindMisc::Roll(m_casterLevel, 6);
+            m_effectAmount3 = IcewindMisc::Roll(2, 4);
+            m_effectAmount4 = IcewindMisc::Roll(2, 4);
+        }
+
+        pSprite->GetDerivedStats()->m_nMaxHitPoints += static_cast<SHORT>(m_effectAmount2);
+        if (m_secondaryType) {
+            pSprite->GetBaseStats()->m_hitPoints += static_cast<SHORT>(m_effectAmount2);
+        }
+        pSprite->GetDerivedStats()->m_nSTR += static_cast<SHORT>(m_effectAmount3);
+        pSprite->GetDerivedStats()->m_nDEX += static_cast<SHORT>(m_effectAmount4);
+        pSprite->GetDerivedStats()->m_nTHAC0 += static_cast<BYTE>(m_casterLevel) / 2;
+        pSprite->GetDerivedStats()->m_nSaveVSFortitude += 5;
+        pSprite->GetDerivedStats()->field_C += 4;
+        pSprite->GetDerivedStats()->m_disabledSpellTypes[0] = TRUE;
+        pSprite->GetDerivedStats()->m_disabledSpellTypes[1] = TRUE;
+    }
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------
