@@ -1556,6 +1556,75 @@ CGameEffect* IcewindCGameEffectFeatExpertise::Copy()
     return copy;
 }
 
+// 0x56B960
+BOOL IcewindCGameEffectFeatExpertise::ApplyEffect(CGameSprite* pSprite)
+{
+    if (!pSprite->sub_763150(CGAMESPRITE_FEAT_EXPERTISE)) {
+        return FALSE;
+    }
+
+    INT nRank = pSprite->sub_726270(CGAMESPRITE_FEAT_EXPERTISE);
+
+    // NOTE: Using `set` (with bounds check).
+    pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_FEAT_EXPERTISE_1, nRank == 1);
+    pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_FEAT_EXPERTISE_2, nRank == 2);
+    pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_FEAT_EXPERTISE_3, nRank == 3);
+    pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_FEAT_EXPERTISE_4, nRank == 4);
+    pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_FEAT_EXPERTISE_5, nRank == 5);
+
+    if (nRank != 0
+        && (pSprite->GetDerivedStats()->m_spellStates.test(SPLSTATE_FEAT_EXPERTISE_1)
+            || pSprite->GetDerivedStats()->m_spellStates.test(SPLSTATE_FEAT_EXPERTISE_2)
+            || pSprite->GetDerivedStats()->m_spellStates.test(SPLSTATE_FEAT_EXPERTISE_3)
+            || pSprite->GetDerivedStats()->m_spellStates.test(SPLSTATE_FEAT_EXPERTISE_4)
+            || pSprite->GetDerivedStats()->m_spellStates.test(SPLSTATE_FEAT_EXPERTISE_5))) {
+        if (m_secondaryType) {
+            // NOTE: Odd mixing of `test` (with bounds check) and `operator[]`.
+            if (pSprite->GetDerivedStats()->m_spellStates.test(SPLSTATE_FEAT_POWER_ATTACK_1)
+                || pSprite->GetDerivedStats()->m_spellStates.test(SPLSTATE_FEAT_POWER_ATTACK_2)
+                || pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_FEAT_POWER_ATTACK_3]
+                || pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_FEAT_POWER_ATTACK_4]
+                || pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_FEAT_POWER_ATTACK_5]) {
+                pSprite->FeedBack(CGameSprite::FEEDBACK_TOGGLEFEAT,
+                    1,
+                    0,
+                    0,
+                    35794, // "Power Attack"
+                    0,
+                    0);
+            }
+            pSprite->FeedBack(CGameSprite::FEEDBACK_TOGGLEFEAT,
+                0,
+                0,
+                0,
+                35785, // "Expertise"
+                0,
+                0);
+        }
+
+        // NOTE: Only this one is changed using `set` (with bounds check).
+        pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_FEAT_POWER_ATTACK_1, false);
+
+        pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_FEAT_POWER_ATTACK_2] = false;
+        pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_FEAT_POWER_ATTACK_3] = false;
+        pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_FEAT_POWER_ATTACK_4] = false;
+        pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_FEAT_POWER_ATTACK_5] = false;
+    } else {
+        m_done = TRUE;
+        if (m_secondaryType) {
+            pSprite->FeedBack(CGameSprite::FEEDBACK_TOGGLEFEAT,
+                1,
+                nRank,
+                0,
+                35785, // "Expertise"
+                0,
+                0);
+        }
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A2B30
