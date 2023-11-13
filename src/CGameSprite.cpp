@@ -4955,6 +4955,20 @@ INT CGameSprite::GetMulticlassingPenalty()
     return nPenalty;
 }
 
+// 0x765BD0
+void CGameSprite::SetColorRange(BYTE rangeValue)
+{
+    field_563C = 1;
+
+    // NOTE: Uninline.
+    m_animation.SetColorRangeAll(rangeValue);
+
+    CColorRange* pColorRange = new CColorRange();
+    pColorRange->m_range = -1;
+    pColorRange->m_color = rangeValue;
+    m_derivedStats.m_appliedColorRanges.AddTail(pColorRange);
+}
+
 // 0x765C50
 void CGameSprite::DisplayFeats(CUIControlTextDisplay* pText)
 {

@@ -467,6 +467,7 @@ public:
     INT GetEffectiveCharacterLevel();
     INT GetRacialFavoredClass(DWORD& nSpecialization);
     INT GetMulticlassingPenalty();
+    void SetColorRange(BYTE rangeValue);
     void DisplayFeats(CUIControlTextDisplay* pText);
     void DisplaySkills(CUIControlTextDisplay* pText);
     void MoveOntoArea(CGameArea* pArea, const CPoint& dest, SHORT facingDirection);
