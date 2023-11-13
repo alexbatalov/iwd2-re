@@ -1306,6 +1306,48 @@ CGameEffect* IcewindCGameEffectEnergyDrain::Copy()
     return copy;
 }
 
+// 0x56A910
+BOOL IcewindCGameEffectEnergyDrain::ApplyEffect(CGameSprite* pSprite)
+{
+    if (pSprite != NULL && pSprite->field_72B6) {
+        return FALSE;
+    }
+
+    if (m_secondaryType) {
+        DisplayStringRef(pSprite, 16286);
+    }
+
+    // NOTE: Using `set` (with bounds check).
+    pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_ENERGY_DRAINED, true);
+
+    // NOTE: Uninline.
+    AddPortraitIcon(pSprite, 123);
+
+    pSprite->GetDerivedStats()->m_nTHAC0 -= static_cast<SHORT>(m_effectAmount);
+    pSprite->GetDerivedStats()->m_nSaveVSFortitude -= static_cast<SHORT>(m_effectAmount);
+    pSprite->GetDerivedStats()->m_nSaveVSReflex -= static_cast<SHORT>(m_effectAmount);
+    pSprite->GetDerivedStats()->m_nSaveVSWill -= static_cast<SHORT>(m_effectAmount);
+    pSprite->GetDerivedStats()->m_nMaxHitPoints += -5 * static_cast<SHORT>(m_effectAmount);
+
+    if (m_secondaryType) {
+        pSprite->GetBaseStats()->m_hitPoints += -5 * static_cast<SHORT>(m_effectAmount);
+    }
+
+    if (pSprite->GetBaseStats()->m_hitPoints <= 0 || pSprite->GetDerivedStats()->m_nMaxHitPoints <= 0) {
+        CGameEffectDeath* pDeath = new CGameEffectDeath();
+        pDeath->m_source = m_source;
+        pDeath->m_sourceID = m_sourceID;
+        pDeath->m_dwFlags = 0x4;
+        pSprite->AddEffect(pDeath, CGameAIBase::EFFECT_LIST_TIMED, TRUE, TRUE);
+
+        pSprite->GetDerivedStats()->m_nMaxHitPoints = 1;
+        pSprite->GetBaseStats()->m_hitPoints = 0;
+        m_done = TRUE;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A1E10
