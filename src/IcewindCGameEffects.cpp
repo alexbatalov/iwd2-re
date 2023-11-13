@@ -1,6 +1,8 @@
 #include "IcewindCGameEffects.h"
 
+#include "CBaldurChitin.h"
 #include "CGameSprite.h"
+#include "CInfGame.h"
 #include "CUtil.h"
 #include "IcewindMisc.h"
 
@@ -1160,6 +1162,46 @@ CGameEffect* IcewindCGameEffectUnconsciousness::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x569BD0
+BOOL IcewindCGameEffectUnconsciousness::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetDerivedStats()->m_generalState |= STATE_HELPLESS | STATE_SLEEPING;
+
+    if (m_dwFlags == 1) {
+        // NOTE: Using `set` (with bounds check).
+        pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_DOESNT_AWAKEN_ON_DAMAGE, true);
+    }
+
+    // NOTE: Uninline.
+    AddPortraitIcon(pSprite, 88);
+
+    if (m_secondaryType) {
+        DisplayStringRef(pSprite, 20438); // "Knocked Unconscious"
+
+        ITEM_EFFECT* effect = new ITEM_EFFECT;
+        ClearItemEffect(effect, CGAMEEFFECT_SETSEQUENCE);
+        effect->dwFlags = CGameSprite::SEQ_AWAKE;
+        effect->durationType = 4;
+        effect->duration = m_duration - g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime / 15;
+        CGameEffect* pEffect = CGameEffect::DecodeEffect(effect,
+            CPoint(-1, -1),
+            -1,
+            CPoint(-1, -1));
+        delete effect;
+        pSprite->AddEffect(pEffect, CGameAIBase::EFFECT_LIST_TIMED, TRUE, TRUE);
+    }
+
+    if (pSprite->m_nSequence != CGameSprite::SEQ_DIE
+        && pSprite->m_nSequence != CGameSprite::SEQ_SLEEP
+        && pSprite->m_nSequence != CGameSprite::SEQ_TWITCH) {
+        pSprite->SetSequence(CGameSprite::SEQ_SLEEP);
+    }
+
+    pSprite->field_9D15 = 1;
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------
