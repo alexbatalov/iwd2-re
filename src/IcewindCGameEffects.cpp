@@ -1038,6 +1038,27 @@ CGameEffect* IcewindCGameEffectHolyPower::Copy()
     return copy;
 }
 
+// 0x569210
+BOOL IcewindCGameEffectHolyPower::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        DisplayStringRef(pSprite, 1315); // "Holy Power"
+    }
+
+    if (!pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_HOLY_POWER]) {
+        pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_HOLY_POWER] = true;
+
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 86);
+
+        AddColorEffect(pSprite, 128, 128, 128, 20);
+
+        pSprite->m_bonusStats.m_nDamageBonus += 4;
+        m_done = FALSE;
+    }
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A1000
