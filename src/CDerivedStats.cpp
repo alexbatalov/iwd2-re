@@ -112,10 +112,8 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
     m_bPolymorphed = FALSE;
     m_nTranslucent = 0;
     m_bIdentifyMode = FALSE;
-
     m_spellStates.reset();
-
-    field_10C = 0;
+    m_spellStatesExtra.reset();
     m_bCasterHold = FALSE;
     m_nEncumberance = 0;
     m_nMagicDamageResistance = pCreature->m_resistMagicDamageBase;
@@ -435,10 +433,8 @@ void CDerivedStats::BonusInit()
     m_nSpecialization = 0;
     m_nMoveSilentlyMTPBonus = 0;
     m_nHideInShadowsMTPBonus = 0;
-
     m_spellStates.reset();
-
-    field_10C = 0;
+    m_spellStatesExtra.reset();
     m_bCasterHold = FALSE;
     m_nEncumberance = 0;
     m_nMissileTHAC0Bonus = 0;
@@ -559,10 +555,8 @@ CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
     m_bIdentifyMode |= other.m_bIdentifyMode;
     m_nMoveSilentlyMTPBonus += other.m_nMoveSilentlyMTPBonus;
     m_nHideInShadowsMTPBonus += other.m_nHideInShadowsMTPBonus;
-
     m_spellStates |= other.m_spellStates;
-
-    field_10C |= other.field_10C;
+    m_spellStatesExtra |= other.m_spellStatesExtra;
     m_nStoneSkins += other.m_nStoneSkins;
     m_bCasterHold |= other.m_bCasterHold;
     field_184 |= other.field_184;
@@ -959,7 +953,7 @@ void CDerivedStats::Unmarshal(BYTE* pStats, LONG nStats)
     m_nMoveSilentlyMTPBonus = pTemplate->m_nMoveSilentlyMTPBonus;
     m_nHideInShadowsMTPBonus = pTemplate->m_nHideInShadowsMTPBonus;
     m_spellStates = pTemplate->m_spellStates;
-    field_10C = pTemplate->field_10C;
+    m_spellStatesExtra = pTemplate->m_spellStatesExtra;
     m_bCasterHold = pTemplate->m_bCasterHold;
     m_nEncumberance = pTemplate->m_nEncumberance;
     m_nMissileTHAC0Bonus = pTemplate->m_nMissileTHAC0Bonus;

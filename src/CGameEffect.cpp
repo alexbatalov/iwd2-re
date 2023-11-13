@@ -3356,7 +3356,7 @@ BOOL CGameEffectBlur::ApplyEffect(CGameSprite* pSprite)
 {
     if ((pSprite->GetDerivedStats()->m_generalState & STATE_BLUR) == 0) {
         pSprite->GetDerivedStats()->m_generalState |= STATE_BLUR;
-        pSprite->GetDerivedStats()->field_10C |= 0x1000000;
+        pSprite->GetDerivedStats()->m_spellStatesExtra[SPLSTATEEXTRA_24] = true;
 
         // NOTE: Uninline.
         AddPortraitIcon(pSprite, 109);
@@ -5805,7 +5805,7 @@ CGameEffect* CGameEffectSanctuary::Copy()
 // 0x4BD5E0
 BOOL CGameEffectSanctuary::ApplyEffect(CGameSprite* pSprite)
 {
-    pSprite->GetDerivedStats()->field_10C |= 0x1;
+    pSprite->GetDerivedStats()->m_spellStatesExtra |= SPLSTATEEXTRA_0;
     pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_SANCTUARY);
 
     // NOTE: Uninline.

@@ -1346,7 +1346,7 @@ CGameEffect* IcewindCGameEffectBlink::Copy()
 BOOL IcewindCGameEffectBlink::ApplyEffect(CGameSprite* pSprite)
 {
     pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_BLINK] = true;
-    pSprite->GetDerivedStats()->field_10C |= 0x2000000;
+    pSprite->GetDerivedStats()->m_spellStatesExtra[SPLSTATEEXTRA_25] = true;
 
     switch (m_dwFlags) {
     case 0:

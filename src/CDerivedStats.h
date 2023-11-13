@@ -344,6 +344,10 @@
 #define SPLSTATE_DRUID_SHAPESHIFT_WINTER_WOLF 177
 #define SPLSTATE_179 179
 
+#define SPLSTATEEXTRA_0 0
+#define SPLSTATEEXTRA_24 24
+#define SPLSTATEEXTRA_25 25
+
 class CCreatureFileHeader;
 class CGameSprite;
 class CGameSpriteGroupedSpellList;
@@ -452,7 +456,7 @@ public:
     /* 00E4 */ LONG m_DamageBonusLeft;
     /* 00E8 */ LONG m_nStoneSkins;
     /* 00EC */ std::bitset<256> m_spellStates;
-    /* 010C */ int field_10C;
+    /* 010C */ std::bitset<32> m_spellStatesExtra;
     /* 0110 */ SHORT m_nDamageModFire;
     /* 0112 */ SHORT m_nDamageModCold;
     /* 0114 */ SHORT m_nDamageModElectricity;
