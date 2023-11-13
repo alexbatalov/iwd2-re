@@ -1252,6 +1252,22 @@ CGameEffect* IcewindCGameEffectExecutionersEyes::Copy()
     return copy;
 }
 
+// 0x56A500
+BOOL IcewindCGameEffectExecutionersEyes::ApplyEffect(CGameSprite* pSprite)
+{
+    if (!pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_EXECUTIONERS_EYES]) {
+        pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_EXECUTIONERS_EYES] = true;
+
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 120);
+
+        pSprite->SetColorRange(8);
+        pSprite->GetDerivedStats()->m_nTHAC0 += 4;
+        pSprite->GetDerivedStats()->m_nCriticalHitBonus += 4;
+    }
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A1B40
