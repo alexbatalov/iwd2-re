@@ -1324,6 +1324,31 @@ CGameEffect* IcewindCGameEffectTortoiseShell::Copy()
     return copy;
 }
 
+// 0x56AAE0
+BOOL IcewindCGameEffectTortoiseShell::ApplyEffect(CGameSprite* pSprite)
+{
+    if (!pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_TORTOISE_SHELL]) {
+        if (m_secondaryType) {
+            DisplayStringRef(pSprite, 17063); // "Encased in Tortoise Shell"
+        }
+
+        // NOTE: Using `set` (with bounds check).
+        pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_TORTOISE_SHELL, true);
+        pSprite->GetDerivedStats()->m_spellStatesExtra.set(SPLSTATEEXTRA_30, true);
+
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 125);
+
+        pSprite->field_9D15 = 1;
+        pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_HELD] = true;
+        pSprite->GetDerivedStats()->m_generalState |= STATE_HELPLESS;
+        pSprite->GetDerivedStats()->field_124 = m_effectAmount;
+    } else {
+        m_done = TRUE;
+    }
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A1F00

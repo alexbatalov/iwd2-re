@@ -347,6 +347,7 @@
 #define SPLSTATEEXTRA_0 0
 #define SPLSTATEEXTRA_24 24
 #define SPLSTATEEXTRA_25 25
+#define SPLSTATEEXTRA_30 30
 
 class CCreatureFileHeader;
 class CGameSprite;
