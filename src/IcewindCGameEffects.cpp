@@ -948,6 +948,34 @@ CGameEffect* IcewindCGameEffectArmorOfFaith::Copy()
     return copy;
 }
 
+// 0x568930
+BOOL IcewindCGameEffectArmorOfFaith::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        DisplayStringRef(pSprite, 509);
+    }
+
+    if (!pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_ARMOR_OF_FAITH]) {
+        // NOTE: Using `set` (with bounds check).
+        pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_ARMOR_OF_FAITH, true);
+
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 84);
+
+        pSprite->GetDerivedStats()->m_nResistCrushing++;
+        pSprite->GetDerivedStats()->m_nResistPiercing++;
+        pSprite->GetDerivedStats()->m_nResistSlashing++;
+        pSprite->GetDerivedStats()->m_nResistFire++;
+        pSprite->GetDerivedStats()->m_nResistCold++;
+        pSprite->GetDerivedStats()->m_nResistAcid++;
+        pSprite->GetDerivedStats()->m_nResistElectricity++;
+        pSprite->GetDerivedStats()->m_nResistMagic++;
+
+        m_done = FALSE;
+    }
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A0B50
