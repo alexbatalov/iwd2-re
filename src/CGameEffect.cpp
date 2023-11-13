@@ -1396,6 +1396,19 @@ void CGameEffect::AddSlowEffect(CGameSprite* pSprite)
     AddPortraitIcon(pSprite, 41);
 }
 
+// 0x4C4260
+void CGameEffect::RemoveAllOfType(CGameSprite* pSprite, WORD effectID, LONG effectAmount)
+{
+    pSprite->GetEquipedEffectList()->RemoveAllOfType(pSprite,
+        effectID,
+        pSprite->GetEquipedEffectList()->GetPosCurrent(),
+        effectAmount);
+    pSprite->GetTimedEffectList()->RemoveAllOfType(pSprite,
+        effectID,
+        pSprite->GetTimedEffectList()->GetPosCurrent(),
+        effectAmount);
+}
+
 // 0x4C42A0
 void CGameEffect::AddPortraitIcon(CGameSprite* pSprite, int icon)
 {
