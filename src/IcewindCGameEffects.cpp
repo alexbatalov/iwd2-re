@@ -1,6 +1,7 @@
 #include "IcewindCGameEffects.h"
 
 #include "CGameSprite.h"
+#include "CUtil.h"
 #include "IcewindMisc.h"
 
 // 0x49DB70
@@ -1339,6 +1340,28 @@ CGameEffect* IcewindCGameEffectBlink::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x56ABB0
+BOOL IcewindCGameEffectBlink::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_BLINK] = true;
+    pSprite->GetDerivedStats()->field_10C |= 0x2000000;
+
+    switch (m_dwFlags) {
+    case 0:
+        AddPortraitIcon(pSprite, 130);
+        break;
+    case 1:
+        AddPortraitIcon(pSprite, 145);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\IcewindCGameEffects.cpp
+        // __LINE__: 6894
+        UTIL_ASSERT(FALSE);
+    }
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------
