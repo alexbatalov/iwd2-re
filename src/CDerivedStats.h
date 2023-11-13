@@ -344,18 +344,38 @@
 #define SPLSTATE_DRUID_SHAPESHIFT_WINTER_WOLF 177
 #define SPLSTATE_179 179
 
-#define SPLSTATEEXTRA_0 0
-#define SPLSTATEEXTRA_10 10
-#define SPLSTATEEXTRA_17 17
-#define SPLSTATEEXTRA_18 18
-#define SPLSTATEEXTRA_19 19
-#define SPLSTATEEXTRA_20 20
-#define SPLSTATEEXTRA_21 21
-#define SPLSTATEEXTRA_22 22
-#define SPLSTATEEXTRA_23 23
-#define SPLSTATEEXTRA_24 24
-#define SPLSTATEEXTRA_25 25
-#define SPLSTATEEXTRA_30 30
+// See https://gibberlings3.github.io/iesdp/opcodes/iwd2.htm#op413.
+
+#define IWD_VFX_SANCTUARY 0
+#define IWD_VFX_ENTANGLE 1
+#define IWD_VFX_WISP 2
+#define IWD_VFX_SHIELD 3
+#define IWD_VFX_GREASE 4
+#define IWD_VFX_WEB 5
+#define IWD_VFX_MINOR_GLOBE_OF_INVULNERABILITY 6
+#define IWD_VFX_GLOBE_OF_INVULNERABILITY 7
+#define IWD_VFX_SHROUD_OF_FLAME 8
+#define IWD_VFX_ANTIMAGIC_MISSILE 9
+#define IWD_VFX_OTILUKES_RESILIENT_SPHERE 10
+#define IWD_VFX_PROTECTION_FROM_MISSILES 11
+#define IWD_VFX_CLOAK_OF_FEAR 12
+#define IWD_VFX_ENTROPY_SHIELD 13
+#define IWD_VFX_FIRE_AURA 14
+#define IWD_VFX_FROST_AURA 15
+#define IWD_VFX_INSECT_PLAGUE 16
+#define IWD_VFX_STORM_SHELL 17
+#define IWD_VFX_SHIELD_OF_LATHANDER 18
+#define IWD_VFX_SHIELD_OF_LATHANDER_2 19
+#define IWD_VFX_GREATER_SHIELD_OF_LATHANDER 20
+#define IWD_VFX_GREATER_SHIELD_OF_LATHANDER_2 21
+#define IWD_VFX_SEVEN_EYES 22
+#define IWD_VFX_SEVEN_EYES_2 23
+#define IWD_VFX_BLUR 24
+#define IWD_VFX_INVISIBILITY 25
+#define IWD_VFX_FIRE_SHIELD_RED 26
+#define IWD_VFX_FIRE_SHEIELD_BLUE 27
+#define IWD_VFX_TORTOISE_SHELL 30
+#define IWD_VFX_DEATH_ARMOR 31
 
 class CCreatureFileHeader;
 class CGameSprite;
@@ -465,7 +485,7 @@ public:
     /* 00E4 */ LONG m_DamageBonusLeft;
     /* 00E8 */ LONG m_nStoneSkins;
     /* 00EC */ std::bitset<256> m_spellStates;
-    /* 010C */ std::bitset<32> m_spellStatesExtra;
+    /* 010C */ std::bitset<32> m_visualEffects;
     /* 0110 */ SHORT m_nDamageModFire;
     /* 0112 */ SHORT m_nDamageModCold;
     /* 0114 */ SHORT m_nDamageModElectricity;

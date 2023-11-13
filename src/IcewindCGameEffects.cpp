@@ -1060,18 +1060,18 @@ CGameEffect* IcewindCGameEffectVisualEffect::Copy()
 BOOL IcewindCGameEffectVisualEffect::ApplyEffect(CGameSprite* pSprite)
 {
     // NOTE: Using `set` (with bounds check).
-    pSprite->GetDerivedStats()->m_spellStatesExtra.set(m_dwFlags, true);
+    pSprite->GetDerivedStats()->m_visualEffects.set(m_dwFlags, true);
 
-    if (m_dwFlags == SPLSTATEEXTRA_18) {
-        pSprite->GetDerivedStats()->m_spellStatesExtra[SPLSTATEEXTRA_19] = true;
+    if (m_dwFlags == IWD_VFX_SHIELD_OF_LATHANDER) {
+        pSprite->GetDerivedStats()->m_visualEffects[IWD_VFX_SHIELD_OF_LATHANDER_2] = true;
     }
 
-    if (m_dwFlags == SPLSTATEEXTRA_20) {
-        pSprite->GetDerivedStats()->m_spellStatesExtra[SPLSTATEEXTRA_21] = true;
+    if (m_dwFlags == IWD_VFX_GREATER_SHIELD_OF_LATHANDER) {
+        pSprite->GetDerivedStats()->m_visualEffects[IWD_VFX_GREATER_SHIELD_OF_LATHANDER_2] = true;
     }
 
-    if (m_dwFlags == SPLSTATEEXTRA_22) {
-        pSprite->GetDerivedStats()->m_spellStatesExtra[SPLSTATEEXTRA_23] = true;
+    if (m_dwFlags == IWD_VFX_SEVEN_EYES) {
+        pSprite->GetDerivedStats()->m_visualEffects[IWD_VFX_SEVEN_EYES_2] = true;
     }
 
     return TRUE;
@@ -1109,7 +1109,7 @@ BOOL IcewindCGameEffectOtilukesResilientSphere::ApplyEffect(CGameSprite* pSprite
 
     pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_HELD] = true;
     pSprite->GetDerivedStats()->m_generalState |= STATE_HELPLESS;
-    pSprite->GetDerivedStats()->m_spellStatesExtra[SPLSTATEEXTRA_10] = true;
+    pSprite->GetDerivedStats()->m_visualEffects[IWD_VFX_OTILUKES_RESILIENT_SPHERE] = true;
     pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_OTILUKES_RESILIENT_SPHERE] = true;
 
     return TRUE;
@@ -1321,7 +1321,7 @@ BOOL IcewindCGameEffectStormShell::ApplyEffect(CGameSprite* pSprite)
         // NOTE: Uninline.
         AddPortraitIcon(pSprite, 105);
 
-        pSprite->GetDerivedStats()->m_spellStatesExtra[SPLSTATEEXTRA_17] = true;
+        pSprite->GetDerivedStats()->m_visualEffects[IWD_VFX_STORM_SHELL] = true;
         pSprite->m_bonusStats.m_nResistFire += 15;
         pSprite->m_bonusStats.m_nResistCold += 15;
         pSprite->m_bonusStats.m_nResistElectricity += 15;
@@ -1548,7 +1548,7 @@ BOOL IcewindCGameEffectTortoiseShell::ApplyEffect(CGameSprite* pSprite)
 
         // NOTE: Using `set` (with bounds check).
         pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_TORTOISE_SHELL, true);
-        pSprite->GetDerivedStats()->m_spellStatesExtra.set(SPLSTATEEXTRA_30, true);
+        pSprite->GetDerivedStats()->m_visualEffects.set(IWD_VFX_TORTOISE_SHELL, true);
 
         // NOTE: Uninline.
         AddPortraitIcon(pSprite, 125);
@@ -1585,7 +1585,7 @@ CGameEffect* IcewindCGameEffectBlink::Copy()
 BOOL IcewindCGameEffectBlink::ApplyEffect(CGameSprite* pSprite)
 {
     pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_BLINK] = true;
-    pSprite->GetDerivedStats()->m_spellStatesExtra[SPLSTATEEXTRA_25] = true;
+    pSprite->GetDerivedStats()->m_visualEffects[IWD_VFX_INVISIBILITY] = true;
 
     switch (m_dwFlags) {
     case 0:
