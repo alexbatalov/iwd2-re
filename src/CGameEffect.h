@@ -307,6 +307,7 @@ public:
     void SetSource(const CPoint& pt);
     void SetSourceId(LONG sourceID);
 
+    void AdjustResistMagic(CGameSprite* pSprite, SHORT nValue);
     void AdjustTHAC0(CGameSprite* pSprite, SHORT nValue);
     void AddSlowEffect(CGameSprite* pSprite);
     void RemoveAllOfType(CGameSprite* pSprite, WORD effectID, LONG effectAmount);

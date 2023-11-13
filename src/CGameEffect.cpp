@@ -1360,6 +1360,17 @@ void CGameEffect::SetSourceId(LONG sourceID)
     m_sourceID = sourceID;
 }
 
+// 0x4C3F60
+void CGameEffect::AdjustResistMagic(CGameSprite* pSprite, SHORT nValue)
+{
+    pSprite->GetDerivedStats()->m_nResistMagic += nValue;
+    if (pSprite->GetDerivedStats()->m_nResistMagic < 0) {
+        pSprite->GetDerivedStats()->m_nResistMagic = 0;
+    } else if (pSprite->GetDerivedStats()->m_nResistMagic > 50) {
+        pSprite->GetDerivedStats()->m_nResistMagic = 50;
+    }
+}
+
 // 0x4C3FA0
 void CGameEffect::AdjustTHAC0(CGameSprite* pSprite, SHORT nValue)
 {

@@ -1502,6 +1502,21 @@ CGameEffect* IcewindCGameEffectLowerResistance::Copy()
     return copy;
 }
 
+// 0x56B680
+BOOL IcewindCGameEffectLowerResistance::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        DisplayStringRef(pSprite, 16967); // "Spell Resistance Lowered"
+    }
+
+    if (!pSprite->GetDerivedStats()->m_spellStates[CGAMEEFFECT_CASTINGGLOW]) {
+        pSprite->GetDerivedStats()->m_spellStates[CGAMEEFFECT_CASTINGGLOW] = true;
+        AdjustResistMagic(pSprite, -static_cast<BYTE>(m_casterLevel) * 2);
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A2860
