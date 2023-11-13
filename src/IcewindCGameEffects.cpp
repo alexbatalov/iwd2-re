@@ -1466,6 +1466,23 @@ CGameEffect* IcewindCGameEffectAlicornLanceGlow::Copy()
     return copy;
 }
 
+// 0x56B4B0
+BOOL IcewindCGameEffectAlicornLanceGlow::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        DisplayStringRef(pSprite, 21646);
+    }
+
+    if (!pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_ALICORN_LANCE]) {
+        pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_ALICORN_LANCE] = true;
+        pSprite->GetDerivedStats()->field_C -= 2;
+        AddColorEffect(pSprite, 185, 185, 185);
+        m_done = FALSE;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A2680
