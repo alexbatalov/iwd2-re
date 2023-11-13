@@ -966,6 +966,62 @@ CGameEffect* IcewindCGameEffectNausea::Copy()
     return copy;
 }
 
+// 0x568A00
+BOOL IcewindCGameEffectNausea::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        pSprite->GetDerivedStats()->m_generalState |= STATE_HELPLESS | STATE_SLEEPING;
+
+        // NOTE: Using `set` (with bounds check).
+        pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_DOESNT_AWAKEN_ON_DAMAGE, true);
+
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 43);
+
+        if (m_secondaryType) {
+            DisplayStringRef(pSprite, 4390); // "Nauseous"
+
+            ITEM_EFFECT* effect = new ITEM_EFFECT;
+            ClearItemEffect(effect, CGAMEEFFECT_SETSEQUENCE);
+            effect->dwFlags = CGameSprite::SEQ_AWAKE;
+            effect->durationType = 4;
+            effect->duration = (m_duration - g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime) / 15;
+            CGameEffect* pEffect = CGameEffect::DecodeEffect(effect,
+                CPoint(-1, -1),
+                -1,
+                CPoint(-1, -1));
+            delete effect;
+            pSprite->AddEffect(pEffect, CGameAIBase::EFFECT_LIST_TIMED, TRUE, TRUE);
+        }
+
+        if (pSprite->m_nSequence != CGameSprite::SEQ_DIE
+            && pSprite->m_nSequence != CGameSprite::SEQ_SLEEP
+            && pSprite->m_nSequence != CGameSprite::SEQ_TWITCH) {
+            pSprite->SetSequence(CGameSprite::SEQ_SLEEP);
+        }
+
+        pSprite->field_9D15 = 1;
+        break;
+    case 1:
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 43);
+
+        if (m_secondaryType) {
+            DisplayStringRef(pSprite, 4390); // "Nauseous"
+        }
+
+        pSprite->GetDerivedStats()->m_nDamageBonus -= 2;
+        pSprite->GetDerivedStats()->m_nTHAC0 -= 2;
+        pSprite->GetDerivedStats()->m_nSaveVSFortitude -= 2;
+        pSprite->GetDerivedStats()->m_nSaveVSReflex -= 2;
+        pSprite->GetDerivedStats()->m_nSaveVSWill -= 2;
+        break;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A0C40
