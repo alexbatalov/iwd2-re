@@ -492,6 +492,7 @@ class IcewindCGameEffectBarkskin : public CGameEffect {
 public:
     IcewindCGameEffectBarkskin(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class IcewindCGameEffectAreaOfEffect : public CGameEffect {

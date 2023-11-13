@@ -1092,6 +1092,32 @@ CGameEffect* IcewindCGameEffectBarkskin::Copy()
     return copy;
 }
 
+// 0x5693B0
+BOOL IcewindCGameEffectBarkskin::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        DisplayStringRef(pSprite, 14785); // "Barkskin"
+    }
+
+    if (!pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_BARKSKIN]) {
+        pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_BARKSKIN] = true;
+
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 20);
+
+        if (m_casterLevel < 6) {
+            pSprite->GetDerivedStats()->field_C += 3;
+        } else if (m_casterLevel < 12) {
+            pSprite->GetDerivedStats()->field_C += 4;
+        } else {
+            pSprite->GetDerivedStats()->field_C += 5;
+        }
+
+        pSprite->SetColorRange(2);
+    }
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A12D0
