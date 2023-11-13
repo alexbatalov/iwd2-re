@@ -308,7 +308,7 @@ public:
     void SetSourceId(LONG sourceID);
 
     void AddSlowEffect(CGameSprite* pSprite);
-    static void AddPortraitIcon(CGameSprite* pSprite, int icon);
+    void AddPortraitIcon(CGameSprite* pSprite, int icon);
     static void ClearItemEffect(ITEM_EFFECT* itemEffect, WORD newEffectId);
 
     /* 010C */ LONG m_sourceID;
