@@ -159,6 +159,7 @@ public:
     void EnablePortrait(BYTE nControlId, BOOL bEnable);
     BOOLEAN ExtendedDayNightAreaActive();
     void UpdatePortraitToolTip(DWORD dwControlId, STRREF dwStrId);
+    void StepAnimation(BYTE direction);
     CGameArea* GetArea(CString sName);
     CGameArea* GetArea(SHORT nArea);
     LONG GetGroundPile(LONG iSprite);
@@ -386,6 +387,8 @@ public:
     /* 4814 */ STR_RES field_4814;
     /* 487C */ STR_RES field_487C;
     /* 48E4 */ BOOLEAN m_bForceDither;
+    /* 4A40 */ SHORT m_currArmor;
+    /* 4A48 */ SHORT m_currAnimation;
     /* 4A8A */ LONG m_nProtagonistId;
     /* 4A8E */ BOOLEAN m_bPartyAI;
     /* 4A8F */ BOOLEAN m_bShowAreaNotes;

@@ -143,6 +143,11 @@ void CGameAnimationType::ChangeDirection(SHORT nDirection)
 {
 }
 
+// 0x778900
+void CGameAnimationType::EquipArmor(CHAR armorLevel, BYTE* colorRangeValues)
+{
+}
+
 // 0x799E20
 CVidPalette* CGameAnimationType::GetAnimationPalette(BYTE range)
 {

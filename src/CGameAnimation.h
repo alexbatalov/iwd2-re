@@ -17,6 +17,7 @@ public:
 
     void CalculateFxRect(CRect& rFx, CPoint& ptReference, LONG posZ);
     void ChangeDirection(SHORT nDirection);
+    void EquipArmor(CHAR armorLevel, BYTE* colorRangeValues);
     void GetAnimationResRef(CString& resRef, BYTE range);
     BOOLEAN CanLieDown();
     BYTE GetListType();
@@ -33,6 +34,7 @@ public:
     void SetColorRange(BYTE colorRange, BYTE rangeValue);
     void SetColorRangeAll(BYTE rangeValue);
     BOOL IsEndOfSequence();
+    void IncrementFrame();
     void Render(CInfinity* pInfinity, CVidMode* pVidMode, INT nSurface, const CRect& rectFX, const CPoint& ptNewPos, const CPoint& ptReference, DWORD dwRenderFlags, COLORREF rgbTintColor, const CRect& rGCBounds, BOOL bDithered, BOOL bFadeOut, LONG posZ, BYTE transparency);
     void SetSequence(SHORT nSequence);
     BOOLEAN GetCurrentResRef(CString& resBody, CString& resWeapon, CString& resShield, CString& resHelmet);

@@ -48,6 +48,16 @@ void CGameAnimation::ChangeDirection(SHORT nDirection)
     m_animation->ChangeDirection(nDirection);
 }
 
+// NOTE: Inlined.
+void CGameAnimation::EquipArmor(CHAR armorLevel, BYTE* colorRangeValues)
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2075
+    UTIL_ASSERT(m_animation != NULL);
+
+    m_animation->EquipArmor(armorLevel, colorRangeValues);
+}
+
 // 0x45B690
 USHORT CGameAnimation::GetAnimationId()
 {
@@ -166,6 +176,16 @@ BOOL CGameAnimation::IsEndOfSequence()
     UTIL_ASSERT(m_animation != NULL);
 
     return m_animation->IsEndOfSequence();
+}
+
+// NOTE: Inlined.
+void CGameAnimation::IncrementFrame()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2104
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->IncrementFrame();
 }
 
 // NOTE: Inlined.
