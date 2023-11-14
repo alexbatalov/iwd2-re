@@ -129,7 +129,7 @@ void CAIResponse::Read(CString sData)
     }
 }
 
-// NOTE: Inlined.
+// 0x40FA30
 CAIResponseSet::CAIResponseSet()
 {
 }

@@ -5,6 +5,7 @@
 
 class CAIUtil {
 public:
+    static CString RemoveAllWS(CString str);
     static CString ReadTo(CString& line, CString pattern, BOOL consume);
     static CString ReadBetween(CString& line, CString pattern);
     static CString ReadToChar(CString& line, char c);

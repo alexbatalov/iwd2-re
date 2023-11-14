@@ -3,6 +3,7 @@
 
 #include "mfc.h"
 
+#include "CAIAction.h"
 #include "CAIIdList.h"
 #include "CAIObjectType.h"
 
@@ -21,18 +22,36 @@ public:
 
     CAIScriptFile();
     ~CAIScriptFile();
-
+    void ParseConditionalString(CString sData);
+    void ParseResponseString(CString sData);
+    SHORT ParseOneLine(CString sLine);
+    SHORT ParseTrigger(CString sData);
+    CString GetIdLine(CAIIdList& ids, CString& name);
+    SHORT DecodeTriggerType(CString IDLine, LONG& paramCount);
+    CString GetConstFile(CString sLine);
+    CAIAction ParseAction(CString sData);
     SHORT DecodeTriggerID(CString sName);
     SHORT DecodeActionID(CString sName);
     BYTE DecodeSpecialCase(CString sName);
+    CPoint ParsePoint(CString sLine);
     LONG ParseInt(CString sID, CString sListName);
     void ParseError(CString sError);
+    CAIObjectType ParseObjectType(CString& sLine);
+    CAIObjectType ParseObjectFunction(CString sLine);
     CAIObjectType ParseObjectAtomic(CString sLine);
     CString ReadToChar(CString sLine, char c);
     CString ReadAfterChar(CString sLine, char c);
     BOOL LoadAllLists(CString a1);
+    SHORT DecodeActionType(CString IDLine, LONG& paramCount);
+    CString GetParameterType(CString param);
+    CString GetParameter(SHORT parNum, CString IDLine);
 
     void Clear();
+
+    void NewResponseSet();
+    void NewResponse(SHORT weight);
+    void NewConditional();
+    void SaveEntry();
 
     /* 0000 */ SHORT m_parseMode;
     /* 0002 */ LONG m_lineNumber;

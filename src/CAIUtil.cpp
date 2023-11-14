@@ -1,5 +1,46 @@
 #include "CAIUtil.h"
 
+// 0x4210E0
+CString CAIUtil::RemoveAllWS(CString str)
+{
+    CString sTemp;
+    char prev = ' ';
+
+    int index = 0;
+    while (index < str.GetLength()) {
+        if (IsCharAlphaNumericA(str[index])) {
+            sTemp += str[index];
+        }
+
+        switch (str[index]) {
+        case '!':
+        case '"':
+        case '#':
+        case '(':
+        case ')':
+        case '*':
+        case ',':
+        case '-':
+        case '.':
+        case '[':
+        case ']':
+        case '_':
+            sTemp += str[index];
+            break;
+        case '/':
+            if (prev == '/') {
+                return sTemp.Left(sTemp.GetLength() - 1);
+            }
+            break;
+        }
+
+        prev = str[index];
+        index++;
+    }
+
+    return sTemp;
+}
+
 // 0x421260
 CString CAIUtil::ReadTo(CString& line, CString pattern, BOOL consume)
 {

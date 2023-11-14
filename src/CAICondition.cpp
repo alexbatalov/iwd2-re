@@ -4,7 +4,7 @@
 #include "CAIUtil.h"
 #include "CGameAIBase.h"
 
-// NOTE: Inlined.
+// 0x410B20
 CAICondition::CAICondition()
 {
 }

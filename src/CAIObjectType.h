@@ -409,6 +409,7 @@ public:
     BOOL sub_40D900(const CPoint& pt) const;
     BOOL sub_40D920(const CPoint& pt) const;
     void SetCenter(const CPoint& pt);
+    void SetRadius(int radius);
     void SetRect(const CRect& rect);
     BYTE GetGeneral();
     BYTE GetRace();

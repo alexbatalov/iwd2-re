@@ -1077,6 +1077,12 @@ void CAIObjectType::SetCenter(const CPoint& pt)
     m_nLocationType = CAIOBJECTTYPE_LOCATION_TYPE_POINT;
 }
 
+// 0x7ACD60
+void CAIObjectType::SetRadius(int radius)
+{
+    m_nRadius = radius;
+}
+
 // 0x40D960
 void CAIObjectType::SetRect(const CRect& rect)
 {
