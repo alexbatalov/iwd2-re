@@ -296,6 +296,10 @@
 #define ANIM_YUAN_TI_HALF 0xE8B9
 #define ANIM_TYPE_NUM 289
 
+#define ANIM_EB52 0xEB52
+#define ANIM_EB8A 0xEB8A
+#define ANIM_EC1D 0xEC1D
+
 typedef struct {
     SHORT x;
     SHORT y;

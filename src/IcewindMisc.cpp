@@ -187,29 +187,29 @@ BOOLEAN IcewindMisc::IsLarge(CGameSprite* pSprite)
     USHORT nID = pSprite->m_animation.m_animation->m_animationID;
 
     switch (nID) {
-    case 0xA000: // Wyvern
-    case 0xE048: // Beetle, Rhinocerous
-    case 0xE050: // Remorhaz
-    case 0xE108: // Cyclops
-    case 0xE118: // Ettin
-    case 0xE138: // Giant, Frost
-    case 0xE218: // Elemental, Earth
-    case 0xE228: // Elemental, Fire
-    case 0xE238: // Elemental, Water
-    case 0xE51D: // Golem, Iron
-    case 0xE528: // Golem, Ice
-    case 0xE759: // Umber Hulk
-    case 0xE7F9: // Umber Hulk, Vodyanoi
-    case 0xE899: // Lizard Man, King
-    case 0xEB39:
-    case 0xEB52:
-    case 0xEB8A:
-    case 0xEC0B: // Dragon, White Young
-    case 0xEC1D:
-    case 0xED09: // Cornugon
-    case 0xED19: // Glabrezu
-    case 0xF308: // Giant, Fire
-    case 0xF41B: // Sahuagin, Large
+    case ANIM_WYVERN:
+    case ANIM_BEETLE_RHINOCEROUS:
+    case ANIM_REMORHAZ:
+    case ANIM_CYCLOPS:
+    case ANIM_ETTIN:
+    case ANIM_GIANT_FROST:
+    case ANIM_ELEMENTAL_EARTH:
+    case ANIM_ELEMENTAL_FIRE:
+    case ANIM_ELEMENTAL_WATER:
+    case ANIM_GOLEM_IRON:
+    case ANIM_GOLEM_ICE:
+    case ANIM_UMBER_HULK:
+    case ANIM_UMBER_HULK_VODYANOI:
+    case ANIM_LIZARD_MAN_KING:
+    case ANIM_BELHIFET:
+    case ANIM_EB52:
+    case ANIM_EB8A:
+    case ANIM_DRAGON_WHITE:
+    case ANIM_EC1D:
+    case ANIM_CORNUGON:
+    case ANIM_GLABREZU:
+    case ANIM_GIANT_FIRE:
+    case ANIM_SAHUAGIN_LARGE:
         return TRUE;
     }
 
@@ -238,16 +238,16 @@ BOOLEAN IcewindMisc::IsOutsider(CGameSprite* pSprite)
     USHORT nID = pSprite->m_animation.m_animation->m_animationID;
 
     switch (nID) {
-    case 0x7F05: // Djinni
-    case 0x7F06: // Djinni w/legs
-    case 0x7F2E: // Raver
-    case 0x7F32: // Slayer
-    case 0xE7C9: // Abishai, White
-    case 0xEBD8: // Salamander
-    case 0xEBE8: // Salamander, Frost
-    case 0xED09: // Cornugon
-    case 0xED19: // Glabrezu
-    case 0xED28: // Lemure
+    case ANIM_DJINNI:
+    case ANIM_DJINNI_LEGS:
+    case ANIM_RAVER:
+    case ANIM_SLAYER:
+    case ANIM_ABISHAI_WHITE:
+    case ANIM_SALAMANDER:
+    case ANIM_SALAMANDER_FROST:
+    case ANIM_CORNUGON:
+    case ANIM_GLABREZU:
+    case ANIM_LEMURE:
         return TRUE;
     }
 
@@ -345,13 +345,13 @@ BOOLEAN IcewindMisc::IsAcquatic(CGameSprite* pSprite)
     USHORT nID = pSprite->m_animation.m_animation->m_animationID;
 
     switch (nID) {
-    case 0xE238: // Elemental, Water
-    case 0xE252: // Water Weird
-    case 0xE3A8: // Drowned Dead
-    case 0xE7E8: // Troll, Scrag
-    case 0xE7F9: // Umber Hulk, Vodyanoi
-    case 0xF40B: // Sahuagin
-    case 0xF41B: // Sahuagin, Large
+    case ANIM_ELEMENTAL_WATER:
+    case ANIM_WATER_WEIRD:
+    case ANIM_DROWNED_DEAD:
+    case ANIM_TROLL_SCRAG:
+    case ANIM_UMBER_HULK_VODYANOI:
+    case ANIM_SAHUAGIN:
+    case ANIM_SAHUAGIN_LARGE:
         return TRUE;
     }
 
@@ -373,14 +373,14 @@ BOOLEAN IcewindMisc::IsLiving(CGameSprite* pSprite)
     USHORT nID = pSprite->m_animation.m_animation->m_animationID;
 
     switch (nID) {
-    case 0x7902: // Slime, Mustard
-    case 0xE218: // Elemental, Earth
-    case 0xE228: // Elemental, Fire
-    case 0xE238: // Elemental, Water
-    case 0xE252: // Water Weird
-    case 0xEB08: // Animated Plate
-    case 0xEB18: // Animated Plate 2
-    case 0xEB28: // Animated Plate 3
+    case ANIM_SLIME_MUSTARD:
+    case ANIM_ELEMENTAL_EARTH:
+    case ANIM_ELEMENTAL_FIRE:
+    case ANIM_ELEMENTAL_WATER:
+    case ANIM_WATER_WEIRD:
+    case ANIM_ANIMATED_PLATE:
+    case ANIM_ANIMATED_PLATE_2:
+    case ANIM_ANIMATED_PLATE_3:
         return FALSE;
     }
 
@@ -413,22 +413,22 @@ BOOLEAN IcewindMisc::sud_585070(CGameSprite* pSprite)
     USHORT nID = pSprite->m_animation.m_animation->m_animationID;
 
     switch (nID) {
-    case 0x7F05: // Djinni
-    case 0x7F06: // Djinni w/legs
-    case 0x7F2E: // Raver
-    case 0xEB08: // Animated Plate
-    case 0xEB18: // Animated Plate 2
-    case 0xEB28: // Animated Plate 3
-    case 0xEBCD: // Tanari
-    case 0xEBD8: // Salamander
-    case 0xEBE8: // Salamander, Frost
-    case 0xEC1D:
-    case 0xED09: // Cornugon
-    case 0xED19: // Glabrezu
-    case 0xED28: // Lemure
-    case 0xEF50: // Keg 1
-    case 0xEF60: // Keg 2
-    case 0xEF70: // Keg 3
+    case ANIM_DJINNI:
+    case ANIM_DJINNI_LEGS:
+    case ANIM_RAVER:
+    case ANIM_ANIMATED_PLATE:
+    case ANIM_ANIMATED_PLATE_2:
+    case ANIM_ANIMATED_PLATE_3:
+    case ANIM_TANARI:
+    case ANIM_SALAMANDER:
+    case ANIM_SALAMANDER_FROST:
+    case ANIM_EC1D:
+    case ANIM_CORNUGON:
+    case ANIM_GLABREZU:
+    case ANIM_LEMURE:
+    case ANIM_KEG_1:
+    case ANIM_KEG_2:
+    case ANIM_KEG_3:
         return TRUE;
     }
 
