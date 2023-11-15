@@ -1911,6 +1911,67 @@ CItem* CGameSprite::GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot
     return NULL;
 }
 
+// 0x718980
+BOOL CGameSprite::CheckLauncherType(const ITEM_ABILITY* ability, CItem* pLauncher)
+{
+    int index;
+
+    if (pLauncher != NULL) {
+        switch (ability->launcherType) {
+        case 1:
+            return pLauncher->GetItemType() == 15;
+        case 2:
+            return pLauncher->GetItemType() == 27;
+        case 3:
+            return pLauncher->GetItemType() == 18;
+        default:
+            return FALSE;
+        }
+    }
+
+    switch (ability->launcherType) {
+    case 0:
+        return TRUE;
+    case 1:
+        if (m_equipment.m_items[2 * m_nWeaponSet + 43] != NULL
+            && m_equipment.m_items[2 * m_nWeaponSet + 43]->GetItemType() == 15) {
+            return TRUE;
+        }
+        for (index = 0; index < 8; index++) {
+            if (m_equipment.m_items[43 + index] != NULL
+                && m_equipment.m_items[43 + index]->GetItemType() == 15) {
+                return TRUE;
+            }
+        }
+        break;
+    case 2:
+        if (m_equipment.m_items[2 * m_nWeaponSet + 43] != NULL
+            && m_equipment.m_items[2 * m_nWeaponSet + 43]->GetItemType() == 27) {
+            return TRUE;
+        }
+        for (index = 0; index < 8; index++) {
+            if (m_equipment.m_items[43 + index] != NULL
+                && m_equipment.m_items[43 + index]->GetItemType() == 27) {
+                return TRUE;
+            }
+        }
+        break;
+    case 3:
+        if (m_equipment.m_items[2 * m_nWeaponSet + 43] != NULL
+            && m_equipment.m_items[2 * m_nWeaponSet + 43]->GetItemType() == 18) {
+            return TRUE;
+        }
+        for (index = 0; index < 8; index++) {
+            if (m_equipment.m_items[43 + index] != NULL
+                && m_equipment.m_items[43 + index]->GetItemType() == 18) {
+                return TRUE;
+            }
+        }
+        break;
+    }
+    return FALSE;
+}
+
 // 0x718B30
 BOOL CGameSprite::ReadyCursor()
 {
