@@ -369,6 +369,7 @@ public:
     /* 003C */ BOOL OnSearchMap() override;
     /* 0044 */ void OnFormationButton(const CPoint& pt) override;
     /* 007C */ void ClearAI(BOOLEAN bSetSequence) override;
+    /* 0094 */ void SetScript(SHORT level, CAIScript* script) override;
     /* 009C */ const BYTE* GetVisibleTerrainTable() override;
     /* 00A0 */ const BYTE* GetTerrainTable() override;
     /* 00B4 */ BOOL GetCanSeeInvisible() override;

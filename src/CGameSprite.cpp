@@ -2736,6 +2736,74 @@ DWORD CGameSprite::GetCarriedWeight()
     return weight;
 }
 
+// 0x71DAB0
+void CGameSprite::SetScript(SHORT level, CAIScript* script)
+{
+    // FIXME: Unused.
+    CString v1;
+
+    switch (level) {
+    case 0:
+        if (m_overrideScript != NULL) {
+            delete m_overrideScript;
+            m_overrideScript = NULL;
+        }
+
+        m_overrideScript = script;
+        m_overrideScript->m_cResRef.GetResRef(m_baseStats.m_scriptOverRide);
+        break;
+    case 1:
+        if (m_special1Script != NULL) {
+            delete m_special1Script;
+            m_special1Script = NULL;
+        }
+        m_special1Script = script;
+        // FIXME: Probably missing copying resref to `m_baseStats`.
+        break;
+    case 2:
+        if (m_teamScript != NULL) {
+            delete m_teamScript;
+            m_teamScript = NULL;
+        }
+
+        m_teamScript = script;
+        m_teamScript->m_cResRef.GetResRef(m_baseStats.m_scriptTeam);
+        break;
+    case 3:
+        if (m_special2Script != NULL) {
+            delete m_special2Script;
+            m_special2Script = NULL;
+        }
+        m_special2Script = script;
+        m_special2Script->m_cResRef.GetResRef(m_baseStats.m_scriptSpecial2);
+        break;
+    case 4:
+        if (m_combatScript != NULL) {
+            delete m_combatScript;
+            m_combatScript = NULL;
+        }
+        m_combatScript = script;
+        m_combatScript->m_cResRef.GetResRef(m_baseStats.m_scriptCombat);
+        break;
+    case 5:
+        if (m_special3Script != NULL) {
+            delete m_special3Script;
+            m_special3Script = NULL;
+        }
+        m_special3Script = script;
+        m_special3Script->m_cResRef.GetResRef(m_baseStats.m_scriptSpecial3);
+        break;
+    case 6:
+        if (m_movementScript != NULL) {
+            delete m_movementScript;
+            m_movementScript = NULL;
+        }
+        m_movementScript = script;
+        m_movementScript->m_cResRef.GetResRef(m_baseStats.m_scriptMovement);
+        break;
+    }
+}
+
 // 0x71E9F0
 void CGameSprite::AddKnownDivineSpells(const BYTE& nClass)
 {
