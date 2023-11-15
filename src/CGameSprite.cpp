@@ -597,7 +597,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     field_4D32 = 0;
     field_4DFE = 0;
     field_5320 = 0;
-    field_5322 = 0;
+    m_animationRunning = FALSE;
     field_5326 = 0;
     field_533E = 0;
     field_533C = 0;
@@ -725,7 +725,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     field_9D14 = 0;
     field_9D15 = 0;
     field_5638 = 0;
-    field_563C = 0;
+    m_hasColorRangeEffects = FALSE;
     field_5640 = 0;
     m_groupPosition = 0;
     m_groupMove = 0;
@@ -2619,6 +2619,54 @@ SHORT CGameSprite::GetBackstabDamageMultiplier()
 SHORT CGameSprite::GetLayOnHandsAmount()
 {
     return g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetLayOnHandsAmount(m_typeAI, m_derivedStats);
+}
+
+// 0x71BE80
+void CGameSprite::CheckLoadState()
+{
+    if (m_baseStats.m_generalState == 0) {
+        return;
+    }
+
+    if ((m_baseStats.m_generalState & STATE_DEAD) != 0) {
+        SetSequence(SEQ_TWITCH);
+    }
+
+    if ((m_baseStats.m_generalState & STATE_FLAME_DEATH) != 0) {
+        GetAnimation()->SetColorEffectAll(0, RGB(75, 75, 75), 1);
+    }
+
+    if ((m_baseStats.m_generalState & STATE_STONE_DEATH) != 0) {
+        m_animationRunning = FALSE;
+        if (GetAnimation()->IsFalseColor()) {
+            m_hasColorRangeEffects = TRUE;
+
+            for (BYTE range = 0; range < 7; range++) {
+                CColorRange* pColorRange = new CColorRange();
+                pColorRange->m_range = range;
+                pColorRange->m_color = CVidPalette::STONE;
+                m_derivedStats.m_appliedColorRanges.AddTail(pColorRange);
+
+                GetAnimation()->SetColorRange(range, CVidPalette::STONE);
+            }
+        }
+    }
+
+    if ((m_baseStats.m_generalState & STATE_FROZEN_DEATH) != 0) {
+        m_animationRunning = FALSE;
+        if (GetAnimation()->IsFalseColor()) {
+            m_hasColorRangeEffects = TRUE;
+
+            for (BYTE range = 0; range < 7; range++) {
+                CColorRange* pColorRange = new CColorRange();
+                pColorRange->m_range = range;
+                pColorRange->m_color = CVidPalette::ICE;
+                m_derivedStats.m_appliedColorRanges.AddTail(pColorRange);
+
+                GetAnimation()->SetColorRange(range, CVidPalette::ICE);
+            }
+        }
+    }
 }
 
 // 0x71C0A0
@@ -5403,7 +5451,7 @@ INT CGameSprite::GetMulticlassingPenalty()
 // 0x765BD0
 void CGameSprite::SetColorRange(BYTE rangeValue)
 {
-    field_563C = 1;
+    m_hasColorRangeEffects = TRUE;
 
     // NOTE: Uninline.
     m_animation.SetColorRangeAll(rangeValue);

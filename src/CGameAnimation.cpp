@@ -169,6 +169,16 @@ BYTE CGameAnimation::GetPersonalSpace()
 }
 
 // NOTE: Inlined.
+BOOL CGameAnimation::IsFalseColor()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2099
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->IsFalseColor();
+}
+
+// NOTE: Inlined.
 BOOL CGameAnimation::IsEndOfSequence()
 {
     // __FILE__: .\Include\ObjAnimation.h

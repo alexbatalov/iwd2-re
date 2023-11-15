@@ -426,6 +426,7 @@ public:
     SHORT GetTurnUndeadLevel();
     SHORT GetBackstabDamageMultiplier();
     SHORT GetLayOnHandsAmount();
+    void CheckLoadState();
     INT GetNumQuickWeaponSlots();
     SHORT FindItemPersonal(const CString& sName, int number, BOOL restrictToEquiped);
     SHORT CountItemPersonal(const CString& sName);
@@ -614,7 +615,7 @@ public:
     /* 5304 */ int field_5304;
     /* 5320 */ unsigned char field_5320;
     /* 5321 */ BOOLEAN m_bEscapingArea;
-    /* 5322 */ int field_5322;
+    /* 5322 */ BOOL m_animationRunning;
     /* 5326 */ int field_5326;
     /* 532A */ unsigned char field_532A;
     /* 532C */ int field_532C;
@@ -718,7 +719,7 @@ public:
     /* 5632 */ int field_5632;
     /* 5636 */ unsigned char field_5636;
     /* 5638 */ int field_5638;
-    /* 563C */ int field_563C;
+    /* 563C */ BOOL m_hasColorRangeEffects;
     /* 5640 */ int field_5640;
     /* 5644 */ BOOL m_removeFromArea;
     /* 5648 */ CMarker m_marker;
