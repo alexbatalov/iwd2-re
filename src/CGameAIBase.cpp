@@ -1285,6 +1285,12 @@ void CGameAIBase::sub_481890(CRect* r, CArray<CRect*>& ary)
     // TODO: Incomplete.
 }
 
+// 0x467C50
+void CGameAIBase::sub_467C50(const CResRef& resRef, CGameSprite* pSprite)
+{
+    // TODO: Incomplete.
+}
+
 // 0x4686C0
 CVariable* CGameAIBase::GetGlobalVariable(const CString& sScope, const CString& sName, int a3)
 {

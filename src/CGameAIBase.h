@@ -10,10 +10,12 @@ class CAITrigger;
 class CGameDoor;
 class CGameEffect;
 class CGameSpawning;
+class CGameSprite;
 class CGameStatic;
 class CGameTiledObject;
 class CGameTimer;
 class CGameTrigger;
+class CResRef;
 class CVariable;
 
 class CGameAIBase : public CGameObject {
@@ -101,6 +103,7 @@ public:
     CAIAction& GetNextAction(CAIAction& action);
 
     void sub_481890(CRect* r, CArray<CRect*>& ary);
+    void sub_467C50(const CResRef& resRef, CGameSprite* pSprite);
     static CVariable* GetGlobalVariable(const CString& sScope, const CString& sName, int a3);
 
     /* 006E */ CAIObjectType m_lAttacker;

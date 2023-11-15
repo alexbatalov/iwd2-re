@@ -2124,6 +2124,72 @@ void CGameSprite::sub_71A0E0(CButtonData buttonData, BOOLEAN firstCall)
     }
 }
 
+// FIXME: `buttonData` should be reference.
+//
+// 0x71A550
+void CGameSprite::sub_71A550(CButtonData buttonData, BOOLEAN firstCall)
+{
+    m_currentUseButton = buttonData;
+
+    CAIAction action;
+    CString string;
+    BOOL cursor = ReadyCursor();
+
+    if (!firstCall && !cursor) {
+        switch (m_currentUseButton.m_abilityId.m_itemType) {
+        case 3:
+            field_54E8 = -1;
+
+            // FIXME: One time is usually enough.
+            g_pBaldurChitin->GetObjectGame()->SetLastTarget(CGameObjectArray::INVALID_INDEX);
+            g_pBaldurChitin->GetObjectGame()->SetLastTarget(CGameObjectArray::INVALID_INDEX);
+
+            m_currentUseButton.m_abilityId.m_res.CopyToString(string);
+
+            // NOTE: Uninline.
+            action = CAIAction(CAIAction::SPELL,
+                m_typeAI,
+                string,
+                0,
+                m_currentUseButton.m_abilityId.m_nClass | (m_currentUseButton.m_abilityId.field_1E << 8));
+
+            ClearActions(FALSE);
+            m_userCommandPause = 75;
+            m_triggerId = CGameObjectArray::INVALID_INDEX;
+            AddAction(action);
+            m_interrupt = TRUE;
+            break;
+        case 4:
+            // FIXME: One time is usually enough.
+            g_pBaldurChitin->GetObjectGame()->SetLastTarget(CGameObjectArray::INVALID_INDEX);
+            g_pBaldurChitin->GetObjectGame()->SetLastTarget(CGameObjectArray::INVALID_INDEX);
+
+            m_currentUseButton.m_abilityId.m_res.CopyToString(string);
+
+            // NOTE: This call is not inlined (see above).
+            action = CAIAction(CAIAction::SPELL,
+                m_typeAI,
+                string,
+                0,
+                m_currentUseButton.m_abilityId.m_nClass | (m_currentUseButton.m_abilityId.field_1E << 8));
+            action.m_specificID3 = m_currentUseButton.m_abilityId.field_1D;
+            ClearActions(FALSE);
+            m_userCommandPause = 75;
+            m_triggerId = CGameObjectArray::INVALID_INDEX;
+            AddAction(action);
+            m_interrupt = TRUE;
+            break;
+        case 5:
+            // NOTE: For unknown reason the first call of `SetLastTarget` is
+            // inlined, but the second is not.
+            g_pBaldurChitin->GetObjectGame()->SetLastTarget(CGameObjectArray::INVALID_INDEX);
+            g_pBaldurChitin->GetObjectGame()->SetLastTarget(CGameObjectArray::INVALID_INDEX);
+            sub_467C50(m_currentUseButton.m_abilityId.m_res, this);
+            break;
+        }
+    }
+}
+
 // 0x71B3B0
 void CGameSprite::CheckToolTipItem(BYTE buttonNum)
 {
