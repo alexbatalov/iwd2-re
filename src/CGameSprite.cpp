@@ -2038,6 +2038,49 @@ void CGameSprite::ReadyItem(SHORT buttonNum, BOOLEAN firstCall)
     }
 }
 
+// FIXME: `buttonData` should be reference.
+//
+// 0x719CA0
+void CGameSprite::ReadyOffInternalList(CButtonData buttonData, BOOLEAN firstCall)
+{
+    m_currentUseButton = buttonData;
+
+    CAIAction action;
+    CString string;
+    BOOL cursor = ReadyCursor();
+
+    if (!firstCall && !cursor) {
+        switch (m_currentUseButton.m_abilityId.m_targetType) {
+        case 5:
+            // FIXME: One time is usually enough.
+            g_pBaldurChitin->GetObjectGame()->SetLastTarget(CGameObjectArray::INVALID_INDEX);
+            g_pBaldurChitin->GetObjectGame()->SetLastTarget(CGameObjectArray::INVALID_INDEX);
+
+            // FIXME: Unused.
+            m_currentUseButton.m_abilityId.m_res.CopyToString(string);
+
+            // NOTE: Uninline.
+            action = CAIAction(CAIAction::USEITEM,
+                m_typeAI,
+                m_currentUseButton.m_abilityId.m_itemNum,
+                m_currentUseButton.m_abilityId.m_abilityNum,
+                0);
+
+            ClearActions(FALSE);
+            m_userCommandPause = 75;
+            m_triggerId = CGameObjectArray::INVALID_INDEX;
+            AddAction(action);
+            m_interrupt = TRUE;
+            break;
+        case 6:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 18593
+            UTIL_ASSERT(FALSE);
+            break;
+        }
+    }
+}
+
 // 0x71B3B0
 void CGameSprite::CheckToolTipItem(BYTE buttonNum)
 {
