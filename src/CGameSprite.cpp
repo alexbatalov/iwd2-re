@@ -4,6 +4,7 @@
 #include "CBaldurChitin.h"
 #include "CBaldurEngine.h"
 #include "CGameArea.h"
+#include "CGameButtonList.h"
 #include "CInfGame.h"
 #include "CItem.h"
 #include "CScreenCharacter.h"
@@ -901,7 +902,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
 
         field_727E = 0;
         field_72B2 = new CVariableHash(16);
-        field_72E6 = 0;
+        m_internalButtonList = NULL;
 
         SleepEx(10, FALSE);
         Unmarshal(pCreature, creatureSize, facing, a3);
@@ -1845,6 +1846,27 @@ void CGameSprite::GetSelectedWeaponButton(CButtonData& cButtonData)
         }
         pItem->Release();
     }
+}
+
+// 0x717620
+CGameButtonList* CGameSprite::GetInternalButtonList()
+{
+    CGameButtonList* buttons = new CGameButtonList();
+
+    if (m_internalButtonList != NULL) {
+        POSITION pos = m_internalButtonList->GetHeadPosition();
+        while (pos != NULL) {
+            CButtonData* node = m_internalButtonList->GetNext(pos);
+            CButtonData* copy = new CButtonData();
+            *copy = *node;
+            buttons->AddTail(copy);
+        }
+
+        // FIXME: Meaninless memory leak.
+        new CButtonData();
+    }
+
+    return buttons;
 }
 
 // 0x718650

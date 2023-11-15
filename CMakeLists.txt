@@ -125,6 +125,7 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CGameArea.h"
     "src/CGameAreaNotes.cpp"
     "src/CGameAreaNotes.h"
+    "src/CGameButtonList.h"
     "src/CGameContainer.cpp"
     "src/CGameContainer.h"
     "src/CGameDialog.cpp"

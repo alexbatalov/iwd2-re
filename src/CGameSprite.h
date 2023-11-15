@@ -147,6 +147,7 @@
 #define CGAMESPRITE_SKILL_WILDERNESS_LORE 15
 #define CGAMESPRITE_SKILL_NUMSKILLS 16
 
+class CGameButtonList;
 class CSearchRequest;
 class CUIControlBase;
 class CUIControlTextDisplay;
@@ -406,6 +407,7 @@ public:
     void LoadAreaInformation(CAreaFileCreature* pCreature);
     BYTE GetChannel();
     void GetSelectedWeaponButton(CButtonData& cButtonData);
+    CGameButtonList* GetInternalButtonList();
     CItem* GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot);
     SHORT GetLauncherSlot(SHORT slotNum, SHORT abilityNum);
     BOOL CheckLauncherType(const ITEM_ABILITY* ability, CItem* pLauncher);
@@ -778,7 +780,7 @@ public:
     /* 72D6 */ int field_72D6;
     /* 72DE */ int field_72DE;
     /* 72E2 */ LONG field_72E2;
-    /* 72E6 */ int field_72E6;
+    /* 72E6 */ CGameButtonList* m_internalButtonList;
     /* 7430 */ unsigned char field_7430;
     /* 752E */ BOOL m_bSendSpriteUpdate;
     /* 7532 */ int field_7532;
