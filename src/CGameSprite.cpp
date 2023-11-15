@@ -1848,6 +1848,46 @@ void CGameSprite::GetSelectedWeaponButton(CButtonData& cButtonData)
     }
 }
 
+// 0x714130
+void CGameSprite::GetWeaponButton(BYTE nButtonNum, CButtonData& cButtonData)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 15766
+    UTIL_ASSERT_MSG(nButtonNum < CCREATUREFILEEQUIPMENT21_WEAPON_NUM, "Invalid button number.");
+
+    const CRuleTables& rule = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    cButtonData.m_icon = "";
+    cButtonData.m_count = 0;
+    cButtonData.m_abilityId.m_itemType = 2;
+    cButtonData.m_abilityId.m_itemNum = 10;
+    cButtonData.m_abilityId.m_abilityNum = 1;
+    cButtonData.m_abilityId.field_10 = -1;
+
+    CItem* pItem = m_equipment.m_items[nButtonNum + 43];
+    if (pItem != NULL) {
+        pItem->Demand();
+        ITEM_ABILITY* pAbility = pItem->GetAbility(field_3D3A[nButtonNum]);
+        if (pAbility != NULL) {
+            cButtonData.m_icon = CString(pAbility->quickSlotIcon);
+            cButtonData.m_abilityId.m_itemType = 2;
+            cButtonData.m_abilityId.m_itemNum = nButtonNum + 43;
+            cButtonData.m_abilityId.m_abilityNum = field_3D3A[nButtonNum];
+            cButtonData.m_abilityId.field_10 = rule.GetItemAbilityDescription(pItem->cResRef,
+                field_3D3A[nButtonNum]);
+            if (cButtonData.m_abilityId.field_10 == -1) {
+                cButtonData.m_abilityId.field_10 = pItem->GetGenericName();
+            }
+
+            cButtonData.m_count = 0;
+            if (pItem->GetMaxStackable() > 1) {
+                cButtonData.m_count = pItem->GetUsageCount(field_3D3A[nButtonNum]);
+            }
+        }
+        pItem->Release();
+    }
+}
+
 // 0x717620
 CGameButtonList* CGameSprite::GetInternalButtonList()
 {

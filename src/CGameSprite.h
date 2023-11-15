@@ -407,6 +407,7 @@ public:
     void LoadAreaInformation(CAreaFileCreature* pCreature);
     BYTE GetChannel();
     void GetSelectedWeaponButton(CButtonData& cButtonData);
+    void GetWeaponButton(BYTE nButtonNum, CButtonData& cButtonData);
     CGameButtonList* GetInternalButtonList();
     CItem* GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot);
     SHORT GetLauncherSlot(SHORT slotNum, SHORT abilityNum);
