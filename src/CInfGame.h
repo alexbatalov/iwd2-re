@@ -353,6 +353,7 @@ public:
     /* 3878 */ SHORT m_nCharacterOverflowCount;
     /* 387A */ SHORT m_nReputation;
     /* 3884 */ CAIGroup m_group;
+    /* 38A6 */ unsigned char field_38A6;
     /* 38A8 */ CTypedPtrList<CPtrList, int*> m_allies; // NOTE: Stores actual ints disguised as pointers.
     /* 38C4 */ CTypedPtrList<CPtrList, int*> m_familiars; // NOTES: Stores actual ints disguised as pointers.
     /* 38E0 */ unsigned char field_38E0[72];

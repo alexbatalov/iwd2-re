@@ -1888,6 +1888,39 @@ void CGameSprite::GetWeaponButton(BYTE nButtonNum, CButtonData& cButtonData)
     }
 }
 
+// 0x7142D0
+void CGameSprite::SetSelectedWeaponButton(SHORT buttonNum)
+{
+    if (m_equipment.m_items[42] != NULL) {
+        g_pBaldurChitin->GetObjectGame()->SetState(2);
+        g_pBaldurChitin->GetObjectGame()->SetIconIndex(12);
+        g_pBaldurChitin->GetObjectGame()->m_iconResRef = "";
+        g_pBaldurChitin->GetObjectGame()->field_38A6 = 1;
+    } else {
+        g_pBaldurChitin->GetObjectGame()->SetLastTarget(CGameObjectArray::INVALID_INDEX);
+
+        SHORT itemNum = m_quickWeapons[buttonNum].m_abilityId.m_itemNum;
+        SHORT abilityNum = m_quickWeapons[buttonNum].m_abilityId.m_abilityNum;
+        if (itemNum != -1 && abilityNum != -1) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE_: 15877
+            m_nTempSelectedWeapon = static_cast<BYTE>(itemNum);
+            m_nTempSelectedWeaponAbility = static_cast<BYTE>(abilityNum);
+            SelectWeaponAbility(static_cast<BYTE>(itemNum),
+                static_cast<BYTE>(abilityNum),
+                0,
+                1);
+            m_interrupt = TRUE;
+            if (m_equipment.m_selectedWeapon == itemNum) {
+                g_pBaldurChitin->GetObjectGame()->SetState(2);
+                g_pBaldurChitin->GetObjectGame()->SetIconIndex(12);
+                g_pBaldurChitin->GetObjectGame()->m_iconResRef = "";
+            }
+            g_pBaldurChitin->GetObjectGame()->field_38A6 = 1;
+        }
+    }
+}
+
 // 0x717620
 CGameButtonList* CGameSprite::GetInternalButtonList()
 {
