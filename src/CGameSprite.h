@@ -411,6 +411,7 @@ public:
     void ReadySpell(SHORT buttonNum, INT nType, BOOLEAN firstCall);
     void ReadyItem(SHORT buttonNum, BOOLEAN firstCall);
     void ReadyOffInternalList(CButtonData buttonData, BOOLEAN firstCall);
+    void sub_71A0E0(CButtonData buttonData, BOOLEAN firstCall);
     void CheckToolTipItem(BYTE buttonNum);
     void UnequipAll(BOOL a1);
     void EquipAll(BOOL a1);
