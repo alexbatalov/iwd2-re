@@ -5,6 +5,7 @@
 
 #include "BalDataTypes.h"
 
+class CButtonData;
 class CGameEffect;
 class CGameObject;
 class CGameSprite;
@@ -69,6 +70,7 @@ public:
     static INT GetSneakAttackDice();
     static INT sub_585D90();
     static BOOLEAN sub_585DA0(CGameSprite* pSprite);
+    static CButtonData* CreateButtonData(BYTE* resRef);
     static void sub_5860F0(CGameSprite* pSprite, CGameEffect* pEffect);
 };
 

@@ -8,6 +8,8 @@ class CGameSprite;
 
 class CSpell : public CResHelper<CResSpell, 1006> {
 public:
+    CSpell();
+    CSpell(CResRef res);
     BOOL Demand();
     BOOL Release();
     INT GetAbilityCount();

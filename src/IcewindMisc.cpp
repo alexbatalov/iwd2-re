@@ -1,10 +1,12 @@
 #include "IcewindMisc.h"
 
 #include "CBaldurChitin.h"
+#include "CButtonData.h"
 #include "CGameAnimationType.h"
 #include "CGameEffect.h"
 #include "CGameSprite.h"
 #include "CInfGame.h"
+#include "CSpell.h"
 #include "CUtil.h"
 
 // 0x5845D0
@@ -845,6 +847,30 @@ BOOLEAN IcewindMisc::sub_585DA0(CGameSprite* pSprite)
         && pSprite->m_nSequence != 5
         && !pSprite->sub_724690(2)
         && !pSprite->sub_724690(3);
+}
+
+// 0x585E00
+CButtonData* IcewindMisc::CreateButtonData(BYTE* resRef)
+{
+    CResRef cResRef(resRef);
+    CSpell cSpell(cResRef);
+    SPELL_ABILITY* ability = cSpell.GetAbility(0);
+
+    CButtonData* button = new CButtonData();
+
+    // NOTE: Original code creates temporary `CString` whose duration is only
+    // this assignment implying some inlined function.
+    button->m_icon = ability->quickSlotIcon;
+
+    button->m_name = cSpell.GetGenericName();
+    button->m_abilityId.m_itemType = 1;
+    button->m_abilityId.m_res = resRef;
+    button->m_abilityId.m_targetType = ability->actionType;
+    button->m_abilityId.field_10 = cSpell.GetGenericName();
+    button->m_bDisabled = FALSE;
+    button->m_bDisplayCount = 0;
+
+    return button;
 }
 
 // 0x5860F0

@@ -4,6 +4,19 @@
 #include "CGameSprite.h"
 #include "CUtil.h"
 
+// NOTE: Inlined.
+CSpell::CSpell()
+{
+}
+
+// FIXME: `res` should be reference.
+//
+// 0x585FD0
+CSpell::CSpell(CResRef res)
+{
+    SetResRef(res, TRUE, TRUE);
+}
+
 // 0x54A380
 BOOL CSpell::Demand()
 {
