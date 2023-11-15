@@ -410,6 +410,7 @@ public:
     void GetSelectedWeaponButton(CButtonData& cButtonData);
     void GetWeaponButton(BYTE nButtonNum, CButtonData& cButtonData);
     void SetSelectedWeaponButton(SHORT buttonNum);
+    CGameButtonList* GetSongsButtonList();
     CGameButtonList* GetInternalButtonList();
     CItem* GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot);
     SHORT GetLauncherSlot(SHORT slotNum, SHORT abilityNum);

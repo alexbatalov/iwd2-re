@@ -1921,6 +1921,25 @@ void CGameSprite::SetSelectedWeaponButton(SHORT buttonNum)
     }
 }
 
+// 0x716540
+CGameButtonList* CGameSprite::GetSongsButtonList()
+{
+    CGameButtonList* buttons = new CGameButtonList();
+    RESREF resRef;
+
+    for (size_t index = 0; index < m_songs.m_List.size(); index++) {
+        // NOTE: Uninline.
+        CGameSpriteSpellListEntry* entry = m_songs.Get(index);
+
+        // NOTE: Uninline.
+        g_pBaldurChitin->GetObjectGame()->GetSongs()->Get(entry->m_nID).GetResRef(resRef);
+
+        buttons->AddTail(IcewindMisc::CreateButtonData(resRef));
+    }
+
+    return buttons;
+}
+
 // 0x717620
 CGameButtonList* CGameSprite::GetInternalButtonList()
 {
