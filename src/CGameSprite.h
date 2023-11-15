@@ -407,6 +407,7 @@ public:
     BYTE GetChannel();
     void GetSelectedWeaponButton(CButtonData& cButtonData);
     CItem* GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot);
+    SHORT GetLauncherSlot(SHORT slotNum, SHORT abilityNum);
     BOOL CheckLauncherType(const ITEM_ABILITY* ability, CItem* pLauncher);
     BOOL ReadyCursor();
     void ReadySpell(SHORT buttonNum, INT nType, BOOLEAN firstCall);

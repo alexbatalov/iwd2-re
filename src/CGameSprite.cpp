@@ -1911,6 +1911,73 @@ CItem* CGameSprite::GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot
     return NULL;
 }
 
+// 0x7187E0
+SHORT CGameSprite::GetLauncherSlot(SHORT slotNum, SHORT abilityNum)
+{
+    int index;
+
+    CItem* pItem = m_equipment.m_items[slotNum];
+    if (pItem == NULL) {
+        return -1;
+    }
+
+    pItem->Demand();
+
+    ITEM_ABILITY* ability = pItem->GetAbility(abilityNum);
+    if (ability == NULL || ability->type != 2) {
+        pItem->Release();
+        return -1;
+    }
+
+    switch (ability->launcherType) {
+    case 1:
+        if (m_equipment.m_items[2 * m_nWeaponSet + 43] != NULL
+            && m_equipment.m_items[2 * m_nWeaponSet + 43]->GetItemType() == 15) {
+            pItem->Release();
+            return 2 * m_nWeaponSet + 43;
+        }
+        for (index = 0; index < 8; index++) {
+            if (m_equipment.m_items[43 + index] != NULL
+                && m_equipment.m_items[43 + index]->GetItemType() == 15) {
+                pItem->Release();
+                return 43 + index;
+            }
+        }
+        break;
+    case 2:
+        if (m_equipment.m_items[2 * m_nWeaponSet + 43] != NULL
+            && m_equipment.m_items[2 * m_nWeaponSet + 43]->GetItemType() == 27) {
+            pItem->Release();
+            return 2 * m_nWeaponSet + 43;
+        }
+        for (index = 0; index < 8; index++) {
+            if (m_equipment.m_items[43 + index] != NULL
+                && m_equipment.m_items[43 + index]->GetItemType() == 27) {
+                pItem->Release();
+                return 43 + index;
+            }
+        }
+        break;
+    case 3:
+        if (m_equipment.m_items[2 * m_nWeaponSet + 43] != NULL
+            && m_equipment.m_items[2 * m_nWeaponSet + 43]->GetItemType() == 18) {
+            pItem->Release();
+            return 2 * m_nWeaponSet + 43;
+        }
+        for (index = 0; index < 8; index++) {
+            if (m_equipment.m_items[43 + index] != NULL
+                && m_equipment.m_items[43 + index]->GetItemType() == 18) {
+                pItem->Release();
+                return 43 + index;
+            }
+        }
+        break;
+    }
+
+    pItem->Release();
+    return -1;
+}
+
 // 0x718980
 BOOL CGameSprite::CheckLauncherType(const ITEM_ABILITY* ability, CItem* pLauncher)
 {
