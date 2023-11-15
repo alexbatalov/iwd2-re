@@ -848,10 +848,8 @@ void CScreenWorld::AsynchronousUpdate(BOOL bActiveEngine)
                 INFINITE);
             if (rc == CGameObjectArray::SUCCESS) {
                 if (pSprite->GetArea() == NULL) {
-                    CDerivedStats* pDStats = pSprite->GetDerivedStats();
-                    if (!pSprite->m_bAllowEffectListCall) {
-                        pDStats = &(pSprite->m_tempStats);
-                    }
+                    // NOTE: Uninline.
+                    CDerivedStats* pDStats = pSprite->GetActiveStats();
 
                     if ((pDStats->m_generalState & STATE_DEAD) != 0) {
                         if (pSprite->DoAIUpdate(pGame->GetWorldTimer()->m_active, g_pChitin->nAUCounter)) {
@@ -928,9 +926,8 @@ void CScreenWorld::AsynchronousUpdate(BOOL bActiveEngine)
 
                                 if (rc == CGameObjectArray::SUCCESS) {
                                     if (pSprite->GetArea() == pArea) {
-                                        CDerivedStats* pDStats = pSprite->m_bAllowEffectListCall
-                                            ? &(pSprite->m_derivedStats)
-                                            : &(pSprite->m_tempStats);
+                                        // NOTE: Uninline.
+                                        CDerivedStats* pDStats = pSprite->GetActiveStats();
                                         if ((pDStats->m_generalState & STATE_DEAD) != 0) {
                                             pArea->m_iPicked = pGame->GetCharacterId(nPortrait);
                                             pArea->m_nToolTip = 0;

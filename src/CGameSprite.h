@@ -535,6 +535,7 @@ public:
     void SetQuickSpell(BYTE buttonNum, CButtonData buttonData);
     void SetQuickAbility(BYTE buttonNum, CButtonData buttonData);
     void SetQuickSong(BYTE buttonNum, CButtonData buttonData);
+    CDerivedStats* GetActiveStats();
 
     /* 0598 */ CResRef m_resRef;
     /* 05A0 */ CString m_sName;
@@ -766,7 +767,6 @@ public:
     /* 7298 */ BOOL m_bPlayedEncumberedStopped;
     /* 729C */ BOOL m_bPlayedEncumberedSlowed;
     /* 72A2 */ short field_72A2;
-    /* 72A4 */ BOOL field_72A4;
     /* 72A4 */ BOOL m_bAllowEffectListCall;
     /* 72A8 */ unsigned char field_72A8;
     /* 72AA */ int field_72AA;

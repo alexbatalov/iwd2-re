@@ -2418,10 +2418,8 @@ SHORT CGameSprite::GetBackstabDamageMultiplier()
         return 0;
     }
 
-    CDerivedStats* DStats = &m_derivedStats;
-    if (!field_72A4) {
-        DStats = &m_tempStats;
-    }
+    // NOTE: Uninline.
+    CDerivedStats* DStats = GetActiveStats();
 
     INT nLevel = DStats->GetBardMonkRogueLevel();
     return static_cast<SHORT>(atol(g_pBaldurChitin->GetObjectGame()->GetRuleTables().m_tBackstabMultiplier.GetAt(CPoint(nLevel, 0))));
@@ -2676,10 +2674,8 @@ void CGameSprite::SetMonkAbilities()
             delete m_equipment.m_items[10];
         }
 
-        CDerivedStats* pStats = &m_derivedStats;
-        if (!m_bAllowEffectListCall) {
-            pStats = &m_tempStats;
-        }
+        // NOTE: Uninline.
+        CDerivedStats* pStats = GetActiveStats();
 
         CItem* pItem;
         switch (pStats->GetClassLevel(CAIOBJECTTYPE_C_MONK)) {
@@ -6005,4 +6001,14 @@ void CGameSprite::SetQuickSong(BYTE buttonNum, CButtonData buttonData)
     UTIL_ASSERT(buttonNum < CGAMESAVECHARACTER_NUM_QUICK_SONGS22);
 
     m_quickSongs[buttonNum] = buttonData;
+}
+
+// NOTE: Inlined.
+CDerivedStats* CGameSprite::GetActiveStats()
+{
+    if (m_bAllowEffectListCall) {
+        return &m_derivedStats;
+    } else {
+        return &m_tempStats;
+    }
 }
