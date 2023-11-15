@@ -526,6 +526,16 @@ public:
 
     INT sub_726270(UINT nFeatNumber);
 
+    void GetQuickSpell(BYTE buttonNum, CButtonData& buttonData);
+    void GetQuickItem(BYTE buttonNum, CButtonData& buttonData);
+    void GetQuickAbility(BYTE buttonNum, CButtonData& buttonData);
+    void GetQuickSong(BYTE buttonNum, CButtonData& buttonData);
+    void SetQuickWeapon(BYTE buttonNum, CButtonData buttonData);
+    void SetQuickItem(BYTE buttonNum, CButtonData buttonData);
+    void SetQuickSpell(BYTE buttonNum, CButtonData buttonData);
+    void SetQuickAbility(BYTE buttonNum, CButtonData buttonData);
+    void SetQuickSong(BYTE buttonNum, CButtonData buttonData);
+
     /* 0598 */ CResRef m_resRef;
     /* 05A0 */ CString m_sName;
     /* 05A4 */ CCreatureFileHeader m_baseStats;

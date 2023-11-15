@@ -5906,3 +5906,103 @@ INT CGameSprite::sub_726270(UINT nFeatNumber)
     }
     return v1;
 }
+
+// NOTE: Inlined.
+void CGameSprite::GetQuickItem(BYTE buttonNum, CButtonData& buttonData)
+{
+    // __FILE__: .\Include\ObjCreature.h
+    // __LINE__: 2022
+    UTIL_ASSERT(buttonNum < CGAMESAVECHARACTER_NUM_QUICK_ITEMS22);
+
+    CheckToolTipItem(buttonNum);
+
+    buttonData = m_quickItems[buttonNum];
+}
+
+// NOTE: Inlined.
+void CGameSprite::GetQuickSpell(BYTE buttonNum, CButtonData& buttonData)
+{
+    // __FILE__: .\Include\ObjCreature.h
+    // __LINE__: 2023
+    UTIL_ASSERT(buttonNum < CGAMESAVECHARACTER_NUM_QUICK_SPELLS22);
+
+    buttonData = m_quickSpells[buttonNum];
+}
+
+// NOTE: Inlined.
+void CGameSprite::GetQuickAbility(BYTE buttonNum, CButtonData& buttonData)
+{
+    // __FILE__: .\Include\ObjCreature.h
+    // __LINE__: 2024
+    UTIL_ASSERT(buttonNum < CGAMESAVECHARACTER_NUM_QUICK_ABILITIES22);
+
+    buttonData = m_quickInnates[buttonNum];
+}
+
+// NOTE: Inlined.
+void CGameSprite::GetQuickSong(BYTE buttonNum, CButtonData& buttonData)
+{
+    // __FILE__: .\Include\ObjCreature.h
+    // __LINE__: 2025
+    UTIL_ASSERT(buttonNum < CGAMESAVECHARACTER_NUM_QUICK_SONGS22);
+
+    buttonData = m_quickSongs[buttonNum];
+}
+
+// FIXME: `buttonData` should be reference.
+//
+// NOTE: Inlined.
+void CGameSprite::SetQuickWeapon(BYTE buttonNum, CButtonData buttonData)
+{
+    // __FILE__: .\Include\ObjCreature.h
+    // __LINE__: 2030
+    UTIL_ASSERT(buttonNum < CGAMESAVECHARACTER_NUM_QUICK_WEAPONS22);
+}
+
+// FIXME: `buttonData` should be reference.
+//
+// NOTE: Inlined.
+void CGameSprite::SetQuickItem(BYTE buttonNum, CButtonData buttonData)
+{
+    // __FILE__: .\Include\ObjCreature.h
+    // __LINE__: 2032
+    UTIL_ASSERT(buttonNum < CGAMESAVECHARACTER_NUM_QUICK_ITEMS22);
+
+    m_quickItems[buttonNum] = buttonData;
+}
+
+// FIXME: `buttonData` should be reference.
+//
+// NOTE: Inlined.
+void CGameSprite::SetQuickSpell(BYTE buttonNum, CButtonData buttonData)
+{
+    // __FILE__: .\Include\ObjCreature.h
+    // __LINE__: 2033
+    UTIL_ASSERT(buttonNum < CGAMESAVECHARACTER_NUM_QUICK_SPELLS22);
+
+    m_quickSpells[buttonNum] = buttonData;
+}
+
+// FIXME: `buttonData` should be reference.
+//
+// NOTE: Inlined.
+void CGameSprite::SetQuickAbility(BYTE buttonNum, CButtonData buttonData)
+{
+    // __FILE__: .\Include\ObjCreature.h
+    // __LINE__: 2034
+    UTIL_ASSERT(buttonNum < CGAMESAVECHARACTER_NUM_QUICK_ABILITIES22);
+
+    m_quickInnates[buttonNum] = buttonData;
+}
+
+// FIXME: `buttonData` should be reference.
+//
+// NOTE: Inlined.
+void CGameSprite::SetQuickSong(BYTE buttonNum, CButtonData buttonData)
+{
+    // __FILE__: .\Include\ObjCreature.h
+    // __LINE__: 2035
+    UTIL_ASSERT(buttonNum < CGAMESAVECHARACTER_NUM_QUICK_SONGS22);
+
+    m_quickSongs[buttonNum] = buttonData;
+}
