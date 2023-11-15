@@ -1945,6 +1945,20 @@ BOOL CGameSprite::ReadyCursor()
     }
 }
 
+// 0x71B3B0
+void CGameSprite::CheckToolTipItem(BYTE buttonNum)
+{
+    SHORT nItemNum = m_quickItems[buttonNum].m_abilityId.m_itemNum;
+    if (nItemNum != -1) {
+        CItem* pItem = m_equipment.m_items[nItemNum];
+        if (pItem != NULL) {
+            // FIXME: Calls `GetGenericName` twice.
+            m_quickItems[nItemNum].m_name = pItem->GetGenericName();
+            m_quickItems[nItemNum].m_abilityId.field_10 = pItem->GetGenericName();
+        }
+    }
+}
+
 // 0x71B460
 void CGameSprite::UnequipAll(BOOL animationOnly)
 {
