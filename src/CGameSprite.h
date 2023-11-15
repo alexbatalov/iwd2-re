@@ -408,6 +408,7 @@ public:
     void GetSelectedWeaponButton(CButtonData& cButtonData);
     CItem* GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot);
     BOOL ReadyCursor();
+    void ReadySpell(SHORT buttonNum, INT nType, BOOLEAN firstCall);
     void CheckToolTipItem(BYTE buttonNum);
     void UnequipAll(BOOL a1);
     void EquipAll(BOOL a1);

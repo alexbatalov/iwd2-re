@@ -37,6 +37,7 @@ public:
     CAIAction(SHORT actionID, const CAIObjectType& actee, LONG specificID, LONG specificID2, LONG specificID3);
     CAIAction(SHORT actionID, const CPoint& dest, LONG specificID, LONG specificID2);
     CAIAction(SHORT actionID, const CString& name, CPoint pt, LONG specificID);
+    CAIAction(SHORT actionID, const CAIObjectType& actee, const CString& name, LONG specificID, LONG specificID2);
     CAIAction(const CAIAction& action);
     ~CAIAction();
     BOOL OfType(SHORT type) const;
