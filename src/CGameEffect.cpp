@@ -6104,6 +6104,41 @@ CGameEffect* CGameEffectWebHold::Copy()
     return copy;
 }
 
+// 0x4BD740
+BOOL CGameEffectWebHold::ApplyEffect(CGameSprite* pSprite)
+{
+    if (g_pBaldurChitin->GetObjectGame()->field_43E6 != 1) {
+        if (!pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_WEB]) {
+            pSprite->GetDerivedStats()->m_visualEffects[IWD_VFX_WEB] = true;
+
+            if (m_secondaryType) {
+                PlaySound(CResRef("CRE_M02"), pSprite);
+            }
+
+            pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_WEB] = true;
+
+            AdjustDEX(pSprite, -4);
+
+            // NOTE: Uninline
+            Immobilize(pSprite);
+
+            // NOTE: Uninline.
+            AddPortraitIcon(pSprite, 95);
+
+            // FIXME: Redundant, path already dropped in `Immobilize`.
+            if (m_secondaryType) {
+                CMessageDropPath* pMessage = new CMessageDropPath(pSprite->GetId(),
+                    pSprite->GetId());
+                g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+            }
+        }
+    } else {
+        m_done = TRUE;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
