@@ -2417,6 +2417,68 @@ CGameEffect* CGameEffectResistElectricity::Copy()
     return copy;
 }
 
+// 0x4B0050
+BOOL CGameEffectResistElectricity::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        if (m_durationType == 1) {
+            pSprite->GetBaseStats()->m_resistElectricityBase += static_cast<BYTE>(m_effectAmount);
+            if (pSprite->GetBaseStats()->m_resistElectricityBase > 100) {
+                pSprite->GetBaseStats()->m_resistElectricityBase = 100;
+            }
+            if (pSprite->GetBaseStats()->m_resistElectricityBase < 0) {
+                pSprite->GetBaseStats()->m_resistElectricityBase = 0;
+            }
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+        } else {
+            pSprite->m_bonusStats.m_nResistElectricity += static_cast<BYTE>(m_effectAmount);
+            m_done = FALSE;
+        }
+        break;
+    case 1:
+        if (m_durationType == 1) {
+            pSprite->GetBaseStats()->m_resistElectricityBase = static_cast<BYTE>(m_effectAmount);
+            if (pSprite->GetBaseStats()->m_resistElectricityBase > 100) {
+                pSprite->GetBaseStats()->m_resistElectricityBase = 100;
+            }
+            if (pSprite->GetBaseStats()->m_resistElectricityBase < 0) {
+                pSprite->GetBaseStats()->m_resistElectricityBase = 0;
+            }
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+        } else {
+            if (pSprite->GetDerivedStats()->m_nResistElectricity < m_effectAmount) {
+                pSprite->GetDerivedStats()->m_nResistElectricity = static_cast<BYTE>(m_effectAmount);
+            }
+            m_done = FALSE;
+        }
+        break;
+    case 2:
+        if (m_durationType == 1) {
+            pSprite->GetBaseStats()->m_resistElectricityBase = static_cast<BYTE>(m_effectAmount) * pSprite->GetBaseStats()->m_resistElectricityBase / 100;
+            if (pSprite->GetBaseStats()->m_resistElectricityBase > 100) {
+                pSprite->GetBaseStats()->m_resistElectricityBase = 100;
+            }
+            if (pSprite->GetBaseStats()->m_resistElectricityBase < 0) {
+                pSprite->GetBaseStats()->m_resistElectricityBase = 0;
+            }
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+        } else {
+            pSprite->GetDerivedStats()->m_nResistElectricity = static_cast<SHORT>(m_effectAmount) * pSprite->GetBaseStats()->m_resistElectricityBase / 100;
+            m_done = FALSE;
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 9936
+        UTIL_ASSERT(FALSE);
+    }
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
