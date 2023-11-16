@@ -2577,6 +2577,34 @@ CGameEffect* CGameEffectResistMagic::Copy()
     return copy;
 }
 
+// 0x4B03B0
+BOOL CGameEffectResistMagic::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        if (m_effectAmount >= 0 || pSprite->m_tempStats.m_nMagicDamageResistance != 100) {
+            pSprite->m_bonusStats.m_nMagicDamageResistance += static_cast<SHORT>(m_effectAmount);
+            m_done = FALSE;
+        }
+        break;
+    case 1:
+        if (pSprite->GetDerivedStats()->m_nMagicDamageResistance < m_effectAmount) {
+            pSprite->GetDerivedStats()->m_nMagicDamageResistance = static_cast<SHORT>(m_effectAmount);
+        }
+        m_done = FALSE;
+        break;
+    case 2:
+        pSprite->GetDerivedStats()->m_nMagicDamageResistance = static_cast<SHORT>(m_effectAmount) * pSprite->GetDerivedStats()->m_nMagicDamageResistance / 100;
+        m_done = FALSE;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 10154
+        UTIL_ASSERT(FALSE);
+    }
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
