@@ -2,6 +2,7 @@
 
 #include "CBaldurChitin.h"
 #include "CBaldurProjector.h"
+#include "CGameArea.h"
 #include "CGameSprite.h"
 #include "CInfGame.h"
 #include "CScreenWorld.h"
@@ -5111,6 +5112,16 @@ CGameEffect* CGameEffectShowArea::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4B8820
+BOOL CGameEffectShowArea::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetArea()->m_visibility.SetAreaExplored();
+
+    m_done = TRUE;
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------
