@@ -5445,6 +5445,43 @@ CGameEffect* CGameEffectNon_CumulativeDrawUponHolyMight::Copy()
     return copy;
 }
 
+// 0x4BAE10
+BOOL CGameEffectNon_CumulativeDrawUponHolyMight::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        // NOTE: Uninline.
+        DisplayStringRef(pSprite, 14125);
+    }
+
+    if (!pSprite->GetDerivedStats()->m_spellStates.test(SPLSTATE_DRAW_UPON_HOLY_MIGHT)) {
+        pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_DRAW_UPON_HOLY_MIGHT, true);
+
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 59);
+
+        if (m_effectAmount > pSprite->GetDerivedStats()->field_128) {
+            pSprite->m_bonusStats.m_nSTR += static_cast<SHORT>(m_effectAmount) - static_cast<SHORT>(pSprite->GetDerivedStats()->field_128);
+            pSprite->GetDerivedStats()->field_128 = m_effectAmount;
+        }
+
+        if (m_effectAmount > pSprite->GetDerivedStats()->field_130) {
+            pSprite->m_bonusStats.m_nCON += static_cast<SHORT>(m_effectAmount) - static_cast<SHORT>(pSprite->GetDerivedStats()->field_130);
+            pSprite->GetDerivedStats()->field_130 = m_effectAmount;
+        }
+
+        if (m_effectAmount > pSprite->GetDerivedStats()->field_12C) {
+            pSprite->m_bonusStats.m_nDEX += static_cast<SHORT>(m_effectAmount) - static_cast<SHORT>(pSprite->GetDerivedStats()->field_12C);
+            pSprite->GetDerivedStats()->field_12C = m_effectAmount;
+        }
+
+        AddColorEffect(pSprite, 128, 128, 128, 30);
+
+        m_done = FALSE;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.

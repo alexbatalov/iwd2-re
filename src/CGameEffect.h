@@ -1179,6 +1179,7 @@ class CGameEffectNon_CumulativeDrawUponHolyMight : public CGameEffect {
 public:
     CGameEffectNon_CumulativeDrawUponHolyMight(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectNon_CumulativeLuck : public CGameEffect {
