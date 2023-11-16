@@ -6157,6 +6157,33 @@ CGameEffect* CGameEffectGreasePool::Copy()
     return copy;
 }
 
+// 0x4BD920
+BOOL CGameEffectGreasePool::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetDerivedStats()->m_visualEffects.set(IWD_VFX_GREASE, true);
+
+    if (m_secondaryType) {
+        PlaySound(CResRef("CRE_M01"), pSprite);
+    }
+
+    pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_GREASE, true);
+
+    // NOTE: Uninline.
+    AddPortraitIcon(pSprite, 94);
+
+    if (pSprite->GetAnimation()->GetMoveScale() != 0) {
+        pSprite->GetAnimation()->SetMoveScale(0);
+    }
+
+    if (m_secondaryType) {
+        CMessageDropPath* pMessage = new CMessageDropPath(pSprite->GetId(),
+            pSprite->GetId());
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
