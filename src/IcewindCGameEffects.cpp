@@ -112,6 +112,185 @@ CGameEffect* IcewindCGameEffectSavingThrowChange::Copy()
     return copy;
 }
 
+// 0x55ED20
+BOOL IcewindCGameEffectSavingThrowChange::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        sub_55ED90(pSprite);
+        break;
+    case 1:
+        sub_55EE70(pSprite);
+        break;
+    case 2:
+        sub_55EFB0(pSprite);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\IcewindCGameEffects.cpp
+        // __LINE__: 809
+        UTIL_ASSERT(FALSE);
+    }
+
+    return TRUE;
+}
+
+// 0x55ED90
+void IcewindCGameEffectSavingThrowChange::sub_55ED90(CGameSprite* pSprite)
+{
+    if (m_durationType == 1) {
+        CCreatureFileHeader* pBStats = pSprite->GetBaseStats();
+        pBStats->m_saveVSFortitudeBase += static_cast<BYTE>(m_effectAmount);
+        if (pBStats->m_saveVSFortitudeBase > 40) {
+            pBStats->m_saveVSFortitudeBase = 40;
+        }
+        if (pBStats->m_saveVSFortitudeBase < -40) {
+            pBStats->m_saveVSFortitudeBase = -40;
+        }
+
+        pBStats->m_saveVSReflexBase += static_cast<BYTE>(m_effectAmount);
+        if (pBStats->m_saveVSReflexBase > 40) {
+            pBStats->m_saveVSReflexBase = 40;
+        }
+        if (pBStats->m_saveVSReflexBase < -40) {
+            pBStats->m_saveVSReflexBase = -40;
+        }
+
+        pBStats->m_saveVSWillBase += static_cast<BYTE>(m_effectAmount);
+        if (pBStats->m_saveVSWillBase > 40) {
+            pBStats->m_saveVSWillBase = 40;
+        }
+        if (pBStats->m_saveVSWillBase < -40) {
+            pBStats->m_saveVSWillBase = -40;
+        }
+        m_forceRepass = TRUE;
+        m_done = TRUE;
+    } else {
+        pSprite->m_bonusStats.m_nSaveVSFortitude += static_cast<SHORT>(m_effectAmount);
+        pSprite->m_bonusStats.m_nSaveVSReflex += static_cast<SHORT>(m_effectAmount);
+        pSprite->m_bonusStats.m_nSaveVSWill += static_cast<SHORT>(m_effectAmount);
+        m_done = FALSE;
+    }
+}
+
+// 0x55EE70
+void IcewindCGameEffectSavingThrowChange::sub_55EE70(CGameSprite* pSprite)
+{
+    if (m_durationType == 1) {
+        CCreatureFileHeader* pBStats = pSprite->GetBaseStats();
+        pBStats->m_saveVSFortitudeBase = static_cast<BYTE>(m_effectAmount);
+        if (pBStats->m_saveVSFortitudeBase > 40) {
+            pBStats->m_saveVSFortitudeBase = 40;
+        }
+        if (pBStats->m_saveVSFortitudeBase < -40) {
+            pBStats->m_saveVSFortitudeBase = -40;
+        }
+
+        pBStats->m_saveVSReflexBase = static_cast<BYTE>(m_effectAmount);
+        if (pBStats->m_saveVSReflexBase > 40) {
+            pBStats->m_saveVSReflexBase = 40;
+        }
+        if (pBStats->m_saveVSReflexBase < -40) {
+            pBStats->m_saveVSReflexBase = -40;
+        }
+
+        pBStats->m_saveVSWillBase = static_cast<BYTE>(m_effectAmount);
+        if (pBStats->m_saveVSWillBase > 40) {
+            pBStats->m_saveVSWillBase = 40;
+        }
+        if (pBStats->m_saveVSWillBase < -40) {
+            pBStats->m_saveVSWillBase = -40;
+        }
+        m_forceRepass = TRUE;
+        m_done = TRUE;
+    } else {
+        CDerivedStats* pDStats = pSprite->GetDerivedStats();
+        pDStats->m_nSaveVSFortitude = static_cast<BYTE>(m_effectAmount);
+        if (pDStats->m_nSaveVSFortitude > 40) {
+            pDStats->m_nSaveVSFortitude = 40;
+        }
+        if (pDStats->m_nSaveVSFortitude < -40) {
+            pDStats->m_nSaveVSFortitude = -40;
+        }
+
+        pDStats->m_nSaveVSReflex = static_cast<BYTE>(m_effectAmount);
+        if (pDStats->m_nSaveVSReflex > 40) {
+            pDStats->m_nSaveVSReflex = 40;
+        }
+        if (pDStats->m_nSaveVSReflex < -40) {
+            pDStats->m_nSaveVSReflex = -40;
+        }
+
+        pDStats->m_nSaveVSWill = static_cast<BYTE>(m_effectAmount);
+        if (pDStats->m_nSaveVSWill > 40) {
+            pDStats->m_nSaveVSWill = 40;
+        }
+        if (pDStats->m_nSaveVSWill < -40) {
+            pDStats->m_nSaveVSWill = -40;
+        }
+        m_done = FALSE;
+    }
+}
+
+// 0x55EFB0
+void IcewindCGameEffectSavingThrowChange::sub_55EFB0(CGameSprite* pSprite)
+{
+    if (m_durationType == 1) {
+        CCreatureFileHeader* pBStats = pSprite->GetBaseStats();
+        pBStats->m_saveVSFortitudeBase = static_cast<SHORT>(m_effectAmount) * pBStats->m_saveVSFortitudeBase / 100;
+        if (pBStats->m_saveVSFortitudeBase > 40) {
+            pBStats->m_saveVSFortitudeBase = 40;
+        }
+        if (pBStats->m_saveVSFortitudeBase < -40) {
+            pBStats->m_saveVSFortitudeBase = -40;
+        }
+
+        pBStats->m_saveVSReflexBase = static_cast<SHORT>(m_effectAmount) * pBStats->m_saveVSReflexBase / 100;
+        if (pBStats->m_saveVSReflexBase > 40) {
+            pBStats->m_saveVSReflexBase = 40;
+        }
+        if (pBStats->m_saveVSReflexBase < -40) {
+            pBStats->m_saveVSReflexBase = -40;
+        }
+
+        pBStats->m_saveVSWillBase = static_cast<SHORT>(m_effectAmount) * pBStats->m_saveVSWillBase / 100;
+        if (pBStats->m_saveVSWillBase > 40) {
+            pBStats->m_saveVSWillBase = 40;
+        }
+        if (pBStats->m_saveVSWillBase < -40) {
+            pBStats->m_saveVSWillBase = -40;
+        }
+        m_forceRepass = TRUE;
+        m_done = TRUE;
+    } else {
+        CCreatureFileHeader* pBStats = pSprite->GetBaseStats();
+        CDerivedStats* pDStats = pSprite->GetDerivedStats();
+        pDStats->m_nSaveVSFortitude = static_cast<SHORT>(m_effectAmount) * pBStats->m_saveVSFortitudeBase / 100;
+        if (pDStats->m_nSaveVSFortitude > 40) {
+            pDStats->m_nSaveVSFortitude = 40;
+        }
+        if (pDStats->m_nSaveVSFortitude < -40) {
+            pDStats->m_nSaveVSFortitude = -40;
+        }
+
+        pDStats->m_nSaveVSReflex = static_cast<SHORT>(m_effectAmount) * pBStats->m_saveVSReflexBase / 100;
+        if (pDStats->m_nSaveVSReflex > 40) {
+            pDStats->m_nSaveVSReflex = 40;
+        }
+        if (pDStats->m_nSaveVSReflex < -40) {
+            pDStats->m_nSaveVSReflex = -40;
+        }
+
+        pDStats->m_nSaveVSWill = static_cast<SHORT>(m_effectAmount) * pBStats->m_saveVSWillBase / 100;
+        if (pDStats->m_nSaveVSWill > 40) {
+            pDStats->m_nSaveVSWill = 40;
+        }
+        if (pDStats->m_nSaveVSWill < -40) {
+            pDStats->m_nSaveVSWill = -40;
+        }
+        m_done = FALSE;
+    }
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49E110
