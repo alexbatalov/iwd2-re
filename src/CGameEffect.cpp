@@ -4359,6 +4359,68 @@ CGameEffect* CGameEffectResistSlashing::Copy()
     return copy;
 }
 
+// 0x4B6400
+BOOL CGameEffectResistSlashing::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        if (m_durationType == 1) {
+            pSprite->GetBaseStats()->m_resistSlashingBase += static_cast<BYTE>(m_effectAmount);
+            if (pSprite->GetBaseStats()->m_resistSlashingBase > 100) {
+                pSprite->GetBaseStats()->m_resistSlashingBase = 100;
+            }
+            if (pSprite->GetBaseStats()->m_resistSlashingBase < 0) {
+                pSprite->GetBaseStats()->m_resistSlashingBase = 0;
+            }
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+        } else {
+            pSprite->m_bonusStats.m_nResistSlashing += static_cast<BYTE>(m_effectAmount);
+            m_done = FALSE;
+        }
+        break;
+    case 1:
+        if (m_durationType == 1) {
+            pSprite->GetBaseStats()->m_resistSlashingBase = static_cast<BYTE>(m_effectAmount);
+            if (pSprite->GetBaseStats()->m_resistSlashingBase > 100) {
+                pSprite->GetBaseStats()->m_resistSlashingBase = 100;
+            }
+            if (pSprite->GetBaseStats()->m_resistSlashingBase < 0) {
+                pSprite->GetBaseStats()->m_resistSlashingBase = 0;
+            }
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+        } else {
+            if (pSprite->GetDerivedStats()->m_nResistSlashing < m_effectAmount) {
+                pSprite->GetDerivedStats()->m_nResistSlashing = static_cast<BYTE>(m_effectAmount);
+            }
+            m_done = FALSE;
+        }
+        break;
+    case 2:
+        if (m_durationType == 1) {
+            pSprite->GetBaseStats()->m_resistSlashingBase = static_cast<BYTE>(m_effectAmount) * pSprite->GetBaseStats()->m_resistSlashingBase / 100;
+            if (pSprite->GetBaseStats()->m_resistSlashingBase > 100) {
+                pSprite->GetBaseStats()->m_resistSlashingBase = 100;
+            }
+            if (pSprite->GetBaseStats()->m_resistSlashingBase < 0) {
+                pSprite->GetBaseStats()->m_resistSlashingBase = 0;
+            }
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+        } else {
+            pSprite->GetDerivedStats()->m_nResistSlashing = static_cast<SHORT>(m_effectAmount) * pSprite->GetBaseStats()->m_resistSlashingBase / 100;
+            m_done = FALSE;
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 14586
+        UTIL_ASSERT(FALSE);
+    }
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.

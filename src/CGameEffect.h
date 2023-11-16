@@ -892,6 +892,7 @@ class CGameEffectResistSlashing : public CGameEffect {
 public:
     CGameEffectResistSlashing(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectResistCrushing : public CGameEffect {
