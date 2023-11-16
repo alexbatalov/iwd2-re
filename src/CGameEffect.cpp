@@ -5823,6 +5823,26 @@ CGameEffect* CGameEffectCastSpell::Copy()
     return copy;
 }
 
+// 0x4BC630
+BOOL CGameEffectCastSpell::ApplyEffect(CGameSprite* pSprite)
+{
+    CAIObjectType target = pSprite->GetAIType();
+
+    // NOTE: Uninline.
+    CAIAction action(CAIAction::FORCESPELL, target, 0, 0, 0);
+
+    CString str;
+    m_res.CopyToString(str);
+    action.SetString1(str);
+
+    CMessageInsertAction* pMessage = new CMessageInsertAction(action,
+        pSprite->GetId(),
+        m_sourceID);
+    g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
