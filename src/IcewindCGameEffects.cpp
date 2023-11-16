@@ -1580,7 +1580,7 @@ BOOL IcewindCGameEffectUnconsciousness::ApplyEffect(CGameSprite* pSprite)
         ClearItemEffect(effect, CGAMEEFFECT_SETSEQUENCE);
         effect->dwFlags = CGameSprite::SEQ_AWAKE;
         effect->durationType = 4;
-        effect->duration = m_duration - g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime / 15;
+        effect->duration = (m_duration - g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime) / 15;
         CGameEffect* pEffect = CGameEffect::DecodeEffect(effect,
             CPoint(-1, -1),
             -1,
