@@ -5384,6 +5384,49 @@ CGameEffect* CGameEffectNon_CumulativeChant::Copy()
     return copy;
 }
 
+// 0x4BACA0
+BOOL CGameEffectNon_CumulativeChant::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        // NOTE: Uses `test` (with bounds check).
+        if (!pSprite->GetDerivedStats()->m_spellStates.test(SPLSTATE_BENEFICIAL_CHANT)) {
+            pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_BENEFICIAL_CHANT, true);
+
+            // NOTE: Uninline.
+            AddPortraitIcon(pSprite, 18);
+
+            AddColorEffect(pSprite, 192, 128, 0, 30);
+
+            pSprite->GetDerivedStats()->m_nDamageBonus++;
+            pSprite->GetDerivedStats()->m_nTHAC0++;
+            pSprite->GetDerivedStats()->m_nSaveVSFortitude++;
+            pSprite->GetDerivedStats()->m_nSaveVSReflex++;
+            pSprite->GetDerivedStats()->m_nSaveVSWill++;
+        }
+        break;
+    case 1:
+        // NOTE: Using `operator[]` (without bounds check).
+        if (!pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_DETRIMENTAL_CHANT]) {
+            pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_DETRIMENTAL_CHANT, true);
+
+            // NOTE: Uninline.
+            AddPortraitIcon(pSprite, 35);
+
+            AddColorEffect(pSprite, 128, 0, 192, 30);
+
+            pSprite->GetDerivedStats()->m_nDamageBonus--;
+            pSprite->GetDerivedStats()->m_nTHAC0--;
+            pSprite->GetDerivedStats()->m_nSaveVSFortitude--;
+            pSprite->GetDerivedStats()->m_nSaveVSReflex--;
+            pSprite->GetDerivedStats()->m_nSaveVSWill--;
+        }
+        break;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.

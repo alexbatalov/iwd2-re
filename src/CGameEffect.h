@@ -1172,6 +1172,7 @@ class CGameEffectNon_CumulativeChant : public CGameEffect {
 public:
     CGameEffectNon_CumulativeChant(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectNon_CumulativeDrawUponHolyMight : public CGameEffect {
