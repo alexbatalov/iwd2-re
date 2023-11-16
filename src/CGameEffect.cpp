@@ -1377,6 +1377,29 @@ void CGameEffect::AdjustTHAC0(CGameSprite* pSprite, SHORT nValue)
     pSprite->GetDerivedStats()->m_nTHAC0 += nValue;
 }
 
+// 0x4C3FC0
+void CGameEffect::AdjustDEX(CGameSprite* pSprite, INT nValue)
+{
+    if ((nValue > 0 && nValue > pSprite->GetDerivedStats()->field_12C)
+        || (nValue < 0 && nValue < pSprite->GetDerivedStats()->field_12C)) {
+        pSprite->m_bonusStats.m_nDEX += static_cast<SHORT>(nValue) - static_cast<SHORT>(pSprite->GetDerivedStats()->field_12C);
+        pSprite->GetDerivedStats()->field_12C = nValue;
+    }
+}
+
+// 0x4C4000
+void CGameEffect::Immobilize(CGameSprite* pSprite)
+{
+    // NOTE: Uninline.
+    pSprite->GetAnimation()->SetMoveScale(0);
+
+    if (m_secondaryType) {
+        CMessageDropPath* pMessage = new CMessageDropPath(pSprite->GetId(),
+            pSprite->GetId());
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+    }
+}
+
 // 0x4C4080
 void CGameEffect::AddSlowEffect(CGameSprite* pSprite)
 {
@@ -6034,6 +6057,33 @@ CGameEffect* CGameEffectEntangle::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4BD650
+BOOL CGameEffectEntangle::ApplyEffect(CGameSprite* pSprite)
+{
+    if (g_pBaldurChitin->GetObjectGame()->field_43E6 != 1) {
+        pSprite->GetDerivedStats()->m_visualEffects[IWD_VFX_ENTANGLE] = true;
+
+        if (m_secondaryType) {
+            PlaySound(CResRef("CRE_P01"), pSprite);
+        }
+
+        if (!pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_ENTANGLE]) {
+            pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_ENTANGLE] = true;
+
+            // NOTE: Uninline.
+            AddPortraitIcon(pSprite, 92);
+
+            pSprite->GetDerivedStats()->m_nTHAC0 -= 2;
+            AdjustDEX(pSprite, -4);
+            Immobilize(pSprite);
+        }
+    } else {
+        m_done = TRUE;
+    }
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------

@@ -309,6 +309,8 @@ public:
 
     void AdjustResistMagic(CGameSprite* pSprite, SHORT nValue);
     void AdjustTHAC0(CGameSprite* pSprite, SHORT nValue);
+    void AdjustDEX(CGameSprite* pSprite, INT nValue);
+    void Immobilize(CGameSprite* pSprite);
     void AddSlowEffect(CGameSprite* pSprite);
     void RemoveAllOfType(CGameSprite* pSprite, WORD effectID, LONG effectAmount);
     void AddPortraitIcon(CGameSprite* pSprite, int icon);
@@ -1312,6 +1314,7 @@ class CGameEffectEntangle : public CGameEffect {
 public:
     CGameEffectEntangle(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectWebHold : public CGameEffect {
