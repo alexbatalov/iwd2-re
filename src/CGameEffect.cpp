@@ -508,8 +508,6 @@ CGameEffect* CGameEffect::DecodeEffect(ITEM_EFFECT* effect, const CPoint& source
         // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
         // __LINE__: 1025
         UTIL_ASSERT_MSG(FALSE, "CGameEffectSummon game effect not supported in Icewind II (-rjf)");
-    case CGAMEEFFECT_RANDOMSUMMON:
-        return new CGameEffectRandomSummon(effect, source, sourceID, target);
     case CGAMEEFFECT_CONFUSION:
         return new CGameEffectConfusion(effect, source, sourceID, target);
     case CGAMEEFFECT_NON_CUMULATIVEAID:
@@ -5226,24 +5224,6 @@ CGameEffect* CGameEffectMovementRateWithPortrait::Copy()
 {
     ITEM_EFFECT* effect = GetItemEffect();
     CGameEffectMovementRateWithPortrait* copy = new CGameEffectMovementRateWithPortrait(effect, m_source, m_sourceID, m_target);
-    delete effect;
-    copy->CopyFromBase(this);
-    return copy;
-}
-
-// -----------------------------------------------------------------------------
-
-// NOTE: Inlined.
-CGameEffectRandomSummon::CGameEffectRandomSummon(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
-    : CGameEffect(effect, source, sourceID, target, FALSE)
-{
-}
-
-// 0x499380
-CGameEffect* CGameEffectRandomSummon::Copy()
-{
-    ITEM_EFFECT* effect = GetItemEffect();
-    CGameEffectRandomSummon* copy = new CGameEffectRandomSummon(effect, m_source, m_sourceID, m_target);
     delete effect;
     copy->CopyFromBase(this);
     return copy;

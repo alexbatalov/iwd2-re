@@ -131,9 +131,8 @@ class CGameSprite;
 #define CGAMEEFFECT_TELEPORT 124
 #define CGAMEEFFECT_KNOCK 125
 #define CGAMEEFFECT_MOVEMENTRATE_126 126
-#define CGAMEEFFECT_RANDOMSUMMON 128
-#define CGAMEEFFECT_CONFUSION 129
-#define CGAMEEFFECT_NON_CUMULATIVEAID 130
+#define CGAMEEFFECT_CONFUSION 128
+#define CGAMEEFFECT_NON_CUMULATIVEAID 129
 #define CGAMEEFFECT_NON_CUMULATIVECHANT 131
 #define CGAMEEFFECT_NON_CUMULATIVEDRAWUPONHOLYMIGHT 132
 #define CGAMEEFFECT_NON_CUMULATIVELUCK 133
@@ -1144,12 +1143,6 @@ public:
 class CGameEffectMovementRateWithPortrait : public CGameEffect {
 public:
     CGameEffectMovementRateWithPortrait(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
-    CGameEffect* Copy() override;
-};
-
-class CGameEffectRandomSummon : public CGameEffect {
-public:
-    CGameEffectRandomSummon(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
 };
 

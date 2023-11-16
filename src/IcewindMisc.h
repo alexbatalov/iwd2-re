@@ -62,7 +62,7 @@ public:
     static CGameEffect* CreateEffectDisplayString(CGameObject* pObject, int effectAmount, BYTE spellLevel, DWORD savingThrow);
     static CGameEffect* CreateEffectHitPoints(CGameObject* pObject, int effectAmount, DWORD duration, BYTE spellLevel, BYTE targetType);
     static CGameEffect* CreateEffectImmunitySpell(CGameObject* pObject, const BYTE* res, DWORD dwFlags, DWORD duration, BYTE spellLevel, BYTE targetType);
-    static CGameEffect* CreateEffectRandomSummon(CGameObject* pObject, DWORD duration, BYTE spellLevel, DWORD savingThrow);
+    static CGameEffect* CreateEffectConfusion(CGameObject* pObject, DWORD duration, BYTE spellLevel, DWORD savingThrow);
     static CGameEffect* CreateEffectDamage(CGameObject* pObject, DWORD dwFlags, DWORD numDice, DWORD diceSize, LONG effectAmount, BYTE spellLevel, DWORD savingThrow);
     static CGameEffect* CreateEffectStun(CGameObject* pObject, DWORD duration, BYTE spellLevel, DWORD savingThrow);
     static CGameEffect* CreateEffectSkillUnsummon(CGameObject* pObject, DWORD duration, BYTE spellLevel);

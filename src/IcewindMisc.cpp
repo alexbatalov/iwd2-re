@@ -748,10 +748,10 @@ CGameEffect* IcewindMisc::CreateEffectImmunitySpell(CGameObject* pObject, const 
 }
 
 // 0x585AE0
-CGameEffect* IcewindMisc::CreateEffectRandomSummon(CGameObject* pObject, DWORD duration, BYTE spellLevel, DWORD savingThrow)
+CGameEffect* IcewindMisc::CreateEffectConfusion(CGameObject* pObject, DWORD duration, BYTE spellLevel, DWORD savingThrow)
 {
     ITEM_EFFECT effect;
-    CGameEffect::ClearItemEffect(&effect, CGAMEEFFECT_RANDOMSUMMON);
+    CGameEffect::ClearItemEffect(&effect, CGAMEEFFECT_CONFUSION);
     effect.durationType = 0;
     effect.duration = duration;
     effect.spellLevel = spellLevel;
