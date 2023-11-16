@@ -3681,6 +3681,45 @@ CGameEffect* CGameEffectDayBlindness::Copy()
     return copy;
 }
 
+// 0x4B54C0
+BOOL CGameEffectDayBlindness::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 13510
+    UTIL_ASSERT(pSprite != NULL);
+
+    if (pSprite->GetArea() != NULL) {
+        if (!pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_DAY_BLINDNESS]) {
+            pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_DAY_BLINDNESS] = true;
+            SHORT nModifier = 0;
+            if (pSprite->m_typeAI.m_nRace == CAIOBJECTTYPE_R_ELF
+                && pSprite->m_typeAI.m_nSubRace == CAIOBJECTTYPE_SUBRACE_ELF_DROW) {
+                nModifier = -1;
+            } else if (pSprite->m_typeAI.m_nRace == CAIOBJECTTYPE_R_DWARF
+                && pSprite->m_typeAI.m_nSubRace == CAIOBJECTTYPE_SUBRACE_DWARF_GRAY) {
+                nModifier = -2;
+            }
+
+            pSprite->m_bonusStats.m_nSaveVSFortitude += nModifier;
+            pSprite->m_bonusStats.m_nSaveVSReflex += nModifier;
+            pSprite->m_bonusStats.m_nSaveVSWill += nModifier;
+
+            for (int skill = 0; skill < CGAMESPRITE_SKILL_NUMSKILLS; skill++) {
+                pSprite->m_bonusStats.m_nSkills[skill] += nModifier;
+            }
+
+            if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
+                || g_pChitin->cNetwork.m_idLocalPlayer == pSprite->m_remotePlayerID) {
+                pSprite->m_bSendSpriteUpdate = TRUE;
+            }
+        } else {
+            m_done = TRUE;
+        }
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
