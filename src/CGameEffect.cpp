@@ -5280,7 +5280,7 @@ CGameEffectNon_CumulativeAid::CGameEffectNon_CumulativeAid(ITEM_EFFECT* effect, 
 {
 }
 
-// 0x4994E0
+// 0x499430
 CGameEffect* CGameEffectNon_CumulativeAid::Copy()
 {
     ITEM_EFFECT* effect = GetItemEffect();
@@ -5288,6 +5288,37 @@ CGameEffect* CGameEffectNon_CumulativeAid::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4BAA40
+BOOL CGameEffectNon_CumulativeAid::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        // NOTE: Uninline.
+        DisplayStringRef(pSprite, 14122);
+    }
+
+    if (!pSprite->GetDerivedStats()->m_spellStates.test(SPLSTATE_AID)) {
+        pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_AID, true);
+
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 57);
+
+        AddColorEffect(pSprite, 50, 50, 50, 30);
+
+        pSprite->GetDerivedStats()->m_nDamageBonus++;
+        pSprite->GetDerivedStats()->m_nTHAC0++;
+        pSprite->GetDerivedStats()->m_nSaveVSFortitude++;
+        pSprite->GetDerivedStats()->m_nSaveVSReflex++;
+        pSprite->GetDerivedStats()->m_nSaveVSWill++;
+        pSprite->GetDerivedStats()->m_nMaxHitPoints += 8;
+
+        if (m_secondaryType) {
+            pSprite->GetBaseStats()->m_hitPoints += 8;
+        }
+    }
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------
