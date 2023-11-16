@@ -3026,6 +3026,57 @@ CGameEffect* CGameEffectSleep::Copy()
     return copy;
 }
 
+// 0x4B1430
+BOOL CGameEffectSleep::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_durationType == 1) {
+        pSprite->GetBaseStats()->m_generalState |= STATE_SLEEPING;
+        pSprite->GetDerivedStats()->m_generalState |= STATE_SLEEPING;
+        pSprite->GetBaseStats()->m_generalState |= STATE_HELPLESS;
+        pSprite->GetDerivedStats()->m_generalState |= STATE_HELPLESS;
+        m_done = TRUE;
+    } else {
+        pSprite->GetDerivedStats()->m_generalState |= STATE_SLEEPING | STATE_HELPLESS;
+
+        if (m_dwFlags == 1) {
+            pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_DOESNT_AWAKEN_ON_DAMAGE, true);
+        }
+
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 14);
+
+        if (m_secondaryType) {
+            // NOTE: Uninline.
+            DisplayStringRef(pSprite, 14001);
+        }
+
+        ITEM_EFFECT* effect = new ITEM_EFFECT;
+
+        // NOTE: Uninline.
+        ClearItemEffect(effect, CGAMEEFFECT_SETSEQUENCE);
+
+        effect->dwFlags = CGameSprite::SEQ_AWAKE;
+        effect->durationType = 4;
+        effect->duration = (m_duration - g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime) / 15;
+        CGameEffect* pEffect = CGameEffect::DecodeEffect(effect,
+            CPoint(-1, -1),
+            -1,
+            CPoint(-1, -1));
+        delete effect;
+        pSprite->AddEffect(pEffect, CGameAIBase::EFFECT_LIST_TIMED, TRUE, TRUE);
+    }
+
+    if (pSprite->m_nSequence != CGameSprite::SEQ_DIE
+        && pSprite->m_nSequence != CGameSprite::SEQ_SLEEP
+        && pSprite->m_nSequence != CGameSprite::SEQ_TWITCH) {
+        pSprite->SetSequence(CGameSprite::SEQ_SLEEP);
+    }
+
+    pSprite->field_9D15 = 1;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
