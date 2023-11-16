@@ -605,6 +605,22 @@ CGameEffect* IcewindCGameEffectRemoveConfusion::Copy()
     return copy;
 }
 
+// 0x565590
+BOOL IcewindCGameEffectRemoveConfusion::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetBaseStats()->m_generalState &= ~STATE_CONFUSED;
+    pSprite->GetDerivedStats()->m_generalState &= ~STATE_CONFUSED;
+
+    // NOTE: Uninline.
+    RemoveAllOfType(pSprite, CGAMEEFFECT_CONFUSION, -1);
+
+    // NOTE: Uninline.
+    RemoveAllOfType(pSprite, CGAMEEFFECT_PORTRAITICON, 3);
+
+    m_done = TRUE;
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49F010
