@@ -5237,7 +5237,7 @@ CGameEffectConfusion::CGameEffectConfusion(ITEM_EFFECT* effect, const CPoint& so
 {
 }
 
-// 0x499430
+// 0x499380
 CGameEffect* CGameEffectConfusion::Copy()
 {
     ITEM_EFFECT* effect = GetItemEffect();
@@ -5245,6 +5245,31 @@ CGameEffect* CGameEffectConfusion::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4BA920
+BOOL CGameEffectConfusion::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        // NOTE: Uninline.
+        DisplayStringRef(pSprite, 14782);
+    }
+
+    // NOTE: Uninline.
+    AddPortraitIcon(pSprite, 3);
+
+    pSprite->sub_761650();
+
+    if (m_durationType == 1) {
+        pSprite->GetBaseStats()->m_generalState |= STATE_CONFUSED;
+        pSprite->GetDerivedStats()->m_generalState |= STATE_CONFUSED;
+        pSprite->ClearActions(FALSE);
+        m_done = TRUE;
+    } else {
+        pSprite->GetDerivedStats()->m_generalState |= STATE_CONFUSED;
+    }
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------

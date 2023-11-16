@@ -4512,6 +4512,12 @@ SHORT CGameSprite::Turn()
     return ACTION_DONE;
 }
 
+// 0x761650
+void CGameSprite::sub_761650()
+{
+    // TODO: Incomplete.
+}
+
 // 0x762740
 BOOL CGameSprite::HasClassMask(DWORD dwMask)
 {

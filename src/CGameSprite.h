@@ -464,6 +464,7 @@ public:
     SHORT EquipItem();
     SHORT FindTraps();
     SHORT Turn();
+    void sub_761650();
     BOOL HasClassMask(DWORD dwMask);
     INT GetClassLevel(INT iClassType);
     void SetClassLevel(INT iClassType, INT nLevel);
