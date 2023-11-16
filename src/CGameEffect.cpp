@@ -512,6 +512,8 @@ CGameEffect* CGameEffect::DecodeEffect(ITEM_EFFECT* effect, const CPoint& source
         return new CGameEffectConfusion(effect, source, sourceID, target);
     case CGAMEEFFECT_NON_CUMULATIVEAID:
         return new CGameEffectNon_CumulativeAid(effect, source, sourceID, target);
+    case CGAMEEFFECT_NON_CUMULATIVEBLESS:
+        return new CGameEffectNon_CumulativeBless(effect, source, sourceID, target);
     case CGAMEEFFECT_NON_CUMULATIVECHANT:
         return new CGameEffectNon_CumulativeChant(effect, source, sourceID, target);
     case CGAMEEFFECT_NON_CUMULATIVEDRAWUPONHOLYMIGHT:
@@ -5316,6 +5318,49 @@ BOOL CGameEffectNon_CumulativeAid::ApplyEffect(CGameSprite* pSprite)
         if (m_secondaryType) {
             pSprite->GetBaseStats()->m_hitPoints += 8;
         }
+    }
+
+    return TRUE;
+}
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Inlined.
+CGameEffectNon_CumulativeBless::CGameEffectNon_CumulativeBless(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
+    : CGameEffect(effect, source, sourceID, target, FALSE)
+{
+}
+
+// 0x4994E0
+CGameEffect* CGameEffectNon_CumulativeBless::Copy()
+{
+    ITEM_EFFECT* effect = GetItemEffect();
+    CGameEffectNon_CumulativeBless* copy = new CGameEffectNon_CumulativeBless(effect, m_source, m_sourceID, m_target);
+    delete effect;
+    copy->CopyFromBase(this);
+    return copy;
+}
+
+// 0x4BAB70
+BOOL CGameEffectNon_CumulativeBless::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        // NOTE: Uninline.
+        DisplayStringRef(pSprite, 14123);
+
+        // NOTE: Uninline.
+        RemoveAllOfType(pSprite, ICEWIND_CGAMEEFFECT_BANE, -1);
+    }
+
+    if (!pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_BLESS]) {
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 17);
+
+        AddColorEffect(pSprite, 192, 128, 0, 30);
+
+        pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_BLESS] = true;
+        pSprite->GetDerivedStats()->m_nTHAC0++;
+        pSprite->GetBaseStats()->m_morale++;
     }
 
     return TRUE;

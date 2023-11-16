@@ -133,6 +133,7 @@ class CGameSprite;
 #define CGAMEEFFECT_MOVEMENTRATE_126 126
 #define CGAMEEFFECT_CONFUSION 128
 #define CGAMEEFFECT_NON_CUMULATIVEAID 129
+#define CGAMEEFFECT_NON_CUMULATIVEBLESS 130
 #define CGAMEEFFECT_NON_CUMULATIVECHANT 131
 #define CGAMEEFFECT_NON_CUMULATIVEDRAWUPONHOLYMIGHT 132
 #define CGAMEEFFECT_NON_CUMULATIVELUCK 133
@@ -1156,6 +1157,13 @@ public:
 class CGameEffectNon_CumulativeAid : public CGameEffect {
 public:
     CGameEffectNon_CumulativeAid(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
+    CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
+};
+
+class CGameEffectNon_CumulativeBless : public CGameEffect {
+public:
+    CGameEffectNon_CumulativeBless(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
     BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
