@@ -783,6 +783,23 @@ CGameEffect* IcewindCGameEffectRemoveAllOfType::Copy()
     return copy;
 }
 
+// 0x565C20
+BOOL IcewindCGameEffectRemoveAllOfType::ApplyEffect(CGameSprite* pSprite)
+{
+    // NOTE: Uninline.
+    RemoveAllOfType(pSprite, static_cast<WORD>(m_dwFlags), -1);
+
+    if (m_dwFlags == CGAMEEFFECT_POISON) {
+        // NOTE: Uninline.
+        RemoveAllOfType(pSprite, CGAMEEFFECT_PORTRAITICON, 6);
+    }
+
+    m_forceRepass = TRUE;
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49F880
