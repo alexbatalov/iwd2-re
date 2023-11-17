@@ -1130,6 +1130,28 @@ CGameEffect* IcewindCGameEffectHopelessness::Copy()
     return copy;
 }
 
+// 0x567450
+BOOL IcewindCGameEffectHopelessness::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        DisplayStringRef(pSprite, 1280);
+        m_secondaryType = 0;
+    }
+
+    if (!pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_HOPELESSNESS]) {
+        pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_HOPELESSNESS] = true;
+        pSprite->GetDerivedStats()->m_generalState |= STATE_HELPLESS;
+        pSprite->field_9D15 = 1;
+
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 47);
+
+        m_done = FALSE;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A0880
