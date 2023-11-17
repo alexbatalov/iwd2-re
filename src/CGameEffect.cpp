@@ -4122,6 +4122,79 @@ CGameEffect* CGameEffectAIChange::Copy()
     return copy;
 }
 
+// 0x4B5000
+BOOL CGameEffectAIChange::ApplyEffect(CGameSprite* pSprite)
+{
+    CAIObjectType type(pSprite->GetAIType());
+    CAIObjectType liveType(pSprite->m_liveTypeAI);
+    CAIObjectType startType(pSprite->m_startTypeAI);
+
+    switch (m_dwFlags) {
+    case 0:
+        type.SetEnemyAlly(static_cast<BYTE>(m_effectAmount));
+        liveType.SetEnemyAlly(static_cast<BYTE>(m_effectAmount));
+        if (m_durationType == 1) {
+            startType.SetEnemyAlly(static_cast<BYTE>(m_effectAmount));
+            m_done = TRUE;
+        }
+        break;
+    case 1:
+        type.SetGeneral(static_cast<BYTE>(m_effectAmount));
+        liveType.SetGeneral(static_cast<BYTE>(m_effectAmount));
+        if (m_durationType == 1) {
+            startType.SetGeneral(static_cast<BYTE>(m_effectAmount));
+            m_done = TRUE;
+        }
+        break;
+    case 2:
+        type.SetRace(static_cast<BYTE>(m_effectAmount));
+        liveType.SetRace(static_cast<BYTE>(m_effectAmount));
+        if (m_durationType == 1) {
+            startType.SetRace(static_cast<BYTE>(m_effectAmount));
+            m_done = TRUE;
+        }
+        break;
+    case 3:
+        type.SetClass(static_cast<BYTE>(m_effectAmount));
+        liveType.SetClass(static_cast<BYTE>(m_effectAmount));
+        if (m_durationType == 1) {
+            startType.SetClass(static_cast<BYTE>(m_effectAmount));
+            m_done = TRUE;
+        }
+        break;
+    case 4:
+        type.SetSpecific(static_cast<BYTE>(m_effectAmount));
+        liveType.SetSpecific(static_cast<BYTE>(m_effectAmount));
+        if (m_durationType == 1) {
+            startType.SetSpecific(static_cast<BYTE>(m_effectAmount));
+            m_done = TRUE;
+        }
+        break;
+    case 5:
+        type.SetGender(static_cast<BYTE>(m_effectAmount));
+        liveType.SetGender(static_cast<BYTE>(m_effectAmount));
+        if (m_durationType == 1) {
+            startType.SetGender(static_cast<BYTE>(m_effectAmount));
+            m_done = TRUE;
+        }
+        break;
+    case 6:
+        type.SetAlignment(static_cast<BYTE>(m_effectAmount));
+        liveType.SetAlignment(static_cast<BYTE>(m_effectAmount));
+        if (m_durationType == 1) {
+            startType.SetAlignment(static_cast<BYTE>(m_effectAmount));
+            m_done = TRUE;
+        }
+        break;
+    }
+
+    pSprite->SetAIType(type, FALSE, FALSE);
+    pSprite->m_liveTypeAI.Set(liveType);
+    pSprite->m_startTypeAI.Set(startType);
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
