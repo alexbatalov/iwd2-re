@@ -222,6 +222,8 @@
 #define CAITRIGGER_PCINSTORE 0x40F7
 #define CAITRIGGER_OUTOFAMMO 0x40F8
 
+class CGameAIBase;
+
 class CAITrigger {
 public:
     static const SHORT NO_TRIGGER;
@@ -240,14 +242,26 @@ public:
     void Read(const CString& sData);
     CAITrigger& operator=(const CAITrigger& other);
 
-    SHORT m_triggerID;
-    LONG m_specificID;
-    CAIObjectType m_triggerCause;
-    LONG m_flags;
-    LONG m_specific2;
-    LONG m_specific3;
-    CString m_string1;
-    CString m_string2;
+    const CAIObjectType& GetCause() const;
+
+    void Decode(CGameAIBase* caller);
+    LONG GetSpecifics() const;
+    void SetSpecifics(LONG specific);
+    LONG GetInt1() const;
+    void SetInt1(LONG value);
+    LONG GetInt2() const;
+    void SetInt2(LONG value);
+    const CString& GetString1() const;
+    const CString& GetString2() const;
+
+    /* 0000 */ SHORT m_triggerID;
+    /* 0002 */ LONG m_specificID;
+    /* 0006 */ CAIObjectType m_triggerCause;
+    /* 0042 */ LONG m_flags;
+    /* 0046 */ LONG m_specific2;
+    /* 004A */ LONG m_specific3;
+    /* 004E */ CString m_string1;
+    /* 0052 */ CString m_string2;
 };
 
 #endif /* CAITRIGGER_H_ */

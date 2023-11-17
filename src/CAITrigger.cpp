@@ -109,3 +109,63 @@ CAITrigger& CAITrigger::operator=(const CAITrigger& other)
     m_string2 = other.m_string2;
     return *this;
 }
+
+// 0x41E1E0
+const CAIObjectType& CAITrigger::GetCause() const
+{
+    return m_triggerCause;
+}
+
+// 0x41E1F0
+LONG CAITrigger::GetSpecifics() const
+{
+    return m_specificID;
+}
+
+// 0x45B490
+void CAITrigger::Decode(CGameAIBase* caller)
+{
+    m_triggerCause.Decode(caller);
+}
+
+// 0x45B4A0
+void CAITrigger::SetSpecifics(LONG specific)
+{
+    m_specificID = specific;
+}
+
+// 0x45B4B0
+LONG CAITrigger::GetInt1() const
+{
+    return m_specific2;
+}
+
+// 0x45B4C0
+void CAITrigger::SetInt1(LONG value)
+{
+    m_specific2 = value;
+}
+
+// 0x45B4D0
+LONG CAITrigger::GetInt2() const
+{
+    return m_specific3;
+}
+
+// NOTE: Inlined.
+void CAITrigger::SetInt2(LONG value)
+{
+    m_specific3 = value;
+}
+
+// 0x45B4E0
+const CString& CAITrigger::GetString1() const
+{
+    return m_string1;
+}
+
+// 0x45B4F0
+const CString& CAITrigger::GetString2() const
+{
+    return m_string2;
+}
