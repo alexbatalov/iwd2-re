@@ -3220,6 +3220,12 @@ CGameAreaNotes* CGameArea::GetAreaNotes()
     return &m_cGameAreaNotes;
 }
 
+// 0x45B670
+LONG CGameArea::GetBattleSongCounter()
+{
+    return m_nBattleSongCounter;
+}
+
 // 0x47A060
 void CGameArea::sub_47A060()
 {
