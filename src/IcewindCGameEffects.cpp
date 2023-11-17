@@ -1170,6 +1170,31 @@ CGameEffect* IcewindCGameEffectProtectionFromEvil::Copy()
     return copy;
 }
 
+// 0x567500
+BOOL IcewindCGameEffectProtectionFromEvil::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        DisplayStringRef(pSprite, 14769);
+    }
+
+    if (!pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_PROTECTION_FROM_EVIL]) {
+        pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_PROTECTION_FROM_EVIL, true);
+
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 9);
+
+        pSprite->GetDerivedStats()->m_naturalImmunities.insert(ICEWIND_CGAMEEFFECT_CHARM);
+        sub_4C3F30(pSprite, 2);
+        pSprite->GetDerivedStats()->m_nSaveVSFortitude += 2;
+        pSprite->GetDerivedStats()->m_nSaveVSReflex += 2;
+        pSprite->GetDerivedStats()->m_nSaveVSWill += 2;
+
+        m_done = FALSE;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A0970

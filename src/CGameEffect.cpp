@@ -1362,6 +1362,12 @@ void CGameEffect::SetSourceId(LONG sourceID)
     m_sourceID = sourceID;
 }
 
+// 0x4C3F30
+void CGameEffect::sub_4C3F30(CGameSprite* pSprite, INT nValue)
+{
+    pSprite->GetDerivedStats()->field_8 = max(pSprite->GetDerivedStats()->field_8, nValue);
+}
+
 // 0x4C3F60
 void CGameEffect::AdjustResistMagic(CGameSprite* pSprite, SHORT nValue)
 {
