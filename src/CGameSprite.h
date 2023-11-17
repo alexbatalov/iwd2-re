@@ -727,7 +727,7 @@ public:
     /* 5630 */ unsigned char field_5630;
     /* 5632 */ int field_5632;
     /* 5636 */ unsigned char field_5636;
-    /* 5638 */ int field_5638;
+    /* 5638 */ BOOL m_hasColorEffects;
     /* 563C */ BOOL m_hasColorRangeEffects;
     /* 5640 */ int field_5640;
     /* 5644 */ BOOL m_removeFromArea;

@@ -725,7 +725,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     field_5582 = 0;
     field_9D14 = 0;
     field_9D15 = 0;
-    field_5638 = 0;
+    m_hasColorEffects = FALSE;
     m_hasColorRangeEffects = FALSE;
     field_5640 = 0;
     m_groupPosition = 0;

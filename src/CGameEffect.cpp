@@ -1238,7 +1238,7 @@ void CGameEffect::DisplayStringRef(CGameSprite* pSprite, STRREF str)
 // 0x4A4EF0
 void CGameEffect::AddColorEffect(CGameSprite* pSprite, BYTE r, BYTE g, BYTE b, BYTE periodLength)
 {
-    pSprite->field_5638 = 1;
+    pSprite->m_hasColorEffects = 1;
 
     COLORREF tintColor = RGB(r, g, b);
 
@@ -1806,6 +1806,44 @@ CGameEffect* CGameEffectColorGlowSolid::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4A6D30
+BOOL CGameEffectColorGlowSolid::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_slotNum == pSprite->sub_726800()
+        && (m_dwFlags & 0xF0) == CGameAnimationType::RANGE_WEAPON) {
+        m_dwFlags &= 0xF;
+        m_dwFlags |= CGameAnimationType::RANGE_SHIELD;
+    }
+
+    pSprite->m_hasColorEffects = TRUE;
+
+    COLORREF tintColor = m_effectAmount >> 8;
+
+    if (m_dwFlags == 255) {
+        // NOTE: Uninline.
+        pSprite->GetAnimation()->SetColorEffectAll(1, tintColor, 1);
+
+        CColorEffect* pColorEffect = new CColorEffect();
+        pColorEffect->m_effectType = 1;
+        pColorEffect->m_range = -1;
+        pColorEffect->m_tintColor = tintColor;
+        pColorEffect->m_periodLength = 1;
+        pSprite->GetDerivedStats()->m_appliedColorEffects.AddTail(pColorEffect);
+    } else {
+        // NOTE: Uninline.
+        pSprite->GetAnimation()->SetColorEffect(1, static_cast<BYTE>(m_dwFlags), tintColor, 1);
+
+        CColorEffect* pColorEffect = new CColorEffect();
+        pColorEffect->m_effectType = 1;
+        pColorEffect->m_range = static_cast<BYTE>(m_dwFlags);
+        pColorEffect->m_tintColor = tintColor;
+        pColorEffect->m_periodLength = 1;
+        pSprite->GetDerivedStats()->m_appliedColorEffects.AddTail(pColorEffect);
+    }
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------
