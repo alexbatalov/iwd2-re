@@ -20,6 +20,18 @@
 // 0x8F8E10
 const CString CGameAnimationType::ROUND_BASE("RNDBASE");
 
+// 0x85AB48
+const BYTE CGameAnimationType::RANGE_BODY = 0x0;
+
+// 0x85AB49
+const BYTE CGameAnimationType::RANGE_WEAPON = 0x10;
+
+// 0x85AB4A
+const BYTE CGameAnimationType::RANGE_SHIELD = 0x20;
+
+// 0x85ABAB
+const BYTE CGameAnimationType::RANGE_HELMET = 0x30;
+
 // 0x8F8E14
 BOOL CGameAnimationType::MIRROR_BAM;
 

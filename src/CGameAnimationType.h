@@ -312,6 +312,11 @@ class CGameAnimationType {
 public:
     static const CString ROUND_BASE;
 
+    static const BYTE RANGE_BODY;
+    static const BYTE RANGE_WEAPON;
+    static const BYTE RANGE_SHIELD;
+    static const BYTE RANGE_HELMET;
+
     static BOOL MIRROR_BAM;
 
     static CGameAnimationType* SetAnimationType(USHORT animationID, BYTE* colorRangeValues, WORD facing);

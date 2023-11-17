@@ -2,6 +2,7 @@
 
 #include "CBaldurChitin.h"
 #include "CBaldurProjector.h"
+#include "CGameAnimationType.h"
 #include "CGameArea.h"
 #include "CGameSprite.h"
 #include "CInfGame.h"
@@ -1754,6 +1755,39 @@ CGameEffect* CGameEffectColorChange::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4A6BE0
+BOOL CGameEffectColorChange::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->m_hasColorRangeEffects = TRUE;
+
+    if (m_slotNum == pSprite->sub_726800()
+        && (m_dwFlags & 0xF0) == CGameAnimationType::RANGE_WEAPON) {
+        m_dwFlags &= 0xF;
+        m_dwFlags |= CGameAnimationType::RANGE_SHIELD;
+    }
+
+    if (m_dwFlags == 255) {
+        // NOTE: Uninline.
+        pSprite->GetAnimation()->SetColorRangeAll(static_cast<BYTE>(m_effectAmount));
+
+        CColorRange* pColorRange = new CColorRange();
+        pColorRange->m_range = -1;
+        pColorRange->m_color = static_cast<BYTE>(m_effectAmount);
+        pSprite->GetDerivedStats()->m_appliedColorRanges.AddTail(pColorRange);
+    } else {
+        CColorRange* pColorRange = new CColorRange();
+        pColorRange->m_range = static_cast<BYTE>(m_dwFlags);
+        pColorRange->m_color = static_cast<BYTE>(m_effectAmount);
+        pSprite->GetDerivedStats()->m_appliedColorRanges.AddTail(pColorRange);
+
+        // NOTE: Uninline.
+        pSprite->GetAnimation()->SetColorRange(static_cast<BYTE>(m_dwFlags),
+            static_cast<BYTE>(m_effectAmount));
+    }
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------
