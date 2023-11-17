@@ -5305,6 +5305,12 @@ CGameOptions* CInfGame::GetOptions()
     return &m_cOptions;
 }
 
+// 0x45B640
+SHORT CInfGame::GetReputation()
+{
+    return m_nReputation / REPUTATION_MULTIPLIER;
+}
+
 // 0x594070
 SHORT CInfGame::GetState()
 {

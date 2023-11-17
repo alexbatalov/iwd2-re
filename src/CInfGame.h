@@ -253,6 +253,7 @@ public:
     CNamedCreatureVariableHash* GetNamedCreatures();
     void SetTempCursor(BYTE tempCursor);
     CGameOptions* GetOptions();
+    SHORT GetReputation();
     SHORT GetState();
     void SetState(SHORT nState);
     BYTE GetIconIndex();
