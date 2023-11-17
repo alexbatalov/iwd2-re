@@ -360,6 +360,7 @@ class IcewindCGameEffectSuppressHPDisplay : public CGameEffect {
 public:
     IcewindCGameEffectSuppressHPDisplay(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite);
 };
 
 class IcewindCGameEffectFloatText : public CGameEffect {

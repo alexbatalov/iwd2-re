@@ -873,6 +873,14 @@ CGameEffect* IcewindCGameEffectSuppressHPDisplay::Copy()
     return copy;
 }
 
+// 0x566500
+BOOL IcewindCGameEffectSuppressHPDisplay::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_SUPPRESS_HP_INFO] = true;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49FD40
