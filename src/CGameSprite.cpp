@@ -6379,6 +6379,12 @@ void CGameSprite::sub_726570()
     }
 }
 
+// 0x726800
+INT CGameSprite::sub_726800()
+{
+    return 2 * m_nWeaponSet + 44;
+}
+
 // NOTE: Inlined.
 void CGameSprite::GetQuickItem(BYTE buttonNum, CButtonData& buttonData)
 {
