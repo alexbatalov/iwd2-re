@@ -666,6 +666,7 @@ class CGameEffectColorTintSolid : public CGameEffect {
 public:
     CGameEffectColorTintSolid(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectColorLightSolid : public CGameEffect {
