@@ -945,6 +945,14 @@ CGameEffect* IcewindCGameEffectImmunityToBackstab::Copy()
     return copy;
 }
 
+// 0x5668F0
+BOOL IcewindCGameEffectImmunityToBackstab::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_SNEAK_ATTACK_IMMUNITY] = true;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A0100
