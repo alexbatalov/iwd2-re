@@ -411,12 +411,13 @@ public:
     void SetCenter(const CPoint& pt);
     void SetRadius(int radius);
     void SetRect(const CRect& rect);
-    BYTE GetGeneral();
-    BYTE GetRace();
-    BYTE GetClass();
-    BYTE GetSpecific();
-    BYTE GetGender();
-    BYTE GetAlignment();
+    BYTE GetEnemyAlly() const;
+    BYTE GetGeneral() const;
+    BYTE GetRace() const;
+    BYTE GetClass() const;
+    BYTE GetSpecific() const;
+    BYTE GetGender() const;
+    BYTE GetAlignment() const;
     void SetEnemyAlly(BYTE nEnemyAlly);
     void SetGeneral(BYTE nGeneral);
     void SetRace(BYTE nRace);
@@ -424,7 +425,7 @@ public:
     void SetGender(BYTE nGender);
     void SetAlignment(BYTE nAlignment);
     void SetName(const CString& sName);
-    int GetInstance();
+    int GetInstance() const;
     void SetInstance(int nInstance);
     void SetClass(BYTE nClass);
 

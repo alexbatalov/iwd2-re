@@ -1130,38 +1130,44 @@ void CAIObjectType::AddClass(BYTE nClass)
     }
 }
 
+// 0x45B680
+BYTE CAIObjectType::GetEnemyAlly() const
+{
+    return m_nEnemyAlly;
+}
+
 // 0x45B390
-BYTE CAIObjectType::GetGeneral()
+BYTE CAIObjectType::GetGeneral() const
 {
     return m_nGeneral;
 }
 
 // 0x45B3A0
-BYTE CAIObjectType::GetRace()
+BYTE CAIObjectType::GetRace() const
 {
     return m_nRace;
 }
 
 // 0x45B3B0
-BYTE CAIObjectType::GetClass()
+BYTE CAIObjectType::GetClass() const
 {
     return m_nClass;
 }
 
 // 0x45B3C0
-BYTE CAIObjectType::GetSpecific()
+BYTE CAIObjectType::GetSpecific() const
 {
     return m_nSpecific;
 }
 
 // 0x45B3D0
-BYTE CAIObjectType::GetGender()
+BYTE CAIObjectType::GetGender() const
 {
     return m_nGender;
 }
 
 // 0x45B3E0
-BYTE CAIObjectType::GetAlignment()
+BYTE CAIObjectType::GetAlignment() const
 {
     return m_nAlignment;
 }
@@ -1209,7 +1215,7 @@ void CAIObjectType::SetName(const CString& sName)
 }
 
 // 0x45B460
-int CAIObjectType::GetInstance()
+int CAIObjectType::GetInstance() const
 {
     return m_nInstance;
 }
