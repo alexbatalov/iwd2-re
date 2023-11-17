@@ -147,6 +147,8 @@
 #define CGAMESPRITE_SKILL_WILDERNESS_LORE 15
 #define CGAMESPRITE_SKILL_NUMSKILLS 16
 
+#define MAX_SELECTABLE_FEAT_USE_LEVELS 5
+
 class CGameButtonList;
 class CSearchRequest;
 class CUIControlBase;
@@ -535,6 +537,7 @@ public:
     BOOLEAN sub_725840(const CResRef& resRef, BOOLEAN a2);
 
     INT sub_726270(UINT nFeatNumber);
+    void sub_726330(UINT nFeatNumber, INT nValue);
 
     void GetQuickSpell(BYTE buttonNum, CButtonData& buttonData);
     void GetQuickItem(BYTE buttonNum, CButtonData& buttonData);

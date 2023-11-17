@@ -6267,6 +6267,74 @@ INT CGameSprite::sub_726270(UINT nFeatNumber)
     return v1;
 }
 
+// 0x726330
+void CGameSprite::sub_726330(UINT nFeatNumber, INT nValue)
+{
+    if (sub_763150(nFeatNumber)) {
+        switch (nFeatNumber) {
+        case CGAMESPRITE_FEAT_ARTERIAL_STRIKE:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 26976
+            UTIL_ASSERT(nValue >= 0, "Invalid feat level.");
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 26977
+            UTIL_ASSERT(nValue <= 1, "Invalid feat level.");
+
+            field_4C54[2] = nValue;
+            field_4C54[3] = 0;
+            break;
+        case CGAMESPRITE_FEAT_EXPERTISE:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 26962
+            UTIL_ASSERT(nValue >= 0, "Invalid feat level.");
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 26963
+            UTIL_ASSERT(nValue <= MAX_SELECTABLE_FEAT_USE_LEVELS, "Invalid feat level.");
+
+            field_4C54[0] = nValue;
+            field_4C54[1] = 0;
+            break;
+        case CGAMESPRITE_FEAT_HAMSTRING:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 26983
+            UTIL_ASSERT(nValue >= 0, "Invalid feat level.");
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 26984
+            UTIL_ASSERT(nValue <= 1, "Invalid feat level.");
+
+            field_4C54[3] = nValue;
+            field_4C54[2] = 0;
+            break;
+        case CGAMESPRITE_FEAT_POWER_ATTACK:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 26969
+            UTIL_ASSERT(nValue >= 0, "Invalid feat level.");
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 26970
+            UTIL_ASSERT(nValue <= MAX_SELECTABLE_FEAT_USE_LEVELS, "Invalid feat level.");
+
+            field_4C54[1] = nValue;
+            field_4C54[0] = 0;
+            break;
+        case CGAMESPRITE_FEAT_RAPID_SHOT:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 26990
+            UTIL_ASSERT(nValue >= 0, "Invalid feat level.");
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 269991
+            UTIL_ASSERT(nValue <= 1, "Invalid feat level.");
+
+            field_4C54[4] = nValue;
+            break;
+        }
+    }
+}
+
 // NOTE: Inlined.
 void CGameSprite::GetQuickItem(BYTE buttonNum, CButtonData& buttonData)
 {
