@@ -254,6 +254,7 @@ public:
     void SetTempCursor(BYTE tempCursor);
     CGameOptions* GetOptions();
     SHORT GetReputation();
+    CTypedPtrArray<CPtrArray, int*>& GetCharacterOverflow();
     SHORT GetState();
     void SetState(SHORT nState);
     BYTE GetIconIndex();
@@ -352,7 +353,7 @@ public:
     /* 382E */ LONG m_characterPortraits[6];
     /* 3846 */ SHORT m_nCharacters;
     /* 3848 */ CTypedPtrList<CPtrList, int*> m_lstGlobalCreatures; // NOTE: Stores actual ints disguised as pointers.
-    /* 3864 */ CTypedPtrList<CPtrList, int*> m_characterOverflow;
+    /* 3864 */ CTypedPtrArray<CPtrArray, int*> m_characterOverflow;
     /* 3878 */ SHORT m_nCharacterOverflowCount;
     /* 387A */ SHORT m_nReputation;
     /* 3884 */ CAIGroup m_group;

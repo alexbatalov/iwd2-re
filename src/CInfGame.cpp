@@ -3813,16 +3813,8 @@ BOOL CInfGame::RemoveCharacterFromParty(LONG id, BOOL& overflow)
     overflow = FALSE;
 
     if (nPortrait == -1) {
-        if (m_characterOverflow.GetCount() > 0) {
-            POSITION pos = m_characterOverflow.GetHeadPosition();
-            while (pos != NULL) {
-                if (reinterpret_cast<int>(m_characterOverflow.GetAt(pos)) == id) {
-                    break;
-                }
-                m_characterOverflow.GetNext(pos);
-            }
-
-            if (pos != NULL) {
+        for (int index = 0; index < m_characterOverflow.GetCount(); index++) {
+            if (reinterpret_cast<int>(m_characterOverflow.GetAt(index)) == id) {
                 do {
                     rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(id,
                         CGameObjectArray::THREAD_ASYNCH,
@@ -3832,7 +3824,7 @@ BOOL CInfGame::RemoveCharacterFromParty(LONG id, BOOL& overflow)
 
                 if (rc == CGameObjectArray::SUCCESS) {
                     overflow = TRUE;
-                    m_characterOverflow.RemoveAt(pos);
+                    m_characterOverflow.RemoveAt(index);
 
                     g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(id,
                         CGameObjectArray::THREAD_ASYNCH,
@@ -4319,7 +4311,7 @@ CString CInfGame::sub_5C0B30()
 // 0x5C2250
 BOOL CInfGame::AddCharacterToOverflow(LONG id)
 {
-    m_characterOverflow.AddTail(reinterpret_cast<int*>(id));
+    m_characterOverflow.Add(reinterpret_cast<int*>(id));
     m_nCharacterOverflowCount++;
     return TRUE;
 }
@@ -5309,6 +5301,12 @@ CGameOptions* CInfGame::GetOptions()
 SHORT CInfGame::GetReputation()
 {
     return m_nReputation / REPUTATION_MULTIPLIER;
+}
+
+// 0x45B660
+CTypedPtrArray<CPtrArray, int*>& CInfGame::GetCharacterOverflow()
+{
+    return m_characterOverflow;
 }
 
 // 0x594070
