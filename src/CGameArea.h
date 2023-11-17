@@ -200,6 +200,7 @@ public:
     int EnterSpawn();
     void sub_47A190();
 
+    CAreaFileHeader* GetHeader();
     CInfinity* GetInfinity();
     CVariableHash* GetVariables();
     CAreaFileRestEncounter* GetHeaderRestEncounter();

@@ -3184,6 +3184,12 @@ void CGameArea::PlaySong(SHORT slot, DWORD flags)
     }
 }
 
+// 0x68BFF0
+CAreaFileHeader* CGameArea::GetHeader()
+{
+    return &m_header;
+}
+
 // 0x453080
 CInfinity* CGameArea::GetInfinity()
 {
