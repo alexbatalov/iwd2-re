@@ -3574,6 +3574,71 @@ CGameEffect* CGameEffectColorLightSolid::Copy()
     return copy;
 }
 
+// 0x4A71B0
+BOOL CGameEffectColorLightSolid::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_slotNum == pSprite->sub_726800()
+        && (m_dwFlags & 0xF0) == CGameAnimationType::RANGE_WEAPON) {
+        m_dwFlags &= 0xF;
+        m_dwFlags |= CGameAnimationType::RANGE_SHIELD;
+    }
+
+    pSprite->m_hasColorEffects = TRUE;
+
+    COLORREF tintColor = m_effectAmount >> 8;
+
+    if (m_dwFlags == 255) {
+        // FIXME: Odd selection of type, should be `BYTE`.
+        //
+        // 0x8A8F28
+        static int ranges[] = {
+            0x00,
+            0x01,
+            0x02,
+            0x03,
+            0x04,
+            0x05,
+            0x06,
+            0x14,
+            0x15,
+            0x21,
+            0x22,
+            0x24,
+            0x25,
+            0x31,
+            0x32,
+            0x34,
+            0x35,
+            -1,
+        };
+
+        int* range = ranges;
+        while (*range != -1) {
+            // NOTE: Uninline.
+            pSprite->GetAnimation()->SetColorEffect(2, static_cast<BYTE>(*range), tintColor, 1);
+
+            CColorEffect* pColorEffect = new CColorEffect();
+            pColorEffect->m_effectType = 2;
+            pColorEffect->m_range = static_cast<BYTE>(*range);
+            pColorEffect->m_tintColor = tintColor;
+            pColorEffect->m_periodLength = 1;
+            pSprite->GetDerivedStats()->m_appliedColorEffects.AddTail(pColorEffect);
+        }
+    } else {
+        // NOTE: Uninline.
+        pSprite->GetAnimation()->SetColorEffect(2, static_cast<BYTE>(m_dwFlags), tintColor, 1);
+
+        CColorEffect* pColorEffect = new CColorEffect();
+        pColorEffect->m_effectType = 2;
+        pColorEffect->m_range = static_cast<BYTE>(m_dwFlags);
+        pColorEffect->m_tintColor = tintColor;
+        pColorEffect->m_periodLength = 1;
+        pSprite->GetDerivedStats()->m_appliedColorEffects.AddTail(pColorEffect);
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
