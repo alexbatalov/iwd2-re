@@ -1864,6 +1864,46 @@ CGameEffect* CGameEffectColorGlowPulse::Copy()
     return copy;
 }
 
+// 0x4A6E90
+BOOL CGameEffectColorGlowPulse::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->m_hasColorEffects = TRUE;
+
+    COLORREF tintColor = m_effectAmount >> 8;
+    WORD range = m_dwFlags & 0xFFFF;
+    WORD period = (m_dwFlags >> 16) & 0xFFFF;
+
+    if (m_slotNum == pSprite->sub_726800()
+        && (range & 0xF0) == CGameAnimationType::RANGE_WEAPON) {
+        range &= 0xF;
+        range |= CGameAnimationType::RANGE_SHIELD;
+    }
+
+    if (range == 255) {
+        // NOTE: Uninline.
+        pSprite->GetAnimation()->SetColorEffectAll(1, tintColor, static_cast<BYTE>(period));
+
+        CColorEffect* pColorEffect = new CColorEffect();
+        pColorEffect->m_effectType = 1;
+        pColorEffect->m_range = -1;
+        pColorEffect->m_tintColor = tintColor;
+        pColorEffect->m_periodLength = static_cast<BYTE>(period);
+        pSprite->GetDerivedStats()->m_appliedColorEffects.AddTail(pColorEffect);
+    } else {
+        // NOTE: Uninline.
+        pSprite->GetAnimation()->SetColorEffect(1, static_cast<BYTE>(range), tintColor, static_cast<BYTE>(period));
+
+        CColorEffect* pColorEffect = new CColorEffect();
+        pColorEffect->m_effectType = 1;
+        pColorEffect->m_range = static_cast<BYTE>(range);
+        pColorEffect->m_tintColor = tintColor;
+        pColorEffect->m_periodLength = static_cast<BYTE>(period);
+        pSprite->GetDerivedStats()->m_appliedColorEffects.AddTail(pColorEffect);
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
