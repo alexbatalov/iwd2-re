@@ -14,6 +14,7 @@
 #include "CSpell.h"
 #include "CUtil.h"
 #include "CVariableHash.h"
+#include "IcewindCGameEffects.h"
 #include "IcewindMisc.h"
 
 // 0x85BB38
@@ -6275,11 +6276,11 @@ void CGameSprite::sub_726330(UINT nFeatNumber, INT nValue)
         case CGAMESPRITE_FEAT_ARTERIAL_STRIKE:
             // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
             // __LINE__: 26976
-            UTIL_ASSERT(nValue >= 0, "Invalid feat level.");
+            UTIL_ASSERT_MSG(nValue >= 0, "Invalid feat level.");
 
             // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
             // __LINE__: 26977
-            UTIL_ASSERT(nValue <= 1, "Invalid feat level.");
+            UTIL_ASSERT_MSG(nValue <= 1, "Invalid feat level.");
 
             field_4C54[2] = nValue;
             field_4C54[3] = 0;
@@ -6287,11 +6288,11 @@ void CGameSprite::sub_726330(UINT nFeatNumber, INT nValue)
         case CGAMESPRITE_FEAT_EXPERTISE:
             // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
             // __LINE__: 26962
-            UTIL_ASSERT(nValue >= 0, "Invalid feat level.");
+            UTIL_ASSERT_MSG(nValue >= 0, "Invalid feat level.");
 
             // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
             // __LINE__: 26963
-            UTIL_ASSERT(nValue <= MAX_SELECTABLE_FEAT_USE_LEVELS, "Invalid feat level.");
+            UTIL_ASSERT_MSG(nValue <= MAX_SELECTABLE_FEAT_USE_LEVELS, "Invalid feat level.");
 
             field_4C54[0] = nValue;
             field_4C54[1] = 0;
@@ -6299,11 +6300,11 @@ void CGameSprite::sub_726330(UINT nFeatNumber, INT nValue)
         case CGAMESPRITE_FEAT_HAMSTRING:
             // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
             // __LINE__: 26983
-            UTIL_ASSERT(nValue >= 0, "Invalid feat level.");
+            UTIL_ASSERT_MSG(nValue >= 0, "Invalid feat level.");
 
             // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
             // __LINE__: 26984
-            UTIL_ASSERT(nValue <= 1, "Invalid feat level.");
+            UTIL_ASSERT_MSG(nValue <= 1, "Invalid feat level.");
 
             field_4C54[3] = nValue;
             field_4C54[2] = 0;
@@ -6311,11 +6312,11 @@ void CGameSprite::sub_726330(UINT nFeatNumber, INT nValue)
         case CGAMESPRITE_FEAT_POWER_ATTACK:
             // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
             // __LINE__: 26969
-            UTIL_ASSERT(nValue >= 0, "Invalid feat level.");
+            UTIL_ASSERT_MSG(nValue >= 0, "Invalid feat level.");
 
             // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
             // __LINE__: 26970
-            UTIL_ASSERT(nValue <= MAX_SELECTABLE_FEAT_USE_LEVELS, "Invalid feat level.");
+            UTIL_ASSERT_MSG(nValue <= MAX_SELECTABLE_FEAT_USE_LEVELS, "Invalid feat level.");
 
             field_4C54[1] = nValue;
             field_4C54[0] = 0;
@@ -6323,15 +6324,58 @@ void CGameSprite::sub_726330(UINT nFeatNumber, INT nValue)
         case CGAMESPRITE_FEAT_RAPID_SHOT:
             // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
             // __LINE__: 26990
-            UTIL_ASSERT(nValue >= 0, "Invalid feat level.");
+            UTIL_ASSERT_MSG(nValue >= 0, "Invalid feat level.");
 
             // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
             // __LINE__: 269991
-            UTIL_ASSERT(nValue <= 1, "Invalid feat level.");
+            UTIL_ASSERT_MSG(nValue <= 1, "Invalid feat level.");
 
             field_4C54[4] = nValue;
             break;
         }
+    }
+}
+
+// 0x726570
+void CGameSprite::sub_726570()
+{
+    ITEM_EFFECT effect;
+    CGameEffect* pEffect;
+    CMessageAddEffect* pMessage;
+
+    if (field_4C54[1] > 0) {
+        CGameEffect::ClearItemEffect(&effect, ICEWIND_CGAMEEFFECT_FEATPOWERATTACK);
+        pEffect = CGameEffect::DecodeEffect(&effect, m_pos, m_id, CPoint(-1, -1));
+        pMessage = new CMessageAddEffect(pEffect, m_id, m_id);
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+    }
+
+    if (field_4C54[0] > 0) {
+        CGameEffect::ClearItemEffect(&effect, ICEWIND_CGAMEEFFECT_FEATEXPERTISE);
+        pEffect = CGameEffect::DecodeEffect(&effect, m_pos, m_id, CPoint(-1, -1));
+        pMessage = new CMessageAddEffect(pEffect, m_id, m_id);
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+    }
+
+    if (field_4C54[2] > 0) {
+        CGameEffect::ClearItemEffect(&effect, ICEWIND_CGAMEEFFECT_FEATARTERIALSTRIKE);
+        pEffect = CGameEffect::DecodeEffect(&effect, m_pos, m_id, CPoint(-1, -1));
+        pMessage = new CMessageAddEffect(pEffect, m_id, m_id);
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+    }
+
+    if (field_4C54[3] > 0) {
+        CGameEffect::ClearItemEffect(&effect, ICEWIND_CGAMEEFFECT_FEATHAMSTRING);
+        pEffect = CGameEffect::DecodeEffect(&effect, m_pos, m_id, CPoint(-1, -1));
+        pMessage = new CMessageAddEffect(pEffect, m_id, m_id);
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
+    }
+
+    if (field_4C54[4] > 0) {
+        CGameEffect::ClearItemEffect(&effect, ICEWIND_CGAMEEFFECT_FEATRAPIDSHOT);
+        pEffect = CGameEffect::DecodeEffect(&effect, m_pos, m_id, CPoint(-1, -1));
+        pMessage = new CMessageAddEffect(pEffect, m_id, m_id);
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
     }
 }
 

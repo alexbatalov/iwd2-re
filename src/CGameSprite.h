@@ -538,6 +538,7 @@ public:
 
     INT sub_726270(UINT nFeatNumber);
     void sub_726330(UINT nFeatNumber, INT nValue);
+    void sub_726570();
 
     void GetQuickSpell(BYTE buttonNum, CButtonData& buttonData);
     void GetQuickItem(BYTE buttonNum, CButtonData& buttonData);
