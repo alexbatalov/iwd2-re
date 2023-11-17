@@ -79,8 +79,8 @@ void CMarker::AsynchronousUpdate(CGameSprite* pSprite)
     }
 
     BOOLEAN dialogTalker = FALSE;
-    if (g_pBaldurChitin->GetObjectGame()->field_43E2 == 386
-        || g_pBaldurChitin->GetObjectGame()->field_43E2 == 1282) {
+    if (g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode == 386
+        || g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode == 1282) {
         CRect rViewPort(pSprite->GetArea()->GetInfinity()->rViewPort);
 
         INT x;

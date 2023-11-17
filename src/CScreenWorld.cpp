@@ -423,7 +423,7 @@ void CScreenWorld::EngineActivated()
 
             if (!m_bHardPaused
                 && m_nAutoHideInterface != 0) {
-                DWORD dwInputMode = g_pBaldurChitin->GetObjectGame()->field_43E2;
+                DWORD dwInputMode = g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode;
                 if (dwInputMode != 0x182 && dwInputMode != 0x502) {
                     // NOTE: Uninline.
                     CancelPopup();
@@ -590,7 +590,7 @@ void CScreenWorld::OnLButtonDblClk(CPoint pt)
 {
     m_cUIManager.OnLButtonDblClk(pt);
 
-    if ((g_pBaldurChitin->GetObjectGame()->field_43E2 & 0x1) != 0) {
+    if ((g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode & 0x1) != 0) {
         CGameArea* pArea = g_pBaldurChitin->GetObjectGame()->GetVisibleArea();
         if (pArea != NULL) {
             pArea->OnActionButtonDblClk(pt);
@@ -607,7 +607,7 @@ void CScreenWorld::OnLButtonDown(CPoint pt)
     m_cUIManager.field_24 = m_bCtrlKeyDown;
     m_cUIManager.OnLButtonDown(pt);
 
-    if ((g_pBaldurChitin->GetObjectGame()->field_43E2 & 0x1) != 0) {
+    if ((g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode & 0x1) != 0) {
         CGameArea* pArea = g_pBaldurChitin->GetObjectGame()->GetVisibleArea();
         if (pArea != NULL) {
             pArea->OnActionButtonDown(pt);
@@ -620,7 +620,7 @@ void CScreenWorld::OnLButtonDown(CPoint pt)
 // 0x68C100
 void CScreenWorld::OnLButtonUp(CPoint pt)
 {
-    if (g_pBaldurChitin->GetObjectGame()->field_43E2 == 0x142) {
+    if (g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode == 0x142) {
         // NOTE: Uninline.
         m_cUIManager.KillCapture();
     } else {
@@ -674,7 +674,7 @@ BOOL CScreenWorld::CheckMouseRButton()
 // 0x68C250
 void CScreenWorld::OnRButtonDblClk(CPoint pt)
 {
-    if ((g_pBaldurChitin->GetObjectGame()->field_43E2 & 0x1) != 0) {
+    if ((g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode & 0x1) != 0) {
         g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
     }
 }
@@ -684,7 +684,7 @@ void CScreenWorld::OnRButtonDown(CPoint pt)
 {
     m_cUIManager.OnRButtonDown(pt);
 
-    if ((g_pBaldurChitin->GetObjectGame()->field_43E2 & 0x1) != 0) {
+    if ((g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode & 0x1) != 0) {
         CGameArea* pArea = g_pBaldurChitin->GetObjectGame()->GetVisibleArea();
         if (pArea != NULL) {
             pArea->OnFormationButtonDown(pt);
@@ -699,7 +699,7 @@ void CScreenWorld::OnRButtonUp(CPoint pt)
 {
     m_cUIManager.OnRButtonUp(pt);
 
-    if ((g_pBaldurChitin->GetObjectGame()->field_43E2 & 0x1) != 0) {
+    if ((g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode & 0x1) != 0) {
         CGameArea* pArea = g_pBaldurChitin->GetObjectGame()->GetVisibleArea();
         if (pArea != NULL) {
             pArea->OnFormationButtonUp(pt);
@@ -1129,7 +1129,7 @@ void CScreenWorld::AsynchronousUpdate(BOOL bActiveEngine)
             }
         }
 
-        if (pGame->field_43E6 || !pGame->GetWorldTimer()->m_active) {
+        if (pGame->GetGameSave()->m_cutScene || !pGame->GetWorldTimer()->m_active) {
             m_interactionIndex = CGameObjectArray::INVALID_INDEX;
             m_interactionTarget = CGameObjectArray::INVALID_INDEX;
         } else {
@@ -1144,7 +1144,7 @@ void CScreenWorld::AsynchronousUpdate(BOOL bActiveEngine)
         }
 
         if (m_autoPauseId != CGameObjectArray::INVALID_INDEX) {
-            if (!pGame->field_43E6) {
+            if (!pGame->GetGameSave()->m_cutScene) {
                 if (m_autoPauseRef != -1) {
                     g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(m_autoPauseName,
                         m_autoPauseRef,
@@ -1210,7 +1210,7 @@ void CScreenWorld::AsynchronousUpdate(BOOL bActiveEngine)
             && g_pChitin->cNetwork.GetSessionHosting() == TRUE
             && m_bChapterTransitionPending == TRUE) {
             BOOLEAN bPermitted = TRUE;
-            if (pGame->field_43E2 == 386 || pGame->field_43E2 == 1282) {
+            if (pGame->GetGameSave()->m_mode == 386 || pGame->GetGameSave()->m_mode == 1282) {
                 bPermitted = FALSE;
             }
             if (pGame->GetMultiplayerSettings()->m_bHostPermittedDialog == TRUE) {
@@ -1233,7 +1233,7 @@ void CScreenWorld::AsynchronousUpdate(BOOL bActiveEngine)
             && g_pChitin->cNetwork.GetSessionHosting() == TRUE
             && m_bMoviePending == TRUE) {
             BOOLEAN bPermitted = TRUE;
-            if (pGame->field_43E2 == 386 || pGame->field_43E2 == 1282) {
+            if (pGame->GetGameSave()->m_mode == 386 || pGame->GetGameSave()->m_mode == 1282) {
                 bPermitted = FALSE;
             }
             if (pGame->GetMultiplayerSettings()->m_bHostPermittedDialog == TRUE) {
@@ -1250,7 +1250,7 @@ void CScreenWorld::AsynchronousUpdate(BOOL bActiveEngine)
             && g_pChitin->cNetwork.GetSessionHosting() == TRUE
             && m_bPendingMapWorld == TRUE) {
             BOOLEAN bPermitted = TRUE;
-            if (pGame->field_43E2 == 386 || pGame->field_43E2 == 1282) {
+            if (pGame->GetGameSave()->m_mode == 386 || pGame->GetGameSave()->m_mode == 1282) {
                 bPermitted = FALSE;
             }
             if (pGame->GetMultiplayerSettings()->m_bHostPermittedDialog == TRUE) {
@@ -1270,7 +1270,7 @@ void CScreenWorld::AsynchronousUpdate(BOOL bActiveEngine)
             && g_pChitin->cNetwork.GetSessionHosting() == TRUE
             && m_bRestPending == TRUE) {
             BOOLEAN bPermitted = TRUE;
-            if (pGame->field_43E2 == 386 || pGame->field_43E2 == 1282) {
+            if (pGame->GetGameSave()->m_mode == 386 || pGame->GetGameSave()->m_mode == 1282) {
                 bPermitted = FALSE;
             }
             if (pGame->GetMultiplayerSettings()->m_bHostPermittedDialog == TRUE) {
@@ -1289,7 +1289,7 @@ void CScreenWorld::AsynchronousUpdate(BOOL bActiveEngine)
             && g_pChitin->cNetwork.GetSessionHosting() == TRUE
             && m_bPendingReformParty == TRUE) {
             BOOLEAN bPermitted = TRUE;
-            if (pGame->field_43E2 == 386 || pGame->field_43E2 == 1282) {
+            if (pGame->GetGameSave()->m_mode == 386 || pGame->GetGameSave()->m_mode == 1282) {
                 bPermitted = FALSE;
             }
             if (pGame->GetMultiplayerSettings()->m_bHostPermittedDialog == TRUE) {
@@ -1307,7 +1307,7 @@ void CScreenWorld::AsynchronousUpdate(BOOL bActiveEngine)
         if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
             && g_pChitin->cNetwork.GetSessionHosting() == TRUE
             && pGame->GetMultiplayerSettings()->m_bHostPermittedDialog == TRUE) {
-            if (pGame->field_43E2 != 386 && pGame->field_43E2 != 1282) {
+            if (pGame->GetGameSave()->m_mode != 386 && pGame->GetGameSave()->m_mode != 1282) {
                 if (++pGame->GetMultiplayerSettings()->m_nHostPermittedDialogDelay >= 30) {
                     g_pBaldurChitin->GetBaldurMessage()->DialogRequestKillOrUse();
                     pGame->GetMultiplayerSettings()->m_nHostPermittedDialogDelay = 0;
@@ -1350,8 +1350,8 @@ void CScreenWorld::AsynchronousUpdate(BOOL bActiveEngine)
 
         if (m_comingOutOfDialog > 0) {
             if (--m_comingOutOfDialog == 0) {
-                if (pGame->field_43E2 != 322) {
-                    pGame->field_43E6 = 0;
+                if (pGame->GetGameSave()->m_mode != 322) {
+                    pGame->GetGameSave()->m_cutScene = 0;
                 }
             }
         }
@@ -2074,7 +2074,7 @@ void CScreenWorld::HideInterface()
 
     m_cUIManager.m_bHidden = TRUE;
 
-    if (pGame->field_43E2 == 386 || pGame->field_43E2 == 1282) {
+    if (pGame->GetGameSave()->m_mode == 386 || pGame->GetGameSave()->m_mode == 1282) {
         m_cUIManager.InvalidateRect(NULL);
     }
 }
@@ -2145,7 +2145,7 @@ void CScreenWorld::StopDeath()
     pGame->GetWorldTimer()->StartTime();
 
     m_bPaused = FALSE;
-    pGame->field_43E2 = -1;
+    pGame->GetGameSave()->m_mode = -1;
 
     m_cUIManager.GetPanel(17)->SetActive(FALSE);
     m_cUIManager.GetPanel(1)->SetActive(TRUE);
@@ -2599,7 +2599,7 @@ void CScreenWorld::UpdatePartyGoldStatus()
         UpdateLabel(pPanel,
             0x10000009,
             "%d",
-            g_pBaldurChitin->GetObjectGame()->m_nPartyGold);
+            g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_nPartyGold);
         break;
     case 8:
         pPanel = m_cUIManager.GetPanel(field_EA4);
@@ -2611,7 +2611,7 @@ void CScreenWorld::UpdatePartyGoldStatus()
         UpdateLabel(pPanel,
             0x10000036,
             "%d",
-            g_pBaldurChitin->GetObjectGame()->m_nPartyGold);
+            g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_nPartyGold);
         break;
     }
 }
@@ -2936,7 +2936,7 @@ void CScreenWorld::CheckPanelInputMode(DWORD dwPanelId, DWORD dwinputModeMask)
     UTIL_ASSERT(pPanel != NULL);
 
     if (pPanel->m_bActive || pPanel->m_bInactiveRender) {
-        pPanel->SetEnabled((g_pBaldurChitin->GetObjectGame()->field_43E2 & dwinputModeMask) != 0);
+        pPanel->SetEnabled((g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode & dwinputModeMask) != 0);
     }
 }
 

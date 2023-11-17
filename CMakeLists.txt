@@ -148,6 +148,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CGamePermission.h"
     "src/CGameRemoteObjectArray.cpp"
     "src/CGameRemoteObjectArray.h"
+    "src/CGameSave.cpp"
+    "src/CGameSave.h"
     "src/CGameSound.cpp"
     "src/CGameSound.h"
     "src/CGameSpawning.cpp"

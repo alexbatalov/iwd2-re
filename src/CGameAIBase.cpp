@@ -864,8 +864,8 @@ SHORT CGameAIBase::TakePartyGold()
     CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
     DWORD gold = m_curAction.m_specificID;
-    if (gold > pGame->m_nPartyGold) {
-        gold = pGame->m_nPartyGold;
+    if (gold > pGame->GetGameSave()->m_nPartyGold) {
+        gold = pGame->GetGameSave()->m_nPartyGold;
     }
 
     if (m_objectType == TYPE_SPRITE) {

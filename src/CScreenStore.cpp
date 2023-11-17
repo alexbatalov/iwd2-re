@@ -1373,7 +1373,7 @@ void CScreenStore::UpdateRentRoomPanel()
     m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(m_pMainPanel->GetControl(13));
 
     DWORD nInnFlags = m_pStore->m_header.m_nInnFlags;
-    DWORD nPartyGold = g_pBaldurChitin->GetObjectGame()->m_nPartyGold;
+    DWORD nPartyGold = g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_nPartyGold;
 
     UpdateLabel(m_pMainPanel,
         0x10000008,
@@ -1468,7 +1468,7 @@ void CScreenStore::UpdateBuyDrinksPanel()
 
     m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(m_pMainPanel->GetControl(5));
 
-    DWORD nPartyGold = g_pBaldurChitin->GetObjectGame()->m_nPartyGold;
+    DWORD nPartyGold = g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_nPartyGold;
 
     UpdateLabel(m_pMainPanel,
         0x10000011,
@@ -1966,7 +1966,7 @@ void CScreenStore::OnRentRoomButtonClick()
     // __LINE__: 7233
     UTIL_ASSERT(pGame != NULL);
 
-    DWORD nPartyGold = pGame->m_nPartyGold;
+    DWORD nPartyGold = pGame->GetGameSave()->m_nPartyGold;
 
     // NOTE: Uninline.
     DWORD nCost = GetRoomCost();

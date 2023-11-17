@@ -269,17 +269,17 @@ void CGameObject::OnActionButton(const CPoint& pt)
                     CPoint cursor = m_pArea->m_moveDest + m_pArea->m_moveDest - pt;
 
                     pGroup->GroupDrawMove(m_pArea->m_moveDest,
-                        pGame->m_curFormation,
+                        pGame->GetGameSave()->m_curFormation,
                         cursor);
 
                     pGroup->GroupSetTarget(pt,
                         bShift,
-                        pGame->m_curFormation,
+                        pGame->GetGameSave()->m_curFormation,
                         cursor);
                 } else {
                     pGroup->GroupSetTarget(pt,
                         bShift,
-                        pGame->m_curFormation,
+                        pGame->GetGameSave()->m_curFormation,
                         CPoint(-1, -1));
                 }
             }
@@ -296,7 +296,7 @@ void CGameObject::OnActionButton(const CPoint& pt)
         pGame->m_lastTarget = CGameObjectArray::INVALID_INDEX;
 
         pGroup->GroupProtectPoint(m_pArea->m_moveDest,
-            pGame->m_curFormation,
+            pGame->GetGameSave()->m_curFormation,
             CPoint(-1, -1),
             FALSE);
 

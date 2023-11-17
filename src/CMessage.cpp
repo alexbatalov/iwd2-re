@@ -2458,8 +2458,8 @@ BOOLEAN CBaldurMessage::SendDialogRequestToServer(BOOLEAN bTestPermission)
             return FALSE;
         }
 
-        if (g_pBaldurChitin->GetObjectGame()->field_43E2 == 386
-            || g_pBaldurChitin->GetObjectGame()->field_43E2 == 1282) {
+        if (g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode == 386
+            || g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode == 1282) {
             m_bDialogRequestPending = FALSE;
             return FALSE;
         }
@@ -2569,8 +2569,8 @@ BOOLEAN CBaldurMessage::OnDialogRequestToServer(INT nMsgFrom, BYTE* pMessage, DW
         bPermitDialog = FALSE;
     }
 
-    if (g_pBaldurChitin->GetObjectGame()->field_43E2 == 386
-        || g_pBaldurChitin->GetObjectGame()->field_43E2 == 1282) {
+    if (g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode == 386
+        || g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode == 1282) {
         bPermitDialog = FALSE;
     }
 
@@ -2679,8 +2679,8 @@ BOOLEAN CBaldurMessage::OnDialogRequestKillOrUse(INT nMsgFrom, BYTE* pMessage, D
         return FALSE;
     }
 
-    if (g_pBaldurChitin->GetObjectGame()->field_43E2 != 386
-        && g_pBaldurChitin->GetObjectGame()->field_43E2 != 1282) {
+    if (g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode != 386
+        && g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode != 1282) {
         CancelDialogRequestToServer();
     }
 
@@ -2828,8 +2828,8 @@ BOOLEAN CBaldurMessage::OnPauseRequestToServer(INT nMsgFrom, BYTE* pMessage, DWO
     nMsgPtr += sizeof(BOOLEAN);
 
     bPermitPause = TRUE;
-    if (g_pBaldurChitin->GetObjectGame()->field_43E2 == 386
-        || g_pBaldurChitin->GetObjectGame()->field_43E2 == 1282) {
+    if (g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode == 386
+        || g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode == 1282) {
         bPermitPause = FALSE;
     }
 
@@ -4412,9 +4412,9 @@ BOOL CMessageClearGroupSlot::UnmarshalMessage(BYTE* pData, DWORD dwSize)
 void CMessageClearGroupSlot::Run()
 {
     CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
-    if (pGame->m_groupInventory[m_slotNum] != NULL) {
-        delete pGame->m_groupInventory[m_slotNum];
-        pGame->m_groupInventory[m_slotNum] = NULL;
+    if (pGame->GetGameSave()->m_groupInventory[m_slotNum] != NULL) {
+        delete pGame->GetGameSave()->m_groupInventory[m_slotNum];
+        pGame->GetGameSave()->m_groupInventory[m_slotNum] = NULL;
     }
 }
 
@@ -5433,8 +5433,8 @@ void CMessageCutSceneModeStatus::Run()
 {
     CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
-    if (pGame->field_43E2 == 1282) {
-        pGame->field_43E6 = 0;
+    if (pGame->GetGameSave()->m_mode == 1282) {
+        pGame->GetGameSave()->m_cutScene = FALSE;
 
         // NOTE: Unused.
         CString sError("Trying to start a cut scene while in a dialog.");
@@ -5450,8 +5450,8 @@ void CMessageCutSceneModeStatus::Run()
                 }
             }
 
-            pGame->field_43E2 = 322;
-            pGame->field_43E6 = 1;
+            pGame->GetGameSave()->m_mode = 322;
+            pGame->GetGameSave()->m_cutScene = TRUE;
 
             g_pBaldurChitin->GetObjectCursor()->SetCursor(0, FALSE);
 
@@ -5460,13 +5460,13 @@ void CMessageCutSceneModeStatus::Run()
 
             g_pBaldurChitin->GetActiveEngine()->SelectEngine(pWorld);
         } else {
-            if (pGame->field_43E2 == 322) {
-                pGame->field_43E2 = -1;
+            if (pGame->GetGameSave()->m_mode == 322) {
+                pGame->GetGameSave()->m_mode = -1;
 
                 g_pBaldurChitin->m_pEngineWorld->GetManager()->GetPanel(1)->SetActive(TRUE);
                 g_pBaldurChitin->m_pEngineWorld->GetManager()->GetPanel(1)->InvalidateRect(NULL);
             }
-            pGame->field_43E6 = 0;
+            pGame->GetGameSave()->m_cutScene = FALSE;
         }
     }
 }
@@ -6757,16 +6757,16 @@ void CMessagePartyGold::Run()
 
         if (m_gold < 0) {
             // NOTE: Unsigned compare.
-            if (static_cast<DWORD>(-m_gold) > g_pBaldurChitin->GetObjectGame()->m_nPartyGold) {
-                g_pBaldurChitin->GetObjectGame()->m_nPartyGold = 0;
+            if (static_cast<DWORD>(-m_gold) > g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_nPartyGold) {
+                g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_nPartyGold = 0;
             } else {
-                g_pBaldurChitin->GetObjectGame()->m_nPartyGold += m_gold;
+                g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_nPartyGold += m_gold;
             }
         } else {
-            g_pBaldurChitin->GetObjectGame()->m_nPartyGold += m_gold;
+            g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_nPartyGold += m_gold;
         }
     } else {
-        g_pBaldurChitin->GetObjectGame()->m_nPartyGold = m_gold;
+        g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_nPartyGold = m_gold;
     }
 
     CBaldurEngine* pActiveEngine = g_pBaldurChitin->GetActiveEngine();

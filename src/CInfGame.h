@@ -10,6 +10,7 @@
 #include "CGameObjectArray.h"
 #include "CGameOptions.h"
 #include "CGameRemoteObjectArray.h"
+#include "CGameSave.h"
 #include "CInfButtonArray.h"
 #include "CInfinity.h"
 #include "CMoveList.h"
@@ -243,6 +244,7 @@ public:
     SHORT GetNumCharacters();
     CGameObjectArray* GetObjectArray();
     CGameArea* GetVisibleArea();
+    CGameSave* GetGameSave();
     CMultiplayerSettings* GetMultiplayerSettings();
     CGameJournal* GetJournal();
     CAIGroup* GetGroup();
@@ -368,15 +370,7 @@ public:
     /* 4220 */ CString m_sSaveGame;
     /* 4224 */ CString m_sSaveDir;
     /* 4228 */ CString m_sMultiplayerSaveDir;
-    /* 422C */ CResRef m_cResCurrentWorldArea;
-    /* 4234 */ DWORD m_nCurrentWorldLink;
-    /* 4238 */ DWORD m_nPartyGold;
-    /* 423C */ SHORT m_curFormation;
-    /* 4248 */ CItem* m_groupInventory[100];
-    /* 43D8 */ int field_43D8;
-    /* 43DC */ short field_43DC;
-    /* 43E2 */ int field_43E2;
-    /* 43E6 */ int field_43E6;
+    /* 422C */ CGameSave m_gameSave;
     /* 43EA */ CGameOptions m_cOptions; // #guess
     /* 44C8 */ CGameJournal m_cJournal;
     /* 44DC */ CWorldMap m_cWorldMap;

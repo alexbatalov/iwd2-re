@@ -817,14 +817,10 @@ void CInfGame::InitGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlac
         EnablePortrait(nIndex, FALSE);
     }
 
-    field_43DC = 0;
-
-    for (int slot = 0; slot < 100; slot++) {
-        m_groupInventory[slot] = NULL;
-    }
-
-    field_43E2 = -1;
-    field_43E6 = 0;
+    m_gameSave.field_1B0 = 0;
+    memset(m_gameSave.m_groupInventory, 0, sizeof(m_gameSave.m_groupInventory));
+    m_gameSave.m_mode = -1;
+    m_gameSave.m_cutScene = FALSE;
     field_4B84 = "";
     field_4B88 = "";
     field_4B8C = "";
@@ -4117,10 +4113,10 @@ void CInfGame::AddPartyGold(LONG dwAddPartyGold)
 
             g_pBaldurChitin->GetMessageHandler()->AddMessage(pMessage, FALSE);
         } else {
-            if (dwAddPartyGold >= 0 || static_cast<DWORD>(-dwAddPartyGold) <= m_nPartyGold) {
-                m_nPartyGold += dwAddPartyGold;
+            if (dwAddPartyGold >= 0 || static_cast<DWORD>(-dwAddPartyGold) <= m_gameSave.m_nPartyGold) {
+                m_gameSave.m_nPartyGold += dwAddPartyGold;
             } else {
-                m_nPartyGold = 0;
+                m_gameSave.m_nPartyGold = 0;
             }
         }
     }
@@ -4395,11 +4391,11 @@ CString CInfGame::GetDirScripts()
 void CInfGame::StartCharacterTerminationSequence()
 {
     CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
-    if (pGame->field_43E2 == 322) {
-        pGame->field_43E2 = -1;
+    if (pGame->m_gameSave.m_mode == 322) {
+        pGame->m_gameSave.m_mode = -1;
     }
 
-    pGame->field_43E6 = 0;
+    pGame->m_gameSave.m_cutScene = FALSE;
 
     if (g_pBaldurChitin->GetActiveEngine() != g_pBaldurChitin->m_pEngineWorld) {
         g_pBaldurChitin->GetActiveEngine()->SelectEngine(g_pBaldurChitin->m_pEngineWorld);
@@ -4411,13 +4407,13 @@ void CInfGame::StartCharacterTerminationSequence()
 // 0x5C2570
 void CInfGame::ReadyCharacterTerminationSequence(int a1, int a2)
 {
-    if (!field_43D8) {
+    if (!m_gameSave.field_1AC) {
         // FIXME: What for (this function is not static as
         // `StartCharacterTerminationSequence`).
         CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
 
-        pGame->field_43E2 = 322;
-        pGame->field_43E6 = 1;
+        pGame->m_gameSave.m_mode = 322;
+        pGame->m_gameSave.m_cutScene = TRUE;
 
         g_pBaldurChitin->GetObjectCursor()->SetCursor(0, FALSE);
 
@@ -5243,6 +5239,12 @@ CGameObjectArray* CInfGame::GetObjectArray()
 CGameArea* CInfGame::GetVisibleArea()
 {
     return m_gameAreas[m_visibleArea];
+}
+
+// 0x453050
+CGameSave* CInfGame::GetGameSave()
+{
+    return &m_gameSave;
 }
 
 // 0x453060

@@ -1046,7 +1046,7 @@ void CScreenInventory::UpdateMainPanel(BOOL bClearError)
     if (rc == CGameObjectArray::SUCCESS) {
         CAIObjectType& typeAI = pSprite->m_liveTypeAI;
         INT nHP = pSprite->GetBaseStats()->m_hitPoints;
-        INT nPartyGold = pGame->m_nPartyGold;
+        INT nPartyGold = pGame->GetGameSave()->m_nPartyGold;
         CCreatureFileHeader* pBStats = pSprite->GetBaseStats();
         CDerivedStats& DStats = *pSprite->GetDerivedStats();
 

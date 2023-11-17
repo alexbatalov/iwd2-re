@@ -3098,7 +3098,7 @@ CGameEffect* CGameEffectSlow::Copy()
 // 0x4B1650
 BOOL CGameEffectSlow::ApplyEffect(CGameSprite* pSprite)
 {
-    if (g_pBaldurChitin->GetObjectGame()->field_43E6 != 1) {
+    if (g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_cutScene != TRUE) {
         if (m_secondaryType != 0) {
             // NOTE: Uninline.
             DisplayStringRef(pSprite, 14668); // "Slowed"
@@ -6687,7 +6687,7 @@ CGameEffect* CGameEffectEntangle::Copy()
 // 0x4BD650
 BOOL CGameEffectEntangle::ApplyEffect(CGameSprite* pSprite)
 {
-    if (g_pBaldurChitin->GetObjectGame()->field_43E6 != 1) {
+    if (g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_cutScene != TRUE) {
         pSprite->GetDerivedStats()->m_visualEffects[IWD_VFX_ENTANGLE] = true;
 
         if (m_secondaryType) {
@@ -6732,7 +6732,7 @@ CGameEffect* CGameEffectWebHold::Copy()
 // 0x4BD740
 BOOL CGameEffectWebHold::ApplyEffect(CGameSprite* pSprite)
 {
-    if (g_pBaldurChitin->GetObjectGame()->field_43E6 != 1) {
+    if (g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_cutScene != TRUE) {
         if (!pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_WEB]) {
             pSprite->GetDerivedStats()->m_visualEffects[IWD_VFX_WEB] = true;
 

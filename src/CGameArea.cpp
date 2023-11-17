@@ -410,7 +410,7 @@ void CGameArea::AIUpdate()
 
     CPoint ptWorldMouse = m_cInfinity.GetWorldCoordinates(m_ptMousePos);
 
-    if ((g_pBaldurChitin->GetObjectGame()->field_43E2 & 0x4000) != 0) {
+    if ((g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode & 0x4000) != 0) {
         if (m_pGame->GetVisibleArea() == this
             && g_pBaldurChitin->GetActiveEngine() == g_pBaldurChitin->m_pEngineWorld) {
             m_bTravelSquare = FALSE;
@@ -475,7 +475,7 @@ void CGameArea::AIUpdate()
                     }
 
                     m_pGame->GetGroup()->GroupDrawMove(m_moveDest,
-                        m_pGame->m_curFormation,
+                        m_pGame->GetGameSave()->m_curFormation,
                         ptCursor);
 
                     if (m_pGame->GetState() == 0) {
@@ -2054,7 +2054,7 @@ void CGameArea::OnDeactivation()
     m_selectSquare.bottom = -1;
     m_groupMove = FALSE;
 
-    if (!m_pGame->field_43E6) {
+    if (!m_pGame->GetGameSave()->m_cutScene) {
         m_pGame->m_tempCursor = 4;
     }
 
@@ -2128,7 +2128,7 @@ void CGameArea::OnFormationButtonDown(const CPoint& pt)
             if (g_pBaldurChitin->GetObjectGame()->GetGroup()->GetCount() != 0) {
                 if (g_pBaldurChitin->GetObjectCursor()->m_nCurrentCursor == 4) {
                     m_pGame->GetGroup()->GroupDrawMove(m_moveDest,
-                        m_pGame->m_curFormation,
+                        m_pGame->GetGameSave()->m_curFormation,
                         CPoint(-1, -1));
                     m_groupMove = TRUE;
                 }

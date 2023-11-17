@@ -1012,7 +1012,7 @@ void CScreenWorldMap::StartWorldMap(INT nEngineState, LONG nLeavingEdge, BOOLEAN
     m_nSelectedArea = -1;
     m_nHighlightArea = -1;
     m_nLeavingEdge = nLeavingEdge;
-    m_nCurrentLink = pGame->m_nCurrentWorldLink;
+    m_nCurrentLink = pGame->GetGameSave()->m_nCurrentWorldLink;
 
     for (SHORT nPortrait = 0; nPortrait < pGame->GetNumCharacters(); nPortrait++) {
         LONG nCharacterId = pGame->GetCharacterId(nPortrait);

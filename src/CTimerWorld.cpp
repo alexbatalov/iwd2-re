@@ -258,7 +258,7 @@ void CTimerWorld::StartTime()
     }
 
     if (g_pBaldurChitin->m_pEngineWorld->m_nAutoUnhideInterface > 0) {
-        if (g_pBaldurChitin->GetObjectGame()->field_43E2 != 322) {
+        if (g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode != 322) {
             g_pBaldurChitin->m_pEngineWorld->m_nAutoUnhideInterface--;
             g_pBaldurChitin->m_pEngineWorld->UnhideInterface();
         }
