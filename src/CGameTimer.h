@@ -5,6 +5,11 @@
 
 class CGameTimer {
 public:
+    LONG GetTime();
+    BYTE GetId();
+    void SetTime(LONG time);
+    void SetId(BYTE id);
+
     LONG m_time;
     BYTE m_id;
 };
