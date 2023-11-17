@@ -971,6 +971,14 @@ CGameEffect* IcewindCGameEffectSetSpellState::Copy()
     return copy;
 }
 
+// 0x566910
+BOOL IcewindCGameEffectSetSpellState::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetDerivedStats()->m_spellStates.set(m_dwFlags, true);
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A01F0
