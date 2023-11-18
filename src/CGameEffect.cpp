@@ -2109,6 +2109,72 @@ CGameEffect* CGameEffectDEX::Copy()
     return copy;
 }
 
+// 0x4ADD10
+BOOL CGameEffectDEX::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        if (m_durationType == 1) {
+            pSprite->GetBaseStats()->m_DEXBase = min(max(pSprite->GetBaseStats()->m_DEXBase + static_cast<SHORT>(m_effectAmount), 1), 40);
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+        } else {
+            // NOTE: Uninline.
+            AdjustDEX(pSprite, m_effectAmount);
+            m_done = FALSE;
+        }
+        break;
+    case 1:
+        if (m_durationType == 1) {
+            pSprite->GetBaseStats()->m_DEXBase = min(max(static_cast<SHORT>(m_effectAmount), 1), 40);
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+        } else {
+            pSprite->GetDerivedStats()->m_nDEX = min(max(static_cast<SHORT>(m_effectAmount), 1), 40);
+            m_done = FALSE;
+        }
+        break;
+    case 2:
+        if (m_durationType == 1) {
+            pSprite->GetBaseStats()->m_DEXBase = min(max(pSprite->GetBaseStats()->m_DEXBase * static_cast<SHORT>(m_effectAmount) / 100, 1), 40);
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+        } else {
+            pSprite->GetDerivedStats()->m_nDEX = min(max(pSprite->GetBaseStats()->m_DEXBase * static_cast<SHORT>(m_effectAmount) / 100, 1), 40);
+            m_done = FALSE;
+        }
+        break;
+    case 3:
+        // Cat's Grace.
+        if (pSprite->GetDerivedStats()->m_nDEX < 20) {
+            if (m_effectAmount == 0) {
+                m_effectAmount = rand() % 4 + 1;
+            }
+
+            pSprite->GetDerivedStats()->m_nDEX = min(pSprite->GetDerivedStats()->m_nDEX + static_cast<SHORT>(m_effectAmount), 20);
+
+            if (m_secondaryType) {
+                // NOTE: Uninline.
+                DisplayStringRef(pSprite, 3798); // "Cat's Grace"
+            }
+
+            // NOTE: Uninline.
+            AddPortraitIcon(pSprite, 75);
+
+            pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_CATS_GRACE] = true;
+        } else {
+            m_done = FALSE;
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 8038
+        UTIL_ASSERT(FALSE);
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
