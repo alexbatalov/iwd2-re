@@ -756,6 +756,37 @@ CGameEffect* IcewindCGameEffectForceMovementRate::Copy()
     return copy;
 }
 
+// 0x5653D0
+BOOL IcewindCGameEffectForceMovementRate::ApplyEffect(CGameSprite* pSprite)
+{
+    // NOTE: Uninline.
+    if (pSprite->GetAnimation()->GetMoveScaleDefault() != 0) {
+        switch (m_dwFlags) {
+        case 0:
+            // NOTE: Uninline.
+            pSprite->GetAnimation()->SetMoveScale(pSprite->GetAnimation()->GetMoveScaleDefault() + static_cast<BYTE>(m_effectAmount));
+            break;
+        case 1:
+            // NOTE: Uninline.
+            pSprite->GetAnimation()->SetMoveScale(static_cast<BYTE>(m_effectAmount));
+            break;
+        case 2:
+            pSprite->GetAnimation()->SetMoveScale(pSprite->GetAnimation()->GetMoveScaleDefault() * static_cast<BYTE>(m_effectAmount) / 100);
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\IcewindCGameEffects.cpp
+            // __LINE__: 4099
+            UTIL_ASSERT(FALSE);
+        }
+    }
+
+    if (m_secondaryType) {
+        pSprite->DropPath();
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49EF20
