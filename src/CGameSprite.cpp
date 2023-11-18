@@ -2674,6 +2674,18 @@ SHORT CGameSprite::GetLayOnHandsAmount()
     return g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetLayOnHandsAmount(m_typeAI, m_derivedStats);
 }
 
+// 0x71B9C0
+void CGameSprite::AddSpecialAbility(const CResRef& cResInnateSpell, BOOL feedBack)
+{
+    // TODO: Incomplete.
+}
+
+// 0x71BC60
+void CGameSprite::RemoveSpecialAbility(const CResRef& cResInnateSpell)
+{
+    // TODO: Incomplete.
+}
+
 // 0x71BE80
 void CGameSprite::CheckLoadState()
 {

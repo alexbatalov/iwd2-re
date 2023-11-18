@@ -431,6 +431,8 @@ public:
     SHORT GetTurnUndeadLevel();
     SHORT GetBackstabDamageMultiplier();
     SHORT GetLayOnHandsAmount();
+    void AddSpecialAbility(const CResRef& cResInnateSpell, BOOL feedBack);
+    void RemoveSpecialAbility(const CResRef& cResInnateSpell);
     void CheckLoadState();
     INT GetNumQuickWeaponSlots();
     SHORT FindItemPersonal(const CString& sName, int number, BOOL restrictToEquiped);

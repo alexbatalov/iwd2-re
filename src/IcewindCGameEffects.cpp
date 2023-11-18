@@ -6,6 +6,29 @@
 #include "CUtil.h"
 #include "IcewindMisc.h"
 
+// NOTE: I'm not sure where these constants belong.
+
+// 0x8AEBCC
+const char RESREF_EYE_OF_THE_MIND[] = "SpIn126";
+
+// 0x8AEBD0
+const char RESREF_EYE_OF_THE_SWORD[] = "SpIn127";
+
+// 0x8AEBD4
+const char RESREF_EYE_OF_THE_MAGE[] = "SpIn128";
+
+// 0x8AEBD8
+const char RESREF_EYE_OF_VENOM[] = "SpIn129";
+
+// 0x8AEBDC
+const char RESREF_EYE_OF_THE_SPIRIT[] = "SpIn130";
+
+// 0x8AEBE0
+const char RESREF_EYE_OF_FORTITUDE[] = "SpIn131";
+
+// 0x8AEBE4
+const char RESREF_EYE_OF_STONE[] = "SpIn132";
+
 // 0x49DB70
 IcewindCGameEffectBeltynsBurningBlood::IcewindCGameEffectBeltynsBurningBlood(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
     : CGameEffect(effect, source, sourceID, target, TRUE)
@@ -839,6 +862,16 @@ CGameEffect* IcewindCGameEffectEyeOfMind::Copy()
     return copy;
 }
 
+// 0x565640
+BOOL IcewindCGameEffectEyeOfMind::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        pSprite->AddSpecialAbility(CResRef(CString(RESREF_EYE_OF_THE_MIND)), FALSE);
+    }
+    pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_EYE_OF_THE_MIND] = true;
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49F100
@@ -855,6 +888,16 @@ CGameEffect* IcewindCGameEffectEyeOfSword::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x5656D0
+BOOL IcewindCGameEffectEyeOfSword::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        pSprite->AddSpecialAbility(CResRef(CString(RESREF_EYE_OF_THE_SWORD)), FALSE);
+    }
+    pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_EYE_OF_THE_SWORD] = true;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------
@@ -875,6 +918,16 @@ CGameEffect* IcewindCGameEffectEyeOfMage::Copy()
     return copy;
 }
 
+// 0x565760
+BOOL IcewindCGameEffectEyeOfMage::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        pSprite->AddSpecialAbility(CResRef(CString(RESREF_EYE_OF_THE_MAGE)), FALSE);
+    }
+    pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_EYE_OF_THE_MAGE] = true;
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49F2E0
@@ -891,6 +944,16 @@ CGameEffect* IcewindCGameEffectEyeOfVenom::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x5657F0
+BOOL IcewindCGameEffectEyeOfVenom::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        pSprite->AddSpecialAbility(CResRef(CString(RESREF_EYE_OF_VENOM)), FALSE);
+    }
+    pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_EYE_OF_VENOM] = true;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------
@@ -911,6 +974,16 @@ CGameEffect* IcewindCGameEffectEyeOfSpirit::Copy()
     return copy;
 }
 
+// 0x565880
+BOOL IcewindCGameEffectEyeOfSpirit::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        pSprite->AddSpecialAbility(CResRef(CString(RESREF_EYE_OF_THE_SPIRIT)), FALSE);
+    }
+    pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_EYE_OF_THE_SPIRIT] = true;
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49F4C0
@@ -927,6 +1000,16 @@ CGameEffect* IcewindCGameEffectEyeOfFortitude::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x565910
+BOOL IcewindCGameEffectEyeOfFortitude::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        pSprite->AddSpecialAbility(CResRef(CString(RESREF_EYE_OF_FORTITUDE)), FALSE);
+    }
+    pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_EYE_OF_FORTITUDE] = true;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------
@@ -947,6 +1030,16 @@ CGameEffect* IcewindCGameEffectEyeOfStone::Copy()
     return copy;
 }
 
+// 0x5659A0
+BOOL IcewindCGameEffectEyeOfStone::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        pSprite->AddSpecialAbility(CResRef(CString(RESREF_EYE_OF_STONE)), FALSE);
+    }
+    pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_EYE_OF_STONE] = true;
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49F6A0
@@ -963,6 +1056,21 @@ CGameEffect* IcewindCGameEffectRemoveSevenEyes::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x565A30
+BOOL IcewindCGameEffectRemoveSevenEyes::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->RemoveSpecialAbility(CResRef(CString(RESREF_EYE_OF_THE_MIND)));
+    pSprite->RemoveSpecialAbility(CResRef(CString(RESREF_EYE_OF_THE_SWORD)));
+    pSprite->RemoveSpecialAbility(CResRef(CString(RESREF_EYE_OF_THE_MAGE)));
+    pSprite->RemoveSpecialAbility(CResRef(CString(RESREF_EYE_OF_VENOM)));
+    pSprite->RemoveSpecialAbility(CResRef(CString(RESREF_EYE_OF_THE_SPIRIT)));
+    pSprite->RemoveSpecialAbility(CResRef(CString(RESREF_EYE_OF_FORTITUDE)));
+    pSprite->RemoveSpecialAbility(CResRef(CString(RESREF_EYE_OF_STONE)));
+
+    m_done = TRUE;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------
