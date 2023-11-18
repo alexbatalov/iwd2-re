@@ -134,6 +134,59 @@ CGameEffect* IcewindCGameEffectRighteousWrathOfFaithful::Copy()
     return copy;
 }
 
+// 0x55E9C0
+BOOL IcewindCGameEffectRighteousWrathOfFaithful::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        if (!pSprite->GetDerivedStats()->m_spellStates.test(SPLSTATE_ALLIED_RIGHTEOUS_WRATH_OF_THE_FAITHFUL)) {
+            pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_ALLIED_RIGHTEOUS_WRATH_OF_THE_FAITHFUL, true);
+
+            // NOTE: Uninline.
+            AddPortraitIcon(pSprite, 67);
+
+            AddColorEffect(pSprite, 215, 182, 0, 30);
+
+            pSprite->GetDerivedStats()->m_nDamageBonus++;
+            pSprite->GetDerivedStats()->m_nTHAC0++;
+            pSprite->GetDerivedStats()->m_nSaveVSFortitude++;
+            pSprite->GetDerivedStats()->m_nSaveVSReflex++;
+            pSprite->GetDerivedStats()->m_nSaveVSWill++;
+            pSprite->GetDerivedStats()->m_nMaxHitPoints += 8;
+
+            if (m_secondaryType) {
+                pSprite->GetBaseStats()->m_hitPoints += 8;
+            }
+        }
+        break;
+    case 1:
+        if (!pSprite->GetDerivedStats()->m_spellStates.test(SPLSTATE_ALLIED_AND_SAME_ALIGNMENT_RIGHTEOUS_WRATH_OF_THE_FAITHFUL)) {
+            pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_ALLIED_AND_SAME_ALIGNMENT_RIGHTEOUS_WRATH_OF_THE_FAITHFUL, true);
+
+            // NOTE: Uninline.
+            AddPortraitIcon(pSprite, 67);
+
+            AddColorEffect(pSprite, 215, 182, 0, 30);
+
+            pSprite->GetDerivedStats()->m_nDamageBonus += 2;
+            pSprite->GetDerivedStats()->m_nTHAC0 += 2;
+            pSprite->GetDerivedStats()->m_nSaveVSFortitude += 2;
+            pSprite->GetDerivedStats()->m_nSaveVSReflex += 2;
+            pSprite->GetDerivedStats()->m_nSaveVSWill += 2;
+
+            if (m_secondaryType) {
+                pSprite->GetBaseStats()->m_hitPoints += 8;
+            }
+
+            if (pSprite->GetDerivedStats()->m_nNumberOfAttacks < 5) {
+                pSprite->GetDerivedStats()->m_nNumberOfAttacks++;
+            }
+        }
+        break;
+    }
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49E020
