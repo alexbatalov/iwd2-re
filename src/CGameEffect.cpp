@@ -9695,6 +9695,31 @@ CGameEffect* CGameEffectHeroicInspiration::Copy()
     return copy;
 }
 
+// 0x4C3E20
+BOOL CGameEffectHeroicInspiration::ApplyEffect(CGameSprite* pSprite)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+    // __LINE__: 27295
+    UTIL_ASSERT(pSprite != NULL);
+
+    if (pSprite->GetBaseStats()->m_hitPoints > pSprite->GetBaseStats()->m_maxHitPointsBase / 2) {
+        m_done = TRUE;
+        PlaySound(CResRef("EFF_E05"), pSprite);
+    } else {
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 138);
+
+        pSprite->GetDerivedStats()->m_nTHAC0++;
+        pSprite->GetDerivedStats()->m_nDamageBonus++;
+        pSprite->GetDerivedStats()->m_nSaveVSFortitude++;
+        pSprite->GetDerivedStats()->m_nSaveVSReflex++;
+        pSprite->GetDerivedStats()->m_nSaveVSWill++;
+        m_done = FALSE;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49DA70
