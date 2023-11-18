@@ -312,6 +312,7 @@ public:
     void AdjustTHAC0(CGameSprite* pSprite, SHORT nValue);
     void AdjustSTR(CGameSprite* pSprite, INT nValue);
     void AdjustDEX(CGameSprite* pSprite, INT nValue);
+    void AdjustWIS(CGameSprite* pSprite, INT nValue);
     void Immobilize(CGameSprite* pSprite);
     void AddSlowEffect(CGameSprite* pSprite);
     void RemoveAllOfType(CGameSprite* pSprite, WORD effectID, LONG effectAmount);
@@ -657,6 +658,7 @@ class CGameEffectWIS : public CGameEffect {
 public:
     CGameEffectWIS(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectSingleColorPulseAll : public CGameEffect {

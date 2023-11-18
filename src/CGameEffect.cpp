@@ -1405,6 +1405,16 @@ void CGameEffect::AdjustDEX(CGameSprite* pSprite, INT nValue)
     }
 }
 
+// NOTE: Convenience.
+void CGameEffect::AdjustWIS(CGameSprite* pSprite, INT nValue)
+{
+    if ((nValue > 0 && nValue > pSprite->GetDerivedStats()->field_138)
+        || (nValue < 0 && nValue < pSprite->GetDerivedStats()->field_138)) {
+        pSprite->m_bonusStats.m_nWIS += static_cast<SHORT>(nValue) - static_cast<SHORT>(pSprite->GetDerivedStats()->field_138);
+        pSprite->GetDerivedStats()->field_138 = nValue;
+    }
+}
+
 // 0x4C4000
 void CGameEffect::Immobilize(CGameSprite* pSprite)
 {
@@ -3513,6 +3523,50 @@ CGameEffect* CGameEffectWIS::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4B2B20
+BOOL CGameEffectWIS::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        if (m_durationType == 1) {
+            pSprite->GetBaseStats()->m_WISBase = min(max(pSprite->GetBaseStats()->m_WISBase + static_cast<SHORT>(m_effectAmount), 1), 40);
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+        } else {
+            // NOTE: Uninline.
+            AdjustWIS(pSprite, m_effectAmount);
+            m_done = FALSE;
+        }
+        break;
+    case 1:
+        if (m_durationType == 1) {
+            pSprite->GetBaseStats()->m_WISBase = min(max(static_cast<SHORT>(m_effectAmount), 1), 40);
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+        } else {
+            pSprite->GetDerivedStats()->m_nWIS = min(max(static_cast<SHORT>(m_effectAmount), 1), 40);
+            m_done = FALSE;
+        }
+        break;
+    case 2:
+        if (m_durationType == 1) {
+            pSprite->GetBaseStats()->m_WISBase = min(max(pSprite->GetBaseStats()->m_WISBase * static_cast<SHORT>(m_effectAmount) / 100, 1), 40);
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+        } else {
+            pSprite->GetDerivedStats()->m_nWIS = min(max(pSprite->GetBaseStats()->m_WISBase * static_cast<SHORT>(m_effectAmount) / 100, 1), 40);
+            m_done = FALSE;
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 11877
+        UTIL_ASSERT(FALSE);
+    }
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------
