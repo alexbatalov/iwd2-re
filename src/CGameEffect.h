@@ -312,6 +312,7 @@ public:
     void AdjustTHAC0(CGameSprite* pSprite, SHORT nValue);
     void AdjustSTR(CGameSprite* pSprite, INT nValue);
     void AdjustDEX(CGameSprite* pSprite, INT nValue);
+    void AdjustINT(CGameSprite* pSprite, INT nValue);
     void AdjustWIS(CGameSprite* pSprite, INT nValue);
     void Immobilize(CGameSprite* pSprite);
     void AddSlowEffect(CGameSprite* pSprite);
@@ -474,6 +475,7 @@ class CGameEffectINT : public CGameEffect {
 public:
     CGameEffectINT(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectInvisible : public CGameEffect {
