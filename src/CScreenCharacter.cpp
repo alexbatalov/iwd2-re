@@ -4203,9 +4203,8 @@ void CScreenCharacter::CheckMultiPlayerViewableModifyable()
     } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
     if (rc == CGameObjectArray::SUCCESS) {
-        m_bMultiPlayerViewable = g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL
-            ? g_pChitin->cNetwork.m_idLocalPlayer == pSprite->m_remotePlayerID
-            : TRUE;
+        // NOTE: Uninline.
+        m_bMultiPlayerViewable = pSprite->InControl();
         m_bMultiPlayerModifyable = m_bMultiPlayerViewable;
 
         if (!pSprite->Orderable(TRUE)) {

@@ -442,3 +442,13 @@ LONG CGameObject::GetId()
 {
     return m_id;
 }
+
+// 0x4530C0
+BOOLEAN CGameObject::InControl()
+{
+    if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+        return m_remotePlayerID == g_pChitin->cNetwork.m_idLocalPlayer;
+    } else {
+        return TRUE;
+    }
+}

@@ -4357,8 +4357,8 @@ BOOL CGameEffectDayBlindness::ApplyEffect(CGameSprite* pSprite)
                 pSprite->m_bonusStats.m_nSkills[skill] += nModifier;
             }
 
-            if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
-                || g_pChitin->cNetwork.m_idLocalPlayer == pSprite->m_remotePlayerID) {
+            // NOTE: Uninline.
+            if (pSprite->InControl()) {
                 pSprite->m_bSendSpriteUpdate = TRUE;
             }
         } else {

@@ -6172,8 +6172,8 @@ void CMessageDropPath::Run()
                 pSprite->SetSequence(CGameSprite::SEQ_READY);
             }
 
-            if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
-                || g_pChitin->cNetwork.m_idLocalPlayer == pSprite->m_remotePlayerID) {
+            // NOTE: Uninline.
+            if (pSprite->InControl()) {
                 pSprite->m_bSendSpriteUpdate = TRUE;
             }
         }
@@ -8771,8 +8771,8 @@ void CMessageSetSequence::Run()
 
             pSprite->SetSequence(m_sequence);
 
-            if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
-                || g_pChitin->cNetwork.m_idLocalPlayer == pSprite->m_remotePlayerID) {
+            // NOTE: Uninline.
+            if (pSprite->InControl()) {
                 pSprite->m_bSendSpriteUpdate = TRUE;
             }
         } else if (pObject->GetObjectType() == CGameObject::TYPE_STATIC) {
@@ -11628,8 +11628,8 @@ void CMessageStoreAddItem::Run()
                 } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
                 if (rc == CGameObjectArray::SUCCESS) {
-                    if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
-                        || g_pChitin->cNetwork.m_idLocalPlayer == pObject->m_remotePlayerID) {
+                    // NOTE: Uninline.
+                    if (pObject->InControl()) {
                         g_pBaldurChitin->m_pEngineStore->UpdateMainPanel();
                     }
 
@@ -11659,8 +11659,8 @@ void CMessageStoreAddItem::Run()
                     } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
                     if (rc == CGameObjectArray::SUCCESS) {
-                        if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
-                            || g_pChitin->cNetwork.m_idLocalPlayer == pObject->m_remotePlayerID) {
+                        // NOTE: Uninline.
+                        if (pObject->InControl()) {
                             g_pBaldurChitin->m_pEngineStore->UpdateMainPanel();
                         }
 

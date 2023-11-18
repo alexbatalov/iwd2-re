@@ -2408,11 +2408,8 @@ BOOL CScreenStore::IsCharacterViewable(SHORT nPortraitNum)
     } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
     if (rc == CGameObjectArray::SUCCESS) {
-        if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
-            bViewable = g_pChitin->cNetwork.m_idLocalPlayer == pSprite->m_remotePlayerID;
-        } else {
-            bViewable = TRUE;
-        }
+        // NOTE: Uninline.
+        bViewable = pSprite->InControl();
 
         pGame->GetObjectArray()->ReleaseShare(nCharacterId,
             CGameObjectArray::THREAD_ASYNCH,

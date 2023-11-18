@@ -530,8 +530,8 @@ void CGameContainer::RemoveFromArea()
 // 0x4801A0
 void CGameContainer::CompressContainer()
 {
-    if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
-        || g_pChitin->cNetwork.m_idLocalPlayer == m_remotePlayerID) {
+    // NOTE: Uninline.
+    if (InControl()) {
         POSITION pos = m_lstItems.GetHeadPosition();
         while (pos != NULL) {
             POSITION posOld = pos;
@@ -545,8 +545,8 @@ void CGameContainer::CompressContainer()
 
         g_pBaldurChitin->GetActiveEngine()->UpdateContainerStatus(m_id, -1);
 
-        if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
-            || g_pChitin->cNetwork.m_idLocalPlayer == m_remotePlayerID) {
+        // NOTE: Uninline.
+        if (InControl()) {
             if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
                 CMessageContainerItems* pContainerItems = new CMessageContainerItems(this,
                     m_id,
@@ -603,8 +603,8 @@ void CGameContainer::SetItem(SHORT nSlotNum, CItem* pItem)
     g_pBaldurChitin->GetActiveEngine()->UpdateContainerStatus(m_id, -1);
 
     if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
-        if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
-            || g_pChitin->cNetwork.m_idLocalPlayer == m_remotePlayerID) {
+        // NOTE: Uninline.
+        if (InControl()) {
             CMessageContainerItems* pContainerItems = new CMessageContainerItems(this,
                 m_id,
                 m_id);

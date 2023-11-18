@@ -4455,8 +4455,8 @@ BYTE CInfGame::GetCharactersControlled()
         } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
         if (rc == CGameObjectArray::SUCCESS) {
-            if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
-                || g_pChitin->cNetwork.m_idLocalPlayer == pObject->m_remotePlayerID) {
+            // NOTE: Uninline.
+            if (pObject->InControl()) {
                 bControlled |= 1 << nIndex;
             }
 

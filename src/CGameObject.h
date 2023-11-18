@@ -68,6 +68,7 @@ public:
 
     CGameArea* GetArea();
     LONG GetId();
+    BOOLEAN InControl();
 
     /* 0004 */ BYTE m_objectType;
     /* 0006 */ CPoint m_pos;

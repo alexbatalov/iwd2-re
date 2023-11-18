@@ -2441,8 +2441,8 @@ void CScreenInventory::CheckMultiPlayerViewable()
 
     if (rc == CGameObjectArray::SUCCESS) {
         if (pSprite->Orderable(1)) {
-            if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL
-                || g_pChitin->cNetwork.m_idLocalPlayer == pSprite->m_remotePlayerID) {
+            // NOTE: Uninline.
+            if (pSprite->InControl()) {
                 m_bMultiPlayerViewable = TRUE;
             } else {
                 if (g_pChitin->cNetwork.GetSessionOpen()) {
@@ -3280,12 +3280,8 @@ void CUIControlButtonInventorySlot::OnRButtonClick(CPoint pt)
         } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
         if (rc == CGameObjectArray::SUCCESS) {
-            BOOLEAN bIsLocal;
-            if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
-                bIsLocal = g_pChitin->cNetwork.m_idLocalPlayer == pSprite->m_remotePlayerID;
-            } else {
-                bIsLocal = TRUE;
-            }
+            // NOTE: Uninline.
+            BOOLEAN bIsLocal = pSprite->InControl();
 
             pGame->GetObjectArray()->ReleaseShare(nCharacterId,
                 CGameObjectArray::THREAD_1,
