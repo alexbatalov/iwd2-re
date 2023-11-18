@@ -506,7 +506,7 @@ public:
     /* 013C */ int field_13C;
     /* 0140 */ int field_140;
     /* 0144 */ BYTE m_nSkills[64];
-    /* 0184 */ int field_184;
+    /* 0184 */ BOOL m_bPreventAISlowDown;
 };
 
 #pragma pack(pop)

@@ -150,7 +150,7 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
     field_138 = 0;
     field_13C = 0;
     field_140 = 0;
-    field_184 = 0;
+    m_bPreventAISlowDown = FALSE;
 
     // TODO: Incomplete.
 
@@ -472,7 +472,7 @@ void CDerivedStats::BonusInit()
     field_138 = 0;
     field_13C = 0;
     field_140 = 0;
-    field_184 = 0;
+    m_bPreventAISlowDown = FALSE;
 
     // TODO: Incomplete.
 
@@ -559,7 +559,7 @@ CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
     m_visualEffects |= other.m_visualEffects;
     m_nStoneSkins += other.m_nStoneSkins;
     m_bCasterHold |= other.m_bCasterHold;
-    field_184 |= other.field_184;
+    m_bPreventAISlowDown |= other.m_bPreventAISlowDown;
     m_nDamageModFire += other.m_nDamageModFire;
     m_nDamageModCold += other.m_nDamageModCold;
     m_nDamageModElectricity += other.m_nDamageModElectricity;
@@ -843,7 +843,7 @@ LONG CDerivedStats::GetAtOffset(SHORT offset)
         // NOTE: Uninline.
         return GetClassLevel(offset - STAT_CLASSLEVELSUM);
     case STAT_107:
-        return field_184;
+        return m_bPreventAISlowDown;
     default:
         return 0;
     }
@@ -991,7 +991,7 @@ void CDerivedStats::Unmarshal(BYTE* pStats, LONG nStats)
     field_138 = pTemplate->field_138;
     field_13C = pTemplate->field_13C;
     field_140 = pTemplate->field_140;
-    field_184 = pTemplate->field_184;
+    m_bPreventAISlowDown = pTemplate->m_bPreventAISlowDown;
 }
 
 // 0x447940

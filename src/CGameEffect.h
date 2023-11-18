@@ -1858,6 +1858,7 @@ class CGameEffectPreventAISlowdown : public CGameEffect {
 public:
     CGameEffectPreventAISlowdown(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 #endif /* CGAMEEFFECT_H_ */

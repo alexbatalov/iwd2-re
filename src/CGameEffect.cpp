@@ -9712,3 +9712,10 @@ CGameEffect* CGameEffectPreventAISlowdown::Copy()
     copy->CopyFromBase(this);
     return copy;
 }
+
+// 0x4C3F10
+BOOL CGameEffectPreventAISlowdown::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetDerivedStats()->m_bPreventAISlowDown = m_dwFlags;
+    return TRUE;
+}
