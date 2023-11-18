@@ -310,6 +310,7 @@ public:
     void sub_4C3F30(CGameSprite* pSprite, INT nValue);
     void AdjustResistMagic(CGameSprite* pSprite, SHORT nValue);
     void AdjustTHAC0(CGameSprite* pSprite, SHORT nValue);
+    void AdjustSTR(CGameSprite* pSprite, INT nValue);
     void AdjustDEX(CGameSprite* pSprite, INT nValue);
     void Immobilize(CGameSprite* pSprite);
     void AddSlowEffect(CGameSprite* pSprite);
@@ -623,6 +624,7 @@ class CGameEffectSTR : public CGameEffect {
 public:
     CGameEffectSTR(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectStun : public CGameEffect {

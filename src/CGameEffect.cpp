@@ -1385,6 +1385,16 @@ void CGameEffect::AdjustTHAC0(CGameSprite* pSprite, SHORT nValue)
     pSprite->GetDerivedStats()->m_nTHAC0 += nValue;
 }
 
+// NOTE: Convenience.
+void CGameEffect::AdjustSTR(CGameSprite* pSprite, INT nValue)
+{
+    if ((nValue > 0 && nValue > pSprite->GetDerivedStats()->field_128)
+        || (nValue < 0 && nValue < pSprite->GetDerivedStats()->field_128)) {
+        pSprite->m_bonusStats.m_nSTR += static_cast<SHORT>(nValue) - static_cast<SHORT>(pSprite->GetDerivedStats()->field_128);
+        pSprite->GetDerivedStats()->field_128 = nValue;
+    }
+}
+
 // 0x4C3FC0
 void CGameEffect::AdjustDEX(CGameSprite* pSprite, INT nValue)
 {
@@ -3306,6 +3316,50 @@ CGameEffect* CGameEffectSTR::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4B2360
+BOOL CGameEffectSTR::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        if (m_durationType == 1) {
+            pSprite->GetBaseStats()->m_STRBase = min(max(pSprite->GetBaseStats()->m_STRBase + static_cast<SHORT>(m_effectAmount), 1), 40);
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+        } else {
+            // NOTE: Uninline.
+            AdjustSTR(pSprite, m_effectAmount);
+            m_done = FALSE;
+        }
+        break;
+    case 1:
+        if (m_durationType == 1) {
+            pSprite->GetBaseStats()->m_STRBase = min(max(static_cast<SHORT>(m_effectAmount), 1), 40);
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+        } else {
+            pSprite->GetDerivedStats()->m_nSTR = min(max(static_cast<SHORT>(m_effectAmount), 1), 40);
+            m_done = FALSE;
+        }
+        break;
+    case 2:
+        if (m_durationType == 1) {
+            pSprite->GetBaseStats()->m_STRBase = min(max(pSprite->GetBaseStats()->m_STRBase * static_cast<SHORT>(m_effectAmount) / 100, 1), 40);
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+        } else {
+            pSprite->GetDerivedStats()->m_nSTR = min(max(pSprite->GetBaseStats()->m_STRBase * static_cast<SHORT>(m_effectAmount) / 100, 1), 40);
+            m_done = FALSE;
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 11439
+        UTIL_ASSERT(FALSE);
+    }
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------
