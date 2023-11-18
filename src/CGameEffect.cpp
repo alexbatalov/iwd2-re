@@ -5410,6 +5410,59 @@ CGameEffect* CGameEffectSkillTraps::Copy()
     return copy;
 }
 
+// 0x4B6EE0
+BOOL CGameEffectSkillTraps::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        if (m_durationType == 1) {
+            // NOTE: Signed compare.
+            pSprite->GetBaseStats()->m_skills[CGAMESPRITE_SKILL_SEARCH] = max(static_cast<signed char>(pSprite->GetBaseStats()->m_skills[CGAMESPRITE_SKILL_SEARCH]) + static_cast<signed char>(m_effectAmount), 0);
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+        } else {
+            pSprite->m_bonusStats.m_nSkills[CGAMESPRITE_SKILL_SEARCH] += static_cast<BYTE>(m_effectAmount);
+            m_done = FALSE;
+        }
+        break;
+    case 1:
+        if (m_durationType == 1) {
+            // NOTE: Signed compare.
+            pSprite->GetBaseStats()->m_skills[CGAMESPRITE_SKILL_SEARCH] = max(static_cast<signed char>(m_effectAmount), 0);
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+        } else {
+            // NOTE: Signed compare.
+            pSprite->GetDerivedStats()->m_nSkills[CGAMESPRITE_SKILL_SEARCH] = max(static_cast<signed char>(m_effectAmount), 0);
+            m_done = FALSE;
+        }
+        break;
+    case 2:
+        if (m_durationType == 1) {
+            // NOTE: Signed compare.
+            pSprite->GetBaseStats()->m_skills[CGAMESPRITE_SKILL_SEARCH] = max(static_cast<signed char>(pSprite->GetBaseStats()->m_skills[CGAMESPRITE_SKILL_SEARCH] * static_cast<SHORT>(m_effectAmount) / 100), 0);
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+        } else {
+            // NOTE: Signed compare.
+            pSprite->GetDerivedStats()->m_nSkills[CGAMESPRITE_SKILL_SEARCH] = max(static_cast<signed char>(pSprite->GetBaseStats()->m_skills[CGAMESPRITE_SKILL_SEARCH] * static_cast<SHORT>(m_effectAmount) / 100), 0);
+            m_done = FALSE;
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 15326
+        UTIL_ASSERT(FALSE);
+    }
+
+    // NOTE: Uninline.
+    if (pSprite->InControl()) {
+        pSprite->m_bSendSpriteUpdate = TRUE;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
