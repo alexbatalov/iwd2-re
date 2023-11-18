@@ -997,6 +997,20 @@ SHORT CGameAIBase::StartMusic()
     return ACTION_DONE;
 }
 
+// 0x4668E0
+SHORT CGameAIBase::SetMusic()
+{
+    if (m_pArea == NULL) {
+        return ACTION_ERROR;
+    }
+
+    if (!m_pArea->SetSong(static_cast<SHORT>(m_curAction.m_specificID), static_cast<BYTE>(m_curAction.m_specificID2))) {
+        return ACTION_ERROR;
+    }
+
+    return ACTION_DONE;
+}
+
 // 0x467110
 SHORT CGameAIBase::Lock(CGameAIBase* pObject)
 {
