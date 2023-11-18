@@ -56,6 +56,7 @@ public:
     static CGameEffect* sub_5853B0(CGameObject* pObject, DWORD numDice, DWORD diceSize, LONG effectAmount, BYTE spellLevel, DWORD savingThrow);
     static CGameEffect* sub_5853E0(CGameObject* pObject, DWORD numDice, DWORD diceSize, LONG effectAmount, BYTE spellLevel, DWORD savingThrow);
     static CGameEffect* sub_585410(CGameObject* pObject, DWORD numDice, DWORD diceSize, LONG effectAmount, BYTE spellLevel, DWORD savingThrow);
+    static CGameEffect* CreateEffectImmunityToBackstab(CGameObject* pObject, DWORD duration);
     static CGameEffect* CreateEffectSTR(CGameObject* pObject, int effectAmount, DWORD duration, BYTE spellLevel);
     static CGameEffect* CreateEffectBerserk(CGameObject* pObject, DWORD duration, BYTE spellLevel, DWORD savingThrow);
     static CGameEffect* CreateEffectPortraitIcon(CGameObject* pObject, DWORD dwFlags, DWORD duration, BYTE spellLevel, DWORD savingThrow);

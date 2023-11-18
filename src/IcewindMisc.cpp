@@ -8,6 +8,7 @@
 #include "CInfGame.h"
 #include "CSpell.h"
 #include "CUtil.h"
+#include "IcewindCGameEffects.h"
 
 // 0x5845D0
 INT IcewindMisc::Roll(INT nRolls, INT nSides)
@@ -590,6 +591,29 @@ CGameEffect* IcewindMisc::CreateEffectDamage(CGameObject* pObject, DWORD dwFlags
     if (pObject->GetObjectType() == CGameObject::TYPE_SPRITE) {
         sub_5860F0(static_cast<CGameSprite*>(pObject), pEffect);
     }
+
+    return pEffect;
+}
+
+// 0x585510
+CGameEffect* IcewindMisc::CreateEffectImmunityToBackstab(CGameObject* pObject, DWORD duration)
+{
+    ITEM_EFFECT effect;
+    CGameEffect::ClearItemEffect(&effect, ICEWIND_CGAMEEFFECT_IMMUNITYTOBACKSTAB);
+    effect.spellLevel = 0;
+    effect.durationType = 0;
+    effect.savingThrow = 0;
+    effect.duration = duration;
+    effect.targetType = 2;
+
+    CGameEffect* pEffect = CGameEffect::DecodeEffect(&effect,
+        CPoint(-1, -1),
+        -1,
+        CPoint(-1, -1));
+
+    pEffect->m_source = pObject->GetPos();
+    pEffect->m_sourceID = pObject->GetId();
+    pEffect->m_flags &= ~0x1;
 
     return pEffect;
 }
