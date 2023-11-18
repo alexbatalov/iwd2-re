@@ -712,6 +712,28 @@ CGameEffect* IcewindMisc::CreateEffectDisplayString(CGameObject* pObject, int ef
     return pEffect;
 }
 
+// 0x585830
+CGameEffect* IcewindMisc::CreateEffectVisualSpellHit(CGameObject* pObject, DWORD dwFlags, BYTE spellLevel, DWORD savingThrow)
+{
+    ITEM_EFFECT effect;
+    CGameEffect::ClearItemEffect(&effect, ICEWIND_CGAMEEFFECT_VISUALSPELLHIT);
+    effect.dwFlags = dwFlags;
+    effect.durationType = 1;
+    effect.spellLevel = spellLevel;
+    effect.savingThrow = savingThrow;
+    effect.targetType = 2;
+
+    CGameEffect* pEffect = CGameEffect::DecodeEffect(&effect,
+        CPoint(-1, -1),
+        -1,
+        CPoint(-1, -1));
+
+    pEffect->m_source = pObject->GetPos();
+    pEffect->m_sourceID = pObject->GetId();
+
+    return pEffect;
+}
+
 // 0x5858D0
 CGameEffect* IcewindMisc::CreateEffectHitPoints(CGameObject* pObject, int effectAmount, DWORD duration, BYTE spellLevel, BYTE targetType)
 {
