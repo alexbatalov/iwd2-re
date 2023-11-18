@@ -4046,6 +4046,37 @@ CGameEffect* CGameEffectHideInShadows::Copy()
     return copy;
 }
 
+// 0x4B4080
+BOOL CGameEffectHideInShadows::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        if (m_durationType == 9) {
+            pSprite->m_bonusStats.m_nHideInShadowsMTPBonus += m_effectAmount;
+        } else {
+            pSprite->m_bonusStats.m_nSkills[CGAMESPRITE_SKILL_HIDE] += static_cast<BYTE>(m_effectAmount);
+        }
+        break;
+    case 1:
+        pSprite->GetDerivedStats()->m_nSkills[CGAMESPRITE_SKILL_HIDE] = static_cast<BYTE>(m_effectAmount);
+        break;
+    case 2:
+        pSprite->GetDerivedStats()->m_nSkills[CGAMESPRITE_SKILL_HIDE] = pSprite->GetBaseStats()->m_skills[CGAMESPRITE_SKILL_HIDE] * static_cast<SHORT>(m_effectAmount) / 100;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 12617
+        UTIL_ASSERT(FALSE);
+    }
+
+    // NOTE: Uninline.
+    if (pSprite->InControl()) {
+        pSprite->m_bSendSpriteUpdate = TRUE;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
