@@ -2461,6 +2461,35 @@ CGameEffect* CGameEffectPanic::Copy()
     return copy;
 }
 
+// 0x4AF500
+BOOL CGameEffectPanic::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        // NOTE: Uninline.
+        DisplayStringRef(pSprite, 14007);
+    }
+
+    // NOTE: Uninline.
+    AddPortraitIcon(pSprite, 36);
+
+    if (m_dwFlags == 1) {
+        pSprite->GetDerivedStats()->m_generalState |= STATE_HELPLESS | STATE_STUNNED;
+        pSprite->field_9D15 = 1;
+    }
+
+    pSprite->sub_761650();
+
+    if (m_durationType == 1) {
+        pSprite->GetBaseStats()->m_generalState |= STATE_PANIC;
+        m_forceRepass = TRUE;
+        m_done = TRUE;
+    } else {
+        pSprite->GetDerivedStats()->m_generalState |= STATE_PANIC;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
