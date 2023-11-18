@@ -951,6 +951,7 @@ class CGameEffectSkillPickPocket : public CGameEffect {
 public:
     CGameEffectSkillPickPocket(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectSkillUseMagicDevice : public CGameEffect {
