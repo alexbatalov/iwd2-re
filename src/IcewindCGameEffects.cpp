@@ -100,24 +100,6 @@ BOOL IcewindCGameEffectPrayer::ApplyEffect(CGameSprite* pSprite)
 
 // -----------------------------------------------------------------------------
 
-// 0x49DE40
-IcewindCGameEffectRecitation::IcewindCGameEffectRecitation(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
-    : CGameEffect(effect, source, sourceID, target, FALSE)
-{
-}
-
-// 0x49DE80
-CGameEffect* IcewindCGameEffectRecitation::Copy()
-{
-    ITEM_EFFECT* effect = GetItemEffect();
-    IcewindCGameEffectRecitation* copy = new IcewindCGameEffectRecitation(effect, m_source, m_sourceID, m_target);
-    delete effect;
-    copy->CopyFromBase(this);
-    return copy;
-}
-
-// -----------------------------------------------------------------------------
-
 // 0x49DF30
 IcewindCGameEffectRighteousWrathOfFaithful::IcewindCGameEffectRighteousWrathOfFaithful(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
     : CGameEffect(effect, source, sourceID, target, FALSE)
@@ -181,6 +163,68 @@ BOOL IcewindCGameEffectRighteousWrathOfFaithful::ApplyEffect(CGameSprite* pSprit
             if (pSprite->GetDerivedStats()->m_nNumberOfAttacks < 5) {
                 pSprite->GetDerivedStats()->m_nNumberOfAttacks++;
             }
+        }
+        break;
+    }
+    return TRUE;
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x49DE40
+IcewindCGameEffectRecitation::IcewindCGameEffectRecitation(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
+    : CGameEffect(effect, source, sourceID, target, FALSE)
+{
+}
+
+// 0x49DE80
+CGameEffect* IcewindCGameEffectRecitation::Copy()
+{
+    ITEM_EFFECT* effect = GetItemEffect();
+    IcewindCGameEffectRecitation* copy = new IcewindCGameEffectRecitation(effect, m_source, m_sourceID, m_target);
+    delete effect;
+    copy->CopyFromBase(this);
+    return copy;
+}
+
+// 0x55EBB0
+BOOL IcewindCGameEffectRecitation::ApplyEffect(CGameSprite* pSprite)
+{
+    SHORT nModifier;
+
+    switch (m_dwFlags) {
+    case 0:
+        if (!pSprite->GetDerivedStats()->m_spellStates.test(SPLSTATE_BENEFICIAL_RECITATION)) {
+            pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_BENEFICIAL_RECITATION, true);
+
+            // NOTE: Uninline.
+            AddPortraitIcon(pSprite, 64);
+
+            AddColorEffect(pSprite, 160, 128, 96, 30);
+
+            nModifier = 2;
+            pSprite->GetDerivedStats()->m_nDamageBonus += nModifier;
+            pSprite->GetDerivedStats()->m_nTHAC0 += nModifier;
+            pSprite->GetDerivedStats()->m_nSaveVSFortitude += nModifier;
+            pSprite->GetDerivedStats()->m_nSaveVSReflex += nModifier;
+            pSprite->GetDerivedStats()->m_nSaveVSWill += nModifier;
+        }
+        break;
+    case 1:
+        if (!pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_DETRIMENTAL_RECITATION]) {
+            pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_DETRIMENTAL_RECITATION, true);
+
+            // NOTE: Uninline.
+            AddPortraitIcon(pSprite, 35);
+
+            AddColorEffect(pSprite, 128, 0, 192, 30);
+
+            nModifier = -2;
+            pSprite->GetDerivedStats()->m_nDamageBonus += nModifier;
+            pSprite->GetDerivedStats()->m_nTHAC0 += nModifier;
+            pSprite->GetDerivedStats()->m_nSaveVSFortitude += nModifier;
+            pSprite->GetDerivedStats()->m_nSaveVSReflex += nModifier;
+            pSprite->GetDerivedStats()->m_nSaveVSWill += nModifier;
         }
         break;
     }

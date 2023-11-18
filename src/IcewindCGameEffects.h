@@ -159,6 +159,7 @@ class IcewindCGameEffectRecitation : public CGameEffect {
 public:
     IcewindCGameEffectRecitation(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite);
 };
 
 class IcewindCGameEffectSavingThrowChange : public CGameEffect {
