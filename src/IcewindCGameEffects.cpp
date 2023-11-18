@@ -58,6 +58,46 @@ CGameEffect* IcewindCGameEffectPrayer::Copy()
     return copy;
 }
 
+// 0x55E850
+BOOL IcewindCGameEffectPrayer::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        if (!pSprite->GetDerivedStats()->m_spellStates.test(SPLSTATE_BENEFICIAL_PRAYER)) {
+            pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_BENEFICIAL_PRAYER, true);
+
+            // NOTE: Uninline.
+            AddPortraitIcon(pSprite, 62);
+
+            AddColorEffect(pSprite, 215, 182, 0, 30);
+
+            pSprite->GetDerivedStats()->m_nDamageBonus++;
+            pSprite->GetDerivedStats()->m_nTHAC0++;
+            pSprite->GetDerivedStats()->m_nSaveVSFortitude++;
+            pSprite->GetDerivedStats()->m_nSaveVSReflex++;
+            pSprite->GetDerivedStats()->m_nSaveVSWill++;
+        }
+        break;
+    case 1:
+        if (!pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_DETRIMENTAL_PRAYER]) {
+            pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_DETRIMENTAL_PRAYER, true);
+
+            // NOTE: Uninline.
+            AddPortraitIcon(pSprite, 35);
+
+            AddColorEffect(pSprite, 128, 0, 92, 30);
+
+            pSprite->GetDerivedStats()->m_nDamageBonus--;
+            pSprite->GetDerivedStats()->m_nTHAC0--;
+            pSprite->GetDerivedStats()->m_nSaveVSFortitude--;
+            pSprite->GetDerivedStats()->m_nSaveVSReflex--;
+            pSprite->GetDerivedStats()->m_nSaveVSWill--;
+        }
+        break;
+    }
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49DE40
