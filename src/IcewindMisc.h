@@ -69,6 +69,7 @@ public:
     static CGameEffect* CreateEffectDamage(CGameObject* pObject, DWORD dwFlags, DWORD numDice, DWORD diceSize, LONG effectAmount, BYTE spellLevel, DWORD savingThrow);
     static CGameEffect* CreateEffectStun(CGameObject* pObject, DWORD duration, BYTE spellLevel, DWORD savingThrow);
     static CGameEffect* CreateEffectSkillUnsummon(CGameObject* pObject, DWORD duration, BYTE spellLevel);
+    static CGameEffect* CreateEffectColorGlowDissipate(BYTE a1, BYTE a2, BYTE a3, BYTE a4);
     static INT GetSneakAttackRolls(CGameSprite* pSprite);
     static INT GetSneakAttackDice();
     static INT sub_585D90();

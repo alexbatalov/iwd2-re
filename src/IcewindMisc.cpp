@@ -884,6 +884,25 @@ CGameEffect* IcewindMisc::CreateEffectSkillUnsummon(CGameObject* pObject, DWORD 
     return pEffect;
 }
 
+// 0x585CC0
+CGameEffect* IcewindMisc::CreateEffectColorGlowDissipate(BYTE a1, BYTE a2, BYTE a3, BYTE a4)
+{
+    ITEM_EFFECT effect;
+    CGameEffect::ClearItemEffect(&effect, ICEWIND_CGAMEEFFECT_COLORGLOWDISSIPATE);
+    effect.dwFlags = a4 << 16;
+    effect.targetType = 2;
+    effect.savingThrow = 0;
+    effect.effectAmount = (a3 << 24) | (a2 << 16) | (a1 << 8);
+    effect.durationType = 1;
+
+    CGameEffect* pEffect = CGameEffect::DecodeEffect(&effect,
+        CPoint(-1, -1),
+        -1,
+        CPoint(-1, -1));
+
+    return pEffect;
+}
+
 // 0x585D50
 INT IcewindMisc::GetSneakAttackRolls(CGameSprite* pSprite)
 {
