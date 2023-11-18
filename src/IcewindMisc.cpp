@@ -793,6 +793,28 @@ CGameEffect* IcewindMisc::CreateEffectImmunitySpell(CGameObject* pObject, const 
     return pEffect;
 }
 
+// 0x585A40
+CGameEffect* IcewindMisc::CreateEffectRemoveAllOfType(CGameObject* pObject, DWORD dwFlags, BYTE spellLevel)
+{
+    ITEM_EFFECT effect;
+    CGameEffect::ClearItemEffect(&effect, ICEWIND_CGAMEEFFECT_REMOVEALLOFTYPE);
+    effect.spellLevel = spellLevel;
+    effect.durationType = 1;
+    effect.dwFlags = dwFlags;
+    effect.targetType = 2;
+    effect.savingThrow = 0;
+
+    CGameEffect* pEffect = CGameEffect::DecodeEffect(&effect,
+        CPoint(-1, -1),
+        -1,
+        CPoint(-1, -1));
+
+    pEffect->m_source = pObject->GetPos();
+    pEffect->m_sourceID = pObject->GetId();
+
+    return pEffect;
+}
+
 // 0x585AE0
 CGameEffect* IcewindMisc::CreateEffectConfusion(CGameObject* pObject, DWORD duration, BYTE spellLevel, DWORD savingThrow)
 {
