@@ -6413,6 +6413,91 @@ CGameEffect* CGameEffectImmuneToWeapon::Copy()
     return copy;
 }
 
+// 0x4B8A90
+BOOL CGameEffectImmuneToWeapon::ApplyEffect(CGameSprite* pSprite)
+{
+    CWeaponIdentification* pWeaponId = new CWeaponIdentification();
+
+    switch (m_dwFlags) {
+    case 0:
+        pWeaponId->m_itemType = 0;
+        pWeaponId->m_itemFlags = 0;
+        pWeaponId->m_itemFlagMask = 0;
+        pWeaponId->m_attributes = m_effectAmount;
+        break;
+    case 1:
+        pWeaponId->m_itemType = 0;
+        pWeaponId->m_itemFlags = 0x40;
+        pWeaponId->m_itemFlagMask = 0x40;
+        pWeaponId->m_attributes = -1;
+        break;
+    case 2:
+        pWeaponId->m_itemType = 0;
+        pWeaponId->m_itemFlags = 0;
+        pWeaponId->m_itemFlagMask = 0x40;
+        pWeaponId->m_attributes = -1;
+        break;
+    case 3:
+        pWeaponId->m_itemType = 0;
+        pWeaponId->m_itemFlags = 0x100;
+        pWeaponId->m_itemFlagMask = 0x100;
+        pWeaponId->m_attributes = -1;
+        break;
+    case 4:
+        pWeaponId->m_itemType = 0;
+        pWeaponId->m_itemFlags = 0;
+        pWeaponId->m_itemFlagMask = 0x100;
+        pWeaponId->m_attributes = -1;
+        break;
+    case 5:
+        pWeaponId->m_itemType = 0;
+        pWeaponId->m_itemFlags = 0;
+        pWeaponId->m_itemFlagMask = 0x100;
+        pWeaponId->m_attributes = 0;
+        break;
+    case 6:
+        pWeaponId->m_itemType = 0;
+        pWeaponId->m_itemFlags = 0x2;
+        pWeaponId->m_itemFlagMask = 0x2;
+        pWeaponId->m_attributes = -1;
+        break;
+    case 7:
+        pWeaponId->m_itemType = 0;
+        pWeaponId->m_itemFlags = 0;
+        pWeaponId->m_itemFlagMask = 0x2;
+        pWeaponId->m_attributes = -1;
+        break;
+    case 8:
+        pWeaponId->m_itemType = 0;
+        pWeaponId->m_itemFlags = 0x10;
+        pWeaponId->m_itemFlagMask = 0x10;
+        pWeaponId->m_attributes = -1;
+        break;
+    case 9:
+        pWeaponId->m_itemType = 0;
+        pWeaponId->m_itemFlags = 0;
+        pWeaponId->m_itemFlagMask = 0x10;
+        pWeaponId->m_attributes = -1;
+        break;
+    case 0xA:
+        pWeaponId->m_itemType = 0;
+        pWeaponId->m_itemFlags = 0x200;
+        pWeaponId->m_itemFlagMask = 0x200;
+        pWeaponId->m_attributes = -1;
+        break;
+    case 0xB:
+        pWeaponId->m_itemType = 0;
+        pWeaponId->m_itemFlags = 0;
+        pWeaponId->m_itemFlagMask = 0x200;
+        pWeaponId->m_attributes = -1;
+        break;
+    }
+
+    pSprite->GetDerivedStats()->m_cImmunitiesWeapon.AddTail(pWeaponId);
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
