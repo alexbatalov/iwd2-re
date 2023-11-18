@@ -446,6 +446,38 @@ CGameEffect* IcewindCGameEffectSlowPoison::Copy()
     return copy;
 }
 
+// 0x55F180
+BOOL IcewindCGameEffectSlowPoison::ApplyEffect(CGameSprite* pSprite)
+{
+    POSITION pos = pSprite->GetTimedEffectList()->GetHeadPosition();
+    while (pos != NULL) {
+        CGameEffect* pEffect = pSprite->GetTimedEffectList()->GetNext(pos);
+        if (pEffect->m_effectID == CGAMEEFFECT_POISON) {
+            switch (m_dwFlags) {
+            case 2:
+                pEffect->m_dwFlags = 4;
+                pEffect->m_duration = 8 * pEffect->m_duration
+                    - 7 * g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime;
+                break;
+            case 3:
+                pEffect->m_effectAmount *= 7;
+                pEffect->m_duration = 8 * pEffect->m_duration
+                    - 7 * g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime;
+                break;
+            case 4:
+                m_dwFlags = 5;
+                pEffect->m_duration = 8 * pEffect->m_duration
+                    - 7 * g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime;
+                break;
+            }
+        }
+    }
+    m_forceRepass = TRUE;
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49E200
