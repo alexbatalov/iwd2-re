@@ -534,7 +534,7 @@ public:
     BOOL HasClass(INT iClassType);
     INT GetBestClass();
 
-    /* 0188 */ CPtrList field_188;
+    /* 0188 */ CImmunitiesProjectile m_cImmunitiesProjectile;
     /* 01A4 */ CImmunitiesEffect m_cImmunitiesEffect;
     /* 01C0 */ CImmunitiesAIType m_cImmunitiesAIType;
     /* 01DC */ CImmunitiesSpellLevel m_cImmunitiesSpellLevel;
@@ -545,12 +545,12 @@ public:
     /* 0274 */ CImmunitiesItemTypeEquipList m_cImmunitiesItemTypeEquip;
     /* 0290 */ CImmunitiesItemEquipList field_290;
     /* 02AC */ CImmunitiesItemTypeEquipList field_2AC;
-    /* 02C8 */ CPtrList field_2C8;
+    /* 02C8 */ CImmunitiesProjectile m_cBounceProjectile;
     /* 02E4 */ CImmunitiesEffect m_cBounceEffect;
-    /* 03C8 */ CPtrList field_3C8;
-    /* 03E4 */ CPtrList field_3E4;
-    /* 0400 */ CPtrList field_400;
-    /* 041C */ CPtrList field_41C;
+    /* 03C8 */ CImmunitiesProjectile field_3C8;
+    /* 03E4 */ CImmunitiesProjectile field_3E4;
+    /* 0400 */ CImmunitiesProjectile field_400;
+    /* 041C */ CImmunitiesProjectile field_41C;
     /* 0438 */ CImmunitiesItemEquipList m_cImmunitiesItemUse;
     /* 0454 */ CImmunitiesItemTypeEquipList m_cImmunitiesItemTypeUse;
     /* 04AC */ CPtrList field_4AC;

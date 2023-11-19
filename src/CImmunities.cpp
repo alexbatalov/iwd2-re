@@ -463,3 +463,32 @@ CImmunitiesItemTypeEquipList& CImmunitiesItemTypeEquipList::operator=(const CImm
 
     return *this;
 }
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Inlined.
+BOOL CImmunitiesProjectile::OnList(DWORD projectileType)
+{
+    POSITION pos = GetHeadPosition();
+    while (pos != NULL) {
+        DWORD node = reinterpret_cast<DWORD>(GetNext(pos));
+        if (node == projectileType) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+// 0x4E7650
+CImmunitiesProjectile& CImmunitiesProjectile::operator=(const CImmunitiesProjectile& other)
+{
+    // FIXME: Missing `ClearAll`.
+
+    POSITION pos = other.GetHeadPosition();
+    while (pos != NULL) {
+        DWORD projectileType = reinterpret_cast<DWORD>(other.GetNext(pos));
+        AddTail(reinterpret_cast<DWORD*>(projectileType));
+    }
+
+    return *this;
+}

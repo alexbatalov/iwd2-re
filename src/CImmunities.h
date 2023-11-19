@@ -106,4 +106,10 @@ public:
     CImmunitiesItemTypeEquipList& operator=(const CImmunitiesItemTypeEquipList& other);
 };
 
+class CImmunitiesProjectile : public CTypedPtrList<CPtrList, DWORD*> {
+public:
+    BOOL OnList(DWORD projectileType);
+    CImmunitiesProjectile& operator=(const CImmunitiesProjectile& other);
+};
+
 #endif /* CIMMUNITIES_H_ */
