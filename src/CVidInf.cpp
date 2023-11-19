@@ -1215,7 +1215,7 @@ BOOL CVidInf::FXRender(CVidCell* pVidCell, INT nRefPtX, INT nRefPtY, const CRect
             FALSE);
     }
 
-    if (m_SurfaceDesc.lpSurface == NULL) {
+    if (m_SurfaceDesc.lpSurface != NULL) {
         return pVidCell->Render(reinterpret_cast<WORD*>(m_SurfaceDesc.lpSurface),
             m_SurfaceDesc.lPitch,
             nRefPtX,
