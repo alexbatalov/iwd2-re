@@ -2580,12 +2580,12 @@ BOOL CVidCell::FXRender3d(INT nRefPtX, INT nRefPtY, const CRect& rFXRect, const 
 
     LONG lPitch = g_pChitin->cVideo.field_13A
         ? CVidTile::BYTES_PER_TEXEL * CVIDINF_FX_WIDTH
-        : CVidTile::BYTES_PER_TEXEL * m_pFrame->nWidth;
+        : CVidTile::BYTES_PER_TEXEL * rFXRect.Width();
 
     bResult = Blt8To32(CVideo3d::texImageData,
         lPitch,
         pt,
-        rClip,
+        r,
         dwFlags,
         CPoint(0, 0),
         bAlphaValues);
