@@ -2356,7 +2356,7 @@ void CScreenMultiPlayer::SetPermissionToolTips(CUIPanel* pPanel, DWORD nHeaderID
         pControl->SetToolTipStrRef(strRef, -1, -1);
     }
 
-    for (DWORD nButtonID = nFirstButtonID; nButtonID < nLastButtonID; nButtonID++) {
+    for (DWORD nButtonID = nFirstButtonID; nButtonID <= nLastButtonID; nButtonID++) {
         pControl = pPanel->GetControl(nButtonID);
 
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMultiPlayer.cpp
