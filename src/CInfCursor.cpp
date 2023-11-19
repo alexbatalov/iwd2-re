@@ -440,6 +440,7 @@ BOOL CInfToolTip::FrameAdvance()
 
         field_5DE = field_5E6 + static_cast<SHORT>(frameSize1.cx / 2 + frameSize2.cx / 2);
         field_5E2 = 2;
+        break;
     case 1:
         field_5DA--;
         if (field_5DA < 0) {
@@ -459,13 +460,14 @@ BOOL CInfToolTip::FrameAdvance()
         if (field_5DE <= frameSize1.cx / 2 + frameSize2.cx / 2) {
             field_5E2 = 3;
         }
-
         break;
     case 2:
         GetFrameSize(1, field_5DA, frameSize1, FALSE);
         GetFrameSize(2, field_5DC, frameSize2, FALSE);
 
         field_5DE = field_5E6 + static_cast<SHORT>(frameSize1.cx / 2 + frameSize2.cx / 2);
+        break;
+    case 3:
         break;
     default:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfCursor.cpp
