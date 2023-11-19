@@ -458,6 +458,172 @@ BOOL CInfToolTip::GetFrame()
     return m_pFrame != NULL;
 }
 
+// 0x598940
+void CInfToolTip::SetTextRef(const STRREF& textRef, const CString& sExtra)
+{
+    STR_RES strRes;
+    BYTE nLine;
+    BYTE nLines;
+
+    field_5E6 = 0;
+
+    for (int index = 0; index < 2; index++) {
+        field_5EC[index] = "";
+    }
+
+    CSize size1;
+    GetFrameSize(1, field_5DA, size1, TRUE);
+
+    CSize size2;
+    GetFrameSize(2, field_5DC, size2, TRUE);
+
+    WORD nMaxWidth = static_cast<WORD>(field_5E4 - size2.cx - size1.cx);
+
+    m_font.GetRes()->Demand();
+
+    if (sExtra != "") {
+        if (textRef != -1 && g_pBaldurChitin->GetTlkTable().Fetch(textRef, strRes)) {
+            field_5EC[0] = strRes.szText;
+            CUtil::TrimRight(field_5EC[0]);
+            nLines = CUtil::SplitString(&m_font,
+                sExtra,
+                nMaxWidth - 8,
+                1,
+                &(field_5EC[1]),
+                FALSE,
+                TRUE,
+                TRUE,
+                -1);
+        } else {
+            int pos = CUtil::Find(sExtra, '\n', 0);
+            if (pos != -1) {
+                field_5EC[0] = sExtra.Left(pos);
+                CUtil::TrimRight(field_5EC[0]);
+                nLines = CUtil::SplitString(&m_font,
+                    sExtra.Mid(pos + 1),
+                    nMaxWidth - 8,
+                    1,
+                    &(field_5EC[1]),
+                    FALSE,
+                    TRUE,
+                    TRUE,
+                    -1);
+            } else {
+                nLines = CUtil::SplitString(&m_font,
+                    sExtra.Mid(pos + 1),
+                    nMaxWidth - 8,
+                    2,
+                    field_5EC,
+                    FALSE,
+                    TRUE,
+                    TRUE,
+                    -1);
+            }
+        }
+
+        if (nLines > 0) {
+            CUtil::TrimRight(field_5EC[nLines - 1]);
+            for (nLine = 0; nLine < nLines; nLine++) {
+                LONG nLineWidth = m_font.GetStringLength(field_5EC[nLine], TRUE);
+                if (nLineWidth > field_5E6) {
+                    field_5E6 = static_cast<SHORT>(nLineWidth);
+                }
+            }
+        }
+
+        m_font.GetRes()->Release();
+
+        field_5E6 = min(field_5E6 + 8, nMaxWidth);
+    } else {
+        if (textRef != -1 && g_pBaldurChitin->GetTlkTable().Fetch(textRef, strRes)) {
+            nLines = CUtil::SplitString(&m_font,
+                strRes.szText,
+                nMaxWidth - 8,
+                2,
+                field_5EC,
+                FALSE,
+                TRUE,
+                TRUE,
+                -1);
+            if (nLines > 0) {
+                CUtil::TrimRight(field_5EC[nLines - 1]);
+                for (nLine = 0; nLine < nLines; nLine++) {
+                    LONG nLineWidth = m_font.GetStringLength(field_5EC[nLine], TRUE);
+                    if (nLineWidth > field_5E6) {
+                        field_5E6 = static_cast<SHORT>(nLineWidth);
+                    }
+                }
+            }
+
+            m_font.GetRes()->Release();
+
+            field_5E6 = min(field_5E6 + 8, nMaxWidth);
+        } else {
+            m_font.GetRes()->Release();
+        }
+    }
+}
+
+// 0x598D30
+void CInfToolTip::SetTextRef(CString sExtra, const STRREF& textRef1, const STRREF& textRef2, const STRREF& textRef3)
+{
+    STR_RES strRes1;
+    STR_RES strRes2;
+
+    if (textRef1 != -1) {
+        field_5E6 = 0;
+
+        for (int index = 0; index < 2; index++) {
+            field_5EC[index] = "";
+        }
+
+        CSize size1;
+        GetFrameSize(1, field_5DA, size1, TRUE);
+
+        CSize size2;
+        GetFrameSize(2, field_5DC, size2, TRUE);
+
+        WORD nMaxWidth = static_cast<WORD>(field_5E4 - size2.cx - size1.cx);
+
+        m_font.GetRes()->Demand();
+
+        if (g_pBaldurChitin->GetTlkTable().Fetch(textRef1, strRes1)) {
+            if (textRef2 != -1) {
+                if (g_pBaldurChitin->GetTlkTable().Fetch(textRef2, strRes2)) {
+                    strRes1.szText = strRes2.szText + strRes1.szText;
+                }
+            }
+
+            if (textRef3 != -1) {
+                if (g_pBaldurChitin->GetTlkTable().Fetch(textRef3, strRes2)) {
+                    strRes1.szText = strRes1.szText + strRes2.szText;
+                }
+            }
+
+            strRes1.szText = strRes1.szText + sExtra;
+
+            BYTE nLines = CUtil::SplitString(&m_font,
+                strRes1.szText,
+                nMaxWidth - 8,
+                2,
+                field_5EC,
+                FALSE,
+                TRUE,
+                TRUE,
+                -1);
+            if (nLines > 0) {
+                CUtil::TrimRight(field_5EC[nLines - 1]);
+                for (BYTE nLine = 0; nLine < nLines; nLine++) {
+                    field_5E6 = max(static_cast<SHORT>(m_font.GetStringLength(field_5EC[nLine], TRUE)), field_5E6);
+                }
+            }
+
+            m_font.GetRes()->Release();
+            field_5E6 = min(field_5E6 + 8, nMaxWidth);
+        }
+    }
+}
+
 // 0x5990F0
 void CInfToolTip::StoreBackground(INT nFrom, INT nTo, INT x, INT y, const CRect& rClip, CRect& rStorage, BOOLEAN bNumbered)
 {
