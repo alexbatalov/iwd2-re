@@ -457,3 +457,132 @@ BOOL CInfToolTip::GetFrame()
 
     return m_pFrame != NULL;
 }
+
+// 0x5990F0
+void CInfToolTip::StoreBackground(INT nFrom, INT nTo, INT x, INT y, const CRect& rClip, CRect& rStorage, BOOLEAN bNumbered)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfCursor.cpp
+    // __LINE__: 1471
+    UTIL_ASSERT(pRes != NULL);
+
+    m_nCurrentSequence = 0;
+    m_nCurrentFrame = 0;
+
+    if (pRes->Demand() == NULL) {
+        // NOTE: rStorage is not nullified like in the overload below.
+        return;
+    }
+
+    // NOTE: Static dispatch.
+    if (!GetFrame()) {
+        pRes->Release();
+        return;
+    }
+
+    CSize size2;
+    GetFrameSize(2, field_5DC, size2, TRUE);
+
+    CSize size1;
+    GetFrameSize(1, field_5DA, size1, TRUE);
+
+    field_5E0 = field_5DE;
+
+    rStorage.left = max(min(max(x - field_5DE / 2 - size1.cx / 2, rClip.left),
+                            rClip.right - field_5DE - size1.cx - size2.cx / 2),
+        rClip.left);
+    rStorage.top = max(min(max(y - m_pFrame->nCenterY, rClip.top),
+                           rClip.bottom - m_pFrame->nHeight),
+        rClip.top);
+    rStorage.right = rStorage.left + size1.cx + size2.cx / 2 + field_5E0;
+    rStorage.bottom = rStorage.top + m_pFrame->nHeight;
+
+    if (rStorage.left < rClip.left) {
+        rStorage.left = rClip.left;
+    }
+
+    if (rStorage.top < rClip.top) {
+        rStorage.top = rClip.top;
+    }
+
+    if (rStorage.right >= rClip.right) {
+        rStorage.right = rClip.right;
+    }
+
+    if (rStorage.bottom >= rClip.bottom) {
+        rStorage.bottom = rClip.bottom;
+    }
+
+    do {
+        HRESULT hr = g_pChitin->cVideo.cVidBlitter.BltFast(g_pChitin->GetCurrentVideoMode()->pSurfaces[nTo],
+            0,
+            0,
+            g_pChitin->GetCurrentVideoMode()->pSurfaces[nFrom],
+            &rStorage,
+            DDBLTFAST_WAIT);
+        g_pChitin->GetCurrentVideoMode()->CheckResults(hr);
+        if (hr != DDERR_SURFACELOST && hr != DDERR_WASSTILLDRAWING) {
+            break;
+        }
+    } while (!g_pChitin->field_1932);
+
+    pRes->Release();
+    m_pFrame = NULL;
+}
+
+// 0x599360
+void CInfToolTip::StoreBackground(INT x, INT y, const CRect& rClip, CRect& rStorage, BOOLEAN bNumbered)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfCursor.cpp
+    // __LINE__: 1560
+    UTIL_ASSERT(pRes != NULL);
+
+    m_nCurrentSequence = 0;
+    m_nCurrentFrame = 0;
+
+    if (pRes->Demand() == NULL) {
+        rStorage.SetRect(0, 0, 0, 0);
+        return;
+    }
+
+    // NOTE: Static dispatch.
+    if (!GetFrame()) {
+        pRes->Release();
+        return;
+    }
+
+    CSize size2;
+    GetFrameSize(2, field_5DC, size2, TRUE);
+
+    CSize size1;
+    GetFrameSize(1, field_5DA, size1, TRUE);
+
+    field_5E0 = field_5DE;
+
+    rStorage.left = max(min(max(x - field_5DE / 2 - size1.cx / 2, rClip.left),
+                            rClip.right - field_5DE - size1.cx - size2.cx / 2),
+        rClip.left);
+    rStorage.top = max(min(max(y - m_pFrame->nCenterY, rClip.top),
+                           rClip.bottom - m_pFrame->nHeight),
+        rClip.top);
+    rStorage.right = rStorage.left + size1.cx + size2.cx / 2 + field_5E0;
+    rStorage.bottom = rStorage.top + m_pFrame->nHeight;
+
+    if (rStorage.left < rClip.left) {
+        rStorage.left = rClip.left;
+    }
+
+    if (rStorage.top < rClip.top) {
+        rStorage.top = rClip.top;
+    }
+
+    if (rStorage.right >= rClip.right) {
+        rStorage.right = rClip.right;
+    }
+
+    if (rStorage.bottom >= rClip.bottom) {
+        rStorage.bottom = rClip.bottom;
+    }
+
+    pRes->Release();
+    m_pFrame = NULL;
+}
