@@ -458,6 +458,103 @@ BOOL CInfToolTip::GetFrame()
     return m_pFrame != NULL;
 }
 
+// 0x5982C0
+BOOL CInfToolTip::Render(INT nSurface, int x, int y, const CRect& rClip, CVidPoly* pClipPoly, int nPolys, DWORD dwFlags, int nTransVal)
+{
+    CVidInf* pVidInf = static_cast<CVidInf*>(g_pBaldurChitin->GetCurrentVideoMode());
+
+    CSize size2;
+    GetFrameSize(2, field_5DC, size2, TRUE);
+
+    CSize size1;
+    GetFrameSize(1, field_5DA, size1, TRUE);
+
+    LONG nWidth1 = size1.cx / 2;
+    LONG nWidth2 = size2.cx / 2;
+
+    SequenceSet(0);
+    FrameSet(0);
+
+    if (pRes->Demand() == NULL) {
+        return FALSE;
+    }
+
+    RealizePalette(dwFlags);
+
+    CSize frameSize;
+    GetCurrentFrameSize(frameSize, TRUE);
+
+    CRect rFXRect(0, 0, nWidth1 + nWidth2 + field_5E0, size2.cy);
+    CRect rFXClip(0, 0, 0, 0);
+    DWORD dwRenderFlags = dwFlags | 0x100 | 0x1;
+
+    pVidInf->FXPrep(rFXRect, dwRenderFlags, CPoint(0, 0), CPoint(0, 0), rFXClip);
+
+    if (!pVidInf->FXLock(rFXRect, dwRenderFlags)) {
+        pRes->Release();
+        return FALSE;
+    }
+
+    CPoint ptCenter;
+    GetCurrentCenterPoint(ptCenter, TRUE);
+
+    rFXClip.left = nWidth1;
+    rFXClip.top = 0;
+    rFXClip.right = rFXRect.Width() - nWidth2;
+    rFXClip.bottom = rFXRect.Height();
+    if (!pVidInf->FXRender(this, ptCenter.x - (rFXRect.left + frameSize.cx - rFXRect.right) / 2, ptCenter.y, rFXClip, TRUE, dwRenderFlags)) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfCursor.cpp
+        // __LINE__: 1068
+        UTIL_ASSERT(FALSE);
+    }
+
+    rFXClip.left = size1.cx;
+    rFXClip.top = 0;
+    rFXClip.right = rFXRect.Width() - size2.cx;
+    rFXClip.bottom = rFXRect.Height();
+    RenderText(pVidInf, size1.cx, 0, rFXClip, dwRenderFlags, static_cast<SHORT>(field_5E4 - size2.cx - size1.cx));
+
+    RealizePalette(dwRenderFlags);
+    GetCurrentCenterPoint(ptCenter, TRUE);
+
+    INT nDestX = max(min(max(x - field_5E0 / 2, rClip.left), rClip.right - field_5E0 - nWidth2 - nWidth1), rClip.left);
+    INT nDestY = max(min(max(y - ptCenter.y, rClip.top), rClip.bottom - frameSize.cy - ptCenter.y), rClip.top);
+
+    SequenceSet(2);
+    FrameSet(field_5DC);
+    GetCurrentCenterPoint(ptCenter, TRUE);
+
+    rFXClip.left = 0;
+    rFXClip.top = 0;
+    rFXClip.right = rFXRect.Width();
+    rFXClip.bottom = rFXRect.Height();
+    if (!pVidInf->FXRender(this, ptCenter.x + nWidth1 + field_5E0 - nWidth2, ptCenter.y, rFXClip, TRUE, dwRenderFlags)) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfCursor.cpp
+        // __LINE__: 1111
+        UTIL_ASSERT(FALSE);
+    }
+
+    SequenceSet(1);
+    FrameSet(field_5DA);
+    GetCurrentCenterPoint(ptCenter, TRUE);
+
+    rFXClip.left = 0;
+    rFXClip.top = 0;
+    rFXClip.right = rFXRect.Width();
+    rFXClip.bottom = rFXRect.Height();
+    if (!pVidInf->FXRender(this, ptCenter.x, ptCenter.y, rFXClip, TRUE, dwRenderFlags)) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfCursor.cpp
+        // __LINE__: 1132
+        UTIL_ASSERT(FALSE);
+    }
+
+    pVidInf->FXUnlock(dwRenderFlags, NULL, CPoint(0, 0));
+    pVidInf->FXBltToBack(rFXRect, nDestX, nDestY, 0, 0, rClip, dwRenderFlags);
+
+    pRes->Release();
+    return TRUE;
+}
+
 // 0x598770
 void CInfToolTip::RenderText(CVidInf* pVidInf, INT x, int a4, const CRect& rFXClip, DWORD dwFlags, SHORT nMaxWidth)
 {

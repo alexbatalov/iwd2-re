@@ -14,6 +14,7 @@ class CInfToolTip : public CVidCell {
 public:
     CInfToolTip();
     BOOL FrameAdvance() override;
+    /* 0008 */ BOOL Render(INT nSurface, int x, int y, const CRect& rClip, CVidPoly* pClipPoly, int nPolys, DWORD dwFlags, int nTransVal) override;
     /* 0010 */ void StoreBackground(INT x, INT y, const CRect& rClip, CRect& rStorage, BOOLEAN bNumbered) override;
     /* 0014 */ void StoreBackground(INT nFrom, INT nTo, INT x, INT y, const CRect& rClip, CRect& rStorage, BOOLEAN bNumbered) override;
 
