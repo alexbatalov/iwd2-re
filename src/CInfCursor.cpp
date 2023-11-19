@@ -1,6 +1,7 @@
 #include "CInfCursor.h"
 
 #include "CBaldurChitin.h"
+#include "CInfGame.h"
 #include "CUIControlBase.h"
 #include "CUtil.h"
 #include "CVidInf.h"
@@ -241,13 +242,70 @@ void CInfCursor::SetGreyScale(BOOLEAN bGreyScale)
 // 0x5976E0
 void CInfCursor::SetToolTip(const STRREF& toolTipRef, CUIControlBase* pControl, const CString& sExtraText)
 {
-    // TODO: Incomplete.
+    if (toolTipRef != -1 || sExtraText != "") {
+        m_vcToolTip.SetTextRef(toolTipRef, sExtraText);
+        field_A02 = pControl;
+        g_pBaldurChitin->GetObjectGame()->SetTempCursor(101);
+    }
 }
 
+// FIXME: `nStrRef`, `nSecondaryStrRef`, and `nTertiaryStrRef` should not be reference.
+//
 // 0x597740
-void CInfCursor::SetToolTip(STRREF nStrRef, CUIControlBase* pControl, SHORT nHotKeyIndex1, SHORT nHotKeyIndex2, CString sKey, STRREF nSecondaryStrRef, STRREF nTertiaryStrRef)
+void CInfCursor::SetToolTip(const STRREF& nStrRef, CUIControlBase* pControl, SHORT nHotKeyIndex1, SHORT nHotKeyIndex2, CString sKey, const STRREF& nSecondaryStrRef, const STRREF& nTertiaryStrRef)
 {
-    // TODO: Incomplete.
+    if (nStrRef == -1) {
+        return;
+    }
+
+    if (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bHotkeysOnToolTips) {
+        char ch = '\0';
+        STR_RES strRes;
+
+        if (nHotKeyIndex1 != -1) {
+            // NOTE: Uninline.
+            char nKey = g_pBaldurChitin->GetObjectGame()->GetKeymap(nHotKeyIndex1);
+
+            ch = g_pBaldurChitin->GetObjectGame()->sub_5A9780(nKey);
+
+            if (ch != '\0' && ch != ' ') {
+                sKey = CString(ch);
+                if (g_pBaldurChitin->GetObjectGame()->m_pKeymapFlags[nHotKeyIndex1]) {
+                    if (g_pBaldurChitin->GetTlkTable().Fetch(24638, strRes)) {
+                        sKey = strRes.szText + sKey;
+                    } else {
+                        sKey = CString("CTRL-") + sKey;
+                    }
+                }
+            }
+        }
+
+        if (nHotKeyIndex2 != -1 && (ch == '\0' || ch == ' ')) {
+            // NOTE: Uninline.
+            char nKey = g_pBaldurChitin->GetObjectGame()->GetKeymap(nHotKeyIndex2);
+
+            if (nKey != '\0' && nKey != ' ') {
+                sKey = CString(nKey);
+                if (g_pBaldurChitin->GetObjectGame()->m_pKeymapFlags[nHotKeyIndex2]) {
+                    if (g_pBaldurChitin->GetTlkTable().Fetch(24638, strRes)) {
+                        sKey = strRes.szText + sKey;
+                    } else {
+                        sKey = CString("CTRL-") + sKey;
+                    }
+                }
+            }
+        }
+
+        if (sKey != "") {
+            sKey = " (" + sKey + ")";
+        }
+    } else {
+        sKey = "";
+    }
+
+    m_vcToolTip.SetTextRef(sKey, nStrRef, nSecondaryStrRef, nTertiaryStrRef);
+    field_A02 = pControl;
+    g_pBaldurChitin->GetObjectGame()->SetTempCursor(101);
 }
 
 // 0x597C50
