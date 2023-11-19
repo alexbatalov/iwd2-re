@@ -61,9 +61,9 @@ public:
     /* 0032 */ BOOL m_bInactiveRender; // #guess
     /* 0036 */ int field_36;
     /* 003A */ BOOL m_bToolTipActive;
-    /* 003E */ int m_nToolTipStrRef; // #guess
-    /* 0042 */ int m_nSecondaryToolTipStrRef; // #guess
-    /* 0046 */ int m_nTertiaryToolTipStrRef; // #guess
+    /* 003E */ STRREF m_nToolTipStrRef; // #guess
+    /* 0042 */ STRREF m_nSecondaryToolTipStrRef; // #guess
+    /* 0046 */ STRREF m_nTertiaryToolTipStrRef; // #guess
     /* 004A */ USHORT m_nToolTipHotKeyIndex1; // #guess
     /* 004C */ USHORT m_nToolTipHotKeyIndex2; // #guess
     /* 004E */ CString m_sKey; // #guess
