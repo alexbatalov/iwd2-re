@@ -7,6 +7,7 @@
 #include "CVidFont.h"
 
 class CUIControlBase;
+class CVidInf;
 class CVidMode;
 
 class CInfToolTip : public CVidCell {
@@ -21,6 +22,7 @@ public:
     // NOTE: This function is not override of parent's `GetFrame`. I'm not sure
     // if it's a bug or it is intentional.
     BOOL GetFrame();
+    void RenderText(CVidInf* pVidInf, INT x, int a4, const CRect& rFXClip, DWORD dwFlags, SHORT nMaxWidth);
     void SetTextRef(const STRREF& textRef, const CString& sExtra);
     void SetTextRef(CString sExtra, const STRREF& textRef1, const STRREF& textRef2, const STRREF& textRef3);
 

@@ -3,7 +3,7 @@
 #include "CBaldurChitin.h"
 #include "CUIControlBase.h"
 #include "CUtil.h"
-#include "CVidMode.h"
+#include "CVidInf.h"
 
 // 0x596C10
 CInfCursor::CInfCursor()
@@ -456,6 +456,46 @@ BOOL CInfToolTip::GetFrame()
     m_pFrame = pRes->GetFrame(m_nCurrentSequence, m_nCurrentFrame, m_bDoubleSize);
 
     return m_pFrame != NULL;
+}
+
+// 0x598770
+void CInfToolTip::RenderText(CVidInf* pVidInf, INT x, int a4, const CRect& rFXClip, DWORD dwFlags, SHORT nMaxWidth)
+{
+    int index;
+    CString sLine;
+    LONG nWidth = rFXClip.Width();
+
+    if (m_font.GetRes()->Demand() == NULL) {
+        return;
+    }
+
+    for (index = 0; index < 2; index++) {
+        if (field_5EC[index] == "") {
+            break;
+        }
+    }
+
+    INT y = m_font.GetBaseLineHeight(TRUE) + (rFXClip.Height() - index * m_font.GetFontHeight(TRUE)) / 2;
+    for (index = 0; index < 2; index++) {
+        if (field_5EC[index] == "") {
+            break;
+        }
+
+        sLine = field_5EC[index];
+
+        // FIXME: Calls `GetStringLength` two times.
+        pVidInf->FXTextOut(&m_font,
+            sLine,
+            x + nWidth / 2 - min(m_font.GetStringLength(sLine, TRUE), nMaxWidth) / 2,
+            y,
+            rFXClip,
+            dwFlags,
+            TRUE);
+
+        y += m_font.GetFontHeight(TRUE);
+    }
+
+    m_font.GetRes()->Release();
 }
 
 // 0x598940
