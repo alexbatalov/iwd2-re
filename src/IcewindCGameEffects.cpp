@@ -2645,6 +2645,49 @@ CGameEffect* IcewindCGameEffectGlobeOfInvulnerability::Copy()
     return copy;
 }
 
+// 0x56B520
+BOOL IcewindCGameEffectGlobeOfInvulnerability::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 0:
+        if (m_secondaryType) {
+            DisplayStringRef(pSprite, 14771);
+        }
+
+        pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_MINOR_GLOBE_OF_INVULNERABILITY, true);
+
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 96);
+
+        pSprite->GetDerivedStats()->m_visualEffects.set(IWD_VFX_MINOR_GLOBE_OF_INVULNERABILITY);
+        pSprite->GetDerivedStats()->field_1E0 = 1;
+        pSprite->GetDerivedStats()->field_1E4 = 1;
+        pSprite->GetDerivedStats()->field_1E8 = 1;
+        break;
+    case 1:
+        if (m_secondaryType) {
+            DisplayStringRef(pSprite, 14771);
+        }
+
+        pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_GLOBE_OF_INVULNERABILITY, true);
+
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 97);
+
+        pSprite->GetDerivedStats()->m_visualEffects.set(IWD_VFX_GLOBE_OF_INVULNERABILITY);
+        pSprite->GetDerivedStats()->field_1E0 = 1;
+        pSprite->GetDerivedStats()->field_1E4 = 1;
+        pSprite->GetDerivedStats()->field_1E8 = 1;
+        pSprite->GetDerivedStats()->field_1EC = 1;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\IcewindCGameEffects.cpp
+        // __LINE__: 7204
+        UTIL_ASSERT(FALSE);
+    }
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A2770

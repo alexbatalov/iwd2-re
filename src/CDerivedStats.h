@@ -538,6 +538,10 @@ public:
     /* 01A4 */ CImmunitiesEffect m_cImmunitiesEffect;
     /* 01C0 */ CImmunitiesAIType m_cImmunitiesAIType;
     /* 01DC */ CImmunitiesSpellLevel m_cImmunitiesSpellLevel;
+    /* 01E0 */ int field_1E0;
+    /* 01E4 */ int field_1E4;
+    /* 01E8 */ int field_1E8;
+    /* 01EC */ int field_1EC;
     /* 0204 */ CImmunitiesWeapon m_cImmunitiesWeapon;
     /* 0220 */ CSelectiveBonusList m_cToHitBonusList;
     /* 023C */ CSelectiveBonusList m_cDamageBonusList;
