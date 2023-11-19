@@ -4459,6 +4459,29 @@ void CGameSprite::FeedBack(WORD nFeedBackId, LONG a3, LONG a4, LONG a5, LONG a6,
     }
 }
 
+// 0x737910
+BOOLEAN CGameSprite::sub_737910(BOOL a1)
+{
+    if (!a1
+        && m_equipment.m_items[m_equipment.m_selectedWeapon] != NULL
+        && (m_equipment.m_items[m_equipment.m_selectedWeapon]->GetFlagsFile() & 0x10) != 0) {
+        m_equipment.m_items[m_equipment.m_selectedWeapon]->m_flags |= 0x1;
+        return FALSE;
+    }
+
+    if ((m_equipment.m_selectedWeapon == 43
+            || m_equipment.m_selectedWeapon == 45
+            || m_equipment.m_selectedWeapon == 47
+            || m_equipment.m_selectedWeapon == 49)
+        && m_equipment.m_items[m_equipment.m_selectedWeapon + 1] != NULL
+        && (m_equipment.m_items[m_equipment.m_selectedWeapon + 1]->GetFlagsFile() & 0x10) != 0) {
+        m_equipment.m_items[m_equipment.m_selectedWeapon + 1]->m_flags |= 0x1;
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
 // 0x73B740
 SHORT CGameSprite::GetCriticalHitBonus()
 {

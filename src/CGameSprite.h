@@ -463,6 +463,7 @@ public:
     void ClearDialogActions();
     BOOL HandleEffects();
     void FeedBack(WORD nFeedBackId, LONG a2, LONG a3, LONG a4, LONG a5, LONG a6, LONG a7);
+    BOOLEAN sub_737910(BOOL a1);
     SHORT GetCriticalHitBonus();
     SHORT LeaveParty();
     void SelectWeaponAbility(unsigned char a1, unsigned char a2, unsigned char a3, unsigned char a4);
