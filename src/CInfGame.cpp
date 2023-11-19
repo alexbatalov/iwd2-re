@@ -3447,6 +3447,91 @@ void CInfGame::CompressContainer(LONG nContainerId)
     }
 }
 
+// 0x5BA080
+INT CInfGame::CheckItemUsable(CGameSprite* pSprite, CItem* pItem)
+{
+    INT nType = pItem->GetItemType();
+    if (nType != 35 || nType != 11) {
+        return 1;
+    }
+
+    DWORD nNotUsable1 = pItem->GetNotUsableBy();
+    DWORD nNotUsable2 = pItem->GetNotUsableBy2();
+    DWORD nClassMask = pSprite->GetDerivedStats()->m_classMask;
+    DWORD nSpecialization = pSprite->GetDerivedStats()->m_nSpecialization;
+
+    if ((nNotUsable1 & 0x1) == 0
+        && (nClassMask & CLASSMASK_BARBARIAN) != 0) {
+        return 1;
+    }
+
+    if ((nNotUsable1 & 0x2) == 0
+        && (nClassMask & CLASSMASK_BARD) != 0) {
+        return 1;
+    }
+
+    if ((nNotUsable1 & 0x4) == 0
+        && (nClassMask & CLASSMASK_CLERIC) != 0
+        && ((nNotUsable2 & nSpecialization) & SPECMASK_CLERIC) == 0) {
+        return 1;
+    }
+
+    if ((nNotUsable1 & 0x8) == 0
+        && (nClassMask & CLASSMASK_DRUID) != 0) {
+        return 1;
+    }
+
+    if ((nNotUsable1 & 0x10) == 0
+        && (nClassMask & CLASSMASK_FIGHTER) != 0) {
+        return 1;
+    }
+
+    if ((nNotUsable1 & 0x20) == 0
+        && (nClassMask & CLASSMASK_MONK) != 0
+        && ((nNotUsable2 & nSpecialization) & SPECMASK_MONK) == 0) {
+        return 1;
+    }
+
+    if ((nNotUsable1 & 0x40) == 0
+        && (nClassMask & CLASSMASK_PALADIN) != 0
+        && ((nNotUsable2 & nSpecialization) & SPECMASK_PALADIN) == 0) {
+        return 1;
+    }
+
+    if ((nNotUsable1 & 0x80) == 0
+        && (nClassMask & CLASSMASK_RANGER) != 0) {
+        return 1;
+    }
+
+    if ((nNotUsable1 & 0x100) == 0
+        && (nClassMask & CLASSMASK_ROGUE) != 0) {
+        return 1;
+    }
+
+    if ((nNotUsable1 & 0x200) == 0
+        && (nClassMask & CLASSMASK_SORCERER) != 0) {
+        return 1;
+    }
+
+    if ((nNotUsable1 & 0x400) == 0
+        && (nClassMask & CLASSMASK_WIZARD) != 0
+        && ((nNotUsable2 & nSpecialization) & SPECMASK_WIZARD) == 0) {
+        return 1;
+    }
+
+    if ((nClassMask & CLASSMASK_ROGUE) != 0
+        && pSprite->GetDerivedStats()->m_nSkills[CGAMESPRITE_SKILL_USE_MAGIC_DEVICE] > 0) {
+        return 2;
+    }
+
+    if ((nClassMask & CLASSMASK_BARD) != 0
+        && pSprite->GetDerivedStats()->m_nSkills[CGAMESPRITE_SKILL_USE_MAGIC_DEVICE] > 0) {
+        return 2;
+    }
+
+    return 0;
+}
+
 // 0x5BACE0
 SHORT CInfGame::GetNumQuickWeaponSlots(SHORT nPortrait)
 {

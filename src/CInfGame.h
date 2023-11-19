@@ -168,6 +168,7 @@ public:
     void InventoryInfoGround(LONG nContainerId, SHORT nSlotNum, CItem*& pItem, STRREF& description, CResRef& cResIcon, CResRef& cResItem, WORD& wCount);
     WORD GetContainerType(LONG nContainerId);
     void CompressContainer(LONG nContainerId);
+    INT CheckItemUsable(CGameSprite* pSprite, CItem* pItem);
     SHORT GetNumQuickWeaponSlots(SHORT nPortrait);
     void InventoryInfoPersonal(SHORT nPortraitNum, SHORT nSlotNum, CItem*& pItem, STRREF& description, CResRef& cResIcon, CResRef& cResItem, WORD& wCount, BOOL a8);
     BOOL Is3DSound(int nSoundChannel);
