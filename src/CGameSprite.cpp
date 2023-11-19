@@ -2447,6 +2447,21 @@ void CGameSprite::CheckToolTipItem(BYTE buttonNum)
     }
 }
 
+// 0x71B400
+CItem* CGameSprite::GetQuickItem(BYTE buttonNum)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 18909
+    UTIL_ASSERT(buttonNum < CGAMESAVECHARACTER_NUM_QUICK_ITEMS21);
+
+    SHORT nItemNum = m_quickItems[buttonNum].m_abilityId.m_itemNum;
+    if (nItemNum != -1) {
+        return m_equipment.m_items[nItemNum];
+    } else {
+        return NULL;
+    }
+}
+
 // 0x71B460
 void CGameSprite::UnequipAll(BOOL animationOnly)
 {
