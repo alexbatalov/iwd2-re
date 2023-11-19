@@ -6397,6 +6397,12 @@ INT CGameSprite::sub_726800()
     return 2 * m_nWeaponSet + 44;
 }
 
+// 0x58FEE0
+BYTE CGameSprite::GetLastSong()
+{
+    return m_nLastSong;
+}
+
 // NOTE: Inlined.
 void CGameSprite::GetQuickItem(BYTE buttonNum, CButtonData& buttonData)
 {

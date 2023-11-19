@@ -542,6 +542,7 @@ public:
     void sub_726330(UINT nFeatNumber, INT nValue);
     void sub_726570();
     INT sub_726800();
+    BYTE GetLastSong();
 
     void GetQuickSpell(BYTE buttonNum, CButtonData& buttonData);
     void GetQuickItem(BYTE buttonNum, CButtonData& buttonData);
