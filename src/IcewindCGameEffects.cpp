@@ -1938,6 +1938,34 @@ CGameEffect* IcewindCGameEffectFreeAction::Copy()
     return copy;
 }
 
+// 0x5698E0
+BOOL IcewindCGameEffectFreeAction::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType) {
+        DisplayStringRef(pSprite, 14794);
+    }
+
+    if (!pSprite->GetDerivedStats()->m_spellStates.test(SPLSTATE_FREE_ACTION)) {
+        pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_FREE_ACTION, true);
+
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 19);
+
+        AddColorEffect(pSprite, 128, 96, 96, 30);
+
+        pSprite->GetDerivedStats()->m_naturalImmunities.insert(CGAMEEFFECT_ENTANGLE);
+        pSprite->GetDerivedStats()->m_naturalImmunities.insert(CGAMEEFFECT_GREASEPOOL);
+        pSprite->GetDerivedStats()->m_naturalImmunities.insert(CGAMEEFFECT_WEBHOLD);
+        pSprite->GetDerivedStats()->m_naturalImmunities.insert(CGAMEEFFECT_HOLDCREATURE);
+        pSprite->GetDerivedStats()->m_naturalImmunities.insert(CGAMEEFFECT_SLOW);
+        pSprite->GetDerivedStats()->m_naturalImmunities.insert(CGAMEEFFECT_MOVEMENTRATE_176);
+
+        m_done = FALSE;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A15A0
