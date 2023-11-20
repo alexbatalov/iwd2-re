@@ -104,6 +104,33 @@ CString CAIUtil::ReadBetween(CString& line, CString sep)
     return sBetween;
 }
 
+// 0x4215B0
+LONG CAIUtil::CountSquares(const CPoint& start, const CPoint& end)
+{
+    LONG dx;
+    LONG dy;
+
+    if (start.x > end.x) {
+        dx = start.x - end.x;
+    } else {
+        dx = end.x - start.x;
+    }
+
+    if (start.y > end.y) {
+        dy = start.y - end.y;
+    } else {
+        dy = end.y - start.y;
+    }
+
+    if (dx > dy) {
+        dx -= dy;
+    } else {
+        dy -= dx;
+    }
+
+    return dx + dy;
+}
+
 // 0x4215F0
 CString CAIUtil::ReadToChar(CString& line, char c)
 {
