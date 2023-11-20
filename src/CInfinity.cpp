@@ -2828,6 +2828,26 @@ BOOL CInfinity::InitViewPort(const CRect& rRect)
     return TRUE;
 }
 
+// 0x5D1040
+void CInfinity::SetScreenShake(BOOL bScreenShake, WORD duration, const CPoint& screenShakeDelta)
+{
+    EnterCriticalSection(&(m_pArea->field_1FC));
+    m_bScreenShake = bScreenShake;
+    m_screenShakeDelta.x = screenShakeDelta.x * CGameSprite::EXACT_SCALE;
+    m_screenShakeDelta.y = screenShakeDelta.y * CGameSprite::EXACT_SCALE;
+    if (screenShakeDelta.x != 0) {
+        m_screenShakeDecrease.x = abs(m_screenShakeDelta.x) / duration;
+    } else {
+        m_screenShakeDecrease.x = 0;
+    }
+    if (screenShakeDelta.y != 0) {
+        m_screenShakeDecrease.y = abs(m_screenShakeDelta.y) / duration;
+    } else {
+        m_screenShakeDecrease.y = 0;
+    }
+    LeaveCriticalSection(&(m_pArea->field_1FC));
+}
+
 // 0x5D11F0
 BOOL CInfinity::SetViewPosition(INT x, INT y, BOOLEAN bSetExactScale)
 {
