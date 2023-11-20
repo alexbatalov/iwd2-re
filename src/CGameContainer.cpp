@@ -745,3 +745,9 @@ void CGameContainer::SetScriptRes(CString scriptRes)
         m_scriptRes[index] = scriptRes[index];
     }
 }
+
+// 0x45B930
+SHORT CGameContainer::GetNumItems()
+{
+    return static_cast<SHORT>(m_lstItems.GetCount());
+}

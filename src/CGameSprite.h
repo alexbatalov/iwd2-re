@@ -443,6 +443,7 @@ public:
     void DisplayTextRef(STRREF nameRef, STRREF textRef, COLORREF nameColor, COLORREF textColor);
     void GetNumInventoryPersonalSlots(INT& nUsedSlots, INT& nTotalSlots);
     void SetModalState(BYTE modalState, BOOL bUpdateToolbar);
+    BOOL sub_7202E0();
     void CheckSequence(BYTE& sequence);
     BOOL HaveUnexportableItems();
     void SetMonkAbilities();
@@ -457,6 +458,7 @@ public:
     STRREF GetNameRef();
     void PlaySound(const CResRef& res);
     BOOL Orderable(BOOL bIgnoreControl);
+    BOOL Animate();
     DWORD GetSpecialization();
     BOOL ProcessEffectList();
     void ClearStoredPaths();
@@ -495,22 +497,44 @@ public:
     void MoveOntoArea(CGameArea* pArea, const CPoint& dest, SHORT facingDirection);
 
     void SetResRef(const CResRef& resRef);
+    void sub_453160(int a1);
+    int sub_453170();
+    SHORT GetSequence();
     CCreatureFileHeader* GetBaseStats();
     CDerivedStats* GetDerivedStats();
+    void sub_4531B0();
     CGameEffectList* GetEquipedEffectList();
     CGameEffectList* GetTimedEffectList();
+    void sub_4531E0(int a1);
     void AddPortraitIcon(int icon);
     void RemovePortraitIcon(int icon);
     CGameSpriteSpellList* GetInnateSpells();
     CGameSpriteSpellList* GetSongs();
     CGameSpriteSpellList* GetShapeshifts();
+    DWORD sub_5940D0();
+    INT sub_5940E0(BYTE buttonNum);
+    void sub_594120(BYTE buttonNum, int a2);
     BYTE GetModalState();
 
+    int sub_45B710();
+    SHORT GetDirection();
     CGameAnimation* GetAnimation();
     CGameSpriteEquipment* GetEquipment();
     SHORT GetHappiness();
+    BOOL GetActive();
+    CVariableHash* GetLocalVariables();
 
+    INT sub_724010(INT a1);
+    INT sub_7240A0();
+    INT sub_724170();
+    INT sub_724270();
+    INT sub_724360();
+    BOOL CheckAranceFailure(INT nRoll);
+    INT sub_724430();
+    BOOL CheckDivineFailure(INT nRoll);
+    BOOLEAN sub_7245D0();
     INT GetNextHatedRacesSlot();
+    void sub_724610();
     BOOL sub_724690(SHORT a1);
 
     // NOTE: See `CGameSpriteSpells` for explanation of the overall ugliness of
@@ -568,7 +592,7 @@ public:
     /* 3828 */ CButtonData m_quickItems[3];
     /* 38DC */ CButtonData m_quickInnates[9];
     /* 3AF8 */ CButtonData m_quickSongs[9];
-    /* 3D14 */ unsigned char field_3D14[9];
+    /* 3D14 */ int field_3D14[9];
     /* 3D38 */ BYTE m_nLastSpellbookClassIndex;
     /* 3D39 */ BYTE m_nLastSpellbookSpellLevel;
     /* 3D3A */ unsigned char field_3D3A[8];
@@ -781,6 +805,7 @@ public:
     /* 724E */ LONG m_nUnselectableCounter;
     /* 7252 */ CResRef m_secondarySounds;
     /* 725A */ unsigned char field_725A[32];
+    /* 727A */ int field_727A;
     /* 727E */ int field_727E;
     /* 7292 */ int field_7292;
     /* 7296 */ SHORT m_currentActionId;
@@ -791,7 +816,7 @@ public:
     /* 72A8 */ unsigned char field_72A8;
     /* 72AA */ int field_72AA;
     /* 72AE */ int field_72AE;
-    /* 72B2 */ CVariableHash* field_72B2;
+    /* 72B2 */ CVariableHash* m_pLocalVariables;
     /* 72B6 */ int field_72B6;
     /* 72D6 */ int field_72D6;
     /* 72DE */ int field_72DE;

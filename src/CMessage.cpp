@@ -3031,6 +3031,22 @@ BOOLEAN CBaldurMessage::OnLeaveAreaNameRequestToServer(INT nMsgFrom, BYTE* pByte
     return FALSE;
 }
 
+// 0x4381A0
+void CBaldurMessage::CleanLeaveAreaLuaRequest()
+{
+    m_bLeaveAreaLuaRequestPending = FALSE;
+    m_nLeaveAreaLuaReplyValue = 0;
+    m_bLeaveAreaLuaReplyReturned = FALSE;
+}
+
+// 0x4393E0
+void CBaldurMessage::CleanLeaveAreaNameRequest()
+{
+    m_bLeaveAreaNameRequestPending = FALSE;
+    m_nLeaveAreaNameReplyValue = 0;
+    m_bLeaveAreaNameReplyReturned = FALSE;
+}
+
 // 0x43A910
 BOOLEAN CBaldurMessage::SendBiographyToServer(BYTE nFixedPartyId, CString szBio)
 {

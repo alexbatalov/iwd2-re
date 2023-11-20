@@ -79,6 +79,7 @@ public:
     BOOL Alloc(CRes* pRes, DWORD nSize);
 
     CString GetCDSwitchDriveLetter();
+    void SetCDSwitchDriveLetter(CString sDrive);
 
     /* 0000 */ int field_0;
     /* 0004 */ int field_4;

@@ -2926,6 +2926,37 @@ void CScreenWorld::DisableKeyRepeat()
     m_pVirtualKeys[57].SetRepeat(0, 0);
 }
 
+// 0x4384B0
+void CScreenWorld::SetLeaveAreaLuaPanicData(CPoint ptValue, SHORT nValue, CString sValue1, CString sValue2)
+{
+    m_ptLeaveAreaLuaPanicLocation = ptValue;
+    m_nLeaveAreaLuaPanicDirection = nValue;
+    m_sLeaveAreaLuaPanicAreaName = sValue1;
+    m_sLeaveAreaLuaPanicParchment = sValue2;
+}
+
+// 0x453780
+BOOL CScreenWorld::sub_453780()
+{
+    return m_nAutoUnhideInterface > 0;
+}
+
+// 0x453790
+void CScreenWorld::sub_453790(BOOL bEnabled)
+{
+    if (bEnabled) {
+        m_nAutoUnhideInterface++;
+    } else {
+        m_nAutoUnhideInterface--;
+    }
+}
+
+// 0x503030
+CGameDialogSprite* CScreenWorld::GetInternalLoadedDialog()
+{
+    return &m_internalLoadedDialog;
+}
+
 // NOTE: Inlined.
 void CScreenWorld::CheckPanelInputMode(DWORD dwPanelId, DWORD dwinputModeMask)
 {

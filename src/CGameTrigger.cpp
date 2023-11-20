@@ -523,3 +523,9 @@ CPoint& CGameTrigger::GetPos()
 {
     return (m_dwFlags & 0x200) != 0 ? field_628 : m_pos;
 }
+
+// 0x45B950
+BOOL CGameTrigger::sub_45B950()
+{
+    return m_trapActivated && (m_dwFlags & 0x100) == 0;
+}

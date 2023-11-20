@@ -109,7 +109,8 @@ public:
         }
     }
 
-    T* GetRes() {
+    T* GetRes()
+    {
         return pRes;
     }
 

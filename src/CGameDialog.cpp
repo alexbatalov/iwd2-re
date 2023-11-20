@@ -14,7 +14,7 @@ CGameDialogSprite::CGameDialogSprite()
     ClearMarshal();
 }
 
-// NOTE: Inlined.
+// 0x67CB50
 CGameDialogSprite::~CGameDialogSprite()
 {
     ClearMarshal();

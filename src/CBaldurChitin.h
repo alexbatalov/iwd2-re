@@ -81,12 +81,15 @@ public:
     CBaldurMessage* GetBaldurMessage();
     CStringList* GetPlayedMovies();
     void AddPlayedMovie(const CResRef& cResMovie);
+    BOOLEAN DetectBaldurCD();
+    CString GetFirstCDRomDrive();
     CInfCursor* GetObjectCursor();
     CInfGame* GetObjectGame();
     CScreenWorld* GetScreenWorld();
     CBaldurEngine* GetActiveEngine();
     CTlkTable& GetTlkTable();
     CMessageHandler* GetMessageHandler();
+    BOOL GetDoubleSize();
 
     void AddMusicPosition(CResRef cResRef, INT nSong);
     BOOL GetMusicPosition(CResRef cResRef, INT nSong, INT& nSection, INT& nPosition);

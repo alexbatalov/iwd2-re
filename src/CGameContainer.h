@@ -35,6 +35,7 @@ public:
     SHORT CountItem(const CResRef& res);
 
     void SetScriptRes(CString scriptRes);
+    SHORT GetNumItems();
 
     /* 0598 */ CRect m_rBounding;
     /* 05A8 */ CPoint* m_pPolygon;

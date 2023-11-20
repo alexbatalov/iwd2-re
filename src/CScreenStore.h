@@ -177,6 +177,7 @@ public:
     void CloseBag(BOOL bSaveFile);
     void UpdateRequesterPanel();
     DWORD GetDefaultMainPanel();
+    CAIObjectType GetCustomer();
 
     void SelectGroupItem(INT nIndex, BOOL bSelected);
     void SelectIdentifyItem(INT nIndex, BOOL bSelected);

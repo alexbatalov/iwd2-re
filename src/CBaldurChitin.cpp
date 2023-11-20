@@ -2235,6 +2235,38 @@ void CBaldurChitin::GetPanicCDStrings(CString& sMediaRemoved, CString& sPlaceCD,
     sInDrive = CBaldurEngine::FetchString(20716);
 }
 
+// 0x426B20
+BOOLEAN CBaldurChitin::DetectBaldurCD()
+{
+    // NOTE: This function simply returns 1, but it's asm looks like a hack
+    // likely performed by GOG to bypass CD check.
+    return TRUE;
+}
+
+// 0x426DC0
+CString CBaldurChitin::GetFirstCDRomDrive()
+{
+    CString sDrive;
+
+    DWORD nDrives = GetLogicalDrives();
+
+    for (BYTE nDrive = 0; nDrive < 32; nDrive++) {
+        if (field_49B1) {
+            sDrive = "";
+            break;
+        }
+
+        if (((1 << nDrive) & nDrives) != 0) {
+            sDrive.Format("%c:\\", nDrive + 'A');
+            if (GetDriveTypeA(sDrive.GetBuffer(sDrive.GetLength())) == DRIVE_CDROM) {
+                break;
+            }
+        }
+    }
+
+    return sDrive;
+}
+
 // 0x426EC0
 WORD CBaldurChitin::GetMultiplayerDirectPlayPort()
 {
@@ -2372,4 +2404,10 @@ CTlkTable& CBaldurChitin::GetTlkTable()
 CMessageHandler* CBaldurChitin::GetMessageHandler()
 {
     return &m_cMessageHandler;
+}
+
+// 0x58FEF0
+BOOL CBaldurChitin::GetDoubleSize()
+{
+    return field_4A2C;
 }

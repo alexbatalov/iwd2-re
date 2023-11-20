@@ -106,6 +106,11 @@ public:
     void sub_481890(CRect* r, CArray<CRect*>& ary);
     void sub_467C50(const CResRef& resRef, CGameSprite* pSprite);
     static CVariable* GetGlobalVariable(const CString& sScope, const CString& sName, int a3);
+    void sub_4530F0(const CAIObjectType& type);
+    void sub_453110(const CAIObjectType& type);
+    void SetLastActionReturn(SHORT returnValue);
+    int sub_45B6D0();
+    void sub_45B6E0(const CAIObjectType& type);
 
     /* 006E */ CAIObjectType m_lAttacker;
     /* 00AE */ CAIObjectType m_lOrderedBy;
@@ -151,7 +156,7 @@ public:
     /* 0588 */ int field_588;
     /* 058C */ int field_58C;
     /* 0590 */ BYTE m_reactionRoll;
-    /* 0592 */ short field_592;
+    /* 0592 */ SHORT m_nLastActionReturn;
     /* 0594 */ unsigned char field_594;
     /* 0595 */ unsigned char field_595;
     /* 0596 */ unsigned char field_596;

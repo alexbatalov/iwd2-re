@@ -2626,6 +2626,18 @@ void CVidCell::SetResRef(const CResRef& cNewResRef, BOOL bDoubleSize, BOOL bSetA
     m_bDoubleSize = bDoubleSize;
 }
 
+// 0x45B2B0
+WORD CVidCell::GetCurrentFrameId()
+{
+    return m_nCurrentFrame;
+}
+
+// 0x45B2C0
+WORD CVidCell::GetCurrentSequenceId()
+{
+    return m_nCurrentSequence;
+}
+
 // NOTE: Inlined in many places. Seen in `CVidCell::GetFrameCenterPoint`
 // assertion.
 BAMHEADER* CVidCell::GetResBamHeader()

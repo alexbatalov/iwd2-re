@@ -2618,6 +2618,12 @@ DWORD CScreenStore::GetDefaultMainPanel()
     }
 }
 
+// 0x67E250
+CAIObjectType CScreenStore::GetCustomer()
+{
+    return m_cAICustomer;
+}
+
 // NOTE: Inlined.
 void CScreenStore::SelectGroupItem(INT nIndex, BOOL bSelected)
 {

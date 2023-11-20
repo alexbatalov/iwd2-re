@@ -1674,6 +1674,24 @@ CGameEffect* CGameEffectBarbarianRage::Copy()
     return copy;
 }
 
+// 0x4A5BF0
+BOOL CGameEffectBarbarianRage::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetDerivedStats()->m_disabledSpellTypes[0] = TRUE;
+    pSprite->GetDerivedStats()->m_disabledSpellTypes[1] = TRUE;
+    pSprite->GetDerivedStats()->m_disabledButtons[2] = TRUE;
+    pSprite->GetDerivedStats()->m_disabledButtons[3] = TRUE;
+    pSprite->GetDerivedStats()->m_disabledButtons[4] = TRUE;
+    pSprite->GetDerivedStats()->m_disabledButtons[5] = TRUE;
+    pSprite->GetDerivedStats()->m_disabledButtons[6] = TRUE;
+    pSprite->GetDerivedStats()->m_disabledButtons[7] = TRUE;
+    pSprite->GetDerivedStats()->m_disabledButtons[8] = TRUE;
+    pSprite->GetDerivedStats()->m_disabledButtons[9] = TRUE;
+    pSprite->GetDerivedStats()->m_disabledButtons[10] = TRUE;
+    pSprite->GetDerivedStats()->m_disabledButtons[0] = TRUE;
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
@@ -5001,6 +5019,14 @@ CGameEffect* CGameEffectImmunityToProjectile::Copy()
     return copy;
 }
 
+// 0x4B63E0
+BOOL CGameEffectImmunityToProjectile::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetDerivedStats()->m_cImmunitiesProjectile.AddTail(reinterpret_cast<DWORD*>(m_dwFlags));
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
@@ -8236,6 +8262,14 @@ CGameEffect* CGameEffectRemoveInnateAbility::Copy()
     return copy;
 }
 
+// 0x4BE1B0
+BOOL CGameEffectRemoveInnateAbility::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->RemoveSpecialAbility(m_res);
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
@@ -8870,6 +8904,15 @@ CGameEffect* CGameEffectFamiliarBlock::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4B9E70
+BOOL CGameEffectFamiliarBlock::ApplyEffect(CGameSprite* pSprite)
+{
+    g_pBaldurChitin->GetObjectGame()->field_4204 = pSprite->Animate();
+    m_done = !pSprite->Animate();
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------

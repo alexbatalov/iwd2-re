@@ -120,6 +120,10 @@ public:
     void sub_695650(BOOL bEnable);
     void EnableKeyRepeat();
     void DisableKeyRepeat();
+    void SetLeaveAreaLuaPanicData(CPoint ptValue, SHORT nValue, CString sValue1, CString sValue2);
+    BOOL sub_453780();
+    void sub_453790(BOOL bEnabled);
+    CGameDialogSprite* GetInternalLoadedDialog();
 
     void CompressTime(DWORD deltaTime) { m_deltaTime = deltaTime; }
 

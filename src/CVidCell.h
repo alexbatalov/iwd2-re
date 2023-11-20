@@ -42,6 +42,8 @@ public:
     BOOL BltFromFX(LPDIRECTDRAWSURFACE pSurface, int x, int y, const CRect& rClip, DWORD dwFlags);
 
     void SetResRef(const CResRef& cNewResRef, BOOL bDoubleSize, BOOL bSetAutoRequest, BOOL bWarningIfMissing);
+    WORD GetCurrentFrameId();
+    WORD GetCurrentSequenceId();
 
     /* 0000 */ virtual BOOL FrameAdvance();
     /* 0004 */ virtual BOOL Render(WORD* pSurface, LONG lPitch, INT nRefPtX, INT nRefPtY, const CRect& rClip, BOOLEAN bDemanded, DWORD dwFlags, const CPoint& ptSource);

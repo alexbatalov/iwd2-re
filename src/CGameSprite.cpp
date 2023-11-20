@@ -902,7 +902,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
         memset(field_725A, 0, sizeof(field_725A));
 
         field_727E = 0;
-        field_72B2 = new CVariableHash(16);
+        m_pLocalVariables = new CVariableHash(16);
         m_internalButtonList = NULL;
 
         SleepEx(10, FALSE);
@@ -3021,6 +3021,16 @@ void CGameSprite::SetModalState(BYTE modalState, BOOL bUpdateToolbar)
     // TODO: Incomplete.
 }
 
+// 0x7202E0
+BOOL CGameSprite::sub_7202E0()
+{
+    if (g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_cutScene) {
+        return FALSE;
+    } else {
+        return (m_curAction.m_internalFlags & 0x1) == 0;
+    }
+}
+
 // 0x720310
 void CGameSprite::CheckSequence(BYTE& sequence)
 {
@@ -3250,6 +3260,12 @@ BOOL CGameSprite::Orderable(BOOL bIgnoreControl)
     // TODO: Incomplete.
 
     return TRUE;
+}
+
+// 0x728560
+BOOL CGameSprite::Animate()
+{
+    return (~m_derivedStats.m_generalState >> 11) & 0x1;
 }
 
 // 0x728570
@@ -5754,6 +5770,24 @@ void CGameSprite::SetResRef(const CResRef& resRef)
     m_resRef = resRef;
 }
 
+// 0x453160
+void CGameSprite::sub_453160(int a1)
+{
+    field_7240 = a1;
+}
+
+// 0x453170
+int CGameSprite::sub_453170()
+{
+    return field_7240;
+}
+
+// 0x453180
+SHORT CGameSprite::GetSequence()
+{
+    return m_nSequence;
+}
+
 // 0x453190
 CCreatureFileHeader* CGameSprite::GetBaseStats()
 {
@@ -5766,6 +5800,12 @@ CDerivedStats* CGameSprite::GetDerivedStats()
     return &m_derivedStats;
 }
 
+// 0x4531B0
+void CGameSprite::sub_4531B0()
+{
+    field_562C = 1;
+}
+
 // 0x4531C0
 CGameEffectList* CGameSprite::GetEquipedEffectList()
 {
@@ -5776,6 +5816,12 @@ CGameEffectList* CGameSprite::GetEquipedEffectList()
 CGameEffectList* CGameSprite::GetTimedEffectList()
 {
     return &m_timedEffectList;
+}
+
+// 0x4531E0
+void CGameSprite::sub_4531E0(int a1)
+{
+    field_727A = a1;
 }
 
 // 0x4AEF20
@@ -5813,10 +5859,48 @@ CGameSpriteSpellList* CGameSprite::GetShapeshifts()
     return &m_shapeshifts;
 }
 
+// 0x5940D0
+DWORD CGameSprite::sub_5940D0()
+{
+    return m_baseStats.m_specialization;
+}
+
+// 0x5940E0
+INT CGameSprite::sub_5940E0(BYTE buttonNum)
+{
+    // __FILE__: .\Include\ObjCreature.h
+    // __LINE__: 2028
+    UTIL_ASSERT(buttonNum < CGAMESAVECHARACTER_NUM_CUSTOM_BUTTONS22);
+
+    return field_3D14[buttonNum];
+}
+
+// 0x594120
+void CGameSprite::sub_594120(BYTE buttonNum, int a2)
+{
+    // __FILE__: .\Include\ObjCreature.h
+    // __LINE__: 2036
+    UTIL_ASSERT(buttonNum < CGAMESAVECHARACTER_NUM_CUSTOM_BUTTONS22);
+
+    field_3D14[buttonNum] = a2;
+}
+
 // 0x594160
 BYTE CGameSprite::GetModalState()
 {
     return m_nModalState;
+}
+
+// 0x45B710
+int CGameSprite::sub_45B710()
+{
+    return field_70F2;
+}
+
+// 0x45B720
+SHORT CGameSprite::GetDirection()
+{
+    return m_nDirection;
 }
 
 // 0x45B730
@@ -5837,6 +5921,303 @@ SHORT CGameSprite::GetHappiness()
     return m_nHappiness;
 }
 
+// 0x45B760
+BOOL CGameSprite::GetActive()
+{
+    return m_active;
+}
+
+// 0x45B770
+CVariableHash* CGameSprite::GetLocalVariables()
+{
+    return m_pLocalVariables;
+}
+
+// 0x724010
+INT CGameSprite::sub_724010(INT a1)
+{
+    CItem* pItem = m_equipment.m_items[1];
+    if (pItem == NULL) {
+        return 1;
+    }
+
+    switch (pItem->GetItemType()) {
+    case 60:
+        return min(6, a1);
+    case 61:
+        return min(5, a1);
+    case 62:
+        return min(2, a1);
+    case 63:
+    case 64:
+        return min(0, a1);
+    case 65:
+        return min(1, a1);
+    case 66:
+        return min(4, a1);
+    case 68:
+        return min(3, a1);
+    default:
+        return a1;
+    }
+}
+
+// 0x7240A0
+INT CGameSprite::sub_7240A0()
+{
+    CItem* pItem = m_equipment.m_items[1];
+    if (pItem == NULL) {
+        return 0;
+    }
+
+    INT v1 = 0;
+
+    INT nItemType = pItem->GetItemType();
+    INT nFeatValue = GetFeatValue(CGAMESPRITE_FEAT_ARMOR_PROF);
+    switch (nItemType) {
+    case 60:
+        if (nFeatValue >= 1) {
+            return v1;
+        }
+        return 0;
+    case 61:
+        if (nFeatValue >= 1) {
+            return v1;
+        }
+        v1 = -1;
+        break;
+    case 62:
+        if (nFeatValue >= 2) {
+            return v1;
+        }
+        v1 = -5;
+        break;
+    case 63:
+    case 64:
+        if (nFeatValue >= 3) {
+            return v1;
+        }
+        v1 = -7;
+        break;
+    case 65:
+        if (nFeatValue >= 3) {
+            return v1;
+        }
+        v1 = -6;
+        break;
+    case 66:
+        if (nFeatValue >= 2) {
+            return v1;
+        }
+        v1 = -3;
+        break;
+    case 68:
+        if (nFeatValue >= 3) {
+            return v1;
+        }
+        v1 = -4;
+        break;
+    default:
+        return v1;
+    }
+
+    if ((pItem->m_flags & 0x8) != 0) {
+        v1++;
+    }
+
+    return v1;
+}
+
+// 0x724170
+INT CGameSprite::sub_724170()
+{
+    INT nSlot = 2 * (m_nWeaponSet + 22);
+    CItem* pItem = m_equipment.m_items[nSlot];
+    if (pItem == NULL) {
+        return 0;
+    }
+
+    INT v1 = 0;
+
+    INT nItemType = pItem->GetItemType();
+    if (GetFeatValue(CGAMESPRITE_FEAT_SHIELD_PROF) < 1) {
+        switch (nItemType) {
+        case 41:
+            if (pItem->GetResRef() != CResRef("00BARD04")
+                && pItem->GetResRef() != CResRef("00HFBD04")) {
+                v1 = -1;
+                if ((pItem->m_flags & 0x8) != 0) {
+                    v1++;
+                }
+            }
+            break;
+        case 47:
+        case 49:
+            v1 = -2;
+            if ((pItem->m_flags & 0x8) != 0) {
+                v1++;
+            }
+            break;
+        case 53:
+            v1 = -1;
+            if ((pItem->m_flags & 0x8) != 0) {
+                v1++;
+            }
+            break;
+        }
+    }
+
+    return v1;
+}
+
+// 0x724270
+INT CGameSprite::sub_724270()
+{
+    INT nSlot = 2 * (m_nWeaponSet + 22);
+    CItem* pItem = m_equipment.m_items[nSlot];
+    if (pItem == NULL) {
+        return 0;
+    }
+
+    switch (pItem->GetItemType()) {
+    case 41:
+        if (pItem->GetResRef() != CResRef("00BARD04")
+            && pItem->GetResRef() != CResRef("00HFBD04")) {
+            return 5;
+        }
+        return 0;
+    case 47:
+        return 50;
+    case 49:
+        return 15;
+    case 53:
+        return 5;
+    default:
+        return 0;
+    }
+}
+
+// 0x724360
+INT CGameSprite::sub_724360()
+{
+    CItem* pItem = m_equipment.m_items[1];
+    if (pItem == NULL) {
+        return 0;
+    }
+
+    switch (pItem->GetItemType()) {
+    case 60:
+        return 10;
+    case 61:
+        return 15;
+    case 62:
+        return 30;
+    case 63:
+    case 64:
+        return 40;
+    case 65:
+        return 35;
+    case 66:
+        return 20;
+    case 68:
+        return 25;
+    default:
+        return 0;
+    }
+}
+
+// 0x7243F0
+BOOL CGameSprite::CheckAranceFailure(INT nRoll)
+{
+    INT nFailureChance = sub_724430();
+
+    if (nRoll >= nFailureChance) {
+        return FALSE;
+    }
+
+    // "Spell Failure check: Roll d100 %d vs. Spell failure chance %d"
+    FeedBack(83, nRoll, nFailureChance, 0, 40955, 0, 0);
+
+    return TRUE;
+}
+
+// 0x724430
+int CGameSprite::sub_724430()
+{
+    INT nMod = 0;
+
+    if (m_derivedStats.m_spellStates[SPLSTATE_MENTAL_DOMINATION]) {
+        nMod = 100;
+    }
+
+    if (m_derivedStats.m_spellStates[SPLSTATE_BLINK]) {
+        nMod += 20;
+    }
+
+    if (m_derivedStats.m_spellStates[SPLSTATE_DEAFENED]) {
+        nMod += 20;
+    }
+
+    INT nFailureChance = m_derivedStats.m_nSpellFailureArcane
+        + nMod
+        + sub_724360()
+        + sub_724270();
+
+    if (sub_763150(CGAMESPRITE_FEAT_ARMORED_ARCANA)) {
+        nFailureChance -= 5 * GetFeatValue(CGAMESPRITE_FEAT_ARMORED_ARCANA);
+    }
+
+    if (nFailureChance > 100) {
+        nFailureChance = 100;
+    } else if (nFailureChance < 0) {
+        nFailureChance = 0;
+    }
+
+    return nFailureChance;
+}
+
+// 0x724540
+BOOL CGameSprite::CheckDivineFailure(INT nRoll)
+{
+    INT nMod = 0;
+
+    if (m_derivedStats.m_spellStates[SPLSTATE_MENTAL_DOMINATION]) {
+        nMod = 100;
+    }
+
+    if (m_derivedStats.m_spellStates[SPLSTATE_BLINK]) {
+        nMod += 20;
+    }
+
+    if (m_derivedStats.m_spellStates[SPLSTATE_DEAFENED]) {
+        nMod += 20;
+    }
+
+    INT nFailureChance = m_derivedStats.m_nSpellFailureDivine + nMod;
+    if (nFailureChance > 100) {
+        nFailureChance = 100;
+    } else if (nFailureChance < 0) {
+        nFailureChance = 0;
+    }
+
+    if (nRoll >= nFailureChance) {
+        return FALSE;
+    }
+
+    // "Spell Failure check: Roll d100 %d vs. Spell failure chance %d"
+    FeedBack(FEEDBACK_ROLL, nRoll, nFailureChance, 0, 40955, 0, 0);
+
+    return TRUE;
+}
+
+// 0x7245D0
+BOOLEAN CGameSprite::sub_7245D0()
+{
+    return m_derivedStats.m_spellStates[SPLSTATE_HELD]
+        || m_derivedStats.m_spellStates[SPLSTATE_HOPELESSNESS]
+        || m_derivedStats.m_spellStates[SPLSTATE_OTILUKES_RESILIENT_SPHERE];
+}
+
 // 0x7245F0
 INT CGameSprite::GetNextHatedRacesSlot()
 {
@@ -5851,10 +6232,59 @@ INT CGameSprite::GetNextHatedRacesSlot()
     return nIndex;
 }
 
+// 0x724610
+void CGameSprite::sub_724610()
+{
+    const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+    INT nClass = m_derivedStats.GetBestClass() - 1;
+
+    for (int v1 = 0; v1 < 9; v1++) {
+        if (field_3D14[v1] == 0) {
+            field_3D14[v1] = atol(ruleTables.m_tQuickSlots.GetAt(CPoint(0, v1)));
+        }
+    }
+}
+
 // 0x724690
 BOOL CGameSprite::sub_724690(SHORT a1)
 {
-    // TODO: Incomplete.
+    CItem* pItem = m_equipment.m_items[1];
+    if (pItem == NULL) {
+        return FALSE;
+    }
+
+    WORD nItemType = pItem->GetItemType();
+    switch (a1) {
+    case 0:
+        switch (nItemType) {
+        case 67:
+            return TRUE;
+        }
+        break;
+    case 1:
+        switch (nItemType) {
+        case 60:
+        case 61:
+            return TRUE;
+        }
+        break;
+    case 2:
+        switch (nItemType) {
+        case 62:
+        case 66:
+        case 68:
+            return TRUE;
+        }
+        break;
+    case 3:
+        switch (nItemType) {
+        case 63:
+        case 64:
+        case 65:
+            return TRUE;
+        }
+        break;
+    }
 
     return FALSE;
 }

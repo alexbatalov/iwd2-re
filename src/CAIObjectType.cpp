@@ -436,7 +436,7 @@ const CAIObjectType CAIObjectType::NOT_SPRITE(EA_INANIMATE, 255, 255, 255, 255, 
 // 0x8C7788
 const CAIObjectType CAIObjectType::OBJECT_MYSELF(0, 0, 0, 0, 0, 0, 0, 0, -1, SPECIALCASE_MYSELF, CString(""), 0, 0);
 
-// NOTE: Inlined.
+// 0x45B320
 CAIObjectType::CAIObjectType(const CAIObjectType& type)
 {
     Set(type);

@@ -361,6 +361,7 @@ class CGameEffectBarbarianRage : public CGameEffect {
 public:
     CGameEffectBarbarianRage(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectCalm : public CGameEffect {
@@ -903,6 +904,7 @@ class CGameEffectImmunityToProjectile : public CGameEffect {
 public:
     CGameEffectImmunityToProjectile(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectResistSlashing : public CGameEffect {
@@ -1457,6 +1459,7 @@ class CGameEffectRemoveInnateAbility : public CGameEffect {
 public:
     CGameEffectRemoveInnateAbility(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectResistanceToPoison : public CGameEffect {
@@ -1609,6 +1612,7 @@ class CGameEffectFamiliarBlock : public CGameEffect {
 public:
     CGameEffectFamiliarBlock(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectBounceProjectile : public CGameEffect {

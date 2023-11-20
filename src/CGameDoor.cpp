@@ -635,3 +635,21 @@ void CGameDoor::SetDrawPoly(SHORT time)
     }
     m_drawPoly = time;
 }
+
+// 0x453140
+DWORD CGameDoor::GetFlags()
+{
+    return m_dwFlags;
+}
+
+// 0x453150
+void CGameDoor::SetFlags(DWORD dwFlags)
+{
+    m_dwFlags = dwFlags;
+}
+
+// 0x45B700
+BOOL CGameDoor::sub_45B700()
+{
+    return m_dwFlags & 0x1;
+}

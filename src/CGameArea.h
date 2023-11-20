@@ -207,6 +207,7 @@ public:
     CNamedCreatureVariableHash* GetNamedCreatures();
     CGameAreaNotes* GetAreaNotes();
     LONG GetBattleSongCounter();
+    BYTE GetId();
 
     static INT dword_8D212C;
     static BOOLEAN byte_8D2138;

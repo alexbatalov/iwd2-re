@@ -53,7 +53,7 @@ CAIAction CGameAIBase::m_aiAction;
 // 0x44C4B0
 CGameAIBase::CGameAIBase()
 {
-    field_592 = 0;
+    m_nLastActionReturn = 0;
     m_objectType = CGameObject::TYPE_AIBASE;
     m_lAttacker.Set(CAIObjectType::NOONE);
     m_lOrderedBy.Set(CAIObjectType::NOONE);
@@ -97,7 +97,7 @@ CGameAIBase::CGameAIBase()
     m_firstCall = TRUE;
     m_forceActionPick = FALSE;
     field_580 = 0;
-    field_592 = -1;
+    m_nLastActionReturn = -1;
     field_588 = 0;
     field_58C = 0;
     field_594 = 0;
@@ -1311,6 +1311,36 @@ CVariable* CGameAIBase::GetGlobalVariable(const CString& sScope, const CString& 
     // TODO: Incomplete.
 
     return NULL;
+}
+
+// 0x4530F0
+void CGameAIBase::sub_4530F0(const CAIObjectType& type)
+{
+    field_342.Set(type);
+}
+
+// 0x453110
+void CGameAIBase::sub_453110(const CAIObjectType& type)
+{
+    field_37E.Set(type);
+}
+
+// 0x453130
+void CGameAIBase::SetLastActionReturn(SHORT returnValue)
+{
+    m_nLastActionReturn = returnValue;
+}
+
+// 0x45B6D0
+int CGameAIBase::sub_45B6D0()
+{
+    return field_58C;
+}
+
+// 0x45B6E0
+void CGameAIBase::sub_45B6E0(const CAIObjectType& type)
+{
+    field_3BA.Set(type);
 }
 
 // -----------------------------------------------------------------------------

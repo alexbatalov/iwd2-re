@@ -43,7 +43,7 @@ int CVariableHashBase::PRIME[] = {
 
 // -----------------------------------------------------------------------------
 
-// NOTE: Inlined.
+// 0x452BD0
 CVariable::CVariable()
 {
 }
@@ -72,6 +72,12 @@ CString CVariable::GetName()
 void CVariable::SetName(CString sName)
 {
     strncpy(m_name, sName, 32);
+}
+
+// 0x45B600
+int CVariable::GetIntValue()
+{
+    return m_intValue;
 }
 
 // NOTE: Inlined.

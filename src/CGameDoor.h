@@ -20,6 +20,9 @@ public:
 
     void OnDoorStatusUpdate(BOOLEAN bDoorOpened, DWORD dwFlags, WORD nTrapActivated, WORD nTrapDetected);
     void SetDrawPoly(SHORT time);
+    DWORD GetFlags();
+    void SetFlags(DWORD dwFlags);
+    BOOL sub_45B700();
 
     /* 0598 */ CResRef m_resID;
     /* 05A0 */ CRect m_rOpenBounding;

@@ -814,3 +814,14 @@ BYTE CItem::GetMinCHRRequired()
 
     return nValue;
 }
+
+// 0x675320
+bool CItem::operator==(const CItem& other)
+{
+    return m_useCount1 == other.m_useCount1
+        && m_useCount2 == other.m_useCount2
+        && m_useCount3 == other.m_useCount3
+        && m_wear == other.m_wear
+        && m_flags == other.m_flags
+        && cResRef == other.cResRef;
+}

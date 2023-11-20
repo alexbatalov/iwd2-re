@@ -16,6 +16,7 @@ public:
     /* 0050 */ BOOLEAN DoAIUpdate(BOOLEAN active, LONG counter) override;
 
     void Marshal(CAreaFileStaticObject** pStaticObject);
+    CVidCell* GetVidCell();
 
     /* 006E */ CAreaFileStaticObject m_header;
     /* 00BC */ CVidCell m_vidCell;

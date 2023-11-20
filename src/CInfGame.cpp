@@ -4752,6 +4752,12 @@ CStringList* CInfGame::GetSounds()
     return pList;
 }
 
+// 0x5C3770
+STRREF CInfGame::sub_5C3770(CString a1)
+{
+    return 9885;
+}
+
 // 0x5C3790
 void CInfGame::ChangeBiography(BYTE nFixedPartyId, CString szBiography)
 {
@@ -5469,6 +5475,32 @@ BYTE CInfGame::GetKeymapFlag(SHORT index)
     UTIL_ASSERT(index >= 0 && index < CINFGAME_KEYMAP_SIZE);
 
     return m_pKeymapFlags[index];
+}
+
+// NOTE: Inlined
+void CInfGame::SetQuickFormation(SHORT buttonNum, SHORT formation)
+{
+    // __FILE__: .\Include\InfGame.h
+    // __LINE__: 1499
+    UTIL_ASSERT(buttonNum < CGAMESAVE_NUM_QUICK_FORMATIONS);
+
+    m_gameSave.m_quickFormations[buttonNum] = formation;
+}
+
+// NOTE: Inlined.
+void CInfGame::SetFormationToQuickFormation(SHORT buttonNum)
+{
+    // __FILE__: .\Include\InfGame.h
+    // __LINE__: 1500
+    UTIL_ASSERT(buttonNum < CGAMESAVE_NUM_QUICK_FORMATIONS);
+
+    m_gameSave.m_curFormation = m_gameSave.m_quickFormations[buttonNum];
+}
+
+// NOTE: Inlined.
+void CInfGame::SetFormation(SHORT formation)
+{
+    m_gameSave.m_curFormation = formation;
 }
 
 // -----------------------------------------------------------------------------

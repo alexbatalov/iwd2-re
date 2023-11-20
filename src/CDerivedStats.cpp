@@ -1,8 +1,10 @@
 #include "CDerivedStats.h"
 
+#include "CBaldurChitin.h"
 #include "CGameEffect.h"
 #include "CGameSprite.h"
 #include "CGameSpriteSpells.h"
+#include "CInfGame.h"
 #include "CUtil.h"
 
 // 0x443B30
@@ -1089,4 +1091,18 @@ INT CDerivedStats::GetBestClass()
     }
 
     return nBestClass + 1;
+}
+
+// FIXME: `nClass` should not be reference.
+//
+// 0x447B00
+CGameSpriteGroupedSpellList* CDerivedStats::sub_447B00(const BYTE& nClass)
+{
+    BYTE nClassIndex = g_pBaldurChitin->GetObjectGame()->GetSpellcasterIndex(nClass);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CDerivedStats.cpp
+    // __LINE__: 2159
+    UTIL_ASSERT(nClassIndex < CSPELLLIST_NUM_CLASSES);
+
+    return &(m_spells.m_spellsByClass[nClassIndex]);
 }

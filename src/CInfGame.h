@@ -220,6 +220,7 @@ public:
     CStringList* GetPortraits();
     CStringList* GetImportCharacters();
     CStringList* GetSounds();
+    STRREF sub_5C3770(CString a1);
     void ChangeBiography(BYTE nFixedPartyId, CString szBiography);
     BOOLEAN GetGameSpyCharacterInformation(INT nCharacterSlot, CString& sName, CString& sRace, CString& sClass, CString& sLevel);
     void MultiplayerSetCharacterCreationLocation();
@@ -275,6 +276,9 @@ public:
 
     BYTE GetKeymap(SHORT index);
     BYTE GetKeymapFlag(SHORT index);
+    void SetQuickFormation(SHORT buttonNum, SHORT formation);
+    void SetFormationToQuickFormation(SHORT buttonNum);
+    void SetFormation(SHORT formation);
 
     static const CString FOGOWAR_RESREF;
     static const CString SAVE_OBJECT_LIST_NAME;

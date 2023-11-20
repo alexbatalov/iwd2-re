@@ -217,3 +217,9 @@ void CGameStatic::Marshal(CAreaFileStaticObject** pStaticObject)
 
     (*pStaticObject)->m_posY -= (*pStaticObject)->m_height;
 }
+
+// 0x45B940
+CVidCell* CGameStatic::GetVidCell()
+{
+    return &m_vidCell;
+}

@@ -2826,3 +2826,11 @@ CString CDimm::GetCDSwitchDriveLetter()
 {
     return m_sCDSwitchDriveLetter;
 }
+
+// FIXME: `sDrive` should be reference.
+//
+// 0x5FBE70
+void CDimm::SetCDSwitchDriveLetter(CString sDrive)
+{
+    m_sCDSwitchDriveLetter = sDrive;
+}

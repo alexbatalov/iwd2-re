@@ -56,6 +56,8 @@ public:
     BYTE GetMinCONRequired();
     BYTE GetMinCHRRequired();
 
+    bool operator==(const CItem& other);
+
     /* 0014 */ INT m_nAbilities;
     /* 0018 */ WORD m_useCount1;
     /* 001A */ WORD m_useCount2;

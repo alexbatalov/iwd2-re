@@ -13,6 +13,7 @@ public:
 
     CString GetName();
     void SetName(CString sName);
+    int GetIntValue();
 };
 
 class CVariableHashBase {
