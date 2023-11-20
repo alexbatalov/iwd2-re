@@ -97,6 +97,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_PROTAGONIST;
     static const BYTE MSG_SUBTYPE_CMESSAGE_START_COMBAT_MUSIC;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_SCREENSHAKE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_DEMAND;
     static const BYTE MSG_SUBTYPE_CMESSAGE_WEAPON_IMMUNITIES_UPDATE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_101;
@@ -753,6 +754,22 @@ public:
     void Run() override;
 
     /* 000C */ SHORT m_deltaRep;
+};
+
+class CMessageScreenShake : public CMessage {
+public:
+    CMessageScreenShake(WORD duration, CHAR magnitudeX, CHAR magnitudeY, BOOLEAN bOverride, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ WORD m_duration;
+    /* 000E */ CHAR m_magnitudeX;
+    /* 000F */ CHAR m_magnitudeY;
+    /* 0010 */ BOOLEAN m_bOverride;
 };
 
 class CMessageSetActive : public CMessage {

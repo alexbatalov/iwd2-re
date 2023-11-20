@@ -283,6 +283,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_PROTAGONIST = 93;
 // 0x84CF35
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_START_COMBAT_MUSIC = 94;
 
+// 0x84CF3A
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SCREENSHAKE = 99;
+
 // 0x84CF3B
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_STORE_DEMAND = 100;
 
@@ -7200,6 +7203,112 @@ void CMessageReputationChange::Run()
     g_pBaldurChitin->GetBaldurMessage()->m_bInReputationChange = TRUE;
     g_pBaldurChitin->GetObjectGame()->ReputationAdjustment(m_deltaRep, FALSE);
     g_pBaldurChitin->GetBaldurMessage()->m_bInReputationChange = FALSE;
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4534C0
+CMessageScreenShake::CMessageScreenShake(WORD duration, CHAR magnitudeX, CHAR magnitudeY, BOOLEAN bOverride, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_duration = duration;
+    m_magnitudeX = magnitudeX;
+    m_magnitudeY = magnitudeY;
+    m_bOverride = bOverride;
+}
+
+// 0x43E170
+SHORT CMessageScreenShake::GetCommType()
+{
+    return BROADCAST_FORCED;
+}
+
+// 0x40A0E0
+BYTE CMessageScreenShake::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x453500
+BYTE CMessageScreenShake::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SCREENSHAKE;
+}
+
+// 0x505020
+void CMessageScreenShake::MarshalMessage(BYTE** pData, DWORD* dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 16043
+    UTIL_ASSERT(pData != NULL && dwSize != NULL);
+
+    *dwSize = sizeof(WORD)
+        + sizeof(CHAR)
+        + sizeof(CHAR)
+        + sizeof(BOOLEAN);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 16051
+    UTIL_ASSERT(*dwSize <= STATICBUFFERSIZE);
+
+    DWORD cnt = 0;
+
+    *reinterpret_cast<WORD*>(*pData + cnt) = m_duration;
+    cnt += sizeof(WORD);
+
+    *reinterpret_cast<CHAR*>(*pData + cnt) = m_magnitudeX;
+    cnt += sizeof(CHAR);
+
+    *reinterpret_cast<CHAR*>(*pData + cnt) = m_magnitudeY;
+    cnt += sizeof(CHAR);
+
+    *reinterpret_cast<BOOLEAN*>(*pData + cnt) = m_bOverride;
+    cnt += sizeof(BOOLEAN);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 16077
+    UTIL_ASSERT(cnt == *dwSize);
+}
+
+// 0x5050C0
+BOOL CMessageScreenShake::UnmarshalMessage(BYTE* pData, DWORD dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 16100
+    UTIL_ASSERT(pData != NULL);
+
+    DWORD cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    m_duration = *reinterpret_cast<WORD*>(*pData + cnt);
+    cnt += sizeof(WORD);
+
+    m_magnitudeX = *reinterpret_cast<CHAR*>(*pData + cnt);
+    cnt += sizeof(CHAR);
+
+    m_magnitudeY = *reinterpret_cast<CHAR*>(*pData + cnt);
+    cnt += sizeof(CHAR);
+
+    m_bOverride = *reinterpret_cast<BOOLEAN*>(*pData + cnt);
+    cnt += sizeof(BOOLEAN);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 16117
+    UTIL_ASSERT(cnt == dwSize);
+
+    return TRUE;
+}
+
+// 0x505140
+void CMessageScreenShake::Run()
+{
+    if (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bAllScreenShake) {
+        if (m_bOverride
+            || g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->GetInfinity()->m_bScreenShake) {
+            g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->GetInfinity()->SetScreenShake(TRUE,
+                m_duration,
+                CPoint(m_magnitudeX, m_magnitudeY));
+        }
+    }
 }
 
 // -----------------------------------------------------------------------------
