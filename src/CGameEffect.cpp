@@ -208,7 +208,7 @@ CGameEffectBase::CGameEffectBase()
     m_savingThrow = 0;
     m_saveMod = 0;
     m_special = 0;
-    field_44 = 0;
+    m_school = 0;
     field_48 = 0;
     m_minLevel = 0;
     m_maxLevel = 0;
@@ -1294,7 +1294,7 @@ void CGameEffect::CopyFromBase(CGameEffectBase* pBase)
     m_savingThrow = pBase->m_savingThrow;
     m_saveMod = pBase->m_saveMod;
     m_special = pBase->m_special;
-    field_44 = pBase->field_44;
+    m_school = pBase->m_school;
     field_48 = pBase->field_48;
     m_minLevel = pBase->m_minLevel;
     m_maxLevel = pBase->m_maxLevel;

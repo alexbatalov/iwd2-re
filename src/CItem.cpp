@@ -1,5 +1,6 @@
 #include "CItem.h"
 
+#include "CGameEffect.h"
 #include "CGameSprite.h"
 #include "CImmunities.h"
 #include "CUtil.h"
@@ -308,6 +309,48 @@ ITEM_ABILITY* CItem::GetAbility(INT nAbility)
     }
 
     return ability;
+}
+
+// 0x4E9680
+CGameEffect* CItem::GetAbilityEffect(LONG abilityNum, LONG effectNum, CGameObject* pObject)
+{
+    if (cResRef == "") {
+        return NULL;
+    }
+
+    if (pRes == NULL) {
+        return NULL;
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CItem.cpp
+    // __LINE__: 1521
+    UTIL_ASSERT(pRes->Demand());
+
+    if (effectNum >= pRes->GetAbilityEffectNo(abilityNum)) {
+        pRes->Release();
+        return NULL;
+    }
+
+    CGameEffect* pEffect = CGameEffect::DecodeEffect(pRes->GetAbilityEffect(abilityNum, effectNum),
+        CPoint(-1, -1),
+        -1,
+        CPoint(-1, -1));
+    if (pEffect != NULL) {
+        // NOTE: Uninline.
+        ITEM_ABILITY* ability = GetAbility(abilityNum);
+        if (ability != NULL) {
+            pEffect->m_school = ability->school;
+            pEffect->m_sourceType = 2;
+            // FIXME: Should it be `m_secondaryType`?
+            pEffect->field_48 = ability->secondaryType;
+            pEffect->m_sourceRes = cResRef;
+            pEffect->m_sourceFlags = ability->abilityFlags;
+            pEffect->m_casterLevel = 10;
+        }
+    }
+
+    pRes->Release();
+    return pEffect;
 }
 
 // 0x4E97E0

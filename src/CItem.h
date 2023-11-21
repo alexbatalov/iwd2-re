@@ -5,6 +5,8 @@
 #include "CSound.h"
 #include "FileFormat.h"
 
+class CGameEffect;
+class CGameObject;
 class CGameSprite;
 class CWeaponIdentification;
 
@@ -31,6 +33,7 @@ public:
     void Unequip(CGameSprite* pSprite, LONG slotNum, BOOL recalculateEffects, BOOL animationOnly);
     WORD GetAnimationType();
     ITEM_ABILITY* GetAbility(INT nAbility);
+    CGameEffect* GetAbilityEffect(LONG abilityNum, LONG effectNum, CGameObject* pObject);
     WORD GetItemType();
     DWORD GetCriticalHitMultiplier();
     DWORD GetWeight();

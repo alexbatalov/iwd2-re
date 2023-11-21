@@ -254,7 +254,7 @@ public:
     /* 0038 */ DWORD m_savingThrow;
     /* 003C */ LONG m_saveMod;
     /* 0040 */ DWORD m_special;
-    /* 0044 */ int field_44;
+    /* 0044 */ DWORD m_school;
     /* 0048 */ int field_48;
     /* 004C */ DWORD m_minLevel;
     /* 0050 */ DWORD m_maxLevel;
