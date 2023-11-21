@@ -2133,7 +2133,7 @@ void CInfGame::UnselectAll()
     SHORT nGroup = m_group.GetCount();
     CGameSprite* pSprite;
 
-    for (SHORT cnt = 0; cnt < cnt; cnt++) {
+    for (SHORT cnt = 0; cnt < nGroup; cnt++) {
         BYTE rc;
         do {
             rc = m_cObjectArray.GetDeny(pGroup[cnt],
