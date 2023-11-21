@@ -297,7 +297,7 @@ BOOL CUIPanel::OnRButtonDown(const CPoint& pt)
     POSITION pos = m_lControls.GetTailPosition();
     while (pos != NULL) {
         CUIControlBase* pControl = m_lControls.GetPrev(pos);
-        if (IsOver(pt - m_ptOrigin)) {
+        if (pControl->IsOver(pt - m_ptOrigin)) {
             if (pControl->IsOverPixel(pt - m_ptOrigin)) {
                 if (pControl->OnRButtonDown(pt - m_ptOrigin)) {
                     return TRUE;
