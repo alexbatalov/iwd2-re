@@ -6233,14 +6233,14 @@ INT CGameSprite::GetNextHatedRacesSlot()
 }
 
 // 0x724610
-void CGameSprite::sub_724610()
+void CGameSprite::ResetQuickSlots()
 {
     const CRuleTables& ruleTables = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
     INT nClass = m_derivedStats.GetBestClass() - 1;
 
-    for (int v1 = 0; v1 < 9; v1++) {
-        if (field_3D14[v1] == 0) {
-            field_3D14[v1] = atol(ruleTables.m_tQuickSlots.GetAt(CPoint(0, v1)));
+    for (int nSlot = 0; nSlot < CGAMESAVECHARACTER_NUM_CUSTOM_BUTTONS22; nSlot++) {
+        if (field_3D14[nSlot] == 0) {
+            field_3D14[nSlot] = atol(ruleTables.m_tQuickSlots.GetAt(CPoint(nSlot, nClass)));
         }
     }
 }

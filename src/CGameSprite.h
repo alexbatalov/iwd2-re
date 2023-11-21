@@ -534,7 +534,7 @@ public:
     BOOL CheckDivineFailure(INT nRoll);
     BOOLEAN sub_7245D0();
     INT GetNextHatedRacesSlot();
-    void sub_724610();
+    void ResetQuickSlots();
     BOOL sub_724690(SHORT a1);
 
     // NOTE: See `CGameSpriteSpells` for explanation of the overall ugliness of
