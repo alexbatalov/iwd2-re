@@ -236,6 +236,7 @@ public:
     UINT GetSpellcasterDomainIndex(const DWORD& dwMask);
     DWORD GetClassMask(const BYTE& nClass);
     BYTE GetSpellType(const CResRef& resRef);
+    INT GetSpellLevel(const CResRef& resRef, BYTE nClass, DWORD nSpecialization);
     void sub_5CADF0();
 
     INT GetCurrentChapter();

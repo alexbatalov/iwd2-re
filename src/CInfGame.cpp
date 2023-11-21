@@ -5229,6 +5229,48 @@ BYTE CInfGame::GetSpellType(const CResRef& resRef)
     return 0;
 }
 
+// 0x5CAC30
+INT CInfGame::GetSpellLevel(const CResRef& resRef, BYTE nClass, DWORD nSpecialization)
+{
+    UINT nID;
+
+    // NOTE: Uninline.
+    if (!m_spells.Find(resRef, nID)) {
+        CString sError;
+        sError.Format("Spell not in master list - Invalid spell: %s", (LPCSTR)resRef.GetResRefStr());
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+        // __LINE__: 23940
+        UTIL_ASSERT_MSG(FALSE, (LPCSTR)sError);
+    }
+
+    if (nSpecialization != 0) {
+        UINT nDomainIndex = GetSpellcasterDomainIndex(nSpecialization);
+
+        for (UINT nLevel = 0; nLevel < m_spellsByDomain[nDomainIndex].m_nHighestLevel; nLevel++) {
+            CSpellList* pSpells = &(m_spellsByDomain[nDomainIndex].m_lists[nLevel]);
+            for (UINT nIndex = 0; nIndex < pSpells->m_nCount; nIndex++) {
+                if (pSpells->m_pList[nIndex].m_nID == nID) {
+                    return nLevel;
+                }
+            }
+        }
+    } else {
+        UINT nClassIndex = GetSpellcasterIndex(nClass);
+
+        for (UINT nLevel = 0; nLevel < m_spellsByClass[nClassIndex].m_nHighestLevel; nLevel++) {
+            CSpellList* pSpells = &(m_spellsByClass[nClassIndex].m_lists[nLevel]);
+            for (UINT nIndex = 0; nIndex < pSpells->m_nCount; nIndex++) {
+                if (pSpells->m_pList[nIndex].m_nID == nID) {
+                    return nLevel;
+                }
+            }
+        }
+    }
+
+    return CSPELLLIST_MAX_LEVELS;
+}
+
 // 0x5CADF0
 void CInfGame::sub_5CADF0()
 {
