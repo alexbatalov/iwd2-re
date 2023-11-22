@@ -63,7 +63,7 @@ void CIcon::RenderIcon(int a1, const CPoint& pos, const CSize& size, const CRect
 
             CRect rClip(rBoundingBox);
 
-            bResult = vcIcon.Render(0, x, y, rClip, NULL, 0, dwFlags, -1);
+            bResult = vcIcon.Render(0, x, y, rClip, NULL, 0, dwRenderFlags, -1);
 
             // __FILE__: C:\Projects\Icewind2\src\Baldur\CIcon.cpp
             // __LINE__: 174
