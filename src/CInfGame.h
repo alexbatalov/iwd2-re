@@ -262,7 +262,7 @@ public:
     void SetState(SHORT nState);
     BYTE GetIconIndex();
     void SetIconIndex(BYTE iconIndex);
-    CSpellResRefList* GetSongs();
+    CSpellResRefList& GetMasterSongLookup();
     CSpellResRefList* GetInnateSpells();
     CSpellResRefList* GetShapeshifts();
     CString GetSaveGame();

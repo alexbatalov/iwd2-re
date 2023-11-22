@@ -1933,7 +1933,7 @@ CGameButtonList* CGameSprite::GetSongsButtonList()
         CGameSpriteSpellListEntry* entry = m_songs.Get(index);
 
         // NOTE: Uninline.
-        g_pBaldurChitin->GetObjectGame()->GetSongs()->Get(entry->m_nID).GetResRef(resRef);
+        g_pBaldurChitin->GetObjectGame()->GetMasterSongLookup().Get(entry->m_nID).GetResRef(resRef);
 
         buttons->AddTail(IcewindMisc::CreateButtonData(resRef));
     }
@@ -6415,7 +6415,7 @@ BOOLEAN CGameSprite::AddInnateSpell(const CResRef& resRef, const unsigned int& a
 BOOLEAN CGameSprite::AddSong(const CResRef& resRef, const unsigned int& a2, const unsigned int& a3, const unsigned int& a4)
 {
     UINT nID = 0;
-    if (g_pBaldurChitin->GetObjectGame()->GetSongs()->Find(resRef, nID) != TRUE) {
+    if (g_pBaldurChitin->GetObjectGame()->GetMasterSongLookup().Find(resRef, nID) != TRUE) {
         return FALSE;
     }
 
@@ -6508,7 +6508,7 @@ BOOLEAN CGameSprite::RemoveInnateSpell(const CResRef& resRef, const unsigned int
 BOOLEAN CGameSprite::RemoveSong(const CResRef& resRef, const unsigned int& a2, const unsigned int& a3, const unsigned int& a4)
 {
     UINT nID = 0;
-    if (g_pBaldurChitin->GetObjectGame()->GetSongs()->Find(resRef, nID) != TRUE) {
+    if (g_pBaldurChitin->GetObjectGame()->GetMasterSongLookup().Find(resRef, nID) != TRUE) {
         return FALSE;
     }
 

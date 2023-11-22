@@ -5468,9 +5468,9 @@ void CInfGame::SetIconIndex(BYTE iconIndex)
 }
 
 // 0x58FEC0
-CSpellResRefList* CInfGame::GetSongs()
+CSpellResRefList& CInfGame::GetMasterSongLookup()
 {
-    return &m_songs;
+    return m_songs;
 }
 
 // 0x5F67F0
