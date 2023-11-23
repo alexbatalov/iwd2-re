@@ -399,6 +399,7 @@ public:
     void SetCharacterToolTip(CUIControlBase* pControl);
     void SetDirection(const CPoint& posDest);
     void SetDirection(SHORT direction);
+    void sub_706FE0();
     void SetIdleSequence();
     SHORT GetIdleSequence();
     void SetSequence(SHORT nSequence);
@@ -673,8 +674,7 @@ public:
     /* 5352 */ int field_5352;
     /* 5356 */ int field_5356;
     /* 535A */ CPoint m_posDest;
-    /* 5362 */ int field_5362;
-    /* 5366 */ int field_5366;
+    /* 5362 */ CPoint field_5362;
     /* 536A */ int field_536A;
     /* 536E */ int field_536E;
     /* 5372 */ CPoint m_posLastVisMapEntry;

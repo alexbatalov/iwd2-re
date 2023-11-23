@@ -657,8 +657,8 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     field_5356 = 0;
     m_posDest.x = 0;
     m_posDest.y = 0;
-    field_5362 = 0;
-    field_5366 = 0;
+    field_5362.x = 0;
+    field_5362.y = 0;
     field_536A = 0;
     field_536E = 0;
     m_nSequence = -1;
@@ -1437,6 +1437,28 @@ void CGameSprite::SetDirection(const CPoint& posDest)
 void CGameSprite::SetDirection(SHORT direction)
 {
     // TODO: Incomplete.
+}
+
+// 0x706FE0
+void CGameSprite::sub_706FE0()
+{
+    field_5362 = m_pos;
+
+    if (m_nDirection >= 2 && m_nDirection <= 7) {
+        // NOTE: Uninline.
+        field_5362.x += GetAnimation()->GetMoveScale();
+    } else if (m_nDirection >= 10) {
+        // NOTE: Uninline.
+        field_5362.x -= GetAnimation()->GetMoveScale();
+    }
+
+    if (m_nDirection <= 3 || m_nDirection >= 14) {
+        // NOTE: Uninline.
+        field_5362.y -= 3 * GetAnimation()->GetMoveScale() / 4;
+    } else if (m_nDirection >= 6 && m_nDirection <= 11) {
+        // NOTE: Uninline.
+        field_5362.y += 3 * GetAnimation()->GetMoveScale() / 4;
+    }
 }
 
 // 0x707170
