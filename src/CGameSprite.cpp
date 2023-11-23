@@ -1439,6 +1439,20 @@ void CGameSprite::SetDirection(SHORT direction)
     // TODO: Incomplete.
 }
 
+// 0x706F80
+void CGameSprite::sub_706F80(SHORT direction)
+{
+    m_nDirection = direction;
+    m_nNewDirection = direction;
+
+    // NOTE: Uninline.
+    GetAnimation()->ChangeDirection(direction);
+
+    if (m_derivedStats.m_visualEffects[IWD_VFX_BLUR]) {
+        sub_706FE0();
+    }
+}
+
 // 0x706FE0
 void CGameSprite::sub_706FE0()
 {
