@@ -3,6 +3,7 @@
 #include "CBaldurChitin.h"
 #include "CGameSprite.h"
 #include "CInfGame.h"
+#include "CUtil.h"
 
 // 0x4CAE30
 CGameStatsRes::CGameStatsRes()
@@ -33,12 +34,12 @@ CGameStatsSprite::CGameStatsSprite()
     m_nGameKillsXPValue = 0;
     m_nGameKillsNumber = 0;
 
-    for (index = 0; index < CGAMESTATSSPRITE_SPELL_STATS; index++) {
+    for (index = 0; index < CGAMESAVECHARACTER_NUM_STATS_SPELLS; index++) {
         m_pSpellStats[index].m_cResRef = "";
         m_pSpellStats[index].m_nTimesUsed = 0;
     }
 
-    for (index = 0; index < CGAMESTATSSPRITE_WEAPON_STATS; index++) {
+    for (index = 0; index < CGAMESAVECHARACTER_NUM_STATS_WEAPONS; index++) {
         m_pWeaponStats[index].m_cResRef = "";
         m_pWeaponStats[index].m_nTimesUsed = 0;
     }
@@ -104,7 +105,7 @@ void CGameStatsSprite::RecordSpellUse(const CResRef& cResSpell)
     int minIndex;
 
     int index;
-    for (index = 0; index < CGAMESTATSSPRITE_SPELL_STATS; index++) {
+    for (index = 0; index < CGAMESAVECHARACTER_NUM_STATS_SPELLS; index++) {
         if (m_pSpellStats[index].m_cResRef == cResSpell) {
             m_pSpellStats[index].m_nTimesUsed++;
             break;
@@ -116,7 +117,7 @@ void CGameStatsSprite::RecordSpellUse(const CResRef& cResSpell)
         }
     }
 
-    if (index == CGAMESTATSSPRITE_SPELL_STATS) {
+    if (index == CGAMESAVECHARACTER_NUM_STATS_SPELLS) {
         m_pSpellStats[minIndex].m_cResRef = cResSpell;
         m_pSpellStats[minIndex].m_nTimesUsed = 1;
     }
@@ -129,7 +130,7 @@ void CGameStatsSprite::RecordWeaponUse(const CResRef& cResWeapon)
     int minIndex;
 
     int index;
-    for (index = 0; index < CGAMESTATSSPRITE_WEAPON_STATS; index++) {
+    for (index = 0; index < CGAMESAVECHARACTER_NUM_STATS_WEAPONS; index++) {
         if (m_pWeaponStats[index].m_cResRef == cResWeapon) {
             m_pWeaponStats[index].m_nTimesUsed++;
             break;
@@ -141,7 +142,7 @@ void CGameStatsSprite::RecordWeaponUse(const CResRef& cResWeapon)
         }
     }
 
-    if (index == CGAMESTATSSPRITE_WEAPON_STATS) {
+    if (index == CGAMESAVECHARACTER_NUM_STATS_WEAPONS) {
         m_pWeaponStats[minIndex].m_cResRef = cResWeapon;
         m_pWeaponStats[minIndex].m_nTimesUsed = 1;
     }
@@ -154,7 +155,7 @@ void CGameStatsSprite::GetFavouriteSpell(CResRef& cResSpell)
 
     SHORT maxValue = 0;
 
-    for (int index = 0; index < CGAMESTATSSPRITE_SPELL_STATS; index++) {
+    for (int index = 0; index < CGAMESAVECHARACTER_NUM_STATS_SPELLS; index++) {
         if (m_pSpellStats[index].m_nTimesUsed > maxValue) {
             cResSpell = m_pSpellStats[index].m_cResRef;
             maxValue = m_pSpellStats[index].m_nTimesUsed;
@@ -169,10 +170,32 @@ void CGameStatsSprite::GetFavouriteWeapon(CResRef& cResWeapon)
 
     SHORT maxValue = 0;
 
-    for (int index = 0; index < CGAMESTATSSPRITE_WEAPON_STATS; index++) {
+    for (int index = 0; index < CGAMESAVECHARACTER_NUM_STATS_WEAPONS; index++) {
         if (m_pWeaponStats[index].m_nTimesUsed > maxValue) {
             cResWeapon = m_pWeaponStats[index].m_cResRef;
             maxValue = m_pWeaponStats[index].m_nTimesUsed;
         }
     }
+}
+
+// NOTE: Inlined.
+void CGameStatsSprite::SetSpellStats(BYTE index, BYTE* name, SHORT count)
+{
+    // __FILE__: .\Include\CGameStatsSprite.h
+    // __LINE__: 119
+    UTIL_ASSERT(index < CGAMESAVECHARACTER_NUM_STATS_SPELLS);
+
+    m_pSpellStats[index].m_cResRef = name;
+    m_pSpellStats[index].m_nTimesUsed = count;
+}
+
+// NOTE: Inlined.
+void CGameStatsSprite::SetWeaponStats(BYTE index, BYTE* name, SHORT count)
+{
+    // __FILE__: .\Include\CGameStatsSprite.h
+    // __LINE__: 120
+    UTIL_ASSERT(index < CGAMESAVECHARACTER_NUM_STATS_WEAPONS);
+
+    m_pWeaponStats[index].m_cResRef = name;
+    m_pWeaponStats[index].m_nTimesUsed = count;
 }

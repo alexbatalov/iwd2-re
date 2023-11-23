@@ -5,9 +5,7 @@
 
 #include "BalDataTypes.h"
 #include "CResRef.h"
-
-#define CGAMESTATSSPRITE_SPELL_STATS 4
-#define CGAMESTATSSPRITE_WEAPON_STATS 4
+#include "FileFormat.h"
 
 class CGameSprite;
 
@@ -34,6 +32,9 @@ public:
     void GetFavouriteSpell(CResRef& cResSpell);
     void GetFavouriteWeapon(CResRef& cResWeapon);
 
+    void SetSpellStats(BYTE index, BYTE* name, SHORT count);
+    void SetWeaponStats(BYTE index, BYTE* name, SHORT count);
+
     /* 0000 */ STRREF m_strStrongestKillName;
     /* 0004 */ DWORD m_nStrongestKillXPValue;
     /* 0008 */ ULONG m_nPreviousTimeWithParty;
@@ -43,8 +44,8 @@ public:
     /* 0018 */ DWORD m_nChapterKillsNumber;
     /* 001C */ DWORD m_nGameKillsXPValue;
     /* 0020 */ DWORD m_nGameKillsNumber;
-    /* 0024 */ CGameStatsRes m_pSpellStats[CGAMESTATSSPRITE_SPELL_STATS];
-    /* 005C */ CGameStatsRes m_pWeaponStats[CGAMESTATSSPRITE_WEAPON_STATS];
+    /* 0024 */ CGameStatsRes m_pSpellStats[CGAMESAVECHARACTER_NUM_STATS_SPELLS];
+    /* 005C */ CGameStatsRes m_pWeaponStats[CGAMESAVECHARACTER_NUM_STATS_WEAPONS];
 };
 
 #endif /* CGAMESTATSSPRITE_H_ */
