@@ -1977,6 +1977,38 @@ CGameButtonList* CGameSprite::GetSongsButtonList()
     return buttons;
 }
 
+// NOTE: This function correctly accepts `nClass` by value (as opposed by to
+// many others which passes `nClass` as a reference for unknown reason).
+//
+// 0x7166D0
+BOOLEAN CGameSprite::CanCast(BYTE nClass, DWORD nSpecialization, CSpell* pSpell)
+{
+    INT nValue = 0;
+    switch (nClass) {
+    case CAIOBJECTTYPE_C_BARBARIAN:
+    case CAIOBJECTTYPE_C_FIGHTER:
+    case CAIOBJECTTYPE_C_MONK:
+    case CAIOBJECTTYPE_C_ROGUE:
+        return FALSE;
+    case CAIOBJECTTYPE_C_BARD:
+    case CAIOBJECTTYPE_C_SORCERER:
+        nValue = m_derivedStats.m_nCHR;
+        break;
+    case CAIOBJECTTYPE_C_CLERIC:
+    case CAIOBJECTTYPE_C_DRUID:
+    case CAIOBJECTTYPE_C_PALADIN:
+    case CAIOBJECTTYPE_C_RANGER:
+        nValue = m_derivedStats.m_nWIS;
+        break;
+    case CAIOBJECTTYPE_C_WIZARD:
+        nValue = m_derivedStats.m_nINT;
+        break;
+    }
+
+    INT nLevel = g_pBaldurChitin->GetObjectGame()->GetSpellLevel(pSpell->GetResRef(), nClass, nSpecialization);
+    return nLevel < CSPELLLIST_MAX_LEVELS && nValue >= nLevel + 11;
+}
+
 // 0x717620
 CGameButtonList* CGameSprite::GetInternalButtonList()
 {
