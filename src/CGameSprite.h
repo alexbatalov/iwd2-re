@@ -151,6 +151,7 @@
 
 class CGameButtonList;
 class CSearchRequest;
+class CSpell;
 class CUIControlBase;
 class CUIControlTextDisplay;
 class CVariableHash;
@@ -472,6 +473,7 @@ public:
     SHORT EquipItem();
     SHORT FindTraps();
     SHORT Turn();
+    SHORT GetCasterLevel(CSpell* pSpell, BYTE nClass, DWORD nSpecialization);
     void sub_761650();
     BOOL HasClassMask(DWORD dwMask);
     INT GetClassLevel(INT iClassType);

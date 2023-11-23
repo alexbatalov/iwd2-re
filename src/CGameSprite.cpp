@@ -4579,6 +4579,110 @@ SHORT CGameSprite::Turn()
     return ACTION_DONE;
 }
 
+// 0x75E940
+SHORT CGameSprite::GetCasterLevel(CSpell* pSpell, BYTE nClass, DWORD nSpecialization)
+{
+    // NOTE: Unsigned compare below in the loop.
+    UINT nLevel = 1;
+    UINT nBestCasterLevel = 0;
+
+    if (pSpell == NULL) {
+        if (nClass != 0 || nSpecialization != 0) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+            // __LINE__: 26119
+            UTIL_ASSERT(pSpell != NULL);
+        }
+        return 1;
+    }
+
+    if (pSpell->GetCasterType() == 4) {
+        if (pSpell->GetResRef() == "SPIN263") {
+            nClass = CAIOBJECTTYPE_C_CLERIC;
+            nSpecialization = SPECMASK_CLERIC_TALOS;
+        } else if (pSpell->GetResRef() == "SPIN264") {
+            nClass = CAIOBJECTTYPE_C_CLERIC;
+            nSpecialization = SPECMASK_CLERIC_TEMPUS;
+        } else if (pSpell->GetResRef() == "SPIN265"
+            || pSpell->GetResRef() == "SPIN266") {
+            nClass = CAIOBJECTTYPE_C_CLERIC;
+            nSpecialization = SPECMASK_CLERIC_HELM;
+        } else if (pSpell->GetResRef() == "SPIN267"
+            || pSpell->GetResRef() == "SPIN270") {
+            nClass = CAIOBJECTTYPE_C_CLERIC;
+            nSpecialization = SPECMASK_CLERIC_ILMATER;
+        } else if (pSpell->GetResRef() == "SPIN268"
+            || pSpell->GetResRef() == "SPIN269") {
+            nClass = CAIOBJECTTYPE_C_CLERIC;
+            nSpecialization = SPECMASK_CLERIC_SELUNE;
+        } else if (pSpell->GetResRef() == "SPIN271") {
+            nClass = CAIOBJECTTYPE_C_CLERIC;
+            nSpecialization = SPECMASK_CLERIC_LATHANDER;
+        } else {
+            nBestCasterLevel = m_derivedStats.GetLevel();
+            if (nBestCasterLevel == 0) {
+                nBestCasterLevel = 1;
+            }
+            return static_cast<SHORT>(nBestCasterLevel);
+        }
+    } else {
+        switch (nClass) {
+        case CAIOBJECTTYPE_C_BARBARIAN:
+        case CAIOBJECTTYPE_C_FIGHTER:
+        case CAIOBJECTTYPE_C_MONK:
+        case CAIOBJECTTYPE_C_ROGUE:
+            return static_cast<SHORT>(m_derivedStats.GetClassLevel(GetAIType().m_nClass));
+        }
+    }
+
+    UINT nStart = 0;
+    UINT nEnd = CSPELLLIST_NUM_CLASSES;
+
+    if (nClass != 0) {
+        nStart = g_pBaldurChitin->GetObjectGame()->GetSpellcasterIndex(nClass);
+        nEnd = nStart + 1;
+    }
+
+    for (UINT nClassIndex = nStart; nClassIndex < nEnd; nClassIndex++) {
+        nClass = g_pBaldurChitin->GetObjectGame()->GetSpellcasterClass(nStart);
+        switch (nClass) {
+        case CAIOBJECTTYPE_C_BARD:
+        case CAIOBJECTTYPE_C_DRUID:
+        case CAIOBJECTTYPE_C_SORCERER:
+        case CAIOBJECTTYPE_C_WIZARD:
+            nLevel = m_derivedStats.GetClassLevel(nClass);
+            break;
+        case CAIOBJECTTYPE_C_CLERIC:
+            nLevel = m_derivedStats.GetClassLevel(nClass);
+            if (nSpecialization != 0) {
+                nLevel++;
+            }
+            break;
+        case CAIOBJECTTYPE_C_PALADIN:
+        case CAIOBJECTTYPE_C_RANGER:
+            nLevel = m_derivedStats.GetClassLevel(nClass);
+            if (nLevel >= 4) {
+                nLevel /= 2;
+            } else {
+                nLevel = 0;
+            }
+            break;
+        }
+
+        // NOTE: Unsigned compare.
+        if (nLevel > nBestCasterLevel) {
+            nBestCasterLevel = nLevel;
+        }
+    }
+
+    if (nBestCasterLevel == 0) {
+        nBestCasterLevel = m_derivedStats.GetClassLevel(GetAIType().m_nClass);
+    }
+    if (nBestCasterLevel == 0) {
+        nBestCasterLevel = 1;
+    }
+    return static_cast<SHORT>(nBestCasterLevel);
+}
+
 // 0x761650
 void CGameSprite::sub_761650()
 {
