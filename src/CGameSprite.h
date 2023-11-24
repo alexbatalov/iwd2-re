@@ -405,6 +405,7 @@ public:
     SHORT GetIdleSequence();
     void SetSequence(SHORT nSequence);
     void RenderDamageArrow(CGameArea* pArea, CVidMode* pVidMode, INT nSurface);
+    void ClearMarshal(BOOL unequip);
     void Marshal(BYTE** pCreature, LONG* creatureSize, WORD* facing, BOOLEAN a4, BOOLEAN a5);
     void Marshal(CSavedGamePartyCreature& partyCreature, BOOLEAN bNetworkMessage);
     void Unmarshal(BYTE* pCreature, LONG creatureSize, WORD facing, int a4);
@@ -616,8 +617,8 @@ public:
     /* 4AA0 */ CGameSpriteSpellList m_songs;
     /* 4ABC */ CGameSpriteSpellList m_shapeshifts;
     /* 4AD8 */ CGameSpriteEquipment m_equipment;
-    /* 4BAC */ int field_4BAC;
-    /* 4BB0 */ int field_4BB0;
+    /* 4BAC */ BYTE* m_pDialogData;
+    /* 4BB0 */ DWORD m_nDialogData;
     /* 4BB4 */ unsigned char field_4BB4;
     /* 4BB6 */ CGameStatsSprite m_cGameStats;
     /* 4C4A */ CResRef m_currentArea;

@@ -878,8 +878,8 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
 
         memset(&m_baseStats, 0, sizeof(m_baseStats));
 
-        field_4BAC = 0;
-        field_4BB0 = 0;
+        m_pDialogData = NULL;
+        m_nDialogData = 0;
         m_dialogWait = 0;
         m_dialogWaitTarget = CGameObjectArray::INVALID_INDEX;
         field_724C = 1;
@@ -1511,6 +1511,74 @@ void CGameSprite::SetSequence(SHORT nSequence)
 void CGameSprite::RenderDamageArrow(CGameArea* pArea, CVidMode* pVidMode, INT nSurface)
 {
     // TODO: Incomplete.
+}
+
+// 0x70AE20
+void CGameSprite::ClearMarshal(BOOL unequip)
+{
+    UINT nClass;
+    UINT nLevel;
+    POSITION pos;
+    CGameEffect* nodeEffect;
+
+    for (nClass = 0; nClass < CSPELLLIST_NUM_CLASSES; nClass++) {
+        for (nLevel = 0; nLevel < CSPELLLIST_MAX_LEVELS; nLevel++) {
+            m_spells.m_spellsByClass[nClass].m_lists[nLevel].m_List.clear();
+        }
+        m_spells.m_spellsByClass[nClass].m_nHighestLevel = 0;
+    }
+
+    for (nLevel = 0; nLevel < CSPELLLIST_MAX_LEVELS; nLevel++) {
+        if (m_domainSpells.m_lists[nLevel].m_List.size() > 0) {
+            m_domainSpells.m_lists[nLevel].m_List.clear();
+            m_domainSpells.m_lists[nLevel].field_14 = 0;
+            m_domainSpells.m_lists[nLevel].field_18 = 0;
+        }
+    }
+    m_domainSpells.m_nHighestLevel = 0;
+
+    if (m_innateSpells.m_List.size() > 0) {
+        m_innateSpells.m_List.clear();
+        m_innateSpells.field_14 = 0;
+        m_innateSpells.field_18 = 0;
+    }
+
+    if (m_songs.m_List.size() > 0) {
+        m_songs.m_List.clear();
+        m_songs.field_14 = 0;
+        m_songs.field_18 = 0;
+    }
+
+    if (m_shapeshifts.m_List.size() > 0) {
+        m_shapeshifts.m_List.clear();
+        m_shapeshifts.field_14 = 0;
+        m_shapeshifts.field_18 = 0;
+    }
+
+    // NOTE: Uninline.
+    m_equipment.SetSpritePointer(this);
+
+    m_equipment.ClearMarshal(unequip);
+
+    memset(&m_baseStats, 0, sizeof(m_baseStats));
+
+    pos = m_timedEffectList.GetHeadPosition();
+    while (pos != NULL) {
+        nodeEffect = m_timedEffectList.GetNext(pos);
+        delete nodeEffect;
+    }
+
+    pos = m_equipedEffectList.GetHeadPosition();
+    while (pos != NULL) {
+        nodeEffect = m_equipedEffectList.GetNext(pos);
+        delete nodeEffect;
+    }
+
+    if (m_pDialogData != NULL) {
+        delete m_pDialogData;
+        m_pDialogData = NULL;
+        m_nDialogData = 0;
+    }
 }
 
 // 0x70B2F0

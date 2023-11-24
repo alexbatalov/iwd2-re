@@ -3,6 +3,7 @@
 #include "CGameSprite.h"
 #include "CItem.h"
 #include "CScreenInventory.h"
+#include "CUtil.h"
 
 // 0x85BD83
 const BYTE CGameSpriteEquipment::SLOT_FIST = 10;
@@ -74,4 +75,14 @@ UINT CGameSpriteEquipment::GetUsedSlotsCount()
     }
 
     return nCount;
+}
+
+// NOTE: Inlined.
+void CGameSpriteEquipment::SetSpritePointer(CGameSprite* pSprite)
+{
+    // __FILE__: .\Include\ObjCreature.h
+    // __LINE__: 243
+    UTIL_ASSERT(pSprite != NULL);
+
+    m_pSprite = pSprite;
 }

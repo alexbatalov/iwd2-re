@@ -18,6 +18,8 @@ public:
     void Unmarshal();
     UINT GetUsedSlotsCount();
 
+    void SetSpritePointer(CGameSprite* pSprite);
+
     /* 0000 */ CItem* m_items[51];
     /* 00CC */ BYTE m_selectedWeapon;
     /* 00CE */ WORD m_selectedWeaponAbility;
