@@ -577,6 +577,30 @@ public:
     /* 0010 */ DWORD m_dynamicFlags;
 };
 
+class CCreatureFileEquipment {
+public:
+    CCreatureFileEquipment()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    /* 0000 */ WORD m_helmetItem;
+    /* 0002 */ WORD m_armorItem;
+    /* 0004 */ WORD m_shieldItem;
+    /* 0006 */ WORD m_gauntletsItem;
+    /* 0008 */ WORD m_ringLeftItem;
+    /* 000A */ WORD m_ringRightItem;
+    /* 000C */ WORD m_amuletItem;
+    /* 000E */ WORD m_beltItem;
+    /* 0010 */ WORD m_bootsItem;
+    /* 0012 */ WORD m_weaponItem[8];
+    /* 0022 */ WORD m_ammoItem[4];
+    /* 002A */ WORD m_cloakItem;
+    /* 002C */ WORD m_miscItem[28];
+    /* 0064 */ WORD m_selectedWeapon;
+    /* 0066 */ WORD m_selectedWeaponAbility;
+};
+
 class CWorldMapHeader {
 public:
     DWORD m_nMapCount;
