@@ -2026,6 +2026,49 @@ void CGameSprite::SetSelectedWeaponButton(SHORT buttonNum)
     }
 }
 
+// 0x714DB0
+void CGameSprite::InitQuickItemData(SHORT itemNum, SHORT abilityNum, int a3, CButtonData& cButtonData)
+{
+    const CRuleTables& cRule = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    if (itemNum != -1 && abilityNum != -1) {
+        CItem* pItem = m_equipment.m_items[itemNum];
+        if (pItem != NULL) {
+            pItem->Demand();
+
+            ITEM_ABILITY* ability = pItem->GetAbility(abilityNum);
+            if (ability != NULL) {
+                if (ability->type != 4
+                    && (ability->type != 2 || CheckLauncherType(ability, NULL))) {
+                    cButtonData.m_icon = CString(ability->quickSlotIcon);
+                    cButtonData.m_name = pItem->GetGenericName();
+                    cButtonData.m_abilityId.m_itemNum = itemNum;
+                    cButtonData.m_abilityId.m_abilityNum = abilityNum;
+                    cButtonData.m_abilityId.m_targetType = ability->actionType;
+                    cButtonData.m_abilityId.field_10 = cRule.GetItemAbilityDescription(pItem->GetResRef(), abilityNum);
+                    if (cButtonData.m_abilityId.field_10 == -1) {
+                        cButtonData.m_abilityId.field_10 = pItem->GetGenericName();
+                    }
+                    cButtonData.m_count = 0;
+                    if (pItem->GetMaxStackable() > 1
+                        || pItem->GetMaxUsageCount(abilityNum) > 0) {
+                        cButtonData.m_count = pItem->GetUsageCount(abilityNum);
+                    }
+
+                    SHORT launcherSlot;
+                    CItem* pLauncher = GetLauncher(ability, launcherSlot);
+                    if (pLauncher != NULL) {
+                        cButtonData.m_launcherIcon = pLauncher->GetItemIcon();
+                        cButtonData.m_launcherName = pLauncher->GetGenericName();
+                    }
+                }
+            }
+
+            pItem->Release();
+        }
+    }
+}
+
 // 0x716540
 CGameButtonList* CGameSprite::GetSongsButtonList()
 {
