@@ -636,7 +636,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     field_7292 = 0;
     m_currentActionId = 0;
     field_72A8 = 0;
-    field_72B6 = 0;
+    m_bInUnmarshal = FALSE;
     field_72D6 = 0;
     field_72DE = 0;
     field_7532 = 0;
@@ -1731,6 +1731,219 @@ void CGameSprite::Marshal(CSavedGamePartyCreature& partyCreature, BOOLEAN bNetwo
     partyCreature.m_nNumberOfTimesTalkedTo = m_nNumberOfTimesTalkedTo;
     m_secondarySounds.GetResRef(partyCreature.m_secondarySounds);
     memcpy(partyCreature.field_25E, field_725A, 32);
+}
+
+// 0x70C600
+void CGameSprite::Unmarshal(CSavedGamePartyCreature* pCreature, BOOLEAN bPartyMember, BOOLEAN bProgressBarInPlace)
+{
+    DWORD nIndex;
+
+    m_bInUnmarshal = TRUE;
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    m_bGlobal = TRUE;
+    m_currentArea = pCreature->m_areaName;
+
+    // NOTE: Uninline.
+    sub_706F80(static_cast<SHORT>(pCreature->m_creatureFacing));
+
+    m_nModalState = static_cast<BYTE>(pCreature->m_nModalState);
+
+    for (nIndex = 0; nIndex < 5; nIndex++) {
+        field_4C54[nIndex] = pCreature->field_28A[nIndex];
+    }
+
+    sub_726570();
+
+    for (nIndex = 0; nIndex < CGAMESAVECHARACTER_NUM_QUICK_WEAPONS22; nIndex++) {
+        InitQuickItemData(pCreature->m_quickWeaponsItemNum[nIndex],
+            pCreature->m_quickWeaponsAbilityNum[nIndex],
+            pCreature->field_2A7[nIndex],
+            m_quickWeapons[nIndex]);
+
+        // NOTE: Uninline.
+        SetQuickWeapon(static_cast<BYTE>(nIndex), pCreature->field_2A7[nIndex]);
+    }
+
+    for (nIndex = 0; nIndex < CGAMESAVECHARACTER_NUM_QUICK_SPELLS22; nIndex++) {
+        if (pCreature->m_quickSpellsClass[nIndex] != 0) {
+            InitQuickSpellData(CResRef(pCreature->m_quickSpellsSpellId[nIndex]),
+                1,
+                m_quickSpells[nIndex],
+                pCreature->m_quickSpellsClass[nIndex],
+                pCreature->field_280[nIndex],
+                pCreature->field_29E[nIndex]);
+        }
+    }
+
+    for (nIndex = 0; nIndex < CGAMESAVECHARACTER_NUM_QUICK_ITEMS22; nIndex++) {
+        InitQuickItemData(pCreature->m_quickItemsItemNum[nIndex],
+            pCreature->m_quickItemsAbilityNum[nIndex],
+            0,
+            m_quickItems[nIndex]);
+    }
+
+    for (nIndex = 0; nIndex < CGAMESAVECHARACTER_NUM_QUICK_ABILITIES22; nIndex++) {
+        InitQuickSpellData(CResRef(pCreature->m_quickInnatesSpellId[nIndex]),
+            2,
+            m_quickInnates[nIndex],
+            0,
+            0,
+            0);
+    }
+
+    for (nIndex = 0; nIndex < CGAMESAVECHARACTER_NUM_QUICK_SONGS22; nIndex++) {
+        InitQuickSpellData(CResRef(pCreature->m_quickSongsSpellId[nIndex]),
+            3,
+            m_quickSongs[nIndex],
+            0,
+            0,
+            0);
+    }
+
+    for (nIndex = 0; nIndex < CGAMESAVECHARACTER_NUM_CUSTOM_BUTTONS22; nIndex++) {
+        field_3D14[nIndex] = pCreature->field_19A[nIndex];
+    }
+
+    m_nLastSpellbookClassIndex = pCreature->m_nLastSpellbookClassIndex;
+    m_nLastSpellbookSpellLevel = pCreature->m_nLastSpellbookSpellLevel;
+    m_nLastSong = pCreature->m_nLastSong;
+
+    m_nNumberOfTimesTalkedTo = pCreature->m_nNumberOfTimesTalkedTo;
+    m_nHappiness = pCreature->m_nHappiness;
+
+    for (nIndex = 0; nIndex < 24; nIndex++) {
+        m_nNumberOfTimesInteractedWith[nIndex] = pCreature->m_nNumberOfTimesInteractedWith[nIndex];
+    }
+
+    if (pCreature->m_strStrongestKillName == 0) {
+        pCreature->m_strStrongestKillName = -1;
+    }
+
+    m_cGameStats.m_strStrongestKillName = pCreature->m_strStrongestKillName;
+    m_cGameStats.m_nStrongestKillXPValue = pCreature->m_nStrongestKillXPValue;
+    m_cGameStats.m_nPreviousTimeWithParty = pCreature->m_nPreviousTimeWithParty;
+    m_cGameStats.m_nJoinPartyTime = pCreature->m_nJoinPartyTime;
+    m_cGameStats.m_bWithParty = pCreature->m_bWithParty;
+    m_cGameStats.m_nChapterKillsXPValue = pCreature->m_nChapterKillsXPValue;
+    m_cGameStats.m_nChapterKillsNumber = pCreature->m_nChapterKillsNumber;
+    m_cGameStats.m_nGameKillsXPValue = pCreature->m_nGameKillsXPValue;
+    m_cGameStats.m_nGameKillsNumber = pCreature->m_nGameKillsNumber;
+
+    for (nIndex = 0; nIndex < CGAMESAVECHARACTER_NUM_STATS_SPELLS; nIndex++) {
+        m_cGameStats.SetSpellStats(static_cast<BYTE>(nIndex),
+            pCreature->m_lSpellStatsName[nIndex],
+            pCreature->m_lSpellStatsCount[nIndex]);
+    }
+
+    for (nIndex = 0; nIndex < CGAMESAVECHARACTER_NUM_STATS_WEAPONS; nIndex++) {
+        m_cGameStats.SetWeaponStats(static_cast<BYTE>(nIndex),
+            pCreature->m_lWeaponStatsName[nIndex],
+            pCreature->m_lWeaponStatsCount[nIndex]);
+    }
+
+    m_secondarySounds = pCreature->m_secondarySounds;
+    memcpy(field_725A, pCreature->field_25E, sizeof(field_725A));
+
+    CString sPath = g_pBaldurChitin->GetObjectGame()->GetDirSounds() + field_725A + '\\';
+    g_pBaldurChitin->cDimm.AddToDirectoryList(sPath, TRUE);
+
+    if (bPartyMember) {
+        CString areaName;
+        m_currentArea.CopyToString(areaName);
+
+        CGameArea* pArea;
+        if ((pCreature->m_wFlags & 0x8000) == 0) {
+            pArea = pGame->LoadArea(areaName,
+                255,
+                FALSE,
+                bProgressBarInPlace);
+            if (pArea == NULL) {
+                return;
+            }
+
+            pArea->GetInfinity()->SetViewPosition(pCreature->m_posViewX,
+                pCreature->m_posViewY,
+                TRUE);
+        } else {
+            if (bProgressBarInPlace) {
+                g_pChitin->cProgressBar.AddActionTarget(-static_cast<LONG>(CInfGame::PROGRESSBAR_CACHING_ADDITIONAL));
+            }
+        }
+
+        if (pGame->m_bInLoadGame == TRUE) {
+            pGame->AddCharacterToParty(m_id, pCreature->m_portraitId);
+        }
+
+        CPoint pos;
+        pos.x = pCreature->m_posX != -1 ? pCreature->m_posX : -1;
+        pos.y = pCreature->m_posY != -1 ? pCreature->m_posY : -1;
+
+        if ((pCreature->m_wFlags & 0x8000) == 0) {
+            if ((m_baseStats.m_generalState & STATE_DEAD) != 0
+                && GetAnimation()->CanLieDown()) {
+                AddToArea(pArea, pos, 0, LIST_BACK);
+            } else {
+                AddToArea(pArea, pos, 0, LIST_FRONT);
+            }
+
+            if ((pCreature->m_wFlags & 0x1) != 0) {
+                pGame->SelectCharacter(m_id, FALSE);
+            }
+        }
+
+        if (m_baseStats.m_name == -1) {
+            m_sName = pCreature->m_name;
+        }
+
+        if (m_baseStats.m_resistMagicBase < 0) {
+            m_baseStats.m_resistMagicBase = 0;
+        } else if (m_baseStats.m_resistMagicBase > 50) {
+            m_baseStats.m_resistMagicBase = 50;
+        }
+
+        sub_71E760(m_derivedStats, TRUE);
+
+        for (UINT nClassIndex = 0; nClassIndex < CSPELLLIST_NUM_CLASSES; nClassIndex++) {
+            for (UINT nLevel = 0; nLevel < CSPELLLIST_MAX_LEVELS; nLevel++) {
+                BYTE nClass = g_pBaldurChitin->GetObjectGame()->GetSpellcasterClass(nClassIndex);
+
+                INT nBonus;
+                INT nMaxSpells = g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetMaxKnownSpells(nClass,
+                    m_startTypeAI,
+                    m_derivedStats,
+                    m_baseStats.m_specialization,
+                    nLevel + 1,
+                    nBonus);
+
+                // __FILE__: .\Include\ObjCreature.h
+                // __LINE__: 1751
+                UTIL_ASSERT(nClassIndex < CSPELLLIST_NUM_CLASSES);
+
+                m_spells.m_spellsByClass[nClassIndex].m_lists[nLevel].field_14 = nMaxSpells + nBonus;
+            }
+        }
+    } else {
+        m_pos.x = pCreature->m_posX;
+        m_pos.y = pCreature->m_posY;
+        if (m_baseStats.m_name == -1) {
+            m_sName = pCreature->m_name;
+        }
+    }
+
+    sub_726810(pCreature->m_nWeaponSet);
+
+    INT nDruidLevel = m_derivedStats.GetClassLevel(CAIOBJECTTYPE_C_DRUID);
+    if (nDruidLevel > 0) {
+        INT nMaxShapeshifts = pGame->GetRuleTables().GetMaxDruidShapeshifts(m_baseStats, nDruidLevel) - m_shapeshifts.field_14;
+        if (nMaxShapeshifts) {
+            sub_724C40(nMaxShapeshifts);
+            m_shapeshifts.sub_725D30(nMaxShapeshifts, FALSE);
+        }
+    }
+
+    m_bInUnmarshal = FALSE;
 }
 
 // 0x70CF90
@@ -7316,6 +7529,12 @@ INT CGameSprite::sub_726800()
     return 2 * m_nWeaponSet + 44;
 }
 
+// 0x726810
+void CGameSprite::sub_726810(BYTE nWeaponSet)
+{
+    // TODO: Incomplete.
+}
+
 // 0x58FEE0
 BYTE CGameSprite::GetLastSong()
 {
@@ -7372,6 +7591,18 @@ void CGameSprite::SetQuickWeapon(BYTE buttonNum, CButtonData buttonData)
     // __FILE__: .\Include\ObjCreature.h
     // __LINE__: 2030
     UTIL_ASSERT(buttonNum < CGAMESAVECHARACTER_NUM_QUICK_WEAPONS22);
+
+    m_quickWeapons[buttonNum] = buttonData;
+}
+
+// NOTE: Inlined.
+void CGameSprite::SetQuickWeapon(BYTE buttonNum, BYTE index)
+{
+    // __FILE__: .\Include\ObjCreature.h
+    // __LINE__: 2031
+    UTIL_ASSERT(buttonNum < CGAMESAVECHARACTER_NUM_QUICK_WEAPONS22);
+
+    field_3D3A[buttonNum] = index;
 }
 
 // FIXME: `buttonData` should be reference.

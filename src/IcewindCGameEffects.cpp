@@ -2323,7 +2323,7 @@ CGameEffect* IcewindCGameEffectEnergyDrain::Copy()
 // 0x56A910
 BOOL IcewindCGameEffectEnergyDrain::ApplyEffect(CGameSprite* pSprite)
 {
-    if (pSprite != NULL && pSprite->field_72B6) {
+    if (pSprite != NULL && pSprite->m_bInUnmarshal) {
         return FALSE;
     }
 

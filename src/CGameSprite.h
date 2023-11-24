@@ -408,6 +408,7 @@ public:
     void ClearMarshal(BOOL unequip);
     void Marshal(BYTE** pCreature, LONG* creatureSize, WORD* facing, BOOLEAN a4, BOOLEAN a5);
     void Marshal(CSavedGamePartyCreature& partyCreature, BOOLEAN bNetworkMessage);
+    void Unmarshal(CSavedGamePartyCreature* pCreature, BOOLEAN bPartyMember, BOOLEAN bProgressBarInPlace);
     void Unmarshal(BYTE* pCreature, LONG creatureSize, WORD facing, int a4);
     void UnmarshalScripts();
     void FetchCommonStrings();
@@ -576,6 +577,7 @@ public:
     void sub_726330(UINT nFeatNumber, INT nValue);
     void sub_726570();
     INT sub_726800();
+    void sub_726810(BYTE nWeaponSet);
     BYTE GetLastSong();
 
     void GetQuickSpell(BYTE buttonNum, CButtonData& buttonData);
@@ -583,6 +585,7 @@ public:
     void GetQuickAbility(BYTE buttonNum, CButtonData& buttonData);
     void GetQuickSong(BYTE buttonNum, CButtonData& buttonData);
     void SetQuickWeapon(BYTE buttonNum, CButtonData buttonData);
+    void SetQuickWeapon(BYTE buttonNum, BYTE index);
     void SetQuickItem(BYTE buttonNum, CButtonData buttonData);
     void SetQuickSpell(BYTE buttonNum, CButtonData buttonData);
     void SetQuickAbility(BYTE buttonNum, CButtonData buttonData);
@@ -824,7 +827,7 @@ public:
     /* 72AA */ int field_72AA;
     /* 72AE */ int field_72AE;
     /* 72B2 */ CVariableHash* m_pLocalVariables;
-    /* 72B6 */ int field_72B6;
+    /* 72B6 */ BOOL m_bInUnmarshal;
     /* 72D6 */ int field_72D6;
     /* 72DE */ int field_72DE;
     /* 72E2 */ LONG field_72E2;
