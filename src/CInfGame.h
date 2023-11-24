@@ -117,6 +117,8 @@ public:
     void sub_59FA00(BOOL a1);
     void DestroyGame(unsigned char a1, unsigned char a2);
     void sub_5A0160();
+    LONG CachingRequirements(const CString& areaName);
+    void CacheResFileWithResource(const CString& areaName);
     LONG ImportCharacter(const CString& sFileName, INT nIndex);
     CString GetDirSounds();
     void CharacterExport(LONG nCharacterId, CString sFileName);
@@ -336,7 +338,10 @@ public:
     /* 1B83 */ BOOLEAN m_bInLoadArea;
     /* 1B84 */ unsigned char field_1B84;
     /* 1B86 */ CString field_1B86;
+    /* 1B8A */ DWORD m_nUniqueAreaID;
+    /* 1B8E */ DWORD m_nAreaFirstObject;
     /* 1B92 */ BOOLEAN m_bFromNewGame;
+    /* 1B93 */ BOOLEAN m_bInDestroyGame;
     /* 1B94 */ BOOLEAN m_bAnotherPlayerJoinedGame;
     /* 1B96 */ SHORT m_nState;
     /* 1B98 */ BYTE m_iconIndex;

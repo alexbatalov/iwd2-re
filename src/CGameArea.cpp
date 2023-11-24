@@ -89,7 +89,7 @@ CGameArea::CGameArea(BYTE id)
     m_ptOldViewPos.y = -1;
     m_moveDest.x = -1;
     m_moveDest.y = -1;
-    field_426 = -1;
+    m_nFirstObject = -1;
     field_241 = 0;
     field_242 = CGameObjectArray::INVALID_INDEX;
     m_sndAmbientVolume = 100;

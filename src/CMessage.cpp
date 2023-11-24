@@ -582,6 +582,14 @@ BOOLEAN CBaldurMessage::OnResourceDemanded(INT nMsgFrom, BYTE* pByteMessage, DWO
     return FALSE;
 }
 
+// 0x42AA10
+BOOLEAN CBaldurMessage::ResourceSuggestLoad(const CString& sResName, UINT nType, DWORD dwFlags)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x42B1F0
 BOOL CBaldurMessage::OnSettingsFullDemanded(INT nMsgFrom)
 {

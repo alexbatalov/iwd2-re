@@ -250,9 +250,8 @@ public:
     /* 040A */ BYTE m_visibleTerrainTable[16];
     /* 041A */ LONG m_nAIIndex;
     /* 041E */ int field_41E;
-    /* 0422 */ DWORD m_nInitialAreaId;
-    /* 0422 */ int m_nInitialAreaID;
-    /* 0426 */ int field_426;
+    /* 0422 */ DWORD m_nInitialAreaID;
+    /* 0426 */ DWORD m_nFirstObject;
     /* 042A */ DWORD m_dwLastProgressRenderTickCount;
     /* 042E */ DWORD m_dwLastProgressMsgTickCount;
     /* 0432 */ unsigned char field_432;
