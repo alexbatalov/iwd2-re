@@ -176,6 +176,7 @@ public:
     static const BYTE DIR_SSE;
     static const BYTE NUM_DIR;
 
+    static const BYTE SOUND_SELECT;
     static const BYTE SOUND_SELECT_ACTION;
     static const BYTE SOUND_REACT_TO_DEATH;
     static const SHORT EXACT_SCALE;

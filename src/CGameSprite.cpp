@@ -68,6 +68,9 @@ const BYTE CGameSprite::DIR_SSE = 15;
 // 0x85BB48
 const BYTE CGameSprite::NUM_DIR = 16;
 
+// 0x85BB6C
+const BYTE CGameSprite::SOUND_SELECT = 9;
+
 // 0x85BB6E
 const BYTE CGameSprite::SOUND_SELECT_ACTION = 11;
 

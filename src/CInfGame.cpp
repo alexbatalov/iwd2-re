@@ -2457,7 +2457,136 @@ void CInfGame::sub_5AC0D0()
 // 0x5AD470
 void CInfGame::SelectAll(BOOLEAN bPlaySound)
 {
-    // TODO: Incomplete.
+    LONG iSprite;
+    CGameSprite* pSprite;
+    BYTE rc;
+    SHORT cnt;
+    POSITION pos;
+
+    for (cnt = 0; cnt < m_nCharacters; cnt++) {
+        iSprite = m_characterPortraits[cnt];
+        do {
+            rc = m_cObjectArray.GetShare(iSprite,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (pSprite->m_pArea == GetVisibleArea()) {
+                if (pSprite->Orderable(FALSE) && !pSprite->m_bSelected) {
+                    do {
+                        rc = m_cObjectArray.GetDeny(iSprite,
+                            CGameObjectArray::THREAD_ASYNCH,
+                            reinterpret_cast<CGameObject**>(&pSprite),
+                            INFINITE);
+                    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+                    if (rc == CGameObjectArray::SUCCESS) {
+                        pSprite->Select();
+                        m_cObjectArray.ReleaseDeny(iSprite,
+                            CGameObjectArray::THREAD_ASYNCH,
+                            INFINITE);
+                    }
+                }
+                if (pSprite->Orderable(FALSE) && bPlaySound) {
+                    bPlaySound = FALSE;
+                    pSprite->PlaySound(CGameSprite::SOUND_SELECT, TRUE, FALSE, FALSE);
+                }
+            } else if (pSprite->m_bSelected) {
+                do {
+                    rc = m_cObjectArray.GetDeny(iSprite,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        reinterpret_cast<CGameObject**>(&pSprite),
+                        INFINITE);
+                } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+                if (rc == CGameObjectArray::SUCCESS) {
+                    pSprite->Unselect();
+                    m_cObjectArray.ReleaseDeny(iSprite,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        INFINITE);
+                    UpdatePortrait(cnt, 1);
+                }
+            }
+            m_cObjectArray.ReleaseShare(iSprite,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+        break;
+    }
+
+    pos = m_familiars.GetHeadPosition();
+    while (pos != NULL) {
+        iSprite = reinterpret_cast<LONG>(m_familiars.GetNext(pos));
+        rc = m_cObjectArray.GetShare(iSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (pSprite->GetArea() == GetVisibleArea()) {
+                if (pSprite->Orderable(FALSE) && !pSprite->m_bSelected) {
+                    do {
+                        rc = m_cObjectArray.GetDeny(iSprite,
+                            CGameObjectArray::THREAD_ASYNCH,
+                            reinterpret_cast<CGameObject**>(&pSprite),
+                            INFINITE);
+                    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+                    if (rc == CGameObjectArray::SUCCESS) {
+                        pSprite->Select();
+                        m_cObjectArray.ReleaseDeny(iSprite,
+                            CGameObjectArray::THREAD_ASYNCH,
+                            INFINITE);
+                    }
+                }
+                if (pSprite->Orderable(FALSE) && bPlaySound) {
+                    bPlaySound = FALSE;
+                    pSprite->PlaySound(CGameSprite::SOUND_SELECT, TRUE, FALSE, FALSE);
+                }
+            }
+            rc = m_cObjectArray.ReleaseShare(iSprite,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+
+    pos = m_allies.GetHeadPosition();
+    while (pos != NULL) {
+        iSprite = reinterpret_cast<LONG>(m_allies.GetNext(pos));
+        rc = m_cObjectArray.GetShare(iSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (pSprite->GetArea() == GetVisibleArea()) {
+                if (pSprite->Orderable(FALSE) && !pSprite->m_bSelected) {
+                    do {
+                        rc = m_cObjectArray.GetDeny(iSprite,
+                            CGameObjectArray::THREAD_ASYNCH,
+                            reinterpret_cast<CGameObject**>(&pSprite),
+                            INFINITE);
+                    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+                    if (rc == CGameObjectArray::SUCCESS) {
+                        pSprite->Select();
+                        m_cObjectArray.ReleaseDeny(iSprite,
+                            CGameObjectArray::THREAD_ASYNCH,
+                            INFINITE);
+                    }
+                }
+                if (pSprite->Orderable(FALSE) && bPlaySound) {
+                    bPlaySound = FALSE;
+                    pSprite->PlaySound(CGameSprite::SOUND_SELECT, TRUE, FALSE, FALSE);
+                }
+            }
+            rc = m_cObjectArray.ReleaseShare(iSprite,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+
+    SelectToolbar();
 }
 
 // 0x5AD7E0
