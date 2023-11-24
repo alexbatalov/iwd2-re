@@ -416,6 +416,7 @@ public:
     void GetSelectedWeaponButton(CButtonData& cButtonData);
     void GetWeaponButton(BYTE nButtonNum, CButtonData& cButtonData);
     void SetSelectedWeaponButton(SHORT buttonNum);
+    void InitQuickSpellData(CResRef resRef, BYTE type, CButtonData& cButtonData, BYTE nClass, BYTE a5, BYTE a6);
     void InitQuickItemData(SHORT itemNum, SHORT abilityNum, int a3, CButtonData& cButtonData);
     CGameButtonList* GetSongsButtonList();
     BOOLEAN CanCast(BYTE nClass, DWORD nSpecialization, CSpell* pSpell);

@@ -2026,6 +2026,174 @@ void CGameSprite::SetSelectedWeaponButton(SHORT buttonNum)
     }
 }
 
+// 0x714410
+void CGameSprite::InitQuickSpellData(CResRef resRef, BYTE type, CButtonData& cButtonData, BYTE nClass, BYTE a5, BYTE nKitIndex)
+{
+    CSpell cSpell;
+    cSpell.SetResRef(resRef, TRUE, TRUE);
+    BYTE count = 0;
+
+    if (!resRef.IsValid()) {
+        return;
+    }
+
+    UINT nID = 0;
+    if (g_pBaldurChitin->GetObjectGame()->m_shapeshifts.Find(resRef, nID) == TRUE) {
+        type = 4;
+    }
+
+    UINT v1 = 0;
+    UINT v2 = 0;
+    UINT nClassIndex;
+
+    switch (type) {
+    case 1:
+        if (!g_pBaldurChitin->GetObjectGame()->m_spells.Find(resRef, v1)) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 15953
+            UTIL_ASSERT(FALSE);
+        }
+
+        nClassIndex = g_pBaldurChitin->GetObjectGame()->GetSpellcasterIndex(nClass);
+
+        if (nKitIndex != 0) {
+            if (nClass == CAIOBJECTTYPE_C_CLERIC) {
+                BOOLEAN bFound = FALSE;
+                for (UINT nLevel = 0; nLevel < m_domainSpells.m_nHighestLevel; nLevel++) {
+                    if (!bFound) {
+                        break;
+                    }
+
+                    if (m_domainSpells.Find(v1, nLevel, v2) == TRUE) {
+                        bFound = TRUE;
+                        count += m_domainSpells.m_lists[nLevel].Get(v2)->field_8;
+                    }
+                }
+            }
+        } else {
+            BOOLEAN bFound = FALSE;
+            for (UINT nLevel = 0; nLevel < m_spells.m_spellsByClass[nClass].m_nHighestLevel; nLevel++) {
+                if (!bFound) {
+                    break;
+                }
+
+                if (m_spells.m_spellsByClass[nClass].Find(v1, nLevel, v2) == TRUE) {
+                    bFound = TRUE;
+                    count += m_spells.m_spellsByClass[nClass].m_lists[nLevel].Get(v2)->field_8;
+                }
+            }
+        }
+        break;
+    case 2:
+        if (!g_pBaldurChitin->GetObjectGame()->m_innateSpells.Find(resRef, v1)) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 15994
+            UTIL_ASSERT(FALSE);
+        }
+
+        if (m_innateSpells.Find(v1, v2) == TRUE) {
+            count += m_innateSpells.Get(v2)->field_8;
+        }
+        break;
+    case 3:
+        if (!g_pBaldurChitin->GetObjectGame()->m_songs.Find(resRef, v1)) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 16012
+            UTIL_ASSERT(FALSE);
+        }
+
+        if (m_songs.Find(v1, v2) == TRUE) {
+            count += m_songs.Get(v2)->field_8;
+        }
+        break;
+    case 4:
+        if (!g_pBaldurChitin->GetObjectGame()->m_shapeshifts.Find(resRef, v1)) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 16030
+            UTIL_ASSERT(FALSE);
+        }
+
+        if (m_shapeshifts.Find(v1, v2) == TRUE) {
+            count += m_shapeshifts.Get(v2)->field_8;
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+        // __LINE__: 16044
+        UTIL_ASSERT(FALSE);
+    }
+
+    DWORD nSpecialization = g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetSpecializationMask(nClass, nKitIndex);
+    cSpell.Demand();
+
+    SHORT nCasterLevel = GetCasterLevel(&cSpell, nClass, nSpecialization);
+    if (nCasterLevel <= 1) {
+        nCasterLevel = 1;
+    }
+
+    SPELL_ABILITY* pBestAbility = NULL;
+    for (INT abilityNum = 0; abilityNum < cSpell.GetAbilityCount(); abilityNum++) {
+        if (cSpell.GetAbility(abilityNum)->minCasterLevel > nCasterLevel) {
+            break;
+        }
+
+        // FIXME: Calls `GetAbility` one more time.
+        pBestAbility = cSpell.GetAbility(abilityNum);
+    }
+
+    if (pBestAbility != NULL) {
+        cButtonData.m_icon = CString(pBestAbility->quickSlotIcon);
+        cButtonData.m_name = cSpell.GetGenericName();
+        cButtonData.m_abilityId.m_itemType = 1;
+        cButtonData.m_abilityId.m_targetType = pBestAbility->actionType;
+        cButtonData.m_abilityId.field_1D = a5;
+        cButtonData.m_abilityId.m_nClass = nClass;
+        cButtonData.m_abilityId.field_1E = nKitIndex;
+        cButtonData.m_abilityId.field_10 = cSpell.GetGenericName();
+
+        if (type == 1) {
+            cButtonData.m_abilityId.field_18 = g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetClassSuffixStringRef(nClass);
+            if (!CanCast(nClass, 0, &cSpell)) {
+                cButtonData.m_bDisabled = TRUE;
+                cButtonData.m_abilityId.field_18 = g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetClassBeyondCastingAbilityStringRef(nClass);
+            }
+        }
+
+        cButtonData.m_count = count;
+
+        if (count == 0) {
+            cButtonData.m_bDisabled = TRUE;
+        }
+
+        if (type == 2) {
+            if (resRef == CGameSprite::SPIN277) {
+                cButtonData.m_bDisplayCount = FALSE;
+                cButtonData.m_count = 0;
+
+                if (!sub_763150(CGAMESPRITE_FEAT_ARTERIAL_STRIKE)) {
+                    cButtonData.m_bDisabled = TRUE;
+                }
+            } else if (resRef == CGameSprite::SPIN278) {
+                cButtonData.m_bDisplayCount = FALSE;
+                cButtonData.m_count = 0;
+
+                if (!sub_763150(CGAMESPRITE_FEAT_HAMSTRING)) {
+                    cButtonData.m_bDisabled = TRUE;
+                }
+            } else if (resRef == CGameSprite::SPIN279) {
+                cButtonData.m_bDisplayCount = FALSE;
+                cButtonData.m_count = 0;
+
+                if (!sub_763150(CGAMESPRITE_FEAT_RAPID_SHOT)) {
+                    cButtonData.m_bDisabled = TRUE;
+                }
+            }
+        }
+    }
+
+    cSpell.Release();
+}
+
 // 0x714DB0
 void CGameSprite::InitQuickItemData(SHORT itemNum, SHORT abilityNum, int a3, CButtonData& cButtonData)
 {
