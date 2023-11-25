@@ -2525,6 +2525,151 @@ CGameButtonList* CGameSprite::GetInternalButtonList()
     return buttons;
 }
 
+// 0x717850
+CGameButtonList* CGameSprite::GetItemUsages(SHORT slotNum, WORD buttonType, SHORT abilityNum)
+{
+    const CRuleTables& cRule = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+    CGameButtonList* buttons = new CGameButtonList();
+
+    // FIXME: Unused.
+    STR_RES strRes;
+
+    if (slotNum >= 51) {
+        return buttons;
+    }
+
+    if (buttonType == 1 && m_equipment.m_items[42] != NULL) {
+        if (slotNum == 43) {
+            delete buttons;
+            return GetItemUsages(42, 1, 0);
+        }
+
+        if (slotNum > 43) {
+            return buttons;
+        }
+    }
+
+    CItem* pItem = m_equipment.m_items[slotNum];
+    if (pItem == NULL) {
+        return buttons;
+    }
+
+    if (slotNum == 43
+        || slotNum == 45
+        || slotNum == 47
+        || slotNum == 49) {
+        if ((pItem->GetFlagsFile() & 0x2) != 0) {
+            if (m_equipment.m_items[slotNum + 1] != NULL) {
+                return buttons;
+            }
+        }
+    }
+
+    pItem->Demand();
+
+    INT nStart = abilityNum;
+    INT nEnd;
+    if (abilityNum == -1) {
+        nStart = 0;
+        if (pItem->GetItemType() == 11) {
+            nEnd = 1;
+        } else {
+            nEnd = pItem->GetAbilityCount();
+        }
+    } else {
+        nEnd = abilityNum + 1;
+    }
+
+    for (INT nAbility = nStart; nAbility < nEnd; nAbility++) {
+        const ITEM_ABILITY* curAbility = pItem->GetAbility(nAbility);
+        if (curAbility == NULL) {
+            continue;
+        }
+
+        if ((curAbility->type & 0x100) != 0 && (pItem->m_flags & 0x1) == 0) {
+            continue;
+        }
+
+        if ((curAbility->type & 0x200) != 0 && (pItem->m_flags & 0x1) != 0) {
+            continue;
+        }
+
+        if (curAbility->quickSlotType == buttonType && (curAbility->type & 0xFF) != 4) {
+            if ((curAbility->type & 0xFF) != 2 || CheckLauncherType(curAbility, NULL)) {
+                CButtonData* pButtonData = new CButtonData();
+                pButtonData->m_icon = CString(curAbility->quickSlotIcon);
+                pButtonData->m_name = pItem->GetGenericName();
+                pButtonData->m_abilityId.m_itemType = 2;
+                pButtonData->m_abilityId.m_itemNum = slotNum;
+                pButtonData->m_abilityId.m_abilityNum = nAbility;
+                pButtonData->m_abilityId.m_targetType = curAbility->actionType;
+                pButtonData->m_abilityId.field_10 = cRule.GetItemAbilityDescription(pItem->GetResRef(), nAbility);
+                if (pButtonData->m_abilityId.field_10 == -1) {
+                    pButtonData->m_abilityId.field_10 = pItem->GetGenericName();
+                }
+                pButtonData->m_count = 0;
+                if (pItem->GetMaxStackable() > 1 || pItem->GetMaxUsageCount(nAbility) > 0) {
+                    pButtonData->m_count = pItem->GetUsageCount(nAbility);
+                }
+
+                SHORT launcherSlot;
+                CItem* pLauncher = GetLauncher(curAbility, launcherSlot);
+                if (pLauncher != NULL) {
+                    pButtonData->m_launcherIcon = pLauncher->GetItemIcon();
+                    pButtonData->m_launcherName = pLauncher->GetGenericName();
+                }
+
+                buttons->AddTail(pButtonData);
+            }
+        } else {
+            if ((curAbility->type & 0xFF) == 4) {
+                for (INT ammoSlotNum = 11; ammoSlotNum < 15; ammoSlotNum++) {
+                    CItem* pAmmo = m_equipment.m_items[ammoSlotNum];
+                    if (pAmmo == NULL) {
+                        continue;
+                    }
+
+                    pAmmo->Demand();
+
+                    for (INT nAmmoAbility = nStart; nAmmoAbility < nEnd; nAmmoAbility++) {
+                        const ITEM_ABILITY* curAmmoAbility = pAmmo->GetAbility(nAmmoAbility);
+                        if (curAmmoAbility != NULL
+                            && curAmmoAbility->quickSlotType == buttonType
+                            && (curAmmoAbility->type & 0xFF) != 4
+                            && CheckLauncherType(curAmmoAbility, pItem)) {
+                            CButtonData* pButtonData = new CButtonData();
+                            pButtonData->m_icon = CString(curAmmoAbility->quickSlotIcon);
+                            pButtonData->m_name = pAmmo->GetGenericName();
+                            pButtonData->m_count = pAmmo->GetUsageCount(nAmmoAbility);
+                            pButtonData->m_abilityId.m_itemType = 2;
+                            pButtonData->m_abilityId.m_itemNum = ammoSlotNum;
+                            pButtonData->m_abilityId.m_abilityNum = nAmmoAbility;
+                            pButtonData->m_abilityId.m_targetType = curAmmoAbility->actionType;
+                            if (curAmmoAbility->maxUsageCount == 0) {
+                                pButtonData->m_bDisplayCount = FALSE;
+                            }
+                            pButtonData->m_abilityId.field_10 = cRule.GetItemAbilityDescription(pAmmo->GetResRef(), nAmmoAbility);
+                            if (pButtonData->m_abilityId.field_10 == -1) {
+                                pButtonData->m_abilityId.field_10 = pAmmo->GetGenericName();
+                            }
+                            pButtonData->m_launcherIcon = pItem->GetItemIcon();
+                            pButtonData->m_launcherName = pItem->GetGenericName();
+
+                            buttons->AddTail(pButtonData);
+                        }
+                    }
+
+                    pAmmo->Release();
+                }
+            }
+        }
+    }
+
+    pItem->Release();
+
+    return buttons;
+}
+
 // 0x718650
 CItem* CGameSprite::GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot)
 {

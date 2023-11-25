@@ -423,6 +423,7 @@ public:
     CGameButtonList* GetSongsButtonList();
     BOOLEAN CanCast(BYTE nClass, DWORD nSpecialization, CSpell* pSpell);
     CGameButtonList* GetInternalButtonList();
+    CGameButtonList* GetItemUsages(SHORT slotNum, WORD buttonType, SHORT abilityNum);
     CItem* GetLauncher(const ITEM_ABILITY* ability, SHORT& launcherSlot);
     SHORT GetLauncherSlot(SHORT slotNum, SHORT abilityNum);
     BOOL CheckLauncherType(const ITEM_ABILITY* ability, CItem* pLauncher);
