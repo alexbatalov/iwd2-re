@@ -14,6 +14,7 @@
 #include "CResRef.h"
 #include "CSound.h"
 #include "CStrRes.h"
+#include "CVidBitmap.h"
 #include "CVidCell.h"
 #include "FileFormat.h"
 
@@ -708,6 +709,7 @@ public:
     /* 53DE */ int field_53DE;
     /* 53E2 */ int field_53E2;
     /* 53E6 */ int field_53E6;
+    /* 53EA */ CVidBitmap m_vbPortraitSmall;
     /* 54A4 */ int field_54A4;
     /* 54A8 */ int field_54A8;
     /* 54AC */ int field_54AC;

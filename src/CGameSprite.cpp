@@ -1952,11 +1952,416 @@ void CGameSprite::Unmarshal(CSavedGamePartyCreature* pCreature, BOOLEAN bPartyMe
 // 0x70CF90
 void CGameSprite::Unmarshal(BYTE* pCreature, LONG creatureSize, WORD facing, int a4)
 {
-    // TODO: Incomplete.
+    CCreatureFileOffsets* offsets;
+
+    m_bInUnmarshal = TRUE;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 12738
+    UTIL_ASSERT(pCreature != NULL);
+
+    BOOL bNeedUpgrade = FALSE;
+    BOOL bAlloced = FALSE;
+    if (memcmp(pCreature, "CRE V2.2", 8) != 0) {
+        bNeedUpgrade = TRUE;
+    }
+
+    if (bNeedUpgrade) {
+        // TODO: Incomplete.
+    }
+
+    ClearMarshal(TRUE);
+    creatureSize -= 900;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 12812
+    UTIL_ASSERT(creatureSize > 0);
 
     memcpy(&m_baseStats, pCreature + 8, sizeof(m_baseStats));
 
-    m_animation.SetAnimationType(m_baseStats.m_animationType, m_baseStats.m_colors, facing);
+    if (m_baseStats.m_scriptTeam[0] == 0xFF) {
+        memcpy(m_baseStats.m_scriptTeam, "None", strlen("None") + 1);
+    }
+
+    if (m_baseStats.m_scriptSpecial1[0] == 0xFF) {
+        memcpy(m_baseStats.m_scriptSpecial1, "None", strlen("None") + 1);
+    }
+
+    STR_RES nameRes;
+    g_pBaldurChitin->GetTlkTable().Fetch(m_baseStats.m_name, nameRes);
+
+    for (BYTE nRange = 0; nRange < 7; nRange++) {
+        if (m_baseStats.m_colors[nRange] == 0xFF) {
+            m_baseStats.m_colors[nRange] = 0;
+        }
+    }
+
+    // NOTE: Uninline.
+    GetAnimation()->SetAnimationType(m_baseStats.m_animationType, m_baseStats.m_colors, facing);
+
+    if (GetAnimation()->GetListType() == LIST_FLIGHT) {
+        // NOTE: Uninline.
+        sub_706F80(4 * ((facing + 2) / 4));
+    }
+
+    m_vbPortraitSmall.SetResRef(CResRef(m_baseStats.m_portraitSmall), TRUE, TRUE);
+    m_vbPortraitSmall.m_bDoubleSize = FALSE;
+
+    offsets = reinterpret_cast<CCreatureFileOffsets*>(pCreature + 900);
+    creatureSize -= sizeof(CCreatureFileOffsets);
+
+    if (m_baseStats.m_subrace == -1) {
+        m_baseStats.m_subrace = 0;
+    }
+
+    if (offsets->m_class == 0 || offsets->m_class == -1) {
+        offsets->m_class = CAIOBJECTTYPE_C_FIGHTER;
+        offsets->m_avClass = CAIOBJECTTYPE_C_FIGHTER;
+        offsets->m_classMask = CLASSMASK_FIGHTER;
+    }
+
+    m_derivedStats.m_classMask = 0;
+    for (INT iClassType = 1; iClassType <= 11; iClassType++) {
+        INT nLevel = GetClassLevel(iClassType);
+        if (nLevel > 0) {
+            m_derivedStats.SetClassLevel(iClassType, nLevel);
+        }
+    }
+
+    SetAIType(CAIObjectType(offsets->m_enemyAlly,
+                  offsets->m_general,
+                  offsets->m_race,
+                  m_baseStats.m_subrace,
+                  offsets->m_class,
+                  offsets->m_specifics,
+                  offsets->m_gender,
+                  offsets->m_alignment,
+                  m_id,
+                  offsets->m_specialCase,
+                  CString(offsets->m_name),
+                  offsets->m_avClass,
+                  offsets->m_classMask),
+        TRUE, TRUE);
+
+    if ((m_baseStats.m_generalState & STATE_DEAD) != 0) {
+        m_startTypeAI.m_nGeneral = CAIObjectType::G_DEAD;
+        m_typeAI.m_nGeneral = CAIObjectType::G_DEAD;
+    }
+
+    strncpy(m_scriptName, offsets->m_name, SCRIPTNAME_SIZE);
+
+    if (m_baseStats.m_attackBase == 0) {
+        int v1;
+        int v2;
+        int v3;
+        g_pBaldurChitin->GetObjectGame()->GetRuleTables().sub_546B60(this,
+            v1,
+            v2,
+            v3,
+            FALSE);
+        m_baseStats.m_attackBase = v1;
+    }
+
+    if (m_baseStats.m_numberOfAttacksBase == 0) {
+        int v1;
+        int v2;
+        int v3;
+        g_pBaldurChitin->GetObjectGame()->GetRuleTables().sub_546B60(this,
+            v1,
+            v2,
+            v3,
+            FALSE);
+        m_baseStats.m_numberOfAttacksBase = v2;
+    }
+
+    m_typeAI.m_nSubRace = m_baseStats.m_subrace;
+    m_startTypeAI.m_nSubRace = m_baseStats.m_subrace;
+    m_liveTypeAI.m_nSubRace = m_baseStats.m_subrace;
+
+    if (m_baseStats.m_effectVersion == 0) {
+        m_timedEffectList.Unmarshal(pCreature + offsets->m_effectListOffset,
+            sizeof(ITEM_EFFECT) * offsets->m_effectListCount,
+            this,
+            0);
+        creatureSize -= sizeof(ITEM_EFFECT) * offsets->m_effectListCount;
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+        // __LINE__: 12914
+        UTIL_ASSERT(creatureSize > 0);
+    } else {
+        m_timedEffectList.Unmarshal(pCreature + offsets->m_effectListOffset,
+            sizeof(CGameEffectBase) * offsets->m_effectListCount,
+            this,
+            1);
+        creatureSize -= sizeof(CGameEffectBase) * offsets->m_effectListCount;
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+        // __LINE__: 12920
+        UTIL_ASSERT(creatureSize > 0);
+    }
+
+    m_equipment.Unmarshal(reinterpret_cast<CCreatureFileEquipment*>(pCreature + offsets->m_equipmentListOffset),
+        reinterpret_cast<CCreatureFileItem*>(pCreature + offsets->m_itemListOffset),
+        offsets->m_itemListCount,
+        this);
+    creatureSize -= sizeof(CCreatureFileEquipment) + sizeof(CCreatureFileItem) * offsets->m_itemListCount;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 12925
+    UTIL_ASSERT(creatureSize > 0);
+
+    if (IcewindMisc::IsPC(this)) {
+        if (m_equipment.m_selectedWeapon >= 43) {
+            m_nWeaponSet = (m_equipment.m_selectedWeapon - 43) / 2;
+        }
+        sub_726810(m_nWeaponSet);
+    }
+
+    for (INT buttonNum = 0; buttonNum < g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetNumQuickWeaponSlots(m_typeAI.m_nClass); buttonNum++) {
+        INT abilityNum = buttonNum + 43 == m_equipment.m_selectedWeapon
+            ? m_equipment.m_selectedWeaponAbility
+            : 0;
+
+        CGameButtonList* buttons = GetItemUsages(buttonNum + 43, TRUE, abilityNum);
+        if (!buttons->IsEmpty()) {
+            // NOTE: Uninline.
+            SetQuickWeapon(static_cast<BYTE>(buttonNum), *buttons->GetHead());
+
+            while (!buttons->IsEmpty()) {
+                delete buttons->RemoveHead();
+            }
+        }
+        delete buttons;
+    }
+
+    CCreatureFileSpell* pSpell = new CCreatureFileSpell();
+    DWORD nOffset;
+    DWORD nIndex;
+    UINT nClass;
+    UINT nLevel;
+
+    for (nClass = 0; nClass < CSPELLLIST_NUM_CLASSES; nClass++) {
+        for (nLevel = 0; nLevel < CSPELLLIST_MAX_LEVELS; nLevel++) {
+            nOffset = offsets->m_spellListOffset[nClass][nLevel];
+            for (nIndex = 0; nIndex < offsets->m_spellListCount[nClass][nLevel]; nIndex++) {
+                *pSpell = *reinterpret_cast<CCreatureFileSpell*>(pCreature + nOffset);
+                nOffset += sizeof(CCreatureFileSpell);
+
+                const CResRef& resRef = g_pBaldurChitin->GetObjectGame()->m_spells.Get(pSpell->field_0);
+                if (memcmp(resRef.GetResRef(), "**", strlen("**")) == 0) {
+                    CString sError;
+                    sError.Format("*** %s has OBSOLETE DOMAIN SPELL FILE: %s.\n",
+                        m_scriptName,
+                        (LPCSTR)resRef.GetResRefStr());
+                } else {
+                    // NOTE: Uninline.
+                    m_spells.Get(nClass)->Add(pSpell->field_0,
+                        nLevel,
+                        pSpell->field_4,
+                        pSpell->field_8,
+                        pSpell->field_C);
+                }
+            }
+            creatureSize -= sizeof(CCreatureFileSpell) * offsets->m_spellListCount[nClass][nLevel];
+
+            // NOTE: There are some inlining.
+
+            m_spells.m_spellsByClass[nClass].m_lists[nLevel].field_14 = *reinterpret_cast<unsigned int*>(pCreature + nOffset);
+            nOffset += sizeof(unsigned int);
+            creatureSize -= sizeof(unsigned int);
+
+            m_spells.m_spellsByClass[nClass].m_lists[nLevel].field_18 = *reinterpret_cast<unsigned int*>(pCreature + nOffset);
+            nOffset += sizeof(unsigned int);
+            creatureSize -= sizeof(unsigned int);
+        }
+    }
+
+    for (nLevel = 0; nLevel < CSPELLLIST_MAX_LEVELS; nLevel++) {
+        nOffset = offsets->m_domainListOffset[nLevel];
+        for (nIndex = 0; nIndex < offsets->m_domainListCount[nLevel]; nIndex++) {
+            *pSpell = *reinterpret_cast<CCreatureFileSpell*>(pCreature + nOffset);
+            nOffset += sizeof(CCreatureFileSpell);
+
+            const CResRef& resRef = g_pBaldurChitin->GetObjectGame()->m_spells.Get(pSpell->field_0);
+            if (memcmp(resRef.GetResRef(), "**", strlen("**")) == 0) {
+                CString sError;
+                sError.Format("*** %s has OBSOLETE DOMAIN SPELL FILE: %s.\n",
+                    m_scriptName,
+                    (LPCSTR)resRef.GetResRefStr());
+            } else {
+                // NOTE: Uninline.
+                m_domainSpells.Add(pSpell->field_0,
+                    nLevel,
+                    pSpell->field_4,
+                    pSpell->field_8,
+                    pSpell->field_C);
+            }
+        }
+        creatureSize -= sizeof(CCreatureFileSpell) * offsets->m_domainListCount[nLevel];
+
+        m_domainSpells.m_lists[nLevel].field_14 = *reinterpret_cast<unsigned int*>(pCreature + nOffset);
+        nOffset += sizeof(unsigned int);
+        creatureSize -= sizeof(unsigned int);
+
+        m_domainSpells.m_lists[nLevel].field_18 = *reinterpret_cast<unsigned int*>(pCreature + nOffset);
+        nOffset += sizeof(unsigned int);
+        creatureSize -= sizeof(unsigned int);
+    }
+
+    nOffset = offsets->m_innateListOffset;
+    for (nIndex = 0; nIndex < offsets->m_innateListCount; nIndex++) {
+        *pSpell = *reinterpret_cast<CCreatureFileSpell*>(pCreature + nOffset);
+        nOffset += sizeof(CCreatureFileSpell);
+
+        const CResRef& resRef = g_pBaldurChitin->GetObjectGame()->GetInnateSpells()->Get(pSpell->field_0);
+        if (memcmp(resRef.GetResRef(), "**", strlen("**")) == 0) {
+            CString sError;
+            sError.Format("*** %s has OBSOLETE INNATE SPELL FILE: %s.\n",
+                m_scriptName,
+                (LPCSTR)resRef.GetResRefStr());
+        } else {
+            m_innateSpells.Add(pSpell->field_0,
+                pSpell->field_4,
+                pSpell->field_8,
+                pSpell->field_C);
+        }
+    }
+    creatureSize -= sizeof(CCreatureFileSpell) * offsets->m_innateListCount;
+
+    m_innateSpells.field_14 = *reinterpret_cast<unsigned int*>(pCreature + nOffset);
+    nOffset += sizeof(unsigned int);
+    creatureSize -= sizeof(unsigned int);
+
+    m_innateSpells.field_18 = *reinterpret_cast<unsigned int*>(pCreature + nOffset);
+    nOffset += sizeof(unsigned int);
+    creatureSize -= sizeof(unsigned int);
+
+    nOffset = offsets->m_songListOffset;
+    for (nIndex = 0; nIndex < offsets->m_songListCount; nIndex++) {
+        *pSpell = *reinterpret_cast<CCreatureFileSpell*>(pCreature + nOffset);
+        nOffset += sizeof(CCreatureFileSpell);
+
+        const CResRef& resRef = g_pBaldurChitin->GetObjectGame()->GetMasterSongLookup().Get(pSpell->field_0);
+        if (memcmp(resRef.GetResRef(), "**", strlen("**")) == 0) {
+            CString sError;
+            sError.Format("*** %s has OBSOLETE SONG FILE: %s.\n",
+                m_scriptName,
+                (LPCSTR)resRef.GetResRefStr());
+        } else {
+            m_songs.Add(pSpell->field_0,
+                pSpell->field_4,
+                pSpell->field_8,
+                pSpell->field_C);
+        }
+    }
+    creatureSize -= sizeof(CCreatureFileSpell) * offsets->m_songListCount;
+
+    m_songs.field_14 = *reinterpret_cast<unsigned int*>(pCreature + nOffset);
+    nOffset += sizeof(unsigned int);
+    creatureSize -= sizeof(unsigned int);
+
+    m_songs.field_18 = *reinterpret_cast<unsigned int*>(pCreature + nOffset);
+    nOffset += sizeof(unsigned int);
+    creatureSize -= sizeof(unsigned int);
+
+    nOffset = offsets->m_shapeListOffset;
+    for (nIndex = 0; nIndex < offsets->m_shapeListCount; nIndex++) {
+        *pSpell = *reinterpret_cast<CCreatureFileSpell*>(pCreature + nOffset);
+        nOffset += sizeof(CCreatureFileSpell);
+
+        const CResRef& resRef = g_pBaldurChitin->GetObjectGame()->GetShapeshifts()->Get(pSpell->field_0);
+        if (memcmp(resRef.GetResRef(), "**", strlen("**")) == 0) {
+            CString sError;
+            sError.Format("*** %s has OBSOLETE SHAPESHIFT FILE: %s.\n",
+                m_scriptName,
+                (LPCSTR)resRef.GetResRefStr());
+        } else {
+            m_shapeshifts.Add(pSpell->field_0,
+                pSpell->field_4,
+                pSpell->field_8,
+                pSpell->field_C);
+        }
+    }
+    creatureSize -= sizeof(CCreatureFileSpell) * offsets->m_shapeListCount;
+
+    m_shapeshifts.field_14 = *reinterpret_cast<unsigned int*>(pCreature + nOffset);
+    nOffset += sizeof(unsigned int);
+    creatureSize -= sizeof(unsigned int);
+
+    m_shapeshifts.field_18 = *reinterpret_cast<unsigned int*>(pCreature + nOffset);
+    nOffset += sizeof(unsigned int);
+    creatureSize -= sizeof(unsigned int);
+
+    delete pSpell;
+
+    for (BYTE nHatedRaceIndex = 0; nHatedRaceIndex < 8; nHatedRaceIndex++) {
+        if (m_baseStats.m_favoredEnemies[nHatedRaceIndex] == 0) {
+            m_baseStats.m_favoredEnemies[nHatedRaceIndex] = CAIObjectType::R_NO_RACE;
+        }
+    }
+
+    m_derivedStats.Reload(this, &m_baseStats, &m_spells, &m_domainSpells);
+    m_bInUnmarshal = FALSE;
+
+    if (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nNightmareMode == TRUE
+        && (m_baseStats.field_2FB & 0x1) == 0
+        && a4 == NULL) {
+        BOOL bIncreaseStats = FALSE;
+        if (m_type == 2) {
+            m_baseStats.m_hitPoints = 2 * (m_baseStats.m_hitPoints + 10);
+            m_baseStats.m_maxHitPointsBase = 2 * (m_baseStats.m_maxHitPointsBase + 10);
+            bIncreaseStats = TRUE;
+        } else {
+            if (offsets->m_enemyAlly > CAIObjectType::EA_GOODCUTOFF) {
+                m_baseStats.m_hitPoints = 3 * (m_baseStats.m_hitPoints + 80);
+                m_baseStats.m_maxHitPointsBase = 3 * (m_baseStats.m_maxHitPointsBase + 80);
+                bIncreaseStats = TRUE;
+            }
+        }
+
+        if (bIncreaseStats) {
+            // NOTE: Uninline.
+            BYTE moveScale = GetAnimation()->GetMoveScale();
+
+            // NOTE: Uninline.
+            GetAnimation()->SetMoveScale(static_cast<BYTE>(static_cast<float>(moveScale) * 1.3f + 1.0f));
+
+            if (m_baseStats.m_gold != 0) {
+                m_baseStats.m_gold += 75;
+            }
+
+            for (INT iClassType = 1; iClassType <= 11; iClassType++) {
+                INT nLevel = GetClassLevel(iClassType);
+                if (nLevel > 0) {
+                    SetClassLevel(iClassType, min(nLevel + 12, 30));
+                }
+            }
+
+            m_baseStats.m_STRBase += 10;
+            m_baseStats.m_INTBase += 10;
+            m_baseStats.m_WISBase += 10;
+            m_baseStats.m_DEXBase += 10;
+            m_baseStats.m_CONBase += 10;
+            m_baseStats.m_CHRBase += 10;
+            m_baseStats.field_252 += 10;
+            m_baseStats.field_2FB |= 0x1;
+        }
+    }
+
+    m_baseStats.field_2FC &= ~0x1;
+    m_dialog = offsets->m_dialog;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 13227
+    UTIL_ASSERT(creatureSize == 0);
+
+    m_derivedStats.Reload(this, &m_baseStats, &m_spells, &m_domainSpells);
+    m_tempStats = m_derivedStats;
+    m_bonusStats.BonusInit();
+
+    if (bAlloced) {
+        delete pCreature;
+    }
 }
 
 // 0x70E750

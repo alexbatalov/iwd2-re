@@ -564,6 +564,61 @@ public:
     /* 02FC */ unsigned char field_2FC;
 };
 
+#pragma pack(push)
+#pragma pack(2)
+
+class CCreatureFileOffsets {
+public:
+    CCreatureFileOffsets()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    /* 0000 */ BYTE m_enemyAlly;
+    /* 0001 */ BYTE m_general;
+    /* 0002 */ BYTE m_race;
+    /* 0003 */ BYTE m_class;
+    /* 0004 */ BYTE m_specifics;
+    /* 0005 */ BYTE m_gender;
+    /* 0006 */ BYTE m_specialCase[5];
+    /* 000B */ BYTE m_alignment;
+    /* 000C */ LONG m_instance;
+    /* 0010 */ SCRIPTNAME m_name;
+    /* 0030 */ BYTE m_avClass;
+    /* 0032 */ DWORD m_classMask;
+    /* 0036 */ DWORD m_spellListOffset[CSPELLLIST_NUM_CLASSES][CSPELLLIST_MAX_LEVELS];
+    /* 0132 */ DWORD m_spellListCount[CSPELLLIST_NUM_CLASSES][CSPELLLIST_MAX_LEVELS];
+    /* 022E */ DWORD m_domainListOffset[CSPELLLIST_MAX_LEVELS];
+    /* 0252 */ DWORD m_domainListCount[CSPELLLIST_MAX_LEVELS];
+    /* 0276 */ DWORD m_innateListOffset;
+    /* 027A */ DWORD m_innateListCount;
+    /* 027E */ DWORD m_songListOffset;
+    /* 0282 */ DWORD m_songListCount;
+    /* 0286 */ DWORD m_shapeListOffset;
+    /* 028A */ DWORD m_shapeListCount;
+    /* 028E */ DWORD m_equipmentListOffset;
+    /* 0292 */ DWORD m_itemListOffset;
+    /* 0296 */ DWORD m_itemListCount;
+    /* 029A */ DWORD m_effectListOffset;
+    /* 029E */ DWORD m_effectListCount;
+    /* 02A2 */ RESREF m_dialog;
+};
+
+#pragma pack(pop)
+
+class CCreatureFileSpell {
+public:
+    CCreatureFileSpell()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    /* 0000 */ UINT field_0;
+    /* 0004 */ UINT field_4;
+    /* 0008 */ UINT field_8;
+    /* 000C */ UINT field_C;
+};
+
 class CCreatureFileItem {
 public:
     CCreatureFileItem()
