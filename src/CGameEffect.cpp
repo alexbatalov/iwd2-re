@@ -1144,6 +1144,11 @@ BOOL CGameEffect::ApplyEffect(CGameSprite* pSprite)
     UTIL_ASSERT(FALSE);
 }
 
+// 0x799E60
+void CGameEffect::OnLoad(CGameSprite* pSprite)
+{
+}
+
 // 0x78E6E0
 BOOL CGameEffect::UsesDice()
 {
