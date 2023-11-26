@@ -1373,6 +1373,12 @@ void CGameArea::Unmarshal(BYTE* pArea, LONG areaSize, const CString& sName, BOOL
         return;
     }
 
+    m_pObjectMarker->AddToArea(this, CPoint(-1, -1), 0, CGameObject::LIST_BACK);
+
+    if (bProgressBarInPlace) {
+        ProgressBarCallback(dwPerArea, FALSE);
+    }
+
     INIFile.SetFileName(sName);
     INIFile.Load(sName);
 
