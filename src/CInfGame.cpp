@@ -2968,7 +2968,66 @@ void CInfGame::WorldEngineDeactivated()
 // 0x5AF870
 void CInfGame::OnPortraitLClick(DWORD id)
 {
-    // TODO: Incomplete.
+    if (m_nState != 0 && GetVisibleArea()->m_iPicked != -1) {
+        CGameObject* pObject;
+        BYTE rc = m_cObjectArray.GetShare(GetVisibleArea()->m_iPicked,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (m_nState == 1) {
+                GetVisibleArea()->OnActionButtonClickGround(pObject->GetPos());
+            } else {
+                pObject->OnActionButton(pObject->GetPos());
+            }
+            m_cObjectArray.ReleaseShare(GetVisibleArea()->m_iPicked,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    } else {
+        if (static_cast<SHORT>(id) < GetNumCharacters()) {
+            CGameSprite* pSprite;
+            LONG nCharacterId = m_characterPortraits[id];
+            BYTE rc = m_cObjectArray.GetShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+            if (rc == CGameObjectArray::SUCCESS) {
+                if (!pSprite->InControl()) {
+                    if (g_pBaldurChitin->GetObjectGame()->GetGroup()->GetCount() > 0
+                        && pSprite->GetArea() == g_pBaldurChitin->GetObjectGame()->GetVisibleArea()) {
+                        CAIAction action(CAIAction::MOVETOOBJECTFOLLOW, pSprite->GetAIType(), 0, 0, 0);
+                        g_pBaldurChitin->GetObjectGame()->GetGroup()->GroupAction(action, TRUE, NULL);
+                    } else if (pSprite->GetArea() != NULL) {
+                        UnselectAll();
+
+                        if (GetVisibleArea() != NULL) {
+                            GetVisibleArea()->m_bPicked = FALSE;
+                            GetVisibleArea()->m_iPicked = -1;
+                            GetVisibleArea()->m_nToolTip = 0;
+                            GetVisibleArea()->OnDeactivation();
+                        }
+
+                        m_visibleArea = pSprite->GetArea()->m_id;
+
+                        GetVisibleArea()->OnActivation();
+                    }
+                }
+
+                m_cObjectArray.ReleaseShare(nCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            }
+
+            if (!g_pBaldurChitin->GetScreenWorld()->GetCtrlKey()
+                && !g_pBaldurChitin->GetScreenWorld()->GetShiftKey()) {
+                UnselectAll();
+            }
+
+            SelectCharacter(m_characterPortraits[id], TRUE);
+            SelectToolbar();
+        }
+    }
 }
 
 // 0x5AFCB0

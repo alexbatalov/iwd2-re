@@ -25,6 +25,7 @@ public:
     static const SHORT FORCESPELLPOINT;
     static const SHORT STARTDIALOG;
     static const SHORT APPLYSPELL;
+    static const SHORT MOVETOOBJECTFOLLOW;
     static const SHORT REALLYFORCESPELL;
     static const SHORT SPELLNODEC;
     static const SHORT SPELLPOINTNODEC;
