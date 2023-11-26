@@ -20,3 +20,10 @@ const BYTE CPathSearch::COST_IMPASSABLE = 255;
 
 // 0x84D6A4
 const BYTE CPathSearch::COST_SCALE_ESTIMATE = 1;
+
+// NOTE: Inlined.
+void CPathSearch::PositionToPoint(LONG position, POINT* point)
+{
+    point->x = position % GRID_ACTUALX;
+    point->y = GRID_ACTUALY - position / GRID_ACTUALX - 1;
+}

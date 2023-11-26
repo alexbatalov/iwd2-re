@@ -1038,6 +1038,22 @@ BOOL CGameSprite::GetCanSeeInvisible()
         || (m_baseStats.m_flags & 0x10000) != 0;
 }
 
+// 0x6FBA50
+void CGameSprite::GetNextWaypoint(CPoint* pt)
+{
+    if (m_pPath != NULL) {
+        CPathSearch::PositionToPoint(m_pPath[m_currPath - 1], pt);
+
+        pt->x *= CPathSearch::GRID_SQUARE_SIZEX;
+        pt->x += CPathSearch::GRID_SQUARE_SIZEX / 2;
+
+        pt->y *= CPathSearch::GRID_SQUARE_SIZEY;
+        pt->y += CPathSearch::GRID_SQUARE_SIZEY / 2;
+    } else {
+        *pt = m_pos;
+    }
+}
+
 // 0x6FF2F0
 void CGameSprite::DropPath()
 {

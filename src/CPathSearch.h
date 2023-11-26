@@ -12,6 +12,8 @@ public:
     static const BYTE COST_IMPASSABLE;
     static const BYTE COST_MINIMUM;
     static const BYTE COST_SCALE_ESTIMATE;
+
+    static void PositionToPoint(LONG position, POINT* point);
 };
 
 #endif /* CPATHSEARCH_H_ */

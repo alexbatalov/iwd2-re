@@ -370,6 +370,7 @@ public:
 
     CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, DWORD expirationTime, WORD huntingRange, WORD followRange, DWORD timeOfDayVisible, CPoint startPos, WORD facing);
     /* 0014 */ LONG GetTargetId() override;
+    /* 0018 */ void GetNextWaypoint(CPoint* pt) override;
     /* 0034 */ BOOL IsOver(const CPoint& pt) override;
     /* 0038 */ BOOL DoesIntersect(CRect r);
     /* 003C */ BOOL OnSearchMap() override;
