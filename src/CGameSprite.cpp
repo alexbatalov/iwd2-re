@@ -14,6 +14,7 @@
 #include "CSpell.h"
 #include "CUtil.h"
 #include "CVariableHash.h"
+#include "CVidInf.h"
 #include "IcewindCGameEffects.h"
 #include "IcewindMisc.h"
 
@@ -1487,7 +1488,30 @@ void CGameSprite::RenderPortrait(const CPoint& cpRenderPosition, const CSize& sz
 // 0x705AD0
 void CGameSprite::RenderToMapScreen(const CRect& rClipBase, const CPoint& ptCharPos)
 {
-    // TODO: Incomplete.
+    CRect rClip(rClipBase);
+    INT nScale = g_pBaldurChitin->field_4A28 ? 2 : 1;
+    if (!g_pBaldurChitin->GetObjectGame()->GetGameSave()->field_1AC
+        || InControl()) {
+        if (!IcewindMisc::IsDead(this)) {
+            CPoint center;
+            CSize axes;
+            COLORREF rgbColor;
+
+            center.x = nScale * (4 * ptCharPos.x / 32) - rClip.left;
+            center.y = nScale * (4 * ptCharPos.y / 32) - rClip.top;
+            rClip.OffsetRect(-rClip.left, -rClip.top);
+
+            axes.cx = GetAnimation()->GetPersonalSpace();
+            if (!g_pBaldurChitin->field_4A28) {
+                axes.cx = max(axes.cx - 2, 3);
+            }
+            axes.cy = 3 * GetAnimation()->GetPersonalSpace() / 4;
+
+            rgbColor = g_pBaldurChitin->GetCurrentVideoMode()->ApplyBrightnessContrast(GetMapScreenColor());
+
+            static_cast<CVidInf*>(g_pBaldurChitin->GetCurrentVideoMode())->BKRenderEllipse(center, axes, rClip, rgbColor);
+        }
+    }
 }
 
 // 0x705CC0
