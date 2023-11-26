@@ -384,6 +384,7 @@ public:
     /* 00C0 */ virtual void ResetAITypeLive();
     /* 00C4 */ virtual void ResetAIType();
 
+    void SetPath(LONG* pPath, SHORT nPath);
     void DropPath();
     void DropSearchRequest();
     BOOL MoveToBack();

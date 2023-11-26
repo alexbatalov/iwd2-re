@@ -1038,6 +1038,34 @@ BOOL CGameSprite::GetCanSeeInvisible()
         || (m_baseStats.m_flags & 0x10000) != 0;
 }
 
+// 0x6FA810
+void CGameSprite::SetPath(LONG* pPath, SHORT nPath)
+{
+    CPoint start;
+    CPoint goal;
+
+    // NOTE: Uninline.
+    DropPath();
+
+    m_nPath = nPath;
+    m_pPath = pPath;
+    m_currPath = 1;
+    m_posDest.x = m_pos.x + 4;
+    m_posDest.y = m_pos.y + 3;
+
+    // NOTE: Uninline.
+    CPathSearch::PositionToPoint(m_pPath[0], &start);
+
+    // NOTE: Uninline.
+    CPathSearch::PositionToPoint(m_pPath[nPath - 1], &goal);
+
+    if (abs(goal.x - start.x) <= 4 && abs(goal.y - start.y <= 4) && nPath <= 4) {
+        m_walkBackwards = TRUE;
+    }
+
+    SetSequence(CGAMESPRITE_SEQ_WALK);
+}
+
 // 0x6FBA50
 void CGameSprite::GetNextWaypoint(CPoint* pt)
 {
