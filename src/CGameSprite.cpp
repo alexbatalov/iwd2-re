@@ -1505,7 +1505,7 @@ void CGameSprite::Select()
                 CGameObjectArray::THREAD_ASYNCH,
                 &pObject,
                 INFINITE);
-        } while (rc == CGameObjectArray::SHARED || CGameObjectArray::DENIED);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
         if (rc == CGameObjectArray::SUCCESS) {
             if (pObject->GetObjectType() == CGameObject::TYPE_SPRITE) {
