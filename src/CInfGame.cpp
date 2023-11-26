@@ -2623,9 +2623,89 @@ void CInfGame::UnselectAll()
 // 0x5AD8A0
 BOOL CInfGame::SelectCharacter(LONG characterId, BOOLEAN bPlaySelectSound)
 {
-    // TODO: Incomplete.
+    CGameSprite* pSprite;
+    BYTE rc;
+    SHORT nPortrait = GetCharacterPortraitNum(characterId);
 
-    return FALSE;
+    if (nPortrait == -1) {
+        if (!IsAlly(characterId) || !IsFamiliar(characterId)) {
+            return FALSE;
+        }
+    }
+
+    do {
+        rc = m_cObjectArray.GetShare(characterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc != CGameObjectArray::SUCCESS) {
+        return FALSE;
+    }
+
+    if (pSprite->m_bSelected
+        && !g_pBaldurChitin->GetScreenWorld()->GetShiftKey()) {
+        do {
+            rc = m_cObjectArray.GetDeny(characterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            pSprite->Unselect();
+
+            m_cObjectArray.ReleaseDeny(characterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    } else if ((GetVisibleArea() == pSprite->GetArea()
+                   || GetGroup()->GetCount() == 0)
+        && pSprite->Orderable(FALSE)
+        && pSprite->GetArea() != NULL) {
+        if (GetVisibleArea() != pSprite->GetArea()) {
+            if (GetVisibleArea() != NULL) {
+                GetVisibleArea()->m_bPicked = FALSE;
+                GetVisibleArea()->m_iPicked = -1;
+                GetVisibleArea()->m_nToolTip = 0;
+                GetVisibleArea()->OnDeactivation();
+            }
+
+            m_visibleArea = pSprite->GetArea()->GetId();
+
+            GetVisibleArea()->OnActivation();
+        }
+
+        do {
+            rc = m_cObjectArray.GetDeny(characterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            pSprite->Select();
+
+            m_cObjectArray.ReleaseDeny(characterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+
+    if (bPlaySelectSound && pSprite->Orderable(FALSE)) {
+        pSprite->PlaySound(CGameSprite::SOUND_SELECT, TRUE, FALSE, FALSE);
+    }
+
+    m_cObjectArray.ReleaseShare(characterId,
+        CGameObjectArray::THREAD_ASYNCH,
+        INFINITE);
+
+    if (nPortrait != -1) {
+        UpdatePortrait(nPortrait, 1);
+    }
+
+    return TRUE;
 }
 
 // 0x5ADAE0
@@ -6006,6 +6086,18 @@ void CInfGame::SetFormationToQuickFormation(SHORT buttonNum)
 void CInfGame::SetFormation(SHORT formation)
 {
     m_gameSave.m_curFormation = formation;
+}
+
+// NOTE: Inlined.
+BOOL CInfGame::IsFamiliar(LONG id)
+{
+    return m_familiars.Find(reinterpret_cast<int*>(id)) != NULL;
+}
+
+// NOTE: Inlined.
+BOOL CInfGame::IsAlly(LONG id)
+{
+    return m_allies.Find(reinterpret_cast<int*>(id)) != NULL;
 }
 
 // -----------------------------------------------------------------------------
