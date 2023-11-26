@@ -1532,7 +1532,7 @@ void CGameSprite::Unselect()
             CGameObjectArray::THREAD_ASYNCH,
             reinterpret_cast<CGameObject**>(&pSprite),
             INFINITE);
-    } while (rc == CGameObjectArray::SHARED || CGameObjectArray::DENIED);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
     if (rc == CGameObjectArray::SUCCESS) {
         if (pSprite != NULL) {
@@ -1551,7 +1551,7 @@ void CGameSprite::Unselect()
                     CGameObjectArray::THREAD_ASYNCH,
                     &pObject,
                     INFINITE);
-            } while (rc == CGameObjectArray::SHARED || CGameObjectArray::DENIED);
+            } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
 
             if (rc == CGameObjectArray::SUCCESS) {
                 if (pObject->GetObjectType() == CGameObject::TYPE_SPRITE) {
