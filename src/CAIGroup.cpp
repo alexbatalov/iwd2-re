@@ -544,7 +544,7 @@ LONG CAIGroup::GetGroupLeader()
 // 0x4060E0
 LONG* CAIGroup::GetGroupList()
 {
-    LONG* pList = new LONG(m_memberList.GetCount());
+    LONG* pList = new LONG[m_memberList.GetCount()];
 
     int index = 0;
     POSITION pos = m_memberList.GetHeadPosition();
