@@ -384,6 +384,7 @@ public:
 
     void DropPath();
     void DropSearchRequest();
+    BOOL MoveToBack();
     void OnLightningStrike();
     void MakeGlobal();
     SHORT GetNumSounds(SHORT nOffset, SHORT nMaxNum);
@@ -726,8 +727,8 @@ public:
     /* 54EE */ int field_54EE;
     /* 54F2 */ short field_54F2;
     /* 54F4 */ short field_54F4;
-    /* 54F6 */ short field_54F6;
-    /* 54F8 */ short field_54F8;
+    /* 54F6 */ SHORT m_moveToFrontQueue;
+    /* 54F8 */ SHORT m_moveToBackQueue;
     /* 54FA */ CGameEffectList m_equipedEffectList;
     /* 5526 */ CGameEffectList m_timedEffectList;
     /* 556E */ int field_556E;

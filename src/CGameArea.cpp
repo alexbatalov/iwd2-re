@@ -3284,6 +3284,22 @@ void CGameArea::sub_47A190()
     g_pBaldurChitin->AddMusicPosition(m_resRef, g_pBaldurChitin->cSoundMixer.m_nCurrentSong);
 }
 
+// NOTE: Inlined.
+void CGameArea::AddToMarkers(LONG id)
+{
+    if (m_pObjectMarker != NULL) {
+        m_pObjectMarker->AddObject(id);
+    }
+}
+
+// NOTE: Inlined.
+void CGameArea::RemoveFromMarkers(LONG id)
+{
+    if (m_pObjectMarker) {
+        m_pObjectMarker->RemoveObject(id);
+    }
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x47A020

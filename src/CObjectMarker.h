@@ -14,6 +14,9 @@ public:
     /* 0048 */ void RemoveFromArea() override;
     /* 004C */ void Render(CGameArea* pArea, CVidMode* pVidMode, int a3) override;
 
+    void AddObject(LONG id);
+    void RemoveObject(LONG id);
+
     CList<LONG> m_lstObjectIds;
 };
 

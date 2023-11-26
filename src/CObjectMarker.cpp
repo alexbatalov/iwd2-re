@@ -78,3 +78,18 @@ void CObjectMarker::Render(CGameArea* pArea, CVidMode* pVidMode, int a3)
         }
     }
 }
+
+// NOTE: Inlined.
+void CObjectMarker::AddObject(LONG id)
+{
+    m_lstObjectIds.AddTail(id);
+}
+
+// NOTE: Inlined.
+void CObjectMarker::RemoveObject(LONG id)
+{
+    POSITION pos = m_lstObjectIds.Find(id);
+    if (pos != NULL) {
+        m_lstObjectIds.RemoveAt(pos);
+    }
+}

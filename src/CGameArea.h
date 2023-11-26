@@ -209,6 +209,9 @@ public:
     LONG GetBattleSongCounter();
     BYTE GetId();
 
+    void AddToMarkers(LONG id);
+    void RemoveFromMarkers(LONG id);
+
     static INT dword_8D212C;
     static BOOLEAN byte_8D2138;
 

@@ -7,6 +7,7 @@
 #include "CGameButtonList.h"
 #include "CInfGame.h"
 #include "CItem.h"
+#include "CPathSearch.h"
 #include "CScreenCharacter.h"
 #include "CScreenCreateChar.h"
 #include "CScreenInventory.h"
@@ -679,8 +680,8 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     field_56EC = 0;
     m_removeFromArea = FALSE;
     m_talkingCounter = 0;
-    field_54F6 = 0;
-    field_54F8 = 0;
+    m_moveToFrontQueue = 0;
+    m_moveToBackQueue = 0;
     m_curResponseNum = -1;
     m_curResponseSetNum = -1;
     m_curScriptNum = -1;
@@ -1049,6 +1050,68 @@ void CGameSprite::DropSearchRequest()
 
         searchLock.Unlock();
     }
+}
+
+// 0x6FF410
+BOOL CGameSprite::MoveToBack()
+{
+    if (m_animation.CanLieDown()) {
+        if (m_listType == LIST_BACK) {
+            if ((m_derivedStats.m_generalState & STATE_SLEEPING) == 0) {
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+                // __LINE__: 5669
+                UTIL_ASSERT(FALSE);
+            }
+
+            // NOTE: Uninline.
+            m_pArea->RemoveFromMarkers(m_id);
+
+            m_pArea->m_search.RemoveObject(CPoint(m_pos.x / CPathSearch::GRID_SQUARE_SIZEX,
+                                               m_pos.y / CPathSearch::GRID_SQUARE_SIZEY),
+                m_typeAI.GetEnemyAlly(),
+                m_animation.GetPersonalSpace(),
+                field_54A8,
+                field_7430);
+            m_pArea->IncrHeightDynamic(m_pos);
+            m_derivedStats.m_generalState &= ~STATE_SLEEPING;
+            return FALSE;
+        }
+
+        if (m_posVertList != NULL) {
+            m_pArea->RemoveObject(m_posVertList, m_listType, m_id);
+            m_posVertList = NULL;
+
+            if ((m_derivedStats.m_generalState & STATE_DEAD) != 0) {
+                // NOTE: Uninline.
+                m_pArea->RemoveFromMarkers(m_id);
+
+                m_pArea->m_search.RemoveObject(CPoint(m_pos.x / CPathSearch::GRID_SQUARE_SIZEX,
+                                                   m_pos.y / CPathSearch::GRID_SQUARE_SIZEY),
+                    m_typeAI.GetEnemyAlly(),
+                    m_animation.GetPersonalSpace(),
+                    field_54A8,
+                    field_7430);
+                m_pArea->IncrHeightDynamic(m_pos);
+            }
+
+            m_listType = LIST_BACK;
+            m_pArea->AddObject(m_id, LIST_BACK);
+            return TRUE;
+        }
+
+        if (m_moveToFrontQueue > 0) {
+            m_moveToFrontQueue--;
+        } else {
+            m_moveToBackQueue++;
+        }
+        return FALSE;
+    }
+
+    if ((m_derivedStats.m_generalState & STATE_DEAD) != 0) {
+        // NOTE: Uninline.
+        m_pArea->RemoveFromMarkers(m_id);
+    }
+    return TRUE;
 }
 
 // 0x700BB0
