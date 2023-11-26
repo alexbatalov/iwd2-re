@@ -559,6 +559,7 @@ public:
     /* 027C */ RESREF m_scriptCombat;
     /* 0284 */ RESREF m_scriptSpecial3;
     /* 028C */ RESREF m_scriptMovement;
+    /* 0294 */ unsigned char field_294;
     /* 02FA */ BYTE m_fadeSpeed;
     /* 02FB */ unsigned char field_2FB;
     /* 02FC */ unsigned char field_2FC;

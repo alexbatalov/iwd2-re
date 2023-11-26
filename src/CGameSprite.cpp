@@ -1331,9 +1331,151 @@ BYTE CGameSprite::GetSound(BYTE soundID)
 }
 
 // 0x704770
-void CGameSprite::RenderMarkers(CVidMode* pVidMode, int a2)
+void CGameSprite::RenderMarkers(CVidMode* pVidMode, INT nSurface)
 {
-    // TODO: Incomplete.
+    CPoint pt;
+    pt.x = min(max(m_pos.x, 0), m_pArea->GetInfinity()->nAreaX - 1);
+    pt.y = min(max(m_pos.y, 0), m_pArea->GetInfinity()->nAreaY - 1);
+
+    if (m_pArea->m_visibility.IsTileExplored(m_pArea->m_visibility.PointToTile(pt))
+        && (m_typeAI.m_nEnemyAlly <= CAIObjectType::EA_CONTROLCUTOFF
+            || (m_derivedStats.m_generalState & STATE_INVISIBLE) == 0
+            || (m_baseStats.field_2FC & 0x1) != 0)
+        && m_baseStats.field_294 != 1) {
+        DWORD level = g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nGuiFeedbackLevel;
+        if (g_pBaldurChitin->GetScreenWorld()->field_14A) {
+            level = 5;
+        }
+        if (g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_cutScene) {
+            level = 1;
+        }
+
+        BOOLEAN dialogTalker = FALSE;
+        if (g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode == 386
+            || g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode == 1282) {
+            CRect rViewPort(m_pArea->GetInfinity()->rViewPort);
+
+            INT x;
+            INT y;
+            m_pArea->GetInfinity()->GetViewPosition(x, y);
+
+            if (abs(GetPos().x - (x + rViewPort.Width() / 2)) < 16
+                && abs(GetPos().y - (y + rViewPort.Height() / 2)) < 12) {
+                dialogTalker = TRUE;
+            }
+        }
+
+        switch (level) {
+        case 1:
+            if (m_talkingCounter > 0
+                || dialogTalker
+                || m_id == m_pArea->m_iPicked
+                || m_id == m_pArea->m_iPickedTarget
+                || m_marker.m_nRecticleForceRenderTarget != 0) {
+                m_marker.Render(pVidMode, nSurface, this);
+            }
+
+            if (m_id == m_pArea->m_iPicked
+                || m_id == m_pArea->m_iPickedTarget
+                || m_marker.m_nRecticleForceRender != 0
+                || m_groupMove) {
+                if (Orderable(FALSE) && m_targetPoint.x != -1) {
+                    m_destMarker.Render(pVidMode,
+                        nSurface,
+                        m_pArea->GetInfinity(),
+                        m_targetPoint,
+                        CMarker::RECTICLE_DEST_SIZE,
+                        3 * CMarker::RECTICLE_DEST_SIZE / 4);
+                }
+            }
+            break;
+        case 2:
+            if (m_bSelected
+                || m_id == m_pArea->m_iPicked
+                || m_id == m_pArea->m_iPickedTarget
+                || m_marker.m_nRecticleForceRender != 0) {
+                m_marker.Render(pVidMode, nSurface, this);
+
+                if (Orderable(FALSE) && m_targetPoint.x != -1) {
+                    m_destMarker.Render(pVidMode,
+                        nSurface,
+                        m_pArea->GetInfinity(),
+                        m_targetPoint,
+                        CMarker::RECTICLE_DEST_SIZE,
+                        3 * CMarker::RECTICLE_DEST_SIZE / 4);
+                }
+            } else if (m_talkingCounter > 0) {
+                m_marker.Render(pVidMode, nSurface, this);
+            }
+            break;
+        case 3:
+            if (Orderable(FALSE)
+                || m_id == m_pArea->m_iPicked
+                || m_id == m_pArea->m_iPickedTarget
+                || m_marker.m_nRecticleForceRender != 0) {
+                m_marker.Render(pVidMode, nSurface, this);
+
+                if (Orderable(FALSE)
+                    && (m_bSelected
+                        || m_id == m_pArea->m_iPicked
+                        || m_id == m_pArea->m_iPickedTarget)
+                    && m_targetPoint.x != -1) {
+                    m_destMarker.Render(pVidMode,
+                        nSurface,
+                        m_pArea->GetInfinity(),
+                        m_targetPoint,
+                        CMarker::RECTICLE_DEST_SIZE,
+                        3 * CMarker::RECTICLE_DEST_SIZE / 4);
+                }
+            } else if (m_talkingCounter > 0) {
+                m_marker.Render(pVidMode, nSurface, this);
+            }
+            break;
+        case 4:
+            if (Orderable(FALSE)
+                || m_marker.m_type == CMarker::RECTICLE
+                || m_id == m_pArea->m_iPicked
+                || m_id == m_pArea->m_iPickedTarget) {
+                m_marker.Render(pVidMode, nSurface, this);
+
+                if (Orderable(FALSE)
+                    && (m_bSelected
+                        || m_id == m_pArea->m_iPicked
+                        || m_id == m_pArea->m_iPickedTarget)
+                    && m_targetPoint.x != -1) {
+                    m_destMarker.Render(pVidMode,
+                        nSurface,
+                        m_pArea->GetInfinity(),
+                        m_targetPoint,
+                        CMarker::RECTICLE_DEST_SIZE,
+                        3 * CMarker::RECTICLE_DEST_SIZE / 4);
+                }
+            } else if (m_talkingCounter > 0) {
+                m_marker.Render(pVidMode, nSurface, this);
+            }
+            break;
+        case 5:
+            m_marker.Render(pVidMode, nSurface, this);
+
+            if (Orderable(FALSE)
+                && (m_bSelected
+                    || m_id == m_pArea->m_iPicked
+                    || m_id == m_pArea->m_iPickedTarget)
+                && m_targetPoint.x != -1) {
+                m_destMarker.Render(pVidMode,
+                    nSurface,
+                    m_pArea->GetInfinity(),
+                    m_targetPoint,
+                    CMarker::RECTICLE_DEST_SIZE,
+                    3 * CMarker::RECTICLE_DEST_SIZE / 4);
+            }
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 8300
+            UTIL_ASSERT(FALSE);
+        }
+    }
 }
 
 // 0x704D40
