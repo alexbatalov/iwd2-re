@@ -396,6 +396,7 @@ public:
     void RenderMarkers(CVidMode* pVidMode, INT nSurface);
     void RenderPortrait(const CPoint& cpRenderPosition, const CSize& szControl, BOOL bPressed, BOOL reorderHighlight, BOOL selectFromMarker, const CRect& rClip, BOOL bDoubleSize);
     void RenderToMapScreen(const CRect& rClipBase, const CPoint& ptCharPos);
+    COLORREF GetMapScreenColor();
     void Select();
     void Unselect();
     void SetCharacterToolTip(CUIControlBase* pControl);

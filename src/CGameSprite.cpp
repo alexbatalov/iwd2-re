@@ -1490,6 +1490,77 @@ void CGameSprite::RenderToMapScreen(const CRect& rClipBase, const CPoint& ptChar
     // TODO: Incomplete.
 }
 
+// 0x705CC0
+COLORREF CGameSprite::GetMapScreenColor()
+{
+    COLORREF rgbColor;
+    BYTE enemyAlly = m_liveTypeAI.GetEnemyAlly();
+    if (enemyAlly == CAIObjectType::EA_PC
+        || enemyAlly == CAIObjectType::EA_FAMILIAR
+        || enemyAlly == CAIObjectType::EA_ALLY
+        || enemyAlly == CAIObjectType::EA_0x847C3A
+        || enemyAlly == CAIObjectType::EA_CONTROLLED
+        || enemyAlly == CAIObjectType::EA_GOODCUTOFF) {
+        if (m_moraleFailure) {
+            rgbColor = CMarker::PC_MORALE_FAILURE_COLOR;
+        } else if (InControl() && m_nUnselectableCounter == 0) {
+            if (g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(m_id) == g_pBaldurChitin->GetActiveEngine()->GetSelectedCharacter()) {
+                rgbColor = CMarker::PC_SELECTED_COLOR;
+            } else {
+                rgbColor = CMarker::PC_COLOR;
+            }
+        } else {
+            if (g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(m_id) == g_pBaldurChitin->GetActiveEngine()->GetSelectedCharacter()) {
+                rgbColor = CMarker::PC_NONECONTROLED_SELECTED_COLOR;
+            } else {
+                rgbColor = CMarker::PC_NONECONTROLED_COLOR;
+            }
+        }
+    } else if (enemyAlly == CAIObjectType::EA_ENEMY
+        || enemyAlly == CAIObjectType::EA_CHARMED_PC) {
+        rgbColor = CMarker::ENEMY_COLOR;
+    } else if (enemyAlly == CAIObjectType::EA_NEUTRAL) {
+        rgbColor = CMarker::NEUTRAL_COLOR;
+    } else {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+        // __LINE__: 8754
+        UTIL_ASSERT(FALSE);
+    }
+
+    if (g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(m_id) == g_pBaldurChitin->GetActiveEngine()->GetPickedCharacter()) {
+        ULONG nQuarterPeriod = CMarker::PICKED_FLASH_PERIOD / 4;
+        ULONG nAsyncCounter = g_pBaldurChitin->nAUCounter % CMarker::PICKED_FLASH_PERIOD;
+        BYTE red;
+        BYTE green;
+        BYTE blue;
+
+        if (nAsyncCounter < nQuarterPeriod) {
+            red = static_cast<BYTE>(nAsyncCounter * GetRValue(rgbColor) / nQuarterPeriod);
+            green = static_cast<BYTE>(nAsyncCounter * GetGValue(rgbColor) / nQuarterPeriod);
+            blue = static_cast<BYTE>(nAsyncCounter * GetBValue(rgbColor) / nQuarterPeriod);
+        } else if (nAsyncCounter < nQuarterPeriod * 2) {
+            nAsyncCounter -= nQuarterPeriod;
+            red = static_cast<BYTE>(GetRValue(rgbColor) + nAsyncCounter * (255 - GetRValue(rgbColor)) / nQuarterPeriod);
+            green = static_cast<BYTE>(GetGValue(rgbColor) + nAsyncCounter * (255 - GetGValue(rgbColor)) / nQuarterPeriod);
+            blue = static_cast<BYTE>(GetBValue(rgbColor) + nAsyncCounter * (255 - GetBValue(rgbColor)) / nQuarterPeriod);
+        } else if (nAsyncCounter < nQuarterPeriod * 3) {
+            nAsyncCounter -= nQuarterPeriod * 2;
+            red = static_cast<BYTE>(255 - nAsyncCounter * (255 - GetRValue(rgbColor)) / nQuarterPeriod);
+            green = static_cast<BYTE>(255 - nAsyncCounter * (255 - GetGValue(rgbColor)) / nQuarterPeriod);
+            blue = static_cast<BYTE>(255 - nAsyncCounter * (255 - GetBValue(rgbColor)) / nQuarterPeriod);
+        } else {
+            nAsyncCounter -= nQuarterPeriod * 3;
+            red = static_cast<BYTE>(GetRValue(rgbColor) - nAsyncCounter * GetRValue(rgbColor) / nQuarterPeriod);
+            green = static_cast<BYTE>(GetGValue(rgbColor) - nAsyncCounter * GetGValue(rgbColor) / nQuarterPeriod);
+            blue = static_cast<BYTE>(GetBValue(rgbColor) - nAsyncCounter * GetBValue(rgbColor) / nQuarterPeriod);
+        }
+
+        rgbColor = RGB(red, green, blue);
+    }
+
+    return rgbColor;
+}
+
 // 0x705FD0
 void CGameSprite::Select()
 {
