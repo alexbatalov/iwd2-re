@@ -951,6 +951,25 @@ BOOL CGameSprite::DoesIntersect(CRect r)
     return !rIntersection.IsRectNull();
 }
 
+// 0x6F2A90
+BOOL CGameSprite::IsOver(const CPoint& pt)
+{
+    if (m_active
+        && m_activeAI
+        && m_activeImprisonment
+        && Animate()
+        && m_baseStats.field_294 == 0
+        && (m_typeAI.GetEnemyAlly() <= CAIObjectType::EA_GOODCUTOFF
+            || (m_derivedStats.m_generalState & STATE_INVISIBLE) == 0
+            || (m_baseStats.field_2FC & 0x1) != 0)) {
+        const CRect& rEllipse = m_animation.GetEllipseRect();
+        CPoint ptRelative(pt.x - m_pos.x, pt.y - m_pos.y);
+        return rEllipse.PtInRect(ptRelative);
+    } else {
+        return FALSE;
+    }
+}
+
 // 0x6F2B50
 const BYTE* CGameSprite::GetVisibleTerrainTable()
 {
