@@ -385,6 +385,7 @@ public:
     void DropPath();
     void DropSearchRequest();
     BOOL MoveToBack();
+    BOOL MoveToFront();
     void OnLightningStrike();
     void MakeGlobal();
     SHORT GetNumSounds(SHORT nOffset, SHORT nMaxNum);

@@ -1114,6 +1114,51 @@ BOOL CGameSprite::MoveToBack()
     return TRUE;
 }
 
+// 0x6FF6D0
+BOOL CGameSprite::MoveToFront()
+{
+    if (m_animation.CanLieDown()) {
+        if (m_listType == LIST_FRONT) {
+            return FALSE;
+        }
+
+        if (m_posVertList != NULL) {
+            m_pArea->RemoveObject(m_posVertList, m_listType, m_id);
+            m_posVertList = NULL;
+
+            if ((m_derivedStats.m_generalState & STATE_SLEEPING) == 0) {
+                // NOTE: Uninline.
+                m_pArea->AddToMarkers(m_id);
+
+                m_pArea->m_search.AddObject(CPoint(m_pos.x / CPathSearch::GRID_SQUARE_SIZEX,
+                                                m_pos.y / CPathSearch::GRID_SQUARE_SIZEY),
+                    m_typeAI.GetEnemyAlly(),
+                    m_animation.GetPersonalSpace(),
+                    field_54A8,
+                    field_7430);
+                m_pArea->DecrHeightDynamic(m_pos);
+            }
+
+            m_listType = LIST_FRONT;
+            m_pArea->AddObject(m_id, LIST_FRONT);
+            return TRUE;
+        }
+
+        if (m_moveToBackQueue > 0) {
+            m_moveToBackQueue--;
+        } else {
+            m_moveToFrontQueue++;
+        }
+        return FALSE;
+    }
+
+    if ((m_derivedStats.m_generalState & STATE_SLEEPING) == 0) {
+        // NOTE: Uninline.
+        m_pArea->AddToMarkers(m_id);
+    }
+    return TRUE;
+}
+
 // 0x700BB0
 void CGameSprite::OnFormationButton(const CPoint& pt)
 {
