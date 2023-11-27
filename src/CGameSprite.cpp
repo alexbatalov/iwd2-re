@@ -5,6 +5,7 @@
 #include "CBaldurEngine.h"
 #include "CGameArea.h"
 #include "CGameButtonList.h"
+#include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CItem.h"
 #include "CPathSearch.h"
@@ -1835,7 +1836,88 @@ void CGameSprite::Unselect()
 // 0x706720
 void CGameSprite::SetCharacterToolTip(CUIControlBase* pControl)
 {
-    // TODO: Incomplete.
+    if (g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(m_id) != -1) {
+        if (m_baseStats.m_name != -1) {
+            CString sHitPoints;
+            if (!m_derivedStats.m_spellStates[SPLSTATE_SUPPRESS_HP_INFO]) {
+                sHitPoints.Format("%d/%d",
+                    m_baseStats.m_hitPoints,
+                    m_derivedStats.m_nMaxHitPoints);
+            } else {
+                sHitPoints.Format("%c/%c", '?', '?');
+            }
+            g_pBaldurChitin->GetObjectCursor()->SetToolTip(m_baseStats.m_name,
+                pControl,
+                sHitPoints);
+        } else {
+            CString sHitPoints;
+            if (!m_derivedStats.m_spellStates[SPLSTATE_SUPPRESS_HP_INFO]) {
+                sHitPoints.Format("%s\n%d/%d",
+                    (LPCSTR)m_sName,
+                    m_baseStats.m_hitPoints,
+                    m_derivedStats.m_nMaxHitPoints);
+            } else {
+                sHitPoints.Format("%s\n%c/%c", (LPCSTR)m_sName, '?', '?');
+            }
+            g_pBaldurChitin->GetObjectCursor()->SetToolTip(m_baseStats.m_name,
+                pControl,
+                sHitPoints);
+        }
+    } else {
+        BOOLEAN bReturn = FALSE;
+        STR_RES strRes;
+        if ((m_baseStats.m_flags & 0x1000) == 0) {
+            if (m_typeAI.GetEnemyAlly() >= CAIObjectType::EA_EVILCUTOFF
+                || m_typeAI.GetEnemyAlly() <= CAIObjectType::EA_GOODCUTOFF) {
+                if (m_baseStats.m_hitPoints == m_derivedStats.m_nMaxHitPoints) {
+                    bReturn = g_pBaldurChitin->GetTlkTable().Fetch(2943, strRes);
+                } else {
+                    INT nHealthPercent = 100 * m_baseStats.m_hitPoints / m_derivedStats.m_nMaxHitPoints;
+                    if (nHealthPercent > 75) {
+                        bReturn = g_pBaldurChitin->GetTlkTable().Fetch(2944, strRes);
+                    } else if (nHealthPercent > 50) {
+                        bReturn = g_pBaldurChitin->GetTlkTable().Fetch(2945, strRes);
+                    } else if (nHealthPercent > 25) {
+                        bReturn = g_pBaldurChitin->GetTlkTable().Fetch(2946, strRes);
+                    } else {
+                        bReturn = g_pBaldurChitin->GetTlkTable().Fetch(2947, strRes);
+                    }
+                }
+            }
+        }
+
+        if ((m_baseStats.m_flags & 0x1) != 0) {
+            if (m_baseStats.m_name != -1) {
+                g_pBaldurChitin->GetObjectCursor()->SetToolTip(m_baseStats.m_name,
+                    NULL,
+                    strRes.szText);
+            } else {
+                if (bReturn) {
+                    g_pBaldurChitin->GetObjectCursor()->SetToolTip(-1,
+                        NULL,
+                        m_sName + "\n" + strRes.szText);
+                } else {
+                    g_pBaldurChitin->GetObjectCursor()->SetToolTip(-1,
+                        NULL,
+                        m_sName);
+                }
+            }
+        } else if (m_baseStats.m_apparentName != -1) {
+            g_pBaldurChitin->GetObjectCursor()->SetToolTip(m_baseStats.m_apparentName,
+                NULL,
+                strRes.szText);
+        } else {
+            if (bReturn) {
+                g_pBaldurChitin->GetObjectCursor()->SetToolTip(-1,
+                    NULL,
+                    m_sName + "\n" + strRes.szText);
+            } else {
+                g_pBaldurChitin->GetObjectCursor()->SetToolTip(-1,
+                    NULL,
+                    m_sName + "\n" + strRes.szText);
+            }
+        }
+    }
 }
 
 // 0x706B40
