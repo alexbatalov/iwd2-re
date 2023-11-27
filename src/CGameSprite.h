@@ -177,6 +177,7 @@ public:
     static const BYTE DIR_SSE;
     static const BYTE NUM_DIR;
 
+    static const BYTE SOUND_DYING;
     static const BYTE SOUND_SELECT;
     static const BYTE SOUND_SELECT_ACTION;
     static const BYTE SOUND_REACT_TO_DEATH;
@@ -485,6 +486,7 @@ public:
     BOOLEAN sub_737910(BOOL a1);
     SHORT GetCriticalHitBonus();
     SHORT Recoil();
+    SHORT PlayDead();
     SHORT LeaveParty();
     void SelectWeaponAbility(unsigned char a1, unsigned char a2, unsigned char a3, unsigned char a4);
     SHORT EquipItem();

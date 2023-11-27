@@ -71,6 +71,9 @@ const BYTE CGameSprite::DIR_SSE = 15;
 // 0x85BB48
 const BYTE CGameSprite::NUM_DIR = 16;
 
+// 0x85BB6A
+const BYTE CGameSprite::SOUND_DYING = 7;
+
 // 0x85BB6C
 const BYTE CGameSprite::SOUND_SELECT = 9;
 
@@ -6136,6 +6139,31 @@ SHORT CGameSprite::Recoil()
     m_recoilFrame = 0;
 
     message = new CMessageSetSequence(static_cast<BYTE>(GetIdleSequence()), m_id, m_id);
+    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+
+    return ACTION_DONE;
+}
+
+// 0x744B20
+SHORT CGameSprite::PlayDead()
+{
+    CMessage* message;
+
+    if (m_nSequence != SEQ_DIE || m_nSequence != SEQ_TWITCH) {
+        message = new CMessageSetSequence(SEQ_DIE, m_id, m_id);
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+    }
+
+    if (m_actionCount == 0) {
+        PlaySound(SOUND_DYING, TRUE, FALSE, FALSE);
+    }
+
+    if (m_curAction.m_specificID > 0) {
+        m_curAction.m_specificID--;
+        return ACTION_NORMAL;
+    }
+
+    message = new CMessageSetSequence(SEQ_AWAKE, m_id, m_id);
     g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
 
     return ACTION_DONE;
