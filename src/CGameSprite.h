@@ -478,6 +478,7 @@ public:
     BOOL Orderable(BOOL bIgnoreControl);
     BOOL Animate();
     DWORD GetSpecialization();
+    void ResolvePausedAction(const CAIAction* curAction, POSITION pos);
     void ResolveTargetPoint(const CAIAction* curAction, POSITION pos);
     BOOL ProcessEffectList();
     void ClearStoredPaths();

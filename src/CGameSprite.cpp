@@ -4880,6 +4880,67 @@ DWORD CGameSprite::GetSpecialization()
     return m_baseStats.m_specialization;
 }
 
+// 0x72B670
+void CGameSprite::ResolvePausedAction(const CAIAction* curAction, POSITION pos)
+{
+    CGameObject* pObject;
+    BYTE rc;
+
+    if (m_groupMove) {
+        return;
+    }
+
+    ResolveTargetPoint(curAction, pos);
+
+    if (curAction->GetActionID() == 23
+        && m_targetId != CGameObjectArray::INVALID_INDEX) {
+        if (m_bSelected && Orderable(FALSE)) {
+            do {
+                rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_targetId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    &pObject,
+                    INFINITE);
+            } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+            if (rc != CGameObjectArray::SUCCESS) {
+                return;
+            }
+
+            if (pObject->GetObjectType() == TYPE_SPRITE) {
+                static_cast<CGameSprite*>(pObject)->m_marker.SetType(CMarker::ELLIPSE);
+            }
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_targetId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+        m_targetId = CGameObjectArray::INVALID_INDEX;
+    } else if (curAction->GetActionID() == 27
+        && m_targetId != CGameObjectArray::INVALID_INDEX) {
+        if (m_bSelected && Orderable(FALSE)) {
+            do {
+                rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_targetId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    &pObject,
+                    INFINITE);
+            } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+            if (rc != CGameObjectArray::SUCCESS) {
+                return;
+            }
+
+            if (pObject->GetObjectType() == TYPE_SPRITE) {
+                static_cast<CGameSprite*>(pObject)->m_marker.SetType(CMarker::ELLIPSE);
+            }
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_targetId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+        m_targetId = CGameObjectArray::INVALID_INDEX;
+    }
+}
+
 // NOTE: Assembly is tail-call optimized.
 //
 // 0x72B870
