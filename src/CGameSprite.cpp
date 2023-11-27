@@ -4880,6 +4880,53 @@ DWORD CGameSprite::GetSpecialization()
     return m_baseStats.m_specialization;
 }
 
+// NOTE: Assembly is tail-call optimized.
+//
+// 0x72B870
+void CGameSprite::ResolveTargetPoint(const CAIAction* curAction, POSITION pos)
+{
+    CAIAction* workAction;
+
+    switch (curAction->GetActionID()) {
+    case 23:
+    case 88:
+        if (pos != NULL) {
+            workAction = m_queuedActions.GetNext(pos);
+            switch (workAction->GetActionID()) {
+            case 23:
+            case 88:
+                ResolveTargetPoint(workAction, pos);
+                break;
+            default:
+                if (!m_groupMove) {
+                    m_targetPoint = curAction->m_dest;
+                }
+                break;
+            }
+        } else {
+            m_targetPoint = curAction->m_dest;
+        }
+        break;
+    case 27:
+        m_targetPoint = curAction->m_dest;
+        break;
+    case 83:
+    case 84:
+        if (pos != NULL) {
+            workAction = m_queuedActions.GetNext(pos);
+            ResolveTargetPoint(workAction, pos);
+        } else {
+            m_targetPoint.x = -1;
+            m_targetPoint.y = -1;
+        }
+        break;
+    default:
+        m_targetPoint.x = -1;
+        m_targetPoint.y = -1;
+        break;
+    }
+}
+
 // 0x72DE60
 BOOL CGameSprite::ProcessEffectList()
 {
