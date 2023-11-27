@@ -484,6 +484,7 @@ public:
     void FeedBack(WORD nFeedBackId, LONG a2, LONG a3, LONG a4, LONG a5, LONG a6, LONG a7);
     BOOLEAN sub_737910(BOOL a1);
     SHORT GetCriticalHitBonus();
+    SHORT Recoil();
     SHORT LeaveParty();
     void SelectWeaponAbility(unsigned char a1, unsigned char a2, unsigned char a3, unsigned char a4);
     SHORT EquipItem();
@@ -758,7 +759,7 @@ public:
     /* 5602 */ unsigned char field_5602;
     /* 5604 */ short field_5604;
     /* 5606 */ short field_5606;
-    /* 5608 */ int field_5608;
+    /* 5608 */ BOOL m_endOfDamageSeq;
     /* 560C */ short field_560C;
     /* 560E */ short field_560E;
     /* 5610 */ short field_5610;
@@ -768,7 +769,7 @@ public:
     /* 5618 */ int field_5618;
     /* 561C */ short field_561C;
     /* 561E */ short field_561E;
-    /* 5620 */ short field_5620;
+    /* 5620 */ SHORT m_recoilFrame;
     /* 5622 */ short field_5622;
     /* 5624 */ int field_5624;
     /* 5628 */ BOOL m_inFormation;

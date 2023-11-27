@@ -688,7 +688,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     m_curScriptNum = -1;
     m_curAction = CAIAction::NULL_ACTION;
     m_interrupt = FALSE;
-    field_5608 = 0;
+    m_endOfDamageSeq = FALSE;
     m_inFormation = FALSE;
     m_lastRGBColor = 0x8000;
     m_bVisibilityUpdated = TRUE;
@@ -713,7 +713,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     field_54C4 = (int)CGameObjectArray::INVALID_INDEX;
     m_followStart = 0;
     m_userCommandPause = 0;
-    field_5620 = 0;
+    m_recoilFrame = 0;
     field_561E = 0;
     field_44A = 0;
     field_54C = 0;
@@ -6109,6 +6109,36 @@ SHORT CGameSprite::GetCriticalHitBonus()
         nCriticalHitBonus++;
     }
     return nCriticalHitBonus;
+}
+
+// 0x7449D0
+SHORT CGameSprite::Recoil()
+{
+    CMessage* message;
+
+    if (m_recoilFrame == 0 && m_baseStats.m_hitPoints == 0) {
+        m_endOfDamageSeq = FALSE;
+        m_recoilFrame = 0;
+        return ACTION_DONE;
+    }
+
+    if (m_nSequence != SEQ_DAMAGE) {
+        message = new CMessageSetSequence(SEQ_DAMAGE, m_id, m_id);
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+    }
+
+    m_recoilFrame++;
+    if (!m_endOfDamageSeq) {
+        return ACTION_NORMAL;
+    }
+
+    m_endOfDamageSeq = FALSE;
+    m_recoilFrame = 0;
+
+    message = new CMessageSetSequence(static_cast<BYTE>(GetIdleSequence()), m_id, m_id);
+    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+
+    return ACTION_DONE;
 }
 
 // 0x751CD0
