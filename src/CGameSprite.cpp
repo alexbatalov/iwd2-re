@@ -1836,6 +1836,121 @@ void CGameSprite::Unselect()
     }
 }
 
+// 0x706220
+void CGameSprite::SetCursor(LONG nToolTip)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    if (m_canBeSeen > 0) {
+        switch (pGame->GetState()) {
+        case 0:
+            // NOTE: Unsigned compare.
+            if (static_cast<DWORD>(nToolTip) < static_cast<DWORD>(pGame->GetOptions()->m_nTooltips)) {
+                if (pGame->GetGroup()->GetCount() != 0) {
+                    if ((pGame->GetCharacterPortraitNum(m_id) != -1
+                            || pGame->IsAlly(m_id)
+                            || pGame->IsFamiliar(m_id)
+                            || m_typeAI.GetEnemyAlly() <= CAIObjectType::EA_CONTROLCUTOFF)
+                        && (!g_pBaldurChitin->GetObjectGame()->GetGameSave()->field_1AC || InControl())) {
+                        if (InControl()) {
+                            g_pBaldurChitin->GetObjectCursor()->SetCursor(0, FALSE);
+                        } else {
+                            g_pBaldurChitin->GetObjectCursor()->SetCursor(46, FALSE);
+                        }
+                    } else {
+                        if (m_typeAI.GetEnemyAlly() < CAIObjectType::EA_EVILCUTOFF) {
+                            if (pGame->GetGroup()->IsPartyLeader()) {
+                                if ((m_baseStats.m_flags & 0x80000) != 0) {
+                                    g_pBaldurChitin->GetObjectCursor()->SetCursor(6, FALSE);
+                                } else {
+                                    g_pBaldurChitin->GetObjectCursor()->SetCursor(18, FALSE);
+                                }
+                            } else {
+                                g_pBaldurChitin->GetObjectCursor()->SetCursor(0, FALSE);
+                            }
+                        } else {
+                            g_pBaldurChitin->GetObjectCursor()->SetCursor(12, FALSE);
+                        }
+                    }
+                } else {
+                    g_pBaldurChitin->GetObjectCursor()->SetCursor(0, FALSE);
+                }
+            } else {
+                SetCharacterToolTip(NULL);
+            }
+            break;
+        case 1:
+            if (pGame->GetIconIndex() != -1) {
+                g_pBaldurChitin->GetObjectCursor()->SetCursor(pGame->GetIconIndex(), FALSE);
+            } else {
+                g_pBaldurChitin->GetObjectCursor()->SetCursor(20, FALSE);
+            }
+            break;
+        case 2:
+            switch (pGame->GetIconIndex()) {
+            case 12:
+                g_pBaldurChitin->GetObjectCursor()->SetCursor(12, FALSE);
+                if (m_bSelected && pGame->GetGroup()->GetCount() == 1) {
+                    g_pBaldurChitin->GetObjectCursor()->SetGreyScale(TRUE);
+                }
+                break;
+            case 18:
+                g_pBaldurChitin->GetObjectCursor()->SetCursor(18, FALSE);
+                if (!pGame->GetGroup()->IsPartyLeader()) {
+                    g_pBaldurChitin->GetObjectCursor()->SetGreyScale(TRUE);
+                }
+                break;
+            case 36:
+            case 40:
+                if (1) {
+                    g_pBaldurChitin->GetObjectCursor()->SetCursor(40, FALSE);
+                    if (m_bSelected) {
+                        g_pBaldurChitin->GetObjectCursor()->SetGreyScale(TRUE);
+                    }
+
+                    SHORT nPortrait = g_pBaldurChitin->GetScreenWorld()->GetSelectedCharacter();
+                    LONG nCharacterId = pGame->GetCharacterId(nPortrait);
+
+                    CGameSprite* pSprite;
+
+                    BYTE rc;
+                    do {
+                        rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+                            CGameObjectArray::THREAD_ASYNCH,
+                            reinterpret_cast<CGameObject**>(&pSprite),
+                            INFINITE);
+                    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+                    if (rc == CGameObjectArray::SUCCESS) {
+                        if (pSprite->m_baseStats.m_skills[CGAMESPRITE_SKILL_PICK_POCKET] == 0) {
+                            g_pBaldurChitin->GetObjectCursor()->SetGreyScale(TRUE);
+                            pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+                                CGameObjectArray::THREAD_ASYNCH,
+                                INFINITE);
+                        }
+                    }
+                }
+                break;
+            case 255:
+                g_pBaldurChitin->GetObjectCursor()->SetCursor(20, FALSE);
+                break;
+            default:
+                g_pBaldurChitin->GetObjectCursor()->SetCursor(pGame->GetIconIndex(), FALSE);
+                break;
+            }
+        case 3:
+            g_pBaldurChitin->GetObjectCursor()->SetCursor(6, FALSE);
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 9053
+            UTIL_ASSERT(FALSE);
+        }
+    } else {
+        CGameObject::SetCursor(nToolTip);
+    }
+}
+
 // 0x706720
 void CGameSprite::SetCharacterToolTip(CUIControlBase* pControl)
 {

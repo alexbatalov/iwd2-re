@@ -376,6 +376,7 @@ public:
     /* 0038 */ BOOL DoesIntersect(CRect r);
     /* 003C */ BOOL OnSearchMap() override;
     /* 0044 */ void OnFormationButton(const CPoint& pt) override;
+    /* 0058 */ void SetCursor(LONG nToolTip) override;
     /* 007C */ void ClearAI(BOOLEAN bSetSequence) override;
     /* 0094 */ void SetScript(SHORT level, CAIScript* script) override;
     /* 009C */ const BYTE* GetVisibleTerrainTable() override;
