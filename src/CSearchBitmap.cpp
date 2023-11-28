@@ -97,7 +97,7 @@ BYTE CSearchBitmap::GetLOSCost(const CPoint& point, const BYTE* terrainTable, SH
             nTableIndex = 8;
             cost = terrainTable[nTableIndex];
             break;
-        case 0x81:
+        default:
             if (m_resSearch.GetBitCount(TRUE) == 8) {
                 nTableIndex = m_resSearch.GetPixelValue(point.x, point.y, TRUE) >> 4;
                 cost = terrainTable[nTableIndex];
