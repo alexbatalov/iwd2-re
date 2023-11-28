@@ -40,7 +40,8 @@ CGameAreaNotes::~CGameAreaNotes()
     if (pPanel != NULL) {
         CUIControlButtonMapAreaMap* pMapControl = static_cast<CUIControlButtonMapAreaMap*>(pPanel->GetControl(2));
         if (pMapControl != NULL) {
-            // TOOD: Incomplete.
+            // NOTE: Uninline.
+            pMapControl->field_7BE.RemoveAll();
         }
     }
 
