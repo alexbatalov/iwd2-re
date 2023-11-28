@@ -3,6 +3,7 @@
 #include "CAIScript.h"
 #include "CBaldurChitin.h"
 #include "CBaldurEngine.h"
+#include "CBlood.h"
 #include "CGameArea.h"
 #include "CGameButtonList.h"
 #include "CInfCursor.h"
@@ -18,6 +19,7 @@
 #include "CVariableHash.h"
 #include "CVidInf.h"
 #include "IcewindCGameEffects.h"
+#include "IcewindCVisualEffect.h"
 #include "IcewindMisc.h"
 
 // 0x85BB38
@@ -1506,6 +1508,558 @@ BYTE CGameSprite::GetSound(BYTE soundID)
     return nSound;
 }
 
+// 0x703700
+void CGameSprite::Render(CGameArea* pArea, CVidMode* pVidMode, INT nSurface)
+{
+    BOOLEAN bDithered = FALSE;
+    BOOLEAN bFadeOut = FALSE;
+    DWORD dwRenderFlags = 0x20000;
+    CVisibilityMap* pVisibility;
+    COLORREF rgbTint;
+    COLORREF rgbGlobalTint;
+    BYTE transparency;
+    CSearchBitmap* pSearch;
+    CRect rFX;
+    CRect rGCBounds;
+    CRect rViewRect;
+    CPoint ptReference;
+    CPoint newPos;
+    POSITION bloodLstPos;
+    CBlood* pBlood;
+    SHORT nBloodDir;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 7687
+    UTIL_ASSERT(pVidMode != NULL);
+
+    if (m_active
+        && m_activeAI
+        && m_activeImprisonment
+        && ((m_derivedStats.m_generalState & STATE_DEAD) != 0
+            || m_canBeSeen > 0)
+        && m_pArea == pArea
+        && (m_typeAI.GetEnemyAlly() <= CAIObjectType::EA_CONTROLCUTOFF
+            || (m_derivedStats.m_generalState & STATE_INVISIBLE) == 0)
+        && m_baseStats.field_294 != 1
+        && m_baseStats.m_animationType != 0) {
+        pSearch = &(m_pArea->m_search);
+        pVisibility = &(m_pArea->m_visibility);
+
+        newPos.x = min(max(m_pos.x, 0), m_pArea->GetInfinity()->nAreaX - 1);
+        newPos.y = min(max(m_pos.y, 0), m_pArea->GetInfinity()->nAreaY - 1);
+
+        if (pVisibility->IsTileExplored(pVisibility->PointToTile(newPos))) {
+            if (m_canBeSeen < VISIBLE_DELAY + 1
+                || !pVisibility->IsTileVisible(pVisibility->PointToTile(newPos))) {
+                bFadeOut = TRUE;
+            }
+
+            rViewRect.left = m_pArea->GetInfinity()->nCurrentX;
+            rViewRect.top = m_pArea->GetInfinity()->nCurrentY;
+            rViewRect.right = rViewRect.left + m_pArea->GetInfinity()->rViewPort.Width();
+            rViewRect.bottom = rViewRect.top + m_pArea->GetInfinity()->rViewPort.Height();
+
+            if (!m_lstBlood.IsEmpty()) {
+                bloodLstPos = m_lstBlood.GetHeadPosition();
+                while (bloodLstPos != NULL) {
+                    pBlood = m_lstBlood.GetNext(bloodLstPos);
+                    nBloodDir = pBlood->GetDirection();
+                    if (pBlood->BloodLeft()
+                        && nBloodDir >= 4
+                        && nBloodDir <= 12) {
+                        pBlood->Render(pVidMode, nSurface);
+                    }
+                }
+            }
+
+            // NOTE: Uninline.
+            m_animation.CalculateFxRect(rFX, ptReference, m_posZ);
+
+            if (m_id == m_pArea->m_iPicked
+                || g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bAlwaysDither
+                || g_pBaldurChitin->GetObjectGame()->m_bForceDither) {
+                bDithered = TRUE;
+            }
+
+            rgbTint = m_pArea->GetTintColor(CPoint(m_pos.x, m_pos.y + m_posZ),
+                m_listType);
+
+            if (m_pArea->field_1EE
+                && m_animation.DetectedByInfravision()
+                && Animate()) {
+                if ((m_pArea->GetInfinity()->m_areaType & 0x2) != 0
+                    && ((m_pArea->GetInfinity()->m_areaType & 0x40) == 0
+                        || (m_pArea->GetInfinity()->m_renderDayNightCode & 0x2) == 0)) {
+                    rgbGlobalTint = g_pBaldurChitin->GetCurrentVideoMode()->GetGlobalTintColor();
+                } else {
+                    rgbGlobalTint = RGB(255, 255, 255);
+                }
+
+                if (GetRValue(rgbTint) * GetRValue(rgbGlobalTint) / 255 > GetRValue(CInfinity::RGB_NIGHT_COLOR)
+                    || GetGValue(rgbTint) * GetGValue(rgbGlobalTint) / 255 > GetGValue(CInfinity::RGB_NIGHT_COLOR)
+                    || GetBValue(rgbTint) * GetBValue(rgbGlobalTint) / 255 > GetBValue(CInfinity::RGB_NIGHT_COLOR)) {
+                    if ((m_pArea->GetInfinity()->m_areaType & 0x2) != 0
+                        && ((m_pArea->GetInfinity()->m_areaType & 0x40) == 0
+                            || (m_pArea->GetInfinity()->m_renderDayNightCode & 0x2) == 0)) {
+                        dwRenderFlags |= 0x10000;
+                    }
+                } else {
+                    rgbTint = RGB(200, 200, 200);
+                }
+            } else {
+                if ((m_pArea->GetInfinity()->m_areaType & 0x2) != 0
+                    && ((m_pArea->GetInfinity()->m_areaType & 0x40) == 0
+                        || (m_pArea->GetInfinity()->m_renderDayNightCode & 0x2) == 0)) {
+                    dwRenderFlags |= 0x10000;
+                }
+            }
+
+            transparency = 0;
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_BLUR]) {
+                transparency = 180;
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_INVISIBILITY]) {
+                transparency = static_cast<BYTE>(abs(g_pBaldurChitin->nAUCounter % 80 - 40)) + 140;
+            }
+
+            // NOTE: Unsigned compare.
+            if (m_derivedStats.m_nTranslucent > 0 && transparency < static_cast<BYTE>(m_derivedStats.m_nTranslucent)) {
+                transparency = static_cast<BYTE>(m_derivedStats.m_nTranslucent);
+            }
+
+            if (m_derivedStats.field_140 > 0) {
+                if (transparency < 96) {
+                    transparency = 96;
+                }
+            }
+
+            if (m_baseStats.field_2F9 > 0 && transparency < m_baseStats.field_2F9) {
+                transparency = m_baseStats.field_2F9;
+            }
+
+            if (m_derivedStats.field_140 > 0) {
+                if (m_derivedStats.field_140 > 2) {
+                    RenderMirrorImage(2,
+                        rFX,
+                        rGCBounds,
+                        rViewRect,
+                        ptReference,
+                        pSearch,
+                        pVisibility,
+                        pVidMode,
+                        nSurface,
+                        rgbTint,
+                        bDithered,
+                        bFadeOut,
+                        dwRenderFlags);
+                }
+
+                if (m_derivedStats.field_140 > 4) {
+                    RenderMirrorImage(4,
+                        rFX,
+                        rGCBounds,
+                        rViewRect,
+                        ptReference,
+                        pSearch,
+                        pVisibility,
+                        pVidMode,
+                        nSurface,
+                        rgbTint,
+                        bDithered,
+                        bFadeOut,
+                        dwRenderFlags);
+                }
+
+                if (m_derivedStats.field_140 > 6) {
+                    RenderMirrorImage(6,
+                        rFX,
+                        rGCBounds,
+                        rViewRect,
+                        ptReference,
+                        pSearch,
+                        pVisibility,
+                        pVidMode,
+                        nSurface,
+                        rgbTint,
+                        bDithered,
+                        bFadeOut,
+                        dwRenderFlags);
+                }
+
+                if (m_derivedStats.field_140 > 0) {
+                    RenderMirrorImage(0,
+                        rFX,
+                        rGCBounds,
+                        rViewRect,
+                        ptReference,
+                        pSearch,
+                        pVisibility,
+                        pVidMode,
+                        nSurface,
+                        rgbTint,
+                        bDithered,
+                        bFadeOut,
+                        dwRenderFlags);
+                }
+
+                if (m_derivedStats.field_140 > 1) {
+                    RenderMirrorImage(1,
+                        rFX,
+                        rGCBounds,
+                        rViewRect,
+                        ptReference,
+                        pSearch,
+                        pVisibility,
+                        pVidMode,
+                        nSurface,
+                        rgbTint,
+                        bDithered,
+                        bFadeOut,
+                        dwRenderFlags);
+                }
+            }
+
+            IcewindCVisualEffect vfx;
+            vfx.sub_586A90(TRUE);
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_GREASE]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_GREASE]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_SHIELD_OF_LATHANDER_2]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_SHIELD_OF_LATHANDER_2]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_GREATER_SHIELD_OF_LATHANDER_2]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_GREATER_SHIELD_OF_LATHANDER_2]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_SEVEN_EYES_2]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_SEVEN_EYES_2]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_28]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_28]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_29]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_29]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_BLUR]
+                && m_pos != field_5362) {
+                LONG dx = (m_pos.x - field_5362.x) / 2;
+                LONG dy = (m_pos.y - field_5362.y) / 2;
+                for (int cnt = 0; cnt < 4; cnt++) {
+                    m_animation.CalculateGCBoundsRect(rGCBounds,
+                        newPos,
+                        ptReference,
+                        m_posZ,
+                        rFX.Width(),
+                        rFX.Height());
+
+                    if (!IsRectEmpty(rViewRect & rGCBounds)) {
+                        m_animation.Render(m_pArea->GetInfinity(),
+                            pVidMode,
+                            nSurface,
+                            rFX,
+                            newPos,
+                            ptReference,
+                            dwRenderFlags,
+                            rgbTint,
+                            rGCBounds,
+                            bDithered,
+                            bFadeOut,
+                            m_posZ,
+                            transparency);
+                    }
+
+                    newPos.x -= dx;
+                    newPos.y -= dy;
+                }
+            } else {
+                m_animation.CalculateGCBoundsRect(rGCBounds,
+                    newPos,
+                    ptReference,
+                    m_posZ,
+                    rFX.Width(),
+                    rFX.Height());
+
+                if (!IsRectEmpty(rViewRect & rGCBounds)) {
+                    m_animation.Render(m_pArea->GetInfinity(),
+                        pVidMode,
+                        nSurface,
+                        rFX,
+                        newPos,
+                        ptReference,
+                        dwRenderFlags,
+                        rgbTint,
+                        rGCBounds,
+                        bDithered,
+                        bFadeOut,
+                        m_posZ,
+                        transparency);
+                }
+            }
+
+            if (m_derivedStats.field_140 > 0) {
+                if (m_derivedStats.field_140 > 7) {
+                    RenderMirrorImage(7,
+                        rFX,
+                        rGCBounds,
+                        rViewRect,
+                        ptReference,
+                        pSearch,
+                        pVisibility,
+                        pVidMode,
+                        nSurface,
+                        rgbTint,
+                        bDithered,
+                        bFadeOut,
+                        dwRenderFlags);
+                }
+
+                if (m_derivedStats.field_140 > 5) {
+                    RenderMirrorImage(5,
+                        rFX,
+                        rGCBounds,
+                        rViewRect,
+                        ptReference,
+                        pSearch,
+                        pVisibility,
+                        pVidMode,
+                        nSurface,
+                        rgbTint,
+                        bDithered,
+                        bFadeOut,
+                        dwRenderFlags);
+                }
+
+                if (m_derivedStats.field_140 > 3) {
+                    RenderMirrorImage(3,
+                        rFX,
+                        rGCBounds,
+                        rViewRect,
+                        ptReference,
+                        pSearch,
+                        pVisibility,
+                        pVidMode,
+                        nSurface,
+                        rgbTint,
+                        bDithered,
+                        bFadeOut,
+                        dwRenderFlags);
+                }
+            }
+
+            RenderSpriteEffect(pVidMode, nSurface);
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_ENTANGLE]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_ENTANGLE]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_WEB]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_WEB]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_SHROUD_OF_FLAME]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_SHROUD_OF_FLAME]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_ANTIMAGIC_MISSILE]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_ANTIMAGIC_MISSILE]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_OTILUKES_RESILIENT_SPHERE]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_OTILUKES_RESILIENT_SPHERE]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_PROTECTION_FROM_MISSILES]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_PROTECTION_FROM_MISSILES]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_CLOAK_OF_FEAR]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_CLOAK_OF_FEAR]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_ENTROPY_SHIELD]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_ENTROPY_SHIELD]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_FIRE_AURA]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_FIRE_AURA]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_FROST_AURA]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_FROST_AURA]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_SANCTUARY]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_SANCTUARY]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_GLOBE_OF_INVULNERABILITY]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_GLOBE_OF_INVULNERABILITY]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_INSECT_PLAGUE]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_INSECT_PLAGUE]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_STORM_SHELL]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_STORM_SHELL]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_SHIELD_OF_LATHANDER]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_SHIELD_OF_LATHANDER]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_GREATER_SHIELD_OF_LATHANDER]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_GREATER_SHIELD_OF_LATHANDER]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_SEVEN_EYES]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_SEVEN_EYES]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_MINOR_GLOBE_OF_INVULNERABILITY]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_MINOR_GLOBE_OF_INVULNERABILITY]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_SHIELD]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_SHIELD]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_FIRE_SHIELD_RED]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_FIRE_SHIELD_RED]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_FIRE_SHEIELD_BLUE]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_FIRE_SHEIELD_BLUE]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_TORTOISE_SHELL]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_TORTOISE_SHELL]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_DEATH_ARMOR]) {
+                vfx.sub_586A90(FALSE);
+                vfx.sub_586AC0(TRUE, 192);
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_DEATH_ARMOR]),
+                    vfx);
+            }
+
+            if (m_derivedStats.m_visualEffects[IWD_VFX_WISP]) {
+                RenderSpriteCover(pVidMode,
+                    nSurface,
+                    &(field_7548[IWD_VFX_WISP]),
+                    vfx);
+            }
+
+            if (!m_lstBlood.IsEmpty()) {
+                bloodLstPos = m_lstBlood.GetHeadPosition();
+                while (bloodLstPos != NULL) {
+                    CBlood* blood = m_lstBlood.GetNext(bloodLstPos);
+                    pBlood = m_lstBlood.GetNext(bloodLstPos);
+                    nBloodDir = pBlood->GetDirection();
+                    if (pBlood->BloodLeft()
+                        && (nBloodDir < 4 || nBloodDir > 12)) {
+                        pBlood->Render(pVidMode, nSurface);
+                    }
+                }
+            }
+        }
+    }
+}
+
 // 0x704770
 void CGameSprite::RenderMarkers(CVidMode* pVidMode, INT nSurface)
 {
@@ -2118,8 +2672,83 @@ void CGameSprite::SetSequence(SHORT nSequence)
     // TODO: Incomplete.
 }
 
+// 0x708D50
+void CGameSprite::RenderSpriteCover(CVidMode* pVidMode, INT nSurface, CVidCell* pVidCell, const IcewindCVisualEffect& vfx)
+{
+    CRect rFX;
+    CSize objectSize;
+    CRect rGCBounds;
+    CPoint newPos;
+    CPoint ptReference;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 10436
+    UTIL_ASSERT(pVidMode != NULL);
+
+    DWORD dwRenderFlags = vfx.m_dwFlags;
+
+    BOOLEAN bDithered = m_id == m_pArea->m_iPicked
+        || g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bAlwaysDither
+        || g_pBaldurChitin->GetObjectGame()->m_bForceDither;
+
+    pVidCell->GetCurrentCenterPoint(ptReference, FALSE);
+    pVidCell->GetCurrentFrameSize(objectSize, FALSE);
+
+    rFX.SetRect(0, 0, objectSize.cx, objectSize.cy);
+
+    newPos.x = m_pos.x;
+    newPos.y = m_pArea->GetHeightOffset(m_pos, m_listType) + m_pos.y + 1;
+
+    if (vfx.field_1 == TRUE || vfx.field_3 == TRUE) {
+        dwRenderFlags |= CInfinity::FXPREP_COPYFROMBACK | 0x2;
+    } else {
+        dwRenderFlags |= CInfinity::FXPREP_CLEARFILL | 0x1;
+    }
+
+    m_pArea->GetInfinity()->FXPrep(rFX,
+        dwRenderFlags,
+        nSurface,
+        newPos,
+        ptReference);
+
+    if (m_pArea->GetInfinity()->FXLock(rFX, dwRenderFlags)) {
+        m_pArea->GetInfinity()->FXRender(pVidCell,
+            ptReference.x,
+            ptReference.y,
+            vfx.m_dwFlags,
+            vfx.m_nTransValue);
+
+        rGCBounds.left = newPos.x - ptReference.x;
+        rGCBounds.top = newPos.y + m_posZ - ptReference.y;
+        rGCBounds.right = rGCBounds.left + rFX.Width();
+        rGCBounds.bottom = rGCBounds.top + rFX.Height() - m_posZ;
+        m_pArea->GetInfinity()->FXRenderClippingPolys(newPos.x,
+            newPos.y - m_posZ,
+            m_posZ,
+            CPoint(ptReference.x, ptReference.y + m_posZ),
+            rGCBounds,
+            bDithered,
+            FALSE);
+
+        m_pArea->GetInfinity()->FXUnlock(dwRenderFlags, NULL, CPoint(0, 0));
+        m_pArea->GetInfinity()->FXBltFrom(nSurface,
+            rFX,
+            newPos.x,
+            newPos.y + m_posZ,
+            ptReference.x,
+            ptReference.y,
+            vfx.m_dwFlags | 0x1);
+    }
+}
+
 // 0x708FC0
 void CGameSprite::RenderDamageArrow(CGameArea* pArea, CVidMode* pVidMode, INT nSurface)
+{
+    // TODO: Incomplete.
+}
+
+// 0x7093E0
+void CGameSprite::RenderSpriteEffect(CVidMode* pVidMode, INT nSurface)
 {
     // TODO: Incomplete.
 }
@@ -3144,6 +3773,72 @@ BYTE CGameSprite::GetChannel()
         return nPortraitNum + 7;
     }
     return 13;
+}
+
+// 0x70F2A0
+void CGameSprite::RenderMirrorImage(INT placement, CRect& rFX, CRect& rGCBounds, CRect& rViewRect, CPoint& ptReference, CSearchBitmap* pSearch, CVisibilityMap* pVisibility, CVidMode* pVidMode, INT nSurface, COLORREF& rgbTint, BOOLEAN& bDithered, BOOLEAN& bFadeOut, DWORD& dwRenderFlags)
+{
+    // 0x8B7308
+    static int mirrorImagePlacementX[] = {
+        -25,
+        25,
+        0,
+        0,
+        -18,
+        18,
+        18,
+        -18,
+    };
+
+    // 0x8B7328
+    static int mirrorImagePlacementY[] = {
+        0,
+        0,
+        -25,
+        25,
+        -18,
+        18,
+        -18,
+        18,
+    };
+
+    CPoint mirrorPos;
+    CPoint mirrorSquare;
+    SHORT searchSquareCode;
+    CPoint pos;
+
+    pos.x = m_pos.x + mirrorImagePlacementX[placement];
+    pos.y = m_pos.y += mirrorImagePlacementY[placement];
+    pos.y += m_pArea->GetHeightOffset(pos, m_listType);
+
+    m_animation.CalculateGCBoundsRect(rGCBounds,
+        pos,
+        ptReference,
+        m_posZ,
+        rFX.Width(),
+        rFX.Height());
+
+    if (!IsRectEmpty(rViewRect & rGCBounds)) {
+        mirrorPos.x = max(pos.x, m_pArea->GetInfinity()->nAreaX - 1) / CPathSearch::GRID_SQUARE_SIZEX;
+        mirrorPos.y = max(pos.y, m_pArea->GetInfinity()->nAreaY - 1) / CPathSearch::GRID_SQUARE_SIZEY;
+        if ((pSearch->GetLOSCost(mirrorPos, m_terrainTable, searchSquareCode, FALSE) != CPathSearch::COST_IMPASSABLE
+                || searchSquareCode == 14)
+            && pVisibility->IsTileExplored(pVisibility->PointToTile(mirrorPos))) {
+            m_animation.Render(m_pArea->GetInfinity(),
+                pVidMode,
+                nSurface,
+                rFX,
+                mirrorPos,
+                ptReference,
+                dwRenderFlags | 0x2,
+                rgbTint,
+                rGCBounds,
+                bDithered,
+                bFadeOut,
+                m_posZ,
+                96);
+        }
+    }
 }
 
 // 0x713FE0

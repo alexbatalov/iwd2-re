@@ -20,6 +20,7 @@ public:
     void EquipArmor(CHAR armorLevel, BYTE* colorRangeValues);
     void GetAnimationResRef(CString& resRef, BYTE range);
     BOOLEAN CanLieDown();
+    BOOLEAN DetectedByInfravision();
     BYTE GetListType();
     BYTE GetMoveScale();
     BYTE GetMoveScaleDefault();

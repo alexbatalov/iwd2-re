@@ -89,6 +89,16 @@ BOOLEAN CGameAnimation::CanLieDown()
 }
 
 // NOTE: Inlined.
+BOOLEAN CGameAnimation::DetectedByInfravision()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2082
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->DetectedByInfravision();
+}
+
+// NOTE: Inlined.
 void CGameAnimation::SetAnimationType(USHORT animationID, BYTE* colorRangeValues, WORD facing)
 {
     if (m_animation != NULL) {

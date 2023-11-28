@@ -150,12 +150,16 @@
 
 #define MAX_SELECTABLE_FEAT_USE_LEVELS 5
 
+class CBlood;
 class CGameButtonList;
+class CSearchBitmap;
 class CSearchRequest;
 class CSpell;
 class CUIControlBase;
 class CUIControlTextDisplay;
 class CVariableHash;
+class CVisibilityMap;
+class IcewindCVisualEffect;
 
 class CGameSprite : public CGameAIBase {
 public:
@@ -376,6 +380,7 @@ public:
     /* 0038 */ BOOL DoesIntersect(CRect r);
     /* 003C */ BOOL OnSearchMap() override;
     /* 0044 */ void OnFormationButton(const CPoint& pt) override;
+    /* 004C */ void Render(CGameArea* pArea, CVidMode* pVidMode, INT nSurface) override;
     /* 0058 */ void SetCursor(LONG nToolTip) override;
     /* 007C */ void ClearAI(BOOLEAN bSetSequence) override;
     /* 0094 */ void SetScript(SHORT level, CAIScript* script) override;
@@ -414,7 +419,9 @@ public:
     void SetIdleSequence();
     SHORT GetIdleSequence();
     void SetSequence(SHORT nSequence);
+    void RenderSpriteCover(CVidMode* pVidMode, INT nSurface, CVidCell* pVidCell, const IcewindCVisualEffect& vfx);
     void RenderDamageArrow(CGameArea* pArea, CVidMode* pVidMode, INT nSurface);
+    void RenderSpriteEffect(CVidMode* pVidMode, INT nSurface);
     void ClearMarshal(BOOL unequip);
     void Marshal(BYTE** pCreature, LONG* creatureSize, WORD* facing, BOOLEAN a4, BOOLEAN a5);
     void Marshal(CSavedGamePartyCreature& partyCreature, BOOLEAN bNetworkMessage);
@@ -424,6 +431,7 @@ public:
     void FetchCommonStrings();
     void LoadAreaInformation(CAreaFileCreature* pCreature);
     BYTE GetChannel();
+    void RenderMirrorImage(INT placement, CRect& rFX, CRect& rGCBounds, CRect& rViewRect, CPoint& ptReference, CSearchBitmap* pSearch, CVisibilityMap* pVisibility, CVidMode* pVidMode, INT nSurface, COLORREF& rgbTint, BOOLEAN& bDithered, BOOLEAN& bFadeOut, DWORD& dwRenderFlags);
     void GetSelectedWeaponButton(CButtonData& cButtonData);
     void GetWeaponButton(BYTE nButtonNum, CButtonData& cButtonData);
     void SetSelectedWeaponButton(SHORT buttonNum);
@@ -732,6 +740,7 @@ public:
     /* 54C0 */ int field_54C0;
     /* 54C4 */ LONG field_54C4;
     /* 54C8 */ int m_followStart;
+    /* 54CC */ CTypedPtrList<CPtrList, CBlood*> m_lstBlood;
     /* 54E8 */ short field_54E8;
     /* 54EA */ int field_54EA;
     /* 54EE */ int field_54EE;
