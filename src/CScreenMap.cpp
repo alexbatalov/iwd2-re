@@ -1572,7 +1572,7 @@ BOOL CUIControlButtonMapAreaMap::Render(BOOL bForce)
         return FALSE;
     }
 
-    if (m_nRenderCount == 0 && bForce) {
+    if (m_nRenderCount == 0 && !bForce) {
         renderLock.Unlock();
         return RenderCharactersOnly(pt);
     }
