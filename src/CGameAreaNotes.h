@@ -28,6 +28,8 @@ public:
     void Invalidate();
     void SetStringBuffer(CString szTemp);
 
+    BOOL IsANoteThere(const CPoint& pt);
+
     /* 0000 */ DWORD** m_areaNoteGrid;
     /* 0004 */ BOOL m_bInitialized;
     /* 0008 */ CPoint m_ptCellSize;

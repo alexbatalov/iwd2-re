@@ -295,3 +295,9 @@ void CGameAreaNotes::SetStringBuffer(CString szTemp)
 {
     m_szBuffer = szTemp;
 }
+
+// NOTE: Inlined.
+BOOL CGameAreaNotes::IsANoteThere(const CPoint& pt)
+{
+    return m_areaNoteGrid[pt.x][pt.y] != -1;
+}

@@ -1411,7 +1411,49 @@ void CUIControlButtonMapAreaMap::OnMouseMove(CPoint pt)
 // 0x6432F0
 void CUIControlButtonMapAreaMap::OnRButtonClick(CPoint pt)
 {
-    // TODO: Incomplete.
+    if (m_bActive
+        && (m_nMouseButtons & RBUTTON) != 0
+        && field_71E
+        && g_pBaldurChitin->GetObjectGame()->m_bShowAreaNotes) {
+        CScreenMap* pMap = g_pBaldurChitin->m_pEngineMap;
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenMap.cpp
+        // __LINE__: 2545
+        UTIL_ASSERT(pMap != NULL);
+
+        // NOTE: Uninline.
+        CPoint ptWorld = ConvertScreenToWorldCoords(pt);
+
+        if (m_pArea->m_visibility.IsTileExplored(m_pArea->m_visibility.PointToTile(ptWorld))) {
+            CPoint sq;
+            m_pArea->m_cGameAreaNotes.GetGridSquare(ptWorld, sq, TRUE);
+
+            CUIControlEditMultiLineMapNote* pText = static_cast<CUIControlEditMultiLineMapNote*>(pMap->GetManager()->GetPanel(5)->GetControl(1));
+
+            if (m_pArea->m_cGameAreaNotes.IsANoteThere(sq)) {
+                CAreaUserNote* pNote = m_pArea->m_cGameAreaNotes.GetNoteAt(sq);
+                STRREF strRef = m_pArea->m_cGameAreaNotes.GetNoteButtonText(pNote->m_id);
+                STR_RES strRes;
+                g_pBaldurChitin->GetTlkTable().Fetch(strRef, strRes);
+                pText->SetText(strRes.szText);
+                m_pArea->m_cGameAreaNotes.field_74 = m_nID;
+                m_pArea->m_cGameAreaNotes.field_70 = 0;
+            } else {
+                m_pArea->m_cGameAreaNotes.field_70 = 1;
+                pText->SetText(CString(""));
+            }
+
+            m_pArea->m_cGameAreaNotes.m_cAreaNote.m_startX = static_cast<WORD>(ptWorld.x);
+            m_pArea->m_cGameAreaNotes.m_cAreaNote.m_startY = static_cast<WORD>(ptWorld.y);
+
+            CSingleLock renderLock(&(m_pPanel->m_pManager->field_36), FALSE);
+            renderLock.Lock(INFINITE);
+            pMap->SetPickedCharacter(-1);
+            pMap->SummonPopup(5);
+            pMap->GetManager()->SetCapture(pText, CUIManager::KEYBOARD);
+            renderLock.Unlock();
+        }
+    }
 }
 
 // NOTE: Math looks similar to `GetStartPosition`.
