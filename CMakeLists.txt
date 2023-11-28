@@ -58,6 +58,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CBaldurEngine.h"
     "src/CBaldurProjector.cpp"
     "src/CBaldurProjector.h"
+    "src/CBlood.cpp"
+    "src/CBlood.h"
     "src/CButtonData.cpp"
     "src/CButtonData.h"
     "src/CCacheStatus.cpp"
