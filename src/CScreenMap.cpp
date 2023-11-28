@@ -1834,7 +1834,7 @@ void CUIControlButtonMapAreaMap::SetMap(CGameArea* pArea)
             field_72A.right = field_72A.left + m_pArea->GetInfinity()->rViewPort.Width();
             field_72A.bottom = field_72A.top + m_pArea->GetInfinity()->rViewPort.Height();
 
-            if (field_72A.left > m_pArea->GetInfinity()->nAreaY - field_72A.right + field_72A.left - 1) {
+            if (field_72A.left > m_pArea->GetInfinity()->nAreaX - field_72A.right + field_72A.left - 1) {
                 field_72A.OffsetRect(-1, 0);
             }
 
