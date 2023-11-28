@@ -1451,7 +1451,44 @@ CPoint CUIControlButtonMapAreaMap::ConvertScreenToWorldCoords(CPoint pt)
 // 0x6437A0
 void CUIControlButtonMapAreaMap::CenterViewPort(const CPoint& pt)
 {
-    // TODO: Incomplete.
+    CSingleLock renderLock(&m_critSect, FALSE);
+    if (field_71E) {
+        if (m_nRenderCount == 0) {
+            field_764 = pt;
+            field_75C = pt;
+
+            renderLock.Lock(INFINITE);
+
+            INT x = max(min(m_pArea->GetInfinity()->nAreaX - field_72A.Width() - 1, pt.x), 0);
+            INT y = max(min(m_pArea->GetInfinity()->nAreaY - field_72A.Height() - 1, pt.y), 0);
+            m_pArea->GetInfinity()->SetViewPosition(x, y, TRUE);
+
+            CRect rOld(field_72A);
+            field_72A.SetRect(x, y, x + field_72A.Width(), y + field_72A.Height());
+
+            CRect r;
+            r.UnionRect(rOld, field_72A);
+
+            CPoint ptLeft = m_pPanel->m_ptOrigin + m_ptOrigin;
+
+            CSize mapSize;
+            m_vmMap.GetSize(mapSize, FALSE);
+
+            ptLeft.x += max(m_size.cx - mapSize.cx, 0) / 2;
+            ptLeft.y += max(m_size.cy - mapSize.cy, 0) / 2;
+
+            r.left = 4 * r.left / 32 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1);
+            r.top = 4 * r.top / 32 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1);
+            r.right = 4 * r.right / 32 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1) + 1;
+            r.bottom = 4 * r.bottom / 32 * (m_pPanel->m_pManager->m_bDoubleSize ? 2 : 1) + 1;
+            r.OffsetRect(ptLeft);
+
+            m_pPanel->InvalidateRect(&r);
+            renderLock.Unlock();
+        } else {
+            field_764 = pt;
+        }
+    }
 }
 
 // 0x643B00
