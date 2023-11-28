@@ -430,7 +430,7 @@ void CScreenMap::OnLButtonDblClk(CPoint pt)
 // 0x636970
 void CScreenMap::OnLButtonDown(CPoint pt)
 {
-    g_pBaldurChitin->GetObjectCursor()->m_nState = 0;
+    g_pBaldurChitin->GetObjectCursor()->m_nState = 1;
     m_cUIManager.OnLButtonDown(pt);
 }
 
