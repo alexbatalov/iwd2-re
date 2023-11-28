@@ -405,6 +405,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/FileFormat.h"
     "src/IcewindCGameEffects.cpp"
     "src/IcewindCGameEffects.h"
+    "src/IcewindCVisualEffect.cpp"
+    "src/IcewindCVisualEffect.h"
     "src/IcewindMisc.cpp"
     "src/IcewindMisc.h"
     "src/main.cpp"
