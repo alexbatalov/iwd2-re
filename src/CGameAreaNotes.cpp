@@ -57,7 +57,110 @@ CGameAreaNotes::~CGameAreaNotes()
 // 0x47A900
 void CGameAreaNotes::IntrnlInitialize()
 {
-    // TODO: Incomplete.
+    if (!m_bInitialized) {
+        field_8D = 0;
+
+        CVidCell vcFlag(CResRef("FLAG1"), FALSE);
+
+        CSize frameSize;
+        vcFlag.GetFrameSize(0, 0, frameSize, FALSE);
+
+        m_ptButtonSize.x = frameSize.cx;
+        m_ptButtonSize.y = frameSize.cy;
+
+        m_pControlInfo = new UI_CONTROL_BUTTON();
+        memset(m_pControlInfo, 0, sizeof(UI_CONTROL_BUTTON));
+        m_pControlInfo->base.nWidth = static_cast<WORD>(frameSize.cx);
+        m_pControlInfo->base.nHeight = static_cast<WORD>(frameSize.cy);
+        m_pControlInfo->nSequence = 0;
+        m_pControlInfo->nDisabledFrame = 0;
+        m_pControlInfo->nPressedFrame = 0;
+        m_pControlInfo->nSelectedFrame = 0;
+        m_pControlInfo->nNormalFrame = 0;
+        vcFlag.GetResRef().GetResRef(m_pControlInfo->refBam);
+
+        memset(&m_cAreaNote, 0, sizeof(m_cAreaNote));
+
+        m_pMapControl = static_cast<CUIControlButtonMapAreaMap*>(g_pBaldurChitin->m_pEngineMap->GetManager()->GetPanel(2)->GetControl(2));
+
+        m_ptCellSize.x = m_pMapControl->m_size.cx / m_ptButtonSize.x;
+        m_ptCellSize.y = m_pMapControl->m_size.cy / m_ptButtonSize.y;
+
+        m_pMapControl->GetStartPosition(m_ptStart);
+
+        m_areaNoteGrid = new DWORD*[m_ptCellSize.x];
+        for (INT x = 0; x < m_ptCellSize.x; x++) {
+            m_areaNoteGrid[x] = new DWORD[m_ptCellSize.y];
+            for (INT y = 0; y < m_ptCellSize.y; y++) {
+                m_areaNoteGrid[x][y] = -1;
+            }
+        }
+
+        m_bInitialized = TRUE;
+
+        if (m_areaNoteList.GetCount() > 0) {
+            CPoint sq;
+            POSITION pos = m_areaNoteList.GetHeadPosition();
+            while (pos != NULL) {
+                POSITION posOld = pos;
+                CAreaUserNote* pNote = m_areaNoteList.GetNext(pos);
+                m_cAreaNote = *pNote;
+                GetGridSquare(CPoint(m_cAreaNote.m_startX, m_cAreaNote.m_startY),
+                    sq,
+                    TRUE);
+                if (IsANoteThere(sq)) {
+                    CAreaUserNote* pOldNote = GetNoteAt(sq);
+                    STR_RES stOld;
+                    STR_RES stNew;
+
+                    if (!g_pBaldurChitin->GetTlkTable().m_override.Fetch(pOldNote->m_note, stOld)) {
+                        g_pBaldurChitin->GetTlkTable().Fetch(pOldNote->m_note, stOld);
+                        g_pBaldurChitin->GetTlkTable().m_override.AddUserEntry(pOldNote->m_note, stOld);
+                    }
+                    g_pBaldurChitin->GetTlkTable().Fetch(pNote->m_note, stNew);
+                    if (!stNew.szText.IsEmpty()) {
+                        if ((pNote->m_dwflags & 0x1) != 0) {
+                            stOld.szText += '\n' + stNew.szText;
+                        } else {
+                            stOld.szText = stNew.szText;
+                        }
+                        g_pBaldurChitin->GetTlkTable().m_override.AddUserEntry(pOldNote->m_note, stOld);
+                        delete pNote;
+                        m_areaNoteList.RemoveAt(posOld);
+                    } else {
+                        DeleteANote(pOldNote->m_id);
+                        delete pNote;
+                        m_areaNoteList.RemoveAt(posOld);
+                    }
+                } else {
+                    field_8D = (m_cAreaNote.m_dwflags >> 16) & 0xFF;
+                    AddButton(sq);
+                    pNote->m_id = m_cAreaNote.m_id;
+                }
+            }
+        }
+    } else {
+        if (field_8E) {
+            if (m_areaNoteList.GetCount() > 0) {
+                CPoint sq;
+                POSITION pos = m_areaNoteList.GetHeadPosition();
+                while (pos != NULL) {
+                    CAreaUserNote* pNote = m_areaNoteList.GetAt(pos);
+                    m_cAreaNote = *pNote;
+                    GetGridSquare(CPoint(m_cAreaNote.m_startX, m_cAreaNote.m_startY),
+                        sq,
+                        TRUE);
+                    if (!IsANoteThere(sq)) {
+                        field_8D = (m_cAreaNote.m_dwflags >> 16) & 0xFF;
+                        AddButton(sq);
+                        pNote->m_id = m_cAreaNote.m_id;
+                    }
+                    m_areaNoteList.GetNext(pos);
+                }
+            }
+        }
+        field_8E = 0;
+    }
 }
 
 // 0x47AE30
