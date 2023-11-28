@@ -219,7 +219,7 @@ STRREF CGameAreaNotes::GetNoteButtonText(DWORD id)
 // 0x47BB40
 CAreaUserNote* CGameAreaNotes::GetNoteAt(const CPoint& pt)
 {
-    DWORD id = m_areaNoteGrid[4 * pt.x][4 * pt.y];
+    DWORD id = m_areaNoteGrid[pt.x][pt.y];
 
     if (id == -1) {
         return NULL;
