@@ -1743,6 +1743,190 @@ void CGameAnimationTypeMonsterIcewind::ClearColorEffectsAll()
     }
 }
 
+// 0x6E6A60
+void CGameAnimationTypeMonsterIcewind::SetColorEffect(BYTE effectType, BYTE colorRange, COLORREF tintColor, BYTE periodLength)
+{
+    switch (colorRange & 0xF0) {
+    case 0x00:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+        // __LINE__: 26667
+        UTIL_ASSERT(m_currentVidCell != NULL);
+
+        if (m_falseColor) {
+            m_a1VidCellBase.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+            m_a2VidCellBase.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+            m_a3VidCellBase.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+            m_a4VidCellBase.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+            m_deVidCellBase.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+            m_ghVidCellBase.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+            m_slVidCellBase.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+            m_guVidCellBase.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+            m_spVidCellBase.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+            m_caVidCellBase.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+            m_scVidCellBase.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+            m_sdVidCellBase.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+            m_twVidCellBase.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+            m_wkVidCellBase.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+
+            if (effectType != 0) {
+                m_a1VidCellBase.SuppressTint(colorRange & 0xF);
+                m_a2VidCellBase.SuppressTint(colorRange & 0xF);
+                m_a3VidCellBase.SuppressTint(colorRange & 0xF);
+                m_a4VidCellBase.SuppressTint(colorRange & 0xF);
+                m_deVidCellBase.SuppressTint(colorRange & 0xF);
+                m_ghVidCellBase.SuppressTint(colorRange & 0xF);
+                m_slVidCellBase.SuppressTint(colorRange & 0xF);
+                m_guVidCellBase.SuppressTint(colorRange & 0xF);
+                m_spVidCellBase.SuppressTint(colorRange & 0xF);
+                m_caVidCellBase.SuppressTint(colorRange & 0xF);
+                m_scVidCellBase.SuppressTint(colorRange & 0xF);
+                m_sdVidCellBase.SuppressTint(colorRange & 0xF);
+                m_twVidCellBase.SuppressTint(colorRange & 0xF);
+                m_wkVidCellBase.SuppressTint(colorRange & 0xF);
+            }
+
+            if (m_bExtendDir && !MIRROR_BAM) {
+                m_a1VidCellExtend.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+                m_a2VidCellExtend.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+                m_a3VidCellExtend.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+                m_a4VidCellExtend.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+                m_deVidCellExtend.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+                m_ghVidCellExtend.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+                m_slVidCellExtend.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+                m_guVidCellExtend.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+                m_spVidCellExtend.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+                m_caVidCellExtend.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+                m_scVidCellExtend.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+                m_sdVidCellExtend.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+                m_twVidCellExtend.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+                m_wkVidCellExtend.AddRangeAffect(effectType, colorRange & 0xF, tintColor, periodLength);
+
+                if (effectType != 0) {
+                    m_a1VidCellExtend.SuppressTint(colorRange & 0xF);
+                    m_a2VidCellExtend.SuppressTint(colorRange & 0xF);
+                    m_a3VidCellExtend.SuppressTint(colorRange & 0xF);
+                    m_a4VidCellExtend.SuppressTint(colorRange & 0xF);
+                    m_deVidCellExtend.SuppressTint(colorRange & 0xF);
+                    m_ghVidCellExtend.SuppressTint(colorRange & 0xF);
+                    m_slVidCellExtend.SuppressTint(colorRange & 0xF);
+                    m_guVidCellExtend.SuppressTint(colorRange & 0xF);
+                    m_spVidCellExtend.SuppressTint(colorRange & 0xF);
+                    m_caVidCellExtend.SuppressTint(colorRange & 0xF);
+                    m_scVidCellExtend.SuppressTint(colorRange & 0xF);
+                    m_sdVidCellExtend.SuppressTint(colorRange & 0xF);
+                    m_twVidCellExtend.SuppressTint(colorRange & 0xF);
+                    m_wkVidCellExtend.SuppressTint(colorRange & 0xF);
+                }
+            }
+        } else {
+            if (effectType != 0) {
+                m_a1VidCellBase.AddResPaletteAffect(effectType, tintColor, periodLength);
+                m_a2VidCellBase.AddResPaletteAffect(effectType, tintColor, periodLength);
+                m_a3VidCellBase.AddResPaletteAffect(effectType, tintColor, periodLength);
+                m_a4VidCellBase.AddResPaletteAffect(effectType, tintColor, periodLength);
+                m_deVidCellBase.AddResPaletteAffect(effectType, tintColor, periodLength);
+                m_ghVidCellBase.AddResPaletteAffect(effectType, tintColor, periodLength);
+                m_slVidCellBase.AddResPaletteAffect(effectType, tintColor, periodLength);
+                m_guVidCellBase.AddResPaletteAffect(effectType, tintColor, periodLength);
+                m_spVidCellBase.AddResPaletteAffect(effectType, tintColor, periodLength);
+                m_caVidCellBase.AddResPaletteAffect(effectType, tintColor, periodLength);
+                m_scVidCellBase.AddResPaletteAffect(effectType, tintColor, periodLength);
+                m_sdVidCellBase.AddResPaletteAffect(effectType, tintColor, periodLength);
+                m_twVidCellBase.AddResPaletteAffect(effectType, tintColor, periodLength);
+                m_wkVidCellBase.AddResPaletteAffect(effectType, tintColor, periodLength);
+
+                m_a1VidCellBase.SuppressTint(0);
+                m_a2VidCellBase.SuppressTint(0);
+                m_a3VidCellBase.SuppressTint(0);
+                m_a4VidCellBase.SuppressTint(0);
+                m_deVidCellBase.SuppressTint(0);
+                m_ghVidCellBase.SuppressTint(0);
+                m_slVidCellBase.SuppressTint(0);
+                m_guVidCellBase.SuppressTint(0);
+                m_spVidCellBase.SuppressTint(0);
+                m_caVidCellBase.SuppressTint(0);
+                m_scVidCellBase.SuppressTint(0);
+                m_sdVidCellBase.SuppressTint(0);
+                m_twVidCellBase.SuppressTint(0);
+                m_wkVidCellBase.SuppressTint(0);
+
+                if (m_bExtendDir && !MIRROR_BAM) {
+                    m_a1VidCellExtend.AddResPaletteAffect(effectType, tintColor, periodLength);
+                    m_a2VidCellExtend.AddResPaletteAffect(effectType, tintColor, periodLength);
+                    m_a3VidCellExtend.AddResPaletteAffect(effectType, tintColor, periodLength);
+                    m_a4VidCellExtend.AddResPaletteAffect(effectType, tintColor, periodLength);
+                    m_deVidCellExtend.AddResPaletteAffect(effectType, tintColor, periodLength);
+                    m_ghVidCellExtend.AddResPaletteAffect(effectType, tintColor, periodLength);
+                    m_slVidCellExtend.AddResPaletteAffect(effectType, tintColor, periodLength);
+                    m_guVidCellExtend.AddResPaletteAffect(effectType, tintColor, periodLength);
+                    m_spVidCellExtend.AddResPaletteAffect(effectType, tintColor, periodLength);
+                    m_caVidCellExtend.AddResPaletteAffect(effectType, tintColor, periodLength);
+                    m_scVidCellExtend.AddResPaletteAffect(effectType, tintColor, periodLength);
+                    m_sdVidCellExtend.AddResPaletteAffect(effectType, tintColor, periodLength);
+                    m_twVidCellExtend.AddResPaletteAffect(effectType, tintColor, periodLength);
+                    m_wkVidCellExtend.AddResPaletteAffect(effectType, tintColor, periodLength);
+
+                    m_a1VidCellExtend.SuppressTint(0);
+                    m_a2VidCellExtend.SuppressTint(0);
+                    m_a3VidCellExtend.SuppressTint(0);
+                    m_a4VidCellExtend.SuppressTint(0);
+                    m_deVidCellExtend.SuppressTint(0);
+                    m_ghVidCellExtend.SuppressTint(0);
+                    m_slVidCellExtend.SuppressTint(0);
+                    m_guVidCellExtend.SuppressTint(0);
+                    m_spVidCellExtend.SuppressTint(0);
+                    m_caVidCellExtend.SuppressTint(0);
+                    m_scVidCellExtend.SuppressTint(0);
+                    m_sdVidCellExtend.SuppressTint(0);
+                    m_twVidCellExtend.SuppressTint(0);
+                    m_wkVidCellExtend.SuppressTint(0);
+                }
+            } else {
+                m_a1VidCellBase.SetTintColor(tintColor);
+                m_a2VidCellBase.SetTintColor(tintColor);
+                m_a3VidCellBase.SetTintColor(tintColor);
+                m_a4VidCellBase.SetTintColor(tintColor);
+                m_deVidCellBase.SetTintColor(tintColor);
+                m_ghVidCellBase.SetTintColor(tintColor);
+                m_slVidCellBase.SetTintColor(tintColor);
+                m_guVidCellBase.SetTintColor(tintColor);
+                m_spVidCellBase.SetTintColor(tintColor);
+                m_caVidCellBase.SetTintColor(tintColor);
+                m_scVidCellBase.SetTintColor(tintColor);
+                m_sdVidCellBase.SetTintColor(tintColor);
+                m_twVidCellBase.SetTintColor(tintColor);
+                m_wkVidCellBase.SetTintColor(tintColor);
+
+                if (m_bExtendDir && !MIRROR_BAM) {
+                    m_a1VidCellExtend.SetTintColor(tintColor);
+                    m_a2VidCellExtend.SetTintColor(tintColor);
+                    m_a3VidCellExtend.SetTintColor(tintColor);
+                    m_a4VidCellExtend.SetTintColor(tintColor);
+                    m_deVidCellExtend.SetTintColor(tintColor);
+                    m_ghVidCellExtend.SetTintColor(tintColor);
+                    m_slVidCellExtend.SetTintColor(tintColor);
+                    m_guVidCellExtend.SetTintColor(tintColor);
+                    m_spVidCellExtend.SetTintColor(tintColor);
+                    m_caVidCellExtend.SetTintColor(tintColor);
+                    m_scVidCellExtend.SetTintColor(tintColor);
+                    m_sdVidCellExtend.SetTintColor(tintColor);
+                    m_twVidCellExtend.SetTintColor(tintColor);
+                    m_wkVidCellExtend.SetTintColor(tintColor);
+                }
+            }
+        }
+        break;
+    case 0x10:
+    case 0x20:
+    case 0x30:
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+        // __LINE__: 26844
+        UTIL_ASSERT(FALSE);
+    }
+}
+
 // 0x6E78F0
 void CGameAnimationTypeMonsterIcewind::SetColorRange(BYTE colorRange, BYTE rangeValue)
 {
