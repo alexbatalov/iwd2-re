@@ -23,6 +23,7 @@ public:
     /* 0094 */ void ClearColorEffects(BYTE colorRange) override;
     /* 0098 */ void ClearColorEffectsAll() override;
     /* 009C */ void SetColorEffect(BYTE effectType, BYTE colorRange, COLORREF tintColor, BYTE periodLength) override;
+    /* 00A0 */ void SetColorEffectAll(BYTE effectType, COLORREF tintColor, BYTE periodLength) override;
     /* 00A4 */ void SetColorRange(BYTE colorRange, BYTE rangeValue) override;
     /* 00A8 */ void SetColorRangeAll(BYTE rangeValue) override;
     /* 00AC */ SHORT SetSequence(SHORT nSequence) override;
