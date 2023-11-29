@@ -1780,3 +1780,137 @@ void CGameAnimationTypeMonsterIcewind::SetColorRangeAll(BYTE rangeValue)
         }
     }
 }
+
+// 0x6E7DF0
+SHORT CGameAnimationTypeMonsterIcewind::SetSequence(SHORT nSequence)
+{
+    BOOL bRandomFrame = FALSE;
+
+    switch (nSequence) {
+    case 1:
+        m_currentVidCellBase = &m_guVidCellBase;
+        m_currentVidCellExtend = &m_guVidCellExtend;
+        m_currentBamSequence = 0;
+        break;
+    case 2:
+        if ((m_animationID & 0x1) != 0) {
+            m_currentVidCellBase = &m_caVidCellBase;
+            m_currentVidCellExtend = &m_caVidCellExtend;
+            m_currentBamSequence = 0;
+        }
+        break;
+    case 3:
+        if ((m_animationID & 0x1) != 0) {
+            m_currentVidCellBase = &m_spVidCellBase;
+            m_currentVidCellExtend = &m_spVidCellExtend;
+            m_currentBamSequence = 0;
+        }
+        break;
+    case 4:
+        m_currentVidCellBase = &m_ghVidCellBase;
+        m_currentVidCellExtend = &m_ghVidCellExtend;
+        m_currentBamSequence = 0;
+        break;
+    case 5:
+        m_currentVidCellBase = &m_deVidCellBase;
+        m_currentVidCellExtend = &m_deVidCellExtend;
+        m_currentBamSequence = 0;
+    case 6:
+        if (m_currentBamSequence != 0
+            || m_currentVidCellBase != &m_sdVidCellBase) {
+            bRandomFrame = TRUE;
+        }
+        m_currentVidCellBase = &m_sdVidCellBase;
+        m_currentVidCellExtend = &m_sdVidCellExtend;
+        m_currentBamSequence = 0;
+        break;
+    case 7:
+        if (m_currentBamSequence != 0
+            || m_currentVidCellBase != &m_scVidCellBase) {
+            bRandomFrame = TRUE;
+        }
+        m_currentVidCellBase = &m_scVidCellBase;
+        m_currentVidCellExtend = &m_scVidCellExtend;
+        m_currentBamSequence = 0;
+        break;
+    case 8:
+        if ((m_animationID & 2) != 0) {
+            m_currentVidCellBase = &m_a4VidCellBase;
+            m_currentVidCellExtend = &m_a4VidCellExtend;
+            m_currentBamSequence = 0;
+            nSequence = 8;
+        }
+        break;
+    case 9:
+        m_currentVidCellBase = &m_twVidCellBase;
+        m_currentVidCellExtend = &m_twVidCellExtend;
+        m_currentBamSequence = 0;
+        break;
+    case 10:
+        m_currentVidCellBase = &m_wkVidCellBase;
+        m_currentVidCellExtend = &m_wkVidCellExtend;
+        m_currentBamSequence = 0;
+        break;
+    case 11:
+        m_currentVidCellBase = &m_a1VidCellBase;
+        m_currentVidCellExtend = &m_a1VidCellExtend;
+        m_currentBamSequence = 0;
+        nSequence = 0;
+        break;
+    case 12:
+        if ((m_animationID & 4) != 0) {
+            m_currentVidCellBase = &m_a3VidCellBase;
+            m_currentVidCellExtend = &m_a3VidCellExtend;
+        } else {
+            m_currentVidCellBase = &m_a1VidCellBase;
+            m_currentVidCellExtend = &m_a1VidCellExtend;
+        }
+        m_currentBamSequence = 0;
+        nSequence = 0;
+        break;
+    case 13:
+        if ((m_animationID & 8) != 0) {
+            m_currentVidCellBase = &m_a2VidCellBase;
+            m_currentVidCellExtend = &m_a2VidCellExtend;
+        } else {
+            m_currentVidCellBase = &m_a1VidCellBase;
+            m_currentVidCellExtend = &m_a1VidCellExtend;
+        }
+        m_currentBamSequence = 0;
+        nSequence = 0;
+        break;
+    case 14:
+    case 15:
+        nSequence = 7;
+        if (m_currentBamSequence != 0
+            || m_currentVidCellBase != &m_scVidCellBase) {
+            bRandomFrame = TRUE;
+        }
+        m_currentVidCellBase = &m_scVidCellBase;
+        m_currentVidCellExtend = &m_scVidCellExtend;
+        m_currentBamSequence = 0;
+        break;
+    case 17:
+        m_currentVidCellBase = &m_a1VidCellBase;
+        m_currentVidCellExtend = &m_a1VidCellExtend;
+        m_currentBamSequence = 0;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+        // __LINE__: 27299
+        UTIL_ASSERT(FALSE);
+    }
+
+    ChangeDirection(m_currentBamDirection);
+
+    SHORT nFrame = 0;
+    if (bRandomFrame) {
+        BYTE nSequenceLength = m_currentVidCell->GetSequenceLength(m_currentVidCell->m_nCurrentSequence, FALSE);
+        if (nSequenceLength != 0) {
+            nFrame = rand() % nSequenceLength;
+        }
+    }
+    m_currentVidCell->FrameSet(nFrame);
+
+    return nSequence;
+}
