@@ -28,6 +28,8 @@ public:
     void ResetMoveScale();
     const CRect& GetEllipseRect();
     BYTE GetPersonalSpace();
+    char* GetSndArmor();
+    char* GetSndReady();
     BOOL IsFalseColor();
     void SetAnimationType(USHORT animationID, BYTE* colorRangeValues, WORD facing);
     void ClearColorEffectsAll();

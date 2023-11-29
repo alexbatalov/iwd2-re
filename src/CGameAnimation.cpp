@@ -179,6 +179,26 @@ BYTE CGameAnimation::GetPersonalSpace()
 }
 
 // NOTE: Inlined.
+char* CGameAnimation::GetSndArmor()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2094
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->GetSndArmor();
+}
+
+// NOTE: Inlined.
+char* CGameAnimation::GetSndReady()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2096
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->GetSndReady();
+}
+
+// NOTE: Inlined.
 BOOL CGameAnimation::IsFalseColor()
 {
     // __FILE__: .\Include\ObjAnimation.h

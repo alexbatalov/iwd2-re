@@ -257,7 +257,7 @@ BYTE CGameAnimationType::GetPersonalSpace()
 }
 
 // 0x55D140
-const char* CGameAnimationType::GetSndArmor()
+char* CGameAnimationType::GetSndArmor()
 {
     return "";
 }
@@ -269,7 +269,7 @@ const char* CGameAnimationType::GetSndDeath()
 }
 
 // 0x55D140
-const char* CGameAnimationType::GetSndReady()
+char* CGameAnimationType::GetSndReady()
 {
     return "";
 }

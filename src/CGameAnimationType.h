@@ -343,9 +343,9 @@ public:
     /* 0054 */ virtual const CRect& GetEllipseRect();
     /* 0058 */ virtual BOOL GetPathSmooth();
     /* 005C */ virtual BYTE GetPersonalSpace();
-    /* 0060 */ virtual const char* GetSndArmor();
+    /* 0060 */ virtual char* GetSndArmor();
     /* 0064 */ virtual const char* GetSndDeath();
-    /* 0068 */ virtual const char* GetSndReady();
+    /* 0068 */ virtual char* GetSndReady();
     /* 006C */ virtual const char* GetSndWalk(SHORT a1);
     /* 0070 */ virtual DWORD GetSndWalkFreq();
     /* 0074 */ virtual BOOL IsFalseColor();

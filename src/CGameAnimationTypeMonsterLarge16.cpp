@@ -284,7 +284,7 @@ void CGameAnimationTypeMonsterLarge16::GetAnimationResRef(CString& resRef, BYTE 
 }
 
 // 0x6B3020
-const char* CGameAnimationTypeMonsterLarge16::GetSndReady()
+char* CGameAnimationTypeMonsterLarge16::GetSndReady()
 {
     switch (m_animationID & 0xF00) {
     case 0x000:

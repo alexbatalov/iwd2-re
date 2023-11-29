@@ -422,7 +422,7 @@ void CGameAnimationTypeMonsterQuadrant::GetAnimationResRef(CString& resRef, BYTE
 }
 
 // 0x6BB5D0
-const char* CGameAnimationTypeMonsterQuadrant::GetSndReady()
+char* CGameAnimationTypeMonsterQuadrant::GetSndReady()
 {
     if ((m_animationID & 0xF00) != 0) {
         // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
@@ -443,7 +443,6 @@ const char* CGameAnimationTypeMonsterQuadrant::GetSndReady()
         szTemp[6] = '\0';
     }
 
-    // FIXME: Leaking `szTemp`.
     return szTemp;
 }
 

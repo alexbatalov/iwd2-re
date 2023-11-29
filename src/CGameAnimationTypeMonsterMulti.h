@@ -12,7 +12,7 @@ public:
     /* 0004 */ void CalculateFxRect(CRect& rFx, CPoint& ptReference, LONG posZ) override;
     /* 0008 */ void CalculateGCBoundsRect(CRect& rGCBounds, const CPoint& pos, const CPoint& ptReference, LONG posZ, LONG nWidth, LONG nHeight) override;
     /* 0024 */ void GetAnimationResRef(CString& resRef, BYTE range) override;
-    /* 0068 */ const char* GetSndReady() override;
+    /* 0068 */ char* GetSndReady() override;
     /* 0074 */ BOOL IsFalseColor() override;
     /* 007C */ BOOL IsMirroring() override;
     /* 0080 */ BOOL IsBeginningOfSequence() override;

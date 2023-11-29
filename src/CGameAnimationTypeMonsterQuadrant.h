@@ -15,7 +15,7 @@ public:
     /* 0020 */ CVidPalette* GetAnimationPalette(BYTE range) override;
     /* 0024 */ void GetAnimationResRef(CString& resRef, BYTE range) override;
     /* 0058 */ BOOL GetPathSmooth() override;
-    /* 0068 */ const char* GetSndReady() override;
+    /* 0068 */ char* GetSndReady() override;
     /* 006C */ const char* GetSndWalk(SHORT a1) override;
     /* 0074 */ BOOL IsFalseColor() override;
     /* 007C */ BOOL IsMirroring() override;

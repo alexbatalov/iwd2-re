@@ -203,6 +203,11 @@ public:
     static const BYTE SEQ_SLEEP;
     static const BYTE SEQ_TWITCH;
     static const BYTE SEQ_WALK;
+    static const BYTE SEQ_ATTACK_SLASH;
+    static const BYTE SEQ_ATTACK_BACKSLASH;
+    static const BYTE SEQ_ATTACK_JAB;
+
+    static const ITEM_ABILITY DEFAULT_ATTACK;
 
     static const LONG STANDARD_VERBAL_CONSTANT_LENGTH;
 
@@ -658,6 +663,7 @@ public:
     /* 4D32 */ int field_4D32;
     /* 4D36 */ CSound m_sndArmor[2];
     /* 4DFE */ unsigned char field_4DFE;
+    /* 4DFF */ BYTE m_currSndArmor;
     /* 4E00 */ CSound m_sndReady;
     /* 4E64 */ CSound m_sndDeath;
     /* 4FF4 */ int m_nNumberOfTimesTalkedTo;

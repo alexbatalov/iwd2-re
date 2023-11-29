@@ -400,7 +400,7 @@ void CGameAnimationTypeMonsterMulti::CalculateGCBoundsRect(CRect& rGCBounds, con
 }
 
 // 0x6B61E0
-const char* CGameAnimationTypeMonsterMulti::GetSndReady()
+char* CGameAnimationTypeMonsterMulti::GetSndReady()
 {
     switch (m_animationID & 0xF00) {
     case 0x000:
@@ -427,7 +427,6 @@ const char* CGameAnimationTypeMonsterMulti::GetSndReady()
         szTemp[6] = '\0';
     }
 
-    // FIXME: Leaking `szTemp`.
     return szTemp;
 }
 

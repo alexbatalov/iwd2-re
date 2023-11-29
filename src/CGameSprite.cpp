@@ -133,6 +133,44 @@ const BYTE CGameSprite::SEQ_TWITCH = CGAMESPRITE_SEQ_TWITCH;
 // 0x85BBBD
 const BYTE CGameSprite::SEQ_WALK = CGAMESPRITE_SEQ_WALK;
 
+// 0x85BBBE
+const BYTE CGameSprite::SEQ_ATTACK_SLASH = CGAMESPRITE_SEQ_ATTACK_SLASH;
+
+// 0x85BBBF
+const BYTE CGameSprite::SEQ_ATTACK_BACKSLASH = CGAMESPRITE_SEQ_ATTACK_BACKSLASH;
+
+// 0x85BBC0
+const BYTE CGameSprite::SEQ_ATTACK_JAB = CGAMESPRITE_SEQ_ATTACK_JAB;
+
+// 0x85BBD0
+const ITEM_ABILITY CGameSprite::DEFAULT_ATTACK = {
+    1, // type
+    1, // quickSlotType
+    0, // largeDamageDice
+    { 0 }, // quickSlotIcon
+    1, // actionType
+    1, // actionCount
+    1, // range
+    0, // launcherType
+    0, // largeDamageDiceCount
+    0, // speedFactor
+    0, // largeDamageDiceBonus
+    0, // thac0Bonus
+    2, // damageDice
+    9, // school
+    1, // damageDiceCount
+    0, // secondaryType
+    0, // damageDiceBonus
+    2, // damageType
+    0, // effectCount
+    0, // startingEffect
+    WORD_MAX, // maxUsageCount
+    0, // usageFlags
+    0, // abilityFlags
+    0, // missileType
+    { 0 }, // attackProbability
+};
+
 // 0x85BCA0
 const LONG CGameSprite::STANDARD_VERBAL_CONSTANT_LENGTH = 300;
 
@@ -2669,7 +2707,158 @@ SHORT CGameSprite::GetIdleSequence()
 // 0x707230
 void CGameSprite::SetSequence(SHORT nSequence)
 {
-    // TODO: Incomplete.
+    if (nSequence == SEQ_WALK) {
+        // NOTE: Uninline.
+        if (m_animation.GetMoveScale() == 0) {
+            return;
+        }
+    }
+
+    if (m_nSequence == nSequence) {
+        // NOTE: Uninline.
+        if (m_nSequence != GetIdleSequence()) {
+            return;
+        }
+    }
+
+    if ((m_derivedStats.m_generalState & STATE_SILENCED) == 0
+        && (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bFootStepsSounds
+            || g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(m_id) == -1)
+        && m_nSequence != nSequence
+        && m_pArea == g_pBaldurChitin->GetObjectGame()->GetVisibleArea()
+        && m_pArea != NULL) {
+        m_currSndArmor = 0;
+        m_sndArmor[m_currSndArmor].Stop();
+
+        // NOTE: Uninline.
+        char* sndArmor = m_animation.GetSndArmor();
+
+        if (sndArmor[0] != '\0') {
+            // NOTE: Uninline.
+            m_sndArmor[m_currSndArmor].SetResRef(CResRef(sndArmor), TRUE, TRUE);
+            delete sndArmor;
+
+            CPoint ear;
+            LONG earZ;
+            g_pBaldurChitin->cSoundMixer.GetListenPosition(ear, earZ);
+
+            LONG priority = max(99 - 99 * ((ear.y - m_pos.y) * (ear.y - m_pos.y) / 144 + (ear.x - m_pos.x) * (ear.x - m_pos.x) / 256) / 6400, 0);
+            m_sndArmor[m_currSndArmor].SetPriority(static_cast<BYTE>(priority));
+
+            m_sndArmor[m_currSndArmor].Play(m_pos.x, m_pos.y, m_posZ, FALSE);
+        }
+    }
+
+    if ((m_derivedStats.m_generalState & STATE_SILENCED) == 0
+        && (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bFootStepsSounds
+            || g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(m_id) == -1)
+        && m_nSequence != nSequence
+        && m_pArea == g_pBaldurChitin->GetObjectGame()->GetVisibleArea()
+        && m_pArea != NULL
+        && nSequence != SEQ_DIE
+        && nSequence != SEQ_SLEEP
+        && nSequence != SEQ_TWITCH
+        && nSequence != SEQ_WALK
+        && nSequence != SEQ_AWAKE) {
+        if (!m_sndReady.IsSoundPlaying()) {
+            // NOTE: Uninline.
+            char* sndReady = m_animation.GetSndReady();
+
+            if (sndReady[0] != '\0') {
+                // NOTE: Uninline.
+                m_sndReady.SetResRef(CResRef(sndReady), TRUE, TRUE);
+
+                delete sndReady;
+
+                m_sndReady.SetLoopingFlag(1);
+                m_sndReady.Play(m_pos.x, m_pos.y, m_posZ, FALSE);
+            }
+        }
+    } else {
+        m_sndReady.Stop();
+    }
+
+    SHORT nDirection = m_nDirection & 0xFE;
+    CItem* curWeapon;
+    const ITEM_ABILITY* curAttack;
+
+    switch (nSequence) {
+    case SEQ_ATTACK:
+        curWeapon = m_equipment.m_items[m_equipment.m_selectedWeapon];
+        if (curWeapon != NULL) {
+            curWeapon->Demand();
+            curAttack = curWeapon->GetAbility(m_equipment.m_selectedWeaponAbility);
+        } else {
+            SelectWeaponAbility(CGameSpriteEquipment::SLOT_FIST, 0, 0, 1);
+            curAttack = &DEFAULT_ATTACK;
+        }
+
+        if (curAttack == NULL) {
+            curAttack = &DEFAULT_ATTACK;
+        }
+
+        if (curAttack->type != 2) {
+            LONG totalProb = 0;
+            LONG prob = rand() % 100 + 1;
+            for (int index = 0; index < 6 && prob > totalProb; index++) {
+                totalProb += curAttack->attackProbability[index];
+                if (prob <= totalProb) {
+                    switch (index) {
+                    case 0:
+                        nSequence = SEQ_ATTACK_SLASH;
+                        break;
+                    case 1:
+                        nSequence = SEQ_ATTACK_BACKSLASH;
+                        break;
+                    case 2:
+                        nSequence = SEQ_ATTACK_JAB;
+                        break;
+                    default:
+                        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+                        // __LINE__: 9748
+                        UTIL_ASSERT(FALSE);
+                    }
+                    break;
+                }
+            }
+        } else {
+            nSequence = SEQ_SHOOT;
+        }
+
+        if (curWeapon != NULL) {
+            curWeapon->Release();
+        }
+
+        if (nSequence == SEQ_HEAD_TURN) {
+            // NOTE: Uninline.
+            nSequence = GetIdleSequence();
+        }
+        break;
+    case SEQ_DAMAGE:
+        field_53DA = 128;
+        field_53DC = 128;
+        field_53E2 = TRUE;
+        g_pBaldurChitin->GetObjectGame()->UpdatePortrait(g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(m_id), 1);
+        break;
+    case SEQ_TWITCH:
+        field_50FE = 0;
+        break;
+    case SEQ_WALK:
+        nDirection = m_nDirection;
+        break;
+    }
+
+    if (nSequence != SEQ_DIE || m_nSequence != SEQ_SLEEP) {
+        // NOTE: Uninline.
+        m_animation.SetSequence(nSequence);
+    }
+
+    if (m_nNewDirection == m_nDirection) {
+        m_nDirection = nDirection;
+        m_nNewDirection = nDirection;
+    } else {
+        m_nDirection = nDirection;
+    }
 }
 
 // 0x708D50
