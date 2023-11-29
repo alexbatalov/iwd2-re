@@ -1781,6 +1781,123 @@ void CGameAnimationTypeMonsterIcewind::SetColorRangeAll(BYTE rangeValue)
     }
 }
 
+// 0x6E7A40
+void CGameAnimationTypeMonsterIcewind::Render(CInfinity* pInfinity, CVidMode* pVidMode, INT nSurface, const CRect& rectFX, const CPoint& ptNewPos, const CPoint& ptReference, DWORD dwRenderFlags, COLORREF rgbTintColor, const CRect& rGCBounds, BOOL bDithered, BOOL bFadeOut, LONG posZ, BYTE transparency)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 27071
+    UTIL_ASSERT(pInfinity != NULL && pVidMode != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 27072
+    UTIL_ASSERT(m_currentVidCell != NULL);
+
+    CPoint ptPos(ptNewPos.x, ptNewPos.y + posZ);
+    CRect rFXRect(rectFX);
+
+    if ((!m_bExtendDir || MIRROR_BAM) && m_currentBamDirection > m_extendDirectionTest) {
+        dwRenderFlags |= CInfinity::MIRROR_FX;
+    }
+
+    if (m_bExtendDir && !MIRROR_BAM) {
+        dwRenderFlags |= 0x4;
+    }
+
+    if ((m_bExtendDir && !MIRROR_BAM)
+        || m_currentVidCellWeaponExtend != NULL
+        || transparency != 0) {
+        dwRenderFlags |= CInfinity::FXPREP_COPYFROMBACK;
+
+        if (transparency != 0) {
+            dwRenderFlags |= 0x2;
+        }
+    } else {
+        dwRenderFlags |= CInfinity::FXPREP_CLEARFILL;
+        dwRenderFlags |= 0x1;
+    }
+
+    pInfinity->FXPrep(rFXRect, dwRenderFlags, nSurface, ptPos, ptReference);
+
+    if (pInfinity->FXLock(rFXRect, dwRenderFlags)) {
+        COLORREF oldTintColor = m_currentVidCell->GetTintColor();
+        BYTE b = GetBValue(oldTintColor) + GetBValue(rgbTintColor) - 255 >= 0
+            ? GetBValue(oldTintColor) + GetBValue(rgbTintColor) + 1
+            : 0;
+        BYTE g = GetGValue(oldTintColor) + GetGValue(rgbTintColor) - 255 >= 0
+            ? GetGValue(oldTintColor) + GetGValue(rgbTintColor) + 1
+            : 0;
+        BYTE r = GetBValue(oldTintColor) + GetBValue(rgbTintColor) - 255 >= 0
+            ? GetBValue(oldTintColor) + GetBValue(rgbTintColor) + 1
+            : 0;
+        m_currentVidCell->SetTintColor(RGB(r, g, b));
+
+        if (m_currentVidCellWeaponExtend != NULL) {
+            m_bitmap.GetRes()->Demand();
+            m_currentVidCell->SetPalette(m_bitmap.GetRes()->GetColorTable(),
+                m_bitmap.GetRes()->GetColorCount(),
+                CVidPalette::TYPE_RESOURCE);
+        }
+
+        if (m_currentVidCellWeaponBase == NULL) {
+            if (transparency != 0) {
+                pInfinity->FXRender(m_currentVidCell,
+                    ptReference.x,
+                    ptReference.y,
+                    dwRenderFlags | 0x2,
+                    transparency);
+            } else {
+                pInfinity->FXRender(m_currentVidCell,
+                    ptReference.x,
+                    ptReference.y,
+                    dwRenderFlags,
+                    0);
+            }
+        } else {
+            if (transparency != 0) {
+                pInfinity->FXRender(m_currentVidCell,
+                    ptReference.x,
+                    ptReference.y,
+                    dwRenderFlags | 0x2,
+                    (transparency * 128) / 255 + 128);
+            } else {
+                pInfinity->FXRender(m_currentVidCell,
+                    ptReference.x,
+                    ptReference.y,
+                    dwRenderFlags | 0x2,
+                    128);
+            }
+        }
+
+        if (m_currentVidCellWeaponExtend != NULL) {
+            m_bitmap.Release();
+        }
+
+        m_currentVidCell->SetTintColor(oldTintColor);
+
+        pInfinity->FXRenderClippingPolys(ptPos.x,
+            ptPos.y - posZ,
+            posZ,
+            ptReference,
+            CRect(rGCBounds.left, rGCBounds.top - posZ, rGCBounds.right, rGCBounds.bottom - posZ),
+            bDithered,
+            dwRenderFlags);
+
+        if (bFadeOut) {
+            pInfinity->FXUnlock(dwRenderFlags, &rFXRect, ptPos + ptReference);
+        } else {
+            pInfinity->FXUnlock(dwRenderFlags, &rFXRect, CPoint(0, 0));
+        }
+
+        pInfinity->FXBltFrom(nSurface,
+            rFXRect,
+            ptPos.x,
+            ptPos.y,
+            ptReference.x,
+            ptReference.y,
+            dwRenderFlags);
+    }
+}
+
 // 0x6E7DF0
 SHORT CGameAnimationTypeMonsterIcewind::SetSequence(SHORT nSequence)
 {
