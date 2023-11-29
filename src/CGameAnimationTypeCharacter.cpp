@@ -776,7 +776,7 @@ void CGameAnimationTypeCharacter::ChangeDirection(SHORT nDirection)
     m_currentVidCell = m_currentVidCellBase;
 
     if (m_currentBamDirection > m_extendDirectionTest) {
-        m_currentVidCell->SequenceSet(9 * m_currentBamSequence - m_currentBamSequence + 16);
+        m_currentVidCell->SequenceSet(9 * m_currentBamSequence - m_currentBamDirection + 16);
     } else {
         m_currentVidCell->SequenceSet(9 * m_currentBamSequence + m_currentBamDirection);
     }
@@ -787,7 +787,7 @@ void CGameAnimationTypeCharacter::ChangeDirection(SHORT nDirection)
         m_currentVidCellWeapon = m_currentVidCellWeaponBase;
 
         if (m_currentBamDirection > m_extendDirectionTest) {
-            m_currentVidCellWeapon->SequenceSet(9 * m_currentBamSequence - m_currentBamSequence + 16);
+            m_currentVidCellWeapon->SequenceSet(9 * m_currentBamSequence - m_currentBamDirection + 16);
         } else {
             m_currentVidCellWeapon->SequenceSet(9 * m_currentBamSequence + m_currentBamDirection);
         }
@@ -799,7 +799,7 @@ void CGameAnimationTypeCharacter::ChangeDirection(SHORT nDirection)
         m_currentVidCellShield = m_currentVidCellShieldBase;
 
         if (m_currentBamDirection > m_extendDirectionTest) {
-            m_currentVidCellShield->SequenceSet(9 * m_currentBamSequence - m_currentBamSequence + 16);
+            m_currentVidCellShield->SequenceSet(9 * m_currentBamSequence - m_currentBamDirection + 16);
         } else {
             m_currentVidCellShield->SequenceSet(9 * m_currentBamSequence + m_currentBamDirection);
         }
@@ -811,7 +811,7 @@ void CGameAnimationTypeCharacter::ChangeDirection(SHORT nDirection)
         m_currentVidCellShield = m_currentVidCellShieldBase;
 
         if (m_currentBamDirection > m_extendDirectionTest) {
-            m_currentVidCellShield->SequenceSet(9 * m_currentBamSequence - m_currentBamSequence + 16);
+            m_currentVidCellShield->SequenceSet(9 * m_currentBamSequence - m_currentBamDirection + 16);
         } else {
             m_currentVidCellShield->SequenceSet(9 * m_currentBamSequence + m_currentBamDirection);
         }
