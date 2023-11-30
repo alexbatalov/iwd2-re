@@ -43,6 +43,7 @@ protected:
 // array of said elements).
 class CMemINI : public CTypedPtrList<CPtrList, void*> {
 public:
+    CMemINI();
     ~CMemINI() override;
     void ClearINI();
     CMemINIValue* Get(const CString& sectionName, const CString& name);

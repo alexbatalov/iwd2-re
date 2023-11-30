@@ -4310,7 +4310,7 @@ void CScreenCreateChar::CompleteCharacterAbilities(CGameSprite* pSprite)
     pSprite->GetBaseStats()->m_maxHitPointsBase = nHitPoints;
     pSprite->GetBaseStats()->m_hitPoints = nHitPoints;
 
-    pSprite->field_7234 = 0;
+    pSprite->m_nHPCONBonusTotalOld = 0;
 
     pSprite->GetBaseStats()->m_saveVSFortitudeBase = ruleTables.GetSavingThrow(typeAI,
         *pSprite->GetDerivedStats(),

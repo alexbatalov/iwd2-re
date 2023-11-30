@@ -1929,6 +1929,23 @@ INT CRuleTables::GetSavingThrow(const CAIObjectType& typeAI, CDerivedStats& DSta
     return nSavingThrow;
 }
 
+// 0x542F20
+INT CRuleTables::GetHPCONBonusTotal(const CAIObjectType& typeAI, CDerivedStats& DStats, BYTE nCON) const
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CRuleTables.cpp
+    // __LINE__: 2572
+    UTIL_ASSERT(DStats.m_classMask != 0);
+
+    float fCON;
+    if (nCON < 10) {
+        fCON = static_cast<float>(nCON) - 1.0f;
+    } else {
+        fCON = static_cast<float>(nCON);
+    }
+
+    return DStats.m_nLevel * static_cast<INT>((fCON - 10.0f) / 2.0f);
+}
+
 // 0x542FA0
 INT CRuleTables::GetStartingHitPoints(const CAIObjectType& typeAI, CDerivedStats& DStats, BYTE nCON) const
 {

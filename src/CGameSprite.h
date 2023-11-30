@@ -152,6 +152,7 @@
 
 class CBlood;
 class CGameButtonList;
+class CMemINIValue;
 class CSearchBitmap;
 class CSearchRequest;
 class CSpell;
@@ -160,6 +161,11 @@ class CUIControlTextDisplay;
 class CVariableHash;
 class CVisibilityMap;
 class IcewindCVisualEffect;
+
+typedef struct {
+    CString field_0;
+    INT field_4;
+} CGameSpriteSoundEntry;
 
 class CGameSprite : public CGameAIBase {
 public:
@@ -477,6 +483,8 @@ public:
     void SetModalState(BYTE modalState, BOOL bUpdateToolbar);
     BOOL sub_7202E0();
     void CheckSequence(BYTE& sequence);
+    void sub_7204C0();
+    void sub_720B50(CMemINIValue* a1, CMemINIValue* a2);
     BOOL HaveUnexportableItems();
     void SetMonkAbilities();
     LONG GetLevel();
@@ -813,12 +821,21 @@ public:
     /* 56EC */ unsigned char field_56EC;
     /* 56DC */ CResRef m_dialog;
     /* 56EE */ STR_RES m_speech[64];
+    /* 70EE */ int field_70EE;
     /* 70F2 */ int field_70F2;
     /* 70F6 */ BYTE field_70F6;
     /* 70F7 */ BYTE field_70F7;
     /* 70F8 */ BYTE field_70F8;
     /* 70F9 */ BYTE field_70F9;
     /* 70FA */ BYTE field_70FA;
+    /* 70FB */ BOOLEAN field_70FB;
+    /* 70FC */ BOOLEAN field_70FC;
+    /* 70FD */ BOOLEAN field_70FD;
+    /* 70FE */ BOOLEAN field_70FE;
+    /* 70FF */ BOOLEAN field_70FF;
+    /* 7100 */ BOOLEAN field_7100;
+    /* 7101 */ BOOLEAN field_7101;
+    /* 7106 */ int field_7106;
     /* 710A */ SHORT field_710A;
     /* 710C */ SHORT field_710C;
     /* 710E */ SHORT field_710E;
@@ -831,16 +848,19 @@ public:
     /* 7126 */ LONG m_dialogWaitTarget;
     /* 712A */ int m_talkingCounter;
     /* 712E */ BYTE m_talkingRenderCount;
+    /* 712F */ BOOLEAN m_inControlLastTime;
     /* 7130 */ CTypedPtrList<CPtrList, int*> m_portraitIcons; // NOTE: Stores actual ints disguised as pointers.
     /* 714C */ CVidCell m_portraitIconVidCell;
     /* 7226 */ BOOL m_firstActionSound;
     /* 722A */ ULONG field_722A;
     /* 722E */ BOOL m_berserkActive;
-    /* 7234 */ int field_7234;
-    /* 7238 */ int field_7238;
+    /* 7232 */ short field_7232;
+    /* 7234 */ LONG m_nHPCONBonusTotalOld;
+    /* 7238 */ BOOL m_bHPCONBonusTotalUpdate;
     /* 723C */ int field_723C;
     /* 7240 */ int field_7240;
     /* 7244 */ ULONG m_lastRegenerationTime;
+    /* 7248 */ int field_7248;
     /* 724C */ unsigned char field_724C;
     /* 724D */ BOOLEAN m_bHappinessChanged;
     /* 724E */ LONG m_nUnselectableCounter;
@@ -848,10 +868,15 @@ public:
     /* 725A */ unsigned char field_725A[32];
     /* 727A */ int field_727A;
     /* 727E */ int field_727E;
+    /* 7282 */ unsigned char field_7282;
+    /* 7283 */ unsigned char field_7283;
+    /* 7284 */ unsigned char field_7284;
+    /* 728E */ int field_728E;
     /* 7292 */ int field_7292;
     /* 7296 */ SHORT m_currentActionId;
     /* 7298 */ BOOL m_bPlayedEncumberedStopped;
     /* 729C */ BOOL m_bPlayedEncumberedSlowed;
+    /* 72A0 */ short field_72A0;
     /* 72A2 */ short field_72A2;
     /* 72A4 */ BOOL m_bAllowEffectListCall;
     /* 72A8 */ unsigned char field_72A8;
@@ -860,13 +885,26 @@ public:
     /* 72B2 */ CVariableHash* m_pLocalVariables;
     /* 72B6 */ BOOL m_bInUnmarshal;
     /* 72D6 */ int field_72D6;
+    /* 72DA */ int field_72DA;
     /* 72DE */ int field_72DE;
     /* 72E2 */ LONG field_72E2;
     /* 72E6 */ CGameButtonList* m_internalButtonList;
+    /* 72F0 */ CList<CGameSpriteSoundEntry, CGameSpriteSoundEntry> field_72F0;
+    /* 730C */ CList<CGameSpriteSoundEntry, CGameSpriteSoundEntry> field_730C;
+    /* 7328 */ CList<CGameSpriteSoundEntry, CGameSpriteSoundEntry> field_7328;
+    /* 7344 */ CList<CGameSpriteSoundEntry, CGameSpriteSoundEntry> field_7344;
+    /* 7360 */ CList<CGameSpriteSoundEntry, CGameSpriteSoundEntry> field_7360;
+    /* 737C */ CList<CGameSpriteSoundEntry, CGameSpriteSoundEntry> field_737C;
+    /* 7398 */ CList<CGameSpriteSoundEntry, CGameSpriteSoundEntry> field_7398;
+    /* 73B4 */ CList<CGameSpriteSoundEntry, CGameSpriteSoundEntry> field_73B4;
+    /* 73D0 */ CList<CGameSpriteSoundEntry, CGameSpriteSoundEntry> field_73D0;
+    /* 73EC */ CList<CGameSpriteSoundEntry, CGameSpriteSoundEntry> field_73EC;
     /* 7430 */ unsigned char field_7430;
     /* 752E */ BOOL m_bSendSpriteUpdate;
     /* 7532 */ int field_7532;
     /* 7536 */ int field_7536;
+    /* 753A */ int field_753A;
+    /* 753C */ int field_753C;
     /* 7540 */ int field_7540;
     /* 7544 */ int field_7544;
     /* 7548 */ CVidCell field_7548[32];

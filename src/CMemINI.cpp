@@ -96,6 +96,12 @@ CMemINIValue* CMemINISection::Get(const CString& name)
 
 // -----------------------------------------------------------------------------
 
+// NOTE: Inlined.
+CMemINI::CMemINI()
+{
+    mpLastSection = NULL;
+}
+
 // 0x46A010
 CMemINI::~CMemINI()
 {

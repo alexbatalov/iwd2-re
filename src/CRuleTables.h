@@ -384,6 +384,7 @@ public:
     void GetBaseSkillPoints(const CAIObjectType& typeAI, CDerivedStats& DStats, BYTE& nPickPockets, BYTE& nOpenLocks, BYTE& nFindTraps, BYTE& nMoveSilently, BYTE& nHide, BYTE& nUseMagicDevice) const;
     INT FindSavingThrow(CDerivedStats& stats, const CString& sSavingThrow) const;
     INT GetSavingThrow(const CAIObjectType& typeAI, CDerivedStats& DStats, BYTE nCON, const CString& sSavingThrow) const;
+    INT GetHPCONBonusTotal(const CAIObjectType& typeAI, CDerivedStats& DStats, BYTE nCON) const;
     INT GetStartingHitPoints(const CAIObjectType& typeAI, CDerivedStats& DStats, BYTE nCON) const;
     INT GetStartingGold(CGameSprite* pSprite) const;
     INT GetStartingExperiencePoints(CGameSprite* pSprite) const;

@@ -13,6 +13,7 @@
 #include "CGameSave.h"
 #include "CInfButtonArray.h"
 #include "CInfinity.h"
+#include "CMemINI.h"
 #include "CMoveList.h"
 #include "CMultiplayerSettings.h"
 #include "CResGame.h"
@@ -427,6 +428,7 @@ public:
     /* 4B88 */ CString field_4B88;
     /* 4B8C */ CString field_4B8C;
     /* 4B90 */ CString field_4B90;
+    /* 4BB0 */ CMemINI m_INISounds;
     /* 4BD4 */ unsigned char field_4BD4;
     /* 4BD5 */ BOOLEAN m_bExpansion; // NOTE: Can also be BYTE indicating number of expansion pack.
     /* 4BD6 */ BOOLEAN field_4BD6;

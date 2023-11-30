@@ -4,6 +4,7 @@
 #include "CBaldurChitin.h"
 #include "CBaldurEngine.h"
 #include "CBlood.h"
+#include "CGameAnimationType.h"
 #include "CGameArea.h"
 #include "CGameButtonList.h"
 #include "CInfCursor.h"
@@ -870,50 +871,50 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
         field_4C54[4] = 0;
         m_nWeaponSet = 0;
 
-        field_7548[0].SetResRef(CResRef("SanctuC"), FALSE, TRUE, TRUE);
-        field_7548[1].SetResRef(CResRef("EntangC"), FALSE, TRUE, TRUE);
-        field_7548[6].SetResRef(CResRef("MGoInvC"), FALSE, TRUE, TRUE);
-        field_7548[3].SetResRef(CResRef("ShieldC"), FALSE, TRUE, TRUE);
-        field_7548[4].SetResRef(CResRef("GreaseC"), FALSE, TRUE, TRUE);
-        field_7548[5].SetResRef(CResRef("WebC"), FALSE, TRUE, TRUE);
-        field_7548[7].SetResRef(CResRef("GoInvuC"), FALSE, TRUE, TRUE);
-        field_7548[8].SetResRef(CResRef("SoFlamC"), FALSE, TRUE, TRUE);
-        field_7548[9].SetResRef(CResRef("AMShelC"), FALSE, TRUE, TRUE);
-        field_7548[10].SetResRef(CResRef("ORSpheC"), FALSE, TRUE, TRUE);
-        field_7548[11].SetResRef(CResRef("PFNMisC"), FALSE, TRUE, TRUE);
-        field_7548[12].SetResRef(CResRef("CoFearC"), FALSE, TRUE, TRUE);
-        field_7548[13].SetResRef(CResRef("EShielC"), FALSE, TRUE, TRUE);
-        field_7548[14].SetResRef(CResRef("FiAuraC"), FALSE, TRUE, TRUE);
-        field_7548[15].SetResRef(CResRef("FrAuraC"), FALSE, TRUE, TRUE);
-        field_7548[16].SetResRef(CResRef("IPlaguC"), FALSE, TRUE, TRUE);
-        field_7548[17].SetResRef(CResRef("SShellC"), FALSE, TRUE, TRUE);
-        field_7548[18].SetResRef(CResRef("SoLatC1"), FALSE, TRUE, TRUE);
-        field_7548[19].SetResRef(CResRef("SoLatC2"), FALSE, TRUE, TRUE);
-        field_7548[20].SetResRef(CResRef("GSoLaC1"), FALSE, TRUE, TRUE);
-        field_7548[21].SetResRef(CResRef("GSoLaC2"), FALSE, TRUE, TRUE);
-        field_7548[22].SetResRef(CResRef("SEyesC1"), FALSE, TRUE, TRUE);
-        field_7548[23].SetResRef(CResRef("SEyesC2"), FALSE, TRUE, TRUE);
-        field_7548[26].SetResRef(CResRef("FShiRC1"), FALSE, TRUE, TRUE);
-        field_7548[28].SetResRef(CResRef("FShiRC1"), FALSE, TRUE, TRUE);
-        field_7548[27].SetResRef(CResRef("FShiBC1"), FALSE, TRUE, TRUE);
-        field_7548[29].SetResRef(CResRef("FShiBC1"), FALSE, TRUE, TRUE);
-        field_7548[31].SetResRef(CResRef("DArmorC"), FALSE, TRUE, TRUE);
-        field_7548[30].SetResRef(CResRef("TShellC"), FALSE, TRUE, TRUE);
-        field_7548[2].SetResRef(CResRef("Wisp"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_SANCTUARY].SetResRef(CResRef("SanctuC"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_ENTANGLE].SetResRef(CResRef("EntangC"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_MINOR_GLOBE_OF_INVULNERABILITY].SetResRef(CResRef("MGoInvC"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_SHIELD].SetResRef(CResRef("ShieldC"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_GREASE].SetResRef(CResRef("GreaseC"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_WEB].SetResRef(CResRef("WebC"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_GLOBE_OF_INVULNERABILITY].SetResRef(CResRef("GoInvuC"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_SHROUD_OF_FLAME].SetResRef(CResRef("SoFlamC"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_ANTIMAGIC_MISSILE].SetResRef(CResRef("AMShelC"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_OTILUKES_RESILIENT_SPHERE].SetResRef(CResRef("ORSpheC"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_PROTECTION_FROM_MISSILES].SetResRef(CResRef("PFNMisC"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_CLOAK_OF_FEAR].SetResRef(CResRef("CoFearC"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_ENTROPY_SHIELD].SetResRef(CResRef("EShielC"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_FIRE_AURA].SetResRef(CResRef("FiAuraC"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_FROST_AURA].SetResRef(CResRef("FrAuraC"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_INSECT_PLAGUE].SetResRef(CResRef("IPlaguC"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_STORM_SHELL].SetResRef(CResRef("SShellC"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_SHIELD_OF_LATHANDER].SetResRef(CResRef("SoLatC1"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_SHIELD_OF_LATHANDER_2].SetResRef(CResRef("SoLatC2"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_GREATER_SHIELD_OF_LATHANDER].SetResRef(CResRef("GSoLaC1"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_GREATER_SHIELD_OF_LATHANDER_2].SetResRef(CResRef("GSoLaC2"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_SEVEN_EYES].SetResRef(CResRef("SEyesC1"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_SEVEN_EYES_2].SetResRef(CResRef("SEyesC2"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_FIRE_SHIELD_RED].SetResRef(CResRef("FShiRC1"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_28].SetResRef(CResRef("FShiRC1"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_FIRE_SHEIELD_BLUE].SetResRef(CResRef("FShiBC1"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_29].SetResRef(CResRef("FShiBC1"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_DEATH_ARMOR].SetResRef(CResRef("DArmorC"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_TORTOISE_SHELL].SetResRef(CResRef("TShellC"), FALSE, TRUE, TRUE);
+        field_7548[IWD_VFX_WISP].SetResRef(CResRef("Wisp"), FALSE, TRUE, TRUE);
 
-        field_9088[7].SetResRef(CResRef("AFT_M05"), TRUE, TRUE);
-        field_9088[8].SetResRef(CResRef("MISC_01C"), TRUE, TRUE);
-        field_9088[9].SetResRef(CResRef("AFT_M04"), TRUE, TRUE);
-        field_9088[10].SetResRef(CResRef("AFT_M03"), TRUE, TRUE);
-        field_9088[11].SetResRef(CResRef("AFT_M01"), TRUE, TRUE);
-        field_9088[12].SetResRef(CResRef("AFT_P02"), TRUE, TRUE);
-        field_9088[13].SetResRef(CResRef("AFT_P03"), TRUE, TRUE);
-        field_9088[17].SetResRef(CResRef("AFT_P25"), TRUE, TRUE);
-        field_9088[18].SetResRef(CResRef("AFT_P20"), TRUE, TRUE);
-        field_9088[20].SetResRef(CResRef("AFT_P26"), TRUE, TRUE);
-        field_9088[0].SetResRef(CResRef("AFT_P01"), TRUE, TRUE);
-        field_9088[6].SetResRef(CResRef("AFT_M02"), TRUE, TRUE);
-        field_9088[3].SetResRef(CResRef("EFF_M11C"), TRUE, TRUE);
+        field_9088[IWD_VFX_GLOBE_OF_INVULNERABILITY].SetResRef(CResRef("AFT_M05"), TRUE, TRUE);
+        field_9088[IWD_VFX_SHROUD_OF_FLAME].SetResRef(CResRef("MISC_01C"), TRUE, TRUE);
+        field_9088[IWD_VFX_ANTIMAGIC_MISSILE].SetResRef(CResRef("AFT_M04"), TRUE, TRUE);
+        field_9088[IWD_VFX_OTILUKES_RESILIENT_SPHERE].SetResRef(CResRef("AFT_M03"), TRUE, TRUE);
+        field_9088[IWD_VFX_PROTECTION_FROM_MISSILES].SetResRef(CResRef("AFT_M01"), TRUE, TRUE);
+        field_9088[IWD_VFX_CLOAK_OF_FEAR].SetResRef(CResRef("AFT_P02"), TRUE, TRUE);
+        field_9088[IWD_VFX_ENTROPY_SHIELD].SetResRef(CResRef("AFT_P03"), TRUE, TRUE);
+        field_9088[IWD_VFX_STORM_SHELL].SetResRef(CResRef("AFT_P25"), TRUE, TRUE);
+        field_9088[IWD_VFX_SHIELD_OF_LATHANDER].SetResRef(CResRef("AFT_P20"), TRUE, TRUE);
+        field_9088[IWD_VFX_GREATER_SHIELD_OF_LATHANDER].SetResRef(CResRef("AFT_P26"), TRUE, TRUE);
+        field_9088[IWD_VFX_SANCTUARY].SetResRef(CResRef("AFT_P01"), TRUE, TRUE);
+        field_9088[IWD_VFX_MINOR_GLOBE_OF_INVULNERABILITY].SetResRef(CResRef("AFT_M02"), TRUE, TRUE);
+        field_9088[IWD_VFX_SHIELD].SetResRef(CResRef("EFF_M11C"), TRUE, TRUE);
 
         m_type = type;
         m_expirationTime = expirationTime;
@@ -921,7 +922,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
         m_followRange = followRange;
         m_posStart = startPos;
         m_timeOfDayVisible = timeOfDayVisible;
-
+        m_active = (g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->GetCurrentHour() & 1) != 0;
         m_activeAI = TRUE;
         m_activeImprisonment = TRUE;
 
@@ -942,8 +943,8 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
 
         field_722A = g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime;
         m_interactingWith.Set(CAIObjectType::NOONE);
-        field_7234 = 0;
-        field_7238 = 1;
+        m_nHPCONBonusTotalOld = 0;
+        m_bHPCONBonusTotalUpdate = TRUE;
         field_723C = 0;
         field_7240 = 0;
         m_secondarySounds = "";
@@ -974,7 +975,83 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
             m_sndWalk[index].m_nVolumeVariance = 50;
         }
 
-        // TODO: Incomplete(0x6F2552).
+        m_currSndArmor = 0;
+        m_sndArmor[m_currSndArmor].m_nVolumeVariance = 50;
+        m_animationRunning = (m_baseStats.m_animationType & 0xF000) != 0;
+        m_triggerId = CGameObjectArray::INVALID_INDEX;
+        field_562C = TRUE;
+        m_firstCall = FALSE;
+        m_berserkActive = FALSE;
+        field_7232 = 0;
+        m_nTempSelectedWeapon = m_equipment.m_selectedWeapon;
+        m_nTempSelectedWeaponAbility = static_cast<BYTE>(m_equipment.m_selectedWeaponAbility);
+
+        SetSequence(SEQ_HEAD_TURN);
+        CheckLoadState();
+
+        field_7248 = 0;
+        m_nUnselectableCounter = 0;
+
+        // NOTE: Uninline.
+        m_inControlLastTime = InControl();
+
+        field_727A = 0;
+        m_baseStats.m_flags &= ~0x80000000;
+
+        INT bonusNew = g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetHPCONBonusTotal(m_typeAI,
+            m_derivedStats,
+            static_cast<BYTE>(m_derivedStats.m_nCON));
+        if (bonusNew > m_nHPCONBonusTotalOld) {
+            if ((m_derivedStats.m_generalState & (STATE_DEAD | STATE_FROZEN_DEATH | STATE_STONE_DEATH)) == 0) {
+                m_baseStats.m_hitPoints += static_cast<SHORT>(bonusNew) - static_cast<SHORT>(m_nHPCONBonusTotalOld);
+            } else {
+                m_baseStats.m_hitPoints = 0;
+            }
+            m_derivedStats.m_nMaxHitPoints += static_cast<SHORT>(bonusNew) - static_cast<SHORT>(m_nHPCONBonusTotalOld);
+            m_baseStats.m_maxHitPointsBase += static_cast<SHORT>(bonusNew) - static_cast<SHORT>(m_nHPCONBonusTotalOld);
+        } else if (bonusNew < m_nHPCONBonusTotalOld) {
+            // NOTE: The code in this branch looks exactly the same as above. It
+            // might be different in earlier games.
+            if ((m_derivedStats.m_generalState & (STATE_DEAD | STATE_FROZEN_DEATH | STATE_STONE_DEATH)) == 0) {
+                m_baseStats.m_hitPoints += static_cast<SHORT>(bonusNew) - static_cast<SHORT>(m_nHPCONBonusTotalOld);
+            } else {
+                m_baseStats.m_hitPoints = 0;
+            }
+            m_derivedStats.m_nMaxHitPoints += static_cast<SHORT>(bonusNew) - static_cast<SHORT>(m_nHPCONBonusTotalOld);
+            m_baseStats.m_maxHitPointsBase += static_cast<SHORT>(bonusNew) - static_cast<SHORT>(m_nHPCONBonusTotalOld);
+        }
+        m_nHPCONBonusTotalOld = bonusNew;
+        m_bHPCONBonusTotalUpdate = FALSE;
+        m_derivedStats.m_nMaxHitPoints = max(m_derivedStats.m_nMaxHitPoints, m_derivedStats.m_nLevel);
+
+        if (m_baseStats.m_hitPoints <= 0
+            && (m_derivedStats.m_generalState & STATE_DEAD) == 0
+            && (m_derivedStats.m_generalState & (STATE_STONE_DEATH | STATE_FROZEN_DEATH)) == 0
+            && (m_baseStats.m_generalState & STATE_DEAD) != 0) {
+            m_derivedStats.m_generalState |= STATE_DEAD;
+        }
+
+        field_7282 = -1;
+        field_7283 = -1;
+        field_7284 = -1;
+        field_728E = -1;
+        m_bPlayedEncumberedStopped = 0;
+        m_bPlayedEncumberedSlowed = 0;
+        field_72A0 = 0;
+        field_72DA = 0;
+        field_7106 = 0;
+
+        sub_7204C0();
+
+        field_70EE = 0;
+        field_7430 = 0;
+        field_70F2 = 0;
+        if (IcewindMisc::IsLarge(this) == TRUE) {
+            field_7548[IWD_VFX_OTILUKES_RESILIENT_SPHERE].SetResRef(CResRef("ORSpheB"), FALSE, TRUE, TRUE);
+        }
+
+        field_753A = 0;
+        field_753C = 0;
     } else {
         // FIXME: Does not look cool.
         delete this;
@@ -5640,6 +5717,565 @@ BOOL CGameSprite::sub_7202E0()
 void CGameSprite::CheckSequence(BYTE& sequence)
 {
     // TODO: Incomplete.
+}
+
+// 0x7204C0
+void CGameSprite::sub_7204C0()
+{
+    CString animationResRef;
+    CMemINI* pINI = &(g_pBaldurChitin->GetObjectGame()->m_INISounds);
+    CMemINIValue* pValue;
+
+    // NOTE: Uninline.
+    m_animation.GetAnimationResRef(animationResRef, CGameAnimationType::RANGE_BODY);
+
+    field_70FB = FALSE;
+    field_70FC = FALSE;
+    field_70FD = FALSE;
+    field_70FE = FALSE;
+    field_70FF = FALSE;
+    field_7100 = FALSE;
+    field_7101 = FALSE;
+
+    pValue = pINI->GetFast(animationResRef, CString("att1"));
+    if (pValue != NULL && pValue->GetValue() != "") {
+        field_70FB = TRUE;
+        sub_720B50(pValue, pINI->GetFast(animationResRef, CString("att1frame")));
+
+        pValue = pINI->GetFast(animationResRef, CString("att2"));
+        if (pValue != NULL && pValue->GetValue() != "") {
+            sub_720B50(pValue, pINI->GetFast(animationResRef, CString("att2frame")));
+        }
+
+        pValue = pINI->GetFast(animationResRef, CString("att3"));
+        if (pValue != NULL && pValue->GetValue() != "") {
+            sub_720B50(pValue, pINI->GetFast(animationResRef, CString("att3frame")));
+        }
+
+        pValue = pINI->GetFast(animationResRef, CString("att4"));
+        if (pValue != NULL && pValue->GetValue() != "") {
+            sub_720B50(pValue, pINI->GetFast(animationResRef, CString("att4frame")));
+        }
+    }
+
+    pValue = pINI->GetFast(animationResRef, CString("btlcry"));
+    if (pValue != NULL && pValue->GetValue() != "") {
+        field_70FC = TRUE;
+        sub_720B50(pValue, pINI->GetFast(animationResRef, CString("btlcryframe")));
+    }
+
+    pValue = pINI->GetFast(animationResRef, CString("damage"));
+    if (pValue != NULL && pValue->GetValue() != "") {
+        field_70FD = TRUE;
+        sub_720B50(pValue, pINI->GetFast(animationResRef, CString("damageframe")));
+    }
+
+    pValue = pINI->GetFast(animationResRef, CString("death"));
+    if (pValue != NULL && pValue->GetValue() != "") {
+        field_70FE = TRUE;
+        sub_720B50(pValue, pINI->GetFast(animationResRef, CString("deathframe")));
+    }
+
+    pValue = pINI->GetFast(animationResRef, CString("fidget"));
+    if (pValue != NULL && pValue->GetValue() != "") {
+        field_70FF = TRUE;
+        sub_720B50(pValue, pINI->GetFast(animationResRef, CString("fidgetframe")));
+    }
+
+    pValue = pINI->GetFast(animationResRef, CString("selected"));
+    if (pValue != NULL && pValue->GetValue() != "") {
+        field_7100 = TRUE;
+        sub_720B50(pValue, pINI->GetFast(animationResRef, CString("selectedframe")));
+    }
+
+    pValue = pINI->GetFast(animationResRef, CString("fall"));
+    if (pValue != NULL && pValue->GetValue() != "") {
+        field_7101 = TRUE;
+        sub_720B50(pValue, pINI->GetFast(animationResRef, CString("fallframe")));
+    }
+}
+
+// 0x720B50
+void CGameSprite::sub_720B50(CMemINIValue* a1, CMemINIValue* a2)
+{
+    CString v1;
+    CString v2;
+    CString v3(a1->GetValue());
+    CString v4;
+    if (a2 != NULL) {
+        v4 = a2->GetValue();
+    }
+    CGameSpriteSoundEntry entry;
+    INT pos1;
+    INT pos2;
+
+    if (v3[v3.GetLength() - 1] != ',') {
+        v3 += ',';
+    }
+
+    if (v4 != "" && v4[v4.GetLength() - 1] != ',') {
+        v4 += ',';
+    }
+
+    if (a1->GetName() == "att1") {
+        while (1) {
+            v1 = "";
+            v2 = "";
+            entry.field_0 = "";
+            entry.field_4 = 0;
+
+            if (v3.IsEmpty()) {
+                break;
+            }
+
+            pos1 = v3.FindOneOf(",");
+            if (!v4.IsEmpty()) {
+                pos2 = v4.FindOneOf(",");
+            }
+
+            if (pos1 >= 0) {
+                v1 = v3.Left(pos1);
+                v3 = v3.Right(v3.GetLength() - pos1 - 1);
+                v3.TrimRight();
+                v3.TrimLeft();
+                v1.TrimRight();
+                v1.TrimLeft();
+            }
+
+            if (pos2 >= 0) {
+                v2 = v4.Left(pos2);
+                v4 = v4.Right(v4.GetLength() - pos2 - 1);
+                v4.TrimRight();
+                v4.TrimLeft();
+                v2.TrimRight();
+                v2.TrimLeft();
+            }
+
+            if (!v1.IsEmpty()) {
+                entry.field_0 = v1;
+                if (!v2.IsEmpty()) {
+                    entry.field_4 = atoi(v2);
+                } else {
+                    entry.field_4 = 0;
+                }
+                field_72F0.AddTail(entry);
+            }
+        }
+    }
+
+    if (a1->GetName() == "att2") {
+        while (1) {
+            v1 = "";
+            v2 = "";
+            entry.field_0 = "";
+            entry.field_4 = 0;
+
+            if (v3.IsEmpty()) {
+                break;
+            }
+
+            pos1 = v3.FindOneOf(",");
+            if (!v4.IsEmpty()) {
+                pos2 = v4.FindOneOf(",");
+            }
+
+            if (pos1 >= 0) {
+                v1 = v3.Left(pos1);
+                v3 = v3.Right(v3.GetLength() - pos1 - 1);
+                v3.TrimRight();
+                v3.TrimLeft();
+                v1.TrimRight();
+                v1.TrimLeft();
+            }
+
+            if (pos2 >= 0) {
+                v2 = v4.Left(pos2);
+                v4 = v4.Right(v4.GetLength() - pos2 - 1);
+                v4.TrimRight();
+                v4.TrimLeft();
+                v2.TrimRight();
+                v2.TrimLeft();
+            }
+
+            if (!v1.IsEmpty()) {
+                entry.field_0 = v1;
+                if (!v2.IsEmpty()) {
+                    entry.field_4 = atoi(v2);
+                } else {
+                    entry.field_4 = 0;
+                }
+                field_730C.AddTail(entry);
+            }
+        }
+    }
+
+    if (a1->GetName() == "att3") {
+        while (1) {
+            v1 = "";
+            v2 = "";
+            entry.field_0 = "";
+            entry.field_4 = 0;
+
+            if (v3.IsEmpty()) {
+                break;
+            }
+
+            pos1 = v3.FindOneOf(",");
+            if (!v4.IsEmpty()) {
+                pos2 = v4.FindOneOf(",");
+            }
+
+            if (pos1 >= 0) {
+                v1 = v3.Left(pos1);
+                v3 = v3.Right(v3.GetLength() - pos1 - 1);
+                v3.TrimRight();
+                v3.TrimLeft();
+                v1.TrimRight();
+                v1.TrimLeft();
+            }
+
+            if (pos2 >= 0) {
+                v2 = v4.Left(pos2);
+                v4 = v4.Right(v4.GetLength() - pos2 - 1);
+                v4.TrimRight();
+                v4.TrimLeft();
+                v2.TrimRight();
+                v2.TrimLeft();
+            }
+
+            if (!v1.IsEmpty()) {
+                entry.field_0 = v1;
+                if (!v2.IsEmpty()) {
+                    entry.field_4 = atoi(v2);
+                } else {
+                    entry.field_4 = 0;
+                }
+                field_7328.AddTail(entry);
+            }
+        }
+    }
+
+    if (a1->GetName() == "att4") {
+        while (1) {
+            v1 = "";
+            v2 = "";
+            entry.field_0 = "";
+            entry.field_4 = 0;
+
+            if (v3.IsEmpty()) {
+                break;
+            }
+
+            pos1 = v3.FindOneOf(",");
+            if (!v4.IsEmpty()) {
+                pos2 = v4.FindOneOf(",");
+            }
+
+            if (pos1 >= 0) {
+                v1 = v3.Left(pos1);
+                v3 = v3.Right(v3.GetLength() - pos1 - 1);
+                v3.TrimRight();
+                v3.TrimLeft();
+                v1.TrimRight();
+                v1.TrimLeft();
+            }
+
+            if (pos2 >= 0) {
+                v2 = v4.Left(pos2);
+                v4 = v4.Right(v4.GetLength() - pos2 - 1);
+                v4.TrimRight();
+                v4.TrimLeft();
+                v2.TrimRight();
+                v2.TrimLeft();
+            }
+
+            if (!v1.IsEmpty()) {
+                entry.field_0 = v1;
+                if (!v2.IsEmpty()) {
+                    entry.field_4 = atoi(v2);
+                } else {
+                    entry.field_4 = 0;
+                }
+                field_7344.AddTail(entry);
+            }
+        }
+    }
+
+    if (a1->GetName() == "btlcry") {
+        while (1) {
+            v1 = "";
+            v2 = "";
+            entry.field_0 = "";
+            entry.field_4 = 0;
+
+            if (v3.IsEmpty()) {
+                break;
+            }
+
+            pos1 = v3.FindOneOf(",");
+            if (!v4.IsEmpty()) {
+                pos2 = v4.FindOneOf(",");
+            }
+
+            if (pos1 >= 0) {
+                v1 = v3.Left(pos1);
+                v3 = v3.Right(v3.GetLength() - pos1 - 1);
+                v3.TrimRight();
+                v3.TrimLeft();
+                v1.TrimRight();
+                v1.TrimLeft();
+            }
+
+            if (pos2 >= 0) {
+                v2 = v4.Left(pos2);
+                v4 = v4.Right(v4.GetLength() - pos2 - 1);
+                v4.TrimRight();
+                v4.TrimLeft();
+                v2.TrimRight();
+                v2.TrimLeft();
+            }
+
+            if (!v1.IsEmpty()) {
+                entry.field_0 = v1;
+                if (!v2.IsEmpty()) {
+                    entry.field_4 = atoi(v2);
+                } else {
+                    entry.field_4 = 0;
+                }
+                field_7360.AddTail(entry);
+            }
+        }
+    }
+
+    if (a1->GetName() == "damage") {
+        while (1) {
+            v1 = "";
+            v2 = "";
+            entry.field_0 = "";
+            entry.field_4 = 0;
+
+            if (v3.IsEmpty()) {
+                break;
+            }
+
+            pos1 = v3.FindOneOf(",");
+            if (!v4.IsEmpty()) {
+                pos2 = v4.FindOneOf(",");
+            }
+
+            if (pos1 >= 0) {
+                v1 = v3.Left(pos1);
+                v3 = v3.Right(v3.GetLength() - pos1 - 1);
+                v3.TrimRight();
+                v3.TrimLeft();
+                v1.TrimRight();
+                v1.TrimLeft();
+            }
+
+            if (pos2 >= 0) {
+                v2 = v4.Left(pos2);
+                v4 = v4.Right(v4.GetLength() - pos2 - 1);
+                v4.TrimRight();
+                v4.TrimLeft();
+                v2.TrimRight();
+                v2.TrimLeft();
+            }
+
+            if (!v1.IsEmpty()) {
+                entry.field_0 = v1;
+                if (!v2.IsEmpty()) {
+                    entry.field_4 = atoi(v2);
+                } else {
+                    entry.field_4 = 0;
+                }
+                field_737C.AddTail(entry);
+            }
+        }
+    }
+
+    if (a1->GetName() == "death") {
+        while (1) {
+            v1 = "";
+            v2 = "";
+            entry.field_0 = "";
+            entry.field_4 = 0;
+
+            if (v3.IsEmpty()) {
+                break;
+            }
+
+            pos1 = v3.FindOneOf(",");
+            if (!v4.IsEmpty()) {
+                pos2 = v4.FindOneOf(",");
+            }
+
+            if (pos1 >= 0) {
+                v1 = v3.Left(pos1);
+                v3 = v3.Right(v3.GetLength() - pos1 - 1);
+                v3.TrimRight();
+                v3.TrimLeft();
+                v1.TrimRight();
+                v1.TrimLeft();
+            }
+
+            if (pos2 >= 0) {
+                v2 = v4.Left(pos2);
+                v4 = v4.Right(v4.GetLength() - pos2 - 1);
+                v4.TrimRight();
+                v4.TrimLeft();
+                v2.TrimRight();
+                v2.TrimLeft();
+            }
+
+            if (!v1.IsEmpty()) {
+                entry.field_0 = v1;
+                if (!v2.IsEmpty()) {
+                    entry.field_4 = atoi(v2);
+                } else {
+                    entry.field_4 = 0;
+                }
+                field_7398.AddTail(entry);
+            }
+        }
+    }
+
+    if (a1->GetName() == "fidget") {
+        while (1) {
+            v1 = "";
+            v2 = "";
+            entry.field_0 = "";
+            entry.field_4 = 0;
+
+            if (v3.IsEmpty()) {
+                break;
+            }
+
+            pos1 = v3.FindOneOf(",");
+            if (!v4.IsEmpty()) {
+                pos2 = v4.FindOneOf(",");
+            }
+
+            if (pos1 >= 0) {
+                v1 = v3.Left(pos1);
+                v3 = v3.Right(v3.GetLength() - pos1 - 1);
+                v3.TrimRight();
+                v3.TrimLeft();
+                v1.TrimRight();
+                v1.TrimLeft();
+            }
+
+            if (pos2 >= 0) {
+                v2 = v4.Left(pos2);
+                v4 = v4.Right(v4.GetLength() - pos2 - 1);
+                v4.TrimRight();
+                v4.TrimLeft();
+                v2.TrimRight();
+                v2.TrimLeft();
+            }
+
+            if (!v1.IsEmpty()) {
+                entry.field_0 = v1;
+                if (!v2.IsEmpty()) {
+                    entry.field_4 = atoi(v2);
+                } else {
+                    entry.field_4 = 0;
+                }
+                field_73B4.AddTail(entry);
+            }
+        }
+    }
+
+    if (a1->GetName() == "selected") {
+        while (1) {
+            v1 = "";
+            v2 = "";
+            entry.field_0 = "";
+            entry.field_4 = 0;
+
+            if (v3.IsEmpty()) {
+                break;
+            }
+
+            pos1 = v3.FindOneOf(",");
+            if (!v4.IsEmpty()) {
+                pos2 = v4.FindOneOf(",");
+            }
+
+            if (pos1 >= 0) {
+                v1 = v3.Left(pos1);
+                v3 = v3.Right(v3.GetLength() - pos1 - 1);
+                v3.TrimRight();
+                v3.TrimLeft();
+                v1.TrimRight();
+                v1.TrimLeft();
+            }
+
+            if (pos2 >= 0) {
+                v2 = v4.Left(pos2);
+                v4 = v4.Right(v4.GetLength() - pos2 - 1);
+                v4.TrimRight();
+                v4.TrimLeft();
+                v2.TrimRight();
+                v2.TrimLeft();
+            }
+
+            if (!v1.IsEmpty()) {
+                entry.field_0 = v1;
+                if (!v2.IsEmpty()) {
+                    entry.field_4 = atoi(v2);
+                } else {
+                    entry.field_4 = 0;
+                }
+                field_73D0.AddTail(entry);
+            }
+        }
+    }
+
+    if (a1->GetName() == "fall") {
+        while (1) {
+            v1 = "";
+            v2 = "";
+            entry.field_0 = "";
+            entry.field_4 = 0;
+
+            if (v3.IsEmpty()) {
+                break;
+            }
+
+            pos1 = v3.FindOneOf(",");
+            if (!v4.IsEmpty()) {
+                pos2 = v4.FindOneOf(",");
+            }
+
+            if (pos1 >= 0) {
+                v1 = v3.Left(pos1);
+                v3 = v3.Right(v3.GetLength() - pos1 - 1);
+                v3.TrimRight();
+                v3.TrimLeft();
+                v1.TrimRight();
+                v1.TrimLeft();
+            }
+
+            if (pos2 >= 0) {
+                v2 = v4.Left(pos2);
+                v4 = v4.Right(v4.GetLength() - pos2 - 1);
+                v4.TrimRight();
+                v4.TrimLeft();
+                v2.TrimRight();
+                v2.TrimLeft();
+            }
+
+            if (!v1.IsEmpty()) {
+                entry.field_0 = v1;
+                if (!v2.IsEmpty()) {
+                    entry.field_4 = atoi(v2);
+                } else {
+                    entry.field_4 = 0;
+                }
+                field_73EC.AddTail(entry);
+            }
+        }
+    }
 }
 
 // Returns `TRUE` if object contains quest items or containers (such as potion
