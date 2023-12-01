@@ -485,6 +485,72 @@ CVidPalette* CGameAnimationTypeCharacterOld::GetAnimationPalette(BYTE range)
     return NULL;
 }
 
+// 0x6DD5B0
+char* CGameAnimationTypeCharacterOld::GetSndArmor()
+{
+    char* szTemp;
+    int cnt;
+    char ch;
+
+    if (m_armorCode == '1') {
+        return "";
+    }
+
+    szTemp = new char[9];
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 19332
+    UTIL_ASSERT(szTemp != NULL);
+
+    strcpy(szTemp, "A_      ");
+
+    switch (m_armorCode) {
+    case '2':
+        strcpy(&(szTemp[2]), "Lthr");
+        cnt = 6;
+        break;
+    case '3':
+        strcpy(&(szTemp[2]), "Chain");
+        cnt = 6;
+        break;
+    case '4':
+        strcpy(&(szTemp[2]), "Plate");
+        cnt = 8;
+        break;
+    default:
+        // FIXME: Leaking `szTemp`.
+        return NULL;
+    }
+
+    ch = rand() % cnt + '1';
+    if (m_armorCode == '2') {
+        szTemp[6] = ch;
+        szTemp[7] = '\0';
+        szTemp[8] = '\0';
+        if (strcmp(szTemp, field_3F2) == 0) {
+            if (szTemp[6] - '1' == cnt - 1) {
+                szTemp[6] = '1';
+            } else {
+                szTemp[6]++;
+            }
+        }
+    } else {
+        szTemp[7] = ch;
+        szTemp[8] = '\0';
+        if (strcmp(szTemp, field_3F2) == 0) {
+            if (szTemp[7] - '1' == cnt - 1) {
+                szTemp[7] = '1';
+            } else {
+                szTemp[7]++;
+            }
+        }
+    }
+
+    memcpy(field_3F2, szTemp, 9);
+
+    return szTemp;
+}
+
 // 0x6DD760
 const char* CGameAnimationTypeCharacterOld::GetSndWalk(SHORT a1)
 {
