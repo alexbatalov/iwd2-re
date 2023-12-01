@@ -12,6 +12,7 @@ public:
     /* 0004 */ void CalculateFxRect(CRect& rFx, CPoint& ptReference, LONG posZ) override;
     /* 0008 */ void CalculateGCBoundsRect(CRect& rGCBounds, const CPoint& pos, const CPoint& ptReference, LONG posZ, LONG nWidth, LONG nHeight) override;
     /* 000C */ void ChangeDirection(SHORT nDirection) override;
+    /* 001C */ void EquipWeapon(const CString& resRef, BYTE* colorRangeValues, DWORD itemFlags, const WORD* pAttackProb) override;
     /* 0020 */ CVidPalette* GetAnimationPalette(BYTE range) override;
     /* 0024 */ void GetAnimationResRef(CString& resRef, BYTE range) override;
     /* 0028 */ BOOLEAN CanLieDown() override;
@@ -36,6 +37,9 @@ public:
     /* 00C8 */ SHORT GetCurrentFrame() override;
     /* 00CC */ BOOLEAN GetCurrentSequenceAndFrame(SHORT nSequence, SHORT nFrame) override;
     /* 00D0 */ BOOLEAN GetCurrentResRef(CString& resBody, CString& resWeapon, CString& resShield, CString& resHelmet) override;
+
+    void Equip1HWeapon(const CString& resRef, BYTE* colorRangeValues);
+    void EquipOffHWeapon(const CString& resRef, BYTE* colorRangeValues);
 
     /* 03FE */ CString m_resRefPaperDoll;
     /* 0402 */ CString m_resRef;
