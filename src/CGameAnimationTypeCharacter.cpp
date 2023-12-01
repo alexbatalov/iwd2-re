@@ -823,6 +823,63 @@ void CGameAnimationTypeCharacter::ChangeDirection(SHORT nDirection)
     }
 }
 
+// 0x6C64E0
+void CGameAnimationTypeCharacter::EquipArmor(CHAR armorLevel, BYTE* colorRangeValues)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 18503
+    UTIL_ASSERT(armorLevel >= '1' && colorRangeValues != NULL);
+
+    if (armorLevel > m_armorMaxCode) {
+        return;
+    }
+
+    if (armorLevel == m_armorMaxCode) {
+        m_resRef.SetAt(3, field_1442);
+    } else {
+        m_resRef.SetAt(3, field_1441);
+    }
+
+    ClearColorEffects(5);
+    ClearColorEffects(4);
+    ClearColorEffects(0);
+
+    m_armorCode = armorLevel;
+
+    m_g1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "G1" + field_144C), field_1444, TRUE, TRUE);
+    m_caVidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "CA" + field_144C), field_1444, TRUE, TRUE);
+
+    if (m_weaponCode == 4) {
+        m_a1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A1"), field_1444, TRUE, TRUE);
+        m_a2VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A3"), field_1444, TRUE, TRUE);
+        m_a3VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A5"), field_1444, TRUE, TRUE);
+    } else if (m_weaponCode == 5) {
+        m_a1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A2"), field_1444, TRUE, TRUE);
+        m_a2VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A4"), field_1444, TRUE, TRUE);
+        m_a3VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A6"), field_1444, TRUE, TRUE);
+    } else if ((m_weaponCode & 0x10) != 0) {
+        m_a1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A7"), field_1444, TRUE, TRUE);
+        m_a2VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A8"), field_1444, TRUE, TRUE);
+        m_a3VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A9"), field_1444, TRUE, TRUE);
+    } else {
+        switch (m_weaponCode) {
+        case 1:
+            m_a1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "SA"), field_1444, TRUE, TRUE);
+            break;
+        case 2:
+            m_a1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "SX"), field_1444, TRUE, TRUE);
+            break;
+        case 3:
+            m_a1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "SS"), field_1444, TRUE, TRUE);
+            break;
+        }
+    }
+
+    m_charPalette.SetRange(4, colorRangeValues[4], *g_pBaldurChitin->GetObjectGame()->GetMasterBitmap());
+    m_charPalette.SetRange(5, colorRangeValues[5], *g_pBaldurChitin->GetObjectGame()->GetMasterBitmap());
+    m_charPalette.SetRange(0, colorRangeValues[0], *g_pBaldurChitin->GetObjectGame()->GetMasterBitmap());
+}
+
 // 0x6C6FE0
 void CGameAnimationTypeCharacter::EquipHelmet(const CString& resRef, BYTE* colorRangeValues)
 {
