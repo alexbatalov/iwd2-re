@@ -485,6 +485,55 @@ CVidPalette* CGameAnimationTypeCharacterOld::GetAnimationPalette(BYTE range)
     return NULL;
 }
 
+// 0x6DD270
+void CGameAnimationTypeCharacterOld::GetAnimationResRef(CString& resRef, BYTE range)
+{
+    resRef = "";
+
+    switch (range) {
+    case 0x00:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+        // __LINE__: 22671
+        UTIL_ASSERT(m_currentVidCell != NULL);
+
+        if (m_animationID == ANIM_SKELETON
+            || m_animationID == ANIM_DOOM_GUARD) {
+            resRef = m_resRef;
+        } else if ((m_animationID & 0xF00) != 0x400
+            || (m_animationID & 0xF) == 0x2) {
+            resRef = m_resRef + m_armorCode;
+        }
+        break;
+    case 0x10:
+        if (m_currentVidCellWeapon != NULL
+            && m_currentVidCellWeapon->GetResRef().IsValid()
+            && ((m_animationID & 0xF00) != 0x400
+                || (m_animationID & 0xF) == 0x2)) {
+            resRef = m_heightCode + m_weaponResRef;
+        }
+        break;
+    case 0x20:
+        if (m_currentVidCellShield != NULL
+            && ((m_animationID & 0xF00) != 0x400
+                || (m_animationID & 0xF) == 0x2)) {
+            resRef = m_heightCode + m_shieldResRef;
+        }
+        break;
+    case 0x30:
+        if (m_bEquipHelmet
+            && m_currentVidCellHelmet != NULL
+            && ((m_animationID & 0xF00) != 0x400
+                || (m_animationID & 0xF) == 0x2)) {
+            resRef = m_heightCode + m_helmetResRef;
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+        // __LINE__: 22726
+        UTIL_ASSERT(FALSE);
+    }
+}
+
 // 0x6DD5B0
 char* CGameAnimationTypeCharacterOld::GetSndArmor()
 {
