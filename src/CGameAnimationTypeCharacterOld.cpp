@@ -1134,3 +1134,299 @@ void CGameAnimationTypeCharacterOld::SetColorRangeAll(BYTE rangeValue)
         }
     }
 }
+
+// 0x6DFBB0
+SHORT CGameAnimationTypeCharacterOld::SetSequence(SHORT nSequence)
+{
+    BOOL bRandomFrame = FALSE;
+
+    m_renderWeapons = TRUE;
+    m_renderHelmet = TRUE;
+
+    switch (nSequence) {
+    case 1:
+    case 5:
+    case 17:
+        m_currentVidCellBase = &m_g1VidCellBase;
+        m_currentVidCellExtend = &m_g1VidCellExtend;
+        m_currentVidCellShadowBase = &m_g1VidCellShadowBase;
+        m_currentVidCellShadowExtend = &m_g1VidCellShadowExtend;
+        m_renderWeapons = FALSE;
+        m_renderHelmet = FALSE;
+        m_currentBamSequence = 6;
+        break;
+    case 2:
+        m_currentVidCellBase = &m_caVidCellBase;
+        m_currentVidCellExtend = &m_caVidCellExtend;
+        m_currentVidCellShadowBase = &m_caVidCellShadowBase;
+        m_currentVidCellShadowExtend = &m_caVidCellShadowExtend;
+        m_renderWeapons = FALSE;
+        if (m_currentVidCellHelmet != NULL) {
+            m_currentVidCellHelmetBase = &m_caVidCellHelmetBase;
+            m_currentVidCellHelmetExtend = &m_caVidCellHelmetExtend;
+        }
+        switch (rand() % 4) {
+        case 0:
+            m_currentBamSequence = 1;
+            break;
+        case 1:
+            m_currentBamSequence = 3;
+            break;
+        case 2:
+            m_currentBamSequence = 5;
+            break;
+        case 3:
+            m_currentBamSequence = 7;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+            // __LINE__: 24121
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 3:
+        m_currentVidCellBase = &m_caVidCellBase;
+        m_currentVidCellExtend = &m_caVidCellExtend;
+        m_currentVidCellShadowBase = &m_caVidCellShadowBase;
+        m_currentVidCellShadowExtend = &m_caVidCellShadowExtend;
+        m_renderWeapons = FALSE;
+        if (m_currentVidCellHelmet != NULL) {
+            m_currentVidCellHelmetBase = &m_caVidCellHelmetBase;
+            m_currentVidCellHelmetExtend = &m_caVidCellHelmetExtend;
+        }
+        switch (rand() % 4) {
+        case 0:
+            m_currentBamSequence = 0;
+            break;
+        case 1:
+            m_currentBamSequence = 2;
+            break;
+        case 2:
+            m_currentBamSequence = 4;
+            break;
+        case 3:
+            m_currentBamSequence = 6;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+            // __LINE__: 24155
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 4:
+        m_currentVidCellBase = &m_g1VidCellBase;
+        m_currentVidCellExtend = &m_g1VidCellExtend;
+        m_currentVidCellShadowBase = &m_g1VidCellShadowBase;
+        m_currentVidCellShadowExtend = &m_g1VidCellShadowExtend;
+        if (m_currentVidCellWeapon != NULL) {
+            m_currentVidCellWeaponBase = &m_g1VidCellWeaponBase;
+            m_currentVidCellWeaponExtend = &m_g1VidCellWeaponExtend;
+        }
+        if (m_currentVidCellShield != NULL) {
+            m_currentVidCellShieldBase = &m_g1VidCellShieldBase;
+            m_currentVidCellShieldExtend = &m_g1VidCellShieldExtend;
+        }
+        if (m_currentVidCellHelmet != NULL) {
+            m_currentVidCellHelmetBase = &m_g1VidCellHelmetBase;
+            m_currentVidCellHelmetExtend = &m_g1VidCellHelmetExtend;
+        }
+        m_currentBamSequence = 5;
+        break;
+    case 6:
+        if (m_currentBamSequence != 2
+            || m_currentVidCellBase != &m_g1VidCellBase) {
+            bRandomFrame = TRUE;
+        }
+        m_currentVidCellBase = &m_g1VidCellBase;
+        m_currentVidCellExtend = &m_g1VidCellExtend;
+        m_currentVidCellShadowBase = &m_g1VidCellShadowBase;
+        m_currentVidCellShadowExtend = &m_g1VidCellShadowExtend;
+        if (m_currentVidCellWeapon != NULL) {
+            m_currentVidCellWeaponBase = &m_g1VidCellWeaponBase;
+            m_currentVidCellWeaponExtend = &m_g1VidCellWeaponExtend;
+        }
+        if (m_currentVidCellShield != NULL) {
+            m_currentVidCellShieldBase = &m_g1VidCellShieldBase;
+            m_currentVidCellShieldExtend = &m_g1VidCellShieldExtend;
+        }
+        if (m_currentVidCellHelmet != NULL) {
+            m_currentVidCellHelmetBase = &m_g1VidCellHelmetBase;
+            m_currentVidCellHelmetExtend = &m_g1VidCellHelmetExtend;
+        }
+        m_currentBamSequence = 2;
+        break;
+    case 7:
+    case 14:
+    case 15:
+        nSequence = 7;
+        m_currentVidCellBase = &m_g1VidCellBase;
+        m_currentVidCellExtend = &m_g1VidCellExtend;
+        m_currentVidCellShadowBase = &m_g1VidCellShadowBase;
+        m_currentVidCellShadowExtend = &m_g1VidCellShadowExtend;
+        if (m_currentVidCellWeapon != NULL) {
+            m_currentVidCellWeaponBase = &m_g1VidCellWeaponBase;
+            m_currentVidCellWeaponExtend = &m_g1VidCellWeaponExtend;
+        }
+        if (m_currentVidCellShield != NULL) {
+            m_currentVidCellShieldBase = &m_g1VidCellShieldBase;
+            m_currentVidCellShieldExtend = &m_g1VidCellShieldExtend;
+        }
+        if (m_currentVidCellHelmet != NULL) {
+            m_currentVidCellHelmetBase = &m_g1VidCellHelmetBase;
+            m_currentVidCellHelmetExtend = &m_g1VidCellHelmetExtend;
+        }
+        if ((m_weaponCode & 0xE0) == 0) {
+            if (m_currentBamSequence != 1) {
+                bRandomFrame = TRUE;
+            }
+
+            m_currentBamSequence = 1;
+
+            if (m_currentVidCellShield != NULL) {
+                m_currentVidCellShieldBase = &m_g1VidCellShieldBase;
+                m_currentVidCellShieldExtend = &m_g1VidCellShieldExtend;
+            }
+        } else {
+            if (m_currentBamSequence != 3) {
+                bRandomFrame = TRUE;
+            }
+
+            m_currentBamSequence = 3;
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+            // __LINE__: 24255
+            UTIL_ASSERT(m_currentVidCellShield == NULL);
+        }
+        break;
+    case 8:
+        m_currentVidCellBase = &m_a1VidCellBase;
+        m_currentVidCellExtend = &m_a1VidCellExtend;
+        m_currentVidCellShadowBase = &m_a1VidCellShadowBase;
+        m_currentVidCellShadowExtend = &m_a1VidCellShadowExtend;
+        if (m_currentVidCellWeapon != NULL) {
+            m_currentVidCellWeaponBase = &m_a1VidCellWeaponBase;
+            m_currentVidCellWeaponExtend = &m_a1VidCellWeaponExtend;
+        }
+        if (m_currentVidCellShield != NULL) {
+            m_currentVidCellShieldBase = &m_a1VidCellShieldBase;
+            m_currentVidCellShieldExtend = &m_a1VidCellShieldExtend;
+        }
+        if (m_currentVidCellHelmet != NULL) {
+            m_currentVidCellHelmetBase = &m_a1VidCellHelmetBase;
+            m_currentVidCellHelmetExtend = &m_a1VidCellHelmetExtend;
+        }
+        if (m_weaponCode == 3) {
+            m_currentBamSequence = 1;
+        } else {
+            m_currentBamSequence = 0;
+        }
+        break;
+    case 9:
+        m_currentVidCellBase = &m_g1VidCellBase;
+        m_currentVidCellExtend = &m_g1VidCellExtend;
+        m_currentVidCellShadowBase = &m_g1VidCellShadowBase;
+        m_currentVidCellShadowExtend = &m_g1VidCellShadowExtend;
+        m_renderWeapons = FALSE;
+        m_renderHelmet = FALSE;
+        m_currentBamSequence = 7;
+        break;
+    case 10:
+        m_currentVidCellBase = &m_g1VidCellBase;
+        m_currentBamSequence = 0;
+        break;
+    case 11:
+        m_currentVidCellBase = &m_a1VidCellBase;
+        m_currentVidCellExtend = &m_a1VidCellExtend;
+        m_currentVidCellShadowBase = &m_a1VidCellShadowBase;
+        m_currentVidCellShadowExtend = &m_a1VidCellShadowExtend;
+        if (m_currentVidCellWeapon != NULL) {
+            m_currentVidCellWeaponBase = &m_a1VidCellWeaponBase;
+            m_currentVidCellWeaponExtend = &m_a1VidCellWeaponExtend;
+        }
+        if (m_currentVidCellShield != NULL) {
+            m_currentVidCellShieldBase = &m_a1VidCellShieldBase;
+            m_currentVidCellShieldExtend = &m_a1VidCellShieldExtend;
+        }
+        if (m_currentVidCellHelmet != NULL) {
+            m_currentVidCellHelmetBase = &m_a1VidCellHelmetBase;
+            m_currentVidCellHelmetExtend = &m_a1VidCellHelmetExtend;
+        }
+        m_currentBamSequence = 0;
+        nSequence = 0;
+        break;
+    case 12:
+        m_currentVidCellBase = &m_a2VidCellBase;
+        m_currentVidCellExtend = &m_a2VidCellExtend;
+        m_currentVidCellShadowBase = &m_a2VidCellShadowBase;
+        m_currentVidCellShadowExtend = &m_a2VidCellShadowExtend;
+        if (m_currentVidCellWeapon != NULL) {
+            m_currentVidCellWeaponBase = &m_a2VidCellWeaponBase;
+            m_currentVidCellWeaponExtend = &m_a2VidCellWeaponExtend;
+        }
+        if (m_currentVidCellShield != NULL) {
+            m_currentVidCellShieldBase = &m_a2VidCellShieldBase;
+            m_currentVidCellShieldExtend = &m_a2VidCellShieldExtend;
+        }
+        if (m_currentVidCellHelmet != NULL) {
+            m_currentVidCellHelmetBase = &m_a2VidCellHelmetBase;
+            m_currentVidCellHelmetExtend = &m_a2VidCellHelmetExtend;
+        }
+        m_currentBamSequence = 0;
+        nSequence = 0;
+        break;
+    case 13:
+        m_currentVidCellBase = &m_a3VidCellBase;
+        m_currentVidCellExtend = &m_a3VidCellExtend;
+        m_currentVidCellShadowBase = &m_a3VidCellShadowBase;
+        m_currentVidCellShadowExtend = &m_a3VidCellShadowExtend;
+        if (m_currentVidCellWeapon != NULL) {
+            m_currentVidCellWeaponBase = &m_a3VidCellWeaponBase;
+            m_currentVidCellWeaponExtend = &m_a3VidCellWeaponExtend;
+        }
+        if (m_currentVidCellShield != NULL) {
+            m_currentVidCellShieldBase = &m_a3VidCellShieldBase;
+            m_currentVidCellShieldExtend = &m_a3VidCellShieldExtend;
+        }
+        if (m_currentVidCellHelmet != NULL) {
+            m_currentVidCellHelmetBase = &m_a3VidCellHelmetBase;
+            m_currentVidCellHelmetExtend = &m_a3VidCellHelmetExtend;
+        }
+        m_currentBamSequence = 0;
+        nSequence = 0;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+        // __LINE__: 24321
+        UTIL_ASSERT(FALSE);
+    }
+
+    ChangeDirection(m_currentBamDirection);
+
+    SHORT nFrame = 0;
+    if (bRandomFrame) {
+        BYTE nSequenceLength = m_currentVidCell->GetSequenceLength(m_currentVidCell->m_nCurrentSequence, FALSE);
+        if (nSequenceLength != 0) {
+            nFrame = rand() % nSequenceLength;
+        }
+    }
+    m_currentVidCell->FrameSet(nFrame);
+    m_currentVidCellShadow->FrameSet(nFrame);
+
+    if (m_renderWeapons) {
+        if (m_currentVidCellWeapon != NULL && m_currentVidCellWeapon->GetResRef().IsValid()) {
+            m_currentVidCellWeapon->FrameSet(nFrame);
+        }
+    }
+
+    if (m_renderHelmet) {
+        if (m_currentVidCellHelmet != NULL) {
+            m_currentVidCellHelmet->FrameSet(nFrame);
+        }
+    }
+
+    if (nSequence == 1) {
+        DecrementFrame();
+    }
+
+    return nSequence;
+}
