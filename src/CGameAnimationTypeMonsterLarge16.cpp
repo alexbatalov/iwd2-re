@@ -567,6 +567,89 @@ void CGameAnimationTypeMonsterLarge16::SetColorRangeAll(BYTE rangeValue)
     }
 }
 
+// 0x6B3C60
+void CGameAnimationTypeMonsterLarge16::Render(CInfinity* pInfinity, CVidMode* pVidMode, INT nSurface, const CRect& rectFX, const CPoint& ptNewPos, const CPoint& ptReference, DWORD dwRenderFlags, COLORREF rgbTintColor, const CRect& rGCBounds, BOOL bDithered, BOOL bFadeOut, LONG posZ, BYTE transparency)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 9910
+    UTIL_ASSERT(pInfinity != NULL && pVidMode != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 9911
+    UTIL_ASSERT(m_currentVidCell != NULL);
+
+    CPoint ptPos(ptNewPos.x, ptNewPos.y + posZ);
+    CRect rFXRect(rectFX);
+
+    if (MIRROR_BAM) {
+        if (m_currentBamDirection > m_extendDirectionTest) {
+            dwRenderFlags |= CInfinity::MIRROR_FX;
+        }
+
+        if (transparency != 0) {
+            dwRenderFlags |= CInfinity::FXPREP_COPYFROMBACK;
+            dwRenderFlags |= 0x2;
+        } else {
+            dwRenderFlags |= CInfinity::FXPREP_CLEARFILL;
+            dwRenderFlags |= 0x1;
+        }
+    } else {
+        dwRenderFlags |= 0x4;
+
+        dwRenderFlags |= CInfinity::FXPREP_COPYFROMBACK;
+
+        if (transparency != 0) {
+            dwRenderFlags |= 0x2;
+        }
+    }
+
+    pInfinity->FXPrep(rFXRect, dwRenderFlags, nSurface, ptPos, ptReference);
+
+    if (pInfinity->FXLock(rFXRect, dwRenderFlags)) {
+        COLORREF oldTintColor = m_currentVidCell->GetTintColor();
+        BYTE b = GetBValue(oldTintColor) + GetBValue(rgbTintColor) - 255 >= 0
+            ? GetBValue(oldTintColor) + GetBValue(rgbTintColor) + 1
+            : 0;
+        BYTE g = GetGValue(oldTintColor) + GetGValue(rgbTintColor) - 255 >= 0
+            ? GetGValue(oldTintColor) + GetGValue(rgbTintColor) + 1
+            : 0;
+        BYTE r = GetBValue(oldTintColor) + GetBValue(rgbTintColor) - 255 >= 0
+            ? GetBValue(oldTintColor) + GetBValue(rgbTintColor) + 1
+            : 0;
+        m_currentVidCell->SetTintColor(RGB(r, g, b));
+
+        pInfinity->FXRender(m_currentVidCell,
+            ptReference.x,
+            ptReference.y,
+            dwRenderFlags,
+            transparency);
+
+        m_currentVidCell->SetTintColor(oldTintColor);
+
+        pInfinity->FXRenderClippingPolys(ptPos.x,
+            ptPos.y - posZ,
+            posZ,
+            ptReference,
+            CRect(rGCBounds.left, rGCBounds.top - posZ, rGCBounds.right, rGCBounds.bottom - posZ),
+            bDithered,
+            dwRenderFlags);
+
+        if (bFadeOut) {
+            pInfinity->FXUnlock(dwRenderFlags, &rFXRect, ptPos + ptReference);
+        } else {
+            pInfinity->FXUnlock(dwRenderFlags, &rFXRect, CPoint(0, 0));
+        }
+
+        pInfinity->FXBltFrom(nSurface,
+            rFXRect,
+            ptPos.x,
+            ptPos.y,
+            ptReference.x,
+            ptReference.y,
+            dwRenderFlags);
+    }
+}
+
 // 0x6B3F20
 SHORT CGameAnimationTypeMonsterLarge16::SetSequence(SHORT nSequence)
 {
