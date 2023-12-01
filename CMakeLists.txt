@@ -107,6 +107,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CGameAnimationTypeMonsterAnkheg.h"
     "src/CGameAnimationTypeMonsterIcewind.cpp"
     "src/CGameAnimationTypeMonsterIcewind.h"
+    "src/CGameAnimationTypeMonsterIcewindNew.cpp"
+    "src/CGameAnimationTypeMonsterIcewindNew.h"
     "src/CGameAnimationTypeMonsterLarge.cpp"
     "src/CGameAnimationTypeMonsterLarge.h"
     "src/CGameAnimationTypeMonsterLarge16.cpp"

@@ -160,6 +160,11 @@ void CGameAnimationType::EquipArmor(CHAR armorLevel, BYTE* colorRangeValues)
 {
 }
 
+// 0x7B5450
+void CGameAnimationType::EquipWeapon(const CString& resRef, BYTE* colorRangeValues, DWORD itemFlags, const WORD* pAttackProb)
+{
+}
+
 // 0x799E20
 CVidPalette* CGameAnimationType::GetAnimationPalette(BYTE range)
 {

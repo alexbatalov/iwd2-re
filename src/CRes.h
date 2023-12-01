@@ -136,6 +136,13 @@ public:
             return 0;
         }
     }
+
+    void CancelRequest()
+    {
+        if (pRes != NULL) {
+            static_cast<CRes*>(pRes)->CancelRequest();
+        }
+    }
 };
 
 #endif /* CRES_H_ */

@@ -327,6 +327,7 @@ public:
     /* 0008 */ virtual void CalculateGCBoundsRect(CRect& rGCBounds, const CPoint& pos, const CPoint& ptReference, LONG posZ, LONG nWidth, LONG nHeight);
     /* 000C */ virtual void ChangeDirection(SHORT nDirection);
     /* 0010 */ virtual void EquipArmor(CHAR armorLevel, BYTE* colorRangeValues);
+    /* 001C */ virtual void EquipWeapon(const CString& resRef, BYTE* colorRangeValues, DWORD itemFlags, const WORD* pAttackProb);
     /* 0020 */ virtual CVidPalette* GetAnimationPalette(BYTE range);
     /* 0024 */ virtual void GetAnimationResRef(CString& resRef, BYTE range);
     /* 0028 */ virtual BOOLEAN CanLieDown();
