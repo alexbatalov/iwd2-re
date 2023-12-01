@@ -1453,6 +1453,71 @@ CVidPalette* CGameAnimationTypeMonsterIcewind::GetAnimationPalette(BYTE range)
     return NULL;
 }
 
+// 0x6E5520
+void CGameAnimationTypeMonsterIcewind::GetAnimationResRef(CString& resRef, BYTE range)
+{
+    resRef = "";
+
+    switch (range) {
+    case 0x00:
+        switch (m_animationID & 0xF00) {
+        case 0x200:
+            switch (m_animationID & 0xF) {
+            case 0x0:
+                resRef = m_resRef + "0";
+                break;
+            case 0x1:
+                resRef = m_resRef + "1";
+                break;
+            case 0x8:
+                switch (m_animationID & 0xF0) {
+                case 0x10:
+                case 0x20:
+                case 0x30:
+                case 0x70:
+                    resRef = m_resRef;
+                    break;
+                }
+                break;
+            default:
+                resRef = m_resRef;
+                break;
+            }
+            break;
+        case 0xB00:
+            switch (m_animationID & 0xF0) {
+            case 0x30:
+            case 0x40:
+                resRef = m_resRef;
+                break;
+            default:
+                switch (m_animationID & 0xF) {
+                case 0x0:
+                    resRef = m_resRef + "0";
+                    break;
+                default:
+                    resRef = m_resRef;
+                    break;
+                }
+                break;
+            }
+            break;
+        default:
+            resRef = m_resRef;
+            break;
+        }
+        break;
+    case 0x10:
+    case 0x20:
+    case 0x30:
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+        // __LINE__: 26078
+        UTIL_ASSERT(FALSE);
+    }
+}
+
 // 0x6E5850
 const char* CGameAnimationTypeMonsterIcewind::GetSndWalk(SHORT a1)
 {
