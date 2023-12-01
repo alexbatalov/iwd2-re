@@ -823,6 +823,79 @@ void CGameAnimationTypeCharacter::ChangeDirection(SHORT nDirection)
     }
 }
 
+// 0x6C7D50
+void CGameAnimationTypeCharacter::EquipShield(const CString& resRef, BYTE* colorRangeValues)
+{
+    ClearColorEffects(37);
+    ClearColorEffects(36);
+    ClearColorEffects(32);
+
+    m_shieldResRef = resRef;
+
+    if (!resRef.IsEmpty()) {
+        m_currentVidCellShieldBase = &m_g1VidCellShieldBase;
+
+        m_g1VidCellShieldBase.SetResRef(CResRef(m_heightCode + m_shieldResRef + "G1"), field_1444, TRUE, TRUE);
+        if (m_weaponCode == 4) {
+            m_a1VidCellShieldBase.SetResRef(CResRef(m_heightCode + m_shieldResRef + "A1"), field_1444, TRUE, TRUE);
+            m_a2VidCellShieldBase.SetResRef(CResRef(m_heightCode + m_shieldResRef + "A3"), field_1444, TRUE, TRUE);
+            m_a3VidCellShieldBase.SetResRef(CResRef(m_heightCode + m_shieldResRef + "A5"), field_1444, TRUE, TRUE);
+        } else if (m_weaponCode == 5) {
+            return;
+        } else {
+            if ((m_weaponCode & 0x10) != 0) {
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+                // __LINE__: 18726
+                UTIL_ASSERT_MSG(FALSE, "Shield equipped with 2 one-handed weapons");
+            }
+
+            if (m_weaponCode == 1) {
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+                // __LINE__: 18730
+                UTIL_ASSERT_MSG(FALSE, "Shield equipped with bow");
+            }
+
+            if (m_weaponCode == 2) {
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+                // __LINE__: 18730
+                UTIL_ASSERT_MSG(FALSE, "Shield equipped with crossbow");
+            }
+
+            if (m_weaponCode == 3) {
+                m_a1VidCellShieldBase.SetResRef(CResRef(m_heightCode + m_shieldResRef + "SS"), field_1444, TRUE, TRUE);
+            }
+        }
+
+        m_currentVidCellShield = m_currentVidCellShieldBase;
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+        // __LINE__: 18742
+        UTIL_ASSERT(colorRangeValues != NULL);
+
+        for (BYTE colorRange = 0; colorRange < 7; colorRange++) {
+            m_shieldPalette.SetRange(colorRange,
+                colorRangeValues[colorRange],
+                *g_pBaldurChitin->GetObjectGame()->GetMasterBitmap());
+        }
+
+        if (m_currentBamDirection > m_extendDirectionTest) {
+            m_currentVidCellShield->SequenceSet(9 * m_currentBamSequence - m_currentBamDirection + 16);
+        } else {
+            m_currentVidCellShield->SequenceSet(9 * m_currentBamSequence + m_currentBamDirection);
+        }
+        m_currentVidCellShield->FrameSet(m_currentVidCell->GetCurrentFrameId());
+    } else {
+        m_currentVidCellShieldBase = NULL;
+
+        m_g1VidCellShieldBase.CancelRequest();
+        m_a1VidCellShieldBase.CancelRequest();
+        m_a2VidCellShieldBase.CancelRequest();
+        m_a3VidCellShieldBase.CancelRequest();
+
+        m_currentVidCellShield = NULL;
+    }
+}
+
 // 0x6C8390
 void CGameAnimationTypeCharacter::EquipWeapon(const CString& resRef, BYTE* colorRangeValues, DWORD itemFlags, const WORD* pAttackProb)
 {
