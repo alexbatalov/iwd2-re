@@ -1453,6 +1453,102 @@ CVidPalette* CGameAnimationTypeMonsterIcewind::GetAnimationPalette(BYTE range)
     return NULL;
 }
 
+// 0x6E5850
+const char* CGameAnimationTypeMonsterIcewind::GetSndWalk(SHORT a1)
+{
+    char* szTemp;
+
+    if (m_animationID == ANIM_DRAGON_WHITE) {
+        szTemp = new char[8];
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+        // __LINE__: 26114
+        UTIL_ASSERT(szTemp != NULL);
+
+        strcpy(szTemp, "DRAGON12");
+        return szTemp;
+    }
+
+    switch (m_animationID & 0xFFF0) {
+    case 0xE000:
+    case 0xE010:
+    case 0xE020:
+    case 0xE030:
+    case 0xE040:
+    case 0xE050:
+    case 0xE250:
+    case 0xE260:
+    case 0xE280:
+    case 0xE3B0:
+    case 0xE8A0:
+    case 0xE900:
+    case 0xE910:
+    case 0xE920:
+    case 0xEA20:
+    case 0xEB90:
+    case 0xEBA0:
+    case 0xEBB0:
+    case 0xEBC0:
+    case 0xEBD0:
+    case 0xEBE0:
+    case 0xED20:
+    case 0xEF90:
+        return NULL;
+    }
+
+    const char* v1;
+    switch (a1) {
+    case 1:
+        v1 = "FS_Dirt ";
+        break;
+    case 2:
+        v1 = "FS_WdSn ";
+        break;
+    case 3:
+    case 9:
+        v1 = "FS_WOOD ";
+        break;
+    case 4:
+        v1 = "FS_Tomb ";
+        break;
+    case 7:
+        v1 = "FS_Ston ";
+        break;
+    case 11:
+        v1 = "FS_Snow ";
+        break;
+    case 15:
+        v1 = "FS_Gras ";
+        break;
+    default:
+        return NULL;
+    }
+
+    szTemp = new char[9];
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 26216
+    UTIL_ASSERT(szTemp != NULL);
+
+    memcpy(szTemp, v1, 9);
+
+    szTemp[7] = rand() % 6 + '1';
+    szTemp[8] = '\0';
+
+    if (strcmp(szTemp, m_walkRef) == 0) {
+        if (szTemp[7] == '6') {
+            szTemp[7] = '1';
+        } else {
+            szTemp[7]++;
+        }
+    }
+
+    memcpy(m_walkRef, szTemp, 9);
+
+    // FIXME: Leaks `szTemp`.
+    return szTemp;
+}
+
 // 0x6E5B50
 void CGameAnimationTypeMonsterIcewind::ClearColorEffects(BYTE colorRange)
 {
