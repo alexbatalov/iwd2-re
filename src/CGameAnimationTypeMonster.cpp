@@ -940,9 +940,9 @@ void CGameAnimationTypeMonster::ChangeDirection(SHORT nDirection)
         m_currentVidCellWeapon = m_currentVidCellWeaponBase;
 
         if (m_currentBamDirection > m_extendDirectionTest) {
-            m_currentVidCellWeapon->SequenceSet(9 * m_currentBamDirection - m_currentBamDirection + 16);
+            m_currentVidCellWeapon->SequenceSet(9 * m_currentBamSequence - m_currentBamDirection + 16);
         } else {
-            m_currentVidCellWeapon->SequenceSet(9 * m_currentBamDirection + m_currentBamDirection);
+            m_currentVidCellWeapon->SequenceSet(9 * m_currentBamSequence + m_currentBamDirection);
         }
     }
 }
