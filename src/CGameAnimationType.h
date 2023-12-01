@@ -386,8 +386,9 @@ public:
     /* 0042 */ CVidBitmap m_combatRounds[5];
     /* 03E4 */ BYTE m_personalSpace;
     /* 03E6 */ WORD m_castFrame;
-    /* 03E9 */ char m_walkRef[9];
     /* 03E8 */ unsigned char field_3E8;
+    /* 03E9 */ char m_walkRef[9];
+    /* 03F2 */ char field_3F2[9];
     /* 03FB */ unsigned char field_3FB;
     /* 03FC */ unsigned char field_3FC;
 };
