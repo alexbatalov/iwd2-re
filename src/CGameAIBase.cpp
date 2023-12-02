@@ -941,6 +941,23 @@ SHORT CGameAIBase::StartMovie()
     return ACTION_DONE;
 }
 
+// 0x466030
+SHORT CGameAIBase::RevealAreaOnMap()
+{
+    CString sArea = m_curAction.GetString1();
+
+    CWorldMap* pWorldMap = g_pBaldurChitin->GetObjectGame()->GetWorldMap(sArea);
+    pWorldMap->EnableArea(pWorldMap->sub_55A3A0(),
+        CResRef(sArea),
+        TRUE);
+
+    g_pBaldurChitin->GetObjectGame()->FeedBack(CInfGame::FEEDBACK_WORLDMAP_UPDATE, 0, TRUE);
+
+    g_pBaldurChitin->GetBaldurMessage()->SendMapWorldRevealArea(m_curAction.GetString1());
+
+    return ACTION_DONE;
+}
+
 // 0x466120
 SHORT CGameAIBase::ChangeTileState(CGameTiledObject* target)
 {

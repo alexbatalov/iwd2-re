@@ -81,6 +81,9 @@ const DWORD CInfGame::PROGRESSBAR_CACHING_ADDITIONAL = 3000000;
 // 0x8518BE
 const SHORT CInfGame::FEEDBACK_GOLD = 1;
 
+// 0x8518D0
+const SHORT CInfGame::FEEDBACK_WORLDMAP_UPDATE = 10;
+
 // 0x8AFC50
 static const char* off_8AFC50[FIFTY_THREE] = {
     "Inventory",

@@ -82,6 +82,7 @@ public:
     SHORT GivePartyGold();
     SHORT GiveOrder(CGameAIBase* sprite);
     SHORT StartMovie();
+    SHORT RevealAreaOnMap();
     SHORT ChangeTileState(CGameTiledObject* target);
     SHORT TriggerActivation(CGameTrigger* target);
     SHORT StartMusic();
