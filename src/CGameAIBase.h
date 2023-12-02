@@ -86,6 +86,7 @@ public:
     SHORT TriggerActivation(CGameTrigger* target);
     SHORT StartMusic();
     SHORT SetMusic();
+    SHORT MoveGlobal(CGameSprite* pSprite);
     SHORT Lock(CGameAIBase* pObject);
     SHORT DetectSecretDoor(CGameDoor* target);
     SHORT FadeToColor();

@@ -1011,6 +1011,25 @@ SHORT CGameAIBase::SetMusic()
     return ACTION_DONE;
 }
 
+// 0x466F90
+SHORT CGameAIBase::MoveGlobal(CGameSprite* pSprite)
+{
+    if (pSprite == NULL) {
+        return ACTION_ERROR;
+    }
+
+    CString sArea = m_curAction.GetString1();
+    sArea.MakeUpper();
+
+    CMessage* message = new CMessageMoveGlobal(sArea,
+        m_curAction.m_dest,
+        m_id,
+        pSprite->GetId());
+    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+
+    return ACTION_DONE;
+}
+
 // 0x467110
 SHORT CGameAIBase::Lock(CGameAIBase* pObject)
 {
