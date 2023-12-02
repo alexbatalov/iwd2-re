@@ -2128,7 +2128,96 @@ void CScreenWorld::SetNewViewSize(CRect newViewSize, BOOL bForceViewSize)
 // 0x692A50
 void CScreenWorld::StartDeath()
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 7811
+    UTIL_ASSERT(pGame != NULL);
+
+    pGame->SetTempCursor(4);
+    g_pBaldurChitin->GetObjectCursor()->SetCursor(0, FALSE);
+
+    // NOTE: Uninline.
+    CancelPopup();
+
+    field_EA4 = 17;
+
+    m_cUIManager.ClearTooltip();
+    pGame->GetWorldTimer()->StopTime();
+
+    m_bPaused = TRUE;
+    m_nAutoHideInterface = 0;
+
+    pGame->GetGameSave()->m_mode = 4096;
+    sub_695570(FALSE, TRUE);
+
+    m_cUIManager.GetPanel(GetPanel_21_7())->SetActive(FALSE);
+    m_cUIManager.GetPanel(GetPanel_21_7())->SetInactiveRender(FALSE);
+    m_cUIManager.GetPanel(1)->SetInactiveRender(FALSE);
+    m_cUIManager.GetPanel(GetPanel_22_0())->SetInactiveRender(FALSE);
+
+    // NOTE: Uninline.
+    SetNewViewSize(CInfinity::stru_8E7988, FALSE);
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(17);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 7843
+    UTIL_ASSERT(pPanel != NULL);
+
+    pPanel->SetActive(TRUE);
+
+    if (m_bHardPaused) {
+        static_cast<CUIControlButton*>(pPanel->GetControl(1))->SetEnabled(FALSE);
+        static_cast<CUIControlButton*>(pPanel->GetControl(2))->SetEnabled(FALSE);
+    } else {
+        static_cast<CUIControlButton*>(pPanel->GetControl(1))->SetEnabled(TRUE);
+        static_cast<CUIControlButton*>(pPanel->GetControl(2))->SetEnabled(TRUE);
+    }
+
+    if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+        && !g_pChitin->cNetwork.GetSessionHosting()) {
+        static_cast<CUIControlButton*>(pPanel->GetControl(1))->SetEnabled(FALSE);
+    }
+
+    STRREF strRef;
+    switch (field_10F0) {
+    case 1:
+        strRef = 32848;
+        break;
+    case 3:
+        strRef = field_10F4;
+        break;
+    default:
+        if (g_pChitin->cNetwork.GetSessionOpen()) {
+            if (g_pChitin->cNetwork.GetSessionHosting()) {
+                strRef = 19377;
+            } else {
+                strRef = 11331;
+            }
+        } else {
+            strRef = 16498;
+        }
+        break;
+    }
+
+    UpdateLabel(pPanel,
+        -1,
+        "%s",
+        FetchString(strRef));
+
+    CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(2));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenWorld.cpp
+    // __LINE__: 7901
+    UTIL_ASSERT(pButton != NULL);
+
+    if (g_pChitin->cNetwork.GetSessionOpen()
+        && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+        pButton->SetText(FetchString(13906)); // "Exit"
+    } else {
+        pButton->SetText(FetchString(15417)); // "Quit"
+    }
 }
 
 // 0x692E80
