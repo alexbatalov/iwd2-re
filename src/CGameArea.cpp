@@ -91,7 +91,7 @@ CGameArea::CGameArea(BYTE id)
     m_moveDest.y = -1;
     m_nFirstObject = -1;
     field_241 = 0;
-    field_242 = CGameObjectArray::INVALID_INDEX;
+    m_iPickedOnDown = CGameObjectArray::INVALID_INDEX;
     m_sndAmbientVolume = 100;
     m_cInfinity.m_pArea = this;
     m_nCurrentSong = -1;
@@ -395,7 +395,7 @@ void CGameArea::AIUpdate()
     if (field_241 > 0) {
         field_241--;
     } else {
-        field_242 = CGameObjectArray::INVALID_INDEX;
+        m_iPickedOnDown = CGameObjectArray::INVALID_INDEX;
     }
 
     INT x;
@@ -2089,7 +2089,46 @@ void CGameArea::OnDeactivation()
 // 0x475440
 void CGameArea::OnActionButtonDown(const CPoint& pt)
 {
-    // TODO: Incomplete.
+    CPoint ptWorld = m_cInfinity.GetWorldCoordinates(pt);
+
+    if (pt.x >= m_cInfinity.rViewPort.left
+        && pt.x < m_cInfinity.rViewPort.right
+        && pt.y >= m_cInfinity.rViewPort.top
+        && pt.y < m_cInfinity.rViewPort.bottom) {
+        CPoint mouseSearchSquare;
+        SHORT searchSquareCode;
+
+        mouseSearchSquare.x = ptWorld.x / CPathSearch::GRID_SQUARE_SIZEX;
+        mouseSearchSquare.y = ptWorld.y / CPathSearch::GRID_SQUARE_SIZEY;
+
+        if (m_pGame->GetState() == 3
+            && m_iPicked == CGameObjectArray::INVALID_INDEX
+            && !m_visibility.IsTileExplored(m_visibility.PointToTile(ptWorld))
+            && m_search.GetLOSCost(mouseSearchSquare, m_terrainTable, searchSquareCode, FALSE) == CPathSearch::COST_IMPASSABLE) {
+            return;
+        }
+
+        m_selectSquare.left = ptWorld.x;
+        m_selectSquare.right = ptWorld.x;
+        m_selectSquare.top = ptWorld.y;
+        m_selectSquare.bottom = ptWorld.y;
+        m_iPickedOnDown = m_iPicked;
+        m_moveDest = ptWorld;
+        field_241 = CTimerWorld::TIMESCALE_MSEC_PER_SEC;
+
+        if (g_pBaldurChitin->GetObjectCursor()->m_nCurrentCursor == 4) {
+            m_pGame->GetGroup()->GroupDrawMove(ptWorld,
+                m_pGame->GetGameSave()->m_curFormation,
+                CPoint(-1, -1));
+        }
+
+        if (m_pGame->GetState() == 0) {
+            if (m_pGame->GetButtonArray()->field_19B2 != 0) {
+                m_pGame->GetButtonArray()->SetSelectedButton(100);
+                m_pGame->GetButtonArray()->ResetState();
+            }
+        }
+    }
 }
 
 // 0x475DC0

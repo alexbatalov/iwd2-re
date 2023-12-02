@@ -234,7 +234,7 @@ public:
     /* 023C */ LONG m_nKeyScrollState;
     /* 0240 */ BOOLEAN m_bTravelSquare;
     /* 0241 */ unsigned char field_241;
-    /* 0242 */ LONG field_242;
+    /* 0242 */ LONG m_iPickedOnDown;
     /* 0246 */ LONG m_iPicked;
     /* 024A */ LONG m_iPickedTarget;
     /* 024E */ BOOL m_bPicked;

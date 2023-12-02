@@ -49,6 +49,7 @@ public:
     /* 189C */ CVidCell field_189C;
     /* 197E */ INT m_nSelectedButton;
     /* 1982 */ int m_nState;
+    /* 19B2 */ int field_19B2;
 };
 
 #endif /* CINFBUTTONARRAY_H_ */
