@@ -110,6 +110,7 @@ public:
     void SetPendingRest(INT nHP, BOOLEAN bRenting, BOOLEAN bMovie);
     void StartRestMultiplayerHost(INT nHP, BOOLEAN bRenting, BOOLEAN bMovie);
     void CheckEndOfHardPause();
+    void sub_693710();
     void CheckEndOfMultiplayerSynch();
     void DeleteAreaMultiplayer();
     void DeleteArea(CGameArea* pArea);

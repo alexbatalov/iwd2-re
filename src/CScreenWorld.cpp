@@ -2410,6 +2410,52 @@ void CScreenWorld::CheckEndOfHardPause()
     }
 }
 
+// 0x693710
+void CScreenWorld::sub_693710()
+{
+    CUIPanel* pPanel;
+    CUIControlBase* pControl;
+
+    if (g_pBaldurChitin->cNetwork.GetSessionOpen()
+        && g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+        pPanel = m_cUIManager.GetPanel(21);
+        if (pPanel->m_bActive) {
+            pControl = pPanel->GetControl(3);
+            if (pControl != NULL) {
+                m_cUIManager.SetCapture(pControl, CUIManager::KEYBOARD);
+                return;
+            }
+        }
+
+        pPanel = m_cUIManager.GetPanel(GetPanel_22_0());
+        if (pPanel->m_bActive) {
+            pControl = pPanel->GetControl(3);
+            if (pControl != NULL) {
+                m_cUIManager.SetCapture(pControl, CUIManager::KEYBOARD);
+                return;
+            }
+        }
+
+        pPanel = m_cUIManager.GetPanel(GetPanel_19_0());
+        if (pPanel->m_bActive) {
+            pControl = pPanel->GetControl(5);
+            if (pControl != NULL) {
+                m_cUIManager.SetCapture(pControl, CUIManager::KEYBOARD);
+                return;
+            }
+        }
+
+        pPanel = m_cUIManager.GetPanel(GetPanel_21_0());
+        if (pPanel->m_bActive) {
+            pControl = pPanel->GetControl(5);
+            if (pControl != NULL) {
+                m_cUIManager.SetCapture(pControl, CUIManager::KEYBOARD);
+                return;
+            }
+        }
+    }
+}
+
 // NOTE: Inlined.
 void CScreenWorld::CheckEndOfMultiplayerSynch()
 {
