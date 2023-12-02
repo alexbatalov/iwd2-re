@@ -992,6 +992,111 @@ void CGameArea::CompressTime(DWORD deltaTime)
     }
 }
 
+// 0x46F930
+void CGameArea::DebugDump(const CString& message, BOOLEAN bEchoToScreen)
+{
+    CScreenWorld* pWorld = g_pBaldurChitin->m_pEngineWorld;
+
+    CString sTemp;
+
+    if (bEchoToScreen) {
+        pWorld->DisplayText(CString(""),
+            CString("DEBUG DUMP: CGameArea"),
+            -1,
+            FALSE);
+
+        pWorld->DisplayText(CString(""),
+            message,
+            -1,
+            FALSE);
+
+        sTemp.Format("Name: %.*s", RESREF_SIZE, m_resRef.GetResRef());
+        pWorld->DisplayText(CString(""),
+            sTemp,
+            -1,
+            FALSE);
+
+        sTemp.Format("Outdoor: %s", (m_header.m_areaType & 0x1) != 0 ? "TRUE" : "FALSE");
+        pWorld->DisplayText(CString(""),
+            sTemp,
+            -1,
+            FALSE);
+
+        sTemp.Format("Day/Night: %s", (m_header.m_areaType & 0x2) != 0 ? "TRUE" : "FALSE");
+        pWorld->DisplayText(CString(""),
+            sTemp,
+            -1,
+            FALSE);
+
+        sTemp.Format("Extended Night: %s", (m_header.m_areaType & 0x40) != 0 ? "TRUE" : "FALSE");
+        pWorld->DisplayText(CString(""),
+            sTemp,
+            -1,
+            FALSE);
+
+        sTemp.Format("Weather: %s", (m_header.m_areaType & 0x4) != 0 ? "TRUE" : "FALSE");
+        pWorld->DisplayText(CString(""),
+            sTemp,
+            -1,
+            FALSE);
+
+        const char* areaType;
+        if ((m_header.m_areaType & 0x8) != 0) {
+            areaType = "CITY";
+        } else if ((m_header.m_areaType & 0x10) != 0) {
+            areaType = "FOREST";
+        } else if ((m_header.m_areaType & 0x20) != 0) {
+            areaType = "DUNGEON";
+        } else {
+            areaType = "NORMAL";
+        }
+
+        sTemp.Format("Area Type: %s", areaType);
+        pWorld->DisplayText(CString(""),
+            sTemp,
+            -1,
+            FALSE);
+
+        sTemp.Format("Rain Probability: %d%%", m_header.m_rainProbability);
+        pWorld->DisplayText(CString(""),
+            sTemp,
+            -1,
+            FALSE);
+
+        sTemp.Format("Snow Probability: %d%%", m_header.m_snowProbability);
+        pWorld->DisplayText(CString(""),
+            sTemp,
+            -1,
+            FALSE);
+
+        sTemp.Format("Fog Probability: %d%%", m_header.m_fogProbability);
+        pWorld->DisplayText(CString(""),
+            sTemp,
+            -1,
+            FALSE);
+
+        sTemp.Format("Lightning Probability: %d%%", m_header.m_lightningProbability);
+        pWorld->DisplayText(CString(""),
+            sTemp,
+            -1,
+            FALSE);
+
+        POSITION pos = m_entryPoints.GetHeadPosition();
+        while (pos != NULL) {
+            CAreaFileCharacterEntryPoint* pEntryPoint = m_entryPoints.GetNext(pos);
+            sTemp.Format("    Entry Point: x=%d, y=%d, Scriptname=%.*s",
+                pEntryPoint->m_startX,
+                pEntryPoint->m_startY,
+                SCRIPTNAME_SIZE,
+                pEntryPoint->m_entryName);
+            pWorld->DisplayText(CString(""),
+                sTemp,
+                -1,
+                FALSE);
+        }
+    }
+}
+
 // 0x46FE30
 void CGameArea::ClearInput()
 {

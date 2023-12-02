@@ -160,6 +160,7 @@ public:
     BOOLEAN CanSaveGame(STRREF& strError);
     void AIUpdate();
     void CompressTime(DWORD deltaTime);
+    void DebugDump(const CString& message, BOOLEAN bEchoToScreen);
     void ClearInput();
     void ClearMarshal();
     BOOLEAN GetEntryPoint(const CString& sName, CPoint& ptEnter, SHORT& facing);
