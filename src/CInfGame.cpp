@@ -6230,6 +6230,20 @@ bool CSpellResRefList::Find(const CResRef& resRef, UINT& nID)
     return false;
 }
 
+// NOTE: Inlined. Unclear why it's different from the one below.
+const CResRef& CSpellResRefList::Get636(UINT nIndex)
+{
+    // __FILE__: .\Include\InfGame.h
+    // __LINE__: 636
+    UTIL_ASSERT(nIndex < m_nCount);
+
+    // __FILE__: .\Include\InfGame.h
+    // __LINE__: 637
+    UTIL_ASSERT(m_pList != NULL);
+
+    return m_pList[nIndex];
+}
+
 // FIXME: `nIndex` should not be reference.
 // TODO: Is it `operator[]`?
 //

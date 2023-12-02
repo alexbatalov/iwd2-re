@@ -54,6 +54,7 @@ public:
     ~CSpellResRefList();
     void Load(const C2DArray& Table, const INT& nResRefColumn);
     bool Find(const CResRef& resRef, UINT& nID);
+    const CResRef& Get636(UINT nIndex);
     const CResRef& Get(UINT& nIndex);
 
     /* 0000 */ CResRef* m_pList;

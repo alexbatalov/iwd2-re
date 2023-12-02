@@ -18,6 +18,7 @@
 
 class CAIObjectType;
 class CDerivedStats;
+class CGameSprite;
 
 class CScreenSinglePlayer : public CBaldurEngine {
 public:
@@ -81,9 +82,10 @@ public:
     void ResetErrorPanel(CUIPanel* pPanel);
     void StartSinglePlayer(INT nEngineState);
     void UpdateExperienceEntry(CUIControlTextDisplay* pText, const CAIObjectType& typeAI, CDerivedStats& DStats, DWORD nSpecialization, BYTE nBestClass, DWORD dwFlags);
+    void UpdateExperience(CUIControlTextDisplay* pText, CGameSprite* pSprite);
     void UpdatePartySelectionPanel();
     void OnPartySelectionDoneButtonClick();
-    void sub_6644B0(CUIPanel* pPanel);
+    void ResetViewCharacterPanel(CUIPanel* pPanel);
     BOOL IsPortraitButtonClickable(INT nCharacterSlot);
     void OnPortraitButtonClick(INT nButton);
     void OnLogoutButtonClick();

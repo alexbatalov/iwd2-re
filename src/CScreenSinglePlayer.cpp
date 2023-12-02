@@ -5,11 +5,13 @@
 #include "CGameSprite.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
+#include "CItem.h"
 #include "CScreenCharacter.h"
 #include "CScreenConnection.h"
 #include "CScreenCreateChar.h"
 #include "CScreenStart.h"
 #include "CScreenWorld.h"
+#include "CSpell.h"
 #include "CUIControlLabel.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
@@ -651,7 +653,7 @@ void CScreenSinglePlayer::ResetPopupPanel(DWORD dwPanelId)
         break;
     case 8:
         m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(m_cUIManager.GetPanel(8)->GetControl(4));
-        sub_6644B0(pPanel);
+        ResetViewCharacterPanel(pPanel);
         break;
     case 10:
         m_nParty = 0;
@@ -1932,6 +1934,31 @@ void CScreenSinglePlayer::UpdateExperienceEntry(CUIControlTextDisplay* pText, co
     }
 }
 
+// NOTE: Inlined.
+void CScreenSinglePlayer::UpdateExperience(CUIControlTextDisplay* pText, CGameSprite* pSprite)
+{
+    DWORD nSpecialization = pSprite->GetSpecialization();
+
+    CDerivedStats* pDStats = pSprite->GetDerivedStats();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 3230
+    UTIL_ASSERT(pDStats != NULL);
+
+    CCreatureFileHeader* pBStats = pSprite->GetBaseStats();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 3232
+    UTIL_ASSERT(pBStats != NULL);
+
+    UpdateExperienceEntry(pText,
+        pSprite->m_liveTypeAI,
+        *pDStats,
+        nSpecialization,
+        pDStats->GetBestClass(),
+        pBStats->m_flags);
+}
+
 // 0x664010
 void CScreenSinglePlayer::UpdatePartySelectionPanel()
 {
@@ -2068,9 +2095,243 @@ void CScreenSinglePlayer::OnPartySelectionDoneButtonClick()
 }
 
 // 0x6644B0
-void CScreenSinglePlayer::sub_6644B0(CUIPanel* pPanel)
+void CScreenSinglePlayer::ResetViewCharacterPanel(CUIPanel* pPanel)
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 3444
+    UTIL_ASSERT(pGame != NULL);
+
+    const CRuleTables& ruleTables = pGame->GetRuleTables();
+
+    CString sName;
+    CString v1; // NOTE: Unused.
+    CString sRace;
+    CString sGender;
+    CString sAlignment;
+
+    CUIControlTextDisplay* pTextLeft = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(2));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 3457
+    UTIL_ASSERT(pTextLeft != NULL);
+
+    pTextLeft->RemoveAll();
+
+    CUIControlTextDisplay* pTextRight = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(3));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+    // __LINE__: 3460
+    UTIL_ASSERT(pTextRight != NULL);
+
+    pTextRight->RemoveAll();
+
+    CMultiplayerSettings* pSettings = pGame->GetMultiplayerSettings();
+
+    LONG nCharacterId = pGame->GetCharacterSlot(field_484);
+
+    BOOL bSlotFull = pSettings->GetCharacterStatus(field_484) == CMultiplayerSettings::CHARSTATUS_CHARACTER
+        && nCharacterId != CGameObjectArray::INVALID_INDEX;
+
+    if (!pSettings->m_bFirstConnected && bSlotFull) {
+        CGameSprite* pSprite;
+
+        BYTE rc;
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            CCreatureFileHeader* pBStats = pSprite->GetBaseStats();
+            CAIObjectType& typeAI = pSprite->m_startTypeAI;
+
+            // NOTE: Uninline.
+            sName = pSprite->GetName();
+
+            UpdateText(pTextLeft,
+                "%s: %s",
+                FetchString(1047), // "Name"
+                sName);
+
+            ruleTables.GetGenderStringMixed(typeAI.m_nGender, sGender);
+            UpdateText(pTextLeft,
+                "%s: %s",
+                FetchString(12135), // "Gender"
+                sGender);
+
+            ruleTables.GetRaceStringMixed(typeAI.m_nRace, sRace, typeAI.m_nSubRace);
+            UpdateText(pTextLeft,
+                "%s: %s",
+                FetchString(1048), // "Race"
+                sRace);
+
+            ruleTables.GetAlignmentStringMixed(typeAI.m_nAlignment, sAlignment);
+            UpdateText(pTextLeft,
+                "%s: %s",
+                FetchString(1049), // "Alignment"
+                sRace);
+
+            // NOTE: Uninline.
+            UpdateExperience(pTextLeft, pSprite);
+
+            UpdateText(pTextLeft, "");
+
+            UpdateTextForceColor(pTextLeft,
+                RGB(200, 200, 0),
+                "%s",
+                FetchString(17088)); // "Abilities"
+
+            UpdateText(pTextLeft,
+                "%s: %d  (%+d)",
+                FetchString(1145), // "Strength"
+                pBStats->m_STRBase,
+                ruleTables.GetAbilityScoreModifier(pBStats->m_STRBase));
+
+            UpdateText(pTextLeft,
+                "%s: %d  (%+d)",
+                FetchString(1151), // "Dexterity"
+                pBStats->m_DEXBase,
+                ruleTables.GetAbilityScoreModifier(pBStats->m_DEXBase));
+
+            UpdateText(pTextLeft,
+                "%s: %d  (%+d)",
+                FetchString(1178), // "Constitution"
+                pBStats->m_CONBase,
+                ruleTables.GetAbilityScoreModifier(pBStats->m_CONBase));
+
+            UpdateText(pTextLeft,
+                "%s: %d  (%+d)",
+                FetchString(1179), // "Intelligence"
+                pBStats->m_INTBase,
+                ruleTables.GetAbilityScoreModifier(pBStats->m_INTBase));
+
+            UpdateText(pTextLeft,
+                "%s: %d  (%+d)",
+                FetchString(1180), // "Wisdom"
+                pBStats->m_WISBase,
+                ruleTables.GetAbilityScoreModifier(pBStats->m_WISBase));
+
+            UpdateText(pTextLeft,
+                "%s: %d  (%+d)",
+                FetchString(1181), // "Charisma"
+                pBStats->m_CHRBase,
+                ruleTables.GetAbilityScoreModifier(pBStats->m_CHRBase));
+
+            UpdateTextForceColor(pTextRight,
+                RGB(200, 200, 0),
+                "%s",
+                FetchString(36361)); // "Feats"
+
+            pSprite->DisplayFeats(pTextRight);
+
+            UpdateText(pTextRight, "");
+
+            UpdateTextForceColor(pTextRight,
+                RGB(200, 200, 0),
+                "%s",
+                FetchString(11983)); // "Skills"
+
+            pSprite->DisplaySkills(pTextRight);
+
+            UpdateText(pTextRight, "");
+
+            UpdateTextForceColor(pTextRight,
+                RGB(200, 200, 0),
+                "%s",
+                FetchString(11292)); // "Inventory"
+
+            for (INT nSlot = 0; nSlot < 51; nSlot++) {
+                if (nSlot != 10) {
+                    if (pSprite->m_equipment.m_items[nSlot] != NULL) {
+                        STRREF strItem = pSprite->m_equipment.m_items[nSlot]->GetGenericName();
+                        UpdateText(pTextRight,
+                            "%s",
+                            FetchString(strItem));
+                    }
+                }
+            }
+
+            if (pSprite->GetNumSpells() > 0) {
+                for (UINT nClassIndex = 0; nClassIndex < CSPELLLIST_NUM_CLASSES; nClassIndex++) {
+                    if (pSprite->m_spells.m_spellsByClass[nClassIndex].GetNumSpells() > 0) {
+                        STRREF strRef;
+                        switch (nClassIndex) {
+                        case 0:
+                            strRef = 39341; // "Known Bard Spells"
+                            break;
+                        case 1:
+                            strRef = 11028; // "Known Cleric Spells"
+                            break;
+                        case 2:
+                            strRef = 39342; // "Known Druid Spells"
+                            break;
+                        case 3:
+                            strRef = 39343; // "Known Paladin Spells"
+                            break;
+                        case 4:
+                            strRef = 39344; // "Known Ranger Spells"
+                            break;
+                        case 5:
+                            strRef = 39345; // "Known Sorcerer Spells"
+                            break;
+                        case 6:
+                            strRef = 11027; // "Known Wizard Spells"
+                            break;
+                        default:
+                            // __FILE__: C:\Projects\Icewind2\src\Baldur\infscreensingleplayer.cpp
+                            // __LINE__: 3583
+                            UTIL_ASSERT(FALSE);
+                        }
+
+                        UpdateText(pTextRight, "");
+
+                        UpdateTextForceColor(pTextRight,
+                            RGB(200, 200, 0),
+                            "%s",
+                            FetchString(strRef));
+
+                        for (UINT nLevel = 0; nLevel < CSPELLLIST_MAX_LEVELS; nLevel++) {
+                            // NOTE: Uninline.
+                            CGameSpriteSpellList* pSpells = pSprite->m_spells.GetSpellsAtLevel(nClassIndex, nLevel);
+
+                            for (size_t index = 0; index < pSpells->m_List.size(); index++) {
+                                // NOTE: Uninline.
+                                CGameSpriteSpellListEntry* pEntry = pSpells->Get(index);
+
+                                // NOTE: Uninline.
+                                const CResRef& resRef = g_pBaldurChitin->GetObjectGame()->m_spells.Get636(pEntry->m_nID);
+
+                                CSpell cSpell;
+                                cSpell.SetResRef(resRef, TRUE, TRUE);
+
+                                if (cSpell.GetRes() != NULL) {
+                                    cSpell.Demand();
+                                    STRREF name = cSpell.GetGenericName();
+                                    cSpell.Release();
+
+                                    UpdateText(pTextRight,
+                                        "%d: %s",
+                                        nLevel + 1,
+                                        FetchString(name));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            pTextLeft->SetTopString(pTextLeft->m_plstStrings->FindIndex(0));
+            pTextRight->SetTopString(pTextRight->m_plstStrings->FindIndex(0));
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
 }
 
 // 0x665280
