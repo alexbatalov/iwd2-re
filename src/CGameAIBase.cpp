@@ -926,6 +926,78 @@ SHORT CGameAIBase::GiveOrder(CGameAIBase* sprite)
     return ACTION_DONE;
 }
 
+// 0x465630
+SHORT CGameAIBase::DisplayString(CGameAIBase* sprite)
+{
+    STR_RES strRes;
+    COLORREF rgbColor = RGB(0, 0, 0);
+    STRREF name;
+
+    if (sprite == NULL) {
+        return ACTION_ERROR;
+    }
+
+    if (sprite->GetObjectType() == TYPE_SPRITE) {
+        rgbColor = CVidPalette::RANGE_COLORS[static_cast<CGameSprite*>(sprite)->GetBaseStats()->m_colors[2]];
+        name = static_cast<CGameSprite*>(sprite)->GetNameRef();
+    } else {
+        name = -1;
+    }
+
+    g_pBaldurChitin->GetTlkTable().Fetch(m_curAction.m_specificID, strRes);
+    strRes.szText.TrimLeft();
+
+    if (sprite->m_typeAI.GetEnemyAlly() == CAIObjectType::EA_PC) {
+        if (strRes.cSound.m_nLooping == 0) {
+            strRes.cSound.SetFireForget(TRUE);
+        }
+
+        if (sprite->GetObjectType() == TYPE_SPRITE) {
+            strRes.cSound.SetChannel(static_cast<CGameSprite*>(sprite)->GetChannel(),
+                reinterpret_cast<DWORD>(m_pArea));
+        } else {
+            strRes.cSound.SetChannel(14, reinterpret_cast<DWORD>(m_pArea));
+        }
+
+        strRes.cSound.Play(m_pos.x, m_pos.y, 0, FALSE);
+
+        if (strRes.szText != "") {
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(name,
+                m_curAction.m_specificID,
+                rgbColor,
+                RGB(160, 200, 215),
+                -1,
+                m_id,
+                sprite->GetId());
+        }
+    } else {
+        if (strRes.cSound.m_nLooping == 0) {
+            strRes.cSound.SetFireForget(TRUE);
+        }
+
+        if (sprite->GetObjectType() == TYPE_SPRITE) {
+            strRes.cSound.SetChannel(static_cast<CGameSprite*>(sprite)->GetChannel(),
+                reinterpret_cast<DWORD>(m_pArea));
+        } else {
+            strRes.cSound.SetChannel(14, reinterpret_cast<DWORD>(m_pArea));
+        }
+
+        strRes.cSound.Play(m_pos.x, m_pos.y, 0, FALSE);
+
+        if (strRes.szText != "") {
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(name,
+                m_curAction.m_specificID,
+                rgbColor,
+                RGB(215, 215, 190),
+                -1,
+                m_id,
+                sprite->GetId());
+        }
+    }
+
+    return ACTION_DONE;
+}
+
 // 0x465F30
 SHORT CGameAIBase::StartMovie()
 {
