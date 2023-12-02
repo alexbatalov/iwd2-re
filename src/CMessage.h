@@ -224,12 +224,14 @@ public:
     BOOL AddDroppedPlayer(PLAYER_ID playerID);
     BOOL PurgeDroppedPlayers();
     void UpdateDemandCharacters(unsigned char a1, int a2, unsigned char a3);
+    void BroadcastUpdateCharacterSlot(BOOLEAN bUpdateAllCharacters, INT nUpdatedCharacterSlot, BOOLEAN bProgressBarInPlace);
     BOOLEAN OnUpdateDemandCharacterSlot(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
     BOOLEAN DemandCharacterSlot(SHORT nCharacterSlot, BOOLEAN bDemandFromHost, SHORT nPlayerSlot);
     BOOLEAN OnDemandCharacterSlot(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
     BOOLEAN BroadcastDemandCharacterSlotReply(BOOLEAN bUpdateAllCharacters, INT nUpdatedCharacterSlot, BOOLEAN bProgressBarInPlace);
     BOOLEAN DemandCharacterSlotReply(CString& sSendTo, SHORT nCharacterSlot, BOOLEAN bSendCharInfo);
     BOOLEAN OnDemandCharacterSlotReply(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
+    BOOL ObjectControlSuggestion(PLAYER_ID playerToSuggestID, LONG localObjectID);
     BOOL ObjectControlRequest(LONG localObjectID);
     BOOL ObjectControl();
     BOOLEAN OnSwapItemRequest(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);

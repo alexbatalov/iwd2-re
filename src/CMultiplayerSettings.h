@@ -55,6 +55,7 @@ public:
     void SetArbitrationLockStatus(BOOLEAN bStatus, unsigned char a2);
     void SetArbitrationLockAllowInput(BOOLEAN bStatus);
     void SetCharacterCreationLocation(CString sAreaName, CPoint ptStart);
+    void OnDropPlayer(PLAYER_ID idDroppedPlayer);
     void SetServerOnLoadGame(PLAYER_ID localPlayerID);
     void ResetServerOnLoadGame();
 
@@ -79,8 +80,8 @@ public:
     /* 009E */ PLAYER_ID m_idHostPermittedDialog;
     /* 00A2 */ LONG m_nHostPermittedDialogDelay;
     /* 00A6 */ BOOLEAN m_bHostPermittedDialog;
-    /* 00A7 */ unsigned char field_A7;
-    /* 00A8 */ unsigned char field_A8;
+    /* 00A7 */ BOOLEAN m_bHostPermittedStore;
+    /* 00A8 */ PLAYER_ID m_idHostPermittedStore;
     /* 00AC */ unsigned char field_AC[6];
     /* 00B2 */ BOOLEAN field_B2[6];
     /* 00B8 */ BOOLEAN m_bFirstConnected;

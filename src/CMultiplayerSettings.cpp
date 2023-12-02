@@ -1,7 +1,12 @@
 #include "CMultiplayerSettings.h"
 
 #include "CBaldurChitin.h"
+#include "CGameSprite.h"
 #include "CInfGame.h"
+#include "CScreenStore.h"
+#include "CScreenWorld.h"
+#include "CScreenWorldMap.h"
+#include "CUIPanel.h"
 #include "CUtil.h"
 
 // 0x84D59C
@@ -107,8 +112,8 @@ void CMultiplayerSettings::InitializeSettings()
     m_nHostPermittedDialogDelay = 0;
     m_bHostPermittedDialog = FALSE;
     m_idHostPermittedDialog = 0;
-    field_A7 = 0;
-    field_A8 = 0;
+    m_bHostPermittedStore = FALSE;
+    m_idHostPermittedStore = 0;
     m_bFirstConnected = FALSE;
 
     m_nDifficultyLevel = GetPrivateProfileIntA("Game Options",
@@ -613,12 +618,33 @@ int CMultiplayerSettings::sub_518560()
 // 0x518580
 void CMultiplayerSettings::sub_518580(PLAYER_ID playerID, INT characterSlotBeingViewed)
 {
+    if (characterSlotBeingViewed != -1) {
+        LONG nCharacterId = g_pBaldurChitin->GetObjectGame()->GetCharacterId(characterSlotBeingViewed);
+
+        CGameSprite* pSprite;
+
+        BYTE rc;
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (pSprite->m_baseStats.m_hitPoints <= 0) {
+                characterSlotBeingViewed = -1;
+            }
+
+            // FIXME: `pSprite` is released.
+        } else {
+            characterSlotBeingViewed = -1;
+        }
+    }
+
     // __FILE__: C:\Projects\Icewind2\src\Baldur\CMultiplayerSettings.cpp
     // __LINE__: 1185
     UTIL_ASSERT(characterSlotBeingViewed >= -1 && characterSlotBeingViewed < MAX_CHARACTERS);
-
-    // TODO: Incomplete. There is some strange code which locks appropriate
-    // character, but never releases it. Check in debugger.
 
     INT nPlayerSlot = g_pChitin->cNetwork.FindPlayerLocationByID(playerID, TRUE);
     field_AC[nPlayerSlot] = characterSlotBeingViewed;
@@ -685,7 +711,70 @@ void CMultiplayerSettings::SetCharacterControlledByPlayer(INT nCharacterSlot, IN
     UTIL_ASSERT_MSG(((nPlayerSlot >= -1) && (nPlayerSlot < MAX_PLAYERS)),
         "CMultiplayerSettings::SetCharacterControlledByPlayer: Bad player slot.");
 
-    // TODO: Incomplete.
+    if (g_pChitin->cNetwork.GetSessionOpen()) {
+        if (g_pChitin->cNetwork.GetSessionHosting()) {
+            if (m_pnCharacterStatus[nCharacterSlot] == CHARSTATUS_CREATING_CHARACTER
+                && g_pChitin->cNetwork.GetPlayerID(nPlayerSlot) != 0) {
+                if (m_pnCharacterControlledByPlayer[nCharacterSlot] != g_pChitin->cNetwork.GetPlayerID(nPlayerSlot)) {
+                    if (g_pBaldurChitin->GetObjectGame()->m_bGameLoaded == TRUE) {
+                        LONG nCharacterId = g_pBaldurChitin->GetObjectGame()->GetCharacterId(nCharacterSlot);
+                        CMessage* message = new CMessage101(FALSE,
+                            nCharacterId,
+                            nCharacterId,
+                            TRUE);
+                        g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+
+                        CGameSprite* pSprite;
+
+                        BYTE rc;
+                        do {
+                            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nCharacterId,
+                                CGameObjectArray::THREAD_ASYNCH,
+                                reinterpret_cast<CGameObject**>(&pSprite),
+                                INFINITE);
+                        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+                        if (rc == CGameObjectArray::SUCCESS) {
+                            pSprite->sub_723BF0(FALSE, FALSE);
+                            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nCharacterId,
+                                CGameObjectArray::THREAD_ASYNCH,
+                                INFINITE);
+                        }
+                    }
+
+                    if (m_pnCharacterStatus[nCharacterSlot] == CHARSTATUS_CHARACTER
+                        && bCharacterUpdate == TRUE) {
+                        g_pBaldurChitin->GetBaldurMessage()->UpdateDemandCharacters(0, nCharacterSlot, 0);
+                        g_pBaldurChitin->GetBaldurMessage()->BroadcastUpdateCharacterSlot(FALSE, nCharacterSlot, FALSE);
+                    }
+
+                    m_pnCharacterControlledByPlayer[nCharacterSlot] = g_pChitin->cNetwork.GetPlayerID(nPlayerSlot);
+                }
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\CMultiplayerSettings.cpp
+                // __LINE__: 1390
+                UTIL_ASSERT(m_pnCharacterControlledByPlayer[nCharacterSlot] != 0);
+
+                if (bFlush == TRUE) {
+                    g_pBaldurChitin->GetBaldurMessage()->SendFullSettingsToClients(CString(""));
+                }
+
+                if (!m_bArbitrationLockStatus) {
+                    if (g_pBaldurChitin->GetObjectGame()->m_bGameLoaded == TRUE) {
+                        g_pBaldurChitin->GetBaldurMessage()->ObjectControlSuggestion(m_pnCharacterControlledByPlayer[nCharacterSlot],
+                            g_pBaldurChitin->GetObjectGame()->GetCharacterId(nCharacterSlot));
+                    }
+                }
+            }
+        } else {
+            CString sPlayerName;
+            g_pChitin->cNetwork.GetPlayerName(nPlayerSlot, sPlayerName);
+            g_pBaldurChitin->GetBaldurMessage()->SendCharacterControlToServer(sPlayerName,
+                nCharacterSlot,
+                bFlush,
+                bCharacterUpdate);
+        }
+    }
 }
 
 // 0x518A30
@@ -862,6 +951,70 @@ void CMultiplayerSettings::SetCharacterCreationLocation(CString sAreaName, CPoin
         m_sAreaName = sAreaName;
         m_ptAreaStart = ptStart;
         g_pBaldurChitin->m_cBaldurMessage.SendFullSettingsToClients(CString(""));
+    }
+}
+
+// 0x519270
+void CMultiplayerSettings::OnDropPlayer(PLAYER_ID idDroppedPlayer)
+{
+    int index;
+
+    for (index = 0; index < MAX_CHARACTERS; index++) {
+        if (m_pnPlayerReady[index] == idDroppedPlayer) {
+            m_pnPlayerReady[index] = 0;
+        }
+    }
+
+    for (index = 0; index < MAX_CHARACTERS; index++) {
+        if (m_pnCharacterControlledByPlayer[index] == idDroppedPlayer) {
+            m_pnCharacterControlledByPlayer[index] = g_pChitin->cNetwork.GetHostPlayerID();
+            if (m_pnCharacterStatus[index] == CHARSTATUS_CREATING_CHARACTER
+                || (m_pnCharacterStatus[index] == CHARSTATUS_CHARACTER
+                    && g_pBaldurChitin->GetObjectGame()->GetCharacterSlot(index) == CGameObjectArray::INVALID_INDEX)) {
+                m_pnCharacterStatus[index] = CHARSTATUS_NO_CHARACTER;
+            }
+        }
+    }
+
+    if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+        if (idDroppedPlayer == m_idHostPermittedDialog && m_bHostPermittedDialog == TRUE) {
+            if (g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode == 386) {
+                g_pBaldurChitin->GetScreenWorld()->m_bInControlOfDialog = TRUE;
+                m_idHostPermittedDialog = g_pChitin->cNetwork.m_idLocalPlayer;
+                g_pBaldurChitin->GetScreenWorld()->GetInternalLoadedDialog()->UpdateDialogColors();
+                g_pBaldurChitin->GetScreenWorld()->GetManager()->GetPanel(9)->SetActive(TRUE);
+                g_pBaldurChitin->GetScreenWorld()->GetManager()->GetPanel(9)->InvalidateRect(NULL);
+                g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode = 1282;
+            }
+            m_idHostPermittedDialog = g_pChitin->cNetwork.m_idLocalPlayer;
+            m_nHostPermittedDialogDelay = 0;
+        }
+
+        if (idDroppedPlayer == m_idHostPermittedStore && m_bHostPermittedStore == TRUE) {
+            if (g_pBaldurChitin->GetActiveEngine() == g_pBaldurChitin->m_pEngineStore) {
+                g_pBaldurChitin->GetScreenWorld()->m_bInControlOfStore = TRUE;
+                m_idHostPermittedStore = g_pChitin->cNetwork.m_idLocalPlayer;
+
+                // FIXME: Redundant.
+                if (g_pBaldurChitin->GetActiveEngine() == g_pBaldurChitin->m_pEngineStore) {
+                    g_pBaldurChitin->m_pEngineStore->UpdateMainPanel();
+                }
+
+                g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode = -1;
+            }
+        }
+
+        if (g_pBaldurChitin->GetActiveEngine() == g_pBaldurChitin->m_pEngineWorldMap
+            && g_pBaldurChitin->GetScreenWorld()->m_idPendingMapWorldController == idDroppedPlayer) {
+            g_pBaldurChitin->GetScreenWorld()->m_idPendingMapWorldController = g_pChitin->cNetwork.m_idLocalPlayer;
+
+            // FIXME: Redundant.
+            if (g_pBaldurChitin->GetActiveEngine() == g_pBaldurChitin->m_pEngineWorldMap) {
+                g_pBaldurChitin->m_pEngineWorldMap->UpdateMainPanel();
+            }
+        }
+
+        sub_518580(idDroppedPlayer, -1);
     }
 }
 

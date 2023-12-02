@@ -1898,6 +1898,12 @@ void CBaldurMessage::UpdateDemandCharacters(unsigned char a1, int a2, unsigned c
     // TODO: Incomplete.
 }
 
+// 0x42DCF0
+void CBaldurMessage::BroadcastUpdateCharacterSlot(BOOLEAN bUpdateAllCharacters, INT nUpdatedCharacterSlot, BOOLEAN bProgressBarInPlace)
+{
+    // TODO: Incomplete.
+}
+
 // 0x42E0C0
 BOOLEAN CBaldurMessage::OnUpdateDemandCharacterSlot(INT nMsgFrom, BYTE* pMessage, DWORD dwSize)
 {
@@ -2093,6 +2099,14 @@ BOOLEAN CBaldurMessage::DemandCharacterSlotReply(CString& sSendTo, SHORT nCharac
 
 // 0x42FA60
 BOOLEAN CBaldurMessage::OnDemandCharacterSlotReply(INT nMsgFrom, BYTE* pMessage, DWORD dwSize)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x430720
+BOOL CBaldurMessage::ObjectControlSuggestion(PLAYER_ID playerToSuggestID, LONG localObjectID)
 {
     // TODO: Incomplete.
 
