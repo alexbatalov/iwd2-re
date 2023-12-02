@@ -307,6 +307,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_AREA_EXPLORED = 114;
 // 0x84CF4F
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_120 = 120;
 
+// 0x84CF50
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_END_GAME = 121;
+
 // 0x84CF51
 const BYTE CBaldurMessage::MSG_TYPE_DIALOG = 68;
 
@@ -13531,4 +13534,91 @@ void CMessageSetAreaExplored::Run()
             pArea->m_visibility.SetAreaUnexplored();
         }
     }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4531F0
+CMessageEndGame::CMessageEndGame(int a1, int a2, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    field_C = a1;
+    field_10 = a2;
+}
+
+// 0x453330
+CMessageEndGame::~CMessageEndGame()
+{
+}
+
+// 0x4088A0
+SHORT CMessageEndGame::GetCommType()
+{
+    return BROADCAST_OTHERS;
+}
+
+// 0x40A0E0
+BYTE CMessageEndGame::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x453300
+BYTE CMessageEndGame::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_END_GAME;
+}
+
+// 0x516550
+void CMessageEndGame::MarshalMessage(BYTE** pData, DWORD* dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 31915
+    UTIL_ASSERT(pData != NULL && dwSize != NULL);
+
+    *dwSize = sizeof(int) + sizeof(int);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 31921
+    UTIL_ASSERT(*dwSize <= STATICBUFFERSIZE);
+
+    DWORD cnt = 0;
+
+    *reinterpret_cast<int*>(*pData + cnt) = field_C;
+    cnt += sizeof(int);
+
+    *reinterpret_cast<int*>(*pData + cnt) = field_10;
+    cnt += sizeof(int);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 31931
+    UTIL_ASSERT(cnt == *dwSize);
+}
+
+// 0x5165E0
+BOOL CMessageEndGame::UnmarshalMessage(BYTE* pData, DWORD dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 31955
+    UTIL_ASSERT(pData != NULL);
+
+    DWORD cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    field_C = *reinterpret_cast<int*>(pData + cnt);
+    cnt += sizeof(int);
+
+    field_10 = *reinterpret_cast<int*>(pData + cnt);
+    cnt += sizeof(int);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 31964
+    UTIL_ASSERT(cnt == dwSize);
+
+    return TRUE;
+}
+
+// 0x516650
+void CMessageEndGame::Run()
+{
+    g_pBaldurChitin->GetObjectGame()->ReadyCharacterTerminationSequence(field_C, field_10);
 }

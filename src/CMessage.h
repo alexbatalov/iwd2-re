@@ -105,6 +105,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_AREA_TYPE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_AREA_EXPLORED;
     static const BYTE MSG_SUBTYPE_CMESSAGE_120;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_END_GAME;
 
     static const BYTE MSG_TYPE_DIALOG;
     static const BYTE MSG_SUBTYPE_DIALOG_PERMIT_REQUEST;
@@ -1424,6 +1425,22 @@ public:
     void Run() override;
 
     /* 000C */ BOOLEAN m_bExplored;
+};
+
+class CMessageEndGame : public CMessage {
+public:
+    CMessageEndGame(int a1, int a2, LONG caller, LONG target);
+    ~CMessageEndGame() override;
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ int field_C;
+    /* 0010 */ int field_10;
+    /* 0014 */ CAIAction m_action;
 };
 
 #endif /* CMESSAGE_H_ */
