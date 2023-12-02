@@ -104,6 +104,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_103;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_AREA_TYPE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_AREA_EXPLORED;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_120;
 
     static const BYTE MSG_TYPE_DIALOG;
     static const BYTE MSG_SUBTYPE_DIALOG_PERMIT_REQUEST;
@@ -1383,6 +1384,20 @@ public:
     /* 000C */ BOOLEAN field_C;
     /* 000E */ PLAYER_ID m_idPlayer;
     /* 0012 */ INT m_nCharacterPortraitSlotNumber;
+};
+
+class CMessage120 : public CMessage {
+public:
+    CMessage120(PLAYER_ID idPlayer, BOOLEAN a2, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ PLAYER_ID m_idPlayer;
+    /* 0010 */ BOOLEAN field_10;
 };
 
 class CMessageSetAreaType : public CMessage {

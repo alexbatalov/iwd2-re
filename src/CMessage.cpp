@@ -304,6 +304,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_AREA_TYPE = 109;
 // 0x84CF49
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_AREA_EXPLORED = 114;
 
+// 0x84CF4F
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_120 = 120;
+
 // 0x84CF51
 const BYTE CBaldurMessage::MSG_TYPE_DIALOG = 68;
 
@@ -13196,6 +13199,137 @@ void CMessage103::Run()
         UTIL_ASSERT(m_nCharacterPortraitSlotNumber >= -1 && m_nCharacterPortraitSlotNumber < CMultiplayerSettings::MAX_CHARACTERS);
 
         pGame->GetMultiplayerSettings()->sub_518580(m_idPlayer, m_nCharacterPortraitSlotNumber);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F6DC0
+CMessage120::CMessage120(PLAYER_ID idPlayer, BOOLEAN a2, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_idPlayer = idPlayer;
+    field_10 = a2;
+}
+
+// 0x43E170
+SHORT CMessage120::GetCommType()
+{
+    return BROADCAST_FORCED;
+}
+
+// 0x40A0E0
+BYTE CMessage120::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4F6DF0
+BYTE CMessage120::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_120;
+}
+
+// 0x514D40
+void CMessage120::MarshalMessage(BYTE** pData, DWORD* dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 30594
+    UTIL_ASSERT(pData != NULL && dwSize != NULL);
+
+    CGameObject* pObject;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        PLAYER_ID remotePlayerID = pObject->m_remotePlayerID;
+        LONG remoteObjectID = pObject->m_remoteObjectID;
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+
+        *dwSize = sizeof(PLAYER_ID)
+            + sizeof(LONG)
+            + sizeof(PLAYER_ID)
+            + sizeof(unsigned char);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+        // __LINE__: 30615
+        UTIL_ASSERT(*dwSize <= STATICBUFFERSIZE);
+
+        DWORD cnt = 0;
+
+        *reinterpret_cast<PLAYER_ID*>(*pData + cnt) = remotePlayerID;
+        cnt += sizeof(PLAYER_ID);
+
+        *reinterpret_cast<LONG*>(*pData + cnt) = remoteObjectID;
+        cnt += sizeof(LONG);
+
+        *reinterpret_cast<PLAYER_ID*>(*pData + cnt) = m_idPlayer;
+        cnt += sizeof(PLAYER_ID);
+
+        *reinterpret_cast<BOOLEAN*>(*pData + cnt) = field_10;
+        cnt += sizeof(BOOLEAN);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+        // __LINE__: 30628
+        UTIL_ASSERT(cnt == *dwSize);
+    } else {
+        *dwSize = 0;
+    }
+}
+
+// 0x514E70
+BOOL CMessage120::UnmarshalMessage(BYTE* pData, DWORD dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 30644
+    UTIL_ASSERT(pData != NULL);
+
+    DWORD cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    PLAYER_ID remotePlayerID = *reinterpret_cast<PLAYER_ID*>(pData + cnt);
+    cnt += sizeof(PLAYER_ID);
+
+    LONG remoteObjectID = *reinterpret_cast<LONG*>(pData + cnt);
+    cnt += sizeof(LONG);
+
+    LONG localObjectID;
+    if (g_pBaldurChitin->GetObjectGame()->GetRemoteObjectArray()->Find(remotePlayerID, remoteObjectID, localObjectID) != TRUE) {
+        return FALSE;
+    }
+
+    m_targetId = localObjectID;
+
+    m_idPlayer = *reinterpret_cast<PLAYER_ID*>(pData + cnt);
+    cnt += sizeof(PLAYER_ID);
+
+    field_10 = *reinterpret_cast<BOOLEAN*>(pData + cnt);
+    cnt += sizeof(BOOLEAN);
+
+    // NOTE: Missing trailing guard.
+
+    return TRUE;
+}
+
+// 0x514CB0
+void CMessage120::Run()
+{
+    if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+        CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+        // __LINE__: 30686
+        UTIL_ASSERT(pGame != NULL);
+
+        pGame->GetMultiplayerSettings()->sub_518660(m_idPlayer, field_10);
     }
 }
 
