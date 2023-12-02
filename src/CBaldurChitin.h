@@ -126,6 +126,7 @@ public:
     /* 0078 */ void OnMultiplayerSessionClose() override;
     /* 007C */ void OnMultiplayerPlayerJoin(PLAYER_ID playerID, const CString& sPlayerName) override;
     /* 0080 */ void OnMultiplayerPlayerVisible(PLAYER_ID playerID) override;
+    /* 0084 */ void OnMultiplayerPlayerLeave(PLAYER_ID playerID, const CString& sPlayerName) override;
     /* 0088 */ BOOL MessageCallback(BYTE* pData, DWORD dwSize) override;
     /* 0090 */ void AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD dw1, DWORD dw2) override;
     /* 0094 */ BOOLEAN FlipFullScreenMode(BOOLEAN bSave) override;

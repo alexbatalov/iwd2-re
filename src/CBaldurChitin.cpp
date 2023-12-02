@@ -2047,6 +2047,37 @@ void CBaldurChitin::OnMultiplayerPlayerVisible(PLAYER_ID playerID)
     }
 }
 
+// 0x425D10
+void CBaldurChitin::OnMultiplayerPlayerLeave(PLAYER_ID playerID, const CString& sPlayerName)
+{
+    INT nLocation;
+    INT nHostLocation;
+
+    if (g_pChitin->cNetwork.GetSessionOpen()) {
+        if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+            nHostLocation = g_pChitin->cNetwork.m_nLocalPlayer;
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CBaldurChitin.cpp
+            // __LINE__: 2725
+            UTIL_ASSERT_MSG(nHostLocation != -1,
+                "CBaldurChitin::OnMultiplayerLeave: Can't find host player slot!\n");
+
+            nLocation = g_pChitin->cNetwork.FindPlayerLocationByID(playerID, FALSE);
+            if (nLocation != -1) {
+                CMultiplayerSettings* pSettings = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings();
+                pSettings->ResetPermissionsForPlayer(nLocation, FALSE);
+                pSettings->OnDropPlayer(playerID);
+                m_cBaldurMessage.SendFullSettingsToClients(CString(""));
+                m_cBaldurMessage.AddDroppedPlayer(playerID);
+            }
+        } else {
+            if (g_pChitin->cNetwork.FindPlayerLocationByID(playerID, FALSE) != -1) {
+                g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->OnDropPlayer(playerID);
+            }
+        }
+    }
+}
+
 // 0x425E60
 BOOL CBaldurChitin::MessageCallback(BYTE* pData, DWORD dwSize)
 {
