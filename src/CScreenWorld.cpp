@@ -2122,6 +2122,7 @@ void CScreenWorld::UnhideInterface()
 void CScreenWorld::SetNewViewSize(CRect newViewSize, BOOL bForceViewSize)
 {
     m_newViewSize = newViewSize;
+    m_waitingOnResize = 2;
     m_bForceViewSize = bForceViewSize;
 }
 
