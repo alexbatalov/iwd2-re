@@ -7920,6 +7920,12 @@ SHORT CGameSprite::LeaveParty()
     return ACTION_DONE;
 }
 
+// 0x74F6D0
+void CGameSprite::MoveGlobal(const CString& sArea, const CPoint& ptStart)
+{
+    // TODO: Incomplete.
+}
+
 // 0x74F830
 void CGameSprite::SelectWeaponAbility(unsigned char a1, unsigned char a2, unsigned char a3, unsigned char a4)
 {

@@ -84,6 +84,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_ESCAPE_AREA;
     static const BYTE MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXTREF_SEND;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_CURRENT_ACTION_ID;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_MOVE_GLOBAL;
     static const BYTE MSG_SUBTYPE_CMESSAGE_FADE_COLOR;
     static const BYTE MSG_SUBTYPE_CMESSAGE_START_TEXT_SCREEN;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SPAWNPT_ACTIVATE;
@@ -1182,6 +1183,20 @@ public:
     void Run() override;
 
     /* 000C */ CResRef m_screen;
+};
+
+class CMessageMoveGlobal : public CMessage {
+public:
+    CMessageMoveGlobal(const CString& sArea, const CPoint& ptStart, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ CString m_sArea;
+    /* 0010 */ CPoint m_ptStart;
 };
 
 class CMessageSpawnPtActivate : public CMessage {
