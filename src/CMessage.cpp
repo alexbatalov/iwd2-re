@@ -9542,7 +9542,7 @@ BOOL CMessageStartScroll::UnmarshalMessage(BYTE* pData, DWORD dwSize)
 
     CHAR szAreaString[9];
     memcpy(szAreaString, pData + cnt, nAreaStringLength);
-    pData += nAreaStringLength;
+    cnt += nAreaStringLength;
 
     CString sTempString(szAreaString, nAreaStringLength);
     m_sAreaString = sTempString;
