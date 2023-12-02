@@ -517,3 +517,23 @@ ULONG CImmunitiesProjectile::Marshal(BYTE** ptrPtr)
 
     return length;
 }
+
+// 0x4E6DF0
+void CImmunitiesProjectile::Unmarshal(BYTE* data, ULONG nSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CImmunities.cpp
+    // __LINE__: 137
+    UTIL_ASSERT(nSize % sizeof(LONG) == 0);
+
+    int count = nSize / sizeof(LONG);
+    int offset = 0;
+
+    for (int index = 0; index < count; index++) {
+        DWORD* pId = new DWORD;
+
+        *pId = *reinterpret_cast<DWORD*>(data + offset);
+        offset += sizeof(DWORD);
+
+        AddTail(pId);
+    }
+}

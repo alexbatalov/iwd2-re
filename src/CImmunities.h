@@ -111,6 +111,7 @@ public:
     BOOL OnList(DWORD projectileType);
     CImmunitiesProjectile& operator=(const CImmunitiesProjectile& other);
     ULONG Marshal(BYTE** ptrPtr);
+    void Unmarshal(BYTE* data, ULONG nSize);
 };
 
 #endif /* CIMMUNITIES_H_ */
