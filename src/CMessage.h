@@ -104,6 +104,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_103;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_AREA_TYPE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_AREA_EXPLORED;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_CHANGE_STAT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_120;
     static const BYTE MSG_SUBTYPE_CMESSAGE_END_GAME;
 
@@ -1441,6 +1442,21 @@ public:
     /* 000C */ int field_C;
     /* 0010 */ int field_10;
     /* 0014 */ CAIAction m_action;
+};
+
+class CMessageChangeStat : public CMessage {
+public:
+    CMessageChangeStat(WORD stat, DWORD value, BOOLEAN modify, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ WORD m_stat;
+    /* 000E */ DWORD m_value;
+    /* 0012 */ BOOLEAN m_modify;
 };
 
 #endif /* CMESSAGE_H_ */
