@@ -517,6 +517,7 @@ public:
     SHORT FindTraps();
     SHORT Turn();
     SHORT GetCasterLevel(CSpell* pSpell, BYTE nClass, DWORD nSpecialization);
+    SHORT SetAtOffset(DWORD stat, DWORD value, BOOL modify);
     void sub_761650();
     BOOL HasClassMask(DWORD dwMask);
     INT GetClassLevel(INT iClassType);

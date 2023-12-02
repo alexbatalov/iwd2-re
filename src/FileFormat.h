@@ -483,7 +483,8 @@ public:
     /* 005D */ BYTE m_fatigue;
     /* 005E */ BYTE m_intoxication;
     /* 005F */ signed char m_luckBase;
-    /* 0060 */ unsigned char field_60[34];
+    /* 0060 */ BYTE m_turnUndeadLevel;
+    /* 0061 */ unsigned char field_60[33];
     /* 0082 */ BYTE m_characterLevel;
     /* 0083 */ union {
         struct {

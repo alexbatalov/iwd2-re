@@ -844,7 +844,7 @@ LONG CDerivedStats::GetAtOffset(SHORT offset)
     case STAT_CLASSLEVELWIZARD:
         // NOTE: Uninline.
         return GetClassLevel(offset - STAT_CLASSLEVELSUM);
-    case STAT_107:
+    case STAT_PREVENTAISLOWDOWN:
         return m_bPreventAISlowDown;
     default:
         return 0;

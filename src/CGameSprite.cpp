@@ -8087,6 +8087,699 @@ SHORT CGameSprite::GetCasterLevel(CSpell* pSpell, BYTE nClass, DWORD nSpecializa
     return static_cast<SHORT>(nBestCasterLevel);
 }
 
+// 0x75F800
+SHORT CGameSprite::SetAtOffset(DWORD stat, DWORD value, BOOL modify)
+{
+    switch (stat) {
+    case STAT_MAXHITPOINTS:
+        if (modify == TRUE) {
+            m_baseStats.m_maxHitPointsBase += static_cast<SHORT>(value);
+            m_derivedStats.m_nMaxHitPoints += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_maxHitPointsBase = static_cast<SHORT>(value);
+            m_derivedStats.m_nMaxHitPoints = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_ARMORCLASS:
+        if (modify == TRUE) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+            // __LINE__: 26506
+            UTIL_ASSERT_MSG(FALSE, "this option is no longer available -rjf");
+        } else {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+            // __LINE__: 26513
+            UTIL_ASSERT_MSG(FALSE, "this option is no longer available -rjf");
+        }
+    case STAT_ACBLUDGEONINGMOD:
+        if (modify == TRUE) {
+            m_baseStats.m_armorClassCrushingAdjustment += static_cast<SHORT>(value);
+            m_derivedStats.m_nACCrushingMod += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_armorClassCrushingAdjustment = static_cast<SHORT>(value);
+            m_derivedStats.m_nACCrushingMod = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_ACMISSILEMOD:
+        if (modify == TRUE) {
+            m_baseStats.m_armorClassMissileAdjustment += static_cast<SHORT>(value);
+            m_derivedStats.m_nACMissileMod += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_armorClassMissileAdjustment = static_cast<SHORT>(value);
+            m_derivedStats.m_nACMissileMod = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_ACPIERCINGMOD:
+        if (modify == TRUE) {
+            m_baseStats.m_armorClassPiercingAdjustment += static_cast<SHORT>(value);
+            m_derivedStats.m_nACPiercingMod += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_armorClassPiercingAdjustment = static_cast<SHORT>(value);
+            m_derivedStats.m_nACPiercingMod = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_ACSLASHINGMOD:
+        if (modify == TRUE) {
+            m_baseStats.m_armorClassSlashingAdjustment += static_cast<SHORT>(value);
+            m_derivedStats.m_nACSlashingMod += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_armorClassSlashingAdjustment = static_cast<SHORT>(value);
+            m_derivedStats.m_nACSlashingMod = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_THAC0:
+        if (modify == TRUE) {
+            m_baseStats.m_attackBase += static_cast<BYTE>(value);
+            m_derivedStats.m_nTHAC0 += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_attackBase = static_cast<BYTE>(value);
+            m_derivedStats.m_nTHAC0 = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_NUMBEROFATTACKS:
+        if (modify == TRUE) {
+            m_baseStats.m_numberOfAttacksBase += static_cast<BYTE>(value);
+            m_derivedStats.m_nNumberOfAttacks += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_numberOfAttacksBase = static_cast<BYTE>(value);
+            m_derivedStats.m_nNumberOfAttacks = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_SAVEFORTITUDE:
+        if (modify == TRUE) {
+            m_baseStats.m_saveVSFortitudeBase += static_cast<BYTE>(value);
+            m_derivedStats.m_nSaveVSFortitude += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_saveVSFortitudeBase = static_cast<BYTE>(value);
+            m_derivedStats.m_nSaveVSFortitude = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_SAVEREFLEX:
+        if (modify == TRUE) {
+            m_baseStats.m_saveVSReflexBase += static_cast<BYTE>(value);
+            m_derivedStats.m_nSaveVSReflex += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_saveVSReflexBase = static_cast<BYTE>(value);
+            m_derivedStats.m_nSaveVSReflex = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_SAVEWILL:
+        if (modify == TRUE) {
+            m_baseStats.m_saveVSWillBase += static_cast<BYTE>(value);
+            m_derivedStats.m_nSaveVSWill += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_saveVSWillBase = static_cast<BYTE>(value);
+            m_derivedStats.m_nSaveVSWill = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_KNOWLEDGEARCANA:
+    case STAT_13:
+        return 1;
+    case STAT_RESISTFIRE:
+        if (modify == TRUE) {
+            m_baseStats.m_resistFireBase += static_cast<signed char>(value);
+            m_derivedStats.m_nResistFire += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_resistFireBase = static_cast<signed char>(value);
+            m_derivedStats.m_nResistFire = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_RESISTCOLD:
+        if (modify == TRUE) {
+            m_baseStats.m_resistColdBase += static_cast<signed char>(value);
+            m_derivedStats.m_nResistCold += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_resistColdBase = static_cast<signed char>(value);
+            m_derivedStats.m_nResistCold = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_RESISTELECTRICITY:
+        if (modify == TRUE) {
+            m_baseStats.m_resistElectricityBase += static_cast<signed char>(value);
+            m_derivedStats.m_nResistElectricity += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_resistElectricityBase = static_cast<signed char>(value);
+            m_derivedStats.m_nResistElectricity = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_RESISTACID:
+        if (modify == TRUE) {
+            m_baseStats.m_resistAcidBase += static_cast<signed char>(value);
+            m_derivedStats.m_nResistAcid += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_resistAcidBase = static_cast<signed char>(value);
+            m_derivedStats.m_nResistAcid = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_RESISTMAGIC:
+        if (modify == TRUE) {
+            m_baseStats.m_resistMagicBase += static_cast<signed char>(value);
+            m_derivedStats.m_nResistMagic += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_resistMagicBase = static_cast<signed char>(value);
+            m_derivedStats.m_nResistMagic = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_RESISTMAGICFIRE:
+        if (modify == TRUE) {
+            m_baseStats.m_resistMagicFireBase += static_cast<signed char>(value);
+            m_derivedStats.m_nResistMagicFire += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_resistMagicFireBase = static_cast<signed char>(value);
+            m_derivedStats.m_nResistMagicFire = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_RESISTMAGICCOLD:
+        if (modify == TRUE) {
+            m_baseStats.m_resistMagicColdBase += static_cast<signed char>(value);
+            m_derivedStats.m_nResistMagicCold += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_resistMagicColdBase = static_cast<signed char>(value);
+            m_derivedStats.m_nResistMagicCold = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_RESISTSLASHING:
+        if (modify == TRUE) {
+            m_baseStats.m_resistSlashingBase += static_cast<signed char>(value);
+            m_derivedStats.m_nResistSlashing += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_resistSlashingBase = static_cast<signed char>(value);
+            m_derivedStats.m_nResistSlashing = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_RESISTBLUDGEONING:
+        if (modify == TRUE) {
+            m_baseStats.m_resistCrushingBase += static_cast<signed char>(value);
+            m_derivedStats.m_nResistCrushing += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_resistCrushingBase = static_cast<signed char>(value);
+            m_derivedStats.m_nResistCrushing = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_RESISTPIERCING:
+        if (modify == TRUE) {
+            m_baseStats.m_resistPiercingBase += static_cast<signed char>(value);
+            m_derivedStats.m_nResistPiercing += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_resistPiercingBase = static_cast<signed char>(value);
+            m_derivedStats.m_nResistPiercing = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_RESISTMISSILE:
+        if (modify == TRUE) {
+            m_baseStats.m_resistMissileBase += static_cast<signed char>(value);
+            m_derivedStats.m_nResistMissile += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_resistMissileBase = static_cast<signed char>(value);
+            m_derivedStats.m_nResistMissile = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_ALCHEMY:
+        if (modify == TRUE) {
+            m_baseStats.m_skills[CGAMESPRITE_SKILL_ALCHEMY] += static_cast<BYTE>(value);
+            m_derivedStats.m_nSkills[CGAMESPRITE_SKILL_ALCHEMY] += static_cast<BYTE>(value);
+        } else {
+            m_baseStats.m_skills[CGAMESPRITE_SKILL_ALCHEMY] = static_cast<BYTE>(value);
+            m_derivedStats.m_nSkills[CGAMESPRITE_SKILL_ALCHEMY] = static_cast<BYTE>(value);
+        }
+        return 1;
+    case STAT_LOCKPICKING:
+        if (modify == TRUE) {
+            m_baseStats.m_skills[CGAMESPRITE_SKILL_OPEN_LOCK] += static_cast<BYTE>(value);
+            m_derivedStats.m_nSkills[CGAMESPRITE_SKILL_OPEN_LOCK] += static_cast<BYTE>(value);
+        } else {
+            m_baseStats.m_skills[CGAMESPRITE_SKILL_OPEN_LOCK] = static_cast<BYTE>(value);
+            m_derivedStats.m_nSkills[CGAMESPRITE_SKILL_OPEN_LOCK] = static_cast<BYTE>(value);
+        }
+        return 1;
+    case STAT_MOVESILENTLY:
+        if (modify == TRUE) {
+            m_baseStats.m_skills[CGAMESPRITE_SKILL_MOVE_SILENTLY] += static_cast<BYTE>(value);
+            m_derivedStats.m_nSkills[CGAMESPRITE_SKILL_MOVE_SILENTLY] += static_cast<BYTE>(value);
+        } else {
+            m_baseStats.m_skills[CGAMESPRITE_SKILL_MOVE_SILENTLY] = static_cast<BYTE>(value);
+            m_derivedStats.m_nSkills[CGAMESPRITE_SKILL_MOVE_SILENTLY] = static_cast<BYTE>(value);
+        }
+        return 1;
+    case STAT_TRAPS:
+        if (modify == TRUE) {
+            m_baseStats.m_skills[CGAMESPRITE_SKILL_SEARCH] += static_cast<BYTE>(value);
+            m_derivedStats.m_nSkills[CGAMESPRITE_SKILL_SEARCH] += static_cast<BYTE>(value);
+        } else {
+            m_baseStats.m_skills[CGAMESPRITE_SKILL_SEARCH] = static_cast<BYTE>(value);
+            m_derivedStats.m_nSkills[CGAMESPRITE_SKILL_SEARCH] = static_cast<BYTE>(value);
+        }
+        return 1;
+    case STAT_PICKPOCKET:
+        if (modify == TRUE) {
+            m_baseStats.m_skills[CGAMESPRITE_SKILL_PICK_POCKET] += static_cast<BYTE>(value);
+            m_derivedStats.m_nSkills[CGAMESPRITE_SKILL_PICK_POCKET] += static_cast<BYTE>(value);
+        } else {
+            m_baseStats.m_skills[CGAMESPRITE_SKILL_PICK_POCKET] = static_cast<BYTE>(value);
+            m_derivedStats.m_nSkills[CGAMESPRITE_SKILL_PICK_POCKET] = static_cast<BYTE>(value);
+        }
+        return 1;
+    case STAT_FATIGUE:
+        if (modify == TRUE) {
+            m_baseStats.m_fatigue += static_cast<BYTE>(value);
+            m_derivedStats.m_nFatigue += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_fatigue = static_cast<BYTE>(value);
+            m_derivedStats.m_nFatigue = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_INTOXICATION:
+        if (modify == TRUE) {
+            m_baseStats.m_intoxication += static_cast<BYTE>(value);
+            // FIXME: Looks like a bug - should be `m_nIntoxication`.
+            m_derivedStats.m_nFatigue += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_intoxication = static_cast<BYTE>(value);
+            // FIXME: Looks like a bug - should be `m_nIntoxication`.
+            m_derivedStats.m_nFatigue = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_LUCK:
+        if (modify == TRUE) {
+            m_baseStats.m_luckBase += static_cast<BYTE>(value);
+            m_derivedStats.m_nLuck += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_luckBase = static_cast<BYTE>(value);
+            m_derivedStats.m_nLuck = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_TRACKING:
+        if (modify == TRUE) {
+            m_baseStats.m_skills[CGAMESPRITE_SKILL_WILDERNESS_LORE] += static_cast<BYTE>(value);
+            m_derivedStats.m_nSkills[CGAMESPRITE_SKILL_WILDERNESS_LORE] += static_cast<BYTE>(value);
+        } else {
+            m_baseStats.m_skills[CGAMESPRITE_SKILL_WILDERNESS_LORE] = static_cast<BYTE>(value);
+            m_derivedStats.m_nSkills[CGAMESPRITE_SKILL_WILDERNESS_LORE] = static_cast<BYTE>(value);
+        }
+        return 1;
+    case STAT_LEVEL:
+        if (modify == TRUE) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+            // __LINE__: 26891
+            UTIL_ASSERT_MSG(FALSE, "Scripts and dialogs may no longer set Class Levels");
+        } else {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+            // __LINE__: 26897
+            UTIL_ASSERT_MSG(FALSE, "Scripts and dialogs may no longer set Class Levels");
+        }
+    case STAT_SEX:
+        if (modify == TRUE) {
+            m_baseStats.m_sex += static_cast<BYTE>(value);
+            m_derivedStats.m_nSex += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_sex = static_cast<BYTE>(value);
+            m_derivedStats.m_nSex = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_STR:
+        if (modify == TRUE) {
+            m_baseStats.m_STRBase += static_cast<BYTE>(value);
+            m_derivedStats.m_nSTR += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_STRBase = static_cast<BYTE>(value);
+            m_derivedStats.m_nSTR = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_STREXTRA:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+        // __LINE__: 26969
+        UTIL_ASSERT(FALSE);
+    case STAT_INT:
+        if (modify == TRUE) {
+            m_baseStats.m_INTBase += static_cast<BYTE>(value);
+            m_derivedStats.m_nINT += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_INTBase = static_cast<BYTE>(value);
+            m_derivedStats.m_nINT = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_WIS:
+        if (modify == TRUE) {
+            m_baseStats.m_WISBase += static_cast<BYTE>(value);
+            m_derivedStats.m_nWIS += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_WISBase = static_cast<BYTE>(value);
+            m_derivedStats.m_nWIS = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_DEX:
+        if (modify == TRUE) {
+            m_baseStats.m_DEXBase += static_cast<BYTE>(value);
+            m_derivedStats.m_nDEX += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_DEXBase = static_cast<BYTE>(value);
+            m_derivedStats.m_nDEX = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_CON:
+        if (modify == TRUE) {
+            m_baseStats.m_CONBase += static_cast<BYTE>(value);
+            m_derivedStats.m_nCON += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_CONBase = static_cast<BYTE>(value);
+            m_derivedStats.m_nCON = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_CHR:
+        if (modify == TRUE) {
+            m_baseStats.m_CHRBase += static_cast<BYTE>(value);
+            m_derivedStats.m_nCHR += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_CHRBase = static_cast<BYTE>(value);
+            m_derivedStats.m_nCHR = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_XPVALUE:
+        if (modify == TRUE) {
+            m_baseStats.m_xpValue += value;
+            m_derivedStats.m_nXPValue += value;
+        } else {
+            m_baseStats.m_xpValue = value;
+            m_derivedStats.m_nXPValue = value;
+        }
+        return 1;
+    case STAT_XP:
+        if (modify == TRUE) {
+            m_baseStats.m_xp += value;
+            m_derivedStats.m_nXP += value;
+        } else {
+            m_baseStats.m_xp = value;
+            m_derivedStats.m_nXP = value;
+        }
+        return 1;
+    case STAT_GOLD:
+        if (modify == TRUE) {
+            m_baseStats.m_gold += value;
+            m_derivedStats.m_nGold += value;
+        } else {
+            m_baseStats.m_gold = value;
+            m_derivedStats.m_nGold = value;
+        }
+        return 1;
+    case STAT_MORALEBREAK:
+        if (modify == TRUE) {
+            m_baseStats.m_moraleBreak += static_cast<BYTE>(value);
+            m_derivedStats.m_nMoraleBreak += value;
+        } else {
+            m_baseStats.m_moraleBreak = static_cast<BYTE>(value);
+            m_derivedStats.m_nMoraleBreak = value;
+        }
+        return 1;
+    case STAT_MORALERECOVERYTIME:
+        if (modify == TRUE) {
+            m_baseStats.m_moraleRecoveryTime += static_cast<WORD>(value);
+            m_derivedStats.m_nMoraleRecoveryTime += value;
+        } else {
+            m_baseStats.m_moraleRecoveryTime = static_cast<WORD>(value);
+            m_derivedStats.m_nMoraleRecoveryTime = value;
+        }
+        return 1;
+    case STAT_REPUTATION:
+        if (modify == TRUE) {
+            m_baseStats.m_reputation += static_cast<BYTE>(value);
+            m_derivedStats.m_nReputation += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_reputation = static_cast<BYTE>(value);
+            m_derivedStats.m_nReputation = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_HATEDRACE:
+        if (modify == TRUE) {
+            m_baseStats.m_favoredEnemies[0] += static_cast<BYTE>(value);
+            m_derivedStats.m_favoredEnemies[0] += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_favoredEnemies[0] = static_cast<BYTE>(value);
+            m_derivedStats.m_favoredEnemies[0] = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_DAMAGEBONUS:
+        if (modify == TRUE) {
+            m_derivedStats.m_nDamageBonus += static_cast<SHORT>(value);
+        } else {
+            m_derivedStats.m_nDamageBonus = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_SPELLFAILUREMAGE:
+        if (modify == TRUE) {
+            m_derivedStats.m_nSpellFailureArcane += static_cast<SHORT>(value);
+        } else {
+            m_derivedStats.m_nSpellFailureArcane = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_SPELLFAILUREPRIEST:
+        if (modify == TRUE) {
+            m_derivedStats.m_nSpellFailureDivine += static_cast<SHORT>(value);
+        } else {
+            m_derivedStats.m_nSpellFailureDivine = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_SPELLDURATIONMODMAGE:
+        if (modify == TRUE) {
+            m_derivedStats.m_nSpellDurationModMage += static_cast<SHORT>(value);
+        } else {
+            m_derivedStats.m_nSpellDurationModMage = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_SPELLDURATIONMODPRIEST:
+        if (modify == TRUE) {
+            m_derivedStats.m_nSpellDurationModPriest += static_cast<SHORT>(value);
+        } else {
+            m_derivedStats.m_nSpellDurationModPriest = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_TURNUNDEADLEVEL:
+        if (modify == TRUE) {
+            m_baseStats.m_turnUndeadLevel += static_cast<BYTE>(value);
+            m_derivedStats.m_nTurnUndeadLevel += static_cast<SHORT>(value);
+        } else {
+            m_baseStats.m_turnUndeadLevel = static_cast<BYTE>(value);
+            m_derivedStats.m_nTurnUndeadLevel = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_BACKSTABDAMAGEMULTIPLIER:
+        if (modify == TRUE) {
+            m_derivedStats.m_nBackstabDamageMultiplier += static_cast<SHORT>(value);
+        } else {
+            m_derivedStats.m_nBackstabDamageMultiplier = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_LAYONHANDSAMOUNT:
+        if (modify == TRUE) {
+            m_derivedStats.m_nLayOnHandsAmount += static_cast<SHORT>(value);
+        } else {
+            m_derivedStats.m_nLayOnHandsAmount = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_TRANSLUCENT:
+        if (modify == TRUE) {
+            m_derivedStats.m_nTranslucent += static_cast<SHORT>(value);
+        } else {
+            m_derivedStats.m_nTranslucent = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_LEVEL2:
+        if (modify == TRUE) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+            // __LINE__: 26905
+            UTIL_ASSERT_MSG(FALSE, "Scripts and dialogs may no longer set Class Levels");
+        } else {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+            // __LINE__: 26911
+            UTIL_ASSERT_MSG(FALSE, "Scripts and dialogs may no longer set Class Levels");
+        }
+    case STAT_LEVEL3:
+        if (modify == TRUE) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+            // __LINE__: 29919
+            UTIL_ASSERT_MSG(FALSE, "Scripts and dialogs may no longer set Class Levels");
+        } else {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+            // __LINE__: 26925
+            UTIL_ASSERT_MSG(FALSE, "Scripts and dialogs may no longer set Class Levels");
+        }
+    case STAT_ENCUMBERANCE:
+        if (modify == TRUE) {
+            m_derivedStats.m_nEncumberance += static_cast<SHORT>(value);
+        } else {
+            m_derivedStats.m_nEncumberance = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_MISSILETHAC0BONUS:
+        if (modify == TRUE) {
+            m_derivedStats.m_nMissileTHAC0Bonus += static_cast<SHORT>(value);
+        } else {
+            m_derivedStats.m_nMissileTHAC0Bonus = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_MAGICDAMAGERESISTANCE:
+        if (modify == TRUE) {
+            m_derivedStats.m_nMagicDamageResistance += static_cast<SHORT>(value);
+        } else {
+            m_derivedStats.m_nMagicDamageResistance = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_RESISTPOISON:
+        if (modify == TRUE) {
+            m_derivedStats.m_nResistPoison += static_cast<SHORT>(value);
+        } else {
+            m_derivedStats.m_nResistPoison = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_MENTALSPEED:
+        if (modify == TRUE) {
+            m_derivedStats.m_nMentalSpeed += static_cast<SHORT>(value);
+        } else {
+            m_derivedStats.m_nMentalSpeed = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_PHYSICALSPEED:
+        if (modify == TRUE) {
+            m_derivedStats.m_nPhysicalSpeed += static_cast<SHORT>(value);
+        } else {
+            m_derivedStats.m_nPhysicalSpeed = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_CASTINGLEVELBONUSMAGE:
+        if (modify == TRUE) {
+            m_derivedStats.m_nCastingLevelBonusMage += static_cast<SHORT>(value);
+        } else {
+            m_derivedStats.m_nCastingLevelBonusMage = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_CASTINGLEVELBONUSCLERIC:
+        if (modify == TRUE) {
+            m_derivedStats.m_nCastingLevelBonusCleric += static_cast<SHORT>(value);
+        } else {
+            m_derivedStats.m_nCastingLevelBonusCleric = static_cast<SHORT>(value);
+        }
+        return 1;
+    case STAT_SEEINVISIBLE:
+        if (modify == TRUE) {
+            m_derivedStats.m_bSeeInvisible += value;
+        } else {
+            m_derivedStats.m_bSeeInvisible = value;
+        }
+        return 1;
+    case STAT_IGNOREDIALOGPAUSE:
+        if (modify == TRUE) {
+            m_derivedStats.m_bIgnoreDialogPause += value;
+        } else {
+            m_derivedStats.m_bIgnoreDialogPause = value;
+        }
+        return 1;
+    case STAT_MINHITPOINTS:
+        if (modify == TRUE) {
+            m_derivedStats.m_nMinHitPoints += value;
+        } else {
+            m_derivedStats.m_nMinHitPoints = value;
+        }
+        return 1;
+    case STAT_THAC0BONUSRIGHT:
+        if (modify == TRUE) {
+            m_derivedStats.m_THAC0BonusRight += value;
+        } else {
+            m_derivedStats.m_THAC0BonusRight = value;
+        }
+        return 1;
+    case STAT_THAC0BONUSLEFT:
+        if (modify == TRUE) {
+            m_derivedStats.m_THAC0BonusLeft += value;
+        } else {
+            m_derivedStats.m_THAC0BonusLeft = value;
+        }
+        return 1;
+    case STAT_DAMAGEBONUSRIGHT:
+        if (modify == TRUE) {
+            m_derivedStats.m_DamageBonusRight += value;
+        } else {
+            m_derivedStats.m_DamageBonusRight = value;
+        }
+        return 1;
+    case STAT_DAMAGEBONUSLEFT:
+        if (modify == TRUE) {
+            m_derivedStats.m_DamageBonusLeft += value;
+        } else {
+            m_derivedStats.m_DamageBonusLeft = value;
+        }
+        return 1;
+    case STAT_HIDEINSHADOWS:
+        if (modify == TRUE) {
+            m_baseStats.m_skills[CGAMESPRITE_SKILL_HIDE] += static_cast<BYTE>(value);
+            m_derivedStats.m_nSkills[CGAMESPRITE_SKILL_HIDE] += static_cast<BYTE>(value);
+        } else {
+            m_baseStats.m_skills[CGAMESPRITE_SKILL_HIDE] = static_cast<BYTE>(value);
+            m_derivedStats.m_nSkills[CGAMESPRITE_SKILL_HIDE] = static_cast<BYTE>(value);
+        }
+        return 1;
+    case STAT_MOVESILENTLYMTPBONUS:
+        if (modify == TRUE) {
+            m_derivedStats.m_nMoveSilentlyMTPBonus += value;
+        } else {
+            m_derivedStats.m_nMoveSilentlyMTPBonus = value;
+        }
+        return 1;
+    case STAT_HIDEINSHADOWSMTPBONUS:
+        if (modify == TRUE) {
+            m_derivedStats.m_nHideInShadowsMTPBonus += value;
+        } else {
+            m_derivedStats.m_nHideInShadowsMTPBonus = value;
+        }
+        return 1;
+    case STAT_SUBRACE:
+        if (modify == TRUE) {
+            m_baseStats.m_subrace += static_cast<BYTE>(value);
+            m_derivedStats.m_nSubRace += value;
+        } else {
+            m_baseStats.m_subrace = static_cast<BYTE>(value);
+            m_derivedStats.m_nSubRace = value;
+        }
+        return 1;
+    case STAT_USEMAGICDEVICE:
+        if (modify == TRUE) {
+            m_baseStats.m_skills[CGAMESPRITE_SKILL_USE_MAGIC_DEVICE] += static_cast<BYTE>(value);
+            m_derivedStats.m_nSkills[CGAMESPRITE_SKILL_USE_MAGIC_DEVICE] += static_cast<BYTE>(value);
+        } else {
+            m_baseStats.m_skills[CGAMESPRITE_SKILL_USE_MAGIC_DEVICE] = static_cast<BYTE>(value);
+            m_derivedStats.m_nSkills[CGAMESPRITE_SKILL_USE_MAGIC_DEVICE] = static_cast<BYTE>(value);
+        }
+        return 1;
+    case STAT_CLASSLEVELBARBARIAN:
+    case STAT_CLASSLEVELBARD:
+    case STAT_CLASSLEVELCLERIC:
+    case STAT_CLASSLEVELDRUID:
+    case STAT_CLASSLEVELFIGHTER:
+    case STAT_CLASSLEVELMONK:
+    case STAT_CLASSLEVELPALADIN:
+    case STAT_CLASSLEVELRANGER:
+    case STAT_CLASSLEVELROGUE:
+    case STAT_CLASSLEVELSORCERER:
+    case STAT_CLASSLEVELWIZARD:
+        if (modify == TRUE) {
+            m_derivedStats.SetClassLevel(stat - STAT_CLASSLEVELSUM,
+                m_derivedStats.GetClassLevel(stat - STAT_CLASSLEVELSUM) + value);
+            SetClassLevel(stat - STAT_CLASSLEVELSUM,
+                GetClassLevel(stat - STAT_CLASSLEVELSUM) + value);
+        } else {
+            m_derivedStats.SetClassLevel(stat - STAT_CLASSLEVELSUM, value);
+            SetClassLevel(stat - STAT_CLASSLEVELSUM, value);
+        }
+        return 1;
+    case STAT_PREVENTAISLOWDOWN:
+        if (modify == TRUE) {
+            m_derivedStats.m_bPreventAISlowDown += value;
+        } else {
+            m_derivedStats.m_bPreventAISlowDown = value;
+        }
+        return 1;
+    }
+
+    return 0;
+}
+
 // 0x761650
 void CGameSprite::sub_761650()
 {
@@ -8117,7 +8810,7 @@ INT CGameSprite::GetClassLevel(INT iClassType)
 void CGameSprite::SetClassLevel(INT iClassType, INT nLevel)
 {
     // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
-    // __LINE__: 28719
+    // __LINE__: 28718
     UTIL_ASSERT(iClassType > 0);
 
     // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
