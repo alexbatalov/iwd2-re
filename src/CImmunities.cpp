@@ -492,3 +492,28 @@ CImmunitiesProjectile& CImmunitiesProjectile::operator=(const CImmunitiesProject
 
     return *this;
 }
+
+// 0x4E6DA0
+ULONG CImmunitiesProjectile::Marshal(BYTE** ptrPtr)
+{
+    *ptrPtr = NULL;
+
+    LONG length = sizeof(DWORD) * GetCount();
+    if (length > 0) {
+        // NOTE: Original code is slightly different.
+        BYTE* ptr = new BYTE[length];
+        int offset = 0;
+
+        POSITION pos = GetHeadPosition();
+        while (pos != NULL) {
+            DWORD* pId = GetNext(pos);
+
+            *reinterpret_cast<DWORD*>(ptr + offset) = *pId;
+            offset += sizeof(DWORD);
+        }
+
+        *ptrPtr = ptr;
+    }
+
+    return length;
+}

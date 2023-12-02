@@ -110,6 +110,7 @@ class CImmunitiesProjectile : public CTypedPtrList<CPtrList, DWORD*> {
 public:
     BOOL OnList(DWORD projectileType);
     CImmunitiesProjectile& operator=(const CImmunitiesProjectile& other);
+    ULONG Marshal(BYTE** ptrPtr);
 };
 
 #endif /* CIMMUNITIES_H_ */
