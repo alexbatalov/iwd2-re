@@ -1397,7 +1397,106 @@ void CScreenInventory::DismissPopup()
 // 0x627C20
 void CScreenInventory::ResetHistoryPanel(CUIPanel* pPanel)
 {
-    // TODO: Incomplete.
+    CItem* pItem;
+    STRREF description;
+    CResRef cResIcon;
+    CResRef cResItem;
+    WORD wCount;
+
+    LONG nCharacterId = g_pBaldurChitin->GetObjectGame()->GetCharacterId(m_nSelectedCharacter);
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        MapButtonIdToItemInfo(m_nRequesterButtonId,
+            pItem,
+            description,
+            cResIcon,
+            cResItem,
+            wCount);
+
+        if (pItem != NULL) {
+            INT nIntMod = g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetAbilityScoreModifier(pSprite->GetDerivedStats()->m_nINT);
+            STRREF strSuccess = 39264; // "Successful identify item check! (Knowledge Arcana + Int mod) %d + %d vs. (item's lore) %d"
+            STRREF strFailure = 39263; // "Failed identify item check! (Knowledge Arcana + Int mod) %d + %d vs. (item's lore) %d"
+
+            INT nSkill;
+            switch (pItem->GetItemType()) {
+            case 9:
+            case 71:
+                nSkill = pSprite->GetDerivedStats()->m_nSkills[CGAMESPRITE_SKILL_ALCHEMY];
+                if (nSkill == 0) {
+                    nIntMod = 0;
+                }
+                strSuccess = 39261; // "Successful identify potion check! (Alchemy + Int mod) %d + %d vs. (potion's lore) %d"
+                strFailure = 39262; // "Failed identify potion check! (Alchemy + Int mod) %d + %d vs. (potion's lore) %d"
+                break;
+            default:
+                nSkill = pSprite->GetDerivedStats()->m_nSkills[CGAMESPRITE_SKILL_KNOWLEDGE_ARCANA];
+                if (nSkill == 0) {
+                    nIntMod = 0;
+                }
+                break;
+            }
+
+            INT nLoreValue = pItem->GetLoreValue();
+
+            // NOTE: Probably a bug, feedback messages say the check includes
+            // Int mod, but only skill value is taken into account.
+            if (nSkill >= nLoreValue) {
+                pSprite->FeedBack(CGameSprite::FEEDBACK_ROLL,
+                    max(nSkill - nIntMod, 0),
+                    nIntMod,
+                    nLoreValue,
+                    strSuccess,
+                    0,
+                    0);
+
+                pItem->m_flags |= 0x1;
+
+                g_pBaldurChitin->GetObjectGame()->GetButtonArray()->UpdateButtons();
+
+                CMessage* message = new CMessageSpriteEquipment(pSprite,
+                    pSprite->GetId(),
+                    pSprite->GetId());
+                g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+            } else {
+                pSprite->FeedBack(CGameSprite::FEEDBACK_ROLL,
+                    max(nSkill - nIntMod, 0),
+                    nIntMod,
+                    nLoreValue,
+                    strFailure,
+                    0,
+                    0);
+            }
+
+            CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(5));
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+            // __LINE__: 2428
+            UTIL_ASSERT(pText != NULL);
+
+            pText->m_sNameSeparator = CString(" ");
+
+            CSize size;
+            pText->m_labelFont.GetFrameSize(64, 0, size, FALSE);
+
+            SHORT nFontHeight = pText->m_labelFont.GetFontHeight(FALSE);
+            pText->field_AB4 = static_cast<SHORT>((nFontHeight + size.cy - 1) / nFontHeight);
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
 }
 
 // 0x627F20
