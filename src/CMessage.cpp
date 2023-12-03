@@ -202,6 +202,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_LAST_OBJECT = 47;
 // 0x84CF0D
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SPRITE_DEATH = 54;
 
+// 0x84CF0E
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SPRITE_EQUIPMENT = 55;
+
 // 0x84CF0F
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SPRITE_PETRIFY = 56;
 
@@ -9137,6 +9140,49 @@ void CMessageSpriteDeath::Run()
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
     }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x50B510
+CMessageSpriteEquipment::CMessageSpriteEquipment(CGameSprite* pSprite, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    if (pSprite != NULL) {
+        CGameSpriteEquipment* pEquipment = pSprite->GetEquipment();
+        for (int index = 0; index < 51; index++) {
+            m_equipment.m_items[index] = pEquipment->m_items[index];
+        }
+        m_equipment.m_selectedWeapon = pEquipment->m_selectedWeapon;
+        m_equipment.m_selectedWeaponAbility = pEquipment->m_selectedWeaponAbility;
+        m_nWeaponSet = pSprite->m_nWeaponSet;
+    }
+
+    m_equipment.m_pSprite = NULL;
+}
+
+// 0x50B620
+CMessageSpriteEquipment::~CMessageSpriteEquipment()
+{
+    memset(&m_equipment, 0, sizeof(m_equipment));
+}
+
+// 0x4088A0
+SHORT CMessageSpriteEquipment::GetCommType()
+{
+    return BROADCAST_OTHERS;
+}
+
+// 0x40A0E0
+BYTE CMessageSpriteEquipment::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x50B5F0
+BYTE CMessageSpriteEquipment::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SPRITE_EQUIPMENT;
 }
 
 // -----------------------------------------------------------------------------

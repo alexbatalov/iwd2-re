@@ -8,6 +8,7 @@
 #include "CAITrigger.h"
 #include "CChatBuffer.h"
 #include "CColorEffects.h"
+#include "CGameSpriteEquipment.h"
 #include "CImmunities.h"
 #include "CItem.h"
 #include "CResRef.h"
@@ -70,6 +71,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_SEQUENCE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_TRIGGER;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SPRITE_DEATH;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_SPRITE_EQUIPMENT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SPRITE_PETRIFY;
     static const BYTE MSG_SUBTYPE_CMESSAGE_START_FOLLOW;
     static const BYTE MSG_SUBTYPE_CMESSAGE_START_SCROLL;
@@ -971,6 +973,18 @@ public:
     void Run() override;
 
     /* 000C */ DWORD m_nDeathType;
+};
+
+class CMessageSpriteEquipment : public CMessage {
+public:
+    CMessageSpriteEquipment(CGameSprite* pSprite, LONG caller, LONG target);
+    ~CMessageSpriteEquipment() override;
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+
+    /* 000C */ CGameSpriteEquipment m_equipment;
+    /* 00E0 */ BYTE m_nWeaponSet;
 };
 
 class CMessageSpritePetrify : public CMessage {
