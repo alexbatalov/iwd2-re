@@ -2634,9 +2634,70 @@ void CScreenInventory::UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId
 }
 
 // 0x62CD60
-void CScreenInventory::IsCharacterInRange()
+BOOL CScreenInventory::IsCharacterInRange(INT nPortraitNum)
 {
-    // TODO: Incomplete.
+    LONG nSprite;
+    CGameSprite* pSprite;
+    BYTE rc;
+    CGameArea* pSrcArea;
+    CGameArea* pDstArea;
+    CPoint ptSrcPos;
+    CPoint ptDstPos;
+    BOOL bDstDead;
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 5872
+    UTIL_ASSERT(pGame != NULL);
+
+    nSprite = pGame->GetCharacterId(field_510);
+
+    do {
+        rc = pGame->GetObjectArray()->GetShare(nSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        pSrcArea = pSprite->GetArea();
+        ptSrcPos = pSprite->GetPos();
+
+        pGame->GetObjectArray()->ReleaseShare(nSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    // FIXME: `pSrcArea` and `ptSrcPos` might be uninitialized.
+
+    nSprite = pGame->GetCharacterId(nPortraitNum);
+
+    do {
+        rc = pGame->GetObjectArray()->GetShare(nSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        pDstArea = pSprite->GetArea();
+        ptDstPos = pSprite->GetPos();
+        bDstDead = (pSprite->GetDerivedStats()->m_generalState & STATE_DEAD) != 0;
+
+        pGame->GetObjectArray()->ReleaseShare(nSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    // FIXME: `pDstArea`, `ptDstPos` and `bDstDead` might be uninitialized.
+
+    return pSrcArea != NULL
+        && pDstArea != NULL
+        && !bDstDead
+        && pSrcArea->m_resRef == pDstArea->m_resRef
+        && (ptSrcPos.x - ptDstPos.x) * (ptSrcPos.x - ptDstPos.x)
+            + 16 * (ptSrcPos.y - ptDstPos.y) * (ptSrcPos.y - ptDstPos.y) / 9 <= 0x40000;
 }
 
 // 0x62CF50

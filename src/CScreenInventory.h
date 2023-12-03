@@ -99,7 +99,7 @@ public:
     void CheckMultiPlayerViewable();
     void UnPauseGame();
     void UpdateHelp(DWORD dwPanelId, DWORD dwTextId, DWORD dwStrId);
-    void IsCharacterInRange();
+    BOOL IsCharacterInRange(INT nPortraitNum);
     void UpdateRequesterPanel();
     void UpdateHistoryPanel(BOOL a1);
     void UpdateAbilitiesPanel();
