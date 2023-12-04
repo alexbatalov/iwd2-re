@@ -15,6 +15,7 @@ class CGameStatic;
 class CGameTiledObject;
 class CGameTimer;
 class CGameTrigger;
+class CItem;
 class CResRef;
 class CVariable;
 
@@ -78,6 +79,7 @@ public:
     SHORT SendTrigger(CGameAIBase* sprite);
     SHORT Wait();
     SHORT SmallWait();
+    void PutItemGround(CItem* pItem);
     SHORT TakePartyGold();
     SHORT GivePartyGold();
     SHORT GiveOrder(CGameAIBase* sprite);

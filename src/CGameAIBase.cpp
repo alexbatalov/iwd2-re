@@ -858,6 +858,26 @@ SHORT CGameAIBase::SmallWait()
     return ACTION_DONE;
 }
 
+// 0x463310
+void CGameAIBase::PutItemGround(CItem* pItem)
+{
+    LONG nContainerId = g_pBaldurChitin->GetObjectGame()->GetGroundPile(m_id);
+    if (nContainerId != CGameObjectArray::INVALID_INDEX) {
+        CGameContainer* pContainer;
+
+        BYTE rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nContainerId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pContainer),
+            INFINITE);
+        if (rc == CGameObjectArray::SUCCESS) {
+            pContainer->PlaceItemInBlankSlot(pItem, TRUE, SHORT_MAX);
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nContainerId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+}
+
 // 0x465110
 SHORT CGameAIBase::TakePartyGold()
 {
