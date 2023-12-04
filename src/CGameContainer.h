@@ -20,6 +20,7 @@ public:
     /* 0034 */ BOOL IsOver(const CPoint& pt) override;
     /* 0048 */ void RemoveFromArea() override;
     /* 0050 */ BOOLEAN DoAIUpdate(BOOLEAN active, LONG counter) override;
+    /* 0058 */ void SetCursor(LONG nToolTip) override;
 
     void CompressContainer();
     CItem* GetItem(SHORT nSlotNum);

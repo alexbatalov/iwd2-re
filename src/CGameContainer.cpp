@@ -3,6 +3,8 @@
 #include "CAIScript.h"
 #include "CBaldurChitin.h"
 #include "CGameArea.h"
+#include "CGameSprite.h"
+#include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CItem.h"
 #include "CPathSearch.h"
@@ -525,6 +527,99 @@ void CGameContainer::RemoveFromArea()
     }
 
     delete this;
+}
+
+// 0x47FE70
+void CGameContainer::SetCursor(LONG nToolTip)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    switch (pGame->GetState()) {
+    case 0:
+        if (pGame->GetGroup()->GetCount() == 0) {
+            g_pBaldurChitin->GetObjectCursor()->SetCursor(2, FALSE);
+        } else {
+            g_pBaldurChitin->GetObjectCursor()->SetCursor(0, FALSE);
+        }
+        break;
+    case 1:
+    case 3:
+        CGameObject::SetCursor(nToolTip);
+        break;
+    case 2:
+        switch (pGame->GetIconIndex()) {
+        case 12:
+            if ((m_dwFlags & 0x1) != 0) {
+                g_pBaldurChitin->GetObjectCursor()->SetCursor(12, FALSE);
+            } else {
+                CGameObject::SetCursor(nToolTip);
+            }
+            break;
+        case 18:
+        case 40:
+        case 255:
+            CGameObject::SetCursor(nToolTip);
+            break;
+        case 20:
+            g_pBaldurChitin->GetObjectCursor()->SetCursor(20, FALSE);
+            break;
+        case 36:
+            if (1) {
+                INT nNewCursor;
+                if (m_trapActivated != 0 && m_trapDetected != 0) {
+                    nNewCursor = 38;
+                } else {
+                    if ((m_dwFlags & 0x1) == 0) {
+                        CGameObject::SetCursor(nToolTip);
+                        break;
+                    }
+
+                    nNewCursor = 26;
+                }
+
+                SHORT nPortrait = g_pBaldurChitin->m_pEngineWorld->GetSelectedCharacter();
+
+                // NOTE: Uninline.
+                LONG nCharacterId = pGame->GetCharacterId(nPortrait);
+
+                CGameSprite* pSprite;
+
+                BYTE rc;
+                do {
+                    rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        reinterpret_cast<CGameObject**>(&pSprite),
+                        INFINITE);
+                } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+                if (rc == CGameObjectArray::SUCCESS) {
+                    if (nNewCursor == 26) {
+                        if (pSprite->GetBaseStats()->m_skills[CGAMESPRITE_SKILL_OPEN_LOCK] == 0) {
+                            g_pBaldurChitin->GetObjectCursor()->SetGreyScale(TRUE);
+                        }
+                    } else {
+                        if (pSprite->GetBaseStats()->m_skills[CGAMESPRITE_SKILL_DISABLE_DEVICE] == 0) {
+                            g_pBaldurChitin->GetObjectCursor()->SetGreyScale(TRUE);
+                        }
+                    }
+
+                    pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        INFINITE);
+                }
+            }
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameContainer.cpp
+            // __LINE__: 1694
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameContainer.cpp
+        // __LINE__: 1704
+        UTIL_ASSERT(FALSE);
+    }
 }
 
 // 0x4801A0
