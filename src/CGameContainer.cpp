@@ -761,6 +761,46 @@ void CGameContainer::RefreshRenderPile()
     }
 }
 
+// 0x481350
+void CGameContainer::OpenContainer(const CAIObjectType& user)
+{
+    CMessage* message;
+    if (m_trapActivated != 0) {
+        CAITrigger opened(CAITrigger::OPENED, user, 0);
+        m_pendingTriggers.AddTail(new CAITrigger(opened));
+
+        message = new CMessageSetTrigger(opened, m_id, m_id);
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+
+        CAIObjectType type;
+        type.m_sName = CString(m_ownedBy);
+
+        LONG targetId = g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->sub_46DAE0(m_pos.x,
+            m_pos.y,
+            type,
+            500,
+            0,
+            0,
+            0,
+            0,
+            0);
+
+        message = new CMessageSetTrigger(CAITrigger(CAITrigger::OPENED, 0), m_id, targetId);
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+
+        if ((m_dwFlags & 0x8) == 0) {
+            m_trapActivated = 0;
+
+            message = new CMessageContainerStatus(m_dwFlags,
+                m_trapActivated,
+                m_trapDetected,
+                m_id,
+                m_id);
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+        }
+    }
+}
+
 // 0x481750
 void CGameContainer::SetFlags(DWORD dwFlags)
 {

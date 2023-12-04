@@ -231,6 +231,7 @@ public:
     static const SHORT RECEIVEDORDER;
     static const SHORT TIMEREXPIRED;
     static const SHORT TRIGGER;
+    static const SHORT OPENED;
     static const SHORT UNLOCKED;
     static const SHORT STATUSTRIGGER;
 

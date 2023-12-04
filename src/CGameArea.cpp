@@ -370,6 +370,14 @@ BOOLEAN CGameArea::CanSaveGame(STRREF& strError)
     return TRUE;
 }
 
+// 0x46DAE0
+LONG CGameArea::sub_46DAE0(INT x, INT y, const CAIObjectType& type, int a4, int a5, int a6, int a7, int a8, int a9)
+{
+    // TODO: Incomplete.
+
+    return -1;
+}
+
 // 0x46E3D0
 void CGameArea::AIUpdate()
 {

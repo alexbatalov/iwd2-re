@@ -28,6 +28,7 @@ public:
     void sub_480480(SHORT nSlotNum, CItem* pItem);
     BOOLEAN PlaceItemInBlankSlot(CItem* pItem, BOOLEAN bCompressContainer, SHORT nRecommendedSlotNum);
     void RefreshRenderPile();
+    void OpenContainer(const CAIObjectType& user);
     void SetFlags(DWORD dwFlags);
     void SetTrapActivated(WORD active);
     void SetTrapDetected(WORD state);

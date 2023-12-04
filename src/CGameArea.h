@@ -14,6 +14,7 @@
 #include "CVisibility.h"
 #include "FileFormat.h"
 
+class CAIObjectType;
 class CInfGame;
 class CObjectMarker;
 class CSpawnFile;
@@ -158,6 +159,7 @@ public:
     void ApplyWindToAmbients(BYTE nPercentVolume);
     LONG GetGroundPile(const CPoint& ptPos);
     BOOLEAN CanSaveGame(STRREF& strError);
+    LONG sub_46DAE0(INT x, INT y, const CAIObjectType& type, int a4, int a5, int a6, int a7, int a8, int a9);
     void AIUpdate();
     void CompressTime(DWORD deltaTime);
     void DebugDump(const CString& message, BOOLEAN bEchoToScreen);
