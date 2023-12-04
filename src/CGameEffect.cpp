@@ -1479,6 +1479,16 @@ void CGameEffect::AddSlowEffect(CGameSprite* pSprite)
     AddPortraitIcon(pSprite, 41);
 }
 
+// 0x4C4200
+void CGameEffect::AddPanicEffect(CGameSprite* pSprite)
+{
+    pSprite->sub_761650();
+    pSprite->GetDerivedStats()->m_generalState |= STATE_PANIC;
+
+    // NOTE: Uninline.
+    AddPortraitIcon(pSprite, 36);
+}
+
 // 0x4C4260
 void CGameEffect::RemoveAllOfType(CGameSprite* pSprite, WORD effectID, LONG effectAmount)
 {

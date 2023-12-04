@@ -317,6 +317,7 @@ public:
     void AdjustWIS(CGameSprite* pSprite, INT nValue);
     void Immobilize(CGameSprite* pSprite);
     void AddSlowEffect(CGameSprite* pSprite);
+    void AddPanicEffect(CGameSprite* pSprite);
     void RemoveAllOfType(CGameSprite* pSprite, WORD effectID, LONG effectAmount);
     void AddPortraitIcon(CGameSprite* pSprite, int icon);
     void SetSpellState(CGameSprite* pSprite, DWORD dwSpellState);
