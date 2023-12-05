@@ -4,10 +4,12 @@
 #include "CGameAnimationTypeAmbientStatic.h"
 #include "CGameAnimationTypeCharacter.h"
 #include "CGameAnimationTypeCharacterOld.h"
+#include "CGameAnimationTypeEffect.h"
 #include "CGameAnimationTypeFlying.h"
 #include "CGameAnimationTypeMonster.h"
 #include "CGameAnimationTypeMonsterAnkheg.h"
 #include "CGameAnimationTypeMonsterIcewind.h"
+#include "CGameAnimationTypeMonsterIcewindNew.h"
 #include "CGameAnimationTypeMonsterLarge.h"
 #include "CGameAnimationTypeMonsterLarge16.h"
 #include "CGameAnimationTypeMonsterLayered.h"
@@ -69,6 +71,9 @@ CGameAnimationType* CGameAnimationType::SetAnimationType(USHORT animationID, BYT
     CGameAnimationType* pAnimation;
 
     switch (animationID & 0xF000) {
+    case 0x0000:
+        pAnimation = new CGameAnimationTypeEffect(animationID, colorRangeValues, facing & 0xF);
+        break;
     case 0x1000:
         switch (animationID & 0xF00) {
         case 0x000:
@@ -81,7 +86,7 @@ CGameAnimationType* CGameAnimationType::SetAnimationType(USHORT animationID, BYT
         }
         break;
     case 0x2000:
-        // TODO: Incomplete.
+        pAnimation = new CGameAnimationTypeMonsterLayeredSpell(animationID, colorRangeValues, facing & 0xF);
         break;
     case 0x3000:
         pAnimation = new CGameAnimationTypeMonsterAnkheg(animationID, colorRangeValues, facing & 0xF);
@@ -126,7 +131,7 @@ CGameAnimationType* CGameAnimationType::SetAnimationType(USHORT animationID, BYT
         pAnimation = new CGameAnimationTypeMonsterIcewind(animationID, colorRangeValues, facing & 0xF);
         break;
     case 0xF000:
-        // TODO: Incomplete.
+        pAnimation = new CGameAnimationTypeMonsterIcewindNew(animationID, colorRangeValues, facing & 0xF);
         break;
     }
 
