@@ -1159,6 +1159,35 @@ BOOL CGameSprite::GetCanSeeInvisible()
         || (m_baseStats.m_flags & 0x10000) != 0;
 }
 
+// 0x6F3A30
+void CGameSprite::AddBlood(SHORT nHeight, SHORT nDirection, SHORT nType)
+{
+    if (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nGoreOption == 0) {
+        if (nType != CBlood::EXPLODING_DEATH) {
+            StartSpriteEffect(0, static_cast<BYTE>(nType), 0, 1);
+        }
+    } else {
+        if (nType == CBlood::EXPLODING_DEATH) {
+            CRect rFx;
+            CPoint ptReference;
+
+            // NOTE: Uninline.
+            m_animation.CalculateFxRect(rFx, ptReference, m_posZ);
+
+            CBlood* pBlood = new CBlood(m_pArea,
+                m_pos.x,
+                m_pos.y,
+                5 * rFx.Height() / 10,
+                nDirection,
+                nType,
+                rFx.Height());
+            m_lstBlood.AddTail(pBlood);
+        } else {
+            StartSpriteEffect(0, static_cast<BYTE>(nType), 0, 1);
+        }
+    }
+}
+
 // 0x6FA810
 void CGameSprite::SetPath(LONG* pPath, SHORT nPath)
 {
@@ -2936,6 +2965,12 @@ void CGameSprite::SetSequence(SHORT nSequence)
     } else {
         m_nDirection = nDirection;
     }
+}
+
+// 0x708280
+void CGameSprite::StartSpriteEffect(BYTE spriteEffect, BYTE intensityLevel, BYTE effectDuration, BOOLEAN a4)
+{
+    // TODO: Incomplete.
 }
 
 // 0x708D50

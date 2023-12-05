@@ -402,6 +402,7 @@ public:
     /* 00C0 */ virtual void ResetAITypeLive();
     /* 00C4 */ virtual void ResetAIType();
 
+    void AddBlood(SHORT nHeight, SHORT nDirection, SHORT nType);
     void SetPath(LONG* pPath, SHORT nPath);
     void DropPath();
     void DropSearchRequest();
@@ -430,6 +431,7 @@ public:
     void SetIdleSequence();
     SHORT GetIdleSequence();
     void SetSequence(SHORT nSequence);
+    void StartSpriteEffect(BYTE spriteEffect, BYTE intensityLevel, BYTE effectDuration, BOOLEAN a4);
     void RenderSpriteCover(CVidMode* pVidMode, INT nSurface, CVidCell* pVidCell, const IcewindCVisualEffect& vfx);
     void RenderDamageArrow(CGameArea* pArea, CVidMode* pVidMode, INT nSurface);
     void RenderSpriteEffect(CVidMode* pVidMode, INT nSurface);
