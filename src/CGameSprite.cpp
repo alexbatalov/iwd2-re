@@ -7,6 +7,7 @@
 #include "CGameAnimationType.h"
 #include "CGameArea.h"
 #include "CGameButtonList.h"
+#include "CGameContainer.h"
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CItem.h"
@@ -8925,6 +8926,40 @@ SHORT CGameSprite::sub_7615F0(int a1)
 void CGameSprite::sub_761650()
 {
     // TODO: Incomplete.
+}
+
+// 0x7618E0
+SHORT CGameSprite::DropItem(CItem* pItem)
+{
+    if (pItem == NULL) {
+        return ACTION_ERROR;
+    }
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    LONG iContainer = pGame->GetGroundPile(m_id);
+    if (iContainer == CGameObjectArray::INVALID_INDEX) {
+        return ACTION_ERROR;
+    }
+
+    CGameContainer* pContainer;
+
+    BYTE rc = pGame->GetObjectArray()->GetDeny(iContainer,
+        CGameObjectArray::THREAD_ASYNCH,
+        reinterpret_cast<CGameObject**>(&pContainer),
+        INFINITE);
+    if (rc != CGameObjectArray::SUCCESS) {
+        return ACTION_ERROR;
+    }
+
+    if ((pItem->GetFlagsFile() & 0x4) != 0) {
+        pContainer->PlaceItemInBlankSlot(pItem, 1, SHORT_MAX);
+    }
+
+    pGame->GetObjectArray()->ReleaseDeny(iContainer,
+        CGameObjectArray::THREAD_ASYNCH,
+        INFINITE);
+
+    return ACTION_DONE;
 }
 
 // 0x762740
