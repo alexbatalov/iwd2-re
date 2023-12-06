@@ -14,11 +14,15 @@ public:
     static const SHORT NO_ACTION;
     static const SHORT ATTACK;
     static const SHORT DIALOGUE;
+    static const SHORT MOVETOPOINT;
     static const SHORT SPELL;
     static const SHORT USEITEM;
     static const SHORT CONTINUE;
+    static const SHORT JUMPTOPOINT;
+    static const SHORT SMALLWAIT;
     static const SHORT RANDOMWALK;
     static const SHORT LEADER;
+    static const SHORT MOVETOPOINTNORECTICLE;
     static const SHORT GROUPATTACK;
     static const SHORT SPELLPOINT;
     static const SHORT LEAVEAREALUA;
@@ -32,6 +36,8 @@ public:
     static const SHORT SPELLPOINTNODEC;
     static const SHORT GIVEPARTYGOLD;
     static const SHORT STARTDIALOGUENOSET;
+    static const SHORT TIMEDMOVETOPOINT;
+    static const SHORT BACKGROUND;
 
     static const CAIAction NULL_ACTION;
 

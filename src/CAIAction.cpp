@@ -12,6 +12,9 @@ const SHORT CAIAction::ATTACK = 3;
 // 0x847792
 const SHORT CAIAction::DIALOGUE = 8;
 
+// 0x8477B0
+const SHORT CAIAction::MOVETOPOINT = 23;
+
 // 0x8477C0
 const SHORT CAIAction::SPELL = 31;
 
@@ -21,11 +24,20 @@ const SHORT CAIAction::USEITEM = 34;
 // 0x8477C6
 const SHORT CAIAction::CONTINUE = 36;
 
+// 0x8477D2
+const SHORT CAIAction::JUMPTOPOINT = 48;
+
+// 0x8477F2
+const SHORT CAIAction::SMALLWAIT = 83;
+
 // 0x84781C
 const SHORT CAIAction::RANDOMWALK = 85;
 
 // 0x847824
 const SHORT CAIAction::LEADER = 88;
+
+// 0x847828
+const SHORT CAIAction::MOVETOPOINTNORECTICLE = 90;
 
 // 0x847830
 const SHORT CAIAction::GROUPATTACK = 94;
@@ -65,6 +77,12 @@ const SHORT CAIAction::SPELLPOINTNODEC = 192;
 
 // 0x847900
 const SHORT CAIAction::STARTDIALOGUENOSET = 198;
+
+// 0x847966
+const SHORT CAIAction::TIMEDMOVETOPOINT = 261;
+
+// 0x8479E2
+const SHORT CAIAction::BACKGROUND = -2;
 
 // 0x8C6118
 const CAIAction CAIAction::NULL_ACTION;

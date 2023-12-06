@@ -169,6 +169,16 @@ const CRect& CGameAnimation::GetEllipseRect()
 }
 
 // NOTE: Inlined.
+BOOL CGameAnimation::GetPathSmooth()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2092
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->GetPathSmooth();
+}
+
+// NOTE: Inlined.
 BYTE CGameAnimation::GetPersonalSpace()
 {
     // __FILE__: .\Include\ObjAnimation.h

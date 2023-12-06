@@ -661,8 +661,8 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     field_53C6 = 0;
     field_54EE = 0;
     field_54F4 = 0;
-    field_556E = 0;
-    field_5572 = 0;
+    m_curDest.x = 0;
+    m_curDest.y = 0;
     m_posLastVisMapEntry.x = 0;
     m_posLastVisMapEntry.y = 0;
     m_nCommandPause = 0;
@@ -2966,6 +2966,12 @@ void CGameSprite::SetSequence(SHORT nSequence)
     } else {
         m_nDirection = nDirection;
     }
+}
+
+// 0x707D40
+void CGameSprite::SetTarget(CSearchRequest* pSearchRequest, BOOL collisionPath, BYTE frontList)
+{
+    // TODO: Incomplete.
 }
 
 // 0x708280
@@ -7893,6 +7899,153 @@ SHORT CGameSprite::GetCriticalHitBonus()
     return nCriticalHitBonus;
 }
 
+// 0x73F560
+SHORT CGameSprite::MoveToPoint()
+{
+    LONG x = m_curAction.m_dest.x;
+    LONG y = m_curAction.m_dest.y;
+    if (m_curAction.GetActionID() == CAIAction::TIMEDMOVETOPOINT) {
+        LONG n = m_curAction.m_specificID - 1;
+        if (n < 1) {
+            m_curAction.m_actionID = CAIAction::JUMPTOPOINT;
+            return JumpToPoint(m_curAction.m_dest, TRUE);
+        }
+        m_curAction.m_specificID = n;
+    }
+
+    if (m_derivedStats.m_nEncumberance == 2) {
+        FeedBack(FEEDBACK_TOOHEAVY_STOPPED, 0, 0, 0, -1, 0, 0);
+        return ACTION_ERROR;
+    }
+
+    if (x == -1) {
+        x = m_posStart.x;
+    } else if (x == -2) {
+        x = m_baseStats.field_2E4;
+    }
+
+    if (y == -1) {
+        y = m_posStart.y;
+    } else if (y == -2) {
+        y = m_baseStats.field_2E6;
+    }
+
+    if (x / CPathSearch::GRID_SQUARE_SIZEX == m_pos.x / CPathSearch::GRID_SQUARE_SIZEX
+        && y / CPathSearch::GRID_SQUARE_SIZEY == m_pos.y / CPathSearch::GRID_SQUARE_SIZEY) {
+        return ACTION_DONE;
+    }
+
+    if (x < 0
+        || x >= m_pArea->GetInfinity()->nAreaX
+        || y < 0
+        || y >= m_pArea->GetInfinity()->nAreaY) {
+        return ACTION_ERROR;
+    }
+
+    if (m_pPath == NULL
+        && m_currentSearchRequest == NULL
+        && m_actionCount > 0
+        && m_curAction.m_specificID != CAIAction::BACKGROUND) {
+        m_curAction.m_specificID2++;
+        if (m_curAction.m_specificID2 > 4) {
+            return ACTION_ERROR;
+        }
+
+        SHORT searchSquareCode;
+        if (m_pArea->m_search.GetLOSCost(CPoint(x / CPathSearch::GRID_SQUARE_SIZEX, y / CPathSearch::GRID_SQUARE_SIZEY), m_terrainTable, searchSquareCode, FALSE) == CPathSearch::COST_IMPASSABLE) {
+            return ACTION_ERROR;
+        }
+
+        m_curDest.x = x;
+        m_curDest.y = y;
+
+        if (!m_interrupt) {
+            if (m_curAction.GetActionID() == CAIAction::MOVETOPOINTNORECTICLE) {
+                CAIAction action(CAIAction::MOVETOPOINTNORECTICLE,
+                    CPoint(x, y),
+                    m_curAction.m_specificID,
+                    m_curAction.m_specificID2);
+                AddAction(action);
+            } else {
+                CAIAction action(CAIAction::MOVETOPOINT,
+                    CPoint(x, y),
+                    m_curAction.m_specificID,
+                    m_curAction.m_specificID2);
+                AddAction(action);
+            }
+
+            CAIAction action(CAIAction::SMALLWAIT,
+                CPoint(-1, -1),
+                rand() % 8 + 1,
+                -1);
+            AddAction(action);
+        }
+
+        return ACTION_DONE;
+    }
+
+    if (m_pPath == NULL
+        && m_currentSearchRequest == NULL
+        && m_actionCount > 0
+        && m_curAction.m_specificID == CAIAction::BACKGROUND) {
+        return ACTION_ERROR;
+    }
+
+    if (x != m_curDest.x || y != m_bPlayedEncumberedStopped) {
+        m_curDest.x = x;
+        m_curDest.y = y;
+
+        CSearchRequest* pSearchRequest = new CSearchRequest();
+        if (pSearchRequest == NULL) {
+            return ACTION_ERROR;
+        }
+
+        pSearchRequest->m_searchBitmap = &(m_pArea->m_search);
+        if (m_animation.GetListType() == LIST_FLIGHT) {
+            memcpy(pSearchRequest->m_terrainTable, m_flightTerrainTable, sizeof(m_flightTerrainTable));
+        } else {
+            memcpy(pSearchRequest->m_terrainTable, m_terrainTable, sizeof(m_terrainTable));
+        }
+
+        pSearchRequest->m_removeSelf = m_animation.GetListType() != LIST_FLIGHT;
+        pSearchRequest->m_pathSmooth = m_animation.GetPathSmooth();
+        pSearchRequest->m_sourceId = m_id;
+        pSearchRequest->m_nTargetPoints = 1;
+        pSearchRequest->m_exclusiveTargetPoints = TRUE;
+
+        pSearchRequest->m_targetPoints = new POINT[pSearchRequest->m_nTargetPoints];
+        if (pSearchRequest->m_targetPoints == NULL) {
+            delete pSearchRequest;
+            return ACTION_ERROR;
+        }
+
+        if (m_pArea->m_pGame->GetGroup()->InList(m_id)) {
+            pSearchRequest->m_nPartyIds = m_pArea->m_pGame->GetGroup()->GetCount();
+            pSearchRequest->m_partyIds = m_pArea->m_pGame->GetGroup()->GetGroupList();
+        }
+
+        pSearchRequest->m_targetPoints[0] = m_curDest;
+        pSearchRequest->m_sourceSide = m_typeAI.GetEnemyAlly();
+
+        if (m_curAction.m_specificID == CAIAction::BACKGROUND) {
+            pSearchRequest->m_frontList = 2;
+            pSearchRequest->m_minNodesBack = 110;
+            pSearchRequest->m_sourcePt.x = m_pos.x / CPathSearch::GRID_SQUARE_SIZEX;
+            pSearchRequest->m_sourcePt.y = m_pos.y / CPathSearch::GRID_SQUARE_SIZEY;
+            pSearchRequest->m_maxNodesBack = CSearchRequest::MINNODESBACK;
+            SetTarget(pSearchRequest, FALSE, LIST_FLIGHT);
+        } else {
+            SetTarget(pSearchRequest, FALSE, LIST_FRONT);
+        }
+    }
+
+    if (m_curAction.GetActionID() == 207) {
+        return ACTION_NORMAL;
+    }
+
+    return ACTION_INTERRUPTABLE;
+}
+
 // 0x7449D0
 SHORT CGameSprite::Recoil()
 {
@@ -7944,6 +8097,14 @@ SHORT CGameSprite::PlayDead()
 
     message = new CMessageSetSequence(SEQ_AWAKE, m_id, m_id);
     g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+
+    return ACTION_DONE;
+}
+
+// 0x745950
+SHORT CGameSprite::JumpToPoint(CPoint dest, BOOL spriteUpdate)
+{
+    // TODO: Incomplete.
 
     return ACTION_DONE;
 }

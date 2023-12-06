@@ -27,6 +27,7 @@ public:
     void SetMoveScale(BYTE scale);
     void ResetMoveScale();
     const CRect& GetEllipseRect();
+    BOOL GetPathSmooth();
     BYTE GetPersonalSpace();
     char* GetSndArmor();
     char* GetSndReady();

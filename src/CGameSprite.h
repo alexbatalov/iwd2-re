@@ -431,6 +431,7 @@ public:
     void SetIdleSequence();
     SHORT GetIdleSequence();
     void SetSequence(SHORT nSequence);
+    void SetTarget(CSearchRequest* pSearchRequest, BOOL collisionPath, BYTE frontList);
     void StartSpriteEffect(BYTE spriteEffect, BYTE intensityLevel, BYTE effectDuration, BOOLEAN a4);
     void RenderSpriteCover(CVidMode* pVidMode, INT nSurface, CVidCell* pVidCell, const IcewindCVisualEffect& vfx);
     void RenderDamageArrow(CGameArea* pArea, CVidMode* pVidMode, INT nSurface);
@@ -511,8 +512,10 @@ public:
     void FeedBack(WORD nFeedBackId, LONG a2, LONG a3, LONG a4, LONG a5, LONG a6, LONG a7);
     BOOLEAN sub_737910(BOOL a1);
     SHORT GetCriticalHitBonus();
+    SHORT MoveToPoint();
     SHORT Recoil();
     SHORT PlayDead();
+    SHORT JumpToPoint(CPoint dest, BOOL spriteUpdate);
     SHORT LeaveParty();
     void MoveGlobal(const CString& sArea, const CPoint& ptStart);
     void SelectWeaponAbility(unsigned char a1, unsigned char a2, unsigned char a3, unsigned char a4);
@@ -776,8 +779,7 @@ public:
     /* 54F8 */ SHORT m_moveToBackQueue;
     /* 54FA */ CGameEffectList m_equipedEffectList;
     /* 5526 */ CGameEffectList m_timedEffectList;
-    /* 556E */ int field_556E;
-    /* 5572 */ int field_5572;
+    /* 556E */ CPoint m_curDest;
     /* 5576 */ SHORT m_userCommandPause;
     /* 5578 */ SHORT m_nCommandPause;
     /* 557A */ int field_557A;
