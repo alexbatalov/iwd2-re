@@ -8004,6 +8004,27 @@ SHORT CGameSprite::FindTraps()
     return ACTION_DONE;
 }
 
+// 0x758440
+SHORT CGameSprite::Panic()
+{
+    CMessage* message;
+
+    if (m_actionCount == 0) {
+        message = new CMessageDropPath(m_id, m_id);
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+
+        message = new CMessageSetSequence(static_cast<BYTE>(GetIdleSequence()),
+            m_id,
+            m_id);
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+    }
+
+    CAIAction randomWalk(CAIAction::RANDOMWALK, CPoint(-1, -1), 0, -1);
+    AddAction(randomWalk);
+
+    return ACTION_DONE;
+}
+
 // 0x75A3F0
 SHORT CGameSprite::Turn()
 {

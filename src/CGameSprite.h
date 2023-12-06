@@ -518,6 +518,7 @@ public:
     void SelectWeaponAbility(unsigned char a1, unsigned char a2, unsigned char a3, unsigned char a4);
     SHORT EquipItem();
     SHORT FindTraps();
+    SHORT Panic();
     SHORT Turn();
     SHORT GetCasterLevel(CSpell* pSpell, BYTE nClass, DWORD nSpecialization);
     SHORT SetAtOffset(DWORD stat, DWORD value, BOOL modify);

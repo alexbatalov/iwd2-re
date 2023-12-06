@@ -21,6 +21,9 @@ const SHORT CAIAction::USEITEM = 34;
 // 0x8477C6
 const SHORT CAIAction::CONTINUE = 36;
 
+// 0x84781C
+const SHORT CAIAction::RANDOMWALK = 85;
+
 // 0x847824
 const SHORT CAIAction::LEADER = 88;
 

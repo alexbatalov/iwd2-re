@@ -17,6 +17,7 @@ public:
     static const SHORT SPELL;
     static const SHORT USEITEM;
     static const SHORT CONTINUE;
+    static const SHORT RANDOMWALK;
     static const SHORT LEADER;
     static const SHORT GROUPATTACK;
     static const SHORT SPELLPOINT;
