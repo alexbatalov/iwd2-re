@@ -409,6 +409,7 @@ public:
     CUIControlButton77DCC0(CUIPanel* panel, UI_CONTROL_BUTTON* controlInfo);
     ~CUIControlButton77DCC0() override;
     BOOL Render(BOOL bForce) override;
+    void TimerAsynchronousUpdate(BOOLEAN bInside) override;
 
     /* 0666 */ short field_666;
     /* 0668 */ short field_668;

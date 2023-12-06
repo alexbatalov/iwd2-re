@@ -5000,3 +5000,60 @@ BOOL CUIControlButton77DCC0::Render(BOOL bForce)
 
     return m_cVidCell.Render(0, pt.x, pt.y, rClip, NULL, 0, dwFlags, -1);
 }
+
+// 0x77DF40
+void CUIControlButton77DCC0::TimerAsynchronousUpdate(BOOLEAN bInside)
+{
+    CUIControlBase::TimerAsynchronousUpdate(bInside);
+    if (((m_nID ^ g_pChitin->nAUCounter) & 0x2) == 0) {
+        LONG nCharacterId = g_pBaldurChitin->GetObjectGame()->GetCharacterId(static_cast<SHORT>(m_nID) - 50);
+        if (nCharacterId != CGameObjectArray::INVALID_INDEX) {
+            CGameSprite* pSprite;
+
+            BYTE rc;
+            do {
+                rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    reinterpret_cast<CGameObject**>(&pSprite),
+                    INFINITE);
+            } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+            if (rc == CGameObjectArray::SUCCESS) {
+                if (pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_SUPPRESS_HP_INFO]) {
+                    m_cVidCell.SequenceSet(4);
+                    field_666 = field_668;
+                } else {
+                    SHORT nMaxHitPoints = max(pSprite->GetDerivedStats()->m_nMaxHitPoints, 1);
+                    SHORT nCurrentHitPoints = max(pSprite->GetBaseStats()->m_hitPoints, 0);
+                    field_666 = nCurrentHitPoints * field_668 / nMaxHitPoints;
+
+                    SHORT nSequence = g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nHitPointBarSequence;
+                    if (nSequence != 0) {
+                        m_cVidCell.SequenceSet(nSequence - 1);
+                    } else {
+                        SHORT nHealthPercent = 100 * nCurrentHitPoints / nMaxHitPoints;
+                        if (nHealthPercent == 100) {
+                            m_cVidCell.SequenceSet(0);
+                        } else if (nHealthPercent >= 75) {
+                            m_cVidCell.SequenceSet(1);
+                        } else if (nHealthPercent >= 50) {
+                            m_cVidCell.SequenceSet(2);
+                        } else if (nHealthPercent >= 25) {
+                            m_cVidCell.SequenceSet(3);
+                        } else {
+                            m_cVidCell.SequenceSet(4);
+                        }
+                    }
+                }
+
+                g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+                InvalidateRect();
+            }
+        } else {
+            field_666 = 0;
+            InvalidateRect();
+        }
+    }
+}
