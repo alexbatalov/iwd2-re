@@ -520,6 +520,7 @@ public:
     SHORT FindTraps();
     SHORT Panic();
     SHORT Turn();
+    const CAIObjectType& GetLiveAIType();
     SHORT GetCasterLevel(CSpell* pSpell, BYTE nClass, DWORD nSpecialization);
     SHORT SetAtOffset(DWORD stat, DWORD value, BOOL modify);
     void sub_761650();

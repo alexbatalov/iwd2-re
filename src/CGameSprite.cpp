@@ -8045,6 +8045,12 @@ SHORT CGameSprite::Turn()
     return ACTION_DONE;
 }
 
+// 0x75E880
+const CAIObjectType& CGameSprite::GetLiveAIType()
+{
+    return m_liveTypeAI;
+}
+
 // 0x75E940
 SHORT CGameSprite::GetCasterLevel(CSpell* pSpell, BYTE nClass, DWORD nSpecialization)
 {
