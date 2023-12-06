@@ -81,7 +81,7 @@ CAIAction::CAIAction()
     m_internalFlags = 0;
 }
 
-// NOTE: Inlined.
+// 0x593D70
 CAIAction::CAIAction(SHORT actionID, const CPoint& dest, LONG specificID, LONG specificID2)
 {
     // NOTE: For unknown reason it creates and immediately destroys `CAIAction`
