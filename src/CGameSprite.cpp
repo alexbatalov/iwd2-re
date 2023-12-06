@@ -8906,6 +8906,21 @@ SHORT CGameSprite::ForceHide(CGameSprite* pSprite)
     return ACTION_DONE;
 }
 
+// 0x7615F0
+SHORT CGameSprite::sub_7615F0(int a1)
+{
+    if (a1 == 0) {
+        m_pArea->m_visibility.SetAreaVisible(FALSE);
+        a1 = CVisibilityMap::EXPLORED_RANGE_3;
+    }
+
+    m_pArea->m_visibility.field_E = static_cast<short>(a1);
+    m_pArea->m_visibility.field_10 = static_cast<short>(3 * a1 / 4);
+    m_pArea->m_visibility.sub_5518A0();
+
+    return ACTION_DONE;
+}
+
 // 0x761650
 void CGameSprite::sub_761650()
 {

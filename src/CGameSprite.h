@@ -525,6 +525,7 @@ public:
     SHORT sub_75F240();
     SHORT SetAtOffset(DWORD stat, DWORD value, BOOL modify);
     SHORT ForceHide(CGameSprite* pSprite);
+    SHORT sub_7615F0(int a1);
     void sub_761650();
     BOOL HasClassMask(DWORD dwMask);
     INT GetClassLevel(INT iClassType);
