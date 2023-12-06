@@ -8962,6 +8962,14 @@ SHORT CGameSprite::DropItem(CItem* pItem)
     return ACTION_DONE;
 }
 
+// 0x761990
+void CGameSprite::sub_761990()
+{
+    m_timedEffectList.RemoveAllEffectsIgnoreMoreThenPermanent(NULL, FALSE, FALSE, 0, 0);
+    UnequipAll(FALSE);
+    EquipAll(FALSE);
+}
+
 // 0x762740
 BOOL CGameSprite::HasClassMask(DWORD dwMask)
 {

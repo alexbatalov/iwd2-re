@@ -528,6 +528,7 @@ public:
     SHORT sub_7615F0(int a1);
     void sub_761650();
     SHORT DropItem(CItem* pItem);
+    void sub_761990();
     BOOL HasClassMask(DWORD dwMask);
     INT GetClassLevel(INT iClassType);
     void SetClassLevel(INT iClassType, INT nLevel);
