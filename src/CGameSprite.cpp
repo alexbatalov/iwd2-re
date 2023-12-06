@@ -8970,6 +8970,37 @@ void CGameSprite::sub_761990()
     EquipAll(FALSE);
 }
 
+// 0x7619C0
+SHORT CGameSprite::PlayBardSong()
+{
+    if ((GetAIType().m_nClassMask & CLASSMASK_BARD) == 0) {
+        return ACTION_ERROR;
+    }
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    if (pGame->GetButtonArray()->m_nState == 113) {
+        return ACTION_DONE;
+    }
+
+    BYTE nSong = static_cast<BYTE>(m_curAction.m_specificID);
+    if (nSong >= pGame->GetMasterSongLookup().m_nCount) {
+        return ACTION_ERROR;
+    }
+
+    m_nLastSong = nSong;
+    SetModalState(1, TRUE);
+    ClearActions(FALSE);
+
+    if (g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(m_id) == g_pBaldurChitin->GetScreenWorld()->GetSelectedCharacter()) {
+        g_pBaldurChitin->GetObjectGame()->GetButtonArray()->SetSelectedButton(100);
+        g_pBaldurChitin->GetObjectGame()->SetState(0);
+        g_pBaldurChitin->GetObjectGame()->GetButtonArray()->UpdateButtons();
+    }
+
+    return ACTION_DONE;
+}
+
 // 0x762740
 BOOL CGameSprite::HasClassMask(DWORD dwMask)
 {

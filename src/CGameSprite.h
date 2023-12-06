@@ -529,6 +529,7 @@ public:
     void sub_761650();
     SHORT DropItem(CItem* pItem);
     void sub_761990();
+    SHORT PlayBardSong();
     BOOL HasClassMask(DWORD dwMask);
     INT GetClassLevel(INT iClassType);
     void SetClassLevel(INT iClassType, INT nLevel);
