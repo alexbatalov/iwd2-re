@@ -4973,3 +4973,30 @@ CUIControlButton77DCC0::CUIControlButton77DCC0(CUIPanel* panel, UI_CONTROL_BUTTO
 CUIControlButton77DCC0::~CUIControlButton77DCC0()
 {
 }
+
+// 0x77DE10
+BOOL CUIControlButton77DCC0::Render(BOOL bForce)
+{
+    DWORD dwFlags = field_64C ? 0x80000 : 0;
+
+    if (!m_bActive && !m_bInactiveRender) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount == 0 && !bForce) {
+        return FALSE;
+    }
+
+    if (m_nRenderCount != 0) {
+        CSingleLock renderLock(&(m_pPanel->m_pManager->field_56), FALSE);
+        renderLock.Lock(INFINITE);
+        m_nRenderCount--;
+        renderLock.Unlock();
+    }
+
+    CPoint pt = m_pPanel->m_ptOrigin + m_ptOrigin;
+    CRect rClip(pt, m_size);
+    rClip.right = pt.x + field_666;
+
+    return m_cVidCell.Render(0, pt.x, pt.y, rClip, NULL, 0, dwFlags, -1);
+}
