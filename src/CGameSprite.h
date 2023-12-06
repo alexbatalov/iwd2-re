@@ -524,6 +524,7 @@ public:
     SHORT GetCasterLevel(CSpell* pSpell, BYTE nClass, DWORD nSpecialization);
     SHORT sub_75F240();
     SHORT SetAtOffset(DWORD stat, DWORD value, BOOL modify);
+    SHORT ForceHide(CGameSprite* pSprite);
     void sub_761650();
     BOOL HasClassMask(DWORD dwMask);
     INT GetClassLevel(INT iClassType);
@@ -864,8 +865,8 @@ public:
     /* 7232 */ short field_7232;
     /* 7234 */ LONG m_nHPCONBonusTotalOld;
     /* 7238 */ BOOL m_bHPCONBonusTotalUpdate;
-    /* 723C */ int field_723C;
-    /* 7240 */ int field_7240;
+    /* 723C */ DWORD m_modalCounter;
+    /* 7240 */ BOOL m_bHiding;
     /* 7244 */ ULONG m_lastRegenerationTime;
     /* 7248 */ int field_7248;
     /* 724C */ unsigned char field_724C;

@@ -945,8 +945,8 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
         m_interactingWith.Set(CAIObjectType::NOONE);
         m_nHPCONBonusTotalOld = 0;
         m_bHPCONBonusTotalUpdate = TRUE;
-        field_723C = 0;
-        field_7240 = 0;
+        m_modalCounter = 0;
+        m_bHiding = FALSE;
         m_secondarySounds = "";
 
         memset(field_725A, 0, sizeof(field_725A));
@@ -8857,6 +8857,55 @@ SHORT CGameSprite::SetAtOffset(DWORD stat, DWORD value, BOOL modify)
     return 0;
 }
 
+// 0x761470
+SHORT CGameSprite::ForceHide(CGameSprite* pSprite)
+{
+    if (m_bHiding) {
+        return ACTION_DONE;
+    }
+
+    if (g_pBaldurChitin->GetObjectGame()->GetState() != 0) {
+        return ACTION_DONE;
+    }
+
+    SetModalState(3, TRUE);
+    g_pBaldurChitin->GetObjectGame()->GetButtonArray()->SetSelectedButton(5);
+
+    if (!m_bHiding && !m_baseStats.field_294) {
+        PlaySound(CResRef("ACT_07"));
+    }
+
+    if (!m_baseStats.field_294) {
+        FeedBack(FEEDBACK_HIDESUCCEEDED,
+            0,
+            0,
+            0,
+            -1,
+            0,
+            0);
+    }
+
+    ITEM_EFFECT effect;
+    CGameEffect::ClearItemEffect(&effect, CGAMEEFFECT_INVISIBLE);
+    effect.durationType = 0x100;
+    effect.dwFlags = 0;
+    effect.effectAmount = 1;
+    effect.duration = g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime + 300;
+
+    CGameEffect* pEffect = CGameEffect::DecodeEffect(&effect,
+        m_pos,
+        m_id,
+        CPoint(-1, -1));
+
+    CMessage* message = new CMessageAddEffect(pEffect, m_id, m_id);
+    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+
+    m_modalCounter = 0;
+    m_bHiding = TRUE;
+
+    return ACTION_DONE;
+}
+
 // 0x761650
 void CGameSprite::sub_761650()
 {
@@ -10051,13 +10100,13 @@ void CGameSprite::SetResRef(const CResRef& resRef)
 // 0x453160
 void CGameSprite::sub_453160(int a1)
 {
-    field_7240 = a1;
+    m_bHiding = a1;
 }
 
 // 0x453170
 int CGameSprite::sub_453170()
 {
-    return field_7240;
+    return m_bHiding;
 }
 
 // 0x453180
