@@ -561,6 +561,9 @@ public:
     /* 0284 */ RESREF m_scriptSpecial3;
     /* 028C */ RESREF m_scriptMovement;
     /* 0294 */ unsigned char field_294;
+    /* 02E4 */ SHORT field_2E4;
+    /* 02E6 */ SHORT field_2E6;
+    /* 02E8 */ SHORT field_2E8;
     /* 02F9 */ BYTE field_2F9;
     /* 02FA */ BYTE m_fadeSpeed;
     /* 02FB */ unsigned char field_2FB;

@@ -522,6 +522,7 @@ public:
     SHORT Turn();
     const CAIObjectType& GetLiveAIType();
     SHORT GetCasterLevel(CSpell* pSpell, BYTE nClass, DWORD nSpecialization);
+    SHORT sub_75F240();
     SHORT SetAtOffset(DWORD stat, DWORD value, BOOL modify);
     void sub_761650();
     BOOL HasClassMask(DWORD dwMask);
