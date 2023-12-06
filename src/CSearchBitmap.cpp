@@ -1,5 +1,10 @@
 #include "CSearchBitmap.h"
 
+#include "CAIObjectType.h"
+#include "CBaldurChitin.h"
+#include "CGameObjectArray.h"
+#include "CInfGame.h"
+#include "CPathSearch.h"
 #include "CUtil.h"
 
 // 0x84EBD8
@@ -217,6 +222,131 @@ BOOLEAN CSearchBitmap::CanToggleDoor(const CPoint* pPoints, USHORT nPoints)
     }
 
     return TRUE;
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x548FD0
+CSearchRequest::CSearchRequest()
+{
+    m_serviceState = STATE_WAITING;
+    m_removeSelf = TRUE;
+    m_frontList = 0;
+    m_searchBitmap = NULL;
+    m_terrainTable[0] = CPathSearch::COST_IMPASSABLE;
+    m_terrainTable[1] = CPathSearch::COST_IMPASSABLE;
+    m_terrainTable[2] = CPathSearch::COST_IMPASSABLE;
+    m_terrainTable[3] = CPathSearch::COST_IMPASSABLE;
+    m_terrainTable[4] = CPathSearch::COST_IMPASSABLE;
+    m_terrainTable[5] = CPathSearch::COST_IMPASSABLE;
+    m_terrainTable[6] = CPathSearch::COST_IMPASSABLE;
+    m_terrainTable[7] = CPathSearch::COST_IMPASSABLE;
+    m_terrainTable[8] = CPathSearch::COST_IMPASSABLE;
+    m_terrainTable[9] = CPathSearch::COST_IMPASSABLE;
+    m_terrainTable[10] = CPathSearch::COST_IMPASSABLE;
+    m_terrainTable[11] = CPathSearch::COST_IMPASSABLE;
+    m_terrainTable[12] = CPathSearch::COST_IMPASSABLE;
+    m_terrainTable[13] = CPathSearch::COST_IMPASSABLE;
+    m_terrainTable[14] = CPathSearch::COST_IMPASSABLE;
+    m_terrainTable[15] = CPathSearch::COST_IMPASSABLE;
+    m_pathSmooth = FALSE;
+    m_collisionSearch = FALSE;
+    m_collisionDelay = 0;
+    m_exclusiveTargetPoints = FALSE;
+    m_sourceId = CGameObjectArray::INVALID_INDEX;
+    m_sourcePt.x = -1;
+    m_sourcePt.y = -1;
+    m_sourceSide = CAIObjectType::EA_PC;
+    m_nPartyIds = 0;
+    m_partyIds = NULL;
+    m_nTargetIds = 0;
+    m_targetIds = NULL;
+    m_nTargetPoints = 0;
+    m_targetPoints = NULL;
+    m_minNodes = g_pBaldurChitin->GetObjectGame()->GetFrameRate() < 10
+        ? MINNODES * (g_pBaldurChitin->GetObjectGame()->GetFrameRate() + 1) / 10
+        : MINNODES;
+    m_maxNodes = MAXNODES;
+    m_minNodesBack = g_pBaldurChitin->GetObjectGame()->GetFrameRate() < 10
+        ? MINNODESBACK * (g_pBaldurChitin->GetObjectGame()->GetFrameRate() + 1) / 10
+        : MINNODESBACK;
+    m_maxNodesBack = MAXNODESBACK;
+    m_searchRc = 0;
+    m_nPath = 0;
+    m_pPath = NULL;
+    m_bBump = TRUE;
+}
+
+// 0x549110
+CSearchRequest::CSearchRequest(const CSearchRequest& other)
+{
+    m_serviceState = STATE_WAITING;
+    m_removeSelf = other.m_removeSelf;
+    m_frontList = 0;
+    m_searchBitmap = other.m_searchBitmap;
+    memcpy(m_terrainTable, other.m_terrainTable, sizeof(m_terrainTable));
+    m_pathSmooth = other.m_pathSmooth;
+    m_collisionSearch = FALSE;
+    m_collisionDelay = 0;
+    m_exclusiveTargetPoints = other.m_exclusiveTargetPoints;
+    m_sourcePt.x = -1;
+    m_sourcePt.y = -1;
+    m_sourceId = other.m_sourceId;
+    m_nPartyIds = 0;
+    m_partyIds = NULL;
+    if (other.m_nPartyIds > 0) {
+        m_partyIds = new LONG[other.m_nPartyIds];
+        if (m_partyIds != NULL) {
+            m_nPartyIds = other.m_nPartyIds;
+            memcpy(m_partyIds, other.m_partyIds, sizeof(LONG) * other.m_nPartyIds);
+        }
+    }
+    m_nTargetIds = 0;
+    m_targetIds = NULL;
+    if (other.m_nTargetIds > 0) {
+        m_targetIds = new LONG[other.m_nTargetIds];
+        if (m_targetIds != NULL) {
+            m_nTargetIds = other.m_nTargetIds;
+            memcpy(m_targetIds, other.m_targetIds, sizeof(LONG) * other.m_nTargetIds);
+        }
+    }
+    m_nTargetPoints = 0;
+    m_targetPoints = NULL;
+    if (other.m_nTargetPoints > 0) {
+        m_targetPoints = new POINT[other.m_nTargetPoints];
+        if (m_targetPoints != NULL) {
+            m_nTargetPoints = other.m_nTargetPoints;
+            memcpy(m_targetPoints, other.m_targetPoints, sizeof(POINT) * other.m_nTargetPoints);
+        }
+    }
+    m_minNodes = other.m_minNodes;
+    m_maxNodes = other.m_maxNodes;
+    m_minNodesBack = other.m_minNodesBack;
+    m_maxNodesBack = other.m_maxNodesBack;
+    m_searchRc = 0;
+    m_nPath = 0;
+    m_pPath = NULL;
+    m_bBump = other.m_bBump;
+}
+
+// 0x549290
+CSearchRequest::~CSearchRequest()
+{
+    if (m_partyIds != NULL) {
+        delete m_partyIds;
+    }
+
+    if (m_targetIds != NULL) {
+        delete m_targetIds;
+    }
+
+    if (m_targetPoints != NULL) {
+        delete m_targetPoints;
+    }
+
+    if (m_pPath != NULL) {
+        delete m_pPath;
+    }
 }
 
 // -----------------------------------------------------------------------------

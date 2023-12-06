@@ -58,8 +58,36 @@ public:
     static LONG MINNODESBACK;
     static LONG MAXNODESBACK;
 
+    CSearchRequest();
+    CSearchRequest(const CSearchRequest& other);
+    ~CSearchRequest();
+
     /* 0000 */ BYTE m_serviceState;
     /* 0001 */ BYTE m_collisionDelay;
+    /* 0002 */ BOOL m_collisionSearch;
+    /* 0006 */ BYTE m_sourceSide;
+    /* 0007 */ BYTE m_nPartyIds;
+    /* 0008 */ BYTE m_nTargetIds;
+    /* 0009 */ BYTE m_nTargetPoints;
+    /* 000A */ BOOL m_removeSelf;
+    /* 000E */ BYTE m_frontList;
+    /* 0010 */ CSearchBitmap* m_searchBitmap;
+    /* 0014 */ BYTE m_terrainTable[16];
+    /* 0024 */ BOOL m_pathSmooth;
+    /* 0028 */ BOOL m_exclusiveTargetPoints;
+    /* 002C */ LONG m_sourceId;
+    /* 0030 */ POINT m_sourcePt;
+    /* 0038 */ LONG* m_partyIds;
+    /* 003C */ LONG* m_targetIds;
+    /* 0040 */ POINT* m_targetPoints;
+    /* 0044 */ LONG m_minNodes;
+    /* 0048 */ LONG m_maxNodes;
+    /* 004C */ LONG m_minNodesBack;
+    /* 0050 */ LONG m_maxNodesBack;
+    /* 0054 */ BOOL m_bBump;
+    /* 0058 */ SHORT m_searchRc;
+    /* 005A */ SHORT m_nPath;
+    /* 005C */ LONG* m_pPath;
 };
 
 void SearchThreadMain(void* userInfo);
