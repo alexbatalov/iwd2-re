@@ -36,6 +36,23 @@ void CGameEffectList::RemoveAllOfType(CGameSprite* pSprite, WORD effectID, POSIT
     // TODO: Incomplete.
 }
 
+// 0x4C0990
+void CGameEffectList::RemoveAllEffectsIgnoreMoreThenPermanent(POSITION posLeave, BOOL checkDispellable, BOOL useLevelDiff, BYTE prob, BYTE dispelLevel)
+{
+    POSITION pos = GetHeadPosition();
+    while (pos != NULL) {
+        POSITION posOld = pos;
+        CGameEffect* pEffect = GetNext(pos);
+        if (posOld != posLeave
+            && (!useLevelDiff || prob > 5 * (pEffect->m_casterLevel - dispelLevel + 10))
+            && (!checkDispellable || (pEffect->m_flags & 0x1) != 0)) {
+            RemoveAt(posOld);
+            delete pEffect;
+        }
+    }
+    m_posNext = NULL;
+}
+
 // 0x4C0E00
 void CGameEffectList::Unmarshal(BYTE* data, ULONG nSize, CGameSprite* pSprite, BYTE version)
 {

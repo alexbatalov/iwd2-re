@@ -13,6 +13,7 @@ public:
 
     POSITION GetPosCurrent();
     void RemoveAllOfType(CGameSprite* pSprite, WORD effectID, POSITION posLeave, LONG effectAmount);
+    void RemoveAllEffectsIgnoreMoreThenPermanent(POSITION posLeave, BOOL checkDispellable, BOOL useLevelDiff, BYTE prob, BYTE dispelLevel);
     void Unmarshal(BYTE* data, ULONG nSize, CGameSprite* pSprite, BYTE version);
 
     /* 001C */ POSITION m_posNext;
