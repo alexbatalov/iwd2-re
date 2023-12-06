@@ -54,15 +54,6 @@ BOOL CChitin::SCREEN_SAVE_ACTIVE_LOADED;
 // 0x8FB950
 BOOLEAN CChitin::byte_8FB950;
 
-// 0x8FB974
-int CChitin::dword_8FB974;
-
-// 0x8FB978
-int CChitin::dword_8FB978;
-
-// 0x8FB97C
-int CChitin::dword_8FB97C;
-
 // 0x78D960
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
@@ -294,9 +285,7 @@ CChitin::CChitin()
     m_sStartUpGameSpyLocation = "";
     field_130 = 0;
     field_136 = 6;
-    dword_8FB974 = 0;
-    dword_8FB978 = 0;
-    dword_8FB97C = 0;
+    memset(CVidFont::byte_8FB974, 0, sizeof(CVidFont::byte_8FB974));
     field_180 = 0;
     field_19C = 0;
     field_1C4A = 1;

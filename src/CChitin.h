@@ -132,9 +132,6 @@ public:
     static BOOL SCREEN_SAVE_ACTIVE;
     static BOOL SCREEN_SAVE_ACTIVE_LOADED;
     static BOOLEAN byte_8FB950;
-    static int dword_8FB974;
-    static int dword_8FB978;
-    static int dword_8FB97C;
 
     /* 0004 */ INT m_mouseLButton;
     /* 0008 */ INT m_mouseRButton;
