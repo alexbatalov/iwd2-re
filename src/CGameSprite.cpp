@@ -8062,6 +8062,58 @@ SHORT CGameSprite::GetCriticalHitBonus()
     return nCriticalHitBonus;
 }
 
+// 0x73C6A0
+SHORT CGameSprite::sub_73C6A0(CGameSprite* target, CItem* curWeapon, const ITEM_ABILITY* curAttack)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+    // __LINE__: 9840
+    UTIL_ASSERT(target != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+    // __LINE__: 9841
+    UTIL_ASSERT(curWeapon != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+    // __LINE__: 9842
+    UTIL_ASSERT(curAttack != NULL);
+
+    SHORT mod = 0;
+
+    switch (curAttack->damageType) {
+    case 1:
+        mod += target->GetDerivedStats()->m_nACPiercingMod;
+        break;
+    case 2:
+        mod += target->GetDerivedStats()->m_nACCrushingMod;
+        break;
+    case 3:
+        mod += target->GetDerivedStats()->m_nACSlashingMod;
+        break;
+    case 4:
+        mod += target->GetDerivedStats()->m_nACMissileMod;
+        mod += target->GetDerivedStats()->m_nACPiercingMod;
+        break;
+    case 5:
+        mod += target->GetDerivedStats()->m_nACCrushingMod;
+        break;
+    case 6:
+        mod += max(target->GetDerivedStats()->m_nACPiercingMod, target->GetDerivedStats()->m_nACCrushingMod);
+        break;
+    case 7:
+        mod += max(target->GetDerivedStats()->m_nACPiercingMod, target->GetDerivedStats()->m_nACSlashingMod);
+        break;
+    case 8:
+        mod += max(target->GetDerivedStats()->m_nACCrushingMod, target->GetDerivedStats()->m_nACSlashingMod);
+        break;
+    case 9:
+        mod += target->GetDerivedStats()->m_nACMissileMod;
+        mod += target->GetDerivedStats()->m_nACCrushingMod;
+        break;
+    }
+
+    return mod;
+}
+
 // 0x73F560
 SHORT CGameSprite::MoveToPoint()
 {

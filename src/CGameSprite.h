@@ -512,6 +512,7 @@ public:
     void FeedBack(WORD nFeedBackId, LONG a2, LONG a3, LONG a4, LONG a5, LONG a6, LONG a7);
     BOOLEAN sub_737910(BOOL a1);
     SHORT GetCriticalHitBonus();
+    SHORT sub_73C6A0(CGameSprite* target, CItem* curWeapon, const ITEM_ABILITY* curAttack);
     SHORT MoveToPoint();
     SHORT Recoil();
     SHORT PlayDead();
