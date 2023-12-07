@@ -2150,6 +2150,45 @@ CGameEffect* CGameEffectDamage::Copy()
     return copy;
 }
 
+// 0x4A7750
+void CGameEffectDamage::sub_4A7750(CGameSprite* pSprite)
+{
+    if ((pSprite->GetBaseStats()->m_generalState & STATE_DEAD) == 0) {
+        if ((pSprite->GetBaseStats()->m_generalState & STATE_SLEEPING) != 0
+            || (pSprite->GetDerivedStats()->m_generalState & STATE_SLEEPING) != 0) {
+            if (!pSprite->GetDerivedStats()->m_spellStates.test(SPLSTATE_DOESNT_AWAKEN_ON_DAMAGE)) {
+                pSprite->GetBaseStats()->m_generalState &= ~(STATE_SLEEPING | STATE_HELPLESS);
+                pSprite->GetDerivedStats()->m_generalState &= ~(STATE_SLEEPING | STATE_HELPLESS);
+
+                // NOTE: Uninline.
+                RemoveAllOfType(pSprite, CGAMEEFFECT_SLEEP, -1);
+
+                // NOTE: Uninline.
+                RemoveAllOfType(pSprite, CGAMEEFFECT_PORTRAITICON, 14);
+            }
+        }
+
+        if ((pSprite->GetDerivedStats()->m_generalState & STATE_STUNNED) != 0) {
+            if (pSprite->GetDerivedStats()->m_spellStates.test(SPLSTATE_UNSTUN_ON_DAMAGE)) {
+                pSprite->GetBaseStats()->m_generalState &= ~STATE_STUNNED;
+                pSprite->GetDerivedStats()->m_generalState &= ~STATE_STUNNED;
+
+                // NOTE: Uninline.
+                RemoveAllOfType(pSprite, CGAMEEFFECT_STUN, -1);
+
+                // NOTE: Uninline.
+                RemoveAllOfType(pSprite, CGAMEEFFECT_PORTRAITICON, 44);
+
+                // NOTE: Uninline.
+                RemoveAllOfType(pSprite, CGAMEEFFECT_HOLDCREATURE, -1);
+
+                // NOTE: Uninline.
+                RemoveAllOfType(pSprite, CGAMEEFFECT_PORTRAITICON, 13);
+            }
+        }
+    }
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.

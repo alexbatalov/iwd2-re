@@ -433,6 +433,8 @@ class CGameEffectDamage : public CGameEffect {
 public:
     CGameEffectDamage(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+
+    void sub_4A7750(CGameSprite* pSprite);
 };
 
 class CGameEffectDeath : public CGameEffect {
