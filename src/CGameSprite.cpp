@@ -6796,7 +6796,19 @@ STRREF CGameSprite::GetNameRef()
 // 0x728270
 void CGameSprite::PlaySound(const CResRef& res)
 {
-    // TODO: Incomplete.
+    CSound cSound;
+
+    CMessage* message = new CMessagePlaySoundRef(res, m_id, m_id);
+    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+
+    cSound.SetResRef(res, TRUE, TRUE);
+
+    if (cSound.m_nLooping == 0) {
+        cSound.SetFireForget(TRUE);
+    }
+
+    cSound.SetChannel(14, reinterpret_cast<DWORD>(m_pArea));
+    cSound.Play(GetPos().x, GetPos().y, 0, FALSE);
 }
 
 // 0x728460
