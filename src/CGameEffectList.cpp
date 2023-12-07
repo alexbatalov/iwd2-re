@@ -113,3 +113,40 @@ void CGameEffectList::Unmarshal(BYTE* data, ULONG nSize, CGameSprite* pSprite, B
         }
     }
 }
+
+// 0x4C0FA0
+BOOL CGameEffectList::HandleList(CGameSprite* pSprite)
+{
+    POSITION pos = GetHeadPosition();
+    BOOL cont = TRUE;
+    BOOL retry = FALSE;
+
+    m_posNext = pos;
+    m_posCurrent = pos;
+
+    while (pos != NULL) {
+        CGameEffect* pEffect = GetNext(m_posNext);
+
+        if (cont) {
+            cont = pEffect->ResolveEffect(pSprite);
+        }
+
+        if (pEffect->m_forceRepass) {
+            retry = TRUE;
+        }
+
+        if (m_posCurrent != NULL && pEffect->m_done) {
+            RemoveAt(m_posCurrent);
+            delete pEffect;
+        }
+
+        pos = m_posNext;
+        m_posCurrent = pos;
+    }
+
+    m_retry = retry;
+    m_posNext = NULL;
+    m_posCurrent = NULL;
+
+    return cont;
+}
