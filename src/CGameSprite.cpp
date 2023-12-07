@@ -8272,6 +8272,21 @@ SHORT CGameSprite::JumpToPoint(CPoint dest, BOOL spriteUpdate)
     return ACTION_DONE;
 }
 
+// 0x7462D0
+SHORT CGameSprite::Face()
+{
+    SetDirection(static_cast<SHORT>(m_curAction.m_specificID));
+
+    if (m_pos.x != -1 || m_pos.y != -1 || m_pArea != NULL) {
+        if (InControl()) {
+            CMessage* message = new CMessageSpriteUpdate(this, m_id, m_id);
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+        }
+    }
+
+    return ACTION_DONE;
+}
+
 // 0x751CD0
 SHORT CGameSprite::LeaveParty()
 {

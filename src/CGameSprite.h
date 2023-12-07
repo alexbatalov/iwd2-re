@@ -516,6 +516,7 @@ public:
     SHORT Recoil();
     SHORT PlayDead();
     SHORT JumpToPoint(CPoint dest, BOOL spriteUpdate);
+    SHORT Face();
     SHORT LeaveParty();
     void MoveGlobal(const CString& sArea, const CPoint& ptStart);
     void SelectWeaponAbility(unsigned char a1, unsigned char a2, unsigned char a3, unsigned char a4);
