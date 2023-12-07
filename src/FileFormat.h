@@ -568,6 +568,7 @@ public:
     /* 02FA */ BYTE m_fadeSpeed;
     /* 02FB */ unsigned char field_2FB;
     /* 02FC */ unsigned char field_2FC;
+    /* 02FF */ unsigned char field_2FF;
 };
 
 #pragma pack(push)

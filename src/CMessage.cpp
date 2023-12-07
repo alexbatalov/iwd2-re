@@ -208,6 +208,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SPRITE_EQUIPMENT = 55;
 // 0x84CF0F
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SPRITE_PETRIFY = 56;
 
+// 0x84CF10
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SPRITE_UPDATE = 57;
+
 // 0x84CF11
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_START_FOLLOW = 58;
 
@@ -9324,6 +9327,119 @@ void CMessageSpritePetrify::Run()
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
     }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x50C260
+CMessageSpriteUpdate::CMessageSpriteUpdate(CGameSprite* pSprite, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_nTranslucent = 0;
+    m_nFadeSpeed = 0;
+    field_64 = 0;
+    field_66 = 0;
+    field_68 = 0;
+    field_6A = 0;
+    m_nACCrushingMod = 0;
+    m_nACMissileMod = 0;
+    m_nACPiercingMod = 0;
+    m_nACSlashingMod = 0;
+    m_nEnemyAlly = 0;
+    m_nEnemyAllyLive = 0;
+    m_nEnemyAllyStart = 0;
+    m_bMoralFailure = 0;
+    m_nMoveScale = 0;
+    m_nHPCONBonusTotalOld = 0;
+    field_84 = 0;
+    m_pPath = 0;
+    m_nPath = 0;
+    field_74 = 0;
+    field_76 = NULL;
+    m_currPath = 0;
+    field_108 = 0;
+    field_56 = 0;
+
+    if (pSprite != NULL) {
+        m_nFadeSpeed = pSprite->GetBaseStats()->m_fadeSpeed;
+        m_nTranslucent = static_cast<BYTE>(pSprite->GetDerivedStats()->m_nTranslucent);
+        m_visualEffects = pSprite->GetDerivedStats()->m_visualEffects;
+        m_spellStates = pSprite->GetDerivedStats()->m_spellStates;
+        memcpy(m_baseSkills, pSprite->GetBaseStats()->m_skills, sizeof(m_baseSkills));
+        memcpy(m_skills, pSprite->GetDerivedStats()->m_nSkills, sizeof(m_skills));
+        field_106 = pSprite->GetBaseStats()->field_2FF;
+        m_nSequence = pSprite->m_nSequence;
+        m_ptPosition = pSprite->GetPos();
+        m_nFacing = pSprite->m_nDirection;
+        m_dwState = pSprite->GetDerivedStats()->m_generalState;
+        m_nHitPoints = pSprite->GetBaseStats()->m_hitPoints;
+        m_nMaxHitPoints = pSprite->GetDerivedStats()->m_nMaxHitPoints;
+        field_60 = pSprite->GetBaseStats()->m_flags;
+        field_64 = pSprite->GetDerivedStats()->field_6;
+        field_66 = pSprite->GetDerivedStats()->field_8;
+        field_68 = pSprite->GetDerivedStats()->field_A;
+        field_6A = pSprite->GetDerivedStats()->field_C;
+        m_nACCrushingMod = pSprite->GetDerivedStats()->m_nACCrushingMod;
+        m_nACMissileMod = pSprite->GetDerivedStats()->m_nACMissileMod;
+        m_nACPiercingMod = pSprite->GetDerivedStats()->m_nACPiercingMod;
+        m_nACSlashingMod = pSprite->GetDerivedStats()->m_nACSlashingMod;
+        m_nEnemyAlly = pSprite->GetAIType().GetEnemyAlly();
+        m_nEnemyAllyLive = pSprite->GetLiveAIType().GetEnemyAlly();
+        m_nEnemyAllyStart = pSprite->m_startTypeAI.GetEnemyAlly();
+        m_bMoralFailure = pSprite->m_moraleFailure;
+        m_nMoveScale = pSprite->GetAnimation()->GetMoveScale();
+        field_84 = pSprite->field_7248;
+        m_nHPCONBonusTotalOld = pSprite->m_nHPCONBonusTotalOld;
+        m_ptDest = pSprite->m_curDest;
+        field_108 = 0;
+        if (pSprite->GetArea() != NULL) {
+            m_nPath = pSprite->m_nPath;
+            m_currPath = pSprite->m_currPath;
+            if (pSprite->m_pPath == NULL) {
+                m_nPath = 0;
+                m_currPath;
+            }
+            if (m_nPath > 0) {
+                m_pPath = new LONG[m_nPath];
+                memcpy(m_pPath, pSprite->m_pPath, sizeof(LONG) * m_nPath);
+            }
+        } else {
+            m_nPath = 0;
+            m_pPath = NULL;
+            m_currPath = 0;
+        }
+        field_85 = 0;
+    }
+}
+
+// 0x4F6300
+CMessageSpriteUpdate::~CMessageSpriteUpdate()
+{
+    if (m_pPath != NULL) {
+        delete m_pPath;
+    }
+
+    if (field_76 != NULL) {
+        delete field_76;
+    }
+}
+
+// 0x4088A0
+SHORT CMessageSpriteUpdate::GetCommType()
+{
+    return BROADCAST_OTHERS;
+}
+
+// 0x40A0E0
+BYTE CMessageSpriteUpdate::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4F62F0
+BYTE CMessageSpriteUpdate::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SPRITE_UPDATE;
 }
 
 // -----------------------------------------------------------------------------

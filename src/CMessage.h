@@ -3,6 +3,8 @@
 
 #include "mfc.h"
 
+#include <bitset>
+
 #include "BalDataTypes.h"
 #include "CAIAction.h"
 #include "CAITrigger.h"
@@ -73,6 +75,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_SPRITE_DEATH;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SPRITE_EQUIPMENT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SPRITE_PETRIFY;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_SPRITE_UPDATE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_START_FOLLOW;
     static const BYTE MSG_SUBTYPE_CMESSAGE_START_SCROLL;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STOP_ACTIONS;
@@ -998,6 +1001,71 @@ public:
     void Run() override;
 
     /* 000C */ BOOLEAN m_bPetrify;
+};
+
+class CMessageSpriteUpdate : public CMessage {
+public:
+    CMessageSpriteUpdate(CGameSprite* pSprite, LONG caller, LONG target);
+    ~CMessageSpriteUpdate() override;
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+
+    /* 000C */ LONG* m_pPath;
+    /* 0010 */ SHORT m_nPath;
+    /* 0012 */ SHORT m_currPath;
+    /* 0014 */ CPoint m_ptDest;
+    /* 001C */ CString m_sAreaString;
+    /* 0020 */ SHORT m_nSequence;
+    /* 0022 */ CPoint m_ptPosition;
+    /* 002A */ SHORT m_nFacing;
+    /* 002C */ DWORD m_dwState;
+    /* 0030 */ std::bitset<256> m_spellStates;
+    /* 0038 */ short field_38;
+    /* 003A */ short field_3A;
+    /* 003C */ short field_3C;
+    /* 003E */ short field_3E;
+    /* 0040 */ short field_40;
+    /* 0042 */ short field_42;
+    /* 0044 */ short field_44;
+    /* 0046 */ short field_46;
+    /* 0048 */ short field_48;
+    /* 004A */ short field_4A;
+    /* 004C */ short field_4C;
+    /* 004E */ short field_4E;
+    /* 0050 */ std::bitset<32> m_visualEffects;
+    /* 0054 */ BYTE m_nFadeSpeed;
+    /* 0055 */ unsigned char field_55;
+    /* 0056 */ int field_56;
+    /* 005A */ BYTE m_nTranslucent;
+    /* 005B */ unsigned char field_5B;
+    /* 005C */ SHORT m_nHitPoints;
+    /* 005E */ SHORT m_nMaxHitPoints;
+    /* 0060 */ int field_60;
+    /* 0064 */ short field_64;
+    /* 0066 */ short field_66;
+    /* 0068 */ short field_68;
+    /* 006A */ short field_6A;
+    /* 006C */ SHORT m_nACCrushingMod;
+    /* 006E */ SHORT m_nACMissileMod;
+    /* 0070 */ SHORT m_nACPiercingMod;
+    /* 0072 */ SHORT m_nACSlashingMod;
+    /* 0074 */ short field_74;
+    /* 0076 */ void* field_76;
+    /* 007A */ BYTE m_nEnemyAlly;
+    /* 007B */ BYTE m_nEnemyAllyLive;
+    /* 007C */ BYTE m_nEnemyAllyStart;
+    /* 007D */ BOOLEAN m_bMoralFailure;
+    /* 007E */ BYTE m_nMoveScale;
+    /* 007F */ unsigned char field_7F;
+    /* 0080 */ LONG m_nHPCONBonusTotalOld;
+    /* 0084 */ unsigned char field_84;
+    /* 0085 */ unsigned char field_85;
+    /* 0086 */ BYTE m_baseSkills[64];
+    /* 00C6 */ BYTE m_skills[64];
+    /* 0106 */ unsigned char field_106;
+    /* 0107 */ unsigned char field_107;
+    /* 0108 */ int field_108;
 };
 
 class CMessageStartFollow : public CMessage {
