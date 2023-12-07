@@ -5789,6 +5789,72 @@ void CGameSprite::InitializeWalkingSound()
     }
 }
 
+// 0x71DFB0
+void CGameSprite::AutoPause(DWORD type)
+{
+    COLORREF nameColor;
+    STRREF strPause;
+
+    if (type == 256
+        || (type == 128 && g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bAutoPauseOnTrap)
+        || (type & g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nAutoPauseState) != 0) {
+        if (g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(m_id) != -1
+            || g_pBaldurChitin->GetObjectGame()->IsAlly(m_id)
+            || g_pBaldurChitin->GetObjectGame()->IsFamiliar(m_id)) {
+            nameColor = CVidPalette::RANGE_COLORS[m_baseStats.m_colors[CVIDPALETTE_RANGE_MAIN_CLOTH]];
+            if (g_pChitin->cNetwork.GetSessionOpen()
+                || g_pBaldurChitin->GetActiveEngine() == g_pBaldurChitin->GetScreenWorld()) {
+                switch (type) {
+                case 0x1:
+                    strPause = 17113; // "Auto-Paused: Weapon Unusable"
+                    break;
+                case 0x2:
+                    strPause = 17114; // "Auto-Paused: Attacked"
+                    break;
+                case 0x4:
+                    strPause = 17115; // "Auto-Paused: Hit"
+                    break;
+                case 0x8:
+                    strPause = 17116; // "Auto-Paused: Badly Wounded"
+                    break;
+                case 0x10:
+                    strPause = 17117; // "Auto-Paused: Dead"
+                    break;
+                case 0x20:
+                    strPause = 17118; // "Auto-Paused: Target Gone"
+                    break;
+                case 0x40:
+                    strPause = 10014; // "Auto-Paused: Round End"
+                    break;
+                case 0x80:
+                    strPause = 18559; // "Trap Detected"
+                    break;
+                case 0x100:
+                    strPause = 7666; // "Auto-Paused: Scripted"
+                    break;
+                case 0x200:
+                    strPause = 23516; // "Enemy Sighted"
+                    break;
+                case 0x400:
+                    strPause = 26310; // "Spell Cast"
+                    break;
+                default:
+                    strPause = 17324; // "Auto-Paused: Unknown Reason"
+                    break;
+                }
+            } else {
+                strPause = 17324; // "Auto-Paused: Unknown Reason"
+            }
+
+            CScreenWorld* pWorld = g_pBaldurChitin->GetScreenWorld();
+            pWorld->m_autoPauseColor = nameColor;
+            pWorld->m_autoPauseId = m_id;
+            pWorld->m_autoPauseRef = strPause;
+            pWorld->m_autoPauseName = GetNameRef();
+        }
+    }
+}
+
 // 0x71E9F0
 void CGameSprite::AddKnownDivineSpells(const BYTE& nClass)
 {
