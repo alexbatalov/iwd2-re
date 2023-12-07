@@ -397,6 +397,7 @@ public:
     /* 0094 */ void SetScript(SHORT level, CAIScript* script) override;
     /* 009C */ const BYTE* GetVisibleTerrainTable() override;
     /* 00A0 */ const BYTE* GetTerrainTable() override;
+    /* 00B0 */ void AutoPause(DWORD type) override;
     /* 00B4 */ BOOL GetCanSeeInvisible() override;
     /* 00BC */ virtual void SetAIType(const CAIObjectType& typeAI, BOOL updateLive, BOOL updateStart);
     /* 00C0 */ virtual void ResetAITypeLive();
@@ -481,7 +482,6 @@ public:
     SHORT CountItemPersonal(const CString& sName);
     DWORD GetCarriedWeight();
     void InitializeWalkingSound();
-    void AutoPause(DWORD type);
     void PlayDialogSound(CGameSprite* pNPC);
     void AddKnownDivineSpells(const BYTE& nClass);
     void DisplayTextRef(STRREF nameRef, STRREF textRef, COLORREF nameColor, COLORREF textColor);

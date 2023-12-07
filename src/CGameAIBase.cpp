@@ -469,6 +469,11 @@ void CGameAIBase::ApplyTriggers()
     // TODO: Incomplete.
 }
 
+// 0x799E60
+void CGameAIBase::AutoPause(DWORD type)
+{
+}
+
 // 0x49FC40
 BOOL CGameAIBase::GetCanSeeInvisible()
 {
