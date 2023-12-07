@@ -518,6 +518,7 @@ public:
     SHORT sub_73CA20(CItem* curWeapon, const ITEM_ABILITY* curAttack);
     SHORT sub_73CAD0();
     SHORT sub_73CAE0(CItem* curWeapon, const ITEM_ABILITY* curAttack);
+    SHORT sub_73CB10(CItem* curWeapon, const ITEM_ABILITY* curAttack);
     SHORT MoveToPoint();
     SHORT Recoil();
     SHORT PlayDead();

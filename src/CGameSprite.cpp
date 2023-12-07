@@ -8238,6 +8238,47 @@ SHORT CGameSprite::sub_73CAE0(CItem* curWeapon, const ITEM_ABILITY* curAttack)
     return 0;
 }
 
+// 0x73CB10
+SHORT CGameSprite::sub_73CB10(CItem* curWeapon, const ITEM_ABILITY* curAttack)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+    // __LINE__: 10083
+    UTIL_ASSERT(curWeapon != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+    // __LINE__: 10084
+    UTIL_ASSERT(curAttack != NULL);
+
+    const CRuleTables& cRule = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    if (curAttack->type == 2 || curAttack->type == 4) {
+        return cRule.GetAbilityScoreModifier(m_derivedStats.m_nDEX);
+    }
+
+    WORD itemType = curWeapon->GetItemType();
+    INT mod = cRule.GetAbilityScoreModifier(m_derivedStats.m_nSTR);
+
+    if (sub_763150(CGAMESPRITE_FEAT_WEAPON_FINESSE)
+        && (itemType == 19 || itemType == 16)) {
+        INT nDEXMod = cRule.GetAbilityScoreModifier(m_derivedStats.m_nDEX);
+        if (mod < nDEXMod) {
+            mod = nDEXMod;
+        }
+    }
+
+    if (sub_763150(CGAMESPRITE_FEAT_POWER_ATTACK)
+        && sub_726270(CGAMESPRITE_FEAT_POWER_ATTACK) > 0) {
+        mod -= sub_726270(CGAMESPRITE_FEAT_POWER_ATTACK);
+    }
+
+    if (sub_763150(CGAMESPRITE_FEAT_EXPERTISE)
+        && sub_726270(CGAMESPRITE_FEAT_EXPERTISE) > 0) {
+        mod -= sub_726270(CGAMESPRITE_FEAT_EXPERTISE);
+    }
+
+    return static_cast<SHORT>(mod);
+}
+
 // 0x73F560
 SHORT CGameSprite::MoveToPoint()
 {
