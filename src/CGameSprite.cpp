@@ -8314,6 +8314,72 @@ SHORT CGameSprite::sub_73CC40(CItem* curWeapon, const ITEM_ABILITY* curAttack)
     return mod;
 }
 
+// 0x73D440
+SHORT CGameSprite::sub_73D440(CItem* curWeapon)
+{
+    SHORT mod = 0;
+    switch (curWeapon->GetItemType()) {
+    case 0:
+    case 28:
+        mod++;
+        break;
+    case 15:
+        mod = static_cast<SHORT>(GetFeatValue(CGAMESPRITE_FEAT_MARTIAL_BOW));
+        break;
+    case 16:
+    case 19:
+        mod = static_cast<SHORT>(GetFeatValue(CGAMESPRITE_FEAT_SIMPLE_SMALLBLADE));
+        break;
+    case 17:
+    case 22:
+    case 44:
+        mod = static_cast<SHORT>(GetFeatValue(CGAMESPRITE_FEAT_SIMPLE_MACE));
+        break;
+    case 18:
+    case 24:
+        mod = static_cast<SHORT>(GetFeatValue(CGAMESPRITE_FEAT_SIMPLE_MISSILE));
+        break;
+    case 20:
+        mod = static_cast<SHORT>(GetFeatValue(CGAMESPRITE_FEAT_MARTIAL_LARGESWORD));
+        break;
+    case 21:
+        mod = static_cast<SHORT>(GetFeatValue(CGAMESPRITE_FEAT_MARTIAL_HAMMER));
+        break;
+    case 23:
+        mod = static_cast<SHORT>(GetFeatValue(CGAMESPRITE_FEAT_MARTIAL_FLAIL));
+        break;
+    case 25:
+        mod = static_cast<SHORT>(GetFeatValue(CGAMESPRITE_FEAT_MARTIAL_AXE));
+        break;
+    case 26:
+        mod = static_cast<SHORT>(GetFeatValue(CGAMESPRITE_FEAT_SIMPLE_QUARTERSTAFF));
+        break;
+    case 27:
+        mod = static_cast<SHORT>(GetFeatValue(CGAMESPRITE_FEAT_SIMPLE_CROSSBOW));
+        break;
+    case 29:
+    case 30:
+        mod = static_cast<SHORT>(GetFeatValue(CGAMESPRITE_FEAT_MARTIAL_POLEARM));
+        break;
+    case 57:
+        mod = static_cast<SHORT>(GetFeatValue(CGAMESPRITE_FEAT_MARTIAL_GREATSWORD));
+        break;
+    case 69:
+        mod = static_cast<SHORT>(GetFeatValue(CGAMESPRITE_FEAT_EXOTIC_BASTARD));
+        break;
+    }
+
+    if (mod < 0) {
+        mod = 0;
+    }
+
+    if (m_derivedStats.m_spellStates[SPLSTATE_TENSERS_TRANSFORMATION] && mod == 0) {
+        mod = 1;
+    }
+
+    return mod;
+}
+
 // 0x73F560
 SHORT CGameSprite::MoveToPoint()
 {
