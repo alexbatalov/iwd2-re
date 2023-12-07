@@ -535,6 +535,7 @@ public:
     SHORT LeaveParty();
     void MoveGlobal(const CString& sArea, const CPoint& ptStart);
     SHORT Enemy();
+    SHORT SetDialog();
     void SelectWeaponAbility(unsigned char a1, unsigned char a2, unsigned char a3, unsigned char a4);
     SHORT EquipItem();
     SHORT FindTraps();

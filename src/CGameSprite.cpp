@@ -8837,6 +8837,19 @@ SHORT CGameSprite::Enemy()
     return ACTION_DONE;
 }
 
+// 0x754870
+SHORT CGameSprite::SetDialog()
+{
+    m_dialog = m_curAction.GetString1();
+
+    if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+        CMessage* message = new CMessageSetDialogResRef(CResRef(m_curAction.GetString1()), m_id, m_id);
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+    }
+
+    return ACTION_DONE;
+}
+
 // 0x74F830
 void CGameSprite::SelectWeaponAbility(unsigned char a1, unsigned char a2, unsigned char a3, unsigned char a4)
 {
