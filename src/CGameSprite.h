@@ -514,6 +514,7 @@ public:
     SHORT GetCriticalHitBonus();
     SHORT sub_73C6A0(CGameSprite* target, CItem* curWeapon, const ITEM_ABILITY* curAttack);
     SHORT sub_73C7E0();
+    SHORT sub_73C8C0(CGameSprite* target);
     SHORT MoveToPoint();
     SHORT Recoil();
     SHORT PlayDead();

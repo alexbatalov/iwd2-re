@@ -8144,6 +8144,54 @@ SHORT CGameSprite::sub_73C7E0()
     return mod;
 }
 
+// 0x73C8C0
+SHORT CGameSprite::sub_73C8C0(CGameSprite* target)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+    // __LINE__: 9925
+    UTIL_ASSERT(target != NULL);
+
+    SHORT mod = 0;
+
+    if (m_typeAI.GetRace() == CAIOBJECTTYPE_R_DWARF) {
+        if (m_typeAI.m_nSubRace == CAIOBJECTTYPE_SUBRACE_DWARF_GOLD
+            && IcewindMisc::IsAberration(target) == TRUE) {
+            mod++;
+        } else {
+            switch (target->m_typeAI.GetRace()) {
+            case CAIOBJECTTYPE_R_HOBGOBLIN:
+            case CAIOBJECTTYPE_R_GOBLIN:
+            case CAIOBJECTTYPE_R_ORC:
+            case CAIOBJECTTYPE_R_BUGBEAR:
+                mod++;
+                break;
+            }
+        }
+    }
+
+    if (m_typeAI.GetRace() == CAIOBJECTTYPE_R_GNOME) {
+        switch (target->m_typeAI.GetRace()) {
+        case CAIOBJECTTYPE_R_HOBGOBLIN:
+        case CAIOBJECTTYPE_R_KOBOLD:
+        case CAIOBJECTTYPE_R_GOBLIN:
+        case CAIOBJECTTYPE_R_BUGBEAR:
+            mod++;
+            break;
+        }
+    }
+
+    if (m_typeAI.GetRace() == CAIOBJECTTYPE_R_GIANT
+        || m_typeAI.GetRace() == CAIOBJECTTYPE_R_OGRE) {
+        if ((target->m_typeAI.GetRace() == CAIOBJECTTYPE_R_GNOME
+                && target->m_typeAI.m_nSubRace != CAIOBJECTTYPE_SUBRACE_DWARF_GOLD)
+            || target->m_typeAI.GetRace() == CAIOBJECTTYPE_R_DWARF) {
+            mod -= 4;
+        }
+    }
+
+    return mod;
+}
+
 // 0x73F560
 SHORT CGameSprite::MoveToPoint()
 {
