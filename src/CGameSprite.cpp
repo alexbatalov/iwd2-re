@@ -8192,6 +8192,36 @@ SHORT CGameSprite::sub_73C8C0(CGameSprite* target)
     return mod;
 }
 
+// 0x73CA20
+SHORT CGameSprite::sub_73CA20(CItem* curWeapon, const ITEM_ABILITY* curAttack)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+    // __LINE__: 9988
+    UTIL_ASSERT(curWeapon != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+    // __LINE__: 9989
+    UTIL_ASSERT(curAttack != NULL);
+
+    SHORT mod = 0;
+
+    if (m_typeAI.GetRace() == CAIOBJECTTYPE_R_HALFLING
+        && curAttack->type == 2) {
+        switch (curWeapon->GetItemType()) {
+        case 14:
+        case 16:
+        case 21:
+        case 24:
+        case 25:
+        case 29:
+            mod++;
+            break;
+        }
+    }
+
+    return mod;
+}
+
 // 0x73F560
 SHORT CGameSprite::MoveToPoint()
 {
