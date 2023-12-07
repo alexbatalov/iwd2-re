@@ -317,6 +317,7 @@ public:
     void AdjustDEX(CGameSprite* pSprite, INT nValue);
     void AdjustINT(CGameSprite* pSprite, INT nValue);
     void AdjustWIS(CGameSprite* pSprite, INT nValue);
+    void AdjustCON(CGameSprite* pSprite, INT nValue);
     void Immobilize(CGameSprite* pSprite);
     void AddSlowEffect(CGameSprite* pSprite);
     void AddPanicEffect(CGameSprite* pSprite);
@@ -418,6 +419,7 @@ class CGameEffectCON : public CGameEffect {
 public:
     CGameEffectCON(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectCurePoison : public CGameEffect {
