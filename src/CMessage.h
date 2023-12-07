@@ -56,6 +56,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_LEAVE_PARTY;
     static const BYTE MSG_SUBTYPE_CMESSAGE_PARTY_GOLD;
     static const BYTE MSG_SUBTYPE_CMESSAGE_PLAY_SOUND;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_PLAY_SOUND_REF;
     static const BYTE MSG_SUBTYPE_CMESSAGE_REMOVE_REPLIES;
     static const BYTE MSG_SUBTYPE_CMESSAGE_REPUTATION_CHANGE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_ACTIVE;
@@ -738,6 +739,21 @@ public:
     /* 000C */ BOOL m_showText;
     /* 0010 */ BOOL m_showCircle;
     /* 0014 */ BYTE m_soundId;
+};
+
+class CMessagePlaySoundRef : public CMessage {
+public:
+    CMessagePlaySoundRef(CResRef cResSound, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ CResRef m_cResSound;
+    /* 0014 */ BYTE m_nChannel;
+    /* 0015 */ BOOLEAN m_bPositioned;
 };
 
 class CMessageRemoveReplies : public CMessage {

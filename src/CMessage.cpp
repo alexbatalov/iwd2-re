@@ -151,6 +151,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_PARTY_GOLD = 31;
 // 0x84CEF7
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_PLAY_SOUND = 32;
 
+// 0x84CEF8
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_PLAY_SOUND_REF = 33;
+
 // 0x84CEFA
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_REMOVE_REPLIES = 35;
 
@@ -6982,6 +6985,193 @@ void CMessagePlaySound::Run()
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4A9AD0
+CMessagePlaySoundRef::CMessagePlaySoundRef(CResRef cResSound, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_cResSound = cResSound;
+    m_nChannel = 14;
+    m_bPositioned = TRUE;
+}
+
+// 0x4536E0
+SHORT CMessagePlaySoundRef::GetCommType()
+{
+    return BROADCAST_FORCED_OTHERS;
+}
+
+// 0x40A0E0
+BYTE CMessagePlaySoundRef::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x48AC70
+BYTE CMessagePlaySoundRef::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_PLAY_SOUND_REF;
+}
+
+// 0x5034E0
+void CMessagePlaySoundRef::MarshalMessage(BYTE** pData, DWORD* dwSize)
+{
+    CString sResRef;
+
+    // FIXME: Unused.
+    CAIObjectType v1;
+
+    PLAYER_ID remotePlayerID = 0;
+    LONG remoteObjectID;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 14894
+    UTIL_ASSERT(pData != NULL && dwSize != NULL);
+
+    CGameObject* pObject;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        remotePlayerID = pObject->m_remotePlayerID;
+        remoteObjectID = pObject->m_remoteObjectID;
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    } else {
+        remoteObjectID = CGameObjectArray::INVALID_INDEX;
+    }
+
+    m_cResSound.CopyToString(sResRef);
+    BYTE stringLen = static_cast<BYTE>(sResRef.GetLength());
+
+    *dwSize = sizeof(PLAYER_ID)
+        + sizeof(LONG)
+        + sizeof(BYTE)
+        + stringLen
+        + sizeof(BYTE)
+        + sizeof(BOOLEAN);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 14923
+    UTIL_ASSERT(*dwSize <= STATICBUFFERSIZE);
+
+    DWORD cnt = 0;
+
+    *reinterpret_cast<PLAYER_ID*>(*pData + cnt) = remotePlayerID;
+    cnt += sizeof(PLAYER_ID);
+
+    *reinterpret_cast<LONG*>(*pData + cnt) = remoteObjectID;
+    cnt += sizeof(LONG);
+
+    *reinterpret_cast<BYTE*>(*pData + cnt) = stringLen;
+    cnt += sizeof(BYTE);
+
+    memcpy(*pData + cnt, sResRef.GetBuffer(sResRef.GetLength()), sResRef.GetLength());
+    cnt += sResRef.GetLength();
+
+    *reinterpret_cast<BYTE*>(*pData + cnt) = m_nChannel;
+    cnt += sizeof(BYTE);
+
+    *reinterpret_cast<BOOLEAN*>(*pData + cnt) = m_bPositioned;
+    cnt += sizeof(BOOLEAN);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 14956
+    UTIL_ASSERT(cnt == *dwSize);
+}
+
+// 0x5036E0
+BOOL CMessagePlaySoundRef::UnmarshalMessage(BYTE* pData, DWORD dwSize)
+{
+    // FIXME: Unused.
+    CString v1;
+    CAIObjectType v2;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 14993
+    UTIL_ASSERT(pData != NULL);
+
+    DWORD cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    PLAYER_ID remotePlayerID = *reinterpret_cast<PLAYER_ID*>(pData + cnt);
+    cnt += sizeof(PLAYER_ID);
+
+    LONG remoteObjectID = *reinterpret_cast<LONG*>(pData + cnt);
+    cnt += sizeof(LONG);
+
+    LONG localObjectID;
+    if (g_pBaldurChitin->GetObjectGame()->GetRemoteObjectArray()->Find(remotePlayerID, remoteObjectID, localObjectID) == TRUE) {
+        m_targetId = localObjectID;
+    } else {
+        m_targetId = CGameObjectArray::INVALID_INDEX;
+    }
+
+    BYTE stringLen = *reinterpret_cast<BYTE*>(pData + cnt);
+    cnt += sizeof(BYTE);
+
+    m_cResSound = CString(reinterpret_cast<char*>(pData + cnt), stringLen);
+    cnt += stringLen;
+
+    m_nChannel = *reinterpret_cast<BYTE*>(pData + cnt) == TRUE;
+    cnt += sizeof(BYTE);
+
+    m_bPositioned = *reinterpret_cast<BOOLEAN*>(pData + cnt) == TRUE;
+    cnt += sizeof(BOOLEAN);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 15034
+    UTIL_ASSERT(cnt == dwSize);
+
+    return TRUE;
+}
+
+// 0x503880
+void CMessagePlaySoundRef::Run()
+{
+    CSound cSound;
+    cSound.SetResRef(m_cResSound, TRUE, TRUE);
+
+    if (cSound.m_nLooping == 0) {
+        cSound.SetFireForget(TRUE);
+    }
+
+    CGameObject* pObject;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        cSound.SetChannel(m_nChannel,
+            reinterpret_cast<DWORD>(pObject->GetArea()));
+        cSound.Play(pObject->GetPos().x,
+            pObject->GetPos().y,
+            0,
+            FALSE);
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    } else {
+        cSound.SetChannel(14,
+            reinterpret_cast<DWORD>(g_pBaldurChitin->GetObjectGame()->GetVisibleArea()));
+        cSound.Play(FALSE);
     }
 }
 
