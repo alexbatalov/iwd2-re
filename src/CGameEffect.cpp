@@ -1158,7 +1158,21 @@ BOOL CGameEffect::UsesDice()
 // 0x4A2E40
 void CGameEffect::PlaySound(const CResRef& soundResRef, CGameSprite* pSprite)
 {
-    // TODO: Incomplete.
+    m_sound.Stop();
+
+    CMessage* message = new CMessagePlaySoundRef(soundResRef,
+        pSprite->GetId(),
+        pSprite->GetId());
+    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+
+    m_sound.SetResRef(soundResRef, TRUE, TRUE);
+
+    if (m_sound.m_nLooping == 0) {
+        m_sound.SetFireForget(TRUE);
+    }
+
+    m_sound.SetChannel(14, reinterpret_cast<DWORD>(pSprite->GetArea()));
+    m_sound.Play(pSprite->GetPos().x, pSprite->GetPos().y, 0, FALSE);
 }
 
 // 0x4A4B00
