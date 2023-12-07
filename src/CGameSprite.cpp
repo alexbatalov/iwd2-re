@@ -646,8 +646,8 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     m_spriteEffectBaseIntensity = 0;
     m_spriteEffectRandomIntensity = 0;
     m_bEscapingArea = 0;
-    field_4D32 = 0;
-    field_4DFE = 0;
+    m_nSndWalk = 0;
+    m_currSndWalk = 0;
     m_effectExtendDirection = 0;
     m_animationRunning = FALSE;
     field_5326 = 0;
@@ -5768,6 +5768,24 @@ void CGameSprite::SetScript(SHORT level, CAIScript* script)
         m_movementScript = script;
         m_movementScript->m_cResRef.GetResRef(m_baseStats.m_scriptMovement);
         break;
+    }
+}
+
+// 0x71DD20
+void CGameSprite::InitializeWalkingSound()
+{
+    m_nSndWalk = 0;
+    m_currSndWalk = 0;
+
+    // NOTE: Uninline.
+    char* pSndWalk = m_animation.GetSndWalk(m_pArea->m_search.GetTableIndex(m_pos));
+    if (pSndWalk != NULL) {
+        m_sndWalk[m_currSndWalk].SetResRef(CResRef(pSndWalk), TRUE, TRUE);
+        if (pSndWalk[0] != '\0') {
+            delete pSndWalk;
+        }
+    } else {
+        m_sndWalk[m_currSndWalk].SetResRef(CResRef(""), TRUE, TRUE);
     }
 }
 

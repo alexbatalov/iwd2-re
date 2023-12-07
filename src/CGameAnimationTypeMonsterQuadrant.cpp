@@ -447,14 +447,14 @@ char* CGameAnimationTypeMonsterQuadrant::GetSndReady()
 }
 
 // 0x6BB670
-const char* CGameAnimationTypeMonsterQuadrant::GetSndWalk(SHORT a1)
+char* CGameAnimationTypeMonsterQuadrant::GetSndWalk(SHORT tableIndex)
 {
     if ((m_animationID & 0xF00) == 0) {
         return NULL;
     }
 
     const char* v1;
-    switch (a1) {
+    switch (tableIndex) {
     case 1:
         v1 = "FS_Dirt ";
         break;
@@ -502,7 +502,6 @@ const char* CGameAnimationTypeMonsterQuadrant::GetSndWalk(SHORT a1)
 
     memcpy(m_walkRef, szTemp, 9);
 
-    // FIXME: Leaks `szTemp`.
     return szTemp;
 }
 

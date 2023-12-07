@@ -1491,10 +1491,10 @@ char* CGameAnimationTypeCharacter::GetSndArmor()
 }
 
 // 0x6CC330
-const char* CGameAnimationTypeCharacter::GetSndWalk(SHORT a1)
+char* CGameAnimationTypeCharacter::GetSndWalk(SHORT tableIndex)
 {
     const char* v1;
-    switch (a1) {
+    switch (tableIndex) {
     case 1:
         v1 = "FS_Dirt ";
         break;
@@ -1542,7 +1542,6 @@ const char* CGameAnimationTypeCharacter::GetSndWalk(SHORT a1)
 
     memcpy(m_walkRef, szTemp, 9);
 
-    // FIXME: Leaks `szTemp`.
     return szTemp;
 }
 

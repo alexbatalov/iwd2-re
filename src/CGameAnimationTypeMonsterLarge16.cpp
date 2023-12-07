@@ -298,7 +298,7 @@ char* CGameAnimationTypeMonsterLarge16::GetSndReady()
 }
 
 // 0x6B3090
-const char* CGameAnimationTypeMonsterLarge16::GetSndWalk(SHORT a1)
+char* CGameAnimationTypeMonsterLarge16::GetSndWalk(SHORT tableIndex)
 {
     char* szTemp;
 
@@ -323,7 +323,7 @@ const char* CGameAnimationTypeMonsterLarge16::GetSndWalk(SHORT a1)
     }
 
     const char* v1;
-    switch (a1) {
+    switch (tableIndex) {
     case 1:
         v1 = "FS_Dirt ";
         break;
@@ -371,7 +371,6 @@ const char* CGameAnimationTypeMonsterLarge16::GetSndWalk(SHORT a1)
 
     memcpy(m_walkRef, szTemp, 9);
 
-    // FIXME: Leaks `szTemp`.
     return szTemp;
 }
 

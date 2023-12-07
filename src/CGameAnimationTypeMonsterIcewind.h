@@ -15,7 +15,7 @@ public:
     /* 0020 */ CVidPalette* GetAnimationPalette(BYTE range) override;
     /* 0024 */ void GetAnimationResRef(CString& resRef, BYTE range) override;
     /* 002C */ BOOLEAN DetectedByInfravision() override;
-    /* 006C */ const char* GetSndWalk(SHORT a1) override;
+    /* 006C */ char* GetSndWalk(SHORT tableIndex) override;
     /* 007C */ BOOL IsMirroring() override;
     /* 0080 */ BOOL IsBeginningOfSequence() override;
     /* 0084 */ BOOL IsEndOfSequence() override;

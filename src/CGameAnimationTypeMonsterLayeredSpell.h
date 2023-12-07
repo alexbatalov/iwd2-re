@@ -12,7 +12,7 @@ public:
     /* 0008 */ void CalculateGCBoundsRect(CRect& rGCBounds, const CPoint& pos, const CPoint& ptReference, LONG posZ, LONG nWidth, LONG nHeight) override;
     /* 000C */ void ChangeDirection(SHORT nDirection) override;
     /* 0024 */ void GetAnimationResRef(CString& resRef, BYTE range) override;
-    /* 006C */ const char* GetSndWalk(SHORT a1) override;
+    /* 006C */ char* GetSndWalk(SHORT tableIndex) override;
     /* 0074 */ BOOL IsFalseColor() override;
     /* 0078 */ BOOL IsInvulnerable() override;
     /* 007C */ BOOL IsMirroring() override;

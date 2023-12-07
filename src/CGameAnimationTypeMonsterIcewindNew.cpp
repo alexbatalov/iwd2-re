@@ -762,7 +762,7 @@ void CGameAnimationTypeMonsterIcewindNew::GetAnimationResRef(CString& resRef, BY
 }
 
 // 0x6ED8A0
-const char* CGameAnimationTypeMonsterIcewindNew::GetSndWalk(SHORT a1)
+char* CGameAnimationTypeMonsterIcewindNew::GetSndWalk(SHORT tableIndex)
 {
     if ((m_animationID & 0xFFF0) == 0xF100
         || (m_animationID & 0xFFF0) == 0xF110) {
@@ -770,7 +770,7 @@ const char* CGameAnimationTypeMonsterIcewindNew::GetSndWalk(SHORT a1)
     }
 
     const char* v1;
-    switch (a1) {
+    switch (tableIndex) {
     case 1:
         v1 = "FS_Dirt ";
         break;
@@ -818,7 +818,6 @@ const char* CGameAnimationTypeMonsterIcewindNew::GetSndWalk(SHORT a1)
 
     memcpy(m_walkRef, szTemp, 9);
 
-    // FIXME: Leaks `szTemp`.
     return szTemp;
 }
 

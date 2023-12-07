@@ -480,6 +480,7 @@ public:
     SHORT FindItemPersonal(const CString& sName, int number, BOOL restrictToEquiped);
     SHORT CountItemPersonal(const CString& sName);
     DWORD GetCarriedWeight();
+    void InitializeWalkingSound();
     void AddKnownDivineSpells(const BYTE& nClass);
     void DisplayTextRef(STRREF nameRef, STRREF textRef, COLORREF nameColor, COLORREF textColor);
     void GetNumInventoryPersonalSlots(INT& nUsedSlots, INT& nTotalSlots);
@@ -698,9 +699,9 @@ public:
     /* 4C54 */ int field_4C54[5];
     /* 4C68 */ BYTE m_nWeaponSet;
     /* 4C6A */ CSound m_sndWalk[2];
-    /* 4D32 */ int field_4D32;
+    /* 4D32 */ int m_nSndWalk;
     /* 4D36 */ CSound m_sndArmor[2];
-    /* 4DFE */ unsigned char field_4DFE;
+    /* 4DFE */ unsigned char m_currSndWalk;
     /* 4DFF */ BYTE m_currSndArmor;
     /* 4E00 */ CSound m_sndReady;
     /* 4E64 */ CSound m_sndDeath;

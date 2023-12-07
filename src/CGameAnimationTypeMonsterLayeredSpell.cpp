@@ -300,14 +300,14 @@ void CGameAnimationTypeMonsterLayeredSpell::ChangeDirection(SHORT nDirection)
 }
 
 // 0x6C0B00
-const char* CGameAnimationTypeMonsterLayeredSpell::GetSndWalk(SHORT a1)
+char* CGameAnimationTypeMonsterLayeredSpell::GetSndWalk(SHORT tableIndex)
 {
     if ((m_animationID & 0xF00) == 0x300) {
         return NULL;
     }
 
     const char* v1;
-    switch (a1) {
+    switch (tableIndex) {
     case 1:
         v1 = "FS_Dirt ";
         break;
@@ -355,7 +355,6 @@ const char* CGameAnimationTypeMonsterLayeredSpell::GetSndWalk(SHORT a1)
 
     memcpy(m_walkRef, szTemp, 9);
 
-    // FIXME: Leaks `szTemp`.
     return szTemp;
 }
 

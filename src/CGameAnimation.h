@@ -32,6 +32,7 @@ public:
     BYTE GetPersonalSpace();
     char* GetSndArmor();
     char* GetSndReady();
+    char* GetSndWalk(SHORT tableIndex);
     BOOL IsFalseColor();
     void SetAnimationType(USHORT animationID, BYTE* colorRangeValues, WORD facing);
     void ClearColorEffectsAll();

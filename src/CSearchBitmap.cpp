@@ -224,6 +224,17 @@ BOOLEAN CSearchBitmap::CanToggleDoor(const CPoint* pPoints, USHORT nPoints)
     return TRUE;
 }
 
+// NOTE: Inlined.
+SHORT CSearchBitmap::GetTableIndex(const CPoint& pt)
+{
+    INT x = pt.x / CPathSearch::GRID_SQUARE_SIZEX;
+    INT y = pt.y / CPathSearch::GRID_SQUARE_SIZEY;
+
+    return m_resSearch.GetBitCount(TRUE) == 8
+        ? m_resSearch.GetPixelValue(x, y, TRUE) >> 4
+        : m_resSearch.GetPixelValue(x, y, TRUE);
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x548FD0

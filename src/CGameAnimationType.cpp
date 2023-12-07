@@ -295,7 +295,7 @@ char* CGameAnimationType::GetSndReady()
 }
 
 // 0x55D150
-const char* CGameAnimationType::GetSndWalk(SHORT a1)
+char* CGameAnimationType::GetSndWalk(SHORT tableIndex)
 {
     return "";
 }

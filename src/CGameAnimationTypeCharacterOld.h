@@ -14,7 +14,7 @@ public:
     /* 0028 */ BOOLEAN CanLieDown() override;
     /* 002C */ BOOLEAN DetectedByInfravision() override;
     /* 0060 */ char* GetSndArmor() override;
-    /* 006C */ const char* GetSndWalk(SHORT a1) override;
+    /* 006C */ char* GetSndWalk(SHORT tableIndex) override;
     /* 0074 */ BOOL IsFalseColor() override;
     /* 0078 */ BOOL IsInvulnerable() override;
     /* 007C */ BOOL IsMirroring() override;

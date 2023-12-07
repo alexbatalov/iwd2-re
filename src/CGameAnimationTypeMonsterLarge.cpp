@@ -234,10 +234,10 @@ void CGameAnimationTypeMonsterLarge::GetAnimationResRef(CString& resRef, BYTE ra
 }
 
 // 0x6B1580
-const char* CGameAnimationTypeMonsterLarge::GetSndWalk(SHORT a1)
+char* CGameAnimationTypeMonsterLarge::GetSndWalk(SHORT tableIndex)
 {
     const char* v1;
-    switch (a1) {
+    switch (tableIndex) {
     case 1:
         v1 = "FS_Dirt ";
         break;
@@ -285,7 +285,6 @@ const char* CGameAnimationTypeMonsterLarge::GetSndWalk(SHORT a1)
 
     memcpy(m_walkRef, szTemp, 9);
 
-    // FIXME: Leaks `szTemp`.
     return szTemp;
 }
 

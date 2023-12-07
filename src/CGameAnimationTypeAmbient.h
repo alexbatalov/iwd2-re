@@ -16,7 +16,7 @@ public:
     /* 002C */ BOOLEAN DetectedByInfravision() override;
     /* 003C */ BYTE GetListType() override;
     /* 0058 */ BOOL GetPathSmooth() override;
-    /* 006C */ const char* GetSndWalk(SHORT a1) override;
+    /* 006C */ char* GetSndWalk(SHORT tableIndex) override;
     /* 0074 */ BOOL IsFalseColor() override;
     /* 0078 */ BOOL IsInvulnerable() override;
     /* 007C */ BOOL IsMirroring() override;

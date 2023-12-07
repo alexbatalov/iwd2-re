@@ -398,7 +398,7 @@ void CGameAnimationTypeAmbient::GetAnimationResRef(CString& resRef, BYTE range)
 }
 
 // 0x6A7C90
-const char* CGameAnimationTypeAmbient::GetSndWalk(SHORT a1)
+char* CGameAnimationTypeAmbient::GetSndWalk(SHORT tableIndex)
 {
     switch (m_animationID) {
     case 0x400:
@@ -414,7 +414,7 @@ const char* CGameAnimationTypeAmbient::GetSndWalk(SHORT a1)
     }
 
     const char* v1;
-    switch (a1) {
+    switch (tableIndex) {
     case 1:
         v1 = "FS_Dirt ";
         break;
@@ -462,7 +462,6 @@ const char* CGameAnimationTypeAmbient::GetSndWalk(SHORT a1)
 
     memcpy(m_walkRef, szTemp, 9);
 
-    // FIXME: Leaks `szTemp`.
     return szTemp;
 }
 

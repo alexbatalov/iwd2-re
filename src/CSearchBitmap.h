@@ -31,6 +31,8 @@ public:
     void RemoveDoor(CPoint* pPoints, USHORT nPoints);
     BOOLEAN CanToggleDoor(const CPoint* pPoints, USHORT nPoints);
 
+    SHORT GetTableIndex(const CPoint& pt);
+
     CGameArea* GetArea() { return m_pArea; }
 
     /* 0000 */ CVidBitmap m_resSearch;
