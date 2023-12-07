@@ -99,6 +99,16 @@ BOOLEAN CGameAnimation::DetectedByInfravision()
 }
 
 // NOTE: Inlined.
+BYTE CGameAnimation::GetColorBlood()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2084
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->GetColorBlood();
+}
+
+// NOTE: Inlined.
 void CGameAnimation::SetAnimationType(USHORT animationID, BYTE* colorRangeValues, WORD facing)
 {
     if (m_animation != NULL) {

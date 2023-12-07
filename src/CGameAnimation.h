@@ -21,6 +21,7 @@ public:
     void GetAnimationResRef(CString& resRef, BYTE range);
     BOOLEAN CanLieDown();
     BOOLEAN DetectedByInfravision();
+    BYTE GetColorBlood();
     BYTE GetListType();
     BYTE GetMoveScale();
     BYTE GetMoveScaleDefault();

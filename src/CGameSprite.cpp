@@ -642,13 +642,13 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
 
     field_7540 = 0;
     field_7544 = 0;
-    field_5101 = 0;
-    field_5102 = 0;
-    field_5103 = 0;
+    m_spriteEffectSequenceLength = 0;
+    m_spriteEffectBaseIntensity = 0;
+    m_spriteEffectRandomIntensity = 0;
     m_bEscapingArea = 0;
     field_4D32 = 0;
     field_4DFE = 0;
-    field_5320 = 0;
+    m_effectExtendDirection = 0;
     m_animationRunning = FALSE;
     field_5326 = 0;
     field_533E = 0;
@@ -861,7 +861,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
         m_pSpriteEffectArray = NULL;
         m_pSpriteEffectArrayPosition = NULL;
         m_spriteEffectDuration = 0;
-        field_5202 = 0;
+        m_spriteEffectFlags = 0;
         field_5304 = 0;
         field_532A = 3;
         m_nModalState = 0;
@@ -2977,7 +2977,170 @@ void CGameSprite::SetTarget(CSearchRequest* pSearchRequest, BOOL collisionPath, 
 // 0x708280
 void CGameSprite::StartSpriteEffect(BYTE spriteEffect, BYTE intensityLevel, BYTE effectDuration, BOOLEAN a4)
 {
-    // TODO: Incomplete.
+    m_spriteEffectDuration = 0;
+    if (m_pSpriteEffectArray != NULL) {
+        delete m_pSpriteEffectArray;
+        m_pSpriteEffectArray = NULL;
+        delete m_pSpriteEffectArrayPosition;
+        m_pSpriteEffectArrayPosition = NULL;
+    }
+
+    switch (spriteEffect) {
+    case 0:
+        field_5304 = 0;
+        m_spriteEffectFlags = 0;
+
+        if (m_animation.GetColorBlood() != 255) {
+            m_spriteSplashPalette.SetRange(0,
+                m_animation.GetColorBlood(),
+                *g_pBaldurChitin->GetObjectGame()->GetMasterBitmap());
+            m_spriteSplashVidCell.SetPalette(m_spriteSplashPalette);
+            if (intensityLevel == CBlood::GUSH_LOW) {
+                m_spriteSplashVidCell.SetResRef(CResRef("BLOODS"), FALSE, TRUE, TRUE);
+            } else if (intensityLevel == CBlood::GUSH_MEDIUM) {
+                m_spriteSplashVidCell.SetResRef(CResRef("BLOODM"), FALSE, TRUE, TRUE);
+            } else if (intensityLevel == CBlood::GUSH_HIGH
+                || intensityLevel == CBlood::EXPLODING_DEATH) {
+                m_spriteSplashVidCell.SetResRef(CResRef("BLOODL"), FALSE, TRUE, TRUE);
+            } else if (intensityLevel == CBlood::PULSATING_ARTERY) {
+                m_spriteSplashVidCell.SetResRef(CResRef("BLOODCR"), FALSE, TRUE, TRUE);
+            } else {
+                m_spriteEffectDuration = 0;
+                return;
+            }
+
+            m_spriteSplashVidCell.SequenceSet(0);
+            m_spriteSplashVidCell.FrameSet(0);
+            m_spriteEffectSequenceLength = 1;
+            m_spriteEffectBaseIntensity = 0;
+            m_spriteEffectRandomIntensity = 1;
+        } else {
+            m_spriteEffectDuration = 0;
+            return;
+        }
+        break;
+    case 1:
+        if (a4 == TRUE) {
+            AddEffect(IcewindMisc::CreateEffectVisualSpellHit(this, 0x3F, 10, 0),
+                EFFECT_LIST_TIMED,
+                TRUE,
+                TRUE);
+        }
+        m_spriteEffectFlags = 0x200;
+        m_spriteEffectVidCell.SetResRef(CResRef("FireL"), FALSE, TRUE, TRUE);
+        m_spriteEffectVidCell.SequenceSet(0);
+        m_spriteEffectSequenceNumber = 1;
+        m_spriteEffectSequenceLength = m_spriteEffectVidCell.GetSequenceLength(m_spriteEffectVidCell.m_nCurrentSequence, FALSE);
+        m_effectExtendDirection = 1;
+        switch (intensityLevel) {
+        case 0:
+            m_spriteEffectBaseIntensity = -2;
+            m_spriteEffectRandomIntensity = 4;
+            break;
+        case 1:
+            m_spriteEffectBaseIntensity = -1;
+            m_spriteEffectRandomIntensity = 3;
+            break;
+        case 2:
+            m_spriteEffectBaseIntensity = 0;
+            m_spriteEffectRandomIntensity = 2;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 10204
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 2:
+        if (a4 == TRUE) {
+            AddEffect(IcewindMisc::CreateEffectVisualSpellHit(this, 0x41, 10, 0),
+                EFFECT_LIST_TIMED,
+                TRUE,
+                TRUE);
+        }
+        m_spriteEffectFlags = 0x200;
+        m_spriteEffectVidCell.SetResRef(CResRef("ElectrL"), FALSE, TRUE, TRUE);
+        m_spriteEffectVidCell.SequenceSet(0);
+        m_spriteEffectSequenceNumber = static_cast<BYTE>(m_spriteEffectVidCell.GetNumberSequences(FALSE));
+        m_spriteEffectSequenceLength = m_spriteEffectVidCell.GetSequenceLength(m_spriteEffectVidCell.m_nCurrentSequence, FALSE);
+        m_effectExtendDirection = 0;
+        switch (intensityLevel) {
+        case 0:
+            m_spriteEffectBaseIntensity = -2;
+            m_spriteEffectRandomIntensity = 4;
+            break;
+        case 1:
+            m_spriteEffectBaseIntensity = -1;
+            m_spriteEffectRandomIntensity = 3;
+            break;
+        case 2:
+            m_spriteEffectBaseIntensity = 0;
+            m_spriteEffectRandomIntensity = 2;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 10259
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    case 3:
+        if (a4 == TRUE) {
+            AddEffect(IcewindMisc::CreateEffectVisualSpellHit(this, 0x40, 10, 0),
+                EFFECT_LIST_TIMED,
+                TRUE,
+                TRUE);
+        }
+        m_spriteEffectFlags = 0x200;
+        m_spriteEffectVidCell.SetResRef(CResRef("ColdL"), FALSE, TRUE, TRUE);
+        m_spriteEffectVidCell.SequenceSet(0);
+        m_spriteEffectSequenceNumber = 1;
+        m_spriteEffectSequenceLength = m_spriteEffectVidCell.GetSequenceLength(m_spriteEffectVidCell.m_nCurrentSequence, FALSE);
+        m_effectExtendDirection = 1;
+        m_spriteEffectBaseIntensity = 0;
+        m_spriteEffectBaseIntensity = 1;
+        break;
+    case 4:
+        if (a4 == TRUE) {
+            AddEffect(IcewindMisc::CreateEffectVisualSpellHit(this, 0x42, 10, 0),
+                EFFECT_LIST_TIMED,
+                TRUE,
+                TRUE);
+        }
+        m_spriteEffectFlags = 0x200;
+        m_spriteEffectVidCell.SetResRef(CResRef("None"), FALSE, TRUE, TRUE);
+        m_spriteEffectVidCell.SequenceSet(0);
+        m_spriteEffectSequenceNumber = static_cast<BYTE>(m_spriteEffectVidCell.GetNumberSequences(FALSE));
+        m_spriteEffectSequenceLength = m_spriteEffectVidCell.GetSequenceLength(m_spriteEffectVidCell.m_nCurrentSequence, FALSE);
+        m_effectExtendDirection = 0;
+        // FIXME: `m_spriteEffectBaseIntensity` and `m_spriteEffectRandomIntensity` not initialized.
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+        // __LINE__: 10324
+        UTIL_ASSERT(FALSE);
+    }
+
+    int cnt = m_spriteEffectSequenceLength * (m_spriteEffectBaseIntensity + m_spriteEffectRandomIntensity - 1);
+    if (m_spriteEffectSequenceLength * (m_spriteEffectBaseIntensity + m_spriteEffectRandomIntensity - 1) > 0) {
+        m_pSpriteEffectArray = new USHORT[cnt];
+        if (m_pSpriteEffectArray != NULL) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 10332
+            UTIL_ASSERT(FALSE);
+        }
+
+        m_pSpriteEffectArrayPosition = new POINT[cnt];
+        if (m_pSpriteEffectArrayPosition != NULL) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 10338
+            UTIL_ASSERT(FALSE);
+        }
+
+        memset(m_pSpriteEffectArray, 0xFF, sizeof(USHORT) * cnt);
+    }
+
+    m_spriteEffectDuration = m_spriteEffectSequenceLength + effectDuration + 9;
+    m_animation.CalculateFxRect(m_rSpriteEffectFX, m_ptSpriteEffectReference, m_posZ);
 }
 
 // 0x708D50
