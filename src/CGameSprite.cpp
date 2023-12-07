@@ -8114,6 +8114,36 @@ SHORT CGameSprite::sub_73C6A0(CGameSprite* target, CItem* curWeapon, const ITEM_
     return mod;
 }
 
+// 0x73C7E0
+SHORT CGameSprite::sub_73C7E0()
+{
+    SHORT mod = 0;
+
+    if (m_typeAI.GetRace() == CAIOBJECTTYPE_R_DWARF
+        && m_typeAI.m_nSubRace == CAIOBJECTTYPE_SUBRACE_DWARF_GRAY) {
+        if (m_pArea != NULL
+            && (m_pArea->GetHeader()->m_areaType & 0x1) != 0
+            && (m_pArea->GetHeader()->m_areaType & 0x2) != 0
+            && (g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->IsDay()
+                || g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->IsDawn())) {
+            mod -= 2;
+        }
+    }
+
+    if (m_typeAI.GetRace() == CAIOBJECTTYPE_R_ELF
+        && m_typeAI.m_nSubRace == CAIOBJECTTYPE_SUBRACE_ELF_DROW) {
+        if (m_pArea != NULL
+            && (m_pArea->GetHeader()->m_areaType & 0x1) != 0
+            && (m_pArea->GetHeader()->m_areaType & 0x2) != 0
+            && (g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->IsDay()
+                || g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->IsDawn())) {
+            mod -= 1;
+        }
+    }
+
+    return mod;
+}
+
 // 0x73F560
 SHORT CGameSprite::MoveToPoint()
 {

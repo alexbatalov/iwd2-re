@@ -513,6 +513,7 @@ public:
     BOOLEAN sub_737910(BOOL a1);
     SHORT GetCriticalHitBonus();
     SHORT sub_73C6A0(CGameSprite* target, CItem* curWeapon, const ITEM_ABILITY* curAttack);
+    SHORT sub_73C7E0();
     SHORT MoveToPoint();
     SHORT Recoil();
     SHORT PlayDead();
