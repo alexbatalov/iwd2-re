@@ -5855,6 +5855,21 @@ void CGameSprite::AutoPause(DWORD type)
     }
 }
 
+// 0x71E1B0
+void CGameSprite::PlayDialogSound(CGameSprite* pNPC)
+{
+    if (g_pChitin->cNetwork.GetSessionOpen()) {
+        CMessage* message = new CMessagePlaySound(SOUND_SELECT,
+            TRUE,
+            TRUE,
+            m_id,
+            pNPC->GetId());
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+    } else {
+        PlaySound(SOUND_SELECT, TRUE, TRUE, FALSE);
+    }
+}
+
 // 0x71E9F0
 void CGameSprite::AddKnownDivineSpells(const BYTE& nClass)
 {

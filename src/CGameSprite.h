@@ -482,6 +482,7 @@ public:
     DWORD GetCarriedWeight();
     void InitializeWalkingSound();
     void AutoPause(DWORD type);
+    void PlayDialogSound(CGameSprite* pNPC);
     void AddKnownDivineSpells(const BYTE& nClass);
     void DisplayTextRef(STRREF nameRef, STRREF textRef, COLORREF nameColor, COLORREF textColor);
     void GetNumInventoryPersonalSlots(INT& nUsedSlots, INT& nTotalSlots);
