@@ -8287,6 +8287,25 @@ SHORT CGameSprite::Face()
     return ACTION_DONE;
 }
 
+// 0x746390
+SHORT CGameSprite::FaceObject(CGameAIBase* pObject)
+{
+    if (pObject == NULL) {
+        return ACTION_ERROR;
+    }
+
+    SetDirection(GetDirection(pObject->GetPos()));
+
+    if (m_pos.x != -1 || m_pos.y != -1 || m_pArea != NULL) {
+        if (InControl()) {
+            CMessage* message = new CMessageSpriteUpdate(this, m_id, m_id);
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+        }
+    }
+
+    return ACTION_DONE;
+}
+
 // 0x751CD0
 SHORT CGameSprite::LeaveParty()
 {
@@ -10650,6 +10669,14 @@ BYTE CGameSprite::GetModalState()
 int CGameSprite::sub_45B710()
 {
     return field_70F2;
+}
+
+// 0x706D50
+SHORT CGameSprite::GetDirection(const CPoint& target)
+{
+    // TODO: Incomplete.
+
+    return 0;
 }
 
 // 0x45B720

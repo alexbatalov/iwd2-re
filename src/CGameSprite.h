@@ -517,6 +517,7 @@ public:
     SHORT PlayDead();
     SHORT JumpToPoint(CPoint dest, BOOL spriteUpdate);
     SHORT Face();
+    SHORT FaceObject(CGameAIBase* pObject);
     SHORT LeaveParty();
     void MoveGlobal(const CString& sArea, const CPoint& ptStart);
     void SelectWeaponAbility(unsigned char a1, unsigned char a2, unsigned char a3, unsigned char a4);
@@ -578,6 +579,7 @@ public:
     BYTE GetModalState();
 
     int sub_45B710();
+    SHORT GetDirection(const CPoint& target);
     SHORT GetDirection();
     CGameAnimation* GetAnimation();
     CGameSpriteEquipment* GetEquipment();
