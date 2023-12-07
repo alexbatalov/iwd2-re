@@ -8222,6 +8222,12 @@ SHORT CGameSprite::sub_73CA20(CItem* curWeapon, const ITEM_ABILITY* curAttack)
     return mod;
 }
 
+// 0x73CAD0
+SHORT CGameSprite::sub_73CAD0()
+{
+    return 0;
+}
+
 // 0x73F560
 SHORT CGameSprite::MoveToPoint()
 {
