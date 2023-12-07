@@ -671,7 +671,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     field_558E = 0;
     field_559E = 0;
     field_55A0 = 0;
-    field_5604 = 0;
+    m_speedFactor = 0;
     field_5606 = 0;
     field_560E = 0;
     field_5610 = 0;
@@ -768,7 +768,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     field_5614 = 0;
     field_54E8 = -1;
     field_54EA = 0;
-    field_5622 = -2;
+    m_attackFrame = -2;
     field_72A2 = 0;
     m_bAllowEffectListCall = TRUE;
     field_72AA = 0;
@@ -8539,6 +8539,68 @@ SHORT CGameSprite::MoveToPoint()
     }
 
     return ACTION_INTERRUPTABLE;
+}
+
+// 0x7446F0
+SHORT CGameSprite::OneSwing()
+{
+    SHORT returnValue = ACTION_NORMAL;
+    CMessage* message;
+
+    if (m_attackFrame == 0) {
+        m_speedFactor = 5;
+        m_speedFactor += rand() % 6;
+        m_speedFactor -= 3;
+        if (m_speedFactor < 0) {
+            m_speedFactor = 0;
+        } else if (m_speedFactor > 10) {
+            m_speedFactor = 10;
+        }
+    }
+
+    BYTE frameType;
+    if (m_derivedStats.m_nNumberOfAttacks > 0) {
+        frameType = m_animation.GetAttackFrameType(static_cast<BYTE>(m_derivedStats.m_nNumberOfAttacks),
+            static_cast<BYTE>(m_speedFactor),
+            static_cast<BYTE>(m_attackFrame));
+    } else {
+        frameType = 0;
+    }
+
+    switch (frameType) {
+    case 0:
+        if (m_nSequence == GetIdleSequence()) {
+            message = new CMessageSetSequence(static_cast<BYTE>(GetIdleSequence()), m_id, m_id);
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+        }
+        returnValue = ACTION_INTERRUPTABLE;
+        break;
+    case 6:
+        if (m_nSequence != SEQ_ATTACK) {
+            message = new CMessageSetSequence(SEQ_ATTACK, m_id, m_id);
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+        }
+        break;
+    case 7:
+        if (m_nSequence != SEQ_ATTACK) {
+            message = new CMessageSetSequence(SEQ_ATTACK, m_id, m_id);
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+        }
+        returnValue = ACTION_NORMAL;
+        break;
+    case 9:
+        if (m_nSequence != SEQ_ATTACK) {
+            message = new CMessageSetSequence(SEQ_ATTACK, m_id, m_id);
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+        }
+        returnValue = ACTION_NORMAL;
+        break;
+    case 15:
+        returnValue = ACTION_DONE;
+        break;
+    }
+
+    return returnValue;
 }
 
 // 0x7449D0

@@ -333,6 +333,16 @@ void CGameAnimation::SetSequence(SHORT nSequence)
 }
 
 // NOTE: Inlined.
+BYTE CGameAnimation::GetAttackFrameType(BYTE numAttacks, BYTE speedFactor, BYTE combatFrame)
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2114
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->GetAttackFrameType(numAttacks, speedFactor, combatFrame);
+}
+
+// NOTE: Inlined.
 BOOLEAN CGameAnimation::GetCurrentResRef(CString& resBody, CString& resWeapon, CString& resShield, CString& resHelmet)
 {
     // __FILE__: .\Include\ObjAnimation.h

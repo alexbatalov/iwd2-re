@@ -523,6 +523,7 @@ public:
     SHORT sub_73D420();
     SHORT sub_73D440(CItem* curWeapon);
     SHORT MoveToPoint();
+    SHORT OneSwing();
     SHORT Recoil();
     SHORT PlayDead();
     SHORT JumpToPoint(CPoint dest, BOOL spriteUpdate);
@@ -820,7 +821,7 @@ public:
     /* 55FA */ int field_55FA;
     /* 55FE */ int field_55FE;
     /* 5602 */ unsigned char field_5602;
-    /* 5604 */ short field_5604;
+    /* 5604 */ SHORT m_speedFactor;
     /* 5606 */ short field_5606;
     /* 5608 */ BOOL m_endOfDamageSeq;
     /* 560C */ short field_560C;
@@ -833,7 +834,7 @@ public:
     /* 561C */ short field_561C;
     /* 561E */ short field_561E;
     /* 5620 */ SHORT m_recoilFrame;
-    /* 5622 */ short field_5622;
+    /* 5622 */ SHORT m_attackFrame;
     /* 5624 */ int field_5624;
     /* 5628 */ BOOL m_inFormation;
     /* 562C */ int field_562C;
