@@ -8314,6 +8314,20 @@ SHORT CGameSprite::sub_73CC40(CItem* curWeapon, const ITEM_ABILITY* curAttack)
     return mod;
 }
 
+// 0x73D420
+SHORT CGameSprite::sub_73D420()
+{
+    SHORT mod = 0;
+
+    if ((m_derivedStats.m_generalState & STATE_BERSERK) != 0) {
+        mod += 2;
+    }
+
+    mod += m_derivedStats.m_nTHAC0;
+
+    return mod;
+}
+
 // 0x73D440
 SHORT CGameSprite::sub_73D440(CItem* curWeapon)
 {
