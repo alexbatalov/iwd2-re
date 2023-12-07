@@ -8228,6 +8228,16 @@ SHORT CGameSprite::sub_73CAD0()
     return 0;
 }
 
+// 0x73CAE0
+SHORT CGameSprite::sub_73CAE0(CItem* curWeapon, const ITEM_ABILITY* curAttack)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+    // __LINE__: 10073
+    UTIL_ASSERT(curAttack != NULL);
+
+    return 0;
+}
+
 // 0x73F560
 SHORT CGameSprite::MoveToPoint()
 {

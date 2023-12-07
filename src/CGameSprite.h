@@ -517,6 +517,7 @@ public:
     SHORT sub_73C8C0(CGameSprite* target);
     SHORT sub_73CA20(CItem* curWeapon, const ITEM_ABILITY* curAttack);
     SHORT sub_73CAD0();
+    SHORT sub_73CAE0(CItem* curWeapon, const ITEM_ABILITY* curAttack);
     SHORT MoveToPoint();
     SHORT Recoil();
     SHORT PlayDead();
