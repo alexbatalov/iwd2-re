@@ -8279,6 +8279,41 @@ SHORT CGameSprite::sub_73CB10(CItem* curWeapon, const ITEM_ABILITY* curAttack)
     return static_cast<SHORT>(mod);
 }
 
+// 0x73CC40
+SHORT CGameSprite::sub_73CC40(CItem* curWeapon, const ITEM_ABILITY* curAttack)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+    // __LINE__: 10144
+    UTIL_ASSERT(curWeapon != NULL);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreatureAI.cpp
+    // __LINE__: 10145
+    UTIL_ASSERT(curAttack != NULL);
+
+    SHORT mod = 0;
+
+    if (curAttack->thac0Bonus != SHORT_MAX) {
+        mod += curAttack->thac0Bonus;
+    }
+
+    if (curAttack->type == 2 || curAttack->type == 4) {
+        mod += m_derivedStats.m_nMissileTHAC0Bonus;
+    }
+
+    SHORT lSlot;
+    CItem* pLauncher = GetLauncher(curAttack, lSlot);
+    if (pLauncher != NULL) {
+        pLauncher->Demand();
+        const ITEM_ABILITY* ability = pLauncher->GetAbility(0);
+        if (ability != NULL) {
+            mod += ability->thac0Bonus;
+        }
+        pLauncher->Release();
+    }
+
+    return mod;
+}
+
 // 0x73F560
 SHORT CGameSprite::MoveToPoint()
 {
