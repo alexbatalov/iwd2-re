@@ -8320,6 +8320,30 @@ void CGameSprite::MoveGlobal(const CString& sArea, const CPoint& ptStart)
     // TODO: Incomplete.
 }
 
+// 0x750DA0
+SHORT CGameSprite::Enemy()
+{
+    m_typeAI.SetEnemyAlly(CAIObjectType::EA_ENEMY);
+    m_liveTypeAI.SetEnemyAlly(CAIObjectType::EA_ENEMY);
+    m_startTypeAI.SetEnemyAlly(CAIObjectType::EA_ENEMY);
+
+    if (InControl()) {
+        CMessage* message = new CMessageSpriteUpdate(this, m_id, m_id);
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+    }
+
+    m_equipedEffectList.RemoveAllOfType(this, CGAMEEFFECT_CHARM, m_equipedEffectList.m_posCurrent, -1);
+    m_equipedEffectList.RemoveAllOfType(this, ICEWIND_CGAMEEFFECT_CHARM, m_equipedEffectList.m_posCurrent, -1);
+    m_timedEffectList.RemoveAllOfType(this, CGAMEEFFECT_CHARM, m_timedEffectList.m_posCurrent, -1);
+    m_timedEffectList.RemoveAllOfType(this, ICEWIND_CGAMEEFFECT_CHARM, m_timedEffectList.m_posCurrent, -1);
+    m_timedEffectList.RemoveAllOfType(this, CGAMEEFFECT_SETAISCRIPT, m_timedEffectList.m_posCurrent, -1);
+    m_equipedEffectList.RemoveAllOfType(this, CGAMEEFFECT_SETAISCRIPT, m_equipedEffectList.m_posCurrent, -1);
+    g_pBaldurChitin->GetObjectGame()->RemoveCharacterFromAllies(m_id);
+    g_pBaldurChitin->GetObjectGame()->RemoveCharacterFromFamiliars(m_id);
+
+    return ACTION_DONE;
+}
+
 // 0x74F830
 void CGameSprite::SelectWeaponAbility(unsigned char a1, unsigned char a2, unsigned char a3, unsigned char a4)
 {
