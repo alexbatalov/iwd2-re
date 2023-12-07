@@ -8813,6 +8813,30 @@ void CGameSprite::MoveGlobal(const CString& sArea, const CPoint& ptStart)
     // TODO: Incomplete.
 }
 
+// 0x74FC50
+SHORT CGameSprite::GroupAttack(CGameSprite* pTarget)
+{
+    if (pTarget == NULL
+        || !pTarget->m_active
+        || !pTarget->m_activeAI
+        || !pTarget->m_activeImprisonment) {
+        return ACTION_DONE;
+    }
+
+    if (m_interrupt) {
+        return ACTION_INTERRUPTABLE;
+    }
+
+    CAIObjectType typeAI(GetAIType());
+    typeAI.SetName(CString(""));
+    typeAI.SetInstance(-1);
+    m_curAction.m_acteeID.Set(typeAI);
+    AddAction(m_curAction);
+    AddAction(CAIAction(CAIAction::ATTACK, m_curAction.m_acteeID, 0, 0, 0));
+
+    return ACTION_DONE;
+}
+
 // 0x750DA0
 SHORT CGameSprite::Enemy()
 {
