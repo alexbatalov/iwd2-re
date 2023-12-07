@@ -150,3 +150,16 @@ BOOL CGameEffectList::HandleList(CGameSprite* pSprite)
 
     return cont;
 }
+
+// 0x4C1050
+BOOL CGameEffectList::CheckEffects()
+{
+    POSITION pos = GetHeadPosition();
+    while (pos != NULL) {
+        CGameEffect* pEffect = GetNext(pos);
+        if (pEffect->CheckExpiration()) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}

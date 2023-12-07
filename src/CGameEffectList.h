@@ -16,6 +16,7 @@ public:
     void RemoveAllEffectsIgnoreMoreThenPermanent(POSITION posLeave, BOOL checkDispellable, BOOL useLevelDiff, BYTE prob, BYTE dispelLevel);
     void Unmarshal(BYTE* data, ULONG nSize, CGameSprite* pSprite, BYTE version);
     BOOL HandleList(CGameSprite* pSprite);
+    BOOL CheckEffects();
 
     /* 001C */ POSITION m_posNext;
     /* 0020 */ POSITION m_posCurrent;

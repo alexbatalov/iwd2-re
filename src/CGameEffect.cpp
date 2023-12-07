@@ -1181,6 +1181,23 @@ void CGameEffect::PlaySound(const CResRef& soundResRef, CGameSprite* pSprite)
     m_sound.Play(pSprite->GetPos().x, pSprite->GetPos().y, 0, FALSE);
 }
 
+// 0x4A3270
+BOOL CGameEffect::CheckExpiration()
+{
+    switch (m_durationType) {
+    case 0:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 1990
+        UTIL_ASSERT(FALSE);
+    case 6:
+    case 7:
+    case 8:
+    case 0x1000:
+        return g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime >= m_duration;
+    }
+    return FALSE;
+}
+
 // 0x4A4B00
 ITEM_EFFECT* CGameEffect::GetItemEffect()
 {

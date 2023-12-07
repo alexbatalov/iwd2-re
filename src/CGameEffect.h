@@ -297,6 +297,7 @@ public:
 
     BOOL Compare(const CGameEffect& other);
     void PlaySound(const CResRef& soundResRef, CGameSprite* pSprite);
+    BOOL CheckExpiration();
     ITEM_EFFECT* GetItemEffect();
     void DisplayStringRef(CGameSprite* pSprite, STRREF str);
     void AddColorEffect(CGameSprite* pSprite, BYTE r, BYTE g, BYTE b, BYTE periodLength);
