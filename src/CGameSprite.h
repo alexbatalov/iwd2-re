@@ -153,6 +153,7 @@
 class CBlood;
 class CGameButtonList;
 class CMemINIValue;
+class CPersistantEffect;
 class CSearchBitmap;
 class CSearchRequest;
 class CSpell;
@@ -806,6 +807,7 @@ public:
     /* 54F8 */ SHORT m_moveToBackQueue;
     /* 54FA */ CGameEffectList m_equipedEffectList;
     /* 5526 */ CGameEffectList m_timedEffectList;
+    /* 5552 */ CTypedPtrList<CPtrList, CPersistantEffect*> m_persistantEffects;
     /* 556E */ CPoint m_curDest;
     /* 5576 */ SHORT m_userCommandPause;
     /* 5578 */ SHORT m_nCommandPause;

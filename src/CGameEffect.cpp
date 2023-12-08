@@ -3906,6 +3906,28 @@ CGameEffect* CGameEffectSingleColorPulseAll::Copy()
     return copy;
 }
 
+// 0x4A7360
+BOOL CGameEffectSingleColorPulseAll::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->m_hasColorEffects = TRUE;
+
+    CPersistantEffectColorEffect* pEffect = new CPersistantEffectColorEffect();
+    pEffect->m_effectFinalRed = GetRValue(m_effectAmount >> 8);
+    pEffect->m_effectFinalGreen = GetGValue(m_effectAmount >> 8);
+    pEffect->m_effectFinalBlue = GetBValue(m_effectAmount >> 8);
+    pEffect->m_effectDegreeRed = 0;
+    pEffect->m_effectDegreeGreen = 0;
+    pEffect->m_effectDegreeBlue = 0;
+    pEffect->m_undo = TRUE;
+    pEffect->m_colorEffect = 1;
+    pEffect->m_period = (m_dwFlags >> 16) & 0xFFFF;
+    pSprite->m_persistantEffects.AddTail(pEffect);
+
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
