@@ -537,6 +537,28 @@ CGameEffect* IcewindCGameEffectColorGlowDissipate::Copy()
     return copy;
 }
 
+// 0x55F500
+BOOL IcewindCGameEffectColorGlowDissipate::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->m_hasColorEffects = TRUE;
+
+    CPersistantEffectColorEffect* pEffect = new CPersistantEffectColorEffect();
+    pEffect->m_effectFinalRed = GetRValue(m_effectAmount >> 8);
+    pEffect->m_effectFinalGreen = GetGValue(m_effectAmount >> 8);
+    pEffect->m_effectFinalBlue = GetBValue(m_effectAmount >> 8);
+    pEffect->m_effectDegreeRed = pEffect->m_effectFinalRed;
+    pEffect->m_effectDegreeGreen = pEffect->m_effectFinalGreen;
+    pEffect->m_effectDegreeBlue = pEffect->m_effectFinalBlue;
+    pEffect->m_undo = TRUE;
+    pEffect->m_colorEffect = 3;
+    pEffect->m_period = (m_dwFlags >> 16) & 0xFFFF;
+    pSprite->m_persistantEffects.AddTail(pEffect);
+
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x55F5E0

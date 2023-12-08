@@ -198,6 +198,7 @@ class IcewindCGameEffectColorGlowDissipate : public CGameEffect {
 public:
     IcewindCGameEffectColorGlowDissipate(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class IcewindCGameEffectSummon : public CGameEffect {
