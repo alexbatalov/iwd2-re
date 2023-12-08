@@ -4611,6 +4611,14 @@ CGameEffect* CGameEffectSkillUnsummon::Copy()
     return copy;
 }
 
+// 0x4B4BB0
+void CGameEffectSkillUnsummon::DisplayString(CGameSprite* pSprite)
+{
+    if (m_effectAmount == 1) {
+        CGameEffect::DisplayString(pSprite);
+    }
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
