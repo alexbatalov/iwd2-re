@@ -2132,6 +2132,13 @@ BOOL CGameEffectCurePoison::ApplyEffect(CGameSprite* pSprite)
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
+CGameEffectDamage::CGameEffectDamage()
+{
+    m_effectID = CGAMEEFFECT_DAMAGE;
+    m_special = -1;
+}
+
+// NOTE: Inlined.
 CGameEffectDamage::CGameEffectDamage(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target)
     : CGameEffect(effect, source, sourceID, target, TRUE)
 {
@@ -9931,4 +9938,527 @@ BOOL CGameEffectPreventAISlowdown::ApplyEffect(CGameSprite* pSprite)
 {
     pSprite->GetDerivedStats()->m_bPreventAISlowDown = m_dwFlags;
     return TRUE;
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4AD250
+CPersistantEffect::CPersistantEffect()
+{
+    m_done = FALSE;
+    m_deleted = FALSE;
+    m_sourceID = -1;
+    m_numDamage = 0;
+    m_persistantType = 0;
+    m_counter = 0;
+}
+
+// NOTE: Inlined.
+CPersistantEffect::CPersistantEffect(const CPersistantEffect& other)
+{
+    m_done = other.m_done;
+    m_deleted = other.m_deleted;
+    m_sourceID = other.m_sourceID;
+    m_numDamage = other.m_numDamage;
+    m_persistantType = other.m_persistantType;
+    m_counter = other.m_counter;
+}
+
+// 0x4A7460
+CPersistantEffect::~CPersistantEffect()
+{
+}
+
+// 0x4A7470
+void CPersistantEffect::AIUpdate(CGameSprite* pSprite, LONG deltaT)
+{
+    // __FILE__: .\Include\CGameEffect.h
+    // __LINE__: 3656
+    UTIL_ASSERT(FALSE);
+}
+
+// 0x4A7440
+CPersistantEffect* CPersistantEffect::Copy()
+{
+    // __FILE__: .\Include\CGameEffect.h
+    // __LINE__: 3665
+    UTIL_ASSERT_MSG(FALSE, "COPY missing");
+}
+
+// 0x4C1080
+void CPersistantEffect::PlaySound(const CResRef& res, CGameSprite* pSprite)
+{
+    CSound cSound;
+
+    CMessage* message = new CMessagePlaySoundRef(res, pSprite->GetId(), pSprite->GetId());
+    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+
+    cSound.SetResRef(res, TRUE, TRUE);
+
+    if (cSound.m_nLooping == 0) {
+        cSound.SetFireForget(TRUE);
+    }
+
+    cSound.SetChannel(14, reinterpret_cast<DWORD>(pSprite->GetArea()));
+    cSound.Play(pSprite->GetPos().x, pSprite->GetPos().y, 0, FALSE);
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4AD280
+CPersistantEffectBurningDeath::CPersistantEffectBurningDeath()
+{
+    m_charredDegree = CVidPalette::NO_TINT;
+    m_charredIncrement = 0;
+}
+
+// 0x4AD2C0
+void CPersistantEffectBurningDeath::AIUpdate(CGameSprite* pSprite, LONG deltaT)
+{
+    // __FILE__: .\Include\CGameEffect.h
+    // __LINE__: 3681
+    UTIL_ASSERT(FALSE);
+}
+
+// 0x4AD2E0
+CPersistantEffect* CPersistantEffectBurningDeath::Copy()
+{
+    CPersistantEffectBurningDeath* copy = new CPersistantEffectBurningDeath();
+    copy->m_charredDegree = m_charredDegree;
+    copy->m_charredIncrement = m_charredIncrement;
+    copy->m_counter = m_counter;
+    copy->m_deleted = m_deleted;
+    copy->m_done = m_done;
+    copy->m_numDamage = m_numDamage;
+    copy->m_persistantType = m_persistantType;
+    copy->m_sourceID = m_sourceID;
+    return copy;
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4C1270
+void CPersistantEffectFireDeath::AIUpdate(CGameSprite* pSprite, LONG deltaT)
+{
+    if (m_counter++ == 0) {
+        pSprite->SetSequence(CGameSprite::SEQ_DIE);
+        m_numDamage = rand() % 6 + 4;
+        PlaySound(CResRef("FIRE"), pSprite);
+        pSprite->StartSpriteEffect(1, 0, static_cast<BYTE>(8 * m_numDamage), TRUE);
+        pSprite->GetAnimation()->SetColorEffectAll(0,
+            RGB(m_charredDegree, m_charredDegree, m_charredDegree),
+            1);
+        m_done = FALSE;
+        m_charredIncrement = (CVidPalette::NO_TINT - 75) / (2 * m_numDamage);
+        m_charredDegree -= m_charredIncrement;
+    } else {
+        if (m_numDamage != 0) {
+            pSprite->GetAnimation()->SetColorEffectAll(0,
+                RGB(m_charredDegree, m_charredDegree, m_charredDegree),
+                1);
+            m_charredDegree -= m_charredIncrement;
+            if ((m_counter & 1) == 0) {
+                m_numDamage--;
+            }
+        } else {
+            pSprite->GetAnimation()->SetColorEffectAll(0, RGB(75, 75, 75), 1);
+            m_done = TRUE;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4C1430
+void CPersistantEffectElectricDeath::AIUpdate(CGameSprite* pSprite, LONG deltaT)
+{
+    if (m_counter++ == 0) {
+        pSprite->SetSequence(CGameSprite::SEQ_DIE);
+        m_numDamage = rand() % 6 + 4;
+        PlaySound(CResRef("ELEC2"), pSprite);
+        pSprite->StartSpriteEffect(2, 0, static_cast<BYTE>(8 * m_numDamage), TRUE);
+        pSprite->GetAnimation()->SetColorEffectAll(0,
+            RGB(m_charredDegree, m_charredDegree, m_charredDegree),
+            1);
+        m_done = FALSE;
+        m_charredIncrement = (CVidPalette::NO_TINT - 75) / (2 * m_numDamage);
+        m_charredDegree -= m_charredIncrement;
+    } else {
+        if (m_numDamage != 0) {
+            pSprite->GetAnimation()->SetColorEffectAll(0,
+                RGB(m_charredDegree, m_charredDegree, m_charredDegree),
+                1);
+            m_charredDegree -= m_charredIncrement;
+            if ((m_counter & 1) == 0) {
+                m_numDamage--;
+            }
+        } else {
+            pSprite->GetAnimation()->SetColorEffectAll(0, RGB(75, 75, 75), 1);
+            m_done = TRUE;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Inlined.
+CPersistantEffectColorEffect::CPersistantEffectColorEffect()
+{
+    m_persistantType = 2;
+    m_undo = FALSE;
+    m_counter = 0;
+    m_period = 0;
+    m_effectDegreeBlue = CVidPalette::NO_TINT;
+    m_effectDegreeGreen = CVidPalette::NO_TINT;
+    m_effectDegreeRed = CVidPalette::NO_TINT;
+    m_colorEffect = 0;
+    m_done = FALSE;
+    m_effectFinalBlue = 0;
+    m_effectFinalGreen = 0;
+    m_effectFinalRed = 0;
+    m_effectIncrementBlue = 0;
+    m_effectIncrementGreen = 0;
+    m_effectIncrementRed = 0;
+}
+
+// 0x4C15F0
+void CPersistantEffectColorEffect::AIUpdate(CGameSprite* pSprite, LONG deltaT)
+{
+    if (m_period == 0) {
+        m_period = 1;
+    }
+
+    if (m_counter++ == 0) {
+        pSprite->GetAnimation()->SetColorEffectAll(m_colorEffect,
+            RGB(m_effectDegreeRed, m_effectDegreeGreen, m_effectDegreeBlue),
+            1);
+        m_done = FALSE;
+
+        switch (m_colorEffect) {
+        case 0:
+            m_effectIncrementRed = (CVidPalette::NO_TINT - m_effectFinalRed) / m_period;
+            m_effectDegreeRed -= m_effectIncrementRed;
+            m_effectIncrementGreen = (CVidPalette::NO_TINT - m_effectFinalGreen) / m_period;
+            m_effectDegreeGreen -= m_effectIncrementGreen;
+            m_effectIncrementBlue = (CVidPalette::NO_TINT - m_effectFinalBlue) / m_period;
+            m_effectDegreeBlue -= m_effectIncrementBlue;
+            break;
+        case 1:
+        case 2:
+            m_effectIncrementRed = m_effectFinalRed / m_period;
+            m_effectDegreeRed += m_effectIncrementRed;
+            m_effectIncrementGreen = m_effectFinalGreen / m_period;
+            m_effectDegreeGreen += m_effectIncrementGreen;
+            m_effectIncrementBlue = m_effectFinalBlue / m_period;
+            m_effectDegreeBlue += m_effectIncrementBlue;
+            break;
+        case 3:
+            m_effectIncrementRed = m_effectFinalRed / m_period;
+            m_effectDegreeRed -= m_effectIncrementRed;
+            m_effectIncrementGreen = m_effectFinalGreen / m_period;
+            m_effectDegreeGreen -= m_effectIncrementGreen;
+            m_effectIncrementBlue = m_effectFinalBlue / m_period;
+            m_effectDegreeBlue -= m_effectIncrementBlue;
+            break;
+        }
+    } else {
+        if (m_counter + 1 < m_period) {
+            pSprite->GetAnimation()->SetColorEffectAll(m_colorEffect,
+                RGB(m_effectDegreeRed, m_effectDegreeGreen, m_effectDegreeBlue),
+                1);
+
+            switch (m_colorEffect) {
+            case 0:
+            case 3:
+                m_effectDegreeRed -= m_effectIncrementRed;
+                m_effectDegreeGreen -= m_effectIncrementGreen;
+                m_effectDegreeBlue -= m_effectIncrementBlue;
+                break;
+            default:
+                m_effectDegreeRed += m_effectIncrementRed;
+                m_effectDegreeGreen += m_effectIncrementGreen;
+                m_effectDegreeBlue += m_effectIncrementBlue;
+                break;
+            }
+
+        } else {
+            m_done = TRUE;
+
+            if (m_undo) {
+                pSprite->GetAnimation()->ClearColorEffectsAll();
+                pSprite->field_562C = 1;
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4C18A0
+CPersistantEffect84C4A4::CPersistantEffect84C4A4(int a1, int a2, int a3)
+{
+    field_18 = a2;
+    field_1C = a3;
+    field_24 = a1;
+    field_28 = 1;
+
+    ULONG delta = g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime - a2;
+    if (delta == 0 || delta == 1) {
+        field_20 = a2;
+    } else {
+        field_20 = a2 + a1 * (delta / a1 + 1);
+    }
+}
+
+// NOTE: Inlined.
+CPersistantEffect84C4A4::CPersistantEffect84C4A4(const CPersistantEffect84C4A4& other)
+    : CPersistantEffect(other)
+{
+    field_18 = other.field_18;
+    field_1C = other.field_1C;
+    field_20 = other.field_20;
+    field_24 = other.field_24;
+    field_28 = other.field_28;
+    field_29 = other.field_29;
+    field_2A = other.field_2A;
+    field_2B = other.field_2B;
+    field_2C = other.field_2C;
+    field_2D = other.field_2D;
+    field_2E = other.field_2E;
+    field_2F = other.field_2F;
+    field_30 = other.field_30;
+    field_31 = other.field_31;
+    field_32 = other.field_32;
+    field_33 = other.field_33;
+}
+
+// 0x4C1920
+void CPersistantEffect84C4A4::AIUpdate(CGameSprite* pSprite, LONG deltaT)
+{
+    int gameTime = g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime;
+    if (gameTime > field_20
+        && (field_1C == 0 || gameTime <= field_1C)) {
+        int time = gameTime - deltaT;
+        int index = 0;
+        while (time < gameTime) {
+            time += field_24;
+            index++;
+        }
+        field_20 += index * field_24;
+        ApplyEffect(pSprite, index);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4C1980
+CPersistantEffect84C4B4::CPersistantEffect84C4B4(const char* a1, int a2, int a3, int a4, int a5)
+    : CPersistantEffect84C4A4(a3, a4, a5)
+{
+    field_34 = a1;
+    field_54 = a2;
+}
+
+// NOTE: Inlined.
+CPersistantEffect84C4B4::CPersistantEffect84C4B4(const CPersistantEffect84C4B4& other)
+    : CPersistantEffect84C4A4(other)
+{
+    field_34 = other.field_34;
+    field_44 = other.field_44;
+    field_54 = other.field_54;
+    field_58 = other.field_58;
+}
+
+// 0x4C1B00
+CPersistantEffect84C4B4::~CPersistantEffect84C4B4()
+{
+}
+
+// 0x4C1C00
+void CPersistantEffect84C4B4::ApplyEffect(CGameSprite* pSprite, int index)
+{
+    // TODO: Incomplete.
+}
+
+// 0x4C1F10
+CPersistantEffect* CPersistantEffect84C4B4::Copy()
+{
+    return new CPersistantEffect84C4B4(*this);
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4C2070
+CPersistantEffect84C4C4::CPersistantEffect84C4C4(const char* a1, int a2, int a3, int a4)
+    : CPersistantEffect84C4A4(a2, a3, a4)
+{
+    field_34 = a1;
+}
+
+// NOTE: Inlined.
+CPersistantEffect84C4C4::CPersistantEffect84C4C4(const CPersistantEffect84C4C4& other)
+    : CPersistantEffect84C4A4(other)
+{
+    field_34 = other.field_34;
+    field_44 = other.field_44;
+}
+
+// 0x4C2160
+CPersistantEffect84C4C4::~CPersistantEffect84C4C4()
+{
+}
+
+// 0x4C21E0
+void CPersistantEffect84C4C4::ApplyEffect(CGameSprite* pSprite, int index)
+{
+    // TODO: Incomplete.
+}
+
+// 0x4C2440
+CPersistantEffect* CPersistantEffect84C4C4::Copy()
+{
+    return new CPersistantEffect84C4C4(*this);
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4C2570
+CPersistantEffect84C420::CPersistantEffect84C420(int a1, int a2, int a3, int a4, int a5)
+    : CPersistantEffect84C4A4(a3, a4, a5)
+{
+    field_34 = a1;
+    field_38 = a2;
+}
+
+// NOTE: Inlined.
+CPersistantEffect84C420::CPersistantEffect84C420(const CPersistantEffect84C420& other)
+    : CPersistantEffect84C4A4(other)
+{
+    field_34 = other.field_34;
+    field_38 = other.field_38;
+}
+
+// 0x4C25B0
+void CPersistantEffect84C420::ApplyEffect(CGameSprite* pSprite, int index)
+{
+    CGameEffect* pEffect = new CGameEffectDamage();
+    pEffect->m_dwFlags = field_34;
+    pEffect->m_sourceID = m_sourceID;
+    pEffect->m_effectAmount = index * field_38;
+    pSprite->AddEffect(pEffect,
+        CGameAIBase::EFFECT_LIST_TIMED,
+        TRUE,
+        TRUE);
+}
+
+// 0x4C27F0
+CPersistantEffect* CPersistantEffect84C420::Copy()
+{
+    return new CPersistantEffect84C420(*this);
+}
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Inlined.
+CPersistantEffect84C494::CPersistantEffect84C494(int a1, int a2, int a3, int a4)
+    : CPersistantEffect84C4A4(a2, a3, a4)
+{
+    field_34 = a1;
+}
+
+// NOTE: Inlined.
+CPersistantEffect84C494::CPersistantEffect84C494(const CPersistantEffect84C494& other)
+    : CPersistantEffect84C4A4(other)
+{
+    field_34 = other.field_34;
+}
+
+// 0x4C2890
+void CPersistantEffect84C494::ApplyEffect(CGameSprite* pSprite, int index)
+{
+    if (pSprite->GetBaseStats()->m_hitPoints < pSprite->GetDerivedStats()->m_nMaxHitPoints) {
+        CGameEffectHeal* pEffect = new CGameEffectHeal();
+        pEffect->m_sourceID = m_sourceID;
+        pEffect->m_effectAmount = index * field_34;
+        pSprite->AddEffect(pEffect,
+            CGameAIBase::EFFECT_LIST_TIMED,
+            TRUE,
+            TRUE);
+    }
+}
+
+// 0x4C2990
+CPersistantEffect* CPersistantEffect84C494::Copy()
+{
+    return new CPersistantEffect84C494(*this);
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4C2A20
+CPersistantEffect84C4D4::CPersistantEffect84C4D4(int a1, int a2, int a3, int a4)
+    : CPersistantEffect84C4A4(a2, a3, a4)
+{
+    field_34 = "";
+    field_54 = a1;
+}
+
+// NOTE: Inlined.
+CPersistantEffect84C4D4::CPersistantEffect84C4D4(const CPersistantEffect84C4D4& other)
+    : CPersistantEffect84C4A4(other)
+{
+    field_34 = other.field_34;
+    field_44 = other.field_44;
+    field_54 = other.field_54;
+    field_58 = other.field_58;
+}
+
+// 0x4C2BB0
+CPersistantEffect84C4D4::~CPersistantEffect84C4D4()
+{
+}
+
+// 0x4C2CB0
+void CPersistantEffect84C4D4::ApplyEffect(CGameSprite* pSprite, int index)
+{
+    // TODO: Incomplete.
+}
+
+// 0x4C3000
+CPersistantEffect* CPersistantEffect84C4D4::Copy()
+{
+    return new CPersistantEffect84C4D4(*this);
+}
+
+// -----------------------------------------------------------------------------
+
+// NOTE: Inlined.
+CPersistantEffect84C484::CPersistantEffect84C484(int a1, const char* a2, int a3, int a4, int a5, int a6)
+    : CPersistantEffect84C4B4(a2, a3, a4, a5, a6)
+{
+    field_68 = a1;
+}
+
+// NOTE: Inlined.
+CPersistantEffect84C484::CPersistantEffect84C484(const CPersistantEffect84C484& other)
+    : CPersistantEffect84C4B4(other)
+{
+    field_68 = other.field_68;
+}
+
+// 0x4C3180
+CPersistantEffect84C484::~CPersistantEffect84C484()
+{
+}
+
+// 0x4C3280
+void CPersistantEffect84C484::ApplyEffect(CGameSprite* pSprite, int index)
+{
+    // TODO: Incomplete.
+}
+
+// 0x4C3570
+CPersistantEffect* CPersistantEffect84C484::Copy()
+{
+    return new CPersistantEffect84C484(*this);
 }

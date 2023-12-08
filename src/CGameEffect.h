@@ -3,6 +3,9 @@
 
 #include "mfc.h"
 
+#include <set>
+#include <string>
+
 #include "CResRef.h"
 #include "CSound.h"
 #include "FileFormat.h"
@@ -431,6 +434,7 @@ public:
 
 class CGameEffectDamage : public CGameEffect {
 public:
+    CGameEffectDamage();
     CGameEffectDamage(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
 
@@ -1872,6 +1876,160 @@ public:
     CGameEffectPreventAISlowdown(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
     BOOL ApplyEffect(CGameSprite* pSprite) override;
+};
+
+class CPersistantEffect {
+public:
+    CPersistantEffect();
+    CPersistantEffect(const CPersistantEffect& other);
+    /* 0000 */ virtual ~CPersistantEffect();
+    /* 0004 */ virtual void AIUpdate(CGameSprite* pSprite, LONG deltaT);
+    /* 0008 */ virtual CPersistantEffect* Copy();
+
+    void PlaySound(const CResRef& res, CGameSprite* pSprite);
+
+    /* 0004 */ BOOL m_done;
+    /* 0008 */ BOOL m_deleted;
+    /* 000C */ SHORT m_numDamage;
+    /* 000E */ SHORT m_persistantType;
+    /* 0010 */ LONG m_sourceID;
+    /* 0014 */ LONG m_counter;
+};
+
+class CPersistantEffectBurningDeath : public CPersistantEffect {
+public:
+    CPersistantEffectBurningDeath();
+    /* 0004 */ void AIUpdate(CGameSprite* pSprite, LONG deltaT) override;
+    /* 0008 */ CPersistantEffect* Copy() override;
+
+    /* 0018 */ BYTE m_charredDegree;
+    /* 0019 */ BYTE m_charredIncrement;
+};
+
+class CPersistantEffectFireDeath : public CPersistantEffectBurningDeath {
+public:
+    /* 0004 */ void AIUpdate(CGameSprite* pSprite, LONG deltaT) override;
+};
+
+class CPersistantEffectElectricDeath : public CPersistantEffectBurningDeath {
+public:
+    /* 0004 */ void AIUpdate(CGameSprite* pSprite, LONG deltaT) override;
+};
+
+class CPersistantEffectColorEffect : public CPersistantEffect {
+public:
+    CPersistantEffectColorEffect();
+    /* 0004 */ void AIUpdate(CGameSprite* pSprite, LONG deltaT) override;
+
+    /* 0018 */ SHORT m_period;
+    /* 001A */ BOOL m_undo;
+    /* 001E */ BYTE m_effectFinalRed;
+    /* 001F */ BYTE m_effectDegreeRed;
+    /* 0020 */ BYTE m_effectIncrementRed;
+    /* 0021 */ BYTE m_effectFinalGreen;
+    /* 0022 */ BYTE m_effectDegreeGreen;
+    /* 0023 */ BYTE m_effectIncrementGreen;
+    /* 0024 */ BYTE m_effectFinalBlue;
+    /* 0025 */ BYTE m_effectDegreeBlue;
+    /* 0026 */ BYTE m_effectIncrementBlue;
+    /* 0027 */ BYTE m_colorEffect;
+};
+
+class CPersistantEffect84C4A4 : public CPersistantEffect {
+public:
+    CPersistantEffect84C4A4(int a1, int a2, int a3);
+    CPersistantEffect84C4A4(const CPersistantEffect84C4A4& other);
+    /* 0004 */ void AIUpdate(CGameSprite* pSprite, LONG deltaT) override;
+    /* 000C */ virtual void ApplyEffect(CGameSprite* pSprite, int index) = 0;
+
+    /* 0018 */ int field_18;
+    /* 001C */ int field_1C;
+    /* 0020 */ int field_20;
+    /* 0024 */ int field_24;
+    /* 0028 */ unsigned char field_28;
+    /* 0029 */ unsigned char field_29;
+    /* 002A */ unsigned char field_2A;
+    /* 002B */ unsigned char field_2B;
+    /* 002C */ unsigned char field_2C;
+    /* 002D */ unsigned char field_2D;
+    /* 002E */ unsigned char field_2E;
+    /* 002F */ unsigned char field_2F;
+    /* 0030 */ unsigned char field_30;
+    /* 0031 */ unsigned char field_31;
+    /* 0032 */ unsigned char field_32;
+    /* 0033 */ unsigned char field_33;
+};
+
+class CPersistantEffect84C4B4 : public CPersistantEffect84C4A4 {
+public:
+    CPersistantEffect84C4B4(const char* a1, int a2, int a3, int a4, int a5);
+    CPersistantEffect84C4B4(const CPersistantEffect84C4B4& other);
+    /* 0000 */ ~CPersistantEffect84C4B4() override;
+    /* 0008 */ CPersistantEffect* Copy() override;
+    /* 000C */ void ApplyEffect(CGameSprite* pSprite, int index) override;
+
+    /* 0034 */ std::string field_34;
+    /* 0044 */ std::string field_44;
+    /* 0054 */ int field_54;
+    /* 0058 */ std::set<void*> field_58;
+};
+
+class CPersistantEffect84C4C4 : public CPersistantEffect84C4A4 {
+public:
+    CPersistantEffect84C4C4(const char* a1, int a2, int a3, int a4);
+    CPersistantEffect84C4C4(const CPersistantEffect84C4C4& other);
+    /* 0000 */ ~CPersistantEffect84C4C4() override;
+    /* 0008 */ CPersistantEffect* Copy() override;
+    /* 000C */ void ApplyEffect(CGameSprite* pSprite, int index) override;
+
+    /* 0034 */ std::string field_34;
+    /* 0044 */ std::string field_44;
+};
+
+class CPersistantEffect84C420 : public CPersistantEffect84C4A4 {
+public:
+    CPersistantEffect84C420(int a1, int a2, int a3, int a4, int a5);
+    CPersistantEffect84C420(const CPersistantEffect84C420& other);
+    /* 0008 */ CPersistantEffect* Copy() override;
+    /* 000C */ void ApplyEffect(CGameSprite* pSprite, int index) override;
+
+    /* 0034 */ int field_34;
+    /* 0038 */ int field_38;
+};
+
+class CPersistantEffect84C494 : public CPersistantEffect84C4A4 {
+public:
+    CPersistantEffect84C494(int a1, int a2, int a3, int a4);
+    CPersistantEffect84C494(const CPersistantEffect84C494& other);
+    /* 0008 */ CPersistantEffect* Copy() override;
+    /* 000C */ void ApplyEffect(CGameSprite* pSprite, int index) override;
+
+    /* 0034 */ int field_34;
+};
+
+class CPersistantEffect84C4D4 : public CPersistantEffect84C4A4 {
+public:
+    CPersistantEffect84C4D4(int a1, int a2, int a3, int a4);
+    CPersistantEffect84C4D4(const CPersistantEffect84C4D4& other);
+    /* 0000 */ ~CPersistantEffect84C4D4() override;
+    /* 0008 */ CPersistantEffect* Copy() override;
+    /* 000C */ void ApplyEffect(CGameSprite* pSprite, int index) override;
+
+    /* 0034 */ std::string field_34;
+    /* 0044 */ std::string field_44;
+    /* 0054 */ int field_54;
+    /* 0058 */ std::set<void*> field_58;
+};
+
+class CPersistantEffect84C484 : public CPersistantEffect84C4B4 {
+public:
+    CPersistantEffect84C484(int a1, const char* a2, int a3, int a4, int a5, int a6);
+    CPersistantEffect84C484(const CPersistantEffect84C484& other);
+    /* 0000 */ ~CPersistantEffect84C484() override;
+    /* 0008 */ CPersistantEffect* Copy() override;
+    /* 000C */ void ApplyEffect(CGameSprite* pSprite, int index) override;
+
+    /* 0068 */ int field_68;
 };
 
 #endif /* CGAMEEFFECT_H_ */
