@@ -162,6 +162,7 @@ public:
     IcewindCGameEffectRighteousWrathOfFaithful(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
     BOOL ApplyEffect(CGameSprite* pSprite);
+    void OnRemove(CGameSprite* pSprite) override;
 };
 
 class IcewindCGameEffectRecitation : public CGameEffect {

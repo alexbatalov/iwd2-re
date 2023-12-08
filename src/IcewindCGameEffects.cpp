@@ -198,6 +198,13 @@ BOOL IcewindCGameEffectRighteousWrathOfFaithful::ApplyEffect(CGameSprite* pSprit
     return TRUE;
 }
 
+// 0x55EB80
+void IcewindCGameEffectRighteousWrathOfFaithful::OnRemove(CGameSprite* pSprite)
+{
+    pSprite->m_bonusStats.m_nFatigue += 8;
+    PlaySound(CResRef("EFF_E01"), pSprite);
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49DE40
