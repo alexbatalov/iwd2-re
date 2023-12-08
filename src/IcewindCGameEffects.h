@@ -154,6 +154,7 @@ public:
     IcewindCGameEffectPrayer(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
     BOOL ApplyEffect(CGameSprite* pSprite);
+    void OnRemove(CGameSprite* pSprite) override;
 };
 
 class IcewindCGameEffectRighteousWrathOfFaithful : public CGameEffect {
@@ -168,6 +169,7 @@ public:
     IcewindCGameEffectRecitation(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
     BOOL ApplyEffect(CGameSprite* pSprite);
+    void OnRemove(CGameSprite* pSprite) override;
 };
 
 class IcewindCGameEffectSavingThrowChange : public CGameEffect {
@@ -371,6 +373,7 @@ class IcewindCGameEffectTurnUndead : public CGameEffect {
 public:
     IcewindCGameEffectTurnUndead(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    void OnRemove(CGameSprite* pSprite) override;
 };
 
 class IcewindCGameEffectVitriolicSphere : public CGameEffect {
@@ -479,6 +482,7 @@ public:
     IcewindCGameEffectArmorOfFaith(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
     BOOL ApplyEffect(CGameSprite* pSprite) override;
+    void OnRemove(CGameSprite* pSprite) override;
 };
 
 class IcewindCGameEffectNausea : public CGameEffect {
@@ -493,6 +497,7 @@ public:
     IcewindCGameEffectEnfeeblement(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
     BOOL ApplyEffect(CGameSprite* pSprite) override;
+    void OnRemove(CGameSprite* pSprite) override;
 };
 
 class IcewindCGameEffectFireshield : public CGameEffect {
@@ -505,6 +510,7 @@ class IcewindCGameEffectDeathWard : public CGameEffect {
 public:
     IcewindCGameEffectDeathWard(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    void OnRemove(CGameSprite* pSprite) override;
 };
 
 class IcewindCGameEffectHolyPower : public CGameEffect {
@@ -512,6 +518,7 @@ public:
     IcewindCGameEffectHolyPower(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
     BOOL ApplyEffect(CGameSprite* pSprite) override;
+    void OnRemove(CGameSprite* pSprite) override;
 };
 
 class IcewindCGameEffectVisualEffect : public CGameEffect {
@@ -526,6 +533,7 @@ public:
     IcewindCGameEffectOtilukesResilientSphere(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
     BOOL ApplyEffect(CGameSprite* pSprite) override;
+    void OnRemove(CGameSprite* pSprite) override;
 };
 
 class IcewindCGameEffectBarkskin : public CGameEffect {
@@ -533,6 +541,7 @@ public:
     IcewindCGameEffectBarkskin(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
     BOOL ApplyEffect(CGameSprite* pSprite) override;
+    void OnRemove(CGameSprite* pSprite) override;
 };
 
 class IcewindCGameEffectAreaOfEffect : public CGameEffect {
@@ -546,6 +555,7 @@ public:
     IcewindCGameEffectFreeAction(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
     BOOL ApplyEffect(CGameSprite* pSprite) override;
+    void OnRemove(CGameSprite* pSprite) override;
 };
 
 class IcewindCGameEffectBleedingWounds : public CGameEffect {
@@ -586,6 +596,7 @@ class IcewindCGameEffectAegis : public CGameEffect {
 public:
     IcewindCGameEffectAegis(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    void OnRemove(CGameSprite* pSprite) override;
 };
 
 class IcewindCGameEffectExecutionersEyes : public CGameEffect {
@@ -593,6 +604,7 @@ public:
     IcewindCGameEffectExecutionersEyes(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
     BOOL ApplyEffect(CGameSprite* pSprite) override;
+    void OnRemove(CGameSprite* pSprite) override;
 };
 
 class IcewindCGameEffectWhenStruck : public CGameEffect {
@@ -651,6 +663,7 @@ public:
     IcewindCGameEffectTensersTransformation(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
     BOOL ApplyEffect(CGameSprite* pSprite) override;
+    void OnRemove(CGameSprite* pSprite) override;
 };
 
 class IcewindCGameEffectSmiteEvil : public CGameEffect {
@@ -678,6 +691,7 @@ public:
     IcewindCGameEffectGlobeOfInvulnerability(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
     BOOL ApplyEffect(CGameSprite* pSprite) override;
+    void OnRemove(CGameSprite* pSprite) override;
 };
 
 class IcewindCGameEffectLowerResistance : public CGameEffect {
@@ -685,6 +699,7 @@ public:
     IcewindCGameEffectLowerResistance(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
     BOOL ApplyEffect(CGameSprite* pSprite) override;
+    void OnRemove(CGameSprite* pSprite) override;
 };
 
 class IcewindCGameEffectBane : public CGameEffect {
@@ -692,6 +707,7 @@ public:
     IcewindCGameEffectBane(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
     BOOL ApplyEffect(CGameSprite* pSprite) override;
+    void OnRemove(CGameSprite* pSprite) override;
 };
 
 class IcewindCGameEffectFeatPowerAttack : public CGameEffect {

@@ -121,6 +121,12 @@ BOOL IcewindCGameEffectPrayer::ApplyEffect(CGameSprite* pSprite)
     return TRUE;
 }
 
+// 0x55ECF0
+void IcewindCGameEffectPrayer::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E03"), pSprite);
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49DF30
@@ -252,6 +258,12 @@ BOOL IcewindCGameEffectRecitation::ApplyEffect(CGameSprite* pSprite)
         break;
     }
     return TRUE;
+}
+
+// 0x55ECF0
+void IcewindCGameEffectRecitation::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E03"), pSprite);
 }
 
 // -----------------------------------------------------------------------------
@@ -1184,6 +1196,12 @@ CGameEffect* IcewindCGameEffectTurnUndead::Copy()
     return copy;
 }
 
+// 0x566070
+void IcewindCGameEffectTurnUndead::OnRemove(CGameSprite* pSprite)
+{
+    pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_TURNED] = false;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x49FB50
@@ -1589,6 +1607,12 @@ BOOL IcewindCGameEffectArmorOfFaith::ApplyEffect(CGameSprite* pSprite)
     return TRUE;
 }
 
+// 0x55ECF0
+void IcewindCGameEffectArmorOfFaith::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E03"), pSprite);
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A0B50
@@ -1710,6 +1734,12 @@ BOOL IcewindCGameEffectEnfeeblement::ApplyEffect(CGameSprite* pSprite)
     return TRUE;
 }
 
+// 0x4BAF90
+void IcewindCGameEffectEnfeeblement::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E04"), pSprite);
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A0D30
@@ -1744,6 +1774,12 @@ CGameEffect* IcewindCGameEffectDeathWard::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4BAF90
+void IcewindCGameEffectDeathWard::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E04"), pSprite);
 }
 
 // -----------------------------------------------------------------------------
@@ -1783,6 +1819,12 @@ BOOL IcewindCGameEffectHolyPower::ApplyEffect(CGameSprite* pSprite)
         m_done = FALSE;
     }
     return TRUE;
+}
+
+// 0x4BAF90
+void IcewindCGameEffectHolyPower::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E04"), pSprite);
 }
 
 // -----------------------------------------------------------------------------
@@ -1862,6 +1904,12 @@ BOOL IcewindCGameEffectOtilukesResilientSphere::ApplyEffect(CGameSprite* pSprite
     return TRUE;
 }
 
+// 0x4BAF90
+void IcewindCGameEffectOtilukesResilientSphere::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E04"), pSprite);
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A11E0
@@ -1904,6 +1952,12 @@ BOOL IcewindCGameEffectBarkskin::ApplyEffect(CGameSprite* pSprite)
         pSprite->SetColorRange(2);
     }
     return TRUE;
+}
+
+// 0x55ECF0
+void IcewindCGameEffectBarkskin::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E03"), pSprite);
 }
 
 // -----------------------------------------------------------------------------
@@ -1986,6 +2040,12 @@ BOOL IcewindCGameEffectFreeAction::ApplyEffect(CGameSprite* pSprite)
     }
 
     return TRUE;
+}
+
+// 0x55ECF0
+void IcewindCGameEffectFreeAction::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E03"), pSprite);
 }
 
 // -----------------------------------------------------------------------------
@@ -2254,6 +2314,12 @@ CGameEffect* IcewindCGameEffectAegis::Copy()
     return copy;
 }
 
+// 0x56B6E0
+void IcewindCGameEffectAegis::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E01"), pSprite);
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A1A50
@@ -2286,6 +2352,12 @@ BOOL IcewindCGameEffectExecutionersEyes::ApplyEffect(CGameSprite* pSprite)
         pSprite->GetDerivedStats()->m_nCriticalHitBonus += 4;
     }
     return TRUE;
+}
+
+// 0x56B6E0
+void IcewindCGameEffectExecutionersEyes::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E01"), pSprite);
 }
 
 // -----------------------------------------------------------------------------
@@ -2571,6 +2643,12 @@ BOOL IcewindCGameEffectTensersTransformation::ApplyEffect(CGameSprite* pSprite)
     return TRUE;
 }
 
+// 0x56B6E0
+void IcewindCGameEffectTensersTransformation::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E01"), pSprite);
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A23B0
@@ -2710,6 +2788,12 @@ BOOL IcewindCGameEffectGlobeOfInvulnerability::ApplyEffect(CGameSprite* pSprite)
     return TRUE;
 }
 
+// 0x56B6E0
+void IcewindCGameEffectGlobeOfInvulnerability::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E01"), pSprite);
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x4A2770
@@ -2741,6 +2825,12 @@ BOOL IcewindCGameEffectLowerResistance::ApplyEffect(CGameSprite* pSprite)
     }
 
     return TRUE;
+}
+
+// 0x56B6E0
+void IcewindCGameEffectLowerResistance::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E01"), pSprite);
 }
 
 // -----------------------------------------------------------------------------
@@ -2778,6 +2868,12 @@ BOOL IcewindCGameEffectBane::ApplyEffect(CGameSprite* pSprite)
     }
 
     return TRUE;
+}
+
+// 0x4BAF90
+void IcewindCGameEffectBane::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E04"), pSprite);
 }
 
 // -----------------------------------------------------------------------------

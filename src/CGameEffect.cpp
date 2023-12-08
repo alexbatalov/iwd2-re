@@ -1260,6 +1260,11 @@ void CGameEffect::DisplayString(CGameSprite* pSprite)
     }
 }
 
+// 0x4A51D0
+void CGameEffect::OnRemove(CGameSprite* pSprite)
+{
+}
+
 // 0x4A4D10
 void CGameEffect::DisplayStringRef(CGameSprite* pSprite, STRREF str)
 {
@@ -1817,6 +1822,12 @@ CGameEffect* CGameEffectCharm::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4A6200
+void CGameEffectCharm::OnRemove(CGameSprite* pSprite)
+{
+    pSprite->GetDerivedStats()->m_generalState &= ~STATE_CHARMED;
 }
 
 // -----------------------------------------------------------------------------
@@ -2660,6 +2671,12 @@ BOOL CGameEffectPanic::ApplyEffect(CGameSprite* pSprite)
     return TRUE;
 }
 
+// 0x4B5490
+void CGameEffectPanic::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E05"), pSprite);
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
@@ -2676,6 +2693,41 @@ CGameEffect* CGameEffectPoison::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4AFBF0
+void CGameEffectPoison::OnRemove(CGameSprite* pSprite)
+{
+    if (m_dwFlags == 8) {
+        ITEM_EFFECT effect;
+        effect.effectID = CGAMEEFFECT_CON;
+        effect.spellLevel = 10;
+        effect.effectAmount = m_effectAmount + m_special;
+        effect.probabilityUpper = 100;
+        effect.probabilityLower = 0;
+        effect.numDice = 0;
+        effect.diceSize = 0;
+        effect.saveMod = 0;
+        effect.special = 0;
+        effect.targetType = 2;
+        effect.dwFlags = 0;
+        effect.durationType = 0;
+        effect.duration = 70;
+        effect.savingThrow = 4;
+
+        CGameEffect* pEffect = DecodeEffect(&effect,
+            CPoint(-1, -1),
+            -1,
+            CPoint(-1, -1));
+        pEffect->SetSource(pSprite->GetPos());
+        pEffect->SetSourceId(pSprite->GetId());
+        pEffect->m_flags &= ~1;
+
+        CMessage* message = new CMessageAddEffect(pEffect,
+            pSprite->GetId(),
+            pSprite->GetId());
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -3463,6 +3515,12 @@ BOOL CGameEffectSilence::ApplyEffect(CGameSprite* pSprite)
     }
 
     return TRUE;
+}
+
+// 0x4B5490
+void CGameEffectSilence::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E05"), pSprite);
 }
 
 // -----------------------------------------------------------------------------
@@ -4843,6 +4901,12 @@ BOOL CGameEffectBlindness::ApplyEffect(CGameSprite* pSprite)
     return TRUE;
 }
 
+// 0x4B5490
+void CGameEffectBlindness::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E05"), pSprite);
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
@@ -4898,6 +4962,12 @@ BOOL CGameEffectDayBlindness::ApplyEffect(CGameSprite* pSprite)
     }
 
     return TRUE;
+}
+
+// 0x4B5490
+void CGameEffectDayBlindness::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E05"), pSprite);
 }
 
 // -----------------------------------------------------------------------------
@@ -5120,6 +5190,12 @@ BOOL CGameEffectDeafness::ApplyEffect(CGameSprite* pSprite)
     m_done = FALSE;
 
     return TRUE;
+}
+
+// 0x4B5490
+void CGameEffectDeafness::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E05"), pSprite);
 }
 
 // -----------------------------------------------------------------------------
@@ -6655,6 +6731,12 @@ BOOL CGameEffectHoldCreature::ApplyEffect(CGameSprite* pSprite)
     return TRUE;
 }
 
+// 0x4B5490
+void CGameEffectHoldCreature::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E05"), pSprite);
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
@@ -7132,6 +7214,12 @@ BOOL CGameEffectConfusion::ApplyEffect(CGameSprite* pSprite)
     return TRUE;
 }
 
+// 0x4B5490
+void CGameEffectConfusion::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E05"), pSprite);
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
@@ -7181,6 +7269,12 @@ BOOL CGameEffectNon_CumulativeAid::ApplyEffect(CGameSprite* pSprite)
     return TRUE;
 }
 
+// 0x55ECF0
+void CGameEffectNon_CumulativeAid::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E03"), pSprite);
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
@@ -7222,6 +7316,12 @@ BOOL CGameEffectNon_CumulativeBless::ApplyEffect(CGameSprite* pSprite)
     }
 
     return TRUE;
+}
+
+// 0x55ECF0
+void CGameEffectNon_CumulativeBless::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E03"), pSprite);
 }
 
 // -----------------------------------------------------------------------------
@@ -7285,6 +7385,12 @@ BOOL CGameEffectNon_CumulativeChant::ApplyEffect(CGameSprite* pSprite)
     return TRUE;
 }
 
+// 0x55ECF0
+void CGameEffectNon_CumulativeChant::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E03"), pSprite);
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
@@ -7338,6 +7444,12 @@ BOOL CGameEffectNon_CumulativeDrawUponHolyMight::ApplyEffect(CGameSprite* pSprit
     }
 
     return TRUE;
+}
+
+// 0x4BAF90
+void CGameEffectNon_CumulativeDrawUponHolyMight::OnRemove(CGameSprite* pSprite)
+{
+    PlaySound(CResRef("EFF_E04"), pSprite);
 }
 
 // -----------------------------------------------------------------------------
