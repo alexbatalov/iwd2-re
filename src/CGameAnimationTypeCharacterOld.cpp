@@ -451,6 +451,167 @@ void CGameAnimationTypeCharacterOld::CalculateGCBoundsRect(CRect& rGCBounds, con
     rGCBounds.bottom = rGCBounds.top + nHeight;
 }
 
+// 0x6D4A30
+void CGameAnimationTypeCharacterOld::ChangeDirection(SHORT nDirection)
+{
+    SHORT nSequence;
+    SHORT nFrame;
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 21611
+    UTIL_ASSERT(m_currentVidCell != NULL && m_currentVidCellBase != NULL);
+
+    nFrame = m_currentVidCell->GetCurrentFrameId();
+
+    m_currentBamDirection = nDirection;
+
+    if ((m_currentVidCellBase == &m_g1VidCellBase
+            && m_currentBamSequence == 0)
+        || m_currentVidCellBase == &m_w2VidCellBase) {
+        if (m_currentBamDirection % 2 == 0) {
+            m_currentVidCellBase = &m_g1VidCellBase;
+            m_currentVidCellExtend = &m_g1VidCellExtend;
+
+            m_currentVidCellShadowBase = &m_g1VidCellShadowBase;
+            m_currentVidCellShadowExtend = &m_g1VidCellShadowExtend;
+
+            if (m_currentVidCellWeapon != NULL) {
+                m_currentVidCellWeaponBase = &m_g1VidCellWeaponBase;
+                m_currentVidCellWeaponExtend = &m_g1VidCellWeaponExtend;
+            }
+
+            if (m_currentVidCellShield != NULL) {
+                m_currentVidCellShieldBase = &m_g1VidCellShieldBase;
+                m_currentVidCellShieldExtend = &m_g1VidCellShieldExtend;
+            }
+
+            if (m_currentVidCellHelmet != NULL) {
+                m_currentVidCellHelmetBase = &m_g1VidCellHelmetBase;
+                m_currentVidCellHelmetExtend = &m_g1VidCellHelmetExtend;
+            }
+        } else {
+            m_currentVidCellBase = &m_w2VidCellBase;
+            m_currentVidCellExtend = &m_w2VidCellExtend;
+
+            m_currentVidCellShadowBase = &m_w2VidCellShadowBase;
+            m_currentVidCellShadowExtend = &m_w2VidCellShadowExtend;
+
+            if (m_currentVidCellWeapon != NULL) {
+                m_currentVidCellWeaponBase = &m_w2VidCellWeaponBase;
+                m_currentVidCellWeaponExtend = &m_w2VidCellWeaponExtend;
+            }
+
+            if (m_currentVidCellShield != NULL) {
+                m_currentVidCellShieldBase = &m_w2VidCellShieldBase;
+                m_currentVidCellShieldExtend = &m_w2VidCellShieldExtend;
+            }
+
+            if (m_currentVidCellHelmet != NULL) {
+                m_currentVidCellHelmetBase = &m_w2VidCellHelmetBase;
+                m_currentVidCellHelmetExtend = &m_w2VidCellHelmetExtend;
+            }
+        }
+    }
+
+    if (!MIRROR_BAM && m_currentBamDirection > m_extendDirectionTest) {
+        m_currentVidCell = m_currentVidCellExtend;
+    } else {
+        m_currentVidCell = m_currentVidCellBase;
+    }
+
+    if (MIRROR_BAM && m_currentBamDirection > m_extendDirectionTest) {
+        if ((m_currentVidCellBase == &m_g1VidCellBase
+                && m_currentBamSequence == 0)
+            || m_currentVidCellBase == &m_w2VidCellBase) {
+            nSequence = 8 * m_currentBamSequence + ((16 - m_currentBamDirection) % 16) / 2;
+        } else {
+            nSequence = 8 * m_currentBamSequence + ((17 - m_currentBamDirection) % 16) / 2;
+        }
+    } else {
+        nSequence = 8 * m_currentBamSequence + m_currentBamDirection / 2;
+    }
+
+    m_currentVidCell->SequenceSet(nSequence);
+    m_currentVidCell->FrameSet(nFrame);
+
+    if (m_currentBamDirection > m_extendDirectionTest) {
+        m_currentVidCellShadow = m_currentVidCellShadowExtend;
+    } else {
+        m_currentVidCellShadow = m_currentVidCellShadowBase;
+    }
+
+    m_currentVidCellShadow->SequenceSet(8 * m_currentBamSequence + m_currentBamDirection / 2);
+    m_currentVidCell->FrameSet(nFrame);
+
+    if (m_currentVidCellWeapon != NULL) {
+        if (!MIRROR_BAM && m_currentBamDirection > m_extendDirectionTest) {
+            m_currentVidCellWeapon = m_currentVidCellWeaponExtend;
+        } else {
+            m_currentVidCellWeapon = m_currentVidCellWeaponBase;
+        }
+
+        if (MIRROR_BAM && m_currentBamDirection > m_extendDirectionTest) {
+            if ((m_currentVidCellWeaponBase == &m_g1VidCellBase
+                    && m_currentBamSequence == 0)
+                || m_currentVidCellWeaponBase == &m_w2VidCellBase) {
+                nSequence = 8 * m_currentBamSequence + ((16 - m_currentBamDirection) % 16) / 2;
+            } else {
+                nSequence = 8 * m_currentBamSequence + ((17 - m_currentBamDirection) % 16) / 2;
+            }
+        } else {
+            nSequence = 8 * m_currentBamSequence + m_currentBamDirection / 2;
+        }
+
+        m_currentVidCellWeapon->SequenceSet(nSequence);
+        m_currentVidCellWeapon->FrameSet(nFrame);
+    }
+
+    if (m_currentVidCellShield != NULL) {
+        if (!MIRROR_BAM && m_currentBamDirection > m_extendDirectionTest) {
+            m_currentVidCellShield = m_currentVidCellShieldExtend;
+        } else {
+            m_currentVidCellShield = m_currentVidCellShieldBase;
+        }
+
+        if (MIRROR_BAM && m_currentBamDirection > m_extendDirectionTest) {
+            if ((m_currentVidCellShieldBase == &m_g1VidCellBase
+                    && m_currentBamSequence == 0)
+                || m_currentVidCellShieldBase == &m_w2VidCellBase) {
+                nSequence = 8 * m_currentBamSequence + ((16 - m_currentBamDirection) % 16) / 2;
+            } else {
+                nSequence = 8 * m_currentBamSequence + ((17 - m_currentBamDirection) % 16) / 2;
+            }
+        } else {
+            nSequence = 8 * m_currentBamSequence + m_currentBamDirection / 2;
+        }
+
+        m_currentVidCellShield->SequenceSet(nSequence);
+        m_currentVidCellShield->FrameSet(nFrame);
+    }
+
+    if (m_currentVidCellHelmet != NULL) {
+        if (!MIRROR_BAM && m_currentBamDirection > m_extendDirectionTest) {
+            m_currentVidCellHelmet = m_currentVidCellHelmetExtend;
+        } else {
+            m_currentVidCellHelmet = m_currentVidCellHelmetBase;
+        }
+
+        if (MIRROR_BAM && m_currentBamDirection > m_extendDirectionTest) {
+            if ((m_currentVidCellHelmetBase == &m_g1VidCellBase
+                    && m_currentBamSequence == 0)
+                || m_currentVidCellHelmetBase == &m_w2VidCellBase) {
+                nSequence = 8 * m_currentBamSequence + ((16 - m_currentBamDirection) % 16) / 2;
+            } else {
+                nSequence = 8 * m_currentBamSequence + ((17 - m_currentBamDirection) % 16) / 2;
+            }
+        } else {
+            nSequence = 8 * m_currentBamSequence + m_currentBamDirection / 2;
+        }
+
+        m_currentVidCellHelmet->SequenceSet(nSequence);
+        m_currentVidCellHelmet->FrameSet(nFrame);
+    }
+}
+
 // 0x6DD150
 CVidPalette* CGameAnimationTypeCharacterOld::GetAnimationPalette(BYTE range)
 {
