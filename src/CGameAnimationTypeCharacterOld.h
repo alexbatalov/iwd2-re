@@ -8,6 +8,7 @@ class CGameAnimationTypeCharacterOld : public CGameAnimationType {
 public:
     CGameAnimationTypeCharacterOld(USHORT animationID, BYTE* colorRangeValues, WORD facing);
     /* 0000 */ ~CGameAnimationTypeCharacterOld() override;
+    /* 0004 */ void CalculateFxRect(CRect& rFx, CPoint& ptReference, LONG posZ) override;
     /* 0008 */ void CalculateGCBoundsRect(CRect& rGCBounds, const CPoint& pos, const CPoint& ptReference, LONG posZ, LONG nWidth, LONG nHeight) override;
     /* 000C */ void ChangeDirection(SHORT nDirection) override;
     /* 0010 */ void EquipArmor(CHAR armorLevel, BYTE* colorRangeValues) override;

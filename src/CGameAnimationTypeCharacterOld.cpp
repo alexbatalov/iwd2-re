@@ -439,6 +439,166 @@ SHORT CGameAnimationTypeCharacterOld::GetCurrentFrame()
     return m_currentVidCell->m_nCurrentFrame;
 }
 
+// 0x6D4660
+void CGameAnimationTypeCharacterOld::CalculateFxRect(CRect& rFx, CPoint& ptReference, LONG posZ)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 21467
+    UTIL_ASSERT(m_currentVidCell != NULL && m_currentVidCellBase != NULL);
+
+    CPoint charCenter;
+    m_currentVidCell->GetCurrentCenterPoint(charCenter, FALSE);
+    ptReference = charCenter;
+
+    CPoint shadowCenter;
+    m_currentVidCellShadow->GetCurrentCenterPoint(shadowCenter, FALSE);
+
+    if (shadowCenter.x > ptReference.x) {
+        ptReference.x = shadowCenter.x;
+    }
+
+    if (shadowCenter.y > ptReference.y) {
+        ptReference.y = shadowCenter.y;
+    }
+
+    if (m_renderWeapons) {
+        if (m_currentVidCellWeapon != NULL
+            && m_currentVidCellWeapon->GetResRef().IsValid()) {
+            CPoint weaponCenter;
+            m_currentVidCellWeapon->GetCurrentCenterPoint(weaponCenter, FALSE);
+
+            if (weaponCenter.x > ptReference.x) {
+                ptReference.x = weaponCenter.x;
+            }
+
+            if (weaponCenter.y > ptReference.y) {
+                ptReference.y = weaponCenter.y;
+            }
+        }
+
+        // FIXME: Redundant.
+        if (m_renderWeapons) {
+            if (m_currentVidCellShield != NULL
+                && m_currentVidCellShield->GetResRef().IsValid()) {
+                CPoint shieldCenter;
+                m_currentVidCellShield->GetCurrentCenterPoint(shieldCenter, FALSE);
+
+                if (shieldCenter.x > ptReference.x) {
+                    ptReference.x = shieldCenter.x;
+                }
+
+                if (shieldCenter.y > ptReference.y) {
+                    ptReference.y = shieldCenter.y;
+                }
+            }
+        }
+    }
+
+    if (m_renderHelmet) {
+        if (m_currentVidCellHelmet != NULL
+            && m_currentVidCellHelmet->GetResRef().IsValid()) {
+            CPoint helmetCenter;
+            m_currentVidCellHelmet->GetCurrentCenterPoint(helmetCenter, FALSE);
+
+            if (helmetCenter.x > ptReference.x) {
+                ptReference.x = helmetCenter.x;
+            }
+
+            if (helmetCenter.y > ptReference.y) {
+                ptReference.y = helmetCenter.y;
+            }
+        }
+    }
+
+    CSize charSize;
+    m_currentVidCell->GetCurrentFrameSize(charSize, FALSE);
+
+    charSize.cx += ptReference.x - charCenter.x;
+    charSize.cy += ptReference.y - charCenter.y;
+    rFx.SetRect(0, 0, charSize.cx, charSize.cy);
+
+    CSize shadowSize;
+    m_currentVidCellShadow->GetCurrentFrameSize(shadowSize, FALSE);
+    m_currentVidCellShadow->GetCurrentCenterPoint(shadowCenter, FALSE);
+
+    shadowSize.cx += ptReference.x - shadowCenter.x;
+    shadowSize.cy += ptReference.y - shadowCenter.y;
+
+    if (shadowSize.cx > rFx.right) {
+        rFx.right = shadowSize.cx;
+    }
+
+    if (shadowSize.cy > rFx.bottom) {
+        rFx.bottom = shadowSize.cy;
+    }
+
+    if (m_renderWeapons) {
+        if (m_currentVidCellWeapon != NULL
+            && m_currentVidCellWeapon->GetResRef().IsValid()) {
+            CSize weaponSize;
+            m_currentVidCellWeapon->GetCurrentFrameSize(weaponSize, FALSE);
+
+            CPoint weaponCenter;
+            m_currentVidCellWeapon->GetCurrentCenterPoint(weaponCenter, FALSE);
+
+            weaponSize.cx += ptReference.x - weaponCenter.x;
+            weaponSize.cy += ptReference.y - weaponCenter.y;
+
+            if (weaponSize.cx > rFx.right) {
+                rFx.right = weaponSize.cx;
+            }
+
+            if (weaponSize.cy > rFx.bottom) {
+                rFx.bottom = weaponSize.cy;
+            }
+        }
+
+        // FIXME: Redundant.
+        if (m_renderWeapons) {
+            if (m_currentVidCellShield != NULL
+                && m_currentVidCellShield->GetResRef().IsValid()) {
+                CSize shieldSize;
+                m_currentVidCellShield->GetCurrentFrameSize(shieldSize, FALSE);
+
+                CPoint shieldCenter;
+                m_currentVidCellShield->GetCurrentCenterPoint(shieldCenter, FALSE);
+
+                shieldSize.cx += ptReference.x - shieldCenter.x;
+                shieldSize.cy += ptReference.y - shieldCenter.y;
+
+                if (shieldSize.cx > rFx.right) {
+                    rFx.right = shieldSize.cx;
+                }
+
+                if (shieldSize.cy > rFx.bottom) {
+                    rFx.bottom = shieldSize.cy;
+                }
+            }
+        }
+    }
+
+    if (m_renderHelmet) {
+        if (m_currentVidCellHelmet != NULL) {
+            CSize helmetSize;
+            m_currentVidCellHelmet->GetCurrentFrameSize(helmetSize, FALSE);
+
+            CPoint helmetCenter;
+            m_currentVidCellHelmet->GetCurrentCenterPoint(helmetCenter, FALSE);
+
+            helmetSize.cx += ptReference.x - helmetCenter.x;
+            helmetSize.cy += ptReference.y - helmetCenter.y;
+
+            if (helmetSize.cx > rFx.right) {
+                rFx.right = helmetSize.cx;
+            }
+
+            if (helmetSize.cy > rFx.bottom) {
+                rFx.bottom = helmetSize.cy;
+            }
+        }
+    }
+}
+
 // 0x6D49C0
 void CGameAnimationTypeCharacterOld::CalculateGCBoundsRect(CRect& rGCBounds, const CPoint& pos, const CPoint& ptReference, LONG posZ, LONG nWidth, LONG nHeight)
 {
