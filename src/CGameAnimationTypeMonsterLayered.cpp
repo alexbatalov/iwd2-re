@@ -271,6 +271,104 @@ void CGameAnimationTypeMonsterLayered::ChangeDirection(SHORT nDirection)
     }
 }
 
+// 0x6BDCB0
+void CGameAnimationTypeMonsterLayered::EquipWeapon(const CString& resRef, BYTE* colorRangeValues, DWORD itemFlags, const WORD* pAttackProb)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 13086
+    UTIL_ASSERT(pAttackProb != NULL);
+
+    m_weaponLeftHand = FALSE;
+
+    ClearColorEffects(21);
+    ClearColorEffects(20);
+    ClearColorEffects(16);
+
+    if (resRef != "") {
+        BYTE cnt = 0;
+        while (cnt < 2) {
+            if (m_weaponResRef[cnt] == resRef) {
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+                // __LINE__: 13113
+                UTIL_ASSERT(colorRangeValues != NULL);
+
+                if (m_currentVidCellBase == &m_g1VidCellBase) {
+                    m_currentVidCellWeaponBase = &m_g1VidCellWeaponBase;
+                    m_currentVidCellWeaponExtend = &m_g1VidCellWeaponExtend;
+                } else {
+                    m_currentVidCellWeaponBase = &m_g2VidCellWeaponBase;
+                    m_currentVidCellWeaponExtend = &m_g2VidCellWeaponExtend;
+                }
+
+                m_nMeleeWeaponReady = cnt;
+
+                if ((itemFlags & 0x80) != 0) {
+                    m_weaponLeftHand = TRUE;
+                }
+
+                m_g1VidCellWeaponBase.SetResRef(CResRef(m_resRef + resRef + "G1"), FALSE, TRUE, TRUE);
+                m_g2VidCellWeaponBase.SetResRef(CResRef(m_resRef + resRef + "G2"), FALSE, TRUE, TRUE);
+
+                if (!MIRROR_BAM) {
+                    m_g1VidCellWeaponExtend.SetResRef(CResRef(m_resRef + resRef + "G1E"), FALSE, TRUE, TRUE);
+                    m_g2VidCellWeaponExtend.SetResRef(CResRef(m_resRef + resRef + "G2E"), FALSE, TRUE, TRUE);
+                }
+
+                break;
+            }
+            cnt++;
+        }
+
+        if (cnt != 2) {
+            for (BYTE colorRange = 0; colorRange < 7; colorRange++) {
+                m_weaponPalette.SetRange(colorRange,
+                    colorRangeValues[colorRange],
+                    *g_pBaldurChitin->GetObjectGame()->GetMasterBitmap());
+            }
+
+            if (!MIRROR_BAM && m_currentBamDirection > m_extendDirectionTest) {
+                m_currentVidCellWeapon = m_currentVidCellWeaponExtend;
+            } else {
+                m_currentVidCellWeapon = m_currentVidCellWeaponBase;
+            }
+
+            SHORT nSequence;
+            if (MIRROR_BAM && m_currentBamDirection > m_extendDirectionTest) {
+                nSequence = 8 * m_currentBamSequence + ((17 - m_currentBamDirection) % 16) / 2;
+            } else {
+                nSequence = 8 * m_currentBamSequence + m_currentBamDirection / 2;
+            }
+
+            m_currentVidCellWeapon->SequenceSet(nSequence);
+            m_currentVidCellWeapon->FrameSet(m_currentVidCell->GetCurrentFrameId());
+        } else {
+            m_nMeleeWeaponReady = 0;
+
+            m_currentVidCellWeaponBase = NULL;
+            m_g1VidCellWeaponBase.CancelRequest();
+            m_g2VidCellWeaponBase.CancelRequest();
+
+            m_currentVidCellWeaponExtend = NULL;
+            m_g1VidCellWeaponExtend.CancelRequest();
+            m_g2VidCellWeaponExtend.CancelRequest();
+
+            m_currentVidCellWeapon = NULL;
+        }
+    } else {
+        m_nMeleeWeaponReady = 0;
+
+        m_currentVidCellWeaponBase = NULL;
+        m_g1VidCellWeaponBase.CancelRequest();
+        m_g2VidCellWeaponBase.CancelRequest();
+
+        m_currentVidCellWeaponExtend = NULL;
+        m_g1VidCellWeaponExtend.CancelRequest();
+        m_g2VidCellWeaponExtend.CancelRequest();
+
+        m_currentVidCellWeapon = NULL;
+    }
+}
+
 // 0x6BE260
 CVidPalette* CGameAnimationTypeMonsterLayered::GetAnimationPalette(BYTE range)
 {
