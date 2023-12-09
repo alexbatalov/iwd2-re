@@ -27,6 +27,7 @@ public:
     void SetItem(SHORT nSlotNum, CItem* pItem);
     void sub_480480(SHORT nSlotNum, CItem* pItem);
     BOOLEAN PlaceItemInBlankSlot(CItem* pItem, BOOLEAN bCompressContainer, SHORT nRecommendedSlotNum);
+    void Marshal(CAreaFileContainer** pContainerObject);
     void RefreshRenderPile();
     void OpenContainer(const CAIObjectType& user);
     void SetFlags(DWORD dwFlags);

@@ -739,6 +739,106 @@ BOOLEAN CGameContainer::PlaceItemInBlankSlot(CItem* pItem, BOOLEAN bCompressCont
     return TRUE;
 }
 
+// 0x4808A0
+void CGameContainer::Marshal(CAreaFileContainer** pContainerObject)
+{
+    CAreaPoint* pPoints;
+    DWORD cnt;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameContainer.cpp
+    // __LINE__: 2028
+    UTIL_ASSERT(pContainerObject != NULL);
+
+    *pContainerObject = new CAreaFileContainer();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameContainer.cpp
+    // __LINE__: 2037
+    UTIL_ASSERT(*pContainerObject != NULL);
+
+    // FIXME: Redundant, memset is a part of constructor.
+    memset(*pContainerObject, 0, sizeof(CAreaFileContainer));
+
+    if (m_nPolygon > 0) {
+        pPoints = new CAreaPoint[m_nPolygon];
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameContainer.cpp
+        // __LINE__: 2042
+        UTIL_ASSERT(pPoints != NULL);
+
+        for (cnt = 0; cnt < m_nPolygon; cnt++) {
+            pPoints[cnt].m_xPos = static_cast<WORD>(m_pPolygon[cnt].x);
+            pPoints[cnt].m_yPos = static_cast<WORD>(m_pPolygon[cnt].y);
+        }
+
+        // FIXME: Unsafe x64 conversion.
+        (*pContainerObject)->m_pickPointStart = reinterpret_cast<DWORD>(pPoints);
+        (*pContainerObject)->m_pickPointCount = m_nPolygon;
+    }
+
+    if (m_lstItems.GetCount() > 0) {
+        CCreatureFileItem* pItems;
+        POSITION pos;
+
+        cnt = 0;
+        pos = m_lstItems.GetHeadPosition();
+        while (pos != NULL) {
+            if (m_lstItems.GetNext(pos) != NULL) {
+                cnt++;
+            }
+        }
+
+        if (cnt > 0) {
+            pItems = new CCreatureFileItem[cnt];
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameContainer.cpp
+            // __LINE__: 2064
+            UTIL_ASSERT(pItems != NULL)
+
+            // FIXME: Unsafe x64 conversion.
+            (*pContainerObject)->m_startingItem = reinterpret_cast<DWORD>(pItems);
+            (*pContainerObject)->m_itemCount = cnt;
+
+            cnt = 0;
+            pos = m_lstItems.GetHeadPosition();
+            while (pos != NULL) {
+                CItem* pItem = m_lstItems.GetNext(pos);
+                if (pItem != NULL) {
+                    pItem->GetResRef().GetResRef(pItems[cnt].m_itemId);
+                    for (INT ability = 0; ability < 3; ability++) {
+                        pItems[cnt].m_usageCount[ability] = pItem->GetUsageCount(ability);
+                    }
+                    pItems[cnt].m_wear = pItem->m_wear;
+                    pItems[cnt].m_dynamicFlags = pItem->m_flags;
+                    cnt++;
+                }
+            }
+        }
+    }
+
+    (*pContainerObject)->m_boundingRectLeft = static_cast<WORD>(m_rBounding.left);
+    (*pContainerObject)->m_boundingRectTop = static_cast<WORD>(m_rBounding.top);
+    (*pContainerObject)->m_boundingRectRight = static_cast<WORD>(m_rBounding.right) - 1;
+    (*pContainerObject)->m_boundingRectBottom = static_cast<WORD>(m_rBounding.bottom) - 1;
+    (*pContainerObject)->m_containerType = m_containerType;
+    (*pContainerObject)->m_posX = static_cast<WORD>(m_ptWalkToUse.x);
+    (*pContainerObject)->m_posY = static_cast<WORD>(m_ptWalkToUse.y);
+    memcpy((*pContainerObject)->m_script, m_scriptRes, RESREF_SIZE);
+    strncpy((*pContainerObject)->m_scriptName, m_scriptName, SCRIPTNAME_SIZE);
+    (*pContainerObject)->m_lockDifficulty = m_lockDifficulty;
+    (*pContainerObject)->m_dwFlags = m_dwFlags;
+    (*pContainerObject)->m_trapDetectionDifficulty = m_trapDetectionDifficulty;
+    (*pContainerObject)->m_trapRemovalDifficulty = m_trapRemovalDifficulty;
+    (*pContainerObject)->m_trapActivated = m_trapActivated;
+    (*pContainerObject)->m_trapDetected = m_trapDetected;
+    (*pContainerObject)->m_posXTrapOrigin = static_cast<WORD>(m_posTrapOrigin.x);
+    (*pContainerObject)->m_posYTrapOrigin = static_cast<WORD>(m_posTrapOrigin.y);
+    (*pContainerObject)->m_triggerRange = m_triggerRange;
+    (*pContainerObject)->m_triggerRange = m_triggerRange;
+    (*pContainerObject)->m_breakDifficulty = m_breakDifficulty;
+    strncpy((*pContainerObject)->m_ownedBy, m_ownedBy, SCRIPTNAME_SIZE);
+    m_keyType.GetResRef((*pContainerObject)->m_keyType);
+}
+
 // 0x481160
 void CGameContainer::RefreshRenderPile()
 {
