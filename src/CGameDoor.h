@@ -19,6 +19,7 @@ public:
     /* 0058 */ void SetCursor(LONG nToolTip) override;
 
     void OnDoorStatusUpdate(BOOLEAN bDoorOpened, DWORD dwFlags, WORD nTrapActivated, WORD nTrapDetected);
+    void Marshal(CAreaFileDoorObject** pDoorObject);
     void SetDrawPoly(SHORT time);
     DWORD GetFlags();
     void SetFlags(DWORD dwFlags);

@@ -624,6 +624,126 @@ void CGameDoor::OnDoorStatusUpdate(BOOLEAN bDoorOpened, DWORD dwFlags, WORD nTra
     m_trapActivated = nTrapActivated;
 }
 
+// 0x48ADC0
+void CGameDoor::Marshal(CAreaFileDoorObject** pDoorObject)
+{
+    CAreaPoint* pPoints;
+    DWORD cnt;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameDoor.cpp
+    // __LINE__: 1904
+    UTIL_ASSERT(pDoorObject != NULL);
+
+    *pDoorObject = new CAreaFileDoorObject();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameDoor.cpp
+    // __LINE__: 1910
+    UTIL_ASSERT(*pDoorObject != NULL);
+
+    // FIXME: Redundant, memset is a part of constructor.
+    memset(*pDoorObject, 0, sizeof(CAreaFileDoorObject));
+
+    if (m_nClosedSearch > 0) {
+        pPoints = new CAreaPoint[m_nClosedSearch];
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameDoor.cpp
+        // __LINE__: 1915
+        UTIL_ASSERT(pPoints != NULL);
+
+        for (cnt = 0; cnt < m_nClosedSearch; cnt++) {
+            pPoints[cnt].m_xPos = static_cast<WORD>(m_pClosedSearch[cnt].x);
+            pPoints[cnt].m_yPos = static_cast<WORD>(m_pClosedSearch[cnt].y);
+        }
+
+        // FIXME: Unsafe x64 conversion.
+        (*pDoorObject)->m_closedSearchSquaresStart = reinterpret_cast<DWORD>(pPoints);
+        (*pDoorObject)->m_closedSearchSquaresCount = m_nClosedSearch;
+    }
+
+    if (m_nOpenSearch > 0) {
+        pPoints = new CAreaPoint[m_nOpenSearch];
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameDoor.cpp
+        // __LINE__: 1927
+        UTIL_ASSERT(pPoints != NULL);
+
+        for (cnt = 0; cnt < m_nOpenSearch; cnt++) {
+            pPoints[cnt].m_xPos = static_cast<WORD>(m_pOpenSearch[cnt].x);
+            pPoints[cnt].m_yPos = static_cast<WORD>(m_pOpenSearch[cnt].y);
+        }
+
+        // FIXME: Unsafe x64 conversion.
+        (*pDoorObject)->m_openSearchSquaresStart = reinterpret_cast<DWORD>(pPoints);
+        (*pDoorObject)->m_openSearchSquaresCount = m_nOpenSearch;
+    }
+
+    if (m_nClosedPolygon > 0) {
+        pPoints = new CAreaPoint[m_nClosedPolygon];
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameDoor.cpp
+        // __LINE__: 1939
+        UTIL_ASSERT(pPoints != NULL);
+
+        for (cnt = 0; cnt < m_nClosedPolygon; cnt++) {
+            pPoints[cnt].m_xPos = static_cast<WORD>(m_pClosedPolygon[cnt].x);
+            pPoints[cnt].m_yPos = static_cast<WORD>(m_pClosedPolygon[cnt].y);
+        }
+
+        // FIXME: Unsafe x64 conversion.
+        (*pDoorObject)->m_closedSelectionPointStart = reinterpret_cast<DWORD>(pPoints);
+        (*pDoorObject)->m_closedSelectionPointCount = m_nClosedPolygon;
+    }
+
+    if (m_nOpenPolygon > 0) {
+        pPoints = new CAreaPoint[m_nOpenPolygon];
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameDoor.cpp
+        // __LINE__: 1951
+        UTIL_ASSERT(pPoints != NULL);
+
+        for (cnt = 0; cnt < m_nOpenPolygon; cnt++) {
+            pPoints[cnt].m_xPos = static_cast<WORD>(m_pOpenPolygon[cnt].x);
+            pPoints[cnt].m_yPos = static_cast<WORD>(m_pOpenPolygon[cnt].y);
+        }
+
+        // FIXME: Unsafe x64 conversion.
+        (*pDoorObject)->m_openSelectionPointStart = reinterpret_cast<DWORD>(pPoints);
+        (*pDoorObject)->m_openSelectionPointCount = m_nOpenPolygon;
+    }
+
+    m_resID.GetResRef((*pDoorObject)->m_doorID);
+    (*pDoorObject)->m_closedBoundingRectLeft = static_cast<WORD>(m_rClosedBounding.left);
+    (*pDoorObject)->m_closedBoundingRectTop = static_cast<WORD>(m_rClosedBounding.top);
+    (*pDoorObject)->m_closedBoundingRectRight = static_cast<WORD>(m_rClosedBounding.right) - 1;
+    (*pDoorObject)->m_closedBoundingRectBottom = static_cast<WORD>(m_rClosedBounding.bottom) - 1;
+    (*pDoorObject)->m_openBoundingRectLeft = static_cast<WORD>(m_rOpenBounding.left);
+    (*pDoorObject)->m_openBoundingRectTop = static_cast<WORD>(m_rOpenBounding.top);
+    (*pDoorObject)->m_openBoundingRectRight = static_cast<WORD>(m_rOpenBounding.right) - 1;
+    (*pDoorObject)->m_openBoundingRectBottom = static_cast<WORD>(m_rOpenBounding.bottom) - 1;
+    (*pDoorObject)->m_cursorType = m_cursorType;
+    (*pDoorObject)->m_dwFlags = m_dwFlags;
+    (*pDoorObject)->m_posXWalkTo1 = static_cast<WORD>(m_ptDest1.x);
+    (*pDoorObject)->m_posYWalkTo1 = static_cast<WORD>(m_ptDest1.y);
+    (*pDoorObject)->m_posXWalkTo2 = static_cast<WORD>(m_ptDest2.x);
+    (*pDoorObject)->m_posYWalkTo2 = static_cast<WORD>(m_ptDest2.y);
+    memcpy((*pDoorObject)->m_script, m_scriptRes, RESREF_SIZE);
+    strncpy((*pDoorObject)->m_scriptName, m_scriptName, SCRIPTNAME_SIZE);
+    (*pDoorObject)->m_hitPoints = m_hitPoints;
+    (*pDoorObject)->m_armourClass = m_armourClass;
+    m_openSound.GetResRef((*pDoorObject)->m_openSound);
+    m_closeSound.GetResRef((*pDoorObject)->m_closeSound);
+    (*pDoorObject)->m_trapDetectionDifficulty = m_trapDetectionDifficulty;
+    (*pDoorObject)->m_trapDisarmingDifficulty = m_trapDisarmingDifficulty;
+    (*pDoorObject)->m_trapActivated = m_trapActivated;
+    (*pDoorObject)->m_trapDetected = m_trapDetected;
+    (*pDoorObject)->m_posXTrapOrigin = m_posXTrapOrigin;
+    (*pDoorObject)->m_posYTrapOrigin = m_posYTrapOrigin;
+    m_keyType.GetResRef((*pDoorObject)->m_keyType);
+    (*pDoorObject)->m_detectionDifficulty = m_detectionDifficulty;
+    (*pDoorObject)->m_lockDifficulty = m_lockDifficulty;
+    (*pDoorObject)->m_strNotPickable = m_strNotPickable;
+}
+
 // 0x48B350
 void CGameDoor::SetDrawPoly(SHORT time)
 {
