@@ -12,6 +12,7 @@
 #include "CInfGame.h"
 #include "CItem.h"
 #include "CPathSearch.h"
+#include "CProjectile.h"
 #include "CScreenCharacter.h"
 #include "CScreenCreateChar.h"
 #include "CScreenInventory.h"
@@ -782,9 +783,9 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     m_groupPosition = 0;
     m_groupMove = 0;
     field_562C = 0;
-    field_5592 = 0;
-    field_5596 = 0;
-    field_559A = 0;
+    m_curProjectile = 0;
+    m_curSpell = 0;
+    m_curItem = 0;
     m_nNumberOfTimesTalkedTo = 0;
     field_4FF8 = 0;
     field_710A = 0;
@@ -1158,6 +1159,84 @@ BOOL CGameSprite::GetCanSeeInvisible()
         || m_curAction.m_actionID == CAIAction::STARTDIALOGUENOSET
         || m_derivedStats.m_bSeeInvisible
         || (m_baseStats.m_flags & 0x10000) != 0;
+}
+
+// 0x6F2D80
+CGameSprite::~CGameSprite()
+{
+    POSITION pos;
+
+    pos = m_lstBlood.GetHeadPosition();
+    while (pos != NULL) {
+        CBlood* blood = m_lstBlood.GetNext(pos);
+        if (blood != NULL) {
+            delete blood;
+        }
+    }
+    m_lstBlood.RemoveAll();
+
+    pos = m_equipedEffectList.GetHeadPosition();
+    while (pos != NULL) {
+        CGameEffect* effect = m_equipedEffectList.GetNext(pos);
+        if (effect != NULL) {
+            delete effect;
+        }
+    }
+    m_equipedEffectList.RemoveAll();
+
+    pos = m_timedEffectList.GetHeadPosition();
+    while (pos != NULL) {
+        CGameEffect* effect = m_timedEffectList.GetNext(pos);
+        if (effect != NULL) {
+            delete effect;
+        }
+    }
+    m_timedEffectList.RemoveAll();
+
+    pos = m_persistantEffects.GetHeadPosition();
+    while (pos != NULL) {
+        CPersistantEffect* effect = m_persistantEffects.GetNext(pos);
+        if (effect != NULL) {
+            delete effect;
+        }
+    }
+    m_persistantEffects.RemoveAll();
+
+    ClearStoredPaths();
+
+    // NOTE: Uninline.
+    DropPath();
+
+    if (m_currentSearchRequest != NULL) {
+        delete m_currentSearchRequest;
+    }
+
+    if (m_curProjectile != NULL) {
+        delete m_curProjectile;
+    }
+    m_curProjectile = NULL;
+
+    if (m_pSpriteEffectArray != NULL) {
+        delete m_pSpriteEffectArray;
+        delete m_pSpriteEffectArrayPosition;
+    }
+
+    if (m_curSpell != NULL) {
+        delete m_curSpell;
+        m_curSpell = NULL;
+    }
+
+    if (m_curItem != NULL) {
+        m_curItem = NULL;
+    }
+
+    if (m_pLocalVariables != NULL) {
+        delete m_pLocalVariables;
+    }
+
+    m_portraitIconVidCell.CancelRequest();
+
+    ClearMarshal(FALSE);
 }
 
 // 0x6F3A30

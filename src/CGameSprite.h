@@ -154,6 +154,7 @@ class CBlood;
 class CGameButtonList;
 class CMemINIValue;
 class CPersistantEffect;
+class CProjectile;
 class CSearchBitmap;
 class CSearchRequest;
 class CSpell;
@@ -386,6 +387,7 @@ public:
     static INT m_bRollFeedbackEnabled;
 
     CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, DWORD expirationTime, WORD huntingRange, WORD followRange, DWORD timeOfDayVisible, CPoint startPos, WORD facing);
+    /* 0000 */ ~CGameSprite() override;
     /* 0014 */ LONG GetTargetId() override;
     /* 0018 */ void GetNextWaypoint(CPoint* pt) override;
     /* 0034 */ BOOL IsOver(const CPoint& pt) override;
@@ -817,9 +819,9 @@ public:
     /* 5586 */ POSITION m_groupPosition;
     /* 558A */ BOOL m_groupMove;
     /* 558E */ int field_558E;
-    /* 5592 */ int field_5592;
-    /* 5596 */ int field_5596;
-    /* 559A */ int field_559A;
+    /* 5592 */ CProjectile* m_curProjectile;
+    /* 5596 */ CSpell* m_curSpell;
+    /* 559A */ CItem* m_curItem;
     /* 559E */ short field_559E;
     /* 55A0 */ short field_55A0;
     /* 55A2 */ int field_55A2[20];
