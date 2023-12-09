@@ -5,6 +5,8 @@
 #include "CInfGame.h"
 #include "CUtil.h"
 
+#define ITEM_FLAGS_TWOHANDED 0x2
+
 // 0x6D0520
 CGameAnimationTypeCharacterOld::CGameAnimationTypeCharacterOld(USHORT animationID, BYTE* colorRangeValues, WORD facing)
     : m_charPalette(CVidPalette::TYPE_RANGE)
@@ -998,6 +1000,474 @@ void CGameAnimationTypeCharacterOld::EquipShield(const CString& resRef, BYTE* co
         }
 
         m_currentVidCellShield = NULL;
+    }
+}
+
+// 0x6D8780
+void CGameAnimationTypeCharacterOld::EquipWeapon(const CString& resRef, BYTE* colorRangeValues, DWORD itemFlags, const WORD* pAttackProb)
+{
+    BOOLEAN bAttackProb[3];
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 22118
+    UTIL_ASSERT(pAttackProb != NULL);
+
+    bAttackProb[0] = FALSE;
+    bAttackProb[1] = FALSE;
+    bAttackProb[2] = FALSE;
+
+    if (pAttackProb[0] != 0) {
+        bAttackProb[0] = TRUE;
+        if ((itemFlags & ITEM_FLAGS_TWOHANDED) == 0) {
+            m_weaponCode |= 0x4;
+
+            m_a1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A1"), FALSE, TRUE, TRUE);
+            m_a1VidCellShadowBase.SetResRef(CResRef(m_shadowResRef + "A1"), FALSE, TRUE, TRUE);
+
+            if (resRef != "") {
+                m_a1VidCellWeaponBase.SetResRef(CResRef(m_heightCode + resRef + "A1"), FALSE, TRUE, TRUE);
+            } else {
+                m_a1VidCellWeaponBase.CancelRequest();
+            }
+
+            if (!MIRROR_BAM) {
+                m_a1VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A1E"), FALSE, TRUE, TRUE);
+                m_a1VidCellShadowExtend.SetResRef(CResRef(m_shadowResRef + "A1E"), FALSE, TRUE, TRUE);
+
+                if (resRef != "") {
+                    m_a1VidCellWeaponExtend.SetResRef(CResRef(m_heightCode + resRef + "A1E"), FALSE, TRUE, TRUE);
+                } else {
+                    m_a1VidCellWeaponExtend.CancelRequest();
+                }
+            } else {
+                m_a1VidCellShadowExtend.SetResRef(CResRef(m_shadowResRef + "A1X"), FALSE, TRUE, TRUE);
+            }
+
+            if (m_currentVidCellShieldBase != NULL) {
+                m_a1VidCellShieldBase.SetResRef(CResRef(m_heightCode + m_shieldResRef + "A1"), FALSE, TRUE, TRUE);
+                if (!MIRROR_BAM) {
+                    m_a1VidCellShieldExtend.SetResRef(CResRef(m_heightCode + m_shieldResRef + "A1E"), FALSE, TRUE, TRUE);
+                }
+            }
+
+            if (m_currentVidCellHelmetBase != NULL) {
+                m_a1VidCellHelmetBase.SetResRef(CResRef(m_heightCodeHelmet + m_helmetResRef + "A1"), FALSE, TRUE, TRUE);
+                if (!MIRROR_BAM) {
+                    m_a1VidCellHelmetExtend.SetResRef(CResRef(m_heightCodeHelmet + m_helmetResRef + "A1E"), FALSE, TRUE, TRUE);
+                }
+            }
+        } else {
+            m_weaponCode |= 0x20;
+
+            m_a1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A2"), FALSE, TRUE, TRUE);
+            m_a1VidCellShadowBase.SetResRef(CResRef(m_shadowResRef + "A2"), FALSE, TRUE, TRUE);
+
+            if (resRef != "") {
+                m_a1VidCellWeaponBase.SetResRef(CResRef(m_heightCode + resRef + "A2"), FALSE, TRUE, TRUE);
+            } else {
+                m_a1VidCellWeaponBase.CancelRequest();
+            }
+
+            if (!MIRROR_BAM) {
+                m_a1VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A2E"), FALSE, TRUE, TRUE);
+                m_a1VidCellShadowExtend.SetResRef(CResRef(m_shadowResRef + "A2E"), FALSE, TRUE, TRUE);
+
+                if (resRef != "") {
+                    m_a1VidCellWeaponExtend.SetResRef(CResRef(m_heightCode + resRef + "A2E"), FALSE, TRUE, TRUE);
+                } else {
+                    m_a1VidCellWeaponExtend.CancelRequest();
+                }
+            } else {
+                m_a1VidCellShadowExtend.SetResRef(CResRef(m_shadowResRef + "A2X"), FALSE, TRUE, TRUE);
+            }
+
+            if (m_currentVidCellHelmetBase != NULL) {
+                m_a1VidCellHelmetBase.SetResRef(CResRef(m_heightCodeHelmet + m_helmetResRef + "A2"), FALSE, TRUE, TRUE);
+                if (!MIRROR_BAM) {
+                    m_a1VidCellHelmetExtend.SetResRef(CResRef(m_heightCodeHelmet + m_helmetResRef + "A2E"), FALSE, TRUE, TRUE);
+                }
+            }
+        }
+    }
+
+    if (pAttackProb[1] != 0) {
+        bAttackProb[0] = TRUE;
+        if ((itemFlags & ITEM_FLAGS_TWOHANDED) == 0) {
+            m_weaponCode |= 0x8;
+
+            m_a2VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A3"), FALSE, TRUE, TRUE);
+            m_a2VidCellShadowBase.SetResRef(CResRef(m_shadowResRef + "A3"), FALSE, TRUE, TRUE);
+
+            if (resRef != "") {
+                m_a2VidCellWeaponBase.SetResRef(CResRef(m_heightCode + resRef + "A3"), FALSE, TRUE, TRUE);
+            } else {
+                m_a2VidCellWeaponBase.CancelRequest();
+            }
+
+            if (!MIRROR_BAM) {
+                m_a2VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A3E"), FALSE, TRUE, TRUE);
+                m_a2VidCellShadowExtend.SetResRef(CResRef(m_shadowResRef + "A3E"), FALSE, TRUE, TRUE);
+
+                if (resRef != "") {
+                    m_a2VidCellWeaponExtend.SetResRef(CResRef(m_heightCode + resRef + "A3E"), FALSE, TRUE, TRUE);
+                } else {
+                    m_a2VidCellWeaponExtend.CancelRequest();
+                }
+            } else {
+                m_a2VidCellShadowExtend.SetResRef(CResRef(m_shadowResRef + "A3X"), FALSE, TRUE, TRUE);
+            }
+
+            if (m_currentVidCellShieldBase != NULL) {
+                m_a2VidCellShieldBase.SetResRef(CResRef(m_heightCode + m_shieldResRef + "A3"), FALSE, TRUE, TRUE);
+                if (!MIRROR_BAM) {
+                    m_a2VidCellShieldExtend.SetResRef(CResRef(m_heightCode + m_shieldResRef + "A3E"), FALSE, TRUE, TRUE);
+                }
+            }
+
+            if (m_currentVidCellHelmetBase != NULL) {
+                m_a2VidCellHelmetBase.SetResRef(CResRef(m_heightCodeHelmet + m_helmetResRef + "A3"), FALSE, TRUE, TRUE);
+                if (!MIRROR_BAM) {
+                    m_a2VidCellHelmetExtend.SetResRef(CResRef(m_heightCodeHelmet + m_helmetResRef + "A3E"), FALSE, TRUE, TRUE);
+                }
+            }
+        } else {
+            m_weaponCode |= 0x40;
+
+            m_a2VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A4"), FALSE, TRUE, TRUE);
+            m_a2VidCellShadowBase.SetResRef(CResRef(m_shadowResRef + "A4"), FALSE, TRUE, TRUE);
+
+            if (resRef != "") {
+                m_a2VidCellWeaponBase.SetResRef(CResRef(m_heightCode + resRef + "A4"), FALSE, TRUE, TRUE);
+            } else {
+                m_a2VidCellWeaponBase.CancelRequest();
+            }
+
+            if (!MIRROR_BAM) {
+                m_a2VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A4E"), FALSE, TRUE, TRUE);
+                m_a2VidCellShadowExtend.SetResRef(CResRef(m_shadowResRef + "A4E"), FALSE, TRUE, TRUE);
+
+                if (resRef != "") {
+                    m_a2VidCellWeaponExtend.SetResRef(CResRef(m_heightCode + resRef + "A4E"), FALSE, TRUE, TRUE);
+                } else {
+                    m_a2VidCellWeaponExtend.CancelRequest();
+                }
+            } else {
+                m_a2VidCellShadowExtend.SetResRef(CResRef(m_shadowResRef + "A4X"), FALSE, TRUE, TRUE);
+            }
+
+            if (m_currentVidCellHelmetBase != NULL) {
+                m_a2VidCellHelmetBase.SetResRef(CResRef(m_heightCodeHelmet + m_helmetResRef + "A4"), FALSE, TRUE, TRUE);
+                if (!MIRROR_BAM) {
+                    m_a2VidCellHelmetExtend.SetResRef(CResRef(m_heightCodeHelmet + m_helmetResRef + "A4E"), FALSE, TRUE, TRUE);
+                }
+            }
+        }
+    }
+
+    if (pAttackProb[2] != 0) {
+        bAttackProb[0] = TRUE;
+        if ((itemFlags & ITEM_FLAGS_TWOHANDED) == 0) {
+            m_weaponCode |= 0x10;
+
+            m_a3VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A5"), FALSE, TRUE, TRUE);
+            m_a3VidCellShadowBase.SetResRef(CResRef(m_shadowResRef + "A5"), FALSE, TRUE, TRUE);
+
+            if (resRef != "") {
+                m_a3VidCellWeaponBase.SetResRef(CResRef(m_heightCode + resRef + "A5"), FALSE, TRUE, TRUE);
+            } else {
+                m_a3VidCellWeaponBase.CancelRequest();
+            }
+
+            if (!MIRROR_BAM) {
+                m_a3VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A5E"), FALSE, TRUE, TRUE);
+                m_a3VidCellShadowExtend.SetResRef(CResRef(m_shadowResRef + "A5E"), FALSE, TRUE, TRUE);
+
+                if (resRef != "") {
+                    m_a3VidCellWeaponExtend.SetResRef(CResRef(m_heightCode + resRef + "A5E"), FALSE, TRUE, TRUE);
+                } else {
+                    m_a3VidCellWeaponExtend.CancelRequest();
+                }
+            } else {
+                m_a3VidCellShadowExtend.SetResRef(CResRef(m_shadowResRef + "A5X"), FALSE, TRUE, TRUE);
+            }
+
+            if (m_currentVidCellHelmetBase != NULL) {
+                m_a3VidCellHelmetBase.SetResRef(CResRef(m_heightCode + m_shieldResRef + "A5"), FALSE, TRUE, TRUE);
+                if (!MIRROR_BAM) {
+                    m_a3VidCellHelmetExtend.SetResRef(CResRef(m_heightCode + m_shieldResRef + "A5E"), FALSE, TRUE, TRUE);
+                }
+            }
+
+            if (m_currentVidCellHelmetBase != NULL) {
+                m_a3VidCellHelmetBase.SetResRef(CResRef(m_heightCodeHelmet + m_helmetResRef + "A5"), FALSE, TRUE, TRUE);
+                if (!MIRROR_BAM) {
+                    m_a3VidCellHelmetExtend.SetResRef(CResRef(m_heightCodeHelmet + m_helmetResRef + "A5E"), FALSE, TRUE, TRUE);
+                }
+            }
+        } else {
+            m_weaponCode |= 0x80;
+
+            m_a3VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A6"), FALSE, TRUE, TRUE);
+            m_a3VidCellShadowBase.SetResRef(CResRef(m_shadowResRef + "A6"), FALSE, TRUE, TRUE);
+
+            if (resRef != "") {
+                m_a3VidCellWeaponBase.SetResRef(CResRef(m_heightCode + resRef + "A6"), FALSE, TRUE, TRUE);
+            } else {
+                m_a3VidCellWeaponBase.CancelRequest();
+            }
+
+            if (!MIRROR_BAM) {
+                m_a3VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A6E"), FALSE, TRUE, TRUE);
+                m_a3VidCellShadowExtend.SetResRef(CResRef(m_shadowResRef + "A6E"), FALSE, TRUE, TRUE);
+
+                if (resRef != "") {
+                    m_a3VidCellWeaponExtend.SetResRef(CResRef(m_heightCode + resRef + "A6E"), FALSE, TRUE, TRUE);
+                } else {
+                    m_a3VidCellWeaponExtend.CancelRequest();
+                }
+            } else {
+                m_a3VidCellShadowExtend.SetResRef(CResRef(m_shadowResRef + "A6X"), FALSE, TRUE, TRUE);
+            }
+
+            if (m_currentVidCellHelmetBase != NULL) {
+                m_a3VidCellHelmetBase.SetResRef(CResRef(m_heightCodeHelmet + m_helmetResRef + "A6"), FALSE, TRUE, TRUE);
+                if (!MIRROR_BAM) {
+                    m_a3VidCellHelmetExtend.SetResRef(CResRef(m_heightCodeHelmet + m_helmetResRef + "A6E"), FALSE, TRUE, TRUE);
+                }
+            }
+        }
+    }
+
+    if (pAttackProb[3] != 0) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+        // __LINE__: 22395
+        UTIL_ASSERT(bAttackProb[0] == FALSE && bAttackProb[1] == FALSE && bAttackProb[2] == FALSE);
+
+        bAttackProb[0] = TRUE;
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+        // __LINE__: 22397
+        UTIL_ASSERT(itemFlags & ITEM_FLAGS_TWOHANDED && resRef != "");
+
+        m_weaponCode = 1;
+
+        m_a1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "SA"), FALSE, TRUE, TRUE);
+        m_a1VidCellShadowBase.SetResRef(CResRef(m_shadowResRef + "SA"), FALSE, TRUE, TRUE);
+        m_a1VidCellWeaponBase.SetResRef(CResRef(m_heightCode + resRef + "SA"), FALSE, TRUE, TRUE);
+
+        if (!MIRROR_BAM) {
+            m_a1VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "SAE"), FALSE, TRUE, TRUE);
+            m_a1VidCellShadowExtend.SetResRef(CResRef(m_shadowResRef + "SAE"), FALSE, TRUE, TRUE);
+            m_a1VidCellWeaponExtend.SetResRef(CResRef(m_heightCode + resRef + "SAE"), FALSE, TRUE, TRUE);
+        } else {
+            m_a1VidCellShadowExtend.SetResRef(CResRef(m_shadowResRef + "SAX"), FALSE, TRUE, TRUE);
+        }
+
+        if (m_currentVidCellHelmetBase != NULL) {
+            m_a1VidCellHelmetBase.SetResRef(CResRef(m_heightCodeHelmet + m_helmetResRef + "SX"), FALSE, TRUE, TRUE);
+            if (!MIRROR_BAM) {
+                m_a1VidCellHelmetExtend.SetResRef(CResRef(m_heightCodeHelmet + m_helmetResRef + "SXE"), FALSE, TRUE, TRUE);
+            }
+        }
+    }
+
+    if (pAttackProb[4] != 0) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+        // __LINE__: 22423
+        UTIL_ASSERT(bAttackProb[0] == FALSE && bAttackProb[1] == FALSE && bAttackProb[2] == FALSE);
+
+        bAttackProb[0] = TRUE;
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+        // __LINE__: 22425
+        UTIL_ASSERT(itemFlags & ITEM_FLAGS_TWOHANDED && resRef != "");
+
+        m_weaponCode = 2;
+
+        m_a1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "SX"), FALSE, TRUE, TRUE);
+        m_a1VidCellShadowBase.SetResRef(CResRef(m_shadowResRef + "SX"), FALSE, TRUE, TRUE);
+        m_a1VidCellWeaponBase.SetResRef(CResRef(m_heightCode + resRef + "SX"), FALSE, TRUE, TRUE);
+
+        if (!MIRROR_BAM) {
+            m_a1VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "SXE"), FALSE, TRUE, TRUE);
+            m_a1VidCellShadowExtend.SetResRef(CResRef(m_shadowResRef + "SXE"), FALSE, TRUE, TRUE);
+            m_a1VidCellWeaponExtend.SetResRef(CResRef(m_heightCode + resRef + "SXE"), FALSE, TRUE, TRUE);
+        } else {
+            m_a1VidCellShadowExtend.SetResRef(CResRef(m_shadowResRef + "SXX"), FALSE, TRUE, TRUE);
+        }
+
+        if (m_currentVidCellHelmetBase != NULL) {
+            m_a1VidCellHelmetBase.SetResRef(CResRef(m_heightCodeHelmet + m_helmetResRef + "SX"), FALSE, TRUE, TRUE);
+            if (!MIRROR_BAM) {
+                m_a1VidCellHelmetExtend.SetResRef(CResRef(m_heightCodeHelmet + m_helmetResRef + "SXE"), FALSE, TRUE, TRUE);
+            }
+        }
+    }
+
+    if (pAttackProb[5] != 0) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+        // __LINE__: 22451
+        UTIL_ASSERT(bAttackProb[0] == FALSE && bAttackProb[1] == FALSE && bAttackProb[2] == FALSE);
+
+        bAttackProb[0] = TRUE;
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+        // __LINE__: 22453
+        UTIL_ASSERT(!(itemFlags & ITEM_FLAGS_TWOHANDED));
+
+        m_weaponCode = 3;
+
+        m_a1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A1"), FALSE, TRUE, TRUE);
+        m_a1VidCellShadowBase.SetResRef(CResRef(m_shadowResRef + "A1"), FALSE, TRUE, TRUE);
+
+        if (resRef != "") {
+            m_a1VidCellWeaponBase.SetResRef(CResRef(m_heightCode + resRef + "A1"), FALSE, TRUE, TRUE);
+        } else {
+            m_a1VidCellWeaponBase.CancelRequest();
+        }
+
+        if (!MIRROR_BAM) {
+            m_a1VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A1E"), FALSE, TRUE, TRUE);
+            m_a1VidCellShadowExtend.SetResRef(CResRef(m_shadowResRef + "A1E"), FALSE, TRUE, TRUE);
+
+            if (resRef != "") {
+                m_a1VidCellWeaponExtend.SetResRef(CResRef(m_heightCode + resRef + "A1E"), FALSE, TRUE, TRUE);
+            } else {
+                m_a1VidCellWeaponExtend.CancelRequest();
+            }
+        } else {
+            m_a1VidCellShadowExtend.SetResRef(CResRef(m_shadowResRef + "A1X"), FALSE, TRUE, TRUE);
+        }
+
+        if (m_currentVidCellShieldBase != NULL) {
+            m_a1VidCellShieldBase.SetResRef(CResRef(m_heightCode + m_shieldResRef + "A1"), FALSE, TRUE, TRUE);
+            if (!MIRROR_BAM) {
+                m_a1VidCellShieldExtend.SetResRef(CResRef(m_heightCode + m_shieldResRef + "A1E"), FALSE, TRUE, TRUE);
+            }
+        }
+
+        if (m_currentVidCellHelmetBase != NULL) {
+            m_a1VidCellHelmetBase.SetResRef(CResRef(m_heightCodeHelmet + m_helmetResRef + "A1"), FALSE, TRUE, TRUE);
+            if (!MIRROR_BAM) {
+                m_a1VidCellHelmetExtend.SetResRef(CResRef(m_heightCodeHelmet + m_helmetResRef + "A1E"), FALSE, TRUE, TRUE);
+            }
+        }
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 22492
+    UTIL_ASSERT(bAttackProb[0] == TRUE || bAttackProb[1] == TRUE || bAttackProb[2] == TRUE);
+
+    if (bAttackProb[0] != TRUE) {
+        m_a1VidCellBase.CancelRequest();
+        m_a1VidCellShadowBase.CancelRequest();
+        m_a1VidCellShieldBase.CancelRequest();
+        m_a1VidCellHelmetBase.CancelRequest();
+        m_a1VidCellExtend.CancelRequest();
+        m_a1VidCellShadowExtend.CancelRequest();
+        m_a1VidCellShieldExtend.CancelRequest();
+        m_a1VidCellHelmetExtend.CancelRequest();
+    }
+
+    if (bAttackProb[1] != TRUE) {
+        m_a2VidCellBase.CancelRequest();
+        m_a2VidCellShadowBase.CancelRequest();
+        m_a2VidCellShieldBase.CancelRequest();
+        m_a2VidCellHelmetBase.CancelRequest();
+        m_a2VidCellExtend.CancelRequest();
+        m_a2VidCellShadowExtend.CancelRequest();
+        m_a2VidCellShieldExtend.CancelRequest();
+        m_a2VidCellHelmetExtend.CancelRequest();
+    }
+
+    if (bAttackProb[2] != TRUE) {
+        m_a3VidCellBase.CancelRequest();
+        m_a3VidCellShadowBase.CancelRequest();
+        m_a3VidCellShieldBase.CancelRequest();
+        m_a3VidCellHelmetBase.CancelRequest();
+        m_a3VidCellExtend.CancelRequest();
+        m_a3VidCellShadowExtend.CancelRequest();
+        m_a3VidCellShieldExtend.CancelRequest();
+        m_a3VidCellHelmetExtend.CancelRequest();
+    }
+
+    ClearColorEffects(21);
+    ClearColorEffects(20);
+    ClearColorEffects(16);
+
+    m_weaponLeftHand = (itemFlags & 0x80) != 0;
+    m_weaponResRef = resRef;
+
+    if (resRef != "") {
+        if (m_currentVidCellBase == &m_w2VidCellBase) {
+            m_currentVidCellWeaponBase = &m_w2VidCellWeaponBase;
+            m_currentVidCellWeaponExtend = &m_w2VidCellWeaponExtend;
+        } else {
+            m_currentVidCellWeaponBase = &m_g1VidCellWeaponBase;
+            m_currentVidCellWeaponExtend = &m_g1VidCellWeaponExtend;
+        }
+
+        m_g1VidCellWeaponBase.SetResRef(CResRef(m_heightCode + m_weaponResRef + "G1"), FALSE, TRUE, TRUE);
+        m_w2VidCellWeaponBase.SetResRef(CResRef(m_heightCode + m_weaponResRef + "W2"), FALSE, TRUE, TRUE);
+
+        if (!MIRROR_BAM) {
+            m_g1VidCellWeaponExtend.SetResRef(CResRef(m_heightCode + m_weaponResRef + "G1E"), FALSE, TRUE, TRUE);
+            m_w2VidCellWeaponExtend.SetResRef(CResRef(m_heightCode + m_weaponResRef + "W2E"), FALSE, TRUE, TRUE);
+        }
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+        // __LINE__: 22573
+        UTIL_ASSERT(colorRangeValues != NULL);
+
+        for (BYTE colorRange = 0; colorRange < 7; colorRange++) {
+            m_weaponPalette.SetRange(colorRange,
+                colorRangeValues[colorRange],
+                *g_pBaldurChitin->GetObjectGame()->GetMasterBitmap());
+        }
+
+        for (BYTE colorRange = 0; colorRange < 7; colorRange++) {
+            m_shieldPalette.SetRange(colorRange,
+                colorRangeValues[colorRange],
+                *g_pBaldurChitin->GetObjectGame()->GetMasterBitmap());
+        }
+
+        if (!MIRROR_BAM && m_currentBamDirection > m_extendDirectionTest) {
+            m_currentVidCellShield = m_currentVidCellShieldExtend;
+        } else {
+            m_currentVidCellShield = m_currentVidCellShieldBase;
+        }
+
+        SHORT nSequence;
+        if (MIRROR_BAM && m_currentBamDirection > m_extendDirectionTest) {
+            if ((m_currentVidCellBase == &m_g1VidCellBase
+                    && m_currentBamSequence == 0)
+                || m_currentVidCellBase == &m_w2VidCellBase) {
+                nSequence = 8 * m_currentBamSequence + ((16 - m_currentBamDirection) % 16) / 2;
+            } else {
+                nSequence = 8 * m_currentBamSequence + ((17 - m_currentBamDirection) % 16) / 2;
+            }
+        } else {
+            nSequence = 8 * m_currentBamSequence + m_currentBamDirection / 2;
+        }
+
+        if (m_currentBamDirection > m_extendDirectionTest) {
+            m_currentVidCellWeapon->SequenceSet(9 * m_currentBamSequence - m_currentBamDirection + 16);
+        } else {
+            m_currentVidCellWeapon->SequenceSet(9 * m_currentBamSequence + m_currentBamDirection);
+        }
+        m_currentVidCellWeapon->FrameSet(m_currentVidCell->GetCurrentFrameId());
+    } else {
+        m_g1VidCellWeaponBase.CancelRequest();
+        m_w2VidCellWeaponBase.CancelRequest();
+
+        if (!MIRROR_BAM) {
+            m_g1VidCellWeaponExtend.CancelRequest();
+            m_w2VidCellWeaponExtend.CancelRequest();
+        }
+
+        m_currentVidCellWeaponBase = NULL;
+        m_currentVidCellWeaponExtend = NULL;
+        m_currentVidCellWeapon = NULL;
     }
 }
 
