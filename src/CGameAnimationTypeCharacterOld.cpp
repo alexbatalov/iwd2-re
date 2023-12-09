@@ -612,6 +612,101 @@ void CGameAnimationTypeCharacterOld::ChangeDirection(SHORT nDirection)
     }
 }
 
+// 0x6D4FC0
+void CGameAnimationTypeCharacterOld::EquipArmor(CHAR armorLevel, BYTE* colorRangeValues)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 21755
+    UTIL_ASSERT(armorLevel >= '1' && colorRangeValues != NULL);
+
+    if (armorLevel > m_armorMaxCode) {
+        return;
+    }
+
+    ClearColorEffects(5);
+    ClearColorEffects(4);
+    ClearColorEffects(0);
+
+    m_armorCode = armorLevel;
+
+    m_g1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "G1"), FALSE, TRUE, TRUE);
+    m_w2VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "W2"), FALSE, TRUE, TRUE);
+    m_caVidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "CA"), FALSE, TRUE, TRUE);
+
+    if (!MIRROR_BAM) {
+        m_g1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "G1E"), FALSE, TRUE, TRUE);
+        m_w2VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "W2E"), FALSE, TRUE, TRUE);
+        m_caVidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "CAE"), FALSE, TRUE, TRUE);
+    }
+
+    if ((m_weaponCode & 0x4) != 0) {
+        m_a1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A1"), FALSE, TRUE, TRUE);
+        if (!MIRROR_BAM) {
+            m_a1VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A1E"), FALSE, TRUE, TRUE);
+        }
+    }
+
+    if ((m_weaponCode & 0x8) != 0) {
+        m_a2VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A3"), FALSE, TRUE, TRUE);
+        if (!MIRROR_BAM) {
+            m_a2VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A3E"), FALSE, TRUE, TRUE);
+        }
+    }
+
+    if ((m_weaponCode & 0x10) != 0) {
+        m_a3VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A5"), FALSE, TRUE, TRUE);
+        if (!MIRROR_BAM) {
+            m_a3VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A5E"), FALSE, TRUE, TRUE);
+        }
+    }
+
+    if ((m_weaponCode & 0x20) != 0) {
+        m_a1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A2"), FALSE, TRUE, TRUE);
+        if (!MIRROR_BAM) {
+            m_a1VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A2E"), FALSE, TRUE, TRUE);
+        }
+    }
+
+    if ((m_weaponCode & 0x40) != 0) {
+        m_a2VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A4"), FALSE, TRUE, TRUE);
+        if (!MIRROR_BAM) {
+            m_a2VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A4E"), FALSE, TRUE, TRUE);
+        }
+    }
+
+    if ((m_weaponCode & 0x80) != 0) {
+        m_a3VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A6"), FALSE, TRUE, TRUE);
+        if (!MIRROR_BAM) {
+            m_a3VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A6E"), FALSE, TRUE, TRUE);
+        }
+    }
+
+    if (m_weaponCode == 1) {
+        m_a1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "SA"), FALSE, TRUE, TRUE);
+        if (!MIRROR_BAM) {
+            m_a1VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "SAE"), FALSE, TRUE, TRUE);
+        }
+    }
+
+    if (m_weaponCode == 2) {
+        m_a1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "SX"), FALSE, TRUE, TRUE);
+        if (!MIRROR_BAM) {
+            m_a1VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "SXE"), FALSE, TRUE, TRUE);
+        }
+    }
+
+    if (m_weaponCode == 3) {
+        m_a1VidCellBase.SetResRef(CResRef(m_resRef + m_armorCode + "A1"), FALSE, TRUE, TRUE);
+        if (!MIRROR_BAM) {
+            m_a1VidCellExtend.SetResRef(CResRef(m_resRef + m_armorCode + "A1E"), FALSE, TRUE, TRUE);
+        }
+    }
+
+    m_charPalette.SetRange(4, colorRangeValues[4], *g_pBaldurChitin->GetObjectGame()->GetMasterBitmap());
+    m_charPalette.SetRange(5, colorRangeValues[5], *g_pBaldurChitin->GetObjectGame()->GetMasterBitmap());
+    m_charPalette.SetRange(0, colorRangeValues[0], *g_pBaldurChitin->GetObjectGame()->GetMasterBitmap());
+}
+
 // 0x6DD150
 CVidPalette* CGameAnimationTypeCharacterOld::GetAnimationPalette(BYTE range)
 {
