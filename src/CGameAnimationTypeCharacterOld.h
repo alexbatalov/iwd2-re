@@ -12,6 +12,7 @@ public:
     /* 000C */ void ChangeDirection(SHORT nDirection) override;
     /* 0010 */ void EquipArmor(CHAR armorLevel, BYTE* colorRangeValues) override;
     /* 0014 */ void EquipHelmet(const CString& resRef, BYTE* colorRangeValues) override;
+    /* 0018 */ void EquipShield(const CString& resRef, BYTE* colorRangeValues) override;
     /* 0020 */ CVidPalette* GetAnimationPalette(BYTE range) override;
     /* 0024 */ void GetAnimationResRef(CString& resRef, BYTE range) override;
     /* 0028 */ BOOLEAN CanLieDown() override;
