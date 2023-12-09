@@ -430,6 +430,63 @@ char* CGameAnimationTypeMonsterMulti::GetSndReady()
     return szTemp;
 }
 
+// 0x6B62A0
+char* CGameAnimationTypeMonsterMulti::GetSndWalk(SHORT tableIndex)
+{
+    const char* v1;
+    int v2;
+
+    switch (m_animationID & 0xF00) {
+    case 0x000:
+        v1 = "WAL_17 ";
+        v2 = 2;
+        break;
+    case 0x100:
+        v1 = "WAL_09 ";
+        v2 = 4;
+        break;
+    case 0x200:
+        switch (m_animationID & 0xF) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+            v1 = "WAL_09 ";
+            v2 = 4;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+            // __LINE__: 10580
+            UTIL_ASSERT(FALSE);
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+        // __LINE__: 10585
+        UTIL_ASSERT(FALSE);
+    }
+
+    char* szTemp = new char[8];
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjAnimation.cpp
+    // __LINE__: 10592
+    UTIL_ASSERT(szTemp != NULL);
+
+    memcpy(szTemp, v1, 8);
+
+    szTemp[6] = rand() % v2 + 'a';
+    if (szTemp[6] == v2 + 'a' - 1) {
+        szTemp[6] = '\0';
+    }
+
+    return szTemp;
+}
+
 // 0x6B63C0
 SHORT CGameAnimationTypeMonsterMulti::GetCastHeight()
 {
