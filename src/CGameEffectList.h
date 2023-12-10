@@ -14,6 +14,7 @@ public:
     POSITION GetPosCurrent();
     void RemoveAllOfType(CGameSprite* pSprite, WORD effectID, POSITION posLeave, LONG effectAmount);
     void RemoveAllEffectsIgnoreMoreThenPermanent(POSITION posLeave, BOOL checkDispellable, BOOL useLevelDiff, BYTE prob, BYTE dispelLevel);
+    void Marshal(BYTE** ptrPtr, BYTE version, BOOL moreThenPermanentOnly);
     void Unmarshal(BYTE* data, ULONG nSize, CGameSprite* pSprite, BYTE version);
     BOOL HandleList(CGameSprite* pSprite);
     BOOL CheckEffects();

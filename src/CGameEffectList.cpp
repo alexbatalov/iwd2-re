@@ -53,6 +53,99 @@ void CGameEffectList::RemoveAllEffectsIgnoreMoreThenPermanent(POSITION posLeave,
     m_posNext = NULL;
 }
 
+// 0x4C0A30
+void CGameEffectList::Marshal(BYTE** ptrPtr, BYTE version, BOOL moreThenPermanentOnly)
+{
+    POSITION pos;
+    CGameEffect* node;
+    INT numEffects;
+    INT index;
+    ITEM_EFFECT effect;
+
+    if (version == 0) {
+        numEffects = GetCount();
+        if (moreThenPermanentOnly) {
+            numEffects = 0;
+            pos = GetHeadPosition();
+            while (pos != NULL) {
+                node = GetNext(pos);
+                if (node->m_durationType == 9) {
+                    numEffects++;
+                }
+            }
+        }
+
+        if (numEffects > 0) {
+            ITEM_EFFECT* effects = new ITEM_EFFECT[numEffects];
+            if (effects != NULL) {
+                index = 0;
+                pos = GetHeadPosition();
+                while (pos != NULL) {
+                    node = GetNext(pos);
+                    if (!moreThenPermanentOnly || node->m_durationType == 9) {
+                        effect.effectID = static_cast<WORD>(node->m_effectID);
+                        effect.spellLevel = static_cast<BYTE>(node->m_spellLevel);
+                        effect.targetType = static_cast<BYTE>(node->m_targetType);
+                        effect.dwFlags = node->m_dwFlags;
+                        effect.durationType = static_cast<WORD>(node->m_durationType);
+                        effect.duration = node->m_duration;
+                        effect.probabilityUpper = static_cast<BYTE>(node->m_probabilityUpper);
+                        effect.probabilityLower = static_cast<BYTE>(node->m_probabilityLower);
+                        node->m_res.GetResRef(effect.res);
+
+                        if (node->UsesDice()) {
+                            effect.numDice = node->m_numDice;
+                            effect.diceSize = node->m_diceSize;
+                        } else {
+                            effect.numDice = node->m_maxLevel;
+                            effect.diceSize = node->m_diceSize;
+                        }
+
+                        effect.savingThrow = node->m_savingThrow;
+                        effect.saveMod = node->m_saveMod;
+                        effect.special = node->m_special;
+
+                        effects[index] = effect;
+                        index++;
+                    }
+                }
+            }
+            *ptrPtr = reinterpret_cast<BYTE*>(effects);
+        }
+    } else {
+        numEffects = GetCount();
+        if (moreThenPermanentOnly) {
+            numEffects = 0;
+            pos = GetHeadPosition();
+            while (pos != NULL) {
+                node = GetNext(pos);
+                if (node->m_durationType == 9) {
+                    numEffects++;
+                }
+            }
+        }
+
+        if (numEffects > 0) {
+            CGameEffectBase* effects = new CGameEffectBase[numEffects];
+
+            // NOTE: Unused.
+            CGameEffectBase v1;
+
+            index = 0;
+            pos = GetHeadPosition();
+            while (pos != NULL) {
+                node = GetNext(pos);
+                if (!moreThenPermanentOnly || node->m_durationType == 9) {
+                    effects[index] = static_cast<CGameEffectBase>(*node);
+                    index++;
+                }
+            }
+
+            *ptrPtr = reinterpret_cast<BYTE*>(effects);
+        }
+    }
+}
+
 // 0x4C0E00
 void CGameEffectList::Unmarshal(BYTE* data, ULONG nSize, CGameSprite* pSprite, BYTE version)
 {
