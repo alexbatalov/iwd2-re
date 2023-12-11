@@ -101,6 +101,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_FAMILIAR_ADD;
     static const BYTE MSG_SUBTYPE_CMESSAGE_FAMILIAR_REMOVE_RESREF;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STOP_ESCAPE_AREA;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_SET_TIME_STOP;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_PROTAGONIST;
     static const BYTE MSG_SUBTYPE_CMESSAGE_START_COMBAT_MUSIC;
@@ -1404,6 +1405,19 @@ public:
     void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
     BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
     void Run() override;
+};
+
+class CMessageSetTimeStop : public CMessage {
+public:
+    CMessageSetTimeStop(LONG time, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ LONG m_time;
 };
 
 class CMessageStoreRelease : public CMessage {
