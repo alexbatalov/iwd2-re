@@ -54,16 +54,18 @@ void CGameEffectList::RemoveAllEffectsIgnoreMoreThenPermanent(POSITION posLeave,
 }
 
 // 0x4C0A30
-void CGameEffectList::Marshal(BYTE** ptrPtr, BYTE version, BOOL moreThenPermanentOnly)
+ULONG CGameEffectList::Marshal(BYTE** ptrPtr, BYTE version, BOOL moreThenPermanentOnly)
 {
     POSITION pos;
     CGameEffect* node;
     INT numEffects;
+    ULONG size;
     INT index;
     ITEM_EFFECT effect;
 
     if (version == 0) {
         numEffects = GetCount();
+        size = sizeof(ITEM_EFFECT) * numEffects;
         if (moreThenPermanentOnly) {
             numEffects = 0;
             pos = GetHeadPosition();
@@ -73,6 +75,7 @@ void CGameEffectList::Marshal(BYTE** ptrPtr, BYTE version, BOOL moreThenPermanen
                     numEffects++;
                 }
             }
+            size = sizeof(ITEM_EFFECT) * numEffects;
         }
 
         if (numEffects > 0) {
@@ -114,6 +117,7 @@ void CGameEffectList::Marshal(BYTE** ptrPtr, BYTE version, BOOL moreThenPermanen
         }
     } else {
         numEffects = GetCount();
+        size = sizeof(CGameEffectBase) * numEffects;
         if (moreThenPermanentOnly) {
             numEffects = 0;
             pos = GetHeadPosition();
@@ -123,6 +127,7 @@ void CGameEffectList::Marshal(BYTE** ptrPtr, BYTE version, BOOL moreThenPermanen
                     numEffects++;
                 }
             }
+            size = sizeof(CGameEffectBase) * numEffects;
         }
 
         if (numEffects > 0) {
@@ -144,6 +149,8 @@ void CGameEffectList::Marshal(BYTE** ptrPtr, BYTE version, BOOL moreThenPermanen
             *ptrPtr = reinterpret_cast<BYTE*>(effects);
         }
     }
+
+    return size;
 }
 
 // 0x4C0E00
