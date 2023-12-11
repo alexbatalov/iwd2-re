@@ -241,6 +241,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_VERBAL_CONSTANT = 65;
 // 0x84CF19
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_VISIBILITY_MAP_MOVE = 66;
 
+// 0x84CF1A
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_VISUAL_EFFECT = 67;
+
 // 0x84CF1B
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_DIALOG_RESREF = 68;
 
@@ -10933,6 +10936,163 @@ void CMessageVisibilityMapMove::Run()
                     pArea->m_visibility.RemoveCharacter(pSprite->GetPos(),
                         pSprite->GetId(),
                         pSprite->GetVisibleTerrainTable());
+                }
+            }
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F67E0
+CMessageVisualEffect::CMessageVisualEffect(BYTE nEffectType, BYTE nEffectProperty, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_nEffectType = nEffectType;
+    nEffectProperty = nEffectProperty;
+}
+
+// 0x453510
+SHORT CMessageVisualEffect::GetCommType()
+{
+    return BROADCAST;
+}
+
+// 0x40A0E0
+BYTE CMessageVisualEffect::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4AA6C0
+BYTE CMessageVisualEffect::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_VISUAL_EFFECT;
+}
+
+// 0x511310
+void CMessageVisualEffect::MarshalMessage(BYTE** pData, DWORD* dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 27347
+    UTIL_ASSERT(pData != NULL && dwSize != NULL);
+
+    CGameObject* pObject;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        PLAYER_ID remotePlayerID = pObject->m_remotePlayerID;
+        LONG remoteObjectID = pObject->m_remoteObjectID;
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+
+        *dwSize = sizeof(PLAYER_ID)
+            + sizeof(LONG)
+            + sizeof(BYTE)
+            + sizeof(BYTE);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+        // __LINE__: 27369
+        UTIL_ASSERT(*dwSize <= STATICBUFFERSIZE);
+
+        DWORD cnt = 0;
+
+        *reinterpret_cast<PLAYER_ID*>(*pData + cnt) = remotePlayerID;
+        cnt += sizeof(PLAYER_ID);
+
+        *reinterpret_cast<LONG*>(*pData + cnt) = remoteObjectID;
+        cnt += sizeof(LONG);
+
+        *reinterpret_cast<BYTE*>(*pData + cnt) = m_nEffectType;
+        cnt += sizeof(BYTE);
+
+        *reinterpret_cast<BYTE*>(*pData + cnt) = m_nEffectProperty;
+        cnt += sizeof(BYTE);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+        // __LINE__: 27395
+        UTIL_ASSERT(cnt == *dwSize);
+    } else {
+        *dwSize = 0;
+    }
+}
+
+// 0x511440
+BOOL CMessageVisualEffect::UnmarshalMessage(BYTE* pData, DWORD dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 27423
+    UTIL_ASSERT(pData != NULL);
+
+    DWORD cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    PLAYER_ID remotePlayerID = *reinterpret_cast<PLAYER_ID*>(pData + cnt);
+    cnt += sizeof(PLAYER_ID);
+
+    LONG remoteObjectID = *reinterpret_cast<LONG*>(pData + cnt);
+    cnt += sizeof(LONG);
+
+    LONG localObjectID;
+    if (g_pBaldurChitin->GetObjectGame()->GetRemoteObjectArray()->Find(remotePlayerID, remoteObjectID, localObjectID) != TRUE) {
+        return FALSE;
+    }
+
+    m_targetId = localObjectID;
+
+    m_nEffectType = *reinterpret_cast<BYTE*>(pData + cnt);
+    cnt += sizeof(BYTE);
+
+    m_nEffectProperty = *reinterpret_cast<BYTE*>(pData + cnt);
+    cnt += sizeof(BYTE);
+
+    // NOTE: Missing trailing guard.
+
+    return TRUE;
+}
+
+// 0x5114D0
+void CMessageVisualEffect::Run()
+{
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
+            if (m_nEffectType == 3) {
+                pSprite->GetDerivedStats()->field_140 = m_nEffectProperty;
+            } else if (m_nEffectType == 23) {
+                pSprite->GetDerivedStats()->m_nStoneSkins = m_nEffectProperty;
+
+                if (m_nEffectProperty == 0) {
+                    // TODO: Probably should be 7, check for overrun in
+                    // debugger.
+                    for (BYTE colorRange = 0; colorRange < 8; colorRange++) {
+                        pSprite->GetAnimation()->SetColorRange(colorRange,
+                            pSprite->GetBaseStats()->m_colors[colorRange]);
+                    }
+                    pSprite->GetAnimation()->ClearColorEffectsAll();
+                } else {
+                    pSprite->SetColorRange(14);
                 }
             }
         }

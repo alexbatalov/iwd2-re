@@ -86,6 +86,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_UPDATE_REACTION;
     static const BYTE MSG_SUBTYPE_CMESSAGE_VERBAL_CONSTANT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_VISIBILITY_MAP_MOVE;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_VISUAL_EFFECT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_DIALOG_RESREF;
     static const BYTE MSG_SUBTYPE_CMESSAGE_ESCAPE_AREA;
     static const BYTE MSG_SUBTYPE_CMESSAGE_DISPLAY_TEXTREF_SEND;
@@ -1200,6 +1201,20 @@ public:
     void Run() override;
 
     /* 000C */ BOOLEAN m_moveOntoList;
+};
+
+class CMessageVisualEffect : public CMessage {
+public:
+    CMessageVisualEffect(BYTE nEffectType, BYTE nEffectProperty, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ BYTE m_nEffectType;
+    /* 000D */ BYTE m_nEffectProperty;
 };
 
 class CMessageSetDialogResRef : public CMessage {
