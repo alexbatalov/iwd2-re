@@ -14,6 +14,7 @@
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CItem.h"
+#include "CPathSearch.h"
 #include "CScreenChapter.h"
 #include "CScreenConnection.h"
 #include "CScreenCreateChar.h"
@@ -78,6 +79,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_ADD_ACTION = 0;
 
 // 0x84CED8
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_ADD_EFFECT = 1;
+
+// 0x84CEDA
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_ANIMATION_CHANGE = 3;
 
 // 0x84CEDB
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_CHANGE_DIRECTION = 4;
@@ -3953,6 +3957,169 @@ void CMessageAddAction::Run()
         if ((pSprite->GetObjectType() & CGameObject::TYPE_AIBASE) != 0) {
             pSprite->AddAction(m_action);
             pSprite->m_interrupt = TRUE;
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x4F51D0
+CMessageAnimationChange::CMessageAnimationChange(WORD animationId, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_animationId = animationId;
+}
+
+// 0x4641A0
+CMessageAnimationChange::~CMessageAnimationChange()
+{
+}
+
+// 0x40A0D0
+SHORT CMessageAnimationChange::GetCommType()
+{
+    return BROADCAST_OTHERS;
+}
+
+// 0x40A0E0
+BYTE CMessageAnimationChange::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4B4FF0
+BYTE CMessageAnimationChange::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_ANIMATION_CHANGE;
+}
+
+// 0x4F93B0
+void CMessageAnimationChange::MarshalMessage(BYTE** pData, DWORD* dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 5756
+    UTIL_ASSERT(pData != NULL && dwSize != NULL);
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        PLAYER_ID remotePlayerID = pSprite->m_remotePlayerID;
+        LONG remoteObjectID = pSprite->m_remoteObjectID;
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+
+        *dwSize = sizeof(PLAYER_ID) + sizeof(LONG) + sizeof(WORD);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+        // __LINE__: 5777
+        UTIL_ASSERT(*dwSize <= STATICBUFFERSIZE);
+
+        DWORD cnt = 0;
+
+        *reinterpret_cast<PLAYER_ID*>(*pData + cnt) = remotePlayerID;
+        cnt += sizeof(PLAYER_ID);
+
+        *reinterpret_cast<LONG*>(*pData + cnt) = remoteObjectID;
+        cnt += sizeof(LONG);
+
+        *reinterpret_cast<WORD*>(*pData + cnt) = m_animationId;
+        cnt += sizeof(WORD);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+        // __LINE__: 5799
+        UTIL_ASSERT(cnt == *dwSize);
+    } else {
+        *dwSize = 0;
+    }
+}
+
+// 0x4F94E0
+BOOL CMessageAnimationChange::UnmarshalMessage(BYTE* pData, DWORD dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 5827
+    UTIL_ASSERT(pData != NULL);
+
+    DWORD cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    PLAYER_ID remotePlayerID = *reinterpret_cast<PLAYER_ID*>(pData + cnt);
+    cnt += sizeof(PLAYER_ID);
+
+    LONG remoteObjectID = *reinterpret_cast<LONG*>(pData + cnt);
+    cnt += sizeof(LONG);
+
+    LONG localObjectID;
+    if (g_pBaldurChitin->GetObjectGame()->GetRemoteObjectArray()->Find(remotePlayerID, remoteObjectID, localObjectID) != TRUE) {
+        return FALSE;
+    }
+
+    m_targetId = localObjectID;
+
+    m_animationId = *reinterpret_cast<WORD*>(pData + cnt);
+    cnt += sizeof(WORD);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 5853
+    UTIL_ASSERT(cnt == dwSize);
+
+    return TRUE;
+}
+
+// 0x4F9590
+void CMessageAnimationChange::Run()
+{
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
+            pSprite->UnequipAll(TRUE);
+            if (pSprite->GetArea() != NULL) {
+                if (pSprite->GetVertListType() != CGameObject::LIST_FLIGHT) {
+                    pSprite->GetArea()->m_search.RemoveObject(CPoint(pSprite->GetPos().x / CPathSearch::GRID_SQUARE_SIZEX,
+                                                                  pSprite->GetPos().y / CPathSearch::GRID_SQUARE_SIZEY),
+                        pSprite->GetAIType().m_nEnemyAlly,
+                        pSprite->GetAnimation()->GetPersonalSpace(),
+                        pSprite->field_54A8,
+                        pSprite->field_7430);
+                }
+            }
+            pSprite->GetAnimation()->SetAnimationType(m_animationId,
+                pSprite->GetBaseStats()->m_colors,
+                pSprite->GetDirection());
+            if (pSprite->GetArea() != NULL) {
+                if (pSprite->GetVertListType() != CGameObject::LIST_FLIGHT) {
+                    pSprite->GetArea()->m_search.AddObject(CPoint(pSprite->GetPos().x / CPathSearch::GRID_SQUARE_SIZEX,
+                                                               pSprite->GetPos().y / CPathSearch::GRID_SQUARE_SIZEY),
+                        pSprite->GetAIType().m_nEnemyAlly,
+                        pSprite->GetAnimation()->GetPersonalSpace(),
+                        pSprite->field_54A8,
+                        pSprite->field_7430);
+                }
+            }
+            pSprite->EquipAll(TRUE);
+            pSprite->JumpToPoint(pSprite->GetPos(), TRUE);
         }
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_targetId,

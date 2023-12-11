@@ -32,6 +32,7 @@ public:
     static const BYTE MSG_TYPE_CMESSAGE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_ADD_ACTION;
     static const BYTE MSG_SUBTYPE_CMESSAGE_ADD_EFFECT;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_ANIMATION_CHANGE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_CHANGE_DIRECTION;
     static const BYTE MSG_SUBTYPE_CMESSAGE_CLEAR_ACTIONS;
     static const BYTE MSG_SUBTYPE_CMESSAGE_CLEAR_DIALOG_ACTIONS;
@@ -421,6 +422,20 @@ public:
     void Run() override;
 
     /* 000C */ CGameEffect* m_effect;
+};
+
+class CMessageAnimationChange : public CMessage {
+public:
+    CMessageAnimationChange(WORD animationId, LONG caller, LONG target);
+    ~CMessageAnimationChange() override;
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ WORD m_animationId;
 };
 
 class CMessageChangeDirection : public CMessage {
