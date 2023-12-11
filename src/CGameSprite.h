@@ -169,6 +169,11 @@ typedef struct {
     INT field_4;
 } CGameSpriteSoundEntry;
 
+class CGameSpriteLastUpdate {
+public:
+    void Initialize(BOOL bFullUpdateRequired);
+};
+
 class CGameSprite : public CGameAIBase {
 public:
     static const BYTE DIR_S;
@@ -945,6 +950,7 @@ public:
     /* 73D0 */ CList<CGameSpriteSoundEntry, CGameSpriteSoundEntry> field_73D0;
     /* 73EC */ CList<CGameSpriteSoundEntry, CGameSpriteSoundEntry> field_73EC;
     /* 7430 */ unsigned char field_7430;
+    /* 7432 */ CGameSpriteLastUpdate m_cLastSpriteUpdate;
     /* 752E */ BOOL m_bSendSpriteUpdate;
     /* 7532 */ int field_7532;
     /* 7536 */ int field_7536;

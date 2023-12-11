@@ -436,7 +436,8 @@ void CGameObjectArray::Clean()
     m_deletedListHead = -1;
     m_nNextObjectId = 0;
 
-    // TODO: Incomplete.
+    // NOTE: Uninline.
+    g_pBaldurChitin->GetObjectGame()->GetRemoteObjectArray()->Clean();
 }
 
 // 0x59ABD0

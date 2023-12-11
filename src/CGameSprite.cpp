@@ -6766,6 +6766,12 @@ LONG CGameSprite::GetLevel()
     return m_derivedStats.GetAtOffset(STAT_CLASSLEVELSUM);
 }
 
+// 0x723B20
+void CGameSpriteLastUpdate::Initialize(BOOL bFullUpdateRequired)
+{
+    // TODO: Incomplete.
+}
+
 // 0x723BF0
 void CGameSprite::sub_723BF0(BOOLEAN a1, BOOLEAN a2)
 {
