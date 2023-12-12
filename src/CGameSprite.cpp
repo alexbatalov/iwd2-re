@@ -6064,7 +6064,54 @@ void CGameSprite::AddKnownDivineSpells(const BYTE& nClass)
 // 0x71F170
 void CGameSprite::DisplayTextRef(STRREF nameRef, STRREF textRef, COLORREF nameColor, COLORREF textColor)
 {
-    // TODO: Incomplete.
+    STR_RES strResName;
+    STR_RES strResText;
+    CString name;
+
+    if (nameRef >= -7 && nameRef != -1) {
+        LONG nCharacterId = g_pBaldurChitin->GetObjectGame()->GetCharacterSlot(-2 - nameRef);
+
+        CGameSprite* pSprite;
+
+        BYTE rc;
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            name = pSprite->GetName();
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    } else {
+        g_pBaldurChitin->GetTlkTable().Fetch(nameRef, strResName);
+        name = strResName.szText;
+    }
+
+    g_pBaldurChitin->GetTlkTable().Fetch(textRef, strResText);
+    if (strResText.cSound.GetRes() != NULL) {
+        if (!strResText.cSound.GetLooping()) {
+            strResText.cSound.SetFireForget(TRUE);
+        }
+        strResText.cSound.SetChannel(14, reinterpret_cast<DWORD>(m_pArea));
+        strResText.cSound.Play(GetPos().x, GetPos().y, 0, FALSE);
+    }
+
+    strResText.szText.TrimLeft();
+    strResText.szText.TrimRight();
+    if (strResText.szText != "") {
+        g_pBaldurChitin->GetScreenWorld()->DisplayText(name,
+            strResText.szText,
+            nameColor,
+            textColor,
+            -1,
+            FALSE);
+    }
 }
 
 // 0x71FBA0
