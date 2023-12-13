@@ -112,6 +112,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_WEAPON_IMMUNITIES_UPDATE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_101;
     static const BYTE MSG_SUBTYPE_CMESSAGE_103;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_107;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_AREA_TYPE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_AREA_EXPLORED;
     static const BYTE MSG_SUBTYPE_CMESSAGE_CHANGE_STAT;
@@ -1603,6 +1604,19 @@ public:
     void Run() override;
 
     /* 000C */ BOOLEAN m_bExplored;
+};
+
+class CMessage107 : public CMessage {
+public:
+    CMessage107(unsigned char a1, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ unsigned char field_C;
 };
 
 class CMessageEndGame : public CMessage {
