@@ -105,6 +105,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_STOP_ESCAPE_AREA;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_TIME_STOP;
     static const BYTE MSG_SUBTYPE_CMESSAGE_STORE_RELEASE;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_FLOAT_TEXT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_92;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_PROTAGONIST;
     static const BYTE MSG_SUBTYPE_CMESSAGE_START_COMBAT_MUSIC;
@@ -1336,6 +1337,20 @@ public:
     void Run() override;
 
     /* 000C */ CResRef m_screen;
+};
+
+class CMessageFloatText : public CMessage {
+public:
+    CMessageFloatText(LONG caller, LONG target, STRREF strRef, BOOLEAN bSpell);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ STRREF m_strRef;
+    /* 0010 */ BOOLEAN m_bSpell;
 };
 
 class CMessage92 : public CMessage {

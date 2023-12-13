@@ -408,6 +408,12 @@ void CGameObject::SetCursor(LONG nToolTip)
     }
 }
 
+// 0x4C83F0
+void CGameObject::FloatText(STRREF strRef, int a2, int a3)
+{
+    // TODO: Incomplete.
+}
+
 // 0x78E750
 void CGameObject::SetTarget(CPoint pt, BOOL a2)
 {

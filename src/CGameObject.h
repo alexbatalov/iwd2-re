@@ -66,6 +66,8 @@ public:
     /* 0064 */ virtual BOOL EvaluateStatusTrigger(const CAITrigger& trigger);
     /* 0068 */ virtual BOOLEAN IsProjectile();
 
+    void FloatText(STRREF strRef, int a2, int a3);
+
     CGameArea* GetArea();
     LONG GetId();
     BOOLEAN InControl();
