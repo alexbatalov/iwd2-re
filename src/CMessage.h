@@ -130,6 +130,14 @@ public:
     static const BYTE MSG_SUBTYPE_SWAPITEM_REQUEST;
     static const BYTE MSG_SUBTYPE_SWAPITEM_REPLY;
 
+    static const BYTE MSG_TYPE_JOURNAL;
+    static const BYTE MSG_SUBTYPE_JOURNAL_ADD_ENTRY;
+    static const BYTE MSG_SUBTYPE_JOURNAL_ANNOUNCE;
+    static const BYTE MSG_SUBTYPE_JOURNAL_ADD_USER_ENTRY;
+    static const BYTE MSG_SUBTYPE_JOURNAL_ANNOUNCE_USER_ENTRY;
+    static const BYTE MSG_SUBTYPE_JOURNAL_CHANGE_ENTRY;
+    static const BYTE MSG_SUBTYPE_JOURNAL_ANNOUNCE_CHANGE;
+
     static const BYTE MSG_TYPE_BIOGRAPHY;
     static const BYTE MSG_SUBTYPE_BIOGRAPHY_CHANGE;
     static const BYTE MSG_SUBTYPE_BIOGRAPHY_CHANGE_ANNOUNCE;
@@ -286,6 +294,18 @@ public:
     BOOLEAN OnLeaveAreaNameRequestToServer(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize);
     void CleanLeaveAreaLuaRequest();
     void CleanLeaveAreaNameRequest();
+    BOOLEAN SendJournalEntryToServer(STRREF strText, INT nChapter, LONG nTime);
+    BOOLEAN OnSendJournalEntry(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize);
+    BOOLEAN AnnounceJournalEntry(STRREF strText, INT nChapter, LONG nTime);
+    BOOLEAN OnAnnounceJournalEntry(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize);
+    BOOLEAN SendJournalUserEntry(CString szText, BYTE nCharacter, INT nChapter, LONG nTime, DWORD nIndex);
+    BOOLEAN OnSendJournalUserEntry(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize);
+    BOOLEAN AnnounceJournalUserEntry(CString szText, BYTE nCharacter, INT nChapter, LONG nTime, DWORD nIndex);
+    BOOLEAN OnAnnounceJournalUserEntry(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize);
+    BOOLEAN SendJournalEntryChangeToServer(CString szText, BYTE nCharacter, INT nChapter, DWORD nIndex);
+    BOOLEAN OnSendEntryJournalChange(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize);
+    BOOLEAN AnnounceJournalEntryChange(CString szText, BYTE nCharacter, INT nChapter, DWORD nIndex);
+    BOOLEAN OnAnnounceJournalEntryChange(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize);
     BOOLEAN SendBiographyToServer(BYTE nFixedPartyId, CString szBio);
     BOOLEAN OnSendBiography(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize);
     BOOLEAN AnnounceBiography(BYTE nFixedPartyId, CString szBio);

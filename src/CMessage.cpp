@@ -365,6 +365,27 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_SWAPITEM_REQUEST = 82;
 // 0x84CF5A
 const BYTE CBaldurMessage::MSG_SUBTYPE_SWAPITEM_REPLY = 114;
 
+// 0x84CF64
+const BYTE CBaldurMessage::MSG_TYPE_JOURNAL = 106;
+
+// 0x84CF65
+const BYTE CBaldurMessage::MSG_SUBTYPE_JOURNAL_ADD_ENTRY = 69;
+
+// 0x84CF66
+const BYTE CBaldurMessage::MSG_SUBTYPE_JOURNAL_ANNOUNCE = 65;
+
+// 0x84CF67
+const BYTE CBaldurMessage::MSG_SUBTYPE_JOURNAL_ADD_USER_ENTRY = 117;
+
+// 0x84CF68
+const BYTE CBaldurMessage::MSG_SUBTYPE_JOURNAL_ANNOUNCE_USER_ENTRY = 85;
+
+// 0x84CF69
+const BYTE CBaldurMessage::MSG_SUBTYPE_JOURNAL_CHANGE_ENTRY = 99;
+
+// 0x84CF6A
+const BYTE CBaldurMessage::MSG_SUBTYPE_JOURNAL_ANNOUNCE_CHANGE = 67;
+
 // 0x84CF6B
 const BYTE CBaldurMessage::MSG_TYPE_BIOGRAPHY = 98;
 
@@ -3098,6 +3119,562 @@ void CBaldurMessage::CleanLeaveAreaNameRequest()
     m_bLeaveAreaNameRequestPending = FALSE;
     m_nLeaveAreaNameReplyValue = 0;
     m_bLeaveAreaNameReplyReturned = FALSE;
+}
+
+// 0x439400
+BOOLEAN CBaldurMessage::SendJournalEntryToServer(STRREF strText, INT nChapter, LONG nTime)
+{
+    CString sHostName;
+    BYTE* pByteMessage;
+    DWORD dwSize;
+    DWORD cnt;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+        return FALSE;
+    }
+
+    g_pChitin->cNetwork.GetHostPlayerName(sHostName);
+
+    if (sHostName == "") {
+        return FALSE;
+    }
+
+    dwSize = sizeof(STRREF)
+        + sizeof(INT)
+        + sizeof(LONG);
+
+    pByteMessage = CreateBuffer(dwSize);
+    if (pByteMessage == NULL) {
+        return FALSE;
+    }
+
+    cnt = 0;
+
+    *reinterpret_cast<STRREF*>(pByteMessage + cnt) = strText;
+    cnt += sizeof(STRREF);
+
+    *reinterpret_cast<INT*>(pByteMessage + cnt) = nChapter;
+    cnt += sizeof(INT);
+
+    *reinterpret_cast<LONG*>(pByteMessage + cnt) = nTime;
+    cnt += sizeof(LONG);
+
+    g_pChitin->cNetwork.SendSpecificMessage(sHostName,
+        CNetwork::SEND_GUARANTEED,
+        MSG_TYPE_JOURNAL,
+        MSG_SUBTYPE_JOURNAL_ADD_ENTRY,
+        pByteMessage,
+        dwSize);
+
+    DestroyBuffer(pByteMessage);
+
+    return TRUE;
+}
+
+// 0x4395C0
+BOOLEAN CBaldurMessage::OnSendJournalEntry(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize)
+{
+    DWORD cnt;
+    STRREF strText;
+    INT nChapter;
+    LONG nTime;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()) {
+        return FALSE;
+    }
+
+    cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    strText = *reinterpret_cast<STRREF*>(pByteMessage + cnt);
+    cnt += sizeof(STRREF);
+
+    nChapter = *reinterpret_cast<INT*>(pByteMessage + cnt);
+    cnt += sizeof(INT);
+
+    nTime = *reinterpret_cast<LONG*>(pByteMessage + cnt);
+    cnt += sizeof(LONG);
+
+    g_pBaldurChitin->GetObjectGame()->GetJournal()->AddEntry(strText, nChapter, nTime, 0);
+
+    return TRUE;
+}
+
+// 0x439610
+BOOLEAN CBaldurMessage::AnnounceJournalEntry(STRREF strText, INT nChapter, LONG nTime)
+{
+    BYTE* pByteMessage;
+    DWORD dwSize;
+    DWORD cnt;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || !g_pChitin->cNetwork.GetSessionHosting()) {
+        return FALSE;
+    }
+
+    dwSize = sizeof(STRREF)
+        + sizeof(INT)
+        + sizeof(LONG);
+
+    pByteMessage = CreateBuffer(dwSize);
+    if (pByteMessage == NULL) {
+        return FALSE;
+    }
+
+    cnt = 0;
+
+    *reinterpret_cast<STRREF*>(pByteMessage + cnt) = strText;
+    cnt += sizeof(STRREF);
+
+    *reinterpret_cast<INT*>(pByteMessage + cnt) = nChapter;
+    cnt += sizeof(INT);
+
+    *reinterpret_cast<LONG*>(pByteMessage + cnt) = nTime;
+    cnt += sizeof(LONG);
+
+    g_pChitin->cNetwork.SendSpecificMessage(CString(""),
+        CNetwork::SEND_GUARANTEED | CNetwork::SEND_ALL_PLAYERS,
+        MSG_TYPE_JOURNAL,
+        MSG_SUBTYPE_JOURNAL_ANNOUNCE,
+        pByteMessage,
+        dwSize);
+
+    DestroyBuffer(pByteMessage);
+
+    return TRUE;
+}
+
+// 0x439740
+BOOLEAN CBaldurMessage::OnAnnounceJournalEntry(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize)
+{
+    DWORD cnt;
+    STRREF strText;
+    INT nChapter;
+    LONG nTime;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()) {
+        return FALSE;
+    }
+
+    cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    strText = *reinterpret_cast<STRREF*>(pByteMessage + cnt);
+    cnt += sizeof(STRREF);
+
+    nChapter = *reinterpret_cast<INT*>(pByteMessage + cnt);
+    cnt += sizeof(INT);
+
+    nTime = *reinterpret_cast<LONG*>(pByteMessage + cnt);
+    cnt += sizeof(LONG);
+
+    m_bInOnJournalAnnounce = TRUE;
+    g_pBaldurChitin->GetObjectGame()->GetJournal()->AddEntry(strText, nChapter, nTime, 0);
+    m_bInOnJournalAnnounce = FALSE;
+
+    return TRUE;
+}
+
+// 0x4397A0
+BOOLEAN CBaldurMessage::SendJournalUserEntry(CString szText, BYTE nCharacter, INT nChapter, LONG nTime, DWORD nIndex)
+{
+    CString sHostName;
+    DWORD nTextLength;
+    BYTE* pByteMessage;
+    DWORD dwSize;
+    DWORD cnt;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+        return FALSE;
+    }
+
+    g_pChitin->cNetwork.GetHostPlayerName(sHostName);
+
+    if (sHostName == "") {
+        return FALSE;
+    }
+
+    nTextLength = szText.GetLength();
+    dwSize = sizeof(DWORD)
+        + nTextLength
+        + sizeof(BYTE)
+        + sizeof(INT)
+        + sizeof(LONG)
+        + sizeof(DWORD);
+
+    pByteMessage = CreateBuffer(dwSize);
+    if (pByteMessage == NULL) {
+        return FALSE;
+    }
+
+    cnt = 0;
+
+    *reinterpret_cast<DWORD*>(pByteMessage + cnt) = nTextLength;
+    cnt += sizeof(DWORD);
+
+    memcpy(pByteMessage + cnt, szText, nTextLength);
+    cnt += nTextLength;
+
+    *reinterpret_cast<BYTE*>(pByteMessage + cnt) = nCharacter;
+    cnt += sizeof(BYTE);
+
+    *reinterpret_cast<INT*>(pByteMessage + cnt) = nChapter;
+    cnt += sizeof(INT);
+
+    *reinterpret_cast<LONG*>(pByteMessage + cnt) = nTime;
+    cnt += sizeof(LONG);
+
+    *reinterpret_cast<DWORD*>(pByteMessage + cnt) = nIndex;
+    cnt += sizeof(DWORD);
+
+    g_pChitin->cNetwork.SendSpecificMessage(sHostName,
+        CNetwork::SEND_GUARANTEED,
+        MSG_TYPE_JOURNAL,
+        MSG_SUBTYPE_JOURNAL_ADD_USER_ENTRY,
+        pByteMessage,
+        dwSize);
+
+    DestroyBuffer(pByteMessage);
+
+    return TRUE;
+}
+
+// 0x439990
+BOOLEAN CBaldurMessage::OnSendJournalUserEntry(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize)
+{
+    DWORD cnt;
+    DWORD nTextLength;
+    BYTE nCharacter;
+    INT nChapter;
+    LONG nTime;
+    DWORD nIndex;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()) {
+        return FALSE;
+    }
+
+    cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    nTextLength = *reinterpret_cast<DWORD*>(pByteMessage + cnt);
+    cnt += sizeof(DWORD);
+
+    CString szText(reinterpret_cast<char*>(pByteMessage + cnt), nTextLength);
+    cnt += nTextLength;
+
+    nCharacter = *reinterpret_cast<BYTE*>(pByteMessage + cnt);
+    cnt += sizeof(BYTE);
+
+    nChapter = *reinterpret_cast<INT*>(pByteMessage + cnt);
+    cnt += sizeof(INT);
+
+    nTime = *reinterpret_cast<LONG*>(pByteMessage + cnt);
+    cnt += sizeof(LONG);
+
+    nIndex = *reinterpret_cast<DWORD*>(pByteMessage + cnt);
+    cnt += sizeof(DWORD);
+
+    g_pBaldurChitin->GetObjectGame()->GetJournal()->InsertEntryAfter(szText,
+        nIndex,
+        nChapter,
+        nTime,
+        nCharacter,
+        0);
+
+    return TRUE;
+}
+
+// 0x439A80
+BOOLEAN CBaldurMessage::AnnounceJournalUserEntry(CString szText, BYTE nCharacter, INT nChapter, LONG nTime, DWORD nIndex)
+{
+    DWORD nTextLength;
+    BYTE* pByteMessage;
+    DWORD dwSize;
+    DWORD cnt;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+        return FALSE;
+    }
+
+    nTextLength = szText.GetLength();
+    dwSize = sizeof(DWORD)
+        + nTextLength
+        + sizeof(BYTE)
+        + sizeof(INT)
+        + sizeof(LONG)
+        + sizeof(DWORD);
+
+    pByteMessage = CreateBuffer(dwSize);
+    if (pByteMessage == NULL) {
+        return FALSE;
+    }
+
+    cnt = 0;
+
+    *reinterpret_cast<DWORD*>(pByteMessage + cnt) = nTextLength;
+    cnt += sizeof(DWORD);
+
+    memcpy(pByteMessage + cnt, szText, nTextLength);
+    cnt += nTextLength;
+
+    *reinterpret_cast<BYTE*>(pByteMessage + cnt) = nCharacter;
+    cnt += sizeof(BYTE);
+
+    *reinterpret_cast<INT*>(pByteMessage + cnt) = nChapter;
+    cnt += sizeof(INT);
+
+    *reinterpret_cast<LONG*>(pByteMessage + cnt) = nTime;
+    cnt += sizeof(LONG);
+
+    *reinterpret_cast<DWORD*>(pByteMessage + cnt) = nIndex;
+    cnt += sizeof(DWORD);
+
+    g_pChitin->cNetwork.SendSpecificMessage(CString(""),
+        CNetwork::SEND_GUARANTEED | CNetwork::SEND_ALL_PLAYERS,
+        MSG_TYPE_JOURNAL,
+        MSG_SUBTYPE_JOURNAL_ANNOUNCE_USER_ENTRY,
+        pByteMessage,
+        dwSize);
+
+    DestroyBuffer(pByteMessage);
+
+    return TRUE;
+}
+
+// 0x439C20
+BOOLEAN CBaldurMessage::OnAnnounceJournalUserEntry(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize)
+{
+    DWORD cnt;
+    DWORD nTextLength;
+    BYTE nCharacter;
+    INT nChapter;
+    LONG nTime;
+    DWORD nIndex;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()) {
+        return FALSE;
+    }
+
+    cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    nTextLength = *reinterpret_cast<DWORD*>(pByteMessage + cnt);
+    cnt += sizeof(DWORD);
+
+    CString szText(reinterpret_cast<char*>(pByteMessage + cnt), nTextLength);
+    cnt += nTextLength;
+
+    nCharacter = *reinterpret_cast<BYTE*>(pByteMessage + cnt);
+    cnt += sizeof(BYTE);
+
+    nChapter = *reinterpret_cast<INT*>(pByteMessage + cnt);
+    cnt += sizeof(INT);
+
+    nTime = *reinterpret_cast<LONG*>(pByteMessage + cnt);
+    cnt += sizeof(LONG);
+
+    nIndex = *reinterpret_cast<DWORD*>(pByteMessage + cnt);
+    cnt += sizeof(DWORD);
+
+    m_bInOnJournalAnnounce = TRUE;
+    g_pBaldurChitin->GetObjectGame()->GetJournal()->InsertEntryAfter(szText,
+        nIndex,
+        nChapter,
+        nTime,
+        nCharacter,
+        0);
+    m_bInOnJournalAnnounce = FALSE;
+
+    return TRUE;
+}
+
+// 0x439D00
+BOOLEAN CBaldurMessage::SendJournalEntryChangeToServer(CString szText, BYTE nCharacter, INT nChapter, DWORD nIndex)
+{
+    CString sHostName;
+    DWORD nTextLength;
+    BYTE* pByteMessage;
+    DWORD dwSize;
+    DWORD cnt;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+        return FALSE;
+    }
+
+    g_pChitin->cNetwork.GetHostPlayerName(sHostName);
+
+    if (sHostName == "") {
+        return FALSE;
+    }
+
+    nTextLength = szText.GetLength();
+    dwSize = sizeof(DWORD)
+        + nTextLength
+        + sizeof(BYTE)
+        + sizeof(INT)
+        + sizeof(DWORD);
+
+    pByteMessage = CreateBuffer(dwSize);
+    if (pByteMessage == NULL) {
+        return FALSE;
+    }
+
+    cnt = 0;
+
+    *reinterpret_cast<DWORD*>(pByteMessage + cnt) = nTextLength;
+    cnt += sizeof(DWORD);
+
+    memcpy(pByteMessage + cnt, szText, nTextLength);
+    cnt += nTextLength;
+
+    *reinterpret_cast<INT*>(pByteMessage + cnt) = nChapter;
+    cnt += sizeof(INT);
+
+    *reinterpret_cast<DWORD*>(pByteMessage + cnt) = nIndex;
+    cnt += sizeof(DWORD);
+
+    g_pChitin->cNetwork.SendSpecificMessage(sHostName,
+        CNetwork::SEND_GUARANTEED,
+        MSG_TYPE_JOURNAL,
+        MSG_SUBTYPE_JOURNAL_CHANGE_ENTRY,
+        pByteMessage,
+        dwSize);
+
+    DestroyBuffer(pByteMessage);
+
+    return TRUE;
+}
+
+// 0x439EE0
+BOOLEAN CBaldurMessage::OnSendEntryJournalChange(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize)
+{
+    DWORD cnt;
+    DWORD nTextLength;
+    BYTE nCharacter;
+    INT nChapter;
+    DWORD nIndex;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()) {
+        return FALSE;
+    }
+
+    cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    nTextLength = *reinterpret_cast<DWORD*>(pByteMessage + cnt);
+    cnt += sizeof(DWORD);
+
+    CString szText(reinterpret_cast<char*>(pByteMessage + cnt), nTextLength);
+    cnt += nTextLength;
+
+    nCharacter = *reinterpret_cast<BYTE*>(pByteMessage + cnt);
+    cnt += sizeof(BYTE);
+
+    nChapter = *reinterpret_cast<INT*>(pByteMessage + cnt);
+    cnt += sizeof(INT);
+
+    nIndex = *reinterpret_cast<DWORD*>(pByteMessage + cnt);
+    cnt += sizeof(DWORD);
+
+    g_pBaldurChitin->GetObjectGame()->GetJournal()->ChangeEntry(nIndex,
+        szText,
+        nChapter,
+        nCharacter);
+
+    return TRUE;
+}
+
+// 0x439FB0
+BOOLEAN CBaldurMessage::AnnounceJournalEntryChange(CString szText, BYTE nCharacter, INT nChapter, DWORD nIndex)
+{
+    DWORD nTextLength;
+    BYTE* pByteMessage;
+    DWORD dwSize;
+    DWORD cnt;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+        return FALSE;
+    }
+
+    nTextLength = szText.GetLength();
+    dwSize = sizeof(DWORD)
+        + nTextLength
+        + sizeof(BYTE)
+        + sizeof(INT)
+        + sizeof(DWORD);
+
+    pByteMessage = CreateBuffer(dwSize);
+    if (pByteMessage == NULL) {
+        return FALSE;
+    }
+
+    cnt = 0;
+
+    *reinterpret_cast<DWORD*>(pByteMessage + cnt) = nTextLength;
+    cnt += sizeof(DWORD);
+
+    memcpy(pByteMessage + cnt, szText, nTextLength);
+    cnt += nTextLength;
+
+    *reinterpret_cast<BYTE*>(pByteMessage + cnt) = nCharacter;
+    cnt += sizeof(BYTE);
+
+    *reinterpret_cast<INT*>(pByteMessage + cnt) = nChapter;
+    cnt += sizeof(INT);
+
+    *reinterpret_cast<DWORD*>(pByteMessage + cnt) = nIndex;
+    cnt += sizeof(DWORD);
+
+    g_pChitin->cNetwork.SendSpecificMessage(CString(""),
+        CNetwork::SEND_GUARANTEED | CNetwork::SEND_ALL_PLAYERS,
+        MSG_TYPE_JOURNAL,
+        MSG_SUBTYPE_JOURNAL_ANNOUNCE_CHANGE,
+        pByteMessage,
+        dwSize);
+
+    DestroyBuffer(pByteMessage);
+
+    return TRUE;
+}
+
+// 0x43A140
+BOOLEAN CBaldurMessage::OnAnnounceJournalEntryChange(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize)
+{
+    DWORD cnt;
+    DWORD nTextLength;
+    BYTE nCharacter;
+    INT nChapter;
+    DWORD nIndex;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()) {
+        return FALSE;
+    }
+
+    cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    nTextLength = *reinterpret_cast<DWORD*>(pByteMessage + cnt);
+    cnt += sizeof(DWORD);
+
+    CString szText(reinterpret_cast<char*>(pByteMessage + cnt), nTextLength);
+    cnt += nTextLength;
+
+    nCharacter = *reinterpret_cast<BYTE*>(pByteMessage + cnt);
+    cnt += sizeof(BYTE);
+
+    nChapter = *reinterpret_cast<INT*>(pByteMessage + cnt);
+    cnt += sizeof(INT);
+
+    nIndex = *reinterpret_cast<DWORD*>(pByteMessage + cnt);
+    cnt += sizeof(DWORD);
+
+    m_bInOnJournalAnnounce = TRUE;
+    g_pBaldurChitin->GetObjectGame()->GetJournal()->ChangeEntry(nIndex,
+        szText,
+        nChapter,
+        nCharacter);
+    m_bInOnJournalAnnounce = FALSE;
+
+    return TRUE;
 }
 
 // 0x43A910

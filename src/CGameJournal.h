@@ -11,6 +11,7 @@ class CUIControlTextDisplay;
 class CGameJournalEntry {
 public:
     CGameJournalEntry();
+    CGameJournalEntry(STRREF strText, LONG nTime, WORD nType);
     void UpdateTextDisplay(CUIControlTextDisplay* pText);
 
     /* 0000 */ STRREF m_strText;
@@ -29,16 +30,21 @@ public:
     BOOL AddEntry(STRREF strText, WORD nType);
     BOOL AddEntry(STRREF strText, INT nChapter, LONG nTime, WORD nType);
     BOOL InsertEntryAfter(CString strText, DWORD nEntry, DWORD nType);
+    BOOL InsertEntryAfter(CString szText, DWORD nIndex, INT nChapter, LONG nTime, BYTE nCharacter, WORD nType);
     BOOL IsEntryChanged(DWORD nIndex);
     void UpdateTextDisplay(INT nChapter, CUIControlTextDisplay* pText);
     void ClearAllEntries();
     WORD CountEntries();
+    void Marshal(CSavedGameJournalEntry* pSavedEntry);
     void Unmarshal(CSavedGameJournalEntry* pSavedEntry, DWORD nSavedEntry);
     void ChangeEntry(STRREF strRef, CString szNewText);
+    void ChangeEntry(DWORD nIndex, CString szNewText, INT nChapter, BYTE nCharacter);
     void RevertEntry(DWORD nIndex);
     void SetQuestDone(STRREF strRef);
     CString GetEntryText(DWORD nIndex);
     WORD GetEntryType(DWORD nIndex);
+    void DeleteEntry(STRREF strRef);
+    static void sub_4C7600(FILE* stream, const CString& sString);
     void SaveAll();
     void Save(INT iChapter);
 

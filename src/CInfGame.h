@@ -109,6 +109,7 @@ public:
     static const DWORD PROGRESSBAR_CACHING_ADDITIONAL;
 
     static const SHORT FEEDBACK_GOLD;
+    static const SHORT FEEDBACK_JOURNAL_UPDATE;
     static const SHORT FEEDBACK_WORLDMAP_UPDATE;
 
     CInfGame();
