@@ -329,6 +329,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_107 = 107;
 // 0x84CF44
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_AREA_TYPE = 109;
 
+// 0x84CF45
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_AREA_REST_ENCOUNTER = 110;
+
 // 0x84CF49
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_AREA_EXPLORED = 114;
 
@@ -14992,6 +14995,132 @@ void CMessageSetAreaType::Run()
             pArea->m_header.m_areaType = m_areaType;
             g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->GetInfinity()->m_areaType = m_areaType;
             g_pBaldurChitin->GetObjectGame()->GetVisibleArea()->m_header.m_areaType = m_areaType;
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x453700
+CMessageSetAreaRestEncounter::CMessageSetAreaRestEncounter(WORD probDay, WORD probNight, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_probDay = probDay;
+    m_probNight = probNight;
+}
+
+// 0x4536E0
+SHORT CMessageSetAreaRestEncounter::GetCommType()
+{
+    return BROADCAST_FORCED_OTHERS;
+}
+
+// 0x40A0E0
+BYTE CMessageSetAreaRestEncounter::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x453730
+BYTE CMessageSetAreaRestEncounter::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_AREA_REST_ENCOUNTER;
+}
+
+// 0x5161D0
+void CMessageSetAreaRestEncounter::MarshalMessage(BYTE** pData, DWORD* dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 31673
+    UTIL_ASSERT(pData != NULL && dwSize != NULL);
+
+    CGameObject* pObject;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        CGameArea* pArea = pObject->GetArea();
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+
+        *dwSize = sizeof(WORD) + sizeof(WORD);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+        // __LINE__: 31695
+        UTIL_ASSERT(*dwSize <= STATICBUFFERSIZE);
+
+        DWORD cnt = 0;
+
+        // NOTE: Unclear why it obtains `probDay` from target's area instead of
+        // using `m_probDay` which is set in constructor.
+        *reinterpret_cast<WORD*>(*pData + cnt) = pArea->GetHeaderRestEncounter()->m_probDay;
+        cnt += sizeof(WORD);
+
+        // NOTE: Unclear why it obtains `probNight` from target's area instead of
+        // using `m_probNight` which is set in constructor.
+        *reinterpret_cast<WORD*>(*pData + cnt) = pArea->GetHeaderRestEncounter()->m_probNight;
+        cnt += sizeof(WORD);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+        // __LINE__: 31704
+        UTIL_ASSERT(cnt == *dwSize);
+    } else {
+        *dwSize = 0;
+    }
+}
+
+// 0x516300
+BOOL CMessageSetAreaRestEncounter::UnmarshalMessage(BYTE* pData, DWORD dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 31728
+    UTIL_ASSERT(pData != NULL);
+
+    DWORD cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    m_probDay = *reinterpret_cast<WORD*>(pData + cnt);
+    cnt += sizeof(WORD);
+
+    m_probNight = *reinterpret_cast<WORD*>(pData + cnt);
+    cnt += sizeof(WORD);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 31737
+    UTIL_ASSERT(cnt == dwSize);
+
+    return TRUE;
+}
+
+// 0x516370
+void CMessageSetAreaRestEncounter::Run()
+{
+    CGameObject* pObject;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_targetId,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        CGameArea* pArea = pObject->GetArea();
+        if (pArea != NULL) {
+            pArea->GetHeaderRestEncounter()->m_probDay = m_probDay;
+            pArea->GetHeaderRestEncounter()->m_probNight = m_probNight;
         }
 
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_targetId,

@@ -115,6 +115,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_TOGGLE_INTERFACE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_107;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_AREA_TYPE;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_SET_AREA_REST_ENCOUNTER;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_AREA_EXPLORED;
     static const BYTE MSG_SUBTYPE_CMESSAGE_CHANGE_STAT;
     static const BYTE MSG_SUBTYPE_CMESSAGE_120;
@@ -1592,6 +1593,20 @@ public:
     void Run() override;
 
     /* 000C */ WORD m_areaType;
+};
+
+class CMessageSetAreaRestEncounter : public CMessage {
+public:
+    CMessageSetAreaRestEncounter(WORD probDay, WORD probNight, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ WORD m_probDay;
+    /* 000E */ WORD m_probNight;
 };
 
 class CMessageToggleInterface : public CMessage {
