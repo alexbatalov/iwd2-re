@@ -553,6 +553,7 @@ public:
     const CAIObjectType& GetLiveAIType();
     SHORT GetCasterLevel(CSpell* pSpell, BYTE nClass, DWORD nSpecialization);
     SHORT sub_75F240();
+    SHORT sub_75F3D0(int a1);
     SHORT SetAtOffset(DWORD stat, DWORD value, BOOL modify);
     SHORT ForceHide(CGameSprite* pSprite);
     SHORT sub_7615F0(int a1);

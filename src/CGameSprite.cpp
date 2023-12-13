@@ -9221,6 +9221,14 @@ SHORT CGameSprite::sub_75F240()
     return ACTION_DONE;
 }
 
+// 0x75F3D0
+SHORT CGameSprite::sub_75F3D0(int a1)
+{
+    // TODO: Incomplete.
+
+    return ACTION_ERROR;
+}
+
 // 0x75F800
 SHORT CGameSprite::SetAtOffset(DWORD stat, DWORD value, BOOL modify)
 {
