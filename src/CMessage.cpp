@@ -320,6 +320,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_WEAPON_IMMUNITIES_UPDATE = 102;
 // 0x84CF3E
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_103 = 103;
 
+// 0x84CF41
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_TOGGLE_INTERFACE = 106;
+
 // 0x84CF42
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_107 = 107;
 
@@ -14994,6 +14997,89 @@ void CMessageSetAreaType::Run()
         g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_targetId,
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x453670
+CMessageToggleInterface::CMessageToggleInterface(BOOLEAN bHide, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    m_bHide = bHide;
+}
+
+// 0x453510
+SHORT CMessageToggleInterface::GetCommType()
+{
+    return BROADCAST;
+}
+
+// 0x40A0E0
+BYTE CMessageToggleInterface::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x453690
+BYTE CMessageToggleInterface::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_TOGGLE_INTERFACE;
+}
+
+// 0x515810
+void CMessageToggleInterface::MarshalMessage(BYTE** pData, DWORD* dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 31130
+    UTIL_ASSERT(pData != NULL && dwSize != NULL);
+
+    *dwSize = sizeof(BOOLEAN);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 31135
+    UTIL_ASSERT(*dwSize <= STATICBUFFERSIZE);
+
+    DWORD cnt = 0;
+
+    *reinterpret_cast<BOOLEAN*>(*pData + cnt) = m_bHide;
+    cnt += sizeof(BOOLEAN);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 31152
+    UTIL_ASSERT(cnt == *dwSize);
+}
+
+// 0x5158A0
+BOOL CMessageToggleInterface::UnmarshalMessage(BYTE* pData, DWORD dwSize)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CMessage.cpp
+    // __LINE__: 31176
+    UTIL_ASSERT(pData != NULL);
+
+    DWORD cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    m_bHide = *reinterpret_cast<BOOLEAN*>(pData + cnt);
+    cnt += sizeof(BOOLEAN);
+
+    // NOTE: Missing trailing guard.
+
+    return TRUE;
+}
+
+// 0x5158E0
+void CMessageToggleInterface::Run()
+{
+    if (m_bHide) {
+        if (!g_pBaldurChitin->GetScreenWorld()->GetManager()->m_bHidden) {
+            g_pBaldurChitin->GetScreenWorld()->HideInterface();
+            g_pBaldurChitin->GetScreenWorld()->m_nAutoUnhideInterface++;
+        }
+    } else {
+        if (g_pBaldurChitin->GetScreenWorld()->m_nAutoUnhideInterface > 0) {
+            g_pBaldurChitin->GetScreenWorld()->UnhideInterface();
+            g_pBaldurChitin->GetScreenWorld()->m_nAutoUnhideInterface--;
+        }
     }
 }
 

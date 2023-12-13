@@ -112,6 +112,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_WEAPON_IMMUNITIES_UPDATE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_101;
     static const BYTE MSG_SUBTYPE_CMESSAGE_103;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_TOGGLE_INTERFACE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_107;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_AREA_TYPE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_SET_AREA_EXPLORED;
@@ -1591,6 +1592,19 @@ public:
     void Run() override;
 
     /* 000C */ WORD m_areaType;
+};
+
+class CMessageToggleInterface : public CMessage {
+public:
+    CMessageToggleInterface(BOOLEAN bHide, LONG caller, LONG target);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+    void MarshalMessage(BYTE** pData, DWORD* dwSize) override;
+    BOOL UnmarshalMessage(BYTE* pData, DWORD dwSize) override;
+    void Run() override;
+
+    /* 000C */ BOOLEAN m_bHide;
 };
 
 class CMessageSetAreaExplored : public CMessage {
