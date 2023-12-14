@@ -16,6 +16,7 @@ public:
     /* 007C */ virtual void CallBack();
 
     void AddEffect(CGameEffect* pEffect);
+    void ClearEffects();
     LONG DetermineHeight(CGameSprite* pSprite);
     SHORT GetDirection(CPoint target);
     void PlaySound(CResRef resRef, BOOL loop, BOOL fireAndForget);

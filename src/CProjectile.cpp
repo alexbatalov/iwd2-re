@@ -32,6 +32,17 @@ void CProjectile::AddEffect(CGameEffect* pEffect)
     m_effectList.AddTail(pEffect);
 }
 
+// 0x529F10
+void CProjectile::ClearEffects()
+{
+    POSITION pos = m_effectList.GetHeadPosition();
+    while (pos != NULL) {
+        CGameEffect* node = m_effectList.GetNext(pos);
+        delete node;
+    }
+    m_effectList.RemoveAll();
+}
+
 // 0x529F40
 LONG CProjectile::DetermineHeight(CGameSprite* pSprite)
 {
