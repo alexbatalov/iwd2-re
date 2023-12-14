@@ -80,6 +80,7 @@ public:
     SHORT SendTrigger(CGameAIBase* sprite);
     SHORT Wait();
     SHORT SmallWait();
+    SHORT Shout();
     void PutItemGround(CItem* pItem);
     SHORT TakePartyGold();
     SHORT GivePartyGold();

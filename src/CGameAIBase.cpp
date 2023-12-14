@@ -863,6 +863,36 @@ SHORT CGameAIBase::SmallWait()
     return ACTION_DONE;
 }
 
+// 0x460110
+SHORT CGameAIBase::Shout()
+{
+    CTypedPtrList<CPtrList, LONG*> targets;
+
+    SHORT range = m_curAction.m_actionID != CAIACTION_212
+        ? GetVisualRange()
+        : SHORT_MAX;
+
+    m_pArea->GetAllInRange(m_pos,
+        CAIObjectType::ANYONE,
+        range,
+        GetTerrainTable(),
+        targets,
+        FALSE,
+        FALSE);
+
+    CAITrigger trigger(CAITrigger::HEARD, m_typeAI, m_curAction.m_specificID);
+
+    POSITION pos = targets.GetHeadPosition();
+    while (pos != NULL) {
+        LONG nId = reinterpret_cast<LONG>(targets.GetNext(pos));
+
+        CMessage* message = new CMessageSetTrigger(trigger, m_id, nId);
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+    }
+
+    return ACTION_DONE;
+}
+
 // 0x463310
 void CGameAIBase::PutItemGround(CItem* pItem)
 {

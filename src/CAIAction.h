@@ -5,6 +5,7 @@
 
 #include "CAIObjectType.h"
 
+#define CAIACTION_212 212
 #define CAIACTION_MOVEVIEWPOINTUNTILDONE 264
 
 class CGameAIBase;
