@@ -333,6 +333,7 @@ public:
     BOOLEAN MultiplayerSynchReply();
     BOOLEAN OnMultiplayerSynchReply(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize);
     BOOLEAN VersionServer(CString sPlayerName);
+    BOOLEAN OnVersionServer(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize);
     void SetVersionControlShutdownServerString(CString sValue);
     void SetVersionControlShutdownClientString(CString sValue);
     BYTE* PollSpecificMessageType(BYTE nMsgType, BYTE nMsgSubType, INT& nMsgFrom, DWORD& dwSize);

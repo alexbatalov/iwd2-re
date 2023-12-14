@@ -4180,6 +4180,89 @@ BOOLEAN CBaldurMessage::VersionServer(CString sPlayerName)
     return TRUE;
 }
 
+// 0x43BF80
+BOOLEAN CBaldurMessage::OnVersionServer(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize)
+{
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+        return FALSE;
+    }
+
+    CString sClientVersion;
+    CString sVersion(CChitin::m_sVersionNumber);
+    CString sBuild(CChitin::m_sBuildNumber);
+
+    INT nMajor;
+    INT nMinor;
+    sscanf(sVersion, "%d, %d", &nMajor, &nMinor);
+
+    sClientVersion.Format("v%d.%d.%s", nMajor, nMinor, (LPCSTR)sBuild);
+
+    DWORD cnt = CNetwork::SPEC_MSG_HEADER_LENGTH;
+
+    // Skip num fields.
+    cnt++;
+
+    BYTE nServerVersionLength = *reinterpret_cast<BYTE*>(pByteMessage + cnt);
+    cnt += sizeof(BYTE);
+
+    CString sServerVersion(reinterpret_cast<char*>(pByteMessage + cnt), nServerVersionLength);
+    cnt += nServerVersionLength;
+
+    if (sClientVersion != sServerVersion) {
+        m_bVersionControlShutdown = TRUE;
+        m_nVersionControlShutdownReason = 1;
+        SetVersionControlShutdownServerString(sServerVersion);
+        SetVersionControlShutdownClientString(sClientVersion);
+        g_pChitin->cNetwork.CloseSession(TRUE);
+        return FALSE;
+    }
+
+    BYTE nServerExpansion = *reinterpret_cast<BYTE*>(pByteMessage + cnt);
+    cnt += sizeof(BYTE);
+
+    if (nServerExpansion != 0) {
+        CString sClientExpansion;
+        CString sServerExpansion;
+
+        m_bVersionControlShutdown = TRUE;
+        m_nVersionControlShutdownReason = 2;
+
+        sServerExpansion.Format("%d", nServerExpansion);
+        sClientExpansion.Format("%d", 0);
+
+        SetVersionControlShutdownServerString(sServerExpansion);
+        SetVersionControlShutdownClientString(sClientExpansion);
+
+        m_bVersionControlShutdown = TRUE;
+        g_pChitin->cNetwork.CloseSession(TRUE);
+        return FALSE;
+    }
+
+    DWORD nServerFrameRate = *reinterpret_cast<DWORD*>(pByteMessage + cnt);
+    cnt += sizeof(DWORD);
+
+    if (nServerFrameRate != CChitin::TIMER_UPDATES_PER_SECOND) {
+        CString sClientFrameRate;
+        CString sServerFrameRate;
+
+        m_bVersionControlShutdown = TRUE;
+        m_nVersionControlShutdownReason = 2;
+
+        sServerFrameRate.Format("%d", nServerFrameRate);
+        sClientFrameRate.Format("%d", CChitin::TIMER_UPDATES_PER_SECOND);
+
+        SetVersionControlShutdownServerString(sServerFrameRate);
+        SetVersionControlShutdownClientString(sClientFrameRate);
+
+        m_bVersionControlShutdown = TRUE;
+        g_pChitin->cNetwork.CloseSession(TRUE);
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
 // FIXME: `sValue` should be reference.
 //
 // 0x43C2F0
