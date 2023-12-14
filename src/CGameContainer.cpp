@@ -16,6 +16,9 @@
 // 0x8D3988
 const CResRef CGameContainer::RESREF_AR6051("AR6051");
 
+// 0x8D2564
+BYTE CGameContainer::STATICBUFFER[STATICBUFFERSIZE_CGAMECONTAINER];
+
 // 0x47BFA0
 CGameContainer::CGameContainer(CGameArea* pArea, CAreaFileContainer* pContainerObject, CAreaPoint* pPoints, WORD maxPts, CCreatureFileItem* pItems, DWORD maxItems)
 {
@@ -837,6 +840,162 @@ void CGameContainer::Marshal(CAreaFileContainer** pContainerObject)
     (*pContainerObject)->m_breakDifficulty = m_breakDifficulty;
     strncpy((*pContainerObject)->m_ownedBy, m_ownedBy, SCRIPTNAME_SIZE);
     m_keyType.GetResRef((*pContainerObject)->m_keyType);
+}
+
+// 0x480C00
+void CGameContainer::MarshalMessage(BYTE** pData, DWORD* dwSize)
+{
+    CResRef areaResRef;
+    DWORD cnt;
+    CAreaFileContainer cContainerObject;
+    WORD nItems;
+    CItem* tempItem;
+    BYTE nAreaStringLength;
+    CCreatureFileItem* pItems;
+    CAreaPoint* pPoints;
+    CString sAreaString;
+    POSITION pos;
+
+    if (m_nPolygon > 0) {
+        pPoints = new CAreaPoint[m_nPolygon];
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameContainer.cpp
+        // __LINE__: 2149
+        UTIL_ASSERT(pPoints != NULL);
+
+        for (cnt = 0; cnt < m_nPolygon; cnt++) {
+            pPoints[cnt].m_xPos = static_cast<WORD>(m_pPolygon[cnt].x);
+            pPoints[cnt].m_yPos = static_cast<WORD>(m_pPolygon[cnt].y);
+        }
+
+        cContainerObject.m_pickPointStart = 0;
+        cContainerObject.m_pickPointCount = m_nPolygon;
+    }
+
+    pItems = NULL;
+    if (m_lstItems.GetCount() > 0) {
+        nItems = 0;
+        pos = m_lstItems.GetHeadPosition();
+        while (pos != NULL) {
+            tempItem = m_lstItems.GetNext(pos);
+            if (tempItem != NULL) {
+                nItems++;
+            }
+        }
+
+        if (nItems > 0) {
+            pItems = new CCreatureFileItem[nItems];
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameContainer.cpp
+            // __LINE__: 2173
+            UTIL_ASSERT(pItems != NULL)
+
+            // FIXME: Unsafe x64 conversion.
+            cContainerObject.m_startingItem = 0;
+            cContainerObject.m_itemCount = nItems;
+
+            cnt = 0;
+            pos = m_lstItems.GetHeadPosition();
+            while (pos != NULL) {
+                tempItem = m_lstItems.GetNext(pos);
+                if (tempItem != NULL) {
+                    tempItem->GetResRef().GetResRef(pItems[cnt].m_itemId);
+                    for (INT ability = 0; ability < 3; ability++) {
+                        pItems[cnt].m_usageCount[ability] = tempItem->GetUsageCount(ability);
+                    }
+                    pItems[cnt].m_wear = tempItem->m_wear;
+                    pItems[cnt].m_dynamicFlags = tempItem->m_flags;
+                    cnt++;
+                }
+            }
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameContainer.cpp
+            // __LINE__: 2191
+            UTIL_ASSERT(cnt == nItems)
+        }
+    }
+
+    cContainerObject.m_boundingRectLeft = static_cast<WORD>(m_rBounding.left);
+    cContainerObject.m_boundingRectTop = static_cast<WORD>(m_rBounding.top);
+    cContainerObject.m_boundingRectRight = static_cast<WORD>(m_rBounding.right) - 1;
+    cContainerObject.m_boundingRectBottom = static_cast<WORD>(m_rBounding.bottom) - 1;
+    cContainerObject.m_containerType = m_containerType;
+    cContainerObject.m_posX = static_cast<WORD>(m_ptWalkToUse.x);
+    cContainerObject.m_posY = static_cast<WORD>(m_ptWalkToUse.y);
+    memcpy(cContainerObject.m_script, m_scriptRes, RESREF_SIZE);
+    strncpy(cContainerObject.m_scriptName, m_scriptName, SCRIPTNAME_SIZE);
+    cContainerObject.m_lockDifficulty = m_lockDifficulty;
+    cContainerObject.m_dwFlags = m_dwFlags;
+    cContainerObject.m_trapDetectionDifficulty = m_trapDetectionDifficulty;
+    cContainerObject.m_trapRemovalDifficulty = m_trapRemovalDifficulty;
+    cContainerObject.m_trapActivated = m_trapActivated;
+    cContainerObject.m_trapDetected = m_trapDetected;
+    cContainerObject.m_posXTrapOrigin = static_cast<WORD>(m_posTrapOrigin.x);
+    cContainerObject.m_posYTrapOrigin = static_cast<WORD>(m_posTrapOrigin.y);
+    cContainerObject.m_triggerRange = m_triggerRange;
+    cContainerObject.m_triggerRange = m_triggerRange;
+    cContainerObject.m_breakDifficulty = m_breakDifficulty;
+    strncpy(cContainerObject.m_ownedBy, m_ownedBy, SCRIPTNAME_SIZE);
+    m_keyType.GetResRef(cContainerObject.m_keyType);
+
+    *dwSize = 0;
+
+    areaResRef = m_pArea->m_resRef;
+    areaResRef.CopyToString(sAreaString);
+    nAreaStringLength = sAreaString.GetLength();
+
+    *dwSize += sizeof(CAreaFileContainer)
+        + sizeof(BYTE)
+        + sizeof(WORD)
+        + sizeof(WORD)
+        + nAreaStringLength
+        + sizeof(CAreaPoint) * m_nPolygon
+        + sizeof(CCreatureFileItem) * nItems;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameContainer.cpp
+    // __LINE__: 2228
+    UTIL_ASSERT(*dwSize <= STATICBUFFERSIZE_CGAMECONTAINER);
+
+    *pData = STATICBUFFER;
+
+    cnt = 0;
+
+    *reinterpret_cast<BYTE*>(*pData + cnt) = nAreaStringLength;
+    cnt += sizeof(BYTE);
+
+    memcpy(*pData + cnt, sAreaString.GetBuffer(nAreaStringLength), nAreaStringLength);
+    cnt += nAreaStringLength;
+
+    *reinterpret_cast<WORD*>(*pData + cnt) = m_nPolygon;
+    cnt += sizeof(WORD);
+
+    *reinterpret_cast<WORD*>(*pData + cnt) = nItems;
+    cnt += sizeof(WORD);
+
+    memcpy(*pData + cnt, &cContainerObject, sizeof(CAreaFileContainer));
+    cnt += sizeof(CAreaFileContainer);
+
+    if (m_nPolygon > 0) {
+        memcpy(*pData + cnt, pPoints, sizeof(CAreaPoint) * m_nPolygon);
+        cnt += sizeof(CAreaPoint) * m_nPolygon;
+    }
+
+    if (pItems != NULL) {
+        memcpy(*pData + cnt, pItems, sizeof(CCreatureFileItem) * nItems);
+        cnt += sizeof(CCreatureFileItem) * nItems;
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameContainer.cpp
+    // __LINE__: 2261
+    UTIL_ASSERT(cnt == *dwSize);
+
+    if (m_nPolygon > 0) {
+        delete pPoints;
+    }
+
+    if (pItems != NULL) {
+        delete pItems;
+    }
 }
 
 // 0x481160

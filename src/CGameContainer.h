@@ -6,11 +6,14 @@
 #include "CVidCell.h"
 #include "FileFormat.h"
 
+#define STATICBUFFERSIZE_CGAMECONTAINER 4096
+
 class CItem;
 
 class CGameContainer : public CGameAIBase {
 public:
     static const CResRef RESREF_AR6051;
+    static BYTE STATICBUFFER[STATICBUFFERSIZE_CGAMECONTAINER];
 
     CGameContainer(CGameArea* pArea, CAreaFileContainer* pContainerObject, CAreaPoint* pPoints, WORD maxPts, CCreatureFileItem* pItems, DWORD maxItems);
     CGameContainer(CGameArea* pArea, const CRect& rBound);
@@ -28,6 +31,7 @@ public:
     void sub_480480(SHORT nSlotNum, CItem* pItem);
     BOOLEAN PlaceItemInBlankSlot(CItem* pItem, BOOLEAN bCompressContainer, SHORT nRecommendedSlotNum);
     void Marshal(CAreaFileContainer** pContainerObject);
+    void MarshalMessage(BYTE** pData, DWORD* dwSize);
     void RefreshRenderPile();
     void OpenContainer(const CAIObjectType& user);
     void SetFlags(DWORD dwFlags);
