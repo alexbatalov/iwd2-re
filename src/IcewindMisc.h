@@ -38,6 +38,7 @@ public:
     static BOOLEAN IsNeutral(CGameSprite* pSprite);
     static BOOLEAN IsEvil(CGameSprite* pSprite);
     static BOOLEAN IsPaladin(CGameSprite* pSprite);
+    static BOOLEAN IsEnemyNearby(CGameSprite* pSprite);
     static BOOLEAN IsAcquatic(CGameSprite* pSprite);
     static BOOLEAN IsLiving(CGameSprite* pSprite);
     static BOOLEAN sud_585070(CGameSprite* pSprite);

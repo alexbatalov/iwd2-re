@@ -196,6 +196,7 @@
 #define CAIOBJECTTYPE_R_PLATE 215
 
 #define CAIOBJECTTYPE_R_184 184
+#define CAIOBJECTTYPE_R_190 190
 
 #define CAIOBJECTTYPE_SUBRACE_PURERACE 0
 #define CAIOBJECTTYPE_SUBRACE_HUMAN_AASIMAR 1
@@ -435,6 +436,9 @@ public:
     int GetInstance() const;
     void SetInstance(int nInstance);
     void SetClass(BYTE nClass);
+
+    BYTE GetSubRace() const { return m_nSubRace; }
+    void SetSubRace(BYTE nSubRace) { m_nSubRace = nSubRace; }
 
     /* 0000 */ CString m_sName;
     /* 0004 */ BYTE m_nEnemyAlly;

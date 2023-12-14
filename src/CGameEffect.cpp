@@ -10,6 +10,7 @@
 #include "CUtil.h"
 #include "CVidPalette.h"
 #include "IcewindCGameEffects.h"
+#include "IcewindMisc.h"
 
 // NOTE: Not used. It does not include many effects. Formatting is odd.
 //
@@ -9491,6 +9492,284 @@ CGameEffect* CGameEffectImmunitySpell::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4BF140
+BOOL CGameEffectImmunitySpell::Evaluate(CGameSprite* pSprite)
+{
+    CGameObject* pObject;
+    BYTE rc;
+    BOOL bResult;
+
+    switch (m_dwFlags) {
+    case 0:
+        return FALSE;
+    case 1:
+        return !IcewindMisc::IsUndead(pSprite);
+    case 2:
+        return IcewindMisc::IsUndead(pSprite);
+    case 3:
+        return !IcewindMisc::IsImmuneToFire(pSprite);
+    case 4:
+        return IcewindMisc::IsImmuneToFire(pSprite);
+    case 5:
+        return !IcewindMisc::IsHumanoid(pSprite);
+    case 6:
+        return IcewindMisc::IsHumanoid(pSprite);
+    case 7:
+        return !IcewindMisc::IsAnimal(pSprite);
+    case 8:
+        return IcewindMisc::IsAnimal(pSprite);
+    case 9:
+        return !IcewindMisc::IsElemental(pSprite);
+    case 10:
+        return IcewindMisc::IsElemental(pSprite);
+    case 11:
+        return !IcewindMisc::IsFungus(pSprite);
+    case 12:
+        return IcewindMisc::IsFungus(pSprite);
+    case 13:
+        return !IcewindMisc::IsLarge(pSprite);
+    case 14:
+        return IcewindMisc::IsLarge(pSprite);
+    case 15:
+        return !IcewindMisc::IsElf(pSprite);
+    case 16:
+        return IcewindMisc::IsElf(pSprite);
+    case 17:
+        return !IcewindMisc::IsUmberhulk(pSprite);
+    case 18:
+        return IcewindMisc::IsUmberhulk(pSprite);
+    case 19:
+        return !IcewindMisc::IsHalfElf(pSprite);
+    case 20:
+        return IcewindMisc::IsHalfElf(pSprite);
+    case 21:
+        return !IcewindMisc::IsHumanoid(pSprite) && !IcewindMisc::IsAnimal(pSprite);
+    case 22:
+        return IcewindMisc::IsHumanoid(pSprite) || IcewindMisc::IsAnimal(pSprite);
+    case 23:
+        return !IcewindMisc::IsBlind(pSprite);
+    case 24:
+        return IcewindMisc::IsBlind(pSprite);
+    case 25:
+        return !IcewindMisc::IsImmuneToCold(pSprite);
+    case 26:
+        return IcewindMisc::IsImmuneToCold(pSprite);
+    case 27:
+        return !IcewindMisc::IsGolem(pSprite);
+    case 28:
+        return IcewindMisc::IsGolem(pSprite);
+    case 29:
+        return !IcewindMisc::IsMinotaur(pSprite);
+    case 30:
+        return IcewindMisc::IsMinotaur(pSprite);
+    case 31:
+        return !IcewindMisc::IsUndead(pSprite) && !IcewindMisc::IsFungus(pSprite);
+    case 32:
+        return IcewindMisc::IsUndead(pSprite) || IcewindMisc::IsFungus(pSprite);
+    case 33:
+        return !IcewindMisc::IsGood(pSprite);
+    case 34:
+        return IcewindMisc::IsGood(pSprite);
+    case 35:
+        return !IcewindMisc::IsNeutral(pSprite);
+    case 36:
+        return IcewindMisc::IsNeutral(pSprite);
+    case 37:
+        return !IcewindMisc::IsEvil(pSprite);
+    case 38:
+        return IcewindMisc::IsEvil(pSprite);
+    case 39:
+        return !IcewindMisc::IsPaladin(pSprite);
+    case 40:
+        return IcewindMisc::IsPaladin(pSprite);
+    case 41:
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_sourceID,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+        if (rc == CGameObjectArray::SUCCESS) {
+            bResult = !IcewindMisc::IsGoodEvilSame(pSprite, static_cast<CGameSprite*>(pObject));
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_sourceID,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        } else {
+            bResult = FALSE;
+        }
+        return bResult;
+    case 42:
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_sourceID,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+        if (rc == CGameObjectArray::SUCCESS) {
+            bResult = IcewindMisc::IsGoodEvilSame(pSprite, static_cast<CGameSprite*>(pObject));
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_sourceID,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        } else {
+            bResult = FALSE;
+        }
+        return bResult;
+    case 43:
+        return pSprite->GetId() != m_sourceID;
+    case 44:
+        return pSprite->GetId() == m_sourceID;
+    case 45:
+        return !IcewindMisc::IsAcquatic(pSprite);
+    case 46:
+        return IcewindMisc::IsAcquatic(pSprite);
+    case 47:
+        return !IcewindMisc::IsLiving(pSprite);
+    case 48:
+        return IcewindMisc::IsLiving(pSprite);
+    case 49:
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_sourceID,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+        if (rc == CGameObjectArray::SUCCESS) {
+            bResult = !IcewindMisc::sub_585230(pSprite, static_cast<CGameSprite*>(pObject));
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_sourceID,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        } else {
+            bResult = FALSE;
+        }
+        return bResult;
+    case 50:
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_sourceID,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+        if (rc == CGameObjectArray::SUCCESS) {
+            bResult = IcewindMisc::sub_585230(pSprite, static_cast<CGameSprite*>(pObject));
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_sourceID,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        } else {
+            bResult = FALSE;
+        }
+        return bResult;
+    case 51:
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_sourceID,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+        if (rc == CGameObjectArray::SUCCESS) {
+            bResult = !IcewindMisc::sub_5852A0(pSprite, static_cast<CGameSprite*>(pObject));
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_sourceID,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        } else {
+            bResult = FALSE;
+        }
+        return bResult;
+    case 52:
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_sourceID,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+        if (rc == CGameObjectArray::SUCCESS) {
+            bResult = IcewindMisc::sub_5852A0(pSprite, static_cast<CGameSprite*>(pObject));
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_sourceID,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        } else {
+            bResult = FALSE;
+        }
+        return bResult;
+    case 53:
+        return !IcewindMisc::IsImmuneToFire(pSprite) && !IcewindMisc::IsImmuneToCold(pSprite);
+    case 54:
+        return IcewindMisc::IsImmuneToFire(pSprite) || IcewindMisc::IsImmuneToCold(pSprite);
+    case 55:
+        return !IcewindMisc::sud_585070(pSprite);
+    case 56:
+        return IcewindMisc::sud_585070(pSprite);
+    case 57:
+        return !IcewindMisc::IsMale(pSprite);
+    case 58:
+        return IcewindMisc::IsMale(pSprite);
+    case 59:
+        return !IcewindMisc::IsLawful(pSprite);
+    case 60:
+        return IcewindMisc::IsLawful(pSprite);
+    case 61:
+        return !IcewindMisc::IsChaotic(pSprite);
+    case 62:
+        return IcewindMisc::IsChaotic(pSprite);
+    case 63:
+        return TRUE;
+    case 64:
+    case 65:
+        return pSprite->GetAIType().GetRace() == CAIOBJECTTYPE_R_ORC;
+    case 66:
+        return !pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_DEAFENED];
+    case 67:
+        return pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_DEAFENED];
+    case 68:
+        return (pSprite->GetDerivedStats()->m_generalState & STATE_SUMMONED_CREATURE) == 0;
+    case 69:
+        return (pSprite->GetDerivedStats()->m_generalState & STATE_SUMMONED_CREATURE) != 0;
+    case 70:
+        return pSprite->GetAIType().GetRace() != CAIOBJECTTYPE_R_184;
+    case 71:
+        return pSprite->GetAIType().GetRace() == CAIOBJECTTYPE_R_184;
+    case 72:
+        return TRUE;
+    case 73:
+        return TRUE;
+    case 74:
+        return pSprite->GetDerivedStats()->m_nINT >= m_effectAmount;
+    case 75:
+        return pSprite->GetDerivedStats()->m_nINT <= m_effectAmount;
+    case 76:
+        return pSprite->GetDerivedStats()->m_nINT > m_effectAmount;
+    case 77:
+        return pSprite->GetDerivedStats()->m_nINT < m_effectAmount;
+    case 78:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 23134
+        UTIL_ASSERT_MSG(FALSE, "CGameEffectImmunitySpell::ApplyEffect - Test for IF_BARD_SKALD is obsolete");
+    case 79:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 23137
+        UTIL_ASSERT_MSG(FALSE, "CGameEffectImmunitySpell::ApplyEffect - Test for IF_BARD_SKALD is obsolete");
+    case 80:
+        return !IcewindMisc::IsEnemyNearby(pSprite);
+    case 81:
+        return IcewindMisc::IsEnemyNearby(pSprite);
+    case 82:
+        return !(pSprite->GetAIType().GetRace() == CAIOBJECTTYPE_R_ELF && pSprite->GetAIType().GetSubRace() == CAIOBJECTTYPE_SUBRACE_ELF_DROW);
+    case 83:
+        return pSprite->GetAIType().GetRace() == CAIOBJECTTYPE_R_ELF && pSprite->GetAIType().GetSubRace() == CAIOBJECTTYPE_SUBRACE_ELF_DROW;
+    case 84:
+        return !(pSprite->GetAIType().GetRace() == CAIOBJECTTYPE_R_DWARF && pSprite->GetAIType().GetSubRace() == CAIOBJECTTYPE_SUBRACE_DWARF_GRAY);
+    case 85:
+        return pSprite->GetAIType().GetRace() == CAIOBJECTTYPE_R_DWARF && pSprite->GetAIType().GetSubRace() == CAIOBJECTTYPE_SUBRACE_DWARF_GRAY;
+    case 86:
+        return !g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->IsDay() && !g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->IsDawn();
+    case 87:
+        return g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->IsDay() || g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->IsDawn();
+    case 88:
+        return !(pSprite->GetArea() != NULL && (pSprite->GetArea()->GetHeader()->m_areaType & 0x3) != 0);
+    case 89:
+        return pSprite->GetArea() != NULL && (pSprite->GetArea()->GetHeader()->m_areaType & 0x3) != 0;
+    case 90:
+        return pSprite->GetAIType().GetRace() != CAIOBJECTTYPE_R_190;
+    case 91:
+        return pSprite->GetAIType().GetRace() == CAIOBJECTTYPE_R_190;
+    case 92:
+        return !IcewindMisc::IsOutsider(pSprite);
+    case 93:
+        return IcewindMisc::IsOutsider(pSprite);
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 23214
+        UTIL_ASSERT(FALSE);
+    }
 }
 
 // -----------------------------------------------------------------------------

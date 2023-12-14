@@ -3,6 +3,7 @@
 #include "CBaldurChitin.h"
 #include "CButtonData.h"
 #include "CGameAnimationType.h"
+#include "CGameArea.h"
 #include "CGameEffect.h"
 #include "CGameSprite.h"
 #include "CInfGame.h"
@@ -339,6 +340,13 @@ BOOLEAN IcewindMisc::IsEvil(CGameSprite* pSprite)
 BOOLEAN IcewindMisc::IsPaladin(CGameSprite* pSprite)
 {
     return (pSprite->GetAIType().m_nClassMask & CLASSMASK_PALADIN) != 0;
+}
+
+// 0x584EF0
+BOOLEAN IcewindMisc::IsEnemyNearby(CGameSprite* pSprite)
+{
+    return pSprite->GetArea() != NULL
+        && pSprite->GetArea()->GetNearest(pSprite->GetId(), pSprite->GetAIType().GetEnemyOf(), pSprite->GetVisualRange(), pSprite->GetTerrainTable(), FALSE, pSprite->GetCanSeeInvisible(), FALSE, FALSE, FALSE) != CGameObjectArray::INVALID_INDEX;
 }
 
 // 0x584FA0

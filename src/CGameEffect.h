@@ -1707,6 +1707,8 @@ class CGameEffectImmunitySpell : public CGameEffect {
 public:
     CGameEffectImmunitySpell(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+
+    BOOL Evaluate(CGameSprite* pSprite);
 };
 
 class CGameEffectBounceSpell : public CGameEffect {
