@@ -1,6 +1,7 @@
 #include "CGameObjectArray.h"
 
 #include "CBaldurChitin.h"
+#include "CGameContainer.h"
 #include "CGameObject.h"
 #include "CInfGame.h"
 #include "CUtil.h"
@@ -345,8 +346,73 @@ BYTE CGameObjectArray::Add(LONG* index, CGameObject* ptr, DWORD dwTimeOut)
     ptr->SetAIType(type, 0);
 
     if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
-        // TODO: Incomplete.
+        CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+        if (pGame->m_bInLoadArea == TRUE) {
+            pGame->GetRemoteObjectArray()->Add(pGame->m_nUniqueAreaID,
+                *index,
+                *index,
+                FALSE);
+
+            if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+                pGame->GetRemoteObjectArray()->Add(g_pChitin->cNetwork.m_idLocalPlayer,
+                    *index,
+                    *index,
+                    FALSE);
+            }
+
+            ptr->m_remotePlayerID = pGame->m_nUniqueAreaID;
+            ptr->m_remoteObjectID = *index;
+
+            // NOTE: Unsigned compare.
+            if (pGame->m_nAreaFirstObject > static_cast<DWORD>(m_nNextObjectId - 1)) {
+                pGame->m_nAreaFirstObject = m_nNextObjectId - 1;
+            }
+        } else if (pGame->m_bInLoadGame == TRUE) {
+            pGame->GetRemoteObjectArray()->Add(0,
+                *index,
+                *index,
+                FALSE);
+
+            if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+                pGame->GetRemoteObjectArray()->Add(g_pChitin->cNetwork.m_idLocalPlayer,
+                    *index,
+                    *index,
+                    FALSE);
+            }
+
+            ptr->m_remotePlayerID = 0;
+            ptr->m_remoteObjectID = *index;
+        } else {
+            if (!g_pBaldurChitin->GetBaldurMessage()->m_bInOnObjectAdd) {
+                pGame->GetRemoteObjectArray()->Add(g_pChitin->cNetwork.m_idLocalPlayer,
+                    *index,
+                    *index,
+                    FALSE);
+
+                if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+                    pGame->GetRemoteObjectArray()->Add(g_pChitin->cNetwork.m_idLocalPlayer,
+                        *index,
+                        *index,
+                        FALSE);
+                }
+
+                ptr->m_remotePlayerID = 0;
+                ptr->m_remoteObjectID = *index;
+
+                if (ptr->GetObjectType() == CGameObject::TYPE_CONTAINER) {
+                    BYTE* pObjectData;
+                    DWORD dwObjectDataSize;
+                    static_cast<CGameContainer*>(ptr)->MarshalMessage(&pObjectData, &dwObjectDataSize);
+                    g_pBaldurChitin->GetBaldurMessage()->ObjectAdd(*index,
+                        ptr->GetObjectType(),
+                        pObjectData,
+                        dwObjectDataSize);
+                }
+            }
+        }
     }
+
+    lock.Unlock();
 
     return SUCCESS;
 }
