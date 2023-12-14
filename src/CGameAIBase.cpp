@@ -1168,6 +1168,56 @@ SHORT CGameAIBase::SetMusic()
     return ACTION_DONE;
 }
 
+// 0x466B30
+SHORT CGameAIBase::Unlock(CGameAIBase* pObject)
+{
+    CMessage* message;
+
+    if (pObject == NULL) {
+        return ACTION_ERROR;
+    }
+
+    if (pObject->GetObjectType() != TYPE_DOOR
+        && pObject->GetObjectType() != TYPE_CONTAINER) {
+        return ACTION_ERROR;
+    }
+
+    message = new CMessageSetForceActionPick(TRUE, m_id, pObject->GetId());
+    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+
+    CAITrigger trigger(CAITrigger::NO_TRIGGER, 0);
+
+    if (pObject->GetObjectType() == TYPE_DOOR
+        && (static_cast<CGameDoor*>(pObject)->m_dwFlags & 0x2) != 0) {
+        trigger = CAITrigger(CAITrigger::UNLOCKED, m_typeAI, 0);
+
+        message = new CMessageSetTrigger(trigger, m_id, pObject->GetId());
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+
+        static_cast<CGameDoor*>(pObject)->m_dwFlags &= ~0x2;
+
+        message = new CMessageUnlock(static_cast<CGameDoor*>(pObject)->m_dwFlags,
+            m_id,
+            pObject->GetId());
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+    }
+
+    if (pObject->GetObjectType() == TYPE_CONTAINER
+        && (static_cast<CGameContainer*>(pObject)->m_dwFlags & 0x1) != 0) {
+        trigger = CAITrigger(CAITrigger::UNLOCKED, m_typeAI, 0);
+
+        message = new CMessageSetTrigger(trigger, m_id, pObject->GetId());
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+
+        message = new CMessageUnlock(static_cast<CGameContainer*>(pObject)->m_dwFlags & ~0x1,
+            m_id,
+            pObject->GetId());
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+    }
+
+    return ACTION_DONE;
+}
+
 // 0x466F90
 SHORT CGameAIBase::MoveGlobal(CGameSprite* pSprite)
 {
