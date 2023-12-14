@@ -1,6 +1,7 @@
 #include "CProjectile.h"
 
 #include "CBaldurChitin.h"
+#include "CGameSprite.h"
 #include "CInfGame.h"
 
 // 0x6A3130
@@ -21,4 +22,18 @@ void CProjectile::RemoveSelf()
     if (rc == CGameObjectArray::SUCCESS) {
         delete this;
     }
+}
+
+// 0x529F40
+LONG CProjectile::DetermineHeight(CGameSprite* pSprite)
+{
+    if (!m_bHasHeight) {
+        return 0;
+    }
+
+    if (pSprite->GetObjectType() != TYPE_SPRITE) {
+        return 32;
+    }
+
+    return pSprite->GetAnimation()->GetCastHeight();
 }

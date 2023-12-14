@@ -353,6 +353,16 @@ BYTE CGameAnimation::GetAttackFrameType(BYTE numAttacks, BYTE speedFactor, BYTE 
 }
 
 // NOTE: Inlined.
+SHORT CGameAnimation::GetCastHeight()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2117
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->GetCastHeight();
+}
+
+// NOTE: Inlined.
 BOOLEAN CGameAnimation::GetCurrentResRef(CString& resBody, CString& resWeapon, CString& resShield, CString& resHelmet)
 {
     // __FILE__: .\Include\ObjAnimation.h
