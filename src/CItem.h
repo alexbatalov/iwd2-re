@@ -59,6 +59,7 @@ public:
     BYTE GetMinCONRequired();
     BYTE GetMinCHRRequired();
 
+    CItem& operator=(const CItem& other);
     bool operator==(const CItem& other);
 
     /* 0014 */ INT m_nAbilities;

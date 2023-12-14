@@ -6208,13 +6208,8 @@ void CMessageColorReset::Run()
 CMessageContainerAddItem::CMessageContainerAddItem(const CItem& item, SHORT slotNum, BOOLEAN bCompressContainer, LONG caller, LONG target)
     : CMessage(caller, target)
 {
-    m_item.SetResRef(item.cResRef, TRUE);
-    m_item.m_useCount1 = item.m_useCount1;
-    m_item.m_useCount2 = item.m_useCount2;
-    m_item.m_useCount3 = item.m_useCount3;
-    m_item.m_wear = item.m_wear;
-    m_item.m_flags = item.m_flags;
-
+    //
+    m_item = item;
     m_slotNum = slotNum;
     m_bCompressContainer = m_bCompressContainer;
 }
