@@ -45,3 +45,88 @@ LONG CProjectile::DetermineHeight(CGameSprite* pSprite)
 
     return pSprite->GetAnimation()->GetCastHeight();
 }
+
+// 0x529FB0
+void CProjectile::OnArrival()
+{
+    CProjectile* pProjectile;
+    BYTE rc;
+
+    if (m_callBackProjectile != CGameObjectArray::INVALID_INDEX) {
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_callBackProjectile,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pProjectile),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc != CGameObjectArray::SUCCESS) {
+            return;
+        }
+
+        pProjectile->CallBack();
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_callBackProjectile,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+
+    // NOTE: Uninline.
+    PlaySound(m_arrivalSoundRef, m_loopArrivalSound, TRUE);
+
+    if (field_182 != CGameObjectArray::INVALID_INDEX) {
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(field_182,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pProjectile),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            pProjectile->RemoveSelf();
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(field_182,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+
+    DeliverEffects();
+    RemoveFromArea();
+
+    rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->Delete(m_id,
+        CGameObjectArray::THREAD_ASYNCH,
+        NULL,
+        INFINITE);
+    if (rc == CGameObjectArray::SUCCESS) {
+        delete this;
+    }
+}
+
+// 0x52A1A0
+void CProjectile::DeliverEffects()
+{
+    // TODO: Incomplete.
+}
+
+// 0x52A4E0
+void CProjectile::PlaySound(CResRef resRef, BOOL loop, BOOL fireAndForget)
+{
+    m_sound.Stop();
+    if (resRef != "") {
+        m_sound.SetResRef(resRef, TRUE, TRUE);
+        if (loop) {
+            m_sound.SetLoopingFlag(TRUE);
+        }
+        if (fireAndForget) {
+            m_sound.SetFireForget(TRUE);
+        }
+        m_sound.SetChannel(15, reinterpret_cast<DWORD>(m_pArea));
+        m_sound.Play(m_pos.x, m_pos.y, 0, FALSE);
+    }
+}
+
+// 0x78E730
+void CProjectile::CallBack()
+{
+}
