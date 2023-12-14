@@ -8520,6 +8520,41 @@ CGameEffect* CGameEffectDamageVisualEffect::Copy()
     return copy;
 }
 
+// 0x4BDE20
+BOOL CGameEffectDamageVisualEffect::ApplyEffect(CGameSprite* pSprite)
+{
+    switch (m_dwFlags) {
+    case 1:
+        pSprite->StartSpriteEffect(0, 0, 128, TRUE);
+        break;
+    case 2:
+        pSprite->StartSpriteEffect(0, 1, 128, TRUE);
+        break;
+    case 3:
+        pSprite->StartSpriteEffect(0, 2, 128, TRUE);
+        break;
+    case 4:
+    case 5:
+    case 6:
+        pSprite->StartSpriteEffect(1, 0, 128, TRUE);
+        break;
+    case 7:
+        pSprite->StartSpriteEffect(2, 0, 128, TRUE);
+        break;
+    case 8:
+        pSprite->StartSpriteEffect(2, 1, 128, TRUE);
+        break;
+    case 9:
+        pSprite->StartSpriteEffect(2, 2, 128, TRUE);
+        break;
+    case 10:
+        pSprite->StartSpriteEffect(4, 0, 128, TRUE);
+        break;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
