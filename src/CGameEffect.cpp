@@ -9017,6 +9017,34 @@ CGameEffect* CGameEffectSetLocalVariable::Copy()
     return copy;
 }
 
+// 0x4BEDF0
+BOOL CGameEffectSetLocalVariable::ApplyEffect(CGameSprite* pSprite)
+{
+    CVariable var;
+    CString strRes1;
+    CString strRes2;
+    CString strRes3;
+    CString work;
+
+    m_res.CopyToString(strRes1);
+    m_res2.CopyToString(strRes2);
+    m_res3.CopyToString(strRes3);
+
+    strncpy(var.m_name, m_scriptName, SCRIPTNAME_SIZE);
+    var.m_type = static_cast<WORD>(m_flags);
+    var.m_dwValue = static_cast<DWORD>(m_dwFlags);
+    var.m_intValue = static_cast<LONG>(m_effectAmount);
+    var.m_resRefType = static_cast<WORD>(m_effectAmount2);
+    var.m_floatValue = static_cast<float>(m_effectAmount3);
+    work = strRes1 + strRes2 + strRes3;
+    strncpy(var.m_stringValue, work, SCRIPTNAME_SIZE);
+    pSprite->GetLocalVariables()->AddKey(var);
+
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
