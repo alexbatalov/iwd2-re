@@ -176,6 +176,9 @@ public:
     static const BYTE MSG_SUBTYPE_MPSETTINGS_NIGHTMAREMODE;
     static const BYTE MSG_SUBTYPE_MPSETTINGS_DEMAND_NIGHTMAREMODE;
 
+    static const BYTE MSG_TYPE_OBJECT;
+    static const BYTE MSG_SUBTYPE_OBJECT_ADD;
+
     static const BYTE MSG_TYPE_PLAYERCHAR;
     static const BYTE MSG_SUBTYPE_PLAYERCHAR_UPDATE_DEMAND;
     static const BYTE MSG_SUBTYPE_PLAYERCHAR_UPDATE_REPLY;
@@ -258,6 +261,7 @@ public:
     BOOLEAN BroadcastDemandCharacterSlotReply(BOOLEAN bUpdateAllCharacters, INT nUpdatedCharacterSlot, BOOLEAN bProgressBarInPlace);
     BOOLEAN DemandCharacterSlotReply(CString& sSendTo, SHORT nCharacterSlot, BOOLEAN bSendCharInfo);
     BOOLEAN OnDemandCharacterSlotReply(INT nMsgFrom, BYTE* pMessage, DWORD dwSize);
+    BOOL ObjectAdd(LONG localObjectID, BYTE nObjectType, BYTE* pObjectData, DWORD dwObjectDataSize);
     BOOL ObjectControlSuggestion(PLAYER_ID playerToSuggestID, LONG localObjectID);
     BOOL ObjectControlRequest(LONG localObjectID);
     BOOL ObjectControl();

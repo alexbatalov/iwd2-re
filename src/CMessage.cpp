@@ -488,6 +488,12 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_MPSETTINGS_NIGHTMAREMODE = 78;
 // 0x84CF8A
 const BYTE CBaldurMessage::MSG_SUBTYPE_MPSETTINGS_DEMAND_NIGHTMAREMODE = 110;
 
+// 0x84CF98
+const BYTE CBaldurMessage::MSG_TYPE_OBJECT = 79;
+
+// 0x84CF99
+const BYTE CBaldurMessage::MSG_SUBTYPE_OBJECT_ADD = 65;
+
 // 0x84CF9F
 const BYTE CBaldurMessage::MSG_TYPE_PLAYERCHAR = 80;
 
@@ -2173,6 +2179,80 @@ BOOLEAN CBaldurMessage::OnDemandCharacterSlotReply(INT nMsgFrom, BYTE* pMessage,
     // TODO: Incomplete.
 
     return FALSE;
+}
+
+// 0x42FE20
+BOOL CBaldurMessage::ObjectAdd(LONG localObjectID, BYTE nObjectType, BYTE* pObjectData, DWORD dwObjectDataSize)
+{
+    DWORD dwSize;
+    BYTE* pByteMessage;
+    DWORD cnt;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || m_bInOnObjectAdd == TRUE) {
+        return FALSE;
+    }
+
+    CGameObject* pObject;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(localObjectID,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc != CGameObjectArray::SUCCESS) {
+        return FALSE;
+    }
+
+    PLAYER_ID remotePlayerID = pObject->m_remotePlayerID;
+    LONG remoteObjectID = pObject->m_remoteObjectID;
+
+    g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(localObjectID,
+        CGameObjectArray::THREAD_ASYNCH,
+        INFINITE);
+
+    dwSize = sizeof(PLAYER_ID)
+        + sizeof(LONG)
+        + sizeof(BYTE)
+        + sizeof(DWORD)
+        + dwObjectDataSize;
+    pByteMessage = CreateBuffer(dwSize);
+    if (pByteMessage != NULL) {
+        return FALSE;
+    }
+
+    cnt = 0;
+
+    *reinterpret_cast<PLAYER_ID*>(pByteMessage + cnt) = remotePlayerID;
+    cnt += sizeof(PLAYER_ID);
+
+    *reinterpret_cast<LONG*>(pByteMessage + cnt) = remoteObjectID;
+    cnt += sizeof(LONG);
+
+    *reinterpret_cast<BYTE*>(pByteMessage + cnt) = nObjectType;
+    cnt += sizeof(BYTE);
+
+    *reinterpret_cast<DWORD*>(pByteMessage + cnt) = dwObjectDataSize;
+    cnt += sizeof(DWORD);
+
+    if (dwObjectDataSize != 0) {
+        memcpy(pByteMessage + cnt, pObjectData, dwObjectDataSize);
+        cnt += dwObjectDataSize;
+    }
+
+    g_pChitin->cNetwork.SendSpecificMessage(CString(""),
+        CNetwork::SEND_GUARANTEED | CNetwork::SEND_ALL_PLAYERS,
+        MSG_TYPE_OBJECT,
+        MSG_SUBTYPE_OBJECT_ADD,
+        pByteMessage,
+        dwSize);
+
+    DestroyBuffer(pByteMessage);
+
+    return TRUE;
 }
 
 // 0x430720
