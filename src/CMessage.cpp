@@ -566,6 +566,15 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_MPSYNCH_REQUEST = 82;
 // 0x84CFCA
 const BYTE CBaldurMessage::MSG_SUBTYPE_MPSYNCH_REPLY = 80;
 
+// 0x84CFCE
+const BYTE CBaldurMessage::MSG_TYPE_VERSION = 86;
+
+// 0x84CFCF
+const BYTE CBaldurMessage::MSG_SUBTYPE_VERSION_SERVER = 115;
+
+// 0x84CFD0
+const BYTE CBaldurMessage::VERSION_NUM_FIELDS = 3;
+
 // 0x84CFD3
 const BYTE CBaldurMessage::MSG_TYPE_LEAVEAREALUA = 88;
 
@@ -4094,6 +4103,79 @@ BOOLEAN CBaldurMessage::OnMultiplayerSynchReply(INT nMsgFrom, BYTE* pByteMessage
     }
 
     m_bMultiplayerSynchClientFinished = TRUE;
+
+    return TRUE;
+}
+
+// FIXME: `sPlayerName` should be reference.
+//
+// 0x43BD00
+BOOLEAN CBaldurMessage::VersionServer(CString sPlayerName)
+{
+    BYTE* pByteMessage;
+    DWORD dwSize;
+    DWORD cnt;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()
+        || !g_pChitin->cNetwork.GetSessionHosting()) {
+        return FALSE;
+    }
+
+    CString sLocalPlayerName;
+
+    sLocalPlayerName = g_pChitin->cNetwork.m_sLocalPlayerName;
+    if (sPlayerName == sLocalPlayerName) {
+        return FALSE;
+    }
+
+    CString sFinalVersion;
+    CString sVersion(CChitin::m_sVersionNumber);
+    CString sBuild(CChitin::m_sBuildNumber);
+
+    INT nMajor;
+    INT nMinor;
+    sscanf(sVersion, "%d, %d", &nMajor, &nMinor);
+
+    sFinalVersion.Format("v%d.%d.%s", nMajor, nMinor, (LPCSTR)sBuild);
+
+    BYTE nFinalVersionLength = static_cast<BYTE>(sFinalVersion.GetLength());
+
+    dwSize = sizeof(BYTE)
+        + sizeof(BYTE)
+        + nFinalVersionLength
+        + sizeof(BYTE)
+        + sizeof(DWORD);
+    pByteMessage = CreateBuffer(dwSize);
+    if (pByteMessage == NULL) {
+        return FALSE;
+    }
+
+    cnt = 0;
+
+    *reinterpret_cast<BYTE*>(pByteMessage + cnt) = VERSION_NUM_FIELDS;
+    cnt += sizeof(BYTE);
+
+    *reinterpret_cast<BYTE*>(pByteMessage + cnt) = nFinalVersionLength;
+    cnt += sizeof(BYTE);
+
+    memcpy(pByteMessage + cnt, sFinalVersion.GetBuffer(nFinalVersionLength), nFinalVersionLength);
+    cnt += nFinalVersionLength;
+
+    // Expansion pack.
+    *reinterpret_cast<BYTE*>(pByteMessage + cnt) = 0;
+    cnt += sizeof(BYTE);
+
+    *reinterpret_cast<DWORD*>(pByteMessage + cnt) = CChitin::TIMER_UPDATES_PER_SECOND;
+    cnt += sizeof(DWORD);
+
+    g_pChitin->cNetwork.SendSpecificMessage(sPlayerName,
+        CNetwork::SEND_GUARANTEED | CNetwork::SEND_JOINING_PLAYERS,
+        MSG_TYPE_VERSION,
+        MSG_SUBTYPE_VERSION_SERVER,
+        pByteMessage,
+        dwSize);
+
+    DestroyBuffer(pByteMessage);
 
     return TRUE;
 }

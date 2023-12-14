@@ -208,6 +208,10 @@ public:
     static const BYTE MSG_SUBTYPE_MPSYNCH_REQUEST;
     static const BYTE MSG_SUBTYPE_MPSYNCH_REPLY;
 
+    static const BYTE MSG_TYPE_VERSION;
+    static const BYTE MSG_SUBTYPE_VERSION_SERVER;
+    static const BYTE VERSION_NUM_FIELDS;
+
     static const BYTE MSG_TYPE_LEAVEAREALUA;
     static const BYTE MSG_SUBTYPE_LEAVEAREALUA_PERMIT_REQUEST;
 
@@ -328,6 +332,7 @@ public:
     BOOLEAN OnMultiplayerSynchRequest(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize);
     BOOLEAN MultiplayerSynchReply();
     BOOLEAN OnMultiplayerSynchReply(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize);
+    BOOLEAN VersionServer(CString sPlayerName);
     void SetVersionControlShutdownServerString(CString sValue);
     void SetVersionControlShutdownClientString(CString sValue);
     BYTE* PollSpecificMessageType(BYTE nMsgType, BYTE nMsgSubType, INT& nMsgFrom, DWORD& dwSize);
