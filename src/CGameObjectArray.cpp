@@ -473,6 +473,77 @@ BYTE CGameObjectArray::Delete(LONG index, BYTE threadNum, CGameObject** ptr, DWO
     return SUCCESS;
 }
 
+// 0x59A740
+BYTE CGameObjectArray::ChangeEntry(LONG index, BYTE threadNum, CGameObject* ptr, DWORD dwTimeOut)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 979
+    UTIL_ASSERT(threadNum == THREAD_ASYNCH);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 982
+    UTIL_ASSERT(ptr != NULL);
+
+    if (index == -1) {
+        return BAD_INDEX;
+    }
+
+    CSingleLock lock(&m_cs, FALSE);
+
+    SHORT arrayIndex = (index >> 16) & 0x7FFF;
+
+    if (!lock.Lock(dwTimeOut)) {
+        return TIMEOUT;
+    }
+
+    if (m_nMaxArrayIndex < arrayIndex || (index & 0x8000) != 0 || m_nNextObjectId <= static_cast<SHORT>(index)) {
+        lock.Unlock();
+        return BAD_INDEX;
+    }
+
+    if (m_pArray[arrayIndex].m_objectId != static_cast<SHORT>(index)) {
+        lock.Unlock();
+        return DELETED;
+    }
+
+    for (BYTE otherThreadNum = 0; otherThreadNum < CGAMEOBJECTARRAYENTRY_MAXTHREADS; otherThreadNum++) {
+        if (m_pArray[arrayIndex].m_denyCounts[otherThreadNum] != 0) {
+            if (otherThreadNum == THREAD_ASYNCH) {
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+                // __LINE__: 1012
+                UTIL_ASSERT(FALSE);
+            }
+
+            lock.Unlock();
+            SleepEx(1, FALSE);
+            return DENIED;
+        }
+
+        if (m_pArray[arrayIndex].m_shareCounts[otherThreadNum] != 0) {
+            if (otherThreadNum == THREAD_ASYNCH) {
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+                // __LINE__: 1024
+                UTIL_ASSERT(FALSE);
+            }
+
+            lock.Unlock();
+            SleepEx(1, FALSE);
+            return SHARED;
+        }
+    }
+
+    delete m_pArray[arrayIndex].m_objectPtr;
+    m_pArray[arrayIndex].m_objectPtr = ptr;
+
+    CAIObjectType type(ptr->GetAIType());
+    type.SetInstance(index);
+    ptr->SetAIType(type, 0);
+
+    // NOTE: No explicit unlock.
+
+    return SUCCESS;
+}
+
 // 0x59A9D0
 void CGameObjectArray::Clean()
 {

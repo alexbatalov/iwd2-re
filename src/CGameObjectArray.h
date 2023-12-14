@@ -45,6 +45,7 @@ public:
     BYTE ReleaseDeny(LONG index, BYTE threadNum, DWORD dwTimeOut);
     BYTE Add(LONG* index, CGameObject* ptr, DWORD dwTimeOut);
     BYTE Delete(LONG index, BYTE threadNum, CGameObject** ptr, DWORD dwTimeOut);
+    BYTE ChangeEntry(LONG index, BYTE threadNum, CGameObject* ptr, DWORD dwTimeOut);
     void Clean();
     LONG FindObjectId(SHORT id);
 
