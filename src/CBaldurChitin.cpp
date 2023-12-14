@@ -2025,7 +2025,15 @@ void CBaldurChitin::ClearChatMessages()
 // 0x425C10
 void CBaldurChitin::OnMultiplayerPlayerJoin(PLAYER_ID playerID, const CString& sPlayerName)
 {
-    // TODO: Incomplete.
+    if (g_pChitin->cNetwork.GetSessionOpen()
+        && g_pChitin->cNetwork.GetSessionHosting()) {
+        if (m_pObjectGame != NULL) {
+            m_pObjectGame->m_bAnotherPlayerJoinedGame = TRUE;
+        }
+
+        g_pBaldurChitin->GetBaldurMessage()->VersionServer(sPlayerName);
+        g_pBaldurChitin->GetBaldurMessage()->SendSettingsNightmareMode(sPlayerName);
+    }
 }
 
 // 0x425CA0
