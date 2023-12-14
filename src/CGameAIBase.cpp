@@ -913,6 +913,19 @@ void CGameAIBase::PutItemGround(CItem* pItem)
     }
 }
 
+// 0x463740
+SHORT CGameAIBase::ClearActions(CGameObject* target)
+{
+    if (target == NULL) {
+        return ACTION_ERROR;
+    }
+
+    CMessage* message = new CMessageClearActions(m_id, target->GetId());
+    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+
+    return ACTION_DONE;
+}
+
 // 0x465110
 SHORT CGameAIBase::TakePartyGold()
 {
