@@ -353,6 +353,16 @@ BYTE CGameAnimation::GetAttackFrameType(BYTE numAttacks, BYTE speedFactor, BYTE 
 }
 
 // NOTE: Inlined.
+BOOL CGameAnimation::GetAboveGround()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2116
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->GetAboveGround();
+}
+
+// NOTE: Inlined.
 SHORT CGameAnimation::GetCastHeight()
 {
     // __FILE__: .\Include\ObjAnimation.h

@@ -25,6 +25,7 @@
 #include "CSpawn.h"
 #include "CTiledObject.h"
 #include "CUtil.h"
+#include "CVidPoly.h"
 
 // 0x8D212C
 INT CGameArea::dword_8D212C;
@@ -207,6 +208,12 @@ void CGameArea::ApplyWindToAmbients(BYTE nPercentVolume)
     m_sndAmbientNight.SetVolume(m_sndAmbientNightVolume * m_sndAmbientVolume / 100);
 }
 
+// 0x46A820
+BOOL CGameArea::CheckLOS(const CPoint& start, const CPoint& goal, const BYTE* terrainTable, BOOLEAN bCheckIfExplored)
+{
+    return FALSE;
+}
+
 // 0x46AF40
 LONG CGameArea::GetGroundPile(const CPoint& ptPos)
 {
@@ -284,6 +291,253 @@ LONG CGameArea::GetGroundPile(const CPoint& ptPos)
     }
 
     return iGroundPile;
+}
+
+// 0x46B160
+LONG CGameArea::GetNearest(LONG startObject, const CAIObjectType& type, SHORT range, const BYTE* terrainTable, BOOL checkLOS, BOOL seeInvisible, BOOL ignoreSleeping, BYTE nNearest, BOOL ignoreDead)
+{
+    // TODO: Incomplete.
+
+    return -1;
+}
+
+// 0x46D140
+void CGameArea::GetAllInRange(const CPoint& center, const CAIObjectType& type, SHORT range, const BYTE* terrainTable, CTypedPtrList<CPtrList, LONG*>& targets, BOOL lineOfSight, BOOL checkForNonSprites)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+    // __LINE__: 1969
+    UTIL_ASSERT(terrainTable != NULL);
+
+    CPoint pt;
+    pt.x = center.x;
+    pt.y = 4 * center.y / 3;
+
+    POSITION pos = m_lVertSort.GetHeadPosition();
+    while (pos != NULL) {
+        LONG nId = reinterpret_cast<LONG>(m_lVertSort.GetNext(pos));
+
+        CGameObject* pObject;
+
+        BYTE rc = m_pGame->GetObjectArray()->GetShare(nId,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (pObject->GetObjectType() != CGameObject::TYPE_SPRITE
+                || static_cast<CGameSprite*>(pObject)->GetBaseStats()->field_294 != 1) {
+                const CPoint& ptObject = pObject->GetPos();
+                if (abs(pt.y - 4 * ptObject.y / 3) <= range
+                    && (4 * ptObject.y / 3 - pt.y) * (4 * ptObject.y / 3 - pt.y) + (ptObject.x - pt.x) * (ptObject.x - pt.x) <= range * range
+                    && pObject->GetAIType().OfType(type, checkForNonSprites, !checkForNonSprites)
+                    && (!lineOfSight
+                        || CheckLOS(center, pObject->GetPos(), terrainTable, FALSE))
+                    && (pObject->GetObjectType() != CGameObject::TYPE_SPRITE
+                        || (static_cast<CGameSprite*>(pObject)->m_active
+                            && static_cast<CGameSprite*>(pObject)->m_activeAI))
+                    && (pObject->GetObjectType() != CGameObject::TYPE_SPRITE
+                        || static_cast<CGameSprite*>(pObject)->GetAnimation()->GetAboveGround())) {
+                    targets.AddTail(reinterpret_cast<LONG*>(nId));
+                }
+            }
+
+            m_pGame->GetObjectArray()->ReleaseShare(nId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+}
+
+// 0x46D390
+int CGameArea::GetCountInRange(const CPoint& center, SHORT range, const CAIObjectType& type)
+{
+    CPoint pt;
+    pt.x = center.x;
+    pt.y = 4 * center.y / 3;
+
+    POSITION pos = m_lVertSort.GetHeadPosition();
+    int count = 0;
+    while (pos != NULL) {
+        LONG nId = reinterpret_cast<LONG>(m_lVertSort.GetNext(pos));
+
+        CGameObject* pObject;
+
+        BYTE rc = m_pGame->GetObjectArray()->GetShare(nId,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+        if (rc == CGameObjectArray::SUCCESS) {
+            LONG x = pObject->GetPos().x;
+            LONG y = 4 * pObject->GetPos().y / 3;
+            if (abs(pt.y - y) <= range
+                && (y - pt.y) * (y - pt.y) + (x - pt.x) * (x - pt.x) <= range * range
+                && pObject->GetAIType().OfType(type, FALSE, FALSE)) {
+                count++;
+            }
+
+            m_pGame->GetObjectArray()->ReleaseShare(nId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+    return count;
+}
+
+// 0x46D4D0
+int CGameArea::GetCountInPoly(const CRect& rBounding, const CAIObjectType& type)
+{
+    POSITION pos = m_lVertSort.GetHeadPosition();
+    int count = 0;
+    while (pos != NULL) {
+        LONG nId = reinterpret_cast<LONG>(m_lVertSort.GetNext(pos));
+
+        CGameObject* pObject;
+
+        BYTE rc = m_pGame->GetObjectArray()->GetShare(nId,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (rBounding.PtInRect(pObject->GetPos())
+                && pObject->GetAIType().OfType(type, FALSE, FALSE)) {
+                count++;
+            }
+
+            m_pGame->GetObjectArray()->ReleaseShare(nId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+    return count;
+}
+
+// 0x46D590
+void CGameArea::GetAllInRangeBack(const CPoint& center, const CAIObjectType& type, SHORT range, const BYTE* terrainTable, CTypedPtrList<CPtrList, LONG*>& targets, BOOL lineOfSight, BOOL ignoreDead, BOOL checkForNonSprites)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+    // __LINE__: 2119
+    UTIL_ASSERT(terrainTable != NULL);
+
+    CPoint pt;
+    pt.x = center.x;
+    pt.y = 4 * center.y / 3;
+
+    POSITION pos = m_lVertSortBack.GetHeadPosition();
+    while (pos != NULL) {
+        LONG nId = reinterpret_cast<LONG>(m_lVertSortBack.GetNext(pos));
+
+        CGameObject* pObject;
+
+        BYTE rc = m_pGame->GetObjectArray()->GetShare(nId,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (pObject->GetObjectType() != CGameObject::TYPE_SPRITE
+                || static_cast<CGameSprite*>(pObject)->GetBaseStats()->field_294 != 1) {
+                const CPoint& ptObject = pObject->GetPos();
+                if (abs(pt.y - 4 * ptObject.y / 3) <= range
+                    && (4 * ptObject.y / 3 - pt.y) * (4 * ptObject.y / 3 - pt.y) + (ptObject.x - pt.x) * (ptObject.x - pt.x) <= range * range
+                    && pObject->GetAIType().OfType(type, checkForNonSprites, !checkForNonSprites)
+                    && (!lineOfSight
+                        || CheckLOS(center, pObject->GetPos(), terrainTable, FALSE))
+                    && (pObject->GetObjectType() != CGameObject::TYPE_SPRITE
+                        || (static_cast<CGameSprite*>(pObject)->m_active
+                            && static_cast<CGameSprite*>(pObject)->m_activeAI))
+                    && (pObject->GetObjectType() != CGameObject::TYPE_SPRITE
+                        || static_cast<CGameSprite*>(pObject)->GetAnimation()->GetAboveGround())
+                    && (pObject->GetObjectType() != CGameObject::TYPE_SPRITE
+                        || ignoreDead
+                        || (static_cast<CGameSprite*>(pObject)->GetDerivedStats()->m_generalState & STATE_DEAD) == 0)) {
+                    targets.AddTail(reinterpret_cast<LONG*>(nId));
+                }
+            }
+
+            m_pGame->GetObjectArray()->ReleaseShare(nId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+}
+
+// 0x46D7E0
+void CGameArea::GetAllInPoly(const CRect& rBounding, CPoint* pPoly, SHORT nPoly, const CAIObjectType& type, const BYTE* terrainTable, CTypedPtrList<CPtrList, LONG*>& targets, BOOLEAN checkBackList)
+{
+    POSITION pos;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+    // __LINE__: 2194
+    UTIL_ASSERT(terrainTable != NULL);
+
+    pos = m_lVertSort.GetHeadPosition();
+    while (pos != NULL) {
+        LONG nId = reinterpret_cast<LONG>(m_lVertSort.GetNext(pos));
+
+        CGameObject* pObject;
+
+        BYTE rc = m_pGame->GetObjectArray()->GetShare(nId,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+        if (rc == CGameObjectArray::SUCCESS) {
+            if ((pObject->GetObjectType() != CGameObject::TYPE_SPRITE
+                    || static_cast<CGameSprite*>(pObject)->GetBaseStats()->field_294 != 1)
+                && rBounding.PtInRect(pObject->GetPos())
+                && CVidPoly::IsPtInPoly(pPoly, nPoly, pObject->GetPos())
+                && (pObject->GetObjectType() != CGameObject::TYPE_SPRITE
+                    || (static_cast<CGameSprite*>(pObject)->m_active
+                        && static_cast<CGameSprite*>(pObject)->m_activeAI))
+                && (pObject->GetObjectType() != CGameObject::TYPE_SPRITE
+                    || static_cast<CGameSprite*>(pObject)->GetAnimation()->GetAboveGround())) {
+                targets.AddTail(reinterpret_cast<LONG*>(nId));
+            }
+
+            m_pGame->GetObjectArray()->ReleaseShare(nId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        }
+    }
+
+    if (checkBackList == TRUE) {
+        pos = m_lVertSortBack.GetHeadPosition();
+        while (pos != NULL) {
+            LONG nId = reinterpret_cast<LONG>(m_lVertSortBack.GetNext(pos));
+
+            CGameObject* pObject;
+
+            BYTE rc = m_pGame->GetObjectArray()->GetShare(nId,
+                CGameObjectArray::THREAD_ASYNCH,
+                &pObject,
+                INFINITE);
+            if (rc == CGameObjectArray::SUCCESS) {
+                if ((pObject->GetObjectType() != CGameObject::TYPE_SPRITE
+                        || static_cast<CGameSprite*>(pObject)->GetBaseStats()->field_294 != 1)
+                    && rBounding.PtInRect(pObject->GetPos())
+                    && CVidPoly::IsPtInPoly(pPoly, nPoly, pObject->GetPos())
+                    && (pObject->GetObjectType() != CGameObject::TYPE_SPRITE
+                        || (static_cast<CGameSprite*>(pObject)->m_active
+                            && static_cast<CGameSprite*>(pObject)->m_activeAI))
+                    && (pObject->GetObjectType() != CGameObject::TYPE_SPRITE
+                        || static_cast<CGameSprite*>(pObject)->GetAnimation()->GetAboveGround())
+                    && (pObject->GetObjectType() != CGameObject::TYPE_SPRITE
+                        || ((static_cast<CGameSprite*>(pObject)->GetDerivedStats()->m_generalState & STATE_DEAD) != 0
+                            && (static_cast<CGameSprite*>(pObject)->GetBaseStats()->m_generalState & STATE_DEAD) != 0))) {
+                    targets.AddTail(reinterpret_cast<LONG*>(nId));
+                }
+
+                m_pGame->GetObjectArray()->ReleaseShare(nId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            }
+        }
+    }
+}
+
+// 0x46DAE0
+LONG CGameArea::sub_46DAE0(INT x, INT y, const CAIObjectType& type, int a4, const BYTE* terrainTable, int a6, int a7, int a8, int a9)
+{
+    // TODO: Incomplete.
+
+    return -1;
 }
 
 // 0x46F5A0
@@ -368,14 +622,6 @@ BOOLEAN CGameArea::CanSaveGame(STRREF& strError)
 
     strError = -1;
     return TRUE;
-}
-
-// 0x46DAE0
-LONG CGameArea::sub_46DAE0(INT x, INT y, const CAIObjectType& type, int a4, int a5, int a6, int a7, int a8, int a9)
-{
-    // TODO: Incomplete.
-
-    return -1;
 }
 
 // 0x46E3D0
