@@ -1829,6 +1829,12 @@ BOOL CChitin::MessageCallback(BYTE* pData, DWORD dwSize)
     return FALSE;
 }
 
+// 0x78E760
+BOOLEAN CChitin::GetGameSpyResponse(BYTE type, BYTE** pData, DWORD* dwSize)
+{
+    return FALSE;
+}
+
 // 0x78E770
 BOOLEAN CChitin::FlipFullScreenMode(BOOLEAN bSave)
 {

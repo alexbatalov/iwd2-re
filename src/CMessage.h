@@ -338,6 +338,11 @@ public:
     void SetVersionControlShutdownClientString(CString sValue);
     BYTE* PollSpecificMessageType(BYTE nMsgType, BYTE nMsgSubType, INT& nMsgFrom, DWORD& dwSize);
     void HandleBlockingMessages();
+    BOOLEAN GetGameSpyQueryBasic(CString& sResponse);
+    BOOLEAN GetGameSpyQueryInfo(CString& sResponse);
+    BOOLEAN GetGameSpyQueryRules(CString& sResponse);
+    BOOLEAN GetGameSpyQueryPlayers(CString& sResponse);
+    void GameSpyRemoveBadCharacters(CString& sString);
     BOOL SendSettingsNightmareMode(const CString& sPlayerName);
     BOOLEAN OnSettingsNightmareMode(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize);
     BOOLEAN DemandSettingsNightmareMode(BOOLEAN wait);

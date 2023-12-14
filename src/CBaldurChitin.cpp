@@ -2092,6 +2092,43 @@ BOOL CBaldurChitin::MessageCallback(BYTE* pData, DWORD dwSize)
     return GetMessageHandler()->ImportantMessage(pData, dwSize);
 }
 
+// 0x425E80
+BOOLEAN CBaldurChitin::GetGameSpyResponse(BYTE type, BYTE** pData, DWORD* dwSize)
+{
+    CString sResponse;
+
+    *pData = NULL;
+    *dwSize = 0;
+
+    switch (type) {
+    case 0:
+        g_pBaldurChitin->GetBaldurMessage()->GetGameSpyQueryBasic(sResponse);
+        break;
+    case 1:
+        g_pBaldurChitin->GetBaldurMessage()->GetGameSpyQueryInfo(sResponse);
+        break;
+    case 2:
+        g_pBaldurChitin->GetBaldurMessage()->GetGameSpyQueryRules(sResponse);
+        break;
+    case 3:
+        g_pBaldurChitin->GetBaldurMessage()->GetGameSpyQueryPlayers(sResponse);
+        break;
+    default:
+        return FALSE;
+    }
+
+    *dwSize = sResponse.GetLength();
+
+    if (*dwSize != 0) {
+        *pData = new BYTE[*dwSize];
+        if (*pData != NULL) {
+            memcpy(*pData, sResponse.GetBuffer(*dwSize), *dwSize);
+        }
+    }
+
+    return TRUE;
+}
+
 // 0x425FB0
 void CBaldurChitin::SynchronousUpdate()
 {

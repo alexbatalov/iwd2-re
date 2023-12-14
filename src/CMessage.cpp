@@ -4402,6 +4402,314 @@ void CBaldurMessage::HandleBlockingMessages()
     m_bInHandleBlockingMessages = FALSE;
 }
 
+// 0x43C750
+BOOLEAN CBaldurMessage::GetGameSpyQueryBasic(CString& sResponse)
+{
+    CString sGameName;
+    CString sGameVersion;
+
+    g_pChitin->GetGameSpyGameName(sGameName);
+    sGameVersion = CChitin::m_sBuildNumber;
+
+    CString sLocation;
+    GetPrivateProfileStringA("GameSpy",
+        "Location",
+        "US",
+        sLocation.GetBuffer(128),
+        128,
+        g_pBaldurChitin->GetIniFileName());
+    sLocation.ReleaseBuffer();
+
+    sResponse.Format("\\gamename\\%s\\gamever\\%s\\location\\%s",
+        sGameName,
+        sGameVersion,
+        sLocation);
+
+    return TRUE;
+}
+
+// 0x43C860
+BOOLEAN CBaldurMessage::GetGameSpyQueryInfo(CString& sResponse)
+{
+    CString sSessionName;
+    CString sPortNumber;
+    CString sIPAddress;
+    CString sChapter;
+    CString sResRef;
+    CString sMapName;
+    CString sGameType;
+    CString sNumPlayers;
+    CString sNumCharacters;
+    CString sMaxCharacters;
+    CString sMaxPlayers;
+    CString sGameMode;
+
+    sSessionName = g_pChitin->cNetwork.m_sSessionNameToMake;
+
+    // NOTE: Uninline.
+    GameSpyRemoveBadCharacters(sSessionName);
+
+    sPortNumber = "5123";
+
+    // NOTE: Uninline.
+    INT nChapter = g_pBaldurChitin->GetObjectGame()->GetCurrentChapter();
+
+    sResRef = "chapters";
+    CList<DWORD, DWORD>* pList = g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetChapterText(CResRef(sResRef), nChapter);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CBaldurMessage.cpp
+    // __LINE__: 16551
+    UTIL_ASSERT(pList != NULL);
+
+    if (pList->GetCount() > 0) {
+        sChapter = CBaldurEngine::FetchString(pList->GetHead());
+    }
+
+    delete pList;
+
+    sMapName = sChapter;
+
+    // NOTE: Uninline.
+    GameSpyRemoveBadCharacters(sMapName);
+
+    sGameType = "cooperative";
+
+    // NOTE: Uninline.
+    GameSpyRemoveBadCharacters(sGameType);
+
+    INT nNumCharacters = 0;
+    for (INT nCharacter = 0; nCharacter < CMultiplayerSettings::MAX_CHARACTERS; nCharacter++) {
+        if (g_pBaldurChitin->GetObjectGame()->GetCharacterId(nCharacter) != CGameObjectArray::INVALID_INDEX) {
+            nNumCharacters++;
+        }
+    }
+
+    sNumCharacters.Format("%d", nNumCharacters);
+    sMaxCharacters.Format("%d", CMultiplayerSettings::MAX_CHARACTERS);
+
+    INT nNumPlayers = 0;
+    for (INT nPlayer = 0; nPlayer < CMultiplayerSettings::MAX_PLAYERS; nPlayer) {
+        if (g_pChitin->cNetwork.GetPlayerID(nPlayer) != 0) {
+            nNumPlayers++;
+        }
+    }
+
+    sNumPlayers.Format("%d", nNumPlayers);
+    sMaxPlayers.Format("%d", CMultiplayerSettings::MAX_PLAYERS);
+
+    if (g_pChitin->cNetwork.m_bAllowNewConnections == TRUE) {
+        sGameMode = "openplaying";
+    } else {
+        sGameMode = "closedplaying";
+    }
+
+    // NOTE: Uninline.
+    GameSpyRemoveBadCharacters(sGameMode);
+
+    sResponse.Format("\\hostname\\%s"
+                     "\\hostport\\%s"
+                     "\\mapname\\%s"
+                     "\\gametype\\%s"
+                     "\\numcharacters\\%s"
+                     "\\maxcharacters\\%s"
+                     "\\numplayers\\%s"
+                     "\\maxplayers\\%s"
+                     "\\gamemode\\%s",
+        sSessionName,
+        sPortNumber,
+        sMapName,
+        sGameType,
+        sNumCharacters,
+        sMaxCharacters,
+        sNumPlayers,
+        sMaxPlayers,
+        sGameMode);
+
+    return TRUE;
+}
+
+// 0x43CC90
+BOOLEAN CBaldurMessage::GetGameSpyQueryRules(CString& sResponse)
+{
+    CString sPassword;
+    CString sPasswordProtection;
+    CString sFrameRate;
+    CString sReputation;
+    CString sDifficulty;
+    CString sModifyCharacters;
+    CString sBuyAndSell;
+    CString sAreaTransition;
+    CString sDialog;
+    CString sViewCharacters;
+    CString sPausing;
+    CString sLeader;
+    CString sImportXP;
+    CString sImportItems;
+
+    sPassword = g_pChitin->cNetwork.m_sSessionPassword;
+    sPasswordProtection.Format("%d", sPassword != "");
+    sFrameRate.Format("%d", CChitin::TIMER_UPDATES_PER_SECOND);
+
+    // NOTE: Uninline.
+    GameSpyRemoveBadCharacters(sFrameRate);
+
+    SHORT nReputation = g_pBaldurChitin->GetObjectGame()->GetReputation();
+    STRREF strReputation = g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetReputationDescription(nReputation);
+    sReputation = CBaldurEngine::FetchString(strReputation);
+
+    // NOTE: Uninline.
+    GameSpyRemoveBadCharacters(sReputation);
+
+    STRREF strDifficulty;
+    if (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nMPDifficultyMultiplier <= -50) {
+        strDifficulty = 11308;
+    } else if (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nMPDifficultyMultiplier <= -25) {
+        strDifficulty = 11309;
+    } else if (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nMPDifficultyMultiplier <= 0) {
+        strDifficulty = 11311;
+    } else if (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nMPDifficultyMultiplier <= 50) {
+        strDifficulty = 11312;
+    } else {
+        strDifficulty = 11313;
+    }
+    sDifficulty = CBaldurEngine::FetchString(strDifficulty);
+
+    // NOTE: Uninline.
+    GameSpyRemoveBadCharacters(sDifficulty);
+
+    BYTE nImportingBitField = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->m_nImportingBitField;
+    sImportXP.Format("%d", (nImportingBitField & CMultiplayerSettings::IMPORT_EXPERIENCE) != 0);
+    sImportItems.Format("%d", (nImportingBitField & CMultiplayerSettings::IMPORT_ITEMS) != 0);
+
+    for (BYTE nPermission = 0; nPermission < CGamePermission::TOTAL_PERMISSIONS; nPermission) {
+        BOOLEAN bPermission = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->GetPermission(-1, nPermission);
+        switch (nPermission) {
+        case 0:
+            sBuyAndSell.Format("%d", bPermission != FALSE);
+            break;
+        case 1:
+            sAreaTransition.Format("%d", bPermission != FALSE);
+            break;
+        case 2:
+            sDialog.Format("%d", bPermission != FALSE);
+            break;
+        case 3:
+            sViewCharacters.Format("%d", bPermission != FALSE);
+            break;
+        case 4:
+            sPausing.Format("%d", bPermission != FALSE);
+            break;
+        case 6:
+            sLeader.Format("%d", bPermission != FALSE);
+            break;
+        case 7:
+            sModifyCharacters.Format("%d", bPermission != FALSE);
+            break;
+        }
+    }
+
+    sResponse.Format("\\PasswordProtection\\%s"
+                     "\\FrameRate\\%s"
+                     "\\PartyReputation\\%s"
+                     "\\DifficultyLevel\\%s"
+                     "\\Import:XP\\%s"
+                     "\\Import:Items\\%s"
+                     "\\Permit:ModifyCharacters\\%s"
+                     "\\Permit:Buy&Sell\\%s"
+                     "\\Permit:AreaTransition\\%s"
+                     "\\Permit:Dialog\\%s"
+                     "\\Permit:ViewCharacters\\%s"
+                     "\\Permit:Pausing\\%s"
+                     "\\Permit:Leader\\%s",
+        sPasswordProtection,
+        sFrameRate,
+        sReputation,
+        sDifficulty,
+        sImportXP,
+        sImportItems,
+        sModifyCharacters,
+        sBuyAndSell,
+        sAreaTransition,
+        sDialog,
+        sViewCharacters,
+        sPausing,
+        sLeader);
+
+    return TRUE;
+}
+
+// 0x43D120
+BOOLEAN CBaldurMessage::GetGameSpyQueryPlayers(CString& sResponse)
+{
+    CString sName;
+    CString sRace;
+    CString sClass;
+    CString sLevel;
+    CString sPlayerName;
+    CString string;
+    INT nCharacter;
+    INT nPlayer;
+    INT nCharacters = 0;
+
+    sResponse = "";
+
+    for (nCharacter = 0; nCharacter < CMultiplayerSettings::MAX_CHARACTERS; nCharacter++) {
+        sName = "";
+        sRace = "";
+        sClass = "";
+        sLevel = "";
+        sPlayerName = "";
+
+        if (g_pBaldurChitin->GetObjectGame()->GetGameSpyCharacterInformation(nCharacter, sName, sRace, sClass, sLevel) == TRUE) {
+            nPlayer = g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->GetCharacterControlledByPlayer(nCharacter);
+            g_pChitin->cNetwork.GetPlayerName(nPlayer, sPlayerName);
+
+            // NOTE: Uninline.
+            GameSpyRemoveBadCharacters(sName);
+
+            // NOTE: Uninline.
+            GameSpyRemoveBadCharacters(sRace);
+
+            // NOTE: Uninline.
+            GameSpyRemoveBadCharacters(sClass);
+
+            // NOTE: Uninline.
+            GameSpyRemoveBadCharacters(sLevel);
+
+            // NOTE: Uninline.
+            GameSpyRemoveBadCharacters(sPlayerName);
+
+            string.Format("\\player_%d\\%s\\team_%d\\%s\\race_%d\\%s\\class_%d\\%s\\level_%d\\%s",
+                nCharacters,
+                sName,
+                sPlayerName,
+                sRace,
+                sClass,
+                sLevel);
+
+            sResponse += string;
+
+            nCharacters++;
+        }
+    }
+
+    if (nCharacters == 0) {
+        sResponse.Format("\\player_0\\No Game Loaded");
+    }
+
+    return TRUE;
+}
+
+// NOTE: Inlined.
+void CBaldurMessage::GameSpyRemoveBadCharacters(CString& sString)
+{
+    for (int index = 0; index < sString.GetLength(); index++) {
+        if (sString[index] == '\\') {
+            sString.SetAt(index, '/');
+        }
+    }
+}
+
 // 0x43D3D0
 BOOL CBaldurMessage::SendSettingsNightmareMode(const CString& sPlayerName)
 {

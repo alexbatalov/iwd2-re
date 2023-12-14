@@ -128,6 +128,7 @@ public:
     /* 0080 */ void OnMultiplayerPlayerVisible(PLAYER_ID playerID) override;
     /* 0084 */ void OnMultiplayerPlayerLeave(PLAYER_ID playerID, const CString& sPlayerName) override;
     /* 0088 */ BOOL MessageCallback(BYTE* pData, DWORD dwSize) override;
+    /* 008C */ BOOLEAN GetGameSpyResponse(BYTE type, BYTE** pData, DWORD* dwSize) override;
     /* 0090 */ void AsynchronousUpdate(UINT nTimerID, UINT uMsg, DWORD dwUser, DWORD dw1, DWORD dw2) override;
     /* 0094 */ BOOLEAN FlipFullScreenMode(BOOLEAN bSave) override;
     /* 009C */ void ShutDown(int nLineNumber, const char* szFileName, const char* text) override;
