@@ -9102,6 +9102,12 @@ SHORT CGameSprite::Turn()
     return ACTION_DONE;
 }
 
+// 0x75DFD0
+SHORT CGameSprite::EquipMostDamagingMelee()
+{
+    return ACTION_ERROR;
+}
+
 // 0x75E880
 const CAIObjectType& CGameSprite::GetLiveAIType()
 {

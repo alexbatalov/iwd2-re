@@ -550,6 +550,7 @@ public:
     SHORT FindTraps();
     SHORT Panic();
     SHORT Turn();
+    SHORT EquipMostDamagingMelee();
     const CAIObjectType& GetLiveAIType();
     SHORT GetCasterLevel(CSpell* pSpell, BYTE nClass, DWORD nSpecialization);
     SHORT sub_75F240();

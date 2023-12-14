@@ -1590,6 +1590,29 @@ void CGameEffect::ClearItemEffect(ITEM_EFFECT* itemEffect, WORD newEffectId)
     itemEffect->special = 0;
 }
 
+// 0x4B8730
+void CGameEffect::sub_4B8730(CGameSprite* pSprite, INT slotNum)
+{
+    CItem* pItem = pSprite->GetEquipment()->m_items[slotNum];
+    if (pItem != NULL) {
+        pSprite->GetEquipment()->m_items[slotNum] = NULL;
+        pItem->Unequip(pSprite, slotNum, TRUE, FALSE);
+        g_pBaldurChitin->GetObjectGame()->AddDisposableItem(pItem);
+
+        if (pSprite->InControl()
+            && g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+            CMessage* message = new CMessageSpriteEquipment(pSprite,
+                pSprite->GetId(),
+                pSprite->GetId());
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+        }
+
+        if (pSprite->GetEquipment()->m_selectedWeapon == slotNum) {
+            pSprite->EquipMostDamagingMelee();
+        }
+    }
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
@@ -4259,6 +4282,44 @@ CGameEffect* CGameEffectDispelEffects::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4B3D00
+BOOL CGameEffectDispelEffects::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->RemoveSpecialAbility(CResRef(CString(RESREF_EYE_OF_THE_MIND)));
+    pSprite->RemoveSpecialAbility(CResRef(CString(RESREF_EYE_OF_THE_SWORD)));
+    pSprite->RemoveSpecialAbility(CResRef(CString(RESREF_EYE_OF_THE_MAGE)));
+    pSprite->RemoveSpecialAbility(CResRef(CString(RESREF_EYE_OF_VENOM)));
+    pSprite->RemoveSpecialAbility(CResRef(CString(RESREF_EYE_OF_THE_SPIRIT)));
+    pSprite->RemoveSpecialAbility(CResRef(CString(RESREF_EYE_OF_FORTITUDE)));
+    pSprite->RemoveSpecialAbility(CResRef(CString(RESREF_EYE_OF_STONE)));
+
+    if (m_dwFlags != 0) {
+        pSprite->GetTimedEffectList()->RemoveAllEffectsIgnoreMoreThenPermanent(pSprite->GetTimedEffectList()->GetPosCurrent(),
+            TRUE,
+            TRUE,
+            rand() % 100,
+            static_cast<BYTE>(m_casterLevel));
+    } else {
+        pSprite->GetTimedEffectList()->RemoveAllEffectsIgnoreMoreThenPermanent(pSprite->GetTimedEffectList()->GetPosCurrent(),
+            TRUE,
+            FALSE,
+            0,
+            0);
+    }
+
+    pSprite->UnequipAll(TRUE);
+    sub_4B8730(pSprite, 42);
+    pSprite->EquipAll(TRUE);
+    pSprite->m_hasColorEffects = TRUE;
+    pSprite->m_hasColorRangeEffects = TRUE;
+    pSprite->field_5640 = 1;
+
+    m_forceRepass = TRUE;
+    m_done = TRUE;
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------

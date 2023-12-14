@@ -329,6 +329,7 @@ public:
     void AddPortraitIcon(CGameSprite* pSprite, int icon);
     void SetSpellState(CGameSprite* pSprite, DWORD dwSpellState);
     static void ClearItemEffect(ITEM_EFFECT* itemEffect, WORD newEffectId);
+    static void sub_4B8730(CGameSprite* pSprite, INT slotNum);
 
     /* 010C */ LONG m_sourceID;
     /* 0110 */ BOOL m_done;
@@ -738,6 +739,7 @@ class CGameEffectDispelEffects : public CGameEffect {
 public:
     CGameEffectDispelEffects(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
 };
 
 class CGameEffectSkillStealth : public CGameEffect {
