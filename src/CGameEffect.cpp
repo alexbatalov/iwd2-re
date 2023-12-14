@@ -2264,6 +2264,16 @@ CGameEffect* CGameEffectDeath::Copy()
     return copy;
 }
 
+// 0x4ADC90
+void CGameEffectDeath::DisplayString(CGameSprite* pSprite)
+{
+    if ((pSprite->GetBaseStats()->m_generalState & STATE_DEAD) == 0
+        && (pSprite->GetBaseStats()->m_generalState & (STATE_STONE_DEATH | STATE_FROZEN_DEATH)) == 0
+        && m_effectAmount != 1) {
+        CGameEffect::DisplayString(pSprite);
+    }
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
