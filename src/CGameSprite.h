@@ -582,6 +582,7 @@ public:
     void SetColorRange(BYTE rangeValue);
     void DisplayFeats(CUIControlTextDisplay* pText);
     void DisplaySkills(CUIControlTextDisplay* pText);
+    SHORT JumpToArea(CString areaName, const CPoint& dest, SHORT facingDirection, SHORT delay);
     void MoveOntoArea(CGameArea* pArea, const CPoint& dest, SHORT facingDirection);
 
     void SetResRef(const CResRef& resRef);

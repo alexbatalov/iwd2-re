@@ -8982,6 +8982,23 @@ CGameEffect* CGameEffectJumpToArea::Copy()
     return copy;
 }
 
+// 0x4BED10
+BOOL CGameEffectJumpToArea::ApplyEffect(CGameSprite* pSprite)
+{
+    CString tempStr;
+    m_res.CopyToString(tempStr);
+    pSprite->JumpToArea(tempStr,
+        m_source,
+        static_cast<SHORT>(m_dwFlags),
+        static_cast<SHORT>(m_effectAmount));
+
+    if (CString(pSprite->GetArea()->GetHeader()->m_areaName) == tempStr) {
+        m_done = TRUE;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.

@@ -11238,6 +11238,14 @@ void CGameSprite::DisplaySkills(CUIControlTextDisplay* pText)
     }
 }
 
+// 0x766140
+SHORT CGameSprite::JumpToArea(CString areaName, const CPoint& dest, SHORT facingDirection, SHORT delay)
+{
+    // TODO: Incomplete.
+
+    return ACTION_ERROR;
+}
+
 // 0x766380
 void CGameSprite::MoveOntoArea(CGameArea* pArea, const CPoint& dest, SHORT facingDirection)
 {
