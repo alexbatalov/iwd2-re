@@ -1,6 +1,7 @@
 #include "CProjectile.h"
 
 #include "CBaldurChitin.h"
+#include "CGameEffect.h"
 #include "CGameSprite.h"
 #include "CInfGame.h"
 
@@ -22,6 +23,13 @@ void CProjectile::RemoveSelf()
     if (rc == CGameObjectArray::SUCCESS) {
         delete this;
     }
+}
+
+// 0x51EA90
+void CProjectile::AddEffect(CGameEffect* pEffect)
+{
+    pEffect->m_projectileType = m_projectileType;
+    m_effectList.AddTail(pEffect);
 }
 
 // 0x529F40
