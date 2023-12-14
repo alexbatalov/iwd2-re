@@ -17,6 +17,7 @@ public:
 
     void AddEffect(CGameEffect* pEffect);
     LONG DetermineHeight(CGameSprite* pSprite);
+    SHORT GetDirection(CPoint target);
     void PlaySound(CResRef resRef, BOOL loop, BOOL fireAndForget);
 
     /* 006E */ WORD m_projectileType;

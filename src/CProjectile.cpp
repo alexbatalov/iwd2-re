@@ -109,6 +109,20 @@ void CProjectile::DeliverEffects()
     // TODO: Incomplete.
 }
 
+// 0x52A480
+SHORT CProjectile::GetDirection(CPoint target)
+{
+    CPoint ptStart;
+    ptStart.x = m_pos.x;
+    ptStart.y = 4 * m_pos.y / 3;
+
+    CPoint ptTarget;
+    ptTarget.x = target.x;
+    ptTarget.y = 4 * target.y / 3;
+
+    return CGameSprite::GetDirection(ptStart, ptTarget);
+}
+
 // 0x52A4E0
 void CProjectile::PlaySound(CResRef resRef, BOOL loop, BOOL fireAndForget)
 {

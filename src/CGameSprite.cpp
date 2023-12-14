@@ -11391,6 +11391,14 @@ SHORT CGameSprite::GetDirection()
     return m_nDirection;
 }
 
+// 0x706DD0
+SHORT CGameSprite::GetDirection( const CPoint& ptStart, const CPoint& ptTarget)
+{
+    // TODO: Incomplete.
+
+    return 0;
+}
+
 // 0x45B730
 CGameAnimation* CGameSprite::GetAnimation()
 {

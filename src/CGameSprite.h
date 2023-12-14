@@ -607,6 +607,7 @@ public:
     int sub_45B710();
     SHORT GetDirection(const CPoint& target);
     SHORT GetDirection();
+    static SHORT GetDirection( const CPoint& ptStart, const CPoint& ptTarget);
     CGameAnimation* GetAnimation();
     CGameSpriteEquipment* GetEquipment();
     SHORT GetHappiness();
