@@ -4391,6 +4391,32 @@ CGameEffect* CGameEffectAlignmentChange::Copy()
     return copy;
 }
 
+// 0x4B3BA0
+BOOL CGameEffectAlignmentChange::ApplyEffect(CGameSprite* pSprite)
+{
+    CAIObjectType typeAI(pSprite->GetAIType());
+    CAIObjectType liveTypeAI(pSprite->GetLiveAIType());
+
+    // FIXME: Probably wrong (using live as start).
+    CAIObjectType startTypeAI(pSprite->GetLiveAIType());
+
+    if (m_durationType == 1) {
+        startTypeAI.SetAlignment(static_cast<BYTE>(m_dwFlags));
+        pSprite->m_startTypeAI = startTypeAI;
+        m_done = TRUE;
+    } else {
+        m_done = FALSE;
+    }
+
+    typeAI.SetAlignment(static_cast<BYTE>(m_dwFlags));
+    pSprite->SetAIType(typeAI, FALSE, FALSE);
+
+    liveTypeAI.SetAlignment(static_cast<BYTE>(m_dwFlags));
+    pSprite->m_liveTypeAI = liveTypeAI;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
