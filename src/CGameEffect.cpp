@@ -7233,6 +7233,35 @@ CGameEffect* CGameEffectMovementRate::Copy()
     return copy;
 }
 
+// 0x4B9680
+BOOL CGameEffectMovementRate::ApplyEffect(CGameSprite* pSprite)
+{
+    if (pSprite->GetAnimation()->GetMoveScale() != 0) {
+        switch (m_dwFlags) {
+        case 0:
+            pSprite->GetAnimation()->SetMoveScale(pSprite->GetAnimation()->GetMoveScaleDefault() + static_cast<BYTE>(m_effectAmount));
+            break;
+        case 1:
+            pSprite->GetAnimation()->SetMoveScale(static_cast<BYTE>(m_effectAmount));
+            break;
+        case 2:
+            pSprite->GetAnimation()->SetMoveScale(pSprite->GetAnimation()->GetMoveScaleDefault() * static_cast<BYTE>(m_effectAmount) / 100);
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+            // __LINE__: 17997
+            UTIL_ASSERT(FALSE);
+        }
+    }
+
+    if (m_secondaryType != 0) {
+        CMessage* message = new CMessageDropPath(pSprite->GetId(), pSprite->GetId());
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // 0x498F80
