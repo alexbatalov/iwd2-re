@@ -1,5 +1,6 @@
 #include "CGameEffect.h"
 
+#include "CAIScript.h"
 #include "CBaldurChitin.h"
 #include "CBaldurProjector.h"
 #include "CGameAnimationType.h"
@@ -5329,6 +5330,24 @@ CGameEffect* CGameEffectSetAIScript::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4B6250
+BOOL CGameEffectSetAIScript::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_secondaryType != 0
+        && m_res != "") {
+        CAIScript* script = new CAIScript(m_res);
+        pSprite->SetScript(static_cast<SHORT>(m_dwFlags), script);
+    }
+    return TRUE;
+}
+
+// 0x4B6360
+void CGameEffectSetAIScript::OnRemove(CGameSprite* pSprite)
+{
+    CAIScript* script = new CAIScript(CResRef(""));
+    pSprite->SetScript(static_cast<SHORT>(m_dwFlags), script);
 }
 
 // -----------------------------------------------------------------------------
