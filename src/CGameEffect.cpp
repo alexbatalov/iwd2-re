@@ -8475,6 +8475,50 @@ CGameEffect* CGameEffectResistanceToMagic::Copy()
     return copy;
 }
 
+// 0x04BDCD0
+BOOL CGameEffectResistanceToMagic::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_effectAmount > 0) {
+        // NOTE: Uninline.
+        AddPortraitIcon(pSprite, 28);
+    }
+
+    switch (m_dwFlags) {
+    case 0:
+        if (m_durationType == 1) {
+            pSprite->GetBaseStats()->m_resistMagicBase += static_cast<signed char>(m_effectAmount);
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+        } else {
+            pSprite->GetDerivedStats()->m_nResistMagic += static_cast<SHORT>(m_effectAmount);
+        }
+        break;
+    case 1:
+        if (m_durationType == 1) {
+            pSprite->GetBaseStats()->m_resistMagicBase = static_cast<signed char>(m_effectAmount);
+            m_forceRepass = TRUE;
+            m_done = TRUE;
+        } else {
+            pSprite->GetDerivedStats()->m_nResistMagic = static_cast<SHORT>(m_effectAmount);
+        }
+        break;
+    }
+
+    if (pSprite->GetBaseStats()->m_resistMagicBase < 0) {
+        pSprite->GetBaseStats()->m_resistMagicBase = 0;
+    } else if (pSprite->GetBaseStats()->m_resistMagicBase > 50) {
+        pSprite->GetBaseStats()->m_resistMagicBase = 50;
+    }
+
+    if (pSprite->GetDerivedStats()->m_nResistMagic < 0) {
+        pSprite->GetDerivedStats()->m_nResistMagic = 0;
+    } else if (pSprite->GetDerivedStats()->m_nResistMagic > 50) {
+        pSprite->GetDerivedStats()->m_nResistMagic = 50;
+    }
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
