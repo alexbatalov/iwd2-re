@@ -4373,6 +4373,76 @@ CGameEffect* CGameEffectAlignmentReversal::Copy()
     return copy;
 }
 
+// 0x4B3840
+BOOL CGameEffectAlignmentReversal::ApplyEffect(CGameSprite* pSprite)
+{
+    CAIObjectType typeAI(pSprite->GetAIType());
+    CAIObjectType liveTypeAI(pSprite->GetLiveAIType());
+
+    // FIXME: Probably wrong (using live as start).
+    CAIObjectType startTypeAI(pSprite->GetLiveAIType());
+
+    if (m_durationType == 1) {
+        // NOTE: Uninline.
+        startTypeAI.SetAlignment(Reverse(startTypeAI.GetAlignment()));
+        pSprite->m_startTypeAI = startTypeAI;
+        m_done = TRUE;
+    } else {
+        m_done = FALSE;
+    }
+
+    // NOTE: Uninline.
+    typeAI.SetAlignment(Reverse(typeAI.GetAlignment()));
+    pSprite->SetAIType(typeAI, FALSE, FALSE);
+
+    // NOTE: Uninline.
+    liveTypeAI.SetAlignment(Reverse(liveTypeAI.GetAlignment()));
+    pSprite->m_liveTypeAI = liveTypeAI;
+
+    return TRUE;
+}
+
+// NOTE: Inlined.
+BYTE CGameEffectAlignmentReversal::Reverse(BYTE alignment)
+{
+    BYTE newAlign;
+
+    switch (alignment) {
+    case 0:
+        newAlign = 0;
+        break;
+    case CAIOBJECTTYPE_LAWFUL_GOOD:
+        newAlign = CAIOBJECTTYPE_CHAOTIC_EVIL;
+        break;
+    case CAIOBJECTTYPE_LAWFUL_NEUTRAL:
+        newAlign = CAIOBJECTTYPE_CHAOTIC_NEUTRAL;
+        break;
+    case CAIOBJECTTYPE_LAWFUL_EVIL:
+        newAlign = CAIOBJECTTYPE_CHAOTIC_GOOD;
+        break;
+    case CAIOBJECTTYPE_NEUTRAL_GOOD:
+        newAlign = CAIOBJECTTYPE_NEUTRAL_EVIL;
+        break;
+    case CAIOBJECTTYPE_NEUTRAL:
+        newAlign = CAIOBJECTTYPE_NEUTRAL;
+        break;
+    case CAIOBJECTTYPE_NEUTRAL_EVIL:
+        newAlign = CAIOBJECTTYPE_NEUTRAL_GOOD;
+        break;
+    case CAIOBJECTTYPE_CHAOTIC_GOOD:
+        newAlign = CAIOBJECTTYPE_LAWFUL_EVIL;
+        break;
+    case CAIOBJECTTYPE_CHAOTIC_NEUTRAL:
+        newAlign = CAIOBJECTTYPE_LAWFUL_NEUTRAL;
+        break;
+    case CAIOBJECTTYPE_CHAOTIC_EVIL:
+        newAlign = CAIOBJECTTYPE_LAWFUL_GOOD;
+        break;
+    }
+
+    return newAlign;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
