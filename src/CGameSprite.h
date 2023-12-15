@@ -926,7 +926,7 @@ public:
     /* 7283 */ unsigned char field_7283;
     /* 7284 */ unsigned char field_7284;
     /* 728E */ int field_728E;
-    /* 7292 */ int field_7292;
+    /* 7292 */ BOOL m_bForceVisualEffects;
     /* 7296 */ SHORT m_currentActionId;
     /* 7298 */ BOOL m_bPlayedEncumberedStopped;
     /* 729C */ BOOL m_bPlayedEncumberedSlowed;

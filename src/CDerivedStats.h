@@ -508,7 +508,7 @@ public:
     /* 0134 */ int field_134;
     /* 0138 */ int field_138;
     /* 013C */ int field_13C;
-    /* 0140 */ int field_140;
+    /* 0140 */ int m_nMirrorImages;
     /* 0144 */ BYTE m_nSkills[64];
     /* 0184 */ BOOL m_bPreventAISlowDown;
 };

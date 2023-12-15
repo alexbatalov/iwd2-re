@@ -8336,6 +8336,29 @@ CGameEffect* CGameEffectMirrorImageRun::Copy()
     return copy;
 }
 
+// 0x4B89E0
+BOOL CGameEffectMirrorImageRun::ApplyEffect(CGameSprite* pSprite)
+{
+    if ((pSprite->GetBaseStats()->m_generalState & STATE_DEAD) == 0) {
+        pSprite->GetDerivedStats()->m_generalState |= STATE_MIRRORIMAGE;
+        if (pSprite->GetDerivedStats()->m_nMirrorImages != m_effectAmount
+            || pSprite->m_bForceVisualEffects) {
+            CMessage* message = new CMessageVisualEffect(3,
+                static_cast<BYTE>(m_effectAmount),
+                pSprite->GetId(),
+                pSprite->GetId());
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+        }
+
+        if (m_effectAmount == 0) {
+            m_done = TRUE;
+        }
+    } else {
+        m_done = TRUE;
+    }
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.

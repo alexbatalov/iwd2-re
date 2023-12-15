@@ -685,7 +685,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     field_7118 = 0;
     field_711C = 0;
     m_firstActionSound = FALSE;
-    field_7292 = 0;
+    m_bForceVisualEffects = FALSE;
     m_currentActionId = 0;
     field_72A8 = 0;
     m_bInUnmarshal = FALSE;
@@ -773,7 +773,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     field_72A2 = 0;
     m_bAllowEffectListCall = TRUE;
     field_72AA = 0;
-    field_7292 = 0;
+    m_bForceVisualEffects = FALSE;
     field_5582 = 0;
     field_9D14 = 0;
     field_9D15 = 0;
@@ -1853,7 +1853,7 @@ void CGameSprite::Render(CGameArea* pArea, CVidMode* pVidMode, INT nSurface)
                 transparency = static_cast<BYTE>(m_derivedStats.m_nTranslucent);
             }
 
-            if (m_derivedStats.field_140 > 0) {
+            if (m_derivedStats.m_nMirrorImages > 0) {
                 if (transparency < 96) {
                     transparency = 96;
                 }
@@ -1863,8 +1863,8 @@ void CGameSprite::Render(CGameArea* pArea, CVidMode* pVidMode, INT nSurface)
                 transparency = m_baseStats.field_2F9;
             }
 
-            if (m_derivedStats.field_140 > 0) {
-                if (m_derivedStats.field_140 > 2) {
+            if (m_derivedStats.m_nMirrorImages > 0) {
+                if (m_derivedStats.m_nMirrorImages > 2) {
                     RenderMirrorImage(2,
                         rFX,
                         rGCBounds,
@@ -1880,7 +1880,7 @@ void CGameSprite::Render(CGameArea* pArea, CVidMode* pVidMode, INT nSurface)
                         dwRenderFlags);
                 }
 
-                if (m_derivedStats.field_140 > 4) {
+                if (m_derivedStats.m_nMirrorImages > 4) {
                     RenderMirrorImage(4,
                         rFX,
                         rGCBounds,
@@ -1896,7 +1896,7 @@ void CGameSprite::Render(CGameArea* pArea, CVidMode* pVidMode, INT nSurface)
                         dwRenderFlags);
                 }
 
-                if (m_derivedStats.field_140 > 6) {
+                if (m_derivedStats.m_nMirrorImages > 6) {
                     RenderMirrorImage(6,
                         rFX,
                         rGCBounds,
@@ -1912,7 +1912,7 @@ void CGameSprite::Render(CGameArea* pArea, CVidMode* pVidMode, INT nSurface)
                         dwRenderFlags);
                 }
 
-                if (m_derivedStats.field_140 > 0) {
+                if (m_derivedStats.m_nMirrorImages > 0) {
                     RenderMirrorImage(0,
                         rFX,
                         rGCBounds,
@@ -1928,7 +1928,7 @@ void CGameSprite::Render(CGameArea* pArea, CVidMode* pVidMode, INT nSurface)
                         dwRenderFlags);
                 }
 
-                if (m_derivedStats.field_140 > 1) {
+                if (m_derivedStats.m_nMirrorImages > 1) {
                     RenderMirrorImage(1,
                         rFX,
                         rGCBounds,
@@ -2046,8 +2046,8 @@ void CGameSprite::Render(CGameArea* pArea, CVidMode* pVidMode, INT nSurface)
                 }
             }
 
-            if (m_derivedStats.field_140 > 0) {
-                if (m_derivedStats.field_140 > 7) {
+            if (m_derivedStats.m_nMirrorImages > 0) {
+                if (m_derivedStats.m_nMirrorImages > 7) {
                     RenderMirrorImage(7,
                         rFX,
                         rGCBounds,
@@ -2063,7 +2063,7 @@ void CGameSprite::Render(CGameArea* pArea, CVidMode* pVidMode, INT nSurface)
                         dwRenderFlags);
                 }
 
-                if (m_derivedStats.field_140 > 5) {
+                if (m_derivedStats.m_nMirrorImages > 5) {
                     RenderMirrorImage(5,
                         rFX,
                         rGCBounds,
@@ -2079,7 +2079,7 @@ void CGameSprite::Render(CGameArea* pArea, CVidMode* pVidMode, INT nSurface)
                         dwRenderFlags);
                 }
 
-                if (m_derivedStats.field_140 > 3) {
+                if (m_derivedStats.m_nMirrorImages > 3) {
                     RenderMirrorImage(3,
                         rFX,
                         rGCBounds,

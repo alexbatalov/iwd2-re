@@ -12389,7 +12389,7 @@ void CMessageVisualEffect::Run()
     if (rc == CGameObjectArray::SUCCESS) {
         if (pSprite->GetObjectType() == CGameObject::TYPE_SPRITE) {
             if (m_nEffectType == 3) {
-                pSprite->GetDerivedStats()->field_140 = m_nEffectProperty;
+                pSprite->GetDerivedStats()->m_nMirrorImages = m_nEffectProperty;
             } else if (m_nEffectType == 23) {
                 pSprite->GetDerivedStats()->m_nStoneSkins = m_nEffectProperty;
 

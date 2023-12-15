@@ -151,7 +151,7 @@ void CDerivedStats::Reload(CGameSprite* pSprite, CCreatureFileHeader* pCreature,
     field_134 = 0;
     field_138 = 0;
     field_13C = 0;
-    field_140 = 0;
+    m_nMirrorImages = 0;
     m_bPreventAISlowDown = FALSE;
 
     // TODO: Incomplete.
@@ -344,7 +344,7 @@ CDerivedStats& CDerivedStats::operator=(const CDerivedStats& other)
     field_134 = other.field_134;
     field_138 = other.field_138;
     field_13C = other.field_13C;
-    field_140 = other.field_140;
+    m_nMirrorImages = other.m_nMirrorImages;
 
     memcpy(m_nSkills, other.m_nSkills, sizeof(m_nSkills));
 
@@ -473,7 +473,7 @@ void CDerivedStats::BonusInit()
     field_134 = 0;
     field_138 = 0;
     field_13C = 0;
-    field_140 = 0;
+    m_nMirrorImages = 0;
     m_bPreventAISlowDown = FALSE;
 
     // TODO: Incomplete.
@@ -579,7 +579,7 @@ CDerivedStats& CDerivedStats::operator+=(const CDerivedStats& other)
     field_134 += other.field_134;
     field_138 += other.field_138;
     field_13C += other.field_13C;
-    field_140 += other.field_140;
+    m_nMirrorImages += other.m_nMirrorImages;
 
     for (index = 0; index < 64; index++) {
         m_nSkills[index] += other.m_nSkills[index];
@@ -992,7 +992,7 @@ void CDerivedStats::Unmarshal(BYTE* pStats, LONG nStats)
     field_134 = pTemplate->field_134;
     field_138 = pTemplate->field_138;
     field_13C = pTemplate->field_13C;
-    field_140 = pTemplate->field_140;
+    m_nMirrorImages = pTemplate->m_nMirrorImages;
     m_bPreventAISlowDown = pTemplate->m_bPreventAISlowDown;
 }
 
