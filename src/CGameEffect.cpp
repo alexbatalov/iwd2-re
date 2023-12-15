@@ -7582,6 +7582,45 @@ CGameEffect* CGameEffectPetrification::Copy()
     return copy;
 }
 
+// 0x4BAFE0
+BOOL CGameEffectPetrification::ApplyEffect(CGameSprite* pSprite)
+{
+    if (g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_cutScene != TRUE) {
+        // FIXME: Should be on stack.
+        ITEM_EFFECT* effect = new ITEM_EFFECT();
+        effect->durationType = 1;
+        effect->effectID = CGAMEEFFECT_DEATH;
+        effect->targetType = 0;
+        effect->spellLevel = 0;
+        effect->effectAmount = 0;
+        effect->probabilityUpper = 100;
+        effect->probabilityLower = 0;
+        effect->numDice = 0;
+        effect->diceSize = 0;
+        effect->savingThrow = 0;
+        effect->saveMod = 0;
+        effect->special = 0;
+        effect->dwFlags = 0x10;
+        effect->duration = 0;
+
+        CGameEffect* pEffect = DecodeEffect(effect,
+            pSprite->GetPos(),
+            pSprite->GetId(),
+            CPoint(-1, -1));
+
+        CMessage* message = new CMessageAddEffect(pEffect,
+            pSprite->GetId(),
+            pSprite->GetId());
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+
+        delete effect;
+    }
+
+    m_done = TRUE;
+
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
