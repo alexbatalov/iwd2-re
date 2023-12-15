@@ -7022,6 +7022,55 @@ CGameEffect* CGameEffectMirrorImage::Copy()
     return copy;
 }
 
+// 0x4B8850
+BOOL CGameEffectMirrorImage::ApplyEffect(CGameSprite* pSprite)
+{
+    if (pSprite->GetDerivedStats()->m_nMirrorImages < 8) {
+        if (m_secondaryType != 0) {
+            // NOTE: Uninline.
+            DisplayStringRef(pSprite, 14774);
+        }
+
+        switch (m_dwFlags) {
+        case 0:
+            pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_MIRROR_IMAGE);
+            if (m_secondaryType != 0) {
+                m_effectAmount += rand() % 4 + 1;
+            }
+            break;
+        case 1:
+            pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_REFLECTED_IMAGE);
+            if (m_secondaryType != 0) {
+                m_effectAmount = 1;
+            }
+            break;
+        }
+
+        pSprite->GetDerivedStats()->m_generalState |= STATE_MIRRORIMAGE;
+
+        m_effectAmount = min(m_effectAmount, 8);
+
+        if (pSprite->GetDerivedStats()->m_nMirrorImages < m_effectAmount) {
+            pSprite->GetDerivedStats()->m_nMirrorImages = m_effectAmount;
+
+            if (m_secondaryType != 0) {
+                CMessage* message = new CMessageVisualEffect(3,
+                    static_cast<BYTE>(pSprite->GetDerivedStats()->m_nMirrorImages),
+                    pSprite->GetId(),
+                    pSprite->GetId());
+                g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+            }
+        }
+
+        if (m_effectAmount == 0) {
+            m_done = TRUE;
+        }
+    } else {
+        m_done = TRUE;
+    }
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
