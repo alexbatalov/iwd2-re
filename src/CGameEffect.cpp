@@ -8,6 +8,7 @@
 #include "CGameSprite.h"
 #include "CInfGame.h"
 #include "CScreenWorld.h"
+#include "CSpell.h"
 #include "CUtil.h"
 #include "CVidPalette.h"
 #include "IcewindCGameEffects.h"
@@ -1570,6 +1571,32 @@ void CGameEffect::AddPortraitIcon(CGameSprite* pSprite, int icon)
 void CGameEffect::SetSpellState(CGameSprite* pSprite, DWORD dwSpellState)
 {
     pSprite->GetDerivedStats()->m_spellStates.set(dwSpellState);
+}
+
+// 0x4C4330
+void CGameEffect::FeedBackImmuneToResource(CGameSprite* pSprite, const CResRef& resRef)
+{
+    if (g_pBaldurChitin->cDimm.m_cKeyTable.FindKey(resRef, 1005, TRUE)) {
+        CItem* pItem = new CItem(resRef, 1, 0, 0, 0, 0);
+        pSprite->FeedBack(CGameSprite::FEEDBACK_IMMUNE_TO_RESOURCE,
+            0,
+            0,
+            0,
+            pItem->GetIdentifiedName(),
+            0,
+            0);
+        delete pItem;
+    } else if (g_pBaldurChitin->cDimm.m_cKeyTable.FindKey(resRef, 1006, TRUE)) {
+        CSpell* pSpell = new CSpell(resRef);
+        pSprite->FeedBack(CGameSprite::FEEDBACK_IMMUNE_TO_RESOURCE,
+            0,
+            0,
+            0,
+            pSpell->GetGenericName(),
+            0,
+            0);
+        delete pSpell;
+    }
 }
 
 // 0x4A2E00
@@ -3800,6 +3827,93 @@ CGameEffect* CGameEffectStun::Copy()
     delete effect;
     copy->CopyFromBase(this);
     return copy;
+}
+
+// 0x4B2560
+BOOL CGameEffectStun::ApplyEffect(CGameSprite* pSprite)
+{
+    if (m_dwFlags == 2) {
+        return sub_4B2680(pSprite);
+    }
+
+    if (m_dwFlags == 1) {
+        pSprite->GetDerivedStats()->m_spellStates.set(SPLSTATE_UNSTUN_ON_DAMAGE, TRUE);
+    }
+
+    if (m_secondaryType != 0) {
+        // NOTE: Uninline.
+        DisplayStringRef(pSprite, 1280); // "Stunned"
+    }
+
+    // NOTE: Uninline.
+    AddPortraitIcon(pSprite, 44);
+
+    pSprite->sub_761650();
+
+    if (m_durationType == 1) {
+        pSprite->GetBaseStats()->m_generalState |= STATE_STUNNED;
+    }
+
+    pSprite->GetDerivedStats()->m_generalState |= STATE_STUNNED;
+    pSprite->GetDerivedStats()->m_generalState |= STATE_HELPLESS;
+    pSprite->field_9D15 = 1;
+
+    return TRUE;
+}
+
+// 0x4B2680
+BOOL CGameEffectStun::sub_4B2680(CGameSprite* pSprite)
+{
+    INT nHealth = pSprite->GetBaseStats()->m_hitPoints;
+    int v1 = 0;
+
+    if (nHealth <= 50) {
+        for (int roll = 0; roll < 4; roll++) {
+            v1 += CUtil::UtilRandInt(4, -pSprite->m_tempStats.m_nLuck) + 1;
+        }
+    } else if (nHealth <= 100) {
+        for (int roll = 0; roll < 2; roll++) {
+            v1 += CUtil::UtilRandInt(4, -pSprite->m_tempStats.m_nLuck) + 1;
+        }
+    } else if (nHealth <= 150) {
+        v1 += CUtil::UtilRandInt(4, -pSprite->m_tempStats.m_nLuck) + 1;
+    } else {
+        FeedBackImmuneToResource(pSprite, m_sourceRes);
+        m_done = TRUE;
+        return TRUE;
+    }
+
+    CGameObject* pSource;
+
+    BYTE rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_sourceID,
+        CGameObjectArray::THREAD_ASYNCH,
+        &pSource,
+        INFINITE);
+    if (rc != CGameObjectArray::SUCCESS) {
+        return FALSE;
+    }
+
+    if (v1 > 0) {
+        CGameEffect* pEffect = IcewindMisc::CreateEffectStun(pSource,
+            7 * v1,
+            static_cast<BYTE>(m_spellLevel),
+            0);
+        pEffect->m_flags |= 0x2;
+        pEffect->m_sourceRes = m_sourceRes;
+        pEffect->m_casterLevel = m_casterLevel;
+        pSprite->AddEffect(pEffect,
+            CGameAIBase::EFFECT_LIST_TIMED,
+            TRUE,
+            TRUE);
+    }
+
+    g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(m_sourceID,
+        CGameObjectArray::THREAD_ASYNCH,
+        INFINITE);
+
+    m_done = TRUE;
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------------

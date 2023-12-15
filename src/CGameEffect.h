@@ -328,6 +328,7 @@ public:
     void RemoveAllOfType(CGameSprite* pSprite, WORD effectID, LONG effectAmount);
     void AddPortraitIcon(CGameSprite* pSprite, int icon);
     void SetSpellState(CGameSprite* pSprite, DWORD dwSpellState);
+    static void FeedBackImmuneToResource(CGameSprite* pSprite, const CResRef& res);
     static void ClearItemEffect(ITEM_EFFECT* itemEffect, WORD newEffectId);
     static void sub_4B8730(CGameSprite* pSprite, INT slotNum);
 
@@ -656,6 +657,9 @@ class CGameEffectStun : public CGameEffect {
 public:
     CGameEffectStun(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
+
+    BOOL sub_4B2680(CGameSprite* pSprite);
 };
 
 class CGameEffectUnstun : public CGameEffect {
