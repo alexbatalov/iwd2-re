@@ -7215,6 +7215,13 @@ CGameEffect* CGameEffectKnock::Copy()
     return copy;
 }
 
+// 0x4B9670
+BOOL CGameEffectKnock::ApplyEffect(CGameSprite* pSprite)
+{
+    m_done = TRUE;
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
