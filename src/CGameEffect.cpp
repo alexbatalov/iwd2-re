@@ -9417,6 +9417,101 @@ CGameEffect* CGameEffectHitPointsOnDeath::Copy()
     return copy;
 }
 
+// 0x4BA6D0
+BOOL CGameEffectHitPointsOnDeath::ApplyEffect(CGameSprite* pSprite)
+{
+    if (!pSprite->Animate()) {
+        BYTE rc;
+        CGameSprite* pProtagonist;
+        ITEM_EFFECT* effect;
+        CGameEffect* pEffect;
+        CMessage* message;
+
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(g_pBaldurChitin->GetObjectGame()->GetProtagonist(),
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pProtagonist),
+            INFINITE);
+        if (rc == CGameObjectArray::SUCCESS) {
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(pProtagonist->GetNameRef(),
+                8536,
+                RGB(215, 215, 190),
+                RGB(215, 215, 190),
+                -1,
+                pProtagonist->GetId(),
+                pProtagonist->GetId());
+
+            // FIXME: Should be on stack.
+            effect = new ITEM_EFFECT();
+            effect->effectAmount = 0;
+            effect->durationType = 0;
+            effect->effectID = CGAMEEFFECT_HITPOINTS;
+            effect->targetType = 0;
+            effect->spellLevel = 0;
+            effect->dwFlags = 0;
+            effect->duration = 0;
+            effect->probabilityUpper = 100;
+            effect->probabilityLower = 0;
+            effect->numDice = 0;
+            effect->diceSize = 0;
+            effect->savingThrow = 0;
+            effect->saveMod = 0;
+            effect->special = 0;
+            effect->effectAmount = m_effectAmount;
+            effect->durationType = static_cast<WORD>(m_durationType);
+
+            pEffect = DecodeEffect(effect,
+                pSprite->GetPos(),
+                pSprite->GetId(),
+                CPoint(-1, -1));
+
+            message = new CMessageAddEffect(pEffect,
+                pSprite->GetId(),
+                pProtagonist->GetId());
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+
+            delete effect;
+
+            // FIXME: Should be on stack.
+            effect = new ITEM_EFFECT();
+            effect->effectAmount = 0;
+            effect->durationType = 0;
+            effect->effectID = CGAMEEFFECT_DAMAGE;
+            effect->targetType = 0;
+            effect->spellLevel = 0;
+            effect->dwFlags = 0;
+            effect->duration = 0;
+            effect->probabilityUpper = 100;
+            effect->probabilityLower = 0;
+            effect->numDice = 0;
+            effect->diceSize = 0;
+            effect->savingThrow = 0;
+            effect->saveMod = 0;
+            effect->special = 0;
+            effect->effectAmount = 0;
+            effect->durationType = static_cast<WORD>(m_durationType);
+
+            pEffect = DecodeEffect(effect,
+                pSprite->GetPos(),
+                pSprite->GetId(),
+                CPoint(-1, -1));
+
+            message = new CMessageAddEffect(pEffect,
+                pSprite->GetId(),
+                pProtagonist->GetId());
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(g_pBaldurChitin->GetObjectGame()->GetProtagonist(),
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+
+            delete effect;
+        }
+    } else {
+        m_done = FALSE;
+    }
+    return TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
