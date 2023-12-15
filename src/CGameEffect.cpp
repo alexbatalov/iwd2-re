@@ -5190,6 +5190,215 @@ CGameEffect* CGameEffectDisease::Copy()
     return copy;
 }
 
+// 0x4B5790
+BOOL CGameEffectDisease::ApplyEffect(CGameSprite* pSprite)
+{
+    pSprite->GetDerivedStats()->m_generalState |= STATE_DISEASED;
+
+    if (m_secondaryType != 0) {
+        // NOTE: Uninline.
+        DisplayStringRef(pSprite, 4389);
+    }
+
+    // NOTE: Uninline.
+    AddPortraitIcon(pSprite, 7);
+
+    switch (m_dwFlags) {
+    case 4:
+        pSprite->m_bonusStats.m_nSTR -= static_cast<SHORT>(m_effectAmount);
+        return TRUE;
+    case 5:
+        pSprite->m_bonusStats.m_nDEX -= static_cast<SHORT>(m_effectAmount);
+        return TRUE;
+    case 6:
+        pSprite->m_bonusStats.m_nCON -= static_cast<SHORT>(m_effectAmount);
+        return TRUE;
+    case 7:
+        pSprite->m_bonusStats.m_nINT -= static_cast<SHORT>(m_effectAmount);
+        return TRUE;
+    case 8:
+        pSprite->m_bonusStats.m_nINT -= static_cast<SHORT>(m_effectAmount);
+        return TRUE;
+    case 9:
+        pSprite->m_bonusStats.m_nCHR -= static_cast<SHORT>(m_effectAmount);
+        return TRUE;
+    case 10:
+        AddSlowEffect(pSprite);
+        return TRUE;
+    case 11:
+        sub_4B5E50(pSprite);
+        return TRUE;
+    case 12:
+        sub_4B5FF0(pSprite);
+        return TRUE;
+    case 13:
+        pSprite->m_bonusStats.m_nSTR -= 2;
+        pSprite->m_bonusStats.m_nDEX -= 2;
+        pSprite->m_bonusStats.m_nCHR -= 2;
+        AddSlowEffect(pSprite);
+        return TRUE;
+    case 14:
+        sub_4B5BF0(pSprite);
+        return TRUE;
+    case 15:
+        sub_4B5D90(pSprite);
+        return TRUE;
+    }
+
+    if (m_secondaryType != 0) {
+        m_special = g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime;
+    }
+
+    DWORD duration = m_durationType != 1 ? m_duration : 0;
+
+    CPersistantEffect84C420* pEffect;
+    switch (m_dwFlags) {
+    case 1:
+        pEffect = new CPersistantEffect84C420(0x40000000,
+            m_effectAmount,
+            105,
+            m_special,
+            duration);
+        break;
+    case 2:
+        pEffect = new CPersistantEffect84C420(0x40000000,
+            m_effectAmount,
+            15,
+            m_special,
+            duration);
+        break;
+    case 3:
+        pEffect = new CPersistantEffect84C420(0x40000000,
+            1,
+            15 * m_effectAmount,
+            m_special,
+            duration);
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameEffect.cpp
+        // __LINE__: 13882
+        UTIL_ASSERT(FALSE);
+    }
+
+    pEffect->m_sourceID = m_sourceID;
+    strcpy(reinterpret_cast<char*>(pEffect->field_29), m_sourceRes.GetResRefStr());
+    pSprite->GetDerivedStats()->m_cRegeneratedPersistantEffectList.AddTail(pEffect);
+
+    return TRUE;
+}
+
+// 0x4B5BF0
+void CGameEffectDisease::sub_4B5BF0(CGameSprite* pSprite)
+{
+    pSprite->m_bonusStats.m_nSTR -= 3;
+    pSprite->m_bonusStats.m_nDEX -= 3;
+
+    if (m_secondaryType != 0) {
+        // NOTE: Uninline.
+        DisplayStringRef(pSprite, 14674); // "Blinded"
+    }
+
+    pSprite->GetDerivedStats()->m_generalState |= STATE_BLIND;
+
+    // NOTE: Uninline.
+    AddPortraitIcon(pSprite, 8);
+
+    pSprite->GetDerivedStats()->field_C -= 4;
+    pSprite->GetDerivedStats()->m_nTHAC0 -= 4;
+
+    if (m_secondaryType != 0) {
+        CGameObject* pSource;
+
+        BYTE rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(m_sourceID,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pSource,
+            INFINITE);
+        if (rc == CGameObjectArray::SUCCESS) {
+            CGameEffect* pEffect = IcewindMisc::sub_585380(pSource,
+                0,
+                0,
+                3,
+                static_cast<BYTE>(m_spellLevel),
+                0);
+
+            CMessage* message = new CMessageAddEffect(pEffect,
+                pSprite->GetId(),
+                pSprite->GetId());
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+        } else {
+            m_done = TRUE;
+        }
+    }
+}
+
+// 0x4B5D90
+void CGameEffectDisease::sub_4B5D90(CGameSprite* pSprite)
+{
+    AddSlowEffect(pSprite);
+
+    if (m_secondaryType != 0) {
+        m_special = g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime;
+    }
+
+    DWORD duration = m_durationType != 1 ? m_duration : 0;
+
+    CPersistantEffect84C420* pEffect = new CPersistantEffect84C420(0x40000000,
+        1,
+        15,
+        m_special,
+        duration);
+    pSprite->GetDerivedStats()->m_cRegeneratedPersistantEffectList.AddTail(pEffect);
+}
+
+// 0x4B5E50
+void CGameEffectDisease::sub_4B5E50(CGameSprite* pSprite)
+{
+    if (IcewindMisc::IsDead(pSprite) != TRUE
+        && !pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_MOLD_TOUCH]) {
+        if (m_secondaryType != 0) {
+            // NOTE: Uninline.
+            DisplayStringRef(pSprite, 11501); // "Afflicted with Mold Touch"
+        }
+
+        pSprite->GetDerivedStats()->m_spellStates[SPLSTATE_MOLD_TOUCH] = true;
+
+        pSprite->SetColorRange(2);
+
+        CPersistantEffect84C484* pEffect = new CPersistantEffect84C484(m_effectAmount,
+            "",
+            100,
+            105,
+            m_special,
+            m_duration);
+        pEffect->m_sourceID = m_sourceID;
+        strcpy(reinterpret_cast<char*>(pEffect->field_29), m_sourceRes.GetResRefStr());
+        pSprite->GetDerivedStats()->m_cRegeneratedPersistantEffectList.AddTail(pEffect);
+    } else {
+        m_done = TRUE;
+    }
+}
+
+// 0x4B5FF0
+void CGameEffectDisease::sub_4B5FF0(CGameSprite* pSprite)
+{
+    if (IcewindMisc::IsDead(pSprite) != TRUE) {
+        for (int index = 0; index < m_effectAmount; index += 7) {
+            CGameEffect* copy = Copy();
+            copy->m_dwFlags = 11;
+            copy->m_durationType = 4;
+            copy->m_duration = 7 * (index + 1);
+            copy->m_effectAmount = m_effectAmount - index;
+            copy->m_flags |= 0x2;
+            copy->m_casterLevel = m_casterLevel;
+            pSprite->AddEffect(copy,
+                CGameAIBase::EFFECT_LIST_TIMED,
+                TRUE,
+                TRUE);
+        }
+    }
+    m_done = TRUE;
+}
+
 // -----------------------------------------------------------------------------
 
 // NOTE: Inlined.
@@ -11128,14 +11337,7 @@ CPersistantEffect84C4A4::CPersistantEffect84C4A4(const CPersistantEffect84C4A4& 
     field_20 = other.field_20;
     field_24 = other.field_24;
     field_28 = other.field_28;
-    field_29 = other.field_29;
-    field_2A = other.field_2A;
-    field_2B = other.field_2B;
-    field_2C = other.field_2C;
-    field_2D = other.field_2D;
-    field_2E = other.field_2E;
-    field_2F = other.field_2F;
-    field_30 = other.field_30;
+    memcpy(field_29, other.field_29, sizeof(field_29));
     field_31 = other.field_31;
     field_32 = other.field_32;
     field_33 = other.field_33;

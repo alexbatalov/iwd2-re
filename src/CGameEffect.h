@@ -895,6 +895,12 @@ class CGameEffectDisease : public CGameEffect {
 public:
     CGameEffectDisease(ITEM_EFFECT* effect, const CPoint& source, LONG sourceID, CPoint target);
     CGameEffect* Copy() override;
+    BOOL ApplyEffect(CGameSprite* pSprite) override;
+
+    void sub_4B5BF0(CGameSprite* pSprite);
+    void sub_4B5D90(CGameSprite* pSprite);
+    void sub_4B5E50(CGameSprite* pSprite);
+    void sub_4B5FF0(CGameSprite* pSprite);
 };
 
 class CGameEffectCureDisease : public CGameEffect {
@@ -1981,14 +1987,7 @@ public:
     /* 0020 */ int field_20;
     /* 0024 */ int field_24;
     /* 0028 */ unsigned char field_28;
-    /* 0029 */ unsigned char field_29;
-    /* 002A */ unsigned char field_2A;
-    /* 002B */ unsigned char field_2B;
-    /* 002C */ unsigned char field_2C;
-    /* 002D */ unsigned char field_2D;
-    /* 002E */ unsigned char field_2E;
-    /* 002F */ unsigned char field_2F;
-    /* 0030 */ unsigned char field_30;
+    /* 0029 */ RESREF field_29;
     /* 0031 */ unsigned char field_31;
     /* 0032 */ unsigned char field_32;
     /* 0033 */ unsigned char field_33;

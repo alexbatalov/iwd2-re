@@ -386,6 +386,7 @@ class CCreatureFileHeader;
 class CGameSprite;
 class CGameSpriteGroupedSpellList;
 class CGameSpriteSpells;
+class CPersistantEffect;
 
 #pragma pack(push)
 #pragma pack(2)
@@ -569,7 +570,7 @@ public:
     /* 0500 */ CPtrList field_500;
     /* 051C */ CPtrList field_51C;
     /* 0538 */ CPtrList field_538;
-    /* 0554 */ CPtrList field_554;
+    /* 0554 */ CTypedPtrList<CPtrList, CPersistantEffect*> m_cRegeneratedPersistantEffectList;
     /* 0574 */ CColorRanges m_appliedColorRanges;
     /* 0590 */ CColorEffects m_appliedColorEffects;
     /* 05AC */ CGameSpriteSpells m_spells;
