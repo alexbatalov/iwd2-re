@@ -1649,6 +1649,24 @@ BOOLEAN CInfGame::CanSaveGame(STRREF& strError, BOOLEAN bInRestGame, BOOLEAN bIn
     return TRUE;
 }
 
+// 0x5AC340
+BOOL CInfGame::BackupQuickSave()
+{
+    BOOL bResult = FALSE;
+
+    m_sSaveGame = QUICK_SAVE_BACKUP_NAME;
+    CScreenCharacter::SAVE_NAME = QUICK_SAVE_BACKUP_NAME;
+
+    CString sDirSave = GetDirSave();
+    if (g_pChitin->cDimm.DirectoryRemoveFiles(sDirSave)) {
+        m_sSaveGame = QUICK_SAVE_NAME;
+        CScreenCharacter::SAVE_NAME = QUICK_SAVE_NAME;
+        bResult = g_pChitin->cDimm.DirectoryCopyFiles(GetDirSave(), sDirSave);
+    }
+
+    return bResult;
+}
+
 // 0x5AC430
 BOOL CInfGame::SaveGame(unsigned char a1, unsigned char a2, unsigned char a3)
 {
