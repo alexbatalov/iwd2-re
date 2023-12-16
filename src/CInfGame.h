@@ -237,6 +237,7 @@ public:
     void ChangeBiography(BYTE nFixedPartyId, CString szBiography);
     BOOLEAN GetGameSpyCharacterInformation(INT nCharacterSlot, CString& sName, CString& sRace, CString& sClass, CString& sLevel);
     void MultiplayerSetCharacterCreationLocation();
+    BOOL IsItemExclusive(CGameSprite* pSprite, INT slotNum, CItem* pItem, STRREF& strError);
     CWorldMap* GetWorldMap(CString sArea);
     BOOL sub_5C79C0(CString sArea);
     INT sub_5C93E0();

@@ -5749,6 +5749,37 @@ void CInfGame::MultiplayerSetCharacterCreationLocation()
     }
 }
 
+// 0x5C7830
+BOOL CInfGame::IsItemExclusive(CGameSprite* pSprite, INT slotNum, CItem* pItem, STRREF& strError)
+{
+    const CRuleTables& cRule = g_pBaldurChitin->GetObjectGame()->GetRuleTables();
+
+    strError = -1;
+
+    INT slots[] = {
+        7,
+        8,
+        1,
+        4,
+        0,
+    };
+
+    if (pItem == NULL || !cRule.IsItemExclusive(pItem)) {
+        return FALSE;
+    }
+
+    for (int index = 0; index < 5; index++) {
+        if (slotNum != slots[index]
+            && pSprite->GetEquipment()->m_items[slots[index]] != NULL
+            && cRule.IsItemExclusive(pSprite->GetEquipment()->m_items[slots[index]])) {
+            strError = 20685;
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
 // 0x5C78F0
 CWorldMap* CInfGame::GetWorldMap(CString sArea)
 {
