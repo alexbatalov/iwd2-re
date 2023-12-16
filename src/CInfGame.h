@@ -242,6 +242,7 @@ public:
     BOOL sub_5C79C0(CString sArea);
     INT sub_5C93E0();
     void ResetMultiPlayerPermissions();
+    INT GetNumberOfItemsInBag(const CResRef& storeResRef, CString a2);
     LONG GetAveragePartyLevel();
 
     UINT GetSpellcasterIndex(const BYTE& nClass);

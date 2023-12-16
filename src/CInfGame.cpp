@@ -5938,6 +5938,75 @@ void CInfGame::ResetMultiPlayerPermissions()
     pSettings->SetImportingCharacterOption(nImportingBitField);
 }
 
+// 0x5C9720
+INT CInfGame::GetNumberOfItemsInBag(const CResRef& storeResRef, CString a2)
+{
+    CMessage* message;
+    INT nNumberOfItemsInBag = 0;
+
+    if (!g_pChitin->cNetwork.GetSessionOpen()) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+        // __LINE__: 23072
+        UTIL_ASSERT_MSG(FALSE, "Very bad things are about to happen in GetNumberOfItemsInBag");
+    }
+
+    BOOL demanded = FALSE;
+    CStore store;
+    if (g_pChitin->cNetwork.GetSessionHosting()) {
+        DemandServerStore(storeResRef, TRUE);
+        store.SetResRef(storeResRef);
+    } else {
+        store.SetResRef(storeResRef);
+        if (!store.m_bLocalCopy || memcmp(store.m_pVersion, "STORV9.0", 8) != 0) {
+            if (!g_pBaldurChitin->GetBaldurMessage()->DemandResourceFromServer(storeResRef.GetResRefStr(),
+                    1014,
+                    TRUE,
+                    TRUE,
+                    TRUE)) {
+                g_pChitin->cNetwork.CloseSession(TRUE);
+                return FALSE;
+            }
+
+            store.SetResRef(storeResRef);
+            demanded = TRUE;
+        }
+    }
+
+    CResRef itemResRef;
+
+    if (g_pChitin->cNetwork.GetSessionHosting() || demanded) {
+        store.InvalidateStore(storeResRef);
+    } else {
+        demanded = TRUE;
+        message = new CMessageStoreDemand(storeResRef, -1, -1);
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+    }
+
+    for (INT nIndex = 0; nIndex < store.GetNumItems(); nIndex++) {
+        itemResRef = store.GetItemId(nIndex);
+
+        // FIXME: Temporary instance, should be on stack.
+        CItem* pItem = new CItem();
+        store.GetItem(nIndex, *pItem);
+        if (pItem->GetResRef() != a2) {
+            nNumberOfItemsInBag += store.GetItemNumInStock(nIndex);
+        }
+
+        // FIXME: Probably leaking `pItem`.
+    }
+
+    if (g_pChitin->cNetwork.GetSessionHosting()) {
+        g_pBaldurChitin->GetObjectGame()->ReleaseServerStore(storeResRef);
+    } else {
+        if (demanded) {
+            message = new CMessageStoreRelease(storeResRef, -1, -1);
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+        }
+    }
+
+    return nNumberOfItemsInBag;
+}
+
 // 0x5C9AC0
 LONG CInfGame::GetAveragePartyLevel()
 {
