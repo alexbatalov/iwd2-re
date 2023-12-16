@@ -923,7 +923,7 @@ void CScreenOptions::QuitGame()
         g_pBaldurChitin->m_cBaldurMessage.m_bPlayerShutdown = FALSE;
     }
 
-    pGame->DestroyGame(1, 0);
+    pGame->DestroyGame(TRUE, FALSE);
 }
 
 // 0x655610
@@ -1024,7 +1024,7 @@ void CScreenOptions::LoadGame()
         nLoadState = 2;
     }
 
-    pGame->DestroyGame(1, 0);
+    pGame->DestroyGame(TRUE, FALSE);
 
     CScreenLoad* pLoad = g_pBaldurChitin->m_pEngineLoad;
 

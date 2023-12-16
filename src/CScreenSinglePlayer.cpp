@@ -547,7 +547,7 @@ void CScreenSinglePlayer::TimerAsynchronousUpdate()
                     g_pBaldurChitin->m_pEngineConnection->ShowSessionTerminatedMessage();
                 }
 
-                pGame->DestroyGame(1, 0);
+                pGame->DestroyGame(TRUE, FALSE);
 
                 return;
             }
@@ -1458,7 +1458,7 @@ void CScreenSinglePlayer::OnMainDoneButtonClick()
                 g_pChitin->cProgressBar.m_bWaiting = FALSE;
                 g_pBaldurChitin->m_cCachingStatus.InvalidateScreen();
 
-                pGame->DestroyGame(0, 1);
+                pGame->DestroyGame(FALSE, TRUE);
                 pGame->LoadGame(FALSE, TRUE);
 
                 g_pChitin->cProgressBar.m_nActionProgress = g_pChitin->cProgressBar.m_nActionTarget - 1;
@@ -1537,7 +1537,7 @@ void CScreenSinglePlayer::OnMainDoneButtonClick()
                 m_cUIManager.KillCapture();
 
                 if (pGame->m_bGameLoaded) {
-                    pGame->DestroyGame(0, 1);
+                    pGame->DestroyGame(FALSE, TRUE);
                 }
 
                 CString v3 = pGame->sub_5C0B30();
@@ -1664,7 +1664,7 @@ void CScreenSinglePlayer::OnMainDoneButtonClick()
                 }
 
                 if (pGame->m_bGameLoaded) {
-                    pGame->DestroyGame(1, 0);
+                    pGame->DestroyGame(TRUE, FALSE);
                 }
             }
         } else if (field_45C == 2) {

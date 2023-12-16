@@ -5598,7 +5598,7 @@ void CScreenCreateChar::OnMainCancelButtonClick()
             // NOTE: Uninline.
             CancelCreateChar();
 
-            pGame->DestroyGame(1, 0);
+            pGame->DestroyGame(TRUE, FALSE);
 
             SelectEngine(pConnection);
             break;
@@ -5610,7 +5610,7 @@ void CScreenCreateChar::OnMainCancelButtonClick()
                 g_pChitin->cNetwork.CloseSession(TRUE);
             }
 
-            pGame->DestroyGame(1, 0);
+            pGame->DestroyGame(TRUE, FALSE);
 
             pConnection->SetEliminateInitialize(TRUE);
             SelectEngine(pConnection);

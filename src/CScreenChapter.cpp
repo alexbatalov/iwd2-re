@@ -587,7 +587,7 @@ void CScreenChapter::OnDoneButtonClick()
             g_pBaldurChitin->m_cBaldurMessage.m_bPlayerShutdown = 0;
         }
 
-        pGame->DestroyGame(1, 0);
+        pGame->DestroyGame(TRUE, FALSE);
 
         break;
     case 4:

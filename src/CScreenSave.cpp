@@ -1455,7 +1455,7 @@ void CScreenSave::SaveGame(INT nGameSlot, const CString& sSlotName)
             g_pChitin->cNetwork.CloseSession(TRUE);
             g_pBaldurChitin->GetBaldurMessage()->m_bPlayerShutdown = FALSE;
         }
-        pGame->DestroyGame(1, 0);
+        pGame->DestroyGame(TRUE, FALSE);
         break;
     case 2:
         break;
@@ -1467,7 +1467,7 @@ void CScreenSave::SaveGame(INT nGameSlot, const CString& sSlotName)
         }
 
         SelectEngine(g_pBaldurChitin->m_pEngineLoad);
-        pGame->DestroyGame(1, 0);
+        pGame->DestroyGame(TRUE, FALSE);
         break;
     default:
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenSave.cpp

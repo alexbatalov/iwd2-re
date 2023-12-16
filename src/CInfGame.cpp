@@ -989,9 +989,209 @@ void CInfGame::sub_59FA00(BOOL a1)
 }
 
 // 0x59FB50
-void CInfGame::DestroyGame(unsigned char a1, unsigned char a2)
+void CInfGame::DestroyGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace)
 {
-    // TODO: Incomplete.
+    DWORD dwPerSegment;
+    BYTE cnt;
+
+    if (!bProgressBarInPlace) {
+        if (bProgressBarRequired == TRUE) {
+            sub_59FA00(TRUE);
+            g_pChitin->SetProgressBar(TRUE,
+                11831,
+                0,
+                0,
+                FALSE,
+                0,
+                FALSE,
+                0,
+                FALSE,
+                FALSE,
+                255);
+            g_pChitin->cProgressBar.m_nActionProgress = 0;
+            g_pChitin->cProgressBar.m_nActionTarget = 5000000;
+            g_pChitin->cProgressBar.m_bDisableMinibars = TRUE;
+        }
+    }
+
+    dwPerSegment = 555555;
+
+    CSingleLock lock(&(g_pBaldurChitin->GetObjectGame()->field_1B58), TRUE);
+    m_bInDestroyGame = TRUE;
+
+    for (cnt = 0; cnt < CINFGAME_MAX_AREAS; cnt++) {
+        if (m_gameAreas[cnt] != NULL) {
+            while (m_gameAreas[cnt]->field_41E != 0) {
+                SleepEx(25, FALSE);
+            }
+        }
+    }
+
+    if (bProgressBarInPlace || bProgressBarRequired) {
+        ProgressBarCallback(dwPerSegment, FALSE);
+    }
+
+    if (g_pBaldurChitin->GetScreenWorld() != NULL) {
+        g_pBaldurChitin->GetScreenWorld()->m_weather.CancelCurrentWeather(NULL, 0);
+    }
+
+    g_pChitin->cDimm.RemoveFromDirectoryList(m_sTempDir, TRUE);
+    m_cObjectArray.Clean();
+
+    EnterCriticalSection(&(g_pBaldurChitin->GetScreenWorld()->field_106));
+    for (cnt = 0; cnt < CINFGAME_MAX_AREAS; cnt++) {
+        if (m_gameAreas[cnt] != NULL) {
+            while (m_gameAreas[cnt]->field_41E != 0) {
+                SleepEx(25, FALSE);
+            }
+
+            delete m_gameAreas[cnt];
+            m_gameAreas[cnt] = NULL;
+        }
+    }
+    m_visibleArea = 0;
+    LeaveCriticalSection(&(g_pBaldurChitin->GetScreenWorld()->field_106));
+
+    lock.Unlock();
+
+    if (bProgressBarInPlace || bProgressBarRequired) {
+        ProgressBarCallback(dwPerSegment, FALSE);
+    }
+
+    for (cnt = 0; cnt < CINFGAME_MAXCHARACTERS; cnt++) {
+        EnablePortrait(cnt, FALSE);
+        if (m_characterPortraits[cnt] != -1) {
+            CGameObject* pObject;
+            if (m_cObjectArray.Delete(m_characterPortraits[cnt], CGameObjectArray::THREAD_ASYNCH, &pObject, -1) == CGameObjectArray::SUCCESS
+                && pObject != NULL) {
+                delete pObject;
+            }
+            m_characterPortraits[cnt] = -1;
+        }
+    }
+
+    memset(m_characters, -1, sizeof(m_characters));
+    m_nCharacters = 0;
+
+    if (bProgressBarInPlace || bProgressBarRequired) {
+        ProgressBarCallback(dwPerSegment, FALSE);
+    }
+
+    while (!m_lstGlobalCreatures.IsEmpty()) {
+        LONG iObject = reinterpret_cast<LONG>(m_lstGlobalCreatures.RemoveHead());
+        CGameObject* pObject;
+        if (m_cObjectArray.Delete(iObject, CGameObjectArray::THREAD_ASYNCH, &pObject, -1) == CGameObjectArray::SUCCESS
+            && pObject != NULL) {
+            delete pObject;
+        }
+    }
+
+    for (cnt = 0; cnt < 9; cnt++) {
+        while (!m_familiarResRefs[cnt]->IsEmpty()) {
+            delete m_familiarResRefs[cnt]->RemoveHead();
+        }
+    }
+
+    if (bProgressBarInPlace || bProgressBarRequired) {
+        ProgressBarCallback(dwPerSegment, FALSE);
+    }
+
+    field_4A42 = 48;
+    field_4A44 = 48;
+    m_nState = 0;
+    m_tempCursor = 4;
+    m_iconIndex = -1;
+    field_49F8 = 1;
+    m_currArmor = '1';
+    field_4A46 = -1;
+    m_currAnimation = -1;
+    m_bGameLoaded = FALSE;
+
+    for (cnt = 0; cnt < 100; cnt++) {
+        if (m_gameSave.m_groupInventory[cnt] != NULL) {
+            delete m_gameSave.m_groupInventory[cnt];
+            m_gameSave.m_groupInventory[cnt] = NULL;
+        }
+    }
+
+    g_pBaldurChitin->GetTlkTable().m_override.CloseFiles();
+
+    if (bProgressBarInPlace || bProgressBarRequired) {
+        ProgressBarCallback(dwPerSegment, FALSE);
+    }
+
+    m_group.m_memberList.RemoveAll();
+    m_group.m_groupChanged = TRUE;
+    m_allies.RemoveAll();
+    m_familiars.RemoveAll();
+    g_pBaldurChitin->EnginesGameUninit();
+
+    if (bProgressBarInPlace || bProgressBarRequired) {
+        ProgressBarCallback(dwPerSegment, FALSE);
+        // FIXME: Redundant.
+        if (bProgressBarInPlace || bProgressBarRequired) {
+            ProgressBarCallback(dwPerSegment, FALSE);
+        }
+    }
+
+    if (!g_pChitin->cDimm.DirectoryRemoveFiles(m_sTempDir)) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+        // __LINE__: 3592
+        UTIL_ASSERT_MSG(FALSE, "Could not remove files from Temp directory");
+    }
+
+    if (!g_pChitin->cDimm.DirectoryRemoveFiles(m_sTempSaveDir)) {
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+        // __LINE__: 3296
+        UTIL_ASSERT_MSG(FALSE, "Could not remove files from TempSave directory");
+    }
+
+    if (bProgressBarInPlace || bProgressBarRequired) {
+        ProgressBarCallback(dwPerSegment, FALSE);
+    }
+
+    m_bInDestroyGame = FALSE;
+
+    if (bProgressBarInPlace || bProgressBarRequired) {
+        ProgressBarCallback(dwPerSegment, FALSE);
+    }
+
+    if (!bProgressBarInPlace && bProgressBarRequired == TRUE) {
+        g_pChitin->cProgressBar.m_nActionProgress = g_pChitin->cProgressBar.m_nActionTarget;
+        g_pChitin->cProgressBar.m_bDisableMinibars = TRUE;
+        g_pChitin->m_bDisplayStale = TRUE;
+        sub_59FA00(TRUE);
+        g_pChitin->SetProgressBar(FALSE,
+            0,
+            0,
+            0,
+            FALSE,
+            0,
+            FALSE,
+            0,
+            FALSE,
+            FALSE,
+            255);
+    }
+
+    m_cVRamPool.DetachSurfaces();
+
+    for (cnt = 0; cnt < 12; cnt++) {
+        if (m_aServerStore[cnt] != NULL) {
+            delete m_aServerStore[cnt];
+        }
+        m_aServerStore[cnt] = NULL;
+    }
+
+    POSITION pos = field_4BDC.GetHeadPosition();
+    while (pos != NULL) {
+        POSITION posOld = pos;
+        CString* node = field_4BDC.GetNext(pos);
+        if (node != NULL) {
+            delete node;
+        }
+        field_4BDC.RemoveAt(posOld);
+    }
 }
 
 // 0x5A0160

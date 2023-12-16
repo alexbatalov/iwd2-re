@@ -750,7 +750,7 @@ void CScreenWorld::AsynchronousUpdate(BOOL bActiveEngine)
                 g_pBaldurChitin->GetBaldurMessage()->m_bPlayerShutdown = FALSE;
             }
 
-            pGame->DestroyGame(1, 0);
+            pGame->DestroyGame(TRUE, FALSE);
             m_bPlayEndCredits = FALSE;
         }
         return;
@@ -759,7 +759,7 @@ void CScreenWorld::AsynchronousUpdate(BOOL bActiveEngine)
     if (m_playerShutdown) {
         g_pBaldurChitin->m_pEngineConnection->field_FB0 = 0;
         SelectEngine(g_pBaldurChitin->m_pEngineConnection);
-        pGame->DestroyGame(1, 0);
+        pGame->DestroyGame(TRUE, FALSE);
     }
 
     if (pGame->m_bGameLoaded) {
@@ -3793,7 +3793,7 @@ void CUIControlButtonWorldDeathLoad::OnLButtonClick(CPoint pt)
         pGame->GetMultiplayerSettings()->SetArbitrationLockStatus(TRUE, 1);
     }
 
-    pGame->DestroyGame(1, 0);
+    pGame->DestroyGame(TRUE, FALSE);
 }
 
 // -----------------------------------------------------------------------------
@@ -3838,5 +3838,5 @@ void CUIControlButtonWorldDeathQuit::OnLButtonClick(CPoint pt)
         g_pBaldurChitin->GetBaldurMessage()->m_bPlayerShutdown = FALSE;
     }
 
-    pGame->DestroyGame(1, 0);
+    pGame->DestroyGame(TRUE, FALSE);
 }

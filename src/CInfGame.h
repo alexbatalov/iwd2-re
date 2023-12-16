@@ -126,7 +126,7 @@ public:
     void BeginListManipulation(CGameArea* pArea);
     INT EndListManipulation(CGameArea* pArea);
     void sub_59FA00(BOOL a1);
-    void DestroyGame(unsigned char a1, unsigned char a2);
+    void DestroyGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace);
     void sub_5A0160();
     LONG CachingRequirements(const CString& areaName);
     void CacheResFileWithResource(const CString& areaName);
@@ -410,7 +410,11 @@ public:
     /* 4814 */ STR_RES field_4814;
     /* 487C */ STR_RES field_487C;
     /* 48E4 */ BOOLEAN m_bForceDither;
+    /* 49F8 */ int field_49F8;
     /* 4A40 */ SHORT m_currArmor;
+    /* 4A42 */ short field_4A42;
+    /* 4A44 */ short field_4A44;
+    /* 4A46 */ short field_4A46;
     /* 4A48 */ SHORT m_currAnimation;
     /* 4A8A */ LONG m_nProtagonistId;
     /* 4A8E */ BOOLEAN m_bPartyAI;
@@ -445,6 +449,7 @@ public:
     /* 4BD5 */ BOOLEAN m_bExpansion; // NOTE: Can also be BYTE indicating number of expansion pack.
     /* 4BD6 */ BOOLEAN field_4BD6;
     /* 4BD8 */ DWORD m_nDifficultyLevel;
+    /* 4BDC */ CTypedPtrList<CPtrList, CString*> field_4BDC;
     /* 4BF8 */ CSpellResRefList m_spells;
     /* 4C00 */ CSpellResRefList m_innateSpells;
     /* 4C08 */ CSpellResRefList m_songs;

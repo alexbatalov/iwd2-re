@@ -631,7 +631,7 @@ void CScreenMultiPlayer::TimerAsynchronousUpdate()
                     g_pBaldurChitin->m_pEngineConnection->ShowSessionTerminatedMessage();
                 }
 
-                pGame->DestroyGame(1, 0);
+                pGame->DestroyGame(TRUE, FALSE);
 
                 return;
             }

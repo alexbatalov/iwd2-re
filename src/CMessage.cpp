@@ -5011,7 +5011,7 @@ void CMessageHandler::PostAsynchronousUpdate()
                 g_pBaldurChitin->GetObjectGame()->SaveGame(0, 0, 1);
             }
 
-            g_pBaldurChitin->GetObjectGame()->DestroyGame(1, 0);
+            g_pBaldurChitin->GetObjectGame()->DestroyGame(TRUE, FALSE);
         }
 
         if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
