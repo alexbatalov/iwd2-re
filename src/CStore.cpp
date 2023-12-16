@@ -474,6 +474,18 @@ INT CStore::AddItemExt(CItem& cItem, DWORD storeFlags)
     return -1;
 }
 
+// 0x54CAF0
+BOOL CStore::IsValidIdentifyItem(CItem* pItem)
+{
+    for (DWORD nIndex = 0; nIndex < m_nBuyTypes; nIndex++) {
+        if (m_pBuyTypes[nIndex] == pItem->GetItemType()) {
+            return (pItem->m_flags & 0x1) == 0
+                && m_header.m_nLore >= pItem->GetLoreValue();
+        }
+    }
+    return FALSE;
+}
+
 // 0x54CB60
 void CStore::CompressItems()
 {
