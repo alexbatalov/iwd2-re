@@ -187,6 +187,25 @@ CAIAction::CAIAction(SHORT actionID, const CAIObjectType& actee, const CString& 
     m_internalFlags = 0;
 }
 
+// 0x5BC220
+CAIAction::CAIAction(SHORT actionID, const CString& string1, CPoint pt, LONG specificID, LONG specificID2)
+{
+    // NOTE: For unknown reason it creates and immediately destroys `CAIAction`
+    // instance. This instance and its properties are not used.
+    // FIXME: Remove.
+    if (1) {
+        CAIAction action;
+    }
+
+    m_actionID = actionID;
+    SetString1(string1);
+    m_dest = pt;
+    m_specificID3 = 0;
+    m_internalFlags = 0;
+    m_specificID2 = specificID2;
+    m_specificID = specificID;
+}
+
 // 0x403B40
 CAIAction::~CAIAction()
 {
