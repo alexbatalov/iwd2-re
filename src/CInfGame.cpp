@@ -4624,9 +4624,49 @@ BOOL CInfGame::SetCharacterSlot(INT nCharacterSlot, LONG nCharacterId)
 // 0x5BD530
 BOOL CInfGame::ClearCharacterSlot(INT nCharacterSlot)
 {
-    // TODO: Incomplete.
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+    // __LINE__: 15717
+    UTIL_ASSERT(0 <= nCharacterSlot && nCharacterSlot < CINFGAME_MAXCHARACTERS);
 
-    return FALSE;
+    LONG id = m_characters[nCharacterSlot];
+    if (id == -1) {
+        return FALSE;
+    }
+
+    m_characters[nCharacterSlot] = -1;
+
+    BOOL overflow;
+    RemoveCharacterFromParty(id, overflow);
+
+    POSITION pos = m_lstGlobalCreatures.GetHeadPosition();
+    while (pos != NULL) {
+        POSITION posOld = pos;
+        if (reinterpret_cast<LONG>(m_lstGlobalCreatures.GetNext(pos)) == id) {
+            m_lstGlobalCreatures.RemoveAt(posOld);
+            break;
+        }
+    }
+
+    CGameSprite* pSprite;
+    if (m_cObjectArray.GetDeny(id, CGameObjectArray::THREAD_ASYNCH, reinterpret_cast<CGameObject**>(&pSprite), INFINITE) != CGameObjectArray::SUCCESS) {
+        return FALSE;
+    }
+
+    if (pSprite->GetArea() != NULL) {
+        pSprite->GetArea()->m_visibility.RemoveCharacter(pSprite->GetPos(),
+            pSprite->GetId(),
+            pSprite->GetTerrainTable());
+
+        if (pSprite->GetArea()->m_nCharacters != -1) {
+            pSprite->GetArea()->m_nCharacters--;
+        }
+
+        pSprite->RemoveFromArea();
+    }
+
+    m_cObjectArray.ReleaseDeny(id, CGameObjectArray::THREAD_ASYNCH, INFINITE);
+
+    return TRUE;
 }
 
 // 0x5BD650
