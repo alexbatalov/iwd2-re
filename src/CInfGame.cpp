@@ -81,6 +81,27 @@ const DWORD CInfGame::PROGRESSBAR_CACHING_ADDITIONAL = 3000000;
 // 0x8518BE
 const SHORT CInfGame::FEEDBACK_GOLD = 1;
 
+// 0x8518C0
+const SHORT CInfGame::FEEDBACK_EXPERIENCE = 2;
+
+// 0x8518C2
+const SHORT CInfGame::FEEDBACK_ITEMGAINED = 3;
+
+// 0x8518C4
+const SHORT CInfGame::FEEDBACK_ITEMLOST = 4;
+
+// 0x8518C6
+const SHORT CInfGame::FEEDBACK_REPUTATION = 5;
+
+// 0x8518C8
+const SHORT CInfGame::FEEDBACK_TIMEPASSEDJOURNEY = 6;
+
+// 0x8518CA
+const SHORT CInfGame::FEEDBACK_TIMEPASSEDREST = 7;
+
+// 0x8518CC
+const SHORT CInfGame::FEEDBACK_INVENTORYFULL_ITEMDROPPED = 8;
+
 // 0x8518CE
 const SHORT CInfGame::FEEDBACK_JOURNAL_UPDATE = 9;
 
@@ -5114,7 +5135,232 @@ void CInfGame::ReadyCharacterTerminationSequence(int a1, int a2)
 // 0x5C2630
 void CInfGame::FeedBack(SHORT feedBackId, LONG value, BOOLEAN a3)
 {
-    // TODO: Incomplete.
+    CString sTime;
+
+    if (!a3) {
+        a3 = m_cOptions.m_bShowQuestXP;
+    }
+
+    switch (feedBackId) {
+    case FEEDBACK_GOLD:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            CString sText;
+            STR_RES strRes;
+
+            if (value != 0) {
+                if (value > 0) {
+                    // "The party has gained gold"
+                    g_pBaldurChitin->GetTlkTable().Fetch(17572, strRes);
+                } else {
+                    // "The party has lost gold"
+                    g_pBaldurChitin->GetTlkTable().Fetch(17573, strRes);
+                    value = -value;
+                }
+                sText.Format("%d", value);
+
+                if (strRes.cSound.GetRes() != NULL) {
+                    if (!strRes.cSound.GetLooping()) {
+                        strRes.cSound.SetFireForget(TRUE);
+                    }
+                    strRes.cSound.SetChannel(14, reinterpret_cast<DWORD>(GetVisibleArea()));
+                    strRes.cSound.Play(FALSE);
+                }
+
+                if (strRes.szText != "") {
+                    if (a3) {
+                        sText = strRes.szText + ": " + sText;
+                    } else {
+                        sText = strRes.szText + ".";
+                    }
+                }
+
+                g_pBaldurChitin->GetBaldurMessage()->DisplayText(CString(""),
+                    sText,
+                    RGB(0, 0, 0),
+                    RGB(255, 255, 0),
+                    -1,
+                    0,
+                    0);
+            }
+        }
+        break;
+    case FEEDBACK_EXPERIENCE:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            CString sText;
+            STR_RES strRes;
+
+            if (value != 0) {
+                if (value > 0) {
+                    // "The party has gained experience"
+                    g_pBaldurChitin->GetTlkTable().Fetch(17574, strRes);
+                } else {
+                    // "The party has lost experience"
+                    g_pBaldurChitin->GetTlkTable().Fetch(17575, strRes);
+                    value = -value;
+                }
+                sText.Format("%d", value);
+
+                if (strRes.cSound.GetRes() != NULL) {
+                    if (!strRes.cSound.GetLooping()) {
+                        strRes.cSound.SetFireForget(TRUE);
+                    }
+                    strRes.cSound.SetChannel(14, reinterpret_cast<DWORD>(GetVisibleArea()));
+                    strRes.cSound.Play(FALSE);
+                }
+
+                if (strRes.szText != "") {
+                    if (a3) {
+                        sText = strRes.szText + ": " + sText;
+                    } else {
+                        sText = strRes.szText + ".";
+                    }
+                }
+
+                g_pBaldurChitin->GetBaldurMessage()->DisplayText(CString(""),
+                    sText,
+                    RGB(0, 0, 0),
+                    RGB(255, 255, 0),
+                    -1,
+                    0,
+                    0);
+            }
+        }
+        break;
+    case FEEDBACK_ITEMGAINED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            // "The party has gained an item."
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(-1,
+                17576,
+                RGB(0, 0, 0),
+                RGB(255, 255, 0),
+                -1,
+                0,
+                0);
+        }
+        break;
+    case FEEDBACK_ITEMLOST:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            // "The party has lost an item."
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(-1,
+                17577,
+                RGB(0, 0, 0),
+                RGB(255, 255, 0),
+                -1,
+                0,
+                0);
+        }
+        break;
+    case FEEDBACK_REPUTATION:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            CString sText;
+            STR_RES strRes;
+
+            if (value != 0) {
+                if (value > 0) {
+                    // "The party's reputation has increased"
+                    g_pBaldurChitin->GetTlkTable().Fetch(19686, strRes);
+                } else {
+                    // "The party's reputation has decreased"
+                    g_pBaldurChitin->GetTlkTable().Fetch(19687, strRes);
+                    value = -value;
+                }
+                sText.Format("%d", value);
+
+                if (strRes.cSound.GetRes() != NULL) {
+                    if (!strRes.cSound.GetLooping()) {
+                        strRes.cSound.SetFireForget(TRUE);
+                    }
+                    strRes.cSound.SetChannel(14, reinterpret_cast<DWORD>(GetVisibleArea()));
+                    strRes.cSound.Play(FALSE);
+                }
+
+                if (strRes.szText != "") {
+                    if (a3) {
+                        sText = strRes.szText + ": " + sText;
+                    } else {
+                        sText = strRes.szText + ".";
+                    }
+                }
+
+                g_pBaldurChitin->GetBaldurMessage()->DisplayText(CString(""),
+                    sText,
+                    RGB(0, 0, 0),
+                    RGB(255, 255, 0),
+                    -1,
+                    0,
+                    0);
+            }
+        }
+        break;
+    case FEEDBACK_TIMEPASSEDJOURNEY:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            // NOTE: Signed compare.
+            if (value >= static_cast<LONG>(CTimerWorld::TIMESCALE_MSEC_PER_HOUR)) {
+                // "The journey took <DURATION>."
+                CTimerWorld::GetCurrentTimeString(value, 10689, sTime);
+                g_pBaldurChitin->GetBaldurMessage()->DisplayText(CString(""),
+                    sTime,
+                    RGB(0, 0, 0),
+                    RGB(255, 255, 0),
+                    -1,
+                    0,
+                    0);
+            }
+        }
+        break;
+    case FEEDBACK_TIMEPASSEDREST:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            // NOTE: Signed compare.
+            if (value >= static_cast<LONG>(CTimerWorld::TIMESCALE_MSEC_PER_HOUR)) {
+                // "You have rested for <DURATION>."
+                CTimerWorld::GetCurrentTimeString(value, 10690, sTime);
+                g_pBaldurChitin->GetBaldurMessage()->DisplayText(CString(""),
+                    sTime,
+                    RGB(0, 0, 0),
+                    RGB(255, 255, 0),
+                    -1,
+                    0,
+                    0);
+            }
+        }
+        break;
+    case FEEDBACK_INVENTORYFULL_ITEMDROPPED:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            // "Inventory Full: The item has been dropped."
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(-1,
+                10959,
+                RGB(0, 0, 0),
+                RGB(255, 255, 0),
+                -1,
+                0,
+                0);
+        }
+        break;
+    case FEEDBACK_JOURNAL_UPDATE:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            // "Your journal has been updated."
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(-1,
+                11359,
+                RGB(0, 0, 0),
+                RGB(255, 255, 0),
+                -1,
+                0,
+                0);
+        }
+        break;
+    case FEEDBACK_WORLDMAP_UPDATE:
+        if ((g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nEffectTextLevel & 0x10) != 0) {
+            // "Your map has been updated."
+            g_pBaldurChitin->GetBaldurMessage()->DisplayTextRef(-1,
+                11360,
+                RGB(0, 0, 0),
+                RGB(255, 255, 0),
+                -1,
+                0,
+                0);
+        }
+        break;
+    }
 }
 
 // 0x5C3210
