@@ -14,6 +14,7 @@
 #include "CInfCursor.h"
 #include "CItem.h"
 #include "CPathSearch.h"
+#include "CScreenChapter.h"
 #include "CScreenCharacter.h"
 #include "CScreenInventory.h"
 #include "CScreenJournal.h"
@@ -1562,11 +1563,90 @@ CGameArea* CInfGame::LoadArea(CString areaName, BYTE nTravelScreenImageToUse, BO
 }
 
 // 0x5AC110
-BOOLEAN CInfGame::CanSaveGame(STRREF& strError, unsigned char a2, unsigned char a3)
+BOOLEAN CInfGame::CanSaveGame(STRREF& strError, BOOLEAN bInRestGame, BOOLEAN bInStore)
 {
-    // TODO: Incomplete.
+    if (!bInRestGame
+        && g_pChitin->cNetwork.GetSessionOpen() == TRUE
+        && !g_pChitin->cNetwork.GetSessionHosting()) {
+        // "Client machines are not allowed to save in a multiplayer game."
+        strError = 17194;
+        return FALSE;
+    }
 
-    return FALSE;
+    if (g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode == 386
+        || g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_mode == 1282) {
+        // "Cannot save game while in dialog mode."
+        strError = 19253;
+        return FALSE;
+    }
+
+    if (g_pBaldurChitin->GetScreenWorld()->m_comingOutOfDialog > 0 && !bInStore) {
+        // "Cannot save game while in dialog mode."
+        strError = 19253;
+        return FALSE;
+    }
+
+    if (g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->m_bHostPermittedDialog == TRUE) {
+        // "Cannot save because dialog is about to start."
+        strError = 19254;
+        return FALSE;
+    }
+
+    if (g_pBaldurChitin->GetScreenWorld()->m_bHardPaused == TRUE) {
+        // "Cannot save during a rest, chapter information or movie."
+        strError = 19255;
+        return FALSE;
+    }
+
+    if (g_pBaldurChitin->GetActiveEngine() == g_pBaldurChitin->m_pEngineProjector
+        || g_pBaldurChitin->GetActiveEngine() == g_pBaldurChitin->m_pEngineChapter
+        || g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_cutScene) {
+        // "Cannot save during a rest, chapter information or movie."
+        strError = 19255;
+        return FALSE;
+    }
+
+    if (!bInRestGame
+        && g_pBaldurChitin->GetActiveEngine() == g_pBaldurChitin->m_pEngineStore) {
+        // "Cannot save while someone is in the Store Screen."
+        strError = 10841;
+        return FALSE;
+    }
+
+    if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL
+        && !bInRestGame
+        && sub_5C93E0() > 0) {
+        // "Cannot save while someone is in the Store Screen."
+        strError = 10841;
+        return FALSE;
+    }
+
+    if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL
+        && !bInRestGame
+        && g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->sub_5186A0() > 0) {
+        // "Cannot save while someone is levelling up."
+        strError = 41397;
+        return FALSE;
+    }
+
+    if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL
+        && !bInRestGame
+        && g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->sub_518560() > 0) {
+        // "Cannot save while someone is in the Inventory Screen."
+        strError = 26546;
+        return FALSE;
+    }
+
+    for (BYTE cnt = 0; cnt < CINFGAME_MAX_AREAS; cnt++) {
+        if (m_gameAreas[cnt] != NULL) {
+            if (!m_gameAreas[cnt]->CanSaveGame(strError)) {
+                return FALSE;
+            }
+        }
+    }
+
+    strError = -1;
+    return TRUE;
 }
 
 // 0x5AC430

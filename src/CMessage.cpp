@@ -4957,7 +4957,7 @@ void CMessageHandler::PostAsynchronousUpdate()
     if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
         STRREF strError;
         if (g_pBaldurChitin->GetObjectGame()->m_bAnotherPlayerJoinedGame == TRUE
-            && (g_pBaldurChitin->GetObjectGame()->CanSaveGame(strError, 0, 0) == TRUE
+            && (g_pBaldurChitin->GetObjectGame()->CanSaveGame(strError, FALSE, FALSE) == TRUE
                 || g_pBaldurChitin->GetObjectGame()->GetMultiplayerSettings()->m_bArbitrationLockStatus == TRUE)) {
             if ((g_pBaldurChitin->GetActiveEngine() != g_pBaldurChitin->m_pEngineLoad
                     && g_pBaldurChitin->GetActiveEngine() != g_pBaldurChitin->m_pEngineCreateChar

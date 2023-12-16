@@ -2503,7 +2503,7 @@ void CUIControlButtonOptionsGameCommand::OnLButtonClick(CPoint pt)
             pEngine->SummonPopup(4);
             break;
         case 6:
-            if (pGame->CanSaveGame(dwStrId, 0, 0)) {
+            if (pGame->CanSaveGame(dwStrId, FALSE, FALSE)) {
                 if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL) {
                     pGame->field_366E = 1;
                     pGame->field_50DC = 0;
@@ -2554,7 +2554,7 @@ void CUIControlButtonOptionsGameCommand::OnLButtonClick(CPoint pt)
             break;
         case 10:
             if (pGame->m_nLastSaveTime < pGame->GetWorldTimer()->m_gameTime) {
-                if (pGame->CanSaveGame(dwStrId, 0, 0)) {
+                if (pGame->CanSaveGame(dwStrId, FALSE, FALSE)) {
                     pEngine->m_dwErrorState = 3;
                     pEngine->m_dwErrorTextId = 16456;
                     pEngine->m_strErrorButtonText[0] = 15589;

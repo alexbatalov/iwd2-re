@@ -1704,7 +1704,7 @@ void CScreenSinglePlayer::OnModifyButtonClick()
 
     if (IsModifyButtonClickable()) {
         STRREF strError;
-        if (pGame->CanSaveGame(strError, 0, 0)) {
+        if (pGame->CanSaveGame(strError, FALSE, FALSE)) {
             if (g_pBaldurChitin->cNetwork.GetSessionHosting()) {
                 pGame->MultiplayerSetCharacterCreationLocation();
                 pGame->GetMultiplayerSettings()->SetArbitrationLockStatus(TRUE, 0);

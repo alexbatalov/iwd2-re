@@ -134,7 +134,7 @@ public:
     CString GetDirSounds();
     void CharacterExport(LONG nCharacterId, CString sFileName);
     CGameArea* LoadArea(CString areaName, BYTE nTravelScreenImageToUse, BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace);
-    BOOLEAN CanSaveGame(STRREF& strError, unsigned char a2, unsigned char a3);
+    BOOLEAN CanSaveGame(STRREF& strError, BOOLEAN bInRestGame, BOOLEAN bInStore);
     BOOL SaveGame(unsigned char a1, unsigned char a2, unsigned char a3);
     BOOL Unmarshal(BYTE* pGame, LONG nGame, BOOLEAN bProgressBarInPlace);
     void ProgressBarCallback(DWORD dwSize, BOOLEAN bInitialize);
