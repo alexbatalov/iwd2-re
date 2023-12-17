@@ -5360,6 +5360,71 @@ CString CInfGame::sub_5C0B30()
     return m_sMultiplayerSaveDir + m_sSaveGame + "\\";
 }
 
+// 0x5C20E0
+BOOL CInfGame::CanEnterStore(STRREF& strError)
+{
+    BOOL bScattered = FALSE;
+    CResRef cResArea;
+
+    for (SHORT nPortrait = 0; nPortrait < m_nCharacters; nPortrait++) {
+        if (bScattered) {
+            break;
+        }
+
+        LONG nCharacterId = GetCharacterId(nPortrait);
+
+        CGameSprite* pSprite;
+
+        BYTE rc;
+        do {
+            rc = m_cObjectArray.GetDeny(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (pSprite->Animate()) {
+                if (cResArea != "") {
+                    if (cResArea != pSprite->GetArea()->m_resRef) {
+                        bScattered = TRUE;
+                    }
+                } else {
+                    cResArea = pSprite->GetArea()->m_resRef;
+                }
+            }
+
+            m_cObjectArray.ReleaseDeny(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+        } else {
+            bScattered = TRUE;
+        }
+    }
+
+    if (!CanSaveGame(strError, TRUE, TRUE)) {
+        if (strError == 16501) {
+            // "You cannot enter the store; there are monsters nearby."
+            strError = 20049;
+        } else if (strError == 16502) {
+            // "You may not enter the store at this time."
+            strError = 261;
+        } else {
+            // "Not permitted to buy/sell items."
+            strError = 10847;
+        }
+        return FALSE;
+    }
+
+    if (bScattered) {
+        // "You may not enter the store when your party is scattered."
+        strError = 20690;
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
 // 0x5C2250
 BOOL CInfGame::AddCharacterToOverflow(LONG id)
 {

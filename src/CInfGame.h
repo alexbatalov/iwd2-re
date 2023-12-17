@@ -220,6 +220,7 @@ public:
     CString GetDirSaveRoot();
     CString GetDirSave();
     CString sub_5C0B30();
+    BOOL CanEnterStore(STRREF& strError);
     BOOL AddCharacterToOverflow(LONG id);
     CStringList* GetScripts();
     CString GetDirScripts();
