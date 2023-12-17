@@ -16,6 +16,7 @@
 #include "CGameTimer.h"
 #include "CGameTrigger.h"
 #include "CInfGame.h"
+#include "CScreenCharacter.h"
 #include "CScreenWorld.h"
 #include "CSpell.h"
 #include "CTimerWorld.h"
@@ -1380,6 +1381,44 @@ SHORT CGameAIBase::SetMusic()
     }
 
     if (!m_pArea->SetSong(static_cast<SHORT>(m_curAction.m_specificID), static_cast<BYTE>(m_curAction.m_specificID2))) {
+        return ACTION_ERROR;
+    }
+
+    return ACTION_DONE;
+}
+
+// 0x466A00
+SHORT CGameAIBase::FinalSave()
+{
+    if (g_pChitin->cNetwork.GetSessionOpen()
+        && g_pChitin->cNetwork.GetSessionHosting() != TRUE) {
+        return ACTION_DONE;
+    }
+
+    if (g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_id, CGameObjectArray::THREAD_ASYNCH, INFINITE) != CGameObjectArray::SUCCESS) {
+        return ACTION_DONE;
+    }
+
+    // NOTE: Looks like inlining.
+    if (1) {
+        CString sSaveName("000000002-Final-Save");
+        g_pBaldurChitin->GetObjectGame()->m_sSaveGame = sSaveName;
+        CScreenCharacter::SAVE_NAME = sSaveName;
+    }
+
+    g_pBaldurChitin->GetObjectGame()->SaveGame(1, 0, 1);
+
+    CGameObject* pObject;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_id,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc != CGameObjectArray::SUCCESS) {
         return ACTION_ERROR;
     }
 
