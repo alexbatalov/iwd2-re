@@ -469,6 +469,46 @@ void CGameAIBase::ApplyTriggers()
     // TODO: Incomplete.
 }
 
+// 0x45DF70
+BOOL CGameAIBase::PartyHasItem(const CResRef& resRef)
+{
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    for (SHORT nPortrait = 0; nPortrait < pGame->GetNumCharacters(); nPortrait++) {
+        LONG nCharacterId = pGame->GetCharacterId(nPortrait);
+
+        CGameSprite* pSprite;
+        BYTE rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+        if (rc != CGameObjectArray::SUCCESS) {
+            break;
+        }
+
+        CString sName;
+        resRef.CopyToString(sName);
+
+        if (pSprite->FindItemPersonal(sName, 0, FALSE) != -1) {
+            pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+            return TRUE;
+        }
+
+        if (pSprite->FindItemBags(sName, 0, FALSE) != -1) {
+            pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+            return TRUE;
+        }
+
+        pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+    return FALSE;
+}
+
 // 0x45E100
 void CGameAIBase::ApplyEffectToParty(CGameEffect* pEffect)
 {

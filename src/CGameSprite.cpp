@@ -6708,6 +6708,31 @@ void CGameSprite::sub_720B50(CMemINIValue* a1, CMemINIValue* a2)
     }
 }
 
+// 0x722530
+SHORT CGameSprite::FindItemBags(const CString& sName, LONG number, BOOL checkForIdentified)
+{
+    CString sMutableName(sName);
+    sMutableName.MakeUpper();
+
+    if (number <= 1) {
+        number = 1;
+    }
+
+    for (SHORT slot = 0; slot < 51; slot++) {
+        CItem* pItem = m_equipment.m_items[slot];
+        if (pItem != NULL && pItem->GetItemType() == 58) {
+            number -= g_pBaldurChitin->GetObjectGame()->FindItemInStore(pItem->GetResRef(),
+                CResRef(sMutableName),
+                checkForIdentified);
+            if (number <= 0) {
+                return slot;
+            }
+        }
+    }
+
+    return -1;
+}
+
 // Returns `TRUE` if object contains quest items or containers (such as potion
 // bags). See STREF #26585.
 //
@@ -11406,7 +11431,7 @@ SHORT CGameSprite::GetDirection()
 }
 
 // 0x706DD0
-SHORT CGameSprite::GetDirection( const CPoint& ptStart, const CPoint& ptTarget)
+SHORT CGameSprite::GetDirection(const CPoint& ptStart, const CPoint& ptTarget)
 {
     // TODO: Incomplete.
 

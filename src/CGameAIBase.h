@@ -58,6 +58,7 @@ public:
 
     void CheckTimers(LONG cycles);
     void ClearTriggers();
+    BOOL PartyHasItem(const CResRef& resRef);
     void ApplyEffectToParty(CGameEffect* pEffect);
     SHORT MoveView(CPoint dest, int speed);
     SHORT MoveViewPoint();

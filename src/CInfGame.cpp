@@ -6116,6 +6116,71 @@ BOOL CInfGame::sub_5C79C0(CString sArea)
     return FALSE;
 }
 
+// 0x5C8190
+DWORD CInfGame::FindItemInStore(const CResRef& cResStore, const CResRef& cResItem, BOOL checkForIdentified)
+{
+    if (g_pChitin->cNetwork.GetSessionOpen()) {
+        BOOL bStoreDemanded = FALSE;
+        CStore cStore;
+        if (g_pChitin->cNetwork.GetSessionHosting()) {
+            DemandServerStore(cResStore, TRUE);
+            cStore.SetResRef(cResStore);
+        } else {
+            cStore.SetResRef(cResStore);
+            if (!cStore.m_bLocalCopy || memcmp(cStore.m_pVersion, "STORV9.0", 8) != 0) {
+                if (!g_pBaldurChitin->GetBaldurMessage()->DemandResourceFromServer(cResStore.GetResRefStr(), 1014, TRUE, TRUE, TRUE)) {
+                    g_pChitin->cNetwork.CloseSession(TRUE);
+                    return 0;
+                }
+                cStore.SetResRef(cResStore);
+                bStoreDemanded = TRUE;
+            }
+        }
+
+        CResRef curItemRef;
+        DWORD inStock = 0;
+        CItem tempItem;
+
+        for (INT nIndex = 0; nIndex < cStore.GetNumItems(); nIndex++) {
+            curItemRef = cStore.GetItemId(nIndex);
+            if (curItemRef == cResItem) {
+                if (checkForIdentified) {
+                    cStore.GetItem(nIndex, tempItem);
+                    if ((tempItem.m_flags & 0x1) != 0) {
+                        inStock += cStore.GetItemNumInStock(nIndex);
+                    }
+                } else {
+                    inStock += cStore.GetItemNumInStock(nIndex);
+                }
+            }
+        }
+
+        if (g_pChitin->cNetwork.GetSessionHosting()) {
+            ReleaseServerStore(cResStore);
+        } else {
+            if (bStoreDemanded) {
+                CMessage* message = new CMessageStoreRelease(cResStore, -1, -1);
+                g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+            }
+        }
+
+        return inStock;
+    } else {
+        CStore cStore;
+        CResRef curItemRef;
+        DWORD inStock = 0;
+
+        for (INT nIndex = 0; nIndex < cStore.GetNumItems(); nIndex++) {
+            curItemRef = cStore.GetItemId(nIndex);
+            if (curItemRef == cResItem) {
+                inStock += cStore.GetItemNumInStock(nIndex);
+            }
+        }
+
+        return inStock;
+    }
+}
+
 // 0x5C93E0
 INT CInfGame::sub_5C93E0()
 {

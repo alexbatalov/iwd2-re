@@ -499,6 +499,7 @@ public:
     void CheckSequence(BYTE& sequence);
     void sub_7204C0();
     void sub_720B50(CMemINIValue* a1, CMemINIValue* a2);
+    SHORT FindItemBags(const CString& sName, LONG number, BOOL checkForIdentified);
     BOOL HaveUnexportableItems();
     void SetMonkAbilities();
     LONG GetLevel();
@@ -609,7 +610,7 @@ public:
     int sub_45B710();
     SHORT GetDirection(const CPoint& target);
     SHORT GetDirection();
-    static SHORT GetDirection( const CPoint& ptStart, const CPoint& ptTarget);
+    static SHORT GetDirection(const CPoint& ptStart, const CPoint& ptTarget);
     CGameAnimation* GetAnimation();
     CGameSpriteEquipment* GetEquipment();
     SHORT GetHappiness();
