@@ -469,6 +469,39 @@ void CGameAIBase::ApplyTriggers()
     // TODO: Incomplete.
 }
 
+// 0x45E100
+void CGameAIBase::ApplyEffectToParty(CGameEffect* pEffect)
+{
+    CMessage* message;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    for (SHORT nPortrait = 0; nPortrait < pGame->GetNumCharacters(); nPortrait++) {
+        LONG nCharacterId = pGame->GetCharacterId(nPortrait);
+        if (pGame->GetGameSave()->field_1AC) {
+            CGameSprite* pSprite;
+            BYTE rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+            if (rc == CGameObjectArray::SUCCESS) {
+                if (pSprite->InControl()) {
+                    pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        INFINITE);
+                    message = new CMessageAddEffect(pEffect, m_id, nCharacterId);
+                    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+                } else {
+                    pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        INFINITE);
+                }
+            }
+        } else {
+            message = new CMessageAddEffect(pEffect, m_id, nCharacterId);
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+        }
+    }
+}
+
 // 0x799E60
 void CGameAIBase::AutoPause(DWORD type)
 {
