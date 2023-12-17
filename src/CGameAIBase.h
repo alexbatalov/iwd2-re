@@ -5,6 +5,7 @@
 #include "CAIObjectType.h"
 #include "CGameObject.h"
 
+class CAIResponse;
 class CAIScript;
 class CAITrigger;
 class CGameDoor;
@@ -115,6 +116,7 @@ public:
     void SetDefaultScript(CAIScript* script);
     void ResetCurrResponse();
     CAIAction& GetNextAction(CAIAction& action);
+    void InsertResponse(CAIResponse& response, BOOL checkCurrentResponse, BOOL clearActions);
 
     void sub_481890(CRect* r, CArray<CRect*>& ary);
     void sub_467C50(const CResRef& resRef, CGameSprite* pSprite);

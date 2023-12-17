@@ -1,5 +1,6 @@
 #include "CGameAIBase.h"
 
+#include "CAIResponse.h"
 #include "CAIScript.h"
 #include "CAITrigger.h"
 #include "CBaldurChitin.h"
@@ -293,6 +294,40 @@ SHORT CGameAIBase::ExecuteAction()
     // TODO: Incomplete.
 
     return ACTION_ERROR;
+}
+
+// 0x45C300
+void CGameAIBase::InsertResponse(CAIResponse& response, BOOL checkCurrentResponse, BOOL clearActions)
+{
+    CAIAction action;
+    CAIObjectType actorType;
+
+    if (checkCurrentResponse
+        && m_curResponseSetNum >= 0
+        && m_curScriptNum >= 0
+        && m_curResponseSetNum == response.m_responseSetNum
+        && m_curScriptNum == response.m_scriptNum) {
+        return;
+    }
+
+    if (clearActions) {
+        ClearActions(FALSE);
+    }
+
+    m_curResponseNum = response.m_responseNum;
+    m_curResponseSetNum = response.m_responseSetNum;
+    m_curScriptNum = response.m_scriptNum;
+    m_interrupt = TRUE;
+
+    POSITION pos = response.m_actionList.GetHeadPosition();
+    while (pos != NULL) {
+        CAIAction* node = response.m_actionList.GetNext(pos);
+        action = *node;
+
+        CAIAction* newNode = new CAIAction();
+        *newNode = action;
+        m_queuedActions.AddTail(newNode);
+    }
 }
 
 // 0x45C730
