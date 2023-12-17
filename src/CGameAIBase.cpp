@@ -1697,8 +1697,37 @@ void CGameAIBase::ResetCurrResponse()
 // 0x45B970
 CAIAction& CGameAIBase::GetNextAction(CAIAction& action)
 {
-    // TODO: Incomplete.
+    while (!m_queuedActions.IsEmpty()) {
+        CAIAction* node = m_queuedActions.RemoveHead();
+        if (node->GetActionID() != CAIAction::NO_ACTION) {
+            action = *node;
 
+            CAIObjectType actorType(node->m_actorID);
+            if (actorType.OfType(CAIObjectType::ANYONE, FALSE, FALSE)
+                && actorType.GetName() == ""
+                && actorType.m_SpecialCase[0] == 0) {
+                delete node;
+                return action;
+            }
+
+            actorType.Decode(this);
+            CGameAIBase* actor = static_cast<CGameAIBase*>(actorType.sub_40CB20(this, CGameObject::TYPE_AIBASE, FALSE));
+            if (actor != NULL) {
+                action.m_actorID = CAIObjectType::ANYONE;
+                action.m_internalFlags |= 0x1;
+
+                CMessage* message = new CMessageInsertAction(action, m_id, actor->GetId());
+                g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+
+                g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(actor->GetId(),
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            }
+        }
+        delete node;
+    }
+
+    action = CAIAction::NULL_ACTION;
     return action;
 }
 
