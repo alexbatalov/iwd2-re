@@ -6733,6 +6733,37 @@ SHORT CGameSprite::FindItemBags(const CString& sName, LONG number, BOOL checkFor
     return -1;
 }
 
+// 0x722610
+SHORT CGameSprite::TakeItemBags(const CString& sName, LONG number, SHORT slotNum)
+{
+    CString sMutableName(sName);
+    sMutableName.MakeUpper();
+
+    SHORT numTaken = 0;
+    if (slotNum != -1) {
+        CItem* pItem = m_equipment.m_items[slotNum];
+        if (pItem != NULL
+            && pItem->GetItemType() == 58) {
+            numTaken = g_pBaldurChitin->GetObjectGame()->TakeItemFromStore(pItem->GetResRef(),
+                CResRef(sName),
+                number);
+        }
+    } else {
+        for (SHORT slot = 0; slot < 51; slot++) {
+            CItem* pItem = m_equipment.m_items[slot];
+            if (pItem != NULL && pItem->GetItemType() == 58) {
+                numTaken += g_pBaldurChitin->GetObjectGame()->TakeItemFromStore(pItem->GetResRef(),
+                    CResRef(sName),
+                    number);
+                if (number - numTaken <= 0) {
+                    break;
+                }
+            }
+        }
+    }
+    return numTaken;
+}
+
 // Returns `TRUE` if object contains quest items or containers (such as potion
 // bags). See STREF #26585.
 //

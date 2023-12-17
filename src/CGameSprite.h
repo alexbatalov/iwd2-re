@@ -500,6 +500,7 @@ public:
     void sub_7204C0();
     void sub_720B50(CMemINIValue* a1, CMemINIValue* a2);
     SHORT FindItemBags(const CString& sName, LONG number, BOOL checkForIdentified);
+    SHORT TakeItemBags(const CString& sName, LONG number, SHORT slotNum);
     BOOL HaveUnexportableItems();
     void SetMonkAbilities();
     LONG GetLevel();

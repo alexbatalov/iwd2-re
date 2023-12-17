@@ -102,6 +102,7 @@ public:
     SHORT Unlock(CGameAIBase* pObject);
     SHORT MoveGlobal(CGameSprite* pSprite);
     SHORT Lock(CGameAIBase* pObject);
+    SHORT DestroyItem();
     SHORT DetectSecretDoor(CGameDoor* target);
     SHORT FadeToColor();
     SHORT FadeFromColor();

@@ -243,6 +243,7 @@ public:
     CWorldMap* GetWorldMap(CString sArea);
     BOOL sub_5C79C0(CString sArea);
     DWORD FindItemInStore(const CResRef& cResStore, const CResRef& cResItem, BOOL checkForIdentified);
+    SHORT TakeItemFromStore(const CResRef& cResStore, const CResRef& cResItem, LONG number);
     INT sub_5C93E0();
     void ResetMultiPlayerPermissions();
     INT GetNumberOfItemsInBag(const CResRef& storeResRef, CString a2);

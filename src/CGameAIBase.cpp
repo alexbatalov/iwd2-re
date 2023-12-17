@@ -1552,6 +1552,40 @@ SHORT CGameAIBase::Lock(CGameAIBase* pObject)
     return ACTION_DONE;
 }
 
+// 0x467550
+SHORT CGameAIBase::DestroyItem()
+{
+    if (GetObjectType() == TYPE_SPRITE) {
+        CGameSprite* pSprite = static_cast<CGameSprite*>(this);
+        SHORT slotNum = pSprite->FindItemPersonal(m_curAction.GetString1(), 0, FALSE);
+        if (slotNum != -1) {
+            pSprite->Unequip(slotNum);
+            g_pBaldurChitin->GetObjectGame()->AddDisposableItem(pSprite->GetEquipment()->m_items[slotNum]);
+            pSprite->GetEquipment()->m_items[slotNum] = NULL;
+            return ACTION_DONE;
+        }
+
+        if (pSprite->TakeItemBags(m_curAction.GetString1(), 1, -1) > 0) {
+            return ACTION_DONE;
+        }
+
+        return ACTION_ERROR;
+    }
+
+    if (GetObjectType() == TYPE_CONTAINER) {
+        CGameContainer* pContainer = static_cast<CGameContainer*>(this);
+        SHORT slotNum = pContainer->FindItemSlot(CResRef(m_curAction.GetString1()));
+        if (slotNum != -1) {
+            pContainer->GetItem(slotNum);
+            pContainer->SetItem(slotNum, NULL);
+            pContainer->CompressContainer();
+        }
+        return ACTION_DONE;
+    }
+
+    return ACTION_ERROR;
+}
+
 // 0x467720
 SHORT CGameAIBase::DetectSecretDoor(CGameDoor* target)
 {

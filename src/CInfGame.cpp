@@ -6181,6 +6181,131 @@ DWORD CInfGame::FindItemInStore(const CResRef& cResStore, const CResRef& cResIte
     }
 }
 
+// 0x5C8510
+SHORT CInfGame::TakeItemFromStore(const CResRef& cResStore, const CResRef& cResItem, LONG number)
+{
+    CItem tempItem;
+    CMessage* message;
+
+    if (g_pChitin->cNetwork.GetSessionOpen()) {
+        BOOL bStoreDemanded = FALSE;
+        CStore cStore;
+
+        if (g_pChitin->cNetwork.GetSessionHosting()) {
+            DemandServerStore(cResStore, TRUE);
+            cStore.SetResRef(cResStore);
+        } else {
+            cStore.SetResRef(cResStore);
+            if (!cStore.m_bLocalCopy || memcmp(cStore.m_pVersion, "STORV9.0", 8) != 0) {
+                if (!g_pBaldurChitin->GetBaldurMessage()->DemandResourceFromServer(cResStore.GetResRefStr(), 1014, TRUE, TRUE, TRUE)) {
+                    g_pChitin->cNetwork.CloseSession(TRUE);
+                    return 0;
+                }
+
+                cStore.SetResRef(cResStore);
+                bStoreDemanded = TRUE;
+            }
+        }
+
+        CResRef curResItem;
+        CStore* pStore;
+        for (INT nIndex = 0; nIndex < cStore.GetNumItems(); nIndex++) {
+            curResItem = cStore.GetItemId(nIndex);
+            if (curResItem == cResItem) {
+                DWORD inStock = cStore.GetItemNumInStock(nIndex);
+                cStore.GetItem(nIndex, tempItem);
+
+                if (!g_pChitin->cNetwork.GetSessionHosting() && !bStoreDemanded) {
+                    bStoreDemanded = TRUE;
+                    message = new CMessageStoreDemand(cResStore, -1, -1);
+                    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+                }
+
+                if (g_pChitin->cNetwork.GetSessionHosting()) {
+                    pStore = g_pBaldurChitin->GetObjectGame()->GetServerStore(cResStore);
+
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+                    // __LINE__: 22412
+                    UTIL_ASSERT(pStore != NULL);
+                }
+
+                // FIXME: Looks wrong, `removed` is reset on every iteration,
+                // but probably should be accumulated.
+                DWORD removed = 0;
+                // NOTE: Unsigned compare.
+                while (removed < inStock && removed < static_cast<DWORD>(number)) {
+                    message = new CMessageStoreRemoveItem(cResStore,
+                        cResItem,
+                        tempItem.m_flags,
+                        -1,
+                        1,
+                        -1,
+                        -1);
+                    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+
+                    if (g_pChitin->cNetwork.GetSessionHosting()) {
+                        pStore->RemoveItemExt(cResItem, tempItem.m_flags, -1, 1, NULL);
+                    }
+                }
+
+                if (!g_pChitin->cNetwork.GetSessionHosting()) {
+                    CStore::InvalidateStore(cResStore);
+                }
+
+                // NOTE: Unsigned compare.
+                if (removed >= static_cast<DWORD>(number)) {
+                    if (g_pChitin->cNetwork.GetSessionHosting()) {
+                        g_pBaldurChitin->GetObjectGame()->ReleaseServerStore(cResStore);
+                    } else {
+                        if (bStoreDemanded) {
+                            message = new CMessageStoreRelease(cResStore, -1, -1);
+                            g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+                        }
+                    }
+
+                    return static_cast<SHORT>(removed);
+                }
+            }
+        }
+
+        if (g_pChitin->cNetwork.GetSessionHosting()) {
+            g_pBaldurChitin->GetObjectGame()->ReleaseServerStore(cResStore);
+        } else {
+            if (bStoreDemanded) {
+                message = new CMessageStoreRelease(cResStore, -1, -1);
+                g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+            }
+        }
+        return 0;
+    } else {
+        CStore cStore(cResStore);
+        CResRef curItemRef;
+        for (INT nIndex = 0; nIndex < cStore.GetNumItems(); nIndex++) {
+            curItemRef = cStore.GetItemId(nIndex);
+            cStore.GetItem(nIndex, tempItem);
+            if (curItemRef == cResItem) {
+                DWORD inStock = cStore.GetItemNumInStock(nIndex);
+                // FIXME: Looks wrong, `removed` is reset on every iteration,
+                // but probably should be accumulated.
+                DWORD removed = 0;
+                // NOTE: Unsigned compare.
+                while (removed < static_cast<DWORD>(number) && removed < inStock) {
+                    cStore.RemoveItemExt(cResItem, tempItem.m_flags, -1, 1, NULL);
+                    removed++;
+                }
+
+                // NOTE: Unsigned compare.
+                if (removed >= static_cast<DWORD>(number)) {
+                    cStore.Marshal(m_sTempDir);
+                    return static_cast<SHORT>(removed);
+                }
+            }
+        }
+        cStore.Marshal(m_sTempDir);
+        return 0;
+    }
+}
+
 // 0x5C93E0
 INT CInfGame::sub_5C93E0()
 {
