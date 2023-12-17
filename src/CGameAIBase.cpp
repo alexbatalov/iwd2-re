@@ -16,6 +16,7 @@
 #include "CGameTrigger.h"
 #include "CInfGame.h"
 #include "CScreenWorld.h"
+#include "CSpell.h"
 #include "CTimerWorld.h"
 #include "CUtil.h"
 #include "CVariableHash.h"
@@ -467,6 +468,31 @@ void CGameAIBase::SetScript(SHORT level, CAIScript* script)
 void CGameAIBase::ApplyTriggers()
 {
     // TODO: Incomplete.
+}
+
+// 0x45DED0
+BOOL CGameAIBase::CheckAppropriateTarget(CSpell* pSpell, CGameAIBase* pTarget)
+{
+
+    pSpell->Demand();
+    if (pTarget->GetObjectType() != TYPE_SPRITE) {
+        pSpell->Release();
+        return FALSE;
+    }
+
+    SPELL_ABILITY* ability = pSpell->GetAbility(0);
+    if (ability != NULL
+        && (ability->actionType != 1
+            || (static_cast<CGameSprite*>(pTarget)->GetDerivedStats()->m_generalState & 0x800) == 0
+            || pSpell->GetGenericName() == 12117
+            || pSpell->GetGenericName() == 25765
+            || pSpell->GetGenericName() == 32393)) {
+        pSpell->Release();
+        return TRUE;
+    }
+
+    pSpell->Release();
+    return FALSE;
 }
 
 // 0x45DF70

@@ -17,6 +17,7 @@ class CGameTimer;
 class CGameTrigger;
 class CItem;
 class CResRef;
+class CSpell;
 class CVariable;
 
 class CGameAIBase : public CGameObject {
@@ -58,6 +59,7 @@ public:
 
     void CheckTimers(LONG cycles);
     void ClearTriggers();
+    BOOL CheckAppropriateTarget(CSpell* pSpell, CGameAIBase* pTarget);
     BOOL PartyHasItem(const CResRef& resRef);
     void ApplyEffectToParty(CGameEffect* pEffect);
     SHORT MoveView(CPoint dest, int speed);
