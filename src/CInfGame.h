@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "CAIGroup.h"
+#include "CAIIdList.h"
 #include "CGameJournal.h"
 #include "CGameObjectArray.h"
 #include "CGameOptions.h"
@@ -418,6 +419,7 @@ public:
     /* 4A44 */ short field_4A44;
     /* 4A46 */ short field_4A46;
     /* 4A48 */ SHORT m_currAnimation;
+    /* 4A4A */ CAIIdList m_saveObjectList;
     /* 4A8A */ LONG m_nProtagonistId;
     /* 4A8E */ BOOLEAN m_bPartyAI;
     /* 4A8F */ BOOLEAN m_bShowAreaNotes;

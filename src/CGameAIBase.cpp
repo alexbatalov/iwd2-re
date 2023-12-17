@@ -467,7 +467,91 @@ void CGameAIBase::SetScript(SHORT level, CAIScript* script)
 // 0x45D6A0
 void CGameAIBase::ApplyTriggers()
 {
-    // TODO: Incomplete.
+    CMessage* message;
+
+    if ((g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime / 4) % 900 == 0) {
+        message = new CMessageUpdateReaction(11, m_id, m_id);
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+    }
+
+    POSITION pos = m_pendingTriggers.GetHeadPosition();
+    while (pos != NULL) {
+        CAITrigger* pTrigger = m_pendingTriggers.GetNext(pos);
+        if ((pTrigger->m_flags & 0x4) == 0) {
+            pTrigger->m_flags |= 0x4;
+
+            switch (pTrigger->m_triggerID) {
+            case CAITRIGGER_ATTACKEDBY:
+                AutoPause(2);
+                if (!m_lAttacker.Equal(pTrigger->GetCause())
+                    && (g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(m_id) != -1
+                        || g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(pTrigger->GetCause().GetInstance()) != -1)) {
+                    m_lAttacker.Set(pTrigger->GetCause());
+                    message = new CMessageSetLastObject(pTrigger->GetCause(),
+                        CAITRIGGER_ATTACKEDBY,
+                        m_id,
+                        m_id);
+                    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+                }
+                break;
+            case CAITRIGGER_HELP:
+                if (!m_lHelp.Equal(pTrigger->GetCause())) {
+                    m_lHelp.Set(pTrigger->GetCause());
+                    message = new CMessageSetLastObject(pTrigger->GetCause(),
+                        CAITRIGGER_HELP,
+                        m_id,
+                        m_id);
+                    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+                }
+                break;
+            case CAITRIGGER_RECEIVEDORDER:
+                if (!m_lOrderedBy.Equal(pTrigger->GetCause())) {
+                    m_lOrderedBy.Set(pTrigger->GetCause());
+                    message = new CMessageSetLastObject(pTrigger->GetCause(), 6, m_id, m_id);
+                    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+                }
+                break;
+            case CAITRIGGER_SAID:
+                if (!m_lTalkedTo.Equal(pTrigger->GetCause())) {
+                    m_lTalkedTo.Set(pTrigger->GetCause());
+                    message = new CMessageSetLastObject(pTrigger->GetCause(),
+                        CAITRIGGER_SAID,
+                        m_id,
+                        m_id);
+                    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+                }
+                break;
+            case CAITRIGGER_HITBY:
+                m_lAttackStyle = pTrigger->m_specificID;
+                if (!m_lHitter.Equal(pTrigger->GetCause())) {
+                    m_lHitter.Set(pTrigger->GetCause());
+                    message = new CMessageSetLastObject(pTrigger->GetCause(),
+                        CAITRIGGER_HITBY,
+                        m_id,
+                        m_id);
+                    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+                }
+                break;
+            case CAITRIGGER_HEARD:
+                if (!m_lHeard.Equal(pTrigger->GetCause())) {
+                    m_lHeard.Set(pTrigger->GetCause());
+                    message = new CMessageSetLastObject(pTrigger->GetCause(),
+                        CAITRIGGER_HEARD,
+                        m_id,
+                        m_id);
+                    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+                }
+                break;
+            }
+
+            if (g_pBaldurChitin->GetObjectGame()->m_saveObjectList.Find(pTrigger->m_triggerID) != NULL
+                && !m_lTrigger.Equal(pTrigger->GetCause())) {
+                m_lTrigger.Set(pTrigger->GetCause());
+                message = new CMessageSetLastObject(pTrigger->GetCause(), 0, m_id, m_id);
+                g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+            }
+        }
+    }
 }
 
 // 0x45DED0

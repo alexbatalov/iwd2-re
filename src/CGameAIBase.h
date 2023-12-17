@@ -126,6 +126,7 @@ public:
     void sub_45B6E0(const CAIObjectType& type);
 
     /* 006E */ CAIObjectType m_lAttacker;
+    /* 00AA */ LONG m_lAttackStyle;
     /* 00AE */ CAIObjectType m_lOrderedBy;
     /* 00EA */ CAIObjectType field_EA;
     /* 0126 */ CAIObjectType field_126;
