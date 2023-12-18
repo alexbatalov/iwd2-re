@@ -709,8 +709,8 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     field_5356 = 0;
     m_posDest.x = 0;
     m_posDest.y = 0;
-    field_5362.x = 0;
-    field_5362.y = 0;
+    m_posOld.x = 0;
+    m_posOld.y = 0;
     field_536A = 0;
     field_536E = 0;
     m_nSequence = -1;
@@ -1991,9 +1991,9 @@ void CGameSprite::Render(CGameArea* pArea, CVidMode* pVidMode, INT nSurface)
             }
 
             if (m_derivedStats.m_visualEffects[IWD_VFX_BLUR]
-                && m_pos != field_5362) {
-                LONG dx = (m_pos.x - field_5362.x) / 2;
-                LONG dy = (m_pos.y - field_5362.y) / 2;
+                && m_pos != m_posOld) {
+                LONG dx = (m_pos.x - m_posOld.x) / 2;
+                LONG dy = (m_pos.y - m_posOld.y) / 2;
                 for (int cnt = 0; cnt < 4; cnt++) {
                     m_animation.CalculateGCBoundsRect(rGCBounds,
                         newPos,
@@ -2838,29 +2838,29 @@ void CGameSprite::SetFacing(SHORT direction)
     GetAnimation()->ChangeDirection(direction);
 
     if (m_derivedStats.m_visualEffects[IWD_VFX_BLUR]) {
-        sub_706FE0();
+        InitBlur();
     }
 }
 
 // 0x706FE0
-void CGameSprite::sub_706FE0()
+void CGameSprite::InitBlur()
 {
-    field_5362 = m_pos;
+    m_posOld = m_pos;
 
     if (m_nDirection >= 2 && m_nDirection <= 7) {
         // NOTE: Uninline.
-        field_5362.x += GetAnimation()->GetMoveScale();
+        m_posOld.x += GetAnimation()->GetMoveScale();
     } else if (m_nDirection >= 10) {
         // NOTE: Uninline.
-        field_5362.x -= GetAnimation()->GetMoveScale();
+        m_posOld.x -= GetAnimation()->GetMoveScale();
     }
 
     if (m_nDirection <= 3 || m_nDirection >= 14) {
         // NOTE: Uninline.
-        field_5362.y -= 3 * GetAnimation()->GetMoveScale() / 4;
+        m_posOld.y -= 3 * GetAnimation()->GetMoveScale() / 4;
     } else if (m_nDirection >= 6 && m_nDirection <= 11) {
         // NOTE: Uninline.
-        field_5362.y += 3 * GetAnimation()->GetMoveScale() / 4;
+        m_posOld.y += 3 * GetAnimation()->GetMoveScale() / 4;
     }
 }
 
