@@ -818,7 +818,12 @@ void CScreenJournal::ResetAnnotatePanel()
 {
     CUIPanel* pPanel = m_cUIManager.GetPanel(9);
 
-    // TODO: Incomplete.
+    CUIControlEditMultiLineJournalAnnotation* pEdit = static_cast<CUIControlEditMultiLineJournalAnnotation*>(pPanel->GetControl(0));
+    if (field_EA0) {
+        pEdit->SetText(CString("New Entry"));
+    } else {
+        pEdit->SetText(g_pBaldurChitin->GetObjectGame()->GetJournal()->GetEntryText(field_E9C));
+    }
 
     CUIControlButton* pBtDone = static_cast<CUIControlButton*>(pPanel->GetControl(1));
     CUIControlButton* pBtCancel = static_cast<CUIControlButton*>(pPanel->GetControl(2));
