@@ -481,7 +481,102 @@ void CScreenInventory::EngineGameUninit()
 // 0x6257C0
 void CScreenInventory::OnKeyDown(SHORT nKeysFlags)
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    for (SHORT nKeyFlag = 0; nKeyFlag < nKeysFlags; nKeyFlag++) {
+        if (!m_cUIManager.OnKeyDown(m_pVirtualKeysFlags[nKeyFlag])) {
+            switch (m_pVirtualKeysFlags[nKeyFlag]) {
+            case VK_TAB:
+                m_cUIManager.ForceToolTip();
+                break;
+            case VK_RETURN:
+                if (GetTopPopup() != NULL) {
+                    OnDoneButtonClick();
+                }
+                break;
+            case VK_ESCAPE:
+                if (GetTopPopup() == NULL) {
+                    if (m_animation.m_animation != NULL) {
+                        CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+                        renderLock.Lock(INFINITE);
+                        delete m_animation.m_animation;
+                        m_animation.m_animation = NULL;
+                        renderLock.Unlock();
+                    }
+                    SelectEngine(g_pBaldurChitin->GetScreenWorld());
+                } else {
+                    OnCancelButtonClick();
+                }
+                break;
+            case VK_SNAPSHOT:
+                g_pBaldurChitin->GetCurrentVideoMode()->PrintScreen();
+                break;
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+                if (GetTopPopup() == NULL) {
+                    OnPortraitLClick(m_pVirtualKeysFlags[nKeyFlag] - '1');
+                }
+                break;
+            case VK_ADD:
+                if (GetTopPopup() != NULL
+                    && GetTopPopup()->m_nID == 4) {
+                    // NOTE: Uninline.
+                    OnRequesterPlusButtonClick();
+                }
+                break;
+            case VK_SUBTRACT:
+                if (GetTopPopup() != NULL
+                    && GetTopPopup()->m_nID == 4) {
+                    // NOTE: Uninline.
+                    OnRequesterMinusButtonClick();
+                }
+                break;
+            default:
+                if (GetTopPopup() == NULL) {
+                    for (SHORT index = 0; index < CINFGAME_KEYMAP_SIZE; index) {
+                        // NOTE: Uninline.
+                        if (pGame->GetKeymap(index) == m_pVirtualKeysFlags[nKeyFlag]
+                            && pGame->GetKeymapFlag(index) == m_bCtrlKeyDown) {
+                            switch (index) {
+                            case 0:
+                                g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(5);
+                                break;
+                            case 1:
+                                g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(8);
+                                break;
+                            case 2:
+                                g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(0);
+                                break;
+                            case 3:
+                                g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(6);
+                                break;
+                            case 4:
+                                g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(7);
+                                break;
+                            case 6:
+                                g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(9);
+                                break;
+                            case 7:
+                                g_pBaldurChitin->GetActiveEngine()->OnLeftPanelButtonClick(13);
+                                break;
+                            case 29:
+                                OnRestButtonClick();
+                                break;
+                            default:
+                                break;
+                            }
+                            break;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+    }
 }
 
 // 0x49FC40
@@ -2696,8 +2791,7 @@ BOOL CScreenInventory::IsCharacterInRange(INT nPortraitNum)
         && pDstArea != NULL
         && !bDstDead
         && pSrcArea->m_resRef == pDstArea->m_resRef
-        && (ptSrcPos.x - ptDstPos.x) * (ptSrcPos.x - ptDstPos.x)
-            + 16 * (ptSrcPos.y - ptDstPos.y) * (ptSrcPos.y - ptDstPos.y) / 9 <= 0x40000;
+        && (ptSrcPos.x - ptDstPos.x) * (ptSrcPos.x - ptDstPos.x) + 16 * (ptSrcPos.y - ptDstPos.y) * (ptSrcPos.y - ptDstPos.y) / 9 <= 0x40000;
 }
 
 // 0x62CF50
