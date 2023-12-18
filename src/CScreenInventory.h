@@ -166,8 +166,8 @@ public:
     void OnMouseMove(CPoint pt) override;
     BOOL OnLButtonDown(CPoint pt) override;
     void OnLButtonUp(CPoint pt) override;
+    BOOL OnLButtonDblClk(CPoint pt) override;
     BOOL Render(BOOL bForce) override;
-    void OnLButtonDoubleClick(CPoint pt) override;
     void OnRButtonClick(CPoint pt) override;
 
     /* 0666 */ BOOL field_666;

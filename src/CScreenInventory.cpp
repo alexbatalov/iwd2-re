@@ -3497,9 +3497,59 @@ void CUIControlButtonInventorySlot::OnLButtonUp(CPoint pt)
 }
 
 // 0x62DA20
-void CUIControlButtonInventorySlot::OnLButtonDoubleClick(CPoint pt)
+BOOL CUIControlButtonInventorySlot::OnLButtonDblClk(CPoint pt)
 {
-    // TODO: Incomplete.
+    if (!m_bActive) {
+        return FALSE;
+    }
+
+    if ((m_nMouseButtons & LBUTTON) == 0) {
+        return FALSE;
+    }
+
+    CScreenInventory* pInventory = g_pBaldurChitin->m_pEngineInventory;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 6690
+    UTIL_ASSERT(pInventory != NULL);
+
+    if (!pInventory->m_bMultiPlayerViewable) {
+        return FALSE;
+    }
+
+    CResRef v1;
+    CResRef v2;
+    WORD wCount = 0;
+    CResRef v3;
+    BOOL v4 = FALSE;
+
+    if (pInventory->m_pTempItem != NULL) {
+        if (pInventory->m_pTempItem->GetMaxStackable() > 1) {
+            wCount = pInventory->m_pTempItem->GetUsageCount(0);
+        }
+
+        v4 = wCount > 1;
+
+        if (pInventory->m_pTempItem->GetItemType() == 58) {
+            v3 = pInventory->m_pTempItem->GetResRef();
+        }
+    }
+
+    pInventory->BeginSwap();
+    pInventory->SwapWithSlot(m_nID, TRUE, -1, FALSE);
+    pInventory->EndSwap();
+
+    if (!field_66A && v4 && pInventory->m_pTempItem == NULL) {
+        pInventory->m_nRequesterButtonId = m_nID;
+        pInventory->m_nRequesterAmount = 1;
+
+        CSingleLock renderLock(&(pInventory->GetManager()->field_36), FALSE);
+        renderLock.Lock(INFINITE);
+        pInventory->SummonPopup(4);
+        renderLock.Unlock();
+    }
+
+    return TRUE;
 }
 
 // 0x62DBF0
