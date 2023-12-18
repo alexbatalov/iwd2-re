@@ -3445,7 +3445,83 @@ BOOL CScreenInventory::SwapWithPortrait(INT nButtonId, BOOL bShowError)
 // 0x6312D0
 void CScreenInventory::SwapWithWeaponSet(UINT nIndex)
 {
-    // TODO: Incomplete.
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 9130
+    UTIL_ASSERT(nIndex < CCREATUREFILEEQUIPMENT21_WEAPON_NUM_SETS);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    LONG nCharacterId = pGame->GetCharacterId(m_nSelectedCharacter);
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        BOOLEAN bInControl = pSprite->InControl();
+        if (bInControl == TRUE) {
+            if (pSprite->sub_737910(FALSE) == TRUE) {
+                if (pSprite->GetEquipment()->m_items[42] == NULL) {
+                    pSprite->sub_726810(nIndex);
+                } else {
+                    // "Magical weapon in use"
+                    SetErrorString(10141, RGB(255, 255, 255));
+                }
+            } else {
+                // "Item Cursed!"
+                SetErrorString(16304, RGB(255, 255, 255));
+            }
+        }
+
+        pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+
+        if (bInControl == TRUE) {
+            g_pBaldurChitin->GetObjectGame()->GetButtonArray()->UpdateState();
+
+            CUIPanel* pPanel = m_cUIManager.GetPanel(2);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+            // __LINE__: 9185
+            UTIL_ASSERT(pPanel != NULL);
+
+            DWORD nButtonID;
+
+            for (nButtonID = 109; nButtonID <= 112; nButtonID++) {
+                CUIControlButtonInventoryWeaponSet* pButton = static_cast<CUIControlButtonInventoryWeaponSet*>(pPanel->GetControl(nButtonID));
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+                // __LINE__: 9191
+                UTIL_ASSERT(pButton != NULL);
+
+                pButton->SetSelected(pSprite->m_nWeaponSet == nButtonID - 109);
+                pButton->InvalidateRect();
+            }
+
+            for (nButtonID = 101; nButtonID <= 108; nButtonID++) {
+                CUIControlButtonInventorySlot* pButton = static_cast<CUIControlButtonInventorySlot*>(pPanel->GetControl(nButtonID));
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+                // __LINE__: 9203
+                UTIL_ASSERT(pButton != NULL);
+
+                pButton->InvalidateRect();
+            }
+        } else {
+            // "You cannot change the equipped items on someone else's character."
+            SetErrorString(20695, RGB(255, 255, 255));
+        }
+    } else {
+        // "You cannot change the equipped items on someone else's character."
+        SetErrorString(20695, RGB(255, 255, 255));
+    }
 }
 
 // NOTE: Inlined.
