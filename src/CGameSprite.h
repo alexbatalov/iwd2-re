@@ -435,7 +435,7 @@ public:
     void SetCharacterToolTip(CUIControlBase* pControl);
     void SetDirection(const CPoint& posDest);
     void SetDirection(SHORT direction);
-    void sub_706F80(SHORT direction);
+    void SetFacing(SHORT direction);
     void sub_706FE0();
     void SetIdleSequence();
     SHORT GetIdleSequence();

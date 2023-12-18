@@ -2829,7 +2829,7 @@ void CGameSprite::SetDirection(SHORT direction)
 }
 
 // 0x706F80
-void CGameSprite::sub_706F80(SHORT direction)
+void CGameSprite::SetFacing(SHORT direction)
 {
     m_nDirection = direction;
     m_nNewDirection = direction;
@@ -3536,7 +3536,7 @@ void CGameSprite::Unmarshal(CSavedGamePartyCreature* pCreature, BOOLEAN bPartyMe
     m_currentArea = pCreature->m_areaName;
 
     // NOTE: Uninline.
-    sub_706F80(static_cast<SHORT>(pCreature->m_creatureFacing));
+    SetFacing(static_cast<SHORT>(pCreature->m_creatureFacing));
 
     m_nModalState = static_cast<BYTE>(pCreature->m_nModalState);
 
@@ -3788,7 +3788,7 @@ void CGameSprite::Unmarshal(BYTE* pCreature, LONG creatureSize, WORD facing, int
 
     if (GetAnimation()->GetListType() == LIST_FLIGHT) {
         // NOTE: Uninline.
-        sub_706F80(4 * ((facing + 2) / 4));
+        SetFacing(4 * ((facing + 2) / 4));
     }
 
     m_vbPortraitSmall.SetResRef(CResRef(m_baseStats.m_portraitSmall), TRUE, TRUE);
