@@ -858,6 +858,12 @@ BYTE CItem::GetMinCHRRequired()
     return nValue;
 }
 
+// 0x4EA580
+void CItem::sub_4EA580(CUIControlTextDisplay* pText, COLORREF rgbColor)
+{
+    // TODO: Incomplete.
+}
+
 // 0x464130
 CItem& CItem::operator=(const CItem& other)
 {

@@ -2854,7 +2854,64 @@ void CScreenInventory::UpdateRequesterPanel()
 // 0x631790
 void CScreenInventory::UpdateHistoryPanel(BOOL a1)
 {
-    // TODO: Incomplete.
+    CItem* pItem;
+    STRREF description;
+    CResRef cResIcon;
+    CResRef cResItem;
+    WORD wCount;
+
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(m_cUIManager.GetPanel(5)->GetControl(6));
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(5);
+    if (pPanel != NULL) {
+        MapButtonIdToItemInfo(m_nRequesterButtonId,
+            pItem,
+            description,
+            cResIcon,
+            cResItem,
+            wCount);
+
+        if (pItem != NULL) {
+            CUIControlButtonInventoryHistoryImage* pImage = static_cast<CUIControlButtonInventoryHistoryImage*>(pPanel->GetControl(7));
+            if (pImage != NULL) {
+                // NOTE: Uninline.
+                pImage->SetImage(pItem->GetDescriptionPicture());
+            }
+
+            if (a1) {
+                CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(5));
+                if (pText != NULL) {
+                    pText->RemoveAll();
+                    pItem->sub_4EA580(pText, RGB(200, 200, 0));
+                    pText->SetTopString(pText->m_plstStrings->FindIndex(0));
+                }
+            }
+
+            CUIControlButtonInventoryHistoryIcon* pIcon = static_cast<CUIControlButtonInventoryHistoryIcon*>(pPanel->GetControl(2));
+            if (pIcon != NULL) {
+                // NOTE: Uninline.
+                pIcon->SetItem(pItem);
+            }
+
+            UpdateLabel(pPanel,
+                0x10000000,
+                "%s",
+                FetchString(pItem->GetGenericName()));
+
+            if ((pItem->m_flags & 0x1) == 0) {
+                // "NOT IDENTIFIED"
+                UpdateLabel(pPanel,
+                    0x1000000B,
+                    "%s",
+                    FetchString(17108));
+            } else {
+                UpdateLabel(pPanel, 0x1000000B, "");
+            }
+
+            CheckEnableButtons();
+            pPanel->InvalidateRect(NULL);
+        }
+    }
 }
 
 // 0x631A20

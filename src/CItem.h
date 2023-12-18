@@ -8,6 +8,7 @@
 class CGameEffect;
 class CGameObject;
 class CGameSprite;
+class CUIControlTextDisplay;
 class CWeaponIdentification;
 
 class CItem : public CResHelper<CResItem, 1005> {
@@ -58,6 +59,7 @@ public:
     BYTE GetMinWISRequired();
     BYTE GetMinCONRequired();
     BYTE GetMinCHRRequired();
+    void sub_4EA580(CUIControlTextDisplay* pText, COLORREF rgbColor);
 
     CItem& operator=(const CItem& other);
     bool operator==(const CItem& other);
