@@ -20,6 +20,8 @@
 
 #define CRESUI_CONTROLBUTTONID_INVENTORYCOLOR_LASTCOLOR 33
 
+class CGameButtonList;
+
 class CScreenInventory : public CBaldurEngine {
 public:
     static const DWORD SLOT_ID[];
@@ -136,7 +138,7 @@ public:
     /* 048C */ DWORD m_nRequesterButtonId;
     /* 0490 */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
     /* 04AC */ int field_4AC;
-    /* 04EC */ CPtrList* field_4EC;
+    /* 04EC */ CGameButtonList* field_4EC;
     /* 04F0 */ INT m_nErrorState;
     /* 04F4 */ STRREF m_strErrorText;
     /* 04F8 */ INT m_nNumErrorButtons;
@@ -280,6 +282,8 @@ public:
     ~CUIControlButtonInventoryAbilitiesAbility() override;
     BOOL Render(BOOL bForce) override;
     void OnLButtonClick(CPoint pt) override;
+
+    void SetButtonData(CButtonData buttonData);
 
     /* 066E */ CButtonData m_cButtonData;
 };

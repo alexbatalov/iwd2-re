@@ -3,6 +3,7 @@
 #include "CBaldurChitin.h"
 #include "CGameAnimationTypeCharacter.h"
 #include "CGameArea.h"
+#include "CGameButtonList.h"
 #include "CGameSprite.h"
 #include "CIcon.h"
 #include "CInfCursor.h"
@@ -2859,7 +2860,64 @@ void CScreenInventory::UpdateHistoryPanel(BOOL a1)
 // 0x631A20
 void CScreenInventory::UpdateAbilitiesPanel()
 {
-    // TODO: Incomplete.
+    CButtonData cButtonData;
+
+    CItem* pItem;
+    STRREF description;
+    CResRef cResIcon;
+    CResRef cResItem;
+    WORD wCount;
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(6);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 9454
+    UTIL_ASSERT(pPanel != NULL);
+
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(9));
+
+    MapButtonIdToItemInfo(m_nRequesterButtonId,
+        pItem,
+        description,
+        cResIcon,
+        cResItem,
+        wCount);
+
+    if (pItem != NULL) {
+        POSITION pos = field_4EC != NULL
+            ? field_4EC->GetHeadPosition()
+            : NULL;
+        for (INT nIndex = 1; nIndex < 3; nIndex++) {
+            CUIControlButtonInventoryAbilitiesAbility* pAbility = static_cast<CUIControlButtonInventoryAbilitiesAbility*>(pPanel->GetControl(nIndex + 1));
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+            // __LINE__: 9480
+            UTIL_ASSERT(pAbility != NULL);
+
+            if (pos != NULL) {
+                CButtonData* pButtonData = field_4EC->GetAt(pos);
+
+                // NOTE: Uninline.
+                pAbility->SetButtonData(*pButtonData);
+
+                pAbility->SetEnabled(field_4EC != NULL);
+                pAbility->SetSelected(field_4AC == nIndex);
+
+                UpdateLabel(pPanel, 0x10000003 + nIndex,
+                    "%s",
+                    FetchString(pButtonData->m_abilityId.field_10));
+
+                field_4EC->GetNext(pos);
+            } else {
+                // NOTE: Uninline.
+                pAbility->SetButtonData(cButtonData);
+
+                pAbility->SetEnabled(FALSE);
+
+                UpdateLabel(pPanel, 0x10000003 + nIndex, "");
+            }
+        }
+    }
 }
 
 // 0x630930
@@ -4787,6 +4845,16 @@ void CUIControlButtonInventoryAbilitiesAbility::OnLButtonClick(CPoint pt)
     pInventory->UpdatePopupPanel(m_pPanel->m_nID);
 
     renderLock.Unlock();
+}
+
+// FIXME: `buttonData` should be reference.
+// NOTE: Inlined.
+void CUIControlButtonInventoryAbilitiesAbility::SetButtonData(CButtonData buttonData)
+{
+    if (m_cButtonData.m_icon != buttonData.m_icon) {
+        m_cButtonData = buttonData;
+        InvalidateRect();
+    }
 }
 
 // -----------------------------------------------------------------------------
