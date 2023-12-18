@@ -49,6 +49,15 @@ const BYTE CSearchRequest::STATE_STALE = 4;
 // 0x84EBE5
 const BYTE CSearchRequest::STATE_ERROR = 5;
 
+// 0x84EBE6
+const BYTE CSearchRequest::LIST_FRONT = 0;
+
+// 0x84EBE7
+const BYTE CSearchRequest::LIST_BACK_PROMOTE = 1;
+
+// 0x84EBE8
+const BYTE CSearchRequest::LIST_BACK = 2;
+
 // 0x8AE1D8
 LONG CSearchRequest::MINNODES = 500;
 

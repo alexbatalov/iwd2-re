@@ -1102,7 +1102,7 @@ void CInfGame::DestroyGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInP
     m_nState = 0;
     m_tempCursor = 4;
     m_iconIndex = -1;
-    field_49F8 = 1;
+    m_searchRequestListEmpty = TRUE;
     m_currArmor = '1';
     field_4A46 = -1;
     m_currAnimation = -1;

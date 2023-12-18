@@ -407,6 +407,7 @@ public:
     /* 00A0 */ const BYTE* GetTerrainTable() override;
     /* 00B0 */ void AutoPause(DWORD type) override;
     /* 00B4 */ BOOL GetCanSeeInvisible() override;
+    /* 00B8 */ virtual void SetTarget(const CPoint& target, BOOL collisionPath);
     /* 00BC */ virtual void SetAIType(const CAIObjectType& typeAI, BOOL updateLive, BOOL updateStart);
     /* 00C0 */ virtual void ResetAITypeLive();
     /* 00C4 */ virtual void ResetAIType();
@@ -791,7 +792,7 @@ public:
     /* 53C2 */ BOOL m_walkBackwards;
     /* 53C6 */ int field_53C6;
     /* 53CA */ COLORREF m_lastRGBColor;
-    /* 53CE */ int field_53CE;
+    /* 53CE */ BOOL m_pathSearchInvalidDest;
     /* 53D2 */ int field_53D2;
     /* 53D6 */ CSearchRequest* m_currentSearchRequest;
     /* 53DA */ short field_53DA;

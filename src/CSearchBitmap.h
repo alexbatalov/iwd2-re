@@ -55,6 +55,10 @@ public:
     static const BYTE STATE_STALE;
     static const BYTE STATE_ERROR;
 
+    static const BYTE LIST_FRONT;
+    static const BYTE LIST_BACK_PROMOTE;
+    static const BYTE LIST_BACK;
+
     static LONG MINNODES;
     static LONG MAXNODES;
     static LONG MINNODESBACK;

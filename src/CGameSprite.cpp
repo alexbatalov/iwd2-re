@@ -719,7 +719,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     m_pPath = 0;
     m_nPath = 0;
     m_currPath = 0;
-    field_53CE = 0;
+    m_pathSearchInvalidDest = FALSE;
     field_54F2 = 17;
     field_53D2 = 0;
     m_currentSearchRequest = 0;
@@ -3047,10 +3047,115 @@ void CGameSprite::SetSequence(SHORT nSequence)
     }
 }
 
+// 0x707980
+void CGameSprite::SetTarget(const CPoint& target, BOOL collisionPath)
+{
+    m_pathSearchInvalidDest = FALSE;
+    if (m_pPath != NULL) {
+        delete m_pPath;
+        m_pPath = NULL;
+    }
+
+    DropSearchRequest();
+
+    if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+        && InControl()) {
+        CMessage* message = new CMessageDropPath(m_id, m_id);
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE, CMessage::BROADCAST_OTHERS);
+    }
+
+    m_currentSearchRequest = new CSearchRequest();
+    if (m_currentSearchRequest != NULL) {
+        m_currentSearchRequest->m_searchBitmap = &(m_pArea->m_search);
+
+        if (m_animation.GetListType() == LIST_FLIGHT) {
+            memcpy(m_currentSearchRequest->m_terrainTable, m_flightTerrainTable, sizeof(m_currentSearchRequest->m_terrainTable));
+        } else {
+            memcpy(m_currentSearchRequest->m_terrainTable, m_terrainTable, sizeof(m_currentSearchRequest->m_terrainTable));
+        }
+
+        m_currentSearchRequest->m_collisionSearch = collisionPath;
+        if (collisionPath) {
+            m_currentSearchRequest->m_collisionDelay = rand() % 15;
+        } else {
+            m_currentSearchRequest->m_collisionDelay = 0;
+        }
+        m_currentSearchRequest->m_removeSelf = m_animation.GetListType() != LIST_FLIGHT;
+        m_currentSearchRequest->m_pathSmooth = m_animation.GetPathSmooth();
+        m_currentSearchRequest->m_sourceId = m_id;
+        m_currentSearchRequest->m_nTargetPoints = 1;
+        m_currentSearchRequest->m_targetPoints = new POINT[m_currentSearchRequest->m_nTargetPoints];
+        if (m_currentSearchRequest->m_targetPoints) {
+            m_currentSearchRequest->m_targetPoints[0] = target;
+            if (m_currentSearchRequest->m_collisionDelay == 0) {
+                CSingleLock lock(&(g_pBaldurChitin->GetObjectGame()->field_1B58), TRUE);
+                g_pBaldurChitin->GetObjectGame()->m_searchRequests.AddTail(m_currentSearchRequest);
+                g_pBaldurChitin->GetObjectGame()->m_searchRequestListEmpty = FALSE;
+                ReleaseSemaphore(g_pBaldurChitin->GetObjectGame()->m_hSearchThread, 1, NULL);
+                lock.Unlock();
+            }
+
+            // NOTE: Uninline.
+            SHORT nIdleSequence = GetIdleSequence();
+            if (m_nSequence != nIdleSequence || m_animation.IsEndOfSequence()) {
+                SetSequence(nIdleSequence);
+            }
+        } else {
+            delete m_currentSearchRequest;
+            m_currentSearchRequest = NULL;
+        }
+    }
+}
+
 // 0x707D40
 void CGameSprite::SetTarget(CSearchRequest* pSearchRequest, BOOL collisionPath, BYTE frontList)
 {
-    // TODO: Incomplete.
+    m_pathSearchInvalidDest = FALSE;
+    if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+        && InControl()) {
+        CMessage* message = new CMessageDropPath(m_id, m_id);
+        g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE, CMessage::BROADCAST_OTHERS);
+    }
+
+    if (frontList == CSearchRequest::LIST_FRONT) {
+        if (m_pPath != NULL) {
+            delete m_pPath;
+            m_pPath = NULL;
+        }
+    }
+
+    if (m_currentSearchRequest != pSearchRequest) {
+        DropSearchRequest();
+    }
+    m_currentSearchRequest = pSearchRequest;
+
+    m_currentSearchRequest->m_serviceState = CSearchRequest::STATE_WAITING;
+    m_currentSearchRequest->m_collisionSearch = collisionPath;
+    if (collisionPath) {
+        m_currentSearchRequest->m_collisionDelay = rand() % 15;
+    } else {
+        m_currentSearchRequest->m_collisionDelay = 0;
+    }
+    m_currentSearchRequest->m_removeSelf = pSearchRequest->m_removeSelf;
+    m_currentSearchRequest->m_frontList = frontList;
+
+    if (!m_currentSearchRequest->m_collisionDelay) {
+        CSingleLock lock(&(g_pBaldurChitin->GetObjectGame()->field_1B58), TRUE);
+        if (frontList == CSearchRequest::LIST_FRONT) {
+            g_pBaldurChitin->GetObjectGame()->m_searchRequests.AddTail(m_currentSearchRequest);
+            g_pBaldurChitin->GetObjectGame()->m_searchRequestListEmpty = FALSE;
+        } else {
+            g_pBaldurChitin->GetObjectGame()->m_searchRequestsBack.AddTail(m_currentSearchRequest);
+        }
+        ReleaseSemaphore(g_pBaldurChitin->GetObjectGame()->m_hSearchThread, 1, NULL);
+        lock.Unlock();
+    }
+
+    // NOTE: Uninline.
+    SHORT nIdleSequence = GetIdleSequence();
+    if (m_nSequence != nIdleSequence || m_animation.IsEndOfSequence()) {
+        SetSequence(nIdleSequence);
+    }
 }
 
 // 0x708280

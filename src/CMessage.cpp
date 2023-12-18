@@ -5050,9 +5050,64 @@ BOOL CMessageHandler::ImportantMessage(BYTE* pData, DWORD dwSize)
 }
 
 // 0x4F7500
-void CMessageHandler::AddMessage(CMessage* message, BOOL bForcePassThrough)
+SHORT CMessageHandler::AddMessage(CMessage* message, BOOL bForcePassThrough)
+{
+    return AddMessage(message, bForcePassThrough, message->GetCommType());
+}
+
+// 0x4F7530
+SHORT CMessageHandler::AddMessage(CMessage* message, BOOL bForcePassThrough, SHORT nCommType)
+{
+    switch (nCommType) {
+    case CMessage::SEND:
+        return Send(message);
+    case CMessage::BROADCAST:
+        if (bForcePassThrough) {
+            m_messageList.AddTail(message);
+            return 1;
+        }
+
+        return Broadcast(message, TRUE, FALSE);
+    case CMessage::BROADCAST_OTHERS:
+        if (bForcePassThrough) {
+            m_messageList.AddTail(message);
+            return 1;
+        }
+
+        return Broadcast(message, FALSE, FALSE);
+    case CMessage::BROADCAST_FORCED:
+        if (bForcePassThrough) {
+            m_messageList.AddTail(message);
+            return 1;
+        }
+
+        return Broadcast(message, TRUE, TRUE);
+    case CMessage::BROADCAST_FORCED_OTHERS:
+        if (bForcePassThrough) {
+            m_messageList.AddTail(message);
+            return 1;
+        }
+
+        return Broadcast(message, FALSE, TRUE);
+    default:
+        return -1;
+    }
+}
+
+// 0x4F7620
+SHORT CMessageHandler::Broadcast(CMessage* message, BOOLEAN bSendMessageToSelf, BOOLEAN bIgnoreObjectControl)
 {
     // TODO: Incomplete.
+
+    return -1;
+}
+
+// 0x4F7830
+SHORT CMessageHandler::Send(CMessage* message)
+{
+    // TODO: Incomplete.
+
+    return -1;
 }
 
 // -----------------------------------------------------------------------------

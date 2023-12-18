@@ -436,8 +436,12 @@ public:
     void AsynchronousUpdate();
     void PostAsynchronousUpdate();
     BOOL ImportantMessage(BYTE* pData, DWORD dwSize);
-    void AddMessage(CMessage* message, BOOL bForcePassThrough);
+    SHORT AddMessage(CMessage* message, BOOL bForcePassThrough);
+    SHORT AddMessage(CMessage* message, BOOL bForcePassThrough, SHORT nCommType);
+    SHORT Broadcast(CMessage* message, BOOLEAN bSendMessageToSelf, BOOLEAN bIgnoreObjectControl);
+    SHORT Send(CMessage* message);
 
+    /* 0000 */ CTypedPtrList<CPtrList, CMessage*> m_messageList;
     /* 001C */ BOOLEAN m_bLastArbitrationLockStatus;
 };
 

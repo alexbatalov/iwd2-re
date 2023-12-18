@@ -42,6 +42,7 @@
 
 class CGameArea;
 class CItem;
+class CSearchRequest;
 class CStore;
 
 // NOTE: The following spell-list related classes are new in IWD2, there are
@@ -415,7 +416,9 @@ public:
     /* 4814 */ STR_RES field_4814;
     /* 487C */ STR_RES field_487C;
     /* 48E4 */ BOOLEAN m_bForceDither;
-    /* 49F8 */ int field_49F8;
+    /* 49C0 */ CTypedPtrList<CPtrList, CSearchRequest*> m_searchRequests;
+    /* 49DC */ CTypedPtrList<CPtrList, CSearchRequest*> m_searchRequestsBack;
+    /* 49F8 */ BOOL m_searchRequestListEmpty;
     /* 4A40 */ SHORT m_currArmor;
     /* 4A42 */ short field_4A42;
     /* 4A44 */ short field_4A44;
