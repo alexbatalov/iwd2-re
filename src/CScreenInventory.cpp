@@ -3030,9 +3030,164 @@ DWORD CScreenInventory::FindFreePersonalSlot(DWORD dwFirstId, DWORD dwLastId, DW
 // 0x630930
 BOOL CScreenInventory::SwapWithAppearance()
 {
-    // TODO: Incomplete.
+    DWORD slotId;
+    DWORD buttonId;
+    DWORD inc;
+    BOOL bResult;
 
-    return FALSE;
+    if (m_pTempItem == NULL) {
+        return FALSE;
+    }
+
+    switch (m_pTempItem->GetItemType()) {
+    case 0:
+    case 8:
+    case 9:
+    case 11:
+    case 13:
+    case 33:
+    case 34:
+    case 35:
+    case 36:
+    case 37:
+    case 38:
+    case 40:
+    case 42:
+    case 43:
+    case 45:
+    case 46:
+    case 48:
+    case 50:
+    case 51:
+    case 52:
+    case 54:
+    case 55:
+    case 56:
+    case 58:
+    case 59:
+    case 71:
+        slotId = FindFreePersonalSlot(5, 7, 1, TRUE);
+        break;
+    case 1:
+    case 70:
+        slotId = 14;
+        break;
+    case 3:
+        slotId = 21;
+        break;
+    case 4:
+        slotId = 25;
+        break;
+    case 5:
+    case 14:
+    case 31:
+        slotId = FindFreePersonalSlot(15, 17, 1, TRUE);
+        break;
+    case 6:
+    case 73:
+        slotId = 12;
+        break;
+    case 10:
+        slotId = FindFreePersonalSlot(22, 23, 1, TRUE);
+        break;
+    case 12:
+    case 39:
+        return FALSE;
+    case 15:
+    case 27:
+        buttonId = 101;
+        BeginSwap();
+        while (buttonId < 107) {
+            slotId = FindFreePersonalSlot(buttonId, 107, 2, FALSE);
+            if (slotId <= 107) {
+                bResult = SwapWithSlot(slotId, TRUE, -1, TRUE);
+                if (bResult) {
+                    break;
+                }
+            }
+            buttonId = slotId + 2;
+        }
+        EndSwap();
+        return bResult;
+    case 16:
+    case 17:
+    case 18:
+    case 19:
+    case 20:
+    case 21:
+    case 22:
+    case 23:
+    case 24:
+    case 25:
+    case 26:
+    case 28:
+    case 29:
+    case 30:
+    case 44:
+    case 57:
+    case 69:
+        inc = 1;
+        if ((m_pTempItem->GetFlagsFile() & 0x2) != 0) {
+            inc = 2;
+        }
+
+        buttonId = 101;
+        BeginSwap();
+        while (buttonId < 108) {
+            slotId = FindFreePersonalSlot(buttonId, 108, inc, FALSE);
+            if (slotId <= 108) {
+                bResult = SwapWithSlot(slotId, TRUE, -1, TRUE);
+                if (bResult) {
+                    break;
+                }
+            }
+            buttonId = slotId + inc;
+        }
+        EndSwap();
+        return bResult;
+    case 32:
+        slotId = 24;
+        break;
+    case 41:
+    case 47:
+    case 49:
+    case 53:
+        buttonId = 102;
+        BeginSwap();
+        while (buttonId < 108) {
+            slotId = FindFreePersonalSlot(buttonId, 108, 2, FALSE);
+            if (slotId <= 108) {
+                bResult = SwapWithSlot(slotId, TRUE, -1, TRUE);
+                if (bResult) {
+                    break;
+                }
+            }
+            buttonId = slotId + 2;
+        }
+        EndSwap();
+        return bResult;
+    case 60:
+    case 61:
+    case 62:
+    case 63:
+    case 64:
+    case 65:
+    case 66:
+    case 67:
+    case 68:
+        slotId = 11;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 8613
+        UTIL_ASSERT(FALSE);
+    }
+
+    BeginSwap();
+    bResult = SwapWithSlot(slotId, TRUE, -1, TRUE);
+    EndSwap();
+
+    return bResult;
 }
 
 // 0x630BD0
