@@ -490,6 +490,7 @@ public:
     SHORT FindItemPersonal(const CString& sName, int number, BOOL restrictToEquiped);
     SHORT CountItemPersonal(const CString& sName);
     DWORD GetCarriedWeight();
+    void GetQuickWeapon(BYTE buttonNum, CButtonData& buttonData);
     void InitializeWalkingSound();
     void PlayDialogSound(CGameSprite* pNPC);
     void AddKnownDivineSpells(const BYTE& nClass);

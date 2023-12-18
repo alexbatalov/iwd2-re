@@ -202,8 +202,8 @@ CScreenInventory::CScreenInventory()
     m_nRequesterAmount = -1;
     field_11E = 0;
     field_11F = 0;
-    field_4AC = 0;
-    field_4EC = NULL;
+    m_nCurrentAbility = 0;
+    m_pAbilities = NULL;
     m_bPauseWarningDisplayed = FALSE;
     field_510 = -1;
     field_514 = -1;
@@ -411,8 +411,8 @@ void CScreenInventory::EngineGameInit()
     m_nRequesterAmount = -1;
     field_11E = 0;
     field_11F = 0;
-    field_4AC = 0;
-    field_4EC = NULL;
+    m_nCurrentAbility = 0;
+    m_pAbilities = NULL;
     m_bPauseWarningDisplayed = FALSE;
     field_510 = -1;
     field_514 = -1;
@@ -1598,7 +1598,93 @@ void CScreenInventory::ResetHistoryPanel(CUIPanel* pPanel)
 // 0x627F20
 void CScreenInventory::ResetAbilitiesPanel(CUIPanel* pPanel)
 {
-    // TODO: Incomplete.
+    CButtonData cButtonData;
+
+    LONG nCharacterId = g_pBaldurChitin->GetObjectGame()->GetCharacterId(m_nSelectedCharacter);
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        CGameButtonList* pButtonList;
+        SHORT abilityNum;
+        SHORT slotNum;
+        CItem* pItem;
+
+        switch (m_nRequesterButtonId) {
+        case 5:
+        case 6:
+        case 7:
+            slotNum = MapButtonIdToInventoryId(m_nRequesterButtonId);
+            pButtonList = pSprite->GetItemUsages(slotNum,
+                3,
+                -1);
+
+            // NOTE: Uninline.
+            pSprite->GetQuickItem(static_cast<BYTE>(m_nRequesterButtonId - 5), cButtonData);
+
+            abilityNum = cButtonData.m_abilityId.m_abilityNum;
+            break;
+        case 101:
+        case 102:
+        case 103:
+        case 104:
+        case 105:
+        case 106:
+        case 107:
+        case 108:
+            slotNum = MapButtonIdToInventoryId(m_nRequesterButtonId);
+            pButtonList = pSprite->GetItemUsages(slotNum,
+                1,
+                -1);
+
+            pSprite->GetQuickWeapon(static_cast<BYTE>(m_nRequesterButtonId - 101), cButtonData);
+
+            abilityNum = cButtonData.m_abilityId.m_abilityNum;
+
+            pItem = pSprite->GetEquipment()->m_items[slotNum];
+            if (pItem != NULL) {
+                pItem->Demand();
+                ITEM_ABILITY* ability = pItem->GetAbility(0);
+                if (ability != NULL && ability->type == 4) {
+                    abilityNum = -1;
+                }
+                pItem->Release();
+            }
+            break;
+        default:
+            pButtonList = NULL;
+            abilityNum = 0;
+            break;
+        }
+
+        m_nCurrentAbility = abilityNum;
+
+        if (m_pAbilities != NULL) {
+            POSITION pos = m_pAbilities->GetHeadPosition();
+            while (pos != NULL) {
+                delete m_pAbilities->GetNext(pos);
+            }
+            m_pAbilities->RemoveAll();
+            // FIXME: Leaking `m_pAbilities`.
+            m_pAbilities = NULL;
+        }
+
+        m_pAbilities = pButtonList;
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+
+        UpdateHelp(pPanel->m_nID, 8, 11322);
+    }
 }
 
 // 0x628200
@@ -1638,15 +1724,15 @@ void CScreenInventory::OnCancelButtonClick()
         DismissPopup();
         break;
     case 6:
-        if (field_4EC != NULL) {
-            POSITION pos = field_4EC->GetHeadPosition();
+        if (m_pAbilities != NULL) {
+            POSITION pos = m_pAbilities->GetHeadPosition();
             while (pos != NULL) {
-                delete field_4EC->GetNext(pos);
+                delete m_pAbilities->GetNext(pos);
             }
-            field_4EC->RemoveAll();
-            field_4EC = NULL;
+            m_pAbilities->RemoveAll();
+            m_pAbilities = NULL;
         }
-        field_4EC = NULL;
+        m_pAbilities = NULL;
         DismissPopup();
         break;
     }
@@ -2941,8 +3027,8 @@ void CScreenInventory::UpdateAbilitiesPanel()
         wCount);
 
     if (pItem != NULL) {
-        POSITION pos = field_4EC != NULL
-            ? field_4EC->GetHeadPosition()
+        POSITION pos = m_pAbilities != NULL
+            ? m_pAbilities->GetHeadPosition()
             : NULL;
         for (INT nIndex = 1; nIndex < 3; nIndex++) {
             CUIControlButtonInventoryAbilitiesAbility* pAbility = static_cast<CUIControlButtonInventoryAbilitiesAbility*>(pPanel->GetControl(nIndex + 1));
@@ -2952,19 +3038,19 @@ void CScreenInventory::UpdateAbilitiesPanel()
             UTIL_ASSERT(pAbility != NULL);
 
             if (pos != NULL) {
-                CButtonData* pButtonData = field_4EC->GetAt(pos);
+                CButtonData* pButtonData = m_pAbilities->GetAt(pos);
 
                 // NOTE: Uninline.
                 pAbility->SetButtonData(*pButtonData);
 
-                pAbility->SetEnabled(field_4EC != NULL);
-                pAbility->SetSelected(field_4AC == nIndex);
+                pAbility->SetEnabled(m_pAbilities != NULL);
+                pAbility->SetSelected(m_nCurrentAbility == nIndex);
 
                 UpdateLabel(pPanel, 0x10000003 + nIndex,
                     "%s",
                     FetchString(pButtonData->m_abilityId.field_10));
 
-                field_4EC->GetNext(pos);
+                m_pAbilities->GetNext(pos);
             } else {
                 // NOTE: Uninline.
                 pAbility->SetButtonData(cButtonData);
@@ -5178,7 +5264,7 @@ void CUIControlButtonInventoryAbilitiesAbility::OnLButtonClick(CPoint pt)
         UTIL_ASSERT(FALSE);
     }
 
-    pInventory->field_4AC = v1;
+    pInventory->m_nCurrentAbility = v1;
 
     pInventory->UpdatePopupPanel(m_pPanel->m_nID);
 

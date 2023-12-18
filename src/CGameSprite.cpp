@@ -5887,6 +5887,91 @@ DWORD CGameSprite::GetCarriedWeight()
     return weight;
 }
 
+// 0x71D4B0
+void CGameSprite::GetQuickWeapon(BYTE buttonNum, CButtonData& buttonData)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 20520
+    UTIL_ASSERT_MSG(buttonNum < CGAMESAVECHARACTER_NUM_QUICK_WEAPONS22, "Trying to access illegal quick weapon slot");
+
+    if (m_equipment.m_items[42] != NULL) {
+        CGameButtonList* buttons = GetItemUsages(42, 1, 0);
+        if (!buttons->IsEmpty()) {
+            CButtonData* node = buttons->RemoveHead();
+            if (node != NULL) {
+                buttonData = *node;
+                delete node;
+            }
+            while (!buttons->IsEmpty()) {
+                delete buttons->RemoveHead();
+            }
+        }
+        delete buttons;
+    }
+
+    buttonData = m_quickWeapons[buttonNum];
+
+    if (buttonNum == 0
+        || buttonNum == 2
+        || buttonNum == 4
+        || buttonNum == 6) {
+        CItem* pItem = m_equipment.m_items[buttonNum + 44];
+        if (pItem != NULL) {
+            // FIXME: Calls `GetItemType` four times.
+            if (pItem->GetItemType() == 47
+                || pItem->GetItemType() == 53
+                || pItem->GetItemType() == 49
+                || pItem->GetItemType() == 41) {
+                if (buttonData.m_abilityId.m_itemNum == -1
+                    || buttonData.m_abilityId.m_itemNum == 10) {
+                    CGameButtonList* buttons = GetItemUsages(10, 1, 0);
+                    CButtonData* node = buttons->RemoveHead();
+                    if (node != NULL) {
+                        buttonData = *node;
+                        m_quickWeapons[buttonNum] = *node;
+                        delete node;
+                    }
+                    while (!buttons->IsEmpty()) {
+                        delete buttons->RemoveHead();
+                    }
+                    delete buttons;
+                }
+            }
+        } else if (buttonData.m_abilityId.m_itemNum == -1) {
+            if (buttonData.m_abilityId.m_itemNum == -1
+                || buttonData.m_abilityId.m_itemNum == 10) {
+                CGameButtonList* buttons = GetItemUsages(10, 1, 0);
+                CButtonData* node = buttons->RemoveHead();
+                if (node != NULL) {
+                    buttonData = *node;
+                    m_quickWeapons[buttonNum] = *node;
+                    delete node;
+                }
+                while (!buttons->IsEmpty()) {
+                    delete buttons->RemoveHead();
+                }
+                delete buttons;
+            }
+        }
+    } else {
+        CItem* pItem = m_equipment.m_items[buttonNum + 43];
+        if (pItem != NULL) {
+            // FIXME: Calls `GetItemType` four times.
+            if (pItem->GetItemType() == 47
+                || pItem->GetItemType() == 53
+                || pItem->GetItemType() == 49
+                || pItem->GetItemType() == 41) {
+                buttonData.m_icon = pItem->GetItemIcon();
+                buttonData.m_name = pItem->GetGenericName();
+                buttonData.m_abilityId.m_itemType = 2;
+                buttonData.m_abilityId.m_itemNum = buttonNum + 43;
+                buttonData.m_abilityId.m_targetType = -1;
+                buttonData.m_abilityId.field_10 = pItem->GetGenericName();
+            }
+        }
+    }
+}
+
 // 0x71DAB0
 void CGameSprite::SetScript(SHORT level, CAIScript* script)
 {

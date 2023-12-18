@@ -138,8 +138,8 @@ public:
     /* 0488 */ DWORD m_nRequesterAmount;
     /* 048C */ DWORD m_nRequesterButtonId;
     /* 0490 */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
-    /* 04AC */ int field_4AC;
-    /* 04EC */ CGameButtonList* field_4EC;
+    /* 04AC */ int m_nCurrentAbility;
+    /* 04EC */ CGameButtonList* m_pAbilities;
     /* 04F0 */ INT m_nErrorState;
     /* 04F4 */ STRREF m_strErrorText;
     /* 04F8 */ INT m_nNumErrorButtons;
