@@ -2977,6 +2977,56 @@ void CScreenInventory::UpdateAbilitiesPanel()
     }
 }
 
+// 0x630810
+DWORD CScreenInventory::FindFreePersonalSlot(DWORD dwFirstId, DWORD dwLastId, DWORD dwInc, BOOL a4)
+{
+    CItem* pItem;
+    STRREF description;
+    CResRef cResIcon;
+    CResRef cResItem;
+    WORD wCount;
+
+    DWORD dwSlotId = dwFirstId;
+    DWORD dwLastValidId = -1;
+
+    while (dwSlotId <= dwLastId) {
+        CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+        // __LINE__: 8646
+        UTIL_ASSERT(pGame != NULL);
+
+        if (dwSlotId < 101
+            || dwSlotId > 108
+            || static_cast<INT>(dwSlotId - 101) < pGame->GetNumQuickWeaponSlots(static_cast<SHORT>(m_nSelectedCharacter))) {
+            dwLastValidId = dwSlotId;
+            pGame->InventoryInfoPersonal(static_cast<SHORT>(m_nSelectedCharacter),
+                MapButtonIdToInventoryId(dwSlotId),
+                pItem,
+                description,
+                cResIcon,
+                cResItem,
+                wCount,
+                a4);
+            if (cResIcon == "") {
+                break;
+            }
+        }
+
+        dwSlotId += dwInc;
+    }
+
+    if (dwSlotId <= dwLastId) {
+        return dwSlotId;
+    }
+
+    if (dwLastValidId != -1) {
+        return dwLastValidId;
+    }
+
+    return dwLastId;
+}
+
 // 0x630930
 BOOL CScreenInventory::SwapWithAppearance()
 {

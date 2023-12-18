@@ -105,6 +105,7 @@ public:
     void UpdateRequesterPanel();
     void UpdateHistoryPanel(BOOL a1);
     void UpdateAbilitiesPanel();
+    DWORD FindFreePersonalSlot(DWORD dwFirstId, DWORD dwLastId, DWORD dwInc, BOOL a4);
     BOOL SwapWithAppearance();
     INT MapButtonIdToInventoryId(INT nButton);
     INT MapInventoryIdToButtonId(INT nInventoryId);
