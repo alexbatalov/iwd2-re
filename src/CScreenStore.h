@@ -223,6 +223,7 @@ public:
     /* 04F8 */ DWORD m_dwSpellCost;
     /* 04FC */ DWORD m_dwIdentifyCost;
     /* 0500 */ DWORD m_dwRoomType;
+    /* 0504 */ CAIObjectType m_cAIProprietor;
     /* 0540 */ CAIObjectType m_cAICustomer;
     /* 057C */ int field_57C;
     /* 0580 */ int field_580;

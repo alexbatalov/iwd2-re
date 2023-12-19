@@ -2370,9 +2370,73 @@ void CScreenStore::CancelEngine()
 // 0x67DB60
 BOOL CScreenStore::IsCharacterInRange(SHORT nPortraitNum)
 {
-    // TODO: Incomplete.
+    LONG nSprite;
+    CGameSprite* pSprite;
+    BYTE rc;
+    CGameArea* pSrcArea;
+    CGameArea* pDstArea;
+    BOOL bDead;
 
-    return FALSE;
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenInventory.cpp
+    // __LINE__: 8488
+    UTIL_ASSERT(pGame != NULL);
+
+    nSprite = pGame->GetCharacterId(m_cAIProprietor.GetInstance());
+
+    do {
+        rc = pGame->GetObjectArray()->GetShare(nSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc != CGameObjectArray::SUCCESS) {
+        return FALSE;
+    }
+
+    pSrcArea = pSprite->GetArea();
+
+    pGame->GetObjectArray()->ReleaseShare(nSprite,
+        CGameObjectArray::THREAD_ASYNCH,
+        INFINITE);
+
+    nSprite = pGame->GetCharacterId(nPortraitNum);
+
+    do {
+        rc = pGame->GetObjectArray()->GetShare(nSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc != CGameObjectArray::SUCCESS) {
+        return FALSE;
+    }
+
+    BOOL bResult;
+    if (pSprite->InControl()) {
+        pDstArea = pSprite->GetArea();
+        bDead = pSprite->GetBaseStats()->m_hitPoints <= 0;
+
+        pGame->GetObjectArray()->ReleaseShare(nSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+
+        if (m_pMainPanel != NULL && m_pMainPanel->m_nID == 5) {
+            bResult = bDead || pDstArea == pSrcArea;
+        } else {
+            bResult = pDstArea == pSrcArea;
+        }
+    } else {
+        pGame->GetObjectArray()->ReleaseShare(nSprite,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+        bResult = FALSE;
+    }
+
+    return bResult;
 }
 
 // NOTE: Inlined.
