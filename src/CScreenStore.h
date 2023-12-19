@@ -155,7 +155,12 @@ public:
     void UpdateStoreCost();
     void UpdateSpellCost();
     void OnBuyItemButtonClick();
+    BOOL IsSellItemButtonClickable();
     void OnSellItemButtonClick();
+    void sub_67A130();
+    void sub_67A5B0();
+    void sub_67ABF0();
+    void sub_67B030();
     void OnIdentifyItemButtonClick();
     void OnBuySpellButtonClick();
     void OnRentRoomButtonClick();

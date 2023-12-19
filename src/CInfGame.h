@@ -186,6 +186,7 @@ public:
     void CompressContainer(LONG nContainerId);
     INT CheckItemUsable(CGameSprite* pSprite, CItem* pItem);
     SHORT GetNumQuickWeaponSlots(SHORT nPortrait);
+    BOOL SwapItemPersonalInventory(SHORT nPortraitNum, CItem*& pNewItem, SHORT nSlotNum, STRREF& errorCode, WORD wCount, BOOLEAN bFromServer, BOOL bAutoStacking);
     void InventoryInfoPersonal(SHORT nPortraitNum, SHORT nSlotNum, CItem*& pItem, STRREF& description, CResRef& cResIcon, CResRef& cResItem, WORD& wCount, BOOL a8);
     BOOL Is3DSound(int nSoundChannel);
     float GetSoundReverbMix(int nSoundChannel, int nReverb);

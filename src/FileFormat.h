@@ -801,7 +801,8 @@ public:
     /* 0088 */ DWORD m_rouletWinAmount;
     /* 008C */ DWORD m_crapsWinAmount;
     /* 0090 */ DWORD m_wheelWinAmount;
-    /* 0094 */ int field_94[21];
+    /* 0094 */ DWORD field_94;
+    /* 0098 */ int field_98[20];
 };
 
 class CStoreFileSpell {
