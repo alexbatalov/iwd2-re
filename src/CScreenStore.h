@@ -162,6 +162,7 @@ public:
     void OnBuyDrinkButtonClick(INT nButton);
     void OnDoneButtonClick();
     void OnCancelButtonClick();
+    void StartStore(const CAIObjectType& proprietor, const CAIObjectType& customer, const CResRef& cResStore);
     void StopStore();
     void DeleteStore();
     DWORD GetPanelButtonPanelId(INT nButtonIndex);

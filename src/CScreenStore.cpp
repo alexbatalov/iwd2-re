@@ -2209,6 +2209,248 @@ void CScreenStore::OnCancelButtonClick()
     }
 }
 
+// 0x67D050
+void CScreenStore::StartStore(const CAIObjectType& proprietor, const CAIObjectType& customer, const CResRef& cResStore)
+{
+    if (m_pBag != NULL) {
+        CloseBag(TRUE);
+    }
+
+    if (m_pStore != NULL) {
+        // NOTE: Uninline.
+        DeleteStore();
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 7777
+    UTIL_ASSERT(cResStore != "");
+
+    m_cResStore = cResStore;
+    m_cAIProprietor = proprietor;
+    m_cAICustomer = customer;
+    field_580 = -1;
+    field_584 = -1;
+
+    if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+        if (g_pChitin->cNetwork.GetSessionHosting()) {
+            g_pBaldurChitin->GetObjectGame()->DemandServerStore(cResStore, TRUE);
+        } else {
+            if (!g_pBaldurChitin->GetBaldurMessage()->DemandResourceFromServer(cResStore.GetResRefStr(), 1014, TRUE, TRUE, TRUE)) {
+                g_pChitin->cNetwork.CloseSession(TRUE);
+                return;
+            }
+        }
+    }
+
+    CMessage* message = new CMessage101(TRUE, customer.GetInstance(), customer.GetInstance(), FALSE);
+    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+
+    m_pStore = new CStore(cResStore);
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 7828
+    UTIL_ASSERT(pGame != NULL);
+
+    SHORT nPortrait = pGame->GetCharacterPortraitNum(customer.GetInstance());
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 7832
+    UTIL_ASSERT(nPortrait >= 0);
+
+    SetSelectedCharacter(nPortrait);
+
+    field_5D8 = 9;
+    field_5D9 = 0;
+
+    if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+        for (SHORT nPortrait = 0; nPortrait < CMultiplayerSettings::MAX_CHARACTERS; nPortrait++) {
+            LONG nCharacterId = pGame->GetCharacterId(nPortrait);
+            if (nCharacterId == customer.GetInstance()) {
+                CGameSprite* pSprite;
+
+                BYTE rc;
+                do {
+                    rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        reinterpret_cast<CGameObject**>(&pSprite),
+                        INFINITE);
+                } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+                if (rc == CGameObjectArray::SUCCESS) {
+                    field_5D8 = static_cast<BYTE>(pSprite->GetDerivedStats()->m_nCHR);
+                    field_5D9 = pSprite->sub_763150(CGAMESPRITE_FEAT_MERCANTILE_BACKGROUND) ? 5 : 0;
+
+                    pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        INFINITE);
+                }
+            }
+        }
+    } else {
+        for (SHORT nPortrait = 0; nPortrait < pGame->GetNumCharacters(); nPortrait++) {
+            if (IsCharacterInRange(nPortrait)) {
+                LONG nCharacterId = pGame->GetCharacterId(nPortrait);
+
+                CGameSprite* pSprite;
+
+                BYTE rc;
+                do {
+                    rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        reinterpret_cast<CGameObject**>(&pSprite),
+                        INFINITE);
+                } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+                if (rc == CGameObjectArray::SUCCESS) {
+                    field_5D8 = static_cast<BYTE>(pSprite->GetDerivedStats()->m_nCHR);
+                    field_5D9 = pSprite->sub_763150(CGAMESPRITE_FEAT_MERCANTILE_BACKGROUND) ? 5 : 0;
+
+                    pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        INFINITE);
+                }
+            }
+        }
+    }
+
+    m_adwButtonPanelId[0] = -1;
+    m_adwButtonPanelId[1] = -1;
+    m_adwButtonPanelId[2] = -1;
+    m_adwButtonPanelId[3] = -1;
+
+    int buttonIndex = 0;
+
+    switch (m_pStore->GetType()) {
+    case 0:
+        m_adwButtonPanelId[buttonIndex++] = 2;
+        if ((m_pStore->m_header.m_nStoreFlags & 0x4) != 0) {
+            m_adwButtonPanelId[buttonIndex++] = 4;
+        }
+        if ((m_pStore->m_header.m_nStoreFlags & 0x20) != 0) {
+            m_adwButtonPanelId[buttonIndex++] = 5;
+        }
+        break;
+    case 1:
+        m_adwButtonPanelId[buttonIndex++] = 8;
+        if ((m_pStore->m_header.m_nStoreFlags & 0x3) != 0) {
+            m_adwButtonPanelId[buttonIndex++] = 2;
+        }
+        if ((m_pStore->m_header.m_nStoreFlags & 0x4) != 0) {
+            m_adwButtonPanelId[buttonIndex++] = 4;
+        }
+        break;
+    case 3:
+        m_adwButtonPanelId[buttonIndex++] = 5;
+        if ((m_pStore->m_header.m_nStoreFlags & 0x3) != 0) {
+            m_adwButtonPanelId[buttonIndex++] = 2;
+        }
+        if ((m_pStore->m_header.m_nStoreFlags & 0x4) != 0) {
+            m_adwButtonPanelId[buttonIndex++] = 4;
+        }
+        break;
+    case 4:
+        m_adwButtonPanelId[buttonIndex++] = 2;
+        if ((m_pStore->m_header.m_nStoreFlags & 0x4) != 0) {
+            m_adwButtonPanelId[buttonIndex++] = 4;
+        }
+        if ((m_pStore->m_header.m_nStoreFlags & 0x20) != 0) {
+            m_adwButtonPanelId[buttonIndex++] = 5;
+        }
+        break;
+    case 5:
+        m_adwButtonPanelId[0] = -1;
+        m_adwButtonPanelId[1] = -1;
+        m_adwButtonPanelId[2] = -1;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 8037
+        UTIL_ASSERT(FALSE);
+    }
+
+    CUIPanel* pBarSingle = m_cUIManager.GetPanel(3);
+    CUIPanel* pBarMulti = m_cUIManager.GetPanel(15);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 8047
+    UTIL_ASSERT((pBarSingle != NULL) && (pBarMulti != NULL));
+
+    pBarSingle->SetActive(FALSE);
+    pBarMulti->SetActive(FALSE);
+
+    if (g_pBaldurChitin->cNetwork.GetSessionOpen()
+        && g_pBaldurChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+        m_pButtonBar = pBarMulti;
+        m_pButtonBar->SetActive(TRUE);
+        m_pChatDisplay = static_cast<CUIControlTextDisplay*>(m_pButtonBar->GetControl(6));
+    } else {
+        m_pButtonBar = pBarSingle;
+        m_pButtonBar->SetActive(TRUE);
+        m_pChatDisplay = NULL;
+    }
+
+    CUIPanel* pPanel;
+    CUIControlTextDisplay* pText;
+
+    pPanel = m_cUIManager.GetPanel(8);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 8066
+    UTIL_ASSERT(pPanel != NULL);
+
+    pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(13));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 8068
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+
+    pPanel = m_cUIManager.GetPanel(5);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 8080
+    UTIL_ASSERT(pPanel != NULL);
+
+    pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(23));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 8082
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+
+    pPanel = m_cUIManager.GetPanel(4);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 8087
+    UTIL_ASSERT(pPanel != NULL);
+
+    pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(23));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 8089
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+
+    pPanel = m_cUIManager.GetPanel(7);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 8094
+    UTIL_ASSERT(pPanel != NULL);
+
+    pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(12));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 8096
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+}
+
 // 0x67D7B0
 void CScreenStore::StopStore()
 {
