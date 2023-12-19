@@ -2472,7 +2472,107 @@ void CScreenStore::OnErrorButtonClick(INT nButton)
 // 0x67DEA0
 void CScreenStore::RestParty()
 {
-    // TODO: Incomplete.
+    CString sToken;
+
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 8778
+    UTIL_ASSERT(pGame != NULL);
+
+    DWORD nPartyGold = pGame->GetGameSave()->m_nPartyGold;
+
+    // NOTE: Uninline.
+    DWORD nCost = GetRoomCost();
+
+    DWORD dwRoomType = m_dwRoomType;
+    m_dwRoomType = 0;
+
+    if (nCost > nPartyGold) {
+        return;
+    }
+
+    if (nCost != 0) {
+        pGame->AddPartyGold(-static_cast<LONG>(nCost));
+    }
+
+    INT nHP;
+    switch (dwRoomType) {
+    case ROOMTYPE_PEASANT:
+        nHP = 1;
+        break;
+    case ROOMTYPE_MERCHANT:
+        nHP = 2;
+        break;
+    case ROOMTYPE_NOBLE:
+        nHP = 3;
+        break;
+    case ROOMTYPE_ROYAL:
+        nHP = 4;
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+        // __LINE__: 8824
+        UTIL_ASSERT(FALSE);
+    }
+
+    sToken.Format("%d", CRuleTables::TIME_RESTING / CTimerWorld::TIMESCALE_MIN_PER_HOUR / CTimerWorld::TIMESCALE_SEC_PER_MIN / CTimerWorld::TIMESCALE_MSEC_PER_SEC);
+    g_pBaldurChitin->GetTlkTable().SetToken(CTimerWorld::TOKEN_HOUR, sToken);
+
+    sToken.Format("%d", nHP);
+    g_pBaldurChitin->GetTlkTable().SetToken(TOKEN_HP, sToken);
+
+    CUIPanel* pPanel = m_cUIManager.GetPanel(7);
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 8835
+    UTIL_ASSERT(pPanel != NULL);
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(12));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 8837
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+
+    UpdateText(pText,
+        "%s",
+        FetchString(16476));
+
+    CInfGame::m_bHealPartyOnRest = TRUE;
+
+    if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+        LONG nCharacterId = GetCustomer().GetInstance();
+
+        CGameSprite* pSprite;
+
+        BYTE rc;
+        do {
+            rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(nCharacterId,
+                CGameObjectArray::THREAD_ASYNCH,
+                reinterpret_cast<CGameObject**>(&pSprite),
+                INFINITE);
+        } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (pSprite->InControl()) {
+                g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+
+                pGame->RestParty(nHP, TRUE);
+            } else {
+                g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(nCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            }
+        }
+    } else {
+        pGame->RestParty(nHP, TRUE);
+    }
+
+    CInfGame::m_bHealPartyOnRest = FALSE;
 }
 
 // 0x67E2A0
