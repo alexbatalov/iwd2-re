@@ -1078,7 +1078,65 @@ void CScreenStore::ResetErrorPanel(CUIPanel* pPanel)
 // 0x6734F0
 void CScreenStore::sub_6734F0(CUIPanel* pPanel)
 {
-    // TODO: Incomplete.
+    // FIXME: Unused.
+    CString v1;
+
+    CItem* pItem = field_5A4;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 1713
+    UTIL_ASSERT(pItem != NULL);
+
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(6));
+
+    CUIControlButtonInventoryHistoryImage* pImage = static_cast<CUIControlButtonInventoryHistoryImage*>(pPanel->GetControl(7));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 1719
+    UTIL_ASSERT(pImage != NULL);
+
+    pImage->SetImage(pItem->GetDescriptionPicture());
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(5));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 1724
+    UTIL_ASSERT(pText != NULL);
+
+    pText->m_sNameSeparator = " ";
+
+    CSize frameSize;
+    pText->m_labelFont.GetFrameSize(64, 0, frameSize, FALSE);
+
+    SHORT nFontHeight = pText->m_labelFont.GetFontHeight(FALSE);
+    pText->field_AB4 = (nFontHeight + frameSize.cy - 1) / nFontHeight;
+
+    pText->RemoveAll();
+    pItem->sub_4EA580(pText, RGB(200, 200, 0));
+    pText->SetTopString(pText->m_plstStrings->FindIndex(0));
+
+    CUIControlButtonInventoryHistoryIcon* pIcon = static_cast<CUIControlButtonInventoryHistoryIcon*>(pPanel->GetControl(2));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 1738
+    UTIL_ASSERT(pIcon != NULL);
+
+    pIcon->SetItem(pItem);
+
+    UpdateLabel(pPanel,
+        0x10000000,
+        "%s",
+        pItem->GetGenericName());
+
+    if ((pItem->m_flags & 0x1) == 0) {
+        // "NOT IDENTIFIED"
+        UpdateLabel(pPanel,
+            0x10000007,
+            "%s",
+            FetchString(17108));
+    } else {
+        UpdateLabel(pPanel, 0x10000007, "");
+    }
 }
 
 // 0x673740
