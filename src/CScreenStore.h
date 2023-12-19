@@ -227,7 +227,7 @@ public:
     /* 0504 */ CAIObjectType m_cAIProprietor;
     /* 0540 */ CAIObjectType m_cAICustomer;
     /* 057C */ int field_57C;
-    /* 0580 */ int field_580;
+    /* 0580 */ LONG m_nDrinkRumorIndex;
     /* 0584 */ int field_584;
     /* 0588 */ CTypedPtrList<CPtrList, CUIPanel*> m_lPopupStack;
     /* 05A4 */ CItem* field_5A4;

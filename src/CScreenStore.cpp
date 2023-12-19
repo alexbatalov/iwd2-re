@@ -237,7 +237,7 @@ CScreenStore::CScreenStore()
     m_pBag = NULL;
     m_cResBag = "";
     m_cResStore = "";
-    field_580 = -1;
+    m_nDrinkRumorIndex = -1;
     field_584 = -1;
     m_pButtonBar = NULL;
     m_pChatDisplay = NULL;
@@ -508,7 +508,7 @@ void CScreenStore::EngineGameInit()
     m_dwIdentifyCost = 0;
     m_pStore = 0;
     m_pBag = NULL;
-    field_580 = -1;
+    m_nDrinkRumorIndex = -1;
     field_584 = -1;
     m_pButtonBar = NULL;
     m_pChatDisplay = NULL;
@@ -2094,7 +2094,91 @@ void CScreenStore::OnRentRoomButtonClick()
 // 0x67C710
 void CScreenStore::OnBuyDrinkButtonClick(INT nButton)
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 7302
+    UTIL_ASSERT(pGame != NULL);
+
+    CSingleLock renderLock(&(GetManager()->field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    STR_RES strRes;
+
+    DWORD nPartyGold = pGame->GetGameSave()->m_nPartyGold;
+    INT nDrinkIndex = m_nTopDrinkItem + nButton;
+    STRREF strName;
+    DWORD dwCost;
+    DWORD dwRumorChance;
+
+    if (IsCharacterInRange(static_cast<SHORT>(m_nSelectedCharacter))
+        && m_pStore->GetDrink(nDrinkIndex, strName, dwCost, dwRumorChance)) {
+        if (dwCost <= nPartyGold) {
+            LONG nCharacterId = pGame->GetCharacterId(static_cast<SHORT>(m_nSelectedCharacter));
+
+            CGameSprite* pSprite;
+
+            BYTE rc;
+            do {
+                rc = pGame->GetObjectArray()->GetDeny(nCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    reinterpret_cast<CGameObject**>(&pSprite),
+                    INFINITE);
+            } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+            if (rc == CGameObjectArray::SUCCESS) {
+                INT nIntoxicationRate;
+                INT nRecoveryRate;
+                INT nIntoxicationCap;
+
+                pGame->GetRuleTables().GetIntoxicationInfo(pSprite->GetDerivedStats()->m_nCON,
+                    nIntoxicationRate,
+                    nRecoveryRate,
+                    nIntoxicationCap);
+
+                CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(m_pMainPanel->GetControl(13));
+
+                if (pSprite->GetBaseStats()->m_intoxication < nIntoxicationCap) {
+                    PlayGUISound(CResRef("GAM_07"));
+                    pSprite->GetBaseStats()->m_intoxication += nIntoxicationRate;
+                    pSprite->field_562C = 1;
+                    pSprite->field_562C = 1;
+                    pSprite->ProcessEffectList();
+
+                    // NOTE: Unsigned compare.
+                    if (static_cast<DWORD>(rand() % 100 + 1) <= dwRumorChance) {
+                        CGameDialogSprite cDialogSprite;
+                        cDialogSprite.FetchRumor(CResRef(m_pStore->m_header.m_resRumor),
+                            pSprite,
+                            m_nDrinkRumorIndex,
+                            strRes);
+
+                        UpdateText(pText, "%s", strRes.szText);
+                        UpdateText(pText, "");
+                    }
+
+                    pGame->AddPartyGold(-static_cast<LONG>(dwCost));
+                } else {
+                    UpdateText(pText,
+                        "%s",
+                        FetchString(10832));
+                    UpdateText(pText, "");
+                }
+
+                pGame->GetObjectArray()->ReleaseDeny(nCharacterId,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+                UpdateMainPanel();
+            }
+        } else {
+            m_nErrorState = 2;
+            m_strErrorText = 11049;
+            m_strErrorButtonText[0] = 11973;
+            SummonPopup(10);
+        }
+    }
+
+    renderLock.Unlock();
 }
 
 // 0x67CBD0
@@ -2228,7 +2312,7 @@ void CScreenStore::StartStore(const CAIObjectType& proprietor, const CAIObjectTy
     m_cResStore = cResStore;
     m_cAIProprietor = proprietor;
     m_cAICustomer = customer;
-    field_580 = -1;
+    m_nDrinkRumorIndex = -1;
     field_584 = -1;
 
     if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {

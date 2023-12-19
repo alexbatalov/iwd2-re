@@ -76,6 +76,14 @@ BOOL CGameDialogSprite::StartDialog(CGameSprite* pSprite)
     return FALSE;
 }
 
+// 0x483B70
+BOOL CGameDialogSprite::FetchRumor(const CResRef& file, CGameSprite* pSprite, LONG& nIndex, STR_RES& strRes)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x483CF0
 void CGameDialogSprite::EndDialog()
 {

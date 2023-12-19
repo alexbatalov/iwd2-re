@@ -5,6 +5,7 @@
 #include "CAICondition.h"
 #include "CAIResponse.h"
 #include "CResRef.h"
+#include "CStrRes.h"
 
 class CGameDialogEntry;
 class CGameDialogReply;
@@ -16,6 +17,7 @@ public:
     ~CGameDialogSprite();
     void ClearMarshal();
     BOOL StartDialog(CGameSprite* pSprite);
+    BOOL FetchRumor(const CResRef& file, CGameSprite* pSprite, LONG& nIndex, STR_RES& strRes);
     void EndDialog();
     BOOL EnterDialog(DWORD index, CGameSprite* pSprite, int a3);
     void AsynchronousUpdate();
