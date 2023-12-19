@@ -6,7 +6,9 @@
 #include "CInfCursor.h"
 #include "CInfGame.h"
 #include "CScreenInventory.h"
+#include "CScreenSpellbook.h"
 #include "CScreenWorld.h"
+#include "CSpell.h"
 #include "CStore.h"
 #include "CUIControlTextDisplay.h"
 #include "CUIPanel.h"
@@ -1142,7 +1144,38 @@ void CScreenStore::sub_6734F0(CUIPanel* pPanel)
 // 0x673740
 void CScreenStore::sub_673740(CUIPanel* pPanel)
 {
-    // TODO: Incomplete.
+    m_pCurrentScrollBar = static_cast<CUIControlScrollBar*>(pPanel->GetControl(4));
+
+    CSpell cSpell;
+    cSpell.SetResRef(m_cResInfoSpell, TRUE, TRUE);
+    cSpell.Demand();
+
+    UpdateLabel(pPanel,
+        0x10000000,
+        "%s",
+        FetchString(cSpell.GetGenericName()));
+
+    CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(3));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 1787
+    UTIL_ASSERT(pText != NULL);
+
+    pText->RemoveAll();
+
+    UpdateText(pText,
+        "%s",
+        FetchString(cSpell.GetDescription()));
+
+    CUIControlButtonSpellbookSpellInfoIcon* pIcon = static_cast<CUIControlButtonSpellbookSpellInfoIcon*>(pPanel->GetControl(2));
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 1794
+    UTIL_ASSERT(pIcon != NULL);
+
+    pIcon->SetSpell(m_cResInfoSpell);
+
+    cSpell.Release();
 }
 
 // 0x673930
