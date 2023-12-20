@@ -447,6 +447,7 @@ public:
     void RenderDamageArrow(CGameArea* pArea, CVidMode* pVidMode, INT nSurface);
     void RenderSpriteEffect(CVidMode* pVidMode, INT nSurface);
     void ClearMarshal(BOOL unequip);
+    void Marshal(CAreaFileCreature** pCreature);
     void Marshal(BYTE** pCreature, LONG* creatureSize, WORD* facing, BOOLEAN a4, BOOLEAN a5);
     void Marshal(CSavedGamePartyCreature& partyCreature, BOOLEAN bNetworkMessage);
     void Unmarshal(CSavedGamePartyCreature* pCreature, BOOLEAN bPartyMember, BOOLEAN bProgressBarInPlace);
@@ -762,10 +763,8 @@ public:
     /* 5322 */ BOOL m_animationRunning;
     /* 5326 */ int field_5326;
     /* 532A */ unsigned char field_532A;
-    /* 532C */ int field_532C;
-    /* 5330 */ int field_5330;
-    /* 5334 */ int field_5334;
-    /* 5338 */ float field_5338;
+    /* 532C */ double m_fCircleChange;
+    /* 5334 */ double m_fCurrCircleChange;
     /* 533C */ short field_533C;
     /* 533E */ unsigned char field_533E;
     /* 533F */ BOOLEAN m_bVisibilityUpdated;

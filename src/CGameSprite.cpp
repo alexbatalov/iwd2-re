@@ -698,10 +698,8 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     field_9D10 = 0;
     m_objectType = TYPE_SPRITE;
     m_resRef = "";
-    field_532C = 0;
-    field_5330 = 0;
-    field_5334 = 0;
-    field_5338 = 1.875;
+    m_fCircleChange = 0.0;
+    m_fCurrCircleChange = 1.0;
     m_bGlobal = FALSE;
     field_534A = 0;
     field_534E = 0;
@@ -3473,6 +3471,117 @@ void CGameSprite::ClearMarshal(BOOL unequip)
         delete m_pDialogData;
         m_pDialogData = NULL;
         m_nDialogData = 0;
+    }
+}
+
+// 0x70AFD0
+void CGameSprite::Marshal(CAreaFileCreature** pCreature)
+{
+    BOOL areaMove = FALSE;
+
+    if (m_pArea == NULL) {
+        m_pArea = g_pBaldurChitin->GetObjectGame()->m_pGameAreaMaster;
+        m_pos.x = 0;
+        m_pos.y = 0;
+        areaMove = TRUE;
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 11809
+    UTIL_ASSERT(pCreature != NULL);
+
+    m_baseStats.m_flags &= ~0x80000000;
+
+    *pCreature = new CAreaFileCreature();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 11817
+    UTIL_ASSERT(*pCreature != NULL);
+
+    // FIXME: Redundant, memset is a part of constructor.
+    memset(*pCreature, 0, sizeof(CAreaFileCreature));
+
+    if (m_pos.x < -100) {
+        m_pos.x = -100;
+        m_fCircleChange = 0.0;
+        m_fCurrCircleChange = 1.0;
+    } else if (m_pos.x > m_pArea->GetInfinity()->nAreaX + 100) {
+        m_pos.x = m_pArea->GetInfinity()->nAreaX + 100;
+        m_fCircleChange = 0.0;
+        m_fCurrCircleChange = 1.0;
+    }
+
+    if (m_pos.y < -100) {
+        m_pos.y = -100;
+        m_fCircleChange = 0.0;
+        m_fCurrCircleChange = 1.0;
+    } else if (m_pos.y > m_pArea->GetInfinity()->nAreaY + 100) {
+        m_pos.y = m_pArea->GetInfinity()->nAreaY + 100;
+        m_fCircleChange = 0.0;
+        m_fCurrCircleChange = 1.0;
+    }
+
+    (*pCreature)->m_posX = static_cast<WORD>(m_pos.x);
+    (*pCreature)->m_posY = static_cast<WORD>(m_pos.y);
+    (*pCreature)->m_startingPosX = static_cast<WORD>(m_posStart.x);
+    (*pCreature)->m_startingPosY = static_cast<WORD>(m_posStart.y);
+    (*pCreature)->m_type = m_type;
+    (*pCreature)->m_expirationTime = m_expirationTime != -1
+        ? m_expirationTime / CTimerWorld::TIMESCALE_MSEC_PER_SEC
+        : -1;
+    (*pCreature)->m_huntingRange = m_huntingRange;
+    (*pCreature)->m_followRange = m_followRange;
+    (*pCreature)->m_timeOfDayVisible = m_timeOfDayVisible;
+
+    BYTE* creatureData;
+    LONG creatureSize;
+    Marshal(&creatureData, &creatureSize, &((*pCreature)->m_facing), TRUE, TRUE);
+
+    // FIXME: Unsafe x64 conversion.
+    (*pCreature)->m_creatureOffset = reinterpret_cast<DWORD>(creatureData);
+    (*pCreature)->m_creatureSize = creatureSize;
+
+    (*pCreature)->m_numberTimesTalkedTo = m_nNumberOfTimesTalkedTo;
+
+    strncpy((*pCreature)->m_scriptName, m_scriptName, SCRIPTNAME_SIZE);
+
+    if (m_overrideScript != NULL) {
+        // NOTE: Uninline.
+        m_overrideScript->m_cResRef.GetResRef((*pCreature)->m_overrideScriptOverride);
+    }
+
+    if (m_special3Script != NULL) {
+        // NOTE: Uninline.
+        m_special3Script->m_cResRef.GetResRef((*pCreature)->m_special3ScriptOverride);
+    }
+
+    if (m_special2Script != NULL) {
+        // NOTE: Uninline.
+        m_special2Script->m_cResRef.GetResRef((*pCreature)->m_special2ScriptOverride);
+    }
+
+    if (m_combatScript != NULL) {
+        // NOTE: Uninline.
+        m_combatScript->m_cResRef.GetResRef((*pCreature)->m_combatScriptOverride);
+    }
+
+    if (m_movementScript != NULL) {
+        // NOTE: Uninline.
+        m_movementScript->m_cResRef.GetResRef((*pCreature)->m_movementScriptOverride);
+    }
+
+    if (m_teamScript != NULL) {
+        // NOTE: Uninline.
+        m_teamScript->m_cResRef.GetResRef((*pCreature)->m_teamScriptOverride);
+    }
+
+    if (m_special1Script != NULL) {
+        // NOTE: Uninline.
+        m_special1Script->m_cResRef.GetResRef((*pCreature)->m_special1ScriptOverride);
+    }
+
+    if (areaMove) {
+        m_pArea = NULL;
     }
 }
 
