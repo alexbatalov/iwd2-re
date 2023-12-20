@@ -76,8 +76,8 @@ CGameArea::CGameArea(BYTE id)
     m_visibility.m_pDynamicHeight = NULL;
     memset(&m_header, 0, sizeof(m_header));
     m_groupMove = FALSE;
-    field_432 = 0;
-    field_434 = 0;
+    m_nRandomMonster = 0;
+    m_nVisibleMonster = 0;
     m_pbmLumNight = NULL;
     field_41E = 0;
     m_nInitialAreaID = 0;

@@ -150,6 +150,8 @@
 
 #define MAX_SELECTABLE_FEAT_USE_LEVELS 5
 
+#define STATICBUFFERSIZE_CGAMESPRITE 128
+
 class CBlood;
 class CGameButtonList;
 class CMemINIValue;
@@ -387,12 +389,14 @@ public:
 
     static const CString TOKEN_SPECIALABILITY;
 
+    static BYTE STATICBUFFER[STATICBUFFERSIZE_CGAMESPRITE];
     static BOOLEAN SHOW_CHARACTER_HP;
     static BOOLEAN GRAVITY_IS_DOWN;
     static INT m_bRollFeedbackEnabled;
 
     CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, DWORD expirationTime, WORD huntingRange, WORD followRange, DWORD timeOfDayVisible, CPoint startPos, WORD facing);
     /* 0000 */ ~CGameSprite() override;
+    /* 0008 */ void AddToArea(CGameArea* pNewArea, const CPoint& pos, LONG posZ, BYTE listType) override;
     /* 0014 */ LONG GetTargetId() override;
     /* 0018 */ void GetNextWaypoint(CPoint* pt) override;
     /* 0034 */ BOOL IsOver(const CPoint& pt) override;
@@ -414,6 +418,7 @@ public:
 
     void AddBlood(SHORT nHeight, SHORT nDirection, SHORT nType);
     void SetPath(LONG* pPath, SHORT nPath);
+    void CheckIfVisible();
     void DropPath();
     void DropSearchRequest();
     BOOL MoveToBack();
@@ -450,6 +455,7 @@ public:
     void Marshal(CAreaFileCreature** pCreature);
     void Marshal(BYTE** pCreature, LONG* creatureSize, WORD* facing, BOOLEAN a4, BOOLEAN a5);
     void Marshal(CSavedGamePartyCreature& partyCreature, BOOLEAN bNetworkMessage);
+    void MarshalMessage(BYTE** pData, DWORD* dwSize);
     void Unmarshal(CSavedGamePartyCreature* pCreature, BOOLEAN bPartyMember, BOOLEAN bProgressBarInPlace);
     void Unmarshal(BYTE* pCreature, LONG creatureSize, WORD facing, int a4);
     void UnmarshalScripts();
@@ -727,7 +733,7 @@ public:
     /* 4E00 */ CSound m_sndReady;
     /* 4E64 */ CSound m_sndDeath;
     /* 4FF4 */ int m_nNumberOfTimesTalkedTo;
-    /* 4FF8 */ int field_4FF8;
+    /* 4FF8 */ BOOL m_bSeenPartyBefore;
     /* 5004 */ LONG m_nNumberOfTimesInteractedWith[24];
     /* 5064 */ SHORT m_nHappiness;
     /* 5066 */ CAIObjectType m_interactingWith;
@@ -771,8 +777,7 @@ public:
     /* 5340 */ int field_5340;
     /* 5344 */ int field_5344;
     /* 5348 */ SHORT m_nSequence;
-    /* 534A */ int field_534A;
-    /* 534E */ int field_534E;
+    /* 534A */ CPoint m_posExact;
     /* 5352 */ int field_5352;
     /* 5356 */ int field_5356;
     /* 535A */ CPoint m_posDest;
@@ -801,7 +806,7 @@ public:
     /* 53E2 */ int field_53E2;
     /* 53E6 */ int field_53E6;
     /* 53EA */ CVidBitmap m_vbPortraitSmall;
-    /* 54A4 */ int field_54A4;
+    /* 54A4 */ BOOL m_bVisibleMonster;
     /* 54A8 */ int field_54A8;
     /* 54AC */ int field_54AC;
     /* 54B0 */ int field_54B0;

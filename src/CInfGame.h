@@ -365,6 +365,7 @@ public:
     /* 1B92 */ BOOLEAN m_bFromNewGame;
     /* 1B93 */ BOOLEAN m_bInDestroyGame;
     /* 1B94 */ BOOLEAN m_bAnotherPlayerJoinedGame;
+    /* 1B95 */ BOOLEAN m_bInAreaTransition;
     /* 1B96 */ SHORT m_nState;
     /* 1B98 */ BYTE m_iconIndex;
     /* 1B99 */ CResRef m_iconResRef;

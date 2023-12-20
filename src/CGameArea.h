@@ -267,8 +267,8 @@ public:
     /* 0426 */ DWORD m_nFirstObject;
     /* 042A */ DWORD m_dwLastProgressRenderTickCount;
     /* 042E */ DWORD m_dwLastProgressMsgTickCount;
-    /* 0432 */ unsigned char field_432;
-    /* 0434 */ short field_434;
+    /* 0432 */ BYTE m_nRandomMonster;
+    /* 0434 */ SHORT m_nVisibleMonster;
     /* 0436 */ unsigned char field_436;
     /* 0438 */ int field_438;
     /* 043C */ CGameAreaNotes m_cGameAreaNotes;

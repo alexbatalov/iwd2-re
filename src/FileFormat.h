@@ -560,10 +560,15 @@ public:
     /* 027C */ RESREF m_scriptCombat;
     /* 0284 */ RESREF m_scriptSpecial3;
     /* 028C */ RESREF m_scriptMovement;
-    /* 0294 */ unsigned char field_294;
+    /* 0294 */ BOOLEAN field_294;
+    /* 02E2 */ BOOLEAN field_2E2;
     /* 02E4 */ SHORT field_2E4;
     /* 02E6 */ SHORT field_2E6;
     /* 02E8 */ SHORT field_2E8;
+    /* 02E9 */ BYTE field_2E9;
+    /* 02EA */ BOOLEAN field_2EA[6];
+    /* 02F7 */ BOOLEAN field_2F7;
+    /* 02F8 */ BOOLEAN field_2F8;
     /* 02F9 */ BYTE field_2F9;
     /* 02FA */ BYTE m_fadeSpeed;
     /* 02FB */ unsigned char field_2FB;

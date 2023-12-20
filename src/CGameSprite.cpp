@@ -17,10 +17,12 @@
 #include "CScreenCreateChar.h"
 #include "CScreenInventory.h"
 #include "CScreenWorld.h"
+#include "CSpawn.h"
 #include "CSpell.h"
 #include "CUtil.h"
 #include "CVariableHash.h"
 #include "CVidInf.h"
+#include "Icewind586B70.h"
 #include "IcewindCGameEffects.h"
 #include "IcewindCVisualEffect.h"
 #include "IcewindMisc.h"
@@ -627,6 +629,9 @@ const CResRef CGameSprite::SPIN285("SPIN285");
 // 0x8F9924
 const CString CGameSprite::TOKEN_SPECIALABILITY("SPECIALABILITYNAME");
 
+// 0x8F9350
+BYTE CGameSprite::STATICBUFFER[STATICBUFFERSIZE_CGAMESPRITE];
+
 // 0x8F950C
 BOOLEAN CGameSprite::SHOW_CHARACTER_HP;
 
@@ -701,8 +706,8 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     m_fCircleChange = 0.0;
     m_fCurrCircleChange = 1.0;
     m_bGlobal = FALSE;
-    field_534A = 0;
-    field_534E = 0;
+    m_posExact.x = 0;
+    m_posExact.y = 0;
     field_5352 = 0;
     field_5356 = 0;
     m_posDest.x = 0;
@@ -785,7 +790,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     m_curSpell = 0;
     m_curItem = 0;
     m_nNumberOfTimesTalkedTo = 0;
-    field_4FF8 = 0;
+    m_bSeenPartyBefore = 0;
     field_710A = 0;
     field_710C = 0;
     field_710E = 0;
@@ -840,7 +845,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     field_54AC = 0;
     field_54B0 = -1;
     field_54B4 = -1;
-    field_54A4 = 0;
+    m_bVisibleMonster = 0;
     m_bSelected = FALSE;
     field_50BA = 0;
     field_50B6 = 0;
@@ -1159,6 +1164,153 @@ BOOL CGameSprite::GetCanSeeInvisible()
         || (m_baseStats.m_flags & 0x10000) != 0;
 }
 
+// 0x6F40F0
+void CGameSprite::AddToArea(CGameArea* pNewArea, const CPoint& pos, LONG posZ, BYTE listType)
+{
+    BOOLEAN v1 = FALSE;
+
+    CGameObject::AddToArea(pNewArea, pos, posZ, listType);
+    m_posExact.x = m_pos.x << 10;
+    m_posExact.y = (m_pos.y << 12) / 3;
+    m_posOld = m_pos;
+    field_562C = 1;
+
+    if (m_active && m_activeAI && m_activeImprisonment) {
+        CheckIfVisible();
+    }
+
+    switch (listType) {
+    case CGAMEOBJECT_LIST_FRONT:
+        if (m_active
+            && m_activeAI
+            && m_activeImprisonment
+            && (m_derivedStats.m_generalState & STATE_DEAD) == 0) {
+            // NOTE: Uninline.
+            pNewArea->AddToMarkers(m_id);
+
+            m_pArea->m_search.AddObject(CPoint(m_pos.x / CPathSearch::GRID_SQUARE_SIZEX,
+                                            m_pos.y / CPathSearch::GRID_SQUARE_SIZEY),
+                m_typeAI.GetEnemyAlly(),
+                m_animation.GetPersonalSpace(),
+                field_54A8,
+                field_7430);
+        }
+        break;
+    case CGAMEOBJECT_LIST_BACK:
+        if (m_active && m_activeAI && m_activeImprisonment) {
+            pNewArea->IncrHeightDynamic(m_pos);
+        }
+        break;
+    case CGAMEOBJECT_LIST_FLIGHT:
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+        // __LINE__: 1528
+        UTIL_ASSERT(FALSE);
+    }
+
+    SetFootstepChannel();
+
+    if ((m_derivedStats.m_generalState & STATE_SILENCED) == 0) {
+        if (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bFootStepsSounds
+            || g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(m_id) == -1) {
+            char* pSndReady = m_animation.GetSndReady();
+            if (*pSndReady != '\0') {
+                m_sndReady.SetResRef(CResRef(pSndReady), TRUE, TRUE);
+                delete pSndReady;
+                m_sndReady.SetLoopingFlag(1);
+                m_sndReady.Play(m_pos.x, m_pos.y, m_posZ, FALSE);
+            }
+        }
+    }
+
+    m_currentArea = pNewArea->m_resRef;
+
+    if (m_bGlobal) {
+        CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+        // __LINE__: 1548
+        UTIL_ASSERT(pGame != NULL);
+
+        if (pGame->GetCharacterPortraitNum(m_id) != -1
+            && Animate()) {
+            m_posLastVisMapEntry = pos;
+            pNewArea->m_visibility.AddCharacter(m_posLastVisMapEntry,
+                m_id,
+                m_visibleTerrainTable);
+            if (pNewArea->m_nCharacters != -1) {
+                pNewArea->m_nCharacters++;
+            } else {
+                pNewArea->m_nCharacters = 1;
+            }
+        }
+    } else if (m_type == 1) {
+        pNewArea->m_nRandomMonster++;
+    }
+
+    if (!g_pBaldurChitin->GetObjectGame()->m_bInLoadGame
+        && !g_pBaldurChitin->GetObjectGame()->m_bInLoadArea
+        && !g_pBaldurChitin->GetObjectGame()->m_bInAreaTransition
+        && !g_pBaldurChitin->GetBaldurMessage()->m_bInOnObjectAdd) {
+        BYTE* pData = STATICBUFFER;
+        DWORD dwSize;
+        MarshalMessage(&pData, &dwSize);
+        g_pBaldurChitin->GetBaldurMessage()->ObjectAdd(m_id, GetObjectType(), pData, dwSize);
+
+        if (InControl()
+            && g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+            m_cLastSpriteUpdate.Initialize(TRUE);
+            CMessage* message = new CMessageSpriteUpdate(this, m_id, m_id);
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+        }
+
+        v1 = TRUE;
+    }
+
+    if (m_pArea == NULL) {
+        // FIXME: Unused.
+        CString sText("Sprite ");
+        if (m_sName.GetLength() != 0) {
+            sText += m_sName;
+        } else {
+            sText += "Unknown";
+        }
+        sText += " has a NULL m_pArea member in AddToArea() function!";
+    }
+
+    if (pNewArea != NULL) {
+        if (g_pBaldurChitin->GetObjectGame()->m_bInLoadGame
+            && pNewArea->mpSpawner->m_bInSpawn == TRUE
+            && !v1) {
+            BYTE* pData = STATICBUFFER;
+            DWORD dwSize;
+            MarshalMessage(&pData, &dwSize);
+            g_pBaldurChitin->GetBaldurMessage()->ObjectAdd(m_id, GetObjectType(), pData, dwSize);
+        }
+    }
+
+    if (m_baseStats.field_294) {
+        m_baseStats.field_294 = FALSE;
+        sub_75F3D0(1);
+        if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+            CMessage* message = new CMessage90(m_id, m_id, 1);
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+        }
+    }
+
+    if (m_baseStats.field_2F8) {
+        m_removeFromArea = TRUE;
+    }
+
+    if (!m_baseStats.field_2E2) {
+        sub_75F240();
+        m_baseStats.field_2E2 = TRUE;
+    }
+
+    Icewind586B70::Instance()->sub_586FC0(this);
+}
+
 // 0x6F2D80
 CGameSprite::~CGameSprite()
 {
@@ -1307,6 +1459,65 @@ void CGameSprite::GetNextWaypoint(CPoint* pt)
         pt->y += CPathSearch::GRID_SQUARE_SIZEY / 2;
     } else {
         *pt = m_pos;
+    }
+}
+
+// 0x6FBF10
+void CGameSprite::CheckIfVisible()
+{
+    if (g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(m_id) != -1
+        || m_animation.GetListType() == LIST_FLIGHT) {
+        if (Animate()) {
+            m_canBeSeen = 4 * (VISIBLE_DELAY + 1);
+            return;
+        }
+    }
+
+    for (SHORT nPortrait = 0; nPortrait < g_pBaldurChitin->GetObjectGame()->GetNumCharacters(); nPortrait++) {
+        CGameSprite* pSprite;
+
+        BYTE rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(g_pBaldurChitin->GetObjectGame()->GetCharacterId(nPortrait),
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+        if (rc == CGameObjectArray::SUCCESS) {
+            if (pSprite->GetArea() == m_pArea
+                && pSprite->Animate()
+                && m_pArea->CheckLOS(m_pos, pSprite->GetPos(), m_visibleTerrainTable, TRUE)) {
+                if (!m_bVisibleMonster
+                    && m_typeAI.GetEnemyAlly() >= CAIObjectType::EA_EVILCUTOFF
+                    && Animate()
+                    && ((m_derivedStats.m_generalState & STATE_INVISIBLE) == 0 || (m_baseStats.field_2FC & 0x1) != 0)
+                    && !m_baseStats.field_294
+                    && (m_baseStats.m_flags & 0x8000) == 0) {
+                    if (m_pArea->m_nVisibleMonster == 0) {
+                        AutoPause(0x200);
+                    }
+
+                    m_bVisibleMonster = TRUE;
+                    m_pArea->m_nVisibleMonster++;
+                }
+
+                if (m_canBeSeen == 0) {
+                    CAITrigger becameVisible(CAITRIGGER_BECAMEVISIBLE, 0);
+                    m_bSeenPartyBefore = TRUE;
+                    CMessage* message = new CMessageSetTrigger(becameVisible, m_id, pSprite->GetId());
+                    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+                }
+
+                m_canBeSeen = 4 * (VISIBLE_DELAY + 1);
+
+                g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(g_pBaldurChitin->GetObjectGame()->GetCharacterId(nPortrait),
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+
+                break;
+            } else {
+                g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(g_pBaldurChitin->GetObjectGame()->GetCharacterId(nPortrait),
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            }
+        }
     }
 }
 
@@ -3735,6 +3946,74 @@ void CGameSprite::Marshal(CSavedGamePartyCreature& partyCreature, BOOLEAN bNetwo
     partyCreature.m_nNumberOfTimesTalkedTo = m_nNumberOfTimesTalkedTo;
     m_secondarySounds.GetResRef(partyCreature.m_secondarySounds);
     memcpy(partyCreature.field_25E, field_725A, 32);
+}
+
+// 0x70C3F0
+void CGameSprite::MarshalMessage(BYTE** pData, DWORD* dwSize)
+{
+    CResRef spriteResRef;
+    CString sSpriteString;
+    BYTE nSpriteStringLength;
+    CResRef areaResRef;
+    CString sAreaString;
+    BYTE nAreaStringLength;
+    CPoint pos;
+    BYTE enemyAlly;
+    DWORD cnt;
+
+    spriteResRef = m_resRef;
+    spriteResRef.CopyToString(sSpriteString);
+    nSpriteStringLength = static_cast<BYTE>(sSpriteString.GetLength());
+
+    areaResRef = m_pArea->m_resRef;
+    areaResRef.CopyToString(sAreaString);
+    nAreaStringLength = static_cast<BYTE>(sAreaString.GetLength());
+
+    pos = GetPos();
+    enemyAlly = m_startTypeAI.GetEnemyAlly();
+
+    // __FILE__: .\Include\ObjCreature.h
+    // __LINE__: 12428
+    UTIL_ASSERT(nAreaStringLength != 0);
+
+    *dwSize = sizeof(BYTE)
+        + nSpriteStringLength
+        + sizeof(BYTE)
+        + nAreaStringLength
+        + sizeof(LONG)
+        + sizeof(LONG)
+        + sizeof(BYTE);
+
+    // __FILE__: .\Include\ObjCreature.h
+    // __LINE__: 12440
+    UTIL_ASSERT(*dwSize <= STATICBUFFERSIZE_CGAMESPRITE);
+
+    cnt = 0;
+
+    *reinterpret_cast<BYTE*>(*pData + cnt) = nSpriteStringLength;
+    cnt += sizeof(BYTE);
+
+    memcpy(*pData + cnt, sSpriteString.GetBuffer(nSpriteStringLength), nSpriteStringLength);
+    cnt += nSpriteStringLength;
+
+    *reinterpret_cast<BYTE*>(*pData + cnt) = nAreaStringLength;
+    cnt += sizeof(BYTE);
+
+    memcpy(*pData + cnt, sSpriteString.GetBuffer(nAreaStringLength), nAreaStringLength);
+    cnt += nAreaStringLength;
+
+    *reinterpret_cast<LONG*>(*pData + cnt) = pos.x;
+    cnt += sizeof(LONG);
+
+    *reinterpret_cast<LONG*>(*pData + cnt) = pos.y;
+    cnt += sizeof(LONG);
+
+    *reinterpret_cast<BYTE*>(*pData + cnt) = enemyAlly;
+    cnt += sizeof(BYTE);
+
+    // __FILE__: .\Include\ObjCreature.h
+    // __LINE__: 12481
+    UTIL_ASSERT(cnt == *dwSize);
 }
 
 // 0x70C600
