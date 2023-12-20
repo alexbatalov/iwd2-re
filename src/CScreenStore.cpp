@@ -812,6 +812,100 @@ void CScreenStore::OnPortraitLClick(DWORD nPortrait)
     }
 }
 
+// 0x672A00
+void CScreenStore::TimerAsynchronousUpdate()
+{
+    if (m_pChatDisplay != NULL) {
+        m_nChatMessageCount = g_pBaldurChitin->GetBaldurMessage()->m_cChatBuffer.UpdateTextDisplay(m_pChatDisplay,
+            m_nChatMessageCount);
+    }
+
+    CGameSprite* pCustomer = static_cast<CGameSprite*>(m_cAICustomer.sub_40CB20(NULL, CGameObject::TYPE_SPRITE, FALSE));
+    if (m_pMainPanel != NULL && m_pMainPanel->m_nID != 5) {
+        if (pCustomer != NULL
+            && (pCustomer->GetBaseStats()->m_generalState & STATE_DEAD) == 0
+            && (pCustomer->GetDerivedStats()->m_generalState & STATE_DEAD) == 0) {
+            if (!pCustomer->InControl()) {
+                SelectEngine(g_pBaldurChitin->GetScreenWorld());
+                g_pBaldurChitin->GetScreenWorld()->StopStore();
+                g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(pCustomer->GetId(),
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            }
+        } else {
+            SelectEngine(g_pBaldurChitin->GetScreenWorld());
+            g_pBaldurChitin->GetScreenWorld()->StopStore();
+            if (pCustomer != NULL) {
+                g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(pCustomer->GetId(),
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            }
+        }
+    } else {
+        if (pCustomer != NULL) {
+            if (m_pStore->GetType() == 4) {
+                if (pCustomer->FindItemPersonal(m_pStore->m_resRef.GetResRefStr(), 0, FALSE) == -1) {
+                    SelectEngine(g_pBaldurChitin->GetScreenWorld());
+                    g_pBaldurChitin->GetScreenWorld()->StopStore();
+                    if (pCustomer != NULL) {
+                        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(pCustomer->GetId(),
+                            CGameObjectArray::THREAD_ASYNCH,
+                            INFINITE);
+                    }
+                    return;
+                }
+            }
+
+            if (m_pBag != NULL) {
+                if (pCustomer->FindItemPersonal(m_pBag->m_resRef.GetResRefStr(), 0, FALSE) == -1) {
+                    SelectEngine(g_pBaldurChitin->GetScreenWorld());
+                    g_pBaldurChitin->GetScreenWorld()->StopStore();
+                    if (pCustomer != NULL) {
+                        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(pCustomer->GetId(),
+                            CGameObjectArray::THREAD_ASYNCH,
+                            INFINITE);
+                    }
+                    return;
+                }
+            }
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(pCustomer->GetId(),
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+
+            CGameSprite* pProprietor = static_cast<CGameSprite*>(m_cAIProprietor.sub_40CB20(NULL, CGameObject::TYPE_SPRITE, FALSE));
+            if (pProprietor != NULL
+                && pProprietor->GetAIType().GetEnemyAlly() != CAIObjectType::EA_ENEMY
+                && (pProprietor->GetBaseStats()->m_generalState & STATE_DEAD) == 0
+                && (pProprietor->GetDerivedStats()->m_generalState & STATE_DEAD) == 0) {
+                g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(pCustomer->GetId(),
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+                g_pBaldurChitin->GetScreenWorld()->AsynchronousUpdate(FALSE);
+                UpdateCursorShape(0);
+                m_cUIManager.TimerAsynchronousUpdate();
+                g_pBaldurChitin->GetObjectCursor()->CursorUpdate(pVidMode);
+            } else {
+                SelectEngine(g_pBaldurChitin->GetScreenWorld());
+                g_pBaldurChitin->GetScreenWorld()->StopStore();
+                if (pCustomer != NULL) {
+                    g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(pCustomer->GetId(),
+                        CGameObjectArray::THREAD_ASYNCH,
+                        INFINITE);
+                }
+            }
+        } else {
+            SelectEngine(g_pBaldurChitin->GetScreenWorld());
+            g_pBaldurChitin->GetScreenWorld()->StopStore();
+            if (pCustomer != NULL) {
+                g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(pCustomer->GetId(),
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+            }
+        }
+    }
+}
+
 // 0x672D50
 void CScreenStore::TimerSynchronousUpdate()
 {
