@@ -1205,7 +1205,7 @@ void CScreenStore::sub_6734F0(CUIPanel* pPanel)
     pText->m_labelFont.GetFrameSize(64, 0, frameSize, FALSE);
 
     SHORT nFontHeight = pText->m_labelFont.GetFontHeight(FALSE);
-    pText->field_AB4 = (nFontHeight + frameSize.cy - 1) / nFontHeight;
+    pText->field_AB4 = static_cast<SHORT>((nFontHeight + frameSize.cy - 1) / nFontHeight);
 
     pText->RemoveAll();
     pItem->sub_4EA580(pText, RGB(200, 200, 0));
@@ -2806,7 +2806,7 @@ void CScreenStore::OnBuyDrinkButtonClick(INT nButton)
                 INT nRecoveryRate;
                 INT nIntoxicationCap;
 
-                pGame->GetRuleTables().GetIntoxicationInfo(pSprite->GetDerivedStats()->m_nCON,
+                pGame->GetRuleTables().GetIntoxicationInfo(static_cast<BYTE>(pSprite->GetDerivedStats()->m_nCON),
                     nIntoxicationRate,
                     nRecoveryRate,
                     nIntoxicationCap);
