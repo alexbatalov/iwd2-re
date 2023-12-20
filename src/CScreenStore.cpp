@@ -2714,7 +2714,71 @@ void CScreenStore::sub_67B030()
 // 0x67B640
 void CScreenStore::OnIdentifyItemButtonClick()
 {
-    // TODO: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+    // __LINE__: 6643
+    UTIL_ASSERT(pGame != NULL);
+
+    CSingleLock renderLock(&(m_cUIManager.field_36), FALSE);
+    renderLock.Lock(INFINITE);
+
+    DWORD nPartyGold = pGame->GetGameSave()->m_nPartyGold;
+    POSITION pos = m_lIdentifyItems.GetHeadPosition();
+    while (pos != NULL) {
+        CScreenStoreItem* pStoreItem = m_lIdentifyItems.GetNext(pos);
+        if (pStoreItem->m_bSelected) {
+            break;
+        }
+    }
+
+    if (pos != NULL) {
+        if (m_dwIdentifyCost <= nPartyGold) {
+            CUIPanel* pPanel = m_cUIManager.GetPanel(4);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+            // __LINE__: 6665
+            UTIL_ASSERT(pPanel != NULL);
+
+            CUIControlTextDisplay* pText = static_cast<CUIControlTextDisplay*>(pPanel->GetControl(23));
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenStore.cpp
+            // __LINE__: 6667
+            UTIL_ASSERT(pText != NULL);
+
+            pos = m_lIdentifyItems.GetHeadPosition();
+            while (pos != NULL) {
+                CScreenStoreItem* pStoreItem = m_lIdentifyItems.GetNext(pos);
+                if (pStoreItem->m_bSelected
+                    && static_cast<LONG>(nPartyGold) >= pStoreItem->m_nValue) {
+                    pStoreItem->m_pItem->m_flags |= 0x1;
+                    nPartyGold -= pStoreItem->m_nValue;
+                    UpdateText(pText, "%s", FetchString(pStoreItem->m_pItem->GetDescription()));
+                    UpdateText(pText, "");
+                    UpdateText(pText, "-----------------------------");
+                    UpdateText(pText, "");
+                }
+            }
+
+            pGame->AddPartyGold(nPartyGold - pGame->GetGameSave()->m_nPartyGold);
+            UpdateIdentifyItems();
+
+            // NOTE: Uninline.
+            SetTopIdentifyItem(0);
+
+            // NOTE: Uninline.
+            UpdateIdentifyCost();
+
+            UpdateMainPanel();
+        } else {
+            m_nErrorState = 2;
+            m_strErrorText = 11050;
+            m_strErrorButtonText[0] = 11973;
+            SummonPopup(10);
+        }
+    }
+
+    renderLock.Unlock();
 }
 
 // 0x67B8A0
