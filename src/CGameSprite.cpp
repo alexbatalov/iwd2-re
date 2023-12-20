@@ -1097,7 +1097,7 @@ const BYTE* CGameSprite::GetVisibleTerrainTable()
     return m_visibleTerrainTable;
 }
 
-// 0x
+// 0x6F2B60
 BOOL CGameSprite::OnSearchMap()
 {
     return ((m_listType == LIST_FRONT || (m_derivedStats.m_generalState & STATE_SLEEPING) != 0))
