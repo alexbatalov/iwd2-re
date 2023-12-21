@@ -276,3 +276,20 @@ BOOL CGameEffectList::IsTypeOnList(WORD effectID)
     }
     return FALSE;
 }
+
+// 0x4C0890
+BOOL CGameEffectList::ModifyAllOfType(WORD effectID, LONG newEffectAmount, BOOL increment)
+{
+    POSITION pos = GetHeadPosition();
+    while (pos != NULL) {
+        CGameEffect* pEffect = GetNext(pos);
+        if (pEffect->m_effectID == effectID) {
+            if (increment) {
+                pEffect->m_effectAmount += newEffectAmount;
+            } else {
+                pEffect->m_effectAmount = newEffectAmount;
+            }
+        }
+    }
+    return TRUE;
+}
