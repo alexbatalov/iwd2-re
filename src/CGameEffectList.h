@@ -18,6 +18,7 @@ public:
     void Unmarshal(BYTE* data, ULONG nSize, CGameSprite* pSprite, BYTE version);
     BOOL HandleList(CGameSprite* pSprite);
     BOOL CheckEffects();
+    BOOL IsTypeOnList(WORD effectID);
 
     /* 001C */ POSITION m_posNext;
     /* 0020 */ POSITION m_posCurrent;

@@ -263,3 +263,16 @@ BOOL CGameEffectList::CheckEffects()
     }
     return FALSE;
 }
+
+// 0x4C0800
+BOOL CGameEffectList::IsTypeOnList(WORD effectID)
+{
+    POSITION pos = GetHeadPosition();
+    while (pos != NULL) {
+        CGameEffect* pEffect = GetNext(pos);
+        if (pEffect->m_effectID == effectID) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
