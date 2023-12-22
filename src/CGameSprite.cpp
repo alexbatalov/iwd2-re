@@ -179,6 +179,33 @@ const ITEM_ABILITY CGameSprite::DEFAULT_ATTACK = {
 // 0x85BCA0
 const LONG CGameSprite::STANDARD_VERBAL_CONSTANT_LENGTH = 300;
 
+// 0x85C09C
+const SHORT CGameSprite::FLY_RIGHT = -1;
+
+// 0x85C09E
+const SHORT CGameSprite::FLY_LEFT = 1;
+
+// 0x85C0A0
+const SHORT CGameSprite::FLY_RADIUS_RANDOM = 0x380;
+
+// 0x85C0A2
+const SHORT CGameSprite::FLY_RADIUS_BASE = 0x80;
+
+// 0x85C0A4
+const SHORT CGameSprite::FLY_0 = 0;
+
+// 0x85C0A6
+const SHORT CGameSprite::FLY_90 = 1;
+
+// 0x85C0A8
+const SHORT CGameSprite::FLY_180 = 2;
+
+// 0x85C0AA
+const SHORT CGameSprite::FLY_270 = 3;
+
+// 0x85C0AC
+const SHORT CGameSprite::FLY_360 = 4;
+
 // 0x85C0B4
 const WORD CGameSprite::FEEDBACK_BACKSTAB = 1;
 
@@ -657,10 +684,9 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     m_effectExtendDirection = 0;
     m_animationRunning = FALSE;
     m_posZDelta = 0;
-    field_533E = 0;
-    field_533C = 0;
-    field_5340 = 0;
-    field_5344 = 0;
+    m_circleFacing = 0;
+    m_radius = 0;
+    m_fDirectionOffset = 0.0;
     m_skipDeltaDirection = 0;
     m_deltaDirection = 0;
     m_walkBackwards = FALSE;
@@ -4419,6 +4445,57 @@ void CGameSprite::SetTarget(CSearchRequest* pSearchRequest, BOOL collisionPath, 
 
     // NOTE: Uninline.
     SetIdleSequence();
+}
+
+// 0x707FB0
+void CGameSprite::SetTargetFly(BYTE circleType, BYTE facing, LONG radius)
+{
+    m_pathSearchInvalidDest = FALSE;
+    if (m_pPath != NULL) {
+        delete m_pPath;
+        m_pPath = NULL;
+    }
+
+    DropSearchRequest();
+
+    m_radius = static_cast<SHORT>(radius);
+    m_circleFacing = facing;
+    m_fCurrCircleChange = 0.0;
+    m_posOld = m_pos;
+    m_turningAbout = FALSE;
+    m_walkBackwards = FALSE;
+    SetSequence(CGAMESPRITE_SEQ_WALK);
+
+    if (circleType == FLY_0) {
+        m_circleFacing = 0;
+        m_fCircleChange = static_cast<double>(m_radius / m_animation.GetMoveScale());
+    } else {
+        m_fCircleChange = static_cast<double>(m_radius) * static_cast<double>(circleType) * 3.1415926535 / static_cast<double>(m_animation.GetMoveScale()) / 2.0;
+
+        switch (abs(4 * ((m_nDirection + 2) / 4))) {
+        case 0:
+            m_posOld.x += m_radius * m_circleFacing;
+            break;
+        case 4:
+            m_posOld.y += 3 * m_radius * m_circleFacing / 4;
+            break;
+        case 8:
+            m_posOld.x -= m_radius * m_circleFacing;
+            break;
+        case 12:
+            m_posOld.y -= 3 * m_radius * m_circleFacing / 4;
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 10009
+            UTIL_ASSERT(FALSE);
+        }
+
+        m_fDirectionOffset = static_cast<double>(8 - m_nDirection) * 3.1415926535 / 8.0;
+        if (m_circleFacing == FLY_RIGHT) {
+            m_fDirectionOffset += 3.1415926535;
+        }
+    }
 }
 
 // 0x708280

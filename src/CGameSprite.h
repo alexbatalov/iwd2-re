@@ -227,6 +227,16 @@ public:
 
     static const LONG STANDARD_VERBAL_CONSTANT_LENGTH;
 
+    static const SHORT FLY_RIGHT;
+    static const SHORT FLY_LEFT;
+    static const SHORT FLY_RADIUS_RANDOM;
+    static const SHORT FLY_RADIUS_BASE;
+    static const SHORT FLY_0;
+    static const SHORT FLY_90;
+    static const SHORT FLY_180;
+    static const SHORT FLY_270;
+    static const SHORT FLY_360;
+
     static const WORD FEEDBACK_BACKSTAB;
     static const WORD FEEDBACK_CRITICALHIT;
     static const WORD FEEDBACK_CRITICALMISS;
@@ -453,6 +463,7 @@ public:
     SHORT GetIdleSequence();
     void SetSequence(SHORT nSequence);
     void SetTarget(CSearchRequest* pSearchRequest, BOOL collisionPath, BYTE frontList);
+    void SetTargetFly(BYTE circleType, BYTE facing, LONG radius);
     void StartSpriteEffect(BYTE spriteEffect, BYTE intensityLevel, BYTE effectDuration, BOOLEAN a4);
     void RenderSpriteCover(CVidMode* pVidMode, INT nSurface, CVidCell* pVidCell, const IcewindCVisualEffect& vfx);
     void RenderDamageArrow(CGameArea* pArea, CVidMode* pVidMode, INT nSurface);
@@ -780,11 +791,10 @@ public:
     /* 532A */ BYTE m_doBounce;
     /* 532C */ double m_fCircleChange;
     /* 5334 */ double m_fCurrCircleChange;
-    /* 533C */ short field_533C;
-    /* 533E */ unsigned char field_533E;
+    /* 533C */ SHORT m_radius;
+    /* 533E */ BYTE m_circleFacing;
     /* 533F */ BOOLEAN m_bVisibilityUpdated;
-    /* 5340 */ int field_5340;
-    /* 5344 */ int field_5344;
+    /* 5340 */ double m_fDirectionOffset;
     /* 5348 */ SHORT m_nSequence;
     /* 534A */ CPoint m_posExact;
     /* 5352 */ int field_5352;
