@@ -2760,7 +2760,39 @@ void CGameSprite::OnFormationButton(const CPoint& pt)
 // 0x700BE0
 void CGameSprite::OnLightningStrike()
 {
-    // TODO: Incomplete.
+    CRect rView;
+    rView.left = m_pArea->GetInfinity()->nNewX;
+    rView.top = m_pArea->GetInfinity()->nNewY;
+    rView.right = m_pArea->GetInfinity()->nNewX + m_pArea->GetInfinity()->rViewPort.Width();
+    rView.bottom = m_pArea->GetInfinity()->nNewY + m_pArea->GetInfinity()->rViewPort.Height();
+
+    BYTE nProb = 30;
+
+    if (rView.PtInRect(m_pos)) {
+        CItem* pItem = m_equipment.m_items[CGameSpriteEquipment::SLOT_ARMOR];
+        if (pItem != NULL) {
+            WORD animType = pItem->GetAnimationType();
+            if (static_cast<BYTE>(animType) != 87) {
+                switch (static_cast<BYTE>(animType >> 8)) {
+                case 51:
+                    nProb += 35;
+                    break;
+                case 52:
+                    nProb += 40;
+                    break;
+                }
+            }
+        }
+
+        if (rand() % 100 < nProb) {
+            CAIAction strike(CAIAction::REALLYFORCESPELL, CPoint(-1, -1), 0, -1);
+            strike.m_acteeID.Set(m_typeAI);
+            strike.SetString1(CString("SpWi938"));
+
+            CMessage* message = new CMessageAddAction(strike, m_pArea->m_nAIIndex, m_id);
+            g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+        }
+    }
 }
 
 // 0x700F20
