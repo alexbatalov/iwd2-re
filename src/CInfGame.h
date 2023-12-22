@@ -196,6 +196,7 @@ public:
     BOOL DeleteSaveGame(const CString& sFileName);
     BOOL SaveGameExists(const CString& sSaveGame);
     void ApplyVolumeSliders(BOOLEAN a2);
+    void UseMagicOnGround(CPoint pt);
     void UseMagicOnObject(LONG target);
     BOOL AddCharacterToParty(LONG id, SHORT nPortraitNumber);
     BOOL RemoveCharacterFromParty(LONG id, BOOL& overflow);

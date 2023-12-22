@@ -29,6 +29,7 @@ public:
     static const SHORT MOVETOPOINTNORECTICLE;
     static const SHORT GROUPATTACK;
     static const SHORT SPELLPOINT;
+    static const SHORT USEITEMPOINT;
     static const SHORT ATTACKNOSOUND;
     static const SHORT ATTACKONEROUND;
     static const SHORT LEAVEAREALUA;

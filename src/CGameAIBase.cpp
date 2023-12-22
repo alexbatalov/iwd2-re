@@ -1851,6 +1851,12 @@ void CGameAIBase::FireSpell(const CResRef& resRef, CGameObject* target)
     // TODO: Incomplete.
 }
 
+// 0x4681E0
+void CGameAIBase::FireSpellPoint(const CResRef& resRef, const CPoint& ptTarget)
+{
+    // TODO: Incomplete.
+}
+
 // 0x4686C0
 CVariable* CGameAIBase::GetGlobalVariable(const CString& sScope, const CString& sName, int a3)
 {

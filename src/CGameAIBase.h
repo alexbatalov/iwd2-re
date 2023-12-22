@@ -122,6 +122,7 @@ public:
 
     void sub_481890(CRect* r, CArray<CRect*>& ary);
     void FireSpell(const CResRef& resRef, CGameObject* target);
+    void FireSpellPoint(const CResRef& resRef, const CPoint& ptTarget);
     static CVariable* GetGlobalVariable(const CString& sScope, const CString& sName, int a3);
     void sub_4530F0(const CAIObjectType& type);
     void sub_453110(const CAIObjectType& type);
