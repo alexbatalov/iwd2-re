@@ -231,7 +231,7 @@ public:
     /* 01D0 */ CTypedPtrList<CPtrList, CAreaFileCharacterEntryPoint*> m_entryPoints;
     /* 01EC */ BYTE m_id;
     /* 01ED */ BYTE m_nCharacters;
-    /* 01EE */ unsigned char field_1EE;
+    /* 01EE */ BYTE m_nInfravision;
     /* 01EF */ BOOLEAN m_bAreaLoaded;
     /* 01F0 */ CResRef m_resRef;
     /* 01F8 */ CResWED* m_pResWED;

@@ -127,7 +127,7 @@ CGameObject::CGameObject()
     field_6B = 0;
     field_1C = 0;
     m_listType = LIST_FRONT;
-    field_6C = 0;
+    m_AIInhibitor = 0;
 }
 
 // 0x44CB10

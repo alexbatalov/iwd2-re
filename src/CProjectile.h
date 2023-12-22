@@ -10,6 +10,7 @@ class CGameArea;
 class CProjectile : public CGameObject {
 public:
     /* 0068 */ BOOLEAN IsProjectile() override;
+    /* 006C */ virtual void Fire(CGameArea* pArea, LONG source, LONG target, CPoint targetPos, LONG nHeight, SHORT nType);
     /* 0070 */ virtual void OnArrival();
     /* 0074 */ virtual void RemoveSelf();
     /* 0078 */ virtual void DeliverEffects();
@@ -22,6 +23,7 @@ public:
     void PlaySound(CResRef resRef, BOOL loop, BOOL fireAndForget);
 
     /* 006E */ WORD m_projectileType;
+    /* 0076 */ LONG m_targetId;
     /* 007A */ LONG m_callBackProjectile;
     /* 007E */ CGameEffectList m_effectList;
     /* 00EA */ CGameArea* m_pArea;

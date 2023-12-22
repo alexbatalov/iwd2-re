@@ -129,6 +129,14 @@ BYTE CSearchBitmap::GetLOSCost(const CPoint& point, const BYTE* terrainTable, SH
     return cost;
 }
 
+// 0x547B10
+BYTE CSearchBitmap::GetCost(const CPoint& point, const BYTE* terrainTable, BYTE personalSpace, SHORT& nTableIndex, BOOL bCheckBump)
+{
+    // TODO: Incomplete.
+
+    return 0;
+}
+
 // 0x547E60
 void CSearchBitmap::AddObject(const CPoint& point, BYTE sourceSide, BYTE personalSpaceRange, int a4, unsigned char& a5)
 {

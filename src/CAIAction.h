@@ -20,12 +20,17 @@ public:
     static const SHORT USEITEM;
     static const SHORT CONTINUE;
     static const SHORT JUMPTOPOINT;
+    static const SHORT WAIT;
     static const SHORT SMALLWAIT;
+    static const SHORT FACE;
     static const SHORT RANDOMWALK;
+    static const SHORT RANDOMWALKCONTINUOUS;
     static const SHORT LEADER;
     static const SHORT MOVETOPOINTNORECTICLE;
     static const SHORT GROUPATTACK;
     static const SHORT SPELLPOINT;
+    static const SHORT ATTACKNOSOUND;
+    static const SHORT ATTACKONEROUND;
     static const SHORT LEAVEAREALUA;
     static const SHORT FORCESPELL;
     static const SHORT FORCESPELLPOINT;
@@ -36,6 +41,7 @@ public:
     static const SHORT SPELLNODEC;
     static const SHORT SPELLPOINTNODEC;
     static const SHORT GIVEPARTYGOLD;
+    static const SHORT ATTACKREEVALUATE;
     static const SHORT STARTDIALOGUENOSET;
     static const SHORT TIMEDMOVETOPOINT;
     static const SHORT BACKGROUND;

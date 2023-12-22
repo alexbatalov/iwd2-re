@@ -104,9 +104,11 @@ CBlood::~CBlood()
 }
 
 // 0x519740
-void CBlood::AsynchronousUpdate()
+BOOLEAN CBlood::AsynchronousUpdate()
 {
     // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // 0x519920

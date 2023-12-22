@@ -35,7 +35,7 @@ public:
 
     CBlood(CGameArea* pArea, LONG nX, LONG nY, LONG nZ, SHORT nDirection, USHORT nType, LONG nCharacterHeight);
     ~CBlood();
-    void AsynchronousUpdate();
+    BOOLEAN AsynchronousUpdate();
     void Render(CVidMode* pVidMode, INT nSurface);
     void CalcBoundingRect();
     void GenerateExplodingBlood(LONG nX, LONG nY, LONG nZ);

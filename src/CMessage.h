@@ -53,6 +53,7 @@ public:
     static const BYTE MSG_SUBTYPE_CMESSAGE_ENTER_STORE_MODE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_EXIT_DIALOG_MODE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_EXIT_STORE_MODE;
+    static const BYTE MSG_SUBTYPE_CMESSAGE_FIRE_PROJECTILE;
     static const BYTE MSG_SUBTYPE_CMESSAGE_INSERT_ACTION;
     static const BYTE MSG_SUBTYPE_CMESSAGE_LEAVE_PARTY;
     static const BYTE MSG_SUBTYPE_CMESSAGE_PARTY_GOLD;
@@ -1509,6 +1510,21 @@ public:
     /* 000C */ CResRef m_resRef;
     /* 0014 */ BYTE m_nAlignment;
     /* 0015 */ BYTE m_nLevel;
+};
+
+class CMessageFireProjectile : public CMessage {
+public:
+    CMessageFireProjectile(WORD projectileType, LONG projectileTargetId, const CPoint& projectileTarget, LONG height, LONG caller, LONG target, unsigned char a7);
+    SHORT GetCommType() override;
+    BYTE GetMsgType() override;
+    BYTE GetMsgSubType() override;
+
+    /* 000C */ WORD m_projectileType;
+    /* 000E */ LONG m_projectileTargetId;
+    /* 0012 */ CPoint m_projectileTarget;
+    /* 001A */ LONG m_height;
+    /* 001E */ unsigned char field_1E;
+    /* 0020 */ int field_20;
 };
 
 class CMessageStopEscapeArea : public CMessage {

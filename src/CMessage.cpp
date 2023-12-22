@@ -143,6 +143,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_EXIT_DIALOG_MODE = 24;
 // 0x84CEF0
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_EXIT_STORE_MODE = 25;
 
+// 0x84CEF1
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_FIRE_PROJECTILE = 26;
+
 // 0x84CEF2
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_INSERT_ACTION = 27;
 
@@ -14679,6 +14682,38 @@ void CMessageFamiliarRemoveResRef::Run()
     g_pBaldurChitin->GetObjectGame()->RemoveFamiliarResRef(m_resRef,
         m_nAlignment,
         m_nLevel);
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x500470
+CMessageFireProjectile::CMessageFireProjectile(WORD projectileType, LONG projectileTargetId, const CPoint& projectileTarget, LONG height, LONG caller, LONG target, unsigned char a7)
+    : CMessage(caller, target)
+{
+    m_projectileType = projectileType;
+    m_projectileTargetId = projectileTargetId;
+    m_projectileTarget = projectileTarget;
+    m_height = height;
+    field_1E = a7;
+    field_20 = 0;
+}
+
+// 0x453510
+SHORT CMessageFireProjectile::GetCommType()
+{
+    return BROADCAST;
+}
+
+// 0x40A0E0
+BYTE CMessageFireProjectile::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x5004C0
+BYTE CMessageFireProjectile::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_FIRE_PROJECTILE;
 }
 
 // -----------------------------------------------------------------------------

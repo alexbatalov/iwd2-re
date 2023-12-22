@@ -49,7 +49,7 @@ CGameArea::CGameArea(BYTE id)
     m_nCurrentSong = 0;
     m_id = id;
     m_nCharacters = 0;
-    field_1EE = 0;
+    m_nInfravision = 0;
     m_pResWED = NULL;
     m_bAreaLoaded = 0;
     InitializeCriticalSection(&field_1FC);

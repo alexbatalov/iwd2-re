@@ -86,7 +86,7 @@ public:
     /* 0066 */ LONG m_remoteObjectID;
     /* 006A */ BYTE m_AISpeed;
     /* 006B */ unsigned char field_6B;
-    /* 006C */ unsigned char field_6C;
+    /* 006C */ BYTE m_AIInhibitor;
 };
 
 #endif /* CGAMEOBJECT_H_ */

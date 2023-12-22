@@ -2,6 +2,7 @@
 #define CGAMESPRITE_H_
 
 #include "CAIObjectType.h"
+#include "CBounceList.h"
 #include "CButtonData.h"
 #include "CDerivedStats.h"
 #include "CGameAIBase.h"
@@ -397,6 +398,7 @@ public:
     CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, DWORD expirationTime, WORD huntingRange, WORD followRange, DWORD timeOfDayVisible, CPoint startPos, WORD facing);
     /* 0000 */ ~CGameSprite() override;
     /* 0008 */ void AddToArea(CGameArea* pNewArea, const CPoint& pos, LONG posZ, BYTE listType) override;
+    /* 000C */ void AIUpdate() override;
     /* 0014 */ LONG GetTargetId() override;
     /* 0018 */ void GetNextWaypoint(CPoint* pt) override;
     /* 0034 */ BOOL IsOver(const CPoint& pt) override;
@@ -417,7 +419,11 @@ public:
     /* 00C4 */ virtual void ResetAIType();
 
     void AddBlood(SHORT nHeight, SHORT nDirection, SHORT nType);
+    void AIUpdateWalk();
     void SetPath(LONG* pPath, SHORT nPath);
+    BOOL sub_6FB440();
+    void AIUpdateFly();
+    void ChangeDirection();
     void CheckIfVisible();
     void DropPath();
     void DropSearchRequest();
@@ -451,6 +457,7 @@ public:
     void RenderSpriteCover(CVidMode* pVidMode, INT nSurface, CVidCell* pVidCell, const IcewindCVisualEffect& vfx);
     void RenderDamageArrow(CGameArea* pArea, CVidMode* pVidMode, INT nSurface);
     void RenderSpriteEffect(CVidMode* pVidMode, INT nSurface);
+    void UpdateSpriteEffect();
     void ClearMarshal(BOOL unequip);
     void Marshal(CAreaFileCreature** pCreature);
     void Marshal(BYTE** pCreature, LONG* creatureSize, WORD* facing, BOOLEAN a4, BOOLEAN a5);
@@ -557,6 +564,7 @@ public:
     SHORT Enemy();
     SHORT SetDialog();
     void SelectWeaponAbility(unsigned char a1, unsigned char a2, unsigned char a3, unsigned char a4);
+    void sub_756930(CItem* pItem, CItem* pLauncher);
     SHORT EquipItem();
     SHORT FindTraps();
     SHORT Panic();
@@ -606,7 +614,7 @@ public:
     void sub_4531B0();
     CGameEffectList* GetEquipedEffectList();
     CGameEffectList* GetTimedEffectList();
-    void sub_4531E0(int a1);
+    void SetStealthGreyOut(LONG greyOut);
     void AddPortraitIcon(int icon);
     void RemovePortraitIcon(int icon);
     CGameSpriteSpellList* GetInnateSpells();
@@ -718,7 +726,7 @@ public:
     /* 4AD8 */ CGameSpriteEquipment m_equipment;
     /* 4BAC */ BYTE* m_pDialogData;
     /* 4BB0 */ DWORD m_nDialogData;
-    /* 4BB4 */ unsigned char field_4BB4;
+    /* 4BB4 */ BYTE m_lastCharacterCount;
     /* 4BB6 */ CGameStatsSprite m_cGameStats;
     /* 4C4A */ CResRef m_currentArea;
     /* 4C52 */ BOOLEAN m_bGlobal;
@@ -732,6 +740,7 @@ public:
     /* 4DFF */ BYTE m_currSndArmor;
     /* 4E00 */ CSound m_sndReady;
     /* 4E64 */ CSound m_sndDeath;
+    /* 4F90 */ CSound m_sndSpriteEffect;
     /* 4FF4 */ int m_nNumberOfTimesTalkedTo;
     /* 4FF8 */ BOOL m_bSeenPartyBefore;
     /* 5004 */ LONG m_nNumberOfTimesInteractedWith[24];
@@ -742,15 +751,15 @@ public:
     /* 50AA */ BOOL m_activeAI;
     /* 50AE */ BOOL m_activeImprisonment;
     /* 50B2 */ BOOL m_bSelected;
-    /* 50B6 */ int field_50B6;
-    /* 50BA */ unsigned char field_50BA;
+    /* 50B6 */ BOOL m_bPortraitUpdate;
+    /* 50BA */ BOOLEAN m_bInfravisionOn;
     /* 50BB */ BYTE m_terrainTable[16];
     /* 50CB */ BYTE m_visibleTerrainTable[16];
     /* 50DB */ BYTE m_flightTerrainTable[16];
     /* 50EC */ CGameAnimation m_animation;
     /* 50F6 */ USHORT* m_pSpriteEffectArray;
     /* 50FA */ POINT* m_pSpriteEffectArrayPosition;
-    /* 50FE */ unsigned char field_50FE;
+    /* 50FE */ BYTE m_nTwitches;
     /* 50FF */ BYTE m_spriteEffectSequenceNumber;
     /* 5100 */ BYTE m_spriteEffectDuration;
     /* 5101 */ BYTE m_spriteEffectSequenceLength;
@@ -767,8 +776,8 @@ public:
     /* 5320 */ BYTE m_effectExtendDirection;
     /* 5321 */ BOOLEAN m_bEscapingArea;
     /* 5322 */ BOOL m_animationRunning;
-    /* 5326 */ int field_5326;
-    /* 532A */ unsigned char field_532A;
+    /* 5326 */ LONG m_posZDelta;
+    /* 532A */ BYTE m_doBounce;
     /* 532C */ double m_fCircleChange;
     /* 5334 */ double m_fCurrCircleChange;
     /* 533C */ short field_533C;
@@ -795,22 +804,21 @@ public:
     /* 53A4 */ CTypedPtrList<CPtrList, int*> m_nPathTemp;
     /* 53C0 */ short m_currPath;
     /* 53C2 */ BOOL m_walkBackwards;
-    /* 53C6 */ int field_53C6;
+    /* 53C6 */ BOOL m_turningAbout;
     /* 53CA */ COLORREF m_lastRGBColor;
     /* 53CE */ BOOL m_pathSearchInvalidDest;
     /* 53D2 */ int field_53D2;
     /* 53D6 */ CSearchRequest* m_currentSearchRequest;
-    /* 53DA */ short field_53DA;
-    /* 53DC */ short field_53DC;
-    /* 53DE */ int field_53DE;
-    /* 53E2 */ int field_53E2;
+    /* 53DA */ SHORT m_nBloodFlashAmount;
+    /* 53DC */ SHORT m_nDamageLocatorTime;
+    /* 53DE */ COLORREF m_nDamageLocatorColor;
+    /* 53E2 */ BOOL m_bBloodFlashOn;
     /* 53E6 */ int field_53E6;
     /* 53EA */ CVidBitmap m_vbPortraitSmall;
     /* 54A4 */ BOOL m_bVisibleMonster;
     /* 54A8 */ int field_54A8;
-    /* 54AC */ int field_54AC;
-    /* 54B0 */ int field_54B0;
-    /* 54B4 */ int field_54B4;
+    /* 54AC */ BOOL m_bBumped;
+    /* 54B0 */ CPoint m_ptBumpedFrom;
     /* 54B8 */ int field_54B8;
     /* 54BC */ int field_54BC;
     /* 54C0 */ int field_54C0;
@@ -916,7 +924,7 @@ public:
     /* 7226 */ BOOL m_firstActionSound;
     /* 722A */ ULONG field_722A;
     /* 722E */ BOOL m_berserkActive;
-    /* 7232 */ short field_7232;
+    /* 7232 */ SHORT m_attackSoundDeadzone;
     /* 7234 */ LONG m_nHPCONBonusTotalOld;
     /* 7238 */ BOOL m_bHPCONBonusTotalUpdate;
     /* 723C */ DWORD m_modalCounter;
@@ -928,7 +936,7 @@ public:
     /* 724E */ LONG m_nUnselectableCounter;
     /* 7252 */ CResRef m_secondarySounds;
     /* 725A */ unsigned char field_725A[32];
-    /* 727A */ int field_727A;
+    /* 727A */ LONG m_nStealthGreyOut;
     /* 727E */ int field_727E;
     /* 7282 */ unsigned char field_7282;
     /* 7283 */ unsigned char field_7283;
@@ -946,8 +954,9 @@ public:
     /* 72AE */ int field_72AE;
     /* 72B2 */ CVariableHash* m_pLocalVariables;
     /* 72B6 */ BOOL m_bInUnmarshal;
+    /* 72BA */ CBounceList m_lBounceList;
     /* 72D6 */ int field_72D6;
-    /* 72DA */ int field_72DA;
+    /* 72DA */ LONG m_nBounceCounter;
     /* 72DE */ int field_72DE;
     /* 72E2 */ LONG field_72E2;
     /* 72E6 */ CGameButtonList* m_internalButtonList;
@@ -961,6 +970,16 @@ public:
     /* 73B4 */ CList<CGameSpriteSoundEntry, CGameSpriteSoundEntry> field_73B4;
     /* 73D0 */ CList<CGameSpriteSoundEntry, CGameSpriteSoundEntry> field_73D0;
     /* 73EC */ CList<CGameSpriteSoundEntry, CGameSpriteSoundEntry> field_73EC;
+    /* 7408 */ CString field_7408;
+    /* 740C */ int field_740C;
+    /* 7410 */ CString field_7410;
+    /* 7414 */ int field_7414;
+    /* 7418 */ CString field_7418;
+    /* 741C */ int field_741C;
+    /* 7420 */ CString field_7420;
+    /* 7424 */ int field_7424;
+    /* 7428 */ CString field_7428;
+    /* 742C */ int field_742C;
     /* 7430 */ unsigned char field_7430;
     /* 7432 */ CGameSpriteLastUpdate m_cLastSpriteUpdate;
     /* 752E */ BOOL m_bSendSpriteUpdate;

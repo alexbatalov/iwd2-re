@@ -57,6 +57,11 @@ LONG CProjectile::DetermineHeight(CGameSprite* pSprite)
     return pSprite->GetAnimation()->GetCastHeight();
 }
 
+// 0x78E740
+void CProjectile::Fire(CGameArea* pArea, LONG source, LONG target, CPoint targetPos, LONG nHeight, SHORT nType)
+{
+}
+
 // 0x529FB0
 void CProjectile::OnArrival()
 {

@@ -239,6 +239,16 @@ BOOL CGameAnimation::IsFalseColor()
 }
 
 // NOTE: Inlined.
+BOOL CGameAnimation::IsBeginningOfSequence()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2102
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->IsBeginningOfSequence();
+}
+
+// NOTE: Inlined.
 BOOL CGameAnimation::IsEndOfSequence()
 {
     // __FILE__: .\Include\ObjAnimation.h
@@ -256,6 +266,16 @@ void CGameAnimation::IncrementFrame()
     UTIL_ASSERT(m_animation != NULL);
 
     return m_animation->IncrementFrame();
+}
+
+// NOTE: Inlined.
+void CGameAnimation::DecrementFrame()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2105
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->DecrementFrame();
 }
 
 // NOTE: Inlined.
@@ -370,6 +390,12 @@ SHORT CGameAnimation::GetCastHeight()
     UTIL_ASSERT(m_animation != NULL);
 
     return m_animation->GetCastHeight();
+}
+
+// NOTE: Inlined.
+SHORT CGameAnimation::GetCurrentFrame()
+{
+    return m_animation->GetCurrentFrame();
 }
 
 // NOTE: Inlined.
