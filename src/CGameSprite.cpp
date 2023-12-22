@@ -796,7 +796,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     field_5616 = 0;
     field_5612 = 0;
     field_5614 = 0;
-    field_54E8 = -1;
+    m_castCounter = -1;
     field_54EA = 0;
     m_attackFrame = -2;
     field_72A2 = 0;
@@ -7186,7 +7186,7 @@ void CGameSprite::sub_71A550(CButtonData buttonData, BOOLEAN firstCall)
     if (!firstCall && !cursor) {
         switch (m_currentUseButton.m_abilityId.m_itemType) {
         case 3:
-            field_54E8 = -1;
+            m_castCounter = -1;
 
             // FIXME: One time is usually enough.
             g_pBaldurChitin->GetObjectGame()->SetLastTarget(CGameObjectArray::INVALID_INDEX);
@@ -7232,7 +7232,7 @@ void CGameSprite::sub_71A550(CButtonData buttonData, BOOLEAN firstCall)
             // inlined, but the second is not.
             g_pBaldurChitin->GetObjectGame()->SetLastTarget(CGameObjectArray::INVALID_INDEX);
             g_pBaldurChitin->GetObjectGame()->SetLastTarget(CGameObjectArray::INVALID_INDEX);
-            sub_467C50(m_currentUseButton.m_abilityId.m_res, this);
+            FireSpell(m_currentUseButton.m_abilityId.m_res, this);
             break;
         }
     }

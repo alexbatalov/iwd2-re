@@ -4748,6 +4748,122 @@ void CInfGame::ApplyVolumeSliders(BOOLEAN a2)
     g_pBaldurChitin->cSoundMixer.UpdateSoundList();
 }
 
+// 0x5BC450
+void CInfGame::UseMagicOnObject(LONG target)
+{
+    CAIAction action;
+    CAIObjectType targetType(0, 0, 0, 0, 0, 0, 0, 0, target, 0, 0);
+
+    LONG nCharacterId = reinterpret_cast<LONG>(m_group.m_memberList.GetHead());
+
+    CGameSprite* pSprite;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            reinterpret_cast<CGameObject**>(&pSprite),
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        // NOTE: Uninline.
+        g_pBaldurChitin->GetObjectGame()->SetLastClick(CPoint(-1, -1));
+
+        // NOTE: Uninline.
+        g_pBaldurChitin->GetObjectGame()->SetLastTarget(CGameObjectArray::INVALID_INDEX);
+
+        BOOL addAction = FALSE;
+        switch (pSprite->m_currentUseButton.m_abilityId.m_itemType) {
+        case 2:
+            action = CAIAction(CAIAction::USEITEM,
+                targetType,
+                pSprite->m_currentUseButton.m_abilityId.m_itemNum,
+                pSprite->m_currentUseButton.m_abilityId.m_abilityNum,
+                0);
+            addAction = TRUE;
+            break;
+        case 3:
+            if (1) {
+                pSprite->m_castCounter = -1;
+
+                CString string;
+                pSprite->m_currentUseButton.m_abilityId.m_res.CopyToString(string);
+
+                action = CAIAction(CAIAction::SPELLNODEC,
+                    targetType,
+                    string,
+                    0,
+                    pSprite->m_currentUseButton.m_abilityId.m_nClass | (pSprite->m_currentUseButton.m_abilityId.field_1E << 8));
+                action.m_specificID3 = pSprite->m_currentUseButton.m_abilityId.field_1D;
+                addAction = TRUE;
+            }
+            break;
+        case 4:
+            if (1) {
+                CString string;
+                pSprite->m_currentUseButton.m_abilityId.m_res.CopyToString(string);
+
+                action = CAIAction(CAIAction::FORCESPELL,
+                    targetType,
+                    string,
+                    0,
+                    pSprite->m_currentUseButton.m_abilityId.m_nClass | (pSprite->m_currentUseButton.m_abilityId.field_1E << 8));
+                action.m_specificID3 = pSprite->m_currentUseButton.m_abilityId.field_1D;
+                addAction = TRUE;
+            }
+            break;
+        case 5:
+            if (1) {
+                CGameObject* pTarget;
+
+                BYTE rc;
+                do {
+                    rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(target,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        &pTarget,
+                        INFINITE);
+                } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+                if (rc == CGameObjectArray::SUCCESS) {
+                    pSprite->FireSpell(pSprite->m_currentUseButton.m_abilityId.m_res, pTarget);
+
+                    g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(target,
+                        CGameObjectArray::THREAD_ASYNCH,
+                        INFINITE);
+                }
+            }
+            break;
+        default:
+            if (1) {
+                CString string;
+                pSprite->m_currentUseButton.m_abilityId.m_res.CopyToString(string);
+
+                action = CAIAction(CAIAction::SPELL,
+                    targetType,
+                    string,
+                    0,
+                    pSprite->m_currentUseButton.m_abilityId.m_nClass | (pSprite->m_currentUseButton.m_abilityId.field_1E << 8));
+                action.m_specificID3 = pSprite->m_currentUseButton.m_abilityId.field_1D;
+                addAction = TRUE;
+            }
+            break;
+        }
+
+        if (addAction) {
+            pSprite->ClearActions(FALSE);
+            pSprite->m_userCommandPause = CGameSprite::USER_OVERRIDE_COUNT;
+            pSprite->m_triggerId = -1;
+            pSprite->AddAction(action);
+            pSprite->m_interrupt = TRUE;
+        }
+
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(nCharacterId,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    }
+}
+
 // 0x5BD070
 BOOL CInfGame::AddCharacterToParty(LONG id, SHORT nPortraitNumber)
 {
@@ -7052,6 +7168,13 @@ void CInfGame::SetLastTarget(LONG id)
     m_lastClick.x = -1;
     m_lastClick.y = -1;
     m_lastTarget = id;
+}
+
+// NOTE: Inlined.
+void CInfGame::SetLastClick(const CPoint& pt)
+{
+    m_lastClick = pt;
+    m_lastTarget = CGameObjectArray::INVALID_INDEX;
 }
 
 // NOTE: Inlined.

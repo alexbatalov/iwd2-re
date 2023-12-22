@@ -121,7 +121,7 @@ public:
     void InsertResponse(CAIResponse& response, BOOL checkCurrentResponse, BOOL clearActions);
 
     void sub_481890(CRect* r, CArray<CRect*>& ary);
-    void sub_467C50(const CResRef& resRef, CGameSprite* pSprite);
+    void FireSpell(const CResRef& resRef, CGameObject* target);
     static CVariable* GetGlobalVariable(const CString& sScope, const CString& sName, int a3);
     void sub_4530F0(const CAIObjectType& type);
     void sub_453110(const CAIObjectType& type);

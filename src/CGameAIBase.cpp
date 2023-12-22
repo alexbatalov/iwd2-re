@@ -1846,7 +1846,7 @@ void CGameAIBase::sub_481890(CRect* r, CArray<CRect*>& ary)
 }
 
 // 0x467C50
-void CGameAIBase::sub_467C50(const CResRef& resRef, CGameSprite* pSprite)
+void CGameAIBase::FireSpell(const CResRef& resRef, CGameObject* target)
 {
     // TODO: Incomplete.
 }

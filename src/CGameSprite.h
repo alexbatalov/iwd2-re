@@ -835,7 +835,7 @@ public:
     /* 54C4 */ LONG field_54C4;
     /* 54C8 */ int m_followStart;
     /* 54CC */ CTypedPtrList<CPtrList, CBlood*> m_lstBlood;
-    /* 54E8 */ short field_54E8;
+    /* 54E8 */ SHORT m_castCounter;
     /* 54EA */ int field_54EA;
     /* 54EE */ int field_54EE;
     /* 54F2 */ short field_54F2;

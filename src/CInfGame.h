@@ -196,6 +196,7 @@ public:
     BOOL DeleteSaveGame(const CString& sFileName);
     BOOL SaveGameExists(const CString& sSaveGame);
     void ApplyVolumeSliders(BOOLEAN a2);
+    void UseMagicOnObject(LONG target);
     BOOL AddCharacterToParty(LONG id, SHORT nPortraitNumber);
     BOOL RemoveCharacterFromParty(LONG id, BOOL& overflow);
     BOOL SetCharacterSlot(INT nCharacterSlot, LONG nCharacterId);
@@ -289,6 +290,7 @@ public:
     CSpellResRefList* GetShapeshifts();
     CString GetSaveGame();
     void SetLastTarget(LONG id);
+    void SetLastClick(const CPoint& pt);
 
     const CRuleTables& GetRuleTables() { return m_ruleTables; }
 
