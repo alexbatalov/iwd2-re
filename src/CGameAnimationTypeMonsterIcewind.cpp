@@ -1424,9 +1424,9 @@ void CGameAnimationTypeMonsterIcewind::ChangeDirection(SHORT nDirection)
     }
 
     if ((!m_bExtendDir || MIRROR_BAM) && m_currentBamDirection > m_extendDirectionTest) {
-        m_currentVidCell->SequenceSet(8 * m_currentBamSequence + m_currentBamDirection / 2);
-    } else {
         m_currentVidCell->SequenceSet(8 * m_currentBamSequence + ((17 - m_currentBamDirection) % 16) / 2);
+    } else {
+        m_currentVidCell->SequenceSet(8 * m_currentBamSequence + m_currentBamDirection / 2);
     }
 }
 
