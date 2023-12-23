@@ -2683,7 +2683,73 @@ void CGameArea::OnActionButtonUp(const CPoint& pt)
 // 0x475600
 void CGameArea::OnActionButtonClickGround(const CPoint& pt)
 {
-    // TOOD: Incomplete.
+    CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+    CAIGroup* pGroup = pGame->GetGroup();
+    SHORT nTableIndex;
+
+    switch (pGame->GetState()) {
+    case 0:
+        if (pGroup->m_groupChanged || pGame->m_lastClick != pt) {
+            pGroup->m_groupChanged = FALSE;
+
+            // NOTE: Uninline.
+            pGame->SetLastClick(pt);
+
+            if (pGroup->GetCount() > 0) {
+                BOOL bShift = g_pBaldurChitin->GetScreenWorld()->GetShiftKey();
+                if (!bShift) {
+                    pGroup->ClearActions();
+                    bShift = FALSE;
+                }
+
+                if (pGroup->GetCount() == 1) {
+                    pGroup->GroupSetTarget(pt,
+                        bShift,
+                        CAIGroup::FORMATION_NONE,
+                        CPoint(-1, -1));
+                } else {
+                    if (m_groupMove) {
+                        CPoint ptCursor(2 * m_moveDest.x - pt.x, 2 * m_moveDest.y - pt.y);
+                        pGroup->GroupDrawMove(m_moveDest,
+                            pGame->GetGameSave()->m_curFormation,
+                            ptCursor);
+                        pGroup->GroupSetTarget(m_moveDest,
+                            bShift,
+                            pGame->GetGameSave()->m_curFormation,
+                            ptCursor);
+                    } else {
+                        pGroup->GroupSetTarget(pt,
+                            bShift,
+                            pGame->GetGameSave()->m_curFormation,
+                            CPoint(-1, -1));
+                    }
+                }
+            }
+        }
+        break;
+    case 1:
+        // NOTE: Uninline.
+        pGame->SetLastClick(CPoint(-1, -1));
+
+        if (m_search.GetLOSCost(CPoint(pt.x / CPathSearch::GRID_SQUARE_SIZEX, pt.y / CPathSearch::GRID_SQUARE_SIZEY), m_terrainTable, nTableIndex, FALSE) != CPathSearch::COST_IMPASSABLE) {
+            BYTE nIconIndex = pGame->GetIconIndex();
+            if (nIconIndex != 20 && nIconIndex != -1) {
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+                // __LINE__: 6200
+                UTIL_ASSERT(FALSE);
+            }
+
+            pGame->UseMagicOnGround(pt);
+            pGame->SetState(0);
+            pGame->GetButtonArray()->SetSelectedButton(100);
+            pGame->GetButtonArray()->UpdateState();
+        }
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+        // __LINE__: 6210
+        UTIL_ASSERT(FALSE);
+    }
 }
 
 // 0x4765C0
