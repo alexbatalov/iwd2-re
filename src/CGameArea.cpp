@@ -211,7 +211,96 @@ void CGameArea::ApplyWindToAmbients(BYTE nPercentVolume)
 // 0x46A820
 BOOL CGameArea::CheckLOS(const CPoint& start, const CPoint& goal, const BYTE* terrainTable, BOOLEAN bCheckIfExplored)
 {
-    return FALSE;
+    SHORT nTableIndex;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+    // __LINE__: 539
+    UTIL_ASSERT(terrainTable != NULL);
+
+    if (start == goal) {
+        return TRUE;
+    }
+
+    if ((start.x - goal.x) * (start.x - goal.x) + 16 * (start.y - goal.y) * (start.y - goal.y) / 9 > m_visibility.field_E * m_visibility.field_E * CVisibilityMap::SQUARE_SIZEX * CVisibilityMap::SQUARE_SIZEX) {
+        return FALSE;
+    }
+
+    CPoint startSearch(start.x / CPathSearch::GRID_SQUARE_SIZEX,
+        start.y / CPathSearch::GRID_SQUARE_SIZEY);
+
+    CPoint goalSearch(goal.x / CPathSearch::GRID_SQUARE_SIZEX,
+        goal.y / CPathSearch::GRID_SQUARE_SIZEY);
+
+    if (startSearch.x < 0
+        || startSearch.y < 0
+        || startSearch.x >= m_search.m_GridSquareDimensions.cx
+        || startSearch.y >= m_search.m_GridSquareDimensions.cy) {
+        return FALSE;
+    }
+
+    if (goalSearch.x < 0
+        || goalSearch.y < 0
+        || goalSearch.x >= m_search.m_GridSquareDimensions.cx
+        || goalSearch.y >= m_search.m_GridSquareDimensions.cy) {
+        return FALSE;
+    }
+
+    if (startSearch == goalSearch) {
+        return TRUE;
+    }
+
+    if (bCheckIfExplored) {
+        if (!m_visibility.IsTileExplored(m_visibility.PointToTile(start))) {
+            return FALSE;
+        }
+
+        if (!m_visibility.IsTileVisible(m_visibility.PointToTile(goal))) {
+            return FALSE;
+        }
+    }
+
+    CPoint deltaExact;
+    if (abs(startSearch.y - goalSearch.y) < abs(startSearch.x - goalSearch.x)) {
+        if (goalSearch.x > startSearch.x) {
+            deltaExact.x = 1 << CGameSprite::EXACT_SCALE;
+        } else {
+            deltaExact.x = -(1 << CGameSprite::EXACT_SCALE);
+        }
+        deltaExact.y = ((goalSearch.y - startSearch.y) << CGameSprite::EXACT_SCALE) / abs(goalSearch.x - startSearch.x);
+    } else {
+        deltaExact.x = ((goalSearch.x - startSearch.x) << CGameSprite::EXACT_SCALE) / abs(goalSearch.y - startSearch.y);
+        if (goalSearch.y > startSearch.y) {
+            deltaExact.y = 1 << CGameSprite::EXACT_SCALE;
+        } else {
+            deltaExact.y = -(1 << CGameSprite::EXACT_SCALE);
+        }
+    }
+
+    CPoint tempPoint;
+    tempPoint.x = (1 << (CGameSprite::EXACT_SCALE - 1)) + (startSearch.x << CGameSprite::EXACT_SCALE);
+    tempPoint.y = (1 << (CGameSprite::EXACT_SCALE - 1)) + (startSearch.y << CGameSprite::EXACT_SCALE);
+
+    while (startSearch != goalSearch) {
+        if (m_search.GetLOSCost(startSearch, terrainTable, nTableIndex, FALSE) == CPathSearch::COST_IMPASSABLE) {
+            return FALSE;
+        }
+
+        if (bCheckIfExplored) {
+            CPoint pt(startSearch.x * CPathSearch::GRID_SQUARE_SIZEX,
+                startSearch.y * CPathSearch::GRID_SQUARE_SIZEY);
+            if (!m_visibility.IsTileExplored(m_visibility.PointToTile(pt))) {
+                return FALSE;
+            }
+        }
+
+        tempPoint.x += deltaExact.x;
+        tempPoint.y += deltaExact.y;
+
+        startSearch.x = tempPoint.x >> CGameSprite::EXACT_SCALE;
+        startSearch.y = tempPoint.y >> CGameSprite::EXACT_SCALE;
+    }
+
+    return TRUE;
 }
 
 // 0x46AF40
