@@ -971,7 +971,7 @@ void CGameArea::AIUpdate()
                                     CPoint mouseSearchSquare;
                                     mouseSearchSquare.x = ptWorldMouse.x / CPathSearch::GRID_SQUARE_SIZEX;
                                     mouseSearchSquare.y = ptWorldMouse.y / CPathSearch::GRID_SQUARE_SIZEY;
-                                    if (m_search.GetLOSCost(mouseSearchSquare, m_terrainTable, searchSquareCode, 0) != CPathSearch::COST_IMPASSABLE) {
+                                    if (m_search.GetLOSCost(mouseSearchSquare, m_terrainTable, searchSquareCode, 0) == CPathSearch::COST_IMPASSABLE) {
                                         switch (m_pGame->GetState()) {
                                         case 0:
                                             if (searchSquareCode == 14) {
