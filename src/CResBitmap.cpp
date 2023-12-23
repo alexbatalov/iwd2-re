@@ -223,7 +223,7 @@ BYTE CResBitmap::GetPixelValue(int x, int y, BOOL bDoubleSize)
         switch (pBitmapInfoHeader->biBitCount) {
         case 4:
             if (bParsed) {
-                if ((y & 1) == 0) {
+                if ((x & 1) == 0) {
                     return pBitmapData[4 * nXWords * (pBitmapInfoHeader->biHeight - y - 1) + x / 2] >> 4;
                 } else {
                     return pBitmapData[4 * nXWords * (pBitmapInfoHeader->biHeight - y - 1) + x / 2] & 0xF;
