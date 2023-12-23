@@ -4363,7 +4363,7 @@ void CGameSprite::SetSequence(SHORT nSequence)
 
     if (nSequence != SEQ_DIE || m_nSequence != SEQ_SLEEP) {
         // NOTE: Uninline.
-        m_animation.SetSequence(nSequence);
+        m_nSequence = m_animation.SetSequence(nSequence);
     }
 
     if (m_nNewDirection == m_nDirection) {

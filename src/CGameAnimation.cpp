@@ -351,7 +351,7 @@ void CGameAnimation::SetColorRangeAll(BYTE rangeValue)
 }
 
 // NOTE: Inlined.
-void CGameAnimation::SetSequence(SHORT nSequence)
+SHORT CGameAnimation::SetSequence(SHORT nSequence)
 {
     // __FILE__: .\Include\ObjAnimation.h
     // __LINE__: 2113
@@ -359,7 +359,7 @@ void CGameAnimation::SetSequence(SHORT nSequence)
 
     m_nSequence = nSequence;
 
-    m_animation->SetSequence(nSequence);
+    return m_animation->SetSequence(nSequence);
 }
 
 // NOTE: Inlined.
