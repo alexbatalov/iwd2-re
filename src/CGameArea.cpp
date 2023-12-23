@@ -2752,6 +2752,63 @@ void CGameArea::OnActionButtonClickGround(const CPoint& pt)
     }
 }
 
+// 0x475870
+void CGameArea::OnActionButtonClickTravel(const CPoint& pt)
+{
+    BYTE flags;
+    SHORT direction;
+    CPoint searchSquare(pt.x / CPathSearch::GRID_SQUARE_SIZEX, pt.y / CPathSearch::GRID_SQUARE_SIZEY);
+
+    if (searchSquare.x < CSearchBitmap::TRAVEL_WIDTH) {
+        flags = static_cast<BYTE>(m_header.m_flagsEdgeWest);
+        direction = 4;
+    } else if (searchSquare.x >= m_cInfinity.nAreaX / CPathSearch::GRID_SQUARE_SIZEX - CSearchBitmap::TRAVEL_WIDTH) {
+        flags = static_cast<BYTE>(m_header.m_flagsEdgeEast);
+        direction = 12;
+    } else if (searchSquare.y < CSearchBitmap::TRAVEL_WIDTH) {
+        flags = static_cast<BYTE>(m_header.m_flagsEdgeNorth);
+        direction = 8;
+    } else if (searchSquare.y >= m_cInfinity.nAreaY / CPathSearch::GRID_SQUARE_SIZEY - CSearchBitmap::TRAVEL_WIDTH) {
+        flags = static_cast<BYTE>(m_header.m_flagsEdgeSouth);
+        direction = 0;
+    } else {
+        flags = static_cast<BYTE>(m_header.m_flagsEdgeWest);
+        direction = 4;
+    }
+
+    CAIAction leave(CAIAction::LEAVEAREA,
+        CString(""),
+        pt,
+        direction | ((flags & 0x1) << 16));
+
+    switch (direction) {
+    case 0:
+        leave.SetString1(CString(m_header.m_areaEdgeSouth));
+        break;
+    case 4:
+        leave.SetString1(CString(m_header.m_areaEdgeWest));
+        break;
+    case 8:
+        leave.SetString1(CString(m_header.m_areaEdgeNorth));
+        break;
+    case 12:
+        leave.SetString1(CString(m_header.m_areaEdgeEast));
+        break;
+    default:
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+        // __LINE__: 6334
+        UTIL_ASSERT(FALSE);
+    }
+
+    // NOTE: Uninline.
+    m_pGame->SetLastClick(CPoint(-1, -1));
+
+    m_pGame->GetGroup()->GroupAction(leave, TRUE, NULL);
+
+    CAIAction move(CAIAction::MOVETOPOINT, pt, 0, -1);
+    m_pGame->GetGroup()->GroupAction(leave, TRUE, NULL);
+}
+
 // 0x4765C0
 void CGameArea::OnActionButtonDblClk(const CPoint& pt)
 {

@@ -185,6 +185,7 @@ public:
     void OnDeactivation();
     void OnActionButtonDown(const CPoint& pt);
     void OnActionButtonClickGround(const CPoint& pt);
+    void OnActionButtonClickTravel(const CPoint& pt);
     void OnActionButtonUp(const CPoint& pt);
     void OnActionButtonDblClk(const CPoint& pt);
     void OnFormationButtonDown(const CPoint& pt);
