@@ -2702,7 +2702,12 @@ void CInfGame::NewGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace
 
     m_cWorldMap.SetResRef(CResRef("WORLDMAP"));
 
-    // TODO: Incomplete.
+    CGameFile cGameFile;
+    cGameFile.SetResRef(CResRef("ICEWIND2"), TRUE, TRUE);
+
+    Unmarshal(cGameFile.GetData(),
+        cGameFile.GetDataSize(),
+        bProgressBarInPlace | bProgressBarRequired);
 
     m_cOptions.m_nNightmareMode = GetPrivateProfileIntA("Game Options",
         "Nightmare Mode",
