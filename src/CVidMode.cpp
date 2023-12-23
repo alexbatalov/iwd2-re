@@ -562,9 +562,155 @@ BOOL CVidMode::DrawLine16(INT nXFrom, INT nYFrom, INT nXTo, INT nYTo, WORD* pSur
 // 0x7980E0
 BOOL CVidMode::DrawRect(const CRect& r, UINT nSurface, const CRect& rClip, COLORREF rgbColor)
 {
-    // TODO: Incomplete.
+    if (g_pChitin->cVideo.Is3dAccelerated()) {
+        return DrawRect3d(r, rClip, rgbColor);
+    }
 
-    return FALSE;
+    CRect rLock;
+    rLock.left = max(r.left, rClip.left);
+    rLock.top = max(r.top, rClip.top);
+    rLock.right = min(r.right, rClip.right);
+    rLock.bottom = min(r.bottom, rClip.bottom);
+
+    DDSURFACEDESC ddsd;
+    ddsd.dwSize = sizeof(ddsd);
+
+    WORD color16;
+    DWORD color;
+
+    if (!LockSurface(nSurface, &ddsd, rLock)) {
+        return FALSE;
+    }
+
+    INT x1 = r.left - rLock.left;
+    INT y1 = r.top - rLock.top;
+    INT x2 = r.right - rLock.left;
+    INT y2 = r.bottom - rLock.top;
+
+    switch (g_pChitin->cVideo.GetBitsPerPixels()) {
+    case 16:
+        color16 = ((GetRValue(rgbColor) >> field_C2) << m_dwRBitShift) | ((GetGValue(rgbColor) >> field_C6) << m_dwGBitShift) | ((GetBValue(rgbColor) >> field_CA) << m_dwBBitShift);
+        DrawLine16(x1,
+            y1,
+            x2,
+            y1,
+            reinterpret_cast<WORD*>(ddsd.lpSurface),
+            ddsd.lPitch / 2,
+            CRect(0, 0, rLock.Width(), rLock.Height()),
+            color16,
+            FALSE);
+        DrawLine16(x1,
+            y2,
+            x2,
+            y2,
+            reinterpret_cast<WORD*>(ddsd.lpSurface),
+            ddsd.lPitch / 2,
+            CRect(0, 0, rLock.Width(), rLock.Height()),
+            color16,
+            FALSE);
+        DrawLine16(x1,
+            y1,
+            x1,
+            y2,
+            reinterpret_cast<WORD*>(ddsd.lpSurface),
+            ddsd.lPitch / 2,
+            CRect(0, 0, rLock.Width(), rLock.Height()),
+            color16,
+            FALSE);
+        DrawLine16(x2,
+            y1,
+            x2,
+            y2,
+            reinterpret_cast<WORD*>(ddsd.lpSurface),
+            ddsd.lPitch / 2,
+            CRect(0, 0, rLock.Width(), rLock.Height()),
+            color16,
+            FALSE);
+        break;
+    case 24:
+        color = (GetRValue(rgbColor) << m_dwRBitShift) | (GetGValue(rgbColor) << m_dwGBitShift) | (GetBValue(rgbColor) << m_dwBBitShift);
+        DrawLine24(x1,
+            y1,
+            x2,
+            y1,
+            reinterpret_cast<BYTE*>(ddsd.lpSurface),
+            ddsd.lPitch,
+            CRect(0, 0, rLock.Width(), rLock.Height()),
+            color,
+            FALSE);
+        DrawLine24(x1,
+            y2,
+            x2,
+            y2,
+            reinterpret_cast<BYTE*>(ddsd.lpSurface),
+            ddsd.lPitch,
+            CRect(0, 0, rLock.Width(), rLock.Height()),
+            color,
+            FALSE);
+        DrawLine24(x1,
+            y1,
+            x1,
+            y2,
+            reinterpret_cast<BYTE*>(ddsd.lpSurface),
+            ddsd.lPitch,
+            CRect(0, 0, rLock.Width(), rLock.Height()),
+            color,
+            FALSE);
+        DrawLine24(x2,
+            y1,
+            x2,
+            y2,
+            reinterpret_cast<BYTE*>(ddsd.lpSurface),
+            ddsd.lPitch,
+            CRect(0, 0, rLock.Width(), rLock.Height()),
+            color,
+            FALSE);
+        break;
+    case 32:
+        color = (GetRValue(rgbColor) << m_dwRBitShift) | (GetGValue(rgbColor) << m_dwGBitShift) | (GetBValue(rgbColor) << m_dwBBitShift);
+        DrawLine32(x1,
+            y1,
+            x2,
+            y1,
+            reinterpret_cast<DWORD*>(ddsd.lpSurface),
+            ddsd.lPitch / 4,
+            CRect(0, 0, rLock.Width(), rLock.Height()),
+            color,
+            FALSE);
+        DrawLine32(x1,
+            y2,
+            x2,
+            y2,
+            reinterpret_cast<DWORD*>(ddsd.lpSurface),
+            ddsd.lPitch / 4,
+            CRect(0, 0, rLock.Width(), rLock.Height()),
+            color,
+            FALSE);
+        DrawLine32(x1,
+            y1,
+            x1,
+            y2,
+            reinterpret_cast<DWORD*>(ddsd.lpSurface),
+            ddsd.lPitch / 4,
+            CRect(0, 0, rLock.Width(), rLock.Height()),
+            color,
+            FALSE);
+        DrawLine32(x2,
+            y1,
+            x2,
+            y2,
+            reinterpret_cast<DWORD*>(ddsd.lpSurface),
+            ddsd.lPitch / 4,
+            CRect(0, 0, rLock.Width(), rLock.Height()),
+            color,
+            FALSE);
+        break;
+    }
+
+    // NOTE: Uninline.
+    UnLockSurface(nSurface, ddsd.lpSurface);
+
+    return TRUE;
 }
 
 // #binary-identical
