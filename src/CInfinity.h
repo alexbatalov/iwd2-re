@@ -183,6 +183,7 @@ public:
     void RequestTile(int x, int y, unsigned char a3, int priority);
     BOOL InitViewPort(const CRect& rRect);
     void SetScreenShake(BOOL bScreenShake, WORD duration, const CPoint& screenShakeDelta);
+    BOOLEAN OutlinePoly(const CPoint* pPoly, SHORT nVertices, const CRect& rClip, COLORREF rgbColor);
     BOOL SetViewPort(const CRect& rRect);
     BOOL SetViewPosition(INT x, INT y, BOOLEAN bSetExactScale);
     void CallLightning(INT xWorldPos, INT yWorldPos);

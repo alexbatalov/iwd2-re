@@ -1869,6 +1869,29 @@ void CInfinity::GetViewPosition(INT& x, INT& y)
     y = nNewY;
 }
 
+// 0x5CECD0
+BOOLEAN CInfinity::OutlinePoly(const CPoint* pPoly, SHORT nVertices, const CRect& rClip, COLORREF rgbColor)
+{
+    if (pPoly == NULL || nVertices < 2) {
+        return FALSE;
+    }
+
+    CPoint ptOffset;
+    ptOffset.x = nCurrentX - rViewPort.left;
+    ptOffset.y = nCurrentY - rViewPort.top;
+
+    CRect rSurface;
+    rSurface.left = max(rViewPort.left, rClip.left - ptOffset.x);
+    rSurface.top = max(rViewPort.top, rClip.top - ptOffset.y);
+    rSurface.right = min(rViewPort.right - 1, rClip.right - ptOffset.x);
+    rSurface.bottom = min(rViewPort.bottom - 1, rClip.bottom - ptOffset.y);
+
+    rgbColor = g_pChitin->GetCurrentVideoMode()->ApplyFadeAmount(rgbColor);
+    rgbColor = g_pChitin->GetCurrentVideoMode()->ApplyBrightnessContrast(rgbColor);
+
+    return pVidMode->OutlinePoly(pPoly, nVertices, rSurface, rgbColor, ptOffset);
+}
+
 // 0x5D1100
 BOOL CInfinity::SetViewPort(const CRect& rRect)
 {
