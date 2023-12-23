@@ -1527,8 +1527,25 @@ BOOL CInfinity::DrawEllipse(const CPoint& ptCenter, const CSize& axes, COLORREF 
 // 0x5CDDC0
 BOOL CInfinity::DrawHighlightRect(const CRect& rSquare, COLORREF rgbColor, BYTE width)
 {
-    // TODO: Incomplete.
-    return FALSE;
+    CRect rNormal(rSquare);
+    rNormal.NormalizeRect();
+
+    CRect rActual;
+    rActual.left = rNormal.left + rViewPort.left - nCurrentX;
+    rActual.top = rNormal.top + rViewPort.top - nCurrentY;
+    rActual.right = rActual.left + max(rNormal.Width(), 1);
+    rActual.bottom = rActual.top + max(rNormal.Height(), 1);
+
+    rgbColor = g_pChitin->GetCurrentVideoMode()->ApplyFadeAmount(rgbColor);
+    rgbColor = g_pChitin->GetCurrentVideoMode()->ApplyBrightnessContrast(rgbColor);
+
+    CRect rClip;
+    rClip.left = rViewPort.left;
+    rClip.top = rViewPort.top;
+    rClip.right = rViewPort.right - 1;
+    rClip.bottom = rViewPort.bottom - 1;
+
+    return pVidMode->DrawRect(rActual, 0, rClip, rgbColor);
 }
 
 // 0x5CDED0
