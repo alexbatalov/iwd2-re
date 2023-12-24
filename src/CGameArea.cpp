@@ -3100,7 +3100,227 @@ void CGameArea::OnFormationButtonUp(const CPoint& pt)
 // 0x476970
 void CGameArea::OnMouseMove(const CPoint& pt)
 {
-    // TODO: Incomplete.
+    if (!m_bAreaLoaded) {
+        return;
+    }
+
+    INT x;
+    INT y;
+    m_cInfinity.GetViewPosition(x, y);
+
+    CPoint ptWorld;
+    if (pt.x != -1) {
+        ptWorld = m_cInfinity.GetWorldCoordinates(pt);
+    } else {
+        ptWorld.x = -2;
+        ptWorld.y = -2;
+    }
+
+    m_ptMousePos = pt;
+    m_nToolTip = 0;
+
+    if (m_groupMove && ptWorld.x > -2) {
+        if (abs(ptWorld.x - m_moveDest.x) > 8 || abs(ptWorld.y - m_moveDest.y) > 8) {
+            CPoint ptCursor;
+            if (pt.x >= m_cInfinity.rViewPort.left
+                && pt.x < m_cInfinity.rViewPort.right
+                && pt.y >= m_cInfinity.rViewPort.top
+                && pt.y < m_cInfinity.rViewPort.bottom) {
+                ptCursor.x = 2 * m_moveDest.x - ptWorld.x;
+                ptCursor.y = 2 * m_moveDest.y - ptWorld.y;
+            } else {
+                CPoint ptScreen;
+                ptScreen.x = min(max(pt.x, m_cInfinity.rViewPort.left), m_cInfinity.rViewPort.right - 1);
+                ptScreen.y = min(max(pt.y, m_cInfinity.rViewPort.top), m_cInfinity.rViewPort.bottom - 1);
+
+                ptWorld = m_cInfinity.GetWorldCoordinates(ptScreen);
+
+                ptCursor.x = 2 * m_moveDest.x - ptWorld.x;
+                ptCursor.y = 2 * m_moveDest.y - ptWorld.y;
+            }
+            m_pGame->GetGroup()->GroupDrawMove(m_moveDest,
+                m_pGame->GetGameSave()->m_curFormation,
+                ptCursor);
+            if (m_pGame->GetState() == 0) {
+                m_pGame->SetTempCursor(8);
+            }
+        } else {
+            INT nCursor = g_pBaldurChitin->GetObjectCursor()->m_nCurrentCursor;
+            if (nCursor == 4 || nCursor == 8) {
+                m_pGame->GetGroup()->GroupDrawMove(m_moveDest,
+                    m_pGame->GetGameSave()->m_curFormation,
+                    CPoint(-1, -1));
+            } else {
+                m_pGame->GetGroup()->GroupCancelMove();
+            }
+            if (m_pGame->GetState() == 0) {
+                m_pGame->SetTempCursor(4);
+            }
+        }
+
+        if (m_pGame->GetState() == 3 && m_selectSquare.left != -1) {
+            m_selectSquare.right = min(max(pt.x - m_cInfinity.rViewPort.left, 0), m_cInfinity.rViewPort.Width() - 1) + x;
+            m_selectSquare.bottom = min(max(pt.y - m_cInfinity.rViewPort.top, 0), m_cInfinity.rViewPort.Height() - 1) + y;
+        }
+    } else if (m_selectSquare.left != -1 && ptWorld.x > -2) {
+        m_selectSquare.right = min(max(pt.x - m_cInfinity.rViewPort.left, 0), m_cInfinity.rViewPort.Width() - 1) + x;
+        m_selectSquare.bottom = min(max(pt.y - m_cInfinity.rViewPort.top, 0), m_cInfinity.rViewPort.Height() - 1) + y;
+
+        if (abs(m_selectSquare.Width()) > 8 || abs(m_selectSquare.Height()) > 8) {
+            if (m_pGame->GetState() == 0) {
+                m_pGame->SetTempCursor(0);
+            }
+            m_pGame->GetGroup()->GroupCancelMove();
+        } else {
+            if (g_pBaldurChitin->GetObjectCursor()->m_nCurrentCursor == 4) {
+                m_pGame->GetGroup()->GroupDrawMove(m_moveDest,
+                    m_pGame->GetGameSave()->m_curFormation,
+                    CPoint(-1, -1));
+            } else {
+                m_pGame->GetGroup()->GroupCancelMove();
+            }
+            if (m_pGame->GetState() == 0) {
+                m_pGame->SetTempCursor(4);
+            }
+        }
+    }
+
+    if (m_firstRender) {
+        m_nScrollState = 0;
+        m_cInfinity.m_nScrollDelay = CInfinity::SCROLL_DELAY;
+        return;
+    }
+
+    if (pt.x == 0) {
+        if (pt.y > CVideo::SCREENHEIGHT / 12) {
+            if (pt.y < 11 * CVideo::SCREENHEIGHT / 12 - 1) {
+                if (x > 0) {
+                    g_pBaldurChitin->GetObjectCursor()->SetCursor(100, FALSE);
+                    m_nScrollState = 7;
+                } else {
+                    g_pBaldurChitin->GetObjectCursor()->SetCursor(6, FALSE);
+                    m_nScrollState = 9;
+                }
+                g_pBaldurChitin->GetObjectCursor()->m_nDirection = 6;
+            } else {
+                if (x > 0 || y < m_cInfinity.nAreaY - m_cInfinity.rViewPort.Height() - 1) {
+                    g_pBaldurChitin->GetObjectCursor()->SetCursor(100, FALSE);
+                    m_nScrollState = 6;
+                } else {
+                    g_pBaldurChitin->GetObjectCursor()->SetCursor(6, FALSE);
+                    m_nScrollState = 9;
+                }
+                g_pBaldurChitin->GetObjectCursor()->m_nDirection = 5;
+            }
+        } else {
+            if (x > 0 || y > 0) {
+                g_pBaldurChitin->GetObjectCursor()->SetCursor(100, FALSE);
+                m_nScrollState = 8;
+            } else {
+                g_pBaldurChitin->GetObjectCursor()->SetCursor(6, FALSE);
+                m_nScrollState = 9;
+            }
+            g_pBaldurChitin->GetObjectCursor()->m_nDirection = 7;
+        }
+    } else if (pt.x == CVideo::SCREENWIDTH - 1) {
+        if (pt.y > CVideo::SCREENHEIGHT / 12) {
+            if (pt.y < 11 * CVideo::SCREENHEIGHT / 12 - 1) {
+                if (x < m_cInfinity.nAreaX - m_cInfinity.rViewPort.Width() - 1) {
+                    g_pBaldurChitin->GetObjectCursor()->SetCursor(100, FALSE);
+                    m_nScrollState = 3;
+                } else {
+                    g_pBaldurChitin->GetObjectCursor()->SetCursor(6, FALSE);
+                    m_nScrollState = 9;
+                }
+                g_pBaldurChitin->GetObjectCursor()->m_nDirection = 2;
+            } else {
+                if (x < m_cInfinity.nAreaX - m_cInfinity.rViewPort.Width() - 1
+                    || y < m_cInfinity.nAreaY - m_cInfinity.rViewPort.Height() - 1) {
+                    g_pBaldurChitin->GetObjectCursor()->SetCursor(100, FALSE);
+                    m_nScrollState = 4;
+                } else {
+                    g_pBaldurChitin->GetObjectCursor()->SetCursor(6, FALSE);
+                    m_nScrollState = 9;
+                }
+                g_pBaldurChitin->GetObjectCursor()->m_nDirection = 3;
+            }
+        } else {
+            if (x < m_cInfinity.nAreaX - m_cInfinity.rViewPort.Width() - 1 || y > 0) {
+                g_pBaldurChitin->GetObjectCursor()->SetCursor(100, FALSE);
+                m_nScrollState = 2;
+            } else {
+                g_pBaldurChitin->GetObjectCursor()->SetCursor(6, FALSE);
+                m_nScrollState = 9;
+            }
+            g_pBaldurChitin->GetObjectCursor()->m_nDirection = 1;
+        }
+    } else if (pt.y == 0) {
+        if (pt.x > CVideo::SCREENWIDTH / 16) {
+            if (pt.x < 15 * CVideo::SCREENWIDTH / 16 - 1) {
+                if (y > 0) {
+                    g_pBaldurChitin->GetObjectCursor()->SetCursor(100, FALSE);
+                    m_nScrollState = 1;
+                } else {
+                    g_pBaldurChitin->GetObjectCursor()->SetCursor(6, FALSE);
+                    m_nScrollState = 9;
+                }
+                g_pBaldurChitin->GetObjectCursor()->m_nDirection = 0;
+            } else {
+                if (x < m_cInfinity.nAreaX - m_cInfinity.rViewPort.Width() - 1 || y > 0) {
+                    g_pBaldurChitin->GetObjectCursor()->SetCursor(100, FALSE);
+                    m_nScrollState = 2;
+                } else {
+                    g_pBaldurChitin->GetObjectCursor()->SetCursor(6, FALSE);
+                    m_nScrollState = 9;
+                }
+                g_pBaldurChitin->GetObjectCursor()->m_nDirection = 1;
+            }
+        } else {
+            if (x > 0 || y > 0) {
+                g_pBaldurChitin->GetObjectCursor()->SetCursor(100, FALSE);
+                m_nScrollState = 8;
+            } else {
+                g_pBaldurChitin->GetObjectCursor()->SetCursor(6, FALSE);
+                m_nScrollState = 9;
+            }
+            g_pBaldurChitin->GetObjectCursor()->m_nDirection = 7;
+        }
+    } else if (pt.y == CVideo::SCREENHEIGHT - 1) {
+        if (pt.x > CVideo::SCREENWIDTH / 16) {
+            if (pt.x < 15 * CVideo::SCREENWIDTH / 16 - 1) {
+                if (y < m_cInfinity.nAreaY - m_cInfinity.rViewPort.Height() - 1) {
+                    g_pBaldurChitin->GetObjectCursor()->SetCursor(100, FALSE);
+                    m_nScrollState = 5;
+                } else {
+                    g_pBaldurChitin->GetObjectCursor()->SetCursor(6, FALSE);
+                    m_nScrollState = 9;
+                }
+                g_pBaldurChitin->GetObjectCursor()->m_nDirection = 4;
+            } else {
+                if (x < m_cInfinity.nAreaX - m_cInfinity.rViewPort.Width() - 1
+                    || y < m_cInfinity.nAreaY - m_cInfinity.rViewPort.Height() - 1) {
+                    g_pBaldurChitin->GetObjectCursor()->SetCursor(100, FALSE);
+                    m_nScrollState = 4;
+                } else {
+                    g_pBaldurChitin->GetObjectCursor()->SetCursor(6, FALSE);
+                    m_nScrollState = 9;
+                }
+                g_pBaldurChitin->GetObjectCursor()->m_nDirection = 3;
+            }
+        } else {
+            if (x > 0 || y < m_cInfinity.nAreaY - m_cInfinity.rViewPort.Height() - 1) {
+                g_pBaldurChitin->GetObjectCursor()->SetCursor(100, FALSE);
+                m_nScrollState = 6;
+            } else {
+                g_pBaldurChitin->GetObjectCursor()->SetCursor(6, FALSE);
+                m_nScrollState = 9;
+            }
+            g_pBaldurChitin->GetObjectCursor()->m_nDirection = 5;
+        }
+    } else {
+        m_nScrollState = 0;
+        m_cInfinity.m_nScrollDelay = CInfinity::SCROLL_DELAY;
+    }
 }
 
 // 0x477550
