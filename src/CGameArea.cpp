@@ -2677,7 +2677,213 @@ void CGameArea::OnActionButtonDown(const CPoint& pt)
 // 0x475DC0
 void CGameArea::OnActionButtonUp(const CPoint& pt)
 {
-    // TODO: Incomplete.
+    CPoint ptWorld = m_cInfinity.GetWorldCoordinates(pt);
+    SHORT gameState = m_pGame->GetState();
+    BOOL firstSelect = TRUE;
+
+    if (m_selectSquare.left != -1) {
+        m_selectSquare.NormalizeRect();
+        if (gameState == 0 || gameState == 3) {
+            if (m_selectSquare.Width() <= 8
+                && m_selectSquare.Height() <= 8
+                && ptWorld.x != -1) {
+                if (m_visibility.IsTileExplored(m_visibility.PointToTile(m_moveDest))) {
+                    if (m_iPickedOnDown != CGameObjectArray::INVALID_INDEX) {
+                        CGameObject* pObject;
+
+                        BYTE rc = m_pGame->GetObjectArray()->GetShare(m_iPickedOnDown,
+                            CGameObjectArray::THREAD_ASYNCH,
+                            &pObject,
+                            INFINITE);
+                        if (rc == CGameObjectArray::SUCCESS) {
+                            if (pObject->GetArea() == this) {
+                                pObject->OnActionButton(m_moveDest);
+                            }
+                            m_pGame->GetObjectArray()->ReleaseShare(m_iPickedOnDown,
+                                CGameObjectArray::THREAD_ASYNCH,
+                                INFINITE);
+                        }
+                    } else {
+                        if (gameState == 3) {
+                            CPoint ptCursor(2 * m_moveDest.x - ptWorld.x,
+                                2 * m_moveDest.y - ptWorld.y);
+                            int nWidth = m_selectSquare.Width();
+                            int nHeight = 4 * m_selectSquare.Height() / 3;
+                            int nRange = static_cast<int>(sqrt(static_cast<double>(nWidth * nWidth + nHeight * nHeight)) + 0.5);
+                            m_pGame->GetGroup()->GroupProtectPoint(m_moveDest,
+                                m_pGame->GetGameSave()->m_curFormation,
+                                ptCursor,
+                                nRange);
+                            m_groupMove = FALSE;
+                            m_pGame->SetState(0);
+                            m_pGame->GetButtonArray()->SetSelectedButton(100);
+                            m_pGame->GetButtonArray()->UpdateState();
+                        } else {
+                            if (m_bTravelSquare) {
+                                OnActionButtonClickTravel(m_moveDest);
+                            } else {
+                                OnActionButtonClickGround(m_moveDest);
+                            }
+                        }
+                    }
+                }
+            } else {
+                if (gameState == 3) {
+                    CPoint ptCursor(2 * m_moveDest.x - ptWorld.x,
+                        2 * m_moveDest.y - ptWorld.y);
+                    int nWidth = m_selectSquare.Width();
+                    int nHeight = 4 * m_selectSquare.Height() / 3;
+                    int nRange = static_cast<int>(sqrt(static_cast<double>(nWidth * nWidth + nHeight * nHeight)) + 0.5);
+                    m_pGame->GetGroup()->GroupProtectPoint(m_moveDest,
+                        m_pGame->GetGameSave()->m_curFormation,
+                        ptCursor,
+                        nRange);
+                    m_groupMove = FALSE;
+                    m_pGame->SetState(0);
+                    m_pGame->GetButtonArray()->SetSelectedButton(100);
+                    m_pGame->GetButtonArray()->UpdateState();
+                } else {
+                    POSITION pos;
+                    CGameSprite* pSprite;
+                    LONG nSprite;
+                    BYTE rc;
+                    BOOL bPlaySelectSound;
+
+                    for (SHORT nPortrait = 0; nPortrait < m_pGame->GetNumCharacters(); nPortrait++) {
+                        nSprite = m_pGame->GetCharacterId(nPortrait);
+                        rc = m_pGame->GetObjectArray()->GetShare(nSprite,
+                            CGameObjectArray::THREAD_ASYNCH,
+                            reinterpret_cast<CGameObject**>(&pSprite),
+                            INFINITE);
+                        if (rc == CGameObjectArray::SUCCESS) {
+                            if (pSprite->m_canBeSeen > 0
+                                && pSprite->GetArea() == this
+                                && pSprite->DoesIntersect(m_selectSquare)
+                                && pSprite->Orderable(FALSE)) {
+                                if (firstSelect) {
+                                    firstSelect = FALSE;
+
+                                    if (!g_pBaldurChitin->GetScreenWorld()->GetCtrlKey()
+                                        && !g_pBaldurChitin->GetScreenWorld()->GetShiftKey()) {
+                                        m_pGame->UnselectAll();
+                                    }
+
+                                    bPlaySelectSound = TRUE;
+                                } else {
+                                    bPlaySelectSound = FALSE;
+                                }
+                                m_pGame->SelectCharacter(nSprite, bPlaySelectSound);
+                            }
+                            m_pGame->GetObjectArray()->ReleaseShare(nSprite,
+                                CGameObjectArray::THREAD_ASYNCH,
+                                INFINITE);
+                        }
+                    }
+
+                    pos = m_pGame->m_familiars.GetHeadPosition();
+                    while (pos != NULL) {
+                        nSprite = reinterpret_cast<LONG>(m_pGame->m_familiars.GetNext(pos));
+                        rc = m_pGame->GetObjectArray()->GetShare(nSprite,
+                            CGameObjectArray::THREAD_ASYNCH,
+                            reinterpret_cast<CGameObject**>(&pSprite),
+                            INFINITE);
+                        if (rc == CGameObjectArray::SUCCESS) {
+                            if (pSprite->m_canBeSeen > 0
+                                && pSprite->GetArea() == this
+                                && pSprite->DoesIntersect(m_selectSquare)
+                                && pSprite->Orderable(FALSE)) {
+                                if (firstSelect) {
+                                    firstSelect = FALSE;
+
+                                    if (!g_pBaldurChitin->GetScreenWorld()->GetCtrlKey()
+                                        && !g_pBaldurChitin->GetScreenWorld()->GetShiftKey()) {
+                                        m_pGame->UnselectAll();
+                                    }
+
+                                    bPlaySelectSound = TRUE;
+                                } else {
+                                    bPlaySelectSound = FALSE;
+                                }
+                                m_pGame->SelectCharacter(nSprite, bPlaySelectSound);
+                            }
+                            m_pGame->GetObjectArray()->ReleaseShare(nSprite,
+                                CGameObjectArray::THREAD_ASYNCH,
+                                INFINITE);
+                        }
+                    }
+
+                    pos = m_pGame->m_allies.GetHeadPosition();
+                    while (pos != NULL) {
+                        nSprite = reinterpret_cast<LONG>(m_pGame->m_allies.GetNext(pos));
+                        rc = m_pGame->GetObjectArray()->GetShare(nSprite,
+                            CGameObjectArray::THREAD_ASYNCH,
+                            reinterpret_cast<CGameObject**>(&pSprite),
+                            INFINITE);
+                        if (rc == CGameObjectArray::SUCCESS) {
+                            if (pSprite->m_canBeSeen > 0
+                                && pSprite->GetArea() == this
+                                && pSprite->DoesIntersect(m_selectSquare)
+                                && pSprite->Orderable(FALSE)) {
+                                if (firstSelect) {
+                                    firstSelect = FALSE;
+
+                                    if (!g_pBaldurChitin->GetScreenWorld()->GetCtrlKey()
+                                        && !g_pBaldurChitin->GetScreenWorld()->GetShiftKey()) {
+                                        m_pGame->UnselectAll();
+                                    }
+
+                                    bPlaySelectSound = TRUE;
+                                } else {
+                                    bPlaySelectSound = FALSE;
+                                }
+                                m_pGame->SelectCharacter(nSprite, bPlaySelectSound);
+                            }
+                            m_pGame->GetObjectArray()->ReleaseShare(nSprite,
+                                CGameObjectArray::THREAD_ASYNCH,
+                                INFINITE);
+                        }
+                    }
+
+                    if (!firstSelect) {
+                        m_pGame->SelectToolbar();
+                    }
+                }
+            }
+            m_pGame->GetGroup()->GroupCancelMove();
+        } else {
+            if (m_selectSquare.Width() <= 8
+                && m_selectSquare.Height() <= 8
+                && ptWorld.x != -1
+                && m_visibility.IsTileExplored(m_visibility.PointToTile(m_moveDest))) {
+                if (gameState == 2) {
+                    if (m_iPickedOnDown != CGameObjectArray::INVALID_INDEX) {
+                        CGameObject* pObject;
+
+                        BYTE rc = m_pGame->GetObjectArray()->GetShare(m_iPickedOnDown,
+                            CGameObjectArray::THREAD_ASYNCH,
+                            &pObject,
+                            INFINITE);
+                        if (rc == CGameObjectArray::SUCCESS) {
+                            if (pObject->GetArea() == this) {
+                                pObject->OnActionButton(m_moveDest);
+                            }
+                            m_pGame->GetObjectArray()->ReleaseShare(m_iPickedOnDown,
+                                CGameObjectArray::THREAD_ASYNCH,
+                                INFINITE);
+                        }
+                    }
+                } else {
+                    OnActionButtonClickGround(m_moveDest);
+                }
+            }
+        }
+
+        m_selectSquare.left = -1;
+        m_selectSquare.top = -1;
+        m_selectSquare.right = -1;
+        m_selectSquare.bottom = -1;
+        m_pGame->SetTempCursor(4);
+    }
 }
 
 // 0x475600
