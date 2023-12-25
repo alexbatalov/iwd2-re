@@ -824,7 +824,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     m_moraleFailure = FALSE;
     m_nHappiness = 0;
     m_bHappinessChanged = FALSE;
-    field_72AE = 1;
+    m_bDeleteOnRemove = TRUE;
     m_lastRegenerationTime = g_pBaldurChitin->GetObjectGame()->GetWorldTimer()->m_gameTime;
 
     CButtonData buttonData;
@@ -966,7 +966,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
         m_bAllowDialogInterrupt = TRUE;
         field_56E4 = "";
         m_talkingRenderCount = 0;
-        field_711E = 1;
+        m_clearAIOnRemoveFromArea = TRUE;
 
         if (m_portraitIconVidCell.pRes != NULL) {
             m_portraitIconVidCell.pRes->Request();
@@ -1369,7 +1369,7 @@ void CGameSprite::RemoveReplacementFromArea()
             m_pPath = NULL;
         }
 
-        if (field_711E) {
+        if (m_clearAIOnRemoveFromArea) {
             ClearAI(TRUE);
         }
 
@@ -1444,6 +1444,149 @@ void CGameSprite::RemoveReplacementFromArea()
             }
 
             delete this;
+        }
+    }
+}
+
+// 0x6F4B90
+void CGameSprite::RemoveFromArea()
+{
+    if (m_pArea != NULL) {
+        POSITION pos = m_lstBlood.GetHeadPosition();
+        while (pos != NULL) {
+            CBlood* pBlood = m_lstBlood.GetNext(pos);
+            delete pBlood;
+        }
+        m_lstBlood.RemoveAll();
+
+        m_sndReady.Stop();
+        DropSearchRequest();
+
+        if (m_bBumped) {
+            m_ptBumpedFrom.x = -1;
+            m_ptBumpedFrom.y = -1;
+            m_bBumped = FALSE;
+        }
+
+        if (m_bVisibleMonster) {
+            m_pArea->m_nVisibleMonster--;
+            m_bVisibleMonster = FALSE;
+        }
+
+        if (m_bInfravisionOn) {
+            m_pArea->m_nInfravision--;
+            m_bInfravisionOn = FALSE;
+        }
+
+        if (g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(m_id) != -1) {
+            if (!g_pBaldurChitin->GetObjectGame()->GetGameSave()->field_1AC || InControl()) {
+                if (Animate()) {
+                    m_pArea->m_visibility.RemoveCharacter(m_pos,
+                        m_id,
+                        m_visibleTerrainTable);
+                }
+
+                if (m_pArea->m_nCharacters != -1) {
+                    m_pArea->m_nCharacters--;
+                }
+            }
+        }
+
+        ClearStoredPaths();
+
+        if (m_pPath != NULL) {
+            delete m_pPath;
+            m_pPath = NULL;
+        }
+
+        if (m_clearAIOnRemoveFromArea) {
+            ClearAI(TRUE);
+        }
+
+        m_nNewDirection = m_nDirection;
+        g_pBaldurChitin->GetObjectGame()->RemoveCharacterFromAllies(m_id);
+
+        switch (m_listType) {
+        case CGAMEOBJECT_LIST_FRONT:
+            if (m_active
+                && m_activeAI
+                && m_activeImprisonment) {
+                if ((m_derivedStats.m_generalState & STATE_DEAD) == 0) {
+                    // NOTE: Uninline.
+                    m_pArea->RemoveFromMarkers(m_id);
+                }
+
+                m_pArea->m_search.RemoveObject(CPoint(m_pos.x / CPathSearch::GRID_SQUARE_SIZEX,
+                                                   m_pos.y / CPathSearch::GRID_SQUARE_SIZEY),
+                    m_typeAI.GetEnemyAlly(),
+                    m_animation.GetPersonalSpace(),
+                    field_54A8,
+                    field_7430);
+            }
+            break;
+        case CGAMEOBJECT_LIST_BACK:
+            if (m_active
+                && m_activeAI
+                && m_activeImprisonment) {
+                if ((m_derivedStats.m_generalState & STATE_SLEEPING) != 0) {
+                    // NOTE: Uninline.
+                    m_pArea->RemoveFromMarkers(m_id);
+
+                    m_pArea->m_search.RemoveObject(CPoint(m_pos.x / CPathSearch::GRID_SQUARE_SIZEX,
+                                                       m_pos.y / CPathSearch::GRID_SQUARE_SIZEY),
+                        m_typeAI.GetEnemyAlly(),
+                        m_animation.GetPersonalSpace(),
+                        field_54A8,
+                        field_7430);
+                } else {
+                    m_pArea->DecrHeightDynamic(m_pos);
+                }
+            }
+            break;
+        case CGAMEOBJECT_LIST_FLIGHT:
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 1922
+            UTIL_ASSERT(FALSE);
+        }
+
+        if (m_bGlobal) {
+            CPoint pos(m_pos);
+
+            CGameObject::RemoveFromArea();
+
+            if (InControl() && g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+                if (!g_pBaldurChitin->GetObjectGame()->m_bInDestroyGame
+                    && !g_pBaldurChitin->GetObjectGame()->m_bInAreaTransition) {
+                    m_cLastSpriteUpdate.Initialize(TRUE);
+
+                    CMessage* message = new CMessageSpriteUpdate(this, m_id, m_id);
+                    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+                }
+            }
+
+            m_pos = pos;
+        } else {
+            if (m_type == 1) {
+                m_pArea->m_nRandomMonster--;
+            }
+
+            CGameObject::RemoveFromArea();
+
+            if (m_bDeleteOnRemove) {
+                BYTE rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->Delete(m_id,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    NULL,
+                    INFINITE);
+                if (rc != CGameObjectArray::SUCCESS) {
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+                    // __LINE__: 1934
+                    UTIL_ASSERT(FALSE);
+                }
+
+                delete this;
+            }
         }
     }
 }

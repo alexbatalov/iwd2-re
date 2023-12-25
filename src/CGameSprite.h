@@ -416,6 +416,7 @@ public:
     /* 003C */ BOOL OnSearchMap() override;
     /* 0040 */ void OnActionButton(const CPoint& pt) override;
     /* 0044 */ void OnFormationButton(const CPoint& pt) override;
+    /* 0048 */ void RemoveFromArea() override;
     /* 004C */ void Render(CGameArea* pArea, CVidMode* pVidMode, INT nSurface) override;
     /* 0058 */ void SetCursor(LONG nToolTip) override;
     /* 007C */ void ClearAI(BOOLEAN bSetSequence) override;
@@ -926,7 +927,7 @@ public:
     /* 7114 */ BOOL m_moraleFailure;
     /* 7118 */ int field_7118;
     /* 711C */ short field_711C;
-    /* 711E */ int field_711E;
+    /* 711E */ BOOL m_clearAIOnRemoveFromArea;
     /* 7122 */ LONG m_dialogWait;
     /* 7126 */ LONG m_dialogWaitTarget;
     /* 712A */ int m_talkingCounter;
@@ -964,7 +965,7 @@ public:
     /* 72A4 */ BOOL m_bAllowEffectListCall;
     /* 72A8 */ unsigned char field_72A8;
     /* 72AA */ int field_72AA;
-    /* 72AE */ int field_72AE;
+    /* 72AE */ BOOL m_bDeleteOnRemove;
     /* 72B2 */ CVariableHash* m_pLocalVariables;
     /* 72B6 */ BOOL m_bInUnmarshal;
     /* 72BA */ CBounceList m_lBounceList;
