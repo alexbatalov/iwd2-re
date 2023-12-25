@@ -9546,7 +9546,51 @@ void CGameSprite::PlaySound(const CResRef& res)
 // 0x728460
 BOOL CGameSprite::Orderable(BOOL bIgnoreControl)
 {
-    // TODO: Incomplete.
+    if (!bIgnoreControl && !InControl()) {
+        return FALSE;
+    }
+
+    if ((m_derivedStats.m_generalState & STATE_DEAD) != 0) {
+        return FALSE;
+    }
+
+    if (m_nUnselectableCounter > 0) {
+        return FALSE;
+    }
+
+    if (m_typeAI.GetEnemyAlly() > CAIObjectType::EA_CONTROLCUTOFF) {
+        return FALSE;
+    }
+
+    if (m_moraleFailure) {
+        return FALSE;
+    }
+
+    if ((m_derivedStats.m_generalState & STATE_STONE_DEATH) != 0
+        || (m_derivedStats.m_generalState & STATE_FROZEN_DEATH) != 0
+        || (m_derivedStats.m_generalState & STATE_HELPLESS) != 0
+        || (m_derivedStats.m_generalState & STATE_STUNNED) != 0
+        || (m_derivedStats.m_generalState & STATE_PANIC) != 0
+        || ((m_derivedStats.m_generalState & STATE_BERSERK) != 0
+            && m_berserkActive)
+        || m_derivedStats.m_spellStates[SPLSTATE_ANIMAL_RAGE]
+        || (m_derivedStats.m_generalState & STATE_SLEEPING) != 0
+        || ((m_derivedStats.m_generalState & STATE_CHARMED) != 0
+            && m_typeAI.GetEnemyAlly() != CAIObjectType::EA_0x847C3A
+            && m_typeAI.GetEnemyAlly() != CAIObjectType::EA_CONTROLLED)
+        || (m_derivedStats.m_generalState & STATE_FEEBLEMINDED) != 0
+        || (m_derivedStats.m_generalState & STATE_CONFUSED) != 0) {
+        return FALSE;
+    }
+
+    if (g_pBaldurChitin->GetObjectGame()->m_nTimeStop != 0
+        && g_pBaldurChitin->GetObjectGame()->m_nTimeStopCaster != m_id) {
+        return FALSE;
+    }
+
+    if (m_derivedStats.m_spellStates[SPLSTATE_179]) {
+        return FALSE;
+    }
 
     return TRUE;
 }
