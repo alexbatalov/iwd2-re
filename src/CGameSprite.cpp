@@ -3081,7 +3081,74 @@ void CGameSprite::PlaySound(BYTE soundID, BOOL showText, BOOL showCircle, BOOL o
 // 0x702900
 void CGameSprite::VerbalConstant(LONG verbalConstant)
 {
-    // TODO: Incomplete.
+    STR_RES strRes;
+
+    // NOTE: Uninline.
+    BYTE channel = GetChannel();
+
+    if (CanSpeak(verbalConstant >= 36 && verbalConstant < 38, FALSE)
+        && verbalConstant >= 0 && verbalConstant < 64) {
+        g_pBaldurChitin->GetTlkTable().Fetch(m_baseStats.m_speech[verbalConstant], strRes);
+        COLORREF nameColor = CVidPalette::RANGE_COLORS[m_baseStats.m_colors[CVIDPALETTE_RANGE_MAIN_CLOTH]];
+        if (m_secondarySounds != "") {
+            CString sSoundName;
+            CString sSoundSetName;
+            LONG nNumber = g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetCustomSound(sSoundName, static_cast<BYTE>(verbalConstant));
+            m_secondarySounds.CopyToString(sSoundSetName);
+            sSoundName.TrimLeft();
+            sSoundName.TrimRight();
+            sSoundName = sSoundSetName + sSoundName;
+
+            strRes.cSound.SetResRef(CResRef(sSoundName), TRUE, TRUE);
+        }
+
+        strRes.szText.TrimLeft();
+
+        BOOL show = g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bSubtitles != FALSE;
+        if (strRes.cSound.GetRes() == NULL) {
+            show = TRUE;
+        }
+
+        if (m_typeAI.GetEnemyAlly() == CAIObjectType::EA_PC) {
+            if (strRes.cSound.GetRes() != NULL) {
+                if (!strRes.cSound.GetLooping()) {
+                    strRes.cSound.SetFireForget(TRUE);
+                }
+                if (strRes.cSound.Play(FALSE)) {
+                    m_talkingCounter = min(strRes.cSound.GetPlayTime() / 66, STANDARD_VERBAL_CONSTANT_LENGTH);
+                }
+            }
+
+            CString sText;
+            sText = strRes.szText;
+            if (sText != "" && show) {
+                g_pBaldurChitin->GetScreenWorld()->DisplayText(m_sName,
+                    sText,
+                    nameColor,
+                    RGB(160, 200, 215),
+                    -1,
+                    FALSE);
+            }
+        } else {
+            if (!strRes.cSound.GetLooping()) {
+                strRes.cSound.SetFireForget(TRUE);
+            }
+            if (strRes.cSound.Play(FALSE)) {
+                m_talkingCounter = min(strRes.cSound.GetPlayTime() / 66, STANDARD_VERBAL_CONSTANT_LENGTH);
+            }
+
+            CString sText;
+            sText = strRes.szText;
+            if (sText != "" && show) {
+                g_pBaldurChitin->GetScreenWorld()->DisplayText(m_sName,
+                    sText,
+                    nameColor,
+                    RGB(160, 200, 215),
+                    -1,
+                    FALSE);
+            }
+        }
+    }
 }
 
 // 0x702E60
