@@ -2481,7 +2481,64 @@ BOOL CGameSprite::sub_6FB440()
 // 0x6FB630
 void CGameSprite::AIUpdateFly()
 {
-    // TODO: Incomplete.
+    if (m_fCurrCircleChange < m_fCircleChange) {
+        double fCurrCircleChange = min(m_fCircleChange, m_fCurrCircleChange + 1.0);
+
+        if (m_circleFacing != 0) {
+            double fAngle = static_cast<double>(m_animation.GetMoveScale())
+                    * static_cast<double>(m_circleFacing)
+                    * fCurrCircleChange
+                    / static_cast<double>(m_radius)
+                + m_fDirectionOffset;
+
+            m_pos.x = m_posOld.x + static_cast<LONG>(cos(fAngle) * static_cast<double>(m_radius));
+            m_pos.y = m_posOld.y - static_cast<LONG>(sin(fAngle) * static_cast<double>(m_radius) * 3.0 / 4.0);
+
+            if (m_circleFacing == FLY_LEFT) {
+                if (m_pos != m_posOld) {
+                    SetDirection((GetDirection(CPoint(m_pos.x, 4 * m_pos.y / 3),
+                                      CPoint(m_posOld.x, 4 * m_posOld.y / 3))
+                                     + 4)
+                        % 16);
+                } else {
+                    SetDirection(m_nNewDirection);
+                }
+            } else {
+                if (m_pos != m_posOld) {
+                    SetDirection((GetDirection(CPoint(m_pos.x, 4 * m_pos.y / 3),
+                                      CPoint(m_posOld.x, 4 * m_posOld.y / 3))
+                                     + 12)
+                        % 16);
+                } else {
+                    SetDirection(m_nNewDirection);
+                }
+            }
+        } else {
+            switch (m_nDirection) {
+            case 0:
+                m_pos.y = m_posOld.y + static_cast<LONG>(static_cast<double>(m_radius) * fCurrCircleChange / m_fCircleChange * 3.0 / 4.0);
+                break;
+            case 4:
+                m_pos.x = m_posOld.x - static_cast<LONG>(static_cast<double>(m_radius) * fCurrCircleChange / m_fCircleChange);
+                break;
+            case 8:
+                m_pos.y = m_posOld.y - static_cast<LONG>(static_cast<double>(m_radius) * fCurrCircleChange / m_fCircleChange * 3.0 / 4.0);
+                break;
+            case 12:
+                m_pos.x = m_posOld.x + static_cast<LONG>(static_cast<double>(m_radius) * fCurrCircleChange / m_fCircleChange);
+                break;
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+                // __LINE__: 4554
+                UTIL_ASSERT(FALSE);
+            }
+        }
+
+        m_fCurrCircleChange += 1.0;
+        if (m_fCurrCircleChange >= m_fCircleChange) {
+            SetSequence(SEQ_READY);
+        }
+    }
 }
 
 // 0x6FBA50
