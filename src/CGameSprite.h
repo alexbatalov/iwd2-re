@@ -443,6 +443,7 @@ public:
     void OnLightningStrike();
     void MakeGlobal();
     SHORT GetNumSounds(SHORT nOffset, SHORT nMaxNum);
+    BOOL CanSpeak(BOOL ignoreDeath, BOOL ignoreSilence);
     void PlaySound(BYTE soundID, BOOL showText, BOOL showCircle, BOOL overrideOption);
     void VerbalConstant(LONG verbalConstant);
     LONG GetLength(LONG verbalConstant);
@@ -942,7 +943,7 @@ public:
     /* 7240 */ BOOL m_bHiding;
     /* 7244 */ ULONG m_lastRegenerationTime;
     /* 7248 */ int field_7248;
-    /* 724C */ unsigned char field_724C;
+    /* 724C */ BOOLEAN m_bAllowDialogInterrupt;
     /* 724D */ BOOLEAN m_bHappinessChanged;
     /* 724E */ LONG m_nUnselectableCounter;
     /* 7252 */ CResRef m_secondarySounds;

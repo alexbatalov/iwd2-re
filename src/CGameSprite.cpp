@@ -963,7 +963,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
         m_nDialogData = 0;
         m_dialogWait = 0;
         m_dialogWaitTarget = CGameObjectArray::INVALID_INDEX;
-        field_724C = 1;
+        m_bAllowDialogInterrupt = TRUE;
         field_56E4 = "";
         m_talkingRenderCount = 0;
         field_711E = 1;
@@ -2038,7 +2038,7 @@ void CGameSprite::AIUpdate()
                 case CGAMESPRITE_SEQ_READY:
                     if (m_dialogWait <= 0
                         || m_typeAI.GetEnemyAlly() >= CAIObjectType::EA_EVILCUTOFF
-                        || !field_724C
+                        || !m_bAllowDialogInterrupt
                         || m_derivedStats.m_bIgnoreDialogPause) {
                         AIUpdateWalk();
                     }
@@ -2138,7 +2138,7 @@ void CGameSprite::AIUpdate()
 
                     if (m_dialogWait > 0
                         && m_typeAI.GetEnemyAlly() < CAIObjectType::EA_EVILCUTOFF
-                        && field_724C
+                        && m_bAllowDialogInterrupt
                         && !m_derivedStats.m_bIgnoreDialogPause) {
                         if (m_nSequence != GetIdleSequence()) {
                             CMessage* message = new CMessageSetSequence(static_cast<BYTE>(GetIdleSequence()),
@@ -3015,6 +3015,61 @@ SHORT CGameSprite::GetNumSounds(SHORT nOffset, SHORT nMaxNum)
     }
 
     return nSounds;
+}
+
+// 0x7010A0
+BOOL CGameSprite::CanSpeak(BOOL ignoreDeath, BOOL ignoreSilence)
+{
+    if (!m_active || !m_activeAI || !m_activeImprisonment) {
+        return FALSE;
+    }
+
+    if (g_pBaldurChitin->GetObjectGame()->GetGameSave()->m_cutScene == TRUE) {
+        return TRUE;
+    }
+
+    if (!ignoreSilence && (m_derivedStats.m_generalState & STATE_SILENCED) != 0) {
+        return FALSE;
+    }
+
+    USHORT animationType = m_animation.GetAnimationId();
+
+    if ((m_derivedStats.m_generalState & STATE_SLEEPING) != 0
+        && ((animationType & 0xF000) != 0x4000 || animationType < 0x4400)) {
+        return FALSE;
+    }
+
+    if (!ignoreDeath
+        && ((m_derivedStats.m_generalState & STATE_DEAD) != 0
+            || (m_derivedStats.m_generalState & STATE_STONE_DEATH) != 0
+            || (m_derivedStats.m_generalState & STATE_FROZEN_DEATH) != 0)) {
+        return FALSE;
+    }
+
+    if ((m_derivedStats.m_generalState & STATE_HELPLESS) != 0) {
+        return FALSE;
+    }
+
+    if (m_derivedStats.m_spellStates.test(SPLSTATE_HELD)
+        || m_derivedStats.m_spellStates.test(SPLSTATE_HOPELESSNESS)
+        || m_derivedStats.m_spellStates.test(SPLSTATE_OTILUKES_RESILIENT_SPHERE)) {
+        return FALSE;
+    }
+
+    if (g_pBaldurChitin->GetObjectGame()->m_nTimeStop != 0
+        && g_pBaldurChitin->GetObjectGame()->m_nTimeStopCaster != m_id) {
+        return FALSE;
+    }
+
+    if (!m_bAllowDialogInterrupt) {
+        return FALSE;
+    }
+
+    if ((m_derivedStats.m_generalState & STATE_CHARMED) != 0) {
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 // 0x7011E0
