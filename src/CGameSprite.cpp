@@ -2747,6 +2747,193 @@ BOOL CGameSprite::MoveToFront()
     return TRUE;
 }
 
+// 0x6FF8A0
+void CGameSprite::OnActionButton(const CPoint& pt)
+{
+    if (m_canBeSeen > 0) {
+        CInfGame* pGame = g_pBaldurChitin->GetObjectGame();
+        CAIGroup* pGroup = pGame->GetGroup();
+        CAIAction action1;
+        CAIAction action2;
+        CAIObjectType targetType(0, 0, 0, 0, 0, 0, 0, 0, m_id, 0, 0);
+
+        switch (pGame->GetState()) {
+        case 0:
+            if (pGame->GetCharacterPortraitNum(m_id) != -1
+                || pGame->IsAlly(m_id)
+                || pGame->IsFamiliar(m_id)) {
+                if (!pGame->GetGameSave()->field_1AC || InControl()) {
+                    if (InControl()) {
+                        // NOTE: Uninline.
+                        pGame->SetLastTarget(CGameObjectArray::INVALID_INDEX);
+
+                        if (!m_moraleFailure) {
+                            if (!g_pBaldurChitin->GetScreenWorld()->GetCtrlKey()
+                                && !g_pBaldurChitin->GetScreenWorld()->GetShiftKey()) {
+                                pGame->UnselectAll();
+                            }
+                            pGame->SelectCharacter(m_id, !m_bSelected);
+                            pGame->SelectToolbar();
+                        }
+                    } else {
+                        if (pGroup->GetCount() > 0
+                            && m_pArea == pGame->GetVisibleArea()) {
+                            action1 = CAIAction(CAIAction::MOVETOOBJECTFOLLOW,
+                                targetType,
+                                0,
+                                0,
+                                0);
+                            pGroup->GroupAction(action1, TRUE, NULL);
+                        } else {
+                            pGame->UnselectAll();
+                            pGame->GetVisibleArea()->m_bPicked = FALSE;
+                            pGame->GetVisibleArea()->m_iPicked = CGameObjectArray::INVALID_INDEX;
+                            pGame->GetVisibleArea()->m_nToolTip = 0;
+                            pGame->GetVisibleArea()->OnDeactivation();
+                            pGame->m_visibleArea = m_pArea->m_id;
+                            pGame->GetVisibleArea()->OnActivation();
+                        }
+                    }
+                }
+            } else {
+                if (pGroup->GetCount() > 0) {
+                    if (pGroup->m_groupChanged
+                        || pGame->m_lastTarget != m_id
+                        || m_typeAI.GetEnemyAlly() < CAIObjectType::EA_EVILCUTOFF) {
+                        if (m_typeAI.GetEnemyAlly() < CAIObjectType::EA_EVILCUTOFF) {
+                            if (pGroup->IsPartyLeader() && (~m_baseStats.m_flags & STATE_DISEASED) != 0) {
+                                CMessage* message = new CMessageSetDialogWait(140,
+                                    pGroup->GetGroupLeader(),
+                                    m_id,
+                                    m_id);
+                                g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+                            }
+                        } else {
+                            pGroup->m_groupChanged = FALSE;
+
+                            // NOTE: Uninline.
+                            pGame->SetLastTarget(m_id);
+
+                            pGroup->GroupSetTarget(m_id);
+                        }
+                    } else if (pGame->field_38A6) {
+                        if (m_typeAI.GetEnemyAlly() >= CAIObjectType::EA_EVILCUTOFF) {
+                            pGroup->m_groupChanged = FALSE;
+
+                            // NOTE: Uninline.
+                            pGame->SetLastTarget(m_id);
+
+                            pGroup->GroupSetTarget(m_id);
+                        }
+                        pGame->field_38A6 = FALSE;
+                    }
+                } else {
+                    // NOTE: Uninline.
+                    pGame->SetLastTarget(CGameObjectArray::INVALID_INDEX);
+
+                    PlaySound(9, TRUE, FALSE, FALSE);
+                }
+            }
+            break;
+        case 2:
+            // NOTE: Uninline.
+            pGame->SetLastTarget(CGameObjectArray::INVALID_INDEX);
+
+            switch (pGame->GetIconIndex()) {
+            case 12:
+                if (!m_bSelected || pGroup->GetCount() != 1) {
+                    pGroup->GroupSetTarget(m_id);
+                    pGame->SetState(0);
+                    pGame->GetButtonArray()->SetSelectedButton(100);
+                    pGame->GetButtonArray()->UpdateState();
+                }
+                break;
+            case 18:
+                if (pGroup->IsPartyLeader()) {
+                    CMessage* message = new CMessageSetDialogWait(150,
+                        pGroup->GetGroupLeader(),
+                        m_id,
+                        m_id);
+                    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+
+                    action2 = CAIAction(CAIAction::PLAYERDIALOG,
+                        targetType,
+                        0,
+                        0,
+                        0);
+                    pGroup->GroupAction(action1, TRUE, &action2);
+
+                    pGame->SetState(0);
+                    pGame->GetButtonArray()->SetSelectedButton(100);
+                    pGame->GetButtonArray()->UpdateState();
+                }
+                break;
+            case 20:
+            case -1:
+                pGame->UseMagicOnGround(m_id);
+
+                pGame->SetState(0);
+                pGame->GetButtonArray()->SetSelectedButton(100);
+                pGame->GetButtonArray()->UpdateState();
+                break;
+            case 36:
+            case 40:
+                if (!m_bSelected) {
+                    SHORT nPortrait = g_pBaldurChitin->GetScreenWorld()->GetSelectedCharacter();
+                    LONG nCharacterId = pGame->GetCharacterId(nPortrait);
+
+                    CGameSprite* pSprite;
+
+                    BYTE rc;
+                    do {
+                        rc = pGame->GetObjectArray()->GetShare(nCharacterId,
+                            CGameObjectArray::THREAD_ASYNCH,
+                            reinterpret_cast<CGameObject**>(&pSprite),
+                            INFINITE);
+                    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+                    if (rc == CGameObjectArray::SUCCESS) {
+                        BYTE nPickPockets = pSprite->GetBaseStats()->m_skills[CGAMESPRITE_SKILL_PICK_POCKET];
+
+                        pGame->GetObjectArray()->ReleaseShare(nCharacterId,
+                            CGameObjectArray::THREAD_ASYNCH,
+                            INFINITE);
+
+                        if (nPickPockets == 0) {
+                            break;
+                        }
+                    }
+
+                    action2 = CAIAction(CAIAction::PICKPOCKETS,
+                        targetType,
+                        0,
+                        0,
+                        0);
+                    pGroup->GroupAction(action1, TRUE, &action2);
+
+                    pGame->SetState(0);
+                    pGame->GetButtonArray()->SetSelectedButton(100);
+                    pGame->GetButtonArray()->UpdateState();
+                }
+                break;
+            default:
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+                // __LINE__: 5921
+                UTIL_ASSERT(FALSE);
+            }
+            break;
+        case 3:
+            break;
+        default:
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+            // __LINE__: 5951
+            UTIL_ASSERT(FALSE);
+        }
+    } else {
+        OnActionButton(pt);
+    }
+}
+
 // 0x700BB0
 void CGameSprite::OnFormationButton(const CPoint& pt)
 {

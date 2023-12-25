@@ -15,6 +15,9 @@ const SHORT CAIAction::DIALOGUE = 8;
 // 0x8477B0
 const SHORT CAIAction::MOVETOPOINT = 23;
 
+// 0x8477B4
+const SHORT CAIAction::PICKPOCKETS = 25;
+
 // 0x8477C0
 const SHORT CAIAction::SPELL = 31;
 
@@ -83,6 +86,9 @@ const SHORT CAIAction::ATTACKREEVALUATE = 134;
 
 // 0x847886
 const SHORT CAIAction::STARTDIALOG = 137;
+
+// 0x84788A
+const SHORT CAIAction::PLAYERDIALOG = 139;
 
 // 0x8478B4
 const SHORT CAIAction::APPLYSPELL = 160;

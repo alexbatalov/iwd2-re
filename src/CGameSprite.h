@@ -414,6 +414,7 @@ public:
     /* 0034 */ BOOL IsOver(const CPoint& pt) override;
     /* 0038 */ BOOL DoesIntersect(CRect r);
     /* 003C */ BOOL OnSearchMap() override;
+    /* 0040 */ void OnActionButton(const CPoint& pt) override;
     /* 0044 */ void OnFormationButton(const CPoint& pt) override;
     /* 004C */ void Render(CGameArea* pArea, CVidMode* pVidMode, INT nSurface) override;
     /* 0058 */ void SetCursor(LONG nToolTip) override;
