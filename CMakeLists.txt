@@ -317,6 +317,8 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/CScreenWorldMap.h"
     "src/CSearchBitmap.cpp"
     "src/CSearchBitmap.h"
+    "src/CSevenEyes.cpp"
+    "src/CSevenEyes.h"
     "src/CSound.cpp"
     "src/CSound.h"
     "src/CSoundChannel.cpp"
