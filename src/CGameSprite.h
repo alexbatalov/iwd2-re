@@ -430,6 +430,7 @@ public:
     /* 00C4 */ virtual void ResetAIType();
 
     void AddBlood(SHORT nHeight, SHORT nDirection, SHORT nType);
+    void RemoveReplacementFromArea();
     void AIUpdateWalk();
     void SetPath(LONG* pPath, SHORT nPath);
     BOOL sub_6FB440();
