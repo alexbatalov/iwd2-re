@@ -3832,7 +3832,7 @@ CUIControlPortraitBase::~CUIControlPortraitBase()
 // 0x77AB90
 void CUIControlPortraitBase::ActivateToolTip()
 {
-    LONG nCharacterId = g_pBaldurChitin->GetObjectGame()->GetCharacterSlot(m_nID);
+    LONG nCharacterId = g_pBaldurChitin->GetObjectGame()->GetCharacterId(static_cast<SHORT>(m_nID));
     if (nCharacterId != CGameObjectArray::INVALID_INDEX) {
         CGameSprite* pSprite;
 
