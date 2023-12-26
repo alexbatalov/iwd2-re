@@ -925,19 +925,16 @@ void CScreenWorld::AsynchronousUpdate(BOOL bActiveEngine)
                                 } while (rc == CGameObjectArray::SHARED);
 
                                 if (rc == CGameObjectArray::SUCCESS) {
-                                    if (pSprite->GetArea() == pArea) {
-                                        // NOTE: Uninline.
-                                        CDerivedStats* pDStats = pSprite->GetActiveStats();
-                                        if ((pDStats->m_generalState & STATE_DEAD) != 0) {
-                                            pArea->m_iPicked = pGame->GetCharacterId(nPortrait);
-                                            pArea->m_nToolTip = 0;
+                                    if (pSprite->GetArea() == pArea
+                                        || (pSprite->GetActiveStats()->m_generalState & STATE_DEAD) != 0) {
+                                        pArea->m_iPicked = pGame->GetCharacterId(nPortrait);
+                                        pArea->m_nToolTip = 0;
 
-                                            if (pSprite->Orderable(FALSE)) {
-                                                pArea->m_iPickedTarget = pSprite->GetTargetId();
-                                            }
-
-                                            pArea->m_bPicked = TRUE;
+                                        if (pSprite->Orderable(FALSE)) {
+                                            pArea->m_iPickedTarget = pSprite->GetTargetId();
                                         }
+
+                                        pArea->m_bPicked = TRUE;
                                     }
                                     pGame->GetObjectArray()->ReleaseShare(pGame->GetCharacterId(nPortrait),
                                         CGameObjectArray::THREAD_ASYNCH,
