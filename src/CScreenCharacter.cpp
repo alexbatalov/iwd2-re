@@ -2291,6 +2291,7 @@ void CScreenCharacter::UpdateGeneralInformation(CUIControlTextDisplay* pText, CG
                 -1,
                 FALSE,
                 TRUE);
+            pSprite->m_portraitIcons.GetNext(pos);
         }
 
         UpdateText(pText, "");
