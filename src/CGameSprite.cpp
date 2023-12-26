@@ -5076,13 +5076,40 @@ void CGameSprite::SetCharacterToolTip(CUIControlBase* pControl)
 // 0x706B40
 void CGameSprite::SetDirection(const CPoint& posDest)
 {
-    // TODO: Incomplete.
+    if (m_pos == posDest) {
+        // NOTE: Uninline.
+        SetDirection(m_nNewDirection);
+    } else {
+        // NOTE: Uninline.
+        SetDirection(GetDirection(posDest));
+    }
 }
 
 // 0x706C80
 void CGameSprite::SetDirection(SHORT direction)
 {
-    // TODO: Incomplete.
+    m_nNewDirection = direction;
+    m_deltaDirection = direction > m_nDirection ? 1 : -1;
+
+    if (direction - m_nDirection > 8 || direction - m_nDirection <= -8) {
+        // FIXME: Same value?
+        m_deltaDirection = direction > m_nDirection ? 1 : -1;
+    }
+
+    if (abs(direction - m_nDirection) == 8) {
+        m_skipDeltaDirection = 4;
+    } else {
+        m_skipDeltaDirection = 0;
+    }
+
+    if (m_nSequence == CGAMESPRITE_SEQ_WALK && m_walkBackwards) {
+        if (abs(direction - m_nDirection) == 8) {
+            m_nNewDirection = (direction + 8) % 16;
+            m_deltaDirection = -m_deltaDirection;
+        } else {
+            m_walkBackwards = FALSE;
+        }
+    }
 }
 
 // 0x706F80
