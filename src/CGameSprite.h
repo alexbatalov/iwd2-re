@@ -944,7 +944,7 @@ public:
     /* 723C */ DWORD m_modalCounter;
     /* 7240 */ BOOL m_bHiding;
     /* 7244 */ ULONG m_lastRegenerationTime;
-    /* 7248 */ int field_7248;
+    /* 7248 */ BOOL m_bLevelUp;
     /* 724C */ BOOLEAN m_bAllowDialogInterrupt;
     /* 724D */ BOOLEAN m_bHappinessChanged;
     /* 724E */ LONG m_nUnselectableCounter;

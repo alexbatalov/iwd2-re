@@ -1138,7 +1138,7 @@ public:
     /* 007E */ BYTE m_nMoveScale;
     /* 007F */ unsigned char field_7F;
     /* 0080 */ LONG m_nHPCONBonusTotalOld;
-    /* 0084 */ unsigned char field_84;
+    /* 0084 */ BOOLEAN m_bLevelUp;
     /* 0085 */ unsigned char field_85;
     /* 0086 */ BYTE m_baseSkills[64];
     /* 00C6 */ BYTE m_skills[64];

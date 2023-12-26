@@ -10915,7 +10915,7 @@ CMessageSpriteUpdate::CMessageSpriteUpdate(CGameSprite* pSprite, LONG caller, LO
     m_bMoralFailure = 0;
     m_nMoveScale = 0;
     m_nHPCONBonusTotalOld = 0;
-    field_84 = 0;
+    m_bLevelUp = FALSE;
     m_pPath = 0;
     m_nPath = 0;
     field_74 = 0;
@@ -10952,7 +10952,7 @@ CMessageSpriteUpdate::CMessageSpriteUpdate(CGameSprite* pSprite, LONG caller, LO
         m_nEnemyAllyStart = pSprite->m_startTypeAI.GetEnemyAlly();
         m_bMoralFailure = pSprite->m_moraleFailure;
         m_nMoveScale = pSprite->GetAnimation()->GetMoveScale();
-        field_84 = pSprite->field_7248;
+        m_bLevelUp = static_cast<BOOLEAN>(pSprite->m_bLevelUp);
         m_nHPCONBonusTotalOld = pSprite->m_nHPCONBonusTotalOld;
         m_ptDest = pSprite->m_curDest;
         field_108 = 0;

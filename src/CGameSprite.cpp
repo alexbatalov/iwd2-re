@@ -16,6 +16,7 @@
 #include "CScreenCharacter.h"
 #include "CScreenCreateChar.h"
 #include "CScreenInventory.h"
+#include "CScreenMap.h"
 #include "CScreenWorld.h"
 #include "CSpawn.h"
 #include "CSpell.h"
@@ -670,6 +671,7 @@ INT CGameSprite::m_bRollFeedbackEnabled = -1;
 
 // 0x6EF990
 CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, DWORD expirationTime, WORD huntingRange, WORD followRange, DWORD timeOfDayVisible, CPoint startPos, WORD facing)
+    : m_portraitIconVidCell(CResRef("STATES"), g_pBaldurChitin->field_4A28)
 {
     int index;
 
@@ -1020,7 +1022,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
         SetSequence(SEQ_HEAD_TURN);
         CheckLoadState();
 
-        field_7248 = 0;
+        m_bLevelUp = FALSE;
         m_nUnselectableCounter = 0;
 
         // NOTE: Uninline.
@@ -4382,7 +4384,315 @@ void CGameSprite::RenderMarkers(CVidMode* pVidMode, INT nSurface)
 // 0x704D40
 void CGameSprite::RenderPortrait(const CPoint& cpRenderPosition, const CSize& szControl, BOOL bPressed, BOOL reorderHighlight, BOOL selectFromMarker, const CRect& rClip, BOOL bDoubleSize)
 {
-    // TODO: Incomplete.
+    BOOL bDead = FALSE;
+
+    if (g_pBaldurChitin->GetObjectGame()->GetGameSave()->field_1AC
+        && !InControl()) {
+        return;
+    }
+
+    m_vbPortraitSmall.SetResRef(CResRef(m_baseStats.m_portraitSmall), TRUE, FALSE);
+    m_vbPortraitSmall.m_bDoubleSize = bDoubleSize;
+
+    if (CResRef(m_baseStats.m_portraitSmall) == "") {
+        m_vbPortraitSmall.SetResRef(CResRef(CInfGame::SILHOUETTE_PORTRAIT_SM), TRUE, FALSE);
+        m_vbPortraitSmall.m_bDoubleSize = bDoubleSize;
+    }
+
+    if (CResRef(m_baseStats.m_portraitSmall) != "" && m_vbPortraitSmall.GetRes() == NULL) {
+        m_vbPortraitSmall.SetResRef(CResRef(CInfGame::SILHOUETTE_PORTRAIT_SM), TRUE, FALSE);
+        m_vbPortraitSmall.m_bDoubleSize = bDoubleSize;
+    }
+
+    if (m_vbPortraitSmall.GetBitCount(FALSE) != 24
+        && m_vbPortraitSmall.GetBitCount(FALSE) != 8) {
+        m_vbPortraitSmall.SetResRef(CResRef(CInfGame::SILHOUETTE_PORTRAIT_SM), TRUE, TRUE);
+        m_vbPortraitSmall.m_bDoubleSize = bDoubleSize;
+    }
+
+    INT nScale = bDoubleSize ? 2 : 1;
+
+    CRect r1(cpRenderPosition.x,
+        cpRenderPosition.y,
+        cpRenderPosition.x + 44 * nScale,
+        cpRenderPosition.y + 44 * nScale);
+
+    INT v1;
+    if (m_derivedStats.m_spellStates[SPLSTATE_SUPPRESS_HP_INFO]) {
+        v1 = 42 * nScale;
+    } else {
+        v1 = 42 * nScale * (m_derivedStats.m_nMaxHitPoints - m_baseStats.m_hitPoints) / m_derivedStats.m_nMaxHitPoints;
+    }
+
+    if (m_baseStats.m_hitPoints <= 0) {
+        bDead = TRUE;
+    }
+
+    COLORREF rgbColor;
+    if (selectFromMarker) {
+        if ((m_pArea != NULL && m_id == m_pArea->m_iPicked)
+            || m_talkingCounter > 0) {
+            rgbColor = m_marker.m_rgbColor;
+        } else {
+            rgbColor = CMarker::PC_SELECTED_COLOR;
+            if (!m_bSelected) {
+                rgbColor = RGB(0, 0, 0);
+            }
+        }
+    } else {
+        if (g_pBaldurChitin->GetActiveEngine() == g_pBaldurChitin->m_pEngineMap) {
+            rgbColor = GetMapScreenColor();
+        } else {
+            if (InControl() && m_nUnselectableCounter == 0) {
+                rgbColor = CMarker::PC_SELECTED_COLOR;
+            } else {
+                rgbColor = CMarker::PC_NONECONTROLED_SELECTED_COLOR;
+            }
+            if (g_pBaldurChitin->GetObjectGame()->GetCharacterPortraitNum(m_id) != g_pBaldurChitin->GetActiveEngine()->GetSelectedCharacter()) {
+                rgbColor = RGB(0, 0, 0);
+            }
+        }
+    }
+
+    INT v2 = 42 * nScale;
+
+    CRect r2(cpRenderPosition.x + 2 * nScale,
+        cpRenderPosition.y + 2 * nScale,
+        cpRenderPosition.x + 2 * nScale + 42 * nScale,
+        cpRenderPosition.y + 2 * nScale + 42 * nScale);
+    CRect r3(r2);
+
+    if (bDead) {
+        m_vbPortraitSmall.SetTintColor(RGB(180, 180, 180));
+        m_vbPortraitSmall.RenderDirect(CVIDINF_SURFACE_BACK,
+            r2.left,
+            r2.top,
+            r2 & rClip,
+            0xA0000,
+            FALSE);
+    } else {
+        if (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nOldPortraitHealth == TRUE) {
+            if (m_bBloodFlashOn) {
+                m_vbPortraitSmall.SetTintColor(RGB(120 + static_cast<BYTE>(m_nBloodFlashAmount), 30, 30));
+                m_vbPortraitSmall.RenderDirect(CVIDINF_SURFACE_BACK,
+                    r2.left,
+                    r2.top,
+                    r2 & rClip,
+                    0x20000,
+                    FALSE);
+            } else {
+                if (field_53E6) {
+                    m_vbPortraitSmall.SetTintColor(RGB(50, 255, 50));
+                } else {
+                    m_vbPortraitSmall.SetTintColor(RGB(120, 30, 30));
+                }
+                m_vbPortraitSmall.RenderDirect(CVIDINF_SURFACE_BACK,
+                    r2.left,
+                    r2.top,
+                    r2 & rClip,
+                    0x20000,
+                    FALSE);
+            }
+        }
+    }
+
+    if (!GRAVITY_IS_DOWN
+        && g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nOldPortraitHealth == TRUE) {
+        r2.bottom = r2.top + v2 - v1;
+    }
+
+    if (!bDead) {
+        m_vbPortraitSmall.SetTintColor(RGB(255, 255, 255));
+
+        if (GRAVITY_IS_DOWN) {
+            CRect r3(rClip);
+
+            if (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_nOldPortraitHealth == TRUE) {
+                r3.top = r2.bottom + v1 - v2;
+            }
+
+            m_vbPortraitSmall.RenderDirect(CVIDINF_SURFACE_BACK,
+                r2.left,
+                r2.top,
+                r2 & r3,
+                0x20000,
+                FALSE);
+        } else {
+            m_vbPortraitSmall.RenderDirect(CVIDINF_SURFACE_BACK,
+                r2.left,
+                r2.top,
+                r2 & r2,
+                0x20000,
+                FALSE);
+        }
+    }
+
+    CRect rLineClip(rClip);
+    if (rgbColor != 0) {
+        r1.right++;
+        rLineClip.right++;
+
+        g_pBaldurChitin->GetCurrentVideoMode()->DrawLine(r1.left,
+            r1.top,
+            r1.left,
+            r1.bottom,
+            CVIDINF_SURFACE_BACK,
+            rLineClip & r1,
+            rgbColor);
+
+        if (rLineClip.bottom != r1.bottom) {
+            g_pBaldurChitin->GetCurrentVideoMode()->DrawLine(r1.left,
+                r1.bottom,
+                r1.right,
+                r1.bottom,
+                CVIDINF_SURFACE_BACK,
+                rLineClip & r1,
+                rgbColor);
+        }
+
+        if (rLineClip.right != r1.right) {
+            g_pBaldurChitin->GetCurrentVideoMode()->DrawLine(r1.right,
+                r1.bottom,
+                r1.right,
+                r1.top,
+                CVIDINF_SURFACE_BACK,
+                rLineClip & r1,
+                rgbColor);
+        }
+
+        g_pBaldurChitin->GetCurrentVideoMode()->DrawLine(r1.right,
+            r1.top,
+            r1.left,
+            r1.top,
+            CVIDINF_SURFACE_BACK,
+            rLineClip & r1,
+            rgbColor);
+    }
+
+    if (reorderHighlight) {
+        g_pBaldurChitin->GetCurrentVideoMode()->DrawLine(r1.left,
+            r1.top,
+            r1.left,
+            r1.bottom,
+            CVIDINF_SURFACE_BACK,
+            r1 & rLineClip,
+            RGB(255, 255, 0));
+
+        g_pBaldurChitin->GetCurrentVideoMode()->DrawLine(r1.left,
+            r1.bottom,
+            r1.right,
+            r1.bottom,
+            CVIDINF_SURFACE_BACK,
+            r1 & rLineClip,
+            RGB(255, 255, 0));
+
+        g_pBaldurChitin->GetCurrentVideoMode()->DrawLine(r1.right,
+            r1.bottom,
+            r1.right,
+            r1.top,
+            CVIDINF_SURFACE_BACK,
+            r1 & rLineClip,
+            RGB(255, 255, 0));
+
+        g_pBaldurChitin->GetCurrentVideoMode()->DrawLine(r1.right,
+            r1.top,
+            r1.left,
+            r1.top,
+            CVIDINF_SURFACE_BACK,
+            r1 & rLineClip,
+            RGB(255, 255, 0));
+    }
+
+    CPoint ptIcon(r3.left, r3.bottom);
+    POSITION pos = m_portraitIcons.GetHeadPosition();
+    while (pos != NULL) {
+        SHORT nIcon = static_cast<SHORT>(reinterpret_cast<INT>(m_portraitIcons.GetNext(pos)));
+        if (nIcon < m_portraitIconVidCell.GetNumberSequences(FALSE)) {
+            m_portraitIconVidCell.SequenceSet(nIcon + 65);
+            m_portraitIconVidCell.FrameSet(0);
+            m_portraitIconVidCell.Render(CVIDINF_SURFACE_BACK,
+                ptIcon.x,
+                ptIcon.y,
+                r3 & rClip,
+                NULL,
+                0,
+                0,
+                -1);
+            ptIcon.x += PORTRAIT_ICON_SIZE.x * nScale;
+            if (ptIcon.x > r3.right - PORTRAIT_ICON_SIZE.x * nScale) {
+                ptIcon.x = r3.left;
+                ptIcon.y -= PORTRAIT_ICON_SIZE.y * nScale;
+            }
+        }
+    }
+
+    CVidFont font;
+    if (!bDead) {
+        if (SHOW_CHARACTER_HP) {
+            font.SetResRef(CResRef("NUMFONT"), bDoubleSize, TRUE);
+            font.SequenceSet(0);
+            if (font.GetRes()->Demand() != NULL) {
+                // 0x85BD4C
+                static const INT HEALTH_VALUE[4] = {
+                    100,
+                    75,
+                    50,
+                    25,
+                };
+
+                // 0x85BD5C
+                static const COLORREF HEALTH_COLOR[4] = {
+                    RGB(255, 255, 255),
+                    RGB(0, 250, 0),
+                    RGB(255, 255, 0),
+                    RGB(255, 128, 0),
+                };
+
+                CString sHealth;
+                INT iHealthPercent = 100 * m_baseStats.m_hitPoints / m_derivedStats.m_nMaxHitPoints;
+                COLORREF rgbColor;
+
+                for (int index = 0; index < 4; index++) {
+                    if (iHealthPercent >= HEALTH_VALUE[index]) {
+                        rgbColor = HEALTH_COLOR[index];
+                        break;
+                    }
+                }
+
+                if (m_derivedStats.m_spellStates[SPLSTATE_SUPPRESS_HP_INFO]) {
+                    sHealth.Format("%c/%c", '-', '-');
+                    rgbColor = RGB(255, 0, 0);
+                } else {
+                    sHealth.Format("%d/%d", m_baseStats.m_hitPoints, m_derivedStats.m_nMaxHitPoints);
+                }
+
+                if (m_baseStats.m_hitPoints == 0) {
+                    rgbColor = RGB(128, 128, 128);
+                }
+
+                font.SetColor(rgbColor, RGB(0, 0, 0), TRUE);
+                font.TextOut(sHealth,
+                    r3.left,
+                    cpRenderPosition.y + font.GetFontHeight(FALSE),
+                    rClip,
+                    CVIDINF_SURFACE_BACK);
+                font.GetRes()->Release();
+            }
+        }
+    }
+
+    if (m_bLevelUp) {
+        m_portraitIconVidCell.SequenceSet(254);
+        m_portraitIconVidCell.FrameSet(0);
+        m_portraitIconVidCell.Render(CVIDINF_SURFACE_BACK,
+            r3.right - PORTRAIT_ICON_SIZE.x * nScale,
+            r3.top + PORTRAIT_ICON_SIZE.y * nScale,
+            r3 & rClip,
+            NULL,
+            0,
+            0,
+            -1);
+    }
 }
 
 // 0x705AD0
