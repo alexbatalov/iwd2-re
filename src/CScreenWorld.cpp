@@ -1941,7 +1941,7 @@ void CScreenWorld::HandleDeathReaction()
 // 0x692290
 POSITION CScreenWorld::DisplayText(const CString& sName, const CString& sText, COLORREF rgbNameColor, COLORREF rgbTextColor, LONG lMarker, BOOLEAN bMoveToTop)
 {
-    if (g_pBaldurChitin->GetObjectGame()->m_bGameLoaded) {
+    if (!g_pBaldurChitin->GetObjectGame()->m_bGameLoaded) {
         return NULL;
     }
 
@@ -1982,7 +1982,7 @@ POSITION CScreenWorld::DisplayText(const CString& sName, const CString& sText, C
 // 0x692460
 POSITION CScreenWorld::DisplayText(const CString& sName, const CString& sText, LONG lMarker, BOOLEAN bMoveToTop)
 {
-    if (g_pBaldurChitin->GetObjectGame()->m_bGameLoaded) {
+    if (!g_pBaldurChitin->GetObjectGame()->m_bGameLoaded) {
         return NULL;
     }
 
