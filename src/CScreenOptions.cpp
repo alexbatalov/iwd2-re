@@ -848,7 +848,7 @@ void CScreenOptions::ResetErrorPanel(CUIPanel* pPanel)
     UpdateText(pText, "%s", strRes.szText);
 
     for (INT nButton = 0; nButton < m_nNumErrorButtons; nButton++) {
-        CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nButton + 1));
+        CUIControlButton* pButton = static_cast<CUIControlButton*>(pPanel->GetControl(nButton));
 
         // __FILE__: C:\Projects\Icewind2\src\Baldur\InfScreenConnection.cpp
         // __LINE__: 1516
