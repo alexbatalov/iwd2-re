@@ -14354,9 +14354,13 @@ int CGameSprite::sub_45B710()
 // 0x706D50
 SHORT CGameSprite::GetDirection(const CPoint& target)
 {
-    // TODO: Incomplete.
+    if (m_pos == target) {
+        return m_nNewDirection;
+    }
 
-    return 0;
+    CPoint ptStart(m_pos.x, 4 * m_pos.y / 3);
+    CPoint ptTarget(target.x, 4 * target.y / 3);
+    return GetDirection(ptStart, ptTarget);
 }
 
 // 0x45B720
@@ -14368,9 +14372,78 @@ SHORT CGameSprite::GetDirection()
 // 0x706DD0
 SHORT CGameSprite::GetDirection(const CPoint& ptStart, const CPoint& ptTarget)
 {
-    // TODO: Incomplete.
+    LONG dx;
+    LONG dy;
 
-    return 0;
+    if (ptStart == ptTarget) {
+        return 0;
+    }
+
+    if (ptTarget.y < ptStart.y) {
+        if (ptTarget.x < ptStart.x) {
+            dx = ptStart.x - ptTarget.y;
+            dy = ptStart.y - ptTarget.y;
+
+            if (27 * dy <= 6 * dx) {
+                return 4;
+            } else if (27 * dy <= 16 * dx) {
+                return 6;
+            } else if (24 * dy <= 38 * dx) {
+                return 6;
+            } else if (7 * dy <= 38 * dx) {
+                return 7;
+            } else {
+                return 8;
+            }
+        } else {
+            dx = ptTarget.x - ptStart.x;
+            dy = ptStart.y - ptTarget.y;
+
+            if (27 * dy <= 6 * dx) {
+                return 12;
+            } else if (27 * dy <= 16 * dx) {
+                return 11;
+            } else if (24 * dy <= 38 * dx) {
+                return 10;
+            } else if (7 * dy <= 38 * dx) {
+                return 9;
+            } else {
+                return 8;
+            }
+        }
+    } else {
+        if (ptTarget.x < ptStart.x) {
+            dx = ptStart.x - ptTarget.x;
+            dy = ptTarget.y - ptStart.y;
+
+            if (27 * dy <= 6 * dx) {
+                return 4;
+            } else if (27 * dy <= 16 * dx) {
+                return 3;
+            } else if (24 * dy <= 38 * dx) {
+                return 2;
+            } else if (7 * dy <= 38 * dx) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } else {
+            dx = ptTarget.x - ptStart.x;
+            dy = ptTarget.y - ptStart.y;
+
+            if (27 * dy <= 6 * dx) {
+                return 12;
+            } else if (27 * dy <= 16 * dx) {
+                return 13;
+            } else if (24 * dy <= 38 * dx) {
+                return 14;
+            } else if (7 * dy <= 38 * dx) {
+                return 15;
+            } else {
+                return 0;
+            }
+        }
+    }
 }
 
 // 0x45B730
