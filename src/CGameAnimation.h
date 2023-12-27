@@ -33,6 +33,7 @@ public:
     char* GetSndArmor();
     char* GetSndReady();
     char* GetSndWalk(SHORT tableIndex);
+    DWORD GetSndWalkFreq();
     BOOL IsFalseColor();
     void SetAnimationType(USHORT animationID, BYTE* colorRangeValues, WORD facing);
     void ClearColorEffectsAll();

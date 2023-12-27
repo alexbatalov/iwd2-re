@@ -229,6 +229,16 @@ char* CGameAnimation::GetSndWalk(SHORT tableIndex)
 }
 
 // NOTE: Inlined.
+DWORD CGameAnimation::GetSndWalkFreq()
+{
+    // __FILE__: .\Include\ObjAnimation.h
+    // __LINE__: 2098
+    UTIL_ASSERT(m_animation != NULL);
+
+    return m_animation->GetSndWalkFreq();
+}
+
+// NOTE: Inlined.
 BOOL CGameAnimation::IsFalseColor()
 {
     // __FILE__: .\Include\ObjAnimation.h

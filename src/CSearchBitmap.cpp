@@ -137,6 +137,37 @@ BYTE CSearchBitmap::GetCost(const CPoint& point, const BYTE* terrainTable, BYTE 
     return 0;
 }
 
+// 0x547D30
+BYTE CSearchBitmap::GetMobileCost(const CPoint& point, const BYTE* terrainTable, BYTE personalSpace, BOOL bCheckBump)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CSearchBitmap.cpp
+    // __LINE__: 377
+    UTIL_ASSERT(terrainTable != NULL);
+
+    int radius = (personalSpace - 2) / 2;
+    int minX = max(point.x - radius, 0);
+    int maxX = min(point.x + radius, m_GridSquareDimensions.cx);
+    int minY = max(point.y - radius, 0);
+    int maxY = min(point.y + radius, m_GridSquareDimensions.cy);
+
+    for (int x = minX; x <= maxX; x++) {
+        for (int y = minY; y <= maxY; y++) {
+            BYTE flags = m_pDynamicCost[y * m_GridSquareDimensions.cx + x];
+            if ((flags & 0x81) == 0x80) {
+                return terrainTable[0];
+            } else if ((flags & 0x1) != 0) {
+                return terrainTable[8];
+            } else if ((flags & 0x70) != 0) {
+                return terrainTable[8];
+            } else if (bCheckBump && (flags & 0xE) != 0) {
+                return terrainTable[8];
+            }
+        }
+    }
+
+    return 0;
+}
+
 // 0x547E60
 void CSearchBitmap::AddObject(const CPoint& point, BYTE sourceSide, BYTE personalSpaceRange, int a4, unsigned char& a5)
 {

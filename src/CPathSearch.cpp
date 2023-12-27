@@ -27,3 +27,9 @@ void CPathSearch::PositionToPoint(LONG position, POINT* point)
     point->x = position % GRID_ACTUALX;
     point->y = GRID_ACTUALY - position / GRID_ACTUALX - 1;
 }
+
+// NOTE: Inlined.
+LONG CPathSearch::PointToPosition(POINT* point)
+{
+    return point->x + GRID_ACTUALX * (GRID_ACTUALY - point->y - 1);
+}

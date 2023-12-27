@@ -14,6 +14,7 @@ public:
     static const BYTE COST_SCALE_ESTIMATE;
 
     static void PositionToPoint(LONG position, POINT* point);
+    static LONG PointToPosition(POINT* point);
 };
 
 #endif /* CPATHSEARCH_H_ */

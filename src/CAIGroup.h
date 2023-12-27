@@ -101,6 +101,7 @@ public:
     void AddTrigger(CAITrigger& trigger);
     BOOL InList(LONG characterId);
     void FollowLeader(CPoint target, BOOL additive);
+    void HandleFollowPath(LONG* pPath, INT nPath, CPoint target, CPoint start, BOOL additive);
 
     BYTE GetCount();
 

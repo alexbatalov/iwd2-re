@@ -200,6 +200,9 @@ const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_LAST_ATTACKER = 46;
 // 0x84CF07
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_NUM_TIMES_TALKED_TO = 48;
 
+// 0x84CF08
+const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_PATH = 49;
+
 // 0x84CF09
 const BYTE CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_SEQUENCE = 50;
 
@@ -10363,6 +10366,79 @@ void CMessageSetNumTimesTalkedTo::Run()
             CGameObjectArray::THREAD_ASYNCH,
             INFINITE);
     }
+}
+
+// -----------------------------------------------------------------------------
+
+// 0x507F70
+CMessageSetPath::CMessageSetPath(LONG position, LONG* pPath, SHORT nPath, SHORT currPath, CPoint currDest, LONG caller, LONG target)
+    : CMessage(caller, target)
+{
+    CResRef areaResRef;
+    CString sAreaString;
+
+    CGameObject* pObject;
+
+    BYTE rc;
+    do {
+        rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetShare(target,
+            CGameObjectArray::THREAD_ASYNCH,
+            &pObject,
+            INFINITE);
+    } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+    if (rc == CGameObjectArray::SUCCESS) {
+        if (pObject->GetArea() != NULL) {
+            areaResRef = pObject->GetArea()->m_resRef;
+            areaResRef.CopyToString(sAreaString);
+        } else {
+            sAreaString = "NO_AREA";
+        }
+        g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseShare(target,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+    } else {
+        sAreaString = "NO_AREA";
+    }
+
+    m_currDest = currDest;
+    m_sAreaString = sAreaString;
+    if (nPath > 0) {
+        m_currPath = currPath;
+        m_pPath = new LONG[nPath];
+        memcpy(m_pPath, pPath, sizeof(LONG) * nPath);
+        m_nPath = nPath;
+    } else {
+        m_currPath = 0;
+        m_pPath = NULL;
+        m_nPath = 0;
+    }
+}
+
+// 0x4F60E0
+CMessageSetPath::~CMessageSetPath()
+{
+    if (m_pPath != NULL) {
+        delete m_pPath;
+    }
+}
+
+// 0x453510
+SHORT CMessageSetPath::GetCommType()
+{
+    return BROADCAST;
+}
+
+// 0x40A0E0
+BYTE CMessageSetPath::GetMsgType()
+{
+    return CBaldurMessage::MSG_TYPE_CMESSAGE;
+}
+
+// 0x4F6140
+BYTE CMessageSetPath::GetMsgSubType()
+{
+    return CBaldurMessage::MSG_SUBTYPE_CMESSAGE_SET_PATH;
 }
 
 // -----------------------------------------------------------------------------

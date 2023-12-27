@@ -903,6 +903,12 @@ void CAIGroup::FollowLeader(CPoint target, BOOL additive)
     }
 }
 
+// 0x409820
+void CAIGroup::HandleFollowPath(LONG* pPath, INT nPath, CPoint target, CPoint start, BOOL additive)
+{
+    // TODO: Incomplete.
+}
+
 // 0x68C000
 BYTE CAIGroup::GetCount()
 {

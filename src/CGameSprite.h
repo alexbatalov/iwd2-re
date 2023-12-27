@@ -434,6 +434,7 @@ public:
     void RemoveReplacementFromArea();
     void AIUpdateWalk();
     void SetPath(LONG* pPath, SHORT nPath);
+    BOOL ClearBumpPath(const CPoint& start, const CPoint& goal);
     BOOL sub_6FB440();
     void AIUpdateFly();
     void ChangeDirection();
@@ -801,8 +802,7 @@ public:
     /* 5340 */ double m_fDirectionOffset;
     /* 5348 */ SHORT m_nSequence;
     /* 534A */ CPoint m_posExact;
-    /* 5352 */ int field_5352;
-    /* 5356 */ int field_5356;
+    /* 5352 */ CPoint m_posDelta;
     /* 535A */ CPoint m_posDest;
     /* 5362 */ CPoint m_posOld;
     /* 536A */ int field_536A;
@@ -834,9 +834,9 @@ public:
     /* 54AC */ BOOL m_bBumped;
     /* 54B0 */ CPoint m_ptBumpedFrom;
     /* 54B8 */ int field_54B8;
-    /* 54BC */ int field_54BC;
-    /* 54C0 */ int field_54C0;
-    /* 54C4 */ LONG field_54C4;
+    /* 54BC */ BOOL m_followLeader;
+    /* 54C0 */ BOOL m_followLeaderAdditive;
+    /* 54C4 */ LONG m_followLeaderNext;
     /* 54C8 */ int m_followStart;
     /* 54CC */ CTypedPtrList<CPtrList, CBlood*> m_lstBlood;
     /* 54E8 */ SHORT m_castCounter;
