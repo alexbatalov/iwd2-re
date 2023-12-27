@@ -199,9 +199,53 @@ void CSearchBitmap::AddObject(const CPoint& point, BYTE sourceSide, BYTE persona
 }
 
 // 0x548020
-void CSearchBitmap::RemoveObject(const CPoint& point, BYTE sourceSide, BYTE personalSpaceRange, int a4, unsigned char& a5)
+void CSearchBitmap::RemoveObject(const CPoint& point, BYTE sourceSide, BYTE personalSpaceRange, BOOL bBumpable, BOOLEAN& bOnSearchMap)
 {
-    // TODO: Incomplete.
+    if (bOnSearchMap != FALSE) {
+        if (point.x >= 0 && point.y >= 0 && point.x < 320 && point.y < 320) {
+            int radius = (personalSpaceRange - 1) / 2;
+            int minX = max(point.x - radius, 0);
+            int maxX = min(point.x + radius, m_GridSquareDimensions.cx - 1);
+            int minY = max(point.y - radius, 0);
+            int maxY = min(point.y + radius, m_GridSquareDimensions.cy - 1);
+
+            CSingleLock lock(&m_critSect, FALSE);
+            if (lock.Lock(INFINITE)) {
+                for (int x = minX; x <= maxX; x++) {
+                    for (int y = minY; y <= maxY; y++) {
+                        int index = y * m_GridSquareDimensions.cx + x;
+                        if (bBumpable) {
+                            m_pDynamicCost[index] = (m_pDynamicCost[index] & ~0xE) | ((m_pDynamicCost[index] - 2) & 0xE);
+                        } else {
+                            m_pDynamicCost[index] = (m_pDynamicCost[index] & ~0x70) | ((m_pDynamicCost[index] - 16) & 0x70);
+                        }
+                    }
+                }
+                bOnSearchMap = TRUE;
+                lock.Unlock();
+            } else {
+                CString sError;
+                sError.Format("Jake says: Can't lock the thread, search map squares not removed at [%d.%d] with personal space of %d",
+                    point.x,
+                    point.y,
+                    personalSpaceRange);
+
+                // __FILE__: C:\Projects\Icewind2\src\Baldur\CSearchBitmap.cpp
+                // __LINE__: 611
+                UTIL_ASSERT_MSG(FALSE, (LPCSTR)sError);
+            }
+        } else {
+            CString sError;
+            sError.Format("Jake says: xy is bad, search map squares not removed at [%d.%d] with personal space of %d",
+                point.x,
+                point.y,
+                personalSpaceRange);
+
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\CSearchBitmap.cpp
+            // __LINE__: 585
+            UTIL_ASSERT_MSG(FALSE, (LPCSTR)sError);
+        }
+    }
 }
 
 // 0x5482B0
