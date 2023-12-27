@@ -132,9 +132,60 @@ BYTE CSearchBitmap::GetLOSCost(const CPoint& point, const BYTE* terrainTable, SH
 // 0x547B10
 BYTE CSearchBitmap::GetCost(const CPoint& point, const BYTE* terrainTable, BYTE personalSpace, SHORT& nTableIndex, BOOL bCheckBump)
 {
-    // TODO: Incomplete.
+    BYTE totalCost;
+    BYTE cost;
 
-    return 0;
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CSearchBitmap.cpp
+    // __LINE__: 265
+    UTIL_ASSERT(terrainTable != NULL);
+
+    if (m_resSearch.GetBitCount(TRUE) == 8) {
+        nTableIndex = m_resSearch.GetPixelValue(point.x, point.y, TRUE);
+        if (terrainTable[nTableIndex >> 4] != CPathSearch::COST_IMPASSABLE) {
+            if (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bTerrainHugging) {
+                totalCost = min(terrainTable[nTableIndex >> 4] * ((nTableIndex & 0xF) + 2) / 2, CPathSearch::COST_IMPASSABLE - 1);
+            } else {
+                totalCost = terrainTable[nTableIndex >> 4];
+            }
+        } else {
+            totalCost = CPathSearch::COST_IMPASSABLE;
+        }
+        nTableIndex >>= 4;
+    } else {
+        nTableIndex = m_resSearch.GetPixelValue(point.x, point.y, TRUE);
+        totalCost = terrainTable[nTableIndex];
+    }
+
+    if (totalCost == CPathSearch::COST_IMPASSABLE) {
+        return totalCost;
+    }
+
+    int radius = (personalSpace - 2) / 2;
+    int minX = max(point.x - radius, 0);
+    int maxX = min(point.x + radius, m_GridSquareDimensions.cx);
+    int minY = max(point.y - radius, 0);
+    int maxY = min(point.y + radius, m_GridSquareDimensions.cy);
+
+    BYTE shift = 0;
+    if (m_resSearch.GetBitCount(TRUE) == 8) {
+        shift = 4;
+    }
+
+    for (int x = minX; x <= maxX; x++) {
+        for (int y = minY; y <= maxY; y++) {
+            cost = terrainTable[m_resSearch.GetPixelValue(x, y, TRUE) >> shift];
+            if (cost == CPathSearch::COST_IMPASSABLE) {
+                return cost;
+            }
+        }
+    }
+
+    cost = GetMobileCost(point, terrainTable, personalSpace, bCheckBump);
+    if (cost == 0) {
+        cost = totalCost;
+    }
+
+    return cost;
 }
 
 // 0x547D30
