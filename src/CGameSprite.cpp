@@ -3607,7 +3607,7 @@ void CGameSprite::OnActionButton(const CPoint& pt)
             UTIL_ASSERT(FALSE);
         }
     } else {
-        OnActionButton(pt);
+        CGameObject::OnActionButton(pt);
     }
 }
 
