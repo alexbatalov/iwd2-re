@@ -376,6 +376,7 @@ public:
     /* 1B99 */ CResRef m_iconResRef;
     /* 1BA1 */ unsigned char m_tempCursor;
     /* 1BA2 */ LONG m_iContainer;
+    /* 1BA6 */ LONG m_iContainerSprite;
     /* 1BAA */ CGamePermission m_singlePlayerPermissions;
     /* 1BB2 */ CMultiplayerSettings m_multiplayerSettings;
     /* 1C78 */ CInfButtonArray m_cButtonArray;
@@ -401,7 +402,7 @@ public:
     /* 38A6 */ unsigned char field_38A6;
     /* 38A8 */ CTypedPtrList<CPtrList, int*> m_allies; // NOTE: Stores actual ints disguised as pointers.
     /* 38C4 */ CTypedPtrList<CPtrList, int*> m_familiars; // NOTES: Stores actual ints disguised as pointers.
-    /* 38E0 */ unsigned char field_38E0[72];
+    /* 38E0 */ RESREF m_defaultFamiliarResRefs[9];
     /* 3928 */ CTypedPtrList<CPtrList, CResRef*> m_familiarResRefs[9][9];
     /* 4204 */ int field_4204;
     /* 4208 */ CString m_sTempDir;
@@ -425,10 +426,14 @@ public:
     /* 4814 */ STR_RES field_4814;
     /* 487C */ STR_RES field_487C;
     /* 48E4 */ BOOLEAN m_bForceDither;
+    /* 48E6 */ CVidCell m_vcLocator;
     /* 49C0 */ CTypedPtrList<CPtrList, CSearchRequest*> m_searchRequests;
     /* 49DC */ CTypedPtrList<CPtrList, CSearchRequest*> m_searchRequestsBack;
     /* 49F8 */ BOOL m_searchRequestListEmpty;
     /* 49FC */ BOOL m_searchShutdown;
+    /* 4A00 */ HANDLE m_hSearchThread;
+    /* 4A04 */ CCriticalSection m_disposableItemsCritSect;
+    /* 4A24 */ CTypedPtrList<CPtrList, CItem*> m_lDisposableItems;
     /* 4A40 */ SHORT m_currArmor;
     /* 4A42 */ short field_4A42;
     /* 4A44 */ short field_4A44;
@@ -441,9 +446,6 @@ public:
     /* 4A90 */ BYTE m_nTravelScreenImageToUse;
     /* 4A9A */ DWORD m_dwLastProgressRenderTickCount;
     /* 4A9E */ DWORD m_dwLastProgressMsgTickCount;
-    /* 4A00 */ HANDLE m_hSearchThread; // #guess
-    /* 4A04 */ CCriticalSection m_disposableItemsCritSect;
-    /* 4A24 */ CTypedPtrList<CPtrList, CItem*> m_lDisposableItems;
     /* 4AA2 */ ULONG m_nLastSaveTime;
     /* 4AA6 */ CPoint m_lastClick;
     /* 4AAE */ LONG m_lastTarget;
@@ -459,10 +461,14 @@ public:
     /* 4B44 */ LONG m_nTimeStopCaster;
     /* 4B48 */ CStore* m_aServerStore[12];
     /* 4B78 */ BYTE m_nServerStoreDemands[12];
-    /* 4B84 */ CString field_4B84;
-    /* 4B88 */ CString field_4B88;
-    /* 4B8C */ CString field_4B8C;
-    /* 4B90 */ CString field_4B90;
+    /* 4B84 */ CString m_appearanceWeapon;
+    /* 4B88 */ CString m_appearanceBody;
+    /* 4B8C */ CString m_appearanceShield;
+    /* 4B90 */ CString m_appearanceHelmet;
+    /* 4B94 */ BYTE m_appearanceColorsWeapon[7];
+    /* 4B9B */ BYTE m_appearanceColorsBody[7];
+    /* 4BA2 */ BYTE m_appearanceColorsShield[7];
+    /* 4BA9 */ BYTE m_appearanceColorsHelmet[7];
     /* 4BB0 */ CMemINI m_INISounds;
     /* 4BD4 */ unsigned char field_4BD4;
     /* 4BD5 */ BOOLEAN m_bExpansion; // NOTE: Can also be BYTE indicating number of expansion pack.

@@ -29,6 +29,7 @@
 #include "CScreenWorld.h"
 #include "CScreenWorldMap.h"
 #include "CSearchBitmap.h"
+#include "CSpell.h"
 #include "CStore.h"
 #include "CUIControlBase.h"
 #include "CUIManager.h"
@@ -711,18 +712,49 @@ int CInfGame::dword_8E52F0;
 CInfGame::CInfGame()
     : m_rgbMasterBitmap(CResRef("MPALETTE"), FALSE, 24)
 {
+    m_nUniqueAreaID = 0;
+    m_nReputation = 0;
+    m_nProtagonistId = 0;
+    m_bPartyAI = FALSE;
+    m_bShowAreaNotes = FALSE;
+    m_dwLastProgressRenderTickCount = 0;
+    m_dwLastProgressMsgTickCount = 0;
+    m_nLastSaveTime = 0;
+    m_lastTarget = 0;
+    field_4AB2 = 0;
+    m_nCharacterTerminationSequenceDelay = 0;
+    m_nAIIndex = 0;
+    m_nTimeStop = 0;
+    m_nTimeStopCaster = 0;
+    memset(m_appearanceColorsWeapon, 0, sizeof(m_appearanceColorsWeapon));
+    memset(m_appearanceColorsBody, 0, sizeof(m_appearanceColorsBody));
+    memset(m_appearanceColorsShield, 0, sizeof(m_appearanceColorsShield));
+    memset(m_appearanceColorsHelmet, 0, sizeof(m_appearanceColorsHelmet));
+    m_nDifficultyLevel = 0;
     m_nCharacters = 0;
     for (INT nIndex = 0; nIndex < CINFGAME_MAXCHARACTERS; nIndex++) {
         m_characters[nIndex] = CGameObjectArray::INVALID_INDEX;
         m_characterPortraits[nIndex] = CGameObjectArray::INVALID_INDEX;
     }
 
+    m_nState = 0;
     m_tempCursor = 4;
+    m_iconIndex = -1;
+    m_bGameLoaded = FALSE;
+    m_bInLoadGame = FALSE;
+    m_bInLoadArea = FALSE;
+    m_bFromNewGame = FALSE;
+    m_bInDestroyGame = FALSE;
+    m_bInAreaTransition = FALSE;
     m_visibleArea = 0;
     memset(m_gameAreas, 0, sizeof(m_gameAreas));
     m_pGameAreaMaster = NULL;
-    // TODO: Incomplete.
-
+    m_pathSearch = NULL;
+    m_listGrid = NULL;
+    m_searchRequestListEmpty = TRUE;
+    m_iContainer = CGameObjectArray::INVALID_INDEX;
+    m_iContainerSprite = CGameObjectArray::INVALID_INDEX;
+    m_bForceDither = FALSE;
     m_sSaveDir = ".\\save\\";
     m_sMultiplayerSaveDir = ".\\mpsave\\";
     m_sTempDir = ".\\temp\\";
@@ -749,14 +781,52 @@ CInfGame::CInfGame()
     g_pChitin->cDimm.AddToDirectoryList(m_sPortraitsDir, TRUE);
     g_pChitin->cDimm.AddToDirectoryList(m_sCharactersDir, TRUE);
 
-    // TODO: Incomplete.
+    m_gameSave.m_curFormation = TRUE;
+    m_gameSave.field_1AC = FALSE;
 
+    field_4A42 = 48;
+    field_4A44 = 48;
+    m_gameSave.m_mode = -1;
+    m_gameSave.m_cutScene = FALSE;
+    m_currArmor = '1';
+    field_4A46 = -1;
+    m_currAnimation = -1;
+    m_vcLocator.SetResRef(CResRef("locater"), FALSE, TRUE, TRUE);
+    memset(m_defaultFamiliarResRefs, 0, sizeof(m_defaultFamiliarResRefs));
+    field_4204 = 0;
+    m_nCharacterOverflowCount = 0;
+    m_saveObjectList.LoadList(CResRef(SAVE_OBJECT_LIST_NAME), FALSE);
     m_listGrid = new CPathNode*[CPathSearch::GRID_ACTUALX * CPathSearch::GRID_ACTUALY];
     m_pathSearch = new CPathSearch(m_listGrid);
     m_searchShutdown = FALSE;
     m_hSearchThread = CreateSemaphoreA(NULL, 0, 1, NULL);
     if (m_hSearchThread != NULL) {
-        // TODO: Incomplete.
+        m_nTravelScreenImageToUse = 0;
+        m_bPlayerScriptStyle = FALSE;
+        field_4B38 = 0;
+        field_366E = 0;
+        m_nAreaFirstObject = 0;
+
+        m_INISounds.SetFileName(CString("sounds"));
+        if (m_INISounds.Load(CString("sounds")) == 0) {
+            // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+            // __LINE__: 2671
+            UTIL_ASSERT_MSG(FALSE, "Problem loading the sounds.ini file!");
+        }
+
+        memset(m_aServerStore, 0, sizeof(m_aServerStore));
+        memset(m_nServerStoreDemands, 0, sizeof(m_nServerStoreDemands));
+
+        field_50D8 = FALSE;
+        field_50DC = 0;
+
+        CString sFileName;
+        g_pChitin->cDimm.WriteSetUp(m_sTempDir + "foo.bar", sFileName);
+        g_pChitin->cDimm.WriteSetUp(m_sTempSaveDir + "foo.bar", sFileName);
+
+        field_4BD4 = 0;
+        m_bExpansion = FALSE;
+        field_4BD6 = FALSE;
 
         C2DArray tSpells;
         tSpells.Load(CResRef(CRuleTables::LISTSPLL));
@@ -791,7 +861,70 @@ CInfGame::CInfGame()
         tShapeshifts.Load(CResRef(CRuleTables::LISTSHAP));
         m_shapeshifts.Load(tShapeshifts, 0);
 
-        // TODO: Incomplete (spells validation).
+        // NOTE: The following validation code looks incomplete. Logging stuff
+        // was likely compiled out via debug/release switches.
+        CString sError(" ");
+        UINT nIndex;
+
+        for (nIndex = 0; nIndex < m_spells.m_nCount; nIndex++) {
+            CSpell cSpell(m_spells.Get(nIndex));
+
+            sError.Format("Unable to load Class Spell file: %s\n",
+                (LPCSTR)m_spells.Get(nIndex).GetResRefStr());
+
+            if (cSpell.Demand()) {
+                sError.Format("Invalid Class Spell level: %s - %d\n",
+                    (LPCSTR)m_spells.Get(nIndex).GetResRefStr(),
+                    cSpell.GetLevel());
+            }
+
+            cSpell.Release();
+        }
+
+        for (nIndex = 0; nIndex < m_innateSpells.m_nCount; nIndex++) {
+            CSpell cSpell(m_innateSpells.Get(nIndex));
+
+            sError.Format("Unable to load Innate Spell file: %s\n",
+                (LPCSTR)m_innateSpells.Get(nIndex).GetResRefStr());
+
+            if (cSpell.Demand()) {
+                sError.Format("Invalid Innate Spell level: %s - %d\n",
+                    (LPCSTR)m_innateSpells.Get(nIndex).GetResRefStr(),
+                    cSpell.GetLevel());
+            }
+
+            cSpell.Release();
+        }
+
+        for (nIndex = 0; nIndex < m_songs.m_nCount; nIndex++) {
+            CSpell cSpell(m_songs.Get(nIndex));
+
+            sError.Format("Unable to load Song file: %s\n",
+                (LPCSTR)m_songs.Get(nIndex).GetResRefStr());
+
+            if (cSpell.Demand()) {
+                sError.Format("Invalid Song level: %s - %d\n",
+                    (LPCSTR)m_songs.Get(nIndex).GetResRefStr(),
+                    cSpell.GetLevel());
+            }
+
+            cSpell.Release();
+        }
+
+        for (nIndex = 0; nIndex < m_shapeshifts.m_nCount; nIndex++) {
+            CSpell cSpell(m_shapeshifts.Get(nIndex));
+
+            sError.Format("Unable to load Shapeshift file: %s\n",
+                (LPCSTR)m_shapeshifts.Get(nIndex).GetResRefStr());
+
+            if (cSpell.Demand()) {
+                sError.Format("Invalid Shapeshift level: %s - %d\n",
+                    (LPCSTR)m_shapeshifts.Get(nIndex).GetResRefStr(),
+                    cSpell.GetLevel());
+            }
+
+            cSpell.Release();
+        }
     }
 }
 
@@ -853,10 +986,10 @@ void CInfGame::InitGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlac
     memset(m_gameSave.m_groupInventory, 0, sizeof(m_gameSave.m_groupInventory));
     m_gameSave.m_mode = -1;
     m_gameSave.m_cutScene = FALSE;
-    field_4B84 = "";
-    field_4B88 = "";
-    field_4B8C = "";
-    field_4B90 = "";
+    m_appearanceWeapon = "";
+    m_appearanceBody = "";
+    m_appearanceShield = "";
+    m_appearanceHelmet = "";
 
     m_pGameAreaMaster = NULL;
     m_bPartyAI = TRUE;
@@ -867,7 +1000,7 @@ void CInfGame::InitGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlac
     m_allies.RemoveAll();
     m_familiars.RemoveAll();
 
-    memset(field_38E0, 0, sizeof(field_38E0));
+    memset(m_defaultFamiliarResRefs, 0, sizeof(m_defaultFamiliarResRefs));
 
     field_4204 = 0;
 
