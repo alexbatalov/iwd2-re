@@ -28,6 +28,8 @@ public:
     void Uninit();
     void SnapshotInit(const BYTE* terrainTable, BYTE* snapshotDynamicCost, BYTE sourceSide, BYTE snapshotPersonalSpace);
     BYTE SnapshotGetCost(CPoint point, BOOL bBump);
+    void SnapshotRemoveObject(CPoint point, BYTE personalSpaceRange, BOOL bBumpable);
+    void SnapshotAddObjectDiagonals(CPoint point, BYTE personalSpaceRange, BOOL bBumpable);
     void AddObject(const CPoint& point, BYTE sourceSide, BYTE personalSpaceRange, BOOL bBumpable, BOOLEAN& bOnSearchMap);
     void RemoveObject(const CPoint& point, BYTE sourceSide, BYTE personalSpaceRange, BOOL bBumpable, BOOLEAN& bOnSearchMap);
     void AddDoor(CPoint* pPoints, USHORT nPoints, BOOL bOpaque);

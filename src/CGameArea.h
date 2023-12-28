@@ -156,6 +156,8 @@ public:
 
     INT SetListManipulationThreadId(DWORD ThreadID);
     void AddObject(LONG id, BYTE listType);
+    BOOL AdjustTarget(CPoint start, POINT* goal, BYTE personalSpace, SHORT tolerance);
+    BOOL SnapshotAdjustTarget(CPoint start, POINT* goal, BOOL bBump, SHORT tolerance);
     void ApplyWindToAmbients(BYTE nPercentVolume);
     BOOL CheckLOS(const CPoint& start, const CPoint& goal, const BYTE* terrainTable, BOOLEAN bCheckIfExplored);
     BOOL CheckWalkable(const CPoint& start, const CPoint& goal, const BYTE* terrainTable, BYTE personalSpace, BOOLEAN bCheckIfExplored);
@@ -264,7 +266,7 @@ public:
     /* 03FA */ BYTE m_terrainTable[16];
     /* 040A */ BYTE m_visibleTerrainTable[16];
     /* 041A */ LONG m_nAIIndex;
-    /* 041E */ int field_41E;
+    /* 041E */ BOOL m_bInPathSearch;
     /* 0422 */ DWORD m_nInitialAreaID;
     /* 0426 */ DWORD m_nFirstObject;
     /* 042A */ DWORD m_dwLastProgressRenderTickCount;

@@ -33,7 +33,7 @@ public:
 
     static const BYTE THREAD_ASYNCH;
     static const BYTE THREAD_1;
-    static const BYTE THREAD_2;
+    static const BYTE THREAD_SEARCH;
 
     static const LONG INVALID_INDEX;
 

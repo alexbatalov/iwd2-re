@@ -34,7 +34,7 @@ const BYTE CGameObjectArray::THREAD_ASYNCH = 0;
 const BYTE CGameObjectArray::THREAD_1 = 1;
 
 // 0x851875
-const BYTE CGameObjectArray::THREAD_2 = 2;
+const BYTE CGameObjectArray::THREAD_SEARCH = 2;
 
 // NOTE: Seen in `CScreenCreateChar::OnDoneButtonClick` assertion.
 //

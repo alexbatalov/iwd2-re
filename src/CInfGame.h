@@ -42,6 +42,8 @@
 
 class CGameArea;
 class CItem;
+class CPathNode;
+class CPathSearch;
 class CSearchRequest;
 class CStore;
 
@@ -393,6 +395,8 @@ public:
     /* 3864 */ CTypedPtrArray<CPtrArray, int*> m_characterOverflow;
     /* 3878 */ SHORT m_nCharacterOverflowCount;
     /* 387A */ SHORT m_nReputation;
+    /* 387C */ CPathSearch* m_pathSearch;
+    /* 3880 */ CPathNode** m_listGrid;
     /* 3884 */ CAIGroup m_group;
     /* 38A6 */ unsigned char field_38A6;
     /* 38A8 */ CTypedPtrList<CPtrList, int*> m_allies; // NOTE: Stores actual ints disguised as pointers.
@@ -424,6 +428,7 @@ public:
     /* 49C0 */ CTypedPtrList<CPtrList, CSearchRequest*> m_searchRequests;
     /* 49DC */ CTypedPtrList<CPtrList, CSearchRequest*> m_searchRequestsBack;
     /* 49F8 */ BOOL m_searchRequestListEmpty;
+    /* 49FC */ BOOL m_searchShutdown;
     /* 4A40 */ SHORT m_currArmor;
     /* 4A42 */ short field_4A42;
     /* 4A44 */ short field_4A44;

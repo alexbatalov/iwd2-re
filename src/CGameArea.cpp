@@ -79,7 +79,7 @@ CGameArea::CGameArea(BYTE id)
     m_nRandomMonster = 0;
     m_nVisibleMonster = 0;
     m_pbmLumNight = NULL;
-    field_41E = 0;
+    m_bInPathSearch = FALSE;
     m_nInitialAreaID = 0;
     m_nBattleSongCounter = 0;
     m_selectSquare.left = -1;
@@ -198,6 +198,22 @@ void CGameArea::AddObject(LONG id, BYTE listType)
     }
 
     pList->AddTail(reinterpret_cast<int*>(id));
+}
+
+// 0x46A3D0
+BOOL CGameArea::AdjustTarget(CPoint start, POINT* goal, BYTE personalSpace, SHORT tolerance)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x46A630
+BOOL CGameArea::SnapshotAdjustTarget(CPoint start, POINT* goal, BOOL bBump, SHORT tolerance)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
 }
 
 // 0x46A7B0
@@ -1644,7 +1660,7 @@ void CGameArea::ClearMarshal()
         m_pResWED = NULL;
     }
 
-    while (field_41E) {
+    while (m_bInPathSearch) {
         Sleep(1);
     }
 

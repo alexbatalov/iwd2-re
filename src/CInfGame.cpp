@@ -751,6 +751,9 @@ CInfGame::CInfGame()
 
     // TODO: Incomplete.
 
+    m_listGrid = new CPathNode*[CPathSearch::GRID_ACTUALX * CPathSearch::GRID_ACTUALY];
+    m_pathSearch = new CPathSearch(m_listGrid);
+    m_searchShutdown = FALSE;
     m_hSearchThread = CreateSemaphoreA(NULL, 0, 1, NULL);
     if (m_hSearchThread != NULL) {
         // TODO: Incomplete.
@@ -1022,7 +1025,7 @@ void CInfGame::DestroyGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInP
 
     for (cnt = 0; cnt < CINFGAME_MAX_AREAS; cnt++) {
         if (m_gameAreas[cnt] != NULL) {
-            while (m_gameAreas[cnt]->field_41E != 0) {
+            while (m_gameAreas[cnt]->m_bInPathSearch != FALSE) {
                 SleepEx(25, FALSE);
             }
         }
@@ -1042,7 +1045,7 @@ void CInfGame::DestroyGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInP
     EnterCriticalSection(&(g_pBaldurChitin->GetScreenWorld()->field_106));
     for (cnt = 0; cnt < CINFGAME_MAX_AREAS; cnt++) {
         if (m_gameAreas[cnt] != NULL) {
-            while (m_gameAreas[cnt]->field_41E != 0) {
+            while (m_gameAreas[cnt]->m_bInPathSearch != FALSE) {
                 SleepEx(25, FALSE);
             }
 
