@@ -271,6 +271,8 @@ CString CMemINIRes::GetLine()
         mEOF = TRUE;
     }
 
+    mFilePosition = end;
+
     return str;
 }
 
