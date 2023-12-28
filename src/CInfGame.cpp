@@ -35,6 +35,7 @@
 #include "CUIManager.h"
 #include "CUIPanel.h"
 #include "CUtil.h"
+#include "Icewind586B70.h"
 
 #define FIFTY_THREE 53
 
@@ -931,7 +932,45 @@ CInfGame::CInfGame()
 // 0x59ECB0
 CInfGame::~CInfGame()
 {
-    // TODO: Incomplete.
+    CSingleLock searchLock(&field_1B58, FALSE);
+
+    if (m_bGameLoaded) {
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+            g_pChitin->cNetwork.CloseSession(TRUE);
+        }
+        DestroyGame(FALSE, FALSE);
+    }
+
+    if (m_hSearchThread != NULL) {
+        searchLock.Lock(INFINITE);
+        m_searchShutdown = TRUE;
+        ReleaseSemaphore(m_hSearchThread, 1, NULL);
+        searchLock.Unlock();
+
+        while (m_hSearchThread != NULL) {
+            SleepEx(1, FALSE);
+        }
+
+        if (m_pathSearch != NULL) {
+            delete m_pathSearch;
+            m_pathSearch = NULL;
+        }
+
+        if (m_listGrid != NULL) {
+            delete[] m_listGrid;
+            m_listGrid = NULL;
+        }
+
+        m_allies.RemoveAll();
+        m_familiars.RemoveAll();
+
+        g_pChitin->cDimm.RemoveFromDirectoryList(m_sScriptsDir, FALSE);
+        g_pChitin->cDimm.RemoveFromDirectoryList(m_sSoundsDir, FALSE);
+        g_pChitin->cDimm.RemoveFromDirectoryList(m_sPortraitsDir, FALSE);
+        g_pChitin->cDimm.RemoveFromDirectoryList(m_sCharactersDir, FALSE);
+
+        Icewind586B70::Destroy();
+    }
 }
 
 // 0x59F500
