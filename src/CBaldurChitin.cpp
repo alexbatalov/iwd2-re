@@ -12,6 +12,7 @@
 #include "CResDLG.h"
 #include "CResEffect.h"
 #include "CResGame.h"
+#include "CResINI.h"
 #include "CResItem.h"
 #include "CResSpell.h"
 #include "CResStore.h"
@@ -796,6 +797,8 @@ CRes* CBaldurChitin::AllocResObject(int nType)
         return new CResText();
     case 1018:
         return new CResCHR();
+    case 2050:
+        return new CResINI();
     default:
         return CChitin::AllocResObject(nType);
     }
