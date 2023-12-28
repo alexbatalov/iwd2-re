@@ -2,6 +2,7 @@
 
 #include "CAIObjectType.h"
 #include "CBaldurChitin.h"
+#include "CGameArea.h"
 #include "CGameObjectArray.h"
 #include "CInfGame.h"
 #include "CPathSearch.h"
@@ -355,6 +356,83 @@ void CSearchBitmap::SnapshotInit(const BYTE* terrainTable, BYTE* snapshotDynamic
     snapshotLock.Lock(INFINITE);
     memcpy(m_snapshotDynamicCost, m_pDynamicCost, m_GridSquareDimensions.cx * m_GridSquareDimensions.cy);
     snapshotLock.Unlock();
+}
+
+// 0x5485A0
+BYTE CSearchBitmap::SnapshotGetCost(CPoint point, BOOL bBump)
+{
+    BYTE terrainCost;
+    SHORT totalCost;
+
+    if (m_sourceSide <= CAIObjectType::EA_CONTROLCUTOFF) {
+        CPoint pt(point.x * CPathSearch::GRID_SQUARE_SIZEX, point.y * CPathSearch::GRID_SQUARE_SIZEY);
+        if (!m_pArea->m_visibility.IsTileExplored(m_pArea->m_visibility.PointToTile(pt))) {
+            return CPathSearch::COST_IMPASSABLE;
+        }
+    }
+
+    if (m_resSearch.GetBitCount(TRUE) == 8) {
+        SHORT nTableIndex = m_resSearch.GetPixelValue(point.x, point.y, TRUE) >> 4;
+        if (m_snapshotTerrainTable[nTableIndex] != CPathSearch::COST_IMPASSABLE) {
+            if (g_pBaldurChitin->GetObjectGame()->GetOptions()->m_bTerrainHugging) {
+                terrainCost = min(m_snapshotTerrainTable[nTableIndex] * (nTableIndex + 2) / 2, CPathSearch::COST_IMPASSABLE - 1);
+            } else {
+                terrainCost = m_snapshotTerrainTable[nTableIndex];
+            }
+        } else {
+            terrainCost = CPathSearch::COST_IMPASSABLE;
+        }
+    } else {
+        terrainCost = m_snapshotTerrainTable[m_resSearch.GetPixelValue(point.x, point.y, TRUE)];
+    }
+
+    totalCost = terrainCost;
+
+    if (totalCost == CPathSearch::COST_IMPASSABLE) {
+        return CPathSearch::COST_IMPASSABLE;
+    }
+
+    int radius = (m_snapshotPersonalSpace - 2) / 2;
+    int minX = max(point.x - radius, 0);
+    int maxX = min(point.x + radius, m_GridSquareDimensions.cx);
+    int minY = max(point.y - radius, 0);
+    int maxY = min(point.y + radius, m_GridSquareDimensions.cy);
+
+    BYTE shift = 0;
+    if (m_resSearch.GetBitCount(TRUE) == 8) {
+        shift = 4;
+    }
+
+    for (int x = minX; x <= maxX; x++) {
+        for (int y = minY; y <= maxY; y++) {
+            BYTE cost = m_snapshotTerrainTable[m_resSearch.GetPixelValue(x, y, TRUE) >> shift];
+            if (cost == CPathSearch::COST_IMPASSABLE) {
+                return CPathSearch::COST_IMPASSABLE;
+            }
+
+            BYTE dynamicCost = m_snapshotDynamicCost[y * m_GridSquareDimensions.cx + x];
+            if ((dynamicCost & 0x80) != 0) {
+                return m_snapshotTerrainTable[0];
+            } else if ((dynamicCost & 0x70) != 0) {
+                return m_snapshotTerrainTable[8];
+            }
+
+            if (bBump) {
+                totalCost += 10 * terrainCost * (dynamicCost & 0xE) / 2;
+            } else {
+                if ((dynamicCost & 0xE) != 0) {
+                    return m_snapshotTerrainTable[8];
+                }
+            }
+        }
+    }
+
+    // NOTE: Signed compare.
+    if (totalCost < static_cast<SHORT>(CPathSearch::COST_IMPASSABLE)) {
+        return static_cast<BYTE>(totalCost);
+    }
+
+    return CPathSearch::COST_IMPASSABLE - 1;
 }
 
 // 0x548EE0
