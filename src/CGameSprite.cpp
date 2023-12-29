@@ -95,6 +95,9 @@ const BYTE CGameSprite::SOUND_REACT_TO_DEATH = 13;
 // 0x85BB74
 const SHORT CGameSprite::EXACT_SCALE = 10;
 
+// 0x85BB9A
+const SHORT CGameSprite::READY_COUNT = 75;
+
 // 0x85BB9C
 const SHORT CGameSprite::USER_OVERRIDE_COUNT = 75;
 
@@ -670,6 +673,9 @@ BOOLEAN CGameSprite::GRAVITY_IS_DOWN;
 // 0x8B85E0
 INT CGameSprite::m_bRollFeedbackEnabled = -1;
 
+// 0x8F9A18
+CAIAction CGameSprite::m_aiDoAction;
+
 // 0x6EF990
 CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, DWORD expirationTime, WORD huntingRange, WORD followRange, DWORD timeOfDayVisible, CPoint startPos, WORD facing)
     : m_portraitIconVidCell(CResRef("STATES"), g_pBaldurChitin->field_4A28)
@@ -694,8 +700,8 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     m_deltaDirection = 0;
     m_walkBackwards = FALSE;
     m_turningAbout = FALSE;
-    field_54EE = 0;
-    field_54F4 = 0;
+    m_bInCasting = FALSE;
+    m_moveCount = 0;
     m_curDest.x = 0;
     m_curDest.y = 0;
     m_posLastVisMapEntry.x = 0;
@@ -707,12 +713,12 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     field_559E = 0;
     field_55A0 = 0;
     m_speedFactor = 0;
-    field_5606 = 0;
+    m_lastActionID = 0;
     field_560E = 0;
     field_5610 = 0;
     field_5618 = 0;
     field_561C = 0;
-    field_5624 = 0;
+    m_noActionCount = 0;
     field_5630 = 0;
     field_5632 = 0;
     field_5636 = 0;
@@ -752,11 +758,11 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     m_nPath = 0;
     m_currPath = 0;
     m_pathSearchInvalidDest = FALSE;
-    field_54F2 = 17;
+    m_selectedSound = 17;
     field_53D2 = 0;
     m_currentSearchRequest = 0;
     m_lastCharacterCount = 0;
-    field_56EC = 0;
+    m_sequenceTest = FALSE;
     m_removeFromArea = FALSE;
     m_talkingCounter = 0;
     m_moveToFrontQueue = 0;
@@ -800,7 +806,7 @@ CGameSprite::CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, 
     field_5612 = 0;
     field_5614 = 0;
     m_castCounter = -1;
-    field_54EA = 0;
+    m_bStartedCasting = FALSE;
     m_attackFrame = -2;
     field_72A2 = 0;
     m_bAllowEffectListCall = TRUE;
@@ -10306,6 +10312,100 @@ BOOL CGameSprite::Animate()
 DWORD CGameSprite::GetSpecialization()
 {
     return m_baseStats.m_specialization;
+}
+
+// 0x728BC0
+void CGameSprite::ResolveInstants(BOOL dropNonInstants)
+{
+    if (m_moveToFrontQueue > 0) {
+        m_moveToFrontQueue--;
+        MoveToFront();
+    }
+
+    if (m_moveToBackQueue > 0) {
+        m_moveToBackQueue--;
+        MoveToBack();
+    }
+
+    if (m_castCounter > -1) {
+        m_castCounter++;
+        if (m_castCounter >= 100 && !m_bInCasting) {
+            m_castCounter = -1;
+        }
+    }
+
+    if (m_attackFrame > -2) {
+        m_attackFrame++;
+        if (m_attackFrame >= 100) {
+            m_attackFrame = -2;
+        }
+    }
+
+    if (((m_derivedStats.m_generalState & STATE_DEAD) == 0
+            && (m_derivedStats.m_generalState & STATE_SLEEPING) == 0)
+        || ((g_pChitin->cNetwork.GetSessionOpen() != TRUE || m_curAction.GetActionID() != CAIACTION_LEAVEAREALUA)
+            && g_pBaldurChitin->GetObjectGame()->GetRuleTables().m_lInstantActions.Find(m_curAction.GetActionID()) != NULL)) {
+        m_typeAI.SetInstance(m_id);
+        m_liveTypeAI.SetInstance(m_id);
+        m_startTypeAI.SetInstance(m_id);
+
+        if (Orderable(FALSE) && m_curAction.GetActionID() != 0) {
+            g_pBaldurChitin->GetScreenWorld()->m_bored = FALSE;
+            g_pBaldurChitin->GetScreenWorld()->m_boredCount = 0;
+        }
+
+        SHORT actionReturn = ExecuteAction();
+        if (m_curAction.GetActionID() != CAIACTION_ATTACK) {
+            m_lastActionID = m_curAction.GetActionID();
+        }
+
+        if (actionReturn == ACTION_DONE
+            || actionReturn == ACTION_ERROR
+            || actionReturn == ACTION_STOPPED) {
+            SetCurrAction(GetNextAction(m_aiDoAction));
+            if (m_curAction.GetActionID() == CAIAction::NO_ACTION) {
+                m_curResponseNum = -1;
+                m_curResponseSetNum = -1;
+                m_curScriptNum = -1;
+            }
+        } else if (m_interrupt
+            && actionReturn == ACTION_INTERRUPTABLE
+            && (m_baseStats.m_flags & 0x80000000) == 0) {
+            if (m_pPath != NULL) {
+                CMessage* message = new CMessageDropPath(m_id, m_id);
+                g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+            }
+            m_actionCount++;
+            SetCurrAction(GetNextAction(m_aiDoAction));
+            m_interrupt = FALSE;
+        } else {
+            m_actionCount++;
+        }
+
+        if (dropNonInstants
+            && !m_sequenceTest
+            && m_noActionCount > READY_COUNT
+            && m_nSequence != SEQ_TWITCH
+            && m_nSequence != SEQ_DIE
+            && m_nSequence != SEQ_SLEEP
+            && m_nSequence != SEQ_DAMAGE) {
+            if (m_pPath != NULL || GetVertListType() == LIST_FLIGHT) {
+                if (m_nSequence != SEQ_WALK) {
+                    CMessage* message = new CMessageSetSequence(SEQ_WALK, m_id, m_id);
+                    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+                }
+            } else {
+                if (m_nSequence != GetIdleSequence()) {
+                    CMessage* message = new CMessageSetSequence(static_cast<BYTE>(GetIdleSequence()), m_id, m_id);
+                    g_pBaldurChitin->GetMessageHandler()->AddMessage(message, FALSE);
+                }
+            }
+        }
+
+        field_5582 = 0;
+        field_9D14 = 0;
+        field_9D15 = 0;
+    }
 }
 
 // 0x72B670

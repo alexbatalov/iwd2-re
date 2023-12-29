@@ -203,6 +203,7 @@ public:
     static const BYTE SOUND_REACT_TO_DEATH;
     static const SHORT EXACT_SCALE;
 
+    static const SHORT READY_COUNT;
     static const SHORT USER_OVERRIDE_COUNT;
 
     static const BYTE SEQ_ATTACK;
@@ -404,6 +405,7 @@ public:
     static BOOLEAN SHOW_CHARACTER_HP;
     static BOOLEAN GRAVITY_IS_DOWN;
     static INT m_bRollFeedbackEnabled;
+    static CAIAction m_aiDoAction;
 
     CGameSprite(BYTE* pCreature, LONG creatureSize, int a3, WORD type, DWORD expirationTime, WORD huntingRange, WORD followRange, DWORD timeOfDayVisible, CPoint startPos, WORD facing);
     /* 0000 */ ~CGameSprite() override;
@@ -548,6 +550,7 @@ public:
     BOOL Orderable(BOOL bIgnoreControl);
     BOOL Animate();
     DWORD GetSpecialization();
+    void ResolveInstants(BOOL dropNonInstants);
     void ResolvePausedAction(const CAIAction* curAction, POSITION pos);
     void ResolveTargetPoint(const CAIAction* curAction, POSITION pos);
     BOOL ProcessEffectList();
@@ -840,10 +843,10 @@ public:
     /* 54C8 */ int m_followStart;
     /* 54CC */ CTypedPtrList<CPtrList, CBlood*> m_lstBlood;
     /* 54E8 */ SHORT m_castCounter;
-    /* 54EA */ int field_54EA;
-    /* 54EE */ int field_54EE;
-    /* 54F2 */ short field_54F2;
-    /* 54F4 */ short field_54F4;
+    /* 54EA */ BOOL m_bStartedCasting;
+    /* 54EE */ BOOL m_bInCasting;
+    /* 54F2 */ SHORT m_selectedSound;
+    /* 54F4 */ SHORT m_moveCount;
     /* 54F6 */ SHORT m_moveToFrontQueue;
     /* 54F8 */ SHORT m_moveToBackQueue;
     /* 54FA */ CGameEffectList m_equipedEffectList;
@@ -870,7 +873,7 @@ public:
     /* 55FE */ int field_55FE;
     /* 5602 */ unsigned char field_5602;
     /* 5604 */ SHORT m_speedFactor;
-    /* 5606 */ short field_5606;
+    /* 5606 */ short m_lastActionID;
     /* 5608 */ BOOL m_endOfDamageSeq;
     /* 560C */ short field_560C;
     /* 560E */ short field_560E;
@@ -883,7 +886,7 @@ public:
     /* 561E */ short field_561E;
     /* 5620 */ SHORT m_recoilFrame;
     /* 5622 */ SHORT m_attackFrame;
-    /* 5624 */ int field_5624;
+    /* 5624 */ LONG m_noActionCount;
     /* 5628 */ BOOL m_inFormation;
     /* 562C */ int field_562C;
     /* 5630 */ unsigned char field_5630;
@@ -902,7 +905,7 @@ public:
     /* 56DF */ BYTE m_nTempSelectedWeaponAbility;
     /* 56A0 */ CButtonData m_currentUseButton;
     /* 56E4 */ CResRef field_56E4;
-    /* 56EC */ unsigned char field_56EC;
+    /* 56EC */ BOOLEAN m_sequenceTest;
     /* 56DC */ CResRef m_dialog;
     /* 56EE */ STR_RES m_speech[64];
     /* 70EE */ int field_70EE;
