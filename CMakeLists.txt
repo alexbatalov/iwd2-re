@@ -10,9 +10,10 @@ set(CMAKE_CXX_EXTENSIONS NO)
 
 set(CMAKE_MFC_FLAG 2)
 
-add_executable(${EXECUTABLE_NAME} WIN32)
+# All game code lives in a static library so tests and tools can link it.
+add_library(iwd2-core STATIC)
 
-target_sources(${EXECUTABLE_NAME} PUBLIC
+target_sources(iwd2-core PRIVATE
     "src/music/adecode.cpp"
     "src/music/adecode.h"
     "src/music/audio.cpp"
@@ -421,15 +422,13 @@ target_sources(${EXECUTABLE_NAME} PUBLIC
     "src/IcewindCVisualEffect.h"
     "src/IcewindMisc.cpp"
     "src/IcewindMisc.h"
-    "src/main.cpp"
     "src/mfc.h"
     "src/resource.h"
-    "src/resource.rc"
 )
 
-target_include_directories(${EXECUTABLE_NAME} PUBLIC src)
+target_include_directories(iwd2-core PUBLIC src)
 
-target_compile_definitions(${EXECUTABLE_NAME} PUBLIC
+target_compile_definitions(iwd2-core PUBLIC
     _AFXDLL
     _CRT_NONSTDC_NO_WARNINGS
     _CRT_SECURE_NO_WARNINGS
@@ -437,11 +436,11 @@ target_compile_definitions(${EXECUTABLE_NAME} PUBLIC
 )
 
 # TODO: Use winsdkver.h?
-target_compile_definitions(${EXECUTABLE_NAME} PUBLIC
+target_compile_definitions(iwd2-core PUBLIC
     _WIN32_WINNT=0x0501
 )
 
-target_link_libraries(${EXECUTABLE_NAME}
+target_link_libraries(iwd2-core PUBLIC
     ddraw
     dsound
     dxguid
@@ -450,8 +449,20 @@ target_link_libraries(${EXECUTABLE_NAME}
     winmm
 )
 
-target_include_directories(${EXECUTABLE_NAME} SYSTEM PRIVATE "third_party/directplay/include")
+target_include_directories(iwd2-core SYSTEM PUBLIC "third_party/directplay/include")
 
 add_subdirectory("third_party/zlib")
-target_link_libraries(${EXECUTABLE_NAME} ${ZLIB_LIBRARIES})
-target_include_directories(${EXECUTABLE_NAME} PRIVATE ${ZLIB_INCLUDE_DIRS})
+target_link_libraries(iwd2-core PUBLIC ${ZLIB_LIBRARIES})
+target_include_directories(iwd2-core PUBLIC ${ZLIB_INCLUDE_DIRS})
+
+add_executable(${EXECUTABLE_NAME} WIN32
+    "src/main.cpp"
+    "src/resource.rc"
+)
+target_link_libraries(${EXECUTABLE_NAME} PRIVATE iwd2-core)
+
+option(IWD2RE_BUILD_TESTS "Build tests" ON)
+if(IWD2RE_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()

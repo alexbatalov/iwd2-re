@@ -391,3 +391,9 @@ FodyWeavers.xsd
 # CMake
 /out
 /build
+
+## iwd2-re
+build*/
+out/
+tests/e2e/out/
+tests/e2e/golden/
