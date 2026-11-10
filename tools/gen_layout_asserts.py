@@ -32,7 +32,7 @@ SRC = REPO / "src"
 OUT = REPO / "tests" / "unit" / "test_layout.cpp"
 KNOWN = REPO / "tests" / "layout" / "known_mismatches.txt"
 
-CLASS_RE = re.compile(r"^\s*(class|struct)\s+(?:__declspec\([^)]*\)\s+)?(\w+)\s*(?::[^{;]*)?\{?\s*$")
+CLASS_RE = re.compile(r"^\s*(?:typedef\s+)?(class|struct)\s+(?:__declspec\([^)]*\)\s+)?(\w+)\s*(?::[^{;]*)?\{?\s*$")
 MEMBER_RE = re.compile(r"^\s*/\*\s*([0-9A-Fa-f]{4,5})\s*\*/\s*(?!virtual\b)([^;()]*?)\b(\w+)\s*(\[[^\]]*\])*\s*;")
 TEMPLATE_RE = re.compile(r"^\s*template\s*<")
 
