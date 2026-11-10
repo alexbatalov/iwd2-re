@@ -1628,6 +1628,12 @@ void CScreenWorld::AddGold(DWORD dwGold)
     pGame->AddPartyGold(dwGold);
 }
 
+// 0x691130
+INT CScreenWorld::GetActivePanelID()
+{
+    return field_EA4;
+}
+
 // 0x690EB0
 void CScreenWorld::StopContainer()
 {

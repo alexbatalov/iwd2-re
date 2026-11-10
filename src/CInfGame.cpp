@@ -37,6 +37,7 @@
 #include "CUIPanel.h"
 #include "CUtil.h"
 #include "Icewind586B70.h"
+#include "IcewindMisc.h"
 
 #define FIFTY_THREE 53
 
@@ -3388,7 +3389,63 @@ BOOL CInfGame::SelectCharacter(LONG characterId, BOOLEAN bPlaySelectSound)
 // 0x5ADAE0
 void CInfGame::SelectToolbar()
 {
-    // TODO: Incomplete.
+    m_nState = 0;
+    m_cButtonArray.m_nSelectedButton = 100;
+
+    // NOTE: Uninline.
+    switch (m_group.GetCount()) {
+    case 0:
+        m_cButtonArray.SetState(CInfButtonArray::STATE_NONE, 0);
+        break;
+    case 1:
+        if (1) {
+            LONG* pGroupList = m_group.GetGroupList();
+            if (pGroupList == NULL) {
+                m_cButtonArray.SetState(CInfButtonArray::STATE_NONE, 0);
+                delete pGroupList;
+                return;
+            }
+
+            CGameSprite* pSprite;
+
+            BYTE rc;
+            do {
+                rc = m_cObjectArray.GetShare(pGroupList[0],
+                    CGameObjectArray::THREAD_ASYNCH,
+                    reinterpret_cast<CGameObject**>(&pSprite),
+                    INFINITE);
+            } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+            if (rc != CGameObjectArray::SUCCESS) {
+                m_cButtonArray.SetState(CInfButtonArray::STATE_NONE, 0);
+                delete pGroupList;
+                return;
+            }
+
+            if (IcewindMisc::IsPC(pSprite) == TRUE) {
+                m_cButtonArray.UpdateCustomizableButtonTypes(pSprite->field_3D14);
+                m_cButtonArray.UpdateSelectedWeaponSet(pSprite->m_nWeaponSet);
+                m_cButtonArray.SetState(CInfButtonArray::byte_85170E, 0);
+            } else {
+                m_cButtonArray.UpdateSelectedWeaponSet(pSprite->m_nWeaponSet);
+                m_cButtonArray.SetState(CInfButtonArray::byte_851701, 0);
+            }
+
+            m_cObjectArray.ReleaseShare(pGroupList[0],
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+
+            delete pGroupList;
+        }
+        break;
+    default:
+        m_cButtonArray.SetState(CInfButtonArray::byte_851701, 0);
+        break;
+    }
+
+    if (g_pBaldurChitin->m_pEngineWorld->GetActivePanelID() == 8) {
+        g_pBaldurChitin->m_pEngineWorld->StopContainer();
+    }
 }
 
 // 0x5ADC90

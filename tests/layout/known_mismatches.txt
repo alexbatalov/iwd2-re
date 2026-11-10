@@ -1203,15 +1203,6 @@ CImm::field_13C
 CImm::m_cCriticalSection
 CImm::m_hKeyboardLayout
 CImm::m_sCandidateList
-CInfButtonArray::field_16E8
-CInfButtonArray::field_17C2
-CInfButtonArray::field_189C
-CInfButtonArray::field_19B2
-CInfButtonArray::m_buttonTypes
-CInfButtonArray::m_nSelectedButton
-CInfButtonArray::m_nState
-CInfButtonSettings::field_1D8
-CInfButtonSettings::m_bGreyOut
 CInfCursor::bAnimatingCustom
 CInfCursor::field_9EE
 CInfCursor::field_9F2
