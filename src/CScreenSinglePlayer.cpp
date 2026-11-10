@@ -2089,7 +2089,9 @@ void CScreenSinglePlayer::OnPartySelectionDoneButtonClick()
 
     delete pCharacters;
 
-    if (m_nParty == 10 && nCharacters > 0) {
+    // Done (control 10) starts the game right away; Modify leaves the
+    // imported party on the party formation screen.
+    if (field_139E == 10 && nCharacters > 0) {
         OnMainDoneButtonClick();
     }
 }
@@ -3094,7 +3096,7 @@ CUIControlButtonSinglePlayerPartyModify::~CUIControlButtonSinglePlayerPartyModif
 {
 }
 
-// 0x667810
+// 0x6679C0
 void CUIControlButtonSinglePlayerPartyModify::OnLButtonClick(CPoint pt)
 {
     CScreenSinglePlayer* pSinglePlayer = g_pBaldurChitin->m_pEngineSinglePlayer;
