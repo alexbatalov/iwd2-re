@@ -10,6 +10,7 @@
 #include <windows.h>
 
 #include <dbghelp.h>
+#include <tlhelp32.h>
 #include <stdio.h>
 
 #pragma comment(lib, "dbghelp.lib")
@@ -22,13 +23,23 @@ static void CrashPath(char* buffer, size_t size, const char* fileName)
     buffer[size - 1] = '\0';
 }
 
-static void WriteStack(FILE* stream, CONTEXT* pContext)
+static volatile LONG gSymbolsReady = 0;
+
+// Load symbols once. Called at startup by the dump thread, so a hang dump
+// doesn't load modules while other threads may hold the loader lock.
+static void EnsureSymbols()
+{
+    if (InterlockedCompareExchange(&gSymbolsReady, 1, 0) == 0) {
+        SymSetOptions(SYMOPT_LOAD_LINES | SYMOPT_UNDNAME);
+        SymInitialize(GetCurrentProcess(), NULL, TRUE);
+    }
+}
+
+static void WriteStack(FILE* stream, CONTEXT* pContext, HANDLE hThread = GetCurrentThread())
 {
     HANDLE hProcess = GetCurrentProcess();
-    HANDLE hThread = GetCurrentThread();
 
-    SymSetOptions(SYMOPT_LOAD_LINES | SYMOPT_UNDNAME | SYMOPT_DEFERRED_LOADS);
-    SymInitialize(hProcess, NULL, TRUE);
+    EnsureSymbols();
 
     CONTEXT context = *pContext;
     STACKFRAME64 frame = { 0 };
@@ -68,7 +79,6 @@ static void WriteStack(FILE* stream, CONTEXT* pContext)
         }
     }
 
-    SymCleanup(hProcess);
 }
 
 static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* pExceptionInfo)
@@ -102,6 +112,85 @@ static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* pExceptionInfo)
     return EXCEPTION_EXECUTE_HANDLER;
 }
 
+// Writes the stack of every other thread to iwd2re-stacks.txt. Used to find
+// where the game hangs. Each thread is suspended only long enough to copy its
+// registers, so no thread stays frozen while this one allocates. Stuck threads
+// don't move, so their stacks stay accurate.
+static void DumpAllThreadStacks()
+{
+    const int kMaxThreads = 128;
+    static DWORD threadIds[kMaxThreads];
+    static CONTEXT contexts[kMaxThreads];
+    int count = 0;
+
+    DWORD processId = GetCurrentProcessId();
+    DWORD selfId = GetCurrentThreadId();
+    HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
+    THREADENTRY32 entry = { sizeof(entry) };
+    if (hSnapshot != INVALID_HANDLE_VALUE && Thread32First(hSnapshot, &entry)) {
+        do {
+            if (entry.th32OwnerProcessID != processId || entry.th32ThreadID == selfId || count >= kMaxThreads) {
+                continue;
+            }
+
+            HANDLE hThread = OpenThread(THREAD_SUSPEND_RESUME | THREAD_GET_CONTEXT, FALSE, entry.th32ThreadID);
+            if (hThread == NULL) {
+                continue;
+            }
+
+            if (SuspendThread(hThread) != (DWORD)-1) {
+                memset(&contexts[count], 0, sizeof(CONTEXT));
+                contexts[count].ContextFlags = CONTEXT_FULL;
+                if (GetThreadContext(hThread, &contexts[count])) {
+                    threadIds[count] = entry.th32ThreadID;
+                    count++;
+                }
+                ResumeThread(hThread);
+            }
+
+            CloseHandle(hThread);
+        } while (Thread32Next(hSnapshot, &entry));
+    }
+
+    if (hSnapshot != INVALID_HANDLE_VALUE) {
+        CloseHandle(hSnapshot);
+    }
+
+    char path[MAX_PATH];
+    CrashPath(path, sizeof(path), "iwd2re-stacks.txt");
+    FILE* stream = fopen(path, "w");
+    if (stream == NULL) {
+        return;
+    }
+
+    for (int index = 0; index < count; index++) {
+        HANDLE hThread = OpenThread(THREAD_GET_CONTEXT | THREAD_QUERY_INFORMATION, FALSE, threadIds[index]);
+        fprintf(stream, "thread %lu:\n", threadIds[index]);
+        WriteStack(stream, &contexts[index], hThread != NULL ? hThread : GetCurrentThread());
+        fprintf(stream, "\n");
+        fflush(stream);
+        if (hThread != NULL) {
+            CloseHandle(hThread);
+        }
+    }
+
+    // Tells readers the file is complete.
+    fprintf(stream, "== end ==\n");
+    fclose(stream);
+}
+
+// Waits on the named event "iwd2re-dump-<pid>". Test tools set it when the
+// game looks stuck.
+static DWORD WINAPI DumpRequestThread(LPVOID lpParameter)
+{
+    HANDLE hEvent = reinterpret_cast<HANDLE>(lpParameter);
+    EnsureSymbols();
+    while (WaitForSingleObject(hEvent, INFINITE) == WAIT_OBJECT_0) {
+        DumpAllThreadStacks();
+    }
+    return 0;
+}
+
 void InstallCrashHandler()
 {
     DWORD length = GetEnvironmentVariableA("IWD2RE_CRASH_DIR", gCrashDir, sizeof(gCrashDir));
@@ -110,4 +199,12 @@ void InstallCrashHandler()
     }
 
     SetUnhandledExceptionFilter(UnhandledExceptionHandler);
+
+    char eventName[64];
+    _snprintf(eventName, sizeof(eventName), "iwd2re-dump-%lu", GetCurrentProcessId());
+    eventName[sizeof(eventName) - 1] = '\0';
+    HANDLE hEvent = CreateEventA(NULL, FALSE, FALSE, eventName);
+    if (hEvent != NULL) {
+        CreateThread(NULL, 0, DumpRequestThread, hEvent, 0, NULL);
+    }
 }

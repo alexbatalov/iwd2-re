@@ -169,3 +169,13 @@ def capture_screen_rect(x: int, y: int, w: int, h: int):
     gdi32.DeleteDC(hdc)
     user32.ReleaseDC(0, hdc_screen)
     return Image.frombuffer("RGB", (w, h), buf, "raw", "BGRX", 0, 1)
+
+
+def signal_event(name: str) -> bool:
+    """Set a named event in another process (EVENT_MODIFY_STATE)."""
+    h = kernel32.OpenEventW(0x0002, False, name)
+    if not h:
+        return False
+    ok = bool(kernel32.SetEvent(h))
+    kernel32.CloseHandle(h)
+    return ok

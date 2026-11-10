@@ -72,6 +72,7 @@ def game(request, target, play_dir, out_dir):
         yield g
         rep = getattr(request.node, "rep_call", None)
         if rep is not None and rep.failed:
+            g.dump_stacks()
             try:
                 g.screenshot("failure")
             except Exception:

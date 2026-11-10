@@ -59,6 +59,7 @@ class Game:
         # and window pixels are screen pixels.
         env["__COMPAT_LAYER"] = "HighDpiAware"
         env["IWD2_GAME_DIR"] = str(self.play_dir)
+        env.setdefault("IWD2RE_CRASH_DIR", str(self.out_dir))
         self.out_dir.mkdir(parents=True, exist_ok=True)
         self.rng = random.Random(self.seed)
         self.proc = subprocess.Popen([str(exe)], cwd=str(self.play_dir), env=env)
@@ -103,6 +104,22 @@ class Game:
             if w * hh > best_area:
                 best, best_area = h, w * hh
         return best
+
+    def dump_stacks(self) -> Path | None:
+        """Ask the rebuild to write the stacks of all its threads (it listens
+        on "iwd2re-dump-<pid>"). Returns the stacks file, if written."""
+        if self.target != "reimpl" or not self.proc or self.proc.poll() is not None:
+            return None
+        path = Path(os.environ.get("IWD2RE_CRASH_DIR", str(self.out_dir))) / "iwd2re-stacks.txt"
+        if path.exists():
+            path.unlink()
+        if not win32.signal_event(f"iwd2re-dump-{self.proc.pid}"):
+            return None
+        for _ in range(240):
+            time.sleep(0.25)
+            if path.exists() and b"== end ==" in path.read_bytes():
+                return path
+        return None
 
     def close(self) -> None:
         if self.proc and self.proc.poll() is None:
