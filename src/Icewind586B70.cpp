@@ -202,6 +202,20 @@ void Icewind586B70::Clear()
     }
 }
 
+// 0x587510
+std::vector<int> Icewind586B70::sub_587510()
+{
+    std::vector<int> ids;
+
+    for (std::vector<Entry>::iterator it = mEntries.begin(); it != mEntries.end(); it++) {
+        if (it->field_0 != 0 && it->field_4 != 0) {
+            ids.push_back(it->field_0);
+        }
+    }
+
+    return ids;
+}
+
 // NOTE: Inlined.
 Icewind586B70::Entry::Entry()
 {
