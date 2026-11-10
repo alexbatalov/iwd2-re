@@ -363,10 +363,34 @@ typedef struct Creature_Header_st {
     /* 0004 */ DWORD nFileVersion;
 } CREATURE_HEADER;
 
-// NOTE: There are no traces of such struct in the code.
+// NOTE: Field names are guesses. Offsets and sizes come from
+// `CInfGame::ImportCharacter` (0x5A0F50), which reads the header with
+// `sizeof` 0x224.
 typedef struct ExportCharacter_Header_st {
     /* 0000 */ DWORD nFileType;
     /* 0004 */ DWORD nFileVersion;
+    /* 0008 */ char szName[32];
+    /* 0028 */ DWORD nCreatureOffset;
+    /* 002C */ DWORD nCreatureSize;
+    /* 0030 */ WORD quickWeaponSlots[8];
+    /* 0040 */ WORD quickWeaponAbilities[8];
+    /* 0050 */ RESREF quickSpells[9];
+    /* 0098 */ BYTE quickSpellsClass[9];
+    /* 00A1 */ BYTE field_A1;
+    /* 00A2 */ WORD quickItemSlots[3];
+    /* 00A8 */ WORD quickItemAbilities[3];
+    /* 00AE */ RESREF quickInnates[9];
+    /* 00F6 */ RESREF quickSongs[9];
+    /* 013E */ DWORD field_13E[9];
+    /* 0162 */ BYTE nLastSpellbookClassIndex;
+    /* 0163 */ BYTE nLastSpellbookSpellLevel;
+    /* 0164 */ BYTE quickSpellsField_164[9];
+    /* 016D */ BYTE quickSpellsKit[9];
+    /* 0176 */ BYTE field_176[6];
+    /* 017C */ RESREF secondarySounds;
+    /* 0184 */ char szSoundSet[32];
+    /* 01A4 */ BYTE quickWeaponsField_1A4[8];
+    /* 01AC */ BYTE field_1AC[120];
 } EXPORT_CHARACTER_HEADER;
 
 // NOTE: There are no traces of such struct in the code.

@@ -6,6 +6,7 @@
 #include "CBaldurChitin.h"
 #include "CBaldurEngine.h"
 #include "CBaldurProjector.h"
+#include "CCharacterFile.h"
 #include "CGameAnimationType.h"
 #include "CGameArea.h"
 #include "CGameContainer.h"
@@ -1391,7 +1392,178 @@ void CInfGame::CacheResFileWithResource(const CString& areaName)
 // 0x5A0F50
 LONG CInfGame::ImportCharacter(const CString& sFileName, INT nIndex)
 {
-    // TODO: Incomplete.
+    CCharacterFile cCharacterData;
+    BOOLEAN bTemporaryKey = FALSE;
+    CBiographyFile cBiographyData;
+    STR_RES strRes;
+
+    // NOTE: Uninline.
+    cCharacterData.SetResRef(CResRef(sFileName), TRUE, TRUE);
+
+    if (cCharacterData.GetResRef() == "") {
+        // Not in the resource index yet, add the file from the characters
+        // folder.
+        bTemporaryKey = TRUE;
+        g_pChitin->cDimm.AddTemporaryKey(m_sCharactersDir, CResRef(sFileName), 1018);
+
+        // NOTE: Uninline.
+        cCharacterData.SetResRef(CResRef(sFileName), TRUE, TRUE);
+    }
+
+    BYTE* pData = cCharacterData.GetData();
+    DWORD nExportCharacter = cCharacterData.GetDataSize();
+
+    if (pData != NULL && memcmp(pData, "CHR V2.2", 8) == 0) {
+        EXPORT_CHARACTER_HEADER* pHeader = reinterpret_cast<EXPORT_CHARACTER_HEADER*>(pData);
+
+        nExportCharacter -= sizeof(EXPORT_CHARACTER_HEADER);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+        // __LINE__: 4172
+        UTIL_ASSERT(static_cast<LONG>(nExportCharacter) > 0);
+
+        nExportCharacter -= pHeader->nCreatureSize;
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+        // __LINE__: 4175
+        UTIL_ASSERT(static_cast<LONG>(nExportCharacter) >= 0);
+
+        CGameSprite* pSprite = new CGameSprite(pData + pHeader->nCreatureOffset,
+            pHeader->nCreatureSize,
+            0,
+            0,
+            -1,
+            0,
+            0,
+            INT_MAX,
+            CPoint(-1, -1),
+            0);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+        // __LINE__: 4180
+        UTIL_ASSERT(pSprite != NULL);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\InfGame.cpp
+        // __LINE__: 4181
+        UTIL_ASSERT(nExportCharacter == 0);
+
+        pSprite->SetResRef(CResRef(sFileName));
+
+        char szName[33] = { 0 };
+        strncpy(szName, pHeader->szName, 32);
+        pSprite->m_sName = CString(szName);
+
+        for (int index = 0; index < 8; index++) {
+            pSprite->InitQuickItemData(pHeader->quickWeaponSlots[index],
+                pHeader->quickWeaponAbilities[index],
+                pHeader->quickWeaponsField_1A4[index],
+                pSprite->m_quickWeapons[index]);
+        }
+
+        for (int index = 0; index < 9; index++) {
+            pSprite->InitQuickSpellData(CResRef(pHeader->quickSpells[index]),
+                1,
+                pSprite->m_quickSpells[index],
+                pHeader->quickSpellsClass[index],
+                pHeader->quickSpellsField_164[index],
+                pHeader->quickSpellsKit[index]);
+        }
+
+        for (int index = 0; index < 3; index++) {
+            pSprite->InitQuickItemData(pHeader->quickItemSlots[index],
+                pHeader->quickItemAbilities[index],
+                0,
+                pSprite->m_quickItems[index]);
+        }
+
+        for (int index = 0; index < 9; index++) {
+            pSprite->InitQuickSpellData(CResRef(pHeader->quickInnates[index]),
+                2,
+                pSprite->m_quickInnates[index],
+                0,
+                0,
+                0);
+        }
+
+        for (int index = 0; index < 9; index++) {
+            pSprite->InitQuickSpellData(CResRef(pHeader->quickSongs[index]),
+                3,
+                pSprite->m_quickSongs[index],
+                0,
+                0,
+                0);
+        }
+
+        for (int index = 0; index < 9; index++) {
+            pSprite->field_3D14[index] = pHeader->field_13E[index];
+        }
+
+        pSprite->m_nLastSpellbookClassIndex = pHeader->nLastSpellbookClassIndex;
+        pSprite->m_nLastSpellbookSpellLevel = pHeader->nLastSpellbookSpellLevel;
+
+        if (bTemporaryKey == TRUE) {
+            g_pChitin->cDimm.RemoveTemporaryKey(m_sCharactersDir, CResRef(sFileName), 1018);
+        }
+
+        // NOTE: Uninline.
+        cBiographyData.SetResRef(CResRef(sFileName), TRUE, TRUE);
+
+        if (cBiographyData.GetResRef() != "") {
+            // Biographies of imported characters go to user talk table
+            // entries, one per party slot.
+            STRREF strBiography = static_cast<BYTE>(nIndex) + 62016;
+            strRes.szText = CString(cBiographyData.GetData());
+            strRes.szText = strRes.szText.Left(cBiographyData.pRes->nSize);
+            g_pBaldurChitin->GetTlkTable().m_override.AddUserEntry(strBiography, strRes);
+            pSprite->m_baseStats.m_biography = strBiography;
+            cBiographyData.pRes->Release();
+        } else {
+            pSprite->m_baseStats.m_biography = -1;
+        }
+
+        BYTE nClass;
+
+        nClass = CAIOBJECTTYPE_C_CLERIC;
+        pSprite->AddKnownDivineSpells(nClass);
+
+        nClass = CAIOBJECTTYPE_C_DRUID;
+        pSprite->AddKnownDivineSpells(nClass);
+
+        nClass = CAIOBJECTTYPE_C_PALADIN;
+        pSprite->AddKnownDivineSpells(nClass);
+
+        nClass = CAIOBJECTTYPE_C_RANGER;
+        pSprite->AddKnownDivineSpells(nClass);
+
+        AddPartyGold(g_pBaldurChitin->GetObjectGame()->GetRuleTables().GetStartingGold(pSprite));
+
+        CString sSoundSet(pHeader->szSoundSet);
+        DWORD nLength = sSoundSet.GetLength();
+        memcpy(pSprite->field_725A, sSoundSet.GetBuffer(nLength), min(nLength, 32));
+        if (nLength < 32) {
+            pSprite->field_725A[nLength] = '\0';
+        }
+
+        CString sPath = g_pBaldurChitin->GetObjectGame()->GetDirSounds() + sSoundSet + '\\';
+        g_pChitin->cDimm.AddToDirectoryList(sPath, TRUE);
+
+        pSprite->m_secondarySounds = CResRef(pHeader->secondarySounds);
+
+        cCharacterData.pRes->dwFlags |= 0x100;
+        cCharacterData.ReleaseData();
+
+        pSprite->m_bGlobal = TRUE;
+        pSprite->sub_726810(pSprite->m_nWeaponSet);
+
+        return pSprite->GetId();
+    }
+
+    cCharacterData.ReleaseData();
+
+    if (bTemporaryKey) {
+        g_pChitin->cDimm.RemoveTemporaryKey(m_sCharactersDir, CResRef(sFileName), 1018);
+        cCharacterData.ReleaseData();
+    }
 
     return 0;
 }
