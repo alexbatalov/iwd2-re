@@ -699,9 +699,147 @@ BOOL CDimm::DirectoryRemoveFiles(const CString& sDirectoryName)
 // 0x784A50
 BOOL CDimm::CompressDirectory(const CString& sTempDir, const CString& sSaveDir)
 {
-    // TODO: Incomplete.
+    CString sResolvedTempDir;
+    CString sMainSaveFileName;
+    CString sFileName;
+    CString sPattern;
 
-    return FALSE;
+    CFile input;
+    CFile output;
+
+    BYTE* pSrc = NULL;
+    DWORD nMaxSrcSize = 0;
+    BYTE* pDest = NULL;
+
+    // NOTE: Uninitialized. Only assigned when the first buffer allocation
+    // happens (original bug if the first file is empty).
+    DWORD nMaxDestSize;
+
+    sMainSaveFileName = "ICEWIND2.SAV";
+
+    if (!g_pChitin->lAliases.ResolveFileName(sTempDir, sResolvedTempDir)) {
+        sResolvedTempDir = sTempDir;
+    }
+
+    sPattern = sResolvedTempDir + "*.*";
+
+    WIN32_FIND_DATAA findFileData;
+    HANDLE hFindFile = FindFirstFileA(sPattern, &findFileData);
+    if (hFindFile == INVALID_HANDLE_VALUE) {
+        return FALSE;
+    }
+
+    if (!output.Open(sResolvedTempDir + sMainSaveFileName, CFile::OpenFlags::modeWrite | CFile::OpenFlags::typeBinary | CFile::OpenFlags::shareExclusive | CFile::OpenFlags::modeCreate, NULL)) {
+        FindClose(hFindFile);
+        return FALSE;
+    }
+
+    output.Seek(0, CFile::SeekPosition::end);
+    output.Write("SAV V1.0", 8);
+
+    BOOL bResult = TRUE;
+
+    do {
+        if ((findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != FILE_ATTRIBUTE_DIRECTORY) {
+            DWORD nFileNameLength = strlen(findFileData.cFileName) + 1;
+            sFileName = findFileData.cFileName;
+            if (sMainSaveFileName != findFileData.cFileName
+                && strnicmp(findFileData.cFileName, "ICEWIND2.GAM", 10) != 0
+                && strnicmp(sFileName.Right(3), "BMP", 3) != 0
+                && strnicmp(findFileData.cFileName, "WORLDMAP.WMP", 12) != 0
+                && strnicmp(findFileData.cFileName, "EXPMAP.WMP", 10) != 0) {
+                sFileName = sResolvedTempDir + findFileData.cFileName;
+
+                if (!input.Open(sFileName, CFile::OpenFlags::modeRead | CFile::OpenFlags::typeBinary | CFile::OpenFlags::shareDenyNone, NULL)) {
+                    bResult = FALSE;
+                    break;
+                }
+
+                DWORD nSrcSize = static_cast<DWORD>(input.GetLength());
+                if (nSrcSize > nMaxSrcSize) {
+                    if (pSrc != NULL) {
+                        delete pSrc;
+                    }
+
+                    if (pDest != NULL) {
+                        delete pDest;
+                    }
+
+                    nMaxSrcSize = max(nSrcSize, 0xFFFF);
+
+                    pSrc = new BYTE[nMaxSrcSize];
+                    if (pSrc == NULL) {
+                        bResult = FALSE;
+                        break;
+                    }
+
+                    nMaxDestSize = nMaxSrcSize + max(nMaxSrcSize / 1000, 1024) + 12;
+
+                    pDest = new BYTE[nMaxDestSize];
+                    if (pDest == NULL) {
+                        bResult = FALSE;
+                        break;
+                    }
+                }
+
+                input.Seek(0, CFile::SeekPosition::begin);
+                nSrcSize = input.Read(pSrc, nSrcSize);
+                input.Close();
+
+                DWORD nDestSize = nMaxDestSize;
+                if (CUtil::Compress(pDest, &nDestSize, pSrc, nSrcSize, 1) != 0) {
+                    // __FILE__: C:\Projects\Icewind2\src\chitin\ChDimm.cpp
+                    // __LINE__: 2126
+                    UTIL_ASSERT_MSG(FALSE, "Compression Failed for File " + sFileName);
+
+                    bResult = FALSE;
+                    break;
+                }
+
+                output.Seek(0, CFile::SeekPosition::end);
+                output.Write(&nFileNameLength, 4);
+                output.Write(findFileData.cFileName, nFileNameLength);
+                output.Write(&nSrcSize, 4);
+                output.Write(&nDestSize, 4);
+                output.Write(pDest, nDestSize);
+            }
+        }
+    } while (FindNextFileA(hFindFile, &findFileData));
+
+    if (pSrc != NULL) {
+        delete pSrc;
+    }
+
+    if (pDest != NULL) {
+        delete pDest;
+    }
+
+    output.Close();
+    FindClose(hFindFile);
+
+    if (!bResult) {
+        CFile::Remove(sResolvedTempDir + sMainSaveFileName);
+        return FALSE;
+    }
+
+    hFindFile = FindFirstFileA(sPattern, &findFileData);
+    do {
+        if ((findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != FILE_ATTRIBUTE_DIRECTORY) {
+            sFileName = findFileData.cFileName;
+            if (sMainSaveFileName != findFileData.cFileName
+                && strnicmp(findFileData.cFileName, "ICEWIND2.GAM", 10) != 0
+                && strnicmp(sFileName.Right(3), "BMP", 3) != 0
+                && strnicmp(findFileData.cFileName, "WORLDMAP.WMP", 12) != 0
+                && strncmp(findFileData.cFileName, "EXPMAP.WMP", 10) != 0) {
+                sFileName = sResolvedTempDir + findFileData.cFileName;
+                DeleteFileA(sFileName);
+            }
+        }
+    } while (FindNextFileA(hFindFile, &findFileData));
+
+    FindClose(hFindFile);
+
+    return TRUE;
 }
 
 // 0x785190
