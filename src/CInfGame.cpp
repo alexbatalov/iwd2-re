@@ -1909,6 +1909,15 @@ CGameArea* CInfGame::LoadArea(CString areaName, BYTE nTravelScreenImageToUse, BO
     return m_gameAreas[cnt];
 }
 
+// 0x5A3230
+void CInfGame::Marshal(BYTE** pGame, LONG* nGame, BOOLEAN bProgressBarInPlace)
+{
+    // TODO: Incomplete.
+
+    *pGame = NULL;
+    *nGame = 0;
+}
+
 // 0x5AC110
 BOOLEAN CInfGame::CanSaveGame(STRREF& strError, BOOLEAN bInRestGame, BOOLEAN bInStore)
 {
@@ -2015,11 +2024,347 @@ BOOL CInfGame::BackupQuickSave()
 }
 
 // 0x5AC430
-BOOL CInfGame::SaveGame(unsigned char a1, unsigned char a2, unsigned char a3)
+BOOL CInfGame::SaveGame(BOOLEAN bProgressBarRequired, BOOLEAN bProgressBarInPlace, BOOLEAN a3)
 {
-    // TODO: Incomplete.
+    CGameFile cGameFile;
+    CAreaFile cAreaFile; // NOTE: Unused.
+    BOOL bResult = TRUE;
+    DWORD dwSectorsPerCluster;
+    DWORD dwBytesPerSector;
+    DWORD dwNumberOfFreeClusters;
+    DWORD dwTotalNumberOfClusters;
+    ULARGE_INTEGER nFreeBytesAvailable;
+    ULARGE_INTEGER nTotalNumberOfBytes;
+    HMODULE hModule;
+    BOOL bHaveGetDiskFreeSpaceExA;
+    INT cnt;
 
-    return FALSE;
+    for (cnt = 0; cnt < CINFGAME_MAX_AREAS; cnt++) {
+        if (m_gameAreas[cnt] != NULL) {
+            m_gameAreas[cnt]->sub_47A190();
+        }
+    }
+
+    if (m_sSaveGame == "") {
+        return FALSE;
+    }
+
+    if (GetDiskFreeSpaceA(NULL, &dwSectorsPerCluster, &dwBytesPerSector, &dwNumberOfFreeClusters, &dwTotalNumberOfClusters) != TRUE
+        || dwNumberOfFreeClusters * dwSectorsPerCluster < CBaldurChitin::MINIMUM_DRIVE_SECTORS
+        || dwNumberOfFreeClusters * dwSectorsPerCluster < CBaldurChitin::MINIMUM_DRIVE_SPACE / dwBytesPerSector) {
+        hModule = LoadLibraryA("kernel32.dll");
+        if (hModule == NULL) {
+            if (bProgressBarInPlace) {
+                g_pChitin->SetProgressBar(FALSE,
+                    0,
+                    0,
+                    0,
+                    FALSE,
+                    0,
+                    FALSE,
+                    0,
+                    FALSE,
+                    FALSE,
+                    255);
+            }
+
+            g_pBaldurChitin->m_dwCloseConfirmationStrId = 11790;
+            g_pBaldurChitin->m_dwCloseConfirmationFlags = 0x34;
+            PostMessageA(g_pBaldurChitin->cWnd.GetSafeHwnd(), WM_CLOSE, 0, 0);
+
+            return FALSE;
+        }
+
+        bHaveGetDiskFreeSpaceExA = GetProcAddress(hModule, "GetDiskFreeSpaceExA") != NULL;
+        CResCache::pfnGetDiskFreeSpaceExA = reinterpret_cast<GetDiskFreeSpaceExAFunc*>(GetProcAddress(hModule, "GetDiskFreeSpaceExA"));
+
+        if (!bHaveGetDiskFreeSpaceExA
+            || !CResCache::pfnGetDiskFreeSpaceExA(NULL, &nFreeBytesAvailable, &nTotalNumberOfBytes, NULL)
+            || (nFreeBytesAvailable.HighPart == 0 && nFreeBytesAvailable.LowPart < CBaldurChitin::MINIMUM_DRIVE_SPACE)) {
+            if (bProgressBarInPlace) {
+                g_pChitin->SetProgressBar(FALSE,
+                    0,
+                    0,
+                    0,
+                    FALSE,
+                    0,
+                    FALSE,
+                    0,
+                    FALSE,
+                    FALSE,
+                    255);
+            }
+
+            g_pBaldurChitin->m_dwCloseConfirmationStrId = 11790;
+            g_pBaldurChitin->m_dwCloseConfirmationFlags = 0x34;
+            PostMessageA(g_pBaldurChitin->cWnd.GetSafeHwnd(), WM_CLOSE, 0, 0);
+
+            FreeLibrary(hModule);
+
+            return FALSE;
+        }
+
+        FreeLibrary(hModule);
+    }
+
+    if (!bProgressBarInPlace && bProgressBarRequired == TRUE) {
+        sub_59FA00(TRUE);
+
+        g_pChitin->SetProgressBar(TRUE,
+            9890,
+            0,
+            0,
+            FALSE,
+            0,
+            FALSE,
+            0,
+            FALSE,
+            FALSE,
+            255);
+        g_pChitin->cProgressBar.m_nActionProgress = 0;
+        g_pChitin->cProgressBar.m_nActionTarget = 5000000;
+        g_pChitin->cProgressBar.m_bDisableMinibars = TRUE;
+    }
+
+    m_cMoveList.sub_5170F0(g_pBaldurChitin->GetObjectGame()->m_pGameAreaMaster);
+    m_cLimboList.sub_5170F0(g_pBaldurChitin->GetObjectGame()->m_pGameAreaMaster);
+
+    if (bProgressBarInPlace || bProgressBarRequired) {
+        ProgressBarCallback(0, TRUE);
+
+        g_pChitin->cProgressBar.AddActionTarget(2500000);
+
+        if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+            && !g_pBaldurChitin->m_pEngineMultiPlayer->m_bMultiplayerStartup) {
+            g_pChitin->cProgressBar.AddActionTarget(6000000);
+        }
+
+        for (cnt = 0; cnt < CINFGAME_MAX_AREAS; cnt++) {
+            if (m_gameAreas[cnt] != NULL && (m_gameAreas[cnt]->m_header.m_flags & 0x1) == 0) {
+                g_pChitin->cProgressBar.AddActionTarget(3000000);
+            }
+        }
+    }
+
+    if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+        && !g_pBaldurChitin->m_pEngineMultiPlayer->m_bMultiplayerStartup) {
+        g_pBaldurChitin->m_pEngineWorld->StartSaveGameMultiplayerHost();
+
+        g_pBaldurChitin->GetBaldurMessage()->UpdateDemandCharacters(TRUE,
+            0,
+            bProgressBarRequired | bProgressBarInPlace);
+        g_pBaldurChitin->GetBaldurMessage()->PurgeDroppedPlayers();
+        g_pBaldurChitin->GetBaldurMessage()->BroadcastUpdateCharacterSlot(TRUE,
+            0,
+            bProgressBarRequired | bProgressBarInPlace);
+        g_pBaldurChitin->GetBaldurMessage()->RequestClientSignal(CBaldurMessage::SIGNAL_END_MAJOR_EVENT);
+    }
+
+    if (a3) {
+        field_366E = TRUE;
+    }
+
+    std::vector<int> ids = Icewind586B70::Instance()->sub_587510();
+    for (std::vector<int>::iterator it = ids.begin(); it != ids.end(); it++) {
+        g_pBaldurChitin->GetBaldurMessage()->sub_43D8D0(*it);
+    }
+    Icewind586B70::Instance()->sub_587190();
+
+    g_pBaldurChitin->GetActiveEngine()->GetManager()->InvalidateRect(NULL);
+    g_pBaldurChitin->m_cCachingStatus.InvalidateScreen();
+
+    if (bProgressBarInPlace) {
+        ProgressBarCallback(312500, FALSE);
+    }
+
+    if (bProgressBarInPlace || bProgressBarRequired) {
+        ProgressBarCallback(312500, FALSE);
+    }
+
+    for (cnt = 0; cnt < 12; cnt++) {
+        if (m_aServerStore[cnt] != NULL) {
+            m_aServerStore[cnt]->Marshal(m_sTempDir);
+        }
+    }
+
+    BOOLEAN bProgressBar = bProgressBarRequired | bProgressBarInPlace;
+
+    BYTE* pGame;
+    LONG nGame;
+    Marshal(&pGame, &nGame, bProgressBar);
+
+    if (pGame != NULL) {
+        // NOTE: Uninline.
+        cGameFile.SetResRef(CResRef("ICEWIND2"), TRUE, TRUE);
+
+        cGameFile.GetRes()->Write(m_sTempDir, pGame, nGame);
+        delete pGame;
+    } else {
+        bResult = FALSE;
+    }
+
+    for (cnt = 0; cnt < CINFGAME_MAX_AREAS; cnt++) {
+        if (m_gameAreas[cnt] != NULL && (m_gameAreas[cnt]->m_header.m_flags & 0x1) == 0) {
+            BYTE* pArea;
+            LONG nArea;
+            m_gameAreas[cnt]->Marshal(&pArea, &nArea, bProgressBar);
+
+            if (pArea != NULL) {
+                CAreaFile cAreaData;
+
+                // NOTE: Uninline.
+                cAreaData.SetResRef(m_gameAreas[cnt]->m_resRef, TRUE, TRUE);
+
+                cAreaData.GetRes()->Write(m_sTempDir, pArea, nArea);
+                delete pArea;
+            } else {
+                bResult = FALSE;
+            }
+        }
+    }
+
+    m_cWorldMap.Marshal(m_sTempDir);
+
+    g_pBaldurChitin->GetTlkTable().m_override.Save();
+    g_pBaldurChitin->GetTlkTable().m_override.CloseFiles();
+
+    if (bResult) {
+        if (!g_pChitin->cDimm.DirectoryCopyFiles(m_sTempDir, m_sTempSaveDir)) {
+            bResult = FALSE;
+        } else if (!g_pChitin->cDimm.CompressDirectory(m_sTempSaveDir, m_sTempSaveDir)) {
+            bResult = FALSE;
+        } else if (!g_pChitin->cDimm.DirectoryRemoveFiles(GetDirSave())
+            || !g_pChitin->cDimm.DirectoryCopyFiles(m_sTempSaveDir, GetDirSave())) {
+            bResult = FALSE;
+        }
+    }
+
+    g_pChitin->cDimm.DirectoryRemoveFiles(m_sTempSaveDir);
+
+    g_pBaldurChitin->GetTlkTable().m_override.Open(CString("temp//default.toh"),
+        CString("temp//default.tot"));
+
+    if (bProgressBarInPlace || bProgressBarRequired) {
+        ProgressBarCallback(312500, FALSE);
+    }
+
+    EnterCriticalSection(&(g_pChitin->field_314));
+    g_pChitin->cDimm.m_cKeyTable.RescanEverything();
+    LeaveCriticalSection(&(g_pChitin->field_314));
+
+    if (bProgressBarInPlace || bProgressBarRequired) {
+        ProgressBarCallback(312500, FALSE);
+    }
+
+    SaveOptions();
+    g_pBaldurChitin->SaveOptions();
+
+    m_nLastSaveTime = m_worldTime.m_gameTime;
+
+    if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+        && !g_pBaldurChitin->m_pEngineMultiPlayer->m_bMultiplayerStartup) {
+        if (g_pChitin->cNetwork.GetServiceProvider() != CNetwork::SERV_PROV_NULL) {
+            g_pChitin->cProgressBar.m_nWaitingReason = 19714;
+            g_pChitin->cProgressBar.m_bWaiting = TRUE;
+        }
+
+        while (g_pBaldurChitin->m_pEngineWorld->m_bHardPaused == TRUE
+            && g_pChitin->cNetwork.GetSessionOpen() == TRUE) {
+            g_pBaldurChitin->m_pEngineWorld->CheckEndOfHardPause();
+            g_pBaldurChitin->GetBaldurMessage()->HandleBlockingMessages();
+
+            g_pChitin->m_bDisplayStale = TRUE;
+
+            if (g_pChitin->cNetwork.GetServiceProvider() == CNetwork::SERV_PROV_NULL) {
+                SynchronousUpdate();
+            } else {
+                SleepEx(60, FALSE);
+            }
+        }
+
+        if (!g_pChitin->cNetwork.GetSessionOpen()) {
+            if (bProgressBarInPlace || bProgressBarRequired) {
+                g_pChitin->SetProgressBar(FALSE,
+                    0,
+                    0,
+                    0,
+                    FALSE,
+                    0,
+                    FALSE,
+                    0,
+                    FALSE,
+                    FALSE,
+                    255);
+            }
+
+            return TRUE;
+        }
+
+        g_pChitin->cProgressBar.m_bWaiting = FALSE;
+        g_pBaldurChitin->m_cCachingStatus.InvalidateScreen();
+    }
+
+    if (bProgressBarInPlace || bProgressBarRequired) {
+        ProgressBarCallback(1250000, FALSE);
+    }
+
+    if (!bProgressBarInPlace && bProgressBarRequired == TRUE) {
+        g_pChitin->cProgressBar.m_nActionProgress += g_pChitin->cProgressBar.m_nActionTarget - g_pChitin->cProgressBar.m_nActionProgress;
+        g_pChitin->cProgressBar.m_bDisableMinibars = TRUE;
+        g_pChitin->m_bDisplayStale = TRUE;
+
+        sub_59FA00(TRUE);
+
+        g_pChitin->SetProgressBar(FALSE,
+            0,
+            0,
+            0,
+            FALSE,
+            0,
+            FALSE,
+            0,
+            FALSE,
+            FALSE,
+            255);
+    }
+
+    if (bResult) {
+        if (GetDiskFreeSpaceA(NULL, &dwSectorsPerCluster, &dwBytesPerSector, &dwNumberOfFreeClusters, &dwTotalNumberOfClusters) != TRUE
+            || dwNumberOfFreeClusters * dwSectorsPerCluster < CBaldurChitin::MINIMUM_DRIVE_SECTORS
+            || dwNumberOfFreeClusters * dwSectorsPerCluster < CBaldurChitin::MINIMUM_DRIVE_SPACE / dwBytesPerSector) {
+            hModule = LoadLibraryA("kernel32.dll");
+            if (hModule == NULL) {
+                g_pBaldurChitin->m_dwCloseConfirmationStrId = 10249;
+                g_pBaldurChitin->m_dwCloseConfirmationFlags = 0x10;
+                PostMessageA(g_pBaldurChitin->cWnd.GetSafeHwnd(), WM_CLOSE, 0, 0);
+
+                return FALSE;
+            }
+
+            bHaveGetDiskFreeSpaceExA = GetProcAddress(hModule, "GetDiskFreeSpaceExA") != NULL;
+            CResCache::pfnGetDiskFreeSpaceExA = reinterpret_cast<GetDiskFreeSpaceExAFunc*>(GetProcAddress(hModule, "GetDiskFreeSpaceExA"));
+
+            if (!bHaveGetDiskFreeSpaceExA
+                || !CResCache::pfnGetDiskFreeSpaceExA(NULL, &nFreeBytesAvailable, &nTotalNumberOfBytes, NULL)
+                || (nFreeBytesAvailable.HighPart == 0 && nFreeBytesAvailable.LowPart < CBaldurChitin::MINIMUM_DRIVE_SPACE)) {
+                g_pBaldurChitin->m_dwCloseConfirmationStrId = 10249;
+                g_pBaldurChitin->m_dwCloseConfirmationFlags = 0x10;
+                PostMessageA(g_pBaldurChitin->cWnd.GetSafeHwnd(), WM_CLOSE, 0, 0);
+
+                FreeLibrary(hModule);
+
+                return FALSE;
+            }
+
+            FreeLibrary(hModule);
+        }
+    } else {
+        g_pBaldurChitin->m_dwCloseConfirmationStrId = 23554;
+        g_pBaldurChitin->m_dwCloseConfirmationFlags = 0x34;
+        PostMessageA(g_pBaldurChitin->cWnd.GetSafeHwnd(), WM_CLOSE, 0, 0);
+    }
+
+    return TRUE;
 }
 
 // 0x5A7E40

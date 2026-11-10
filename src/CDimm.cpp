@@ -696,6 +696,14 @@ BOOL CDimm::DirectoryRemoveFiles(const CString& sDirectoryName)
     return bResult;
 }
 
+// 0x784A50
+BOOL CDimm::CompressDirectory(const CString& sTempDir, const CString& sSaveDir)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x785190
 BOOL CDimm::UncompressDirectory(const CString& sTempDir, const CString& sSaveDir)
 {
