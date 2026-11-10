@@ -2176,6 +2176,7 @@ CScreenWorld::field_11E
 CScreenWorld::field_11F0
 CScreenWorld::field_11F4
 CScreenWorld::field_11F8
+CScreenWorld::field_11FC
 CScreenWorld::field_1204
 CScreenWorld::field_142
 CScreenWorld::field_14A

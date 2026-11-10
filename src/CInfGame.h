@@ -94,6 +94,24 @@ public:
     /* 0048 */ UINT m_nHighestLevel;
 };
 
+// NOTE: Elements of `CInfGame::field_4BDC`, keyed by area name (see
+// `CGameArea::Unmarshal`). The list is typed as `CString*` since `m_sName` is
+// the first member.
+class CInfGameUnknownEntry {
+public:
+    CInfGameUnknownEntry()
+    {
+        field_4 = 0;
+        field_8 = 0;
+        memset(field_9, 0, sizeof(field_9));
+    }
+
+    /* 0000 */ CString m_sName;
+    /* 0004 */ DWORD field_4;
+    /* 0008 */ BYTE field_8;
+    /* 0009 */ BYTE field_9[15];
+};
+
 class CInfGame {
 public:
     static const SHORT KILL_INNOCENT;
@@ -141,7 +159,7 @@ public:
     BOOLEAN CanSaveGame(STRREF& strError, BOOLEAN bInRestGame, BOOLEAN bInStore);
     BOOL BackupQuickSave();
     BOOL SaveGame(unsigned char a1, unsigned char a2, unsigned char a3);
-    BOOL Unmarshal(BYTE* pGame, LONG nGame, BOOLEAN bProgressBarInPlace);
+    void Unmarshal(BYTE* pGame, LONG nGame, BOOLEAN bProgressBarInPlace);
     void ProgressBarCallback(DWORD dwSize, BOOLEAN bInitialize);
     char sub_5A9780(BYTE nKey);
     BYTE sub_5A97D0(char ch);
