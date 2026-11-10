@@ -175,6 +175,7 @@ public:
     void DebugDump(const CString& message, BOOLEAN bEchoToScreen);
     void ClearInput();
     void ClearMarshal();
+    void Marshal(BYTE** pArea, LONG* areaSize, BOOLEAN bProgressBarInPlace);
     BOOLEAN GetEntryPoint(const CString& sName, CPoint& ptEnter, SHORT& facing);
     int GetHeightOffset(const CPoint& pt, BYTE listType);
     void IncrHeightDynamic(const CPoint& point);
@@ -296,6 +297,7 @@ public:
     /* 0A56 */ CTypedPtrList<CPtrList, POSITION> m_lVertSortBackRemove;
     /* 0A72 */ CTypedPtrList<CPtrList, POSITION> m_lVertSortFlightRemove;
     /* 0A8E */ CTypedPtrList<CPtrList, CTiledObject*> m_lTiledObjects;
+    /* 0AAA */ CTypedPtrList<CPtrList, int*> field_AAA; // NOTE: Stores actual ints disguised as pointers.
     /* 0AC6 */ CPoint m_ptOldViewPos;
     /* 0ACE */ CVariableHash m_variables;
     /* 0ADA */ CNamedCreatureVariableHash m_namedCreatures;

@@ -14,6 +14,7 @@ public:
     ~CWorldMap();
 
     void ClearData();
+    void Marshal(const CString& sDirName);
     void SetResRef(const CResRef& cResRef);
     CWorldMapData* GetMap(DWORD nMap);
     CSize GetMapSize(DWORD nMap);

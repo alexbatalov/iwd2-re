@@ -1770,6 +1770,15 @@ COLORREF CGameArea::GetTintColor(const CPoint& cPoint, BYTE listType)
     return rgbColor;
 }
 
+// 0x471630
+void CGameArea::Marshal(BYTE** pArea, LONG* areaSize, BOOLEAN bProgressBarInPlace)
+{
+    // TODO: Incomplete.
+
+    *pArea = NULL;
+    *areaSize = 0;
+}
+
 // 0x472DE0
 void CGameArea::Unmarshal(BYTE* pArea, LONG areaSize, const CString& sName, BOOLEAN bProgressBarInPlace)
 {

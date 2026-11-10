@@ -4786,6 +4786,14 @@ BOOL CBaldurMessage::OnDemandSettingsNightmareMode(INT nMsgFrom)
     return TRUE;
 }
 
+// 0x43D8D0
+BOOLEAN CBaldurMessage::sub_43D8D0(LONG nCharacterId)
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
 // 0x43DF40
 BOOLEAN CBaldurMessage::OnMovieEndCredits(INT nMsgFrom, BYTE* pByteMessage, DWORD dwSize)
 {

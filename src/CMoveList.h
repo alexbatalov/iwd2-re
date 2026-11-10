@@ -23,6 +23,7 @@ public:
     CMoveList();
     ~CMoveList() override;
     void ClearAll();
+    void sub_5170F0(CGameArea* pArea);
     void CheckLoad(CGameArea* pArea);
     void AIUpdate();
 };

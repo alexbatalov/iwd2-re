@@ -174,6 +174,12 @@ void CWorldMap::SetResRef(const CResRef& cResRef)
     }
 }
 
+// 0x558F40
+void CWorldMap::Marshal(const CString& sDirName)
+{
+    // TODO: Incomplete.
+}
+
 // 0x559490
 CWorldMapData* CWorldMap::GetMap(DWORD nMap)
 {
