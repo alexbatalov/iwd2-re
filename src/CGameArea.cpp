@@ -1773,10 +1773,678 @@ COLORREF CGameArea::GetTintColor(const CPoint& cPoint, BYTE listType)
 // 0x471630
 void CGameArea::Marshal(BYTE** pArea, LONG* areaSize, BOOLEAN bProgressBarInPlace)
 {
-    // TODO: Incomplete.
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+    // __LINE__: 4239
+    UTIL_ASSERT(pArea != NULL && areaSize != NULL);
+
+    CTypedPtrList<CPtrList, CAreaFileStaticObject*> lStatics(10);
+    CTypedPtrList<CPtrList, CAreaFileSoundObject*> lSounds(10);
+    CTypedPtrList<CPtrList, CAreaFileRandomMonsterSpawningPoint*> lSpawnings(10);
+    CTypedPtrList<CPtrList, CAreaFileContainer*> lContainers(10);
+    CTypedPtrList<CPtrList, CAreaFileTriggerObject*> lTriggers(10);
+    CTypedPtrList<CPtrList, CAreaFileDoorObject*> lDoors(10);
+    WORD nPoints = 0;
+    DWORD nItems = 0;
+    CTypedPtrList<CPtrList, CAreaFileCreature*> lCreatures(10);
+    DWORD nCreatureData = 0;
+
+    CAreaFileStaticObject* pStaticObject;
+    CAreaFileSoundObject* pSoundObject;
+    CAreaFileRandomMonsterSpawningPoint* pSpawningObject;
+    CAreaFileContainer* pContainerObject;
+    CAreaFileTriggerObject* pTriggerObject;
+    CAreaFileDoorObject* pDoorObject;
+    CAreaFileCreature* pCreature;
+    CGameObject* pObject;
+    LONG iObject;
+    BYTE objectType;
+    POSITION pos;
+    INT nObjects;
+    DWORD dwPerArea;
+
+    field_AAA.RemoveAll();
+
+    if (g_pBaldurChitin->GetObjectGame()->m_pGameAreaMaster == this) {
+        g_pBaldurChitin->GetObjectGame()->m_cMoveList.sub_5170F0(this);
+        g_pBaldurChitin->GetObjectGame()->m_cLimboList.sub_5170F0(this);
+    }
+
+    if (bProgressBarInPlace == TRUE) {
+        dwPerArea = CInfGame::PROGRESSBAR_AREA_ADDITIONAL / 25;
+        ProgressBarCallback(0, TRUE);
+    }
 
     *pArea = NULL;
     *areaSize = 0;
+
+    if (g_pChitin->cNetwork.GetSessionOpen() == TRUE
+        && g_pChitin->cNetwork.GetSessionHosting() == FALSE) {
+        ProgressBarCallback(CInfGame::PROGRESSBAR_AREA_ADDITIONAL, FALSE);
+    } else {
+        // FLIGHT
+        nObjects = m_lVertSortFlight.GetCount();
+        pos = m_lVertSortFlight.GetTailPosition();
+        while (pos != NULL) {
+            iObject = reinterpret_cast<LONG>(m_lVertSortFlight.GetPrev(pos));
+            if (m_pGame->GetObjectArray()->GetShare(iObject,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    &pObject,
+                    INFINITE)
+                == CGameObjectArray::SUCCESS) {
+                objectType = pObject->GetObjectType();
+                if (objectType == CGameObject::TYPE_NONE
+                    || objectType == CGameObject::TYPE_TEXT) {
+                    // Skip.
+                } else if (objectType == CGameObject::TYPE_SOUND) {
+                    static_cast<CGameSound*>(pObject)->Marshal(&pSoundObject);
+                    lSounds.AddTail(pSoundObject);
+                } else if (objectType == CGameObject::TYPE_SPAWNING) {
+                    static_cast<CGameSpawning*>(pObject)->Marshal(&pSpawningObject);
+                    lSpawnings.AddTail(pSpawningObject);
+                } else if (objectType == CGameObject::TYPE_SPRITE) {
+                    static_cast<CGameSprite*>(pObject)->Marshal(&pCreature);
+                    lCreatures.AddTail(pCreature);
+                    nCreatureData += pCreature->m_creatureSize;
+                } else if (objectType == CGameObject::TYPE_AIBASE
+                    || objectType == CGameObject::TYPE_CONTAINER
+                    || objectType == CGameObject::TYPE_DOOR
+                    || objectType == CGameObject::TYPE_STATIC
+                    || objectType == CGameObject::TYPE_OBJECT_MARKER
+                    || objectType == CGameObject::TYPE_TRIGGER) {
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+                    // __LINE__: 4317
+                    UTIL_ASSERT(FALSE);
+                } else {
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+                    // __LINE__: 4337
+                    UTIL_ASSERT(FALSE);
+                }
+
+                m_pGame->GetObjectArray()->ReleaseShare(iObject,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+
+                if (bProgressBarInPlace == TRUE && nObjects != 0) {
+                    ProgressBarCallback(4 * dwPerArea / nObjects, FALSE);
+                }
+            }
+        }
+
+        if (bProgressBarInPlace == TRUE && nObjects == 0) {
+            ProgressBarCallback(4 * dwPerArea, FALSE);
+        }
+
+        // FRONT
+        nObjects = m_lVertSort.GetCount();
+        pos = m_lVertSort.GetTailPosition();
+        while (pos != NULL) {
+            iObject = reinterpret_cast<LONG>(m_lVertSort.GetPrev(pos));
+            if (m_pGame->GetObjectArray()->GetShare(iObject,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    &pObject,
+                    INFINITE)
+                == CGameObjectArray::SUCCESS) {
+                objectType = pObject->GetObjectType();
+                if (objectType == CGameObject::TYPE_NONE
+                    || objectType == CGameObject::TYPE_AIBASE
+                    || objectType == CGameObject::TYPE_TEXT) {
+                    // Skip.
+                } else if (objectType == CGameObject::TYPE_DOOR) {
+                    static_cast<CGameDoor*>(pObject)->Marshal(&pDoorObject);
+                    lDoors.AddTail(pDoorObject);
+                    nPoints += pDoorObject->m_closedSearchSquaresCount
+                        + pDoorObject->m_openSearchSquaresCount
+                        + pDoorObject->m_closedSelectionPointCount
+                        + pDoorObject->m_openSelectionPointCount;
+                } else if (objectType == CGameObject::TYPE_STATIC) {
+                    static_cast<CGameStatic*>(pObject)->Marshal(&pStaticObject);
+                    lStatics.AddTail(pStaticObject);
+                } else if (objectType == CGameObject::TYPE_TRIGGER) {
+                    static_cast<CGameTrigger*>(pObject)->Marshal(&pTriggerObject);
+                    lTriggers.AddTail(pTriggerObject);
+                    nPoints += pTriggerObject->m_pickPointCount;
+                } else if (objectType == CGameObject::TYPE_SPRITE) {
+                    if (!static_cast<CGameSprite*>(pObject)->m_bGlobal) {
+                        static_cast<CGameSprite*>(pObject)->Marshal(&pCreature);
+                        lCreatures.AddTail(pCreature);
+                        nCreatureData += pCreature->m_creatureSize;
+                    }
+                } else if (objectType == CGameObject::TYPE_SOUND
+                    || objectType == CGameObject::TYPE_CONTAINER
+                    || objectType == CGameObject::TYPE_SPAWNING
+                    || objectType == CGameObject::TYPE_OBJECT_MARKER) {
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+                    // __LINE__: 4372
+                    UTIL_ASSERT(FALSE);
+                } else {
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+                    // __LINE__: 4405
+                    UTIL_ASSERT(FALSE);
+                }
+
+                m_pGame->GetObjectArray()->ReleaseShare(iObject,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+
+                if (bProgressBarInPlace == TRUE && nObjects != 0) {
+                    ProgressBarCallback(4 * dwPerArea / nObjects, FALSE);
+                }
+            }
+        }
+
+        if (bProgressBarInPlace == TRUE && nObjects == 0) {
+            ProgressBarCallback(4 * dwPerArea, FALSE);
+        }
+
+        // TRAVEL (filled by `CMoveList::sub_5170F0`)
+        nObjects = field_AAA.GetCount();
+        pos = field_AAA.GetTailPosition();
+        while (pos != NULL) {
+            iObject = reinterpret_cast<LONG>(field_AAA.GetPrev(pos));
+            if (m_pGame->GetObjectArray()->GetDeny(iObject,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    &pObject,
+                    INFINITE)
+                == CGameObjectArray::SUCCESS) {
+                objectType = pObject->GetObjectType();
+                if (objectType == CGameObject::TYPE_NONE
+                    || objectType == CGameObject::TYPE_AIBASE
+                    || objectType == CGameObject::TYPE_TEXT) {
+                    // Skip.
+                } else if (objectType == CGameObject::TYPE_SPRITE) {
+                    if (!static_cast<CGameSprite*>(pObject)->m_bGlobal) {
+                        static_cast<CGameSprite*>(pObject)->Marshal(&pCreature);
+                        lCreatures.AddTail(pCreature);
+                        nCreatureData += pCreature->m_creatureSize;
+                    }
+                } else if (objectType == CGameObject::TYPE_SOUND
+                    || objectType == CGameObject::TYPE_CONTAINER
+                    || objectType == CGameObject::TYPE_SPAWNING
+                    || objectType == CGameObject::TYPE_DOOR
+                    || objectType == CGameObject::TYPE_STATIC
+                    || objectType == CGameObject::TYPE_OBJECT_MARKER
+                    || objectType == CGameObject::TYPE_TRIGGER) {
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+                    // __LINE__: 4444
+                    UTIL_ASSERT(FALSE);
+                } else {
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+                    // __LINE__: 4457
+                    UTIL_ASSERT(FALSE);
+                }
+
+                m_pGame->GetObjectArray()->ReleaseDeny(iObject,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+
+                if (bProgressBarInPlace == TRUE && nObjects != 0) {
+                    ProgressBarCallback(4 * dwPerArea / nObjects, FALSE);
+                }
+            }
+        }
+
+        field_AAA.RemoveAll();
+
+        // BACK
+        nObjects = m_lVertSortBack.GetCount();
+        pos = m_lVertSortBack.GetTailPosition();
+        while (pos != NULL) {
+            iObject = reinterpret_cast<LONG>(m_lVertSortBack.GetPrev(pos));
+            if (m_pGame->GetObjectArray()->GetShare(iObject,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    &pObject,
+                    INFINITE)
+                == CGameObjectArray::SUCCESS) {
+                objectType = pObject->GetObjectType();
+                if (objectType == CGameObject::TYPE_NONE
+                    || objectType == CGameObject::TYPE_AIBASE
+                    || objectType == CGameObject::TYPE_OBJECT_MARKER
+                    || objectType == CGameObject::TYPE_TEXT) {
+                    // Skip.
+                } else if (objectType == CGameObject::TYPE_SOUND) {
+                    static_cast<CGameSound*>(pObject)->Marshal(&pSoundObject);
+                    lSounds.AddTail(pSoundObject);
+                } else if (objectType == CGameObject::TYPE_CONTAINER) {
+                    static_cast<CGameContainer*>(pObject)->Marshal(&pContainerObject);
+                    lContainers.AddTail(pContainerObject);
+                    nPoints += pContainerObject->m_pickPointCount;
+                    nItems += pContainerObject->m_itemCount;
+                } else if (objectType == CGameObject::TYPE_SPAWNING) {
+                    static_cast<CGameSpawning*>(pObject)->Marshal(&pSpawningObject);
+                    lSpawnings.AddTail(pSpawningObject);
+                } else if (objectType == CGameObject::TYPE_SPRITE) {
+                    if (!static_cast<CGameSprite*>(pObject)->m_bGlobal) {
+                        static_cast<CGameSprite*>(pObject)->Marshal(&pCreature);
+                        lCreatures.AddTail(pCreature);
+                        nCreatureData += pCreature->m_creatureSize;
+                    }
+                } else if (objectType == CGameObject::TYPE_TRIGGER) {
+                    static_cast<CGameTrigger*>(pObject)->Marshal(&pTriggerObject);
+                    lTriggers.AddTail(pTriggerObject);
+                    nPoints += pTriggerObject->m_pickPointCount;
+                } else if (objectType == CGameObject::TYPE_DOOR
+                    || objectType == CGameObject::TYPE_STATIC) {
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+                    // __LINE__: 4488
+                    UTIL_ASSERT(FALSE);
+                } else {
+                    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+                    // __LINE__: 4524
+                    UTIL_ASSERT(FALSE);
+                }
+
+                m_pGame->GetObjectArray()->ReleaseShare(iObject,
+                    CGameObjectArray::THREAD_ASYNCH,
+                    INFINITE);
+
+                if (bProgressBarInPlace == TRUE && nObjects != 0) {
+                    ProgressBarCallback(4 * dwPerArea / nObjects, FALSE);
+                }
+            }
+        }
+
+        if (bProgressBarInPlace == TRUE && nObjects == 0) {
+            ProgressBarCallback(4 * dwPerArea, FALSE);
+        }
+
+        BYTE* pVisibilityMap;
+        DWORD nVisibilityMap;
+        m_visibility.Marshal(&pVisibilityMap, &nVisibilityMap);
+
+        CVariable* pVariables;
+        WORD nVariables;
+        m_variables.Marshal(&pVariables, &nVariables);
+
+        *areaSize += nCreatureData
+            + nVisibilityMap
+            + sizeof(CCreatureFileItem) * nItems
+            + sizeof(CAreaFileDoorObject) * lDoors.GetCount()
+            + sizeof(CAreaFileRandomMonsterSpawningPoint) * lSpawnings.GetCount()
+            + sizeof(CAreaVariable) * nVariables
+            + sizeof(CAreaFileCreature) * lCreatures.GetCount()
+            + sizeof(CAreaFileTriggerObject) * lTriggers.GetCount()
+            + sizeof(CAreaFileContainer) * lContainers.GetCount()
+            + sizeof(CAreaFileSoundObject) * lSounds.GetCount()
+            + sizeof(CAreaFileStaticObject) * lStatics.GetCount()
+            + sizeof(CAreaPoint) * nPoints;
+        *areaSize += 8
+            + sizeof(CAreaFileHeader)
+            + sizeof(CAreaFileOffsets)
+            + sizeof(CAreaSoundsAndMusic)
+            + sizeof(CAreaFileRestEncounter)
+            + sizeof(CAreaFileCharacterEntryPoint) * m_entryPoints.GetCount();
+        *areaSize += sizeof(CAreaUserNote) * m_cGameAreaNotes.m_areaNoteList.GetCount();
+
+        *pArea = new BYTE[*areaSize];
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+        // __LINE__: 4562
+        UTIL_ASSERT(*pArea != NULL);
+
+        memset(*pArea, 0, *areaSize);
+
+        // HEADER
+        DWORD cnt = 0;
+        memcpy(*pArea, "AREAV9.1", 8);
+        cnt += 8;
+
+        m_header.m_lastSaved = m_pGame->GetWorldTimer()->m_gameTime / CTimerWorld::TIMESCALE_MSEC_PER_SEC;
+        memcpy(*pArea + cnt, &m_header, sizeof(CAreaFileHeader));
+        cnt += sizeof(CAreaFileHeader);
+
+        CAreaFileOffsets* offsets = reinterpret_cast<CAreaFileOffsets*>(*pArea + cnt);
+        cnt += sizeof(CAreaFileOffsets);
+
+        memcpy(*pArea + cnt, &m_headerSound, sizeof(CAreaSoundsAndMusic));
+        offsets->m_areaSoundsAndMusicOffset = cnt;
+        cnt += sizeof(CAreaSoundsAndMusic);
+
+        memcpy(*pArea + cnt, &m_headerRestEncounter, sizeof(CAreaFileRestEncounter));
+        offsets->m_restingEncounterOffset = cnt;
+        cnt += sizeof(CAreaFileRestEncounter);
+
+        if (bProgressBarInPlace == TRUE) {
+            ProgressBarCallback(dwPerArea, FALSE);
+        }
+
+        // VISIBILITY
+        if (nVisibilityMap > 0) {
+            memcpy(*pArea + cnt, pVisibilityMap, nVisibilityMap);
+            offsets->m_visibilityMapOffset = cnt;
+            offsets->m_visibilityMapCount = nVisibilityMap;
+            cnt += nVisibilityMap;
+            delete[] pVisibilityMap;
+        }
+
+        if (bProgressBarInPlace == TRUE) {
+            ProgressBarCallback(dwPerArea, FALSE);
+        }
+
+        // STATICS
+        if (lStatics.GetCount() > 0) {
+            offsets->m_staticObjectListOffset = cnt;
+            offsets->m_staticObjectListCount = lStatics.GetCount();
+
+            pos = lStatics.GetHeadPosition();
+            while (pos != NULL) {
+                pStaticObject = lStatics.GetNext(pos);
+                memcpy(*pArea + cnt, pStaticObject, sizeof(CAreaFileStaticObject));
+                cnt += sizeof(CAreaFileStaticObject);
+                delete pStaticObject;
+            }
+
+            lStatics.RemoveAll();
+        }
+
+        if (bProgressBarInPlace == TRUE) {
+            ProgressBarCallback(dwPerArea, FALSE);
+        }
+
+        // SOUNDS
+        if (lSounds.GetCount() > 0) {
+            offsets->m_soundObjectOffset = cnt;
+            offsets->m_soundObjectCount = static_cast<WORD>(lSounds.GetCount());
+
+            pos = lSounds.GetHeadPosition();
+            while (pos != NULL) {
+                pSoundObject = lSounds.GetNext(pos);
+                memcpy(*pArea + cnt, pSoundObject, sizeof(CAreaFileSoundObject));
+                cnt += sizeof(CAreaFileSoundObject);
+                delete pSoundObject;
+            }
+
+            lSounds.RemoveAll();
+        }
+
+        if (bProgressBarInPlace == TRUE) {
+            ProgressBarCallback(dwPerArea, FALSE);
+        }
+
+        // SPAWNINGS
+        if (lSpawnings.GetCount() > 0) {
+            offsets->m_randomMonsterSpawningPointTableOffset = cnt;
+            offsets->m_randomMonsterSpawningPointTableCount = lSpawnings.GetCount();
+
+            pos = lSpawnings.GetHeadPosition();
+            while (pos != NULL) {
+                pSpawningObject = lSpawnings.GetNext(pos);
+                memcpy(*pArea + cnt, pSpawningObject, sizeof(CAreaFileRandomMonsterSpawningPoint));
+                cnt += sizeof(CAreaFileRandomMonsterSpawningPoint);
+                delete pSpawningObject;
+            }
+
+            lSpawnings.RemoveAll();
+        }
+
+        if (bProgressBarInPlace == TRUE) {
+            ProgressBarCallback(dwPerArea, FALSE);
+        }
+
+        // CREATURES
+        if (lCreatures.GetCount() > 0) {
+            pos = lCreatures.GetHeadPosition();
+            while (pos != NULL) {
+                pCreature = lCreatures.GetNext(pos);
+
+                // FIXME: Unsafe x64 conversion.
+                BYTE* pCreatureData = reinterpret_cast<BYTE*>(pCreature->m_creatureOffset);
+                memcpy(*pArea + cnt, pCreatureData, pCreature->m_creatureSize);
+                delete[] pCreatureData;
+
+                pCreature->m_creatureOffset = cnt;
+                cnt += pCreature->m_creatureSize;
+            }
+
+            offsets->m_creatureTableOffset = cnt;
+            offsets->m_creatureTableCount = static_cast<WORD>(lCreatures.GetCount());
+
+            pos = lCreatures.GetHeadPosition();
+            while (pos != NULL) {
+                pCreature = lCreatures.GetNext(pos);
+                memcpy(*pArea + cnt, pCreature, sizeof(CAreaFileCreature));
+                cnt += sizeof(CAreaFileCreature);
+                delete pCreature;
+            }
+
+            lCreatures.RemoveAll();
+        }
+
+        if (bProgressBarInPlace == TRUE) {
+            ProgressBarCallback(dwPerArea, FALSE);
+        }
+
+        // POINTS
+        if (nPoints > 0) {
+            offsets->m_pointsOffset = cnt;
+            offsets->m_pointsCount = nPoints;
+
+            DWORD nPoint = 0;
+            CAreaPoint* pPoints;
+
+            pos = lContainers.GetHeadPosition();
+            while (pos != NULL) {
+                pContainerObject = lContainers.GetNext(pos);
+                if (pContainerObject->m_pickPointCount > 0) {
+                    // FIXME: Unsafe x64 conversion.
+                    pPoints = reinterpret_cast<CAreaPoint*>(pContainerObject->m_pickPointStart);
+                    memcpy(*pArea + cnt, pPoints, sizeof(CAreaPoint) * pContainerObject->m_pickPointCount);
+                    delete[] pPoints;
+                    pContainerObject->m_pickPointStart = nPoint;
+                    cnt += sizeof(CAreaPoint) * pContainerObject->m_pickPointCount;
+                    nPoint += pContainerObject->m_pickPointCount;
+                }
+            }
+
+            pos = lDoors.GetHeadPosition();
+            while (pos != NULL) {
+                pDoorObject = lDoors.GetNext(pos);
+
+                if (pDoorObject->m_openSelectionPointCount > 0) {
+                    // FIXME: Unsafe x64 conversion.
+                    pPoints = reinterpret_cast<CAreaPoint*>(pDoorObject->m_openSelectionPointStart);
+                    memcpy(*pArea + cnt, pPoints, sizeof(CAreaPoint) * pDoorObject->m_openSelectionPointCount);
+                    delete[] pPoints;
+                    pDoorObject->m_openSelectionPointStart = nPoint;
+                    cnt += sizeof(CAreaPoint) * pDoorObject->m_openSelectionPointCount;
+                    nPoint += pDoorObject->m_openSelectionPointCount;
+                }
+
+                if (pDoorObject->m_closedSelectionPointCount > 0) {
+                    // FIXME: Unsafe x64 conversion.
+                    pPoints = reinterpret_cast<CAreaPoint*>(pDoorObject->m_closedSelectionPointStart);
+                    memcpy(*pArea + cnt, pPoints, sizeof(CAreaPoint) * pDoorObject->m_closedSelectionPointCount);
+                    delete[] pPoints;
+                    pDoorObject->m_closedSelectionPointStart = nPoint;
+                    cnt += sizeof(CAreaPoint) * pDoorObject->m_closedSelectionPointCount;
+                    nPoint += pDoorObject->m_closedSelectionPointCount;
+                }
+
+                if (pDoorObject->m_openSearchSquaresCount > 0) {
+                    // FIXME: Unsafe x64 conversion.
+                    pPoints = reinterpret_cast<CAreaPoint*>(pDoorObject->m_openSearchSquaresStart);
+                    memcpy(*pArea + cnt, pPoints, sizeof(CAreaPoint) * pDoorObject->m_openSearchSquaresCount);
+                    delete[] pPoints;
+                    pDoorObject->m_openSearchSquaresStart = nPoint;
+                    cnt += sizeof(CAreaPoint) * pDoorObject->m_openSearchSquaresCount;
+                    nPoint += pDoorObject->m_openSearchSquaresCount;
+                }
+
+                if (pDoorObject->m_closedSearchSquaresCount > 0) {
+                    // FIXME: Unsafe x64 conversion.
+                    pPoints = reinterpret_cast<CAreaPoint*>(pDoorObject->m_closedSearchSquaresStart);
+                    memcpy(*pArea + cnt, pPoints, sizeof(CAreaPoint) * pDoorObject->m_closedSearchSquaresCount);
+                    delete[] pPoints;
+                    pDoorObject->m_closedSearchSquaresStart = nPoint;
+                    cnt += sizeof(CAreaPoint) * pDoorObject->m_closedSearchSquaresCount;
+                    nPoint += pDoorObject->m_closedSearchSquaresCount;
+                }
+            }
+
+            pos = lTriggers.GetHeadPosition();
+            while (pos != NULL) {
+                pTriggerObject = lTriggers.GetNext(pos);
+                if (pTriggerObject->m_pickPointCount > 0) {
+                    // FIXME: Unsafe x64 conversion.
+                    pPoints = reinterpret_cast<CAreaPoint*>(pTriggerObject->m_pickPointStart);
+                    memcpy(*pArea + cnt, pPoints, sizeof(CAreaPoint) * pTriggerObject->m_pickPointCount);
+                    delete[] pPoints;
+                    pTriggerObject->m_pickPointStart = nPoint;
+                    cnt += sizeof(CAreaPoint) * pTriggerObject->m_pickPointCount;
+                    nPoint += pTriggerObject->m_pickPointCount;
+                }
+            }
+        }
+
+        if (bProgressBarInPlace == TRUE) {
+            ProgressBarCallback(dwPerArea, FALSE);
+        }
+
+        // DOORS
+        if (lDoors.GetCount() > 0) {
+            offsets->m_doorObjectListOffset = cnt;
+            offsets->m_doorObjectListCount = lDoors.GetCount();
+
+            pos = lDoors.GetHeadPosition();
+            while (pos != NULL) {
+                pDoorObject = lDoors.GetNext(pos);
+                memcpy(*pArea + cnt, pDoorObject, sizeof(CAreaFileDoorObject));
+                cnt += sizeof(CAreaFileDoorObject);
+                delete pDoorObject;
+            }
+
+            lDoors.RemoveAll();
+        }
+
+        if (bProgressBarInPlace == TRUE) {
+            ProgressBarCallback(dwPerArea, FALSE);
+        }
+
+        // TRIGGERS
+        if (lTriggers.GetCount() > 0) {
+            offsets->m_triggerObjectListOffset = cnt;
+            offsets->m_triggerObjectListCount = static_cast<WORD>(lTriggers.GetCount());
+
+            pos = lTriggers.GetHeadPosition();
+            while (pos != NULL) {
+                pTriggerObject = lTriggers.GetNext(pos);
+                memcpy(*pArea + cnt, pTriggerObject, sizeof(CAreaFileTriggerObject));
+                cnt += sizeof(CAreaFileTriggerObject);
+                delete pTriggerObject;
+            }
+
+            lTriggers.RemoveAll();
+        }
+
+        if (bProgressBarInPlace == TRUE) {
+            ProgressBarCallback(dwPerArea, FALSE);
+        }
+
+        // ITEMS
+        if (nItems > 0) {
+            offsets->m_itemObjectsOffset = cnt;
+            offsets->m_itemObjectsCount = static_cast<WORD>(nItems);
+
+            DWORD nItem = 0;
+            CCreatureFileItem* pItems;
+
+            pos = lContainers.GetHeadPosition();
+            while (pos != NULL) {
+                pContainerObject = lContainers.GetNext(pos);
+                if (pContainerObject->m_itemCount > 0) {
+                    // FIXME: Unsafe x64 conversion.
+                    pItems = reinterpret_cast<CCreatureFileItem*>(pContainerObject->m_startingItem);
+                    memcpy(*pArea + cnt, pItems, sizeof(CCreatureFileItem) * pContainerObject->m_itemCount);
+                    delete[] pItems;
+                    pContainerObject->m_startingItem = nItem;
+                    cnt += sizeof(CCreatureFileItem) * pContainerObject->m_itemCount;
+                    nItem += pContainerObject->m_itemCount;
+                }
+            }
+        }
+
+        if (bProgressBarInPlace == TRUE) {
+            ProgressBarCallback(dwPerArea, FALSE);
+        }
+
+        // CONTAINERS
+        if (lContainers.GetCount() > 0) {
+            offsets->m_containerListOffset = cnt;
+            offsets->m_containerListCount = static_cast<WORD>(lContainers.GetCount());
+
+            pos = lContainers.GetHeadPosition();
+            while (pos != NULL) {
+                pContainerObject = lContainers.GetNext(pos);
+                memcpy(*pArea + cnt, pContainerObject, sizeof(CAreaFileContainer));
+                cnt += sizeof(CAreaFileContainer);
+                delete pContainerObject;
+            }
+
+            lContainers.RemoveAll();
+        }
+
+        if (bProgressBarInPlace == TRUE) {
+            ProgressBarCallback(dwPerArea, FALSE);
+        }
+
+        // VARIABLES
+        if (nVariables > 0) {
+            offsets->m_areaScriptVariablesOffset = cnt;
+            offsets->m_areaScriptVariablesCount = nVariables;
+            memcpy(*pArea + cnt, pVariables, sizeof(CAreaVariable) * nVariables);
+            cnt += sizeof(CAreaVariable) * nVariables;
+            delete[] pVariables;
+        }
+
+        if (bProgressBarInPlace == TRUE) {
+            ProgressBarCallback(dwPerArea, FALSE);
+        }
+
+        // ENTRY POINTS
+        if (m_entryPoints.GetCount() > 0) {
+            offsets->m_characterEntryPointTableOffset = cnt;
+            offsets->m_characterEntryPointTableCount = m_entryPoints.GetCount();
+
+            pos = m_entryPoints.GetHeadPosition();
+            while (pos != NULL) {
+                CAreaFileCharacterEntryPoint* pEntryPoint = m_entryPoints.GetNext(pos);
+                memcpy(*pArea + cnt, pEntryPoint, sizeof(CAreaFileCharacterEntryPoint));
+                cnt += sizeof(CAreaFileCharacterEntryPoint);
+            }
+        }
+
+        // NOTES
+        if (m_cGameAreaNotes.m_areaNoteList.GetCount() != 0) {
+            offsets->m_userMapNotesCount = m_cGameAreaNotes.m_areaNoteList.GetCount();
+            offsets->m_userMapNotesOffset = cnt;
+            m_cGameAreaNotes.Marshal(pArea, cnt);
+        } else {
+            offsets->m_userMapNotesOffset = 0;
+            offsets->m_userMapNotesCount = 0;
+        }
+
+        if (bProgressBarInPlace == TRUE) {
+            ProgressBarCallback(dwPerArea, FALSE);
+        }
+
+        // SCRIPT
+        if (m_pGame->GetObjectArray()->GetShare(m_nAIIndex,
+                CGameObjectArray::THREAD_ASYNCH,
+                &pObject,
+                INFINITE)
+            == CGameObjectArray::SUCCESS) {
+            CResRef cResRef = static_cast<CGameAIArea*>(pObject)->m_movementScript->m_cResRef;
+            cResRef.GetResRef(offsets->m_script);
+        }
+
+        // NOTE: Released even when `GetShare` above failed.
+        m_pGame->GetObjectArray()->ReleaseShare(m_nAIIndex,
+            CGameObjectArray::THREAD_ASYNCH,
+            INFINITE);
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameArea.cpp
+        // __LINE__: 4913
+        UTIL_ASSERT(cnt == static_cast<DWORD>(*areaSize));
+    }
 }
 
 // 0x472DE0

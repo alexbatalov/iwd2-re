@@ -506,6 +506,74 @@ void CGameTrigger::SetCursor(LONG nToolTip)
     }
 }
 
+// 0x4CFF70
+void CGameTrigger::Marshal(CAreaFileTriggerObject** pTriggerObject)
+{
+    CAreaPoint* pPoints;
+    DWORD cnt;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameTrigger.cpp
+    // __LINE__: 1235
+    UTIL_ASSERT(pTriggerObject != NULL);
+
+    *pTriggerObject = new CAreaFileTriggerObject();
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameTrigger.cpp
+    // __LINE__: 1241
+    UTIL_ASSERT(*pTriggerObject != NULL);
+
+    // FIXME: Redundant, memset is a part of constructor.
+    memset(*pTriggerObject, 0, sizeof(CAreaFileTriggerObject));
+
+    if (m_nPolygon > 0) {
+        pPoints = new CAreaPoint[m_nPolygon];
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\CGameTrigger.cpp
+        // __LINE__: 1246
+        UTIL_ASSERT(pPoints != NULL);
+
+        for (cnt = 0; cnt < m_nPolygon; cnt++) {
+            pPoints[cnt].m_xPos = static_cast<WORD>(m_pPolygon[cnt].x);
+            pPoints[cnt].m_yPos = static_cast<WORD>(m_pPolygon[cnt].y);
+        }
+
+        // FIXME: Unsafe x64 conversion.
+        (*pTriggerObject)->m_pickPointStart = reinterpret_cast<DWORD>(pPoints);
+        (*pTriggerObject)->m_pickPointCount = m_nPolygon;
+    }
+
+    (*pTriggerObject)->m_boundingRectLeft = static_cast<WORD>(m_rBounding.left);
+    (*pTriggerObject)->m_boundingRectTop = static_cast<WORD>(m_rBounding.top);
+    (*pTriggerObject)->m_boundingRectRight = static_cast<WORD>(m_rBounding.right) - 1;
+    (*pTriggerObject)->m_boundingRectBottom = static_cast<WORD>(m_rBounding.bottom) - 1;
+
+    if ((m_dwFlags & 0x200) != 0) {
+        (*pTriggerObject)->m_transitionWalkToX = static_cast<WORD>(field_628.x);
+        (*pTriggerObject)->m_transitionWalkToY = static_cast<WORD>(field_628.y);
+    } else {
+        (*pTriggerObject)->m_transitionWalkToX = static_cast<WORD>(m_pos.x);
+        (*pTriggerObject)->m_transitionWalkToY = static_cast<WORD>(m_pos.y);
+    }
+
+    (*pTriggerObject)->m_triggerType = m_triggerType;
+    (*pTriggerObject)->m_cursorType = m_cursorType;
+    memcpy((*pTriggerObject)->m_newArea, m_newArea, RESREF_SIZE);
+    memcpy((*pTriggerObject)->m_newEntryPoint, m_newEntryPoint, SCRIPTNAME_SIZE);
+    (*pTriggerObject)->m_dwFlags = m_dwFlags;
+    (*pTriggerObject)->m_description = m_description;
+    memcpy((*pTriggerObject)->m_script, m_scriptRes, RESREF_SIZE);
+    strncpy((*pTriggerObject)->m_scriptName, m_scriptName, SCRIPTNAME_SIZE);
+    (*pTriggerObject)->m_trapDetectionDifficulty = m_trapDetectionDifficulty;
+    (*pTriggerObject)->m_trapDisarmingDifficulty = m_trapDisarmingDifficulty;
+    (*pTriggerObject)->m_trapActivated = m_trapActivated;
+    (*pTriggerObject)->m_trapDetected = m_trapDetected;
+    (*pTriggerObject)->m_posXTrapOrigin = static_cast<WORD>(m_posTrapOrigin.x);
+    (*pTriggerObject)->m_posYTrapOrigin = static_cast<WORD>(m_posTrapOrigin.y);
+    m_keyType.GetResRef((*pTriggerObject)->m_keyType);
+    (*pTriggerObject)->field_88 = field_628.x;
+    (*pTriggerObject)->field_8C = field_628.y;
+}
+
 // 0x4D0230
 void CGameTrigger::SetDrawPoly(SHORT time)
 {
