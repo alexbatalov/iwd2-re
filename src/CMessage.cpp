@@ -2506,9 +2506,79 @@ BOOLEAN CBaldurMessage::OnSignal(INT nMsgFrom, BYTE* pMessage, DWORD dwSize)
 // 0x433580
 BOOLEAN CBaldurMessage::NonBlockingWaitForSignal(BYTE signalType, BYTE signalToWaitFor)
 {
-    // TODO: Incomplete.
+    BOOLEAN bSignalReceived[6];
+    CString sPlayerName;
+    BYTE nHostPlayer;
+    BOOLEAN bAllReceived;
+    INT nPlayerNumber;
+    INT nIndex;
+    INT nCount;
 
-    return -1;
+    if (!g_pChitin->cNetwork.m_bConnectionEstablished) {
+        return -1;
+    }
+
+    nHostPlayer = static_cast<BYTE>(g_pChitin->cNetwork.m_nHostPlayer);
+    if (nHostPlayer == 0xFF) {
+        nHostPlayer = 0;
+    }
+
+    // Signals to the server come from everyone but the host. Signals from
+    // the server come from the host only.
+    if (signalType == SIGNAL_SERVER) {
+        memset(bSignalReceived, FALSE, sizeof(bSignalReceived));
+        bSignalReceived[nHostPlayer] = TRUE;
+    } else {
+        memset(bSignalReceived, TRUE, sizeof(bSignalReceived));
+        bSignalReceived[nHostPlayer] = FALSE;
+    }
+
+    nIndex = m_nSignalQueueStart;
+    nCount = 0;
+    while (nIndex != m_nSignalQueueEnd && nCount < m_nSignalQueueSize) {
+        if (m_pnSignalType[nIndex] == signalType
+            && m_pnSignalData[nIndex] == signalToWaitFor) {
+            bSignalReceived[m_pnSignalFrom[nIndex]] = TRUE;
+        }
+        nIndex = (nIndex + 1) % m_nSignalQueueSize;
+        nCount++;
+    }
+
+    bAllReceived = TRUE;
+    for (nPlayerNumber = 0; nPlayerNumber < 6; nPlayerNumber++) {
+        if (g_pChitin->cNetwork.GetPlayerID(nPlayerNumber) != 0
+            && !bSignalReceived[nPlayerNumber]
+            && bAllReceived == TRUE) {
+            g_pChitin->cNetwork.GetPlayerName(nPlayerNumber, sPlayerName);
+            bAllReceived = FALSE;
+        }
+    }
+
+    if (bAllReceived == TRUE) {
+        RemoveSignalsFromQueue(signalType, signalToWaitFor);
+    } else {
+        // Pull one pending signal from the first player we're still
+        // waiting for.
+        if (g_pChitin->cNetwork.PeekSpecificMessage(sPlayerName, MSG_TYPE_SIGNAL, MSG_SUBTYPE_SIGNAL) == TRUE) {
+            DWORD dwSize;
+            BYTE* pMessage = g_pChitin->cNetwork.FetchSpecificMessage(sPlayerName,
+                MSG_TYPE_SIGNAL,
+                MSG_SUBTYPE_SIGNAL,
+                dwSize);
+            INT nFrom = g_pChitin->cNetwork.FindPlayerLocationByName(sPlayerName, FALSE);
+
+            BYTE nType = pMessage[CNetwork::SPEC_MSG_HEADER_LENGTH];
+            BYTE nData = pMessage[CNetwork::SPEC_MSG_HEADER_LENGTH + 1];
+            m_pnSignalFrom[m_nSignalQueueEnd] = static_cast<BYTE>(nFrom);
+            m_pnSignalType[m_nSignalQueueEnd] = nType;
+            m_pnSignalData[m_nSignalQueueEnd] = nData;
+            m_nSignalQueueEnd = (m_nSignalQueueEnd + 1) % m_nSignalQueueSize;
+
+            delete pMessage;
+        }
+    }
+
+    return bAllReceived != FALSE;
 }
 
 // 0x4337D0
