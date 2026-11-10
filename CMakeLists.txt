@@ -460,6 +460,8 @@ target_link_libraries(iwd2-core PUBLIC ${ZLIB_LIBRARIES})
 target_include_directories(iwd2-core PUBLIC ${ZLIB_INCLUDE_DIRS})
 
 add_executable(${EXECUTABLE_NAME} WIN32
+    "src/support/CrashHandler.cpp"
+    "src/support/CrashHandler.h"
     "src/main.cpp"
     "src/resource.rc"
 )

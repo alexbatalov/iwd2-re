@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "CBaldurChitin.h"
+#include "support/CrashHandler.h"
 
 // 0x421820
 static BOOL IsSupportedOS(DWORD& majorVersion, DWORD& minorVersion)
@@ -52,6 +53,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     std::cout << std::endl;
 
     CChitin::GetGameVersionInfo(hInstance);
+
+    // NOTE: Not in the original.
+    InstallCrashHandler();
 
     AfxSetResourceHandle(hInstance);
 
