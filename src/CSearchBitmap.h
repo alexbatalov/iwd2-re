@@ -37,6 +37,7 @@ public:
     BOOLEAN CanToggleDoor(const CPoint* pPoints, USHORT nPoints);
 
     SHORT GetTableIndex(const CPoint& pt);
+    CPoint GetNearestOpenSquare(CPoint pt, const BYTE* terrainTable, BYTE personalSpace, SHORT nDirection);
 
     CGameArea* GetArea() { return m_pArea; }
 

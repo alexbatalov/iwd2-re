@@ -448,6 +448,14 @@ BYTE CSearchBitmap::SnapshotGetCost(CPoint point, BOOL bBump)
     return CPathSearch::COST_IMPASSABLE - 1;
 }
 
+// 0x548B80
+CPoint CSearchBitmap::GetNearestOpenSquare(CPoint pt, const BYTE* terrainTable, BYTE personalSpace, SHORT nDirection)
+{
+    // TODO: Incomplete.
+
+    return pt;
+}
+
 // 0x548EE0
 void CSearchBitmap::AddDoor(CPoint* pPoints, USHORT nPoints, BOOL bOpaque)
 {
