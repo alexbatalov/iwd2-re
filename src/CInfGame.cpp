@@ -2014,16 +2014,6 @@ CGameArea* CInfGame::LoadArea(CString areaName, BYTE nTravelScreenImageToUse, BO
     return m_gameAreas[cnt];
 }
 
-// NOTE: Element of `CInfGame::field_4BDC` (declared as a list of `CString*`,
-// but the elements are 0x18-byte objects starting with a `CString`).
-class CInfGameUnknownEntry {
-public:
-    /* 0000 */ CString m_sText;
-    /* 0004 */ DWORD field_4;
-    /* 0008 */ BYTE field_8;
-    /* 0009 */ BYTE field_9[15];
-};
-
 // 0x5A3230
 void CInfGame::Marshal(BYTE** pGame, LONG* nGame, BOOLEAN bProgressBarInPlace)
 {
@@ -2142,7 +2132,7 @@ void CInfGame::Marshal(BYTE** pGame, LONG* nGame, BOOLEAN bProgressBarInPlace)
     *nGame += nVariables * sizeof(CVariable);
 
     *nGame += m_cJournal.CountEntries() * sizeof(CSavedGameJournalEntry)
-        + sizeof(CSavedGameFamiliarInfo);
+        + sizeof(CSavedGameFamiliars);
 
     for (int alignment = 0; alignment < 9; alignment++) {
         for (int level = 0; level < 9; level++) {
@@ -2159,7 +2149,7 @@ void CInfGame::Marshal(BYTE** pGame, LONG* nGame, BOOLEAN bProgressBarInPlace)
     pos = field_4BDC.GetHeadPosition();
     while (pos != NULL) {
         CInfGameUnknownEntry* pEntry = reinterpret_cast<CInfGameUnknownEntry*>(field_4BDC.GetNext(pos));
-        nUnknownSize += pEntry->m_sText.GetLength() + sizeof(CSavedGameUnknownEntry);
+        nUnknownSize += pEntry->m_sName.GetLength() + sizeof(CSavedGameUnknownEntry);
     }
 
     *nGame += nUnknownSize;
@@ -2349,15 +2339,15 @@ void CInfGame::Marshal(BYTE** pGame, LONG* nGame, BOOLEAN bProgressBarInPlace)
     pHeader->m_storedLocationsOffset = m_cOptions.m_nNightmareMode;
     pHeader->m_familiarsOffset = cnt;
 
-    CSavedGameFamiliarInfo* pFamiliarInfo = reinterpret_cast<CSavedGameFamiliarInfo*>(*pGame + cnt);
-    cnt += sizeof(CSavedGameFamiliarInfo);
+    CSavedGameFamiliars* pFamiliarInfo = reinterpret_cast<CSavedGameFamiliars*>(*pGame + cnt);
+    cnt += sizeof(CSavedGameFamiliars);
 
-    memcpy(pFamiliarInfo->m_familiarResRefs, m_defaultFamiliarResRefs, sizeof(m_defaultFamiliarResRefs));
-    pFamiliarInfo->m_familiarListOffset = cnt;
+    memcpy(pFamiliarInfo->m_defaultFamiliarResRefs, m_defaultFamiliarResRefs, sizeof(m_defaultFamiliarResRefs));
+    pFamiliarInfo->m_familiarResRefsOffset = cnt;
 
     for (int alignment = 0; alignment < 9; alignment++) {
         for (int level = 0; level < 9; level++) {
-            pFamiliarInfo->m_familiarListCounts[alignment][level] = m_familiarResRefs[alignment][level].GetCount();
+            pFamiliarInfo->m_familiarResRefsCount[alignment][level] = m_familiarResRefs[alignment][level].GetCount();
 
             pos = m_familiarResRefs[alignment][level].GetHeadPosition();
             while (pos != NULL) {
@@ -2381,10 +2371,10 @@ void CInfGame::Marshal(BYTE** pGame, LONG* nGame, BOOLEAN bProgressBarInPlace)
     while (pos != NULL) {
         CInfGameUnknownEntry* pEntry = reinterpret_cast<CInfGameUnknownEntry*>(field_4BDC.GetNext(pos));
         CSavedGameUnknownEntry* pSavedEntry = reinterpret_cast<CSavedGameUnknownEntry*>(pData);
-        DWORD nSize = pEntry->m_sText.GetLength() + sizeof(CSavedGameUnknownEntry) - sizeof(DWORD);
+        DWORD nSize = pEntry->m_sName.GetLength() + sizeof(CSavedGameUnknownEntry) - sizeof(DWORD);
 
         pSavedEntry->m_nSize = nSize;
-        pSavedEntry->m_nLength = pEntry->m_sText.GetLength();
+        pSavedEntry->m_nLength = pEntry->m_sName.GetLength();
         pSavedEntry->field_8 = pEntry->field_4;
 
         // NOTE: The original writes `field_8` as a zero-extended `DWORD`, then
@@ -2393,8 +2383,8 @@ void CInfGame::Marshal(BYTE** pGame, LONG* nGame, BOOLEAN bProgressBarInPlace)
         memcpy(pSavedEntry->field_D, pEntry->field_9, sizeof(pSavedEntry->field_D));
 
         memcpy(pData + sizeof(CSavedGameUnknownEntry),
-            static_cast<LPCSTR>(pEntry->m_sText),
-            pEntry->m_sText.GetLength());
+            static_cast<LPCSTR>(pEntry->m_sName),
+            pEntry->m_sName.GetLength());
 
         pData += nSize + sizeof(DWORD);
     }
@@ -2404,7 +2394,7 @@ void CInfGame::Marshal(BYTE** pGame, LONG* nGame, BOOLEAN bProgressBarInPlace)
     pos = field_4BDC.GetHeadPosition();
     while (pos != NULL) {
         CInfGameUnknownEntry* pEntry = reinterpret_cast<CInfGameUnknownEntry*>(field_4BDC.GetNext(pos));
-        nUnknownSize += pEntry->m_sText.GetLength() + sizeof(CSavedGameUnknownEntry);
+        nUnknownSize += pEntry->m_sName.GetLength() + sizeof(CSavedGameUnknownEntry);
     }
 
     cnt += nUnknownSize;
