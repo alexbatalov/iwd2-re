@@ -46,7 +46,7 @@ BOOL CResCHR::Parse(void* pData)
     }
 
     EXPORT_CHARACTER_HEADER* header = reinterpret_cast<EXPORT_CHARACTER_HEADER*>(pData);
-    if (header->nFileType != 'CHR ') {
+    if (header->nFileType != ' RHC' /* "CHR " */) {
         // NOTE: Looks like deviation from similar `Parse` methods.
         return FALSE;
     }

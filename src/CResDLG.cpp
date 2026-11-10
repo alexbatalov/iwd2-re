@@ -35,7 +35,7 @@ BOOL CResDLG::Parse(void* pData)
     }
 
     DWORD* header = reinterpret_cast<DWORD*>(pData);
-    if (header[0] != 'DLG ' || header[1] != 'V1.0') {
+    if (header[0] != ' GLD' /* "DLG " */ || header[1] != '0.1V' /* "V1.0" */) {
         return FALSE;
     }
 

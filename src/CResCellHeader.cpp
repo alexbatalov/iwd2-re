@@ -122,7 +122,7 @@ BOOL CResCellHeader::Parse(void* pData)
     }
 
     BAMHEADER* pBamHeader = reinterpret_cast<BAMHEADER*>(pData);
-    if (pBamHeader->nFileType != 'BAH ' || pBamHeader->nFileVersion != 'V1  ') {
+    if (pBamHeader->nFileType != ' HAB' /* "BAH " */ || pBamHeader->nFileVersion != '  1V' /* "V1  " */) {
         return FALSE;
     }
 

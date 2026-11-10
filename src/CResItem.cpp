@@ -87,13 +87,13 @@ BOOL CResItem::Parse(void* pData)
     }
 
     m_pHeader = reinterpret_cast<ITEM_HEADER*>(pData);
-    if (m_pHeader->nFileType != 'ITM ') {
+    if (m_pHeader->nFileType != ' MTI' /* "ITM " */) {
         // __FILE__: C:\Projects\Icewind2\src\Baldur\BalDataTypes.cpp
         // __LINE__: 1356
         UTIL_ASSERT_MSG(FALSE, CString("Item file header type isn't 'ITM '") + CString(": ") + CString(reinterpret_cast<const char*>(m_pDimmKeyTableEntry->resRef.GetResRef()), RESREF_SIZE) + CString(".ITM"));
     }
 
-    if (m_pHeader->nFileVersion != 'V2.0') {
+    if (m_pHeader->nFileVersion != '0.2V' /* "V2.0" */) {
         // __FILE__: C:\Projects\Icewind2\src\Baldur\BalDataTypes.cpp
         // __LINE__: 1369
         UTIL_ASSERT_MSG(FALSE, CString("Item file version isn't ") + CString("ITM V2.0") + CString(": ") + CString(reinterpret_cast<const char*>(m_pDimmKeyTableEntry->resRef.GetResRef()), RESREF_SIZE) + CString(".ITM"));

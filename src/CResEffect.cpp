@@ -35,7 +35,7 @@ BOOL CResEffect::Parse(void* pData)
     }
 
     DWORD* header = reinterpret_cast<DWORD*>(pData);
-    if (header[0] != 'EFF ' || header[1] != 'V2.0') {
+    if (header[0] != ' FFE' /* "EFF " */ || header[1] != '0.2V' /* "V2.0" */) {
         return FALSE;
     }
 

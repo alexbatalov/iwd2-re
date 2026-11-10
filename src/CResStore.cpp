@@ -35,7 +35,7 @@ BOOL CResStore::Parse(void* pData)
     }
 
     DWORD* header = reinterpret_cast<DWORD*>(pData);
-    if ((header[0] != 'STOR' && header[0] != 'STOO') || header[1] != 'V9.0') {
+    if ((header[0] != 'ROTS' /* "STOR" */ && header[0] != 'OOTS' /* "STOO" */) || header[1] != '0.9V' /* "V9.0" */) {
         return FALSE;
     }
 
