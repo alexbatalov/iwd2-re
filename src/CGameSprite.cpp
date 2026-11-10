@@ -6472,9 +6472,214 @@ void CGameSprite::Marshal(CAreaFileCreature** pCreature)
 // 0x70B2F0
 void CGameSprite::Marshal(BYTE** pCreature, LONG* creatureSize, WORD* facing, BOOLEAN a4, BOOLEAN a5)
 {
+    CCreatureFileEquipment equipment;
+    CCreatureFileItem* pItems;
+    DWORD nItems;
+    BYTE* pEffects;
+    DWORD nEffects;
+    DWORD nEffectsSize;
+    CCreatureFileOffsets* pOffsets;
+    DWORD cnt;
+    UINT nClass;
+    UINT nLevel;
+    DWORD nIndex;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 11953
     UTIL_ASSERT(pCreature != NULL && creatureSize != NULL && facing != NULL);
 
-    // TODO: Incomplete.
+    m_baseStats.m_hitPoints -= static_cast<SHORT>(m_nHPCONBonusTotalOld);
+    m_baseStats.m_maxHitPointsBase -= static_cast<SHORT>(m_nHPCONBonusTotalOld);
+    m_derivedStats.m_nMaxHitPoints -= static_cast<SHORT>(m_nHPCONBonusTotalOld);
+
+    m_baseStats.m_effectVersion = 1;
+
+    *pCreature = NULL;
+    *creatureSize = 0;
+    *facing = m_nDirection;
+
+    for (nClass = 0; nClass < CSPELLLIST_NUM_CLASSES; nClass++) {
+        for (nLevel = 0; nLevel < CSPELLLIST_MAX_LEVELS; nLevel++) {
+            *creatureSize += sizeof(CCreatureFileSpell) * m_spells.Get(nClass)->GetSpellsAtLevel(nLevel)->m_List.size()
+                + sizeof(unsigned int)
+                + sizeof(unsigned int);
+        }
+    }
+
+    for (nLevel = 0; nLevel < CSPELLLIST_MAX_LEVELS; nLevel++) {
+        *creatureSize += sizeof(CCreatureFileSpell) * m_domainSpells.GetSpellsAtLevel(nLevel)->m_List.size()
+            + sizeof(unsigned int)
+            + sizeof(unsigned int);
+    }
+
+    *creatureSize += sizeof(CCreatureFileSpell) * m_innateSpells.m_List.size()
+        + sizeof(unsigned int)
+        + sizeof(unsigned int);
+
+    *creatureSize += sizeof(CCreatureFileSpell) * m_songs.m_List.size()
+        + sizeof(unsigned int)
+        + sizeof(unsigned int);
+
+    *creatureSize += sizeof(CCreatureFileSpell) * m_shapeshifts.m_List.size()
+        + sizeof(unsigned int)
+        + sizeof(unsigned int);
+
+    m_equipment.Marshal(&equipment, &pItems, &nItems, a5);
+    *creatureSize += sizeof(CCreatureFileItem) * nItems + sizeof(CCreatureFileEquipment);
+
+    if (a4) {
+        m_pLocalVariables->MarshalToCharacter(this);
+    } else {
+        // NOTE: Last misc slot is the magic weapon slot.
+        equipment.m_miscItem[27] = -1;
+    }
+
+    nEffectsSize = m_timedEffectList.Marshal(&pEffects, 1, !a4);
+    nEffects = nEffectsSize / sizeof(CGameEffectBase);
+    nEffectsSize = sizeof(CGameEffectBase) * nEffects;
+
+    m_baseStats.field_2F8 = static_cast<BOOLEAN>(m_removeFromArea);
+
+    // NOTE: 900 is "CRE V2.2" signature followed by `CCreatureFileHeader`
+    // (0x37C bytes in the original).
+    *creatureSize += nEffectsSize + 900 + sizeof(CCreatureFileOffsets);
+
+    *pCreature = new BYTE[*creatureSize];
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 12051
+    UTIL_ASSERT(*pCreature != NULL);
+
+    memset(*pCreature, 0, *creatureSize);
+    memcpy(*pCreature, "CRE V2.2", 8);
+
+    m_baseStats.m_subrace = m_startTypeAI.m_nSubRace;
+
+    // NOTE: The original copies 0x37C bytes. The tail of `CCreatureFileHeader`
+    // is not reconstructed yet so it is smaller here, the rest of the header
+    // stays zeroed (`Unmarshal` reads back the same size).
+    memcpy(*pCreature + 8, &m_baseStats, sizeof(m_baseStats));
+
+    pOffsets = reinterpret_cast<CCreatureFileOffsets*>(*pCreature + 900);
+    pOffsets->m_enemyAlly = m_startTypeAI.m_nEnemyAlly;
+    pOffsets->m_general = m_liveTypeAI.m_nGeneral;
+    pOffsets->m_race = m_startTypeAI.m_nRace;
+    pOffsets->m_class = m_startTypeAI.m_nClass;
+    pOffsets->m_specifics = m_startTypeAI.m_nSpecific;
+    pOffsets->m_gender = m_startTypeAI.m_nGender;
+    pOffsets->m_alignment = m_startTypeAI.m_nAlignment;
+    pOffsets->m_instance = m_startTypeAI.m_nInstance;
+    pOffsets->m_avClass = m_startTypeAI.m_nAvClass;
+    pOffsets->m_classMask = m_startTypeAI.m_nClassMask;
+    memcpy(pOffsets->m_specialCase, m_startTypeAI.m_SpecialCase, sizeof(pOffsets->m_specialCase));
+    strncpy(pOffsets->m_name, m_scriptName, SCRIPTNAME_SIZE);
+    m_dialog.GetResRef(pOffsets->m_dialog);
+
+    cnt = 900 + sizeof(CCreatureFileOffsets);
+
+    for (nClass = 0; nClass < CSPELLLIST_NUM_CLASSES; nClass++) {
+        for (nLevel = 0; nLevel < CSPELLLIST_MAX_LEVELS; nLevel++) {
+            pOffsets->m_spellListOffset[nClass][nLevel] = cnt;
+            pOffsets->m_spellListCount[nClass][nLevel] = m_spells.Get(nClass)->GetSpellsAtLevel(nLevel)->m_List.size();
+
+            for (nIndex = 0; nIndex < pOffsets->m_spellListCount[nClass][nLevel]; nIndex++) {
+                *reinterpret_cast<CGameSpriteSpellListEntry*>(*pCreature + cnt) = *m_spells.Get(nClass)->GetSpellsAtLevel(nLevel)->Get(nIndex);
+                cnt += sizeof(CCreatureFileSpell);
+            }
+
+            *reinterpret_cast<unsigned int*>(*pCreature + cnt) = m_spells.Get(nClass)->GetSpellsAtLevel(nLevel)->field_14;
+            cnt += sizeof(unsigned int);
+
+            *reinterpret_cast<unsigned int*>(*pCreature + cnt) = m_spells.Get(nClass)->GetSpellsAtLevel(nLevel)->field_18;
+            cnt += sizeof(unsigned int);
+        }
+    }
+
+    for (nLevel = 0; nLevel < CSPELLLIST_MAX_LEVELS; nLevel++) {
+        pOffsets->m_domainListOffset[nLevel] = cnt;
+        pOffsets->m_domainListCount[nLevel] = m_domainSpells.GetSpellsAtLevel(nLevel)->m_List.size();
+
+        for (nIndex = 0; nIndex < pOffsets->m_domainListCount[nLevel]; nIndex++) {
+            *reinterpret_cast<CGameSpriteSpellListEntry*>(*pCreature + cnt) = *m_domainSpells.GetSpellsAtLevel(nLevel)->Get(nIndex);
+            cnt += sizeof(CCreatureFileSpell);
+        }
+
+        *reinterpret_cast<unsigned int*>(*pCreature + cnt) = m_domainSpells.GetSpellsAtLevel(nLevel)->field_14;
+        cnt += sizeof(unsigned int);
+
+        *reinterpret_cast<unsigned int*>(*pCreature + cnt) = m_domainSpells.GetSpellsAtLevel(nLevel)->field_18;
+        cnt += sizeof(unsigned int);
+    }
+
+    pOffsets->m_innateListOffset = cnt;
+    pOffsets->m_innateListCount = m_innateSpells.m_List.size();
+    for (nIndex = 0; nIndex < pOffsets->m_innateListCount; nIndex++) {
+        *reinterpret_cast<CGameSpriteSpellListEntry*>(*pCreature + cnt) = *m_innateSpells.Get(nIndex);
+        cnt += sizeof(CCreatureFileSpell);
+    }
+
+    *reinterpret_cast<unsigned int*>(*pCreature + cnt) = m_innateSpells.field_14;
+    cnt += sizeof(unsigned int);
+
+    *reinterpret_cast<unsigned int*>(*pCreature + cnt) = m_innateSpells.field_18;
+    cnt += sizeof(unsigned int);
+
+    pOffsets->m_songListOffset = cnt;
+    pOffsets->m_songListCount = m_songs.m_List.size();
+    for (nIndex = 0; nIndex < pOffsets->m_songListCount; nIndex++) {
+        *reinterpret_cast<CGameSpriteSpellListEntry*>(*pCreature + cnt) = *m_songs.Get(nIndex);
+        cnt += sizeof(CCreatureFileSpell);
+    }
+
+    *reinterpret_cast<unsigned int*>(*pCreature + cnt) = m_songs.field_14;
+    cnt += sizeof(unsigned int);
+
+    *reinterpret_cast<unsigned int*>(*pCreature + cnt) = m_songs.field_18;
+    cnt += sizeof(unsigned int);
+
+    pOffsets->m_shapeListOffset = cnt;
+    pOffsets->m_shapeListCount = m_shapeshifts.m_List.size();
+    for (nIndex = 0; nIndex < pOffsets->m_shapeListCount; nIndex++) {
+        *reinterpret_cast<CGameSpriteSpellListEntry*>(*pCreature + cnt) = *m_shapeshifts.Get(nIndex);
+        cnt += sizeof(CCreatureFileSpell);
+    }
+
+    *reinterpret_cast<unsigned int*>(*pCreature + cnt) = m_shapeshifts.field_14;
+    cnt += sizeof(unsigned int);
+
+    *reinterpret_cast<unsigned int*>(*pCreature + cnt) = m_shapeshifts.field_18;
+    cnt += sizeof(unsigned int);
+
+    pOffsets->m_equipmentListOffset = cnt;
+    memcpy(*pCreature + cnt, &equipment, sizeof(CCreatureFileEquipment));
+    cnt += sizeof(CCreatureFileEquipment);
+
+    if (nItems > 0) {
+        pOffsets->m_itemListOffset = cnt;
+        pOffsets->m_itemListCount = nItems;
+        memcpy(*pCreature + cnt, pItems, sizeof(CCreatureFileItem) * nItems);
+        cnt += sizeof(CCreatureFileItem) * nItems;
+        delete[] pItems;
+    }
+
+    if (nEffects > 0) {
+        pOffsets->m_effectListCount = nEffects;
+        pOffsets->m_effectListOffset = cnt;
+        memcpy(*pCreature + cnt, pEffects, nEffectsSize);
+        cnt += nEffectsSize;
+        delete[] reinterpret_cast<CGameEffectBase*>(pEffects);
+    }
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 12187
+    UTIL_ASSERT(cnt == (DWORD)*creatureSize);
+
+    m_baseStats.m_hitPoints += static_cast<SHORT>(m_nHPCONBonusTotalOld);
+    m_baseStats.m_maxHitPointsBase += static_cast<SHORT>(m_nHPCONBonusTotalOld);
+    m_derivedStats.m_nMaxHitPoints += static_cast<SHORT>(m_nHPCONBonusTotalOld);
+
+    m_equipedEffectList.RemoveAllOfType(this, CGAMEEFFECT_JUMPTOAREA, m_equipedEffectList.m_posCurrent, -1);
+    m_timedEffectList.RemoveAllOfType(this, CGAMEEFFECT_JUMPTOAREA, m_timedEffectList.m_posCurrent, -1);
 }
 
 // 0x70BEE0
