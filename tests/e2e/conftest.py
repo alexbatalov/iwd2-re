@@ -56,9 +56,25 @@ def golden_dir(request) -> Path:
     return d
 
 
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    rep = outcome.get_result()
+    setattr(item, "rep_" + rep.when, rep)
+
+
 @pytest.fixture
 def game(request, target, play_dir, out_dir):
     exe = request.config.getoption("--exe")
     g = Game(target=target, play_dir=play_dir, out_dir=out_dir, exe=Path(exe) if exe else None)
-    with g:
+    g.launch()
+    try:
         yield g
+        rep = getattr(request.node, "rep_call", None)
+        if rep is not None and rep.failed:
+            try:
+                g.screenshot("failure")
+            except Exception:
+                g.screenshot_desktop("failure")
+    finally:
+        g.close()

@@ -62,13 +62,18 @@ class Game:
         self.out_dir.mkdir(parents=True, exist_ok=True)
         self.rng = random.Random(self.seed)
         self.proc = subprocess.Popen([str(exe)], cwd=str(self.play_dir), env=env)
+        # The game can briefly show a desktop-sized window during startup, so
+        # wait until the main window's size has stayed the same for a moment.
         deadline = time.time() + timeout
+        last, since = None, time.time()
         while time.time() < deadline:
             self.check_alive()
             hwnd = self.main_window()
             if hwnd:
-                x, y, w, h = win32.client_rect_on_screen(hwnd)
-                if w >= 640 and h >= 480:
+                state = (hwnd, win32.client_rect_on_screen(hwnd)[2:])
+                if state != last:
+                    last, since = state, time.time()
+                elif time.time() - since >= 1.5 and state[1][0] >= 640:
                     self.hwnd = hwnd
                     win32.bring_to_front(hwnd)
                     return
@@ -89,7 +94,10 @@ class Game:
             return 0
         best, best_area = 0, 0
         for h in win32.windows_of_pid(self.proc.pid):
-            if win32.window_class(h) == "#32770":
+            cls = win32.window_class(h)
+            if cls == "ChitinClass":  # the engine's main window (original and rebuild)
+                return h
+            if cls == "#32770":
                 continue
             _, _, w, hh = win32.client_rect_on_screen(h)
             if w * hh > best_area:
