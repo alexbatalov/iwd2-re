@@ -15,6 +15,8 @@
 #include "CInfCursor.h"
 #include "CItem.h"
 #include "CPathSearch.h"
+#include "CResCache.h"
+#include "CResFile.h"
 #include "CScreenChapter.h"
 #include "CScreenCharacter.h"
 #include "CScreenInventory.h"
@@ -1385,9 +1387,110 @@ LONG CInfGame::CachingRequirements(const CString& areaName)
 }
 
 // 0x5A0950
-void CInfGame::CacheResFileWithResource(const CString& areaName)
+BOOL CInfGame::CacheResFileWithResource(const CString& areaName)
 {
-    // TODO: Incomplete.
+    CAreaFile cAreaFile;
+
+    for (int index = 1; index < 7; index++) {
+        CResCache::stru_8FB90C[index] = "";
+    }
+
+    CResCache::stru_8FB90C[0] = areaName;
+    CResCache::dword_8FB92C = 1;
+
+    // NOTE: Uninline.
+    cAreaFile.SetResRef(CResRef(areaName), TRUE, TRUE);
+
+    // NOTE: The WED resref is at offset 8 of the ARE file (after signature
+    // and version).
+    BYTE* pData = cAreaFile.GetData();
+    CResFile* pResFile = g_pChitin->cDimm.GetResFilePtr(g_pChitin->cDimm.GetResID(CResRef(pData + 8), 1003));
+    cAreaFile.ReleaseData();
+
+    if (pResFile == NULL) {
+        return FALSE;
+    }
+
+    if (!g_pChitin->cNetwork.m_bConnectionEstablished) {
+        if (pResFile->sub_789CE0() == TRUE) {
+            pResFile->UnCache();
+        }
+        return TRUE;
+    }
+
+    CString sResFileName;
+    CString sXLabel;
+    CString sYLabel;
+    CPoint ptLocation;
+
+    pResFile->sub_78A0F0(sResFileName);
+
+    if ((m_ruleTables.m_tAreaLinkageCaching.Find(sResFileName, ptLocation, TRUE)
+            & m_ruleTables.m_tAreaLinkageCaching.Find(sResFileName, sXLabel, sYLabel, TRUE))
+        == TRUE) {
+        // NOTE: Uninline.
+        CString sCount = m_ruleTables.m_tAreaLinkageCaching.GetAt(CPoint(0, ptLocation.y));
+        int nCount = atoi(sCount.GetBuffer(sCount.GetLength()));
+
+        if (nCount != 0) {
+            int index;
+            UINT nResFileID;
+
+            index = 0;
+            nResFileID = g_pChitin->cDimm.GetResFileID(sYLabel);
+            while (index <= nCount) {
+                pResFile = g_pChitin->cDimm.GetResFilePtr(nResFileID);
+                if (pResFile == NULL) {
+                    return FALSE;
+                }
+
+                if (!pResFile->sub_789A20()) {
+                    if (pResFile->sub_789CE0() == TRUE) {
+                        pResFile->UnCache();
+                    }
+                }
+
+                index++;
+
+                // NOTE: Uninline.
+                sResFileName = m_ruleTables.m_tAreaLinkageCaching.GetAt(CPoint(index, ptLocation.y));
+                nResFileID = g_pChitin->cDimm.GetResFileID(sResFileName);
+            }
+
+            index = 0;
+            nResFileID = g_pChitin->cDimm.GetResFileID(sYLabel);
+            while (index <= nCount) {
+                pResFile = g_pChitin->cDimm.GetResFilePtr(nResFileID);
+                if (pResFile == NULL) {
+                    return FALSE;
+                }
+
+                // NOTE: On the first iteration `sResFileName` still holds the
+                // value read past the last column by the first loop.
+                CResCache::stru_8FB90C[CResCache::dword_8FB92C++] = sResFileName;
+
+                if (pResFile->sub_789A20()) {
+                    if (pResFile->sub_789CE0() == TRUE) {
+                        pResFile->UnCache();
+                    }
+                }
+
+                index++;
+
+                // NOTE: Uninline.
+                sResFileName = m_ruleTables.m_tAreaLinkageCaching.GetAt(CPoint(index, ptLocation.y));
+                nResFileID = g_pChitin->cDimm.GetResFileID(sResFileName);
+            }
+
+            return TRUE;
+        }
+    }
+
+    if (pResFile->sub_789CE0() == TRUE) {
+        pResFile->UnCache();
+    }
+
+    return TRUE;
 }
 
 // 0x5A0F50

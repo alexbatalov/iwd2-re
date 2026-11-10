@@ -86,6 +86,46 @@ BOOL CResFile::CloseFile()
     return TRUE;
 }
 
+// 0x789A20
+BOOL CResFile::sub_789A20()
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x789CE0
+BOOL CResFile::sub_789CE0()
+{
+    // TODO: Incomplete.
+
+    return FALSE;
+}
+
+// 0x78A0F0
+BOOLEAN CResFile::sub_78A0F0(CString& sResFileName)
+{
+    CString sUnused;
+    CString sFileName;
+    CString sBaseName;
+
+    if (g_pChitin->cDimm.m_cKeyTable.m_bInitialized && m_nIndex < g_pChitin->cDimm.m_cKeyTable.m_nResFiles) {
+        sFileName = reinterpret_cast<char*>(g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries) + g_pChitin->cDimm.m_cKeyTable.m_pResFileNameEntries[m_nIndex].nFileNameOffset;
+        sBaseName = sFileName;
+
+        int nPos;
+        while ((nPos = sBaseName.Find('\\')) != -1) {
+            sBaseName = sBaseName.Right(sBaseName.GetLength() - nPos - 1);
+        }
+
+        sResFileName = sBaseName.Left(sBaseName.GetLength() - 4);
+
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 // #guess
 // 0x78A280
 DWORD CResFile::GetFileSize(RESID resID)
