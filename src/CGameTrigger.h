@@ -21,6 +21,7 @@ public:
     /* 0058 */ void SetCursor(LONG nToolTip) override;
     /* 00B8 */ virtual BOOL IsOverActivate(const CPoint& pt);
 
+    void Marshal(CAreaFileTriggerObject** pTriggerObject);
     void SetDrawPoly(SHORT time);
     BOOL sub_45B950();
 
