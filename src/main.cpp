@@ -117,7 +117,17 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     }
 
     SetCurrentDirectoryA(currentDirectory);
-    SetCurrentDirectoryA("C:\\Program Files (x86)\\GOG.com\\Icewind Dale II");
+
+    // NOTE: Not in the original. The original runs from the game folder. Here
+    // the game folder comes from `IWD2_GAME_DIR`, then the current directory
+    // (if it holds the game), then the old GOG default.
+    char gameDirectory[MAX_PATH];
+    DWORD gameDirectoryLength = GetEnvironmentVariableA("IWD2_GAME_DIR", gameDirectory, sizeof(gameDirectory));
+    if (gameDirectoryLength > 0 && gameDirectoryLength < sizeof(gameDirectory)) {
+        SetCurrentDirectoryA(gameDirectory);
+    } else if (GetFileAttributesA("CHITIN.KEY") == INVALID_FILE_ATTRIBUTES) {
+        SetCurrentDirectoryA("C:\\Program Files (x86)\\GOG.com\\Icewind Dale II");
+    }
 
     baldurChitin.Init(hInstance);
     int rc = baldurChitin.WinMain(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
