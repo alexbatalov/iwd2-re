@@ -798,6 +798,7 @@ CGameAnimationTypeTownStatic::m_g1VidCellBase
 CGameArea::field_3EC
 CGameArea::field_436
 CGameArea::field_438
+CGameArea::field_AAA
 CGameArea::field_AE6
 CGameArea::field_B0E
 CGameArea::field_B16
