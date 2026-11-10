@@ -55,12 +55,31 @@ public:
     /* 0058 */ DWORD m_dwFlags;
     /* 005C */ DWORD m_versionNumber;
     /* 0060 */ DWORD m_familiarsOffset;
-    /* 0064 */ DWORD m_storedLocationsOffset;
+    /* 0064 */ DWORD m_storedLocationsOffset; // NOTE: IWD2 stores `CGameOptions::m_nNightmareMode` here.
     /* 0068 */ DWORD m_storedLocationsCount;
     /* 006C */ DWORD m_gameTime;
     /* 0070 */ DWORD m_storedLocationsOffsetPocketPlane;
     /* 0074 */ DWORD m_storedLocationsCountPocketPlane;
     /* 0098 */ unsigned char field_78[52];
+};
+
+// NOTE: GAM V2.2 familiar info.
+class CSavedGameFamiliarInfo {
+public:
+    /* 0000 */ RESREF m_familiarResRefs[9];
+    /* 0048 */ DWORD m_familiarListOffset;
+    /* 004C */ DWORD m_familiarListCounts[9][9];
+};
+
+// NOTE: Header of entries in the trailing list of GAM V2.2 (marshalled from
+// `CInfGame::field_4BDC`). Followed by `m_nLength` bytes of text.
+class CSavedGameUnknownEntry {
+public:
+    /* 0000 */ DWORD m_nSize;
+    /* 0004 */ DWORD m_nLength;
+    /* 0008 */ DWORD field_8;
+    /* 000C */ BYTE field_C;
+    /* 000D */ BYTE field_D[15];
 };
 
 class CSavedGameJournalEntry {
