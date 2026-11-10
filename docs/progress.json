@@ -5,16 +5,16 @@
     "0x7DA200"
   ],
   "functions_total": 9831,
-  "functions_done": 6856,
-  "incomplete_markers": 370,
+  "functions_done": 6873,
+  "incomplete_markers": 364,
   "incomplete_by_file": {
     "src/CMessage.cpp": 33,
-    "src/CGameSprite.cpp": 32,
+    "src/CGameSprite.cpp": 31,
     "src/CVidMode.cpp": 20,
     "src/CScreenCharacter.cpp": 19,
-    "src/CInfGame.cpp": 18,
     "src/CStore.cpp": 16,
     "src/CVidCell.cpp": 14,
+    "src/CInfGame.cpp": 12,
     "src/CScreenInventory.cpp": 12,
     "src/CScreenStore.cpp": 12,
     "src/CDerivedStats.cpp": 11,
@@ -42,15 +42,16 @@
     "src/CGameDialog.cpp": 3,
     "src/CScreenConnection.cpp": 3,
     "src/CScreenWorldMap.cpp": 3,
+    "src/CSearchBitmap.cpp": 3,
     "src/CSpawn.cpp": 3,
     "src/CSwitchCDStatus.cpp": 3,
     "src/CTiledObject.cpp": 3,
     "src/CGameAreaNotes.cpp": 2,
     "src/CGameObjectArray.cpp": 2,
     "src/CImm.cpp": 2,
+    "src/CResFile.cpp": 2,
     "src/CRuleTables.cpp": 2,
     "src/CScreenMultiPlayer.cpp": 2,
-    "src/CSearchBitmap.cpp": 2,
     "src/CVidBlitter.cpp": 2,
     "src/CVidPalette.cpp": 2,
     "src/BalDataTypes.h": 1,
@@ -60,10 +61,8 @@
     "src/CGameAnimationTypeMonsterAnkheg.cpp": 1,
     "src/CGameAnimationTypeMonsterLayeredSpell.cpp": 1,
     "src/CGameContainer.cpp": 1,
-    "src/CGameEffectList.cpp": 1,
     "src/CGameObject.cpp": 1,
     "src/CGameSpawning.cpp": 1,
-    "src/CGameSpriteEquipment.cpp": 1,
     "src/CMoveList.cpp": 1,
     "src/CProjectile.cpp": 1,
     "src/CScreenChapter.cpp": 1,
@@ -78,8 +77,8 @@
     "src/CVidMosaic.cpp": 1,
     "src/CWarp.cpp": 1
   },
-  "annotations_total": 9300,
-  "annotations_not_function_start": 2422,
+  "annotations_total": 9319,
+  "annotations_not_function_start": 2424,
   "duplicate_annotations": {
     "0x7ACD60": [
       "src/CAIObjectType.cpp",
@@ -1787,6 +1786,8 @@
     "0x84EE92",
     "0x84EE94",
     "0x851700",
+    "0x851701",
+    "0x85170E",
     "0x85186C",
     "0x85186D",
     "0x85186E",
@@ -3624,7 +3625,7 @@
     "0xA1917C"
   ],
   "bytes_total": 3846937,
-  "bytes_done": 2655799,
+  "bytes_done": 2673696,
   "next": [
     {
       "addr": "0x442990",
@@ -3751,12 +3752,6 @@
       "name": "StringContainer_Set",
       "translated_callers": 6,
       "size": 156
-    },
-    {
-      "addr": "0x548B80",
-      "name": "FUN_00548b80",
-      "translated_callers": 6,
-      "size": 808
     },
     {
       "addr": "0x5B9C60",
@@ -3925,6 +3920,12 @@
       "name": "UnknownContainer_FreeIfPtrIsZeroOrNegOne",
       "translated_callers": 3,
       "size": 71
+    },
+    {
+      "addr": "0x448DD0",
+      "name": "FUN_00448dd0",
+      "translated_callers": 3,
+      "size": 572
     }
   ]
 }

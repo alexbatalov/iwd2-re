@@ -15,7 +15,34 @@ Newest first. Each entry covers what was done, what's blocked and what's next.
   - Six resource parsers compared byte-reversed signatures (CHR, ITM, BAM, DLG, EFF, STO).
   - `CInfGame::ImportCharacter` translated, plus `CResBIO`, `CCharacterFile` and missing factory cases.
 
-**Current state of S2 on the rebuild:** the premade party imports, then the game crashes in `CInfGame::WorldEngineActivated` because no area is loaded. The new-game path depends on stubs `UpdateCharacterSlots`, `SetupCharacters`, `SaveGame`, `Unmarshal`, `GetProtagonist` and `SelectToolbar` (all `CInfGame`). These are being translated in worktrees `C:\Users\Luke\Projects\iwd2-re-wt\{savegame,unmarshal,party,world}`.
+- Phase A, translated by parallel agents (one worktree each, then merged):
+  - `CInfGame`: `UpdateCharacterSlots`, `SetupCharacters`, `GetProtagonist`, `SelectToolbar`, `SynchronousUpdate`, `CacheResFileWithResource`, `SaveGame`, `Marshal`, `Unmarshal`.
+  - Marshal functions: `CGameArea::Marshal`, `CGameTrigger::Marshal`, `CWorldMap::Marshal`, `CGameSprite::Marshal`, `CGameSpriteEquipment::Marshal`.
+  - `CDimm::CompressDirectory`, `CGameEffectList::RemoveAllOfType`, plus small helpers.
+- Fixes I made along the way:
+  - `NonBlockingWaitForSignal` was a stub, which hung the single-player save.
+  - The 8-byte resref used as a file name had no terminator, so `ICEWIND2.GAM` was written under a garbage name.
+  - `WriteSetUp` created one-character folder paths, so compressed CD2 BIFs couldn't be cached and the area's WED failed to load.
+  - Test tooling: an on-demand hang stack dump (`iwd2re-dump-<pid>` event).
+
+**Current state of S2 on the rebuild:** a new game with a premade party **reaches the world screen** at Targos (AR1000). The map, action bar and HP counters render. Still different from the original:
+- The Prologue chapter screen is skipped.
+- Party sprites and portraits aren't drawn.
+- Hedron's opening dialogue doesn't start.
+- Starting gold isn't checked yet.
+
+**Next (Phase A continues)**
+1. Make S2 wait for the chapter screen, and find why it's skipped (`CScreenChapter`, the chapter text resources and the call after `LoadGame`).
+2. Find why sprites and portraits don't draw (`CGameSprite` render/AIUpdate TODOs, `CScreenWorld` portrait panel). Use the hang/crash tools and compare screenshots with the original.
+3. Opening dialogue: the area script and dialogue start (`CMessage` TODOs, `CScreenWorld` dialogue).
+4. Stubs left behind:
+   - `CSearchBitmap::GetNearestOpenSquare` (0x548B80), which only matters for multiplayer late joins.
+   - `CResFile::sub_789A20`/`sub_789CE0` (BIF cache helpers).
+   - `CInfGame::CachingRequirements` (0x5A04B0).
+   - `CBaldurMessage::WaitForSignal`/`KickOutWaitingForSignal`.
+   - `sub_5A79E0`/`sub_5A7BF0`, which only convert old save versions.
+   - `CBaldurMessage::sub_43D8D0`, multiplayer.
+5. The `CCreatureFileHeader` tail layout is wrong (about 0x2AA bytes instead of 0x37C), so CRE saves aren't byte-compatible after offset 0x294. Fix this before checking save compatibility (S10).
 
 **Notes for next session**
 - `inventory.py` counts a function as done once annotated, even with `TODO: Incomplete` inside, so bytes done (69%) overstates progress. Consider subtracting the sizes of functions that contain TODOs.
