@@ -4,9 +4,16 @@
 #include "CButtonData.h"
 #include "CGameSprite.h"
 #include "CInfGame.h"
+#include "CUtil.h"
 
 // 0x851700
 const BYTE CInfButtonArray::STATE_NONE = 0;
+
+// 0x851701
+const BYTE CInfButtonArray::byte_851701 = 110;
+
+// 0x85170E
+const BYTE CInfButtonArray::byte_85170E = 114;
 
 // 0x587960
 CInfButtonSettings::CInfButtonSettings()
@@ -148,4 +155,24 @@ void CInfButtonArray::OnLButtonPressed(int buttonID)
 void CInfButtonArray::OnRButtonPressed(int buttonID)
 {
     // TODO: Incomplete.
+}
+
+// 0x595E70
+void CInfButtonArray::UpdateCustomizableButtonTypes(INT* pButtonList)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfButtonArray.cpp
+    // __LINE__: 7128
+    UTIL_ASSERT(pButtonList != NULL);
+
+    memcpy(m_customizableButtonTypes, pButtonList, sizeof(m_customizableButtonTypes));
+}
+
+// 0x595F70
+void CInfButtonArray::UpdateSelectedWeaponSet(BYTE nIndex)
+{
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\InfButtonArray.cpp
+    // __LINE__: 7154
+    UTIL_ASSERT(nIndex < CCREATUREFILEEQUIPMENT21_WEAPON_NUM_SETS);
+
+    m_nSelectedWeaponSet = nIndex;
 }

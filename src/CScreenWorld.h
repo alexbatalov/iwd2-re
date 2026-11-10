@@ -76,6 +76,7 @@ public:
     void SetCurrentXP(DWORD dwCurrentXP);
     void AddGold(DWORD dwGold);
     void StopContainer();
+    INT GetActivePanelID();
     void CancelPopup();
     void StartCommand();
     void StopCommand();

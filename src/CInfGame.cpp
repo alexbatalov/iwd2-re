@@ -15,6 +15,8 @@
 #include "CInfCursor.h"
 #include "CItem.h"
 #include "CPathSearch.h"
+#include "CResCache.h"
+#include "CResFile.h"
 #include "CScreenChapter.h"
 #include "CScreenCharacter.h"
 #include "CScreenInventory.h"
@@ -1385,9 +1387,110 @@ LONG CInfGame::CachingRequirements(const CString& areaName)
 }
 
 // 0x5A0950
-void CInfGame::CacheResFileWithResource(const CString& areaName)
+BOOL CInfGame::CacheResFileWithResource(const CString& areaName)
 {
-    // TODO: Incomplete.
+    CAreaFile cAreaFile;
+
+    for (int index = 1; index < 7; index++) {
+        CResCache::stru_8FB90C[index] = "";
+    }
+
+    CResCache::stru_8FB90C[0] = areaName;
+    CResCache::dword_8FB92C = 1;
+
+    // NOTE: Uninline.
+    cAreaFile.SetResRef(CResRef(areaName), TRUE, TRUE);
+
+    // NOTE: The WED resref is at offset 8 of the ARE file (after signature
+    // and version).
+    BYTE* pData = cAreaFile.GetData();
+    CResFile* pResFile = g_pChitin->cDimm.GetResFilePtr(g_pChitin->cDimm.GetResID(CResRef(pData + 8), 1003));
+    cAreaFile.ReleaseData();
+
+    if (pResFile == NULL) {
+        return FALSE;
+    }
+
+    if (!g_pChitin->cNetwork.m_bConnectionEstablished) {
+        if (pResFile->sub_789CE0() == TRUE) {
+            pResFile->UnCache();
+        }
+        return TRUE;
+    }
+
+    CString sResFileName;
+    CString sXLabel;
+    CString sYLabel;
+    CPoint ptLocation;
+
+    pResFile->sub_78A0F0(sResFileName);
+
+    if ((m_ruleTables.m_tAreaLinkageCaching.Find(sResFileName, ptLocation, TRUE)
+            & m_ruleTables.m_tAreaLinkageCaching.Find(sResFileName, sXLabel, sYLabel, TRUE))
+        == TRUE) {
+        // NOTE: Uninline.
+        CString sCount = m_ruleTables.m_tAreaLinkageCaching.GetAt(CPoint(0, ptLocation.y));
+        int nCount = atoi(sCount.GetBuffer(sCount.GetLength()));
+
+        if (nCount != 0) {
+            int index;
+            UINT nResFileID;
+
+            index = 0;
+            nResFileID = g_pChitin->cDimm.GetResFileID(sYLabel);
+            while (index <= nCount) {
+                pResFile = g_pChitin->cDimm.GetResFilePtr(nResFileID);
+                if (pResFile == NULL) {
+                    return FALSE;
+                }
+
+                if (!pResFile->sub_789A20()) {
+                    if (pResFile->sub_789CE0() == TRUE) {
+                        pResFile->UnCache();
+                    }
+                }
+
+                index++;
+
+                // NOTE: Uninline.
+                sResFileName = m_ruleTables.m_tAreaLinkageCaching.GetAt(CPoint(index, ptLocation.y));
+                nResFileID = g_pChitin->cDimm.GetResFileID(sResFileName);
+            }
+
+            index = 0;
+            nResFileID = g_pChitin->cDimm.GetResFileID(sYLabel);
+            while (index <= nCount) {
+                pResFile = g_pChitin->cDimm.GetResFilePtr(nResFileID);
+                if (pResFile == NULL) {
+                    return FALSE;
+                }
+
+                // NOTE: On the first iteration `sResFileName` still holds the
+                // value read past the last column by the first loop.
+                CResCache::stru_8FB90C[CResCache::dword_8FB92C++] = sResFileName;
+
+                if (pResFile->sub_789A20()) {
+                    if (pResFile->sub_789CE0() == TRUE) {
+                        pResFile->UnCache();
+                    }
+                }
+
+                index++;
+
+                // NOTE: Uninline.
+                sResFileName = m_ruleTables.m_tAreaLinkageCaching.GetAt(CPoint(index, ptLocation.y));
+                nResFileID = g_pChitin->cDimm.GetResFileID(sResFileName);
+            }
+
+            return TRUE;
+        }
+    }
+
+    if (pResFile->sub_789CE0() == TRUE) {
+        pResFile->UnCache();
+    }
+
+    return TRUE;
 }
 
 // 0x5A0F50
@@ -3389,7 +3492,63 @@ BOOL CInfGame::SelectCharacter(LONG characterId, BOOLEAN bPlaySelectSound)
 // 0x5ADAE0
 void CInfGame::SelectToolbar()
 {
-    // TODO: Incomplete.
+    m_nState = 0;
+    m_cButtonArray.m_nSelectedButton = 100;
+
+    // NOTE: Uninline.
+    switch (m_group.GetCount()) {
+    case 0:
+        m_cButtonArray.SetState(CInfButtonArray::STATE_NONE, 0);
+        break;
+    case 1:
+        if (1) {
+            LONG* pGroupList = m_group.GetGroupList();
+            if (pGroupList == NULL) {
+                m_cButtonArray.SetState(CInfButtonArray::STATE_NONE, 0);
+                delete pGroupList;
+                return;
+            }
+
+            CGameSprite* pSprite;
+
+            BYTE rc;
+            do {
+                rc = m_cObjectArray.GetShare(pGroupList[0],
+                    CGameObjectArray::THREAD_ASYNCH,
+                    reinterpret_cast<CGameObject**>(&pSprite),
+                    INFINITE);
+            } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+            if (rc != CGameObjectArray::SUCCESS) {
+                m_cButtonArray.SetState(CInfButtonArray::STATE_NONE, 0);
+                delete pGroupList;
+                return;
+            }
+
+            if (IcewindMisc::IsPC(pSprite) == TRUE) {
+                m_cButtonArray.UpdateCustomizableButtonTypes(pSprite->field_3D14);
+                m_cButtonArray.UpdateSelectedWeaponSet(pSprite->m_nWeaponSet);
+                m_cButtonArray.SetState(CInfButtonArray::byte_85170E, 0);
+            } else {
+                m_cButtonArray.UpdateSelectedWeaponSet(pSprite->m_nWeaponSet);
+                m_cButtonArray.SetState(CInfButtonArray::byte_851701, 0);
+            }
+
+            m_cObjectArray.ReleaseShare(pGroupList[0],
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+
+            delete pGroupList;
+        }
+        break;
+    default:
+        m_cButtonArray.SetState(CInfButtonArray::byte_851701, 0);
+        break;
+    }
+
+    if (g_pBaldurChitin->m_pEngineWorld->GetActivePanelID() == 8) {
+        g_pBaldurChitin->m_pEngineWorld->StopContainer();
+    }
 }
 
 // 0x5ADC90
@@ -4965,7 +5124,191 @@ BYTE CInfGame::GetFrameRate()
 // 0x5BE900
 void CInfGame::SynchronousUpdate()
 {
-    // TODO: Incomplete.
+    if (field_366E) {
+        CResHelper<CResBitmap, 1> cResScreenShot;
+        CResHelper<CResBitmap, 1> cResPortrait;
+        LPBYTE pScreenShotData = NULL;
+        LPBYTE pPortraitData = NULL;
+        CVidBitmap cPortraitBitmap;
+        CString sPortraitResRef;
+
+        if (field_50D8 && !field_50DC) {
+            CString sSource;
+            CString sDestination;
+
+            sSource = GetDirSaveRoot() + "default\\" + "ICEWIND2.BMP";
+            sDestination = GetDirSave() + "ICEWIND2.BMP";
+            CopyFileA(sSource, sDestination, FALSE);
+            DeleteFileA(sSource);
+
+            for (int nPortrait = 0; nPortrait < 6; nPortrait++) {
+                sSource.Format("%sdefault\\%s%d.BMP", (LPCSTR)GetDirSaveRoot(), "PORTRT", nPortrait);
+                sDestination.Format("%s%s%d.BMP", (LPCSTR)GetDirSave(), "PORTRT", nPortrait);
+                CopyFileA(sSource, sDestination, FALSE);
+                DeleteFileA(sSource);
+            }
+
+            field_366E = 0;
+            field_50D8 = FALSE;
+
+            return;
+        }
+
+        CGameArea* pArea = m_gameAreas[m_visibleArea];
+        if (pArea != NULL) {
+            EnterCriticalSection(&(pArea->field_214));
+            pArea->SetListManipulationThreadId(GetCurrentThreadId());
+        }
+
+        EnterCriticalSection(&(m_gameAreas[m_visibleArea]->field_1FC));
+
+        Sleep(100);
+
+        CSingleLock renderLock(&(g_pBaldurChitin->m_pEngineWorld->GetManager()->field_36), FALSE);
+        renderLock.Lock(INFINITE);
+
+        // NOTE: Uninline.
+        BYTE nBrightnessCorrection = g_pBaldurChitin->GetCurrentVideoMode()->m_nBrightnessCorrection;
+        g_pBaldurChitin->GetCurrentVideoMode()->m_nBrightnessCorrection = 0;
+
+        // NOTE: Uninline.
+        BYTE nGammaCorrection = g_pBaldurChitin->GetCurrentVideoMode()->m_nGammaCorrection;
+        g_pBaldurChitin->GetCurrentVideoMode()->m_nGammaCorrection = 0;
+
+        m_gameAreas[m_visibleArea]->m_cInfinity.pVRPool->InvalidateAll();
+
+        // NOTE: Uninline.
+        g_pBaldurChitin->GetCurrentVideoMode()->LoadFogOWarSurfaces(FOGOWAR_RESREF);
+
+        field_366E = 0;
+
+        BOOL bSaved = CCacheStatus::dword_8D0BA8;
+        CCacheStatus::dword_8D0BA8 = FALSE;
+        g_pBaldurChitin->m_pEngineWorld->SaveScreen();
+        CCacheStatus::dword_8D0BA8 = bSaved;
+
+        LONG nScreenShotSize;
+
+        // NOTE: Uninline.
+        g_pBaldurChitin->GetCurrentVideoMode()->PrintSurfaceToBmp(pScreenShotData,
+            0,
+            CInfinity::stru_8E79A8,
+            nScreenShotSize,
+            5);
+
+        CString sDirName;
+        if (!field_50DC && g_pChitin->cNetwork.m_nServiceProvider != CNetwork::SERV_PROV_NULL) {
+            sDirName = GetDirSave();
+        } else if (!g_pChitin->cVideo.m_bIs3dAccelerated) {
+            sDirName = GetDirSaveRoot() + "default\\";
+        } else if (field_50DC) {
+            sDirName = GetDirSave();
+            field_50DC = 0;
+            field_50D8 = FALSE;
+        } else {
+            sDirName = GetDirSaveRoot() + "default\\";
+            field_50D8 = TRUE;
+        }
+
+        if (pScreenShotData != NULL) {
+            // NOTE: Uninline.
+            cResScreenShot.SetResRef(CResRef("ICEWIND2"), TRUE, TRUE);
+
+            cResScreenShot.pRes->Write(sDirName, pScreenShotData, nScreenShotSize);
+            delete pScreenShotData;
+        }
+
+        WORD nPortraitIndex = 0;
+        for (int nCharacter = 0; nCharacter < 6; nCharacter++) {
+            LONG nCharacterId = m_characters[nCharacter];
+            if (nCharacterId != CGameObjectArray::INVALID_INDEX) {
+                CGameSprite* pSprite;
+
+                BYTE rc;
+                do {
+                    rc = m_cObjectArray.GetShare(nCharacterId,
+                        CGameObjectArray::THREAD_1,
+                        reinterpret_cast<CGameObject**>(&pSprite),
+                        INFINITE);
+                } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+                if (rc == CGameObjectArray::SUCCESS) {
+                    cPortraitBitmap.SetResRef(CResRef(pSprite->m_baseStats.m_portraitSmall), TRUE, TRUE);
+                    cPortraitBitmap.m_bDoubleSize = FALSE;
+
+                    if (cPortraitBitmap.pRes == NULL) {
+                        BOOL bDoubleSize = g_pBaldurChitin->field_4A28;
+                        cPortraitBitmap.SetResRef(CResRef(SILHOUETTE_PORTRAIT_SM), TRUE, TRUE);
+                        cPortraitBitmap.m_bDoubleSize = bDoubleSize;
+                    }
+
+                    if (cPortraitBitmap.GetBitCount(FALSE) != 24
+                        && cPortraitBitmap.GetBitCount(FALSE) != 8) {
+                        BOOL bDoubleSize = g_pBaldurChitin->field_4A28;
+                        cPortraitBitmap.SetResRef(CResRef(SILHOUETTE_PORTRAIT_SM), TRUE, TRUE);
+                        cPortraitBitmap.m_bDoubleSize = bDoubleSize;
+                    }
+
+                    m_cObjectArray.ReleaseShare(nCharacterId,
+                        CGameObjectArray::THREAD_1,
+                        INFINITE);
+
+                    CSize size;
+                    cPortraitBitmap.GetImageDimensions(size, FALSE);
+
+                    CRect rPortrait;
+                    SetRect(&rPortrait, 0, 0, size.cx, size.cy);
+
+                    cPortraitBitmap.RenderDirect(2, 0, 0, rPortrait, 0, FALSE);
+
+                    LONG nPortraitSize;
+
+                    // NOTE: Uninline.
+                    g_pBaldurChitin->GetCurrentVideoMode()->PrintSurfaceToBmp(pPortraitData,
+                        2,
+                        rPortrait,
+                        nPortraitSize,
+                        2);
+
+                    if (pPortraitData != NULL) {
+                        sPortraitResRef.Format("%s%d", "PORTRT", nPortraitIndex);
+
+                        // NOTE: Uninline.
+                        cResPortrait.SetResRef(CResRef(sPortraitResRef), TRUE, TRUE);
+
+                        cResPortrait.pRes->Write(sDirName, pPortraitData, nPortraitSize);
+                        nPortraitIndex++;
+                        delete pPortraitData;
+                    }
+                }
+            }
+        }
+
+        g_pChitin->cDimm.RemoveFromDirectoryList(GetDirSave(), TRUE);
+
+        // NOTE: Uninline.
+        g_pBaldurChitin->GetCurrentVideoMode()->m_nBrightnessCorrection = nBrightnessCorrection;
+
+        // NOTE: Uninline.
+        g_pBaldurChitin->GetCurrentVideoMode()->m_nGammaCorrection = nGammaCorrection;
+
+        m_gameAreas[m_visibleArea]->m_cInfinity.pVRPool->InvalidateAll();
+
+        // NOTE: Uninline.
+        g_pBaldurChitin->GetCurrentVideoMode()->LoadFogOWarSurfaces(FOGOWAR_RESREF);
+
+        renderLock.Unlock();
+
+        LeaveCriticalSection(&(m_gameAreas[m_visibleArea]->field_1FC));
+
+        pArea = m_gameAreas[m_visibleArea];
+        if (pArea != NULL) {
+            pArea->SetListManipulationThreadId(0);
+            LeaveCriticalSection(&(pArea->field_214));
+        }
+    }
+
+    DestroyDisposableItems();
 }
 
 // 0x5C0520
