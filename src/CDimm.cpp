@@ -2825,7 +2825,12 @@ BOOL CDimm::WriteResourceWithData(const CString& sDirName, CRes* pRes, LPVOID lp
     CResRef cResRef = pRes->GetResRef();
     USHORT nType = pRes->GetType();
 
-    sBaseName = cResRef.GetResRef();
+    // A resref fills all 8 bytes without a terminator (e.g. "ICEWIND2"), so
+    // copy it into a terminated buffer first.
+    char szBaseName[RESREF_SIZE + 1];
+    memcpy(szBaseName, cResRef.GetResRef(), RESREF_SIZE);
+    szBaseName[RESREF_SIZE] = '\0';
+    sBaseName = szBaseName;
     g_pChitin->TranslateType(nType, sExtension);
     sFileName = sBaseName + "." + sExtension;
 
@@ -2875,7 +2880,8 @@ BOOL CDimm::WriteSetUp(const CString& sFileName, CString& sResolvedFileName)
             if (sDirName[nPos - 1] == '\\'
                 && sDirName[nPos - 2] != '\\'
                 && sDirName[nPos] != '\\') {
-                sTemp = sDirName[nPos - 1];
+                // Path up to (not including) this backslash.
+                sTemp = sDirName.Left(nPos - 1);
 
                 if (_chdir(sTemp) != 0) {
                     if (_mkdir(sTemp) != 0) {
