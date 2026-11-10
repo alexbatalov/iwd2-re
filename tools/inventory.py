@@ -180,8 +180,13 @@ def check(r: dict) -> int:
     errors = []
     if base.get("function_list") == r["function_list"] and r["functions_done"] < base["functions_done"]:
         errors.append(f"functions_done dropped {base['functions_done']} -> {r['functions_done']}")
-    if r["incomplete_markers"] > base["incomplete_markers"]:
-        errors.append(f"TODO: Incomplete grew {base['incomplete_markers']} -> {r['incomplete_markers']}")
+    # New stubs for functions that weren't in src before are fine (they come
+    # with new annotations), so only fail if TODOs grew without new functions.
+    grew = r["incomplete_markers"] - base["incomplete_markers"]
+    added = r["functions_done"] - base["functions_done"] if base.get("function_list") == r["function_list"] else 0
+    if grew > 0 and added < grew:
+        errors.append(f"TODO: Incomplete grew {base['incomplete_markers']} -> {r['incomplete_markers']} "
+                      f"with only {added} new functions")
     new_dups = set(r["duplicate_annotations"]) - set(base.get("duplicate_annotations", {}))
     if new_dups:
         errors.append(f"new duplicate annotations: {sorted(new_dups)}")

@@ -141,6 +141,51 @@ public:
 
 #pragma pack(pop)
 
+// NOTE: Party creature entry of "GAMEV2.1" saves. Only the leading fields
+// shared with `CSavedGamePartyCreature` are known.
+class CSavedGamePartyCreature21 {
+public:
+    CSavedGamePartyCreature21()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    /* 0000 */ WORD m_wFlags;
+    /* 0002 */ WORD m_portraitId;
+    /* 0004 */ DWORD m_creatureOffset;
+    /* 0008 */ DWORD m_creatureSize;
+    /* 000C */ RESREF m_creatureResRef;
+    /* 0014 */ unsigned char field_14[524];
+};
+
+// Seen in `CInfGame::Unmarshal`.
+class CSavedGameFamiliars {
+public:
+    CSavedGameFamiliars()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    /* 0000 */ RESREF m_defaultFamiliarResRefs[9];
+    /* 0048 */ DWORD m_familiarResRefsOffset;
+    /* 004C */ DWORD m_familiarResRefsCount[9][9];
+};
+
+// Seen in `CInfGame::Unmarshal`. Followed by `m_nLength` characters of name.
+class CSavedGameUnknownEntry {
+public:
+    CSavedGameUnknownEntry()
+    {
+        memset(this, 0, sizeof(*this));
+    }
+
+    /* 0000 */ DWORD m_nSize;
+    /* 0004 */ DWORD m_nLength;
+    /* 0008 */ DWORD field_8;
+    /* 000C */ BYTE field_C;
+    /* 000D */ BYTE field_D[15];
+};
+
 class CAreaFileCreature {
 public:
     CAreaFileCreature()
