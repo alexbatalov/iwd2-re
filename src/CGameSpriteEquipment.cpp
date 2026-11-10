@@ -94,9 +94,252 @@ void CGameSpriteEquipment::ClearMarshal(BOOL bUnequip)
 }
 
 // 0x7124C0
-void CGameSpriteEquipment::Marshal()
+void CGameSpriteEquipment::Marshal(CCreatureFileEquipment* pHeader, CCreatureFileItem** pItems, DWORD* nItems, BOOL bIncludeUnexportable)
 {
-    // TODO: Incomplete.
+    CItem* pItem;
+    BYTE nSlot;
+    INT ability;
+    SHORT cnt;
+
+    // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+    // __LINE__: 15053
+    UTIL_ASSERT(pHeader != NULL && pItems != NULL && nItems != NULL);
+
+    memset(pHeader, 0xFF, sizeof(CCreatureFileEquipment));
+    pHeader->m_selectedWeapon = NO_WEAPON;
+    pHeader->m_selectedWeaponAbility = 0;
+
+    *pItems = NULL;
+    nSlot = 0;
+    *nItems = 0;
+
+    for (INT index = 0; index < 51; index++) {
+        if (m_items[index] != NULL
+            && (bIncludeUnexportable || m_items[index]->GetItemType() != 58)) {
+            (*nItems)++;
+        }
+    }
+
+    // NOTE: Exclude fist.
+    (*nItems)--;
+
+    if (*nItems != 0) {
+        *pItems = new CCreatureFileItem[*nItems];
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+        // __LINE__: 15077
+        UTIL_ASSERT(*pItems != NULL);
+
+        pItem = m_items[SLOT_HELMET];
+        if (pItem != NULL
+            && (bIncludeUnexportable || pItem->GetItemType() != 58)) {
+            if (bIncludeUnexportable || (pItem->GetFlagsFile() & 0x800) == 0) {
+                pItem->GetResRef().GetResRef((*pItems)[nSlot].m_itemId);
+                for (ability = 0; ability < 3; ability++) {
+                    (*pItems)[nSlot].m_usageCount[ability] = pItem->GetUsageCount(ability);
+                }
+                (*pItems)[nSlot].m_wear = pItem->m_wear;
+                (*pItems)[nSlot].m_dynamicFlags = pItem->m_flags;
+                pHeader->m_helmetItem = nSlot;
+            }
+            nSlot++;
+        }
+
+        pItem = m_items[SLOT_ARMOR];
+        if (pItem != NULL
+            && (bIncludeUnexportable || pItem->GetItemType() != 58)) {
+            if (bIncludeUnexportable || (pItem->GetFlagsFile() & 0x800) == 0) {
+                pItem->GetResRef().GetResRef((*pItems)[nSlot].m_itemId);
+                for (ability = 0; ability < 3; ability++) {
+                    (*pItems)[nSlot].m_usageCount[ability] = pItem->GetUsageCount(ability);
+                }
+                (*pItems)[nSlot].m_wear = pItem->m_wear;
+                (*pItems)[nSlot].m_dynamicFlags = pItem->m_flags;
+                pHeader->m_armorItem = nSlot;
+            }
+            nSlot++;
+        }
+
+        pItem = m_items[SLOT_SHIELD];
+        if (pItem != NULL
+            && (bIncludeUnexportable || pItem->GetItemType() != 58)) {
+            if (bIncludeUnexportable || (pItem->GetFlagsFile() & 0x800) == 0) {
+                pItem->GetResRef().GetResRef((*pItems)[nSlot].m_itemId);
+                for (ability = 0; ability < 3; ability++) {
+                    (*pItems)[nSlot].m_usageCount[ability] = pItem->GetUsageCount(ability);
+                }
+                (*pItems)[nSlot].m_wear = pItem->m_wear;
+                (*pItems)[nSlot].m_dynamicFlags = pItem->m_flags;
+                pHeader->m_shieldItem = nSlot;
+            }
+            nSlot++;
+        }
+
+        pItem = m_items[SLOT_GAUNTLETS];
+        if (pItem != NULL
+            && (bIncludeUnexportable || pItem->GetItemType() != 58)) {
+            if (bIncludeUnexportable || (pItem->GetFlagsFile() & 0x800) == 0) {
+                pItem->GetResRef().GetResRef((*pItems)[nSlot].m_itemId);
+                for (ability = 0; ability < 3; ability++) {
+                    (*pItems)[nSlot].m_usageCount[ability] = pItem->GetUsageCount(ability);
+                }
+                (*pItems)[nSlot].m_wear = pItem->m_wear;
+                (*pItems)[nSlot].m_dynamicFlags = pItem->m_flags;
+                pHeader->m_gauntletsItem = nSlot;
+            }
+            nSlot++;
+        }
+
+        pItem = m_items[SLOT_RING_LEFT];
+        if (pItem != NULL
+            && (bIncludeUnexportable || pItem->GetItemType() != 58)) {
+            if (bIncludeUnexportable || (pItem->GetFlagsFile() & 0x800) == 0) {
+                pItem->GetResRef().GetResRef((*pItems)[nSlot].m_itemId);
+                for (ability = 0; ability < 3; ability++) {
+                    (*pItems)[nSlot].m_usageCount[ability] = pItem->GetUsageCount(ability);
+                }
+                (*pItems)[nSlot].m_wear = pItem->m_wear;
+                (*pItems)[nSlot].m_dynamicFlags = pItem->m_flags;
+                pHeader->m_ringLeftItem = nSlot;
+            }
+            nSlot++;
+        }
+
+        pItem = m_items[SLOT_RING_RIGHT];
+        if (pItem != NULL
+            && (bIncludeUnexportable || pItem->GetItemType() != 58)) {
+            if (bIncludeUnexportable || (pItem->GetFlagsFile() & 0x800) == 0) {
+                pItem->GetResRef().GetResRef((*pItems)[nSlot].m_itemId);
+                for (ability = 0; ability < 3; ability++) {
+                    (*pItems)[nSlot].m_usageCount[ability] = pItem->GetUsageCount(ability);
+                }
+                (*pItems)[nSlot].m_wear = pItem->m_wear;
+                (*pItems)[nSlot].m_dynamicFlags = pItem->m_flags;
+                pHeader->m_ringRightItem = nSlot;
+            }
+            nSlot++;
+        }
+
+        pItem = m_items[SLOT_AMULET];
+        if (pItem != NULL
+            && (bIncludeUnexportable || pItem->GetItemType() != 58)) {
+            if (bIncludeUnexportable || (pItem->GetFlagsFile() & 0x800) == 0) {
+                pItem->GetResRef().GetResRef((*pItems)[nSlot].m_itemId);
+                for (ability = 0; ability < 3; ability++) {
+                    (*pItems)[nSlot].m_usageCount[ability] = pItem->GetUsageCount(ability);
+                }
+                (*pItems)[nSlot].m_wear = pItem->m_wear;
+                (*pItems)[nSlot].m_dynamicFlags = pItem->m_flags;
+                pHeader->m_amuletItem = nSlot;
+            }
+            nSlot++;
+        }
+
+        pItem = m_items[SLOT_BELT];
+        if (pItem != NULL
+            && (bIncludeUnexportable || pItem->GetItemType() != 58)) {
+            if (bIncludeUnexportable || (pItem->GetFlagsFile() & 0x800) == 0) {
+                pItem->GetResRef().GetResRef((*pItems)[nSlot].m_itemId);
+                for (ability = 0; ability < 3; ability++) {
+                    (*pItems)[nSlot].m_usageCount[ability] = pItem->GetUsageCount(ability);
+                }
+                (*pItems)[nSlot].m_wear = pItem->m_wear;
+                (*pItems)[nSlot].m_dynamicFlags = pItem->m_flags;
+                pHeader->m_beltItem = nSlot;
+            }
+            nSlot++;
+        }
+
+        pItem = m_items[SLOT_BOOTS];
+        if (pItem != NULL
+            && (bIncludeUnexportable || pItem->GetItemType() != 58)) {
+            if (bIncludeUnexportable || (pItem->GetFlagsFile() & 0x800) == 0) {
+                pItem->GetResRef().GetResRef((*pItems)[nSlot].m_itemId);
+                for (ability = 0; ability < 3; ability++) {
+                    (*pItems)[nSlot].m_usageCount[ability] = pItem->GetUsageCount(ability);
+                }
+                (*pItems)[nSlot].m_wear = pItem->m_wear;
+                (*pItems)[nSlot].m_dynamicFlags = pItem->m_flags;
+                pHeader->m_bootsItem = nSlot;
+            }
+            nSlot++;
+        }
+
+        pItem = m_items[SLOT_CLOAK];
+        if (pItem != NULL
+            && (bIncludeUnexportable || pItem->GetItemType() != 58)) {
+            if (bIncludeUnexportable || (pItem->GetFlagsFile() & 0x800) == 0) {
+                pItem->GetResRef().GetResRef((*pItems)[nSlot].m_itemId);
+                for (ability = 0; ability < 3; ability++) {
+                    (*pItems)[nSlot].m_usageCount[ability] = pItem->GetUsageCount(ability);
+                }
+                (*pItems)[nSlot].m_wear = pItem->m_wear;
+                (*pItems)[nSlot].m_dynamicFlags = pItem->m_flags;
+                pHeader->m_cloakItem = nSlot;
+            }
+            nSlot++;
+        }
+
+        for (cnt = 0; cnt < 8; cnt++) {
+            pItem = m_items[SLOT_WEAPON + cnt];
+            if (pItem != NULL
+                && (bIncludeUnexportable || pItem->GetItemType() != 58)) {
+                if (bIncludeUnexportable || (pItem->GetFlagsFile() & 0x800) == 0) {
+                    pItem->GetResRef().GetResRef((*pItems)[nSlot].m_itemId);
+                    for (ability = 0; ability < 3; ability++) {
+                        (*pItems)[nSlot].m_usageCount[ability] = pItem->GetUsageCount(ability);
+                    }
+                    (*pItems)[nSlot].m_wear = pItem->m_wear;
+                    (*pItems)[nSlot].m_dynamicFlags = pItem->m_flags;
+                    pHeader->m_weaponItem[cnt] = nSlot;
+                }
+                nSlot++;
+            }
+        }
+
+        for (cnt = 0; cnt < 4; cnt++) {
+            pItem = m_items[SLOT_AMMO + cnt];
+            if (pItem != NULL
+                && (bIncludeUnexportable || pItem->GetItemType() != 58)) {
+                if (bIncludeUnexportable || (pItem->GetFlagsFile() & 0x800) == 0) {
+                    pItem->GetResRef().GetResRef((*pItems)[nSlot].m_itemId);
+                    for (ability = 0; ability < 3; ability++) {
+                        (*pItems)[nSlot].m_usageCount[ability] = pItem->GetUsageCount(ability);
+                    }
+                    (*pItems)[nSlot].m_wear = pItem->m_wear;
+                    (*pItems)[nSlot].m_dynamicFlags = pItem->m_flags;
+                    pHeader->m_ammoItem[cnt] = nSlot;
+                }
+                nSlot++;
+            }
+        }
+
+        for (cnt = 0; cnt < 28; cnt++) {
+            pItem = m_items[SLOT_MISC + cnt];
+            if (pItem != NULL
+                && (bIncludeUnexportable || pItem->GetItemType() != 58)) {
+                if (bIncludeUnexportable || (pItem->GetFlagsFile() & 0x800) == 0) {
+                    pItem->GetResRef().GetResRef((*pItems)[nSlot].m_itemId);
+                    for (ability = 0; ability < 3; ability++) {
+                        (*pItems)[nSlot].m_usageCount[ability] = pItem->GetUsageCount(ability);
+                    }
+                    (*pItems)[nSlot].m_wear = pItem->m_wear;
+                    (*pItems)[nSlot].m_dynamicFlags = pItem->m_flags;
+                    pHeader->m_miscItem[cnt] = nSlot;
+                }
+                nSlot++;
+            }
+        }
+
+        if (m_selectedWeapon != SLOT_FIST) {
+            pHeader->m_selectedWeapon = m_selectedWeapon - SLOT_WEAPON;
+            pHeader->m_selectedWeaponAbility = m_selectedWeaponAbility;
+        }
+
+        // __FILE__: C:\Projects\Icewind2\src\Baldur\ObjCreature.cpp
+        // __LINE__: 15347
+        UTIL_ASSERT(nSlot == *nItems);
+    }
 }
 
 // 0x713040
