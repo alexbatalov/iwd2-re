@@ -94,7 +94,7 @@ void CGameSpriteEquipment::ClearMarshal(BOOL bUnequip)
 }
 
 // 0x7124C0
-void CGameSpriteEquipment::Marshal()
+void CGameSpriteEquipment::Marshal(CCreatureFileEquipment* pHeader, CCreatureFileItem** pItems, DWORD* nItems, BOOL bIncludeUnexportable)
 {
     // TODO: Incomplete.
 }
