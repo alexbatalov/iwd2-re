@@ -15,22 +15,22 @@ defaults:
 
 jobs:
   build:
-    runs-on: windows-2019
+    runs-on: windows-2022
     steps:
       - name: Clone
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Cache cmake build
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: build
-          key: windows-x86-cmake-v1
+          key: windows-x86-cmake-vs2022-v1
 
       - name: Configure
         run: |
           cmake \
             -B build \
-            -G "Visual Studio 16 2019" \
+            -G "Visual Studio 17 2022" \
             -A Win32 \
             # EOL
 
@@ -41,8 +41,16 @@ jobs:
             --config RelWithDebInfo \
             # EOL
 
+      - name: Test
+        run: |
+          ctest --test-dir build -C RelWithDebInfo --output-on-failure
+
+      - name: Inventory check
+        run: |
+          python -I tools/inventory.py --functions tools/function_list.txt --check
+
       - name: Upload
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: iwd2-re
           path:  build/RelWithDebInfo/iwd2-re.exe
