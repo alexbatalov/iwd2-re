@@ -5564,7 +5564,110 @@ INT CInfGame::GetCharacterSlotFromId(LONG nCharacterId)
 // 0x5BD6B0
 void CInfGame::UpdateCharacterSlots()
 {
-    // TODO: Incomplete.
+    CGameSprite* pSprite;
+    BYTE rc;
+    INT nCharacterSlot;
+    INT nPortraits;
+    INT index;
+
+    m_nCharacters = 0;
+
+    for (nCharacterSlot = 0; nCharacterSlot < CINFGAME_MAXCHARACTERS; nCharacterSlot++) {
+        if (m_characters[nCharacterSlot] != -1
+            && (!g_pChitin->cNetwork.GetSessionOpen()
+                || m_multiplayerSettings.GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_CHARACTER)) {
+            do {
+                rc = g_pBaldurChitin->GetObjectGame()->GetObjectArray()->GetDeny(m_characters[nCharacterSlot],
+                    CGameObjectArray::THREAD_ASYNCH,
+                    reinterpret_cast<CGameObject**>(&pSprite),
+                    INFINITE);
+            } while (rc == CGameObjectArray::SHARED || rc == CGameObjectArray::DENIED);
+
+            if (rc != CGameObjectArray::SUCCESS) {
+                return;
+            }
+
+            m_characters[m_nCharacters] = m_characters[nCharacterSlot];
+
+            if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+                m_multiplayerSettings.SetCharacterControlledByPlayer(m_nCharacters,
+                    m_multiplayerSettings.GetCharacterControlledByPlayer(nCharacterSlot),
+                    FALSE,
+                    FALSE);
+
+                if (m_multiplayerSettings.GetCharacterStatus(nCharacterSlot) == CMultiplayerSettings::CHARSTATUS_CHARACTER) {
+                    m_multiplayerSettings.SignalCharacterStatus(m_nCharacters,
+                        CMultiplayerSettings::CHARSTATUS_SIGNAL_IMPORTED,
+                        TRUE,
+                        FALSE);
+                } else {
+                    m_multiplayerSettings.SignalCharacterStatus(m_nCharacters,
+                        CMultiplayerSettings::CHARSTATUS_SIGNAL_DELETED,
+                        TRUE,
+                        FALSE);
+                }
+
+                m_multiplayerSettings.SetCharacterReady(m_nCharacters, TRUE, FALSE);
+            }
+
+            pSprite->m_cGameStats.RecordJoinParty();
+            EnablePortrait(static_cast<BYTE>(m_nCharacters), TRUE);
+            UpdatePortraitToolTip(m_nCharacters, pSprite->GetNameRef());
+
+            g_pBaldurChitin->GetObjectGame()->GetObjectArray()->ReleaseDeny(m_characters[nCharacterSlot],
+                CGameObjectArray::THREAD_ASYNCH,
+                INFINITE);
+
+            m_nCharacters++;
+        }
+    }
+
+    // Keep characters that already have a portrait in their portrait order.
+    nPortraits = 0;
+    for (nCharacterSlot = 0; nCharacterSlot < CINFGAME_MAXCHARACTERS; nCharacterSlot++) {
+        for (index = 0; index < m_nCharacters; index++) {
+            if (m_characters[index] == m_characterPortraits[nCharacterSlot]) {
+                m_characterPortraits[nPortraits] = m_characters[index];
+                nPortraits++;
+                break;
+            }
+        }
+    }
+
+    // Append the rest.
+    index = 0;
+    while (nPortraits < m_nCharacters && index < m_nCharacters) {
+        for (nCharacterSlot = 0; nCharacterSlot < CINFGAME_MAXCHARACTERS; nCharacterSlot++) {
+            if (m_characters[index] == m_characterPortraits[nCharacterSlot]) {
+                break;
+            }
+        }
+
+        if (nCharacterSlot >= CINFGAME_MAXCHARACTERS) {
+            m_characterPortraits[nPortraits] = m_characters[index];
+            nPortraits++;
+        }
+
+        index++;
+    }
+
+    for (nCharacterSlot = m_nCharacters; nCharacterSlot < CINFGAME_MAXCHARACTERS; nCharacterSlot++) {
+        m_characters[nCharacterSlot] = -1;
+        m_characterPortraits[nCharacterSlot] = -1;
+
+        if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+            m_multiplayerSettings.SetCharacterControlledByPlayer(nCharacterSlot, 0, FALSE, FALSE);
+            m_multiplayerSettings.SignalCharacterStatus(nCharacterSlot,
+                CMultiplayerSettings::CHARSTATUS_SIGNAL_DELETED,
+                TRUE,
+                FALSE);
+            m_multiplayerSettings.SetCharacterReady(nCharacterSlot, FALSE, FALSE);
+        }
+    }
+
+    if (g_pChitin->cNetwork.GetSessionHosting() == TRUE) {
+        g_pBaldurChitin->GetBaldurMessage()->SendFullSettingsToClients(CString(""));
+    }
 }
 
 // 0x5BD9D0
